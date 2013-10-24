@@ -7,12 +7,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "AppDomain", "AppDomain", "{
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DataDomain", "DataDomain", "{81F6F5D5-AADE-4C4A-ACAE-EB1B3651E150}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Services", "Services", "{2EE4DC9E-C2B3-4300-8068-EA39AF6D0465}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Services", "AppDomain\Phytel.API.AppDomain.Services\Development\Current\Phytel.API.AppDomain.Services\Services.csproj", "{C581958D-66FC-40AF-A33F-21868C1FA0FC}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Services.Tests", "AppDomain\Phytel.API.AppDomain.Services\Development\Current\Phytel.API.AppDomain.Services.Tests\Services.Tests.csproj", "{DCC0173F-F554-45DB-82BE-A3370ABCD312}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "User", "User", "{8E28768D-9A7C-4CA0-A4D0-761C06DA259C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Phytel.API.AppDomain.User", "AppDomain\Phytel.API.AppDomain.User\Development\Current\Phytel.API.AppDomain.User\Phytel.API.AppDomain.User.csproj", "{8F254AC6-F99C-4BEC-9088-EBBA9C696CAF}"
@@ -35,64 +29,48 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "User", "DataDomain\Phytel.A
 EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 11
+		SccNumberOfProjects = 9
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = http://hillstfs2013:8080/tfs/phytel
 		SccLocalPath0 = .
-		SccProjectUniqueName1 = AppDomain\\Phytel.API.AppDomain.Services\\Development\\Current\\Phytel.API.AppDomain.Services\\Services.csproj
+		SccProjectUniqueName1 = AppDomain\\Phytel.API.AppDomain.User\\Development\\Current\\Phytel.API.AppDomain.User\\Phytel.API.AppDomain.User.csproj
 		SccProjectTopLevelParentUniqueName1 = API.sln
-		SccProjectName1 = AppDomain/Phytel.API.AppDomain.Services/Development/Current/Phytel.API.AppDomain.Services
-		SccLocalPath1 = AppDomain\\Phytel.API.AppDomain.Services\\Development\\Current\\Phytel.API.AppDomain.Services
-		SccProjectUniqueName2 = AppDomain\\Phytel.API.AppDomain.Services\\Development\\Current\\Phytel.API.AppDomain.Services.Tests\\Services.Tests.csproj
+		SccProjectName1 = AppDomain/Phytel.API.AppDomain.User/Development/Current/Phytel.API.AppDomain.User
+		SccLocalPath1 = AppDomain\\Phytel.API.AppDomain.User\\Development\\Current\\Phytel.API.AppDomain.User
+		SccProjectUniqueName2 = AppDomain\\Phytel.API.AppDomain.User\\Development\\Current\\Phytel.API.AppDomain.User.DTOs\\Phytel.API.AppDomain.User.DTOs.csproj
 		SccProjectTopLevelParentUniqueName2 = API.sln
-		SccProjectName2 = AppDomain/Phytel.API.AppDomain.Services/Development/Current/Phytel.API.AppDomain.Services.Tests
-		SccLocalPath2 = AppDomain\\Phytel.API.AppDomain.Services\\Development\\Current\\Phytel.API.AppDomain.Services.Tests
-		SccProjectUniqueName3 = AppDomain\\Phytel.API.AppDomain.User\\Development\\Current\\Phytel.API.AppDomain.User\\Phytel.API.AppDomain.User.csproj
+		SccProjectName2 = AppDomain/Phytel.API.AppDomain.User/Development/Current/Phytel.API.AppDomain.User.DTOs
+		SccLocalPath2 = AppDomain\\Phytel.API.AppDomain.User\\Development\\Current\\Phytel.API.AppDomain.User.DTOs
+		SccProjectUniqueName3 = AppDomain\\Phytel.API.AppDomain.User\\Development\\Current\\Phytel.API.AppDomain.User.Tests\\Phytel.API.AppDomain.User_Tests.csproj
 		SccProjectTopLevelParentUniqueName3 = API.sln
-		SccProjectName3 = AppDomain/Phytel.API.AppDomain.User/Development/Current/Phytel.API.AppDomain.User
-		SccLocalPath3 = AppDomain\\Phytel.API.AppDomain.User\\Development\\Current\\Phytel.API.AppDomain.User
-		SccProjectUniqueName4 = AppDomain\\Phytel.API.AppDomain.User\\Development\\Current\\Phytel.API.AppDomain.User.DTOs\\Phytel.API.AppDomain.User.DTOs.csproj
+		SccProjectName3 = AppDomain/Phytel.API.AppDomain.User/Development/Current/Phytel.API.AppDomain.User.Tests
+		SccLocalPath3 = AppDomain\\Phytel.API.AppDomain.User\\Development\\Current\\Phytel.API.AppDomain.User.Tests
+		SccProjectUniqueName4 = DataDomain\\Phytel.API.DataDomain.User\\Development\\Current\\User.Services.Tests\\User.Services.Tests.csproj
 		SccProjectTopLevelParentUniqueName4 = API.sln
-		SccProjectName4 = AppDomain/Phytel.API.AppDomain.User/Development/Current/Phytel.API.AppDomain.User.DTOs
-		SccLocalPath4 = AppDomain\\Phytel.API.AppDomain.User\\Development\\Current\\Phytel.API.AppDomain.User.DTOs
-		SccProjectUniqueName5 = AppDomain\\Phytel.API.AppDomain.User\\Development\\Current\\Phytel.API.AppDomain.User.Tests\\Phytel.API.AppDomain.User_Tests.csproj
+		SccProjectName4 = DataDomain/Phytel.API.DataDomain.User/Development/Current/User.Services.Tests
+		SccLocalPath4 = DataDomain\\Phytel.API.DataDomain.User\\Development\\Current\\User.Services.Tests
+		SccProjectUniqueName5 = DataDomain\\Phytel.API.DataDomain.User\\Development\\Current\\User.Tests\\User.Tests.csproj
 		SccProjectTopLevelParentUniqueName5 = API.sln
-		SccProjectName5 = AppDomain/Phytel.API.AppDomain.User/Development/Current/Phytel.API.AppDomain.User.Tests
-		SccLocalPath5 = AppDomain\\Phytel.API.AppDomain.User\\Development\\Current\\Phytel.API.AppDomain.User.Tests
-		SccProjectUniqueName6 = DataDomain\\Phytel.API.DataDomain.User\\Development\\Current\\User.Services.Tests\\User.Services.Tests.csproj
+		SccProjectName5 = DataDomain/Phytel.API.DataDomain.User/Development/Current/User.Tests
+		SccLocalPath5 = DataDomain\\Phytel.API.DataDomain.User\\Development\\Current\\User.Tests
+		SccProjectUniqueName6 = DataDomain\\Phytel.API.DataDomain.User\\Development\\Current\\User.Services\\User.Services.csproj
 		SccProjectTopLevelParentUniqueName6 = API.sln
-		SccProjectName6 = DataDomain/Phytel.API.DataDomain.User/Development/Current/User.Services.Tests
-		SccLocalPath6 = DataDomain\\Phytel.API.DataDomain.User\\Development\\Current\\User.Services.Tests
-		SccProjectUniqueName7 = DataDomain\\Phytel.API.DataDomain.User\\Development\\Current\\User.Tests\\User.Tests.csproj
+		SccProjectName6 = DataDomain/Phytel.API.DataDomain.User/Development/Current/User.Services
+		SccLocalPath6 = DataDomain\\Phytel.API.DataDomain.User\\Development\\Current\\User.Services
+		SccProjectUniqueName7 = DataDomain\\Phytel.API.DataDomain.User\\Development\\Current\\User.DTOs\\User.DTOs.csproj
 		SccProjectTopLevelParentUniqueName7 = API.sln
-		SccProjectName7 = DataDomain/Phytel.API.DataDomain.User/Development/Current/User.Tests
-		SccLocalPath7 = DataDomain\\Phytel.API.DataDomain.User\\Development\\Current\\User.Tests
-		SccProjectUniqueName8 = DataDomain\\Phytel.API.DataDomain.User\\Development\\Current\\User.Services\\User.Services.csproj
+		SccProjectName7 = DataDomain/Phytel.API.DataDomain.User/Development/Current/User.DTOs
+		SccLocalPath7 = DataDomain\\Phytel.API.DataDomain.User\\Development\\Current\\User.DTOs
+		SccProjectUniqueName8 = DataDomain\\Phytel.API.DataDomain.User\\Development\\Current\\User\\User.csproj
 		SccProjectTopLevelParentUniqueName8 = API.sln
-		SccProjectName8 = DataDomain/Phytel.API.DataDomain.User/Development/Current/User.Services
-		SccLocalPath8 = DataDomain\\Phytel.API.DataDomain.User\\Development\\Current\\User.Services
-		SccProjectUniqueName9 = DataDomain\\Phytel.API.DataDomain.User\\Development\\Current\\User.DTOs\\User.DTOs.csproj
-		SccProjectTopLevelParentUniqueName9 = API.sln
-		SccProjectName9 = DataDomain/Phytel.API.DataDomain.User/Development/Current/User.DTOs
-		SccLocalPath9 = DataDomain\\Phytel.API.DataDomain.User\\Development\\Current\\User.DTOs
-		SccProjectUniqueName10 = DataDomain\\Phytel.API.DataDomain.User\\Development\\Current\\User\\User.csproj
-		SccProjectTopLevelParentUniqueName10 = API.sln
-		SccProjectName10 = DataDomain/Phytel.API.DataDomain.User/Development/Current/User
-		SccLocalPath10 = DataDomain\\Phytel.API.DataDomain.User\\Development\\Current\\User
+		SccProjectName8 = DataDomain/Phytel.API.DataDomain.User/Development/Current/User
+		SccLocalPath8 = DataDomain\\Phytel.API.DataDomain.User\\Development\\Current\\User
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{C581958D-66FC-40AF-A33F-21868C1FA0FC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C581958D-66FC-40AF-A33F-21868C1FA0FC}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C581958D-66FC-40AF-A33F-21868C1FA0FC}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C581958D-66FC-40AF-A33F-21868C1FA0FC}.Release|Any CPU.Build.0 = Release|Any CPU
-		{DCC0173F-F554-45DB-82BE-A3370ABCD312}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{DCC0173F-F554-45DB-82BE-A3370ABCD312}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{DCC0173F-F554-45DB-82BE-A3370ABCD312}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{DCC0173F-F554-45DB-82BE-A3370ABCD312}.Release|Any CPU.Build.0 = Release|Any CPU
 		{8F254AC6-F99C-4BEC-9088-EBBA9C696CAF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{8F254AC6-F99C-4BEC-9088-EBBA9C696CAF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8F254AC6-F99C-4BEC-9088-EBBA9C696CAF}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -130,11 +108,8 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{2EE4DC9E-C2B3-4300-8068-EA39AF6D0465} = {2E11BED7-15D8-4A76-B289-E9FE4FF9DD72}
 		{8E28768D-9A7C-4CA0-A4D0-761C06DA259C} = {2E11BED7-15D8-4A76-B289-E9FE4FF9DD72}
 		{774B2FE7-1971-440A-A70E-BE8ED31B0DEA} = {81F6F5D5-AADE-4C4A-ACAE-EB1B3651E150}
-		{C581958D-66FC-40AF-A33F-21868C1FA0FC} = {2EE4DC9E-C2B3-4300-8068-EA39AF6D0465}
-		{DCC0173F-F554-45DB-82BE-A3370ABCD312} = {2EE4DC9E-C2B3-4300-8068-EA39AF6D0465}
 		{8F254AC6-F99C-4BEC-9088-EBBA9C696CAF} = {8E28768D-9A7C-4CA0-A4D0-761C06DA259C}
 		{5D9C233B-E53D-4BE1-B578-1AA9722DE1CF} = {8E28768D-9A7C-4CA0-A4D0-761C06DA259C}
 		{BE484372-864F-4D0A-A4E1-60F6760182FD} = {8E28768D-9A7C-4CA0-A4D0-761C06DA259C}
