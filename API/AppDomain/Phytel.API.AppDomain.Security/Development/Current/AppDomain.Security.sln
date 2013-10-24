@@ -1,0 +1,57 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.21005.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Security", "Security\Security.csproj", "{8F254AC6-F99C-4BEC-9088-EBBA9C696CAF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Security.DTOs", "Security.DTOs\Security.DTOs.csproj", "{5D9C233B-E53D-4BE1-B578-1AA9722DE1CF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Security.Tests", "Security.Tests\Security.Tests.csproj", "{BE484372-864F-4D0A-A4E1-60F6760182FD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Security.Services", "Security.Services\Security.Services.csproj", "{B84263C2-54D7-4254-B159-DDB1F39D0783}"
+EndProject
+Global
+	GlobalSection(TeamFoundationVersionControl) = preSolution
+		SccNumberOfProjects = 5
+		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccTeamFoundationServer = http://hillstfs2013:8080/tfs/phytel
+		SccProjectUniqueName0 = Security\\Security.csproj
+		SccProjectName0 = Security
+		SccLocalPath0 = Security
+		SccProjectUniqueName1 = Security.DTOs\\Security.DTOs.csproj
+		SccProjectName1 = Security.DTOs
+		SccLocalPath1 = Security.DTOs
+		SccProjectUniqueName2 = Security.Tests\\Security.Tests.csproj
+		SccProjectName2 = Security.Tests
+		SccLocalPath2 = Security.Tests
+		SccProjectUniqueName3 = Security.Services\\Security.Services.csproj
+		SccProjectName3 = Security.Services
+		SccLocalPath3 = Security.Services
+		SccLocalPath4 = .
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{8F254AC6-F99C-4BEC-9088-EBBA9C696CAF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8F254AC6-F99C-4BEC-9088-EBBA9C696CAF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8F254AC6-F99C-4BEC-9088-EBBA9C696CAF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8F254AC6-F99C-4BEC-9088-EBBA9C696CAF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5D9C233B-E53D-4BE1-B578-1AA9722DE1CF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5D9C233B-E53D-4BE1-B578-1AA9722DE1CF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5D9C233B-E53D-4BE1-B578-1AA9722DE1CF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5D9C233B-E53D-4BE1-B578-1AA9722DE1CF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BE484372-864F-4D0A-A4E1-60F6760182FD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BE484372-864F-4D0A-A4E1-60F6760182FD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BE484372-864F-4D0A-A4E1-60F6760182FD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BE484372-864F-4D0A-A4E1-60F6760182FD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B84263C2-54D7-4254-B159-DDB1F39D0783}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B84263C2-54D7-4254-B159-DDB1F39D0783}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B84263C2-54D7-4254-B159-DDB1F39D0783}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B84263C2-54D7-4254-B159-DDB1F39D0783}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
