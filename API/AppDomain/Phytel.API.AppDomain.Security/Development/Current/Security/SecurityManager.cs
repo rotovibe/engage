@@ -14,14 +14,14 @@ namespace Phytel.API.AppDomain.Security
     {
         public static AuthenticateResponse GetToken(string username, string password, string apikey)
         {
-            AuthenticateResponse response = null;
+            AuthenticateResponse response = new AuthenticateResponse();
 
             IRestClient client = new JsonServiceClient();
 
             JsonServiceClient.HttpWebRequestFilter = x => x.Headers.Add(string.Format("APIKey:{0}", "12345"));
 
-            TokenResponse wsResponse = client.Post<TokenResponse>("http://localhost:9999/data/user",
-                new TokenRequest { APIKey="test12345", Password = "Testing", Product = "NG", UserName = "NGMel" } as object);
+            TokenResponse wsResponse = client.Post<TokenResponse>("http://localhost:9999/api/Data/User",
+                new TokenRequest { APIKey=apikey, Password = password, Product = "NG", UserName = username } as object);
 
             response.Token  = wsResponse.Token;
 
