@@ -17,7 +17,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppDomain.Security", "AppDo
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppDomain.Security.DTOs", "AppDomain\Phytel.API.AppDomain.Security\Development\Current\Security.DTOs\AppDomain.Security.DTOs.csproj", "{5D9C233B-E53D-4BE1-B578-1AA9722DE1CF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppDomain.Security.Tests", "AppDomain\Phytel.API.AppDomain.Security\Development\Current\Security.Tests\AppDomain.Security.Tests.csproj", "{BE484372-864F-4D0A-A4E1-60F6760182FD}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppDomain.Security.Services.Tests", "AppDomain\Phytel.API.AppDomain.Security\Development\Current\Security.Tests\AppDomain.Security.Services.Tests.csproj", "{BE484372-864F-4D0A-A4E1-60F6760182FD}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.Security.Services.Tests", "DataDomain\Phytel.API.DataDomain.Security\Development\Current\Security.Services.Tests\DataDomain.Security.Services.Tests.csproj", "{9F763B50-9E2B-426F-ACFB-27F3D3F255D5}"
 EndProject
@@ -63,14 +63,14 @@ Global
 		SccProjectTopLevelParentUniqueName7 = API.sln
 		SccProjectName7 = AppDomain/Phytel.API.AppDomain.Security/Development/Current/Security.Services
 		SccLocalPath7 = AppDomain\\Phytel.API.AppDomain.Security\\Development\\Current\\Security.Services
-		SccProjectUniqueName8 = AppDomain\\Phytel.API.AppDomain.Security\\Development\\Current\\Security.Tests\\AppDomain.Security.Tests.csproj
+		SccProjectUniqueName8 = DataDomain\\Phytel.API.DataDomain.Security\\Development\\Current\\Security.Services\\DataDomain.Security.Services.csproj
 		SccProjectTopLevelParentUniqueName8 = API.sln
-		SccProjectName8 = AppDomain/Phytel.API.AppDomain.Security/Development/Current/Security.Tests
-		SccLocalPath8 = AppDomain\\Phytel.API.AppDomain.Security\\Development\\Current\\Security.Tests
-		SccProjectUniqueName9 = DataDomain\\Phytel.API.DataDomain.Security\\Development\\Current\\Security.Services\\DataDomain.Security.Services.csproj
+		SccProjectName8 = DataDomain/Phytel.API.DataDomain.Security/Development/Current/Security.Services
+		SccLocalPath8 = DataDomain\\Phytel.API.DataDomain.Security\\Development\\Current\\Security.Services
+		SccProjectUniqueName9 = AppDomain\\Phytel.API.AppDomain.Security\\Development\\Current\\Security.Tests\\AppDomain.Security.Services.Tests.csproj
 		SccProjectTopLevelParentUniqueName9 = API.sln
-		SccProjectName9 = DataDomain/Phytel.API.DataDomain.Security/Development/Current/Security.Services
-		SccLocalPath9 = DataDomain\\Phytel.API.DataDomain.Security\\Development\\Current\\Security.Services
+		SccProjectName9 = AppDomain/Phytel.API.AppDomain.Security/Development/Current/Security.Tests
+		SccLocalPath9 = AppDomain\\Phytel.API.AppDomain.Security\\Development\\Current\\Security.Tests
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

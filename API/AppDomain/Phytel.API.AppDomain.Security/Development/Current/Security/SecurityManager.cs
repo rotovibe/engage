@@ -20,7 +20,7 @@ namespace Phytel.API.AppDomain.Security
 
             JsonServiceClient.HttpWebRequestFilter = x => x.Headers.Add(string.Format("APIKey:{0}", "12345"));
 
-            TokenResponse wsResponse = client.Post<TokenResponse>("http://localhost:9999/api/login",
+            TokenResponse wsResponse = client.Post<TokenResponse>("http://localhost:9999/data/user",
                 new TokenRequest { APIKey="test12345", Password = "Testing", Product = "NG", UserName = "NGMel" } as object);
 
             response.Token  = wsResponse.Token;
