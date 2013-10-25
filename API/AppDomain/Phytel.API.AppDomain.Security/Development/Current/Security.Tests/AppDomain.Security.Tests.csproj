@@ -67,9 +67,9 @@
     <Compile Include="Request_Security_Token_Test.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Security.DTOs\Security.DTOs.csproj">
+    <ProjectReference Include="..\Security.DTOs\AppDomain.Security.DTOs.csproj">
       <Project>{5d9c233b-e53d-4be1-b578-1aa9722de1cf}</Project>
-      <Name>Security.DTOs</Name>
+      <Name>AppDomain.Security.DTOs</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

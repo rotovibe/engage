@@ -57,9 +57,13 @@
     <Compile Include="SecurityManager.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Security.DTOs\Security.DTOs.csproj">
+    <ProjectReference Include="..\..\..\..\..\DataDomain\Phytel.API.DataDomain.Security\Development\Current\Security.DTOs\DataDomain.Security.DTOs.csproj">
+      <Project>{1c2c63a1-4246-4ec9-bad1-c00e9ecd85f6}</Project>
+      <Name>DataDomain.Security.DTOs</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Security.DTOs\AppDomain.Security.DTOs.csproj">
       <Project>{5d9c233b-e53d-4be1-b578-1aa9722de1cf}</Project>
-      <Name>Security.DTOs</Name>
+      <Name>AppDomain.Security.DTOs</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

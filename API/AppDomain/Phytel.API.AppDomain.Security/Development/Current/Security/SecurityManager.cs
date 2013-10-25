@@ -1,4 +1,5 @@
 ﻿using Phytel.API.AppDomain.Security.DTOs;
+using Phytel.API.DataDomain.Security.DTOs;
 using ServiceStack.Service;
 using ServiceStack.ServiceClient.Web;
 using System;
@@ -19,8 +20,10 @@ namespace Phytel.API.AppDomain.Security
 
             JsonServiceClient.HttpWebRequestFilter = x => x.Headers.Add(string.Format("APIKey:{0}", "12345"));
 
-            response = client.Post<AuthenticateResponse>("http://localhost:999/api/login",
-                new AuthenticateRequest { Password = "Testing", Product = "NG", UserName = "NGMel" } as object);
+            TokenResponse wsResponse = client.Post<TokenResponse>("http://localhost:9999/api/login",
+                new TokenRequest { APIKey="test12345", Password = "Testing", Product = "NG", UserName = "NGMel" } as object);
+
+            response.Token  = wsResponse.Token;
 
             return response;
         }

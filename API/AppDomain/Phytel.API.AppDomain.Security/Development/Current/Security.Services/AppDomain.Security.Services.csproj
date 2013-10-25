@@ -105,13 +105,13 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Security.DTOs\Security.DTOs.csproj">
+    <ProjectReference Include="..\Security.DTOs\AppDomain.Security.DTOs.csproj">
       <Project>{5d9c233b-e53d-4be1-b578-1aa9722de1cf}</Project>
-      <Name>Security.DTOs</Name>
+      <Name>AppDomain.Security.DTOs</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Security\Security.csproj">
+    <ProjectReference Include="..\Security\AppDomain.Security.csproj">
       <Project>{8f254ac6-f99c-4bec-9088-ebba9c696caf}</Project>
-      <Name>Security</Name>
+      <Name>AppDomain.Security</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
