@@ -12,7 +12,7 @@ namespace Phytel.API.AppDomain.User_Tests
         [TestMethod]
         public void Get_Token_With_User_Password_APIKey()
         {
-            string controlValue = "Test123";
+            string controlValue = "rbobadilla";
             string sampleValue;
             IRestClient client = new JsonServiceClient();
 

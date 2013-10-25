@@ -15,10 +15,11 @@ namespace User.Services
             request.APIKey = aPIKey;
 
             // get token and save to APIusers
+
             // register token to global asp.net cache
             // return token
 
-            return new AuthenticateResponse { Token = "Test123" };
+            return new AuthenticateResponse { Token = "Rbobadilla" };
         }
     }
 }
