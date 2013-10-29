@@ -9,9 +9,16 @@ namespace AppDomain.Security.Tests
     public class SecurityManager_Tests
     {
         [TestMethod]
-        public void TestMethod1()
+        public void Validate_Credentials_Test()
         {
-            AuthenticateResponse response = SecurityManager.GetToken("Mel", "bobadilla", "123456789");
+            AuthenticateResponse response = SecurityManager.ValidateCredentials("Mel", "bobadilla", "123456789");
         }
+
+        [TestMethod]
+        public void IsTokenExpired_Test()
+        {
+            bool result = SecurityManager.IsTokenExpired("testtoken");
+        }
+
     }
 }

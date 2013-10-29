@@ -8,6 +8,6 @@ namespace Phytel.API.AppDomain.Security.DTOs
 {
     public class AuthenticateResponse
     {
-        public string Token { get; set; }
+        public string Validated { get; set; }
     }
 }

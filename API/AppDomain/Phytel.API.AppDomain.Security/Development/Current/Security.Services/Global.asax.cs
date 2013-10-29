@@ -6,7 +6,7 @@ using System.Web;
 using System.Web.Security;
 using System.Web.SessionState;
 
-namespace User.Services
+namespace Phytel.API.AppDomain.Security.Services
 {
     public class Global : System.Web.HttpApplication
     {

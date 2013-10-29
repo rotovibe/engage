@@ -18,10 +18,10 @@ namespace Phytel.API.AppDomain.User_Tests
 
             JsonServiceClient.HttpWebRequestFilter = x => x.Headers.Add(string.Format("APIKey:{0}", "12345"));
 
-            AuthenticateResponse response = client.Post<AuthenticateResponse>("http://localhost:999/api/login",
+            AuthenticateResponse response = client.Post<AuthenticateResponse>("http://localhost:999/api/security/login",
                 new AuthenticateRequest { Password = "Testing", Product = "NG", UserName = "NGMel" } as object);
 
-            sampleValue = response.Token;
+            sampleValue = response.Validated;
 
             Assert.AreEqual(controlValue, sampleValue);
         }

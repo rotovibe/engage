@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Phytel.API.AppDomain.Security.DTOs
 {
-    [Route("/api/login")]
+    [Route("/api/security/login")]
     public class AuthenticateRequest
     {
         public string UserName { get; set; }

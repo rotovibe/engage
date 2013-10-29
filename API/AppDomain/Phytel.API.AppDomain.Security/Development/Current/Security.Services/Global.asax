@@ -1,1 +1,1 @@
-﻿<%@ Application Codebehind="Global.asax.cs" Inherits="User.Services.Global" Language="C#" %>
+﻿<%@ Application Codebehind="Global.asax.cs" Inherits="Phytel.API.AppDomain.Security.Services.Global" Language="C#" %>

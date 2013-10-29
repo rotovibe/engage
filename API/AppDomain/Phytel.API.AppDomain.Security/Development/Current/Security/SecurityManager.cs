@@ -12,20 +12,37 @@ namespace Phytel.API.AppDomain.Security
 {
     public static class SecurityManager
     {
-        public static AuthenticateResponse GetToken(string username, string password, string apikey)
+        public static AuthenticateResponse ValidateCredentials(string username, string password, string apikey)
         {
-            AuthenticateResponse response = new AuthenticateResponse();
 
             IRestClient client = new JsonServiceClient();
 
             JsonServiceClient.HttpWebRequestFilter = x => x.Headers.Add(string.Format("APIKey:{0}", "12345"));
 
-            TokenResponse wsResponse = client.Post<TokenResponse>("http://localhost:9999/api/Data/User",
-                new TokenRequest { APIKey=apikey, Password = password, Product = "NG", UserName = username } as object);
+            ValidateResponse wsResponse = client.Post<ValidateResponse>("http://localhost:9999/api/Data/Login",
+                new ValidateRequest { APIKey=apikey, Password = password, Product = "NG", UserName = username } as object);
 
-            response.Token  = wsResponse.Token;
+            // translate to appdomain response object
+            AuthenticateResponse authResponse = new AuthenticateResponse();
+            authResponse.Validated = wsResponse.Validated;
 
-            return response;
+            return authResponse;
+        }
+
+        public static bool IsTokenExpired(string tempToken)
+        {
+            bool valid = false;
+            IRestClient client = new JsonServiceClient();
+
+            // might not need this
+            JsonServiceClient.HttpWebRequestFilter = x => x.Headers.Add(string.Format("APIKey:{0}", "12345"));
+
+            ValidateTokenResponse wsResponse = client.Post<ValidateTokenResponse>("http://localhost:9999/api/Data/Token",
+                new ValidateTokenRequest { Token = tempToken } as object);
+
+            ValidateTokenResponse authResponse = new ValidateTokenResponse();
+            valid = Convert.ToBoolean(wsResponse.Validated);
+            return valid;
         }
     }
 }

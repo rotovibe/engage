@@ -4,8 +4,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Web.UI;
+using System.Web.Security;
+using System.Web;
 
-namespace User.Services
+namespace Phytel.API.AppDomain.Security.Services
 {
     public class SecurityService : Service
     {
@@ -14,12 +17,14 @@ namespace User.Services
             string aPIKey = base.Request.Headers["APIKey"];
             request.APIKey = aPIKey;
 
-            // get token and save to APIusers
-
-            // register token to global asp.net cache
+            // validate user against apiuser datastore
+            AuthenticateResponse authResponse = SecurityManager.ValidateCredentials("mel", "bobadilla", "apikey1234");
+            bool validated = Convert.ToBoolean(authResponse.Validated);
+            
             // return token
+            string currentToken = CacheModel.GetValidToken(request.UserName, request.Password, request.APIKey);
 
-            return new AuthenticateResponse { Token = "Rbobadilla" };
+            return authResponse;
         }
     }
 }
