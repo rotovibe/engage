@@ -24,7 +24,7 @@ namespace Phytel.API.AppDomain.Security
 
             // translate to appdomain response object
             AuthenticateResponse authResponse = new AuthenticateResponse();
-            authResponse.Validated = wsResponse.Validated;
+            authResponse.Validated = wsResponse.Validated.ToString();
 
             return authResponse;
         }
