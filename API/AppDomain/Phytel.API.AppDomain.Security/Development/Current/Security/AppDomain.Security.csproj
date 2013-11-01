@@ -34,6 +34,12 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="MongoDB.Bson">
+      <HintPath>..\..\..\..\..\..\..\Shared\PhytelServices\Development\Current\References\MongoDB.Bson.dll</HintPath>
+    </Reference>
+    <Reference Include="MongoDB.Driver">
+      <HintPath>..\..\..\..\..\..\..\Shared\PhytelServices\Development\Current\References\MongoDB.Driver.dll</HintPath>
+    </Reference>
     <Reference Include="ServiceStack.Common">
       <HintPath>..\..\..\..\..\packages\ServiceStack.Common.3.9.69\lib\net35\ServiceStack.Common.dll</HintPath>
     </Reference>
@@ -52,15 +58,31 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="C3UserDataManager.cs" />
+    <Compile Include="C3UserRepositoryFactory.cs" />
+    <Compile Include="IC3UserRepository.cs" />
+    <Compile Include="ISecurityRepository.cs" />
     <Compile Include="IUnitOfWork.cs" />
+    <Compile Include="MongoDB\DTO\MEAPISession.cs" />
+    <Compile Include="MongoDB\DTO\MEAPIUser.cs" />
+    <Compile Include="MongoDB\Repository\APISessionMongoRepository.cs" />
+    <Compile Include="MongoDB\Repository\APIUsersMongoRepository.cs" />
+    <Compile Include="MongoDB\SecurityMongoContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RSAClass.cs" />
+    <Compile Include="SecurityDataManager.cs" />
     <Compile Include="SecurityManager.cs" />
+    <Compile Include="SecurityRepositoryFactory.cs" />
+    <Compile Include="SQL\Repository\C3UserRepository.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\..\DataDomain\Phytel.API.DataDomain.Security\Development\Current\Security.DTOs\DataDomain.Security.DTO.csproj">
-      <Project>{1c2c63a1-4246-4ec9-bad1-c00e9ecd85f6}</Project>
-      <Name>DataDomain.Security.DTO</Name>
+    <ProjectReference Include="..\..\..\..\..\..\..\Shared\PhytelServices\Development\Current\Phytel.Mongo\Phytel.Mongo.csproj">
+      <Project>{7c9e786c-e4f7-4382-bde4-8dbf980ea013}</Project>
+      <Name>Phytel.Mongo</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\..\..\Shared\PhytelServices\Development\Current\PhytelServices\PhytelServices.csproj">
+      <Project>{d790f618-438b-4c39-abe5-1346122273ac}</Project>
+      <Name>PhytelServices</Name>
     </ProjectReference>
     <ProjectReference Include="..\Security.DTOs\AppDomain.Security.DTO.csproj">
       <Project>{5d9c233b-e53d-4be1-b578-1aa9722de1cf}</Project>
