@@ -1,9 +1,7 @@
-﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Phytel.API.AppDomain.Security;
-using Phytel.API.AppDomain.Security.DTOs;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Phytel.API.AppDomain.Security.DTO;
 
-namespace AppDomain.Security.Tests
+namespace Phytel.API.AppDomain.Security.Test
 {
     [TestClass]
     public class SecurityManager_Tests

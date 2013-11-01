@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using System.Web;
 
-namespace Phytel.API.AppDomain.Security.Services
+namespace Phytel.API.AppDomain.Security.Service
 {
     public static class CacheModel
     {

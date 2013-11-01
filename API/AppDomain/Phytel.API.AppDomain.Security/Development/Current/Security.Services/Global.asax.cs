@@ -1,12 +1,7 @@
 ﻿using ServiceStack.WebHost.Endpoints;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Security;
-using System.Web.SessionState;
 
-namespace Phytel.API.AppDomain.Security.Services
+namespace Phytel.API.AppDomain.Security.Service
 {
     public class Global : System.Web.HttpApplication
     {

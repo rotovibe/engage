@@ -1,10 +1,9 @@
-﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using ServiceStack.ServiceClient.Web;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Phytel.API.AppDomain.Security.DTO;
 using ServiceStack.Service;
-using Phytel.API.AppDomain.Security.DTOs;
+using ServiceStack.ServiceClient.Web;
 
-namespace Phytel.API.AppDomain.User_Tests
+namespace Phytel.API.AppDomain.Security.Services.Test
 {
     [TestClass]
     public class Request_Security_Token_Test

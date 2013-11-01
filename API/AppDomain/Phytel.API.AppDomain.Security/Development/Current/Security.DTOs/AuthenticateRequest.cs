@@ -1,11 +1,6 @@
 ﻿using ServiceStack.ServiceHost;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Phytel.API.AppDomain.Security.DTOs
+namespace Phytel.API.AppDomain.Security.DTO
 {
     [Route("/api/security/login")]
     public class AuthenticateRequest

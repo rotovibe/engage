@@ -1,12 +1,8 @@
-﻿using Phytel.API.AppDomain.Security.DTOs;
-using Phytel.API.DataDomain.Security.DTOs;
+﻿using Phytel.API.AppDomain.Security.DTO;
+using Phytel.API.DataDomain.Security.DTO;
 using ServiceStack.Service;
 using ServiceStack.ServiceClient.Web;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Phytel.API.AppDomain.Security
 {

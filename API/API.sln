@@ -11,80 +11,164 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Security", "Security", "{8E
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Security", "Security", "{774B2FE7-1971-440A-A70E-BE8ED31B0DEA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppDomain.Security.Services", "AppDomain\Phytel.API.AppDomain.Security\Development\Current\Security.Services\AppDomain.Security.Services.csproj", "{B84263C2-54D7-4254-B159-DDB1F39D0783}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppDomain.Security.Service", "AppDomain\Phytel.API.AppDomain.Security\Development\Current\Security.Services\AppDomain.Security.Service.csproj", "{B84263C2-54D7-4254-B159-DDB1F39D0783}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppDomain.Security", "AppDomain\Phytel.API.AppDomain.Security\Development\Current\Security\AppDomain.Security.csproj", "{8F254AC6-F99C-4BEC-9088-EBBA9C696CAF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppDomain.Security.DTOs", "AppDomain\Phytel.API.AppDomain.Security\Development\Current\Security.DTOs\AppDomain.Security.DTOs.csproj", "{5D9C233B-E53D-4BE1-B578-1AA9722DE1CF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppDomain.Security.DTO", "AppDomain\Phytel.API.AppDomain.Security\Development\Current\Security.DTOs\AppDomain.Security.DTO.csproj", "{5D9C233B-E53D-4BE1-B578-1AA9722DE1CF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppDomain.Security.Services.Tests", "AppDomain\Phytel.API.AppDomain.Security\Development\Current\Security.Tests\AppDomain.Security.Services.Tests.csproj", "{BE484372-864F-4D0A-A4E1-60F6760182FD}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppDomain.Security.Services.Test", "AppDomain\Phytel.API.AppDomain.Security\Development\Current\Security.Tests\AppDomain.Security.Services.Test.csproj", "{BE484372-864F-4D0A-A4E1-60F6760182FD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.Security.Services.Tests", "DataDomain\Phytel.API.DataDomain.Security\Development\Current\Security.Services.Tests\DataDomain.Security.Services.Tests.csproj", "{9F763B50-9E2B-426F-ACFB-27F3D3F255D5}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.Security.Services.Test", "DataDomain\Phytel.API.DataDomain.Security\Development\Current\Security.Services.Tests\DataDomain.Security.Services.Test.csproj", "{9F763B50-9E2B-426F-ACFB-27F3D3F255D5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.Security.DTOs", "DataDomain\Phytel.API.DataDomain.Security\Development\Current\Security.DTOs\DataDomain.Security.DTOs.csproj", "{1C2C63A1-4246-4EC9-BAD1-C00E9ECD85F6}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.Security.DTO", "DataDomain\Phytel.API.DataDomain.Security\Development\Current\Security.DTOs\DataDomain.Security.DTO.csproj", "{1C2C63A1-4246-4EC9-BAD1-C00E9ECD85F6}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.Security", "DataDomain\Phytel.API.DataDomain.Security\Development\Current\Security\DataDomain.Security.csproj", "{F1A478D1-DCA1-4BE6-AE83-E0ACDD4FDFFD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.Security.Tests", "DataDomain\Phytel.API.DataDomain.Security\Development\Current\Security.Tests\DataDomain.Security.Tests.csproj", "{79CB7A3A-6D69-45F8-964F-D9609383B22A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.Security.Test", "DataDomain\Phytel.API.DataDomain.Security\Development\Current\Security.Tests\DataDomain.Security.Test.csproj", "{79CB7A3A-6D69-45F8-964F-D9609383B22A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.Security.Services", "DataDomain\Phytel.API.DataDomain.Security\Development\Current\Security.Services\DataDomain.Security.Services.csproj", "{75925CEF-FC32-490C-B804-3FF4C51D68C8}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.Security.Service", "DataDomain\Phytel.API.DataDomain.Security\Development\Current\Security.Services\DataDomain.Security.Service.csproj", "{75925CEF-FC32-490C-B804-3FF4C51D68C8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppDomain.Security.Tests", "AppDomain\Phytel.API.AppDomain.Security\Development\Current\AppDomain.Security.Tests\AppDomain.Security.Tests.csproj", "{8F553B3A-B649-4FDA-A1D7-F7EFC0DB4B67}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppDomain.Security.Test", "AppDomain\Phytel.API.AppDomain.Security\Development\Current\AppDomain.Security.Tests\AppDomain.Security.Test.csproj", "{8F553B3A-B649-4FDA-A1D7-F7EFC0DB4B67}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Phytel.API.Interface", "Interfaces\Development\Current\Phytel.API.Interface\Phytel.API.Interface.csproj", "{ABE948FB-247E-4955-B3AB-B7C93E10A542}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Interfaces", "Interfaces", "{2B73BAC7-448F-4CB9-9481-3C837C901B9C}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "C3User", "C3User", "{203698DB-0482-43A7-9D70-3A2AAFDD12D0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppDomain.C3User", "AppDomain\Phytel.API.AppDomain.C3User\Development\Current\C3User\AppDomain.C3User.csproj", "{958D8413-FE8C-4D2E-8651-6E1F3E50C02F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppDomain.C3User.DTO", "AppDomain\Phytel.API.AppDomain.C3User\Development\Current\C3User.DTOs\AppDomain.C3User.DTO.csproj", "{B6CFDC36-B2CD-4F81-B23F-DCB4AE193CC3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppDomain.C3User.Service", "AppDomain\Phytel.API.AppDomain.C3User\Development\Current\C3User.Services\AppDomain.C3User.Service.csproj", "{01BDEFDD-F975-4335-B362-872DBBF938F1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppDomain.C3User.Services.Test", "AppDomain\Phytel.API.AppDomain.C3User\Development\Current\C3User.Tests\AppDomain.C3User.Services.Test.csproj", "{0D2DCC54-4593-463D-A826-FAB60039B123}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppDomain.C3User.Test", "AppDomain\Phytel.API.AppDomain.C3User\Development\Current\AppDomain.C3User.Tests\AppDomain.C3User.Test.csproj", "{390D3F02-D87E-4DA0-9B1F-8BF0E070B45B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shared", "Shared", "{0921D4F2-8F09-438B-95F6-539E2434CCEF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Phytel.Mongo", "..\..\Shared\PhytelServices\Development\Current\Phytel.Mongo\Phytel.Mongo.csproj", "{7C9E786C-E4F7-4382-BDE4-8DBF980EA013}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Phytel.Web", "..\..\Shared\PhytelServices\Development\Current\Phytel.Web\Phytel.Web.csproj", "{FB0F37A8-A847-471F-98A2-F1B157AB31C8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PhytelServices", "..\..\Shared\PhytelServices\Development\Current\PhytelServices\PhytelServices.csproj", "{D790F618-438B-4C39-ABE5-1346122273AC}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "C3User", "C3User", "{719F4AB1-807A-43A1-A684-64B44220935D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.C3User", "DataDomain\Phytel.API.DataDomain.C3User\Development\Current\C3User\DataDomain.C3User.csproj", "{1536CD0A-6308-4DAF-8618-35BBA0816997}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.C3User.DTO", "DataDomain\Phytel.API.DataDomain.C3User\Development\Current\C3User.DTOs\DataDomain.C3User.DTO.csproj", "{1B3148A8-FB57-4461-91BC-F1CD38A013B6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.C3User.Service", "DataDomain\Phytel.API.DataDomain.C3User\Development\Current\C3User.Services\DataDomain.C3User.Service.csproj", "{017DC6E8-FB93-4303-AAF9-52E2449F9A34}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.C3User.Services.Test", "DataDomain\Phytel.API.DataDomain.C3User\Development\Current\C3User.Services.Tests\DataDomain.C3User.Services.Test.csproj", "{5D22373D-E432-4208-A737-E0BCA0567B5F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.C3User.Test", "DataDomain\Phytel.API.DataDomain.C3User\Development\Current\C3User.Tests\DataDomain.C3User.Test.csproj", "{EC134A5F-CB56-4196-BB4E-217D365A2534}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 12
+		SccNumberOfProjects = 25
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = http://hillstfs2013:8080/tfs/phytel
 		SccLocalPath0 = .
-		SccProjectUniqueName1 = DataDomain\\Phytel.API.DataDomain.Security\\Development\\Current\\Security.DTOs\\DataDomain.Security.DTOs.csproj
+		SccProjectUniqueName1 = DataDomain\\Phytel.API.DataDomain.Security\\Development\\Current\\Security\\DataDomain.Security.csproj
 		SccProjectTopLevelParentUniqueName1 = API.sln
-		SccProjectName1 = DataDomain/Phytel.API.DataDomain.Security/Development/Current/Security.DTOs
-		SccLocalPath1 = DataDomain\\Phytel.API.DataDomain.Security\\Development\\Current\\Security.DTOs
-		SccProjectUniqueName2 = DataDomain\\Phytel.API.DataDomain.Security\\Development\\Current\\Security\\DataDomain.Security.csproj
+		SccProjectName1 = DataDomain/Phytel.API.DataDomain.Security/Development/Current/Security
+		SccLocalPath1 = DataDomain\\Phytel.API.DataDomain.Security\\Development\\Current\\Security
+		SccProjectUniqueName2 = AppDomain\\Phytel.API.AppDomain.Security\\Development\\Current\\Security\\AppDomain.Security.csproj
 		SccProjectTopLevelParentUniqueName2 = API.sln
-		SccProjectName2 = DataDomain/Phytel.API.DataDomain.Security/Development/Current/Security
-		SccLocalPath2 = DataDomain\\Phytel.API.DataDomain.Security\\Development\\Current\\Security
-		SccProjectUniqueName3 = DataDomain\\Phytel.API.DataDomain.Security\\Development\\Current\\Security.Services.Tests\\DataDomain.Security.Services.Tests.csproj
+		SccProjectName2 = AppDomain/Phytel.API.AppDomain.Security/Development/Current/Security
+		SccLocalPath2 = AppDomain\\Phytel.API.AppDomain.Security\\Development\\Current\\Security
+		SccProjectUniqueName3 = Interfaces\\Development\\Current\\Phytel.API.Interface\\Phytel.API.Interface.csproj
 		SccProjectTopLevelParentUniqueName3 = API.sln
-		SccProjectName3 = DataDomain/Phytel.API.DataDomain.Security/Development/Current/Security.Services.Tests
-		SccLocalPath3 = DataDomain\\Phytel.API.DataDomain.Security\\Development\\Current\\Security.Services.Tests
-		SccProjectUniqueName4 = DataDomain\\Phytel.API.DataDomain.Security\\Development\\Current\\Security.Tests\\DataDomain.Security.Tests.csproj
+		SccProjectName3 = Interfaces/Development/Current/Phytel.API.Interface
+		SccLocalPath3 = Interfaces\\Development\\Current\\Phytel.API.Interface
+		SccProjectUniqueName4 = AppDomain\\Phytel.API.AppDomain.C3User\\Development\\Current\\C3User\\AppDomain.C3User.csproj
 		SccProjectTopLevelParentUniqueName4 = API.sln
-		SccProjectName4 = DataDomain/Phytel.API.DataDomain.Security/Development/Current/Security.Tests
-		SccLocalPath4 = DataDomain\\Phytel.API.DataDomain.Security\\Development\\Current\\Security.Tests
-		SccProjectUniqueName5 = AppDomain\\Phytel.API.AppDomain.Security\\Development\\Current\\Security\\AppDomain.Security.csproj
+		SccProjectName4 = AppDomain/Phytel.API.AppDomain.C3User/Development/Current/C3User
+		SccLocalPath4 = AppDomain\\Phytel.API.AppDomain.C3User\\Development\\Current\\C3User
+		SccProjectUniqueName5 = ..\\..\\Shared\\PhytelServices\\Development\\Current\\Phytel.Mongo\\Phytel.Mongo.csproj
 		SccProjectTopLevelParentUniqueName5 = API.sln
-		SccProjectName5 = AppDomain/Phytel.API.AppDomain.Security/Development/Current/Security
-		SccLocalPath5 = AppDomain\\Phytel.API.AppDomain.Security\\Development\\Current\\Security
-		SccProjectUniqueName6 = AppDomain\\Phytel.API.AppDomain.Security\\Development\\Current\\Security.DTOs\\AppDomain.Security.DTOs.csproj
+		SccProjectName5 = ../../Shared/PhytelServices/Development/Current/Phytel.Mongo
+		SccLocalPath5 = ..\\..\\Shared\\PhytelServices\\Development\\Current\\Phytel.Mongo
+		SccProjectUniqueName6 = ..\\..\\Shared\\PhytelServices\\Development\\Current\\Phytel.Web\\Phytel.Web.csproj
 		SccProjectTopLevelParentUniqueName6 = API.sln
-		SccProjectName6 = AppDomain/Phytel.API.AppDomain.Security/Development/Current/Security.DTOs
-		SccLocalPath6 = AppDomain\\Phytel.API.AppDomain.Security\\Development\\Current\\Security.DTOs
-		SccProjectUniqueName7 = AppDomain\\Phytel.API.AppDomain.Security\\Development\\Current\\Security.Services\\AppDomain.Security.Services.csproj
+		SccProjectName6 = ../../Shared/PhytelServices/Development/Current/Phytel.Web
+		SccLocalPath6 = ..\\..\\Shared\\PhytelServices\\Development\\Current\\Phytel.Web
+		SccProjectUniqueName7 = ..\\..\\Shared\\PhytelServices\\Development\\Current\\PhytelServices\\PhytelServices.csproj
 		SccProjectTopLevelParentUniqueName7 = API.sln
-		SccProjectName7 = AppDomain/Phytel.API.AppDomain.Security/Development/Current/Security.Services
-		SccLocalPath7 = AppDomain\\Phytel.API.AppDomain.Security\\Development\\Current\\Security.Services
-		SccProjectUniqueName8 = DataDomain\\Phytel.API.DataDomain.Security\\Development\\Current\\Security.Services\\DataDomain.Security.Services.csproj
+		SccProjectName7 = ../../Shared/PhytelServices/Development/Current/PhytelServices
+		SccLocalPath7 = ..\\..\\Shared\\PhytelServices\\Development\\Current\\PhytelServices
+		SccProjectUniqueName8 = DataDomain\\Phytel.API.DataDomain.C3User\\Development\\Current\\C3User\\DataDomain.C3User.csproj
 		SccProjectTopLevelParentUniqueName8 = API.sln
-		SccProjectName8 = DataDomain/Phytel.API.DataDomain.Security/Development/Current/Security.Services
-		SccLocalPath8 = DataDomain\\Phytel.API.DataDomain.Security\\Development\\Current\\Security.Services
-		SccProjectUniqueName9 = AppDomain\\Phytel.API.AppDomain.Security\\Development\\Current\\Security.Tests\\AppDomain.Security.Services.Tests.csproj
+		SccProjectName8 = DataDomain/Phytel.API.DataDomain.C3User/Development/Current/C3User
+		SccLocalPath8 = DataDomain\\Phytel.API.DataDomain.C3User\\Development\\Current\\C3User
+		SccProjectUniqueName9 = AppDomain\\Phytel.API.AppDomain.C3User\\Development\\Current\\C3User.DTOs\\AppDomain.C3User.DTO.csproj
 		SccProjectTopLevelParentUniqueName9 = API.sln
-		SccProjectName9 = AppDomain/Phytel.API.AppDomain.Security/Development/Current/Security.Tests
-		SccLocalPath9 = AppDomain\\Phytel.API.AppDomain.Security\\Development\\Current\\Security.Tests
-		SccProjectUniqueName10 = AppDomain\\Phytel.API.AppDomain.Security\\Development\\Current\\AppDomain.Security.Tests\\AppDomain.Security.Tests.csproj
+		SccProjectName9 = AppDomain/Phytel.API.AppDomain.C3User/Development/Current/C3User.DTOs
+		SccLocalPath9 = AppDomain\\Phytel.API.AppDomain.C3User\\Development\\Current\\C3User.DTOs
+		SccProjectUniqueName10 = AppDomain\\Phytel.API.AppDomain.C3User\\Development\\Current\\C3User.Services\\AppDomain.C3User.Service.csproj
 		SccProjectTopLevelParentUniqueName10 = API.sln
-		SccProjectName10 = AppDomain/Phytel.API.AppDomain.Security/Development/Current/AppDomain.Security.Tests
-		SccLocalPath10 = AppDomain\\Phytel.API.AppDomain.Security\\Development\\Current\\AppDomain.Security.Tests
-		SccProjectUniqueName11 = Interfaces\\Development\\Current\\Phytel.API.Interface\\Phytel.API.Interface.csproj
+		SccProjectName10 = AppDomain/Phytel.API.AppDomain.C3User/Development/Current/C3User.Services
+		SccLocalPath10 = AppDomain\\Phytel.API.AppDomain.C3User\\Development\\Current\\C3User.Services
+		SccProjectUniqueName11 = AppDomain\\Phytel.API.AppDomain.C3User\\Development\\Current\\C3User.Tests\\AppDomain.C3User.Services.Test.csproj
 		SccProjectTopLevelParentUniqueName11 = API.sln
-		SccProjectName11 = Interfaces/Development/Current/Phytel.API.Interface
-		SccLocalPath11 = Interfaces\\Development\\Current\\Phytel.API.Interface
+		SccProjectName11 = AppDomain/Phytel.API.AppDomain.C3User/Development/Current/C3User.Tests
+		SccLocalPath11 = AppDomain\\Phytel.API.AppDomain.C3User\\Development\\Current\\C3User.Tests
+		SccProjectUniqueName12 = AppDomain\\Phytel.API.AppDomain.C3User\\Development\\Current\\AppDomain.C3User.Tests\\AppDomain.C3User.Test.csproj
+		SccProjectTopLevelParentUniqueName12 = API.sln
+		SccProjectName12 = AppDomain/Phytel.API.AppDomain.C3User/Development/Current/AppDomain.C3User.Tests
+		SccLocalPath12 = AppDomain\\Phytel.API.AppDomain.C3User\\Development\\Current\\AppDomain.C3User.Tests
+		SccProjectUniqueName13 = AppDomain\\Phytel.API.AppDomain.Security\\Development\\Current\\Security.DTOs\\AppDomain.Security.DTO.csproj
+		SccProjectTopLevelParentUniqueName13 = API.sln
+		SccProjectName13 = AppDomain/Phytel.API.AppDomain.Security/Development/Current/Security.DTOs
+		SccLocalPath13 = AppDomain\\Phytel.API.AppDomain.Security\\Development\\Current\\Security.DTOs
+		SccProjectUniqueName14 = AppDomain\\Phytel.API.AppDomain.Security\\Development\\Current\\Security.Services\\AppDomain.Security.Service.csproj
+		SccProjectTopLevelParentUniqueName14 = API.sln
+		SccProjectName14 = AppDomain/Phytel.API.AppDomain.Security/Development/Current/Security.Services
+		SccLocalPath14 = AppDomain\\Phytel.API.AppDomain.Security\\Development\\Current\\Security.Services
+		SccProjectUniqueName15 = AppDomain\\Phytel.API.AppDomain.Security\\Development\\Current\\Security.Tests\\AppDomain.Security.Services.Test.csproj
+		SccProjectTopLevelParentUniqueName15 = API.sln
+		SccProjectName15 = AppDomain/Phytel.API.AppDomain.Security/Development/Current/Security.Tests
+		SccLocalPath15 = AppDomain\\Phytel.API.AppDomain.Security\\Development\\Current\\Security.Tests
+		SccProjectUniqueName16 = AppDomain\\Phytel.API.AppDomain.Security\\Development\\Current\\AppDomain.Security.Tests\\AppDomain.Security.Test.csproj
+		SccProjectTopLevelParentUniqueName16 = API.sln
+		SccProjectName16 = AppDomain/Phytel.API.AppDomain.Security/Development/Current/AppDomain.Security.Tests
+		SccLocalPath16 = AppDomain\\Phytel.API.AppDomain.Security\\Development\\Current\\AppDomain.Security.Tests
+		SccProjectUniqueName17 = DataDomain\\Phytel.API.DataDomain.Security\\Development\\Current\\Security.DTOs\\DataDomain.Security.DTO.csproj
+		SccProjectTopLevelParentUniqueName17 = API.sln
+		SccProjectName17 = DataDomain/Phytel.API.DataDomain.Security/Development/Current/Security.DTOs
+		SccLocalPath17 = DataDomain\\Phytel.API.DataDomain.Security\\Development\\Current\\Security.DTOs
+		SccProjectUniqueName18 = DataDomain\\Phytel.API.DataDomain.Security\\Development\\Current\\Security.Services\\DataDomain.Security.Service.csproj
+		SccProjectTopLevelParentUniqueName18 = API.sln
+		SccProjectName18 = DataDomain/Phytel.API.DataDomain.Security/Development/Current/Security.Services
+		SccLocalPath18 = DataDomain\\Phytel.API.DataDomain.Security\\Development\\Current\\Security.Services
+		SccProjectUniqueName19 = DataDomain\\Phytel.API.DataDomain.Security\\Development\\Current\\Security.Services.Tests\\DataDomain.Security.Services.Test.csproj
+		SccProjectTopLevelParentUniqueName19 = API.sln
+		SccProjectName19 = DataDomain/Phytel.API.DataDomain.Security/Development/Current/Security.Services.Tests
+		SccLocalPath19 = DataDomain\\Phytel.API.DataDomain.Security\\Development\\Current\\Security.Services.Tests
+		SccProjectUniqueName20 = DataDomain\\Phytel.API.DataDomain.Security\\Development\\Current\\Security.Tests\\DataDomain.Security.Test.csproj
+		SccProjectTopLevelParentUniqueName20 = API.sln
+		SccProjectName20 = DataDomain/Phytel.API.DataDomain.Security/Development/Current/Security.Tests
+		SccLocalPath20 = DataDomain\\Phytel.API.DataDomain.Security\\Development\\Current\\Security.Tests
+		SccProjectUniqueName21 = DataDomain\\Phytel.API.DataDomain.C3User\\Development\\Current\\C3User.DTOs\\DataDomain.C3User.DTO.csproj
+		SccProjectTopLevelParentUniqueName21 = API.sln
+		SccProjectName21 = DataDomain/Phytel.API.DataDomain.C3User/Development/Current/C3User.DTOs
+		SccLocalPath21 = DataDomain\\Phytel.API.DataDomain.C3User\\Development\\Current\\C3User.DTOs
+		SccProjectUniqueName22 = DataDomain\\Phytel.API.DataDomain.C3User\\Development\\Current\\C3User.Services\\DataDomain.C3User.Service.csproj
+		SccProjectTopLevelParentUniqueName22 = API.sln
+		SccProjectName22 = DataDomain/Phytel.API.DataDomain.C3User/Development/Current/C3User.Services
+		SccLocalPath22 = DataDomain\\Phytel.API.DataDomain.C3User\\Development\\Current\\C3User.Services
+		SccProjectUniqueName23 = DataDomain\\Phytel.API.DataDomain.C3User\\Development\\Current\\C3User.Services.Tests\\DataDomain.C3User.Services.Test.csproj
+		SccProjectTopLevelParentUniqueName23 = API.sln
+		SccProjectName23 = DataDomain/Phytel.API.DataDomain.C3User/Development/Current/C3User.Services.Tests
+		SccLocalPath23 = DataDomain\\Phytel.API.DataDomain.C3User\\Development\\Current\\C3User.Services.Tests
+		SccProjectUniqueName24 = DataDomain\\Phytel.API.DataDomain.C3User\\Development\\Current\\C3User.Tests\\DataDomain.C3User.Test.csproj
+		SccProjectTopLevelParentUniqueName24 = API.sln
+		SccProjectName24 = DataDomain/Phytel.API.DataDomain.C3User/Development/Current/C3User.Tests
+		SccLocalPath24 = DataDomain\\Phytel.API.DataDomain.C3User\\Development\\Current\\C3User.Tests
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -135,13 +219,67 @@ Global
 		{ABE948FB-247E-4955-B3AB-B7C93E10A542}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{ABE948FB-247E-4955-B3AB-B7C93E10A542}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{ABE948FB-247E-4955-B3AB-B7C93E10A542}.Release|Any CPU.Build.0 = Release|Any CPU
+		{958D8413-FE8C-4D2E-8651-6E1F3E50C02F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{958D8413-FE8C-4D2E-8651-6E1F3E50C02F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{958D8413-FE8C-4D2E-8651-6E1F3E50C02F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{958D8413-FE8C-4D2E-8651-6E1F3E50C02F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B6CFDC36-B2CD-4F81-B23F-DCB4AE193CC3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B6CFDC36-B2CD-4F81-B23F-DCB4AE193CC3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B6CFDC36-B2CD-4F81-B23F-DCB4AE193CC3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B6CFDC36-B2CD-4F81-B23F-DCB4AE193CC3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{01BDEFDD-F975-4335-B362-872DBBF938F1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{01BDEFDD-F975-4335-B362-872DBBF938F1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{01BDEFDD-F975-4335-B362-872DBBF938F1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{01BDEFDD-F975-4335-B362-872DBBF938F1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0D2DCC54-4593-463D-A826-FAB60039B123}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0D2DCC54-4593-463D-A826-FAB60039B123}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0D2DCC54-4593-463D-A826-FAB60039B123}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0D2DCC54-4593-463D-A826-FAB60039B123}.Release|Any CPU.Build.0 = Release|Any CPU
+		{390D3F02-D87E-4DA0-9B1F-8BF0E070B45B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{390D3F02-D87E-4DA0-9B1F-8BF0E070B45B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{390D3F02-D87E-4DA0-9B1F-8BF0E070B45B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{390D3F02-D87E-4DA0-9B1F-8BF0E070B45B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7C9E786C-E4F7-4382-BDE4-8DBF980EA013}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7C9E786C-E4F7-4382-BDE4-8DBF980EA013}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7C9E786C-E4F7-4382-BDE4-8DBF980EA013}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7C9E786C-E4F7-4382-BDE4-8DBF980EA013}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FB0F37A8-A847-471F-98A2-F1B157AB31C8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FB0F37A8-A847-471F-98A2-F1B157AB31C8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FB0F37A8-A847-471F-98A2-F1B157AB31C8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FB0F37A8-A847-471F-98A2-F1B157AB31C8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D790F618-438B-4C39-ABE5-1346122273AC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D790F618-438B-4C39-ABE5-1346122273AC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D790F618-438B-4C39-ABE5-1346122273AC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D790F618-438B-4C39-ABE5-1346122273AC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1536CD0A-6308-4DAF-8618-35BBA0816997}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1536CD0A-6308-4DAF-8618-35BBA0816997}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1536CD0A-6308-4DAF-8618-35BBA0816997}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1536CD0A-6308-4DAF-8618-35BBA0816997}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1B3148A8-FB57-4461-91BC-F1CD38A013B6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1B3148A8-FB57-4461-91BC-F1CD38A013B6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1B3148A8-FB57-4461-91BC-F1CD38A013B6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1B3148A8-FB57-4461-91BC-F1CD38A013B6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{017DC6E8-FB93-4303-AAF9-52E2449F9A34}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{017DC6E8-FB93-4303-AAF9-52E2449F9A34}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{017DC6E8-FB93-4303-AAF9-52E2449F9A34}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{017DC6E8-FB93-4303-AAF9-52E2449F9A34}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5D22373D-E432-4208-A737-E0BCA0567B5F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5D22373D-E432-4208-A737-E0BCA0567B5F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5D22373D-E432-4208-A737-E0BCA0567B5F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5D22373D-E432-4208-A737-E0BCA0567B5F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EC134A5F-CB56-4196-BB4E-217D365A2534}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EC134A5F-CB56-4196-BB4E-217D365A2534}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EC134A5F-CB56-4196-BB4E-217D365A2534}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EC134A5F-CB56-4196-BB4E-217D365A2534}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{8E28768D-9A7C-4CA0-A4D0-761C06DA259C} = {2E11BED7-15D8-4A76-B289-E9FE4FF9DD72}
+		{203698DB-0482-43A7-9D70-3A2AAFDD12D0} = {2E11BED7-15D8-4A76-B289-E9FE4FF9DD72}
 		{774B2FE7-1971-440A-A70E-BE8ED31B0DEA} = {81F6F5D5-AADE-4C4A-ACAE-EB1B3651E150}
+		{719F4AB1-807A-43A1-A684-64B44220935D} = {81F6F5D5-AADE-4C4A-ACAE-EB1B3651E150}
 		{B84263C2-54D7-4254-B159-DDB1F39D0783} = {8E28768D-9A7C-4CA0-A4D0-761C06DA259C}
 		{8F254AC6-F99C-4BEC-9088-EBBA9C696CAF} = {8E28768D-9A7C-4CA0-A4D0-761C06DA259C}
 		{5D9C233B-E53D-4BE1-B578-1AA9722DE1CF} = {8E28768D-9A7C-4CA0-A4D0-761C06DA259C}
@@ -153,5 +291,18 @@ Global
 		{79CB7A3A-6D69-45F8-964F-D9609383B22A} = {774B2FE7-1971-440A-A70E-BE8ED31B0DEA}
 		{75925CEF-FC32-490C-B804-3FF4C51D68C8} = {774B2FE7-1971-440A-A70E-BE8ED31B0DEA}
 		{ABE948FB-247E-4955-B3AB-B7C93E10A542} = {2B73BAC7-448F-4CB9-9481-3C837C901B9C}
+		{958D8413-FE8C-4D2E-8651-6E1F3E50C02F} = {203698DB-0482-43A7-9D70-3A2AAFDD12D0}
+		{B6CFDC36-B2CD-4F81-B23F-DCB4AE193CC3} = {203698DB-0482-43A7-9D70-3A2AAFDD12D0}
+		{01BDEFDD-F975-4335-B362-872DBBF938F1} = {203698DB-0482-43A7-9D70-3A2AAFDD12D0}
+		{0D2DCC54-4593-463D-A826-FAB60039B123} = {203698DB-0482-43A7-9D70-3A2AAFDD12D0}
+		{390D3F02-D87E-4DA0-9B1F-8BF0E070B45B} = {203698DB-0482-43A7-9D70-3A2AAFDD12D0}
+		{7C9E786C-E4F7-4382-BDE4-8DBF980EA013} = {0921D4F2-8F09-438B-95F6-539E2434CCEF}
+		{FB0F37A8-A847-471F-98A2-F1B157AB31C8} = {0921D4F2-8F09-438B-95F6-539E2434CCEF}
+		{D790F618-438B-4C39-ABE5-1346122273AC} = {0921D4F2-8F09-438B-95F6-539E2434CCEF}
+		{1536CD0A-6308-4DAF-8618-35BBA0816997} = {719F4AB1-807A-43A1-A684-64B44220935D}
+		{1B3148A8-FB57-4461-91BC-F1CD38A013B6} = {719F4AB1-807A-43A1-A684-64B44220935D}
+		{017DC6E8-FB93-4303-AAF9-52E2449F9A34} = {719F4AB1-807A-43A1-A684-64B44220935D}
+		{5D22373D-E432-4208-A737-E0BCA0567B5F} = {719F4AB1-807A-43A1-A684-64B44220935D}
+		{EC134A5F-CB56-4196-BB4E-217D365A2534} = {719F4AB1-807A-43A1-A684-64B44220935D}
 	EndGlobalSection
 EndGlobal

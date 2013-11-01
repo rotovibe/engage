@@ -1,16 +1,9 @@
-﻿using Phytel.API.AppDomain.Security.DTOs;
-using ServiceStack.ServiceInterface;
+﻿using Phytel.API.AppDomain.Security.DTO;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Web.UI;
-using System.Web.Security;
-using System.Web;
 
-namespace Phytel.API.AppDomain.Security.Services
+namespace Phytel.API.AppDomain.Security.Service
 {
-    public class SecurityService : Service
+    public class SecurityService : ServiceStack.ServiceInterface.Service
     {
         public object Any(AuthenticateRequest request)
         {

@@ -7,8 +7,8 @@
     <ProjectGuid>{5D9C233B-E53D-4BE1-B578-1AA9722DE1CF}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Phytel.API.AppDomain.User.DTOs</RootNamespace>
-    <AssemblyName>Phytel.API.AppDomain.User.DTOs</AssemblyName>
+    <RootNamespace>Phytel.API.AppDomain.Security.DTO</RootNamespace>
+    <AssemblyName>Phytel.API.AppDomain.Security.DTO</AssemblyName>
     <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SccProjectName>SAK</SccProjectName>

@@ -11,8 +11,8 @@
     <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Phytel.API.AppDomain.Security.Services</RootNamespace>
-    <AssemblyName>Phytel.API.AppDomain.Security.Services</AssemblyName>
+    <RootNamespace>Phytel.API.AppDomain.Security.Service</RootNamespace>
+    <AssemblyName>Phytel.API.AppDomain.Security.Service</AssemblyName>
     <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
     <UseIISExpress>false</UseIISExpress>
     <IISExpressSSLPort />
@@ -106,9 +106,9 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Security.DTOs\AppDomain.Security.DTOs.csproj">
+    <ProjectReference Include="..\Security.DTOs\AppDomain.Security.DTO.csproj">
       <Project>{5d9c233b-e53d-4be1-b578-1aa9722de1cf}</Project>
-      <Name>AppDomain.Security.DTOs</Name>
+      <Name>AppDomain.Security.DTO</Name>
     </ProjectReference>
     <ProjectReference Include="..\Security\AppDomain.Security.csproj">
       <Project>{8f254ac6-f99c-4bec-9088-ebba9c696caf}</Project>
