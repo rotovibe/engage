@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("User.Services")]
+[assembly: AssemblyTitle("Phytel.API.AppDomain.Security.Service")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Phytel Inc.")]
-[assembly: AssemblyProduct("User.Services")]
+[assembly: AssemblyProduct("Phytel.API.AppDomain.Security.Service")]
 [assembly: AssemblyCopyright("Copyright © Phytel Inc. 2013")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
