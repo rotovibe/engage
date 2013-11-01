@@ -22,8 +22,6 @@ namespace Phytel.API.AppDomain.Security
             if(userResponse.UserID != Guid.Empty)
                 userResponse = securityRepo.LoginUser(userResponse, apiKey, productName);
 
-            throw new Exception("I just failed, help!!!");
-
             return userResponse;
         }
 
