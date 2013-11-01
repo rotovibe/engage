@@ -1,10 +1,10 @@
 ﻿using ServiceStack.ServiceInterface.ServiceModel;
 
-namespace Phytel.API.DataDomain.Security.DTO
+namespace Phytel.API.AppDomain.Security.DTO
 {
     public class ValidateTokenResponse
     {
-        public string Validated { get; set; }
+        public bool IsValid { get; set; }
         public ResponseStatus Status { get; set; }
     }
 }

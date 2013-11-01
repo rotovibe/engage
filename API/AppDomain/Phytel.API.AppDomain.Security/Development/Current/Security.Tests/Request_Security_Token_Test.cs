@@ -9,18 +9,16 @@ namespace Phytel.API.AppDomain.Security.Services.Test
     public class Request_Security_Token_Test
     {
         [TestMethod]
-        public void Get_Token_With_User_Password_APIKey()
+        public void ValidateCredential_Test()
         {
-            string controlValue = "rbobadilla";
+            string controlValue = "tdigiorgio@phytel.com";
             string sampleValue;
             IRestClient client = new JsonServiceClient();
 
-            JsonServiceClient.HttpWebRequestFilter = x => x.Headers.Add(string.Format("APIKey:{0}", "12345"));
-
             AuthenticateResponse response = client.Post<AuthenticateResponse>("http://localhost:999/api/security/login",
-                new AuthenticateRequest { Password = "Testing", Product = "NG", UserName = "NGMel" } as object);
+                new AuthenticateRequest { APIKey = "12345", Product = "NG", Token = "abcxyz"  } as object);
 
-            sampleValue = response.Validated;
+            sampleValue = response.UserName;
 
             Assert.AreEqual(controlValue, sampleValue);
         }

@@ -1,5 +1,5 @@
 ﻿using Phytel.API.AppDomain.Security.DTO;
-using Phytel.API.DataDomain.Security.DTO;
+using Phytel.API.AppDomain.Security.DTO;
 using ServiceStack.Service;
 using ServiceStack.ServiceClient.Web;
 using System;
@@ -8,37 +8,30 @@ namespace Phytel.API.AppDomain.Security
 {
     public static class SecurityManager
     {
-        public static AuthenticateResponse ValidateCredentials(string username, string password, string apikey)
+        public static AuthenticateResponse ValidateCredentials(string token, string apiKey, string productName)
         {
+            //First, call the C3UserRepository class to get the user information based on the token
+            //Next, call the APIRepository class to identify if the apiKey/productName combination is valid
+            //create AuthenticationResponse object and populate
+            //write APISession object, with TTL information 
 
-            IRestClient client = new JsonServiceClient();
+            ISecurityRepository<AuthenticateResponse> userRepo = SecurityRepositoryFactory<AuthenticateResponse>.GetUserRepository(productName);
+            ISecurityRepository<AuthenticateResponse> securityRepo = SecurityRepositoryFactory<AuthenticateResponse>.GetSecurityRepository(productName);
 
-            JsonServiceClient.HttpWebRequestFilter = x => x.Headers.Add(string.Format("APIKey:{0}", "12345"));
+            AuthenticateResponse userResponse = userRepo.LoginUser(token);
+            if(userResponse.UserID != Guid.Empty)
+                userResponse = securityRepo.LoginUser(userResponse, apiKey, productName);
 
-            ValidateResponse wsResponse = client.Post<ValidateResponse>("http://localhost:9999/api/Data/Login",
-                new ValidateRequest { APIKey=apikey, Password = password, Product = "NG", UserName = username } as object);
+            throw new Exception("I just failed, help!!!");
 
-            // translate to appdomain response object
-            AuthenticateResponse authResponse = new AuthenticateResponse();
-            authResponse.Validated = wsResponse.Validated.ToString();
-
-            return authResponse;
+            return userResponse;
         }
 
-        public static bool IsTokenExpired(string tempToken)
+        public static ValidateTokenResponse ValidateToken(string token, string productName)
         {
-            bool valid = false;
-            IRestClient client = new JsonServiceClient();
+            ISecurityRepository<AuthenticateResponse> securityRepo = SecurityRepositoryFactory<AuthenticateResponse>.GetSecurityRepository(productName);
 
-            // might not need this
-            JsonServiceClient.HttpWebRequestFilter = x => x.Headers.Add(string.Format("APIKey:{0}", "12345"));
-
-            ValidateTokenResponse wsResponse = client.Post<ValidateTokenResponse>("http://localhost:9999/api/Data/Token",
-                new ValidateTokenRequest { Token = tempToken } as object);
-
-            ValidateTokenResponse authResponse = new ValidateTokenResponse();
-            valid = Convert.ToBoolean(wsResponse.Validated);
-            return valid;
+            return securityRepo.Validate(token);
         }
     }
 }

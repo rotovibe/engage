@@ -1,30 +1,22 @@
-﻿
-namespace Phytel.API.DataDomain.Security
+﻿namespace Phytel.API.AppDomain.Security
 {
     public abstract class SecurityRepositoryFactory<T>
     {
-        public static ISecurityRepository<T> GetAPISessionRepository(string productName)
+        public static ISecurityRepository<T> GetUserRepository(string productName)
         {
             ISecurityRepository<T> repo = null;
 
-            if (productName.ToLower().Equals("NG"))
-            {
-                SecurityMongoContext context = new SecurityMongoContext();
-                repo = new APISessionMongoRepository<T>(context) as ISecurityRepository<T>;
-            }
+            repo = new C3UserRepository<T>() as ISecurityRepository<T>;
 
             return repo;
         }
 
-        public static ISecurityRepository<T> GetAPIUserRepository(string productName)
+        public static ISecurityRepository<T> GetSecurityRepository(string productName)
         {
             ISecurityRepository<T> repo = null;
 
-            if (productName.ToLower().Equals("NG"))
-            {
-                SecurityMongoContext context = new SecurityMongoContext();
-                repo = new APIUsersMongoRepository<T>(context) as ISecurityRepository<T>;
-            }
+            SecurityMongoContext context = new SecurityMongoContext();
+            repo = new APISessionRepository<T>(context) as ISecurityRepository<T>;
 
             return repo;
         }

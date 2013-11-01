@@ -1,8 +1,8 @@
 ﻿using ServiceStack.ServiceHost;
 
-namespace Phytel.API.DataDomain.Security.DTO
+namespace Phytel.API.AppDomain.Security.DTO
 {
-    [Route("/api/Data/Token")]
+    [Route("/api/security/Token")]
     public class ValidateTokenRequest
     {
         public string Token { get; set; }

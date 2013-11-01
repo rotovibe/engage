@@ -7,17 +7,18 @@ namespace Phytel.API.AppDomain.Security.Service
     {
         public object Any(AuthenticateRequest request)
         {
-            string aPIKey = base.Request.Headers["APIKey"];
-            request.APIKey = aPIKey;
-
-            // validate user against apiuser datastore
-            AuthenticateResponse authResponse = SecurityManager.ValidateCredentials("mel", "bobadilla", "apikey1234");
-            bool validated = Convert.ToBoolean(authResponse.Validated);
-            
-            // return token
-            string currentToken = CacheModel.GetValidToken(request.UserName, request.Password, request.APIKey);
-
-            return authResponse;
+            AuthenticateResponse response = new AuthenticateResponse();
+            try
+            {
+                // validate user against apiuser datastore
+                response = SecurityManager.ValidateCredentials(request.Token, request.APIKey, request.Product);
+            }
+            catch(Exception ex)
+            {
+                //TODO: Log this to C3 database via ASE
+                response.Status = new ServiceStack.ServiceInterface.ServiceModel.ResponseStatus("Excepton", ex.Message);
+            }
+            return response;
         }
     }
 }
