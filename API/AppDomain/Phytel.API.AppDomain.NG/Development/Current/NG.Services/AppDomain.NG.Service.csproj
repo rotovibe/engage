@@ -7,12 +7,12 @@
     <ProductVersion>
     </ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{017DC6E8-FB93-4303-AAF9-52E2449F9A34}</ProjectGuid>
+    <ProjectGuid>{10A4CF5C-5B03-4069-9A7F-5BD0627EF148}</ProjectGuid>
     <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Phytel.API.DataDomain.Patient.Service</RootNamespace>
-    <AssemblyName>Phytel.API.DataDomain.Patient.Service</AssemblyName>
+    <RootNamespace>Phytel.API.AppDomain.NG.Service</RootNamespace>
+    <AssemblyName>Phytel.API.AppDomain.NG.Service</AssemblyName>
     <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
     <UseIISExpress>false</UseIISExpress>
     <IISExpressSSLPort />
@@ -44,28 +44,28 @@
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="ServiceStack">
-      <HintPath>..\..\..\..\..\packages\ServiceStack.3.9.69\lib\net35\ServiceStack.dll</HintPath>
+      <HintPath>..\packages\ServiceStack.3.9.69\lib\net35\ServiceStack.dll</HintPath>
     </Reference>
     <Reference Include="ServiceStack.Common">
-      <HintPath>..\..\..\..\..\packages\ServiceStack.Common.3.9.69\lib\net35\ServiceStack.Common.dll</HintPath>
+      <HintPath>..\packages\ServiceStack.Common.3.9.69\lib\net35\ServiceStack.Common.dll</HintPath>
     </Reference>
     <Reference Include="ServiceStack.Interfaces">
-      <HintPath>..\..\..\..\..\packages\ServiceStack.Common.3.9.69\lib\net35\ServiceStack.Interfaces.dll</HintPath>
+      <HintPath>..\packages\ServiceStack.Common.3.9.69\lib\net35\ServiceStack.Interfaces.dll</HintPath>
     </Reference>
     <Reference Include="ServiceStack.OrmLite">
-      <HintPath>..\..\..\..\..\packages\ServiceStack.OrmLite.SqlServer.3.9.69\lib\net35\ServiceStack.OrmLite.dll</HintPath>
+      <HintPath>..\packages\ServiceStack.OrmLite.SqlServer.3.9.69\lib\net35\ServiceStack.OrmLite.dll</HintPath>
     </Reference>
     <Reference Include="ServiceStack.OrmLite.SqlServer">
-      <HintPath>..\..\..\..\..\packages\ServiceStack.OrmLite.SqlServer.3.9.69\lib\net35\ServiceStack.OrmLite.SqlServer.dll</HintPath>
+      <HintPath>..\packages\ServiceStack.OrmLite.SqlServer.3.9.69\lib\net35\ServiceStack.OrmLite.SqlServer.dll</HintPath>
     </Reference>
     <Reference Include="ServiceStack.Redis">
-      <HintPath>..\..\..\..\..\packages\ServiceStack.Redis.3.9.69\lib\net35\ServiceStack.Redis.dll</HintPath>
+      <HintPath>..\packages\ServiceStack.Redis.3.9.69\lib\net35\ServiceStack.Redis.dll</HintPath>
     </Reference>
     <Reference Include="ServiceStack.ServiceInterface">
-      <HintPath>..\..\..\..\..\packages\ServiceStack.3.9.69\lib\net35\ServiceStack.ServiceInterface.dll</HintPath>
+      <HintPath>..\packages\ServiceStack.3.9.69\lib\net35\ServiceStack.ServiceInterface.dll</HintPath>
     </Reference>
     <Reference Include="ServiceStack.Text">
-      <HintPath>..\..\..\..\..\packages\ServiceStack.Text.3.9.69\lib\net35\ServiceStack.Text.dll</HintPath>
+      <HintPath>..\packages\ServiceStack.Text.3.9.69\lib\net35\ServiceStack.Text.dll</HintPath>
     </Reference>
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
@@ -89,11 +89,11 @@
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="PatientService.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="NGService.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
@@ -105,13 +105,13 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Patient.DTOs\DataDomain.Patient.DTO.csproj">
-      <Project>{1b3148a8-fb57-4461-91bc-f1cd38a013b6}</Project>
-      <Name>DataDomain.Patient.DTO</Name>
+    <ProjectReference Include="..\NG.DTOs\AppDomain.NG.DTO.csproj">
+      <Project>{e9957107-8f2a-4946-834e-629d4235b9b3}</Project>
+      <Name>AppDomain.NG.DTO</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Patient\DataDomain.Patient.csproj">
-      <Project>{1536cd0a-6308-4daf-8618-35bba0816997}</Project>
-      <Name>DataDomain.Patient</Name>
+    <ProjectReference Include="..\NG\AppDomain.NG.csproj">
+      <Project>{e368da81-d304-4556-b1c4-d4774c0defd2}</Project>
+      <Name>AppDomain.NG</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
@@ -127,9 +127,9 @@
         <WebProjectProperties>
           <UseIIS>True</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>56179</DevelopmentServerPort>
+          <DevelopmentServerPort>53167</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:8888</IISUrl>
+          <IISUrl>http://localhost:999</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

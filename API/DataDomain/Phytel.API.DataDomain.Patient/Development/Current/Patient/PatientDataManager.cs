@@ -5,14 +5,14 @@ namespace Phytel.API.DataDomain.Patient
 {
     public static class PatientDataManager
     {
-        public static PatientDataResponse LoginUser(PatientDataRequest request)
+        public static PatientResponse GetPatientByID(PatientRequest request)
         {
-            PatientDataResponse result = null;
+            PatientResponse result = null;
 
-            IPatientRepository<PatientDataResponse> repo = Phytel.API.DataDomain.Patient.PatientRepositoryFactory<PatientDataResponse>.GetPatientRepository(string.Empty);
-            result = repo.ProcessUserToken(request.UserToken);
+            IPatientRepository<PatientResponse> repo = Phytel.API.DataDomain.Patient.PatientRepositoryFactory<PatientResponse>.GetPatientRepository("INHEALTH001", string.Empty);
+            result = (PatientResponse)repo.FindByID(request.PatientID);
             if (result == null)
-                result = new PatientDataResponse();
+                result = new PatientResponse();
 
             return result;
         }

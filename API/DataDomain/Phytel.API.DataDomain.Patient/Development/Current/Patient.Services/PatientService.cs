@@ -5,13 +5,9 @@ namespace Phytel.API.DataDomain.Patient.Service
 {
     public class PatientService : ServiceStack.ServiceInterface.Service
     {
-        public object Any(PatientDataRequest request)
+        public object Any(PatientRequest request)
         {
-            PatientDataResponse vResponse;
-            
-            vResponse = PatientDataManager.LoginUser(request);
-
-            return vResponse;
+            return new PatientResponse();
         }
     }
 }

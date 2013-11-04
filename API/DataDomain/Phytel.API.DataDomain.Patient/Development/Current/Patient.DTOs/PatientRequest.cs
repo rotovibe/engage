@@ -2,9 +2,9 @@ using ServiceStack.ServiceHost;
 
 namespace Phytel.API.DataDomain.Patient.DTO
 {
-    [Route("/api/Data/login")]
+    [Route("/[context]/data/patient")]
     public class PatientRequest
     {
-        public string UserToken { get; set; }
+        public string PatientID { get; set; }
     }
 }

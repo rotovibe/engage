@@ -10,6 +10,6 @@ namespace Phytel.API.DataDomain.Patient
 {
     public interface IPatientRepository<T> : IRepository<T>
     {
-        PatientDataResponse ProcessUserToken(string userToken);
+        
     }
 }

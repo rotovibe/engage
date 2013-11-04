@@ -1,4 +1,5 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Phytel.API.DataDomain.Patient.DTO;
 
 namespace Phytel.API.DataDomain.Patient.Test
 {
@@ -6,13 +7,13 @@ namespace Phytel.API.DataDomain.Patient.Test
     public class PatientTest
     {
         [TestMethod]
-        public void GetUserByToken()
+        public void GetPatientByID()
         {
-            DTO.PatientDataRequest newRequest = new DTO.PatientDataRequest { UserToken = "abcxyz" };
+            PatientRequest request = new PatientRequest{ PatientID = "5"};
 
-            DTO.PatientDataResponse response = DataDomain.Patient.PatientDataManager.LoginUser(newRequest);
+            PatientResponse response = PatientDataManager.GetPatientByID(request);
 
-            Assert.IsTrue(response.UserName == "tdigiorgio@phytel.com");
+            Assert.IsTrue(response.FirstName == "Tony");
         }
     }
 }

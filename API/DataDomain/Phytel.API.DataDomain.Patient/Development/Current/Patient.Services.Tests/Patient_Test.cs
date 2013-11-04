@@ -9,18 +9,18 @@ namespace Phytel.API.DataDomain.Patient.Services.Test
     public class User_Services_Test
     {
         [TestMethod]
-        public void Get_Token_From_DataStore()
+        public void GetPatientByID()
         {
-            string controlValue = "tdigiorgio@phytel.com";
+            string controlValue = "Tony";
             string sampleValue;
             IRestClient client = new JsonServiceClient();
 
             JsonServiceClient.HttpWebRequestFilter = x => x.Headers.Add(string.Format("APIKey:{0}", "12345"));
 
-            PatientDataResponse response = client.Post<PatientDataResponse>("http://localhost:9999/api/Data/User",
-                new PatientDataRequest { UserToken = "abcxyz" } as object);
+            PatientResponse response = client.Post<PatientResponse>("http://localhost:9999/api/Data/User",
+                new PatientRequest { PatientID = "5"} as object);
 
-            sampleValue = response.UserName;
+            sampleValue = response.FirstName;
 
             Assert.AreEqual(controlValue, sampleValue);
         }
