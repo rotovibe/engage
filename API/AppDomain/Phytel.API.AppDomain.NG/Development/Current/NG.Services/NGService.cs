@@ -5,12 +5,12 @@ namespace Phytel.API.AppDomain.NG.Service
 {
     public class NGService : ServiceStack.ServiceInterface.Service
     {
-        public object Get(PatientRequest request)
+        public object Post(PatientRequest request)
         {
             PatientResponse response = new PatientResponse();
             try
             {
-                request.Token = base.Request.Headers["APIToken"] as string;
+                //request.Token = base.Request.Headers["APIToken"] as string;
 
                 // validate user against apiuser datastore
                 bool result = NGManager.IsUserValidated(request.Token);

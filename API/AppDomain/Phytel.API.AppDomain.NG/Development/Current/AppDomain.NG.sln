@@ -2,56 +2,125 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
 VisualStudioVersion = 12.0.21005.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NG", "NG\AppDomain.NG.csproj", "{8F254AC6-F99C-4BEC-9088-EBBA9C696CAF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppDomain.NG", "NG\AppDomain.NG.csproj", "{E368DA81-D304-4556-B1C4-D4774C0DEFD2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NG.DTOs", "NG.DTOs\AppDomain.NG.DTO.csproj", "{5D9C233B-E53D-4BE1-B578-1AA9722DE1CF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppDomain.NG.DTO", "NG.DTOs\AppDomain.NG.DTO.csproj", "{E9957107-8F2A-4946-834E-629D4235B9B3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NG.Tests", "NG.Tests\AppDomain.NG.Services.Test.csproj", "{BE484372-864F-4D0A-A4E1-60F6760182FD}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppDomain.NG.Services.Test", "NG.Tests\AppDomain.NG.Services.Test.csproj", "{C14B66C1-AE95-4A17-B1E5-E2BAFDE8BAB3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NG.Services", "NG.Services\AppDomain.NG.Service.csproj", "{B84263C2-54D7-4254-B159-DDB1F39D0783}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppDomain.NG.Service", "NG.Services\AppDomain.NG.Service.csproj", "{10A4CF5C-5B03-4069-9A7F-5BD0627EF148}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DataDomain.Patient", "DataDomain.Patient", "{4D511DE3-A68D-43BD-8937-ACDDC1ED76D2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.Patient.Service", "..\..\..\..\DataDomain\Phytel.API.DataDomain.Patient\Development\Current\Patient.Services\DataDomain.Patient.Service.csproj", "{017DC6E8-FB93-4303-AAF9-52E2449F9A34}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.Patient", "..\..\..\..\DataDomain\Phytel.API.DataDomain.Patient\Development\Current\Patient\DataDomain.Patient.csproj", "{1536CD0A-6308-4DAF-8618-35BBA0816997}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.Patient.Test", "..\..\..\..\DataDomain\Phytel.API.DataDomain.Patient\Development\Current\Patient.Tests\DataDomain.Patient.Test.csproj", "{EC134A5F-CB56-4196-BB4E-217D365A2534}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.Patient.Services.Test", "..\..\..\..\DataDomain\Phytel.API.DataDomain.Patient\Development\Current\Patient.Services.Tests\DataDomain.Patient.Services.Test.csproj", "{5D22373D-E432-4208-A737-E0BCA0567B5F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.Patient.DTO", "..\..\..\..\DataDomain\Phytel.API.DataDomain.Patient\Development\Current\Patient.DTOs\DataDomain.Patient.DTO.csproj", "{1B3148A8-FB57-4461-91BC-F1CD38A013B6}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "AppDomain.NG", "AppDomain.NG", "{B1352ECA-2809-4B7B-AA70-1D181A236F96}"
 EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 5
+		SccNumberOfProjects = 10
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = http://hillstfs2013:8080/tfs/phytel
-		SccProjectUniqueName0 = NG\\NG.csproj
-		SccProjectName0 = NG
-		SccLocalPath0 = NG
-		SccProjectUniqueName1 = NG.DTOs\\NG.DTOs.csproj
-		SccProjectName1 = NG.DTOs
-		SccLocalPath1 = NG.DTOs
-		SccProjectUniqueName2 = NG.Tests\\NG.Tests.csproj
-		SccProjectName2 = NG.Tests
-		SccLocalPath2 = NG.Tests
-		SccProjectUniqueName3 = NG.Services\\NG.Services.csproj
-		SccProjectName3 = NG.Services
-		SccLocalPath3 = NG.Services
-		SccLocalPath4 = .
+		SccLocalPath0 = .
+		SccProjectUniqueName1 = NG\\AppDomain.NG.csproj
+		SccProjectTopLevelParentUniqueName1 = AppDomain.NG.sln
+		SccProjectName1 = NG
+		SccLocalPath1 = NG
+		SccProjectUniqueName2 = NG.DTOs\\AppDomain.NG.DTO.csproj
+		SccProjectTopLevelParentUniqueName2 = AppDomain.NG.sln
+		SccProjectName2 = NG.DTOs
+		SccLocalPath2 = NG.DTOs
+		SccProjectUniqueName3 = NG.Tests\\AppDomain.NG.Services.Test.csproj
+		SccProjectTopLevelParentUniqueName3 = AppDomain.NG.sln
+		SccProjectName3 = NG.Tests
+		SccLocalPath3 = NG.Tests
+		SccProjectUniqueName4 = NG.Services\\AppDomain.NG.Service.csproj
+		SccProjectTopLevelParentUniqueName4 = AppDomain.NG.sln
+		SccProjectName4 = NG.Services
+		SccLocalPath4 = NG.Services
+		SccProjectUniqueName5 = ..\\..\\..\\..\\DataDomain\\Phytel.API.DataDomain.Patient\\Development\\Current\\Patient.Services\\DataDomain.Patient.Service.csproj
+		SccProjectTopLevelParentUniqueName5 = AppDomain.NG.sln
+		SccProjectName5 = ../../../../DataDomain/Phytel.API.DataDomain.Patient/Development/Current/Patient.Services
+		SccLocalPath5 = ..\\..\\..\\..\\DataDomain\\Phytel.API.DataDomain.Patient\\Development\\Current\\Patient.Services
+		SccProjectUniqueName6 = ..\\..\\..\\..\\DataDomain\\Phytel.API.DataDomain.Patient\\Development\\Current\\Patient\\DataDomain.Patient.csproj
+		SccProjectTopLevelParentUniqueName6 = AppDomain.NG.sln
+		SccProjectName6 = ../../../../DataDomain/Phytel.API.DataDomain.Patient/Development/Current/Patient
+		SccLocalPath6 = ..\\..\\..\\..\\DataDomain\\Phytel.API.DataDomain.Patient\\Development\\Current\\Patient
+		SccProjectUniqueName7 = ..\\..\\..\\..\\DataDomain\\Phytel.API.DataDomain.Patient\\Development\\Current\\Patient.Tests\\DataDomain.Patient.Test.csproj
+		SccProjectTopLevelParentUniqueName7 = AppDomain.NG.sln
+		SccProjectName7 = ../../../../DataDomain/Phytel.API.DataDomain.Patient/Development/Current/Patient.Tests
+		SccLocalPath7 = ..\\..\\..\\..\\DataDomain\\Phytel.API.DataDomain.Patient\\Development\\Current\\Patient.Tests
+		SccProjectUniqueName8 = ..\\..\\..\\..\\DataDomain\\Phytel.API.DataDomain.Patient\\Development\\Current\\Patient.Services.Tests\\DataDomain.Patient.Services.Test.csproj
+		SccProjectTopLevelParentUniqueName8 = AppDomain.NG.sln
+		SccProjectName8 = ../../../../DataDomain/Phytel.API.DataDomain.Patient/Development/Current/Patient.Services.Tests
+		SccLocalPath8 = ..\\..\\..\\..\\DataDomain\\Phytel.API.DataDomain.Patient\\Development\\Current\\Patient.Services.Tests
+		SccProjectUniqueName9 = ..\\..\\..\\..\\DataDomain\\Phytel.API.DataDomain.Patient\\Development\\Current\\Patient.DTOs\\DataDomain.Patient.DTO.csproj
+		SccProjectTopLevelParentUniqueName9 = AppDomain.NG.sln
+		SccProjectName9 = ../../../../DataDomain/Phytel.API.DataDomain.Patient/Development/Current/Patient.DTOs
+		SccLocalPath9 = ..\\..\\..\\..\\DataDomain\\Phytel.API.DataDomain.Patient\\Development\\Current\\Patient.DTOs
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{8F254AC6-F99C-4BEC-9088-EBBA9C696CAF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{8F254AC6-F99C-4BEC-9088-EBBA9C696CAF}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{8F254AC6-F99C-4BEC-9088-EBBA9C696CAF}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{8F254AC6-F99C-4BEC-9088-EBBA9C696CAF}.Release|Any CPU.Build.0 = Release|Any CPU
-		{5D9C233B-E53D-4BE1-B578-1AA9722DE1CF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{5D9C233B-E53D-4BE1-B578-1AA9722DE1CF}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{5D9C233B-E53D-4BE1-B578-1AA9722DE1CF}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{5D9C233B-E53D-4BE1-B578-1AA9722DE1CF}.Release|Any CPU.Build.0 = Release|Any CPU
-		{BE484372-864F-4D0A-A4E1-60F6760182FD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{BE484372-864F-4D0A-A4E1-60F6760182FD}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{BE484372-864F-4D0A-A4E1-60F6760182FD}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{BE484372-864F-4D0A-A4E1-60F6760182FD}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B84263C2-54D7-4254-B159-DDB1F39D0783}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B84263C2-54D7-4254-B159-DDB1F39D0783}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B84263C2-54D7-4254-B159-DDB1F39D0783}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B84263C2-54D7-4254-B159-DDB1F39D0783}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E368DA81-D304-4556-B1C4-D4774C0DEFD2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E368DA81-D304-4556-B1C4-D4774C0DEFD2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E368DA81-D304-4556-B1C4-D4774C0DEFD2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E368DA81-D304-4556-B1C4-D4774C0DEFD2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E9957107-8F2A-4946-834E-629D4235B9B3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E9957107-8F2A-4946-834E-629D4235B9B3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E9957107-8F2A-4946-834E-629D4235B9B3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E9957107-8F2A-4946-834E-629D4235B9B3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C14B66C1-AE95-4A17-B1E5-E2BAFDE8BAB3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C14B66C1-AE95-4A17-B1E5-E2BAFDE8BAB3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C14B66C1-AE95-4A17-B1E5-E2BAFDE8BAB3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C14B66C1-AE95-4A17-B1E5-E2BAFDE8BAB3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{10A4CF5C-5B03-4069-9A7F-5BD0627EF148}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{10A4CF5C-5B03-4069-9A7F-5BD0627EF148}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{10A4CF5C-5B03-4069-9A7F-5BD0627EF148}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{10A4CF5C-5B03-4069-9A7F-5BD0627EF148}.Release|Any CPU.Build.0 = Release|Any CPU
+		{017DC6E8-FB93-4303-AAF9-52E2449F9A34}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{017DC6E8-FB93-4303-AAF9-52E2449F9A34}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{017DC6E8-FB93-4303-AAF9-52E2449F9A34}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{017DC6E8-FB93-4303-AAF9-52E2449F9A34}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1536CD0A-6308-4DAF-8618-35BBA0816997}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1536CD0A-6308-4DAF-8618-35BBA0816997}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1536CD0A-6308-4DAF-8618-35BBA0816997}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1536CD0A-6308-4DAF-8618-35BBA0816997}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EC134A5F-CB56-4196-BB4E-217D365A2534}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EC134A5F-CB56-4196-BB4E-217D365A2534}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EC134A5F-CB56-4196-BB4E-217D365A2534}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EC134A5F-CB56-4196-BB4E-217D365A2534}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5D22373D-E432-4208-A737-E0BCA0567B5F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5D22373D-E432-4208-A737-E0BCA0567B5F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5D22373D-E432-4208-A737-E0BCA0567B5F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5D22373D-E432-4208-A737-E0BCA0567B5F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1B3148A8-FB57-4461-91BC-F1CD38A013B6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1B3148A8-FB57-4461-91BC-F1CD38A013B6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1B3148A8-FB57-4461-91BC-F1CD38A013B6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1B3148A8-FB57-4461-91BC-F1CD38A013B6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{017DC6E8-FB93-4303-AAF9-52E2449F9A34} = {4D511DE3-A68D-43BD-8937-ACDDC1ED76D2}
+		{1536CD0A-6308-4DAF-8618-35BBA0816997} = {4D511DE3-A68D-43BD-8937-ACDDC1ED76D2}
+		{EC134A5F-CB56-4196-BB4E-217D365A2534} = {4D511DE3-A68D-43BD-8937-ACDDC1ED76D2}
+		{5D22373D-E432-4208-A737-E0BCA0567B5F} = {4D511DE3-A68D-43BD-8937-ACDDC1ED76D2}
+		{1B3148A8-FB57-4461-91BC-F1CD38A013B6} = {4D511DE3-A68D-43BD-8937-ACDDC1ED76D2}
+		{E368DA81-D304-4556-B1C4-D4774C0DEFD2} = {B1352ECA-2809-4B7B-AA70-1D181A236F96}
+		{E9957107-8F2A-4946-834E-629D4235B9B3} = {B1352ECA-2809-4B7B-AA70-1D181A236F96}
+		{10A4CF5C-5B03-4069-9A7F-5BD0627EF148} = {B1352ECA-2809-4B7B-AA70-1D181A236F96}
+		{C14B66C1-AE95-4A17-B1E5-E2BAFDE8BAB3} = {B1352ECA-2809-4B7B-AA70-1D181A236F96}
 	EndGlobalSection
 EndGlobal

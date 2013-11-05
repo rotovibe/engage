@@ -7,16 +7,16 @@ namespace Phytel.API.DataDomain.Patient
     {
         public static DataPatientResponse GetPatientByID(DataPatientRequest request)
         {
-            DataPatientResponse result = null;
+            DataPatientResponse result = new DataPatientResponse();
 
             IPatientRepository<DataPatientResponse> repo = Phytel.API.DataDomain.Patient.PatientRepositoryFactory<DataPatientResponse>.GetPatientRepository(request.ContractID, request.Context);
             MEPatient mePatient =  repo.FindByID(request.PatientID) as MEPatient;
 
-            if (mePatient == null)
+            if (mePatient != null)
             {
-                result.FirstName = MEPatient.FirstNameProperty;
-                result.LastName = MEPatient.LastNameProperty;
-                result.PatientID = MEPatient.PatientIDProperty;
+                result.FirstName = mePatient.FirstName;
+                result.LastName = mePatient.LastName;
+                result.PatientID = mePatient.PatientID;
             }
 
             return result;

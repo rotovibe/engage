@@ -28,6 +28,6 @@ namespace Phytel.API.DataDomain.Patient.DTO
 
         [BsonElement(LastNameProperty)]
         [BsonIgnoreIfNull(true)]
-        public bool LastName { get; set; }
+        public string LastName { get; set; }
     }
 }
