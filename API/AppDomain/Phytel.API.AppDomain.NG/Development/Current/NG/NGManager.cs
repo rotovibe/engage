@@ -7,30 +7,35 @@ using System;
 
 namespace Phytel.API.AppDomain.NG
 {
-    public static class NGManager
+    public class NGManager : ManagerBase
     {
-        public static PatientResponse GetPatientByID(string patientID, string product, string contractID)
+        public PatientResponse GetPatientByID(string token, string patientID, string product, string contractID, out bool validated)
         {
-            //Execute call(s) to Patient Data Domain
-            IRestClient client = new JsonServiceClient();
+            PatientResponse pResponse = new PatientResponse();
+            // validate user against apiuser datastore
+            bool result = IsUserValidated(token); 
 
-            DataPatientResponse response = client.Post<DataPatientResponse>("http://localhost:8888/" + product + "/data/patient",
-                new DataPatientRequest { PatientID = patientID, ContractID = contractID, Context = product } as object);
+            if (result)
+            {
+                //Execute call(s) to Patient Data Domain
+                IRestClient client = new JsonServiceClient();
 
-            return new PatientResponse { FirstName = response.FirstName, LastName = response.LastName, ID = response.PatientID };
+                DataPatientResponse response = client.Post<DataPatientResponse>("http://localhost:8888/" + product + "/data/patient",
+                    new DataPatientRequest { PatientID = patientID, ContractID = contractID, Context = product } as object);
+
+                pResponse.FirstName = response.FirstName;
+                pResponse.LastName = response.LastName;
+                pResponse.ID = response.PatientID;
+                validated = true;
+            }
+            else
+            {
+                validated = false;
+                pResponse.Status = new ServiceStack.ServiceInterface.ServiceModel.ResponseStatus("User Validation Failed", "User was not authenticated.");
+            }
+
+            return pResponse;
         }
 
-        public static bool IsUserValidated(string token)
-        {
-            bool result = false;
-            IRestClient client = new JsonServiceClient();
-
-            ValidateTokenResponse response = client.Post<ValidateTokenResponse>("http://localhost:999/api/security/Token",
-                new ValidateTokenRequest { Token = token } as object);
-
-            if (response.IsValid) result = true;
-
-            return result;
-        }
     }
 }
