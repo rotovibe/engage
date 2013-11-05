@@ -53,7 +53,7 @@
     <Compile Include="MongoDB\DTO\MEPatient.cs" />
     <Compile Include="MongoDB\Repository\MongoPatientRepository.cs" />
     <Compile Include="MongoDB\PatientMongoContext.cs" />
-    <Compile Include="PatientDataManager.cs" />
+    <Compile Include="DataPatientManager.cs" />
     <Compile Include="PatientRepositoryFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

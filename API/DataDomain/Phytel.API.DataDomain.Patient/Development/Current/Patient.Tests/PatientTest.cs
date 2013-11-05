@@ -9,9 +9,9 @@ namespace Phytel.API.DataDomain.Patient.Test
         [TestMethod]
         public void GetPatientByID()
         {
-            PatientRequest request = new PatientRequest{ PatientID = "5"};
+            DataPatientRequest request = new DataPatientRequest{ PatientID = "5"};
 
-            PatientResponse response = PatientDataManager.GetPatientByID(request);
+            DataPatientResponse response = PatientDataManager.GetPatientByID(request);
 
             Assert.IsTrue(response.FirstName == "Tony");
         }

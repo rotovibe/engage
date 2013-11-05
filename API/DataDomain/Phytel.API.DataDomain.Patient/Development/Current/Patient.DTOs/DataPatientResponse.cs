@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 namespace Phytel.API.DataDomain.Patient.DTO
 {
-    public class PatientResponse
+    public class DataPatientResponse
    {
         public string PatientID { get; set; }
         public string FirstName { get; set; }

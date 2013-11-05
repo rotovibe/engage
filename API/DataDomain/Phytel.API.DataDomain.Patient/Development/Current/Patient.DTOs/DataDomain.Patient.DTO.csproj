@@ -48,8 +48,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="PatientRequest.cs" />
-    <Compile Include="PatientResponse.cs" />
+    <Compile Include="DataPatientRequest.cs" />
+    <Compile Include="DataPatientResponse.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -2,6 +2,7 @@
 using Phytel.API.AppDomain.Security.DTO;
 using ServiceStack.Service;
 using ServiceStack.ServiceClient.Web;
+using System;
 
 namespace Phytel.API.AppDomain.Security.Services.Test
 {
@@ -16,10 +17,8 @@ namespace Phytel.API.AppDomain.Security.Services.Test
             IRestClient client = new JsonServiceClient();
 
             AuthenticateResponse response = client.Post<AuthenticateResponse>("http://localhost:999/api/security/login",
-                new AuthenticateRequest { APIKey = "12345", Product = "NG", Token = "abcxyz"  } as object);
-
+                new AuthenticateRequest { APIKey = "12345", Product = "NG", Token = "abcxyz" } as object);
             sampleValue = response.UserName;
-
             Assert.AreEqual(controlValue, sampleValue);
         }
     }

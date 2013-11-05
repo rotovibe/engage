@@ -10,8 +10,15 @@ namespace Phytel.API.AppDomain.NG.Service
             PatientResponse response = new PatientResponse();
             try
             {
+                request.Token = base.Request.Headers["APIToken"] as string;
+
                 // validate user against apiuser datastore
-                response = NGManager.GetPatientByID(request.ID);
+                bool result = NGManager.IsUserValidated(request.Token);
+
+                if (result)
+                {
+                    response = NGManager.GetPatientByID(request.ID, request.Product, request.ContractNumber);
+                }
             }
             catch(Exception ex)
             {

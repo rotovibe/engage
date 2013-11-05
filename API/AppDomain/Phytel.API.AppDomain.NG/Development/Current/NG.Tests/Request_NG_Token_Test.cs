@@ -16,7 +16,7 @@ namespace Phytel.API.AppDomain.NG.Services.Test
             IRestClient client = new JsonServiceClient();
 
             PatientResponse response = client.Post<PatientResponse>("http://localhost:888/api/ng/patient",
-                new PatientRequest { ID = 5  } as object);
+                new PatientRequest { ID = "5"  } as object);
 
             sampleValue = response.LastName;
 

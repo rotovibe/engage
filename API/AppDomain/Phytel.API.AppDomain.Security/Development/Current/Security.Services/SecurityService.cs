@@ -20,5 +20,21 @@ namespace Phytel.API.AppDomain.Security.Service
             }
             return response;
         }
+
+        public object Any(ValidateTokenRequest request)
+        {
+            ValidateTokenResponse response = new ValidateTokenResponse();
+            try
+            {
+                // validate user against apiuser datastore
+                response = SecurityManager.ValidateToken(request.Token, "NG");
+            }
+            catch (Exception ex)
+            {
+                //TODO: Log this to C3 database via ASE
+                response.Status = new ServiceStack.ServiceInterface.ServiceModel.ResponseStatus("Excepton", ex.Message);
+            }
+            return response;
+        }
     }
 }

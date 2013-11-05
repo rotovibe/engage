@@ -17,8 +17,8 @@ namespace Phytel.API.DataDomain.Patient.Services.Test
 
             JsonServiceClient.HttpWebRequestFilter = x => x.Headers.Add(string.Format("APIKey:{0}", "12345"));
 
-            PatientResponse response = client.Post<PatientResponse>("http://localhost:9999/api/Data/User",
-                new PatientRequest { PatientID = "5"} as object);
+            DataPatientResponse response = client.Post<DataPatientResponse>("http://localhost:9999/api/Data/User",
+                new DataPatientRequest { PatientID = "5"} as object);
 
             sampleValue = response.FirstName;
 
