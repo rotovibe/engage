@@ -8,7 +8,8 @@ namespace Phytel.API.Interface
 {
     public interface IDataDomainRequest
     {
+        string Version { get; set; }
         string ContractNumber { get; set; }
-        string DataDomainName { get; set; }
+        string Context { get; set; }
     }
 }

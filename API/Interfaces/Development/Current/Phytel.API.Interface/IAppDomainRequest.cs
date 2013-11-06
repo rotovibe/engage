@@ -8,9 +8,9 @@ namespace Phytel.API.Interface
 {
     public interface IAppDomainRequest
     {
-        string VersionID { get; set; }
+        string Version { get; set; }
         string ContractNumber { get; set; }
-        string Product { get; set; }
+        string Context { get; set; }
         string Token { get; set; }
     }
 }
