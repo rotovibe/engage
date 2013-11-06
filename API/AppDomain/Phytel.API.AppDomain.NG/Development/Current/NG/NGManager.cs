@@ -18,8 +18,8 @@ namespace Phytel.API.AppDomain.NG
         {
             NG.DTO.PatientResponse pResponse = new NG.DTO.PatientResponse();
             
-            //Execute call(s) to Patient Data Domain
-            IRestClient client = new JsonServiceClient();
+                //Execute call(s) to Patient Data Domain
+                IRestClient client = new JsonServiceClient();
 
             Phytel.API.DataDomain.Patient.DTO.PatientResponse response = client.Get<Phytel.API.DataDomain.Patient.DTO.PatientResponse>(string.Format("{0}/{1}/{2}/Contract/{3}/patient/{4}",
                                                                                         DDPatientServiceURL,
@@ -27,8 +27,8 @@ namespace Phytel.API.AppDomain.NG
                                                                                         request.Version,
                                                                                         request.ContractNumber,
                                                                                         request.PatientID));
-            pResponse.FirstName = response.FirstName;
-            pResponse.LastName = response.LastName;
+                pResponse.FirstName = response.FirstName;
+                pResponse.LastName = response.LastName;
             pResponse.PatientID = response.PatientID;
             pResponse.DOB = response.DOB;
             pResponse.Gender = response.Gender;
