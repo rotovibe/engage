@@ -12,7 +12,7 @@ namespace Phytel.API.AppDomain.NG.Service
             PatientResponse response = new PatientResponse();
             try
             {
-                //request.Token = base.Request.Headers["APIToken"] as string;
+                request.Token = base.Request.Headers["APIToken"] as string;
 
                 // if the token is valid, go ahead and grant the request.
                 NGManager ngm = new NGManager();

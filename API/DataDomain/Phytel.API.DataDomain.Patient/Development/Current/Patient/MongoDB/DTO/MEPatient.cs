@@ -14,6 +14,8 @@ namespace Phytel.API.DataDomain.Patient.DTO
         public const string PatientIDProperty = "pid";
         public const string FirstNameProperty = "fn";
         public const string LastNameProperty = "ln";
+        public const string GenderProperty = "gn";
+        public const string DOBProperty = "dob";
 
         [BsonId]
         public ObjectId Id { get; set; }
@@ -29,5 +31,13 @@ namespace Phytel.API.DataDomain.Patient.DTO
         [BsonElement(LastNameProperty)]
         [BsonIgnoreIfNull(true)]
         public string LastName { get; set; }
+
+        [BsonElement(GenderProperty)]
+        [BsonIgnoreIfNull(true)]
+        public string Gender { get; set; }
+
+        [BsonElement(DOBProperty)]
+        [BsonIgnoreIfNull(true)]
+        public string DOB { get; set; }
     }
 }

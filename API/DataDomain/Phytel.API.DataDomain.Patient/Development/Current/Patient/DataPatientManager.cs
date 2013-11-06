@@ -17,7 +17,8 @@ namespace Phytel.API.DataDomain.Patient
                 result.FirstName = mePatient.FirstName;
                 result.LastName = mePatient.LastName;
                 result.PatientID = mePatient.PatientID;
-
+                result.Gender = mePatient.Gender;
+                result.DOB = mePatient.DOB;
             }
 
             return result;
