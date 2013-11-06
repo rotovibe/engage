@@ -6,7 +6,7 @@ namespace Phytel.API.AppDomain.Security.Service
 {
     public class SecurityService : ServiceStack.ServiceInterface.Service
     {
-        public object Any(AuthenticateRequest request)
+        public AuthenticateResponse Post(AuthenticateRequest request)
         {
             AuthenticateResponse response = new AuthenticateResponse();
             try
@@ -22,7 +22,7 @@ namespace Phytel.API.AppDomain.Security.Service
             return response;
         }
 
-        public object Any(UserAuthenticateRequest request)
+        public UserAuthenticateResponse Post(UserAuthenticateRequest request)
         {
             UserAuthenticateResponse response = new UserAuthenticateResponse();
             try
@@ -38,7 +38,7 @@ namespace Phytel.API.AppDomain.Security.Service
             return response;
         }
 
-        public object Any(ValidateTokenRequest request)
+        public ValidateTokenResponse Post(ValidateTokenRequest request)
         {
             ValidateTokenResponse response = new ValidateTokenResponse();
             try

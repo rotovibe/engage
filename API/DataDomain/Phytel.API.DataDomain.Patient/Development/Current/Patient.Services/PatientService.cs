@@ -5,7 +5,7 @@ namespace Phytel.API.DataDomain.Patient.Service
 {
     public class PatientService : ServiceStack.ServiceInterface.Service
     {
-        public object Any(DataPatientRequest request)
+        public DataPatientResponse Any(DataPatientRequest request)
         {
             DataPatientResponse response = PatientDataManager.GetPatientByID(request);
             return response;
