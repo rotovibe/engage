@@ -14,6 +14,7 @@ namespace Phytel.API.AppDomain.Security.Service
             {
                 //register any dependencies your services use, e.g:
                 //container.Register<ICacheClient>(new MemoryCacheClient());
+                SetConfig(new EndpointHostConfig { AllowJsonpRequests = true });
             }
         }
 
