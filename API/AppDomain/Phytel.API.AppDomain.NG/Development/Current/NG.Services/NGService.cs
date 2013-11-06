@@ -6,7 +6,7 @@ namespace Phytel.API.AppDomain.NG.Service
 {
     public class NGService : ServiceStack.ServiceInterface.Service
     {
-        public object Post(PatientRequest request)
+        public PatientResponse Post(PatientRequest request)
         {
             bool validated = false;
             PatientResponse response = new PatientResponse();
