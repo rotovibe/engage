@@ -88,11 +88,12 @@ namespace Phytel.API.AppDomain.Security
                 reader.NextResult();
 
                 int colContractId = reader.GetOrdinal("ContractId");
+                int colContractNumber = reader.GetOrdinal("Number");
                 int colContractName = reader.GetOrdinal("Name");
 
                 while (reader.Read())
                 {
-                    response.Contracts.Add(new ContractInfo { Id = reader.GetInt32(colContractId), Name = reader.GetString(colContractName) });
+                    response.Contracts.Add(new ContractInfo { Id = reader.GetInt32(colContractId), Name = reader.GetString(colContractName), Number = reader.GetString(colContractNumber) });
                 }
             }
 
