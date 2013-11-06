@@ -25,6 +25,15 @@ namespace Phytel.API.AppDomain.Security
             return userResponse;
         }
 
+        public static UserAuthenticateResponse ValidateCredentials(string userName, string password, string apiKey, string productName)
+        {
+            ISecurityRepository<UserAuthenticateResponse> securityRepo = SecurityRepositoryFactory<UserAuthenticateResponse>.GetSecurityRepository(productName);
+
+            UserAuthenticateResponse response = securityRepo.LoginUser(userName, password, apiKey, productName);
+
+            return response;
+        }
+
         public static ValidateTokenResponse ValidateToken(string token, string productName)
         {
             ISecurityRepository<AuthenticateResponse> securityRepo = SecurityRepositoryFactory<AuthenticateResponse>.GetSecurityRepository(productName);

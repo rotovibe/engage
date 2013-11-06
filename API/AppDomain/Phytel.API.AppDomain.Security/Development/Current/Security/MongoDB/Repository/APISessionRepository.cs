@@ -23,6 +23,42 @@ namespace Phytel.API.AppDomain.Security
             throw new NotImplementedException();
         }
 
+        public UserAuthenticateResponse LoginUser(string userName, string password, string apiKey, string productName)
+        {
+            UserAuthenticateResponse response = new UserAuthenticateResponse();
+            MEAPISession session = null;
+
+            //need to do a lookup against the APIKey collection to see if apiKey/Product combination exists
+            MEAPIUser user = (from k in _objectContext.APIUsers where k.UserName == userName && k.ApiKey == apiKey && k.Product == productName && k.IsActive == true select k).FirstOrDefault();
+            if (user != null)
+            {
+                //validate password
+                Phytel.Services.DataProtector protector = new Services.DataProtector(Services.DataProtector.Store.USE_SIMPLE_STORE);
+                string dbPwd = protector.Decrypt(user.Password);
+                if (dbPwd.Equals(password))
+                {
+                    session = new MEAPISession
+                    {
+                        APIKey = apiKey,
+                        Product = productName,
+                        SessionLengthInMinutes = user.SessionTimeout,
+                        SessionTimeOut = DateTime.Now.AddMinutes(user.SessionTimeout),
+                        UserName = user.UserName
+                    };
+
+                    _objectContext.APISessions.Collection.Insert(session);
+                }
+                else
+                    throw new Exception("Login Failed!  Username and/or Password is incorrect");
+
+                response = new UserAuthenticateResponse { APIToken = session.Id.ToString(), Contracts = new List<ContractInfo>(), Name = user.UserName, SessionTimeout = user.SessionTimeout, UserName = user.UserName };
+            }
+            else
+                throw new Exception("Login Failed! Unknown Username/Password");
+
+            return response;
+        }
+
         public AuthenticateResponse LoginUser(AuthenticateResponse existingReponse, string apiKey, string productName)
         {
             AuthenticateResponse response = new AuthenticateResponse();
@@ -42,6 +78,8 @@ namespace Phytel.API.AppDomain.Security
                 response = existingReponse;
                 response.APIToken = session.Id.ToString();
             }
+            else
+                throw new Exception("Login Failed! Unknown Username/Password");
 
             return response;
         }

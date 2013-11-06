@@ -60,6 +60,7 @@
   <ItemGroup>
     <Compile Include="ISecurityRepository.cs" />
     <Compile Include="IUnitOfWork.cs" />
+    <Compile Include="MongoDB\DTO\MEAPIUser.cs" />
     <Compile Include="MongoDB\DTO\MEAPISession.cs" />
     <Compile Include="MongoDB\DTO\MEAPIKey.cs" />
     <Compile Include="MongoDB\Repository\APISessionRepository.cs" />
