@@ -2,7 +2,7 @@
 
 namespace Phytel.API.AppDomain.Security.DTO
 {
-    [Route("/api/security/Token")]
+    [Route("/{Version}/token", "POST")]
     public class ValidateTokenRequest
     {
         public string Token { get; set; }

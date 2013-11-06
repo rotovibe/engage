@@ -14,30 +14,24 @@ namespace Phytel.API.AppDomain.NG
         protected static readonly string DDPatientServiceURL = ConfigurationManager.AppSettings["DDPatientServiceUrl"];
         #endregion
 
-        public PatientResponse GetPatientByID(string token, string patientID, string product, string contractID, out bool validated)
+        public NG.DTO.PatientResponse GetPatientByID(NG.DTO.PatientRequest request)
         {
-            PatientResponse pResponse = new PatientResponse();
-            // validate user against apiuser datastore
-            bool result = IsUserValidated(token); 
+            NG.DTO.PatientResponse pResponse = new NG.DTO.PatientResponse();
             
-            if (result)
-            {
-                //Execute call(s) to Patient Data Domain
-                IRestClient client = new JsonServiceClient();
+            //Execute call(s) to Patient Data Domain
+            IRestClient client = new JsonServiceClient();
 
-                DataPatientResponse response = client.Post<DataPatientResponse>(DDPatientServiceURL + "/" + product + "/data/patient",
-                    new DataPatientRequest { PatientID = patientID, ContractID = contractID, Context = product } as object);
-
-                pResponse.FirstName = response.FirstName;
-                pResponse.LastName = response.LastName;
-                pResponse.ID = response.PatientID;
-                validated = true;
-            }
-            else
-            {
-                validated = false;
-                pResponse.Status = new ServiceStack.ServiceInterface.ServiceModel.ResponseStatus("User Validation Failed", "User was not authenticated.");
-            }
+            Phytel.API.DataDomain.Patient.DTO.PatientResponse response = client.Get<Phytel.API.DataDomain.Patient.DTO.PatientResponse>(string.Format("{0}/{1}/{2}/Contract/{3}/patient/{4}",
+                                                                                        DDPatientServiceURL,
+                                                                                        request.Context,
+                                                                                        request.Version,
+                                                                                        request.ContractNumber,
+                                                                                        request.PatientID));
+            pResponse.FirstName = response.FirstName;
+            pResponse.LastName = response.LastName;
+            pResponse.PatientID = response.PatientID;
+            pResponse.DOB = response.DOB;
+            pResponse.Gender = response.Gender;
 
             return pResponse;
         }

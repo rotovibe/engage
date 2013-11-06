@@ -5,11 +5,11 @@ namespace Phytel.API.DataDomain.Patient
 {
     public static class PatientDataManager
     {
-        public static DataPatientResponse GetPatientByID(DataPatientRequest request)
+        public static PatientResponse GetPatientByID(PatientRequest request)
         {
-            DataPatientResponse result = new DataPatientResponse();
+            PatientResponse result = new PatientResponse();
 
-            IPatientRepository<DataPatientResponse> repo = Phytel.API.DataDomain.Patient.PatientRepositoryFactory<DataPatientResponse>.GetPatientRepository(request.ContractID, request.Context);
+            IPatientRepository<PatientResponse> repo = Phytel.API.DataDomain.Patient.PatientRepositoryFactory<PatientResponse>.GetPatientRepository(request.ContractNumber, request.Context);
             MEPatient mePatient =  repo.FindByID(request.PatientID) as MEPatient;
 
             if (mePatient != null)

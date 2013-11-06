@@ -6,7 +6,7 @@ namespace Phytel.API.AppDomain.NG.DTO
 {
     public class PatientResponse
     {
-        public string ID { get; set; }
+        public string PatientID { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string Gender { get; set; }

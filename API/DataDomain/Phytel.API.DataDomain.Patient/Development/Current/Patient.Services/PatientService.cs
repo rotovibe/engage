@@ -5,9 +5,17 @@ namespace Phytel.API.DataDomain.Patient.Service
 {
     public class PatientService : ServiceStack.ServiceInterface.Service
     {
-        public DataPatientResponse Any(DataPatientRequest request)
+        public PatientResponse Post(PatientRequest request)
         {
-            DataPatientResponse response = PatientDataManager.GetPatientByID(request);
+            PatientResponse response = PatientDataManager.GetPatientByID(request);
+            response.Version = request.Version;
+            return response;
+        }
+
+        public PatientResponse Get(PatientRequest request)
+        {
+            PatientResponse response = PatientDataManager.GetPatientByID(request);
+            response.Version = request.Version;
             return response;
         }
     }

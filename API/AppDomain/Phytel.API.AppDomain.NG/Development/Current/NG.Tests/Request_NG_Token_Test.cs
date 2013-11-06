@@ -29,7 +29,7 @@ namespace Phytel.API.AppDomain.NG.Services.Test
             JsonServiceClient.HttpWebRequestFilter = x => x.Headers.Add(string.Format("APIToken: {0}", token));
             
             PatientResponse response = client.Post<PatientResponse>("http://localhost:888/Nightingale/v1/NG/Contract/InHealth001/patient",
-                new PatientRequest { ID = patientID } as object);
+                new PatientRequest { PatientID = patientID } as object);
 
             lnsampleValue = response.LastName;
             fnsampleValue = response.FirstName;
@@ -60,7 +60,7 @@ namespace Phytel.API.AppDomain.NG.Services.Test
             IRestClient client = new JsonServiceClient();
 
             PatientResponse response = client.Post<PatientResponse>("http://localhost:888/v1/NG/Contract/InHealth001/patient",
-                new PatientRequest { ID = patientID, Token = token } as object);
+                new PatientRequest { PatientID = patientID, Token = token } as object);
 
             lnsampleValue = response.LastName;
             fnsampleValue = response.FirstName;

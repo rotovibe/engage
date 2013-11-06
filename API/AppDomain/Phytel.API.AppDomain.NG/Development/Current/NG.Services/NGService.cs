@@ -8,20 +8,17 @@ namespace Phytel.API.AppDomain.NG.Service
     {
         public PatientResponse Post(PatientRequest request)
         {
-            bool validated = false;
             PatientResponse response = new PatientResponse();
             try
             {
-                request.Token = base.Request.Headers["APIToken"] as string;
-
-                // if the token is valid, go ahead and grant the request.
                 NGManager ngm = new NGManager();
-                response = ngm.GetPatientByID(request.Token, request.ID, request.Product, request.ContractNumber, out validated);
 
-                if (!validated)
-                {
-                    base.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
-                }
+                request.Token = base.Request.Headers["APIToken"] as string;
+                bool result = ngm.IsUserValidated(request.Version, request.Token);
+                if (result)
+                    response = ngm.GetPatientByID(request);
+                else
+                    throw new UnauthorizedAccessException();
             }
             catch (Exception ex)
             {
@@ -31,5 +28,29 @@ namespace Phytel.API.AppDomain.NG.Service
             }
             return response;
         }
+
+        public PatientResponse Get(PatientRequest request)
+        {
+            PatientResponse response = new PatientResponse();
+            try
+            {
+                NGManager ngm = new NGManager();
+
+                request.Token = base.Request.Headers["APIToken"] as string;
+                bool result = ngm.IsUserValidated(request.Version, request.Token);
+                if (result)
+                    response = ngm.GetPatientByID(request);
+                else
+                    throw new UnauthorizedAccessException();
+            }
+            catch (Exception ex)
+            {
+                //TODO: Log this to C3 database via ASE
+                base.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                response.Status = new ServiceStack.ServiceInterface.ServiceModel.ResponseStatus("Excepton", ex.Message);
+            }
+            return response;
+        }
+
     }
 }

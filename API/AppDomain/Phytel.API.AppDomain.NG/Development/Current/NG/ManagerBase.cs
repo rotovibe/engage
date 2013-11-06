@@ -14,12 +14,12 @@ namespace Phytel.API.AppDomain.NG
     {
         protected static readonly string ADSecurityServiceURL = ConfigurationManager.AppSettings["ADSecurityServiceUrl"];
 
-        public bool IsUserValidated(string token)
+        public bool IsUserValidated(string version, string token)
         {
             bool result = false;
             IRestClient client = new JsonServiceClient();
 
-            ValidateTokenResponse response = client.Post<ValidateTokenResponse>(ADSecurityServiceURL + "/api/security/Token",
+            ValidateTokenResponse response = client.Post<ValidateTokenResponse>(string.Format("{0}/{1}/token", ADSecurityServiceURL, version),
                 new ValidateTokenRequest { Token = token } as object);
 
             if (response.IsValid) result = true;

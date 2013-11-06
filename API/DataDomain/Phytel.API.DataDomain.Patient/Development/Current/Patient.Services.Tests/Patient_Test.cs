@@ -14,14 +14,14 @@ namespace Phytel.API.DataDomain.Patient.Services.Test
             string controlValue = "Tony";
             string sampleValue;
             string patientID = "52781cd8fe7a5925fcee5bf3";
-            string contractID = "InHealth001";
+            string contractNumber = "InHealth001";
             string context ="NG";
             IRestClient client = new JsonServiceClient();
 
             //JsonServiceClient.HttpWebRequestFilter = x => x.Headers.Add(string.Format("APIKey:{0}", "12345"));
 
-            DataPatientResponse response = client.Post<DataPatientResponse>("http://localhost:8888/NG/data/patient",
-                new DataPatientRequest { PatientID = patientID, ContractID = contractID, Context = context } as object);
+            PatientResponse response = client.Post<PatientResponse>("http://localhost:8888/NG/data/patient",
+                new PatientRequest { PatientID = patientID, ContractNumber = contractNumber, Context = context } as object);
 
             sampleValue = response.FirstName;
 

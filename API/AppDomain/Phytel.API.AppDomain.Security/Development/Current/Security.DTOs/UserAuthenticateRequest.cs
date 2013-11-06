@@ -2,7 +2,7 @@
 
 namespace Phytel.API.AppDomain.Security.DTO
 {
-    [Route("/api/security/login")]
+    [Route("/{Version}/login", "POST")]
     public class UserAuthenticateRequest
     {
         public string UserName { get; set; }
