@@ -1,4 +1,5 @@
 ﻿using Phytel.API.AppDomain.Security.DTO;
+using ServiceStack.ServiceInterface.ServiceModel;
 using System;
 
 namespace Phytel.API.AppDomain.Security.Service
@@ -16,7 +17,7 @@ namespace Phytel.API.AppDomain.Security.Service
             catch(Exception ex)
             {
                 //TODO: Log this to C3 database via ASE
-                response.Status = new ServiceStack.ServiceInterface.ServiceModel.ResponseStatus("Excepton", ex.Message);
+                response.Status = new ResponseStatus("Excepton", ex.Message);
             }
             return response;
         }
@@ -32,7 +33,7 @@ namespace Phytel.API.AppDomain.Security.Service
             catch (Exception ex)
             {
                 //TODO: Log this to C3 database via ASE
-                response.Status = new ServiceStack.ServiceInterface.ServiceModel.ResponseStatus("Excepton", ex.Message);
+                response.Status = new ResponseStatus("Excepton", ex.Message);
             }
             return response;
         }
