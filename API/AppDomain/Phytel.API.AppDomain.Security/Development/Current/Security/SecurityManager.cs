@@ -34,11 +34,11 @@ namespace Phytel.API.AppDomain.Security
             return response;
         }
 
-        public static ValidateTokenResponse ValidateToken(string token, string productName)
+        public static ValidateTokenResponse ValidateToken(ValidateTokenRequest request)
         {
-            ISecurityRepository<AuthenticateResponse> securityRepo = SecurityRepositoryFactory<AuthenticateResponse>.GetSecurityRepository(productName);
+            ISecurityRepository<AuthenticateResponse> securityRepo = SecurityRepositoryFactory<AuthenticateResponse>.GetSecurityRepository(request.Context);
 
-            return securityRepo.Validate(token);
+            return securityRepo.Validate(request.Token, request.Context);
         }
     }
 }

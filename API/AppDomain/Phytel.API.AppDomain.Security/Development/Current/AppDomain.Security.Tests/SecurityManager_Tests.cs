@@ -24,7 +24,8 @@ namespace Phytel.API.AppDomain.Security.Test
         [TestMethod]
         public void IsTokenExpired_Test()
         {
-            ValidateTokenResponse response = SecurityManager.ValidateToken("abc", "NG");
+            ValidateTokenRequest request = new ValidateTokenRequest { Context = "NG", Token = "abc", Version = "v1" };
+            ValidateTokenResponse response = SecurityManager.ValidateToken(request);
         }
 
     }

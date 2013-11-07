@@ -43,10 +43,19 @@ namespace Phytel.API.DataDomain.Patient
 
         public object FindByID(string entityID)
         {
-            MEPatient patient = null;
+            PatientResponse patient = null;
             using (PatientMongoContext ctx = new PatientMongoContext(_dbName))
             {
-                patient = ctx.Patients.Collection.FindOneById(ObjectId.Parse(entityID));
+                patient = (from p in ctx.Patients
+                           where p.Id == ObjectId.Parse(entityID)
+                           select new PatientResponse
+                            {
+                                DOB = p.DOB,
+                                FirstName = p.FirstName,
+                                Gender = p.Gender,
+                                LastName = p.LastName,
+                                PatientID = p.Id.ToString()
+                            }).FirstOrDefault();
             }
             return patient;
         }
@@ -54,6 +63,16 @@ namespace Phytel.API.DataDomain.Patient
         public IQueryable<T> Select(System.Linq.Expressions.Expression<Func<T, bool>> predicate)
         {
             throw new NotImplementedException();
+            //List<IMongoQuery> queries = new List<IMongoQuery>();
+
+            //queries.Add(Query.EQ(MEPatient.FirstNameProperty, "Greg"));
+            //queries.Add(Query.EQ(MEPatient.LastNameProperty, "Tony"));
+
+            //IMongoQuery query2 = Query.And(queries);
+
+            //IMongoQuery query = Query.Or(
+            //    Query.EQ(MEPatient.FirstNameProperty, "Greg"),
+            //    Query.EQ(MEPatient.LastNameProperty, "Tony"));
         }
 
         public IQueryable<T> SelectAll()

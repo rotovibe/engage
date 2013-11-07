@@ -84,18 +84,20 @@ namespace Phytel.API.AppDomain.Security
             return response;
         }
 
-        public ValidateTokenResponse Validate(string token)
+        public ValidateTokenResponse Validate(string token, string productName)
         {
             ValidateTokenResponse response = new ValidateTokenResponse();
             response.IsValid = false;
 
             MEAPISession session = _objectContext.APISessions.Collection.FindOneById(ObjectId.Parse(token));
-            if(session != null)
+            if (session != null && session.Product.ToUpper().Equals(productName.ToUpper()))
             {
                 response.IsValid = true;
                 session.SessionTimeOut = DateTime.Now.AddMinutes(session.SessionLengthInMinutes);
                 _objectContext.APISessions.Collection.Save(session);
             }
+            else
+                throw new UnauthorizedAccessException("Security Token does not exist");
 
             return response;
         }

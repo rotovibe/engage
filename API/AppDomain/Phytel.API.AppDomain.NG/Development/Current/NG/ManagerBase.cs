@@ -20,7 +20,7 @@ namespace Phytel.API.AppDomain.NG
             bool result = false;
             IRestClient client = new JsonServiceClient();
 
-            ValidateTokenResponse response = client.Post<ValidateTokenResponse>(string.Format("{0}/{1}/token", ADSecurityServiceURL, version),
+            ValidateTokenResponse response = client.Post<ValidateTokenResponse>(string.Format("{0}/{1}/{2}/token", ADSecurityServiceURL, "NG", version),
                 new ValidateTokenRequest { Token = token } as object);
 
             if (response.IsValid) result = true;

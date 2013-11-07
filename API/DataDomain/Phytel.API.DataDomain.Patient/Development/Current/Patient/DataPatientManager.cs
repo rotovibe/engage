@@ -10,16 +10,16 @@ namespace Phytel.API.DataDomain.Patient
             PatientResponse result = new PatientResponse();
 
             IPatientRepository<PatientResponse> repo = Phytel.API.DataDomain.Patient.PatientRepositoryFactory<PatientResponse>.GetPatientRepository(request.ContractNumber, request.Context);
-            MEPatient mePatient =  repo.FindByID(request.PatientID) as MEPatient;
+            result = repo.FindByID(request.PatientID) as PatientResponse;
+            
+            return (result != null ? result : new PatientResponse());
+        }
 
-            if (mePatient != null)
-            {
-                result.FirstName = mePatient.FirstName;
-                result.LastName = mePatient.LastName;
-                result.PatientID = mePatient.PatientID;
-                result.Gender = mePatient.Gender;
-                result.DOB = mePatient.DOB;
-            }
+        public static PatientListResponse GetPatientList(PatientListRequest request)
+        {
+            PatientListResponse result = new PatientListResponse();
+
+            IPatientRepository<PatientListResponse> repo = Phytel.API.DataDomain.Patient.PatientRepositoryFactory<PatientListResponse>.GetPatientRepository(request.ContractNumber, request.Context);
 
             return result;
         }

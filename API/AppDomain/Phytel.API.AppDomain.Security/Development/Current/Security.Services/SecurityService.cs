@@ -44,7 +44,7 @@ namespace Phytel.API.AppDomain.Security.Service
             try
             {
                 // validate user against apiuser datastore
-                response = SecurityManager.ValidateToken(request.Token, "NG");
+                response = SecurityManager.ValidateToken(request);
             }
             catch (Exception ex)
             {

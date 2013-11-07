@@ -113,7 +113,7 @@ namespace Phytel.API.AppDomain.Security
             throw new NotImplementedException();
         }
 
-        public DTO.ValidateTokenResponse Validate(string token)
+        public DTO.ValidateTokenResponse Validate(string token, string productName)
         {
             throw new NotImplementedException();
         }
