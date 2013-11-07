@@ -1,4 +1,5 @@
 ﻿using Phytel.API.AppDomain.Security.DTO;
+using Phytel.API.Common.Audit;
 using ServiceStack.Service;
 using ServiceStack.ServiceClient.Web;
 using System;
@@ -26,5 +27,11 @@ namespace Phytel.API.AppDomain.NG
 
             return result;
         }
+
+        //protected void SendAuditDispatch()
+        //{
+        //    //DispatchEventArgs args = new DispatchEventArgs { DispatchType = DispatchType.AUDIT, new object() };
+        //    //AuditDispatcher.SendDispatchAsynch(args);
+        //}
     }
 }
