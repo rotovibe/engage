@@ -1,3 +1,4 @@
+using Phytel.API.Interface;
 using ServiceStack.ServiceHost;
 using System.Runtime.Serialization;
 
@@ -5,7 +6,7 @@ namespace Phytel.API.AppDomain.NG.DTO
 {
     [Route("/{Context}/{Version}/Contract/{ContractNumber}/patient", "POST")]
     [Route("/{Context}/{Version}/Contract/{ContractNumber}/patient/{PatientID}", "GET")]
-    public class PatientRequest
+    public class PatientRequest : IAppDomainRequest
     {
         [ApiMember(Name = "PatientID", Description = "ID parameter", ParameterType = "property", DataType = "string", IsRequired = true)]
         public string PatientID { get; set; }

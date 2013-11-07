@@ -106,6 +106,10 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\..\Interfaces\Development\Current\Phytel.API.Interface\Phytel.API.Interface.csproj">
+      <Project>{abe948fb-247e-4955-b3ab-b7c93e10a542}</Project>
+      <Name>Phytel.API.Interface</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Security.DTOs\AppDomain.Security.DTO.csproj">
       <Project>{5d9c233b-e53d-4be1-b578-1aa9722de1cf}</Project>
       <Name>AppDomain.Security.DTO</Name>

@@ -70,6 +70,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\..\Interfaces\Development\Current\Phytel.API.Interface\Phytel.API.Interface.csproj">
+      <Project>{abe948fb-247e-4955-b3ab-b7c93e10a542}</Project>
+      <Name>Phytel.API.Interface</Name>
+    </ProjectReference>
     <ProjectReference Include="..\NG.DTOs\AppDomain.NG.DTO.csproj">
       <Project>{e9957107-8f2a-4946-834e-629d4235b9b3}</Project>
       <Name>AppDomain.NG.DTO</Name>
