@@ -62,7 +62,7 @@
     <Compile Include="ILookUpRepository.cs" />
     <Compile Include="MongoDB\DTO\MECondition.cs" />
     <Compile Include="MongoDB\ConditionMongoContext.cs" />
-    <Compile Include="MongoDB\Repository\MongoLookUpRepository.cs" />
+    <Compile Include="MongoDB\Repository\MongoConditionRepository.cs" />
     <Compile Include="LookUpRepositoryFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

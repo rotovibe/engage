@@ -1,11 +1,10 @@
-using System.Collections.Generic;
 using Phytel.API.Interface;
 using ServiceStack.ServiceHost;
 
 namespace Phytel.API.DataDomain.LookUp.DTO
 {
     [Route("/{Context}/{Version}/Contract/{ContractNumber}/condition/{ConditionID}", "GET")]
-    public class GetConditionRequest : IDataDomainRequest, IReturn<ConditionResponse>
+    public class GetConditionRequest : IDataDomainRequest
     {
         public string ConditionID { get; set; }
         public string Context { get; set; }

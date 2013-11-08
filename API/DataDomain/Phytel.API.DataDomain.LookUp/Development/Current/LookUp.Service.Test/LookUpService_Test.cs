@@ -19,7 +19,7 @@ namespace Phytel.API.DataDomain.LookUp.Services.Test
             IRestClient client = new JsonServiceClient();
 
             // Act
-            List<ConditionResponse> response = client.Get<List<ConditionResponse>>
+            List<Condition> response = client.Get<List<Condition>>
                 (string.Format("{0}/{1}/{2}/Contract/{3}/conditions",
                   "http://localhost:8888/LookUp/",context,version, contractNumber));
 
@@ -39,7 +39,7 @@ namespace Phytel.API.DataDomain.LookUp.Services.Test
             IRestClient client = new JsonServiceClient();
 
             // Act
-            ConditionResponse response = client.Get<ConditionResponse>
+            Condition response = client.Get<Condition>
                 (string.Format("{0}/{1}/{2}/Contract/{3}/condition/{4}",
                   "http://localhost:8888/LookUp/", context, version, contractNumber, conditionID));
 

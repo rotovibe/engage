@@ -43,12 +43,18 @@ namespace Phytel.API.DataDomain.LookUp
 
         public object FindByID(string entityID)
         {
-            MECondition condition = null;
+            ConditionResponse conditionResponse = null;
             using (ConditionMongoContext ctx = new ConditionMongoContext(_dbName))
             {
-                condition = ctx.Conditions.Collection.FindOneById(ObjectId.Parse(entityID));
+                MECondition meCondition = ctx.Conditions.Collection.FindOneById(ObjectId.Parse(entityID));
+                if (meCondition != null)
+                {
+                    conditionResponse = new ConditionResponse();
+                    Condition condition = new Condition { ConditionID = meCondition.Id.ToString(), DisplayName = meCondition.DisplayName, IsActive = meCondition.IsActive };
+                    conditionResponse.Condition = condition;
+                }
             }
-            return condition;
+            return conditionResponse;
         }
 
         public Tuple<int, IQueryable<T>> Select(Interface.APIExpression expression)
@@ -58,12 +64,25 @@ namespace Phytel.API.DataDomain.LookUp
 
         public IQueryable<T> SelectAll()
         {
-            List<MECondition> conditions = new List<MECondition>();
+            IQueryable<T> query = null;
+            List<Condition> conditionList = null;
             using (ConditionMongoContext ctx = new ConditionMongoContext(_dbName))
             {
-                conditions = ctx.Conditions.Collection.FindAll().ToList();
+                List<MECondition> meConditions = ctx.Conditions.Collection.FindAll().ToList();
+                if (meConditions != null)
+                {
+                    conditionList = new List<Condition>();
+                    foreach (MECondition m in meConditions)
+                    {
+                        Condition condition = new Condition { ConditionID = m.Id.ToString(), DisplayName = m.DisplayName, IsActive = m.IsActive };
+                        conditionList.Add(condition);
+                    }
+                }
             }
-            return conditions as IQueryable<T>;
+            query = (IQueryable<T>)Convert.ChangeType(conditionList, typeof(T));
+            //query = conditionList as IQueryable<T>;
+            
+            return query;
         }
 
         public T Update(T entity)

@@ -46,7 +46,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="FindConditionRequest.cs" />
+    <Compile Include="ConditionsResponse.cs" />
+    <Compile Include="FindConditionsRequest.cs" />
     <Compile Include="GetConditionRequest.cs" />
     <Compile Include="ConditionResponse.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

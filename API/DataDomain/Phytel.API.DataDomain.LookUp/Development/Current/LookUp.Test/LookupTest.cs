@@ -20,12 +20,12 @@ namespace Phytel.API.DataDomain.LookUp.Test
             ConditionResponse response = LookUpDataManager.GetConditionByID(request);
 
             // Assert
-            Assert.IsTrue(response.DisplayName == "Arthritis");
+            Assert.IsTrue(response.Condition.DisplayName == "Arthritis");
             
         }
 
         [TestMethod]
-        public void FindConditions()
+        public void FindConditions_Test()
         {
             // Arrange
             string version = "v1";
@@ -34,10 +34,10 @@ namespace Phytel.API.DataDomain.LookUp.Test
             FindConditionsRequest request = new FindConditionsRequest {  Context = context, ContractNumber = contractNumber, Version = version };
 
             // Act
-            List<ConditionResponse> response = LookUpDataManager.GetConditions(request);
+            ConditionsResponse response = LookUpDataManager.FindConditions(request);
 
             // Assert
-            Assert.AreNotEqual(0, response.Count);
+            Assert.AreNotEqual(0, response.Conditions.Count);
         }
 
     }

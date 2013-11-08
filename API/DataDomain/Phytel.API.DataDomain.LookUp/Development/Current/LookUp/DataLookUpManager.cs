@@ -1,49 +1,34 @@
 using Phytel.API.DataDomain.LookUp.DTO;
-using System.Data.SqlClient;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Phytel.API.DataDomain.LookUp
 {
     public static class LookUpDataManager
     {
         private static readonly string CONDITIONLOOKUP = "condition";
-        
+
         public static ConditionResponse GetConditionByID(GetConditionRequest request)
         {
-            ConditionResponse result = new ConditionResponse();
+            ConditionResponse response = new ConditionResponse();
 
             ILookUpRepository<ConditionResponse> repo = Phytel.API.DataDomain.LookUp.LookUpRepositoryFactory<ConditionResponse>.GetLookUpRepository(request.ContractNumber, request.Context, CONDITIONLOOKUP);
-            MECondition meCondition =  repo.FindByID(request.ConditionID) as MECondition;
-
-            if (meCondition != null)
-            {
-                result.ConditionID = meCondition.Id.ToString();
-                result.DisplayName = meCondition.DisplayName;
-                result.IsActive = meCondition.IsActive;
-            }
-
-            return result;
+            response = repo.FindByID(request.ConditionID) as ConditionResponse;
+            return response;
         }
 
-        public static List<ConditionResponse> GetConditions(FindConditionsRequest request)
+        public static ConditionsResponse FindConditions(FindConditionsRequest request)
         {
-            List<ConditionResponse> results = new List<ConditionResponse>();
+            ConditionsResponse response = new ConditionsResponse();
 
-            ILookUpRepository<ConditionResponse> repo = Phytel.API.DataDomain.LookUp.LookUpRepositoryFactory<ConditionResponse>.GetLookUpRepository(request.ContractNumber, request.Context, CONDITIONLOOKUP);
-            List<MECondition> meConditions = (List<MECondition>)repo.SelectAll();
+            ILookUpRepository<IQueryable<Condition>> repo = Phytel.API.DataDomain.LookUp.LookUpRepositoryFactory<IQueryable<Condition>>.GetLookUpRepository(request.ContractNumber, request.Context, CONDITIONLOOKUP);
+            IQueryable<Condition> conditions = repo.SelectAll() as IQueryable<Condition>;
 
-            foreach(MECondition m in meConditions)
+            if (conditions != null)
             {
-                ConditionResponse meCondition = new ConditionResponse
-                { 
-                    ConditionID = m.Id.ToString(),
-                    DisplayName = m.DisplayName,
-                    IsActive = m.IsActive
-                };
-                results.Add(meCondition);
+                response.Conditions = conditions.ToList();
             }
-
-            return results;
+            return response;
         }
     }
 }   
