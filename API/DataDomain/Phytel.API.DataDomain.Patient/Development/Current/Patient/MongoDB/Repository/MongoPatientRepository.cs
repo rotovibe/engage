@@ -54,7 +54,10 @@ namespace Phytel.API.DataDomain.Patient
                                 FirstName = p.FirstName,
                                 Gender = p.Gender,
                                 LastName = p.LastName,
-                                PatientID = p.Id.ToString()
+                                PatientID = p.Id.ToString(),
+                                PreferredName = p.PreferredName,
+                                MiddleName = p.MiddleName,
+                                Suffix = p.Suffix
                             }).FirstOrDefault();
             }
             return patient;
