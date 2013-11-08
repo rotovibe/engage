@@ -1,10 +1,9 @@
+using System.Collections.Generic;
+using System.Configuration;
 using Phytel.API.AppDomain.NG.DTO;
-using Phytel.API.AppDomain.Security.DTO;
 using Phytel.API.DataDomain.Patient.DTO;
 using ServiceStack.Service;
 using ServiceStack.ServiceClient.Web;
-using System;
-using System.Configuration;
 
 namespace Phytel.API.AppDomain.NG
 {
@@ -12,6 +11,7 @@ namespace Phytel.API.AppDomain.NG
     {
         #region endpoint addresses
         protected static readonly string DDPatientServiceURL = ConfigurationManager.AppSettings["DDPatientServiceUrl"];
+        protected static readonly string DDPatientProblemServiceUrl = ConfigurationManager.AppSettings["DDPatientProblemServiceUrl"];
         #endregion
 
         public NG.DTO.PatientResponse GetPatientByID(NG.DTO.PatientRequest request)
@@ -36,6 +36,36 @@ namespace Phytel.API.AppDomain.NG
             //SendAuditDispatch();
 
             return pResponse;
+        }
+
+        /// <summary>
+        ///     Gets all active chronic problems for a patient
+        /// </summary>
+        /// <param name="request">PatientProblemRequest object</param>
+        /// <returns>PatientProblem object</returns>
+        public List<PatientProblem> GetProblemsByPatientID(PatientProblemRequest request)
+        {
+            List<PatientProblem> response = new List<PatientProblem>();
+
+            //IRestClient client = new JsonServiceClient();
+
+            //Phytel.API.DataDomain.PatientProblem.DTO.PatientProblemResponse dataDomainResponse = client.Get<Phytel.API.DataDomain.PatientProblem.DTO.PatientProblemResponse>(string.Format("{0}/{1}/{2}/Contract/{3}/patientproblem/{4}",
+            //                                                                            DDPatientProblemServiceUrl,
+            //                                                                            request.Context,
+            //                                                                            request.Version,
+            //                                                                            request.ContractNumber,
+            //                                                                            request.PatientID));
+
+            //dataDomainResponse.
+
+            //foreach()
+            //{
+            //    response.DisplayName = response.FirstName;
+            //    response.ProblemID = response.LastName;
+            //    response.PatientID = response.PatientID;
+            //}
+
+            return response;
         }
 
     }

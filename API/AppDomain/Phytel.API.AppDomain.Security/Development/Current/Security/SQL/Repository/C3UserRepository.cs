@@ -38,7 +38,7 @@ namespace Phytel.API.AppDomain.Security
             throw new NotImplementedException();
         }
 
-        public IQueryable<T> Select(Expression<Func<T, bool>> predicate)
+        public Tuple<int, IQueryable<T>> Select(Interface.APIExpression expression)
         {
             throw new NotImplementedException();
         }

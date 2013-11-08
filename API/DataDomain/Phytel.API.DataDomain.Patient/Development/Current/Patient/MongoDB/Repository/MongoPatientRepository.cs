@@ -60,7 +60,7 @@ namespace Phytel.API.DataDomain.Patient
             return patient;
         }
 
-        public IQueryable<T> Select(System.Linq.Expressions.Expression<Func<T, bool>> predicate)
+        public Tuple<int, IQueryable<T>> Select(Interface.APIExpression expression)
         {
             throw new NotImplementedException();
             //List<IMongoQuery> queries = new List<IMongoQuery>();

@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{E9957107-8F2A-4946-834E-629D4235B9B3}</ProjectGuid>
+    <ProjectGuid>{AFD0F5B1-A29E-402C-958B-D6D82B4278E5}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Phytel.API.AppDomain.NG.DTO</RootNamespace>
-    <AssemblyName>Phytel.API.AppDomain.NG.DTO</AssemblyName>
+    <RootNamespace>Phytel.API.DataDomain.PatientProblem</RootNamespace>
+    <AssemblyName>Phytel.API.DataDomain.PatientProblem</AssemblyName>
     <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SccProjectName>SAK</SccProjectName>
@@ -34,33 +34,20 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="ServiceStack">
-      <HintPath>..\packages\ServiceStack.3.9.69\lib\net35\ServiceStack.dll</HintPath>
+    <Reference Include="MongoDB.Bson">
+      <HintPath>..\..\..\..\..\..\..\Shared\PhytelServices\Development\Current\References\MongoDB.Bson.dll</HintPath>
     </Reference>
-    <Reference Include="ServiceStack.Common">
-      <HintPath>..\packages\ServiceStack.Common.3.9.69\lib\net35\ServiceStack.Common.dll</HintPath>
+    <Reference Include="MongoDB.Driver">
+      <HintPath>..\..\..\..\..\..\..\Shared\PhytelServices\Development\Current\References\MongoDB.Driver.dll</HintPath>
+    </Reference>
+    <Reference Include="Phytel.Mongo">
+      <HintPath>..\References\Phytel.Mongo.dll</HintPath>
     </Reference>
     <Reference Include="ServiceStack.Interfaces">
-      <HintPath>..\packages\ServiceStack.Common.3.9.69\lib\net35\ServiceStack.Interfaces.dll</HintPath>
-    </Reference>
-    <Reference Include="ServiceStack.OrmLite">
-      <HintPath>..\packages\ServiceStack.OrmLite.SqlServer.3.9.69\lib\net35\ServiceStack.OrmLite.dll</HintPath>
-    </Reference>
-    <Reference Include="ServiceStack.OrmLite.SqlServer">
-      <HintPath>..\packages\ServiceStack.OrmLite.SqlServer.3.9.69\lib\net35\ServiceStack.OrmLite.SqlServer.dll</HintPath>
-    </Reference>
-    <Reference Include="ServiceStack.Redis">
-      <HintPath>..\packages\ServiceStack.Redis.3.9.69\lib\net35\ServiceStack.Redis.dll</HintPath>
-    </Reference>
-    <Reference Include="ServiceStack.ServiceInterface">
-      <HintPath>..\packages\ServiceStack.3.9.69\lib\net35\ServiceStack.ServiceInterface.dll</HintPath>
-    </Reference>
-    <Reference Include="ServiceStack.Text">
-      <HintPath>..\packages\ServiceStack.Text.3.9.69\lib\net35\ServiceStack.Text.dll</HintPath>
+      <HintPath>..\References\ServiceStack.Interfaces.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -68,21 +55,25 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="PatientProblemRequest.cs" />
-    <Compile Include="PatientProblemResponse.cs" />
-    <Compile Include="PatientRequest.cs" />
-    <Compile Include="PatientResponse.cs" />
+    <Compile Include="IPatientProblemRepository.cs" />
+    <Compile Include="MongoDB\DTO\MEPatientProblem.cs" />
+    <Compile Include="MongoDB\Repository\MongoPatientProblemRepository.cs" />
+    <Compile Include="MongoDB\PatientProblemMongoContext.cs" />
+    <Compile Include="DataPatientProblemManager.cs" />
+    <Compile Include="PatientProblemRepositoryFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\..\Interfaces\Development\Current\Phytel.API.Interface\Phytel.API.Interface.csproj">
       <Project>{abe948fb-247e-4955-b3ab-b7c93e10a542}</Project>
       <Name>Phytel.API.Interface</Name>
     </ProjectReference>
+    <ProjectReference Include="..\PatientProblem.DTOs\DataDomain.PatientProblem.DTO.csproj">
+      <Project>{f133e537-1d48-4a42-aba9-5587e057f5b3}</Project>
+      <Name>DataDomain.PatientProblem.DTO</Name>
+    </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -12,9 +12,41 @@ namespace Phytel.API.Interface
         void Delete(T entity);
         void DeleteAll(List<T> entities);
         object FindByID(string entityID);
-        IQueryable<T> Select(Expression<Func<T, bool>> predicate);
+        Tuple<int, IQueryable<T>> Select(APIExpression expression);
         IQueryable<T> SelectAll();
         T Update(T entity);
         void CacheByID(List<string> entityIDs);
+    }
+
+    public class APIExpression
+    {
+        ICollection<SelectExpression> Expressions { get; set; }
+        string ExpressionID { get; set; }
+        int skip { get; set; }
+        int take { get; set; }
+    }
+
+    public struct SelectExpression
+    {
+        public string FieldName { get; set; }
+        public SelectExpressionType Type { get; set; }
+        public string Value { get; set; }
+        public SelectExpressionGroupType NextExpressionType { get; set; }
+        public int GroupID { get; set; }
+        public int ExpressionOrder { get; set; }
+    }
+
+    public enum SelectExpressionType
+    {
+        EQ,
+        NOTEQ,
+        LIKE,
+        NOTLIKE
+    }
+
+    public enum SelectExpressionGroupType
+    {
+        AND,
+        OR
     }
 }
