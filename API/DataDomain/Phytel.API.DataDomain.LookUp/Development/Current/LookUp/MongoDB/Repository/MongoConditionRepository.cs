@@ -79,8 +79,7 @@ namespace Phytel.API.DataDomain.LookUp
                     }
                 }
             }
-            query = (IQueryable<T>)Convert.ChangeType(conditionList, typeof(T));
-            //query = conditionList as IQueryable<T>;
+            query = ((IEnumerable<T>)conditionList).AsQueryable<T>();
             
             return query;
         }
