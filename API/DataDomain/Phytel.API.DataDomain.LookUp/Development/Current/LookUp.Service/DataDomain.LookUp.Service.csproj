@@ -97,6 +97,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
+    <None Include="Properties\PublishProfiles\Azure Publish.pubxml" />
     <None Include="Properties\PublishProfiles\DataDomain.LookUp.Service.pubxml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
