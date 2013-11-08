@@ -21,7 +21,7 @@ namespace Phytel.API.DataDomain.LookUp
         {
             ConditionsResponse response = new ConditionsResponse();
 
-            ILookUpRepository<IQueryable<Condition>> repo = Phytel.API.DataDomain.LookUp.LookUpRepositoryFactory<IQueryable<Condition>>.GetLookUpRepository(request.ContractNumber, request.Context, CONDITIONLOOKUP);
+            ILookUpRepository<Condition> repo = Phytel.API.DataDomain.LookUp.LookUpRepositoryFactory<Condition>.GetLookUpRepository(request.ContractNumber, request.Context, CONDITIONLOOKUP);
             IQueryable<Condition> conditions = repo.SelectAll() as IQueryable<Condition>;
 
             if (conditions != null)
