@@ -1,3 +1,4 @@
+using Phytel.API.AppDomain.NG.DTO;
 using System;
 using System.Net;
 using Phytel.API.AppDomain.NG.DTO;
@@ -13,7 +14,7 @@ namespace Phytel.API.AppDomain.NG.Service
             {
                 NGManager ngm = new NGManager();
 
-                request.Token = base.Request.Headers["APIToken"] as string;
+                //request.Token = base.Request.Headers["APIToken"] as string;
                 bool result = ngm.IsUserValidated(request.Version, request.Token);
                 if (result)
                     response = ngm.GetPatientByID(request);
@@ -36,7 +37,7 @@ namespace Phytel.API.AppDomain.NG.Service
             {
                 NGManager ngm = new NGManager();
 
-                request.Token = base.Request.Headers["APIToken"] as string;
+                //request.Token = base.Request.Headers["APIToken"] as string;
                 bool result = ngm.IsUserValidated(request.Version, request.Token);
                 if (result)
                     response = ngm.GetPatientByID(request);
