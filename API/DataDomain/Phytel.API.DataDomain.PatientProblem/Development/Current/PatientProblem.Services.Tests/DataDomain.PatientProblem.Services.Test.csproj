@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{F6EF22D5-BD24-46B5-A9B0-3CE5BDDB5343}</ProjectGuid>
+    <ProjectGuid>{5D22373D-E432-4208-A737-E0BCA0567B5F}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Phytel.API.DataDomain.Patient.Services.Test</RootNamespace>
@@ -70,9 +70,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ProblemProblem\DataDomain.PatientProblem.csproj">
-      <Project>{afd0f5b1-a29e-402c-958b-d6d82b4278e5}</Project>
-      <Name>DataDomain.PatientProblem</Name>
+    <ProjectReference Include="..\PatientProblem.DTOs\DataDomain.PatientProblem.DTO.csproj">
+      <Project>{1b3148a8-fb57-4461-91bc-f1cd38a013b6}</Project>
+      <Name>DataDomain.PatientProblem.DTO</Name>
     </ProjectReference>
   </ItemGroup>
   <Choose>

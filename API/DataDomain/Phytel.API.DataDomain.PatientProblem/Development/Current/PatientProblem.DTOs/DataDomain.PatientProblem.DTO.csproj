@@ -4,7 +4,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{F133E537-1D48-4A42-ABA9-5587E057F5B3}</ProjectGuid>
+    <ProjectGuid>{1B3148A8-FB57-4461-91BC-F1CD38A013B6}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Phytel.API.DataDomain.PatientProblem.DTO</RootNamespace>
@@ -51,7 +51,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="PatientProblemRequest.cs" />
-    <Compile Include="PatientProblemResponse.cs" />
+    <Compile Include="PatientProblemsResponse.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -1,30 +1,51 @@
 using Phytel.API.DataDomain.PatientProblem.DTO;
 using System.Data.SqlClient;
 using System.Collections.Generic;
+using Phytel.API.Interface;
+using System;
+using System.Linq;
 
 namespace Phytel.API.DataDomain.PatientProblem
 {
     public static class PatientProblemDataManager
     {
-        public static List<PatientProblemResponse> GetProblemsByPatientID(PatientProblemRequest request)
+        public static PatientProblemsResponse GetProblemsByPatientID(PatientProblemRequest request)
         {
-            List<PatientProblemResponse> result = new List<PatientProblemResponse>();
 
-            IPatientProblemRepository<PatientProblemResponse> repo = Phytel.API.DataDomain.PatientProblem.PatientProblemRepositoryFactory<PatientProblemResponse>.GetPatientProblemRepository(request.ContractNumber, request.Context);
+            PatientProblemsResponse response = new PatientProblemsResponse();
+
+            IPatientProblemRepository<Problem> repo = Phytel.API.DataDomain.PatientProblem.PatientProblemRepositoryFactory<Problem>.GetPatientProblemRepository(request.ContractNumber, request.Context);
             
-            List <MEPatientProblem > mePatientProblem = null;//repo.Select(request.PatientID) as MEPatientProblem;
+            APIExpression apiExpression = new APIExpression();
 
-            foreach(MEPatientProblem p in mePatientProblem)
+            SelectExpression patientSelectExpression = new SelectExpression();
+            patientSelectExpression.FieldName = "PatientID";
+            patientSelectExpression.Type = SelectExpressionType.EQ;
+            patientSelectExpression.Value = request.PatientID;
+            patientSelectExpression.NextExpressionType = SelectExpressionGroupType.AND;
+            patientSelectExpression.ExpressionOrder = 1;
+
+            SelectExpression statusSelectExpression = new SelectExpression();
+            statusSelectExpression.FieldName = "Status";
+            statusSelectExpression.Type = SelectExpressionType.EQ;
+            statusSelectExpression.Value = request.Status;
+            statusSelectExpression.NextExpressionType = SelectExpressionGroupType.AND;
+            statusSelectExpression.ExpressionOrder = 2;
+
+            SelectExpression categorySelectExpression = new SelectExpression();
+            categorySelectExpression.FieldName = "Category";
+            categorySelectExpression.Type = SelectExpressionType.EQ;
+            categorySelectExpression.Value = request.Category;
+            categorySelectExpression.ExpressionOrder = 3;
+
+
+            Tuple<int, IQueryable<Problem>> problems = repo.Select(apiExpression);
+
+            if (problems != null)
             {
-                PatientProblemResponse patientProblem = new PatientProblemResponse
-                {
-                    DisplayName = p.DisplayName,
-                    PatientID = p.PatientID,
-                    ProblemID = p.Id.ToString()
-                };
-                result.Add(patientProblem);
+                response.PatientProblems = problems.Item2.ToList();
             }
-            return result;
+            return response;
         }
     }
 }   

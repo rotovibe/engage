@@ -43,14 +43,24 @@ namespace Phytel.API.DataDomain.PatientProblem
 
         public Tuple<int, IQueryable<T>> Select(Interface.APIExpression expression)
         {
-            IQueryable<T> patients = null;
-            Tuple<int, IQueryable<T>> response = new Tuple<int, IQueryable<T>>(0, patients);
-            //IQueryable<MEPatientProblem> patientProblems = null;
+            Tuple<int, IQueryable<T>> query = null;
+            //List<Problem> problemList = null;
             //using (PatientProblemMongoContext ctx = new PatientProblemMongoContext(_dbName))
             //{
-            //    patientProblems = ctx.PatientProblems.Collection.(ObjectId.Parse(entityID));
+            //    List<MECondition> meConditions = ctx.Conditions.Collection.FindAll().ToList();
+            //    if (meConditions != null)
+            //    {
+            //        conditionList = new List<Condition>();
+            //        foreach (MECondition m in meConditions)
+            //        {
+            //            Condition condition = new Condition { ConditionID = m.Id.ToString(), DisplayName = m.DisplayName, IsActive = m.IsActive };
+            //            conditionList.Add(condition);
+            //        }
+            //    }
             //}
-            return response;
+            //query = ((IEnumerable<T>)conditionList).AsQueryable<T>();
+
+            return query;
         }
 
         public IQueryable<T> SelectAll()

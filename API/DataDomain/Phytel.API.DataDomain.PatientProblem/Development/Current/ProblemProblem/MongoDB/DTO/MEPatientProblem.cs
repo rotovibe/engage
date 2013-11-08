@@ -12,7 +12,7 @@ namespace Phytel.API.DataDomain.PatientProblem.DTO
 
         public const string IdProperty = "_id";
         public const string PatientIDProperty = "pid";
-        public const string DisplayNameProperty = "dn";
+        public const string ConditionIDProperty = "cid";
         public const string CodeProperty = "cd";
         public const string StatusProperty = "stat";
         public const string CategoryProperty = "cat";
@@ -25,9 +25,9 @@ namespace Phytel.API.DataDomain.PatientProblem.DTO
         [BsonIgnoreIfNull(true)]
         public string PatientID { get; set; }
 
-        [BsonElement(DisplayNameProperty)]
+        [BsonElement(ConditionIDProperty)]
         [BsonIgnoreIfNull(true)]
-        public string DisplayName { get; set; }
+        public string ConditionID { get; set; }
 
         [BsonElement(CodeProperty)]
         [BsonIgnoreIfNull(true)]

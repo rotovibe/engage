@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{1FDE97CB-3E85-41FB-ABFA-A62720C99FCB}</ProjectGuid>
+    <ProjectGuid>{EC134A5F-CB56-4196-BB4E-217D365A2534}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Phytel.API.DataDomain.PatientProblem.Test</RootNamespace>
@@ -75,6 +75,10 @@
     <ProjectReference Include="..\PatientProblem.DTOs\DataDomain.PatientProblem.DTO.csproj">
       <Project>{f133e537-1d48-4a42-aba9-5587e057f5b3}</Project>
       <Name>DataDomain.PatientProblem.DTO</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ProblemProblem\DataDomain.PatientProblem.csproj">
+      <Project>{1536cd0a-6308-4daf-8618-35bba0816997}</Project>
+      <Name>DataDomain.PatientProblem</Name>
     </ProjectReference>
   </ItemGroup>
   <Choose>
