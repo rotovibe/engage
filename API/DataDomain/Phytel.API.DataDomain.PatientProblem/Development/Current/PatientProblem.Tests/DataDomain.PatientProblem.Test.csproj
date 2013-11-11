@@ -76,9 +76,9 @@
       <Project>{f133e537-1d48-4a42-aba9-5587e057f5b3}</Project>
       <Name>DataDomain.PatientProblem.DTO</Name>
     </ProjectReference>
-    <ProjectReference Include="..\ProblemProblem\DataDomain.PatientProblem.csproj">
+    <ProjectReference Include="..\..\..\..\Phytel.API.DataDomain.Patient\Development\Current\Patient\DataDomain.Patient.csproj">
       <Project>{1536cd0a-6308-4daf-8618-35bba0816997}</Project>
-      <Name>DataDomain.PatientProblem</Name>
+      <Name>DataDomain.Patient</Name>
     </ProjectReference>
   </ItemGroup>
   <Choose>

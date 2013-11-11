@@ -70,9 +70,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\PatientProblem.DTOs\DataDomain.PatientProblem.DTO.csproj">
+    <ProjectReference Include="..\..\..\..\Phytel.API.DataDomain.Patient\Development\Current\Patient.DTOs\DataDomain.Patient.DTO.csproj">
       <Project>{1b3148a8-fb57-4461-91bc-f1cd38a013b6}</Project>
-      <Name>DataDomain.PatientProblem.DTO</Name>
+      <Name>DataDomain.Patient.DTO</Name>
     </ProjectReference>
   </ItemGroup>
   <Choose>

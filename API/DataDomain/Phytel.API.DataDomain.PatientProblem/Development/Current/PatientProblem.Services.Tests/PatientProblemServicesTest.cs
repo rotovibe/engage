@@ -1,5 +1,5 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Phytel.API.DataDomain.PatientProblem.DTO;
+using Phytel.API.DataDomain.PatientProblem;
 using ServiceStack.Service;
 using ServiceStack.ServiceClient.Web;
 

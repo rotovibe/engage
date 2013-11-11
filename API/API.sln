@@ -95,9 +95,21 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.LookUp.Service.T
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.LookUp.Test", "DataDomain\Phytel.API.DataDomain.LookUp\Development\Current\LookUp.Test\DataDomain.LookUp.Test.csproj", "{CBBFA1EA-0482-4FB1-B0DE-D3AEC89724B4}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Audit", "Audit", "{67BE1A57-5202-45AA-8469-221A00CFF30B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppDomain.Audit", "AppDomain\Phytel.API.AppDomain.Audit\Development\Current\Audit\AppDomain.Audit.csproj", "{BD9E8867-CA65-43F6-A18B-A28805716A4B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppDomain.Audit.Test", "AppDomain\Phytel.API.AppDomain.Audit\Development\Current\AppDomain.Audit.Tests\AppDomain.Audit.Test.csproj", "{3E45BC69-C36F-459C-9310-F62DBC855841}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppDomain.Audit.DTO", "AppDomain\Phytel.API.AppDomain.Audit\Development\Current\Audit.DTOs\AppDomain.Audit.DTO.csproj", "{DDF2CB2B-6351-44AA-A152-35F82D7D0AF2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppDomain.Audit.Service", "AppDomain\Phytel.API.AppDomain.Audit\Development\Current\Audit.Services\AppDomain.Audit.Service.csproj", "{DA0DCEDF-73A9-4BB9-970C-05995FC9E5C1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppDomain.Audit.Services.Test", "AppDomain\Phytel.API.AppDomain.Audit\Development\Current\Audit.Tests\AppDomain.Audit.Services.Test.csproj", "{C940018D-A598-407A-AAA0-22918FF5FFE8}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 36
+		SccNumberOfProjects = 41
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = http://hillstfs2013:8080/tfs/phytel
 		SccLocalPath0 = .
@@ -241,6 +253,26 @@ Global
 		SccProjectTopLevelParentUniqueName35 = API.sln
 		SccProjectName35 = DataDomain/Phytel.API.DataDomain.LookUp/Development/Current/LookUp.Test
 		SccLocalPath35 = DataDomain\\Phytel.API.DataDomain.LookUp\\Development\\Current\\LookUp.Test
+		SccProjectUniqueName36 = AppDomain\\Phytel.API.AppDomain.Audit\\Development\\Current\\Audit\\AppDomain.Audit.csproj
+		SccProjectTopLevelParentUniqueName36 = API.sln
+		SccProjectName36 = AppDomain/Phytel.API.AppDomain.Audit/Development/Current/Audit
+		SccLocalPath36 = AppDomain\\Phytel.API.AppDomain.Audit\\Development\\Current\\Audit
+		SccProjectUniqueName37 = AppDomain\\Phytel.API.AppDomain.Audit\\Development\\Current\\AppDomain.Audit.Tests\\AppDomain.Audit.Test.csproj
+		SccProjectTopLevelParentUniqueName37 = API.sln
+		SccProjectName37 = AppDomain/Phytel.API.AppDomain.Audit/Development/Current/AppDomain.Audit.Tests
+		SccLocalPath37 = AppDomain\\Phytel.API.AppDomain.Audit\\Development\\Current\\AppDomain.Audit.Tests
+		SccProjectUniqueName38 = AppDomain\\Phytel.API.AppDomain.Audit\\Development\\Current\\Audit.DTOs\\AppDomain.Audit.DTO.csproj
+		SccProjectTopLevelParentUniqueName38 = API.sln
+		SccProjectName38 = AppDomain/Phytel.API.AppDomain.Audit/Development/Current/Audit.DTOs
+		SccLocalPath38 = AppDomain\\Phytel.API.AppDomain.Audit\\Development\\Current\\Audit.DTOs
+		SccProjectUniqueName39 = AppDomain\\Phytel.API.AppDomain.Audit\\Development\\Current\\Audit.Services\\AppDomain.Audit.Service.csproj
+		SccProjectTopLevelParentUniqueName39 = API.sln
+		SccProjectName39 = AppDomain/Phytel.API.AppDomain.Audit/Development/Current/Audit.Services
+		SccLocalPath39 = AppDomain\\Phytel.API.AppDomain.Audit\\Development\\Current\\Audit.Services
+		SccProjectUniqueName40 = AppDomain\\Phytel.API.AppDomain.Audit\\Development\\Current\\Audit.Tests\\AppDomain.Audit.Services.Test.csproj
+		SccProjectTopLevelParentUniqueName40 = API.sln
+		SccProjectName40 = AppDomain/Phytel.API.AppDomain.Audit/Development/Current/Audit.Tests
+		SccLocalPath40 = AppDomain\\Phytel.API.AppDomain.Audit\\Development\\Current\\Audit.Tests
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -387,6 +419,26 @@ Global
 		{CBBFA1EA-0482-4FB1-B0DE-D3AEC89724B4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CBBFA1EA-0482-4FB1-B0DE-D3AEC89724B4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CBBFA1EA-0482-4FB1-B0DE-D3AEC89724B4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BD9E8867-CA65-43F6-A18B-A28805716A4B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BD9E8867-CA65-43F6-A18B-A28805716A4B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BD9E8867-CA65-43F6-A18B-A28805716A4B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BD9E8867-CA65-43F6-A18B-A28805716A4B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3E45BC69-C36F-459C-9310-F62DBC855841}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3E45BC69-C36F-459C-9310-F62DBC855841}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3E45BC69-C36F-459C-9310-F62DBC855841}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3E45BC69-C36F-459C-9310-F62DBC855841}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DDF2CB2B-6351-44AA-A152-35F82D7D0AF2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DDF2CB2B-6351-44AA-A152-35F82D7D0AF2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DDF2CB2B-6351-44AA-A152-35F82D7D0AF2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DDF2CB2B-6351-44AA-A152-35F82D7D0AF2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DA0DCEDF-73A9-4BB9-970C-05995FC9E5C1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DA0DCEDF-73A9-4BB9-970C-05995FC9E5C1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DA0DCEDF-73A9-4BB9-970C-05995FC9E5C1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DA0DCEDF-73A9-4BB9-970C-05995FC9E5C1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C940018D-A598-407A-AAA0-22918FF5FFE8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C940018D-A598-407A-AAA0-22918FF5FFE8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C940018D-A598-407A-AAA0-22918FF5FFE8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C940018D-A598-407A-AAA0-22918FF5FFE8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -394,6 +446,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{8E28768D-9A7C-4CA0-A4D0-761C06DA259C} = {2E11BED7-15D8-4A76-B289-E9FE4FF9DD72}
 		{2FDF8A25-888A-4C5D-9C06-7FCDF0C3C318} = {2E11BED7-15D8-4A76-B289-E9FE4FF9DD72}
+		{67BE1A57-5202-45AA-8469-221A00CFF30B} = {2E11BED7-15D8-4A76-B289-E9FE4FF9DD72}
 		{BE578879-FB93-495B-B801-B1D955EEE190} = {81F6F5D5-AADE-4C4A-ACAE-EB1B3651E150}
 		{9A76086C-F38C-4A03-8C5C-E759EE0084AD} = {81F6F5D5-AADE-4C4A-ACAE-EB1B3651E150}
 		{08328FF0-1E70-4255-A243-A7F38AE9BE45} = {81F6F5D5-AADE-4C4A-ACAE-EB1B3651E150}
@@ -433,5 +486,10 @@ Global
 		{60637A3F-B4AB-4B76-981F-9C12FF2869A0} = {297ADE89-F45C-42A0-98F1-DE761DF84604}
 		{D46EC92D-3AFD-473F-911B-9CE9AEFF099E} = {297ADE89-F45C-42A0-98F1-DE761DF84604}
 		{F12C46CC-86B7-42A9-BF04-97CBFE1F1CFA} = {297ADE89-F45C-42A0-98F1-DE761DF84604}
+		{BD9E8867-CA65-43F6-A18B-A28805716A4B} = {67BE1A57-5202-45AA-8469-221A00CFF30B}
+		{3E45BC69-C36F-459C-9310-F62DBC855841} = {67BE1A57-5202-45AA-8469-221A00CFF30B}
+		{DDF2CB2B-6351-44AA-A152-35F82D7D0AF2} = {67BE1A57-5202-45AA-8469-221A00CFF30B}
+		{DA0DCEDF-73A9-4BB9-970C-05995FC9E5C1} = {67BE1A57-5202-45AA-8469-221A00CFF30B}
+		{C940018D-A598-407A-AAA0-22918FF5FFE8} = {67BE1A57-5202-45AA-8469-221A00CFF30B}
 	EndGlobalSection
 EndGlobal
