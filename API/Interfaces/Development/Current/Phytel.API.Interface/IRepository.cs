@@ -20,10 +20,10 @@ namespace Phytel.API.Interface
 
     public class APIExpression
     {
-        ICollection<SelectExpression> Expressions { get; set; }
-        string ExpressionID { get; set; }
-        int skip { get; set; }
-        int take { get; set; }
+        public ICollection<SelectExpression> Expressions { get; set; }
+        public string ExpressionID { get; set; }
+        public int skip { get; set; }
+        public int take { get; set; }
     }
 
     public struct SelectExpression
