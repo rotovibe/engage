@@ -127,7 +127,7 @@ namespace Phytel.API.AppDomain.Security
             throw new NotImplementedException();
         }
 
-        public Tuple<int, IQueryable<T>> Select(Interface.APIExpression expression)
+        public Tuple<string, IQueryable<T>> Select(Interface.APIExpression expression)
         {
             throw new NotImplementedException();
         }

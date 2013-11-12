@@ -58,9 +58,9 @@ namespace Phytel.API.AppDomain.NG.Service
         /// </summary>
         /// <param name="request">PatientProblemResponse object</param>
         /// <returns>PatientProblemResponse object</returns>
-        public PatientProblemResponse Get(PatientProblemRequest request)
+        public PatientProblemsResponse Get(PatientProblemRequest request)
         {
-            PatientProblemResponse response = new PatientProblemResponse();
+            PatientProblemsResponse response = new PatientProblemsResponse();
             try
             {
                 NGManager ngm = new NGManager();
@@ -80,6 +80,31 @@ namespace Phytel.API.AppDomain.NG.Service
             }
             return response;
         }
+
+        public LookUpConditionsResponse Get(LookUpConditionRequest request)
+        {
+            LookUpConditionsResponse response = new LookUpConditionsResponse();
+            try
+            {
+                NGManager ngm = new NGManager();
+
+                request.Token = base.Request.Headers["APIToken"] as string;
+                bool result = ngm.IsUserValidated(request.Version, request.Token);
+                if (result)
+                    response.Conditions = ngm.GetConditions(request);
+                else
+                    throw new UnauthorizedAccessException();
+            }
+            catch (Exception ex)
+            {
+                //TODO: Log this to C3 database via ASE
+                base.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                response.Status = new ServiceStack.ServiceInterface.ServiceModel.ResponseStatus("Exception", ex.Message);
+            }
+            return response;
+        }
+
+
 
     }
 }

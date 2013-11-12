@@ -5,7 +5,7 @@ using System.Collections.Generic;
 namespace Phytel.API.AppDomain.NG.DTO
 {
     [Route("/{Context}/{Version}/Contract/{ContractNumber}/patientproblem/{PatientID}", "GET")]
-    public class PatientProblemRequest : IAppDomainRequest, IReturn<PatientProblemResponse>
+    public class PatientProblemRequest : IAppDomainRequest, IReturn<PatientProblemsResponse>
     {
         [ApiMember(Name = "PatientID", Description = "ID parameter", ParameterType = "path", DataType = "string", IsRequired = true)]
         public string PatientID { get; set; }

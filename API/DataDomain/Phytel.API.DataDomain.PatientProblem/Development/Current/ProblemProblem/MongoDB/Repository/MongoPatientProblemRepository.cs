@@ -2,8 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using MongoDB.Bson;
+using MongoDB.Driver;
+using MongoDB.Driver.Builders;
 using Phytel.API.AppDomain.PatientProblem;
 using Phytel.API.DataDomain.PatientProblem.DTO;
+using Phytel.API.Interface;
 
 namespace Phytel.API.DataDomain.PatientProblem
 {
@@ -41,26 +44,61 @@ namespace Phytel.API.DataDomain.PatientProblem
             throw new NotImplementedException();
         }
 
-        public Tuple<int, IQueryable<T>> Select(Interface.APIExpression expression)
+        public Tuple<string, IQueryable<T>> Select(Interface.APIExpression expression)
         {
-            Tuple<int, IQueryable<T>> query = null;
-            //List<Problem> problemList = null;
-            //using (PatientProblemMongoContext ctx = new PatientProblemMongoContext(_dbName))
-            //{
-            //    List<MECondition> meConditions = ctx.Conditions.Collection.FindAll().ToList();
-            //    if (meConditions != null)
-            //    {
-            //        conditionList = new List<Condition>();
-            //        foreach (MECondition m in meConditions)
-            //        {
-            //            Condition condition = new Condition { ConditionID = m.Id.ToString(), DisplayName = m.DisplayName, IsActive = m.IsActive };
-            //            conditionList.Add(condition);
-            //        }
-            //    }
-            //}
-            //query = ((IEnumerable<T>)conditionList).AsQueryable<T>();
+            IQueryable<T> returnQuery = null;
+            IMongoQuery mQuery = null;
 
-            return query;
+            List<SelectExpression> selectExpressions = expression.Expressions.ToList();
+            selectExpressions.Where(s => s.GroupID == 1).OrderBy(o => o.ExpressionOrder).ToList();
+
+            SelectExpressionGroupType groupType = SelectExpressionGroupType.AND;
+
+            if(selectExpressions.Count > 0)
+            {
+                IList<IMongoQuery> queries = new List<IMongoQuery>();
+                for (int i = 0; i < selectExpressions.Count; i++)
+                {
+
+                    groupType = selectExpressions[0].NextExpressionType;
+                    
+                    Type t = selectExpressions[i].Value.GetType();
+                    
+                    if (selectExpressions[i].Type == SelectExpressionType.EQ)
+                        queries.Add(Query.EQ(selectExpressions[i].FieldName, BsonValue.Create(selectExpressions[i].Value))); 
+                }
+
+                if(groupType.Equals(SelectExpressionGroupType.AND))
+                {
+                    mQuery = Query.And(queries);
+                }
+                else if (groupType.Equals(SelectExpressionGroupType.OR))
+                {
+                    mQuery = Query.Or(queries);
+                }
+
+                List<Problem> patientProblemList = null;
+                using (PatientProblemMongoContext ctx = new PatientProblemMongoContext(_dbName))
+                {
+                    List<MEPatientProblem> mePatientProblems = ctx.PatientProblems.Collection.Find(mQuery).ToList();
+                    if (mePatientProblems != null)
+                    { 
+                        patientProblemList = new List<Problem>();
+                        foreach (MEPatientProblem p in mePatientProblems)
+                        {
+                            Problem condition = new Problem { 
+                                ConditionID = p.ConditionID,
+                                PatientID = p.PatientID,
+                                ProblemID = p.Id.ToString()
+                            };
+                            patientProblemList.Add(condition);
+                        }
+                    }
+                }
+                returnQuery = ((IEnumerable<T>)patientProblemList).AsQueryable<T>();
+            }
+
+            return new Tuple<string, IQueryable<T>>(expression.ExpressionID, returnQuery);
         }
 
         public IQueryable<T> SelectAll()
@@ -78,4 +116,5 @@ namespace Phytel.API.DataDomain.PatientProblem
             throw new NotImplementedException();
         }
     }
+
 }

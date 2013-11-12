@@ -2,6 +2,8 @@ using System.Collections.Generic;
 using System.Configuration;
 using Phytel.API.AppDomain.NG.DTO;
 using Phytel.API.DataDomain.Patient.DTO;
+using Phytel.API.DataDomain.PatientProblem.DTO;
+using Phytel.API.DataDomain.LookUp.DTO;
 using ServiceStack.Service;
 using ServiceStack.ServiceClient.Web;
 
@@ -12,6 +14,7 @@ namespace Phytel.API.AppDomain.NG
         #region endpoint addresses
         protected static readonly string DDPatientServiceURL = ConfigurationManager.AppSettings["DDPatientServiceUrl"];
         protected static readonly string DDPatientProblemServiceUrl = ConfigurationManager.AppSettings["DDPatientProblemServiceUrl"];
+        protected static readonly string DDLookupServiceUrl = ConfigurationManager.AppSettings["DDLookupServiceUrl"];
         #endregion
 
         public NG.DTO.PatientResponse GetPatientByID(NG.DTO.PatientRequest request)
@@ -43,27 +46,49 @@ namespace Phytel.API.AppDomain.NG
         /// </summary>
         /// <param name="request">PatientProblemRequest object</param>
         /// <returns>PatientProblem object</returns>
-        public List<PatientProblem> GetProblemsByPatientID(PatientProblemRequest request)
+        public List<PatientProblem> GetProblemsByPatientID(Phytel.API.AppDomain.NG.DTO.PatientProblemRequest request)
         {
             List<PatientProblem> response = new List<PatientProblem>();
 
-            //IRestClient client = new JsonServiceClient();
+            IRestClient client = new JsonServiceClient();
+            ///{Context}/{Version}/Contract/{ContractNumber}/patientproblems"
+            Phytel.API.DataDomain.PatientProblem.DTO.PatientProblemsResponse dataDomainResponse = client.Get<Phytel.API.DataDomain.PatientProblem.DTO.PatientProblemsResponse>(string.Format("{0}/{1}/{2}/Contract/{3}/patientproblems/{4}",                                                                           DDPatientProblemServiceUrl,                                                                  request.Context, request.Version,request.ContractNumber, request.PatientID));
 
-            //Phytel.API.DataDomain.PatientProblem.DTO.PatientProblemResponse dataDomainResponse = client.Get<Phytel.API.DataDomain.PatientProblem.DTO.PatientProblemResponse>(string.Format("{0}/{1}/{2}/Contract/{3}/patientproblem/{4}",
-            //                                                                            DDPatientProblemServiceUrl,
-            //                                                                            request.Context,
-            //                                                                            request.Version,
-            //                                                                            request.ContractNumber,
-            //                                                                            request.PatientID));
+            List<Problem> problems = dataDomainResponse.PatientProblems;
 
-            //dataDomainResponse.
+            foreach(Problem p in problems)
+            {
+                PatientProblem pp = new PatientProblem();
+                pp.PatientProblemID = p.ProblemID;
+                pp.PatientID = p.PatientID;
+                pp.ConditionID = p.ConditionID;
+                response.Add(pp);
+            }
 
-            //foreach()
-            //{
-            //    response.DisplayName = response.FirstName;
-            //    response.ProblemID = response.LastName;
-            //    response.PatientID = response.PatientID;
-            //}
+            return response;
+        }
+
+        public List<LookUpCondition> GetConditions(LookUpConditionRequest request)
+        {
+            List<LookUpCondition> response = new List<LookUpCondition>();
+
+            IRestClient client = new JsonServiceClient();
+
+            Phytel.API.DataDomain.LookUp.DTO.ConditionsResponse dataDomainResponse = client.Get<Phytel.API.DataDomain.LookUp.DTO.ConditionsResponse>(string.Format("{0}/{1}/{2}/Contract/{3}/conditions",
+                                                                                                            DDLookupServiceUrl,
+                                                                                                            request.Context,
+                                                                                                            request.Version,
+                                                                                                            request.ContractNumber));
+
+            List<Condition> conditions = dataDomainResponse.Conditions;
+
+            foreach(Condition c in conditions)
+            {
+                LookUpCondition lookUpCondition = new LookUpCondition();
+                lookUpCondition.ConditionID = c.ConditionID;
+                lookUpCondition.DisplayName = c.DisplayName;
+                response.Add(lookUpCondition);
+            }
 
             return response;
         }

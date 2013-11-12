@@ -3,7 +3,7 @@ using ServiceStack.ServiceHost;
 
 namespace Phytel.API.DataDomain.PatientProblem.DTO
 {
-    [Route("/{Context}/{Version}/Contract/{ContractNumber}/patientproblem/{PatientID}", "GET")]
+    [Route("/{Context}/{Version}/Contract/{ContractNumber}/patientproblems", "POST")]
     public class PatientProblemRequest: IDataDomainRequest
     {
 
@@ -11,10 +11,10 @@ namespace Phytel.API.DataDomain.PatientProblem.DTO
         public string PatientID { get; set; }
 
         [ApiMember(Name = "Status", Description = "Status of the problem being requested", ParameterType = "body", DataType = "string", IsRequired = false)]
-        public string Status { get; set; }
+        public Status Status { get; set; }
 
         [ApiMember(Name = "Category", Description = "Status of the problem being requested", ParameterType = "body", DataType = "string", IsRequired = false)]
-        public string Category { get; set; }
+        public Category Category { get; set; }
 
         [ApiMember(Name = "Context", Description = "Product Context requesting the patient", ParameterType = "path", DataType = "string", IsRequired = false)]
         public string Context { get; set; }
@@ -25,5 +25,16 @@ namespace Phytel.API.DataDomain.PatientProblem.DTO
         [ApiMember(Name = "Version", Description = "Version of the Data Domain API being called", ParameterType = "path", DataType = "string", IsRequired = true)]
         public string Version { get; set; }
 
+    }
+
+    public enum Status
+    {
+        Active,
+        Inactive
+    }
+
+    public enum Category
+    {
+        Chronic
     }
 }

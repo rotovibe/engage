@@ -1,6 +1,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Phytel.API.AppDomain.NG.DTO;
 using System;
+using System.Collections.Generic;
 
 namespace Phytel.API.AppDomain.NG.Test
 {
@@ -12,6 +13,29 @@ namespace Phytel.API.AppDomain.NG.Test
         {
             //PatientResponse response = NGManager.GetPatientByID("1", "NG", "inHealth001");
             //Assert.IsTrue(response.LastName == "DiGiorgio");
+        }
+
+        [TestMethod]
+        public void FindConditions_Test()
+        { 
+            // Arrange
+            string version = "v1";
+            string contractNumber = "InHealth001";
+            string context = "NG";
+            string token = "1234";
+            NGManager ngManager = new NGManager();
+            LookUpConditionRequest request = new LookUpConditionRequest
+            {
+                Context = context,
+                ContractNumber = contractNumber,
+                Token = token,
+                Version = version
+            };
+            // Act
+            List<LookUpCondition> response = ngManager.GetConditions(request);
+
+            //Assert
+            Assert.IsTrue(response.Count > 0);
         }
     }
 }

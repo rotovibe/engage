@@ -7,7 +7,7 @@ using System.Linq;
 
 namespace Phytel.API.DataDomain.PatientProblem
 {
-    public static class PatientProblemDataManager
+    public static class DataPatientProblemManager
     {
         public static PatientProblemsResponse GetProblemsByPatientID(PatientProblemRequest request)
         {
@@ -17,6 +17,11 @@ namespace Phytel.API.DataDomain.PatientProblem
             IPatientProblemRepository<Problem> repo = Phytel.API.DataDomain.PatientProblem.PatientProblemRepositoryFactory<Problem>.GetPatientProblemRepository(request.ContractNumber, request.Context);
             
             APIExpression apiExpression = new APIExpression();
+            // expressionID will be used as a unique cacheKey for caching the query.
+            string expressionID = Guid.NewGuid().ToString();
+            apiExpression.ExpressionID = expressionID;
+
+            ICollection<SelectExpression> selectExpressions = new List<SelectExpression>();
 
             SelectExpression patientSelectExpression = new SelectExpression();
             patientSelectExpression.FieldName = "PatientID";
@@ -24,22 +29,29 @@ namespace Phytel.API.DataDomain.PatientProblem
             patientSelectExpression.Value = request.PatientID;
             patientSelectExpression.NextExpressionType = SelectExpressionGroupType.AND;
             patientSelectExpression.ExpressionOrder = 1;
+            patientSelectExpression.GroupID = 1;
+            selectExpressions.Add(patientSelectExpression);
 
             SelectExpression statusSelectExpression = new SelectExpression();
             statusSelectExpression.FieldName = "Status";
             statusSelectExpression.Type = SelectExpressionType.EQ;
-            statusSelectExpression.Value = request.Status;
+            statusSelectExpression.Value = ((int)request.Status).ToString();
             statusSelectExpression.NextExpressionType = SelectExpressionGroupType.AND;
             statusSelectExpression.ExpressionOrder = 2;
+            statusSelectExpression.GroupID = 1;
+            selectExpressions.Add(statusSelectExpression);
 
             SelectExpression categorySelectExpression = new SelectExpression();
             categorySelectExpression.FieldName = "Category";
             categorySelectExpression.Type = SelectExpressionType.EQ;
-            categorySelectExpression.Value = request.Category;
+            categorySelectExpression.Value = ((int)request.Category).ToString();
             categorySelectExpression.ExpressionOrder = 3;
+            categorySelectExpression.GroupID = 1;
+            selectExpressions.Add(categorySelectExpression);
 
+            apiExpression.Expressions = selectExpressions;
 
-            Tuple<int, IQueryable<Problem>> problems = repo.Select(apiExpression);
+            Tuple<string, IQueryable<Problem>> problems = repo.Select(apiExpression);
 
             if (problems != null)
             {

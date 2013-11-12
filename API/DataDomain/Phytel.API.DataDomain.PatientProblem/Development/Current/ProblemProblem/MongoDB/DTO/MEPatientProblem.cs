@@ -44,17 +44,7 @@ namespace Phytel.API.DataDomain.PatientProblem.DTO
         [BsonElement(DisplayProperty)]
         [BsonIgnoreIfNull(true)]
         public bool DisplayCondition { get; set; }
-    }
 
-    public enum Status
-    { 
-        Active,
-        Inactive
-    }
-
-    public enum Category
-    {
-        Chronic
     }
 }
 

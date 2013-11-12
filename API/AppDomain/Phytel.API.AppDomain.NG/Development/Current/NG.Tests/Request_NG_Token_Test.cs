@@ -68,5 +68,26 @@ namespace Phytel.API.AppDomain.NG.Services.Test
             Assert.AreEqual(lnControlValue, lnsampleValue);
             Assert.AreEqual(fnControlValue, fnsampleValue);
         }
+
+        [TestMethod]
+        public void FindConditionsService_Test()
+        {
+
+            // Arrange
+            string version = "v1";
+            string contractNumber = "InHealth001";
+            string context = "NG";
+            string token = "1234";
+            IRestClient client = new JsonServiceClient();
+            JsonServiceClient.HttpWebRequestFilter = x => x.Headers.Add(string.Format("APIToken: {0}", token));
+            // Act
+            //[Route("/{Context}/{Version}/Contract/{ContractNumber}/lookupconditions", 
+            LookUpConditionsResponse response = client.Get<LookUpConditionsResponse>
+                (string.Format("{0}/{1}/{2}/Contract/{3}/lookupconditions",
+                  "http://localhost:888/Nightingale/", context, version, contractNumber));
+
+            // Assert
+            Assert.AreNotEqual(0, response.Conditions.Count);
+        }
     }
 }

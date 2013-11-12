@@ -68,6 +68,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="LookUpConditionRequest.cs" />
+    <Compile Include="LookUpConditionResponse.cs" />
     <Compile Include="PatientProblemRequest.cs" />
     <Compile Include="PatientProblemResponse.cs" />
     <Compile Include="PatientRequest.cs" />
