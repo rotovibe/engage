@@ -65,7 +65,7 @@ namespace Phytel.API.DataDomain.PatientProblem
                     Type t = selectExpressions[i].Value.GetType();
                     
                     if (selectExpressions[i].Type == SelectExpressionType.EQ)
-                        queries.Add(Query.EQ(selectExpressions[i].FieldName, BsonValue.Create(selectExpressions[i].Value))); 
+                        queries.Add(Query.EQ(selectExpressions[i].FieldName, BsonValue.Create(convertToAppropriateType(selectExpressions[i].Value)))); 
                 }
 
                 if(groupType.Equals(SelectExpressionGroupType.AND))
@@ -99,6 +99,24 @@ namespace Phytel.API.DataDomain.PatientProblem
             }
 
             return new Tuple<string, IQueryable<T>>(expression.ExpressionID, returnQuery);
+        }
+
+        private object convertToAppropriateType(object p)
+        {
+            string type = p.GetType().ToString();
+            switch (type)
+            {
+                case "System.Int32":
+                    return Convert.ToInt32(p);
+                case "System.String":
+                    return p.ToString();
+                case "System.Int16":
+                    return Convert.ToInt16(p);
+                case "System.Int64":
+                    return Convert.ToInt64(p);
+                default:
+                    return  p.ToString();
+            }
         }
 
         public IQueryable<T> SelectAll()

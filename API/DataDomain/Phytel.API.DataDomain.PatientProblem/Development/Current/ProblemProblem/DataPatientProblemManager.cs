@@ -24,7 +24,7 @@ namespace Phytel.API.DataDomain.PatientProblem
             ICollection<SelectExpression> selectExpressions = new List<SelectExpression>();
 
             SelectExpression patientSelectExpression = new SelectExpression();
-            patientSelectExpression.FieldName = "PatientID";
+            patientSelectExpression.FieldName = MEPatientProblem.PatientIDProperty;
             patientSelectExpression.Type = SelectExpressionType.EQ;
             patientSelectExpression.Value = request.PatientID;
             patientSelectExpression.NextExpressionType = SelectExpressionGroupType.AND;
@@ -33,18 +33,18 @@ namespace Phytel.API.DataDomain.PatientProblem
             selectExpressions.Add(patientSelectExpression);
 
             SelectExpression statusSelectExpression = new SelectExpression();
-            statusSelectExpression.FieldName = "Status";
+            statusSelectExpression.FieldName = MEPatientProblem.StatusProperty;
             statusSelectExpression.Type = SelectExpressionType.EQ;
-            statusSelectExpression.Value = ((int)request.Status).ToString();
+            statusSelectExpression.Value = (int)request.Status;
             statusSelectExpression.NextExpressionType = SelectExpressionGroupType.AND;
             statusSelectExpression.ExpressionOrder = 2;
             statusSelectExpression.GroupID = 1;
             selectExpressions.Add(statusSelectExpression);
 
             SelectExpression categorySelectExpression = new SelectExpression();
-            categorySelectExpression.FieldName = "Category";
+            categorySelectExpression.FieldName = MEPatientProblem.CategoryProperty;
             categorySelectExpression.Type = SelectExpressionType.EQ;
-            categorySelectExpression.Value = ((int)request.Category).ToString();
+            categorySelectExpression.Value = (int)request.Category;
             categorySelectExpression.ExpressionOrder = 3;
             categorySelectExpression.GroupID = 1;
             selectExpressions.Add(categorySelectExpression);

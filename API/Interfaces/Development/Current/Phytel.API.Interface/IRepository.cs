@@ -30,7 +30,7 @@ namespace Phytel.API.Interface
     {
         public string FieldName { get; set; }
         public SelectExpressionType Type { get; set; }
-        public string Value { get; set; }
+        public object Value { get; set; }
         public SelectExpressionGroupType NextExpressionType { get; set; }
         public int GroupID { get; set; }
         public int ExpressionOrder { get; set; }
@@ -41,7 +41,8 @@ namespace Phytel.API.Interface
         EQ,
         NOTEQ,
         LIKE,
-        NOTLIKE
+        NOTLIKE,
+        STARTWITH
     }
 
     public enum SelectExpressionGroupType
