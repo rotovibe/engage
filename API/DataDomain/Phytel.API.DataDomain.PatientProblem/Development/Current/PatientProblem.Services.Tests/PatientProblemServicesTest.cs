@@ -20,17 +20,6 @@ namespace Phytel.API.DataDomain.PatientProblem.Services.Test
             IRestClient client = new JsonServiceClient();
 
             // Act
-            ///{Context}/{Version}/Contract/{ContractNumber}/patientproblems"
-            //PatientProblemsResponse response = client.POST<PatientProblemsResponse>("http://localhost:8888/PatientProblem", new PatientProblemRequest { 
-            //    PatientID = patientID,
-            //    Category = Category.Chronic.ToString(),
-            //    Status = Status.Active.ToString(),
-            //    Context = context,
-            //    Version = version,
-            //    ContractNumber = contractNumber}
-            //as object);
-
-
             PatientProblemsResponse response = client.Post<PatientProblemsResponse>(string.Format("{0}/{1}/{2}/Contract/{3}/patientproblems", "http://localhost:8888/PatientProblem", context, version, contractNumber),
                 new PatientProblemRequest
                 {
