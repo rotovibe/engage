@@ -19,8 +19,7 @@ namespace Phytel.API.AppDomain.Security.Service
                 //Permit modern browsers to allow sending of any REST HTTP Method
                 SetConfig(new EndpointHostConfig
                 {
-                    GlobalResponseHeaders = { { "Access-Control-Allow-Origin", "*" },
-                                                { "Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS" },
+                    GlobalResponseHeaders = { { "Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS" },
                                                 { "Access-Control-Allow-Headers", "Content-Type" },
                                                 },
                 });
