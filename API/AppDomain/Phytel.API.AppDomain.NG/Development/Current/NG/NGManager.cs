@@ -50,10 +50,25 @@ namespace Phytel.API.AppDomain.NG
         {
             List<PatientProblem> response = new List<PatientProblem>();
 
-            IRestClient client = new JsonServiceClient();
+           IRestClient client = new JsonServiceClient();
             ///{Context}/{Version}/Contract/{ContractNumber}/patientproblems"
-            Phytel.API.DataDomain.PatientProblem.DTO.PatientProblemsResponse dataDomainResponse = client.Get<Phytel.API.DataDomain.PatientProblem.DTO.PatientProblemsResponse>(string.Format("{0}/{1}/{2}/Contract/{3}/patientproblems/{4}",                                                                           DDPatientProblemServiceUrl,                                                                  request.Context, request.Version,request.ContractNumber, request.PatientID));
-
+            Phytel.API.DataDomain.PatientProblem.DTO.PatientProblemsResponse dataDomainResponse = client.Post<Phytel.API.DataDomain.PatientProblem.DTO.PatientProblemsResponse>
+                (string.Format("{0}/{1}/{2}/Contract/{3}/patientproblems",
+                    DDPatientProblemServiceUrl, 
+                    request.Context, 
+                    request.Version, 
+                    request.ContractNumber),
+                    new Phytel.API.DataDomain.PatientProblem.DTO.PatientProblemRequest
+                    {
+                        PatientID = request.PatientID,
+                        Category = Category.Chronic,
+                        Status = Status.Active,
+                        Context = request.Context,
+                        Version = request.Version,
+                        ContractNumber = request.ContractNumber
+                    }
+                as object);
+                
             List<Problem> problems = dataDomainResponse.PatientProblems;
 
             foreach(Problem p in problems)

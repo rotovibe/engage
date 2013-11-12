@@ -16,6 +16,32 @@ namespace Phytel.API.AppDomain.NG.Test
         }
 
         [TestMethod]
+        public void GetPatientsByCondition_Test()
+        {
+            // Arrange
+            string version = "v1";
+            string contractNumber = "InHealth001";
+            string context = "NG";
+            string token = "1234";
+            NGManager ngManager = new NGManager();
+            PatientProblemRequest request = new PatientProblemRequest
+            {
+                Context = context,
+                ContractNumber = contractNumber,
+                Token = token,
+                Version = version,
+                Category = "Chronic",
+                Status = "Active",
+                PatientID = "527a933efe7a590ad417d3b0"
+            };
+            // Act
+            List<PatientProblem> response = ngManager.GetProblemsByPatientID(request);
+
+            //Assert
+            Assert.IsTrue(response.Count > 0);
+        }
+        
+        [TestMethod]
         public void FindConditions_Test()
         { 
             // Arrange

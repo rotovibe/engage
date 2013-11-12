@@ -71,7 +71,7 @@
     <Compile Include="LookUpConditionRequest.cs" />
     <Compile Include="LookUpConditionResponse.cs" />
     <Compile Include="PatientProblemRequest.cs" />
-    <Compile Include="PatientProblemResponse.cs" />
+    <Compile Include="PatientProblemsResponse.cs" />
     <Compile Include="PatientRequest.cs" />
     <Compile Include="PatientResponse.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

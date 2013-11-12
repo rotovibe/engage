@@ -54,7 +54,7 @@ namespace Phytel.API.AppDomain.NG.Service
         }
 
         /// <summary>
-        ///     ServiceStack's service endpoint for getting active chronic problems for a patient
+        ///     ServiceStack's GET endpoint for getting active chronic problems for a patient
         /// </summary>
         /// <param name="request">PatientProblemResponse object</param>
         /// <returns>PatientProblemResponse object</returns>
@@ -65,7 +65,33 @@ namespace Phytel.API.AppDomain.NG.Service
             {
                 NGManager ngm = new NGManager();
 
-                request.Token = base.Request.Headers["APIToken"] as string;
+                bool result = ngm.IsUserValidated(request.Version, request.Token);
+                if (result)
+                    response.PatientProblems = ngm.GetProblemsByPatientID(request);
+                else
+                    throw new UnauthorizedAccessException();
+            }
+            catch (Exception ex)
+            {
+                //TODO: Log this to C3 database via ASE
+                base.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                response.Status = new ServiceStack.ServiceInterface.ServiceModel.ResponseStatus("Exception", ex.Message);
+            }
+            return response;
+        }
+
+        /// <summary>
+        ///     ServiceStack's POST endpoint for getting active chronic problems for a patient
+        /// </summary>
+        /// <param name="request">PatientProblemResponse object</param>
+        /// <returns>PatientProblemResponse object</returns>
+        public PatientProblemsResponse POST(PatientProblemRequest request)
+        {
+            PatientProblemsResponse response = new PatientProblemsResponse();
+            try
+            {
+                NGManager ngm = new NGManager();
+
                 bool result = ngm.IsUserValidated(request.Version, request.Token);
                 if (result)
                     response.PatientProblems = ngm.GetProblemsByPatientID(request);
@@ -88,7 +114,6 @@ namespace Phytel.API.AppDomain.NG.Service
             {
                 NGManager ngm = new NGManager();
 
-                request.Token = base.Request.Headers["APIToken"] as string;
                 bool result = ngm.IsUserValidated(request.Version, request.Token);
                 if (result)
                     response.Conditions = ngm.GetConditions(request);

@@ -69,6 +69,46 @@ namespace Phytel.API.AppDomain.NG.Services.Test
             Assert.AreEqual(fnControlValue, fnsampleValue);
         }
 
+
+        [TestMethod]
+        public void GetPatientProblemsByPatientIDService_POST_Test()
+        {
+
+            // Arrange
+            string version = "v1";
+            string contractNumber = "InHealth001";
+            string context = "NG";
+            string token = "1234";
+            string category = "Chronic";
+            string status = "Active";
+            string patientID = "527a933efe7a590ad417d3b0";
+            IRestClient client = new JsonServiceClient();
+
+            // Act
+             //[Route("/{Context}/{Version}/Contract/{ContractNumber}/patientproblems/{PatientID}", "GET")]
+            //[Route("/{Context}/{Version}/Contract/{ContractNumber}/patientproblems", "POST")]
+            PatientProblemsResponse response = client.Post<PatientProblemsResponse>
+                (string.Format("{0}/{1}/{2}/Contract/{3}/patientproblems",
+                  "http://localhost:888/Nightingale/", context, version, contractNumber),
+                  new PatientProblemRequest {
+                   Context = context,
+                   ContractNumber = contractNumber,
+                   Version = version,
+                   Token = token,
+                   Category = category,
+                   Status = status,
+                   PatientID = patientID
+                  } 
+                  as object
+                  );
+
+            // Assert
+            Assert.AreNotEqual(0, response.PatientProblems.Count);
+        }
+
+
+        
+
         [TestMethod]
         public void FindConditionsService_Test()
         {
