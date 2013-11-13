@@ -18,12 +18,18 @@ namespace Phytel.API.AppDomain.NG
         public bool IsUserValidated(string version, string token)
         {
             bool result = false;
-            IRestClient client = new JsonServiceClient();
 
+            if(string.IsNullOrEmpty(token))
+                throw new ArgumentException("Token is null or empty.");
+
+            IRestClient client = new JsonServiceClient();
             ValidateTokenResponse response = client.Post<ValidateTokenResponse>(string.Format("{0}/{1}/{2}/token", ADSecurityServiceURL, "NG", version),
                 new ValidateTokenRequest { Token = token } as object);
 
-            if (response.IsValid) result = true;
+            if (response.IsValid)
+                result = true;
+            else
+                throw new ArgumentException("Token is not valid.");
 
             return result;
         }

@@ -1,7 +1,6 @@
 using Phytel.API.AppDomain.NG.DTO;
 using System;
 using System.Net;
-using Phytel.API.AppDomain.NG.DTO;
 
 namespace Phytel.API.AppDomain.NG.Service
 {
