@@ -1,5 +1,4 @@
 ﻿using Phytel.API.AppDomain.Security.DTO;
-using Phytel.API.AppDomain.Security.DTO;
 using ServiceStack.Service;
 using ServiceStack.ServiceClient.Web;
 using System;
@@ -8,6 +7,7 @@ namespace Phytel.API.AppDomain.Security
 {
     public static class SecurityManager
     {
+        // add validation checks
         public static AuthenticateResponse ValidateCredentials(string token, string apiKey, string productName)
         {
             //First, call the C3UserRepository class to get the user information based on the token

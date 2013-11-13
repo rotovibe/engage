@@ -68,6 +68,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SecurityManager.cs" />
     <Compile Include="SecurityRepositoryFactory.cs" />
+    <Compile Include="SecurityUtils.cs" />
     <Compile Include="SQL\Repository\C3UserRepository.cs" />
   </ItemGroup>
   <ItemGroup>
