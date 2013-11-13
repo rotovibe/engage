@@ -14,7 +14,7 @@ namespace Phytel.API.AppDomain.NG.DTO
         [ApiMember(Name = "Status", Description = "Status of the problem being requested", ParameterType = "property", DataType = "string", IsRequired = false)]
         public string Status { get; set; }
 
-        [ApiMember(Name = "Category", Description = "Status of the problem being requested", ParameterType = "property", DataType = "string", IsRequired = false)]
+        [ApiMember(Name = "Category", Description = "Category of the problem being requested", ParameterType = "property", DataType = "string", IsRequired = false)]
         public string Category { get; set; }
 
         [ApiMember(Name = "Context", Description = "Product parameter will be defined in the route.", ParameterType = "property", DataType = "string", IsRequired = false)]

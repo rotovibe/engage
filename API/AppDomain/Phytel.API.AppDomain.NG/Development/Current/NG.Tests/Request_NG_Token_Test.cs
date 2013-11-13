@@ -81,7 +81,7 @@ namespace Phytel.API.AppDomain.NG.Services.Test
             string token = "1234";
             string category = "Chronic";
             string status = "Active";
-            string patientID = "527a933efe7a590ad417d3b0";
+            string patientID = null;// "527a933efe7a590ad417d3b0";
             IRestClient client = new JsonServiceClient();
 
             // Act

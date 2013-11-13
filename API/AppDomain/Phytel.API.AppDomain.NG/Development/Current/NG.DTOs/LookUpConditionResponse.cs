@@ -15,7 +15,7 @@ namespace Phytel.API.AppDomain.NG.DTO
 
     public class LookUpCondition
     {
-        public string ConditionID { get; set; }
-        public string DisplayName { get; set; }
+        public string ID { get; set; }
+        public string Name { get; set; }
     }
 }

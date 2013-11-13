@@ -52,6 +52,9 @@ namespace Phytel.API.AppDomain.NG
         /// <returns>PatientProblem object</returns>
         public List<PatientProblem> GetProblemsByPatientID(Phytel.API.AppDomain.NG.DTO.PatientProblemRequest request)
         {
+            if (string.IsNullOrEmpty(request.PatientID))
+                throw new ArgumentException("PatientID is null or empty.");
+
             List<PatientProblem> response = new List<PatientProblem>();
 
            IRestClient client = new JsonServiceClient();
@@ -65,8 +68,8 @@ namespace Phytel.API.AppDomain.NG
                     new Phytel.API.DataDomain.PatientProblem.DTO.PatientProblemRequest
                     {
                         PatientID = request.PatientID,
-                        Category = Category.Chronic,
-                        Status = Status.Active,
+                        Category = request.Category,
+                        Status = request.Status,
                         Context = request.Context,
                         Version = request.Version,
                         ContractNumber = request.ContractNumber
@@ -78,7 +81,7 @@ namespace Phytel.API.AppDomain.NG
             foreach(Problem p in problems)
             {
                 PatientProblem pp = new PatientProblem();
-                pp.PatientProblemID = p.ProblemID;
+                pp.ID = p.ProblemID;
                 pp.PatientID = p.PatientID;
                 pp.ConditionID = p.ConditionID;
                 response.Add(pp);
@@ -104,8 +107,8 @@ namespace Phytel.API.AppDomain.NG
             foreach(Condition c in conditions)
             {
                 LookUpCondition lookUpCondition = new LookUpCondition();
-                lookUpCondition.ConditionID = c.ConditionID;
-                lookUpCondition.DisplayName = c.DisplayName;
+                lookUpCondition.ID = c.ConditionID;
+                lookUpCondition.Name = c.DisplayName;
                 response.Add(lookUpCondition);
             }
 

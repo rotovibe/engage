@@ -17,7 +17,7 @@ namespace Phytel.API.AppDomain.Security.Service
             catch(Exception ex)
             {
                 //TODO: Log this to C3 database via ASE
-                response.Status = new ResponseStatus("Excepton", ex.Message);
+                response.Status = new ResponseStatus("Exception", ex.Message);
             }
             return response;
         }
@@ -33,7 +33,7 @@ namespace Phytel.API.AppDomain.Security.Service
             catch (Exception ex)
             {
                 //TODO: Log this to C3 database via ASE
-                response.Status = new ResponseStatus("Excepton", ex.Message);
+                response.Status = new ResponseStatus("Exception", ex.Message);
             }
             return response;
         }
@@ -49,7 +49,7 @@ namespace Phytel.API.AppDomain.Security.Service
             catch (Exception ex)
             {
                 //TODO: Log this to C3 database via ASE
-                response.Status = new ResponseStatus("Excepton", ex.Message);
+                response.Status = new ResponseStatus("Exception", ex.Message);
             }
             return response;
         }

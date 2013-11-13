@@ -16,7 +16,7 @@ namespace Phytel.API.AppDomain.NG.DTO
     public class PatientProblem
     {
         public string PatientID { get; set; }
-        public string PatientProblemID { get; set; }
+        public string ID { get; set; }
         public string ConditionID { get; set; }
     }
 }
