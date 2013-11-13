@@ -16,13 +16,9 @@ namespace Phytel.API.DataDomain.PatientProblem
 
             IPatientProblemRepository<Problem> repo = Phytel.API.DataDomain.PatientProblem.PatientProblemRepositoryFactory<Problem>.GetPatientProblemRepository(request.ContractNumber, request.Context);
             
-            APIExpression apiExpression = new APIExpression();
-            // expressionID will be used as a unique cacheKey for caching the query.
-            string expressionID = Guid.NewGuid().ToString();
-            apiExpression.ExpressionID = expressionID;
-
             ICollection<SelectExpression> selectExpressions = new List<SelectExpression>();
 
+            // PatientID
             SelectExpression patientSelectExpression = new SelectExpression();
             patientSelectExpression.FieldName = MEPatientProblem.PatientIDProperty;
             patientSelectExpression.Type = SelectExpressionType.EQ;
@@ -32,6 +28,7 @@ namespace Phytel.API.DataDomain.PatientProblem
             patientSelectExpression.GroupID = 1;
             selectExpressions.Add(patientSelectExpression);
 
+            // Status
             SelectExpression statusSelectExpression = new SelectExpression();
             statusSelectExpression.FieldName = MEPatientProblem.StatusProperty;
             statusSelectExpression.Type = SelectExpressionType.EQ;
@@ -41,6 +38,7 @@ namespace Phytel.API.DataDomain.PatientProblem
             statusSelectExpression.GroupID = 1;
             selectExpressions.Add(statusSelectExpression);
 
+            // Category
             SelectExpression categorySelectExpression = new SelectExpression();
             categorySelectExpression.FieldName = MEPatientProblem.CategoryProperty;
             categorySelectExpression.Type = SelectExpressionType.EQ;
@@ -49,6 +47,17 @@ namespace Phytel.API.DataDomain.PatientProblem
             categorySelectExpression.GroupID = 1;
             selectExpressions.Add(categorySelectExpression);
 
+            // DisplayCondition.
+            // This is not passed through the request object. But user story demands that only conditions set to DisplayCondition == true should be displayed to the end user.
+            SelectExpression displaySelectExpression = new SelectExpression();
+            displaySelectExpression.FieldName = MEPatientProblem.DisplayProperty;
+            displaySelectExpression.Type = SelectExpressionType.EQ;
+            displaySelectExpression.Value = true;
+            displaySelectExpression.ExpressionOrder = 4;
+            displaySelectExpression.GroupID = 1;
+            selectExpressions.Add(displaySelectExpression);
+
+            APIExpression apiExpression = new APIExpression();
             apiExpression.Expressions = selectExpressions;
 
             Tuple<string, IQueryable<Problem>> problems = repo.Select(apiExpression);

@@ -59,23 +59,16 @@ namespace Phytel.API.DataDomain.PatientProblem
                 IList<IMongoQuery> queries = new List<IMongoQuery>();
                 for (int i = 0; i < selectExpressions.Count; i++)
                 {
-
                     groupType = selectExpressions[0].NextExpressionType;
-                    
-                    Type t = selectExpressions[i].Value.GetType();
-                    
-                    if (selectExpressions[i].Type == SelectExpressionType.EQ)
-                        queries.Add(Query.EQ(selectExpressions[i].FieldName, BsonValue.Create(convertToAppropriateType(selectExpressions[i].Value)))); 
+
+                    IMongoQuery query = applyQueryOperators(selectExpressions[i].Type, selectExpressions[i].FieldName, selectExpressions[i].Value);
+                    if (query != null)
+                    {
+                        queries.Add(query);
+                    }
                 }
 
-                if(groupType.Equals(SelectExpressionGroupType.AND))
-                {
-                    mQuery = Query.And(queries);
-                }
-                else if (groupType.Equals(SelectExpressionGroupType.OR))
-                {
-                    mQuery = Query.Or(queries);
-                }
+                mQuery = buildQuery(groupType, queries);
 
                 List<Problem> patientProblemList = null;
                 using (PatientProblemMongoContext ctx = new PatientProblemMongoContext(_dbName))
@@ -101,7 +94,54 @@ namespace Phytel.API.DataDomain.PatientProblem
             return new Tuple<string, IQueryable<T>>(expression.ExpressionID, returnQuery);
         }
 
-        private object convertToAppropriateType(object p)
+        /// <summary>
+        /// Applies appropriate query operators on fied name and value.
+        /// </summary>
+        /// <param name="type">Type can be EQ, NOTEQ, LIKE, NOTLIKE, STARTWITH</param>
+        /// <param name="fieldName">field name</param>
+        /// <param name="value">value of field</param>
+        /// <returns>IMongoQuery object</returns>
+        private static IMongoQuery applyQueryOperators(SelectExpressionType type, string fieldName, object value)
+        {
+            IMongoQuery query = null;
+            switch (type)
+            {
+                case SelectExpressionType.EQ:
+                    query = Query.EQ(fieldName, BsonValue.Create(convertToAppropriateType(value)));
+                    break;
+                case SelectExpressionType.NOTEQ:
+                    query = Query.NE(fieldName, BsonValue.Create(convertToAppropriateType(value)));
+                    break;
+            }
+            return query;
+        }
+
+        /// <summary>
+        /// Builds a single mongo query from list of queries depending on AND or OR clause.
+        /// </summary>
+        /// <param name="groupType">AND or OR</param>
+        /// <param name="queries">List of queries</param>
+        /// <returns>A single mongo query</returns>
+        private static IMongoQuery buildQuery(SelectExpressionGroupType groupType, IList<IMongoQuery> queries)
+        {
+            IMongoQuery query = null;
+            if (groupType.Equals(SelectExpressionGroupType.AND))
+            {
+                query = Query.And(queries);
+            }
+            else if (groupType.Equals(SelectExpressionGroupType.OR))
+            {
+                query = Query.Or(queries);
+            }
+            return query;
+        }
+
+        /// <summary>
+        /// Converts the object to an appropriate type.
+        /// </summary>
+        /// <param name="p">object to be converted</param>
+        /// <returns>converted object.</returns>
+        private static object convertToAppropriateType(object p)
         {
             string type = p.GetType().ToString();
             switch (type)
@@ -114,6 +154,8 @@ namespace Phytel.API.DataDomain.PatientProblem
                     return Convert.ToInt16(p);
                 case "System.Int64":
                     return Convert.ToInt64(p);
+                case "System.Boolean":
+                    return Convert.ToBoolean(p);
                 default:
                     return  p.ToString();
             }
