@@ -29,23 +29,37 @@ namespace Phytel.API.DataDomain.PatientProblem
             selectExpressions.Add(patientSelectExpression);
 
             // Status
-            SelectExpression statusSelectExpression = new SelectExpression();
-            statusSelectExpression.FieldName = MEPatientProblem.StatusProperty;
-            statusSelectExpression.Type = SelectExpressionType.EQ;
-            statusSelectExpression.Value = (int)request.Status;
-            statusSelectExpression.NextExpressionType = SelectExpressionGroupType.AND;
-            statusSelectExpression.ExpressionOrder = 2;
-            statusSelectExpression.GroupID = 1;
-            selectExpressions.Add(statusSelectExpression);
+            if (!string.IsNullOrEmpty(request.Status))
+            {
+                Status status;
+                if(Enum.TryParse(request.Status, true, out status))
+                {
+                    SelectExpression statusSelectExpression = new SelectExpression();
+                    statusSelectExpression.FieldName = MEPatientProblem.StatusProperty;
+                    statusSelectExpression.Type = SelectExpressionType.EQ;
+                    statusSelectExpression.Value = (int)status;
+                    statusSelectExpression.NextExpressionType = SelectExpressionGroupType.AND;
+                    statusSelectExpression.ExpressionOrder = 2;
+                    statusSelectExpression.GroupID = 1;
+                    selectExpressions.Add(statusSelectExpression);
+                }
+            }
 
             // Category
-            SelectExpression categorySelectExpression = new SelectExpression();
-            categorySelectExpression.FieldName = MEPatientProblem.CategoryProperty;
-            categorySelectExpression.Type = SelectExpressionType.EQ;
-            categorySelectExpression.Value = (int)request.Category;
-            categorySelectExpression.ExpressionOrder = 3;
-            categorySelectExpression.GroupID = 1;
-            selectExpressions.Add(categorySelectExpression);
+            if (!string.IsNullOrEmpty(request.Category))
+            {
+                Category category;
+                if (Enum.TryParse(request.Category, true, out category))
+                {
+                    SelectExpression categorySelectExpression = new SelectExpression();
+                    categorySelectExpression.FieldName = MEPatientProblem.CategoryProperty;
+                    categorySelectExpression.Type = SelectExpressionType.EQ;
+                    categorySelectExpression.Value = (int)category;
+                    categorySelectExpression.ExpressionOrder = 3;
+                    categorySelectExpression.GroupID = 1;
+                    selectExpressions.Add(categorySelectExpression);
+                }
+            }
 
             // DisplayCondition.
             // This is not passed through the request object. But user story demands that only conditions set to DisplayCondition == true should be displayed to the end user.

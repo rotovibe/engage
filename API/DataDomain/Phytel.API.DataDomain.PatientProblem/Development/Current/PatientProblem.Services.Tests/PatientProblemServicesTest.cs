@@ -24,8 +24,8 @@ namespace Phytel.API.DataDomain.PatientProblem.Services.Test
                 new PatientProblemRequest
                 {
                     PatientID = patientID,
-                    Category = Category.Chronic,
-                    Status = Status.Active,
+                    Category = "",
+                    Status = "active",
                     Context = context,
                     Version = version,
                     ContractNumber = contractNumber
