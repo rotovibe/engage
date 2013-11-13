@@ -1,12 +1,13 @@
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 using Phytel.Mongo.Linq;
+using System.ComponentModel;
 
 namespace Phytel.API.DataDomain.Patient.DTO
 {
-    [BsonIgnoreExtraElements(true)]
+    [BsonIgnoreExtraElements(false)]
     [MongoIndex(Keys = new string[] { PatientIDProperty })]
-    public class MEPatient : IMongoEntity<ObjectId>
+    public class MEPatient : IMongoEntity<ObjectId> //, ISupportInitialize
     {
         public MEPatient() { Id = ObjectId.GenerateNewId(); }
 
@@ -54,5 +55,15 @@ namespace Phytel.API.DataDomain.Patient.DTO
         [BsonElement(DOBProperty)]
         [BsonIgnoreIfNull(true)]
         public string DOB { get; set; }
+
+
+        //public void BeginInit()
+        //{
+        //    // do housekeeping to reconcile version property info.
+        //}
+
+        //public void EndInit()
+        //{
+        //}
     }
 }

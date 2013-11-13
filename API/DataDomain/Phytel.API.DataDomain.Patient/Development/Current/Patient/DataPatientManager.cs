@@ -1,5 +1,6 @@
 using Phytel.API.DataDomain.Patient.DTO;
 using System.Data.SqlClient;
+using Phytel.API.DataDomain.Patient;
 
 namespace Phytel.API.DataDomain.Patient
 {
@@ -9,7 +10,7 @@ namespace Phytel.API.DataDomain.Patient
         {
             PatientResponse result = new PatientResponse();
 
-            IPatientRepository<PatientResponse> repo = Phytel.API.DataDomain.Patient.PatientRepositoryFactory<PatientResponse>.GetPatientRepository(request.ContractNumber, request.Context);
+            IPatientRepository<PatientResponse> repo = PatientRepositoryFactory<PatientResponse>.GetPatientRepository(request.ContractNumber, request.Context);
             result = repo.FindByID(request.PatientID) as PatientResponse;
             
             return (result != null ? result : new PatientResponse());
@@ -19,7 +20,7 @@ namespace Phytel.API.DataDomain.Patient
         {
             PatientListResponse result = new PatientListResponse();
 
-            IPatientRepository<PatientListResponse> repo = Phytel.API.DataDomain.Patient.PatientRepositoryFactory<PatientListResponse>.GetPatientRepository(request.ContractNumber, request.Context);
+            IPatientRepository<PatientListResponse> repo = PatientRepositoryFactory<PatientListResponse>.GetPatientRepository(request.ContractNumber, request.Context);
 
             return result;
         }
