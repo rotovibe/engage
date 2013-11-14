@@ -4,14 +4,13 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{D4489296-17A3-4172-8FDF-DB6C0A7AE748}</ProjectGuid>
+    <ProjectGuid>{229026B1-C3E5-4D2B-8D2B-61D00E8A52CC}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Phytel.API.DataDomain.Cohort.DTO</RootNamespace>
-    <AssemblyName>Phytel.API.DataDomain.Cohort.DTO</AssemblyName>
+    <RootNamespace>Phytel.API.DataDomain.Cohort</RootNamespace>
+    <AssemblyName>Phytel.API.DataDomain.Cohort</AssemblyName>
     <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile />
     <SccProjectName>SAK</SccProjectName>
     <SccLocalPath>SAK</SccLocalPath>
     <SccAuxPath>SAK</SccAuxPath>
@@ -35,17 +34,11 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="ServiceStack">
-      <HintPath>..\..\..\..\..\packages\ServiceStack.3.9.70\lib\net35\ServiceStack.dll</HintPath>
+    <Reference Include="MongoDB.Bson">
+      <HintPath>..\References\MongoDB.Bson.dll</HintPath>
     </Reference>
-    <Reference Include="ServiceStack.Interfaces">
-      <HintPath>..\..\..\..\..\packages\ServiceStack.Common.3.9.70\lib\net35\ServiceStack.Interfaces.dll</HintPath>
-    </Reference>
-    <Reference Include="ServiceStack.OrmLite">
-      <HintPath>..\..\..\..\..\packages\ServiceStack.OrmLite.SqlServer.3.9.70\lib\net35\ServiceStack.OrmLite.dll</HintPath>
-    </Reference>
-    <Reference Include="ServiceStack.ServiceInterface">
-      <HintPath>..\..\..\..\..\packages\ServiceStack.3.9.70\lib\net35\ServiceStack.ServiceInterface.dll</HintPath>
+    <Reference Include="MongoDB.Driver">
+      <HintPath>..\References\MongoDB.Driver.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -56,18 +49,33 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CohortListRequest.cs" />
-    <Compile Include="CohortRequest.cs" />
-    <Compile Include="CohortListResponse.cs" />
-    <Compile Include="CohortResponse.cs" />
+    <Compile Include="ICohortRepository.cs" />
+    <Compile Include="MongoDB\DTO\MECohort.cs" />
+    <Compile Include="MongoDB\Repository\MongoCohortRepository.cs" />
+    <Compile Include="MongoDB\CohortMongoContext.cs" />
+    <Compile Include="DataCohortManager.cs" />
+    <Compile Include="CohortRepositoryFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\..\..\..\Shared\PhytelServices\Development\Current\Phytel.Mongo\Phytel.Mongo.csproj">
+      <Project>{7c9e786c-e4f7-4382-bde4-8dbf980ea013}</Project>
+      <Name>Phytel.Mongo</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\..\..\Shared\PhytelServices\Development\Current\PhytelServices\PhytelServices.csproj">
+      <Project>{d790f618-438b-4c39-abe5-1346122273ac}</Project>
+      <Name>PhytelServices</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\..\..\Interfaces\Development\Current\Phytel.API.Interface\Phytel.API.Interface.csproj">
       <Project>{abe948fb-247e-4955-b3ab-b7c93e10a542}</Project>
       <Name>Phytel.API.Interface</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Cohort.DTO\DataDomain.Cohort.DTO.csproj">
+      <Project>{d4489296-17a3-4172-8fdf-db6c0a7ae748}</Project>
+      <Name>DataDomain.Cohort.DTO</Name>
+    </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
