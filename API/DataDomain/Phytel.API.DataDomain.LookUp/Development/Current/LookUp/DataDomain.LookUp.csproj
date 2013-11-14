@@ -40,12 +40,6 @@
     <Reference Include="MongoDB.Driver">
       <HintPath>..\References\MongoDB.Driver.dll</HintPath>
     </Reference>
-    <Reference Include="Phytel.Mongo">
-      <HintPath>..\References\Phytel.Mongo.dll</HintPath>
-    </Reference>
-    <Reference Include="PhytelServices">
-      <HintPath>..\References\PhytelServices.dll</HintPath>
-    </Reference>
     <Reference Include="ServiceStack.Interfaces">
       <HintPath>..\References\ServiceStack.Interfaces.dll</HintPath>
     </Reference>
@@ -67,6 +61,14 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\..\..\..\Shared\PhytelServices\Development\Current\Phytel.Mongo\Phytel.Mongo.csproj">
+      <Project>{7c9e786c-e4f7-4382-bde4-8dbf980ea013}</Project>
+      <Name>Phytel.Mongo</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\..\..\Shared\PhytelServices\Development\Current\PhytelServices\PhytelServices.csproj">
+      <Project>{d790f618-438b-4c39-abe5-1346122273ac}</Project>
+      <Name>PhytelServices</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\..\..\Interfaces\Development\Current\Phytel.API.Interface\Phytel.API.Interface.csproj">
       <Project>{abe948fb-247e-4955-b3ab-b7c93e10a542}</Project>
       <Name>Phytel.API.Interface</Name>
