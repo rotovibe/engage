@@ -115,5 +115,10 @@ namespace Phytel.API.AppDomain.NG
             return response;
         }
 
+
+        public List<CohortResponse> GetCohorts(CohortRequest request)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
