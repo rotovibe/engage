@@ -1,5 +1,6 @@
 using Phytel.API.AppDomain.NG.DTO;
 using System;
+using System.Collections.Generic;
 using System.Net;
 
 namespace Phytel.API.AppDomain.NG.Service
@@ -128,7 +129,34 @@ namespace Phytel.API.AppDomain.NG.Service
             return response;
         }
 
+        public CohortResponse Post(CohortRequest request)
+        {
+            CohortResponse response = new CohortResponse();
+            try
+            {
+                NGManager ngm = new NGManager();
 
+                bool result = ngm.IsUserValidated(request.Version, request.Token);
+                if (result)
+                {
+                    // implement
+                    //response = ngm.GetCohorts(request);
+                    List<Cohort> chrl = new List<Cohort>();
+                    chrl.Add(new Cohort { Description = "Diabetics who are males and the like.", Name = "Diabetics who are males", ShortName = "DM - all Males" });
+                    chrl.Add(new Cohort { Description = "Some messed up people.", Name = "People who need some serious help.", ShortName = "OMG - all humans" });
+                    response.Cohorts = chrl;
+                }
+                else
+                    throw new UnauthorizedAccessException();
+            }
+            catch (Exception ex)
+            {
+                //TODO: Log this to C3 database via ASE
+                base.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                response.Status = new ServiceStack.ServiceInterface.ServiceModel.ResponseStatus("Exception", ex.Message);
+            }
+            return response;
+        }
 
     }
 }
