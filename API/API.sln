@@ -96,6 +96,9 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.LookUp.Test", "DataDomain\Phytel.API.DataDomain.LookUp\Development\Current\LookUp.Test\DataDomain.LookUp.Test.csproj", "{CBBFA1EA-0482-4FB1-B0DE-D3AEC89724B4}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Audit", "Audit", "{67BE1A57-5202-45AA-8469-221A00CFF30B}"
+	ProjectSection(SolutionItems) = preProject
+		AppDomain\Phytel.API.AppDomain.Audit\Development\Current\Audit\ISecurityRepository.cs = AppDomain\Phytel.API.AppDomain.Audit\Development\Current\Audit\ISecurityRepository.cs
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppDomain.Audit", "AppDomain\Phytel.API.AppDomain.Audit\Development\Current\Audit\AppDomain.Audit.csproj", "{BD9E8867-CA65-43F6-A18B-A28805716A4B}"
 EndProject
