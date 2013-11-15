@@ -34,6 +34,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Phytel.API.Interface, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\Interfaces\Development\Current\Phytel.API.Interface\bin\Debug\Phytel.API.Interface.dll</HintPath>
+    </Reference>
     <Reference Include="ServiceStack, Version=3.9.70.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\..\packages\ServiceStack.3.9.70\lib\net35\ServiceStack.dll</HintPath>
@@ -80,18 +84,14 @@
     <Compile Include="LookUpConditionResponse.cs" />
     <Compile Include="PatientProblemRequest.cs" />
     <Compile Include="PatientProblemsResponse.cs" />
+    <Compile Include="CohortRequest.cs" />
     <Compile Include="PatientRequest.cs" />
+    <Compile Include="CohortResponse.cs" />
     <Compile Include="PatientResponse.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\..\..\..\Interfaces\Development\Current\Phytel.API.Interface\Phytel.API.Interface.csproj">
-      <Project>{abe948fb-247e-4955-b3ab-b7c93e10a542}</Project>
-      <Name>Phytel.API.Interface</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
