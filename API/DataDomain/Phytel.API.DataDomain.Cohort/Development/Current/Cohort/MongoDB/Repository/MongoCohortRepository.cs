@@ -43,7 +43,22 @@ namespace Phytel.API.DataDomain.Cohort
 
         public object FindByID(string entityID)
         {
-            throw new NotImplementedException();
+            CohortResponse cohortResponse = null;
+            using (CohortMongoContext ctx = new CohortMongoContext(_dbName))
+            {
+                List<IMongoQuery> queries = new List<IMongoQuery>();
+                queries.Add(Query.EQ(MECohort.IdProperty, ObjectId.Parse(entityID)));
+                queries.Add(Query.EQ(MECohort.DeleteFlagProperty, false));
+                IMongoQuery mQuery = Query.And(queries);
+                MECohort meCohort = ctx.Cohorts.Collection.Find(mQuery).FirstOrDefault();
+                if (meCohort != null)
+                {
+                    cohortResponse = new CohortResponse();
+                    API.DataDomain.Cohort.DTO.Cohort cohort = new API.DataDomain.Cohort.DTO.Cohort { ID = meCohort.Id.ToString(), SName = meCohort.ShortName };
+                    cohortResponse.Cohort = cohort;
+                }
+            }
+            return cohortResponse;
         }
 
         public Tuple<string, IQueryable<T>> Select(Interface.APIExpression expression)
@@ -53,7 +68,24 @@ namespace Phytel.API.DataDomain.Cohort
 
         public IQueryable<T> SelectAll()
         {
-            throw new NotImplementedException();
+            IQueryable<T> query = null;
+            List<API.DataDomain.Cohort.DTO.Cohort> cohorts = null;
+            using (CohortMongoContext ctx = new CohortMongoContext(_dbName))
+            {
+                List <MECohort> meCohorts = ctx.Cohorts.Collection.Find(Query.EQ(MECohort.DeleteFlagProperty, false)).ToList();
+                if (meCohorts != null)
+                {
+                    cohorts = new List<API.DataDomain.Cohort.DTO.Cohort>();
+                    foreach (MECohort m in meCohorts)
+                    {
+                        API.DataDomain.Cohort.DTO.Cohort cohort = new API.DataDomain.Cohort.DTO.Cohort { ID = m.Id.ToString(), SName = m.ShortName };
+                        cohorts.Add(cohort);
+                    }
+                }
+            }
+            query = ((IEnumerable<T>)cohorts).AsQueryable<T>();
+
+            return query;
         }
 
         public T Update(T entity)
