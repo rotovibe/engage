@@ -6,7 +6,7 @@ namespace Phytel.API.DataDomain.Cohort
 {
     public static class CohortDataManager
     {
-        public static CohortResponse GetCohortByID(CohortRequest request)
+        public static CohortResponse GetCohortByID(GetCohortRequest request)
         {
             CohortResponse result = new CohortResponse();
 
@@ -16,11 +16,11 @@ namespace Phytel.API.DataDomain.Cohort
             return (result != null ? result : new CohortResponse());
         }
 
-        public static CohortListResponse GetCohortList(CohortListRequest request)
+        public static CohortsResponse GetCohorts(GetAllCohortRequest request)
         {
-            CohortListResponse result = new CohortListResponse();
+            CohortsResponse result = new CohortsResponse();
 
-            ICohortRepository<CohortListResponse> repo = CohortRepositoryFactory<CohortListResponse>.GetCohortRepository(request.ContractNumber, request.Context);
+            ICohortRepository<CohortsResponse> repo = CohortRepositoryFactory<CohortsResponse>.GetCohortRepository(request.ContractNumber, request.Context);
 
             return result;
         }

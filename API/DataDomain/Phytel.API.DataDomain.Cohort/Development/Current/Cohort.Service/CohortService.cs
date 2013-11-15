@@ -5,23 +5,16 @@ namespace Phytel.API.DataDomain.Cohort.Service
 {
     public class CohortService : ServiceStack.ServiceInterface.Service
     {
-        public CohortResponse Post(CohortRequest request)
+        public CohortResponse Get(GetCohortRequest request)
         {
             CohortResponse response = CohortDataManager.GetCohortByID(request);
             response.Version = request.Version;
             return response;
         }
 
-        public CohortResponse Get(CohortRequest request)
+        public CohortsResponse Get(GetAllCohortRequest request)
         {
-            CohortResponse response = CohortDataManager.GetCohortByID(request);
-            response.Version = request.Version;
-            return response;
-        }
-
-        public CohortListResponse Post(CohortListRequest request)
-        {
-            CohortListResponse response = CohortDataManager.GetCohortList(request);
+            CohortsResponse response = CohortDataManager.GetCohorts(request);
             response.Version = request.Version;
             return response;
         }

@@ -1,20 +1,53 @@
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 using Phytel.Mongo.Linq;
-using System.ComponentModel;
+using Phytel.API.Interface;
+using System.Collections.Generic;
+using System;
 
 namespace Phytel.API.DataDomain.Cohort.DTO
 {
-    [BsonIgnoreExtraElements(false)]
-    //[MongoIndex(Keys = new string[] { "SOME PROPERTY NAME HERE" })]
-    public class MECohort : IMongoEntity<ObjectId> //, ISupportInitialize
+    [MongoIndex(Keys = new string[] { IdProperty })]
+    public class MECohort : IMongoEntity<ObjectId>, IMEEntity
     {
         public MECohort() { Id = ObjectId.GenerateNewId(); }
 
         public const string IdProperty = "_id";
+        public const string NameProperty = "n";
+        public const string ShortNameProperty = "sn";
+        public const string DescriptionProperty = "desc";
+        public const string QueryProperty = "q";
 
         [BsonId]
+        [BsonElement(IdProperty)]
         public ObjectId Id { get; set; }
 
+        [BsonElement(NameProperty)]
+        [BsonIgnoreIfNull(true)]
+        public string Name { get; set; }
+
+        [BsonElement(ShortNameProperty)]
+        [BsonIgnoreIfNull(true)]
+        public string ShortName { get; set; }
+
+        [BsonElement(DescriptionProperty)]
+        [BsonIgnoreIfNull(true)]
+        public string Description { get; set; }
+
+        [BsonElement(QueryProperty)]
+        [BsonIgnoreIfNull(true)]
+        public string Query { get; set; }
+
+        public Dictionary<string, object> ExtraElements { get; set; }
+       
+        public string Version { get; set; } 
+
+        public string UpdatedBy { get; set; }
+
+        public bool DeleteFlag { get; set; }
+
+        public DateTime TTLDate { get; set; }
+
+        public DateTime LastUpdatedOn { get; set; }
     }
 }

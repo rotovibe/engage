@@ -9,11 +9,7 @@ namespace Phytel.API.DataDomain.Cohort.Test
         [TestMethod]
         public void GetCohortByID()
         {
-            CohortRequest request = new CohortRequest{ CohortID = "5"};
 
-            CohortResponse response = CohortDataManager.GetCohortByID(request);
-
-            Assert.IsTrue(response.CohortID == "Tony");
         }
     }
 }

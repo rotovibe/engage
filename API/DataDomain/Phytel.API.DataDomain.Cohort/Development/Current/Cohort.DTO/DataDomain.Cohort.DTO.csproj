@@ -56,9 +56,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CohortListRequest.cs" />
-    <Compile Include="CohortRequest.cs" />
-    <Compile Include="CohortListResponse.cs" />
+    <Compile Include="GetAllCohortRequest.cs" />
+    <Compile Include="GetCohortRequest.cs" />
+    <Compile Include="CohortsResponse.cs" />
     <Compile Include="CohortResponse.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
