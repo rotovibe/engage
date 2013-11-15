@@ -5,7 +5,7 @@ namespace Phytel.API.DataDomain.Cohort.DTO
 {
     public class CohortsResponse
    {
-        public List<CohortResponse> Cohorts { get; set; }
+        public List<Cohort> Cohorts { get; set; }
         public string Version { get; set; }
         public ResponseStatus Status { get; set; }
     }
