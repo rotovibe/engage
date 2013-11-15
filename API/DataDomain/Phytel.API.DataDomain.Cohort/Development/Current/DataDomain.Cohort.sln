@@ -1,0 +1,76 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.21005.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.Cohort", "Cohort\DataDomain.Cohort.csproj", "{229026B1-C3E5-4D2B-8D2B-61D00E8A52CC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.Cohort.DTO", "Cohort.DTO\DataDomain.Cohort.DTO.csproj", "{D4489296-17A3-4172-8FDF-DB6C0A7AE748}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.Cohort.Service", "Cohort.Service\DataDomain.Cohort.Service.csproj", "{42F7185B-2EE1-49F9-AB6F-E89E6F8AF7C6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.Cohort.Service.Test", "Cohort.Service.Test\DataDomain.Cohort.Service.Test.csproj", "{516D2892-5B54-43EB-9208-30E97A6F9292}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.Cohort.Test", "Cohort.Test\DataDomain.Cohort.Test.csproj", "{1E8D72DF-2A09-4872-917F-30ED9B6FDAC3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Phytel.API.Interface", "..\..\..\..\Interfaces\Development\Current\Phytel.API.Interface\Phytel.API.Interface.csproj", "{ABE948FB-247E-4955-B3AB-B7C93E10A542}"
+EndProject
+Global
+	GlobalSection(TeamFoundationVersionControl) = preSolution
+		SccNumberOfProjects = 7
+		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccTeamFoundationServer = http://hillstfs2013:8080/tfs/phytel
+		SccLocalPath0 = .
+		SccProjectUniqueName1 = Cohort\\DataDomain.Cohort.csproj
+		SccProjectName1 = Cohort
+		SccLocalPath1 = Cohort
+		SccProjectUniqueName2 = Cohort.DTO\\DataDomain.Cohort.DTO.csproj
+		SccProjectName2 = Cohort.DTO
+		SccLocalPath2 = Cohort.DTO
+		SccProjectUniqueName3 = Cohort.Service\\DataDomain.Cohort.Service.csproj
+		SccProjectName3 = Cohort.Service
+		SccLocalPath3 = Cohort.Service
+		SccProjectUniqueName4 = Cohort.Service.Test\\DataDomain.Cohort.Service.Test.csproj
+		SccProjectName4 = Cohort.Service.Test
+		SccLocalPath4 = Cohort.Service.Test
+		SccProjectUniqueName5 = Cohort.Test\\DataDomain.Cohort.Test.csproj
+		SccProjectName5 = Cohort.Test
+		SccLocalPath5 = Cohort.Test
+		SccProjectUniqueName6 = ..\\..\\..\\..\\Interfaces\\Development\\Current\\Phytel.API.Interface\\Phytel.API.Interface.csproj
+		SccProjectName6 = ../../../../Interfaces/Development/Current/Phytel.API.Interface
+		SccLocalPath6 = ..\\..\\..\\..\\Interfaces\\Development\\Current\\Phytel.API.Interface
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{229026B1-C3E5-4D2B-8D2B-61D00E8A52CC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{229026B1-C3E5-4D2B-8D2B-61D00E8A52CC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{229026B1-C3E5-4D2B-8D2B-61D00E8A52CC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{229026B1-C3E5-4D2B-8D2B-61D00E8A52CC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D4489296-17A3-4172-8FDF-DB6C0A7AE748}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D4489296-17A3-4172-8FDF-DB6C0A7AE748}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D4489296-17A3-4172-8FDF-DB6C0A7AE748}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D4489296-17A3-4172-8FDF-DB6C0A7AE748}.Release|Any CPU.Build.0 = Release|Any CPU
+		{42F7185B-2EE1-49F9-AB6F-E89E6F8AF7C6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{42F7185B-2EE1-49F9-AB6F-E89E6F8AF7C6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{42F7185B-2EE1-49F9-AB6F-E89E6F8AF7C6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{42F7185B-2EE1-49F9-AB6F-E89E6F8AF7C6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{516D2892-5B54-43EB-9208-30E97A6F9292}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{516D2892-5B54-43EB-9208-30E97A6F9292}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{516D2892-5B54-43EB-9208-30E97A6F9292}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{516D2892-5B54-43EB-9208-30E97A6F9292}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1E8D72DF-2A09-4872-917F-30ED9B6FDAC3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1E8D72DF-2A09-4872-917F-30ED9B6FDAC3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1E8D72DF-2A09-4872-917F-30ED9B6FDAC3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1E8D72DF-2A09-4872-917F-30ED9B6FDAC3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ABE948FB-247E-4955-B3AB-B7C93E10A542}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ABE948FB-247E-4955-B3AB-B7C93E10A542}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ABE948FB-247E-4955-B3AB-B7C93E10A542}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ABE948FB-247E-4955-B3AB-B7C93E10A542}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
