@@ -107,16 +107,16 @@ namespace Phytel.API.AppDomain.NG.Service
             return response;
         }
 
-        public LookUpConditionsResponse Get(LookUpConditionRequest request)
+        public ProblemsLookUpResponse Get(ProblemLookUpRequest request)
         {
-            LookUpConditionsResponse response = new LookUpConditionsResponse();
+            ProblemsLookUpResponse response = new ProblemsLookUpResponse();
             try
             {
                 NGManager ngm = new NGManager();
 
                 bool result = ngm.IsUserValidated(request.Version, request.Token);
                 if (result)
-                    response.Conditions = ngm.GetConditions(request);
+                    response.Problems = ngm.GetProblems(request);
                 else
                     throw new UnauthorizedAccessException();
             }

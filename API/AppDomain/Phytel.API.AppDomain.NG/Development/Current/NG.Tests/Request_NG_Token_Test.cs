@@ -110,7 +110,7 @@ namespace Phytel.API.AppDomain.NG.Services.Test
         
 
         [TestMethod]
-        public void FindConditionsService_Test()
+        public void FindProblemsService_Test()
         {
 
             // Arrange
@@ -121,13 +121,13 @@ namespace Phytel.API.AppDomain.NG.Services.Test
             IRestClient client = new JsonServiceClient();
             JsonServiceClient.HttpWebRequestFilter = x => x.Headers.Add(string.Format("APIToken: {0}", token));
             // Act
-            //[Route("/{Context}/{Version}/Contract/{ContractNumber}/lookupconditions", 
-            LookUpConditionsResponse response = client.Get<LookUpConditionsResponse>
-                (string.Format("{0}/{1}/{2}/Contract/{3}/lookupconditions",
+            //[Route("/{Context}/{Version}/Contract/{ContractNumber}/problemslookup", 
+            ProblemsLookUpResponse response = client.Get<ProblemsLookUpResponse>
+                (string.Format("{0}/{1}/{2}/Contract/{3}/problemslookup",
                   "http://localhost:888/Nightingale/", context, version, contractNumber));
 
             // Assert
-            Assert.AreNotEqual(0, response.Conditions.Count);
+            Assert.AreNotEqual(0, response.Problems.Count);
         }
     }
 }

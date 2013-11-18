@@ -70,19 +70,20 @@ namespace Phytel.API.DataDomain.PatientProblem
 
                 mQuery = buildQuery(groupType, queries);
 
-                List<Problem> patientProblemList = null;
+                List<Phytel.API.DataDomain.PatientProblem.DTO.PProb> patientProblemList = null;
                 using (PatientProblemMongoContext ctx = new PatientProblemMongoContext(_dbName))
                 {
                     List<MEPatientProblem> mePatientProblems = ctx.PatientProblems.Collection.Find(mQuery).ToList();
                     if (mePatientProblems != null)
-                    { 
-                        patientProblemList = new List<Problem>();
+                    {
+                        patientProblemList = new List<PProb>();
                         foreach (MEPatientProblem p in mePatientProblems)
                         {
-                            Problem problem = new Problem { 
+                            PProb problem = new PProb
+                            { 
                                 ProblemID = p.ProblemID.ToString(),
                                 PatientID = p.PatientID.ToString(),
-                                PatientProblemID = p.Id.ToString()
+                                ID = p.Id.ToString()
                             };
                             patientProblemList.Add(problem);
                         }

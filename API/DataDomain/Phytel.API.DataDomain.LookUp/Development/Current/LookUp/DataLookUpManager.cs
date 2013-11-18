@@ -6,27 +6,27 @@ namespace Phytel.API.DataDomain.LookUp
 {
     public static class LookUpDataManager
     {
-        private static readonly string CONDITIONLOOKUP = "condition";
+        private static readonly string PROBLEMLOOKUP = "problemlookup";
 
-        public static ConditionResponse GetConditionByID(GetConditionRequest request)
+        public static ProblemResponse GetProblemByID(GetProblemRequest request)
         {
-            ConditionResponse response = new ConditionResponse();
+            ProblemResponse response = new ProblemResponse();
 
-            ILookUpRepository<ConditionResponse> repo = Phytel.API.DataDomain.LookUp.LookUpRepositoryFactory<ConditionResponse>.GetLookUpRepository(request.ContractNumber, request.Context, CONDITIONLOOKUP);
-            response = repo.FindByID(request.ConditionID) as ConditionResponse;
+            ILookUpRepository<ProblemResponse> repo = Phytel.API.DataDomain.LookUp.LookUpRepositoryFactory<ProblemResponse>.GetLookUpRepository(request.ContractNumber, request.Context, PROBLEMLOOKUP);
+            response = repo.FindByID(request.ProblemID) as ProblemResponse;
             return response;
         }
 
-        public static ConditionsResponse FindConditions(FindConditionsRequest request)
+        public static ProblemsResponse FindProblems(FindProblemsRequest request)
         {
-            ConditionsResponse response = new ConditionsResponse();
+            ProblemsResponse response = new ProblemsResponse();
 
-            ILookUpRepository<Condition> repo = Phytel.API.DataDomain.LookUp.LookUpRepositoryFactory<Condition>.GetLookUpRepository(request.ContractNumber, request.Context, CONDITIONLOOKUP);
-            IQueryable<Condition> conditions = repo.SelectAll() as IQueryable<Condition>;
+            ILookUpRepository<Problem> repo = Phytel.API.DataDomain.LookUp.LookUpRepositoryFactory<Problem>.GetLookUpRepository(request.ContractNumber, request.Context, PROBLEMLOOKUP);
+            IQueryable<Problem> problems = repo.SelectAll() as IQueryable<Problem>;
 
-            if (conditions != null)
+            if (problems != null)
             {
-                response.Conditions = conditions.ToList();
+                response.Problems = problems.ToList();
             }
             return response;
         }

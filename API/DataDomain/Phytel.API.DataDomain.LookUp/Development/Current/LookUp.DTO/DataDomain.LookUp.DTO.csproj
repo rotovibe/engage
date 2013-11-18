@@ -46,10 +46,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ConditionsResponse.cs" />
-    <Compile Include="FindConditionsRequest.cs" />
-    <Compile Include="GetConditionRequest.cs" />
-    <Compile Include="ConditionResponse.cs" />
+    <Compile Include="ProblemsResponse.cs" />
+    <Compile Include="FindProblemsRequest.cs" />
+    <Compile Include="GetProblemRequest.cs" />
+    <Compile Include="ProblemResponse.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -7,13 +7,13 @@ using ServiceStack.ServiceInterface.ServiceModel;
 
 namespace Phytel.API.AppDomain.NG.DTO
 {
-    public class LookUpConditionsResponse
+    public class ProblemsLookUpResponse
     {
-        public List<LookUpCondition> Conditions { get; set; }
+        public List<ProblemLookUp> Problems { get; set; }
         public ResponseStatus Status { get; set; }
     }
 
-    public class LookUpCondition
+    public class ProblemLookUp
     {
         public string ID { get; set; }
         public string Name { get; set; }

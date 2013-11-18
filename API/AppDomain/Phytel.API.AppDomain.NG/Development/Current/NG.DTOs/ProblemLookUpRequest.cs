@@ -4,8 +4,8 @@ using System.Collections.Generic;
 
 namespace Phytel.API.AppDomain.NG.DTO
 {
-     [Route("/{Context}/{Version}/Contract/{ContractNumber}/lookupconditions", "GET")]
-    public class LookUpConditionRequest : IAppDomainRequest
+     [Route("/{Context}/{Version}/Contract/{ContractNumber}/problemslookup", "GET")]
+    public class ProblemLookUpRequest : IAppDomainRequest
     {
         [ApiMember(Name = "Context", Description = "Product parameter will be defined in the route.", ParameterType = "property", DataType = "string", IsRequired = false)]
         public string Context { get; set; }

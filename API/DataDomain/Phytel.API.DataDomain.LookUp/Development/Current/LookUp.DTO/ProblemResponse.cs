@@ -2,16 +2,16 @@ using ServiceStack.ServiceInterface.ServiceModel;
 
 namespace Phytel.API.DataDomain.LookUp.DTO
 {
-   public class ConditionResponse
+   public class ProblemResponse
    {
-        public Condition Condition { get; set; }
+        public Problem Problem { get; set; }
         public string Version { get; set; }
         public ResponseStatus Status { get; set; }
     }
 
-    public class Condition
+    public class Problem
     {
-        public string ConditionID { get; set; }
+        public string ProblemID { get; set; }
         public string Name { get; set; }
         public bool Active { get; set; }
     }

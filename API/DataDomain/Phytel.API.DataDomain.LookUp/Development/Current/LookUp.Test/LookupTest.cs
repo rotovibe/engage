@@ -8,36 +8,36 @@ namespace Phytel.API.DataDomain.LookUp.Test
     public class LookUpTest
     {
         [TestMethod]
-        public void GetConditionByID_Test()
+        public void GetProblemByID_Test()
         {
             // Arrange
             string version = "v1";
             string contractNumber = "InHealth001";
             string context = "NG";
-            GetConditionRequest request = new GetConditionRequest { ConditionID = "527c1b1ad4332324ac199142", Context = context, ContractNumber = contractNumber, Version = version };
+            GetProblemRequest request = new GetProblemRequest { ProblemID = "527c1b1ad4332324ac199142", Context = context, ContractNumber = contractNumber, Version = version };
 
             // Act
-            ConditionResponse response = LookUpDataManager.GetConditionByID(request);
+            ProblemResponse response = LookUpDataManager.GetProblemByID(request);
 
             // Assert
-            Assert.IsTrue(response.Condition.Name == "Arthritis");
+            Assert.IsTrue(response.Problem.Name == "Arthritis");
             
         }
 
         [TestMethod]
-        public void FindConditions_Test()
+        public void FindProblems_Test()
         {
             // Arrange
             string version = "v1";
             string contractNumber = "InHealth001";
             string context = "NG";
-            FindConditionsRequest request = new FindConditionsRequest {  Context = context, ContractNumber = contractNumber, Version = version };
+            FindProblemsRequest request = new FindProblemsRequest {  Context = context, ContractNumber = contractNumber, Version = version };
 
             // Act
-            ConditionsResponse response = LookUpDataManager.FindConditions(request);
+            ProblemsResponse response = LookUpDataManager.FindProblems(request);
 
             // Assert
-            Assert.AreNotEqual(0, response.Conditions.Count);
+            Assert.AreNotEqual(0, response.Problems.Count);
         }
 
     }

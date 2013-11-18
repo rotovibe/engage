@@ -3,9 +3,9 @@ using ServiceStack.ServiceInterface.ServiceModel;
 
 namespace Phytel.API.DataDomain.LookUp.DTO
 {
-    public class ConditionsResponse
+    public class ProblemsResponse
    {
-       public List<Condition> Conditions { get; set; }
+       public List<Problem> Problems { get; set; }
        public string Version { get; set; }
        public ResponseStatus Status { get; set; }
     }

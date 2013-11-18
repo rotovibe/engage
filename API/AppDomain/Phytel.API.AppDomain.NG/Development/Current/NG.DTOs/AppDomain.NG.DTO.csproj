@@ -80,8 +80,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="LookUpConditionRequest.cs" />
-    <Compile Include="LookUpConditionResponse.cs" />
+    <Compile Include="ProblemLookUpRequest.cs" />
+    <Compile Include="ProblemLookUpResponse.cs" />
     <Compile Include="PatientProblemRequest.cs" />
     <Compile Include="PatientProblemsResponse.cs" />
     <Compile Include="CohortRequest.cs" />

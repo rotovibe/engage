@@ -12,11 +12,11 @@ using Phytel.API.AppDomain.LookUp;
 
 namespace Phytel.API.DataDomain.LookUp
 {
-    public class MongoConditionRepository<T> : ILookUpRepository<T>
+    public class MongoProblemRepository<T> : ILookUpRepository<T>
     {
         private string _dbName = string.Empty;
 
-        public MongoConditionRepository(string contractDBName)
+        public MongoProblemRepository(string contractDBName)
         {
             _dbName = contractDBName;
         }
@@ -43,18 +43,18 @@ namespace Phytel.API.DataDomain.LookUp
 
         public object FindByID(string entityID)
         {
-            ConditionResponse conditionResponse = null;
-            using (ConditionMongoContext ctx = new ConditionMongoContext(_dbName))
+            ProblemResponse problemResponse = null;
+            using (ProblemMongoContext ctx = new ProblemMongoContext(_dbName))
             {
-                MEProblem meCondition = ctx.Conditions.Collection.FindOneById(ObjectId.Parse(entityID));
-                if (meCondition != null)
+                MEProblem meProblem = ctx.Problems.Collection.FindOneById(ObjectId.Parse(entityID));
+                if (meProblem != null)
                 {
-                    conditionResponse = new ConditionResponse();
-                    Condition condition = new Condition { ConditionID = meCondition.Id.ToString(), Name = meCondition.Name, Active = meCondition.Active };
-                    conditionResponse.Condition = condition;
+                    problemResponse = new ProblemResponse();
+                    Problem problem = new Problem { ProblemID = meProblem.Id.ToString(), Name = meProblem.Name, Active = meProblem.Active };
+                    problemResponse.Problem = problem;
                 }
             }
-            return conditionResponse;
+            return problemResponse;
         }
 
         public Tuple<string, IQueryable<T>> Select(Interface.APIExpression expression)
@@ -65,21 +65,21 @@ namespace Phytel.API.DataDomain.LookUp
         public IQueryable<T> SelectAll()
         {
             IQueryable<T> query = null;
-            List<Condition> conditionList = null;
-            using (ConditionMongoContext ctx = new ConditionMongoContext(_dbName))
+            List<Problem> problemList = null;
+            using (ProblemMongoContext ctx = new ProblemMongoContext(_dbName))
             {
-                List<MEProblem> meConditions = ctx.Conditions.Collection.FindAll().ToList();
-                if (meConditions != null)
+                List<MEProblem> meProblems = ctx.Problems.Collection.FindAll().ToList();
+                if (meProblems != null)
                 {
-                    conditionList = new List<Condition>();
-                    foreach (MEProblem m in meConditions)
+                    problemList = new List<Problem>();
+                    foreach (MEProblem m in meProblems)
                     {
-                        Condition condition = new Condition { ConditionID = m.Id.ToString(), Name = m.Name, Active = m.Active };
-                        conditionList.Add(condition);
+                        Problem problem = new Problem { ProblemID = m.Id.ToString(), Name = m.Name, Active = m.Active };
+                        problemList.Add(problem);
                     }
                 }
             }
-            query = ((IEnumerable<T>)conditionList).AsQueryable<T>();
+            query = ((IEnumerable<T>)problemList).AsQueryable<T>();
             
             return query;
         }

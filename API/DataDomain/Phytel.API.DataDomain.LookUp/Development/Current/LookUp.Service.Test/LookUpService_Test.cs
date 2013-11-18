@@ -10,7 +10,7 @@ namespace Phytel.API.DataDomain.LookUp.Services.Test
     public class LookUpService_Test
     {
         [TestMethod]
-        public void FindConditions_Test()
+        public void FindProblems_Test()
         {
             // Arrange
             string version = "v1";
@@ -19,8 +19,8 @@ namespace Phytel.API.DataDomain.LookUp.Services.Test
             IRestClient client = new JsonServiceClient();
 
             // Act
-            List<Condition> response = client.Get<List<Condition>>
-                (string.Format("{0}/{1}/{2}/Contract/{3}/conditions",
+            List<Problem> response = client.Get<List<Problem>>
+                (string.Format("{0}/{1}/{2}/Contract/{3}/problems",
                   "http://localhost:8888/LookUp/",context,version, contractNumber));
 
             // Assert
@@ -28,20 +28,20 @@ namespace Phytel.API.DataDomain.LookUp.Services.Test
         }
 
         [TestMethod]
-        public void GetConditionByID_Test()
+        public void GetProblemByID_Test()
         {
             // Arrange
             string expectedValue = "Arthritis";
             string version = "v1";
             string contractNumber = "InHealth001";
             string context = "NG";
-            string conditionID = "527c1b1ad4332324ac199142";
+            string problemID = "527c1b1ad4332324ac199142";
             IRestClient client = new JsonServiceClient();
 
             // Act
-            Condition response = client.Get<Condition>
-                (string.Format("{0}/{1}/{2}/Contract/{3}/condition/{4}",
-                  "http://localhost:8888/LookUp/", context, version, contractNumber, conditionID));
+            Problem response = client.Get<Problem>
+                (string.Format("{0}/{1}/{2}/Contract/{3}/problem/{4}",
+                  "http://localhost:8888/LookUp/", context, version, contractNumber, problemID));
 
             string actualValue = response.Name;
             // Assert

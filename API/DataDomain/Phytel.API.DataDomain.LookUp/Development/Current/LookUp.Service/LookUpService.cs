@@ -8,12 +8,12 @@ namespace Phytel.API.DataDomain.Patient.Service
 {
     public class LookUpService : ServiceStack.ServiceInterface.Service
     {
-        public ConditionResponse Get(GetConditionRequest request)
+        public ProblemResponse Get(GetProblemRequest request)
         {
-            ConditionResponse response = new ConditionResponse();
+            ProblemResponse response = new ProblemResponse();
             try
             {
-                response = LookUpDataManager.GetConditionByID(request);
+                response = LookUpDataManager.GetProblemByID(request);
             }
             catch (Exception ex)
             {
@@ -24,12 +24,12 @@ namespace Phytel.API.DataDomain.Patient.Service
             return response;
         }
 
-        public ConditionsResponse Get(FindConditionsRequest request)
+        public ProblemsResponse Get(FindProblemsRequest request)
         {
-            ConditionsResponse response = new ConditionsResponse();
+            ProblemsResponse response = new ProblemsResponse();
             try
             {
-                response = LookUpDataManager.FindConditions(request);
+                response = LookUpDataManager.FindProblems(request);
             }
             catch (Exception ex)
             {

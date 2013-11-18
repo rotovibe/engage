@@ -16,7 +16,7 @@ namespace Phytel.API.AppDomain.NG.Test
         }
 
         [TestMethod]
-        public void GetPatientsByCondition_Test()
+        public void GetPatientsByProblem_Test()
         {
             // Arrange
             string version = "v1";
@@ -42,7 +42,7 @@ namespace Phytel.API.AppDomain.NG.Test
         }
         
         [TestMethod]
-        public void FindConditions_Test()
+        public void FindProblems_Test()
         { 
             // Arrange
             string version = "v1";
@@ -50,7 +50,7 @@ namespace Phytel.API.AppDomain.NG.Test
             string context = "NG";
             string token = "1234";
             NGManager ngManager = new NGManager();
-            LookUpConditionRequest request = new LookUpConditionRequest
+            ProblemLookUpRequest request = new ProblemLookUpRequest
             {
                 Context = context,
                 ContractNumber = contractNumber,
@@ -58,7 +58,7 @@ namespace Phytel.API.AppDomain.NG.Test
                 Version = version
             };
             // Act
-            List<LookUpCondition> response = ngManager.GetConditions(request);
+            List<ProblemLookUp> response = ngManager.GetProblems(request);
 
             //Assert
             Assert.IsTrue(response.Count > 0);

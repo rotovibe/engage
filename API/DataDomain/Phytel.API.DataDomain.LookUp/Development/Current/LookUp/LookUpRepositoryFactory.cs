@@ -13,9 +13,9 @@ namespace Phytel.API.DataDomain.LookUp
         {
             ILookUpRepository<T> repo = null;
 
-            if(lookUpTable.Equals("condition", StringComparison.InvariantCultureIgnoreCase))
+            if(lookUpTable.Equals("problemlookup", StringComparison.InvariantCultureIgnoreCase))
             {
-                repo = new MongoConditionRepository<T>(dbName) as ILookUpRepository<T>;
+                repo = new MongoProblemRepository<T>(dbName) as ILookUpRepository<T>;
             }
             return repo;
         }

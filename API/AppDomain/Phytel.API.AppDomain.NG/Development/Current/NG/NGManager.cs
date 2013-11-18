@@ -50,12 +50,12 @@ namespace Phytel.API.AppDomain.NG
         /// </summary>
         /// <param name="request">PatientProblemRequest object</param>
         /// <returns>PatientProblem object</returns>
-        public List<PatientProblem> GetProblemsByPatientID(Phytel.API.AppDomain.NG.DTO.PatientProblemRequest request)
+        public List<Phytel.API.AppDomain.NG.DTO.PatientProblem> GetProblemsByPatientID(Phytel.API.AppDomain.NG.DTO.PatientProblemRequest request)
         {
             if (string.IsNullOrEmpty(request.PatientID))
                 throw new ArgumentException("PatientID is null or empty.");
 
-            List<PatientProblem> response = new List<PatientProblem>();
+            List<Phytel.API.AppDomain.NG.DTO.PatientProblem> response = new List<Phytel.API.AppDomain.NG.DTO.PatientProblem>();
 
            IRestClient client = new JsonServiceClient();
             ///{Context}/{Version}/Contract/{ContractNumber}/patientproblems"
@@ -75,41 +75,41 @@ namespace Phytel.API.AppDomain.NG
                         ContractNumber = request.ContractNumber
                     }
                 as object);
-                
-            List<Problem> problems = dataDomainResponse.PatientProblems;
 
-            foreach(Problem p in problems)
+            List<Phytel.API.DataDomain.PatientProblem.DTO.PProb> problems = dataDomainResponse.PatientProblems;
+
+            foreach (Phytel.API.DataDomain.PatientProblem.DTO.PProb p in problems)
             {
-                PatientProblem pp = new PatientProblem();
-                pp.ID = p.ProblemID;
+                Phytel.API.AppDomain.NG.DTO.PatientProblem pp = new Phytel.API.AppDomain.NG.DTO.PatientProblem();
+                pp.ID = p.ID;
                 pp.PatientID = p.PatientID;
-                pp.ConditionID = p.ConditionID;
+                pp.ProblemID = p.ProblemID;
                 response.Add(pp);
             }
 
             return response;
         }
 
-        public List<LookUpCondition> GetConditions(LookUpConditionRequest request)
+        public List<ProblemLookUp> GetProblems(ProblemLookUpRequest request)
         {
-            List<LookUpCondition> response = new List<LookUpCondition>();
+            List<ProblemLookUp> response = new List<ProblemLookUp>();
 
             IRestClient client = new JsonServiceClient();
 
-            Phytel.API.DataDomain.LookUp.DTO.ConditionsResponse dataDomainResponse = client.Get<Phytel.API.DataDomain.LookUp.DTO.ConditionsResponse>(string.Format("{0}/{1}/{2}/Contract/{3}/conditions",
+            Phytel.API.DataDomain.LookUp.DTO.ProblemsResponse dataDomainResponse = client.Get<Phytel.API.DataDomain.LookUp.DTO.ProblemsResponse>(string.Format("{0}/{1}/{2}/Contract/{3}/problems",
                                                                                                             DDLookupServiceUrl,
                                                                                                             request.Context,
                                                                                                             request.Version,
                                                                                                             request.ContractNumber));
 
-            List<Condition> conditions = dataDomainResponse.Conditions;
+            List<Problem> problems = dataDomainResponse.Problems;
 
-            foreach(Condition c in conditions)
+            foreach(Problem c in problems)
             {
-                LookUpCondition lookUpCondition = new LookUpCondition();
-                lookUpCondition.ID = c.ConditionID;
-                lookUpCondition.Name = c.Name;
-                response.Add(lookUpCondition);
+                ProblemLookUp problemLookUp = new ProblemLookUp();
+                problemLookUp.ID = c.ProblemID;
+                problemLookUp.Name = c.Name;
+                response.Add(problemLookUp);
             }
 
             return response;

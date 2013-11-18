@@ -4,16 +4,16 @@ using Phytel.Mongo.Linq;
 
 namespace Phytel.API.AppDomain.LookUp
 {
-    public class ConditionMongoContext : MongoContext
+    public class ProblemMongoContext : MongoContext
     {
         private static string COLL_PROBLEMLOOKUP = "ProblemLookUp";
 
-        public ConditionMongoContext(string contractDBName)
+        public ProblemMongoContext(string contractDBName)
             : base(contractDBName, true)
 		{
-            Conditions = new MongoSet<MEProblem, ObjectId>(this, COLL_PROBLEMLOOKUP);
+            Problems = new MongoSet<MEProblem, ObjectId>(this, COLL_PROBLEMLOOKUP);
 		}
 
-        public MongoSet<MEProblem, ObjectId> Conditions { get; private set; }
+        public MongoSet<MEProblem, ObjectId> Problems { get; private set; }
     }
 }

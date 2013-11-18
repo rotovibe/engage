@@ -14,7 +14,7 @@ namespace Phytel.API.DataDomain.PatientProblem
 
             PatientProblemsResponse response = new PatientProblemsResponse();
 
-            IPatientProblemRepository<Problem> repo = Phytel.API.DataDomain.PatientProblem.PatientProblemRepositoryFactory<Problem>.GetPatientProblemRepository(request.ContractNumber, request.Context);
+            IPatientProblemRepository<PProb> repo = Phytel.API.DataDomain.PatientProblem.PatientProblemRepositoryFactory<PProb>.GetPatientProblemRepository(request.ContractNumber, request.Context);
             
             ICollection<SelectExpression> selectExpressions = new List<SelectExpression>();
 
@@ -41,7 +41,7 @@ namespace Phytel.API.DataDomain.PatientProblem
                 selectExpressions.Add(statusSelectExpression);
             }
 
-            // DisplayCondition.
+            // Featured.
             // This is not passed through the request object. But user story demands that only Problems set to Featured == true should be displayed to the end user.
             SelectExpression displaySelectExpression = new SelectExpression();
             displaySelectExpression.FieldName = MEPatientProblem.FeaturedProperty;
@@ -54,7 +54,7 @@ namespace Phytel.API.DataDomain.PatientProblem
             APIExpression apiExpression = new APIExpression();
             apiExpression.Expressions = selectExpressions;
 
-            Tuple<string, IQueryable<Problem>> problems = repo.Select(apiExpression);
+            Tuple<string, IQueryable<Phytel.API.DataDomain.PatientProblem.DTO.PProb>> problems = repo.Select(apiExpression);
 
             if (problems != null)
             {
