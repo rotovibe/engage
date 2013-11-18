@@ -63,7 +63,22 @@ namespace Phytel.API.DataDomain.Cohort
 
         public Tuple<string, IQueryable<T>> Select(Interface.APIExpression expression)
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
+
+            using (CohortMongoContext ctx = new CohortMongoContext(_dbName))
+            {
+                BsonDocument query = MongoDB.Bson.Serialization.BsonSerializer.Deserialize<BsonDocument>("{'k':'G','t':'Demo','v':'M','a':1}");
+                
+                QueryDocument queryDoc = new QueryDocument(query);
+
+                SortByBuilder builder = new SortByBuilder();
+                builder.Ascending(new string[] { "ln" });
+
+                List<BsonDocument> responses = ctx.GetDatabase().GetCollection("CohortPatientView").FindAs<BsonDocument>(queryDoc).SetSortOrder(builder).SetSkip(100).SetLimit(10).ToList(); // (SortBy.Ascending(new string[] { "sort field" })).SetSkip(100).SetLimit(50);
+
+                int count = responses.Count;
+            }
+            return new Tuple<string, IQueryable<T>>(string.Empty, null);
         }
 
         public IQueryable<T> SelectAll()
