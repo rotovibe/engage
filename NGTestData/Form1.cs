@@ -68,8 +68,13 @@ namespace NGTestData
                             DeleteFlag = false,
                             EndDate = null,
                             Featured = true,
-                            
-                        })
+                            LastUpdatedOn = DateTime.Now,
+                            Level = 1,
+                            ProblemID = problems[0].Id,
+                            StartDate = null,
+                            TTLDate = null,
+                            Version = "v1"
+                        });
                 }
             }
             mongoDB.GetCollection("Patient").RemoveAll();
