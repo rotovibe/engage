@@ -64,6 +64,10 @@ namespace NGTestData
                     patientProblems.Add(new MEPatientProblem
                         {
                             PatientID = patient.Id,
+                            Active = true,
+                            DeleteFlag = false,
+                            EndDate = null,
+                            Featured = true,
                             
                         })
                 }
