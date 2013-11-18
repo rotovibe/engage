@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using System.Data.SqlClient;
 using Phytel.API.DataDomain.Patient.DTO;
 using Phytel.API.DataDomain.LookUp.DTO;
+using Phytel.API.DataDomain.PatientProblem.DTO;
 
 namespace NGTestData
 {
@@ -27,11 +28,13 @@ namespace NGTestData
             string sqlConn = "server=10.90.1.10;database=JCMR001;user id=jcmrtestuser;password=testuser;";
 
             List<MEPatient> patients = new List<MEPatient>();
-            List<MECondition> conditions = null;
+            List<MEPatientProblem> patientProblems = new List<MEPatientProblem>();
+
+            List<MEProblem> problems = null;
 
             MongoDB.Driver.MongoDatabase mongoDB = Phytel.Services.MongoService.Instance.GetDatabase("InHealth001", true);
 
-            conditions = mongoDB.GetCollection("ProblemLookUp").FindAllAs<MECondition>().ToList();
+            problems = mongoDB.GetCollection("ProblemLookUp").FindAllAs<MEProblem>().ToList();
 
             DataSet dsPatients = Phytel.Services.SQLDataService.Instance.ExecuteSQLDirect(sqlConn, sqlPatientQuery, 0);
 
@@ -56,6 +59,14 @@ namespace NGTestData
 
                 patients.Add(patient);
 
+                for(int i = 0; i < numProblems.Value; i++)
+                {
+                    patientProblems.Add(new MEPatientProblem
+                        {
+                            PatientID = patient.Id,
+                            
+                        })
+                }
             }
             mongoDB.GetCollection("Patient").RemoveAll();
             mongoDB.GetCollection("Patient").InsertBatch(patients);

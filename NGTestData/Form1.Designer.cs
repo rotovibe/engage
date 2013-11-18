@@ -31,10 +31,10 @@
             this.button1 = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.numPatients = new System.Windows.Forms.NumericUpDown();
-            this.numericUpDown2 = new System.Windows.Forms.NumericUpDown();
+            this.numProblems = new System.Windows.Forms.NumericUpDown();
             this.label2 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.numPatients)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numProblems)).BeginInit();
             this.SuspendLayout();
             // 
             // button1
@@ -63,12 +63,12 @@
             this.numPatients.Size = new System.Drawing.Size(120, 20);
             this.numPatients.TabIndex = 2;
             // 
-            // numericUpDown2
+            // numProblems
             // 
-            this.numericUpDown2.Location = new System.Drawing.Point(120, 48);
-            this.numericUpDown2.Name = "numericUpDown2";
-            this.numericUpDown2.Size = new System.Drawing.Size(120, 20);
-            this.numericUpDown2.TabIndex = 4;
+            this.numProblems.Location = new System.Drawing.Point(120, 48);
+            this.numProblems.Name = "numProblems";
+            this.numProblems.Size = new System.Drawing.Size(120, 20);
+            this.numProblems.TabIndex = 4;
             // 
             // label2
             // 
@@ -84,7 +84,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(254, 124);
-            this.Controls.Add(this.numericUpDown2);
+            this.Controls.Add(this.numProblems);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.numPatients);
             this.Controls.Add(this.label1);
@@ -92,7 +92,7 @@
             this.Name = "Form1";
             this.Text = "Form1";
             ((System.ComponentModel.ISupportInitialize)(this.numPatients)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numProblems)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -103,7 +103,7 @@
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.NumericUpDown numPatients;
-        private System.Windows.Forms.NumericUpDown numericUpDown2;
+        private System.Windows.Forms.NumericUpDown numProblems;
         private System.Windows.Forms.Label label2;
     }
 }

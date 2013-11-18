@@ -37,11 +37,13 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="MongoDB.Bson">
-      <HintPath>..\..\Services\API\DataDomain\Phytel.API.DataDomain.Template\References\MongoDB.Bson.dll</HintPath>
+    <Reference Include="MongoDB.Bson, Version=1.8.1.20, Culture=neutral, PublicKeyToken=f686731cfb9cc103, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\PhytelServices\Development\Current\PhytelServices\bin\Release\MongoDB.Bson.dll</HintPath>
     </Reference>
-    <Reference Include="MongoDB.Driver">
-      <HintPath>..\..\Services\API\AppDomain\Phytel.API.AppDomain.Security\Development\Current\References\MongoDB.Driver.dll</HintPath>
+    <Reference Include="MongoDB.Driver, Version=1.8.1.20, Culture=neutral, PublicKeyToken=f686731cfb9cc103, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\PhytelServices\Development\Current\PhytelServices\bin\Release\MongoDB.Driver.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -89,6 +91,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Services\API\DataDomain\Phytel.API.DataDomain.Cohort\Development\Current\Cohort\DataDomain.Cohort.csproj">
+      <Project>{229026b1-c3e5-4d2b-8d2b-61d00e8a52cc}</Project>
+      <Name>DataDomain.Cohort</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Services\API\DataDomain\Phytel.API.DataDomain.LookUp\Development\Current\LookUp\DataDomain.LookUp.csproj">
       <Project>{f0a3623a-6d1d-46de-a00e-794ebc856eb5}</Project>
       <Name>DataDomain.LookUp</Name>
@@ -96,10 +102,6 @@
     <ProjectReference Include="..\..\Services\API\DataDomain\Phytel.API.DataDomain.PatientProblem\Development\Current\ProblemProblem\DataDomain.PatientProblem.csproj">
       <Project>{afd0f5b1-a29e-402c-958b-d6d82b4278e5}</Project>
       <Name>DataDomain.PatientProblem</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Services\API\DataDomain\Phytel.API.DataDomain.Patient\Development\Current\Patient.DTOs\DataDomain.Patient.DTO.csproj">
-      <Project>{1b3148a8-fb57-4461-91bc-f1cd38a013b6}</Project>
-      <Name>DataDomain.Patient.DTO</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Services\API\DataDomain\Phytel.API.DataDomain.Patient\Development\Current\Patient\DataDomain.Patient.csproj">
       <Project>{1536cd0a-6308-4daf-8618-35bba0816997}</Project>
