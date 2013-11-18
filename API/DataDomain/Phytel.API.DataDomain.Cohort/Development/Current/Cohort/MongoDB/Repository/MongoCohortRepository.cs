@@ -9,7 +9,6 @@ using MongoDB.Driver;
 using MongoDB.Driver.Builders;
 using MongoDB.Bson;
 using Phytel.API.AppDomain.Cohort;
-using Phytel.API.Common.Constants;
 
 namespace Phytel.API.DataDomain.Cohort
 {
@@ -49,7 +48,7 @@ namespace Phytel.API.DataDomain.Cohort
             {
                 List<IMongoQuery> queries = new List<IMongoQuery>();
                 queries.Add(Query.EQ(MECohort.IdProperty, ObjectId.Parse(entityID)));
-                queries.Add(Query.EQ(MongoEntityProperty.DeleteFlag, false));
+                queries.Add(Query.EQ(MECohort.DeleteFlagProperty, false));
                 IMongoQuery mQuery = Query.And(queries);
                 MECohort meCohort = ctx.Cohorts.Collection.Find(mQuery).FirstOrDefault();
                 if (meCohort != null)
@@ -88,7 +87,7 @@ namespace Phytel.API.DataDomain.Cohort
             List<API.DataDomain.Cohort.DTO.Cohort> cohorts = null;
             using (CohortMongoContext ctx = new CohortMongoContext(_dbName))
             {
-                List <MECohort> meCohorts = ctx.Cohorts.Collection.Find(Query.EQ(MongoEntityProperty.DeleteFlag, false)).ToList();
+                List <MECohort> meCohorts = ctx.Cohorts.Collection.Find(Query.EQ(MECohort.DeleteFlagProperty, false)).ToList();
                 if (meCohorts != null)
                 {
                     cohorts = new List<API.DataDomain.Cohort.DTO.Cohort>();

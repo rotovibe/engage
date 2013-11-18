@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace Phytel.API.DataDomain.Cohort
 {
-    public static class CohortDataManager
+    public static class DataCohortManager
     {
         public static CohortResponse GetCohortByID(GetCohortRequest request)
         {
@@ -21,7 +21,7 @@ namespace Phytel.API.DataDomain.Cohort
         {
             CohortsResponse response = new CohortsResponse();
 
-            ICohortRepository<CohortsResponse> repo = CohortRepositoryFactory<CohortsResponse>.GetCohortRepository(request.ContractNumber, request.Context);
+            ICohortRepository<API.DataDomain.Cohort.DTO.Cohort> repo = CohortRepositoryFactory<API.DataDomain.Cohort.DTO.Cohort>.GetCohortRepository(request.ContractNumber, request.Context);
 
             IQueryable<API.DataDomain.Cohort.DTO.Cohort> cohorts = repo.SelectAll() as IQueryable<API.DataDomain.Cohort.DTO.Cohort>;
 

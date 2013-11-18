@@ -12,7 +12,7 @@ namespace Phytel.API.DataDomain.Cohort.Service
             CohortResponse response = new CohortResponse();
             try
             {
-                response = CohortDataManager.GetCohortByID(request);
+                response = DataCohortManager.GetCohortByID(request);
             }
             catch (Exception ex)
             {
@@ -28,7 +28,7 @@ namespace Phytel.API.DataDomain.Cohort.Service
             CohortsResponse response = new CohortsResponse();
             try
             {
-                response = CohortDataManager.GetCohorts(request);
+                response = DataCohortManager.GetCohorts(request);
             }
             catch (Exception ex)
             {

@@ -13,5 +13,38 @@ namespace Phytel.API.DataDomain.Cohort.Test
 
             repo.Select(new Interface.APIExpression());
         }
+
+        [TestMethod]
+        public void GetCohortByID_Test()
+        {
+            // Arrange
+            string version = "v1";
+            string contractNumber = "InHealth001";
+            string context = "NG";
+            GetCohortRequest request = new GetCohortRequest { CohortID = "528aa03ad4332317acc50976", Context = context, ContractNumber = contractNumber, Version = version };
+
+            // Act
+            CohortResponse response = DataCohortManager.GetCohortByID(request);
+
+            // Assert
+            Assert.IsTrue(response.Cohort.SName == "All(f)");
+
+        }
+
+        [TestMethod]
+        public void GetAllCohorts_Test()
+        {
+            // Arrange
+            string version = "v1";
+            string contractNumber = "InHealth001";
+            string context = "NG";
+            GetAllCohortRequest request = new GetAllCohortRequest { Context = context, ContractNumber = contractNumber, Version = version };
+
+            // Act
+            CohortsResponse response = DataCohortManager.GetCohorts(request);
+
+            // Assert
+            Assert.AreNotEqual(0, response.Cohorts.Count);
+        }
     }
 }
