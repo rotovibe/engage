@@ -7,7 +7,6 @@ using System;
 
 namespace Phytel.API.DataDomain.Cohort.DTO
 {
-    [MongoIndex(Keys = new string[] { IdProperty })]
     public class MECohort : IMongoEntity<ObjectId>, IMEEntity
     {
         public MECohort() { Id = ObjectId.GenerateNewId(); }
@@ -17,6 +16,7 @@ namespace Phytel.API.DataDomain.Cohort.DTO
         public const string ShortNameProperty = "sn";
         public const string DescriptionProperty = "desc";
         public const string QueryProperty = "q";
+        public const string SortProperty = "sort";
 
         public const string ExtraElementsProperty = "ex";
         public const string VersionProperty = "v";
@@ -44,6 +44,10 @@ namespace Phytel.API.DataDomain.Cohort.DTO
         [BsonElement(QueryProperty)]
         [BsonIgnoreIfNull(true)]
         public string Query { get; set; }
+
+        [BsonElement(SortProperty)]
+        [BsonIgnoreIfNull(true)]
+        public string Sort { get; set; }
 
         public Dictionary<string, object> ExtraElements { get; set; }
        
