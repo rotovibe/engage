@@ -20,7 +20,7 @@ namespace Phytel.API.DataDomain.LookUp.Test
             ConditionResponse response = LookUpDataManager.GetConditionByID(request);
 
             // Assert
-            Assert.IsTrue(response.Condition.DisplayName == "Arthritis");
+            Assert.IsTrue(response.Condition.Name == "Arthritis");
             
         }
 

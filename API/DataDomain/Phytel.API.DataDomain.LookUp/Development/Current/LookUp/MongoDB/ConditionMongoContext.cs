@@ -6,14 +6,14 @@ namespace Phytel.API.AppDomain.LookUp
 {
     public class ConditionMongoContext : MongoContext
     {
-        private static string COLL_CONDITIONS = "Condition";
+        private static string COLL_PROBLEMLOOKUP = "ProblemLookUp";
 
         public ConditionMongoContext(string contractDBName)
             : base(contractDBName, true)
 		{
-            Conditions = new MongoSet<MECondition, ObjectId>(this, COLL_CONDITIONS);
+            Conditions = new MongoSet<MEProblem, ObjectId>(this, COLL_PROBLEMLOOKUP);
 		}
 
-        public MongoSet<MECondition, ObjectId> Conditions { get; private set; }
+        public MongoSet<MEProblem, ObjectId> Conditions { get; private set; }
     }
 }

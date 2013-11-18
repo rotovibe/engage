@@ -1,22 +1,24 @@
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
+using Phytel.API.Interface;
 using Phytel.Mongo.Linq;
+using System.Collections.Generic;
+using System;
 
 namespace Phytel.API.DataDomain.PatientProblem.DTO
 {
-    [BsonIgnoreExtraElements(true)]
-    [MongoIndex(Keys = new string[] { PatientIDProperty })]
-    public class MEPatientProblem : IMongoEntity<ObjectId>
+    public class MEPatientProblem : IMongoEntity<ObjectId>, IMEEntity
     {
         public MEPatientProblem() { Id = ObjectId.GenerateNewId(); }                                                                                                                                                                                                           
 
         public const string IdProperty = "_id";
         public const string PatientIDProperty = "pid";
-        public const string ConditionIDProperty = "cid";
-        public const string CodeProperty = "cd";
-        public const string StatusProperty = "stat";
-        public const string CategoryProperty = "cat";
-        public const string DisplayProperty = "dis";
+        public const string ProblemIDProperty = "prbid";
+        public const string ActiveProperty = "a";
+        public const string FeaturedProperty = "f";
+        public const string LevelProperty = "l";
+        public const string StartDateProperty = "sd";
+        public const string EndDateProperty = "ed";
 
         [BsonId]
         public ObjectId Id { get; set; }
@@ -25,38 +27,41 @@ namespace Phytel.API.DataDomain.PatientProblem.DTO
         [BsonIgnoreIfNull(true)]
         public string PatientID { get; set; }
 
-        [BsonElement(ConditionIDProperty)]
+        [BsonElement(ProblemIDProperty)]
         [BsonIgnoreIfNull(true)]
-        public string ConditionID { get; set; }
+        public string ProblemID { get; set; }
 
-        [BsonElement(CodeProperty)]
+        [BsonElement(ActiveProperty)]
         [BsonIgnoreIfNull(true)]
-        public string Code { get; set; }
+        public bool Active { get; set; }
 
-        [BsonElement(StatusProperty)]
+        [BsonElement(FeaturedProperty)]
         [BsonIgnoreIfNull(true)]
-        public Status Status { get; set; }
+        public bool Featured { get; set; }
 
-        [BsonElement(CategoryProperty)]
+        [BsonElement(LevelProperty)]
         [BsonIgnoreIfNull(true)]
-        public Category Category { get; set; }
+        public int Level { get; set; }
 
-        [BsonElement(DisplayProperty)]
+        [BsonElement(StartDateProperty)]
         [BsonIgnoreIfNull(true)]
-        public bool DisplayCondition { get; set; }
+        public DateTime StartDate { get; set; }
 
-    }
+        [BsonElement(EndDateProperty)]
+        [BsonIgnoreIfNull(true)]
+        public DateTime EndDate { get; set; }
 
-    public enum Status
-    {
-        Active,
-        Inactive
-    }
+        public Dictionary<string, object> ExtraElements { get; set; }
+       
+        public string Version { get; set; } 
 
-    public enum Category
-    {
-        Chronic
+        public string UpdatedBy { get; set; }
+
+        public bool DeleteFlag { get; set; }
+
+        public DateTime TTLDate { get; set; }
+
+        public DateTime LastUpdatedOn { get; set; }
+
     }
 }
-
-    

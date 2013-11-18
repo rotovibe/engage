@@ -108,7 +108,7 @@ namespace Phytel.API.AppDomain.NG
             {
                 LookUpCondition lookUpCondition = new LookUpCondition();
                 lookUpCondition.ID = c.ConditionID;
-                lookUpCondition.Name = c.DisplayName;
+                lookUpCondition.Name = c.Name;
                 response.Add(lookUpCondition);
             }
 

@@ -46,11 +46,11 @@ namespace Phytel.API.DataDomain.LookUp
             ConditionResponse conditionResponse = null;
             using (ConditionMongoContext ctx = new ConditionMongoContext(_dbName))
             {
-                MECondition meCondition = ctx.Conditions.Collection.FindOneById(ObjectId.Parse(entityID));
+                MEProblem meCondition = ctx.Conditions.Collection.FindOneById(ObjectId.Parse(entityID));
                 if (meCondition != null)
                 {
                     conditionResponse = new ConditionResponse();
-                    Condition condition = new Condition { ConditionID = meCondition.Id.ToString(), DisplayName = meCondition.DisplayName, IsActive = meCondition.IsActive };
+                    Condition condition = new Condition { ConditionID = meCondition.Id.ToString(), Name = meCondition.Name, Active = meCondition.Active };
                     conditionResponse.Condition = condition;
                 }
             }
@@ -68,13 +68,13 @@ namespace Phytel.API.DataDomain.LookUp
             List<Condition> conditionList = null;
             using (ConditionMongoContext ctx = new ConditionMongoContext(_dbName))
             {
-                List<MECondition> meConditions = ctx.Conditions.Collection.FindAll().ToList();
+                List<MEProblem> meConditions = ctx.Conditions.Collection.FindAll().ToList();
                 if (meConditions != null)
                 {
                     conditionList = new List<Condition>();
-                    foreach (MECondition m in meConditions)
+                    foreach (MEProblem m in meConditions)
                     {
-                        Condition condition = new Condition { ConditionID = m.Id.ToString(), DisplayName = m.DisplayName, IsActive = m.IsActive };
+                        Condition condition = new Condition { ConditionID = m.Id.ToString(), Name = m.Name, Active = m.Active };
                         conditionList.Add(condition);
                     }
                 }

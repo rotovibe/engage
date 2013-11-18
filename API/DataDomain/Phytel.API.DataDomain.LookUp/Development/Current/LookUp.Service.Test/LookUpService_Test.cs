@@ -43,7 +43,7 @@ namespace Phytel.API.DataDomain.LookUp.Services.Test
                 (string.Format("{0}/{1}/{2}/Contract/{3}/condition/{4}",
                   "http://localhost:8888/LookUp/", context, version, contractNumber, conditionID));
 
-            string actualValue = response.DisplayName;
+            string actualValue = response.Name;
             // Assert
             Assert.AreEqual(expectedValue, actualValue, true);
         }

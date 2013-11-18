@@ -18,12 +18,6 @@ namespace Phytel.API.DataDomain.Cohort.DTO
         public const string QueryProperty = "q";
         public const string SortProperty = "sort";
 
-        public const string ExtraElementsProperty = "ex";
-        public const string VersionProperty = "v";
-        public const string UpdatedByProperty = "uby";
-        public const string DeleteFlagProperty = "del";
-        public const string TTLDateProperty = "ttl";
-        public const string LastUpdatedOnProperty = "uon";
 
         [BsonId]
         [BsonElement(IdProperty)]

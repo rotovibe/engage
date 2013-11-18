@@ -31,40 +31,20 @@ namespace Phytel.API.DataDomain.PatientProblem
             // Status
             if (!string.IsNullOrEmpty(request.Status))
             {
-                Status status;
-                if(Enum.TryParse(request.Status, true, out status))
-                {
-                    SelectExpression statusSelectExpression = new SelectExpression();
-                    statusSelectExpression.FieldName = MEPatientProblem.StatusProperty;
-                    statusSelectExpression.Type = SelectExpressionType.EQ;
-                    statusSelectExpression.Value = (int)status;
-                    statusSelectExpression.NextExpressionType = SelectExpressionGroupType.AND;
-                    statusSelectExpression.ExpressionOrder = 2;
-                    statusSelectExpression.GroupID = 1;
-                    selectExpressions.Add(statusSelectExpression);
-                }
-            }
-
-            // Category
-            if (!string.IsNullOrEmpty(request.Category))
-            {
-                Category category;
-                if (Enum.TryParse(request.Category, true, out category))
-                {
-                    SelectExpression categorySelectExpression = new SelectExpression();
-                    categorySelectExpression.FieldName = MEPatientProblem.CategoryProperty;
-                    categorySelectExpression.Type = SelectExpressionType.EQ;
-                    categorySelectExpression.Value = (int)category;
-                    categorySelectExpression.ExpressionOrder = 3;
-                    categorySelectExpression.GroupID = 1;
-                    selectExpressions.Add(categorySelectExpression);
-                }
+                SelectExpression statusSelectExpression = new SelectExpression();
+                statusSelectExpression.FieldName = MEPatientProblem.ActiveProperty;
+                statusSelectExpression.Type = SelectExpressionType.EQ;
+                statusSelectExpression.Value = request.Status;
+                statusSelectExpression.NextExpressionType = SelectExpressionGroupType.AND;
+                statusSelectExpression.ExpressionOrder = 2;
+                statusSelectExpression.GroupID = 1;
+                selectExpressions.Add(statusSelectExpression);
             }
 
             // DisplayCondition.
             // This is not passed through the request object. But user story demands that only conditions set to DisplayCondition == true should be displayed to the end user.
             SelectExpression displaySelectExpression = new SelectExpression();
-            displaySelectExpression.FieldName = MEPatientProblem.DisplayProperty;
+            displaySelectExpression.FieldName = MEPatientProblem.FeaturedProperty;
             displaySelectExpression.Type = SelectExpressionType.EQ;
             displaySelectExpression.Value = true;
             displaySelectExpression.ExpressionOrder = 4;
