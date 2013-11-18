@@ -42,7 +42,7 @@ namespace Phytel.API.DataDomain.PatientProblem
             }
 
             // DisplayCondition.
-            // This is not passed through the request object. But user story demands that only conditions set to DisplayCondition == true should be displayed to the end user.
+            // This is not passed through the request object. But user story demands that only Problems set to Featured == true should be displayed to the end user.
             SelectExpression displaySelectExpression = new SelectExpression();
             displaySelectExpression.FieldName = MEPatientProblem.FeaturedProperty;
             displaySelectExpression.Type = SelectExpressionType.EQ;

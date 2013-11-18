@@ -79,12 +79,12 @@ namespace Phytel.API.DataDomain.PatientProblem
                         patientProblemList = new List<Problem>();
                         foreach (MEPatientProblem p in mePatientProblems)
                         {
-                            Problem condition = new Problem { 
-                                ConditionID = p.ProblemID,
-                                PatientID = p.PatientID,
-                                ProblemID = p.Id.ToString()
+                            Problem problem = new Problem { 
+                                ProblemID = p.ProblemID.ToString(),
+                                PatientID = p.PatientID.ToString(),
+                                PatientProblemID = p.Id.ToString()
                             };
-                            patientProblemList.Add(condition);
+                            patientProblemList.Add(problem);
                         }
                     }
                 }
