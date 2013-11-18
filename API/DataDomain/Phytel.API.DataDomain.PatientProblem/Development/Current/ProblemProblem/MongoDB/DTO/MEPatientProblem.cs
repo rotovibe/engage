@@ -53,12 +53,12 @@ namespace Phytel.API.DataDomain.PatientProblem.DTO
         [BsonElement(StartDateProperty)]
         [BsonIgnoreIfNull(true)]
         [BsonDateTimeOptions(Kind = System.DateTimeKind.Local)]
-        public DateTime StartDate { get; set; }
+        public DateTime? StartDate { get; set; }
 
         [BsonElement(EndDateProperty)]
         [BsonIgnoreIfNull(true)]
         [BsonDateTimeOptions(Kind = System.DateTimeKind.Local)]
-        public DateTime EndDate { get; set; }
+        public DateTime? EndDate { get; set; }
 
         [BsonElement(ExtraElementsProperty)]
         [BsonExtraElements()]
