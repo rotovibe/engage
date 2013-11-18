@@ -37,6 +37,12 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="MongoDB.Bson">
+      <HintPath>..\..\Services\API\DataDomain\Phytel.API.DataDomain.Template\References\MongoDB.Bson.dll</HintPath>
+    </Reference>
+    <Reference Include="MongoDB.Driver">
+      <HintPath>..\..\Services\API\AppDomain\Phytel.API.AppDomain.Security\Development\Current\References\MongoDB.Driver.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -57,6 +63,9 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="Form1.resx">
+      <DependentUpon>Form1.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -78,6 +87,36 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Services\API\DataDomain\Phytel.API.DataDomain.LookUp\Development\Current\LookUp\DataDomain.LookUp.csproj">
+      <Project>{f0a3623a-6d1d-46de-a00e-794ebc856eb5}</Project>
+      <Name>DataDomain.LookUp</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Services\API\DataDomain\Phytel.API.DataDomain.PatientProblem\Development\Current\ProblemProblem\DataDomain.PatientProblem.csproj">
+      <Project>{afd0f5b1-a29e-402c-958b-d6d82b4278e5}</Project>
+      <Name>DataDomain.PatientProblem</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Services\API\DataDomain\Phytel.API.DataDomain.Patient\Development\Current\Patient.DTOs\DataDomain.Patient.DTO.csproj">
+      <Project>{1b3148a8-fb57-4461-91bc-f1cd38a013b6}</Project>
+      <Name>DataDomain.Patient.DTO</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Services\API\DataDomain\Phytel.API.DataDomain.Patient\Development\Current\Patient\DataDomain.Patient.csproj">
+      <Project>{1536cd0a-6308-4daf-8618-35bba0816997}</Project>
+      <Name>DataDomain.Patient</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Services\API\Interfaces\Development\Current\Phytel.API.Interface\Phytel.API.Interface.csproj">
+      <Project>{abe948fb-247e-4955-b3ab-b7c93e10a542}</Project>
+      <Name>Phytel.API.Interface</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\PhytelServices\Development\Current\Phytel.Mongo\Phytel.Mongo.csproj">
+      <Project>{7c9e786c-e4f7-4382-bde4-8dbf980ea013}</Project>
+      <Name>Phytel.Mongo</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\PhytelServices\Development\Current\PhytelServices\PhytelServices.csproj">
+      <Project>{d790f618-438b-4c39-abe5-1346122273ac}</Project>
+      <Name>PhytelServices</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
