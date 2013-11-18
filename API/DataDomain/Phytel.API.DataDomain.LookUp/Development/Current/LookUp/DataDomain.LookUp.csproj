@@ -55,7 +55,7 @@
     <Compile Include="DataLookUpManager.cs" />
     <Compile Include="ILookUpRepository.cs" />
     <Compile Include="MongoDB\DTO\MEProblem.cs" />
-    <Compile Include="MongoDB\ConditionMongoContext.cs" />
+    <Compile Include="MongoDB\ProblemMongoContext.cs" />
     <Compile Include="MongoDB\Repository\MongoProblemRepository.cs" />
     <Compile Include="LookUpRepositoryFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
