@@ -18,6 +18,13 @@ namespace Phytel.API.DataDomain.Cohort.DTO
         public const string QueryProperty = "q";
         public const string SortProperty = "sort";
 
+        public const string ExtraElementsProperty = "ex";
+        public const string VersionProperty = "v";
+        public const string UpdatedByProperty = "uby";
+        public const string DeleteFlagProperty = "del";
+        public const string TTLDateProperty = "ttl";
+        public const string LastUpdatedOnProperty = "uon";
+
 
         [BsonId]
         [BsonElement(IdProperty)]
@@ -43,16 +50,31 @@ namespace Phytel.API.DataDomain.Cohort.DTO
         [BsonIgnoreIfNull(true)]
         public string Sort { get; set; }
 
+        [BsonElement(ExtraElementsProperty)]
+        [BsonExtraElements()]
+        [BsonIgnoreIfNull(true)]
         public Dictionary<string, object> ExtraElements { get; set; }
-       
-        public string Version { get; set; } 
 
+        [BsonElement(VersionProperty)]
+        [BsonDefaultValue("v1")]
+        public string Version { get; set; }
+
+        [BsonElement(UpdatedByProperty)]
+        [BsonDefaultValue("-100")]
         public string UpdatedBy { get; set; }
 
+        [BsonElement(DeleteFlagProperty)]
+        [BsonDefaultValue(false)]
         public bool DeleteFlag { get; set; }
 
-        public DateTime TTLDate { get; set; }
+        [BsonElement(TTLDateProperty)]
+        [BsonIgnoreIfNull(true)]
+        [BsonDateTimeOptions(Kind = System.DateTimeKind.Local)]
+        public System.DateTime? TTLDate { get; set; }
 
-        public DateTime LastUpdatedOn { get; set; }
+        [BsonElement(LastUpdatedOnProperty)]
+        [BsonIgnoreIfNull(true)]
+        [BsonDateTimeOptions(Kind = System.DateTimeKind.Local)]
+        public System.DateTime? LastUpdatedOn { get; set; }
     }
 }
