@@ -32,11 +32,11 @@ namespace Phytel.API.DataDomain.PatientProblem.DTO
 
         [BsonElement(PatientIDProperty)]
         [BsonIgnoreIfNull(true)]
-        public string PatientID { get; set; }
+        public ObjectId PatientID { get; set; }
 
         [BsonElement(ProblemIDProperty)]
         [BsonIgnoreIfNull(true)]
-        public string ProblemID { get; set; }
+        public ObjectId ProblemID { get; set; }
 
         [BsonElement(ActiveProperty)]
         [BsonIgnoreIfNull(true)]
@@ -52,10 +52,12 @@ namespace Phytel.API.DataDomain.PatientProblem.DTO
 
         [BsonElement(StartDateProperty)]
         [BsonIgnoreIfNull(true)]
+        [BsonDateTimeOptions(Kind = System.DateTimeKind.Local)]
         public DateTime StartDate { get; set; }
 
         [BsonElement(EndDateProperty)]
         [BsonIgnoreIfNull(true)]
+        [BsonDateTimeOptions(Kind = System.DateTimeKind.Local)]
         public DateTime EndDate { get; set; }
 
         [BsonElement(ExtraElementsProperty)]
