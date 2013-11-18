@@ -3,7 +3,7 @@ using ServiceStack.ServiceHost;
 
 namespace Phytel.API.DataDomain.LookUp.DTO
 {
-    [Route("/{Context}/{Version}/Contract/{ContractNumber}/problem/{ProblemID}", "GET")]
+    [Route("/{Context}/{Version}/{ContractNumber}/problem/{ProblemID}", "GET")]
     public class GetProblemRequest : IDataDomainRequest
     {
         public string ProblemID { get; set; }

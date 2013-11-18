@@ -28,7 +28,7 @@ namespace Phytel.API.AppDomain.NG.Services.Test
             IRestClient client = new JsonServiceClient();
             JsonServiceClient.HttpWebRequestFilter = x => x.Headers.Add(string.Format("APIToken: {0}", token));
             
-            PatientResponse response = client.Post<PatientResponse>("http://localhost:888/Nightingale/v1/NG/Contract/InHealth001/patient",
+            PatientResponse response = client.Post<PatientResponse>("http://localhost:888/Nightingale/v1/NG/InHealth001/patient",
                 new PatientRequest { PatientID = patientID } as object);
 
             lnsampleValue = response.LastName;
@@ -59,7 +59,7 @@ namespace Phytel.API.AppDomain.NG.Services.Test
 
             IRestClient client = new JsonServiceClient();
 
-            PatientResponse response = client.Post<PatientResponse>("http://localhost:888/v1/NG/Contract/InHealth001/patient",
+            PatientResponse response = client.Post<PatientResponse>("http://localhost:888/v1/NG/InHealth001/patient",
                 new PatientRequest { PatientID = patientID, Token = token } as object);
 
             lnsampleValue = response.LastName;
@@ -85,10 +85,10 @@ namespace Phytel.API.AppDomain.NG.Services.Test
             IRestClient client = new JsonServiceClient();
 
             // Act
-             //[Route("/{Context}/{Version}/Contract/{ContractNumber}/patientproblems/{PatientID}", "GET")]
-            //[Route("/{Context}/{Version}/Contract/{ContractNumber}/patientproblems", "POST")]
+             //[Route("/{Context}/{Version}/{ContractNumber}/patientproblems/{PatientID}", "GET")]
+            //[Route("/{Context}/{Version}/{ContractNumber}/patientproblems", "POST")]
             PatientProblemsResponse response = client.Post<PatientProblemsResponse>
-                (string.Format("{0}/{1}/{2}/Contract/{3}/patientproblems",
+                (string.Format("{0}/{1}/{2}/{3}/patientproblems",
                   "http://localhost:888/Nightingale/", context, version, contractNumber),
                   new PatientProblemRequest {
                    Context = context,
@@ -121,9 +121,9 @@ namespace Phytel.API.AppDomain.NG.Services.Test
             IRestClient client = new JsonServiceClient();
             JsonServiceClient.HttpWebRequestFilter = x => x.Headers.Add(string.Format("APIToken: {0}", token));
             // Act
-            //[Route("/{Context}/{Version}/Contract/{ContractNumber}/problemslookup", 
+            //[Route("/{Context}/{Version}/{ContractNumber}/problemslookup", 
             ProblemsLookUpResponse response = client.Get<ProblemsLookUpResponse>
-                (string.Format("{0}/{1}/{2}/Contract/{3}/problemslookup",
+                (string.Format("{0}/{1}/{2}/{3}/problemslookup",
                   "http://localhost:888/Nightingale/", context, version, contractNumber));
 
             // Assert

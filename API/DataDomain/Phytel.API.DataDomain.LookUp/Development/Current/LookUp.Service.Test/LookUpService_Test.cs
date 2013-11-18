@@ -20,7 +20,7 @@ namespace Phytel.API.DataDomain.LookUp.Services.Test
 
             // Act
             List<Problem> response = client.Get<List<Problem>>
-                (string.Format("{0}/{1}/{2}/Contract/{3}/problems",
+                (string.Format("{0}/{1}/{2}/{3}/problems",
                   "http://localhost:8888/LookUp/",context,version, contractNumber));
 
             // Assert
@@ -40,7 +40,7 @@ namespace Phytel.API.DataDomain.LookUp.Services.Test
 
             // Act
             Problem response = client.Get<Problem>
-                (string.Format("{0}/{1}/{2}/Contract/{3}/problem/{4}",
+                (string.Format("{0}/{1}/{2}/{3}/problem/{4}",
                   "http://localhost:8888/LookUp/", context, version, contractNumber, problemID));
 
             string actualValue = response.Name;

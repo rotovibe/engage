@@ -25,7 +25,7 @@ namespace Phytel.API.AppDomain.NG
             //Execute call(s) to Patient Data Domain
             IRestClient client = new JsonServiceClient();
 
-            Phytel.API.DataDomain.Patient.DTO.PatientResponse response = client.Get<Phytel.API.DataDomain.Patient.DTO.PatientResponse>(string.Format("{0}/{1}/{2}/Contract/{3}/patient/{4}",
+            Phytel.API.DataDomain.Patient.DTO.PatientResponse response = client.Get<Phytel.API.DataDomain.Patient.DTO.PatientResponse>(string.Format("{0}/{1}/{2}/{3}/patient/{4}",
                                                                                         DDPatientServiceURL,
                                                                                         request.Context,
                                                                                         request.Version,
@@ -58,9 +58,9 @@ namespace Phytel.API.AppDomain.NG
             List<Phytel.API.AppDomain.NG.DTO.PatientProblem> response = new List<Phytel.API.AppDomain.NG.DTO.PatientProblem>();
 
            IRestClient client = new JsonServiceClient();
-            ///{Context}/{Version}/Contract/{ContractNumber}/patientproblems"
+            ///{Context}/{Version}/{ContractNumber}/patientproblems"
             Phytel.API.DataDomain.PatientProblem.DTO.PatientProblemsResponse dataDomainResponse = client.Post<Phytel.API.DataDomain.PatientProblem.DTO.PatientProblemsResponse>
-                (string.Format("{0}/{1}/{2}/Contract/{3}/patientproblems",
+                (string.Format("{0}/{1}/{2}/{3}/patientproblems",
                     DDPatientProblemServiceUrl, 
                     request.Context, 
                     request.Version, 
@@ -96,7 +96,7 @@ namespace Phytel.API.AppDomain.NG
 
             IRestClient client = new JsonServiceClient();
 
-            Phytel.API.DataDomain.LookUp.DTO.ProblemsResponse dataDomainResponse = client.Get<Phytel.API.DataDomain.LookUp.DTO.ProblemsResponse>(string.Format("{0}/{1}/{2}/Contract/{3}/problems",
+            Phytel.API.DataDomain.LookUp.DTO.ProblemsResponse dataDomainResponse = client.Get<Phytel.API.DataDomain.LookUp.DTO.ProblemsResponse>(string.Format("{0}/{1}/{2}/{3}/problems",
                                                                                                             DDLookupServiceUrl,
                                                                                                             request.Context,
                                                                                                             request.Version,
