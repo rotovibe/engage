@@ -20,7 +20,7 @@ namespace Phytel.API.DataDomain.Cohort.Services.Test
 
             // Act
             GetAllCohortResponse response = client.Get <GetAllCohortResponse>
-                (string.Format("{0}/{1}/{2}/{3}/problems",
+                (string.Format("{0}/{1}/{2}/{3}/cohorts",
                   "http://localhost:8888/Cohort/", context, version, contractNumber));
 
             // Assert
@@ -35,13 +35,13 @@ namespace Phytel.API.DataDomain.Cohort.Services.Test
             string version = "v1";
             string contractNumber = "InHealth001";
             string context = "NG";
-            string problemID = "528aa03ad4332317acc50976";
+            string cohortID = "528aa03ad4332317acc50976";
             IRestClient client = new JsonServiceClient();
 
             // Act
             GetCohortResponse response = client.Get<GetCohortResponse>
-                (string.Format("{0}/{1}/{2}/{3}/problem/{4}",
-                  "http://localhost:8888/Cohort/", context, version, contractNumber, problemID));
+                (string.Format("{0}/{1}/{2}/{3}/cohort/{4}",
+                  "http://localhost:8888/Cohort/", context, version, contractNumber, cohortID));
 
             string actualValue = response.Cohort.SName;
             // Assert
