@@ -12,9 +12,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.Patient.Services
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.Patient.Test", "Patient.Tests\DataDomain.Patient.Test.csproj", "{EC134A5F-CB56-4196-BB4E-217D365A2534}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.CohortPatients.DTO", "..\..\..\Phytel.API.DataDomain.CohortPatient\Development\Current\CohortPatient.DTO\DataDomain.CohortPatients.DTO.csproj", "{037D090A-F888-40D8-A51A-01B19AFF2965}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 5
+		SccNumberOfProjects = 6
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = http://hillstfs2013:8080/tfs/phytel
 		SccProjectUniqueName0 = Patient.Services\\DataDomain.Patient.Service.csproj
@@ -42,6 +44,11 @@ Global
 		SccAuxPath4 = http://hillstfs2013:8080/tfs/phytel
 		SccLocalPath4 = Patient.Tests
 		SccProvider4 = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccProjectUniqueName5 = ..\\..\\..\\Phytel.API.DataDomain.CohortPatient\\Development\\Current\\CohortPatient.DTO\\DataDomain.CohortPatients.DTO.csproj
+		SccProjectName5 = ../../../Phytel.API.DataDomain.CohortPatient/Development/Current/CohortPatient.DTO
+		SccAuxPath5 = http://hillstfs2013:8080/tfs/phytel
+		SccLocalPath5 = ..\\..\\..\\Phytel.API.DataDomain.CohortPatient\\Development\\Current\\CohortPatient.DTO
+		SccProvider5 = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -68,6 +75,10 @@ Global
 		{EC134A5F-CB56-4196-BB4E-217D365A2534}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EC134A5F-CB56-4196-BB4E-217D365A2534}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EC134A5F-CB56-4196-BB4E-217D365A2534}.Release|Any CPU.Build.0 = Release|Any CPU
+		{037D090A-F888-40D8-A51A-01B19AFF2965}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{037D090A-F888-40D8-A51A-01B19AFF2965}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{037D090A-F888-40D8-A51A-01B19AFF2965}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{037D090A-F888-40D8-A51A-01B19AFF2965}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
