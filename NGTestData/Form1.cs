@@ -11,7 +11,7 @@ using System.Data.SqlClient;
 using Phytel.API.DataDomain.Patient.DTO;
 using Phytel.API.DataDomain.LookUp.DTO;
 using Phytel.API.DataDomain.PatientProblem.DTO;
-using Phytel.API.DataDomain.CohortPatients.DTO;
+using Phytel.API.DataDomain.CohortPatient.DTO;
 
 namespace NGTestData
 {
