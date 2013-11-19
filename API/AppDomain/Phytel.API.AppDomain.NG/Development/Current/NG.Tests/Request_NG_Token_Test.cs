@@ -88,10 +88,9 @@ namespace Phytel.API.AppDomain.NG.Services.Test
              //[Route("/{Context}/{Version}/{ContractNumber}/patientproblems/{PatientID}", "GET")]
             //[Route("/{Context}/{Version}/{ContractNumber}/patientproblems", "POST")]
             GetAllPatientProblemsResponse response = client.Post<GetAllPatientProblemsResponse>
-                (string.Format("{0}/{1}/{2}/{3}/patientproblems",
-                  "http://localhost:888/Nightingale/", context, version, contractNumber),
+                (string.Format("{0}/{1}/{2}/patientproblems",
+                  "http://localhost:888/Nightingale/", version, contractNumber),
                   new GetAllPatientProblemsRequest {
-                   Context = context,
                    ContractNumber = contractNumber,
                    Version = version,
                    Token = token,

@@ -4,8 +4,8 @@ using System.Collections.Generic;
 
 namespace Phytel.API.AppDomain.NG.DTO
 {
-    [Route("/{Context}/{Version}/{ContractNumber}/patientproblems/{PatientID}", "GET")]
-    [Route("/{Context}/{Version}/{ContractNumber}/patientproblems", "POST")]
+    [Route("/{Version}/{ContractNumber}/patientproblems/{PatientID}", "GET")]
+    [Route("/{Version}/{ContractNumber}/patientproblems", "POST")]
     public class GetAllPatientProblemsRequest : IAppDomainRequest
     {
         [ApiMember(Name = "PatientID", Description = "ID parameter", ParameterType = "property", DataType = "string", IsRequired = true)]
@@ -16,9 +16,6 @@ namespace Phytel.API.AppDomain.NG.DTO
 
         [ApiMember(Name = "Category", Description = "Category of the problem being requested", ParameterType = "property", DataType = "string", IsRequired = false)]
         public string Category { get; set; }
-
-        [ApiMember(Name = "Context", Description = "Product parameter will be defined in the route.", ParameterType = "property", DataType = "string", IsRequired = false)]
-        public string Context { get; set; }
 
         [ApiMember(Name = "ContractNumber", Description = "Contract parameter will be defined in the route.", ParameterType = "property", DataType = "string", IsRequired = false)]
         public string ContractNumber { get; set; }

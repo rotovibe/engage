@@ -21,12 +21,10 @@ namespace Phytel.API.AppDomain.NG.Test
             // Arrange
             string version = "v1";
             string contractNumber = "InHealth001";
-            string context = "NG";
             string token = "1234";
             NGManager ngManager = new NGManager();
             GetAllPatientProblemsRequest request = new GetAllPatientProblemsRequest
             {
-                Context = context,
                 ContractNumber = contractNumber,
                 Token = token,
                 Version = version,
@@ -47,12 +45,10 @@ namespace Phytel.API.AppDomain.NG.Test
             // Arrange
             string version = "v1";
             string contractNumber = "InHealth001";
-            string context = "NG";
             string token = "1234";
             NGManager ngManager = new NGManager();
             GetAllProblemsRequest request = new GetAllProblemsRequest
             {
-                Context = context,
                 ContractNumber = contractNumber,
                 Token = token,
                 Version = version

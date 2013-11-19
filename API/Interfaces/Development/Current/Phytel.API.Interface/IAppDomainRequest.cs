@@ -10,7 +10,6 @@ namespace Phytel.API.Interface
     {
         string Version { get; set; }
         string ContractNumber { get; set; }
-        string Context { get; set; }
         string Token { get; set; }
     }
 }

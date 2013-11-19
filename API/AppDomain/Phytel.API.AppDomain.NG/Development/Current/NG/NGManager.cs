@@ -32,7 +32,7 @@ namespace Phytel.API.AppDomain.NG
 
             Phytel.API.DataDomain.Patient.DTO.PatientResponse response = client.Get<Phytel.API.DataDomain.Patient.DTO.PatientResponse>(string.Format("{0}/{1}/{2}/{3}/patient/{4}",
                                                                                         DDPatientServiceURL,
-                                                                                        request.Context,
+                                                                                        "NG",
                                                                                         request.Version,
                                                                                         request.ContractNumber,
                                                                                         request.PatientID));
@@ -67,8 +67,8 @@ namespace Phytel.API.AppDomain.NG
             ///{Context}/{Version}/{ContractNumber}/patientproblems"
             Phytel.API.DataDomain.PatientProblem.DTO.GetAllPatientProblemResponse dataDomainResponse = client.Post<Phytel.API.DataDomain.PatientProblem.DTO.GetAllPatientProblemResponse>
                 (string.Format("{0}/{1}/{2}/{3}/patientproblems",
-                    DDPatientProblemServiceUrl, 
-                    request.Context, 
+                    DDPatientProblemServiceUrl,
+                    "NG", 
                     request.Version, 
                     request.ContractNumber),
                     new Phytel.API.DataDomain.PatientProblem.DTO.GetAllPatientProblemRequest
@@ -76,7 +76,7 @@ namespace Phytel.API.AppDomain.NG
                         PatientID = request.PatientID,
                         Category = request.Category,
                         Status = request.Status,
-                        Context = request.Context,
+                        Context = "NG",
                         Version = request.Version,
                         ContractNumber = request.ContractNumber
                     }
@@ -106,7 +106,7 @@ namespace Phytel.API.AppDomain.NG
 
             Phytel.API.DataDomain.LookUp.DTO.GetAllProblemResponse dataDomainResponse = client.Get<Phytel.API.DataDomain.LookUp.DTO.GetAllProblemResponse>(string.Format("{0}/{1}/{2}/{3}/problems",
                                                                                                             DDLookupServiceUrl,
-                                                                                                            request.Context,
+                                                                                                            "NG",
                                                                                                             request.Version,
                                                                                                             request.ContractNumber));
 
@@ -140,7 +140,7 @@ namespace Phytel.API.AppDomain.NG
             // call cohort data domain
             CohortPatientDetailsResponse qResponse = client.Get<CohortPatientDetailsResponse>(string.Format("{0}/{1}/{2}/{3}/CohortPatientDetails/{4}?Skip={5}&Take={6}",
                                                                                         DDCohortPatientServiceUrl,
-                                                                                        request.Context,
+                                                                                        "NG",
                                                                                         request.Version,
                                                                                         request.ContractNumber,
                                                                                         request.CohortID,
