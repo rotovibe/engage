@@ -46,7 +46,10 @@ namespace Phytel.API.DataDomain.LookUp
             GetProblemResponse problemResponse = null;
             using (ProblemMongoContext ctx = new ProblemMongoContext(_dbName))
             {
-                MEProblem meProblem = ctx.Problems.Collection.FindOneById(ObjectId.Parse(entityID));
+                List<IMongoQuery> queries = new List<IMongoQuery>();
+                queries.Add(Query.EQ(MEProblem.IdProperty, ObjectId.Parse(entityID)));
+                queries.Add(Query.EQ(MEProblem.ActiveProperty, true));
+                MEProblem meProblem = ctx.Problems.Collection.Find(Query.And(queries)).FirstOrDefault();
                 if (meProblem != null)
                 {
                     problemResponse = new GetProblemResponse();
@@ -68,7 +71,7 @@ namespace Phytel.API.DataDomain.LookUp
             List<Problem> problemList = null;
             using (ProblemMongoContext ctx = new ProblemMongoContext(_dbName))
             {
-                List<MEProblem> meProblems = ctx.Problems.Collection.FindAll().ToList();
+                List<MEProblem> meProblems = ctx.Problems.Collection.Find(Query.EQ(MEProblem.ActiveProperty, true)).ToList();
                 if (meProblems != null)
                 {
                     problemList = new List<Problem>();

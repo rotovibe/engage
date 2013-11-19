@@ -34,7 +34,7 @@ namespace Phytel.API.DataDomain.LookUp.Test
             GetAllProblemRequest request = new GetAllProblemRequest {  Context = context, ContractNumber = contractNumber, Version = version };
 
             // Act
-            GetAllProblemResponse response = LookUpDataManager.FindProblems(request);
+            GetAllProblemResponse response = LookUpDataManager.GetAllProblem(request);
 
             // Assert
             Assert.AreNotEqual(0, response.Problems.Count);

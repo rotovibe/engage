@@ -17,7 +17,7 @@ namespace Phytel.API.DataDomain.LookUp
             return response;
         }
 
-        public static GetAllProblemResponse FindProblems(GetAllProblemRequest request)
+        public static GetAllProblemResponse GetAllProblem(GetAllProblemRequest request)
         {
             GetAllProblemResponse response = new GetAllProblemResponse();
 
