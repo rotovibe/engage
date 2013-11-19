@@ -43,7 +43,7 @@ namespace Phytel.API.DataDomain.LookUp.DTO
 
         [BsonElement(DefaultLevelProperty)]
         [BsonIgnoreIfNull(true)]
-        public int DefaultLevel { get; set; }
+        public int? DefaultLevel { get; set; }
 
         [BsonElement(DefaultFeaturedProperty)]
         [BsonIgnoreIfNull(true)]
