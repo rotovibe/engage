@@ -8,12 +8,12 @@ namespace Phytel.API.DataDomain.PatientProblem.Service
 {
     public class PatientProblemService : ServiceStack.ServiceInterface.Service
     {
-        public GetAllPatientProblemResponse Post(GetAllPatientProblemRequest request)
+        public GetAllPatientProblemResponse Get(GetAllPatientProblemRequest request)
         {
             GetAllPatientProblemResponse response = new GetAllPatientProblemResponse();
             try
             {
-                response = DataPatientProblemManager.GetProblemsByPatientID(request);
+                response = DataPatientProblemManager.GetAllPatientProblem(request);
             }
             catch (Exception ex)
             {

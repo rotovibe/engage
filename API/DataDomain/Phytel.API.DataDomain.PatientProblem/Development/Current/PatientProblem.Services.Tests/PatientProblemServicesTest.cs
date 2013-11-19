@@ -10,27 +10,17 @@ namespace Phytel.API.DataDomain.PatientProblem.Service.Test
     public class PatientProblemServicesTest
     {
         [TestMethod]
-        public void GetPatientProblemByID_Test()
+        public void GetPatientProblem_Test()
         {
             // Arrange
             string version = "v1";
             string contractNumber = "InHealth001";
             string context = "NG";
-            string patientID = "527a933efe7a590ad417d3b0";
+            string patientID = "528bdccc072ef7071c2e22ae";
             IRestClient client = new JsonServiceClient();
 
             // Act
-            GetAllPatientProblemResponse response = client.Post<GetAllPatientProblemResponse>(string.Format("{0}/{1}/{2}/{3}/patientproblems", "http://localhost:8888/PatientProblem", context, version, contractNumber),
-                new GetAllPatientProblemRequest
-                {
-                    PatientID = patientID,
-                    Category = "",
-                    Status = "active",
-                    Context = context,
-                    Version = version,
-                    ContractNumber = contractNumber
-                }
-            as object);
+            GetAllPatientProblemResponse response = client.Get<GetAllPatientProblemResponse>(string.Format("{0}/{1}/{2}/{3}/patientproblems/{4}", "http://localhost:8888/PatientProblem", context, version, contractNumber, patientID));
 
            // Assert
             Assert.AreNotEqual(0, response.PatientProblems.Count);

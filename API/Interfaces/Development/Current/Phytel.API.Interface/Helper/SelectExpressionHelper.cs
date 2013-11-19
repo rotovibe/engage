@@ -30,6 +30,9 @@ namespace Phytel.API.Interface
                 case SelectExpressionType.NOTEQ:
                     query = Query.NE(fieldName, BsonValue.Create(ConvertToAppropriateType(value)));
                     break;
+                case SelectExpressionType.IN:
+                    query = Query.In(fieldName, ConvertToBsonValueList(value));
+                    break;
             }
             return query;
         }
@@ -67,7 +70,15 @@ namespace Phytel.API.Interface
                 case "System.Int32":
                     return Convert.ToInt32(p);
                 case "System.String":
-                    return p.ToString();
+                    ObjectId result;
+                    if (ObjectId.TryParse(p.ToString(), out result))
+                    {
+                        return result;
+                    }
+                    else
+                    {
+                        return p.ToString();
+                    }
                 case "System.Int16":
                     return Convert.ToInt16(p);
                 case "System.Int64":
@@ -77,6 +88,26 @@ namespace Phytel.API.Interface
                 default:
                     return p.ToString();
             }
+        }
+
+        /// <summary>
+        /// Converts the object to List of BsonValue.
+        /// </summary>
+        /// <param name="p">object to be converted.</param>
+        /// <returns>List of BsonValue</returns>
+        public static List<BsonValue> ConvertToBsonValueList(object p)
+        {
+            List<BsonValue> bsonValues = null;
+            string [] split = p.ToString().Split(new Char[] { ',' });
+            if (split.Count() > 0)
+            {
+                bsonValues = new List<BsonValue>();
+                foreach (string s in split)
+                {
+                    bsonValues.Add(BsonValue.Create(ConvertToAppropriateType(s)));
+                }
+            }
+            return bsonValues;
         }
     }
 }

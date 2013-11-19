@@ -42,7 +42,8 @@ namespace Phytel.API.Interface
         NOTEQ,
         LIKE,
         NOTLIKE,
-        STARTWITH
+        STARTWITH,
+        IN
     }
 
     public enum SelectExpressionGroupType

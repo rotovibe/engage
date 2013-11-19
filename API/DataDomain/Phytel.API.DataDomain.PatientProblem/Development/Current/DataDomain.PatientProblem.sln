@@ -2,21 +2,27 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
 VisualStudioVersion = 12.0.21005.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.PatientProblem.DTO", "PatientProblem.DTOs\DataDomain.PatientProblem.DTO.csproj", "{1B3148A8-FB57-4461-91BC-F1CD38A013B6}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.PatientProblem.DTO", "PatientProblem.DTOs\DataDomain.PatientProblem.DTO.csproj", "{F133E537-1D48-4A42-ABA9-5587E057F5B3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.PatientProblem.Services.Test", "PatientProblem.Services.Tests\DataDomain.PatientProblem.Services.Test.csproj", "{5D22373D-E432-4208-A737-E0BCA0567B5F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.PatientProblem.Services.Test", "PatientProblem.Services.Tests\DataDomain.PatientProblem.Services.Test.csproj", "{F6EF22D5-BD24-46B5-A9B0-3CE5BDDB5343}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.PatientProblem.Test", "PatientProblem.Tests\DataDomain.PatientProblem.Test.csproj", "{EC134A5F-CB56-4196-BB4E-217D365A2534}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.PatientProblem.Test", "PatientProblem.Tests\DataDomain.PatientProblem.Test.csproj", "{1FDE97CB-3E85-41FB-ABFA-A62720C99FCB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.PatientProblem", "ProblemProblem\DataDomain.PatientProblem.csproj", "{1536CD0A-6308-4DAF-8618-35BBA0816997}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.PatientProblem", "ProblemProblem\DataDomain.PatientProblem.csproj", "{AFD0F5B1-A29E-402C-958B-D6D82B4278E5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.PatientProblem.Service", "PatientProblem.Services\DataDomain.PatientProblem.Service.csproj", "{017DC6E8-FB93-4303-AAF9-52E2449F9A34}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.PatientProblem.Service", "PatientProblem.Services\DataDomain.PatientProblem.Service.csproj", "{43DE353A-4B53-4FB5-8013-0BDB37B848A2}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Phytel.API.Interface", "..\..\..\..\Interfaces\Development\Current\Phytel.API.Interface\Phytel.API.Interface.csproj", "{ABE948FB-247E-4955-B3AB-B7C93E10A542}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Phytel.Mongo", "..\..\..\..\..\..\Shared\PhytelServices\Development\Current\Phytel.Mongo\Phytel.Mongo.csproj", "{7C9E786C-E4F7-4382-BDE4-8DBF980EA013}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PhytelServices", "..\..\..\..\..\..\Shared\PhytelServices\Development\Current\PhytelServices\PhytelServices.csproj", "{D790F618-438B-4C39-ABE5-1346122273AC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.LookUp.DTO", "..\..\..\Phytel.API.DataDomain.LookUp\Development\Current\LookUp.DTO\DataDomain.LookUp.DTO.csproj", "{4885FE36-03DB-47B7-BE7E-33260943A9DC}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 6
+		SccNumberOfProjects = 9
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = http://hillstfs2013:8080/tfs/phytel
 		SccProjectUniqueName0 = PatientProblem.DTOs\\DataDomain.PatientProblem.DTO.csproj
@@ -49,36 +55,63 @@ Global
 		SccAuxPath5 = http://hillstfs2013:8080/tfs/phytel
 		SccLocalPath5 = ..\\..\\..\\..\\Interfaces\\Development\\Current\\Phytel.API.Interface
 		SccProvider5 = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccProjectUniqueName6 = ..\\..\\..\\..\\..\\..\\Shared\\PhytelServices\\Development\\Current\\Phytel.Mongo\\Phytel.Mongo.csproj
+		SccProjectName6 = ../../../../../../Shared/PhytelServices/Development/Current/Phytel.Mongo
+		SccAuxPath6 = http://hillstfs2013:8080/tfs/phytel
+		SccLocalPath6 = ..\\..\\..\\..\\..\\..\\Shared\\PhytelServices\\Development\\Current\\Phytel.Mongo
+		SccProvider6 = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccProjectUniqueName7 = ..\\..\\..\\..\\..\\..\\Shared\\PhytelServices\\Development\\Current\\PhytelServices\\PhytelServices.csproj
+		SccProjectName7 = ../../../../../../Shared/PhytelServices/Development/Current/PhytelServices
+		SccAuxPath7 = http://hillstfs2013:8080/tfs/phytel
+		SccLocalPath7 = ..\\..\\..\\..\\..\\..\\Shared\\PhytelServices\\Development\\Current\\PhytelServices
+		SccProvider7 = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccProjectUniqueName8 = ..\\..\\..\\Phytel.API.DataDomain.LookUp\\Development\\Current\\LookUp.DTO\\DataDomain.LookUp.DTO.csproj
+		SccProjectName8 = ../../../Phytel.API.DataDomain.LookUp/Development/Current/LookUp.DTO
+		SccAuxPath8 = http://hillstfs2013:8080/tfs/phytel
+		SccLocalPath8 = ..\\..\\..\\Phytel.API.DataDomain.LookUp\\Development\\Current\\LookUp.DTO
+		SccProvider8 = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{1B3148A8-FB57-4461-91BC-F1CD38A013B6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{1B3148A8-FB57-4461-91BC-F1CD38A013B6}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{1B3148A8-FB57-4461-91BC-F1CD38A013B6}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{1B3148A8-FB57-4461-91BC-F1CD38A013B6}.Release|Any CPU.Build.0 = Release|Any CPU
-		{5D22373D-E432-4208-A737-E0BCA0567B5F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{5D22373D-E432-4208-A737-E0BCA0567B5F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{5D22373D-E432-4208-A737-E0BCA0567B5F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{5D22373D-E432-4208-A737-E0BCA0567B5F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{EC134A5F-CB56-4196-BB4E-217D365A2534}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{EC134A5F-CB56-4196-BB4E-217D365A2534}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{EC134A5F-CB56-4196-BB4E-217D365A2534}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{EC134A5F-CB56-4196-BB4E-217D365A2534}.Release|Any CPU.Build.0 = Release|Any CPU
-		{1536CD0A-6308-4DAF-8618-35BBA0816997}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{1536CD0A-6308-4DAF-8618-35BBA0816997}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{1536CD0A-6308-4DAF-8618-35BBA0816997}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{1536CD0A-6308-4DAF-8618-35BBA0816997}.Release|Any CPU.Build.0 = Release|Any CPU
-		{017DC6E8-FB93-4303-AAF9-52E2449F9A34}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{017DC6E8-FB93-4303-AAF9-52E2449F9A34}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{017DC6E8-FB93-4303-AAF9-52E2449F9A34}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{017DC6E8-FB93-4303-AAF9-52E2449F9A34}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F133E537-1D48-4A42-ABA9-5587E057F5B3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F133E537-1D48-4A42-ABA9-5587E057F5B3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F133E537-1D48-4A42-ABA9-5587E057F5B3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F133E537-1D48-4A42-ABA9-5587E057F5B3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F6EF22D5-BD24-46B5-A9B0-3CE5BDDB5343}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F6EF22D5-BD24-46B5-A9B0-3CE5BDDB5343}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F6EF22D5-BD24-46B5-A9B0-3CE5BDDB5343}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F6EF22D5-BD24-46B5-A9B0-3CE5BDDB5343}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1FDE97CB-3E85-41FB-ABFA-A62720C99FCB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1FDE97CB-3E85-41FB-ABFA-A62720C99FCB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1FDE97CB-3E85-41FB-ABFA-A62720C99FCB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1FDE97CB-3E85-41FB-ABFA-A62720C99FCB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AFD0F5B1-A29E-402C-958B-D6D82B4278E5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AFD0F5B1-A29E-402C-958B-D6D82B4278E5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AFD0F5B1-A29E-402C-958B-D6D82B4278E5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AFD0F5B1-A29E-402C-958B-D6D82B4278E5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{43DE353A-4B53-4FB5-8013-0BDB37B848A2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{43DE353A-4B53-4FB5-8013-0BDB37B848A2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{43DE353A-4B53-4FB5-8013-0BDB37B848A2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{43DE353A-4B53-4FB5-8013-0BDB37B848A2}.Release|Any CPU.Build.0 = Release|Any CPU
 		{ABE948FB-247E-4955-B3AB-B7C93E10A542}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{ABE948FB-247E-4955-B3AB-B7C93E10A542}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{ABE948FB-247E-4955-B3AB-B7C93E10A542}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{ABE948FB-247E-4955-B3AB-B7C93E10A542}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7C9E786C-E4F7-4382-BDE4-8DBF980EA013}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7C9E786C-E4F7-4382-BDE4-8DBF980EA013}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7C9E786C-E4F7-4382-BDE4-8DBF980EA013}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7C9E786C-E4F7-4382-BDE4-8DBF980EA013}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D790F618-438B-4C39-ABE5-1346122273AC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D790F618-438B-4C39-ABE5-1346122273AC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D790F618-438B-4C39-ABE5-1346122273AC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D790F618-438B-4C39-ABE5-1346122273AC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4885FE36-03DB-47B7-BE7E-33260943A9DC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4885FE36-03DB-47B7-BE7E-33260943A9DC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4885FE36-03DB-47B7-BE7E-33260943A9DC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4885FE36-03DB-47B7-BE7E-33260943A9DC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

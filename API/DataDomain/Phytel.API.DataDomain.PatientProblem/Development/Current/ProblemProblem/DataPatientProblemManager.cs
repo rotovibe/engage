@@ -1,64 +1,99 @@
-using Phytel.API.DataDomain.PatientProblem.DTO;
-using System.Data.SqlClient;
-using System.Collections.Generic;
-using Phytel.API.Interface;
 using System;
+using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
+using Phytel.API.DataDomain.LookUp.DTO;
+using Phytel.API.DataDomain.PatientProblem.DTO;
+using Phytel.API.Interface;
+using ServiceStack.Service;
+using ServiceStack.ServiceClient.Web;
 
 namespace Phytel.API.DataDomain.PatientProblem
 {
     public static class DataPatientProblemManager
     {
-        public static GetAllPatientProblemResponse GetProblemsByPatientID(GetAllPatientProblemRequest request)
+        #region endpoint addresses
+        private static readonly string DDLookUpServiceUrl = ConfigurationManager.AppSettings["DDLookUpServiceUrl"];
+        private static readonly string ProblemType = "Chronic";
+        #endregion
+        
+        public static GetAllPatientProblemResponse GetAllPatientProblem(GetAllPatientProblemRequest request)
         {
+            string activeChronicProblemIDs = string.Empty;
+            GetAllPatientProblemResponse response = null;
 
-            GetAllPatientProblemResponse response = new GetAllPatientProblemResponse();
+            // Call LookUp data domain to fetch all active chronic problems.
+            IRestClient client = new JsonServiceClient();
+            SearchProblemResponse problemLookUpResponse = client.Post<SearchProblemResponse>
+                (string.Format("{0}/{1}/{2}/{3}/problems",
+                    DDLookUpServiceUrl,
+                    request.Context,
+                    request.Version,
+                    request.ContractNumber
+                    ),
+                new SearchProblemRequest {  
+                    Active = true,
+                    Type = ProblemType,
+                    Context = request.Context,
+                    Version = request.Version,
+                    ContractNumber = request.ContractNumber
+                } as object);
 
-            IPatientProblemRepository<PProb> repo = Phytel.API.DataDomain.PatientProblem.PatientProblemRepositoryFactory<PProb>.GetPatientProblemRepository(request.ContractNumber, request.Context);
+            if (problemLookUpResponse != null)
+            {
+                List<string> IDs = new List<string>();
+                List<Problem> problems = problemLookUpResponse.Problems;
+                foreach (Problem p in problems)
+                {
+                    IDs.Add(p.ProblemID);
+                }
+
+                activeChronicProblemIDs = string.Join(",", IDs);
             
-            ICollection<SelectExpression> selectExpressions = new List<SelectExpression>();
+                IPatientProblemRepository<PProb> repo = Phytel.API.DataDomain.PatientProblem.PatientProblemRepositoryFactory<PProb>.GetPatientProblemRepository(request.ContractNumber, request.Context);
+            
+                ICollection<SelectExpression> selectExpressions = new List<SelectExpression>();
 
-            // PatientID
-            SelectExpression patientSelectExpression = new SelectExpression();
-            patientSelectExpression.FieldName = MEPatientProblem.PatientIDProperty;
-            patientSelectExpression.Type = SelectExpressionType.EQ;
-            patientSelectExpression.Value = request.PatientID;
-            patientSelectExpression.NextExpressionType = SelectExpressionGroupType.AND;
-            patientSelectExpression.ExpressionOrder = 1;
-            patientSelectExpression.GroupID = 1;
-            selectExpressions.Add(patientSelectExpression);
+                // PatientID
+                SelectExpression patientSelectExpression = new SelectExpression();
+                patientSelectExpression.FieldName = MEPatientProblem.PatientIDProperty;
+                patientSelectExpression.Type = SelectExpressionType.EQ;
+                patientSelectExpression.Value = request.PatientID;
+                patientSelectExpression.NextExpressionType = SelectExpressionGroupType.AND;
+                patientSelectExpression.ExpressionOrder = 1;
+                patientSelectExpression.GroupID = 1;
+                selectExpressions.Add(patientSelectExpression);
+            
+                // DeleteFlag = false.
+                // This is not passed through the request object. But user story demands that only Problems set to DeleteFlag == false should be displayed to the end user.
+                SelectExpression deleteFlagSelectExpression = new SelectExpression();
+                deleteFlagSelectExpression.FieldName = MEPatientProblem.DeleteFlagProperty;
+                deleteFlagSelectExpression.Type = SelectExpressionType.EQ;
+                deleteFlagSelectExpression.Value = false;
+                deleteFlagSelectExpression.ExpressionOrder = 2;
+                deleteFlagSelectExpression.GroupID = 1;
+                selectExpressions.Add(deleteFlagSelectExpression);
 
-            // Status
-            if (!string.IsNullOrEmpty(request.Status))
-            {
-                SelectExpression statusSelectExpression = new SelectExpression();
-                statusSelectExpression.FieldName = MEPatientProblem.ActiveProperty;
-                statusSelectExpression.Type = SelectExpressionType.EQ;
-                statusSelectExpression.Value = request.Status;
-                statusSelectExpression.NextExpressionType = SelectExpressionGroupType.AND;
-                statusSelectExpression.ExpressionOrder = 2;
-                statusSelectExpression.GroupID = 1;
-                selectExpressions.Add(statusSelectExpression);
-            }
+                // Active Chronic problems
+                SelectExpression problemIDsSelectExpression = new SelectExpression();
+                problemIDsSelectExpression.FieldName = MEPatientProblem.ProblemIDProperty;
+                problemIDsSelectExpression.Type = SelectExpressionType.IN;
+                problemIDsSelectExpression.Value = activeChronicProblemIDs;
+                problemIDsSelectExpression.NextExpressionType = SelectExpressionGroupType.AND;
+                problemIDsSelectExpression.ExpressionOrder = 3;
+                problemIDsSelectExpression.GroupID = 1;
+                selectExpressions.Add(problemIDsSelectExpression);
 
-            // Featured.
-            // This is not passed through the request object. But user story demands that only Problems set to Featured == true should be displayed to the end user.
-            SelectExpression displaySelectExpression = new SelectExpression();
-            displaySelectExpression.FieldName = MEPatientProblem.FeaturedProperty;
-            displaySelectExpression.Type = SelectExpressionType.EQ;
-            displaySelectExpression.Value = true;
-            displaySelectExpression.ExpressionOrder = 4;
-            displaySelectExpression.GroupID = 1;
-            selectExpressions.Add(displaySelectExpression);
+                APIExpression apiExpression = new APIExpression();
+                apiExpression.Expressions = selectExpressions;
 
-            APIExpression apiExpression = new APIExpression();
-            apiExpression.Expressions = selectExpressions;
+                Tuple<string, IQueryable<Phytel.API.DataDomain.PatientProblem.DTO.PProb>> patientProblems = repo.Select(apiExpression);
 
-            Tuple<string, IQueryable<Phytel.API.DataDomain.PatientProblem.DTO.PProb>> problems = repo.Select(apiExpression);
-
-            if (problems != null)
-            {
-                response.PatientProblems = problems.Item2.ToList();
+                if (patientProblems != null)
+                {
+                    response = new GetAllPatientProblemResponse();
+                    response.PatientProblems = patientProblems.Item2.ToList();
+                }
             }
             return response;
         }
