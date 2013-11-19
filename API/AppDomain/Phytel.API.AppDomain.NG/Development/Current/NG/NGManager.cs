@@ -22,10 +22,11 @@ namespace Phytel.API.AppDomain.NG
         protected static readonly string DDCohortPatientServiceUrl = ConfigurationManager.AppSettings["DDCohortPatientServiceUrl"];
         #endregion
 
-        public NG.DTO.GetPatientResponse GetPatientByID(NG.DTO.GetPatientRequest request)
+        #region Patient Requests
+        public NG.DTO.GetPatientResponse GetPatient(NG.DTO.GetPatientRequest request)
         {
             NG.DTO.GetPatientResponse pResponse = new NG.DTO.GetPatientResponse();
-
+            
             //Execute call(s) to Patient Data Domain
             IRestClient client = new JsonServiceClient();
 
@@ -35,26 +36,27 @@ namespace Phytel.API.AppDomain.NG
                                                                                         request.Version,
                                                                                         request.ContractNumber,
                                                                                         request.PatientID));
-            pResponse.FirstName = response.FirstName;
-            pResponse.LastName = response.LastName;
-            pResponse.PatientID = response.PatientID;
-            pResponse.DOB = NGUtils.IsDateValid(response.DOB) ? response.DOB : string.Empty;
-            pResponse.Gender = response.Gender;
-            pResponse.MiddleName = response.MiddleName;
-            pResponse.Suffix = response.Suffix;
-            pResponse.PreferredName = response.PreferredName;
+            if (response != null)
+            {
+                pResponse.Patient = new Patient
+                {
+                    FirstName = response.FirstName,
+                    LastName = response.LastName,
+                    PatientID = response.PatientID,
+                    DOB = NGUtils.IsDateValid(response.DOB) ? response.DOB : string.Empty,
+                    Gender = response.Gender,
+                    MiddleName = response.MiddleName,
+                    Suffix = response.Suffix,
+                    PreferredName = response.PreferredName
+                };
+            }
 
             //SendAuditDispatch();
 
             return pResponse;
         }
 
-        /// <summary>
-        ///     Gets all active chronic problems for a patient
-        /// </summary>
-        /// <param name="request">PatientProblemRequest object</param>
-        /// <returns>PatientProblem object</returns>
-        public List<Phytel.API.AppDomain.NG.DTO.PatientProblem> GetProblemsByPatientID(Phytel.API.AppDomain.NG.DTO.GetAllPatientProblemRequest request)
+        public List<NG.DTO.PatientProblem> GetPatientProblems(NG.DTO.GetAllPatientProblemsRequest request)
         {
             if (string.IsNullOrEmpty(request.PatientID))
                 throw new ArgumentException("PatientID is null or empty.");
@@ -93,8 +95,10 @@ namespace Phytel.API.AppDomain.NG
 
             return response;
         }
+        #endregion
 
-        public List<ProblemLookUp> GetProblems(GetAllProblemLookUpRequest request)
+        #region Problem Requests
+        public List<ProblemLookUp> GetProblems(GetAllProblemsRequest request)
         {
             List<ProblemLookUp> response = new List<ProblemLookUp>();
 
@@ -119,8 +123,10 @@ namespace Phytel.API.AppDomain.NG
             return response;
         }
 
+        #endregion
 
-        public List<Phytel.API.AppDomain.NG.DTO.GetAllCohortResponse> GetCohorts(Phytel.API.AppDomain.NG.DTO.GetAllCohortRequest request)
+        #region Cohort Requests
+        public List<Phytel.API.AppDomain.NG.DTO.GetAllCohortsResponse> GetCohorts(Phytel.API.AppDomain.NG.DTO.GetAllCohortsRequest request)
         {
             throw new NotImplementedException();
         }
@@ -141,9 +147,12 @@ namespace Phytel.API.AppDomain.NG
                                                                                         request.Skip,
                                                                                         request.Take));
 
+            //take qResponse Patient details and map them to "Patient" in the GetCohortPatientsResponse
+
             //SendAuditDispatch();
 
             return pResponse;
         }
+        #endregion
     }
 }

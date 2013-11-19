@@ -7,7 +7,7 @@ using ServiceStack.ServiceInterface.ServiceModel;
 
 namespace Phytel.API.AppDomain.NG.DTO
 {
-    public class GetAllProblemLookUpResponse
+    public class GetAllProblemsResponse
     {
         public List<ProblemLookUp> Problems { get; set; }
         public ResponseStatus Status { get; set; }

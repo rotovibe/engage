@@ -24,7 +24,7 @@ namespace Phytel.API.AppDomain.NG.Test
             string context = "NG";
             string token = "1234";
             NGManager ngManager = new NGManager();
-            GetAllPatientProblemRequest request = new GetAllPatientProblemRequest
+            GetAllPatientProblemsRequest request = new GetAllPatientProblemsRequest
             {
                 Context = context,
                 ContractNumber = contractNumber,
@@ -35,7 +35,7 @@ namespace Phytel.API.AppDomain.NG.Test
                 PatientID = "527a933efe7a590ad417d3b0"
             };
             // Act
-            List<PatientProblem> response = ngManager.GetProblemsByPatientID(request);
+            List<PatientProblem> response = ngManager.GetPatientProblems(request);
 
             //Assert
             Assert.IsTrue(response.Count > 0);
@@ -50,7 +50,7 @@ namespace Phytel.API.AppDomain.NG.Test
             string context = "NG";
             string token = "1234";
             NGManager ngManager = new NGManager();
-            GetAllProblemLookUpRequest request = new GetAllProblemLookUpRequest
+            GetAllProblemsRequest request = new GetAllProblemsRequest
             {
                 Context = context,
                 ContractNumber = contractNumber,

@@ -27,26 +27,32 @@ namespace Phytel.API.AppDomain.NG
             List<GetPatientResponse> pts = new List<GetPatientResponse>();
             pts.Add(new GetPatientResponse
             {
-                DOB = "09/12/1993",
-                FirstName = "Oscar",
-                Gender = "M",
-                LastName = "DeLahoya",
-                MiddleName = "Denni",
-                PatientID = Guid.NewGuid().ToString(),
-                PreferredName = "Punchy",
-                Suffix = "Mr."
+                Patient = new Patient
+                {
+                    DOB = "09/12/1993",
+                    FirstName = "Oscar",
+                    Gender = "M",
+                    LastName = "DeLahoya",
+                    MiddleName = "Denni",
+                    PatientID = Guid.NewGuid().ToString(),
+                    PreferredName = "Punchy",
+                    Suffix = "Mr."
+                }
             });
 
             pts.Add(new GetPatientResponse
             {
-                DOB = "02/16/1980",
-                FirstName = "Jenny",
-                Gender = "F",
-                LastName = "Greer",
-                MiddleName = "Irene",
-                PatientID = Guid.NewGuid().ToString(),
-                PreferredName = "Jen",
-                Suffix = "Mr."
+                Patient = new Patient
+                {
+                    DOB = "02/16/1980",
+                    FirstName = "Jenny",
+                    Gender = "F",
+                    LastName = "Greer",
+                    MiddleName = "Irene",
+                    PatientID = Guid.NewGuid().ToString(),
+                    PreferredName = "Jen",
+                    Suffix = "Mr."
+                }
             });
 
             return pts;

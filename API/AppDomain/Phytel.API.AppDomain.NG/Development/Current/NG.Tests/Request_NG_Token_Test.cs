@@ -31,10 +31,10 @@ namespace Phytel.API.AppDomain.NG.Services.Test
             GetPatientResponse response = client.Post<GetPatientResponse>("http://localhost:888/Nightingale/v1/NG/InHealth001/patient",
                 new GetPatientRequest { PatientID = patientID } as object);
 
-            lnsampleValue = response.LastName;
-            fnsampleValue = response.FirstName;
-            gnsampleValue = response.Gender;
-            dobsampleValue = response.DOB;
+            lnsampleValue = response.Patient.LastName;
+            fnsampleValue = response.Patient.FirstName;
+            gnsampleValue = response.Patient.Gender;
+            dobsampleValue = response.Patient.DOB;
 
             Assert.AreEqual(lnControlValue, lnsampleValue);
             Assert.AreEqual(fnControlValue, fnsampleValue);
@@ -62,8 +62,8 @@ namespace Phytel.API.AppDomain.NG.Services.Test
             GetPatientResponse response = client.Post<GetPatientResponse>("http://localhost:888/v1/NG/InHealth001/patient",
                 new GetPatientRequest { PatientID = patientID, Token = token } as object);
 
-            lnsampleValue = response.LastName;
-            fnsampleValue = response.FirstName;
+            lnsampleValue = response.Patient.LastName;
+            fnsampleValue = response.Patient.FirstName;
 
             Assert.AreEqual(lnControlValue, lnsampleValue);
             Assert.AreEqual(fnControlValue, fnsampleValue);
@@ -87,10 +87,10 @@ namespace Phytel.API.AppDomain.NG.Services.Test
             // Act
              //[Route("/{Context}/{Version}/{ContractNumber}/patientproblems/{PatientID}", "GET")]
             //[Route("/{Context}/{Version}/{ContractNumber}/patientproblems", "POST")]
-            GetAllPatientProblemResponse response = client.Post<GetAllPatientProblemResponse>
+            GetAllPatientProblemsResponse response = client.Post<GetAllPatientProblemsResponse>
                 (string.Format("{0}/{1}/{2}/{3}/patientproblems",
                   "http://localhost:888/Nightingale/", context, version, contractNumber),
-                  new GetAllPatientProblemRequest {
+                  new GetAllPatientProblemsRequest {
                    Context = context,
                    ContractNumber = contractNumber,
                    Version = version,
@@ -122,7 +122,7 @@ namespace Phytel.API.AppDomain.NG.Services.Test
             JsonServiceClient.HttpWebRequestFilter = x => x.Headers.Add(string.Format("APIToken: {0}", token));
             // Act
             //[Route("/{Context}/{Version}/{ContractNumber}/problemslookup", 
-            GetAllProblemLookUpResponse response = client.Get<GetAllProblemLookUpResponse>
+            GetAllProblemsResponse response = client.Get<GetAllProblemsResponse>
                 (string.Format("{0}/{1}/{2}/{3}/problemslookup",
                   "http://localhost:888/Nightingale/", context, version, contractNumber));
 

@@ -17,7 +17,7 @@ namespace Phytel.API.AppDomain.NG.Service
                 //request.Token = base.Request.Headers["APIToken"] as string;
                 bool result = ngm.IsUserValidated(request.Version, request.Token);
                 if (result)
-                    response = ngm.GetPatientByID(request);
+                    response = ngm.GetPatient(request);
                 else
                     throw new UnauthorizedAccessException();
             }
@@ -40,7 +40,7 @@ namespace Phytel.API.AppDomain.NG.Service
                 //request.Token = base.Request.Headers["APIToken"] as string;
                 bool result = ngm.IsUserValidated(request.Version, request.Token);
                 if (result)
-                    response = ngm.GetPatientByID(request);
+                    response = ngm.GetPatient(request);
                 else
                     throw new UnauthorizedAccessException();
             }
@@ -58,16 +58,16 @@ namespace Phytel.API.AppDomain.NG.Service
         /// </summary>
         /// <param name="request">PatientProblemResponse object</param>
         /// <returns>PatientProblemResponse object</returns>
-        public GetAllPatientProblemResponse Get(GetAllPatientProblemRequest request)
+        public GetAllPatientProblemsResponse Get(GetAllPatientProblemsRequest request)
         {
-            GetAllPatientProblemResponse response = new GetAllPatientProblemResponse();
+            GetAllPatientProblemsResponse response = new GetAllPatientProblemsResponse();
             try
             {
                 NGManager ngm = new NGManager();
 
                 bool result = ngm.IsUserValidated(request.Version, request.Token);
                 if (result)
-                    response.PatientProblems = ngm.GetProblemsByPatientID(request);
+                    response.PatientProblems = ngm.GetPatientProblems(request);
                 else
                     throw new UnauthorizedAccessException();
             }
@@ -85,16 +85,16 @@ namespace Phytel.API.AppDomain.NG.Service
         /// </summary>
         /// <param name="request">PatientProblemResponse object</param>
         /// <returns>PatientProblemResponse object</returns>
-        public GetAllPatientProblemResponse POST(GetAllPatientProblemRequest request)
+        public GetAllPatientProblemsResponse POST(GetAllPatientProblemsRequest request)
         {
-            GetAllPatientProblemResponse response = new GetAllPatientProblemResponse();
+            GetAllPatientProblemsResponse response = new GetAllPatientProblemsResponse();
             try
             {
                 NGManager ngm = new NGManager();
 
                 bool result = ngm.IsUserValidated(request.Version, request.Token);
                 if (result)
-                    response.PatientProblems = ngm.GetProblemsByPatientID(request);
+                    response.PatientProblems = ngm.GetPatientProblems(request);
                 else
                     throw new UnauthorizedAccessException();
             }
@@ -107,9 +107,9 @@ namespace Phytel.API.AppDomain.NG.Service
             return response;
         }
 
-        public GetAllProblemLookUpResponse Get(GetAllProblemLookUpRequest request)
+        public GetAllProblemsResponse Get(GetAllProblemsRequest request)
         {
-            GetAllProblemLookUpResponse response = new GetAllProblemLookUpResponse();
+            GetAllProblemsResponse response = new GetAllProblemsResponse();
             try
             {
                 NGManager ngm = new NGManager();
@@ -129,9 +129,9 @@ namespace Phytel.API.AppDomain.NG.Service
             return response;
         }
 
-        public GetAllCohortResponse Post(GetAllCohortRequest request)
+        public GetAllCohortsResponse Post(GetAllCohortsRequest request)
         {
-            GetAllCohortResponse response = new GetAllCohortResponse();
+            GetAllCohortsResponse response = new GetAllCohortsResponse();
             try
             {
                 NGManager ngm = new NGManager();
