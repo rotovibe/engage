@@ -74,8 +74,6 @@ namespace Phytel.API.AppDomain.NG
                     new Phytel.API.DataDomain.PatientProblem.DTO.GetAllPatientProblemRequest
                     {
                         PatientID = request.PatientID,
-                        Category = request.Category,
-                        Status = request.Status,
                         Context = "NG",
                         Version = request.Version,
                         ContractNumber = request.ContractNumber
@@ -126,9 +124,28 @@ namespace Phytel.API.AppDomain.NG
         #endregion
 
         #region Cohort Requests
-        public List<Phytel.API.AppDomain.NG.DTO.GetAllCohortsResponse> GetCohorts(Phytel.API.AppDomain.NG.DTO.GetAllCohortsRequest request)
+        public List<Phytel.API.AppDomain.NG.DTO.Cohort> GetCohorts(GetAllCohortsRequest request)
         {
-            throw new NotImplementedException();
+            List<Phytel.API.AppDomain.NG.DTO.Cohort> response = new List<Phytel.API.AppDomain.NG.DTO.Cohort>();
+
+            IRestClient client = new JsonServiceClient();
+
+            Phytel.API.DataDomain.Cohort.DTO.GetAllCohortResponse dataDomainResponse = client.Get<Phytel.API.DataDomain.Cohort.DTO.GetAllCohortResponse>(string.Format("{0}/{1}/{2}/{3}/Cohorts",
+                                                                                                            "http://localhost:8888/Cohort",//DDCohortServiceUrl,
+                                                                                                            "NG",
+                                                                                                            request.Version,
+                                                                                                            request.ContractNumber));
+
+            List<Phytel.API.DataDomain.Cohort.DTO.Cohort> cohorts = dataDomainResponse.Cohorts;
+
+            foreach(Phytel.API.DataDomain.Cohort.DTO.Cohort c in cohorts)
+            {
+                Phytel.API.AppDomain.NG.DTO.Cohort cohort = new Phytel.API.AppDomain.NG.DTO.Cohort();
+                cohort.ID = c.ID;
+                cohort.SName = c.SName;
+                response.Add(cohort);
+            }
+            return response;
         }
 
         public GetCohortPatientsResponse GetCohortPatients(GetCohortPatientsRequest request)

@@ -28,9 +28,7 @@ namespace Phytel.API.AppDomain.NG.Test
                 ContractNumber = contractNumber,
                 Token = token,
                 Version = version,
-                Category = "Chronic",
-                Status = "Active",
-                PatientID = "527a933efe7a590ad417d3b0"
+                PatientID = "528bdccc072ef7071c2e22ae"
             };
             // Act
             List<PatientProblem> response = ngManager.GetPatientProblems(request);
@@ -55,6 +53,27 @@ namespace Phytel.API.AppDomain.NG.Test
             };
             // Act
             List<ProblemLookUp> response = ngManager.GetProblems(request);
+
+            //Assert
+            Assert.IsTrue(response.Count > 0);
+        }
+
+        [TestMethod]
+        public void GetAllCohorts_Test()
+        {
+            // Arrange
+            string version = "v1";
+            string contractNumber = "InHealth001";
+            string token = "1234";
+            NGManager ngManager = new NGManager();
+            GetAllCohortsRequest request = new GetAllCohortsRequest
+            {
+                ContractNumber = contractNumber,
+                Token = token,
+                Version = version
+            };
+            // Act
+            List<Cohort> response = ngManager.GetCohorts(request);
 
             //Assert
             Assert.IsTrue(response.Count > 0);

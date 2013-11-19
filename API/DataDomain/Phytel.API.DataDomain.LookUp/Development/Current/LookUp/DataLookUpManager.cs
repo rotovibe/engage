@@ -42,17 +42,14 @@ namespace Phytel.API.DataDomain.LookUp
             ICollection<SelectExpression> selectExpressions = new List<SelectExpression>();
 
             // Active property
-            if(request.Active !=  null)
-            {
-                SelectExpression activeSelectExpression = new SelectExpression();
-                activeSelectExpression.FieldName = MEProblem.ActiveProperty;
-                activeSelectExpression.Type = SelectExpressionType.EQ;
-                activeSelectExpression.Value = request.Active;
-                activeSelectExpression.NextExpressionType = SelectExpressionGroupType.AND;
-                activeSelectExpression.ExpressionOrder = 1;
-                activeSelectExpression.GroupID = 1;
-                selectExpressions.Add(activeSelectExpression);
-            }
+            SelectExpression activeSelectExpression = new SelectExpression();
+            activeSelectExpression.FieldName = MEProblem.ActiveProperty;
+            activeSelectExpression.Type = SelectExpressionType.EQ;
+            activeSelectExpression.Value = request.Active;
+            activeSelectExpression.NextExpressionType = SelectExpressionGroupType.AND;
+            activeSelectExpression.ExpressionOrder = 1;
+            activeSelectExpression.GroupID = 1;
+            selectExpressions.Add(activeSelectExpression);
 
             // Type
             if (!string.IsNullOrEmpty(request.Type))

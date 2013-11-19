@@ -77,28 +77,14 @@ namespace Phytel.API.AppDomain.NG.Services.Test
             // Arrange
             string version = "v1";
             string contractNumber = "InHealth001";
-            string context = "NG";
             string token = "1234";
-            string category = "Chronic";
-            string status = "Active";
-            string patientID = null;// "527a933efe7a590ad417d3b0";
+            string patientID = "528bdccc072ef7071c2e22ae";
             IRestClient client = new JsonServiceClient();
 
-            // Act
-             //[Route("/{Context}/{Version}/{ContractNumber}/patientproblems/{PatientID}", "GET")]
-            //[Route("/{Context}/{Version}/{ContractNumber}/patientproblems", "POST")]
-            GetAllPatientProblemsResponse response = client.Post<GetAllPatientProblemsResponse>
-                (string.Format("{0}/{1}/{2}/patientproblems",
-                  "http://localhost:888/Nightingale/", version, contractNumber),
-                  new GetAllPatientProblemsRequest {
-                   ContractNumber = contractNumber,
-                   Version = version,
-                   Token = token,
-                   Category = category,
-                   Status = status,
-                   PatientID = patientID
-                  } 
-                  as object
+            JsonServiceClient.HttpWebRequestFilter = x => x.Headers.Add(string.Format("APIToken: {0}", token));
+            GetAllPatientProblemsResponse response = client.Get<GetAllPatientProblemsResponse>
+                (string.Format("{0}/{1}/{2}/patientproblems/{PatientID}",
+                  "http://localhost:888/Nightingale/", version, contractNumber, patientID)
                   );
 
             // Assert
