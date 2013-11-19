@@ -35,10 +35,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="MongoDB.Bson">
-      <HintPath>..\References\MongoDB.Bson.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\Shared\PhytelServices\Development\Current\References\MongoDB.Bson.dll</HintPath>
     </Reference>
     <Reference Include="MongoDB.Driver">
-      <HintPath>..\References\MongoDB.Driver.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\Shared\PhytelServices\Development\Current\References\MongoDB.Driver.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />

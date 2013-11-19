@@ -48,7 +48,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="PatientDetailsRequest.cs" />
     <Compile Include="PatientListRequest.cs" />
+    <Compile Include="PatientDetailsResponse.cs" />
     <Compile Include="PatientRequest.cs" />
     <Compile Include="PatientListResponse.cs" />
     <Compile Include="PatientResponse.cs" />

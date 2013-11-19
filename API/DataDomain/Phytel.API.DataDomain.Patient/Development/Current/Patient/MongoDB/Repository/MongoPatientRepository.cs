@@ -78,6 +78,44 @@ namespace Phytel.API.DataDomain.Patient
             //    Query.EQ(MEPatient.LastNameProperty, "Tony"));
         }
 
+        public PatientDetailsResponse Select(string[] patientIds)
+        {
+            BsonValue[] bsv = new BsonValue[patientIds.Length];
+            for (int i = 0; i < patientIds.Length; i++)
+            {
+                bsv[i] = ObjectId.Parse(patientIds[i]);
+            }
+
+            IMongoQuery query = Query.In("_id", bsv);
+            List<MEPatient> pr = null;
+            List<PatientResponse> pResp = new List<PatientResponse>();
+            using (PatientMongoContext ctx = new PatientMongoContext(_dbName))
+            {
+                pr = ctx.Patients.Collection.Find(query).ToList();
+                // convert to a PatientDetailsResponse
+                foreach (MEPatient mp in pr)
+                {
+                    pResp.Add(new PatientResponse
+                    {
+                        PreferredName = mp.PreferredName,
+                        DOB = mp.DOB,
+                        FirstName = mp.FirstName,
+                        Gender = mp.Gender,
+                        LastName = mp.LastName,
+                        MiddleName = mp.MiddleName,
+                        PatientID = mp.DisplayPatientSystemID,
+                        Suffix = mp.Suffix,
+                        Version = mp.Version
+                    });
+                }
+            }
+
+            PatientDetailsResponse pdResponse = new PatientDetailsResponse();
+            pdResponse.Patients = pResp;
+
+            return pdResponse;
+        }
+
         public IQueryable<T> SelectAll()
         {
             throw new NotImplementedException();

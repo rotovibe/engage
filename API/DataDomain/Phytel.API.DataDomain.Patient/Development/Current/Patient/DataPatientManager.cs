@@ -21,7 +21,16 @@ namespace Phytel.API.DataDomain.Patient
             PatientListResponse result = new PatientListResponse();
 
             IPatientRepository<PatientListResponse> repo = PatientRepositoryFactory<PatientListResponse>.GetPatientRepository(request.ContractNumber, request.Context);
+            
+            return result;
+        }
 
+        public static PatientDetailsResponse GetPatientDetailsList(PatientDetailsRequest request)
+        {
+            PatientDetailsResponse result = new PatientDetailsResponse();
+            IPatientRepository<PatientDetailsResponse> repo = PatientRepositoryFactory<PatientDetailsResponse>.GetPatientRepository(request.ContractNumber, request.Context);
+            repo.Select(request.PatientIds);
+            
             return result;
         }
     }

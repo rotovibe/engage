@@ -28,5 +28,17 @@ namespace Phytel.API.AppDomain.NG.Services.Test
                 new CohortRequest { } as object);
 
         }
+
+        [TestMethod]
+        public void Get_Pateints_In_Cohort_Test()
+        {
+            string token = "52792478fe7a592338e990a0";
+            string patientID = "527a933efe7a590ad417d3b0";
+
+            IRestClient client = new JsonServiceClient();
+
+            GetCohortPatientsResponse response = client.Get<GetCohortPatientsResponse>("http://localhost:888/Nightingale/v1/NG/Contract/InHealth001/cohort/1");
+        }
+
     }
 }

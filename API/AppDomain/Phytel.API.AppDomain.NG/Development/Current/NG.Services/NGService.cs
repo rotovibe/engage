@@ -158,5 +158,32 @@ namespace Phytel.API.AppDomain.NG.Service
             return response;
         }
 
+        public GetCohortPatientsResponse Get(GetCohortPatientsRequest request)
+        {
+            GetCohortPatientsResponse response = new GetCohortPatientsResponse();
+            try
+            {
+                NGManager ngm = new NGManager();
+
+                bool result = ngm.IsUserValidated(request.Version, request.Token);
+                if (result)
+                {
+                    // implement
+                    //response = ngm.GetCohorts(request);
+                    //response.Patients = NGUtils.PopulateCohortPatientStubData();
+                    response = ngm.GetCohortPatients(request);
+                }
+                else
+                    throw new UnauthorizedAccessException();
+            }
+            catch (Exception ex)
+            {
+                //TODO: Log this to C3 database via ASE
+                base.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                response.Status = new ServiceStack.ServiceInterface.ServiceModel.ResponseStatus("Exception", ex.Message);
+            }
+            return response;
+        }
+
     }
 }

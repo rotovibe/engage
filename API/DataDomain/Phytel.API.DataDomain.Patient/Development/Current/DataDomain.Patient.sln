@@ -2,42 +2,42 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
 VisualStudioVersion = 12.0.21005.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Patient.Services", "Patient.Services\Patient.Services.csproj", "{29DFC6F8-F09F-4881-8A94-43C4229A5583}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.Patient.Service", "Patient.Services\DataDomain.Patient.Service.csproj", "{017DC6E8-FB93-4303-AAF9-52E2449F9A34}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Patient.Tests", "Patient.Tests\Patient.Tests.csproj", "{79CB7A3A-6D69-45F8-964F-D9609383B22A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.Patient", "Patient\DataDomain.Patient.csproj", "{1536CD0A-6308-4DAF-8618-35BBA0816997}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Patient", "Patient\Patient.csproj", "{F1A478D1-DCA1-4BE6-AE83-E0ACDD4FDFFD}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.Patient.DTO", "Patient.DTOs\DataDomain.Patient.DTO.csproj", "{1B3148A8-FB57-4461-91BC-F1CD38A013B6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Patient.DTOs", "Patient.DTOs\Patient.DTOs.csproj", "{1C2C63A1-4246-4EC9-BAD1-C00E9ECD85F6}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.Patient.Services.Test", "Patient.Services.Tests\DataDomain.Patient.Services.Test.csproj", "{5D22373D-E432-4208-A737-E0BCA0567B5F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Patient.Services.Tests", "Patient.Services.Tests\Patient.Services.Tests.csproj", "{9F763B50-9E2B-426F-ACFB-27F3D3F255D5}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.Patient.Test", "Patient.Tests\DataDomain.Patient.Test.csproj", "{EC134A5F-CB56-4196-BB4E-217D365A2534}"
 EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
 		SccNumberOfProjects = 5
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = http://hillstfs2013:8080/tfs/phytel
-		SccProjectUniqueName0 = Patient.Services\\Patient.Services.csproj
+		SccProjectUniqueName0 = Patient.Services\\DataDomain.Patient.Service.csproj
 		SccProjectName0 = Patient.Services
 		SccAuxPath0 = http://hillstfs2013:8080/tfs/phytel
 		SccLocalPath0 = Patient.Services
 		SccProvider0 = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccProjectUniqueName1 = Patient\\Patient.csproj
+		SccProjectUniqueName1 = Patient\\DataDomain.Patient.csproj
 		SccProjectName1 = Patient
 		SccAuxPath1 = http://hillstfs2013:8080/tfs/phytel
 		SccLocalPath1 = Patient
 		SccProvider1 = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccProjectUniqueName2 = Patient.DTOs\\Patient.DTOs.csproj
+		SccProjectUniqueName2 = Patient.DTOs\\DataDomain.Patient.DTO.csproj
 		SccProjectName2 = Patient.DTOs
 		SccAuxPath2 = http://hillstfs2013:8080/tfs/phytel
 		SccLocalPath2 = Patient.DTOs
 		SccProvider2 = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccProjectUniqueName3 = Patient.Services.Tests\\Patient.Services.Tests.csproj
+		SccProjectUniqueName3 = Patient.Services.Tests\\DataDomain.Patient.Services.Test.csproj
 		SccProjectName3 = Patient.Services.Tests
 		SccAuxPath3 = http://hillstfs2013:8080/tfs/phytel
 		SccLocalPath3 = Patient.Services.Tests
 		SccProvider3 = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccProjectUniqueName4 = Patient.Tests\\Patient.Tests.csproj
+		SccProjectUniqueName4 = Patient.Tests\\DataDomain.Patient.Test.csproj
 		SccProjectName4 = Patient.Tests
 		SccAuxPath4 = http://hillstfs2013:8080/tfs/phytel
 		SccLocalPath4 = Patient.Tests
@@ -48,26 +48,26 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{29DFC6F8-F09F-4881-8A94-43C4229A5583}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{29DFC6F8-F09F-4881-8A94-43C4229A5583}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{29DFC6F8-F09F-4881-8A94-43C4229A5583}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{29DFC6F8-F09F-4881-8A94-43C4229A5583}.Release|Any CPU.Build.0 = Release|Any CPU
-		{79CB7A3A-6D69-45F8-964F-D9609383B22A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{79CB7A3A-6D69-45F8-964F-D9609383B22A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{79CB7A3A-6D69-45F8-964F-D9609383B22A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{79CB7A3A-6D69-45F8-964F-D9609383B22A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F1A478D1-DCA1-4BE6-AE83-E0ACDD4FDFFD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F1A478D1-DCA1-4BE6-AE83-E0ACDD4FDFFD}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F1A478D1-DCA1-4BE6-AE83-E0ACDD4FDFFD}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F1A478D1-DCA1-4BE6-AE83-E0ACDD4FDFFD}.Release|Any CPU.Build.0 = Release|Any CPU
-		{1C2C63A1-4246-4EC9-BAD1-C00E9ECD85F6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{1C2C63A1-4246-4EC9-BAD1-C00E9ECD85F6}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{1C2C63A1-4246-4EC9-BAD1-C00E9ECD85F6}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{1C2C63A1-4246-4EC9-BAD1-C00E9ECD85F6}.Release|Any CPU.Build.0 = Release|Any CPU
-		{9F763B50-9E2B-426F-ACFB-27F3D3F255D5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{9F763B50-9E2B-426F-ACFB-27F3D3F255D5}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{9F763B50-9E2B-426F-ACFB-27F3D3F255D5}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{9F763B50-9E2B-426F-ACFB-27F3D3F255D5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{017DC6E8-FB93-4303-AAF9-52E2449F9A34}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{017DC6E8-FB93-4303-AAF9-52E2449F9A34}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{017DC6E8-FB93-4303-AAF9-52E2449F9A34}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{017DC6E8-FB93-4303-AAF9-52E2449F9A34}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1536CD0A-6308-4DAF-8618-35BBA0816997}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1536CD0A-6308-4DAF-8618-35BBA0816997}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1536CD0A-6308-4DAF-8618-35BBA0816997}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1536CD0A-6308-4DAF-8618-35BBA0816997}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1B3148A8-FB57-4461-91BC-F1CD38A013B6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1B3148A8-FB57-4461-91BC-F1CD38A013B6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1B3148A8-FB57-4461-91BC-F1CD38A013B6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1B3148A8-FB57-4461-91BC-F1CD38A013B6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5D22373D-E432-4208-A737-E0BCA0567B5F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5D22373D-E432-4208-A737-E0BCA0567B5F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5D22373D-E432-4208-A737-E0BCA0567B5F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5D22373D-E432-4208-A737-E0BCA0567B5F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EC134A5F-CB56-4196-BB4E-217D365A2534}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EC134A5F-CB56-4196-BB4E-217D365A2534}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EC134A5F-CB56-4196-BB4E-217D365A2534}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EC134A5F-CB56-4196-BB4E-217D365A2534}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -25,5 +25,12 @@ namespace Phytel.API.DataDomain.Patient.Service
             response.Version = request.Version;
             return response;
         }
+
+        public PatientDetailsResponse Post(PatientDetailsRequest request)
+        {
+            PatientDetailsResponse response = PatientDataManager.GetPatientDetailsList(request);
+            response.Version = request.Version;
+            return response;
+        }
     }
 }

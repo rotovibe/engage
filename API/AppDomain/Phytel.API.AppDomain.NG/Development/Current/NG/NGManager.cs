@@ -7,6 +7,8 @@ using Phytel.API.DataDomain.LookUp.DTO;
 using ServiceStack.Service;
 using ServiceStack.ServiceClient.Web;
 using System;
+using Phytel.API.DataDomain.Cohort.DTO;
+using Phytel.API.DataDomain.CohortPatients.DTO;
 
 namespace Phytel.API.AppDomain.NG
 {
@@ -16,6 +18,7 @@ namespace Phytel.API.AppDomain.NG
         protected static readonly string DDPatientServiceURL = ConfigurationManager.AppSettings["DDPatientServiceUrl"];
         protected static readonly string DDPatientProblemServiceUrl = ConfigurationManager.AppSettings["DDPatientProblemServiceUrl"];
         protected static readonly string DDLookupServiceUrl = ConfigurationManager.AppSettings["DDLookupServiceUrl"];
+        protected static readonly string DDCohortServiceUrl = ConfigurationManager.AppSettings["DDCohortServiceUrl"];
         #endregion
 
         public NG.DTO.PatientResponse GetPatientByID(NG.DTO.PatientRequest request)
@@ -116,9 +119,30 @@ namespace Phytel.API.AppDomain.NG
         }
 
 
-        public List<CohortResponse> GetCohorts(CohortRequest request)
+        public List<Phytel.API.AppDomain.NG.DTO.CohortResponse> GetCohorts(Phytel.API.AppDomain.NG.DTO.CohortRequest request)
         {
             throw new NotImplementedException();
+        }
+
+        public GetCohortPatientsResponse GetCohortPatients(GetCohortPatientsRequest request)
+        {
+            GetCohortPatientsResponse pResponse = new GetCohortPatientsResponse();
+
+            IRestClient client = new JsonServiceClient();
+
+            // call cohort data domain
+            CohortPatientDetailsResponse qResponse = client.Get<CohortPatientDetailsResponse>(string.Format("{0}/{1}/{2}/Contract/{3}/CohortPatientDetails/{4}?Skip={5}&Take={6}",
+                                                                                        DDCohortServiceUrl,
+                                                                                        request.Context,
+                                                                                        request.Version,
+                                                                                        request.ContractNumber,
+                                                                                        request.CohortID,
+                                                                                        request.Skip,
+                                                                                        request.Take));
+
+            //SendAuditDispatch();
+
+            return pResponse;
         }
     }
 }
