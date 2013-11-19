@@ -34,12 +34,20 @@ namespace NGTestData
 
             MongoDB.Driver.MongoDatabase mongoDB = Phytel.Services.MongoService.Instance.GetDatabase("InHealth001", true);
 
+            mongoDB.GetCollection("Patient").RemoveAll();
+            mongoDB.GetCollection("PatientProblem").RemoveAll();
+            mongoDB.GetCollection("CohortPatientView").RemoveAll();
+
             problems = mongoDB.GetCollection("ProblemLookUp").FindAllAs<MEProblem>().ToList();
+
+            System.Random rnd = new Random();
+            int maxNum = problems.Count() - 1;
 
             DataSet dsPatients = Phytel.Services.SQLDataService.Instance.ExecuteSQLDirect(sqlConn, sqlPatientQuery, 0);
 
             foreach (DataRow dr in dsPatients.Tables[0].Rows)
             {
+                //Phytel.API.DataDomain.Cohort.DTO.
                 Phytel.API.DataDomain.Patient.DTO.MEPatient patient = new Phytel.API.DataDomain.Patient.DTO.MEPatient
                     {
                         DisplayPatientSystemID = null,
@@ -61,6 +69,8 @@ namespace NGTestData
 
                 for(int i = 0; i < numProblems.Value; i++)
                 {
+                    int probID = rnd.Next(maxNum);
+
                     patientProblems.Add(new MEPatientProblem
                         {
                             PatientID = patient.Id,
@@ -70,15 +80,17 @@ namespace NGTestData
                             Featured = true,
                             LastUpdatedOn = DateTime.Now,
                             Level = 1,
-                            ProblemID = problems[0].Id,
+                            ProblemID = problems[probID].Id,
                             StartDate = null,
                             TTLDate = null,
                             Version = "v1"
                         });
                 }
             }
-            mongoDB.GetCollection("Patient").RemoveAll();
+            
             mongoDB.GetCollection("Patient").InsertBatch(patients);
+            mongoDB.GetCollection("PatientProblem").InsertBatch(patientProblems);
+            //mongoDB.GetCollection("Patient").InsertBatch(patients);
         }
     }
 }
