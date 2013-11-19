@@ -1,6 +1,8 @@
 using Phytel.API.DataDomain.LookUp.DTO;
 using System.Collections.Generic;
 using System.Linq;
+using Phytel.API.Interface;
+using System;
 
 namespace Phytel.API.DataDomain.LookUp
 {
@@ -8,7 +10,7 @@ namespace Phytel.API.DataDomain.LookUp
     {
         private static readonly string PROBLEMLOOKUP = "problemlookup";
 
-        public static GetProblemResponse GetProblemByID(GetProblemRequest request)
+        public static GetProblemResponse GetPatientProblem(GetProblemRequest request)
         {
             GetProblemResponse response = new GetProblemResponse();
 
@@ -30,5 +32,54 @@ namespace Phytel.API.DataDomain.LookUp
             }
             return response;
         }
+
+        public static SearchProblemResponse SearchProblem(SearchProblemRequest request)
+        {
+            SearchProblemResponse response = new SearchProblemResponse();
+
+            ILookUpRepository<Problem> repo = Phytel.API.DataDomain.LookUp.LookUpRepositoryFactory<Problem>.GetLookUpRepository(request.ContractNumber, request.Context, PROBLEMLOOKUP);
+
+            ICollection<SelectExpression> selectExpressions = new List<SelectExpression>();
+
+            // Active property
+            if(request.Active !=  null)
+            {
+                SelectExpression activeSelectExpression = new SelectExpression();
+                activeSelectExpression.FieldName = MEProblem.ActiveProperty;
+                activeSelectExpression.Type = SelectExpressionType.EQ;
+                activeSelectExpression.Value = request.Active;
+                activeSelectExpression.NextExpressionType = SelectExpressionGroupType.AND;
+                activeSelectExpression.ExpressionOrder = 1;
+                activeSelectExpression.GroupID = 1;
+                selectExpressions.Add(activeSelectExpression);
+            }
+
+            // Type
+            if (!string.IsNullOrEmpty(request.Type))
+            {
+                SelectExpression categorySelectExpression = new SelectExpression();
+                categorySelectExpression.FieldName = MEProblem.TypeProperty;
+                categorySelectExpression.Type = SelectExpressionType.EQ;
+                categorySelectExpression.Value = request.Type;
+                categorySelectExpression.NextExpressionType = SelectExpressionGroupType.AND;
+                categorySelectExpression.ExpressionOrder = 2;
+                categorySelectExpression.GroupID = 1;
+                selectExpressions.Add(categorySelectExpression);
+            }
+
+            APIExpression apiExpression = new APIExpression();
+            apiExpression.Expressions = selectExpressions;
+
+            Tuple<string, IQueryable<Problem>> problems = repo.Select(apiExpression);
+
+            if (problems != null)
+            {
+                response.Problems = problems.Item2.ToList();
+            }
+            return response;
+        }
+
+
+
     }
 }   

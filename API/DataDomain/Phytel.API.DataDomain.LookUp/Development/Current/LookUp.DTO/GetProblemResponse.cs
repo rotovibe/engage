@@ -14,5 +14,6 @@ namespace Phytel.API.DataDomain.LookUp.DTO
         public string ProblemID { get; set; }
         public string Name { get; set; }
         public bool Active { get; set; }
+        public string Type { get; set; }
     }
 }

@@ -49,6 +49,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Helper\SelectExpressionHelper.cs" />
     <Compile Include="IAppDomainRequest.cs" />
     <Compile Include="IDataDomainRequest.cs" />
     <Compile Include="IMEEntity.cs" />

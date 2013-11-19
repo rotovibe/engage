@@ -47,5 +47,33 @@ namespace Phytel.API.DataDomain.LookUp.Services.Test
             // Assert
             Assert.AreEqual(expectedValue, actualValue, true);
         }
+
+        [TestMethod]
+        public void SearchProblem_Test()
+        {
+            // Arrange
+            string version = "v1";
+            string contractNumber = "InHealth001";
+            string context = "NG";
+            
+            IRestClient client = new JsonServiceClient();
+
+            // Act
+            GetAllProblemResponse response = client.Post<GetAllProblemResponse>
+                (string.Format("{0}/{1}/{2}/{3}/problems",
+                  "http://localhost:8888/LookUp/", context, version, contractNumber),
+                      new SearchProblemRequest
+                      {
+                          Active = true,
+                          Type = "Chronic",
+                          Version = version,
+                          ContractNumber = contractNumber,
+                          Context = context
+                      }
+                  );
+
+            // Assert
+            Assert.AreNotEqual(0, response.Problems.Count);
+        }
     }
 }

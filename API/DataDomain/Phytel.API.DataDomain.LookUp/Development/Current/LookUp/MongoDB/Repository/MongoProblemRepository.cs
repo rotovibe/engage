@@ -46,10 +46,7 @@ namespace Phytel.API.DataDomain.LookUp
             GetProblemResponse problemResponse = null;
             using (ProblemMongoContext ctx = new ProblemMongoContext(_dbName))
             {
-                List<IMongoQuery> queries = new List<IMongoQuery>();
-                queries.Add(Query.EQ(MEProblem.IdProperty, ObjectId.Parse(entityID)));
-                queries.Add(Query.EQ(MEProblem.ActiveProperty, true));
-                MEProblem meProblem = ctx.Problems.Collection.Find(Query.And(queries)).FirstOrDefault();
+                MEProblem meProblem = ctx.Problems.Collection.Find(Query.EQ(MEProblem.IdProperty, ObjectId.Parse(entityID))).FirstOrDefault();
                 if (meProblem != null)
                 {
                     problemResponse = new GetProblemResponse();
@@ -62,7 +59,55 @@ namespace Phytel.API.DataDomain.LookUp
 
         public Tuple<string, IQueryable<T>> Select(Interface.APIExpression expression)
         {
-            throw new NotImplementedException();
+            IQueryable<T> returnQuery = null;
+            IMongoQuery mQuery = null;
+
+            List<SelectExpression> selectExpressions = expression.Expressions.ToList();
+            selectExpressions.Where(s => s.GroupID == 1).OrderBy(o => o.ExpressionOrder).ToList();
+
+            SelectExpressionGroupType groupType = SelectExpressionGroupType.AND;
+
+            if (selectExpressions.Count > 0)
+            {
+                IList<IMongoQuery> queries = new List<IMongoQuery>();
+                for (int i = 0; i < selectExpressions.Count; i++)
+                {
+                    groupType = selectExpressions[0].NextExpressionType;
+
+                    IMongoQuery query = SelectExpressionHelper.ApplyQueryOperators(selectExpressions[i].Type, selectExpressions[i].FieldName, selectExpressions[i].Value);
+                    if (query != null)
+                    {
+                        queries.Add(query);
+                    }
+                }
+
+                mQuery = SelectExpressionHelper.BuildQuery(groupType, queries);
+
+                List<Problem> patientProblemList = null;
+                using (ProblemMongoContext ctx = new ProblemMongoContext(_dbName))
+                {
+                    List<MEProblem> meProblems = ctx.Problems.Collection.Find(mQuery).ToList();
+                    if (meProblems != null)
+                    {
+                        patientProblemList = new List<Problem>();
+                        foreach (MEProblem p in meProblems)
+                        {
+                            Problem problem = new Problem
+                            {
+                                ProblemID = p.Id.ToString(),
+                                Name = p.Name,
+                                Active = p.Active,
+                                Type = p.Type
+                                
+                            };
+                            patientProblemList.Add(problem);
+                        }
+                    }
+                }
+                returnQuery = ((IEnumerable<T>)patientProblemList).AsQueryable<T>();
+            }
+
+            return new Tuple<string, IQueryable<T>>(expression.ExpressionID, returnQuery);
         }
 
         public IQueryable<T> SelectAll()
@@ -71,7 +116,7 @@ namespace Phytel.API.DataDomain.LookUp
             List<Problem> problemList = null;
             using (ProblemMongoContext ctx = new ProblemMongoContext(_dbName))
             {
-                List<MEProblem> meProblems = ctx.Problems.Collection.Find(Query.EQ(MEProblem.ActiveProperty, true)).ToList();
+                List<MEProblem> meProblems = ctx.Problems.Collection.FindAll().ToList();
                 if (meProblems != null)
                 {
                     problemList = new List<Problem>();

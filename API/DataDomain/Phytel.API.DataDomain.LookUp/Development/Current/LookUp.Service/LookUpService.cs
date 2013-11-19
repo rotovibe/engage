@@ -13,7 +13,7 @@ namespace Phytel.API.DataDomain.Patient.Service
             GetProblemResponse response = new GetProblemResponse();
             try
             {
-                response = LookUpDataManager.GetProblemByID(request);
+                response = LookUpDataManager.GetPatientProblem(request);
             }
             catch (Exception ex)
             {
@@ -30,6 +30,22 @@ namespace Phytel.API.DataDomain.Patient.Service
             try
             {
                 response = LookUpDataManager.GetAllProblem(request);
+            }
+            catch (Exception ex)
+            {
+                //TODO: Log this to C3 database via ASE
+                base.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                response.Status = new ServiceStack.ServiceInterface.ServiceModel.ResponseStatus("Exception", ex.Message);
+            }
+            return response;
+        }
+
+        public SearchProblemResponse Post(SearchProblemRequest request)
+        {
+            SearchProblemResponse response = new SearchProblemResponse();
+            try
+            {
+                response = LookUpDataManager.SearchProblem(request);
             }
             catch (Exception ex)
             {
