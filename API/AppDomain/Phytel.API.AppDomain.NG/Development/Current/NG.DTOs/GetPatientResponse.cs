@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace Phytel.API.AppDomain.NG.DTO
 {
-    public class PatientResponse
+    public class GetPatientResponse
     {
         public string PatientID { get; set; }
         public string FirstName { get; set; }

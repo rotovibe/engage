@@ -22,10 +22,10 @@ namespace Phytel.API.AppDomain.NG
             return result;
         }
 
-        public static List<PatientResponse> PopulateCohortPatientStubData()
+        public static List<GetPatientResponse> PopulateCohortPatientStubData()
         {
-            List<PatientResponse> pts = new List<PatientResponse>();
-            pts.Add(new PatientResponse
+            List<GetPatientResponse> pts = new List<GetPatientResponse>();
+            pts.Add(new GetPatientResponse
             {
                 DOB = "09/12/1993",
                 FirstName = "Oscar",
@@ -37,7 +37,7 @@ namespace Phytel.API.AppDomain.NG
                 Suffix = "Mr."
             });
 
-            pts.Add(new PatientResponse
+            pts.Add(new GetPatientResponse
             {
                 DOB = "02/16/1980",
                 FirstName = "Jenny",

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace Phytel.API.AppDomain.NG.DTO
 {
-    public class CohortResponse
+    public class GetAllCohortResponse
     {
         public List<Cohort> Cohorts { get; set; }
         public ResponseStatus Status { get; set; }

@@ -7,9 +7,9 @@ namespace Phytel.API.AppDomain.NG.Service
 {
     public class NGService : ServiceStack.ServiceInterface.Service
     {
-        public PatientResponse Post(PatientRequest request)
+        public GetPatientResponse Post(GetPatientRequest request)
         {
-            PatientResponse response = new PatientResponse();
+            GetPatientResponse response = new GetPatientResponse();
             try
             {
                 NGManager ngm = new NGManager();
@@ -30,9 +30,9 @@ namespace Phytel.API.AppDomain.NG.Service
             return response;
         }
 
-        public PatientResponse Get(PatientRequest request)
+        public GetPatientResponse Get(GetPatientRequest request)
         {
-            PatientResponse response = new PatientResponse();
+            GetPatientResponse response = new GetPatientResponse();
             try
             {
                 NGManager ngm = new NGManager();
@@ -58,9 +58,9 @@ namespace Phytel.API.AppDomain.NG.Service
         /// </summary>
         /// <param name="request">PatientProblemResponse object</param>
         /// <returns>PatientProblemResponse object</returns>
-        public PatientProblemsResponse Get(PatientProblemRequest request)
+        public GetAllPatientProblemResponse Get(GetAllPatientProblemRequest request)
         {
-            PatientProblemsResponse response = new PatientProblemsResponse();
+            GetAllPatientProblemResponse response = new GetAllPatientProblemResponse();
             try
             {
                 NGManager ngm = new NGManager();
@@ -85,9 +85,9 @@ namespace Phytel.API.AppDomain.NG.Service
         /// </summary>
         /// <param name="request">PatientProblemResponse object</param>
         /// <returns>PatientProblemResponse object</returns>
-        public PatientProblemsResponse POST(PatientProblemRequest request)
+        public GetAllPatientProblemResponse POST(GetAllPatientProblemRequest request)
         {
-            PatientProblemsResponse response = new PatientProblemsResponse();
+            GetAllPatientProblemResponse response = new GetAllPatientProblemResponse();
             try
             {
                 NGManager ngm = new NGManager();
@@ -107,9 +107,9 @@ namespace Phytel.API.AppDomain.NG.Service
             return response;
         }
 
-        public ProblemsLookUpResponse Get(ProblemLookUpRequest request)
+        public GetAllProblemLookUpResponse Get(GetAllProblemLookUpRequest request)
         {
-            ProblemsLookUpResponse response = new ProblemsLookUpResponse();
+            GetAllProblemLookUpResponse response = new GetAllProblemLookUpResponse();
             try
             {
                 NGManager ngm = new NGManager();
@@ -129,9 +129,9 @@ namespace Phytel.API.AppDomain.NG.Service
             return response;
         }
 
-        public CohortResponse Post(CohortRequest request)
+        public GetAllCohortResponse Post(GetAllCohortRequest request)
         {
-            CohortResponse response = new CohortResponse();
+            GetAllCohortResponse response = new GetAllCohortResponse();
             try
             {
                 NGManager ngm = new NGManager();

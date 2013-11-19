@@ -6,7 +6,7 @@ namespace Phytel.API.AppDomain.NG.DTO
 {
     [Route("/{Context}/{Version}/{ContractNumber}/patientproblems/{PatientID}", "GET")]
     [Route("/{Context}/{Version}/{ContractNumber}/patientproblems", "POST")]
-    public class PatientProblemRequest : IAppDomainRequest
+    public class GetAllPatientProblemRequest : IAppDomainRequest
     {
         [ApiMember(Name = "PatientID", Description = "ID parameter", ParameterType = "property", DataType = "string", IsRequired = true)]
         public string PatientID { get; set; }

@@ -78,14 +78,14 @@
   <ItemGroup>
     <Compile Include="GetAllPatientsCohortRequest.cs" />
     <Compile Include="GetAllPatientsCohortResponse.cs" />
-    <Compile Include="ProblemLookUpRequest.cs" />
-    <Compile Include="ProblemLookUpResponse.cs" />
-    <Compile Include="PatientProblemRequest.cs" />
-    <Compile Include="PatientProblemsResponse.cs" />
-    <Compile Include="CohortRequest.cs" />
-    <Compile Include="PatientRequest.cs" />
-    <Compile Include="CohortResponse.cs" />
-    <Compile Include="PatientResponse.cs" />
+    <Compile Include="GetAllProblemLookUpRequest.cs" />
+    <Compile Include="GetAllProblemLookUpResponse.cs" />
+    <Compile Include="GetAllPatientProblemRequest.cs" />
+    <Compile Include="GetAllPatientProblemResponse.cs" />
+    <Compile Include="GetAllCohortRequest.cs" />
+    <Compile Include="GetPatientRequest.cs" />
+    <Compile Include="GetAllCohortResponse.cs" />
+    <Compile Include="GetPatientResponse.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

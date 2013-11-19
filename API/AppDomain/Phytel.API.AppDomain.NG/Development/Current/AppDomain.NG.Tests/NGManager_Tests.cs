@@ -24,7 +24,7 @@ namespace Phytel.API.AppDomain.NG.Test
             string context = "NG";
             string token = "1234";
             NGManager ngManager = new NGManager();
-            PatientProblemRequest request = new PatientProblemRequest
+            GetAllPatientProblemRequest request = new GetAllPatientProblemRequest
             {
                 Context = context,
                 ContractNumber = contractNumber,
@@ -50,7 +50,7 @@ namespace Phytel.API.AppDomain.NG.Test
             string context = "NG";
             string token = "1234";
             NGManager ngManager = new NGManager();
-            ProblemLookUpRequest request = new ProblemLookUpRequest
+            GetAllProblemLookUpRequest request = new GetAllProblemLookUpRequest
             {
                 Context = context,
                 ContractNumber = contractNumber,

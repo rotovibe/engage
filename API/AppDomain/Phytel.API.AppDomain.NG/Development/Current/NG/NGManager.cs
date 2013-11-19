@@ -21,9 +21,9 @@ namespace Phytel.API.AppDomain.NG
         protected static readonly string DDCohortServiceUrl = ConfigurationManager.AppSettings["DDCohortServiceUrl"];
         #endregion
 
-        public NG.DTO.PatientResponse GetPatientByID(NG.DTO.PatientRequest request)
+        public NG.DTO.GetPatientResponse GetPatientByID(NG.DTO.GetPatientRequest request)
         {
-            NG.DTO.PatientResponse pResponse = new NG.DTO.PatientResponse();
+            NG.DTO.GetPatientResponse pResponse = new NG.DTO.GetPatientResponse();
 
             //Execute call(s) to Patient Data Domain
             IRestClient client = new JsonServiceClient();
@@ -53,7 +53,7 @@ namespace Phytel.API.AppDomain.NG
         /// </summary>
         /// <param name="request">PatientProblemRequest object</param>
         /// <returns>PatientProblem object</returns>
-        public List<Phytel.API.AppDomain.NG.DTO.PatientProblem> GetProblemsByPatientID(Phytel.API.AppDomain.NG.DTO.PatientProblemRequest request)
+        public List<Phytel.API.AppDomain.NG.DTO.PatientProblem> GetProblemsByPatientID(Phytel.API.AppDomain.NG.DTO.GetAllPatientProblemRequest request)
         {
             if (string.IsNullOrEmpty(request.PatientID))
                 throw new ArgumentException("PatientID is null or empty.");
@@ -93,7 +93,7 @@ namespace Phytel.API.AppDomain.NG
             return response;
         }
 
-        public List<ProblemLookUp> GetProblems(ProblemLookUpRequest request)
+        public List<ProblemLookUp> GetProblems(GetAllProblemLookUpRequest request)
         {
             List<ProblemLookUp> response = new List<ProblemLookUp>();
 
@@ -119,7 +119,7 @@ namespace Phytel.API.AppDomain.NG
         }
 
 
-        public List<Phytel.API.AppDomain.NG.DTO.CohortResponse> GetCohorts(Phytel.API.AppDomain.NG.DTO.CohortRequest request)
+        public List<Phytel.API.AppDomain.NG.DTO.GetAllCohortResponse> GetCohorts(Phytel.API.AppDomain.NG.DTO.GetAllCohortRequest request)
         {
             throw new NotImplementedException();
         }
