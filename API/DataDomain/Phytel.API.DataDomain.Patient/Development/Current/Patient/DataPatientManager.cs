@@ -27,10 +27,9 @@ namespace Phytel.API.DataDomain.Patient
 
         public static PatientDetailsResponse GetPatientDetailsList(PatientDetailsRequest request)
         {
-            PatientDetailsResponse result = new PatientDetailsResponse();
             IPatientRepository<PatientDetailsResponse> repo = PatientRepositoryFactory<PatientDetailsResponse>.GetPatientRepository(request.ContractNumber, request.Context);
-            repo.Select(request.PatientIds);
-            
+            PatientDetailsResponse result = repo.Select(request.PatientIds);
+
             return result;
         }
     }

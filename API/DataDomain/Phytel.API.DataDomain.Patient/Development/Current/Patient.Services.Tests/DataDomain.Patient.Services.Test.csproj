@@ -39,6 +39,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Phytel.API.Interface, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\Interfaces\Development\Current\Phytel.API.Interface\bin\Debug\Phytel.API.Interface.dll</HintPath>
+    </Reference>
     <Reference Include="ServiceStack.Common, Version=3.9.70.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\..\packages\ServiceStack.Common.3.9.70\lib\net35\ServiceStack.Common.dll</HintPath>
@@ -73,9 +77,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\..\Interfaces\Development\Current\Phytel.API.Interface\Phytel.API.Interface.csproj">
-      <Project>{abe948fb-247e-4955-b3ab-b7c93e10a542}</Project>
-      <Name>Phytel.API.Interface</Name>
+    <ProjectReference Include="..\..\..\..\Phytel.API.DataDomain.CohortPatient\Development\Current\CohortPatient.DTO\DataDomain.CohortPatients.DTO.csproj">
+      <Project>{037d090a-f888-40d8-a51a-01b19aff2965}</Project>
+      <Name>DataDomain.CohortPatients.DTO</Name>
     </ProjectReference>
     <ProjectReference Include="..\Patient.DTOs\DataDomain.Patient.DTO.csproj">
       <Project>{1b3148a8-fb57-4461-91bc-f1cd38a013b6}</Project>
