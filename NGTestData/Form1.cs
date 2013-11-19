@@ -62,7 +62,7 @@ namespace NGTestData
                         DOB = dr["BirthDate"].ToString(),
                         MiddleName = dr["MiddleInitial"].ToString(),
                         Suffix = dr["Suffix"].ToString(),
-                        PreferredName = null,
+                        PreferredName = dr["FirstName"].ToString() + "o",
                         UpdatedBy = null,
                         DeleteFlag = false,
                         TTLDate = null,
