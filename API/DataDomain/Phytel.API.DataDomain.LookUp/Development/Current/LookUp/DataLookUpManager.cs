@@ -8,18 +8,18 @@ namespace Phytel.API.DataDomain.LookUp
     {
         private static readonly string PROBLEMLOOKUP = "problemlookup";
 
-        public static ProblemResponse GetProblemByID(GetProblemRequest request)
+        public static GetProblemResponse GetProblemByID(GetProblemRequest request)
         {
-            ProblemResponse response = new ProblemResponse();
+            GetProblemResponse response = new GetProblemResponse();
 
-            ILookUpRepository<ProblemResponse> repo = Phytel.API.DataDomain.LookUp.LookUpRepositoryFactory<ProblemResponse>.GetLookUpRepository(request.ContractNumber, request.Context, PROBLEMLOOKUP);
-            response = repo.FindByID(request.ProblemID) as ProblemResponse;
+            ILookUpRepository<GetProblemResponse> repo = Phytel.API.DataDomain.LookUp.LookUpRepositoryFactory<GetProblemResponse>.GetLookUpRepository(request.ContractNumber, request.Context, PROBLEMLOOKUP);
+            response = repo.FindByID(request.ProblemID) as GetProblemResponse;
             return response;
         }
 
-        public static ProblemsResponse FindProblems(FindProblemsRequest request)
+        public static GetAllProblemResponse FindProblems(GetAllProblemRequest request)
         {
-            ProblemsResponse response = new ProblemsResponse();
+            GetAllProblemResponse response = new GetAllProblemResponse();
 
             ILookUpRepository<Problem> repo = Phytel.API.DataDomain.LookUp.LookUpRepositoryFactory<Problem>.GetLookUpRepository(request.ContractNumber, request.Context, PROBLEMLOOKUP);
             IQueryable<Problem> problems = repo.SelectAll() as IQueryable<Problem>;

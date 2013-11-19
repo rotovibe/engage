@@ -9,10 +9,10 @@ namespace Phytel.API.DataDomain.PatientProblem
 {
     public static class DataPatientProblemManager
     {
-        public static PatientProblemsResponse GetProblemsByPatientID(PatientProblemRequest request)
+        public static GetAllPatientProblemResponse GetProblemsByPatientID(GetAllPatientProblemRequest request)
         {
 
-            PatientProblemsResponse response = new PatientProblemsResponse();
+            GetAllPatientProblemResponse response = new GetAllPatientProblemResponse();
 
             IPatientProblemRepository<PProb> repo = Phytel.API.DataDomain.PatientProblem.PatientProblemRepositoryFactory<PProb>.GetPatientProblemRepository(request.ContractNumber, request.Context);
             

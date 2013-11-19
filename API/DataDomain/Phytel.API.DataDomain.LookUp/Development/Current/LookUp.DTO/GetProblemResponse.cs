@@ -2,7 +2,7 @@ using ServiceStack.ServiceInterface.ServiceModel;
 
 namespace Phytel.API.DataDomain.LookUp.DTO
 {
-   public class ProblemResponse
+   public class GetProblemResponse
    {
         public Problem Problem { get; set; }
         public string Version { get; set; }

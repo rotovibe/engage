@@ -3,7 +3,7 @@ using ServiceStack.ServiceInterface.ServiceModel;
 
 namespace Phytel.API.DataDomain.PatientProblem.DTO
 {
-    public class PatientProblemsResponse
+    public class GetAllPatientProblemResponse
     {
         public List<PProb> PatientProblems { get; set; }
         public string Version { get; set; }

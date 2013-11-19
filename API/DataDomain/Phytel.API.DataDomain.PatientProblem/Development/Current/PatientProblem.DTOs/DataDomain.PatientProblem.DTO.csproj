@@ -53,8 +53,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="PatientProblemRequest.cs" />
-    <Compile Include="PatientProblemsResponse.cs" />
+    <Compile Include="GetAllPatientProblemRequest.cs" />
+    <Compile Include="GetAllPatientProblemResponse.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -43,13 +43,13 @@ namespace Phytel.API.DataDomain.LookUp
 
         public object FindByID(string entityID)
         {
-            ProblemResponse problemResponse = null;
+            GetProblemResponse problemResponse = null;
             using (ProblemMongoContext ctx = new ProblemMongoContext(_dbName))
             {
                 MEProblem meProblem = ctx.Problems.Collection.FindOneById(ObjectId.Parse(entityID));
                 if (meProblem != null)
                 {
-                    problemResponse = new ProblemResponse();
+                    problemResponse = new GetProblemResponse();
                     Problem problem = new Problem { ProblemID = meProblem.Id.ToString(), Name = meProblem.Name, Active = meProblem.Active };
                     problemResponse.Problem = problem;
                 }

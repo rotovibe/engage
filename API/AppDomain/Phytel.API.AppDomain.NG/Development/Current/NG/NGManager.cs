@@ -62,13 +62,13 @@ namespace Phytel.API.AppDomain.NG
 
            IRestClient client = new JsonServiceClient();
             ///{Context}/{Version}/{ContractNumber}/patientproblems"
-            Phytel.API.DataDomain.PatientProblem.DTO.PatientProblemsResponse dataDomainResponse = client.Post<Phytel.API.DataDomain.PatientProblem.DTO.PatientProblemsResponse>
+            Phytel.API.DataDomain.PatientProblem.DTO.GetAllPatientProblemResponse dataDomainResponse = client.Post<Phytel.API.DataDomain.PatientProblem.DTO.GetAllPatientProblemResponse>
                 (string.Format("{0}/{1}/{2}/{3}/patientproblems",
                     DDPatientProblemServiceUrl, 
                     request.Context, 
                     request.Version, 
                     request.ContractNumber),
-                    new Phytel.API.DataDomain.PatientProblem.DTO.PatientProblemRequest
+                    new Phytel.API.DataDomain.PatientProblem.DTO.GetAllPatientProblemRequest
                     {
                         PatientID = request.PatientID,
                         Category = request.Category,
