@@ -9,7 +9,7 @@ namespace Phytel.API.DataDomain.Cohort.Test
         [TestMethod]
         public void GetCohortByID()
         {
-            ICohortRepository<CohortResponse> repo = CohortRepositoryFactory<CohortResponse>.GetCohortRepository("InHealth001", "NG");
+            ICohortRepository<GetCohortResponse> repo = CohortRepositoryFactory<GetCohortResponse>.GetCohortRepository("InHealth001", "NG");
 
             repo.Select(new Interface.APIExpression());
         }
@@ -24,7 +24,7 @@ namespace Phytel.API.DataDomain.Cohort.Test
             GetCohortRequest request = new GetCohortRequest { CohortID = "528aa03ad4332317acc50976", Context = context, ContractNumber = contractNumber, Version = version };
 
             // Act
-            CohortResponse response = DataCohortManager.GetCohortByID(request);
+            GetCohortResponse response = DataCohortManager.GetCohortByID(request);
 
             // Assert
             Assert.IsTrue(response.Cohort.SName == "All(f)");
@@ -41,7 +41,7 @@ namespace Phytel.API.DataDomain.Cohort.Test
             GetAllCohortRequest request = new GetAllCohortRequest { Context = context, ContractNumber = contractNumber, Version = version };
 
             // Act
-            CohortsResponse response = DataCohortManager.GetCohorts(request);
+            GetAllCohortResponse response = DataCohortManager.GetCohorts(request);
 
             // Assert
             Assert.AreNotEqual(0, response.Cohorts.Count);

@@ -7,9 +7,9 @@ namespace Phytel.API.DataDomain.Cohort.Service
 {
     public class CohortService : ServiceStack.ServiceInterface.Service
     {
-        public CohortResponse Get(GetCohortRequest request)
+        public GetCohortResponse Get(GetCohortRequest request)
         {
-            CohortResponse response = new CohortResponse();
+            GetCohortResponse response = new GetCohortResponse();
             try
             {
                 response = DataCohortManager.GetCohortByID(request);
@@ -23,9 +23,9 @@ namespace Phytel.API.DataDomain.Cohort.Service
             return response;
         }
 
-        public CohortsResponse Get(GetAllCohortRequest request)
+        public GetAllCohortResponse Get(GetAllCohortRequest request)
         {
-            CohortsResponse response = new CohortsResponse();
+            GetAllCohortResponse response = new GetAllCohortResponse();
             try
             {
                 response = DataCohortManager.GetCohorts(request);

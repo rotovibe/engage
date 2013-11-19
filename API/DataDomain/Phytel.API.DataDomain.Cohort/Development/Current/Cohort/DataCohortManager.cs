@@ -7,19 +7,19 @@ namespace Phytel.API.DataDomain.Cohort
 {
     public static class DataCohortManager
     {
-        public static CohortResponse GetCohortByID(GetCohortRequest request)
+        public static GetCohortResponse GetCohortByID(GetCohortRequest request)
         {
-            CohortResponse response = new CohortResponse();
+            GetCohortResponse response = new GetCohortResponse();
 
-            ICohortRepository<CohortResponse> repo = CohortRepositoryFactory<CohortResponse>.GetCohortRepository(request.ContractNumber, request.Context);
-            response = repo.FindByID(request.CohortID) as CohortResponse;
+            ICohortRepository<GetCohortResponse> repo = CohortRepositoryFactory<GetCohortResponse>.GetCohortRepository(request.ContractNumber, request.Context);
+            response = repo.FindByID(request.CohortID) as GetCohortResponse;
 
             return response;
         }
 
-        public static CohortsResponse GetCohorts(GetAllCohortRequest request)
+        public static GetAllCohortResponse GetCohorts(GetAllCohortRequest request)
         {
-            CohortsResponse response = new CohortsResponse();
+            GetAllCohortResponse response = new GetAllCohortResponse();
 
             ICohortRepository<API.DataDomain.Cohort.DTO.Cohort> repo = CohortRepositoryFactory<API.DataDomain.Cohort.DTO.Cohort>.GetCohortRepository(request.ContractNumber, request.Context);
 

@@ -43,7 +43,7 @@ namespace Phytel.API.DataDomain.Cohort
 
         public object FindByID(string entityID)
         {
-            CohortResponse cohortResponse = null;
+            GetCohortResponse cohortResponse = null;
             using (CohortMongoContext ctx = new CohortMongoContext(_dbName))
             {
                 List<IMongoQuery> queries = new List<IMongoQuery>();
@@ -53,7 +53,7 @@ namespace Phytel.API.DataDomain.Cohort
                 MECohort meCohort = ctx.Cohorts.Collection.Find(mQuery).FirstOrDefault();
                 if (meCohort != null)
                 {
-                    cohortResponse = new CohortResponse();
+                    cohortResponse = new GetCohortResponse();
                     API.DataDomain.Cohort.DTO.Cohort cohort = new API.DataDomain.Cohort.DTO.Cohort { ID = meCohort.Id.ToString(), SName = meCohort.ShortName, Query = meCohort.Query, Sort = meCohort.Sort };
                     cohortResponse.Cohort = cohort;
                 }

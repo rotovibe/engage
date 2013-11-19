@@ -58,8 +58,8 @@
   <ItemGroup>
     <Compile Include="GetAllCohortRequest.cs" />
     <Compile Include="GetCohortRequest.cs" />
-    <Compile Include="CohortsResponse.cs" />
-    <Compile Include="CohortResponse.cs" />
+    <Compile Include="GetAllCohortResponse.cs" />
+    <Compile Include="GetCohortResponse.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

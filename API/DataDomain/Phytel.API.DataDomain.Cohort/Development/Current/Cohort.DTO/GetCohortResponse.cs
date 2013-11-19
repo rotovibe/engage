@@ -3,7 +3,7 @@ using ServiceStack.ServiceInterface.ServiceModel;
 
 namespace Phytel.API.DataDomain.Cohort.DTO
 {
-    public class CohortResponse
+    public class GetCohortResponse
    {
         public Cohort Cohort { get; set; }
         public string Version { get; set; }
