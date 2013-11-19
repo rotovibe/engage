@@ -4,7 +4,7 @@ using Phytel.API.DataDomain.PatientProblem.DTO;
 using ServiceStack.Service;
 using ServiceStack.ServiceClient.Web;
 
-namespace Phytel.API.DataDomain.PatientProblem.Services.Test
+namespace Phytel.API.DataDomain.PatientProblem.Service.Test
 {
     [TestClass]
     public class PatientProblemServicesTest

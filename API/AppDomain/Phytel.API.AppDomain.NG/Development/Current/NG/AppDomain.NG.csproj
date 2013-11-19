@@ -67,9 +67,9 @@
       <Project>{25cf3c3f-221f-4a49-b5ef-a8a5fcf9a5ba}</Project>
       <Name>Phytel.API.Common</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\..\..\DataDomain\Phytel.API.DataDomain.CohortPatient\Development\Current\CohortPatient.DTO\DataDomain.CohortPatients.DTO.csproj">
+    <ProjectReference Include="..\..\..\..\..\DataDomain\Phytel.API.DataDomain.CohortPatient\Development\Current\CohortPatient.DTO\DataDomain.CohortPatient.DTO.csproj">
       <Project>{037d090a-f888-40d8-a51a-01b19aff2965}</Project>
-      <Name>DataDomain.CohortPatients.DTO</Name>
+      <Name>DataDomain.CohortPatient.DTO</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\..\..\DataDomain\Phytel.API.DataDomain.Cohort\Development\Current\Cohort.DTO\DataDomain.Cohort.DTO.csproj">
       <Project>{d4489296-17a3-4172-8fdf-db6c0a7ae748}</Project>

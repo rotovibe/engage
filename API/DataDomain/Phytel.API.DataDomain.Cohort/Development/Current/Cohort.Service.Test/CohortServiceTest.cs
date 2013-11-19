@@ -4,7 +4,7 @@ using Phytel.API.DataDomain.Cohort.DTO;
 using ServiceStack.Service;
 using ServiceStack.ServiceClient.Web;
 
-namespace Phytel.API.DataDomain.Cohort.Services.Test
+namespace Phytel.API.DataDomain.Cohort.Service.Test
 {
     [TestClass]
     public class CohortServiceTest

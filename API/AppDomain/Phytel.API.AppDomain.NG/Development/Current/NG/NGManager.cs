@@ -8,7 +8,7 @@ using ServiceStack.Service;
 using ServiceStack.ServiceClient.Web;
 using System;
 using Phytel.API.DataDomain.Cohort.DTO;
-using Phytel.API.DataDomain.CohortPatients.DTO;
+using Phytel.API.DataDomain.CohortPatient.DTO;
 
 namespace Phytel.API.AppDomain.NG
 {

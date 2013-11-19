@@ -6,8 +6,8 @@
     <ProjectGuid>{5D22373D-E432-4208-A737-E0BCA0567B5F}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Phytel.API.DataDomain.Patient.Services.Test</RootNamespace>
-    <AssemblyName>Phytel.API.DataDomain.Patient.Services.Test</AssemblyName>
+    <RootNamespace>Phytel.API.DataDomain.Patient.Service.Test</RootNamespace>
+    <AssemblyName>Phytel.API.DataDomain.Patient.Service.Test</AssemblyName>
     <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -77,9 +77,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\Phytel.API.DataDomain.CohortPatient\Development\Current\CohortPatient.DTO\DataDomain.CohortPatients.DTO.csproj">
+    <ProjectReference Include="..\..\..\..\Phytel.API.DataDomain.CohortPatient\Development\Current\CohortPatient.DTO\DataDomain.CohortPatient.DTO.csproj">
       <Project>{037d090a-f888-40d8-a51a-01b19aff2965}</Project>
-      <Name>DataDomain.CohortPatients.DTO</Name>
+      <Name>DataDomain.CohortPatient.DTO</Name>
     </ProjectReference>
     <ProjectReference Include="..\Patient.DTOs\DataDomain.Patient.DTO.csproj">
       <Project>{1b3148a8-fb57-4461-91bc-f1cd38a013b6}</Project>

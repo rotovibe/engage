@@ -1,10 +1,10 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Phytel.API.DataDomain.CohortPatients.DTO;
+using Phytel.API.DataDomain.CohortPatient.DTO;
 using Phytel.API.DataDomain.Patient.DTO;
 using ServiceStack.Service;
 using ServiceStack.ServiceClient.Web;
 
-namespace Phytel.API.DataDomain.Patient.Services.Test
+namespace Phytel.API.DataDomain.Patient.Service.Test
 {
     [TestClass]
     public class User_Services_Test
