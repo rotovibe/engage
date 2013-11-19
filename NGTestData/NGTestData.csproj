@@ -89,6 +89,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Services\API\DataDomain\Phytel.API.DataDomain.CohortPatient\Development\Current\CohortPatient\DataDomain.CohortPatients.csproj">
+      <Project>{106378b4-24bc-4572-b02c-0742f753df01}</Project>
+      <Name>DataDomain.CohortPatients</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Services\API\DataDomain\Phytel.API.DataDomain.Cohort\Development\Current\Cohort\DataDomain.Cohort.csproj">
       <Project>{229026b1-c3e5-4d2b-8d2b-61d00e8a52cc}</Project>
       <Name>DataDomain.Cohort</Name>

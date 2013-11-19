@@ -11,6 +11,7 @@ using System.Data.SqlClient;
 using Phytel.API.DataDomain.Patient.DTO;
 using Phytel.API.DataDomain.LookUp.DTO;
 using Phytel.API.DataDomain.PatientProblem.DTO;
+using Phytel.API.DataDomain.CohortPatients.DTO;
 
 namespace NGTestData
 {
@@ -29,6 +30,7 @@ namespace NGTestData
 
             List<MEPatient> patients = new List<MEPatient>();
             List<MEPatientProblem> patientProblems = new List<MEPatientProblem>();
+            List<MECohortPatientView> cohortPatients = new List<MECohortPatientView>();
 
             List<MEProblem> problems = null;
 
@@ -45,8 +47,11 @@ namespace NGTestData
 
             DataSet dsPatients = Phytel.Services.SQLDataService.Instance.ExecuteSQLDirect(sqlConn, sqlPatientQuery, 0);
 
+            int counter = 0;
             foreach (DataRow dr in dsPatients.Tables[0].Rows)
             {
+                counter++;
+
                 //Phytel.API.DataDomain.Cohort.DTO.
                 Phytel.API.DataDomain.Patient.DTO.MEPatient patient = new Phytel.API.DataDomain.Patient.DTO.MEPatient
                     {
@@ -67,6 +72,12 @@ namespace NGTestData
 
                 patients.Add(patient);
 
+                cohortPatients.Add(new MECohortPatientView { Active = true, Key = "FN", Type = "Demo", PatientID = patient.Id, Value = patient.FirstName, LastName = patient.LastName });
+                cohortPatients.Add(new MECohortPatientView { Active = true, Key = "LN", Type = "Demo", PatientID = patient.Id, Value = patient.LastName, LastName = patient.LastName });
+                cohortPatients.Add(new MECohortPatientView { Active = true, Key = "DOB", Type = "Demo", PatientID = patient.Id, Value = patient.DOB, LastName = patient.LastName });
+                cohortPatients.Add(new MECohortPatientView { Active = true, Key = "MI", Type = "Demo", PatientID = patient.Id, Value = patient.MiddleName, LastName = patient.LastName });
+                cohortPatients.Add(new MECohortPatientView { Active = true, Key = "G", Type = "Demo", PatientID = patient.Id, Value = patient.Gender, LastName = patient.LastName });
+
                 for(int i = 0; i < numProblems.Value; i++)
                 {
                     int probID = rnd.Next(maxNum);
@@ -85,12 +96,28 @@ namespace NGTestData
                             TTLDate = null,
                             Version = "v1"
                         });
+                    cohortPatients.Add(new MECohortPatientView { Active = true, Key = "Condition", Type = "Chronic", PatientID = patient.Id, Value = problems[probID].Id.ToString(), LastName = patient.LastName });
+                }
+
+                if(counter == 1000)
+                {
+                    mongoDB.GetCollection("Patient").InsertBatch(patients);
+                    mongoDB.GetCollection("PatientProblem").InsertBatch(patientProblems);
+                    mongoDB.GetCollection("CohortPatientView").InsertBatch(cohortPatients);
+                    counter = 0;
+
+                    patients = new List<MEPatient>();
+                    patientProblems = new List<MEPatientProblem>();
+                    cohortPatients = new List<MECohortPatientView>();
                 }
             }
+            if (patients.Count > 0)
+            {
+                mongoDB.GetCollection("Patient").InsertBatch(patients);
+                mongoDB.GetCollection("PatientProblem").InsertBatch(patientProblems);
+                mongoDB.GetCollection("CohortPatientView").InsertBatch(patients);
+            }
             
-            mongoDB.GetCollection("Patient").InsertBatch(patients);
-            mongoDB.GetCollection("PatientProblem").InsertBatch(patientProblems);
-            //mongoDB.GetCollection("Patient").InsertBatch(patients);
         }
     }
 }
