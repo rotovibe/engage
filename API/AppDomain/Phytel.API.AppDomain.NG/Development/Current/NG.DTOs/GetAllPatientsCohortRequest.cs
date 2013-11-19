@@ -4,7 +4,7 @@ using System.Runtime.Serialization;
 
 namespace Phytel.API.AppDomain.NG.DTO
 {
-    [Route("/{Context}/{Version}/Contract/{ContractNumber}/cohort/{CohortId}", "GET")]
+    [Route("/{Context}/{Version}/{ContractNumber}/cohort/{CohortId}", "GET")]
     public class GetCohortPatientsRequest : IAppDomainRequest
     {
         [ApiMember(Name = "Context", Description = "Product parameter will be defined in the route.", ParameterType = "path", DataType = "string", IsRequired = false)]

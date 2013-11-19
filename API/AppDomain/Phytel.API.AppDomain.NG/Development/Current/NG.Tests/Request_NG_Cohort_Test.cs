@@ -37,7 +37,7 @@ namespace Phytel.API.AppDomain.NG.Services.Test
 
             IRestClient client = new JsonServiceClient();
 
-            GetCohortPatientsResponse response = client.Get<GetCohortPatientsResponse>("http://localhost:888/Nightingale/v1/NG/Contract/InHealth001/cohort/1");
+            GetCohortPatientsResponse response = client.Get<GetCohortPatientsResponse>("http://localhost:888/Nightingale/v1/NG/InHealth001/cohort/1");
         }
 
     }

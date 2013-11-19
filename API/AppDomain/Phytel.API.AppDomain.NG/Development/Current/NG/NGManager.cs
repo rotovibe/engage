@@ -19,6 +19,7 @@ namespace Phytel.API.AppDomain.NG
         protected static readonly string DDPatientProblemServiceUrl = ConfigurationManager.AppSettings["DDPatientProblemServiceUrl"];
         protected static readonly string DDLookupServiceUrl = ConfigurationManager.AppSettings["DDLookupServiceUrl"];
         protected static readonly string DDCohortServiceUrl = ConfigurationManager.AppSettings["DDCohortServiceUrl"];
+        protected static readonly string DDCohortPatientServiceUrl = ConfigurationManager.AppSettings["DDCohortPatientServiceUrl"];
         #endregion
 
         public NG.DTO.GetPatientResponse GetPatientByID(NG.DTO.GetPatientRequest request)
@@ -131,8 +132,8 @@ namespace Phytel.API.AppDomain.NG
             IRestClient client = new JsonServiceClient();
 
             // call cohort data domain
-            CohortPatientDetailsResponse qResponse = client.Get<CohortPatientDetailsResponse>(string.Format("{0}/{1}/{2}/Contract/{3}/CohortPatientDetails/{4}?Skip={5}&Take={6}",
-                                                                                        DDCohortServiceUrl,
+            CohortPatientDetailsResponse qResponse = client.Get<CohortPatientDetailsResponse>(string.Format("{0}/{1}/{2}/{3}/CohortPatientDetails/{4}?Skip={5}&Take={6}",
+                                                                                        DDCohortPatientServiceUrl,
                                                                                         request.Context,
                                                                                         request.Version,
                                                                                         request.ContractNumber,
