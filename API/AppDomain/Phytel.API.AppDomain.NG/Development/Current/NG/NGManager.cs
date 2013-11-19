@@ -99,7 +99,7 @@ namespace Phytel.API.AppDomain.NG
 
             IRestClient client = new JsonServiceClient();
 
-            Phytel.API.DataDomain.LookUp.DTO.ProblemsResponse dataDomainResponse = client.Get<Phytel.API.DataDomain.LookUp.DTO.ProblemsResponse>(string.Format("{0}/{1}/{2}/{3}/problems",
+            Phytel.API.DataDomain.LookUp.DTO.GetAllProblemResponse dataDomainResponse = client.Get<Phytel.API.DataDomain.LookUp.DTO.GetAllProblemResponse>(string.Format("{0}/{1}/{2}/{3}/problems",
                                                                                                             DDLookupServiceUrl,
                                                                                                             request.Context,
                                                                                                             request.Version,
