@@ -1,10 +1,11 @@
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 using Phytel.Mongo.Linq;
+using System.Collections.Generic;
 
 namespace Phytel.API.DataDomain.LookUp.DTO
 {
-    [BsonIgnoreExtraElements(true)]
+    [BsonIgnoreExtraElements(false)]
     public class MEProblem : IMongoEntity<ObjectId>
     {
         public MEProblem() { Id = ObjectId.GenerateNewId(); }
@@ -17,6 +18,8 @@ namespace Phytel.API.DataDomain.LookUp.DTO
         public const string TypeProperty = "t";
         public const string DefaultLevelProperty = "dl";
         public const string DefaultFeaturedProperty = "df";
+        public const string VersionProperty = "v";
+        public const string ExtraElementsProperty = "ex";
 
         [BsonId]
         public ObjectId Id { get; set; }
@@ -27,6 +30,7 @@ namespace Phytel.API.DataDomain.LookUp.DTO
 
         [BsonElement(ActiveProperty)]
         [BsonIgnoreIfNull(true)]
+        [BsonDefaultValue(true)]
         public bool Active { get; set; }
 
         [BsonElement(CodeSystemProperty)]
@@ -43,10 +47,21 @@ namespace Phytel.API.DataDomain.LookUp.DTO
 
         [BsonElement(DefaultLevelProperty)]
         [BsonIgnoreIfNull(true)]
+        [BsonDefaultValue(1)]
         public int? DefaultLevel { get; set; }
 
         [BsonElement(DefaultFeaturedProperty)]
         [BsonIgnoreIfNull(true)]
+        [BsonDefaultValue(true)]
         public bool DefaultFeatured { get; set; }
+
+        [BsonElement(VersionProperty)]
+        [BsonDefaultValue("v1")]
+        public string Version { get; set; }
+
+        [BsonExtraElements]
+        [BsonIgnoreIfNull(true)]
+        [BsonElement(ExtraElementsProperty)]
+        Dictionary<string, object> ExtraElements { get; set; }
     }
 }

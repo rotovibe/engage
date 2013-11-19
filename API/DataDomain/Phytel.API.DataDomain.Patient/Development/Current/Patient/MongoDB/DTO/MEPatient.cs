@@ -7,6 +7,8 @@ using System.ComponentModel;
 
 namespace Phytel.API.DataDomain.Patient.DTO
 {
+    [BsonIgnoreExtraElements(false)]
+    [MongoIndex(Keys = new string[] { TTLDateProperty }, TimeToLive=0)]
     public class MEPatient : IMongoEntity<ObjectId>, IMEEntity
     {
         public MEPatient() { Id = ObjectId.GenerateNewId(); }
@@ -32,7 +34,7 @@ namespace Phytel.API.DataDomain.Patient.DTO
 
         [BsonElement(DisplayPatientSystemIDProperty)]
         [BsonIgnoreIfNull(true)]
-        public string DisplayPatientSystemID { get; set; }
+        public ObjectId? DisplayPatientSystemID { get; set; }
 
         [BsonElement(FirstNameProperty)]
         [BsonIgnoreIfNull(true)]

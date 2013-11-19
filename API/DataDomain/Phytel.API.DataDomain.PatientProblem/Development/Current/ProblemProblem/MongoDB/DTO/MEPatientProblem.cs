@@ -7,6 +7,9 @@ using System;
 
 namespace Phytel.API.DataDomain.PatientProblem.DTO
 {
+    [BsonIgnoreExtraElements(false)]
+    [MongoIndex(Keys = new string[] { PatientIDProperty })]
+    [MongoIndex(Keys = new string[] { TTLDateProperty }, TimeToLive=0)]
     public class MEPatientProblem : IMongoEntity<ObjectId>, IMEEntity
     {
         public MEPatientProblem() { Id = ObjectId.GenerateNewId(); }                                                                                                                                                                                                           
@@ -40,14 +43,17 @@ namespace Phytel.API.DataDomain.PatientProblem.DTO
 
         [BsonElement(ActiveProperty)]
         [BsonIgnoreIfNull(true)]
+        [BsonDefaultValue(true)]
         public bool Active { get; set; }
 
         [BsonElement(FeaturedProperty)]
         [BsonIgnoreIfNull(true)]
+        [BsonDefaultValue(false)]
         public bool Featured { get; set; }
 
         [BsonElement(LevelProperty)]
         [BsonIgnoreIfNull(true)]
+        [BsonDefaultValue(1)]
         public int Level { get; set; }
 
         [BsonElement(StartDateProperty)]

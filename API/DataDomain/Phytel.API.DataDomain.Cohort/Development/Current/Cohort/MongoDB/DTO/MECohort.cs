@@ -7,6 +7,8 @@ using System;
 
 namespace Phytel.API.DataDomain.Cohort.DTO
 {
+    [BsonIgnoreExtraElements(false)]
+    [MongoIndex(Keys = new string[] { TTLDateProperty }, TimeToLive = 0)]
     public class MECohort : IMongoEntity<ObjectId>, IMEEntity
     {
         public MECohort() { Id = ObjectId.GenerateNewId(); }

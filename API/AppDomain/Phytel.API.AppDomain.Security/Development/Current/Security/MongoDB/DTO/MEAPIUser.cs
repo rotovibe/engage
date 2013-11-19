@@ -1,10 +1,11 @@
 ﻿using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 using Phytel.Mongo.Linq;
+using System.Collections.Generic;
 
 namespace Phytel.API.AppDomain.Security
 {
-    [BsonIgnoreExtraElements(true)]
+    [BsonIgnoreExtraElements(false)]
     [MongoIndex(Keys = new string[] { ApiKeyProperty, ProductProperty, IsActiveProperty })]
     public class MEAPIUser : IMongoEntity<ObjectId>
     {
@@ -19,6 +20,8 @@ namespace Phytel.API.AppDomain.Security
         public const string ProductProperty = "product";
         public const string IsActiveProperty = "isactive";
         public const string SessionTimeoutProperty = "timeout";
+        public const string VersionProperty = "v";
+        public const string ExtraElementsProperty = "ex";
 
         [BsonId]
         public ObjectId Id { get; set; }
@@ -46,6 +49,14 @@ namespace Phytel.API.AppDomain.Security
         [BsonElement(SessionTimeoutProperty)]
         [BsonDefaultValue(30)]
         public int SessionTimeout { get; set; }
-        
+
+        [BsonElement(VersionProperty)]
+        [BsonDefaultValue("v1")]
+        public string Version { get; set; }
+
+        [BsonExtraElements]
+        [BsonIgnoreIfNull(true)]
+        [BsonElement(ExtraElementsProperty)]
+        Dictionary<string, object> ExtraElements { get; set; }
     }
 }

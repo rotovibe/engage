@@ -2,10 +2,11 @@
 using MongoDB.Bson.Serialization.Attributes;
 using Phytel.Mongo.Linq;
 using System;
+using System.Collections.Generic;
 
 namespace Phytel.API.AppDomain.Security
 {
-    [BsonIgnoreExtraElements(true)]
+    [BsonIgnoreExtraElements(false)]
     [MongoIndex(Keys = new string[] { TTLProperty }, TimeToLive=0)]
     public class MEAPISession : IMongoEntity<ObjectId>
     {
@@ -16,6 +17,8 @@ namespace Phytel.API.AppDomain.Security
         public const string APIKeyProperty = "apiKey";
         public const string SessionTimeOutProperty = "sto";
         public const string TTLProperty = "ttl";
+        public const string VersionProperty = "v";
+        public const string ExtraElementsProperty = "ex";
 
         [BsonId]
         public ObjectId Id { get; set; } // token
@@ -41,5 +44,13 @@ namespace Phytel.API.AppDomain.Security
         [BsonIgnoreIfNull(true)]
         public int SessionLengthInMinutes { get; set; }
 
+        [BsonElement(VersionProperty)]
+        [BsonDefaultValue("v1")]
+        public string Version { get; set; }
+
+        [BsonExtraElements]
+        [BsonIgnoreIfNull(true)]
+        [BsonElement(ExtraElementsProperty)]
+        Dictionary<string, object> ExtraElements { get; set; }
     }
 }
