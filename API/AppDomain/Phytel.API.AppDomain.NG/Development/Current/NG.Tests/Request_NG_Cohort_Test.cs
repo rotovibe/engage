@@ -33,11 +33,11 @@ namespace Phytel.API.AppDomain.NG.Services.Test
         public void Get_Pateints_In_Cohort_Test()
         {
             string token = "52792478fe7a592338e990a0";
-            string patientID = "527a933efe7a590ad417d3b0";
+            string cohortID = "528aa048d4332317acc50977";
 
             IRestClient client = new JsonServiceClient();
 
-            GetCohortPatientsResponse response = client.Get<GetCohortPatientsResponse>("http://localhost:888/Nightingale/v1/NG/InHealth001/cohortpatients/1");
+            GetCohortPatientsResponse response = client.Get<GetCohortPatientsResponse>("http://localhost:888/Nightingale/v1/NG/InHealth001/cohortpatients/528aa048d4332317acc50977");
         }
 
     }
