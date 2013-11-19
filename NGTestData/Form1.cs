@@ -115,7 +115,7 @@ namespace NGTestData
             {
                 mongoDB.GetCollection("Patient").InsertBatch(patients);
                 mongoDB.GetCollection("PatientProblem").InsertBatch(patientProblems);
-                mongoDB.GetCollection("CohortPatientView").InsertBatch(patients);
+                mongoDB.GetCollection("CohortPatientView").InsertBatch(cohortPatients);
             }
             
         }
