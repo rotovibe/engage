@@ -64,21 +64,14 @@ namespace Phytel.API.AppDomain.NG
             List<Phytel.API.AppDomain.NG.DTO.PatientProblem> response = new List<Phytel.API.AppDomain.NG.DTO.PatientProblem>();
 
            IRestClient client = new JsonServiceClient();
-            ///{Context}/{Version}/{ContractNumber}/patientproblems"
-            Phytel.API.DataDomain.PatientProblem.DTO.GetAllPatientProblemResponse dataDomainResponse = client.Post<Phytel.API.DataDomain.PatientProblem.DTO.GetAllPatientProblemResponse>
-                (string.Format("{0}/{1}/{2}/{3}/patientproblems",
+             //[Route("/{Context}/{Version}/{ContractNumber}/patientproblems/{PatientID}", "GET")]
+            Phytel.API.DataDomain.PatientProblem.DTO.GetAllPatientProblemResponse dataDomainResponse = client.Get<Phytel.API.DataDomain.PatientProblem.DTO.GetAllPatientProblemResponse>
+                (string.Format("{0}/{1}/{2}/{3}/patientproblems/{4}",
                     DDPatientProblemServiceUrl,
                     "NG", 
                     request.Version, 
-                    request.ContractNumber),
-                    new Phytel.API.DataDomain.PatientProblem.DTO.GetAllPatientProblemRequest
-                    {
-                        PatientID = request.PatientID,
-                        Context = "NG",
-                        Version = request.Version,
-                        ContractNumber = request.ContractNumber
-                    }
-                as object);
+                    request.ContractNumber,
+                    request.PatientID));
 
             List<Phytel.API.DataDomain.PatientProblem.DTO.PProb> problems = dataDomainResponse.PatientProblems;
 

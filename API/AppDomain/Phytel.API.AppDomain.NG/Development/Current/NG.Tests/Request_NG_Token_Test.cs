@@ -70,21 +70,21 @@ namespace Phytel.API.AppDomain.NG.Services.Test
         }
 
 
+        #region PatientProblem
         [TestMethod]
-        public void GetPatientProblemsByPatientIDService_POST_Test()
+        public void GetAllPatientProblems_Test()
         {
 
             // Arrange
             string version = "v1";
             string contractNumber = "InHealth001";
-            string token = "1234";
+            string token = "528cc924d6a4850fe05b3afa";
             string patientID = "528bdccc072ef7071c2e22ae";
             IRestClient client = new JsonServiceClient();
 
-            JsonServiceClient.HttpWebRequestFilter = x => x.Headers.Add(string.Format("APIToken: {0}", token));
             GetAllPatientProblemsResponse response = client.Get<GetAllPatientProblemsResponse>
-                (string.Format("{0}/{1}/{2}/patientproblems/{PatientID}",
-                  "http://localhost:888/Nightingale/", version, contractNumber, patientID)
+                (string.Format("{0}/{1}/{2}/patientproblems/{3}?Token={4}",
+                  "http://localhost:888/Nightingale/", version, contractNumber, patientID, token)
                   );
 
             // Assert
@@ -92,27 +92,27 @@ namespace Phytel.API.AppDomain.NG.Services.Test
         }
 
 
-        
+
 
         [TestMethod]
-        public void FindProblemsService_Test()
+        public void GetAllProblems_Test()
         {
 
             // Arrange
             string version = "v1";
             string contractNumber = "InHealth001";
             string context = "NG";
-            string token = "1234";
+            string token = "528cc924d6a4850fe05b3afa";
             IRestClient client = new JsonServiceClient();
-            JsonServiceClient.HttpWebRequestFilter = x => x.Headers.Add(string.Format("APIToken: {0}", token));
             // Act
             //[Route("/{Context}/{Version}/{ContractNumber}/problemslookup", 
             GetAllProblemsResponse response = client.Get<GetAllProblemsResponse>
-                (string.Format("{0}/{1}/{2}/{3}/problemslookup",
-                  "http://localhost:888/Nightingale/", context, version, contractNumber));
+                (string.Format("{0}/{1}/{2}/{3}/problemslookup?Token={4}",
+                  "http://localhost:888/Nightingale/", context, version, contractNumber, token));
 
             // Assert
             Assert.AreNotEqual(0, response.Problems.Count);
         }
-    }
+    } 
+        #endregion
 }

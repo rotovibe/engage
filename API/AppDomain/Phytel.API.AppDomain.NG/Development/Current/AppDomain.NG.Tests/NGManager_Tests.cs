@@ -15,8 +15,9 @@ namespace Phytel.API.AppDomain.NG.Test
             //Assert.IsTrue(response.LastName == "DiGiorgio");
         }
 
+        #region PatientProblem
         [TestMethod]
-        public void GetPatientsByProblem_Test()
+        public void GetAllPatientProblems_Test()
         {
             // Arrange
             string version = "v1";
@@ -36,10 +37,10 @@ namespace Phytel.API.AppDomain.NG.Test
             //Assert
             Assert.IsTrue(response.Count > 0);
         }
-        
+
         [TestMethod]
-        public void FindProblems_Test()
-        { 
+        public void GetAllProblems_Test()
+        {
             // Arrange
             string version = "v1";
             string contractNumber = "InHealth001";
@@ -56,7 +57,8 @@ namespace Phytel.API.AppDomain.NG.Test
 
             //Assert
             Assert.IsTrue(response.Count > 0);
-        }
+        } 
+        #endregion
 
         [TestMethod]
         public void GetAllCohorts_Test()
