@@ -63,6 +63,16 @@ namespace Phytel.API.DataDomain.PatientProblem
                 patientSelectExpression.ExpressionOrder = 1;
                 patientSelectExpression.GroupID = 1;
                 selectExpressions.Add(patientSelectExpression);
+
+
+                // Active = true.
+                SelectExpression activeSelectExpression = new SelectExpression();
+                activeSelectExpression.FieldName = MEPatientProblem.ActiveProperty;
+                activeSelectExpression.Type = SelectExpressionType.EQ;
+                activeSelectExpression.Value = true;
+                activeSelectExpression.ExpressionOrder = 2;
+                activeSelectExpression.GroupID = 1;
+                selectExpressions.Add(activeSelectExpression);
             
                 // DeleteFlag = false.
                 // This is not passed through the request object. But user story demands that only Problems set to DeleteFlag == false should be displayed to the end user.
@@ -70,7 +80,7 @@ namespace Phytel.API.DataDomain.PatientProblem
                 deleteFlagSelectExpression.FieldName = MEPatientProblem.DeleteFlagProperty;
                 deleteFlagSelectExpression.Type = SelectExpressionType.EQ;
                 deleteFlagSelectExpression.Value = false;
-                deleteFlagSelectExpression.ExpressionOrder = 2;
+                deleteFlagSelectExpression.ExpressionOrder = 3;
                 deleteFlagSelectExpression.GroupID = 1;
                 selectExpressions.Add(deleteFlagSelectExpression);
 
@@ -80,7 +90,7 @@ namespace Phytel.API.DataDomain.PatientProblem
                 problemIDsSelectExpression.Type = SelectExpressionType.IN;
                 problemIDsSelectExpression.Value = activeChronicProblemIDs;
                 problemIDsSelectExpression.NextExpressionType = SelectExpressionGroupType.AND;
-                problemIDsSelectExpression.ExpressionOrder = 3;
+                problemIDsSelectExpression.ExpressionOrder = 4;
                 problemIDsSelectExpression.GroupID = 1;
                 selectExpressions.Add(problemIDsSelectExpression);
 

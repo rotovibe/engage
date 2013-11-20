@@ -15,7 +15,7 @@ namespace Phytel.API.DataDomain.PatientProblem.Test
             string context = "NG";
             GetAllPatientProblemRequest request = new GetAllPatientProblemRequest
             {
-                PatientID = "528bdccc072ef7071c2e22ae",
+                PatientID = "528d3c82072ef71fb45ff580",
                 Context = context,
                 ContractNumber = contractNumber,
                 Version = version
