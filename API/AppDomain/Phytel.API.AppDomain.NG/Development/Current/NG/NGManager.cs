@@ -124,7 +124,7 @@ namespace Phytel.API.AppDomain.NG
         #endregion
 
         #region Cohort Requests
-        public List<Phytel.API.AppDomain.NG.DTO.Cohort> GetCohorts(GetAllCohortsRequest request)
+        public List<Phytel.API.AppDomain.NG.DTO.Cohort> GetCohorts(Phytel.API.AppDomain.NG.DTO.GetAllCohortsRequest request)
         {
             List<Phytel.API.AppDomain.NG.DTO.Cohort> response = new List<Phytel.API.AppDomain.NG.DTO.Cohort>();
 
