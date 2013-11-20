@@ -38,7 +38,7 @@ namespace Phytel.API.AppDomain.NG.Services.Test
             IRestClient client = new JsonServiceClient();
 
             GetCohortPatientsResponse response = client.Get<GetCohortPatientsResponse>(
-                string.Format("{0}/{1}/{2}/{3}/cohortpatients/{4}", "http://localhost:888/Nightingale/", "v1", "NG", "InHealth001", cohortID)
+                string.Format("{0}/{1}/{2}/cohortpatients/{3}/{4}", "http://localhost:888/Nightingale", "v1", "InHealth001", cohortID, "?Skip=0&Take=1000")
                 );
         }
 

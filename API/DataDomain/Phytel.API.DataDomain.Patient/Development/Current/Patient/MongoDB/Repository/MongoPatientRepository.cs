@@ -103,7 +103,7 @@ namespace Phytel.API.DataDomain.Patient
                         Gender = mp.Gender,
                         LastName = mp.LastName,
                         MiddleName = mp.MiddleName,
-                        PatientID = mp.DisplayPatientSystemID.ToString(),
+                        PatientID = mp.Id.ToString(),
                         Suffix = mp.Suffix,
                         Version = mp.Version
                     });

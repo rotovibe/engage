@@ -144,6 +144,7 @@ namespace Phytel.API.AppDomain.NG
         public GetCohortPatientsResponse GetCohortPatients(GetCohortPatientsRequest request)
         {
             GetCohortPatientsResponse pResponse = new GetCohortPatientsResponse();
+            pResponse.Patients = new List<Patient>();
 
             IRestClient client = new JsonServiceClient();
 
@@ -158,6 +159,17 @@ namespace Phytel.API.AppDomain.NG
                                                                                         request.Take));
 
             //take qResponse Patient details and map them to "Patient" in the GetCohortPatientsResponse
+            qResponse.CohortPatients.ForEach(x => pResponse.Patients.Add(new Patient
+            {
+                DOB = x.DOB,
+                FirstName = x.FirstName,
+                Gender = x.Gender,
+                LastName = x.LastName,
+                MiddleName = x.MiddleName,
+                PatientID = x.PatientID,
+                PreferredName = x.PreferredName,
+                Suffix = x.Suffix
+            }));
 
             //SendAuditDispatch();
 
