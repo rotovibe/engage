@@ -87,6 +87,7 @@ namespace Phytel.API.DataDomain.LookUp
                 using (ProblemMongoContext ctx = new ProblemMongoContext(_dbName))
                 {
                     List<MEProblem> meProblems = ctx.Problems.Collection.Find(mQuery).ToList();
+
                     if (meProblems != null)
                     {
                         patientProblemList = new List<Problem>();
