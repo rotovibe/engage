@@ -51,6 +51,7 @@ namespace NGTestData
             foreach (DataRow dr in dsPatients.Tables[0].Rows)
             {
                 counter++;
+                MECohortPatientView currentPatientView = new MECohortPatientView();
 
                 //Phytel.API.DataDomain.Cohort.DTO.
                 Phytel.API.DataDomain.Patient.DTO.MEPatient patient = new Phytel.API.DataDomain.Patient.DTO.MEPatient
@@ -58,7 +59,7 @@ namespace NGTestData
                         DisplayPatientSystemID = null,
                         FirstName = dr["FirstName"].ToString(),
                         LastName = dr["LastName"].ToString(),
-                        Gender = dr["Gender"].ToString(),
+                        Gender = dr["Gender"].ToString().ToUpper(),
                         DOB = dr["BirthDate"].ToString(),
                         MiddleName = dr["MiddleInitial"].ToString(),
                         Suffix = dr["Suffix"].ToString(),
@@ -72,12 +73,17 @@ namespace NGTestData
 
                 patients.Add(patient);
 
-                cohortPatients.Add(new MECohortPatientView { Active = true, Key = "FN", Type = "Demo", PatientID = patient.Id, Value = patient.FirstName, LastName = patient.LastName });
-                cohortPatients.Add(new MECohortPatientView { Active = true, Key = "LN", Type = "Demo", PatientID = patient.Id, Value = patient.LastName, LastName = patient.LastName });
-                cohortPatients.Add(new MECohortPatientView { Active = true, Key = "DOB", Type = "Demo", PatientID = patient.Id, Value = patient.DOB, LastName = patient.LastName });
-                cohortPatients.Add(new MECohortPatientView { Active = true, Key = "MI", Type = "Demo", PatientID = patient.Id, Value = patient.MiddleName, LastName = patient.LastName });
-                cohortPatients.Add(new MECohortPatientView { Active = true, Key = "G", Type = "Demo", PatientID = patient.Id, Value = patient.Gender, LastName = patient.LastName });
-
+                currentPatientView.PatientID = patient.Id;
+                currentPatientView.LastName = patient.LastName;
+                currentPatientView.SearchFields = new List<SearchField>();
+                currentPatientView.SearchFields.Add(new SearchField { Active = true, FieldName = "FN", Value = patient.FirstName });
+                currentPatientView.SearchFields.Add(new SearchField { Active = true, FieldName = "LN", Value = patient.LastName });
+                currentPatientView.SearchFields.Add(new SearchField { Active = true, FieldName = "G", Value = patient.Gender.ToUpper() });
+                currentPatientView.SearchFields.Add(new SearchField { Active = true, FieldName = "DOB", Value = patient.DOB });
+                currentPatientView.SearchFields.Add(new SearchField { Active = true, FieldName = "MN", Value = patient.MiddleName });
+                currentPatientView.SearchFields.Add(new SearchField { Active = true, FieldName = "SFX", Value = patient.Suffix });
+                currentPatientView.SearchFields.Add(new SearchField { Active = true, FieldName = "PN", Value = patient.PreferredName });
+                
                 for(int i = 0; i < numProblems.Value; i++)
                 {
                     int probID = rnd.Next(maxNum);
@@ -96,9 +102,11 @@ namespace NGTestData
                             TTLDate = null,
                             Version = "v1"
                         });
-                    cohortPatients.Add(new MECohortPatientView { Active = true, Key = "Condition", Type = "Chronic", PatientID = patient.Id, Value = problems[probID].Id.ToString(), LastName = patient.LastName });
+                    currentPatientView.SearchFields.Add(new SearchField { Active = true, FieldName = "Problem", Value = problems[probID].Id.ToString() });
                 }
 
+                cohortPatients.Add(currentPatientView);
+                
                 if(counter == 1000)
                 {
                     mongoDB.GetCollection("Patient").InsertBatch(patients);
