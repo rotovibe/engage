@@ -17,9 +17,9 @@ namespace Phytel.API.DataDomain.Cohort
             return response;
         }
 
-        public static GetAllCohortResponse GetCohorts(GetAllCohortRequest request)
+        public static GetAllCohortsResponse GetCohorts(GetAllCohortsRequest request)
         {
-            GetAllCohortResponse response = new GetAllCohortResponse();
+            GetAllCohortsResponse response = new GetAllCohortsResponse();
 
             ICohortRepository<API.DataDomain.Cohort.DTO.Cohort> repo = CohortRepositoryFactory<API.DataDomain.Cohort.DTO.Cohort>.GetCohortRepository(request.ContractNumber, request.Context);
 

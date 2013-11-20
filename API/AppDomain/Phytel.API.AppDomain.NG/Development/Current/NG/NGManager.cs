@@ -130,8 +130,8 @@ namespace Phytel.API.AppDomain.NG
 
             IRestClient client = new JsonServiceClient();
 
-            Phytel.API.DataDomain.Cohort.DTO.GetAllCohortResponse dataDomainResponse = client.Get<Phytel.API.DataDomain.Cohort.DTO.GetAllCohortResponse>(string.Format("{0}/{1}/{2}/{3}/Cohorts",
-                                                                                                            "http://localhost:8888/Cohort",//DDCohortServiceUrl,
+            Phytel.API.DataDomain.Cohort.DTO.GetAllCohortsResponse dataDomainResponse = client.Get<Phytel.API.DataDomain.Cohort.DTO.GetAllCohortsResponse>(string.Format("{0}/{1}/{2}/{3}/Cohorts",
+                                                                                                            DDCohortServiceUrl,
                                                                                                             "NG",
                                                                                                             request.Version,
                                                                                                             request.ContractNumber));

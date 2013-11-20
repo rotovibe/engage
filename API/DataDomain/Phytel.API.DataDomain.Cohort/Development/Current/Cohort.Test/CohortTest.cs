@@ -38,10 +38,10 @@ namespace Phytel.API.DataDomain.Cohort.Test
             string version = "v1";
             string contractNumber = "InHealth001";
             string context = "NG";
-            GetAllCohortRequest request = new GetAllCohortRequest { Context = context, ContractNumber = contractNumber, Version = version };
+            GetAllCohortsRequest request = new GetAllCohortsRequest { Context = context, ContractNumber = contractNumber, Version = version };
 
             // Act
-            GetAllCohortResponse response = DataCohortManager.GetCohorts(request);
+            GetAllCohortsResponse response = DataCohortManager.GetCohorts(request);
 
             // Assert
             Assert.AreNotEqual(0, response.Cohorts.Count);

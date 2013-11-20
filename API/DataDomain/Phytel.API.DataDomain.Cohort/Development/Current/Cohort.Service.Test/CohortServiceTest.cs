@@ -19,7 +19,7 @@ namespace Phytel.API.DataDomain.Cohort.Service.Test
             IRestClient client = new JsonServiceClient();
 
             // Act
-            GetAllCohortResponse response = client.Get <GetAllCohortResponse>
+            GetAllCohortsResponse response = client.Get <GetAllCohortsResponse>
                 (string.Format("{0}/{1}/{2}/{3}/cohorts",
                   "http://localhost:8888/Cohort/", context, version, contractNumber));
 

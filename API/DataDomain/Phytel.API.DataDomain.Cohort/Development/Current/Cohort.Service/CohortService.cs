@@ -23,9 +23,9 @@ namespace Phytel.API.DataDomain.Cohort.Service
             return response;
         }
 
-        public GetAllCohortResponse Get(GetAllCohortRequest request)
+        public GetAllCohortsResponse Get(GetAllCohortsRequest request)
         {
-            GetAllCohortResponse response = new GetAllCohortResponse();
+            GetAllCohortsResponse response = new GetAllCohortsResponse();
             try
             {
                 response = DataCohortManager.GetCohorts(request);
