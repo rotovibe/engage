@@ -20,7 +20,7 @@ namespace Phytel.API.DataDomain.PatientProblem.Service.Test
             IRestClient client = new JsonServiceClient();
 
             // Act
-            GetAllPatientProblemResponse response = client.Get<GetAllPatientProblemResponse>(string.Format("{0}/{1}/{2}/{3}/patientproblems/{4}", "http://localhost:8888/PatientProblem", context, version, contractNumber, patientID));
+            GetAllPatientProblemsDataResponse response = client.Get<GetAllPatientProblemsDataResponse>(string.Format("{0}/{1}/{2}/{3}/patientproblems/{4}", "http://localhost:8888/PatientProblem", context, version, contractNumber, patientID));
 
            // Assert
             Assert.AreNotEqual(0, response.PatientProblems.Count);

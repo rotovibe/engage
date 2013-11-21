@@ -1,35 +1,43 @@
 using Phytel.API.DataDomain.Patient;
 using Phytel.API.DataDomain.Patient.DTO;
+using System;
+using System.Net;
 
 namespace Phytel.API.DataDomain.Patient.Service
 {
     public class PatientService : ServiceStack.ServiceInterface.Service
     {
-        public PatientResponse Post(PatientRequest request)
+        public GetPatientDataResponse Get(GetPatientDataRequest request)
         {
-            PatientResponse response = PatientDataManager.GetPatientByID(request);
-            response.Version = request.Version;
+            GetPatientDataResponse response = new GetPatientDataResponse();
+            try
+            {
+                response = PatientDataManager.GetPatientByID(request);
+                response.Version = request.Version;
+            }
+            catch (Exception ex)
+            {
+                //TODO: Log this to C3 database via ASE
+                base.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                response.Status = new ServiceStack.ServiceInterface.ServiceModel.ResponseStatus("Exception", ex.Message);
+            }
             return response;
         }
 
-        public PatientResponse Get(PatientRequest request)
+        public GetPatientsDataResponse Post(GetPatientsDataRequest request)
         {
-            PatientResponse response = PatientDataManager.GetPatientByID(request);
-            response.Version = request.Version;
-            return response;
-        }
-
-        public PatientListResponse Post(PatientListRequest request)
-        {
-            PatientListResponse response = PatientDataManager.GetPatientList(request);
-            response.Version = request.Version;
-            return response;
-        }
-
-        public PatientDetailsResponse Post(PatientDetailsRequest request)
-        {
-            PatientDetailsResponse response = PatientDataManager.GetPatientDetailsList(request);
-            response.Version = request.Version;
+            GetPatientsDataResponse response = new GetPatientsDataResponse();
+            try
+            {
+                response = PatientDataManager.GetPatients(request);
+                response.Version = request.Version;
+            }
+            catch (Exception ex)
+            {
+                //TODO: Log this to C3 database via ASE
+                base.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                response.Status = new ServiceStack.ServiceInterface.ServiceModel.ResponseStatus("Exception", ex.Message);
+            }
             return response;
         }
     }

@@ -83,18 +83,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.LookUp.Service.T
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.LookUp.Test", "DataDomain\Phytel.API.DataDomain.LookUp\Development\Current\LookUp.Test\DataDomain.LookUp.Test.csproj", "{CBBFA1EA-0482-4FB1-B0DE-D3AEC89724B4}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Template", "Template", "{9C575322-0A26-4351-BE40-6957FA0F5FF9}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.Template", "DataDomain\Phytel.API.DataDomain.Template\Template\DataDomain.Template.csproj", "{F1A478D1-DCA1-4BE6-AE83-E0ACDD4FDFFD}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.Template.DTO", "DataDomain\Phytel.API.DataDomain.Template\Template.DTO\DataDomain.Template.DTO.csproj", "{1C2C63A1-4246-4EC9-BAD1-C00E9ECD85F6}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.Template.Service", "DataDomain\Phytel.API.DataDomain.Template\Template.Service\DataDomain.Template.Service.csproj", "{29DFC6F8-F09F-4881-8A94-43C4229A5583}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.Template.Service.Test", "DataDomain\Phytel.API.DataDomain.Template\Template.Service.Test\DataDomain.Template.Service.Test.csproj", "{9F763B50-9E2B-426F-ACFB-27F3D3F255D5}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.Template.Test", "DataDomain\Phytel.API.DataDomain.Template\Template.Test\DataDomain.Template.Test.csproj", "{79CB7A3A-6D69-45F8-964F-D9609383B22A}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Cohort", "Cohort", "{2A01ECE4-66FB-4A8C-BEA0-74A20BDD6543}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.Cohort.Service", "DataDomain\Phytel.API.DataDomain.Cohort\Development\Current\Cohort.Service\DataDomain.Cohort.Service.csproj", "{42F7185B-2EE1-49F9-AB6F-E89E6F8AF7C6}"
@@ -121,9 +109,33 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.CohortPatient.Se
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.CohortPatient.Test", "DataDomain\Phytel.API.DataDomain.CohortPatient\Development\Current\CohortPatient.Test\DataDomain.CohortPatient.Test.csproj", "{3694B67A-DD77-4798-956A-1BF3241C23B9}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Template", "Template", "{F2E086CF-3717-4ED0-B6F9-35A8A362F7FD}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "PatientSystem", "PatientSystem", "{B65DC0B4-4013-4BBC-952D-1122F5480535}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.Template", "DataDomain\Phytel.API.DataDomain.Template\Template\DataDomain.Template.csproj", "{F1A478D1-DCA1-4BE6-AE83-E0ACDD4FDFFD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.Template.DTO", "DataDomain\Phytel.API.DataDomain.Template\Template.DTO\DataDomain.Template.DTO.csproj", "{1C2C63A1-4246-4EC9-BAD1-C00E9ECD85F6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.Template.Service", "DataDomain\Phytel.API.DataDomain.Template\Template.Service\DataDomain.Template.Service.csproj", "{29DFC6F8-F09F-4881-8A94-43C4229A5583}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.Template.Service.Test", "DataDomain\Phytel.API.DataDomain.Template\Template.Service.Test\DataDomain.Template.Service.Test.csproj", "{9F763B50-9E2B-426F-ACFB-27F3D3F255D5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.Template.Test", "DataDomain\Phytel.API.DataDomain.Template\Template.Test\DataDomain.Template.Test.csproj", "{79CB7A3A-6D69-45F8-964F-D9609383B22A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.PatientSystem", "DataDomain\Phytel.API.DataDomain.PatientSystem\PatientSystem\DataDomain.PatientSystem.csproj", "{BF2F1262-D5CC-41F0-BCFC-7CCDCE479795}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.PatientSystem.DTO", "DataDomain\Phytel.API.DataDomain.PatientSystem\PatientSystem.DTO\DataDomain.PatientSystem.DTO.csproj", "{6033A8EA-A3EF-4182-BFDD-4A9826ECF871}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.PatientSystem.Service", "DataDomain\Phytel.API.DataDomain.PatientSystem\PatientSystem.Service\DataDomain.PatientSystem.Service.csproj", "{F127267A-807D-4091-AE83-48CDC12E7D56}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.PatientSystem.Service.Test", "DataDomain\Phytel.API.DataDomain.PatientSystem\PatientSystem.Service.Test\DataDomain.PatientSystem.Service.Test.csproj", "{211E6CB2-91E2-4C25-A235-1FF1D9D4CEC7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.PatientSystem.Test", "DataDomain\Phytel.API.DataDomain.PatientSystem\PatientSystem.Test\DataDomain.PatientSystem.Test.csproj", "{BA3F00D1-7DE7-4AE6-B637-6681C10EC20D}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 47
+		SccNumberOfProjects = 52
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = http://hillstfs2013:8080/tfs/phytel
 		SccLocalPath0 = .
@@ -239,78 +251,98 @@ Global
 		SccProjectTopLevelParentUniqueName28 = API.sln
 		SccProjectName28 = DataDomain/Phytel.API.DataDomain.LookUp/Development/Current/LookUp.Test
 		SccLocalPath28 = DataDomain\\Phytel.API.DataDomain.LookUp\\Development\\Current\\LookUp.Test
-		SccProjectUniqueName29 = DataDomain\\Phytel.API.DataDomain.Template\\Template\\DataDomain.Template.csproj
+		SccProjectUniqueName29 = DataDomain\\Phytel.API.DataDomain.Cohort\\Development\\Current\\Cohort.Service\\DataDomain.Cohort.Service.csproj
 		SccProjectTopLevelParentUniqueName29 = API.sln
-		SccProjectName29 = DataDomain/Phytel.API.DataDomain.Template/Template
-		SccLocalPath29 = DataDomain\\Phytel.API.DataDomain.Template\\Template
-		SccProjectUniqueName30 = DataDomain\\Phytel.API.DataDomain.Template\\Template.DTO\\DataDomain.Template.DTO.csproj
+		SccProjectName29 = DataDomain/Phytel.API.DataDomain.Cohort/Development/Current/Cohort.Service
+		SccLocalPath29 = DataDomain\\Phytel.API.DataDomain.Cohort\\Development\\Current\\Cohort.Service
+		SccProjectUniqueName30 = DataDomain\\Phytel.API.DataDomain.Cohort\\Development\\Current\\Cohort.DTO\\DataDomain.Cohort.DTO.csproj
 		SccProjectTopLevelParentUniqueName30 = API.sln
-		SccProjectName30 = DataDomain/Phytel.API.DataDomain.Template/Template.DTO
-		SccLocalPath30 = DataDomain\\Phytel.API.DataDomain.Template\\Template.DTO
-		SccProjectUniqueName31 = DataDomain\\Phytel.API.DataDomain.Template\\Template.Service\\DataDomain.Template.Service.csproj
+		SccProjectName30 = DataDomain/Phytel.API.DataDomain.Cohort/Development/Current/Cohort.DTO
+		SccLocalPath30 = DataDomain\\Phytel.API.DataDomain.Cohort\\Development\\Current\\Cohort.DTO
+		SccProjectUniqueName31 = DataDomain\\Phytel.API.DataDomain.Cohort\\Development\\Current\\Cohort\\DataDomain.Cohort.csproj
 		SccProjectTopLevelParentUniqueName31 = API.sln
-		SccProjectName31 = DataDomain/Phytel.API.DataDomain.Template/Template.Service
-		SccLocalPath31 = DataDomain\\Phytel.API.DataDomain.Template\\Template.Service
-		SccProjectUniqueName32 = DataDomain\\Phytel.API.DataDomain.Template\\Template.Service.Test\\DataDomain.Template.Service.Test.csproj
+		SccProjectName31 = DataDomain/Phytel.API.DataDomain.Cohort/Development/Current/Cohort
+		SccLocalPath31 = DataDomain\\Phytel.API.DataDomain.Cohort\\Development\\Current\\Cohort
+		SccProjectUniqueName32 = DataDomain\\Phytel.API.DataDomain.Cohort\\Development\\Current\\Cohort.Service.Test\\DataDomain.Cohort.Service.Test.csproj
 		SccProjectTopLevelParentUniqueName32 = API.sln
-		SccProjectName32 = DataDomain/Phytel.API.DataDomain.Template/Template.Service.Test
-		SccLocalPath32 = DataDomain\\Phytel.API.DataDomain.Template\\Template.Service.Test
-		SccProjectUniqueName33 = DataDomain\\Phytel.API.DataDomain.Template\\Template.Test\\DataDomain.Template.Test.csproj
+		SccProjectName32 = DataDomain/Phytel.API.DataDomain.Cohort/Development/Current/Cohort.Service.Test
+		SccLocalPath32 = DataDomain\\Phytel.API.DataDomain.Cohort\\Development\\Current\\Cohort.Service.Test
+		SccProjectUniqueName33 = DataDomain\\Phytel.API.DataDomain.Cohort\\Development\\Current\\Cohort.Test\\DataDomain.Cohort.Test.csproj
 		SccProjectTopLevelParentUniqueName33 = API.sln
-		SccProjectName33 = DataDomain/Phytel.API.DataDomain.Template/Template.Test
-		SccLocalPath33 = DataDomain\\Phytel.API.DataDomain.Template\\Template.Test
-		SccProjectUniqueName34 = DataDomain\\Phytel.API.DataDomain.Cohort\\Development\\Current\\Cohort.Service\\DataDomain.Cohort.Service.csproj
+		SccProjectName33 = DataDomain/Phytel.API.DataDomain.Cohort/Development/Current/Cohort.Test
+		SccLocalPath33 = DataDomain\\Phytel.API.DataDomain.Cohort\\Development\\Current\\Cohort.Test
+		SccProjectUniqueName34 = ..\\..\\Shared\\NGTestData\\NGTestData.csproj
 		SccProjectTopLevelParentUniqueName34 = API.sln
-		SccProjectName34 = DataDomain/Phytel.API.DataDomain.Cohort/Development/Current/Cohort.Service
-		SccLocalPath34 = DataDomain\\Phytel.API.DataDomain.Cohort\\Development\\Current\\Cohort.Service
-		SccProjectUniqueName35 = DataDomain\\Phytel.API.DataDomain.Cohort\\Development\\Current\\Cohort.DTO\\DataDomain.Cohort.DTO.csproj
+		SccProjectName34 = ../../Shared/NGTestData
+		SccLocalPath34 = ..\\..\\Shared\\NGTestData
+		SccProjectUniqueName35 = DataDomain\\Phytel.API.DataDomain.CohortPatient\\Development\\Current\\CohortPatient\\DataDomain.CohortPatient.csproj
 		SccProjectTopLevelParentUniqueName35 = API.sln
-		SccProjectName35 = DataDomain/Phytel.API.DataDomain.Cohort/Development/Current/Cohort.DTO
-		SccLocalPath35 = DataDomain\\Phytel.API.DataDomain.Cohort\\Development\\Current\\Cohort.DTO
-		SccProjectUniqueName36 = DataDomain\\Phytel.API.DataDomain.Cohort\\Development\\Current\\Cohort\\DataDomain.Cohort.csproj
+		SccProjectName35 = DataDomain/Phytel.API.DataDomain.CohortPatient/Development/Current/CohortPatient
+		SccLocalPath35 = DataDomain\\Phytel.API.DataDomain.CohortPatient\\Development\\Current\\CohortPatient
+		SccProjectUniqueName36 = DataDomain\\Phytel.API.DataDomain.CohortPatient\\Development\\Current\\CohortPatient.DTO\\DataDomain.CohortPatient.DTO.csproj
 		SccProjectTopLevelParentUniqueName36 = API.sln
-		SccProjectName36 = DataDomain/Phytel.API.DataDomain.Cohort/Development/Current/Cohort
-		SccLocalPath36 = DataDomain\\Phytel.API.DataDomain.Cohort\\Development\\Current\\Cohort
-		SccProjectUniqueName37 = DataDomain\\Phytel.API.DataDomain.Cohort\\Development\\Current\\Cohort.Service.Test\\DataDomain.Cohort.Service.Test.csproj
+		SccProjectName36 = DataDomain/Phytel.API.DataDomain.CohortPatient/Development/Current/CohortPatient.DTO
+		SccLocalPath36 = DataDomain\\Phytel.API.DataDomain.CohortPatient\\Development\\Current\\CohortPatient.DTO
+		SccProjectUniqueName37 = DataDomain\\Phytel.API.DataDomain.CohortPatient\\Development\\Current\\CohortPatient.Service\\DataDomain.CohortPatient.Service.csproj
 		SccProjectTopLevelParentUniqueName37 = API.sln
-		SccProjectName37 = DataDomain/Phytel.API.DataDomain.Cohort/Development/Current/Cohort.Service.Test
-		SccLocalPath37 = DataDomain\\Phytel.API.DataDomain.Cohort\\Development\\Current\\Cohort.Service.Test
-		SccProjectUniqueName38 = DataDomain\\Phytel.API.DataDomain.Cohort\\Development\\Current\\Cohort.Test\\DataDomain.Cohort.Test.csproj
+		SccProjectName37 = DataDomain/Phytel.API.DataDomain.CohortPatient/Development/Current/CohortPatient.Service
+		SccLocalPath37 = DataDomain\\Phytel.API.DataDomain.CohortPatient\\Development\\Current\\CohortPatient.Service
+		SccProjectUniqueName38 = DataDomain\\Phytel.API.DataDomain.CohortPatient\\Development\\Current\\CohortPatient.Service.Test\\DataDomain.CohortPatient.Service.Test.csproj
 		SccProjectTopLevelParentUniqueName38 = API.sln
-		SccProjectName38 = DataDomain/Phytel.API.DataDomain.Cohort/Development/Current/Cohort.Test
-		SccLocalPath38 = DataDomain\\Phytel.API.DataDomain.Cohort\\Development\\Current\\Cohort.Test
-		SccProjectUniqueName39 = ..\\..\\Shared\\NGTestData\\NGTestData.csproj
+		SccProjectName38 = DataDomain/Phytel.API.DataDomain.CohortPatient/Development/Current/CohortPatient.Service.Test
+		SccLocalPath38 = DataDomain\\Phytel.API.DataDomain.CohortPatient\\Development\\Current\\CohortPatient.Service.Test
+		SccProjectUniqueName39 = DataDomain\\Phytel.API.DataDomain.CohortPatient\\Development\\Current\\CohortPatient.Test\\DataDomain.CohortPatient.Test.csproj
 		SccProjectTopLevelParentUniqueName39 = API.sln
-		SccProjectName39 = ../../Shared/NGTestData
-		SccLocalPath39 = ..\\..\\Shared\\NGTestData
-		SccProjectUniqueName40 = DataDomain\\Phytel.API.DataDomain.CohortPatient\\Development\\Current\\CohortPatient\\DataDomain.CohortPatient.csproj
+		SccProjectName39 = DataDomain/Phytel.API.DataDomain.CohortPatient/Development/Current/CohortPatient.Test
+		SccLocalPath39 = DataDomain\\Phytel.API.DataDomain.CohortPatient\\Development\\Current\\CohortPatient.Test
+		SccProjectUniqueName40 = DataDomain\\Phytel.API.DataDomain.Patient\\Development\\Current\\Patient.Services.Tests\\DataDomain.Patient.Service.Test.csproj
 		SccProjectTopLevelParentUniqueName40 = API.sln
-		SccProjectName40 = DataDomain/Phytel.API.DataDomain.CohortPatient/Development/Current/CohortPatient
-		SccLocalPath40 = DataDomain\\Phytel.API.DataDomain.CohortPatient\\Development\\Current\\CohortPatient
-		SccProjectUniqueName41 = DataDomain\\Phytel.API.DataDomain.CohortPatient\\Development\\Current\\CohortPatient.DTO\\DataDomain.CohortPatient.DTO.csproj
+		SccProjectName40 = DataDomain/Phytel.API.DataDomain.Patient/Development/Current/Patient.Services.Tests
+		SccLocalPath40 = DataDomain\\Phytel.API.DataDomain.Patient\\Development\\Current\\Patient.Services.Tests
+		SccProjectUniqueName41 = DataDomain\\Phytel.API.DataDomain.PatientProblem\\Development\\Current\\PatientProblem.Services.Tests\\DataDomain.PatientProblem.Service.Test.csproj
 		SccProjectTopLevelParentUniqueName41 = API.sln
-		SccProjectName41 = DataDomain/Phytel.API.DataDomain.CohortPatient/Development/Current/CohortPatient.DTO
-		SccLocalPath41 = DataDomain\\Phytel.API.DataDomain.CohortPatient\\Development\\Current\\CohortPatient.DTO
-		SccProjectUniqueName42 = DataDomain\\Phytel.API.DataDomain.CohortPatient\\Development\\Current\\CohortPatient.Service\\DataDomain.CohortPatient.Service.csproj
+		SccProjectName41 = DataDomain/Phytel.API.DataDomain.PatientProblem/Development/Current/PatientProblem.Services.Tests
+		SccLocalPath41 = DataDomain\\Phytel.API.DataDomain.PatientProblem\\Development\\Current\\PatientProblem.Services.Tests
+		SccProjectUniqueName42 = DataDomain\\Phytel.API.DataDomain.Template\\Template\\DataDomain.Template.csproj
 		SccProjectTopLevelParentUniqueName42 = API.sln
-		SccProjectName42 = DataDomain/Phytel.API.DataDomain.CohortPatient/Development/Current/CohortPatient.Service
-		SccLocalPath42 = DataDomain\\Phytel.API.DataDomain.CohortPatient\\Development\\Current\\CohortPatient.Service
-		SccProjectUniqueName43 = DataDomain\\Phytel.API.DataDomain.CohortPatient\\Development\\Current\\CohortPatient.Service.Test\\DataDomain.CohortPatient.Service.Test.csproj
+		SccProjectName42 = DataDomain/Phytel.API.DataDomain.Template/Template
+		SccLocalPath42 = DataDomain\\Phytel.API.DataDomain.Template\\Template
+		SccProjectUniqueName43 = DataDomain\\Phytel.API.DataDomain.Template\\Template.DTO\\DataDomain.Template.DTO.csproj
 		SccProjectTopLevelParentUniqueName43 = API.sln
-		SccProjectName43 = DataDomain/Phytel.API.DataDomain.CohortPatient/Development/Current/CohortPatient.Service.Test
-		SccLocalPath43 = DataDomain\\Phytel.API.DataDomain.CohortPatient\\Development\\Current\\CohortPatient.Service.Test
-		SccProjectUniqueName44 = DataDomain\\Phytel.API.DataDomain.CohortPatient\\Development\\Current\\CohortPatient.Test\\DataDomain.CohortPatient.Test.csproj
+		SccProjectName43 = DataDomain/Phytel.API.DataDomain.Template/Template.DTO
+		SccLocalPath43 = DataDomain\\Phytel.API.DataDomain.Template\\Template.DTO
+		SccProjectUniqueName44 = DataDomain\\Phytel.API.DataDomain.Template\\Template.Service\\DataDomain.Template.Service.csproj
 		SccProjectTopLevelParentUniqueName44 = API.sln
-		SccProjectName44 = DataDomain/Phytel.API.DataDomain.CohortPatient/Development/Current/CohortPatient.Test
-		SccLocalPath44 = DataDomain\\Phytel.API.DataDomain.CohortPatient\\Development\\Current\\CohortPatient.Test
-		SccProjectUniqueName45 = DataDomain\\Phytel.API.DataDomain.Patient\\Development\\Current\\Patient.Services.Tests\\DataDomain.Patient.Service.Test.csproj
+		SccProjectName44 = DataDomain/Phytel.API.DataDomain.Template/Template.Service
+		SccLocalPath44 = DataDomain\\Phytel.API.DataDomain.Template\\Template.Service
+		SccProjectUniqueName45 = DataDomain\\Phytel.API.DataDomain.Template\\Template.Service.Test\\DataDomain.Template.Service.Test.csproj
 		SccProjectTopLevelParentUniqueName45 = API.sln
-		SccProjectName45 = DataDomain/Phytel.API.DataDomain.Patient/Development/Current/Patient.Services.Tests
-		SccLocalPath45 = DataDomain\\Phytel.API.DataDomain.Patient\\Development\\Current\\Patient.Services.Tests
-		SccProjectUniqueName46 = DataDomain\\Phytel.API.DataDomain.PatientProblem\\Development\\Current\\PatientProblem.Services.Tests\\DataDomain.PatientProblem.Service.Test.csproj
+		SccProjectName45 = DataDomain/Phytel.API.DataDomain.Template/Template.Service.Test
+		SccLocalPath45 = DataDomain\\Phytel.API.DataDomain.Template\\Template.Service.Test
+		SccProjectUniqueName46 = DataDomain\\Phytel.API.DataDomain.Template\\Template.Test\\DataDomain.Template.Test.csproj
 		SccProjectTopLevelParentUniqueName46 = API.sln
-		SccProjectName46 = DataDomain/Phytel.API.DataDomain.PatientProblem/Development/Current/PatientProblem.Services.Tests
-		SccLocalPath46 = DataDomain\\Phytel.API.DataDomain.PatientProblem\\Development\\Current\\PatientProblem.Services.Tests
+		SccProjectName46 = DataDomain/Phytel.API.DataDomain.Template/Template.Test
+		SccLocalPath46 = DataDomain\\Phytel.API.DataDomain.Template\\Template.Test
+		SccProjectUniqueName47 = DataDomain\\Phytel.API.DataDomain.PatientSystem\\PatientSystem\\DataDomain.PatientSystem.csproj
+		SccProjectTopLevelParentUniqueName47 = API.sln
+		SccProjectName47 = DataDomain/Phytel.API.DataDomain.PatientSystem/PatientSystem
+		SccLocalPath47 = DataDomain\\Phytel.API.DataDomain.PatientSystem\\PatientSystem
+		SccProjectUniqueName48 = DataDomain\\Phytel.API.DataDomain.PatientSystem\\PatientSystem.DTO\\DataDomain.PatientSystem.DTO.csproj
+		SccProjectTopLevelParentUniqueName48 = API.sln
+		SccProjectName48 = DataDomain/Phytel.API.DataDomain.PatientSystem/PatientSystem.DTO
+		SccLocalPath48 = DataDomain\\Phytel.API.DataDomain.PatientSystem\\PatientSystem.DTO
+		SccProjectUniqueName49 = DataDomain\\Phytel.API.DataDomain.PatientSystem\\PatientSystem.Service\\DataDomain.PatientSystem.Service.csproj
+		SccProjectTopLevelParentUniqueName49 = API.sln
+		SccProjectName49 = DataDomain/Phytel.API.DataDomain.PatientSystem/PatientSystem.Service
+		SccLocalPath49 = DataDomain\\Phytel.API.DataDomain.PatientSystem\\PatientSystem.Service
+		SccProjectUniqueName50 = DataDomain\\Phytel.API.DataDomain.PatientSystem\\PatientSystem.Service.Test\\DataDomain.PatientSystem.Service.Test.csproj
+		SccProjectTopLevelParentUniqueName50 = API.sln
+		SccProjectName50 = DataDomain/Phytel.API.DataDomain.PatientSystem/PatientSystem.Service.Test
+		SccLocalPath50 = DataDomain\\Phytel.API.DataDomain.PatientSystem\\PatientSystem.Service.Test
+		SccProjectUniqueName51 = DataDomain\\Phytel.API.DataDomain.PatientSystem\\PatientSystem.Test\\DataDomain.PatientSystem.Test.csproj
+		SccProjectTopLevelParentUniqueName51 = API.sln
+		SccProjectName51 = DataDomain/Phytel.API.DataDomain.PatientSystem/PatientSystem.Test
+		SccLocalPath51 = DataDomain\\Phytel.API.DataDomain.PatientSystem\\PatientSystem.Test
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -437,26 +469,6 @@ Global
 		{CBBFA1EA-0482-4FB1-B0DE-D3AEC89724B4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CBBFA1EA-0482-4FB1-B0DE-D3AEC89724B4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CBBFA1EA-0482-4FB1-B0DE-D3AEC89724B4}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F1A478D1-DCA1-4BE6-AE83-E0ACDD4FDFFD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F1A478D1-DCA1-4BE6-AE83-E0ACDD4FDFFD}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F1A478D1-DCA1-4BE6-AE83-E0ACDD4FDFFD}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F1A478D1-DCA1-4BE6-AE83-E0ACDD4FDFFD}.Release|Any CPU.Build.0 = Release|Any CPU
-		{1C2C63A1-4246-4EC9-BAD1-C00E9ECD85F6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{1C2C63A1-4246-4EC9-BAD1-C00E9ECD85F6}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{1C2C63A1-4246-4EC9-BAD1-C00E9ECD85F6}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{1C2C63A1-4246-4EC9-BAD1-C00E9ECD85F6}.Release|Any CPU.Build.0 = Release|Any CPU
-		{29DFC6F8-F09F-4881-8A94-43C4229A5583}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{29DFC6F8-F09F-4881-8A94-43C4229A5583}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{29DFC6F8-F09F-4881-8A94-43C4229A5583}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{29DFC6F8-F09F-4881-8A94-43C4229A5583}.Release|Any CPU.Build.0 = Release|Any CPU
-		{9F763B50-9E2B-426F-ACFB-27F3D3F255D5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{9F763B50-9E2B-426F-ACFB-27F3D3F255D5}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{9F763B50-9E2B-426F-ACFB-27F3D3F255D5}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{9F763B50-9E2B-426F-ACFB-27F3D3F255D5}.Release|Any CPU.Build.0 = Release|Any CPU
-		{79CB7A3A-6D69-45F8-964F-D9609383B22A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{79CB7A3A-6D69-45F8-964F-D9609383B22A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{79CB7A3A-6D69-45F8-964F-D9609383B22A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{79CB7A3A-6D69-45F8-964F-D9609383B22A}.Release|Any CPU.Build.0 = Release|Any CPU
 		{42F7185B-2EE1-49F9-AB6F-E89E6F8AF7C6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{42F7185B-2EE1-49F9-AB6F-E89E6F8AF7C6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{42F7185B-2EE1-49F9-AB6F-E89E6F8AF7C6}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -501,6 +513,46 @@ Global
 		{3694B67A-DD77-4798-956A-1BF3241C23B9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3694B67A-DD77-4798-956A-1BF3241C23B9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3694B67A-DD77-4798-956A-1BF3241C23B9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F1A478D1-DCA1-4BE6-AE83-E0ACDD4FDFFD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F1A478D1-DCA1-4BE6-AE83-E0ACDD4FDFFD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F1A478D1-DCA1-4BE6-AE83-E0ACDD4FDFFD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F1A478D1-DCA1-4BE6-AE83-E0ACDD4FDFFD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1C2C63A1-4246-4EC9-BAD1-C00E9ECD85F6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1C2C63A1-4246-4EC9-BAD1-C00E9ECD85F6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1C2C63A1-4246-4EC9-BAD1-C00E9ECD85F6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1C2C63A1-4246-4EC9-BAD1-C00E9ECD85F6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{29DFC6F8-F09F-4881-8A94-43C4229A5583}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{29DFC6F8-F09F-4881-8A94-43C4229A5583}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{29DFC6F8-F09F-4881-8A94-43C4229A5583}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{29DFC6F8-F09F-4881-8A94-43C4229A5583}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9F763B50-9E2B-426F-ACFB-27F3D3F255D5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9F763B50-9E2B-426F-ACFB-27F3D3F255D5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9F763B50-9E2B-426F-ACFB-27F3D3F255D5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9F763B50-9E2B-426F-ACFB-27F3D3F255D5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{79CB7A3A-6D69-45F8-964F-D9609383B22A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{79CB7A3A-6D69-45F8-964F-D9609383B22A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{79CB7A3A-6D69-45F8-964F-D9609383B22A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{79CB7A3A-6D69-45F8-964F-D9609383B22A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BF2F1262-D5CC-41F0-BCFC-7CCDCE479795}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BF2F1262-D5CC-41F0-BCFC-7CCDCE479795}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BF2F1262-D5CC-41F0-BCFC-7CCDCE479795}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BF2F1262-D5CC-41F0-BCFC-7CCDCE479795}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6033A8EA-A3EF-4182-BFDD-4A9826ECF871}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6033A8EA-A3EF-4182-BFDD-4A9826ECF871}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6033A8EA-A3EF-4182-BFDD-4A9826ECF871}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6033A8EA-A3EF-4182-BFDD-4A9826ECF871}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F127267A-807D-4091-AE83-48CDC12E7D56}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F127267A-807D-4091-AE83-48CDC12E7D56}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F127267A-807D-4091-AE83-48CDC12E7D56}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F127267A-807D-4091-AE83-48CDC12E7D56}.Release|Any CPU.Build.0 = Release|Any CPU
+		{211E6CB2-91E2-4C25-A235-1FF1D9D4CEC7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{211E6CB2-91E2-4C25-A235-1FF1D9D4CEC7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{211E6CB2-91E2-4C25-A235-1FF1D9D4CEC7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{211E6CB2-91E2-4C25-A235-1FF1D9D4CEC7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BA3F00D1-7DE7-4AE6-B637-6681C10EC20D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BA3F00D1-7DE7-4AE6-B637-6681C10EC20D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BA3F00D1-7DE7-4AE6-B637-6681C10EC20D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BA3F00D1-7DE7-4AE6-B637-6681C10EC20D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -511,9 +563,10 @@ Global
 		{BE578879-FB93-495B-B801-B1D955EEE190} = {81F6F5D5-AADE-4C4A-ACAE-EB1B3651E150}
 		{9A76086C-F38C-4A03-8C5C-E759EE0084AD} = {81F6F5D5-AADE-4C4A-ACAE-EB1B3651E150}
 		{08328FF0-1E70-4255-A243-A7F38AE9BE45} = {81F6F5D5-AADE-4C4A-ACAE-EB1B3651E150}
-		{9C575322-0A26-4351-BE40-6957FA0F5FF9} = {81F6F5D5-AADE-4C4A-ACAE-EB1B3651E150}
 		{2A01ECE4-66FB-4A8C-BEA0-74A20BDD6543} = {81F6F5D5-AADE-4C4A-ACAE-EB1B3651E150}
 		{0F36C4AB-88FA-4B6C-9609-2509E0D56341} = {81F6F5D5-AADE-4C4A-ACAE-EB1B3651E150}
+		{F2E086CF-3717-4ED0-B6F9-35A8A362F7FD} = {81F6F5D5-AADE-4C4A-ACAE-EB1B3651E150}
+		{B65DC0B4-4013-4BBC-952D-1122F5480535} = {81F6F5D5-AADE-4C4A-ACAE-EB1B3651E150}
 		{B84263C2-54D7-4254-B159-DDB1F39D0783} = {8E28768D-9A7C-4CA0-A4D0-761C06DA259C}
 		{8F254AC6-F99C-4BEC-9088-EBBA9C696CAF} = {8E28768D-9A7C-4CA0-A4D0-761C06DA259C}
 		{5D9C233B-E53D-4BE1-B578-1AA9722DE1CF} = {8E28768D-9A7C-4CA0-A4D0-761C06DA259C}
@@ -545,11 +598,6 @@ Global
 		{D1AB1B95-3FAA-49F1-8158-9E619CDF8D7F} = {08328FF0-1E70-4255-A243-A7F38AE9BE45}
 		{CBBFA1EA-0482-4FB1-B0DE-D3AEC89724B4} = {08328FF0-1E70-4255-A243-A7F38AE9BE45}
 		{25CF3C3F-221F-4A49-B5EF-A8A5FCF9A5BA} = {BE4D6E45-ED2C-41A4-839C-AC49756E4166}
-		{F1A478D1-DCA1-4BE6-AE83-E0ACDD4FDFFD} = {9C575322-0A26-4351-BE40-6957FA0F5FF9}
-		{1C2C63A1-4246-4EC9-BAD1-C00E9ECD85F6} = {9C575322-0A26-4351-BE40-6957FA0F5FF9}
-		{29DFC6F8-F09F-4881-8A94-43C4229A5583} = {9C575322-0A26-4351-BE40-6957FA0F5FF9}
-		{9F763B50-9E2B-426F-ACFB-27F3D3F255D5} = {9C575322-0A26-4351-BE40-6957FA0F5FF9}
-		{79CB7A3A-6D69-45F8-964F-D9609383B22A} = {9C575322-0A26-4351-BE40-6957FA0F5FF9}
 		{42F7185B-2EE1-49F9-AB6F-E89E6F8AF7C6} = {2A01ECE4-66FB-4A8C-BEA0-74A20BDD6543}
 		{D4489296-17A3-4172-8FDF-DB6C0A7AE748} = {2A01ECE4-66FB-4A8C-BEA0-74A20BDD6543}
 		{229026B1-C3E5-4D2B-8D2B-61D00E8A52CC} = {2A01ECE4-66FB-4A8C-BEA0-74A20BDD6543}
@@ -560,5 +608,15 @@ Global
 		{2D7CF780-B265-4F55-A7EF-C7075FD39B3E} = {0F36C4AB-88FA-4B6C-9609-2509E0D56341}
 		{337CA928-064E-4E49-BBEE-EBB70863C943} = {0F36C4AB-88FA-4B6C-9609-2509E0D56341}
 		{3694B67A-DD77-4798-956A-1BF3241C23B9} = {0F36C4AB-88FA-4B6C-9609-2509E0D56341}
+		{F1A478D1-DCA1-4BE6-AE83-E0ACDD4FDFFD} = {F2E086CF-3717-4ED0-B6F9-35A8A362F7FD}
+		{1C2C63A1-4246-4EC9-BAD1-C00E9ECD85F6} = {F2E086CF-3717-4ED0-B6F9-35A8A362F7FD}
+		{29DFC6F8-F09F-4881-8A94-43C4229A5583} = {F2E086CF-3717-4ED0-B6F9-35A8A362F7FD}
+		{9F763B50-9E2B-426F-ACFB-27F3D3F255D5} = {F2E086CF-3717-4ED0-B6F9-35A8A362F7FD}
+		{79CB7A3A-6D69-45F8-964F-D9609383B22A} = {F2E086CF-3717-4ED0-B6F9-35A8A362F7FD}
+		{BF2F1262-D5CC-41F0-BCFC-7CCDCE479795} = {B65DC0B4-4013-4BBC-952D-1122F5480535}
+		{6033A8EA-A3EF-4182-BFDD-4A9826ECF871} = {B65DC0B4-4013-4BBC-952D-1122F5480535}
+		{F127267A-807D-4091-AE83-48CDC12E7D56} = {B65DC0B4-4013-4BBC-952D-1122F5480535}
+		{211E6CB2-91E2-4C25-A235-1FF1D9D4CEC7} = {B65DC0B4-4013-4BBC-952D-1122F5480535}
+		{BA3F00D1-7DE7-4AE6-B637-6681C10EC20D} = {B65DC0B4-4013-4BBC-952D-1122F5480535}
 	EndGlobalSection
 EndGlobal

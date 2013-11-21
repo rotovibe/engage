@@ -86,6 +86,7 @@
     <Compile Include="GetPatientRequest.cs" />
     <Compile Include="GetAllCohortsResponse.cs" />
     <Compile Include="GetPatientResponse.cs" />
+    <Compile Include="Patient.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

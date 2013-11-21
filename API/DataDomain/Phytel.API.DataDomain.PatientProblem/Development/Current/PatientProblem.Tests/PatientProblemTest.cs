@@ -13,7 +13,7 @@ namespace Phytel.API.DataDomain.PatientProblem.Test
             string version = "v1";
             string contractNumber = "InHealth001";
             string context = "NG";
-            GetAllPatientProblemRequest request = new GetAllPatientProblemRequest
+            GetAllPatientProblemsDataRequest request = new GetAllPatientProblemsDataRequest
             {
                 PatientID = "528d3c82072ef71fb45ff580",
                 Context = context,
@@ -22,7 +22,7 @@ namespace Phytel.API.DataDomain.PatientProblem.Test
             };
 
             // Act
-            GetAllPatientProblemResponse response = DataPatientProblemManager.GetAllPatientProblem(request);
+            GetAllPatientProblemsDataResponse response = DataPatientProblemManager.GetAllPatientProblem(request);
 
             // Assert
             Assert.IsTrue(response.PatientProblems.Count != 0);

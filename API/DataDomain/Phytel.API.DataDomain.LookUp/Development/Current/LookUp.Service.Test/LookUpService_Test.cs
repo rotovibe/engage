@@ -19,7 +19,7 @@ namespace Phytel.API.DataDomain.LookUp.Services.Test
             IRestClient client = new JsonServiceClient();
 
             // Act
-            GetAllProblemResponse response = client.Get<GetAllProblemResponse>
+            GetAllProblemsDataResponse response = client.Get<GetAllProblemsDataResponse>
                 (string.Format("{0}/{1}/{2}/{3}/problems",
                   "http://localhost:8888/LookUp/",context,version, contractNumber));
 
@@ -39,7 +39,7 @@ namespace Phytel.API.DataDomain.LookUp.Services.Test
             IRestClient client = new JsonServiceClient();
 
             // Act
-            GetProblemResponse response = client.Get<GetProblemResponse>
+            GetProblemDataResponse response = client.Get<GetProblemDataResponse>
                 (string.Format("{0}/{1}/{2}/{3}/problem/{4}",
                   "http://localhost:8888/LookUp/", context, version, contractNumber, problemID));
 
@@ -59,10 +59,10 @@ namespace Phytel.API.DataDomain.LookUp.Services.Test
             IRestClient client = new JsonServiceClient();
 
             // Act
-            GetAllProblemResponse response = client.Post<GetAllProblemResponse>
+            GetAllProblemsDataResponse response = client.Post<GetAllProblemsDataResponse>
                 (string.Format("{0}/{1}/{2}/{3}/problems",
                   "http://localhost:8888/LookUp/", context, version, contractNumber),
-                      new SearchProblemRequest
+                      new SearchProblemsDataRequest
                       {
                           Active = true,
                           Type = "Chronic",

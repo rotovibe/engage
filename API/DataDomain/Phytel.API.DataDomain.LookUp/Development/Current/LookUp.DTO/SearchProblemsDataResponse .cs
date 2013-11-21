@@ -1,11 +1,13 @@
 using System.Collections.Generic;
 using ServiceStack.ServiceInterface.ServiceModel;
+using DataDomain.LookUp.DTO;
+using Phytel.API.Interface;
 
 namespace Phytel.API.DataDomain.LookUp.DTO
 {
-    public class GetAllProblemResponse
+    public class SearchProblemsDataResponse : IDomainResponse
    {
-       public List<Problem> Problems { get; set; }
+       public List<ProblemData> Problems { get; set; }
        public string Version { get; set; }
        public ResponseStatus Status { get; set; }
     }

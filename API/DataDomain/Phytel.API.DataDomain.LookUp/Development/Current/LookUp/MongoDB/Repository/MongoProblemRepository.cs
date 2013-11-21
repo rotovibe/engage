@@ -9,6 +9,7 @@ using MongoDB.Driver;
 using MongoDB.Driver.Builders;
 using MongoDB.Bson;
 using Phytel.API.AppDomain.LookUp;
+using DataDomain.LookUp.DTO;
 
 namespace Phytel.API.DataDomain.LookUp
 {
@@ -43,14 +44,14 @@ namespace Phytel.API.DataDomain.LookUp
 
         public object FindByID(string entityID)
         {
-            GetProblemResponse problemResponse = null;
+            GetProblemDataResponse problemResponse = null;
             using (ProblemMongoContext ctx = new ProblemMongoContext(_dbName))
             {
                 MEProblem meProblem = ctx.Problems.Collection.Find(Query.EQ(MEProblem.IdProperty, ObjectId.Parse(entityID))).FirstOrDefault();
                 if (meProblem != null)
                 {
-                    problemResponse = new GetProblemResponse();
-                    Problem problem = new Problem { ProblemID = meProblem.Id.ToString(), Name = meProblem.Name, Active = meProblem.Active };
+                    problemResponse = new GetProblemDataResponse();
+                    ProblemData problem = new ProblemData { ProblemID = meProblem.Id.ToString(), Name = meProblem.Name, Active = meProblem.Active };
                     problemResponse.Problem = problem;
                 }
             }
@@ -83,17 +84,17 @@ namespace Phytel.API.DataDomain.LookUp
 
                 mQuery = SelectExpressionHelper.BuildQuery(groupType, queries);
 
-                List<Problem> patientProblemList = null;
+                List<ProblemData> patientProblemList = null;
                 using (ProblemMongoContext ctx = new ProblemMongoContext(_dbName))
                 {
                     List<MEProblem> meProblems = ctx.Problems.Collection.Find(mQuery).ToList();
 
                     if (meProblems != null)
                     {
-                        patientProblemList = new List<Problem>();
+                        patientProblemList = new List<ProblemData>();
                         foreach (MEProblem p in meProblems)
                         {
-                            Problem problem = new Problem
+                            ProblemData problem = new ProblemData
                             {
                                 ProblemID = p.Id.ToString(),
                                 Name = p.Name,
@@ -114,16 +115,16 @@ namespace Phytel.API.DataDomain.LookUp
         public IQueryable<T> SelectAll()
         {
             IQueryable<T> query = null;
-            List<Problem> problemList = null;
+            List<ProblemData> problemList = null;
             using (ProblemMongoContext ctx = new ProblemMongoContext(_dbName))
             {
                 List<MEProblem> meProblems = ctx.Problems.Collection.FindAll().ToList();
                 if (meProblems != null)
                 {
-                    problemList = new List<Problem>();
+                    problemList = new List<ProblemData>();
                     foreach (MEProblem m in meProblems)
                     {
-                        Problem problem = new Problem { ProblemID = m.Id.ToString(), Name = m.Name, Active = m.Active };
+                        ProblemData problem = new ProblemData { ProblemID = m.Id.ToString(), Name = m.Name, Active = m.Active };
                         problemList.Add(problem);
                     }
                 }

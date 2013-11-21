@@ -7,23 +7,23 @@ namespace Phytel.API.DataDomain.Cohort
 {
     public static class DataCohortManager
     {
-        public static GetCohortResponse GetCohortByID(GetCohortRequest request)
+        public static GetCohortDataResponse GetCohortByID(GetCohortDataRequest request)
         {
-            GetCohortResponse response = new GetCohortResponse();
+            GetCohortDataResponse response = new GetCohortDataResponse();
 
-            ICohortRepository<GetCohortResponse> repo = CohortRepositoryFactory<GetCohortResponse>.GetCohortRepository(request.ContractNumber, request.Context);
-            response = repo.FindByID(request.CohortID) as GetCohortResponse;
+            ICohortRepository<GetCohortDataResponse> repo = CohortRepositoryFactory<GetCohortDataResponse>.GetCohortRepository(request.ContractNumber, request.Context);
+            response = repo.FindByID(request.CohortID) as GetCohortDataResponse;
 
             return response;
         }
 
-        public static GetAllCohortsResponse GetCohorts(GetAllCohortsRequest request)
+        public static GetAllCohortsDataResponse GetCohorts(GetAllCohortsDataRequest request)
         {
-            GetAllCohortsResponse response = new GetAllCohortsResponse();
+            GetAllCohortsDataResponse response = new GetAllCohortsDataResponse();
 
-            ICohortRepository<API.DataDomain.Cohort.DTO.Cohort> repo = CohortRepositoryFactory<API.DataDomain.Cohort.DTO.Cohort>.GetCohortRepository(request.ContractNumber, request.Context);
+            ICohortRepository<API.DataDomain.Cohort.DTO.CohortData> repo = CohortRepositoryFactory<API.DataDomain.Cohort.DTO.CohortData>.GetCohortRepository(request.ContractNumber, request.Context);
 
-            IQueryable<API.DataDomain.Cohort.DTO.Cohort> cohorts = repo.SelectAll() as IQueryable<API.DataDomain.Cohort.DTO.Cohort>;
+            IQueryable<API.DataDomain.Cohort.DTO.CohortData> cohorts = repo.SelectAll() as IQueryable<API.DataDomain.Cohort.DTO.CohortData>;
 
             if (cohorts != null)
             {

@@ -40,6 +40,15 @@
     <Reference Include="MongoDB.Driver">
       <HintPath>..\..\..\..\..\..\Shared\PhytelServices\Development\Current\References\MongoDB.Driver.dll</HintPath>
     </Reference>
+    <Reference Include="ServiceStack.Common">
+      <HintPath>..\..\..\..\packages\ServiceStack.Common.3.9.70\lib\net35\ServiceStack.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="ServiceStack.Interfaces">
+      <HintPath>..\..\..\..\packages\ServiceStack.Common.3.9.70\lib\net35\ServiceStack.Interfaces.dll</HintPath>
+    </Reference>
+    <Reference Include="ServiceStack.Text">
+      <HintPath>..\..\..\..\packages\ServiceStack.Text.3.9.70\lib\net35\ServiceStack.Text.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -50,11 +59,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Helper\SelectExpressionHelper.cs" />
+    <Compile Include="IDomainResponse.cs" />
     <Compile Include="IAppDomainRequest.cs" />
     <Compile Include="IDataDomainRequest.cs" />
     <Compile Include="IMEEntity.cs" />
     <Compile Include="IRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

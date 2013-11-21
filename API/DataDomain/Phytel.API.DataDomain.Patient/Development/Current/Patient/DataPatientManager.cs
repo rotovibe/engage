@@ -6,29 +6,20 @@ namespace Phytel.API.DataDomain.Patient
 {
     public static class PatientDataManager
     {
-        public static PatientResponse GetPatientByID(PatientRequest request)
+        public static GetPatientDataResponse GetPatientByID(GetPatientDataRequest request)
         {
-            PatientResponse result = new PatientResponse();
+            GetPatientDataResponse result = new GetPatientDataResponse();
 
-            IPatientRepository<PatientResponse> repo = PatientRepositoryFactory<PatientResponse>.GetPatientRepository(request.ContractNumber, request.Context);
-            result = repo.FindByID(request.PatientID) as PatientResponse;
+            IPatientRepository<GetPatientDataResponse> repo = PatientRepositoryFactory<GetPatientDataResponse>.GetPatientRepository(request.ContractNumber, request.Context);
+            result.Patient = repo.FindByID(request.PatientID) as DTO.PatientData;
             
-            return (result != null ? result : new PatientResponse());
+            return (result != null ? result : new GetPatientDataResponse());
         }
 
-        public static PatientListResponse GetPatientList(PatientListRequest request)
+        public static GetPatientsDataResponse GetPatients(GetPatientsDataRequest request)
         {
-            PatientListResponse result = new PatientListResponse();
-
-            IPatientRepository<PatientListResponse> repo = PatientRepositoryFactory<PatientListResponse>.GetPatientRepository(request.ContractNumber, request.Context);
-            
-            return result;
-        }
-
-        public static PatientDetailsResponse GetPatientDetailsList(PatientDetailsRequest request)
-        {
-            IPatientRepository<PatientDetailsResponse> repo = PatientRepositoryFactory<PatientDetailsResponse>.GetPatientRepository(request.ContractNumber, request.Context);
-            PatientDetailsResponse result = repo.Select(request.PatientIds);
+            IPatientRepository<GetPatientsDataResponse> repo = PatientRepositoryFactory<GetPatientsDataResponse>.GetPatientRepository(request.ContractNumber, request.Context);
+            GetPatientsDataResponse result = repo.Select(request.PatientIDs);
 
             return result;
         }

@@ -9,6 +9,7 @@ using ServiceStack.ServiceClient.Web;
 using System;
 using Phytel.API.DataDomain.Cohort.DTO;
 using Phytel.API.DataDomain.CohortPatient.DTO;
+using DataDomain.LookUp.DTO;
 
 namespace Phytel.API.AppDomain.NG
 {
@@ -20,6 +21,7 @@ namespace Phytel.API.AppDomain.NG
         protected static readonly string DDLookupServiceUrl = ConfigurationManager.AppSettings["DDLookupServiceUrl"];
         protected static readonly string DDCohortServiceUrl = ConfigurationManager.AppSettings["DDCohortServiceUrl"];
         protected static readonly string DDCohortPatientServiceUrl = ConfigurationManager.AppSettings["DDCohortPatientServiceUrl"];
+        protected static readonly string DDPatientSystemUrl = ConfigurationManager.AppSettings["DDPatientSystemUrl"];
         #endregion
 
         #region Patient Requests
@@ -30,25 +32,44 @@ namespace Phytel.API.AppDomain.NG
             //Execute call(s) to Patient Data Domain
             IRestClient client = new JsonServiceClient();
 
-            Phytel.API.DataDomain.Patient.DTO.PatientResponse response = client.Get<Phytel.API.DataDomain.Patient.DTO.PatientResponse>(string.Format("{0}/{1}/{2}/{3}/patient/{4}",
+            Phytel.API.DataDomain.Patient.DTO.GetPatientDataResponse response = client.Get<Phytel.API.DataDomain.Patient.DTO.GetPatientDataResponse>(string.Format("{0}/{1}/{2}/{3}/patient/{4}",
                                                                                         DDPatientServiceURL,
                                                                                         "NG",
                                                                                         request.Version,
                                                                                         request.ContractNumber,
                                                                                         request.PatientID));
-            if (response != null)
+
+            if (response != null && response.Patient != null)
             {
-                pResponse.Patient = new Patient
+                Phytel.API.DataDomain.PatientSystem.DTO.GetPatientSystemDataResponse sysResponse = null;
+
+                if (string.IsNullOrEmpty(response.Patient.DisplayPatientSystemID) == false)
                 {
-                    FirstName = response.FirstName,
-                    LastName = response.LastName,
-                    PatientID = response.PatientID,
-                    DOB = NGUtils.IsDateValid(response.DOB) ? response.DOB : string.Empty,
-                    Gender = response.Gender,
-                    MiddleName = response.MiddleName,
-                    Suffix = response.Suffix,
-                    PreferredName = response.PreferredName
+                    sysResponse = client.Get<Phytel.API.DataDomain.PatientSystem.DTO.GetPatientSystemDataResponse>(string.Format("{0}/{1}/{2}/{3}/PatientSystem/{4}",
+                                                                                DDPatientServiceURL,
+                                                                                "NG",
+                                                                                request.Version,
+                                                                                request.ContractNumber,
+                                                                                response.Patient.DisplayPatientSystemID));
+                }
+
+                pResponse.Patient = new NG.DTO.Patient
+                {
+                    ID = response.Patient.ID,
+                    FirstName = response.Patient.FirstName,
+                    LastName = response.Patient.LastName,
+                    DOB = NGUtils.IsDateValid(response.Patient.DOB) ? response.Patient.DOB : string.Empty,
+                    Gender = response.Patient.Gender,
+                    MiddleName = response.Patient.MiddleName,
+                    Suffix = response.Patient.Suffix,
+                    PreferredName = response.Patient.PreferredName
                 };
+
+                if(sysResponse != null && sysResponse.PatientSystem != null)
+                {
+                    pResponse.Patient.DisplaySystemID = sysResponse.PatientSystem.SystemID;
+                    pResponse.Patient.DisplaySystemName = sysResponse.PatientSystem.SystemName;
+                }
             }
 
             //SendAuditDispatch();
@@ -65,7 +86,7 @@ namespace Phytel.API.AppDomain.NG
 
            IRestClient client = new JsonServiceClient();
              //[Route("/{Context}/{Version}/{ContractNumber}/patientproblems/{PatientID}", "GET")]
-            Phytel.API.DataDomain.PatientProblem.DTO.GetAllPatientProblemResponse dataDomainResponse = client.Get<Phytel.API.DataDomain.PatientProblem.DTO.GetAllPatientProblemResponse>
+            Phytel.API.DataDomain.PatientProblem.DTO.GetAllPatientProblemsDataResponse dataDomainResponse = client.Get<Phytel.API.DataDomain.PatientProblem.DTO.GetAllPatientProblemsDataResponse>
                 (string.Format("{0}/{1}/{2}/{3}/patientproblems/{4}",
                     DDPatientProblemServiceUrl,
                     "NG", 
@@ -73,9 +94,9 @@ namespace Phytel.API.AppDomain.NG
                     request.ContractNumber,
                     request.PatientID));
 
-            List<Phytel.API.DataDomain.PatientProblem.DTO.PProb> problems = dataDomainResponse.PatientProblems;
+            List<Phytel.API.DataDomain.PatientProblem.DTO.PatientProblemData> problems = dataDomainResponse.PatientProblems;
 
-            foreach (Phytel.API.DataDomain.PatientProblem.DTO.PProb p in problems)
+            foreach (Phytel.API.DataDomain.PatientProblem.DTO.PatientProblemData p in problems)
             {
                 Phytel.API.AppDomain.NG.DTO.PatientProblem pp = new Phytel.API.AppDomain.NG.DTO.PatientProblem();
                 pp.ID = p.ID;
@@ -95,15 +116,15 @@ namespace Phytel.API.AppDomain.NG
 
             IRestClient client = new JsonServiceClient();
 
-            Phytel.API.DataDomain.LookUp.DTO.GetAllProblemResponse dataDomainResponse = client.Get<Phytel.API.DataDomain.LookUp.DTO.GetAllProblemResponse>(string.Format("{0}/{1}/{2}/{3}/problems",
+            Phytel.API.DataDomain.LookUp.DTO.GetAllProblemsDataResponse dataDomainResponse = client.Get<Phytel.API.DataDomain.LookUp.DTO.GetAllProblemsDataResponse>(string.Format("{0}/{1}/{2}/{3}/problems",
                                                                                                             DDLookupServiceUrl,
                                                                                                             "NG",
                                                                                                             request.Version,
                                                                                                             request.ContractNumber));
 
-            List<Problem> problems = dataDomainResponse.Problems;
+            List<ProblemData> problems = dataDomainResponse.Problems;
 
-            foreach(Problem c in problems)
+            foreach(ProblemData c in problems)
             {
                 ProblemLookUp problemLookUp = new ProblemLookUp();
                 problemLookUp.ID = c.ProblemID;
@@ -123,15 +144,15 @@ namespace Phytel.API.AppDomain.NG
 
             IRestClient client = new JsonServiceClient();
 
-            Phytel.API.DataDomain.Cohort.DTO.GetAllCohortsResponse dataDomainResponse = client.Get<Phytel.API.DataDomain.Cohort.DTO.GetAllCohortsResponse>(string.Format("{0}/{1}/{2}/{3}/Cohorts",
+            GetAllCohortsDataResponse dataDomainResponse = client.Get<GetAllCohortsDataResponse>(string.Format("{0}/{1}/{2}/{3}/Cohorts",
                                                                                                             DDCohortServiceUrl,
                                                                                                             "NG",
                                                                                                             request.Version,
                                                                                                             request.ContractNumber));
 
-            List<Phytel.API.DataDomain.Cohort.DTO.Cohort> cohorts = dataDomainResponse.Cohorts;
+            List<CohortData> cohorts = dataDomainResponse.Cohorts;
 
-            foreach(Phytel.API.DataDomain.Cohort.DTO.Cohort c in cohorts)
+            foreach(CohortData c in cohorts)
             {
                 Phytel.API.AppDomain.NG.DTO.Cohort cohort = new Phytel.API.AppDomain.NG.DTO.Cohort();
                 cohort.ID = c.ID;
@@ -144,12 +165,12 @@ namespace Phytel.API.AppDomain.NG
         public GetCohortPatientsResponse GetCohortPatients(GetCohortPatientsRequest request)
         {
             GetCohortPatientsResponse pResponse = new GetCohortPatientsResponse();
-            pResponse.Patients = new List<Patient>();
+            pResponse.Patients = new List<Phytel.API.AppDomain.NG.DTO.Patient>();
 
             IRestClient client = new JsonServiceClient();
 
             // call cohort data domain
-            CohortPatientDetailsResponse qResponse = client.Get<CohortPatientDetailsResponse>(string.Format("{0}/{1}/{2}/{3}/CohortPatientDetails/{4}?Skip={5}&Take={6}",
+            GetCohortPatientsDataResponse qResponse = client.Get<GetCohortPatientsDataResponse>(string.Format("{0}/{1}/{2}/{3}/CohortPatients/{4}?Skip={5}&Take={6}",
                                                                                         DDCohortPatientServiceUrl,
                                                                                         "NG",
                                                                                         request.Version,
@@ -159,14 +180,14 @@ namespace Phytel.API.AppDomain.NG
                                                                                         request.Take));
 
             //take qResponse Patient details and map them to "Patient" in the GetCohortPatientsResponse
-            qResponse.CohortPatients.ForEach(x => pResponse.Patients.Add(new Patient
+            qResponse.CohortPatients.ForEach(x => pResponse.Patients.Add(new Phytel.API.AppDomain.NG.DTO.Patient
             {
+                ID = x.ID,
                 DOB = x.DOB,
                 FirstName = x.FirstName,
                 Gender = x.Gender,
                 LastName = x.LastName,
                 MiddleName = x.MiddleName,
-                PatientID = x.PatientID,
                 PreferredName = x.PreferredName,
                 Suffix = x.Suffix
             }));

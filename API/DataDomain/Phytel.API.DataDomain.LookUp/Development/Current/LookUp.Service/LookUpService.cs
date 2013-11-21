@@ -8,9 +8,9 @@ namespace Phytel.API.DataDomain.Patient.Service
 {
     public class LookUpService : ServiceStack.ServiceInterface.Service
     {
-        public GetProblemResponse Get(GetProblemRequest request)
+        public GetProblemDataResponse Get(GetProblemDataRequest request)
         {
-            GetProblemResponse response = new GetProblemResponse();
+            GetProblemDataResponse response = new GetProblemDataResponse();
             try
             {
                 response = LookUpDataManager.GetPatientProblem(request);
@@ -24,9 +24,9 @@ namespace Phytel.API.DataDomain.Patient.Service
             return response;
         }
 
-        public GetAllProblemResponse Get(GetAllProblemRequest request)
+        public GetAllProblemsDataResponse Get(GetAllProblemsDataRequest request)
         {
-            GetAllProblemResponse response = new GetAllProblemResponse();
+            GetAllProblemsDataResponse response = new GetAllProblemsDataResponse();
             try
             {
                 response = LookUpDataManager.GetAllProblem(request);
@@ -40,9 +40,9 @@ namespace Phytel.API.DataDomain.Patient.Service
             return response;
         }
 
-        public SearchProblemResponse Post(SearchProblemRequest request)
+        public SearchProblemsDataResponse Post(SearchProblemsDataRequest request)
         {
-            SearchProblemResponse response = new SearchProblemResponse();
+            SearchProblemsDataResponse response = new SearchProblemsDataResponse();
             try
             {
                 response = LookUpDataManager.SearchProblem(request);

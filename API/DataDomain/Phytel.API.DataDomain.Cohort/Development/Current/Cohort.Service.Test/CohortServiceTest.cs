@@ -19,7 +19,7 @@ namespace Phytel.API.DataDomain.Cohort.Service.Test
             IRestClient client = new JsonServiceClient();
 
             // Act
-            GetAllCohortsResponse response = client.Get <GetAllCohortsResponse>
+            GetAllCohortsDataResponse response = client.Get <GetAllCohortsDataResponse>
                 (string.Format("{0}/{1}/{2}/{3}/cohorts",
                   "http://localhost:8888/Cohort/", context, version, contractNumber));
 
@@ -39,7 +39,7 @@ namespace Phytel.API.DataDomain.Cohort.Service.Test
             IRestClient client = new JsonServiceClient();
 
             // Act
-            GetCohortResponse response = client.Get<GetCohortResponse>
+            GetCohortDataResponse response = client.Get<GetCohortDataResponse>
                 (string.Format("{0}/{1}/{2}/{3}/cohort/{4}",
                   "http://localhost:8888/Cohort/", context, version, contractNumber, cohortID));
 

@@ -1,16 +1,12 @@
+﻿using System;
 using System.Collections.Generic;
-using ServiceStack.ServiceInterface.ServiceModel;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace Phytel.API.DataDomain.Cohort.DTO
 {
-    public class GetCohortResponse
-   {
-        public Cohort Cohort { get; set; }
-        public string Version { get; set; }
-        public ResponseStatus Status { get; set; }
-    }
-
-    public class Cohort
+    public class CohortData
     {
         public string ID { get; set; }
         public string SName { get; set; }

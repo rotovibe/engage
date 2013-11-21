@@ -14,10 +14,10 @@ namespace Phytel.API.DataDomain.LookUp.Test
             string version = "v1";
             string contractNumber = "InHealth001";
             string context = "NG";
-            GetProblemRequest request = new GetProblemRequest { ProblemID = "527c1b1ad4332324ac199142", Context = context, ContractNumber = contractNumber, Version = version };
+            GetProblemDataRequest request = new GetProblemDataRequest { ProblemID = "527c1b1ad4332324ac199142", Context = context, ContractNumber = contractNumber, Version = version };
 
             // Act
-            GetProblemResponse response = LookUpDataManager.GetPatientProblem(request);
+            GetProblemDataResponse response = LookUpDataManager.GetPatientProblem(request);
 
             // Assert
             Assert.IsTrue(response.Problem.Name == "Arthritis");
@@ -31,10 +31,10 @@ namespace Phytel.API.DataDomain.LookUp.Test
             string version = "v1";
             string contractNumber = "InHealth001";
             string context = "NG";
-            GetAllProblemRequest request = new GetAllProblemRequest {  Context = context, ContractNumber = contractNumber, Version = version };
+            GetAllProblemsDataRequest request = new GetAllProblemsDataRequest {  Context = context, ContractNumber = contractNumber, Version = version };
 
             // Act
-            GetAllProblemResponse response = LookUpDataManager.GetAllProblem(request);
+            GetAllProblemsDataResponse response = LookUpDataManager.GetAllProblem(request);
 
             // Assert
             Assert.AreNotEqual(0, response.Problems.Count);
@@ -47,10 +47,10 @@ namespace Phytel.API.DataDomain.LookUp.Test
             string version = "v1";
             string contractNumber = "InHealth001";
             string context = "NG";
-            SearchProblemRequest request = new SearchProblemRequest { Active = true, Type = "Chronic", Context = context, ContractNumber = contractNumber, Version = version };
+            SearchProblemsDataRequest request = new SearchProblemsDataRequest { Active = true, Type = "Chronic", Context = context, ContractNumber = contractNumber, Version = version };
 
             // Act
-            SearchProblemResponse response = LookUpDataManager.SearchProblem(request);
+            SearchProblemsDataResponse response = LookUpDataManager.SearchProblem(request);
 
             // Assert
             Assert.AreNotEqual(0, response.Problems.Count);

@@ -21,10 +21,10 @@ namespace Phytel.API.DataDomain.Patient.Service.Test
 
             //JsonServiceClient.HttpWebRequestFilter = x => x.Headers.Add(string.Format("APIKey:{0}", "12345"));
 
-            PatientResponse response = client.Post<PatientResponse>("http://localhost:8888/NG/data/patient",
-                new PatientRequest { PatientID = patientID, ContractNumber = contractNumber, Context = context } as object);
+            GetPatientDataResponse response = client.Post<GetPatientDataResponse>("http://localhost:8888/NG/data/patient",
+                new GetPatientDataRequest { PatientID = patientID, ContractNumber = contractNumber, Context = context } as object);
 
-            sampleValue = response.FirstName;
+            sampleValue = response.Patient.FirstName;
 
             Assert.AreEqual(controlValue, sampleValue);
         }
@@ -39,9 +39,9 @@ namespace Phytel.API.DataDomain.Patient.Service.Test
             string version = "v1";
 
             JsonServiceClient client = new JsonServiceClient();
-            PatientDetailsResponse response = client.Post<PatientDetailsResponse>
+            GetPatientsDataResponse response = client.Post<GetPatientsDataResponse>
                 (string.Format("{0}/{1}/{2}/{3}/patientdetails", "http://localhost:8888/Patient", context, version, contractNumber),
-                new PatientDetailsRequest { PatientIds = new string[]{patientID} } as object);
+                new GetPatientsDataRequest { PatientIDs = new string[]{patientID} } as object);
         }
     }
 }

@@ -9,7 +9,7 @@ namespace Phytel.API.DataDomain.Cohort.Test
         [TestMethod]
         public void GetCohortByID()
         {
-            ICohortRepository<GetCohortResponse> repo = CohortRepositoryFactory<GetCohortResponse>.GetCohortRepository("InHealth001", "NG");
+            ICohortRepository<GetCohortDataResponse> repo = CohortRepositoryFactory<GetCohortDataResponse>.GetCohortRepository("InHealth001", "NG");
 
             repo.Select(new Interface.APIExpression());
         }
@@ -21,10 +21,10 @@ namespace Phytel.API.DataDomain.Cohort.Test
             string version = "v1";
             string contractNumber = "InHealth001";
             string context = "NG";
-            GetCohortRequest request = new GetCohortRequest { CohortID = "528aa03ad4332317acc50976", Context = context, ContractNumber = contractNumber, Version = version };
+            GetCohortDataRequest request = new GetCohortDataRequest { CohortID = "528aa03ad4332317acc50976", Context = context, ContractNumber = contractNumber, Version = version };
 
             // Act
-            GetCohortResponse response = DataCohortManager.GetCohortByID(request);
+            GetCohortDataResponse response = DataCohortManager.GetCohortByID(request);
 
             // Assert
             Assert.IsTrue(response.Cohort.SName == "All(f)");
@@ -38,10 +38,10 @@ namespace Phytel.API.DataDomain.Cohort.Test
             string version = "v1";
             string contractNumber = "InHealth001";
             string context = "NG";
-            GetAllCohortsRequest request = new GetAllCohortsRequest { Context = context, ContractNumber = contractNumber, Version = version };
+            GetAllCohortsDataRequest request = new GetAllCohortsDataRequest { Context = context, ContractNumber = contractNumber, Version = version };
 
             // Act
-            GetAllCohortsResponse response = DataCohortManager.GetCohorts(request);
+            GetAllCohortsDataResponse response = DataCohortManager.GetCohorts(request);
 
             // Assert
             Assert.AreNotEqual(0, response.Cohorts.Count);

@@ -3,12 +3,9 @@ using ServiceStack.ServiceHost;
 
 namespace Phytel.API.DataDomain.Cohort.DTO
 {
-    [Route("/{Context}/{Version}/{ContractNumber}/Cohort/{CohortID}", "GET")]
-    public class GetCohortRequest : IDataDomainRequest
+    [Route("/{Context}/{Version}/{ContractNumber}/Cohorts", "GET")]
+    public class GetAllCohortsDataRequest : IDataDomainRequest
     {
-        [ApiMember(Name = "CohortID", Description = "ID of the Cohort being requested", ParameterType = "property", DataType = "string", IsRequired = true)]
-        public string CohortID { get; set; }
-
         [ApiMember(Name = "Context", Description = "Product Context requesting the Cohort", ParameterType = "property", DataType = "string", IsRequired = true)]
         public string Context { get; set; }
 

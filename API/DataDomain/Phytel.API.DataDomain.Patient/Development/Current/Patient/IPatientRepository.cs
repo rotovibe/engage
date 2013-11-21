@@ -10,6 +10,6 @@ namespace Phytel.API.DataDomain.Patient
 {
     public interface IPatientRepository<T> : IRepository<T>
     {
-        PatientDetailsResponse Select(string[] patientIds);
+        GetPatientsDataResponse Select(string[] patientIds);
     }
 }

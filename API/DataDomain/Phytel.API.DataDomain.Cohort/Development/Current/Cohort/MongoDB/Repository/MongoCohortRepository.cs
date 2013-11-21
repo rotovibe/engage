@@ -43,7 +43,7 @@ namespace Phytel.API.DataDomain.Cohort
 
         public object FindByID(string entityID)
         {
-            GetCohortResponse cohortResponse = null;
+            GetCohortDataResponse cohortResponse = null;
             using (CohortMongoContext ctx = new CohortMongoContext(_dbName))
             {
                 List<IMongoQuery> queries = new List<IMongoQuery>();
@@ -53,8 +53,8 @@ namespace Phytel.API.DataDomain.Cohort
                 MECohort meCohort = ctx.Cohorts.Collection.Find(mQuery).FirstOrDefault();
                 if (meCohort != null)
                 {
-                    cohortResponse = new GetCohortResponse();
-                    API.DataDomain.Cohort.DTO.Cohort cohort = new API.DataDomain.Cohort.DTO.Cohort { ID = meCohort.Id.ToString(), SName = meCohort.ShortName, Query = meCohort.Query, Sort = meCohort.Sort };
+                    cohortResponse = new GetCohortDataResponse();
+                    API.DataDomain.Cohort.DTO.CohortData cohort = new API.DataDomain.Cohort.DTO.CohortData { ID = meCohort.Id.ToString(), SName = meCohort.ShortName, Query = meCohort.Query, Sort = meCohort.Sort };
                     cohortResponse.Cohort = cohort;
                 }
             }
@@ -84,16 +84,16 @@ namespace Phytel.API.DataDomain.Cohort
         public IQueryable<T> SelectAll()
         {
             IQueryable<T> query = null;
-            List<API.DataDomain.Cohort.DTO.Cohort> cohorts = null;
+            List<API.DataDomain.Cohort.DTO.CohortData> cohorts = null;
             using (CohortMongoContext ctx = new CohortMongoContext(_dbName))
             {
                 List <MECohort> meCohorts = ctx.Cohorts.Collection.Find(Query.EQ(MECohort.DeleteFlagProperty, false)).ToList();
                 if (meCohorts != null)
                 {
-                    cohorts = new List<API.DataDomain.Cohort.DTO.Cohort>();
+                    cohorts = new List<API.DataDomain.Cohort.DTO.CohortData>();
                     foreach (MECohort m in meCohorts)
                     {
-                        API.DataDomain.Cohort.DTO.Cohort cohort = new API.DataDomain.Cohort.DTO.Cohort { ID = m.Id.ToString(), SName = m.ShortName, Query = m.Query, Sort = m.Sort };
+                        API.DataDomain.Cohort.DTO.CohortData cohort = new API.DataDomain.Cohort.DTO.CohortData { ID = m.Id.ToString(), SName = m.ShortName, Query = m.Query, Sort = m.Sort };
                         cohorts.Add(cohort);
                     }
                 }

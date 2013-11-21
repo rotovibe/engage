@@ -34,7 +34,6 @@ namespace Phytel.API.AppDomain.NG
                     Gender = "M",
                     LastName = "DeLahoya",
                     MiddleName = "Denni",
-                    PatientID = Guid.NewGuid().ToString(),
                     PreferredName = "Punchy",
                     Suffix = "Mr."
                 }
@@ -49,7 +48,6 @@ namespace Phytel.API.AppDomain.NG
                     Gender = "F",
                     LastName = "Greer",
                     MiddleName = "Irene",
-                    PatientID = Guid.NewGuid().ToString(),
                     PreferredName = "Jen",
                     Suffix = "Mr."
                 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Phytel.API.Interface;
 using System;
+using DataDomain.LookUp.DTO;
 
 namespace Phytel.API.DataDomain.LookUp
 {
@@ -10,21 +11,21 @@ namespace Phytel.API.DataDomain.LookUp
     {
         private static readonly string PROBLEMLOOKUP = "problemlookup";
 
-        public static GetProblemResponse GetPatientProblem(GetProblemRequest request)
+        public static GetProblemDataResponse GetPatientProblem(GetProblemDataRequest request)
         {
-            GetProblemResponse response = new GetProblemResponse();
+            GetProblemDataResponse response = new GetProblemDataResponse();
 
-            ILookUpRepository<GetProblemResponse> repo = Phytel.API.DataDomain.LookUp.LookUpRepositoryFactory<GetProblemResponse>.GetLookUpRepository(request.ContractNumber, request.Context, PROBLEMLOOKUP);
-            response = repo.FindByID(request.ProblemID) as GetProblemResponse;
+            ILookUpRepository<GetProblemDataResponse> repo = Phytel.API.DataDomain.LookUp.LookUpRepositoryFactory<GetProblemDataResponse>.GetLookUpRepository(request.ContractNumber, request.Context, PROBLEMLOOKUP);
+            response = repo.FindByID(request.ProblemID) as GetProblemDataResponse;
             return response;
         }
 
-        public static GetAllProblemResponse GetAllProblem(GetAllProblemRequest request)
+        public static GetAllProblemsDataResponse GetAllProblem(GetAllProblemsDataRequest request)
         {
-            GetAllProblemResponse response = new GetAllProblemResponse();
+            GetAllProblemsDataResponse response = new GetAllProblemsDataResponse();
 
-            ILookUpRepository<Problem> repo = Phytel.API.DataDomain.LookUp.LookUpRepositoryFactory<Problem>.GetLookUpRepository(request.ContractNumber, request.Context, PROBLEMLOOKUP);
-            IQueryable<Problem> problems = repo.SelectAll() as IQueryable<Problem>;
+            ILookUpRepository<ProblemData> repo = Phytel.API.DataDomain.LookUp.LookUpRepositoryFactory<ProblemData>.GetLookUpRepository(request.ContractNumber, request.Context, PROBLEMLOOKUP);
+            IQueryable<ProblemData> problems = repo.SelectAll() as IQueryable<ProblemData>;
 
             if (problems != null)
             {
@@ -33,11 +34,11 @@ namespace Phytel.API.DataDomain.LookUp
             return response;
         }
 
-        public static SearchProblemResponse SearchProblem(SearchProblemRequest request)
+        public static SearchProblemsDataResponse SearchProblem(SearchProblemsDataRequest request)
         {
-            SearchProblemResponse response = new SearchProblemResponse();
+            SearchProblemsDataResponse response = new SearchProblemsDataResponse();
 
-            ILookUpRepository<Problem> repo = Phytel.API.DataDomain.LookUp.LookUpRepositoryFactory<Problem>.GetLookUpRepository(request.ContractNumber, request.Context, PROBLEMLOOKUP);
+            ILookUpRepository<ProblemData> repo = Phytel.API.DataDomain.LookUp.LookUpRepositoryFactory<ProblemData>.GetLookUpRepository(request.ContractNumber, request.Context, PROBLEMLOOKUP);
 
             ICollection<SelectExpression> selectExpressions = new List<SelectExpression>();
 
@@ -67,7 +68,7 @@ namespace Phytel.API.DataDomain.LookUp
             APIExpression apiExpression = new APIExpression();
             apiExpression.Expressions = selectExpressions;
 
-            Tuple<string, IQueryable<Problem>> problems = repo.Select(apiExpression);
+            Tuple<string, IQueryable<ProblemData>> problems = repo.Select(apiExpression);
 
             if (problems != null)
             {

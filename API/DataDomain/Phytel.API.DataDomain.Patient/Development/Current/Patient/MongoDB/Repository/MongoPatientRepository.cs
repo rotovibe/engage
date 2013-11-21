@@ -43,21 +43,22 @@ namespace Phytel.API.DataDomain.Patient
 
         public object FindByID(string entityID)
         {
-            PatientResponse patient = null;
+            DTO.PatientData patient = null;
             using (PatientMongoContext ctx = new PatientMongoContext(_dbName))
             {
                 patient = (from p in ctx.Patients
                            where p.Id == ObjectId.Parse(entityID)
-                           select new PatientResponse
+                           select new DTO.PatientData
                             {
+                                ID = p.Id.ToString(),
                                 DOB = p.DOB,
                                 FirstName = p.FirstName,
                                 Gender = p.Gender,
                                 LastName = p.LastName,
-                                PatientID = p.Id.ToString(),
                                 PreferredName = p.PreferredName,
                                 MiddleName = p.MiddleName,
-                                Suffix = p.Suffix
+                                Suffix = p.Suffix,
+                                DisplayPatientSystemID = p.DisplayPatientSystemID.ToString()
                             }).FirstOrDefault();
             }
             return patient;
@@ -78,7 +79,7 @@ namespace Phytel.API.DataDomain.Patient
             //    Query.EQ(MEPatient.LastNameProperty, "Tony"));
         }
 
-        public PatientDetailsResponse Select(string[] patientIds)
+        public GetPatientsDataResponse Select(string[] patientIds)
         {
             BsonValue[] bsv = new BsonValue[patientIds.Length];
             for (int i = 0; i < patientIds.Length; i++)
@@ -88,29 +89,30 @@ namespace Phytel.API.DataDomain.Patient
 
             IMongoQuery query = Query.In("_id", bsv);
             List<MEPatient> pr = null;
-            List<PatientResponse> pResp = new List<PatientResponse>();
+            List<DTO.PatientData> pResp = new List<DTO.PatientData>();
             using (PatientMongoContext ctx = new PatientMongoContext(_dbName))
             {
                 pr = ctx.Patients.Collection.Find(query).ToList();
                 // convert to a PatientDetailsResponse
                 foreach (MEPatient mp in pr)
                 {
-                    pResp.Add(new PatientResponse
+                    pResp.Add(new DTO.PatientData
                     {
+                        ID = mp.Id.ToString(),
                         PreferredName = mp.PreferredName,
                         DOB = mp.DOB,
                         FirstName = mp.FirstName,
                         Gender = mp.Gender,
                         LastName = mp.LastName,
                         MiddleName = mp.MiddleName,
-                        PatientID = mp.Id.ToString(),
                         Suffix = mp.Suffix,
-                        Version = mp.Version
+                        Version = mp.Version,
+                        DisplayPatientSystemID = mp.DisplayPatientSystemID.ToString()
                     });
                 }
             }
 
-            PatientDetailsResponse pdResponse = new PatientDetailsResponse();
+            GetPatientsDataResponse pdResponse = new GetPatientsDataResponse();
             pdResponse.Patients = pResp;
 
             return pdResponse;
