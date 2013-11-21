@@ -170,14 +170,15 @@ namespace Phytel.API.AppDomain.NG
             IRestClient client = new JsonServiceClient();
 
             // call cohort data domain
-            GetCohortPatientsDataResponse qResponse = client.Get<GetCohortPatientsDataResponse>(string.Format("{0}/{1}/{2}/{3}/CohortPatients/{4}?Skip={5}&Take={6}",
+            GetCohortPatientsDataResponse qResponse = client.Get<GetCohortPatientsDataResponse>(string.Format("{0}/{1}/{2}/{3}/CohortPatients/{4}?Skip={5}&Take={6}&SearchFilter={7}",
                                                                                         DDCohortPatientServiceUrl,
                                                                                         "NG",
                                                                                         request.Version,
                                                                                         request.ContractNumber,
                                                                                         request.CohortID,
                                                                                         request.Skip,
-                                                                                        request.Take));
+                                                                                        request.Take,
+                                                                                        request.SearchFilter));
 
             //take qResponse Patient details and map them to "Patient" in the GetCohortPatientsResponse
             qResponse.CohortPatients.ForEach(x => pResponse.Patients.Add(new Phytel.API.AppDomain.NG.DTO.Patient
