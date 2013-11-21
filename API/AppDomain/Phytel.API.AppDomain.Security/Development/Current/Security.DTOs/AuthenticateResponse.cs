@@ -1,10 +1,11 @@
 ﻿using ServiceStack.ServiceInterface.ServiceModel;
 using System;
 using System.Collections.Generic;
+using Phytel.API.Interface;
 
 namespace Phytel.API.AppDomain.Security.DTO
 {
-    public class AuthenticateResponse
+    public class AuthenticateResponse: IDomainResponse
     {
         public Guid UserID { get; set; }
         public string UserName { get; set; }
@@ -14,5 +15,6 @@ namespace Phytel.API.AppDomain.Security.DTO
         public string APIToken { get; set; }
         public List<ContractInfo> Contracts { get; set; }
         public ResponseStatus Status { get; set; }
+        public string Version { get; set; }
     }
 }
