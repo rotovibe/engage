@@ -32,8 +32,8 @@ namespace Phytel.API.AppDomain.NG.Services.Test
         [TestMethod]
         public void Get_Pateints_In_Cohort_Test()
         {
-            string token = "52792478fe7a592338e990a0";
-            string cohortID = "528aa048d4332317acc50977";
+            string token = "528e3a62d6a4850c7463d5a7";
+            string cohortID = "528aa055d4332317acc50978";
 
             IRestClient client = new JsonServiceClient();
 
