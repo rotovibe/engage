@@ -12,6 +12,7 @@ using Phytel.API.DataDomain.Patient.DTO;
 using Phytel.API.DataDomain.LookUp.DTO;
 using Phytel.API.DataDomain.PatientProblem.DTO;
 using Phytel.API.DataDomain.CohortPatient.DTO;
+using Phytel.API.DataDomain.PatientSystem.DTO;
 
 namespace NGTestData
 {
@@ -24,13 +25,14 @@ namespace NGTestData
 
         private void button1_Click(object sender, EventArgs e)
         {
-            string sqlPatientQuery = string.Format("Select Top {0} FirstName, LastName, CONVERT(VARCHAR, BirthDate, 101) as BirthDate, MiddleInitial, Gender, Suffix From ContactEntities where CategoryCode = 'PT' and DeleteFlag = 0", numPatients.Value.ToString());
+            string sqlPatientQuery = string.Format("Select Top {0} ID, FirstName, LastName, CONVERT(VARCHAR, BirthDate, 101) as BirthDate, MiddleInitial, Gender, Suffix From ContactEntities where CategoryCode = 'PT' and DeleteFlag = 0", numPatients.Value.ToString());
 
             string sqlConn = "server=10.90.1.10;database=JCMR001;user id=jcmrtestuser;password=testuser;";
 
             List<MEPatient> patients = new List<MEPatient>();
             List<MEPatientProblem> patientProblems = new List<MEPatientProblem>();
             List<MECohortPatientView> cohortPatients = new List<MECohortPatientView>();
+            List<MEPatientSystem> patientSystems = new List<MEPatientSystem>();
 
             List<MEProblem> problems = null;
 
@@ -39,6 +41,7 @@ namespace NGTestData
             mongoDB.GetCollection("Patient").RemoveAll();
             mongoDB.GetCollection("PatientProblem").RemoveAll();
             mongoDB.GetCollection("CohortPatientView").RemoveAll();
+            mongoDB.GetCollection("PatientSystem").RemoveAll();
 
             problems = mongoDB.GetCollection("ProblemLookUp").FindAllAs<MEProblem>().ToList();
 
@@ -53,7 +56,8 @@ namespace NGTestData
                 counter++;
                 MECohortPatientView currentPatientView = new MECohortPatientView();
 
-                //Phytel.API.DataDomain.Cohort.DTO.
+                string patientSystemID = dr["ID"].ToString();
+
                 Phytel.API.DataDomain.Patient.DTO.MEPatient patient = new Phytel.API.DataDomain.Patient.DTO.MEPatient
                     {
                         DisplayPatientSystemID = null,
@@ -71,7 +75,22 @@ namespace NGTestData
                         LastUpdatedOn = DateTime.Now
                     };
 
+                MEPatientSystem patSystem = new MEPatientSystem
+                    {
+                        PatientID = patient.Id,
+                        SystemID = patientSystemID,
+                        SystemName = "Atmosphere",
+                        UpdatedBy = null,
+                        DeleteFlag = false,
+                        TTLDate = null,
+                        Version = "v1",
+                        LastUpdatedOn = DateTime.Now
+                    };
+
+                patient.DisplayPatientSystemID = patSystem.Id;
+                
                 patients.Add(patient);
+                patientSystems.Add(patSystem);
 
                 currentPatientView.PatientID = patient.Id;
                 currentPatientView.LastName = patient.LastName;
@@ -112,11 +131,14 @@ namespace NGTestData
                     mongoDB.GetCollection("Patient").InsertBatch(patients);
                     mongoDB.GetCollection("PatientProblem").InsertBatch(patientProblems);
                     mongoDB.GetCollection("CohortPatientView").InsertBatch(cohortPatients);
+                    mongoDB.GetCollection("PatientSystem").InsertBatch(patientSystems);
+
                     counter = 0;
 
                     patients = new List<MEPatient>();
                     patientProblems = new List<MEPatientProblem>();
                     cohortPatients = new List<MECohortPatientView>();
+                    patientSystems = new List<MEPatientSystem>();
                 }
             }
             if (patients.Count > 0)
@@ -124,6 +146,7 @@ namespace NGTestData
                 mongoDB.GetCollection("Patient").InsertBatch(patients);
                 mongoDB.GetCollection("PatientProblem").InsertBatch(patientProblems);
                 mongoDB.GetCollection("CohortPatientView").InsertBatch(cohortPatients);
+                mongoDB.GetCollection("PatientSystem").InsertBatch(patientSystems);
             }
             
         }

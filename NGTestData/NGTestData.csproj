@@ -105,6 +105,10 @@
       <Project>{afd0f5b1-a29e-402c-958b-d6d82b4278e5}</Project>
       <Name>DataDomain.PatientProblem</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Services\API\DataDomain\Phytel.API.DataDomain.PatientSystem\PatientSystem\DataDomain.PatientSystem.csproj">
+      <Project>{bf2f1262-d5cc-41f0-bcfc-7ccdce479795}</Project>
+      <Name>DataDomain.PatientSystem</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Services\API\DataDomain\Phytel.API.DataDomain.Patient\Development\Current\Patient\DataDomain.Patient.csproj">
       <Project>{1536cd0a-6308-4daf-8618-35bba0816997}</Project>
       <Name>DataDomain.Patient</Name>
