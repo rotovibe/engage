@@ -136,9 +136,6 @@ namespace Phytel.API.AppDomain.NG.Service
                 bool result = ngm.IsUserValidated(request.Version, request.Token);
                 if (result)
                 {
-                    // implement
-                    //response = ngm.GetCohorts(request);
-                    //response.Patients = NGUtils.PopulateCohortPatientStubData();
                     response = ngm.GetCohortPatients(request);
                 }
                 else
