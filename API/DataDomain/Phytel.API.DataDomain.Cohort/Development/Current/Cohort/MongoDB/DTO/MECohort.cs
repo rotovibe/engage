@@ -18,6 +18,7 @@ namespace Phytel.API.DataDomain.Cohort.DTO
         public const string ShortNameProperty = "sn";
         public const string DescriptionProperty = "desc";
         public const string QueryProperty = "q";
+        public const string QueryWithFilterProperty = "qwf";
         public const string SortProperty = "sort";
 
         public const string ExtraElementsProperty = "ex";
@@ -47,6 +48,10 @@ namespace Phytel.API.DataDomain.Cohort.DTO
         [BsonElement(QueryProperty)]
         [BsonIgnoreIfNull(true)]
         public string Query { get; set; }
+
+        [BsonElement(QueryWithFilterProperty)]
+        [BsonIgnoreIfNull(true)]
+        public string QueryWithFilter { get; set; }
 
         [BsonElement(SortProperty)]
         [BsonIgnoreIfNull(true)]

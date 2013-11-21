@@ -54,7 +54,12 @@ namespace Phytel.API.DataDomain.Cohort
                 if (meCohort != null)
                 {
                     cohortResponse = new GetCohortDataResponse();
-                    API.DataDomain.Cohort.DTO.CohortData cohort = new API.DataDomain.Cohort.DTO.CohortData { ID = meCohort.Id.ToString(), SName = meCohort.ShortName, Query = meCohort.Query, Sort = meCohort.Sort };
+                    API.DataDomain.Cohort.DTO.CohortData cohort = new API.DataDomain.Cohort.DTO.CohortData { 
+                            ID = meCohort.Id.ToString(), 
+                            SName = meCohort.ShortName, 
+                            Query = meCohort.Query, 
+                            QueryWithFilter = meCohort.QueryWithFilter,
+                            Sort = meCohort.Sort };
                     cohortResponse.Cohort = cohort;
                 }
             }
