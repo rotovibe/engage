@@ -80,5 +80,26 @@ namespace Phytel.API.AppDomain.NG.Test
             //Assert
             Assert.IsTrue(response.Count > 0);
         }
+
+        [TestMethod]
+        public void GetAllSettings_Test()
+        {
+            // Arrange
+            string version = "v1";
+            string contractNumber = "InHealth001";
+            string token = "528e257fd6a4850d28169493";
+            NGManager ngManager = new NGManager();
+            GetAllSettingsRequest request = new GetAllSettingsRequest
+            {
+                ContractNumber = contractNumber,
+                Token = token,
+                Version = version
+            };
+            // Act
+            GetAllSettingsResponse response = ngManager.GetAllSettings(request);
+
+            //Assert
+            Assert.IsTrue(response.Settings.Count > 0);
+        }
     }
 }
