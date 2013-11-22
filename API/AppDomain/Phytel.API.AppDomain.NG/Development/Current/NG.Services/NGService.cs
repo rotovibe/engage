@@ -1,7 +1,6 @@
-using Phytel.API.AppDomain.NG.DTO;
 using System;
-using System.Collections.Generic;
 using System.Net;
+using Phytel.API.AppDomain.NG.DTO;
 
 namespace Phytel.API.AppDomain.NG.Service
 {
@@ -148,6 +147,32 @@ namespace Phytel.API.AppDomain.NG.Service
                 response.Status = new ServiceStack.ServiceInterface.ServiceModel.ResponseStatus("Exception", ex.Message);
             }
             return response;
+        }
+
+        public GetAllSettingsResponse Get(GetAllSettingsRequest request)
+        {
+            GetAllSettingsResponse response = new GetAllSettingsResponse();
+            try
+            {
+                NGManager ngm = new NGManager();
+
+                bool result = ngm.IsUserValidated(request.Version, request.Token);
+                if (result)
+                {
+                    response = ngm.GetAllSettings(request);
+                }
+                else
+                    throw new UnauthorizedAccessException();
+            }
+            catch (Exception ex)
+            {
+                //TODO: Log this to C3 database via ASE
+                base.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                response.Status = new ServiceStack.ServiceInterface.ServiceModel.ResponseStatus("Exception", ex.Message);
+            }
+            return response;
+        
+        
         }
 
     }
