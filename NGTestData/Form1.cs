@@ -36,7 +36,13 @@ namespace NGTestData
 
             List<MEProblem> problems = null;
 
-            MongoDB.Driver.MongoDatabase mongoDB = Phytel.Services.MongoService.Instance.GetDatabase("InHealth001", true);
+            string mongoConnString = string.Empty;
+            if (rdoDev.Checked)
+                mongoConnString = "mongodb://healthuser:healthu$3r@azurePhytel.cloudapp.net:27017/InHealth001";
+            else
+                mongoConnString = "mongodb://healthuser:healthu$3r@azurePhytel.cloudapp.net:27017/InHealth001_Model";
+
+            MongoDB.Driver.MongoDatabase mongoDB = Phytel.Services.MongoService.Instance.GetDatabase(mongoConnString);
 
             mongoDB.GetCollection("Patient").RemoveAll();
             mongoDB.GetCollection("PatientProblem").RemoveAll();
@@ -102,11 +108,17 @@ namespace NGTestData
                 currentPatientView.SearchFields.Add(new SearchField { Active = true, FieldName = "MN", Value = patient.MiddleName });
                 currentPatientView.SearchFields.Add(new SearchField { Active = true, FieldName = "SFX", Value = patient.Suffix });
                 currentPatientView.SearchFields.Add(new SearchField { Active = true, FieldName = "PN", Value = patient.PreferredName });
-                
+
+                List<int> prodIds = new List<int>();
                 for(int i = 0; i < numProblems.Value; i++)
                 {
                     int probID = rnd.Next(maxNum);
+                    while (prodIds.Contains(probID))
+                    {
+                        probID = rnd.Next(maxNum);
+                    }
 
+                    prodIds.Add(probID);
                     patientProblems.Add(new MEPatientProblem
                         {
                             PatientID = patient.Id,
