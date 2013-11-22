@@ -1,15 +1,15 @@
+using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.IO;
+using System.Text;
+using DataDomain.LookUp.DTO;
+using Newtonsoft.Json;
 using Phytel.API.AppDomain.NG.DTO;
-using Phytel.API.DataDomain.Patient.DTO;
-using Phytel.API.DataDomain.PatientProblem.DTO;
-using Phytel.API.DataDomain.LookUp.DTO;
-using ServiceStack.Service;
-using ServiceStack.ServiceClient.Web;
-using System;
 using Phytel.API.DataDomain.Cohort.DTO;
 using Phytel.API.DataDomain.CohortPatient.DTO;
-using DataDomain.LookUp.DTO;
+using ServiceStack.Service;
+using ServiceStack.ServiceClient.Web;
 
 namespace Phytel.API.AppDomain.NG
 {
@@ -198,5 +198,17 @@ namespace Phytel.API.AppDomain.NG
             return pResponse;
         }
         #endregion
+
+        public GetAllSettingsResponse GetAllSettings(GetAllSettingsRequest request)
+        {
+            GetAllSettingsResponse response = new GetAllSettingsResponse();
+            using (StreamReader r = new StreamReader("settings.json"))
+            {
+                string json = r.ReadToEnd();
+                var settings = JsonConvert.DeserializeObject<List<Setting>>(json);
+                response.Settings = settings;
+            }
+            return response;
+        }
     }
 }
