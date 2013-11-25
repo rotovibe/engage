@@ -7,8 +7,8 @@
     <ProjectGuid>{F0A3623A-6D1D-46DE-A00E-794EBC856EB5}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>DataDomain.LookUp</RootNamespace>
-    <AssemblyName>DataDomain.LookUp</AssemblyName>
+    <RootNamespace>Phytel.API.DataDomain.LookUp</RootNamespace>
+    <AssemblyName>Phytel.API.DataDomain.LookUp</AssemblyName>
     <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SccProjectName>SAK</SccProjectName>
