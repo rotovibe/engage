@@ -128,14 +128,14 @@ namespace Phytel.API.AppDomain.NG.Service
         public GetCohortPatientsResponse Get(GetCohortPatientsRequest request)
         {
             GetCohortPatientsResponse response = new GetCohortPatientsResponse();
+            NGManager ngm = new NGManager();
+
             try
             {
-                NGManager ngm = new NGManager();
-
                 bool result = ngm.IsUserValidated(request.Version, request.Token);
                 if (result)
                 {
-                    response = ngm.GetCohortPatients(request);
+                    response = ngm.GetCohortPatients(request, base.RequestContext  );
                 }
                 else
                     throw new UnauthorizedAccessException();

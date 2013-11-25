@@ -11,6 +11,8 @@ using Phytel.API.DataDomain.Cohort.DTO;
 using Phytel.API.DataDomain.CohortPatient.DTO;
 using ServiceStack.Service;
 using ServiceStack.ServiceClient.Web;
+using ServiceStack.ServiceHost;
+using Phytel.API.AppDomain.Audit.DTO;
 
 namespace Phytel.API.AppDomain.NG
 {
@@ -163,11 +165,15 @@ namespace Phytel.API.AppDomain.NG
             return response;
         }
 
-        public GetCohortPatientsResponse GetCohortPatients(GetCohortPatientsRequest request)
+        public GetCohortPatientsResponse GetCohortPatients(GetCohortPatientsRequest request, IRequestContext httpContext)
         {
             GetCohortPatientsResponse pResponse = new GetCohortPatientsResponse();
             pResponse.Patients = new List<Phytel.API.AppDomain.NG.DTO.Patient>();
 
+            try
+            {
+                //remove
+                throw new ArgumentException("Testing");
             IRestClient client = new JsonServiceClient();
 
             // call cohort data domain
@@ -194,9 +200,23 @@ namespace Phytel.API.AppDomain.NG
                 Suffix = x.Suffix
             }));
 
-            //SendAuditDispatch();
-
             return pResponse;
+        }
+            catch (Exception ex)
+            {
+                SendAuditDispatch(new PutAuditErrorRequest
+                {
+                    Browser = httpContext.GetHeader("User-Agent"),
+                    SourceIp = httpContext.IpAddress,
+                    Context = "NG",
+                    ContractNumber = request.ContractNumber,
+                    ErrorText = ex.Message,
+                    StackTrace = ex.StackTrace,
+                    Version = request.Version,
+                    SessionId = request.Token
+                });
+                throw new ArgumentException(ex.Message);
+            }
         }
         #endregion
 

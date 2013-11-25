@@ -34,10 +34,10 @@ namespace Phytel.API.AppDomain.NG
             return result;
         }
 
-        //protected void SendAuditDispatch()
-        //{
-        //    //DispatchEventArgs args = new DispatchEventArgs { DispatchType = DispatchType.AUDIT, new object() };
-        //    //AuditDispatcher.SendDispatchAsynch(args);
-        //}
+        protected static void SendAuditDispatch(object request)
+        {
+            DispatchEventArgs args = new DispatchEventArgs { payload = request};
+            AuditDispatcher.SendDispatchAsynch(args);
+        }
     }
 }
