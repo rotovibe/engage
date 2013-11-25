@@ -2,9 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
+using System.Runtime.Serialization.Json;
 using System.Text;
+using System.Web.Hosting;
 using DataDomain.LookUp.DTO;
-using Newtonsoft.Json;
 using Phytel.API.AppDomain.NG.DTO;
 using Phytel.API.DataDomain.Cohort.DTO;
 using Phytel.API.DataDomain.CohortPatient.DTO;
@@ -202,11 +203,14 @@ namespace Phytel.API.AppDomain.NG
         public GetAllSettingsResponse GetAllSettings(GetAllSettingsRequest request)
         {
             GetAllSettingsResponse response = new GetAllSettingsResponse();
-            using (StreamReader r = new StreamReader("settings.json"))
+            using (StreamReader r = new StreamReader(HostingEnvironment.MapPath("/Nightingale/settings.json")))
             {
-                string json = r.ReadToEnd();
-                var settings = JsonConvert.DeserializeObject<List<Setting>>(json);
-                response.Settings = settings;
+               using (MemoryStream stream1 = new MemoryStream(Encoding.UTF8.GetBytes(r.ReadToEnd())))
+                { 
+                    DataContractJsonSerializer serializer = new DataContractJsonSerializer(typeof(List<Setting>));
+                    var settings = serializer.ReadObject(stream1) as List<Setting>;
+                    response.Settings = settings;
+                }
             }
             return response;
         }

@@ -72,9 +72,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="settings.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
+    <Content Include="settings.json" />
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
