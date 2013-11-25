@@ -1,5 +1,0 @@
-﻿[
-	{ "Key":"TotalPatientCount","Value":"50"},
-	{ "Key":"NightingaleEndPoint","Value":"http://azurephytel.cloudapp.net:59990/Nightingale"},
-	{ "Key":"AuditEndPoint","Value":"http://azurephytel.cloudapp.net:59990/Audit"}
-]

@@ -71,9 +71,6 @@
       <Name>AppDomain.NG</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Content Include="settings.json" />
-  </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
       <ItemGroup>
