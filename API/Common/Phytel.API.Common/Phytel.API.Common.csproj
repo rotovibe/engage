@@ -47,6 +47,7 @@
       <HintPath>..\..\packages\ServiceStack.Text.3.9.70\lib\net35\ServiceStack.Text.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -68,6 +69,10 @@
     <ProjectReference Include="..\..\AppDomain\Phytel.API.AppDomain.Audit\Development\Current\Audit.DTOs\AppDomain.Audit.DTO.csproj">
       <Project>{ddf2cb2b-6351-44aa-a152-35f82d7d0af2}</Project>
       <Name>AppDomain.Audit.DTO</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Interfaces\Development\Current\Phytel.API.Interface\Phytel.API.Interface.csproj">
+      <Project>{abe948fb-247e-4955-b3ab-b7c93e10a542}</Project>
+      <Name>Phytel.API.Interface</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
