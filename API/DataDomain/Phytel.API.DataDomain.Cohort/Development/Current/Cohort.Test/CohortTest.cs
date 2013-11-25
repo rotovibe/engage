@@ -21,7 +21,7 @@ namespace Phytel.API.DataDomain.Cohort.Test
             string version = "v1";
             string contractNumber = "InHealth001";
             string context = "NG";
-            GetCohortDataRequest request = new GetCohortDataRequest { CohortID = "528aa03ad4332317acc50976", Context = context, ContractNumber = contractNumber, Version = version };
+            GetCohortDataRequest request = new GetCohortDataRequest { CohortID = "528aa055d4332317acc50978", Context = context, ContractNumber = contractNumber, Version = version };
 
             // Act
             GetCohortDataResponse response = DataCohortManager.GetCohortByID(request);

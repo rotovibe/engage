@@ -35,7 +35,7 @@ namespace Phytel.API.DataDomain.Cohort.Service.Test
             string version = "v1";
             string contractNumber = "InHealth001";
             string context = "NG";
-            string cohortID = "528aa03ad4332317acc50976";
+            string cohortID = "528aa055d4332317acc50978";
             IRestClient client = new JsonServiceClient();
 
             // Act
