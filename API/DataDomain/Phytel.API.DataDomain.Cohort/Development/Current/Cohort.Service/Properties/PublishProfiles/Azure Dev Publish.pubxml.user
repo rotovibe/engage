@@ -6,6 +6,6 @@ by editing this MSBuild file. In order to learn more about this please visit htt
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <TimeStampOfAssociatedLegacyPublishXmlFile />
-    <EncryptedPassword>AQAAANCMnd8BFdERjHoAwE/Cl+sBAAAAiMcuhhAKJEmLmN+47TytiAAAAAACAAAAAAADZgAAwAAAABAAAACX99K+zmFhqqoRC2kcr1A9AAAAAASAAACgAAAAEAAAAHnLcQJ0Q1rVS4HyE6DNtzkYAAAAEXiXmQsXFvkPuEVdfkZ/8u2fsFIUXICxFAAAAIN4QD1AiD2xQNxGPhCr3gHJnve6</EncryptedPassword>
+    <EncryptedPassword>AQAAANCMnd8BFdERjHoAwE/Cl+sBAAAAPJuDltzm8kmWhVrMFjArGgAAAAACAAAAAAADZgAAwAAAABAAAAAx2pfWkg0ekK4ZXcOG91d3AAAAAASAAACgAAAAEAAAAHFOELMuvM2nB5eDp54l/DwYAAAAMzRmrxPzNMILfBJ7pib15G5szUVXLwKsFAAAACCDChBCzpeYlAAN31vJ8BJMpGqd</EncryptedPassword>
   </PropertyGroup>
 </Project>
