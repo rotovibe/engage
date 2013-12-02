@@ -105,6 +105,7 @@ namespace Phytel.API.AppDomain.NG
                 pp.ID = p.ID;
                 pp.PatientID = p.PatientID;
                 pp.ProblemID = p.ProblemID;
+                pp.Level = p.Level;
                 response.Add(pp);
             }
 

@@ -83,7 +83,9 @@ namespace Phytel.API.DataDomain.PatientProblem
                             { 
                                 ProblemID = p.ProblemID.ToString(),
                                 PatientID = p.PatientID.ToString(),
-                                ID = p.Id.ToString()
+                                ID = p.Id.ToString(),
+                                Level = p.Level
+
                             };
                             patientProblemList.Add(problem);
                         }

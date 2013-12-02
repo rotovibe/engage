@@ -11,5 +11,6 @@ namespace Phytel.API.DataDomain.PatientProblem.DTO
         public string ID { get; set; }
         public string PatientID { get; set; }
         public string ProblemID { get; set; }
+        public int Level { get; set; }
     }
 }
