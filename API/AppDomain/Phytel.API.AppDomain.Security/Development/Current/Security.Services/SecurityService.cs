@@ -1,4 +1,5 @@
 ﻿using Phytel.API.AppDomain.Security.DTO;
+using ServiceStack.ServiceHost;
 using ServiceStack.ServiceInterface.ServiceModel;
 using System;
 using System.Net;
