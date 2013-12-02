@@ -38,9 +38,9 @@ namespace NGTestData
 
             string mongoConnString = string.Empty;
             if (rdoDev.Checked)
-                mongoConnString = "mongodb://healthuser:healthu$3r@azurePhytel.cloudapp.net:27017/InHealth001";
+                mongoConnString = "mongodb://healthuser:healthu$3r@azurePhytelDev.cloudapp.net:27017/InHealth001";
             else
-                mongoConnString = "mongodb://healthuser:healthu$3r@azurePhytel.cloudapp.net:27017/InHealth001_Model";
+                mongoConnString = "mongodb://healthuser:healthu$3r@azurePhytel.cloudapp.net:27017/InHealth001";
 
             MongoDB.Driver.MongoDatabase mongoDB = Phytel.Services.MongoService.Instance.GetDatabase(mongoConnString);
 
