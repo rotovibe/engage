@@ -145,9 +145,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppDomain.Audit.Services.Te
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppDomain.Audit.Test", "AppDomain\Phytel.API.AppDomain.Audit\Development\Current\AppDomain.Audit.Test\AppDomain.Audit.Test.csproj", "{1861B5A0-1AA8-41C0-A9ED-6BE0FDE2082B}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{03013DA6-3BB8-4665-A4E0-0B3064FA86B9}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{1F26C326-3639-4208-95C6-EF7C01938CFB}"
 	ProjectSection(SolutionItems) = preProject
-		Performance1.psess = Performance1.psess
+		Performance2.psess = Performance2.psess
 	EndProjectSection
 EndProject
 Global
@@ -681,8 +681,5 @@ Global
 		{DA0DCEDF-73A9-4BB9-970C-05995FC9E5C1} = {20C235E5-B8ED-43FC-8A30-BB8FEE4C33C1}
 		{C940018D-A598-407A-AAA0-22918FF5FFE8} = {20C235E5-B8ED-43FC-8A30-BB8FEE4C33C1}
 		{1861B5A0-1AA8-41C0-A9ED-6BE0FDE2082B} = {20C235E5-B8ED-43FC-8A30-BB8FEE4C33C1}
-	EndGlobalSection
-	GlobalSection(Performance) = preSolution
-		HasPerformanceSessions = true
 	EndGlobalSection
 EndGlobal
