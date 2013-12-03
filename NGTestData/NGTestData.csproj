@@ -43,30 +43,6 @@
     <Reference Include="MongoDB.Driver">
       <HintPath>..\PhytelServices\Development\Current\References\MongoDB.Driver.dll</HintPath>
     </Reference>
-    <Reference Include="ServiceStack">
-      <HintPath>..\..\Services\API\packages\ServiceStack.4.0.3\lib\net40\ServiceStack.dll</HintPath>
-    </Reference>
-    <Reference Include="ServiceStack.Client">
-      <HintPath>..\..\Services\API\packages\ServiceStack.Client.4.0.3\lib\net40\ServiceStack.Client.dll</HintPath>
-    </Reference>
-    <Reference Include="ServiceStack.Common, Version=4.0.3.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Services\API\packages\ServiceStack.Common.4.0.3\lib\net40\ServiceStack.Common.dll</HintPath>
-    </Reference>
-    <Reference Include="ServiceStack.Interfaces, Version=4.0.0.0, Culture=neutral, PublicKeyToken=e06fbc6124f57c43, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Services\API\packages\ServiceStack.Interfaces.4.0.3\lib\net40\ServiceStack.Interfaces.dll</HintPath>
-    </Reference>
-    <Reference Include="ServiceStack.OrmLite">
-      <HintPath>..\..\Services\API\packages\ServiceStack.OrmLite.4.0.3\lib\net40\ServiceStack.OrmLite.dll</HintPath>
-    </Reference>
-    <Reference Include="ServiceStack.OrmLite.SqlServer">
-      <HintPath>..\..\Services\API\packages\ServiceStack.OrmLite.SqlServer.4.0.3\lib\net40\ServiceStack.OrmLite.SqlServer.dll</HintPath>
-    </Reference>
-    <Reference Include="ServiceStack.Text, Version=4.0.3.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Services\API\packages\ServiceStack.Text.4.0.3\lib\net40\ServiceStack.Text.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -99,7 +75,6 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -130,7 +105,7 @@
       <Project>{afd0f5b1-a29e-402c-958b-d6d82b4278e5}</Project>
       <Name>DataDomain.PatientProblem</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Services\API\DataDomain\Phytel.API.DataDomain.PatientSystem\PatientSystem\DataDomain.PatientSystem.csproj">
+    <ProjectReference Include="..\..\Services\API\DataDomain\Phytel.API.DataDomain.PatientSystem\Development\Current\PatientSystem\DataDomain.PatientSystem.csproj">
       <Project>{bf2f1262-d5cc-41f0-bcfc-7ccdce479795}</Project>
       <Name>DataDomain.PatientSystem</Name>
     </ProjectReference>
