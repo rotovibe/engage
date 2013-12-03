@@ -1,6 +1,8 @@
+using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Phytel.API.DataDomain.LookUp.DTO;
-using ServiceStack;
+using ServiceStack.Service;
+using ServiceStack.ServiceClient.Web;
 
 namespace Phytel.API.DataDomain.LookUp.Services.Test
 {

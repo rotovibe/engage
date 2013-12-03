@@ -1,4 +1,4 @@
-﻿using ServiceStack;
+﻿using ServiceStack.ServiceInterface.ServiceModel;
 using System;
 using System.Collections.Generic;
 using Phytel.API.Interface;

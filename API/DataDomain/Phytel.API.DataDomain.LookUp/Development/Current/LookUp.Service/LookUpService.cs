@@ -3,11 +3,10 @@ using System.Collections.Generic;
 using System.Net;
 using Phytel.API.DataDomain.LookUp;
 using Phytel.API.DataDomain.LookUp.DTO;
-using ServiceStack;
 
 namespace Phytel.API.DataDomain.Patient.Service
 {
-    public class LookUpService : ServiceStack.Service
+    public class LookUpService : ServiceStack.ServiceInterface.Service
     {
         public GetProblemDataResponse Get(GetProblemDataRequest request)
         {
@@ -20,7 +19,7 @@ namespace Phytel.API.DataDomain.Patient.Service
             {
                 //TODO: Log this to C3 database via ASE
                 base.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-                response.Status = new ResponseStatus("Exception", ex.Message);
+                response.Status = new ServiceStack.ServiceInterface.ServiceModel.ResponseStatus("Exception", ex.Message);
             }
             return response;
         }
@@ -36,7 +35,7 @@ namespace Phytel.API.DataDomain.Patient.Service
             {
                 //TODO: Log this to C3 database via ASE
                 base.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-                response.Status = new ResponseStatus("Exception", ex.Message);
+                response.Status = new ServiceStack.ServiceInterface.ServiceModel.ResponseStatus("Exception", ex.Message);
             }
             return response;
         }
@@ -52,7 +51,7 @@ namespace Phytel.API.DataDomain.Patient.Service
             {
                 //TODO: Log this to C3 database via ASE
                 base.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-                response.Status = new ResponseStatus("Exception", ex.Message);
+                response.Status = new ServiceStack.ServiceInterface.ServiceModel.ResponseStatus("Exception", ex.Message);
             }
             return response;
         }

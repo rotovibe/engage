@@ -1,8 +1,13 @@
 ﻿using Phytel.API.AppDomain.Security.DTO;
 using Phytel.API.Common.Audit;
-using ServiceStack;
+using ServiceStack.Service;
+using ServiceStack.ServiceClient.Web;
 using System;
+using System.Collections.Generic;
 using System.Configuration;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace Phytel.API.AppDomain.NG
 {

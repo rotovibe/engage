@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using ServiceStack;
+using ServiceStack.ServiceInterface.ServiceModel;
 using DataDomain.LookUp.DTO;
 using Phytel.API.Interface;
 

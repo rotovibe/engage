@@ -1,4 +1,6 @@
 ﻿using Phytel.API.AppDomain.Security.DTO;
+using ServiceStack.Service;
+using ServiceStack.ServiceClient.Web;
 using System;
 
 namespace Phytel.API.AppDomain.Security

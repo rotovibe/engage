@@ -1,11 +1,10 @@
 using System;
 using System.Net;
 using Phytel.API.AppDomain.NG.DTO;
-using ServiceStack;
 
 namespace Phytel.API.AppDomain.NG.Service
 {
-    public class NGService : ServiceStack.Service
+    public class NGService : ServiceStack.ServiceInterface.Service
     {
         public GetPatientResponse Post(GetPatientRequest request)
         {
@@ -25,7 +24,7 @@ namespace Phytel.API.AppDomain.NG.Service
             {
                 //TODO: Log this to C3 database via ASE
                 base.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-                response.Status = new ResponseStatus("Exception", ex.Message);
+                response.Status = new ServiceStack.ServiceInterface.ServiceModel.ResponseStatus("Exception", ex.Message);
             }
             return response;
         }
@@ -48,7 +47,7 @@ namespace Phytel.API.AppDomain.NG.Service
             {
                 //TODO: Log this to C3 database via ASE
                 base.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-                response.Status = new ResponseStatus("Exception", ex.Message);
+                response.Status = new ServiceStack.ServiceInterface.ServiceModel.ResponseStatus("Exception", ex.Message);
             }
             return response;
         }
@@ -75,7 +74,7 @@ namespace Phytel.API.AppDomain.NG.Service
             {
                 //TODO: Log this to C3 database via ASE
                 base.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-                response.Status = new ResponseStatus("Exception", ex.Message);
+                response.Status = new ServiceStack.ServiceInterface.ServiceModel.ResponseStatus("Exception", ex.Message);
             }
             return response;
         }
@@ -97,7 +96,7 @@ namespace Phytel.API.AppDomain.NG.Service
             {
                 //TODO: Log this to C3 database via ASE
                 base.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-                response.Status = new ResponseStatus("Exception", ex.Message);
+                response.Status = new ServiceStack.ServiceInterface.ServiceModel.ResponseStatus("Exception", ex.Message);
             }
             return response;
         }
@@ -121,7 +120,7 @@ namespace Phytel.API.AppDomain.NG.Service
             {
                 //TODO: Log this to C3 database via ASE
                 base.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-                response.Status = new ResponseStatus("Exception", ex.Message);
+                response.Status = new ServiceStack.ServiceInterface.ServiceModel.ResponseStatus("Exception", ex.Message);
             }
             return response;
         }
@@ -136,7 +135,7 @@ namespace Phytel.API.AppDomain.NG.Service
                 bool result = ngm.IsUserValidated(request.Version, request.Token);
                 if (result)
                 {
-                    response = ngm.GetCohortPatients(request, base.Request );
+                    response = ngm.GetCohortPatients(request, base.RequestContext  );
                 }
                 else
                     throw new UnauthorizedAccessException();
@@ -145,7 +144,7 @@ namespace Phytel.API.AppDomain.NG.Service
             {
                 //TODO: Log this to C3 database via ASE
                 base.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-                response.Status = new ResponseStatus("Exception", ex.Message);
+                response.Status = new ServiceStack.ServiceInterface.ServiceModel.ResponseStatus("Exception", ex.Message);
             }
             return response;
         }
@@ -169,7 +168,7 @@ namespace Phytel.API.AppDomain.NG.Service
             {
                 //TODO: Log this to C3 database via ASE
                 base.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-                response.Status = new ResponseStatus("Exception", ex.Message);
+                response.Status = new ServiceStack.ServiceInterface.ServiceModel.ResponseStatus("Exception", ex.Message);
             }
             return response;
         

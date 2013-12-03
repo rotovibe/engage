@@ -1,4 +1,4 @@
-using ServiceStack;
+using ServiceStack.WebHost.Endpoints;
 using System;
 
 namespace Phytel.API.AppDomain.NG.Service
@@ -15,10 +15,10 @@ namespace Phytel.API.AppDomain.NG.Service
             {
                 //register any dependencies your services use, e.g:
                 //container.Register<ICacheClient>(new MemoryCacheClient());
-                SetConfig(new HostConfig { AllowJsonpRequests = true });
+                SetConfig(new EndpointHostConfig { AllowJsonpRequests = true });
 
                 //Permit modern browsers to allow sending of any REST HTTP Method
-                SetConfig(new HostConfig
+                SetConfig(new EndpointHostConfig
                 {
                     GlobalResponseHeaders = { 
                           //{"Access-Control-Allow-Origin", "*"},

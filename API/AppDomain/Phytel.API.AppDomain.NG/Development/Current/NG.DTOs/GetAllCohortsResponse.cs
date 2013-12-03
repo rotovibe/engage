@@ -1,5 +1,5 @@
 using Phytel.API.Interface;
-using ServiceStack;
+using ServiceStack.ServiceInterface.ServiceModel;
 using System;
 using System.Collections.Generic;
 

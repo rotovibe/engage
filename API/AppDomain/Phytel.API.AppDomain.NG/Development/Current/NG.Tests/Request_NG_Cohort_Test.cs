@@ -1,6 +1,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Phytel.API.AppDomain.NG.DTO;
-using ServiceStack;
+using ServiceStack.Service;
+using ServiceStack.ServiceClient.Web;
 
 namespace Phytel.API.AppDomain.NG.Services.Test
 {
@@ -16,7 +17,7 @@ namespace Phytel.API.AppDomain.NG.Services.Test
             string token = "52792478fe7a592338e990a0";
 
             IRestClient client = new JsonServiceClient();
-            JsonServiceClient.GlobalRequestFilter = x => x.Headers.Add(string.Format("APIToken: {0}", token));
+            JsonServiceClient.HttpWebRequestFilter = x => x.Headers.Add(string.Format("APIToken: {0}", token));
             
             GetAllCohortsResponse response = client.Post<GetAllCohortsResponse>("http://localhost:888/Nightingale/v1/NG/InHealth001/cohort",
                 new GetAllCohortsRequest { } as object);

@@ -1,6 +1,8 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Phytel.API.AppDomain.Security.DTO;
-using ServiceStack;
+using ServiceStack.Service;
+using ServiceStack.ServiceClient.Web;
+using System;
 
 namespace Phytel.API.AppDomain.Security.Services.Test
 {
@@ -15,7 +17,7 @@ namespace Phytel.API.AppDomain.Security.Services.Test
             string sampleValue;
             IRestClient client = new JsonServiceClient();
 
-            ServiceStack.AuthenticateResponse response = client.Post<ServiceStack.AuthenticateResponse>("http://localhost:999/api/security/login",
+            AuthenticateResponse response = client.Post<AuthenticateResponse>("http://localhost:999/api/security/login",
                 new AuthenticateRequest { APIKey = "12345", Product = "NG", Token = "1234" } as object);
             sampleValue = response.UserName;
             Assert.AreEqual(controlValue, sampleValue);
