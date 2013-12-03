@@ -1,16 +1,15 @@
 ﻿using Phytel.API.AppDomain.Security.DTO;
-using ServiceStack.ServiceHost;
-using ServiceStack.ServiceInterface.ServiceModel;
+using ServiceStack;
 using System;
 using System.Net;
 
 namespace Phytel.API.AppDomain.Security.Service
 {
-    public class SecurityService : ServiceStack.ServiceInterface.Service
+    public class SecurityService : ServiceStack.Service
     {
-        public AuthenticateResponse Post(AuthenticateRequest request)
+        public DTO.AuthenticateResponse Post(AuthenticateRequest request)
         {
-            AuthenticateResponse response = new AuthenticateResponse();
+            DTO.AuthenticateResponse response = new DTO.AuthenticateResponse();
             try
             {
                 // validate user against apiuser datastore

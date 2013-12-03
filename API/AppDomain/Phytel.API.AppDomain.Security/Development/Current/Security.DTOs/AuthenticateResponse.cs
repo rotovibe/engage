@@ -1,8 +1,7 @@
-﻿using ServiceStack.ServiceInterface.ServiceModel;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using Phytel.API.Interface;
-using ServiceStack.ServiceHost;
+using ServiceStack;
 
 namespace Phytel.API.AppDomain.Security.DTO
 {

@@ -1,5 +1,5 @@
 using Phytel.API.Interface;
-using ServiceStack.ServiceHost;
+using ServiceStack;
 using System.Runtime.Serialization;
 
 namespace Phytel.API.AppDomain.NG.DTO

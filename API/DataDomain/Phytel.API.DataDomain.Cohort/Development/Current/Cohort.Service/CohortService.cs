@@ -2,10 +2,11 @@ using System;
 using System.Net;
 using Phytel.API.DataDomain.Cohort;
 using Phytel.API.DataDomain.Cohort.DTO;
+using ServiceStack;
 
 namespace Phytel.API.DataDomain.Cohort.Service
 {
-    public class CohortService : ServiceStack.ServiceInterface.Service
+    public class CohortService : ServiceStack.Service
     {
         public GetCohortDataResponse Get(GetCohortDataRequest request)
         {
@@ -18,7 +19,7 @@ namespace Phytel.API.DataDomain.Cohort.Service
             {
                 //TODO: Log this to C3 database via ASE
                 base.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-                response.Status = new ServiceStack.ServiceInterface.ServiceModel.ResponseStatus("Exception", ex.Message);
+                response.Status = new ResponseStatus("Exception", ex.Message);
             }
             return response;
         }
@@ -34,7 +35,7 @@ namespace Phytel.API.DataDomain.Cohort.Service
             {
                 //TODO: Log this to C3 database via ASE
                 base.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-                response.Status = new ServiceStack.ServiceInterface.ServiceModel.ResponseStatus("Exception", ex.Message);
+                response.Status = new ResponseStatus("Exception", ex.Message);
             }
             return response;
         }

@@ -1,5 +1,5 @@
 using Phytel.API.Interface;
-using ServiceStack.ServiceInterface.ServiceModel;
+using ServiceStack;
 using System.Collections.Generic;
 
 namespace Phytel.API.DataDomain.Patient.DTO

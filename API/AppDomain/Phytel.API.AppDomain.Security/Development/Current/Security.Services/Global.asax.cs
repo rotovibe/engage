@@ -1,4 +1,4 @@
-﻿using ServiceStack.WebHost.Endpoints;
+﻿using ServiceStack;
 using System;
 
 namespace Phytel.API.AppDomain.Security.Service
@@ -14,10 +14,10 @@ namespace Phytel.API.AppDomain.Security.Service
             {
                 //register any dependencies your services use, e.g:
                 //container.Register<ICacheClient>(new MemoryCacheClient());
-                SetConfig(new EndpointHostConfig { AllowJsonpRequests = true });
+                SetConfig(new HostConfig { AllowJsonpRequests = true });
 
                 //Permit modern browsers to allow sending of any REST HTTP Method
-                SetConfig(new EndpointHostConfig
+                SetConfig(new HostConfig
                 {
                     GlobalResponseHeaders = { { "Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS" },
                                                 { "Access-Control-Allow-Headers", "Content-Type" },

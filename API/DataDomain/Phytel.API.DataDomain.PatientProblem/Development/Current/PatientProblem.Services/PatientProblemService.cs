@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Net;
 using Phytel.API.DataDomain.PatientProblem;
 using Phytel.API.DataDomain.PatientProblem.DTO;
+using ServiceStack;
 
 namespace Phytel.API.DataDomain.PatientProblem.Service
 {
-    public class PatientProblemService : ServiceStack.ServiceInterface.Service
+    public class PatientProblemService : ServiceStack.Service
     {
         public GetAllPatientProblemsDataResponse Get(GetAllPatientProblemsDataRequest request)
         {
@@ -19,7 +20,7 @@ namespace Phytel.API.DataDomain.PatientProblem.Service
             {
                 //TODO: Log this to C3 database via ASE
                 base.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-                response.Status = new ServiceStack.ServiceInterface.ServiceModel.ResponseStatus("Exception", ex.Message);
+                response.Status = new ResponseStatus("Exception", ex.Message);
             }
             return response;
 

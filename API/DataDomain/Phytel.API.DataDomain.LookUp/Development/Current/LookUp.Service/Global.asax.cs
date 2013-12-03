@@ -1,4 +1,4 @@
-using ServiceStack.WebHost.Endpoints;
+using ServiceStack;
 using System;
 
 namespace Phytel.API.DataDomain.Patient.Service

@@ -1,13 +1,12 @@
+using DataDomain.LookUp.DTO;
+using Phytel.API.DataDomain.LookUp.DTO;
+using Phytel.API.DataDomain.PatientProblem.DTO;
+using Phytel.API.Interface;
+using ServiceStack;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
-using Phytel.API.DataDomain.LookUp.DTO;
-using Phytel.API.DataDomain.PatientProblem.DTO;
-using Phytel.API.Interface;
-using ServiceStack.Service;
-using ServiceStack.ServiceClient.Web;
-using DataDomain.LookUp.DTO;
 
 namespace Phytel.API.DataDomain.PatientProblem
 {

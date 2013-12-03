@@ -1,5 +1,5 @@
 ﻿using Phytel.API.Interface;
-using ServiceStack.ServiceInterface.ServiceModel;
+using ServiceStack;
 
 namespace Phytel.API.AppDomain.Security.DTO
 {

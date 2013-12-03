@@ -1,5 +1,5 @@
 ﻿using Phytel.API.Interface;
-using ServiceStack.ServiceHost;
+using ServiceStack;
 
 namespace Phytel.API.DataDomain.LookUp.DTO
 {
