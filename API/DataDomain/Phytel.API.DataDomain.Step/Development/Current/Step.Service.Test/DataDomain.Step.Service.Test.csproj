@@ -75,7 +75,7 @@
       <Name>Phytel.API.Interface</Name>
     </ProjectReference>
     <ProjectReference Include="..\Step.DTO\DataDomain.Step.DTO.csproj">
-      <Project>{1c2c63a1-4246-4ec9-bad1-c00e9ecd85f6}</Project>
+      <Project>{71e4bd1e-0fdf-4b80-8322-4c38b8bb671c}</Project>
       <Name>DataDomain.Step.DTO</Name>
     </ProjectReference>
   </ItemGroup>
