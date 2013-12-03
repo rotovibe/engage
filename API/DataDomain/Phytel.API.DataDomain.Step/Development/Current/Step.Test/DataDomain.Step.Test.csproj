@@ -1,9 +1,9 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{79CB7A3A-6D69-45F8-964F-D9609383B22A}</ProjectGuid>
+    <ProjectGuid>{C81DE09B-A2B2-4E0A-B642-482471BE74CA}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Phytel.API.DataDomain.Step.Test</RootNamespace>
@@ -40,7 +40,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="ServiceStack.Text">
-      <HintPath>..\..\..\packages\ServiceStack.Text.3.9.70\lib\net35\ServiceStack.Text.dll</HintPath>
+      <HintPath>..\..\..\..\..\packages\ServiceStack.Text.3.9.70\lib\net35\ServiceStack.Text.dll</HintPath>
     </Reference>
     <Reference Include="System" />
   </ItemGroup>
@@ -64,7 +64,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Interfaces\Development\Current\Phytel.API.Interface\Phytel.API.Interface.csproj">
+    <ProjectReference Include="..\..\..\..\..\Interfaces\Development\Current\Phytel.API.Interface\Phytel.API.Interface.csproj">
       <Project>{abe948fb-247e-4955-b3ab-b7c93e10a542}</Project>
       <Name>Phytel.API.Interface</Name>
     </ProjectReference>

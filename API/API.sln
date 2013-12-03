@@ -138,9 +138,33 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.PatientSystem.Se
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.PatientSystem.Test", "DataDomain\Phytel.API.DataDomain.PatientSystem\Development\Current\PatientSystem.Test\DataDomain.PatientSystem.Test.csproj", "{BA3F00D1-7DE7-4AE6-B637-6681C10EC20D}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Action", "Action", "{22453963-B1E8-4151-B99B-580AAFDD078C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.Action", "DataDomain\Phytel.API.DataDomain.Action\Development\Current\Action\DataDomain.Action.csproj", "{F1A478D1-DCA1-4BE6-AE83-E0ACDD4FDFFD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.Action.DTO", "DataDomain\Phytel.API.DataDomain.Action\Development\Current\Action.DTO\DataDomain.Action.DTO.csproj", "{1C2C63A1-4246-4EC9-BAD1-C00E9ECD85F6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.Action.Service.Test", "DataDomain\Phytel.API.DataDomain.Action\Development\Current\Action.Service.Test\DataDomain.Action.Service.Test.csproj", "{9F763B50-9E2B-426F-ACFB-27F3D3F255D5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.Action.Test", "DataDomain\Phytel.API.DataDomain.Action\Development\Current\Action.Test\DataDomain.Action.Test.csproj", "{79CB7A3A-6D69-45F8-964F-D9609383B22A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.Action.Service", "DataDomain\Phytel.API.DataDomain.Action\Development\Current\Action.Service\DataDomain.Action.Service.csproj", "{29DFC6F8-F09F-4881-8A94-43C4229A5583}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Step", "Step", "{02BF6A85-166F-4F6F-8B25-98F19C10021B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.Step", "DataDomain\Phytel.API.DataDomain.Step\Development\Current\Step\DataDomain.Step.csproj", "{79DCBEEF-250B-4D28-8D1D-EE76A3E2491F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.Step.DTO", "DataDomain\Phytel.API.DataDomain.Step\Development\Current\Step.DTO\DataDomain.Step.DTO.csproj", "{71E4BD1E-0FDF-4B80-8322-4C38B8BB671C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.Step.Service", "DataDomain\Phytel.API.DataDomain.Step\Development\Current\Step.Service\DataDomain.Step.Service.csproj", "{6AA1BC3E-16F0-4E96-A4B9-5A58F7CE7EF0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.Step.Service.Test", "DataDomain\Phytel.API.DataDomain.Step\Development\Current\Step.Service.Test\DataDomain.Step.Service.Test.csproj", "{CE87FCEA-7946-4F4B-B84B-47B8DED237FA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.Step.Test", "DataDomain\Phytel.API.DataDomain.Step\Development\Current\Step.Test\DataDomain.Step.Test.csproj", "{C81DE09B-A2B2-4E0A-B642-482471BE74CA}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 52
+		SccNumberOfProjects = 62
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = http://hillstfs2013:8080/tfs/phytel
 		SccLocalPath0 = .
@@ -348,6 +372,46 @@ Global
 		SccProjectTopLevelParentUniqueName51 = API.sln
 		SccProjectName51 = DataDomain/Phytel.API.DataDomain.PatientSystem/Development/Current/PatientSystem.Test
 		SccLocalPath51 = DataDomain\\Phytel.API.DataDomain.PatientSystem\\Development\\Current\\PatientSystem.Test
+		SccProjectUniqueName52 = DataDomain\\Phytel.API.DataDomain.Action\\Development\\Current\\Action\\DataDomain.Action.csproj
+		SccProjectTopLevelParentUniqueName52 = API.sln
+		SccProjectName52 = DataDomain/Phytel.API.DataDomain.Action/Development/Current/Action
+		SccLocalPath52 = DataDomain\\Phytel.API.DataDomain.Action\\Development\\Current\\Action
+		SccProjectUniqueName53 = DataDomain\\Phytel.API.DataDomain.Action\\Development\\Current\\Action.DTO\\DataDomain.Action.DTO.csproj
+		SccProjectTopLevelParentUniqueName53 = API.sln
+		SccProjectName53 = DataDomain/Phytel.API.DataDomain.Action/Development/Current/Action.DTO
+		SccLocalPath53 = DataDomain\\Phytel.API.DataDomain.Action\\Development\\Current\\Action.DTO
+		SccProjectUniqueName54 = DataDomain\\Phytel.API.DataDomain.Action\\Development\\Current\\Action.Service.Test\\DataDomain.Action.Service.Test.csproj
+		SccProjectTopLevelParentUniqueName54 = API.sln
+		SccProjectName54 = DataDomain/Phytel.API.DataDomain.Action/Development/Current/Action.Service.Test
+		SccLocalPath54 = DataDomain\\Phytel.API.DataDomain.Action\\Development\\Current\\Action.Service.Test
+		SccProjectUniqueName55 = DataDomain\\Phytel.API.DataDomain.Action\\Development\\Current\\Action.Test\\DataDomain.Action.Test.csproj
+		SccProjectTopLevelParentUniqueName55 = API.sln
+		SccProjectName55 = DataDomain/Phytel.API.DataDomain.Action/Development/Current/Action.Test
+		SccLocalPath55 = DataDomain\\Phytel.API.DataDomain.Action\\Development\\Current\\Action.Test
+		SccProjectUniqueName56 = DataDomain\\Phytel.API.DataDomain.Action\\Development\\Current\\Action.Service\\DataDomain.Action.Service.csproj
+		SccProjectTopLevelParentUniqueName56 = API.sln
+		SccProjectName56 = DataDomain/Phytel.API.DataDomain.Action/Development/Current/Action.Service
+		SccLocalPath56 = DataDomain\\Phytel.API.DataDomain.Action\\Development\\Current\\Action.Service
+		SccProjectUniqueName57 = DataDomain\\Phytel.API.DataDomain.Step\\Development\\Current\\Step\\DataDomain.Step.csproj
+		SccProjectTopLevelParentUniqueName57 = API.sln
+		SccProjectName57 = DataDomain/Phytel.API.DataDomain.Step/Development/Current/Step
+		SccLocalPath57 = DataDomain\\Phytel.API.DataDomain.Step\\Development\\Current\\Step
+		SccProjectUniqueName58 = DataDomain\\Phytel.API.DataDomain.Step\\Development\\Current\\Step.DTO\\DataDomain.Step.DTO.csproj
+		SccProjectTopLevelParentUniqueName58 = API.sln
+		SccProjectName58 = DataDomain/Phytel.API.DataDomain.Step/Development/Current/Step.DTO
+		SccLocalPath58 = DataDomain\\Phytel.API.DataDomain.Step\\Development\\Current\\Step.DTO
+		SccProjectUniqueName59 = DataDomain\\Phytel.API.DataDomain.Step\\Development\\Current\\Step.Service\\DataDomain.Step.Service.csproj
+		SccProjectTopLevelParentUniqueName59 = API.sln
+		SccProjectName59 = DataDomain/Phytel.API.DataDomain.Step/Development/Current/Step.Service
+		SccLocalPath59 = DataDomain\\Phytel.API.DataDomain.Step\\Development\\Current\\Step.Service
+		SccProjectUniqueName60 = DataDomain\\Phytel.API.DataDomain.Step\\Development\\Current\\Step.Service.Test\\DataDomain.Step.Service.Test.csproj
+		SccProjectTopLevelParentUniqueName60 = API.sln
+		SccProjectName60 = DataDomain/Phytel.API.DataDomain.Step/Development/Current/Step.Service.Test
+		SccLocalPath60 = DataDomain\\Phytel.API.DataDomain.Step\\Development\\Current\\Step.Service.Test
+		SccProjectUniqueName61 = DataDomain\\Phytel.API.DataDomain.Step\\Development\\Current\\Step.Test\\DataDomain.Step.Test.csproj
+		SccProjectTopLevelParentUniqueName61 = API.sln
+		SccProjectName61 = DataDomain/Phytel.API.DataDomain.Step/Development/Current/Step.Test
+		SccLocalPath61 = DataDomain\\Phytel.API.DataDomain.Step\\Development\\Current\\Step.Test
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -558,6 +622,46 @@ Global
 		{BA3F00D1-7DE7-4AE6-B637-6681C10EC20D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BA3F00D1-7DE7-4AE6-B637-6681C10EC20D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BA3F00D1-7DE7-4AE6-B637-6681C10EC20D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F1A478D1-DCA1-4BE6-AE83-E0ACDD4FDFFD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F1A478D1-DCA1-4BE6-AE83-E0ACDD4FDFFD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F1A478D1-DCA1-4BE6-AE83-E0ACDD4FDFFD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F1A478D1-DCA1-4BE6-AE83-E0ACDD4FDFFD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1C2C63A1-4246-4EC9-BAD1-C00E9ECD85F6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1C2C63A1-4246-4EC9-BAD1-C00E9ECD85F6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1C2C63A1-4246-4EC9-BAD1-C00E9ECD85F6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1C2C63A1-4246-4EC9-BAD1-C00E9ECD85F6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9F763B50-9E2B-426F-ACFB-27F3D3F255D5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9F763B50-9E2B-426F-ACFB-27F3D3F255D5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9F763B50-9E2B-426F-ACFB-27F3D3F255D5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9F763B50-9E2B-426F-ACFB-27F3D3F255D5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{79CB7A3A-6D69-45F8-964F-D9609383B22A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{79CB7A3A-6D69-45F8-964F-D9609383B22A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{79CB7A3A-6D69-45F8-964F-D9609383B22A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{79CB7A3A-6D69-45F8-964F-D9609383B22A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{29DFC6F8-F09F-4881-8A94-43C4229A5583}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{29DFC6F8-F09F-4881-8A94-43C4229A5583}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{29DFC6F8-F09F-4881-8A94-43C4229A5583}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{29DFC6F8-F09F-4881-8A94-43C4229A5583}.Release|Any CPU.Build.0 = Release|Any CPU
+		{79DCBEEF-250B-4D28-8D1D-EE76A3E2491F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{79DCBEEF-250B-4D28-8D1D-EE76A3E2491F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{79DCBEEF-250B-4D28-8D1D-EE76A3E2491F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{79DCBEEF-250B-4D28-8D1D-EE76A3E2491F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{71E4BD1E-0FDF-4B80-8322-4C38B8BB671C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{71E4BD1E-0FDF-4B80-8322-4C38B8BB671C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{71E4BD1E-0FDF-4B80-8322-4C38B8BB671C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{71E4BD1E-0FDF-4B80-8322-4C38B8BB671C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6AA1BC3E-16F0-4E96-A4B9-5A58F7CE7EF0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6AA1BC3E-16F0-4E96-A4B9-5A58F7CE7EF0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6AA1BC3E-16F0-4E96-A4B9-5A58F7CE7EF0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6AA1BC3E-16F0-4E96-A4B9-5A58F7CE7EF0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CE87FCEA-7946-4F4B-B84B-47B8DED237FA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CE87FCEA-7946-4F4B-B84B-47B8DED237FA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CE87FCEA-7946-4F4B-B84B-47B8DED237FA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CE87FCEA-7946-4F4B-B84B-47B8DED237FA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C81DE09B-A2B2-4E0A-B642-482471BE74CA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C81DE09B-A2B2-4E0A-B642-482471BE74CA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C81DE09B-A2B2-4E0A-B642-482471BE74CA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C81DE09B-A2B2-4E0A-B642-482471BE74CA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -567,16 +671,18 @@ Global
 		{2FDF8A25-888A-4C5D-9C06-7FCDF0C3C318} = {2E11BED7-15D8-4A76-B289-E9FE4FF9DD72}
 		{20C235E5-B8ED-43FC-8A30-BB8FEE4C33C1} = {2E11BED7-15D8-4A76-B289-E9FE4FF9DD72}
 		{BE578879-FB93-495B-B801-B1D955EEE190} = {81F6F5D5-AADE-4C4A-ACAE-EB1B3651E150}
-		{9A76086C-F38C-4A03-8C5C-E759EE0084AD} = {81F6F5D5-AADE-4C4A-ACAE-EB1B3651E150}
 		{08328FF0-1E70-4255-A243-A7F38AE9BE45} = {81F6F5D5-AADE-4C4A-ACAE-EB1B3651E150}
 		{2A01ECE4-66FB-4A8C-BEA0-74A20BDD6543} = {81F6F5D5-AADE-4C4A-ACAE-EB1B3651E150}
 		{0F36C4AB-88FA-4B6C-9609-2509E0D56341} = {81F6F5D5-AADE-4C4A-ACAE-EB1B3651E150}
 		{B65DC0B4-4013-4BBC-952D-1122F5480535} = {81F6F5D5-AADE-4C4A-ACAE-EB1B3651E150}
+		{22453963-B1E8-4151-B99B-580AAFDD078C} = {81F6F5D5-AADE-4C4A-ACAE-EB1B3651E150}
+		{02BF6A85-166F-4F6F-8B25-98F19C10021B} = {81F6F5D5-AADE-4C4A-ACAE-EB1B3651E150}
 		{B84263C2-54D7-4254-B159-DDB1F39D0783} = {8E28768D-9A7C-4CA0-A4D0-761C06DA259C}
 		{8F254AC6-F99C-4BEC-9088-EBBA9C696CAF} = {8E28768D-9A7C-4CA0-A4D0-761C06DA259C}
 		{5D9C233B-E53D-4BE1-B578-1AA9722DE1CF} = {8E28768D-9A7C-4CA0-A4D0-761C06DA259C}
 		{BE484372-864F-4D0A-A4E1-60F6760182FD} = {8E28768D-9A7C-4CA0-A4D0-761C06DA259C}
 		{8F553B3A-B649-4FDA-A1D7-F7EFC0DB4B67} = {8E28768D-9A7C-4CA0-A4D0-761C06DA259C}
+		{9A76086C-F38C-4A03-8C5C-E759EE0084AD} = {8E28768D-9A7C-4CA0-A4D0-761C06DA259C}
 		{ABE948FB-247E-4955-B3AB-B7C93E10A542} = {2B73BAC7-448F-4CB9-9481-3C837C901B9C}
 		{7C9E786C-E4F7-4382-BDE4-8DBF980EA013} = {0921D4F2-8F09-438B-95F6-539E2434CCEF}
 		{FB0F37A8-A847-471F-98A2-F1B157AB31C8} = {0921D4F2-8F09-438B-95F6-539E2434CCEF}
@@ -623,5 +729,15 @@ Global
 		{DA0DCEDF-73A9-4BB9-970C-05995FC9E5C1} = {20C235E5-B8ED-43FC-8A30-BB8FEE4C33C1}
 		{C940018D-A598-407A-AAA0-22918FF5FFE8} = {20C235E5-B8ED-43FC-8A30-BB8FEE4C33C1}
 		{1861B5A0-1AA8-41C0-A9ED-6BE0FDE2082B} = {20C235E5-B8ED-43FC-8A30-BB8FEE4C33C1}
+		{F1A478D1-DCA1-4BE6-AE83-E0ACDD4FDFFD} = {22453963-B1E8-4151-B99B-580AAFDD078C}
+		{1C2C63A1-4246-4EC9-BAD1-C00E9ECD85F6} = {22453963-B1E8-4151-B99B-580AAFDD078C}
+		{9F763B50-9E2B-426F-ACFB-27F3D3F255D5} = {22453963-B1E8-4151-B99B-580AAFDD078C}
+		{79CB7A3A-6D69-45F8-964F-D9609383B22A} = {22453963-B1E8-4151-B99B-580AAFDD078C}
+		{29DFC6F8-F09F-4881-8A94-43C4229A5583} = {22453963-B1E8-4151-B99B-580AAFDD078C}
+		{79DCBEEF-250B-4D28-8D1D-EE76A3E2491F} = {02BF6A85-166F-4F6F-8B25-98F19C10021B}
+		{71E4BD1E-0FDF-4B80-8322-4C38B8BB671C} = {02BF6A85-166F-4F6F-8B25-98F19C10021B}
+		{6AA1BC3E-16F0-4E96-A4B9-5A58F7CE7EF0} = {02BF6A85-166F-4F6F-8B25-98F19C10021B}
+		{CE87FCEA-7946-4F4B-B84B-47B8DED237FA} = {02BF6A85-166F-4F6F-8B25-98F19C10021B}
+		{C81DE09B-A2B2-4E0A-B642-482471BE74CA} = {02BF6A85-166F-4F6F-8B25-98F19C10021B}
 	EndGlobalSection
 EndGlobal

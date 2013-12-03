@@ -1,9 +1,9 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{9F763B50-9E2B-426F-ACFB-27F3D3F255D5}</ProjectGuid>
+    <ProjectGuid>{CE87FCEA-7946-4F4B-B84B-47B8DED237FA}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Phytel.API.DataDomain.Step.Services.Test</RootNamespace>
@@ -40,13 +40,13 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="ServiceStack.Common">
-      <HintPath>..\..\..\packages\ServiceStack.Common.3.9.70\lib\net35\ServiceStack.Common.dll</HintPath>
+      <HintPath>..\..\..\..\..\packages\ServiceStack.Common.3.9.70\lib\net35\ServiceStack.Common.dll</HintPath>
     </Reference>
     <Reference Include="ServiceStack.Interfaces">
-      <HintPath>..\..\..\packages\ServiceStack.Common.3.9.70\lib\net35\ServiceStack.Interfaces.dll</HintPath>
+      <HintPath>..\..\..\..\..\packages\ServiceStack.Common.3.9.70\lib\net35\ServiceStack.Interfaces.dll</HintPath>
     </Reference>
     <Reference Include="ServiceStack.Text">
-      <HintPath>..\..\..\packages\ServiceStack.Text.3.9.70\lib\net35\ServiceStack.Text.dll</HintPath>
+      <HintPath>..\..\..\..\..\packages\ServiceStack.Text.3.9.70\lib\net35\ServiceStack.Text.dll</HintPath>
     </Reference>
     <Reference Include="System" />
   </ItemGroup>
@@ -70,7 +70,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Interfaces\Development\Current\Phytel.API.Interface\Phytel.API.Interface.csproj">
+    <ProjectReference Include="..\..\..\..\..\Interfaces\Development\Current\Phytel.API.Interface\Phytel.API.Interface.csproj">
       <Project>{abe948fb-247e-4955-b3ab-b7c93e10a542}</Project>
       <Name>Phytel.API.Interface</Name>
     </ProjectReference>

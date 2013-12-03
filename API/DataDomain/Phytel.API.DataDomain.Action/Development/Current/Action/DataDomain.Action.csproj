@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -41,14 +41,14 @@
       <HintPath>..\References\MongoDB.Driver.dll</HintPath>
     </Reference>
     <Reference Include="ServiceStack.Common">
-      <HintPath>..\..\..\packages\ServiceStack.Common.3.9.70\lib\net35\ServiceStack.Common.dll</HintPath>
+      <HintPath>..\..\..\..\..\packages\ServiceStack.Common.3.9.70\lib\net35\ServiceStack.Common.dll</HintPath>
     </Reference>
     <Reference Include="ServiceStack.Interfaces, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\packages\ServiceStack.Common.3.9.70\lib\net35\ServiceStack.Interfaces.dll</HintPath>
+      <HintPath>..\..\..\..\..\packages\ServiceStack.Common.3.9.70\lib\net35\ServiceStack.Interfaces.dll</HintPath>
     </Reference>
     <Reference Include="ServiceStack.Text">
-      <HintPath>..\..\..\packages\ServiceStack.Text.3.9.70\lib\net35\ServiceStack.Text.dll</HintPath>
+      <HintPath>..\..\..\..\..\packages\ServiceStack.Text.3.9.70\lib\net35\ServiceStack.Text.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -68,15 +68,15 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\..\Shared\PhytelServices\Development\Current\Phytel.Mongo\Phytel.Mongo.csproj">
+    <ProjectReference Include="..\..\..\..\..\..\..\Shared\PhytelServices\Development\Current\Phytel.Mongo\Phytel.Mongo.csproj">
       <Project>{7c9e786c-e4f7-4382-bde4-8dbf980ea013}</Project>
       <Name>Phytel.Mongo</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\..\..\Shared\PhytelServices\Development\Current\PhytelServices\PhytelServices.csproj">
+    <ProjectReference Include="..\..\..\..\..\..\..\Shared\PhytelServices\Development\Current\PhytelServices\PhytelServices.csproj">
       <Project>{d790f618-438b-4c39-abe5-1346122273ac}</Project>
       <Name>PhytelServices</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\Interfaces\Development\Current\Phytel.API.Interface\Phytel.API.Interface.csproj">
+    <ProjectReference Include="..\..\..\..\..\Interfaces\Development\Current\Phytel.API.Interface\Phytel.API.Interface.csproj">
       <Project>{abe948fb-247e-4955-b3ab-b7c93e10a542}</Project>
       <Name>Phytel.API.Interface</Name>
     </ProjectReference>
