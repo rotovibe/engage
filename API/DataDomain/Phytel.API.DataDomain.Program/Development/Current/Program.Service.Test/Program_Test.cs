@@ -6,26 +6,39 @@ using ServiceStack.ServiceClient.Web;
 namespace Phytel.API.DataDomain.Program.Services.Test
 {
     [TestClass]
-    public class User_Services_Test
+    public class Program_Service_Test
     {
         [TestMethod]
-        public void GetProgramByID()
+        public void Get_ProgramByID()
         {
-            string controlValue = "Tony";
-            string sampleValue;
-            string ProgramID = "52781cd8fe7a5925fcee5bf3";
+            string url = "http://localhost:8888/Program";
+            string ProgramID = "529e534ffe7a5918c89ffd28";
             string contractNumber = "InHealth001";
             string context ="NG";
+            string version = "v1";
             IRestClient client = new JsonServiceClient();
 
-            //JsonServiceClient.HttpWebRequestFilter = x => x.Headers.Add(string.Format("APIKey:{0}", "12345"));
+            GetProgramResponse response = client.Get<GetProgramResponse>(
+                string.Format("{0}/{1}/{2}/{3}/Program/{4}", url, context, version, contractNumber, ProgramID));
 
-            GetProgramResponse response = client.Post<GetProgramResponse>("http://localhost:8888/NG/data/Program",
-                new GetProgramRequest { ProgramID = ProgramID, ContractNumber = contractNumber, Context = context } as object);
+            Assert.IsNotNull(response);
+        }
 
-            sampleValue = string.Empty;
+        [TestMethod]
+        public void Post_ProgramByID()
+        {
+            string url = "http://localhost:8888/Program";
+            string ProgramID = "529e534ffe7a5918c89ffd28";
+            string contractNumber = "InHealth001";
+            string context = "NG";
+            string version = "v1";
+            IRestClient client = new JsonServiceClient();
 
-            Assert.AreEqual(controlValue, sampleValue);
+            GetProgramResponse response = client.Post<GetProgramResponse>(
+                string.Format("{0}/{1}/{2}/{3}/Program/{4}", url, context, version, contractNumber, ProgramID), 
+                new GetProgramResponse() as object);
+
+            Assert.IsNotNull(response);
         }
     }
 }

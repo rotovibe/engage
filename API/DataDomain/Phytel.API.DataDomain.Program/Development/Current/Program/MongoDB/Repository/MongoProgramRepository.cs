@@ -43,7 +43,28 @@ namespace Phytel.API.DataDomain.Program
 
         public object FindByID(string entityID)
         {
-            throw new NotImplementedException();
+            DTO.Program program = null;
+            using (ProgramMongoContext ctx = new ProgramMongoContext(_dbName))
+            {
+                program = (from p in ctx.Programs
+                           where p.Id == ObjectId.Parse(entityID)
+                           select new DTO.Program
+                           {
+                               ProgramID = p.Id.ToString(),
+                               Name = p.Name,
+                               AuthoredBy = p.AuthoredBy,
+                               Client = p.Client,
+                               Description = p.Description,
+                               EndDate = p.EndDate.ToString(),
+                               StartDate = p.StartDate.ToString(),
+                               Locked = p.Locked,
+                               ProgramStatus = p.ProgramStatus,
+                               ShortName = p.ShortName,
+                               Status = p.Status,
+                               Version = p.Version
+                           }).FirstOrDefault();
+            }
+            return program;
         }
 
         public Tuple<string, IQueryable<T>> Select(Interface.APIExpression expression)

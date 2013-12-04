@@ -8,21 +8,14 @@ namespace Phytel.API.DataDomain.Program
     {
         public static GetProgramResponse GetProgramByID(GetProgramRequest request)
         {
-            GetProgramResponse result = new GetProgramResponse();
+            GetProgramResponse programResponse = new GetProgramResponse();
+            DTO.Program result;
 
             IProgramRepository<GetProgramResponse> repo = ProgramRepositoryFactory<GetProgramResponse>.GetProgramRepository(request.ContractNumber, request.Context);
-            result = repo.FindByID(request.ProgramID) as GetProgramResponse;
-            
-            return (result != null ? result : new GetProgramResponse());
-        }
+            result = repo.FindByID(request.ProgramID) as DTO.Program;
 
-        public static GetAllProgramsResponse GetProgramList(GetAllProgramsRequest request)
-        {
-            GetAllProgramsResponse result = new GetAllProgramsResponse();
-
-            IProgramRepository<GetAllProgramsResponse> repo = ProgramRepositoryFactory<GetAllProgramsResponse>.GetProgramRepository(request.ContractNumber, request.Context);
-
-            return result;
+            programResponse.Program = result;
+            return (programResponse != null ? programResponse : new GetProgramResponse());
         }
     }
 }   

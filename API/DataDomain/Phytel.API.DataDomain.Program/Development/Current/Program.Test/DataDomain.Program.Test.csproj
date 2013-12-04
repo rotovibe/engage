@@ -40,7 +40,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="ServiceStack.Text">
-      <HintPath>..\..\..\packages\ServiceStack.Text.3.9.70\lib\net35\ServiceStack.Text.dll</HintPath>
+      <HintPath>..\..\..\..\..\packages\ServiceStack.Text.3.9.70\lib\net35\ServiceStack.Text.dll</HintPath>
     </Reference>
     <Reference Include="System" />
   </ItemGroup>
@@ -64,17 +64,17 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Interfaces\Development\Current\Phytel.API.Interface\Phytel.API.Interface.csproj">
+    <ProjectReference Include="..\..\..\..\..\Interfaces\Development\Current\Phytel.API.Interface\Phytel.API.Interface.csproj">
       <Project>{abe948fb-247e-4955-b3ab-b7c93e10a542}</Project>
       <Name>Phytel.API.Interface</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Program.DTO\DataDomain.Program.DTO.csproj">
+    <ProjectReference Include="..\..\..\..\Phytel.API.DataDomain.Action\Development\Current\Action.DTO\DataDomain.Action.DTO.csproj">
       <Project>{1c2c63a1-4246-4ec9-bad1-c00e9ecd85f6}</Project>
-      <Name>DataDomain.Program.DTO</Name>
+      <Name>DataDomain.Action.DTO</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Program\DataDomain.Program.csproj">
+    <ProjectReference Include="..\..\..\..\Phytel.API.DataDomain.Action\Development\Current\Action\DataDomain.Action.csproj">
       <Project>{f1a478d1-dca1-4be6-ae83-e0acdd4fdffd}</Project>
-      <Name>DataDomain.Program</Name>
+      <Name>DataDomain.Action</Name>
     </ProjectReference>
   </ItemGroup>
   <Choose>
