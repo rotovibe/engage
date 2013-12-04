@@ -17,7 +17,7 @@ namespace Phytel.API.DataDomain.LookUp.Test
             GetProblemDataRequest request = new GetProblemDataRequest { ProblemID = "527c1b1ad4332324ac199142", Context = context, ContractNumber = contractNumber, Version = version };
 
             // Act
-            GetProblemDataResponse response = LookUpDataManager.GetPatientProblem(request);
+            GetProblemDataResponse response = LookUpDataManager.GetProblem(request);
 
             // Assert
             Assert.IsTrue(response.Problem.Name == "Arthritis");
@@ -47,7 +47,7 @@ namespace Phytel.API.DataDomain.LookUp.Test
             string version = "v1";
             string contractNumber = "InHealth001";
             string context = "NG";
-            SearchProblemsDataRequest request = new SearchProblemsDataRequest { Active = true, Type = "Chronic", Context = context, ContractNumber = contractNumber, Version = version };
+            SearchProblemsDataRequest request = new SearchProblemsDataRequest { Active = true, Context = context, ContractNumber = contractNumber, Version = version };
 
             // Act
             SearchProblemsDataResponse response = LookUpDataManager.SearchProblem(request);

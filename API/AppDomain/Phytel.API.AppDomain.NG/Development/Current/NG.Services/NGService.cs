@@ -53,7 +53,7 @@ namespace Phytel.API.AppDomain.NG.Service
         }
 
         /// <summary>
-        ///     ServiceStack's GET endpoint for getting active chronic problems for a patient
+        ///     ServiceStack's GET endpoint for getting active problems for a patient
         /// </summary>
         /// <param name="request">PatientProblemResponse object</param>
         /// <returns>PatientProblemResponse object</returns>

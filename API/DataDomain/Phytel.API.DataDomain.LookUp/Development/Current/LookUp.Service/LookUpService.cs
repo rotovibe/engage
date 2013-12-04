@@ -13,7 +13,7 @@ namespace Phytel.API.DataDomain.Patient.Service
             GetProblemDataResponse response = new GetProblemDataResponse();
             try
             {
-                response = LookUpDataManager.GetPatientProblem(request);
+                response = LookUpDataManager.GetProblem(request);
             }
             catch (Exception ex)
             {

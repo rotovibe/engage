@@ -65,7 +65,6 @@ namespace Phytel.API.DataDomain.LookUp.Services.Test
                       new SearchProblemsDataRequest
                       {
                           Active = true,
-                          Type = "Chronic",
                           Version = version,
                           ContractNumber = contractNumber,
                           Context = context

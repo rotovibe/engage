@@ -11,7 +11,7 @@ namespace Phytel.API.DataDomain.LookUp
     {
         private static readonly string PROBLEMLOOKUP = "problemlookup";
 
-        public static GetProblemDataResponse GetPatientProblem(GetProblemDataRequest request)
+        public static GetProblemDataResponse GetProblem(GetProblemDataRequest request)
         {
             GetProblemDataResponse response = new GetProblemDataResponse();
 
