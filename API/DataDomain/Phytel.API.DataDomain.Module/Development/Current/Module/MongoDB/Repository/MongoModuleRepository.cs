@@ -43,7 +43,22 @@ namespace Phytel.API.DataDomain.Module
 
         public object FindByID(string entityID)
         {
-            throw new NotImplementedException();
+            DTO.Module module = null;
+            using (ModuleMongoContext ctx = new ModuleMongoContext(_dbName))
+            {
+                module = (from m in ctx.Modules
+                          where m.Id == ObjectId.Parse(entityID)
+                          select new DTO.Module
+                          {
+                              Id = m.Id.ToString(),
+                              Name = m.Name,
+                              Description = m.Description,
+                              Objective = m.Objective,
+                              Status = m.Status,
+                              Version = m.Version
+                          }).FirstOrDefault();
+            }
+            return module;
         }
 
         public Tuple<string, IQueryable<T>> Select(Interface.APIExpression expression)

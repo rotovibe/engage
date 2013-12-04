@@ -9,23 +9,19 @@ namespace Phytel.API.DataDomain.Module.Services.Test
     public class User_Services_Test
     {
         [TestMethod]
-        public void GetModuleByID()
+        public void Get_ModlueByID()
         {
-            string controlValue = "Tony";
-            string sampleValue;
-            string ModuleID = "52781cd8fe7a5925fcee5bf3";
+            string url = "http://localhost:8888/Module";
+            string moduleID = "529fb367fe7a591f68ce4acd";
             string contractNumber = "InHealth001";
-            string context ="NG";
+            string context = "NG";
+            string version = "v1";
             IRestClient client = new JsonServiceClient();
 
-            //JsonServiceClient.HttpWebRequestFilter = x => x.Headers.Add(string.Format("APIKey:{0}", "12345"));
+            GetModuleResponse response = client.Get<GetModuleResponse>(
+                string.Format("{0}/{1}/{2}/{3}/Module/{4}", url, context, version, contractNumber, moduleID));
 
-            GetModuleResponse response = client.Post<GetModuleResponse>("http://localhost:8888/NG/data/Module",
-                new GetModuleRequest { ModuleID = ModuleID, ContractNumber = contractNumber, Context = context } as object);
-
-            sampleValue = string.Empty;
-
-            Assert.AreEqual(controlValue, sampleValue);
+            //Assert.AreEqual(ProgramID, response.Program.ProgramID);
         }
     }
 }

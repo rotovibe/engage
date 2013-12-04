@@ -13,7 +13,7 @@ namespace Phytel.API.DataDomain.Module.Test
 
             GetModuleResponse response = ModuleDataManager.GetModuleByID(request);
 
-            Assert.IsTrue(response.Module.ModuleID == "Tony");
+            Assert.IsTrue(response.Module.Id == "Tony");
         }
     }
 }
