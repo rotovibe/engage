@@ -12,7 +12,7 @@ namespace Phytel.API.DataDomain.Program.Services.Test
         public void Get_ProgramByID()
         {
             string url = "http://localhost:8888/Program";
-            string ProgramID = "529e534ffe7a5918c89ffd28";
+            string ProgramID = "529fa3e5fe7a591f68ce4acb";
             string contractNumber = "InHealth001";
             string context ="NG";
             string version = "v1";
@@ -21,14 +21,14 @@ namespace Phytel.API.DataDomain.Program.Services.Test
             GetProgramResponse response = client.Get<GetProgramResponse>(
                 string.Format("{0}/{1}/{2}/{3}/Program/{4}", url, context, version, contractNumber, ProgramID));
 
-            Assert.IsNotNull(response);
+            Assert.AreEqual(ProgramID, response.Program.ProgramID);
         }
 
         [TestMethod]
         public void Post_ProgramByID()
         {
             string url = "http://localhost:8888/Program";
-            string ProgramID = "529e534ffe7a5918c89ffd28";
+            string ProgramID = "529fa3e5fe7a591f68ce4acb";
             string contractNumber = "InHealth001";
             string context = "NG";
             string version = "v1";
@@ -38,7 +38,7 @@ namespace Phytel.API.DataDomain.Program.Services.Test
                 string.Format("{0}/{1}/{2}/{3}/Program/{4}", url, context, version, contractNumber, ProgramID), 
                 new GetProgramResponse() as object);
 
-            Assert.IsNotNull(response);
+            Assert.AreEqual(ProgramID, response.Program.ProgramID);
         }
     }
 }
