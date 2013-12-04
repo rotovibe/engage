@@ -15,15 +15,13 @@ namespace Phytel.API.DataDomain.PatientProblem
     {
         #region endpoint addresses
         private static readonly string DDLookUpServiceUrl = ConfigurationManager.AppSettings["DDLookUpServiceUrl"];
-        private static readonly string ProblemType = "Chronic";
         #endregion
         
         public static GetAllPatientProblemsDataResponse GetAllPatientProblem(GetAllPatientProblemsDataRequest request)
         {
-            string activeChronicProblemIDs = string.Empty;
             GetAllPatientProblemsDataResponse response = null;
 
-            // Call LookUp data domain to fetch all active chronic problems.
+            // Call LookUp data domain to fetch all active problems.
             IRestClient client = new JsonServiceClient();
             SearchProblemsDataResponse problemLookUpResponse = client.Post<SearchProblemsDataResponse>
                 (string.Format("{0}/{1}/{2}/{3}/problems",
@@ -34,7 +32,6 @@ namespace Phytel.API.DataDomain.PatientProblem
                     ),
                 new SearchProblemsDataRequest {  
                     Active = true,
-                    Type = ProblemType,
                     Context = request.Context,
                     Version = request.Version,
                     ContractNumber = request.ContractNumber
@@ -42,15 +39,14 @@ namespace Phytel.API.DataDomain.PatientProblem
 
             if (problemLookUpResponse != null)
             {
-                List<string> IDs = new List<string>();
+                List<string> activeProblemIDs = new List<string>();
                 List<ProblemData> problems = problemLookUpResponse.Problems;
                 foreach (ProblemData p in problems)
                 {
-                    IDs.Add(p.ProblemID);
+                    activeProblemIDs.Add(p.ProblemID);
                 }
 
-                activeChronicProblemIDs = string.Join(",", IDs);
-            
+          
                 IPatientProblemRepository<PatientProblemData> repo = Phytel.API.DataDomain.PatientProblem.PatientProblemRepositoryFactory<PatientProblemData>.GetPatientProblemRepository(request.ContractNumber, request.Context);
             
                 ICollection<SelectExpression> selectExpressions = new List<SelectExpression>();
@@ -85,15 +81,28 @@ namespace Phytel.API.DataDomain.PatientProblem
                 deleteFlagSelectExpression.GroupID = 1;
                 selectExpressions.Add(deleteFlagSelectExpression);
 
-                // Active Chronic problems
+                // Active problems
                 SelectExpression problemIDsSelectExpression = new SelectExpression();
                 problemIDsSelectExpression.FieldName = MEPatientProblem.ProblemIDProperty;
                 problemIDsSelectExpression.Type = SelectExpressionType.IN;
-                problemIDsSelectExpression.Value = activeChronicProblemIDs;
+                problemIDsSelectExpression.Value = activeProblemIDs;
                 problemIDsSelectExpression.NextExpressionType = SelectExpressionGroupType.AND;
                 problemIDsSelectExpression.ExpressionOrder = 4;
                 problemIDsSelectExpression.GroupID = 1;
                 selectExpressions.Add(problemIDsSelectExpression);
+
+                // Primary and secondary problems
+                List<int> levels = new List<int>();
+                levels.Add(1);
+                levels.Add(2);
+                SelectExpression levelSelectExpression = new SelectExpression();
+                levelSelectExpression.FieldName = MEPatientProblem.LevelProperty;
+                levelSelectExpression.Type = SelectExpressionType.IN;
+                levelSelectExpression.Value = levels;
+                levelSelectExpression.NextExpressionType = SelectExpressionGroupType.AND;
+                levelSelectExpression.ExpressionOrder = 5;
+                levelSelectExpression.GroupID = 1;
+                selectExpressions.Add(levelSelectExpression);
 
                 APIExpression apiExpression = new APIExpression();
                 apiExpression.Expressions = selectExpressions;

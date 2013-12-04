@@ -31,7 +31,11 @@ namespace Phytel.API.Interface
                     query = Query.NE(fieldName, BsonValue.Create(ConvertToAppropriateType(value)));
                     break;
                 case SelectExpressionType.IN:
-                    query = Query.In(fieldName, ConvertToBsonValueList(value));
+                    List<BsonValue> bsonList = ConvertToBsonValueList(value);
+                    if(bsonList != null)
+                    {
+                        query = Query.In(fieldName, bsonList);
+                    }
                     break;
             }
             return query;
@@ -98,16 +102,34 @@ namespace Phytel.API.Interface
         public static List<BsonValue> ConvertToBsonValueList(object p)
         {
             List<BsonValue> bsonValues = null;
-            string [] split = p.ToString().Split(new Char[] { ',' });
-            if (split.Count() > 0)
+            string type = p.GetType().ToString();
+            switch (type)
             {
-                bsonValues = new List<BsonValue>();
-                foreach (string s in split)
-                {
-                    bsonValues.Add(BsonValue.Create(ConvertToAppropriateType(s)));
-                }
+                case "System.Collections.Generic.List`1[System.Int32]":
+                    List<int> intList = (List<int>)p;
+                    if (intList.Count() > 0)
+                    {
+                        bsonValues = new List<BsonValue>();
+                        foreach (int i in intList)
+                        {
+                            bsonValues.Add(BsonValue.Create(ConvertToAppropriateType(i)));
+                        }
+                    }
+                    return bsonValues;
+                case "System.Collections.Generic.List`1[System.String]":
+                    List<string> stringList = (List<string>)p;
+                    if (stringList.Count() > 0)
+                    {
+                        bsonValues = new List<BsonValue>();
+                        foreach (string s in stringList)
+                        {
+                            bsonValues.Add(BsonValue.Create(ConvertToAppropriateType(s)));
+                        }
+                    }
+                    return bsonValues;
+                default:
+                    return bsonValues;
             }
-            return bsonValues;
         }
     }
 }
