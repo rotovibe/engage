@@ -13,6 +13,7 @@ using ServiceStack.Service;
 using ServiceStack.ServiceClient.Web;
 using ServiceStack.ServiceHost;
 using Phytel.API.AppDomain.Audit.DTO;
+using System.Net;
 
 namespace Phytel.API.AppDomain.NG
 {
@@ -198,6 +199,11 @@ namespace Phytel.API.AppDomain.NG
                     PreferredName = x.PreferredName,
                     Suffix = x.Suffix
                 }));
+
+                if (((IHttpResponse)qResponse).StatusCode.Equals((int)HttpStatusCode.InternalServerError))
+                {
+                    pResponse.Status = qResponse.Status;
+                }
 
                 return pResponse;
             }
