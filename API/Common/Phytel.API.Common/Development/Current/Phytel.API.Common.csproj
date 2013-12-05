@@ -69,6 +69,7 @@
     <Compile Include="Audit\DispatchEventArgs.cs" />
     <Compile Include="Audit\DispatchRequest.cs" />
     <Compile Include="Enums.cs" />
+    <Compile Include="Helper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -13,6 +13,9 @@ namespace Phytel.API.Common
         auditview
     }
 
+    /// <summary>
+    /// Enum that denotes the various statuses in a workflow for program, module, action, step, objective, etc.
+    /// </summary>
     public enum Status
     {
         Active = 1,
@@ -20,5 +23,5 @@ namespace Phytel.API.Common
         InReview = 3,
         Met = 4,
         NotMet = 5
-    }
+    } 
 }
