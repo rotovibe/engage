@@ -5,8 +5,9 @@ using Phytel.Mongo.Linq;
 using System.ComponentModel;
 using System.Collections.Generic;
 using System;
+using Phytel.API.Common;
 
-namespace Phytel.API.DataDomain.Program.DTO
+namespace Phytel.API.DataDomain.Program.MongoDB.DTO
 {
     [BsonIgnoreExtraElements(false)]
     [MongoIndex(Keys = new string[] { TTLDateProperty }, TimeToLive = 0)]
@@ -23,6 +24,7 @@ namespace Phytel.API.DataDomain.Program.DTO
         public const string EndDateProperty = "ed";
         public const string StatusProperty = "st";
         public const string ProgramStatusProperty = "pst";
+        public const string ObjectivesInfoProperty = "oi";
         public const string AuthoredByProperty = "athby";
         public const string LockedProperty = "lck";
         public const string ExtraElementsProperty = "ex";
@@ -71,7 +73,9 @@ namespace Phytel.API.DataDomain.Program.DTO
         [BsonIgnoreIfNull(true)]
         public string ProgramStatus { get; set; }
 
-        //public List<Objective> Objectives { get; set; }
+        [BsonElement(ObjectivesInfoProperty)]
+        [BsonIgnoreIfNull(true)]
+        public List<ObjectivesInfo> ObjectivesInfo { get; set; }
         //public List<string> Attributes { get; set; }
 
         [BsonElement(AuthoredByProperty)]
@@ -108,5 +112,25 @@ namespace Phytel.API.DataDomain.Program.DTO
         [BsonIgnoreIfNull(true)]
         [BsonDateTimeOptions(Kind = System.DateTimeKind.Local)]
         public DateTime? LastUpdatedOn { get; set; }
+    }
+
+    public class ObjectivesInfo
+    {
+        public const string IDProperty = "_id";
+        public const string ValueProperty = "vl";
+        public const string MeasurementProperty = "ms";
+        public const string StatusProperty = "st";
+
+        [BsonElement(IDProperty)]
+        public string ID { get; set; }
+
+        [BsonElement(ValueProperty)]
+        public string Value { get; set; }
+
+        [BsonElement(MeasurementProperty)]
+        public string Measurement { get; set; }
+
+        [BsonElement(StatusProperty)]
+        public Status Status { get; set; }
     }
 }

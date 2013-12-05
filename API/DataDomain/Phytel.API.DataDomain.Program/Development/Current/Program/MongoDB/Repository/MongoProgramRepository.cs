@@ -9,6 +9,7 @@ using MongoDB.Driver;
 using MongoDB.Driver.Builders;
 using MongoDB.Bson;
 using Phytel.API.AppDomain.Program;
+using Phytel.API.DataDomain.Program.MongoDB.DTO;
 
 namespace Phytel.API.DataDomain.Program
 {
@@ -57,6 +58,13 @@ namespace Phytel.API.DataDomain.Program
                                Description = p.Description,
                                EndDate = p.EndDate.ToString(),
                                StartDate = p.StartDate.ToString(),
+                               ObjectivesInfo = p.ObjectivesInfo.Select(x => new DTO.ObjectivesInfo
+                               {
+                                   ID = x.ID,
+                                   Measurement = x.Measurement,
+                                   Status = x.Status,
+                                   Value = x.Value
+                               }).ToList(),
                                Locked = p.Locked,
                                ProgramStatus = p.ProgramStatus,
                                ShortName = p.ShortName,
