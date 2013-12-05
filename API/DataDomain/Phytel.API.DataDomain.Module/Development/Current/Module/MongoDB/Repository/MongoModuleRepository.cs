@@ -9,6 +9,7 @@ using MongoDB.Driver;
 using MongoDB.Driver.Builders;
 using MongoDB.Bson;
 using Phytel.API.AppDomain.Module;
+using Phytel.API.DataDomain.Module.MongoDB.DTO;
 
 namespace Phytel.API.DataDomain.Module
 {
@@ -46,8 +47,6 @@ namespace Phytel.API.DataDomain.Module
             DTO.Module module = null;
             using (ModuleMongoContext ctx = new ModuleMongoContext(_dbName))
             {
-                MEModule md = ctx.Modules.First();
-
                 module = (from m in ctx.Modules
                           where m.Id == ObjectId.Parse(entityID)
                           select new DTO.Module

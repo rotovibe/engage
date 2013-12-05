@@ -1,6 +1,7 @@
 using ServiceStack.ServiceInterface.ServiceModel;
 using System.Collections.Generic;
 using Phytel.API.Interface;
+using Phytel.API.Common;
 
 namespace Phytel.API.DataDomain.Module.DTO
 {
@@ -18,6 +19,6 @@ namespace Phytel.API.DataDomain.Module.DTO
         public string Name { get; set; }
         public List<string> Objectives { get; set; }
         public string Description { get; set; }
-        public string Status { get; set; }
+        public Status Status { get; set; }
     }
 }

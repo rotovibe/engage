@@ -1,12 +1,13 @@
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
+using Phytel.API.Common;
 using Phytel.API.Interface;
 using Phytel.Mongo.Linq;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 
-namespace Phytel.API.DataDomain.Module.DTO
+namespace Phytel.API.DataDomain.Module.MongoDB.DTO
 {
     [BsonIgnoreExtraElements(false)]
     [MongoIndex(Keys = new string[] { TTLDateProperty }, TimeToLive = 0)]
@@ -44,7 +45,7 @@ namespace Phytel.API.DataDomain.Module.DTO
 
         [BsonElement(StatusProperty)]
         [BsonIgnoreIfNull(true)]
-        public string Status { get; set; }
+        public Status Status { get; set; }
 
 
 
