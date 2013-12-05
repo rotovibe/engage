@@ -32,53 +32,58 @@ namespace Phytel.API.AppDomain.NG
         public NG.DTO.GetPatientResponse GetPatient(NG.DTO.GetPatientRequest request)
         {
             NG.DTO.GetPatientResponse pResponse = new NG.DTO.GetPatientResponse();
-            
-            //Execute call(s) to Patient Data Domain
-            IRestClient client = new JsonServiceClient();
 
-            Phytel.API.DataDomain.Patient.DTO.GetPatientDataResponse response = client.Get<Phytel.API.DataDomain.Patient.DTO.GetPatientDataResponse>(string.Format("{0}/{1}/{2}/{3}/patient/{4}",
-                                                                                        DDPatientServiceURL,
-                                                                                        "NG",
-                                                                                        request.Version,
-                                                                                        request.ContractNumber,
-                                                                                        request.PatientID));
-
-            if (response != null && response.Patient != null)
+            try
             {
-                Phytel.API.DataDomain.PatientSystem.DTO.GetPatientSystemDataResponse sysResponse = null;
+                //Execute call(s) to Patient Data Domain
+                IRestClient client = new JsonServiceClient();
 
-                if (string.IsNullOrEmpty(response.Patient.DisplayPatientSystemID) == false)
+                Phytel.API.DataDomain.Patient.DTO.GetPatientDataResponse response = client.Get<Phytel.API.DataDomain.Patient.DTO.GetPatientDataResponse>(string.Format("{0}/{1}/{2}/{3}/patient/{4}",
+                                                                                            DDPatientServiceURL,
+                                                                                            "NG",
+                                                                                            request.Version,
+                                                                                            request.ContractNumber,
+                                                                                            request.PatientID));
+
+                if (response != null && response.Patient != null)
                 {
-                    sysResponse = client.Get<Phytel.API.DataDomain.PatientSystem.DTO.GetPatientSystemDataResponse>(string.Format("{0}/{1}/{2}/{3}/PatientSystem/{4}",
-                                                                                DDPatientSystemUrl,
-                                                                                "NG",
-                                                                                request.Version,
-                                                                                request.ContractNumber,
-                                                                                response.Patient.DisplayPatientSystemID));
+                    Phytel.API.DataDomain.PatientSystem.DTO.GetPatientSystemDataResponse sysResponse = null;
+
+                    if (string.IsNullOrEmpty(response.Patient.DisplayPatientSystemID) == false)
+                    {
+                        sysResponse = client.Get<Phytel.API.DataDomain.PatientSystem.DTO.GetPatientSystemDataResponse>(string.Format("{0}/{1}/{2}/{3}/PatientSystem/{4}",
+                                                                                    DDPatientSystemUrl,
+                                                                                    "NG",
+                                                                                    request.Version,
+                                                                                    request.ContractNumber,
+                                                                                    response.Patient.DisplayPatientSystemID));
+                    }
+
+                    pResponse.Patient = new NG.DTO.Patient
+                    {
+                        ID = response.Patient.ID,
+                        FirstName = response.Patient.FirstName,
+                        LastName = response.Patient.LastName,
+                        DOB = NGUtils.IsDateValid(response.Patient.DOB) ? response.Patient.DOB : string.Empty,
+                        Gender = response.Patient.Gender,
+                        MiddleName = response.Patient.MiddleName,
+                        Suffix = response.Patient.Suffix,
+                        PreferredName = response.Patient.PreferredName
+                    };
+
+                    if (sysResponse != null && sysResponse.PatientSystem != null)
+                    {
+                        pResponse.Patient.DisplaySystemID = sysResponse.PatientSystem.SystemID;
+                        pResponse.Patient.DisplaySystemName = sysResponse.PatientSystem.SystemName;
+                    }
                 }
-
-                pResponse.Patient = new NG.DTO.Patient
-                {
-                    ID = response.Patient.ID,
-                    FirstName = response.Patient.FirstName,
-                    LastName = response.Patient.LastName,
-                    DOB = NGUtils.IsDateValid(response.Patient.DOB) ? response.Patient.DOB : string.Empty,
-                    Gender = response.Patient.Gender,
-                    MiddleName = response.Patient.MiddleName,
-                    Suffix = response.Patient.Suffix,
-                    PreferredName = response.Patient.PreferredName
-                };
-
-                if(sysResponse != null && sysResponse.PatientSystem != null)
-                {
-                    pResponse.Patient.DisplaySystemID = sysResponse.PatientSystem.SystemID;
-                    pResponse.Patient.DisplaySystemName = sysResponse.PatientSystem.SystemName;
-                }
+                return pResponse;
             }
-
-            //SendAuditDispatch();
-
-            return pResponse;
+            catch (Exception ex)
+            {
+                //SendAuditDispatch();
+                throw ex;
+            }
         }
 
         public List<NG.DTO.PatientProblem> GetPatientProblems(NG.DTO.GetAllPatientProblemsRequest request)
@@ -220,7 +225,7 @@ namespace Phytel.API.AppDomain.NG
                     Version = request.Version,
                     SessionId = request.Token
                 });
-                throw new ArgumentException(ex.Message);
+                throw ex;
             }
         }
         #endregion
