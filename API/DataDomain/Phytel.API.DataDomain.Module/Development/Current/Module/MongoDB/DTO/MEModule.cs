@@ -36,8 +36,7 @@ namespace Phytel.API.DataDomain.Module.DTO
         public string Name { get; set; }
 
         [BsonElement(ObjectiveProperty)]
-        [BsonIgnoreIfNull(true)]
-        public string Objective { get; set; }
+        public List<Objective> Objectives { get; set; }
 
         [BsonElement(DescriptionProperty)]
         [BsonIgnoreIfNull(true)]
@@ -75,5 +74,13 @@ namespace Phytel.API.DataDomain.Module.DTO
         [BsonIgnoreIfNull(true)]
         [BsonDateTimeOptions(Kind = System.DateTimeKind.Local)]
         public DateTime? LastUpdatedOn { get; set; }
+    }
+
+    public class Objective
+    {
+        public const string IDProperty = "_id";
+
+        [BsonElement(IDProperty)]
+        public string ID { get; set; }
     }
 }

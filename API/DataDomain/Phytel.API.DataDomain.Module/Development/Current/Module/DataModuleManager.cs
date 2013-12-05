@@ -11,7 +11,8 @@ namespace Phytel.API.DataDomain.Module
             GetModuleResponse result = new GetModuleResponse();
 
             IModuleRepository<GetModuleResponse> repo = ModuleRepositoryFactory<GetModuleResponse>.GetModuleRepository(request.ContractNumber, request.Context);
-            result = repo.FindByID(request.ModuleID) as GetModuleResponse;
+            var module = repo.FindByID(request.ModuleID);
+            result.Module = module as DTO.Module;
             
             return (result != null ? result : new GetModuleResponse());
         }

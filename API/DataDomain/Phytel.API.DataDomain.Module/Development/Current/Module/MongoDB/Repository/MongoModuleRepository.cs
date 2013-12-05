@@ -46,6 +46,8 @@ namespace Phytel.API.DataDomain.Module
             DTO.Module module = null;
             using (ModuleMongoContext ctx = new ModuleMongoContext(_dbName))
             {
+                MEModule md = ctx.Modules.First();
+
                 module = (from m in ctx.Modules
                           where m.Id == ObjectId.Parse(entityID)
                           select new DTO.Module
@@ -53,7 +55,7 @@ namespace Phytel.API.DataDomain.Module
                               Id = m.Id.ToString(),
                               Name = m.Name,
                               Description = m.Description,
-                              Objective = m.Objective,
+                              Objectives = m.Objectives.Select(i => i.ID).ToList(),
                               Status = m.Status,
                               Version = m.Version
                           }).FirstOrDefault();

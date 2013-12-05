@@ -29,9 +29,9 @@ namespace Phytel.API.DataDomain.Module.Service
             GetModuleResponse response = new GetModuleResponse();
             try
             {
-             response = ModuleDataManager.GetModuleByID(request);
-            response.Version = request.Version;
-                        }
+                response = ModuleDataManager.GetModuleByID(request);
+                response.Version = request.Version;
+            }
             catch (Exception ex)
             {
                 //TODO: Log this to C3 database via ASE
