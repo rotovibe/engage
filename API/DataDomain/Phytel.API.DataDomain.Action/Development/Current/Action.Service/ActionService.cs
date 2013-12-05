@@ -7,9 +7,9 @@ namespace Phytel.API.DataDomain.Action.Service
 {
     public class ActionService : ServiceStack.ServiceInterface.Service
     {
-        public GetActionResponse Post(GetActionRequest request)
+        public GetActionDataResponse Get(GetActionDataRequest request)
         {
-            GetActionResponse response = new GetActionResponse();
+            GetActionDataResponse response = new GetActionDataResponse();
             try
             {
                 response = ActionDataManager.GetActionByID(request);
@@ -24,38 +24,38 @@ namespace Phytel.API.DataDomain.Action.Service
             return response;
         }
 
-        public GetActionResponse Get(GetActionRequest request)
-        {
-            GetActionResponse response = new GetActionResponse();
-            try
-            {
-             response = ActionDataManager.GetActionByID(request);
-            response.Version = request.Version;
-                        }
-            catch (Exception ex)
-            {
-                //TODO: Log this to C3 database via ASE
-                base.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-                response.Status = new ServiceStack.ServiceInterface.ServiceModel.ResponseStatus("Exception", ex.Message);
-            }
-            return response;
-        }
+        //public GetActionResponse Get(GetActionRequest request)
+        //{
+        //    GetActionResponse response = new GetActionResponse();
+        //    try
+        //    {
+        //     response = ActionDataManager.GetActionByID(request);
+        //    response.Version = request.Version;
+        //                }
+        //    catch (Exception ex)
+        //    {
+        //        //TODO: Log this to C3 database via ASE
+        //        base.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+        //        response.Status = new ServiceStack.ServiceInterface.ServiceModel.ResponseStatus("Exception", ex.Message);
+        //    }
+        //    return response;
+        //}
 
-        public GetAllActionsResponse Post(GetAllActionsRequest request)
-        {
-            GetAllActionsResponse response = new GetAllActionsResponse();
-            try
-            {
-                response = ActionDataManager.GetActionList(request);
-                response.Version = request.Version;
-            }
-            catch (Exception ex)
-            {
-                //TODO: Log this to C3 database via ASE
-                base.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-                response.Status = new ServiceStack.ServiceInterface.ServiceModel.ResponseStatus("Exception", ex.Message);
-            }
-            return response;
-        }
+        //public GetAllActionsResponse Post(GetAllActionsRequest request)
+        //{
+        //    GetAllActionsResponse response = new GetAllActionsResponse();
+        //    try
+        //    {
+        //        response = ActionDataManager.GetActionList(request);
+        //        response.Version = request.Version;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        //TODO: Log this to C3 database via ASE
+        //        base.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+        //        response.Status = new ServiceStack.ServiceInterface.ServiceModel.ResponseStatus("Exception", ex.Message);
+        //    }
+        //    return response;
+        //}
     }
 }

@@ -69,10 +69,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="GetAllActionsRequest.cs" />
-    <Compile Include="GetActionRequest.cs" />
-    <Compile Include="GetAllActionsResponse.cs" />
-    <Compile Include="GetActionResponse.cs" />
+    <Compile Include="GetAllActionsDataRequest.cs" />
+    <Compile Include="GetActionDataRequest.cs" />
+    <Compile Include="GetAllActionsDataResponse.cs" />
+    <Compile Include="GetActionDataResponse.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

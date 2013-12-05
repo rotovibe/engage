@@ -7,13 +7,20 @@ namespace Phytel.API.DataDomain.Action.Test
     public class ActionTest
     {
         [TestMethod]
-        public void GetActionByID()
+        public void GetActionByID_Test()
         {
-            GetActionRequest request = new GetActionRequest{ ActionID = "5"};
+            // Arrange
+            string version = "v1";
+            string contractNumber = "InHealth001";
+            string context = "NG";
+            GetActionDataRequest request = new GetActionDataRequest { ActionID = "52a0f33bd43323141c9eb274", Context = context, ContractNumber = contractNumber, Version = version };
 
-            GetActionResponse response = ActionDataManager.GetActionByID(request);
+            // Act
+            GetActionDataResponse response = ActionDataManager.GetActionByID(request);
 
-            Assert.IsTrue(response.Action.ActionID == "Tony");
+            // Assert
+            Assert.IsTrue(response.Action.Name == "Verify P4H Eligibility");
+
         }
     }
 }

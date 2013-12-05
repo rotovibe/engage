@@ -9,6 +9,7 @@ using MongoDB.Driver;
 using MongoDB.Driver.Builders;
 using MongoDB.Bson;
 using Phytel.API.AppDomain.Action;
+using Phytel.API.Common;
 
 namespace Phytel.API.DataDomain.Action
 {
@@ -43,7 +44,41 @@ namespace Phytel.API.DataDomain.Action
 
         public object FindByID(string entityID)
         {
-            throw new NotImplementedException();
+            GetActionDataResponse actionResponse = null;
+            using (ActionMongoContext ctx = new ActionMongoContext(_dbName))
+            {
+                List<IMongoQuery> queries = new List<IMongoQuery>();
+                queries.Add(Query.EQ(MEAction.IdProperty, ObjectId.Parse(entityID)));
+                queries.Add(Query.EQ(MEAction.DeleteFlagProperty, false));
+                IMongoQuery mQuery = Query.And(queries);
+                MEAction meAction = ctx.Actions.Collection.Find(mQuery).FirstOrDefault();
+                if (meAction != null)
+                {
+                    actionResponse = new GetActionDataResponse();
+
+                    List<string> objectiveIDs = new List<string>();
+
+                    if (meAction.ObjectivesInfo != null)
+                    {
+                        foreach (ObjectiveInfo oi in meAction.ObjectivesInfo)
+                        {
+                            objectiveIDs.Add(oi.ID.ToString());
+                        }
+                    }
+                    
+                    API.DataDomain.Action.DTO.ActionData action = new API.DataDomain.Action.DTO.ActionData
+                    {
+                        ID = meAction.Id.ToString(),
+                        Name = meAction.Name,
+                        Description = meAction.Description,
+                        CompletedBy = meAction.CompletedBy,
+                        Objectives = objectiveIDs,
+                        Status = Helper.ToFriendlyString(meAction.Status)
+                    };
+                    actionResponse.Action = action;
+                }
+            }
+            return actionResponse;
         }
 
         public Tuple<string, IQueryable<T>> Select(Interface.APIExpression expression)
