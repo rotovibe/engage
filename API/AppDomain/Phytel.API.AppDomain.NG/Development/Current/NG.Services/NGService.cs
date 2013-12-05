@@ -25,6 +25,7 @@ namespace Phytel.API.AppDomain.NG.Service
                 //TODO: Log this to C3 database via ASE
                 base.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
                 response.Status = new ServiceStack.ServiceInterface.ServiceModel.ResponseStatus("Exception", ex.Message);
+                response.Status.StackTrace = ex.StackTrace;
             }
             return response;
         }
@@ -48,6 +49,7 @@ namespace Phytel.API.AppDomain.NG.Service
                 //TODO: Log this to C3 database via ASE
                 base.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
                 response.Status = new ServiceStack.ServiceInterface.ServiceModel.ResponseStatus("Exception", ex.Message);
+                response.Status.StackTrace = ex.StackTrace;
             }
             return response;
         }
@@ -145,6 +147,7 @@ namespace Phytel.API.AppDomain.NG.Service
                 //TODO: Log this to C3 database via ASE
                 base.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
                 response.Status = new ServiceStack.ServiceInterface.ServiceModel.ResponseStatus("Exception", ex.Message);
+                response.Status.StackTrace = ex.StackTrace;
             }
             return response;
         }
