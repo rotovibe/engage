@@ -58,5 +58,22 @@ namespace Phytel.API.DataDomain.Module.Services.Test
             Assert.AreEqual(moduleID, response.Module.Id);
             Assert.IsTrue(response.Module.Objectives.Count.Equals(1));
         }
+
+        //[TestMethod]
+        //public void Get_ModlueByID_with_3_objectives()
+        //{
+        //    string url = "http://localhost:8888/Module";
+        //    string moduleID = "52a0a8c2fe7a5915485bdfd4";
+        //    string contractNumber = "InHealth001";
+        //    string context = "NG";
+        //    string version = "v1";
+        //    IRestClient client = new JsonServiceClient();
+
+        //    GetModuleResponse response = client.Get<GetModuleResponse>(
+        //        string.Format("{0}/{1}/{2}/{3}/Module/{4}", url, context, version, contractNumber, moduleID));
+
+        //    Assert.AreEqual(moduleID, response.Module.Id);
+        //    Assert.IsTrue(response.Module.Objectives.Count.Equals(3));
+        //}
     }
 }
