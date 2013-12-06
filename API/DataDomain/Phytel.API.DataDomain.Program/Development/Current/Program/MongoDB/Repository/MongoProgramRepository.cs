@@ -52,12 +52,13 @@ namespace Phytel.API.DataDomain.Program
                            select new DTO.Program
                            {
                                ProgramID = p.Id.ToString(),
+                               TemplateName = p.TemplateName,
                                Name = p.Name,
                                AuthoredBy = p.AuthoredBy,
                                Client = p.Client,
                                Description = p.Description,
-                               EndDate = p.EndDate.ToString(),
-                               StartDate = p.StartDate.ToString(),
+                               EndDate = p.EndDate == null ? string.Empty : String.Format("{0:MM/dd/yyyy}", p.EndDate),
+                               StartDate = p.StartDate == null ? string.Empty : String.Format("{0:MM/dd/yyyy}", p.StartDate),
                                ObjectivesInfo = p.ObjectivesInfo.Select(x => new DTO.ObjectivesInfo
                                {
                                    ID = x.ID,
@@ -66,6 +67,9 @@ namespace Phytel.API.DataDomain.Program
                                    Value = x.Value
                                }).ToList(),
                                Locked = p.Locked,
+                               EligibilityRequirements = p.EligibilityRequirements,
+                               EligibilityEndDate = p.EligibilityEndDate == null ? string.Empty : String.Format("{0:MM/dd/yyyy}", p.EligibilityEndDate),
+                               EligibilityStartDate = p.EligibilityStartDate == null ? string.Empty : String.Format("{0:MM/dd/yyyy}", p.EligibilityStartDate),
                                ProgramStatus = p.ProgramStatus,
                                ShortName = p.ShortName,
                                Status = p.Status,

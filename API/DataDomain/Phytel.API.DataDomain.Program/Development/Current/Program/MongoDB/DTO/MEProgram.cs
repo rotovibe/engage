@@ -16,12 +16,16 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
         public MEProgram() { Id = ObjectId.GenerateNewId(); }
 
         public const string IdProperty = "_id";
+        public const string TemplateNameProperty = "ptn";
         public const string NameProperty = "nm";
         public const string ShortNameProperty = "snm";
         public const string DescriptionProperty = "dsc";
         public const string ClientProperty = "cp";
         public const string StartDateProperty = "sd";
         public const string EndDateProperty = "ed";
+        public const string EligibilityRequirementsProperty = "elr";
+        public const string EligibilityStartDateProperty = "elsd";
+        public const string EligibilityEndDateProperty = "eled";
         public const string StatusProperty = "st";
         public const string ProgramStatusProperty = "pst";
         public const string ObjectivesInfoProperty = "oi";
@@ -36,6 +40,10 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
 
         [BsonId]
         public ObjectId Id { get; set; }
+
+        [BsonElement(TemplateNameProperty)]
+        [BsonIgnoreIfNull(true)]
+        public string TemplateName { get; set; }
 
         [BsonElement(NameProperty)]
         [BsonIgnoreIfNull(true)]
@@ -55,15 +63,23 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
 
         [BsonElement(StartDateProperty)]
         [BsonIgnoreIfNull(true)]
-        public DateTime StartDate { get; set; }
+        public DateTime? StartDate { get; set; }
 
         [BsonElement(EndDateProperty)]
         [BsonIgnoreIfNull(true)]
-        public DateTime EndDate { get; set; }
+        public DateTime? EndDate { get; set; }
 
-        //public string EligibilityRequirements { get; set; }
-        //public string EligibilityStartDate { get; set; }
-        //public string EligibilityEndDate { get; set; }
+        [BsonElement(EligibilityRequirementsProperty)]
+        [BsonIgnoreIfNull(true)]
+        public string EligibilityRequirements { get; set; }
+
+        [BsonElement(EligibilityStartDateProperty)]
+        [BsonIgnoreIfNull(true)]
+        public DateTime? EligibilityStartDate { get; set; }
+
+        [BsonElement(EligibilityEndDateProperty)]
+        [BsonIgnoreIfNull(true)]
+        public DateTime? EligibilityEndDate { get; set; }
 
         [BsonElement(StatusProperty)]
         [BsonIgnoreIfNull(true)]

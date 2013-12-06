@@ -16,15 +16,16 @@ namespace Phytel.API.DataDomain.Program.DTO
     public class Program
     {
         public string ProgramID { get; set; }
+        public string TemplateName { get; set; }
         public string Name { get; set; }
         public string ShortName { get; set; }
         public string Description { get; set; }
         public string Client { get; set; }
         public string StartDate { get; set; }
         public string EndDate { get; set; }
-        //public string EligibilityRequirements { get; set; }
-        //public string EligibilityStartDate { get; set; }
-        //public string EligibilityEndDate { get; set; }
+        public string EligibilityRequirements { get; set; }
+        public string EligibilityStartDate { get; set; }
+        public string EligibilityEndDate { get; set; }
         public string Status { get; set; }
         public string ProgramStatus { get; set; }
         public List<ObjectivesInfo> ObjectivesInfo { get; set; }
