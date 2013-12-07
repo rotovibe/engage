@@ -12,11 +12,11 @@ using Phytel.API.AppDomain.Step;
 
 namespace Phytel.API.DataDomain.Step
 {
-    public class MongoStepRepository<T> : IStepRepository<T>
+    public class MongoYesNoRepository<T> : IStepRepository<T>
     {
         private string _dbName = string.Empty;
 
-        public MongoStepRepository(string contractDBName)
+        public MongoYesNoRepository(string contractDBName)
         {
             _dbName = contractDBName;
         }

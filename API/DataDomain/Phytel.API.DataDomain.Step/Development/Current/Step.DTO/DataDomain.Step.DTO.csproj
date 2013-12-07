@@ -70,9 +70,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="GetAllStepsRequest.cs" />
-    <Compile Include="GetStepRequest.cs" />
+    <Compile Include="GetYesNoDataRequest.cs" />
+    <Compile Include="GetYesDataResponse.cs" />
     <Compile Include="GetAllStepsResponse.cs" />
-    <Compile Include="GetStepResponse.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

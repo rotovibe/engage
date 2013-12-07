@@ -60,10 +60,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="IStepRepository.cs" />
-    <Compile Include="MongoDB\DTO\MEStep.cs" />
-    <Compile Include="MongoDB\Repository\MongoStepRepository.cs" />
-    <Compile Include="MongoDB\StepMongoContext.cs" />
-    <Compile Include="DataStepManager.cs" />
+    <Compile Include="MongoDB\DTO\METext.cs" />
+    <Compile Include="MongoDB\DTO\MEYesNo.cs" />
+    <Compile Include="MongoDB\Repository\MongoTextRepository.cs" />
+    <Compile Include="MongoDB\Repository\MongoYesNoRepository.cs" />
+    <Compile Include="MongoDB\TextMongoContext.cs" />
+    <Compile Include="MongoDB\YesNoMongoContext.cs" />
+    <Compile Include="StepDataManager.cs" />
     <Compile Include="StepRepositoryFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -76,6 +79,10 @@
       <Project>{d790f618-438b-4c39-abe5-1346122273ac}</Project>
       <Name>PhytelServices</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\Common\Phytel.API.Common\Development\Current\Phytel.API.Common.csproj">
+      <Project>{25cf3c3f-221f-4a49-b5ef-a8a5fcf9a5ba}</Project>
+      <Name>Phytel.API.Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\..\..\Interfaces\Development\Current\Phytel.API.Interface\Phytel.API.Interface.csproj">
       <Project>{abe948fb-247e-4955-b3ab-b7c93e10a542}</Project>
       <Name>Phytel.API.Interface</Name>
@@ -87,9 +94,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
