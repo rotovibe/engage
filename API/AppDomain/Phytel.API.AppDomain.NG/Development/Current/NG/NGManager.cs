@@ -205,7 +205,7 @@ namespace Phytel.API.AppDomain.NG
                     Suffix = x.Suffix
                 }));
 
-                if (((IHttpResponse)qResponse).StatusCode.Equals((int)HttpStatusCode.InternalServerError))
+                if (qResponse.Status != null)
                 {
                     pResponse.Status = qResponse.Status;
                 }
@@ -214,17 +214,17 @@ namespace Phytel.API.AppDomain.NG
             }
             catch (Exception ex)
             {
-                SendAuditDispatch(new PutAuditErrorRequest
-                {
-                    Browser = httpContext.GetHeader("User-Agent"),
-                    SourceIp = httpContext.IpAddress,
-                    Context = "NG",
-                    ContractNumber = request.ContractNumber,
-                    ErrorText = ex.Message,
-                    StackTrace = ex.StackTrace,
-                    Version = request.Version,
-                    SessionId = request.Token
-                });
+                //SendAuditDispatch(new PutAuditErrorRequest
+                //{
+                //    Browser = httpContext.GetHeader("User-Agent"),
+                //    SourceIp = httpContext.IpAddress,
+                //    Context = "NG",
+                //    ContractNumber = request.ContractNumber,
+                //    ErrorText = ex.Message,
+                //    StackTrace = ex.StackTrace,
+                //    Version = request.Version,
+                //    SessionId = request.Token
+                //});
                 throw ex;
             }
         }
