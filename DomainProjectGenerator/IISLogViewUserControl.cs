@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Configuration;
 using DomainProjectGenerator.Modals;
+using System.IO;
 
 namespace DomainProjectGenerator
 {
@@ -115,6 +116,12 @@ namespace DomainProjectGenerator
                     return;
                 }
 
+                if (!LogFilesExist(FilePathTextBox.Text))
+                {
+                    MessageBox.Show(FilePathTextBox.Text + " does not have any log files in it." + Environment.NewLine + " Please make sure the directory chosen contains log files.");
+                    return;
+                }
+
                 MSUtil.LogQueryClass oLogQuery = new MSUtil.LogQueryClass();
                 MSUtil.COMW3CInputContextClass oEVTInputFormat = new MSUtil.COMW3CInputContextClass();
                 //#Path#
@@ -183,6 +190,18 @@ namespace DomainProjectGenerator
             {
                 FilePathTextBox.Text = LogPathFolderBrowserDialog.SelectedPath + @"\";
             }
+        }
+
+        private bool LogFilesExist(string p)
+        {
+            bool result = true;
+            var allFileNames = Directory.EnumerateFiles(p).Select(r => Path.GetFileName(r));
+            var logs = allFileNames.Where(fn => Path.GetExtension(fn) == ".log");
+            if (logs.Count() == 0)
+            {
+                result = false;
+            }
+            return result;
         }
 
         private void SummarySyntaxRichTextBox_KeyDown(object sender, KeyEventArgs e)

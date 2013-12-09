@@ -35,6 +35,7 @@
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(IISLogViewUserControl));
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+            this.label2 = new System.Windows.Forms.Label();
             this.FilePathButton = new System.Windows.Forms.Button();
             this.FilePathTextBox = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
@@ -55,7 +56,6 @@
             this.SummarySyntaxRichTextBox = new SyntaxHighlighter.SyntaxRichTextBox();
             this.KeyWordsContextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.LogPathFolderBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
-            this.label2 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -101,6 +101,15 @@
             this.splitContainer1.SplitterWidth = 6;
             this.splitContainer1.TabIndex = 3;
             // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(15, 5);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(122, 13);
+            this.label2.TabIndex = 11;
+            this.label2.Text = "Enter Logs location path";
+            // 
             // FilePathButton
             // 
             this.FilePathButton.Location = new System.Drawing.Point(293, 19);
@@ -144,6 +153,7 @@
             // label5
             // 
             this.label5.AutoSize = true;
+            this.label5.Enabled = false;
             this.label5.Location = new System.Drawing.Point(15, 53);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(29, 13);
@@ -192,6 +202,7 @@
             // RangeCheckBox
             // 
             this.RangeCheckBox.AutoSize = true;
+            this.RangeCheckBox.Enabled = false;
             this.RangeCheckBox.Location = new System.Drawing.Point(272, 52);
             this.RangeCheckBox.Margin = new System.Windows.Forms.Padding(1);
             this.RangeCheckBox.Name = "RangeCheckBox";
@@ -203,6 +214,7 @@
             // 
             // StartTimeDateTimePicker
             // 
+            this.StartTimeDateTimePicker.Enabled = false;
             this.StartTimeDateTimePicker.Format = System.Windows.Forms.DateTimePickerFormat.Time;
             this.StartTimeDateTimePicker.Location = new System.Drawing.Point(174, 50);
             this.StartTimeDateTimePicker.Name = "StartTimeDateTimePicker";
@@ -212,6 +224,7 @@
             // 
             // StartDateTimePicker
             // 
+            this.StartDateTimePicker.Enabled = false;
             this.StartDateTimePicker.Format = System.Windows.Forms.DateTimePickerFormat.Short;
             this.StartDateTimePicker.Location = new System.Drawing.Point(56, 50);
             this.StartDateTimePicker.Name = "StartDateTimePicker";
@@ -340,15 +353,6 @@
             // LogPathFolderBrowserDialog
             // 
             this.LogPathFolderBrowserDialog.ShowNewFolderButton = false;
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(15, 5);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(122, 13);
-            this.label2.TabIndex = 11;
-            this.label2.Text = "Enter Logs location path";
             // 
             // IISLogViewUserControl
             // 
