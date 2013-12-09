@@ -39,22 +39,26 @@
             this.label3 = new System.Windows.Forms.Label();
             this.GenerateButton = new System.Windows.Forms.Button();
             this.ResultsTextBox = new System.Windows.Forms.TextBox();
+            this.tabControl1 = new System.Windows.Forms.TabControl();
+            this.DDGeneratorTabPage = new System.Windows.Forms.TabPage();
+            this.IISLogViewerTabPage = new System.Windows.Forms.TabPage();
+            this.tabControl1.SuspendLayout();
+            this.DDGeneratorTabPage.SuspendLayout();
             this.SuspendLayout();
             // 
             // WorkingDirectoryTextBox
             // 
-            this.WorkingDirectoryTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+            this.WorkingDirectoryTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.WorkingDirectoryTextBox.Location = new System.Drawing.Point(6, 41);
+            this.WorkingDirectoryTextBox.Location = new System.Drawing.Point(19, 31);
             this.WorkingDirectoryTextBox.Name = "WorkingDirectoryTextBox";
-            this.WorkingDirectoryTextBox.Size = new System.Drawing.Size(485, 20);
+            this.WorkingDirectoryTextBox.Size = new System.Drawing.Size(729, 20);
             this.WorkingDirectoryTextBox.TabIndex = 0;
             // 
             // OpenDirectoryBrowserBtn
             // 
             this.OpenDirectoryBrowserBtn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.OpenDirectoryBrowserBtn.Location = new System.Drawing.Point(496, 39);
+            this.OpenDirectoryBrowserBtn.Location = new System.Drawing.Point(754, 29);
             this.OpenDirectoryBrowserBtn.Name = "OpenDirectoryBrowserBtn";
             this.OpenDirectoryBrowserBtn.Size = new System.Drawing.Size(31, 23);
             this.OpenDirectoryBrowserBtn.TabIndex = 1;
@@ -64,11 +68,8 @@
             // 
             // label1
             // 
-            this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(6, 22);
+            this.label1.Location = new System.Drawing.Point(19, 12);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(139, 13);
             this.label1.TabIndex = 2;
@@ -76,11 +77,8 @@
             // 
             // label2
             // 
-            this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(6, 69);
+            this.label2.Location = new System.Drawing.Point(19, 59);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(130, 13);
             this.label2.TabIndex = 5;
@@ -89,7 +87,7 @@
             // button1
             // 
             this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.button1.Location = new System.Drawing.Point(496, 86);
+            this.button1.Location = new System.Drawing.Point(754, 76);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(31, 23);
             this.button1.TabIndex = 4;
@@ -99,31 +97,26 @@
             // 
             // TargetFolderPath
             // 
-            this.TargetFolderPath.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+            this.TargetFolderPath.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.TargetFolderPath.Location = new System.Drawing.Point(6, 88);
+            this.TargetFolderPath.Location = new System.Drawing.Point(19, 78);
             this.TargetFolderPath.Name = "TargetFolderPath";
-            this.TargetFolderPath.Size = new System.Drawing.Size(485, 20);
+            this.TargetFolderPath.Size = new System.Drawing.Size(729, 20);
             this.TargetFolderPath.TabIndex = 3;
             // 
             // EntityNameTxtBx
             // 
-            this.EntityNameTxtBx.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+            this.EntityNameTxtBx.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.EntityNameTxtBx.Location = new System.Drawing.Point(9, 134);
+            this.EntityNameTxtBx.Location = new System.Drawing.Point(22, 124);
             this.EntityNameTxtBx.Name = "EntityNameTxtBx";
-            this.EntityNameTxtBx.Size = new System.Drawing.Size(518, 20);
+            this.EntityNameTxtBx.Size = new System.Drawing.Size(763, 20);
             this.EntityNameTxtBx.TabIndex = 6;
             // 
             // label3
             // 
-            this.label3.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(6, 115);
+            this.label3.Location = new System.Drawing.Point(19, 105);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(111, 13);
             this.label3.TabIndex = 7;
@@ -132,7 +125,7 @@
             // GenerateButton
             // 
             this.GenerateButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.GenerateButton.Location = new System.Drawing.Point(439, 160);
+            this.GenerateButton.Location = new System.Drawing.Point(697, 150);
             this.GenerateButton.Name = "GenerateButton";
             this.GenerateButton.Size = new System.Drawing.Size(88, 23);
             this.GenerateButton.TabIndex = 8;
@@ -145,32 +138,68 @@
             this.ResultsTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.ResultsTextBox.Location = new System.Drawing.Point(9, 191);
+            this.ResultsTextBox.Location = new System.Drawing.Point(22, 181);
             this.ResultsTextBox.Multiline = true;
             this.ResultsTextBox.Name = "ResultsTextBox";
             this.ResultsTextBox.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.ResultsTextBox.Size = new System.Drawing.Size(518, 159);
+            this.ResultsTextBox.Size = new System.Drawing.Size(763, 299);
             this.ResultsTextBox.TabIndex = 9;
+            // 
+            // tabControl1
+            // 
+            this.tabControl1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.tabControl1.Controls.Add(this.IISLogViewerTabPage);
+            this.tabControl1.Controls.Add(this.DDGeneratorTabPage);
+            this.tabControl1.Location = new System.Drawing.Point(4, 34);
+            this.tabControl1.Name = "tabControl1";
+            this.tabControl1.SelectedIndex = 0;
+            this.tabControl1.Size = new System.Drawing.Size(833, 528);
+            this.tabControl1.TabIndex = 10;
+            // 
+            // DDGeneratorTabPage
+            // 
+            this.DDGeneratorTabPage.Controls.Add(this.WorkingDirectoryTextBox);
+            this.DDGeneratorTabPage.Controls.Add(this.ResultsTextBox);
+            this.DDGeneratorTabPage.Controls.Add(this.OpenDirectoryBrowserBtn);
+            this.DDGeneratorTabPage.Controls.Add(this.GenerateButton);
+            this.DDGeneratorTabPage.Controls.Add(this.label1);
+            this.DDGeneratorTabPage.Controls.Add(this.label3);
+            this.DDGeneratorTabPage.Controls.Add(this.TargetFolderPath);
+            this.DDGeneratorTabPage.Controls.Add(this.EntityNameTxtBx);
+            this.DDGeneratorTabPage.Controls.Add(this.button1);
+            this.DDGeneratorTabPage.Controls.Add(this.label2);
+            this.DDGeneratorTabPage.Location = new System.Drawing.Point(4, 22);
+            this.DDGeneratorTabPage.Name = "DDGeneratorTabPage";
+            this.DDGeneratorTabPage.Padding = new System.Windows.Forms.Padding(3);
+            this.DDGeneratorTabPage.Size = new System.Drawing.Size(825, 502);
+            this.DDGeneratorTabPage.TabIndex = 1;
+            this.DDGeneratorTabPage.Text = "DataDomain Generator";
+            this.DDGeneratorTabPage.UseVisualStyleBackColor = true;
+            // 
+            // IISLogViewerTabPage
+            // 
+            this.IISLogViewerTabPage.Location = new System.Drawing.Point(4, 22);
+            this.IISLogViewerTabPage.Name = "IISLogViewerTabPage";
+            this.IISLogViewerTabPage.Padding = new System.Windows.Forms.Padding(3);
+            this.IISLogViewerTabPage.Size = new System.Drawing.Size(825, 502);
+            this.IISLogViewerTabPage.TabIndex = 0;
+            this.IISLogViewerTabPage.Text = "IIS Log Viewer";
+            this.IISLogViewerTabPage.UseVisualStyleBackColor = true;
             // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(537, 362);
-            this.Controls.Add(this.ResultsTextBox);
-            this.Controls.Add(this.GenerateButton);
-            this.Controls.Add(this.label3);
-            this.Controls.Add(this.EntityNameTxtBx);
-            this.Controls.Add(this.label2);
-            this.Controls.Add(this.button1);
-            this.Controls.Add(this.TargetFolderPath);
-            this.Controls.Add(this.label1);
-            this.Controls.Add(this.OpenDirectoryBrowserBtn);
-            this.Controls.Add(this.WorkingDirectoryTextBox);
+            this.ClientSize = new System.Drawing.Size(840, 565);
+            this.Controls.Add(this.tabControl1);
             this.Name = "Main";
-            this.Text = "DataDomain Projects Generator";
+            this.Text = "Phytel API Utilities";
+            this.tabControl1.ResumeLayout(false);
+            this.DDGeneratorTabPage.ResumeLayout(false);
+            this.DDGeneratorTabPage.PerformLayout();
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
@@ -187,6 +216,9 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Button GenerateButton;
         private System.Windows.Forms.TextBox ResultsTextBox;
+        private System.Windows.Forms.TabControl tabControl1;
+        private System.Windows.Forms.TabPage DDGeneratorTabPage;
+        private System.Windows.Forms.TabPage IISLogViewerTabPage;
     }
 }
 

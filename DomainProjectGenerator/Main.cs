@@ -17,6 +17,9 @@ namespace DomainProjectGenerator
         {
             InitializeComponent();
             DirectoryService.RaiseMessageEvent += DirectoryService_RaiseMessageEvent;
+            IISLogViewUserControl iislvc = new IISLogViewUserControl();
+            iislvc.Dock = DockStyle.Fill;
+            IISLogViewerTabPage.Controls.Add(iislvc);
         }
 
         void DirectoryService_RaiseMessageEvent(TextMessageEventArg e)
