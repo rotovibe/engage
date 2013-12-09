@@ -1,6 +1,10 @@
 using System;
 using System.Net;
 using Phytel.API.AppDomain.NG.DTO;
+using Phytel.API.Interface;
+using ServiceStack.ServiceInterface.ServiceModel;
+using ServiceStack.ServiceHost;
+using Phytel.API.Common.Format;
 
 namespace Phytel.API.AppDomain.NG.Service
 {
@@ -23,9 +27,7 @@ namespace Phytel.API.AppDomain.NG.Service
             catch (Exception ex)
             {
                 //TODO: Log this to C3 database via ASE
-                base.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-                response.Status = new ServiceStack.ServiceInterface.ServiceModel.ResponseStatus("Exception", ex.Message);
-                response.Status.StackTrace = ex.StackTrace;
+                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
             }
             return response;
         }
@@ -47,9 +49,7 @@ namespace Phytel.API.AppDomain.NG.Service
             catch (Exception ex)
             {
                 //TODO: Log this to C3 database via ASE
-                base.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-                response.Status = new ServiceStack.ServiceInterface.ServiceModel.ResponseStatus("Exception", ex.Message);
-                response.Status.StackTrace = ex.StackTrace;
+                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
             }
             return response;
         }
@@ -75,8 +75,7 @@ namespace Phytel.API.AppDomain.NG.Service
             catch (Exception ex)
             {
                 //TODO: Log this to C3 database via ASE
-                base.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-                response.Status = new ServiceStack.ServiceInterface.ServiceModel.ResponseStatus("Exception", ex.Message);
+                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
             }
             return response;
         }
@@ -97,8 +96,7 @@ namespace Phytel.API.AppDomain.NG.Service
             catch (Exception ex)
             {
                 //TODO: Log this to C3 database via ASE
-                base.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-                response.Status = new ServiceStack.ServiceInterface.ServiceModel.ResponseStatus("Exception", ex.Message);
+                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
             }
             return response;
         }
@@ -121,8 +119,7 @@ namespace Phytel.API.AppDomain.NG.Service
             catch (Exception ex)
             {
                 //TODO: Log this to C3 database via ASE
-                base.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-                response.Status = new ServiceStack.ServiceInterface.ServiceModel.ResponseStatus("Exception", ex.Message);
+                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
             }
             return response;
         }
@@ -145,9 +142,7 @@ namespace Phytel.API.AppDomain.NG.Service
             catch (Exception ex)
             {
                 //TODO: Log this to C3 database via ASE
-                base.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-                response.Status = new ServiceStack.ServiceInterface.ServiceModel.ResponseStatus("GetCohortPatientsRequest", ex.Message);
-                response.Status.StackTrace = ex.StackTrace;
+                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
             }
             return response;
         }
@@ -170,8 +165,7 @@ namespace Phytel.API.AppDomain.NG.Service
             catch (Exception ex)
             {
                 //TODO: Log this to C3 database via ASE
-                base.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-                response.Status = new ServiceStack.ServiceInterface.ServiceModel.ResponseStatus("Exception", ex.Message);
+                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
             }
             return response;
         
