@@ -70,7 +70,6 @@
     <Compile Include="Audit\DispatchRequest.cs" />
     <Compile Include="Enums.cs" />
     <Compile Include="Format\CommonFormatter.cs" />
-    <Compile Include="Helper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
