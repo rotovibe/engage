@@ -20,5 +20,15 @@ namespace Phytel.API.Common.Format
             response.Status.Message = ex.Message;
             response.Status.StackTrace = ex.StackTrace;
         }
+
+        public static string FormatDateOfBirth(string val)
+        {
+            string result = string.Empty;
+            DateTime parsed;
+            if (DateTime.TryParse(val, out parsed))
+                result = val;
+
+            return result;
+        }
     }
 }

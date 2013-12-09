@@ -9,6 +9,7 @@ using MongoDB.Driver;
 using MongoDB.Driver.Builders;
 using MongoDB.Bson;
 using Phytel.API.AppDomain.Patient;
+using Phytel.API.Common.Format;
 
 namespace Phytel.API.DataDomain.Patient
 {
@@ -51,7 +52,7 @@ namespace Phytel.API.DataDomain.Patient
                            select new DTO.PatientData
                             {
                                 ID = p.Id.ToString(),
-                                DOB = p.DOB,
+                                DOB = CommonFormatter.FormatDateOfBirth(p.DOB),
                                 FirstName = p.FirstName,
                                 Gender = p.Gender,
                                 LastName = p.LastName,

@@ -14,9 +14,19 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.Patient.Test", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.CohortPatients.DTO", "..\..\..\Phytel.API.DataDomain.CohortPatient\Development\Current\CohortPatient.DTO\DataDomain.CohortPatients.DTO.csproj", "{037D090A-F888-40D8-A51A-01B19AFF2965}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "PhytelShared", "PhytelShared", "{800769AE-E702-422E-8B96-C0E7B2350F50}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Phytel.API.Interface", "..\..\..\..\Interfaces\Development\Current\Phytel.API.Interface\Phytel.API.Interface.csproj", "{ABE948FB-247E-4955-B3AB-B7C93E10A542}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Phytel.Mongo", "..\..\..\..\..\..\Shared\PhytelServices\Development\Current\Phytel.Mongo\Phytel.Mongo.csproj", "{7C9E786C-E4F7-4382-BDE4-8DBF980EA013}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PhytelServices", "..\..\..\..\..\..\Shared\PhytelServices\Development\Current\PhytelServices\PhytelServices.csproj", "{D790F618-438B-4C39-ABE5-1346122273AC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Phytel.API.Common", "..\..\..\..\Common\Phytel.API.Common\Development\Current\Phytel.API.Common.csproj", "{25CF3C3F-221F-4A49-B5EF-A8A5FCF9A5BA}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 6
+		SccNumberOfProjects = 10
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = http://hillstfs2013:8080/tfs/phytel
 		SccProjectUniqueName0 = Patient.Services\\DataDomain.Patient.Service.csproj
@@ -34,21 +44,45 @@ Global
 		SccAuxPath2 = http://hillstfs2013:8080/tfs/phytel
 		SccLocalPath2 = Patient.DTOs
 		SccProvider2 = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccProjectUniqueName3 = Patient.Services.Tests\\DataDomain.Patient.Services.Test.csproj
-		SccProjectName3 = Patient.Services.Tests
+		SccProjectUniqueName3 = Patient.Tests\\DataDomain.Patient.Test.csproj
+		SccProjectName3 = Patient.Tests
 		SccAuxPath3 = http://hillstfs2013:8080/tfs/phytel
-		SccLocalPath3 = Patient.Services.Tests
+		SccLocalPath3 = Patient.Tests
 		SccProvider3 = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccProjectUniqueName4 = Patient.Tests\\DataDomain.Patient.Test.csproj
-		SccProjectName4 = Patient.Tests
+		SccProjectUniqueName4 = Patient.Services.Tests\\DataDomain.Patient.Services.Test.csproj
+		SccProjectName4 = Patient.Services.Tests
 		SccAuxPath4 = http://hillstfs2013:8080/tfs/phytel
-		SccLocalPath4 = Patient.Tests
+		SccLocalPath4 = Patient.Services.Tests
 		SccProvider4 = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccProjectUniqueName5 = ..\\..\\..\\Phytel.API.DataDomain.CohortPatient\\Development\\Current\\CohortPatient.DTO\\DataDomain.CohortPatients.DTO.csproj
 		SccProjectName5 = ../../../Phytel.API.DataDomain.CohortPatient/Development/Current/CohortPatient.DTO
 		SccAuxPath5 = http://hillstfs2013:8080/tfs/phytel
 		SccLocalPath5 = ..\\..\\..\\Phytel.API.DataDomain.CohortPatient\\Development\\Current\\CohortPatient.DTO
 		SccProvider5 = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccProjectUniqueName6 = ..\\..\\..\\..\\Interfaces\\Development\\Current\\Phytel.API.Interface\\Phytel.API.Interface.csproj
+		SccProjectTopLevelParentUniqueName6 = DataDomain.Patient.sln
+		SccProjectName6 = ../../../../Interfaces/Development/Current/Phytel.API.Interface
+		SccAuxPath6 = http://hillstfs2013:8080/tfs/phytel
+		SccLocalPath6 = ..\\..\\..\\..\\Interfaces\\Development\\Current\\Phytel.API.Interface
+		SccProvider6 = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccProjectUniqueName7 = ..\\..\\..\\..\\..\\..\\Shared\\PhytelServices\\Development\\Current\\Phytel.Mongo\\Phytel.Mongo.csproj
+		SccProjectTopLevelParentUniqueName7 = DataDomain.Patient.sln
+		SccProjectName7 = ../../../../../../Shared/PhytelServices/Development/Current/Phytel.Mongo
+		SccAuxPath7 = http://hillstfs2013:8080/tfs/phytel
+		SccLocalPath7 = ..\\..\\..\\..\\..\\..\\Shared\\PhytelServices\\Development\\Current\\Phytel.Mongo
+		SccProvider7 = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccProjectUniqueName8 = ..\\..\\..\\..\\..\\..\\Shared\\PhytelServices\\Development\\Current\\PhytelServices\\PhytelServices.csproj
+		SccProjectTopLevelParentUniqueName8 = DataDomain.Patient.sln
+		SccProjectName8 = ../../../../../../Shared/PhytelServices/Development/Current/PhytelServices
+		SccAuxPath8 = http://hillstfs2013:8080/tfs/phytel
+		SccLocalPath8 = ..\\..\\..\\..\\..\\..\\Shared\\PhytelServices\\Development\\Current\\PhytelServices
+		SccProvider8 = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccProjectUniqueName9 = ..\\..\\..\\..\\Common\\Phytel.API.Common\\Development\\Current\\Phytel.API.Common.csproj
+		SccProjectTopLevelParentUniqueName9 = DataDomain.Patient.sln
+		SccProjectName9 = ../../../../Common/Phytel.API.Common/Development/Current
+		SccAuxPath9 = http://hillstfs2013:8080/tfs/phytel
+		SccLocalPath9 = ..\\..\\..\\..\\Common\\Phytel.API.Common\\Development\\Current
+		SccProvider9 = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -79,8 +113,30 @@ Global
 		{037D090A-F888-40D8-A51A-01B19AFF2965}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{037D090A-F888-40D8-A51A-01B19AFF2965}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{037D090A-F888-40D8-A51A-01B19AFF2965}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ABE948FB-247E-4955-B3AB-B7C93E10A542}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ABE948FB-247E-4955-B3AB-B7C93E10A542}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ABE948FB-247E-4955-B3AB-B7C93E10A542}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ABE948FB-247E-4955-B3AB-B7C93E10A542}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7C9E786C-E4F7-4382-BDE4-8DBF980EA013}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7C9E786C-E4F7-4382-BDE4-8DBF980EA013}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7C9E786C-E4F7-4382-BDE4-8DBF980EA013}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7C9E786C-E4F7-4382-BDE4-8DBF980EA013}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D790F618-438B-4C39-ABE5-1346122273AC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D790F618-438B-4C39-ABE5-1346122273AC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D790F618-438B-4C39-ABE5-1346122273AC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D790F618-438B-4C39-ABE5-1346122273AC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{25CF3C3F-221F-4A49-B5EF-A8A5FCF9A5BA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{25CF3C3F-221F-4A49-B5EF-A8A5FCF9A5BA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{25CF3C3F-221F-4A49-B5EF-A8A5FCF9A5BA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{25CF3C3F-221F-4A49-B5EF-A8A5FCF9A5BA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{ABE948FB-247E-4955-B3AB-B7C93E10A542} = {800769AE-E702-422E-8B96-C0E7B2350F50}
+		{7C9E786C-E4F7-4382-BDE4-8DBF980EA013} = {800769AE-E702-422E-8B96-C0E7B2350F50}
+		{D790F618-438B-4C39-ABE5-1346122273AC} = {800769AE-E702-422E-8B96-C0E7B2350F50}
+		{25CF3C3F-221F-4A49-B5EF-A8A5FCF9A5BA} = {800769AE-E702-422E-8B96-C0E7B2350F50}
 	EndGlobalSection
 EndGlobal
