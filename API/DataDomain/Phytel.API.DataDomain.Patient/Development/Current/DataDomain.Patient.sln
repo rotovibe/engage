@@ -79,7 +79,6 @@ Global
 		SccLocalPath8 = Patient.Services.Tests
 		SccProvider8 = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccProjectUniqueName9 = ..\\..\\..\\Phytel.API.DataDomain.CohortPatient\\Development\\Current\\CohortPatient.DTO\\DataDomain.CohortPatient.DTO.csproj
-		SccProjectTopLevelParentUniqueName9 = DataDomain.Patient.sln
 		SccProjectName9 = ../../../Phytel.API.DataDomain.CohortPatient/Development/Current/CohortPatient.DTO
 		SccAuxPath9 = http://hillstfs2013:8080/tfs/phytel
 		SccLocalPath9 = ..\\..\\..\\Phytel.API.DataDomain.CohortPatient\\Development\\Current\\CohortPatient.DTO
@@ -139,6 +138,5 @@ Global
 		{7C9E786C-E4F7-4382-BDE4-8DBF980EA013} = {800769AE-E702-422E-8B96-C0E7B2350F50}
 		{D790F618-438B-4C39-ABE5-1346122273AC} = {800769AE-E702-422E-8B96-C0E7B2350F50}
 		{25CF3C3F-221F-4A49-B5EF-A8A5FCF9A5BA} = {800769AE-E702-422E-8B96-C0E7B2350F50}
-		{037D090A-F888-40D8-A51A-01B19AFF2965} = {800769AE-E702-422E-8B96-C0E7B2350F50}
 	EndGlobalSection
 EndGlobal

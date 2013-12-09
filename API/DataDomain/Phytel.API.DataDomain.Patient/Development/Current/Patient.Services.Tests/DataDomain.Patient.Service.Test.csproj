@@ -92,10 +92,6 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\Phytel.API.DataDomain.CohortPatient\Development\Current\CohortPatient.DTO\DataDomain.CohortPatient.DTO.csproj">
-      <Project>{037d090a-f888-40d8-a51a-01b19aff2965}</Project>
-      <Name>DataDomain.CohortPatient.DTO</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Patient.DTOs\DataDomain.Patient.DTO.csproj">
       <Project>{1b3148a8-fb57-4461-91bc-f1cd38a013b6}</Project>
       <Name>DataDomain.Patient.DTO</Name>

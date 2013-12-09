@@ -1,5 +1,4 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Phytel.API.DataDomain.CohortPatient.DTO;
 using Phytel.API.DataDomain.Patient.DTO;
 using ServiceStack.Service;
 using ServiceStack.ServiceClient.Web;
@@ -21,8 +20,27 @@ namespace Phytel.API.DataDomain.Patient.Service.Test
 
             //JsonServiceClient.HttpWebRequestFilter = x => x.Headers.Add(string.Format("APIKey:{0}", "12345"));
 
-            GetPatientDataResponse response = client.Post<GetPatientDataResponse>("http://localhost:8888/NG/data/patient",
+            GetPatientDataResponse response = client.Post<GetPatientDataResponse>("http://localhost:8888/Patient/NG/data/patient",
                 new GetPatientDataRequest { PatientID = patientID, ContractNumber = contractNumber, Context = context } as object);
+
+            sampleValue = response.Patient.FirstName;
+
+            Assert.AreEqual(controlValue, sampleValue);
+        }
+
+        [TestMethod]
+        public void Get_PatientByID()
+        {
+            string controlValue = "Tony";
+            string sampleValue;
+            string patientID = "528f6dc2072ef708ecd91040";
+            string contractNumber = "InHealth001";
+            string context = "NG";
+            IRestClient client = new JsonServiceClient();
+
+            //JsonServiceClient.HttpWebRequestFilter = x => x.Headers.Add(string.Format("APIKey:{0}", "12345"));
+
+            GetPatientDataResponse response = client.Get<GetPatientDataResponse>("http://localhost:8888/Patient/NG/v1/InHealth001/patient/" + patientID);
 
             sampleValue = response.Patient.FirstName;
 
