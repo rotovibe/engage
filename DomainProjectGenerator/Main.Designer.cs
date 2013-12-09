@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Main));
             this.FolderBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
             this.WorkingDirectoryTextBox = new System.Windows.Forms.TextBox();
             this.OpenDirectoryBrowserBtn = new System.Windows.Forms.Button();
@@ -40,10 +41,15 @@
             this.GenerateButton = new System.Windows.Forms.Button();
             this.ResultsTextBox = new System.Windows.Forms.TextBox();
             this.tabControl1 = new System.Windows.Forms.TabControl();
-            this.DDGeneratorTabPage = new System.Windows.Forms.TabPage();
             this.IISLogViewerTabPage = new System.Windows.Forms.TabPage();
+            this.DDGeneratorTabPage = new System.Windows.Forms.TabPage();
+            this.toolStrip1 = new System.Windows.Forms.ToolStrip();
+            this.newToolStripButton = new System.Windows.Forms.ToolStripButton();
+            this.openToolStripButton = new System.Windows.Forms.ToolStripButton();
+            this.saveToolStripButton = new System.Windows.Forms.ToolStripButton();
             this.tabControl1.SuspendLayout();
             this.DDGeneratorTabPage.SuspendLayout();
+            this.toolStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // WorkingDirectoryTextBox
@@ -158,6 +164,16 @@
             this.tabControl1.Size = new System.Drawing.Size(833, 528);
             this.tabControl1.TabIndex = 10;
             // 
+            // IISLogViewerTabPage
+            // 
+            this.IISLogViewerTabPage.Location = new System.Drawing.Point(4, 22);
+            this.IISLogViewerTabPage.Name = "IISLogViewerTabPage";
+            this.IISLogViewerTabPage.Padding = new System.Windows.Forms.Padding(3);
+            this.IISLogViewerTabPage.Size = new System.Drawing.Size(825, 502);
+            this.IISLogViewerTabPage.TabIndex = 0;
+            this.IISLogViewerTabPage.Text = "IIS Log Viewer";
+            this.IISLogViewerTabPage.UseVisualStyleBackColor = true;
+            // 
             // DDGeneratorTabPage
             // 
             this.DDGeneratorTabPage.Controls.Add(this.WorkingDirectoryTextBox);
@@ -178,28 +194,61 @@
             this.DDGeneratorTabPage.Text = "DataDomain Generator";
             this.DDGeneratorTabPage.UseVisualStyleBackColor = true;
             // 
-            // IISLogViewerTabPage
+            // toolStrip1
             // 
-            this.IISLogViewerTabPage.Location = new System.Drawing.Point(4, 22);
-            this.IISLogViewerTabPage.Name = "IISLogViewerTabPage";
-            this.IISLogViewerTabPage.Padding = new System.Windows.Forms.Padding(3);
-            this.IISLogViewerTabPage.Size = new System.Drawing.Size(825, 502);
-            this.IISLogViewerTabPage.TabIndex = 0;
-            this.IISLogViewerTabPage.Text = "IIS Log Viewer";
-            this.IISLogViewerTabPage.UseVisualStyleBackColor = true;
+            this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.newToolStripButton,
+            this.openToolStripButton,
+            this.saveToolStripButton});
+            this.toolStrip1.Location = new System.Drawing.Point(0, 0);
+            this.toolStrip1.Name = "toolStrip1";
+            this.toolStrip1.Size = new System.Drawing.Size(840, 25);
+            this.toolStrip1.TabIndex = 11;
+            this.toolStrip1.Text = "toolStrip1";
+            // 
+            // newToolStripButton
+            // 
+            this.newToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.newToolStripButton.Image = ((System.Drawing.Image)(resources.GetObject("newToolStripButton.Image")));
+            this.newToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.newToolStripButton.Name = "newToolStripButton";
+            this.newToolStripButton.Size = new System.Drawing.Size(23, 22);
+            this.newToolStripButton.Text = "&New";
+            // 
+            // openToolStripButton
+            // 
+            this.openToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.openToolStripButton.Image = ((System.Drawing.Image)(resources.GetObject("openToolStripButton.Image")));
+            this.openToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.openToolStripButton.Name = "openToolStripButton";
+            this.openToolStripButton.Size = new System.Drawing.Size(23, 22);
+            this.openToolStripButton.Text = "&Open";
+            // 
+            // saveToolStripButton
+            // 
+            this.saveToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.saveToolStripButton.Image = ((System.Drawing.Image)(resources.GetObject("saveToolStripButton.Image")));
+            this.saveToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.saveToolStripButton.Name = "saveToolStripButton";
+            this.saveToolStripButton.Size = new System.Drawing.Size(23, 22);
+            this.saveToolStripButton.Text = "&Save";
             // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(840, 565);
+            this.Controls.Add(this.toolStrip1);
             this.Controls.Add(this.tabControl1);
             this.Name = "Main";
             this.Text = "Phytel API Utilities";
             this.tabControl1.ResumeLayout(false);
             this.DDGeneratorTabPage.ResumeLayout(false);
             this.DDGeneratorTabPage.PerformLayout();
+            this.toolStrip1.ResumeLayout(false);
+            this.toolStrip1.PerformLayout();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -219,6 +268,10 @@
         private System.Windows.Forms.TabControl tabControl1;
         private System.Windows.Forms.TabPage DDGeneratorTabPage;
         private System.Windows.Forms.TabPage IISLogViewerTabPage;
+        private System.Windows.Forms.ToolStrip toolStrip1;
+        private System.Windows.Forms.ToolStripButton newToolStripButton;
+        private System.Windows.Forms.ToolStripButton openToolStripButton;
+        private System.Windows.Forms.ToolStripButton saveToolStripButton;
     }
 }
 
