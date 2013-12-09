@@ -37,6 +37,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Interop.MSUtil">
+      <HintPath>References\Interop.MSUtil.dll</HintPath>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
@@ -106,18 +110,8 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="References\Interop.MSUtil.dll" />
     <Content Include="References\LogParser.dll" />
-  </ItemGroup>
-  <ItemGroup>
-    <COMReference Include="MSUtil">
-      <Guid>{A7E75D86-41CD-4B6E-B4BD-CC2ED34B3FB0}</Guid>
-      <VersionMajor>1</VersionMajor>
-      <VersionMinor>0</VersionMinor>
-      <Lcid>0</Lcid>
-      <WrapperTool>tlbimp</WrapperTool>
-      <Isolated>False</Isolated>
-      <EmbedInteropTypes>True</EmbedInteropTypes>
-    </COMReference>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SyntaxHighlighter\SyntaxHighlighter.csproj">
