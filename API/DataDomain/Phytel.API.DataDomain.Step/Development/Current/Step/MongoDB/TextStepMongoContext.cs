@@ -4,15 +4,15 @@ using Phytel.Mongo.Linq;
 
 namespace Phytel.API.AppDomain.Step
 {
-    public class TextMongoContext : MongoContext
+    public class TextStepMongoContext : MongoContext
     {
-        private static string COLL_Texts = "TextStep";
+        private static string COLL_Step = "Step";
 
-        public TextMongoContext(string contractDBName)
+        public TextStepMongoContext(string contractDBName)
             : base(contractDBName, true)
-        {
-            TextSteps = new MongoSet<METext, ObjectId>(this, COLL_Texts);
-        }
+		{
+            TextSteps = new MongoSet<METext, ObjectId>(this, COLL_Step);
+		}
 
         public MongoSet<METext, ObjectId> TextSteps { get; private set; }
     }

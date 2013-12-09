@@ -4,14 +4,14 @@ using Phytel.Mongo.Linq;
 
 namespace Phytel.API.AppDomain.Step
 {
-    public class YesNoMongoContext : MongoContext
+    public class YesNoStepMongoContext : MongoContext
     {
-        private static string COLL_YesNos = "YesNoStep";
+        private static string COLL_Step = "Step";
 
-        public YesNoMongoContext(string contractDBName)
+        public YesNoStepMongoContext(string contractDBName)
             : base(contractDBName, true)
 		{
-            YesNoSteps = new MongoSet<MEYesNo, ObjectId>(this, COLL_YesNos);
+            YesNoSteps = new MongoSet<MEYesNo, ObjectId>(this, COLL_Step);
 		}
 
         public MongoSet<MEYesNo, ObjectId> YesNoSteps { get; private set; }

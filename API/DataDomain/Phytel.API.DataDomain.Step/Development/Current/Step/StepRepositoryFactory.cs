@@ -9,16 +9,16 @@ namespace Phytel.API.DataDomain.Step
 {
     public abstract class StepRepositoryFactory<T>
     {
-        public static IStepRepository<T> GetStepRepository(string dbName, string productName, string table)
+        public static IStepRepository<T> GetStepRepository(string dbName, string productName, string type)
         {
             IStepRepository<T> repo = null;
-            if (table.Equals("YesNo", StringComparison.InvariantCultureIgnoreCase))
+            if (type.Equals("yesno", StringComparison.InvariantCultureIgnoreCase))
             {
-                repo = new MongoYesNoRepository<T>(dbName) as IStepRepository<T>;
+                repo = new MongoYesNoStepRepository<T>(dbName) as IStepRepository<T>;
             }
-            else if (table.Equals("Text", StringComparison.InvariantCultureIgnoreCase))
+            else if (type.Equals("text", StringComparison.InvariantCultureIgnoreCase))
             {
-                repo = new MongoTextRepository<T>(dbName) as IStepRepository<T>;
+                repo = new MongoTextStepRepository<T>(dbName) as IStepRepository<T>;
             }
             return repo;
         }

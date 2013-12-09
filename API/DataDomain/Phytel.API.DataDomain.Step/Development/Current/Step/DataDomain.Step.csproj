@@ -62,10 +62,11 @@
     <Compile Include="IStepRepository.cs" />
     <Compile Include="MongoDB\DTO\METext.cs" />
     <Compile Include="MongoDB\DTO\MEYesNo.cs" />
-    <Compile Include="MongoDB\Repository\MongoTextRepository.cs" />
-    <Compile Include="MongoDB\Repository\MongoYesNoRepository.cs" />
-    <Compile Include="MongoDB\TextMongoContext.cs" />
-    <Compile Include="MongoDB\YesNoMongoContext.cs" />
+    <Compile Include="MongoDB\DTO\MEStepBase.cs" />
+    <Compile Include="MongoDB\Repository\MongoTextStepRepository.cs" />
+    <Compile Include="MongoDB\Repository\MongoYesNoStepRepository.cs" />
+    <Compile Include="MongoDB\TextStepMongoContext.cs" />
+    <Compile Include="MongoDB\YesNoStepMongoContext.cs" />
     <Compile Include="StepDataManager.cs" />
     <Compile Include="StepRepositoryFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

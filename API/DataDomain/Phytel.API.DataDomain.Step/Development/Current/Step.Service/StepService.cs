@@ -24,22 +24,39 @@ namespace Phytel.API.DataDomain.Step.Service
         //    return response;
         //}
 
-        //public GetStepResponse Get(GetStepRequest request)
-        //{
-        //    GetStepResponse response = new GetStepResponse();
-        //    try
-        //    {
-        //     response = StepDataManager.GetStepByID(request);
-        //    response.Version = request.Version;
-        //                }
-        //    catch (Exception ex)
-        //    {
-        //        //TODO: Log this to C3 database via ASE
-        //        base.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-        //        response.Status = new ServiceStack.ServiceInterface.ServiceModel.ResponseStatus("Exception", ex.Message);
-        //    }
-        //    return response;
-        //}
+        public GetYesNoStepDataResponse Get(GetYesNoStepDataRequest request)
+        {
+            GetYesNoStepDataResponse response = new GetYesNoStepDataResponse();
+            try
+            {
+                response = StepDataManager.GetYesNoStepByID(request);
+                response.Version = request.Version;
+            }
+            catch (Exception ex)
+            {
+                //TODO: Log this to C3 database via ASE
+                base.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                response.Status = new ServiceStack.ServiceInterface.ServiceModel.ResponseStatus("Exception", ex.Message);
+            }
+            return response;
+        }
+
+        public GetTextStepDataResponse Get(GetTextStepDataRequest request)
+        {
+            GetTextStepDataResponse response = new GetTextStepDataResponse();
+            try
+            {
+                response = StepDataManager.GetTextStepByID(request);
+                response.Version = request.Version;
+            }
+            catch (Exception ex)
+            {
+                //TODO: Log this to C3 database via ASE
+                base.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                response.Status = new ServiceStack.ServiceInterface.ServiceModel.ResponseStatus("Exception", ex.Message);
+            }
+            return response;
+        }
 
         //public GetAllStepsResponse Post(GetAllStepsRequest request)
         //{

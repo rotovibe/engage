@@ -1,33 +1,36 @@
 using Phytel.API.DataDomain.Step.DTO;
 using System.Data.SqlClient;
 using Phytel.API.DataDomain.Step;
+using Phytel.API.Interface;
+using System.Collections.Generic;
+using System.Linq;
+using System;
 
 namespace Phytel.API.DataDomain.Step
 {
     public static class StepDataManager
     {
-
-        private static readonly string YESNO = "yesno";
-        private static readonly string TEXT = "text";
+        private static readonly string yesnostep = "yesno";
+        private static readonly string textstep = "text";
         
-        public static GetYesNoDataResponse GetStepByID(GetYesNoDataRequest request)
+        public static GetYesNoStepDataResponse GetYesNoStepByID(GetYesNoStepDataRequest request)
         {
-            GetYesNoDataResponse result = new GetYesNoDataResponse();
+            GetYesNoStepDataResponse result = new GetYesNoStepDataResponse();
 
-            IStepRepository<GetYesNoDataResponse> repo = StepRepositoryFactory<GetYesNoDataResponse>.GetStepRepository(request.ContractNumber, request.Context, YESNO);
-            result = repo.FindByID(request.YesNoID) as GetYesNoDataResponse;
+            IStepRepository<GetYesNoStepDataResponse> repo = StepRepositoryFactory<GetYesNoStepDataResponse>.GetStepRepository(request.ContractNumber, request.Context, yesnostep);
+            result = repo.FindByID(request.YesNoStepID) as GetYesNoStepDataResponse;
 
-            return (result != null ? result : new GetYesNoDataResponse());
+            return (result != null ? result : new GetYesNoStepDataResponse());
         }
 
-        //public static GetTextDataResponse GetStepByID(GetTextDataRequest request)
-        //{
-        //    GetTextDataResponse result = new GetTextDataResponse();
+        public static GetTextStepDataResponse GetTextStepByID(GetTextStepDataRequest request)
+        {
+            GetTextStepDataResponse result = new GetTextStepDataResponse();
 
-        //    IStepRepository<GetTextDataResponse> repo = StepRepositoryFactory<GetTextDataResponse>.GetStepRepository(request.ContractNumber, request.Context, TEXT);
-        //    result = repo.FindByID(request.StepID) as GetTextDataResponse;
+            IStepRepository<GetTextStepDataResponse> repo = StepRepositoryFactory<GetTextStepDataResponse>.GetStepRepository(request.ContractNumber, request.Context, textstep);
+            result = repo.FindByID(request.TextStepID) as GetTextStepDataResponse;
 
-        //    return (result != null ? result : new GetTextDataResponse());
-        //}
+            return (result != null ? result : new GetTextStepDataResponse());
+        }
     }
 }   
