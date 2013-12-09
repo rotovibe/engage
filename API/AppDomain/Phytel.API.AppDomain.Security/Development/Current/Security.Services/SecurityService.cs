@@ -1,4 +1,6 @@
 ﻿using Phytel.API.AppDomain.Security.DTO;
+using Phytel.API.Common.Format;
+using Phytel.API.Interface;
 using ServiceStack.ServiceHost;
 using ServiceStack.ServiceInterface.ServiceModel;
 using System;
@@ -19,8 +21,7 @@ namespace Phytel.API.AppDomain.Security.Service
             catch(Exception ex)
             {
                 //TODO: Log this to C3 database via ASE
-                base.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-                response.Status = new ResponseStatus("Exception", ex.Message);
+                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
             }
             return response;
         }
@@ -36,8 +37,7 @@ namespace Phytel.API.AppDomain.Security.Service
             catch (Exception ex)
             {
                 //TODO: Log this to C3 database via ASE
-                base.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-                response.Status = new ResponseStatus("Exception", ex.Message);
+                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
             }
             return response;
         }
@@ -53,8 +53,7 @@ namespace Phytel.API.AppDomain.Security.Service
             catch (Exception ex)
             {
                 //TODO: Log this to C3 database via ASE
-                base.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-                response.Status = new ResponseStatus("Exception", ex.Message);
+                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
             }
             return response;
         }
