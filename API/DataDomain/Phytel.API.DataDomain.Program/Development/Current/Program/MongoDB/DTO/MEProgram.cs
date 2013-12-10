@@ -83,7 +83,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
 
         [BsonElement(StatusProperty)]
         [BsonIgnoreIfNull(true)]
-        public string Status { get; set; }
+        public Status Status { get; set; }
 
         [BsonElement(ProgramStatusProperty)]
         [BsonIgnoreIfNull(true)]
