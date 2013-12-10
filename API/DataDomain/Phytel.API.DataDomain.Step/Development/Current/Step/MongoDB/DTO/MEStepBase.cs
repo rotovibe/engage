@@ -9,7 +9,7 @@ namespace Phytel.API.DataDomain.Step.DTO
 {
     [BsonIgnoreExtraElements(false)]
     [MongoIndex(Keys = new string[] { TTLDateProperty, }, TimeToLive = 0)]
-    [MongoIndex(Keys = new string[] { TypeProperty, DescriptionProperty, QuestionProperty }, TimeToLive = 0)]
+    [MongoIndex(Keys = new string[] { TypeProperty, DescriptionProperty, QuestionProperty }, Unique = true)]
     public class MEStepBase : IMongoEntity<ObjectId>
     {
         public MEStepBase() { Id = ObjectId.GenerateNewId(); }
