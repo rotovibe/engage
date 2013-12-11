@@ -11,12 +11,19 @@ namespace Phytel.API.DataDomain.Template
     {
         public static ITemplateRepository<T> GetTemplateRepository(string dbName, string productName)
         {
-            ITemplateRepository<T> repo = null;
+            try
+            {
+                ITemplateRepository<T> repo = null;
 
-            //We only have 1 repository at this time, just return it
-            repo = new MongoTemplateRepository<T>(dbName) as ITemplateRepository<T>;
+                //We only have 1 repository at this time, just return it
+                repo = new MongoTemplateRepository<T>(dbName) as ITemplateRepository<T>;
 
-            return repo;
+                return repo;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
     }
 }

@@ -1,3 +1,4 @@
+using ServiceStack.ServiceInterface.Admin;
 using ServiceStack.WebHost.Endpoints;
 using System;
 
@@ -14,7 +15,7 @@ namespace Phytel.API.DataDomain.Template.Service
             {
                 //register any dependencies your services use, e.g:
                 //container.Register<ICacheClient>(new MemoryCacheClient());
-
+                Plugins.Add(new RequestLogsFeature() { RequiredRoles = new string[] { } });
             }
         }
 

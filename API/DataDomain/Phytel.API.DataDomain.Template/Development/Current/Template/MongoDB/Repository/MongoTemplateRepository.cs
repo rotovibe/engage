@@ -23,47 +23,92 @@ namespace Phytel.API.DataDomain.Template
 
         public T Insert(T newEntity)
         {
-            throw new NotImplementedException();
+            try
+            {
+                throw new NotImplementedException();
+                // code here //
+            }
+            catch (Exception ex) { throw ex; }
         }
 
         public T InsertAll(List<T> entities)
         {
-            throw new NotImplementedException();
+            try
+            {
+                throw new NotImplementedException();
+                // code here //
+            }
+            catch (Exception ex) { throw ex; }
         }
 
         public void Delete(T entity)
         {
-            throw new NotImplementedException();
+            try
+            {
+                throw new NotImplementedException();
+                // code here //
+            }
+            catch (Exception ex) { throw ex; }
         }
 
         public void DeleteAll(List<T> entities)
         {
-            throw new NotImplementedException();
+            try
+            {
+                throw new NotImplementedException();
+                // code here //
+            }
+            catch (Exception ex) { throw ex; }
         }
 
         public object FindByID(string entityID)
         {
-            throw new NotImplementedException();
+            try
+            {
+                throw new NotImplementedException();
+                // code here //
+            }
+            catch (Exception ex) { throw ex; }
         }
 
         public Tuple<string, IQueryable<T>> Select(Interface.APIExpression expression)
         {
-            throw new NotImplementedException();
+            try
+            {
+                throw new NotImplementedException();
+                // code here //
+            }
+            catch (Exception ex) { throw ex; }
         }
 
         public IQueryable<T> SelectAll()
         {
-            throw new NotImplementedException();
+            try
+            {
+                throw new NotImplementedException();
+                // code here //
+            }
+            catch (Exception ex) { throw ex; }
         }
 
         public T Update(T entity)
         {
-            throw new NotImplementedException();
+            try
+            {
+                throw new NotImplementedException();
+                // code here //
+            }
+            catch (Exception ex) { throw ex; }
         }
 
         public void CacheByID(List<string> entityIDs)
         {
-            throw new NotImplementedException();
+            try
+            {
+                throw new NotImplementedException();
+                // code here //
+            }
+            catch (Exception ex) { throw ex; }
         }
     }
 }
