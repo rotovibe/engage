@@ -116,14 +116,17 @@ namespace DomainProjectGenerator
                     return;
                 }
 
-                if (!LogFilesExist(FilePathTextBox.Text))
-                {
-                    MessageBox.Show(FilePathTextBox.Text + " does not have any log files in it." + Environment.NewLine + " Please make sure the directory chosen contains log files.");
-                    return;
-                }
+                //if (!LogFilesExist(FilePathTextBox.Text))
+                //{
+                //    MessageBox.Show(FilePathTextBox.Text + " does not have any log files in it." + Environment.NewLine + " Please make sure the directory chosen contains log files.");
+                //    return;
+                //}
 
                 MSUtil.LogQueryClass oLogQuery = new MSUtil.LogQueryClass();
-                MSUtil.COMW3CInputContextClass oEVTInputFormat = new MSUtil.COMW3CInputContextClass();
+                MSUtil.COMIISW3CInputContextClass oEVTInputFormat = new MSUtil.COMIISW3CInputContextClass();
+                //MSUtil.COMW3CInputContextClass oEVTInputFormat = new MSUtil.COMW3CInputContextClass();
+                oEVTInputFormat.recurse = -1;
+                
                 //#Path#
                 string path = lPath.Replace("#Path#", FilePathTextBox.Text + "*.log");
                 string query = path;
