@@ -60,47 +60,54 @@ namespace Phytel.API.AppDomain.Security
 
         public DTO.AuthenticateResponse LoginUser(string token)
         {
-            Services.ParameterCollection parmColl = new Services.ParameterCollection();
-            parmColl.Add(new Services.Parameter("@Token", token, System.Data.SqlDbType.VarChar, System.Data.ParameterDirection.Input, 100));
-            SqlDataReader reader = Phytel.Services.SQLDataService.Instance.GetReader("C3", false, "spPhy_ProcessUserToken", parmColl);
-
-            AuthenticateResponse response = new AuthenticateResponse();
-
-            int colUserId = reader.GetOrdinal("UserID");
-            int colUserName = reader.GetOrdinal("UserName");
-            int colFirstName = reader.GetOrdinal("FirstName");
-            int colLastName = reader.GetOrdinal("LastName");
-            int colSessionTimeout = reader.GetOrdinal("SessionTimeout");
-
-            while (reader.Read())
+            try
             {
-                response.UserID = reader.GetGuid(colUserId);
-                response.UserName = reader.GetString(colUserName);
-                response.FirstName = reader.GetString(colFirstName);
-                response.LastName = reader.GetString(colLastName);
-                response.SessionTimeout = reader.GetInt16(colSessionTimeout);
-            }
+                Services.ParameterCollection parmColl = new Services.ParameterCollection();
+                parmColl.Add(new Services.Parameter("@Token", token, System.Data.SqlDbType.VarChar, System.Data.ParameterDirection.Input, 100));
+                SqlDataReader reader = Phytel.Services.SQLDataService.Instance.GetReader("C3", false, "spPhy_ProcessUserToken", parmColl);
 
-            if (response != null)
-            {
-                response.Contracts = new List<ContractInfo>();
+                AuthenticateResponse response = new AuthenticateResponse();
 
-                reader.NextResult();
-
-                int colContractId = reader.GetOrdinal("ContractId");
-                int colContractNumber = reader.GetOrdinal("Number");
-                int colContractName = reader.GetOrdinal("Name");
+                int colUserId = reader.GetOrdinal("UserID");
+                int colUserName = reader.GetOrdinal("UserName");
+                int colFirstName = reader.GetOrdinal("FirstName");
+                int colLastName = reader.GetOrdinal("LastName");
+                int colSessionTimeout = reader.GetOrdinal("SessionTimeout");
 
                 while (reader.Read())
                 {
-                    response.Contracts.Add(new ContractInfo { Id = reader.GetInt32(colContractId), Name = reader.GetString(colContractName), Number = reader.GetString(colContractNumber) });
+                    response.UserID = reader.GetGuid(colUserId);
+                    response.UserName = reader.GetString(colUserName);
+                    response.FirstName = reader.GetString(colFirstName);
+                    response.LastName = reader.GetString(colLastName);
+                    response.SessionTimeout = reader.GetInt16(colSessionTimeout);
                 }
+
+                if (response != null)
+                {
+                    response.Contracts = new List<ContractInfo>();
+
+                    reader.NextResult();
+
+                    int colContractId = reader.GetOrdinal("ContractId");
+                    int colContractNumber = reader.GetOrdinal("Number");
+                    int colContractName = reader.GetOrdinal("Name");
+
+                    while (reader.Read())
+                    {
+                        response.Contracts.Add(new ContractInfo { Id = reader.GetInt32(colContractId), Name = reader.GetString(colContractName), Number = reader.GetString(colContractNumber) });
+                    }
+                }
+
+                if (reader != null)
+                    reader.Close();
+
+                return response;
             }
-
-            if (reader != null)
-                reader.Close();
-
-            return response;
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
 
         public DTO.AuthenticateResponse LoginUser(AuthenticateResponse existingReponse, string apiKey, string productName)

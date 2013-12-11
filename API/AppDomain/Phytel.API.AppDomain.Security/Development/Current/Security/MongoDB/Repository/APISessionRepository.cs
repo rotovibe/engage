@@ -25,81 +25,105 @@ namespace Phytel.API.AppDomain.Security
 
         public UserAuthenticateResponse LoginUser(string userName, string password, string apiKey, string productName)
         {
-            UserAuthenticateResponse response = new UserAuthenticateResponse();
-            MEAPISession session = null;
-
-            //need to do a lookup against the APIKey collection to see if apiKey/Product combination exists
-            MEAPIUser user = (from k in _objectContext.APIUsers where k.UserName == userName && k.ApiKey == apiKey && k.Product == productName && k.IsActive == true select k).FirstOrDefault();
-            if (user != null)
+            try
             {
-                //validate password
-                Phytel.Services.DataProtector protector = new Services.DataProtector(Services.DataProtector.Store.USE_SIMPLE_STORE);
-                string dbPwd = protector.Decrypt(user.Password);
-                if (dbPwd.Equals(password))
-                {
-                    session = new MEAPISession
-                    {
-                        APIKey = apiKey,
-                        Product = productName,
-                        SessionLengthInMinutes = user.SessionTimeout,
-                        SessionTimeOut = DateTime.Now.AddMinutes(user.SessionTimeout),
-                        UserName = user.UserName
-                    };
+                UserAuthenticateResponse response = new UserAuthenticateResponse();
+                MEAPISession session = null;
 
-                    _objectContext.APISessions.Collection.Insert(session);
+                //need to do a lookup against the APIKey collection to see if apiKey/Product combination exists
+                MEAPIUser user = (from k in _objectContext.APIUsers where k.UserName == userName && k.ApiKey == apiKey && k.Product == productName && k.IsActive == true select k).FirstOrDefault();
+                if (user != null)
+                {
+                    //validate password
+                    Phytel.Services.DataProtector protector = new Services.DataProtector(Services.DataProtector.Store.USE_SIMPLE_STORE);
+                    string dbPwd = protector.Decrypt(user.Password);
+                    if (dbPwd.Equals(password))
+                    {
+                        session = new MEAPISession
+                        {
+                            APIKey = apiKey,
+                            Product = productName,
+                            SessionLengthInMinutes = user.SessionTimeout,
+                            SessionTimeOut = DateTime.Now.AddMinutes(user.SessionTimeout),
+                            UserName = user.UserName
+                        };
+
+                        _objectContext.APISessions.Collection.Insert(session);
+                    }
+                    else
+                        throw new Exception("Login Failed!  Username and/or Password is incorrect");
+
+                    response = new UserAuthenticateResponse { APIToken = session.Id.ToString(), Contracts = new List<ContractInfo>(), Name = user.UserName, SessionTimeout = user.SessionTimeout, UserName = user.UserName };
                 }
                 else
-                    throw new Exception("Login Failed!  Username and/or Password is incorrect");
+                    throw new Exception("Login Failed! Unknown Username/Password");
 
-                response = new UserAuthenticateResponse { APIToken = session.Id.ToString(), Contracts = new List<ContractInfo>(), Name = user.UserName, SessionTimeout = user.SessionTimeout, UserName = user.UserName };
+                return response;
             }
-            else
-                throw new Exception("Login Failed! Unknown Username/Password");
-
-            return response;
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
 
         public AuthenticateResponse LoginUser(AuthenticateResponse existingReponse, string apiKey, string productName)
         {
-            AuthenticateResponse response = new AuthenticateResponse();
-
-            //need to do a lookup against the APIKey collection to see if apiKey/Product combination exists
-            MEAPIKey key = (from k in _objectContext.APIKeys where k.ApiKey == apiKey && k.Product == productName && k.IsActive == true select k).FirstOrDefault();
-            if(key != null)
+            try
             {
-                MEAPISession session = new MEAPISession { APIKey = apiKey, 
-                                                            Product = productName, 
-                                                            SessionLengthInMinutes = existingReponse.SessionTimeout, 
-                                                            SessionTimeOut = DateTime.Now.AddMinutes(existingReponse.SessionTimeout), 
-                                                            UserName = existingReponse.UserName };
+                AuthenticateResponse response = new AuthenticateResponse();
 
-                _objectContext.APISessions.Collection.Insert(session);
+                //need to do a lookup against the APIKey collection to see if apiKey/Product combination exists
+                MEAPIKey key = (from k in _objectContext.APIKeys where k.ApiKey == apiKey && k.Product == productName && k.IsActive == true select k).FirstOrDefault();
+                if (key != null)
+                {
+                    MEAPISession session = new MEAPISession
+                    {
+                        APIKey = apiKey,
+                        Product = productName,
+                        SessionLengthInMinutes = existingReponse.SessionTimeout,
+                        SessionTimeOut = DateTime.Now.AddMinutes(existingReponse.SessionTimeout),
+                        UserName = existingReponse.UserName
+                    };
 
-                response = existingReponse;
-                response.APIToken = session.Id.ToString();
+                    _objectContext.APISessions.Collection.Insert(session);
+
+                    response = existingReponse;
+                    response.APIToken = session.Id.ToString();
+                }
+                else
+                    throw new Exception("Login Failed! Unknown Username/Password");
+
+                return response;
             }
-            else
-                throw new Exception("Login Failed! Unknown Username/Password");
-
-            return response;
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
 
         public ValidateTokenResponse Validate(string token, string productName)
         {
-            ValidateTokenResponse response = new ValidateTokenResponse();
-            response.IsValid = false;
-
-            MEAPISession session = _objectContext.APISessions.Collection.FindOneById(ObjectId.Parse(token));
-            if (session != null && session.Product.ToUpper().Equals(productName.ToUpper()))
+            try
             {
-                response.IsValid = true;
-                session.SessionTimeOut = DateTime.Now.AddMinutes(session.SessionLengthInMinutes);
-                _objectContext.APISessions.Collection.Save(session);
-            }
-            else
-                throw new UnauthorizedAccessException("Security Token does not exist");
+                ValidateTokenResponse response = new ValidateTokenResponse();
+                response.IsValid = false;
 
-            return response;
+                MEAPISession session = _objectContext.APISessions.Collection.FindOneById(ObjectId.Parse(token));
+                if (session != null && session.Product.ToUpper().Equals(productName.ToUpper()))
+                {
+                    response.IsValid = true;
+                    session.SessionTimeOut = DateTime.Now.AddMinutes(session.SessionLengthInMinutes);
+                    _objectContext.APISessions.Collection.Save(session);
+                }
+                else
+                    throw new UnauthorizedAccessException("Security Token does not exist");
+
+                return response;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
 
         public LogoutResponse Logout(string token, string context)
