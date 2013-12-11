@@ -12,6 +12,7 @@ namespace Phytel.API.AppDomain.Security
     {
         public MEAPISession() { Id = ObjectId.GenerateNewId(); }
 
+        public const string IdProperty = "_id";
         public const string UserNameProperty = "un";
         public const string ProductProperty = "prd";
         public const string APIKeyProperty = "apiKey";

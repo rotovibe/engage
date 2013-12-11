@@ -117,5 +117,10 @@ namespace Phytel.API.AppDomain.Security
         {
             throw new NotImplementedException();
         }
+
+        public DTO.LogoutResponse Logout(string token, string productName)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

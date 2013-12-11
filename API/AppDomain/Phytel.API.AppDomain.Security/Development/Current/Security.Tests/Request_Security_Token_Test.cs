@@ -22,5 +22,14 @@ namespace Phytel.API.AppDomain.Security.Services.Test
             sampleValue = response.UserName;
             Assert.AreEqual(controlValue, sampleValue);
         }
+
+        [TestMethod]
+        public void Logout_Test()
+        {
+            IRestClient client = new JsonServiceClient();
+            LogoutResponse response = client.Post<LogoutResponse>("http://localhost:888/security/v1/logout",
+                new LogoutRequest { Context = "NG", Token = "52a887c6d6a4850a8cd99f02" } as object);
+            Assert.AreEqual(response.SuccessfulLogout, true);
+        }
     }
 }

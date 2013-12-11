@@ -28,5 +28,12 @@ namespace Phytel.API.AppDomain.Security.Test
             ValidateTokenResponse response = SecurityManager.ValidateToken(request);
         }
 
+        [TestMethod]
+        public void Logout_Test()
+        {
+            LogoutRequest request = new LogoutRequest { Context = "NG", Token = "52a87fe2d6a4850a8cd99ed5" };
+            LogoutResponse response = SecurityManager.Logout(request);
+        }
+
     }
 }

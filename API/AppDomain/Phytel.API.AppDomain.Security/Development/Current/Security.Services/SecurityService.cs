@@ -57,5 +57,20 @@ namespace Phytel.API.AppDomain.Security.Service
             }
             return response;
         }
+
+        public LogoutResponse Post(LogoutRequest request)
+        {
+            LogoutResponse response = new LogoutResponse();
+            try
+            {
+                response = SecurityManager.Logout(request);
+            }
+            catch (Exception ex)
+            {
+                //TODO: Log this to C3 database via ASE
+                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+            }
+            return response;
+        }
     }
 }

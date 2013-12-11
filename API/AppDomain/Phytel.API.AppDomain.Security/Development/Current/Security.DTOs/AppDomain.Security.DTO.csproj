@@ -75,6 +75,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="LogoutRequest.cs" />
+    <Compile Include="LogoutResponse.cs" />
     <Compile Include="ContractInfo.cs" />
     <Compile Include="UserAuthenticateResponse.cs" />
     <Compile Include="UserAuthenticateRequest.cs" />

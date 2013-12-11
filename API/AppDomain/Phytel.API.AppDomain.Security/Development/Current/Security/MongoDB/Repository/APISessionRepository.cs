@@ -102,6 +102,28 @@ namespace Phytel.API.AppDomain.Security
             return response;
         }
 
+        public LogoutResponse Logout(string token, string context)
+        {
+            LogoutResponse response = new LogoutResponse();
+            response.SuccessfulLogout = false;
+            try
+            {
+                List<IMongoQuery> queries = new List<IMongoQuery>();
+                queries.Add(Query.EQ(MEAPISession.IdProperty, ObjectId.Parse(token)));
+                queries.Add(Query.EQ(MEAPISession.ProductProperty, context.ToUpper()));
+                IMongoQuery mQuery = Query.And(queries);
+
+                MEAPISession session = _objectContext.APISessions.Collection.FindOneById(ObjectId.Parse(token));
+                if (session != null && session.Product.ToUpper().Equals(context.ToUpper()))
+                {
+                    _objectContext.APISessions.Collection.Remove(mQuery);
+                    response.SuccessfulLogout = true;
+                }
+            }
+            catch (Exception ex) { throw ex; }
+            return response;
+        }
+
         public T Insert(T newEntity)
         {
             throw new NotImplementedException();

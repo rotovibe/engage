@@ -40,5 +40,12 @@ namespace Phytel.API.AppDomain.Security
 
             return securityRepo.Validate(request.Token, request.Context);
         }
+
+        public static LogoutResponse Logout(LogoutRequest request)
+        {
+            ISecurityRepository<AuthenticateResponse> securityRepo = SecurityRepositoryFactory<AuthenticateResponse>.GetSecurityRepository(request.Context);
+
+            return securityRepo.Logout(request.Token, request.Context);
+        }
     }
 }
