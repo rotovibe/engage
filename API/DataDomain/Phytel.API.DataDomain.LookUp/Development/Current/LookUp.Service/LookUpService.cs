@@ -8,6 +8,7 @@ namespace Phytel.API.DataDomain.Patient.Service
 {
     public class LookUpService : ServiceStack.ServiceInterface.Service
     {
+        #region Problems
         public GetProblemDataResponse Get(GetProblemDataRequest request)
         {
             GetProblemDataResponse response = new GetProblemDataResponse();
@@ -29,7 +30,7 @@ namespace Phytel.API.DataDomain.Patient.Service
             GetAllProblemsDataResponse response = new GetAllProblemsDataResponse();
             try
             {
-                response = LookUpDataManager.GetAllProblem(request);
+                response = LookUpDataManager.GetAllProblems(request);
             }
             catch (Exception ex)
             {
@@ -54,6 +55,7 @@ namespace Phytel.API.DataDomain.Patient.Service
                 response.Status = new ServiceStack.ServiceInterface.ServiceModel.ResponseStatus("Exception", ex.Message);
             }
             return response;
-        }
+        } 
+        #endregion
     }
 }

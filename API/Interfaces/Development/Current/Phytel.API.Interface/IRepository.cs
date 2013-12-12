@@ -7,15 +7,14 @@ namespace Phytel.API.Interface
 {
     public interface IRepository<T>
     {
-        object Insert(T newEntity);
-        object InsertAll(List<T> entities);
+        T Insert(T newEntity);
+        T InsertAll(List<T> entities);
         void Delete(T entity);
         void DeleteAll(List<T> entities);
         object FindByID(string entityID);
-        Tuple<string, IQueryable<object>> Select(APIExpression expression);
-        IQueryable<object> SelectAll();
-        object Update(T entity);
-        void CacheByID(List<string> entityIDs);
+        Tuple<string, IQueryable<T>> Select(APIExpression expression);
+        IQueryable<T> SelectAll();
+        T Update(T entity);
     }
 
     public class APIExpression

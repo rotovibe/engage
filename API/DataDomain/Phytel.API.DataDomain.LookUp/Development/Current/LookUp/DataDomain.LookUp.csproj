@@ -77,9 +77,14 @@
   <ItemGroup>
     <Compile Include="DataLookUpManager.cs" />
     <Compile Include="ILookUpRepository.cs" />
+    <Compile Include="MongoDB\DTO\ILookUpData.cs" />
+    <Compile Include="MongoDB\DTO\LookUpBase.cs" />
+    <Compile Include="MongoDB\DTO\MECategory.cs" />
+    <Compile Include="MongoDB\DTO\MELookup.cs" />
+    <Compile Include="MongoDB\DTO\MEObjective.cs" />
     <Compile Include="MongoDB\DTO\MEProblem.cs" />
-    <Compile Include="MongoDB\ProblemMongoContext.cs" />
-    <Compile Include="MongoDB\Repository\MongoProblemRepository.cs" />
+    <Compile Include="MongoDB\LookUpMongoContext.cs" />
+    <Compile Include="MongoDB\Repository\MongoLookUpRepository.cs" />
     <Compile Include="LookUpRepositoryFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

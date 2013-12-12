@@ -14,13 +14,13 @@ namespace Phytel.API.DataDomain.LookUp.Test
             string version = "v1";
             string contractNumber = "InHealth001";
             string context = "NG";
-            GetProblemDataRequest request = new GetProblemDataRequest { ProblemID = "527c1b1ad4332324ac199142", Context = context, ContractNumber = contractNumber, Version = version };
+            GetProblemDataRequest request = new GetProblemDataRequest { ProblemID = "528a66d6d4332317acc5095d", Context = context, ContractNumber = contractNumber, Version = version };
 
             // Act
             GetProblemDataResponse response = LookUpDataManager.GetProblem(request);
 
             // Assert
-            Assert.IsTrue(response.Problem.Name == "Arthritis");
+            Assert.IsTrue(response.Problem.Name == "High Cholesterol");
             
         }
 
@@ -34,14 +34,14 @@ namespace Phytel.API.DataDomain.LookUp.Test
             GetAllProblemsDataRequest request = new GetAllProblemsDataRequest {  Context = context, ContractNumber = contractNumber, Version = version };
 
             // Act
-            GetAllProblemsDataResponse response = LookUpDataManager.GetAllProblem(request);
+            GetAllProblemsDataResponse response = LookUpDataManager.GetAllProblems(request);
 
             // Assert
             Assert.AreNotEqual(0, response.Problems.Count);
         }
 
         [TestMethod]
-        public void SeachProblem_Test()
+        public void SearchProblem_Test()
         {
             // Arrange
             string version = "v1";

@@ -10,6 +10,8 @@ namespace Phytel.API.DataDomain.LookUp
 {
     public interface ILookUpRepository<T> : IRepository<T>
     {
-        
+        object FindProblemByID(string entityID);
+        IQueryable<T> GetAllProblems();
+        IQueryable<T> SearchProblem(SearchProblemsDataRequest request);
     }
 }
