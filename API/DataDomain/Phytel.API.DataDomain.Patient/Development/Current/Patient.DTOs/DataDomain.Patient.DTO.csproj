@@ -76,6 +76,8 @@
     <Compile Include="GetPatientDataRequest.cs" />
     <Compile Include="GetPatientDataResponse.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="PutPatientDataRequest.cs" />
+    <Compile Include="PutPatientDataResponse.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\..\Interfaces\Development\Current\Phytel.API.Interface\Phytel.API.Interface.csproj">

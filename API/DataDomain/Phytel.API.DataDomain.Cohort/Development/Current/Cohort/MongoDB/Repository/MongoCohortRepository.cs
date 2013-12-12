@@ -21,12 +21,12 @@ namespace Phytel.API.DataDomain.Cohort
             _dbName = contractDBName;
         }
 
-        public T Insert(T newEntity)
+        public object Insert(T newEntity)
         {
             throw new NotImplementedException();
         }
 
-        public T InsertAll(List<T> entities)
+        public object InsertAll(List<T> entities)
         {
             throw new NotImplementedException();
         }
@@ -66,7 +66,7 @@ namespace Phytel.API.DataDomain.Cohort
             return cohortResponse;
         }
 
-        public Tuple<string, IQueryable<T>> Select(Interface.APIExpression expression)
+        public Tuple<string, IQueryable<object>> Select(Interface.APIExpression expression)
         {
             //throw new NotImplementedException();
 
@@ -86,7 +86,7 @@ namespace Phytel.API.DataDomain.Cohort
             return new Tuple<string, IQueryable<T>>(string.Empty, null);
         }
 
-        public IQueryable<T> SelectAll()
+        public IQueryable<object> SelectAll()
         {
             IQueryable<T> query = null;
             List<API.DataDomain.Cohort.DTO.CohortData> cohorts = null;
@@ -108,7 +108,7 @@ namespace Phytel.API.DataDomain.Cohort
             return query;
         }
 
-        public T Update(T entity)
+        public object Update(T entity)
         {
             throw new NotImplementedException();
         }

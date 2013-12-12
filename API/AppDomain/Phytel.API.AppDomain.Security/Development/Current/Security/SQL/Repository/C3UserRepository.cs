@@ -13,12 +13,12 @@ namespace Phytel.API.AppDomain.Security
         {
         }
 
-        public T Insert(T newEntity)
+        public object Insert(T newEntity)
         {
             throw new NotImplementedException();
         }
 
-        public T InsertAll(List<T> entities)
+        public object InsertAll(List<T> entities)
         {
             throw new NotImplementedException();
         }
@@ -38,17 +38,17 @@ namespace Phytel.API.AppDomain.Security
             throw new NotImplementedException();
         }
 
-        public Tuple<string, IQueryable<T>> Select(Interface.APIExpression expression)
+        public Tuple<string, IQueryable<object>> Select(Interface.APIExpression expression)
         {
             throw new NotImplementedException();
         }
 
-        public IQueryable<T> SelectAll()
+        public IQueryable<object> SelectAll()
         {
             throw new NotImplementedException();
         }
 
-        public T Update(T entity)
+        public object Update(T entity)
         {
             throw new NotImplementedException();
         }

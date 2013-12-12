@@ -38,5 +38,12 @@ namespace Phytel.API.DataDomain.Patient
                 throw ex;
             }
         }
+
+        public static PutPatientDataResponse InsertPatient(PutPatientDataRequest request)
+        {
+           IPatientRepository<PutPatientDataRequest> repo = PatientRepositoryFactory<PutPatientDataRequest>.GetPatientRepository(request.ContractNumber, request.Context);
+           PutPatientDataResponse result = repo.Insert(request) as PutPatientDataResponse;
+           return result;
+        }
     }
 }   
