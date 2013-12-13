@@ -101,6 +101,7 @@ namespace Phytel.API.AppDomain.Security
             }
         }
 
+
         public ValidateTokenResponse Validate(string token, string productName)
         {
             try
@@ -109,12 +110,16 @@ namespace Phytel.API.AppDomain.Security
                 response.IsValid = false;
 
                 MEAPISession session = _objectContext.APISessions.Collection.FindOneById(ObjectId.Parse(token));
+
+                var query = Query<MEAPISession>.EQ(e => e.Id, ObjectId.Parse(token));
+                var update = Update<MEAPISession>.Set(e => e.SessionTimeOut, DateTime.Now.AddMinutes(session.SessionLengthInMinutes));
+
                 if (session != null && session.Product.ToUpper().Equals(productName.ToUpper()))
                 {
                     response.IsValid = true;
-                    session.SessionTimeOut = DateTime.Now.AddMinutes(session.SessionLengthInMinutes);
-                    //_objectContext.APISessions.Update()
-                    _objectContext.APISessions.Collection.Save(session);
+                    //session.SessionTimeOut = DateTime.Now.AddMinutes(session.SessionLengthInMinutes);
+                    _objectContext.APISessions.Collection.Update(query, update);
+                    //_objectContext.APISessions.Collection.Save(session);
                 }
                 else
                     throw new UnauthorizedAccessException("Security Token does not exist");
@@ -126,6 +131,32 @@ namespace Phytel.API.AppDomain.Security
                 throw ex;
             }
         }
+
+        //public ValidateTokenResponse Validate(string token, string productName)
+        //{
+        //    try
+        //    {
+        //        ValidateTokenResponse response = new ValidateTokenResponse();
+        //        response.IsValid = false;
+
+        //        MEAPISession session = _objectContext.APISessions.Collection.FindOneById(ObjectId.Parse(token));
+        //        if (session != null && session.Product.ToUpper().Equals(productName.ToUpper()))
+        //        {
+        //            response.IsValid = true;
+        //            session.SessionTimeOut = DateTime.Now.AddMinutes(session.SessionLengthInMinutes);
+        //            //_objectContext.APISessions.Update()
+        //            _objectContext.APISessions.Collection.Save(session);
+        //        }
+        //        else
+        //            throw new UnauthorizedAccessException("Security Token does not exist");
+
+        //        return response;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw ex;
+        //    }
+        //}
 
         public LogoutResponse Logout(string token, string context)
         {
