@@ -58,7 +58,6 @@ namespace Phytel.API.DataDomain.Patient.Service
         } 
         #endregion
 
-
         #region Objective
         public GetObjectiveDataResponse Get(GetObjectiveDataRequest request)
         {

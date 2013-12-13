@@ -9,6 +9,7 @@ namespace Phytel.API.DataDomain.LookUp
 {
     public static class LookUpDataManager
     {
+        #region Problems
         public static GetProblemDataResponse GetProblem(GetProblemDataRequest request)
         {
             GetProblemDataResponse response = new GetProblemDataResponse();
@@ -44,8 +45,10 @@ namespace Phytel.API.DataDomain.LookUp
                 response.Problems = problems.ToList();
             }
             return response;
-        }
+        } 
+        #endregion
 
+        #region Objective
         public static GetObjectiveDataResponse GetObjectiveByID(GetObjectiveDataRequest request)
         {
             GetObjectiveDataResponse result = new GetObjectiveDataResponse();
@@ -54,9 +57,10 @@ namespace Phytel.API.DataDomain.LookUp
             result = repo.FindObjectiveByID(request.ObjectiveID) as GetObjectiveDataResponse;
 
             return (result != null ? result : new GetObjectiveDataResponse());
-        }
+        } 
+        #endregion
 
-
+        #region Category
         public static GetCategoryDataResponse GetCategoryByID(GetCategoryDataRequest request)
         {
             GetCategoryDataResponse result = new GetCategoryDataResponse();
@@ -65,9 +69,7 @@ namespace Phytel.API.DataDomain.LookUp
             result = repo.FindCategoryByID(request.CategoryID) as GetCategoryDataResponse;
 
             return (result != null ? result : new GetCategoryDataResponse());
-        }
-
-
-
+        } 
+        #endregion
     }
 }   

@@ -7,6 +7,7 @@ namespace Phytel.API.DataDomain.LookUp.Test
     [TestClass]
     public class LookUpTest
     {
+        #region Problem
         [TestMethod]
         public void GetProblemByID_Test()
         {
@@ -21,7 +22,7 @@ namespace Phytel.API.DataDomain.LookUp.Test
 
             // Assert
             Assert.IsTrue(response.Problem.Name == "High Cholesterol");
-            
+
         }
 
         [TestMethod]
@@ -31,7 +32,7 @@ namespace Phytel.API.DataDomain.LookUp.Test
             string version = "v1";
             string contractNumber = "InHealth001";
             string context = "NG";
-            GetAllProblemsDataRequest request = new GetAllProblemsDataRequest {  Context = context, ContractNumber = contractNumber, Version = version };
+            GetAllProblemsDataRequest request = new GetAllProblemsDataRequest { Context = context, ContractNumber = contractNumber, Version = version };
 
             // Act
             GetAllProblemsDataResponse response = LookUpDataManager.GetAllProblems(request);
@@ -54,8 +55,8 @@ namespace Phytel.API.DataDomain.LookUp.Test
 
             // Assert
             Assert.AreNotEqual(0, response.Problems.Count);
-        }
-
+        } 
+        #endregion
 
         #region Objective
         [TestMethod]

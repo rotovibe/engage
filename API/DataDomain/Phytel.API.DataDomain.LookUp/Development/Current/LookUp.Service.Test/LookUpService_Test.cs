@@ -9,19 +9,20 @@ namespace Phytel.API.DataDomain.LookUp.Services.Test
     [TestClass]
     public class LookUpService_Test
     {
+        #region Problem
         [TestMethod]
         public void GetAllProblem_Test()
         {
             // Arrange
             string version = "v1";
             string contractNumber = "InHealth001";
-            string context ="NG";
+            string context = "NG";
             IRestClient client = new JsonServiceClient();
 
             // Act
             GetAllProblemsDataResponse response = client.Get<GetAllProblemsDataResponse>
                 (string.Format("{0}/{1}/{2}/{3}/problems",
-                  "http://localhost:8888/LookUp/",context,version, contractNumber));
+                  "http://localhost:8888/LookUp/", context, version, contractNumber));
 
             // Assert
             Assert.AreNotEqual(0, response.Problems.Count);
@@ -55,7 +56,7 @@ namespace Phytel.API.DataDomain.LookUp.Services.Test
             string version = "v1";
             string contractNumber = "InHealth001";
             string context = "NG";
-            
+
             IRestClient client = new JsonServiceClient();
 
             // Act
@@ -73,6 +74,7 @@ namespace Phytel.API.DataDomain.LookUp.Services.Test
 
             // Assert
             Assert.AreNotEqual(0, response.Problems.Count);
-        }
+        } 
+        #endregion
     }
 }
