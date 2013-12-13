@@ -1,4 +1,5 @@
 ﻿using MongoDB.Bson;
+using MongoDB.Bson.Serialization;
 using MongoDB.Driver;
 using MongoDB.Driver.Builders;
 using Phytel.API.AppDomain.Security.DTO;
@@ -43,7 +44,7 @@ namespace Phytel.API.AppDomain.Security
                         {
                             APIKey = apiKey,
                             Product = productName,
-                            SessionLengthInMinutes = user.SessionTimeout,
+                            //SessionLengthInMinutes = user.SessionTimeout,
                             SessionTimeOut = DateTime.Now.AddMinutes(user.SessionTimeout),
                             UserName = user.UserName
                         };
@@ -80,7 +81,7 @@ namespace Phytel.API.AppDomain.Security
                     {
                         APIKey = apiKey,
                         Product = productName,
-                        SessionLengthInMinutes = existingReponse.SessionTimeout,
+                        //SessionLengthInMinutes = existingReponse.SessionTimeout,
                         SessionTimeOut = DateTime.Now.AddMinutes(existingReponse.SessionTimeout),
                         UserName = existingReponse.UserName
                     };
@@ -109,18 +110,11 @@ namespace Phytel.API.AppDomain.Security
                 ValidateTokenResponse response = new ValidateTokenResponse();
                 response.IsValid = false;
 
-                MEAPISession session = _objectContext.APISessions.Collection.FindOneById(ObjectId.Parse(token));
+                FindAndModifyResult result = _objectContext.APISessions.Collection.FindAndModify(Query.EQ(MEAPISession.IdProperty, ObjectId.Parse(token)), SortBy.Null,
+                                            MongoDB.Driver.Builders.Update.Set(MEAPISession.SessionTimeOutProperty, DateTime.Now.AddMinutes(480)), true);
 
-                var query = Query<MEAPISession>.EQ(e => e.Id, ObjectId.Parse(token));
-                var update = Update<MEAPISession>.Set(e => e.SessionTimeOut, DateTime.Now.AddMinutes(session.SessionLengthInMinutes));
-
-                if (session != null && session.Product.ToUpper().Equals(productName.ToUpper()))
-                {
+                if (result != null && result.ModifiedDocument != null)
                     response.IsValid = true;
-                    //session.SessionTimeOut = DateTime.Now.AddMinutes(session.SessionLengthInMinutes);
-                    _objectContext.APISessions.Collection.Update(query, update);
-                    //_objectContext.APISessions.Collection.Save(session);
-                }
                 else
                     throw new UnauthorizedAccessException("Security Token does not exist");
 

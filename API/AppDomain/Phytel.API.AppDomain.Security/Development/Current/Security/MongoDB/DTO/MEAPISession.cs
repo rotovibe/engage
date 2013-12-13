@@ -7,17 +7,18 @@ using System.Collections.Generic;
 namespace Phytel.API.AppDomain.Security
 {
     [BsonIgnoreExtraElements(false)]
-    [MongoIndex(Keys = new string[] { TTLProperty }, TimeToLive=0)]
+    [MongoIndex(Keys = new string[] { SessionTimeOutProperty }, TimeToLive = 0)]
     public class MEAPISession : IMongoEntity<ObjectId>
     {
         public MEAPISession() { Id = ObjectId.GenerateNewId(); }
 
         public const string IdProperty = "_id";
         public const string UserNameProperty = "un";
+        public const string UserIDProperty = "uid";
         public const string ProductProperty = "prd";
         public const string APIKeyProperty = "apiKey";
+//        public const string SessionLengthInMinutesProperty = "slim";
         public const string SessionTimeOutProperty = "sto";
-        public const string TTLProperty = "ttl";
         public const string VersionProperty = "v";
         public const string ExtraElementsProperty = "ex";
 
@@ -28,6 +29,10 @@ namespace Phytel.API.AppDomain.Security
         [BsonIgnoreIfNull(true)]
         public string UserName { get; set; }
 
+        [BsonElement(UserIDProperty)]
+        [BsonIgnoreIfNull(true)]
+        public string UserID { get; set; }
+
         [BsonElement(APIKeyProperty)]
         [BsonIgnoreIfNull(true)]
         public string APIKey { get; set; }
@@ -36,14 +41,14 @@ namespace Phytel.API.AppDomain.Security
         [BsonIgnoreIfNull(true)]
         public string Product { get; set; }
 
-        [BsonElement(TTLProperty)]
         [BsonIgnoreIfNull(true)]
         [BsonDateTimeOptions(Kind = DateTimeKind.Local)]
+        [BsonElement(SessionTimeOutProperty)]
         public DateTime SessionTimeOut { get; set; }
 
-        [BsonElement(SessionTimeOutProperty)]
-        [BsonIgnoreIfNull(true)]
-        public int SessionLengthInMinutes { get; set; }
+        //[BsonElement(SessionLengthInMinutesProperty)]
+        //[BsonDefaultValue(60)]
+        //public int SessionLengthInMinutes { get; set; }
 
         [BsonElement(VersionProperty)]
         [BsonDefaultValue("v1")]
