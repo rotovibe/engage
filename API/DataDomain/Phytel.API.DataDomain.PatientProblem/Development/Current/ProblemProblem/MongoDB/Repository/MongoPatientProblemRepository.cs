@@ -91,7 +91,7 @@ namespace Phytel.API.DataDomain.PatientProblem
                         }
                     }
                 }
-                returnQuery = ((IEnumerable<object>)patientProblemList).AsQueryable<object>();
+                returnQuery = patientProblemList.AsQueryable<object>();
             }
 
             return new Tuple<string, IQueryable<object>>(expression.ExpressionID, returnQuery);

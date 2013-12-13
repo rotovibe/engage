@@ -113,7 +113,7 @@ namespace Phytel.API.DataDomain.PatientProblem
                 if (patientProblems != null)
                 {
                     response = new GetAllPatientProblemsDataResponse();
-                    response.PatientProblems = ((List<Phytel.API.DataDomain.PatientProblem.DTO.PatientProblemData>)patientProblems.Item2).ToList();
+                    response.PatientProblems = ((IEnumerable<Phytel.API.DataDomain.PatientProblem.DTO.PatientProblemData>)patientProblems.Item2).ToList();
                 }
             }
             return response;
