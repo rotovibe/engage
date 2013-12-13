@@ -113,6 +113,7 @@ namespace Phytel.API.AppDomain.Security
                 {
                     response.IsValid = true;
                     session.SessionTimeOut = DateTime.Now.AddMinutes(session.SessionLengthInMinutes);
+                    //_objectContext.APISessions.Update()
                     _objectContext.APISessions.Collection.Save(session);
                 }
                 else

@@ -17,13 +17,14 @@ namespace Phytel.API.AppDomain.Security.Service
             {
                 // validate user against apiuser datastore
                 response = SecurityManager.ValidateCredentials(request.Token, request.APIKey, request.Context);
+                return response;
             }
             catch(Exception ex)
             {
                 //TODO: Log this to C3 database via ASE
                 CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
-            }
             return response;
+        }
         }
 
         public UserAuthenticateResponse Post(UserAuthenticateRequest request)
@@ -33,13 +34,14 @@ namespace Phytel.API.AppDomain.Security.Service
             {
                 // validate user against apiuser datastore
                 response = SecurityManager.ValidateCredentials(request.UserName, request.Password, request.APIKey, request.Context);
+                return response;
             }
             catch (Exception ex)
             {
                 //TODO: Log this to C3 database via ASE
                 CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
-            }
             return response;
+        }
         }
 
         public ValidateTokenResponse Post(ValidateTokenRequest request)
@@ -49,13 +51,14 @@ namespace Phytel.API.AppDomain.Security.Service
             {
                 // validate user against apiuser datastore
                 response = SecurityManager.ValidateToken(request);
+                return response;
             }
             catch (Exception ex)
             {
                 //TODO: Log this to C3 database via ASE
                 CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+                return response;
             }
-            return response;
         }
 
         public LogoutResponse Post(LogoutRequest request)
@@ -64,13 +67,14 @@ namespace Phytel.API.AppDomain.Security.Service
             try
             {
                 response = SecurityManager.Logout(request);
+                return response;
             }
             catch (Exception ex)
             {
                 //TODO: Log this to C3 database via ASE
                 CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+                return response;
             }
-            return response;
         }
     }
 }
