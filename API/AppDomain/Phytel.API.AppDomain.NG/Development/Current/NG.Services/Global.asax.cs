@@ -1,3 +1,5 @@
+using ServiceStack.MiniProfiler;
+using ServiceStack.ServiceInterface.Admin;
 using ServiceStack.WebHost.Endpoints;
 using System;
 
@@ -15,6 +17,7 @@ namespace Phytel.API.AppDomain.NG.Service
             {
                 //register any dependencies your services use, e.g:
                 //container.Register<ICacheClient>(new MemoryCacheClient());
+                Plugins.Add(new RequestLogsFeature() { RequiredRoles = new string[] { } });
                 SetConfig(new EndpointHostConfig { AllowJsonpRequests = true });
 
                 //Permit modern browsers to allow sending of any REST HTTP Method
@@ -40,7 +43,13 @@ namespace Phytel.API.AppDomain.NG.Service
 
         protected void Application_BeginRequest(object sender, EventArgs e)
         {
+            if (Request.IsLocal)
+                Profiler.Start();
+        }
 
+        protected void Application_EndRequest(object src, EventArgs e)
+        {
+            Profiler.Stop();
         }
 
         protected void Application_AuthenticateRequest(object sender, EventArgs e)

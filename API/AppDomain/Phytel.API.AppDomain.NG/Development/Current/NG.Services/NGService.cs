@@ -23,13 +23,15 @@ namespace Phytel.API.AppDomain.NG.Service
                     response = ngm.GetPatient(request);
                 else
                     throw new UnauthorizedAccessException();
+
+                return response;
             }
             catch (Exception ex)
             {
                 //TODO: Log this to C3 database via ASE
                 CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+                return response;
             }
-            return response;
         }
 
         public GetPatientResponse Get(GetPatientRequest request)
@@ -45,13 +47,15 @@ namespace Phytel.API.AppDomain.NG.Service
                     response = ngm.GetPatient(request);
                 else
                     throw new UnauthorizedAccessException();
+
+                return response;
             }
             catch (Exception ex)
             {
                 //TODO: Log this to C3 database via ASE
                 CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+                return response;
             }
-            return response;
         }
 
         /// <summary>
@@ -71,13 +75,15 @@ namespace Phytel.API.AppDomain.NG.Service
                     response.PatientProblems = ngm.GetPatientProblems(request);
                 else
                     throw new UnauthorizedAccessException();
+
+                return response;
             }
             catch (Exception ex)
             {
                 //TODO: Log this to C3 database via ASE
                 CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+                return response;
             }
-            return response;
         }
 
         public GetAllProblemsResponse Get(GetAllProblemsRequest request)
@@ -92,13 +98,15 @@ namespace Phytel.API.AppDomain.NG.Service
                     response.Problems = ngm.GetProblems(request);
                 else
                     throw new UnauthorizedAccessException();
+
+                return response;
             }
             catch (Exception ex)
             {
                 //TODO: Log this to C3 database via ASE
                 CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+                return response;
             }
-            return response;
         }
 
         public GetAllCohortsResponse Get(GetAllCohortsRequest request)
@@ -115,13 +123,15 @@ namespace Phytel.API.AppDomain.NG.Service
                 }
                 else
                     throw new UnauthorizedAccessException();
+
+                return response;
             }
             catch (Exception ex)
             {
                 //TODO: Log this to C3 database via ASE
                 CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+                return response;
             }
-            return response;
         }
 
         public GetCohortPatientsResponse Get(GetCohortPatientsRequest request)
@@ -138,13 +148,15 @@ namespace Phytel.API.AppDomain.NG.Service
                 }
                 else
                     throw new UnauthorizedAccessException();
+
+                return response;
             }
             catch (Exception ex)
             {
                 //TODO: Log this to C3 database via ASE
                 CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+                return response;
             }
-            return response;
         }
 
         public GetAllSettingsResponse Get(GetAllSettingsRequest request)
@@ -161,15 +173,14 @@ namespace Phytel.API.AppDomain.NG.Service
                 }
                 else
                     throw new UnauthorizedAccessException();
+                return response;
             }
             catch (Exception ex)
             {
                 //TODO: Log this to C3 database via ASE
                 CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+                return response;
             }
-            return response;
-        
-        
         }
 
     }
