@@ -13,8 +13,8 @@ namespace Phytel.API.AppDomain.Security.DTO
         [ApiMember(Name = "APIKey", Description = "API License Key unique to the product requesting access", ParameterType = "body", DataType = "string", IsRequired = true)]
         public string APIKey { get; set; }
 
-        [ApiMember(Name = "Product", Description = "Product Code requesting access to the API", ParameterType = "body", DataType = "string", IsRequired = true)]
-        public string Product { get; set; }
+        [ApiMember(Name = "Context", Description = "Context requesting access to the API", ParameterType = "body", DataType = "string", IsRequired = true)]
+        public string Context { get; set; }
         
         [ApiMember(Name = "Version", Description = "Version of the API being called", ParameterType = "path", DataType = "string", IsRequired = false)]
         public string Version { get; set; }

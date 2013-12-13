@@ -16,7 +16,7 @@ namespace Phytel.API.AppDomain.Security.Service
             try
             {
                 // validate user against apiuser datastore
-                response = SecurityManager.ValidateCredentials(request.Token, request.APIKey, request.Product);
+                response = SecurityManager.ValidateCredentials(request.Token, request.APIKey, request.Context);
             }
             catch(Exception ex)
             {
@@ -32,7 +32,7 @@ namespace Phytel.API.AppDomain.Security.Service
             try
             {
                 // validate user against apiuser datastore
-                response = SecurityManager.ValidateCredentials(request.UserName, request.Password, request.APIKey, request.Product);
+                response = SecurityManager.ValidateCredentials(request.UserName, request.Password, request.APIKey, request.Context);
             }
             catch (Exception ex)
             {

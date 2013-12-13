@@ -46,7 +46,7 @@ namespace Phytel.API.DataDomain.PatientProblem
 
         public Tuple<string, IQueryable<object>> Select(Interface.APIExpression expression)
         {
-            IQueryable<T> returnQuery = null;
+            IQueryable<object> returnQuery = null;
             IMongoQuery mQuery = null;
 
             List<SelectExpression> selectExpressions = expression.Expressions.ToList();
@@ -91,10 +91,10 @@ namespace Phytel.API.DataDomain.PatientProblem
                         }
                     }
                 }
-                returnQuery = ((IEnumerable<T>)patientProblemList).AsQueryable<T>();
+                returnQuery = ((IEnumerable<object>)patientProblemList).AsQueryable<object>();
             }
 
-            return new Tuple<string, IQueryable<T>>(expression.ExpressionID, returnQuery);
+            return new Tuple<string, IQueryable<object>>(expression.ExpressionID, returnQuery);
         }
 
 

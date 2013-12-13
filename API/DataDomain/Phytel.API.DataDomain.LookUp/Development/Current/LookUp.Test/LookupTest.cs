@@ -56,5 +56,45 @@ namespace Phytel.API.DataDomain.LookUp.Test
             Assert.AreNotEqual(0, response.Problems.Count);
         }
 
+
+        #region Objective
+        [TestMethod]
+        public void GetObjectiveByID_Test()
+        {
+            // Arrange
+            string version = "v1";
+            string contractNumber = "InHealth001";
+            string context = "NG";
+            GetObjectiveDataRequest request = new GetObjectiveDataRequest { ObjectiveID = "528aa055d4332317acc50978", Context = context, ContractNumber = contractNumber, Version = version };
+
+            // Act
+            GetObjectiveDataResponse response = LookUpDataManager.GetObjectiveByID(request);
+
+            // Assert
+            Assert.IsTrue(response.Objective.Name == "All");
+
+        }
+
+        #endregion
+
+        #region Category
+        [TestMethod]
+        public void GetCategoryByID_Test()
+        {
+            // Arrange
+            string version = "v1";
+            string contractNumber = "InHealth001";
+            string context = "NG";
+            GetCategoryDataRequest request = new GetCategoryDataRequest { CategoryID = "528aa055d4332317acc50978", Context = context, ContractNumber = contractNumber, Version = version };
+
+            // Act
+            GetCategoryDataResponse response = LookUpDataManager.GetCategoryByID(request);
+
+            // Assert
+            Assert.IsTrue(response.Category.Text == "All");
+
+        } 
+        #endregion
+
     }
 }

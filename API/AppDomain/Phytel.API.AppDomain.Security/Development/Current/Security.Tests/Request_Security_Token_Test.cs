@@ -18,7 +18,7 @@ namespace Phytel.API.AppDomain.Security.Services.Test
             IRestClient client = new JsonServiceClient();
 
             AuthenticateResponse response = client.Post<AuthenticateResponse>("http://localhost:999/api/security/login",
-                new AuthenticateRequest { APIKey = "12345", Product = "NG", Token = "1234" } as object);
+                new AuthenticateRequest { APIKey = "12345", Context = "NG", Token = "1234" } as object);
             sampleValue = response.UserName;
             Assert.AreEqual(controlValue, sampleValue);
         }

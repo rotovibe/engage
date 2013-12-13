@@ -69,6 +69,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="GetAllObjectivesDataRequest.cs" />
+    <Compile Include="GetAllObjectivesDataResponse.cs" />
+    <Compile Include="GetCategoryDataRequest.cs" />
+    <Compile Include="GetCategoryDataResponse.cs" />
+    <Compile Include="GetObjectiveDataRequest.cs" />
+    <Compile Include="GetObjectiveDataResponse.cs" />
     <Compile Include="ProblemData.cs" />
     <Compile Include="SearchProblemsDataResponse .cs" />
     <Compile Include="GetAllProblemsDataResponse.cs" />

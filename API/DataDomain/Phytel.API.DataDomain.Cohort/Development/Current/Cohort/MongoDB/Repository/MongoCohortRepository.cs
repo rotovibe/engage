@@ -83,12 +83,12 @@ namespace Phytel.API.DataDomain.Cohort
 
                 int count = responses.Count;
             }
-            return new Tuple<string, IQueryable<T>>(string.Empty, null);
+            return new Tuple<string, IQueryable<object>>(string.Empty, null);
         }
 
         public IQueryable<object> SelectAll()
         {
-            IQueryable<T> query = null;
+            IQueryable<object> query = null;
             List<API.DataDomain.Cohort.DTO.CohortData> cohorts = null;
             using (CohortMongoContext ctx = new CohortMongoContext(_dbName))
             {
@@ -103,7 +103,7 @@ namespace Phytel.API.DataDomain.Cohort
                     }
                 }
             }
-            query = ((IEnumerable<T>)cohorts).AsQueryable<T>();
+            query = ((IEnumerable<object>)cohorts).AsQueryable<object>();
 
             return query;
         }

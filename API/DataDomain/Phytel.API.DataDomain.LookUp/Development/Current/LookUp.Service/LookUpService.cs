@@ -57,5 +57,44 @@ namespace Phytel.API.DataDomain.Patient.Service
             return response;
         } 
         #endregion
+
+
+        #region Objective
+        public GetObjectiveDataResponse Get(GetObjectiveDataRequest request)
+        {
+            GetObjectiveDataResponse response = new GetObjectiveDataResponse();
+            try
+            {
+                response = LookUpDataManager.GetObjectiveByID(request);
+                response.Version = request.Version;
+            }
+            catch (Exception ex)
+            {
+                //TODO: Log this to C3 database via ASE
+                base.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                response.Status = new ServiceStack.ServiceInterface.ServiceModel.ResponseStatus("Exception", ex.Message);
+            }
+            return response;
+        } 
+        #endregion
+
+        #region Category
+        public GetCategoryDataResponse Get(GetCategoryDataRequest request)
+        {
+            GetCategoryDataResponse response = new GetCategoryDataResponse();
+            try
+            {
+                response = LookUpDataManager.GetCategoryByID(request);
+                response.Version = request.Version;
+            }
+            catch (Exception ex)
+            {
+                //TODO: Log this to C3 database via ASE
+                base.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                response.Status = new ServiceStack.ServiceInterface.ServiceModel.ResponseStatus("Exception", ex.Message);
+            }
+            return response;
+        } 
+        #endregion
     }
 }

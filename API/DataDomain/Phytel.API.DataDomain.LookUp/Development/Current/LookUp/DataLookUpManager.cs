@@ -23,7 +23,7 @@ namespace Phytel.API.DataDomain.LookUp
             GetAllProblemsDataResponse response = new GetAllProblemsDataResponse();
 
             ILookUpRepository<ProblemData> repo = Phytel.API.DataDomain.LookUp.LookUpRepositoryFactory<ProblemData>.GetLookUpRepository(request.ContractNumber, request.Context);
-            IQueryable<ProblemData> problems = repo.GetAllProblems() as IQueryable<ProblemData>;
+            List<ProblemData> problems = repo.GetAllProblems();
 
             if (problems != null)
             {
@@ -37,13 +37,34 @@ namespace Phytel.API.DataDomain.LookUp
             SearchProblemsDataResponse response = new SearchProblemsDataResponse();
 
             ILookUpRepository<ProblemData> repo = Phytel.API.DataDomain.LookUp.LookUpRepositoryFactory<ProblemData>.GetLookUpRepository(request.ContractNumber, request.Context);
-            IQueryable<ProblemData> problems = repo.SearchProblem(request) as IQueryable<ProblemData>;
+            List<ProblemData> problems = repo.SearchProblem(request);
 
             if (problems != null)
             {
                 response.Problems = problems.ToList();
             }
             return response;
+        }
+
+        public static GetObjectiveDataResponse GetObjectiveByID(GetObjectiveDataRequest request)
+        {
+            GetObjectiveDataResponse result = new GetObjectiveDataResponse();
+
+            ILookUpRepository<GetObjectiveDataResponse> repo = LookUpRepositoryFactory<GetObjectiveDataResponse>.GetLookUpRepository(request.ContractNumber, request.Context);
+            result = repo.FindByID(request.ObjectiveID) as GetObjectiveDataResponse;
+
+            return (result != null ? result : new GetObjectiveDataResponse());
+        }
+
+
+        public static GetCategoryDataResponse GetCategoryByID(GetCategoryDataRequest request)
+        {
+            GetCategoryDataResponse result = new GetCategoryDataResponse();
+
+            ILookUpRepository<GetCategoryDataResponse> repo = LookUpRepositoryFactory<GetCategoryDataResponse>.GetLookUpRepository(request.ContractNumber, request.Context);
+            result = repo.FindByID(request.CategoryID) as GetCategoryDataResponse;
+
+            return (result != null ? result : new GetCategoryDataResponse());
         }
 
 
