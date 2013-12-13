@@ -25,7 +25,7 @@ namespace Phytel.API.DataDomain.PatientProblem
             IRestClient client = new JsonServiceClient();
             SearchProblemsDataResponse problemLookUpResponse = client.Post<SearchProblemsDataResponse>
                 (string.Format("{0}/{1}/{2}/{3}/problems",
-                   "http://azurePhytelDev.cloudapp.net:59901/Lookup",// DDLookUpServiceUrl,
+                   DDLookUpServiceUrl,
                     request.Context,
                     request.Version,
                     request.ContractNumber
@@ -107,7 +107,6 @@ namespace Phytel.API.DataDomain.PatientProblem
                 APIExpression apiExpression = new APIExpression();
                 apiExpression.Expressions = selectExpressions;
 
-                //Tuple<string, IQueryable<Phytel.API.DataDomain.PatientProblem.DTO.PatientProblemData>> patientProblems = repo.Select(apiExpression);
                 Tuple<string, IQueryable<object>> patientProblems = repo.Select(apiExpression);
 
                 if (patientProblems != null)
