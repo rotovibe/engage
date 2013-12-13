@@ -125,11 +125,11 @@ namespace Phytel.API.DataDomain.LookUp
                         List<MEProblem> meproblems = new List<MEProblem>();
                         if (string.IsNullOrEmpty(request.Type))
                         {
-                            meproblems = ((IEnumerable<MEProblem>)meLookup.Data).Where(a => a.Active == request.Active).ToList();
+                            meproblems = meLookup.Data.Cast<MEProblem>().Where(a => a.Active == request.Active).ToList();
                         }
                         else
                         {
-                            meproblems = ((IEnumerable<MEProblem>)meLookup.Data).Where(a => a.Type == request.Type && a.Active == request.Active).ToList();
+                            meproblems = meLookup.Data.Cast<MEProblem>().Where(a => a.Type == request.Type && a.Active == request.Active).ToList();
                         }
 
                         foreach (MEProblem m in meproblems)

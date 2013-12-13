@@ -47,7 +47,7 @@ namespace Phytel.API.DataDomain.LookUp.Test
             string version = "v1";
             string contractNumber = "InHealth001";
             string context = "NG";
-            SearchProblemsDataRequest request = new SearchProblemsDataRequest { Active = true, Context = context, ContractNumber = contractNumber, Version = version };
+            SearchProblemsDataRequest request = new SearchProblemsDataRequest { Active = true, Type = "Chronic", Context = context, ContractNumber = contractNumber, Version = version };
 
             // Act
             SearchProblemsDataResponse response = LookUpDataManager.SearchProblem(request);
@@ -65,13 +65,13 @@ namespace Phytel.API.DataDomain.LookUp.Test
             string version = "v1";
             string contractNumber = "InHealth001";
             string context = "NG";
-            GetObjectiveDataRequest request = new GetObjectiveDataRequest { ObjectiveID = "528aa055d4332317acc50978", Context = context, ContractNumber = contractNumber, Version = version };
+            GetObjectiveDataRequest request = new GetObjectiveDataRequest { ObjectiveID = "52a0beb9d43323141c9eb26c", Context = context, ContractNumber = contractNumber, Version = version };
 
             // Act
             GetObjectiveDataResponse response = LookUpDataManager.GetObjectiveByID(request);
 
             // Assert
-            Assert.IsTrue(response.Objective.Name == "All");
+            Assert.IsTrue(response.Objective.Name == "Reduce Risk Factors");
 
         }
 
@@ -85,13 +85,13 @@ namespace Phytel.API.DataDomain.LookUp.Test
             string version = "v1";
             string contractNumber = "InHealth001";
             string context = "NG";
-            GetCategoryDataRequest request = new GetCategoryDataRequest { CategoryID = "528aa055d4332317acc50978", Context = context, ContractNumber = contractNumber, Version = version };
+            GetCategoryDataRequest request = new GetCategoryDataRequest { CategoryID = "52a0bc3fd4332322b4aed5b5", Context = context, ContractNumber = contractNumber, Version = version };
 
             // Act
             GetCategoryDataResponse response = LookUpDataManager.GetCategoryByID(request);
 
             // Assert
-            Assert.IsTrue(response.Category.Text == "All");
+            Assert.IsTrue(response.Category.Text == "Cost");
 
         } 
         #endregion
