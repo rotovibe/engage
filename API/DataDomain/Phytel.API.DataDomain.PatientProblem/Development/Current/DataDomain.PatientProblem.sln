@@ -4,8 +4,6 @@ VisualStudioVersion = 12.0.21005.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.PatientProblem.DTO", "PatientProblem.DTOs\DataDomain.PatientProblem.DTO.csproj", "{F133E537-1D48-4A42-ABA9-5587E057F5B3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.PatientProblem.Services.Test", "PatientProblem.Services.Tests\DataDomain.PatientProblem.Services.Test.csproj", "{F6EF22D5-BD24-46B5-A9B0-3CE5BDDB5343}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.PatientProblem.Test", "PatientProblem.Tests\DataDomain.PatientProblem.Test.csproj", "{1FDE97CB-3E85-41FB-ABFA-A62720C99FCB}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.PatientProblem", "ProblemProblem\DataDomain.PatientProblem.csproj", "{AFD0F5B1-A29E-402C-958B-D6D82B4278E5}"
@@ -20,6 +18,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PhytelServices", "..\..\..\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.LookUp.DTO", "..\..\..\Phytel.API.DataDomain.LookUp\Development\Current\LookUp.DTO\DataDomain.LookUp.DTO.csproj", "{4885FE36-03DB-47B7-BE7E-33260943A9DC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.PatientProblem.Service.Test", "PatientProblem.Services.Tests\DataDomain.PatientProblem.Service.Test.csproj", "{F6EF22D5-BD24-46B5-A9B0-3CE5BDDB5343}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
 		SccNumberOfProjects = 9
@@ -30,45 +30,45 @@ Global
 		SccAuxPath0 = http://hillstfs2013:8080/tfs/phytel
 		SccLocalPath0 = PatientProblem.DTOs
 		SccProvider0 = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccProjectUniqueName1 = PatientProblem.Services.Tests\\DataDomain.PatientProblem.Services.Test.csproj
-		SccProjectName1 = PatientProblem.Services.Tests
+		SccProjectUniqueName1 = PatientProblem.Tests\\DataDomain.PatientProblem.Test.csproj
+		SccProjectName1 = PatientProblem.Tests
 		SccAuxPath1 = http://hillstfs2013:8080/tfs/phytel
-		SccLocalPath1 = PatientProblem.Services.Tests
+		SccLocalPath1 = PatientProblem.Tests
 		SccProvider1 = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccProjectUniqueName2 = PatientProblem.Tests\\DataDomain.PatientProblem.Test.csproj
-		SccProjectName2 = PatientProblem.Tests
+		SccProjectUniqueName2 = ProblemProblem\\DataDomain.PatientProblem.csproj
+		SccProjectName2 = ProblemProblem
 		SccAuxPath2 = http://hillstfs2013:8080/tfs/phytel
-		SccLocalPath2 = PatientProblem.Tests
+		SccLocalPath2 = ProblemProblem
 		SccProvider2 = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccProjectUniqueName3 = ProblemProblem\\DataDomain.PatientProblem.csproj
-		SccProjectName3 = ProblemProblem
+		SccProjectUniqueName3 = PatientProblem.Services\\DataDomain.PatientProblem.Service.csproj
+		SccProjectName3 = PatientProblem.Services
 		SccAuxPath3 = http://hillstfs2013:8080/tfs/phytel
-		SccLocalPath3 = ProblemProblem
+		SccLocalPath3 = PatientProblem.Services
 		SccProvider3 = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccProjectUniqueName4 = PatientProblem.Services\\DataDomain.PatientProblem.Service.csproj
-		SccProjectName4 = PatientProblem.Services
+		SccProjectUniqueName4 = ..\\..\\..\\..\\Interfaces\\Development\\Current\\Phytel.API.Interface\\Phytel.API.Interface.csproj
+		SccProjectName4 = ../../../../Interfaces/Development/Current/Phytel.API.Interface
 		SccAuxPath4 = http://hillstfs2013:8080/tfs/phytel
-		SccLocalPath4 = PatientProblem.Services
+		SccLocalPath4 = ..\\..\\..\\..\\Interfaces\\Development\\Current\\Phytel.API.Interface
 		SccProvider4 = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccProjectUniqueName5 = ..\\..\\..\\..\\Interfaces\\Development\\Current\\Phytel.API.Interface\\Phytel.API.Interface.csproj
-		SccProjectName5 = ../../../../Interfaces/Development/Current/Phytel.API.Interface
+		SccProjectUniqueName5 = ..\\..\\..\\..\\..\\..\\Shared\\PhytelServices\\Development\\Current\\Phytel.Mongo\\Phytel.Mongo.csproj
+		SccProjectName5 = ../../../../../../Shared/PhytelServices/Development/Current/Phytel.Mongo
 		SccAuxPath5 = http://hillstfs2013:8080/tfs/phytel
-		SccLocalPath5 = ..\\..\\..\\..\\Interfaces\\Development\\Current\\Phytel.API.Interface
+		SccLocalPath5 = ..\\..\\..\\..\\..\\..\\Shared\\PhytelServices\\Development\\Current\\Phytel.Mongo
 		SccProvider5 = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccProjectUniqueName6 = ..\\..\\..\\..\\..\\..\\Shared\\PhytelServices\\Development\\Current\\Phytel.Mongo\\Phytel.Mongo.csproj
-		SccProjectName6 = ../../../../../../Shared/PhytelServices/Development/Current/Phytel.Mongo
+		SccProjectUniqueName6 = ..\\..\\..\\..\\..\\..\\Shared\\PhytelServices\\Development\\Current\\PhytelServices\\PhytelServices.csproj
+		SccProjectName6 = ../../../../../../Shared/PhytelServices/Development/Current/PhytelServices
 		SccAuxPath6 = http://hillstfs2013:8080/tfs/phytel
-		SccLocalPath6 = ..\\..\\..\\..\\..\\..\\Shared\\PhytelServices\\Development\\Current\\Phytel.Mongo
+		SccLocalPath6 = ..\\..\\..\\..\\..\\..\\Shared\\PhytelServices\\Development\\Current\\PhytelServices
 		SccProvider6 = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccProjectUniqueName7 = ..\\..\\..\\..\\..\\..\\Shared\\PhytelServices\\Development\\Current\\PhytelServices\\PhytelServices.csproj
-		SccProjectName7 = ../../../../../../Shared/PhytelServices/Development/Current/PhytelServices
+		SccProjectUniqueName7 = ..\\..\\..\\Phytel.API.DataDomain.LookUp\\Development\\Current\\LookUp.DTO\\DataDomain.LookUp.DTO.csproj
+		SccProjectName7 = ../../../Phytel.API.DataDomain.LookUp/Development/Current/LookUp.DTO
 		SccAuxPath7 = http://hillstfs2013:8080/tfs/phytel
-		SccLocalPath7 = ..\\..\\..\\..\\..\\..\\Shared\\PhytelServices\\Development\\Current\\PhytelServices
+		SccLocalPath7 = ..\\..\\..\\Phytel.API.DataDomain.LookUp\\Development\\Current\\LookUp.DTO
 		SccProvider7 = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccProjectUniqueName8 = ..\\..\\..\\Phytel.API.DataDomain.LookUp\\Development\\Current\\LookUp.DTO\\DataDomain.LookUp.DTO.csproj
-		SccProjectName8 = ../../../Phytel.API.DataDomain.LookUp/Development/Current/LookUp.DTO
+		SccProjectUniqueName8 = PatientProblem.Services.Tests\\DataDomain.PatientProblem.Service.Test.csproj
+		SccProjectName8 = PatientProblem.Services.Tests
 		SccAuxPath8 = http://hillstfs2013:8080/tfs/phytel
-		SccLocalPath8 = ..\\..\\..\\Phytel.API.DataDomain.LookUp\\Development\\Current\\LookUp.DTO
+		SccLocalPath8 = PatientProblem.Services.Tests
 		SccProvider8 = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -80,10 +80,6 @@ Global
 		{F133E537-1D48-4A42-ABA9-5587E057F5B3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F133E537-1D48-4A42-ABA9-5587E057F5B3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F133E537-1D48-4A42-ABA9-5587E057F5B3}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F6EF22D5-BD24-46B5-A9B0-3CE5BDDB5343}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F6EF22D5-BD24-46B5-A9B0-3CE5BDDB5343}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F6EF22D5-BD24-46B5-A9B0-3CE5BDDB5343}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F6EF22D5-BD24-46B5-A9B0-3CE5BDDB5343}.Release|Any CPU.Build.0 = Release|Any CPU
 		{1FDE97CB-3E85-41FB-ABFA-A62720C99FCB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{1FDE97CB-3E85-41FB-ABFA-A62720C99FCB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1FDE97CB-3E85-41FB-ABFA-A62720C99FCB}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -112,6 +108,10 @@ Global
 		{4885FE36-03DB-47B7-BE7E-33260943A9DC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4885FE36-03DB-47B7-BE7E-33260943A9DC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4885FE36-03DB-47B7-BE7E-33260943A9DC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F6EF22D5-BD24-46B5-A9B0-3CE5BDDB5343}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F6EF22D5-BD24-46B5-A9B0-3CE5BDDB5343}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F6EF22D5-BD24-46B5-A9B0-3CE5BDDB5343}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F6EF22D5-BD24-46B5-A9B0-3CE5BDDB5343}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
