@@ -17,12 +17,6 @@ namespace Phytel.API.DataDomain.LookUp.DTO
 
         [BsonElement(CategoriesProperty)]
         [BsonIgnoreIfNull(true)]
-        public List<CategoryInfo> Categories { get; set; }
-    }
-
-    public class CategoryInfo
-    { 
-        public ObjectId Id { get; set; }
-        public string Text { get; set; }
+        public List<ObjectId> Categories { get; set; }
     }
 }
