@@ -128,12 +128,12 @@ namespace NGTestData
                             Featured = true,
                             LastUpdatedOn = DateTime.Now,
                             Level = 1,
-                            ProblemID = problems[probID].Id,
+                            //ProblemID = problems[probID].Id,
                             StartDate = null,
                             TTLDate = null,
                             Version = "v1"
                         });
-                    currentPatientView.SearchFields.Add(new SearchField { Active = true, FieldName = "Problem", Value = problems[probID].Id.ToString() });
+                    //currentPatientView.SearchFields.Add(new SearchField { Active = true, FieldName = "Problem", Value = problems[probID].Id.ToString() });
                 }
 
                 cohortPatients.Add(currentPatientView);
