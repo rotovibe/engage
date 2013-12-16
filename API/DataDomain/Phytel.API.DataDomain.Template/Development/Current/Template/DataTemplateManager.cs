@@ -2,6 +2,7 @@ using Phytel.API.DataDomain.Template.DTO;
 using System.Data.SqlClient;
 using Phytel.API.DataDomain.Template;
 using System;
+using Phytel.API.Common.Format;
 
 namespace Phytel.API.DataDomain.Template
 {
@@ -15,6 +16,12 @@ namespace Phytel.API.DataDomain.Template
 
                 ITemplateRepository<GetTemplateResponse> repo = TemplateRepositoryFactory<GetTemplateResponse>.GetTemplateRepository(request.ContractNumber, request.Context);
                 result = repo.FindByID(request.TemplateID) as GetTemplateResponse;
+
+                // if cross-domain service call has error
+                //if (result.Status != null)
+                //{
+                //    throw new ArgumentException(result.Status.Message, new Exception() { Source = result.Status.StackTrace });
+                //}
 
                 return (result != null ? result : new GetTemplateResponse());
             }
@@ -31,6 +38,7 @@ namespace Phytel.API.DataDomain.Template
                 GetAllTemplatesResponse result = new GetAllTemplatesResponse();
 
                 ITemplateRepository<GetAllTemplatesResponse> repo = TemplateRepositoryFactory<GetAllTemplatesResponse>.GetTemplateRepository(request.ContractNumber, request.Context);
+               
 
                 return result;
             }

@@ -21,7 +21,7 @@ namespace Phytel.API.DataDomain.Template
             _dbName = contractDBName;
         }
 
-        public T Insert(T newEntity)
+        public object Insert(T newEntity)
         {
             try
             {
@@ -31,7 +31,7 @@ namespace Phytel.API.DataDomain.Template
             catch (Exception ex) { throw ex; }
         }
 
-        public T InsertAll(List<T> entities)
+        public object InsertAll(List<T> entities)
         {
             try
             {
@@ -71,7 +71,7 @@ namespace Phytel.API.DataDomain.Template
             catch (Exception ex) { throw ex; }
         }
 
-        public Tuple<string, IQueryable<T>> Select(Interface.APIExpression expression)
+        public Tuple<string, IQueryable<object>> Select(Interface.APIExpression expression)
         {
             try
             {
@@ -81,7 +81,7 @@ namespace Phytel.API.DataDomain.Template
             catch (Exception ex) { throw ex; }
         }
 
-        public IQueryable<T> SelectAll()
+        public IQueryable<object> SelectAll()
         {
             try
             {
@@ -91,7 +91,7 @@ namespace Phytel.API.DataDomain.Template
             catch (Exception ex) { throw ex; }
         }
 
-        public T Update(T entity)
+        public object Update(T entity)
         {
             try
             {

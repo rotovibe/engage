@@ -1,3 +1,4 @@
+using ServiceStack.MiniProfiler;
 using ServiceStack.ServiceInterface.Admin;
 using ServiceStack.WebHost.Endpoints;
 using System;
@@ -32,7 +33,8 @@ namespace Phytel.API.DataDomain.Template.Service
 
         protected void Application_BeginRequest(object sender, EventArgs e)
         {
-
+            if (Request.IsLocal)
+                Profiler.Start();
         }
 
         protected void Application_AuthenticateRequest(object sender, EventArgs e)
