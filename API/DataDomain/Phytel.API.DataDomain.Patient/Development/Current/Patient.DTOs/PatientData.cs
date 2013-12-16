@@ -18,5 +18,14 @@ namespace Phytel.API.DataDomain.Patient.DTO
         public string DOB { get; set; }
         public string Version { get; set; }
         public string DisplayPatientSystemID { get; set; }
+        public Priority Priority { get; set; }
+    }
+
+    public enum Priority
+    {
+        NotSet = 0,
+        Low = 1,
+        Medium = 2,
+        High = 3
     }
 }

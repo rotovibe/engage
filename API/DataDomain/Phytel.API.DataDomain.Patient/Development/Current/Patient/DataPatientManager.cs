@@ -45,5 +45,13 @@ namespace Phytel.API.DataDomain.Patient
            PutPatientDataResponse result = repo.Insert(request) as PutPatientDataResponse;
            return result;
         }
+
+        public static PutPatientPriorityResponse UpdatePatientPriority(PutPatientPriorityRequest request)
+        {
+            PutPatientPriorityResponse response = new PutPatientPriorityResponse();
+            //IPatientRepository<PutPatientDataRequest> repo = PatientRepositoryFactory<PutPatientDataRequest>.GetPatientRepository(request.ContractNumber, request.Context);
+            //PutPatientDataResponse response = repo.Insert(request) as PutPatientDataResponse;
+            return response;
+        }
     }
 }   

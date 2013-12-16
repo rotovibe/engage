@@ -22,6 +22,7 @@ namespace Phytel.API.DataDomain.Patient.DTO
         public const string MiddleNameProperty = "mn";
         public const string SuffixProperty = "sfx";
         public const string PreferredProperty = "pfn";
+        public const string PriorityProperty = "pri";
         public const string ExtraElementsProperty = "ex";
         public const string VersionProperty = "v";
         public const string UpdatedByProperty = "uby";
@@ -64,6 +65,10 @@ namespace Phytel.API.DataDomain.Patient.DTO
         [BsonIgnoreIfNull(true)]
         public string DOB { get; set; }
 
+        [BsonElement(PriorityProperty)]
+        [BsonIgnoreIfNull(true)]
+        public MEPriority Priority { get; set; }
+
         [BsonElement(ExtraElementsProperty)]
         [BsonExtraElements()]
         [BsonIgnoreIfNull(true)]
@@ -90,5 +95,13 @@ namespace Phytel.API.DataDomain.Patient.DTO
         [BsonIgnoreIfNull(true)]
         [BsonDateTimeOptions(Kind = System.DateTimeKind.Local)]
         public System.DateTime? LastUpdatedOn { get; set; }
+    }
+
+    public enum MEPriority
+    {
+        NotSet = 0,
+        Low = 1,
+        Medium = 2,
+        High = 3
     }
 }

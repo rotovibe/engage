@@ -6,7 +6,7 @@ using ServiceStack.ServiceClient.Web;
 namespace Phytel.API.DataDomain.Patient.Service.Test
 {
     [TestClass]
-    public class User_Services_Test
+    public class Patient_Priority_Test
     {
         [TestMethod]
         public void GetPatientByID()

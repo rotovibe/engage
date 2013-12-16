@@ -57,7 +57,21 @@ namespace Phytel.API.DataDomain.Patient.Service
             }
             return response;
         }
-          
-         
+
+        public PutPatientPriorityResponse Put(PutPatientPriorityRequest request)
+        {
+            PutPatientPriorityResponse response = new PutPatientPriorityResponse();
+            try
+            {
+                response = PatientDataManager.UpdatePatientPriority(request);
+                response.Version = request.Version;
+            }
+            catch (Exception ex)
+            {
+                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+            }
+            return response;
+        }    
+ 
     }
 }
