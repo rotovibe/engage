@@ -92,14 +92,6 @@
     <Compile Include="SQL\Repository\C3UserRepository.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\..\..\..\Shared\PhytelServices\Development\Current\Phytel.Mongo\Phytel.Mongo.csproj">
-      <Project>{7c9e786c-e4f7-4382-bde4-8dbf980ea013}</Project>
-      <Name>Phytel.Mongo</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\..\..\..\..\Shared\PhytelServices\Development\Current\PhytelServices\PhytelServices.csproj">
-      <Project>{d790f618-438b-4c39-abe5-1346122273ac}</Project>
-      <Name>PhytelServices</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\..\..\..\DataDomain\Phytel.API.DataDomain.Patient\Development\Current\Patient.DTOs\DataDomain.Patient.DTO.csproj">
       <Project>{1b3148a8-fb57-4461-91bc-f1cd38a013b6}</Project>
       <Name>DataDomain.Patient.DTO</Name>
