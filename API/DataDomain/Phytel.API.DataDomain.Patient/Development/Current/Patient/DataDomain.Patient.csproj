@@ -84,14 +84,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\..\..\..\Shared\PhytelServices\Development\Current\Phytel.Mongo\Phytel.Mongo.csproj">
-      <Project>{7c9e786c-e4f7-4382-bde4-8dbf980ea013}</Project>
-      <Name>Phytel.Mongo</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\..\..\..\..\Shared\PhytelServices\Development\Current\PhytelServices\PhytelServices.csproj">
-      <Project>{d790f618-438b-4c39-abe5-1346122273ac}</Project>
-      <Name>PhytelServices</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\..\..\..\Common\Phytel.API.Common\Development\Current\Phytel.API.Common.csproj">
       <Project>{25cf3c3f-221f-4a49-b5ef-a8a5fcf9a5ba}</Project>
       <Name>Phytel.API.Common</Name>
