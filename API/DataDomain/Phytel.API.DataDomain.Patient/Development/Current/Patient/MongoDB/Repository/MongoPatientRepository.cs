@@ -88,6 +88,7 @@ namespace Phytel.API.DataDomain.Patient
                                 PreferredName = p.PreferredName,
                                 MiddleName = p.MiddleName,
                                 Suffix = p.Suffix,
+                                Priority = (DTO.Priority)((int)p.Priority),
                                 DisplayPatientSystemID = p.DisplayPatientSystemID.ToString()
                             }).FirstOrDefault();
             }
@@ -137,6 +138,7 @@ namespace Phytel.API.DataDomain.Patient
                         MiddleName = mp.MiddleName,
                         Suffix = mp.Suffix,
                         Version = mp.Version,
+                        Priority = (DTO.Priority)((int)mp.Priority),
                         DisplayPatientSystemID = mp.DisplayPatientSystemID.ToString()
                     });
                 }
@@ -151,6 +153,24 @@ namespace Phytel.API.DataDomain.Patient
         public IQueryable<object> SelectAll()
         {
             throw new NotImplementedException();
+        }
+
+        public PutPatientPriorityResponse UpdatePriority(PutPatientPriorityRequest request)
+        {
+            PutPatientPriorityResponse response = new PutPatientPriorityResponse();
+            try
+            {
+                using (PatientMongoContext ctx = new PatientMongoContext(_dbName))
+                {
+                    FindAndModifyResult result = ctx.Patients.Collection.FindAndModify(Query.EQ(MEPatient.IdProperty, ObjectId.Parse(request.PatientId)), SortBy.Null,
+                                                MongoDB.Driver.Builders.Update.Set(MEPatient.PriorityProperty, (MEPriority)request.Priority));
+                }
+                return response;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
 
         public object Update(T entity)

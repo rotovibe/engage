@@ -11,5 +11,6 @@ namespace Phytel.API.DataDomain.Patient
     public interface IPatientRepository<T> : IRepository<T>
     {
         GetPatientsDataResponse Select(string[] patientIds);
+        PutPatientPriorityResponse UpdatePriority(PutPatientPriorityRequest request);
     }
 }
