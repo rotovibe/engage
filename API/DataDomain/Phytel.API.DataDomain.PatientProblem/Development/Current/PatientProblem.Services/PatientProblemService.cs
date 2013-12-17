@@ -17,7 +17,7 @@ namespace Phytel.API.DataDomain.PatientProblem.Service
             }
             catch (Exception ex)
             {
-                //TODO: Log this to C3 database via ASE
+                //TODO: Log this to the SQL database via ASE
                 base.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
                 response.Status = new ServiceStack.ServiceInterface.ServiceModel.ResponseStatus("Exception", ex.Message);
             }

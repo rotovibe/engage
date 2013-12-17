@@ -12,7 +12,7 @@ namespace Phytel.API.AppDomain.Security.Services.Test
         [TestMethod]
         public void ValidateCredential_Test()
         {
-            // need to make sure that there is a registration in the apiusertoken table in the c3 DB for this user.
+            // need to make sure that there is a registration in the apiusertoken table in the DB for this user.
             string controlValue = "inhealthadmin";
             string sampleValue;
             IRestClient client = new JsonServiceClient();

@@ -62,9 +62,10 @@ namespace Phytel.API.AppDomain.Security
         {
             try
             {
+                string dbConnName = System.Configuration.ConfigurationManager.AppSettings["DBConnName"];
                 Services.ParameterCollection parmColl = new Services.ParameterCollection();
                 parmColl.Add(new Services.Parameter("@Token", token, System.Data.SqlDbType.VarChar, System.Data.ParameterDirection.Input, 100));
-                SqlDataReader reader = Phytel.Services.SQLDataService.Instance.GetReader("C3", false, "spPhy_ProcessUserToken", parmColl);
+                SqlDataReader reader = Phytel.Services.SQLDataService.Instance.GetReader(dbConnName, false, "spPhy_ProcessUserToken", parmColl);
 
                 AuthenticateResponse response = new AuthenticateResponse();
 

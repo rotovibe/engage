@@ -18,7 +18,7 @@ namespace Phytel.API.DataDomain.Patient.Service
             }
             catch (Exception ex)
             {
-                //TODO: Log this to C3 database via ASE
+                //TODO: Log this to the SQL database via ASE
                 CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
             }
             return response;
@@ -34,7 +34,7 @@ namespace Phytel.API.DataDomain.Patient.Service
             }
             catch (Exception ex)
             {
-                //TODO: Log this to C3 database via ASE
+                //TODO: Log this to the SQL database via ASE
                 CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
             }
             return response;
@@ -51,7 +51,7 @@ namespace Phytel.API.DataDomain.Patient.Service
             }
             catch (Exception ex)
             {
-                //TODO: Log this to C3 database via ASE
+                //TODO: Log this to the SQL database via ASE
                 base.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
                 response.Status = new ServiceStack.ServiceInterface.ServiceModel.ResponseStatus("Exception", ex.Message);
             }
