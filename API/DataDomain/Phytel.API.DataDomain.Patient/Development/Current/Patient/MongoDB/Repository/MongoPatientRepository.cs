@@ -95,7 +95,7 @@ namespace Phytel.API.DataDomain.Patient
             return patient;
         }
 
-        public Tuple<string, IQueryable<object>> Select(Interface.APIExpression expression)
+        public Tuple<string, IEnumerable<object>> Select(Interface.APIExpression expression)
         {
             throw new NotImplementedException();
             //List<IMongoQuery> queries = new List<IMongoQuery>();
@@ -150,7 +150,7 @@ namespace Phytel.API.DataDomain.Patient
             return pdResponse;
         }
 
-        public IQueryable<object> SelectAll()
+        public IEnumerable<object> SelectAll()
         {
             throw new NotImplementedException();
         }

@@ -12,8 +12,8 @@ namespace Phytel.API.Interface
         void Delete(T entity);
         void DeleteAll(List<T> entities);
         object FindByID(string entityID);
-        Tuple<string, IQueryable<object>> Select(APIExpression expression);
-        IQueryable<object> SelectAll();
+        Tuple<string, IEnumerable<object>> Select(APIExpression expression);
+        IEnumerable<object> SelectAll();
         object Update(T entity);
         void CacheByID(List<string> entityIDs);
     }

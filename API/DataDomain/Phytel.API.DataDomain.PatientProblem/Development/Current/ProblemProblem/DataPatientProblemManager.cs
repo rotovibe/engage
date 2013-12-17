@@ -107,7 +107,7 @@ namespace Phytel.API.DataDomain.PatientProblem
                 APIExpression apiExpression = new APIExpression();
                 apiExpression.Expressions = selectExpressions;
 
-                Tuple<string, IQueryable<object>> patientProblems = repo.Select(apiExpression);
+                Tuple<string, IEnumerable<object>> patientProblems = repo.Select(apiExpression);
 
                 if (patientProblems != null)
                 {

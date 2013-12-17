@@ -44,9 +44,9 @@ namespace Phytel.API.DataDomain.PatientProblem
             throw new NotImplementedException();
         }
 
-        public Tuple<string, IQueryable<object>> Select(Interface.APIExpression expression)
+        public Tuple<string, IEnumerable<object>> Select(Interface.APIExpression expression)
         {
-            IQueryable<object> returnQuery = null;
+            IEnumerable<object> returnQuery = null;
             IMongoQuery mQuery = null;
 
             List<SelectExpression> selectExpressions = expression.Expressions.ToList();
@@ -94,11 +94,11 @@ namespace Phytel.API.DataDomain.PatientProblem
                 returnQuery = patientProblemList.AsQueryable<object>();
             }
 
-            return new Tuple<string, IQueryable<object>>(expression.ExpressionID, returnQuery);
+            return new Tuple<string, IEnumerable<object>>(expression.ExpressionID, returnQuery);
         }
 
 
-        public IQueryable<object> SelectAll()
+        public IEnumerable<object> SelectAll()
         {
             throw new NotImplementedException();
         }

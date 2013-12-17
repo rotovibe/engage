@@ -2,6 +2,7 @@ using Phytel.API.DataDomain.Cohort.DTO;
 using System.Data.SqlClient;
 using Phytel.API.DataDomain.Cohort;
 using System.Linq;
+using System.Collections.Generic;
 
 namespace Phytel.API.DataDomain.Cohort
 {
@@ -23,7 +24,7 @@ namespace Phytel.API.DataDomain.Cohort
 
             ICohortRepository<API.DataDomain.Cohort.DTO.CohortData> repo = CohortRepositoryFactory<API.DataDomain.Cohort.DTO.CohortData>.GetCohortRepository(request.ContractNumber, request.Context);
 
-            IQueryable<API.DataDomain.Cohort.DTO.CohortData> cohorts = repo.SelectAll() as IQueryable<API.DataDomain.Cohort.DTO.CohortData>;
+            List<API.DataDomain.Cohort.DTO.CohortData> cohorts = repo.SelectAll() as List<API.DataDomain.Cohort.DTO.CohortData>;
 
             if (cohorts != null)
             {
