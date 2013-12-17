@@ -38,16 +38,16 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="MongoDB.Bson">
-      <HintPath>..\ReferenceBin\ASE\2.2\MongoDB.Bson.dll</HintPath>
+      <HintPath>..\..\Services\API\AppDomain\Phytel.API.AppDomain.NG\Development\Current\References\MongoDB.Bson.dll</HintPath>
     </Reference>
     <Reference Include="MongoDB.Driver">
-      <HintPath>..\ReferenceBin\ASE\2.2\MongoDB.Driver.dll</HintPath>
+      <HintPath>..\..\Services\API\AppDomain\Phytel.API.AppDomain.NG\Development\Current\References\MongoDB.Driver.dll</HintPath>
     </Reference>
     <Reference Include="Phytel.Mongo">
-      <HintPath>..\ReferenceBin\ASE\2.2\Phytel.Mongo.dll</HintPath>
+      <HintPath>..\..\Services\API\AppDomain\Phytel.API.AppDomain.NG\Development\Current\References\Phytel.Mongo.dll</HintPath>
     </Reference>
     <Reference Include="PhytelServices">
-      <HintPath>..\ReferenceBin\ASE\2.2\PhytelServices.dll</HintPath>
+      <HintPath>..\..\Services\API\AppDomain\Phytel.API.AppDomain.NG\Development\Current\References\PhytelServices.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
