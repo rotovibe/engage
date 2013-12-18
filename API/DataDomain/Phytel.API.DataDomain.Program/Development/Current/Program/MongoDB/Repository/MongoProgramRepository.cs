@@ -22,12 +22,12 @@ namespace Phytel.API.DataDomain.Program
             _dbName = contractDBName;
         }
 
-        public T Insert(T newEntity)
+        public object Insert(T newEntity)
         {
             throw new NotImplementedException();
         }
 
-        public T InsertAll(List<T> entities)
+        public object InsertAll(List<T> entities)
         {
             throw new NotImplementedException();
         }
@@ -79,17 +79,17 @@ namespace Phytel.API.DataDomain.Program
             return program;
         }
 
-        public Tuple<string, IQueryable<T>> Select(Interface.APIExpression expression)
+        public Tuple<string, IEnumerable<object>> Select(Interface.APIExpression expression)
         {
             throw new NotImplementedException();
         }
 
-        public IQueryable<T> SelectAll()
+        public IEnumerable<object> SelectAll()
         {
             throw new NotImplementedException();
         }
 
-        public T Update(T entity)
+        public object Update(T entity)
         {
             throw new NotImplementedException();
         }
