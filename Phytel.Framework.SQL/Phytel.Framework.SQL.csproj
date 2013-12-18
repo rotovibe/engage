@@ -8,8 +8,8 @@
     <ProjectGuid>{29041AAC-927E-427C-A7B2-B0C851C1C388}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>C3.Framework</RootNamespace>
-    <AssemblyName>C3.Framework</AssemblyName>
+    <RootNamespace>Phytel.Framework.SQL</RootNamespace>
+    <AssemblyName>Phytel.Framework.SQL</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <FileUpgradeFlags>
