@@ -173,6 +173,42 @@ namespace Phytel.API.DataDomain.Patient
             }
         }
 
+        public PutPatientFlaggedResponse UpdateFlagged(PutPatientFlaggedRequest request)
+        {
+            PutPatientFlaggedResponse response = new PutPatientFlaggedResponse();
+            try
+            {
+                using (PatientMongoContext ctx = new PatientMongoContext(_dbName))
+                {
+                    var query = new QueryDocument(MEPatient.IdProperty, ObjectId.Parse(request.PatientId));
+                    MEPatient patient = ctx.Patients.Collection.Find(query).FirstOrDefault();
+
+                    if (request.Flagged == 1)
+                    {
+                        if (patient.UserFlaggedList == null) patient.UserFlaggedList = new List<string>();
+
+                        if (!patient.UserFlaggedList.Contains(request.UserId))
+                        {
+                            patient.UserFlaggedList.Add(request.UserId);
+                        }
+                    }
+                    else if (request.Flagged == 0)
+                    {
+                        string usrid = patient.UserFlaggedList.Where(a => a == request.UserId).FirstOrDefault();
+                        if (!usrid.Equals(string.Empty))
+                            patient.UserFlaggedList.Remove(usrid);
+                    }
+
+                    ctx.Patients.Collection.Save(patient);
+                }
+                return response;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
         public object Update(T entity)
         {
             throw new NotImplementedException();

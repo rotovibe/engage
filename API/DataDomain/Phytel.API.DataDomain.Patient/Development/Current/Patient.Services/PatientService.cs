@@ -71,7 +71,22 @@ namespace Phytel.API.DataDomain.Patient.Service
                 CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
             }
             return response;
-        }    
- 
+        }
+
+        public PutPatientFlaggedResponse Put(PutPatientFlaggedRequest request)
+        {
+            PutPatientFlaggedResponse response = new PutPatientFlaggedResponse();
+            try
+            {
+                response = PatientDataManager.UpdatePatientFlagged(request);
+                response.Version = request.Version;
+            }
+            catch (Exception ex)
+            {
+                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+            }
+            return response;
+        }  
+
     }
 }
