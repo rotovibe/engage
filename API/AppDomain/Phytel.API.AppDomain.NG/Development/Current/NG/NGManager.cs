@@ -61,7 +61,7 @@ namespace Phytel.API.AppDomain.NG
 
                     pResponse.Patient = new NG.DTO.Patient
                     {
-                        ID = response.Patient.ID,
+                        Id = response.Patient.ID,
                         FirstName = response.Patient.FirstName,
                         LastName = response.Patient.LastName,
                         DOB = NGUtils.IsDateValid(response.Patient.DOB) ? response.Patient.DOB : string.Empty,
@@ -74,7 +74,7 @@ namespace Phytel.API.AppDomain.NG
 
                     if (sysResponse != null && sysResponse.PatientSystem != null)
                     {
-                        pResponse.Patient.DisplaySystemID = sysResponse.PatientSystem.SystemID;
+                        pResponse.Patient.DisplaySystemId = sysResponse.PatientSystem.SystemID;
                         pResponse.Patient.DisplaySystemName = sysResponse.PatientSystem.SystemName;
                     }
                 }
@@ -196,7 +196,7 @@ namespace Phytel.API.AppDomain.NG
                 //take qResponse Patient details and map them to "Patient" in the GetCohortPatientsResponse
                 qResponse.CohortPatients.ForEach(x => pResponse.Patients.Add(new Phytel.API.AppDomain.NG.DTO.Patient
                 {
-                    ID = x.ID,
+                    Id = x.ID,
                     DOB = x.DOB,
                     FirstName = x.FirstName,
                     Gender = x.Gender,
