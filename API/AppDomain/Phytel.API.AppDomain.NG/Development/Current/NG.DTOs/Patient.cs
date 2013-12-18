@@ -8,7 +8,7 @@ namespace Phytel.API.AppDomain.NG.DTO
 {
     public class Patient
     {
-        public string ID { get; set; }
+        public string Id { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string MiddleName { get; set; }
@@ -16,16 +16,8 @@ namespace Phytel.API.AppDomain.NG.DTO
         public string PreferredName { get; set; }
         public string Gender { get; set; }
         public string DOB { get; set; }
-        public string DisplaySystemID { get; set; }
+        public string DisplaySystemId { get; set; }
         public string DisplaySystemName { get; set; }
-        public Priority Priority { get; set; }
-    }
-
-    public enum Priority
-    {
-        NotSet = 0,
-        Low = 1,
-        Medium = 2,
-        High = 3
+        public int PriorityId { get; set; }
     }
 }
