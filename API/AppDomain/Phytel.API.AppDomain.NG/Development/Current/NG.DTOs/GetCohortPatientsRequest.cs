@@ -27,5 +27,7 @@ namespace Phytel.API.AppDomain.NG.DTO
 
         [ApiMember(Name = "Take", Description = "Number of records to return per request.", ParameterType = "path", DataType = "string", IsRequired = true)]
         public string Take { get; set; }
+
+        public GetCohortPatientsRequest() { }
     }
 }

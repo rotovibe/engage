@@ -68,7 +68,8 @@ namespace Phytel.API.AppDomain.NG
                         Gender = response.Patient.Gender,
                         MiddleName = response.Patient.MiddleName,
                         Suffix = response.Patient.Suffix,
-                        PreferredName = response.Patient.PreferredName
+                        PreferredName = response.Patient.PreferredName,
+                        Priority = (DTO.Priority)((int)response.Patient.Priority)
                     };
 
                     if (sysResponse != null && sysResponse.PatientSystem != null)
@@ -93,13 +94,13 @@ namespace Phytel.API.AppDomain.NG
 
             List<Phytel.API.AppDomain.NG.DTO.PatientProblem> response = new List<Phytel.API.AppDomain.NG.DTO.PatientProblem>();
 
-           IRestClient client = new JsonServiceClient();
-             //[Route("/{Context}/{Version}/{ContractNumber}/patientproblems/{PatientID}", "GET")]
+            IRestClient client = new JsonServiceClient();
+            //[Route("/{Context}/{Version}/{ContractNumber}/patientproblems/{PatientID}", "GET")]
             Phytel.API.DataDomain.PatientProblem.DTO.GetAllPatientProblemsDataResponse dataDomainResponse = client.Get<Phytel.API.DataDomain.PatientProblem.DTO.GetAllPatientProblemsDataResponse>
                 (string.Format("{0}/{1}/{2}/{3}/patientproblems/{4}",
                     DDPatientProblemServiceUrl,
-                    "NG", 
-                    request.Version, 
+                    "NG",
+                    request.Version,
                     request.ContractNumber,
                     request.PatientID));
 
@@ -134,7 +135,7 @@ namespace Phytel.API.AppDomain.NG
 
             List<ProblemData> problems = dataDomainResponse.Problems;
 
-            foreach(ProblemData c in problems)
+            foreach (ProblemData c in problems)
             {
                 ProblemLookUp problemLookUp = new ProblemLookUp();
                 problemLookUp.ID = c.ProblemID;
@@ -162,7 +163,7 @@ namespace Phytel.API.AppDomain.NG
 
             List<CohortData> cohorts = dataDomainResponse.Cohorts;
 
-            foreach(CohortData c in cohorts)
+            foreach (CohortData c in cohorts)
             {
                 Phytel.API.AppDomain.NG.DTO.Cohort cohort = new Phytel.API.AppDomain.NG.DTO.Cohort();
                 cohort.ID = c.ID;
@@ -235,14 +236,53 @@ namespace Phytel.API.AppDomain.NG
             GetAllSettingsResponse response = new GetAllSettingsResponse();
             using (StreamReader r = new StreamReader(HostingEnvironment.MapPath("/Nightingale/settings.json")))
             {
-               using (MemoryStream stream1 = new MemoryStream(Encoding.UTF8.GetBytes(r.ReadToEnd())))
-                { 
+                using (MemoryStream stream1 = new MemoryStream(Encoding.UTF8.GetBytes(r.ReadToEnd())))
+                {
                     DataContractJsonSerializer serializer = new DataContractJsonSerializer(typeof(List<Setting>));
                     var settings = serializer.ReadObject(stream1) as List<Setting>;
                     response.Settings = settings;
                 }
             }
             return response;
+        }
+
+        public PutPatientPriorityUpdateResponse PutPatientPriorityUpdate(PutPatientPriorityUpdateRequest request)
+        {
+            PutPatientPriorityUpdateResponse response = new PutPatientPriorityUpdateResponse();
+
+            IRestClient client = new JsonServiceClient();
+            PutPatientPriorityUpdateResponse dataDomainResponse = client.Put<PutPatientPriorityUpdateResponse>(string.Format("{0}/{1}/{2}/{3}/patient/{4}/priority/{5}",
+                                                                                                            DDPatientServiceURL,
+                                                                                                            "NG",
+                                                                                                            request.Version,
+                                                                                                            request.ContractNumber,
+                                                                                                            request.PatientId,
+                                                                                                            request.Priority), new PutPatientPriorityUpdateResponse { } as object);
+            return dataDomainResponse;
+        }
+
+        public PutPatientFlaggedUpdateResponse PutPatientFlaggedUpdate(PutPatientFlaggedUpdateRequest request)
+        {
+            try
+            {
+                PutPatientFlaggedUpdateResponse response = new PutPatientFlaggedUpdateResponse();
+
+                IRestClient client = new JsonServiceClient();
+                PutPatientFlaggedUpdateResponse dataDomainResponse =
+                    client.Put<PutPatientFlaggedUpdateResponse>(string.Format("{0}/{1}/{2}/{3}/patient/{4}/flagged/{5}?UserId={6}",
+                                                                                                                DDPatientServiceURL,
+                                                                                                                "NG",
+                                                                                                                request.Version,
+                                                                                                                request.ContractNumber,
+                                                                                                                request.PatientId,
+                                                                                                                request.Flagged,
+                                                                                                                request.UserId), new PutPatientFlaggedUpdateResponse { } as object);
+                return dataDomainResponse;
+            }
+            catch (WebServiceException ex)
+            {
+                throw ex;
+            }
         }
     }
 }

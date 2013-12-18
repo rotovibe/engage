@@ -134,6 +134,56 @@ namespace Phytel.API.AppDomain.NG.Service
             }
         }
 
+        public PutPatientFlaggedUpdateResponse Put(PutPatientFlaggedUpdateRequest request)
+        {
+            PutPatientFlaggedUpdateResponse response = new PutPatientFlaggedUpdateResponse();
+            try
+            {
+                NGManager ngm = new NGManager();
+
+                bool result = ngm.IsUserValidated(request.Version, request.Token);
+                if (result)
+                {
+                    response = ngm.PutPatientFlaggedUpdate(request);
+                }
+                else
+                    throw new UnauthorizedAccessException();
+
+                return response;
+            }
+            catch (Exception ex)
+            {
+                //TODO: Log this to C3 database via ASE
+                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+                return response;
+            }
+        }
+
+        public PutPatientPriorityUpdateResponse Put(PutPatientPriorityUpdateRequest request)
+        {
+            PutPatientPriorityUpdateResponse response = new PutPatientPriorityUpdateResponse();
+            try
+            {
+                NGManager ngm = new NGManager();
+
+                bool result = ngm.IsUserValidated(request.Version, request.Token);
+                if (result)
+                {
+                    response = ngm.PutPatientPriorityUpdate(request);
+                }
+                else
+                    throw new UnauthorizedAccessException();
+
+                return response;
+            }
+            catch (Exception ex)
+            {
+                //TODO: Log this to C3 database via ASE
+                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+                return response;
+            }
+        }
+
         public GetCohortPatientsResponse Get(GetCohortPatientsRequest request)
         {
             GetCohortPatientsResponse response = new GetCohortPatientsResponse();

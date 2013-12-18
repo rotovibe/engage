@@ -15,5 +15,7 @@ namespace Phytel.API.AppDomain.NG.DTO
 
         [ApiMember(Name = "Version", Description = "Version of the Request", ParameterType = "property", DataType = "string", IsRequired = true)]
         public string Version { get; set; }
+
+        public GetAllProblemsRequest() { }
     }
 }
