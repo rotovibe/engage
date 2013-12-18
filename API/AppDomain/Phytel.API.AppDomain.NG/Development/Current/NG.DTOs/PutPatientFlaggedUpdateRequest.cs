@@ -3,8 +3,8 @@ using ServiceStack.ServiceHost;
 
 namespace Phytel.API.AppDomain.NG.DTO
 {
-    [Route("/{Context}/{Version}/{ContractNumber}/patient/{PatientId}/flagged/{Flagged}", "PUT")]
-    public class PutPatientFlaggedUpdateRequest : IDataDomainRequest
+    [Route("/{Version}/{ContractNumber}/patient/{PatientId}/flagged/{Flagged}", "PUT")]
+    public class PutPatientFlaggedUpdateRequest : IAppDomainRequest
     {
         [ApiMember(Name = "UserId", Description = "UserId of the user", ParameterType = "property", DataType = "string", IsRequired = true)]
         public string UserId { get; set; }
@@ -17,9 +17,6 @@ namespace Phytel.API.AppDomain.NG.DTO
 
         [ApiMember(Name = "Token", Description = "Token parameter", ParameterType = "path", DataType = "string", IsRequired = true)]
         public string Token { get; set; }
-
-        [ApiMember(Name = "Context", Description = "Product Context creating the patient", ParameterType = "property", DataType = "string", IsRequired = true)]
-        public string Context { get; set; }
 
         [ApiMember(Name = "ContractNumber", Description = "Contract Number to retrieve data from", ParameterType = "property", DataType = "string", IsRequired = true)]
         public string ContractNumber { get; set; }

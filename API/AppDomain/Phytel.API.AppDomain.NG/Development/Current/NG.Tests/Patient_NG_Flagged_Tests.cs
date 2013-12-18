@@ -23,8 +23,7 @@ namespace Phytel.API.DataDomain.Patient.Service.Test
             IRestClient client = new JsonServiceClient();
 
             PutPatientFlaggedUpdateResponse response = client.Put<PutPatientFlaggedUpdateResponse>(
-                string.Format(@"http://localhost:888/Nightingale/{0}/{1}/{2}/patient/{3}/flagged/{4}?UserId={5}&Token={6}",
-                context,
+                string.Format(@"http://localhost:888/Nightingale/{0}/{1}/patient/{2}/flagged/{3}?UserId={4}&Token={5}",
                 version,
                 contractNumber,
                 patientID,

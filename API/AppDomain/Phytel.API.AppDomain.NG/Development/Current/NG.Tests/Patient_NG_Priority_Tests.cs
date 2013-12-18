@@ -20,8 +20,7 @@ namespace Phytel.API.DataDomain.Patient.Service.Test
             IRestClient client = new JsonServiceClient();
 
             PutPatientPriorityUpdateResponse response = client.Put<PutPatientPriorityUpdateResponse>(
-                string.Format(@"http://localhost:888/Nightingale/{0}/{1}/{2}/patient/{3}/priority/{4}?Token={5}",
-                context, 
+                string.Format(@"http://localhost:888/Nightingale/{0}/{1}/patient/{2}/priority/{3}?Token={4}",
                 version, 
                 contractNumber, 
                 patientID,
