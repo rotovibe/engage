@@ -167,9 +167,9 @@ namespace Phytel.API.DataDomain.Patient
                 }
                 return response;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                throw ex;
+                throw;
             }
         }
 
@@ -203,9 +203,9 @@ namespace Phytel.API.DataDomain.Patient
                 }
                 return response;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                throw ex;
+                throw;
             }
         }
 

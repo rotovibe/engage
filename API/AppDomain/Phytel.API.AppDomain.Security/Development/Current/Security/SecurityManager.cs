@@ -26,9 +26,9 @@ namespace Phytel.API.AppDomain.Security
 
                 return userResponse;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                throw ex;
+                throw;
             }
         }
 
@@ -42,9 +42,9 @@ namespace Phytel.API.AppDomain.Security
 
                 return response;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                throw ex;
+                throw;
             }
         }
 
@@ -56,9 +56,9 @@ namespace Phytel.API.AppDomain.Security
 
                 return securityRepo.Validate(request.Token, request.Context);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                throw ex;
+                throw;
             }
         }
 

@@ -5,6 +5,7 @@ using Phytel.API.Interface;
 using ServiceStack.ServiceInterface.ServiceModel;
 using ServiceStack.ServiceHost;
 using Phytel.API.Common.Format;
+using Phytel.API.AppDomain.Security.DTO;
 
 namespace Phytel.API.AppDomain.NG.Service
 {
@@ -17,10 +18,12 @@ namespace Phytel.API.AppDomain.NG.Service
             {
                 NGManager ngm = new NGManager();
 
-                //request.Token = base.Request.Headers["APIToken"] as string;
-                bool result = ngm.IsUserValidated(request.Version, request.Token);
-                if (result)
+                ValidateTokenResponse result = ngm.IsUserValidated(request.Version, request.Token);
+                if (result.UserId.Trim() != string.Empty)
+                {
+                    request.UserId = result.UserId;
                     response = ngm.GetPatient(request);
+                }
                 else
                     throw new UnauthorizedAccessException();
 
@@ -41,10 +44,12 @@ namespace Phytel.API.AppDomain.NG.Service
             {
                 NGManager ngm = new NGManager();
 
-                //request.Token = base.Request.Headers["APIToken"] as string;
-                bool result = ngm.IsUserValidated(request.Version, request.Token);
-                if (result)
+                ValidateTokenResponse result = ngm.IsUserValidated(request.Version, request.Token);
+                if (result.UserId.Trim() != string.Empty)
+                {
+                    request.UserId = result.UserId;
                     response = ngm.GetPatient(request);
+                }
                 else
                     throw new UnauthorizedAccessException();
 
@@ -70,9 +75,12 @@ namespace Phytel.API.AppDomain.NG.Service
             {
                 NGManager ngm = new NGManager();
 
-                bool result = ngm.IsUserValidated(request.Version, request.Token);
-                if (result)
+                ValidateTokenResponse result = ngm.IsUserValidated(request.Version, request.Token);
+                if (result.UserId.Trim() != string.Empty)
+                {
+                    request.UserId = result.UserId;
                     response.PatientProblems = ngm.GetPatientProblems(request);
+                }
                 else
                     throw new UnauthorizedAccessException();
 
@@ -93,9 +101,12 @@ namespace Phytel.API.AppDomain.NG.Service
             {
                 NGManager ngm = new NGManager();
 
-                bool result = ngm.IsUserValidated(request.Version, request.Token);
-                if (result)
+                ValidateTokenResponse result = ngm.IsUserValidated(request.Version, request.Token);
+                if (result.UserId.Trim() != string.Empty)
+                {
+                    request.UserId = result.UserId;
                     response.Problems = ngm.GetProblems(request);
+                }
                 else
                     throw new UnauthorizedAccessException();
 
@@ -116,9 +127,10 @@ namespace Phytel.API.AppDomain.NG.Service
             {
                 NGManager ngm = new NGManager();
 
-                bool result = ngm.IsUserValidated(request.Version, request.Token);
-                if (result)
+                ValidateTokenResponse result = ngm.IsUserValidated(request.Version, request.Token);
+                if (result.UserId.Trim() != string.Empty)
                 {
+                    request.UserId = result.UserId;
                     response.Cohorts = ngm.GetCohorts(request);
                 }
                 else
@@ -141,9 +153,10 @@ namespace Phytel.API.AppDomain.NG.Service
             {
                 NGManager ngm = new NGManager();
 
-                bool result = ngm.IsUserValidated(request.Version, request.Token);
-                if (result)
+                ValidateTokenResponse result = ngm.IsUserValidated(request.Version, request.Token);
+                if (result.UserId.Trim() != string.Empty)
                 {
+                    request.UserId = result.UserId;
                     response = ngm.PutPatientFlaggedUpdate(request);
                 }
                 else
@@ -166,9 +179,10 @@ namespace Phytel.API.AppDomain.NG.Service
             {
                 NGManager ngm = new NGManager();
 
-                bool result = ngm.IsUserValidated(request.Version, request.Token);
-                if (result)
+                ValidateTokenResponse result = ngm.IsUserValidated(request.Version, request.Token);
+                if (result.UserId.Trim() != string.Empty)
                 {
+                    request.UserId = result.UserId;
                     response = ngm.PutPatientPriorityUpdate(request);
                 }
                 else
@@ -191,10 +205,11 @@ namespace Phytel.API.AppDomain.NG.Service
 
             try
             {
-                bool result = ngm.IsUserValidated(request.Version, request.Token);
-                if (result)
+                ValidateTokenResponse result = ngm.IsUserValidated(request.Version, request.Token);
+                if (result.UserId.Trim() != string.Empty)
                 {
-                    response = ngm.GetCohortPatients(request, base.RequestContext  );
+                    request.UserId = result.UserId;
+                    response = ngm.GetCohortPatients(request, base.RequestContext);
                 }
                 else
                     throw new UnauthorizedAccessException();
@@ -216,9 +231,10 @@ namespace Phytel.API.AppDomain.NG.Service
             {
                 NGManager ngm = new NGManager();
 
-                bool result = ngm.IsUserValidated(request.Version, request.Token);
-                if (result)
+                ValidateTokenResponse result = ngm.IsUserValidated(request.Version, request.Token);
+                if (result.UserId.Trim() != string.Empty)
                 {
+                    request.UserId = result.UserId;
                     response = ngm.GetAllSettings(request);
                 }
                 else

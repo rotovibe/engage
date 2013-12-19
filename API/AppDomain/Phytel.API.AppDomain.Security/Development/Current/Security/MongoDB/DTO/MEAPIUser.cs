@@ -19,7 +19,7 @@ namespace Phytel.API.AppDomain.Security
         public const string ApiKeyProperty = "apikey";
         public const string ProductProperty = "product";
         public const string IsActiveProperty = "isactive";
-        public const string SessionTimeoutProperty = "timeout";
+        public const string SessionLengthInMinutesProperty = "slim";
         public const string VersionProperty = "v";
         public const string ExtraElementsProperty = "ex";
 
@@ -46,9 +46,9 @@ namespace Phytel.API.AppDomain.Security
         [BsonIgnoreIfNull(true)]
         public bool IsActive { get; set; }
 
-        [BsonElement(SessionTimeoutProperty)]
-        [BsonDefaultValue(30)]
-        public int SessionTimeout { get; set; }
+        [BsonElement(SessionLengthInMinutesProperty)]
+        [BsonDefaultValue(60)]
+        public int SessionLengthInMinutes { get; set; }
 
         [BsonElement(VersionProperty)]
         [BsonDefaultValue("v1")]

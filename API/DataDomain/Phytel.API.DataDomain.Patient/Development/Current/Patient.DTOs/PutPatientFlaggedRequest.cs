@@ -6,9 +6,6 @@ namespace Phytel.API.DataDomain.Patient.DTO
     [Route("/{Context}/{Version}/{ContractNumber}/patient/{PatientId}/flagged/{Flagged}", "PUT")]
     public class PutPatientFlaggedRequest : IDataDomainRequest
     {
-        [ApiMember(Name = "UserId", Description = "UserId of the user", ParameterType = "property", DataType = "string", IsRequired = true)]
-        public string UserId { get; set; }
-
         [ApiMember(Name = "PatientId", Description = "Id of the patient being updated", ParameterType = "property", DataType = "string", IsRequired = true)]
         public string PatientId { get; set; }
 
@@ -23,6 +20,9 @@ namespace Phytel.API.DataDomain.Patient.DTO
 
         [ApiMember(Name = "Version", Description = "Version of the API being called", ParameterType = "property", DataType = "string", IsRequired = true)]
         public string Version { get; set; }
+
+        [ApiMember(Name = "UserID", Description = "ID of the user making the request (Internally used ONLY)", ParameterType = "property", DataType = "string", IsRequired = false)]
+        public string UserId { get; set; }
 
         public PutPatientFlaggedRequest() { }
     }

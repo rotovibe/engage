@@ -80,10 +80,10 @@ namespace Phytel.API.AppDomain.NG
                 }
                 return pResponse;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 //SendAuditDispatch();
-                throw ex;
+                throw;
             }
         }
 
@@ -214,7 +214,7 @@ namespace Phytel.API.AppDomain.NG
 
                 return pResponse;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 //SendAuditDispatch(new PutAuditErrorRequest
                 //{
@@ -227,7 +227,7 @@ namespace Phytel.API.AppDomain.NG
                 //    Version = request.Version,
                 //    SessionId = request.Token
                 //});
-                throw ex;
+                throw;
             }
         }
         #endregion
@@ -280,9 +280,9 @@ namespace Phytel.API.AppDomain.NG
                                                                                                                 request.UserId), new PutPatientFlaggedUpdateResponse { } as object);
                 return dataDomainResponse;
             }
-            catch (WebServiceException ex)
+            catch (WebServiceException)
             {
-                throw ex;
+                throw;
             }
         }
     }

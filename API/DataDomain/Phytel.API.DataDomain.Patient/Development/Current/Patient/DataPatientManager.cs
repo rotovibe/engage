@@ -18,9 +18,9 @@ namespace Phytel.API.DataDomain.Patient
 
                 return (result != null ? result : new GetPatientDataResponse());
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                throw ex;
+                throw;
             }
         }
 
@@ -33,9 +33,9 @@ namespace Phytel.API.DataDomain.Patient
 
                 return result;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                throw ex;
+                throw;
             }
         }
 

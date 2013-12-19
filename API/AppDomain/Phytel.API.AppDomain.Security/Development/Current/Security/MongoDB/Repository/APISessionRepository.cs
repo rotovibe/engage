@@ -44,9 +44,10 @@ namespace Phytel.API.AppDomain.Security
                         {
                             APIKey = apiKey,
                             Product = productName,
-                            //SessionLengthInMinutes = user.SessionTimeout,
-                            SessionTimeOut = DateTime.Now.AddMinutes(user.SessionTimeout),
-                            UserName = user.UserName
+                            SessionLengthInMinutes = user.SessionLengthInMinutes,
+                            SessionTimeOut = DateTime.Now.AddMinutes(user.SessionLengthInMinutes),
+                            UserName = user.UserName,
+                            UserId = user.Id.ToString()
                         };
 
                         _objectContext.APISessions.Collection.Insert(session);
@@ -54,16 +55,23 @@ namespace Phytel.API.AppDomain.Security
                     else
                         throw new Exception("Login Failed!  Username and/or Password is incorrect");
 
-                    response = new UserAuthenticateResponse { APIToken = session.Id.ToString(), Contracts = new List<ContractInfo>(), Name = user.UserName, SessionTimeout = user.SessionTimeout, UserName = user.UserName };
+                    response = new UserAuthenticateResponse 
+                                    { 
+                                        APIToken = session.Id.ToString(), 
+                                        Contracts = new List<ContractInfo>(), 
+                                        Name = user.UserName, 
+                                        SessionTimeout = user.SessionLengthInMinutes, 
+                                        UserName = user.UserName 
+                                    };
                 }
                 else
                     throw new Exception("Login Failed! Unknown Username/Password");
 
                 return response;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                throw ex;
+                throw;
             }
         }
 
@@ -81,9 +89,10 @@ namespace Phytel.API.AppDomain.Security
                     {
                         APIKey = apiKey,
                         Product = productName,
-                        //SessionLengthInMinutes = existingReponse.SessionTimeout,
+                        SessionLengthInMinutes = existingReponse.SessionTimeout,
                         SessionTimeOut = DateTime.Now.AddMinutes(existingReponse.SessionTimeout),
-                        UserName = existingReponse.UserName
+                        UserName = existingReponse.UserName,
+                        UserId = existingReponse.UserID.ToString()
                     };
 
                     _objectContext.APISessions.Collection.Insert(session);
@@ -96,9 +105,9 @@ namespace Phytel.API.AppDomain.Security
 
                 return response;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                throw ex;
+                throw;
             }
         }
 
@@ -107,50 +116,42 @@ namespace Phytel.API.AppDomain.Security
         {
             try
             {
-                ValidateTokenResponse response = new ValidateTokenResponse();
-                response.IsValid = false;
+                ValidateTokenResponse response = null;
 
-                FindAndModifyResult result = _objectContext.APISessions.Collection.FindAndModify(Query.EQ(MEAPISession.IdProperty, ObjectId.Parse(token)), SortBy.Null,
-                                            MongoDB.Driver.Builders.Update.Set(MEAPISession.SessionTimeOutProperty, DateTime.Now.AddMinutes(480)), true);
+                int sessionLengthInMinutes = (from s in _objectContext.APISessions
+                                              where s.Id == ObjectId.Parse(token)
+                                              select s.SessionLengthInMinutes).FirstOrDefault();
 
-                if (result != null && result.ModifiedDocument != null)
-                    response.IsValid = true;
+                if (sessionLengthInMinutes > 0)
+                {
+                    FindAndModifyResult result = _objectContext.APISessions.Collection.FindAndModify(Query.EQ(MEAPISession.IdProperty, ObjectId.Parse(token)), SortBy.Null,
+                                                MongoDB.Driver.Builders.Update.Set(MEAPISession.SessionTimeOutProperty, DateTime.Now.AddMinutes(sessionLengthInMinutes)), true);
+
+                    if (result != null && result.ModifiedDocument != null)
+                    {
+                        MEAPISession session = BsonSerializer.Deserialize<MEAPISession>(result.ModifiedDocument);
+                        response = new ValidateTokenResponse
+                                        {
+                                            SessionLengthInMinutes = session.SessionLengthInMinutes,
+                                            SessionTimeOut = session.SessionTimeOut,
+                                            TokenId = session.Id.ToString(),
+                                            UserId = session.UserId,
+                                            UserName = session.UserName
+                                        };
+                    }
+                    else
+                        throw new UnauthorizedAccessException("Security Token does not exist");
+
+                    return response;
+                }
                 else
                     throw new UnauthorizedAccessException("Security Token does not exist");
-
-                return response;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                throw ex;
+                throw;
             }
         }
-
-        //public ValidateTokenResponse Validate(string token, string productName)
-        //{
-        //    try
-        //    {
-        //        ValidateTokenResponse response = new ValidateTokenResponse();
-        //        response.IsValid = false;
-
-        //        MEAPISession session = _objectContext.APISessions.Collection.FindOneById(ObjectId.Parse(token));
-        //        if (session != null && session.Product.ToUpper().Equals(productName.ToUpper()))
-        //        {
-        //            response.IsValid = true;
-        //            session.SessionTimeOut = DateTime.Now.AddMinutes(session.SessionLengthInMinutes);
-        //            //_objectContext.APISessions.Update()
-        //            _objectContext.APISessions.Collection.Save(session);
-        //        }
-        //        else
-        //            throw new UnauthorizedAccessException("Security Token does not exist");
-
-        //        return response;
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        throw ex;
-        //    }
-        //}
 
         public LogoutResponse Logout(string token, string context)
         {
@@ -158,19 +159,18 @@ namespace Phytel.API.AppDomain.Security
             response.SuccessfulLogout = false;
             try
             {
-                List<IMongoQuery> queries = new List<IMongoQuery>();
-                queries.Add(Query.EQ(MEAPISession.IdProperty, ObjectId.Parse(token)));
-                queries.Add(Query.EQ(MEAPISession.ProductProperty, context.ToUpper()));
-                IMongoQuery mQuery = Query.And(queries);
+                IMongoQuery removeQ = Query.And(
+                                            Query.EQ(MEAPISession.IdProperty, ObjectId.Parse(token)),
+                                            Query.EQ(MEAPISession.ProductProperty, context.ToUpper()));
 
                 MEAPISession session = _objectContext.APISessions.Collection.FindOneById(ObjectId.Parse(token));
                 if (session != null && session.Product.ToUpper().Equals(context.ToUpper()))
                 {
-                    _objectContext.APISessions.Collection.Remove(mQuery);
+                    _objectContext.APISessions.Collection.Remove(removeQ);
                     response.SuccessfulLogout = true;
                 }
             }
-            catch (Exception ex) { throw ex; }
+            catch (Exception) { throw; }
             return response;
         }
 

@@ -17,6 +17,9 @@ namespace Phytel.API.DataDomain.LookUp.DTO
 
         [ApiMember(Name = "Version", Description = "Version of the Data Domain API being called", ParameterType = "path", DataType = "string", IsRequired = true)]
         public string Version { get; set; }
+
+        [ApiMember(Name = "UserID", Description = "ID of the user making the request (Internally used ONLY)", ParameterType = "property", DataType = "string", IsRequired = false)]
+        public string UserId { get; set; }
     }
 
 

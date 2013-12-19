@@ -11,5 +11,8 @@ namespace Phytel.API.DataDomain.LookUp.DTO
         public string Context { get; set; }
         public string ContractNumber { get; set; }
         public string Version { get; set; }
+
+        [ApiMember(Name = "UserID", Description = "ID of the user making the request (Internally used ONLY)", ParameterType = "property", DataType = "string", IsRequired = false)]
+        public string UserId { get; set; }
     }
 }

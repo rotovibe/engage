@@ -12,12 +12,10 @@ namespace Phytel.API.AppDomain.NG
     {
         protected static readonly string ADSecurityServiceURL = ConfigurationManager.AppSettings["ADSecurityServiceUrl"];
 
-        public bool IsUserValidated(string version, string token)
+        public ValidateTokenResponse IsUserValidated(string version, string token)
         {
             try
             {
-                bool result = false;
-
                 if (string.IsNullOrEmpty(token))
                     throw new ArgumentException("Token is null or empty.");
 
@@ -25,16 +23,11 @@ namespace Phytel.API.AppDomain.NG
                 ValidateTokenResponse response = client.Post<ValidateTokenResponse>(string.Format("{0}/{1}/{2}/token", ADSecurityServiceURL, "NG", version),
                     new ValidateTokenRequest { Token = token } as object);
 
-                if (response.IsValid)
-                    result = true;
-                else
-                    throw new ArgumentException("Token is not valid.");
-
-                return result;
+                return response;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                throw ex;
+                throw;
             }
         }
 

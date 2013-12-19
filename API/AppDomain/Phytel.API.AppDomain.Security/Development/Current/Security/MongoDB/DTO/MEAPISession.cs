@@ -17,7 +17,7 @@ namespace Phytel.API.AppDomain.Security
         public const string UserIDProperty = "uid";
         public const string ProductProperty = "prd";
         public const string APIKeyProperty = "apiKey";
-//        public const string SessionLengthInMinutesProperty = "slim";
+        public const string SessionLengthInMinutesProperty = "slim";
         public const string SessionTimeOutProperty = "sto";
         public const string VersionProperty = "v";
         public const string ExtraElementsProperty = "ex";
@@ -31,7 +31,7 @@ namespace Phytel.API.AppDomain.Security
 
         [BsonElement(UserIDProperty)]
         [BsonIgnoreIfNull(true)]
-        public string UserID { get; set; }
+        public string UserId { get; set; }
 
         [BsonElement(APIKeyProperty)]
         [BsonIgnoreIfNull(true)]
@@ -46,9 +46,9 @@ namespace Phytel.API.AppDomain.Security
         [BsonElement(SessionTimeOutProperty)]
         public DateTime SessionTimeOut { get; set; }
 
-        //[BsonElement(SessionLengthInMinutesProperty)]
-        //[BsonDefaultValue(60)]
-        //public int SessionLengthInMinutes { get; set; }
+        [BsonElement(SessionLengthInMinutesProperty)]
+        [BsonDefaultValue(60)]
+        public int SessionLengthInMinutes { get; set; }
 
         [BsonElement(VersionProperty)]
         [BsonDefaultValue("v1")]

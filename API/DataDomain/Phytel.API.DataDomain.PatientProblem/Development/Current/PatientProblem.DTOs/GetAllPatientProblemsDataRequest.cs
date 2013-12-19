@@ -10,5 +10,6 @@ namespace Phytel.API.DataDomain.PatientProblem.DTO
         public string Context { get; set; }
         public string ContractNumber { get; set; }
         public string Version { get; set; }
+        public string UserId { get; set; }
     }
 }

@@ -105,9 +105,9 @@ namespace Phytel.API.AppDomain.Security
 
                 return response;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                throw ex;
+                throw;
             }
         }
 
