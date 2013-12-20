@@ -32,9 +32,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.Patient.Service.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppDomain.NG.Test", "AppDomain.NG.Tests\AppDomain.NG.Test.csproj", "{1FCB66F1-56D2-430B-85A7-0D1C26A30FA8}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "AppDomain.Security", "AppDomain.Security", "{F6188D6D-9910-4933-8DBB-4E4572A78DE4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppDomain.Security.DTO", "..\..\..\Phytel.API.AppDomain.Security\Development\Current\Security.DTOs\AppDomain.Security.DTO.csproj", "{5D9C233B-E53D-4BE1-B578-1AA9722DE1CF}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 13
+		SccNumberOfProjects = 14
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = http://hillstfs2013:8080/tfs/phytel
 		SccLocalPath0 = .
@@ -86,6 +90,10 @@ Global
 		SccProjectTopLevelParentUniqueName12 = AppDomain.NG.sln
 		SccProjectName12 = AppDomain.NG.Tests
 		SccLocalPath12 = AppDomain.NG.Tests
+		SccProjectUniqueName13 = ..\\..\\..\\Phytel.API.AppDomain.Security\\Development\\Current\\Security.DTOs\\AppDomain.Security.DTO.csproj
+		SccProjectTopLevelParentUniqueName13 = AppDomain.NG.sln
+		SccProjectName13 = ../../../Phytel.API.AppDomain.Security/Development/Current/Security.DTOs
+		SccLocalPath13 = ..\\..\\..\\Phytel.API.AppDomain.Security\\Development\\Current\\Security.DTOs
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -140,6 +148,10 @@ Global
 		{1FCB66F1-56D2-430B-85A7-0D1C26A30FA8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1FCB66F1-56D2-430B-85A7-0D1C26A30FA8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1FCB66F1-56D2-430B-85A7-0D1C26A30FA8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5D9C233B-E53D-4BE1-B578-1AA9722DE1CF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5D9C233B-E53D-4BE1-B578-1AA9722DE1CF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5D9C233B-E53D-4BE1-B578-1AA9722DE1CF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5D9C233B-E53D-4BE1-B578-1AA9722DE1CF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -157,5 +169,6 @@ Global
 		{5D22373D-E432-4208-A737-E0BCA0567B5F} = {4D511DE3-A68D-43BD-8937-ACDDC1ED76D2}
 		{ABE948FB-247E-4955-B3AB-B7C93E10A542} = {D159338B-AADF-4BDD-996F-D0A097A022FD}
 		{25CF3C3F-221F-4A49-B5EF-A8A5FCF9A5BA} = {D159338B-AADF-4BDD-996F-D0A097A022FD}
+		{5D9C233B-E53D-4BE1-B578-1AA9722DE1CF} = {F6188D6D-9910-4933-8DBB-4E4572A78DE4}
 	EndGlobalSection
 EndGlobal

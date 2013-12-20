@@ -19,5 +19,6 @@ namespace Phytel.API.AppDomain.NG.DTO
         public string DisplaySystemId { get; set; }
         public string DisplaySystemName { get; set; }
         public int PriorityId { get; set; }
+        public bool Flagged { get; set; }
     }
 }

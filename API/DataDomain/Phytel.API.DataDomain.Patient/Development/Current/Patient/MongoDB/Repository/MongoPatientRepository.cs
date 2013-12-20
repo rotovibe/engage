@@ -95,6 +95,57 @@ namespace Phytel.API.DataDomain.Patient
             return patient;
         }
 
+        public object FindByID(string entityId, string userId)
+        {
+            DTO.PatientData patient = null;
+            using (PatientMongoContext ctx = new PatientMongoContext(_dbName))
+            {
+                patient = (from p in ctx.Patients
+                           where p.Id == ObjectId.Parse(entityId)
+                           select new DTO.PatientData
+                           {
+                               ID = p.Id.ToString(),
+                               DOB = CommonFormatter.FormatDateOfBirth(p.DOB),
+                               FirstName = p.FirstName,
+                               Gender = p.Gender,
+                               LastName = p.LastName,
+                               PreferredName = p.PreferredName,
+                               MiddleName = p.MiddleName,
+                               Suffix = p.Suffix,
+                               Priority = (DTO.Priority)((int)p.Priority),
+                               DisplayPatientSystemID = p.DisplayPatientSystemID.ToString(),
+                               Flagged = GetFlaggedStatus(entityId, userId)
+                           }).FirstOrDefault();
+            }
+            return patient;
+        }
+
+        private bool GetFlaggedStatus(string entityId, string userId)
+        {
+            bool result = false;
+            using (PatientMongoContext ctx = new PatientMongoContext(_dbName))
+            {
+                var patientUsr = FindPatientUser(entityId, userId, ctx);
+
+                if (patientUsr != null)
+                {
+                    result = patientUsr.Flagged;
+                }
+            }
+            return result;
+        }
+
+        private static MEPatientUser FindPatientUser(string entityId, string userId, PatientMongoContext ctx)
+        {
+            var findQ = Query.And(
+                Query<MEPatientUser>.EQ(b => b.PatientId, ObjectId.Parse(entityId)),
+                Query<MEPatientUser>.EQ(b => b.UserId, userId)
+            );
+
+            var patientUsr = ctx.PatientUsers.Collection.Find(findQ).FirstOrDefault();
+            return patientUsr;
+        }
+
         public Tuple<string, IEnumerable<object>> Select(Interface.APIExpression expression)
         {
             throw new NotImplementedException();
@@ -180,26 +231,31 @@ namespace Phytel.API.DataDomain.Patient
             {
                 using (PatientMongoContext ctx = new PatientMongoContext(_dbName))
                 {
-                    var query = new QueryDocument(MEPatient.IdProperty, ObjectId.Parse(request.PatientId));
-                    MEPatient patient = ctx.Patients.Collection.Find(query).FirstOrDefault();
 
-                    if (request.Flagged == 1)
+                    var patientUsr = FindPatientUser(request.PatientId, request.UserId, ctx);
+
+                    if (patientUsr == null)
                     {
-                        if (patient.UserFlaggedList == null) patient.UserFlaggedList = new List<string>();
-
-                        if (!patient.UserFlaggedList.Contains(request.UserId))
+                        ctx.PatientUsers.Collection.Insert(new MEPatientUser
                         {
-                            patient.UserFlaggedList.Add(request.UserId);
-                        }
+                            PatientId = ObjectId.Parse(request.PatientId),
+                            UserId = request.UserId,
+                            Flagged = Convert.ToBoolean(request.Flagged),
+                            Version = "v1",
+                            LastUpdatedOn = System.DateTime.UtcNow,
+                            DeleteFlag = false
+                        });
+                        response.flagged = Convert.ToBoolean(request.Flagged);
                     }
-                    else if (request.Flagged == 0)
+                    else
                     {
-                        string usrid = patient.UserFlaggedList.Where(a => a == request.UserId).FirstOrDefault();
-                        if (!usrid.Equals(string.Empty))
-                            patient.UserFlaggedList.Remove(usrid);
-                    }
 
-                    ctx.Patients.Collection.Save(patient);
+                        var pUQuery = new QueryDocument(MEPatientUser.PatientIdProperty, ObjectId.Parse(request.PatientId));
+                        var sortBy = new SortByBuilder().Ascending("_id");
+                        UpdateBuilder updt = new UpdateBuilder().Set("flg", Convert.ToBoolean(request.Flagged));
+                        var pt = ctx.PatientUsers.Collection.FindAndModify(pUQuery, sortBy, updt, true);
+                        response.flagged = Convert.ToBoolean(request.Flagged);
+                    }
                 }
                 return response;
             }

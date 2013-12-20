@@ -38,12 +38,13 @@ namespace Phytel.API.AppDomain.NG
                 //Execute call(s) to Patient Data Domain
                 IRestClient client = new JsonServiceClient();
 
-                Phytel.API.DataDomain.Patient.DTO.GetPatientDataResponse response = client.Get<Phytel.API.DataDomain.Patient.DTO.GetPatientDataResponse>(string.Format("{0}/{1}/{2}/{3}/patient/{4}",
+                Phytel.API.DataDomain.Patient.DTO.GetPatientDataResponse response = client.Get<Phytel.API.DataDomain.Patient.DTO.GetPatientDataResponse>(string.Format("{0}/{1}/{2}/{3}/patient/{4}?UserId={5}",
                                                                                             DDPatientServiceURL,
                                                                                             "NG",
                                                                                             request.Version,
                                                                                             request.ContractNumber,
-                                                                                            request.PatientID));
+                                                                                            request.PatientID,
+                                                                                            request.UserId));
 
                 if (response != null && response.Patient != null)
                 {
@@ -69,7 +70,8 @@ namespace Phytel.API.AppDomain.NG
                         MiddleName = response.Patient.MiddleName,
                         Suffix = response.Patient.Suffix,
                         PreferredName = response.Patient.PreferredName,
-                        PriorityId = (int)response.Patient.Priority
+                        PriorityId = (int)response.Patient.Priority,
+                        Flagged = response.Patient.Flagged
                     };
 
                     if (sysResponse != null && sysResponse.PatientSystem != null)
@@ -252,13 +254,14 @@ namespace Phytel.API.AppDomain.NG
             PutPatientPriorityUpdateResponse response = new PutPatientPriorityUpdateResponse();
 
             IRestClient client = new JsonServiceClient();
-            PutPatientPriorityUpdateResponse dataDomainResponse = client.Put<PutPatientPriorityUpdateResponse>(string.Format("{0}/{1}/{2}/{3}/patient/{4}/priority/{5}",
-                                                                                                            DDPatientServiceURL,
-                                                                                                            "NG",
-                                                                                                            request.Version,
-                                                                                                            request.ContractNumber,
-                                                                                                            request.PatientId,
-                                                                                                            request.Priority), new PutPatientPriorityUpdateResponse { } as object);
+            PutPatientPriorityUpdateResponse dataDomainResponse = 
+                client.Put<PutPatientPriorityUpdateResponse>(string.Format("{0}/{1}/{2}/{3}/patient/{4}/priority/{5}",
+                                                                            DDPatientServiceURL,
+                                                                            "NG",
+                                                                            request.Version,
+                                                                            request.ContractNumber,
+                                                                            request.PatientId,
+                                                                            request.Priority), new PutPatientPriorityUpdateResponse { } as object);
             return dataDomainResponse;
         }
 
@@ -271,13 +274,13 @@ namespace Phytel.API.AppDomain.NG
                 IRestClient client = new JsonServiceClient();
                 PutPatientFlaggedUpdateResponse dataDomainResponse =
                     client.Put<PutPatientFlaggedUpdateResponse>(string.Format("{0}/{1}/{2}/{3}/patient/{4}/flagged/{5}?UserId={6}",
-                                                                                                                DDPatientServiceURL,
-                                                                                                                "NG",
-                                                                                                                request.Version,
-                                                                                                                request.ContractNumber,
-                                                                                                                request.PatientId,
-                                                                                                                request.Flagged,
-                                                                                                                request.UserId), new PutPatientFlaggedUpdateResponse { } as object);
+                                                                                DDPatientServiceURL,
+                                                                                "NG",
+                                                                                request.Version,
+                                                                                request.ContractNumber,
+                                                                                request.PatientId,
+                                                                                request.Flagged,
+                                                                                request.UserId), new PutPatientFlaggedUpdateResponse { } as object);
                 return dataDomainResponse;
             }
             catch (WebServiceException)

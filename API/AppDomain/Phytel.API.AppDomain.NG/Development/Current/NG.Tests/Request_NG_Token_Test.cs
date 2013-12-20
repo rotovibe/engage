@@ -23,12 +23,12 @@ namespace Phytel.API.AppDomain.NG.Services.Test
             string fnsampleValue;
             string gnsampleValue;
             string dobsampleValue;
-            string patientID = "527a933efe7a590ad417d3b0";
+            string patientID = "528f6dc2072ef708ecd90e87";
 
             IRestClient client = new JsonServiceClient();
             JsonServiceClient.HttpWebRequestFilter = x => x.Headers.Add(string.Format("APIToken: {0}", token));
             
-            GetPatientResponse response = client.Post<GetPatientResponse>("http://localhost:888/Nightingale/v1/NG/InHealth001/patient",
+            GetPatientResponse response = client.Post<GetPatientResponse>("http://localhost:888/Nightingale/v1/InHealth001/patient",
                 new GetPatientRequest { PatientID = patientID } as object);
 
             lnsampleValue = response.Patient.LastName;

@@ -29,6 +29,29 @@ namespace Phytel.API.DataDomain.Patient.Service.Test
         }
 
         [TestMethod]
+        public void Get_Patient_with_Flag_ByID_and_UserID()
+        {
+            string controlValue = "Tony";
+            string sampleValue;
+            string patientId = "528f6dc2072ef708ecd90e87";
+            string userId = "BB241C64-A0FF-4E01-BA5F-4246EF50780E";
+            string contractNumber = "InHealth001";
+            string context = "NG";
+            IRestClient client = new JsonServiceClient();
+
+            //JsonServiceClient.HttpWebRequestFilter = x => x.Headers.Add(string.Format("APIKey:{0}", "12345"));
+
+            GetPatientDataResponse response = client.Get<GetPatientDataResponse>(string.Format
+                ("http://localhost:8888/Patient/NG/v1/InHealth001/patient/{0}?UserId={1}",
+                patientId,
+                userId));
+
+            sampleValue = response.Patient.FirstName;
+
+            Assert.AreEqual(controlValue, sampleValue);
+        }
+
+        [TestMethod]
         public void Get_PatientByID()
         {
             string controlValue = "Tony";

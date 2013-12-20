@@ -13,5 +13,6 @@ namespace Phytel.API.DataDomain.Patient
         GetPatientsDataResponse Select(string[] patientIds);
         PutPatientPriorityResponse UpdatePriority(PutPatientPriorityRequest request);
         PutPatientFlaggedResponse UpdateFlagged(PutPatientFlaggedRequest request);
+        object FindByID(string patientId, string userId);
     }
 }

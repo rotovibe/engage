@@ -86,6 +86,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="IPatientRepository.cs" />
+    <Compile Include="MongoDB\DTO\MEPatientUser.cs" />
     <Compile Include="MongoDB\DTO\MEPatient.cs" />
     <Compile Include="MongoDB\Repository\MongoPatientRepository.cs" />
     <Compile Include="MongoDB\PatientMongoContext.cs" />

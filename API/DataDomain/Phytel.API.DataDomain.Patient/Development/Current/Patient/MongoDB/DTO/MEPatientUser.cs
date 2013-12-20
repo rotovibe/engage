@@ -9,20 +9,14 @@ namespace Phytel.API.DataDomain.Patient.DTO
 {
     [BsonIgnoreExtraElements(false)]
     [MongoIndex(Keys = new string[] { TTLDateProperty }, TimeToLive=0)]
-    public class MEPatient : IMongoEntity<ObjectId>, IMEEntity
+    public class MEPatientUser : IMongoEntity<ObjectId>, IMEEntity
     {
-        public MEPatient() { Id = ObjectId.GenerateNewId(); }
+        public MEPatientUser() { Id = ObjectId.GenerateNewId(); }
 
         public const string IdProperty = "_id";
-        public const string DisplayPatientSystemIDProperty = "dpsid";
-        public const string FirstNameProperty = "fn";
-        public const string LastNameProperty = "ln";
-        public const string GenderProperty = "gn";
-        public const string DOBProperty = "dob";
-        public const string MiddleNameProperty = "mn";
-        public const string SuffixProperty = "sfx";
-        public const string PreferredProperty = "pfn";
-        public const string PriorityProperty = "pri";
+        public const string PatientIdProperty = "pid";
+        public const string UserIdProperty = "uid";
+        public const string FlaggedProperty = "flg";
         public const string ExtraElementsProperty = "ex";
         public const string VersionProperty = "v";
         public const string UpdatedByProperty = "uby";
@@ -33,41 +27,17 @@ namespace Phytel.API.DataDomain.Patient.DTO
         [BsonId]
         public ObjectId Id { get; set; }
 
-        [BsonElement(DisplayPatientSystemIDProperty)]
+        [BsonElement(PatientIdProperty)]
         [BsonIgnoreIfNull(true)]
-        public ObjectId? DisplayPatientSystemID { get; set; }
+        public ObjectId PatientId { get; set; }
 
-        [BsonElement(FirstNameProperty)]
+        [BsonElement(UserIdProperty)]
         [BsonIgnoreIfNull(true)]
-        public string FirstName { get; set; }
+        public string UserId { get; set; }
 
-        [BsonElement(LastNameProperty)]
+        [BsonElement(FlaggedProperty)]
         [BsonIgnoreIfNull(true)]
-        public string LastName { get; set; }
-
-        [BsonElement(SuffixProperty)]
-        [BsonIgnoreIfNull(true)]
-        public string Suffix { get; set; }
-
-        [BsonElement(PreferredProperty)]
-        [BsonIgnoreIfNull(true)]
-        public string PreferredName { get; set; }
-
-        [BsonElement(MiddleNameProperty)]
-        [BsonIgnoreIfNull(true)]
-        public string MiddleName { get; set; }
-
-        [BsonElement(GenderProperty)]
-        [BsonIgnoreIfNull(true)]
-        public string Gender { get; set; }
-
-        [BsonElement(DOBProperty)]
-        [BsonIgnoreIfNull(true)]
-        public string DOB { get; set; }
-
-        [BsonElement(PriorityProperty)]
-        [BsonIgnoreIfNull(true)]
-        public MEPriority Priority { get; set; }
+        public bool Flagged { get; set; }
 
         [BsonElement(ExtraElementsProperty)]
         [BsonExtraElements()]
@@ -95,13 +65,5 @@ namespace Phytel.API.DataDomain.Patient.DTO
         [BsonIgnoreIfNull(true)]
         [BsonDateTimeOptions(Kind = System.DateTimeKind.Local)]
         public System.DateTime? LastUpdatedOn { get; set; }
-    }
-
-    public enum MEPriority
-    {
-        NotSet = 0,
-        Low = 1,
-        Medium = 2,
-        High = 3
     }
 }
