@@ -6,6 +6,9 @@ namespace Phytel.API.DataDomain.Template.DTO
     [Route("/{Context}/{Version}/{ContractNumber}/Template/{TemplateID}", "GET")]
     public class GetTemplateRequest : IDataDomainRequest
     {
+        [ApiMember(Name = "UserId", Description = "UserId of the logged in user", ParameterType = "property", DataType = "string", IsRequired = false)]
+        public string UserId { get; set; }
+
         [ApiMember(Name = "TemplateID", Description = "ID of the Template being requested", ParameterType = "property", DataType = "string", IsRequired = false)]
         public string TemplateID { get; set; }
 

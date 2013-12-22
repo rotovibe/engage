@@ -71,7 +71,7 @@ namespace Phytel.API.DataDomain.Template
             catch (Exception ex) { throw ex; }
         }
 
-        public Tuple<string, IQueryable<object>> Select(Interface.APIExpression expression)
+        public Tuple<string, IEnumerable<object>> Select(Interface.APIExpression expression)
         {
             try
             {
@@ -81,7 +81,7 @@ namespace Phytel.API.DataDomain.Template
             catch (Exception ex) { throw ex; }
         }
 
-        public IQueryable<object> SelectAll()
+        public IEnumerable<object> SelectAll()
         {
             try
             {
