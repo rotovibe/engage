@@ -76,6 +76,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="PostPatientToProgramsRequest.cs" />
+    <Compile Include="PostPatientToProgramsResponse.cs" />
     <Compile Include="GetAllSettingsResponse.cs" />
     <Compile Include="GetAllSettingsRequest.cs" />
     <Compile Include="GetAllProblemsResponse.cs" />
@@ -85,8 +87,10 @@
     <Compile Include="GetAllPatientProblemsRequest.cs" />
     <Compile Include="GetAllPatientProblemsResponse.cs" />
     <Compile Include="GetAllCohortsRequest.cs" />
+    <Compile Include="GetActiveProgramsRequest.cs" />
     <Compile Include="GetPatientRequest.cs" />
     <Compile Include="GetAllCohortsResponse.cs" />
+    <Compile Include="GetActiveProgramsResponse.cs" />
     <Compile Include="GetPatientResponse.cs" />
     <Compile Include="Patient.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

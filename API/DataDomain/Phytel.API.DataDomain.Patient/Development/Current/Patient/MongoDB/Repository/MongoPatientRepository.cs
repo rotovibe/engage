@@ -265,12 +265,46 @@ namespace Phytel.API.DataDomain.Patient
             }
         }
 
-        public object Update(T entity)
+        public object Update(PutUpdatePatientDataRequest request)
+        {
+            PutUpdatePatientDataResponse response = new PutUpdatePatientDataResponse();
+            try
+            {
+                using (PatientMongoContext ctx = new PatientMongoContext(_dbName))
+                {
+                    var pUQuery = new QueryDocument(MEPatientUser.PatientIdProperty, ObjectId.Parse(request.Id));
+                    
+                    UpdateBuilder updt = new UpdateBuilder()
+                        .Set("fn", request.FirstName)
+                        .Set("ln", request.LastName)
+                        .Set("mn", request.MiddleName)
+                        .Set("sfx", request.Suffix)
+                        .Set("pfn", request.PreferredName)
+                        .Set("gn", request.Gender)
+                        .Set("dob", request.DOB)
+                        .Set("pri", request.Priority)
+                        .Set("v", Convert.ToBoolean(request.Version));
+
+                    var sortBy = new SortByBuilder().Ascending("_id");
+                    var pt = ctx.PatientUsers.Collection.FindAndModify(pUQuery, sortBy, updt, true);
+                    
+                    response.Id = request.Id;
+                }
+                return response;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public void CacheByID(List<string> entityIDs)
         {
             throw new NotImplementedException();
         }
 
-        public void CacheByID(List<string> entityIDs)
+
+        public object Update(T entity)
         {
             throw new NotImplementedException();
         }

@@ -40,6 +40,23 @@ namespace Phytel.API.DataDomain.Patient.Service
             return response;
         }
 
+        public PutUpdatePatientDataResponse Put(PutUpdatePatientDataRequest request)
+        {
+            PutUpdatePatientDataResponse response = new PutUpdatePatientDataResponse();
+            try
+            {
+                response = PatientDataManager.UpdatePatient(request);
+                response.Version = request.Version;
+            }
+            catch (Exception ex)
+            {
+                //TODO: Log this to the SQL database via ASE
+                base.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                response.Status = new ServiceStack.ServiceInterface.ServiceModel.ResponseStatus("Exception", ex.Message);
+            }
+            return response;
+        }
+
 
         public PutPatientDataResponse Put(PutPatientDataRequest request)
         {

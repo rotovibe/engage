@@ -3,7 +3,7 @@ using ServiceStack.ServiceHost;
 
 namespace Phytel.API.AppDomain.NG.DTO
 {
-    [Route("/{Version}/{ContractNumber}/patient/{PatientId}/flagged/{Flagged}", "PUT")]
+    [Route("/{Version}/{ContractNumber}/patient/{PatientId}/flagged/{Flagged}", "POST")]
     public class PutPatientFlaggedUpdateRequest : IAppDomainRequest
     {
         [ApiMember(Name = "UserId", Description = "UserId of the user", ParameterType = "property", DataType = "string", IsRequired = true)]

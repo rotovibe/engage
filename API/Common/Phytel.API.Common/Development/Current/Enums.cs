@@ -23,5 +23,16 @@ namespace Phytel.API.Common
         InReview = 3,
         Met = 4,
         NotMet = 5
-    } 
+    }
+
+    /// <summary>
+    /// Program state enums
+    /// </summary>
+    public enum ProgramState
+    {
+        Removed = -1,
+        NotStarted = 0,
+        Started = 1,
+        Completed = 2
+    }
 }

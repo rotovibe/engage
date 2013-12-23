@@ -76,6 +76,8 @@
     <Compile Include="GetPatientDataRequest.cs" />
     <Compile Include="GetPatientDataResponse.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="PutUpdatePatientDataRequest.cs" />
+    <Compile Include="PutUpdatePatientDataResponse.cs" />
     <Compile Include="PutPatientFlaggedRequest.cs" />
     <Compile Include="PutPatientPriorityRequest.cs" />
     <Compile Include="PutPatientDataRequest.cs" />

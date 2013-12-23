@@ -146,7 +146,7 @@ namespace Phytel.API.AppDomain.NG.Service
             }
         }
 
-        public PutPatientFlaggedUpdateResponse Put(PutPatientFlaggedUpdateRequest request)
+        public PutPatientFlaggedUpdateResponse Post(PutPatientFlaggedUpdateRequest request)
         {
             PutPatientFlaggedUpdateResponse response = new PutPatientFlaggedUpdateResponse();
             try
@@ -249,5 +249,56 @@ namespace Phytel.API.AppDomain.NG.Service
             }
         }
 
+        public GetActiveProgramsResponse Get(GetActiveProgramsRequest request)
+        {
+            GetActiveProgramsResponse response = new GetActiveProgramsResponse();
+            try
+            {
+                NGManager ngm = new NGManager();
+
+                ValidateTokenResponse result = ngm.IsUserValidated(request.Version, request.Token);
+                if (result.UserId.Trim() != string.Empty)
+                {
+                    request.UserId = result.UserId;
+                    response = ngm.GetActivePrograms(request);
+                }
+                else
+                    throw new UnauthorizedAccessException();
+
+                return response;
+            }
+            catch (Exception ex)
+            {
+                //TODO: Log this to the SQL database via ASE
+                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+                return response;
+            }
+        }
+
+        public PostPatientToProgramsResponse Post(PostPatientToProgramsRequest request)
+        {
+            PostPatientToProgramsResponse response = new PostPatientToProgramsResponse();
+            try
+            {
+                NGManager ngm = new NGManager();
+
+                ValidateTokenResponse result = ngm.IsUserValidated(request.Version, request.Token);
+                if (result.UserId.Trim() != string.Empty)
+                {
+                    request.UserId = result.UserId;
+                    response = ngm.PostPatientToProgram(request);
+                }
+                else
+                    throw new UnauthorizedAccessException();
+
+                return response;
+            }
+            catch (Exception ex)
+            {
+                //TODO: Log this to C3 database via ASE
+                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+                return response;
+            }
+        }
     }
 }

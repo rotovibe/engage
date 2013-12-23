@@ -61,5 +61,12 @@ namespace Phytel.API.DataDomain.Patient
             response = repo.UpdateFlagged(request) as PutPatientFlaggedResponse;
             return response;
         }
+
+        public static PutUpdatePatientDataResponse UpdatePatient(PutUpdatePatientDataRequest request)
+        {
+            IPatientRepository<PutUpdatePatientDataRequest> repo = PatientRepositoryFactory<PutUpdatePatientDataRequest>.GetPatientRepository(request.ContractNumber, request.Context);
+            PutUpdatePatientDataResponse result = repo.Update(request) as PutUpdatePatientDataResponse;
+            return result;
+        }
     }
 }   

@@ -23,6 +23,7 @@ namespace Phytel.API.AppDomain.NG
         protected static readonly string DDPatientServiceURL = ConfigurationManager.AppSettings["DDPatientServiceUrl"];
         protected static readonly string DDPatientProblemServiceUrl = ConfigurationManager.AppSettings["DDPatientProblemServiceUrl"];
         protected static readonly string DDLookupServiceUrl = ConfigurationManager.AppSettings["DDLookupServiceUrl"];
+        protected static readonly string DDProgramServiceUrl = ConfigurationManager.AppSettings["DDProgramServiceUrl"];
         protected static readonly string DDCohortServiceUrl = ConfigurationManager.AppSettings["DDCohortServiceUrl"];
         protected static readonly string DDCohortPatientServiceUrl = ConfigurationManager.AppSettings["DDCohortPatientServiceUrl"];
         protected static readonly string DDPatientSystemUrl = ConfigurationManager.AppSettings["DDPatientSystemUrl"];
@@ -71,7 +72,7 @@ namespace Phytel.API.AppDomain.NG
                         Suffix = response.Patient.Suffix,
                         PreferredName = response.Patient.PreferredName,
                         PriorityId = (int)response.Patient.Priority,
-                        Flagged = response.Patient.Flagged
+                        Flagged = Convert.ToInt32(response.Patient.Flagged)
                     };
 
                     if (sysResponse != null && sysResponse.PatientSystem != null)
@@ -255,7 +256,7 @@ namespace Phytel.API.AppDomain.NG
 
             IRestClient client = new JsonServiceClient();
             PutPatientPriorityUpdateResponse dataDomainResponse = 
-                client.Put<PutPatientPriorityUpdateResponse>(string.Format("{0}/{1}/{2}/{3}/patient/{4}/priority/{5}",
+                client.Post<PutPatientPriorityUpdateResponse>(string.Format("{0}/{1}/{2}/{3}/patient/{4}/priority/{5}",
                                                                             DDPatientServiceURL,
                                                                             "NG",
                                                                             request.Version,
@@ -281,6 +282,56 @@ namespace Phytel.API.AppDomain.NG
                                                                                 request.PatientId,
                                                                                 request.Flagged,
                                                                                 request.UserId), new PutPatientFlaggedUpdateResponse { } as object);
+                return dataDomainResponse;
+            }
+            catch (WebServiceException)
+            {
+                throw;
+            }
+        }
+
+
+        public GetActiveProgramsResponse GetActivePrograms(GetActiveProgramsRequest request)
+        {
+            GetActiveProgramsResponse pResponse = new GetActiveProgramsResponse();
+
+            try
+            {
+                List<ProgramInfo> response = new List<ProgramInfo>();
+
+                IRestClient client = new JsonServiceClient();
+
+                GetActiveProgramsResponse dataDomainResponse =
+                    client.Get<GetActiveProgramsResponse>(
+                    string.Format("{0}/{1}/{2}/{3}/Programs/Active", DDProgramServiceUrl, "NG", request.Version, request.ContractNumber));
+
+                pResponse.Programs = dataDomainResponse.Programs;
+                pResponse.Version = "v1";
+                return pResponse;
+            }
+            catch (Exception)
+            {
+                //SendAuditDispatch();
+                throw;
+            }
+        }
+
+        public PostPatientToProgramsResponse PostPatientToProgram(PostPatientToProgramsRequest request)
+        {
+            try
+            {
+                PostPatientToProgramsResponse response = new PostPatientToProgramsResponse();
+
+                IRestClient client = new JsonServiceClient();
+                PostPatientToProgramsResponse dataDomainResponse =
+                    client.Post<PostPatientToProgramsResponse>(
+                    string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Programs/?ContractProgramId={5}",
+                    DDPatientServiceURL, 
+                    "NG", 
+                    request.Version, 
+                    request.ContractNumber, 
+                    request.PatientId, 
+                    request.ContractProgramId), new PostPatientToProgramsResponse { } as object);
                 return dataDomainResponse;
             }
             catch (WebServiceException)
