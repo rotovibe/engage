@@ -10,10 +10,10 @@ namespace Phytel.API.AppDomain.NG.DTO
         [ApiMember(Name = "UserId", Description = "UserId of the logged in user", ParameterType = "property", DataType = "string", IsRequired = false)]
         public string UserId { get; set; }
 
-        [ApiMember(Name = "PatientId", Description = "PatientId", ParameterType = "property", DataType = "string", IsRequired = false)]
+        [ApiMember(Name = "PatientId", Description = "PatientId", ParameterType = "path", DataType = "string", IsRequired = false)]
         public string PatientId { get; set; }
 
-        [ApiMember(Name = "ContractProgramId", Description = "Id of the contractprogram to assign to patient", ParameterType = "property", DataType = "string", IsRequired = false)]
+        [ApiMember(Name = "ContractProgramId", Description = "Id of the contractprogram to assign to patient", ParameterType = "querystring", DataType = "string", IsRequired = false)]
         public string ContractProgramId { get; set; }
 
         [ApiMember(Name = "Context", Description = "Product Context requesting the Program", ParameterType = "property", DataType = "string", IsRequired = false)]
