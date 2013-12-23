@@ -9,6 +9,8 @@ namespace Phytel.API.DataDomain.Program.DTO
         /*
          * Put custom fields here
         */
+        [ApiMember(Name = "UserId", Description = "UserId of the logged in user", ParameterType = "property", DataType = "string", IsRequired = false)]
+        public string UserId { get; set; }
 
         [ApiMember(Name = "Context", Description = "Product Context requesting the Program", ParameterType = "property", DataType = "string", IsRequired = false)]
         public string Context { get; set; }

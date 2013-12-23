@@ -11,20 +11,26 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
 {
     [BsonIgnoreExtraElements(false)]
     [MongoIndex(Keys = new string[] { TTLDateProperty }, TimeToLive = 0)]
-    public class MEProgram : MEProgramBase, IMongoEntity<ObjectId>
+    public class MEContractProgram : MEProgramBase, IMongoEntity<ObjectId>
     {
-        public MEProgram() { Id = ObjectId.GenerateNewId(); }
+        public MEContractProgram(){ Id = ObjectId.GenerateNewId(); }
 
         public const string IdProperty = "_id";
-        public const string TemplateNameProperty = "ptn";
+
+        public const string ProgramTemplateIdProperty = "ptid";
+        public const string ContractIdProperty = "cid";
         public const string TTLDateProperty = "ttl";
 
         [BsonId]
         public ObjectId Id { get; set; }
 
-        [BsonElement(TemplateNameProperty)]
+        [BsonElement(ProgramTemplateIdProperty)]
         [BsonIgnoreIfNull(true)]
-        public string TemplateName { get; set; }
+        public ObjectId ProgramTemplateId { get; set; }
+
+        [BsonElement(ContractIdProperty)]
+        [BsonIgnoreIfNull(true)]
+        public ObjectId ContractId { get; set; }
 
         [BsonElement(TTLDateProperty)]
         [BsonIgnoreIfNull(true)]

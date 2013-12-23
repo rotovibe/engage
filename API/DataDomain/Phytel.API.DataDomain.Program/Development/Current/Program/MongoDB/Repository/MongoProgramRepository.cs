@@ -79,6 +79,86 @@ namespace Phytel.API.DataDomain.Program
             return program;
         }
 
+        public List<ProgramInfo> GetActiveProgramsInfoList(GetAllActiveProgramsRequest request)
+        {
+            List<ProgramInfo> result = new List<ProgramInfo>();
+
+            using (ProgramMongoContext ctx = new ProgramMongoContext(_dbName))
+            {
+                IMongoQuery mQuery = Query.EQ(MEContractProgram.StatusProperty, 1);
+                result = ctx.ContractPrograms.Collection.Find(mQuery).Select(r => new ProgramInfo
+                {
+                    Name = r.Name,
+                    ProgramID = r.Id.ToString(),
+                    ProgramStatus = r.ProgramStatus,
+                    ShortName = r.ShortName,
+                    Status = (int)r.Status
+                }).ToList();
+            }
+            return result;
+        }
+
+        public Outcome InsertPatientToProgramAssignment(PutProgramToPatientRequest request)
+        {
+            try
+            {
+                Outcome result = new Outcome();
+                using (ProgramMongoContext ctx = new ProgramMongoContext(_dbName))
+                {
+                    var findQ = Query.And(
+                        Query.In(MEPatientProgram.ProgramStateProperty, new List<BsonValue> { BsonValue.Create(0), BsonValue.Create(1) }),
+                        Query<MEPatientProgram>.EQ(b => b.PatientId, ObjectId.Parse(request.PatientId)),
+                        Query<MEPatientProgram>.EQ(b => b.ContractProgramId, ObjectId.Parse(request.ContractProgramId)));
+
+                    List<MEPatientProgram> pp = ctx.PatientPrograms.Collection.Find(findQ).ToList();
+
+                    if (pp.Count == 0)
+                    {
+                        var findcp = Query<MEContractProgram>.EQ(b => b.Id, ObjectId.Parse(request.ContractProgramId));
+                        MEContractProgram cp = ctx.ContractPrograms.Collection.Find(findcp).FirstOrDefault();
+
+                        ctx.PatientPrograms.Collection.Insert(new MEPatientProgram
+                        {
+                            PatientId = ObjectId.Parse(request.PatientId),
+                            AuthoredBy = cp.AuthoredBy,
+                            Client = cp.Client,
+                            ProgramState = Common.ProgramState.NotStarted,
+                            ProgramStatus = "0",
+                            ContractProgramId = cp.Id,
+                            DeleteFlag = cp.DeleteFlag,
+                            Description = cp.Description,
+                            EligibilityEndDate = cp.EligibilityEndDate,
+                            EligibilityRequirements = cp.EligibilityRequirements,
+                            EligibilityStartDate = cp.EligibilityStartDate,
+                            EndDate = cp.EndDate,
+                            LastUpdatedOn = cp.LastUpdatedOn,
+                            Locked = cp.Locked,
+                            Modules = cp.Modules,
+                            Name = cp.Name,
+                            ObjectivesInfo = cp.ObjectivesInfo,
+                            ShortName = cp.ShortName,
+                            StartDate = cp.StartDate,
+                            Status = cp.Status
+
+                        });
+
+                        result.Result = 1;
+                        result.Reason = "Successfully assigned this program for the patient";
+                    }
+                    else
+                    {
+                        result.Result = 0;
+                        result.Reason = pp[0].Name + " is already assigned";
+                    }
+                }
+                return result;
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
         public Tuple<string, IEnumerable<object>> Select(Interface.APIExpression expression)
         {
             throw new NotImplementedException();

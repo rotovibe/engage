@@ -3,14 +3,11 @@ using ServiceStack.ServiceHost;
 
 namespace Phytel.API.DataDomain.Program.DTO
 {
-    [Route("/{Context}/{Version}/{ContractNumber}/Program/{ProgramID}", "GET")]
-    public class GetProgramRequest : IDataDomainRequest
+    [Route("/{Context}/{Version}/{ContractNumber}/Programs/Active", "GET")]
+    public class GetAllActiveProgramsRequest : IDataDomainRequest
     {
         [ApiMember(Name = "UserId", Description = "UserId of the logged in user", ParameterType = "property", DataType = "string", IsRequired = false)]
         public string UserId { get; set; }
-
-        [ApiMember(Name = "ProgramID", Description = "ID of the Program being requested", ParameterType = "property", DataType = "string", IsRequired = false)]
-        public string ProgramID { get; set; }
 
         [ApiMember(Name = "Context", Description = "Product Context requesting the Program", ParameterType = "property", DataType = "string", IsRequired = false)]
         public string Context { get; set; }

@@ -69,7 +69,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="PutProgramToPatientRequest.cs" />
+    <Compile Include="GetAllActiveProgramsRequest.cs" />
+    <Compile Include="PutProgramToPatientResponse.cs" />
     <Compile Include="GetAllProgramsRequest.cs" />
+    <Compile Include="GetAllActiveProgramsResponse.cs" />
     <Compile Include="GetProgramRequest.cs" />
     <Compile Include="GetAllProgramsResponse.cs" />
     <Compile Include="GetProgramResponse.cs" />
