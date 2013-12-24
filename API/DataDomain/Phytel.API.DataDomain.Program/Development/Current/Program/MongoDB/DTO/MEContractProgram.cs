@@ -30,7 +30,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
 
         [BsonElement(ContractIdProperty)]
         [BsonIgnoreIfNull(true)]
-        public ObjectId ContractId { get; set; }
+        public string ContractId { get; set; }
 
         [BsonElement(TTLDateProperty)]
         [BsonIgnoreIfNull(true)]
