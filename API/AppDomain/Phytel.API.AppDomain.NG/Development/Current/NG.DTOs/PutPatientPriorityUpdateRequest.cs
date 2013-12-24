@@ -3,11 +3,32 @@ using ServiceStack.ServiceHost;
 
 namespace Phytel.API.AppDomain.NG.DTO
 {
-    [Route("/{Version}/{ContractNumber}/patient/{PatientId}/priority/{Priority}", "PUT")]
-    public class PutPatientPriorityUpdateRequest : IAppDomainRequest
+    [Route("/{Version}/{ContractNumber}/patient/{PatientId}/priority/{Priority}", "POST")]
+    public class PutPatientDetailsUpdateRequest : IAppDomainRequest
     {
         [ApiMember(Name = "PatientId", Description = "Id of the patient being updated", ParameterType = "property", DataType = "string", IsRequired = true)]
-        public string PatientId { get; set; }
+        public string Id { get; set; }
+
+        [ApiMember(Name = "FirstName", Description = "First Name of the patient being created", ParameterType = "property", DataType = "string", IsRequired = true)]
+        public string FirstName { get; set; }
+
+        [ApiMember(Name = "LastName", Description = "Last name of the patient being created", ParameterType = "property", DataType = "string", IsRequired = true)]
+        public string LastName { get; set; }
+
+        [ApiMember(Name = "MiddleName", Description = "Middle name of the patient being created", ParameterType = "property", DataType = "string", IsRequired = false)]
+        public string MiddleName { get; set; }
+
+        [ApiMember(Name = "Suffix", Description = "Suffix of the patient being created", ParameterType = "property", DataType = "string", IsRequired = false)]
+        public string Suffix { get; set; }
+
+        [ApiMember(Name = "PreferredName", Description = "Preferred name of the patient being created", ParameterType = "property", DataType = "string", IsRequired = false)]
+        public string PreferredName { get; set; }
+
+        [ApiMember(Name = "Gender", Description = "Gender of the patient being created", ParameterType = "property", DataType = "string", IsRequired = false)]
+        public string Gender { get; set; }
+
+        [ApiMember(Name = "DOB", Description = "Date of birth of the patient being created", ParameterType = "property", DataType = "string", IsRequired = false)]
+        public string DOB { get; set; }
 
         [ApiMember(Name = "Priority", Description = "Priority value of the patient being updated", ParameterType = "property", DataType = "string", IsRequired = true)]
         public int Priority { get; set; }
@@ -24,6 +45,6 @@ namespace Phytel.API.AppDomain.NG.DTO
         [ApiMember(Name = "UserID", Description = "ID of the user making the request (Internally used ONLY)", ParameterType = "property", DataType = "string", IsRequired = false)]
         public string UserId { get; set; }
 
-        public PutPatientPriorityUpdateRequest() { }
+        public PutPatientDetailsUpdateRequest() { }
     }
 }

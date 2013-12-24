@@ -250,19 +250,19 @@ namespace Phytel.API.AppDomain.NG
             return response;
         }
 
-        public PutPatientPriorityUpdateResponse PutPatientPriorityUpdate(PutPatientPriorityUpdateRequest request)
+        public PutPatientDetailsUpdateResponse PutPatientPriorityUpdate(PutPatientDetailsUpdateRequest request)
         {
-            PutPatientPriorityUpdateResponse response = new PutPatientPriorityUpdateResponse();
+            PutPatientDetailsUpdateResponse response = new PutPatientDetailsUpdateResponse();
 
             IRestClient client = new JsonServiceClient();
-            PutPatientPriorityUpdateResponse dataDomainResponse = 
-                client.Post<PutPatientPriorityUpdateResponse>(string.Format("{0}/{1}/{2}/{3}/patient/{4}/priority/{5}",
+            PutPatientDetailsUpdateResponse dataDomainResponse = 
+                client.Put<PutPatientDetailsUpdateResponse>(string.Format("{0}/{1}/{2}/{3}/patient/{4}",
                                                                             DDPatientServiceURL,
                                                                             "NG",
                                                                             request.Version,
                                                                             request.ContractNumber,
-                                                                            request.PatientId,
-                                                                            request.Priority), new PutPatientPriorityUpdateResponse { } as object);
+                                                                            request.Id,
+                                                                            request.Priority), new PutPatientDetailsUpdateResponse { } as object);
             return dataDomainResponse;
         }
 
@@ -290,7 +290,6 @@ namespace Phytel.API.AppDomain.NG
             }
         }
 
-
         public GetActiveProgramsResponse GetActivePrograms(GetActiveProgramsRequest request)
         {
             GetActiveProgramsResponse pResponse = new GetActiveProgramsResponse();
@@ -301,9 +300,17 @@ namespace Phytel.API.AppDomain.NG
 
                 IRestClient client = new JsonServiceClient();
 
-                GetActiveProgramsResponse dataDomainResponse =
-                    client.Get<GetActiveProgramsResponse>(
-                    string.Format("{0}/{1}/{2}/{3}/Programs/Active", DDProgramServiceUrl, "NG", request.Version, request.ContractNumber));
+                GetActiveProgramsResponse dataDomainResponse;
+                try
+                {
+                    dataDomainResponse =
+                        client.Get<GetActiveProgramsResponse>(
+                        string.Format("{0}/{1}/{2}/{3}/Programs/Active", "http://azurephyteldev.cloudapp.net:59901/Program", "NG", request.Version, request.ContractNumber));
+                }
+                catch
+                {
+                    throw new ArgumentException("dataDomainResponse is coming back null.");
+                }
 
                 pResponse.Programs = dataDomainResponse.Programs;
                 pResponse.Version = "v1";
@@ -324,9 +331,9 @@ namespace Phytel.API.AppDomain.NG
 
                 IRestClient client = new JsonServiceClient();
                 PostPatientToProgramsResponse dataDomainResponse =
-                    client.Post<PostPatientToProgramsResponse>(
+                    client.Put<PostPatientToProgramsResponse>(
                     string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Programs/?ContractProgramId={5}",
-                    DDPatientServiceURL, 
+                    "http://azurephyteldev.cloudapp.net:59901/Program", 
                     "NG", 
                     request.Version, 
                     request.ContractNumber, 

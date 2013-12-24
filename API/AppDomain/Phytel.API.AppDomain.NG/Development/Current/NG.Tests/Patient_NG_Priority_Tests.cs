@@ -19,14 +19,14 @@ namespace Phytel.API.DataDomain.Patient.Service.Test
             string token = "52af293ad6a4850da8845c20";
             IRestClient client = new JsonServiceClient();
 
-            PutPatientPriorityUpdateResponse response = client.Put<PutPatientPriorityUpdateResponse>(
+            PutPatientDetailsUpdateResponse response = client.Put<PutPatientDetailsUpdateResponse>(
                 string.Format(@"http://localhost:888/Nightingale/{0}/{1}/patient/{2}/priority/{3}?Token={4}",
                 version, 
                 contractNumber, 
                 patientID,
                 priority,
                 token),
-                new PutPatientPriorityUpdateRequest { } as object);
+                new PutPatientDetailsUpdateRequest { } as object);
         }
     }
 }

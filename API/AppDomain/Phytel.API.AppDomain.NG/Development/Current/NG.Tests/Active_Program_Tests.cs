@@ -15,13 +15,20 @@ namespace Phytel.API.DataDomain.Patient.Service.Test
             string context = "NG";
             string priority = "3";
             string version = "v1";
-            string token = "52af293ad6a4850da8845c20";
+            string token = "52b875aed6a4850ab047d601";
             IRestClient client = new JsonServiceClient();
 
+            //GetActiveProgramsResponse response = client.Get<GetActiveProgramsResponse>(
+            //    string.Format(@"http://localhost:888/Nightingale/{0}/{1}/Programs/Active?Token={2}",
+            //    version,
+            //    contractNumber,
+            //    token));
+
             GetActiveProgramsResponse response = client.Get<GetActiveProgramsResponse>(
-                string.Format(@"http://localhost:888/Nightingale/{0}/{1}/Programs/Active",
-                version, 
-                contractNumber));
+                string.Format(@"http://azurephyteldev.cloudapp.net:59900/Nightingale/{0}/{1}/Programs/Active?Token={2}",
+                version,
+                contractNumber,
+                token));
         }
 
         [TestMethod]
@@ -37,7 +44,7 @@ namespace Phytel.API.DataDomain.Patient.Service.Test
             IRestClient client = new JsonServiceClient();
 
             PostPatientToProgramsResponse response = client.Post<PostPatientToProgramsResponse>(
-                string.Format(@"http://localhost:888/Nightingale/{0}/{1}//Patient/{2}/Programs/?ContractProgramId={3}",
+                string.Format(@"http://localhost:888/Nightingale/{0}/{1}//Patient/{2}/Programs/?ContractProgramId={3}&Token=52b868fad6a4850ab047d5c9",
                 version,
                 contractNumber,
                 patientId,

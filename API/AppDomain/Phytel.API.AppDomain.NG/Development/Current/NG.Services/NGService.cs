@@ -172,9 +172,9 @@ namespace Phytel.API.AppDomain.NG.Service
             }
         }
 
-        public PutPatientPriorityUpdateResponse Put(PutPatientPriorityUpdateRequest request)
+        public PutPatientDetailsUpdateResponse Post(PutPatientDetailsUpdateRequest request)
         {
-            PutPatientPriorityUpdateResponse response = new PutPatientPriorityUpdateResponse();
+            PutPatientDetailsUpdateResponse response = new PutPatientDetailsUpdateResponse();
             try
             {
                 NGManager ngm = new NGManager();
@@ -257,10 +257,15 @@ namespace Phytel.API.AppDomain.NG.Service
                 NGManager ngm = new NGManager();
 
                 ValidateTokenResponse result = ngm.IsUserValidated(request.Version, request.Token);
-                if (result.UserId.Trim() != string.Empty)
+                if (result.UserId != null)
                 {
-                    request.UserId = result.UserId;
-                    response = ngm.GetActivePrograms(request);
+                    if (result.UserId.Trim() != string.Empty)
+                    {
+                        request.UserId = result.UserId;
+                        response = ngm.GetActivePrograms(request);
+                    }
+                    else
+                        throw new UnauthorizedAccessException();
                 }
                 else
                     throw new UnauthorizedAccessException();

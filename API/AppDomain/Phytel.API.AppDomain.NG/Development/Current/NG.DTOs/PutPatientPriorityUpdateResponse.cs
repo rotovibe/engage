@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace Phytel.API.AppDomain.NG.DTO
 {
-    public class PutPatientPriorityUpdateResponse : IDomainResponse
+    public class PutPatientDetailsUpdateResponse : IDomainResponse
     {
         public string Id { get; set; }
         public string Version { get; set; }

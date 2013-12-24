@@ -283,7 +283,7 @@ namespace Phytel.API.DataDomain.Patient
                         .Set("gn", request.Gender)
                         .Set("dob", request.DOB)
                         .Set("pri", request.Priority)
-                        .Set("v", Convert.ToBoolean(request.Version));
+                        .Set("v", request.Version);
 
                     var sortBy = new SortByBuilder().Ascending("_id");
                     var pt = ctx.PatientUsers.Collection.FindAndModify(pUQuery, sortBy, updt, true);
