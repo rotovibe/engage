@@ -15,13 +15,26 @@ namespace Phytel.API.DataDomain.Patient.Service.Test
             string patientID = "528f6dc2072ef708ecd90e3a";
             string contractNumber = "InHealth001";
             string context ="NG";
-            string priority = "3";
+            int priority = 1;
             string version = "v1";
+            string firstname = null;
             IRestClient client = new JsonServiceClient();
 
-            GetPatientDataResponse response = client.Put<GetPatientDataResponse>(
-                string.Format(@"http://localhost:8888/Patient/{0}/{1}/{2}/patient/{3}/priority/{4}", context, version, contractNumber, patientID, priority ),
-                new GetPatientDataRequest { } as object);
+            PutUpdatePatientDataResponse response = client.Put<PutUpdatePatientDataResponse>(
+                string.Format(@"http://localhost:8888/Patient/{0}/{1}/{2}/patient/{3}", context, version, contractNumber, patientID),
+                new PutUpdatePatientDataRequest
+                {
+                    Context = context,
+                    ContractNumber = contractNumber,
+                    Priority = priority,
+                    DOB = "12-12-2013",
+                    //FirstName = firstname,
+                    LastName = "ariza",
+                    Gender = "m",
+                    PreferredName = "a man",
+                    Suffix = "mr",
+                    MiddleName = "junior"
+                } as object);
         }
     }
 }

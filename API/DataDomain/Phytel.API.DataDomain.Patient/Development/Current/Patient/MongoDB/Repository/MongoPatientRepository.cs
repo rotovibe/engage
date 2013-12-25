@@ -272,21 +272,22 @@ namespace Phytel.API.DataDomain.Patient
             {
                 using (PatientMongoContext ctx = new PatientMongoContext(_dbName))
                 {
-                    var pUQuery = new QueryDocument(MEPatientUser.PatientIdProperty, ObjectId.Parse(request.Id));
+                    var pUQuery = new QueryDocument(MEPatient.IdProperty, ObjectId.Parse(request.Id));
                     
-                    UpdateBuilder updt = new UpdateBuilder()
-                        .Set("fn", request.FirstName)
-                        .Set("ln", request.LastName)
-                        .Set("mn", request.MiddleName)
-                        .Set("sfx", request.Suffix)
-                        .Set("pfn", request.PreferredName)
-                        .Set("gn", request.Gender)
-                        .Set("dob", request.DOB)
-                        .Set("pri", request.Priority)
-                        .Set("v", request.Version);
+                    UpdateBuilder updt = new UpdateBuilder();
+                        if(request.Priority != null ) updt.Set("pri", request.Priority);
+                        if (request.FirstName != null) updt.Set("fn", request.FirstName);
+                        if (request.LastName != null) updt.Set("ln", request.LastName);
+                        if (request.MiddleName != null) updt.Set("mn", request.MiddleName);
+                        if (request.Suffix != null) updt.Set("sfx", request.Suffix);
+                        if (request.PreferredName != null) updt.Set("pfn", request.PreferredName);
+                        if (request.Gender != null) updt.Set("gn", request.Gender);
+                        if (request.DOB != null) updt.Set("dob", request.DOB);
+                        if (request.Version != null) updt.Set("v", request.Version);
+
 
                     var sortBy = new SortByBuilder().Ascending("_id");
-                    var pt = ctx.PatientUsers.Collection.FindAndModify(pUQuery, sortBy, updt, true);
+                    var pt = ctx.Patients.Collection.FindAndModify(pUQuery, sortBy, updt, true);
                     
                     response.Id = request.Id;
                 }
