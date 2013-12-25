@@ -3,10 +3,10 @@ using ServiceStack.ServiceHost;
 
 namespace Phytel.API.AppDomain.NG.DTO
 {
-    [Route("/{Version}/{ContractNumber}/patient/{PatientId}/Update", "POST")]
+    [Route("/{Version}/{ContractNumber}/patient/Update/", "POST")]
     public class PutPatientDetailsUpdateRequest : IAppDomainRequest
     {
-        [ApiMember(Name = "PatientId", Description = "Id of the patient being updated", ParameterType = "property", DataType = "string", IsRequired = true)]
+        [ApiMember(Name = "Id", Description = "Id of the patient being updated", ParameterType = "property", DataType = "string", IsRequired = true)]
         public string Id { get; set; }
 
         [ApiMember(Name = "FirstName", Description = "First Name of the patient being created", ParameterType = "property", DataType = "string", IsRequired = true)]

@@ -255,14 +255,29 @@ namespace Phytel.API.AppDomain.NG
             PutPatientDetailsUpdateResponse response = new PutPatientDetailsUpdateResponse();
 
             IRestClient client = new JsonServiceClient();
-            PutPatientDetailsUpdateResponse dataDomainResponse = 
+            PutPatientDetailsUpdateResponse dataDomainResponse =
                 client.Put<PutPatientDetailsUpdateResponse>(string.Format("{0}/{1}/{2}/{3}/patient/{4}",
                                                                             DDPatientServiceURL,
                                                                             "NG",
                                                                             request.Version,
                                                                             request.ContractNumber,
                                                                             request.Id,
-                                                                            request.Priority), new PutPatientDetailsUpdateResponse { } as object);
+                                                                            request.Priority), new PutPatientDetailsUpdateRequest
+                                                                            {
+                                                                                ContractNumber = request.ContractNumber,
+                                                                                DOB = request.DOB,
+                                                                                FirstName = request.FirstName,
+                                                                                LastName = request.LastName,
+                                                                                Gender = request.Gender,
+                                                                                MiddleName = request.MiddleName,
+                                                                                PreferredName = request.PreferredName,
+                                                                                Priority = request.Priority,
+                                                                                Suffix = request.Suffix,
+                                                                                Token = request.Token,
+                                                                                UserId = request.UserId,
+                                                                                Version = request.Version,
+                                                                                Id = request.Id
+                                                                            } as object);
             return dataDomainResponse;
         }
 
@@ -296,8 +311,6 @@ namespace Phytel.API.AppDomain.NG
 
             try
             {
-                List<ProgramInfo> response = new List<ProgramInfo>();
-
                 IRestClient client = new JsonServiceClient();
 
                 GetActiveProgramsResponse dataDomainResponse;

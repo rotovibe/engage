@@ -83,7 +83,7 @@
   <ItemGroup>
     <Compile Include="Patient_NG_Flagged_Tests.cs" />
     <Compile Include="Active_Program_Tests.cs" />
-    <Compile Include="Patient_NG_Priority_Tests.cs" />
+    <Compile Include="Update_Patient_Details_Test.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Request_NG_Cohort_Test.cs" />
     <Compile Include="Request_NG_Token_Test.cs" />

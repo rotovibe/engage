@@ -95,9 +95,9 @@
     <Compile Include="Patient.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PutPatientFlaggedUpdateRequest.cs" />
-    <Compile Include="PutPatientPriorityUpdateRequest.cs" />
+    <Compile Include="PutPatientDetailsUpdateRequest.cs" />
     <Compile Include="PutPatientFlaggedUpdateResponse.cs" />
-    <Compile Include="PutPatientPriorityUpdateResponse.cs" />
+    <Compile Include="PutPatientDetailsUpdateResponse.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
