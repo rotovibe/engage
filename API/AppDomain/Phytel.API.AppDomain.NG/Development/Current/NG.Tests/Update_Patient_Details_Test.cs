@@ -31,6 +31,19 @@ namespace Phytel.API.DataDomain.Patient.Service.Test
                     PreferredName = "Samuel",
                     Token = token
                 } as object);
+
+            //PutPatientDetailsUpdateResponse response = client.Post<PutPatientDetailsUpdateResponse>(
+            //    string.Format(@"http://azurephyteldev.cloudapp.net:59900/Nightingale/{0}/{1}/patient/Update/?Id={2}",
+            //    version,
+            //    contractNumber,
+            //    patientID),
+            //    new PutPatientDetailsUpdateRequest
+            //    {
+            //        DOB = "12-12-2013",
+            //        Priority = 1,
+            //        PreferredName = "Sammy",
+            //        Token = token
+            //    } as object);
         }
     }
 }
