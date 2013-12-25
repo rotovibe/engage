@@ -13,7 +13,7 @@ namespace Phytel.API.DataDomain.Program.DTO
 
     public class ProgramInfo
     {
-        public string ProgramID { get; set; }
+        public string Id { get; set; }
         public string Name { get; set; }
         public string ShortName { get; set; }
         public int Status { get; set; }

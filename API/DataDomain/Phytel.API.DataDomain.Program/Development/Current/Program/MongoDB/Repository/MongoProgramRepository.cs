@@ -89,7 +89,7 @@ namespace Phytel.API.DataDomain.Program
                 result = ctx.ContractPrograms.Collection.Find(mQuery).Select(r => new ProgramInfo
                 {
                     Name = r.Name,
-                    ProgramID = r.Id.ToString(),
+                    Id = r.Id.ToString(),
                     ProgramStatus = r.ProgramStatus,
                     ShortName = r.ShortName,
                     Status = (int)r.Status
