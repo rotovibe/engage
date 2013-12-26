@@ -354,16 +354,19 @@ namespace Phytel.API.AppDomain.NG
                     request.PatientId,
                     request.ContractProgramId), new PutProgramToPatientResponse { } as object);
 
-                response.Program = new DTO.ProgramInfo
+                if (dataDomainResponse.program != null)
                 {
-                    Id = dataDomainResponse.program.Id,
-                    Name = dataDomainResponse.program.Name,
-                    ProgramStatus = dataDomainResponse.program.ProgramStatus,
-                    ShortName = dataDomainResponse.program.ShortName,
-                    Status = dataDomainResponse.program.Status
-                };
+                    response.Program = new DTO.ProgramInfo()
+                    {
+                        Id = dataDomainResponse.program.Id,
+                        Name = dataDomainResponse.program.Name,
+                        ProgramStatus = dataDomainResponse.program.ProgramStatus,
+                        ShortName = dataDomainResponse.program.ShortName,
+                        Status = dataDomainResponse.program.Status
+                    };
+                }
 
-                response.Result = new DTO.Outcome
+                response.Result = new DTO.Outcome()
                 {
                     Reason = dataDomainResponse.Outcome.Reason,
                     Result = dataDomainResponse.Outcome.Result
