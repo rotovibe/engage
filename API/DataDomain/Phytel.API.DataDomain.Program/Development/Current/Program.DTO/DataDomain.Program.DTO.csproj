@@ -69,6 +69,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ProgramInfo.cs" />
     <Compile Include="PutProgramToPatientRequest.cs" />
     <Compile Include="GetAllActiveProgramsRequest.cs" />
     <Compile Include="PutProgramToPatientResponse.cs" />

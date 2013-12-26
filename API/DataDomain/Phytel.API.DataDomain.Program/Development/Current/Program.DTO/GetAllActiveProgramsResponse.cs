@@ -10,13 +10,4 @@ namespace Phytel.API.DataDomain.Program.DTO
         public string Version { get; set; }
         public ResponseStatus Status { get; set; }
    }
-
-    public class ProgramInfo
-    {
-        public string Id { get; set; }
-        public string Name { get; set; }
-        public string ShortName { get; set; }
-        public int Status { get; set; }
-        public string ProgramStatus { get; set; }
-    }
 }

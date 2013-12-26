@@ -61,7 +61,7 @@ namespace Phytel.API.DataDomain.Program
                                StartDate = p.StartDate == null ? string.Empty : String.Format("{0:MM/dd/yyyy}", p.StartDate),
                                ObjectivesInfo = p.ObjectivesInfo.Select(x => new DTO.ObjectivesInfo
                                {
-                                   ID = x.ID,
+                                   ID = x.Id.ToString(),
                                    Measurement = x.Measurement,
                                    Status = x.Status,
                                    Value = x.Value
@@ -98,11 +98,12 @@ namespace Phytel.API.DataDomain.Program
             return result;
         }
 
-        public Outcome InsertPatientToProgramAssignment(PutProgramToPatientRequest request)
+        public PutProgramToPatientResponse InsertPatientToProgramAssignment(PutProgramToPatientRequest request)
         {
             try
             {
-                Outcome result = new Outcome();
+                PutProgramToPatientResponse result = new PutProgramToPatientResponse();
+                result.Outcome = new Outcome();
                 using (ProgramMongoContext ctx = new ProgramMongoContext(_dbName))
                 {
                     var findQ = Query.And(
@@ -117,7 +118,7 @@ namespace Phytel.API.DataDomain.Program
                         var findcp = Query<MEContractProgram>.EQ(b => b.Id, ObjectId.Parse(request.ContractProgramId));
                         MEContractProgram cp = ctx.ContractPrograms.Collection.Find(findcp).FirstOrDefault();
 
-                        ctx.PatientPrograms.Collection.Insert(new MEPatientProgram
+                        MEPatientProgram patientProgDoc = new MEPatientProgram
                         {
                             PatientId = ObjectId.Parse(request.PatientId),
                             AuthoredBy = cp.AuthoredBy,
@@ -140,15 +141,26 @@ namespace Phytel.API.DataDomain.Program
                             StartDate = cp.StartDate,
                             Status = cp.Status
 
-                        });
+                        };
 
-                        result.Result = 1;
-                        result.Reason = "Successfully assigned this program for the patient";
+                        ctx.PatientPrograms.Collection.Insert(patientProgDoc);
+
+                        result.program = new ProgramInfo
+                        {
+                            Id = patientProgDoc.Id.ToString(),
+                            Name = patientProgDoc.Name,
+                            ProgramStatus = patientProgDoc.ProgramStatus,
+                            ShortName = patientProgDoc.ShortName,
+                            Status = (int)patientProgDoc.Status
+                        };
+
+                        result.Outcome.Result = 1;
+                        result.Outcome.Reason = "Successfully assigned this program for the patient";
                     }
                     else
                     {
-                        result.Result = 0;
-                        result.Reason = pp[0].Name + " is already assigned";
+                        result.Outcome.Result = 0;
+                        result.Outcome.Reason = pp[0].Name + " is already assigned";
                     }
 
                 }

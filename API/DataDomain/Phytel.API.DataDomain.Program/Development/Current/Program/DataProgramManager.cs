@@ -37,15 +37,12 @@ namespace Phytel.API.DataDomain.Program
 
         public static PutProgramToPatientResponse PutPatientToProgram(PutProgramToPatientRequest request)
         {
-            PutProgramToPatientResponse response = new PutProgramToPatientResponse();
-            Outcome result;
+            PutProgramToPatientResponse response;
 
             IProgramRepository<PutProgramToPatientResponse> repo =
                 Phytel.API.DataDomain.Program.ProgramRepositoryFactory<PutProgramToPatientResponse>.GetProgramRepository(request.ContractNumber, request.Context);
 
-            result = repo.InsertPatientToProgramAssignment(request);
-
-            response.Result = result;
+            response = repo.InsertPatientToProgramAssignment(request);
 
             return response;
         }

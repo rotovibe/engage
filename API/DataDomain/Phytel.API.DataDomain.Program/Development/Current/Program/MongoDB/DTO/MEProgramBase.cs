@@ -118,17 +118,19 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
         public DateTime? LastUpdatedOn { get; set; }
     }
 
-    public class Modules
+    public class Modules : IMongoEntity<ObjectId>
     {
+        public Modules() { Id = ObjectId.GenerateNewId(); }
+
         public const string IDProperty = "_id";
         public const string NameProperty = "nm";
         public const string DescriptionProperty = "desc";
-        public const string ObjectivesProperty = "objs";
+        public const string ObjectivesProperty = "obj";
         public const string ActionsProperty = "acts";
         public const string StatusProperty = "stat";
 
-        [BsonElement(IDProperty)]
-        public string ID { get; set; }
+        [BsonId]
+        public ObjectId Id { get; set; }
 
         [BsonElement(NameProperty)]
         public string Name { get; set; }
@@ -146,8 +148,10 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
         public Status Status { get; set; }
     }
 
-    public class ActionsInfo
+    public class ActionsInfo : IMongoEntity<ObjectId>
     {
+        public ActionsInfo() { Id = ObjectId.GenerateNewId(); }
+
         public const string IDProperty = "_id";
         public const string NameProperty = "nm";
         public const string DescriptionProperty = "desc";
@@ -156,8 +160,8 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
         public const string StepsProperty = "stps";
         public const string StatusProperty = "stat";
 
-        [BsonElement(IDProperty)]
-        public string ID { get; set; }
+        [BsonId]
+        public ObjectId Id { get; set; }
 
         [BsonElement(NameProperty)]
         public string Name { get; set; }
@@ -178,16 +182,21 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
         public Status Status { get; set; }
     }
 
-    public class StepsInfo
+    public class StepsInfo : IMongoEntity<ObjectId>
     {
+        public StepsInfo() { Id = ObjectId.GenerateNewId(); }
         public const string IDProperty = "_id";
         public const string TypeProperty = "typ";
-        public const string QuestionProperty = "desc";
+        public const string QuestionProperty = "q";
+        public const string TProperty = "t";
+        public const string DescriptionProperty = "desc";
         public const string NotesProperty = "notes";
+        public const string TextProperty = "txt";
+        public const string ExProperty = "ex";
         public const string StatusProperty = "stat";
 
-        [BsonElement(IDProperty)]
-        public string ID { get; set; }
+        [BsonId]
+        public ObjectId Id { get; set; }
 
         [BsonElement(TypeProperty)]
         public int Type { get; set; }
@@ -195,22 +204,37 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
         [BsonElement(QuestionProperty)]
         public string Question { get; set; }
 
+        [BsonElement(TProperty)]
+        public string T { get; set; }
+
+        [BsonElement(DescriptionProperty)]
+        public string Description { get; set; }
+
         [BsonElement(NotesProperty)]
         public string Notes { get; set; }
+
+        [BsonElement(TextProperty)]
+        public string Text { get; set; }
+
+        [BsonElement(ExProperty)]
+        public string Ex { get; set; }
 
         [BsonElement(StatusProperty)]
         public Status Status { get; set; }
     }
 
-    public class ObjectivesInfo
+    public class ObjectivesInfo : IMongoEntity<ObjectId>
     {
+        public ObjectivesInfo() { Id = ObjectId.GenerateNewId(); }
+
         public const string IDProperty = "_id";
         public const string ValueProperty = "vl";
         public const string MeasurementProperty = "ms";
         public const string StatusProperty = "st";
 
-        [BsonElement(IDProperty)]
-        public string ID { get; set; }
+
+        [BsonId]
+        public ObjectId Id { get; set; }
 
         [BsonElement(ValueProperty)]
         public string Value { get; set; }

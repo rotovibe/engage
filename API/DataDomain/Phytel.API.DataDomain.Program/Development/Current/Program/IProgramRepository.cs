@@ -13,6 +13,6 @@ namespace Phytel.API.DataDomain.Program
 
         List<ProgramInfo> GetActiveProgramsInfoList(GetAllActiveProgramsRequest request);
 
-        Outcome InsertPatientToProgramAssignment(PutProgramToPatientRequest request);
+        PutProgramToPatientResponse InsertPatientToProgramAssignment(PutProgramToPatientRequest request);
     }
 }

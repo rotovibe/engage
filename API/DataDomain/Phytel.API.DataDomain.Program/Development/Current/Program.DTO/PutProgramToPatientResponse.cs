@@ -5,11 +5,12 @@ using Phytel.API.Interface;
 namespace Phytel.API.DataDomain.Program.DTO
 {
     public class PutProgramToPatientResponse : IDomainResponse
-   {
-       public Outcome Result { get; set; }
-       public string Version { get; set; }
-       public ResponseStatus Status { get; set; }
-   }
+    {
+        public ProgramInfo program { get; set; }
+        public Outcome Outcome { get; set; }
+        public string Version { get; set; }
+        public ResponseStatus Status { get; set; }
+    }
 
     public class Outcome
     {
