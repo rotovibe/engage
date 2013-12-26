@@ -13,12 +13,12 @@
     "lck" : true,
     "nm" : null,
     "oi" : [{
-        "_id" : "52a1f231fe7a5915485bdfdf",
+        "_id" : ObjectId("52a1f231fe7a5915485bdfdf"),
         "vl" : ".04",
         "ms" : "percent",
         "st" : 5
     }, {
-        "_id" : "52a1f1e7fe7a5915485bdfde",
+        "_id" : ObjectId("52a1f1e7fe7a5915485bdfde"),
         "vl" : "2",
         "ms" : "lbs",
         "st" : 5
@@ -27,9 +27,15 @@
         "_id" : ObjectId("52a0a775fe7a5915485bdfd1"),
         "nm" : "Low Carb Diet Module",
         "obj" : [{
-            "_id" : "529fba64d4332328d098fc29"
+            "_id" : ObjectId("529fba64d4332328d098fc29"),
+			"vl" : "33",
+			"ms" : "oz",
+			"st" : 5
         }, {
-            "_id" : "529fba94d4332328d098fc2a"
+            "_id" : ObjectId("529fba94d4332328d098fc2a"),
+			"vl" : "13",
+			"ms" : "mm",
+			"st" : 5
         }],
         "desc" : "Reduce the amount of crabs in the diet",
         "acts" : [{
@@ -96,12 +102,12 @@
     "lck" : true,
     "nm" : "Program Test 2",
     "oi" : [{
-        "_id" : "52a1f231fe7a5915485bdfdf",
+        "_id" : ObjectId("52a1f231fe7a5915485bdfdf"),
         "vl" : ".04",
         "ms" : "percent",
         "st" : 5
     }, {
-        "_id" : "52a1f1e7fe7a5915485bdfde",
+        "_id" : ObjectId("52a1f1e7fe7a5915485bdfde"),
         "vl" : "2",
         "ms" : "lbs",
         "st" : 5
@@ -110,9 +116,15 @@
         "_id" : ObjectId("52a0a775fe7a5915485bdfd1"),
         "nm" : "Low Carb Diet Module",
         "obj" : [{
-            "_id" : "529fba64d4332328d098fc29"
+            "_id" : ObjectId("529fba64d4332328d098fc29"),
+			"vl" : "33",
+			"ms" : "oz",
+			"st" : 5
         }, {
-            "_id" : "529fba94d4332328d098fc2a"
+            "_id" : ObjectId("529fba94d4332328d098fc2a"),
+			"vl" : "13",
+			"ms" : "mm",
+			"st" : 5
         }],
         "desc" : "Reduce the amount of crabs in the diet",
         "acts" : [{
@@ -179,12 +191,12 @@
     "lck" : true,
     "nm" : null,
     "oi" : [{
-        "_id" : "52a1f231fe7a5915485bdfdf",
+        "_id" : ObjectId("52a1f231fe7a5915485bdfdf"),
         "vl" : ".04",
         "ms" : "percent",
         "st" : 5
     }, {
-        "_id" : "52a1f1e7fe7a5915485bdfde",
+        "_id" : ObjectId("52a1f1e7fe7a5915485bdfde"),
         "vl" : "2",
         "ms" : "lbs",
         "st" : 5
@@ -192,10 +204,16 @@
     "mods" : [{
         "_id" : ObjectId("52a0a775fe7a5915485bdfd1"),
         "nm" : "Low Carb Diet Module",
-        "obj" : [{
-            "_id" : "529fba64d4332328d098fc29"
+		"obj" : [{
+            "_id" : ObjectId("529fba64d4332328d098fc29"),
+			"vl" : "33",
+			"ms" : "oz",
+			"st" : 5
         }, {
-            "_id" : "529fba94d4332328d098fc2a"
+            "_id" : ObjectId("529fba94d4332328d098fc2a"),
+			"vl" : "13",
+			"ms" : "mm",
+			"st" : 5
         }],
         "desc" : "Reduce the amount of crabs in the diet",
         "acts" : [{
