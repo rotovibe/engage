@@ -14,6 +14,7 @@ using ServiceStack.ServiceClient.Web;
 using ServiceStack.ServiceHost;
 using Phytel.API.AppDomain.Audit.DTO;
 using System.Net;
+using Phytel.API.DataDomain.Program.DTO;
 
 namespace Phytel.API.AppDomain.NG
 {
@@ -343,16 +344,35 @@ namespace Phytel.API.AppDomain.NG
                 PostPatientToProgramsResponse response = new PostPatientToProgramsResponse();
 
                 IRestClient client = new JsonServiceClient();
-                PostPatientToProgramsResponse dataDomainResponse =
-                    client.Put<PostPatientToProgramsResponse>(
+                PutProgramToPatientResponse dataDomainResponse =
+                    client.Put<PutProgramToPatientResponse>(
                     string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Programs/?ContractProgramId={5}",
-                    "http://azurephyteldev.cloudapp.net:59901/Program", 
-                    "NG", 
-                    request.Version, 
-                    request.ContractNumber, 
-                    request.PatientId, 
-                    request.ContractProgramId), new PostPatientToProgramsResponse { } as object);
-                return dataDomainResponse;
+                    "http://azurephyteldev.cloudapp.net:59901/Program",
+                    "NG",
+                    request.Version,
+                    request.ContractNumber,
+                    request.PatientId,
+                    request.ContractProgramId), new PutProgramToPatientResponse { } as object);
+
+                response.Program = new DTO.ProgramInfo
+                {
+                    Id = dataDomainResponse.program.Id,
+                    Name = dataDomainResponse.program.Name,
+                    ProgramStatus = dataDomainResponse.program.ProgramStatus,
+                    ShortName = dataDomainResponse.program.ShortName,
+                    Status = dataDomainResponse.program.Status
+                };
+
+                response.Result = new DTO.Outcome
+                {
+                    Reason = dataDomainResponse.Outcome.Reason,
+                    Result = dataDomainResponse.Outcome.Result
+                };
+
+                if (dataDomainResponse.Status != null)
+                    response.Status = dataDomainResponse.Status;
+
+                return response;
             }
             catch (WebServiceException)
             {

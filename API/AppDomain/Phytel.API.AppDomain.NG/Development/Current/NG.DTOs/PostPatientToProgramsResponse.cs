@@ -7,6 +7,7 @@ namespace Phytel.API.AppDomain.NG.DTO
 {
     public class PostPatientToProgramsResponse : IDomainResponse
     {
+        public ProgramInfo Program { get; set; }
         public Outcome Result { get; set; }
         public string Version { get; set; }
         public ResponseStatus Status { get; set; }

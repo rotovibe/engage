@@ -38,17 +38,18 @@ namespace Phytel.API.DataDomain.Patient.Service.Test
             string context = "NG";
             string priority = "3";
             string version = "v1";
-            string token = "52af293ad6a4850da8845c20";
+            string token = "52bc9c3ed6a4850d485c6137";
             string programId = "52b6304afe7a590654430378";
             string patientId = "528f6dc2072ef708ecd90e56";
             IRestClient client = new JsonServiceClient();
 
             PostPatientToProgramsResponse response = client.Post<PostPatientToProgramsResponse>(
-                string.Format(@"http://localhost:888/Nightingale/{0}/{1}//Patient/{2}/Programs/?ContractProgramId={3}&Token=52b868fad6a4850ab047d5c9",
+                string.Format(@"http://localhost:888/Nightingale/{0}/{1}//Patient/{2}/Programs/?ContractProgramId={3}&Token={4}",
                 version,
                 contractNumber,
                 patientId,
-                programId), new PostPatientToProgramsRequest() as object);
+                programId,
+                token), new PostPatientToProgramsRequest() as object);
         }
     }
 }
