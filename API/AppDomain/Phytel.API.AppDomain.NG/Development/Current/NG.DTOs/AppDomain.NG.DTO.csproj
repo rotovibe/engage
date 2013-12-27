@@ -76,6 +76,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="GetPatientProgramDetailsSummaryResponse.cs" />
+    <Compile Include="GetPatientProgramDetailsSummaryRequest.cs" />
     <Compile Include="PostPatientToProgramsRequest.cs" />
     <Compile Include="PostPatientToProgramsResponse.cs" />
     <Compile Include="GetAllSettingsResponse.cs" />

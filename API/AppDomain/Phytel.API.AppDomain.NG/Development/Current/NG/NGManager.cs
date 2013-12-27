@@ -15,6 +15,7 @@ using ServiceStack.ServiceHost;
 using Phytel.API.AppDomain.Audit.DTO;
 using System.Net;
 using Phytel.API.DataDomain.Program.DTO;
+using System.Linq;
 
 namespace Phytel.API.AppDomain.NG
 {
@@ -378,6 +379,104 @@ namespace Phytel.API.AppDomain.NG
                 return response;
             }
             catch (WebServiceException)
+            {
+                throw;
+            }
+        }
+
+        public GetPatientProgramDetailsSummaryResponse GetPatientProgramDetailsSummary(GetPatientProgramDetailsSummaryRequest request)
+        {
+            try
+            {
+                GetPatientProgramDetailsSummaryResponse result = new GetPatientProgramDetailsSummaryResponse();
+
+                IRestClient client = new JsonServiceClient();
+                GetProgramDetailsSummaryResponse resp =
+                    client.Get<GetProgramDetailsSummaryResponse>(
+                    string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Program/{5}/Details/?Token={6}",
+                    //"http://azurephyteldev.cloudapp.net:59901/Program",
+                    "http://Localhost:8888/Program",
+                    "NG",
+                    request.Version,
+                    request.ContractNumber,
+                    request.PatientId,
+                    request.ProgramId,
+                    request.Token));
+
+                result.Program = new ProgramDetailNG
+                {
+                    Id = resp.Program.Id.ToString(),
+                    Client = resp.Program.Client,
+                    ContractProgramId = resp.Program.ContractProgramId.ToString(),
+                    Description = resp.Program.Description,
+                    EligibilityEndDate = resp.Program.EligibilityEndDate,
+                    EligibilityRequirements = resp.Program.EligibilityRequirements,
+                    EligibilityStartDate = resp.Program.EligibilityStartDate,
+                    EndDate = resp.Program.EndDate,
+                    Modules = resp.Program.Modules.Select(r => new ModuleDetailNG
+                    {
+                        Id = r.Id.ToString(),
+                        Description = r.Description,
+                        Name = r.Name,
+                        Status = (int)r.Status,
+                        Objectives = r.Objectives.Select(o => new ObjectivesDetailNG
+                        {
+                            Id = o.Id.ToString(),
+                            Value = o.Value,
+                            Status = (int)o.Status,
+                            Measurement = o.Measurement
+                        }).ToList(),
+                        Actions = r.Actions.Select(a => new ActionsDetailNG
+                        {
+                            CompletedBy = a.CompletedBy,
+                            Description = a.Description,
+                            Id = a.Id.ToString(),
+                            Name = a.Name,
+                            Status = (int)a.Status,
+                            Objectives = a.Objectives.Select(x => new ObjectivesDetailNG
+                            {
+                                Id = x.Id.ToString(),
+                                Measurement = x.Measurement,
+                                Status = (int)x.Status,
+                                Value = x.Value
+                            }).ToList(),
+                            Steps = a.Steps.Select(s => new StepsDetailNG
+                            {
+                                Description = s.Description,
+                                Ex = s.Ex,
+                                Id = s.Id.ToString(),
+                                Notes = s.Notes,
+                                Question = s.Question,
+                                Status = (int)s.Status,
+                                T = s.T,
+                                Text = s.Text,
+                                Type = s.Type
+                            }).ToList()
+                        }).ToList()
+                    }).ToList(),
+                    Name = resp.Program.Name,
+                    ObjectivesInfo = resp.Program.ObjectivesInfo.Select(r => new ObjectivesDetailNG
+                    {
+                        Id = r.Id.ToString(),
+                        Measurement = r.Measurement,
+                        Status = r.Status,
+                        Value = r.Value
+                    }).ToList(),
+                    PatientId = resp.Program.PatientId.ToString(),
+                    ProgramState = resp.Program.ProgramState,
+                    ProgramStatus = resp.Program.ProgramStatus,
+                    ShortName = resp.Program.ShortName,
+                    StartDate = resp.Program.StartDate,
+                    Status = resp.Program.Status,
+                    Version = resp.Program.Version
+                };
+
+                if (resp.Status != null)
+                    result.Status = resp.Status;
+
+                return result;
+            }
+            catch (Exception)
             {
                 throw;
             }
