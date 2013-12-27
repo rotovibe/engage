@@ -46,5 +46,17 @@ namespace Phytel.API.DataDomain.Program
 
             return response;
         }
+
+        public static GetProgramDetailsSummaryResponse GetPatientProgramDetailsById(GetProgramDetailsSummaryRequest request)
+        {
+            GetProgramDetailsSummaryResponse response;
+
+            IProgramRepository<GetProgramDetailsSummaryResponse> repo =
+                Phytel.API.DataDomain.Program.ProgramRepositoryFactory<GetProgramDetailsSummaryResponse>.GetProgramRepository(request.ContractNumber, request.Context);
+
+            response = repo.GetPatientProgramDocumentDetailsById(request);
+
+            return response;
+        }
     }
 }   

@@ -59,11 +59,11 @@ namespace Phytel.API.DataDomain.Program
                                Description = p.Description,
                                EndDate = p.EndDate == null ? string.Empty : String.Format("{0:MM/dd/yyyy}", p.EndDate),
                                StartDate = p.StartDate == null ? string.Empty : String.Format("{0:MM/dd/yyyy}", p.StartDate),
-                               ObjectivesInfo = p.ObjectivesInfo.Select(x => new DTO.ObjectivesInfo
+                               ObjectivesInfo = p.ObjectivesInfo.Select(x => new DTO.ObjectivesDetail
                                {
-                                   ID = x.Id.ToString(),
+                                    Id = x.Id.ToString(),
                                    Measurement = x.Measurement,
-                                   Status = x.Status,
+                                   Status = (int)x.Status,
                                    Value = x.Value
                                }).ToList(),
                                Locked = p.Locked,
@@ -96,6 +96,96 @@ namespace Phytel.API.DataDomain.Program
                 }).ToList();
             }
             return result;
+        }
+
+        public GetProgramDetailsSummaryResponse GetPatientProgramDocumentDetailsById(GetProgramDetailsSummaryRequest request)
+        {
+            try
+            {
+                GetProgramDetailsSummaryResponse result = new GetProgramDetailsSummaryResponse();
+
+                using (ProgramMongoContext ctx = new ProgramMongoContext(_dbName))
+                {
+                    var findcp = Query<MEPatientProgram>.EQ(b => b.Id, ObjectId.Parse(request.ProgramId));
+                    MEPatientProgram cp = ctx.PatientPrograms.Collection.Find(findcp).FirstOrDefault();
+
+                    if (cp != null)
+                    {
+                        result.Program = new ProgramDetail
+                        {
+                            Id = cp.Id.ToString(),
+                            Client = cp.Client,
+                            ContractProgramId = cp.ContractProgramId.ToString(),
+                            Description = cp.Description,
+                            EligibilityEndDate = cp.EligibilityEndDate,
+                            EligibilityRequirements = cp.EligibilityRequirements,
+                            EligibilityStartDate = cp.EligibilityStartDate,
+                            EndDate = cp.EndDate,
+                            Modules = cp.Modules.Select(r => new ModuleDetail
+                            {
+                                Id = r.Id.ToString(),
+                                Description = r.Description,
+                                Name = r.Name,
+                                Status = (int)r.Status,
+                                Objectives = r.Objectives.Select(o => new ObjectivesDetail
+                                {
+                                    Id = o.Id.ToString(),
+                                    Value = o.Value,
+                                    Status = (int)o.Status,
+                                    Measurement = o.Measurement
+                                }).ToList(),
+                                Actions = r.Actions.Select(a => new ActionsDetail
+                                {
+                                    CompletedBy = a.CompletedBy,
+                                    Description = a.Description,
+                                    Id = a.Id.ToString(),
+                                    Name = a.Name,
+                                    Status = (int)a.Status,
+                                    Objectives = a.Objectives.Select(x => new ObjectivesDetail
+                                    {
+                                        Id = x.Id.ToString(),
+                                        Measurement = x.Measurement,
+                                        Status = (int)x.Status,
+                                        Value = x.Value
+                                    }).ToList(),
+                                    Steps = a.Steps.Select(s => new StepsDetail
+                                    {
+                                        Description = s.Description,
+                                        Ex = s.Ex,
+                                        Id = s.Id.ToString(),
+                                        Notes = s.Notes,
+                                        Question = s.Question,
+                                        Status = (int)s.Status,
+                                        T = s.T,
+                                        Text = s.Text,
+                                        Type = s.Type
+                                    }).ToList()
+                                }).ToList()
+                            }).ToList(),
+                            Name = cp.Name,
+                            ObjectivesInfo = cp.ObjectivesInfo.Select(r => new ObjectivesDetail
+                            {
+                                Id = r.Id.ToString(),
+                                Measurement = r.Measurement,
+                                Status = (int)r.Status,
+                                Value = r.Value
+                            }).ToList(),
+                            PatientId = cp.PatientId.ToString(),
+                            ProgramState = (int)cp.ProgramState,
+                            ProgramStatus = cp.ProgramStatus,
+                            ShortName = cp.ShortName,
+                            StartDate = cp.StartDate,
+                            Status = (int)cp.Status,
+                            Version = cp.Version
+                        };
+                    }
+                }
+                return result;
+            }
+            catch
+            {
+                throw;
+            }
         }
 
         public PutProgramToPatientResponse InsertPatientToProgramAssignment(PutProgramToPatientRequest request)
