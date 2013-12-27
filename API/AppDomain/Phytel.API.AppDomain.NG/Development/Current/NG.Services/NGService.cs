@@ -6,6 +6,7 @@ using ServiceStack.ServiceInterface.ServiceModel;
 using ServiceStack.ServiceHost;
 using Phytel.API.Common.Format;
 using Phytel.API.AppDomain.Security.DTO;
+using ServiceStack.ServiceClient.Web;
 
 namespace Phytel.API.AppDomain.NG.Service
 {
