@@ -73,7 +73,7 @@ namespace Phytel.API.AppDomain.NG
                         MiddleName = response.Patient.MiddleName,
                         Suffix = response.Patient.Suffix,
                         PreferredName = response.Patient.PreferredName,
-                        PriorityId = (int)response.Patient.Priority,
+                        Priority = (int)response.Patient.Priority,
                         Flagged = Convert.ToInt32(response.Patient.Flagged)
                     };
 
@@ -233,7 +233,7 @@ namespace Phytel.API.AppDomain.NG
                     MiddleName = x.MiddleName,
                     PreferredName = x.PreferredName,
                     Suffix = x.Suffix,
-                    PriorityId = 0 // need to enable if needed.
+                    Priority = 0 // need to enable if needed.
                 }));
 
                 if (qResponse.Status != null)
