@@ -16,25 +16,56 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
         public MEPatientProgram() { Id = ObjectId.GenerateNewId(); }
 
         public const string IdProperty = "_id";
-        public const string PatientIdProperty = "pid";
-        public const string ContractProgramIdProperty = "cpid";
-        public const string ProgramStateProperty = "stat";
-        public const string TTLDateProperty = "ttl";
-
         [BsonId]
         public ObjectId Id { get; set; }
 
+        public const string PatientIdProperty = "pid";
         [BsonElement(PatientIdProperty)]
         [BsonIgnoreIfNull(true)]
         public ObjectId PatientId { get; set; }
 
+        public const string ContractProgramIdProperty = "cpid";
         [BsonElement(ContractProgramIdProperty)]
         [BsonIgnoreIfNull(true)]
         public ObjectId ContractProgramId { get; set; }
 
+        public const string ProgramStateProperty = "progstate";
         [BsonElement(ProgramStateProperty)]
         public ProgramState ProgramState { get; set; }
 
+        public const string GraduatedFlagProperty = "graduated";
+        [BsonElement(GraduatedFlagProperty)]
+        public bool GraduatedFlag { get; set; }
+
+        public const string IneligibleReasonProperty = "ineligible";
+        [BsonElement(IneligibleReasonProperty)]
+        public string IneligibleReason { get; set; }
+
+        public const string OptOutProperty = "opt-out";
+        [BsonElement(OptOutProperty)]
+        public string OptOut { get; set; }
+
+        public const string OptOutReasonProperty = "optoutreason";
+        [BsonElement(OptOutReasonProperty)]
+        public string OptOutReason { get; set; }
+
+        public const string OptOutDateProperty = "optoutdate";
+        [BsonElement(OptOutDateProperty)]
+        public DateTime? OptOutDate { get; set; }
+
+        public const string RemovedReasonProperty = "removedreason";
+        [BsonElement(RemovedReasonProperty)]
+        public string RemovedReason { get; set; }
+
+        public const string DidNotEnrollReasonProperty = "notenrollreason";
+        [BsonElement(DidNotEnrollReasonProperty)]
+        public string NotEnrollReason { get; set; }
+
+        public const string OverrideReasonProperty = "overridereason";
+        [BsonElement(OverrideReasonProperty)]
+        public string OverrideReason { get; set; }
+
+        public const string TTLDateProperty = "ttl";
         [BsonElement(TTLDateProperty)]
         [BsonIgnoreIfNull(true)]
         [BsonDateTimeOptions(Kind = System.DateTimeKind.Local)]

@@ -13,11 +13,11 @@ using Phytel.API.DataDomain.Program.MongoDB.DTO;
 
 namespace Phytel.API.DataDomain.Program
 {
-    public class MongoProgramRepository<T> : IProgramRepository<T>
+    public class MongoContractProgramRepository<T> : IProgramRepository<T>
     {
         private string _dbName = string.Empty;
 
-        public MongoProgramRepository(string contractDBName)
+        public MongoContractProgramRepository(string contractDBName)
         {
             _dbName = contractDBName;
         }
@@ -47,12 +47,11 @@ namespace Phytel.API.DataDomain.Program
             DTO.Program program = null;
             using (ProgramMongoContext ctx = new ProgramMongoContext(_dbName))
             {
-                program = (from p in ctx.Programs
+                program = (from p in ctx.ContractPrograms
                            where p.Id == ObjectId.Parse(entityID)
                            select new DTO.Program
                            {
                                ProgramID = p.Id.ToString(),
-                               TemplateName = p.TemplateName,
                                Name = p.Name,
                                AuthoredBy = p.AuthoredBy,
                                Client = p.Client,
@@ -80,20 +79,7 @@ namespace Phytel.API.DataDomain.Program
 
         public List<ProgramInfo> GetActiveProgramsInfoList(GetAllActiveProgramsRequest request)
         {
-            List<ProgramInfo> result = new List<ProgramInfo>();
-
-            using (ProgramMongoContext ctx = new ProgramMongoContext(_dbName))
-            {
-                IMongoQuery mQuery = Query.EQ(MEContractProgram.StatusProperty, 1);
-                result = ctx.ContractPrograms.Collection.Find(mQuery).Select(r => new ProgramInfo
-                {
-                    Name = r.Name,
-                    Id = r.Id.ToString(),
-                    ShortName = r.ShortName,
-                    Status = (int)r.Status
-                }).ToList();
-            }
-            return result;
+            throw new NotImplementedException();
         }
 
         public Tuple<string, IEnumerable<object>> Select(Interface.APIExpression expression)

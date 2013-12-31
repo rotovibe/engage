@@ -22,10 +22,9 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
         public const string EligibilityRequirementsProperty = "elr";
         public const string EligibilityStartDateProperty = "elsd";
         public const string EligibilityEndDateProperty = "eled";
-        public const string StatusProperty = "st";
-        public const string ProgramStatusProperty = "pst";
-        public const string ObjectivesInfoProperty = "oi";
-        public const string ModulesProperty = "mods";
+        public const string StatusProperty = "status";
+        public const string ObjectivesInfoProperty = "objs";
+        public const string ModulesProperty = "modules";
         public const string AuthoredByProperty = "athby";
         public const string LockedProperty = "lck";
         public const string ExtraElementsProperty = "ex";
@@ -74,10 +73,6 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
         [BsonIgnoreIfNull(true)]
         public Status Status { get; set; }
 
-        [BsonElement(ProgramStatusProperty)]
-        [BsonIgnoreIfNull(true)]
-        public string ProgramStatus { get; set; }
-
         [BsonElement(ObjectivesInfoProperty)]
         [BsonIgnoreIfNull(true)]
         public List<ObjectivesInfo> ObjectivesInfo { get; set; }
@@ -123,27 +118,26 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
         public Modules() { Id = ObjectId.GenerateNewId(); }
 
         public const string IDProperty = "_id";
-        public const string NameProperty = "nm";
-        public const string DescriptionProperty = "desc";
-        public const string ObjectivesProperty = "obj";
-        public const string ActionsProperty = "acts";
-        public const string StatusProperty = "stat";
-
         [BsonId]
         public ObjectId Id { get; set; }
 
+        public const string NameProperty = "nm";
         [BsonElement(NameProperty)]
         public string Name { get; set; }
 
+        public const string DescriptionProperty = "desc";
         [BsonElement(DescriptionProperty)]
         public string Description { get; set; }
 
+        public const string ObjectivesProperty = "objs";
         [BsonElement(ObjectivesProperty)]
         public List<ObjectivesInfo> Objectives { get; set; }
 
+        public const string ActionsProperty = "actions";
         [BsonElement(ActionsProperty)]
         public List<ActionsInfo> Actions { get; set; }
 
+        public const string StatusProperty = "status";
         [BsonElement(StatusProperty)]
         public Status Status { get; set; }
     }
@@ -153,31 +147,30 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
         public ActionsInfo() { Id = ObjectId.GenerateNewId(); }
 
         public const string IDProperty = "_id";
-        public const string NameProperty = "nm";
-        public const string DescriptionProperty = "desc";
-        public const string CompletedByProperty = "cmplby";
-        public const string ObjectivesProperty = "objs";
-        public const string StepsProperty = "stps";
-        public const string StatusProperty = "stat";
-
         [BsonId]
         public ObjectId Id { get; set; }
 
+        public const string NameProperty = "nm";
         [BsonElement(NameProperty)]
         public string Name { get; set; }
 
+        public const string DescriptionProperty = "desc";
         [BsonElement(DescriptionProperty)]
         public string Description { get; set; }
 
+        public const string CompletedByProperty = "cmplby";
         [BsonElement(CompletedByProperty)]
         public string CompletedBy { get; set; }
 
+        public const string ObjectivesProperty = "objs";
         [BsonElement(ObjectivesProperty)]
         public List<ObjectivesInfo> Objectives { get; set; }
 
+        public const string StepsProperty = "steps";
         [BsonElement(StepsProperty)]
         public List<StepsInfo> Steps { get; set; }
 
+        public const string StatusProperty = "status";
         [BsonElement(StatusProperty)]
         public Status Status { get; set; }
     }
@@ -185,40 +178,40 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
     public class StepsInfo : IMongoEntity<ObjectId>
     {
         public StepsInfo() { Id = ObjectId.GenerateNewId(); }
-        public const string IDProperty = "_id";
-        public const string TypeProperty = "typ";
-        public const string QuestionProperty = "q";
-        public const string TProperty = "t";
-        public const string DescriptionProperty = "desc";
-        public const string NotesProperty = "notes";
-        public const string TextProperty = "txt";
-        public const string ExProperty = "ex";
-        public const string StatusProperty = "stat";
 
+        public const string IDProperty = "_id";
         [BsonId]
         public ObjectId Id { get; set; }
 
+        public const string TypeProperty = "typ";
         [BsonElement(TypeProperty)]
         public int Type { get; set; }
 
+        public const string QuestionProperty = "q";
         [BsonElement(QuestionProperty)]
         public string Question { get; set; }
 
+        public const string TProperty = "t";
         [BsonElement(TProperty)]
         public string T { get; set; }
 
+        public const string DescriptionProperty = "desc";
         [BsonElement(DescriptionProperty)]
         public string Description { get; set; }
 
+        public const string NotesProperty = "notes";
         [BsonElement(NotesProperty)]
         public string Notes { get; set; }
 
+        public const string TextProperty = "txt";
         [BsonElement(TextProperty)]
         public string Text { get; set; }
 
+        public const string ExProperty = "ex";
         [BsonElement(ExProperty)]
         public string Ex { get; set; }
 
+        public const string StatusProperty = "status";
         [BsonElement(StatusProperty)]
         public Status Status { get; set; }
     }
@@ -228,20 +221,18 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
         public ObjectivesInfo() { Id = ObjectId.GenerateNewId(); }
 
         public const string IDProperty = "_id";
-        public const string ValueProperty = "vl";
-        public const string MeasurementProperty = "ms";
-        public const string StatusProperty = "st";
-
-
         [BsonId]
         public ObjectId Id { get; set; }
 
+        public const string ValueProperty = "val";
         [BsonElement(ValueProperty)]
         public string Value { get; set; }
 
-        [BsonElement(MeasurementProperty)]
-        public string Measurement { get; set; }
+        public const string UnitProperty = "unit";
+        [BsonElement(UnitProperty)]
+        public string Unit { get; set; }
 
+        public const string StatusProperty = "status";
         [BsonElement(StatusProperty)]
         public Status Status { get; set; }
     }

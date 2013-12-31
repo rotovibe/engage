@@ -64,6 +64,8 @@
     <Compile Include="MongoDB\DTO\MEContractProgram.cs" />
     <Compile Include="MongoDB\DTO\MEProgramBase.cs" />
     <Compile Include="MongoDB\DTO\MEProgram.cs" />
+    <Compile Include="MongoDB\Repository\MongoPatientProgramRepository.cs" />
+    <Compile Include="MongoDB\Repository\MongoContractProgramRepository.cs" />
     <Compile Include="MongoDB\Repository\MongoProgramRepository.cs" />
     <Compile Include="MongoDB\ProgramMongoContext.cs" />
     <Compile Include="DataProgramManager.cs" />

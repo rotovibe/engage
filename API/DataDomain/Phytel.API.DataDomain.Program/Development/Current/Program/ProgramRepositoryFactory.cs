@@ -18,5 +18,25 @@ namespace Phytel.API.DataDomain.Program
 
             return repo;
         }
+
+        public static IProgramRepository<T> GetPatientProgramRepository(string dbName, string productName)
+        {
+            IProgramRepository<T> repo = null;
+
+            //We only have 1 repository at this time, just return it
+            repo = new MongoPatientProgramRepository<T>(dbName) as IProgramRepository<T>;
+
+            return repo;
+        }
+
+        public static IProgramRepository<T> GetContractProgramRepository(string dbName, string productName)
+        {
+            IProgramRepository<T> repo = null;
+
+            //We only have 1 repository at this time, just return it
+            repo = new MongoContractProgramRepository<T>(dbName) as IProgramRepository<T>;
+
+            return repo;
+        }
     }
 }

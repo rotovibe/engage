@@ -16,22 +16,20 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
         public MEContractProgram(){ Id = ObjectId.GenerateNewId(); }
 
         public const string IdProperty = "_id";
-
-        public const string ProgramTemplateIdProperty = "ptid";
-        public const string ContractIdProperty = "cid";
-        public const string TTLDateProperty = "ttl";
-
         [BsonId]
         public ObjectId Id { get; set; }
 
+        public const string ProgramTemplateIdProperty = "ptid";
         [BsonElement(ProgramTemplateIdProperty)]
         [BsonIgnoreIfNull(true)]
         public ObjectId ProgramTemplateId { get; set; }
 
+        public const string ContractIdProperty = "cid";
         [BsonElement(ContractIdProperty)]
         [BsonIgnoreIfNull(true)]
         public string ContractId { get; set; }
 
+        public const string TTLDateProperty = "ttl";
         [BsonElement(TTLDateProperty)]
         [BsonIgnoreIfNull(true)]
         [BsonDateTimeOptions(Kind = System.DateTimeKind.Local)]

@@ -4,6 +4,7 @@ using Phytel.API.DataDomain.Program;
 using Phytel.API.Interface;
 using System.Collections.Generic;
 using System;
+using ServiceStack.ServiceInterface.ServiceModel;
 
 namespace Phytel.API.DataDomain.Program
 {
@@ -39,12 +40,40 @@ namespace Phytel.API.DataDomain.Program
         {
             PutProgramToPatientResponse response;
 
-            IProgramRepository<PutProgramToPatientResponse> repo =
-                Phytel.API.DataDomain.Program.ProgramRepositoryFactory<PutProgramToPatientResponse>.GetProgramRepository(request.ContractNumber, request.Context);
+            //IProgramRepository<PutProgramToPatientResponse> patRepo =
+            //    Phytel.API.DataDomain.Program.ProgramRepositoryFactory<PutProgramToPatientResponse>
+            //    .GetPatientProgramRepository(request.ContractNumber, request.Context);
 
-            response = repo.InsertPatientToProgramAssignment(request);
+
+            if (IsValidContractProgramId(request))
+            {
+                response = new PutProgramToPatientResponse();
+                response.Status = new ResponseStatus("", "ContractProgram does not exist.");
+            }
+
+            IProgramRepository<PutProgramToPatientResponse> patProgRepo =
+                Phytel.API.DataDomain.Program.ProgramRepositoryFactory<PutProgramToPatientResponse>
+                .GetPatientProgramRepository(request.ContractNumber, request.Context);
+
+            response = patProgRepo.InsertPatientToProgramAssignment(request);
 
             return response;
+        }
+
+        private static bool IsValidContractProgramId(PutProgramToPatientRequest request)
+        {
+            bool result = false;
+            IProgramRepository<PutProgramToPatientResponse> contractProgRepo =
+                            Phytel.API.DataDomain.Program.ProgramRepositoryFactory<PutProgramToPatientResponse>
+                            .GetContractProgramRepository(request.ContractNumber, request.Context);
+
+            object contractProgram = contractProgRepo.FindByID(request.ContractProgramId);
+            if (contractProgram != null)
+            {
+                result = true;
+            }
+
+            return result;
         }
 
         public static GetProgramDetailsSummaryResponse GetPatientProgramDetailsById(GetProgramDetailsSummaryRequest request)
@@ -52,7 +81,8 @@ namespace Phytel.API.DataDomain.Program
             GetProgramDetailsSummaryResponse response;
 
             IProgramRepository<GetProgramDetailsSummaryResponse> repo =
-                Phytel.API.DataDomain.Program.ProgramRepositoryFactory<GetProgramDetailsSummaryResponse>.GetProgramRepository(request.ContractNumber, request.Context);
+                Phytel.API.DataDomain.Program.ProgramRepositoryFactory<GetProgramDetailsSummaryResponse>
+                .GetPatientProgramRepository(request.ContractNumber, request.Context);
 
             response = repo.GetPatientProgramDocumentDetailsById(request);
 
