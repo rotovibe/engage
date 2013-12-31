@@ -72,7 +72,7 @@ namespace Phytel.API.AppDomain.NG.DTO
     {
         public string Id { get; set; }
         public string Value { get; set; }
-        public string Measurement { get; set; }
+        public string Unit { get; set; }
         public int Status { get; set; }
     }
 }

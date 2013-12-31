@@ -398,7 +398,8 @@ namespace Phytel.API.AppDomain.NG
                         Name = dataDomainResponse.program.Name,
                         ProgramStatus = dataDomainResponse.program.ProgramStatus,
                         ShortName = dataDomainResponse.program.ShortName,
-                        Status = dataDomainResponse.program.Status
+                        Status = dataDomainResponse.program.Status,
+                         PatientId = dataDomainResponse.program.PatientId
                     };
                 }
 
@@ -461,7 +462,7 @@ namespace Phytel.API.AppDomain.NG
                                 Id = o.Id.ToString(),
                                 Value = o.Value,
                                 Status = (int)o.Status,
-                                Measurement = o.Measurement
+                                Unit = o.Unit
                             }).ToList(),
                             Actions = r.Actions.Select(a => new ActionsDetailNG
                             {
@@ -473,7 +474,7 @@ namespace Phytel.API.AppDomain.NG
                                 Objectives = a.Objectives.Select(x => new ObjectivesDetailNG
                                 {
                                     Id = x.Id.ToString(),
-                                    Measurement = x.Measurement,
+                                    Unit = x.Unit,
                                     Status = (int)x.Status,
                                     Value = x.Value
                                 }).ToList(),
@@ -495,7 +496,7 @@ namespace Phytel.API.AppDomain.NG
                         ObjectivesInfo = resp.Program.ObjectivesInfo.Select(r => new ObjectivesDetailNG
                         {
                             Id = r.Id.ToString(),
-                            Measurement = r.Measurement,
+                            Unit = r.Unit,
                             Status = r.Status,
                             Value = r.Value
                         }).ToList(),

@@ -15,20 +15,20 @@ namespace Phytel.API.DataDomain.Patient.Service.Test
             string context = "NG";
             string priority = "3";
             string version = "v1";
-            string token = "52bdac26d6a4850d485c62ef";
+            string token = "52c24bd0d6a4850ef80555ea";
             IRestClient client = new JsonServiceClient();
 
-            //GetActiveProgramsResponse response = client.Get<GetActiveProgramsResponse>(
-            //    string.Format(@"http://localhost:888/Nightingale/{0}/{1}/Programs/Active?Token={2}",
-            //    version,
-            //    contractNumber,
-            //    token));
-
             GetActiveProgramsResponse response = client.Get<GetActiveProgramsResponse>(
-                string.Format(@"http://azurephyteldev.cloudapp.net:59900/Nightingale/{0}/{1}/Programs/Active?Token={2}",
+                string.Format(@"http://localhost:888/Nightingale/{0}/{1}/Programs/Active?Token={2}",
                 version,
                 contractNumber,
                 token));
+
+            //GetActiveProgramsResponse response = client.Get<GetActiveProgramsResponse>(
+            //    string.Format(@"http://azurephyteldev.cloudapp.net:59900/Nightingale/{0}/{1}/Programs/Active?Token={2}",
+            //    version,
+            //    contractNumber,
+            //    token));
         }
 
         [TestMethod]
