@@ -396,7 +396,7 @@ namespace Phytel.API.AppDomain.NG
                     {
                         Id = dataDomainResponse.program.Id,
                         Name = dataDomainResponse.program.Name,
-                        ProgramStatus = dataDomainResponse.program.ProgramStatus,
+                        ProgramState = dataDomainResponse.program.ProgramState,
                         ShortName = dataDomainResponse.program.ShortName,
                         Status = dataDomainResponse.program.Status,
                          PatientId = dataDomainResponse.program.PatientId
@@ -502,7 +502,6 @@ namespace Phytel.API.AppDomain.NG
                         }).ToList(),
                         PatientId = resp.Program.PatientId.ToString(),
                         ProgramState = resp.Program.ProgramState,
-                        ProgramStatus = resp.Program.ProgramStatus,
                         ShortName = resp.Program.ShortName,
                         StartDate = resp.Program.StartDate,
                         Status = resp.Program.Status,

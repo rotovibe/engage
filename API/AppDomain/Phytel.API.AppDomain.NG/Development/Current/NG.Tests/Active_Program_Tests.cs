@@ -38,31 +38,30 @@ namespace Phytel.API.DataDomain.Patient.Service.Test
             string context = "NG";
             string priority = "3";
             string version = "v1";
-            string token = "52bdb1c0d6a4850d485c633d";
+            string token = "52c2f618d6a4850c80664aa0";
             //string programId = "52b6304afe7a590654430378";
-            string programId = "52b6304afe7a590654430378";
+            string programId = "52c2f123fe7a5902a812fcde";  //valid one
+            //string programId = "52b6304afe7a590654431111";
             //string patientId = "528f6dc2072ef708ecd90e41";
             //string patientId = "528f6c42072ef708ecd43f59";
-            string patientId = "528f6b2f072ef708eccf98b8";
+            string patientId = "528f6dc2072ef708ecd910da";
             IRestClient client = new JsonServiceClient();
 
-        //http://azurephyteldev.cloudapp.net:59900/Nightingale/v1/InHealth001//Patient/528f6b2f072ef708eccf98b8/Programs/?ContractProgramId=52b6304afe7a590654430378&Token=52bdb7b8d6a4850d485c636b
-
-            //PostPatientToProgramsResponse response = client.Post<PostPatientToProgramsResponse>(
-            //    string.Format(@"http://localhost:888/Nightingale/{0}/{1}/Patient/{2}/Programs/?ContractProgramId={3}&Token={4}",
-            //    version,
-            //    contractNumber,
-            //    patientId,
-            //    programId,
-            //    token), new PostPatientToProgramsRequest() as object);
-
             PostPatientToProgramsResponse response = client.Post<PostPatientToProgramsResponse>(
-                string.Format(@"http://azurephyteldev.cloudapp.net:59900/Nightingale/{0}/{1}/Patient/{2}/Programs/?ContractProgramId={3}&Token={4}",
+                string.Format(@"http://localhost:888/Nightingale/{0}/{1}/Patient/{2}/Programs/?ContractProgramId={3}&Token={4}",
                 version,
                 contractNumber,
                 patientId,
                 programId,
                 token), new PostPatientToProgramsRequest() as object);
+
+            //PostPatientToProgramsResponse response = client.Post<PostPatientToProgramsResponse>(
+            //    string.Format(@"http://azurephyteldev.cloudapp.net:59900/Nightingale/{0}/{1}/Patient/{2}/Programs/?ContractProgramId={3}&Token={4}",
+            //    version,
+            //    contractNumber,
+            //    patientId,
+            //    programId,
+            //    token), new PostPatientToProgramsRequest() as object);
         }
 
         [TestMethod]

@@ -28,7 +28,6 @@ namespace Phytel.API.AppDomain.NG.DTO
         public DateTime? EligibilityStartDate { get; set; }
         public DateTime? EligibilityEndDate { get; set; }
         public int Status { get; set; }
-        public string ProgramStatus { get; set; }
         public List<ObjectivesDetailNG> ObjectivesInfo { get; set; }
         public List<ModuleDetailNG> Modules { get; set; }
         public string Version { get; set; }
