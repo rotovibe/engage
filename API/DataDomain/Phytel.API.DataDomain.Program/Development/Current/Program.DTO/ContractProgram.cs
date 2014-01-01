@@ -6,13 +6,12 @@ using System.Threading.Tasks;
 
 namespace Phytel.API.DataDomain.Program.DTO
 {
-    public class ProgramInfo
+    public class ContractProgram
     {
         public string Id { get; set; }
         public string Name { get; set; }
         public string ShortName { get; set; }
         public int Status { get; set; }
-        public int ProgramState { get; set; }
-        public string PatientId { get; set; }
+        public bool Delete { get; set; }
     }
 }

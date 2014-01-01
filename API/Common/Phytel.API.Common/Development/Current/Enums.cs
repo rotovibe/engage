@@ -35,4 +35,16 @@ namespace Phytel.API.Common
         Started = 1,
         Completed = 2
     }
+
+    public enum GenericStatus
+    {
+        NotSet = 0,
+        Pending = 1
+    }
+
+    public enum GenericSetting
+    {
+        No = 0,
+        Yes = 1
+    }
 }

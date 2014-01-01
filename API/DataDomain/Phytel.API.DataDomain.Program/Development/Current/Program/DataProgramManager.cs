@@ -5,6 +5,10 @@ using Phytel.API.Interface;
 using System.Collections.Generic;
 using System;
 using ServiceStack.ServiceInterface.ServiceModel;
+using Phytel.API.DataDomain.Patient.DTO;
+using ServiceStack.Service;
+using ServiceStack.ServiceClient.Web;
+using System.Configuration;
 
 namespace Phytel.API.DataDomain.Program
 {
@@ -38,17 +42,27 @@ namespace Phytel.API.DataDomain.Program
 
         public static PutProgramToPatientResponse PutPatientToProgram(PutProgramToPatientRequest request)
         {
-            PutProgramToPatientResponse response;
+            PutProgramToPatientResponse response = new PutProgramToPatientResponse();
 
-            //IProgramRepository<PutProgramToPatientResponse> patRepo =
-            //    Phytel.API.DataDomain.Program.ProgramRepositoryFactory<PutProgramToPatientResponse>
-            //    .GetPatientProgramRepository(request.ContractNumber, request.Context);
-
-
-            if (IsValidContractProgramId(request))
+            if (!IsValidPatientId(request))
             {
-                response = new PutProgramToPatientResponse();
-                response.Status = new ResponseStatus("", "ContractProgram does not exist.");
+                response.Status = new ResponseStatus("500", "Patient does not exist or has an invalid identifier.");
+                response.Outcome = new Outcome() { Reason = "Patient does not exist or has an invalid id.", Result = 0 };
+                return response;
+            }
+
+            if (!IsValidContractProgramId(request))
+            {
+                response.Status = new ResponseStatus("500", "ContractProgram does not exist or has an invalid identifier.");
+                response.Outcome = new Outcome() { Reason = "ContractProgram does not exist or has an invalid id.", Result = 0 };
+                return response;
+            }
+
+            if (!IsContractProgramAssignable(request))
+            {
+                response.Status = new ResponseStatus("500", "ContractProgram is not currently active.");
+                response.Outcome = new Outcome() { Reason = "ContractProgram is not assignable.", Result = 0 };
+                return response;
             }
 
             IProgramRepository<PutProgramToPatientResponse> patProgRepo =
@@ -58,6 +72,50 @@ namespace Phytel.API.DataDomain.Program
             response = patProgRepo.InsertPatientToProgramAssignment(request);
 
             return response;
+        }
+
+        private static bool IsContractProgramAssignable(PutProgramToPatientRequest p)
+        {
+            bool result = false;
+
+            IProgramRepository<ContractProgram> contractProgRepo =
+                            Phytel.API.DataDomain.Program.ProgramRepositoryFactory<ContractProgram>
+                            .GetContractProgramRepository(p.ContractNumber, p.Context);
+
+            ContractProgram c = contractProgRepo.FindByID(p.ContractProgramId) as ContractProgram;
+
+            if (c != null)
+            {
+                if (c.Status == 1 && c.Delete != true)
+                    result = true;
+            }
+
+            return result;
+        }
+
+        private static bool IsValidPatientId(PutProgramToPatientRequest request)
+        {
+
+            bool result = false;
+            string path = ConfigurationManager.AppSettings["DDPatientServiceUrl"];
+            string contractNumber = "InHealth001";
+            string context = "NG";
+            string version = "v1";
+            IRestClient client = new JsonServiceClient();
+            GetPatientDataResponse response = client.Get<GetPatientDataResponse>(
+                string.Format("{0}/{1}/{2}/{3}/patient/{4}", 
+                path,
+                context,
+                version,
+                contractNumber,
+                request.PatientId));
+
+            if (response.Patient != null)
+            {
+                result = true;
+            }
+
+            return result;
         }
 
         private static bool IsValidContractProgramId(PutProgramToPatientRequest request)

@@ -24,11 +24,6 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
         [BsonIgnoreIfNull(true)]
         public string TemplateName { get; set; }
 
-        public const string TemplateStatusProperty = "tempstatus";
-        [BsonElement(TemplateStatusProperty)]
-        [BsonIgnoreIfNull(true)]
-        public string TemplateStatus { get; set; }
-
         public const string TTLDateProperty = "ttl";
         [BsonElement(TTLDateProperty)]
         [BsonIgnoreIfNull(true)]

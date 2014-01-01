@@ -33,6 +33,18 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
         [BsonElement(ProgramStateProperty)]
         public ProgramState ProgramState { get; set; }
 
+        public const string EligibilityProperty = "eligibility";
+        [BsonElement(EligibilityProperty)]
+        public GenericStatus Eligibility { get; set; }
+
+        public const string EligibilityOverrideProperty = "eligoverride";
+        [BsonElement(EligibilityOverrideProperty)]
+        public GenericSetting EligibilityOverride { get; set; }
+
+        public const string EnrollmentProperty = "enrollment";
+        [BsonElement(EnrollmentProperty)]
+        public GenericStatus Enrollment { get; set; }
+
         public const string GraduatedFlagProperty = "graduated";
         [BsonElement(GraduatedFlagProperty)]
         public bool GraduatedFlag { get; set; }

@@ -44,34 +44,18 @@ namespace Phytel.API.DataDomain.Program
 
         public object FindByID(string entityID)
         {
-            DTO.Program program = null;
+            ContractProgram program = null;
             using (ProgramMongoContext ctx = new ProgramMongoContext(_dbName))
             {
                 program = (from p in ctx.ContractPrograms
                            where p.Id == ObjectId.Parse(entityID)
-                           select new DTO.Program
+                           select new ContractProgram
                            {
-                               ProgramID = p.Id.ToString(),
+                               Delete = p.DeleteFlag,
+                               Id = p.Id.ToString(),
                                Name = p.Name,
-                               AuthoredBy = p.AuthoredBy,
-                               Client = p.Client,
-                               Description = p.Description,
-                               EndDate = p.EndDate == null ? string.Empty : String.Format("{0:MM/dd/yyyy}", p.EndDate),
-                               StartDate = p.StartDate == null ? string.Empty : String.Format("{0:MM/dd/yyyy}", p.StartDate),
-                               ObjectivesInfo = p.ObjectivesInfo.Select(x => new DTO.ObjectivesDetail
-                               {
-                                    Id = x.Id.ToString(),
-                                   Unit = x.Unit,
-                                   Status = (int)x.Status,
-                                   Value = x.Value
-                               }).ToList(),
-                               Locked = p.Locked,
-                               EligibilityRequirements = p.EligibilityRequirements,
-                               EligibilityEndDate = p.EligibilityEndDate == null ? string.Empty : String.Format("{0:MM/dd/yyyy}", p.EligibilityEndDate),
-                               EligibilityStartDate = p.EligibilityStartDate == null ? string.Empty : String.Format("{0:MM/dd/yyyy}", p.EligibilityStartDate),
                                ShortName = p.ShortName,
-                               Status = p.Status,
-                               Version = p.Version
+                               Status = (int)p.Status
                            }).FirstOrDefault();
             }
             return program;

@@ -75,34 +75,36 @@ namespace Phytel.API.DataDomain.Program
                             EligibilityRequirements = cp.EligibilityRequirements,
                             EligibilityStartDate = cp.EligibilityStartDate,
                             EndDate = cp.EndDate,
-                            Modules = cp.Modules.Select(r => new ModuleDetail
+                            Modules = cp.Modules.Where(h => h.Status == Common.Status.Active).Select(r => new ModuleDetail
                             {
                                 Id = r.Id.ToString(),
                                 Description = r.Description,
                                 Name = r.Name,
                                 Status = (int)r.Status,
-                                Objectives = r.Objectives.Select(o => new ObjectivesDetail
+                                Objectives = r.Objectives.Where(m => m.Status == Common.Status.Active)
+                                .Select(o => new ObjectivesDetail
                                 {
                                     Id = o.Id.ToString(),
                                     Value = o.Value,
                                     Status = (int)o.Status,
                                     Unit = o.Unit
                                 }).ToList(),
-                                Actions = r.Actions.Select(a => new ActionsDetail
+                                Actions = r.Actions.Where(i => i.Status == Common.Status.Active).Select(a => new ActionsDetail
                                 {
                                     CompletedBy = a.CompletedBy,
                                     Description = a.Description,
                                     Id = a.Id.ToString(),
                                     Name = a.Name,
                                     Status = (int)a.Status,
-                                    Objectives = a.Objectives.Select(x => new ObjectivesDetail
+                                    Objectives = a.Objectives.Where(k => k.Status == Common.Status.Active)
+                                    .Select(x => new ObjectivesDetail
                                     {
                                         Id = x.Id.ToString(),
                                         Unit = x.Unit,
                                         Status = (int)x.Status,
                                         Value = x.Value
                                     }).ToList(),
-                                    Steps = a.Steps.Select(s => new StepsDetail
+                                    Steps = a.Steps.Where(j => j.Status == Common.Status.Active).Select(s => new StepsDetail
                                     {
                                         Description = s.Description,
                                         Ex = s.Ex,
@@ -117,7 +119,8 @@ namespace Phytel.API.DataDomain.Program
                                 }).ToList()
                             }).ToList(),
                             Name = cp.Name,
-                            ObjectivesInfo = cp.ObjectivesInfo.Select(r => new ObjectivesDetail
+                            ObjectivesInfo = cp.ObjectivesInfo.Where(l => l.Status == Common.Status.Active)
+                            .Select(r => new ObjectivesDetail
                             {
                                 Id = r.Id.ToString(),
                                 Unit = r.Unit,
@@ -167,6 +170,12 @@ namespace Phytel.API.DataDomain.Program
                             AuthoredBy = cp.AuthoredBy,
                             Client = cp.Client,
                             ProgramState = Common.ProgramState.NotStarted,
+                            StartDate = System.DateTime.UtcNow, // utc time
+                            GraduatedFlag = false,
+                            OptOut = null,
+                            Eligibility = Common.GenericStatus.Pending,
+                            Enrollment = Common.GenericStatus.Pending,
+                            EligibilityOverride = Common.GenericSetting.No,
                             ContractProgramId = cp.Id,
                             DeleteFlag = cp.DeleteFlag,
                             Description = cp.Description,
@@ -176,11 +185,17 @@ namespace Phytel.API.DataDomain.Program
                             EndDate = null,
                             LastUpdatedOn = cp.LastUpdatedOn,
                             Locked = cp.Locked,
-                            Modules = cp.Modules,
+                            Modules = SetValidModules(cp.Modules),
                             Name = cp.Name,
                             ObjectivesInfo = cp.ObjectivesInfo,
+                            //ObjectivesInfo = cp.ObjectivesInfo.Where(e => e.Status == Common.Status.Active).Select(f => new ObjectivesInfo()
+                            //{
+                            //    Id = f.Id,
+                            //    Status = f.Status,
+                            //    Value = f.Value,
+                            //    Unit = f.Unit
+                            //}).ToList(),
                             ShortName = cp.ShortName,
-                            StartDate = System.DateTime.UtcNow, // utc time
                             Status = cp.Status
 
                         };
@@ -193,7 +208,8 @@ namespace Phytel.API.DataDomain.Program
                             Name = patientProgDoc.Name,
                             ShortName = patientProgDoc.ShortName,
                             Status = (int)patientProgDoc.Status,
-                             PatientId = patientProgDoc.PatientId.ToString()
+                             PatientId = patientProgDoc.PatientId.ToString(),
+                            ProgramState = (int)patientProgDoc.ProgramState
                         };
 
                         result.Outcome.Result = 1;
@@ -212,6 +228,75 @@ namespace Phytel.API.DataDomain.Program
             {
                 throw;
             }
+        }
+
+        private List<Modules> SetValidModules(List<Modules> list)
+        {
+            List<StepsInfo> steps = new List<StepsInfo>();
+            List<ActionsInfo> acts = new List<ActionsInfo>();
+            List<Modules> mods = new List<Modules>();
+
+            foreach (Modules m in list)
+            {
+                if (m.Status == Common.Status.Active)
+                {
+                    Modules mod = new Modules()
+                    {
+                        Id = m.Id,
+                        Description = m.Description,
+                        Name = m.Name,
+                        Status = m.Status,
+                        Objectives = m.Objectives,
+                        //Objectives = m.Objectives.Where(a => a.Status == Common.Status.Active).Select(z => new ObjectivesInfo()
+                        //{
+                        //    Id = z.Id,
+                        //    Status = z.Status,
+                        //    Unit = z.Unit,
+                        //    Value = z.Value
+                        //}).ToList(),
+                        Actions = new List<ActionsInfo>()
+                    };
+
+                    foreach (ActionsInfo ai in m.Actions)
+                    {
+                        if (ai.Status == Common.Status.Active)
+                        {
+                            ActionsInfo ac = new ActionsInfo()
+                            {
+                                CompletedBy = ai.CompletedBy,
+                                Description = ai.Description,
+                                Id = ai.Id,
+                                Name = ai.Name,
+                                Status = ai.Status,
+                                Objectives = ai.Objectives,
+                                //Objectives = ai.Objectives.Where(r => r.Status == Common.Status.Active).Select(x => new ObjectivesInfo()
+                                //{
+                                //    Id = x.Id,
+                                //    Status = x.Status,
+                                //    Unit = x.Unit,
+                                //    Value = x.Value
+                                //}).ToList(),
+                                Steps = ai.Steps.Where(s => s.Status == Common.Status.Active).Select(b => new StepsInfo()
+                                {
+                                    Status = b.Status,
+                                    Description = b.Description,
+                                    Ex = b.Ex,
+                                    Id = b.Id,
+                                    Notes = b.Notes,
+                                    Question = b.Question,
+                                    T = b.T,
+                                    Text = b.Text,
+                                    Type = b.Type
+                                }).ToList()
+                            };
+                            mod.Actions.Add(ac);
+                        }
+                    }
+                    mods.Add(mod);
+                }
+            }
+
+            return mods;
         }
 
         public Tuple<string, IEnumerable<object>> Select(Interface.APIExpression expression)
