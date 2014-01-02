@@ -53,8 +53,8 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
         [BsonIgnoreIfNull(true)]
         public DateTime? StartDate { get; set; }
 
-        [BsonElement(EndDateProperty)]
-        [BsonIgnoreIfNull(true)]
+        [BsonElement(EndDateProperty)] 
+        [BsonIgnoreIfNull(false)]
         public DateTime? EndDate { get; set; }
 
         [BsonElement(EligibilityRequirementsProperty)]
@@ -66,7 +66,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
         public DateTime? EligibilityStartDate { get; set; }
 
         [BsonElement(EligibilityEndDateProperty)]
-        [BsonIgnoreIfNull(true)]
+        [BsonIgnoreIfNull(false)]
         public DateTime? EligibilityEndDate { get; set; }
 
         [BsonElement(StatusProperty)]

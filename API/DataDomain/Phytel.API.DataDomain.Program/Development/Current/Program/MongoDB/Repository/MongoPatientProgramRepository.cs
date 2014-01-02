@@ -171,19 +171,19 @@ namespace Phytel.API.DataDomain.Program
                             Client = cp.Client,
                             ProgramState = Common.ProgramState.NotStarted,
                             StartDate = System.DateTime.UtcNow, // utc time
+                            EndDate = null,
                             GraduatedFlag = false,
                             OptOut = null,
                             Eligibility = Common.GenericStatus.Pending,
+                            EligibilityStartDate = System.DateTime.UtcNow,
+                            EligibilityEndDate = null,
+                            EligibilityRequirements = cp.EligibilityRequirements,
                             Enrollment = Common.GenericStatus.Pending,
                             EligibilityOverride = Common.GenericSetting.No,
                             ContractProgramId = cp.Id,
                             DeleteFlag = cp.DeleteFlag,
                             Description = cp.Description,
-                            EligibilityEndDate = cp.EligibilityEndDate,
-                            EligibilityRequirements = cp.EligibilityRequirements,
-                            EligibilityStartDate = cp.EligibilityStartDate,
-                            EndDate = null,
-                            LastUpdatedOn = cp.LastUpdatedOn,
+                            LastUpdatedOn = System.DateTime.UtcNow, // utc time
                             Locked = cp.Locked,
                             Modules = SetValidModules(cp.Modules),
                             Name = cp.Name,
@@ -197,7 +197,6 @@ namespace Phytel.API.DataDomain.Program
                             //}).ToList(),
                             ShortName = cp.ShortName,
                             Status = cp.Status
-
                         };
 
                         ctx.PatientPrograms.Collection.Insert(patientProgDoc);
