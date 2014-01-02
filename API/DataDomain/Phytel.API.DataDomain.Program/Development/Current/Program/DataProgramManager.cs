@@ -46,23 +46,17 @@ namespace Phytel.API.DataDomain.Program
 
             if (!IsValidPatientId(request))
             {
-                response.Status = new ResponseStatus("500", "Patient does not exist or has an invalid identifier.");
-                response.Outcome = new Outcome() { Reason = "Patient does not exist or has an invalid id.", Result = 0 };
-                return response;
+                return FormatExceptionResponse(response, "Patient does not exist or has an invalid id.", "500");
             }
 
             if (!IsValidContractProgramId(request))
             {
-                response.Status = new ResponseStatus("500", "ContractProgram does not exist or has an invalid identifier.");
-                response.Outcome = new Outcome() { Reason = "ContractProgram does not exist or has an invalid id.", Result = 0 };
-                return response;
+                return FormatExceptionResponse(response, "ContractProgram does not exist or has an invalid identifier.", "500");
             }
 
             if (!IsContractProgramAssignable(request))
             {
-                response.Status = new ResponseStatus("500", "ContractProgram is not currently active.");
-                response.Outcome = new Outcome() { Reason = "ContractProgram is not assignable.", Result = 0 };
-                return response;
+                return FormatExceptionResponse(response, "ContractProgram is not currently active.", "500");
             }
 
             IProgramRepository<PutProgramToPatientResponse> patProgRepo =
@@ -71,6 +65,13 @@ namespace Phytel.API.DataDomain.Program
 
             response = patProgRepo.InsertPatientToProgramAssignment(request);
 
+            return response;
+        }
+
+        private static PutProgramToPatientResponse FormatExceptionResponse(PutProgramToPatientResponse response, string reason, string errorcode)
+        {
+            response.Status = new ResponseStatus(errorcode, reason);
+            response.Outcome = new Outcome() { Reason = reason, Result = 0 };
             return response;
         }
 
