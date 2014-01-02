@@ -12,17 +12,17 @@ namespace Phytel.API.DataDomain.Patient.Service.Test
         public void Update_Patient_Flagged_By_PatientID()
         {
             // http://localhost:8888/Patient/NG/v1/InHealth001/patient/999/flagged/2?UserId=12345
-            string patientID = "528f6dc2072ef708ecd90e3a";
-            string userId = "BB241C64-A0FF-4E01-BA5F-4246EF50780E";
+            string patientID = "528f6d09072ef708ecd6d08e";
+            string userId = "ba9b277d-4b53-4a53-a2c5-15d4969423ec";
             string contractNumber = "InHealth001";
             string context = "NG";
             string flagged = "1";
             string version = "v1";
-            string token = "52af293ad6a4850da8845c20";
+            string token = "52c5e5dfd6a4850edcd1a239";
 
             IRestClient client = new JsonServiceClient();
 
-            PutPatientFlaggedUpdateResponse response = client.Put<PutPatientFlaggedUpdateResponse>(
+            PutPatientFlaggedUpdateResponse response = client.Post<PutPatientFlaggedUpdateResponse>(
                 string.Format(@"http://localhost:888/Nightingale/{0}/{1}/patient/{2}/flagged/{3}?UserId={4}&Token={5}",
                 version,
                 contractNumber,
