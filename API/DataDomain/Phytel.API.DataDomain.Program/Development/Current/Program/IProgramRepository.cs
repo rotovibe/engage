@@ -10,9 +10,7 @@ namespace Phytel.API.DataDomain.Program
 {
     public interface IProgramRepository<T> : IRepository<T>
     {
-
         List<ProgramInfo> GetActiveProgramsInfoList(GetAllActiveProgramsRequest request);
         PutProgramToPatientResponse InsertPatientToProgramAssignment(PutProgramToPatientRequest request);
-        GetProgramDetailsSummaryResponse GetPatientProgramDocumentDetailsById(GetProgramDetailsSummaryRequest request);
     }
 }

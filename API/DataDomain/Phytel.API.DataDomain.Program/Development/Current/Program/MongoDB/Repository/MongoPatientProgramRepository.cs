@@ -44,23 +44,13 @@ namespace Phytel.API.DataDomain.Program
 
         public object FindByID(string entityID)
         {
-            throw new NotImplementedException();
-        }
-
-        public List<ProgramInfo> GetActiveProgramsInfoList(GetAllActiveProgramsRequest request)
-        {
-            throw new NotImplementedException();
-        }
-
-        public GetProgramDetailsSummaryResponse GetPatientProgramDocumentDetailsById(GetProgramDetailsSummaryRequest request)
-        {
             try
             {
                 GetProgramDetailsSummaryResponse result = new GetProgramDetailsSummaryResponse();
 
                 using (ProgramMongoContext ctx = new ProgramMongoContext(_dbName))
                 {
-                    var findcp = Query<MEPatientProgram>.EQ(b => b.Id, ObjectId.Parse(request.ProgramId));
+                    var findcp = Query<MEPatientProgram>.EQ(b => b.Id, ObjectId.Parse(entityID));
                     MEPatientProgram cp = ctx.PatientPrograms.Collection.Find(findcp).FirstOrDefault();
 
                     if (cp != null)
@@ -135,6 +125,10 @@ namespace Phytel.API.DataDomain.Program
                             Version = cp.Version
                         };
                     }
+                    else
+                    {
+                        throw new ArgumentException("ProgramID is not valid or is missing from the records.");
+                    }
                 }
                 return result;
             }
@@ -142,6 +136,11 @@ namespace Phytel.API.DataDomain.Program
             {
                 throw;
             }
+        }
+
+        public List<ProgramInfo> GetActiveProgramsInfoList(GetAllActiveProgramsRequest request)
+        {
+            throw new NotImplementedException();
         }
 
         public PutProgramToPatientResponse InsertPatientToProgramAssignment(PutProgramToPatientRequest request)
@@ -300,7 +299,115 @@ namespace Phytel.API.DataDomain.Program
 
         public Tuple<string, IEnumerable<object>> Select(Interface.APIExpression expression)
         {
-            throw new NotImplementedException();
+            IMongoQuery mQuery = null;
+            List<object> patList = new List<object>();
+
+            List<SelectExpression> selectExpressions = expression.Expressions.ToList();
+            selectExpressions.Where(s => s.GroupID == 1).OrderBy(o => o.ExpressionOrder).ToList();
+
+            SelectExpressionGroupType groupType = SelectExpressionGroupType.AND;
+
+            if (selectExpressions.Count > 0)
+            {
+                IList<IMongoQuery> queries = new List<IMongoQuery>();
+                for (int i = 0; i < selectExpressions.Count; i++)
+                {
+                    groupType = selectExpressions[0].NextExpressionType;
+
+                    IMongoQuery query = SelectExpressionHelper.ApplyQueryOperators(selectExpressions[i].Type, selectExpressions[i].FieldName, selectExpressions[i].Value);
+                    if (query != null)
+                    {
+                        queries.Add(query);
+                    }
+                }
+
+                mQuery = SelectExpressionHelper.BuildQuery(groupType, queries);
+            }
+
+            GetProgramDetailsSummaryResponse result = new GetProgramDetailsSummaryResponse();
+
+            using (ProgramMongoContext ctx = new ProgramMongoContext(_dbName))
+            {
+                //var findcp = Query<MEPatientProgram>.EQ(b => b.Id, ObjectId.Parse(request.PatientProgramId));
+                //MEPatientProgram cp = ctx.PatientPrograms.Collection.Find(findcp).FirstOrDefault();
+                MEPatientProgram cp = ctx.PatientPrograms.Collection.Find(mQuery).FirstOrDefault();
+
+                if (cp != null)
+                {
+                    ProgramDetail patProgram = new ProgramDetail
+                    {
+                        Id = cp.Id.ToString(),
+                        Client = cp.Client,
+                        ContractProgramId = cp.ContractProgramId.ToString(),
+                        Description = cp.Description,
+                        EligibilityEndDate = cp.EligibilityEndDate,
+                        EligibilityRequirements = cp.EligibilityRequirements,
+                        EligibilityStartDate = cp.EligibilityStartDate,
+                        EndDate = cp.EndDate,
+                        Modules = cp.Modules.Where(h => h.Status == Common.Status.Active).Select(r => new ModuleDetail
+                        {
+                            Id = r.Id.ToString(),
+                            Description = r.Description,
+                            Name = r.Name,
+                            Status = (int)r.Status,
+                            Objectives = r.Objectives
+                            .Select(o => new ObjectivesDetail
+                            {
+                                Id = o.Id.ToString(),
+                                Value = o.Value,
+                                Status = (int)o.Status,
+                                Unit = o.Unit
+                            }).ToList(),
+                            Actions = r.Actions.Where(i => i.Status == Common.Status.Active).Select(a => new ActionsDetail
+                            {
+                                CompletedBy = a.CompletedBy,
+                                Description = a.Description,
+                                Id = a.Id.ToString(),
+                                Name = a.Name,
+                                Status = (int)a.Status,
+                                Objectives = a.Objectives
+                                .Select(x => new ObjectivesDetail
+                                {
+                                    Id = x.Id.ToString(),
+                                    Unit = x.Unit,
+                                    Status = (int)x.Status,
+                                    Value = x.Value
+                                }).ToList(),
+                                Steps = a.Steps.Where(j => j.Status == Common.Status.Active).Select(s => new StepsDetail
+                                {
+                                    Description = s.Description,
+                                    Ex = s.Ex,
+                                    Id = s.Id.ToString(),
+                                    Notes = s.Notes,
+                                    Question = s.Question,
+                                    Status = (int)s.Status,
+                                    T = s.T,
+                                    Text = s.Text,
+                                    Type = s.Type
+                                }).ToList()
+                            }).ToList()
+                        }).ToList(),
+                        Name = cp.Name,
+                        ObjectivesInfo = cp.ObjectivesInfo
+                        .Select(r => new ObjectivesDetail
+                        {
+                            Id = r.Id.ToString(),
+                            Unit = r.Unit,
+                            Status = (int)r.Status,
+                            Value = r.Value
+                        }).ToList(),
+                        PatientId = cp.PatientId.ToString(),
+                        ProgramState = (int)cp.ProgramState,
+                        ShortName = cp.ShortName,
+                        StartDate = cp.StartDate,
+                        Status = (int)cp.Status,
+                        Version = cp.Version
+                    };
+                    patList.Add(patProgram);
+                }
+            }
+
+            return new Tuple<string, IEnumerable<object>>(expression.ExpressionID, patList);
         }
 
         public IEnumerable<object> SelectAll()

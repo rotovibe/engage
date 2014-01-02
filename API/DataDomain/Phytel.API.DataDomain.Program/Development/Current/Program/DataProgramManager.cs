@@ -9,6 +9,7 @@ using Phytel.API.DataDomain.Patient.DTO;
 using ServiceStack.Service;
 using ServiceStack.ServiceClient.Web;
 using System.Configuration;
+using Phytel.API.DataDomain.Program.MongoDB.DTO;
 
 namespace Phytel.API.DataDomain.Program
 {
@@ -137,15 +138,22 @@ namespace Phytel.API.DataDomain.Program
 
         public static GetProgramDetailsSummaryResponse GetPatientProgramDetailsById(GetProgramDetailsSummaryRequest request)
         {
-            GetProgramDetailsSummaryResponse response;
+            try
+            {
+                GetProgramDetailsSummaryResponse response = null;
 
-            IProgramRepository<GetProgramDetailsSummaryResponse> repo =
-                Phytel.API.DataDomain.Program.ProgramRepositoryFactory<GetProgramDetailsSummaryResponse>
-                .GetPatientProgramRepository(request.ContractNumber, request.Context);
+                IProgramRepository<GetProgramDetailsSummaryResponse> repo =
+                    Phytel.API.DataDomain.Program.ProgramRepositoryFactory<GetProgramDetailsSummaryResponse>
+                    .GetPatientProgramRepository(request.ContractNumber, request.Context);
 
-            response = repo.GetPatientProgramDocumentDetailsById(request);
+                response = repo.FindByID(request.ProgramId) as GetProgramDetailsSummaryResponse;
 
-            return response;
+                return response;
+            }
+            catch
+            {
+                throw;
+            }
         }
     }
 }   

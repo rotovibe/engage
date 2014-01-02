@@ -117,10 +117,6 @@ namespace Phytel.API.DataDomain.Program
         }
 
         // needs to be refactored
-        public GetProgramDetailsSummaryResponse GetPatientProgramDocumentDetailsById(GetProgramDetailsSummaryRequest request)
-        {
-            throw new NotImplementedException();
-        }
         public PutProgramToPatientResponse InsertPatientToProgramAssignment(PutProgramToPatientRequest request)
         {
             throw new NotImplementedException();
