@@ -12,7 +12,7 @@ namespace Phytel.API.DataDomain.Program.DTO
         [ApiMember(Name = "PatientId", Description = "PatientId of the contexted user", ParameterType = "property", DataType = "string", IsRequired = false)]
         public string PatientId { get; set; }
 
-        [ApiMember(Name = "ProgramId", Description = "ProgramId of the program", ParameterType = "property", DataType = "string", IsRequired = false)]
+        [ApiMember(Name = "PatientProgramId", Description = "ID of the program to patient registration", ParameterType = "property", DataType = "string", IsRequired = false)]
         public string ProgramId { get; set; }
 
         [ApiMember(Name = "Context", Description = "Product Context requesting the Program", ParameterType = "property", DataType = "string", IsRequired = false)]

@@ -441,78 +441,80 @@ namespace Phytel.API.AppDomain.NG
 
                 if (resp != null)
                 {
-                    result.Program = new ProgramDetailNG
+                    if (resp.Program != null)
                     {
-                        Id = resp.Program.Id.ToString(),
-                        Client = resp.Program.Client,
-                        ContractProgramId = resp.Program.ContractProgramId.ToString(),
-                        Description = resp.Program.Description,
-                        EligibilityEndDate = resp.Program.EligibilityEndDate,
-                        EligibilityRequirements = resp.Program.EligibilityRequirements,
-                        EligibilityStartDate = resp.Program.EligibilityStartDate,
-                        EndDate = resp.Program.EndDate,
-                        Modules = resp.Program.Modules.Select(r => new ModuleDetailNG
+                        result.Program = new ProgramDetailNG
                         {
-                            Id = r.Id.ToString(),
-                            Description = r.Description,
-                            Name = r.Name,
-                            Status = (int)r.Status,
-                            Objectives = r.Objectives.Select(o => new ObjectivesDetailNG
+                            Id = resp.Program.Id.ToString(),
+                            Client = resp.Program.Client,
+                            ContractProgramId = resp.Program.ContractProgramId.ToString(),
+                            Description = resp.Program.Description,
+                            EligibilityEndDate = resp.Program.EligibilityEndDate,
+                            EligibilityRequirements = resp.Program.EligibilityRequirements,
+                            EligibilityStartDate = resp.Program.EligibilityStartDate,
+                            EndDate = resp.Program.EndDate,
+                            Modules = resp.Program.Modules.Select(r => new ModuleDetailNG
                             {
-                                Id = o.Id.ToString(),
-                                Value = o.Value,
-                                Status = (int)o.Status,
-                                Unit = o.Unit
-                            }).ToList(),
-                            Actions = r.Actions.Select(a => new ActionsDetailNG
-                            {
-                                CompletedBy = a.CompletedBy,
-                                Description = a.Description,
-                                Id = a.Id.ToString(),
-                                Name = a.Name,
-                                Status = (int)a.Status,
-                                Objectives = a.Objectives.Select(x => new ObjectivesDetailNG
+                                Id = r.Id.ToString(),
+                                Description = r.Description,
+                                Name = r.Name,
+                                Status = (int)r.Status,
+                                Objectives = r.Objectives.Select(o => new ObjectivesDetailNG
                                 {
-                                    Id = x.Id.ToString(),
-                                    Unit = x.Unit,
-                                    Status = (int)x.Status,
-                                    Value = x.Value
+                                    Id = o.Id.ToString(),
+                                    Value = o.Value,
+                                    Status = (int)o.Status,
+                                    Unit = o.Unit
                                 }).ToList(),
-                                Steps = a.Steps.Select(s => new StepsDetailNG
+                                Actions = r.Actions.Select(a => new ActionsDetailNG
                                 {
-                                    Description = s.Description,
-                                    Ex = s.Ex,
-                                    Id = s.Id.ToString(),
-                                    Notes = s.Notes,
-                                    Question = s.Question,
-                                    Status = (int)s.Status,
-                                    T = s.T,
-                                    Text = s.Text,
-                                    Type = s.Type
+                                    CompletedBy = a.CompletedBy,
+                                    Description = a.Description,
+                                    Id = a.Id.ToString(),
+                                    Name = a.Name,
+                                    Status = (int)a.Status,
+                                    Objectives = a.Objectives.Select(x => new ObjectivesDetailNG
+                                    {
+                                        Id = x.Id.ToString(),
+                                        Unit = x.Unit,
+                                        Status = (int)x.Status,
+                                        Value = x.Value
+                                    }).ToList(),
+                                    Steps = a.Steps.Select(s => new StepsDetailNG
+                                    {
+                                        Description = s.Description,
+                                        Ex = s.Ex,
+                                        Id = s.Id.ToString(),
+                                        Notes = s.Notes,
+                                        Question = s.Question,
+                                        Status = (int)s.Status,
+                                        T = s.T,
+                                        Text = s.Text,
+                                        Type = s.Type
+                                    }).ToList()
                                 }).ToList()
-                            }).ToList()
-                        }).ToList(),
-                        Name = resp.Program.Name,
-                        ObjectivesInfo = resp.Program.ObjectivesInfo.Select(r => new ObjectivesDetailNG
-                        {
-                            Id = r.Id.ToString(),
-                            Unit = r.Unit,
-                            Status = r.Status,
-                            Value = r.Value
-                        }).ToList(),
-                        PatientId = resp.Program.PatientId.ToString(),
-                        ProgramState = resp.Program.ProgramState,
-                        ShortName = resp.Program.ShortName,
-                        StartDate = resp.Program.StartDate,
-                        Status = resp.Program.Status,
-                        Version = resp.Program.Version
-                    };
+                            }).ToList(),
+                            Name = resp.Program.Name,
+                            ObjectivesInfo = resp.Program.ObjectivesInfo.Select(r => new ObjectivesDetailNG
+                            {
+                                Id = r.Id.ToString(),
+                                Unit = r.Unit,
+                                Status = r.Status,
+                                Value = r.Value
+                            }).ToList(),
+                            PatientId = resp.Program.PatientId.ToString(),
+                            ProgramState = resp.Program.ProgramState,
+                            ShortName = resp.Program.ShortName,
+                            StartDate = resp.Program.StartDate,
+                            Status = resp.Program.Status,
+                            Version = resp.Program.Version
+                        };
 
 
-                    if (resp.Status != null)
-                        result.Status = resp.Status;
+                        if (resp.Status != null)
+                            result.Status = resp.Status;
+                    }
                 }
-
                 return result;
             }
             catch (WebServiceException wse)

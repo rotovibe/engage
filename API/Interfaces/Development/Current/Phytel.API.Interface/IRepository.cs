@@ -49,6 +49,7 @@ namespace Phytel.API.Interface
     public enum SelectExpressionGroupType
     {
         AND,
-        OR
+        OR,
+        EQ
     }
 }
