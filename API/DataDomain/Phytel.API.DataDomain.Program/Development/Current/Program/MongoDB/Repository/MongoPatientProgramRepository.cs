@@ -81,7 +81,7 @@ namespace Phytel.API.DataDomain.Program
                                 Description = r.Description,
                                 Name = r.Name,
                                 Status = (int)r.Status,
-                                Objectives = r.Objectives.Where(m => m.Status == Common.Status.Active)
+                                Objectives = r.Objectives
                                 .Select(o => new ObjectivesDetail
                                 {
                                     Id = o.Id.ToString(),
@@ -96,7 +96,7 @@ namespace Phytel.API.DataDomain.Program
                                     Id = a.Id.ToString(),
                                     Name = a.Name,
                                     Status = (int)a.Status,
-                                    Objectives = a.Objectives.Where(k => k.Status == Common.Status.Active)
+                                    Objectives = a.Objectives
                                     .Select(x => new ObjectivesDetail
                                     {
                                         Id = x.Id.ToString(),
@@ -119,7 +119,7 @@ namespace Phytel.API.DataDomain.Program
                                 }).ToList()
                             }).ToList(),
                             Name = cp.Name,
-                            ObjectivesInfo = cp.ObjectivesInfo.Where(l => l.Status == Common.Status.Active)
+                            ObjectivesInfo = cp.ObjectivesInfo
                             .Select(r => new ObjectivesDetail
                             {
                                 Id = r.Id.ToString(),
