@@ -285,6 +285,7 @@ namespace Phytel.API.DataDomain.Patient
                     if (request.Version != null) updt.Set("v", request.Version);
                     updt.Set("uon", System.DateTime.UtcNow);
                     updt.Set("pri", request.Priority);
+                    updt.Set("uby", request.UserId);
 
                     var sortBy = new SortByBuilder().Ascending("_id");
                     var pt = ctx.Patients.Collection.FindAndModify(pUQuery, sortBy, updt, true);
