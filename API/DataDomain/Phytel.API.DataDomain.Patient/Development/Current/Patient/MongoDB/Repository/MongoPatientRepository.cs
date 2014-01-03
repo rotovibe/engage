@@ -22,7 +22,7 @@ namespace Phytel.API.DataDomain.Patient
             _dbName = contractDBName;
         }
 
-        public object Insert(T newEntity)
+        public object Insert(object newEntity)
         {
             PutPatientDataRequest request = newEntity as PutPatientDataRequest;
             MEPatient patient = new MEPatient
@@ -273,22 +273,22 @@ namespace Phytel.API.DataDomain.Patient
                 using (PatientMongoContext ctx = new PatientMongoContext(_dbName))
                 {
                     var pUQuery = new QueryDocument(MEPatient.IdProperty, ObjectId.Parse(request.Id));
-                    
-                    UpdateBuilder updt = new UpdateBuilder();
-                        if(request.Priority != null ) updt.Set("pri", request.Priority);
-                        if (request.FirstName != null) updt.Set("fn", request.FirstName);
-                        if (request.LastName != null) updt.Set("ln", request.LastName);
-                        if (request.MiddleName != null) updt.Set("mn", request.MiddleName);
-                        if (request.Suffix != null) updt.Set("sfx", request.Suffix);
-                        if (request.PreferredName != null) updt.Set("pfn", request.PreferredName);
-                        if (request.Gender != null) updt.Set("gn", request.Gender);
-                        if (request.DOB != null) updt.Set("dob", request.DOB);
-                        if (request.Version != null) updt.Set("v", request.Version);
 
+                    UpdateBuilder updt = new UpdateBuilder();
+                    if (request.FirstName != null) updt.Set("fn", request.FirstName);
+                    if (request.LastName != null) updt.Set("ln", request.LastName);
+                    if (request.MiddleName != null) updt.Set("mn", request.MiddleName);
+                    if (request.Suffix != null) updt.Set("sfx", request.Suffix);
+                    if (request.PreferredName != null) updt.Set("pfn", request.PreferredName);
+                    if (request.Gender != null) updt.Set("gn", request.Gender);
+                    if (request.DOB != null) updt.Set("dob", request.DOB);
+                    if (request.Version != null) updt.Set("v", request.Version);
+                    updt.Set("uon", System.DateTime.UtcNow);
+                    updt.Set("pri", request.Priority);
 
                     var sortBy = new SortByBuilder().Ascending("_id");
                     var pt = ctx.Patients.Collection.FindAndModify(pUQuery, sortBy, updt, true);
-                    
+
                     response.Id = request.Id;
                 }
                 return response;
