@@ -52,7 +52,10 @@ namespace Phytel.API.DataDomain.Program
                             StartDate = System.DateTime.UtcNow, // utc time
                             EndDate = null,
                             GraduatedFlag = false,
+                            Population = null,
                             OptOut = null,
+                            NotEnrollReason = null,
+                            DisEnrollReason = null,
                             Eligibility = Common.GenericStatus.Pending,
                             EligibilityStartDate = System.DateTime.UtcNow,
                             EligibilityEndDate = null,

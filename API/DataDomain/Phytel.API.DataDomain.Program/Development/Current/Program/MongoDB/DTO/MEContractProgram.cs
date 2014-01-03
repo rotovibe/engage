@@ -21,17 +21,22 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
 
         public const string ProgramTemplateIdProperty = "ptid";
         [BsonElement(ProgramTemplateIdProperty)]
-        [BsonIgnoreIfNull(true)]
+        [BsonIgnoreIfNull(false)]
         public ObjectId ProgramTemplateId { get; set; }
+
+        public const string PopulationProperty = "population";
+        [BsonElement(PopulationProperty)]
+        [BsonIgnoreIfNull(false)]
+        public string Population { get; set; }
 
         public const string ContractIdProperty = "cid";
         [BsonElement(ContractIdProperty)]
-        [BsonIgnoreIfNull(true)]
+        [BsonIgnoreIfNull(false)]
         public string ContractId { get; set; }
 
         public const string TTLDateProperty = "ttl";
         [BsonElement(TTLDateProperty)]
-        [BsonIgnoreIfNull(true)]
+        [BsonIgnoreIfNull(false)]
         [BsonDateTimeOptions(Kind = System.DateTimeKind.Local)]
         public DateTime? TTLDate { get; set; }
     }

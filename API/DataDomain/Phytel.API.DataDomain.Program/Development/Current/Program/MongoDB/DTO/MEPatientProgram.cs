@@ -33,6 +33,11 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
         [BsonElement(ProgramStateProperty)]
         public ProgramState ProgramState { get; set; }
 
+        public const string PopulationProperty = "population";
+        [BsonElement(PopulationProperty)]
+        [BsonIgnoreIfNull(false)]
+        public string Population { get; set; }
+
         public const string EligibilityProperty = "eligibility";
         [BsonElement(EligibilityProperty)]
         public GenericStatus Eligibility { get; set; }
@@ -72,6 +77,10 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
         public const string DidNotEnrollReasonProperty = "notenrollreason";
         [BsonElement(DidNotEnrollReasonProperty)]
         public string NotEnrollReason { get; set; }
+
+        public const string DisEnrollReasonProperty = "disenrollreason";
+        [BsonElement(DisEnrollReasonProperty)]
+        public string DisEnrollReason { get; set; }
 
         public const string OverrideReasonProperty = "overridereason";
         [BsonElement(OverrideReasonProperty)]
