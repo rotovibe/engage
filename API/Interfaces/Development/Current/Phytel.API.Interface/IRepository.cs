@@ -7,7 +7,7 @@ namespace Phytel.API.Interface
 {
     public interface IRepository<T>
     {
-        object Insert(T newEntity);
+        object Insert(object newEntity);
         object InsertAll(List<T> entities);
         void Delete(T entity);
         void DeleteAll(List<T> entities);

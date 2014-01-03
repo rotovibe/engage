@@ -22,7 +22,7 @@ namespace Phytel.API.DataDomain.Program
             _dbName = contractDBName;
         }
 
-        public object Insert(T newEntity)
+        public object Insert(object newEntity)
         {
             throw new NotImplementedException();
         }
@@ -82,12 +82,6 @@ namespace Phytel.API.DataDomain.Program
         }
 
         public void CacheByID(List<string> entityIDs)
-        {
-            throw new NotImplementedException();
-        }
-
-        // needs to be refactored
-        public PutProgramToPatientResponse InsertPatientToProgramAssignment(PutProgramToPatientRequest request)
         {
             throw new NotImplementedException();
         }

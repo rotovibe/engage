@@ -22,9 +22,90 @@ namespace Phytel.API.DataDomain.Program
             _dbName = contractDBName;
         }
 
-        public object Insert(T newEntity)
+        public object Insert(object newEntity)
         {
-            throw new NotImplementedException();
+            try
+            {
+                PutProgramToPatientRequest request = (PutProgramToPatientRequest)newEntity;
+                PutProgramToPatientResponse result = new PutProgramToPatientResponse();
+                result.Outcome = new Outcome();
+                using (ProgramMongoContext ctx = new ProgramMongoContext(_dbName))
+                {
+                    var findQ = Query.And(
+                        Query.In(MEPatientProgram.ProgramStateProperty, new List<BsonValue> { BsonValue.Create(0), BsonValue.Create(1) }),
+                        Query<MEPatientProgram>.EQ(b => b.PatientId, ObjectId.Parse(request.PatientId)),
+                        Query<MEPatientProgram>.EQ(b => b.ContractProgramId, ObjectId.Parse(request.ContractProgramId)));
+
+                    List<MEPatientProgram> pp = ctx.PatientPrograms.Collection.Find(findQ).ToList();
+
+                    if (pp.Count == 0)
+                    {
+                        var findcp = Query<MEContractProgram>.EQ(b => b.Id, ObjectId.Parse(request.ContractProgramId));
+                        MEContractProgram cp = ctx.ContractPrograms.Collection.Find(findcp).FirstOrDefault();
+
+                        MEPatientProgram patientProgDoc = new MEPatientProgram
+                        {
+                            PatientId = ObjectId.Parse(request.PatientId),
+                            AuthoredBy = cp.AuthoredBy,
+                            Client = cp.Client,
+                            ProgramState = Common.ProgramState.NotStarted,
+                            StartDate = System.DateTime.UtcNow, // utc time
+                            EndDate = null,
+                            GraduatedFlag = false,
+                            OptOut = null,
+                            Eligibility = Common.GenericStatus.Pending,
+                            EligibilityStartDate = System.DateTime.UtcNow,
+                            EligibilityEndDate = null,
+                            EligibilityRequirements = cp.EligibilityRequirements,
+                            Enrollment = Common.GenericStatus.Pending,
+                            EligibilityOverride = Common.GenericSetting.No,
+                            ContractProgramId = cp.Id,
+                            DeleteFlag = cp.DeleteFlag,
+                            Description = cp.Description,
+                            LastUpdatedOn = System.DateTime.UtcNow, // utc time
+                            Locked = cp.Locked,
+                            Modules = SetValidModules(cp.Modules),
+                            Name = cp.Name,
+                            ObjectivesInfo = cp.ObjectivesInfo,
+                            //ObjectivesInfo = cp.ObjectivesInfo.Where(e => e.Status == Common.Status.Active).Select(f => new ObjectivesInfo()
+                            //{
+                            //    Id = f.Id,
+                            //    Status = f.Status,
+                            //    Value = f.Value,
+                            //    Unit = f.Unit
+                            //}).ToList(),
+                            ShortName = cp.ShortName,
+                            Status = cp.Status
+                        };
+
+                        ctx.PatientPrograms.Collection.Insert(patientProgDoc);
+
+                        result.program = new ProgramInfo
+                        {
+                            Id = patientProgDoc.Id.ToString(),
+                            Name = patientProgDoc.Name,
+                            ShortName = patientProgDoc.ShortName,
+                            Status = (int)patientProgDoc.Status,
+                            PatientId = patientProgDoc.PatientId.ToString(),
+                            ProgramState = (int)patientProgDoc.ProgramState
+                        };
+
+                        result.Outcome.Result = 1;
+                        result.Outcome.Reason = "Successfully assigned this program for the patient";
+                    }
+                    else
+                    {
+                        result.Outcome.Result = 0;
+                        result.Outcome.Reason = pp[0].Name + " is already assigned";
+                    }
+
+                }
+                return result;
+            }
+            catch
+            {
+                throw;
+            }
         }
 
         public object InsertAll(List<T> entities)
@@ -143,6 +224,7 @@ namespace Phytel.API.DataDomain.Program
             throw new NotImplementedException();
         }
 
+        /*
         public PutProgramToPatientResponse InsertPatientToProgramAssignment(PutProgramToPatientRequest request)
         {
             try
@@ -227,6 +309,7 @@ namespace Phytel.API.DataDomain.Program
                 throw;
             }
         }
+        */
 
         private List<Modules> SetValidModules(List<Modules> list)
         {

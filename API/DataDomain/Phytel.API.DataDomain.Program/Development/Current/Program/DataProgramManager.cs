@@ -64,7 +64,8 @@ namespace Phytel.API.DataDomain.Program
                 Phytel.API.DataDomain.Program.ProgramRepositoryFactory<PutProgramToPatientResponse>
                 .GetPatientProgramRepository(request.ContractNumber, request.Context);
 
-            response = patProgRepo.InsertPatientToProgramAssignment(request);
+            object resp = patProgRepo.Insert((object)request);
+            response = (PutProgramToPatientResponse)resp;
 
             return response;
         }
