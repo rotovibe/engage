@@ -254,7 +254,7 @@ namespace Phytel.API.DataDomain.Patient
                         var pUQuery = new QueryDocument(MEPatientUser.IdProperty, patientUsr.Id);
                         var sortBy = new SortByBuilder().Ascending("_id");
                         UpdateBuilder updt = new UpdateBuilder().Set(MEPatientUser.FlaggedProperty, Convert.ToBoolean(request.Flagged))
-                            .Set(MEPatientUser.UpdatedByProperty, Convert.ToBoolean(request.UserId));
+                            .Set(MEPatientUser.UpdatedByProperty, request.UserId);
                         var pt = ctx.PatientUsers.Collection.FindAndModify(pUQuery, sortBy, updt, true);
                         response.flagged = Convert.ToBoolean(request.Flagged);
                     }
