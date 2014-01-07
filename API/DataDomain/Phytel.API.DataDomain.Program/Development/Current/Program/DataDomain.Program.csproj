@@ -100,6 +100,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="MongoDB\DTO\module_Map.json" />
     <None Include="MongoDB\DTO\sample_Program_documents.json" />
     <None Include="packages.config" />
   </ItemGroup>
