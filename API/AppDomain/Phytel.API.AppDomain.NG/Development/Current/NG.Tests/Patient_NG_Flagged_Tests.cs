@@ -18,7 +18,7 @@ namespace Phytel.API.DataDomain.Patient.Service.Test
             string context = "NG";
             string flagged = "1";
             string version = "v1";
-            string token = "52c5e5dfd6a4850edcd1a239";
+            string token = "52cc3dcbd6a4850cf4c0ce58";
 
             IRestClient client = new JsonServiceClient();
 

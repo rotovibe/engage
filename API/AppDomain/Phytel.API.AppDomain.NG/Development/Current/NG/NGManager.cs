@@ -388,7 +388,7 @@ namespace Phytel.API.AppDomain.NG
                     request.Version,
                     request.ContractNumber,
                     request.PatientId,
-                    request.ContractProgramId), new PutProgramToPatientResponse { } as object);
+                    request.ContractProgramId), new PutProgramToPatientRequest { UserId = request.UserId } as object);
 
                 if (dataDomainResponse.program != null)
                 {
