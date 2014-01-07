@@ -34,7 +34,7 @@ namespace Phytel.API.DataDomain.LookUp
             }
         }
 
-        public object Insert(T newEntity)
+        public object Insert(object newEntity)
         {
             throw new NotImplementedException();
         }

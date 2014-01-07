@@ -40,6 +40,12 @@
     <Reference Include="MongoDB.Driver">
       <HintPath>..\References\MongoDB.Driver.dll</HintPath>
     </Reference>
+    <Reference Include="Phytel.Mongo">
+      <HintPath>..\References\Phytel.Mongo.dll</HintPath>
+    </Reference>
+    <Reference Include="PhytelServices">
+      <HintPath>..\References\PhytelServices.dll</HintPath>
+    </Reference>
     <Reference Include="ServiceStack.Common">
       <HintPath>..\..\..\..\..\packages\ServiceStack.Common.3.9.70\lib\net35\ServiceStack.Common.dll</HintPath>
     </Reference>
@@ -74,14 +80,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\..\..\..\Shared\PhytelServices\Development\Current\Phytel.Mongo\Phytel.Mongo.csproj">
-      <Project>{7c9e786c-e4f7-4382-bde4-8dbf980ea013}</Project>
-      <Name>Phytel.Mongo</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\..\..\..\..\Shared\PhytelServices\Development\Current\PhytelServices\PhytelServices.csproj">
-      <Project>{d790f618-438b-4c39-abe5-1346122273ac}</Project>
-      <Name>PhytelServices</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\..\..\..\Common\Phytel.API.Common\Development\Current\Phytel.API.Common.csproj">
       <Project>{25cf3c3f-221f-4a49-b5ef-a8a5fcf9a5ba}</Project>
       <Name>Phytel.API.Common</Name>
@@ -90,12 +88,16 @@
       <Project>{abe948fb-247e-4955-b3ab-b7c93e10a542}</Project>
       <Name>Phytel.API.Interface</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\..\Phytel.API.DataDomain.Action\Development\Current\Action.DTO\DataDomain.Action.DTO.csproj">
+      <Project>{1c2c63a1-4246-4ec9-bad1-c00e9ecd85f6}</Project>
+      <Name>DataDomain.Action.DTO</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\..\Phytel.API.DataDomain.Patient\Development\Current\Patient.DTOs\DataDomain.Patient.DTO.csproj">
       <Project>{1b3148a8-fb57-4461-91bc-f1cd38a013b6}</Project>
       <Name>DataDomain.Patient.DTO</Name>
     </ProjectReference>
     <ProjectReference Include="..\Program.DTO\DataDomain.Program.DTO.csproj">
-      <Project>{1c2c63a1-4246-4ec9-bad1-c00e9ecd85f6}</Project>
+      <Project>{4e9f9dbf-e01b-4226-9e4f-246149ebbb3f}</Project>
       <Name>DataDomain.Program.DTO</Name>
     </ProjectReference>
   </ItemGroup>

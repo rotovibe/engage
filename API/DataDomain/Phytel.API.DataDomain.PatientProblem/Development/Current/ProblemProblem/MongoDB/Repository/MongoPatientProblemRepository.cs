@@ -19,7 +19,7 @@ namespace Phytel.API.DataDomain.PatientProblem
             _dbName = contractDBName;
         }
 
-        public object Insert(T newEntity)
+        public object Insert(object newEntity)
         {
             throw new NotImplementedException();
         }

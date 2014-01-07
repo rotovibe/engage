@@ -22,7 +22,7 @@ namespace Phytel.API.DataDomain.Module
             _dbName = contractDBName;
         }
 
-        public object Insert(T newEntity)
+        public object Insert(object newEntity)
         {
             throw new NotImplementedException();
         }

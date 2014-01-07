@@ -174,7 +174,7 @@ namespace Phytel.API.AppDomain.Security
             return response;
         }
 
-        public object Insert(T newEntity)
+        public object Insert(object newEntity)
         {
             throw new NotImplementedException();
         }
