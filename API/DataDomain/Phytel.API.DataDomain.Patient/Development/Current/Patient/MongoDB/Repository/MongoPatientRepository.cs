@@ -214,7 +214,7 @@ namespace Phytel.API.DataDomain.Patient
                 using (PatientMongoContext ctx = new PatientMongoContext(_dbName))
                 {
                     FindAndModifyResult result = ctx.Patients.Collection.FindAndModify(Query.EQ(MEPatient.IdProperty, ObjectId.Parse(request.PatientId)), SortBy.Null,
-                                                MongoDB.Driver.Builders.Update.Set(MEPatient.PriorityProperty, (MEPriority)request.Priority));
+                                                MongoDB.Driver.Builders.Update.Set(MEPatient.PriorityProperty, (MEPriority)request.Priority).Set(MEPatient.UpdatedByProperty, request.UserId));
                 }
                 return response;
             }
@@ -243,7 +243,8 @@ namespace Phytel.API.DataDomain.Patient
                             Flagged = Convert.ToBoolean(request.Flagged),
                             Version = "v1",
                             LastUpdatedOn = System.DateTime.UtcNow,
-                            DeleteFlag = false
+                            DeleteFlag = false,
+                             UpdatedBy = request.UserId
                         });
                         response.flagged = Convert.ToBoolean(request.Flagged);
                     }
@@ -252,7 +253,8 @@ namespace Phytel.API.DataDomain.Patient
 
                         var pUQuery = new QueryDocument(MEPatientUser.IdProperty, patientUsr.Id);
                         var sortBy = new SortByBuilder().Ascending("_id");
-                        UpdateBuilder updt = new UpdateBuilder().Set("flg", Convert.ToBoolean(request.Flagged));
+                        UpdateBuilder updt = new UpdateBuilder().Set(MEPatientUser.FlaggedProperty, Convert.ToBoolean(request.Flagged))
+                            .Set(MEPatientUser.UpdatedByProperty, Convert.ToBoolean(request.UserId));
                         var pt = ctx.PatientUsers.Collection.FindAndModify(pUQuery, sortBy, updt, true);
                         response.flagged = Convert.ToBoolean(request.Flagged);
                     }
