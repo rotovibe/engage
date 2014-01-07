@@ -70,6 +70,7 @@ namespace Phytel.API.DataDomain.Program
                             Modules = SetValidModules(cp.Modules),
                             Name = cp.Name,
                             ObjectivesInfo = cp.ObjectivesInfo,
+                            UpdatedBy = request.UserId,
                             //ObjectivesInfo = cp.ObjectivesInfo.Where(e => e.Status == Common.Status.Active).Select(f => new ObjectivesInfo()
                             //{
                             //    Id = f.Id,
