@@ -81,6 +81,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="Interview_Action_Processing_Tests.cs" />
     <Compile Include="Patient_NG_Flagged_Tests.cs" />
     <Compile Include="Active_Program_Tests.cs" />
     <Compile Include="Update_Patient_Details_Test.cs" />

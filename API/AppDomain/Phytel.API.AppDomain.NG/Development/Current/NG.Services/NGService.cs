@@ -10,7 +10,7 @@ using ServiceStack.ServiceClient.Web;
 
 namespace Phytel.API.AppDomain.NG.Service
 {
-    public class NGService : ServiceStack.ServiceInterface.Service
+    public partial class NGService : ServiceStack.ServiceInterface.Service
     {
         public GetPatientResponse Post(GetPatientRequest request)
         {
@@ -184,7 +184,7 @@ namespace Phytel.API.AppDomain.NG.Service
                 if (result.UserId.Trim() != string.Empty)
                 {
                     request.UserId = result.UserId;
-                    response = ngm.PutPatientPriorityUpdate(request);
+                    response = ngm.PutPatientDetailsUpdate(request);
                 }
                 else
                     throw new UnauthorizedAccessException();

@@ -14,7 +14,7 @@ using ServiceStack.ServiceClient.Web;
 using ServiceStack.ServiceHost;
 using Phytel.API.AppDomain.Audit.DTO;
 using System.Net;
-using Phytel.API.DataDomain.Program.DTO;
+using DD = Phytel.API.DataDomain.Program.DTO;
 using System.Linq;
 
 namespace Phytel.API.AppDomain.NG
@@ -274,7 +274,7 @@ namespace Phytel.API.AppDomain.NG
             }
         }
 
-        public PutPatientDetailsUpdateResponse PutPatientPriorityUpdate(PutPatientDetailsUpdateRequest request)
+        public PutPatientDetailsUpdateResponse PutPatientDetailsUpdate(PutPatientDetailsUpdateRequest request)
         {
             try
             {
@@ -380,15 +380,15 @@ namespace Phytel.API.AppDomain.NG
                 PostPatientToProgramsResponse response = new PostPatientToProgramsResponse();
 
                 IRestClient client = new JsonServiceClient();
-                PutProgramToPatientResponse dataDomainResponse =
-                    client.Put<PutProgramToPatientResponse>(
+                DD.PutProgramToPatientResponse dataDomainResponse =
+                    client.Put<DD.PutProgramToPatientResponse>(
                     string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Programs/?ContractProgramId={5}",
                     DDProgramServiceUrl,
                     "NG",
                     request.Version,
                     request.ContractNumber,
                     request.PatientId,
-                    request.ContractProgramId), new PutProgramToPatientRequest { UserId = request.UserId } as object);
+                    request.ContractProgramId), new DD.PutProgramToPatientRequest { UserId = request.UserId } as object);
 
                 if (dataDomainResponse.program != null)
                 {
@@ -428,8 +428,8 @@ namespace Phytel.API.AppDomain.NG
                 GetPatientProgramDetailsSummaryResponse result = new GetPatientProgramDetailsSummaryResponse();
 
                 IRestClient client = new JsonServiceClient();
-                GetProgramDetailsSummaryResponse resp =
-                    client.Get<GetProgramDetailsSummaryResponse>(
+                DD.GetProgramDetailsSummaryResponse resp =
+                    client.Get<DD.GetProgramDetailsSummaryResponse>(
                     string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Program/{5}/Details/?Token={6}",
                     DDProgramServiceUrl,
                     "NG",
@@ -443,7 +443,7 @@ namespace Phytel.API.AppDomain.NG
                 {
                     if (resp.Program != null)
                     {
-                        result.Program = new ProgramDetailNG
+                        result.Program = new Program
                         {
                             Id = resp.Program.Id.ToString(),
                             Client = resp.Program.Client,
@@ -453,38 +453,41 @@ namespace Phytel.API.AppDomain.NG
                             EligibilityRequirements = resp.Program.EligibilityRequirements,
                             EligibilityStartDate = resp.Program.EligibilityStartDate,
                             EndDate = resp.Program.EndDate,
-                            Modules = resp.Program.Modules.Select(r => new ModuleDetailNG
+                            Modules = resp.Program.Modules.Select(r => new Module
                             {
-                                Id = r.Id.ToString(),
+                                Id = r.Id,
+                                 ProgramId = r.ProgramId,
                                 Description = r.Description,
                                 Name = r.Name,
                                 Status = (int)r.Status,
-                                Objectives = r.Objectives.Select(o => new ObjectivesDetailNG
+                                Objectives = r.Objectives.Select(o => new Objective
                                 {
                                     Id = o.Id.ToString(),
                                     Value = o.Value,
                                     Status = (int)o.Status,
                                     Unit = o.Unit
                                 }).ToList(),
-                                Actions = r.Actions.Select(a => new ActionsDetailNG
+                                Actions = r.Actions.Select(a => new Actions
                                 {
                                     CompletedBy = a.CompletedBy,
                                     Description = a.Description,
-                                    Id = a.Id.ToString(),
+                                    Id = a.Id,
+                                     ModuleId = a.ModuleId,
                                     Name = a.Name,
                                     Status = (int)a.Status,
-                                    Objectives = a.Objectives.Select(x => new ObjectivesDetailNG
+                                    Objectives = a.Objectives.Select(x => new Objective
                                     {
                                         Id = x.Id.ToString(),
                                         Unit = x.Unit,
                                         Status = (int)x.Status,
                                         Value = x.Value
                                     }).ToList(),
-                                    Steps = a.Steps.Select(s => new StepsDetailNG
+                                    Steps = a.Steps.Select(s => new Step
                                     {
                                         Description = s.Description,
                                         Ex = s.Ex,
-                                        Id = s.Id.ToString(),
+                                        Id = s.Id,
+                                         ActionId = s.ActionId,
                                         Notes = s.Notes,
                                         Question = s.Question,
                                         Status = (int)s.Status,
@@ -495,7 +498,7 @@ namespace Phytel.API.AppDomain.NG
                                 }).ToList()
                             }).ToList(),
                             Name = resp.Program.Name,
-                            ObjectivesInfo = resp.Program.ObjectivesInfo.Select(r => new ObjectivesDetailNG
+                            ObjectivesInfo = resp.Program.ObjectivesInfo.Select(r => new Objective
                             {
                                 Id = r.Id.ToString(),
                                 Unit = r.Unit,
