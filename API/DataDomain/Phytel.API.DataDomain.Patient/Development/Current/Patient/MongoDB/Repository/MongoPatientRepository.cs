@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Phytel.API.DataDomain.Patient.DTO;
 using Phytel.API.Interface;
 using MongoDB.Driver;
-using MongoDB.Driver.Builders;
+using MB = MongoDB.Driver.Builders;
 using MongoDB.Bson;
 using Phytel.API.Common.Format;
 using Phytel.API.DataDomain.Patient.MongoDB.DTO;
@@ -137,9 +137,9 @@ namespace Phytel.API.DataDomain.Patient
 
         private static MEPatientUser FindPatientUser(string entityId, string userId, PatientMongoContext ctx)
         {
-            var findQ = Query.And(
-                Query<MEPatientUser>.EQ(b => b.PatientId, ObjectId.Parse(entityId)),
-                Query<MEPatientUser>.EQ(b => b.UserId, userId)
+            var findQ = MB.Query.And(
+                MB.Query<MEPatientUser>.EQ(b => b.PatientId, ObjectId.Parse(entityId)),
+                MB.Query<MEPatientUser>.EQ(b => b.UserId, userId)
             );
 
             var patientUsr = ctx.PatientUsers.Collection.Find(findQ).FirstOrDefault();
@@ -169,7 +169,7 @@ namespace Phytel.API.DataDomain.Patient
                 bsv[i] = ObjectId.Parse(patientIds[i]);
             }
 
-            IMongoQuery query = Query.In("_id", bsv);
+            IMongoQuery query = MB.Query.In("_id", bsv);
             List<MEPatient> pr = null;
             List<DTO.PatientData> pResp = new List<DTO.PatientData>();
             using (PatientMongoContext ctx = new PatientMongoContext(_dbName))
@@ -213,8 +213,8 @@ namespace Phytel.API.DataDomain.Patient
             {
                 using (PatientMongoContext ctx = new PatientMongoContext(_dbName))
                 {
-                    FindAndModifyResult result = ctx.Patients.Collection.FindAndModify(Query.EQ(MEPatient.IdProperty, ObjectId.Parse(request.PatientId)), SortBy.Null,
-                                                new UpdateBuilder().Set(MEPatient.PriorityProperty, (MEPriority)request.Priority).Set(MEPatient.UpdatedByProperty, request.UserId));
+                    FindAndModifyResult result = ctx.Patients.Collection.FindAndModify(MB.Query.EQ(MEPatient.IdProperty, ObjectId.Parse(request.PatientId)), MB.SortBy.Null,
+                                                new MB.UpdateBuilder().Set(MEPatient.PriorityProperty, (MEPriority)request.Priority).Set(MEPatient.UpdatedByProperty, request.UserId));
                 }
                 return response;
             }
@@ -252,8 +252,8 @@ namespace Phytel.API.DataDomain.Patient
                     {
 
                         var pUQuery = new QueryDocument(MEPatientUser.IdProperty, patientUsr.Id);
-                        var sortBy = new SortByBuilder().Ascending("_id");
-                        UpdateBuilder updt = new UpdateBuilder().Set(MEPatientUser.FlaggedProperty, Convert.ToBoolean(request.Flagged))
+                        var sortBy = new MB.SortByBuilder().Ascending("_id");
+                        MB.UpdateBuilder updt = new MB.UpdateBuilder().Set(MEPatientUser.FlaggedProperty, Convert.ToBoolean(request.Flagged))
                             .Set(MEPatientUser.UpdatedByProperty, request.UserId);
                         var pt = ctx.PatientUsers.Collection.FindAndModify(pUQuery, sortBy, updt, true);
                         response.flagged = Convert.ToBoolean(request.Flagged);
@@ -282,7 +282,7 @@ namespace Phytel.API.DataDomain.Patient
                 {
                     var pUQuery = new QueryDocument(MEPatient.IdProperty, ObjectId.Parse(request.Id));
 
-                    UpdateBuilder updt = new UpdateBuilder();
+                    MB.UpdateBuilder updt = new MB.UpdateBuilder();
                     if (request.FirstName != null)
                     {
                         if (request.FirstName == "\"\"" || (request.FirstName == "\'\'"))
@@ -343,18 +343,107 @@ namespace Phytel.API.DataDomain.Patient
                     updt.Set("pri", request.Priority);
                     updt.Set("uby", request.UserId);
 
-                    var sortBy = new SortByBuilder().Ascending("_id");
+                    var sortBy = new MB.SortByBuilder().Ascending("_id");
                     var pt = ctx.Patients.Collection.FindAndModify(pUQuery, sortBy, updt, true);
 
                     response.Id = request.Id;
-                }
 
-                // save to cohortuser collection
+                    // save to cohortuser collection
+                    var findQ = MB.Query<MECohortPatientView>.EQ(b => b.PatientID, ObjectId.Parse(request.Id));
+                    MECohortPatientView cPV = ctx.CohortPatientViews.Collection.Find(findQ).FirstOrDefault();
+                    cPV.SearchFields.ForEach(s => UpdateProperty(request, s));
+                    List<SearchField> sfs = cPV.SearchFields.ToList<SearchField>();
+
+                    ctx.CohortPatientViews.Collection.Update(findQ, MB.Update.SetWrapped<List<SearchField>>("sf", sfs).Set(MECohortPatientView.LastNameProperty, request.LastName));
+
+                    //var sort = new MB.SortByBuilder().Ascending("_id");
+                    //var cpv = ctx.Patients.Collection.FindAndModify(findQ, sort,
+                    //    new MB.UpdateBuilder().Set(MECohortPatientView.SearchFieldsProperty, MB.Update.SetWrapped<SearchField>("sf", sfs) ), true);
+                }
                 return response;
             }
             catch (Exception)
             {
                 throw;
+            }
+        }
+
+        private void UpdateProperty(PutUpdatePatientDataRequest request, SearchField s)
+        {
+            if (s.FieldName.Equals("PN"))
+            {
+                if (request.PreferredName != null)
+                {
+                    if (request.PreferredName == "\"\"" || (request.PreferredName == "\'\'"))
+                        s.Value = string.Empty;
+                    else
+                        s.Value = request.PreferredName;
+                }
+            }
+
+            if (s.FieldName.Equals("SFX"))
+            {
+                if (request.Suffix != null)
+                {
+                    if (request.Suffix == "\"\"" || (request.Suffix == "\'\'"))
+                        s.Value = string.Empty;
+                    else
+                        s.Value = request.Suffix;
+                }
+            }
+
+            if (s.FieldName.Equals("MN"))
+            {
+                if (request.MiddleName != null)
+                {
+                    if (request.MiddleName == "\"\"" || (request.MiddleName == "\'\'"))
+                        s.Value = string.Empty;
+                    else
+                        s.Value = request.MiddleName;
+                }
+            }
+
+            if (s.FieldName.Equals("DOB"))
+            {
+                if (request.DOB != null)
+                {
+                    if (request.DOB == "\"\"" || (request.DOB == "\'\'"))
+                        s.Value = string.Empty;
+                    else
+                        s.Value = request.DOB;
+                }
+            }
+
+            if (s.FieldName.Equals("G"))
+            {
+                if (request.Gender != null)
+                {
+                    if (request.Gender == "\"\"" || (request.Gender == "\'\'"))
+                        s.Value = string.Empty;
+                    else
+                        s.Value = request.Gender;
+                }
+            }
+
+            if (s.FieldName.Equals("LN"))
+            {
+                if (request.LastName != null)
+                {
+                    if (request.LastName == "\"\"" || (request.LastName == "\'\'"))
+                        s.Value = string.Empty;
+                    else
+                        s.Value = request.LastName;
+                }
+            }
+            if (s.FieldName.Equals("FN"))
+            {
+                if (request.FirstName != null)
+                {
+                    if (request.FirstName == "\"\"" || (request.FirstName == "\'\'"))
+                        s.Value = string.Empty;
+                    else
+                        s.Value = request.FirstName;
+                }
             }
         }
 

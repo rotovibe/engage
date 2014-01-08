@@ -28,12 +28,12 @@ namespace Phytel.API.DataDomain.Patient.Service.Test
                     ContractNumber = contractNumber,
                     Priority = priority,
                     DOB = "12-12-2013",
-                    //FirstName = firstname,
-                    LastName = string.Empty,
-                    Gender = "",
-                    PreferredName = "a man",
+                    FirstName = "Reggie",
+                    LastName = "Bobzilla",
+                    Gender = "M",
+                    PreferredName = "A manny",
                     Suffix = "mr",
-                    MiddleName = "junior",
+                    MiddleName = "Ignacio",
                     UserId = "ba9b277d-4b53-4a53-a2c5-15d4969423ec"
                 } as object);
 
