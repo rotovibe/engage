@@ -8,8 +8,8 @@ using Phytel.API.Interface;
 using MongoDB.Driver;
 using MongoDB.Driver.Builders;
 using MongoDB.Bson;
-using Phytel.API.AppDomain.Patient;
 using Phytel.API.Common.Format;
+using Phytel.API.DataDomain.Patient.MongoDB.DTO;
 
 namespace Phytel.API.DataDomain.Patient
 {
@@ -214,7 +214,7 @@ namespace Phytel.API.DataDomain.Patient
                 using (PatientMongoContext ctx = new PatientMongoContext(_dbName))
                 {
                     FindAndModifyResult result = ctx.Patients.Collection.FindAndModify(Query.EQ(MEPatient.IdProperty, ObjectId.Parse(request.PatientId)), SortBy.Null,
-                                                MongoDB.Driver.Builders.Update.Set(MEPatient.PriorityProperty, (MEPriority)request.Priority).Set(MEPatient.UpdatedByProperty, request.UserId));
+                                                new UpdateBuilder().Set(MEPatient.PriorityProperty, (MEPriority)request.Priority).Set(MEPatient.UpdatedByProperty, request.UserId));
                 }
                 return response;
             }
@@ -272,19 +272,73 @@ namespace Phytel.API.DataDomain.Patient
             PutUpdatePatientDataResponse response = new PutUpdatePatientDataResponse();
             try
             {
+                if (request.UserId == null)
+                    throw new ArgumentException("UserId is missing from the DataDomain request.");
+
+                if (request.Priority == null)
+                    throw new ArgumentException("Priority is missing from the DataDomain request.");
+
                 using (PatientMongoContext ctx = new PatientMongoContext(_dbName))
                 {
                     var pUQuery = new QueryDocument(MEPatient.IdProperty, ObjectId.Parse(request.Id));
 
                     UpdateBuilder updt = new UpdateBuilder();
-                    if (request.FirstName != null) updt.Set("fn", request.FirstName);
-                    if (request.LastName != null) updt.Set("ln", request.LastName);
-                    if (request.MiddleName != null) updt.Set("mn", request.MiddleName);
-                    if (request.Suffix != null) updt.Set("sfx", request.Suffix);
-                    if (request.PreferredName != null) updt.Set("pfn", request.PreferredName);
-                    if (request.Gender != null) updt.Set("gn", request.Gender);
-                    if (request.DOB != null) updt.Set("dob", request.DOB);
-                    if (request.Version != null) updt.Set("v", request.Version);
+                    if (request.FirstName != null)
+                    {
+                        if (request.FirstName == "\"\"" || (request.FirstName == "\'\'"))
+                            updt.Set(MEPatient.FirstNameProperty, string.Empty);
+                        else
+                            updt.Set(MEPatient.FirstNameProperty, request.FirstName);
+                    }
+                    if (request.LastName != null)
+                    {
+                        if (request.LastName == "\"\"" || (request.LastName == "\'\'"))
+                            updt.Set(MEPatient.LastNameProperty, string.Empty);
+                        else
+                            updt.Set(MEPatient.LastNameProperty, request.LastName);
+                    }
+                    if (request.MiddleName != null)
+                    {
+                        if (request.MiddleName == "\"\"" || (request.MiddleName == "\'\'"))
+                            updt.Set(MEPatient.MiddleNameProperty, string.Empty);
+                        else
+                            updt.Set(MEPatient.MiddleNameProperty, request.MiddleName);
+                    }
+                    if (request.Suffix != null)
+                    {
+                        if (request.Suffix == "\"\"" || (request.Suffix == "\'\'"))
+                            updt.Set(MEPatient.SuffixProperty, string.Empty);
+                        else
+                            updt.Set(MEPatient.SuffixProperty, request.Suffix);
+                    }
+                    if (request.PreferredName != null)
+                    {
+                        if (request.PreferredName == "\"\"" || (request.PreferredName == "\'\'"))
+                            updt.Set(MEPatient.PreferredProperty, string.Empty);
+                        else
+                            updt.Set(MEPatient.PreferredProperty, request.PreferredName);
+                    }
+                    if (request.Gender != null)
+                    {
+                        if (request.Gender == "\"\"" || (request.Gender == "\'\'"))
+                            updt.Set(MEPatient.GenderProperty, string.Empty);
+                        else
+                            updt.Set(MEPatient.GenderProperty, request.Gender);
+                    }
+                    if (request.DOB != null)
+                    {
+                        if (request.DOB == "\"\"" || (request.DOB == "\'\'"))
+                            updt.Set(MEPatient.DOBProperty, string.Empty);
+                        else
+                            updt.Set(MEPatient.DOBProperty, request.DOB);
+                    }
+                    if (request.Version != null)
+                    {
+                        if ((request.Version == "\"\"") || (request.Version == "\'\'"))
+                            updt.Set(MEPatient.VersionProperty, string.Empty);
+                        else
+                            updt.Set(MEPatient.VersionProperty, request.Version);
+                    }
                     updt.Set("uon", System.DateTime.UtcNow);
                     updt.Set("pri", request.Priority);
                     updt.Set("uby", request.UserId);
@@ -294,6 +348,8 @@ namespace Phytel.API.DataDomain.Patient
 
                     response.Id = request.Id;
                 }
+
+                // save to cohortuser collection
                 return response;
             }
             catch (Exception)

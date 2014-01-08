@@ -29,13 +29,14 @@ namespace Phytel.API.DataDomain.Patient.Service.Test
                     Priority = priority,
                     DOB = "12-12-2013",
                     //FirstName = firstname,
-                    LastName = "ariza",
-                    Gender = "m",
+                    LastName = string.Empty,
+                    Gender = "",
                     PreferredName = "a man",
                     Suffix = "mr",
                     MiddleName = "junior",
                     UserId = "ba9b277d-4b53-4a53-a2c5-15d4969423ec"
                 } as object);
+
         }
     }
 }
