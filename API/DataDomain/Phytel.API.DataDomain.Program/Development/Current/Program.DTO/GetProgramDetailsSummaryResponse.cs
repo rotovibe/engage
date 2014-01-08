@@ -36,6 +36,7 @@ namespace Phytel.API.DataDomain.Program.DTO
     public class ModuleDetail
     {
         public string Id { get; set; }
+        public string ProgramId { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
         public List<ObjectivesDetail> Objectives { get; set; }
@@ -46,6 +47,7 @@ namespace Phytel.API.DataDomain.Program.DTO
     public class ActionsDetail
     {
         public string Id { get; set; }
+        public string ModuleId { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
         public string CompletedBy { get; set; }
@@ -57,6 +59,7 @@ namespace Phytel.API.DataDomain.Program.DTO
     public class StepsDetail
     {
         public string Id { get; set; }
+        public string ActionId { get; set; }
         public int Type { get; set; }
         public string Question { get; set; }
         public string T { get; set; }

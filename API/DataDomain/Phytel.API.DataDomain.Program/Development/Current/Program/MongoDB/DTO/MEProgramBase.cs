@@ -121,6 +121,10 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
         [BsonId]
         public ObjectId Id { get; set; }
 
+        public const string ProgramIdProperty = "progid";
+        [BsonElement(ProgramIdProperty)]
+        public ObjectId ProgramId { get; set; }
+
         public const string NameProperty = "nm";
         [BsonElement(NameProperty)]
         public string Name { get; set; }
@@ -149,6 +153,10 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
         public const string IDProperty = "_id";
         [BsonId]
         public ObjectId Id { get; set; }
+
+        public const string ModuleIdProperty = "moduleid";
+        [BsonElement(ModuleIdProperty)]
+        public ObjectId ModuleId { get; set; }
 
         public const string NameProperty = "nm";
         [BsonElement(NameProperty)]
@@ -182,6 +190,10 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
         public const string IDProperty = "_id";
         [BsonId]
         public ObjectId Id { get; set; }
+
+        public const string ActionIdProperty = "actid";
+        [BsonElement(ActionIdProperty)]
+        public ObjectId ActionId { get; set; }
 
         public const string TypeProperty = "typ";
         [BsonElement(TypeProperty)]

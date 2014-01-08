@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Phytel.API.DataDomain.Program.DTO;
 using Phytel.API.Interface;
 using MongoDB.Driver;
-using MongoDB.Driver.Builders;
+using MB = MongoDB.Driver.Builders;
 using MongoDB.Bson;
 using Phytel.API.AppDomain.Program;
 using Phytel.API.DataDomain.Program.MongoDB.DTO;
@@ -31,16 +31,16 @@ namespace Phytel.API.DataDomain.Program
                 result.Outcome = new Outcome();
                 using (ProgramMongoContext ctx = new ProgramMongoContext(_dbName))
                 {
-                    var findQ = Query.And(
-                        Query.In(MEPatientProgram.ProgramStateProperty, new List<BsonValue> { BsonValue.Create(0), BsonValue.Create(1) }),
-                        Query<MEPatientProgram>.EQ(b => b.PatientId, ObjectId.Parse(request.PatientId)),
-                        Query<MEPatientProgram>.EQ(b => b.ContractProgramId, ObjectId.Parse(request.ContractProgramId)));
+                    var findQ = MB.Query.And(
+                        MB.Query.In(MEPatientProgram.ProgramStateProperty, new List<BsonValue> { BsonValue.Create(0), BsonValue.Create(1) }),
+                        MB.Query<MEPatientProgram>.EQ(b => b.PatientId, ObjectId.Parse(request.PatientId)),
+                        MB.Query<MEPatientProgram>.EQ(b => b.ContractProgramId, ObjectId.Parse(request.ContractProgramId)));
 
                     List<MEPatientProgram> pp = ctx.PatientPrograms.Collection.Find(findQ).ToList();
 
                     if (pp.Count == 0)
                     {
-                        var findcp = Query<MEContractProgram>.EQ(b => b.Id, ObjectId.Parse(request.ContractProgramId));
+                        var findcp = MB.Query<MEContractProgram>.EQ(b => b.Id, ObjectId.Parse(request.ContractProgramId));
                         MEContractProgram cp = ctx.ContractPrograms.Collection.Find(findcp).FirstOrDefault();
 
                         MEPatientProgram patientProgDoc = new MEPatientProgram
@@ -85,6 +85,11 @@ namespace Phytel.API.DataDomain.Program
 
                         ctx.PatientPrograms.Collection.Insert(patientProgDoc);
 
+                        // update programid in modules
+                        var q = MB.Query<MEPatientProgram>.EQ(b => b.Id, patientProgDoc.Id);
+                        patientProgDoc.Modules.ForEach(s => UpdateProgramIdInModules(s, patientProgDoc.Id));
+                        ctx.PatientPrograms.Collection.Update(q, MB.Update.SetWrapped<List<Modules>>("modules", patientProgDoc.Modules));
+
                         result.program = new ProgramInfo
                         {
                             Id = patientProgDoc.Id.ToString(),
@@ -113,6 +118,11 @@ namespace Phytel.API.DataDomain.Program
             }
         }
 
+        private void UpdateProgramIdInModules(Modules s, ObjectId objectId)
+        {
+            s.ProgramId = objectId;
+        }
+
         public object InsertAll(List<T> entities)
         {
             throw new NotImplementedException();
@@ -136,7 +146,7 @@ namespace Phytel.API.DataDomain.Program
 
                 using (ProgramMongoContext ctx = new ProgramMongoContext(_dbName))
                 {
-                    var findcp = Query<MEPatientProgram>.EQ(b => b.Id, ObjectId.Parse(entityID));
+                    var findcp = MB.Query<MEPatientProgram>.EQ(b => b.Id, ObjectId.Parse(entityID));
                     MEPatientProgram cp = ctx.PatientPrograms.Collection.Find(findcp).FirstOrDefault();
 
                     if (cp != null)
@@ -154,6 +164,7 @@ namespace Phytel.API.DataDomain.Program
                             Modules = cp.Modules.Where(h => h.Status == Common.Status.Active).Select(r => new ModuleDetail
                             {
                                 Id = r.Id.ToString(),
+                                 ProgramId = r.ProgramId.ToString(),
                                 Description = r.Description,
                                 Name = r.Name,
                                 Status = (int)r.Status,
@@ -170,6 +181,7 @@ namespace Phytel.API.DataDomain.Program
                                     CompletedBy = a.CompletedBy,
                                     Description = a.Description,
                                     Id = a.Id.ToString(),
+                                     ModuleId = a.ModuleId.ToString(),
                                     Name = a.Name,
                                     Status = (int)a.Status,
                                     Objectives = a.Objectives
@@ -185,6 +197,7 @@ namespace Phytel.API.DataDomain.Program
                                         Description = s.Description,
                                         Ex = s.Ex,
                                         Id = s.Id.ToString(),
+                                        ActionId = s.ActionId.ToString(),
                                         Notes = s.Notes,
                                         Question = s.Question,
                                         Status = (int)s.Status,
@@ -242,6 +255,7 @@ namespace Phytel.API.DataDomain.Program
                     Modules mod = new Modules()
                     {
                         Id = m.Id,
+                         ProgramId = m.ProgramId,
                         Description = m.Description,
                         Name = m.Name,
                         Status = m.Status,
@@ -265,6 +279,7 @@ namespace Phytel.API.DataDomain.Program
                                 CompletedBy = ai.CompletedBy,
                                 Description = ai.Description,
                                 Id = ai.Id,
+                                 ModuleId = ai.ModuleId,
                                 Name = ai.Name,
                                 Status = ai.Status,
                                 Objectives = ai.Objectives,
@@ -281,6 +296,7 @@ namespace Phytel.API.DataDomain.Program
                                     Description = b.Description,
                                     Ex = b.Ex,
                                     Id = b.Id,
+                                     ActionId = b.ActionId,
                                     Notes = b.Notes,
                                     Question = b.Question,
                                     T = b.T,
