@@ -355,10 +355,6 @@ namespace Phytel.API.DataDomain.Patient
                     List<SearchField> sfs = cPV.SearchFields.ToList<SearchField>();
 
                     ctx.CohortPatientViews.Collection.Update(findQ, MB.Update.SetWrapped<List<SearchField>>("sf", sfs).Set(MECohortPatientView.LastNameProperty, request.LastName));
-
-                    //var sort = new MB.SortByBuilder().Ascending("_id");
-                    //var cpv = ctx.Patients.Collection.FindAndModify(findQ, sort,
-                    //    new MB.UpdateBuilder().Set(MECohortPatientView.SearchFieldsProperty, MB.Update.SetWrapped<SearchField>("sf", sfs) ), true);
                 }
                 return response;
             }
