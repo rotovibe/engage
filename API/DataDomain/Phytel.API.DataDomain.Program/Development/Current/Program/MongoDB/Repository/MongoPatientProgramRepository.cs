@@ -67,7 +67,7 @@ namespace Phytel.API.DataDomain.Program
                             Description = cp.Description,
                             LastUpdatedOn = System.DateTime.UtcNow, // utc time
                             Locked = cp.Locked,
-                            Modules = SetValidModules(cp.Modules),
+                            Modules = DTOUtils.SetValidModules(cp.Modules),
                             Name = cp.Name,
                             ObjectivesInfo = cp.ObjectivesInfo,
                             UpdatedBy = request.UserId,
@@ -80,7 +80,14 @@ namespace Phytel.API.DataDomain.Program
                             //}).ToList(),
                             ShortName = cp.ShortName,
                             Status = cp.Status,
-                            Version = cp.Version
+                            Version = cp.Version,
+                            Spawn = cp.Spawn,
+                            Completed = cp.Completed,
+                            Enabled = cp.Enabled,
+                            ExtraElements = cp.ExtraElements,
+                            Next = cp.Next,
+                            Order = cp.Order,
+                            Previous = cp.Previous
                         };
 
                         ctx.PatientPrograms.Collection.Insert(patientProgDoc);
@@ -157,17 +164,44 @@ namespace Phytel.API.DataDomain.Program
                             Client = cp.Client,
                             ContractProgramId = cp.ContractProgramId.ToString(),
                             Description = cp.Description,
+                            Name = cp.Name,
+                            PatientId = cp.PatientId.ToString(),
+                            ProgramState = (int)cp.ProgramState,
+                            ShortName = cp.ShortName,
+                            StartDate = cp.StartDate,
+                            Status = (int)cp.Status,
+                            Version = cp.Version,
                             EligibilityEndDate = cp.EligibilityEndDate,
                             EligibilityRequirements = cp.EligibilityRequirements,
                             EligibilityStartDate = cp.EligibilityStartDate,
                             EndDate = cp.EndDate,
+                            Completed = cp.Completed,
+                            Enabled = cp.Enabled,
+                            Next = cp.Next.ToString(),
+                            Order = cp.Order,
+                            Previous = cp.Previous.ToString(),
+                            ObjectivesInfo = cp.ObjectivesInfo
+                            .Select(r => new ObjectivesDetail
+                            {
+                                Id = r.Id.ToString(),
+                                Unit = r.Unit,
+                                Status = (int)r.Status,
+                                Value = r.Value
+                            }).ToList(),
+                            SpawnElement = new SpawnElementDetail { ElementId = cp.Spawn.SpawnId.ToString(), ElementType = cp.Spawn.Type },
                             Modules = cp.Modules.Where(h => h.Status == Common.Status.Active).Select(r => new ModuleDetail
                             {
                                 Id = r.Id.ToString(),
-                                 ProgramId = r.ProgramId.ToString(),
+                                ProgramId = r.ProgramId.ToString(),
                                 Description = r.Description,
                                 Name = r.Name,
                                 Status = (int)r.Status,
+                                Completed = r.Completed,
+                                Enabled = r.Enabled,
+                                Next = r.Next.ToString(),
+                                Order = r.Order,
+                                Previous = r.Previous.ToString(),
+                                SpawnElement = new SpawnElementDetail { ElementType = r.Spawn.Type, ElementId = r.Spawn.SpawnId.ToString() },
                                 Objectives = r.Objectives
                                 .Select(o => new ObjectivesDetail
                                 {
@@ -181,9 +215,15 @@ namespace Phytel.API.DataDomain.Program
                                     CompletedBy = a.CompletedBy,
                                     Description = a.Description,
                                     Id = a.Id.ToString(),
-                                     ModuleId = a.ModuleId.ToString(),
+                                    ModuleId = a.ModuleId.ToString(),
                                     Name = a.Name,
                                     Status = (int)a.Status,
+                                    Completed = a.Completed,
+                                    Enabled = a.Enabled,
+                                    Next = a.Next.ToString(),
+                                    Order = a.Order,
+                                    Previous = a.Previous.ToString(),
+                                    SpawnElement = new SpawnElementDetail { ElementId = a.Spawn.SpawnId.ToString(), ElementType = a.Spawn.Type },
                                     Objectives = a.Objectives
                                     .Select(x => new ObjectivesDetail
                                     {
@@ -203,25 +243,30 @@ namespace Phytel.API.DataDomain.Program
                                         Status = (int)s.Status,
                                         T = s.T,
                                         Text = s.Text,
-                                        Type = s.Type
+                                        Type = s.Type,
+                                        Completed = s.Completed,
+                                        Enabled = s.Enabled,
+                                        Next = s.Next.ToString(),
+                                        Order = s.Order,
+                                        Previous = s.Previous.ToString(),
+                                        ControlType = s.ControlType,
+                                        Header = s.Header,
+                                        SelectedResponseId = s.SelectedResponseId.ToString(),
+                                        Responses = s.Responses.Select(x => new ResponseDetail
+                                        {
+                                            Id = x.Id.ToString(),
+                                            NextStepId = x.NextStepId.ToString(),
+                                            Nominal = x.Nominal,
+                                            Order = x.Order,
+                                            Required = x.Required,
+                                            StepID = x.StepId.ToString(),
+                                            Text = x.Text,
+                                            Value = x.Value
+                                        }).ToList<ResponseDetail>(),
+                                        SpawnElement = new SpawnElementDetail { ElementType = s.Spawn.Type, ElementId = s.Spawn.SpawnId.ToString() }
                                     }).ToList()
                                 }).ToList()
-                            }).ToList(),
-                            Name = cp.Name,
-                            ObjectivesInfo = cp.ObjectivesInfo
-                            .Select(r => new ObjectivesDetail
-                            {
-                                Id = r.Id.ToString(),
-                                Unit = r.Unit,
-                                Status = (int)r.Status,
-                                Value = r.Value
-                            }).ToList(),
-                            PatientId = cp.PatientId.ToString(),
-                            ProgramState = (int)cp.ProgramState,
-                            ShortName = cp.ShortName,
-                            StartDate = cp.StartDate,
-                            Status = (int)cp.Status,
-                            Version = cp.Version
+                            }).ToList()
                         };
                     }
                     else
@@ -240,78 +285,6 @@ namespace Phytel.API.DataDomain.Program
         public List<ProgramInfo> GetActiveProgramsInfoList(GetAllActiveProgramsRequest request)
         {
             throw new NotImplementedException();
-        }
-
-        private List<Modules> SetValidModules(List<Modules> list)
-        {
-            List<StepsInfo> steps = new List<StepsInfo>();
-            List<ActionsInfo> acts = new List<ActionsInfo>();
-            List<Modules> mods = new List<Modules>();
-
-            foreach (Modules m in list)
-            {
-                if (m.Status == Common.Status.Active)
-                {
-                    Modules mod = new Modules()
-                    {
-                        Id = m.Id,
-                         ProgramId = m.ProgramId,
-                        Description = m.Description,
-                        Name = m.Name,
-                        Status = m.Status,
-                        Objectives = m.Objectives,
-                        //Objectives = m.Objectives.Where(a => a.Status == Common.Status.Active).Select(z => new ObjectivesInfo()
-                        //{
-                        //    Id = z.Id,
-                        //    Status = z.Status,
-                        //    Unit = z.Unit,
-                        //    Value = z.Value
-                        //}).ToList(),
-                        Actions = new List<ActionsInfo>()
-                    };
-
-                    foreach (ActionsInfo ai in m.Actions)
-                    {
-                        if (ai.Status == Common.Status.Active)
-                        {
-                            ActionsInfo ac = new ActionsInfo()
-                            {
-                                CompletedBy = ai.CompletedBy,
-                                Description = ai.Description,
-                                Id = ai.Id,
-                                 ModuleId = ai.ModuleId,
-                                Name = ai.Name,
-                                Status = ai.Status,
-                                Objectives = ai.Objectives,
-                                //Objectives = ai.Objectives.Where(r => r.Status == Common.Status.Active).Select(x => new ObjectivesInfo()
-                                //{
-                                //    Id = x.Id,
-                                //    Status = x.Status,
-                                //    Unit = x.Unit,
-                                //    Value = x.Value
-                                //}).ToList(),
-                                Steps = ai.Steps.Where(s => s.Status == Common.Status.Active).Select(b => new StepsInfo()
-                                {
-                                    Status = b.Status,
-                                    Description = b.Description,
-                                    Ex = b.Ex,
-                                    Id = b.Id,
-                                     ActionId = b.ActionId,
-                                    Notes = b.Notes,
-                                    Question = b.Question,
-                                    T = b.T,
-                                    Text = b.Text,
-                                    Type = b.Type
-                                }).ToList()
-                            };
-                            mod.Actions.Add(ac);
-                        }
-                    }
-                    mods.Add(mod);
-                }
-            }
-
-            return mods;
         }
 
         public Tuple<string, IEnumerable<object>> Select(Interface.APIExpression expression)

@@ -9,7 +9,7 @@ using Phytel.API.Common;
 
 namespace Phytel.API.DataDomain.Program.MongoDB.DTO
 {
-    public class MEProgramBase
+    public class MEProgramBase : MEPlanElement
     {
         public MEProgramBase() {}
 
@@ -113,7 +113,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
         public DateTime? LastUpdatedOn { get; set; }
     }
 
-    public class Modules : IMongoEntity<ObjectId>
+    public class Modules : MEPlanElement, IMongoEntity<ObjectId>
     {
         public Modules() { Id = ObjectId.GenerateNewId(); }
 
@@ -146,7 +146,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
         public Status Status { get; set; }
     }
 
-    public class ActionsInfo : IMongoEntity<ObjectId>
+    public class ActionsInfo : MEPlanElement, IMongoEntity<ObjectId>
     {
         public ActionsInfo() { Id = ObjectId.GenerateNewId(); }
 
@@ -183,7 +183,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
         public Status Status { get; set; }
     }
 
-    public class StepsInfo : IMongoEntity<ObjectId>
+    public class StepsInfo : MEPlanElement, IMongoEntity<ObjectId>
     {
         public StepsInfo() { Id = ObjectId.GenerateNewId(); }
 
@@ -198,6 +198,18 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
         public const string TypeProperty = "typ";
         [BsonElement(TypeProperty)]
         public int Type { get; set; }
+
+        public const string HeaderProperty = "hdr";
+        [BsonElement(HeaderProperty)]
+        public string Header { get; set; }
+
+        public const string SelectedResponseIdProperty = "selectedresp";
+        [BsonElement(SelectedResponseIdProperty)]
+        public ObjectId SelectedResponseId { get; set; }
+
+        public const string ControlTypeProperty = "controltype";
+        [BsonElement(ControlTypeProperty)]
+        public int ControlType { get; set; }
 
         public const string QuestionProperty = "q";
         [BsonElement(QuestionProperty)]
@@ -226,6 +238,47 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
         public const string StatusProperty = "status";
         [BsonElement(StatusProperty)]
         public Status Status { get; set; }
+
+        public const string ResponsesProperty = "responses";
+        [BsonElement(ResponsesProperty)]
+        public List<ResponseInfo> Responses { get; set; }
+    }
+
+    public class ResponseInfo : IMongoEntity<ObjectId>
+    {
+        public ResponseInfo() { Id = ObjectId.GenerateNewId(); }
+
+        public const string IDProperty = "_id";
+        [BsonId]
+        public ObjectId Id { get; set; }
+
+        public const string OrderProperty = "order";
+        [BsonElement(OrderProperty)]
+        public int Order { get; set; }
+
+        public const string TextProperty = "txt";
+        [BsonElement(TextProperty)]
+        public string Text { get; set; }
+
+        public const string StepIdProperty = "stepid";
+        [BsonElement(StepIdProperty)]
+        public ObjectId StepId { get; set; }
+
+        public const string ValueProperty = "value";
+        [BsonElement(ValueProperty)]
+        public string Value { get; set; }
+
+        public const string NominalProperty = "nominal";
+        [BsonElement(NominalProperty)]
+        public bool Nominal { get; set; }
+
+        public const string RequiredProperty = "req";
+        [BsonElement(RequiredProperty)]
+        public bool Required { get; set; }
+
+        public const string NextStepIdProperty = "nextstepid";
+        [BsonElement(NextStepIdProperty)]
+        public ObjectId NextStepId { get; set; }
     }
 
     public class ObjectivesInfo : IMongoEntity<ObjectId>
