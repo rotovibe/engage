@@ -465,11 +465,7 @@ namespace Phytel.API.AppDomain.NG
                             Next = resp.Program.Next,
                             Order = resp.Program.Order,
                             Previous = resp.Program.Previous,
-                            SpawnElement = new SpawnElement
-                            {
-                                ElementId = resp.Program.SpawnElement.ElementId,
-                                ElementType = resp.Program.SpawnElement.ElementType
-                            },
+                            SpawnElement = GetSpawnElement(resp.Program),
                             Modules = resp.Program.Modules.Select(r => new Module
                             {
                                 Id = r.Id,
@@ -482,11 +478,7 @@ namespace Phytel.API.AppDomain.NG
                                 Next = r.Next,
                                 Order = r.Order,
                                 Previous = r.Previous,
-                                SpawnElement = new SpawnElement
-                                {
-                                    ElementType = r.SpawnElement.ElementType,
-                                    ElementId = r.SpawnElement.ElementId
-                                },
+                                SpawnElement = GetSpawnElement(r),
                                 Objectives = r.Objectives.Select(o => new Objective
                                 {
                                     Id = o.Id.ToString(),
@@ -507,11 +499,7 @@ namespace Phytel.API.AppDomain.NG
                                     Next = a.Next,
                                     Order = a.Order,
                                     Previous = a.Previous,
-                                    SpawnElement = new SpawnElement
-                                    {
-                                        ElementId = a.SpawnElement.ElementId,
-                                        ElementType = a.SpawnElement.ElementType
-                                    },
+                                    SpawnElement = GetSpawnElement(a),
                                     Objectives = a.Objectives.Select(x => new Objective
                                     {
                                         Id = x.Id.ToString(),
@@ -538,23 +526,9 @@ namespace Phytel.API.AppDomain.NG
                                         Next = s.Next,
                                         Order = s.Order,
                                         Previous = s.Previous,
-                                        Responses = s.Responses.Select(z => new Response
-                                        {
-                                            Id = z.Id,
-                                            NextStepId = z.NextStepId,
-                                            Nominal = z.Nominal,
-                                            Order = z.Order,
-                                            Required = z.Required,
-                                            StepID = z.StepID,
-                                            Text = z.Text,
-                                            Value = z.Value
-                                        }).ToList(),
+                                        Responses = GetResponses(s),
                                         SelectedResponseId = s.SelectedResponseId,
-                                        SpawnElement = new SpawnElement
-                                        {
-                                            ElementType = s.SpawnElement.ElementType,
-                                            ElementId = s.SpawnElement.ElementId
-                                        }
+                                        SpawnElement = GetSpawnElement(s)
                                     }).ToList()
                                 }).ToList()
                             }).ToList(),
@@ -578,6 +552,40 @@ namespace Phytel.API.AppDomain.NG
                 Exception ae = new Exception(wse.ResponseBody, wse.InnerException);
                 throw ae;
             }
+        }
+
+        private List<Response> GetResponses(DD.StepsDetail s)
+        {
+            List<Response> resps = null;
+            if (s.Responses != null)
+            {
+                resps = s.Responses.Select(z => new Response
+                                            {
+                                                Id = z.Id,
+                                                NextStepId = z.NextStepId,
+                                                Nominal = z.Nominal,
+                                                Order = z.Order,
+                                                Required = z.Required,
+                                                StepID = z.StepID,
+                                                Text = z.Text,
+                                                Value = z.Value
+                                            }).ToList();
+            }
+            return resps;
+        }
+
+        private SpawnElement GetSpawnElement(DD.PlanElementDetail planElement)
+        {
+            SpawnElement spawn = null;
+            if (planElement.SpawnElement != null)
+            {
+                spawn = new SpawnElement
+                                            {
+                                                ElementId = planElement.SpawnElement.ElementId,
+                                                ElementType = planElement.SpawnElement.ElementType
+                                            };
+            }
+            return spawn;
         }
     }
 }
