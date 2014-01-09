@@ -46,8 +46,8 @@ namespace Phytel.API.DataDomain.Patient.Service.Test
                 Order = 1,
                 Status = 1,
                 Responses = new List<Response> { 
-                    new Response { Id = "1", Nominal = true, Order = 1, ResponsePathId = "52a641f1d433231824878c90", StepID = "52a641e8d433231824878c8f" },
-                    new Response { Id = "2", Nominal = true, Order = 2, ResponsePathId = "0", StepID = "52a641e8d433231824878c8f" }
+                    new Response { Id = "1", Nominal = true, Order = 1, NextStepId = "52a641f1d433231824878c90", StepID = "52a641e8d433231824878c8f" },
+                    new Response { Id = "2", Nominal = true, Order = 2, NextStepId = "0", StepID = "52a641e8d433231824878c8f" }
                 }
             };
 
@@ -64,8 +64,8 @@ namespace Phytel.API.DataDomain.Patient.Service.Test
                 Order = 2,
                 Status = 1,
                 Responses = new List<Response> { 
-                    new Response { Id = "1", Nominal = true, Order = 1, ResponsePathId = "1", StepID = "52a641f1d433231824878c90" },
-                    new Response { Id = "2", Nominal = true, Order = 2, ResponsePathId = "1", StepID = "52a641f1d433231824878c90" }
+                    new Response { Id = "1", Nominal = true, Order = 1, NextStepId = "1", StepID = "52a641f1d433231824878c90" },
+                    new Response { Id = "2", Nominal = true, Order = 2, NextStepId = "1", StepID = "52a641f1d433231824878c90" }
                 }
             };
 

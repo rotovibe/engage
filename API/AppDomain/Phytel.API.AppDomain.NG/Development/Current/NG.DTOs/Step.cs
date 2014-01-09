@@ -15,14 +15,12 @@ namespace Phytel.API.AppDomain.NG.DTO
         public string Notes { get; set; }
         public string Text { get; set; }
         public string Ex { get; set; }
-        public int Status { get; set; }
 
         public string ActionId { get; set; }
-        public int StepTypeId { get; set; }
-        public string Instruction { get; set; }
         public string Header { get; set; }
-        public int SelectedResponseId { get; set; }
+        public string SelectedResponseId { get; set; }
         public int ControlType { get; set; }
         public List<Response> Responses { get; set; }
+        public int Status { get; set; }
     }
 }

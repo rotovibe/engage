@@ -447,19 +447,46 @@ namespace Phytel.API.AppDomain.NG
                         {
                             Id = resp.Program.Id.ToString(),
                             Client = resp.Program.Client,
+                            Name = resp.Program.Name,
                             ContractProgramId = resp.Program.ContractProgramId.ToString(),
                             Description = resp.Program.Description,
                             EligibilityEndDate = resp.Program.EligibilityEndDate,
                             EligibilityRequirements = resp.Program.EligibilityRequirements,
                             EligibilityStartDate = resp.Program.EligibilityStartDate,
                             EndDate = resp.Program.EndDate,
+                            PatientId = resp.Program.PatientId.ToString(),
+                            ProgramState = resp.Program.ProgramState,
+                            ShortName = resp.Program.ShortName,
+                            StartDate = resp.Program.StartDate,
+                            Status = resp.Program.Status,
+                            Version = resp.Program.Version,
+                            Completed = resp.Program.Completed,
+                            Enabled = resp.Program.Enabled,
+                            Next = resp.Program.Next,
+                            Order = resp.Program.Order,
+                            Previous = resp.Program.Previous,
+                            SpawnElement = new SpawnElement
+                            {
+                                ElementId = resp.Program.SpawnElement.ElementId,
+                                ElementType = resp.Program.SpawnElement.ElementType
+                            },
                             Modules = resp.Program.Modules.Select(r => new Module
                             {
                                 Id = r.Id,
-                                 ProgramId = r.ProgramId,
+                                ProgramId = r.ProgramId,
                                 Description = r.Description,
                                 Name = r.Name,
                                 Status = (int)r.Status,
+                                Completed = r.Completed,
+                                Enabled = r.Enabled,
+                                Next = r.Next,
+                                Order = r.Order,
+                                Previous = r.Previous,
+                                SpawnElement = new SpawnElement
+                                {
+                                    ElementType = r.SpawnElement.ElementType,
+                                    ElementId = r.SpawnElement.ElementId
+                                },
                                 Objectives = r.Objectives.Select(o => new Objective
                                 {
                                     Id = o.Id.ToString(),
@@ -472,9 +499,19 @@ namespace Phytel.API.AppDomain.NG
                                     CompletedBy = a.CompletedBy,
                                     Description = a.Description,
                                     Id = a.Id,
-                                     ModuleId = a.ModuleId,
+                                    ModuleId = a.ModuleId,
                                     Name = a.Name,
                                     Status = (int)a.Status,
+                                    Completed = a.Completed,
+                                    Enabled = a.Enabled,
+                                    Next = a.Next,
+                                    Order = a.Order,
+                                    Previous = a.Previous,
+                                    SpawnElement = new SpawnElement
+                                    {
+                                        ElementId = a.SpawnElement.ElementId,
+                                        ElementType = a.SpawnElement.ElementType
+                                    },
                                     Objectives = a.Objectives.Select(x => new Objective
                                     {
                                         Id = x.Id.ToString(),
@@ -487,32 +524,48 @@ namespace Phytel.API.AppDomain.NG
                                         Description = s.Description,
                                         Ex = s.Ex,
                                         Id = s.Id,
-                                         ActionId = s.ActionId,
+                                        ActionId = s.ActionId,
                                         Notes = s.Notes,
                                         Question = s.Question,
                                         Status = (int)s.Status,
                                         T = s.T,
                                         Text = s.Text,
-                                        Type = s.Type
+                                        Type = s.Type,
+                                        Completed = s.Completed,
+                                        ControlType = s.ControlType,
+                                        Enabled = s.Enabled,
+                                        Header = s.Header,
+                                        Next = s.Next,
+                                        Order = s.Order,
+                                        Previous = s.Previous,
+                                        Responses = s.Responses.Select(z => new Response
+                                        {
+                                            Id = z.Id,
+                                            NextStepId = z.NextStepId,
+                                            Nominal = z.Nominal,
+                                            Order = z.Order,
+                                            Required = z.Required,
+                                            StepID = z.StepID,
+                                            Text = z.Text,
+                                            Value = z.Value
+                                        }).ToList(),
+                                        SelectedResponseId = s.SelectedResponseId,
+                                        SpawnElement = new SpawnElement
+                                        {
+                                            ElementType = s.SpawnElement.ElementType,
+                                            ElementId = s.SpawnElement.ElementId
+                                        }
                                     }).ToList()
                                 }).ToList()
                             }).ToList(),
-                            Name = resp.Program.Name,
                             ObjectivesInfo = resp.Program.ObjectivesInfo.Select(r => new Objective
                             {
                                 Id = r.Id.ToString(),
                                 Unit = r.Unit,
                                 Status = r.Status,
                                 Value = r.Value
-                            }).ToList(),
-                            PatientId = resp.Program.PatientId.ToString(),
-                            ProgramState = resp.Program.ProgramState,
-                            ShortName = resp.Program.ShortName,
-                            StartDate = resp.Program.StartDate,
-                            Status = resp.Program.Status,
-                            Version = resp.Program.Version
+                            }).ToList()
                         };
-
 
                         if (resp.Status != null)
                             result.Status = resp.Status;

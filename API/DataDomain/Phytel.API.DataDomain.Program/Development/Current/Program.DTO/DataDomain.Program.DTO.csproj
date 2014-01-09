@@ -70,6 +70,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="GetProgramDetailsSummaryRequest.cs" />
+    <Compile Include="ActionDetail.cs" />
+    <Compile Include="PlanElementDetail.cs" />
+    <Compile Include="ObjectivesDetail.cs" />
+    <Compile Include="ResponseDetail.cs" />
+    <Compile Include="StepDetail.cs" />
+    <Compile Include="ModuleDetail.cs" />
+    <Compile Include="ProgramDetail.cs" />
     <Compile Include="GetProgramDetailsSummaryResponse.cs" />
     <Compile Include="ContractProgram.cs" />
     <Compile Include="ProgramInfo.cs" />

@@ -1,12 +1,11 @@
-﻿using System;
+using ServiceStack.ServiceInterface.ServiceModel;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Phytel.API.Interface;
+using System;
 
-namespace Phytel.API.AppDomain.NG.DTO
+namespace Phytel.API.DataDomain.Program.DTO
 {
-    public class Response
+    public class ResponseDetail
     {
         public string Id { get; set; }
         public int Order { get; set; }
