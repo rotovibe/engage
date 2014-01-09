@@ -16,7 +16,6 @@ namespace Phytel.API.DataDomain.Patient.MongoDB.DTO
         public const string IdProperty = "_id";
         public const string PatientIdProperty = "pid";
         public const string UserIdProperty = "uid";
-        public const string FlaggedProperty = "flg";
         public const string ExtraElementsProperty = "ex";
         public const string VersionProperty = "v";
         public const string UpdatedByProperty = "uby";
@@ -35,6 +34,7 @@ namespace Phytel.API.DataDomain.Patient.MongoDB.DTO
         [BsonIgnoreIfNull(true)]
         public string UserId { get; set; }
 
+        public const string FlaggedProperty = "flg";
         [BsonElement(FlaggedProperty)]
         [BsonIgnoreIfNull(true)]
         public bool Flagged { get; set; }
