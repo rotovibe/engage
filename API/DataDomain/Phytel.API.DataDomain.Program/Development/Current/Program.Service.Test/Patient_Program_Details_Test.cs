@@ -12,12 +12,12 @@ namespace Phytel.API.DataDomain.Program.Services.Test
         public void Get_ProgramDetails_For_Patient_Assignment()
         {
             string url = "http://localhost:8888/Program";
-            string patientID = "528f6c3e072ef708ecd4226b";
-            string ProgramID = "52c5b8d71e601540b017e6d3";
+            string patientID = "528f6b5a072ef708ecd0c16d";
+            string ProgramID = "52d02cbdd6a48501b4704c26";
             string contractNumber = "InHealth001";
             string context = "NG";
             string version = "v1";
-            string token = "52c5c541d6a4850edcd1a1dc";
+            string token = "52d02b9cd6a48501b4667f15";
             IRestClient client = new JsonServiceClient();
 
             GetProgramDetailsSummaryResponse response = client.Get<GetProgramDetailsSummaryResponse>(

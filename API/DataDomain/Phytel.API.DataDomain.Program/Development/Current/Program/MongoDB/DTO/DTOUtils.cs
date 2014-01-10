@@ -26,6 +26,12 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
                         Name = m.Name,
                         Status = m.Status,
                         Objectives = m.Objectives,
+                        Completed = m.Completed,
+                        Enabled = m.Enabled,
+                        Next = m.Next,
+                        Order = m.Order,
+                        Previous = m.Previous,
+                        Spawn = m.Spawn,
                         //Objectives = m.Objectives.Where(a => a.Status == Common.Status.Active).Select(z => new ObjectivesInfo()
                         //{
                         //    Id = z.Id,
@@ -49,6 +55,12 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
                                 Name = ai.Name,
                                 Status = ai.Status,
                                 Objectives = ai.Objectives,
+                                Completed = ai.Completed,
+                                Enabled = ai.Enabled,
+                                Next = ai.Next,
+                                Order = ai.Order,
+                                Previous = ai.Previous,
+                                Spawn = ai.Spawn,
                                 //Objectives = ai.Objectives.Where(r => r.Status == Common.Status.Active).Select(x => new ObjectivesInfo()
                                 //{
                                 //    Id = x.Id,
@@ -67,7 +79,17 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
                                     Question = b.Question,
                                     T = b.T,
                                     Text = b.Text,
-                                    Type = b.Type
+                                    StepTypeId = b.StepTypeId,
+                                    Responses = b.Responses,
+                                    Completed = b.Completed,
+                                    ControlType = b.ControlType,
+                                    Enabled = b.Enabled,
+                                    Header = b.Header,
+                                    Next = b.Next,
+                                    Order = b.Order,
+                                    Previous = b.Previous,
+                                    SelectedResponseId = b.SelectedResponseId,
+                                    Spawn = b.Spawn
                                 }).ToList()
                             };
                             mod.Actions.Add(ac);

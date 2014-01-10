@@ -82,18 +82,25 @@ namespace Phytel.API.DataDomain.Program
         {
             List<ProgramInfo> result = new List<ProgramInfo>();
 
-            using (ProgramMongoContext ctx = new ProgramMongoContext(_dbName))
+            try
             {
-                IMongoQuery mQuery = Query.EQ(MEContractProgram.StatusProperty, 1);
-                result = ctx.ContractPrograms.Collection.Find(mQuery).Select(r => new ProgramInfo
+                using (ProgramMongoContext ctx = new ProgramMongoContext(_dbName))
                 {
-                    Name = r.Name,
-                    Id = r.Id.ToString(),
-                    ShortName = r.ShortName,
-                    Status = (int)r.Status
-                }).ToList();
+                    IMongoQuery mQuery = Query.EQ(MEContractProgram.StatusProperty, 1);
+                    result = ctx.ContractPrograms.Collection.Find(mQuery).Select(r => new ProgramInfo
+                    {
+                        Name = r.Name,
+                        Id = r.Id.ToString(),
+                        ShortName = r.ShortName,
+                        Status = (int)r.Status
+                    }).ToList();
+                }
+                return result;
             }
-            return result;
+            catch
+            {
+                throw;
+            }
         }
 
         public Tuple<string, IEnumerable<object>> Select(Interface.APIExpression expression)

@@ -177,9 +177,9 @@ namespace Phytel.API.DataDomain.Program
                             EndDate = cp.EndDate,
                             Completed = cp.Completed,
                             Enabled = cp.Enabled,
-                            Next = cp.Next.ToString(),
+                            Next = cp.Next,
                             Order = cp.Order,
-                            Previous = cp.Previous.ToString(),
+                            Previous = cp.Previous,
                             ObjectivesInfo = cp.ObjectivesInfo
                             .Select(r => new ObjectivesDetail
                             {
@@ -188,7 +188,7 @@ namespace Phytel.API.DataDomain.Program
                                 Status = (int)r.Status,
                                 Value = r.Value
                             }).ToList(),
-                            SpawnElement = new SpawnElementDetail { ElementId = cp.Spawn.SpawnId.ToString(), ElementType = cp.Spawn.Type },
+                            SpawnElement = GetSpawnElement(cp),
                             Modules = cp.Modules.Where(h => h.Status == Common.Status.Active).Select(r => new ModuleDetail
                             {
                                 Id = r.Id.ToString(),
@@ -198,10 +198,10 @@ namespace Phytel.API.DataDomain.Program
                                 Status = (int)r.Status,
                                 Completed = r.Completed,
                                 Enabled = r.Enabled,
-                                Next = r.Next.ToString(),
+                                Next = r.Next,
+                                Previous = r.Previous,
                                 Order = r.Order,
-                                Previous = r.Previous.ToString(),
-                                SpawnElement = new SpawnElementDetail { ElementType = r.Spawn.Type, ElementId = r.Spawn.SpawnId.ToString() },
+                                SpawnElement = GetSpawnElement(r),
                                 Objectives = r.Objectives
                                 .Select(o => new ObjectivesDetail
                                 {
@@ -220,10 +220,10 @@ namespace Phytel.API.DataDomain.Program
                                     Status = (int)a.Status,
                                     Completed = a.Completed,
                                     Enabled = a.Enabled,
-                                    Next = a.Next.ToString(),
+                                    Next = a.Next,
+                                    Previous = a.Previous,
                                     Order = a.Order,
-                                    Previous = a.Previous.ToString(),
-                                    SpawnElement = new SpawnElementDetail { ElementId = a.Spawn.SpawnId.ToString(), ElementType = a.Spawn.Type },
+                                    SpawnElement = GetSpawnElement(a),
                                     Objectives = a.Objectives
                                     .Select(x => new ObjectivesDetail
                                     {
@@ -243,27 +243,17 @@ namespace Phytel.API.DataDomain.Program
                                         Status = (int)s.Status,
                                         T = s.T,
                                         Text = s.Text,
-                                        Type = s.Type,
+                                        StepTypeId = s.StepTypeId,
                                         Completed = s.Completed,
                                         Enabled = s.Enabled,
-                                        Next = s.Next.ToString(),
+                                        Next = s.Next,
+                                        Previous = s.Previous,
                                         Order = s.Order,
-                                        Previous = s.Previous.ToString(),
                                         ControlType = s.ControlType,
                                         Header = s.Header,
-                                        SelectedResponseId = s.SelectedResponseId.ToString(),
-                                        Responses = s.Responses.Select(x => new ResponseDetail
-                                        {
-                                            Id = x.Id.ToString(),
-                                            NextStepId = x.NextStepId.ToString(),
-                                            Nominal = x.Nominal,
-                                            Order = x.Order,
-                                            Required = x.Required,
-                                            StepID = x.StepId.ToString(),
-                                            Text = x.Text,
-                                            Value = x.Value
-                                        }).ToList<ResponseDetail>(),
-                                        SpawnElement = new SpawnElementDetail { ElementType = s.Spawn.Type, ElementId = s.Spawn.SpawnId.ToString() }
+                                        SelectedResponseId = s.SelectedResponseId,
+                                        Responses = GetResponses(s),
+                                        SpawnElement = GetSpawnElement(s)
                                     }).ToList()
                                 }).ToList()
                             }).ToList()
@@ -276,10 +266,42 @@ namespace Phytel.API.DataDomain.Program
                 }
                 return result;
             }
-            catch
+            catch(Exception ex)
             {
-                throw;
+                throw ex;
             }
+        }
+
+        private static SpawnElementDetail GetSpawnElement(MEPlanElement a)
+        {
+            SpawnElementDetail spawnDetail = null;
+
+            if (a.Spawn != null)
+            {
+                spawnDetail = new SpawnElementDetail { ElementId = a.Spawn.SpawnId.ToString(), ElementType = a.Spawn.Type };
+            }
+
+            return spawnDetail;
+        }
+
+        private List<ResponseDetail> GetResponses(StepsInfo step)
+        {
+            List<ResponseDetail> resp = null;
+            if (step.Responses != null)
+            {
+                resp = step.Responses.Select(x => new ResponseDetail
+                                           {
+                                               Id = x.Id.ToString(),
+                                               NextStepId = x.NextStepId.ToString(),
+                                               Nominal = x.Nominal,
+                                               Order = x.Order,
+                                               Required = x.Required,
+                                               StepID = x.StepId.ToString(),
+                                               Text = x.Text,
+                                               Value = x.Value
+                                           }).ToList<ResponseDetail>();
+            }
+            return resp;
         }
 
         public List<ProgramInfo> GetActiveProgramsInfoList(GetAllActiveProgramsRequest request)
@@ -373,7 +395,7 @@ namespace Phytel.API.DataDomain.Program
                                     Status = (int)s.Status,
                                     T = s.T,
                                     Text = s.Text,
-                                    Type = s.Type
+                                    StepTypeId = s.StepTypeId
                                 }).ToList()
                             }).ToList()
                         }).ToList(),

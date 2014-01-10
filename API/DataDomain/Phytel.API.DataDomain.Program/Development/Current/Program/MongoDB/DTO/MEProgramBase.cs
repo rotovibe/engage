@@ -197,7 +197,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
 
         public const string TypeProperty = "typ";
         [BsonElement(TypeProperty)]
-        public int Type { get; set; }
+        public int StepTypeId { get; set; }
 
         public const string HeaderProperty = "hdr";
         [BsonElement(HeaderProperty)]
@@ -205,7 +205,8 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
 
         public const string SelectedResponseIdProperty = "selectedresp";
         [BsonElement(SelectedResponseIdProperty)]
-        public ObjectId SelectedResponseId { get; set; }
+        [BsonIgnoreIfNull(true)]
+        public string SelectedResponseId { get; set; }
 
         public const string ControlTypeProperty = "controltype";
         [BsonElement(ControlTypeProperty)]

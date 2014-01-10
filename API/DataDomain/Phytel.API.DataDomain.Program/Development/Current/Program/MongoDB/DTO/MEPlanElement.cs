@@ -30,17 +30,17 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
 
         public const string NextProperty = "next";
         [BsonElement(NextProperty)]
-        [BsonIgnoreIfNull(false)]
-        public ObjectId Next { get; set; }
+        [BsonIgnoreIfNull(true)]
+        public string Next { get; set; }
 
         public const string PreviousProperty = "previous";
         [BsonElement(PreviousProperty)]
-        [BsonIgnoreIfNull(false)]
-        public ObjectId Previous { get; set; }
+        [BsonIgnoreIfNull(true)]
+        public string Previous { get; set; }
 
         public const string SpawnProperty = "spawn";
         [BsonElement(SpawnProperty)]
-        [BsonIgnoreIfNull(false)]
+        [BsonIgnoreIfNull(true)]
         public MESpawnElement Spawn { get; set; }
     }
 
@@ -50,12 +50,12 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
 
         public const string TypeProperty = "type";
         [BsonElement(TypeProperty)]
-        [BsonIgnoreIfNull(false)]
+        [BsonIgnoreIfNull(true)]
         public int Type { get; set; }
 
         public const string SpawnIdProperty = "spawnid";
         [BsonElement(SpawnIdProperty)]
-        [BsonIgnoreIfNull(false)]
+        [BsonIgnoreIfNull(true)]
         public ObjectId SpawnId { get; set; }
     }
 }
