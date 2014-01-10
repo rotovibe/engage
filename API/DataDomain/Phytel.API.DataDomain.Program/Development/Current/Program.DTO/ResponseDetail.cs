@@ -10,7 +10,7 @@ namespace Phytel.API.DataDomain.Program.DTO
         public string Id { get; set; }
         public int Order { get; set; }
         public string Text { get; set; }
-        public string StepID { get; set; }
+        public string StepId { get; set; }
         public string Value { get; set; }
         public bool Nominal { get; set; }
         public bool Required { get; set; }

@@ -566,7 +566,7 @@ namespace Phytel.API.AppDomain.NG
                                                 Nominal = z.Nominal,
                                                 Order = z.Order,
                                                 Required = z.Required,
-                                                StepID = z.StepID,
+                                                StepId = z.StepId,
                                                 Text = z.Text,
                                                 Value = z.Value
                                             }).ToList();
