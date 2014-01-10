@@ -466,6 +466,7 @@ namespace Phytel.API.AppDomain.NG
                             Order = resp.Program.Order,
                             Previous = resp.Program.Previous,
                             SpawnElement = GetSpawnElement(resp.Program),
+                             SourceId = resp.Program.SourceId,
                             Modules = resp.Program.Modules.Select(r => new Module
                             {
                                 Id = r.Id,
@@ -479,6 +480,7 @@ namespace Phytel.API.AppDomain.NG
                                 Order = r.Order,
                                 Previous = r.Previous,
                                 SpawnElement = GetSpawnElement(r),
+                                SourceId = r.SourceId,
                                 Objectives = r.Objectives.Select(o => new Objective
                                 {
                                     Id = o.Id.ToString(),
@@ -500,6 +502,7 @@ namespace Phytel.API.AppDomain.NG
                                     Order = a.Order,
                                     Previous = a.Previous,
                                     SpawnElement = GetSpawnElement(a),
+                                     SourceId = a.SourceId,
                                     Objectives = a.Objectives.Select(x => new Objective
                                     {
                                         Id = x.Id.ToString(),
@@ -512,6 +515,7 @@ namespace Phytel.API.AppDomain.NG
                                         Description = s.Description,
                                         Ex = s.Ex,
                                         Id = s.Id,
+                                         SourceId = s.SourceId,
                                         ActionId = s.ActionId,
                                         Notes = s.Notes,
                                         Question = s.Question,

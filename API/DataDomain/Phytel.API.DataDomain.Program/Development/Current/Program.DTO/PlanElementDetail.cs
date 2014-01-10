@@ -8,6 +8,7 @@ namespace Phytel.API.DataDomain.Program.DTO
     public class PlanElementDetail
     {
         public string Id { get; set; }
+        public string SourceId { get; set; }
         public int Order { get; set; }
         public bool Enabled { get; set; }
         public bool Completed { get; set; }

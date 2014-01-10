@@ -14,6 +14,11 @@ namespace Phytel.API.AppDomain.NG.DTO
         public string Id { get; set; }
 
         /// <summary>
+        /// SourceId of element
+        /// </summary>
+        public string SourceId { get; set; }
+
+        /// <summary>
         /// Ordinal of the current item in a list
         /// </summary>
         public int Order { get; set; }
