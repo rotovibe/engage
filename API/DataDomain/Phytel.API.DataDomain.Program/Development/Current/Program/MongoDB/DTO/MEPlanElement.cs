@@ -13,6 +13,11 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
     {
         public MEPlanElement() { }
 
+        public const string SourceIdProperty = "sourceid";
+        [BsonElement(SourceIdProperty)]
+        [BsonIgnoreIfNull(false)]
+        public string SourceId { get; set; }
+
         public const string OrderProperty = "order";
         [BsonElement(OrderProperty)]
         [BsonIgnoreIfNull(false)]

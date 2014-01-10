@@ -71,6 +71,7 @@ namespace Phytel.API.DataDomain.Program
                             Name = cp.Name,
                             ObjectivesInfo = cp.ObjectivesInfo,
                             UpdatedBy = request.UserId,
+                            SourceId = cp.SourceId,
                             //ObjectivesInfo = cp.ObjectivesInfo.Where(e => e.Status == Common.Status.Active).Select(f => new ObjectivesInfo()
                             //{
                             //    Id = f.Id,
@@ -180,6 +181,7 @@ namespace Phytel.API.DataDomain.Program
                             Next = cp.Next,
                             Order = cp.Order,
                             Previous = cp.Previous,
+                            SourceId = cp.SourceId,
                             ObjectivesInfo = cp.ObjectivesInfo
                             .Select(r => new ObjectivesDetail
                             {
@@ -202,6 +204,7 @@ namespace Phytel.API.DataDomain.Program
                                 Previous = r.Previous,
                                 Order = r.Order,
                                 SpawnElement = GetSpawnElement(r),
+                                SourceId = r.SourceId,
                                 Objectives = r.Objectives
                                 .Select(o => new ObjectivesDetail
                                 {
@@ -224,6 +227,7 @@ namespace Phytel.API.DataDomain.Program
                                     Previous = a.Previous,
                                     Order = a.Order,
                                     SpawnElement = GetSpawnElement(a),
+                                    SourceId = a.SourceId,
                                     Objectives = a.Objectives
                                     .Select(x => new ObjectivesDetail
                                     {
@@ -237,6 +241,7 @@ namespace Phytel.API.DataDomain.Program
                                         Description = s.Description,
                                         Ex = s.Ex,
                                         Id = s.Id.ToString(),
+                                        SourceId = s.SourceId,
                                         ActionId = s.ActionId.ToString(),
                                         Notes = s.Notes,
                                         Question = s.Question,
