@@ -10,7 +10,7 @@ namespace Phytel.API.DataDomain.Program.DTO
         public string Id { get; set; }
         public string ActionId { get; set; }
         public string SelectedResponseId { get; set; }
-        public int Type { get; set; }
+        public int StepTypeId { get; set; }
         public string Header { get; set; }
         public string Question { get; set; }
         public string T { get; set; }

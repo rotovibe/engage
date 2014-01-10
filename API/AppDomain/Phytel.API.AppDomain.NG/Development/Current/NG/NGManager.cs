@@ -518,7 +518,7 @@ namespace Phytel.API.AppDomain.NG
                                         Status = (int)s.Status,
                                         T = s.T,
                                         Text = s.Text,
-                                        Type = s.Type,
+                                        StepTypeId = s.StepTypeId,
                                         Completed = s.Completed,
                                         ControlType = s.ControlType,
                                         Enabled = s.Enabled,

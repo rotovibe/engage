@@ -8,7 +8,7 @@ namespace Phytel.API.AppDomain.NG.DTO
 {
     public class Step : PlanElement
     {
-        public int Type { get; set; }
+        public int StepTypeId { get; set; }
         public string Question { get; set; }
         public string T { get; set; }
         public string Description { get; set; }
