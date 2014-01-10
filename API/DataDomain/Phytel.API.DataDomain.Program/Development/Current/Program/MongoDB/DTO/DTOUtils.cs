@@ -77,7 +77,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
                                     ActionId = b.ActionId,
                                     Notes = b.Notes,
                                     Question = b.Question,
-                                    T = b.T,
+                                    Title = b.Title,
                                     Text = b.Text,
                                     StepTypeId = b.StepTypeId,
                                     Responses = b.Responses,

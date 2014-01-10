@@ -241,7 +241,7 @@ namespace Phytel.API.DataDomain.Program
                                         Notes = s.Notes,
                                         Question = s.Question,
                                         Status = (int)s.Status,
-                                        T = s.T,
+                                        Title = s.Title,
                                         Text = s.Text,
                                         StepTypeId = s.StepTypeId,
                                         Completed = s.Completed,
@@ -393,7 +393,7 @@ namespace Phytel.API.DataDomain.Program
                                     Notes = s.Notes,
                                     Question = s.Question,
                                     Status = (int)s.Status,
-                                    T = s.T,
+                                    Title = s.Title,
                                     Text = s.Text,
                                     StepTypeId = s.StepTypeId
                                 }).ToList()

@@ -218,7 +218,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
 
         public const string TProperty = "t";
         [BsonElement(TProperty)]
-        public string T { get; set; }
+        public string Title { get; set; }
 
         public const string DescriptionProperty = "desc";
         [BsonElement(DescriptionProperty)]
