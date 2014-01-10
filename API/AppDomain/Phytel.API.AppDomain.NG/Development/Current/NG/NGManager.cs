@@ -516,7 +516,7 @@ namespace Phytel.API.AppDomain.NG
                                         Notes = s.Notes,
                                         Question = s.Question,
                                         Status = (int)s.Status,
-                                        T = s.T,
+                                        T = s.Title,
                                         Text = s.Text,
                                         StepTypeId = s.StepTypeId,
                                         Completed = s.Completed,
