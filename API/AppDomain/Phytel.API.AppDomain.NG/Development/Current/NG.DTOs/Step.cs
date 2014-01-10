@@ -10,7 +10,7 @@ namespace Phytel.API.AppDomain.NG.DTO
     {
         public int StepTypeId { get; set; }
         public string Question { get; set; }
-        public string T { get; set; }
+        public string Title { get; set; }
         public string Description { get; set; }
         public string Notes { get; set; }
         public string Text { get; set; }
