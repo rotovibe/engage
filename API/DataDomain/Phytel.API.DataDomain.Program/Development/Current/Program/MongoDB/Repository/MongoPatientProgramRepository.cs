@@ -296,7 +296,7 @@ namespace Phytel.API.DataDomain.Program
                                                Nominal = x.Nominal,
                                                Order = x.Order,
                                                Required = x.Required,
-                                               StepID = x.StepId.ToString(),
+                                               StepId = x.StepId.ToString(),
                                                Text = x.Text,
                                                Value = x.Value
                                            }).ToList<ResponseDetail>();
