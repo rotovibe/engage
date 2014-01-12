@@ -212,6 +212,15 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
         [BsonElement(ControlTypeProperty)]
         public int ControlType { get; set; }
 
+        public const string SelectTypeProperty = "selecttype";
+        [BsonElement(SelectTypeProperty)]
+        [BsonIgnoreIfNull(true)]
+        public int SelectType { get; set; }
+
+        public const string IncludeTimeProperty = "inctime";
+        [BsonElement(IncludeTimeProperty)]
+        public bool IncludeTime { get; set; }
+
         public const string QuestionProperty = "q";
         [BsonElement(QuestionProperty)]
         public string Question { get; set; }
