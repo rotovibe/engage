@@ -32,6 +32,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
                         Order = m.Order,
                         Previous = m.Previous,
                         Spawn = m.Spawn,
+                         SourceId = m.SourceId,
                         //Objectives = m.Objectives.Where(a => a.Status == Common.Status.Active).Select(z => new ObjectivesInfo()
                         //{
                         //    Id = z.Id,
@@ -61,6 +62,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
                                 Order = ai.Order,
                                 Previous = ai.Previous,
                                 Spawn = ai.Spawn,
+                                SourceId = ai.SourceId,
                                 //Objectives = ai.Objectives.Where(r => r.Status == Common.Status.Active).Select(x => new ObjectivesInfo()
                                 //{
                                 //    Id = x.Id,
@@ -89,7 +91,8 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
                                     Order = b.Order,
                                     Previous = b.Previous,
                                     SelectedResponseId = b.SelectedResponseId,
-                                    Spawn = b.Spawn
+                                    Spawn = b.Spawn,
+                                    SourceId = b.SourceId
                                 }).ToList()
                             };
                             mod.Actions.Add(ac);

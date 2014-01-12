@@ -71,7 +71,7 @@ namespace Phytel.API.DataDomain.Program
                             Name = cp.Name,
                             ObjectivesInfo = cp.ObjectivesInfo,
                             UpdatedBy = request.UserId,
-                            SourceId = cp.SourceId,
+                            SourceId = cp.Id.ToString(),
                             //ObjectivesInfo = cp.ObjectivesInfo.Where(e => e.Status == Common.Status.Active).Select(f => new ObjectivesInfo()
                             //{
                             //    Id = f.Id,
@@ -95,7 +95,7 @@ namespace Phytel.API.DataDomain.Program
 
                         // update programid in modules
                         var q = MB.Query<MEPatientProgram>.EQ(b => b.Id, patientProgDoc.Id);
-                        patientProgDoc.Modules.ForEach(s => UpdateProgramIdInModules(s, patientProgDoc.Id));
+                        patientProgDoc.Modules.ForEach(s => s.ProgramId = patientProgDoc.Id);
                         ctx.PatientPrograms.Collection.Update(q, MB.Update.SetWrapped<List<Modules>>("modules", patientProgDoc.Modules));
 
                         result.program = new ProgramInfo
@@ -124,11 +124,6 @@ namespace Phytel.API.DataDomain.Program
             {
                 throw;
             }
-        }
-
-        private void UpdateProgramIdInModules(Modules s, ObjectId objectId)
-        {
-            s.ProgramId = objectId;
         }
 
         public object InsertAll(List<T> entities)
