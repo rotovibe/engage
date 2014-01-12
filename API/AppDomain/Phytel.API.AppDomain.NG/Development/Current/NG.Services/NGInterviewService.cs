@@ -17,7 +17,7 @@ namespace Phytel.API.AppDomain.NG.Service
             PostProcessActionResponse response = new PostProcessActionResponse();
             try
             {
-                InterviewManager intm = new InterviewManager();
+                PlanManager intm = new PlanManager();
 
                 ValidateTokenResponse result = intm.IsUserValidated(request.Version, request.Token);
                 if (result.UserId.Trim() != string.Empty)

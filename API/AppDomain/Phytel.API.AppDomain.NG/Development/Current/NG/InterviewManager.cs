@@ -9,7 +9,7 @@ using Phytel.API.AppDomain.NG.PlanSpecification;
 
 namespace Phytel.API.AppDomain.NG
 {
-    public class InterviewManager : ManagerBase
+    public class PlanManager : ManagerBase
     {
 
         public PostProcessActionResponse ProcessActionResults(PostProcessActionRequest request)
@@ -19,21 +19,22 @@ namespace Phytel.API.AppDomain.NG
                 PostProcessActionResponse response = new PostProcessActionResponse();
                 Program program = request.Program;
 
+                // create a responsibility chain to process each elemnt in the hierachy
                 Actions action = GetProcessingAction(program.Modules, request.ActionId);
 
-                // 1) ProcessAction(request);
-                SaveAction(action);
-
-                // 2) check for special logic with response in action
+                // 1) check for special logic with response in action
                 CheckPlanRules(action);
 
-                // 3) set completion status for this action based on agregate completion
+                // 2) set completion status for this action based on aggregate completion
                 action.Completed = PlanElementUtil.SetCompletionStatus(action.Steps);
                 action.Enabled = !action.Completed;
 
-                // 4) set visibility of actions after action processing.
+                // 3) set visibility of actions after action processing.
                 Module mod = PlanElementUtil.FindElementById(program.Modules, action.ModuleId);
                 PlanElementUtil.SetEnabledStatus(mod.Actions);
+
+                // 4) ProcessAction(request);
+                SaveAction(program);
 
                 return response;
             }
@@ -44,7 +45,7 @@ namespace Phytel.API.AppDomain.NG
             }
         }
 
-        private void SaveAction(Actions action)
+        private void SaveAction(Program action)
         {
             
         }

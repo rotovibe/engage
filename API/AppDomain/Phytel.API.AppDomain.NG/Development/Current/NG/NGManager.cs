@@ -357,9 +357,9 @@ namespace Phytel.API.AppDomain.NG
                         request.Version,
                         request.ContractNumber));
                 }
-                catch
+                catch(Exception ex)
                 {
-                    throw new ArgumentException("dataDomainResponse is coming back null.");
+                    throw new WebServiceException(ex.Message, ex.InnerException);
                 }
 
                 pResponse.Programs = dataDomainResponse.Programs;
