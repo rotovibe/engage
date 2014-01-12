@@ -219,6 +219,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
 
         public const string IncludeTimeProperty = "inctime";
         [BsonElement(IncludeTimeProperty)]
+        [BsonIgnoreIfNull(true)]
         public bool IncludeTime { get; set; }
 
         public const string QuestionProperty = "q";
@@ -227,6 +228,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
 
         public const string TProperty = "t";
         [BsonElement(TProperty)]
+        [BsonIgnoreIfNull(true)]
         public string Title { get; set; }
 
         public const string DescriptionProperty = "desc";
@@ -235,6 +237,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
 
         public const string NotesProperty = "notes";
         [BsonElement(NotesProperty)]
+        [BsonIgnoreIfNull(true)]
         public string Notes { get; set; }
 
         public const string TextProperty = "txt";
