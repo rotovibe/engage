@@ -466,7 +466,7 @@ namespace Phytel.API.AppDomain.NG
                             Order = resp.Program.Order,
                             Previous = resp.Program.Previous,
                             SpawnElement = GetSpawnElement(resp.Program),
-                             SourceId = resp.Program.SourceId,
+                            SourceId = resp.Program.SourceId,
                             Modules = resp.Program.Modules.Select(r => new Module
                             {
                                 Id = r.Id,
@@ -502,7 +502,7 @@ namespace Phytel.API.AppDomain.NG
                                     Order = a.Order,
                                     Previous = a.Previous,
                                     SpawnElement = GetSpawnElement(a),
-                                     SourceId = a.SourceId,
+                                    SourceId = a.SourceId,
                                     Objectives = a.Objectives.Select(x => new Objective
                                     {
                                         Id = x.Id.ToString(),
@@ -515,7 +515,7 @@ namespace Phytel.API.AppDomain.NG
                                         Description = s.Description,
                                         Ex = s.Ex,
                                         Id = s.Id,
-                                         SourceId = s.SourceId,
+                                        SourceId = s.SourceId,
                                         ActionId = s.ActionId,
                                         Notes = s.Notes,
                                         Question = s.Question,
@@ -530,6 +530,8 @@ namespace Phytel.API.AppDomain.NG
                                         Next = s.Next,
                                         Order = s.Order,
                                         Previous = s.Previous,
+                                        IncludeTime = s.IncludeTime,
+                                        SelectType = s.SelectType,
                                         Responses = GetResponses(s),
                                         SelectedResponseId = s.SelectedResponseId,
                                         SpawnElement = GetSpawnElement(s)
