@@ -270,7 +270,7 @@ namespace Phytel.API.DataDomain.Program
             }
             catch(Exception ex)
             {
-                throw ex;
+                throw new Exception("DataDomain:FindById():" + ex.Message, ex.InnerException);
             }
         }
 
