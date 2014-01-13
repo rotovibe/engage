@@ -20,6 +20,8 @@ namespace Phytel.API.DataDomain.Program.DTO
         public string Ex { get; set; }
         public int Status { get; set; }
         public int ControlType { get; set; }
+        public int SelectType { get; set; }
+        public bool IncludeTime { get; set; }
         public List<ResponseDetail> Responses { get; set; }
     }
 }

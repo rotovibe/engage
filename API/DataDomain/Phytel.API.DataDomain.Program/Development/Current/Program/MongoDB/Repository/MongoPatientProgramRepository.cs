@@ -252,6 +252,8 @@ namespace Phytel.API.DataDomain.Program
                                         ControlType = s.ControlType,
                                         Header = s.Header,
                                         SelectedResponseId = s.SelectedResponseId,
+                                        IncludeTime = s.IncludeTime,
+                                        SelectType = s.SelectType,
                                         Responses = GetResponses(s),
                                         SpawnElement = GetSpawnElement(s)
                                     }).ToList()
