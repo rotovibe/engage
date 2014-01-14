@@ -85,6 +85,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="CohortPatients_Test.cs" />
     <Compile Include="Patient_Flagged_Tests.cs" />
     <Compile Include="Patient_Priority_Tests.cs" />
     <Compile Include="Patient_Test.cs" />

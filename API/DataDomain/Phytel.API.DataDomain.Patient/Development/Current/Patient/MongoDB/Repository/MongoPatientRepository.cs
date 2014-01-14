@@ -8,8 +8,10 @@ using Phytel.API.Interface;
 using MongoDB.Driver;
 using MB = MongoDB.Driver.Builders;
 using MongoDB.Bson;
+using MongoDB.Driver.Linq;
 using Phytel.API.Common.Format;
-using Phytel.API.DataDomain.Patient.MongoDB.DTO;
+using Phytel.API.DataDomain.Patient.DTO;
+using MongoDB.Driver.Builders;
 
 namespace Phytel.API.DataDomain.Patient
 {
@@ -144,6 +146,150 @@ namespace Phytel.API.DataDomain.Patient
 
             var patientUsr = ctx.PatientUsers.Collection.Find(findQ).FirstOrDefault();
             return patientUsr;
+        }
+
+        public List<PatientData> Select(string query, string[] filterData, string querySort, int skip, int take)
+        {
+            /* Query without filter:
+             *  { sf: { $elemMatch : {'val':'528a66f4d4332317acc5095f', 'fld':'Problem', 'act':true}}}
+             * 
+             * Query with single field filter:
+             *  { $and : [ 
+             *      { sf: { $elemMatch : {'val':'528a66f4d4332317acc5095f', 'fld':'Problem', 'act':true}}}, 
+             *      { $or : [ 
+             *          { sf: { $elemMatch : {'val':/^<Single Field Text Here>/i, 'fld':'FN'}}}, 
+             *          { sf: { $elemMatch : {'val':/^<Single Field Text Here>/i, 'fld':'LN'}}}, 
+             *          { sf: { $elemMatch : {'val':/^<Single Field Text Here>/i, 'fld':'PN'}}} 
+             *          ] 
+             *      } 
+             *   ] 
+             * }
+             * 
+             * Query with double field filter:
+             *  { $and : [ 
+             *      { sf: { $elemMatch : {'val':'528a66f4d4332317acc5095f', 'fld':'Problem', 'act':true}}}, 
+             *      { $and : [ 
+             *          { $or : [ 
+             *              { sf : { $elemMatch: {'val':/^<First Field Text Here>/i, 'fld':'FN'}}}, 
+             *              { sf : { $elemMatch: {'val':/^<First Field Text Here>/i, 'fld':'PN'}}}
+             *            ]
+             *          },	
+             *          { sf: { $elemMatch : {'val':/^<Second Field Text Here>/i, 'fld':'LN'}}}
+             *        ] 
+             *      } 
+             *    ] 
+             *  }
+             * 
+            */
+
+            try
+            {
+                string jsonQuery = string.Empty;
+                string queryName = "TBD"; //Pass this into the method call
+                string redisKey = string.Empty;
+
+                if (filterData[0].Trim() == string.Empty)
+                {
+                    jsonQuery = query;
+                    redisKey = string.Format("{0}{1}{2}", queryName, skip, take);
+                }
+                else
+                {
+                    if (filterData[1].Trim() == string.Empty)
+                    {
+                        redisKey = string.Format("{0}{1}{2}{3}", queryName, filterData[0].Trim(), skip, take);
+
+                        jsonQuery = "{ $and : [ ";
+                        jsonQuery += string.Format("{0},  ", query);
+                        jsonQuery += "{ $or : [  ";
+                        jsonQuery += "{ sf: { $elemMatch : {'val':/^";
+                        jsonQuery += string.Format("{0}/i, ", filterData[0].Trim());
+                        jsonQuery += "'fld':'FN'}}},  ";
+                        jsonQuery += "{ sf: { $elemMatch : {'val':/^";
+                        jsonQuery += string.Format("{0}/i, ", filterData[0].Trim());
+                        jsonQuery += "'fld':'LN'}}},  ";
+                        jsonQuery += "{ sf: { $elemMatch : {'val':/^";
+                        jsonQuery += string.Format("{0}/i, ", filterData[0].Trim());
+                        jsonQuery += "'fld':'PN'}}}]}]}";
+                    }
+                    else
+                    {
+                        redisKey = string.Format("{0}{1}{2}{3}{4}", queryName, filterData[0].Trim(), filterData[1].Trim(), skip, take);
+
+                        jsonQuery = "{ $and : [ ";
+                        jsonQuery += string.Format("{0},  ", query);
+                        jsonQuery += "{ $and : [  ";
+                        jsonQuery += "{ $or : [  ";
+                        jsonQuery += "{ sf : { $elemMatch: {'val':/^";
+                        jsonQuery += string.Format("{0}/i, ", filterData[0].Trim());
+                        jsonQuery += "'fld':'FN'}}},  ";
+                        jsonQuery += "{ sf : { $elemMatch: {'val':/^";
+                        jsonQuery += string.Format("{0}/i, ", filterData[0].Trim());
+                        jsonQuery += "'fld':'PN'}}} ";
+                        jsonQuery += "]}, ";
+                        jsonQuery += "{ sf: { $elemMatch : {'val':/^";
+                        jsonQuery += string.Format("{0}/i, ", filterData[1].Trim());
+                        jsonQuery += "'fld':'LN'}}}]}]}}";
+                    }
+                }
+
+                string redisClientIPAddress = System.Configuration.ConfigurationManager.AppSettings.Get("RedisClientIPAddress");
+
+                List<PatientData> cohortPatientList = new List<PatientData>();
+                ServiceStack.Redis.RedisClient client = null;
+
+                //TODO: Uncomment the following 2 lines to turn Redis cache on
+                //if(string.IsNullOrEmpty(redisClientIPAddress) == false)
+                //    client = new ServiceStack.Redis.RedisClient(redisClientIPAddress);
+
+                //If the redisKey is already in Cache (REDIS) get it from there, else re-query
+                if (client != null && client.ContainsKey(redisKey))
+                {
+                    //go get cohortPatientList from Redis using the redisKey now
+                    cohortPatientList = client.Get<List<PatientData>>(redisKey);
+                }
+                else
+                {
+                    using (PatientMongoContext ctx = new PatientMongoContext(_dbName))
+                    {
+                        BsonDocument searchQuery = MongoDB.Bson.Serialization.BsonSerializer.Deserialize<BsonDocument>(jsonQuery);
+                        QueryDocument queryDoc = new QueryDocument(searchQuery);
+                        SortByBuilder builder = PatientsUtils.BuildSortByBuilder(querySort);
+
+                        List<MECohortPatientView> meCohortPatients = ctx.CohortPatientViews.Collection.Find(queryDoc)
+                            .SetSortOrder(builder).SetSkip(skip).SetLimit(take).Distinct().ToList();
+
+                        if (meCohortPatients != null && meCohortPatients.Count > 0)
+                        {
+                            meCohortPatients.ForEach(delegate(MECohortPatientView pat)
+                            {
+                                PatientData cohortPatient = new PatientData();
+                                cohortPatient.ID = pat.PatientID.ToString();
+
+                                foreach (SearchField sf in pat.SearchFields)
+                                {
+                                    cohortPatient.FirstName = ((SearchField)pat.SearchFields.Where(x => x.FieldName == "FN").FirstOrDefault()).Value;
+                                    cohortPatient.LastName = ((SearchField)pat.SearchFields.Where(x => x.FieldName == "LN").FirstOrDefault()).Value;
+                                    cohortPatient.Gender = ((SearchField)pat.SearchFields.Where(x => x.FieldName == "G").FirstOrDefault()).Value;
+                                    cohortPatient.DOB = CommonFormatter.FormatDateOfBirth(((SearchField)pat.SearchFields.Where(x => x.FieldName == "DOB").FirstOrDefault()).Value);
+                                    cohortPatient.MiddleName = ((SearchField)pat.SearchFields.Where(x => x.FieldName == "MN").FirstOrDefault()).Value;
+                                    cohortPatient.Suffix = ((SearchField)pat.SearchFields.Where(x => x.FieldName == "SFX").FirstOrDefault()).Value;
+                                    cohortPatient.PreferredName = ((SearchField)pat.SearchFields.Where(x => x.FieldName == "PN").FirstOrDefault()).Value;
+                                }
+                                cohortPatientList.Add(cohortPatient);
+                            });
+                        }
+                    }
+                    //put cohortPatientList into cache using redisKey now
+                    if (client != null)
+                        client.Set<List<PatientData>>(redisKey, cohortPatientList);
+                }
+                return cohortPatientList;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
 
         public Tuple<string, IEnumerable<object>> Select(Interface.APIExpression expression)

@@ -11,6 +11,7 @@ namespace Phytel.API.DataDomain.Patient
     public interface IPatientRepository<T> : IRepository<T>
     {
         GetPatientsDataResponse Select(string[] patientIds);
+        List<PatientData> Select(string query, string[] filterData, string querySort, int skip, int take);
         PutPatientPriorityResponse UpdatePriority(PutPatientPriorityRequest request);
         PutPatientFlaggedResponse UpdateFlagged(PutPatientFlaggedRequest request);
         object FindByID(string patientId, string userId);

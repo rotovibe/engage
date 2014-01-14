@@ -57,7 +57,6 @@ namespace Phytel.API.DataDomain.Patient.Service
             return response;
         }
 
-
         public PutPatientDataResponse Put(PutPatientDataRequest request)
         {
             PutPatientDataResponse response = new PutPatientDataResponse();
@@ -103,7 +102,24 @@ namespace Phytel.API.DataDomain.Patient.Service
                 CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
             }
             return response;
-        }  
+        }
+
+        public GetCohortPatientsDataResponse Get(GetCohortPatientsDataRequest request)
+        {
+            GetCohortPatientsDataResponse response = new GetCohortPatientsDataResponse();
+
+            try
+            {
+                response = PatientDataManager.GetCohortPatients(request);
+                response.Version = request.Version;
+            }
+            catch (Exception ex)
+            {
+                //TODO: Log this to the SQL database via ASE
+                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+            }
+            return response;
+        }
 
     }
 }

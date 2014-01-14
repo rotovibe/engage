@@ -1,21 +1,19 @@
+using DataDomain.LookUp.DTO;
+using Phytel.API.AppDomain.NG.DTO;
+using Phytel.API.DataDomain.Cohort.DTO;
+using Phytel.API.DataDomain.Patient.DTO;
+using ServiceStack.Service;
+using ServiceStack.ServiceClient.Web;
+using ServiceStack.ServiceHost;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
+using System.Linq;
 using System.Runtime.Serialization.Json;
 using System.Text;
 using System.Web.Hosting;
-using DataDomain.LookUp.DTO;
-using Phytel.API.AppDomain.NG.DTO;
-using Phytel.API.DataDomain.Cohort.DTO;
-using Phytel.API.DataDomain.CohortPatient.DTO;
-using ServiceStack.Service;
-using ServiceStack.ServiceClient.Web;
-using ServiceStack.ServiceHost;
-using Phytel.API.AppDomain.Audit.DTO;
-using System.Net;
 using DD = Phytel.API.DataDomain.Program.DTO;
-using System.Linq;
 
 namespace Phytel.API.AppDomain.NG
 {
@@ -27,7 +25,6 @@ namespace Phytel.API.AppDomain.NG
         protected static readonly string DDLookupServiceUrl = ConfigurationManager.AppSettings["DDLookupServiceUrl"];
         protected static readonly string DDProgramServiceUrl = ConfigurationManager.AppSettings["DDProgramServiceUrl"];
         protected static readonly string DDCohortServiceUrl = ConfigurationManager.AppSettings["DDCohortServiceUrl"];
-        protected static readonly string DDCohortPatientServiceUrl = ConfigurationManager.AppSettings["DDCohortPatientServiceUrl"];
         protected static readonly string DDPatientSystemUrl = ConfigurationManager.AppSettings["DDPatientSystemUrl"];
         #endregion
 
@@ -213,7 +210,7 @@ namespace Phytel.API.AppDomain.NG
 
                 // call cohort data domain
                 GetCohortPatientsDataResponse qResponse = client.Get<GetCohortPatientsDataResponse>(string.Format("{0}/{1}/{2}/{3}/CohortPatients/{4}?Skip={5}&Take={6}&SearchFilter={7}",
-                                                                                            DDCohortPatientServiceUrl,
+                                                                                            DDPatientServiceURL,
                                                                                             "NG",
                                                                                             request.Version,
                                                                                             request.ContractNumber,

@@ -70,6 +70,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="GetCohortPatientsDataRequest.cs" />
+    <Compile Include="GetCohortPatientsDataResponse.cs" />
     <Compile Include="GetPatientsDataRequest.cs" />
     <Compile Include="GetPatientsDataResponse.cs" />
     <Compile Include="PatientData.cs" />

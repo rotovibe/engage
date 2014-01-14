@@ -6,7 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 
-namespace Phytel.API.DataDomain.Patient.MongoDB.DTO
+namespace Phytel.API.DataDomain.Patient.DTO
 {
     [BsonIgnoreExtraElements(false)]
     [MongoIndex(Keys = new string[] { SearchFieldsProperty + "." + SearchField.FieldNameProperty, SearchFieldsProperty + "." + SearchField.ValueProperty, SearchFieldsProperty + "." + SearchField.ActiveProperty })]

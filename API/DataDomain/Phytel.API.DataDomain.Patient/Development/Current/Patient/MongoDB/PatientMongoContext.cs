@@ -1,5 +1,5 @@
 ﻿using MongoDB.Bson;
-using Phytel.API.DataDomain.Patient.MongoDB.DTO;
+using Phytel.API.DataDomain.Patient.DTO;
 using Phytel.Mongo.Linq;
 
 namespace Phytel.API.DataDomain.Patient
