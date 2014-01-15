@@ -462,79 +462,14 @@ namespace Phytel.API.AppDomain.NG
                             Next = resp.Program.Next,
                             Order = resp.Program.Order,
                             Previous = resp.Program.Previous,
+                            AssignBy = resp.Program.AssignBy,
+                            AssignDate = resp.Program.AssignDate,
+                            ElementState = resp.Program.ElementState,
                             SpawnElement = GetSpawnElement(resp.Program),
                             SourceId = resp.Program.SourceId,
-                            Modules = resp.Program.Modules.Select(r => new Module
-                            {
-                                Id = r.Id,
-                                ProgramId = r.ProgramId,
-                                Description = r.Description,
-                                Name = r.Name,
-                                Status = (int)r.Status,
-                                Completed = r.Completed,
-                                Enabled = r.Enabled,
-                                Next = r.Next,
-                                Order = r.Order,
-                                Previous = r.Previous,
-                                SpawnElement = GetSpawnElement(r),
-                                SourceId = r.SourceId,
-                                Objectives = r.Objectives.Select(o => new Objective
-                                {
-                                    Id = o.Id.ToString(),
-                                    Value = o.Value,
-                                    Status = (int)o.Status,
-                                    Unit = o.Unit
-                                }).ToList(),
-                                Actions = r.Actions.Select(a => new Actions
-                                {
-                                    CompletedBy = a.CompletedBy,
-                                    Description = a.Description,
-                                    Id = a.Id,
-                                    ModuleId = a.ModuleId,
-                                    Name = a.Name,
-                                    Status = (int)a.Status,
-                                    Completed = a.Completed,
-                                    Enabled = a.Enabled,
-                                    Next = a.Next,
-                                    Order = a.Order,
-                                    Previous = a.Previous,
-                                    SpawnElement = GetSpawnElement(a),
-                                    SourceId = a.SourceId,
-                                    Objectives = a.Objectives.Select(x => new Objective
-                                    {
-                                        Id = x.Id.ToString(),
-                                        Unit = x.Unit,
-                                        Status = (int)x.Status,
-                                        Value = x.Value
-                                    }).ToList(),
-                                    Steps = a.Steps.Select(s => new Step
-                                    {
-                                        Description = s.Description,
-                                        Ex = s.Ex,
-                                        Id = s.Id,
-                                        SourceId = s.SourceId,
-                                        ActionId = s.ActionId,
-                                        Notes = s.Notes,
-                                        Question = s.Question,
-                                        Status = (int)s.Status,
-                                        Title = s.Title,
-                                        Text = s.Text,
-                                        StepTypeId = s.StepTypeId,
-                                        Completed = s.Completed,
-                                        ControlType = s.ControlType,
-                                        Enabled = s.Enabled,
-                                        Header = s.Header,
-                                        Next = s.Next,
-                                        Order = s.Order,
-                                        Previous = s.Previous,
-                                        IncludeTime = s.IncludeTime,
-                                        SelectType = s.SelectType,
-                                        Responses = GetResponses(s),
-                                        SelectedResponseId = s.SelectedResponseId,
-                                        SpawnElement = GetSpawnElement(s)
-                                    }).ToList()
-                                }).ToList()
-                            }).ToList(),
+                             CompletedBy = resp.Program.CompletedBy,
+                              DateCompleted = resp.Program.DateCompleted,
+                            Modules = GetModuleInfo(resp),
                             ObjectivesInfo = resp.Program.ObjectivesInfo.Select(r => new Objective
                             {
                                 Id = r.Id.ToString(),
@@ -557,6 +492,105 @@ namespace Phytel.API.AppDomain.NG
             }
         }
 
+        private List<Module> GetModuleInfo(DD.GetProgramDetailsSummaryResponse resp)
+        {
+            return resp.Program.Modules.Select(r => new Module
+            {
+                Id = r.Id,
+                ProgramId = r.ProgramId,
+                Description = r.Description,
+                Name = r.Name,
+                Status = (int)r.Status,
+                Completed = r.Completed,
+                Enabled = r.Enabled,
+                Next = r.Next,
+                Order = r.Order,
+                Previous = r.Previous,
+                SpawnElement = GetSpawnElement(r),
+                SourceId = r.SourceId,
+                AssignBy = r.AssignBy,
+                AssignDate = r.AssignDate,
+                ElementState = r.ElementState,
+                CompletedBy = r.CompletedBy,
+                DateCompleted = r.DateCompleted,
+                Objectives = r.Objectives.Select(o => new Objective
+                {
+                    Id = o.Id.ToString(),
+                    Value = o.Value,
+                    Status = (int)o.Status,
+                    Unit = o.Unit
+                }).ToList(),
+                Actions = GetActionsInfo(r)
+            }).ToList();
+        }
+
+        private List<Actions> GetActionsInfo(DD.ModuleDetail r)
+        {
+            return r.Actions.Select(a => new Actions
+            {
+                CompletedBy = a.CompletedBy,
+                Description = a.Description,
+                Id = a.Id,
+                ModuleId = a.ModuleId,
+                Name = a.Name,
+                Status = (int)a.Status,
+                Completed = a.Completed,
+                Enabled = a.Enabled,
+                Next = a.Next,
+                Order = a.Order,
+                Previous = a.Previous,
+                SpawnElement = GetSpawnElement(a),
+                SourceId = a.SourceId,
+                AssignBy = a.AssignBy,
+                AssignDate = a.AssignDate,
+                ElementState = a.ElementState,
+                DateCompleted = a.DateCompleted,
+                Objectives = a.Objectives.Select(x => new Objective
+                {
+                    Id = x.Id.ToString(),
+                    Unit = x.Unit,
+                    Status = (int)x.Status,
+                    Value = x.Value
+                }).ToList(),
+                Steps = GetStepsInfo(a)
+            }).ToList();
+        }
+
+        private List<Step> GetStepsInfo(DD.ActionsDetail a)
+        {
+            return a.Steps.Select(s => new Step
+            {
+                Description = s.Description,
+                Ex = s.Ex,
+                Id = s.Id,
+                SourceId = s.SourceId,
+                ActionId = s.ActionId,
+                Notes = s.Notes,
+                Question = s.Question,
+                Status = (int)s.Status,
+                Title = s.Title,
+                Text = s.Text,
+                StepTypeId = s.StepTypeId,
+                Completed = s.Completed,
+                ControlType = s.ControlType,
+                Enabled = s.Enabled,
+                Header = s.Header,
+                Next = s.Next,
+                Order = s.Order,
+                Previous = s.Previous,
+                IncludeTime = s.IncludeTime,
+                SelectType = s.SelectType,
+                AssignBy = s.AssignBy,
+                AssignDate = s.AssignDate,
+                ElementState = s.ElementState,
+                Responses = GetResponses(s),
+                SelectedResponseId = s.SelectedResponseId,
+                CompletedBy = s.CompletedBy,
+                DateCompleted = s.DateCompleted,
+                SpawnElement = GetSpawnElement(s)
+            }).ToList();
+        }
+
         private List<Response> GetResponses(DD.StepsDetail s)
         {
             List<Response> resps = null;
@@ -577,16 +611,17 @@ namespace Phytel.API.AppDomain.NG
             return resps;
         }
 
-        private SpawnElement GetSpawnElement(DD.PlanElementDetail planElement)
+        private List<SpawnElement> GetSpawnElement(DD.PlanElementDetail planElement)
         {
-            SpawnElement spawn = null;
+            List<SpawnElement> spawn = new List<SpawnElement>();
+
             if (planElement.SpawnElement != null)
             {
-                spawn = new SpawnElement
-                                            {
-                                                ElementId = planElement.SpawnElement.ElementId,
-                                                ElementType = planElement.SpawnElement.ElementType
-                                            };
+                spawn = planElement.SpawnElement.Select(s => new SpawnElement
+                {
+                    ElementId = s.ElementId,
+                    ElementType = s.ElementType
+                }).ToList();
             }
             return spawn;
         }

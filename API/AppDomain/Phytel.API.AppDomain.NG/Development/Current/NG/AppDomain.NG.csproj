@@ -89,6 +89,12 @@
     <Compile Include="IUnitOfWork.cs" />
     <Compile Include="ManagerBase.cs" />
     <Compile Include="NGUtils.cs" />
+    <Compile Include="PlanCOR\ActionPlanProcessor.cs" />
+    <Compile Include="PlanCOR\StepPlanProcessor.cs" />
+    <Compile Include="PlanCOR\PlanElementEventArg.cs" />
+    <Compile Include="PlanCOR\PlanProcessor.cs" />
+    <Compile Include="PlanCOR\ModulePlanProcessor.cs" />
+    <Compile Include="PlanCOR\ProgramPlanProcessor.cs" />
     <Compile Include="PlanElementUtil.cs" />
     <Compile Include="PlanSpecification\CompletedSpecification.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Phytel.API.AppDomain.NG.DTO;
 using ServiceStack.ServiceClient.Web;
 using Phytel.API.AppDomain.NG.PlanSpecification;
+using Phytel.API.AppDomain.NG.PlanCOR;
 
 namespace Phytel.API.AppDomain.NG
 {
@@ -19,22 +20,25 @@ namespace Phytel.API.AppDomain.NG
                 PostProcessActionResponse response = new PostProcessActionResponse();
                 Program program = request.Program;
 
-                // create a responsibility chain to process each elemnt in the hierachy
+                //// create a responsibility chain to process each elemnt in the hierachy
+                ProgramPlanProcessor pChain = InitializeProgramChain();
+
                 Actions action = GetProcessingAction(program.Modules, request.ActionId);
+                pChain.ProcessRequest((IPlanElement)action, program, request.UserId);
 
-                // 1) check for special logic with response in action
-                CheckPlanRules(action);
+                // process modules
+                program.Modules.ForEach(m =>
+                {
+                    pChain.ProcessRequest((IPlanElement)m, program, request.UserId);
+                });
 
-                // 2) set completion status for this action based on aggregate completion
-                action.Completed = PlanElementUtil.SetCompletionStatus(action.Steps);
-                action.Enabled = !action.Completed;
-
-                // 3) set visibility of actions after action processing.
+                // set module settings
+                // 3) set enable/visibility of actions after action processing.
                 Module mod = PlanElementUtil.FindElementById(program.Modules, action.ModuleId);
-                PlanElementUtil.SetEnabledStatus(mod.Actions);
+                PlanElementUtil.SetEnabledStatusByPrevious(mod.Actions);
 
                 // 4) ProcessAction(request);
-                SaveAction(program);
+                //SaveAction(program);
 
                 return response;
             }
@@ -43,6 +47,19 @@ namespace Phytel.API.AppDomain.NG
                 Exception ae = new Exception(wse.ResponseBody, wse.InnerException);
                 throw ae;
             }
+        }
+
+        private ProgramPlanProcessor InitializeProgramChain()
+        {
+            ProgramPlanProcessor progProc = new ProgramPlanProcessor();
+            ModulePlanProcessor modProc = new ModulePlanProcessor();
+            ActionPlanProcessor actProc = new ActionPlanProcessor();
+            StepPlanProcessor stepProc = new StepPlanProcessor();
+            progProc.Successor = modProc;
+            modProc.Successor = actProc;
+            actProc.Successor = stepProc;
+
+            return progProc;
         }
 
         private void SaveAction(Program action)

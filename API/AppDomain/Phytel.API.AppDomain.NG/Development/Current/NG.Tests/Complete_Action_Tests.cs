@@ -7,16 +7,16 @@ using System.Collections.Generic;
 namespace Phytel.API.DataDomain.Patient.Service.Test
 {
     [TestClass]
-    public class Interview_Action_Processing_Tests
+    public class Complete_Action_Tests
     {
         [TestMethod]
-        public void Get_Program_Details_summary_for_display_Tests()
+        public void Complete_Single_Action_Tests()
         {
             string contractNumber = "InHealth001";
             string context = "NG";
             string priority = "3";
             string version = "v1";
-            string token = "52d32474d6a4850dac4a06d5";
+            string token = "52d58da0d6a4850e90240706";
             string programId = "52c5b8d71e601540b017e6d3";
             string patientId = "528f6dc2072ef708ecd90e56";
             string actionID = "52a0f33bd43323141c9eb274";
@@ -28,10 +28,10 @@ namespace Phytel.API.DataDomain.Patient.Service.Test
                 contractNumber,
                 patientId,
                 programId,
-                token), new PostProcessActionRequest() { Program = GenProgram(), ActionId = actionID });
+                token), new PostProcessActionRequest() { Program = GenTestProgram(), ActionId = actionID });
         }
 
-        private static Program GenProgram()
+        private static Program GenTestProgram()
         {
             Step s = new Step()
             {
@@ -69,6 +69,26 @@ namespace Phytel.API.DataDomain.Patient.Service.Test
                 }
             };
 
+            Step s2 = new Step()
+            {
+                Id = "52a641f1d433231824871234",
+                ActionId = "52a0f33bd43323141c9eb274",
+                ControlType = 1,
+                Description = "description",
+                Enabled = true,
+                Question = "Are you a spouse of an ABC Employee?",
+                Notes = "Example notes",
+                Completed = true,
+                Order = 2,
+                Status = 1,
+                StepTypeId = 7
+            };
+
+            List<SpawnElement> se = new List<SpawnElement>();
+            se.Add(new SpawnElement { ElementId = "aaaaf33bd43323141c9eb274", ElementType = 3 } );
+            se.Add(new SpawnElement { ElementId = "52a0a775fe7a5915485b8866", ElementType = 2 });
+            se.Add(new SpawnElement { ElementId = "52a0a775fe7a5915485b1212", ElementType = 2 });
+
             Actions act = new Actions
             {
                 Enabled = true,
@@ -78,15 +98,16 @@ namespace Phytel.API.DataDomain.Patient.Service.Test
                 Description = "act - Assess whether individual is eligible for the program",
                 CompletedBy = "Care Manager",
                 Text = "text",
-                Completed = true,
+                Completed = false,
                 Order = 1,
                 Status = 1,
-                Steps = new List<Step> { s,s1 }
+                SpawnElement =  se,
+                Steps = new List<Step> { s, s1, s2 }
             };
 
             Actions act1 = new Actions
             {
-                Enabled = false,
+                Enabled = true,
                 Id = "5555f33bd43323141c9eb275",
                 ModuleId = "52a0a775fe7a5915485bdfd1",
                 Name = "act1 Verify P4H Eligibility",
@@ -102,7 +123,7 @@ namespace Phytel.API.DataDomain.Patient.Service.Test
 
             Actions act2 = new Actions
             {
-                Enabled = true,
+                Enabled = false,
                 Id = "aaaaf33bd43323141c9eb274",
                 ModuleId = "52a0a775fe7a5915485bdfd1",
                 Name = "act2 Verify P4H Eligibility",
@@ -116,6 +137,9 @@ namespace Phytel.API.DataDomain.Patient.Service.Test
                 Steps = new List<Step> { s, s1 }
             };
 
+            List<SpawnElement> sem = new List<SpawnElement>();
+            sem.Add(new SpawnElement { ElementId = "9990a775fe7a5915485b1212", ElementType = 2 });
+
             Module mod = new Module
             {
                 Id = "52a0a775fe7a5915485bdfd1",
@@ -127,7 +151,47 @@ namespace Phytel.API.DataDomain.Patient.Service.Test
                 Completed = false,
                 Order = 1,
                 Status = 1,
-                Actions = new List<Actions> { act, act1, act2 }
+                Actions = new List<Actions> { act, act1, act2 },
+                SpawnElement = sem
+            };
+
+            Module mod1 = new Module
+            {
+                Id = "52a0a775fe7a5915485b8866",
+                Enabled = false,
+                ProgramId = "52c71fd7d6a4850a1cf69494",
+                Text = "Reduce the amount of crabs in the diet",
+                Description = "Reduce the amount of crabs in the diet",
+                Name = "Low Carb Diet Module",
+                Completed = false,
+                Order = 1,
+                Status = 1
+            };
+
+            Module mod2 = new Module
+            {
+                Id = "52a0a775fe7a5915485b1212",
+                Enabled = false,
+                ProgramId = "52c71fd7d6a4850a1cf69494",
+                Text = "Reduce the amount of crabs in the diet",
+                Description = "Reduce the amount of crabs in the diet",
+                Name = "Low Carb Diet Module",
+                Completed = false,
+                Order = 1,
+                Status = 1
+            };
+
+            Module mod3 = new Module
+            {
+                Id = "9990a775fe7a5915485b1212",
+                Enabled = false,
+                ProgramId = "52c71fd7d6a4850a1cf69494",
+                Text = "Testgen module number 3",
+                Description = "module number 3",
+                Name = "Low Carb Diet Module",
+                Completed = false,
+                Order = 1,
+                Status = 1
             };
 
             Program pMap = new Program()
@@ -136,7 +200,7 @@ namespace Phytel.API.DataDomain.Patient.Service.Test
                 Id = "52c71fd7d6a4850a1cf69494",
                 PatientId = "1234",
                 Text = "THIS IS THE PROGRAM",
-                Modules = new List<Module> { mod },
+                Modules = new List<Module> { mod, mod1, mod2, mod3 },
                 Completed = false,
                 Order = 1,
                 Status = 1

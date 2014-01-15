@@ -43,6 +43,12 @@ namespace Phytel.API.AppDomain.NG.DTO
         /// </summary>
         public string Previous { get; set; }
 
-        public SpawnElement SpawnElement { get; set; }
+        public string CompletedBy { get; set; }
+        public DateTime? DateCompleted { get; set; }
+        public int ElementState { get; set; }
+        public DateTime? AssignDate { get; set; }
+        public string AssignBy { get; set; }
+
+        public List<SpawnElement> SpawnElement { get; set; }
     }
 }

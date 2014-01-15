@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 namespace Phytel.API.AppDomain.NG.DTO
 {
     public interface IPlanElement
@@ -9,5 +10,10 @@ namespace Phytel.API.AppDomain.NG.DTO
         string Next { get; set; }
         int Order { get; set; }
         string Previous { get; set; }
+        string SourceId { get; set; }
+        int ElementState { get; set; }
+        DateTime? AssignDate { get; set; }
+        string AssignBy { get; set; }
+        List<SpawnElement> SpawnElement { get; set; }
     }
 }

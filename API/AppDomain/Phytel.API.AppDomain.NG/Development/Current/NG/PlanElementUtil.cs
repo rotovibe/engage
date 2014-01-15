@@ -10,6 +10,12 @@ namespace Phytel.API.AppDomain.NG
 {
     public static class PlanElementUtil
     {
+        /// <summary>
+        /// Checks to see if completion status count is equal to the list count. Return true if equal.
+        /// </summary>
+        /// <typeparam name="T">T</typeparam>
+        /// <param name="list">PlanElement list</param>
+        /// <returns></returns>
         public static bool SetCompletionStatus<T>(List<T> list)
         {
             bool result = false;
@@ -29,11 +35,12 @@ namespace Phytel.API.AppDomain.NG
             return mod;
         }
 
-        public static void SetEnabledStatus<T>(List<T> actions)
+        public static void SetEnabledStatusByPrevious<T>(List<T> actions)
         {
             actions.ForEach(x =>
             {
-                ((IPlanElement)Convert.ChangeType(x, typeof(T))).Enabled = true;
+                //// default to true
+                //((IPlanElement)Convert.ChangeType(x, typeof(T))).Enabled = true;
 
                 SetEnabledState(actions, x);
             });
@@ -51,6 +58,80 @@ namespace Phytel.API.AppDomain.NG
                     ((IPlanElement)x).Enabled = false;
                 }
             }
+        }
+
+        internal static void DisableCompleteButtonForAction(List<Step> list)
+        {
+            list.ForEach(s =>
+            {
+                if (s.StepTypeId.Equals(7))
+                {
+                    s.Enabled = false;
+                }
+            });
+        }
+
+        internal static void SpawnElementsInList(List<SpawnElement> list, Program program)
+        {
+            list.ForEach(r =>
+            {
+                SetEnabledStateRecursion(r.ElementId, program);
+            });
+        }
+
+        private static void SetEnabledStateRecursion(string p, Program program)
+        {
+            foreach (Module m in program.Modules)
+            {
+                if (m.Id.ToString().Equals(p))
+                {
+                    SetInitialProperties(m);
+                }
+                else
+                {
+                    FindIdInActions(p, m);
+                }
+            }
+        }
+
+        private static void FindIdInActions(string p, Module m)
+        {
+            if (m.Actions != null)
+            {
+                foreach (Actions a in m.Actions)
+                {
+                    if (a.Id.ToString().Equals(p))
+                    {
+                        SetInitialProperties(a);
+                    }
+                    else
+                    {
+                        FindIdInSteps(p, a);
+                    }
+                }
+            }
+        }
+
+        private static void FindIdInSteps(string p, Actions a)
+        {
+            if (a.Steps != null)
+            {
+                foreach (Step s in a.Steps)
+                {
+                    if (s.Id.ToString().Equals(p))
+                    {
+                        SetInitialProperties(s);
+                    }
+                }
+            }
+        }
+
+        private static void SetInitialProperties(IPlanElement m)
+        {
+            m.Enabled = true;
+            m.AssignDate = System.DateTime.UtcNow;
+            m.ElementState = 0;
+            m.AssignBy = "System";
         }
     }
 }

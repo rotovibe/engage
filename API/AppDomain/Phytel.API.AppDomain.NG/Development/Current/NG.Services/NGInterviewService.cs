@@ -7,6 +7,7 @@ using ServiceStack.ServiceHost;
 using Phytel.API.Common.Format;
 using Phytel.API.AppDomain.Security.DTO;
 using ServiceStack.ServiceClient.Web;
+using ServiceStack.ServiceInterface.Cors;
 
 namespace Phytel.API.AppDomain.NG.Service
 {

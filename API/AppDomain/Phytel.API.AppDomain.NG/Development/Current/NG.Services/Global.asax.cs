@@ -11,7 +11,10 @@ namespace Phytel.API.AppDomain.NG.Service
         {
 
             //Tell Service Stack the name of your application and where to find your web services
-            public NGAppHost() : base("Phytel NG Services", typeof(NGService).Assembly) { }
+            public NGAppHost()
+                : base("Phytel NG Services", typeof(NGService).Assembly)
+            {
+            }
 
             public override void Configure(Funq.Container container)
             {
@@ -21,13 +24,13 @@ namespace Phytel.API.AppDomain.NG.Service
                 SetConfig(new EndpointHostConfig { AllowJsonpRequests = true });
 
                 //Permit modern browsers to allow sending of any REST HTTP Method
-                SetConfig(new EndpointHostConfig
-                {
-                    GlobalResponseHeaders = { 
-                          //{"Access-Control-Allow-Origin", "*"},
-                    { "Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS" }, 
-                    { "Access-Control-Allow-Headers", "Content-Type" }, },
-                });
+                //SetConfig(new EndpointHostConfig
+                //{
+                //    GlobalResponseHeaders = { 
+                //    //{"Access-Control-Allow-Origin", "*"},
+                //    //{ "Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS" }, 
+                //    //{ "Access-Control-Allow-Headers", "Content-Type" }, },
+                //});
             }
         }
 
