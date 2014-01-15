@@ -36,6 +36,14 @@ namespace Phytel.API.Common
         Completed = 2
     }
 
+    public enum ElementState
+    {
+        Removed = -1,
+        NotStarted = 0,
+        Started = 1,
+        Completed = 2
+    }
+
     public enum GenericStatus
     {
         NotSet = 0,

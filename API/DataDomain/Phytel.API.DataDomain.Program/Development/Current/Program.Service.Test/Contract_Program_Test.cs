@@ -28,8 +28,8 @@ namespace Phytel.API.DataDomain.Program.Services.Test
         public void Put_ContractProgramWithPatient()
         {
             string url = "http://localhost:8888/Program";
-            string patientID = "528f6dc2072ef708ecd90ec6";
-            string ProgramID = "52c2f123fe7a5902a812fcde";
+            string patientID = "528f6dc2072ef708ecd91c79";
+            string ContractProgramID = "52c2f123fe7a5902a812fcde";
             string contractNumber = "InHealth001";
             string context = "NG";
             string version = "v1";
@@ -42,7 +42,7 @@ namespace Phytel.API.DataDomain.Program.Services.Test
                 version, 
                 contractNumber,
                 patientID,
-                ProgramID), new PutProgramToPatientRequest() as object );
+                ContractProgramID), new PutProgramToPatientRequest() as object );
 
             Assert.AreEqual(response.Outcome.Result, 0);
             //Assert.AreEqual(ProgramID, response.Program.ProgramID);

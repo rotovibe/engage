@@ -49,6 +49,9 @@ namespace Phytel.API.DataDomain.Program
                             AuthoredBy = cp.AuthoredBy,
                             Client = cp.Client,
                             ProgramState = Common.ProgramState.NotStarted,
+                            AssignBy = cp.AssignBy,
+                            AssignDate = cp.AssignDate,
+                            ElementState = cp.ElementState,
                             StartDate = System.DateTime.UtcNow, // utc time
                             EndDate = null,
                             GraduatedFlag = false,
@@ -91,6 +94,9 @@ namespace Phytel.API.DataDomain.Program
                             Previous = cp.Previous
                         };
 
+                        // update to new ids and their references
+                        DTOUtils.RecurseAndReplaceIds(patientProgDoc.Modules);
+
                         ctx.PatientPrograms.Collection.Insert(patientProgDoc);
 
                         // update programid in modules
@@ -98,6 +104,7 @@ namespace Phytel.API.DataDomain.Program
                         patientProgDoc.Modules.ForEach(s => s.ProgramId = patientProgDoc.Id);
                         ctx.PatientPrograms.Collection.Update(q, MB.Update.SetWrapped<List<Modules>>("modules", patientProgDoc.Modules));
 
+                        // hydrate response object
                         result.program = new ProgramInfo
                         {
                             Id = patientProgDoc.Id.ToString(),
@@ -177,6 +184,11 @@ namespace Phytel.API.DataDomain.Program
                             Order = cp.Order,
                             Previous = cp.Previous,
                             SourceId = cp.SourceId,
+                            AssignBy = cp.AssignBy,
+                            AssignDate = cp.AssignDate,
+                            ElementState = (int)cp.ElementState,
+                            CompletedBy = cp.CompletedBy,
+                            DateCompleted = cp.DateCompleted,
                             ObjectivesInfo = cp.ObjectivesInfo
                             .Select(r => new ObjectivesDetail
                             {
@@ -200,6 +212,11 @@ namespace Phytel.API.DataDomain.Program
                                 Order = r.Order,
                                 SpawnElement = GetSpawnElement(r),
                                 SourceId = r.SourceId,
+                                AssignBy = r.AssignBy,
+                                AssignDate = r.AssignDate,
+                                ElementState = (int)r.ElementState,
+                                CompletedBy = r.CompletedBy,
+                                DateCompleted = r.DateCompleted,
                                 Objectives = r.Objectives
                                 .Select(o => new ObjectivesDetail
                                 {
@@ -223,6 +240,10 @@ namespace Phytel.API.DataDomain.Program
                                     Order = a.Order,
                                     SpawnElement = GetSpawnElement(a),
                                     SourceId = a.SourceId,
+                                    AssignBy = a.AssignBy,
+                                    AssignDate = a.AssignDate,
+                                    ElementState = (int)a.ElementState,
+                                    DateCompleted = a.DateCompleted,
                                     Objectives = a.Objectives
                                     .Select(x => new ObjectivesDetail
                                     {
@@ -254,6 +275,11 @@ namespace Phytel.API.DataDomain.Program
                                         SelectedResponseId = s.SelectedResponseId,
                                         IncludeTime = s.IncludeTime,
                                         SelectType = s.SelectType,
+                                        AssignBy = s.AssignBy,
+                                        AssignDate = s.AssignDate,
+                                        ElementState = (int)s.ElementState,
+                                        CompletedBy = s.CompletedBy,
+                                        DateCompleted = s.DateCompleted,
                                         Responses = GetResponses(s),
                                         SpawnElement = GetSpawnElement(s)
                                     }).ToList()
@@ -274,16 +300,19 @@ namespace Phytel.API.DataDomain.Program
             }
         }
 
-        private static SpawnElementDetail GetSpawnElement(MEPlanElement a)
+        private static List<SpawnElementDetail> GetSpawnElement(MEPlanElement a)
         {
-            SpawnElementDetail spawnDetail = null;
+            List<SpawnElementDetail> spawn = new List<SpawnElementDetail>();
 
             if (a.Spawn != null)
             {
-                spawnDetail = new SpawnElementDetail { ElementId = a.Spawn.SpawnId.ToString(), ElementType = a.Spawn.Type };
+                spawn = a.Spawn.Select(s => new SpawnElementDetail
+                {
+                    ElementId = s.SpawnId.ToString(),
+                    ElementType = s.Type
+                }).ToList();
             }
-
-            return spawnDetail;
+            return spawn;
         }
 
         private List<ResponseDetail> GetResponses(StepsInfo step)
