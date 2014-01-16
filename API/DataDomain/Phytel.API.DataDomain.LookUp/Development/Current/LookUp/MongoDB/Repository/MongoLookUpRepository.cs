@@ -39,22 +39,22 @@ namespace Phytel.API.DataDomain.LookUp
             throw new NotImplementedException();
         }
 
-        public object InsertAll(List<T> entities)
+        public object InsertAll(List<object> entities)
         {
             throw new NotImplementedException();
         }
 
-        public void Delete(T entity)
+        public void Delete(object entity)
         {
             throw new NotImplementedException();
         }
 
-        public void DeleteAll(List<T> entities)
+        public void DeleteAll(List<object> entities)
         {
             throw new NotImplementedException();
         }
 
-        public object Update(T entity)
+        public object Update(object entity)
         {
             throw new NotImplementedException();
         }

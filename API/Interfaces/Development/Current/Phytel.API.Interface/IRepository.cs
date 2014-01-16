@@ -8,9 +8,9 @@ namespace Phytel.API.Interface
     public interface IRepository<T>
     {
         object Insert(object newEntity);
-        object InsertAll(List<T> entities);
-        void Delete(T entity);
-        void DeleteAll(List<T> entities);
+        object InsertAll(List<object> entities);
+        void Delete(object entity);
+        void DeleteAll(List<object> entities);
         object FindByID(string entityID);
         Tuple<string, IEnumerable<object>> Select(APIExpression expression);
         IEnumerable<object> SelectAll();

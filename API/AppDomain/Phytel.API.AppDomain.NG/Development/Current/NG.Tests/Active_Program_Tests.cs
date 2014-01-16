@@ -38,7 +38,7 @@ namespace Phytel.API.DataDomain.Patient.Service.Test
             string context = "NG";
             string priority = "3";
             string version = "v1";
-            string token = "52cc3dcbd6a4850cf4c0ce58";
+            string token = "52d6e1e5231e250bb89e1c3c";
             //string programId = "52b6304afe7a590654430378";
             string programId = "52b6304afe7a590654430378";  //valid one
             //string programId = "52b6304afe7a590654431111";
