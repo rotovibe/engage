@@ -70,6 +70,26 @@ namespace Phytel.API.DataDomain.Program
             return response;
         }
 
+        public static PutProgramActionProcessingResponse PutProgramActionUpdate(PutProgramActionProcessingRequest request)
+        {
+            try
+            {
+                PutProgramActionProcessingResponse response = new PutProgramActionProcessingResponse();
+
+                IProgramRepository<PutProgramActionProcessingResponse> patProgRepo =
+                    Phytel.API.DataDomain.Program.ProgramRepositoryFactory<PutProgramActionProcessingResponse>
+                    .GetPatientProgramRepository(request.ContractNumber, request.Context);
+
+                response.program = (ProgramDetail)patProgRepo.Update((object)request);
+
+                return response;
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
         private static PutProgramToPatientResponse FormatExceptionResponse(PutProgramToPatientResponse response, string reason, string errorcode)
         {
             response.Status = new ResponseStatus(errorcode, reason);

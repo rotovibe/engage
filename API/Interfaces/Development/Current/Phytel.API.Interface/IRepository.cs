@@ -14,7 +14,7 @@ namespace Phytel.API.Interface
         object FindByID(string entityID);
         Tuple<string, IEnumerable<object>> Select(APIExpression expression);
         IEnumerable<object> SelectAll();
-        object Update(T entity);
+        object Update(object entity);
         void CacheByID(List<string> entityIDs);
     }
 

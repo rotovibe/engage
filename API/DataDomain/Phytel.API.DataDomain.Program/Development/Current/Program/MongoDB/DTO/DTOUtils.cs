@@ -1,4 +1,6 @@
 ﻿using MongoDB.Bson;
+using Phytel.API.Common;
+using Phytel.API.DataDomain.Program.DTO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -265,6 +267,234 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
                 list.Add(id, newId);
             }
             return newId;
+        }
+
+        internal static List<MESpawnElement> GetSpawnElements(List<Program.DTO.SpawnElementDetail> list)
+        {
+            try
+            {
+                List<MESpawnElement> spawnList = null;
+                if (list != null)
+                {
+                    spawnList = new List<MESpawnElement>();
+
+                    list.ForEach(s =>
+                    {
+                        spawnList.Add(
+                        new MESpawnElement
+                        {
+                            SpawnId = ObjectId.Parse(s.ElementId),
+                            Type = s.ElementType
+                        });
+                    });
+                }
+                return spawnList;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("DataDomain:GetSpawnElements():" + ex.Message, ex.InnerException);
+            }
+        }
+
+        internal static List<ActionsInfo> GetActionElements(List<Program.DTO.ActionsDetail> list)
+        {
+            try
+            {
+                List<ActionsInfo> acts = null;
+                if (list != null)
+                {
+                    acts = new List<ActionsInfo>();
+
+                    list.ForEach(a =>
+                    {
+                        acts.Add(
+                        new ActionsInfo
+                        {
+                            Id = ObjectId.Parse(a.Id),
+                            ModuleId = ObjectId.Parse(a.ModuleId),
+                            Steps = GetStepsInfo(a.Steps),
+                            AssignBy = a.AssignBy,
+                            AssignDate = a.AssignDate,
+                            Completed = a.Completed,
+                            CompletedBy = a.CompletedBy,
+                            DateCompleted = a.DateCompleted,
+                            Description = a.Description,
+                            ElementState = (ElementState)a.ElementState,
+                            Enabled = a.Enabled,
+                            Name = a.Name,
+                            Next = a.Next,
+                            Objectives = GetObjectives(a.Objectives),
+                            Order = a.Order,
+                            Previous = a.Previous,
+                            SourceId = a.SourceId,
+                            Spawn = GetSpawnElements(a.SpawnElement),
+                            Status = (Status)a.Status
+                        });
+                    });
+                }
+                return acts;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("DataDomain:GetActionElements():" + ex.Message, ex.InnerException);
+            }
+        }
+
+        private static List<StepsInfo> GetStepsInfo(List<Program.DTO.StepsDetail> list)
+        {
+            try
+            {
+                List<StepsInfo> steps = null;
+                if (list != null)
+                {
+                    steps = new List<StepsInfo>();
+
+                    list.ForEach(st =>
+                    {
+                        steps.Add(
+                        new StepsInfo
+                        {
+                            Id = ObjectId.Parse(st.Id),
+                            ActionId = ObjectId.Parse(st.ActionId),
+                            AssignBy = st.AssignBy,
+                            AssignDate = st.AssignDate,
+                            Completed = st.Completed,
+                            CompletedBy = st.CompletedBy,
+                            ControlType = st.ControlType,
+                            DateCompleted = st.DateCompleted,
+                            Description = st.Description,
+                            ElementState = (ElementState)st.ElementState,
+                            Enabled = st.Enabled,
+                            Ex = st.Ex,
+                            Header = st.Header,
+                            IncludeTime = st.IncludeTime,
+                            Next = st.Next,
+                            Notes = st.Notes,
+                            Order = st.Order,
+                            Previous = st.Previous,
+                            Question = st.Question,
+                            SelectedResponseId = st.SelectedResponseId,
+                            SelectType = st.SelectType,
+                            SourceId = st.SourceId,
+                            Status = (Status)st.Status,
+                            StepTypeId = st.StepTypeId,
+                            Text = st.Text,
+                            Title = st.Title,
+                            Spawn = GetSpawnElements(st.SpawnElement),
+                            Responses = GetResponses(st.Responses)
+                        });
+                    });
+                }
+                return steps;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("DataDomain:GetStepsInfo():" + ex.Message, ex.InnerException);
+            }
+        }
+
+        private static List<ResponseInfo> GetResponses(List<Program.DTO.ResponseDetail> list)
+        {
+            try
+            {
+                List<ResponseInfo> rs = null;
+                if (list != null)
+                {
+                    rs = new List<ResponseInfo>();
+
+                    list.ForEach(r =>
+                        {
+                            rs.Add(
+                                new ResponseInfo
+                                {
+                                    StepId = ObjectId.Parse(r.StepId),
+                                    NextStepId = ObjectId.Parse(r.NextStepId),
+                                    Id = ObjectId.Parse(r.Id),
+                                    Nominal = r.Nominal,
+                                    Order = r.Order,
+                                    Required = r.Required,
+                                    Text = r.Text,
+                                    Value = r.Value
+                                });
+                        });
+                }
+                return rs;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("DataDomain:GetResponses():" + ex.Message, ex.InnerException);
+            }
+        }
+
+        public static List<ObjectivesInfo> GetObjectives(List<Program.DTO.ObjectivesDetail> list)
+        {
+            try
+            {
+                List<ObjectivesInfo> objs = null;
+                if (list != null)
+                {
+                    objs = new List<ObjectivesInfo>();
+
+                    list.ForEach(o =>
+                    {
+                        objs.Add(new ObjectivesInfo
+                        {
+                            Id = ObjectId.Parse(o.Id),
+                            Status = (Status)o.Status,
+                            Unit = o.Unit,
+                            Value = o.Value
+                        });
+                    });
+                }
+                return objs;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("DataDomain:GetObjectives():" + ex.Message, ex.InnerException);
+            }
+        }
+
+        public static List<Modules> CloneAppDomainModules(List<ModuleDetail> prg)
+        {
+            try
+            {
+                List<Modules> mods = null;
+                if (prg != null)
+                {
+                    mods = new List<Modules>();
+                    prg.ForEach(m =>
+                    {
+                        mods.Add(
+                        new Modules
+                        {
+                            Id = ObjectId.Parse(m.Id),
+                            DateCompleted = m.DateCompleted,
+                            Next = m.Next,
+                            Previous = m.Previous,
+                            Spawn = (m.SpawnElement != null) ? DTOUtils.GetSpawnElements(m.SpawnElement) : null,
+                            Actions = (m.Actions != null) ? DTOUtils.GetActionElements(m.Actions) : null,
+                            AssignBy = m.AssignBy,
+                            AssignDate = m.AssignDate,
+                            Completed = m.Completed,
+                            CompletedBy = m.CompletedBy,
+                            Description = m.Description,
+                            ElementState = (ElementState)m.ElementState,
+                            Enabled = m.Enabled,
+                            Name = m.Name,
+                            Objectives = (m.Objectives != null) ? DTOUtils.GetObjectives(m.Objectives) : null,
+                            Order = m.Order,
+                            ProgramId = ObjectId.Parse(m.ProgramId),
+                            SourceId = m.SourceId,
+                            Status = (Status)m.Status
+                        });
+                    });
+                }
+                return mods;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("DataDomain:CloneAppDomainModules():" + ex.Message, ex.InnerException);
+            }
         }
     }
 }

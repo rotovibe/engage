@@ -7,7 +7,6 @@ namespace Phytel.API.DataDomain.Program.DTO
 {
     public class StepsDetail : PlanElementDetail
     {
-        public string Id { get; set; }
         public string ActionId { get; set; }
         public string SelectedResponseId { get; set; }
         public int StepTypeId { get; set; }

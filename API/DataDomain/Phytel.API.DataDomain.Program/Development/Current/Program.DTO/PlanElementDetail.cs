@@ -19,7 +19,6 @@ namespace Phytel.API.DataDomain.Program.DTO
         public string AssignBy { get; set; }
         public string CompletedBy { get; set; }
         public DateTime? DateCompleted { get; set; }
-
         public List<SpawnElementDetail> SpawnElement { get; set; }
     }
 

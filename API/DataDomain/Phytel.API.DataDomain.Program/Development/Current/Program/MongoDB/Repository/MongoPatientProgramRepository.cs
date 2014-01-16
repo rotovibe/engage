@@ -10,6 +10,7 @@ using MB = MongoDB.Driver.Builders;
 using MongoDB.Bson;
 using Phytel.API.AppDomain.Program;
 using Phytel.API.DataDomain.Program.MongoDB.DTO;
+using Phytel.API.Common;
 
 namespace Phytel.API.DataDomain.Program
 {
@@ -458,9 +459,58 @@ namespace Phytel.API.DataDomain.Program
             throw new NotImplementedException();
         }
 
-        public object Update(T entity)
+        public object Update(object entity)
         {
-            throw new NotImplementedException();
+            PutProgramActionProcessingRequest p = (PutProgramActionProcessingRequest)entity;
+
+            try
+            {
+                ProgramDetail pg = p.Program;
+                using (ProgramMongoContext ctx = new ProgramMongoContext(_dbName))
+                {
+                    var q = MB.Query<MEPatientProgram>.EQ(b => b.Id, ObjectId.Parse(p.ProgramId));
+                    List<Modules> mods = (pg.Modules != null) ? DTOUtils.CloneAppDomainModules(pg.Modules) : null;
+
+                    var uv = new List<MB.UpdateBuilder>();
+                    uv.Add(MB.Update.Set(MEPatientProgram.CompletedByProperty, pg.Completed));
+                    uv.Add(MB.Update.Set(MEPatientProgram.StateProperty, (ElementState)pg.ElementState));
+                    uv.Add(MB.Update.Set(MEPatientProgram.EnabledProperty, pg.Enabled));
+                    uv.Add(MB.Update.Set(MEPatientProgram.OrderProperty, pg.Order));
+                    uv.Add(MB.Update.Set(MEPatientProgram.ProgramStateProperty, (ProgramState)pg.ProgramState));
+                    uv.Add(MB.Update.Set(MEPatientProgram.StatusProperty, (Status)pg.Status));
+                    uv.Add(MB.Update.Set(MEPatientProgram.LastUpdatedOnProperty, System.DateTime.UtcNow));
+                    uv.Add(MB.Update.Set(MEPatientProgram.UpdatedByProperty, p.UserId));
+                    if (pg.AssignBy != null) { uv.Add(MB.Update.Set(MEPatientProgram.AssignByProperty, pg.AssignBy)); }
+                    if (pg.AssignDate != null) { uv.Add(MB.Update.Set(MEPatientProgram.AssignDateProperty, pg.AssignDate)); }
+                    if (pg.Client != null) { uv.Add(MB.Update.Set(MEPatientProgram.ClientProperty, pg.Client)); }
+                    if (pg.CompletedBy != null) { uv.Add(MB.Update.Set(MEPatientProgram.CompletedByProperty, pg.CompletedBy)); }
+                    if (pg.ContractProgramId != null) { uv.Add(MB.Update.Set(MEPatientProgram.ContractProgramIdProperty, ObjectId.Parse(pg.ContractProgramId))); }
+                    if (pg.DateCompleted != null) { uv.Add(MB.Update.Set(MEPatientProgram.DateCompletedProperty, pg.DateCompleted)); }
+                    if (pg.Description != null) { uv.Add(MB.Update.Set(MEPatientProgram.DescriptionProperty, pg.Description)); }
+                    if (pg.EligibilityEndDate != null) { uv.Add(MB.Update.Set(MEPatientProgram.EligibilityEndDateProperty, pg.EligibilityEndDate)); }
+                    if (pg.EligibilityRequirements != null) { uv.Add(MB.Update.Set(MEPatientProgram.EligibilityRequirementsProperty, pg.EligibilityRequirements)); }
+                    if (pg.EligibilityStartDate != null) { uv.Add(MB.Update.Set(MEPatientProgram.EligibilityStartDateProperty, pg.EligibilityStartDate)); }
+                    if (pg.EndDate != null) { uv.Add(MB.Update.Set(MEPatientProgram.EndDateProperty, pg.EndDate)); }
+                    if (pg.Name != null) { uv.Add(MB.Update.Set(MEPatientProgram.NameProperty, pg.Name)); }
+                    if (pg.Next != null) { uv.Add(MB.Update.Set(MEPatientProgram.NextProperty, pg.Next)); }
+                    if (pg.Previous != null) { uv.Add(MB.Update.Set(MEPatientProgram.PreviousProperty, pg.Previous)); }
+                    if (pg.ShortName != null) { uv.Add(MB.Update.Set(MEPatientProgram.ShortNameProperty, pg.ShortName)); }
+                    if (pg.SourceId != null) { uv.Add(MB.Update.Set(MEPatientProgram.SourceIdProperty, pg.SourceId)); }
+                    if (pg.StartDate != null) { uv.Add(MB.Update.Set(MEPatientProgram.StartDateProperty, pg.StartDate)); }
+                    if (pg.Version != null) { uv.Add(MB.Update.Set(MEPatientProgram.VersionProperty, pg.Version)); }
+                    if (mods != null) { uv.Add(MB.Update.SetWrapped<List<Modules>>(MEPatientProgram.ModulesProperty, mods)); }
+                    if (pg.SpawnElement != null) { uv.Add(MB.Update.SetWrapped<List<MESpawnElement>>(MEPatientProgram.SpawnProperty, DTOUtils.GetSpawnElements(pg.SpawnElement))); }
+                    if (pg.ObjectivesInfo != null) { uv.Add(MB.Update.SetWrapped<List<ObjectivesInfo>>(MEPatientProgram.ObjectivesInfoProperty, DTOUtils.GetObjectives(pg.ObjectivesInfo))); }
+
+                    IMongoUpdate update = MB.Update.Combine(uv);
+                    ctx.PatientPrograms.Collection.Update(q, update);
+                }
+                return pg;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("DataDomain:Update():" + ex.Message, ex.InnerException);
+            }
         }
 
         public void CacheByID(List<string> entityIDs)

@@ -113,7 +113,7 @@ namespace Phytel.API.DataDomain.Program
             throw new NotImplementedException();
         }
 
-        public object Update(T entity)
+        public object Update(object entity)
         {
             throw new NotImplementedException();
         }
