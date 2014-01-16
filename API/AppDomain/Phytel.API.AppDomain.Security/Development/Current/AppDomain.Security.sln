@@ -20,13 +20,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Phytel.Mongo", "..\..\..\..
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PhytelServices", "..\..\..\..\..\..\Shared\PhytelServices\Development\Current\PhytelServices\PhytelServices.csproj", "{D790F618-438B-4C39-ABE5-1346122273AC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.Patient.DTO", "..\..\..\..\DataDomain\Phytel.API.DataDomain.Patient\Development\Current\Patient.DTOs\DataDomain.Patient.DTO.csproj", "{1B3148A8-FB57-4461-91BC-F1CD38A013B6}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Phytel.API.Common", "..\..\..\..\Common\Phytel.API.Common\Development\Current\Phytel.API.Common.csproj", "{25CF3C3F-221F-4A49-B5EF-A8A5FCF9A5BA}"
 EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 11
+		SccNumberOfProjects = 10
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = http://hillstfs2013:8080/tfs/phytel
 		SccLocalPath0 = .
@@ -57,14 +55,10 @@ Global
 		SccProjectTopLevelParentUniqueName8 = AppDomain.Security.sln
 		SccProjectName8 = ../../../../../../Shared/PhytelServices/Development/Current/PhytelServices
 		SccLocalPath8 = ..\\..\\..\\..\\..\\..\\Shared\\PhytelServices\\Development\\Current\\PhytelServices
-		SccProjectUniqueName9 = ..\\..\\..\\..\\DataDomain\\Phytel.API.DataDomain.Patient\\Development\\Current\\Patient.DTOs\\DataDomain.Patient.DTO.csproj
+		SccProjectUniqueName9 = ..\\..\\..\\..\\Common\\Phytel.API.Common\\Development\\Current\\Phytel.API.Common.csproj
 		SccProjectTopLevelParentUniqueName9 = AppDomain.Security.sln
-		SccProjectName9 = ../../../../DataDomain/Phytel.API.DataDomain.Patient/Development/Current/Patient.DTOs
-		SccLocalPath9 = ..\\..\\..\\..\\DataDomain\\Phytel.API.DataDomain.Patient\\Development\\Current\\Patient.DTOs
-		SccProjectUniqueName10 = ..\\..\\..\\..\\Common\\Phytel.API.Common\\Development\\Current\\Phytel.API.Common.csproj
-		SccProjectTopLevelParentUniqueName10 = AppDomain.Security.sln
-		SccProjectName10 = ../../../../Common/Phytel.API.Common/Development/Current
-		SccLocalPath10 = ..\\..\\..\\..\\Common\\Phytel.API.Common\\Development\\Current
+		SccProjectName9 = ../../../../Common/Phytel.API.Common/Development/Current
+		SccLocalPath9 = ..\\..\\..\\..\\Common\\Phytel.API.Common\\Development\\Current
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -103,10 +97,6 @@ Global
 		{D790F618-438B-4C39-ABE5-1346122273AC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D790F618-438B-4C39-ABE5-1346122273AC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D790F618-438B-4C39-ABE5-1346122273AC}.Release|Any CPU.Build.0 = Release|Any CPU
-		{1B3148A8-FB57-4461-91BC-F1CD38A013B6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{1B3148A8-FB57-4461-91BC-F1CD38A013B6}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{1B3148A8-FB57-4461-91BC-F1CD38A013B6}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{1B3148A8-FB57-4461-91BC-F1CD38A013B6}.Release|Any CPU.Build.0 = Release|Any CPU
 		{25CF3C3F-221F-4A49-B5EF-A8A5FCF9A5BA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{25CF3C3F-221F-4A49-B5EF-A8A5FCF9A5BA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{25CF3C3F-221F-4A49-B5EF-A8A5FCF9A5BA}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -119,7 +109,6 @@ Global
 		{ABE948FB-247E-4955-B3AB-B7C93E10A542} = {C8D1FDB6-CE7C-446E-9AC0-8A37C493CDFB}
 		{7C9E786C-E4F7-4382-BDE4-8DBF980EA013} = {C8D1FDB6-CE7C-446E-9AC0-8A37C493CDFB}
 		{D790F618-438B-4C39-ABE5-1346122273AC} = {C8D1FDB6-CE7C-446E-9AC0-8A37C493CDFB}
-		{1B3148A8-FB57-4461-91BC-F1CD38A013B6} = {C8D1FDB6-CE7C-446E-9AC0-8A37C493CDFB}
 		{25CF3C3F-221F-4A49-B5EF-A8A5FCF9A5BA} = {C8D1FDB6-CE7C-446E-9AC0-8A37C493CDFB}
 	EndGlobalSection
 EndGlobal
