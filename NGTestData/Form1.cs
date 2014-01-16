@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Data.SqlClient;
-using Phytel.API.DataDomain.Patient.DTO;
+using Phytel.API.DataDomain.Patient.MongoDB.DTO;
 using Phytel.API.DataDomain.LookUp.DTO;
 using Phytel.API.DataDomain.PatientProblem.DTO;
 using Phytel.API.DataDomain.CohortPatient.DTO;
@@ -31,7 +31,7 @@ namespace NGTestData
 
             List<MEPatient> patients = new List<MEPatient>();
             List<MEPatientProblem> patientProblems = new List<MEPatientProblem>();
-            List<MECohortPatientView> cohortPatients = new List<MECohortPatientView>();
+            List<Phytel.API.DataDomain.CohortPatient.DTO.MECohortPatientView> cohortPatients = new List<Phytel.API.DataDomain.CohortPatient.DTO.MECohortPatientView>();
             List<MEPatientSystem> patientSystems = new List<MEPatientSystem>();
 
             List<MEProblem> problems = null;
@@ -64,7 +64,7 @@ namespace NGTestData
 
                 string patientSystemID = dr["ID"].ToString();
 
-                Phytel.API.DataDomain.Patient.DTO.MEPatient patient = new Phytel.API.DataDomain.Patient.DTO.MEPatient
+                Phytel.API.DataDomain.Patient.MongoDB.DTO.MEPatient patient = new Phytel.API.DataDomain.Patient.MongoDB.DTO.MEPatient
                     {
                         DisplayPatientSystemID = null,
                         FirstName = dr["FirstName"].ToString(),
