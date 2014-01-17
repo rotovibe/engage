@@ -551,12 +551,34 @@ namespace Phytel.API.AppDomain.NG
                             Required = r.Required,
                             StepId = r.StepId,
                             Text = r.Text,
-                            Value = r.Value
+                            Value = r.Value,
+                            SpawnElement = GetDDSpawnElement(r.SpawnElement)
                         };
                         rd.Add(rdi);
                     });
                 }
                 return rd;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("AppDomain:GetADResponses():" + ex.Message, ex.InnerException);
+            }
+        }
+
+        private static SpawnElementDetail GetDDSpawnElement(SpawnElement s)
+        {
+            try
+            {
+                SpawnElementDetail sed = null;
+                if (s != null)
+                {
+                    sed = new SpawnElementDetail
+                    {
+                        ElementType = s.ElementType,
+                        ElementId = s.ElementId
+                    };
+                }
+                return sed;
             }
             catch (Exception ex)
             {
@@ -582,12 +604,34 @@ namespace Phytel.API.AppDomain.NG
                             Required = r.Required,
                             StepId = r.StepId,
                             Text = r.Text,
-                            Value = r.Value
+                            Value = r.Value,
+                            SpawnElement = GetADSpawnElement(r.SpawnElement)
                         };
                         rd.Add(rdi);
                     });
                 }
                 return rd;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("AppDomain:GetADResponses():" + ex.Message, ex.InnerException);
+            }
+        }
+
+        private static SpawnElement GetADSpawnElement(SpawnElementDetail s)
+        {
+            try
+            {
+                SpawnElement se = null;
+                if (s != null)
+                {
+                    se = new SpawnElement
+                    {
+                        ElementId = s.ElementId,
+                        ElementType = s.ElementType
+                    };
+                }
+                return se;
             }
             catch (Exception ex)
             {

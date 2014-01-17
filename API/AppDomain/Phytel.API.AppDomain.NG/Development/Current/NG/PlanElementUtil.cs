@@ -37,46 +37,87 @@ namespace Phytel.API.AppDomain.NG
 
         public static void SetEnabledStatusByPrevious<T>(List<T> actions)
         {
-            actions.ForEach(x =>
+            try
             {
-                //// default to true
-                //((IPlanElement)Convert.ChangeType(x, typeof(T))).Enabled = true;
-
-                SetEnabledState(actions, x);
-            });
+                if (actions != null)
+                {
+                    actions.ForEach(x =>
+                    {
+                        SetEnabledState(actions, x);
+                    });
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("AppDomain:SetEnabledStatusByPrevious():" + ex.Message, ex.InnerException);
+            }
         }
 
         public static void SetEnabledState<T>(List<T> list, T x)
         {
-            IPlanElement pe = ((IPlanElement)Convert.ChangeType(x, typeof(T)));
-
-            if (!string.IsNullOrEmpty(pe.Previous))
+            try
             {
-                var prevElem = list.Find(r => ((IPlanElement)r).Id == pe.Previous);
-                if (((IPlanElement)prevElem).Completed != true)
+                if (list != null && x != null)
                 {
-                    ((IPlanElement)x).Enabled = false;
+                    IPlanElement pe = ((IPlanElement)Convert.ChangeType(x, typeof(T)));
+
+                    if (!string.IsNullOrEmpty(pe.Previous))
+                    {
+                        var prevElem = list.Find(r => ((IPlanElement)r).Id == pe.Previous);
+                        if (prevElem != null)
+                        {
+                            if (((IPlanElement)prevElem).Completed != true)
+                            {
+                                ((IPlanElement)x).Enabled = false;
+                            }
+                            else
+                            {
+                                ((IPlanElement)x).Enabled = true;
+                            }
+                        }
+                    }
                 }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("AppDomain:SetEnabledState():" + ex.Message, ex.InnerException);
             }
         }
 
         internal static void DisableCompleteButtonForAction(List<Step> list)
         {
-            list.ForEach(s =>
+            try
             {
-                if (s.StepTypeId.Equals(7))
+                if (list != null)
                 {
-                    s.Enabled = false;
+                    list.ForEach(s =>
+                    {
+                        if (s.StepTypeId.Equals(7))
+                        {
+                            s.Enabled = false;
+                        }
+                    });
                 }
-            });
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("AppDomain:DisableCompleteButtonForAction():" + ex.Message, ex.InnerException);
+            }
         }
 
         internal static void SpawnElementsInList(List<SpawnElement> list, Program program)
         {
-            list.ForEach(r =>
+            try
             {
-                SetEnabledStateRecursion(r.ElementId, program);
-            });
+                list.ForEach(r =>
+                {
+                    SetEnabledStateRecursion(r.ElementId, program);
+                });
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("AppDomain:SpawnElementsInList():" + ex.Message, ex.InnerException);
+            }
         }
 
         private static void SetEnabledStateRecursion(string p, Program program)

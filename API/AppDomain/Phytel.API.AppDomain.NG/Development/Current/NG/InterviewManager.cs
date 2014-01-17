@@ -31,22 +31,18 @@ namespace Phytel.API.AppDomain.NG
                 ProgramPlanProcessor pChain = InitializeProgramChain();
                 pChain.ProcessRequest((IPlanElement)action, p, request.UserId);
 
-                // process modules
-                p.Modules.ForEach(m =>
-                {
-                    pChain.ProcessRequest((IPlanElement)m, p, request.UserId);
-                });
-
-                // need to get module references to control state
-                // 3) set enable/visibility of actions after action processing.
+                // set enable/visibility of actions after action processing.
                 Module mod = PlanElementUtil.FindElementById(p.Modules, action.ModuleId);
                 if (mod != null)
                 {
-                    PlanElementUtil.SetEnabledStatusByPrevious(mod.Actions);
+                    pChain.ProcessRequest((IPlanElement)mod, p, request.UserId);
                 }
 
+                // set module visibility for modules
+                PlanElementUtil.SetEnabledStatusByPrevious(p.Modules);
+
                 // 4) save
-                SaveAction(request, p); 
+                SaveAction(request, p);
 
                 response.Program = p;
                 response.Version = request.Version;
@@ -112,9 +108,10 @@ namespace Phytel.API.AppDomain.NG
 
                 return response.program;
             }
-            catch (Exception ex)
+            catch (WebServiceException wse)
             {
-                throw new Exception("AppDomain: SaveAction():" + ex.Message, ex.InnerException);
+                Exception ae = new Exception(wse.ResponseBody, wse.InnerException);
+                throw ae;
             }
         }
 

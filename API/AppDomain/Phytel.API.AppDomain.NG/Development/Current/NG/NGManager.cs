@@ -605,10 +605,32 @@ namespace Phytel.API.AppDomain.NG
                                                 Required = z.Required,
                                                 StepId = z.StepId,
                                                 Text = z.Text,
-                                                Value = z.Value
+                                                Value = z.Value ,
+                                                SpawnElement = GetADSpawnElement(z.SpawnElement)
                                             }).ToList();
             }
             return resps;
+        }
+
+        private SpawnElement GetADSpawnElement(DD.SpawnElementDetail sed)
+        {
+            try
+            {
+                SpawnElement se = null;
+                if (sed != null)
+                {
+                    se = new SpawnElement
+                    {
+                        ElementId = sed.ElementId,
+                        ElementType = sed.ElementType
+                    };
+                }
+                return se;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("AppDomain:GetADSpawnElement():" + ex.Message, ex.InnerException);
+            }
         }
 
         private List<SpawnElement> GetSpawnElement(DD.PlanElementDetail planElement)

@@ -52,11 +52,13 @@ namespace Phytel.API.DataDomain.Patient.Service.Test
                     new Response { 
                         Id = "52d9639dd6a4850b88206a56", 
                         Order = 1, 
-                         Text = "Yes",
+                        Text = "Yes",
                         StepId = "52d9639dd6a4850b88206a55",
                     Nominal = false,
                     Required = false,
-                    NextStepId = "52d9639dd6a4850b88206a58"},
+                    NextStepId = "52d9639dd6a4850b88206a58",
+                    SpawnElement = new SpawnElement{ ElementType=101, ElementId="528a66f4d4332317acc5095f"}
+                    },
                     new Response { 
                         Id = "52d9639dd6a4850b88206a57", 
                         Order = 2, 
