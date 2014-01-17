@@ -13,108 +13,117 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
     {
         public static List<Modules> SetValidModules(List<Modules> list)
         {
-            List<StepsInfo> steps = new List<StepsInfo>();
-            List<ActionsInfo> acts = new List<ActionsInfo>();
-            List<Modules> mods = new List<Modules>();
-
-            foreach (Modules m in list)
+            try
             {
-                if (m.Status == Common.Status.Active)
+                List<StepsInfo> steps = new List<StepsInfo>();
+                List<ActionsInfo> acts = new List<ActionsInfo>();
+                List<Modules> mods = new List<Modules>();
+
+                foreach (Modules m in list)
                 {
-                    Modules mod = new Modules()
+                    if (m.Status == Common.Status.Active)
                     {
-                        Id = m.Id,
-                        ProgramId = m.ProgramId,
-                        Description = m.Description,
-                        Name = m.Name,
-                        Status = m.Status,
-                        Objectives = m.Objectives,
-                        Completed = m.Completed,
-                        Enabled = m.Enabled,
-                        Next = m.Next,
-                        Order = m.Order,
-                        Previous = m.Previous,
-                        Spawn = m.Spawn,
-                        SourceId = m.SourceId,
-                        AssignBy = m.AssignBy,
-                        AssignDate = m.AssignDate,
-                        ElementState = m.ElementState,
-                        //Objectives = m.Objectives.Where(a => a.Status == Common.Status.Active).Select(z => new ObjectivesInfo()
-                        //{
-                        //    Id = z.Id,
-                        //    Status = z.Status,
-                        //    Unit = z.Unit,
-                        //    Value = z.Value
-                        //}).ToList(),
-                        Actions = new List<ActionsInfo>()
-                    };
-
-                    foreach (ActionsInfo ai in m.Actions)
-                    {
-                        if (ai.Status == Common.Status.Active)
+                        Modules mod = new Modules()
                         {
-                            ActionsInfo ac = new ActionsInfo()
-                            {
-                                CompletedBy = ai.CompletedBy,
-                                Description = ai.Description,
-                                Id = ai.Id,
-                                ModuleId = ai.ModuleId,
-                                Name = ai.Name,
-                                Status = ai.Status,
-                                Objectives = ai.Objectives,
-                                Completed = ai.Completed,
-                                Enabled = ai.Enabled,
-                                Next = ai.Next,
-                                Order = ai.Order,
-                                Previous = ai.Previous,
-                                Spawn = ai.Spawn,
-                                SourceId = ai.SourceId,
-                                AssignBy = ai.AssignBy,
-                                AssignDate = ai.AssignDate,
-                                ElementState = ai.ElementState,
-                                //Objectives = ai.Objectives.Where(r => r.Status == Common.Status.Active).Select(x => new ObjectivesInfo()
-                                //{
-                                //    Id = x.Id,
-                                //    Status = x.Status,
-                                //    Unit = x.Unit,
-                                //    Value = x.Value
-                                //}).ToList(),
-                                Steps = ai.Steps.Where(s => s.Status == Common.Status.Active).Select(b => new StepsInfo()
-                                {
-                                    Status = b.Status,
-                                    Description = b.Description,
-                                    Ex = b.Ex,
-                                    Id = b.Id,
-                                    ActionId = b.ActionId,
-                                    Notes = b.Notes,
-                                    Question = b.Question,
-                                    Title = b.Title,
-                                    Text = b.Text,
-                                    StepTypeId = b.StepTypeId,
-                                    Responses = b.Responses,
-                                    Completed = b.Completed,
-                                    ControlType = b.ControlType,
-                                    Enabled = b.Enabled,
-                                    Header = b.Header,
-                                    Next = b.Next,
-                                    Order = b.Order,
-                                    Previous = b.Previous,
-                                    SelectedResponseId = b.SelectedResponseId,
-                                    Spawn = b.Spawn,
-                                    SourceId = b.SourceId,
-                                    AssignBy = b.AssignBy,
-                                    AssignDate = b.AssignDate,
-                                    ElementState = b.ElementState
-                                }).ToList()
-                            };
-                            mod.Actions.Add(ac);
-                        }
-                    }
-                    mods.Add(mod);
-                }
-            }
+                            Id = m.Id,
+                            ProgramId = m.ProgramId,
+                            Description = m.Description,
+                            Name = m.Name,
+                            Status = m.Status,
+                            Objectives = m.Objectives,
+                            Completed = m.Completed,
+                            Enabled = m.Enabled,
+                            Next = m.Next,
+                            Order = m.Order,
+                            Previous = m.Previous,
+                            Spawn = m.Spawn,
+                            SourceId = m.SourceId,
+                            AssignBy = m.AssignBy,
+                            AssignDate = m.AssignDate,
+                            ElementState = m.ElementState,
+                            CompletedBy = m.CompletedBy,
+                            DateCompleted = m.DateCompleted,
+                            //Objectives = m.Objectives.Where(a => a.Status == Common.Status.Active).Select(z => new ObjectivesInfo()
+                            //{
+                            //    Id = z.Id,
+                            //    Status = z.Status,
+                            //    Unit = z.Unit,
+                            //    Value = z.Value
+                            //}).ToList(),
+                            Actions = new List<ActionsInfo>()
+                        };
 
-            return mods;
+                        foreach (ActionsInfo ai in m.Actions)
+                        {
+                            if (ai.Status == Common.Status.Active)
+                            {
+                                ActionsInfo ac = new ActionsInfo()
+                                {
+                                    CompletedBy = ai.CompletedBy,
+                                    Description = ai.Description,
+                                    Id = ai.Id,
+                                    ModuleId = ai.ModuleId,
+                                    Name = ai.Name,
+                                    Status = ai.Status,
+                                    Objectives = ai.Objectives,
+                                    Completed = ai.Completed,
+                                    Enabled = ai.Enabled,
+                                    Next = ai.Next,
+                                    Order = ai.Order,
+                                    Previous = ai.Previous,
+                                    Spawn = ai.Spawn,
+                                    SourceId = ai.SourceId,
+                                    AssignBy = ai.AssignBy,
+                                    AssignDate = ai.AssignDate,
+                                    ElementState = ai.ElementState,
+                                    //Objectives = ai.Objectives.Where(r => r.Status == Common.Status.Active).Select(x => new ObjectivesInfo()
+                                    //{
+                                    //    Id = x.Id,
+                                    //    Status = x.Status,
+                                    //    Unit = x.Unit,
+                                    //    Value = x.Value
+                                    //}).ToList(),
+                                    Steps = ai.Steps.Where(s => s.Status == Common.Status.Active).Select(b => new StepsInfo()
+                                    {
+                                        Status = b.Status,
+                                        Description = b.Description,
+                                        Ex = b.Ex,
+                                        Id = b.Id,
+                                        ActionId = b.ActionId,
+                                        Notes = b.Notes,
+                                        Question = b.Question,
+                                        Title = b.Title,
+                                        Text = b.Text,
+                                        StepTypeId = b.StepTypeId,
+                                        Responses = b.Responses,
+                                        Completed = b.Completed,
+                                        ControlType = b.ControlType,
+                                        Enabled = b.Enabled,
+                                        Header = b.Header,
+                                        Next = b.Next,
+                                        Order = b.Order,
+                                        Previous = b.Previous,
+                                        SelectedResponseId = b.SelectedResponseId,
+                                        Spawn = b.Spawn,
+                                        SourceId = b.SourceId,
+                                        AssignBy = b.AssignBy,
+                                        AssignDate = b.AssignDate,
+                                        ElementState = b.ElementState
+                                    }).ToList()
+                                };
+                                mod.Actions.Add(ac);
+                            }
+                        }
+                        mods.Add(mod);
+                    }
+                }
+
+                return mods;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("DataDomain:SetValidModules():" + ex.Message, ex.InnerException);
+            }
         }
 
         public static void RecurseAndReplaceIds(List<Modules> mods)
@@ -181,6 +190,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
                                     {
                                         ReplaceNextAndPreviousIds(kv, s);
                                         ReplaceSpawnIdReferences(kv, s);
+                                        ReplaceSelectedResponseId(kv, s);
                                         if (s.Responses != null)
                                         {
                                             foreach (ResponseInfo r in s.Responses)
@@ -249,6 +259,24 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
                         {
                             sp.SpawnId = kv.Value;
                         }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        private static void ReplaceSelectedResponseId(KeyValuePair<ObjectId, ObjectId> kv, StepsInfo s)
+        {
+            try
+            {
+                if (s.SelectedResponseId != null)
+                {
+                    if (s.SelectedResponseId.Equals(kv.Key.ToString()))
+                    {
+                        s.SelectedResponseId = kv.Value.ToString();
                     }
                 }
             }
@@ -471,8 +499,8 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
                             DateCompleted = m.DateCompleted,
                             Next = m.Next,
                             Previous = m.Previous,
-                            Spawn = (m.SpawnElement != null) ? DTOUtils.GetSpawnElements(m.SpawnElement) : null,
-                            Actions = (m.Actions != null) ? DTOUtils.GetActionElements(m.Actions) : null,
+                            Spawn = DTOUtils.GetSpawnElements(m.SpawnElement),
+                            Actions = DTOUtils.GetActionElements(m.Actions),
                             AssignBy = m.AssignBy,
                             AssignDate = m.AssignDate,
                             Completed = m.Completed,
@@ -481,7 +509,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
                             ElementState = (ElementState)m.ElementState,
                             Enabled = m.Enabled,
                             Name = m.Name,
-                            Objectives = (m.Objectives != null) ? DTOUtils.GetObjectives(m.Objectives) : null,
+                            Objectives = DTOUtils.GetObjectives(m.Objectives),
                             Order = m.Order,
                             ProgramId = ObjectId.Parse(m.ProgramId),
                             SourceId = m.SourceId,

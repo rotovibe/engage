@@ -74,6 +74,7 @@ namespace Phytel.API.DataDomain.Program
                             Modules = DTOUtils.SetValidModules(cp.Modules),
                             Name = cp.Name,
                             ObjectivesInfo = cp.ObjectivesInfo,
+                            CompletedBy = cp.CompletedBy,
                             UpdatedBy = request.UserId,
                             SourceId = cp.Id.ToString(),
                             //ObjectivesInfo = cp.ObjectivesInfo.Where(e => e.Status == Common.Status.Active).Select(f => new ObjectivesInfo()
@@ -128,9 +129,9 @@ namespace Phytel.API.DataDomain.Program
                 }
                 return result;
             }
-            catch
+            catch(Exception ex)
             {
-                throw;
+                throw new Exception("DataDomain:Insert():" + ex.Message, ex.InnerException);
             }
         }
 
@@ -469,10 +470,10 @@ namespace Phytel.API.DataDomain.Program
                 using (ProgramMongoContext ctx = new ProgramMongoContext(_dbName))
                 {
                     var q = MB.Query<MEPatientProgram>.EQ(b => b.Id, ObjectId.Parse(p.ProgramId));
-                    List<Modules> mods = (pg.Modules != null) ? DTOUtils.CloneAppDomainModules(pg.Modules) : null;
+                    List<Modules> mods = DTOUtils.CloneAppDomainModules(pg.Modules);
 
                     var uv = new List<MB.UpdateBuilder>();
-                    uv.Add(MB.Update.Set(MEPatientProgram.CompletedByProperty, pg.Completed));
+                    uv.Add(MB.Update.Set(MEPatientProgram.CompletedProperty, pg.Completed));
                     uv.Add(MB.Update.Set(MEPatientProgram.StateProperty, (ElementState)pg.ElementState));
                     uv.Add(MB.Update.Set(MEPatientProgram.EnabledProperty, pg.Enabled));
                     uv.Add(MB.Update.Set(MEPatientProgram.OrderProperty, pg.Order));
