@@ -15,7 +15,6 @@ namespace Phytel.API.AppDomain.NG.DTO
         public string Notes { get; set; }
         public string Text { get; set; }
         public string Ex { get; set; }
-
         public int SelectType { get; set; }
         public bool IncludeTime { get; set; }
         public string ActionId { get; set; }

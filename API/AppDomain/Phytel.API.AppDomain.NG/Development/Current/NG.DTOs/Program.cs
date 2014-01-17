@@ -24,7 +24,6 @@ namespace Phytel.API.AppDomain.NG.DTO
         public List<Objective> ObjectivesInfo { get; set; }
         public List<Module> Modules { get; set; }
         public string Version { get; set; }
-
         public string Text { get; set; }
     }
 }

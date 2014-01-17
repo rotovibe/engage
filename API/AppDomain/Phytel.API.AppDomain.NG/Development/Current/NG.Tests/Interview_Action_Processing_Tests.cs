@@ -16,9 +16,9 @@ namespace Phytel.API.DataDomain.Patient.Service.Test
             string context = "NG";
             string priority = "3";
             string version = "v1";
-            string token = "52d32474d6a4850dac4a06d5";
-            string programId = "52c5b8d71e601540b017e6d3";
-            string patientId = "528f6dc2072ef708ecd90e56";
+            string token = "52d81857d6a4850860d2b501";
+            string programId = "52d7fc5bd6a48508602923d9";
+            string patientId = "528f6c94072ef708ecd5bc1c";
             string actionID = "52a0f33bd43323141c9eb274";
             IRestClient client = new JsonServiceClient();
 
@@ -46,8 +46,8 @@ namespace Phytel.API.DataDomain.Patient.Service.Test
                 Order = 1,
                 Status = 1,
                 Responses = new List<Response> { 
-                    new Response { Id = "1", Nominal = true, Order = 1, NextStepId = "52a641f1d433231824878c90", StepId = "52a641e8d433231824878c8f" },
-                    new Response { Id = "2", Nominal = true, Order = 2, NextStepId = "0", StepId = "52a641e8d433231824878c8f" }
+                    new Response { Id = "52a641f1d433231824878c90", Nominal = true, Order = 1, NextStepId = "52a641f1d433231824878c90", StepId = "52a641e8d433231824878c8f" },
+                    new Response { Id = "52a641f1d433231824878c90", Nominal = true, Order = 2, NextStepId = "52a641f1d433231824878c90", StepId = "52a641e8d433231824878c8f" }
                 }
             };
 
@@ -64,8 +64,8 @@ namespace Phytel.API.DataDomain.Patient.Service.Test
                 Order = 2,
                 Status = 1,
                 Responses = new List<Response> { 
-                    new Response { Id = "1", Nominal = true, Order = 1, NextStepId = "1", StepId = "52a641f1d433231824878c90" },
-                    new Response { Id = "2", Nominal = true, Order = 2, NextStepId = "1", StepId = "52a641f1d433231824878c90" }
+                    new Response { Id = "52a641f1d433231824878c90", Nominal = true, Order = 1, NextStepId = "52a641f1d433231824878c90", StepId = "52a641f1d433231824878c90" },
+                    new Response { Id = "52a641f1d433231824878c90", Nominal = true, Order = 2, NextStepId = "52a641f1d433231824878c90", StepId = "52a641f1d433231824878c90" }
                 }
             };
 
@@ -106,7 +106,7 @@ namespace Phytel.API.DataDomain.Patient.Service.Test
                 Id = "aaaaf33bd43323141c9eb274",
                 ModuleId = "52a0a775fe7a5915485bdfd1",
                 Name = "act2 Verify P4H Eligibility",
-                Description = "dependent on act1",
+                Description = "dependent on act1 blah",
                 CompletedBy = "Care Manager",
                 Text = "text",
                 Completed = false,
@@ -116,13 +116,29 @@ namespace Phytel.API.DataDomain.Patient.Service.Test
                 Steps = new List<Step> { s, s1 }
             };
 
+            SpawnElement se = new SpawnElement { ElementId = "5555f33bd43323141c9eb275", ElementType = 2 };
             Module mod = new Module
             {
                 Id = "52a0a775fe7a5915485bdfd1",
                 Enabled = true,
                 ProgramId = "52c71fd7d6a4850a1cf69494",
-                Text = "Reduce the amount of crabs in the diet",
-                Description = "Reduce the amount of crabs in the diet",
+                Text = "THIS IS A TEST PROGRAM ALL IT'S HIERARCHY WILL BE BROKEN MOD2",
+                Description = "THIS IS A TEST PROGRAM ALL IT'S HIERARCHY WILL BE BROKEN MOD2",
+                Name = "Low Carb Diet Module",
+                Completed = false,
+                Order = 1,
+                Status = 1,
+                 SpawnElement = new List<SpawnElement>{se},
+                Actions = new List<Actions> { act, act1, act2 }
+            };
+
+            Module mod1 = new Module
+            {
+                Id = "52a0a775fe7a5915485bdfd1",
+                Enabled = true,
+                ProgramId = "52c71fd7d6a4850a1cf69494",
+                Text = "THIS IS A TEST PROGRAM ALL IT'S HIERARCHY WILL BE BROKEN MOD1",
+                Description = "THIS IS A TEST PROGRAM ALL IT'S HIERARCHY WILL BE BROKEN MOD2",
                 Name = "Low Carb Diet Module",
                 Completed = false,
                 Order = 1,
@@ -133,10 +149,11 @@ namespace Phytel.API.DataDomain.Patient.Service.Test
             Program pMap = new Program()
             {
                 Enabled = true,
-                Id = "52c71fd7d6a4850a1cf69494",
+                Id = "52d7fc5bd6a48508602923d9",
                 PatientId = "1234",
-                Text = "THIS IS THE PROGRAM",
-                Modules = new List<Module> { mod },
+                 Description = "THIS IS A TEST PROGRAM ALL IT'S HIERARCHY WILL BE BROKEN PROGRAM!",
+                Text = "THIS IS A TEST PROGRAM ALL IT'S HIERARCHY WILL BE BROKEN",
+                Modules = new List<Module> { mod, mod1 },
                 Completed = false,
                 Order = 1,
                 Status = 1

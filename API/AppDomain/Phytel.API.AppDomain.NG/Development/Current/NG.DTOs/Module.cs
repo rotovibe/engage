@@ -13,7 +13,6 @@ namespace Phytel.API.AppDomain.NG.DTO
         public List<Objective> Objectives { get; set; }
         public List<Actions> Actions { get; set; }
         public int Status { get; set; }
-
         public string Text { get; set; }
         public string ProgramId { get; set; }
 
