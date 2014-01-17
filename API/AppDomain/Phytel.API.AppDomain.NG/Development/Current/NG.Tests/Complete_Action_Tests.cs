@@ -16,10 +16,10 @@ namespace Phytel.API.DataDomain.Patient.Service.Test
             string context = "NG";
             string priority = "3";
             string version = "v1";
-            string token = "52d58da0d6a4850e90240706";
-            string programId = "52c5b8d71e601540b017e6d3";
-            string patientId = "528f6dc2072ef708ecd90e56";
-            string actionID = "52a0f33bd43323141c9eb274";
+            string token = "52d949d1d6a4850b882a783b";
+            string programId = "52d83fc1d6a48508604d87ab";
+            string patientId = "528f6bc7072ef708ecd29785";
+            string actionID = "52d83fc1d6a48508604d87b1";
             IRestClient client = new JsonServiceClient();
 
             PostProcessActionResponse response = client.Post<PostProcessActionResponse>(
@@ -28,7 +28,45 @@ namespace Phytel.API.DataDomain.Patient.Service.Test
                 contractNumber,
                 patientId,
                 programId,
-                token), new PostProcessActionRequest() { Program = GenTestProgram(), ActionId = actionID });
+                token), new PostProcessActionRequest() { ProgramId = programId, Action = GenAction()});
+        }
+
+        private static Actions GenAction()
+        {
+            Step s1 = new Step()
+            {
+                Id = "52a641f1d433231824878c90",
+                ActionId = "52a0f33bd43323141c9eb274",
+                ControlType = 1,
+                Description = "THIS IS A TEST 1/17/2014",
+                Enabled = true,
+                Question = "TEST!!! Are you a spouse of an ABC Employee?",
+                Notes = "Example notes",
+                Completed = true,
+                Order = 2,
+                Status = 1,
+                Responses = new List<Response> { 
+                    new Response { Id = "52a641f1d433231824878c90", Nominal = true, Order = 1, NextStepId = "52a641f1d433231824878c90", StepId = "52a641f1d433231824878c90" },
+                    new Response { Id = "52a641f1d433231824878c90", Nominal = true, Order = 2, NextStepId = "52a641f1d433231824878c90", StepId = "52a641f1d433231824878c90" }
+                }
+            };
+
+            Actions act = new Actions
+            {
+                Enabled = true,
+                Id = "52d83fc1d6a48508604d87b1",
+                ModuleId = "52a0a775fe7a5915485bdfd1",
+                Name = "act Verify P4H Eligibility",
+                Description = "!!THIS IS A TEST ACTION UPDATE 1/17/2014!!",
+                CompletedBy = "Care Manager",
+                Text = "text",
+                Completed = true,
+                Order = 1,
+                Status = 1,
+                Steps = new List<Step> { s1 }
+            };
+
+            return act;
         }
 
         private static Program GenTestProgram()

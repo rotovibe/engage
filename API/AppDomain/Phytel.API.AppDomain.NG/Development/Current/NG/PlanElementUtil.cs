@@ -31,7 +31,7 @@ namespace Phytel.API.AppDomain.NG
 
         public static T FindElementById<T>(List<T> list, string id)
         {
-            var mod = list.Where(r => ((IPlanElement)Convert.ChangeType(r, typeof(T))).Id == id).First();
+            var mod = list.Where(r => ((IPlanElement)Convert.ChangeType(r, typeof(T))).Id == id).FirstOrDefault();
             return mod;
         }
 

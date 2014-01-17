@@ -28,7 +28,45 @@ namespace Phytel.API.DataDomain.Patient.Service.Test
                 contractNumber,
                 patientId,
                 programId,
-                token), new PostProcessActionRequest() { Program = GenProgram(), ActionId = actionID });
+                token), new PostProcessActionRequest() {  Action = GenAction(), ProgramId = programId });
+        }
+
+        private static Actions GenAction()
+        {
+            Step s1 = new Step()
+            {
+                Id = "52a641f1d433231824878c90",
+                ActionId = "52a0f33bd43323141c9eb274",
+                ControlType = 1,
+                Description = "description",
+                Enabled = true,
+                Question = "Are you a spouse of an ABC Employee?",
+                Notes = "Example notes",
+                Completed = true,
+                Order = 2,
+                Status = 1,
+                Responses = new List<Response> { 
+                    new Response { Id = "52a641f1d433231824878c90", Nominal = true, Order = 1, NextStepId = "52a641f1d433231824878c90", StepId = "52a641f1d433231824878c90" },
+                    new Response { Id = "52a641f1d433231824878c90", Nominal = true, Order = 2, NextStepId = "52a641f1d433231824878c90", StepId = "52a641f1d433231824878c90" }
+                }
+            };
+
+            Actions act = new Actions
+            {
+                Enabled = true,
+                Id = "52a0f33bd43323141c9eb274",
+                ModuleId = "52a0a775fe7a5915485bdfd1",
+                Name = "act Verify P4H Eligibility",
+                Description = "act - Assess whether individual is eligible for the program",
+                CompletedBy = "Care Manager",
+                Text = "text",
+                Completed = true,
+                Order = 1,
+                Status = 1,
+                Steps = new List<Step> { s1 }
+            };
+
+            return act;
         }
 
         private static Program GenProgram()

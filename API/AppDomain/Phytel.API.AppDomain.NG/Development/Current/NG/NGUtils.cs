@@ -594,5 +594,37 @@ namespace Phytel.API.AppDomain.NG
                 throw new Exception("AppDomain:GetADResponses():" + ex.Message, ex.InnerException);
             }
         }
+
+        internal static void UpdateProgramAction(Actions ac, DTO.Program p)
+        {
+            DTO.Program pr = p;
+            pr.Modules.ForEach(m =>
+            {
+                foreach (Actions a in m.Actions)
+                {
+                    bool replaced = ReplaceAction(ac, m, a);
+                    if (replaced)
+                        break;
+                }
+                //m.Actions.ForEach(a =>
+                //{
+                //    bool replaced = ReplaceAction(ac, m, a);
+                //    if (replaced)
+                //        return;
+                //});
+            });
+        }
+
+        private static bool ReplaceAction(Actions ac, Module m, Actions a)
+        {
+            bool replaced = false;
+            if (a.Id.Equals(ac.Id))
+            {
+                var i = m.Actions.FindIndex(x => x == a);
+                m.Actions[i] = ac;
+                replaced = true;
+            }
+            return replaced;
+        }
     }
 }

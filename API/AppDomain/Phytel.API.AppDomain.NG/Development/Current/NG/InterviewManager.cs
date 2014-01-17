@@ -23,29 +23,32 @@ namespace Phytel.API.AppDomain.NG
             {
                 PostProcessActionResponse response = new PostProcessActionResponse();
 
-                //Program p = RequestPatientProgramDetail(request);
+                Program p = RequestPatientProgramDetail(request);
+                Actions action = request.Action;
+                NGUtils.UpdateProgramAction(action, p);
 
                 //// create a responsibility chain to process each elemnt in the hierachy
                 ProgramPlanProcessor pChain = InitializeProgramChain();
-
-                Actions action = GetProcessingAction(request.Program.Modules, request.ActionId);
-                pChain.ProcessRequest((IPlanElement)action, request.Program, request.UserId);
+                pChain.ProcessRequest((IPlanElement)action, p, request.UserId);
 
                 // process modules
-                request.Program.Modules.ForEach(m =>
+                p.Modules.ForEach(m =>
                 {
-                    pChain.ProcessRequest((IPlanElement)m, request.Program, request.UserId);
+                    pChain.ProcessRequest((IPlanElement)m, p, request.UserId);
                 });
 
                 // need to get module references to control state
                 // 3) set enable/visibility of actions after action processing.
-                Module mod = PlanElementUtil.FindElementById(request.Program.Modules, action.ModuleId);
-                PlanElementUtil.SetEnabledStatusByPrevious(mod.Actions);
+                Module mod = PlanElementUtil.FindElementById(p.Modules, action.ModuleId);
+                if (mod != null)
+                {
+                    PlanElementUtil.SetEnabledStatusByPrevious(mod.Actions);
+                }
 
                 // 4) save
-                SaveAction(request);
+                SaveAction(request, p); 
 
-                response.Program = request.Program;
+                response.Program = p;
                 response.Version = request.Version;
 
                 return response;
@@ -69,7 +72,7 @@ namespace Phytel.API.AppDomain.NG
                 request.Version,
                 request.ContractNumber,
                 request.PatientId,
-                request.Program.Id,
+                request.ProgramId,
                 request.Token));
 
             pd = NGUtils.FormatProgramDetail(resp.Program);
@@ -90,11 +93,11 @@ namespace Phytel.API.AppDomain.NG
             return progProc;
         }
 
-        private DD.ProgramDetail SaveAction(PostProcessActionRequest request)
+        private DD.ProgramDetail SaveAction(PostProcessActionRequest request, Program p)
         {
             try
             {
-                DD.ProgramDetail pD = NGUtils.FormatProgramDetail(request.Program);
+                DD.ProgramDetail pD = NGUtils.FormatProgramDetail(p);
 
                 IRestClient client = new JsonServiceClient();
                 DD.PutProgramActionProcessingResponse response = client.Put<DD.PutProgramActionProcessingResponse>(
@@ -104,7 +107,7 @@ namespace Phytel.API.AppDomain.NG
                     request.Version,
                     request.ContractNumber,
                     request.PatientId,
-                    request.Program.Id,
+                    request.ProgramId,
                     request.Token), new DD.PutProgramActionProcessingRequest { Program = pD, UserId = request.UserId });
 
                 return response.program;
