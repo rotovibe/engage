@@ -8,7 +8,7 @@ using ServiceStack.ServiceClient.Web;
 using Phytel.API.AppDomain.NG.PlanSpecification;
 using Phytel.API.AppDomain.NG.PlanCOR;
 using ServiceStack.Service;
-using Phytel.API.DataDomain.Program.DTO;
+using DD = Phytel.API.DataDomain.Program.DTO;
 using System.Configuration;
 
 namespace Phytel.API.AppDomain.NG
@@ -22,6 +22,8 @@ namespace Phytel.API.AppDomain.NG
             try
             {
                 PostProcessActionResponse response = new PostProcessActionResponse();
+
+                //Program p = RequestPatientProgramDetail(request);
 
                 //// create a responsibility chain to process each elemnt in the hierachy
                 ProgramPlanProcessor pChain = InitializeProgramChain();
@@ -55,6 +57,26 @@ namespace Phytel.API.AppDomain.NG
             }
         }
 
+        private Program RequestPatientProgramDetail(PostProcessActionRequest request)
+        {
+            Program pd = null;
+            IRestClient client = new JsonServiceClient();
+            DD.GetProgramDetailsSummaryResponse resp =
+                client.Get<DD.GetProgramDetailsSummaryResponse>(
+                string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Program/{5}/Details/?Token={6}",
+                DDProgramServiceUrl,
+                "NG",
+                request.Version,
+                request.ContractNumber,
+                request.PatientId,
+                request.Program.Id,
+                request.Token));
+
+            pd = NGUtils.FormatProgramDetail(resp.Program);
+
+            return pd;
+        }
+
         private ProgramPlanProcessor InitializeProgramChain()
         {
             ProgramPlanProcessor progProc = new ProgramPlanProcessor();
@@ -68,14 +90,14 @@ namespace Phytel.API.AppDomain.NG
             return progProc;
         }
 
-        private ProgramDetail SaveAction(PostProcessActionRequest request)
+        private DD.ProgramDetail SaveAction(PostProcessActionRequest request)
         {
             try
             {
-                ProgramDetail pD = NGUtils.FormatProgramDetail(request.Program);
+                DD.ProgramDetail pD = NGUtils.FormatProgramDetail(request.Program);
 
                 IRestClient client = new JsonServiceClient();
-                PutProgramActionProcessingResponse response = client.Put<PutProgramActionProcessingResponse>(
+                DD.PutProgramActionProcessingResponse response = client.Put<DD.PutProgramActionProcessingResponse>(
                     string.Format(@"{0}/{1}/{2}/{3}/Patient/{4}/Programs/{5}/Update",
                     DDProgramServiceUrl,
                     "NG",
@@ -83,7 +105,7 @@ namespace Phytel.API.AppDomain.NG
                     request.ContractNumber,
                     request.PatientId,
                     request.Program.Id,
-                    request.Token), new PutProgramActionProcessingRequest { Program = pD, UserId = request.UserId });
+                    request.Token), new DD.PutProgramActionProcessingRequest { Program = pD, UserId = request.UserId });
 
                 return response.program;
             }

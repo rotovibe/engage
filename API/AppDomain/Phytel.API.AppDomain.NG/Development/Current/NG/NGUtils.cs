@@ -106,6 +106,55 @@ namespace Phytel.API.AppDomain.NG
             }
         }
 
+        internal static DTO.Program FormatProgramDetail(ProgramDetail program)
+        {
+            try
+            {
+                ProgramDetail p = program;
+                DTO.Program pD = null;
+
+                pD = new DTO.Program
+                {
+                    AssignBy = p.AssignBy,
+                    AssignDate = p.AssignDate,
+                    Client = p.Client,
+                    Completed = p.Completed,
+                    CompletedBy = p.CompletedBy,
+                    ContractProgramId = p.ContractProgramId,
+                    DateCompleted = p.DateCompleted,
+                    Description = p.Description,
+                    ElementState = p.ElementState,
+                    EligibilityEndDate = p.EligibilityEndDate,
+                    EligibilityRequirements = p.EligibilityRequirements,
+                    EligibilityStartDate = p.EligibilityStartDate,
+                    Enabled = p.Enabled,
+                    EndDate = p.EndDate,
+                    Id = p.Id,
+                    Modules = GetADModules(p.Modules),
+                    Name = p.Name,
+                    Next = p.Next,
+                    ObjectivesInfo = GetADObjectives(p.ObjectivesInfo),
+                    Order = p.Order,
+                    PatientId = p.PatientId,
+                    Previous = p.Previous,
+                    ProgramState = p.ProgramState,
+                    ShortName = p.ShortName,
+                    SourceId = p.SourceId,
+                    SpawnElement = GetADSpawnElements(p.SpawnElement),
+                    StartDate = p.StartDate,
+                    Status = p.Status,
+                    Text = p.Text,
+                    Version = p.Version
+                };
+
+                return pD;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("AppDomain:FormatProgramDetail():" + ex.Message, ex.InnerException);
+            }
+        }
+
         private static List<SpawnElementDetail> GetADSpawnElements(List<SpawnElement> list)
         {
             try
@@ -131,6 +180,31 @@ namespace Phytel.API.AppDomain.NG
             }
         }
 
+        private static List<SpawnElement> GetADSpawnElements(List<SpawnElementDetail> list)
+        {
+            try
+            {
+                List<SpawnElement> sd = new List<SpawnElement>();
+                if (list != null)
+                {
+                    list.ForEach(s =>
+                    {
+                        SpawnElement sed = new SpawnElement
+                        {
+                            ElementId = s.ElementId,
+                            ElementType = s.ElementType
+                        };
+                        sd.Add(sed);
+                    });
+                }
+                return sd;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("AppDomain:GetADSpawnElements():" + ex.Message, ex.InnerException);
+            }
+        }
+
         private static List<ObjectivesDetail> GetADObjectives(List<Objective> list)
         {
             try
@@ -141,6 +215,33 @@ namespace Phytel.API.AppDomain.NG
                     list.ForEach(o =>
                     {
                         ObjectivesDetail odi = new ObjectivesDetail
+                        {
+                            Id = o.Id,
+                            Status = o.Status,
+                            Unit = o.Unit,
+                            Value = o.Value
+                        };
+                        od.Add(odi);
+                    });
+                }
+                return od;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("AppDomain:GetADObjectives():" + ex.Message, ex.InnerException);
+            }
+        }
+
+        private static List<Objective> GetADObjectives(List<ObjectivesDetail> list)
+        {
+            try
+            {
+                List<Objective> od = new List<Objective>();
+                if (list != null)
+                {
+                    list.ForEach(o =>
+                    {
+                        Objective odi = new Objective
                         {
                             Id = o.Id,
                             Status = o.Status,
@@ -201,6 +302,49 @@ namespace Phytel.API.AppDomain.NG
             }
         }
 
+        private static List<Module> GetADModules(List<ModuleDetail> list)
+        {
+            try
+            {
+                List<Module> md = new List<Module>();
+                if (list != null)
+                {
+                    list.ForEach(m =>
+                    {
+                        Module mdi = new Module
+                        {
+                            Actions = GetADActions(m.Actions),
+                            AssignBy = m.AssignBy,
+                            AssignDate = m.AssignDate,
+                            Completed = m.Completed,
+                            CompletedBy = m.CompletedBy,
+                            DateCompleted = m.DateCompleted,
+                            Description = m.Description,
+                            ElementState = m.ElementState,
+                            Enabled = m.Enabled,
+                            Id = m.Id,
+                            Name = m.Name,
+                            Next = m.Next,
+                            Objectives = GetADObjectives(m.Objectives),
+                            Order = m.Order,
+                            Previous = m.Previous,
+                            ProgramId = m.ProgramId,
+                            SourceId = m.SourceId,
+                            SpawnElement = GetADSpawnElements(m.SpawnElement),
+                            Status = m.Status,
+                            Text = m.Text
+                        };
+                        md.Add(mdi);
+                    });
+                }
+                return md;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("AppDomain:GetADModules():" + ex.Message, ex.InnerException);
+            }
+        }
+
         private static List<ActionsDetail> GetADActions(List<Actions> list)
         {
             try
@@ -211,6 +355,49 @@ namespace Phytel.API.AppDomain.NG
                     list.ForEach(a =>
                     {
                         ActionsDetail adi = new ActionsDetail
+                        {
+                            AssignBy = a.AssignBy,
+                            AssignDate = a.AssignDate,
+                            Completed = a.Completed,
+                            CompletedBy = a.CompletedBy,
+                            DateCompleted = a.DateCompleted,
+                            Description = a.Description,
+                            ElementState = a.ElementState,
+                            Enabled = a.Enabled,
+                            Id = a.Id,
+                            ModuleId = a.ModuleId,
+                            Name = a.Name,
+                            Next = a.Next,
+                            Objectives = GetADObjectives(a.Objectives),
+                            Order = a.Order,
+                            Previous = a.Previous,
+                            SourceId = a.SourceId,
+                            SpawnElement = GetADSpawnElements(a.SpawnElement),
+                            Status = a.Status,
+                            Steps = GetADSteps(a.Steps),
+                            Text = a.Text
+                        };
+                        ad.Add(adi);
+                    });
+                }
+                return ad;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("AppDomain:GetADActions():" + ex.Message, ex.InnerException);
+            }
+        }
+
+        private static List<Actions> GetADActions(List<ActionsDetail> list)
+        {
+            try
+            {
+                List<Actions> ad = new List<Actions>();
+                if (list != null)
+                {
+                    list.ForEach(a =>
+                    {
+                        Actions adi = new Actions
                         {
                             AssignBy = a.AssignBy,
                             AssignDate = a.AssignDate,
@@ -295,6 +482,57 @@ namespace Phytel.API.AppDomain.NG
             }
         }
 
+        private static List<Step> GetADSteps(List<StepsDetail> list)
+        {
+            try
+            {
+                List<Step> sd = new List<Step>();
+                if (list != null)
+                {
+                    list.ForEach(s =>
+                    {
+                        Step sdi = new Step
+                        {
+                            ActionId = s.ActionId,
+                            AssignBy = s.AssignBy,
+                            AssignDate = s.AssignDate,
+                            Completed = s.Completed,
+                            CompletedBy = s.CompletedBy,
+                            ControlType = s.ControlType,
+                            DateCompleted = s.DateCompleted,
+                            Description = s.Description,
+                            ElementState = s.ElementState,
+                            Enabled = s.Enabled,
+                            Ex = s.Ex,
+                            Header = s.Header,
+                            Id = s.Id,
+                            IncludeTime = s.IncludeTime,
+                            Next = s.Next,
+                            Notes = s.Notes,
+                            Order = s.Order,
+                            Previous = s.Previous,
+                            Question = s.Question,
+                            Responses = GetADResponses(s.Responses),
+                            SelectedResponseId = s.SelectedResponseId,
+                            SelectType = s.SelectType,
+                            SourceId = s.SourceId,
+                            SpawnElement = GetADSpawnElements(s.SpawnElement),
+                            Status = s.Status,
+                            StepTypeId = s.StepTypeId,
+                            Text = s.Text,
+                            Title = s.Title
+                        };
+                        sd.Add(sdi);
+                    });
+                }
+                return sd;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("AppDomain:GetADSteps():" + ex.Message, ex.InnerException);
+            }
+        }
+
         private static List<ResponseDetail> GetADResponses(List<Response> list)
         {
             try
@@ -305,6 +543,37 @@ namespace Phytel.API.AppDomain.NG
                     list.ForEach(r =>
                     {
                         ResponseDetail rdi = new ResponseDetail
+                        {
+                            Id = r.Id,
+                            NextStepId = r.NextStepId,
+                            Nominal = r.Nominal,
+                            Order = r.Order,
+                            Required = r.Required,
+                            StepId = r.StepId,
+                            Text = r.Text,
+                            Value = r.Value
+                        };
+                        rd.Add(rdi);
+                    });
+                }
+                return rd;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("AppDomain:GetADResponses():" + ex.Message, ex.InnerException);
+            }
+        }
+
+        private static List<Response> GetADResponses(List<ResponseDetail> list)
+        {
+            try
+            {
+                List<Response> rd = new List<Response>();
+                if (list != null)
+                {
+                    list.ForEach(r =>
+                    {
+                        Response rdi = new Response
                         {
                             Id = r.Id,
                             NextStepId = r.NextStepId,
