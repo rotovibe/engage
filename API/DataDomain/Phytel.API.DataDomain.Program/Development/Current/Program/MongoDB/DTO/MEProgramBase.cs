@@ -292,6 +292,11 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
         public const string NextStepIdProperty = "nextstepid";
         [BsonElement(NextStepIdProperty)]
         public ObjectId NextStepId { get; set; }
+
+        public const string SpawnElementProperty = "spawn";
+        [BsonElement(SpawnElementProperty)]
+        [BsonIgnoreIfNull(true)]
+        public MESpawnElement SpawnElement { get; set; }
     }
 
     public class ObjectivesInfo : IMongoEntity<ObjectId>

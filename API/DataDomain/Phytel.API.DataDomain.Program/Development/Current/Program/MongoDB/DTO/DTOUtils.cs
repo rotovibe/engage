@@ -207,6 +207,17 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
                                                         r.NextStepId = kv.Value;
                                                     }
                                                 }
+
+                                                if (r.SpawnElement != null)
+                                                {
+                                                    if (r.SpawnElement.SpawnId != null)
+                                                    {
+                                                        if (r.SpawnElement.SpawnId.Equals(kv.Key))
+                                                        {
+                                                            r.SpawnElement.SpawnId = kv.Value;
+                                                        }
+                                                    }
+                                                }
                                             }
                                         }
                                     }
@@ -442,7 +453,8 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
                                     Order = r.Order,
                                     Required = r.Required,
                                     Text = r.Text,
-                                    Value = r.Value
+                                    Value = r.Value,
+                                    SpawnElement = GetSPawnElement(r.SpawnElement)
                                 });
                         });
                 }
@@ -451,6 +463,48 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             catch (Exception ex)
             {
                 throw new Exception("DataDomain:GetResponses():" + ex.Message, ex.InnerException);
+            }
+        }
+
+        private static MESpawnElement GetSPawnElement(SpawnElementDetail s)
+        {
+            try
+            {
+                MESpawnElement sp = null;
+                if (s != null)
+                {
+                    sp = new MESpawnElement
+                    {
+                        SpawnId = ObjectId.Parse(s.ElementId),
+                        Type = s.ElementType
+                    };
+                }
+                return sp;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("DataDomain:GetSpawnElement():" + ex.Message, ex.InnerException);
+            }
+        }
+
+        private static SpawnElementDetail GetSPawnElement(MESpawnElement s)
+        {
+            try
+            {
+                SpawnElementDetail sp = null;
+                if (s != null)
+                {
+                    sp = new SpawnElementDetail
+                    {
+                        ElementType = s.Type,
+                        ElementId = s.SpawnId.ToString()
+                    };
+                }
+                return sp;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("DataDomain:GetSpawnElement():" + ex.Message, ex.InnerException);
             }
         }
 
