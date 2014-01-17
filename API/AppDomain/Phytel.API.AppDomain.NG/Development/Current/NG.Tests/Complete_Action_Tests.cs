@@ -17,9 +17,9 @@ namespace Phytel.API.DataDomain.Patient.Service.Test
             string priority = "3";
             string version = "v1";
             string token = "52d949d1d6a4850b882a783b";
-            string programId = "52d83fc1d6a48508604d87ab";
-            string patientId = "528f6bc7072ef708ecd29785";
-            string actionID = "52d83fc1d6a48508604d87b1";
+            string programId = "52d9639dd6a4850b88206a3c";
+            string patientId = "528f6c7c072ef708ecd51581";
+            string actionID = "52d9639dd6a4850b88206a54";
             IRestClient client = new JsonServiceClient();
 
             PostProcessActionResponse response = client.Post<PostProcessActionResponse>(
@@ -35,35 +35,83 @@ namespace Phytel.API.DataDomain.Patient.Service.Test
         {
             Step s1 = new Step()
             {
-                Id = "52a641f1d433231824878c90",
-                ActionId = "52a0f33bd43323141c9eb274",
-                ControlType = 1,
-                Description = "THIS IS A TEST 1/17/2014",
+                SourceId = "52cb2bdb1e601522209c44ba",
+                Order = 1,
                 Enabled = true,
-                Question = "TEST!!! Are you a spouse of an ABC Employee?",
-                Notes = "Example notes",
-                Completed = true,
-                Order = 2,
+                ElementState = 0,
+                Completed = false,
+                Id = "52d9639dd6a4850b88206a55",
+                ActionId = "52d9639dd6a4850b88206a54",
+                StepTypeId = 1,
+                SelectType = 0,
+                ControlType = 0,
+                IncludeTime = false,
+                Question = "Is patient a Diabetic?",
                 Status = 1,
                 Responses = new List<Response> { 
-                    new Response { Id = "52a641f1d433231824878c90", Nominal = true, Order = 1, NextStepId = "52a641f1d433231824878c90", StepId = "52a641f1d433231824878c90" },
-                    new Response { Id = "52a641f1d433231824878c90", Nominal = true, Order = 2, NextStepId = "52a641f1d433231824878c90", StepId = "52a641f1d433231824878c90" }
+                    new Response { 
+                        Id = "52d9639dd6a4850b88206a56", 
+                        Order = 1, 
+                         Text = "Yes",
+                        StepId = "52d9639dd6a4850b88206a55",
+                    Nominal = false,
+                    Required = false,
+                    NextStepId = "52d9639dd6a4850b88206a58"},
+                    new Response { 
+                        Id = "52d9639dd6a4850b88206a57", 
+                        Order = 2, 
+                         Text = "No",
+                        StepId = "52d9639dd6a4850b88206a55",
+                    Nominal = false,
+                    Required = false,
+                    NextStepId = "52d9639dd6a4850b88206a58"}
                 }
             };
 
+            Step s2 = new Step()
+            {
+                SourceId = "52cf3ade1e6015397c1bcc2c",
+                Order = 2,
+                Enabled = true,
+                ElementState = 0,
+                Completed = false,
+                Id = "52d9639dd6a4850b88206a58",
+                ActionId = "52d9639dd6a4850b88206a54",
+                StepTypeId = 7,
+                ControlType = 0,
+                SelectType = 0,
+                IncludeTime = false,
+                Description = "complete - final step in action",
+                Text = "complete",
+                Status = 1
+            };
+
+            List<SpawnElement> se = new List<SpawnElement>();
+            se.Add(new SpawnElement
+            {
+                ElementId = "52d9639dd6a4850b88206a59",
+                ElementType = 2
+            });
+
+            List<Objective> obj = new List<Objective> { new Objective{ Id = "52a0bf97d43323141c9eb271",
+             Status = 5, Unit = "%", Value = "75"}};
+
             Actions act = new Actions
             {
-                Enabled = true,
-                Id = "52d83fc1d6a48508604d87b1",
-                ModuleId = "52a0a775fe7a5915485bdfd1",
-                Name = "act Verify P4H Eligibility",
-                Description = "!!THIS IS A TEST ACTION UPDATE 1/17/2014!!",
-                CompletedBy = "Care Manager",
-                Text = "text",
-                Completed = true,
+                SourceId = "52cb205d1e601522209c44a8",
                 Order = 1,
+                Enabled = true,
+                ElementState = 0,
+                Completed = true,
+                SpawnElement = se,
+                Id = "52d9639dd6a4850b88206a54",
+                ModuleId = "52d9639dd6a4850b88206a53",
+                Name = "Diabetic screening",
+                Description = "Diabetic screening for initial assesment",
+                CompletedBy = "Care Manager",
+                Objectives = obj,
                 Status = 1,
-                Steps = new List<Step> { s1 }
+                Steps = new List<Step> { s1, s2 }
             };
 
             return act;
