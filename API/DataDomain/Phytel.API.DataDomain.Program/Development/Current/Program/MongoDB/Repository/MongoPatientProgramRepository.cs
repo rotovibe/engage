@@ -200,7 +200,7 @@ namespace Phytel.API.DataDomain.Program
                                 Value = r.Value
                             }).ToList(),
                             SpawnElement = GetSpawnElement(cp),
-                            Modules = cp.Modules.Where(h => h.Status == Common.Status.Active).Select(r => new ModuleDetail
+                            Modules = cp.Modules.Select(r => new ModuleDetail
                             {
                                 Id = r.Id.ToString(),
                                 ProgramId = r.ProgramId.ToString(),
@@ -227,7 +227,7 @@ namespace Phytel.API.DataDomain.Program
                                     Status = (int)o.Status,
                                     Unit = o.Unit
                                 }).ToList(),
-                                Actions = r.Actions.Where(i => i.Status == Common.Status.Active).Select(a => new ActionsDetail
+                                Actions = r.Actions.Select(a => new ActionsDetail
                                 {
                                     CompletedBy = a.CompletedBy,
                                     Description = a.Description,
@@ -254,7 +254,7 @@ namespace Phytel.API.DataDomain.Program
                                         Status = (int)x.Status,
                                         Value = x.Value
                                     }).ToList(),
-                                    Steps = a.Steps.Where(j => j.Status == Common.Status.Active).Select(s => new StepsDetail
+                                    Steps = a.Steps.Select(s => new StepsDetail
                                     {
                                         Description = s.Description,
                                         Ex = s.Ex,
