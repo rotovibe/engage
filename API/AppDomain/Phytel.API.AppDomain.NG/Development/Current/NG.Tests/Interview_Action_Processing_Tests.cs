@@ -16,9 +16,9 @@ namespace Phytel.API.DataDomain.Patient.Service.Test
             string context = "NG";
             string priority = "3";
             string version = "v1";
-            string token = "52d81857d6a4850860d2b501";
-            string programId = "52d7fc5bd6a48508602923d9";
-            string patientId = "528f6c94072ef708ecd5bc1c";
+            string token = "52dd7de7d6a4850ea84c2894";
+            string programId = "52dd5c5bd6a4850ea8b75381";
+            string patientId = "528f6bdf072ef708ecd326f0";
             string actionID = "52a0f33bd43323141c9eb274";
             IRestClient client = new JsonServiceClient();
 
@@ -35,169 +35,79 @@ namespace Phytel.API.DataDomain.Patient.Service.Test
         {
             Step s1 = new Step()
             {
-                Id = "52a641f1d433231824878c90",
-                ActionId = "52a0f33bd43323141c9eb274",
-                ControlType = 1,
-                Description = "description",
+                Id = "52dd5c5bd6a4850ea8b7539a",
+                ActionId = "52dd5c5bd6a4850ea8b75399",
+                SourceId = "52cb2bdb1e601522209c44ba",
+                Order = 1,
                 Enabled = true,
-                Question = "Are you a spouse of an ABC Employee?",
-                Notes = "Example notes",
+                ElementState = 0,
                 Completed = true,
-                Order = 2,
+                StepTypeId = 1,
+                ControlType = 0,
+                SelectType = 0,
+                IncludeTime = false,
+                Header = string.Empty,
+                Description = "",
+                Question = "Is patient a Diabetic?",
+                Notes = "Example notes",
                 Status = 1,
+                SelectedResponseId = "52dd5c5bd6a4850ea8b7539b",
                 Responses = new List<Response> { 
-                    new Response { Id = "52a641f1d433231824878c90", Nominal = true, Order = 1, NextStepId = "52a641f1d433231824878c90", StepId = "52a641f1d433231824878c90" },
-                    new Response { Id = "52a641f1d433231824878c90", Nominal = true, Order = 2, NextStepId = "52a641f1d433231824878c90", StepId = "52a641f1d433231824878c90" }
+                    new Response { Id = "52dd5c5bd6a4850ea8b7539b", Nominal = false, Text="Yes", Required=false, Value=string.Empty, Order = 1, NextStepId = "52dd5c5bd6a4850ea8b7539d", StepId = "52dd5c5bd6a4850ea8b7539a" },
+                    new Response { Id = "52dd5c5bd6a4850ea8b7539c", Nominal = false, Text ="No", Required=false,  Order = 2, NextStepId = "52dd5c5bd6a4850ea8b7539d", StepId = "52dd5c5bd6a4850ea8b7539a" }
                 }
             };
 
-            Actions act = new Actions
+            // complete step action
+            Step s2 = new Step()
             {
-                Enabled = true,
-                Id = "52a0f33bd43323141c9eb274",
-                ModuleId = "52a0a775fe7a5915485bdfd1",
-                Name = "act Verify P4H Eligibility",
-                Description = "act - Assess whether individual is eligible for the program",
-                CompletedBy = "Care Manager",
-                Text = "text",
-                Completed = true,
-                Order = 1,
-                Status = 1,
-                Steps = new List<Step> { s1 }
-            };
-
-            return act;
-        }
-
-        private static Program GenProgram()
-        {
-            Step s = new Step()
-            {
-                Id = "52a641e8d433231824878c8f",
-                ActionId = "52a0f33bd43323141c9eb274",
-                ControlType = 1,
-                Description = "description",
-                Enabled = true,
-                Question = "Are you an ABC Employee?",
-                Notes = "Example notes",
-                Completed = true,
-                Order = 1,
-                Status = 1,
-                Responses = new List<Response> { 
-                    new Response { Id = "52a641f1d433231824878c90", Nominal = true, Order = 1, NextStepId = "52a641f1d433231824878c90", StepId = "52a641e8d433231824878c8f" },
-                    new Response { Id = "52a641f1d433231824878c90", Nominal = true, Order = 2, NextStepId = "52a641f1d433231824878c90", StepId = "52a641e8d433231824878c8f" }
-                }
-            };
-
-            Step s1 = new Step()
-            {
-                Id = "52a641f1d433231824878c90",
-                ActionId = "52a0f33bd43323141c9eb274",
-                ControlType = 1,
-                Description = "description",
-                Enabled = true,
-                Question = "Are you a spouse of an ABC Employee?",
-                Notes = "Example notes",
-                Completed = true,
+                SourceId = "52cf3ade1e6015397c1bcc2c",
                 Order = 2,
-                Status = 1,
-                Responses = new List<Response> { 
-                    new Response { Id = "52a641f1d433231824878c90", Nominal = true, Order = 1, NextStepId = "52a641f1d433231824878c90", StepId = "52a641f1d433231824878c90" },
-                    new Response { Id = "52a641f1d433231824878c90", Nominal = true, Order = 2, NextStepId = "52a641f1d433231824878c90", StepId = "52a641f1d433231824878c90" }
-                }
-            };
-
-            Actions act = new Actions
-            {
                 Enabled = true,
-                Id = "52a0f33bd43323141c9eb274",
-                ModuleId = "52a0a775fe7a5915485bdfd1",
-                Name = "act Verify P4H Eligibility",
-                Description = "act - Assess whether individual is eligible for the program",
-                CompletedBy = "Care Manager",
-                Text = "text",
-                Completed = true,
-                Order = 1,
-                Status = 1,
-                Steps = new List<Step> { s,s1 }
-            };
-
-            Actions act1 = new Actions
-            {
-                Enabled = false,
-                Id = "5555f33bd43323141c9eb275",
-                ModuleId = "52a0a775fe7a5915485bdfd1",
-                Name = "act1 Verify P4H Eligibility",
-                Description = "act1 Assess whether individual is eligible for the program",
-                CompletedBy = "Care Manager",
-                Text = "text",
+                ElementState = 0,
                 Completed = false,
-                Order = 2,
-                Status = 1,
-                Previous = "52a0f33bd43323141c9eb274",
-                Steps = new List<Step> { s, s1 }
-            };
-
-            Actions act2 = new Actions
-            {
-                Enabled = true,
-                Id = "aaaaf33bd43323141c9eb274",
-                ModuleId = "52a0a775fe7a5915485bdfd1",
-                Name = "act2 Verify P4H Eligibility",
-                Description = "dependent on act1 blah",
-                CompletedBy = "Care Manager",
-                Text = "text",
-                Completed = false,
-                Order = 3,
-                Status = 1,
-                Previous = "5555f33bd43323141c9eb275",
-                Steps = new List<Step> { s, s1 }
-            };
-
-            SpawnElement se = new SpawnElement { ElementId = "5555f33bd43323141c9eb275", ElementType = 2 };
-            Module mod = new Module
-            {
-                Id = "52a0a775fe7a5915485bdfd1",
-                Enabled = true,
-                ProgramId = "52c71fd7d6a4850a1cf69494",
-                Text = "THIS IS A TEST PROGRAM ALL IT'S HIERARCHY WILL BE BROKEN MOD2",
-                Description = "THIS IS A TEST PROGRAM ALL IT'S HIERARCHY WILL BE BROKEN MOD2",
-                Name = "Low Carb Diet Module",
-                Completed = false,
-                Order = 1,
-                Status = 1,
-                 SpawnElement = new List<SpawnElement>{se},
-                Actions = new List<Actions> { act, act1, act2 }
-            };
-
-            Module mod1 = new Module
-            {
-                Id = "52a0a775fe7a5915485bdfd1",
-                Enabled = true,
-                ProgramId = "52c71fd7d6a4850a1cf69494",
-                Text = "THIS IS A TEST PROGRAM ALL IT'S HIERARCHY WILL BE BROKEN MOD1",
-                Description = "THIS IS A TEST PROGRAM ALL IT'S HIERARCHY WILL BE BROKEN MOD2",
-                Name = "Low Carb Diet Module",
-                Completed = false,
-                Order = 1,
-                Status = 1,
-                Actions = new List<Actions> { act, act1, act2 }
-            };
-
-            Program pMap = new Program()
-            {
-                Enabled = true,
-                Id = "52d7fc5bd6a48508602923d9",
-                PatientId = "1234",
-                 Description = "THIS IS A TEST PROGRAM ALL IT'S HIERARCHY WILL BE BROKEN PROGRAM!",
-                Text = "THIS IS A TEST PROGRAM ALL IT'S HIERARCHY WILL BE BROKEN",
-                Modules = new List<Module> { mod, mod1 },
-                Completed = false,
-                Order = 1,
+                Id = "52dd5c5bd6a4850ea8b7539d",
+                ActionId = "52dd5c5bd6a4850ea8b75399",
+                StepTypeId = 7,
+                Header = string.Empty,
+                ControlType = 0,
+                SelectType = 0,
+                IncludeTime = false,
+                Question = string.Empty,
+                Description = "complete - final step in action",
+                 Text = "complete",
+                Notes = "Example notes",
                 Status = 1
             };
 
-            return pMap;
+            List<SpawnElement> se = new List<SpawnElement>();
+            se.Add(new SpawnElement { ElementId = "52dd5c5bd6a4850ea8b7539e", ElementType = 2 });
+
+            List<Objective> objs = new List<Objective>();
+            objs.Add(new Objective { Id = "", Value = "75", Unit ="%", Status = 5 });
+
+            Actions act = new Actions
+            {
+                SourceId = "52cb205d1e601522209c44a8",
+                Order = 1,
+                Enabled = true,
+                ElementState = 0,
+                Next = string.Empty,
+                Previous = string.Empty,
+                SpawnElement = se,
+                Id = "52dd5c5bd6a4850ea8b75399",
+                ModuleId = "52dd5c5bd6a4850ea8b75398",
+                Name = "Diabetic screening",
+                Description = "Diabetic screening for initial assesment",
+                CompletedBy = "Care Manager",
+                Completed = true,
+                Text = "text",
+                Objectives = objs,
+                Steps = new List<Step> { s1, s2 },
+                Status = 1
+            };
+
+            return act;
         }
     }
 }

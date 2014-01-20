@@ -29,19 +29,31 @@ namespace Phytel.API.AppDomain.NG
 
                 //// create a responsibility chain to process each elemnt in the hierachy
                 ProgramPlanProcessor pChain = InitializeProgramChain();
-                pChain.ProcessRequest((IPlanElement)action, p, request.UserId);
 
-                // set enable/visibility of actions after action processing.
+                //// process steps in action
+                //action.Steps.ForEach(s =>
+                //{
+                //    pChain.ProcessRequest((IPlanElement)s, p, request.UserId, request.PatientId);
+                //});
+
+                pChain.ProcessRequest((IPlanElement)action, p, request.UserId, request.PatientId);
+
+
                 Module mod = PlanElementUtil.FindElementById(p.Modules, action.ModuleId);
+
                 if (mod != null)
                 {
-                    pChain.ProcessRequest((IPlanElement)mod, p, request.UserId);
+                    // set enabled status for action dependencies
+                    PlanElementUtil.SetEnabledStatusByPrevious(mod.Actions);
+
+                    // set enable/visibility of actions after action processing.
+                    pChain.ProcessRequest((IPlanElement)mod, p, request.UserId, request.PatientId);
                 }
 
                 // set module visibility for modules
                 PlanElementUtil.SetEnabledStatusByPrevious(p.Modules);
 
-                // 4) save
+                // save
                 SaveAction(request, p);
 
                 response.Program = p;
