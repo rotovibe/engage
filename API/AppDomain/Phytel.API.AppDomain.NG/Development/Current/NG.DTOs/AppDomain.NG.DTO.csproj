@@ -78,6 +78,7 @@
   <ItemGroup>
     <Compile Include="Action.cs" />
     <Compile Include="IPlanElement.cs" />
+    <Compile Include="CohortPatient.cs" />
     <Compile Include="PostProcessActionRequest.cs" />
     <Compile Include="PostProcessActionResponse.cs" />
     <Compile Include="GetPatientProgramDetailsSummaryResponse.cs" />

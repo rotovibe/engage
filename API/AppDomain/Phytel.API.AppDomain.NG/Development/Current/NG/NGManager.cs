@@ -202,7 +202,7 @@ namespace Phytel.API.AppDomain.NG
         public GetCohortPatientsResponse GetCohortPatients(GetCohortPatientsRequest request, IRequestContext httpContext)
         {
             GetCohortPatientsResponse pResponse = new GetCohortPatientsResponse();
-            pResponse.Patients = new List<Patient>();
+            pResponse.Patients = new List<CohortPatient>();
 
             try
             {
@@ -220,7 +220,7 @@ namespace Phytel.API.AppDomain.NG
                                                                                             request.SearchFilter));
 
                 //take qResponse Patient details and map them to "Patient" in the GetCohortPatientsResponse
-                qResponse.CohortPatients.ForEach(x => pResponse.Patients.Add(new Patient
+                qResponse.CohortPatients.ForEach(x => pResponse.Patients.Add(new CohortPatient
                 {
                     Id = x.ID,
                     DOB = x.DOB,
@@ -229,8 +229,7 @@ namespace Phytel.API.AppDomain.NG
                     LastName = x.LastName,
                     MiddleName = x.MiddleName,
                     PreferredName = x.PreferredName,
-                    Suffix = x.Suffix,
-                    Priority = 0 // need to enable if needed.
+                    Suffix = x.Suffix
                 }));
 
                 if (qResponse.Status != null)
