@@ -21,7 +21,46 @@ namespace Phytel.API.DataDomain.PatientProblem
 
         public object Insert(object newEntity)
         {
-            throw new NotImplementedException();
+            try
+            {
+                PutNewPatientProblemRequest request = (PutNewPatientProblemRequest)newEntity;
+                DTO.PatientProblem pb = null;
+
+                using (PatientProblemMongoContext ctx = new PatientProblemMongoContext(_dbName))
+                {
+                    MEPatientProblem pp = new MEPatientProblem
+                    {
+                        Active = request.Active,
+                        Featured = request.Featured,
+                        Level = request.Level,
+                        PatientID = ObjectId.Parse(request.PatientId),
+                        ProblemID = ObjectId.Parse(request.ProblemId),
+                        Version = "v1",
+                        DeleteFlag = false,
+                        LastUpdatedOn = System.DateTime.UtcNow
+
+                    };
+                    ctx.PatientProblems.Collection.Insert(pp);
+
+                    pb = new DTO.PatientProblem
+                    {
+                        Active = pp.Active,
+                        Featured = pp.Featured,
+                        Level = pp.Level,
+                        PatientID = pp.PatientID.ToString(),
+                        ProblemID = pp.ProblemID.ToString(),
+                        LastUpdatedOn = pp.LastUpdatedOn,
+                        DeleteFlag = pp.DeleteFlag,
+                        Version = pp.Version
+                    };
+                }
+
+                return pb as object;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
 
         public object InsertAll(List<object> entities)

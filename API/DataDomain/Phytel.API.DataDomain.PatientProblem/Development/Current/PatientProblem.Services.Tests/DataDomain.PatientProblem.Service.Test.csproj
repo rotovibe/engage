@@ -81,6 +81,8 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="PutPatientProblemServicesTest.cs" />
+    <Compile Include="GetPatientProblemServicesTest.cs" />
     <Compile Include="PatientProblemServicesTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

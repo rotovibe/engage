@@ -117,5 +117,83 @@ namespace Phytel.API.DataDomain.PatientProblem
             }
             return response;
         }
+
+        public static GetPatientProblemsDataResponse GetPatientProblem(GetPatientProblemsDataRequest request)
+        {
+            GetPatientProblemsDataResponse response = null;
+
+            IPatientProblemRepository<PatientProblemData> repo = Phytel.API.DataDomain.PatientProblem.PatientProblemRepositoryFactory<PatientProblemData>.GetPatientProblemRepository(request.ContractNumber, request.Context);
+
+            ICollection<SelectExpression> selectExpressions = new List<SelectExpression>();
+
+            // PatientID
+            SelectExpression patientSelectExpression = new SelectExpression();
+            patientSelectExpression.FieldName = MEPatientProblem.PatientIDProperty;
+            patientSelectExpression.Type = SelectExpressionType.EQ;
+            patientSelectExpression.Value = request.PatientId;
+            patientSelectExpression.NextExpressionType = SelectExpressionGroupType.AND;
+            patientSelectExpression.ExpressionOrder = 1;
+            patientSelectExpression.GroupID = 1;
+            selectExpressions.Add(patientSelectExpression);
+
+            // ProblemID
+            SelectExpression problemSelectExpression = new SelectExpression();
+            problemSelectExpression.FieldName = MEPatientProblem.ProblemIDProperty;
+            problemSelectExpression.Type = SelectExpressionType.EQ;
+            problemSelectExpression.Value = request.ProblemId;
+            problemSelectExpression.NextExpressionType = SelectExpressionGroupType.AND;
+            problemSelectExpression.ExpressionOrder = 2;
+            problemSelectExpression.GroupID = 1;
+            selectExpressions.Add(problemSelectExpression);
+
+
+            // Active = true.
+            SelectExpression activeSelectExpression = new SelectExpression();
+            activeSelectExpression.FieldName = MEPatientProblem.ActiveProperty;
+            activeSelectExpression.Type = SelectExpressionType.EQ;
+            activeSelectExpression.Value = true;
+            activeSelectExpression.ExpressionOrder = 3;
+            activeSelectExpression.GroupID = 1;
+            selectExpressions.Add(activeSelectExpression);
+
+            // DeleteFlag = false.
+            // This is not passed through the request object. But user story demands that only Problems set to DeleteFlag == false should be displayed to the end user.
+            SelectExpression deleteFlagSelectExpression = new SelectExpression();
+            deleteFlagSelectExpression.FieldName = MEPatientProblem.DeleteFlagProperty;
+            deleteFlagSelectExpression.Type = SelectExpressionType.EQ;
+            deleteFlagSelectExpression.Value = false;
+            deleteFlagSelectExpression.ExpressionOrder = 4;
+            deleteFlagSelectExpression.GroupID = 1;
+            selectExpressions.Add(deleteFlagSelectExpression);
+
+            APIExpression apiExpression = new APIExpression();
+            apiExpression.Expressions = selectExpressions;
+
+            Tuple<string, IEnumerable<object>> patientProblems = repo.Select(apiExpression);
+
+            if (patientProblems != null)
+            {
+                response = new GetPatientProblemsDataResponse();
+                List<PatientProblemData> ppL = patientProblems.Item2.Cast<PatientProblemData>().ToList();
+                if (ppL.Count > 0)
+                {
+                    response.PatientProblem = ppL[0];
+                }
+            }
+
+            return response;
+        }
+
+        public static PutNewPatientProblemResponse PutPatientProblem(PutNewPatientProblemRequest request)
+        {
+            PutNewPatientProblemResponse response = new PutNewPatientProblemResponse();
+
+            IPatientProblemRepository<PutNewPatientProblemResponse> repo = PatientProblem.PatientProblemRepositoryFactory<PutNewPatientProblemResponse>
+                .GetPatientProblemRepository(request.ContractNumber, request.Context);
+
+            response.PatientProblem = (DTO.PatientProblem)repo.Insert(request);
+
+            return response;
+        }
     }
 }   

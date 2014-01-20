@@ -71,10 +71,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="GetPatientProblemsDataRequest.cs" />
     <Compile Include="GetAllPatientProblemsDataRequest.cs" />
+    <Compile Include="GetPatientProblemsDataResponse.cs" />
+    <Compile Include="GetPatientProblemRequest.cs" />
+    <Compile Include="GetPatientProblemResponse.cs" />
+    <Compile Include="PutNewPatientProblemResponse.cs" />
     <Compile Include="GetAllPatientProblemsDataResponse.cs" />
+    <Compile Include="PatientProblem.cs" />
     <Compile Include="PatientProblemData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="PutNewPatientProblemRequest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\..\Interfaces\Development\Current\Phytel.API.Interface\Phytel.API.Interface.csproj">
