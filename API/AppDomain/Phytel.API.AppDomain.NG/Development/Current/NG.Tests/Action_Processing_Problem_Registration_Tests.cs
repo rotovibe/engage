@@ -7,10 +7,10 @@ using System.Collections.Generic;
 namespace Phytel.API.DataDomain.Patient.Service.Test
 {
     [TestClass]
-    public class Interview_Action_Processing_Tests
+    public class Action_Processing_Problem_Registration_Tests
     {
         [TestMethod]
-        public void Get_Program_Details_summary_for_display_Tests()
+        public void Get_Program_Details_summary_for_display_With_Problem_Code_Registration_Tests()
         {
             string contractNumber = "InHealth001";
             string context = "NG";
@@ -33,6 +33,8 @@ namespace Phytel.API.DataDomain.Patient.Service.Test
 
         private static Actions GenAction()
         {
+            SpawnElement pcse = new SpawnElement { ElementId = "528a66f4d4332317acc5095f", ElementType = 101 };
+
             Step s1 = new Step()
             {
                 Id = "52ddb387d6a4850ea8a60fa6",
@@ -53,7 +55,7 @@ namespace Phytel.API.DataDomain.Patient.Service.Test
                 Status = 1,
                 SelectedResponseId = "52ddb387d6a4850ea8a60fa7",
                 Responses = new List<Response> { 
-                    new Response { Id = "52ddb387d6a4850ea8a60fa7", Nominal = false, Text="Yes", Required=false, Value=string.Empty, Order = 1, NextStepId = "52ddb387d6a4850ea8a60fa9", StepId = "52ddb387d6a4850ea8a60fa6" },
+                    new Response { Id = "52ddb387d6a4850ea8a60fa7", Nominal = false, Text="Yes", SpawnElement = pcse, Required=false, Value=string.Empty, Order = 1, NextStepId = "52ddb387d6a4850ea8a60fa9", StepId = "52ddb387d6a4850ea8a60fa6" },
                     new Response { Id = "52ddb387d6a4850ea8a60fa8", Nominal = false, Text ="No", Required=false,  Order = 2, NextStepId = "52ddb387d6a4850ea8a60fa9", StepId = "52ddb387d6a4850ea8a60fa6" }
                 }
             };

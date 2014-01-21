@@ -31,10 +31,10 @@ namespace Phytel.API.AppDomain.NG
                 ProgramPlanProcessor pChain = InitializeProgramChain();
 
                 //// process steps in action
-                //action.Steps.ForEach(s =>
-                //{
-                //    pChain.ProcessRequest((IPlanElement)s, p, request.UserId, request.PatientId);
-                //});
+                action.Steps.ForEach(s =>
+                {
+                    pChain.ProcessRequest((IPlanElement)s, p, request.UserId, request.PatientId);
+                });
 
                 pChain.ProcessRequest((IPlanElement)action, p, request.UserId, request.PatientId);
 
