@@ -331,10 +331,28 @@ namespace Phytel.API.DataDomain.Program
                                                Required = x.Required,
                                                StepId = x.StepId.ToString(),
                                                Text = x.Text,
-                                               Value = x.Value
+                                               Value = x.Value,
+                                                SpawnElement = GetResponseSpawnElement(x.SpawnElement)
                                            }).ToList<ResponseDetail>();
             }
             return resp;
+        }
+
+        private SpawnElementDetail GetResponseSpawnElement(MESpawnElement mESpawnElement)
+        {
+            try
+            {
+                SpawnElementDetail sed = null;
+                if (mESpawnElement != null)
+                {
+                    sed = new SpawnElementDetail { ElementId = mESpawnElement.SpawnId.ToString(), ElementType = mESpawnElement.Type };
+                }
+                return sed;
+            }
+            catch (Exception ex)
+            {
+                throw new ArgumentException("DDomain:GetResponseSpawnElement()" + ex.Message, ex.InnerException);
+            }
         }
 
         public List<ProgramInfo> GetActiveProgramsInfoList(GetAllActiveProgramsRequest request)
