@@ -332,5 +332,31 @@ namespace Phytel.API.AppDomain.NG.Service
                 return response;
             }
         }
+
+        public GetContactResponse Get(GetContactRequest request)
+        {
+            GetContactResponse response = new GetContactResponse();
+            try
+            {
+                NGManager ngm = new NGManager();
+
+                ValidateTokenResponse result = ngm.IsUserValidated(request.Version, request.Token);
+                if (result.UserId.Trim() != string.Empty)
+                {
+                    request.UserId = result.UserId;
+                    response = ngm.GetContact(request);
+                }
+                else
+                    throw new UnauthorizedAccessException();
+
+                return response;
+            }
+            catch (Exception ex)
+            {
+                //TODO: Log this to the SQL database via ASE
+                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+                return response;
+            }
+        }
     }
 }

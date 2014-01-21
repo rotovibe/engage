@@ -23,6 +23,7 @@ namespace Phytel.API.DataDomain.Patient.DTO
         public const string SuffixProperty = "sfx";
         public const string PreferredProperty = "pfn";
         public const string PriorityProperty = "pri";
+        public const string CIdProperty = "cid";
         public const string ExtraElementsProperty = "ex";
         public const string VersionProperty = "v";
         public const string UpdatedByProperty = "uby";
@@ -68,6 +69,10 @@ namespace Phytel.API.DataDomain.Patient.DTO
         [BsonElement(PriorityProperty)]
         [BsonIgnoreIfNull(true)]
         public MEPriority Priority { get; set; }
+
+        [BsonElement(CIdProperty)]
+        [BsonIgnoreIfNull(true)]
+        public string ContactId { get; set; }
 
         [BsonElement(ExtraElementsProperty)]
         [BsonExtraElements()]

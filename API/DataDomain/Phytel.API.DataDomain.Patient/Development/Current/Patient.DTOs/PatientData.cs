@@ -20,6 +20,7 @@ namespace Phytel.API.DataDomain.Patient.DTO
         public string DisplayPatientSystemID { get; set; }
         public Priority Priority { get; set; }
         public bool Flagged { get; set; }
+        public string ContactId { get; set; }
     }
 
     public enum Priority

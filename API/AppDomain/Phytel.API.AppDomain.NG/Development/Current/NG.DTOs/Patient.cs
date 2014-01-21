@@ -20,5 +20,6 @@ namespace Phytel.API.AppDomain.NG.DTO
         public string DisplaySystemName { get; set; }
         public int Priority { get; set; }
         public int Flagged { get; set; }
+        public string ContactId { get; set; }
     }
 }

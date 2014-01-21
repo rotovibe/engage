@@ -26,6 +26,7 @@ namespace Phytel.API.AppDomain.NG
         protected static readonly string DDProgramServiceUrl = ConfigurationManager.AppSettings["DDProgramServiceUrl"];
         protected static readonly string DDCohortServiceUrl = ConfigurationManager.AppSettings["DDCohortServiceUrl"];
         protected static readonly string DDPatientSystemUrl = ConfigurationManager.AppSettings["DDPatientSystemUrl"];
+        protected static readonly string DDContactServiceUrl = ConfigurationManager.AppSettings["DDContactServiceUrl"];
         #endregion
 
         #region Patient Requests
@@ -247,6 +248,7 @@ namespace Phytel.API.AppDomain.NG
         }
         #endregion
 
+        #region SettingRequest
         public GetAllSettingsResponse GetAllSettings(GetAllSettingsRequest request)
         {
             try
@@ -268,7 +270,8 @@ namespace Phytel.API.AppDomain.NG
                 Exception ae = new Exception(wse.ResponseBody, wse.InnerException);
                 throw ae;
             }
-        }
+        } 
+        #endregion
 
         public PutPatientDetailsUpdateResponse PutPatientDetailsUpdate(PutPatientDetailsUpdateRequest request)
         {
@@ -646,5 +649,35 @@ namespace Phytel.API.AppDomain.NG
             }
             return spawn;
         }
+
+
+        #region Contact
+        public GetContactResponse GetContact(GetContactRequest request)
+        {
+            GetContactResponse response = new GetContactResponse();
+
+            try
+            {
+                IRestClient client = new JsonServiceClient();
+
+               // GetActiveProgramsResponse dataDomainResponse;
+                    //dataDomainResponse =
+                    //    client.Get<GetActiveProgramsResponse>(
+                    //    string.Format("{0}/{1}/{2}/{3}/Programs/Active",
+                    //    DDProgramServiceUrl,
+                    //    "NG",
+                    //    request.Version,
+                    //    request.ContractNumber));
+
+                    //response.Contact
+                return response;
+            }
+            catch (WebServiceException wse)
+            {
+                Exception ae = new Exception(wse.ResponseBody, wse.InnerException);
+                throw ae;
+            }
+        } 
+        #endregion
     }
 }

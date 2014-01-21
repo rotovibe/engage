@@ -77,6 +77,26 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Action.cs" />
+    <Compile Include="Contact\Address.cs" />
+    <Compile Include="Contact\CommMode.cs" />
+    <Compile Include="Contact\Email.cs" />
+    <Compile Include="Contact\GetContactRequest.cs" />
+    <Compile Include="Contact\Language.cs" />
+    <Compile Include="Contact\Phone.cs" />
+    <Compile Include="Contact\Text.cs" />
+    <Compile Include="LookUp\GetAllLanguagesRequest.cs" />
+    <Compile Include="LookUp\GetAllTimeZonesRequest.cs" />
+    <Compile Include="LookUp\GetAllTimesOfDaysRequest.cs" />
+    <Compile Include="LookUp\GetAllStatesRequest.cs" />
+    <Compile Include="LookUp\GetAllCommTypesRequest.cs" />
+    <Compile Include="LookUp\GetAllCommModesRequest.cs" />
+    <Compile Include="LookUp\GetAllTimeLanguagesResponse.cs" />
+    <Compile Include="LookUp\GetAllTimeZonesResponse.cs" />
+    <Compile Include="LookUp\GetAllTimesOfDaysResponse.cs" />
+    <Compile Include="LookUp\GetAllStatesRespone.cs" />
+    <Compile Include="LookUp\GetAllCommTypesRespone.cs" />
+    <Compile Include="LookUp\GetAllCommModesResponse.cs" />
+    <Compile Include="Contact\GetContactResponse.cs" />
     <Compile Include="IPlanElement.cs" />
     <Compile Include="CohortPatient.cs" />
     <Compile Include="PostProcessActionRequest.cs" />
@@ -90,10 +110,10 @@
     <Compile Include="PostPatientToProgramsResponse.cs" />
     <Compile Include="GetAllSettingsResponse.cs" />
     <Compile Include="GetAllSettingsRequest.cs" />
-    <Compile Include="GetAllProblemsResponse.cs" />
+    <Compile Include="LookUp\GetAllProblemsResponse.cs" />
     <Compile Include="GetCohortPatientsRequest.cs" />
     <Compile Include="GetCohortPatientsResponse.cs" />
-    <Compile Include="GetAllProblemsRequest.cs" />
+    <Compile Include="LookUp\GetAllProblemsRequest.cs" />
     <Compile Include="GetAllPatientProblemsRequest.cs" />
     <Compile Include="GetAllPatientProblemsResponse.cs" />
     <Compile Include="GetAllCohortsRequest.cs" />

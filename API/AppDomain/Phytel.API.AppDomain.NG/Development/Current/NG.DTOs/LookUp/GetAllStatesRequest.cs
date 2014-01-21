@@ -1,11 +1,10 @@
 ﻿using ServiceStack.ServiceHost;
 using Phytel.API.Interface;
-using System.Collections.Generic;
 
 namespace Phytel.API.AppDomain.NG.DTO
 {
-     [Route("/{Version}/{ContractNumber}/problemslookup", "GET")]
-    public class GetAllProblemsRequest : IAppDomainRequest
+     [Route("/{Version}/{ContractNumber}/lookup/states", "GET")]
+    public class GetAllStatesRequest : IAppDomainRequest
     {
         [ApiMember(Name = "ContractNumber", Description = "Contract parameter will be defined in the route.", ParameterType = "property", DataType = "string", IsRequired = false)]
         public string ContractNumber { get; set; }
@@ -19,6 +18,6 @@ namespace Phytel.API.AppDomain.NG.DTO
         [ApiMember(Name = "UserID", Description = "ID of the user making the request (Internally used ONLY)", ParameterType = "property", DataType = "string", IsRequired = false)]
         public string UserId { get; set; }
 
-        public GetAllProblemsRequest() { }
+        public GetAllStatesRequest() { }
     }
 }

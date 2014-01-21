@@ -91,6 +91,7 @@ namespace Phytel.API.DataDomain.Patient
                                 MiddleName = p.MiddleName,
                                 Suffix = p.Suffix,
                                 Priority = (DTO.Priority)((int)p.Priority),
+                                ContactId = p.ContactId.ToString(),
                                 DisplayPatientSystemID = p.DisplayPatientSystemID.ToString()
                             }).FirstOrDefault();
             }
@@ -116,7 +117,8 @@ namespace Phytel.API.DataDomain.Patient
                                Suffix = p.Suffix,
                                Priority = (DTO.Priority)((int)p.Priority),
                                DisplayPatientSystemID = p.DisplayPatientSystemID.ToString(),
-                               Flagged = GetFlaggedStatus(entityId, userId)
+                               Flagged = GetFlaggedStatus(entityId, userId),
+                               ContactId = p.ContactId.ToString()
                            }).FirstOrDefault();
             }
             return patient;
@@ -336,6 +338,7 @@ namespace Phytel.API.DataDomain.Patient
                         Suffix = mp.Suffix,
                         Version = mp.Version,
                         Priority = (DTO.Priority)((int)mp.Priority),
+                        ContactId = mp.ContactId.ToString(),
                         DisplayPatientSystemID = mp.DisplayPatientSystemID.ToString()
                     });
                 }
