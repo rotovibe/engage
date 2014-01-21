@@ -9,6 +9,7 @@ using ServiceStack.ServiceHost;
 using System.Web;
 using ServiceStack.WebHost.Endpoints.Extensions;
 using ServiceStack.Common.Web;
+using ServiceStack.Text;
 
 namespace Phytel.API.AppDomain.NG.Service
 {
@@ -39,6 +40,9 @@ namespace Phytel.API.AppDomain.NG.Service
                     { "Access-Control-Allow-Headers", "Content-Type" }, },
                     AllowJsonpRequests = true
                 });
+
+                // initialize datetime format
+                JsConfig.DateHandler = JsonDateHandler.ISO8601;
             }
         }
 
