@@ -17,9 +17,9 @@ namespace Phytel.API.DataDomain.Patient.Service.Test
             string priority = "3";
             string version = "v1";
             string token = "52de9344d6a4850faca90a8e";
-            string programId = "52ddb387d6a4850ea8a60f8d";
-            string patientId = "528f6d42072ef708ecd772a6";
-            string actionID = "52a0f33bd43323141c9eb274";
+            string programId = "52def1add6a4850fac29e3f0";
+            string patientId = "528f6cfa072ef708ecd68c94";
+            string actionID = "52def1add6a4850fac29e474";
             IRestClient client = new JsonServiceClient();
 
             PostProcessActionResponse response = client.Post<PostProcessActionResponse>(
@@ -38,7 +38,7 @@ namespace Phytel.API.DataDomain.Patient.Service.Test
             Step s1 = new Step()
             {
                 Id = "52ddb387d6a4850ea8a60fa6",
-                ActionId = "52ddb387d6a4850ea8a60fa5",
+                ActionId = "52def1add6a4850fac29e474",
                 SourceId = "52cb2bdb1e601522209c44ba",
                 Order = 1,
                 Enabled = true,
@@ -69,7 +69,7 @@ namespace Phytel.API.DataDomain.Patient.Service.Test
                 ElementState = 0,
                 Completed = false,
                 Id = "52ddb387d6a4850ea8a60fa9",
-                ActionId = "52ddb387d6a4850ea8a60fa5",
+                ActionId = "52def1add6a4850fac29e474",
                 StepTypeId = 7,
                 Header = string.Empty,
                 ControlType = 0,
@@ -97,8 +97,8 @@ namespace Phytel.API.DataDomain.Patient.Service.Test
                 Next = string.Empty,
                 Previous = string.Empty,
                 SpawnElement = se,
-                Id = "52ddb387d6a4850ea8a60fa5",
-                ModuleId = "52ddb387d6a4850ea8a60fa4",
+                Id = "52def1add6a4850fac29e474",
+                ModuleId = "52def1add6a4850fac29e45a",
                 Name = "Diabetic screening",
                 Description = "Diabetic screening for initial assesment",
                 CompletedBy = "Care Manager",

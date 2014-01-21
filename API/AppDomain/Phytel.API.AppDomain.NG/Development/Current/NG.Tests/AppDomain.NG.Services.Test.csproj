@@ -81,6 +81,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="Action_Processing_response_spawn_Tests.cs" />
     <Compile Include="Complete_Action_Tests.cs" />
     <Compile Include="Action_Processing_Bug_572_Tests.cs" />
     <Compile Include="Action_Processing_Problem_Registration_Tests.cs" />
@@ -105,6 +106,9 @@
       <Project>{e9957107-8f2a-4946-834e-629d4235b9b3}</Project>
       <Name>AppDomain.NG.DTO</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Action_Sample.txt" />
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
