@@ -1,3 +1,4 @@
+using ServiceStack.Text;
 using ServiceStack.WebHost.Endpoints;
 using System;
 
@@ -15,6 +16,8 @@ namespace Phytel.API.DataDomain.Program.Service
                 //register any dependencies your services use, e.g:
                 //container.Register<ICacheClient>(new MemoryCacheClient());
 
+                // initialize datetime format
+                JsConfig.DateHandler = JsonDateHandler.ISO8601;
             }
         }
 
