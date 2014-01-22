@@ -20,21 +20,21 @@ namespace Phytel.API.DataDomain.Patient.DTO
         public const string DeleteFlagProperty = "del";
         public const string TTLDateProperty = "ttl";
         public const string LastUpdatedOnProperty = "uon";
+        public const string PatientIdProperty = "pid";
+        public const string UserIdProperty = "uid";
+        public const string FlaggedProperty = "flg";
 
         [BsonId]
         public ObjectId Id { get; set; }
 
-        public const string PatientIdProperty = "pid";
         [BsonElement(PatientIdProperty)]
         [BsonIgnoreIfNull(true)]
         public ObjectId PatientId { get; set; }
 
-        public const string UserIdProperty = "uid";
         [BsonElement(UserIdProperty)]
         [BsonIgnoreIfNull(true)]
         public string UserId { get; set; }
 
-        public const string FlaggedProperty = "flg";
         [BsonElement(FlaggedProperty)]
         [BsonIgnoreIfNull(true)]
         public bool Flagged { get; set; }
