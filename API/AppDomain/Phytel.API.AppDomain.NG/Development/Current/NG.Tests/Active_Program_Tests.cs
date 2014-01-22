@@ -71,17 +71,17 @@ namespace Phytel.API.DataDomain.Patient.Service.Test
             string context = "NG";
             string priority = "3";
             string version = "v1";
-            string token = "52d442a3d6a4850dac4a0b8f";
-            string programId = "52d449ddd6a4850dace2a71b";
+            string token = "52e0118cd6a4850d00a4c9af";
+            string patientProgramId = "52d449ddd6a4850dace2a71b";
             string patientId = "528f6bdb072ef708ecd316b9";
             IRestClient client = new JsonServiceClient();
 
             GetPatientProgramDetailsSummaryResponse response = client.Get<GetPatientProgramDetailsSummaryResponse>(
-                string.Format(@"http://localhost:888/Nightingale/{0}/{1}/Patient/{2}/Program/Details/?ProgramId={3}&Token={4}",
+                string.Format(@"http://localhost:888/Nightingale/{0}/{1}/Patient/{2}/Program/{3}/?Token={4}",
                 version,
                 contractNumber,
                 patientId,
-                programId,
+                patientProgramId,
                 token) );
         }
     }
