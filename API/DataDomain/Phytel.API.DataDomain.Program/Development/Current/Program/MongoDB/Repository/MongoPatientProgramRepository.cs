@@ -338,14 +338,17 @@ namespace Phytel.API.DataDomain.Program
             return resp;
         }
 
-        private SpawnElementDetail GetResponseSpawnElement(MESpawnElement mESpawnElement)
+        private List<SpawnElementDetail> GetResponseSpawnElement(List<MESpawnElement> mESpawnElement)
         {
             try
             {
-                SpawnElementDetail sed = null;
+                List<SpawnElementDetail> sed = new List<SpawnElementDetail>();
                 if (mESpawnElement != null)
                 {
-                    sed = new SpawnElementDetail { ElementId = mESpawnElement.SpawnId.ToString(), ElementType = mESpawnElement.Type };
+                    mESpawnElement.ForEach(se =>
+                    {
+                        sed.Add(new SpawnElementDetail { ElementId = se.SpawnId.ToString(), ElementType = se.Type });
+                    });
                 }
                 return sed;
             }

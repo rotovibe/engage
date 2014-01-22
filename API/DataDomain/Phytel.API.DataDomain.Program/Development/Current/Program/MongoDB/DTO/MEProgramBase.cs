@@ -300,7 +300,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
 
         [BsonElement(SpawnElementProperty)]
         [BsonIgnoreIfNull(true)]
-        public MESpawnElement SpawnElement { get; set; }
+        public List<MESpawnElement> SpawnElement { get; set; }
     }
 
     public class ObjectivesInfo : IMongoEntity<ObjectId>

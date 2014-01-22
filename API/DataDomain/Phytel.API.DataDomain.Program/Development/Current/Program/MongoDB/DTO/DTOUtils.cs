@@ -210,11 +210,14 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
 
                                                 if (r.SpawnElement != null)
                                                 {
-                                                    if (r.SpawnElement.SpawnId != null)
+                                                    foreach (MESpawnElement sp in r.SpawnElement)
                                                     {
-                                                        if (r.SpawnElement.SpawnId.Equals(kv.Key))
+                                                        if (sp.SpawnId != null)
                                                         {
-                                                            r.SpawnElement.SpawnId = kv.Value;
+                                                            if (sp.SpawnId.Equals(kv.Key))
+                                                            {
+                                                                sp.SpawnId = kv.Value;
+                                                            }
                                                         }
                                                     }
                                                 }
@@ -466,18 +469,21 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             }
         }
 
-        private static MESpawnElement GetSPawnElement(SpawnElementDetail s)
+        private static List<MESpawnElement> GetSPawnElement(List<SpawnElementDetail> s)
         {
             try
             {
-                MESpawnElement sp = null;
+                List<MESpawnElement> sp = new List<MESpawnElement>();
                 if (s != null)
                 {
-                    sp = new MESpawnElement
+                    s.ForEach(sed =>
                     {
-                        SpawnId = ObjectId.Parse(s.ElementId),
-                        Type = s.ElementType
-                    };
+                        sp.Add(new MESpawnElement
+                        {
+                            SpawnId = ObjectId.Parse(sed.ElementId),
+                            Type = sed.ElementType
+                        });
+                    });
                 }
                 return sp;
             }
