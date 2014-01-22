@@ -33,6 +33,9 @@ namespace Phytel.API.DataDomain.Patient.Service.Test
 
         private static Actions GenAction()
         {
+            List<SpawnElement> ser = new List<SpawnElement>();
+            ser.Add(new SpawnElement { ElementType = 101, ElementId = "528a66f4d4332317acc5095f" });
+
             Step s1 = new Step()
             {
                 SourceId = "52cb2bdb1e601522209c44ba",
@@ -57,7 +60,7 @@ namespace Phytel.API.DataDomain.Patient.Service.Test
                     Nominal = false,
                     Required = false,
                     NextStepId = "52d9639dd6a4850b88206a58",
-                    SpawnElement = new SpawnElement{ ElementType=101, ElementId="528a66f4d4332317acc5095f"}
+                    SpawnElement = ser,
                     },
                     new Response { 
                         Id = "52d9639dd6a4850b88206a57", 

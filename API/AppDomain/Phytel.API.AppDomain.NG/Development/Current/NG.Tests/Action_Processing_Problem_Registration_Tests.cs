@@ -33,7 +33,8 @@ namespace Phytel.API.DataDomain.Patient.Service.Test
 
         private static Actions GenAction()
         {
-            SpawnElement pcse = new SpawnElement { ElementId = "528a66f4d4332317acc5095f", ElementType = 101 };
+            List<SpawnElement> pcse = new List<SpawnElement>();
+                pcse.Add(new SpawnElement { ElementId = "528a66f4d4332317acc5095f", ElementType = 101 });
 
             Step s1 = new Step()
             {

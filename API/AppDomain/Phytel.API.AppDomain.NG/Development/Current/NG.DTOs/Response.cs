@@ -16,6 +16,6 @@ namespace Phytel.API.AppDomain.NG.DTO
         public bool Nominal { get; set; }
         public bool Required { get; set; }
         public string NextStepId { get; set; }
-        public SpawnElement SpawnElement { get; set; }
+        public List<SpawnElement> SpawnElement { get; set; }
     }
 }

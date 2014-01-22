@@ -565,18 +565,21 @@ namespace Phytel.API.AppDomain.NG
             }
         }
 
-        private static SpawnElementDetail GetDDSpawnElement(SpawnElement s)
+        private static List<SpawnElementDetail> GetDDSpawnElement(List<SpawnElement> s)
         {
             try
             {
-                SpawnElementDetail sed = null;
+                List<SpawnElementDetail> sed = new List<SpawnElementDetail>();
                 if (s != null)
                 {
-                    sed = new SpawnElementDetail
+                    s.ForEach(x =>
                     {
-                        ElementType = s.ElementType,
-                        ElementId = s.ElementId
-                    };
+                        sed.Add(new SpawnElementDetail
+                        {
+                            ElementType = x.ElementType,
+                            ElementId = x.ElementId
+                        });
+                    });
                 }
                 return sed;
             }
@@ -618,18 +621,20 @@ namespace Phytel.API.AppDomain.NG
             }
         }
 
-        private static SpawnElement GetADSpawnElement(SpawnElementDetail s)
+        private static List<SpawnElement> GetADSpawnElement(List<SpawnElementDetail> s)
         {
             try
             {
-                SpawnElement se = null;
+                List<SpawnElement> se = new List<SpawnElement>();
                 if (s != null)
                 {
-                    se = new SpawnElement
-                    {
-                        ElementId = s.ElementId,
-                        ElementType = s.ElementType
-                    };
+                    s.ForEach(x =>{
+                        se.Add(new SpawnElement
+                        {
+                            ElementId = x.ElementId,
+                            ElementType = x.ElementType
+                        });
+                    });
                 }
                 return se;
             }

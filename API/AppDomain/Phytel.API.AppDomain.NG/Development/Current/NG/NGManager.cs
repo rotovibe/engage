@@ -614,18 +614,21 @@ namespace Phytel.API.AppDomain.NG
             return resps;
         }
 
-        private SpawnElement GetADSpawnElement(DD.SpawnElementDetail sed)
+        private List<SpawnElement> GetADSpawnElement(List<DD.SpawnElementDetail> sed)
         {
             try
             {
-                SpawnElement se = null;
+                List<SpawnElement> se = new List<SpawnElement>();
                 if (sed != null)
                 {
-                    se = new SpawnElement
+                    sed.ForEach(x =>
                     {
-                        ElementId = sed.ElementId,
-                        ElementType = sed.ElementType
-                    };
+                        se.Add(new SpawnElement
+                        {
+                            ElementId = x.ElementId,
+                            ElementType = x.ElementType
+                        });
+                    });
                 }
                 return se;
             }
