@@ -435,7 +435,7 @@ namespace Phytel.API.AppDomain.NG
                     request.Version,
                     request.ContractNumber,
                     request.PatientId,
-                    request.ProgramId,
+                    request.PatientProgramId,
                     request.Token));
 
                 if (resp != null)

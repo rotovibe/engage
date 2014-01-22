@@ -4,11 +4,11 @@ using System.Runtime.Serialization;
 
 namespace Phytel.API.AppDomain.NG.DTO
 {
-    [Route("/{Version}/{ContractNumber}/Patient/{PatientId}/Program/Details/", "GET")]
+    [Route("/{Context}/{Version}/{ContractNumber}/Patient/{PatientId}/Program/{PatientProgramId}/", "GET")]
     public class GetPatientProgramDetailsSummaryRequest : IAppDomainRequest
     {
         [ApiMember(Name = "ProgramId", Description = "programId of program to get details.", ParameterType = "Path", DataType = "string", IsRequired = true)]
-        public string ProgramId { get; set; }
+        public string PatientProgramId { get; set; }
 
         [ApiMember(Name = "PatientId", Description = "PatientId", ParameterType = "path", DataType = "string", IsRequired = true)]
         public string PatientId { get; set; }
@@ -24,5 +24,8 @@ namespace Phytel.API.AppDomain.NG.DTO
 
         [ApiMember(Name = "Version", Description = "Version of the API being called", ParameterType = "property", DataType = "string", IsRequired = true)]
         public string Version { get; set; }
+
+        [ApiMember(Name = "Context", Description = "Product Context requesting the Program", ParameterType = "property", DataType = "string", IsRequired = false)]
+        public string Context { get; set; }
     }
 }
