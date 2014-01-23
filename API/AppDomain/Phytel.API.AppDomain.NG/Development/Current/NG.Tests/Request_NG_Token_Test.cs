@@ -105,9 +105,9 @@ namespace Phytel.API.AppDomain.NG.Services.Test
             string token = "528cc924d6a4850fe05b3afa";
             IRestClient client = new JsonServiceClient();
             // Act
-            //[Route("/{Context}/{Version}/{ContractNumber}/problemslookup", 
+            //[Route("/{Context}/{Version}/{ContractNumber}/lookup/problems", 
             GetAllProblemsResponse response = client.Get<GetAllProblemsResponse>
-                (string.Format("{0}/{1}/{2}/{3}/problemslookup?Token={4}",
+                (string.Format("{0}/{1}/{2}/{3}/lookup/problems?Token={4}",
                   "http://localhost:888/Nightingale/", context, version, contractNumber, token));
 
             // Assert
