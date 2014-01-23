@@ -392,10 +392,13 @@ namespace Phytel.API.DataDomain.LookUp
                         foreach (MECommType m in meLookup.Data)
                         {
                             List<string> commModes = null;
-                            foreach(ObjectId id in m.CommModes)
+                            if (m.CommModes.Count > 0)
                             {
                                 commModes = new List<string>();
-                                commModes.Add(id.ToString());
+                                foreach (ObjectId id in m.CommModes)
+                                {
+                                    commModes.Add(id.ToString());
+                                }
                             }
                             CommTypeData data = new CommTypeData { ID = m.DataID.ToString(), Name = m.Name, CommModes = commModes };
                             commTypeList.Add(data);
