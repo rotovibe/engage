@@ -8,10 +8,10 @@ namespace Phytel.API.DataDomain.LookUp.DTO
     [BsonIgnoreExtraElements(false)]
     public class MEProblem : LookUpBase
     {
-        public const string ActiveProperty = "a";
+        public const string ActiveProperty = "act";
         public const string CodeSystemProperty = "cs";
         public const string CodeProperty = "c";
-        public const string TypeProperty = "t";
+        public const string TypeProperty = "type";
         public const string DefaultLevelProperty = "dl";
         public const string DefaultFeaturedProperty = "df";
 
