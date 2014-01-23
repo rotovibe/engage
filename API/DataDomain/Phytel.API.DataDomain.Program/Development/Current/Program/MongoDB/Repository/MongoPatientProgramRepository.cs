@@ -50,15 +50,15 @@ namespace Phytel.API.DataDomain.Program
                             AuthoredBy = cp.AuthoredBy,
                             Client = cp.Client,
                             ProgramState = Common.ProgramState.NotStarted,
-                            AssignBy = cp.AssignBy,
-                            AssignDate = cp.AssignDate,
-                            ElementState = cp.ElementState,
+                            AssignedBy = cp.AssignedBy,
+                            AssignedOn = cp.AssignedOn,
+                            State = cp.State,
                             StartDate = System.DateTime.UtcNow, // utc time
                             EndDate = null,
                             GraduatedFlag = false,
                             Population = null,
                             OptOut = null,
-                            NotEnrollReason = null,
+                            DidNotEnrollReason = null,
                             DisEnrollReason = null,
                             Eligibility = Common.GenericStatus.Pending,
                             EligibilityStartDate = System.DateTime.UtcNow,
@@ -104,7 +104,7 @@ namespace Phytel.API.DataDomain.Program
                         // update programid in modules
                         var q = MB.Query<MEPatientProgram>.EQ(b => b.Id, patientProgDoc.Id);
                         patientProgDoc.Modules.ForEach(s => s.ProgramId = patientProgDoc.Id);
-                        ctx.PatientPrograms.Collection.Update(q, MB.Update.SetWrapped<List<Modules>>("modules", patientProgDoc.Modules));
+                        ctx.PatientPrograms.Collection.Update(q, MB.Update.SetWrapped<List<MEModules>>("modules", patientProgDoc.Modules));
 
                         // hydrate response object
                         result.program = new ProgramInfo
@@ -186,9 +186,9 @@ namespace Phytel.API.DataDomain.Program
                             Order = cp.Order,
                             Previous = cp.Previous,
                             SourceId = cp.SourceId,
-                            AssignBy = cp.AssignBy,
-                            AssignDate = cp.AssignDate,
-                            ElementState = (int)cp.ElementState,
+                            AssignBy = cp.AssignedBy,
+                            AssignDate = cp.AssignedOn,
+                            ElementState = (int)cp.State,
                             CompletedBy = cp.CompletedBy,
                             DateCompleted = cp.DateCompleted,
                             ObjectivesInfo = cp.ObjectivesInfo
@@ -214,9 +214,9 @@ namespace Phytel.API.DataDomain.Program
                                 Order = r.Order,
                                 SpawnElement = GetSpawnElement(r),
                                 SourceId = r.SourceId,
-                                AssignBy = r.AssignBy,
-                                AssignDate = r.AssignDate,
-                                ElementState = (int)r.ElementState,
+                                AssignBy = r.AssignedBy,
+                                AssignDate = r.AssignedOn,
+                                ElementState = (int)r.State,
                                 CompletedBy = r.CompletedBy,
                                 DateCompleted = r.DateCompleted,
                                 Objectives = r.Objectives
@@ -242,9 +242,9 @@ namespace Phytel.API.DataDomain.Program
                                     Order = a.Order,
                                     SpawnElement = GetSpawnElement(a),
                                     SourceId = a.SourceId,
-                                    AssignBy = a.AssignBy,
-                                    AssignDate = a.AssignDate,
-                                    ElementState = (int)a.ElementState,
+                                    AssignBy = a.AssignedBy,
+                                    AssignDate = a.AssignedOn,
+                                    ElementState = (int)a.State,
                                     DateCompleted = a.DateCompleted,
                                     Objectives = a.Objectives
                                     .Select(x => new ObjectivesDetail
@@ -277,9 +277,9 @@ namespace Phytel.API.DataDomain.Program
                                         SelectedResponseId = s.SelectedResponseId,
                                         IncludeTime = s.IncludeTime,
                                         SelectType = s.SelectType,
-                                        AssignBy = s.AssignBy,
-                                        AssignDate = s.AssignDate,
-                                        ElementState = (int)s.ElementState,
+                                        AssignBy = s.AssignedBy,
+                                        AssignDate = s.AssignedOn,
+                                        ElementState = (int)s.State,
                                         CompletedBy = s.CompletedBy,
                                         DateCompleted = s.DateCompleted,
                                         Responses = GetResponses(s),
@@ -317,7 +317,7 @@ namespace Phytel.API.DataDomain.Program
             return spawn;
         }
 
-        private List<ResponseDetail> GetResponses(StepsInfo step)
+        private List<ResponseDetail> GetResponses(MEStep step)
         {
             List<ResponseDetail> resp = null;
             if (step.Responses != null)
@@ -332,7 +332,7 @@ namespace Phytel.API.DataDomain.Program
                                                StepId = x.StepId.ToString(),
                                                Text = x.Text,
                                                Value = x.Value,
-                                                SpawnElement = GetResponseSpawnElement(x.SpawnElement)
+                                                SpawnElement = GetResponseSpawnElement(x.Spawn)
                                            }).ToList<ResponseDetail>();
             }
             return resp;
@@ -491,7 +491,7 @@ namespace Phytel.API.DataDomain.Program
                 using (ProgramMongoContext ctx = new ProgramMongoContext(_dbName))
                 {
                     var q = MB.Query<MEPatientProgram>.EQ(b => b.Id, ObjectId.Parse(p.ProgramId));
-                    List<Modules> mods = DTOUtils.CloneAppDomainModules(pg.Modules);
+                    List<MEModules> mods = DTOUtils.CloneAppDomainModules(pg.Modules);
 
                     var uv = new List<MB.UpdateBuilder>();
                     uv.Add(MB.Update.Set(MEPatientProgram.CompletedProperty, pg.Completed));
@@ -507,7 +507,7 @@ namespace Phytel.API.DataDomain.Program
                     if (pg.Client != null) { uv.Add(MB.Update.Set(MEPatientProgram.ClientProperty, pg.Client)); }
                     if (pg.CompletedBy != null) { uv.Add(MB.Update.Set(MEPatientProgram.CompletedByProperty, pg.CompletedBy)); }
                     if (pg.ContractProgramId != null) { uv.Add(MB.Update.Set(MEPatientProgram.ContractProgramIdProperty, ObjectId.Parse(pg.ContractProgramId))); }
-                    if (pg.DateCompleted != null) { uv.Add(MB.Update.Set(MEPatientProgram.DateCompletedProperty, pg.DateCompleted)); }
+                    if (pg.DateCompleted != null) { uv.Add(MB.Update.Set(MEPatientProgram.CompletedOnProperty, pg.DateCompleted)); }
                     if (pg.Description != null) { uv.Add(MB.Update.Set(MEPatientProgram.DescriptionProperty, pg.Description)); }
                     if (pg.EligibilityEndDate != null) { uv.Add(MB.Update.Set(MEPatientProgram.EligibilityEndDateProperty, pg.EligibilityEndDate)); }
                     if (pg.EligibilityRequirements != null) { uv.Add(MB.Update.Set(MEPatientProgram.EligibilityRequirementsProperty, pg.EligibilityRequirements)); }
@@ -520,9 +520,9 @@ namespace Phytel.API.DataDomain.Program
                     if (pg.SourceId != null) { uv.Add(MB.Update.Set(MEPatientProgram.SourceIdProperty, pg.SourceId)); }
                     if (pg.StartDate != null) { uv.Add(MB.Update.Set(MEPatientProgram.StartDateProperty, pg.StartDate)); }
                     if (pg.Version != null) { uv.Add(MB.Update.Set(MEPatientProgram.VersionProperty, pg.Version)); }
-                    if (mods != null) { uv.Add(MB.Update.SetWrapped<List<Modules>>(MEPatientProgram.ModulesProperty, mods)); }
+                    if (mods != null) { uv.Add(MB.Update.SetWrapped<List<MEModules>>(MEPatientProgram.ModulesProperty, mods)); }
                     if (pg.SpawnElement != null) { uv.Add(MB.Update.SetWrapped<List<MESpawnElement>>(MEPatientProgram.SpawnProperty, DTOUtils.GetSpawnElements(pg.SpawnElement))); }
-                    if (pg.ObjectivesInfo != null) { uv.Add(MB.Update.SetWrapped<List<ObjectivesInfo>>(MEPatientProgram.ObjectivesInfoProperty, DTOUtils.GetObjectives(pg.ObjectivesInfo))); }
+                    if (pg.ObjectivesInfo != null) { uv.Add(MB.Update.SetWrapped<List<Objectives>>(MEPatientProgram.ObjectivesInfoProperty, DTOUtils.GetObjectives(pg.ObjectivesInfo))); }
 
                     IMongoUpdate update = MB.Update.Combine(uv);
                     ctx.PatientPrograms.Collection.Update(q, update);

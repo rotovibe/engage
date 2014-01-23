@@ -11,19 +11,19 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
 {
     public static class DTOUtils
     {
-        public static List<Modules> SetValidModules(List<Modules> list)
+        public static List<MEModules> SetValidModules(List<MEModules> list)
         {
             try
             {
-                List<StepsInfo> steps = new List<StepsInfo>();
-                List<ActionsInfo> acts = new List<ActionsInfo>();
-                List<Modules> mods = new List<Modules>();
+                List<MEStep> steps = new List<MEStep>();
+                List<MEAction> acts = new List<MEAction>();
+                List<MEModules> mods = new List<MEModules>();
 
-                foreach (Modules m in list)
+                foreach (MEModules m in list)
                 {
                     if (m.Status == Common.Status.Active)
                     {
-                        Modules mod = new Modules()
+                        MEModules mod = new MEModules()
                         {
                             Id = m.Id,
                             ProgramId = m.ProgramId,
@@ -38,9 +38,9 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
                             Previous = m.Previous,
                             Spawn = m.Spawn,
                             SourceId = m.SourceId,
-                            AssignBy = m.AssignBy,
-                            AssignDate = m.AssignDate,
-                            ElementState = m.ElementState,
+                            AssignedBy = m.AssignedBy,
+                            AssignedOn = m.AssignedOn,
+                            State = m.State,
                             CompletedBy = m.CompletedBy,
                             DateCompleted = m.DateCompleted,
                             //Objectives = m.Objectives.Where(a => a.Status == Common.Status.Active).Select(z => new ObjectivesInfo()
@@ -50,14 +50,14 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
                             //    Unit = z.Unit,
                             //    Value = z.Value
                             //}).ToList(),
-                            Actions = new List<ActionsInfo>()
+                            Actions = new List<MEAction>()
                         };
 
-                        foreach (ActionsInfo ai in m.Actions)
+                        foreach (MEAction ai in m.Actions)
                         {
                             if (ai.Status == Common.Status.Active)
                             {
-                                ActionsInfo ac = new ActionsInfo()
+                                MEAction ac = new MEAction()
                                 {
                                     CompletedBy = ai.CompletedBy,
                                     Description = ai.Description,
@@ -73,9 +73,9 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
                                     Previous = ai.Previous,
                                     Spawn = ai.Spawn,
                                     SourceId = ai.SourceId,
-                                    AssignBy = ai.AssignBy,
-                                    AssignDate = ai.AssignDate,
-                                    ElementState = ai.ElementState,
+                                    AssignedBy = ai.AssignedBy,
+                                    AssignedOn = ai.AssignedOn,
+                                    State = ai.State,
                                     //Objectives = ai.Objectives.Where(r => r.Status == Common.Status.Active).Select(x => new ObjectivesInfo()
                                     //{
                                     //    Id = x.Id,
@@ -83,7 +83,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
                                     //    Unit = x.Unit,
                                     //    Value = x.Value
                                     //}).ToList(),
-                                    Steps = ai.Steps.Where(s => s.Status == Common.Status.Active).Select(b => new StepsInfo()
+                                    Steps = ai.Steps.Where(s => s.Status == Common.Status.Active).Select(b => new MEStep()
                                     {
                                         Status = b.Status,
                                         Description = b.Description,
@@ -106,9 +106,9 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
                                         SelectedResponseId = b.SelectedResponseId,
                                         Spawn = b.Spawn,
                                         SourceId = b.SourceId,
-                                        AssignBy = b.AssignBy,
-                                        AssignDate = b.AssignDate,
-                                        ElementState = b.ElementState
+                                        AssignedBy = b.AssignedBy,
+                                        AssignedOn = b.AssignedOn,
+                                        State = b.State
                                     }).ToList()
                                 };
                                 mod.Actions.Add(ac);
@@ -126,23 +126,23 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             }
         }
 
-        public static void RecurseAndReplaceIds(List<Modules> mods)
+        public static void RecurseAndReplaceIds(List<MEModules> mods)
         {
             Dictionary<ObjectId, ObjectId> IdsList = new Dictionary<ObjectId, ObjectId>();
             try
             {
-                foreach (Modules md in mods)
+                foreach (MEModules md in mods)
                 {
                     md.Id = RegisterIds(IdsList, md.Id);
                     if (md.Actions != null)
                     {
-                        foreach (ActionsInfo a in md.Actions)
+                        foreach (MEAction a in md.Actions)
                         {
                             a.Id = RegisterIds(IdsList, a.Id);
                             a.ModuleId = md.Id;
                             if (a.Steps != null)
                             {
-                                foreach (StepsInfo s in a.Steps)
+                                foreach (MEStep s in a.Steps)
                                 {
                                     s.Id = RegisterIds(IdsList, s.Id);
                                     s.ActionId = a.Id;
@@ -168,25 +168,25 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             }
         }
 
-        private static void ScanAndReplaceIdReferences(Dictionary<ObjectId, ObjectId> IdsList, List<Modules> mods)
+        private static void ScanAndReplaceIdReferences(Dictionary<ObjectId, ObjectId> IdsList, List<MEModules> mods)
         {
             try
             {
                 foreach (KeyValuePair<ObjectId, ObjectId> kv in IdsList)
                 {
-                    foreach (Modules md in mods)
+                    foreach (MEModules md in mods)
                     {
                         ReplaceNextAndPreviousIds(kv, md);
                         ReplaceSpawnIdReferences(kv, md);
                         if (md.Actions != null)
                         {
-                            foreach (ActionsInfo a in md.Actions)
+                            foreach (MEAction a in md.Actions)
                             {
                                 ReplaceNextAndPreviousIds(kv, a);
                                 ReplaceSpawnIdReferences(kv, a);
                                 if (a.Steps != null)
                                 {
-                                    foreach (StepsInfo s in a.Steps)
+                                    foreach (MEStep s in a.Steps)
                                     {
                                         ReplaceNextAndPreviousIds(kv, s);
                                         ReplaceSpawnIdReferences(kv, s);
@@ -208,9 +208,9 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
                                                     }
                                                 }
 
-                                                if (r.SpawnElement != null)
+                                                if (r.Spawn != null)
                                                 {
-                                                    foreach (MESpawnElement sp in r.SpawnElement)
+                                                    foreach (MESpawnElement sp in r.Spawn)
                                                     {
                                                         if (sp.SpawnId != null)
                                                         {
@@ -282,7 +282,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             }
         }
 
-        private static void ReplaceSelectedResponseId(KeyValuePair<ObjectId, ObjectId> kv, StepsInfo s)
+        private static void ReplaceSelectedResponseId(KeyValuePair<ObjectId, ObjectId> kv, MEStep s)
         {
             try
             {
@@ -338,30 +338,30 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             }
         }
 
-        internal static List<ActionsInfo> GetActionElements(List<Program.DTO.ActionsDetail> list)
+        internal static List<MEAction> GetActionElements(List<Program.DTO.ActionsDetail> list)
         {
             try
             {
-                List<ActionsInfo> acts = null;
+                List<MEAction> acts = null;
                 if (list != null)
                 {
-                    acts = new List<ActionsInfo>();
+                    acts = new List<MEAction>();
 
                     list.ForEach(a =>
                     {
                         acts.Add(
-                        new ActionsInfo
+                        new MEAction
                         {
                             Id = ObjectId.Parse(a.Id),
                             ModuleId = ObjectId.Parse(a.ModuleId),
                             Steps = GetStepsInfo(a.Steps),
-                            AssignBy = a.AssignBy,
-                            AssignDate = a.AssignDate,
+                            AssignedBy = a.AssignBy,
+                            AssignedOn = a.AssignDate,
                             Completed = a.Completed,
                             CompletedBy = a.CompletedBy,
                             DateCompleted = a.DateCompleted,
                             Description = a.Description,
-                            ElementState = (ElementState)a.ElementState,
+                            State = (ElementState)a.ElementState,
                             Enabled = a.Enabled,
                             Name = a.Name,
                             Next = a.Next,
@@ -382,30 +382,30 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             }
         }
 
-        private static List<StepsInfo> GetStepsInfo(List<Program.DTO.StepsDetail> list)
+        private static List<MEStep> GetStepsInfo(List<Program.DTO.StepsDetail> list)
         {
             try
             {
-                List<StepsInfo> steps = null;
+                List<MEStep> steps = null;
                 if (list != null)
                 {
-                    steps = new List<StepsInfo>();
+                    steps = new List<MEStep>();
 
                     list.ForEach(st =>
                     {
                         steps.Add(
-                        new StepsInfo
+                        new MEStep
                         {
                             Id = ObjectId.Parse(st.Id),
                             ActionId = ObjectId.Parse(st.ActionId),
-                            AssignBy = st.AssignBy,
-                            AssignDate = st.AssignDate,
+                            AssignedBy = st.AssignBy,
+                            AssignedOn = st.AssignDate,
                             Completed = st.Completed,
                             CompletedBy = st.CompletedBy,
                             ControlType = st.ControlType,
                             DateCompleted = st.DateCompleted,
                             Description = st.Description,
-                            ElementState = (ElementState)st.ElementState,
+                            State = (ElementState)st.ElementState,
                             Enabled = st.Enabled,
                             Ex = st.Ex,
                             Header = st.Header,
@@ -457,7 +457,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
                                     Required = r.Required,
                                     Text = r.Text,
                                     Value = r.Value,
-                                    SpawnElement = GetSPawnElement(r.SpawnElement)
+                                    Spawn = GetSPawnElement(r.SpawnElement)
                                 });
                         });
                 }
@@ -514,18 +514,18 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             }
         }
 
-        public static List<ObjectivesInfo> GetObjectives(List<Program.DTO.ObjectivesDetail> list)
+        public static List<Objectives> GetObjectives(List<Program.DTO.ObjectivesDetail> list)
         {
             try
             {
-                List<ObjectivesInfo> objs = null;
+                List<Objectives> objs = null;
                 if (list != null)
                 {
-                    objs = new List<ObjectivesInfo>();
+                    objs = new List<Objectives>();
 
                     list.ForEach(o =>
                     {
-                        objs.Add(new ObjectivesInfo
+                        objs.Add(new Objectives
                         {
                             Id = ObjectId.Parse(o.Id),
                             Status = (Status)o.Status,
@@ -542,18 +542,18 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             }
         }
 
-        public static List<Modules> CloneAppDomainModules(List<ModuleDetail> prg)
+        public static List<MEModules> CloneAppDomainModules(List<ModuleDetail> prg)
         {
             try
             {
-                List<Modules> mods = null;
+                List<MEModules> mods = null;
                 if (prg != null)
                 {
-                    mods = new List<Modules>();
+                    mods = new List<MEModules>();
                     prg.ForEach(m =>
                     {
                         mods.Add(
-                        new Modules
+                        new MEModules
                         {
                             Id = ObjectId.Parse(m.Id),
                             DateCompleted = m.DateCompleted,
@@ -561,12 +561,12 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
                             Previous = m.Previous,
                             Spawn = DTOUtils.GetSpawnElements(m.SpawnElement),
                             Actions = DTOUtils.GetActionElements(m.Actions),
-                            AssignBy = m.AssignBy,
-                            AssignDate = m.AssignDate,
+                            AssignedBy = m.AssignBy,
+                            AssignedOn = m.AssignDate,
                             Completed = m.Completed,
                             CompletedBy = m.CompletedBy,
                             Description = m.Description,
-                            ElementState = (ElementState)m.ElementState,
+                            State = (ElementState)m.ElementState,
                             Enabled = m.Enabled,
                             Name = m.Name,
                             Objectives = DTOUtils.GetObjectives(m.Objectives),
