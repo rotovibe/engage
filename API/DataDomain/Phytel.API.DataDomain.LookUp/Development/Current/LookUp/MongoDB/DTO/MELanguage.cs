@@ -8,7 +8,7 @@ namespace Phytel.API.DataDomain.LookUp.DTO
 {
     public class MELanguage : LookUpBase
     {
-        public const string CodeProperty = "cd";
+        public const string CodeProperty = "c";
 
         [BsonElement(CodeProperty)]
         [BsonIgnoreIfNull(true)]
