@@ -9,7 +9,6 @@ using MongoDB.Driver;
 using MongoDB.Driver.Builders;
 using MongoDB.Bson;
 using Phytel.API.AppDomain.LookUp;
-using DataDomain.LookUp.DTO;
 
 namespace Phytel.API.DataDomain.LookUp
 {
@@ -20,10 +19,11 @@ namespace Phytel.API.DataDomain.LookUp
         public MongoLookUpRepository(string contractDBName)
         {
             _dbName = contractDBName;
+            #region Register ClassMap
             if (MongoDB.Bson.Serialization.BsonClassMap.IsClassMapRegistered(typeof(MEProblem)) == false)
             {
                 MongoDB.Bson.Serialization.BsonClassMap.RegisterClassMap<MEProblem>();
-        }
+            }
             if (MongoDB.Bson.Serialization.BsonClassMap.IsClassMapRegistered(typeof(MEObjective)) == false)
             {
                 MongoDB.Bson.Serialization.BsonClassMap.RegisterClassMap<MEObjective>();
@@ -32,6 +32,31 @@ namespace Phytel.API.DataDomain.LookUp
             {
                 MongoDB.Bson.Serialization.BsonClassMap.RegisterClassMap<MECategory>();
             }
+            if (MongoDB.Bson.Serialization.BsonClassMap.IsClassMapRegistered(typeof(MECommMode)) == false)
+            {
+                MongoDB.Bson.Serialization.BsonClassMap.RegisterClassMap<MECommMode>();
+            }
+            if (MongoDB.Bson.Serialization.BsonClassMap.IsClassMapRegistered(typeof(MEState)) == false)
+            {
+                MongoDB.Bson.Serialization.BsonClassMap.RegisterClassMap<MEState>();
+            }
+            if (MongoDB.Bson.Serialization.BsonClassMap.IsClassMapRegistered(typeof(METimesOfDay)) == false)
+            {
+                MongoDB.Bson.Serialization.BsonClassMap.RegisterClassMap<METimesOfDay>();
+            }
+            if (MongoDB.Bson.Serialization.BsonClassMap.IsClassMapRegistered(typeof(METimeZone)) == false)
+            {
+                MongoDB.Bson.Serialization.BsonClassMap.RegisterClassMap<METimeZone>();
+            }
+            if (MongoDB.Bson.Serialization.BsonClassMap.IsClassMapRegistered(typeof(MECommType)) == false)
+            {
+                MongoDB.Bson.Serialization.BsonClassMap.RegisterClassMap<MECommType>();
+            }
+            if (MongoDB.Bson.Serialization.BsonClassMap.IsClassMapRegistered(typeof(MELanguage)) == false)
+            {
+                MongoDB.Bson.Serialization.BsonClassMap.RegisterClassMap<MELanguage>();
+            } 
+            #endregion
         }
 
         public object Insert(object newEntity)
@@ -98,7 +123,7 @@ namespace Phytel.API.DataDomain.LookUp
                         MEProblem meProblem = (MEProblem)meLookup.Data.Where(a => a.DataID == ObjectId.Parse(entityID)).FirstOrDefault();
                         if (meProblem != null)
                         {
-                            ProblemData problemData = new ProblemData { ProblemID = meProblem.DataID.ToString(), Name = meProblem.Name, Active = meProblem.Active };
+                            ProblemData problemData = new ProblemData { ID = meProblem.DataID.ToString(), Name = meProblem.Name, Active = meProblem.Active };
                             problemResponse.Problem = problemData;
                         }
                     }
@@ -134,7 +159,7 @@ namespace Phytel.API.DataDomain.LookUp
 
                         foreach (MEProblem m in meproblems)
                         {
-                            ProblemData problem = new ProblemData { ProblemID = m.DataID.ToString(), Name = m.Name, Active = m.Active };
+                            ProblemData problem = new ProblemData { ID = m.DataID.ToString(), Name = m.Name, Active = m.Active };
                             problemList.Add(problem);
                         }
                     }
@@ -161,7 +186,7 @@ namespace Phytel.API.DataDomain.LookUp
                         problemList = new List<ProblemData>();
                         foreach (MEProblem m in meLookup.Data)
                         {
-                            ProblemData problem = new ProblemData { ProblemID = m.DataID.ToString(), Name = m.Name, Active = m.Active };
+                            ProblemData problem = new ProblemData { ID = m.DataID.ToString(), Name = m.Name, Active = m.Active };
                             problemList.Add(problem);
                         }
                     }
@@ -191,10 +216,10 @@ namespace Phytel.API.DataDomain.LookUp
                         MECategory meCategory = (MECategory)meLookup.Data.Where(a => a.DataID == ObjectId.Parse(entityID)).FirstOrDefault();
                         if (meCategory != null)
                         {
-                            API.DataDomain.LookUp.DTO.CategoryData objective = new API.DataDomain.LookUp.DTO.CategoryData
+                            API.DataDomain.LookUp.DTO.LookUpData objective = new API.DataDomain.LookUp.DTO.LookUpData
                             {
                                 ID = meCategory.DataID.ToString(),
-                                Text = meCategory.Name
+                                Name = meCategory.Name
                             };
                             categoryResponse.Category = objective;
 
@@ -225,7 +250,7 @@ namespace Phytel.API.DataDomain.LookUp
                         MEObjective meObjective = (MEObjective)meLookup.Data.Where(a => a.DataID == ObjectId.Parse(entityID)).FirstOrDefault();
                         if (meObjective != null)
                         {
-                            API.DataDomain.LookUp.DTO.ObjectiveData objective = new API.DataDomain.LookUp.DTO.ObjectiveData
+                            API.DataDomain.LookUp.DTO.LookUpData objective = new API.DataDomain.LookUp.DTO.LookUpData
                             {
                                 ID = meObjective.DataID.ToString(),
                                 Name = meObjective.Name
@@ -240,6 +265,173 @@ namespace Phytel.API.DataDomain.LookUp
         } 
         #endregion
 
+        #region ContactRelated LookUps
+        public List<LookUpData> GetAllCommModes()
+        {
+            List<LookUpData> commModeList = null;
+            using (LookUpMongoContext ctx = new LookUpMongoContext(_dbName))
+            {
+                List<IMongoQuery> queries = new List<IMongoQuery>();
+                queries.Add(Query.EQ(MELookup.TypeProperty, LookUpType.CommMode));
+                queries.Add(Query.EQ(MELookup.DeleteFlagProperty, false));
+                IMongoQuery mQuery = Query.And(queries);
+                MELookup meLookup = ctx.LookUps.Collection.Find(mQuery).FirstOrDefault();
+                if (meLookup != null)
+                {
+                    if (meLookup.Data != null)
+                    {
+                        commModeList = new List<LookUpData>();
+                        foreach (MECommMode m in meLookup.Data)
+                        {
+                            LookUpData data = new LookUpData { ID = m.DataID.ToString(), Name = m.Name};
+                            commModeList.Add(data);
+                        }
+                    }
 
+                }
+            }
+            return commModeList;
+        }
+        
+        public List<LookUpData> GetAllStates()
+        {
+            List<LookUpData> stateList = null;
+            using (LookUpMongoContext ctx = new LookUpMongoContext(_dbName))
+            {
+                List<IMongoQuery> queries = new List<IMongoQuery>();
+                queries.Add(Query.EQ(MELookup.TypeProperty, LookUpType.State));
+                queries.Add(Query.EQ(MELookup.DeleteFlagProperty, false));
+                IMongoQuery mQuery = Query.And(queries);
+                MELookup meLookup = ctx.LookUps.Collection.Find(mQuery).FirstOrDefault();
+                if (meLookup != null)
+                {
+                    if (meLookup.Data != null)
+                    {
+                        stateList = new List<LookUpData>();
+                        foreach (MEState m in meLookup.Data)
+                        {
+                            LookUpData data = new LookUpData { ID = m.DataID.ToString(), Name = m.Name};
+                            stateList.Add(data);
+                        }
+                    }
+
+                }
+            }
+            return stateList;
+        }
+
+        public List<LookUpData> GetAllTimesOfDays()
+        {
+            List<LookUpData> timesOfDayList = null;
+            using (LookUpMongoContext ctx = new LookUpMongoContext(_dbName))
+            {
+                List<IMongoQuery> queries = new List<IMongoQuery>();
+                queries.Add(Query.EQ(MELookup.TypeProperty, LookUpType.TimesOfDay));
+                queries.Add(Query.EQ(MELookup.DeleteFlagProperty, false));
+                IMongoQuery mQuery = Query.And(queries);
+                MELookup meLookup = ctx.LookUps.Collection.Find(mQuery).FirstOrDefault();
+                if (meLookup != null)
+                {
+                    if (meLookup.Data != null)
+                    {
+                        timesOfDayList = new List<LookUpData>();
+                        foreach (METimesOfDay m in meLookup.Data)
+                        {
+                            LookUpData data = new LookUpData { ID = m.DataID.ToString(), Name = m.Name };
+                            timesOfDayList.Add(data);
+                        }
+                    }
+
+                }
+            }
+            return timesOfDayList;
+        }
+
+        public List<LookUpData> GetAllTimeZones()
+        {
+            List<LookUpData> timeZoneList = null;
+            using (LookUpMongoContext ctx = new LookUpMongoContext(_dbName))
+            {
+                List<IMongoQuery> queries = new List<IMongoQuery>();
+                queries.Add(Query.EQ(MELookup.TypeProperty, LookUpType.TimeZone));
+                queries.Add(Query.EQ(MELookup.DeleteFlagProperty, false));
+                IMongoQuery mQuery = Query.And(queries);
+                MELookup meLookup = ctx.LookUps.Collection.Find(mQuery).FirstOrDefault();
+                if (meLookup != null)
+                {
+                    if (meLookup.Data != null)
+                    {
+                        timeZoneList = new List<LookUpData>();
+                        foreach (METimeZone m in meLookup.Data)
+                        {
+                            LookUpData data = new LookUpData { ID = m.DataID.ToString(), Name = m.Name };
+                            timeZoneList.Add(data);
+                        }
+                    }
+
+                }
+            }
+            return timeZoneList;
+        }
+
+        public List<CommTypeData> GetAllCommTypes()
+        {
+            List<CommTypeData> commTypeList = null;
+            using (LookUpMongoContext ctx = new LookUpMongoContext(_dbName))
+            {
+                List<IMongoQuery> queries = new List<IMongoQuery>();
+                queries.Add(Query.EQ(MELookup.TypeProperty, LookUpType.CommType));
+                queries.Add(Query.EQ(MELookup.DeleteFlagProperty, false));
+                IMongoQuery mQuery = Query.And(queries);
+                MELookup meLookup = ctx.LookUps.Collection.Find(mQuery).FirstOrDefault();
+                if (meLookup != null)
+                {
+                    if (meLookup.Data != null)
+                    {
+                        commTypeList = new List<CommTypeData>();
+                        foreach (MECommType m in meLookup.Data)
+                        {
+                            List<string> commModes = null;
+                            foreach(ObjectId id in m.CommModes)
+                            {
+                                commModes = new List<string>();
+                                commModes.Add(id.ToString());
+                            }
+                            CommTypeData data = new CommTypeData { ID = m.DataID.ToString(), Name = m.Name, CommModes = commModes };
+                            commTypeList.Add(data);
+                        }
+                    }
+                }
+            }
+            return commTypeList;
+        }
+
+        public List<LanguageData> GetAllLanguages()
+        {
+            List<LanguageData> LanguageList = null;
+            using (LookUpMongoContext ctx = new LookUpMongoContext(_dbName))
+            {
+                List<IMongoQuery> queries = new List<IMongoQuery>();
+                queries.Add(Query.EQ(MELookup.TypeProperty, LookUpType.Language));
+                queries.Add(Query.EQ(MELookup.DeleteFlagProperty, false));
+                IMongoQuery mQuery = Query.And(queries);
+                MELookup meLookup = ctx.LookUps.Collection.Find(mQuery).FirstOrDefault();
+                if (meLookup != null)
+                {
+                    if (meLookup.Data != null)
+                    {
+                        LanguageList = new List<LanguageData>();
+                        foreach (MELanguage m in meLookup.Data)
+                        {
+                            LanguageData data = new LanguageData { ID = m.DataID.ToString(), Name = m.Name, Code = m.Code };
+                            LanguageList.Add(data);
+                        }
+                    }
+                }
+            }
+            return LanguageList;
+        }
+
+        #endregion
     }
 }

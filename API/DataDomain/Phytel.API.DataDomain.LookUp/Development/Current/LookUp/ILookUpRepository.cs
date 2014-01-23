@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using DataDomain.LookUp.DTO;
 using Phytel.API.DataDomain.LookUp.DTO;
 using Phytel.API.Interface;
 
@@ -16,5 +15,11 @@ namespace Phytel.API.DataDomain.LookUp
         List<ProblemData> SearchProblem(SearchProblemsDataRequest request);
         object FindObjectiveByID(string entityID);
         object FindCategoryByID(string entityID);
+        List<LookUpData> GetAllCommModes();
+        List<LookUpData> GetAllStates();
+        List<LookUpData> GetAllTimesOfDays();
+        List<LookUpData> GetAllTimeZones();
+        List<CommTypeData> GetAllCommTypes();
+        List<LanguageData> GetAllLanguages();
     }
 }

@@ -69,12 +69,25 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="GetAllLanguageDataRequest.cs" />
+    <Compile Include="GetAllLanguagesDataResponse.cs" />
+    <Compile Include="GetAllCommTypesDataRequest.cs" />
+    <Compile Include="GetAllCommTypesDataResponse.cs" />
+    <Compile Include="GetAllTimeZonesDataRequest.cs" />
+    <Compile Include="GetAllTimeZonesDataResponse.cs" />
+    <Compile Include="GetAllTimesOfDaysDataRequest.cs" />
+    <Compile Include="GetAllTimesOfDaysDataResponse.cs" />
+    <Compile Include="GetAllStatesDataRequest.cs" />
+    <Compile Include="GetAllStatesDataResponse.cs" />
     <Compile Include="GetAllObjectivesDataRequest.cs" />
     <Compile Include="GetAllObjectivesDataResponse.cs" />
+    <Compile Include="GetAllCommModesDataRequest.cs" />
+    <Compile Include="GetAllCommModesDataResponse.cs" />
     <Compile Include="GetCategoryDataRequest.cs" />
     <Compile Include="GetCategoryDataResponse.cs" />
     <Compile Include="GetObjectiveDataRequest.cs" />
     <Compile Include="GetObjectiveDataResponse.cs" />
+    <Compile Include="LookUpData.cs" />
     <Compile Include="ProblemData.cs" />
     <Compile Include="SearchProblemsDataResponse .cs" />
     <Compile Include="GetAllProblemsDataResponse.cs" />

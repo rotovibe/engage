@@ -1,4 +1,4 @@
-using DataDomain.LookUp.DTO;
+using Phytel.API.DataDomain.LookUp.DTO;
 using Phytel.API.AppDomain.NG.DTO;
 using Phytel.API.DataDomain.Cohort.DTO;
 using Phytel.API.DataDomain.Patient.DTO;
@@ -100,9 +100,10 @@ namespace Phytel.API.AppDomain.NG
                 List<Phytel.API.AppDomain.NG.DTO.PatientProblem> response = new List<Phytel.API.AppDomain.NG.DTO.PatientProblem>();
 
                 IRestClient client = new JsonServiceClient();
-                //[Route("/{Context}/{Version}/{ContractNumber}/patientproblems/{PatientID}", "GET")]
+                
+                //[Route("/{Context}/{Version}/{ContractNumber}/Patient/{PatientID}/Problems", "GET")]
                 Phytel.API.DataDomain.PatientProblem.DTO.GetAllPatientProblemsDataResponse dataDomainResponse = client.Get<Phytel.API.DataDomain.PatientProblem.DTO.GetAllPatientProblemsDataResponse>
-                    (string.Format("{0}/{1}/{2}/{3}/patientproblems/{4}",
+                    (string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Problems",
                         DDPatientProblemServiceUrl,
                         "NG",
                         request.Version,
@@ -151,7 +152,7 @@ namespace Phytel.API.AppDomain.NG
                 foreach (ProblemData c in problems)
                 {
                     ProblemLookUp problemLookUp = new ProblemLookUp();
-                    problemLookUp.ID = c.ProblemID;
+                    problemLookUp.ID = c.ID;
                     problemLookUp.Name = c.Name;
                     response.Add(problemLookUp);
                 }

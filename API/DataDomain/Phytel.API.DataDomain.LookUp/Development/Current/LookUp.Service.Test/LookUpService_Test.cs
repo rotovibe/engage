@@ -76,5 +76,115 @@ namespace Phytel.API.DataDomain.LookUp.Services.Test
             Assert.AreNotEqual(0, response.Problems.Count);
         } 
         #endregion
+
+        #region Contact Related LookUps
+        [TestMethod]
+        public void GetAllCommModes_Test()
+        {
+            // Arrange
+            string version = "v1";
+            string contractNumber = "InHealth001";
+            string context = "NG";
+            IRestClient client = new JsonServiceClient();
+
+            // Act
+            GetAllCommModesDataResponse response = client.Get<GetAllCommModesDataResponse>
+                (string.Format("{0}/{1}/{2}/{3}/CommModes",
+                  "http://localhost:8888/LookUp/", context, version, contractNumber));
+
+            // Assert
+            Assert.AreNotEqual(0, response.CommModes.Count);
+        }
+
+        [TestMethod]
+        public void GetAllStates_Test()
+        {
+            // Arrange
+            string version = "v1";
+            string contractNumber = "InHealth001";
+            string context = "NG";
+            IRestClient client = new JsonServiceClient();
+
+            // Act
+            GetAllStatesDataResponse response = client.Get<GetAllStatesDataResponse>
+                (string.Format("{0}/{1}/{2}/{3}/States",
+                  "http://localhost:8888/LookUp/", context, version, contractNumber));
+
+            // Assert
+            Assert.AreNotEqual(0, response.States.Count);
+        }
+
+        [TestMethod]
+        public void GetAllTimesOfDays_Test()
+        {
+            // Arrange
+            string version = "v1";
+            string contractNumber = "InHealth001";
+            string context = "NG";
+            IRestClient client = new JsonServiceClient();
+
+            // Act
+            GetAllTimesOfDaysDataResponse response = client.Get<GetAllTimesOfDaysDataResponse>
+                (string.Format("{0}/{1}/{2}/{3}/TimesOfDays",
+                  "http://localhost:8888/LookUp/", context, version, contractNumber));
+
+            // Assert
+            Assert.AreNotEqual(0, response.TimesOfDays.Count);
+        }
+
+        [TestMethod]
+        public void GetAllTimeZones_Test()
+        {
+            // Arrange
+            string version = "v1";
+            string contractNumber = "InHealth001";
+            string context = "NG";
+            IRestClient client = new JsonServiceClient();
+
+            // Act
+            GetAllTimeZonesDataResponse response = client.Get<GetAllTimeZonesDataResponse>
+                (string.Format("{0}/{1}/{2}/{3}/TimeZones",
+                  "http://localhost:8888/LookUp/", context, version, contractNumber));
+
+            // Assert
+            Assert.AreNotEqual(0, response.TimeZones.Count);
+        }
+
+        [TestMethod]
+        public void GetAllCommTypes_Test()
+        {
+            // Arrange
+            string version = "v1";
+            string contractNumber = "InHealth001";
+            string context = "NG";
+            IRestClient client = new JsonServiceClient();
+
+            // Act
+            GetAllCommTypesDataResponse response = client.Get<GetAllCommTypesDataResponse>
+                (string.Format("{0}/{1}/{2}/{3}/CommTypes",
+                  "http://localhost:8888/LookUp/", context, version, contractNumber));
+
+            // Assert
+            Assert.AreNotEqual(0, response.CommTypes.Count);
+        }
+
+        [TestMethod]
+        public void GetAllLanguages_Test()
+        {
+            // Arrange
+            string version = "v1";
+            string contractNumber = "InHealth001";
+            string context = "NG";
+            IRestClient client = new JsonServiceClient();
+
+            // Act
+            GetAllLanguagesDataResponse response = client.Get<GetAllLanguagesDataResponse>
+                (string.Format("{0}/{1}/{2}/{3}/Languages",
+                  "http://localhost:8888/LookUp/", context, version, contractNumber));
+
+            // Assert
+            Assert.AreNotEqual(0, response.Languages.Count);
+        } 
+        #endregion
     }
 }

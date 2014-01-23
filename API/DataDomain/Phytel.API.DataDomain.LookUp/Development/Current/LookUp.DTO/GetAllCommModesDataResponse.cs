@@ -4,9 +4,9 @@ using Phytel.API.Interface;
 
 namespace Phytel.API.DataDomain.LookUp.DTO
 {
-    public class GetAllProblemsDataResponse : IDomainResponse
+    public class GetAllCommModesDataResponse : IDomainResponse
    {
-       public List<ProblemData> Problems { get; set; }
+       public List<LookUpData> CommModes { get; set; }
        public string Version { get; set; }
        public ResponseStatus Status { get; set; }
     }

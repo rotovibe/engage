@@ -11,7 +11,7 @@ namespace Phytel.API.DataDomain.LookUp.DTO
     public class LookUpBase : ILookUpData
     {
         public const string DataIDProperty = "did";
-        public const string NameProperty = "n";
+        public const string NameProperty = "nm";
 
         [BsonElement(DataIDProperty)]
         public ObjectId DataID { get; set; }

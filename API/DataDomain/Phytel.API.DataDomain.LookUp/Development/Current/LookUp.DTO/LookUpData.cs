@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace Phytel.API.DataDomain.LookUp.DTO
 {
-    public class ProblemData: LookUpData
+    public class LookUpData
     {
-        public bool Active { get; set; }
-        public string Type { get; set; }
+        public string ID { get; set; }
+        public string Name { get; set; }
     }
 }

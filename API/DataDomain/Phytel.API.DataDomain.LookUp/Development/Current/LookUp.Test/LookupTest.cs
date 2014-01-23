@@ -92,8 +92,106 @@ namespace Phytel.API.DataDomain.LookUp.Test
             GetCategoryDataResponse response = LookUpDataManager.GetCategoryByID(request);
 
             // Assert
-            Assert.IsTrue(response.Category.Text == "Cost");
+            Assert.IsTrue(response.Category.Name == "Cost");
 
+        } 
+        #endregion
+
+        #region Contact Related LookUps
+        [TestMethod]
+        public void GetAllCommModes_Test()
+        {
+            // Arrange
+            string version = "v1";
+            string contractNumber = "InHealth001";
+            string context = "NG";
+            GetAllCommModesDataRequest request = new GetAllCommModesDataRequest { Context = context, ContractNumber = contractNumber, Version = version };
+
+            // Act
+            GetAllCommModesDataResponse response = LookUpDataManager.GetAllCommModes(request);
+
+            // Assert
+            Assert.AreNotEqual(0, response.CommModes.Count);
+        }
+
+        [TestMethod]
+        public void GetAllStates_Test()
+        {
+            // Arrange
+            string version = "v1";
+            string contractNumber = "InHealth001";
+            string context = "NG";
+            GetAllStatesDataRequest request = new GetAllStatesDataRequest { Context = context, ContractNumber = contractNumber, Version = version };
+
+            // Act
+            GetAllStatesDataResponse response = LookUpDataManager.GetAllStates(request);
+
+            // Assert
+            Assert.AreNotEqual(0, response.States.Count);
+        }
+
+        [TestMethod]
+        public void GetAllTimesOfDays_Test()
+        {
+            // Arrange
+            string version = "v1";
+            string contractNumber = "InHealth001";
+            string context = "NG";
+            GetAllTimesOfDaysDataRequest request = new GetAllTimesOfDaysDataRequest { Context = context, ContractNumber = contractNumber, Version = version };
+
+            // Act
+            GetAllTimesOfDaysDataResponse response = LookUpDataManager.GetAllTimesOfDays(request);
+
+            // Assert
+            Assert.AreNotEqual(0, response.TimesOfDays.Count);
+        }
+
+        [TestMethod]
+        public void GetAllTimeZones_Test()
+        {
+            // Arrange
+            string version = "v1";
+            string contractNumber = "InHealth001";
+            string context = "NG";
+            GetAllTimeZonesDataRequest request = new GetAllTimeZonesDataRequest { Context = context, ContractNumber = contractNumber, Version = version };
+
+            // Act
+            GetAllTimeZonesDataResponse response = LookUpDataManager.GetAllTimeZones(request);
+
+            // Assert
+            Assert.AreNotEqual(0, response.TimeZones.Count);
+        }
+
+        [TestMethod]
+        public void GetAllCommTypes_Test()
+        {
+            // Arrange
+            string version = "v1";
+            string contractNumber = "InHealth001";
+            string context = "NG";
+            GetAllCommTypesDataRequest request = new GetAllCommTypesDataRequest { Context = context, ContractNumber = contractNumber, Version = version };
+
+            // Act
+            GetAllCommTypesDataResponse response = LookUpDataManager.GetAllCommTypes(request);
+
+            // Assert
+            Assert.AreNotEqual(0, response.CommTypes.Count);
+        }
+
+        [TestMethod]
+        public void GetAllLanguages_Test()
+        {
+            // Arrange
+            string version = "v1";
+            string contractNumber = "InHealth001";
+            string context = "NG";
+            GetAllLanguagesDataRequest request = new GetAllLanguagesDataRequest { Context = context, ContractNumber = contractNumber, Version = version };
+
+            // Act
+            GetAllLanguagesDataResponse response = LookUpDataManager.GetAllLanguages(request);
+
+            // Assert
+            Assert.AreNotEqual(0, response.Languages.Count);
         } 
         #endregion
 

@@ -7,7 +7,6 @@ using Phytel.API.DataDomain.PatientProblem.DTO;
 using Phytel.API.Interface;
 using ServiceStack.Service;
 using ServiceStack.ServiceClient.Web;
-using DataDomain.LookUp.DTO;
 
 namespace Phytel.API.DataDomain.PatientProblem
 {
@@ -43,7 +42,7 @@ namespace Phytel.API.DataDomain.PatientProblem
                 List<ProblemData> problems = problemLookUpResponse.Problems;
                 foreach (ProblemData p in problems)
                 {
-                    activeProblemIDs.Add(p.ProblemID);
+                    activeProblemIDs.Add(p.ID);
                 }
 
           

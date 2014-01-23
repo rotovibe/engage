@@ -89,6 +89,12 @@
     <Compile Include="ILookUpRepository.cs" />
     <Compile Include="MongoDB\DTO\ILookUpData.cs" />
     <Compile Include="MongoDB\DTO\LookUpBase.cs" />
+    <Compile Include="MongoDB\DTO\MELanguage.cs" />
+    <Compile Include="MongoDB\DTO\MECommType.cs" />
+    <Compile Include="MongoDB\DTO\MEState.cs" />
+    <Compile Include="MongoDB\DTO\METimesOfDay.cs" />
+    <Compile Include="MongoDB\DTO\METimeZone.cs" />
+    <Compile Include="MongoDB\DTO\MECommMode.cs" />
     <Compile Include="MongoDB\DTO\MECategory.cs" />
     <Compile Include="MongoDB\DTO\MELookup.cs" />
     <Compile Include="MongoDB\DTO\MEObjective.cs" />
@@ -109,7 +115,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

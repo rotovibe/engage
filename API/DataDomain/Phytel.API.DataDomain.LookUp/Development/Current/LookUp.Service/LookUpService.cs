@@ -95,5 +95,106 @@ namespace Phytel.API.DataDomain.Patient.Service
             return response;
         } 
         #endregion
+
+        #region Contact Related LookUps
+        public GetAllCommModesDataResponse Get(GetAllCommModesDataRequest request)
+        {
+            GetAllCommModesDataResponse response = new GetAllCommModesDataResponse();
+            try
+            {
+                response = LookUpDataManager.GetAllCommModes(request);
+            }
+            catch (Exception ex)
+            {
+                //TODO: Log this to the SQL database via ASE
+                base.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                response.Status = new ServiceStack.ServiceInterface.ServiceModel.ResponseStatus("Exception", ex.Message);
+            }
+            return response;
+        }
+
+        public GetAllStatesDataResponse Get(GetAllStatesDataRequest request)
+        {
+            GetAllStatesDataResponse response = new GetAllStatesDataResponse();
+            try
+            {
+                response = LookUpDataManager.GetAllStates(request);
+            }
+            catch (Exception ex)
+            {
+                //TODO: Log this to the SQL database via ASE
+                base.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                response.Status = new ServiceStack.ServiceInterface.ServiceModel.ResponseStatus("Exception", ex.Message);
+            }
+            return response;
+        }
+
+        public GetAllTimesOfDaysDataResponse Get(GetAllTimesOfDaysDataRequest request)
+        {
+            GetAllTimesOfDaysDataResponse response = new GetAllTimesOfDaysDataResponse();
+            try
+            {
+                response = LookUpDataManager.GetAllTimesOfDays(request);
+            }
+            catch (Exception ex)
+            {
+                //TODO: Log this to the SQL database via ASE
+                base.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                response.Status = new ServiceStack.ServiceInterface.ServiceModel.ResponseStatus("Exception", ex.Message);
+            }
+            return response;
+        }
+
+        public GetAllTimeZonesDataResponse Get(GetAllTimeZonesDataRequest request)
+        {
+            GetAllTimeZonesDataResponse response = new GetAllTimeZonesDataResponse();
+            try
+            {
+                response = LookUpDataManager.GetAllTimeZones(request);
+            }
+            catch (Exception ex)
+            {
+                //TODO: Log this to the SQL database via ASE
+                base.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                response.Status = new ServiceStack.ServiceInterface.ServiceModel.ResponseStatus("Exception", ex.Message);
+            }
+            return response;
+        }
+
+        public GetAllCommTypesDataResponse Get(GetAllCommTypesDataRequest request)
+        {
+            GetAllCommTypesDataResponse response = new GetAllCommTypesDataResponse();
+            try
+            {
+                response = LookUpDataManager.GetAllCommTypes(request);
+            }
+            catch (Exception ex)
+            {
+                //TODO: Log this to the SQL database via ASE
+                base.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                response.Status = new ServiceStack.ServiceInterface.ServiceModel.ResponseStatus("Exception", ex.Message);
+            }
+            return response;
+        }
+
+        public GetAllLanguagesDataResponse Get(GetAllLanguagesDataRequest request)
+        {
+            GetAllLanguagesDataResponse response = new GetAllLanguagesDataResponse();
+            try
+            {
+                response = LookUpDataManager.GetAllLanguages(request);
+            }
+            catch (Exception ex)
+            {
+                //TODO: Log this to the SQL database via ASE
+                base.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                response.Status = new ServiceStack.ServiceInterface.ServiceModel.ResponseStatus("Exception", ex.Message);
+            }
+            return response;
+        }
+
+
+        #endregion
+
     }
 }

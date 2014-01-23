@@ -90,7 +90,7 @@
     <Compile Include="LookUp\GetAllStatesRequest.cs" />
     <Compile Include="LookUp\GetAllCommTypesRequest.cs" />
     <Compile Include="LookUp\GetAllCommModesRequest.cs" />
-    <Compile Include="LookUp\GetAllTimeLanguagesResponse.cs" />
+    <Compile Include="LookUp\GetAllLanguagesResponse.cs" />
     <Compile Include="LookUp\GetAllTimeZonesResponse.cs" />
     <Compile Include="LookUp\GetAllTimesOfDaysResponse.cs" />
     <Compile Include="LookUp\GetAllStatesRespone.cs" />
