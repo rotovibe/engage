@@ -17,7 +17,7 @@ namespace Phytel.API.DataDomain.PatientProblem.DTO
         public const string IdProperty = "_id";
         public const string PatientIDProperty = "pid";
         public const string ProblemIDProperty = "prbid";
-        public const string ActiveProperty = "a";
+        public const string ActiveProperty = "act";
         public const string FeaturedProperty = "f";
         public const string LevelProperty = "l";
         public const string StartDateProperty = "sd";

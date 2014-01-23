@@ -118,8 +118,8 @@ namespace Phytel.API.DataDomain.LookUp
         {
             GetAllTimeZonesDataResponse response = new GetAllTimeZonesDataResponse();
 
-            ILookUpRepository<LookUpData> repo = LookUpRepositoryFactory<LookUpData>.GetLookUpRepository(request.ContractNumber, request.Context);
-            List<LookUpData> data = repo.GetAllTimeZones();
+            ILookUpRepository<TimeZoneData> repo = LookUpRepositoryFactory<TimeZoneData>.GetLookUpRepository(request.ContractNumber, request.Context);
+            List<TimeZoneData> data = repo.GetAllTimeZones();
 
             if (data != null)
             {

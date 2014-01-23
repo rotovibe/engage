@@ -14,12 +14,12 @@ namespace Phytel.API.DataDomain.Cohort.DTO
         public MECohort() { Id = ObjectId.GenerateNewId(); }
 
         public const string IdProperty = "_id";
-        public const string NameProperty = "n";
+        public const string NameProperty = "nm";
         public const string ShortNameProperty = "sn";
         public const string DescriptionProperty = "desc";
-        public const string QueryProperty = "q";
+        public const string QueryProperty = "query";
         public const string QueryWithFilterProperty = "qwf";
-        public const string SortProperty = "sort";
+        public const string SortProperty = "s";
 
         public const string ExtraElementsProperty = "ex";
         public const string VersionProperty = "v";

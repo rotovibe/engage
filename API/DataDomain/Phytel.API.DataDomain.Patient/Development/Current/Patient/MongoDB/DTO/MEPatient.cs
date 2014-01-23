@@ -17,7 +17,7 @@ namespace Phytel.API.DataDomain.Patient.DTO
         public const string DisplayPatientSystemIDProperty = "dpsid";
         public const string FirstNameProperty = "fn";
         public const string LastNameProperty = "ln";
-        public const string GenderProperty = "gn";
+        public const string GenderProperty = "g";
         public const string DOBProperty = "dob";
         public const string MiddleNameProperty = "mn";
         public const string SuffixProperty = "sfx";

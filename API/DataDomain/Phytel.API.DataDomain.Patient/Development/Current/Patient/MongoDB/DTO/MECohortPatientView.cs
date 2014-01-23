@@ -46,7 +46,7 @@ namespace Phytel.API.DataDomain.Patient.DTO
 
     public class SearchField
     {
-        public const string FieldNameProperty = "fld";
+        public const string FieldNameProperty = "fldn";
         public const string ValueProperty = "val";
         public const string ActiveProperty = "act";
 

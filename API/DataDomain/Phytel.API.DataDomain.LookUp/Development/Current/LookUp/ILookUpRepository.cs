@@ -18,7 +18,7 @@ namespace Phytel.API.DataDomain.LookUp
         List<LookUpData> GetAllCommModes();
         List<LookUpData> GetAllStates();
         List<LookUpData> GetAllTimesOfDays();
-        List<LookUpData> GetAllTimeZones();
+        List<TimeZoneData> GetAllTimeZones();
         List<CommTypeData> GetAllCommTypes();
         List<LanguageData> GetAllLanguages();
     }

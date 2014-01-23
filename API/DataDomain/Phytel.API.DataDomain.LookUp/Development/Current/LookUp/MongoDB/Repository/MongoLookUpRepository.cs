@@ -347,9 +347,9 @@ namespace Phytel.API.DataDomain.LookUp
             return timesOfDayList;
         }
 
-        public List<LookUpData> GetAllTimeZones()
+        public List<TimeZoneData> GetAllTimeZones()
         {
-            List<LookUpData> timeZoneList = null;
+            List<TimeZoneData> timeZoneList = null;
             using (LookUpMongoContext ctx = new LookUpMongoContext(_dbName))
             {
                 List<IMongoQuery> queries = new List<IMongoQuery>();
@@ -361,10 +361,10 @@ namespace Phytel.API.DataDomain.LookUp
                 {
                     if (meLookup.Data != null)
                     {
-                        timeZoneList = new List<LookUpData>();
+                        timeZoneList = new List<TimeZoneData>();
                         foreach (METimeZone m in meLookup.Data)
                         {
-                            LookUpData data = new LookUpData { ID = m.DataID.ToString(), Name = m.Name };
+                            TimeZoneData data = new TimeZoneData { ID = m.DataID.ToString(), Name = m.Name, Default = m.Default };
                             timeZoneList.Add(data);
                         }
                     }
