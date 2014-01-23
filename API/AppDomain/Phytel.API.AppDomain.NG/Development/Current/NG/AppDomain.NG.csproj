@@ -90,6 +90,7 @@
     <Compile Include="ManagerBase.cs" />
     <Compile Include="NGUtils.cs" />
     <Compile Include="PlanCOR\ActionPlanProcessor.cs" />
+    <Compile Include="PlanCOR\SpawnEventArgs.cs" />
     <Compile Include="PlanCOR\StepPlanProcessor.cs" />
     <Compile Include="PlanCOR\PlanElementEventArg.cs" />
     <Compile Include="PlanCOR\PlanProcessor.cs" />

@@ -16,11 +16,18 @@ namespace Phytel.API.AppDomain.NG
     public class PlanManager : ManagerBase
     {
         protected static readonly string DDProgramServiceUrl = ConfigurationManager.AppSettings["DDProgramServiceUrl"];
+        public List<string> RelatedChanges { get; set; }
+
+        public PlanManager()
+        {
+            RelatedChanges = new List<string>();
+        }
 
         public PostProcessActionResponse ProcessActionResults(PostProcessActionRequest request)
         {
             try
             {
+                RelatedChanges.Clear();
                 PostProcessActionResponse response = new PostProcessActionResponse();
 
                 Program p = RequestPatientProgramDetail(request);
@@ -57,14 +64,16 @@ namespace Phytel.API.AppDomain.NG
                 SaveAction(request, p);
 
                 response.Program = p;
+                response.RelatedChanges = new List<string>();
+                response.RelatedChanges = RelatedChanges;
+                response.PatientId = request.PatientId;
                 response.Version = request.Version;
 
                 return response;
             }
-            catch (WebServiceException wse)
+            catch (Exception wse)
             {
-                Exception ae = new Exception(wse.ResponseBody, wse.InnerException);
-                throw ae;
+                throw wse;
             }
         }
 
@@ -94,11 +103,17 @@ namespace Phytel.API.AppDomain.NG
             ModulePlanProcessor modProc = new ModulePlanProcessor();
             ActionPlanProcessor actProc = new ActionPlanProcessor();
             StepPlanProcessor stepProc = new StepPlanProcessor();
+            stepProc._spawnEvent += stepProc__spawnEvent;
             progProc.Successor = modProc;
             modProc.Successor = actProc;
             actProc.Successor = stepProc;
 
             return progProc;
+        }
+
+        void stepProc__spawnEvent(object s, SpawnEventArgs e)
+        {
+            this.RelatedChanges.Add(e.Name);
         }
 
         private DD.ProgramDetail SaveAction(PostProcessActionRequest request, Program p)
