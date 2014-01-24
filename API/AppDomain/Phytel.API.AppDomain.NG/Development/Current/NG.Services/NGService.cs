@@ -333,6 +333,32 @@ namespace Phytel.API.AppDomain.NG.Service
             }
         }
 
+        public GetPatientProgramsResponse Get(GetPatientProgramsRequest request)
+        {
+            GetPatientProgramsResponse response = new GetPatientProgramsResponse();
+            try
+            {
+                NGManager ngm = new NGManager();
+
+                ValidateTokenResponse result = ngm.IsUserValidated(request.Version, request.Token);
+                if (result.UserId.Trim() != string.Empty)
+                {
+                    request.UserId = result.UserId;
+                    response = ngm.GetPatientPrograms(request);
+                }
+                else
+                    throw new UnauthorizedAccessException();
+
+                return response;
+            }
+            catch (Exception ex)
+            {
+                //TODO: Log this to C3 database via ASE
+                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+                return response;
+            }
+        }
+
         public GetContactResponse Get(GetContactRequest request)
         {
             GetContactResponse response = new GetContactResponse();

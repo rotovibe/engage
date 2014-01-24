@@ -495,6 +495,52 @@ namespace Phytel.API.AppDomain.NG
             }
         }
 
+        public GetPatientProgramsResponse GetPatientPrograms(GetPatientProgramsRequest request)
+        {
+            try
+            {
+                GetPatientProgramsResponse result = new GetPatientProgramsResponse();
+
+                IRestClient client = new JsonServiceClient();
+                DD.GetPatientProgramsResponse resp =
+                    client.Get<DD.GetPatientProgramsResponse>(
+                    string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Programs/",
+                    DDProgramServiceUrl,
+                    "NG",
+                    request.Version,
+                    request.ContractNumber,
+                    request.PatientId,
+                    request.Token));
+
+                if (resp != null)
+                {
+                    if (resp.programs != null)
+                    {
+                        List<ProgramInfo> adPs = new List<ProgramInfo>();
+                        resp.programs.ForEach(p => adPs.Add(new ProgramInfo
+                        {
+                            Id = p.Id,
+                            Name = p.Name,
+                            PatientId = p.PatientId,
+                            ProgramState = p.ProgramState,
+                            ShortName = p.ShortName,
+                            Status = p.Status
+                        }));
+
+                        result.Programs = adPs;
+                        if (resp.Status != null)
+                            result.Status = resp.Status;
+                    }
+                }
+                return result;
+            }
+            catch (WebServiceException wse)
+            {
+                Exception ae = new Exception(wse.ResponseBody, wse.InnerException);
+                throw ae;
+            }
+        }
+
         private List<Module> GetModuleInfo(DD.GetProgramDetailsSummaryResponse resp)
         {
             return resp.Program.Modules.Select(r => new Module

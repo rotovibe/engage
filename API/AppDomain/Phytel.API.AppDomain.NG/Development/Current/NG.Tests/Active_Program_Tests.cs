@@ -84,5 +84,23 @@ namespace Phytel.API.DataDomain.Patient.Service.Test
                 patientProgramId,
                 token) );
         }
+
+        [TestMethod]
+        public void Get_patient_program_details_Tests()
+        {
+            string contractNumber = "InHealth001";
+            string context = "NG";
+            string version = "v1";
+            string token = "52e28549d6a4850cf0d4b809";
+            string patientId = "52e26f5b072ef7191c11e0b6";
+            IRestClient client = new JsonServiceClient();
+
+            GetPatientProgramsResponse response = client.Get<GetPatientProgramsResponse>(
+                string.Format(@"http://localhost:888/Nightingale/{0}/{1}/Patient/{2}/Programs/?Token={3}",
+                version,
+                contractNumber,
+                patientId,
+                token));
+        }
     }
 }
