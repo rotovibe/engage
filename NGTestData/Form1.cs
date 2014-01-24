@@ -34,7 +34,7 @@ namespace NGTestData
 
             List<MEPatient> patients = new List<MEPatient>();
             List<MEPatientProblem> patientProblems = new List<MEPatientProblem>();
-            List<Phytel.API.DataDomain.Patient.DTO.MECohortPatientView> cohortPatients = new List<Phytel.API.DataDomain.Patient.DTO.MECohortPatientView>();
+            List<MECohortPatientView> cohortPatients = new List<MECohortPatientView>();
             List<MEPatientSystem> patientSystems = new List<MEPatientSystem>();
             List<MEPatientProgram> patientPrograms = new List<MEPatientProgram>();
 
