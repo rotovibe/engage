@@ -242,11 +242,11 @@ namespace Phytel.API.DataDomain.Program
             {
                 //var findcp = Query<MEPatientProgram>.EQ(b => b.Id, ObjectId.Parse(request.PatientProgramId));
                 //MEPatientProgram cp = ctx.PatientPrograms.Collection.Find(findcp).FirstOrDefault();
-                MEPatientProgram cp = ctx.PatientPrograms.Collection.Find(mQuery).FirstOrDefault();
+                List<MEPatientProgram> cps = ctx.PatientPrograms.Collection.Find(mQuery).ToList();
 
-                if (cp != null)
+                if (cps != null)
                 {
-                    ProgramDetail patProgram = new ProgramDetail
+                    cps.ForEach(cp => patList.Add(new ProgramDetail
                     {
                         Id = cp.Id.ToString(),
                         Client = cp.Client,
@@ -314,8 +314,7 @@ namespace Phytel.API.DataDomain.Program
                         StartDate = cp.StartDate,
                         Status = (int)cp.Status,
                         Version = cp.Version
-                    };
-                    patList.Add(patProgram);
+                    }));
                 }
             }
 

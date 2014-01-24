@@ -6,7 +6,7 @@ namespace Phytel.API.DataDomain.Program.DTO
 {
     public class GetPatientProgramsResponse : IDomainResponse
     {
-        public ProgramInfo program { get; set; }
+        public List<ProgramInfo> programs { get; set; }
         public string Version { get; set; }
         public ResponseStatus Status { get; set; }
     }

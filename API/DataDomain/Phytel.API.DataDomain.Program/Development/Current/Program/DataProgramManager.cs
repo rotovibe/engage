@@ -10,6 +10,7 @@ using ServiceStack.Service;
 using ServiceStack.ServiceClient.Web;
 using System.Configuration;
 using Phytel.API.DataDomain.Program.MongoDB.DTO;
+using System.Linq;
 
 namespace Phytel.API.DataDomain.Program
 {
@@ -185,7 +186,43 @@ namespace Phytel.API.DataDomain.Program
                 Phytel.API.DataDomain.Program.ProgramRepositoryFactory<GetPatientProgramsResponse>
                 .GetPatientProgramRepository(request.ContractNumber, request.Context);
 
-            //response = repo.Select(request.ProgramId) as GetPatientProgramsResponse;
+            ICollection<SelectExpression> selectExpressions = new List<SelectExpression>();
+
+            // PatientID
+            SelectExpression patientSelectExpression = new SelectExpression();
+            patientSelectExpression.FieldName = MEPatientProgram.PatientIdProperty;
+            patientSelectExpression.Type = SelectExpressionType.EQ;
+            patientSelectExpression.Value = request.PatientId;
+            patientSelectExpression.ExpressionOrder = 1;
+            patientSelectExpression.GroupID = 1;
+            selectExpressions.Add(patientSelectExpression);
+
+            APIExpression apiExpression = new APIExpression();
+            apiExpression.Expressions = selectExpressions;
+
+            Tuple<string, IEnumerable<object>> patientPrograms = repo.Select(apiExpression);
+
+            if (patientPrograms != null)
+            {
+                List<ProgramDetail> pds = patientPrograms.Item2.Cast<ProgramDetail>().ToList();
+                if (pds.Count > 0)
+                {
+                    response = new GetPatientProgramsResponse();
+
+                    List<ProgramInfo> lpi = new List<ProgramInfo>();
+                    pds.ForEach(pd => lpi.Add(new ProgramInfo
+                        {
+                            Id = pd.Id,
+                            Name = pd.Name,
+                            PatientId = pd.PatientId,
+                            ProgramState = pd.ProgramState,
+                            ShortName = pd.ShortName,
+                            Status = pd.Status
+                        })
+                    );
+                    response.programs = lpi;
+                }
+            }
 
             return response;
         }
