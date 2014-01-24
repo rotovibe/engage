@@ -180,7 +180,7 @@ namespace Phytel.API.DataDomain.Program
 
         public static GetPatientProgramsResponse GetPatientPrograms(GetPatientProgramsRequest request)
         {
-            GetPatientProgramsResponse response = null;
+            GetPatientProgramsResponse response = new GetPatientProgramsResponse(); ;
 
             IProgramRepository<GetPatientProgramsResponse> repo =
                 Phytel.API.DataDomain.Program.ProgramRepositoryFactory<GetPatientProgramsResponse>
@@ -207,7 +207,6 @@ namespace Phytel.API.DataDomain.Program
                 List<ProgramDetail> pds = patientPrograms.Item2.Cast<ProgramDetail>().ToList();
                 if (pds.Count > 0)
                 {
-                    response = new GetPatientProgramsResponse();
 
                     List<ProgramInfo> lpi = new List<ProgramInfo>();
                     pds.ForEach(pd => lpi.Add(new ProgramInfo
