@@ -17,7 +17,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
         public const string DescriptionProperty = "dsc";
         public const string StartDateProperty = "sd";
         public const string EndDateProperty = "ed";
-        public const string ObjectivesInfoProperty = "objs";
+        public const string ObjectivesInfoProperty = "obj";
         public const string AuthoredByProperty = "athby";
         public const string LockedProperty = "lck";
         public const string VersionProperty = "v";
