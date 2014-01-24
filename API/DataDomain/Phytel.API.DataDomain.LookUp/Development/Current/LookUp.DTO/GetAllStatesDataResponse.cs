@@ -6,8 +6,13 @@ namespace Phytel.API.DataDomain.LookUp.DTO
 {
     public class GetAllStatesDataResponse : IDomainResponse
    {
-       public List<LookUpData> States { get; set; }
+       public List<StateData> States { get; set; }
        public string Version { get; set; }
        public ResponseStatus Status { get; set; }
+    }
+
+    public class StateData : LookUpData
+    {
+        public string Code { get; set; }
     }
 }

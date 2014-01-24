@@ -90,8 +90,8 @@ namespace Phytel.API.DataDomain.LookUp
         {
             GetAllStatesDataResponse response = new GetAllStatesDataResponse();
 
-            ILookUpRepository<LookUpData> repo = LookUpRepositoryFactory<LookUpData>.GetLookUpRepository(request.ContractNumber, request.Context);
-            List<LookUpData> data = repo.GetAllStates();
+            ILookUpRepository<StateData> repo = LookUpRepositoryFactory<StateData>.GetLookUpRepository(request.ContractNumber, request.Context);
+            List<StateData> data = repo.GetAllStates();
 
             if (data != null)
             {

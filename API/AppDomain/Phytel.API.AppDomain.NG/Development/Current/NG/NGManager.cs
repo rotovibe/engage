@@ -732,11 +732,11 @@ namespace Phytel.API.AppDomain.NG
             }
         }
 
-        public List<LookUp> GetAllStates(GetAllStatesRequest request)
+        public List<StatesLookUp> GetAllStates(GetAllStatesRequest request)
         {
             try
             {
-                List<LookUp> response = new List<LookUp>();
+                List<StatesLookUp> response = new List<StatesLookUp>();
                 IRestClient client = new JsonServiceClient();
                 // [Route("/{Context}/{Version}/{ContractNumber}/states", "GET")]
                 Phytel.API.DataDomain.LookUp.DTO.GetAllStatesDataResponse dataDomainResponse = client.Get<Phytel.API.DataDomain.LookUp.DTO.GetAllStatesDataResponse>(string.Format("{0}/{1}/{2}/{3}/states",
@@ -745,13 +745,14 @@ namespace Phytel.API.AppDomain.NG
                                                                                                                 request.Version,
                                                                                                                 request.ContractNumber));
 
-                List<LookUpData> dataList = dataDomainResponse.States;
+                List<StateData> dataList = dataDomainResponse.States;
 
-                foreach (LookUpData d in dataList)
+                foreach (StateData d in dataList)
                 {
-                    LookUp lookUp = new LookUp();
+                    StatesLookUp lookUp = new StatesLookUp();
                     lookUp.Id = d.ID;
                     lookUp.Name = d.Name;
+                    lookUp.Code = d.Code;
                     response.Add(lookUp);
                 }
                 return response;

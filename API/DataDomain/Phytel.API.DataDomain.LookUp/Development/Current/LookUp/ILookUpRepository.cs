@@ -16,7 +16,7 @@ namespace Phytel.API.DataDomain.LookUp
         object FindObjectiveByID(string entityID);
         object FindCategoryByID(string entityID);
         List<LookUpData> GetAllCommModes();
-        List<LookUpData> GetAllStates();
+        List<StateData> GetAllStates();
         List<LookUpData> GetAllTimesOfDays();
         List<TimeZoneData> GetAllTimeZones();
         List<CommTypeData> GetAllCommTypes();

@@ -8,6 +8,10 @@ namespace Phytel.API.DataDomain.LookUp.DTO
 {
     public class MEState : LookUpBase
     {
+        public const string CodeProperty = "c";
 
+        [BsonElement(CodeProperty)]
+        [BsonIgnoreIfNull(true)]
+        public string Code { get; set; }
     }
 }

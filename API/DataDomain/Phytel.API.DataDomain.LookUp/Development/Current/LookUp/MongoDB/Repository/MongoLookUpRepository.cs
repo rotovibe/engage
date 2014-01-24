@@ -293,9 +293,9 @@ namespace Phytel.API.DataDomain.LookUp
             return commModeList;
         }
         
-        public List<LookUpData> GetAllStates()
+        public List<StateData> GetAllStates()
         {
-            List<LookUpData> stateList = null;
+            List<StateData> stateList = null;
             using (LookUpMongoContext ctx = new LookUpMongoContext(_dbName))
             {
                 List<IMongoQuery> queries = new List<IMongoQuery>();
@@ -307,10 +307,10 @@ namespace Phytel.API.DataDomain.LookUp
                 {
                     if (meLookup.Data != null)
                     {
-                        stateList = new List<LookUpData>();
+                        stateList = new List<StateData>();
                         foreach (MEState m in meLookup.Data)
                         {
-                            LookUpData data = new LookUpData { ID = m.DataID.ToString(), Name = m.Name};
+                            StateData data = new StateData { ID = m.DataID.ToString(), Name = m.Name, Code = m.Code };
                             stateList.Add(data);
                         }
                     }

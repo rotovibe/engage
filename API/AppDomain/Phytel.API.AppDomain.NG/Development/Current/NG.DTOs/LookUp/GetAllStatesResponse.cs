@@ -10,9 +10,14 @@ namespace Phytel.API.AppDomain.NG.DTO
 {
     public class GetAllStatesResponse : IDomainResponse
     {
-        public List<LookUp> States { get; set; }
+        public List<StatesLookUp> States { get; set; }
         public ResponseStatus Status { get; set; }
         public string Version { get; set; }
 
+    }
+
+    public class StatesLookUp : LookUp
+    {
+        public string Code { get; set; }
     }
 }
