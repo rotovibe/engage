@@ -110,5 +110,36 @@ namespace Phytel.API.DataDomain.Contact
             }
             catch (Exception ex) { throw ex; }
         }
+
+        public object FindContactByPatientId(string patientId)
+        {
+            GetContactDataResponse response = null;
+            using (ContactMongoContext ctx = new ContactMongoContext(_dbName))
+            {
+                List<IMongoQuery> queries = new List<IMongoQuery>();
+                queries.Add(Query.EQ(MEContact.PatientIdProperty, patientId));
+                queries.Add(Query.EQ(MEContact.DeleteFlagProperty, false));
+                IMongoQuery mQuery = Query.And(queries);
+                MEContact mc = ctx.Contacts.Collection.Find(mQuery).FirstOrDefault();
+                if (mc != null)
+                {
+                    response = new GetContactDataResponse();
+                    ContactData contactData = new ContactData { ContactId = mc.Id.ToString(), PatientId = mc.PatientId.ToString(), UserId = mc.UserId.ToString(), TimeZoneId = mc.TimeZone.ToString() };
+
+                    //Modes
+                    //Phones
+                    //Texts
+                    //Emails
+                    //Addresses
+                    //WeekDays
+                    //TimesOfDaysId
+                    //TimeZoneId
+                    //Languages
+
+                    response.Contact = contactData;
+                }
+            }
+            return response;
+        }
     }
 }

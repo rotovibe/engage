@@ -10,6 +10,6 @@ namespace Phytel.API.DataDomain.Contact
 {
     public interface IContactRepository<T> : IRepository<T>
     {
-        
+        object FindContactByPatientId(string patientId);
     }
 }

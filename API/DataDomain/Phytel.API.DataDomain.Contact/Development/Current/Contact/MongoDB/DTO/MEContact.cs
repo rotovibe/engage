@@ -1,10 +1,9 @@
+using System.Collections.Generic;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
+using Phytel.API.DataDomain.Contact.MongoDB.DTO;
 using Phytel.API.Interface;
 using Phytel.Mongo.Linq;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 
 namespace Phytel.API.DataDomain.Contact.DTO
 {
@@ -15,21 +14,72 @@ namespace Phytel.API.DataDomain.Contact.DTO
         public MEContact() { Id = ObjectId.GenerateNewId(); }
 
         public const string IdProperty = "_id";
+        public const string PatientIdProperty = "pid";
+        public const string UserIdProperty = "uid";
+        public const string ModesProperty = "ms";
+        public const string PhonesProperty = "phs";
+        public const string TextsProperty = "txts";
+        public const string EmailsProperty = "ems";
+        public const string AddressessProperty = "adds";
+        public const string WeekDaysProperty = "wds";
+        public const string TimesOfDaysProperty = "tofds";
+        public const string TimeZoneProperty = "tz";
+        public const string LanguagesProperty = "lans";
 
-        #region Standard IMongoEntity Constants
         public const string ExtraElementsProperty = "ex";
         public const string VersionProperty = "v";
         public const string UpdatedByProperty = "uby";
         public const string DeleteFlagProperty = "del";
         public const string TTLDateProperty = "ttl";
         public const string LastUpdatedOnProperty = "uon";
-        #endregion
 
         [BsonId]
         public ObjectId Id { get; set; }
 
+        [BsonElement(PatientIdProperty)]
+        [BsonIgnoreIfNull(true)]
+        public ObjectId? PatientId { get; set; }
 
-        #region Standard IMongoEntity Implementation
+        [BsonElement(UserIdProperty)]
+        [BsonIgnoreIfNull(true)]
+        public ObjectId? UserId { get; set; }
+
+        [BsonElement(ModesProperty)]
+        [BsonIgnoreIfNull(true)]
+        public List<MECommMode> Modes { get; set; }
+
+        [BsonElement(PhonesProperty)]
+        [BsonIgnoreIfNull(true)]
+        public List<MEPhone> Phones { get; set; }
+
+        [BsonElement(TextsProperty)]
+        [BsonIgnoreIfNull(true)]
+        public List<METext> Texts { get; set; }
+
+        [BsonElement(EmailsProperty)]
+        [BsonIgnoreIfNull(true)]
+        public List<MEEmail> Emails { get; set; }
+
+        [BsonElement(AddressessProperty)]
+        [BsonIgnoreIfNull(true)]
+        public List<MEAddress> Addresses { get; set; }
+
+        [BsonElement(WeekDaysProperty)]
+        [BsonIgnoreIfNull(true)]
+        public List<int> WeekDays { get; set; }
+
+        [BsonElement(TimesOfDaysProperty)]
+        [BsonIgnoreIfNull(true)]
+        public List<ObjectId> TimesOfDays { get; set; }
+
+        [BsonElement(TimeZoneProperty)]
+        [BsonIgnoreIfNull(true)]
+        public ObjectId TimeZone { get; set; }
+
+        [BsonElement(LanguagesProperty)]
+        [BsonIgnoreIfNull(true)]
+        public List<MELanguage> Languages { get; set; }
+        
         [BsonElement(ExtraElementsProperty)]
         [BsonExtraElements()]
         [BsonIgnoreIfNull(true)]
@@ -56,25 +106,5 @@ namespace Phytel.API.DataDomain.Contact.DTO
         [BsonIgnoreIfNull(true)]
         [BsonDateTimeOptions(Kind = System.DateTimeKind.Local)]
         public System.DateTime? LastUpdatedOn { get; set; }
-        #endregion
-
-        //public string ContactId { get; set; }
-        //public string PatientId { get; set; }
-        //public string UserId { get; set; }
-        //public List<CommMode> Modes { get; set; }
-        //public List<Phone> Phones { get; set; }
-        //public List<Text> Texts { get; set; }
-        //public List<Email> Emails { get; set; }
-        //public List<Address> Addresses { get; set; }
-        //public List<int> WeekDays { get; set; }
-        //public List<string> TimesOfDaysId { get; set; }
-        //public string TimeZoneId { get; set; }
-        //public List<Language> Languages { get; set; }
-
-        //public string PreferredPhoneId { get; set; }
-        //public string PreferredTextId { get; set; }
-        //public string PreferredEmailId { get; set; }
-        //public string PreferredAddressId { get; set; }
-        //public string PreferredLanguageId { get; set; }
     }
 }

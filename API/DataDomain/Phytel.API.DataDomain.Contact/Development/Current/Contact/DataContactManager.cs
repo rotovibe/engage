@@ -12,7 +12,7 @@ namespace Phytel.API.DataDomain.Contact
                 GetContactDataResponse result = new GetContactDataResponse();
 
                 IContactRepository<GetContactDataResponse> repo = ContactRepositoryFactory<GetContactDataResponse>.GetContactRepository(request.ContractNumber, request.Context);
-                result = repo.FindByID(request.PatientId) as GetContactDataResponse;
+                result = repo.FindContactByPatientId(request.PatientId) as GetContactDataResponse;
                 return (result != null ? result : new GetContactDataResponse());
             }
             catch (Exception ex)

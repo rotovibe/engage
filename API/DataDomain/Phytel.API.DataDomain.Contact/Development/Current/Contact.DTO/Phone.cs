@@ -10,6 +10,7 @@ namespace Phytel.API.DataDomain.Contact.DTO
         public string Id { get; set; }
         public string Number { get; set; }
         public string TypeId { get; set; }
+        public bool Preferred { get; set; }
         public bool OptOut { get; set; }
     }
 }
