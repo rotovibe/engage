@@ -152,7 +152,7 @@ namespace Phytel.API.AppDomain.NG
                 foreach (ProblemData c in problems)
                 {
                     LookUp lookUp = new LookUp();
-                    lookUp.ID = c.ID;
+                    lookUp.Id = c.ID;
                     lookUp.Name = c.Name;
                     response.Add(lookUp);
                 }
@@ -673,7 +673,7 @@ namespace Phytel.API.AppDomain.NG
                 foreach (LookUpData d in dataList)
                 {
                     LookUp lookUp = new LookUp();
-                    lookUp.ID = d.ID;
+                    lookUp.Id = d.ID;
                     lookUp.Name = d.Name;
                     response.Add(lookUp);
                 }
@@ -704,7 +704,7 @@ namespace Phytel.API.AppDomain.NG
                 foreach (LookUpData d in dataList)
                 {
                     LookUp lookUp = new LookUp();
-                    lookUp.ID = d.ID;
+                    lookUp.Id = d.ID;
                     lookUp.Name = d.Name;
                     response.Add(lookUp);
                 }
@@ -735,7 +735,7 @@ namespace Phytel.API.AppDomain.NG
                 foreach (LookUpData d in dataList)
                 {
                     LookUp lookUp = new LookUp();
-                    lookUp.ID = d.ID;
+                    lookUp.Id = d.ID;
                     lookUp.Name = d.Name;
                     response.Add(lookUp);
                 }
@@ -766,7 +766,7 @@ namespace Phytel.API.AppDomain.NG
                 foreach (CommTypeData d in dataList)
                 {
                     CommTypeLookUp lookUp = new CommTypeLookUp();
-                    lookUp.ID = d.ID;
+                    lookUp.Id = d.ID;
                     lookUp.Name = d.Name;
                     lookUp.CommModes = d.CommModes;
                     response.Add(lookUp);
@@ -798,7 +798,7 @@ namespace Phytel.API.AppDomain.NG
                 foreach (LanguageData d in dataList)
                 {
                     LanguagesLookUp lookUp = new LanguagesLookUp();
-                    lookUp.ID = d.ID;
+                    lookUp.Id = d.ID;
                     lookUp.Name = d.Name;
                     lookUp.Code = d.Code;
                     response.Add(lookUp);
@@ -830,9 +830,9 @@ namespace Phytel.API.AppDomain.NG
                 foreach (TimeZoneData d in dataList)
                 {
                     TimeZonesLookUp lookUp = new TimeZonesLookUp();
-                    lookUp.ID = d.ID;
+                    lookUp.Id = d.ID;
                     lookUp.Name = d.Name;
-                    lookUp.Default = d.Default;
+                    lookUp.DefaultZone = d.Default;
                     response.Add(lookUp);
                 }
                 return response;

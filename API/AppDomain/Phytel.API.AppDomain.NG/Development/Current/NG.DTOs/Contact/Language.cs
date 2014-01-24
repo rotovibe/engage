@@ -7,6 +7,7 @@ namespace Phytel.API.AppDomain.NG.DTO
 {
     public class Language
     {
-        public string LanguageId { get; set; }
+        public string Id { get; set; }
+        public bool Preferred { get; set; }
     }
 }

@@ -13,6 +13,6 @@ namespace Phytel.API.AppDomain.NG.DTO
 
     public class TimeZonesLookUp : LookUp
     {
-        public bool Default { get; set; }
+        public bool DefaultZone { get; set; }
     }
 }

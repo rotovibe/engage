@@ -39,6 +39,17 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="MongoDB.Bson, Version=1.8.1.20, Culture=neutral, PublicKeyToken=f686731cfb9cc103, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\References\MongoDB.Bson.dll</HintPath>
+    </Reference>
+    <Reference Include="MongoDB.Driver, Version=1.8.1.20, Culture=neutral, PublicKeyToken=f686731cfb9cc103, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\References\MongoDB.Driver.dll</HintPath>
+    </Reference>
+    <Reference Include="Phytel.Mongo">
+      <HintPath>..\References\Phytel.Mongo.dll</HintPath>
+    </Reference>
     <Reference Include="ServiceStack">
       <HintPath>..\..\..\..\..\packages\ServiceStack.3.9.70\lib\net35\ServiceStack.dll</HintPath>
     </Reference>
@@ -78,6 +89,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="LookUps_Test.cs" />
     <Compile Include="NGManager_Tests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -85,6 +97,10 @@
     <ProjectReference Include="..\..\..\..\..\Interfaces\Development\Current\Phytel.API.Interface\Phytel.API.Interface.csproj">
       <Project>{abe948fb-247e-4955-b3ab-b7c93e10a542}</Project>
       <Name>Phytel.API.Interface</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\Phytel.API.AppDomain.Security\Development\Current\Security\AppDomain.Security.csproj">
+      <Project>{8f254ac6-f99c-4bec-9088-ebba9c696caf}</Project>
+      <Name>AppDomain.Security</Name>
     </ProjectReference>
     <ProjectReference Include="..\NG.DTOs\AppDomain.NG.DTO.csproj">
       <Project>{e9957107-8f2a-4946-834e-629d4235b9b3}</Project>

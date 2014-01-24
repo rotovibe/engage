@@ -38,26 +38,6 @@ namespace Phytel.API.AppDomain.NG.Test
             Assert.IsTrue(response.Count > 0);
         }
 
-        [TestMethod]
-        public void GetAllProblems_Test()
-        {
-            // Arrange
-            string version = "v1";
-            string contractNumber = "InHealth001";
-            string token = "1234";
-            NGManager ngManager = new NGManager();
-            GetAllProblemsRequest request = new GetAllProblemsRequest
-            {
-                ContractNumber = contractNumber,
-                Token = token,
-                Version = version
-            };
-            // Act
-            List<LookUp> response = ngManager.GetProblems(request);
-
-            //Assert
-            Assert.IsTrue(response.Count > 0);
-        } 
         #endregion
 
         [TestMethod]
