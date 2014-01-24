@@ -8,29 +8,14 @@ namespace Phytel.API.DataDomain.Contact.Service
 {
     public class ContactService : ServiceStack.ServiceInterface.Service
     {
-        public GetContactResponse Post(GetContactRequest request)
-        {
-            GetContactResponse response = new GetContactResponse();
-            try
-            {
-                response = ContactDataManager.GetContactByID(request);
-                response.Version = request.Version;
-            }
-            catch (Exception ex)
-            {
-                //TODO: Log this to C3 database via ASE
-                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
-            }
-            return response;
-        }
 
-        public GetContactResponse Get(GetContactRequest request)
+        public GetContactDataResponse Get(GetContactDataRequest request)
         {
-            GetContactResponse response = new GetContactResponse();
+            GetContactDataResponse response = new GetContactDataResponse();
             try
             {
-             response = ContactDataManager.GetContactByID(request);
-            response.Version = request.Version;
+             response = ContactDataManager.GetContactByPatientId(request);
+             response.Version = request.Version;
                         }
             catch (Exception ex)
             {
@@ -40,20 +25,5 @@ namespace Phytel.API.DataDomain.Contact.Service
             return response;
         }
 
-        public GetAllContactsResponse Post(GetAllContactsRequest request)
-        {
-            GetAllContactsResponse response = new GetAllContactsResponse();
-            try
-            {
-                response = ContactDataManager.GetContactList(request);
-                response.Version = request.Version;
-            }
-            catch (Exception ex)
-            {
-                //TODO: Log this to C3 database via ASE
-                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
-            }
-            return response;
-        }
     }
 }

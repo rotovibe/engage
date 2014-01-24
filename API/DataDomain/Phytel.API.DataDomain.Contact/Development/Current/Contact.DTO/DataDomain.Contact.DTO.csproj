@@ -69,11 +69,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="GetAllContactsRequest.cs" />
-    <Compile Include="GetContactRequest.cs" />
-    <Compile Include="GetAllContactsResponse.cs" />
-    <Compile Include="GetContactResponse.cs" />
+    <Compile Include="Address.cs" />
+    <Compile Include="CommMode.cs" />
+    <Compile Include="Email.cs" />
+    <Compile Include="GetContactDataRequest.cs" />
+    <Compile Include="GetContactDataResponse.cs" />
+    <Compile Include="Language.cs" />
+    <Compile Include="Phone.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Text.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

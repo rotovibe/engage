@@ -7,13 +7,13 @@ namespace Phytel.API.DataDomain.Contact.Test
     public class ContactTest
     {
         [TestMethod]
-        public void GetContactByID()
+        public void GetContactByPatientId_Test()
         {
-            GetContactRequest request = new GetContactRequest{ ContactID = "5"};
+            GetContactDataRequest request = new GetContactDataRequest{ PatientId = "5"};
 
-            GetContactResponse response = ContactDataManager.GetContactByID(request);
+            GetContactDataResponse response = ContactDataManager.GetContactByPatientId(request);
 
-            Assert.IsTrue(response.Contact.ContactID == "Tony");
+            Assert.IsTrue(response.Contact.ContactId == "Tony");
         }
     }
 }

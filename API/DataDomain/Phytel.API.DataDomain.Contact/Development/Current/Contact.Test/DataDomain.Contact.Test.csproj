@@ -69,11 +69,11 @@
       <Name>Phytel.API.Interface</Name>
     </ProjectReference>
     <ProjectReference Include="..\Contact.DTO\DataDomain.Contact.DTO.csproj">
-      <Project>{1c2c63a1-4246-4ec9-bad1-c00e9ecd85f6}</Project>
+      <Project>{0b6e0ed8-abe5-4a1d-8e10-0ac54f06d9c4}</Project>
       <Name>DataDomain.Contact.DTO</Name>
     </ProjectReference>
     <ProjectReference Include="..\Contact\DataDomain.Contact.csproj">
-      <Project>{f1a478d1-dca1-4be6-ae83-e0acdd4fdffd}</Project>
+      <Project>{16143ea0-7971-4959-8b3b-eac8584279c2}</Project>
       <Name>DataDomain.Contact</Name>
     </ProjectReference>
   </ItemGroup>
