@@ -33,5 +33,29 @@ namespace Phytel.API.DataDomain.Program.Services.Test
 
             Assert.IsNotNull(response.Program);
         }
+
+        [TestMethod]
+        public void Get_Patient_Programs()
+        {
+            string url = "http://localhost:8888/Program";
+            string patientID = "52e26f11072ef7191c111cbd";
+            string ProgramID = "52e29288fe7a5923609b6475";
+            string contractNumber = "InHealth001";
+            string context = "NG";
+            string version = "v1";
+            string token = "52e28549d6a4850cf0d4b809";
+            IRestClient client = new JsonServiceClient();
+
+            GetPatientProgramsResponse response = client.Get<GetPatientProgramsResponse>(
+                string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Programs/",
+                url,
+                context,
+                version,
+                contractNumber,
+                patientID,
+                token));
+
+
+        }
     }
 }

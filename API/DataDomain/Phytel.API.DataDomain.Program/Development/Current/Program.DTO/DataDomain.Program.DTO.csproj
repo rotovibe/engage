@@ -75,6 +75,8 @@
     <Compile Include="ObjectivesDetail.cs" />
     <Compile Include="PutProgramActionProcessingRequest.cs" />
     <Compile Include="PutProgramActionProcessingResponse.cs" />
+    <Compile Include="GetPatientProgramsRequest.cs" />
+    <Compile Include="GetPatientProgramsResponse.cs" />
     <Compile Include="ResponseDetail.cs" />
     <Compile Include="StepDetail.cs" />
     <Compile Include="ModuleDetail.cs" />

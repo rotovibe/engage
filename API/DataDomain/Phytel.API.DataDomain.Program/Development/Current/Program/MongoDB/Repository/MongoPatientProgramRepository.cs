@@ -191,9 +191,9 @@ namespace Phytel.API.DataDomain.Program
                             ElementState = (int)cp.State,
                             CompletedBy = cp.CompletedBy,
                             DateCompleted = cp.DateCompleted,
-                            ObjectivesInfo = GetObjectives(cp.ObjectivesInfo),
-                            SpawnElement = GetSpawnElement(cp),
-                            Modules = GetModules(cp.Modules)
+                            ObjectivesInfo = DTOUtils.GetObjectives(cp.ObjectivesInfo),
+                            SpawnElement = DTOUtils.GetSpawnElement(cp),
+                            Modules = DTOUtils.GetModules(cp.Modules)
                         };
                     }
                     else
@@ -207,218 +207,6 @@ namespace Phytel.API.DataDomain.Program
             {
                 throw new Exception("DataDomain:FindById():" + ex.Message, ex.InnerException);
             }
-        }
-
-        private List<ModuleDetail> GetModules(List<MEModules> list)
-        {
-            try {
-                List<ModuleDetail> mods = new List<ModuleDetail>();
-                list.ForEach(r => mods.Add(new ModuleDetail
-                {
-                    Id = r.Id.ToString(),
-                    ProgramId = r.ProgramId.ToString(),
-                    Description = r.Description,
-                    Name = r.Name,
-                    Status = (int)r.Status,
-                    Completed = r.Completed,
-                    Enabled = r.Enabled,
-                    Next = r.Next,
-                    Previous = r.Previous,
-                    Order = r.Order,
-                    SpawnElement = GetSpawnElement(r),
-                    SourceId = r.SourceId,
-                    AssignBy = r.AssignedBy,
-                    AssignDate = r.AssignedOn,
-                    ElementState = (int)r.State,
-                    CompletedBy = r.CompletedBy,
-                    DateCompleted = r.DateCompleted,
-                    Objectives = GetObjectives(r.Objectives),
-                    Actions = GetActions(r.Actions)
-                }));
-                return mods;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("DataDomain:GetModules():" + ex.Message, ex.InnerException);
-            }
-        }
-
-        private List<ObjectivesDetail> GetObjectives(List<Objectives> list)
-        {
-            try
-            {
-                List<ObjectivesDetail> objs = new List<ObjectivesDetail>();
-                if (list != null)
-                {
-                    list.ForEach(o => objs.Add(new ObjectivesDetail
-                    {
-                        Id = o.Id.ToString(),
-                        Value = o.Value,
-                        Status = (int)o.Status,
-                        Unit = o.Unit
-                    }));
-                }
-                return objs;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("DataDomain:GetObjectives():" + ex.Message, ex.InnerException);
-            }
-        }
-
-        private List<ActionsDetail> GetActions(List<MEAction> list)
-        {
-            try
-            {
-                List<ActionsDetail> acts = new List<ActionsDetail>();
-                list.ForEach(a => acts.Add(new ActionsDetail
-                {
-                        CompletedBy = a.CompletedBy,
-                        Description = a.Description,
-                        Id = a.Id.ToString(),
-                        ModuleId = a.ModuleId.ToString(),
-                        Name = a.Name,
-                        Status = (int)a.Status,
-                        Completed = a.Completed,
-                        Enabled = a.Enabled,
-                        Next = a.Next,
-                        Previous = a.Previous,
-                        Order = a.Order,
-                        SpawnElement = GetSpawnElement(a),
-                        SourceId = a.SourceId,
-                        AssignBy = a.AssignedBy,
-                        AssignDate = a.AssignedOn,
-                        ElementState = (int)a.State,
-                        DateCompleted = a.DateCompleted,
-                        Objectives = GetObjectives(a.Objectives),
-                        Steps = GetSteps(a.Steps)
-                    }));
-                return acts;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("DataDomain:GetActions():" + ex.Message, ex.InnerException);
-            }
-        }
-
-        private List<StepsDetail> GetSteps(List<MEStep> list)
-        {
-            try
-            {
-                List<StepsDetail> steps = new List<StepsDetail>();
-                list.ForEach(s => steps.Add(
-                    new StepsDetail
-                    {
-                        Description = s.Description,
-                        Ex = s.Ex,
-                        Id = s.Id.ToString(),
-                        SourceId = s.SourceId,
-                        ActionId = s.ActionId.ToString(),
-                        Notes = s.Notes,
-                        Question = s.Question,
-                        Status = (int)s.Status,
-                        Title = s.Title,
-                        Text = s.Text,
-                        StepTypeId = s.StepTypeId,
-                        Completed = s.Completed,
-                        Enabled = s.Enabled,
-                        Next = s.Next,
-                        Previous = s.Previous,
-                        Order = s.Order,
-                        ControlType = s.ControlType,
-                        Header = s.Header,
-                        SelectedResponseId = s.SelectedResponseId,
-                        IncludeTime = s.IncludeTime,
-                        SelectType = s.SelectType,
-                        AssignBy = s.AssignedBy,
-                        AssignDate = s.AssignedOn,
-                        ElementState = (int)s.State,
-                        CompletedBy = s.CompletedBy,
-                        DateCompleted = s.DateCompleted,
-                        Responses = GetResponses(s),
-                        SpawnElement = GetSpawnElement(s)
-                    }));
-                return steps;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("DataDomain:GetSteps():" + ex.Message, ex.InnerException);
-            }
-        }
-
-        private static List<SpawnElementDetail> GetSpawnElement(MEPlanElement a)
-        {
-            try
-            {
-                List<SpawnElementDetail> spawn = new List<SpawnElementDetail>();
-
-                if (a.Spawn != null)
-                {
-                    spawn = a.Spawn.Select(s => new SpawnElementDetail
-                    {
-                        ElementId = s.SpawnId.ToString(),
-                        ElementType = s.Type
-                    }).ToList();
-                }
-                return spawn;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("DataDomain:GetSpawnElement():" + ex.Message, ex.InnerException);
-            }
-        }
-
-        private List<ResponseDetail> GetResponses(MEStep step)
-        {
-            try
-            {
-                List<ResponseDetail> resp = null;
-                if (step.Responses != null)
-                {
-                    resp = step.Responses.Select(x => new ResponseDetail
-                                               {
-                                                   Id = x.Id.ToString(),
-                                                   NextStepId = x.NextStepId.ToString(),
-                                                   Nominal = x.Nominal,
-                                                   Order = x.Order,
-                                                   Required = x.Required,
-                                                   StepId = x.StepId.ToString(),
-                                                   Text = x.Text,
-                                                   Value = x.Value,
-                                                   SpawnElement = GetResponseSpawnElement(x.Spawn)
-                                               }).ToList<ResponseDetail>();
-                }
-                return resp;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("DataDomain:GetResponses():" + ex.Message, ex.InnerException);
-            }
-        }
-
-        private List<SpawnElementDetail> GetResponseSpawnElement(List<MESpawnElement> mESpawnElement)
-        {
-            try
-            {
-                List<SpawnElementDetail> sed = new List<SpawnElementDetail>();
-                if (mESpawnElement != null)
-                {
-                    mESpawnElement.ForEach(se =>
-                    {
-                        sed.Add(new SpawnElementDetail { ElementId = se.SpawnId.ToString(), ElementType = se.Type });
-                    });
-                }
-                return sed;
-            }
-            catch (Exception ex)
-            {
-                throw new ArgumentException("DDomain:GetResponseSpawnElement()" + ex.Message, ex.InnerException);
-            }
-        }
-
-        public List<ProgramInfo> GetActiveProgramsInfoList(GetAllActiveProgramsRequest request)
-        {
-            throw new NotImplementedException();
         }
 
         public Tuple<string, IEnumerable<object>> Select(Interface.APIExpression expression)
@@ -591,6 +379,11 @@ namespace Phytel.API.DataDomain.Program
             {
                 throw new Exception("DataDomain:Update():" + ex.Message, ex.InnerException);
             }
+        }
+
+        public List<ProgramInfo> GetActiveProgramsInfoList(GetAllActiveProgramsRequest request)
+        {
+            throw new NotImplementedException();
         }
 
         public void CacheByID(List<string> entityIDs)
