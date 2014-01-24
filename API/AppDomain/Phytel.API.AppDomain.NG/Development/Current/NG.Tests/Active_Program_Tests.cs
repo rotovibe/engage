@@ -92,7 +92,7 @@ namespace Phytel.API.DataDomain.Patient.Service.Test
             string context = "NG";
             string version = "v1";
             string token = "52e28549d6a4850cf0d4b809";
-            string patientId = "52e26f5b072ef7191c11e0b6";
+            string patientId = "52e26f0b072ef7191c111c4d";
             IRestClient client = new JsonServiceClient();
 
             GetPatientProgramsResponse response = client.Get<GetPatientProgramsResponse>(

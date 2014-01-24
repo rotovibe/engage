@@ -41,7 +41,8 @@ namespace Phytel.API.Common
         Removed = -1,
         NotStarted = 0,
         Started = 1,
-        Completed = 2
+        Completed = 2,
+        InProgress =3
     }
 
     public enum GenericStatus

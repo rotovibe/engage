@@ -34,31 +34,33 @@ namespace Phytel.API.AppDomain.NG
                 Actions action = request.Action;
                 NGUtils.UpdateProgramAction(action, p);
 
-                //// create a responsibility chain to process each elemnt in the hierachy
-                ProgramPlanProcessor pChain = InitializeProgramChain();
-
-                //// process steps in action
-                action.Steps.ForEach(s =>
+                if (action.Completed)
                 {
-                    pChain.ProcessRequest((IPlanElement)s, p, request.UserId, request.PatientId);
-                });
+                    //// create a responsibility chain to process each elemnt in the hierachy
+                    ProgramPlanProcessor pChain = InitializeProgramChain();
+                    //// process steps in action
+                    action.Steps.ForEach(s =>
+                    {
+                        pChain.ProcessRequest((IPlanElement)s, p, request.UserId, request.PatientId, action);
+                    });
 
-                pChain.ProcessRequest((IPlanElement)action, p, request.UserId, request.PatientId);
+                    pChain.ProcessRequest((IPlanElement)action, p, request.UserId, request.PatientId, action);
+                    Module mod = PlanElementUtil.FindElementById(p.Modules, action.ModuleId);
 
-
-                Module mod = PlanElementUtil.FindElementById(p.Modules, action.ModuleId);
-
-                if (mod != null)
-                {
-                    // set enabled status for action dependencies
-                    PlanElementUtil.SetEnabledStatusByPrevious(mod.Actions);
-
-                    // set enable/visibility of actions after action processing.
-                    pChain.ProcessRequest((IPlanElement)mod, p, request.UserId, request.PatientId);
+                    if (mod != null)
+                    {
+                        // set enabled status for action dependencies
+                        PlanElementUtil.SetEnabledStatusByPrevious(mod.Actions);
+                        // set enable/visibility of actions after action processing.
+                        pChain.ProcessRequest((IPlanElement)mod, p, request.UserId, request.PatientId, action);
+                    }
+                    // set module visibility for modules
+                    PlanElementUtil.SetEnabledStatusByPrevious(p.Modules);
                 }
-
-                // set module visibility for modules
-                PlanElementUtil.SetEnabledStatusByPrevious(p.Modules);
+                else
+                {
+                    action.ElementState = 3;
+                }
 
                 // save
                 SaveAction(request, p);
