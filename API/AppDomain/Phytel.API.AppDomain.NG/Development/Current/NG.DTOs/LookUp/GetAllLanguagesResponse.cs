@@ -8,17 +8,15 @@ using Phytel.API.Interface;
 
 namespace Phytel.API.AppDomain.NG.DTO
 {
-    public class GetAllLanguagesRespone : IDomainResponse
+    public class GetAllLanguagesResponse : IDomainResponse
     {
-        public List<LanguagesLookUp> States { get; set; }
+        public List<LanguagesLookUp> Languages { get; set; }
         public ResponseStatus Status { get; set; }
         public string Version { get; set; }
     }
 
-    public class LanguagesLookUp
+    public class LanguagesLookUp : LookUp
     {
-        public string ID { get; set; }
-        public string Name { get; set; }
         public string Code { get; set; }
     }
 }

@@ -8,17 +8,11 @@ using Phytel.API.Interface;
 
 namespace Phytel.API.AppDomain.NG.DTO
 {
-    public class GetAllStatesRespone : IDomainResponse
+    public class GetAllStatesResponse : IDomainResponse
     {
-        public List<StatesLookUp> States { get; set; }
+        public List<LookUp> States { get; set; }
         public ResponseStatus Status { get; set; }
         public string Version { get; set; }
 
-    }
-
-    public class StatesLookUp
-    {
-        public string ID { get; set; }
-        public string Name { get; set; }
     }
 }

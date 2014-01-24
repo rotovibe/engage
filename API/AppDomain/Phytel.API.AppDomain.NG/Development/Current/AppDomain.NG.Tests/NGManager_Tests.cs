@@ -53,7 +53,7 @@ namespace Phytel.API.AppDomain.NG.Test
                 Version = version
             };
             // Act
-            List<ProblemLookUp> response = ngManager.GetProblems(request);
+            List<LookUp> response = ngManager.GetProblems(request);
 
             //Assert
             Assert.IsTrue(response.Count > 0);

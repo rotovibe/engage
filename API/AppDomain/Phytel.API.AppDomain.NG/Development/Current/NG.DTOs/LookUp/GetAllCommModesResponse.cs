@@ -10,15 +10,9 @@ namespace Phytel.API.AppDomain.NG.DTO
 {
     public class GetAllCommModesResponse : IDomainResponse
     {
-        public List<CommModesLookUp> CommModes { get; set; }
+        public List<LookUp> CommModes { get; set; }
         public ResponseStatus Status { get; set; }
         public string Version { get; set; }
 
-    }
-
-    public class CommModesLookUp
-    {
-        public string ID { get; set; }
-        public string Name { get; set; }
     }
 }

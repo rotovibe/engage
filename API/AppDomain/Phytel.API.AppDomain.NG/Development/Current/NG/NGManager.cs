@@ -133,11 +133,11 @@ namespace Phytel.API.AppDomain.NG
         #endregion
 
         #region Problem Requests
-        public List<ProblemLookUp> GetProblems(GetAllProblemsRequest request)
+        public List<LookUp> GetProblems(GetAllProblemsRequest request)
         {
             try
             {
-                List<ProblemLookUp> response = new List<ProblemLookUp>();
+                List<LookUp> response = new List<LookUp>();
 
                 IRestClient client = new JsonServiceClient();
                 //[Route("/{Context}/{Version}/{ContractNumber}/problems", "GET")]
@@ -151,10 +151,10 @@ namespace Phytel.API.AppDomain.NG
 
                 foreach (ProblemData c in problems)
                 {
-                    ProblemLookUp problemLookUp = new ProblemLookUp();
-                    problemLookUp.ID = c.ID;
-                    problemLookUp.Name = c.Name;
-                    response.Add(problemLookUp);
+                    LookUp lookUp = new LookUp();
+                    lookUp.ID = c.ID;
+                    lookUp.Name = c.Name;
+                    response.Add(lookUp);
                 }
 
                 return response;
@@ -654,6 +654,196 @@ namespace Phytel.API.AppDomain.NG
             return spawn;
         }
 
+        #region LookUp - ContactRelated
+        public List<LookUp> GetAllCommModes(GetAllCommModesRequest request)
+        {
+            try
+            {
+                List<LookUp> response = new List<LookUp>();
+                IRestClient client = new JsonServiceClient();
+                // [Route("/{Context}/{Version}/{ContractNumber}/commmodes", "GET")]
+                Phytel.API.DataDomain.LookUp.DTO.GetAllCommModesDataResponse dataDomainResponse = client.Get<Phytel.API.DataDomain.LookUp.DTO.GetAllCommModesDataResponse>(string.Format("{0}/{1}/{2}/{3}/commmodes",
+                                                                                                                DDLookupServiceUrl,
+                                                                                                                "NG",
+                                                                                                                request.Version,
+                                                                                                                request.ContractNumber));
+
+                List<LookUpData> dataList  = dataDomainResponse.CommModes;
+
+                foreach (LookUpData d in dataList)
+                {
+                    LookUp lookUp = new LookUp();
+                    lookUp.ID = d.ID;
+                    lookUp.Name = d.Name;
+                    response.Add(lookUp);
+                }
+                return response;
+            }
+            catch (WebServiceException wse)
+            {
+                Exception ae = new Exception(wse.ResponseBody, wse.InnerException);
+                throw ae;
+            }
+        }
+
+        public List<LookUp> GetAllStates(GetAllStatesRequest request)
+        {
+            try
+            {
+                List<LookUp> response = new List<LookUp>();
+                IRestClient client = new JsonServiceClient();
+                // [Route("/{Context}/{Version}/{ContractNumber}/states", "GET")]
+                Phytel.API.DataDomain.LookUp.DTO.GetAllStatesDataResponse dataDomainResponse = client.Get<Phytel.API.DataDomain.LookUp.DTO.GetAllStatesDataResponse>(string.Format("{0}/{1}/{2}/{3}/states",
+                                                                                                                DDLookupServiceUrl,
+                                                                                                                "NG",
+                                                                                                                request.Version,
+                                                                                                                request.ContractNumber));
+
+                List<LookUpData> dataList = dataDomainResponse.States;
+
+                foreach (LookUpData d in dataList)
+                {
+                    LookUp lookUp = new LookUp();
+                    lookUp.ID = d.ID;
+                    lookUp.Name = d.Name;
+                    response.Add(lookUp);
+                }
+                return response;
+            }
+            catch (WebServiceException wse)
+            {
+                Exception ae = new Exception(wse.ResponseBody, wse.InnerException);
+                throw ae;
+            }
+        }
+
+        public List<LookUp> GetAllTimesOfDays(GetAllTimesOfDaysRequest request)
+        {
+            try
+            {
+                List<LookUp> response = new List<LookUp>();
+                IRestClient client = new JsonServiceClient();
+                //[Route("/{Context}/{Version}/{ContractNumber}/timesOfDays", "GET")]
+                Phytel.API.DataDomain.LookUp.DTO.GetAllTimesOfDaysDataResponse dataDomainResponse = client.Get<Phytel.API.DataDomain.LookUp.DTO.GetAllTimesOfDaysDataResponse>(string.Format("{0}/{1}/{2}/{3}/timesOfDays",
+                                                                                                                DDLookupServiceUrl,
+                                                                                                                "NG",
+                                                                                                                request.Version,
+                                                                                                                request.ContractNumber));
+
+                List<LookUpData> dataList = dataDomainResponse.TimesOfDays;
+
+                foreach (LookUpData d in dataList)
+                {
+                    LookUp lookUp = new LookUp();
+                    lookUp.ID = d.ID;
+                    lookUp.Name = d.Name;
+                    response.Add(lookUp);
+                }
+                return response;
+            }
+            catch (WebServiceException wse)
+            {
+                Exception ae = new Exception(wse.ResponseBody, wse.InnerException);
+                throw ae;
+            }
+        }
+
+        public List<CommTypeLookUp> GetAllCommTypes(GetAllCommTypesRequest request)
+        {
+            try
+            {
+                List<CommTypeLookUp> response = new List<CommTypeLookUp>();
+                IRestClient client = new JsonServiceClient();
+                // [Route("/{Context}/{Version}/{ContractNumber}/commtypes", "GET")]
+                Phytel.API.DataDomain.LookUp.DTO.GetAllCommTypesDataResponse dataDomainResponse = client.Get<Phytel.API.DataDomain.LookUp.DTO.GetAllCommTypesDataResponse>(string.Format("{0}/{1}/{2}/{3}/commtypes",
+                                                                                                                DDLookupServiceUrl,
+                                                                                                                "NG",
+                                                                                                                request.Version,
+                                                                                                                request.ContractNumber));
+
+                List<CommTypeData> dataList = dataDomainResponse.CommTypes;
+
+                foreach (CommTypeData d in dataList)
+                {
+                    CommTypeLookUp lookUp = new CommTypeLookUp();
+                    lookUp.ID = d.ID;
+                    lookUp.Name = d.Name;
+                    lookUp.CommModes = d.CommModes;
+                    response.Add(lookUp);
+                }
+                return response;
+            }
+            catch (WebServiceException wse)
+            {
+                Exception ae = new Exception(wse.ResponseBody, wse.InnerException);
+                throw ae;
+            }
+        }
+
+        public List<LanguagesLookUp> GetAllLanguages(GetAllLanguagesRequest request)
+        {
+            try
+            {
+                List<LanguagesLookUp> response = new List<LanguagesLookUp>();
+                IRestClient client = new JsonServiceClient();
+                // [Route("/{Context}/{Version}/{ContractNumber}/languages", "GET")]
+                Phytel.API.DataDomain.LookUp.DTO.GetAllLanguagesDataResponse dataDomainResponse = client.Get<Phytel.API.DataDomain.LookUp.DTO.GetAllLanguagesDataResponse>(string.Format("{0}/{1}/{2}/{3}/languages",
+                                                                                                                DDLookupServiceUrl,
+                                                                                                                "NG",
+                                                                                                                request.Version,
+                                                                                                                request.ContractNumber));
+
+                List<LanguageData> dataList = dataDomainResponse.Languages;
+
+                foreach (LanguageData d in dataList)
+                {
+                    LanguagesLookUp lookUp = new LanguagesLookUp();
+                    lookUp.ID = d.ID;
+                    lookUp.Name = d.Name;
+                    lookUp.Code = d.Code;
+                    response.Add(lookUp);
+                }
+                return response;
+            }
+            catch (WebServiceException wse)
+            {
+                Exception ae = new Exception(wse.ResponseBody, wse.InnerException);
+                throw ae;
+            }
+        }
+
+        public List<TimeZonesLookUp> GetAllTimeZones(GetAllTimeZonesRequest request)
+        {
+            try
+            {
+                List<TimeZonesLookUp> response = new List<TimeZonesLookUp>();
+                IRestClient client = new JsonServiceClient();
+                //[Route("/{Context}/{Version}/{ContractNumber}/timeZones", "GET")]
+                Phytel.API.DataDomain.LookUp.DTO.GetAllTimeZonesDataResponse dataDomainResponse = client.Get<Phytel.API.DataDomain.LookUp.DTO.GetAllTimeZonesDataResponse>(string.Format("{0}/{1}/{2}/{3}/timeZones",
+                                                                                                                DDLookupServiceUrl,
+                                                                                                                "NG",
+                                                                                                                request.Version,
+                                                                                                                request.ContractNumber));
+
+                List<TimeZoneData> dataList = dataDomainResponse.TimeZones;
+
+                foreach (TimeZoneData d in dataList)
+                {
+                    TimeZonesLookUp lookUp = new TimeZonesLookUp();
+                    lookUp.ID = d.ID;
+                    lookUp.Name = d.Name;
+                    lookUp.Default = d.Default;
+                    response.Add(lookUp);
+                }
+                return response;
+            }
+            catch (WebServiceException wse)
+            {
+                Exception ae = new Exception(wse.ResponseBody, wse.InnerException);
+                throw ae;
+            }
+        } 
+        #endregion
 
         #region Contact
         public GetContactResponse GetContact(GetContactRequest request)

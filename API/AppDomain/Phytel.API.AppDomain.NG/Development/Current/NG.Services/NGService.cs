@@ -358,5 +358,164 @@ namespace Phytel.API.AppDomain.NG.Service
                 return response;
             }
         }
+
+        #region LookUps ContactRelated
+        public GetAllCommModesResponse Get(GetAllCommModesRequest request)
+        {
+            GetAllCommModesResponse response = new GetAllCommModesResponse();
+            try
+            {
+                NGManager ngm = new NGManager();
+
+                ValidateTokenResponse result = ngm.IsUserValidated(request.Version, request.Token);
+                if (result.UserId.Trim() != string.Empty)
+                {
+                    request.UserId = result.UserId;
+                    response.CommModes = ngm.GetAllCommModes(request);
+                }
+                else
+                    throw new UnauthorizedAccessException();
+
+                return response;
+            }
+            catch (Exception ex)
+            {
+                //TODO: Log this to the SQL database via ASE
+                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+                return response;
+            }
+        }
+
+        public GetAllStatesResponse Get(GetAllStatesRequest request)
+        {
+            GetAllStatesResponse response = new GetAllStatesResponse();
+            try
+            {
+                NGManager ngm = new NGManager();
+
+                ValidateTokenResponse result = ngm.IsUserValidated(request.Version, request.Token);
+                if (result.UserId.Trim() != string.Empty)
+                {
+                    request.UserId = result.UserId;
+                    response.States = ngm.GetAllStates(request);
+                }
+                else
+                    throw new UnauthorizedAccessException();
+
+                return response;
+            }
+            catch (Exception ex)
+            {
+                //TODO: Log this to the SQL database via ASE
+                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+                return response;
+            }
+        }
+
+        public GetAllTimesOfDaysResponse Get(GetAllTimesOfDaysRequest request)
+        {
+            GetAllTimesOfDaysResponse response = new GetAllTimesOfDaysResponse();
+            try
+            {
+                NGManager ngm = new NGManager();
+
+                ValidateTokenResponse result = ngm.IsUserValidated(request.Version, request.Token);
+                if (result.UserId.Trim() != string.Empty)
+                {
+                    request.UserId = result.UserId;
+                    response.TimesOfDays = ngm.GetAllTimesOfDays(request);
+                }
+                else
+                    throw new UnauthorizedAccessException();
+
+                return response;
+            }
+            catch (Exception ex)
+            {
+                //TODO: Log this to the SQL database via ASE
+                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+                return response;
+            }
+        }
+
+        public GetAllTimeZonesResponse Get(GetAllTimeZonesRequest request)
+        {
+            GetAllTimeZonesResponse response = new GetAllTimeZonesResponse();
+            try
+            {
+                NGManager ngm = new NGManager();
+
+                ValidateTokenResponse result = ngm.IsUserValidated(request.Version, request.Token);
+                if (result.UserId.Trim() != string.Empty)
+                {
+                    request.UserId = result.UserId;
+                    response.TimeZones = ngm.GetAllTimeZones(request);
+                }
+                else
+                    throw new UnauthorizedAccessException();
+
+                return response;
+            }
+            catch (Exception ex)
+            {
+                //TODO: Log this to the SQL database via ASE
+                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+                return response;
+            }
+        }
+
+        public GetAllCommTypesResponse Get(GetAllCommTypesRequest request)
+        {
+            GetAllCommTypesResponse response = new GetAllCommTypesResponse();
+            try
+            {
+                NGManager ngm = new NGManager();
+
+                ValidateTokenResponse result = ngm.IsUserValidated(request.Version, request.Token);
+                if (result.UserId.Trim() != string.Empty)
+                {
+                    request.UserId = result.UserId;
+                    response.CommTypes = ngm.GetAllCommTypes(request);
+                }
+                else
+                    throw new UnauthorizedAccessException();
+
+                return response;
+            }
+            catch (Exception ex)
+            {
+                //TODO: Log this to the SQL database via ASE
+                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+                return response;
+            }
+        }
+
+        public GetAllLanguagesResponse Get(GetAllLanguagesRequest request)
+        {
+            GetAllLanguagesResponse response = new GetAllLanguagesResponse();
+            try
+            {
+                NGManager ngm = new NGManager();
+
+                ValidateTokenResponse result = ngm.IsUserValidated(request.Version, request.Token);
+                if (result.UserId.Trim() != string.Empty)
+                {
+                    request.UserId = result.UserId;
+                    response.Languages = ngm.GetAllLanguages(request);
+                }
+                else
+                    throw new UnauthorizedAccessException();
+
+                return response;
+            }
+            catch (Exception ex)
+            {
+                //TODO: Log this to the SQL database via ASE
+                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+                return response;
+            }
+        }
+
+        #endregion
     }
 }

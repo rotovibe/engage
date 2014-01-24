@@ -8,16 +8,10 @@ using Phytel.API.Interface;
 
 namespace Phytel.API.AppDomain.NG.DTO
 {
-    public class GetAllTimesOfDaysRespone : IDomainResponse
+    public class GetAllTimesOfDaysResponse : IDomainResponse
     {
-        public List<TimesOfDaysLookUp> States { get; set; }
+        public List<LookUp> TimesOfDays { get; set; }
         public ResponseStatus Status { get; set; }
         public string Version { get; set; }
-    }
-
-    public class TimesOfDaysLookUp
-    {
-        public string ID { get; set; }
-        public string Name { get; set; }
     }
 }

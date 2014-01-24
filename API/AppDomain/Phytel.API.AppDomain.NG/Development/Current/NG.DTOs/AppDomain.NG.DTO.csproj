@@ -93,12 +93,13 @@
     <Compile Include="LookUp\GetAllLanguagesResponse.cs" />
     <Compile Include="LookUp\GetAllTimeZonesResponse.cs" />
     <Compile Include="LookUp\GetAllTimesOfDaysResponse.cs" />
-    <Compile Include="LookUp\GetAllStatesRespone.cs" />
-    <Compile Include="LookUp\GetAllCommTypesRespone.cs" />
+    <Compile Include="LookUp\GetAllStatesResponse.cs" />
+    <Compile Include="LookUp\GetAllCommTypesResponse.cs" />
     <Compile Include="LookUp\GetAllCommModesResponse.cs" />
     <Compile Include="Contact\GetContactResponse.cs" />
     <Compile Include="IPlanElement.cs" />
     <Compile Include="CohortPatient.cs" />
+    <Compile Include="LookUp\LookUp.cs" />
     <Compile Include="PostProcessActionRequest.cs" />
     <Compile Include="PostProcessActionResponse.cs" />
     <Compile Include="GetPatientProgramDetailsSummaryResponse.cs" />

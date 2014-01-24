@@ -1,23 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using ServiceStack.ServiceInterface.ServiceModel;
 using Phytel.API.Interface;
 
 namespace Phytel.API.AppDomain.NG.DTO
 {
-    public class GetAllTimeZonesRespone : IDomainResponse
+    public class GetAllTimeZonesResponse : IDomainResponse
     {
-        public List<TimeZonesLookUp> States { get; set; }
+        public List<TimeZonesLookUp> TimeZones { get; set; }
         public ResponseStatus Status { get; set; }
         public string Version { get; set; }
     }
 
-    public class TimeZonesLookUp
+    public class TimeZonesLookUp : LookUp
     {
-        public string ID { get; set; }
-        public string Name { get; set; }
+        public bool Default { get; set; }
     }
 }

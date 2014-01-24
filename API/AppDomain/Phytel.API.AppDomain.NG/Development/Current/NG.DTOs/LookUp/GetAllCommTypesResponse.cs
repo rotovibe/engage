@@ -8,18 +8,16 @@ using Phytel.API.Interface;
 
 namespace Phytel.API.AppDomain.NG.DTO
 {
-    public class GetAllCommTypesRespone : IDomainResponse
+    public class GetAllCommTypesResponse : IDomainResponse
     {
-        public List<CommTypesLookUp> CommTypes { get; set; }
+        public List<CommTypeLookUp> CommTypes { get; set; }
         public ResponseStatus Status { get; set; }
         public string Version { get; set; }
 
     }
 
-    public class CommTypesLookUp
+    public class CommTypeLookUp : LookUp
     {
-        public string ID { get; set; }
-        public string Name { get; set; }
-        public List<CommModesLookUp> CommModes { get; set; }
+        public List<string> CommModes { get; set; }
     }
 }
