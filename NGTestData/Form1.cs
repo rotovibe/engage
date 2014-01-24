@@ -8,11 +8,14 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Data.SqlClient;
-using Phytel.API.DataDomain.Patient.MongoDB.DTO;
+using Phytel.API.DataDomain.Patient.DTO;
 using Phytel.API.DataDomain.LookUp.DTO;
 using Phytel.API.DataDomain.PatientProblem.DTO;
-using Phytel.API.DataDomain.CohortPatient.DTO;
 using Phytel.API.DataDomain.PatientSystem.DTO;
+using MongoDB.Driver;
+using MongoDB.Driver.Builders;
+using Phytel.API.DataDomain.Program.MongoDB.DTO;
+using MongoDB.Bson.Serialization;
 
 namespace NGTestData
 {
@@ -31,10 +34,12 @@ namespace NGTestData
 
             List<MEPatient> patients = new List<MEPatient>();
             List<MEPatientProblem> patientProblems = new List<MEPatientProblem>();
-            List<Phytel.API.DataDomain.CohortPatient.DTO.MECohortPatientView> cohortPatients = new List<Phytel.API.DataDomain.CohortPatient.DTO.MECohortPatientView>();
+            List<Phytel.API.DataDomain.Patient.DTO.MECohortPatientView> cohortPatients = new List<Phytel.API.DataDomain.Patient.DTO.MECohortPatientView>();
             List<MEPatientSystem> patientSystems = new List<MEPatientSystem>();
+            List<MEPatientProgram> patientPrograms = new List<MEPatientProgram>();
 
             List<MEProblem> problems = null;
+            List<MEContractProgram> programs = null;
 
             string mongoConnString = string.Empty;
             if (rdoDev.Checked)
@@ -48,8 +53,14 @@ namespace NGTestData
             mongoDB.GetCollection("PatientProblem").RemoveAll();
             mongoDB.GetCollection("CohortPatientView").RemoveAll();
             mongoDB.GetCollection("PatientSystem").RemoveAll();
+            mongoDB.GetCollection("PatientProgram").RemoveAll();
+            mongoDB.GetCollection("PatientUser").RemoveAll();
 
-            problems = mongoDB.GetCollection("ProblemLookUp").FindAllAs<MEProblem>().ToList();
+            IMongoQuery q = Query.EQ("type", 1);
+
+            problems = GetAllProblems(mongoDB.GetCollection("LookUp"));
+            
+            programs = mongoDB.GetCollection("ContractProgram").FindAllAs<MEContractProgram>().ToList();
 
             System.Random rnd = new Random();
             int maxNum = problems.Count() - 1;
@@ -64,7 +75,7 @@ namespace NGTestData
 
                 string patientSystemID = dr["ID"].ToString();
 
-                Phytel.API.DataDomain.Patient.MongoDB.DTO.MEPatient patient = new Phytel.API.DataDomain.Patient.MongoDB.DTO.MEPatient
+                Phytel.API.DataDomain.Patient.DTO.MEPatient patient = new Phytel.API.DataDomain.Patient.DTO.MEPatient
                     {
                         DisplayPatientSystemID = null,
                         FirstName = dr["FirstName"].ToString(),
@@ -80,6 +91,38 @@ namespace NGTestData
                         Version = "v1",
                         LastUpdatedOn = DateTime.Now
                     };
+
+                int progID = rnd.Next(programs.Count - 1);
+
+                MEPatientProgram patProg = new MEPatientProgram
+                    {
+                        AssignedBy = "Phytel",
+                        AssignedOn = DateTime.Now,
+                        AuthoredBy = programs[progID].AuthoredBy,
+                        Completed = false,
+                        ContractProgramId = programs[progID].Id,
+                        DeleteFlag = false,
+                        Enabled = true,
+                        Client = programs[progID].Client,
+                        Description = programs[progID].Description,
+                        Locked = false,
+                        Modules = programs[progID].Modules,
+                        Name = programs[progID].Name,
+                        Next = programs[progID].Next,
+                        ObjectivesInfo = programs[progID].ObjectivesInfo,
+                        Order = programs[progID].Order,
+                        PatientId = patient.Id,
+                        Previous = programs[progID].Previous,
+                        ProgramState = Phytel.API.Common.ProgramState.NotStarted,
+                        ShortName = programs[progID].ShortName,
+                        SourceId = programs[progID].SourceId,
+                        Spawn = programs[progID].Spawn,
+                        StartDate = DateTime.Now,
+                        State = Phytel.API.Common.ElementState.NotStarted,
+                        Status = Phytel.API.Common.Status.Active
+                    };
+
+                patientPrograms.Add(patProg);
 
                 MEPatientSystem patSystem = new MEPatientSystem
                     {
@@ -128,12 +171,12 @@ namespace NGTestData
                             Featured = true,
                             LastUpdatedOn = DateTime.Now,
                             Level = 1,
-                            //ProblemID = problems[probID].Id,
+                            ProblemID = problems[probID].DataID,
                             StartDate = null,
                             TTLDate = null,
                             Version = "v1"
                         });
-                    //currentPatientView.SearchFields.Add(new SearchField { Active = true, FieldName = "Problem", Value = problems[probID].Id.ToString() });
+                    currentPatientView.SearchFields.Add(new SearchField { Active = true, FieldName = "Problem", Value = problems[probID].DataID.ToString() });
                 }
 
                 cohortPatients.Add(currentPatientView);
@@ -144,6 +187,7 @@ namespace NGTestData
                     mongoDB.GetCollection("PatientProblem").InsertBatch(patientProblems);
                     mongoDB.GetCollection("CohortPatientView").InsertBatch(cohortPatients);
                     mongoDB.GetCollection("PatientSystem").InsertBatch(patientSystems);
+                    //mongoDB.GetCollection("PatientProgram").InsertBatch(patientPrograms);
 
                     counter = 0;
 
@@ -151,6 +195,7 @@ namespace NGTestData
                     patientProblems = new List<MEPatientProblem>();
                     cohortPatients = new List<MECohortPatientView>();
                     patientSystems = new List<MEPatientSystem>();
+                    patientPrograms = new List<MEPatientProgram>();
                 }
             }
             if (patients.Count > 0)
@@ -159,8 +204,39 @@ namespace NGTestData
                 mongoDB.GetCollection("PatientProblem").InsertBatch(patientProblems);
                 mongoDB.GetCollection("CohortPatientView").InsertBatch(cohortPatients);
                 mongoDB.GetCollection("PatientSystem").InsertBatch(patientSystems);
+                //mongoDB.GetCollection("PatientProgram").InsertBatch(patientPrograms);
             }
             
         }
+
+        public List<MEProblem> GetAllProblems(MongoCollection lookupColl)
+        {
+            if (BsonClassMap.IsClassMapRegistered(typeof(LookUpBase)) == false)
+                BsonClassMap.RegisterClassMap<LookUpBase>();
+
+            if (BsonClassMap.IsClassMapRegistered(typeof(MELookup)) == false)
+                BsonClassMap.RegisterClassMap<MELookup>();
+
+            if (BsonClassMap.IsClassMapRegistered(typeof(MEProblem)) == false)
+                BsonClassMap.RegisterClassMap<MEProblem>();
+
+            List<MEProblem> problems = new List<MEProblem>();
+            List<IMongoQuery> queries = new List<IMongoQuery>();
+            queries.Add(Query.EQ(MELookup.TypeProperty, LookUpType.Problem));
+            queries.Add(Query.EQ(MELookup.DeleteFlagProperty, false));
+            IMongoQuery mQuery = Query.And(queries);
+            MELookup meLookup = lookupColl.FindAs<MELookup>(mQuery).FirstOrDefault();
+            if (meLookup != null)
+            {
+                if (meLookup.Data != null)
+                {
+                    foreach (MEProblem m in meLookup.Data)
+                        problems.Add(m);
+                }
+
+            }
+            return problems;
+        } 
+
     }
 }

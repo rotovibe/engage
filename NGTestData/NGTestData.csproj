@@ -95,9 +95,9 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Services\API\DataDomain\Phytel.API.DataDomain.CohortPatient\Development\Current\CohortPatient\DataDomain.CohortPatient.csproj">
-      <Project>{106378b4-24bc-4572-b02c-0742f753df01}</Project>
-      <Name>DataDomain.CohortPatient</Name>
+    <ProjectReference Include="..\..\Services\API\Common\Phytel.API.Common\Development\Current\Phytel.API.Common.csproj">
+      <Project>{25cf3c3f-221f-4a49-b5ef-a8a5fcf9a5ba}</Project>
+      <Name>Phytel.API.Common</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Services\API\DataDomain\Phytel.API.DataDomain.Cohort\Development\Current\Cohort\DataDomain.Cohort.csproj">
       <Project>{229026b1-c3e5-4d2b-8d2b-61d00e8a52cc}</Project>
@@ -118,6 +118,10 @@
     <ProjectReference Include="..\..\Services\API\DataDomain\Phytel.API.DataDomain.Patient\Development\Current\Patient\DataDomain.Patient.csproj">
       <Project>{1536cd0a-6308-4daf-8618-35bba0816997}</Project>
       <Name>DataDomain.Patient</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Services\API\DataDomain\Phytel.API.DataDomain.Program\Development\Current\Program\DataDomain.Program.csproj">
+      <Project>{34271552-e2e1-428f-b612-7186e01b6c54}</Project>
+      <Name>DataDomain.Program</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Services\API\Interfaces\Development\Current\Phytel.API.Interface\Phytel.API.Interface.csproj">
       <Project>{abe948fb-247e-4955-b3ab-b7c93e10a542}</Project>
