@@ -21,7 +21,7 @@ namespace Phytel.API.DataDomain.Contact
             _dbName = contractDBName;
         }
 
-        public object Insert(T newEntity)
+        public object Insert(object newEntity)
         {
             try
             {
@@ -31,7 +31,7 @@ namespace Phytel.API.DataDomain.Contact
             catch (Exception ex) { throw ex; }
         }
 
-        public object InsertAll(List<T> entities)
+        public object InsertAll(List<object> entities)
         {
             try
             {
@@ -41,7 +41,7 @@ namespace Phytel.API.DataDomain.Contact
             catch (Exception ex) { throw ex; }
         }
 
-        public void Delete(T entity)
+        public void Delete(object entity)
         {
             try
             {
@@ -51,7 +51,7 @@ namespace Phytel.API.DataDomain.Contact
             catch (Exception ex) { throw ex; }
         }
 
-        public void DeleteAll(List<T> entities)
+        public void DeleteAll(List<object> entities)
         {
             try
             {
@@ -91,7 +91,7 @@ namespace Phytel.API.DataDomain.Contact
             catch (Exception ex) { throw ex; }
         }
 
-        public object Update(T entity)
+        public object Update(object entity)
         {
             try
             {

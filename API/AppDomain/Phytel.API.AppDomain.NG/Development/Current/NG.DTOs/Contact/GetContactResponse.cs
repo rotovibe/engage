@@ -23,7 +23,7 @@ namespace Phytel.API.AppDomain.NG.DTO
         public List<Email> Emails { get; set; }
         public List<Address> Addresses { get; set; }
         public List<int> WeekDays { get; set; }
-        public List<int> TimesOfDaysId { get; set; }
+        public List<string> TimesOfDaysId { get; set; }
         public string TimeZoneId { get; set; }
         public List<Language> Languages { get; set; }
 
