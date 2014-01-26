@@ -91,6 +91,9 @@
   <ItemGroup>
     <Compile Include="LookUps_Test.cs" />
     <Compile Include="NGManager_Tests.cs" />
+    <Compile Include="PlanCOR\ActionPlanProcessorTests.cs" />
+    <Compile Include="PlanCOR\ModulePlanProcessor_Tests.cs" />
+    <Compile Include="PlanElementEndpointUtilTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
