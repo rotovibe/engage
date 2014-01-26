@@ -65,7 +65,6 @@ namespace Phytel.API.AppDomain.NG
                 PlanElementEndpointUtil.SaveAction(request, p);
 
                 response.Program = p;
-                response.RelatedChanges = new List<string>();
                 response.RelatedChanges = RelatedChanges;
                 response.PatientId = request.PatientId;
                 response.Version = request.Version;
