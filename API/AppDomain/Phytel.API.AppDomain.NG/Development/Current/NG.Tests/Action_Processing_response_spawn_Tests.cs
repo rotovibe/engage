@@ -17,9 +17,9 @@ namespace Phytel.API.DataDomain.Patient.Service.Test
             string context = "NG";
             string priority = "3";
             string version = "v1";
-            string token = "52e1065cd6a4850cf0d4b023";
-            string programId = "52dd8c44d6a4850ea8a56c6f";
-            string patientId = "528f6c4d072ef708ecd48f9a";
+            string token = "52e51db0d6a4850534c80488";
+            string programId = "52e51ef5d6a48505344c9efc";
+            string patientId = "52e26f11072ef7191c111d6c";
             string actionID = "52dd8c44d6a4850ea8a56cbe";
             IRestClient client = new JsonServiceClient();
 

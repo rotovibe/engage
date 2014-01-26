@@ -3,8 +3,6 @@ using Phytel.API.AppDomain.NG.PlanSpecification;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Phytel.API.AppDomain.NG
 {
@@ -173,6 +171,12 @@ namespace Phytel.API.AppDomain.NG
             m.AssignDate = System.DateTime.UtcNow;
             m.ElementState = 0;
             m.AssignBy = "System";
+        }
+
+        public static Actions GetProcessingAction(List<Module> list, string actionId)
+        {
+            Actions query = list.SelectMany(module => module.Actions).Where(action => action.Id == actionId).FirstOrDefault();
+            return query;
         }
     }
 }

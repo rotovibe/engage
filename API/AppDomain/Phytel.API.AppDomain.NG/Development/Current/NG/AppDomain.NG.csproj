@@ -96,10 +96,14 @@
     <Compile Include="PlanCOR\PlanProcessor.cs" />
     <Compile Include="PlanCOR\ModulePlanProcessor.cs" />
     <Compile Include="PlanCOR\ProgramPlanProcessor.cs" />
+    <Compile Include="PlanElementEndpointUtil.cs" />
+    <Compile Include="PlanElementStrategy\ISpawn.cs" />
+    <Compile Include="PlanElementStrategy\SpawnProblemCodeRegistration.cs" />
     <Compile Include="PlanElementUtil.cs" />
     <Compile Include="PlanSpecification\CompletedSpecification.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="NGManager.cs" />
+    <Compile Include="PlanElementStrategy\SpawnElementStrategy.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\..\Common\Phytel.API.Common\Development\Current\Phytel.API.Common.csproj">

@@ -15,7 +15,6 @@ namespace Phytel.API.AppDomain.NG
 {
     public class PlanManager : ManagerBase
     {
-        protected static readonly string DDProgramServiceUrl = ConfigurationManager.AppSettings["DDProgramServiceUrl"];
         public List<string> RelatedChanges { get; set; }
 
         public PlanManager()
@@ -30,7 +29,7 @@ namespace Phytel.API.AppDomain.NG
                 RelatedChanges.Clear();
                 PostProcessActionResponse response = new PostProcessActionResponse();
 
-                Program p = RequestPatientProgramDetail(request);
+                Program p = PlanElementEndpointUtil.RequestPatientProgramDetail(request);
                 Actions action = request.Action;
                 NGUtils.UpdateProgramAction(action, p);
 
@@ -63,7 +62,7 @@ namespace Phytel.API.AppDomain.NG
                 }
 
                 // save
-                SaveAction(request, p);
+                PlanElementEndpointUtil.SaveAction(request, p);
 
                 response.Program = p;
                 response.RelatedChanges = new List<string>();
@@ -77,26 +76,6 @@ namespace Phytel.API.AppDomain.NG
             {
                 throw wse;
             }
-        }
-
-        private Program RequestPatientProgramDetail(PostProcessActionRequest request)
-        {
-            Program pd = null;
-            IRestClient client = new JsonServiceClient();
-            DD.GetProgramDetailsSummaryResponse resp =
-                client.Get<DD.GetProgramDetailsSummaryResponse>(
-                string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Program/{5}/Details/?Token={6}",
-                DDProgramServiceUrl,
-                "NG",
-                request.Version,
-                request.ContractNumber,
-                request.PatientId,
-                request.ProgramId,
-                request.Token));
-
-            pd = NGUtils.FormatProgramDetail(resp.Program);
-
-            return pd;
         }
 
         private ProgramPlanProcessor InitializeProgramChain()
@@ -116,43 +95,6 @@ namespace Phytel.API.AppDomain.NG
         void stepProc__spawnEvent(object s, SpawnEventArgs e)
         {
             this.RelatedChanges.Add(e.Name);
-        }
-
-        private DD.ProgramDetail SaveAction(PostProcessActionRequest request, Program p)
-        {
-            try
-            {
-                DD.ProgramDetail pD = NGUtils.FormatProgramDetail(p);
-
-                IRestClient client = new JsonServiceClient();
-                DD.PutProgramActionProcessingResponse response = client.Put<DD.PutProgramActionProcessingResponse>(
-                    string.Format(@"{0}/{1}/{2}/{3}/Patient/{4}/Programs/{5}/Update",
-                    DDProgramServiceUrl,
-                    "NG",
-                    request.Version,
-                    request.ContractNumber,
-                    request.PatientId,
-                    request.ProgramId,
-                    request.Token), new DD.PutProgramActionProcessingRequest { Program = pD, UserId = request.UserId });
-
-                return response.program;
-            }
-            catch (WebServiceException wse)
-            {
-                Exception ae = new Exception(wse.ResponseBody, wse.InnerException);
-                throw ae;
-            }
-        }
-
-        private void CheckPlanRules(Actions action)
-        {
-            // check for any special rules or objectives
-        }
-
-        private Actions GetProcessingAction(List<Module> list, string actionId)
-        {
-            Actions query = list.SelectMany(module => module.Actions).Where(action => action.Id == actionId).FirstOrDefault();
-            return query;
         }
     }
 }
