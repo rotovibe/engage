@@ -151,15 +151,15 @@ namespace Phytel.API.DataDomain.Patient
         public List<PatientData> Select(string query, string[] filterData, string querySort, int skip, int take)
         {
             /* Query without filter:
-             *  { sf: { $elemMatch : {'val':'528a66f4d4332317acc5095f', 'fld':'Problem', 'act':true}}}
+             *  { sf: { $elemMatch : {'val':'528a66f4d4332317acc5095f', 'fldn':'Problem', 'act':true}}}
              * 
              * Query with single field filter:
              *  { $and : [ 
-             *      { sf: { $elemMatch : {'val':'528a66f4d4332317acc5095f', 'fld':'Problem', 'act':true}}}, 
+             *      { sf: { $elemMatch : {'val':'528a66f4d4332317acc5095f', 'fldn':'Problem', 'act':true}}}, 
              *      { $or : [ 
-             *          { sf: { $elemMatch : {'val':/^<Single Field Text Here>/i, 'fld':'FN'}}}, 
-             *          { sf: { $elemMatch : {'val':/^<Single Field Text Here>/i, 'fld':'LN'}}}, 
-             *          { sf: { $elemMatch : {'val':/^<Single Field Text Here>/i, 'fld':'PN'}}} 
+             *          { sf: { $elemMatch : {'val':/^<Single Field Text Here>/i, 'fldn':'FN'}}}, 
+             *          { sf: { $elemMatch : {'val':/^<Single Field Text Here>/i, 'fldn':'LN'}}}, 
+             *          { sf: { $elemMatch : {'val':/^<Single Field Text Here>/i, 'fldn':'PN'}}} 
              *          ] 
              *      } 
              *   ] 
@@ -167,14 +167,14 @@ namespace Phytel.API.DataDomain.Patient
              * 
              * Query with double field filter:
              *  { $and : [ 
-             *      { sf: { $elemMatch : {'val':'528a66f4d4332317acc5095f', 'fld':'Problem', 'act':true}}}, 
+             *      { sf: { $elemMatch : {'val':'528a66f4d4332317acc5095f', 'fldn':'Problem', 'act':true}}}, 
              *      { $and : [ 
              *          { $or : [ 
-             *              { sf : { $elemMatch: {'val':/^<First Field Text Here>/i, 'fld':'FN'}}}, 
-             *              { sf : { $elemMatch: {'val':/^<First Field Text Here>/i, 'fld':'PN'}}}
+             *              { sf : { $elemMatch: {'val':/^<First Field Text Here>/i, 'fldn':'FN'}}}, 
+             *              { sf : { $elemMatch: {'val':/^<First Field Text Here>/i, 'fldn':'PN'}}}
              *            ]
              *          },	
-             *          { sf: { $elemMatch : {'val':/^<Second Field Text Here>/i, 'fld':'LN'}}}
+             *          { sf: { $elemMatch : {'val':/^<Second Field Text Here>/i, 'fldn':'LN'}}}
              *        ] 
              *      } 
              *    ] 
@@ -204,13 +204,13 @@ namespace Phytel.API.DataDomain.Patient
                         jsonQuery += "{ $or : [  ";
                         jsonQuery += "{ sf: { $elemMatch : {'val':/^";
                         jsonQuery += string.Format("{0}/i, ", filterData[0].Trim());
-                        jsonQuery += "'fld':'FN'}}},  ";
-                        jsonQuery += "{ sf: { $elemMatch : {'val':/^";
+                        jsonQuery += "'" + SearchField.FieldNameProperty + "':'FN'}}},  ";
+                        jsonQuery += "{ sf: { $elemMatch : {'" + SearchField.ValueProperty + "':/^";
                         jsonQuery += string.Format("{0}/i, ", filterData[0].Trim());
-                        jsonQuery += "'fld':'LN'}}},  ";
-                        jsonQuery += "{ sf: { $elemMatch : {'val':/^";
+                        jsonQuery += "'" + SearchField.FieldNameProperty + "':'LN'}}},  ";
+                        jsonQuery += "{ sf: { $elemMatch : {'" + SearchField.ValueProperty + "':/^";
                         jsonQuery += string.Format("{0}/i, ", filterData[0].Trim());
-                        jsonQuery += "'fld':'PN'}}}]}]}";
+                        jsonQuery += "'" + SearchField.FieldNameProperty + "':'PN'}}}]}]}";
                     }
                     else
                     {
@@ -220,16 +220,16 @@ namespace Phytel.API.DataDomain.Patient
                         jsonQuery += string.Format("{0},  ", query);
                         jsonQuery += "{ $and : [  ";
                         jsonQuery += "{ $or : [  ";
-                        jsonQuery += "{ sf : { $elemMatch: {'val':/^";
+                        jsonQuery += "{ sf : { $elemMatch: {'" + SearchField.ValueProperty + "':/^";
                         jsonQuery += string.Format("{0}/i, ", filterData[0].Trim());
-                        jsonQuery += "'fld':'FN'}}},  ";
-                        jsonQuery += "{ sf : { $elemMatch: {'val':/^";
+                        jsonQuery += "'" + SearchField.FieldNameProperty + "':'FN'}}},  ";
+                        jsonQuery += "{ sf : { $elemMatch: {'" + SearchField.ValueProperty + "':/^";
                         jsonQuery += string.Format("{0}/i, ", filterData[0].Trim());
-                        jsonQuery += "'fld':'PN'}}} ";
+                        jsonQuery += "'" + SearchField.FieldNameProperty + "':'PN'}}} ";
                         jsonQuery += "]}, ";
-                        jsonQuery += "{ sf: { $elemMatch : {'val':/^";
+                        jsonQuery += "{ sf: { $elemMatch : {'" + SearchField.ValueProperty + "':/^";
                         jsonQuery += string.Format("{0}/i, ", filterData[1].Trim());
-                        jsonQuery += "'fld':'LN'}}}]}]}}";
+                        jsonQuery += "'" + SearchField.FieldNameProperty + "':'LN'}}}]}]}}";
                     }
                 }
 
