@@ -148,7 +148,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
                                     s.ActionId = a.Id;
                                     if (s.Responses != null)
                                     {
-                                        foreach (ResponseInfo r in s.Responses)
+                                        foreach (MEResponse r in s.Responses)
                                         {
                                             r.Id = RegisterIds(IdsList, r.Id);
                                             r.StepId = s.Id;
@@ -193,7 +193,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
                                         ReplaceSelectedResponseId(kv, s);
                                         if (s.Responses != null)
                                         {
-                                            foreach (ResponseInfo r in s.Responses)
+                                            foreach (MEResponse r in s.Responses)
                                             {
                                                 if (r.Id.Equals(kv.Key))
                                                 {
@@ -326,7 +326,8 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
                         new MESpawnElement
                         {
                             SpawnId = ObjectId.Parse(s.ElementId),
-                            Type = s.ElementType
+                            Type = s.ElementType,
+                            Tag = s.Tag
                         });
                     });
                 }
@@ -435,19 +436,19 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             }
         }
 
-        private static List<ResponseInfo> GetResponses(List<Program.DTO.ResponseDetail> list)
+        private static List<MEResponse> GetResponses(List<Program.DTO.ResponseDetail> list)
         {
             try
             {
-                List<ResponseInfo> rs = null;
+                List<MEResponse> rs = null;
                 if (list != null)
                 {
-                    rs = new List<ResponseInfo>();
+                    rs = new List<MEResponse>();
 
                     list.ForEach(r =>
                         {
                             rs.Add(
-                                new ResponseInfo
+                                new MEResponse
                                 {
                                     StepId = ObjectId.Parse(r.StepId),
                                     NextStepId = ObjectId.Parse(r.NextStepId),
@@ -481,7 +482,8 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
                         sp.Add(new MESpawnElement
                         {
                             SpawnId = ObjectId.Parse(sed.ElementId),
-                            Type = sed.ElementType
+                            Type = sed.ElementType,
+                            Tag = sed.Tag
                         });
                     });
                 }
@@ -503,7 +505,8 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
                     sp = new SpawnElementDetail
                     {
                         ElementType = s.Type,
-                        ElementId = s.SpawnId.ToString()
+                        ElementId = s.SpawnId.ToString(),
+                        Tag = s.Tag
                     };
                 }
                 return sp;
@@ -514,18 +517,18 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             }
         }
 
-        public static List<Objectives> GetObjectives(List<Program.DTO.ObjectivesDetail> list)
+        public static List<MEObjective> GetObjectives(List<Program.DTO.ObjectivesDetail> list)
         {
             try
             {
-                List<Objectives> objs = null;
+                List<MEObjective> objs = null;
                 if (list != null)
                 {
-                    objs = new List<Objectives>();
+                    objs = new List<MEObjective>();
 
                     list.ForEach(o =>
                     {
-                        objs.Add(new Objectives
+                        objs.Add(new MEObjective
                         {
                             Id = ObjectId.Parse(o.Id),
                             Status = (Status)o.Status,
@@ -621,7 +624,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             }
         }
 
-        public static List<ObjectivesDetail> GetObjectives(List<Objectives> list)
+        public static List<ObjectivesDetail> GetObjectives(List<MEObjective> list)
         {
             try
             {
@@ -735,7 +738,8 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
                     spawn = a.Spawn.Select(s => new SpawnElementDetail
                     {
                         ElementId = s.SpawnId.ToString(),
-                        ElementType = s.Type
+                        ElementType = s.Type,
+                        Tag = s.Tag
                     }).ToList();
                 }
                 return spawn;
@@ -783,7 +787,12 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
                 {
                     mESpawnElement.ForEach(se =>
                     {
-                        sed.Add(new SpawnElementDetail { ElementId = se.SpawnId.ToString(), ElementType = se.Type });
+                        sed.Add(new SpawnElementDetail
+                        {
+                            ElementId = se.SpawnId.ToString(),
+                            ElementType = se.Type,
+                            Tag = se.Tag
+                        });
                     });
                 }
                 return sed;

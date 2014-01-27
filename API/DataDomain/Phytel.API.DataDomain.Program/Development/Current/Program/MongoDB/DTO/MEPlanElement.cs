@@ -73,19 +73,4 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
         [BsonIgnoreIfNull(true)]
         public List<MESpawnElement> Spawn { get; set; }
     }
-
-    public class MESpawnElement
-    {
-        public MESpawnElement() { }
-
-        public const string TypeProperty = "type";
-        [BsonElement(TypeProperty)]
-        [BsonIgnoreIfNull(true)]
-        public int Type { get; set; }
-
-        public const string SpawnIdProperty = "spwnid";
-        [BsonElement(SpawnIdProperty)]
-        [BsonIgnoreIfNull(true)]
-        public ObjectId SpawnId { get; set; }
-    }
 }

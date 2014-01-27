@@ -26,5 +26,6 @@ namespace Phytel.API.DataDomain.Program.DTO
     {
         public int ElementType { get; set; }
         public string ElementId { get; set; }
+        public string Tag { get; set; }
     }
 }

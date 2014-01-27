@@ -236,8 +236,6 @@ namespace Phytel.API.DataDomain.Program
                 mQuery = SelectExpressionHelper.BuildQuery(groupType, queries);
             }
 
-            GetProgramDetailsSummaryResponse result = new GetProgramDetailsSummaryResponse();
-
             using (ProgramMongoContext ctx = new ProgramMongoContext(_dbName))
             {
                 //var findcp = Query<MEPatientProgram>.EQ(b => b.Id, ObjectId.Parse(request.PatientProgramId));
@@ -367,7 +365,7 @@ namespace Phytel.API.DataDomain.Program
                     if (pg.Version != null) { uv.Add(MB.Update.Set(MEPatientProgram.VersionProperty, pg.Version)); }
                     if (mods != null) { uv.Add(MB.Update.SetWrapped<List<MEModules>>(MEPatientProgram.ModulesProperty, mods)); }
                     if (pg.SpawnElement != null) { uv.Add(MB.Update.SetWrapped<List<MESpawnElement>>(MEPatientProgram.SpawnProperty, DTOUtils.GetSpawnElements(pg.SpawnElement))); }
-                    if (pg.ObjectivesInfo != null) { uv.Add(MB.Update.SetWrapped<List<Objectives>>(MEPatientProgram.ObjectivesInfoProperty, DTOUtils.GetObjectives(pg.ObjectivesInfo))); }
+                    if (pg.ObjectivesInfo != null) { uv.Add(MB.Update.SetWrapped<List<MEObjective>>(MEPatientProgram.ObjectivesInfoProperty, DTOUtils.GetObjectives(pg.ObjectivesInfo))); }
 
                     IMongoUpdate update = MB.Update.Combine(uv);
                     ctx.PatientPrograms.Collection.Update(q, update);
