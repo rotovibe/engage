@@ -33,7 +33,8 @@ namespace Phytel.API.Common
         Removed = -1,
         NotStarted = 0,
         Started = 1,
-        Completed = 2
+        Completed = 2,
+        Closed = 3
     }
 
     public enum ElementState
@@ -48,7 +49,14 @@ namespace Phytel.API.Common
     public enum GenericStatus
     {
         NotSet = 0,
-        Pending = 1
+        Pending = 1,
+        NotEligible = 2
+    }
+
+    public enum EligibilityStatus
+    {
+        NotEligible = 0,
+        Eligible = 1
     }
 
     public enum GenericSetting

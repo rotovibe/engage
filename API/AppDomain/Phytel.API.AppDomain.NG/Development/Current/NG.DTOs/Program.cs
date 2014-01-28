@@ -17,6 +17,7 @@ namespace Phytel.API.AppDomain.NG.DTO
         public string Client { get; set; }
         public DateTime? StartDate { get; set; }
         public DateTime? EndDate { get; set; }
+        public int Eligibility { get; set; }
         public string EligibilityRequirements { get; set; }
         public DateTime? EligibilityStartDate { get; set; }
         public DateTime? EligibilityEndDate { get; set; }
@@ -25,5 +26,17 @@ namespace Phytel.API.AppDomain.NG.DTO
         public List<Module> Modules { get; set; }
         public string Version { get; set; }
         public string Text { get; set; }
+
+        public int EligibilityOverride { get; set; }
+        public int Enrollment { get; set; }
+        public bool GraduatedFlag { get; set; }
+        public string IneligibleReason { get; set; }
+        public string OptOut { get; set; }
+        public string OptOutReason { get; set; }
+        public DateTime? OptOutDate { get; set; }
+        public string RemovedReason { get; set; }
+        public string DidNotEnrollReason { get; set; }
+        public string DisEnrollReason { get; set; }
+        public string OverrideReason { get; set; }
     }
 }

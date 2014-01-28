@@ -74,6 +74,7 @@
     <Compile Include="GetCohortPatientsDataResponse.cs" />
     <Compile Include="GetPatientsDataRequest.cs" />
     <Compile Include="GetPatientsDataResponse.cs" />
+    <Compile Include="CohortPatientViewData.cs" />
     <Compile Include="PatientData.cs" />
     <Compile Include="GetPatientDataRequest.cs" />
     <Compile Include="GetPatientDataResponse.cs" />

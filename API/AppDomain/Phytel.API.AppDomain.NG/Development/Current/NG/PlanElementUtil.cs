@@ -103,14 +103,79 @@ namespace Phytel.API.AppDomain.NG
             }
         }
 
-        internal static void SpawnElementsInList(List<SpawnElement> list, Program program)
+        internal static void SpawnElementsInList(List<SpawnElement> list, Program program, string userId)
         {
             try
             {
                 list.ForEach(r =>
                 {
-                    SetEnabledStateRecursion(r.ElementId, program);
+                    if (r.ElementType < 10)
+                    {
+                        SetEnabledStateRecursion(r.ElementId, program);
+                    }
+                    else
+                    {
+                        SetProgramAttributes(r, program, userId );
+                    }
                 });
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("AppDomain:SpawnElementsInList():" + ex.Message, ex.InnerException);
+            }
+        }
+
+        public static void SetProgramAttributes(SpawnElement r, Program program, string userId)
+        {
+            try
+            {
+                if (r.ElementType.Equals(10))
+                {
+                    // eligibility series
+                    program.Eligibility = Convert.ToInt32(r.Tag);
+                    
+                    int state;
+                    bool isNum = int.TryParse(r.Tag, out state);
+                    if (isNum)
+                    {
+                        // program is closed due to ineligibility
+                        if (state.Equals(0))
+                        {
+                            program.ElementState = 4;
+                            program.EndDate = System.DateTime.UtcNow;
+                            //closedby ???
+                        }
+                        else if (state.Equals(1))
+                        {
+                            program.ElementState = 3;
+                        }
+                    }
+                }
+                else if (r.ElementType.Equals(11))
+                {
+                    // eligibility reason
+                    program.IneligibleReason = r.Tag;
+                }
+                else if (r.ElementType.Equals(16))
+                {
+                    // do something with opt out 
+                    program.OptOut = r.Tag;
+                }
+                else if (r.ElementType.Equals(17))
+                {
+                    // do something with opt out
+                    program.OptOutReason = r.Tag;
+                }
+                else if (r.ElementType.Equals(18))
+                {
+                    // do something with opt out 
+                    program.OptOutDate = Convert.ToDateTime(r.Tag);
+                }
+                else if (r.ElementType.Equals(19))
+                {
+                    // do something with opt out 
+                    program.GraduatedFlag = Convert.ToBoolean(r.Tag);
+                }
             }
             catch (Exception ex)
             {
@@ -177,6 +242,33 @@ namespace Phytel.API.AppDomain.NG
         {
             Actions query = list.SelectMany(module => module.Actions).Where(action => action.Id == actionId).FirstOrDefault();
             return query;
+        }
+
+        internal static bool IsProgramCompleted(Program p, string userId)
+        {
+            try
+            {
+                bool result = false;
+                int modulesCompleted = 0;
+                p.Modules.ForEach(m =>
+                {
+                    if (m.Completed)
+                    {
+                        modulesCompleted++;
+                    }
+                });
+
+                if (modulesCompleted.Equals(p.Modules.Count))
+                {
+                    result = true;
+                }
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("AppDomain:SpawnElementsInList():" + ex.Message, ex.InnerException);
+            }
         }
     }
 }

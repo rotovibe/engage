@@ -35,20 +35,20 @@ namespace Phytel.API.DataDomain.Patient.Services.Test
             string version = "v1";
             string contractNumber = "InHealth001";
             string context = "NG";
-            string cohortID = "528aa048d4332317acc50977";
+            string cohortID = "528ed9b3072ef70e10099687";
 
             IRestClient client = new JsonServiceClient();
 
             Stopwatch sw = new Stopwatch();
             sw.Start();
 
-            GetCohortPatientsDataResponse response =
-                client.Get<GetCohortPatientsDataResponse>(string.Format("{0}/{1}/{2}/{3}/CohortPatients/{4}?Skip=0&Take=5000",
-                "http://azurephytel.cloudapp.net:59901/CohortPatients", context, version, contractNumber, cohortID));
+            //GetCohortPatientsDataResponse response =
+            //    client.Get<GetCohortPatientsDataResponse>(string.Format("{0}/{1}/{2}/{3}/CohortPatients/{4}?Skip=0&Take=5000",
+            //    "http://azurephytel.cloudapp.net:59901/CohortPatients", context, version, contractNumber, cohortID));
 
-            //CohortPatientDetailsResponse response =
-            //    client.Get<CohortPatientDetailsResponse>(string.Format("{0}/{1}/{2}/{3}/CohortPatients/{4}?Skip=0&Take=1000",
-            //    "http://localhost:8888/CohortPatients", context, version, contractNumber, cohortID));
+            GetCohortPatientsDataResponse response =
+                client.Get<GetCohortPatientsDataResponse>(string.Format("{0}/{1}/{2}/{3}/CohortPatients/{4}?Skip=0&Take=1000",
+                "http://localhost:8888/Patient", context, version, contractNumber, cohortID));
 
             sw.Stop();
             string elapsed = sw.Elapsed.ToString();
@@ -61,7 +61,7 @@ namespace Phytel.API.DataDomain.Patient.Services.Test
             string version = "v1";
             string contractNumber = "InHealth001";
             string context = "NG";
-            string cohortID = "528e4feb072ef713fc4f258d";
+            string cohortID = "528ed9b3072ef70e10099687";
             string searchFilter = "Jul";
 
             IRestClient client = new JsonServiceClient();
@@ -71,7 +71,7 @@ namespace Phytel.API.DataDomain.Patient.Services.Test
 
             GetCohortPatientsDataResponse response =
                 client.Get<GetCohortPatientsDataResponse>(string.Format("{0}/{1}/{2}/{3}/CohortPatients/{4}?Skip=0&Take=1000&SearchFilter={5}",
-                "http://localhost:8888/CohortPatients", context, version, contractNumber, cohortID, searchFilter));
+                "http://localhost:8888/Patient", context, version, contractNumber, cohortID, searchFilter));
 
             sw.Stop();
             string elapsed = sw.Elapsed.ToString();

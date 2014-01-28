@@ -10,6 +10,7 @@ namespace Phytel.API.DataDomain.Patient
 {
     public interface IPatientRepository<T> : IRepository<T>
     {
+        // these need to be refactored to either conform to the IRepository interface or get refactored up to the appdomain.
         GetPatientsDataResponse Select(string[] patientIds);
         List<PatientData> Select(string query, string[] filterData, string querySort, int skip, int take);
         PutPatientPriorityResponse UpdatePriority(PutPatientPriorityRequest request);

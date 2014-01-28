@@ -86,6 +86,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="MongoDB\Repository\MongoCohortPatientViewRepository.cs" />
     <Compile Include="PatientsUtils.cs" />
     <Compile Include="IPatientRepository.cs" />
     <Compile Include="MongoDB\DTO\MECohortPatientView.cs" />

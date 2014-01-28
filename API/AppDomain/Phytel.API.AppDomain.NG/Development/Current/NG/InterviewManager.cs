@@ -35,15 +35,21 @@ namespace Phytel.API.AppDomain.NG
 
                 if (action.Completed)
                 {
+                    // set program starting date
+                    if (action.Order == 1)
+                    {
+                        p.StartDate = System.DateTime.UtcNow;
+                    }
+
                     //// create a responsibility chain to process each elemnt in the hierachy
                     ProgramPlanProcessor pChain = InitializeProgramChain();
                     //// process steps in action
                     action.Steps.ForEach(s =>
                     {
-                        pChain.ProcessRequest((IPlanElement)s, p, request.UserId, request.PatientId, action);
+                        pChain.ProcessWorkflow((IPlanElement)s, p, request.UserId, request.PatientId, action);
                     });
 
-                    pChain.ProcessRequest((IPlanElement)action, p, request.UserId, request.PatientId, action);
+                    pChain.ProcessWorkflow((IPlanElement)action, p, request.UserId, request.PatientId, action);
                     Module mod = PlanElementUtil.FindElementById(p.Modules, action.ModuleId);
 
                     if (mod != null)
@@ -51,13 +57,21 @@ namespace Phytel.API.AppDomain.NG
                         // set enabled status for action dependencies
                         PlanElementUtil.SetEnabledStatusByPrevious(mod.Actions);
                         // set enable/visibility of actions after action processing.
-                        pChain.ProcessRequest((IPlanElement)mod, p, request.UserId, request.PatientId, action);
+                        pChain.ProcessWorkflow((IPlanElement)mod, p, request.UserId, request.PatientId, action);
                     }
                     // set module visibility for modules
                     PlanElementUtil.SetEnabledStatusByPrevious(p.Modules);
+
+                    // evaluate program status
+                    if (PlanElementUtil.IsProgramCompleted(p, request.UserId))
+                    {
+                        p.Completed = true;
+                        pChain.ProcessWorkflow((IPlanElement)p, p, request.UserId, request.PatientId, action);
+                    }
                 }
                 else
                 {
+                    // need to update this on the p level.
                     action.ElementState = 3;
                 }
 

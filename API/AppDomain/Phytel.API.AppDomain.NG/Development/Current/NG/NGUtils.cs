@@ -144,7 +144,18 @@ namespace Phytel.API.AppDomain.NG
                     StartDate = p.StartDate,
                     Status = p.Status,
                     Text = p.Text,
-                    Version = p.Version
+                    Version = p.Version,
+                    DisEnrollReason = p.DisEnrollReason,
+                    DidNotEnrollReason = p.DidNotEnrollReason,
+                    EligibilityOverride = p.EligibilityOverride,
+                    Enrollment = p.Enrollment,
+                    GraduatedFlag = p.GraduatedFlag,
+                    IneligibleReason = p.IneligibleReason,
+                    OptOut = p.OptOut,
+                    OptOutDate = p.OptOutDate,
+                    OptOutReason = p.OptOutReason,
+                    OverrideReason = p.OverrideReason,
+                    RemovedReason = p.RemovedReason
                 };
 
                 return pD;
@@ -167,7 +178,8 @@ namespace Phytel.API.AppDomain.NG
                         SpawnElementDetail sed = new SpawnElementDetail
                         {
                             ElementId = s.ElementId,
-                            ElementType = s.ElementType
+                            ElementType = s.ElementType,
+                            Tag = s.Tag
                         };
                         sd.Add(sed);
                     });
@@ -192,7 +204,8 @@ namespace Phytel.API.AppDomain.NG
                         SpawnElement sed = new SpawnElement
                         {
                             ElementId = s.ElementId,
-                            ElementType = s.ElementType
+                            ElementType = s.ElementType,
+                            Tag = s.Tag
                         };
                         sd.Add(sed);
                     });
@@ -577,7 +590,8 @@ namespace Phytel.API.AppDomain.NG
                         sed.Add(new SpawnElementDetail
                         {
                             ElementType = x.ElementType,
-                            ElementId = x.ElementId
+                            ElementId = x.ElementId,
+                            Tag = x.Tag
                         });
                     });
                 }
@@ -632,7 +646,8 @@ namespace Phytel.API.AppDomain.NG
                         se.Add(new SpawnElement
                         {
                             ElementId = x.ElementId,
-                            ElementType = x.ElementType
+                            ElementType = x.ElementType,
+                            Tag = x.Tag
                         });
                     });
                 }

@@ -50,20 +50,12 @@
                "Required":false,
                "NextStepId":"52e03b59d6a4850d00a3a8b7",
                   "SpawnElement" : [{
-                      "ElementType" : 101,
-                      "ElementId" : "528a66f4d4332317acc5095f"
+                      "ElementType" : 10,
+                      "Tag":"0"
                     },
 					{
-                      "ElementType" : 16,
-                      "Tag":"true"
-                    },
-					{
-                      "ElementType" : 17,
-                      "Tag":"Roumel !!! Opt Out reason test!!!"
-                    },
-					{
-                      "ElementType" : 18,
-					  "Tag":"1/27/2014"
+                      "ElementType" : 11,
+                      "Tag":"Neither an employee or spouse of an employee."
                     }]
             }
          ]

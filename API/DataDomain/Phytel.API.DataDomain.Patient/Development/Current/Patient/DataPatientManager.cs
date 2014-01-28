@@ -26,7 +26,7 @@ namespace Phytel.API.DataDomain.Patient
                     (string.Format("{0}/{1}/{2}/{3}/cohort/{4}", DDCohortServiceURL, request.Context, request.Version, request.ContractNumber, request.CohortID));
 
                 // 2) get patientIDs through cohortpatients view
-                IPatientRepository<PatientData> repo = PatientRepositoryFactory<PatientData>.GetPatientRepository(request.ContractNumber, request.Context);
+                IPatientRepository<CohortPatientViewData> repo = PatientRepositoryFactory<CohortPatientViewData>.GetCohortPatientViewRepository(request.ContractNumber, request.Context);
 
                 string field1 = string.Empty;
                 string field2 = string.Empty;

@@ -108,6 +108,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Action_Eligibility.txt" />
     <Content Include="Action_Sample.txt" />
   </ItemGroup>
   <Choose>

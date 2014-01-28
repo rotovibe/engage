@@ -9,5 +9,6 @@ namespace Phytel.API.AppDomain.NG.DTO
     {
         public int ElementType { get; set; }
         public string ElementId { get; set; }
+        public string Tag { get; set; }
     }
 }

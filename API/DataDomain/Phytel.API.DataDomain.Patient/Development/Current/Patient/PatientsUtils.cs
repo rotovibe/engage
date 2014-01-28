@@ -35,5 +35,30 @@ namespace Phytel.API.DataDomain.Patient
                 throw;
             }
         }
+
+        internal static List<DTO.SearchFieldData> GetSearchFields(List<DTO.SearchField> list)
+        {
+            try
+            {
+                List<DTO.SearchFieldData> sfd = new List<DTO.SearchFieldData>();
+                if (list != null)
+                {
+                    list.ForEach(sf =>
+                    {
+                        sfd.Add(new DTO.SearchFieldData
+                        {
+                            Active = sf.Active,
+                            FieldName = sf.FieldName,
+                            Value = sf.Value
+                        });
+                    });
+                }
+                return sfd;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Source, ex.InnerException);
+            }
+        }
     }
 }

@@ -674,7 +674,8 @@ namespace Phytel.API.AppDomain.NG
                         se.Add(new SpawnElement
                         {
                             ElementId = x.ElementId,
-                            ElementType = x.ElementType
+                            ElementType = x.ElementType,
+                            Tag = x.Tag
                         });
                     });
                 }
@@ -695,7 +696,8 @@ namespace Phytel.API.AppDomain.NG
                 spawn = planElement.SpawnElement.Select(s => new SpawnElement
                 {
                     ElementId = s.ElementId,
-                    ElementType = s.ElementType
+                    ElementType = s.ElementType,
+                    Tag = s.Tag
                 }).ToList();
             }
             return spawn;
