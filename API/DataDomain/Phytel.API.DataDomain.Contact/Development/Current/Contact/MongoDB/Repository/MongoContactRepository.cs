@@ -111,17 +111,30 @@ namespace Phytel.API.DataDomain.Contact
             catch (Exception ex) { throw ex; }
         }
 
-        public object FindContactByPatientId(string patientId)
+        public object FindContactByPatientId(GetContactDataRequest request)
         {
             ContactData contactData = null;
             using (ContactMongoContext ctx = new ContactMongoContext(_dbName))
             {
                 List<IMongoQuery> queries = new List<IMongoQuery>();
-                queries.Add(Query.EQ(MEContact.PatientIdProperty, ObjectId.Parse(patientId)));
+                queries.Add(Query.EQ(MEContact.PatientIdProperty, ObjectId.Parse(request.PatientId)));
                 queries.Add(Query.EQ(MEContact.DeleteFlagProperty, false));
                 IMongoQuery mQuery = Query.And(queries);
                 MEContact mc = ctx.Contacts.Collection.Find(mQuery).FirstOrDefault();
-                if (mc != null)
+                if (mc == null)
+                {
+                    //Insert a new contact entity with the given patientId and send it back.
+                    MEContact meContact = new MEContact { 
+                        PatientId = ObjectId.Parse(request.PatientId),
+                        Version = request.Version,
+                        LastUpdatedOn = DateTime.Now,
+                        UpdatedBy = request.UserId,
+                        DeleteFlag = false
+                    };
+                    ctx.Contacts.Collection.Insert(meContact);
+                    contactData = new ContactData { ContactId = meContact.Id.ToString(), PatientId = meContact.PatientId.ToString()};
+                }
+                else
                 {
                     contactData = new ContactData { 
                         ContactId = mc.Id.ToString(),

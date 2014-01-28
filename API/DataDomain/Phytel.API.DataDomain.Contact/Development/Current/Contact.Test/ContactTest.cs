@@ -33,7 +33,7 @@ namespace Phytel.API.DataDomain.Contact.Test
 
             ContactData response = ContactDataManager.GetContactByPatientId(request);
 
-            Assert.IsTrue(response.ContactId == "52e749e3d43323149870c214");
+            Assert.IsNotNull(response.ContactId);
         }
     }
 }
