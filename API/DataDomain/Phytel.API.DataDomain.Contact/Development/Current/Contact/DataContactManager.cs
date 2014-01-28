@@ -5,20 +5,19 @@ namespace Phytel.API.DataDomain.Contact
 {
     public static class ContactDataManager
     {
-        public static GetContactDataResponse GetContactByPatientId(GetContactDataRequest request)
+        public static ContactData GetContactByPatientId(GetContactDataRequest request)
         {
+            ContactData result = null;
             try
             {
-                GetContactDataResponse result = new GetContactDataResponse();
-
                 IContactRepository<GetContactDataResponse> repo = ContactRepositoryFactory<GetContactDataResponse>.GetContactRepository(request.ContractNumber, request.Context);
-                result = repo.FindContactByPatientId(request.PatientId) as GetContactDataResponse;
-                return (result != null ? result : new GetContactDataResponse());
+                result = repo.FindContactByPatientId(request.PatientId) as ContactData;
             }
             catch (Exception ex)
             {
                 throw ex;
             }
+            return result;
         }
     }
 }   

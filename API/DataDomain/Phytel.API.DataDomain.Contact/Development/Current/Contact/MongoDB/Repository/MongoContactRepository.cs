@@ -113,7 +113,7 @@ namespace Phytel.API.DataDomain.Contact
 
         public object FindContactByPatientId(string patientId)
         {
-            GetContactDataResponse response = null;
+            ContactData contactData = null;
             using (ContactMongoContext ctx = new ContactMongoContext(_dbName))
             {
                 List<IMongoQuery> queries = new List<IMongoQuery>();
@@ -123,8 +123,7 @@ namespace Phytel.API.DataDomain.Contact
                 MEContact mc = ctx.Contacts.Collection.Find(mQuery).FirstOrDefault();
                 if (mc != null)
                 {
-                    response = new GetContactDataResponse();
-                    ContactData contactData = new ContactData { 
+                    contactData = new ContactData { 
                         ContactId = mc.Id.ToString(),
                         PatientId = mc.PatientId.ToString(),
                         UserId = mc.UserId == null ? null : mc.UserId.ToString(),
@@ -209,11 +208,9 @@ namespace Phytel.API.DataDomain.Contact
                         }
                         contactData.Languages = languages;
                     }
-
-                    response.Contact = contactData;
                 }
             }
-            return response;
+            return contactData;
         }
 
 

@@ -14,9 +14,9 @@ namespace Phytel.API.DataDomain.Contact.Service
             GetContactDataResponse response = new GetContactDataResponse();
             try
             {
-             response = ContactDataManager.GetContactByPatientId(request);
-             response.Version = request.Version;
-                        }
+                 response.Contact = ContactDataManager.GetContactByPatientId(request);
+                 response.Version = request.Version;
+            }
             catch (Exception ex)
             {
                 //TODO: Log this to C3 database via ASE
