@@ -183,7 +183,7 @@ namespace Phytel.API.DataDomain.Contact
                             // Get the ones that are not deleted.
                             if (!meAdd.DeleteFlag)
                             {
-                                AddressData address = new AddressData { Id = meAdd.ToString(), Line1 = meAdd.Line1, Line2 = meAdd.Line2, Line3 = meAdd.Line3, City = meAdd.City, StateId = meAdd.StateId.ToString(), PostalCode = meAdd.PostalCode, TypeId = meAdd.TypeId.ToString(), OptOut = meAdd.OptOut, Preferred = meAdd.Preferred };
+                                AddressData address = new AddressData { Id = meAdd.Id.ToString(), Line1 = meAdd.Line1, Line2 = meAdd.Line2, Line3 = meAdd.Line3, City = meAdd.City, StateId = meAdd.StateId.ToString(), PostalCode = meAdd.PostalCode, TypeId = meAdd.TypeId.ToString(), OptOut = meAdd.OptOut, Preferred = meAdd.Preferred };
                                 addresses.Add(address);
                             }
                         }
@@ -197,7 +197,7 @@ namespace Phytel.API.DataDomain.Contact
                         List<LanguageData> languages = new List<LanguageData>();
                         foreach (MELanguage meLang in meLanguages)
                         {
-                            LanguageData langugage = new LanguageData { Id = meLang.ToString(), LookUpLanguageId = meLang.LookUpLanguageId.ToString() ,Preferred = meLang.Preferred };
+                            LanguageData langugage = new LanguageData { Id = meLang.Id.ToString(), LookUpLanguageId = meLang.LookUpLanguageId.ToString() ,Preferred = meLang.Preferred };
                             languages.Add(langugage);
                         }
                         contactData.Languages = languages;
