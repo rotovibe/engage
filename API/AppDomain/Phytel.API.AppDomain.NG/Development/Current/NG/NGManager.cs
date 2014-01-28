@@ -525,7 +525,8 @@ namespace Phytel.API.AppDomain.NG
                             PatientId = p.PatientId,
                             ProgramState = p.ProgramState,
                             ShortName = p.ShortName,
-                            Status = p.Status
+                            Status = p.Status,
+                            ElementState = p.ElementState
                         }));
 
                         result.Programs = adPs;

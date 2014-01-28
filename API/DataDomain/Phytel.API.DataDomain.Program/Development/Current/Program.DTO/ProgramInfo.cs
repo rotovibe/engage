@@ -12,6 +12,7 @@ namespace Phytel.API.DataDomain.Program.DTO
         public string Name { get; set; }
         public string ShortName { get; set; }
         public int Status { get; set; }
+        public int ElementState { get; set; }
         public int ProgramState { get; set; }
         public string PatientId { get; set; }
     }

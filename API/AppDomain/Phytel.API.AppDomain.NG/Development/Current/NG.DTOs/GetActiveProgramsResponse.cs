@@ -19,6 +19,7 @@ namespace Phytel.API.AppDomain.NG.DTO
         public string ShortName { get; set; }
         public int Status { get; set; }
         public int ProgramState { get; set; }
+        public int ElementState { get; set; }
 
         /// <summary>
         /// Assigned patient id to the program
