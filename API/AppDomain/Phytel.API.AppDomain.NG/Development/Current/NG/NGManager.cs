@@ -941,12 +941,13 @@ namespace Phytel.API.AppDomain.NG
                 GetContactDataResponse dataDomainResponse;
                     dataDomainResponse =
                         client.Get<GetContactDataResponse>(
-                        string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Contact",
+                        string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Contact?UserId={5}",
                         DDContactServiceUrl,
                         "NG",
                         request.Version,
                         request.ContractNumber,
-                        request.PatientID));
+                        request.PatientID,
+                        request.UserId));
 
                     if (dataDomainResponse != null && dataDomainResponse.Contact != null)
                     {

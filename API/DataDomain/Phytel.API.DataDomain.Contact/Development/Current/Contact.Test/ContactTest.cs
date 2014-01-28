@@ -29,7 +29,7 @@ namespace Phytel.API.DataDomain.Contact.Test
         [TestMethod]
         public void GetContactByPatientId_Empty_Test()
         {
-            GetContactDataRequest request = new GetContactDataRequest { PatientId = "52e26f63072ef7191c11fd96" };
+            GetContactDataRequest request = new GetContactDataRequest { PatientId = "52e26f4b072ef7191c11b026" };
 
             ContactData response = ContactDataManager.GetContactByPatientId(request);
 
