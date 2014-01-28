@@ -16,14 +16,13 @@ namespace Phytel.API.DataDomain.Contact.DTO
         public string ContactId { get; set; }
         public string PatientId { get; set; }
         public string UserId { get; set; }
-        public List<CommMode> Modes { get; set; }
-        public List<Phone> Phones { get; set; }
-        public List<Text> Texts { get; set; }
-        public List<Email> Emails { get; set; }
-        public List<Address> Addresses { get; set; }
+        public List<CommModeData> Modes { get; set; }
+        public List<PhoneData> Phones { get; set; }
+        public List<EmailData> Emails { get; set; }
+        public List<AddressData> Addresses { get; set; }
         public List<int> WeekDays { get; set; }
         public List<string> TimesOfDaysId { get; set; }
         public string TimeZoneId { get; set; }
-        public List<Language> Languages { get; set; }
+        public List<LanguageData> Languages { get; set; }
     }
 }

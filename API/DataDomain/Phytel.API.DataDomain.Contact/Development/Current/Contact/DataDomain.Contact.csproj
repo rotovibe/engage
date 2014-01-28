@@ -69,7 +69,6 @@
     <Compile Include="MongoDB\DTO\MEEmail.cs" />
     <Compile Include="MongoDB\DTO\MELanguage.cs" />
     <Compile Include="MongoDB\DTO\MEPhone.cs" />
-    <Compile Include="MongoDB\DTO\METext.cs" />
     <Compile Include="MongoDB\Repository\MongoContactRepository.cs" />
     <Compile Include="MongoDB\ContactMongoContext.cs" />
     <Compile Include="DataContactManager.cs" />

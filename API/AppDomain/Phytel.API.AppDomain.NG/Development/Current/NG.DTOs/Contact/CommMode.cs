@@ -8,6 +8,7 @@ namespace Phytel.API.AppDomain.NG.DTO
     public class CommMode
     {
         public string Id { get; set; }
+        public string LookUpModeId { get; set; }
         public bool Preferred { get; set; }
         public bool OptOut { get; set; }
     }

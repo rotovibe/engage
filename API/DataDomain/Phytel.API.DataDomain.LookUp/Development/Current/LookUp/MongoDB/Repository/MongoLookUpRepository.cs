@@ -426,7 +426,7 @@ namespace Phytel.API.DataDomain.LookUp
                         LanguageList = new List<LanguageData>();
                         foreach (MELanguage m in meLookup.Data)
                         {
-                            LanguageData data = new LanguageData { ID = m.DataID.ToString(), Name = m.Name, Code = m.Code };
+                            LanguageData data = new LanguageData { ID = m.DataID.ToString(), Name = m.Name, Code = m.Code, Active = m.Active };
                             LanguageList.Add(data);
                         }
                     }

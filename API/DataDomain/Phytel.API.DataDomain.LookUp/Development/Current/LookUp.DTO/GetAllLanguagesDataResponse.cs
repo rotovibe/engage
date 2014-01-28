@@ -14,5 +14,6 @@ namespace Phytel.API.DataDomain.LookUp.DTO
     public class LanguageData : LookUpData
     {
         public string Code { get; set; }
+        public bool Active { get; set; }
     }
 }

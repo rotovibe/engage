@@ -1,7 +1,7 @@
 ﻿using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 
-namespace Phytel.API.DataDomain.Contact.MongoDB.DTO
+namespace Phytel.API.DataDomain.Contact.DTO
 {
     public class MEAddress
     {

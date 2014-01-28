@@ -81,5 +81,30 @@ namespace Phytel.API.AppDomain.NG.Test
             //Assert
             Assert.IsTrue(response.Settings.Count > 0);
         }
+
+        #region Contact
+
+        [TestMethod]
+        public void GetContactByPatientId_Test()
+        {
+            // Arrange
+            string version = "v1";
+            string contractNumber = "InHealth001";
+            string token = "1234";
+            NGManager ngManager = new NGManager();
+            GetContactRequest request = new GetContactRequest
+            {
+                ContractNumber = contractNumber,
+                Token = token,
+                Version = version,
+                PatientID = "528bdccc072ef7071c2e22ae"
+            };
+            // Act
+            Contact response = ngManager.GetContactByPatientId(request);
+
+            //Assert
+            Assert.IsTrue(response != null);
+        } 
+        #endregion
     }
 }

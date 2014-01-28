@@ -14,12 +14,11 @@ namespace Phytel.API.AppDomain.NG.DTO
 
     public class Contact
     {
-        public string ContactId { get; set; }
+        public string Id { get; set; }
         public string PatientId { get; set; }
         public string UserId { get; set; }
         public List<CommMode> Modes { get; set; }
         public List<Phone> Phones { get; set; }
-        public List<Text> Texts { get; set; }
         public List<Email> Emails { get; set; }
         public List<Address> Addresses { get; set; }
         public List<int> WeekDays { get; set; }

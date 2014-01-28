@@ -15,6 +15,7 @@ namespace Phytel.API.AppDomain.NG.DTO
         public string City { get; set; }
         public string StateId { get; set; }
         public string PostalCode { get; set; }
+        public bool Preferred { get; set; }
         public bool OptOut { get; set; }
     }
 }

@@ -14,6 +14,7 @@ using System.Runtime.Serialization.Json;
 using System.Text;
 using System.Web.Hosting;
 using DD = Phytel.API.DataDomain.Program.DTO;
+using Phytel.API.DataDomain.Contact.DTO;
 
 namespace Phytel.API.AppDomain.NG
 {
@@ -840,15 +841,21 @@ namespace Phytel.API.AppDomain.NG
                                                                                                                 request.Version,
                                                                                                                 request.ContractNumber));
 
-                List<LanguageData> dataList = dataDomainResponse.Languages;
+                List<Phytel.API.DataDomain.LookUp.DTO.LanguageData> dataList = dataDomainResponse.Languages;
 
-                foreach (LanguageData d in dataList)
+                if (dataList != null && dataList.Count > 0)
                 {
-                    LanguagesLookUp lookUp = new LanguagesLookUp();
-                    lookUp.Id = d.ID;
-                    lookUp.Name = d.Name;
-                    lookUp.Code = d.Code;
-                    response.Add(lookUp);
+                    // Get all active languages only.
+                    List<Phytel.API.DataDomain.LookUp.DTO.LanguageData> activeLanguages = dataList.Where(d => d.Active == true).ToList();
+
+                    foreach (Phytel.API.DataDomain.LookUp.DTO.LanguageData d in activeLanguages)
+                    {
+                        LanguagesLookUp lookUp = new LanguagesLookUp();
+                        lookUp.Id = d.ID;
+                        lookUp.Name = d.Name;
+                        lookUp.Code = d.Code;
+                        response.Add(lookUp);
+                    }
                 }
                 return response;
             }
@@ -893,25 +900,125 @@ namespace Phytel.API.AppDomain.NG
         #endregion
 
         #region Contact
-        public GetContactResponse GetContact(GetContactRequest request)
+        public Contact GetContactByPatientId(GetContactRequest request)
         {
-            GetContactResponse response = new GetContactResponse();
+            Contact contact = null;
 
             try
             {
                 IRestClient client = new JsonServiceClient();
+                //[Route("/{Context}/{Version}/{ContractNumber}/Patient/{PatientId}/Contact", "GET")]
+                GetContactDataResponse dataDomainResponse;
+                    dataDomainResponse =
+                        client.Get<GetContactDataResponse>(
+                        string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Contact",
+                        DDContactServiceUrl,
+                        "NG",
+                        request.Version,
+                        request.ContractNumber,
+                        request.PatientID));
 
-               // GetActiveProgramsResponse dataDomainResponse;
-                    //dataDomainResponse =
-                    //    client.Get<GetActiveProgramsResponse>(
-                    //    string.Format("{0}/{1}/{2}/{3}/Programs/Active",
-                    //    DDProgramServiceUrl,
-                    //    "NG",
-                    //    request.Version,
-                    //    request.ContractNumber));
+                    if (dataDomainResponse != null && dataDomainResponse.Contact != null)
+                    {
+                        ContactData cd = dataDomainResponse.Contact;
+                        string preferredPhoneId = null;
+                        string preferredTextId = null;
+                        string preferredEmailId = null;
+                        string preferredAddressId = null;
+                        string preferredLanguageId = null;
+                        
+                        contact = new Contact {
+                            Id = cd.ContactId,
+                            PatientId = cd.PatientId,
+                            UserId = cd.UserId,
+                            WeekDays = cd.WeekDays,
+                            TimesOfDaysId = cd.TimesOfDaysId,
+                            TimeZoneId = cd.TimeZoneId
+                        };
 
-                    //response.Contact
-                return response;
+                        //Modes
+                        List<CommModeData> commModeData = cd.Modes;
+                        if (commModeData != null && commModeData.Count > 0)
+                        {
+                            List<CommMode> modes = new List<CommMode>();
+                            foreach (CommModeData cm in commModeData)
+                            {
+                                CommMode commMode = new CommMode { Id = cm.Id, LookUpModeId = cm.ModeId, OptOut = cm.OptOut, Preferred = cm.Preferred };
+                                modes.Add(commMode);
+                            }
+                            contact.Modes = modes;
+                        }
+
+                        //Phones
+                        List<PhoneData> phoneData = cd.Phones;
+                        if (phoneData != null && phoneData.Count > 0)
+                        {
+                            List<Phone> phones = new List<Phone>();
+                            foreach (PhoneData ph in phoneData)
+                            {
+                                Phone phone = new Phone { Id = ph.Id, TypeId = ph.TypeId, Number = ph.Number, IsText = ph.IsText, PhonePreferred = ph.PhonePreferred, TextPreferred = ph.TextPreferred, OptOut = ph.OptOut};
+                                phones.Add(phone);
+                                if (ph.PhonePreferred)
+                                    preferredPhoneId = ph.Id;
+                                if (ph.TextPreferred)
+                                    preferredTextId = ph.Id;
+                            }
+                            contact.Phones = phones;
+                        }
+
+                        //Emails
+                        List<EmailData> emailData = cd.Emails;
+                        if (emailData != null && emailData.Count > 0)
+                        {
+                            List<Email> emails = new List<Email>();
+                            foreach (EmailData e in emailData)
+                            {
+                                Email email = new Email { Id = e.Id, Text = e.Text, TypeId = e.TypeId, Preferred = e.Preferred, OptOut = e.OptOut};
+                                emails.Add(email);
+                                if (e.Preferred)
+                                    preferredEmailId = e.Id;
+                            }
+                            contact.Emails = emails;
+                        }
+
+                        //Address
+                        List<AddressData> addressData = cd.Addresses;
+                        if (addressData != null && addressData.Count > 0)
+                        {
+                            List<Address> addresses = new List<Address>();
+                            foreach (AddressData a in addressData)
+                            {
+                                Address address = new Address { Id = a.Id, Line1 = a.Line1, Line2  = a.Line2, Line3 = a.Line3, City = a.City, StateId = a.StateId, PostalCode = a.PostalCode, TypeId = a.TypeId, Preferred = a.Preferred, OptOut = a.OptOut};
+                                addresses.Add(address);
+                                if (a.Preferred)
+                                    preferredAddressId = a.Id;
+                            }
+                            contact.Addresses = addresses;
+                        }
+
+                        //Language
+                        List<Phytel.API.DataDomain.Contact.DTO.LanguageData> languageData = cd.Languages;
+                        if (languageData != null && languageData.Count > 0)
+                        {
+                            List<Language> languages = new List<Language>();
+                            foreach (Phytel.API.DataDomain.Contact.DTO.LanguageData l in languageData)
+                            {
+                                Language language = new Language { Id = l.Id, LookUpLanguageId = l.LookUpLanguageId, Preferred = l.Preferred };
+                                languages.Add(language);
+                                if (l.Preferred)
+                                    preferredLanguageId = l.Id;
+                            }
+                            contact.Languages = languages;
+                        }
+
+                        // Preferreds
+                        contact.PreferredPhoneId = preferredPhoneId;
+                        contact.PreferredTextId = preferredTextId;
+                        contact.PreferredAddressId = preferredAddressId;
+                        contact.PreferredEmailId = preferredEmailId;
+                        contact.PreferredLanguageId = preferredLanguageId;
+                    }
+                return contact;
             }
             catch (WebServiceException wse)
             {
@@ -920,5 +1027,6 @@ namespace Phytel.API.AppDomain.NG
             }
         } 
         #endregion
+
     }
 }

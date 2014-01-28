@@ -370,7 +370,7 @@ namespace Phytel.API.AppDomain.NG.Service
                 if (result.UserId.Trim() != string.Empty)
                 {
                     request.UserId = result.UserId;
-                    response = ngm.GetContact(request);
+                    response.Contact = ngm.GetContactByPatientId(request);
                 }
                 else
                     throw new UnauthorizedAccessException();
@@ -543,5 +543,6 @@ namespace Phytel.API.AppDomain.NG.Service
         }
 
         #endregion
+
     }
 }

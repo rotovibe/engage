@@ -5,12 +5,14 @@ using System.Text;
 
 namespace Phytel.API.DataDomain.Contact.DTO
 {
-    public class Email
+    public class PhoneData
     {
         public string Id { get; set; }
-        public string Text { get; set; }
+        public string Number { get; set; }
         public string TypeId { get; set; }
-        public bool Preferred { get; set; }
+        public bool IsText { get; set; }
+        public bool PhonePreferred { get; set; }
+        public bool TextPreferred { get; set; }
         public bool OptOut { get; set; }
     }
 }

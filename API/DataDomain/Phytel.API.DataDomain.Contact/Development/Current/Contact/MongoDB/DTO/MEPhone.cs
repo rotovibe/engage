@@ -1,14 +1,16 @@
 ﻿using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 
-namespace Phytel.API.DataDomain.Contact.MongoDB.DTO
+namespace Phytel.API.DataDomain.Contact.DTO
 {
     public class MEPhone
     {
         public const string IDProperty = "_id";
         public const string NumberProperty = "num";
         public const string TypeIdProperty = "typeid";
-        public const string PreferredProperty = "pf";
+        public const string IsTextProperty = "txt";
+        public const string PhonePreferredProperty = "pfph";
+        public const string TextPreferredProperty = "pftxt";
         public const string OptOutProperty = "oo";
         public const string DeleteFlagProperty = "del";
 
@@ -21,8 +23,14 @@ namespace Phytel.API.DataDomain.Contact.MongoDB.DTO
         [BsonElement(TypeIdProperty)]
         public ObjectId TypeId { get; set; }
 
-        [BsonElement(PreferredProperty)]
-        public bool Preferred { get; set; }
+        [BsonElement(IsTextProperty)]
+        public bool IsText { get; set; }
+
+        [BsonElement(PhonePreferredProperty)]
+        public bool PreferredPhone { get; set; }
+
+        [BsonElement(TextPreferredProperty)]
+        public bool PreferredText { get; set; }
 
         [BsonElement(OptOutProperty)]
         public bool OptOut { get; set; }

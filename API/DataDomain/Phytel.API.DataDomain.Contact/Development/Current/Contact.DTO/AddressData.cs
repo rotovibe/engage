@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Phytel.API.DataDomain.Contact.DTO
 {
-    public class Address
+    public class AddressData
     {
         public string Id { get; set; }
         public string TypeId { get; set; }

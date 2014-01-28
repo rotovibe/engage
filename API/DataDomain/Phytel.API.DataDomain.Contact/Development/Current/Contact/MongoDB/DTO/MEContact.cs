@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
-using Phytel.API.DataDomain.Contact.MongoDB.DTO;
+using Phytel.API.DataDomain.Contact.DTO;
 using Phytel.API.Interface;
 using Phytel.Mongo.Linq;
 
@@ -18,7 +18,6 @@ namespace Phytel.API.DataDomain.Contact.DTO
         public const string UserIdProperty = "uid";
         public const string ModesProperty = "ms";
         public const string PhonesProperty = "phs";
-        public const string TextsProperty = "txts";
         public const string EmailsProperty = "ems";
         public const string AddressessProperty = "adds";
         public const string WeekDaysProperty = "wds";
@@ -51,10 +50,6 @@ namespace Phytel.API.DataDomain.Contact.DTO
         [BsonElement(PhonesProperty)]
         [BsonIgnoreIfNull(true)]
         public List<MEPhone> Phones { get; set; }
-
-        [BsonElement(TextsProperty)]
-        [BsonIgnoreIfNull(true)]
-        public List<METext> Texts { get; set; }
 
         [BsonElement(EmailsProperty)]
         [BsonIgnoreIfNull(true)]
