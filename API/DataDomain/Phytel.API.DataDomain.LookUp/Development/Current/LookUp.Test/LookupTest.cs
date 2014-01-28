@@ -192,7 +192,23 @@ namespace Phytel.API.DataDomain.LookUp.Test
 
             // Assert
             Assert.AreNotEqual(0, response.Languages.Count);
-        } 
+        }
+
+        [TestMethod]
+        public void GetDefaultTimeZone_Test()
+        {
+            // Arrange
+            string version = "v1";
+            string contractNumber = "InHealth001";
+            string context = "NG";
+            GetTimeZoneDataRequest request = new GetTimeZoneDataRequest { Context = context, ContractNumber = contractNumber, Version = version };
+
+            // Act
+            GetTimeZoneDataResponse response = LookUpDataManager.GetDefaultTimeZone(request);
+
+            // Assert
+            Assert.AreEqual("Central (UTC-06:00)", response.TimeZone.Name);
+        }
         #endregion
 
     }

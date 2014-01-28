@@ -896,6 +896,33 @@ namespace Phytel.API.AppDomain.NG
                 Exception ae = new Exception(wse.ResponseBody, wse.InnerException);
                 throw ae;
             }
+        }
+
+        private TimeZonesLookUp getDefaultTimeZone(GetTimeZoneDataRequest request)
+        {
+            TimeZonesLookUp response = null;
+            try
+            {
+                response = new TimeZonesLookUp();
+                IRestClient client = new JsonServiceClient();
+                //  [Route("/{Context}/{Version}/{ContractNumber}/TimeZone/Default", "GET")]
+                Phytel.API.DataDomain.LookUp.DTO.GetTimeZoneDataResponse dataDomainResponse = client.Get<Phytel.API.DataDomain.LookUp.DTO.GetTimeZoneDataResponse>(string.Format("{0}/{1}/{2}/{3}/TimeZone/Default",
+                                                                                                                DDLookupServiceUrl,
+                                                                                                                "NG",
+                                                                                                                request.Version,
+                                                                                                                request.ContractNumber));
+
+                TimeZoneData data = dataDomainResponse.TimeZone;
+                response.Id = data.ID;
+                response.Name = data.Name;
+                response.DefaultZone = data.Default;
+            }
+            catch (WebServiceException wse)
+            {
+                Exception ae = new Exception(wse.ResponseBody, wse.InnerException);
+                throw ae;
+            }
+            return response;
         } 
         #endregion
 
@@ -932,9 +959,25 @@ namespace Phytel.API.AppDomain.NG
                             PatientId = cd.PatientId,
                             UserId = cd.UserId,
                             WeekDays = cd.WeekDays,
-                            TimesOfDaysId = cd.TimesOfDaysId,
-                            TimeZoneId = cd.TimeZoneId
+                            TimesOfDaysId = cd.TimesOfDaysId
                         };
+
+                        //TimeZone
+                        if (cd.TimeZoneId != null)
+                        {
+                            contact.TimeZoneId = cd.TimeZoneId;
+                        }
+                        else
+                        { 
+                            // If the user has no timezone set, the default timezone in lookup table should override it.
+                            // Getting the default TimeZone that is set in TimeZone LookUp table. 
+                            GetTimeZoneDataRequest tzDataRequest = new GetTimeZoneDataRequest { ContractNumber = request.ContractNumber, Version = request.Version };
+                            TimeZonesLookUp tz = getDefaultTimeZone(tzDataRequest);
+                            if (tz != null)
+                            {
+                                contact.TimeZoneId = tz.Id;
+                            }
+                        }
 
                         //Modes
                         List<CommModeData> commModeData = cd.Modes;

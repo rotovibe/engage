@@ -124,7 +124,14 @@ namespace Phytel.API.DataDomain.Contact
                 if (mc != null)
                 {
                     response = new GetContactDataResponse();
-                    ContactData contactData = new ContactData { ContactId = mc.Id.ToString(), PatientId = mc.PatientId.ToString(), UserId = mc.UserId.ToString(), TimeZoneId = mc.TimeZone.ToString(), WeekDays = mc.WeekDays, TimesOfDaysId = convertToStringList(mc.TimesOfDays) };
+                    ContactData contactData = new ContactData { 
+                        ContactId = mc.Id.ToString(),
+                        PatientId = mc.PatientId.ToString(),
+                        UserId = mc.UserId == null ? null : mc.UserId.ToString(),
+                        TimeZoneId = mc.TimeZone == null ? null : mc.TimeZone.ToString(),
+                        WeekDays = mc.WeekDays,
+                        TimesOfDaysId = convertToStringList(mc.TimesOfDays)
+                    };
 
                     //Modes
                     List<MECommMode> meCommModes = mc.Modes;

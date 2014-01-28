@@ -193,6 +193,22 @@ namespace Phytel.API.DataDomain.Patient.Service
             return response;
         }
 
+        public GetTimeZoneDataResponse Get(GetTimeZoneDataRequest request)
+        {
+            GetTimeZoneDataResponse response = new GetTimeZoneDataResponse();
+            try
+            {
+                response = LookUpDataManager.GetDefaultTimeZone(request);
+            }
+            catch (Exception ex)
+            {
+                //TODO: Log this to the SQL database via ASE
+                base.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                response.Status = new ServiceStack.ServiceInterface.ServiceModel.ResponseStatus("Exception", ex.Message);
+            }
+            return response;
+        }
+
 
         #endregion
 

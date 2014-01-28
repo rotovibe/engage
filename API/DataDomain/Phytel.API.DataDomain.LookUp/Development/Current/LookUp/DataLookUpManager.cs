@@ -155,6 +155,20 @@ namespace Phytel.API.DataDomain.LookUp
             }
             return response;
         }
+
+        public static GetTimeZoneDataResponse GetDefaultTimeZone(GetTimeZoneDataRequest request)
+        {
+            GetTimeZoneDataResponse response = new GetTimeZoneDataResponse();
+
+            ILookUpRepository<TimeZoneData> repo = LookUpRepositoryFactory<TimeZoneData>.GetLookUpRepository(request.ContractNumber, request.Context);
+            TimeZoneData data = repo.GetDefaultTimeZone();
+
+            if (data != null)
+            {
+                response.TimeZone = data;
+            }
+            return response;
+        }
         #endregion
     }
 }   

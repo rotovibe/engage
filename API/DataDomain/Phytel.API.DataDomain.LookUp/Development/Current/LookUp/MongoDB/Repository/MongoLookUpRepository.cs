@@ -435,6 +435,33 @@ namespace Phytel.API.DataDomain.LookUp
             return LanguageList;
         }
 
+
+        public TimeZoneData GetDefaultTimeZone()
+        {
+           TimeZoneData tz = null;
+            using (LookUpMongoContext ctx = new LookUpMongoContext(_dbName))
+            {
+                List<IMongoQuery> queries = new List<IMongoQuery>();
+                queries.Add(Query.EQ(MELookup.TypeProperty, LookUpType.TimeZone));
+                queries.Add(Query.EQ(MELookup.DeleteFlagProperty, false));
+                IMongoQuery mQuery = Query.And(queries);
+                MELookup meLookup = ctx.LookUps.Collection.Find(mQuery).FirstOrDefault();
+                if (meLookup != null)
+                {
+                    if (meLookup.Data != null)
+                    {
+                        tz = new TimeZoneData();
+                        METimeZone meTz = meLookup.Data.Cast<METimeZone>().Where(a => a.Default == true).FirstOrDefault();
+                        if (meTz != null)
+                        {
+                            tz = new TimeZoneData { ID = meTz.DataID.ToString(), Name = meTz.Name, Default = meTz.Default };
+                        }
+                    }
+                }
+            }
+            return tz;
+        }
+
         #endregion
     }
 }

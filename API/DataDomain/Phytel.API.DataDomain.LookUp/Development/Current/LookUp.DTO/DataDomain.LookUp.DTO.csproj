@@ -87,6 +87,8 @@
     <Compile Include="GetCategoryDataResponse.cs" />
     <Compile Include="GetObjectiveDataRequest.cs" />
     <Compile Include="GetObjectiveDataResponse.cs" />
+    <Compile Include="GetTimeZoneDataRequest.cs" />
+    <Compile Include="GetTimeZoneDataResponse.cs" />
     <Compile Include="LookUpData.cs" />
     <Compile Include="ProblemData.cs" />
     <Compile Include="SearchProblemsDataResponse .cs" />

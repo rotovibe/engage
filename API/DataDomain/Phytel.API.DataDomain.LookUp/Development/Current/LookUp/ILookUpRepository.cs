@@ -21,5 +21,6 @@ namespace Phytel.API.DataDomain.LookUp
         List<TimeZoneData> GetAllTimeZones();
         List<CommTypeData> GetAllCommTypes();
         List<LanguageData> GetAllLanguages();
+        TimeZoneData GetDefaultTimeZone();
     }
 }
