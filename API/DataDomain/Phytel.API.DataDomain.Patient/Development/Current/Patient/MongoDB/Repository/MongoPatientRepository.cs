@@ -53,9 +53,25 @@ namespace Phytel.API.DataDomain.Patient
                 LastUpdatedOn = System.DateTime.Now
             };
 
+
+            MECohortPatientView ptView = new DTO.MECohortPatientView();
+
+            ptView.PatientID = patient.Id;
+            ptView.LastName = patient.LastName;
+            ptView.SearchFields = new List<SearchField>();
+            ptView.SearchFields.Add(new SearchField { Active = true, FieldName = "FN", Value = patient.FirstName });
+            ptView.SearchFields.Add(new SearchField { Active = true, FieldName = "LN", Value = patient.LastName });
+            ptView.SearchFields.Add(new SearchField { Active = true, FieldName = "G", Value = patient.Gender.ToUpper() });
+            ptView.SearchFields.Add(new SearchField { Active = true, FieldName = "DOB", Value = patient.DOB });
+            ptView.SearchFields.Add(new SearchField { Active = true, FieldName = "MN", Value = patient.MiddleName });
+            ptView.SearchFields.Add(new SearchField { Active = true, FieldName = "SFX", Value = patient.Suffix });
+            ptView.SearchFields.Add(new SearchField { Active = true, FieldName = "PN", Value = patient.PreferredName });
+
+
             using (PatientMongoContext ctx = new PatientMongoContext(_dbName))
             {
                 ctx.Patients.Collection.Insert(patient);
+                ctx.CohortPatientViews.Collection.Insert(ptView);
             }
 
             if (string.IsNullOrEmpty(request.SystemID) == false)

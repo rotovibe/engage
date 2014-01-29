@@ -64,6 +64,7 @@ namespace Phytel.API.DataDomain.Patient.Service
             {
                 response = PatientDataManager.InsertPatient(request);
                 response.Version = request.Version;
+                //throw new Exception("Just a test error");
             }
             catch (Exception ex)
             {
