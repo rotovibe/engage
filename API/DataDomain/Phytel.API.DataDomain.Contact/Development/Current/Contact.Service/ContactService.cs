@@ -12,15 +12,34 @@ namespace Phytel.API.DataDomain.Contact.Service
         public GetContactDataResponse Get(GetContactDataRequest request)
         {
             GetContactDataResponse response = new GetContactDataResponse();
+            response.Version = request.Version;
             try
             {
                  response.Contact = ContactDataManager.GetContactByPatientId(request);
-                 response.Version = request.Version;
+                 
             }
             catch (Exception ex)
             {
                 //TODO: Log this to C3 database via ASE
                 CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+            }
+            return response;
+        }
+
+        public PutContactDataResponse Put(PutContactDataRequest request)
+        {
+            PutContactDataResponse response = new PutContactDataResponse();
+            response.Success = false;
+            response.Version = request.Version;
+            try
+            {
+                response.Success = ContactDataManager.UpdateContact(request);
+            }
+            catch (Exception ex)
+            {
+                //TODO: Log this to the SQL database via ASE
+                base.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                response.Status = new ServiceStack.ServiceInterface.ServiceModel.ResponseStatus("Exception", ex.Message);
             }
             return response;
         }

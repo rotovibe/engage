@@ -6,9 +6,10 @@ using System.Threading.Tasks;
 using Phytel.API.DataDomain.Contact.DTO;
 using Phytel.API.Interface;
 using MongoDB.Driver;
-using MongoDB.Driver.Builders;
+using MB = MongoDB.Driver.Builders;
 using MongoDB.Bson;
 using Phytel.API.AppDomain.Contact;
+using MongoDB.Driver.Builders;
 
 namespace Phytel.API.DataDomain.Contact
 {
@@ -93,12 +94,114 @@ namespace Phytel.API.DataDomain.Contact
 
         public object Update(object entity)
         {
+            bool status = false;
             try
             {
-                throw new NotImplementedException();
-                // code here //
+                PutContactDataRequest request = entity as PutContactDataRequest;
+                if (request.ContactId == null)
+                    throw new ArgumentException("ContactId is missing from the DataDomain request.");
+
+                using (ContactMongoContext ctx = new ContactMongoContext(_dbName))
+                {
+                    var query = MB.Query<MEContact>.EQ(c => c.Id, ObjectId.Parse(request.ContactId));
+
+                    var uv = new List<UpdateBuilder>();
+
+                    //Modes
+                    if(request.Modes != null)
+                    {
+                        List<MECommMode> meModes = null;
+                        if(request.Modes.Count != 0)
+                        {
+                            meModes = new List<MECommMode>();
+                            List<CommModeData> modeData = request.Modes;
+                            foreach (CommModeData m in modeData)
+                            {
+                                MECommMode meM = new MECommMode
+                                {
+                                    Id = ObjectId.Parse(m.Id),
+                                    ModeId = ObjectId.Parse(m.ModeId),
+                                    OptOut = m.OptOut,
+                                    Preferred = m.Preferred
+                                };
+                                meModes.Add(meM);
+                            }
+                        }
+                        uv.Add(MB.Update.SetWrapped<List<MECommMode>>(MEContact.ModesProperty, meModes));
+                    
+                    }
+
+                    //WeekDays
+                    if (request.WeekDays != null)
+                    {
+                        List<int> weekDays = null;
+                        if (request.WeekDays.Count != 0)
+                        {
+                            weekDays = request.WeekDays;
+                        }
+                        uv.Add(MB.Update.SetWrapped<List<int>>(MEContact.WeekDaysProperty, weekDays));
+
+                    }
+
+                    //TimesOfDays
+                    if (request.TimesOfDaysId != null)
+                    {
+                        List<ObjectId> timesOfDays = null;
+                        // if nothing is selected
+                        if (request.TimesOfDaysId.Count != 0)
+                        {
+                            timesOfDays = new List<ObjectId>();
+                            List<string> times = request.TimesOfDaysId;
+                            foreach (string s in times)
+                            {
+                                timesOfDays.Add(ObjectId.Parse(s));
+                            }
+                        }
+                        uv.Add(MB.Update.SetWrapped<List<ObjectId>>(MEContact.TimesOfDaysProperty, timesOfDays));
+                    }
+
+                    //Languages
+                    if (request.Languages != null)
+                    {
+                        List<MELanguage> meLanguages = null;
+                        if (request.Languages.Count != 0)
+                        {
+                            meLanguages = new List<MELanguage>();
+                            List<LanguageData> languageData = request.Languages;
+                            foreach (LanguageData l in languageData)
+                            {
+                                MELanguage meL = new MELanguage
+                                {
+                                     Id = ObjectId.Parse(l.Id),
+                                     LookUpLanguageId  = ObjectId.Parse(l.LookUpLanguageId),
+                                     Preferred = l.Preferred
+                                };
+                                meLanguages.Add(meL);
+                            }
+                        }
+                        uv.Add(MB.Update.SetWrapped<List<MELanguage>>(MEContact.LanguagesProperty, meLanguages));
+                    
+                    }
+                    
+                    // TimeZone
+                    uv.Add(MB.Update.Set(MEContact.TimeZoneProperty, ObjectId.Parse(request.TimeZoneId)));
+
+                    // LastUpdatedOn
+                    uv.Add(MB.Update.Set(MEContact.LastUpdatedOnProperty,DateTime.UtcNow));
+
+                    //UpdatedBy
+                    uv.Add(MB.Update.Set(MEContact.UpdatedByProperty, request.UserId));
+
+                    IMongoUpdate update = MB.Update.Combine(uv);
+                    ctx.Contacts.Collection.Update(query, update);
+                }
+                status = true;
             }
-            catch (Exception ex) { throw ex; }
+            catch (Exception ex) 
+            { 
+                throw ex; 
+            }
+            return status;
         }
 
         public void CacheByID(List<string> entityIDs)
@@ -127,7 +230,7 @@ namespace Phytel.API.DataDomain.Contact
                     MEContact meContact = new MEContact { 
                         PatientId = ObjectId.Parse(request.PatientId),
                         Version = request.Version,
-                        LastUpdatedOn = DateTime.Now,
+                        LastUpdatedOn = DateTime.UtcNow,
                         UpdatedBy = request.UserId,
                         DeleteFlag = false
                     };
@@ -140,7 +243,7 @@ namespace Phytel.API.DataDomain.Contact
                         ContactId = mc.Id.ToString(),
                         PatientId = mc.PatientId.ToString(),
                         UserId = mc.UserId == null ? null : mc.UserId.ToString(),
-                        TimeZoneId = mc.TimeZone == null ? null : mc.TimeZone.ToString(),
+                        TimeZoneId = mc.TimeZone.ToString(),
                         WeekDays = mc.WeekDays,
                         TimesOfDaysId = convertToStringList(mc.TimesOfDays)
                     };

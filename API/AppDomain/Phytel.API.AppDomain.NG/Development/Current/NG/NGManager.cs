@@ -1072,7 +1072,112 @@ namespace Phytel.API.AppDomain.NG
                 Exception ae = new Exception(wse.ResponseBody, wse.InnerException);
                 throw ae;
             }
-        } 
+        }
+
+        public PutContactResponse PutContact(PutContactRequest request)
+        {
+            try
+            {
+                List<CommModeData> modesData = null;
+                if (request.Modes != null)
+                {
+                    List<CommMode> modes = request.Modes;
+                    modesData = new List<CommModeData>();
+                    foreach (CommMode m in modes)
+                    {
+                        CommModeData cd = new CommModeData { Id = m.Id, ModeId = m.LookUpModeId, OptOut = m.OptOut, Preferred  = m.Preferred};
+                        modesData.Add(cd);
+                    }
+                }
+
+                List<PhoneData> phonesData = null;
+                if (request.Phones != null)
+                {
+                    List<Phone> phones = request.Phones;
+                    phonesData = new List<PhoneData>();
+                    foreach (Phone p in phones)
+                    {
+                        PhoneData d = new PhoneData {  Id = p.Id,  IsText = p.IsText, Number = p.Number, OptOut = p.OptOut, PhonePreferred = p.PhonePreferred, TextPreferred = p.TextPreferred, TypeId =  p.TypeId};
+                        phonesData.Add(d);
+                    }
+                }
+                List<EmailData> emailsData = null;
+                if (request.Emails != null)
+                {
+                    List<Email> emails = request.Emails;
+                    emailsData = new List<EmailData>();
+                    foreach (Email e in emails)
+                    {
+                        EmailData d = new EmailData {  Id = e.Id, Text = e.Text, TypeId = e.TypeId, OptOut = e.OptOut, Preferred =  e.Preferred};
+                        emailsData.Add(d);
+                    }
+                }
+
+                List<AddressData> addressesData = null;
+                if (request.Addresses != null)
+                {
+                    List<Address> addresses = request.Addresses;
+                    addressesData = new List<AddressData>();
+                    foreach (Address a in addresses)
+                    {
+                        AddressData d = new AddressData { Id = a.Id, Line1 = a.Line1, Line2 = a.Line2, Line3 = a.Line3, City = a.City, StateId = a.StateId, PostalCode = a.PostalCode, OptOut = a.OptOut, Preferred = a.Preferred, TypeId =  a.TypeId};
+                        addressesData.Add(d);
+                    }
+                }
+
+                List<Phytel.API.DataDomain.Contact.DTO.LanguageData> languagesData = null;
+                if (request.Languages != null)
+                {
+                    List<Language> langs = request.Languages;
+                    languagesData = new List<Phytel.API.DataDomain.Contact.DTO.LanguageData>();
+                    foreach (Language l in langs)
+                    {
+                        Phytel.API.DataDomain.Contact.DTO.LanguageData d = new Phytel.API.DataDomain.Contact.DTO.LanguageData {  Id = l.Id, LookUpLanguageId  = l.LookUpLanguageId, Preferred  = l.Preferred};
+                        languagesData.Add(d);
+                    }
+                }
+
+                
+                PutContactResponse response = new PutContactResponse();
+                // [Route("/{Context}/{Version}/{ContractNumber}/Patient/Contact", "PUT")]
+                IRestClient client = new JsonServiceClient();
+                PutContactDataResponse dataDomainResponse =
+                    client.Put<PutContactDataResponse>(string.Format("{0}/{1}/{2}/{3}/patient/contact?UserId={4}",
+                                                                                DDContactServiceUrl,
+                                                                                "NG",
+                                                                                request.Version,
+                                                                                request.ContractNumber,
+                                                                                request.UserId), new PutContactDataRequest
+                                                                                {
+                                                                                   ContactId = request.ContactId,
+                                                                                   Modes = modesData,
+                                                                                   Phones = phonesData,
+                                                                                   Emails = emailsData,
+                                                                                   Addresses = addressesData,
+                                                                                   WeekDays = request.WeekDays,
+                                                                                   TimesOfDaysId = request.TimesOfDaysId,
+                                                                                   Languages = languagesData,
+                                                                                   TimeZoneId = request.TimeZoneId,
+                                                                                   Context = "NG",
+                                                                                   ContractNumber = request.ContractNumber,
+                                                                                   Version = request.Version,
+                                                                                   UserId = request.UserId
+                                                                                } as object);
+                
+                response.Version = dataDomainResponse.Version;
+                response.Success = dataDomainResponse.Success;
+                if (!dataDomainResponse.Success)
+                {
+                    response.Status = dataDomainResponse.Status;
+                }
+                return response;
+            }
+            catch (WebServiceException wse)
+            {
+                Exception ae = new Exception(wse.ResponseBody, wse.InnerException);
+                throw ae;
+            }
+        }
         #endregion
 
     }

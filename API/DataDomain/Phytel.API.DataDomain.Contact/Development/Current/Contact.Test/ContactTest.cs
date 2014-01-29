@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Phytel.API.DataDomain.Contact.DTO;
 
@@ -9,7 +10,7 @@ namespace Phytel.API.DataDomain.Contact.Test
         [TestMethod]
         public void GetContactByPatientId_Test()
         {
-            GetContactDataRequest request = new GetContactDataRequest { PatientId = "52e26f79072ef7191c122328" };
+            GetContactDataRequest request = new GetContactDataRequest { PatientId = "52e26f63072ef7191c11f7e6" };
 
             ContactData response = ContactDataManager.GetContactByPatientId(request);
 
@@ -34,6 +35,40 @@ namespace Phytel.API.DataDomain.Contact.Test
             ContactData response = ContactDataManager.GetContactByPatientId(request);
 
             Assert.IsNotNull(response.ContactId);
+        }
+
+        [TestMethod]
+        public void UpdateContact_Test()
+        {
+            List<int> weekDays = new List<int>();
+            List<string> timesOfday = new List<string>();
+            List<LanguageData> language = new List<LanguageData>();
+            List<CommModeData> modes = new List<CommModeData>();
+
+            //weekDays = new List<int>();
+            weekDays.Add(6);
+
+            modes.Add(new CommModeData { Id = "52e755d8d43323149870c215", ModeId = "52e17cc2d433232028e9e38f", OptOut = false, Preferred = false });
+            modes.Add(new CommModeData { Id = "52e755dbd43323149870c216", ModeId = "52e17ce6d433232028e9e390", OptOut = false, Preferred = false });
+
+            //timesOfday = new List<string>();
+            //timesOfday.Add("52e17de8d433232028e9e394");
+            //timesOfday.Add("52e17dedd433232028e9e395");
+            
+            
+            PutContactDataRequest request = new PutContactDataRequest {
+                ContactId = "52e971c5d433231c304e8609",
+                UserId = "testmethod",
+                TimeZoneId = "52e1815dd433232028e9e399",
+                Languages = language,
+                WeekDays = weekDays,
+                TimesOfDaysId = timesOfday,
+                Modes = modes
+            };
+
+            bool response = ContactDataManager.UpdateContact(request);
+
+            Assert.IsTrue(response);
         }
     }
 }

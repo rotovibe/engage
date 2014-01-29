@@ -359,6 +359,7 @@ namespace Phytel.API.AppDomain.NG.Service
             }
         }
 
+        #region Contact
         public GetContactResponse Get(GetContactRequest request)
         {
             GetContactResponse response = new GetContactResponse();
@@ -384,6 +385,33 @@ namespace Phytel.API.AppDomain.NG.Service
                 return response;
             }
         }
+
+        public PutContactResponse Post(PutContactRequest request)
+        {
+            PutContactResponse response = new PutContactResponse();
+            try
+            {
+                NGManager ngm = new NGManager();
+
+                ValidateTokenResponse result = ngm.IsUserValidated(request.Version, request.Token);
+                if (result.UserId.Trim() != string.Empty)
+                {
+                    request.UserId = result.UserId;
+                    response = ngm.PutContact(request);
+                }
+                else
+                    throw new UnauthorizedAccessException();
+
+                return response;
+            }
+            catch (Exception ex)
+            {
+                //TODO: Log this to C3 database via ASE
+                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+                return response;
+            }
+        }
+        #endregion
 
         #region LookUps ContactRelated
         public GetAllCommModesResponse Get(GetAllCommModesRequest request)

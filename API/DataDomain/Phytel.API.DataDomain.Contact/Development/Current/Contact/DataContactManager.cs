@@ -19,5 +19,21 @@ namespace Phytel.API.DataDomain.Contact
             }
             return result;
         }
+
+
+        public static bool UpdateContact(PutContactDataRequest request)
+        {
+            bool status = false;
+            try
+            {
+                IContactRepository<PutContactDataResponse> repo = ContactRepositoryFactory<PutContactDataResponse>.GetContactRepository(request.ContractNumber, request.Context);
+                status = (bool)repo.Update(request);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return status;
+        }
     }
 }   

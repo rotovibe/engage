@@ -22,6 +22,6 @@ namespace Phytel.API.AppDomain.NG.DTO
         [ApiMember(Name = "Token", Description = "Request Token", ParameterType = "QueryString", DataType = "string", IsRequired = true)]
         public string Token { get; set; }
 
-
+        public GetContactRequest() { }
     }
 }
