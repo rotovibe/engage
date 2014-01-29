@@ -1,17 +1,15 @@
+using MongoDB.Bson;
+using MongoDB.Bson.Serialization;
+using MongoDB.Driver;
+using MongoDB.Driver.Builders;
+using Phytel.API.Common.Format;
+using Phytel.API.DataDomain.Patient.DTO;
+using Phytel.API.DataDomain.Patient.MongoDB.DTO;
+using Phytel.API.Interface;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Phytel.API.DataDomain.Patient.DTO;
-using Phytel.API.Interface;
-using MongoDB.Driver;
 using MB = MongoDB.Driver.Builders;
-using MongoDB.Bson;
-using MongoDB.Driver.Linq;
-using Phytel.API.Common.Format;
-using Phytel.API.DataDomain.Patient.DTO;
-using MongoDB.Driver.Builders;
 
 namespace Phytel.API.DataDomain.Patient
 {
@@ -87,7 +85,34 @@ namespace Phytel.API.DataDomain.Patient
 
         public object Update(object entity)
         {
-            throw new NotImplementedException();
+            PutProblemInCohortPatientViewRequest p = (PutProblemInCohortPatientViewRequest)entity;
+            PutProblemInCohortPatientViewResponse resp = new PutProblemInCohortPatientViewResponse();
+
+            try
+            {
+                CohortPatientViewData cpvd = p.CohortPatientView;
+                using (PatientMongoContext ctx = new PatientMongoContext(_dbName))
+                {
+                    var q = MB.Query<MECohortPatientView>.EQ(b => b.Id, ObjectId.Parse(p.CohortPatientView.Id));
+                    List<MESearchField> sfds = DTOUtils.CloneAppDomainCohortPatientViews(p.CohortPatientView.SearchFields);
+
+                    var uv = new List<MB.UpdateBuilder>();
+                    if (!String.IsNullOrEmpty(cpvd.LastName)) uv.Add(MB.Update.Set(MECohortPatientView.LastNameProperty, cpvd.LastName));
+                    if (!String.IsNullOrEmpty(cpvd.PatientID)) uv.Add(MB.Update.Set(MECohortPatientView.PatientIDProperty, ObjectId.Parse(cpvd.PatientID)));
+                    if (!String.IsNullOrEmpty(cpvd.Version)) uv.Add(MB.Update.Set(MECohortPatientView.VersionProperty, cpvd.Version));
+
+                    if (p.CohortPatientView != null) { uv.Add(MB.Update.SetWrapped<List<MESearchField>>(MECohortPatientView.SearchFieldsProperty, sfds)); }
+
+                    IMongoUpdate update = MB.Update.Combine(uv);
+                    ctx.CohortPatientViews.Collection.Update(q, update);
+                }
+                resp.CohortPatientViewId = p.CohortPatientView.Id;
+                return resp;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("DataDomain:Update():" + ex.Message, ex.InnerException);
+            }
         }
 
         public List<PatientData> Select(string query, string[] filterData, string querySort, int skip, int take)
@@ -146,13 +171,13 @@ namespace Phytel.API.DataDomain.Patient
                         jsonQuery += "{ $or : [  ";
                         jsonQuery += "{ sf: { $elemMatch : {'val':/^";
                         jsonQuery += string.Format("{0}/i, ", filterData[0].Trim());
-                        jsonQuery += "'" + SearchField.FieldNameProperty + "':'FN'}}},  ";
-                        jsonQuery += "{ sf: { $elemMatch : {'" + SearchField.ValueProperty + "':/^";
+                        jsonQuery += "'" + MESearchField.FieldNameProperty + "':'FN'}}},  ";
+                        jsonQuery += "{ sf: { $elemMatch : {'" + MESearchField.ValueProperty + "':/^";
                         jsonQuery += string.Format("{0}/i, ", filterData[0].Trim());
-                        jsonQuery += "'" + SearchField.FieldNameProperty + "':'LN'}}},  ";
-                        jsonQuery += "{ sf: { $elemMatch : {'" + SearchField.ValueProperty + "':/^";
+                        jsonQuery += "'" + MESearchField.FieldNameProperty + "':'LN'}}},  ";
+                        jsonQuery += "{ sf: { $elemMatch : {'" + MESearchField.ValueProperty + "':/^";
                         jsonQuery += string.Format("{0}/i, ", filterData[0].Trim());
-                        jsonQuery += "'" + SearchField.FieldNameProperty + "':'PN'}}}]}]}";
+                        jsonQuery += "'" + MESearchField.FieldNameProperty + "':'PN'}}}]}]}";
                     }
                     else
                     {
@@ -162,16 +187,16 @@ namespace Phytel.API.DataDomain.Patient
                         jsonQuery += string.Format("{0},  ", query);
                         jsonQuery += "{ $and : [  ";
                         jsonQuery += "{ $or : [  ";
-                        jsonQuery += "{ sf : { $elemMatch: {'" + SearchField.ValueProperty + "':/^";
+                        jsonQuery += "{ sf : { $elemMatch: {'" + MESearchField.ValueProperty + "':/^";
                         jsonQuery += string.Format("{0}/i, ", filterData[0].Trim());
-                        jsonQuery += "'" + SearchField.FieldNameProperty + "':'FN'}}},  ";
-                        jsonQuery += "{ sf : { $elemMatch: {'" + SearchField.ValueProperty + "':/^";
+                        jsonQuery += "'" + MESearchField.FieldNameProperty + "':'FN'}}},  ";
+                        jsonQuery += "{ sf : { $elemMatch: {'" + MESearchField.ValueProperty + "':/^";
                         jsonQuery += string.Format("{0}/i, ", filterData[0].Trim());
-                        jsonQuery += "'" + SearchField.FieldNameProperty + "':'PN'}}} ";
+                        jsonQuery += "'" + MESearchField.FieldNameProperty + "':'PN'}}} ";
                         jsonQuery += "]}, ";
-                        jsonQuery += "{ sf: { $elemMatch : {'" + SearchField.ValueProperty + "':/^";
+                        jsonQuery += "{ sf: { $elemMatch : {'" + MESearchField.ValueProperty + "':/^";
                         jsonQuery += string.Format("{0}/i, ", filterData[1].Trim());
-                        jsonQuery += "'" + SearchField.FieldNameProperty + "':'LN'}}}]}]}}";
+                        jsonQuery += "'" + MESearchField.FieldNameProperty + "':'LN'}}}]}]}}";
                     }
                 }
 
@@ -194,7 +219,7 @@ namespace Phytel.API.DataDomain.Patient
                 {
                     using (PatientMongoContext ctx = new PatientMongoContext(_dbName))
                     {
-                        BsonDocument searchQuery = MongoDB.Bson.Serialization.BsonSerializer.Deserialize<BsonDocument>(jsonQuery);
+                        BsonDocument searchQuery = BsonSerializer.Deserialize<BsonDocument>(jsonQuery);
                         QueryDocument queryDoc = new QueryDocument(searchQuery);
                         SortByBuilder builder = PatientsUtils.BuildSortByBuilder(querySort);
 
@@ -208,15 +233,15 @@ namespace Phytel.API.DataDomain.Patient
                                 PatientData cohortPatient = new PatientData();
                                 cohortPatient.ID = pat.PatientID.ToString();
 
-                                foreach (SearchField sf in pat.SearchFields)
+                                foreach (MESearchField sf in pat.SearchFields)
                                 {
-                                    cohortPatient.FirstName = ((SearchField)pat.SearchFields.Where(x => x.FieldName == "FN").FirstOrDefault()).Value;
-                                    cohortPatient.LastName = ((SearchField)pat.SearchFields.Where(x => x.FieldName == "LN").FirstOrDefault()).Value;
-                                    cohortPatient.Gender = ((SearchField)pat.SearchFields.Where(x => x.FieldName == "G").FirstOrDefault()).Value;
-                                    cohortPatient.DOB = CommonFormatter.FormatDateOfBirth(((SearchField)pat.SearchFields.Where(x => x.FieldName == "DOB").FirstOrDefault()).Value);
-                                    cohortPatient.MiddleName = ((SearchField)pat.SearchFields.Where(x => x.FieldName == "MN").FirstOrDefault()).Value;
-                                    cohortPatient.Suffix = ((SearchField)pat.SearchFields.Where(x => x.FieldName == "SFX").FirstOrDefault()).Value;
-                                    cohortPatient.PreferredName = ((SearchField)pat.SearchFields.Where(x => x.FieldName == "PN").FirstOrDefault()).Value;
+                                    cohortPatient.FirstName = ((MESearchField)pat.SearchFields.Where(x => x.FieldName == "FN").FirstOrDefault()).Value;
+                                    cohortPatient.LastName = ((MESearchField)pat.SearchFields.Where(x => x.FieldName == "LN").FirstOrDefault()).Value;
+                                    cohortPatient.Gender = ((MESearchField)pat.SearchFields.Where(x => x.FieldName == "G").FirstOrDefault()).Value;
+                                    cohortPatient.DOB = CommonFormatter.FormatDateOfBirth(((MESearchField)pat.SearchFields.Where(x => x.FieldName == "DOB").FirstOrDefault()).Value);
+                                    cohortPatient.MiddleName = ((MESearchField)pat.SearchFields.Where(x => x.FieldName == "MN").FirstOrDefault()).Value;
+                                    cohortPatient.Suffix = ((MESearchField)pat.SearchFields.Where(x => x.FieldName == "SFX").FirstOrDefault()).Value;
+                                    cohortPatient.PreferredName = ((MESearchField)pat.SearchFields.Where(x => x.FieldName == "PN").FirstOrDefault()).Value;
                                 }
                                 cohortPatientList.Add(cohortPatient);
                             });

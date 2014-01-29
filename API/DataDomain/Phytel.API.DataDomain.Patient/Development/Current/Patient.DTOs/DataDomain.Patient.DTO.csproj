@@ -72,6 +72,10 @@
   <ItemGroup>
     <Compile Include="GetCohortPatientsDataRequest.cs" />
     <Compile Include="GetCohortPatientsDataResponse.cs" />
+    <Compile Include="GetCohortPatientViewRequest.cs" />
+    <Compile Include="GetCohortPatientViewResponse.cs" />
+    <Compile Include="PutProblemInCohortPatientViewRequest.cs" />
+    <Compile Include="PutProblemInCohortPatientViewResponse.cs" />
     <Compile Include="GetPatientsDataRequest.cs" />
     <Compile Include="GetPatientsDataResponse.cs" />
     <Compile Include="CohortPatientViewData.cs" />

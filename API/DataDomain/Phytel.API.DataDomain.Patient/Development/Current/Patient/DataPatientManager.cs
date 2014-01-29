@@ -5,6 +5,9 @@ using System;
 using System.Configuration;
 using ServiceStack.ServiceClient.Web;
 using Phytel.API.DataDomain.Cohort.DTO;
+using System.Collections.Generic;
+using Phytel.API.Interface;
+using System.Linq;
 
 namespace Phytel.API.DataDomain.Patient
 {
@@ -120,6 +123,42 @@ namespace Phytel.API.DataDomain.Patient
         {
             IPatientRepository<PutUpdatePatientDataRequest> repo = PatientRepositoryFactory<PutUpdatePatientDataRequest>.GetPatientRepository(request.ContractNumber, request.Context);
             PutUpdatePatientDataResponse result = repo.Update(request) as PutUpdatePatientDataResponse;
+            return result;
+        }
+
+        public static PutProblemInCohortPatientViewResponse UpdateCohortPatientViewProblem(PutProblemInCohortPatientViewRequest request)
+        {
+            IPatientRepository<PutProblemInCohortPatientViewRequest> repo = PatientRepositoryFactory<PutProblemInCohortPatientViewRequest>.GetCohortPatientViewRepository(request.ContractNumber, request.Context);
+            PutProblemInCohortPatientViewResponse result = repo.Update(request) as PutProblemInCohortPatientViewResponse;
+            return result;
+        }
+
+        public static GetCohortPatientViewResponse GetCohortPatientView(GetCohortPatientViewRequest request)
+        {
+            IPatientRepository<GetCohortPatientViewRequest> repo = PatientRepositoryFactory<GetCohortPatientViewRequest>.GetCohortPatientViewRepository(request.ContractNumber, request.Context);
+            GetCohortPatientViewResponse result = new GetCohortPatientViewResponse();
+            ICollection<SelectExpression> selectExpressions = new List<SelectExpression>();
+
+            // PatientID
+            SelectExpression patientSelectExpression = new SelectExpression();
+            patientSelectExpression.FieldName = MECohortPatientView.PatientIDProperty;
+            patientSelectExpression.Type = SelectExpressionType.EQ;
+            patientSelectExpression.Value = request.PatientID;
+            patientSelectExpression.ExpressionOrder = 1;
+            patientSelectExpression.GroupID = 1;
+            selectExpressions.Add(patientSelectExpression);
+
+            APIExpression apiExpression = new APIExpression();
+            apiExpression.Expressions = selectExpressions;
+
+            Tuple<string, IEnumerable<object>> cohortPatientView = repo.Select(apiExpression);
+
+            if (cohortPatientView != null)
+            {
+                List<CohortPatientViewData> cpd = cohortPatientView.Item2.Cast<CohortPatientViewData>().ToList();
+                result.CohortPatientView = cpd[0];
+            }
+
             return result;
         }
     }

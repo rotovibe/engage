@@ -75,6 +75,23 @@ namespace Phytel.API.DataDomain.Patient.Service
             return response;
         }
 
+        public PutProblemInCohortPatientViewResponse Put(PutProblemInCohortPatientViewRequest request)
+        {
+            PutProblemInCohortPatientViewResponse response = new PutProblemInCohortPatientViewResponse();
+            try
+            {
+                response = PatientDataManager.UpdateCohortPatientViewProblem(request);
+                response.Version = request.Version;
+            }
+            catch (Exception ex)
+            {
+                //TODO: Log this to the SQL database via ASE
+                base.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                response.Status = new ServiceStack.ServiceInterface.ServiceModel.ResponseStatus("Exception", ex.Message);
+            }
+            return response;
+        }
+
         public PutPatientPriorityResponse Put(PutPatientPriorityRequest request)
         {
             PutPatientPriorityResponse response = new PutPatientPriorityResponse();
@@ -112,6 +129,23 @@ namespace Phytel.API.DataDomain.Patient.Service
             try
             {
                 response = PatientDataManager.GetCohortPatients(request);
+                response.Version = request.Version;
+            }
+            catch (Exception ex)
+            {
+                //TODO: Log this to the SQL database via ASE
+                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+            }
+            return response;
+        }
+
+        public GetCohortPatientViewResponse Get(GetCohortPatientViewRequest request)
+        {
+            GetCohortPatientViewResponse response = new GetCohortPatientViewResponse();
+
+            try
+            {
+                response = PatientDataManager.GetCohortPatientView(request);
                 response.Version = request.Version;
             }
             catch (Exception ex)

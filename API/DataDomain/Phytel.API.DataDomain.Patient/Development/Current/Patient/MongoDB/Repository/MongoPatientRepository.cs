@@ -34,79 +34,83 @@ namespace Phytel.API.DataDomain.Patient
 
         public object Insert(object newEntity)
         {
-            PutPatientDataRequest request = newEntity as PutPatientDataRequest;
-            MEPatient patient = new MEPatient
-            {
-                Id = ObjectId.GenerateNewId(),
-                FirstName = request.FirstName,
-                LastName = request.LastName,
-                MiddleName = request.MiddleName,
-                Suffix = request.Suffix,
-                PreferredName = request.PreferredName,
-                Gender = request.Gender,
-                DOB = request.DOB,
-                Version = request.Version,
-                //UpdatedBy = security token user id,
-                //DisplayPatientSystemID
-                TTLDate = null,
-                DeleteFlag = false,
-                LastUpdatedOn = System.DateTime.Now
-            };
+            // **** SearchField has been renamed to MESearchField and is in its own class file.
+            // PutPatientSystemDataResponse and request were not checked in. so I had to comment this out.
+            // please get latest
+
+            //PutPatientDataRequest request = newEntity as PutPatientDataRequest;
+            //MEPatient patient = new MEPatient
+            //{
+            //    Id = ObjectId.GenerateNewId(),
+            //    FirstName = request.FirstName,
+            //    LastName = request.LastName,
+            //    MiddleName = request.MiddleName,
+            //    Suffix = request.Suffix,
+            //    PreferredName = request.PreferredName,
+            //    Gender = request.Gender,
+            //    DOB = request.DOB,
+            //    Version = request.Version,
+            //    //UpdatedBy = security token user id,
+            //    //DisplayPatientSystemID
+            //    TTLDate = null,
+            //    DeleteFlag = false,
+            //    LastUpdatedOn = System.DateTime.Now
+            //};
 
 
-            MECohortPatientView ptView = new DTO.MECohortPatientView();
+            //MECohortPatientView ptView = new DTO.MECohortPatientView();
 
-            ptView.PatientID = patient.Id;
-            ptView.LastName = patient.LastName;
-            ptView.SearchFields = new List<SearchField>();
-            ptView.SearchFields.Add(new SearchField { Active = true, FieldName = "FN", Value = patient.FirstName });
-            ptView.SearchFields.Add(new SearchField { Active = true, FieldName = "LN", Value = patient.LastName });
-            ptView.SearchFields.Add(new SearchField { Active = true, FieldName = "G", Value = patient.Gender.ToUpper() });
-            ptView.SearchFields.Add(new SearchField { Active = true, FieldName = "DOB", Value = patient.DOB });
-            ptView.SearchFields.Add(new SearchField { Active = true, FieldName = "MN", Value = patient.MiddleName });
-            ptView.SearchFields.Add(new SearchField { Active = true, FieldName = "SFX", Value = patient.Suffix });
-            ptView.SearchFields.Add(new SearchField { Active = true, FieldName = "PN", Value = patient.PreferredName });
-
-
-            using (PatientMongoContext ctx = new PatientMongoContext(_dbName))
-            {
-                ctx.Patients.Collection.Insert(patient);
-                ctx.CohortPatientViews.Collection.Insert(ptView);
-            }
-
-            if (string.IsNullOrEmpty(request.SystemID) == false)
-            {
-                PutPatientSystemDataRequest systemRequest = new PutPatientSystemDataRequest
-                {
-                    SystemID = request.SystemID,
-                    SystemName = request.SystemName,
-                    PatientID = patient.Id.ToString()
-                };
+            //ptView.PatientID = patient.Id;
+            //ptView.LastName = patient.LastName;
+            //ptView.SearchFields = new List<MESearchField>();
+            //ptView.SearchFields.Add(new MESearchField { Active = true, FieldName = "FN", Value = patient.FirstName });
+            //ptView.SearchFields.Add(new MESearchField { Active = true, FieldName = "LN", Value = patient.LastName });
+            //ptView.SearchFields.Add(new MESearchField { Active = true, FieldName = "G", Value = patient.Gender.ToUpper() });
+            //ptView.SearchFields.Add(new MESearchField { Active = true, FieldName = "DOB", Value = patient.DOB });
+            //ptView.SearchFields.Add(new MESearchField { Active = true, FieldName = "MN", Value = patient.MiddleName });
+            //ptView.SearchFields.Add(new MESearchField { Active = true, FieldName = "SFX", Value = patient.Suffix });
+            //ptView.SearchFields.Add(new MESearchField { Active = true, FieldName = "PN", Value = patient.PreferredName });
 
 
+            //using (PatientMongoContext ctx = new PatientMongoContext(_dbName))
+            //{
+            //    ctx.Patients.Collection.Insert(patient);
+            //    ctx.CohortPatientViews.Collection.Insert(ptView);
+            //}
 
-                IRestClient client = new JsonServiceClient();
-                PutPatientSystemDataResponse sysResponse = client.Put<PutPatientSystemDataResponse>(string.Format("{0}/{1}/{2}/{3}/PatientSystem",
-                                                                                        DDPatientSystemUrl,
-                                                                                        "NG",
-                                                                                        request.Version,
-                                                                                        request.ContractNumber), systemRequest);
-
-
-                patient.DisplayPatientSystemID = ObjectId.Parse(sysResponse.PatientSystemId);
-
-                using (PatientMongoContext ctx = new PatientMongoContext(_dbName))
-                {
-                    ctx.Patients.Collection.Save(patient);
-                }
-            }
-
-            return new PutPatientDataResponse
-            {
-                Id = patient.Id.ToString()
-            };
+            //if (string.IsNullOrEmpty(request.SystemID) == false)
+            //{
+            //    PutPatientSystemDataRequest systemRequest = new PutPatientSystemDataRequest
+            //    {
+            //        SystemID = request.SystemID,
+            //        SystemName = request.SystemName,
+            //        PatientID = patient.Id.ToString()
+            //    };
 
 
+
+            //    IRestClient client = new JsonServiceClient();
+            //    PutPatientSystemDataResponse sysResponse = client.Put<PutPatientSystemDataResponse>(string.Format("{0}/{1}/{2}/{3}/PatientSystem",
+            //                                                                            DDPatientSystemUrl,
+            //                                                                            "NG",
+            //                                                                            request.Version,
+            //                                                                            request.ContractNumber), systemRequest);
+
+
+            //    patient.DisplayPatientSystemID = ObjectId.Parse(sysResponse.PatientSystemId);
+
+            //    using (PatientMongoContext ctx = new PatientMongoContext(_dbName))
+            //    {
+            //        ctx.Patients.Collection.Save(patient);
+            //    }
+            //}
+
+            //return new PutPatientDataResponse
+            //{
+            //    Id = patient.Id.ToString()
+            //};
+
+            return null;
         }
 
         public object InsertAll(List<object> entities)
@@ -550,9 +554,9 @@ namespace Phytel.API.DataDomain.Patient
                     var findQ = MB.Query<MECohortPatientView>.EQ(b => b.PatientID, ObjectId.Parse(request.Id));
                     MECohortPatientView cPV = ctx.CohortPatientViews.Collection.Find(findQ).FirstOrDefault();
                     cPV.SearchFields.ForEach(s => UpdateProperty(request, s));
-                    List<SearchField> sfs = cPV.SearchFields.ToList<SearchField>();
+                    List<MESearchField> sfs = cPV.SearchFields.ToList<MESearchField>();
 
-                    ctx.CohortPatientViews.Collection.Update(findQ, MB.Update.SetWrapped<List<SearchField>>("sf", sfs).Set(MECohortPatientView.LastNameProperty, request.LastName));
+                    ctx.CohortPatientViews.Collection.Update(findQ, MB.Update.SetWrapped<List<MESearchField>>("sf", sfs).Set(MECohortPatientView.LastNameProperty, request.LastName));
                 }
                 return response;
             }
@@ -562,7 +566,7 @@ namespace Phytel.API.DataDomain.Patient
             }
         }
 
-        private void UpdateProperty(PutUpdatePatientDataRequest request, SearchField s)
+        private void UpdateProperty(PutUpdatePatientDataRequest request, MESearchField s)
         {
             if (s.FieldName.Equals("PN"))
             {

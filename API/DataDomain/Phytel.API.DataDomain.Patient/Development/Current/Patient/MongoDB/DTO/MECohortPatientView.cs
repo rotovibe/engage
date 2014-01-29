@@ -9,7 +9,7 @@ using System.ComponentModel;
 namespace Phytel.API.DataDomain.Patient.DTO
 {
     [BsonIgnoreExtraElements(false)]
-    [MongoIndex(Keys = new string[] { SearchFieldsProperty + "." + SearchField.FieldNameProperty, SearchFieldsProperty + "." + SearchField.ValueProperty, SearchFieldsProperty + "." + SearchField.ActiveProperty })]
+    [MongoIndex(Keys = new string[] { SearchFieldsProperty + "." + MESearchField.FieldNameProperty, SearchFieldsProperty + "." + MESearchField.ValueProperty, SearchFieldsProperty + "." + MESearchField.ActiveProperty })]
     public class MECohortPatientView : IMongoEntity<ObjectId>
     {
         public MECohortPatientView() { Id = ObjectId.GenerateNewId(); }
@@ -29,7 +29,7 @@ namespace Phytel.API.DataDomain.Patient.DTO
         public ObjectId PatientID { get; set; }
 
         [BsonElement(SearchFieldsProperty)]
-        public List<SearchField> SearchFields { get; set; }
+        public List<MESearchField> SearchFields { get; set; }
 
         [BsonElement(LastNameProperty)]
         public string LastName { get; set; }
@@ -42,22 +42,6 @@ namespace Phytel.API.DataDomain.Patient.DTO
         [BsonIgnoreIfNull(true)]
         [BsonElement(ExtraElementsProperty)]
         Dictionary<string, object> ExtraElements { get; set; }
-    }
-
-    public class SearchField
-    {
-        public const string FieldNameProperty = "fldn";
-        public const string ValueProperty = "val";
-        public const string ActiveProperty = "act";
-
-        [BsonElement(FieldNameProperty)]
-        public string FieldName { get; set; }
-
-        [BsonElement(ValueProperty)]
-        public string Value { get; set; }
-
-        [BsonElement(ActiveProperty)]
-        public bool Active { get; set; }
     }
 }
 
