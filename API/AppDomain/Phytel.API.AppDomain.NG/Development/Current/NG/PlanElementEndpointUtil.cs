@@ -1,5 +1,6 @@
 ﻿using Phytel.API.AppDomain.NG.DTO;
 using Phytel.API.AppDomain.NG.PlanCOR;
+using Phytel.API.DataDomain.Patient.DTO;
 using Phytel.API.DataDomain.PatientProblem.DTO;
 using ServiceStack.Service;
 using ServiceStack.ServiceClient.Web;
@@ -16,6 +17,7 @@ namespace Phytel.API.AppDomain.NG
     public static class PlanElementEndpointUtil
     {
         static readonly string DDPatientProblemServiceUrl = ConfigurationManager.AppSettings["DDPatientProblemServiceUrl"];
+        static readonly string DDPatientServiceUrl = ConfigurationManager.AppSettings["DDPatientServiceUrl"];
         static readonly string DDProgramServiceUrl = ConfigurationManager.AppSettings["DDProgramServiceUrl"];
 
         public static bool DoesPatientProblemExist(string probId, PlanElementEventArg e)
@@ -92,6 +94,61 @@ namespace Phytel.API.AppDomain.NG
             pd = NGUtils.FormatProgramDetail(resp.Program);
 
             return pd;
+        }
+
+        internal static CohortPatientViewData RequestCohortPatientViewData(string patientId)
+        {
+            try
+            {
+                string version = "v1";
+                string contractNumber = "InHealth001";
+                string context = "NG";
+
+                IRestClient client = new JsonServiceClient();
+                GetCohortPatientViewResponse response =
+                    client.Get<GetCohortPatientViewResponse>(string.Format("{0}/{1}/{2}/{3}/patient/{4}/cohortpatientview/",
+                    DDPatientServiceUrl,
+                    context,
+                    version,
+                    contractNumber,
+                    patientId));
+
+                return response.CohortPatientView;
+            }
+            catch (WebServiceException wse)
+            {
+                Exception ae = new Exception(wse.ResponseBody, wse.InnerException);
+                throw ae;
+            }
+        }
+
+        internal static void UpdateCohortPatientViewProblem(CohortPatientViewData cpvd, string patientId)
+        {
+            try
+            {
+                string version = "v1";
+                string contractNumber = "InHealth001";
+                string context = "NG";
+
+                IRestClient client = new JsonServiceClient();
+                PutProblemInCohortPatientViewResponse response =
+                    client.Put<PutProblemInCohortPatientViewResponse>(string.Format("{0}/{1}/{2}/{3}/patient/{4}/cohortpatientview/update",
+                    DDPatientServiceUrl,
+                    context,
+                    version,
+                    contractNumber,
+                    patientId), new PutProblemInCohortPatientViewRequest
+                    {
+                        CohortPatientView = cpvd,
+                        ContractNumber = contractNumber,
+                        PatientID = patientId
+                    } as object);
+            }
+            catch (WebServiceException wse)
+            {
+                Exception ae = new Exception(wse.ResponseBody, wse.InnerException);
+                throw ae;
+            }
         }
     }
 }

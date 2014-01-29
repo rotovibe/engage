@@ -34,11 +34,11 @@ example for the opt-out series:
                     },
 					{
                       "ElementType" : 17,
-                      "ElementId" : "They chickened out."
+                      "Tag" : "They chickened out."
                     },
 					{
                       "ElementType" : 18,
-                      "ElementId" : "1/1/2014"
+                      "Tag" : "1/1/2014"
                     }]
             }
          ]

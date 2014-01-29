@@ -1,5 +1,6 @@
 ﻿using Phytel.API.AppDomain.NG.DTO;
 using Phytel.API.AppDomain.NG.PlanSpecification;
+using Phytel.API.DataDomain.Patient.DTO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -268,6 +269,42 @@ namespace Phytel.API.AppDomain.NG
             catch (Exception ex)
             {
                 throw new Exception("AppDomain:SpawnElementsInList():" + ex.Message, ex.InnerException);
+            }
+        }
+
+        internal static void RegisterProblemCodeToPatient(string problemId, string patientId)
+        {
+            try
+            {
+                CohortPatientViewData cpvd = GetCohortPatientViewRecord(patientId);
+                if (!cpvd.SearchFields.Exists(sf => sf.Value == problemId))
+                {
+                    cpvd.SearchFields.Add(new SearchFieldData
+                    {
+                        Value = problemId,
+                        Active = true,
+                        FieldName = "Problem"
+                    });
+                }
+
+                PlanElementEndpointUtil.UpdateCohortPatientViewProblem(cpvd, patientId);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("AppDomain:RegisterProblemCodeToPatient():" + ex.Message, ex.InnerException);
+            }
+        }
+
+        private static CohortPatientViewData GetCohortPatientViewRecord(string patientId)
+        {
+            try
+            {
+                CohortPatientViewData cpvd = PlanElementEndpointUtil.RequestCohortPatientViewData(patientId);
+                return cpvd;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("AppDomain:GetCohortPatientViewRecord():" + ex.Message, ex.InnerException);
             }
         }
     }
