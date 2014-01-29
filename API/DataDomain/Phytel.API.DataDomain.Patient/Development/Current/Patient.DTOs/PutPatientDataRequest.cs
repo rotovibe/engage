@@ -27,6 +27,12 @@ namespace Phytel.API.DataDomain.Patient.DTO
         [ApiMember(Name = "DOB", Description = "Date of birth of the patient being created", ParameterType = "property", DataType = "string", IsRequired = false)]
         public string DOB { get; set; }
 
+        [ApiMember(Name = "SystemID", Description = "System ID of the patient being created", ParameterType = "property", DataType = "string", IsRequired = false)]
+        public string SystemID { get; set; }
+
+        [ApiMember(Name = "SystemName", Description = "System name of the patient being created", ParameterType = "property", DataType = "string", IsRequired = false)]
+        public string SystemName { get; set; }
+
         [ApiMember(Name = "Context", Description = "Product Context creating the patient", ParameterType = "property", DataType = "string", IsRequired = true)]
         public string Context { get; set; }
 

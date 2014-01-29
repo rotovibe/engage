@@ -12,12 +12,20 @@ using MongoDB.Driver.Linq;
 using Phytel.API.Common.Format;
 using Phytel.API.DataDomain.Patient.DTO;
 using MongoDB.Driver.Builders;
+using Phytel.API.DataDomain.PatientSystem.DTO;
+using ServiceStack.Service;
+using ServiceStack.ServiceClient.Web;
+using System.Configuration;
 
 namespace Phytel.API.DataDomain.Patient
 {
     public class MongoPatientRepository<T> : IPatientRepository<T>
     {
         private string _dbName = string.Empty;
+
+        #region endpoint addresses
+        protected static readonly string DDPatientSystemUrl = ConfigurationManager.AppSettings["DDPatientSystemServiceUrl"];
+        #endregion
 
         public MongoPatientRepository(string contractDBName)
         {
@@ -48,6 +56,33 @@ namespace Phytel.API.DataDomain.Patient
             using (PatientMongoContext ctx = new PatientMongoContext(_dbName))
             {
                 ctx.Patients.Collection.Insert(patient);
+            }
+
+            if (string.IsNullOrEmpty(request.SystemID) == false)
+            {
+                PutPatientSystemDataRequest systemRequest = new PutPatientSystemDataRequest
+                {
+                    SystemID = request.SystemID,
+                    SystemName = request.SystemName,
+                    PatientID = patient.Id.ToString()
+                };
+
+
+
+                IRestClient client = new JsonServiceClient();
+                PutPatientSystemDataResponse sysResponse = client.Put<PutPatientSystemDataResponse>(string.Format("{0}/{1}/{2}/{3}/PatientSystem",
+                                                                                        DDPatientSystemUrl,
+                                                                                        "NG",
+                                                                                        request.Version,
+                                                                                        request.ContractNumber), systemRequest);
+
+
+                patient.DisplayPatientSystemID = ObjectId.Parse(sysResponse.PatientSystemId);
+
+                using (PatientMongoContext ctx = new PatientMongoContext(_dbName))
+                {
+                    ctx.Patients.Collection.Save(patient);
+                }
             }
 
             return new PutPatientDataResponse
