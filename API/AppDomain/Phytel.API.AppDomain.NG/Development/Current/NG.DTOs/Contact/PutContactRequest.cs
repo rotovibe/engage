@@ -9,7 +9,7 @@ namespace Phytel.API.AppDomain.NG.DTO
     [Route("/{Version}/{ContractNumber}/Patient/Contact", "POST")]
     public class PutContactRequest : IAppDomainRequest
     {
-        [ApiMember(Name = "ContactId", Description = "ID of the Contact being requested", ParameterType = "property", DataType = "string", IsRequired = false)]
+        [ApiMember(Name = "ContactId", Description = "ID of the Contact being requested", ParameterType = "property", DataType = "string", IsRequired = true)]
         public string ContactId { get; set; }
 
         [ApiMember(Name = "Modes", Description = "List of CommModes being requested", ParameterType = "property", DataType = "List<CommModeData>", IsRequired = false)]
