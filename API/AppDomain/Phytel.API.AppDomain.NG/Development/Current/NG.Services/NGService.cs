@@ -85,6 +85,8 @@ namespace Phytel.API.AppDomain.NG.Service
                 else
                     throw new UnauthorizedAccessException();
 
+                //audit this request; what type is it?
+
                 return response;
             }
             catch (Exception ex)

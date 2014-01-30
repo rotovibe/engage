@@ -5,11 +5,17 @@ using ServiceStack.Service;
 using ServiceStack.ServiceClient.Web;
 using System;
 using System.Configuration;
+using System.Runtime.CompilerServices;
+using Phytel.API.Common;
 
 namespace Phytel.API.AppDomain.NG
 {
     public abstract class ManagerBase
     {
+        //static member constants for each of the AuditTypes
+        protected const string GetPatientAction = "GetPatient";
+        protected const string GetPatientProblemsAction = "PatientProblems"; 
+        
         protected static readonly string ADSecurityServiceURL = ConfigurationManager.AppSettings["ADSecurityServiceUrl"];
 
         public ValidateTokenResponse IsUserValidated(string version, string token)
@@ -35,6 +41,24 @@ namespace Phytel.API.AppDomain.NG
         {
             DispatchEventArgs args = new DispatchEventArgs { payload = request};
             AuditDispatcher.SendDispatchAsynch(args);
+        }
+
+        protected static void LogAuditData(Phytel.API.Interface.IAppDomainRequest request,  [CallerMemberName] string callingMethod = null)
+        {
+            int audittypeid = 0;
+
+            switch (callingMethod.ToLower())
+            {
+                case GetPatientAction:
+                    audittypeid = 0;
+                    break;
+                
+                default:
+                    break;
+            }
+
+            AuditData auditlog = AuditHelper.GetAuditLog(audittypeid, request, callingMethod);
+            AuditDispatcher.LogAuditAsynch(auditlog);
         }
     }
 }

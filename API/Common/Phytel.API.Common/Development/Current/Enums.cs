@@ -78,4 +78,10 @@ namespace Phytel.API.Common
         Time = 9,
         InputMultiline = 10
     }
+
+    public enum AuditType
+    {
+        GetPatient = 0,
+        GetPatientProblems = 1
+    }
 }

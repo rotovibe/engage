@@ -142,10 +142,6 @@
       <Project>{abe948fb-247e-4955-b3ab-b7c93e10a542}</Project>
       <Name>Phytel.API.Interface</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\..\Phytel.API.AppDomain.Audit\Development\Current\Audit.DTOs\AppDomain.Audit.DTO.csproj">
-      <Project>{ddf2cb2b-6351-44aa-a152-35f82d7d0af2}</Project>
-      <Name>AppDomain.Audit.DTO</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\..\..\Phytel.API.AppDomain.Security\Development\Current\Security.DTOs\AppDomain.Security.DTO.csproj">
       <Project>{5d9c233b-e53d-4be1-b578-1aa9722de1cf}</Project>
       <Name>AppDomain.Security.DTO</Name>

@@ -82,6 +82,9 @@ namespace Phytel.API.AppDomain.NG
                         pResponse.Patient.DisplaySystemName = sysResponse.PatientSystem.SystemName;
                     }
                 }
+
+                LogAuditData(request);
+
                 return pResponse;
             }
             catch (WebServiceException wse)
@@ -106,7 +109,8 @@ namespace Phytel.API.AppDomain.NG
                 Phytel.API.DataDomain.PatientProblem.DTO.GetAllPatientProblemsDataResponse dataDomainResponse = client.Get<Phytel.API.DataDomain.PatientProblem.DTO.GetAllPatientProblemsDataResponse>
                     (string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Problems",
                         DDPatientProblemServiceUrl,
-                        "NG",
+                        //"NG",
+                        "Nightingale",
                         request.Version,
                         request.ContractNumber,
                         request.PatientID));
@@ -122,6 +126,8 @@ namespace Phytel.API.AppDomain.NG
                     pp.Level = p.Level;
                     response.Add(pp);
                 }
+
+                LogAuditData(request);
 
                 return response;
             }

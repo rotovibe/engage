@@ -34,6 +34,24 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="ASECore">
+      <HintPath>..\..\..\..\..\..\Client Apps\Atmosphere\ASEProcessor\Development\Current\References\ASECore.dll</HintPath>
+    </Reference>
+    <Reference Include="ASEData">
+      <HintPath>..\..\..\..\..\..\Client Apps\Atmosphere\ASEProcessor\Development\Current\References\ASEData.dll</HintPath>
+    </Reference>
+    <Reference Include="Atmosphere.Core">
+      <HintPath>..\..\..\..\..\..\Client Apps\Atmosphere\Nightingale\Development\Current\Nightingale.Login\Nightingale.Login.Website.Port.CoreReferences\Atmosphere.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Atmosphere.Core.Business">
+      <HintPath>..\..\..\..\..\..\Client Apps\Atmosphere\Atmosphere.Site\Development\Current\CoreReferences\Atmosphere.Core.Business.dll</HintPath>
+    </Reference>
+    <Reference Include="Atmosphere.Core.Data">
+      <HintPath>..\..\..\..\..\..\Client Apps\Atmosphere\Atmosphere.Site\Development\Current\CoreReferences\Atmosphere.Core.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="Phytel.Framework.SQL">
+      <HintPath>..\..\..\..\..\..\Client Apps\Atmosphere\Atmosphere.Site\Development\Current\CoreReferences\Phytel.Framework.SQL.dll</HintPath>
+    </Reference>
     <Reference Include="ServiceStack">
       <HintPath>..\..\..\..\packages\ServiceStack.3.9.70\lib\net35\ServiceStack.dll</HintPath>
     </Reference>
@@ -58,6 +76,7 @@
     <Reference Include="System" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -65,7 +84,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Audit\AuditData.cs" />
     <Compile Include="Audit\AuditDispatcher.cs" />
+    <Compile Include="Audit\AuditHelper.cs" />
     <Compile Include="Audit\DispatchEventArgs.cs" />
     <Compile Include="Audit\DispatchRequest.cs" />
     <Compile Include="Enums.cs" />
@@ -83,10 +104,6 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\AppDomain\Phytel.API.AppDomain.Audit\Development\Current\Audit.DTOs\AppDomain.Audit.DTO.csproj">
-      <Project>{ddf2cb2b-6351-44aa-a152-35f82d7d0af2}</Project>
-      <Name>AppDomain.Audit.DTO</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\..\..\Interfaces\Development\Current\Phytel.API.Interface\Phytel.API.Interface.csproj">
       <Project>{abe948fb-247e-4955-b3ab-b7c93e10a542}</Project>
       <Name>Phytel.API.Interface</Name>
