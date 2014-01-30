@@ -2,6 +2,7 @@
 //using Phytel.API.AppDomain.Audit.DTO;
 using System;
 using System.Configuration;
+using System.Data;
 using System.IO;
 using System.Xml;
 using System.Xml.Serialization;
@@ -66,22 +67,28 @@ namespace Phytel.API.Common.Audit
             QueueMessage newMessage = null;
 
             //where should I get this?
-            string messageQueue = @".\private$\c3audit"; // ApplicationSettingService.Instance.GetSetting("AUDIT_QUEUE").Value;
-            //string messageQueue = "fake";
+            string dbName = ConfigurationManager.AppSettings.Get("PhytelServicesConnName");
 
-            string xmlBody = ToXML(auditLog);
+            DataSet ds = Phytel.Services.SQLDataService.Instance.ExecuteSQL(dbName, false, "Select [Value] From ApplicationSetting Where [Key] = 'AUDIT_QUEUE'");
 
-            newMessage = new QueueMessage(Phytel.Framework.ASE.Data.Common.ASEMessageType.Process, messageQueue);
-            newMessage.Body = xmlBody;
+            if (ds.Tables[0].Rows.Count > 0)
+            {
+                string messageQueue = ds.Tables[0].Rows[0]["Value"].ToString();
+                //string messageQueue = "fake";
 
-            string title = string.Empty;
-            if (auditLog.Type.ToString() == "PageView")
-                title = auditLog.Type.ToString() + " - " + auditLog.SourcePage;
-            else
-                title = auditLog.Type.ToString();
+                string xmlBody = ToXML(auditLog);
 
-            MessageQueueHelper.SendMessage(@messageQueue, newMessage, title);
+                newMessage = new QueueMessage(Phytel.Framework.ASE.Data.Common.ASEMessageType.Process, messageQueue);
+                newMessage.Body = xmlBody;
 
+                string title = string.Empty;
+                if (auditLog.Type.ToString() == "PageView")
+                    title = auditLog.Type.ToString() + " - " + auditLog.SourcePage;
+                else
+                    title = auditLog.Type.ToString();
+
+                MessageQueueHelper.SendMessage(@messageQueue, newMessage, title);
+            }
             //return auditLog;
         }
 
