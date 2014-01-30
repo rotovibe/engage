@@ -20,15 +20,15 @@ namespace Phytel.API.AppDomain.NG
         static readonly string DDPatientServiceUrl = ConfigurationManager.AppSettings["DDPatientServiceUrl"];
         static readonly string DDProgramServiceUrl = ConfigurationManager.AppSettings["DDProgramServiceUrl"];
 
-        public static bool DoesPatientProblemExist(string probId, PlanElementEventArg e)
+        public static PatientProblemData GetPatientProblem(string probId, PlanElementEventArg e)
         {
             try
             {
-                bool result = false;
+                PatientProblemData result = null;
 
                 IRestClient client = new JsonServiceClient();
-                PutNewPatientProblemResponse dataDomainResponse =
-                   client.Get<PutNewPatientProblemResponse>(
+                GetPatientProblemsDataResponse dataDomainResponse =
+                   client.Get<GetPatientProblemsDataResponse>(
                    string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Problem/?ProblemId={5}",
                    DDPatientProblemServiceUrl,
                    "NG",
@@ -39,7 +39,7 @@ namespace Phytel.API.AppDomain.NG
 
                 if (dataDomainResponse.PatientProblem != null)
                 {
-                    result = true;
+                    result = dataDomainResponse.PatientProblem;
                 }
 
                 return result;
@@ -172,6 +172,38 @@ namespace Phytel.API.AppDomain.NG
                        UserId = userId,
                        Level = 1
                    } as object);
+                return dataDomainResponse;
+            }
+            catch (WebServiceException wse)
+            {
+                Exception ae = new Exception(wse.ResponseBody, wse.InnerException);
+                throw ae;
+            }
+        }
+
+        internal static PutUpdatePatientProblemResponse UpdatePatientProblem(string patientId, string userId, string elementId, PatientProblemData ppd, bool _active)
+        {
+            try
+            {
+                //register call to remote serivce.
+                IRestClient client = new JsonServiceClient();
+                PutUpdatePatientProblemResponse dataDomainResponse =
+                   client.Put<PutUpdatePatientProblemResponse>(
+                   string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Problem/Update/",
+                   DDPatientProblemServiceUrl,
+                   "NG",
+                   "v1",
+                   "InHealth001",
+                   patientId), new PutUpdatePatientProblemRequest
+                   {
+                       Id = ppd.ID,
+                       ProblemId = elementId,
+                       Active = _active,
+                       Featured = true,
+                       UserId = userId,
+                       Level = 1
+                   } as object);
+
                 return dataDomainResponse;
             }
             catch (WebServiceException wse)

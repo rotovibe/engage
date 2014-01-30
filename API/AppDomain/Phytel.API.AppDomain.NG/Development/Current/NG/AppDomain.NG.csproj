@@ -98,7 +98,8 @@
     <Compile Include="PlanCOR\ProgramPlanProcessor.cs" />
     <Compile Include="PlanElementEndpointUtil.cs" />
     <Compile Include="PlanElementStrategy\ISpawn.cs" />
-    <Compile Include="PlanElementStrategy\SpawnProblemCodeRegistration.cs" />
+    <Compile Include="PlanElementStrategy\UpdateSpawnProblemCode.cs" />
+    <Compile Include="PlanElementStrategy\RegisterSpawnProblemCode.cs" />
     <Compile Include="PlanElementUtil.cs" />
     <Compile Include="PlanSpecification\CompletedSpecification.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

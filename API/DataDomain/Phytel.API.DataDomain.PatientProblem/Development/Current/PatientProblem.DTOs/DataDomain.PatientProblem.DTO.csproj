@@ -76,6 +76,9 @@
     <Compile Include="GetPatientProblemsDataResponse.cs" />
     <Compile Include="GetPatientProblemRequest.cs" />
     <Compile Include="GetPatientProblemResponse.cs" />
+    <Compile Include="Outcome.cs" />
+    <Compile Include="PutUpdatePatientProblemRequest.cs" />
+    <Compile Include="PutUpdatePatientProblemResponse.cs" />
     <Compile Include="PutNewPatientProblemResponse.cs" />
     <Compile Include="GetAllPatientProblemsDataResponse.cs" />
     <Compile Include="PatientProblem.cs" />

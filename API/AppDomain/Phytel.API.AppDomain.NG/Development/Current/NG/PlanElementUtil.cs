@@ -272,11 +272,12 @@ namespace Phytel.API.AppDomain.NG
             }
         }
 
-        internal static void RegisterProblemCodeToPatient(string problemId, string patientId)
+        internal static void RegisterCohortPatientViewProblemToPatient(string problemId, string patientId)
         {
             try
             {
                 CohortPatientViewData cpvd = GetCohortPatientViewRecord(patientId);
+                // check to see if problem exists in the searchfield
                 if (!cpvd.SearchFields.Exists(sf => sf.Value == problemId))
                 {
                     cpvd.SearchFields.Add(new SearchFieldData
