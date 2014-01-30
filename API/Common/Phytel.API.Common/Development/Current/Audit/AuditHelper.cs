@@ -1,19 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using C3.Data;
 using System.Web;
-using C3.Web.Helpers;
 
 namespace Phytel.API.Common.Audit
 {
     public class AuditHelper
     {
-
-
-
-
         /// <summary>
         /// Gets an auditdata record for the current context
         /// </summary>

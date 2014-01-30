@@ -40,18 +40,6 @@
     <Reference Include="ASEData">
       <HintPath>..\..\..\..\..\..\Client Apps\Atmosphere\ASEProcessor\Development\Current\References\ASEData.dll</HintPath>
     </Reference>
-    <Reference Include="Atmosphere.Core">
-      <HintPath>..\..\..\..\..\..\Client Apps\Atmosphere\Nightingale\Development\Current\Nightingale.Login\Nightingale.Login.Website.Port.CoreReferences\Atmosphere.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="Atmosphere.Core.Business">
-      <HintPath>..\..\..\..\..\..\Client Apps\Atmosphere\Atmosphere.Site\Development\Current\CoreReferences\Atmosphere.Core.Business.dll</HintPath>
-    </Reference>
-    <Reference Include="Atmosphere.Core.Data">
-      <HintPath>..\..\..\..\..\..\Client Apps\Atmosphere\Atmosphere.Site\Development\Current\CoreReferences\Atmosphere.Core.Data.dll</HintPath>
-    </Reference>
-    <Reference Include="Phytel.Framework.SQL">
-      <HintPath>..\..\..\..\..\..\Client Apps\Atmosphere\Atmosphere.Site\Development\Current\CoreReferences\Phytel.Framework.SQL.dll</HintPath>
-    </Reference>
     <Reference Include="ServiceStack">
       <HintPath>..\..\..\..\packages\ServiceStack.3.9.70\lib\net35\ServiceStack.dll</HintPath>
     </Reference>

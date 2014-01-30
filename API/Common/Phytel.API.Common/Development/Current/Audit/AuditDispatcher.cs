@@ -1,19 +1,10 @@
-﻿//using Phytel.API.AppDomain.Audit.DTO;
-using Phytel.API.Interface;
-using ServiceStack.Service;
-using ServiceStack.ServiceClient.Web;
+﻿using Phytel.Framework.ASE.Process;
+//using Phytel.API.AppDomain.Audit.DTO;
 using System;
-using System.Collections.Generic;
 using System.Configuration;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using System.IO;
-using System.Xml.Serialization;
 using System.Xml;
-using Phytel.Framework.ASE.Process;
-using C3.Business;
+using System.Xml.Serialization;
 
 namespace Phytel.API.Common.Audit
 {
@@ -75,7 +66,7 @@ namespace Phytel.API.Common.Audit
             QueueMessage newMessage = null;
 
             //where should I get this?
-            string messageQueue = ApplicationSettingService.Instance.GetSetting("AUDIT_QUEUE").Value;
+            string messageQueue = @".\private$\c3audit"; // ApplicationSettingService.Instance.GetSetting("AUDIT_QUEUE").Value;
             //string messageQueue = "fake";
 
             string xmlBody = ToXML(auditLog);
