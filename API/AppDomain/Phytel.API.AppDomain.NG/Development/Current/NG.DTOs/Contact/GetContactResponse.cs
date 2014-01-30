@@ -26,10 +26,5 @@ namespace Phytel.API.AppDomain.NG.DTO
         public string TimeZoneId { get; set; }
         public List<Language> Languages { get; set; }
 
-        public string PreferredPhoneId { get; set; }
-        public string PreferredTextId { get; set; }
-        public string PreferredEmailId { get; set; }
-        public string PreferredAddressId { get; set; }
-        public string PreferredLanguageId { get; set; }
     }
 }

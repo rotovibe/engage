@@ -952,11 +952,6 @@ namespace Phytel.API.AppDomain.NG
                     if (dataDomainResponse != null && dataDomainResponse.Contact != null)
                     {
                         ContactData cd = dataDomainResponse.Contact;
-                        string preferredPhoneId = null;
-                        string preferredTextId = null;
-                        string preferredEmailId = null;
-                        string preferredAddressId = null;
-                        string preferredLanguageId = null;
                         
                         contact = new Contact {
                             Id = cd.ContactId,
@@ -1005,10 +1000,6 @@ namespace Phytel.API.AppDomain.NG
                             {
                                 Phone phone = new Phone { Id = ph.Id, TypeId = ph.TypeId, Number = ph.Number, IsText = ph.IsText, PhonePreferred = ph.PhonePreferred, TextPreferred = ph.TextPreferred, OptOut = ph.OptOut};
                                 phones.Add(phone);
-                                if (ph.PhonePreferred)
-                                    preferredPhoneId = ph.Id;
-                                if (ph.TextPreferred)
-                                    preferredTextId = ph.Id;
                             }
                             contact.Phones = phones;
                         }
@@ -1022,8 +1013,6 @@ namespace Phytel.API.AppDomain.NG
                             {
                                 Email email = new Email { Id = e.Id, Text = e.Text, TypeId = e.TypeId, Preferred = e.Preferred, OptOut = e.OptOut};
                                 emails.Add(email);
-                                if (e.Preferred)
-                                    preferredEmailId = e.Id;
                             }
                             contact.Emails = emails;
                         }
@@ -1037,8 +1026,6 @@ namespace Phytel.API.AppDomain.NG
                             {
                                 Address address = new Address { Id = a.Id, Line1 = a.Line1, Line2  = a.Line2, Line3 = a.Line3, City = a.City, StateId = a.StateId, PostalCode = a.PostalCode, TypeId = a.TypeId, Preferred = a.Preferred, OptOut = a.OptOut};
                                 addresses.Add(address);
-                                if (a.Preferred)
-                                    preferredAddressId = a.Id;
                             }
                             contact.Addresses = addresses;
                         }
@@ -1052,18 +1039,9 @@ namespace Phytel.API.AppDomain.NG
                             {
                                 Language language = new Language { Id = l.Id, LookUpLanguageId = l.LookUpLanguageId, Preferred = l.Preferred };
                                 languages.Add(language);
-                                if (l.Preferred)
-                                    preferredLanguageId = l.Id;
                             }
                             contact.Languages = languages;
                         }
-
-                        // Preferreds
-                        contact.PreferredPhoneId = preferredPhoneId;
-                        contact.PreferredTextId = preferredTextId;
-                        contact.PreferredAddressId = preferredAddressId;
-                        contact.PreferredEmailId = preferredEmailId;
-                        contact.PreferredLanguageId = preferredLanguageId;
                     }
                 return contact;
             }
