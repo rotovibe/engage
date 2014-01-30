@@ -146,14 +146,14 @@ namespace Phytel.API.DataDomain.PatientProblem
             selectExpressions.Add(problemSelectExpression);
 
 
-            // Active = true.
-            SelectExpression activeSelectExpression = new SelectExpression();
-            activeSelectExpression.FieldName = MEPatientProblem.ActiveProperty;
-            activeSelectExpression.Type = SelectExpressionType.EQ;
-            activeSelectExpression.Value = true;
-            activeSelectExpression.ExpressionOrder = 3;
-            activeSelectExpression.GroupID = 1;
-            selectExpressions.Add(activeSelectExpression);
+            //// Active = true.
+            //SelectExpression activeSelectExpression = new SelectExpression();
+            //activeSelectExpression.FieldName = MEPatientProblem.ActiveProperty;
+            //activeSelectExpression.Type = SelectExpressionType.EQ;
+            //activeSelectExpression.Value = true;
+            //activeSelectExpression.ExpressionOrder = 3;
+            //activeSelectExpression.GroupID = 1;
+            //selectExpressions.Add(activeSelectExpression);
 
             // DeleteFlag = false.
             // This is not passed through the request object. But user story demands that only Problems set to DeleteFlag == false should be displayed to the end user.
@@ -191,6 +191,20 @@ namespace Phytel.API.DataDomain.PatientProblem
                 .GetPatientProblemRepository(request.ContractNumber, request.Context);
 
             response.PatientProblem = (DTO.PatientProblem)repo.Insert(request);
+
+            return response;
+        }
+
+        public static PutUpdatePatientProblemResponse PutUpdatePatientProblem(PutUpdatePatientProblemRequest request)
+        {
+            PutUpdatePatientProblemResponse response = new PutUpdatePatientProblemResponse();
+
+            IPatientProblemRepository<PutUpdatePatientProblemResponse> repo = PatientProblem.PatientProblemRepositoryFactory<PutUpdatePatientProblemResponse>
+                .GetPatientProblemRepository(request.ContractNumber, request.Context);
+
+            var result = repo.Update(request);
+            if (result != null)
+                response.Outcome = new Outcome { Reason = "Success", Result = 1 };
 
             return response;
         }

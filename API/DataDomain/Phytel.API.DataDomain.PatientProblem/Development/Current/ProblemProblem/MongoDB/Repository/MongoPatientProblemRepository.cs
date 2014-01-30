@@ -7,6 +7,7 @@ using MongoDB.Driver.Builders;
 using Phytel.API.AppDomain.PatientProblem;
 using Phytel.API.DataDomain.PatientProblem.DTO;
 using Phytel.API.Interface;
+using MB = MongoDB.Driver.Builders;
 
 namespace Phytel.API.DataDomain.PatientProblem
 {
@@ -119,12 +120,12 @@ namespace Phytel.API.DataDomain.PatientProblem
                         foreach (MEPatientProblem p in mePatientProblems)
                         {
                             PatientProblemData problem = new PatientProblemData
-                            { 
+                            {
                                 ProblemID = p.ProblemID.ToString(),
                                 PatientID = p.PatientID.ToString(),
                                 ID = p.Id.ToString(),
-                                Level = p.Level
-
+                                Level = p.Level,
+                                Active = p.Active
                             };
                             patientProblemList.Add(problem);
                         }
@@ -144,7 +145,31 @@ namespace Phytel.API.DataDomain.PatientProblem
 
         public object Update(object entity)
         {
-            throw new NotImplementedException();
+            PutUpdatePatientProblemRequest p = (PutUpdatePatientProblemRequest)entity;
+            PutUpdatePatientProblemResponse pr = new PutUpdatePatientProblemResponse();
+
+            try
+            {
+                using (PatientProblemMongoContext ctx = new PatientProblemMongoContext(_dbName))
+                {
+                    var q = MB.Query<MEPatientProblem>.EQ(b => b.Id, ObjectId.Parse(p.Id));
+
+                    var uv = new List<MB.UpdateBuilder>();
+                    uv.Add(MB.Update.Set(MEPatientProblem.ActiveProperty, p.Active));
+                    uv.Add(MB.Update.Set(MEPatientProblem.FeaturedProperty, p.Featured));
+                    uv.Add(MB.Update.Set(MEPatientProblem.LastUpdatedOnProperty, System.DateTime.UtcNow));
+                    if (p.Level != 0) { uv.Add(MB.Update.Set(MEPatientProblem.LevelProperty, p.Level)); }
+                    if (p.UserId != null) { uv.Add(MB.Update.Set(MEPatientProblem.UpdatedByProperty, p.UserId)); }
+
+                    IMongoUpdate update = MB.Update.Combine(uv);
+                    ctx.PatientProblems.Collection.Update(q, update);
+                }
+                return pr;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("DataDomain:Update():" + ex.Message, ex.InnerException);
+            }
         }
 
         public void CacheByID(List<string> entityIDs)
