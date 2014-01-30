@@ -150,5 +150,35 @@ namespace Phytel.API.AppDomain.NG
                 throw ae;
             }
         }
+
+        internal static PutNewPatientProblemResponse PutNewPatientProblem(string patientId, string userId, string elementId)
+        {
+            try
+            {
+                //register call to remote serivce.
+                IRestClient client = new JsonServiceClient();
+                PutNewPatientProblemResponse dataDomainResponse =
+                   client.Put<PutNewPatientProblemResponse>(
+                   string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Problem/Insert",
+                   DDPatientProblemServiceUrl,
+                   "NG",
+                   "v1",
+                   "InHealth001",
+                   patientId), new PutNewPatientProblemRequest
+                   {
+                       ProblemId = elementId,
+                       Active = true,
+                       Featured = true,
+                       UserId = userId,
+                       Level = 1
+                   } as object);
+                return dataDomainResponse;
+            }
+            catch (WebServiceException wse)
+            {
+                Exception ae = new Exception(wse.ResponseBody, wse.InnerException);
+                throw ae;
+            }
+        }
     }
 }
