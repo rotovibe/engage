@@ -1,6 +1,6 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.21005.1
+VisualStudioVersion = 12.0.30110.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppDomain.NG", "NG\AppDomain.NG.csproj", "{E368DA81-D304-4556-B1C4-D4774C0DEFD2}"
 EndProject
@@ -40,8 +40,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DataDomain.Program", "DataD
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.Program.DTO", "..\..\..\..\DataDomain\Phytel.API.DataDomain.Program\Development\Current\Program.DTO\DataDomain.Program.DTO.csproj", "{4E9F9DBF-E01B-4226-9E4F-246149EBBB3F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Phytel.API.Common.Test", "..\..\..\..\Common\Phytel.API.Common.Test\Development\Current\Phytel.API.Common.Test.csproj", "{9580136D-5C64-4C29-BCCE-AD647AC2A7C2}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DataDomain.PatientProblem", "DataDomain.PatientProblem", "{29237807-35BE-43FC-A492-48D79074BFB6}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.PatientProblem.DTO", "..\..\..\..\DataDomain\Phytel.API.DataDomain.PatientProblem\Development\Current\PatientProblem.DTOs\DataDomain.PatientProblem.DTO.csproj", "{F133E537-1D48-4A42-ABA9-5587E057F5B3}"
@@ -56,7 +54,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.Contact.DTO", ".
 EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 19
+		SccNumberOfProjects = 18
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = http://hillstfs2013:8080/tfs/phytel
 		SccLocalPath0 = .
@@ -116,22 +114,18 @@ Global
 		SccProjectTopLevelParentUniqueName14 = AppDomain.NG.sln
 		SccProjectName14 = ../../../../DataDomain/Phytel.API.DataDomain.Program/Development/Current/Program.DTO
 		SccLocalPath14 = ..\\..\\..\\..\\DataDomain\\Phytel.API.DataDomain.Program\\Development\\Current\\Program.DTO
-		SccProjectUniqueName15 = ..\\..\\..\\..\\Common\\Phytel.API.Common.Test\\Development\\Current\\Phytel.API.Common.Test.csproj
+		SccProjectUniqueName15 = ..\\..\\..\\..\\DataDomain\\Phytel.API.DataDomain.PatientProblem\\Development\\Current\\PatientProblem.DTOs\\DataDomain.PatientProblem.DTO.csproj
 		SccProjectTopLevelParentUniqueName15 = AppDomain.NG.sln
-		SccProjectName15 = ../../../../Common/Phytel.API.Common.Test/Development/Current
-		SccLocalPath15 = ..\\..\\..\\..\\Common\\Phytel.API.Common.Test\\Development\\Current
-		SccProjectUniqueName16 = ..\\..\\..\\..\\DataDomain\\Phytel.API.DataDomain.PatientProblem\\Development\\Current\\PatientProblem.DTOs\\DataDomain.PatientProblem.DTO.csproj
+		SccProjectName15 = ../../../../DataDomain/Phytel.API.DataDomain.PatientProblem/Development/Current/PatientProblem.DTOs
+		SccLocalPath15 = ..\\..\\..\\..\\DataDomain\\Phytel.API.DataDomain.PatientProblem\\Development\\Current\\PatientProblem.DTOs
+		SccProjectUniqueName16 = ..\\..\\..\\..\\DataDomain\\Phytel.API.DataDomain.LookUp\\Development\\Current\\LookUp.DTO\\DataDomain.LookUp.DTO.csproj
 		SccProjectTopLevelParentUniqueName16 = AppDomain.NG.sln
-		SccProjectName16 = ../../../../DataDomain/Phytel.API.DataDomain.PatientProblem/Development/Current/PatientProblem.DTOs
-		SccLocalPath16 = ..\\..\\..\\..\\DataDomain\\Phytel.API.DataDomain.PatientProblem\\Development\\Current\\PatientProblem.DTOs
-		SccProjectUniqueName17 = ..\\..\\..\\..\\DataDomain\\Phytel.API.DataDomain.LookUp\\Development\\Current\\LookUp.DTO\\DataDomain.LookUp.DTO.csproj
+		SccProjectName16 = ../../../../DataDomain/Phytel.API.DataDomain.LookUp/Development/Current/LookUp.DTO
+		SccLocalPath16 = ..\\..\\..\\..\\DataDomain\\Phytel.API.DataDomain.LookUp\\Development\\Current\\LookUp.DTO
+		SccProjectUniqueName17 = ..\\..\\..\\..\\DataDomain\\Phytel.API.DataDomain.Contact\\Development\\Current\\Contact.DTO\\DataDomain.Contact.DTO.csproj
 		SccProjectTopLevelParentUniqueName17 = AppDomain.NG.sln
-		SccProjectName17 = ../../../../DataDomain/Phytel.API.DataDomain.LookUp/Development/Current/LookUp.DTO
-		SccLocalPath17 = ..\\..\\..\\..\\DataDomain\\Phytel.API.DataDomain.LookUp\\Development\\Current\\LookUp.DTO
-		SccProjectUniqueName18 = ..\\..\\..\\..\\DataDomain\\Phytel.API.DataDomain.Contact\\Development\\Current\\Contact.DTO\\DataDomain.Contact.DTO.csproj
-		SccProjectTopLevelParentUniqueName18 = AppDomain.NG.sln
-		SccProjectName18 = ../../../../DataDomain/Phytel.API.DataDomain.Contact/Development/Current/Contact.DTO
-		SccLocalPath18 = ..\\..\\..\\..\\DataDomain\\Phytel.API.DataDomain.Contact\\Development\\Current\\Contact.DTO
+		SccProjectName17 = ../../../../DataDomain/Phytel.API.DataDomain.Contact/Development/Current/Contact.DTO
+		SccLocalPath17 = ..\\..\\..\\..\\DataDomain\\Phytel.API.DataDomain.Contact\\Development\\Current\\Contact.DTO
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -194,10 +188,6 @@ Global
 		{4E9F9DBF-E01B-4226-9E4F-246149EBBB3F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4E9F9DBF-E01B-4226-9E4F-246149EBBB3F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4E9F9DBF-E01B-4226-9E4F-246149EBBB3F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{9580136D-5C64-4C29-BCCE-AD647AC2A7C2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{9580136D-5C64-4C29-BCCE-AD647AC2A7C2}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{9580136D-5C64-4C29-BCCE-AD647AC2A7C2}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{9580136D-5C64-4C29-BCCE-AD647AC2A7C2}.Release|Any CPU.Build.0 = Release|Any CPU
 		{F133E537-1D48-4A42-ABA9-5587E057F5B3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{F133E537-1D48-4A42-ABA9-5587E057F5B3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F133E537-1D48-4A42-ABA9-5587E057F5B3}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -227,7 +217,6 @@ Global
 		{5D22373D-E432-4208-A737-E0BCA0567B5F} = {4D511DE3-A68D-43BD-8937-ACDDC1ED76D2}
 		{ABE948FB-247E-4955-B3AB-B7C93E10A542} = {D159338B-AADF-4BDD-996F-D0A097A022FD}
 		{25CF3C3F-221F-4A49-B5EF-A8A5FCF9A5BA} = {D159338B-AADF-4BDD-996F-D0A097A022FD}
-		{9580136D-5C64-4C29-BCCE-AD647AC2A7C2} = {D159338B-AADF-4BDD-996F-D0A097A022FD}
 		{5D9C233B-E53D-4BE1-B578-1AA9722DE1CF} = {F6188D6D-9910-4933-8DBB-4E4572A78DE4}
 		{4E9F9DBF-E01B-4226-9E4F-246149EBBB3F} = {FD0421A3-F855-4311-A9B0-9FFDF3896656}
 		{F133E537-1D48-4A42-ABA9-5587E057F5B3} = {29237807-35BE-43FC-A492-48D79074BFB6}
