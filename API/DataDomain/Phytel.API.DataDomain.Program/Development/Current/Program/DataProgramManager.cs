@@ -216,7 +216,8 @@ namespace Phytel.API.DataDomain.Program
                             PatientId = pd.PatientId,
                             ProgramState = pd.ProgramState,
                             ShortName = pd.ShortName,
-                            Status = pd.Status
+                            Status = pd.Status,
+                             ElementState = pd.ElementState
                         })
                     );
                     response.programs = lpi;

@@ -481,7 +481,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
                     {
                         sp.Add(new MESpawnElement
                         {
-                            SpawnId = ObjectId.Parse(sed.ElementId),
+                            SpawnId =  sed.ElementId != null ? ObjectId.Parse(sed.ElementId) : ObjectId.Parse("000000000000000000000000"),
                             Type = sed.ElementType,
                             Tag = sed.Tag
                         });

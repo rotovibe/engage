@@ -87,19 +87,22 @@ namespace Phytel.API.DataDomain.Program
                 using (ProgramMongoContext ctx = new ProgramMongoContext(_dbName))
                 {
                     IMongoQuery mQuery = Query.EQ(MEContractProgram.StatusProperty, 1);
+                    MongoCursor<MEContractProgram> fnd = ctx.ContractPrograms.Collection.Find(mQuery);
+
                     result = ctx.ContractPrograms.Collection.Find(mQuery).Select(r => new ProgramInfo
                     {
                         Name = r.Name,
                         Id = r.Id.ToString(),
                         ShortName = r.ShortName,
-                        Status = (int)r.Status
+                        Status = (int)r.Status,
+                         ElementState = (int)r.State
                     }).ToList();
                 }
                 return result;
             }
-            catch
+            catch(Exception ex)
             {
-                throw;
+                throw new Exception("DataDomain:GetActiveProgramsInfoList()" + ex.Message, ex.InnerException);
             }
         }
 

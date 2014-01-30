@@ -40,7 +40,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
 
         public const string EligibilityProperty = "elg";
         [BsonElement(EligibilityProperty)]
-        public GenericStatus Eligibility { get; set; }
+        public EligibilityStatus Eligibility { get; set; }
 
         public const string EligibilityOverrideProperty = "eo";
         [BsonElement(EligibilityOverrideProperty)]

@@ -50,9 +50,9 @@ namespace Phytel.API.DataDomain.Program
                             AuthoredBy = cp.AuthoredBy,
                             Client = cp.Client,
                             ProgramState = Common.ProgramState.NotStarted,
+                            State = cp.State,
                             AssignedBy = cp.AssignedBy,
                             AssignedOn = cp.AssignedOn,
-                            State = cp.State,
                             StartDate = System.DateTime.UtcNow, // utc time
                             EndDate = null,
                             GraduatedFlag = false,
@@ -60,12 +60,13 @@ namespace Phytel.API.DataDomain.Program
                             OptOut = null,
                             DidNotEnrollReason = null,
                             DisEnrollReason = null,
-                            Eligibility = Common.GenericStatus.Pending,
+                            Eligibility = Common.EligibilityStatus.Eligible,
                             EligibilityStartDate = System.DateTime.UtcNow,
                             EligibilityEndDate = null,
                             EligibilityRequirements = cp.EligibilityRequirements,
                             Enrollment = Common.GenericStatus.Pending,
                             EligibilityOverride = Common.GenericSetting.No,
+                             DateCompleted = cp.DateCompleted,
                             ContractProgramId = cp.Id,
                             DeleteFlag = cp.DeleteFlag,
                             Description = cp.Description,
@@ -114,7 +115,8 @@ namespace Phytel.API.DataDomain.Program
                             ShortName = patientProgDoc.ShortName,
                             Status = (int)patientProgDoc.Status,
                             PatientId = patientProgDoc.PatientId.ToString(),
-                            ProgramState = (int)patientProgDoc.ProgramState
+                            ProgramState = (int)patientProgDoc.ProgramState,
+                             ElementState = (int)patientProgDoc.State
                         };
 
                         result.Outcome.Result = 1;
@@ -176,9 +178,21 @@ namespace Phytel.API.DataDomain.Program
                             StartDate = cp.StartDate,
                             Status = (int)cp.Status,
                             Version = cp.Version,
+                            Eligibility = (int)cp.Eligibility,
                             EligibilityEndDate = cp.EligibilityEndDate,
                             EligibilityRequirements = cp.EligibilityRequirements,
                             EligibilityStartDate = cp.EligibilityStartDate,
+                            DidNotEnrollReason = cp.DidNotEnrollReason,
+                            DisEnrollReason = cp.DisEnrollReason,
+                            EligibilityOverride = (int)cp.EligibilityOverride,
+                            Enrollment = (int)cp.Enrollment,
+                            GraduatedFlag = cp.GraduatedFlag,
+                            IneligibleReason = cp.IneligibleReason,
+                            OptOut = cp.OptOut,
+                            OptOutDate = cp.OptOutDate,
+                            OptOutReason = cp.OptOutReason,
+                            OverrideReason = cp.OverrideReason,
+                            RemovedReason = cp.RemovedReason,
                             EndDate = cp.EndDate,
                             Completed = cp.Completed,
                             Enabled = cp.Enabled,
@@ -254,6 +268,30 @@ namespace Phytel.API.DataDomain.Program
                         EligibilityRequirements = cp.EligibilityRequirements,
                         EligibilityStartDate = cp.EligibilityStartDate,
                         EndDate = cp.EndDate,
+                        RemovedReason = cp.RemovedReason,
+                        OverrideReason = cp.OverrideReason,
+                        OptOutReason = cp.OptOutReason,
+                        OptOutDate = cp.OptOutDate,
+                        OptOut = cp.OptOut,
+                        IneligibleReason = cp.IneligibleReason,
+                        GraduatedFlag = cp.GraduatedFlag,
+                        Enrollment = (int)cp.Enrollment,
+                        EligibilityOverride = (int)cp.EligibilityOverride,
+                        DisEnrollReason = cp.DisEnrollReason,
+                        DidNotEnrollReason = cp.DidNotEnrollReason,
+                        AssignBy = cp.AssignedBy,
+                        AssignDate = cp.AssignedOn,
+                        Completed = cp.Completed,
+                        CompletedBy = cp.CompletedBy,
+                        DateCompleted = cp.DateCompleted,
+                        ElementState = (int)cp.State,
+                        Eligibility = (int)cp.Eligibility,
+                        Enabled = cp.Enabled,
+                        Next = cp.Next,
+                        Order = cp.Order,
+                        Previous = cp.Previous,
+                        SourceId = cp.SourceId,
+                        SpawnElement = DTOUtils.GetResponseSpawnElement(cp.Spawn),
                         Modules = cp.Modules.Where(h => h.Status == Common.Status.Active).Select(r => new ModuleDetail
                         {
                             Id = r.Id.ToString(),
@@ -345,6 +383,10 @@ namespace Phytel.API.DataDomain.Program
                     uv.Add(MB.Update.Set(MEPatientProgram.StatusProperty, (Status)pg.Status));
                     uv.Add(MB.Update.Set(MEPatientProgram.LastUpdatedOnProperty, System.DateTime.UtcNow));
                     uv.Add(MB.Update.Set(MEPatientProgram.UpdatedByProperty, p.UserId));
+                    uv.Add(MB.Update.Set(MEPatientProgram.EligibilityProperty, pg.Eligibility));
+                    uv.Add(MB.Update.Set(MEPatientProgram.EnrollmentProperty, pg.Enrollment));
+                    uv.Add(MB.Update.Set(MEPatientProgram.GraduatedFlagProperty, pg.GraduatedFlag));
+
                     if (pg.AssignBy != null) { uv.Add(MB.Update.Set(MEPatientProgram.AssignByProperty, pg.AssignBy)); }
                     if (pg.AssignDate != null) { uv.Add(MB.Update.Set(MEPatientProgram.AssignDateProperty, pg.AssignDate)); }
                     if (pg.Client != null) { uv.Add(MB.Update.Set(MEPatientProgram.ClientProperty, pg.Client)); }
@@ -355,6 +397,10 @@ namespace Phytel.API.DataDomain.Program
                     if (pg.EligibilityEndDate != null) { uv.Add(MB.Update.Set(MEPatientProgram.EligibilityEndDateProperty, pg.EligibilityEndDate)); }
                     if (pg.EligibilityRequirements != null) { uv.Add(MB.Update.Set(MEPatientProgram.EligibilityRequirementsProperty, pg.EligibilityRequirements)); }
                     if (pg.EligibilityStartDate != null) { uv.Add(MB.Update.Set(MEPatientProgram.EligibilityStartDateProperty, pg.EligibilityStartDate)); }
+                    if (pg.IneligibleReason != null) { uv.Add(MB.Update.Set(MEPatientProgram.IneligibleReasonProperty, pg.IneligibleReason)); }
+                    if (pg.OptOut != null) { uv.Add(MB.Update.Set(MEPatientProgram.OptOutProperty, pg.OptOut)); }
+                    if (pg.OptOutReason != null) { uv.Add(MB.Update.Set(MEPatientProgram.OptOutReasonProperty, pg.OptOutReason)); }
+                    if (pg.OptOutDate != null) { uv.Add(MB.Update.Set(MEPatientProgram.OptOutDateProperty, pg.OptOutDate)); }
                     if (pg.EndDate != null) { uv.Add(MB.Update.Set(MEPatientProgram.EndDateProperty, pg.EndDate)); }
                     if (pg.Name != null) { uv.Add(MB.Update.Set(MEPatientProgram.NameProperty, pg.Name)); }
                     if (pg.Next != null) { uv.Add(MB.Update.Set(MEPatientProgram.NextProperty, pg.Next)); }
