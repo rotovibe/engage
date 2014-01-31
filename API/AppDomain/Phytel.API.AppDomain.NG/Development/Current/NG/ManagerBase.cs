@@ -52,7 +52,7 @@ namespace Phytel.API.AppDomain.NG
                 case GetPatientAction:
                     audittypeid = 0;
                     break;
-                
+
                 default:
                     break;
             }

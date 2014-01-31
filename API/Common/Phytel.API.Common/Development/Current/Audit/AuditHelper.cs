@@ -11,7 +11,7 @@ namespace Phytel.API.Common.Audit
         /// <returns></returns>
         public static AuditData GetAuditLog(int auditTypeId, Phytel.API.Interface.IAppDomainRequest request, string methodCalledFrom)
         {
-            var webrequest = HttpContext.Current.Request;            
+            var webrequest = HttpContext.Current.Request;
             
             ///{Version}/{ContractNumber}/patient/{PatientID}
             AuditData auditLog = new AuditData() 

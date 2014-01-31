@@ -4,6 +4,8 @@ using System;
 using System.Configuration;
 using System.Data;
 using System.IO;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Serialization;
 
@@ -52,9 +54,9 @@ namespace Phytel.API.Common.Audit
             {
                 // handle work here
                 //test the response to here, even though I don't send it back to the client
-                WriteAudit(AuditData data);
+                WriteAudit(data);
 
-            }).Start()  
+            }).Start();
 #endif
             
         }
