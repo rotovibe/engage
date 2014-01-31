@@ -6,7 +6,6 @@ namespace Phytel.API.AppDomain.NG.DTO
 {
     public class PutUpdateContactResponse : IDomainResponse
     {
-        public bool Success { get; set; }
         public List<CleanupId> UpdatedPhone { get; set; }
         public List<CleanupId> UpdatedEmail { get; set; }
         public List<CleanupId> UpdatedAddress { get; set; }

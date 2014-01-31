@@ -1209,7 +1209,6 @@ namespace Phytel.API.AppDomain.NG
                                                                                 } as object);
                 
                 response.Version = dataDomainResponse.Version;
-                response.Success = dataDomainResponse.SuccessData;
                 if (dataDomainResponse.SuccessData)
                 {
                     // If the update was successful, send back the updated map for new phone inserts.

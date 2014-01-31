@@ -310,6 +310,12 @@ namespace Phytel.API.DataDomain.Contact
                                             DeleteFlag = false
                                         };
                                         mePhones.Add(mePh);
+                                    } 
+                                    // Addd the ones that are soft deleted in DB and not sent back from the UI.
+                                    List<MEPhone> deletedExistingPhones = existingPhones.Where(a => a.DeleteFlag == true).ToList();
+                                    if (deletedExistingPhones.Count > 0)
+                                    {
+                                        mePhones.AddRange(deletedExistingPhones);
                                     }
                                 }
                             }
@@ -386,6 +392,12 @@ namespace Phytel.API.DataDomain.Contact
                                             DeleteFlag = false
                                         };
                                         meEmails.Add(mePh);
+                                    }
+                                    // Addd the ones that are soft deleted in DB and not sent back from the UI.
+                                    List<MEEmail> deletedExistingEmails = existingEmails.Where(a => a.DeleteFlag == true).ToList();
+                                    if (deletedExistingEmails.Count > 0)
+                                    {
+                                        meEmails.AddRange(deletedExistingEmails);
                                     }
                                 }
                             }
@@ -472,6 +484,12 @@ namespace Phytel.API.DataDomain.Contact
                                             DeleteFlag = false
                                         };
                                         meAddresses.Add(me);
+                                    }
+                                    // Addd the ones that are soft deleted in DB and not sent back from the UI.
+                                    List<MEAddress> deletedExistingAdds = existingAddresses.Where(a => a.DeleteFlag == true).ToList();
+                                    if (deletedExistingAdds.Count > 0)
+                                    {
+                                        meAddresses.AddRange(deletedExistingAdds);
                                     }
                                 }
                             }

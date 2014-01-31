@@ -73,68 +73,51 @@ namespace Phytel.API.DataDomain.Contact.Test
             request.UserId = "DD_TestHarness";
             request.Version = "v1";
             
-            List<CommModeData> modes = new List<CommModeData>();
-            modes.Add(new CommModeData { ModeId = "52e17cc2d433232028e9e38f", OptOut = false, Preferred = false });
-            modes.Add(new CommModeData { ModeId = "52e17ce6d433232028e9e390", OptOut = true, Preferred = false });
-            modes.Add(new CommModeData { ModeId = "52e17d08d433232028e9e391", OptOut = false, Preferred = true });
-            modes.Add(new CommModeData { ModeId = "52e17d10d433232028e9e392", OptOut = false, Preferred = false });
-            request.Modes = modes;
+            //List<CommModeData> modes = new List<CommModeData>();
+            //modes.Add(new CommModeData { ModeId = "52e17cc2d433232028e9e38f", OptOut = false, Preferred = false });
+            //modes.Add(new CommModeData { ModeId = "52e17ce6d433232028e9e390", OptOut = true, Preferred = false });
+            //modes.Add(new CommModeData { ModeId = "52e17d08d433232028e9e391", OptOut = false, Preferred = true });
+            //modes.Add(new CommModeData { ModeId = "52e17d10d433232028e9e392", OptOut = false, Preferred = false });
+            //request.Modes = modes;
 
-            List<AddressData> addresses = new List<AddressData>();
-            addresses.Add(new AddressData { Id = "52e75858d43323149870c22a", Line1 = "phytel", Line2 = "11511 luna road", Line3 = "suite 600", City = "Dallas", PostalCode = "75234", StateId = "52e195b8d433232028e9e3e4", Preferred = false, OptOut = false, TypeId = "52e18c45d433232028e9e3ab" });
-            request.Addresses = addresses;
+            //List<AddressData> addresses = new List<AddressData>();
+            //addresses.Add(new AddressData { Id = "52e75858d43323149870c22a", Line1 = "phytel", Line2 = "11511 luna road", Line3 = "suite 600", City = "Dallas", PostalCode = "75234", StateId = "52e195b8d433232028e9e3e4", Preferred = false, OptOut = false, TypeId = "52e18c45d433232028e9e3ab" });
+            //request.Addresses = addresses;
 
             List<PhoneData> phones = new List<PhoneData>();
-            phones.Add(new PhoneData { Id = "52e7583dd43323149870c225", IsText = false, Number = "2142142147", OptOut = false, PhonePreferred = true, TextPreferred = false, TypeId = "52e18c2ed433232028e9e3a6" });
-            phones.Add(new PhoneData { Id = "52e75847d43323149870c226", IsText = true, Number = "8178178179", OptOut = false, PhonePreferred = false, TextPreferred = true, TypeId = "52e18c38d433232028e9e3a8" });
-            phones.Add(new PhoneData { Id = "52e7584bd43323149870c227", IsText = false, Number = "9729729723", OptOut = false, PhonePreferred = false, TextPreferred = false, TypeId = "52e18c32d433232028e9e3a7" });
+            //phones.Add(new PhoneData { Id = "52e7583dd43323149870c225", IsText = false, Number = "2142142147", OptOut = false, PhonePreferred = true, TextPreferred = false, TypeId = "52e18c2ed433232028e9e3a6" });
+            //phones.Add(new PhoneData { Id = "52e75847d43323149870c226", IsText = true, Number = "8178178179", OptOut = false, PhonePreferred = false, TextPreferred = true, TypeId = "52e18c38d433232028e9e3a8" });
+            phones.Add(new PhoneData { Id = "52ec1f53d433232330c8bb7c", IsText = false, Number = "99999999", OptOut = false, PhonePreferred = false, TextPreferred = false, TypeId = "52e18c32d433232028e9e3a7" });
             request.Phones = phones;
 
-            List<EmailData> emails = new List<EmailData>();
-            emails.Add(new EmailData { Id = "52e75852d43323149870c228", OptOut = false, Preferred = true, TypeId = "52e18c32d433232028e9e3a7", Text = "test1@gmail.com" });
-            emails.Add(new EmailData { Id = "52e75855d43323149870c229", OptOut = false, Preferred = false, TypeId = "52e18c41d433232028e9e3aa", Text = "test2@gmail.com" });
-            request.Emails = emails;
+            //List<EmailData> emails = new List<EmailData>();
+            //emails.Add(new EmailData { Id = "52e75852d43323149870c228", OptOut = false, Preferred = true, TypeId = "52e18c32d433232028e9e3a7", Text = "test1@gmail.com" });
+            //emails.Add(new EmailData { Id = "52e75855d43323149870c229", OptOut = false, Preferred = false, TypeId = "52e18c41d433232028e9e3aa", Text = "test2@gmail.com" });
+            //request.Emails = emails;
 
-            List<LanguageData> languages = new List<LanguageData>();
-            languages.Add(new LanguageData { LookUpLanguageId = "52e199dfd433232028e9e3f3", Preferred = true });
-            languages.Add(new LanguageData { LookUpLanguageId = "52e199d5d433232028e9e3f2", Preferred = false });
-            languages.Add(new LanguageData { LookUpLanguageId = "52e199d1d433232028e9e3f1", Preferred = false });
-            languages.Add(new LanguageData { LookUpLanguageId = "52e199cdd433232028e9e3f0", Preferred = false });
-            request.Languages = languages;
+            //List<LanguageData> languages = new List<LanguageData>();
+            //languages.Add(new LanguageData { LookUpLanguageId = "52e199dfd433232028e9e3f3", Preferred = true });
+            //languages.Add(new LanguageData { LookUpLanguageId = "52e199d5d433232028e9e3f2", Preferred = false });
+            //languages.Add(new LanguageData { LookUpLanguageId = "52e199d1d433232028e9e3f1", Preferred = false });
+            //languages.Add(new LanguageData { LookUpLanguageId = "52e199cdd433232028e9e3f0", Preferred = false });
+            //request.Languages = languages;
 
 
-            List<string> times = new List<string>();
-            times.Add("52e17de8d433232028e9e394");
-            times.Add("52e17dedd433232028e9e395");
-            request.TimesOfDaysId = times;
+            //List<string> times = new List<string>();
+            //times.Add("52e17de8d433232028e9e394");
+            //times.Add("52e17dedd433232028e9e395");
+            //request.TimesOfDaysId = times;
 
-            List<int> days = new List<int>();
-            days.Add(1);
-            days.Add(2);
-            days.Add(3);
-            days.Add(4);
-            request.WeekDays = days;
+            //List<int> days = new List<int>();
+            //days.Add(1);
+            //days.Add(2);
+            //days.Add(3);
+            //days.Add(4);
+            //request.WeekDays = days;
 
-            request.UserId = "1";
             //request.pat = "52e26f5b072ef7191c11e0b6";
-            request.ContactId = "52ebc816d433232150813e49";
+            request.ContactId = "52ec1b77d6a4850b78581986";
             request.TimeZoneId = "52e1817ad433232028e9e39d";
-
-
-
-            
-            //PutUpdateContactDataRequest request = new PutUpdateContactDataRequest {
-            //    ContactId = "52ebcd84d6a4850b78c87a2a",
-            //    UserId = "testmethod",
-            //    TimeZoneId = "52e1815dd433232028e9e399",
-            //    //Languages = language,
-            //    //WeekDays = weekDays,
-            //    //TimesOfDaysId = timesOfday,
-            //    //Modes = modes
-            //    Phones = phones,
-            //    Emails = emails,
-            //    Addresses = addresses
-            //};
 
             PutUpdateContactDataResponse response = ContactDataManager.UpdateContact(request);
 
