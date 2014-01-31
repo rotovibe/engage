@@ -1122,9 +1122,9 @@ namespace Phytel.API.AppDomain.NG
             try
             {
                 List<CommModeData> modesData = null;
-                if (request.Modes != null)
+                if (request.Contact.Modes != null)
                 {
-                    List<CommMode> modes = request.Modes;
+                    List<CommMode> modes = request.Contact.Modes;
                     modesData = new List<CommModeData>();
                     foreach (CommMode m in modes)
                     {
@@ -1134,9 +1134,9 @@ namespace Phytel.API.AppDomain.NG
                 }
 
                 List<PhoneData> phonesData = null;
-                if (request.Phones != null)
+                if (request.Contact.Phones != null)
                 {
-                    List<Phone> phones = request.Phones;
+                    List<Phone> phones = request.Contact.Phones;
                     phonesData = new List<PhoneData>();
                     foreach (Phone p in phones)
                     {
@@ -1145,9 +1145,9 @@ namespace Phytel.API.AppDomain.NG
                     }
                 }
                 List<EmailData> emailsData = null;
-                if (request.Emails != null)
+                if (request.Contact.Emails != null)
                 {
-                    List<Email> emails = request.Emails;
+                    List<Email> emails = request.Contact.Emails;
                     emailsData = new List<EmailData>();
                     foreach (Email e in emails)
                     {
@@ -1157,9 +1157,9 @@ namespace Phytel.API.AppDomain.NG
                 }
 
                 List<AddressData> addressesData = null;
-                if (request.Addresses != null)
+                if (request.Contact.Addresses != null)
                 {
-                    List<Address> addresses = request.Addresses;
+                    List<Address> addresses = request.Contact.Addresses;
                     addressesData = new List<AddressData>();
                     foreach (Address a in addresses)
                     {
@@ -1169,9 +1169,9 @@ namespace Phytel.API.AppDomain.NG
                 }
 
                 List<Phytel.API.DataDomain.Contact.DTO.LanguageData> languagesData = null;
-                if (request.Languages != null)
+                if (request.Contact.Languages != null)
                 {
-                    List<Language> langs = request.Languages;
+                    List<Language> langs = request.Contact.Languages;
                     languagesData = new List<Phytel.API.DataDomain.Contact.DTO.LanguageData>();
                     foreach (Language l in langs)
                     {
@@ -1192,15 +1192,15 @@ namespace Phytel.API.AppDomain.NG
                                                                                 request.ContractNumber,
                                                                                 request.UserId), new PutUpdateContactDataRequest
                                                                                 {
-                                                                                   ContactId = request.ContactId,
+                                                                                    ContactId = request.Contact.Id,
                                                                                    Modes = modesData,
                                                                                    Phones = phonesData,
                                                                                    Emails = emailsData,
                                                                                    Addresses = addressesData,
-                                                                                   WeekDays = request.WeekDays,
-                                                                                   TimesOfDaysId = request.TimesOfDaysId,
+                                                                                    WeekDays = request.Contact.WeekDays,
+                                                                                    TimesOfDaysId = request.Contact.TimesOfDaysId,
                                                                                    Languages = languagesData,
-                                                                                   TimeZoneId = request.TimeZoneId,
+                                                                                    TimeZoneId = request.Contact.TimeZoneId,
                                                                                    Context = "NG",
                                                                                    ContractNumber = request.ContractNumber,
                                                                                    Version = request.Version,
