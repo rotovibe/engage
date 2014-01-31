@@ -287,6 +287,17 @@ namespace Phytel.API.AppDomain.NG
                         FieldName = "Problem"
                     });
                 }
+                else
+                {
+                    cpvd.SearchFields.ForEach(sf =>
+                    {
+                        if (sf.Value == problemId)
+                        {
+                            if (sf.Active == false)
+                                sf.Active = true;
+                        }
+                    });
+                }
 
                 PlanElementEndpointUtil.UpdateCohortPatientViewProblem(cpvd, patientId);
             }
