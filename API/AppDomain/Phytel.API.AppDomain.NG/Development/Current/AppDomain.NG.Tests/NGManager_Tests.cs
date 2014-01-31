@@ -157,7 +157,6 @@ namespace Phytel.API.AppDomain.NG.Test
             days.Add(4);
             contact.WeekDays = days;
 
-            request.UserId = "1";
             contact.PatientId = "52e26f5b072ef7191c11e0b6";
             contact.Id = "52ebc816d433232150813e49";
             contact.TimeZoneId = "52e1817ad433232028e9e39d";

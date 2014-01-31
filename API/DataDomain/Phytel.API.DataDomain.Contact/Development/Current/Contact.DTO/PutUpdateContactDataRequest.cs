@@ -5,7 +5,6 @@ using ServiceStack.ServiceHost;
 namespace Phytel.API.DataDomain.Contact.DTO
 {
     [Api(Description = "A Request object to update the contact card details.")]
-    [Route("/{Context}/{Version}/{ContractNumber}/Contact", "PUT")]
     [Route("/{Context}/{Version}/{ContractNumber}/Patient/Contact", "PUT")]
     public class PutUpdateContactDataRequest : IDataDomainRequest
     {

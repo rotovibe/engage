@@ -963,14 +963,15 @@ namespace Phytel.API.AppDomain.NG
                     }
                 }
                 
-                // [Route("/{Context}/{Version}/{ContractNumber}/Patient/Contact", "PUT")]
+                // [Route("/{Context}/{Version}/{ContractNumber}/Patient/Contact/{PatientId}", "PUT")]
                 IRestClient client = new JsonServiceClient();
                 PutContactDataResponse dataDomainResponse =
-                    client.Put<PutContactDataResponse>(string.Format("{0}/{1}/{2}/{3}/patient/contact?UserId={4}",
+                    client.Put<PutContactDataResponse>(string.Format("{0}/{1}/{2}/{3}/patient/contact/{4}?UserId={5}",
                                                                                 DDContactServiceUrl,
                                                                                 context,
                                                                                 version,
                                                                                 contractNumber,
+                                                                                patientId,
                                                                                 userId), new PutContactDataRequest
                                                                                 {
                                                                                     PatientId = patientId,
@@ -1186,7 +1187,7 @@ namespace Phytel.API.AppDomain.NG
                 IRestClient client = new JsonServiceClient();
                 PutUpdateContactDataResponse dataDomainResponse =
                     client.Put<PutUpdateContactDataResponse>(string.Format("{0}/{1}/{2}/{3}/patient/contact?UserId={4}",
-                                                                                DDContactServiceUrl,
+                                                                                "http://localhost:8888/Contact",//DDContactServiceUrl,
                                                                                 "NG",
                                                                                 request.Version,
                                                                                 request.ContractNumber,
