@@ -242,12 +242,7 @@ namespace Phytel.API.DataDomain.Contact
                         {
                             List<MEPhone> mePhones = null;
                             List<MEPhone> existingPhones = mc.Phones;
-                            if (existingPhones != null)
-                            {
-                               // Get only the valid phones (i.e where deleteflag = false.)
-                                existingPhones = existingPhones.Where(a => a.DeleteFlag == false).ToList();
-                            }
-                            if (existingPhones == null || existingPhones.Count == 0)
+                            if (existingPhones == null)
                             {
                                 // Add all the new phones that are sent in the request with the newly generated ObjectId.
                                 if (request.Phones.Count != 0)
@@ -327,12 +322,7 @@ namespace Phytel.API.DataDomain.Contact
                         {
                             List<MEEmail> meEmails = null;
                             List<MEEmail> existingEmails = mc.Emails;
-                            if (existingEmails != null)
-                            {
-                                // Get only the valid emails (i.e where deleteflag = false.)
-                                existingEmails = existingEmails.Where(a => a.DeleteFlag == false).ToList();
-                            }
-                            if (existingEmails == null || existingEmails.Count == 0)
+                            if (existingEmails == null)
                             {
                                 // Add all the new emails that are sent in the request with the newly generated ObjectId.
                                 if (request.Emails.Count != 0)
@@ -408,12 +398,7 @@ namespace Phytel.API.DataDomain.Contact
                         {
                             List<MEAddress> meAddresses = null;
                             List<MEAddress> existingAddresses = mc.Addresses;
-                            if (existingAddresses != null)
-                            {
-                                // Get only the valid addresses (i.e where deleteflag = false.)
-                                existingAddresses = existingAddresses.Where(a => a.DeleteFlag == false).ToList();
-                            }
-                            if (existingAddresses == null || existingAddresses.Count == 0)
+                            if (existingAddresses == null)
                             {
                                 // Add all the new addresses that are sent in the request with the newly generated ObjectId.
                                 if (request.Addresses.Count != 0)
@@ -637,7 +622,6 @@ namespace Phytel.API.DataDomain.Contact
             }
             return contactData;
         }
-
 
         /// <summary>
         /// Converts a list of objectIds to list of strings.
