@@ -1187,7 +1187,7 @@ namespace Phytel.API.AppDomain.NG
                 IRestClient client = new JsonServiceClient();
                 PutUpdateContactDataResponse dataDomainResponse =
                     client.Put<PutUpdateContactDataResponse>(string.Format("{0}/{1}/{2}/{3}/patient/contact?UserId={4}",
-                                                                                "http://localhost:8888/Contact",//DDContactServiceUrl,
+                                                                                DDContactServiceUrl,
                                                                                 "NG",
                                                                                 request.Version,
                                                                                 request.ContractNumber,
