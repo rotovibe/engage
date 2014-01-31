@@ -4,37 +4,19 @@ using ServiceStack.ServiceHost;
 
 namespace Phytel.API.DataDomain.Contact.DTO
 {
-    [Api(Description = "A Request object to update the contact card details.")]
+    [Api(Description = "A Request object to insert a new contact.")]
     [Route("/{Context}/{Version}/{ContractNumber}/Contact", "PUT")]
     [Route("/{Context}/{Version}/{ContractNumber}/Patient/Contact", "PUT")]
     public class PutContactDataRequest : IDataDomainRequest
     {
-        [ApiMember(Name = "ContactId", Description = "ID of the Contact being requested", ParameterType = "property", DataType = "string", IsRequired = false)]
-        public string ContactId { get; set; }
+        [ApiMember(Name = "PatientId", Description = "Id of the patient for whom Contact is inserted.", ParameterType = "property", DataType = "string", IsRequired = true)]
+        public string PatientId { get; set; }
 
-        [ApiMember(Name = "Modes", Description = "List of CommModes being requested", ParameterType = "property", DataType = "List<CommModeData>", IsRequired = false)]
+        [ApiMember(Name = "Modes", Description = "List of CommModes being inserted", ParameterType = "property", DataType = "List<CommModeData>", IsRequired = true)]
         public List<CommModeData> Modes { get; set; }
 
-        [ApiMember(Name = "WeekDays", Description = "List of Week of days being requested", ParameterType = "property", DataType = "List<int>", IsRequired = false)]
-        public List<int> WeekDays { get; set; }
-
-        [ApiMember(Name = "TimesOfDaysId", Description = "List of Times of days being requested", ParameterType = "property", DataType = "List<string>", IsRequired = false)]
-        public List<string> TimesOfDaysId { get; set; }
-
-        [ApiMember(Name = "TimeZoneId", Description = "ID of timezone being requested", ParameterType = "property", DataType = "string", IsRequired = true)]
+        [ApiMember(Name = "TimeZoneId", Description = "ID of timezone being inserted", ParameterType = "property", DataType = "string", IsRequired = true)]
         public string TimeZoneId { get; set; }
-
-        [ApiMember(Name = "Languages", Description = "List of langugages being requested", ParameterType = "property", DataType = "List<LanguageData>", IsRequired = false)]
-        public List<LanguageData> Languages { get; set; }
-
-        [ApiMember(Name = "Phones", Description = "List of Phones being requested", ParameterType = "property", DataType = "List<PhoneData>", IsRequired = false)]
-        public List<PhoneData> Phones { get; set; }
-
-        [ApiMember(Name = "Emails", Description = "List of Emails being requested", ParameterType = "property", DataType = "List<EmailData>", IsRequired = false)]
-        public List<EmailData> Emails { get; set; }
-
-        [ApiMember(Name = "Addresses", Description = "List of Addresses being requested", ParameterType = "property", DataType = "List<AddressData>", IsRequired = false)]
-        public List<AddressData> Addresses { get; set; }
 
         [ApiMember(Name = "Context", Description = "Product Context requesting the Contact", ParameterType = "property", DataType = "string", IsRequired = true)]
         public string Context { get; set; }

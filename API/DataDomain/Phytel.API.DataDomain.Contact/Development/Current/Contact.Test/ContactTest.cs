@@ -48,15 +48,15 @@ namespace Phytel.API.DataDomain.Contact.Test
             //weekDays = new List<int>();
             weekDays.Add(6);
 
-            modes.Add(new CommModeData { Id = "52e755d8d43323149870c215", ModeId = "52e17cc2d433232028e9e38f", OptOut = false, Preferred = false });
-            modes.Add(new CommModeData { Id = "52e755dbd43323149870c216", ModeId = "52e17ce6d433232028e9e390", OptOut = false, Preferred = false });
+            modes.Add(new CommModeData { ModeId = "52e17cc2d433232028e9e38f", OptOut = false, Preferred = false });
+            modes.Add(new CommModeData { ModeId = "52e17ce6d433232028e9e390", OptOut = false, Preferred = false });
 
             //timesOfday = new List<string>();
             //timesOfday.Add("52e17de8d433232028e9e394");
             //timesOfday.Add("52e17dedd433232028e9e395");
             
             
-            PutContactDataRequest request = new PutContactDataRequest {
+            PutUpdateContactDataRequest request = new PutUpdateContactDataRequest {
                 ContactId = "52e971c5d433231c304e8609",
                 UserId = "testmethod",
                 TimeZoneId = "52e1815dd433232028e9e399",
@@ -66,9 +66,9 @@ namespace Phytel.API.DataDomain.Contact.Test
                 Modes = modes
             };
 
-            bool response = ContactDataManager.UpdateContact(request);
+            PutUpdateContactDataResponse response = ContactDataManager.UpdateContact(request);
 
-            Assert.IsTrue(response);
+            Assert.IsNotNull(response);
         }
     }
 }

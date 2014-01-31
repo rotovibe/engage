@@ -83,8 +83,8 @@
     <Compile Include="Contact\GetContactRequest.cs" />
     <Compile Include="Contact\Language.cs" />
     <Compile Include="Contact\Phone.cs" />
-    <Compile Include="Contact\PutContactRequest.cs" />
-    <Compile Include="Contact\PutContactResponse.cs" />
+    <Compile Include="Contact\PutUpdateContactRequest.cs" />
+    <Compile Include="Contact\PutUpdateContactResponse.cs" />
     <Compile Include="GetPatientProgramsRequest.cs" />
     <Compile Include="GetPatientProgramsResponse.cs" />
     <Compile Include="LookUp\GetAllLanguagesRequest.cs" />

@@ -26,14 +26,31 @@ namespace Phytel.API.DataDomain.Contact.Service
             return response;
         }
 
+
         public PutContactDataResponse Put(PutContactDataRequest request)
         {
             PutContactDataResponse response = new PutContactDataResponse();
-            response.Success = false;
             response.Version = request.Version;
             try
             {
-                response.Success = ContactDataManager.UpdateContact(request);
+                response = ContactDataManager.InsertContact(request);
+            }
+            catch (Exception ex)
+            {
+                //TODO: Log this to the SQL database via ASE
+                base.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                response.Status = new ServiceStack.ServiceInterface.ServiceModel.ResponseStatus("Exception", ex.Message);
+            }
+            return response;
+        }
+
+        public PutUpdateContactDataResponse Put(PutUpdateContactDataRequest request)
+        {
+            PutUpdateContactDataResponse response = new PutUpdateContactDataResponse();
+            response.Version = request.Version;
+            try
+            {
+                response = ContactDataManager.UpdateContact(request);
             }
             catch (Exception ex)
             {

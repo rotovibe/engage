@@ -388,9 +388,9 @@ namespace Phytel.API.AppDomain.NG.Service
             }
         }
 
-        public PutContactResponse Post(PutContactRequest request)
+        public PutUpdateContactResponse Post(PutUpdateContactRequest request)
         {
-            PutContactResponse response = new PutContactResponse();
+            PutUpdateContactResponse response = new PutUpdateContactResponse();
             try
             {
                 NGManager ngm = new NGManager();
@@ -399,7 +399,7 @@ namespace Phytel.API.AppDomain.NG.Service
                 if (result.UserId.Trim() != string.Empty)
                 {
                     request.UserId = result.UserId;
-                    response = ngm.PutContact(request);
+                    response = ngm.PutUpdateContact(request);
                 }
                 else
                     throw new UnauthorizedAccessException();

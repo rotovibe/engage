@@ -22,14 +22,52 @@ namespace Phytel.API.DataDomain.Contact
             _dbName = contractDBName;
         }
 
+        /// <summary>
+        /// Inserts a contact object.
+        /// </summary>
+        /// <param name="newEntity">PutContactDataRequest object</param>
+        /// <returns>Id of the newly inserted contact.</returns>
         public object Insert(object newEntity)
         {
+            PutContactDataResponse response = null;
+            PutContactDataRequest request = newEntity as PutContactDataRequest;
             try
             {
-                throw new NotImplementedException();
-                // code here //
+                MEContact meContact = new MEContact
+                {
+                    Id = ObjectId.GenerateNewId(),
+                    PatientId = ObjectId.Parse(request.PatientId),
+                    TimeZone = ObjectId.Parse(request.TimeZoneId),
+                    Version = request.Version,
+                    LastUpdatedOn = DateTime.UtcNow,
+                    UpdatedBy = request.UserId,
+                    DeleteFlag = false
+                };
+
+                //Modes
+                if (request.Modes != null && request.Modes.Count > 0)
+                {
+                    List<MECommMode> commModes = new List<MECommMode>();
+                    foreach (CommModeData c in request.Modes)
+                    {
+                        commModes.Add(new MECommMode { ModeId = ObjectId.Parse(c.ModeId), OptOut = c.OptOut, Preferred = c.Preferred });
+                    }
+                    meContact.Modes = commModes;
+                }
+
+                using (ContactMongoContext ctx = new ContactMongoContext(_dbName))
+                {
+                    ctx.Contacts.Collection.Insert(meContact);
+                }
+                //Send back the newly inserted object.
+                response = new PutContactDataResponse();
+                response.ContactId = meContact.Id.ToString();
             }
-            catch (Exception ex) { throw ex; }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return response;
         }
 
         public object InsertAll(List<object> entities)
@@ -92,116 +130,380 @@ namespace Phytel.API.DataDomain.Contact
             catch (Exception ex) { throw ex; }
         }
 
+        /// <summary>
+        /// Updates a contact object in the database.
+        /// </summary>
+        /// <param name="entity">PutContactDataRequest object to be updated.</param>
+        /// <returns>Boolean field indicating if the update was successful or not.</returns>
         public object Update(object entity)
         {
-            bool status = false;
+            PutUpdateContactDataResponse response = new PutUpdateContactDataResponse();
+            response.SuccessData = false;
+            List<CleanupIdData> updatedPhones = new List<CleanupIdData>();
+            List<CleanupIdData> updatedEmails = new List<CleanupIdData>();
+            List<CleanupIdData> updatedAddresses = new List<CleanupIdData>();
             try
             {
-                PutContactDataRequest request = entity as PutContactDataRequest;
+                PutUpdateContactDataRequest request = entity as PutUpdateContactDataRequest;
                 if (request.ContactId == null)
                     throw new ArgumentException("ContactId is missing from the DataDomain request.");
 
                 using (ContactMongoContext ctx = new ContactMongoContext(_dbName))
                 {
-                    var query = MB.Query<MEContact>.EQ(c => c.Id, ObjectId.Parse(request.ContactId));
-
-                    var uv = new List<UpdateBuilder>();
-
-                    //Modes
-                    if(request.Modes != null)
+                    List<IMongoQuery> queries = new List<IMongoQuery>();
+                    queries.Add(Query.EQ(MEContact.IdProperty, ObjectId.Parse(request.ContactId)));
+                    queries.Add(Query.EQ(MEContact.DeleteFlagProperty, false));
+                    IMongoQuery query = Query.And(queries);
+                    MEContact mc = ctx.Contacts.Collection.Find(query).FirstOrDefault();
+                    if(mc != null)
                     {
-                        List<MECommMode> meModes = null;
-                        if(request.Modes.Count != 0)
+                        var uv = new List<UpdateBuilder>();
+
+                        #region Modes
+                        if (request.Modes != null)
                         {
-                            meModes = new List<MECommMode>();
-                            List<CommModeData> modeData = request.Modes;
-                            foreach (CommModeData m in modeData)
+                            List<MECommMode> meModes = null;
+                            if (request.Modes.Count != 0)
                             {
-                                MECommMode meM = new MECommMode
+                                meModes = new List<MECommMode>();
+                                List<CommModeData> modeData = request.Modes;
+                                foreach (CommModeData m in modeData)
                                 {
-                                    Id = ObjectId.Parse(m.Id),
-                                    ModeId = ObjectId.Parse(m.ModeId),
-                                    OptOut = m.OptOut,
-                                    Preferred = m.Preferred
-                                };
-                                meModes.Add(meM);
+                                    MECommMode meM = new MECommMode
+                                    {
+                                        ModeId = ObjectId.Parse(m.ModeId),
+                                        OptOut = m.OptOut,
+                                        Preferred = m.Preferred
+                                    };
+                                    meModes.Add(meM);
+                                }
                             }
-                        }
-                        uv.Add(MB.Update.SetWrapped<List<MECommMode>>(MEContact.ModesProperty, meModes));
-                    
-                    }
+                            uv.Add(MB.Update.SetWrapped<List<MECommMode>>(MEContact.ModesProperty, meModes));
 
-                    //WeekDays
-                    if (request.WeekDays != null)
-                    {
-                        List<int> weekDays = null;
-                        if (request.WeekDays.Count != 0)
+                        } 
+                        #endregion
+
+                        #region WeekDays
+                        if (request.WeekDays != null)
                         {
-                            weekDays = request.WeekDays;
-                        }
-                        uv.Add(MB.Update.SetWrapped<List<int>>(MEContact.WeekDaysProperty, weekDays));
-
-                    }
-
-                    //TimesOfDays
-                    if (request.TimesOfDaysId != null)
-                    {
-                        List<ObjectId> timesOfDays = null;
-                        // if nothing is selected
-                        if (request.TimesOfDaysId.Count != 0)
-                        {
-                            timesOfDays = new List<ObjectId>();
-                            List<string> times = request.TimesOfDaysId;
-                            foreach (string s in times)
+                            List<int> weekDays = null;
+                            if (request.WeekDays.Count != 0)
                             {
-                                timesOfDays.Add(ObjectId.Parse(s));
+                                weekDays = request.WeekDays;
                             }
-                        }
-                        uv.Add(MB.Update.SetWrapped<List<ObjectId>>(MEContact.TimesOfDaysProperty, timesOfDays));
-                    }
+                            uv.Add(MB.Update.SetWrapped<List<int>>(MEContact.WeekDaysProperty, weekDays));
 
-                    //Languages
-                    if (request.Languages != null)
-                    {
-                        List<MELanguage> meLanguages = null;
-                        if (request.Languages.Count != 0)
+                        } 
+                        #endregion
+
+                        #region TimesOfDays
+                        if (request.TimesOfDaysId != null)
                         {
-                            meLanguages = new List<MELanguage>();
-                            List<LanguageData> languageData = request.Languages;
-                            foreach (LanguageData l in languageData)
+                            List<ObjectId> timesOfDays = null;
+                            // if nothing is selected
+                            if (request.TimesOfDaysId.Count != 0)
                             {
-                                MELanguage meL = new MELanguage
+                                timesOfDays = new List<ObjectId>();
+                                List<string> times = request.TimesOfDaysId;
+                                foreach (string s in times)
                                 {
-                                     Id = ObjectId.Parse(l.Id),
-                                     LookUpLanguageId  = ObjectId.Parse(l.LookUpLanguageId),
-                                     Preferred = l.Preferred
-                                };
-                                meLanguages.Add(meL);
+                                    timesOfDays.Add(ObjectId.Parse(s));
+                                }
                             }
+                            uv.Add(MB.Update.SetWrapped<List<ObjectId>>(MEContact.TimesOfDaysProperty, timesOfDays));
+                        } 
+                        #endregion
+
+                        #region Languages
+                        if (request.Languages != null)
+                        {
+                            List<MELanguage> meLanguages = null;
+                            if (request.Languages.Count != 0)
+                            {
+                                meLanguages = new List<MELanguage>();
+                                List<LanguageData> languageData = request.Languages;
+                                foreach (LanguageData l in languageData)
+                                {
+                                    MELanguage meL = new MELanguage
+                                    {
+                                        LookUpLanguageId = ObjectId.Parse(l.LookUpLanguageId),
+                                        Preferred = l.Preferred
+                                    };
+                                    meLanguages.Add(meL);
+                                }
+                            }
+                            uv.Add(MB.Update.SetWrapped<List<MELanguage>>(MEContact.LanguagesProperty, meLanguages));
+
+                        } 
+                        #endregion
+                        
+                        #region Phone&Text(softdeletes)
+                        if (request.Phones != null)
+                        {
+                            List<MEPhone> mePhones = null;
+                            List<MEPhone> existingPhones = mc.Phones;
+                            if (existingPhones.Count == 0)
+                            {
+                                // Add all the new phones that are sent in the request with the newly generated ObjectId.
+                                if (request.Phones.Count != 0)
+                                {
+                                    mePhones = new List<MEPhone>();
+                                    List<PhoneData> phoneData = request.Phones;
+                                    foreach (PhoneData p in phoneData)
+                                    {
+                                        MEPhone mePh = new MEPhone
+                                        {
+                                            Id = ObjectId.GenerateNewId(),
+                                            Number = p.Number,
+                                            IsText = p.IsText,
+                                            TypeId = ObjectId.Parse(p.TypeId),
+                                            PreferredPhone = p.PhonePreferred,
+                                            PreferredText = p.TextPreferred,
+                                            OptOut = p.OptOut,
+                                            DeleteFlag = false
+                                        };
+                                        mePhones.Add(mePh);
+                                        updatedPhones.Add(new CleanupIdData { OldId = p.Id, NewId = mePh.Id.ToString() });
+                                    }
+                                }
+                            }
+                            else 
+                            {
+                                mePhones = new List<MEPhone>();
+                                // Set deleteflag == true for the existing 
+                                if (request.Phones.Count == 0)
+                                {
+                                    foreach (MEPhone mePh in existingPhones)
+                                    {
+                                        mePh.DeleteFlag = true;
+                                        mePhones.Add(mePh);
+                                    }
+                                }
+                                else
+                                {
+                                    List<PhoneData> phoneData = request.Phones;
+                                    foreach(PhoneData p in phoneData )
+                                    {
+                                        // Check if it was a new insert.
+                                        ObjectId result;
+                                        ObjectId id;
+                                        if (ObjectId.TryParse(p.Id, out result))
+                                        {
+                                            // this is an update to an existing.
+                                            id = result;
+                                        }
+                                        else
+                                        {
+                                            // this is a new insert
+                                            id = ObjectId.GenerateNewId();
+                                            updatedPhones.Add(new CleanupIdData { OldId = p.Id, NewId = id.ToString() });
+                                        }
+                                        MEPhone mePh = new MEPhone
+                                        {
+                                            Id = id,
+                                            Number = p.Number,
+                                            IsText = p.IsText,
+                                            TypeId = ObjectId.Parse(p.TypeId),
+                                            PreferredPhone = p.PhonePreferred,
+                                            PreferredText = p.TextPreferred,
+                                            OptOut = p.OptOut,
+                                            DeleteFlag = false
+                                        };
+                                        mePhones.Add(mePh);
+                                    }
+                                }
+                            }
+                            uv.Add(MB.Update.SetWrapped<List<MEPhone>>(MEContact.PhonesProperty, mePhones));
                         }
-                        uv.Add(MB.Update.SetWrapped<List<MELanguage>>(MEContact.LanguagesProperty, meLanguages));
-                    
+                        #endregion
+
+                        #region Emails(softdeletes)
+                        if (request.Emails != null)
+                        {
+                            List<MEEmail> meEmails = null;
+                            List<MEEmail> existingEmails = mc.Emails;
+                            if (existingEmails.Count == 0)
+                            {
+                                // Add all the new emails that are sent in the request with the newly generated ObjectId.
+                                if (request.Emails.Count != 0)
+                                {
+                                    meEmails = new List<MEEmail>();
+                                    List<EmailData> emailData = request.Emails;
+                                    foreach (EmailData p in emailData)
+                                    {
+                                        MEEmail me = new MEEmail
+                                        {
+                                            Id = ObjectId.GenerateNewId(),
+                                            Text = p.Text,
+                                            Preferred = p.Preferred,
+                                            TypeId = ObjectId.Parse(p.TypeId),
+                                            OptOut = p.OptOut,
+                                            DeleteFlag = false
+                                        };
+                                        meEmails.Add(me);
+                                        updatedEmails.Add(new CleanupIdData { OldId = p.Id, NewId = me.Id.ToString() });
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                meEmails = new List<MEEmail>();
+                                // Set deleteflag == true for the existing 
+                                if (request.Emails.Count == 0)
+                                {
+                                    foreach (MEEmail me in existingEmails)
+                                    {
+                                        me.DeleteFlag = true;
+                                        meEmails.Add(me);
+                                    }
+                                }
+                                else
+                                {
+                                    List<EmailData> emailData = request.Emails;
+                                    foreach (EmailData p in emailData)
+                                    {
+                                        // Check if it was a new insert.
+                                        ObjectId result;
+                                        ObjectId id;
+                                        if (ObjectId.TryParse(p.Id, out result))
+                                        {
+                                            // this is an update to an existing.
+                                            id = result;
+                                        }
+                                        else
+                                        {
+                                            // this is a new insert
+                                            id = ObjectId.GenerateNewId();
+                                            updatedEmails.Add(new CleanupIdData { OldId = p.Id, NewId = id.ToString() });
+                                        }
+                                        MEEmail mePh = new MEEmail
+                                        {
+                                            Id = id,
+                                            Text = p.Text,
+                                            TypeId = ObjectId.Parse(p.TypeId),
+                                            Preferred = p.Preferred,
+                                            OptOut = p.OptOut,
+                                            DeleteFlag = false
+                                        };
+                                        meEmails.Add(mePh);
+                                    }
+                                }
+                            }
+                            uv.Add(MB.Update.SetWrapped<List<MEEmail>>(MEContact.EmailsProperty, meEmails));
+                        }
+                        #endregion
+
+                        #region Addresses(softdeletes)
+                        if (request.Addresses != null)
+                        {
+                            List<MEAddress> meAddresses = null;
+                            List<MEAddress> existingAddresses = mc.Addresses;
+                            if (existingAddresses.Count == 0)
+                            {
+                                // Add all the new addresses that are sent in the request with the newly generated ObjectId.
+                                if (request.Addresses.Count != 0)
+                                {
+                                    meAddresses = new List<MEAddress>();
+                                    List<AddressData> addressData = request.Addresses;
+                                    foreach (AddressData p in addressData)
+                                    {
+                                        MEAddress me = new MEAddress
+                                        {
+                                            Id = ObjectId.GenerateNewId(),
+                                            TypeId = ObjectId.Parse(p.TypeId),
+                                            Line1 = p.Line1,
+                                            Line2 = p.Line2,
+                                            Line3 = p.Line3,
+                                            City = p.City,
+                                            StateId = ObjectId.Parse(p.StateId),
+                                            PostalCode = p.PostalCode,
+                                            Preferred = p.Preferred,
+                                            OptOut = p.OptOut,
+                                            DeleteFlag = false
+                                        };
+                                        meAddresses.Add(me);
+                                        updatedAddresses.Add(new CleanupIdData { OldId = p.Id, NewId = me.Id.ToString() });
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                meAddresses = new List<MEAddress>();
+                                // Set deleteflag == true for the existing 
+                                if (request.Addresses.Count == 0)
+                                {
+                                    foreach (MEAddress me in existingAddresses)
+                                    {
+                                        me.DeleteFlag = true;
+                                        meAddresses.Add(me);
+                                    }
+                                }
+                                else
+                                {
+                                    List<AddressData> addressData = request.Addresses;
+                                    foreach (AddressData p in addressData)
+                                    {
+                                        // Check if it was a new insert.
+                                        ObjectId result;
+                                        ObjectId id;
+                                        if (ObjectId.TryParse(p.Id, out result))
+                                        {
+                                            // this is an update to an existing.
+                                            id = result;
+                                        }
+                                        else
+                                        {
+                                            // this is a new insert
+                                            id = ObjectId.GenerateNewId();
+                                            updatedAddresses.Add(new CleanupIdData { OldId = p.Id, NewId = id.ToString() });
+                                        }
+                                        MEAddress me = new MEAddress
+                                        {
+                                            Id = id,
+                                            TypeId = ObjectId.Parse(p.TypeId),
+                                            Line1 = p.Line1,
+                                            Line2 = p.Line2,
+                                            Line3 = p.Line3,
+                                            City = p.City,
+                                            StateId = ObjectId.Parse(p.StateId),
+                                            PostalCode = p.PostalCode,
+                                            Preferred = p.Preferred,
+                                            OptOut = p.OptOut,
+                                            DeleteFlag = false
+                                        };
+                                        meAddresses.Add(me);
+                                    }
+                                }
+                            }
+                            uv.Add(MB.Update.SetWrapped<List<MEAddress>>(MEContact.AddressessProperty, meAddresses));
+                        }
+                        #endregion
+
+                        // TimeZone
+                        uv.Add(MB.Update.Set(MEContact.TimeZoneProperty, ObjectId.Parse(request.TimeZoneId)));
+
+                        // LastUpdatedOn
+                        uv.Add(MB.Update.Set(MEContact.LastUpdatedOnProperty,DateTime.UtcNow));
+
+                        //UpdatedBy
+                        uv.Add(MB.Update.Set(MEContact.UpdatedByProperty, request.UserId));
+
+                        IMongoUpdate update = MB.Update.Combine(uv);
+                        ctx.Contacts.Collection.Update(query, update);
+
+                        //set the response
+                        response.SuccessData = true;
+                        response.UpdatedPhoneData = updatedPhones;
+                        response.UpdatedEmailData = updatedEmails;
+                        response.UpdatedAddressData = updatedAddresses;
                     }
-                    
-                    // TimeZone
-                    uv.Add(MB.Update.Set(MEContact.TimeZoneProperty, ObjectId.Parse(request.TimeZoneId)));
-
-                    // LastUpdatedOn
-                    uv.Add(MB.Update.Set(MEContact.LastUpdatedOnProperty,DateTime.UtcNow));
-
-                    //UpdatedBy
-                    uv.Add(MB.Update.Set(MEContact.UpdatedByProperty, request.UserId));
-
-                    IMongoUpdate update = MB.Update.Combine(uv);
-                    ctx.Contacts.Collection.Update(query, update);
                 }
-                status = true;
             }
             catch (Exception ex) 
             { 
                 throw ex; 
             }
-            return status;
+            return response;
         }
 
         public void CacheByID(List<string> entityIDs)
@@ -214,6 +516,11 @@ namespace Phytel.API.DataDomain.Contact
             catch (Exception ex) { throw ex; }
         }
 
+        /// <summary>
+        /// Get a contact for patient
+        /// </summary>
+        /// <param name="request">GetContactDataRequest object</param>
+        /// <returns>ContactData object</returns>
         public object FindContactByPatientId(GetContactDataRequest request)
         {
             ContactData contactData = null;
@@ -224,20 +531,7 @@ namespace Phytel.API.DataDomain.Contact
                 queries.Add(Query.EQ(MEContact.DeleteFlagProperty, false));
                 IMongoQuery mQuery = Query.And(queries);
                 MEContact mc = ctx.Contacts.Collection.Find(mQuery).FirstOrDefault();
-                if (mc == null)
-                {
-                    //Insert a new contact entity with the given patientId and send it back.
-                    MEContact meContact = new MEContact { 
-                        PatientId = ObjectId.Parse(request.PatientId),
-                        Version = request.Version,
-                        LastUpdatedOn = DateTime.UtcNow,
-                        UpdatedBy = request.UserId,
-                        DeleteFlag = false
-                    };
-                    ctx.Contacts.Collection.Insert(meContact);
-                    contactData = new ContactData { ContactId = meContact.Id.ToString(), PatientId = meContact.PatientId.ToString()};
-                }
-                else
+                if (mc != null)
                 {
                     contactData = new ContactData { 
                         ContactId = mc.Id.ToString(),
@@ -255,7 +549,7 @@ namespace Phytel.API.DataDomain.Contact
                         List<CommModeData> modes = new List<CommModeData>();
                         foreach(MECommMode cm in meCommModes)
                         {
-                            CommModeData commMode = new CommModeData { Id = cm.Id.ToString(), ModeId = cm.ModeId.ToString() , OptOut = cm.OptOut, Preferred = cm.Preferred };
+                            CommModeData commMode = new CommModeData { ModeId = cm.ModeId.ToString() , OptOut = cm.OptOut, Preferred = cm.Preferred };
                             modes.Add(commMode);
                         }
                         contactData.Modes = modes;
@@ -319,7 +613,7 @@ namespace Phytel.API.DataDomain.Contact
                         List<LanguageData> languages = new List<LanguageData>();
                         foreach (MELanguage meLang in meLanguages)
                         {
-                            LanguageData langugage = new LanguageData { Id = meLang.Id.ToString(), LookUpLanguageId = meLang.LookUpLanguageId.ToString() ,Preferred = meLang.Preferred };
+                            LanguageData langugage = new LanguageData { LookUpLanguageId = meLang.LookUpLanguageId.ToString() ,Preferred = meLang.Preferred };
                             languages.Add(langugage);
                         }
                         contactData.Languages = languages;
