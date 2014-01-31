@@ -14,66 +14,58 @@ namespace Phytel.API.DataDomain.Step.DTO
     {
         public MEStepBase() { Id = ObjectId.GenerateNewId(); }
 
-        public const string IdProperty = "_id";
-        public const string TypeProperty = "ty";
-        public const string StatusProperty = "st";
-
         //for index
         public const string DescriptionProperty = "desc";
         public const string QuestionProperty = "q";
 
-        public const string ExtraElementsProperty = "ex";
-        public const string VersionProperty = "v";
-        public const string UpdatedByProperty = "uby";
-        public const string DeleteFlagProperty = "del";
-        public const string TTLDateProperty = "ttl";
-        public const string LastUpdatedOnProperty = "uon";
-
+        public const string IdProperty = "_id";
         [BsonId]
         public ObjectId Id { get; set; }
 
+        public const string TypeProperty = "ty";
         [BsonElement(TypeProperty)]
         [BsonIgnoreIfNull(true)]
         [BsonRequired]
-        public Type Type { get; set; }
+        public StepType Type { get; set; }
 
+        public const string StatusProperty = "st";
         [BsonElement(StatusProperty)]
         [BsonIgnoreIfNull(true)]
         [BsonDefaultValue(1)]
         public Status Status { get; set; }
 
+        public const string ExtraElementsProperty = "ex";
         [BsonElement(ExtraElementsProperty)]
         [BsonExtraElements()]
         [BsonIgnoreIfNull(true)]
         public Dictionary<string, object> ExtraElements { get; set; }
 
+        public const string VersionProperty = "v";
         [BsonElement(VersionProperty)]
         [BsonDefaultValue("v1")]
         public string Version { get; set; }
 
+        public const string UpdatedByProperty = "uby";
         [BsonElement(UpdatedByProperty)]
         [BsonDefaultValue("-100")]
         public string UpdatedBy { get; set; }
 
+        public const string DeleteFlagProperty = "del";
         [BsonElement(DeleteFlagProperty)]
         [BsonDefaultValue(false)]
         public bool DeleteFlag { get; set; }
 
+        public const string TTLDateProperty = "ttl";
         [BsonElement(TTLDateProperty)]
         [BsonIgnoreIfNull(true)]
         [BsonDateTimeOptions(Kind = System.DateTimeKind.Local)]
         public System.DateTime? TTLDate { get; set; }
 
+        public const string LastUpdatedOnProperty = "uon";
         [BsonElement(LastUpdatedOnProperty)]
         [BsonIgnoreIfNull(true)]
         [BsonDateTimeOptions(Kind = System.DateTimeKind.Local)]
         public System.DateTime? LastUpdatedOn { get; set; }
 
-    }
-
-    public enum Type
-    { 
-        YesNo  = 1,
-        Text = 2
     }
 }

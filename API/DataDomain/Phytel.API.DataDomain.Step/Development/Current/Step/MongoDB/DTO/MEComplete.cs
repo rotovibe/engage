@@ -7,17 +7,12 @@ using System.Collections.Generic;
 namespace Phytel.API.DataDomain.Step.DTO
 {
     [BsonIgnoreExtraElements(false)]
-    public class METext : MEStepBase
+    public class MEComplete : MEStepBase
     {
         public const string TitleProperty = "t";
         [BsonElement(TitleProperty)]
         [BsonIgnoreIfNull(true)]
         public string Title { get; set; }
-
-        [BsonElement(DescriptionProperty)]
-        [BsonIgnoreIfNull(true)]
-        [BsonRequired]
-        public string Description { get; set; }
 
         public const string TextPromptProperty = "text";
         [BsonElement(TextPromptProperty)]

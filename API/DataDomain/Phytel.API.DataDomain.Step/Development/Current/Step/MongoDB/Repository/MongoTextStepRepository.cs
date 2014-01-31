@@ -62,7 +62,7 @@ namespace Phytel.API.DataDomain.Step
                         Status = Helper.ToFriendlyString(meText.Status),
                         Title = meText.Title,
                         Description = meText.Description,
-                        TextEntry = meText.TextEntry
+                        TextEntry = meText.TextPrompt
                     };
                     response.TextStep = textStep;
                 }
