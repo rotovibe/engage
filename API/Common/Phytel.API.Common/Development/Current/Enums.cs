@@ -26,7 +26,7 @@ namespace Phytel.API.Common
     }
 
     /// <summary>
-    /// Program state enums
+    /// depricated. see ElementState
     /// </summary>
     public enum ProgramState
     {
@@ -39,30 +39,61 @@ namespace Phytel.API.Common
 
     public enum ElementState
     {
-        Removed = -1,
-        NotStarted = 0,
-        Started = 1,
-        Completed = 2,
-        InProgress =3
+        Removed = 1,
+        NotStarted = 2,
+        Started = 3,
+        InProgress = 4,
+        Completed = 5
     }
 
     public enum GenericStatus
     {
-        NotSet = 0,
-        Pending = 1,
-        NotEligible = 2
+        NotSet = 1,
+        Pending = 2,
+        NotEligible = 3
+    }
+
+    public enum EnrollmentStatus
+    {
+        NotSet = 1,
+        Pending = 2,
+        NotEligible = 3
     }
 
     public enum EligibilityStatus
     {
-        NotEligible = 0,
-        Eligible = 1
+        NotEligible = 1,
+        Eligible = 2
+    }
+
+    public enum Locked
+    {
+        No = 1,
+        Yes = 2
     }
 
     public enum GenericSetting
     {
-        No = 0,
-        Yes = 1
+        No = 1,
+        Yes = 2
+    }
+
+    public enum EligibilityOverride
+    {
+        No = 1,
+        Yes = 2
+    }
+
+    public enum Graduated
+    {
+        No = 1,
+        Yes = 2
+    }
+
+    public enum Completed
+    {
+        No = 1,
+        Yes = 2
     }
 
     public enum StepType
@@ -77,11 +108,5 @@ namespace Phytel.API.Common
         DateTime = 8,
         Time = 9,
         InputMultiline = 10
-    }
-
-    public enum AuditType
-    {
-        GetPatient = 0,
-        GetPatientProblems = 1
     }
 }

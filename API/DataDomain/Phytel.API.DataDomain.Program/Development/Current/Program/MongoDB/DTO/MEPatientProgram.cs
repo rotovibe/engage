@@ -33,10 +33,10 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
         [BsonElement(ProgramStateProperty)]
         public ProgramState ProgramState { get; set; }
 
-        public const string PopulationProperty = "pop";
-        [BsonElement(PopulationProperty)]
-        [BsonIgnoreIfNull(false)]
-        public string Population { get; set; }
+        #region // will be moved to other collection
+        public const string IneligibleReasonProperty = "ir";
+        [BsonElement(IneligibleReasonProperty)]
+        public string IneligibleReason { get; set; }
 
         public const string EligibilityProperty = "elg";
         [BsonElement(EligibilityProperty)]
@@ -54,10 +54,6 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
         [BsonElement(GraduatedFlagProperty)]
         public bool GraduatedFlag { get; set; }
 
-        public const string IneligibleReasonProperty = "ir";
-        [BsonElement(IneligibleReasonProperty)]
-        public string IneligibleReason { get; set; }
-
         public const string OptOutProperty = "oo";
         [BsonElement(OptOutProperty)]
         public string OptOut { get; set; }
@@ -69,6 +65,11 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
         public const string OptOutDateProperty = "ood";
         [BsonElement(OptOutDateProperty)]
         public DateTime? OptOutDate { get; set; }
+
+        public const string PopulationProperty = "pop";
+        [BsonElement(PopulationProperty)]
+        [BsonIgnoreIfNull(false)]
+        public string Population { get; set; }
 
         public const string RemovedReasonProperty = "rr";
         [BsonElement(RemovedReasonProperty)]
@@ -85,6 +86,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
         public const string OverrideReasonProperty = "or";
         [BsonElement(OverrideReasonProperty)]
         public string OverrideReason { get; set; }
+#endregion
 
         public const string TTLDateProperty = "ttl";
         [BsonElement(TTLDateProperty)]

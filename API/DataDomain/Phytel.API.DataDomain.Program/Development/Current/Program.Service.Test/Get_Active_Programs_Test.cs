@@ -12,7 +12,6 @@ namespace Phytel.API.DataDomain.Program.Services.Test
         public void Get_AllActivePrograms()
         {
             string url = "http://localhost:8888/Program";
-            string ProgramID = "52a0da34fe7a5915485bdfd6";
             string contractNumber = "InHealth001";
             string context ="NG";
             string version = "v1";
@@ -23,8 +22,7 @@ namespace Phytel.API.DataDomain.Program.Services.Test
                 url, 
                 context, 
                 version, 
-                contractNumber, 
-                ProgramID));
+                contractNumber));
 
             //Assert.AreEqual(ProgramID, response.Program.ProgramID);
         }

@@ -1,6 +1,7 @@
 ﻿using Phytel.API.AppDomain.NG.DTO;
 using Phytel.API.AppDomain.NG.PlanSpecification;
 using Phytel.API.DataDomain.Patient.DTO;
+using DD = Phytel.API.DataDomain.Program.DTO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -104,7 +105,7 @@ namespace Phytel.API.AppDomain.NG
             }
         }
 
-        internal static void SpawnElementsInList(List<SpawnElement> list, Program program, string userId)
+        internal static void SpawnElementsInList(List<SpawnElement> list, Program program, string userId, DD.ProgramAttribute progAttr)
         {
             try
             {
@@ -116,7 +117,7 @@ namespace Phytel.API.AppDomain.NG
                     }
                     else
                     {
-                        SetProgramAttributes(r, program, userId );
+                        SetProgramAttributes(r, program, userId, progAttr );
                     }
                 });
             }
@@ -126,56 +127,63 @@ namespace Phytel.API.AppDomain.NG
             }
         }
 
-        public static void SetProgramAttributes(SpawnElement r, Program program, string userId)
+        public static void SetProgramAttributes(SpawnElement r, Program program, string userId, DD.ProgramAttribute progAttr)
         {
             try
             {
                 if (r.ElementType.Equals(10))
                 {
                     // eligibility series
-                    program.Eligibility = Convert.ToInt32(r.Tag);
-                    
-                    int state;
+                    //program.Eligibility = Convert.ToInt32(r.Tag); // remove after testing
+                    progAttr.Eligibility = Convert.ToInt32(r.Tag);
+
+                    int state; // no = 1, yes = 2
                     bool isNum = int.TryParse(r.Tag, out state);
                     if (isNum)
                     {
                         // program is closed due to ineligibility
-                        if (state.Equals(0))
+                        if (state.Equals(1)) // not eligible
+                        {
+                            program.ElementState = 5;
+                            //program.EndDate = System.DateTime.UtcNow; // remove after testing
+                            //closedby ???
+                            progAttr.EndDate = System.DateTime.UtcNow;
+                        }
+                        else if (state.Equals(2)) // eligible
                         {
                             program.ElementState = 4;
-                            program.EndDate = System.DateTime.UtcNow;
-                            //closedby ???
-                        }
-                        else if (state.Equals(1))
-                        {
-                            program.ElementState = 3;
                         }
                     }
                 }
                 else if (r.ElementType.Equals(11))
                 {
                     // eligibility reason
-                    program.IneligibleReason = r.Tag;
+                    //program.IneligibleReason = r.Tag; // remove
+                    progAttr.IneligibleReason = r.Tag;
                 }
                 else if (r.ElementType.Equals(16))
                 {
                     // do something with opt out 
-                    program.OptOut = r.Tag;
+                    //program.OptOut = r.Tag; // remove
+                    progAttr.OptOut = r.Tag;
                 }
                 else if (r.ElementType.Equals(17))
                 {
                     // do something with opt out
-                    program.OptOutReason = r.Tag;
+                    //program.OptOutReason = r.Tag; // remove
+                    progAttr.OptOutReason = r.Tag;
                 }
                 else if (r.ElementType.Equals(18))
                 {
                     // do something with opt out 
-                    program.OptOutDate = Convert.ToDateTime(r.Tag);
+                    //program.OptOutDate = Convert.ToDateTime(r.Tag);  // remove
+                    progAttr.OptOutDate = Convert.ToDateTime(r.Tag);
                 }
                 else if (r.ElementType.Equals(19))
                 {
                     // do something with opt out 
-                    program.GraduatedFlag = Convert.ToBoolean(r.Tag);
+                    //program.GraduatedFlag = Convert.ToBoolean(r.Tag); // remove
+                    progAttr.GraduatedFlag = Convert.ToInt32(r.Tag);
                 }
             }
             catch (Exception ex)
@@ -317,6 +325,92 @@ namespace Phytel.API.AppDomain.NG
             catch (Exception ex)
             {
                 throw new Exception("AppDomain:GetCohortPatientViewRecord():" + ex.Message, ex.InnerException);
+            }
+        }
+
+        internal static void SaveReportingAttributes(DD.ProgramAttribute _programAttributes)
+        {
+            try
+            {
+                // 1) get program attribute
+                DD.ProgramAttribute pAtt = PlanElementEndpointUtil.GetProgramAttributes(_programAttributes.PlanElementId);
+                // 2) update existing attributes
+                if (pAtt != null)
+                {
+                    ModifyProgramAttributePropertiesForUpdate(pAtt, _programAttributes);
+                    PlanElementEndpointUtil.UpdateProgramAttributes(pAtt);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("AppDomain:SaveReportingAttributes():" + ex.Message, ex.InnerException);
+            }
+        }
+
+        private static void ModifyProgramAttributePropertiesForUpdate(DD.ProgramAttribute pAtt, DD.ProgramAttribute _pAtt)
+        {
+            try
+            {
+                if (_pAtt.AssignedBy != null) pAtt.AssignedBy = _pAtt.AssignedBy;
+                if (_pAtt.AssignedOn != null) pAtt.AssignedOn = _pAtt.AssignedOn;
+                if (_pAtt.AuthoredBy != null) pAtt.AuthoredBy = _pAtt.AuthoredBy;
+                if (_pAtt.CompletedBy != null) pAtt.CompletedBy = _pAtt.CompletedBy;
+                if (_pAtt.DateCompleted != null) pAtt.DateCompleted = _pAtt.DateCompleted;
+                if (_pAtt.DidNotEnrollReason != null) pAtt.DidNotEnrollReason = _pAtt.DidNotEnrollReason;
+                if (_pAtt.DisEnrollReason != null) pAtt.DisEnrollReason = _pAtt.DisEnrollReason;
+                if (_pAtt.EligibilityRequirements != null) pAtt.EligibilityRequirements = _pAtt.EligibilityRequirements;
+                if (_pAtt.EligibilityStartDate != null) pAtt.EligibilityStartDate = _pAtt.EligibilityStartDate;
+                if (_pAtt.EndDate != null) pAtt.EndDate = _pAtt.EndDate;
+                if (_pAtt.IneligibleReason != null) pAtt.IneligibleReason = _pAtt.IneligibleReason;
+                if (_pAtt.OptOut != null) pAtt.OptOut = _pAtt.OptOut;
+                if (_pAtt.OptOutDate != null) pAtt.OptOutDate = _pAtt.OptOutDate;
+                if (_pAtt.OptOutReason != null) pAtt.OptOutReason = _pAtt.OptOutReason;
+                if (_pAtt.OverrideReason != null) pAtt.OverrideReason = _pAtt.OverrideReason;
+                if (_pAtt.Population != null) pAtt.Population = _pAtt.Population;
+                if (_pAtt.RemovedReason != null) pAtt.RemovedReason = _pAtt.RemovedReason;
+                if (_pAtt.StartDate != null) pAtt.StartDate = _pAtt.StartDate;
+                if (_pAtt.Status != 0) pAtt.Status = _pAtt.Status;
+                if (_pAtt.Completed != 0) pAtt.Completed = _pAtt.Completed;
+                if (_pAtt.Eligibility != 0) pAtt.Eligibility = _pAtt.Eligibility;
+                if (_pAtt.EligibilityEndDate != null) pAtt.EligibilityEndDate = _pAtt.EligibilityEndDate;
+                if (_pAtt.EligibilityOverride != 0) pAtt.EligibilityOverride = _pAtt.EligibilityOverride;
+                if (_pAtt.Enrollment != 0) pAtt.Enrollment = _pAtt.Enrollment;
+                if (_pAtt.GraduatedFlag != 0) pAtt.GraduatedFlag = _pAtt.GraduatedFlag;
+                if (_pAtt.Locked != 0) pAtt.Locked = _pAtt.Locked;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("AppDomain:ModifyProgramAttributePropertiesForUpdate():" + ex.Message, ex.InnerException);
+            }
+        }
+
+        internal static void SetStartDateForProgramAttributes(string programId)
+        {
+            try
+            {
+                DD.ProgramAttribute pa = new DD.ProgramAttribute
+                {
+                    PlanElementId = programId,
+                    StartDate = System.DateTime.UtcNow
+                };
+
+                // 1) get program attribute
+                DD.ProgramAttribute pAtt = PlanElementEndpointUtil.GetProgramAttributes(pa.PlanElementId);
+                // 2) update existing attributes
+                if (pAtt != null)
+                {
+                    ModifyProgramAttributePropertiesForUpdate(pAtt, pa);
+                    PlanElementEndpointUtil.UpdateProgramAttributes(pAtt);
+                }
+                else
+                {
+                    PlanElementEndpointUtil.InsertNewProgramAttribute(pa);
+                }
+
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("AppDomain:SetStartDateForProgramAttributes():" + ex.Message, ex.InnerException);
             }
         }
     }

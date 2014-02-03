@@ -13,6 +13,11 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
     {
         public MEPlanElement() { }
 
+        public const string StartDateProperty = "sd";
+        [BsonElement(StartDateProperty)]
+        [BsonIgnoreIfNull(true)]
+        public DateTime? StartDate { get; set; }
+
         public const string SourceIdProperty = "srcid";
         [BsonElement(SourceIdProperty)]
         [BsonIgnoreIfNull(false)]

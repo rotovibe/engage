@@ -26,6 +26,7 @@ namespace Phytel.API.AppDomain.NG
         {
             try
             {
+                // need to refactor this into a mediator.
                 RelatedChanges.Clear();
                 PostProcessActionResponse response = new PostProcessActionResponse();
 
@@ -38,7 +39,8 @@ namespace Phytel.API.AppDomain.NG
                     // set program starting date
                     if (action.Order == 1)
                     {
-                        p.StartDate = System.DateTime.UtcNow;
+                        //p.StartDate = System.DateTime.UtcNow;
+                        PlanElementUtil.SetStartDateForProgramAttributes(request.ProgramId);
                     }
 
                     //// create a responsibility chain to process each elemnt in the hierachy
@@ -72,11 +74,11 @@ namespace Phytel.API.AppDomain.NG
                 else
                 {
                     // need to update this on the p level.
-                    action.ElementState = 3;
+                    action.ElementState = 4; // in progress
                 }
 
                 // save
-                PlanElementEndpointUtil.SaveAction(request, p);
+                PlanElementEndpointUtil.SaveAction(request, action.Id, p);
 
                 response.Program = p;
                 response.RelatedChanges = RelatedChanges;

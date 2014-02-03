@@ -72,7 +72,6 @@ namespace Phytel.API.DataDomain.Program
                             Description = cp.Description,
                             LastUpdatedOn = System.DateTime.UtcNow, // utc time
                             Locked = cp.Locked,
-                            Modules = DTOUtils.SetValidModules(cp.Modules),
                             Name = cp.Name,
                             ObjectivesInfo = cp.ObjectivesInfo,
                             CompletedBy = cp.CompletedBy,
@@ -94,12 +93,13 @@ namespace Phytel.API.DataDomain.Program
                             ExtraElements = cp.ExtraElements,
                             Next = cp.Next,
                             Order = cp.Order,
-                            Previous = cp.Previous
+                            Previous = cp.Previous,
+                            Modules = DTOUtils.SetValidModules(cp.Modules, request.ContractNumber)
                         };
 
                         // update to new ids and their references
                         DTOUtils.RecurseAndReplaceIds(patientProgDoc.Modules);
-
+                        DTOUtils.RecurseAndSaveResponseObjects(patientProgDoc, request.ContractNumber);
                         ctx.PatientPrograms.Collection.Insert(patientProgDoc);
 
                         // update programid in modules
@@ -156,7 +156,7 @@ namespace Phytel.API.DataDomain.Program
         {
             try
             {
-                GetProgramDetailsSummaryResponse result = new GetProgramDetailsSummaryResponse();
+                MEPatientProgram result = null;
 
                 using (ProgramMongoContext ctx = new ProgramMongoContext(_dbName))
                 {
@@ -165,50 +165,7 @@ namespace Phytel.API.DataDomain.Program
 
                     if (cp != null)
                     {
-                        result.Program = new ProgramDetail
-                        {
-                            Id = cp.Id.ToString(),
-                            Client = cp.Client,
-                            ContractProgramId = cp.ContractProgramId.ToString(),
-                            Description = cp.Description,
-                            Name = cp.Name,
-                            PatientId = cp.PatientId.ToString(),
-                            ProgramState = (int)cp.ProgramState,
-                            ShortName = cp.ShortName,
-                            StartDate = cp.StartDate,
-                            Status = (int)cp.Status,
-                            Version = cp.Version,
-                            Eligibility = (int)cp.Eligibility,
-                            EligibilityEndDate = cp.EligibilityEndDate,
-                            EligibilityRequirements = cp.EligibilityRequirements,
-                            EligibilityStartDate = cp.EligibilityStartDate,
-                            DidNotEnrollReason = cp.DidNotEnrollReason,
-                            DisEnrollReason = cp.DisEnrollReason,
-                            EligibilityOverride = (int)cp.EligibilityOverride,
-                            Enrollment = (int)cp.Enrollment,
-                            GraduatedFlag = cp.GraduatedFlag,
-                            IneligibleReason = cp.IneligibleReason,
-                            OptOut = cp.OptOut,
-                            OptOutDate = cp.OptOutDate,
-                            OptOutReason = cp.OptOutReason,
-                            OverrideReason = cp.OverrideReason,
-                            RemovedReason = cp.RemovedReason,
-                            EndDate = cp.EndDate,
-                            Completed = cp.Completed,
-                            Enabled = cp.Enabled,
-                            Next = cp.Next,
-                            Order = cp.Order,
-                            Previous = cp.Previous,
-                            SourceId = cp.SourceId,
-                            AssignBy = cp.AssignedBy,
-                            AssignDate = cp.AssignedOn,
-                            ElementState = (int)cp.State,
-                            CompletedBy = cp.CompletedBy,
-                            DateCompleted = cp.DateCompleted,
-                            ObjectivesInfo = DTOUtils.GetObjectives(cp.ObjectivesInfo),
-                            SpawnElement = DTOUtils.GetSpawnElement(cp),
-                            Modules = DTOUtils.GetModules(cp.Modules)
-                        };
+                        result = cp;
                     }
                     else
                     {

@@ -1,6 +1,7 @@
 ﻿using MongoDB.Bson;
 using Phytel.API.Common;
 using Phytel.API.DataDomain.Program.DTO;
+using Phytel.API.Interface;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +12,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
 {
     public static class DTOUtils
     {
-        public static List<MEModules> SetValidModules(List<MEModules> list)
+        public static List<MEModules> SetValidModules(List<MEModules> list, string contractNumber)
         {
             try
             {
@@ -95,7 +96,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
                                         Title = b.Title,
                                         Text = b.Text,
                                         StepTypeId = b.StepTypeId,
-                                        Responses = b.Responses,
+                                        Responses = GetStepResponses(b.Id, contractNumber),
                                         Completed = b.Completed,
                                         ControlType = b.ControlType,
                                         Enabled = b.Enabled,
@@ -123,6 +124,42 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             catch (Exception ex)
             {
                 throw new Exception("DataDomain:SetValidModules():" + ex.Message, ex.InnerException);
+            }
+        }
+
+        private static List<MEResponse> GetStepResponses(ObjectId stepId, string contractNumber)
+        {
+            List<MEResponse> responseList = null;
+            try
+            {
+                IProgramRepository<GetStepResponseListResponse> repo =
+                    ProgramRepositoryFactory<GetStepResponseListResponse>.GetStepResponseRepository(contractNumber, "NG");
+
+                ICollection<SelectExpression> selectExpressions = new List<SelectExpression>();
+
+                SelectExpression stepResponseExpression = new SelectExpression();
+                stepResponseExpression.FieldName = MEResponse.StepIdProperty;
+                stepResponseExpression.Type = SelectExpressionType.EQ;
+                stepResponseExpression.Value = stepId.ToString();
+                stepResponseExpression.ExpressionOrder = 1;
+                stepResponseExpression.GroupID = 1;
+                selectExpressions.Add(stepResponseExpression);
+
+                APIExpression apiExpression = new APIExpression();
+                apiExpression.Expressions = selectExpressions;
+
+                Tuple<string, IEnumerable<object>> stepResponses = repo.Select(apiExpression);
+
+                if (stepResponses != null)
+                {
+                    responseList = stepResponses.Item2.Cast<MEResponse>().ToList();
+                }
+
+                return responseList;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("DataDomain:GetStepResponses():" + ex.Message, ex.InnerException);
             }
         }
 
@@ -589,7 +626,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
         }
 
 
-        public static List<ModuleDetail> GetModules(List<MEModules> list)
+        public static List<ModuleDetail> GetModules(List<MEModules> list, string contractNumber)
         {
             try
             {
@@ -614,7 +651,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
                     CompletedBy = r.CompletedBy,
                     DateCompleted = r.DateCompleted,
                     Objectives = GetObjectives(r.Objectives),
-                    Actions = GetActions(r.Actions)
+                    Actions = GetActions(r.Actions, contractNumber)
                 }));
                 return mods;
             }
@@ -647,7 +684,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             }
         }
 
-        public static List<ActionsDetail> GetActions(List<MEAction> list)
+        public static List<ActionsDetail> GetActions(List<MEAction> list, string contract)
         {
             try
             {
@@ -672,7 +709,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
                     ElementState = (int)a.State,
                     DateCompleted = a.DateCompleted,
                     Objectives = GetObjectives(a.Objectives),
-                    Steps = GetSteps(a.Steps)
+                    Steps = GetSteps(a.Steps, contract)
                 }));
                 return acts;
             }
@@ -682,7 +719,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             }
         }
 
-        public static List<StepsDetail> GetSteps(List<MEStep> list)
+        public static List<StepsDetail> GetSteps(List<MEStep> list, string contract)
         {
             try
             {
@@ -716,7 +753,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
                         ElementState = (int)s.State,
                         CompletedBy = s.CompletedBy,
                         DateCompleted = s.DateCompleted,
-                        Responses = GetResponses(s),
+                        Responses = GetResponses(s, contract),
                         SpawnElement = GetSpawnElement(s)
                     }));
                 return steps;
@@ -750,26 +787,31 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             }
         }
 
-        public static List<ResponseDetail> GetResponses(MEStep step)
+        public static List<ResponseDetail> GetResponses(MEStep step, string contract)
         {
             try
             {
+                List<MEResponse> meresp = step.Responses;
                 List<ResponseDetail> resp = null;
-                if (step.Responses != null)
+
+                if (meresp == null)
                 {
-                    resp = step.Responses.Select(x => new ResponseDetail
-                    {
-                        Id = x.Id.ToString(),
-                        NextStepId = x.NextStepId.ToString(),
-                        Nominal = x.Nominal,
-                        Order = x.Order,
-                        Required = x.Required,
-                        StepId = x.StepId.ToString(),
-                        Text = x.Text,
-                        Value = x.Value,
-                        SpawnElement = GetResponseSpawnElement(x.Spawn)
-                    }).ToList<ResponseDetail>();
+                    meresp = GetStepResponses(step.Id, contract);
                 }
+
+                resp = meresp.Select(x => new ResponseDetail
+                {
+                    Id = x.Id.ToString(),
+                    NextStepId = x.NextStepId.ToString(),
+                    Nominal = x.Nominal,
+                    Order = x.Order,
+                    Required = x.Required,
+                    StepId = x.StepId.ToString(),
+                    Text = x.Text,
+                    Value = x.Value,
+                    SpawnElement = GetResponseSpawnElement(x.Spawn)
+                }).ToList<ResponseDetail>();
+
                 return resp;
             }
             catch (Exception ex)
@@ -800,6 +842,52 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             catch (Exception ex)
             {
                 throw new ArgumentException("DDomain:GetResponseSpawnElement()" + ex.Message, ex.InnerException);
+            }
+        }
+
+        public static void RecurseAndSaveResponseObjects(MEPatientProgram prog, string contractNumber)
+        {
+            try
+            {
+                foreach (MEModules m in prog.Modules)
+                {
+                    foreach (MEAction a in m.Actions)
+                    {
+                        foreach (MEStep s in a.Steps)
+                        {
+                            bool success = false;
+                            foreach (MEResponse r in s.Responses)
+                            {
+                                success = SaveResponseToDocument(r, contractNumber);
+                            }
+                            if (success)
+                            {
+                                s.Responses = null;
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new ArgumentException("DDomain:RecurseAndSaveResponseObjects()" + ex.Message, ex.InnerException);
+            }
+        }
+
+        private static bool SaveResponseToDocument(MEResponse r, string contractNumber)
+        {
+            bool result = false;
+            try
+            {
+                IProgramRepository<MEResponse> repo =
+                    ProgramRepositoryFactory<MEResponse>.GetStepResponseRepository(contractNumber, "NG");
+
+                result = (Boolean)repo.Insert(r);
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw new ArgumentException("DDomain:SaveResponseToDocument()" + ex.Message, ex.InnerException);
             }
         }
     }

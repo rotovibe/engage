@@ -74,11 +74,15 @@
     <Compile Include="MongoDB\DTO\MEAction.cs" />
     <Compile Include="MongoDB\DTO\MEModule.cs" />
     <Compile Include="MongoDB\DTO\MEObjective.cs" />
+    <Compile Include="MongoDB\DTO\MEProgramAttribute.cs" />
+    <Compile Include="MongoDB\DTO\MEResponseBase.cs" />
     <Compile Include="MongoDB\DTO\MEStep.cs" />
     <Compile Include="MongoDB\DTO\MEResponse.cs" />
     <Compile Include="MongoDB\DTO\MESpawnElement.cs" />
     <Compile Include="MongoDB\DTO\MEProgramBase.cs" />
     <Compile Include="MongoDB\DTO\MEProgram.cs" />
+    <Compile Include="MongoDB\Repository\MongoPatientProgramAttributeRepository.cs" />
+    <Compile Include="MongoDB\Repository\MongopResponseRepository.cs" />
     <Compile Include="MongoDB\Repository\MongoPatientProgramRepository.cs" />
     <Compile Include="MongoDB\Repository\MongoContractProgramRepository.cs" />
     <Compile Include="MongoDB\Repository\MongoProgramRepository.cs" />

@@ -63,6 +63,8 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="Program_Attributes_Test.cs" />
+    <Compile Include="Responses_Test.cs" />
     <Compile Include="Get_Active_Programs_Test.cs" />
     <Compile Include="Patient_Program_Details_Test.cs" />
     <Compile Include="Contract_Program_Test.cs" />

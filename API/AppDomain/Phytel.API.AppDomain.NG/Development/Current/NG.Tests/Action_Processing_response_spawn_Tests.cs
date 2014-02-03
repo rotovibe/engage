@@ -107,5 +107,37 @@ namespace Phytel.API.DataDomain.Patient.Service.Test
             }
             return act;
         }
+
+        [TestMethod]
+        public void Action_Eligibility_spawn_Tests()
+        {
+            string contractNumber = "InHealth001";
+            string context = "NG";
+            string priority = "3";
+            string version = "v1";
+            string token = "52efa855d6a4850fb4f20fc3";
+            string programId = "52efc1ddfe7a5921e450d7fe";
+            string patientId = "52e26f11072ef7191c111f02";
+            string actionID = "52efc1dffe7a5921e450d805";
+            IRestClient client = new JsonServiceClient();
+
+            PostProcessActionResponse response = client.Post<PostProcessActionResponse>(
+                string.Format(@"http://localhost:888/Nightingale/{0}/{1}/Patient/{2}/Program/Module/Action/Process/?ProgramId={3}&Token={4}",
+                version,
+                contractNumber,
+                patientId,
+                programId,
+                token), new PostProcessActionRequest() { Action = GenActionResponseEligibility(), ProgramId = programId });
+        }
+
+        private static Actions GenActionResponseEligibility()
+        {
+            Actions act = null;
+            using (TextReader reader = File.OpenText(actionPath + "Action_Process_Eligibility_Sample.txt"))
+            {
+                act = (Actions)ServiceStack.Text.JsonSerializer.DeserializeFromReader(reader, typeof(Actions));
+            }
+            return act;
+        }
     }
 }

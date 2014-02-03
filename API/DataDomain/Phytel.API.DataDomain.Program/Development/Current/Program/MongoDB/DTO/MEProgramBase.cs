@@ -13,6 +13,11 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
     {
         public MEProgramBase() {}
 
+        public const string EndDateProperty = "ed";
+        [BsonElement(EndDateProperty)]
+        [BsonIgnoreIfNull(false)]
+        public DateTime? EndDate { get; set; }
+
         public const string NameProperty = "nm";
         [BsonElement(NameProperty)]
         [BsonIgnoreIfNull(true)]
@@ -33,31 +38,6 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
         [BsonIgnoreIfNull(true)]
         public string Client { get; set; }
 
-        public const string StartDateProperty = "sd";
-        [BsonElement(StartDateProperty)]
-        [BsonIgnoreIfNull(true)]
-        public DateTime? StartDate { get; set; }
-
-        public const string EndDateProperty = "ed";
-        [BsonElement(EndDateProperty)] 
-        [BsonIgnoreIfNull(false)]
-        public DateTime? EndDate { get; set; }
-
-        public const string EligibilityRequirementsProperty = "er";
-        [BsonElement(EligibilityRequirementsProperty)]
-        [BsonIgnoreIfNull(true)]
-        public string EligibilityRequirements { get; set; }
-
-        public const string EligibilityStartDateProperty = "esd";
-        [BsonElement(EligibilityStartDateProperty)]
-        [BsonIgnoreIfNull(true)]
-        public DateTime? EligibilityStartDate { get; set; }
-
-        public const string EligibilityEndDateProperty = "eedt";
-        [BsonElement(EligibilityEndDateProperty)]
-        [BsonIgnoreIfNull(false)]
-        public DateTime? EligibilityEndDate { get; set; }
-
         public const string StatusProperty = "sts";
         [BsonElement(StatusProperty)]
         [BsonIgnoreIfNull(true)]
@@ -73,16 +53,6 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
         [BsonElement(ModulesProperty)]
         [BsonIgnoreIfNull(true)]
         public List<MEModules> Modules { get; set; }
-
-        public const string AuthoredByProperty = "athby";
-        [BsonElement(AuthoredByProperty)]
-        [BsonIgnoreIfNull(true)]
-        public string AuthoredBy { get; set; }
-
-        public const string LockedProperty = "lck";
-        [BsonElement(LockedProperty)]
-        [BsonIgnoreIfNull(true)]
-        public bool Locked { get; set; }
 
         public const string ExtraElementsProperty = "ex";
         [BsonElement(ExtraElementsProperty)]
@@ -110,5 +80,32 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
         [BsonIgnoreIfNull(true)]
         [BsonDateTimeOptions(Kind = System.DateTimeKind.Local)]
         public DateTime? LastUpdatedOn { get; set; }
+
+        #region // will be refactored
+        public const string EligibilityRequirementsProperty = "er";
+        [BsonElement(EligibilityRequirementsProperty)]
+        [BsonIgnoreIfNull(true)]
+        public string EligibilityRequirements { get; set; }
+
+        public const string EligibilityStartDateProperty = "esd";
+        [BsonElement(EligibilityStartDateProperty)]
+        [BsonIgnoreIfNull(true)]
+        public DateTime? EligibilityStartDate { get; set; }
+
+        public const string EligibilityEndDateProperty = "eedt";
+        [BsonElement(EligibilityEndDateProperty)]
+        [BsonIgnoreIfNull(false)]
+        public DateTime? EligibilityEndDate { get; set; }
+
+        public const string AuthoredByProperty = "athby";
+        [BsonElement(AuthoredByProperty)]
+        [BsonIgnoreIfNull(true)]
+        public string AuthoredBy { get; set; }
+
+        public const string LockedProperty = "lck";
+        [BsonElement(LockedProperty)]
+        [BsonIgnoreIfNull(true)]
+        public bool Locked { get; set; }
+        #endregion
     }
 }

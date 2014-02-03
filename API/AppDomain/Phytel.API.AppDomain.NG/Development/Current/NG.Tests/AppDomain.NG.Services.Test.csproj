@@ -90,6 +90,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="Action_Processing_response_saving_Tests.cs" />
     <Compile Include="Action_Processing_response_spawn_Tests.cs" />
     <Compile Include="Complete_Action_Tests.cs" />
     <Compile Include="Action_Processing_Bug_572_Tests.cs" />
@@ -118,6 +119,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Action_Eligibility.txt" />
+    <Content Include="Action_Process_Eligibility_Sample.txt" />
+    <Content Include="Action_Response_saving_Sample.txt" />
     <Content Include="Action_problem_Sample.txt" />
     <Content Include="Action_Sample.txt" />
   </ItemGroup>

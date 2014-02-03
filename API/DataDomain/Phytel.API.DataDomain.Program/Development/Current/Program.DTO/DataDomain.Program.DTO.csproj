@@ -80,12 +80,25 @@
   <ItemGroup>
     <Compile Include="GetProgramDetailsSummaryRequest.cs" />
     <Compile Include="ActionDetail.cs" />
+    <Compile Include="GetProgramAttributeRequest.cs" />
+    <Compile Include="GetStepResponseRequest.cs" />
+    <Compile Include="GetStepResponseListRequest.cs" />
+    <Compile Include="GetProgramAttributeResponse.cs" />
+    <Compile Include="GetStepResponseResponse.cs" />
+    <Compile Include="GetStepResponseListResponse.cs" />
     <Compile Include="PlanElementDetail.cs" />
     <Compile Include="ObjectivesDetail.cs" />
+    <Compile Include="ProgramAttribute.cs" />
     <Compile Include="PutProgramActionProcessingRequest.cs" />
     <Compile Include="PutProgramActionProcessingResponse.cs" />
     <Compile Include="GetPatientProgramsRequest.cs" />
     <Compile Include="GetPatientProgramsResponse.cs" />
+    <Compile Include="PutProgramAttributesRequest.cs" />
+    <Compile Include="PutUpdateProgramAttributesRequest.cs" />
+    <Compile Include="PutProgramAttributesResponse.cs" />
+    <Compile Include="PutUpdateResponseRequest.cs" />
+    <Compile Include="PutUpdateProgramAttributesResponse.cs" />
+    <Compile Include="PutUpdateResponseResponse.cs" />
     <Compile Include="ResponseDetail.cs" />
     <Compile Include="StepDetail.cs" />
     <Compile Include="ModuleDetail.cs" />
@@ -102,6 +115,7 @@
     <Compile Include="GetAllProgramsResponse.cs" />
     <Compile Include="GetProgramResponse.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="StepResponse.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\..\Common\Phytel.API.Common\Development\Current\Phytel.API.Common.csproj">

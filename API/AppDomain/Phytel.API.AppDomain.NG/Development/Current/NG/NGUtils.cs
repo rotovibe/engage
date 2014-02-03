@@ -11,7 +11,7 @@ namespace Phytel.API.AppDomain.NG
     public static class NGUtils
     {
 
-        internal static bool IsDateValid(string p)
+        public static bool IsDateValid(string p)
         {
             DateTime date;
             bool result = false;
@@ -57,7 +57,7 @@ namespace Phytel.API.AppDomain.NG
             return pts;
         }
 
-        internal static ProgramDetail FormatProgramDetail(DTO.Program program)
+        public static ProgramDetail FormatProgramDetail(DTO.Program program)
         {
             try
             {
@@ -106,7 +106,7 @@ namespace Phytel.API.AppDomain.NG
             }
         }
 
-        internal static DTO.Program FormatProgramDetail(ProgramDetail program)
+        public static DTO.Program FormatProgramDetail(ProgramDetail program)
         {
             try
             {
@@ -166,7 +166,7 @@ namespace Phytel.API.AppDomain.NG
             }
         }
 
-        private static List<SpawnElementDetail> GetADSpawnElements(List<SpawnElement> list)
+        public static List<SpawnElementDetail> GetADSpawnElements(List<SpawnElement> list)
         {
             try
             {
@@ -192,7 +192,7 @@ namespace Phytel.API.AppDomain.NG
             }
         }
 
-        private static List<SpawnElement> GetADSpawnElements(List<SpawnElementDetail> list)
+        public static List<SpawnElement> GetADSpawnElements(List<SpawnElementDetail> list)
         {
             try
             {
@@ -218,7 +218,7 @@ namespace Phytel.API.AppDomain.NG
             }
         }
 
-        private static List<ObjectivesDetail> GetADObjectives(List<Objective> list)
+        public static List<ObjectivesDetail> GetADObjectives(List<Objective> list)
         {
             try
             {
@@ -245,7 +245,7 @@ namespace Phytel.API.AppDomain.NG
             }
         }
 
-        private static List<Objective> GetADObjectives(List<ObjectivesDetail> list)
+        public static List<Objective> GetADObjectives(List<ObjectivesDetail> list)
         {
             try
             {
@@ -272,7 +272,7 @@ namespace Phytel.API.AppDomain.NG
             }
         }
 
-        private static List<ModuleDetail> GetADModules(List<Module> list)
+        public static List<ModuleDetail> GetADModules(List<Module> list)
         {
             try
             {
@@ -315,7 +315,7 @@ namespace Phytel.API.AppDomain.NG
             }
         }
 
-        private static List<Module> GetADModules(List<ModuleDetail> list)
+        public static List<Module> GetADModules(List<ModuleDetail> list)
         {
             try
             {
@@ -358,7 +358,7 @@ namespace Phytel.API.AppDomain.NG
             }
         }
 
-        private static List<ActionsDetail> GetADActions(List<Actions> list)
+        public static List<ActionsDetail> GetADActions(List<Actions> list)
         {
             try
             {
@@ -401,7 +401,7 @@ namespace Phytel.API.AppDomain.NG
             }
         }
 
-        private static List<Actions> GetADActions(List<ActionsDetail> list)
+        public static List<Actions> GetADActions(List<ActionsDetail> list)
         {
             try
             {
@@ -444,7 +444,7 @@ namespace Phytel.API.AppDomain.NG
             }
         }
 
-        private static List<StepsDetail> GetADSteps(List<Step> list)
+        public static List<StepsDetail> GetADSteps(List<Step> list)
         {
             try
             {
@@ -495,7 +495,7 @@ namespace Phytel.API.AppDomain.NG
             }
         }
 
-        private static List<Step> GetADSteps(List<StepsDetail> list)
+        public static List<Step> GetADSteps(List<StepsDetail> list)
         {
             try
             {
@@ -546,7 +546,7 @@ namespace Phytel.API.AppDomain.NG
             }
         }
 
-        private static List<ResponseDetail> GetADResponses(List<Response> list)
+        public static List<ResponseDetail> GetADResponses(List<Response> list)
         {
             try
             {
@@ -578,7 +578,7 @@ namespace Phytel.API.AppDomain.NG
             }
         }
 
-        private static List<SpawnElementDetail> GetDDSpawnElement(List<SpawnElement> s)
+        public static List<SpawnElementDetail> GetDDSpawnElement(List<SpawnElement> s)
         {
             try
             {
@@ -599,11 +599,11 @@ namespace Phytel.API.AppDomain.NG
             }
             catch (Exception ex)
             {
-                throw new Exception("AppDomain:GetADResponses():" + ex.Message, ex.InnerException);
+                throw new Exception("AppDomain:GetDDSpawnElement():" + ex.Message, ex.InnerException);
             }
         }
 
-        private static List<Response> GetADResponses(List<ResponseDetail> list)
+        public static List<Response> GetADResponses(List<ResponseDetail> list)
         {
             try
             {
@@ -635,7 +635,7 @@ namespace Phytel.API.AppDomain.NG
             }
         }
 
-        private static List<SpawnElement> GetADSpawnElement(List<SpawnElementDetail> s)
+        public static List<SpawnElement> GetADSpawnElement(List<SpawnElementDetail> s)
         {
             try
             {
@@ -659,7 +659,7 @@ namespace Phytel.API.AppDomain.NG
             }
         }
 
-        internal static void UpdateProgramAction(Actions ac, DTO.Program p)
+        public static void UpdateProgramAction(Actions ac, DTO.Program p)
         {
             DTO.Program pr = p;
             pr.Modules.ForEach(m =>
@@ -679,7 +679,7 @@ namespace Phytel.API.AppDomain.NG
             });
         }
 
-        private static bool ReplaceAction(Actions ac, Module m, Actions a)
+        public static bool ReplaceAction(Actions ac, Module m, Actions a)
         {
             bool replaced = false;
             if (a.Id.Equals(ac.Id))
