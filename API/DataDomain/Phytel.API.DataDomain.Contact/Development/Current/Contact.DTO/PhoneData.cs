@@ -8,7 +8,7 @@ namespace Phytel.API.DataDomain.Contact.DTO
     public class PhoneData
     {
         public string Id { get; set; }
-        public string Number { get; set; }
+        public long Number { get; set; }
         public string TypeId { get; set; }
         public bool IsText { get; set; }
         public bool PhonePreferred { get; set; }

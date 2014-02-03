@@ -128,8 +128,8 @@ namespace Phytel.API.AppDomain.NG.Test
             contact.Addresses = addresses;
 
             List<Phone> phones = new List<Phone>();
-            phones.Add(new Phone { Id = "52e7583dd43323149870c225", IsText = false, Number = "2142142147", OptOut = false, PhonePreferred = true, TextPreferred = false, TypeId = "52e18c2ed433232028e9e3a6" });
-            phones.Add(new Phone { Id = "52e75847d43323149870c226", IsText = true, Number = "8178178179", OptOut = false, PhonePreferred = false, TextPreferred = true, TypeId = "52e18c38d433232028e9e3a8" });
+            phones.Add(new Phone { Id = "52e7583dd43323149870c225", IsText = false, Number = 2142142147, OptOut = false, PhonePreferred = true, TextPreferred = false, TypeId = "52e18c2ed433232028e9e3a6" });
+            phones.Add(new Phone { Id = "52e75847d43323149870c226", IsText = true, Number = 8179035768, OptOut = false, PhonePreferred = false, TextPreferred = true, TypeId = "52e18c38d433232028e9e3a8" });
           //  phones.Add(new Phone { Id = "52e7584bd43323149870c227", IsText = false, Number = "9729729723", OptOut = false, PhonePreferred = false, TextPreferred = false, TypeId = "52e18c32d433232028e9e3a7" });
            // phones.Add(new Phone { Id = "-1", IsText = false, Number = "0000000", OptOut = false, PhonePreferred = false, TextPreferred = false, TypeId = "52e18c32d433232028e9e3a7" });
             contact.Phones = phones;

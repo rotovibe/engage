@@ -18,7 +18,7 @@ namespace Phytel.API.DataDomain.Contact.DTO
         public ObjectId Id { get; set; }
 
         [BsonElement(NumberProperty)]
-        public string Number { get; set; }
+        public long Number { get; set; }
 
         [BsonElement(TypeIdProperty)]
         public ObjectId TypeId { get; set; }

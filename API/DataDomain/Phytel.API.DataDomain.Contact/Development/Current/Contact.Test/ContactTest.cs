@@ -87,7 +87,7 @@ namespace Phytel.API.DataDomain.Contact.Test
             List<PhoneData> phones = new List<PhoneData>();
             //phones.Add(new PhoneData { Id = "52e7583dd43323149870c225", IsText = false, Number = "2142142147", OptOut = false, PhonePreferred = true, TextPreferred = false, TypeId = "52e18c2ed433232028e9e3a6" });
             //phones.Add(new PhoneData { Id = "52e75847d43323149870c226", IsText = true, Number = "8178178179", OptOut = false, PhonePreferred = false, TextPreferred = true, TypeId = "52e18c38d433232028e9e3a8" });
-            phones.Add(new PhoneData { Id = "52ec1f53d433232330c8bb7c", IsText = false, Number = "99999999", OptOut = false, PhonePreferred = false, TextPreferred = false, TypeId = "52e18c32d433232028e9e3a7" });
+            phones.Add(new PhoneData { Id = "52ec1f53d433232330c8bb7c", IsText = false, Number = 8179035768, OptOut = false, PhonePreferred = false, TextPreferred = false, TypeId = "52e18c32d433232028e9e3a7" });
             request.Phones = phones;
 
             //List<EmailData> emails = new List<EmailData>();
@@ -108,12 +108,14 @@ namespace Phytel.API.DataDomain.Contact.Test
             //times.Add("52e17dedd433232028e9e395");
             //request.TimesOfDaysId = times;
 
-            //List<int> days = new List<int>();
-            //days.Add(1);
-            //days.Add(2);
-            //days.Add(3);
-            //days.Add(4);
-            //request.WeekDays = days;
+            List<int> days = new List<int>();
+            days.Add(1);
+            days.Add(2);
+            days.Add(3);
+            days.Add(4);
+            days.Add(0);
+            days.Add(5);
+            request.WeekDays = days;
 
             //request.pat = "52e26f5b072ef7191c11e0b6";
             request.ContactId = "52ec1b77d6a4850b78581986";
