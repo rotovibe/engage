@@ -17,6 +17,11 @@ namespace Phytel.API.AppDomain.NG.DTO
         public string Id { get; set; }
         public string PatientId { get; set; }
         public string UserId { get; set; }
+        public string FirstName { get; set; }
+        public string MiddleName { get; set; }
+        public string LastName { get; set; }
+        public string PreferredName { get; set; }
+        public string Gender { get; set; }
         public List<CommMode> Modes { get; set; }
         public List<Phone> Phones { get; set; }
         public List<Email> Emails { get; set; }

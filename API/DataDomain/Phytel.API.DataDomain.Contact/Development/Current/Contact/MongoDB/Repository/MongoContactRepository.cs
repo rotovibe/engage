@@ -554,7 +554,12 @@ namespace Phytel.API.DataDomain.Contact
                     contactData = new ContactData { 
                         ContactId = mc.Id.ToString(),
                         PatientId = mc.PatientId.ToString(),
-                        UserId = mc.UserId == null ? null : mc.UserId.ToString(),
+                        UserId = mc.UserId,
+                        FirstName = mc.FirstName,
+                        MiddleName = mc.MiddleName,
+                        LastName = mc.LastName,
+                        PreferredName = mc.PreferredName,
+                        Gender = mc.Gender,
                         TimeZoneId = mc.TimeZone.ToString(),
                         WeekDays = mc.WeekDays,
                         TimesOfDaysId = convertToStringList(mc.TimesOfDays)

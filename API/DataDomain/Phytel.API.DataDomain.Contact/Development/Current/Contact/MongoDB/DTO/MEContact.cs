@@ -16,6 +16,11 @@ namespace Phytel.API.DataDomain.Contact.DTO
         public const string IdProperty = "_id";
         public const string PatientIdProperty = "pid";
         public const string UserIdProperty = "uid";
+        public const string FirstNameProperty = "fn";
+        public const string MiddleNameProperty = "mn";
+        public const string LastNameProperty = "ln";
+        public const string PreferredNameProperty = "pfn";
+        public const string GenderProperty = "g";
         public const string ModesProperty = "ms";
         public const string PhonesProperty = "phs";
         public const string EmailsProperty = "ems";
@@ -41,7 +46,27 @@ namespace Phytel.API.DataDomain.Contact.DTO
 
         [BsonElement(UserIdProperty)]
         [BsonIgnoreIfNull(true)]
-        public ObjectId? UserId { get; set; }
+        public string UserId { get; set; }
+
+        [BsonElement(FirstNameProperty)]
+        [BsonIgnoreIfNull(true)]
+        public string FirstName { get; set; }
+
+        [BsonElement(LastNameProperty)]
+        [BsonIgnoreIfNull(true)]
+        public string LastName { get; set; }
+
+        [BsonElement(MiddleNameProperty)]
+        [BsonIgnoreIfNull(true)]
+        public string MiddleName { get; set; }
+
+        [BsonElement(PreferredNameProperty)]
+        [BsonIgnoreIfNull(true)]
+        public string PreferredName { get; set; }
+
+        [BsonElement(GenderProperty)]
+        [BsonIgnoreIfNull(true)]
+        public string Gender { get; set; }
 
         [BsonElement(ModesProperty)]
         [BsonIgnoreIfNull(true)]

@@ -1036,6 +1036,11 @@ namespace Phytel.API.AppDomain.NG
                             Id = cd.ContactId,
                             PatientId = cd.PatientId,
                             UserId = cd.UserId,
+                            FirstName = cd.FirstName,
+                            MiddleName = cd.MiddleName,
+                            LastName = cd.LastName,
+                            PreferredName = cd.PreferredName,
+                            Gender = cd.Gender,
                             TimeZoneId = cd.TimeZoneId,
                             WeekDays = cd.WeekDays,
                             TimesOfDaysId = cd.TimesOfDaysId
