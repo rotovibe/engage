@@ -109,6 +109,7 @@
     <None Include="Properties\PublishProfiles\Azure Dev Publish.pubxml" />
     <None Include="Properties\PublishProfiles\Azure Model Publish.pubxml" />
     <Content Include="settings.json" />
+    <None Include="Properties\PublishProfiles\TonysTest.pubxml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
