@@ -337,8 +337,11 @@ namespace Phytel.API.AppDomain.NG
                 // 2) update existing attributes
                 if (pAtt != null)
                 {
-                    ModifyProgramAttributePropertiesForUpdate(pAtt, _programAttributes);
-                    PlanElementEndpointUtil.UpdateProgramAttributes(pAtt);
+                    bool dirty = ModifyProgramAttributePropertiesForUpdate(pAtt, _programAttributes);
+                    if (dirty)
+                    {
+                        PlanElementEndpointUtil.UpdateProgramAttributes(pAtt);
+                    }
                 }
             }
             catch (Exception ex)
@@ -347,36 +350,39 @@ namespace Phytel.API.AppDomain.NG
             }
         }
 
-        private static void ModifyProgramAttributePropertiesForUpdate(DD.ProgramAttribute pAtt, DD.ProgramAttribute _pAtt)
+        private static bool ModifyProgramAttributePropertiesForUpdate(DD.ProgramAttribute pAtt, DD.ProgramAttribute _pAtt)
         {
+            bool dirty = false;
             try
             {
-                if (_pAtt.AssignedBy != null) pAtt.AssignedBy = _pAtt.AssignedBy;
-                if (_pAtt.AssignedOn != null) pAtt.AssignedOn = _pAtt.AssignedOn;
-                if (_pAtt.AuthoredBy != null) pAtt.AuthoredBy = _pAtt.AuthoredBy;
-                if (_pAtt.CompletedBy != null) pAtt.CompletedBy = _pAtt.CompletedBy;
-                if (_pAtt.DateCompleted != null) pAtt.DateCompleted = _pAtt.DateCompleted;
-                if (_pAtt.DidNotEnrollReason != null) pAtt.DidNotEnrollReason = _pAtt.DidNotEnrollReason;
-                if (_pAtt.DisEnrollReason != null) pAtt.DisEnrollReason = _pAtt.DisEnrollReason;
-                if (_pAtt.EligibilityRequirements != null) pAtt.EligibilityRequirements = _pAtt.EligibilityRequirements;
-                if (_pAtt.EligibilityStartDate != null) pAtt.EligibilityStartDate = _pAtt.EligibilityStartDate;
-                if (_pAtt.EndDate != null) pAtt.EndDate = _pAtt.EndDate;
-                if (_pAtt.IneligibleReason != null) pAtt.IneligibleReason = _pAtt.IneligibleReason;
-                if (_pAtt.OptOut != null) pAtt.OptOut = _pAtt.OptOut;
-                if (_pAtt.OptOutDate != null) pAtt.OptOutDate = _pAtt.OptOutDate;
-                if (_pAtt.OptOutReason != null) pAtt.OptOutReason = _pAtt.OptOutReason;
-                if (_pAtt.OverrideReason != null) pAtt.OverrideReason = _pAtt.OverrideReason;
-                if (_pAtt.Population != null) pAtt.Population = _pAtt.Population;
-                if (_pAtt.RemovedReason != null) pAtt.RemovedReason = _pAtt.RemovedReason;
-                if (_pAtt.StartDate != null) pAtt.StartDate = _pAtt.StartDate;
-                if (_pAtt.Status != 0) pAtt.Status = _pAtt.Status;
-                if (_pAtt.Completed != 0) pAtt.Completed = _pAtt.Completed;
-                if (_pAtt.Eligibility != 0) pAtt.Eligibility = _pAtt.Eligibility;
-                if (_pAtt.EligibilityEndDate != null) pAtt.EligibilityEndDate = _pAtt.EligibilityEndDate;
-                if (_pAtt.EligibilityOverride != 0) pAtt.EligibilityOverride = _pAtt.EligibilityOverride;
-                if (_pAtt.Enrollment != 0) pAtt.Enrollment = _pAtt.Enrollment;
-                if (_pAtt.GraduatedFlag != 0) pAtt.GraduatedFlag = _pAtt.GraduatedFlag;
-                if (_pAtt.Locked != 0) pAtt.Locked = _pAtt.Locked;
+                if (_pAtt.AssignedBy != null){ pAtt.AssignedBy = _pAtt.AssignedBy; dirty = true;}
+                if (_pAtt.AssignedOn != null){ pAtt.AssignedOn = _pAtt.AssignedOn; dirty = true;}
+                if (_pAtt.AuthoredBy != null){ pAtt.AuthoredBy = _pAtt.AuthoredBy; dirty = true;}
+                if (_pAtt.CompletedBy != null){ pAtt.CompletedBy = _pAtt.CompletedBy; dirty = true;}
+                if (_pAtt.DateCompleted != null){ pAtt.DateCompleted = _pAtt.DateCompleted; dirty = true;}
+                if (_pAtt.DidNotEnrollReason != null){ pAtt.DidNotEnrollReason = _pAtt.DidNotEnrollReason; dirty = true;}
+                if (_pAtt.DisEnrollReason != null){ pAtt.DisEnrollReason = _pAtt.DisEnrollReason; dirty = true;}
+                if (_pAtt.EligibilityRequirements != null){ pAtt.EligibilityRequirements = _pAtt.EligibilityRequirements; dirty = true;}
+                if (_pAtt.EligibilityStartDate != null){ pAtt.EligibilityStartDate = _pAtt.EligibilityStartDate; dirty = true;}
+                if (_pAtt.EndDate != null){ pAtt.EndDate = _pAtt.EndDate; dirty = true;}
+                if (_pAtt.IneligibleReason != null){ pAtt.IneligibleReason = _pAtt.IneligibleReason; dirty = true;}
+                if (_pAtt.OptOut != null){ pAtt.OptOut = _pAtt.OptOut; dirty = true;}
+                if (_pAtt.OptOutDate != null){ pAtt.OptOutDate = _pAtt.OptOutDate; dirty = true;}
+                if (_pAtt.OptOutReason != null){ pAtt.OptOutReason = _pAtt.OptOutReason; dirty = true;}
+                if (_pAtt.OverrideReason != null){ pAtt.OverrideReason = _pAtt.OverrideReason; dirty = true;}
+                if (_pAtt.Population != null){ pAtt.Population = _pAtt.Population; dirty = true;}
+                if (_pAtt.RemovedReason != null){ pAtt.RemovedReason = _pAtt.RemovedReason; dirty = true;}
+                if (_pAtt.StartDate != null){ pAtt.StartDate = _pAtt.StartDate; dirty = true;}
+                if (_pAtt.Status != 0){ pAtt.Status = _pAtt.Status; dirty = true;}
+                if (_pAtt.Completed != 0){ pAtt.Completed = _pAtt.Completed; dirty = true;}
+                if (_pAtt.Eligibility != 0){ pAtt.Eligibility = _pAtt.Eligibility; dirty = true;}
+                if (_pAtt.EligibilityEndDate != null){ pAtt.EligibilityEndDate = _pAtt.EligibilityEndDate; dirty = true;}
+                if (_pAtt.EligibilityOverride != 0){ pAtt.EligibilityOverride = _pAtt.EligibilityOverride; dirty = true;}
+                if (_pAtt.Enrollment != 0){ pAtt.Enrollment = _pAtt.Enrollment; dirty = true;}
+                if (_pAtt.GraduatedFlag != 0){ pAtt.GraduatedFlag = _pAtt.GraduatedFlag; dirty = true;}
+                if (_pAtt.Locked != 0) { pAtt.Locked = _pAtt.Locked; dirty = true; }
+
+                return dirty;
             }
             catch (Exception ex)
             {

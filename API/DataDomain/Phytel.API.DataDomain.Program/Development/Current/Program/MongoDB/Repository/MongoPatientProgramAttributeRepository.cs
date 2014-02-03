@@ -252,11 +252,14 @@ namespace Phytel.API.DataDomain.Program
                     if (mepa.GraduatedFlag != 0) uv.Add(MB.Update.Set(MEProgramAttribute.GraduatedFlagProperty, mepa.GraduatedFlag));
                     if (mepa.Locked != 0) uv.Add(MB.Update.Set(MEProgramAttribute.LockedProperty, mepa.Locked));
 
-                    IMongoUpdate update = MB.Update.Combine(uv);
-                    WriteConcernResult wcr = ctx.ProgramAttributes.Collection.Update(q, update);
-                    if (wcr.Ok)
+                    if (uv.Count > 0)
                     {
-                        result = true;
+                        IMongoUpdate update = MB.Update.Combine(uv);
+                        WriteConcernResult wcr = ctx.ProgramAttributes.Collection.Update(q, update);
+                        if (wcr.Ok)
+                        {
+                            result = true;
+                        }
                     }
                 }
                 return result;
