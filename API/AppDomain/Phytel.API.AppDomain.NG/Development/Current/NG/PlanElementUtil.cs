@@ -343,6 +343,10 @@ namespace Phytel.API.AppDomain.NG
                         PlanElementEndpointUtil.UpdateProgramAttributes(pAtt);
                     }
                 }
+                else
+                {
+                    PlanElementEndpointUtil.InsertNewProgramAttribute(_programAttributes);
+                }
             }
             catch (Exception ex)
             {
