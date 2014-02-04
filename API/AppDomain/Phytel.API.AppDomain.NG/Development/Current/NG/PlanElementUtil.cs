@@ -131,11 +131,14 @@ namespace Phytel.API.AppDomain.NG
         {
             try
             {
+                if(r.Tag == null)
+                    throw new ArgumentException("Cannot set attribute of type "+ r.ElementType +". Tag value is null.");
+
                 if (r.ElementType.Equals(10))
                 {
                     // eligibility series
                     //program.Eligibility = Convert.ToInt32(r.Tag); // remove after testing
-                    progAttr.Eligibility = Convert.ToInt32(r.Tag);
+                    progAttr.Eligibility = (!string.IsNullOrEmpty(r.Tag))? Convert.ToInt32(r.Tag) : 0;
 
                     int state; // no = 1, yes = 2
                     bool isNum = int.TryParse(r.Tag, out state);
@@ -159,31 +162,28 @@ namespace Phytel.API.AppDomain.NG
                 {
                     // eligibility reason
                     //program.IneligibleReason = r.Tag; // remove
-                    progAttr.IneligibleReason = r.Tag;
+                    progAttr.IneligibleReason = (!string.IsNullOrEmpty(r.Tag))?r.Tag : null;
                 }
                 else if (r.ElementType.Equals(16))
                 {
                     // do something with opt out 
                     //program.OptOut = r.Tag; // remove
-                    progAttr.OptOut = r.Tag;
+                    progAttr.OptOut = (!string.IsNullOrEmpty(r.Tag))? r.Tag : null;
                 }
                 else if (r.ElementType.Equals(17))
                 {
                     // do something with opt out
                     //program.OptOutReason = r.Tag; // remove
-                    progAttr.OptOutReason = r.Tag;
+                    progAttr.OptOutReason = (!string.IsNullOrEmpty(r.Tag))? r.Tag : null;
                 }
                 else if (r.ElementType.Equals(18))
                 {
                     // do something with opt out 
-                    //program.OptOutDate = Convert.ToDateTime(r.Tag);  // remove
-                    progAttr.OptOutDate = Convert.ToDateTime(r.Tag);
+                    progAttr.OptOutDate = System.DateTime.UtcNow;
                 }
                 else if (r.ElementType.Equals(19))
                 {
-                    // do something with opt out 
-                    //program.GraduatedFlag = Convert.ToBoolean(r.Tag); // remove
-                    progAttr.GraduatedFlag = Convert.ToInt32(r.Tag);
+                    progAttr.GraduatedFlag = (!string.IsNullOrEmpty(r.Tag))? Convert.ToInt32(r.Tag) : 0;
                 }
             }
             catch (Exception ex)
