@@ -45,23 +45,23 @@ namespace Phytel.API.Common.Audit
         public static void LogAuditAsynch(AuditData data)
         { 
 
-#if DEBUG
-            // synchronous for testing
-            WriteAudit(data);
-#else
-          //hand this to a new thread so the original process can continue
-            new Thread(() =>
-            {
-                // handle work here
-                //test the response to here, even though I don't send it back to the client
-                WriteAudit(data);
+//#if DEBUG
+//            // synchronous for testing
+//            WriteAudit(data);
+//#else
+//          //hand this to a new thread so the original process can continue
+//            new Thread(() =>
+//            {
+//                // handle work here
+//                //test the response to here, even though I don't send it back to the client
+//                WriteAudit(data);
 
-            }).Start();
-#endif
+//            }).Start();
+//#endif
             
         }
 
-        private static void WriteAudit(AuditData auditLogToProcess)
+        public static void WriteAudit(AuditData auditLogToProcess)
         {
             AuditData auditLog = auditLogToProcess;
             auditLog.EventDateTime = DateTime.Now;

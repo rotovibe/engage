@@ -41,6 +41,9 @@ namespace Phytel.API.AppDomain.NG.Service
         public GetPatientResponse Get(GetPatientRequest request)
         {
             GetPatientResponse response = new GetPatientResponse();
+
+            IRequestContext req = base.RequestContext;
+           
             try
             {
                 NGManager ngm = new NGManager();
@@ -54,6 +57,16 @@ namespace Phytel.API.AppDomain.NG.Service
                 else
                     throw new UnauthorizedAccessException();
 
+                try
+                {
+                    ngm.LogAuditData(request, System.Web.HttpContext.Current.Request, request.GetType().Name);
+                }
+                catch (Exception)
+                {
+                    //need to decide how to handle an error here
+                    throw;
+                }
+
                 return response;
             }
             catch (Exception ex)
@@ -64,6 +77,7 @@ namespace Phytel.API.AppDomain.NG.Service
             }
         }
 
+       
         /// <summary>
         ///     ServiceStack's GET endpoint for getting active problems for a patient
         /// </summary>

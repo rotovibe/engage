@@ -15,6 +15,11 @@ using System.Text;
 using System.Web.Hosting;
 using DD = Phytel.API.DataDomain.Program.DTO;
 using Phytel.API.DataDomain.Contact.DTO;
+using System.Runtime.CompilerServices;
+using Phytel.API.Common.Audit;
+using System.Threading;
+using Phytel.API.Interface;
+using System.Web;
 
 namespace Phytel.API.AppDomain.NG
 {
@@ -133,9 +138,7 @@ namespace Phytel.API.AppDomain.NG
                     }
                 }
 
-                LogAuditData(request);
-
-                return pResponse;
+               return pResponse;
             }
             catch (WebServiceException wse)
             {
@@ -176,8 +179,6 @@ namespace Phytel.API.AppDomain.NG
                     pp.Level = p.Level;
                     response.Add(pp);
                 }
-
-                LogAuditData(request);
 
                 return response;
             }
@@ -1315,6 +1316,30 @@ namespace Phytel.API.AppDomain.NG
             }
         }
         #endregion
+
+
+        public void LogAuditData(IAppDomainRequest request, HttpRequest webreq, string returnTypeName)
+        {
+            //hand to a new thread here, and immediately return this thread to caller
+            new Thread(() =>
+            {
+                AuditAsynch(request, webreq, returnTypeName);
+
+            }).Start();
+
+            return;
+
+        }
+
+        private static void AuditAsynch(IAppDomainRequest request, HttpRequest webreq, string returnTypeName)
+        {
+            string callingMethod = AuditHelper.FindMethodType(returnTypeName);
+            int auditTypeId = AuditHelper.GetAuditTypeID(callingMethod);
+            AuditData data = AuditHelper.GetAuditLog(auditTypeId, request, webreq, callingMethod);
+
+            AuditDispatcher.WriteAudit(data);
+        }
+
 
     }
 }

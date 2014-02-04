@@ -42,23 +42,5 @@ namespace Phytel.API.AppDomain.NG
             //DispatchEventArgs args = new DispatchEventArgs { payload = request};
             //AuditDispatcher.SendDispatchAsynch(args);
         }
-
-        protected static void LogAuditData(Phytel.API.Interface.IAppDomainRequest request,  [CallerMemberName] string callingMethod = null)
-        {
-            //int audittypeid = 0;
-
-            //switch (callingMethod.ToLower())
-            //{
-            //    case GetPatientAction:
-            //        audittypeid = 0;
-            //        break;
-
-            //    default:
-            //        break;
-            //}
-
-            //AuditData auditlog = AuditHelper.GetAuditLog(audittypeid, request, callingMethod);
-            //AuditDispatcher.LogAuditAsynch(auditlog);
-        }
     }
 }
