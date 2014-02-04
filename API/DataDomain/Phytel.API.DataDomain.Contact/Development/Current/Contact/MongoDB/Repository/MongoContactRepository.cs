@@ -37,7 +37,6 @@ namespace Phytel.API.DataDomain.Contact
                 {
                     Id = ObjectId.GenerateNewId(),
                     PatientId = ObjectId.Parse(request.PatientId),
-                    TimeZone = ObjectId.Parse(request.TimeZoneId),
                     Version = request.Version,
                     LastUpdatedOn = DateTime.UtcNow,
                     UpdatedBy = request.UserId,
@@ -102,22 +101,79 @@ namespace Phytel.API.DataDomain.Contact
 
         public object FindByID(string entityID)
         {
-            try
+            ContactData contactData = null;
+            using (ContactMongoContext ctx = new ContactMongoContext(_dbName))
             {
-                throw new NotImplementedException();
-                // code here //
+                List<IMongoQuery> queries = new List<IMongoQuery>();
+                queries.Add(Query.EQ(MEContact.IdProperty, ObjectId.Parse(entityID)));
+                queries.Add(Query.EQ(MEContact.DeleteFlagProperty, false));
+                IMongoQuery mQuery = Query.And(queries);
+                MEContact mc = ctx.Contacts.Collection.Find(mQuery).FirstOrDefault();
+                if (mc != null)
+                {
+                    contactData = new ContactData { 
+                        ContactId = mc.Id.ToString(),
+                        UserId = mc.UserId,
+                        FirstName = mc.FirstName,
+                        MiddleName = mc.MiddleName,
+                        LastName = mc.LastName,
+                        PreferredName = mc.PreferredName,
+                        Gender = mc.Gender
+                    };
+                }
             }
-            catch (Exception ex) { throw ex; }
+            return contactData;
         }
 
         public Tuple<string, IEnumerable<object>> Select(Interface.APIExpression expression)
         {
-            try
+            IEnumerable<object> returnQuery = null;
+            IMongoQuery mQuery = null;
+
+            List<SelectExpression> selectExpressions = expression.Expressions.ToList();
+            selectExpressions.Where(s => s.GroupID == 1).OrderBy(o => o.ExpressionOrder).ToList();
+
+            SelectExpressionGroupType groupType = SelectExpressionGroupType.AND;
+
+            if (selectExpressions.Count > 0)
             {
-                throw new NotImplementedException();
-                // code here //
+                IList<IMongoQuery> queries = new List<IMongoQuery>();
+                for (int i = 0; i < selectExpressions.Count; i++)
+                {
+                    groupType = selectExpressions[0].NextExpressionType;
+
+                    IMongoQuery query = SelectExpressionHelper.ApplyQueryOperators(selectExpressions[i].Type, selectExpressions[i].FieldName, selectExpressions[i].Value);
+                    if (query != null)
+                    {
+                        queries.Add(query);
+                    }
+                }
+
+                mQuery = SelectExpressionHelper.BuildQuery(groupType, queries);
+
+                List<ContactData> contactDataList = null;
+                using (ContactMongoContext ctx = new ContactMongoContext(_dbName))
+                {
+                    List<MEContact> meContacts = ctx.Contacts.Collection.Find(mQuery).ToList();
+                    if (meContacts != null)
+                    {
+                        contactDataList = new List<ContactData>();
+                        foreach (MEContact c in meContacts)
+                        {
+                            ContactData contactData = new ContactData
+                            {
+                               ContactId = c.Id.ToString(),
+                               Gender = c.Gender,
+                               PreferredName = c.PreferredName
+                            };
+                            contactDataList.Add(contactData);
+                        }
+                    }
+                }
+                returnQuery = contactDataList.AsQueryable<object>();
             }
-            catch (Exception ex) { throw ex; }
+
+            return new Tuple<string, IEnumerable<object>>(expression.ExpressionID, returnQuery);
         }
 
         public IEnumerable<object> SelectAll()
@@ -498,7 +554,10 @@ namespace Phytel.API.DataDomain.Contact
                         #endregion
 
                         // TimeZone
-                        uv.Add(MB.Update.Set(MEContact.TimeZoneProperty, ObjectId.Parse(request.TimeZoneId)));
+                        if (!string.IsNullOrEmpty(request.TimeZoneId))
+                        {
+                            uv.Add(MB.Update.Set(MEContact.TimeZoneProperty, ObjectId.Parse(request.TimeZoneId)));
+                        } 
 
                         // LastUpdatedOn
                         uv.Add(MB.Update.Set(MEContact.LastUpdatedOnProperty,DateTime.UtcNow));
@@ -560,7 +619,7 @@ namespace Phytel.API.DataDomain.Contact
                         LastName = mc.LastName,
                         PreferredName = mc.PreferredName,
                         Gender = mc.Gender,
-                        TimeZoneId = mc.TimeZone.ToString(),
+                        TimeZoneId = mc.TimeZone == null ? null : mc.TimeZone.ToString(),
                         WeekDays = mc.WeekDays,
                         TimesOfDaysId = convertToStringList(mc.TimesOfDays)
                     };

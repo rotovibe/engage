@@ -14,9 +14,6 @@ namespace Phytel.API.DataDomain.Contact.DTO
         [ApiMember(Name = "Modes", Description = "List of CommModes being inserted", ParameterType = "property", DataType = "List<CommModeData>", IsRequired = true)]
         public List<CommModeData> Modes { get; set; }
 
-        [ApiMember(Name = "TimeZoneId", Description = "ID of timezone being inserted", ParameterType = "property", DataType = "string", IsRequired = true)]
-        public string TimeZoneId { get; set; }
-
         [ApiMember(Name = "Context", Description = "Product Context requesting the Contact", ParameterType = "property", DataType = "string", IsRequired = true)]
         public string Context { get; set; }
 

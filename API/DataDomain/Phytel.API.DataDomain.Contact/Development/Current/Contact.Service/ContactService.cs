@@ -15,8 +15,7 @@ namespace Phytel.API.DataDomain.Contact.Service
             response.Version = request.Version;
             try
             {
-                 response.Contact = ContactDataManager.GetContactByPatientId(request);
-                 
+                response.Contact = ContactDataManager.GetContactByPatientId(request); 
             }
             catch (Exception ex)
             {
@@ -26,6 +25,21 @@ namespace Phytel.API.DataDomain.Contact.Service
             return response;
         }
 
+        public SearchContactsDataResponse Post(SearchContactsDataRequest request)
+        {
+            SearchContactsDataResponse response = new SearchContactsDataResponse();
+            response.Version = request.Version;
+            try
+            {
+                response = ContactDataManager.SearchContacts(request);
+            }
+            catch (Exception ex)
+            {
+                //TODO: Log this to C3 database via ASE
+                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+            }
+            return response;
+        }
 
         public PutContactDataResponse Put(PutContactDataRequest request)
         {

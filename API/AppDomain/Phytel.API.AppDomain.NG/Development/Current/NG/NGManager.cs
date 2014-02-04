@@ -62,6 +62,55 @@ namespace Phytel.API.AppDomain.NG
                                                                                     response.Patient.DisplayPatientSystemID));
                     }
 
+                    List<CareTeamMember> careTeam = null;
+                    //Get the List of contact Ids from the PatientDataResponse.
+                    if(response.Patient.CareTeamData != null && response.Patient.CareTeamData.Count > 0)
+                    {
+                        List<CareTeamMemberData> careTeamMembersData = response.Patient.CareTeamData;
+                        List<string> contactIds = new List<string>();
+                        foreach (CareTeamMemberData ctm in careTeamMembersData)
+                        {
+                            contactIds.Add(ctm.ContactId);
+                        }
+
+                        SearchContactsDataResponse contactDataResponse = null;
+                        //[Route("/{Context}/{Version}/{ContractNumber}/Contact", "POST")]
+                        contactDataResponse = client.Post<SearchContactsDataResponse>(string.Format("{0}/{1}/{2}/{3}/Contact",
+                                                                DDContactServiceUrl,
+                                                                "NG",
+                                                                request.Version,
+                                                                request.ContractNumber), new SearchContactsDataRequest 
+                                                                {
+                                                                    ContactIds = contactIds, 
+                                                                    Context = "NG",
+                                                                    ContractNumber = request.ContractNumber,
+                                                                    UserId = request.UserId,
+                                                                    Version = request.Version
+                                                                } as object
+                                                                );
+
+
+                        if(contactDataResponse != null && contactDataResponse.Contacts != null)
+                        {
+                            careTeam = new List<CareTeamMember>();
+                            foreach(CareTeamMemberData ctmData in careTeamMembersData)
+                            {
+                               var contactData = contactDataResponse.Contacts.Where(c => c.ContactId == ctmData.ContactId).FirstOrDefault();
+                               if (contactData != null)
+                               {
+
+                                   CareTeamMember newCM = new CareTeamMember {
+                                       Gender = contactData.Gender, 
+                                       PreferredName = contactData.PreferredName,
+                                       Primary = ctmData.Primary, 
+                                       Type = ctmData.Type 
+                                   };
+                                   careTeam.Add(newCM);
+                               }
+                            }
+                        }
+                    }
+
                     pResponse.Patient = new NG.DTO.Patient
                     {
                         Id = response.Patient.ID,
@@ -73,7 +122,8 @@ namespace Phytel.API.AppDomain.NG
                         Suffix = response.Patient.Suffix,
                         PreferredName = response.Patient.PreferredName,
                         Priority = (int)response.Patient.Priority,
-                        Flagged = Convert.ToInt32(response.Patient.Flagged)
+                        Flagged = Convert.ToInt32(response.Patient.Flagged),
+                        CareTeam = careTeam
                     };
 
                     if (sysResponse != null && sysResponse.PatientSystem != null)
@@ -940,15 +990,6 @@ namespace Phytel.API.AppDomain.NG
             Contact newContact = null;
             try
             {
-                // Get the default TimeZone that is set in TimeZone LookUp table. 
-                string defaultTimeZone = null;
-                GetTimeZoneDataRequest tzDataRequest = new GetTimeZoneDataRequest { ContractNumber = contractNumber, Version = version };
-                TimeZonesLookUp tz = getDefaultTimeZone(tzDataRequest);
-                if (tz != null)
-                {
-                    defaultTimeZone = tz.Id;
-                }
-
                 //Get all the available comm modes in the lookup.
                 List<CommModeData> commModeData = new List<CommModeData>();
                 List<CommMode> commMode = new List<CommMode>();
@@ -975,7 +1016,6 @@ namespace Phytel.API.AppDomain.NG
                                                                                 userId), new PutContactDataRequest
                                                                                 {
                                                                                     PatientId = patientId,
-                                                                                    TimeZoneId = defaultTimeZone,
                                                                                     Modes = commModeData,
                                                                                     Context = context, 
                                                                                     ContractNumber = contractNumber, 
@@ -989,7 +1029,6 @@ namespace Phytel.API.AppDomain.NG
                     newContact = new Contact();
                     newContact.Id = dataDomainResponse.ContactId;
                     newContact.PatientId = patientId;
-                    newContact.TimeZoneId = defaultTimeZone;
                     newContact.Modes = commMode;
                 }
             }
@@ -1041,12 +1080,26 @@ namespace Phytel.API.AppDomain.NG
                             LastName = cd.LastName,
                             PreferredName = cd.PreferredName,
                             Gender = cd.Gender,
-                            TimeZoneId = cd.TimeZoneId,
                             WeekDays = cd.WeekDays,
                             TimesOfDaysId = cd.TimesOfDaysId
                         };
 
-
+                        //TimeZone
+                        if (cd.TimeZoneId != null)
+                        {
+                            contact.TimeZoneId = cd.TimeZoneId;
+                        }
+                        else
+                        {
+                            // If the user has no timezone set, the default timezone in lookup table should override it.
+                            // Getting the default TimeZone that is set in TimeZone LookUp table. 
+                            GetTimeZoneDataRequest tzDataRequest = new GetTimeZoneDataRequest { ContractNumber = request.ContractNumber, Version = request.Version };
+                            TimeZonesLookUp tz = getDefaultTimeZone(tzDataRequest);
+                            if (tz != null)
+                            {
+                                contact.TimeZoneId = tz.Id;
+                            }
+                        }
 
                         //Modes
                         List<CommModeData> commModeData = cd.Modes;
