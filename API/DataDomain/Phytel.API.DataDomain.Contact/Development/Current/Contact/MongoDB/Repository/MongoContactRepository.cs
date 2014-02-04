@@ -245,6 +245,7 @@ namespace Phytel.API.DataDomain.Contact
                             List<int> weekDays = null;
                             if (request.WeekDays.Count != 0)
                             {
+                                weekDays = new List<int>();
                                 weekDays = request.WeekDays;
                             }
                             uv.Add(MB.Update.SetWrapped<List<int>>(MEContact.WeekDaysProperty, weekDays));
