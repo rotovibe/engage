@@ -19,14 +19,13 @@ namespace Phytel.API.Common.Audit
             ///{Version}/{ContractNumber}/patient/{PatientID}
             AuditData auditLog = new AuditData() 
             {
-                Type = isError ? "ErrorMessage": "UserAction" ,  
+                Type = isError ? "ErrorMessage": string.Format("NG_{0}",methodCalledFrom) ,  
                 AuditTypeId = auditTypeId, //derive this from the type passed in (lookup on PNG.AuditType.Name column)
                 UserId = new Guid(request.UserId), //derive this from Mongo.APISessions.uid...lookup on Mongo.APISessions._id)
                 SourcePage = methodCalledFrom, //derive this from querystring...utility function
                 SourceIP = webrequest.UserHostAddress,
                 Browser = webrequest.Browser.Type,
                 SessionId = request.Token,
-                //ContractID = 
                 ContractID = GetContractID(request.ContractNumber) //request.ContractNumber
             };
 
