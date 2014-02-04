@@ -33,15 +33,17 @@ namespace Phytel.API.DataDomain.Contact
                 ICollection<SelectExpression> selectExpressions = new List<SelectExpression>();
 
                 //List of contact ids
-                SelectExpression contactIDsSelectExpression = new SelectExpression();
-                contactIDsSelectExpression.FieldName = MEContact.IdProperty;
-                contactIDsSelectExpression.Type = SelectExpressionType.IN;
-                contactIDsSelectExpression.Value = request.ContactIds;
-                contactIDsSelectExpression.NextExpressionType = SelectExpressionGroupType.AND;
-                contactIDsSelectExpression.ExpressionOrder = 1;
-                contactIDsSelectExpression.GroupID = 1;
-                selectExpressions.Add(contactIDsSelectExpression);
-                
+                if (request.ContactIds != null)
+                {
+                    SelectExpression contactIDsSelectExpression = new SelectExpression();
+                    contactIDsSelectExpression.FieldName = MEContact.IdProperty;
+                    contactIDsSelectExpression.Type = SelectExpressionType.IN;
+                    contactIDsSelectExpression.Value = request.ContactIds;
+                    contactIDsSelectExpression.NextExpressionType = SelectExpressionGroupType.AND;
+                    contactIDsSelectExpression.ExpressionOrder = 1;
+                    contactIDsSelectExpression.GroupID = 1;
+                    selectExpressions.Add(contactIDsSelectExpression);
+                }
                 // DeleteFlag = false.
                 SelectExpression deleteFlagSelectExpression = new SelectExpression();
                 deleteFlagSelectExpression.FieldName = MEContact.DeleteFlagProperty;
