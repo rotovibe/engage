@@ -131,13 +131,12 @@ namespace Phytel.API.AppDomain.NG
         {
             try
             {
-                if(r.Tag == null)
-                    throw new ArgumentException("Cannot set attribute of type "+ r.ElementType +". Tag value is null.");
-
                 if (r.ElementType.Equals(10))
                 {
+                    if (r.Tag == null)
+                        throw new ArgumentException("Cannot set attribute of type " + r.ElementType + ". Tag value is null.");
+
                     // eligibility series
-                    //program.Eligibility = Convert.ToInt32(r.Tag); // remove after testing
                     progAttr.Eligibility = (!string.IsNullOrEmpty(r.Tag))? Convert.ToInt32(r.Tag) : 0;
 
                     int state; // no = 1, yes = 2
@@ -161,19 +160,24 @@ namespace Phytel.API.AppDomain.NG
                 else if (r.ElementType.Equals(11))
                 {
                     // eligibility reason
-                    //program.IneligibleReason = r.Tag; // remove
+                    if (r.Tag == null)
+                        throw new ArgumentException("Cannot set attribute of type " + r.ElementType + ". Tag value is null.");
+
                     progAttr.IneligibleReason = (!string.IsNullOrEmpty(r.Tag))?r.Tag : null;
                 }
                 else if (r.ElementType.Equals(16))
                 {
-                    // do something with opt out 
-                    //program.OptOut = r.Tag; // remove
+                    if (r.Tag == null)
+                        throw new ArgumentException("Cannot set attribute of type " + r.ElementType + ". Tag value is null.");
+
                     progAttr.OptOut = (!string.IsNullOrEmpty(r.Tag))? r.Tag : null;
                 }
                 else if (r.ElementType.Equals(17))
                 {
                     // do something with opt out
-                    //program.OptOutReason = r.Tag; // remove
+                    if (r.Tag == null)
+                        throw new ArgumentException("Cannot set attribute of type " + r.ElementType + ". Tag value is null.");
+
                     progAttr.OptOutReason = (!string.IsNullOrEmpty(r.Tag))? r.Tag : null;
                 }
                 else if (r.ElementType.Equals(18))
@@ -183,6 +187,9 @@ namespace Phytel.API.AppDomain.NG
                 }
                 else if (r.ElementType.Equals(19))
                 {
+                    if (r.Tag == null)
+                        throw new ArgumentException("Cannot set attribute of type " + r.ElementType + ". Tag value is null.");
+
                     progAttr.GraduatedFlag = (!string.IsNullOrEmpty(r.Tag))? Convert.ToInt32(r.Tag) : 0;
                 }
             }
