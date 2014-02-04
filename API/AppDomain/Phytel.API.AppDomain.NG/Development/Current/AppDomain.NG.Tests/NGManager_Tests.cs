@@ -97,7 +97,7 @@ namespace Phytel.API.AppDomain.NG.Test
                 ContractNumber = contractNumber,
                 Token = token,
                 Version = version,
-                PatientID = "528bdccc072ef7071c2e22ae"
+                PatientID = "52e26f11072ef7191c111edf"
             };
             // Act
             Contact response = ngManager.GetContactByPatientId(request);

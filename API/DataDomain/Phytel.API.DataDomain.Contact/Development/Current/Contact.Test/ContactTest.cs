@@ -38,6 +38,24 @@ namespace Phytel.API.DataDomain.Contact.Test
         }
 
         [TestMethod]
+        public void SearchContacts_Test()
+        {
+            SearchContactsDataRequest request = new SearchContactsDataRequest();
+
+            request.ContractNumber = "InHealth001";
+            request.UserId = "DD_TestHarness";
+            request.Version = "v1";
+            List<string> ids = new List<string>();
+            ids.Add("52f012acd433231e1cfbc974");
+            ids.Add("52f012b7d433231e1cfbc975");
+           // request.ContactIds = ids;
+
+            SearchContactsDataResponse response = ContactDataManager.SearchContacts(request);
+
+            Assert.IsNotNull(response);
+        }
+
+        [TestMethod]
         public void UpdateContact_Test()
         {
             //List<int> weekDays = new List<int>();
