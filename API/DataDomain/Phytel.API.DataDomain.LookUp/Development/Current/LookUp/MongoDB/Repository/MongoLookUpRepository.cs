@@ -367,6 +367,7 @@ namespace Phytel.API.DataDomain.LookUp
                             TimeZoneData data = new TimeZoneData { ID = m.DataID.ToString(), Name = m.Name, Default = m.Default };
                             timeZoneList.Add(data);
                         }
+                        timeZoneList = timeZoneList.OrderBy(s => s.Name).ToList();
                     }
 
                 }
