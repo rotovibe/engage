@@ -163,6 +163,61 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             }
         }
 
+        public static GetStepResponseListResponse GetStepResponses(string stepId, string contractNumber, bool? service)
+        {
+            GetStepResponseListResponse StepResponseResponse = new GetStepResponseListResponse(); 
+            List<MEResponse> responseList = null;
+            List<StepResponse> returnResponseList = new List<StepResponse>();
+            try
+            {
+                IProgramRepository<GetStepResponseListResponse> repo =
+                    ProgramRepositoryFactory<GetStepResponseListResponse>.GetStepResponseRepository(contractNumber, "NG");
+
+                ICollection<SelectExpression> selectExpressions = new List<SelectExpression>();
+
+                SelectExpression stepResponseExpression = new SelectExpression();
+                stepResponseExpression.FieldName = MEResponse.StepIdProperty;
+                stepResponseExpression.Type = SelectExpressionType.EQ;
+                stepResponseExpression.Value = stepId;
+                stepResponseExpression.ExpressionOrder = 1;
+                stepResponseExpression.GroupID = 1;
+                selectExpressions.Add(stepResponseExpression);
+
+                APIExpression apiExpression = new APIExpression();
+                apiExpression.Expressions = selectExpressions;
+
+                Tuple<string, IEnumerable<object>> stepResponses = repo.Select(apiExpression);
+
+                if (stepResponses != null)
+                {
+                    responseList = stepResponses.Item2.Cast<MEResponse>().ToList();
+                    responseList.ForEach(r =>
+                    {
+                        returnResponseList.Add(new StepResponse
+                        {
+                            Id = r.Id.ToString(),
+                            NextStepId = r.NextStepId.ToString(),
+                            Nominal = r.Nominal,
+                            Order = r.Order,
+                            Required = r.Required,
+                            Spawn = DTOUtils.GetSpawnElements(r.Spawn),
+                            StepId = r.StepId.ToString(),
+                            Text = r.Text,
+                            Value = r.Value
+                        });
+                    });
+                }
+
+                StepResponseResponse.StepResponseList = returnResponseList;
+
+                return StepResponseResponse;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("DataDomain:GetStepResponses():" + ex.Message, ex.InnerException);
+            }
+        }
+
         public static void RecurseAndReplaceIds(List<MEModules> mods)
         {
             Dictionary<ObjectId, ObjectId> IdsList = new Dictionary<ObjectId, ObjectId>();
@@ -364,6 +419,34 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
                         {
                             SpawnId = ObjectId.Parse(s.ElementId),
                             Type = s.ElementType,
+                            Tag = s.Tag
+                        });
+                    });
+                }
+                return spawnList;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("DataDomain:GetSpawnElements():" + ex.Message, ex.InnerException);
+            }
+        }
+
+        internal static List<SpawnElementDetail> GetSpawnElements(List<MESpawnElement> list)
+        {
+            try
+            {
+                List<SpawnElementDetail> spawnList = null;
+                if (list != null)
+                {
+                    spawnList = new List<SpawnElementDetail>();
+
+                    list.ForEach(s =>
+                    {
+                        spawnList.Add(
+                        new SpawnElementDetail
+                        {
+                            ElementId = s.SpawnId.ToString(),
+                            ElementType = s.Type,
                             Tag = s.Tag
                         });
                     });

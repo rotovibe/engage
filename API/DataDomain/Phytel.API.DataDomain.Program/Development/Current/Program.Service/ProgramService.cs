@@ -160,6 +160,23 @@ namespace Phytel.API.DataDomain.Program.Service
             return response;
         }
 
+        public GetStepResponseListResponse Get(GetStepResponseListRequest request)
+        {
+            GetStepResponseListResponse response = new GetStepResponseListResponse();
+            try
+            {
+                response = ProgramDataManager.GetStepResponse(request);
+                response.Version = request.Version;
+            }
+            catch (Exception ex)
+            {
+                //TODO: Log this to C3 database via ASE
+                base.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                response.Status = new ServiceStack.ServiceInterface.ServiceModel.ResponseStatus("Exception", ex.Message);
+            }
+            return response;
+        }
+
         //public GetAllProgramsResponse Post(GetAllProgramsRequest request)
         //{
         //    GetAllProgramsResponse response = new GetAllProgramsResponse();

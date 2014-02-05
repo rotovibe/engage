@@ -326,6 +326,13 @@ namespace Phytel.API.DataDomain.Program
             }
         }
 
+        public static GetStepResponseListResponse GetStepResponse(GetStepResponseListRequest request)
+        {
+            GetStepResponseListResponse response = null;
+            response = DTOUtils.GetStepResponses(request.StepId, request.ContractNumber, true);
+            return response;
+        }
+
         public static GetStepResponseResponse GetStepResponse(GetStepResponseRequest request)
         {
             GetStepResponseResponse response = new GetStepResponseResponse();

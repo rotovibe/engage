@@ -530,7 +530,7 @@ namespace Phytel.API.AppDomain.NG
                             SourceId = resp.Program.SourceId,
                              CompletedBy = resp.Program.CompletedBy,
                               DateCompleted = resp.Program.DateCompleted,
-                            Modules = GetModuleInfo(resp),
+                            Modules = GetModuleInfo(resp, request),
                             ObjectivesInfo = resp.Program.ObjectivesInfo.Select(r => new Objective
                             {
                                 Id = r.Id.ToString(),
@@ -600,7 +600,7 @@ namespace Phytel.API.AppDomain.NG
             }
         }
 
-        private List<Module> GetModuleInfo(DD.GetProgramDetailsSummaryResponse resp)
+        private List<Module> GetModuleInfo(DD.GetProgramDetailsSummaryResponse resp, IAppDomainRequest request)
         {
             return resp.Program.Modules.Select(r => new Module
             {
@@ -628,13 +628,14 @@ namespace Phytel.API.AppDomain.NG
                     Status = (int)o.Status,
                     Unit = o.Unit
                 }).ToList(),
-                Actions = GetActionsInfo(r)
+                Actions = GetActionsInfo(r, request)
             }).ToList();
         }
 
-        private List<Actions> GetActionsInfo(DD.ModuleDetail r)
+        private List<Actions> GetActionsInfo(DD.ModuleDetail r, IAppDomainRequest request)
         {
-            return r.Actions.Select(a => new Actions
+            List<Actions> action = null;
+            action = r.Actions.Select(a => new Actions
             {
                 CompletedBy = a.CompletedBy,
                 Description = a.Description,
@@ -660,13 +661,15 @@ namespace Phytel.API.AppDomain.NG
                     Status = (int)x.Status,
                     Value = x.Value
                 }).ToList(),
-                Steps = GetStepsInfo(a)
+                Steps = GetStepsInfo(a, request)
             }).ToList();
+
+            return action;
         }
 
-        private List<Step> GetStepsInfo(DD.ActionsDetail a)
+        private List<Step> GetStepsInfo(DD.ActionsDetail a, IAppDomainRequest request)
         {
-            return a.Steps.Select(s => new Step
+            List<Step> steps = a.Steps.Select(s => new Step
             {
                 Description = s.Description,
                 Ex = s.Ex,
@@ -691,18 +694,20 @@ namespace Phytel.API.AppDomain.NG
                 AssignBy = s.AssignBy,
                 AssignDate = s.AssignDate,
                 ElementState = s.ElementState,
-                Responses = GetResponses(s),
+                Responses = GetResponses(s, request),
                 SelectedResponseId = s.SelectedResponseId,
                 CompletedBy = s.CompletedBy,
                 DateCompleted = s.DateCompleted,
                 SpawnElement = GetSpawnElement(s)
             }).ToList();
+
+            return steps;
         }
 
-        private List<Response> GetResponses(DD.StepsDetail s)
+        private List<Response> GetResponses(DD.StepsDetail s, IAppDomainRequest request)
         {
             List<Response> resps = null;
-            if (s.Responses != null)
+            if (s.Responses != null && s.Responses.Count > 0)
             {
                 resps = s.Responses.Select(z => new Response
                                             {
@@ -713,9 +718,27 @@ namespace Phytel.API.AppDomain.NG
                                                 Required = z.Required,
                                                 StepId = z.StepId,
                                                 Text = z.Text,
-                                                Value = z.Value ,
+                                                Value = z.Value,
                                                 SpawnElement = GetADSpawnElement(z.SpawnElement)
                                             }).ToList();
+            }
+            else
+            {
+                // get the responses for step.
+                resps = new List<Response>();
+                List<DD.StepResponse> rsps = PlanElementEndpointUtil.GetResponsesForStep(s.Id, request);
+                rsps.ForEach(r => resps.Add(new Response
+                {
+                    Id = r.Id,
+                    NextStepId = r.NextStepId,
+                    Nominal = r.Nominal,
+                    Order = r.Order,
+                    Required = r.Required,
+                    SpawnElement = GetADSpawnElement(r.Spawn),
+                    StepId = r.StepId,
+                    Text = r.Text,
+                    Value = r.Value
+                }));
             }
             return resps;
         }

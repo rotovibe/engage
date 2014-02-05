@@ -127,6 +127,35 @@ namespace Phytel.API.AppDomain.NG
             }
         }
 
+        public static List<StepResponse> GetResponsesForStep(string stepId, IAppDomainRequest request)
+        {
+            List<StepResponse> result = null;
+            try
+            {
+                IRestClient client = new JsonServiceClient();
+                GetStepResponseListResponse resp =
+                                    client.Get<GetStepResponseListResponse>(
+                                    string.Format("{0}/{1}/{2}/{3}/Program/Module/Action/Step/{4}/Responses/",
+                                    DDProgramServiceUrl,
+                                    "NG",
+                                    request.Version,
+                                    request.ContractNumber,
+                                    stepId));
+
+                if (resp != null)
+                {
+                    result = resp.StepResponseList;
+                }
+
+                return result;
+            }
+            catch (WebServiceException wse)
+            {
+                Exception ae = new Exception(wse.ResponseBody, wse.InnerException);
+                throw ae;
+            }
+        }
+
         private static bool ResponseExistsRequest(string stepId, string responseId, IAppDomainRequest request)
         {
             bool result = false;

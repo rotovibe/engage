@@ -3,7 +3,7 @@ using ServiceStack.ServiceHost;
 
 namespace Phytel.API.DataDomain.Program.DTO
 {
-    [Route("/{Context}/{Version}/{ContractNumber}/Program/Module/Action/Step/{StepId}/Responses", "GET")]
+    [Route("/{Context}/{Version}/{ContractNumber}/Program/Module/Action/Step/{StepId}/Responses/", "GET")]
     public class GetStepResponseListRequest : IDataDomainRequest
     {
         [ApiMember(Name = "UserId", Description = "UserId of the logged in user", ParameterType = "property", DataType = "string", IsRequired = false)]
