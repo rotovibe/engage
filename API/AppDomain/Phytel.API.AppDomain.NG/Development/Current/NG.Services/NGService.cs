@@ -28,6 +28,8 @@ namespace Phytel.API.AppDomain.NG.Service
                 else
                     throw new UnauthorizedAccessException();
 
+                ngm.LogAuditData(request, System.Web.HttpContext.Current.Request, request.GetType().Name);
+               
                 return response;
             }
             catch (Exception ex)
