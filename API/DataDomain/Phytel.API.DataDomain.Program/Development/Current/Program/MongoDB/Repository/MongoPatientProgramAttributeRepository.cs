@@ -223,34 +223,38 @@ namespace Phytel.API.DataDomain.Program
                 using (ProgramMongoContext ctx = new ProgramMongoContext(_dbName))
                 {
                     var q = MB.Query<MEProgramAttribute>.EQ(b => b.PlanElementId, ObjectId.Parse(mepa.PlanElementId));
-
                     var uv = new List<MB.UpdateBuilder>();
+                    // state
                     if (mepa.AssignedBy != null) uv.Add(MB.Update.Set(MEProgramAttribute.AssignByProperty, mepa.AssignedBy));
                     if (mepa.AssignedOn != null) uv.Add(MB.Update.Set(MEProgramAttribute.AssignDateProperty, mepa.AssignedOn));
+                    if (mepa.Population != null) uv.Add(MB.Update.Set(MEProgramAttribute.PopulationProperty, mepa.Population));
                     if (mepa.AuthoredBy != null) uv.Add(MB.Update.Set(MEProgramAttribute.AuthoredByProperty, mepa.AuthoredBy));
+                    if (mepa.Completed != 0) uv.Add(MB.Update.Set(MEProgramAttribute.CompletedProperty, mepa.Completed));
                     if (mepa.CompletedBy != null) uv.Add(MB.Update.Set(MEProgramAttribute.CompletedByProperty, mepa.CompletedBy));
                     if (mepa.DateCompleted != null) uv.Add(MB.Update.Set(MEProgramAttribute.CompletedOnProperty, mepa.DateCompleted));
-                    if (mepa.DidNotEnrollReason != null) uv.Add(MB.Update.Set(MEProgramAttribute.DidNotEnrollReasonProperty, mepa.DidNotEnrollReason));
-                    if (mepa.DisEnrollReason != null) uv.Add(MB.Update.Set(MEProgramAttribute.DisEnrollReasonProperty, mepa.DisEnrollReason));
+                    if (mepa.RemovedReason != null) uv.Add(MB.Update.Set(MEProgramAttribute.RemovedReasonProperty, mepa.RemovedReason));
+                    if (mepa.GraduatedFlag != 0) uv.Add(MB.Update.Set(MEProgramAttribute.GraduatedFlagProperty, mepa.GraduatedFlag));
+                    if (mepa.Locked != 0) uv.Add(MB.Update.Set(MEProgramAttribute.LockedProperty, mepa.Locked));
+                    if (mepa.OverrideReason != null) uv.Add(MB.Update.Set(MEProgramAttribute.OverrideReasonProperty, mepa.OverrideReason));
+                    if (mepa.Status != 0) uv.Add(MB.Update.Set(MEProgramAttribute.StatusProperty, (Status)mepa.Status));
+                    // eligibility
                     if (mepa.EligibilityEndDate != null) uv.Add(MB.Update.Set(MEProgramAttribute.EligibilityEndDateProperty, mepa.EligibilityEndDate));
                     if (mepa.EligibilityRequirements != null) uv.Add(MB.Update.Set(MEProgramAttribute.EligibilityRequirementsProperty, mepa.EligibilityRequirements));
                     if (mepa.EligibilityStartDate != null) uv.Add(MB.Update.Set(MEProgramAttribute.EligibilityStartDateProperty, mepa.EligibilityStartDate));
-                    if (mepa.EndDate != null) uv.Add(MB.Update.Set(MEProgramAttribute.EndDateProperty, mepa.EndDate));
                     if (mepa.IneligibleReason != null) uv.Add(MB.Update.Set(MEProgramAttribute.IneligibleReasonProperty, mepa.IneligibleReason));
+                    if (mepa.EligibilityOverride != 0) uv.Add(MB.Update.Set(MEProgramAttribute.EligibilityOverrideProperty, (EligibilityOverride)mepa.EligibilityOverride));
+                    if (mepa.Eligibility != 0) uv.Add(MB.Update.Set(MEProgramAttribute.EligibilityProperty, (EligibilityStatus)mepa.Eligibility));
+                    // optout
                     if (mepa.OptOutDate != null) uv.Add(MB.Update.Set(MEProgramAttribute.OptOutDateProperty, mepa.OptOutDate));
                     if (mepa.OptOut != null) uv.Add(MB.Update.Set(MEProgramAttribute.OptOutProperty, mepa.OptOut));
                     if (mepa.OptOutReason != null) uv.Add(MB.Update.Set(MEProgramAttribute.OptOutReasonProperty, mepa.OptOutReason));
-                    if (mepa.OverrideReason != null) uv.Add(MB.Update.Set(MEProgramAttribute.OverrideReasonProperty, mepa.OverrideReason));
-                    if (mepa.Population != null) uv.Add(MB.Update.Set(MEProgramAttribute.PopulationProperty, mepa.Population));
-                    if (mepa.RemovedReason != null) uv.Add(MB.Update.Set(MEProgramAttribute.RemovedReasonProperty, mepa.RemovedReason));
+                    // dates
                     if (mepa.StartDate != null) uv.Add(MB.Update.Set(MEProgramAttribute.StartDateProperty, mepa.StartDate));
-                    if (mepa.Status != 0) uv.Add(MB.Update.Set(MEProgramAttribute.StatusProperty, (Status)mepa.Status));
+                    if (mepa.EndDate != null) uv.Add(MB.Update.Set(MEProgramAttribute.EndDateProperty, mepa.EndDate));
+                    // enrollment
                     if (mepa.Enrollment != 0) uv.Add(MB.Update.Set(MEProgramAttribute.EnrollmentProperty, (EnrollmentStatus)mepa.Enrollment));
-                    if (mepa.EligibilityOverride != 0) uv.Add(MB.Update.Set(MEProgramAttribute.EligibilityOverrideProperty, (EligibilityOverride)mepa.EligibilityOverride));
-                    if (mepa.Eligibility != 0) uv.Add(MB.Update.Set(MEProgramAttribute.EligibilityProperty, (EligibilityStatus)mepa.Eligibility));
-                    if (mepa.Completed != 0) uv.Add(MB.Update.Set(MEProgramAttribute.CompletedProperty, mepa.Completed));
-                    if (mepa.GraduatedFlag != 0) uv.Add(MB.Update.Set(MEProgramAttribute.GraduatedFlagProperty, mepa.GraduatedFlag));
-                    if (mepa.Locked != 0) uv.Add(MB.Update.Set(MEProgramAttribute.LockedProperty, mepa.Locked));
+                    if (mepa.DidNotEnrollReason != null) uv.Add(MB.Update.Set(MEProgramAttribute.DidNotEnrollReasonProperty, mepa.DidNotEnrollReason));
+                    if (mepa.DisEnrollReason != null) uv.Add(MB.Update.Set(MEProgramAttribute.DisEnrollReasonProperty, mepa.DisEnrollReason));
 
                     if (uv.Count > 0)
                     {

@@ -165,6 +165,17 @@ namespace Phytel.API.AppDomain.NG
 
                     progAttr.IneligibleReason = (!string.IsNullOrEmpty(r.Tag))?r.Tag : null;
                 }
+                else if (r.ElementType.Equals(14))
+                {
+                    progAttr.EndDate = System.DateTime.UtcNow;
+                }
+                else if (r.ElementType.Equals(15))
+                {
+                    if (r.Tag == null)
+                        throw new ArgumentException("Cannot set attribute of type " + r.ElementType + ". Tag value is null.");
+
+                    progAttr.Enrollment = (!string.IsNullOrEmpty(r.Tag)) ? Convert.ToInt32(r.Tag) : 0;
+                }
                 else if (r.ElementType.Equals(16))
                 {
                     if (r.Tag == null)
