@@ -9,6 +9,10 @@ using MongoDB.Driver;
 using MongoDB.Driver.Builders;
 using MongoDB.Bson;
 using Phytel.API.AppDomain.Template;
+using MB = MongoDB.Driver.Builders;
+using MongoDB.Bson;
+using Phytel.API.Common;
+using Phytel.API.Common.Data;
 
 namespace Phytel.API.DataDomain.Template
 {
@@ -21,7 +25,7 @@ namespace Phytel.API.DataDomain.Template
             _dbName = contractDBName;
         }
 
-        public object Insert(T newEntity)
+        public object Insert(object newEntity)
         {
             try
             {
@@ -31,7 +35,7 @@ namespace Phytel.API.DataDomain.Template
             catch (Exception ex) { throw ex; }
         }
 
-        public object InsertAll(List<T> entities)
+        public object InsertAll(List<object> entities)
         {
             try
             {
@@ -41,7 +45,7 @@ namespace Phytel.API.DataDomain.Template
             catch (Exception ex) { throw ex; }
         }
 
-        public void Delete(T entity)
+        public void Delete(object entity)
         {
             try
             {
@@ -51,7 +55,7 @@ namespace Phytel.API.DataDomain.Template
             catch (Exception ex) { throw ex; }
         }
 
-        public void DeleteAll(List<T> entities)
+        public void DeleteAll(List<object> entities)
         {
             try
             {
@@ -75,8 +79,16 @@ namespace Phytel.API.DataDomain.Template
         {
             try
             {
-                throw new NotImplementedException();
-                // code here //
+                IMongoQuery mQuery = null;
+                List<object> TemplateItems = new List<object>();
+
+                mQuery = MongoDataUtil.ExpressionQueryBuilder(expression);
+
+                //using (TemplateMongoContext ctx = new TemplateMongoContext(_dbName))
+                //{
+                //}
+
+                return new Tuple<string, IEnumerable<object>>(expression.ExpressionID, TemplateItems);
             }
             catch (Exception ex) { throw ex; }
         }
@@ -91,7 +103,7 @@ namespace Phytel.API.DataDomain.Template
             catch (Exception ex) { throw ex; }
         }
 
-        public object Update(T entity)
+        public object Update(object entity)
         {
             try
             {

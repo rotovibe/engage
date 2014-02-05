@@ -19,7 +19,8 @@ namespace Phytel.API.DataDomain.Template.Service
             catch (Exception ex)
             {
                 //TODO: Log this to C3 database via ASE
-                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+                base.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                response.Status = new ServiceStack.ServiceInterface.ServiceModel.ResponseStatus("Exception", ex.Message);
             }
             return response;
         }
@@ -29,13 +30,14 @@ namespace Phytel.API.DataDomain.Template.Service
             GetTemplateResponse response = new GetTemplateResponse();
             try
             {
-             response = TemplateDataManager.GetTemplateByID(request);
-            response.Version = request.Version;
-                        }
+                response = TemplateDataManager.GetTemplateByID(request);
+                response.Version = request.Version;
+            }
             catch (Exception ex)
             {
                 //TODO: Log this to C3 database via ASE
-                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+                base.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                response.Status = new ServiceStack.ServiceInterface.ServiceModel.ResponseStatus("Exception", ex.Message);
             }
             return response;
         }
@@ -51,7 +53,8 @@ namespace Phytel.API.DataDomain.Template.Service
             catch (Exception ex)
             {
                 //TODO: Log this to C3 database via ASE
-                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+                base.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                response.Status = new ServiceStack.ServiceInterface.ServiceModel.ResponseStatus("Exception", ex.Message);
             }
             return response;
         }
