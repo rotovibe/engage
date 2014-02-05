@@ -11,8 +11,24 @@ namespace Phytel.API.AppDomain.NG.Test
         [TestMethod]
         public void GetPatientByID_Test()
         {
-            //PatientResponse response = NGManager.GetPatientByID("1", "NG", "inHealth001");
-            //Assert.IsTrue(response.LastName == "DiGiorgio");
+            
+            // Arrange
+            string version = "v1";
+            string contractNumber = "InHealth001";
+            string token = "1234";
+            NGManager ngManager = new NGManager();
+            GetPatientRequest request = new GetPatientRequest
+            {
+                ContractNumber = contractNumber,
+                Token = token,
+                Version = version,
+                PatientID = "52e26f11072ef7191c111caf"
+            };
+            // Act
+            GetPatientResponse response = ngManager.GetPatient(request);
+
+            //Assert
+            Assert.IsTrue(response.Patient != null);
         }
 
         #region PatientProblem
@@ -97,7 +113,7 @@ namespace Phytel.API.AppDomain.NG.Test
                 ContractNumber = contractNumber,
                 Token = token,
                 Version = version,
-                PatientID = "52e26f11072ef7191c111edf"
+                PatientID = "52e26f5b072ef7191c11e689"
             };
             // Act
             Contact response = ngManager.GetContactByPatientId(request);
