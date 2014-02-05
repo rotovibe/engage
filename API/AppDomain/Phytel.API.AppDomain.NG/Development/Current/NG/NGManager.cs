@@ -1321,18 +1321,43 @@ namespace Phytel.API.AppDomain.NG
         public void LogAuditData(IAppDomainRequest request, HttpRequest webreq, string returnTypeName)
         {
             //hand to a new thread here, and immediately return this thread to caller
-            new Thread(() =>
+            try
             {
-                AuditAsynch(request, webreq, returnTypeName);
+                //throw new SystemException("test before new thread starts");
+                    new Thread(() =>
+                                {
+                                    try
+                                    {
+                                        AuditAsynch(request, webreq, returnTypeName);
+                                     }   
+                                    catch (Exception)
+                                    {
+                                        //if there's an error from the new thread, handle it here, so we don't black the main thread
+                                        //drop into queue
+                                        //write to log
+                                        //email to admin
+                                        //NLog?
+                    
+                                    }
+                                    
+                                }).Start();
+                
+            }
+            catch (Exception)
+            {
+                //handle the exception here, to make sure we don't block the main thread
 
-            }).Start();
+             }
 
             return;
+
 
         }
 
         private static void AuditAsynch(IAppDomainRequest request, HttpRequest webreq, string returnTypeName)
         {
+            throw new SystemException("test error in new thread starts");
+
             string callingMethod = AuditHelper.FindMethodType(returnTypeName);
             int auditTypeId = AuditHelper.GetAuditTypeID(callingMethod);
             AuditData data = AuditHelper.GetAuditLog(auditTypeId, request, webreq, callingMethod);

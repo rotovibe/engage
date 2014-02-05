@@ -57,16 +57,8 @@ namespace Phytel.API.AppDomain.NG.Service
                 else
                     throw new UnauthorizedAccessException();
 
-                try
-                {
-                    ngm.LogAuditData(request, System.Web.HttpContext.Current.Request, request.GetType().Name);
-                }
-                catch (Exception)
-                {
-                    //need to decide how to handle an error here
-                    throw;
-                }
-
+               ngm.LogAuditData(request, System.Web.HttpContext.Current.Request, request.GetType().Name);
+               
                 return response;
             }
             catch (Exception ex)
