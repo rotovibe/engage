@@ -41,7 +41,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
                             SourceId = m.SourceId,
                             AssignedBy = m.AssignedBy,
                             AssignedOn = m.AssignedOn,
-                            State = m.State,
+                            State = Common.ElementState.NotStarted,
                             CompletedBy = m.CompletedBy,
                             DateCompleted = m.DateCompleted,
                             //Objectives = m.Objectives.Where(a => a.Status == Common.Status.Active).Select(z => new ObjectivesInfo()
@@ -76,7 +76,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
                                     SourceId = ai.SourceId,
                                     AssignedBy = ai.AssignedBy,
                                     AssignedOn = ai.AssignedOn,
-                                    State = ai.State,
+                                    State = Common.ElementState.NotStarted,
                                     //Objectives = ai.Objectives.Where(r => r.Status == Common.Status.Active).Select(x => new ObjectivesInfo()
                                     //{
                                     //    Id = x.Id,

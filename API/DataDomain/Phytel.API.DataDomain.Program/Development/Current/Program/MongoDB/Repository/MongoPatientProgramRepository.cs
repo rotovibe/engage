@@ -50,7 +50,7 @@ namespace Phytel.API.DataDomain.Program
                             AuthoredBy = cp.AuthoredBy,
                             Client = cp.Client,
                             ProgramState = Common.ProgramState.NotStarted,
-                            State = cp.State,
+                            State = Common.ElementState.NotStarted,
                             AssignedBy = cp.AssignedBy,
                             AssignedOn = cp.AssignedOn,
                             StartDate = System.DateTime.UtcNow, // utc time
@@ -66,7 +66,7 @@ namespace Phytel.API.DataDomain.Program
                             EligibilityRequirements = cp.EligibilityRequirements,
                             Enrollment = Common.GenericStatus.Pending,
                             EligibilityOverride = Common.GenericSetting.No,
-                             DateCompleted = cp.DateCompleted,
+                            DateCompleted = cp.DateCompleted,
                             ContractProgramId = cp.Id,
                             DeleteFlag = cp.DeleteFlag,
                             Description = cp.Description,
