@@ -43,6 +43,11 @@ namespace Phytel.API.DataDomain.Contact
                     DeleteFlag = false
                 };
 
+                //Timezone
+                if (request.TimeZoneId != null)
+                { 
+                    meContact.TimeZone = ObjectId.Parse(request.TimeZoneId);
+                }
                 //Modes
                 if (request.Modes != null && request.Modes.Count > 0)
                 {

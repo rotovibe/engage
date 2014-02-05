@@ -991,6 +991,15 @@ namespace Phytel.API.AppDomain.NG
             Contact newContact = null;
             try
             {
+                // Get the default TimeZone that is set in TimeZone LookUp table. 
+                string defaultTimeZone = null;
+                GetTimeZoneDataRequest tzDataRequest = new GetTimeZoneDataRequest { ContractNumber = contractNumber, Version = version };
+                TimeZonesLookUp tz = getDefaultTimeZone(tzDataRequest);
+                if (tz != null)
+                {
+                    defaultTimeZone = tz.Id;
+                }
+                
                 //Get all the available comm modes in the lookup.
                 List<CommModeData> commModeData = new List<CommModeData>();
                 List<CommMode> commMode = new List<CommMode>();
@@ -1017,6 +1026,7 @@ namespace Phytel.API.AppDomain.NG
                                                                                 userId), new PutContactDataRequest
                                                                                 {
                                                                                     PatientId = patientId,
+                                                                                    TimeZoneId = defaultTimeZone,
                                                                                     Modes = commModeData,
                                                                                     Context = context, 
                                                                                     ContractNumber = contractNumber, 
@@ -1030,6 +1040,7 @@ namespace Phytel.API.AppDomain.NG
                     newContact = new Contact();
                     newContact.Id = dataDomainResponse.ContactId;
                     newContact.PatientId = patientId;
+                    newContact.TimeZoneId = defaultTimeZone;
                     newContact.Modes = commMode;
                 }
             }
@@ -1081,26 +1092,10 @@ namespace Phytel.API.AppDomain.NG
                             LastName = cd.LastName,
                             PreferredName = cd.PreferredName,
                             Gender = cd.Gender,
+                            TimeZoneId = cd.TimeZoneId,
                             WeekDays = cd.WeekDays,
                             TimesOfDaysId = cd.TimesOfDaysId
                         };
-
-                        //TimeZone
-                        if (cd.TimeZoneId != null)
-                        {
-                            contact.TimeZoneId = cd.TimeZoneId;
-                        }
-                        else
-                        {
-                            // If the user has no timezone set, the default timezone in lookup table should override it.
-                            // Getting the default TimeZone that is set in TimeZone LookUp table. 
-                            GetTimeZoneDataRequest tzDataRequest = new GetTimeZoneDataRequest { ContractNumber = request.ContractNumber, Version = request.Version };
-                            TimeZonesLookUp tz = getDefaultTimeZone(tzDataRequest);
-                            if (tz != null)
-                            {
-                                contact.TimeZoneId = tz.Id;
-                            }
-                        }
 
                         //Modes
                         List<CommModeData> commModeData = cd.Modes;
