@@ -18,6 +18,7 @@ using Phytel.API.DataDomain.Program.MongoDB.DTO;
 using Phytel.API.DataDomain.Contact.DTO;
 
 using MongoDB.Bson.Serialization;
+using MongoDB.Bson;
 
 namespace NGTestData
 {
@@ -41,6 +42,7 @@ namespace NGTestData
             List<MEContact> patientContacts = new List<MEContact>();
 
             List<MEProblem> problems = null;
+            List<MEState> states = null;
 
             string mongoConnString = string.Empty;
             if (rdoDev.Checked)
@@ -65,7 +67,8 @@ namespace NGTestData
             IMongoQuery q = Query.EQ("type", 1);
 
             problems = GetAllProblems(mongoDB.GetCollection("LookUp"));
-            
+            states = GetAllStates(mongoDB.GetCollection("LookUp"));
+
             System.Random rnd = new Random();
             int maxNum = problems.Count() - 1;
 
@@ -96,10 +99,54 @@ namespace NGTestData
                         LastUpdatedOn = DateTime.Now
                     };
 
-                //MEContact patContact = new MEContact
-                //    {
-                        
-                //    }
+                List<MEAddress> addresses = new List<MEAddress>();
+                List<MEEmail> emails = new List<MEEmail>();
+                List<MEPhone> phones = new List<MEPhone>();
+
+                string sqlAddressQuery = string.Format("select top 1 Address1, Address2, City, [State], ZipCode from Address Where OwnerID = {0}", patientSystemID);
+                string sqlEmailQuery = string.Format("select top 1 Address from Email Where OwnerID = {0}", patientSystemID);
+                string sqlPhoneQuery = string.Format("select top 1 DialString from Phone Where OwnerID = {0}", patientSystemID);
+
+                DataSet dsAddress = Phytel.Services.SQLDataService.Instance.ExecuteSQLDirect(sqlConn, sqlAddressQuery, 0);
+                DataSet dsEmail = Phytel.Services.SQLDataService.Instance.ExecuteSQLDirect(sqlConn, sqlEmailQuery, 0);
+                DataSet dsPhone = Phytel.Services.SQLDataService.Instance.ExecuteSQLDirect(sqlConn, sqlPhoneQuery, 0);
+
+                if (dsAddress.Tables[0].Rows.Count > 0)
+                {
+                    ObjectId stateID = states.Where(x => x.Code == dsAddress.Tables[0].Rows[0]["State"].ToString()).Select(y => y.DataID).FirstOrDefault();
+
+                    addresses.Add(new MEAddress
+                    {
+                        Id = ObjectId.GenerateNewId(),
+                        Line1 = dsAddress.Tables[0].Rows[0]["Address1"].ToString(),
+                        Line2 = dsAddress.Tables[0].Rows[0]["Address2"].ToString(),
+                        City = dsAddress.Tables[0].Rows[0]["City"].ToString(),
+                        StateId = stateID,
+                        PostalCode = dsAddress.Tables[0].Rows[0]["ZipCode"].ToString(),
+                        TypeId = ObjectId.Parse("52e18c2ed433232028e9e3a6")
+                    });
+                }
+
+                if (dsEmail.Tables[0].Rows.Count > 0)
+                    emails.Add(new MEEmail { Id = ObjectId.GenerateNewId(), Preferred = true, Text = dsEmail.Tables[0].Rows[0]["Address"].ToString() });
+
+                if (dsPhone.Tables[0].Rows.Count > 0)
+                    phones.Add(new MEPhone { Id = ObjectId.GenerateNewId(), IsText = true, Number = long.Parse(dsPhone.Tables[0].Rows[0]["DialString"].ToString()), PreferredPhone = true, PreferredText = false, TypeId = ObjectId.Parse("52e18c2ed433232028e9e3a6") });
+
+                MEContact patContact = new MEContact
+                    {
+                        Addresses = addresses,
+                        Emails = emails,
+                        FirstName = patient.FirstName,
+                        Gender = patient.Gender,
+                        LastName = patient.LastName,
+                        MiddleName = patient.MiddleName,
+                        PatientId = patient.Id,
+                        Phones = phones,
+                        PreferredName = patient.PreferredName,
+                        TimeZone = ObjectId.Parse("52e1817dd433232028e9e39e")
+                    };
+
                 MEPatientSystem patSystem = new MEPatientSystem
                     {
                         PatientID = patient.Id,
@@ -116,6 +163,7 @@ namespace NGTestData
                 
                 patients.Add(patient);
                 patientSystems.Add(patSystem);
+                patientContacts.Add(patContact);
 
                 currentPatientView.PatientID = patient.Id;
                 currentPatientView.LastName = patient.LastName;
@@ -163,6 +211,7 @@ namespace NGTestData
                     mongoDB.GetCollection("PatientProblem").InsertBatch(patientProblems);
                     mongoDB.GetCollection("CohortPatientView").InsertBatch(cohortPatients);
                     mongoDB.GetCollection("PatientSystem").InsertBatch(patientSystems);
+                    mongoDB.GetCollection("Contact").InsertBatch(patientContacts);
 
                     counter = 0;
 
@@ -170,6 +219,7 @@ namespace NGTestData
                     patientProblems = new List<MEPatientProblem>();
                     cohortPatients = new List<MECohortPatientView>();
                     patientSystems = new List<MEPatientSystem>();
+                    patientContacts = new List<MEContact>();
                 }
             }
             if (patients.Count > 0)
@@ -178,6 +228,7 @@ namespace NGTestData
                 mongoDB.GetCollection("PatientProblem").InsertBatch(patientProblems);
                 mongoDB.GetCollection("CohortPatientView").InsertBatch(cohortPatients);
                 mongoDB.GetCollection("PatientSystem").InsertBatch(patientSystems);
+                mongoDB.GetCollection("Contact").InsertBatch(patientContacts);
             }
             
         }
@@ -209,7 +260,34 @@ namespace NGTestData
 
             }
             return problems;
-        } 
+        }
 
+        public List<MEState> GetAllStates(MongoCollection lookupColl)
+        {
+            if (BsonClassMap.IsClassMapRegistered(typeof(LookUpBase)) == false)
+                BsonClassMap.RegisterClassMap<LookUpBase>();
+
+            if (BsonClassMap.IsClassMapRegistered(typeof(MELookup)) == false)
+                BsonClassMap.RegisterClassMap<MELookup>();
+
+            if (BsonClassMap.IsClassMapRegistered(typeof(MEState)) == false)
+                BsonClassMap.RegisterClassMap<MEState>();
+
+            List<MEState> states = new List<MEState>();
+            List<IMongoQuery> queries = new List<IMongoQuery>();
+            queries.Add(Query.EQ(MELookup.TypeProperty, LookUpType.State));
+            queries.Add(Query.EQ(MELookup.DeleteFlagProperty, false));
+            IMongoQuery mQuery = Query.And(queries);
+            MELookup meLookup = lookupColl.FindAs<MELookup>(mQuery).FirstOrDefault();
+            if (meLookup != null)
+            {
+                if (meLookup.Data != null)
+                {
+                    foreach (MEState s in meLookup.Data)
+                        states.Add(s);
+                }
+            }
+            return states;
+        }
     }
 }
