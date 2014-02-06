@@ -21,7 +21,7 @@ namespace Phytel.API.DataDomain.Contact.DTO
         public const string LastNameProperty = "ln";
         public const string PreferredNameProperty = "pfn";
         public const string GenderProperty = "g";
-        public const string ModesProperty = "ms";
+        public const string ModesProperty = "mds";
         public const string PhonesProperty = "phs";
         public const string EmailsProperty = "ems";
         public const string AddressessProperty = "adds";

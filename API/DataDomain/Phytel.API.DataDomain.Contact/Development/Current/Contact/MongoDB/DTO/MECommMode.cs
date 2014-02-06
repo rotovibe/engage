@@ -5,7 +5,7 @@ namespace Phytel.API.DataDomain.Contact.DTO
 {
     public class MECommMode
     {
-        public const string ModeIdProperty = "mid";
+        public const string ModeIdProperty = "mdid";
         public const string PreferredProperty = "pf";
         public const string OptOutProperty = "oo";
         
