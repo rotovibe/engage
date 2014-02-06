@@ -15,11 +15,11 @@ namespace Phytel.API.DataDomain.Action.DTO
         public MEAction() { Id = ObjectId.GenerateNewId(); }
 
         public const string IdProperty = "_id";
-        public const string NameProperty = "n";
+        public const string NameProperty = "nm";
         public const string DescriptionProperty = "desc";
         public const string CompletedByProperty = "cby";
-        public const string ObjectivesProperty = "oi";
-        public const string StatusProperty = "st";
+        public const string ObjectivesProperty = "obj";
+        public const string StatusProperty = "sts";
 
         public const string ExtraElementsProperty = "ex";
         public const string VersionProperty = "v";
@@ -82,12 +82,12 @@ namespace Phytel.API.DataDomain.Action.DTO
     public class ObjectiveInfo
     {
         public const string IDProperty = "_id";
-        public const string ValueProperty = "vl";
+        public const string ValueProperty = "val";
         public const string MeasurementProperty = "m";
         public const string StatusProperty = "st";
 
         [BsonElement(IDProperty)]
-        public ObjectId ID { get; set; }
+        public ObjectId Id { get; set; }
 
         [BsonElement(ValueProperty)]
         public string Value { get; set; }

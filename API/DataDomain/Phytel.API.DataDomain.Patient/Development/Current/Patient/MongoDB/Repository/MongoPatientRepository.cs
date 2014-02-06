@@ -539,9 +539,9 @@ namespace Phytel.API.DataDomain.Patient
                     if (request.PreferredName != null)
                     {
                         if (request.PreferredName == "\"\"" || (request.PreferredName == "\'\'"))
-                            updt.Set(MEPatient.PreferredProperty, string.Empty);
+                            updt.Set(MEPatient.PreferredNameProperty, string.Empty);
                         else
-                            updt.Set(MEPatient.PreferredProperty, request.PreferredName);
+                            updt.Set(MEPatient.PreferredNameProperty, request.PreferredName);
                     }
                     if (request.Gender != null)
                     {

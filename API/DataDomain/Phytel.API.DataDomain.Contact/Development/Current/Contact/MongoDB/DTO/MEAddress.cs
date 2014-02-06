@@ -11,7 +11,7 @@ namespace Phytel.API.DataDomain.Contact.DTO
         public const string Line2Property = "l2";
         public const string Line3Property = "l3";
         public const string CityProperty = "ci";
-        public const string StateIdProperty = "sid";
+        public const string StateIdProperty = "stid";
         public const string PostalCodeProperty = "pc";
         public const string PreferredProperty = "pf";
         public const string OptOutProperty = "oo";

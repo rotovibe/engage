@@ -8,7 +8,7 @@ namespace Phytel.API.DataDomain.Contact.DTO
         public const string IDProperty = "_id";
         public const string NumberProperty = "num";
         public const string TypeIdProperty = "typeid";
-        public const string IsTextProperty = "txt";
+        public const string IsTextProperty = "istxt";
         public const string PhonePreferredProperty = "pfph";
         public const string TextPreferredProperty = "pftxt";
         public const string OptOutProperty = "oo";

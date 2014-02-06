@@ -21,7 +21,7 @@ namespace Phytel.API.DataDomain.Patient.DTO
         public const string DOBProperty = "dob";
         public const string MiddleNameProperty = "mn";
         public const string SuffixProperty = "sfx";
-        public const string PreferredProperty = "pfn";
+        public const string PreferredNameProperty = "pfn";
         public const string PriorityProperty = "pri";
         public const string CareTeamProperty = "ct";
         public const string ExtraElementsProperty = "ex";
@@ -50,7 +50,7 @@ namespace Phytel.API.DataDomain.Patient.DTO
         [BsonIgnoreIfNull(true)]
         public string Suffix { get; set; }
 
-        [BsonElement(PreferredProperty)]
+        [BsonElement(PreferredNameProperty)]
         [BsonIgnoreIfNull(true)]
         public string PreferredName { get; set; }
 

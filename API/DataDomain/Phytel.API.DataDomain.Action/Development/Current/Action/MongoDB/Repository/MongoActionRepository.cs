@@ -62,7 +62,7 @@ namespace Phytel.API.DataDomain.Action
                     {
                         foreach (ObjectiveInfo oi in meAction.ObjectivesInfo)
                         {
-                            objectiveIDs.Add(oi.ID.ToString());
+                            objectiveIDs.Add(oi.Id.ToString());
                         }
                     }
                     
