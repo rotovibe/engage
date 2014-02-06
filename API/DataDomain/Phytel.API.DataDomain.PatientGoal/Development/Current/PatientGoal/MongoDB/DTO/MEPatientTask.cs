@@ -17,5 +17,22 @@ namespace Phytel.API.DataDomain.PatientGoal.DTO
         public const string IdProperty = "_id";
         [BsonId]
         public ObjectId Id { get; set; }
+
+
+        public const string TargetValueProperty = "tv";
+        [BsonElement(TargetValueProperty)]
+        [BsonIgnoreIfNull(false)]
+        public string TargetValue { get; set; }
+
+        public const string TargetDateProperty = "td";
+        [BsonElement(TargetDateProperty)]
+        [BsonIgnoreIfNull(true)]
+        [BsonDateTimeOptions(Kind = System.DateTimeKind.Local)]
+        public DateTime? TargetDate { get; set; }
+
+        public const string BarriersProperty = "bar";
+        [BsonElement(BarriersProperty)]
+        [BsonIgnoreIfNull(false)]
+        public List<ObjectId> Barriers { get; set; }
     }
 }

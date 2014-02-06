@@ -14,6 +14,28 @@ namespace Phytel.API.DataDomain.PatientGoal.DTO
     {
         public MEGoalBase() {}
 
+        public const string DescriptionProperty = "dsc";
+        [BsonElement(DescriptionProperty)]
+        [BsonIgnoreIfNull(true)]
+        public string Description { get; set; }
+
+        public const string StatusProperty = "sts";
+        [BsonElement(StatusProperty)]
+        [BsonIgnoreIfNull(true)]
+        public string Status { get; set; }
+
+        public const string StatusDateProperty = "stsd";
+        [BsonElement(StatusDateProperty)]
+        [BsonIgnoreIfNull(true)]
+        [BsonDateTimeOptions(Kind = System.DateTimeKind.Local)]
+        public DateTime? StatusDate { get; set; }
+
+        public const string StartDateProperty = "sd";
+        [BsonElement(StartDateProperty)]
+        [BsonIgnoreIfNull(true)]
+        [BsonDateTimeOptions(Kind = System.DateTimeKind.Local)]        
+        public DateTime? StartDate { get; set; }
+
         #region Standard IMongoEntity Implementation
         public const string ExtraElementsProperty = "ex";
         [BsonElement(ExtraElementsProperty)]
