@@ -36,7 +36,7 @@ namespace Phytel.API.DataDomain.Patient
             }
         }
 
-        internal static List<DTO.SearchFieldData> GetSearchFields(List<DTO.MESearchField> list)
+        internal static List<DTO.SearchFieldData> GetSearchFields(List<DTO.SearchField> list)
         {
             try
             {

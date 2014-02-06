@@ -9,7 +9,7 @@ using System.ComponentModel;
 namespace Phytel.API.DataDomain.Patient.DTO
 {
     [BsonIgnoreExtraElements(false)]
-    [MongoIndex(Keys = new string[] { SearchFieldsProperty + "." + MESearchField.FieldNameProperty, SearchFieldsProperty + "." + MESearchField.ValueProperty, SearchFieldsProperty + "." + MESearchField.ActiveProperty })]
+    [MongoIndex(Keys = new string[] { SearchFieldsProperty + "." + SearchField.FieldNameProperty, SearchFieldsProperty + "." + SearchField.ValueProperty, SearchFieldsProperty + "." + SearchField.ActiveProperty })]
     public class MECohortPatientView : IMongoEntity<ObjectId>
     {
         public MECohortPatientView() { Id = ObjectId.GenerateNewId(); }
@@ -29,7 +29,7 @@ namespace Phytel.API.DataDomain.Patient.DTO
         public ObjectId PatientID { get; set; }
 
         [BsonElement(SearchFieldsProperty)]
-        public List<MESearchField> SearchFields { get; set; }
+        public List<SearchField> SearchFields { get; set; }
 
         [BsonElement(LastNameProperty)]
         public string LastName { get; set; }

@@ -577,9 +577,9 @@ namespace Phytel.API.DataDomain.Patient
                     var findQ = MB.Query<MECohortPatientView>.EQ(b => b.PatientID, ObjectId.Parse(request.Id));
                     MECohortPatientView cPV = ctx.CohortPatientViews.Collection.Find(findQ).FirstOrDefault();
                     cPV.SearchFields.ForEach(s => UpdateProperty(request, s));
-                    List<MESearchField> sfs = cPV.SearchFields.ToList<MESearchField>();
+                    List<SearchField> sfs = cPV.SearchFields.ToList<SearchField>();
 
-                    ctx.CohortPatientViews.Collection.Update(findQ, MB.Update.SetWrapped<List<MESearchField>>("sf", sfs).Set(MECohortPatientView.LastNameProperty, request.LastName));
+                    ctx.CohortPatientViews.Collection.Update(findQ, MB.Update.SetWrapped<List<SearchField>>("sf", sfs).Set(MECohortPatientView.LastNameProperty, request.LastName));
                 }
                 return response;
             }
@@ -589,7 +589,7 @@ namespace Phytel.API.DataDomain.Patient
             }
         }
 
-        private void UpdateProperty(PutUpdatePatientDataRequest request, MESearchField s)
+        private void UpdateProperty(PutUpdatePatientDataRequest request, SearchField s)
         {
             if (s.FieldName.Equals("PN"))
             {

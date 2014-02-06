@@ -9,9 +9,9 @@ namespace Phytel.API.DataDomain.Patient.MongoDB.DTO
 {
     public static class DTOUtils
     {
-        internal static List<MESearchField> CloneAppDomainCohortPatientViews(List<Patient.DTO.SearchFieldData> list)
+        internal static List<SearchField> CloneAppDomainCohortPatientViews(List<Patient.DTO.SearchFieldData> list)
         {
-            List<MESearchField> melist = new List<MESearchField>();
+            List<SearchField> melist = new List<SearchField>();
 
             try
             {
@@ -19,7 +19,7 @@ namespace Phytel.API.DataDomain.Patient.MongoDB.DTO
                 {
                     list.ForEach(l =>
                     {
-                        melist.Add(new MESearchField
+                        melist.Add(new SearchField
                         {
                             Active = l.Active,
                             FieldName = l.FieldName,
