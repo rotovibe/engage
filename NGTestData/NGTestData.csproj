@@ -103,6 +103,10 @@
       <Project>{229026b1-c3e5-4d2b-8d2b-61d00e8a52cc}</Project>
       <Name>DataDomain.Cohort</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Services\API\DataDomain\Phytel.API.DataDomain.Contact\Development\Current\Contact\DataDomain.Contact.csproj">
+      <Project>{16143ea0-7971-4959-8b3b-eac8584279c2}</Project>
+      <Name>DataDomain.Contact</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Services\API\DataDomain\Phytel.API.DataDomain.LookUp\Development\Current\LookUp\DataDomain.LookUp.csproj">
       <Project>{f0a3623a-6d1d-46de-a00e-794ebc856eb5}</Project>
       <Name>DataDomain.LookUp</Name>
