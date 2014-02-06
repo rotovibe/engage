@@ -83,7 +83,7 @@ namespace Phytel.API.DataDomain.Action.DTO
     {
         public const string IDProperty = "_id";
         public const string ValueProperty = "vl";
-        public const string MeasurementProperty = "ms";
+        public const string MeasurementProperty = "m";
         public const string StatusProperty = "st";
 
         [BsonElement(IDProperty)]

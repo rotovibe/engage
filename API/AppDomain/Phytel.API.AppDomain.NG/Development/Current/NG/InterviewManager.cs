@@ -89,7 +89,7 @@ namespace Phytel.API.AppDomain.NG
             }
             catch (Exception wse)
             {
-                throw wse;
+                throw;
             }
         }
 
