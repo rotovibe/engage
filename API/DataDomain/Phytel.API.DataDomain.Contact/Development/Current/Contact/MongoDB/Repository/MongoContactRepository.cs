@@ -373,11 +373,21 @@ namespace Phytel.API.DataDomain.Contact
                                         };
                                         mePhones.Add(mePh);
                                     } 
-                                    // Addd the ones that are soft deleted in DB and not sent back from the UI.
-                                    List<MEPhone> deletedExistingPhones = existingPhones.Where(a => a.DeleteFlag == true).ToList();
-                                    if (deletedExistingPhones.Count > 0)
+                                    // Addd the ones that are alreaddy soft deleted in DB or deleted in the UI and not sent back from the UI.
+                                    foreach (var e in existingPhones)
                                     {
-                                        mePhones.AddRange(deletedExistingPhones);
+                                        if (e.DeleteFlag == true)
+                                        {
+                                            mePhones.Add(e);
+                                        }
+                                        else
+                                        {
+                                            if(phoneData.Where(a => a.Id == e.Id.ToString()).FirstOrDefault() == null)
+                                            {
+                                                e.DeleteFlag = true;
+                                                mePhones.Add(e);
+                                            }
+                                        }
                                     }
                                 }
                             }
@@ -455,11 +465,21 @@ namespace Phytel.API.DataDomain.Contact
                                         };
                                         meEmails.Add(mePh);
                                     }
-                                    // Addd the ones that are soft deleted in DB and not sent back from the UI.
-                                    List<MEEmail> deletedExistingEmails = existingEmails.Where(a => a.DeleteFlag == true).ToList();
-                                    if (deletedExistingEmails.Count > 0)
+                                    // Addd the ones that are alreaddy soft deleted in DB or deleted in the UI and not sent back from the UI.
+                                    foreach (var e in existingEmails)
                                     {
-                                        meEmails.AddRange(deletedExistingEmails);
+                                        if (e.DeleteFlag == true)
+                                        {
+                                           meEmails.Add(e);
+                                        }
+                                        else
+                                        {
+                                            if (emailData.Where(a => a.Id == e.Id.ToString()).FirstOrDefault() == null)
+                                            {
+                                                e.DeleteFlag = true;
+                                                meEmails.Add(e);
+                                            }
+                                        }
                                     }
                                 }
                             }
@@ -547,11 +567,21 @@ namespace Phytel.API.DataDomain.Contact
                                         };
                                         meAddresses.Add(me);
                                     }
-                                    // Addd the ones that are soft deleted in DB and not sent back from the UI.
-                                    List<MEAddress> deletedExistingAdds = existingAddresses.Where(a => a.DeleteFlag == true).ToList();
-                                    if (deletedExistingAdds.Count > 0)
+                                    // Addd the ones that are alreaddy soft deleted in DB or deleted in the UI and not sent back from the UI.
+                                    foreach (var e in existingAddresses)
                                     {
-                                        meAddresses.AddRange(deletedExistingAdds);
+                                        if (e.DeleteFlag == true)
+                                        {
+                                            meAddresses.Add(e);
+                                        }
+                                        else
+                                        {
+                                            if (addressData.Where(a => a.Id == e.Id.ToString()).FirstOrDefault() == null)
+                                            {
+                                                e.DeleteFlag = true;
+                                                meAddresses.Add(e);
+                                            }
+                                        }
                                     }
                                 }
                             }
