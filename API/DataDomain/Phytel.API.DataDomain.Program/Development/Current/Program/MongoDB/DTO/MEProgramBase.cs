@@ -54,33 +54,6 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
         [BsonIgnoreIfNull(true)]
         public List<MEModules> Modules { get; set; }
 
-        public const string ExtraElementsProperty = "ex";
-        [BsonElement(ExtraElementsProperty)]
-        [BsonExtraElements()]
-        [BsonIgnoreIfNull(true)]
-        public Dictionary<string, object> ExtraElements { get; set; }
-
-        public const string VersionProperty = "v";
-        [BsonElement(VersionProperty)]
-        [BsonDefaultValue("v1")]
-        public string Version { get; set; }
-
-        public const string UpdatedByProperty = "uby";
-        [BsonElement(UpdatedByProperty)]
-        [BsonDefaultValue("-100")]
-        public string UpdatedBy { get; set; }
-
-        public const string DeleteFlagProperty = "del";
-        [BsonElement(DeleteFlagProperty)]
-        [BsonDefaultValue(false)]
-        public bool DeleteFlag { get; set; }
-
-        public const string LastUpdatedOnProperty = "uon";
-        [BsonElement(LastUpdatedOnProperty)]
-        [BsonIgnoreIfNull(true)]
-        [BsonDateTimeOptions(Kind = System.DateTimeKind.Local)]
-        public DateTime? LastUpdatedOn { get; set; }
-
         #region // will be refactored
         public const string EligibilityRequirementsProperty = "er";
         [BsonElement(EligibilityRequirementsProperty)]

@@ -9,7 +9,9 @@ using Phytel.API.Common;
 
 namespace Phytel.API.DataDomain.Program.MongoDB.DTO
 {
-    public class MEProgramAttribute : IMongoEntity<ObjectId>
+    [BsonIgnoreExtraElements(false)]
+    [MongoIndex(Keys = new string[] { TTLDateProperty }, TimeToLive = 0)]
+    public class MEProgramAttribute : IMEEntity, IMongoEntity<ObjectId>
     {
         public MEProgramAttribute() { Id = ObjectId.GenerateNewId(); }
 
@@ -167,6 +169,13 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
         [BsonIgnoreIfNull(true)]
         [BsonDateTimeOptions(Kind = System.DateTimeKind.Local)]
         public DateTime? LastUpdatedOn { get; set; }
+
+        public const string TTLDateProperty = "ttl";
+        [BsonElement(TTLDateProperty)]
+        [BsonIgnoreIfNull(true)]
+        [BsonDateTimeOptions(Kind = System.DateTimeKind.Local)]
+        public DateTime? TTLDate { get; set; }
+        
         #endregion
     }
 }
