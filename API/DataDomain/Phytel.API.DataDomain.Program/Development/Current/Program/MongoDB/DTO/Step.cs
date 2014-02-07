@@ -9,17 +9,17 @@ using Phytel.API.Common;
 
 namespace Phytel.API.DataDomain.Program.MongoDB.DTO
 {
-    public class MEStep : MEPlanElement, IMongoEntity<ObjectId>
+    public class Step : PlanElement
     {
-        public MEStep() { Id = ObjectId.GenerateNewId(); }
+        public Step() { Id = ObjectId.GenerateNewId(); }
 
-        public const string IDProperty = "_id";
+        public const string IdProperty = "_id";
         public const string ActionIdProperty = "actid";
         public const string HeaderProperty = "hdr";
         public const string QuestionProperty = "q";
         public const string ExProperty = "ex";
 
-        [BsonId]
+        [BsonElement(IdProperty)]
         public ObjectId Id { get; set; }
 
         [BsonElement(ActionIdProperty)]

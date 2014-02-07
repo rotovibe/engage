@@ -300,16 +300,16 @@ namespace Phytel.API.DataDomain.Program
             return result;
         }
 
-        private static List<MESpawnElement> ParseSpawnElements(List<SpawnElementDetail> list)
+        private static List<SpawnElement> ParseSpawnElements(List<SpawnElementDetail> list)
         {
-            List<MESpawnElement> mespn = new List<MESpawnElement>();
+            List<SpawnElement> mespn = new List<SpawnElement>();
             try
             {
                 if (list != null)
                 {
                     list.ForEach(s =>
                     {
-                        mespn.Add(new MESpawnElement
+                        mespn.Add(new SpawnElement
                         {
                             SpawnId = (s.ElementId != null) ? ObjectId.Parse(s.ElementId) : ObjectId.Parse("000000000000000000000000"),
                             Tag = s.Tag,

@@ -9,11 +9,9 @@ using Phytel.API.Common;
 
 namespace Phytel.API.DataDomain.Program.MongoDB.DTO
 {
-    [BsonIgnoreExtraElements(false)]
-    [MongoIndex(Keys = new string[] { TTLDateProperty }, TimeToLive = 0)]
-    public class MEPlanElement : IMEEntity
+    public class PlanElement
     {
-        public MEPlanElement() { }
+        public PlanElement() { }
 
         public const string StartDateProperty = "sd";
         [BsonElement(StartDateProperty)]
@@ -78,40 +76,6 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
         public const string SpawnProperty = "spwn";
         [BsonElement(SpawnProperty)]
         [BsonIgnoreIfNull(true)]
-        public List<MESpawnElement> Spawn { get; set; }
-
-        public const string ExtraElementsProperty = "ex";
-        [BsonExtraElements]
-        [BsonIgnoreIfNull(true)]
-        [BsonElement(ExtraElementsProperty)]
-        public Dictionary<string, object> ExtraElements { get; set; }
-
-        public const string VersionProperty = "v";
-        [BsonElement(VersionProperty)]
-        [BsonDefaultValue("v1")]
-        public string Version { get; set; }
-
-        public const string UpdatedByProperty = "uby";
-        [BsonElement(UpdatedByProperty)]
-        [BsonIgnoreIfNull(true)]
-        public string UpdatedBy { get; set; }
-
-        public const string DeleteFlagProperty = "del";
-        [BsonElement(DeleteFlagProperty)]
-        [BsonDefaultValue(false)]
-        public bool DeleteFlag { get; set; }
-
-        public const string TTLDateProperty = "ttl";
-        [BsonElement(TTLDateProperty)]
-        [BsonDefaultValue(null)]
-        [BsonIgnoreIfNull(true)]
-        [BsonDateTimeOptions(Kind = System.DateTimeKind.Local)]
-        public DateTime? TTLDate { get; set; }
-
-        public const string LastUpdatedOnProperty = "uon";
-        [BsonIgnoreIfNull(true)]
-        [BsonElement(LastUpdatedOnProperty)]
-        [BsonDateTimeOptions(Kind = System.DateTimeKind.Local)]
-        public DateTime? LastUpdatedOn { get; set; }
+        public List<SpawnElement> Spawn { get; set; }
     }
 }

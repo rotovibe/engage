@@ -118,7 +118,7 @@ namespace Phytel.API.DataDomain.Program
                     if (resp.Order != 0) uv.Add(MB.Update.Set(MEResponse.OrderProperty, resp.Order));
                     if (resp.Text != null) uv.Add(MB.Update.Set(MEResponse.TextProperty, resp.Text));
                     if (resp.Value != null) uv.Add(MB.Update.Set(MEResponse.ValueProperty, resp.Value));
-                    if (resp.Spawn != null) { uv.Add(MB.Update.SetWrapped<List<MESpawnElement>>(MEResponse.SpawnElementProperty, resp.Spawn)); }
+                    if (resp.Spawn != null) { uv.Add(MB.Update.SetWrapped<List<SpawnElement>>(MEResponse.SpawnElementProperty, resp.Spawn)); }
 
                     IMongoUpdate update = MB.Update.Combine(uv);
                     WriteConcernResult res = ctx.Responses.Collection.Update(q, update);

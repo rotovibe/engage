@@ -9,9 +9,9 @@ using Phytel.API.Common;
 
 namespace Phytel.API.DataDomain.Program.MongoDB.DTO
 {
-    public class MESpawnElement
+    public class SpawnElement
     {
-        public MESpawnElement() { }
+        public SpawnElement() { }
 
         public const string TypeProperty = "type";
         [BsonElement(TypeProperty)]

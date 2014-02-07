@@ -9,17 +9,17 @@ using Phytel.API.Common;
 
 namespace Phytel.API.DataDomain.Program.MongoDB.DTO
 {
-    public class MEAction : MEPlanElement, IMongoEntity<ObjectId>
+    public class Module : PlanElement
     {
-        public MEAction() { Id = ObjectId.GenerateNewId(); }
+        public Module() { Id = ObjectId.GenerateNewId(); }
 
-        public const string IDProperty = "_id";
-        [BsonId]
+        public const string IdProperty = "_id";
+        [BsonElement(IdProperty)]
         public ObjectId Id { get; set; }
 
-        public const string ModuleIdProperty = "mid";
-        [BsonElement(ModuleIdProperty)]
-        public ObjectId ModuleId { get; set; }
+        public const string ProgramIdProperty = "progid";
+        [BsonElement(ProgramIdProperty)]
+        public ObjectId ProgramId { get; set; }
 
         public const string NameProperty = "nm";
         [BsonElement(NameProperty)]
@@ -31,11 +31,11 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
 
         public const string ObjectivesProperty = "obj";
         [BsonElement(ObjectivesProperty)]
-        public List<MEObjective> Objectives { get; set; }
+        public List<Objective> Objectives { get; set; }
 
-        public const string StepsProperty = "sps";
-        [BsonElement(StepsProperty)]
-        public List<MEStep> Steps { get; set; }
+        public const string ActionsProperty = "acts";
+        [BsonElement(ActionsProperty)]
+        public List<Action> Actions { get; set; }
 
         public const string StatusProperty = "sts";
         [BsonElement(StatusProperty)]

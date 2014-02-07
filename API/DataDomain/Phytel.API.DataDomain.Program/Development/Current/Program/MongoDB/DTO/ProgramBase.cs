@@ -9,9 +9,9 @@ using Phytel.API.Common;
 
 namespace Phytel.API.DataDomain.Program.MongoDB.DTO
 {
-    public class MEProgramBase : MEPlanElement
+    public class ProgramBase : PlanElement
     {
-        public MEProgramBase() {}
+        public ProgramBase() {}
 
         public const string EndDateProperty = "ed";
         [BsonElement(EndDateProperty)]
@@ -46,13 +46,12 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
         public const string ObjectivesInfoProperty = "obj";
         [BsonElement(ObjectivesInfoProperty)]
         [BsonIgnoreIfNull(true)]
-        public List<MEObjective> ObjectivesInfo { get; set; }
-        //public List<string> Attributes { get; set; }
+        public List<Objective> ObjectivesInfo { get; set; }
 
         public const string ModulesProperty = "ms";
         [BsonElement(ModulesProperty)]
         [BsonIgnoreIfNull(true)]
-        public List<MEModules> Modules { get; set; }
+        public List<Module> Modules { get; set; }
 
         #region // will be refactored
         public const string EligibilityRequirementsProperty = "er";

@@ -77,13 +77,6 @@ namespace Phytel.API.DataDomain.Program
                             CompletedBy = cp.CompletedBy,
                             UpdatedBy = request.UserId,
                             SourceId = cp.Id.ToString(),
-                            //ObjectivesInfo = cp.ObjectivesInfo.Where(e => e.Status == Common.Status.Active).Select(f => new ObjectivesInfo()
-                            //{
-                            //    Id = f.Id,
-                            //    Status = f.Status,
-                            //    Value = f.Value,
-                            //    Unit = f.Unit
-                            //}).ToList(),
                             ShortName = cp.ShortName,
                             Status = cp.Status,
                             Version = cp.Version,
@@ -105,7 +98,7 @@ namespace Phytel.API.DataDomain.Program
                         // update programid in modules
                         var q = MB.Query<MEPatientProgram>.EQ(b => b.Id, patientProgDoc.Id);
                         patientProgDoc.Modules.ForEach(s => s.ProgramId = patientProgDoc.Id);
-                        ctx.PatientPrograms.Collection.Update(q, MB.Update.SetWrapped<List<MEModules>>(MEPatientProgram.ModulesProperty, patientProgDoc.Modules));
+                        ctx.PatientPrograms.Collection.Update(q, MB.Update.SetWrapped<List<Module>>(MEPatientProgram.ModulesProperty, patientProgDoc.Modules));
 
                         // hydrate response object
                         result.program = new ProgramInfo
@@ -329,7 +322,7 @@ namespace Phytel.API.DataDomain.Program
                 using (ProgramMongoContext ctx = new ProgramMongoContext(_dbName))
                 {
                     var q = MB.Query<MEPatientProgram>.EQ(b => b.Id, ObjectId.Parse(p.ProgramId));
-                    List<MEModules> mods = DTOUtils.CloneAppDomainModules(pg.Modules);
+                    List<Module> mods = DTOUtils.CloneAppDomainModules(pg.Modules);
 
                     var uv = new List<MB.UpdateBuilder>();
                     uv.Add(MB.Update.Set(MEPatientProgram.CompletedProperty, pg.Completed));
@@ -366,9 +359,9 @@ namespace Phytel.API.DataDomain.Program
                     if (pg.SourceId != null) { uv.Add(MB.Update.Set(MEPatientProgram.SourceIdProperty, pg.SourceId)); }
                     if (pg.StartDate != null) { uv.Add(MB.Update.Set(MEPatientProgram.StartDateProperty, pg.StartDate)); }
                     if (pg.Version != null) { uv.Add(MB.Update.Set(MEPatientProgram.VersionProperty, pg.Version)); }
-                    if (mods != null) { uv.Add(MB.Update.SetWrapped<List<MEModules>>(MEPatientProgram.ModulesProperty, mods)); }
-                    if (pg.SpawnElement != null) { uv.Add(MB.Update.SetWrapped<List<MESpawnElement>>(MEPatientProgram.SpawnProperty, DTOUtils.GetSpawnElements(pg.SpawnElement))); }
-                    if (pg.ObjectivesInfo != null) { uv.Add(MB.Update.SetWrapped<List<MEObjective>>(MEPatientProgram.ObjectivesInfoProperty, DTOUtils.GetObjectives(pg.ObjectivesInfo))); }
+                    if (mods != null) { uv.Add(MB.Update.SetWrapped<List<Module>>(MEPatientProgram.ModulesProperty, mods)); }
+                    if (pg.SpawnElement != null) { uv.Add(MB.Update.SetWrapped<List<SpawnElement>>(MEPatientProgram.SpawnProperty, DTOUtils.GetSpawnElements(pg.SpawnElement))); }
+                    if (pg.ObjectivesInfo != null) { uv.Add(MB.Update.SetWrapped<List<Objective>>(MEPatientProgram.ObjectivesInfoProperty, DTOUtils.GetObjectives(pg.ObjectivesInfo))); }
 
                     IMongoUpdate update = MB.Update.Combine(uv);
                     ctx.PatientPrograms.Collection.Update(q, update);

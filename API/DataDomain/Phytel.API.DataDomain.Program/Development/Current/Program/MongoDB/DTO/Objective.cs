@@ -9,12 +9,12 @@ using Phytel.API.Common;
 
 namespace Phytel.API.DataDomain.Program.MongoDB.DTO
 {
-    public class MEObjective : IMongoEntity<ObjectId>
+    public class Objective
     {
-        public MEObjective() { Id = ObjectId.GenerateNewId(); }
+        public Objective() { Id = ObjectId.GenerateNewId(); }
 
-        public const string IDProperty = "_id";
-        [BsonId]
+        public const string IdProperty = "_id";
+        [BsonElement(IdProperty)]
         public ObjectId Id { get; set; }
 
         public const string ValueProperty = "val";
