@@ -3,7 +3,7 @@ using MongoDB.Bson.Serialization.Attributes;
 
 namespace Phytel.API.DataDomain.Contact.DTO
 {
-    public class MEAddress
+    public class Address
     {
         public const string IDProperty = "_id";
         public const string TypeIdProperty = "typeid";

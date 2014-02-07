@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 namespace Phytel.API.DataDomain.LookUp.DTO
 {
-    public class MELanguage : LookUpBase
+    public class Language : LookUpBase
     {
         public const string CodeProperty = "c";
         public const string ActiveProperty = "act";

@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 namespace Phytel.API.DataDomain.LookUp.DTO
 {
-    public class MECommMode : LookUpBase
+    public class TimesOfDay : LookUpBase
     {
 
     }

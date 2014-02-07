@@ -3,7 +3,7 @@ using MongoDB.Bson.Serialization.Attributes;
 
 namespace Phytel.API.DataDomain.Contact.DTO
 {
-    public class MECommMode
+    public class CommMode
     {
         public const string ModeIdProperty = "mdid";
         public const string PreferredProperty = "pf";

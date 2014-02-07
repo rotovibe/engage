@@ -166,7 +166,7 @@ namespace Phytel.API.DataDomain.Patient
                                 PreferredName = p.PreferredName,
                                 MiddleName = p.MiddleName,
                                 Suffix = p.Suffix,
-                                Priority = (DTO.Priority)((int)p.Priority),
+                                PriorityData = (DTO.PriorityData)((int)p.Priority),
                                 DisplayPatientSystemID = p.DisplayPatientSystemID.ToString(),
                                 CareTeamData = getCareTeam(p.CareTeam)
                             }).FirstOrDefault();
@@ -174,13 +174,13 @@ namespace Phytel.API.DataDomain.Patient
             return patient;
         }
 
-        private List<CareTeamMemberData> getCareTeam(List<MECareTeamMember> list)
+        private List<CareTeamMemberData> getCareTeam(List<CareTeamMember> list)
         {
             List<CareTeamMemberData> careTeam = null;
             if(list != null)
             {
                 careTeam = new List<CareTeamMemberData>();
-                foreach(MECareTeamMember meCtm in list)
+                foreach(CareTeamMember meCtm in list)
                 {
                     CareTeamMemberData ctm = new CareTeamMemberData
                     { 
@@ -211,7 +211,7 @@ namespace Phytel.API.DataDomain.Patient
                                PreferredName = p.PreferredName,
                                MiddleName = p.MiddleName,
                                Suffix = p.Suffix,
-                               Priority = (DTO.Priority)((int)p.Priority),
+                               PriorityData = (DTO.PriorityData)((int)p.Priority),
                                DisplayPatientSystemID = p.DisplayPatientSystemID.ToString(),
                                Flagged = GetFlaggedStatus(entityId, userId),
                                CareTeamData = getCareTeam(p.CareTeam)
@@ -434,7 +434,7 @@ namespace Phytel.API.DataDomain.Patient
                         MiddleName = mp.MiddleName,
                         Suffix = mp.Suffix,
                         Version = mp.Version,
-                        Priority = (DTO.Priority)((int)mp.Priority),
+                        PriorityData = (PriorityData)((int)mp.Priority),
                         DisplayPatientSystemID = mp.DisplayPatientSystemID.ToString(),
                         CareTeamData = getCareTeam(mp.CareTeam)
                     });
@@ -460,7 +460,7 @@ namespace Phytel.API.DataDomain.Patient
                 using (PatientMongoContext ctx = new PatientMongoContext(_dbName))
                 {
                     FindAndModifyResult result = ctx.Patients.Collection.FindAndModify(MB.Query.EQ(MEPatient.IdProperty, ObjectId.Parse(request.PatientId)), MB.SortBy.Null,
-                                                new MB.UpdateBuilder().Set(MEPatient.PriorityProperty, (MEPriority)request.Priority).Set(MEPatient.UpdatedByProperty, request.UserId));
+                                                new MB.UpdateBuilder().Set(MEPatient.PriorityProperty, (PriorityData)request.Priority).Set(MEPatient.UpdatedByProperty, request.UserId));
                 }
                 return response;
             }

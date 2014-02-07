@@ -3,7 +3,7 @@ using MongoDB.Bson.Serialization.Attributes;
 
 namespace Phytel.API.DataDomain.Contact.DTO
 {
-    public class MELanguage
+    public class Language
     {
         public const string LanguageIdProperty = "lid";
         public const string PreferredProperty = "pf";

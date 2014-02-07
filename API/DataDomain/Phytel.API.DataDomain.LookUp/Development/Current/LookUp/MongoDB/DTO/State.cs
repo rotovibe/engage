@@ -6,12 +6,12 @@ using System.Collections.Generic;
 
 namespace Phytel.API.DataDomain.LookUp.DTO
 {
-    public class MECommType : LookUpBase
+    public class State : LookUpBase
     {
-        public const string CommModesProperty = "cmode";
+        public const string CodeProperty = "c";
 
-        [BsonElement(CommModesProperty)]
+        [BsonElement(CodeProperty)]
         [BsonIgnoreIfNull(true)]
-        public List<ObjectId> CommModes { get; set; }
+        public string Code { get; set; }
     }
 }

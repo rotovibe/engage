@@ -68,11 +68,11 @@ namespace Phytel.API.DataDomain.Patient.DTO
 
         [BsonElement(PriorityProperty)]
         [BsonIgnoreIfNull(true)]
-        public MEPriority Priority { get; set; }
+        public PriorityData Priority { get; set; }
 
         [BsonElement(CareTeamProperty)]
         [BsonIgnoreIfNull(true)]
-        public List<MECareTeamMember> CareTeam { get; set; }
+        public List<CareTeamMember> CareTeam { get; set; }
 
         [BsonElement(ExtraElementsProperty)]
         [BsonExtraElements()]
@@ -102,7 +102,7 @@ namespace Phytel.API.DataDomain.Patient.DTO
         public System.DateTime? LastUpdatedOn { get; set; }
     }
 
-    public enum MEPriority
+    public enum Priority
     {
         NotSet = 0,
         Low = 1,
@@ -110,7 +110,7 @@ namespace Phytel.API.DataDomain.Patient.DTO
         High = 3
     }
 
-    public class MECareTeamMember
+    public class CareTeamMember
     {
         public const string ContactIdProperty = "cid";
         public const string PrimaryProperty = "pri";

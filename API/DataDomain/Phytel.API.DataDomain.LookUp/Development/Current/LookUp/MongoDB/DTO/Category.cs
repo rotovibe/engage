@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 namespace Phytel.API.DataDomain.LookUp.DTO
 {
-    public class MECategory : LookUpBase
+    public class Category : LookUpBase
     {
 
     }

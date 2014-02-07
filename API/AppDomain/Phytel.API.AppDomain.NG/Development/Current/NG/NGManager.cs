@@ -126,7 +126,7 @@ namespace Phytel.API.AppDomain.NG
                         MiddleName = response.Patient.MiddleName,
                         Suffix = response.Patient.Suffix,
                         PreferredName = response.Patient.PreferredName,
-                        Priority = (int)response.Patient.Priority,
+                        Priority = (int)response.Patient.PriorityData,
                         Flagged = Convert.ToInt32(response.Patient.Flagged),
                         CareTeam = careTeam
                     };

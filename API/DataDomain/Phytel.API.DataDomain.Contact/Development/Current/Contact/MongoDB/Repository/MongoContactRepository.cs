@@ -51,10 +51,10 @@ namespace Phytel.API.DataDomain.Contact
                 //Modes
                 if (request.Modes != null && request.Modes.Count > 0)
                 {
-                    List<MECommMode> commModes = new List<MECommMode>();
+                    List<CommMode> commModes = new List<CommMode>();
                     foreach (CommModeData c in request.Modes)
                     {
-                        commModes.Add(new MECommMode { ModeId = ObjectId.Parse(c.ModeId), OptOut = c.OptOut, Preferred = c.Preferred });
+                        commModes.Add(new CommMode { ModeId = ObjectId.Parse(c.ModeId), OptOut = c.OptOut, Preferred = c.Preferred });
                     }
                     meContact.Modes = commModes;
                 }
@@ -223,14 +223,14 @@ namespace Phytel.API.DataDomain.Contact
                         #region Modes
                         if (request.Modes != null)
                         {
-                            List<MECommMode> meModes = null;
+                            List<CommMode> meModes = null;
                             if (request.Modes.Count != 0)
                             {
-                                meModes = new List<MECommMode>();
+                                meModes = new List<CommMode>();
                                 List<CommModeData> modeData = request.Modes;
                                 foreach (CommModeData m in modeData)
                                 {
-                                    MECommMode meM = new MECommMode
+                                    CommMode meM = new CommMode
                                     {
                                         ModeId = ObjectId.Parse(m.ModeId),
                                         OptOut = m.OptOut,
@@ -239,7 +239,7 @@ namespace Phytel.API.DataDomain.Contact
                                     meModes.Add(meM);
                                 }
                             }
-                            uv.Add(MB.Update.SetWrapped<List<MECommMode>>(MEContact.ModesProperty, meModes));
+                            uv.Add(MB.Update.SetWrapped<List<CommMode>>(MEContact.ModesProperty, meModes));
 
                         } 
                         #endregion
@@ -279,14 +279,14 @@ namespace Phytel.API.DataDomain.Contact
                         #region Languages
                         if (request.Languages != null)
                         {
-                            List<MELanguage> meLanguages = null;
+                            List<Language> meLanguages = null;
                             if (request.Languages.Count != 0)
                             {
-                                meLanguages = new List<MELanguage>();
+                                meLanguages = new List<Language>();
                                 List<LanguageData> languageData = request.Languages;
                                 foreach (LanguageData l in languageData)
                                 {
-                                    MELanguage meL = new MELanguage
+                                    Language meL = new Language
                                     {
                                         LookUpLanguageId = ObjectId.Parse(l.LookUpLanguageId),
                                         Preferred = l.Preferred
@@ -294,7 +294,7 @@ namespace Phytel.API.DataDomain.Contact
                                     meLanguages.Add(meL);
                                 }
                             }
-                            uv.Add(MB.Update.SetWrapped<List<MELanguage>>(MEContact.LanguagesProperty, meLanguages));
+                            uv.Add(MB.Update.SetWrapped<List<Language>>(MEContact.LanguagesProperty, meLanguages));
 
                         } 
                         #endregion
@@ -302,18 +302,18 @@ namespace Phytel.API.DataDomain.Contact
                         #region Phone&Text(softdeletes)
                         if (request.Phones != null)
                         {
-                            List<MEPhone> mePhones = null;
-                            List<MEPhone> existingPhones = mc.Phones;
+                            List<Phone> mePhones = null;
+                            List<Phone> existingPhones = mc.Phones;
                             if (existingPhones == null)
                             {
                                 // Add all the new phones that are sent in the request with the newly generated ObjectId.
                                 if (request.Phones.Count != 0)
                                 {
-                                    mePhones = new List<MEPhone>();
+                                    mePhones = new List<Phone>();
                                     List<PhoneData> phoneData = request.Phones;
                                     foreach (PhoneData p in phoneData)
                                     {
-                                        MEPhone mePh = new MEPhone
+                                        Phone mePh = new Phone
                                         {
                                             Id = ObjectId.GenerateNewId(),
                                             Number = p.Number,
@@ -331,11 +331,11 @@ namespace Phytel.API.DataDomain.Contact
                             }
                             else 
                             {
-                                mePhones = new List<MEPhone>();
+                                mePhones = new List<Phone>();
                                 // Set deleteflag == true for the existing 
                                 if (request.Phones.Count == 0)
                                 {
-                                    foreach (MEPhone mePh in existingPhones)
+                                    foreach (Phone mePh in existingPhones)
                                     {
                                         mePh.DeleteFlag = true;
                                         mePhones.Add(mePh);
@@ -360,7 +360,7 @@ namespace Phytel.API.DataDomain.Contact
                                             id = ObjectId.GenerateNewId();
                                             updatedPhones.Add(new CleanupIdData { OldId = p.Id, NewId = id.ToString() });
                                         }
-                                        MEPhone mePh = new MEPhone
+                                        Phone mePh = new Phone
                                         {
                                             Id = id,
                                             Number = p.Number,
@@ -391,25 +391,25 @@ namespace Phytel.API.DataDomain.Contact
                                     }
                                 }
                             }
-                            uv.Add(MB.Update.SetWrapped<List<MEPhone>>(MEContact.PhonesProperty, mePhones));
+                            uv.Add(MB.Update.SetWrapped<List<Phone>>(MEContact.PhonesProperty, mePhones));
                         }
                         #endregion
 
                         #region Emails(softdeletes)
                         if (request.Emails != null)
                         {
-                            List<MEEmail> meEmails = null;
-                            List<MEEmail> existingEmails = mc.Emails;
+                            List<Email> meEmails = null;
+                            List<Email> existingEmails = mc.Emails;
                             if (existingEmails == null)
                             {
                                 // Add all the new emails that are sent in the request with the newly generated ObjectId.
                                 if (request.Emails.Count != 0)
                                 {
-                                    meEmails = new List<MEEmail>();
+                                    meEmails = new List<Email>();
                                     List<EmailData> emailData = request.Emails;
                                     foreach (EmailData p in emailData)
                                     {
-                                        MEEmail me = new MEEmail
+                                        Email me = new Email
                                         {
                                             Id = ObjectId.GenerateNewId(),
                                             Text = p.Text,
@@ -425,11 +425,11 @@ namespace Phytel.API.DataDomain.Contact
                             }
                             else
                             {
-                                meEmails = new List<MEEmail>();
+                                meEmails = new List<Email>();
                                 // Set deleteflag == true for the existing 
                                 if (request.Emails.Count == 0)
                                 {
-                                    foreach (MEEmail me in existingEmails)
+                                    foreach (Email me in existingEmails)
                                     {
                                         me.DeleteFlag = true;
                                         meEmails.Add(me);
@@ -454,7 +454,7 @@ namespace Phytel.API.DataDomain.Contact
                                             id = ObjectId.GenerateNewId();
                                             updatedEmails.Add(new CleanupIdData { OldId = p.Id, NewId = id.ToString() });
                                         }
-                                        MEEmail mePh = new MEEmail
+                                        Email mePh = new Email
                                         {
                                             Id = id,
                                             Text = p.Text,
@@ -483,25 +483,25 @@ namespace Phytel.API.DataDomain.Contact
                                     }
                                 }
                             }
-                            uv.Add(MB.Update.SetWrapped<List<MEEmail>>(MEContact.EmailsProperty, meEmails));
+                            uv.Add(MB.Update.SetWrapped<List<Email>>(MEContact.EmailsProperty, meEmails));
                         }
                         #endregion
 
                         #region Addresses(softdeletes)
                         if (request.Addresses != null)
                         {
-                            List<MEAddress> meAddresses = null;
-                            List<MEAddress> existingAddresses = mc.Addresses;
+                            List<Address> meAddresses = null;
+                            List<Address> existingAddresses = mc.Addresses;
                             if (existingAddresses == null)
                             {
                                 // Add all the new addresses that are sent in the request with the newly generated ObjectId.
                                 if (request.Addresses.Count != 0)
                                 {
-                                    meAddresses = new List<MEAddress>();
+                                    meAddresses = new List<Address>();
                                     List<AddressData> addressData = request.Addresses;
                                     foreach (AddressData p in addressData)
                                     {
-                                        MEAddress me = new MEAddress
+                                        Address me = new Address
                                         {
                                             Id = ObjectId.GenerateNewId(),
                                             TypeId = ObjectId.Parse(p.TypeId),
@@ -522,11 +522,11 @@ namespace Phytel.API.DataDomain.Contact
                             }
                             else
                             {
-                                meAddresses = new List<MEAddress>();
+                                meAddresses = new List<Address>();
                                 // Set deleteflag == true for the existing 
                                 if (request.Addresses.Count == 0)
                                 {
-                                    foreach (MEAddress me in existingAddresses)
+                                    foreach (Address me in existingAddresses)
                                     {
                                         me.DeleteFlag = true;
                                         meAddresses.Add(me);
@@ -551,7 +551,7 @@ namespace Phytel.API.DataDomain.Contact
                                             id = ObjectId.GenerateNewId();
                                             updatedAddresses.Add(new CleanupIdData { OldId = p.Id, NewId = id.ToString() });
                                         }
-                                        MEAddress me = new MEAddress
+                                        Address me = new Address
                                         {
                                             Id = id,
                                             TypeId = ObjectId.Parse(p.TypeId),
@@ -585,7 +585,7 @@ namespace Phytel.API.DataDomain.Contact
                                     }
                                 }
                             }
-                            uv.Add(MB.Update.SetWrapped<List<MEAddress>>(MEContact.AddressessProperty, meAddresses));
+                            uv.Add(MB.Update.SetWrapped<List<Address>>(MEContact.AddressessProperty, meAddresses));
                         }
                         #endregion
 
@@ -661,11 +661,11 @@ namespace Phytel.API.DataDomain.Contact
                     };
 
                     //Modes
-                    List<MECommMode> meCommModes = mc.Modes;
+                    List<CommMode> meCommModes = mc.Modes;
                     if(meCommModes != null && meCommModes.Count > 0 )
                     {
                         List<CommModeData> modes = new List<CommModeData>();
-                        foreach(MECommMode cm in meCommModes)
+                        foreach(CommMode cm in meCommModes)
                         {
                             CommModeData commMode = new CommModeData { ModeId = cm.ModeId.ToString() , OptOut = cm.OptOut, Preferred = cm.Preferred };
                             modes.Add(commMode);
@@ -674,11 +674,11 @@ namespace Phytel.API.DataDomain.Contact
                     }
 
                     //Phones
-                    List<MEPhone> mePhones = mc.Phones;
+                    List<Phone> mePhones = mc.Phones;
                     if (mePhones != null && mePhones.Count > 0)
                     {
                         List<PhoneData> phones = new List<PhoneData>();
-                        foreach (MEPhone mePh in mePhones)
+                        foreach (Phone mePh in mePhones)
                         {
                             // Get the ones that are not deleted.
                             if(!mePh.DeleteFlag)
@@ -691,11 +691,11 @@ namespace Phytel.API.DataDomain.Contact
                     }
 
                     //Emails
-                    List<MEEmail> meEmails = mc.Emails;
+                    List<Email> meEmails = mc.Emails;
                     if (meEmails != null && meEmails.Count > 0)
                     {
                         List<EmailData> emails = new List<EmailData>();
-                        foreach (MEEmail meE in meEmails)
+                        foreach (Email meE in meEmails)
                         {
                             // Get the ones that are not deleted.
                             if (!meE.DeleteFlag)
@@ -708,11 +708,11 @@ namespace Phytel.API.DataDomain.Contact
                     }
 
                     //Addresses
-                    List<MEAddress> meAddresses = mc.Addresses;
+                    List<Address> meAddresses = mc.Addresses;
                     if (meAddresses != null && meAddresses.Count > 0)
                     {
                         List<AddressData> addresses = new List<AddressData>();
-                        foreach (MEAddress meAdd in meAddresses)
+                        foreach (Address meAdd in meAddresses)
                         {
                             // Get the ones that are not deleted.
                             if (!meAdd.DeleteFlag)
@@ -725,11 +725,11 @@ namespace Phytel.API.DataDomain.Contact
                     }
 
                     //Languages
-                    List<MELanguage> meLanguages = mc.Languages;
+                    List<Language> meLanguages = mc.Languages;
                     if (meLanguages != null && meLanguages.Count > 0)
                     {
                         List<LanguageData> languages = new List<LanguageData>();
-                        foreach (MELanguage meLang in meLanguages)
+                        foreach (Language meLang in meLanguages)
                         {
                             LanguageData langugage = new LanguageData { LookUpLanguageId = meLang.LookUpLanguageId.ToString() ,Preferred = meLang.Preferred };
                             languages.Add(langugage);

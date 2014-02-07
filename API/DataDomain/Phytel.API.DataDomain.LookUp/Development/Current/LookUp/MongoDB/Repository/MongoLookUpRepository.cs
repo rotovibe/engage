@@ -20,41 +20,41 @@ namespace Phytel.API.DataDomain.LookUp
         {
             _dbName = contractDBName;
             #region Register ClassMap
-            if (MongoDB.Bson.Serialization.BsonClassMap.IsClassMapRegistered(typeof(MEProblem)) == false)
+            if (MongoDB.Bson.Serialization.BsonClassMap.IsClassMapRegistered(typeof(Problem)) == false)
             {
-                MongoDB.Bson.Serialization.BsonClassMap.RegisterClassMap<MEProblem>();
+                MongoDB.Bson.Serialization.BsonClassMap.RegisterClassMap<Problem>();
             }
-            if (MongoDB.Bson.Serialization.BsonClassMap.IsClassMapRegistered(typeof(MEObjective)) == false)
+            if (MongoDB.Bson.Serialization.BsonClassMap.IsClassMapRegistered(typeof(DTO.Objective)) == false)
             {
-                MongoDB.Bson.Serialization.BsonClassMap.RegisterClassMap<MEObjective>();
+                MongoDB.Bson.Serialization.BsonClassMap.RegisterClassMap<DTO.Objective>();
             }
-            if (MongoDB.Bson.Serialization.BsonClassMap.IsClassMapRegistered(typeof(MECategory)) == false)
+            if (MongoDB.Bson.Serialization.BsonClassMap.IsClassMapRegistered(typeof(Category)) == false)
             {
-                MongoDB.Bson.Serialization.BsonClassMap.RegisterClassMap<MECategory>();
+                MongoDB.Bson.Serialization.BsonClassMap.RegisterClassMap<Category>();
             }
-            if (MongoDB.Bson.Serialization.BsonClassMap.IsClassMapRegistered(typeof(MECommMode)) == false)
+            if (MongoDB.Bson.Serialization.BsonClassMap.IsClassMapRegistered(typeof(CommMode)) == false)
             {
-                MongoDB.Bson.Serialization.BsonClassMap.RegisterClassMap<MECommMode>();
+                MongoDB.Bson.Serialization.BsonClassMap.RegisterClassMap<CommMode>();
             }
-            if (MongoDB.Bson.Serialization.BsonClassMap.IsClassMapRegistered(typeof(MEState)) == false)
+            if (MongoDB.Bson.Serialization.BsonClassMap.IsClassMapRegistered(typeof(State)) == false)
             {
-                MongoDB.Bson.Serialization.BsonClassMap.RegisterClassMap<MEState>();
+                MongoDB.Bson.Serialization.BsonClassMap.RegisterClassMap<State>();
             }
-            if (MongoDB.Bson.Serialization.BsonClassMap.IsClassMapRegistered(typeof(METimesOfDay)) == false)
+            if (MongoDB.Bson.Serialization.BsonClassMap.IsClassMapRegistered(typeof(TimesOfDay)) == false)
             {
-                MongoDB.Bson.Serialization.BsonClassMap.RegisterClassMap<METimesOfDay>();
+                MongoDB.Bson.Serialization.BsonClassMap.RegisterClassMap<TimesOfDay>();
             }
-            if (MongoDB.Bson.Serialization.BsonClassMap.IsClassMapRegistered(typeof(METimeZone)) == false)
+            if (MongoDB.Bson.Serialization.BsonClassMap.IsClassMapRegistered(typeof(TimeZone)) == false)
             {
-                MongoDB.Bson.Serialization.BsonClassMap.RegisterClassMap<METimeZone>();
+                MongoDB.Bson.Serialization.BsonClassMap.RegisterClassMap<TimeZone>();
             }
-            if (MongoDB.Bson.Serialization.BsonClassMap.IsClassMapRegistered(typeof(MECommType)) == false)
+            if (MongoDB.Bson.Serialization.BsonClassMap.IsClassMapRegistered(typeof(CommType)) == false)
             {
-                MongoDB.Bson.Serialization.BsonClassMap.RegisterClassMap<MECommType>();
+                MongoDB.Bson.Serialization.BsonClassMap.RegisterClassMap<CommType>();
             }
-            if (MongoDB.Bson.Serialization.BsonClassMap.IsClassMapRegistered(typeof(MELanguage)) == false)
+            if (MongoDB.Bson.Serialization.BsonClassMap.IsClassMapRegistered(typeof(Language)) == false)
             {
-                MongoDB.Bson.Serialization.BsonClassMap.RegisterClassMap<MELanguage>();
+                MongoDB.Bson.Serialization.BsonClassMap.RegisterClassMap<Language>();
             } 
             #endregion
         }
@@ -120,7 +120,7 @@ namespace Phytel.API.DataDomain.LookUp
                     if (meLookup.Data.Count > 0)
                     {
                         problemResponse = new GetProblemDataResponse();
-                        MEProblem meProblem = (MEProblem)meLookup.Data.Where(a => a.DataID == ObjectId.Parse(entityID)).FirstOrDefault();
+                        Problem meProblem = (Problem)meLookup.Data.Where(a => a.DataID == ObjectId.Parse(entityID)).FirstOrDefault();
                         if (meProblem != null)
                         {
                             ProblemData problemData = new ProblemData { ID = meProblem.DataID.ToString(), Name = meProblem.Name, Active = meProblem.Active };
@@ -147,17 +147,17 @@ namespace Phytel.API.DataDomain.LookUp
                     if (meLookup.Data != null)
                     {
                         problemList = new List<ProblemData>();
-                        List<MEProblem> meproblems = new List<MEProblem>();
+                        List<Problem> meproblems = new List<Problem>();
                         if (string.IsNullOrEmpty(request.Type))
                         {
-                            meproblems = meLookup.Data.Cast<MEProblem>().Where(a => a.Active == request.Active).ToList();
+                            meproblems = meLookup.Data.Cast<Problem>().Where(a => a.Active == request.Active).ToList();
                         }
                         else
                         {
-                            meproblems = meLookup.Data.Cast<MEProblem>().Where(a => a.Type == request.Type && a.Active == request.Active).ToList();
+                            meproblems = meLookup.Data.Cast<Problem>().Where(a => a.Type == request.Type && a.Active == request.Active).ToList();
                         }
 
-                        foreach (MEProblem m in meproblems)
+                        foreach (Problem m in meproblems)
                         {
                             ProblemData problem = new ProblemData { ID = m.DataID.ToString(), Name = m.Name, Active = m.Active };
                             problemList.Add(problem);
@@ -184,7 +184,7 @@ namespace Phytel.API.DataDomain.LookUp
                     if (meLookup.Data != null)
                     {
                         problemList = new List<ProblemData>();
-                        foreach (MEProblem m in meLookup.Data)
+                        foreach (Problem m in meLookup.Data)
                         {
                             ProblemData problem = new ProblemData { ID = m.DataID.ToString(), Name = m.Name, Active = m.Active };
                             problemList.Add(problem);
@@ -213,7 +213,7 @@ namespace Phytel.API.DataDomain.LookUp
                     if (meLookup.Data.Count > 0)
                     {
                         categoryResponse = new GetCategoryDataResponse();
-                        MECategory meCategory = (MECategory)meLookup.Data.Where(a => a.DataID == ObjectId.Parse(entityID)).FirstOrDefault();
+                        Category meCategory = (Category)meLookup.Data.Where(a => a.DataID == ObjectId.Parse(entityID)).FirstOrDefault();
                         if (meCategory != null)
                         {
                             API.DataDomain.LookUp.DTO.LookUpData objective = new API.DataDomain.LookUp.DTO.LookUpData
@@ -247,7 +247,7 @@ namespace Phytel.API.DataDomain.LookUp
                     if (meLookup.Data.Count > 0)
                     {
                         objectiveResponse = new GetObjectiveDataResponse();
-                        MEObjective meObjective = (MEObjective)meLookup.Data.Where(a => a.DataID == ObjectId.Parse(entityID)).FirstOrDefault();
+                        DTO.Objective meObjective = (DTO.Objective)meLookup.Data.Where(a => a.DataID == ObjectId.Parse(entityID)).FirstOrDefault();
                         if (meObjective != null)
                         {
                             API.DataDomain.LookUp.DTO.LookUpData objective = new API.DataDomain.LookUp.DTO.LookUpData
@@ -281,7 +281,7 @@ namespace Phytel.API.DataDomain.LookUp
                     if (meLookup.Data != null)
                     {
                         commModeList = new List<LookUpData>();
-                        foreach (MECommMode m in meLookup.Data)
+                        foreach (CommMode m in meLookup.Data)
                         {
                             LookUpData data = new LookUpData { ID = m.DataID.ToString(), Name = m.Name};
                             commModeList.Add(data);
@@ -308,7 +308,7 @@ namespace Phytel.API.DataDomain.LookUp
                     if (meLookup.Data != null)
                     {
                         stateList = new List<StateData>();
-                        foreach (MEState m in meLookup.Data)
+                        foreach (State m in meLookup.Data)
                         {
                             StateData data = new StateData { ID = m.DataID.ToString(), Name = m.Name, Code = m.Code };
                             stateList.Add(data);
@@ -335,7 +335,7 @@ namespace Phytel.API.DataDomain.LookUp
                     if (meLookup.Data != null)
                     {
                         timesOfDayList = new List<LookUpData>();
-                        foreach (METimesOfDay m in meLookup.Data)
+                        foreach (TimesOfDay m in meLookup.Data)
                         {
                             LookUpData data = new LookUpData { ID = m.DataID.ToString(), Name = m.Name };
                             timesOfDayList.Add(data);
@@ -362,7 +362,7 @@ namespace Phytel.API.DataDomain.LookUp
                     if (meLookup.Data != null)
                     {
                         timeZoneList = new List<TimeZoneData>();
-                        foreach (METimeZone m in meLookup.Data)
+                        foreach (Phytel.API.DataDomain.LookUp.DTO.Timezone m in meLookup.Data)
                         {
                             TimeZoneData data = new TimeZoneData { ID = m.DataID.ToString(), Name = m.Name, Default = m.Default };
                             timeZoneList.Add(data);
@@ -390,7 +390,7 @@ namespace Phytel.API.DataDomain.LookUp
                     if (meLookup.Data != null)
                     {
                         commTypeList = new List<CommTypeData>();
-                        foreach (MECommType m in meLookup.Data)
+                        foreach (CommType m in meLookup.Data)
                         {
                             List<string> commModes = null;
                             if (m.CommModes.Count > 0)
@@ -425,7 +425,7 @@ namespace Phytel.API.DataDomain.LookUp
                     if (meLookup.Data != null)
                     {
                         LanguageList = new List<LanguageData>();
-                        foreach (MELanguage m in meLookup.Data)
+                        foreach (Language m in meLookup.Data)
                         {
                             LanguageData data = new LanguageData { ID = m.DataID.ToString(), Name = m.Name, Code = m.Code, Active = m.Active };
                             LanguageList.Add(data);
@@ -452,7 +452,7 @@ namespace Phytel.API.DataDomain.LookUp
                     if (meLookup.Data != null)
                     {
                         tz = new TimeZoneData();
-                        METimeZone meTz = meLookup.Data.Cast<METimeZone>().Where(a => a.Default == true).FirstOrDefault();
+                        Timezone meTz = meLookup.Data.Cast<Timezone>().Where(a => a.Default == true).FirstOrDefault();
                         if (meTz != null)
                         {
                             tz = new TimeZoneData { ID = meTz.DataID.ToString(), Name = meTz.Name, Default = meTz.Default };

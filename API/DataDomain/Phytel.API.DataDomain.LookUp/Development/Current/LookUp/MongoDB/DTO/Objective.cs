@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 namespace Phytel.API.DataDomain.LookUp.DTO
 {
-    public class MEObjective : LookUpBase
+    public class Objective : LookUpBase
     {
         public const string DescriptionProperty = "desc";
         public const string CategoriesProperty = "cats";

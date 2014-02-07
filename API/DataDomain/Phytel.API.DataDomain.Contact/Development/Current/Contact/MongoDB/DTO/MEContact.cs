@@ -70,19 +70,19 @@ namespace Phytel.API.DataDomain.Contact.DTO
 
         [BsonElement(ModesProperty)]
         [BsonIgnoreIfNull(true)]
-        public List<MECommMode> Modes { get; set; }
+        public List<CommMode> Modes { get; set; }
 
         [BsonElement(PhonesProperty)]
         [BsonIgnoreIfNull(true)]
-        public List<MEPhone> Phones { get; set; }
+        public List<Phone> Phones { get; set; }
 
         [BsonElement(EmailsProperty)]
         [BsonIgnoreIfNull(true)]
-        public List<MEEmail> Emails { get; set; }
+        public List<Email> Emails { get; set; }
 
         [BsonElement(AddressessProperty)]
         [BsonIgnoreIfNull(true)]
-        public List<MEAddress> Addresses { get; set; }
+        public List<Address> Addresses { get; set; }
 
         [BsonElement(WeekDaysProperty)]
         [BsonIgnoreIfNull(true)]
@@ -98,7 +98,7 @@ namespace Phytel.API.DataDomain.Contact.DTO
 
         [BsonElement(LanguagesProperty)]
         [BsonIgnoreIfNull(true)]
-        public List<MELanguage> Languages { get; set; }
+        public List<Language> Languages { get; set; }
         
         [BsonElement(ExtraElementsProperty)]
         [BsonExtraElements()]
