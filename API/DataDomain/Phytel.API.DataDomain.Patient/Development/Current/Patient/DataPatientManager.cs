@@ -103,6 +103,13 @@ namespace Phytel.API.DataDomain.Patient
            return result;
         }
 
+        public static PutCohortPatientViewDataResponse InsertCohortPatientView(PutCohortPatientViewDataRequest request)
+        {
+            IPatientRepository<PutCohortPatientViewDataRequest> repo = PatientRepositoryFactory<PutCohortPatientViewDataRequest>.GetCohortPatientViewRepository(request.ContractNumber, request.Context);
+            PutCohortPatientViewDataResponse result = repo.Insert(request) as PutCohortPatientViewDataResponse;
+            return result;
+        }
+
         public static PutPatientPriorityResponse UpdatePatientPriority(PutPatientPriorityRequest request)
         {
             PutPatientPriorityResponse response = new PutPatientPriorityResponse();

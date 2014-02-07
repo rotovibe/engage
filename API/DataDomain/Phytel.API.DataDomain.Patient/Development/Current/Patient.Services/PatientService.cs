@@ -75,6 +75,23 @@ namespace Phytel.API.DataDomain.Patient.Service
             return response;
         }
 
+        public PutCohortPatientViewDataResponse Put(PutCohortPatientViewDataRequest request)
+        {
+            PutCohortPatientViewDataResponse response = new PutCohortPatientViewDataResponse();
+            try
+            {
+                response = PatientDataManager.InsertCohortPatientView(request);
+                response.Version = request.Version;
+            }
+            catch (Exception ex)
+            {
+                //TODO: Log this to the SQL database via ASE
+                base.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                response.Status = new ServiceStack.ServiceInterface.ServiceModel.ResponseStatus("Exception", ex.Message);
+            }
+            return response;
+        }
+
         public PutProblemInCohortPatientViewResponse Put(PutProblemInCohortPatientViewRequest request)
         {
             PutProblemInCohortPatientViewResponse response = new PutProblemInCohortPatientViewResponse();
