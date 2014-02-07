@@ -17,7 +17,6 @@ namespace Phytel.API.DataDomain.Contact.DTO
         public const string OptOutProperty = "oo";
         public const string DeleteFlagProperty = "del";
 
-
         [BsonElement(IDProperty)]
         public ObjectId Id { get; set; }
 

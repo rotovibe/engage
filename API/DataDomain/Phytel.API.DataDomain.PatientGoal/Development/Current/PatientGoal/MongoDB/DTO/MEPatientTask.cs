@@ -10,14 +10,23 @@ namespace Phytel.API.DataDomain.PatientGoal.DTO
 {
     [BsonIgnoreExtraElements(false)]
     [MongoIndex(Keys = new string[] { TTLDateProperty }, TimeToLive = 0)]
-    public class MEPatientTask : MEGoalBase, IMongoEntity<ObjectId>
+    public class MEPatientTask : GoalBase, IMongoEntity<ObjectId>, IMEEntity
     {
         public MEPatientTask() { Id = ObjectId.GenerateNewId(); }
 
         public const string IdProperty = "_id";
+
+        #region Standard IMongoEntity Constants
+        public const string ExtraElementsProperty = "ex";
+        public const string VersionProperty = "v";
+        public const string UpdatedByProperty = "uby";
+        public const string DeleteFlagProperty = "del";
+        public const string TTLDateProperty = "ttl";
+        public const string LastUpdatedOnProperty = "uon";
+        #endregion
+        
         [BsonId]
         public ObjectId Id { get; set; }
-
 
         public const string TargetValueProperty = "tv";
         [BsonElement(TargetValueProperty)]
@@ -34,5 +43,34 @@ namespace Phytel.API.DataDomain.PatientGoal.DTO
         [BsonElement(BarriersProperty)]
         [BsonIgnoreIfNull(false)]
         public List<ObjectId> Barriers { get; set; }
+
+        #region Standard IMongoEntity Implementation
+        [BsonElement(ExtraElementsProperty)]
+        [BsonExtraElements()]
+        [BsonIgnoreIfNull(true)]
+        public Dictionary<string, object> ExtraElements { get; set; }
+
+        [BsonElement(VersionProperty)]
+        [BsonDefaultValue("v1")]
+        public string Version { get; set; }
+
+        [BsonElement(UpdatedByProperty)]
+        [BsonDefaultValue("-100")]
+        public string UpdatedBy { get; set; }
+
+        [BsonElement(DeleteFlagProperty)]
+        [BsonDefaultValue(false)]
+        public bool DeleteFlag { get; set; }
+
+        [BsonElement(TTLDateProperty)]
+        [BsonIgnoreIfNull(true)]
+        [BsonDateTimeOptions(Kind = System.DateTimeKind.Local)]
+        public System.DateTime? TTLDate { get; set; }
+
+        [BsonElement(LastUpdatedOnProperty)]
+        [BsonIgnoreIfNull(true)]
+        [BsonDateTimeOptions(Kind = System.DateTimeKind.Local)]
+        public System.DateTime? LastUpdatedOn { get; set; }
+        #endregion
     }
 }

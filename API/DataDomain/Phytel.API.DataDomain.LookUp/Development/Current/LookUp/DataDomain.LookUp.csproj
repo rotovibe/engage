@@ -93,7 +93,7 @@
     <Compile Include="MongoDB\DTO\CommType.cs" />
     <Compile Include="MongoDB\DTO\State.cs" />
     <Compile Include="MongoDB\DTO\TimesOfDay.cs" />
-    <Compile Include="MongoDB\DTO\Timezone.cs" />
+    <Compile Include="MongoDB\DTO\TimeZone.cs" />
     <Compile Include="MongoDB\DTO\CommMode.cs" />
     <Compile Include="MongoDB\DTO\Category.cs" />
     <Compile Include="MongoDB\DTO\MELookup.cs" />

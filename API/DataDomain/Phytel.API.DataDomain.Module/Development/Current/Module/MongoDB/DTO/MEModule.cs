@@ -11,7 +11,7 @@ namespace Phytel.API.DataDomain.Module.MongoDB.DTO
 {
     [BsonIgnoreExtraElements(false)]
     [MongoIndex(Keys = new string[] { TTLDateProperty }, TimeToLive = 0)]
-    public class MEModule : IMongoEntity<ObjectId>, IMEEntity //, ISupportInitialize
+    public class MEModule : IMongoEntity<ObjectId>, IMEEntity
     {
         public MEModule() { Id = ObjectId.GenerateNewId(); }
 

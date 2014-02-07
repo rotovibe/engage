@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 namespace Phytel.API.DataDomain.LookUp.DTO
 {
-    public class Timezone : LookUpBase
+    public class TimeZone : LookUpBase
     {
         public const string DefaultProperty = "df";
 

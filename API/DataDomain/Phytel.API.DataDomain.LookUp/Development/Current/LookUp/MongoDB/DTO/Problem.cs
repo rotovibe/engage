@@ -5,7 +5,6 @@ using System.Collections.Generic;
 
 namespace Phytel.API.DataDomain.LookUp.DTO
 {
-    [BsonIgnoreExtraElements(false)]
     public class Problem : LookUpBase
     {
         public const string ActiveProperty = "act";

@@ -4,13 +4,14 @@ using Phytel.Mongo.Linq;
 using System.ComponentModel;
 using System.Collections.Generic;
 using Phytel.API.Common;
+using Phytel.API.Interface;
 
 namespace Phytel.API.DataDomain.Action.DTO
 {
     [BsonIgnoreExtraElements(false)]
     [MongoIndex(Keys = new string[] { TTLDateProperty, }, TimeToLive = 0)]
     [MongoIndex(Keys = new string[] { NameProperty }, Unique = true)]
-    public class MEAction : IMongoEntity<ObjectId>
+    public class MEAction : IMongoEntity<ObjectId>, IMEEntity
     {
         public MEAction() { Id = ObjectId.GenerateNewId(); }
 

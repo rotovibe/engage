@@ -3,12 +3,13 @@ using MongoDB.Bson.Serialization.Attributes;
 using Phytel.Mongo.Linq;
 using System.Collections.Generic;
 using Phytel.API.DataDomain.LookUp.DTO;
+using Phytel.API.Interface;
 
 namespace Phytel.API.DataDomain.LookUp.DTO
 {
     [BsonIgnoreExtraElements(false)]
     [MongoIndex(Keys = new string[] { TTLDateProperty, }, TimeToLive = 0)]
-    public class MELookup : IMongoEntity<ObjectId>
+    public class MELookup : IMongoEntity<ObjectId>, IMEEntity
     {
         public MELookup() { Id = ObjectId.GenerateNewId(); }
 

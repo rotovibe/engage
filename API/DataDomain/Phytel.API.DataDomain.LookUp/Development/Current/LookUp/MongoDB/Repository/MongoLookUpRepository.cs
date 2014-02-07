@@ -44,9 +44,9 @@ namespace Phytel.API.DataDomain.LookUp
             {
                 MongoDB.Bson.Serialization.BsonClassMap.RegisterClassMap<TimesOfDay>();
             }
-            if (MongoDB.Bson.Serialization.BsonClassMap.IsClassMapRegistered(typeof(TimeZone)) == false)
+            if (MongoDB.Bson.Serialization.BsonClassMap.IsClassMapRegistered(typeof(DTO.TimeZone)) == false)
             {
-                MongoDB.Bson.Serialization.BsonClassMap.RegisterClassMap<TimeZone>();
+                MongoDB.Bson.Serialization.BsonClassMap.RegisterClassMap<DTO.TimeZone>();
             }
             if (MongoDB.Bson.Serialization.BsonClassMap.IsClassMapRegistered(typeof(CommType)) == false)
             {
@@ -362,7 +362,7 @@ namespace Phytel.API.DataDomain.LookUp
                     if (meLookup.Data != null)
                     {
                         timeZoneList = new List<TimeZoneData>();
-                        foreach (Phytel.API.DataDomain.LookUp.DTO.Timezone m in meLookup.Data)
+                        foreach (DTO.TimeZone m in meLookup.Data)
                         {
                             TimeZoneData data = new TimeZoneData { ID = m.DataID.ToString(), Name = m.Name, Default = m.Default };
                             timeZoneList.Add(data);
@@ -452,7 +452,7 @@ namespace Phytel.API.DataDomain.LookUp
                     if (meLookup.Data != null)
                     {
                         tz = new TimeZoneData();
-                        Timezone meTz = meLookup.Data.Cast<Timezone>().Where(a => a.Default == true).FirstOrDefault();
+                        DTO.TimeZone meTz = meLookup.Data.Cast<DTO.TimeZone>().Where(a => a.Default == true).FirstOrDefault();
                         if (meTz != null)
                         {
                             tz = new TimeZoneData { ID = meTz.DataID.ToString(), Name = meTz.Name, Default = meTz.Default };
