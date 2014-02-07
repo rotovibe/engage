@@ -16,6 +16,7 @@ using Phytel.API.DataDomain.PatientSystem.DTO;
 using ServiceStack.Service;
 using ServiceStack.ServiceClient.Web;
 using System.Configuration;
+using Phytel.API.DataDomain.Patient.MongoDB.DTO;
 
 namespace Phytel.API.DataDomain.Patient
 {
@@ -165,7 +166,7 @@ namespace Phytel.API.DataDomain.Patient
                     { 
                         ContactId = meCtm.ContactId.ToString(),
                         Primary  = meCtm.Primary,
-                        Type = Enum.GetName(typeof(CareMemberType), meCtm.Type)
+                        Type = DTOUtils.ToFriendlyString(meCtm.Type)
                     };
                     careTeam.Add(ctm);
                 }
