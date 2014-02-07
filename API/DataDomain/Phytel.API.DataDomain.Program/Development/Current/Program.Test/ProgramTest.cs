@@ -15,5 +15,15 @@ namespace Phytel.API.DataDomain.Program.Test
 
             Assert.IsTrue(response.Program.ProgramID == "Tony");
         }
+
+        [TestMethod]
+        public void GetAllActiveContractPrograms_Test()
+        {
+            GetAllActiveProgramsRequest request = new GetAllActiveProgramsRequest();
+
+            GetAllActiveProgramsResponse response = ProgramDataManager.GetAllActiveContractPrograms(request);
+
+            Assert.IsTrue(response.Programs.Count > 0);
+        }
     }
 }
