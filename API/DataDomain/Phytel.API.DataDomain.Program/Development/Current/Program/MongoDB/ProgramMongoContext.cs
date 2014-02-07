@@ -7,7 +7,7 @@ namespace Phytel.API.AppDomain.Program
 {
     public class ProgramMongoContext : MongoContext
     {
-        private static string COLL_ContractProgramS = "ContractProgram"; // switch to Program when done 
+        private static string COLL_ContractProgramS = "Program"; // switch to Program when done 
         private static string COLL_PatientProgramS = "PatientProgram";
         private static string COLL_PatientProgramResponseS = "PatientProgramResponse";
         private static string COLL_StepResponseS = "Response";
