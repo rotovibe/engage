@@ -1,5 +1,6 @@
 ﻿using Phytel.API.Interface;
 using ServiceStack.ServiceHost;
+using System.Collections.Generic;
 
 namespace Phytel.API.DataDomain.Patient.DTO
 {
@@ -12,8 +13,8 @@ namespace Phytel.API.DataDomain.Patient.DTO
         [ApiMember(Name = "LastName", Description = "Last name of the patient being created", ParameterType = "property", DataType = "string", IsRequired = true)]
         public string LastName { get; set; }
 
-        [ApiMember(Name = "SearchFields", Description = "Search fields of the patient being created", ParameterType = "property", DataType = "string", IsRequired = true)]
-        public string SearchFields { get; set; }
+        [ApiMember(Name = "SearchFields", Description = "Search fields of the patient being created", ParameterType = "property", DataType = "SearchFieldData", IsRequired = true)]
+        public List<SearchFieldData> SearchFields { get; set; }
 
         [ApiMember(Name = "Context", Description = "Product Context creating the patient", ParameterType = "property", DataType = "string", IsRequired = true)]
         public string Context { get; set; }

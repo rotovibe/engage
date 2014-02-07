@@ -26,23 +26,21 @@ namespace Phytel.API.DataDomain.Patient
         {
             PutCohortPatientViewDataRequest cohortRequest = newEntity as PutCohortPatientViewDataRequest;
 
-            List<SearchField> list = new List<SearchField>();
-            string[] stringList = cohortRequest.SearchFields.Split("\n".ToCharArray());
-            
-            list.Add(new SearchField { Active = true, FieldName = "FN", Value = stringList[2] });
-            list.Add(new SearchField { Active = true, FieldName = "LN", Value = stringList[5] });
-            list.Add(new SearchField { Active = true, FieldName = "G", Value = stringList[8] });
-            list.Add(new SearchField { Active = true, FieldName = "DOB", Value = stringList[11] });
-            list.Add(new SearchField { Active = true, FieldName = "MN", Value = stringList[14] });
-            list.Add(new SearchField { Active = true, FieldName = "SFX", Value = stringList[17] });
-            list.Add(new SearchField { Active = true, FieldName = "PN", Value = stringList[20] });
-
             MECohortPatientView patient = new MECohortPatientView
             {
                 PatientID = ObjectId.Parse(cohortRequest.PatientID),
-                LastName = cohortRequest.LastName,
-                SearchFields = list
+                LastName = cohortRequest.LastName
             };
+
+            if (cohortRequest.SearchFields != null && cohortRequest.SearchFields.Count > 0)
+            {
+                List<SearchField> fields = new List<SearchField>();
+                foreach (SearchFieldData c in cohortRequest.SearchFields)
+                {
+                    fields.Add(new SearchField { Active = c.Active, FieldName = c.FieldName, Value = c.Value });
+                }
+                patient.SearchFields = fields;
+            }
 
             using (PatientMongoContext ctx = new PatientMongoContext(_dbName))
             {
