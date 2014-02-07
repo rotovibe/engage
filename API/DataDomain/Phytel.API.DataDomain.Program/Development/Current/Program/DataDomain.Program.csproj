@@ -70,6 +70,8 @@
     <Compile Include="MongoDB\DTO\DTOUtils.cs" />
     <Compile Include="MongoDB\DTO\MEPatientProgram.cs" />
     <Compile Include="MongoDB\DTO\MEContractProgram.cs" />
+    <Compile Include="MongoDB\DTO\MEPatientProgramResponse.cs" />
+    <Compile Include="MongoDB\DTO\METempResponse.cs" />
     <Compile Include="MongoDB\DTO\PlanElement.cs" />
     <Compile Include="MongoDB\DTO\Action.cs" />
     <Compile Include="MongoDB\DTO\Module.cs" />
@@ -82,6 +84,8 @@
     <Compile Include="MongoDB\DTO\ProgramBase.cs" />
     <Compile Include="MongoDB\DTO\MEProgram.cs" />
     <Compile Include="MongoDB\Repository\MongoPatientProgramAttributeRepository.cs" />
+    <Compile Include="MongoDB\Repository\MongoTempContractProgramResponseRepository.cs" />
+    <Compile Include="MongoDB\Repository\MongoPatientProgramResponseRepository.cs" />
     <Compile Include="MongoDB\Repository\MongopResponseRepository.cs" />
     <Compile Include="MongoDB\Repository\MongoPatientProgramRepository.cs" />
     <Compile Include="MongoDB\Repository\MongoContractProgramRepository.cs" />

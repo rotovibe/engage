@@ -283,5 +283,11 @@ namespace Phytel.API.DataDomain.Program
         {
             throw new NotImplementedException();
         }
+
+
+        public MEContractProgram FindByID(string entityID, bool temp)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

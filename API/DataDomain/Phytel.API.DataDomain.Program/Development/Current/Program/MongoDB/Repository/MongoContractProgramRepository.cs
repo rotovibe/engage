@@ -42,12 +42,23 @@ namespace Phytel.API.DataDomain.Program
             throw new NotImplementedException();
         }
 
+        public MEContractProgram FindByID(string entityID, bool temp)
+        {
+            MEContractProgram program = null;
+            using (ProgramMongoContext ctx = new ProgramMongoContext(_dbName))
+            {
+                var findcp = Query<MEContractProgram>.EQ(b => b.Id, ObjectId.Parse(entityID));
+                program = ctx.Programs.Collection.Find(findcp).FirstOrDefault();
+            }
+            return program;
+        }
+
         public object FindByID(string entityID)
         {
             ContractProgram program = null;
             using (ProgramMongoContext ctx = new ProgramMongoContext(_dbName))
             {
-                program = (from p in ctx.ContractPrograms
+                program = (from p in ctx.Programs
                            where p.Id == ObjectId.Parse(entityID)
                            select new ContractProgram
                            {
@@ -63,7 +74,30 @@ namespace Phytel.API.DataDomain.Program
 
         public List<ProgramInfo> GetActiveProgramsInfoList(GetAllActiveProgramsRequest request)
         {
-            throw new NotImplementedException();
+            List<ProgramInfo> result = new List<ProgramInfo>();
+
+            try
+            {
+                using (ProgramMongoContext ctx = new ProgramMongoContext(_dbName))
+                {
+                    IMongoQuery mQuery = Query.EQ(MEContractProgram.StatusProperty, 1);
+                    MongoCursor<MEContractProgram> fnd = ctx.Programs.Collection.Find(mQuery);
+
+                    result = ctx.Programs.Collection.Find(mQuery).Select(r => new ProgramInfo
+                    {
+                        Name = r.Name,
+                        Id = r.Id.ToString(),
+                        ShortName = r.ShortName,
+                        Status = (int)r.Status,
+                        ElementState = (int)r.State
+                    }).ToList();
+                }
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("DataDomain:GetActiveProgramsInfoList()" + ex.Message, ex.InnerException);
+            }
         }
 
         public Tuple<string, IEnumerable<object>> Select(Interface.APIExpression expression)

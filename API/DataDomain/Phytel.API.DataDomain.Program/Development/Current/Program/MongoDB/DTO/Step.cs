@@ -81,6 +81,6 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
 
         public const string ResponsesProperty = "resp";
         [BsonElement(ResponsesProperty)]
-        public List<MEResponse> Responses { get; set; }
+        public List<MEPatientProgramResponse> Responses { get; set; }
     }
 }

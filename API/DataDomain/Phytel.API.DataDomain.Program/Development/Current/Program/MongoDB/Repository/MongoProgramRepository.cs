@@ -44,66 +44,44 @@ namespace Phytel.API.DataDomain.Program
 
         public object FindByID(string entityID)
         {
-            DTO.Program program = null;
-            using (ProgramMongoContext ctx = new ProgramMongoContext(_dbName))
-            {
-                program = (from p in ctx.Programs
-                           where p.Id == ObjectId.Parse(entityID)
-                           select new DTO.Program
-                           {
-                               ProgramID = p.Id.ToString(),
-                               TemplateName = p.TemplateName,
-                               Name = p.Name,
-                               AuthoredBy = p.AuthoredBy,
-                               Client = p.Client,
-                               Description = p.Description,
-                               EndDate = p.EndDate == null ? string.Empty : String.Format("{0:MM/dd/yyyy}", p.EndDate),
-                               StartDate = p.StartDate == null ? string.Empty : String.Format("{0:MM/dd/yyyy}", p.StartDate),
-                               ObjectivesInfo = p.ObjectivesInfo.Select(x => new DTO.ObjectivesDetail
-                               {
-                                    Id = x.Id.ToString(),
-                                   Unit = x.Unit,
-                                   Status = (int)x.Status,
-                                   Value = x.Value
-                               }).ToList(),
-                               Locked = p.Locked,
-                               EligibilityRequirements = p.EligibilityRequirements,
-                               EligibilityEndDate = p.EligibilityEndDate == null ? string.Empty : String.Format("{0:MM/dd/yyyy}", p.EligibilityEndDate),
-                               EligibilityStartDate = p.EligibilityStartDate == null ? string.Empty : String.Format("{0:MM/dd/yyyy}", p.EligibilityStartDate),
-                               ShortName = p.ShortName,
-                               Status = p.Status,
-                               Version = p.Version
-                           }).FirstOrDefault();
-            }
-            return program;
+            //DTO.Program program = null;
+            //using (ProgramMongoContext ctx = new ProgramMongoContext(_dbName))
+            //{
+            //    program = (from p in ctx.Programs
+            //               where p.Id == ObjectId.Parse(entityID)
+            //               select new DTO.Program
+            //               {
+            //                   ProgramID = p.Id.ToString(),
+            //                   TemplateName = p.TemplateName,
+            //                   Name = p.Name,
+            //                   AuthoredBy = p.AuthoredBy,
+            //                   Client = p.Client,
+            //                   Description = p.Description,
+            //                   EndDate = p.EndDate == null ? string.Empty : String.Format("{0:MM/dd/yyyy}", p.EndDate),
+            //                   StartDate = p.StartDate == null ? string.Empty : String.Format("{0:MM/dd/yyyy}", p.StartDate),
+            //                   ObjectivesInfo = p.ObjectivesInfo.Select(x => new DTO.ObjectivesDetail
+            //                   {
+            //                        Id = x.Id.ToString(),
+            //                       Unit = x.Unit,
+            //                       Status = (int)x.Status,
+            //                       Value = x.Value
+            //                   }).ToList(),
+            //                   Locked = p.Locked,
+            //                   EligibilityRequirements = p.EligibilityRequirements,
+            //                   EligibilityEndDate = p.EligibilityEndDate == null ? string.Empty : String.Format("{0:MM/dd/yyyy}", p.EligibilityEndDate),
+            //                   EligibilityStartDate = p.EligibilityStartDate == null ? string.Empty : String.Format("{0:MM/dd/yyyy}", p.EligibilityStartDate),
+            //                   ShortName = p.ShortName,
+            //                   Status = p.Status,
+            //                   Version = p.Version
+            //               }).FirstOrDefault();
+            //}
+            //return program;
+            throw new NotImplementedException();
         }
 
         public List<ProgramInfo> GetActiveProgramsInfoList(GetAllActiveProgramsRequest request)
         {
-            List<ProgramInfo> result = new List<ProgramInfo>();
-
-            try
-            {
-                using (ProgramMongoContext ctx = new ProgramMongoContext(_dbName))
-                {
-                    IMongoQuery mQuery = Query.EQ(MEContractProgram.StatusProperty, 1);
-                    MongoCursor<MEContractProgram> fnd = ctx.ContractPrograms.Collection.Find(mQuery);
-
-                    result = ctx.ContractPrograms.Collection.Find(mQuery).Select(r => new ProgramInfo
-                    {
-                        Name = r.Name,
-                        Id = r.Id.ToString(),
-                        ShortName = r.ShortName,
-                        Status = (int)r.Status,
-                         ElementState = (int)r.State
-                    }).ToList();
-                }
-                return result;
-            }
-            catch(Exception ex)
-            {
-                throw new Exception("DataDomain:GetActiveProgramsInfoList()" + ex.Message, ex.InnerException);
-            }
+            throw new NotImplementedException();
         }
 
         public Tuple<string, IEnumerable<object>> Select(Interface.APIExpression expression)
@@ -126,5 +104,11 @@ namespace Phytel.API.DataDomain.Program
             throw new NotImplementedException();
         }
 
+
+
+        public MEContractProgram FindByID(string entityID, bool temp)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -15,11 +15,11 @@ using Phytel.API.Common.Data;
 
 namespace Phytel.API.DataDomain.Program
 {
-    public class MongoResponseRepository<T> : IProgramRepository<T>
+    public class MongoTempContractProgramResponseRepository<T> : IProgramRepository<T>
     {
         private string _dbName = string.Empty;
 
-        public MongoResponseRepository(string contractDBName)
+        public MongoTempContractProgramResponseRepository(string contractDBName)
         {
             _dbName = contractDBName;
         }
@@ -32,7 +32,7 @@ namespace Phytel.API.DataDomain.Program
             {
                 using (ProgramMongoContext ctx = new ProgramMongoContext(_dbName))
                 {
-                    WriteConcernResult result = ctx.Responses.Collection.Insert(mer);
+                    WriteConcernResult result = ctx.TempProgramResponses.Collection.Insert(mer);
                     if (result.Ok)
                     {
                         res = true;
@@ -63,13 +63,13 @@ namespace Phytel.API.DataDomain.Program
 
         public object FindByID(string entityID)
         {
-            MEResponse response = null;
+            MEPatientProgramResponse response = null;
             try
             {
                 using (ProgramMongoContext ctx = new ProgramMongoContext(_dbName))
                 {
                     var findcp = MB.Query<MEResponse>.EQ(b => b.Id, ObjectId.Parse(entityID));
-                    response = ctx.Responses.Collection.Find(findcp).FirstOrDefault();
+                    response = ctx.PatientProgramResponses.Collection.Find(findcp).FirstOrDefault();
                 }
 
                 return response;
@@ -102,7 +102,7 @@ namespace Phytel.API.DataDomain.Program
 
         public object Update(object entity)
         {
-            MEResponse resp = (MEResponse)entity;
+            MEPatientProgramResponse resp = (MEPatientProgramResponse)entity;
             bool result = false;
             try
             {
@@ -111,17 +111,17 @@ namespace Phytel.API.DataDomain.Program
                     var q = MB.Query<MEResponse>.EQ(b => b.Id, resp.Id);
 
                     var uv = new List<MB.UpdateBuilder>();
-                    uv.Add(MB.Update.Set(MEResponse.NextStepIdProperty, resp.NextStepId));
-                    uv.Add(MB.Update.Set(MEResponse.StepIdProperty, resp.StepId));
-                    uv.Add(MB.Update.Set(MEResponse.NominalProperty, resp.Nominal));
-                    uv.Add(MB.Update.Set(MEResponse.RequiredProperty, resp.Required));
-                    if (resp.Order != 0) uv.Add(MB.Update.Set(MEResponse.OrderProperty, resp.Order));
-                    if (resp.Text != null) uv.Add(MB.Update.Set(MEResponse.TextProperty, resp.Text));
-                    if (resp.Value != null) uv.Add(MB.Update.Set(MEResponse.ValueProperty, resp.Value));
-                    if (resp.Spawn != null) { uv.Add(MB.Update.SetWrapped<List<SpawnElement>>(MEResponse.SpawnElementProperty, resp.Spawn)); }
+                    uv.Add(MB.Update.Set(MEPatientProgramResponse.NextStepIdProperty, resp.NextStepId));
+                    uv.Add(MB.Update.Set(MEPatientProgramResponse.StepIdProperty, resp.StepId));
+                    uv.Add(MB.Update.Set(MEPatientProgramResponse.NominalProperty, resp.Nominal));
+                    uv.Add(MB.Update.Set(MEPatientProgramResponse.RequiredProperty, resp.Required));
+                    if (resp.Order != 0) uv.Add(MB.Update.Set(MEPatientProgramResponse.OrderProperty, resp.Order));
+                    if (resp.Text != null) uv.Add(MB.Update.Set(MEPatientProgramResponse.TextProperty, resp.Text));
+                    if (resp.Value != null) uv.Add(MB.Update.Set(MEPatientProgramResponse.ValueProperty, resp.Value));
+                    if (resp.Spawn != null) { uv.Add(MB.Update.SetWrapped<List<SpawnElement>>(MEPatientProgramResponse.SpawnElementProperty, resp.Spawn)); }
 
                     IMongoUpdate update = MB.Update.Combine(uv);
-                    WriteConcernResult res = ctx.Responses.Collection.Update(q, update);
+                    WriteConcernResult res = ctx.PatientProgramResponses.Collection.Update(q, update);
                     if (res.Ok)
                         result = true;
                 }

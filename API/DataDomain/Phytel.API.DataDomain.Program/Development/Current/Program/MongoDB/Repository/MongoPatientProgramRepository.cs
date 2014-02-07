@@ -42,7 +42,7 @@ namespace Phytel.API.DataDomain.Program
                     if (pp.Count == 0)
                     {
                         var findcp = MB.Query<MEContractProgram>.EQ(b => b.Id, ObjectId.Parse(request.ContractProgramId));
-                        MEContractProgram cp = ctx.ContractPrograms.Collection.Find(findcp).FirstOrDefault();
+                        MEContractProgram cp = ctx.Programs.Collection.Find(findcp).FirstOrDefault();
 
                         MEPatientProgram patientProgDoc = new MEPatientProgram
                         {
@@ -380,6 +380,12 @@ namespace Phytel.API.DataDomain.Program
         }
 
         public void CacheByID(List<string> entityIDs)
+        {
+            throw new NotImplementedException();
+        }
+
+
+        public MEContractProgram FindByID(string entityID, bool temp)
         {
             throw new NotImplementedException();
         }

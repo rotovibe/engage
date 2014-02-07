@@ -28,7 +28,7 @@ namespace Phytel.API.DataDomain.Program.Services.Test
         public void Put_ContractProgramWithPatient()
         {
             string url = "http://localhost:8888/Program";
-            string patientID = "52e26f3b072ef7191c117b21";
+            string patientID = "52e26f34072ef7191c115320";
             string ContractProgramID = "52e024f91e601512a8f03789";
             string contractNumber = "InHealth001";
             string context = "NG";
@@ -45,6 +45,28 @@ namespace Phytel.API.DataDomain.Program.Services.Test
                 ContractProgramID), new PutProgramToPatientRequest() as object );
 
             Assert.AreEqual(response.Outcome.Result, 0);
+            //Assert.AreEqual(ProgramID, response.Program.ProgramID);
+        }
+
+        [TestMethod]
+        public void get_ContractProgramWithPatient()
+        {
+            string url = "http://localhost:8888/Program";
+            string patientID = "52e26f3b072ef7191c117b21";
+            string ContractProgramID = "52f17c781e60150accb7e9d3";
+            string contractNumber = "InHealth001";
+            string context = "NG";
+            string version = "v1";
+            IRestClient client = new JsonServiceClient();
+
+            GetContractProgramResponse response = client.Get<GetContractProgramResponse>(
+                string.Format("{0}/{1}/{2}/{3}/ContractProgram/{4}/",
+                url,
+                context,
+                version,
+                contractNumber,
+                ContractProgramID));
+
             //Assert.AreEqual(ProgramID, response.Program.ProgramID);
         }
     }

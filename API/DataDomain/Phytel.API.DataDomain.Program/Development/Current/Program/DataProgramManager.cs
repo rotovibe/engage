@@ -36,7 +36,7 @@ namespace Phytel.API.DataDomain.Program
             List<ProgramInfo> result;
 
             IProgramRepository<GetAllActiveProgramsResponse> repo =
-                Phytel.API.DataDomain.Program.ProgramRepositoryFactory<GetAllActiveProgramsResponse>.GetProgramRepository(request.ContractNumber, request.Context);
+                Phytel.API.DataDomain.Program.ProgramRepositoryFactory<GetAllActiveProgramsResponse>.GetContractProgramRepository(request.ContractNumber, request.Context);
 
             result = repo.GetActiveProgramsInfoList(request);
             response.Programs = result;
@@ -280,9 +280,9 @@ namespace Phytel.API.DataDomain.Program
             PutUpdateResponseResponse result = new PutUpdateResponseResponse();
             IProgramRepository<PutUpdateResponseResponse> responseRepo =
                             Phytel.API.DataDomain.Program.ProgramRepositoryFactory<PutUpdateResponseResponse>
-                            .GetStepResponseRepository(r.ContractNumber, r.Context);
+                            .GetPatientProgramStepResponseRepository(r.ContractNumber, r.Context);
 
-            MEResponse meres = new MEResponse
+            MEPatientProgramResponse meres = new MEPatientProgramResponse
             {
                 Id = ObjectId.Parse(r.ResponseDetail.Id),
                 NextStepId = ObjectId.Parse(r.ResponseDetail.NextStepId),
@@ -337,8 +337,8 @@ namespace Phytel.API.DataDomain.Program
         {
             GetStepResponseResponse response = new GetStepResponseResponse();
 
-            IProgramRepository<GetStepResponseResponse> repo = ProgramRepositoryFactory<GetStepResponseResponse>.GetStepResponseRepository(request.ContractNumber, request.Context);
-            MEResponse result = repo.FindByID(request.ResponseId) as MEResponse;
+            IProgramRepository<GetStepResponseResponse> repo = ProgramRepositoryFactory<GetStepResponseResponse>.GetPatientProgramStepResponseRepository(request.ContractNumber, request.Context);
+            MEPatientProgramResponse result = repo.FindByID(request.ResponseId) as MEPatientProgramResponse;
 
             if (result != null)
             {
@@ -417,6 +417,77 @@ namespace Phytel.API.DataDomain.Program
             response.Result = resp;
 
             return response;
+        }
+
+        public static GetContractProgramResponse ImportContractProgramResponses(GetContractProgramRequest request)
+        {
+            GetContractProgramResponse response = new GetContractProgramResponse();
+
+            IProgramRepository<GetContractProgramResponse> progAttr =
+                Phytel.API.DataDomain.Program.ProgramRepositoryFactory<GetContractProgramResponse>
+                .GetContractProgramRepository(request.ContractNumber, request.Context);
+
+            MEContractProgram cProg = (MEContractProgram)progAttr.FindByID(request.ContractProgramID, true);
+
+            foreach (Module m in cProg.Modules)
+            {
+                foreach (MongoDB.DTO.Action a in m.Actions)
+                {
+                    foreach (MongoDB.DTO.Step s in a.Steps)
+                    {
+                        GetResponsesForStep(s, request.ContractNumber, request.Context);
+                    }
+                }
+            }
+
+            return response;
+        }
+
+        private static void GetResponsesForStep(Step step, string contract, string context)
+        {
+            GetStepResponseListResponse response = null;
+            response = DTOUtils.GetStepResponses(step.Id.ToString(), contract, true);
+            List<StepResponse> respList = response.StepResponseList;
+
+            IProgramRepository<GetStepResponseListResponse> progAttr =
+                Phytel.API.DataDomain.Program.ProgramRepositoryFactory<GetStepResponseListResponse>
+                .GetTempContractResponsesRepository(contract, context);
+
+            foreach(StepResponse s in respList){
+                MEResponse mresp = new MEResponse
+                {
+                    Value = s.Value,
+                    Text = s.Text,
+                    StepId = ObjectId.Parse(s.StepId),
+                    Spawn = CreateSpawn(s.Spawn),
+                    Required = s.Required,
+                    Order = s.Order,
+                    Nominal = s.Nominal,
+                    NextStepId = ObjectId.Parse(s.NextStepId),
+                    Id = ObjectId.Parse(s.Id)
+                };
+
+                object result = progAttr.Insert(mresp );
+            };
+        }
+
+        private static List<SpawnElement> CreateSpawn(List<SpawnElementDetail> list)
+        {
+            List<SpawnElement> se = new List<SpawnElement>();
+            if (list != null)
+            {
+                list.ForEach(s =>
+                {
+                    se.Add(new SpawnElement
+                    {
+                        SpawnId = (s.ElementId != null)? ObjectId.Parse(s.ElementId) : ObjectId.Parse("000000000000000000000000"),
+                        Tag = s.Tag,
+                        Type = s.ElementType
+                    });
+                });
+            }
+
+            return se;
         }
     }
 }   
