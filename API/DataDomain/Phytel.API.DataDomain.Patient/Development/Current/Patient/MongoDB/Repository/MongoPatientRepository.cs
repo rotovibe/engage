@@ -10,13 +10,15 @@ using MB = MongoDB.Driver.Builders;
 using MongoDB.Bson;
 using MongoDB.Driver.Linq;
 using Phytel.API.Common.Format;
-using Phytel.API.DataDomain.Patient.DTO;
 using MongoDB.Driver.Builders;
 using Phytel.API.DataDomain.PatientSystem.DTO;
 using ServiceStack.Service;
 using ServiceStack.ServiceClient.Web;
 using System.Configuration;
 using Phytel.API.DataDomain.Patient.MongoDB.DTO;
+using Phytel.API.DataDomain.Contact.DTO;
+using Phytel.API.DataDomain.LookUp.DTO;
+using Phytel.API.DataDomain.LookUp;
 
 namespace Phytel.API.DataDomain.Patient
 {
@@ -53,7 +55,6 @@ namespace Phytel.API.DataDomain.Patient
                     DOB = request.DOB,
                     Version = request.Version,
                     //UpdatedBy = security token user id,
-                    //DisplayPatientSystemID
                     TTLDate = null,
                     DeleteFlag = false,
                     LastUpdatedOn = System.DateTime.Now
@@ -64,28 +65,20 @@ namespace Phytel.API.DataDomain.Patient
                     ctx.Patients.Collection.Insert(patient);
                 }
 
-                List<SearchField> list = new List<SearchField>();
-                list.Add(new SearchField { Active = true, FieldName = "FN", Value = patient.FirstName });
-                list.Add(new SearchField { Active = true, FieldName = "LN", Value = patient.LastName });
-                list.Add(new SearchField { Active = true, FieldName = "G", Value = patient.Gender.ToUpper() });
-                list.Add(new SearchField { Active = true, FieldName = "DOB", Value = patient.DOB });
-                list.Add(new SearchField { Active = true, FieldName = "MN", Value = patient.MiddleName });
-                list.Add(new SearchField { Active = true, FieldName = "SFX", Value = patient.Suffix });
-                list.Add(new SearchField { Active = true, FieldName = "PN", Value = patient.PreferredName });
-
-                string stringList = null;
-                foreach (SearchField me in list)
-                {
-                    stringList += me.Active + "\n";
-                    stringList += me.FieldName + "\n";
-                    stringList += me.Value + "\n";
-                }
+                List<SearchFieldData> data = new List<SearchFieldData>();
+                data.Add(new SearchFieldData { Active = true, FieldName = "FN", Value = patient.FirstName });
+                data.Add(new SearchFieldData { Active = true, FieldName = "LN", Value = patient.LastName });
+                data.Add(new SearchFieldData { Active = true, FieldName = "G", Value = patient.Gender.ToUpper() });
+                data.Add(new SearchFieldData { Active = true, FieldName = "DOB", Value = patient.DOB });
+                data.Add(new SearchFieldData { Active = true, FieldName = "MN", Value = patient.MiddleName });
+                data.Add(new SearchFieldData { Active = true, FieldName = "SFX", Value = patient.Suffix });
+                data.Add(new SearchFieldData { Active = true, FieldName = "PN", Value = patient.PreferredName });
 
                 PutCohortPatientViewDataRequest cohortPatientRequest = new PutCohortPatientViewDataRequest
                 {
                     PatientID = patient.Id.ToString(),
                     LastName = patient.LastName,
-                    SearchFields = stringList,
+                    SearchFields = data,
                     Version = patient.Version,
                     Context = request.Context,
                     ContractNumber = request.ContractNumber
@@ -120,6 +113,21 @@ namespace Phytel.API.DataDomain.Patient
                         ctx.Patients.Collection.Save(patient);
                     }
                 }
+
+                LookUpBase lookUp = new LookUpBase();
+                lookUp.Name = request.TimeZone;
+                
+                //MECommMode mode = new MECommMode();
+                
+
+                PutContactDataRequest contactRequest = new PutContactDataRequest
+                {
+                    PatientId = patient.Id.ToString(),
+                    //Modes = request.Modes,
+                    TimeZoneId = lookUp.DataID.ToString(),
+                    Version = patient.Version
+                    
+                };
 
                 return new PutCohortPatientViewDataResponse
                 {
