@@ -93,8 +93,9 @@ namespace Phytel.API.AppDomain.NG.Service
                 else
                     throw new UnauthorizedAccessException();
 
-                //audit this request; what type is it?
-
+               
+                ngm.LogAuditData(request, System.Web.HttpContext.Current.Request, request.GetType().Name);
+               
                 return response;
             }
             catch (Exception ex)
@@ -121,6 +122,8 @@ namespace Phytel.API.AppDomain.NG.Service
                 else
                     throw new UnauthorizedAccessException();
 
+                ngm.LogAuditData(request, System.Web.HttpContext.Current.Request, request.GetType().Name);
+               
                 return response;
             }
             catch (Exception ex)
@@ -147,6 +150,8 @@ namespace Phytel.API.AppDomain.NG.Service
                 else
                     throw new UnauthorizedAccessException();
 
+                ngm.LogAuditData(request, System.Web.HttpContext.Current.Request, request.GetType().Name);
+               
                 return response;
             }
             catch (Exception ex)
@@ -173,6 +178,8 @@ namespace Phytel.API.AppDomain.NG.Service
                 else
                     throw new UnauthorizedAccessException();
 
+                ngm.LogAuditData(request, System.Web.HttpContext.Current.Request, request.GetType().Name);
+               
                 return response;
             }
             catch (Exception ex)
@@ -199,6 +206,8 @@ namespace Phytel.API.AppDomain.NG.Service
                 else
                     throw new UnauthorizedAccessException();
 
+                ngm.LogAuditData(request, System.Web.HttpContext.Current.Request, request.GetType().Name);
+               
                 return response;
             }
             catch (Exception ex)
@@ -225,6 +234,8 @@ namespace Phytel.API.AppDomain.NG.Service
                 else
                     throw new UnauthorizedAccessException();
 
+                ngm.LogAuditData(request, System.Web.HttpContext.Current.Request, request.GetType().Name);
+               
                 return response;
             }
             catch (Exception ex)
@@ -250,6 +261,9 @@ namespace Phytel.API.AppDomain.NG.Service
                 }
                 else
                     throw new UnauthorizedAccessException();
+
+                ngm.LogAuditData(request, System.Web.HttpContext.Current.Request, request.GetType().Name);
+               
                 return response;
             }
             catch (Exception ex)
@@ -281,6 +295,8 @@ namespace Phytel.API.AppDomain.NG.Service
                 else
                     throw new UnauthorizedAccessException();
 
+                ngm.LogAuditData(request, System.Web.HttpContext.Current.Request, request.GetType().Name);
+               
                 return response;
             }
             catch (Exception ex)
@@ -307,6 +323,8 @@ namespace Phytel.API.AppDomain.NG.Service
                 else
                     throw new UnauthorizedAccessException();
 
+                ngm.LogAuditData(request, System.Web.HttpContext.Current.Request, request.GetType().Name);
+               
                 return response;
             }
             catch (Exception ex)
@@ -333,6 +351,8 @@ namespace Phytel.API.AppDomain.NG.Service
                 else
                     throw new UnauthorizedAccessException();
 
+                ngm.LogAuditData(request, System.Web.HttpContext.Current.Request, request.GetType().Name);
+               
                 return response;
             }
             catch (Exception ex)
@@ -359,6 +379,8 @@ namespace Phytel.API.AppDomain.NG.Service
                 else
                     throw new UnauthorizedAccessException();
 
+                ngm.LogAuditData(request, System.Web.HttpContext.Current.Request, request.GetType().Name);
+               
                 return response;
             }
             catch (Exception ex)
@@ -386,6 +408,8 @@ namespace Phytel.API.AppDomain.NG.Service
                 else
                     throw new UnauthorizedAccessException();
 
+                ngm.LogAuditData(request, System.Web.HttpContext.Current.Request, request.GetType().Name);
+               
                 return response;
             }
             catch (Exception ex)
@@ -412,6 +436,8 @@ namespace Phytel.API.AppDomain.NG.Service
                 else
                     throw new UnauthorizedAccessException();
 
+                ngm.LogAuditData(request, System.Web.HttpContext.Current.Request, request.GetType().Name);
+               
                 return response;
             }
             catch (Exception ex)
@@ -440,6 +466,8 @@ namespace Phytel.API.AppDomain.NG.Service
                 else
                     throw new UnauthorizedAccessException();
 
+                ngm.LogAuditData(request, System.Web.HttpContext.Current.Request, request.GetType().Name);
+               
                 return response;
             }
             catch (Exception ex)
@@ -466,6 +494,8 @@ namespace Phytel.API.AppDomain.NG.Service
                 else
                     throw new UnauthorizedAccessException();
 
+                ngm.LogAuditData(request, System.Web.HttpContext.Current.Request, request.GetType().Name);
+               
                 return response;
             }
             catch (Exception ex)
@@ -492,6 +522,8 @@ namespace Phytel.API.AppDomain.NG.Service
                 else
                     throw new UnauthorizedAccessException();
 
+                ngm.LogAuditData(request, System.Web.HttpContext.Current.Request, request.GetType().Name);
+               
                 return response;
             }
             catch (Exception ex)
@@ -518,6 +550,8 @@ namespace Phytel.API.AppDomain.NG.Service
                 else
                     throw new UnauthorizedAccessException();
 
+                ngm.LogAuditData(request, System.Web.HttpContext.Current.Request, request.GetType().Name);
+               
                 return response;
             }
             catch (Exception ex)
@@ -544,6 +578,8 @@ namespace Phytel.API.AppDomain.NG.Service
                 else
                     throw new UnauthorizedAccessException();
 
+                ngm.LogAuditData(request, System.Web.HttpContext.Current.Request, request.GetType().Name);
+               
                 return response;
             }
             catch (Exception ex)
@@ -570,6 +606,8 @@ namespace Phytel.API.AppDomain.NG.Service
                 else
                     throw new UnauthorizedAccessException();
 
+                ngm.LogAuditData(request, System.Web.HttpContext.Current.Request, request.GetType().Name);
+               
                 return response;
             }
             catch (Exception ex)

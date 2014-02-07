@@ -8,6 +8,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Serialization;
+using System.Diagnostics;
 
 namespace Phytel.API.Common.Audit
 {
@@ -82,6 +83,10 @@ namespace Phytel.API.Common.Audit
 
                 newMessage = new QueueMessage(Phytel.Framework.ASE.Data.Common.ASEMessageType.Process, messageQueue);
                 newMessage.Body = xmlBody;
+
+#if DEBUG
+                Debug.WriteLine(string.Format("***** Message Body ***** {0}", newMessage.Body));
+#endif
 
                 string title = string.Empty;
                 if (auditLog.Type.ToString() == "PageView")

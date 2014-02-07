@@ -161,20 +161,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.Contact.Service.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.Contact.Test", "DataDomain\Phytel.API.DataDomain.Contact\Development\Current\Contact.Test\DataDomain.Contact.Test.csproj", "{91F53D4C-ECC3-4D25-9BBF-0E0773ABE439}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NGTestData", "..\..\Shared\NGTestData\NGTestData.csproj", "{6F1A3E2C-0991-427B-94A7-BA8DEDD90C88}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Goal", "Goal", "{67D02FF3-2528-46E8-8105-3135F60B555C}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.PatientGoal", "DataDomain\Phytel.API.DataDomain.PatientGoal\Development\Current\PatientGoal\DataDomain.PatientGoal.csproj", "{73FA0644-F0B9-45AD-A52A-0930B66C6C10}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.PatientGoal.DTO", "DataDomain\Phytel.API.DataDomain.PatientGoal\Development\Current\PatientGoal.DTO\DataDomain.PatientGoal.DTO.csproj", "{92488AF4-963E-4098-8BA8-23D6952BD952}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.PatientGoal.Service", "DataDomain\Phytel.API.DataDomain.PatientGoal\Development\Current\PatientGoal.Service\DataDomain.PatientGoal.Service.csproj", "{40E1E480-43BE-410B-82CF-33FE3DE9ADAD}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.PatientGoal.Service.Test", "DataDomain\Phytel.API.DataDomain.PatientGoal\Development\Current\PatientGoal.Service.Test\DataDomain.PatientGoal.Service.Test.csproj", "{C6B46E4D-93A9-4D31-85D0-CE7080919734}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.PatientGoal.Test", "DataDomain\Phytel.API.DataDomain.PatientGoal\Development\Current\PatientGoal.Test\DataDomain.PatientGoal.Test.csproj", "{BE7CFA5D-9FBE-413B-B8A6-832F6A5BBB05}"
-EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
 		SccNumberOfProjects = 69
@@ -447,12 +433,8 @@ Global
 		SccLocalPath66 = DataDomain\\Phytel.API.DataDomain.PatientGoal\\Development\\Current\\PatientGoal.Service
 		SccProjectUniqueName67 = DataDomain\\Phytel.API.DataDomain.PatientGoal\\Development\\Current\\PatientGoal.Service.Test\\DataDomain.PatientGoal.Service.Test.csproj
 		SccProjectTopLevelParentUniqueName67 = API.sln
-		SccProjectName67 = DataDomain/Phytel.API.DataDomain.PatientGoal/Development/Current/PatientGoal.Service.Test
-		SccLocalPath67 = DataDomain\\Phytel.API.DataDomain.PatientGoal\\Development\\Current\\PatientGoal.Service.Test
-		SccProjectUniqueName68 = DataDomain\\Phytel.API.DataDomain.PatientGoal\\Development\\Current\\PatientGoal.Test\\DataDomain.PatientGoal.Test.csproj
-		SccProjectTopLevelParentUniqueName68 = API.sln
-		SccProjectName68 = DataDomain/Phytel.API.DataDomain.PatientGoal/Development/Current/PatientGoal.Test
-		SccLocalPath68 = DataDomain\\Phytel.API.DataDomain.PatientGoal\\Development\\Current\\PatientGoal.Test
+		SccProjectName67 = DataDomain/Phytel.API.DataDomain.Contact/Development/Current/Contact.Test
+		SccLocalPath67 = DataDomain\\Phytel.API.DataDomain.Contact\\Development\\Current\\Contact.Test
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -707,30 +689,6 @@ Global
 		{91F53D4C-ECC3-4D25-9BBF-0E0773ABE439}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{91F53D4C-ECC3-4D25-9BBF-0E0773ABE439}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{91F53D4C-ECC3-4D25-9BBF-0E0773ABE439}.Release|Any CPU.Build.0 = Release|Any CPU
-		{6F1A3E2C-0991-427B-94A7-BA8DEDD90C88}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{6F1A3E2C-0991-427B-94A7-BA8DEDD90C88}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{6F1A3E2C-0991-427B-94A7-BA8DEDD90C88}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{6F1A3E2C-0991-427B-94A7-BA8DEDD90C88}.Release|Any CPU.Build.0 = Release|Any CPU
-		{73FA0644-F0B9-45AD-A52A-0930B66C6C10}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{73FA0644-F0B9-45AD-A52A-0930B66C6C10}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{73FA0644-F0B9-45AD-A52A-0930B66C6C10}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{73FA0644-F0B9-45AD-A52A-0930B66C6C10}.Release|Any CPU.Build.0 = Release|Any CPU
-		{92488AF4-963E-4098-8BA8-23D6952BD952}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{92488AF4-963E-4098-8BA8-23D6952BD952}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{92488AF4-963E-4098-8BA8-23D6952BD952}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{92488AF4-963E-4098-8BA8-23D6952BD952}.Release|Any CPU.Build.0 = Release|Any CPU
-		{40E1E480-43BE-410B-82CF-33FE3DE9ADAD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{40E1E480-43BE-410B-82CF-33FE3DE9ADAD}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{40E1E480-43BE-410B-82CF-33FE3DE9ADAD}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{40E1E480-43BE-410B-82CF-33FE3DE9ADAD}.Release|Any CPU.Build.0 = Release|Any CPU
-		{C6B46E4D-93A9-4D31-85D0-CE7080919734}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C6B46E4D-93A9-4D31-85D0-CE7080919734}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C6B46E4D-93A9-4D31-85D0-CE7080919734}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C6B46E4D-93A9-4D31-85D0-CE7080919734}.Release|Any CPU.Build.0 = Release|Any CPU
-		{BE7CFA5D-9FBE-413B-B8A6-832F6A5BBB05}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{BE7CFA5D-9FBE-413B-B8A6-832F6A5BBB05}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{BE7CFA5D-9FBE-413B-B8A6-832F6A5BBB05}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{BE7CFA5D-9FBE-413B-B8A6-832F6A5BBB05}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -787,6 +745,11 @@ Global
 		{F127267A-807D-4091-AE83-48CDC12E7D56} = {B65DC0B4-4013-4BBC-952D-1122F5480535}
 		{211E6CB2-91E2-4C25-A235-1FF1D9D4CEC7} = {B65DC0B4-4013-4BBC-952D-1122F5480535}
 		{BA3F00D1-7DE7-4AE6-B637-6681C10EC20D} = {B65DC0B4-4013-4BBC-952D-1122F5480535}
+		{BD9E8867-CA65-43F6-A18B-A28805716A4B} = {20C235E5-B8ED-43FC-8A30-BB8FEE4C33C1}
+		{DDF2CB2B-6351-44AA-A152-35F82D7D0AF2} = {20C235E5-B8ED-43FC-8A30-BB8FEE4C33C1}
+		{DA0DCEDF-73A9-4BB9-970C-05995FC9E5C1} = {20C235E5-B8ED-43FC-8A30-BB8FEE4C33C1}
+		{C940018D-A598-407A-AAA0-22918FF5FFE8} = {20C235E5-B8ED-43FC-8A30-BB8FEE4C33C1}
+		{1861B5A0-1AA8-41C0-A9ED-6BE0FDE2082B} = {20C235E5-B8ED-43FC-8A30-BB8FEE4C33C1}
 		{F1A478D1-DCA1-4BE6-AE83-E0ACDD4FDFFD} = {22453963-B1E8-4151-B99B-580AAFDD078C}
 		{1C2C63A1-4246-4EC9-BAD1-C00E9ECD85F6} = {22453963-B1E8-4151-B99B-580AAFDD078C}
 		{9F763B50-9E2B-426F-ACFB-27F3D3F255D5} = {22453963-B1E8-4151-B99B-580AAFDD078C}

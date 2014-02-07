@@ -20,6 +20,7 @@ using Phytel.API.Common.Audit;
 using System.Threading;
 using Phytel.API.Interface;
 using System.Web;
+using System.Diagnostics;
 
 namespace Phytel.API.AppDomain.NG
 {
@@ -1348,20 +1349,22 @@ namespace Phytel.API.AppDomain.NG
                                     {
                                         AuditAsynch(request, webreq, returnTypeName);
                                      }   
-                                    catch (Exception)
+                                    catch (Exception newthreadex)
                                     {
                                         //if there's an error from the new thread, handle it here, so we don't black the main thread
                                         //drop into queue
                                         //write to log
                                         //email to admin
                                         //NLog?
+                                        Debug.WriteLine(string.Format("^^^^^ Error calling ^^^^^{0}", webreq.RawUrl));
+                                        //Console.WriteLine(string.Format("Error calling {0}", webreq.QueryString));
                     
                                     }
                                     
                                 }).Start();
                 
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 //handle the exception here, to make sure we don't block the main thread
 
@@ -1374,7 +1377,7 @@ namespace Phytel.API.AppDomain.NG
 
         private static void AuditAsynch(IAppDomainRequest request, HttpRequest webreq, string returnTypeName)
         {
-            throw new SystemException("test error in new thread starts");
+            //throw new SystemException("test error in new thread starts");
 
             string callingMethod = AuditHelper.FindMethodType(returnTypeName);
             int auditTypeId = AuditHelper.GetAuditTypeID(callingMethod);
