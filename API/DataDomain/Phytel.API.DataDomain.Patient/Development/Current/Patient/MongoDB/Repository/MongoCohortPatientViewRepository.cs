@@ -24,33 +24,34 @@ namespace Phytel.API.DataDomain.Patient
 
         public object Insert(object newEntity)
         {
-            PutPatientDataRequest request = newEntity as PutPatientDataRequest;
-            MEPatient patient = new MEPatient
+            PutCohortPatientViewDataRequest cohortRequest = newEntity as PutCohortPatientViewDataRequest;
+
+            List<SearchField> list = new List<SearchField>();
+            string[] stringList = cohortRequest.SearchFields.Split("\n".ToCharArray());
+            
+            list.Add(new SearchField { Active = true, FieldName = "FN", Value = stringList[2] });
+            list.Add(new SearchField { Active = true, FieldName = "LN", Value = stringList[5] });
+            list.Add(new SearchField { Active = true, FieldName = "G", Value = stringList[8] });
+            list.Add(new SearchField { Active = true, FieldName = "DOB", Value = stringList[11] });
+            list.Add(new SearchField { Active = true, FieldName = "MN", Value = stringList[14] });
+            list.Add(new SearchField { Active = true, FieldName = "SFX", Value = stringList[17] });
+            list.Add(new SearchField { Active = true, FieldName = "PN", Value = stringList[20] });
+
+            MECohortPatientView patient = new MECohortPatientView
             {
-                Id = ObjectId.GenerateNewId(),
-                FirstName = request.FirstName,
-                LastName = request.LastName,
-                MiddleName = request.MiddleName,
-                Suffix = request.Suffix,
-                PreferredName = request.PreferredName,
-                Gender = request.Gender,
-                DOB = request.DOB,
-                Version = request.Version,
-                //UpdatedBy = security token user id,
-                //DisplayPatientSystemID
-                TTLDate = null,
-                DeleteFlag = false,
-                LastUpdatedOn = System.DateTime.Now
+                PatientID = ObjectId.Parse(cohortRequest.PatientID),
+                LastName = cohortRequest.LastName,
+                SearchFields = list
             };
 
             using (PatientMongoContext ctx = new PatientMongoContext(_dbName))
             {
-                ctx.Patients.Collection.Insert(patient);
+                ctx.CohortPatientViews.Collection.Insert(patient);
             }
 
-            return new PutPatientDataResponse
+            return new PutCohortPatientViewDataResponse
             {
-                Id = patient.Id.ToString()
+                PatientID = patient.Id.ToString()
             };
         }
 
