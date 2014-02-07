@@ -41,8 +41,8 @@ namespace NGTestData
             List<MEPatientSystem> patientSystems = new List<MEPatientSystem>();
             List<MEContact> patientContacts = new List<MEContact>();
 
-            List<MEProblem> problems = null;
-            List<MEState> states = null;
+            List<Problem> problems = null;
+            List<State> states = null;
 
             string mongoConnString = string.Empty;
             if (rdoDev.Checked)
@@ -99,9 +99,9 @@ namespace NGTestData
                         LastUpdatedOn = DateTime.Now
                     };
 
-                List<MEAddress> addresses = new List<MEAddress>();
-                List<MEEmail> emails = new List<MEEmail>();
-                List<MEPhone> phones = new List<MEPhone>();
+                List<Address> addresses = new List<Address>();
+                List<Email> emails = new List<Email>();
+                List<Phone> phones = new List<Phone>();
 
                 string sqlAddressQuery = string.Format("select top 1 Address1, Address2, City, [State], ZipCode from Address Where OwnerID = {0}", patientSystemID);
                 string sqlEmailQuery = string.Format("select top 1 Address from Email Where OwnerID = {0}", patientSystemID);
@@ -115,7 +115,7 @@ namespace NGTestData
                 {
                     ObjectId stateID = states.Where(x => x.Code == dsAddress.Tables[0].Rows[0]["State"].ToString()).Select(y => y.DataID).FirstOrDefault();
 
-                    addresses.Add(new MEAddress
+                    addresses.Add(new Address
                     {
                         Id = ObjectId.GenerateNewId(),
                         Line1 = dsAddress.Tables[0].Rows[0]["Address1"].ToString(),
@@ -128,10 +128,10 @@ namespace NGTestData
                 }
 
                 if (dsEmail.Tables[0].Rows.Count > 0)
-                    emails.Add(new MEEmail { Id = ObjectId.GenerateNewId(), Preferred = true, Text = dsEmail.Tables[0].Rows[0]["Address"].ToString() });
+                    emails.Add(new Email { Id = ObjectId.GenerateNewId(), Preferred = true, Text = dsEmail.Tables[0].Rows[0]["Address"].ToString() });
 
                 if (dsPhone.Tables[0].Rows.Count > 0)
-                    phones.Add(new MEPhone { Id = ObjectId.GenerateNewId(), IsText = true, Number = long.Parse(dsPhone.Tables[0].Rows[0]["DialString"].ToString()), PreferredPhone = true, PreferredText = false, TypeId = ObjectId.Parse("52e18c2ed433232028e9e3a6") });
+                    phones.Add(new Phone { Id = ObjectId.GenerateNewId(), IsText = true, Number = long.Parse(dsPhone.Tables[0].Rows[0]["DialString"].ToString()), PreferredPhone = true, PreferredText = false, TypeId = ObjectId.Parse("52e18c2ed433232028e9e3a6") });
 
                 MEContact patContact = new MEContact
                     {
@@ -233,7 +233,7 @@ namespace NGTestData
             
         }
 
-        public List<MEProblem> GetAllProblems(MongoCollection lookupColl)
+        public List<Problem> GetAllProblems(MongoCollection lookupColl)
         {
             if (BsonClassMap.IsClassMapRegistered(typeof(LookUpBase)) == false)
                 BsonClassMap.RegisterClassMap<LookUpBase>();
@@ -241,10 +241,10 @@ namespace NGTestData
             if (BsonClassMap.IsClassMapRegistered(typeof(MELookup)) == false)
                 BsonClassMap.RegisterClassMap<MELookup>();
 
-            if (BsonClassMap.IsClassMapRegistered(typeof(MEProblem)) == false)
-                BsonClassMap.RegisterClassMap<MEProblem>();
+            if (BsonClassMap.IsClassMapRegistered(typeof(Problem)) == false)
+                BsonClassMap.RegisterClassMap<Problem>();
 
-            List<MEProblem> problems = new List<MEProblem>();
+            List<Problem> problems = new List<Problem>();
             List<IMongoQuery> queries = new List<IMongoQuery>();
             queries.Add(Query.EQ(MELookup.TypeProperty, LookUpType.Problem));
             queries.Add(Query.EQ(MELookup.DeleteFlagProperty, false));
@@ -254,7 +254,7 @@ namespace NGTestData
             {
                 if (meLookup.Data != null)
                 {
-                    foreach (MEProblem m in meLookup.Data)
+                    foreach (Problem m in meLookup.Data)
                         problems.Add(m);
                 }
 
@@ -262,7 +262,7 @@ namespace NGTestData
             return problems;
         }
 
-        public List<MEState> GetAllStates(MongoCollection lookupColl)
+        public List<State> GetAllStates(MongoCollection lookupColl)
         {
             if (BsonClassMap.IsClassMapRegistered(typeof(LookUpBase)) == false)
                 BsonClassMap.RegisterClassMap<LookUpBase>();
@@ -270,10 +270,10 @@ namespace NGTestData
             if (BsonClassMap.IsClassMapRegistered(typeof(MELookup)) == false)
                 BsonClassMap.RegisterClassMap<MELookup>();
 
-            if (BsonClassMap.IsClassMapRegistered(typeof(MEState)) == false)
-                BsonClassMap.RegisterClassMap<MEState>();
+            if (BsonClassMap.IsClassMapRegistered(typeof(State)) == false)
+                BsonClassMap.RegisterClassMap<State>();
 
-            List<MEState> states = new List<MEState>();
+            List<State> states = new List<State>();
             List<IMongoQuery> queries = new List<IMongoQuery>();
             queries.Add(Query.EQ(MELookup.TypeProperty, LookUpType.State));
             queries.Add(Query.EQ(MELookup.DeleteFlagProperty, false));
@@ -283,7 +283,7 @@ namespace NGTestData
             {
                 if (meLookup.Data != null)
                 {
-                    foreach (MEState s in meLookup.Data)
+                    foreach (State s in meLookup.Data)
                         states.Add(s);
                 }
             }
