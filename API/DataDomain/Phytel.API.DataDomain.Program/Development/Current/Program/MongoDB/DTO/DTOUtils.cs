@@ -929,7 +929,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
                 List<MEPatientProgramResponse> meresp = step.Responses;
                 List<ResponseDetail> resp = null;
 
-                if (meresp == null)
+                if (meresp == null || meresp.Count == 0)
                 {
                     meresp = GetStepResponses(step.Id, contract);
                 }
