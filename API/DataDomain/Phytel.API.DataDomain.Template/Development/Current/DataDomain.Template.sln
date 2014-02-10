@@ -1,6 +1,6 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.21005.1
+VisualStudioVersion = 12.0.30110.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.Template.Service", "Template.Service\DataDomain.Template.Service.csproj", "{29DFC6F8-F09F-4881-8A94-43C4229A5583}"
 EndProject
@@ -12,10 +12,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.Template.DTO", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.Template.Service.Test", "Template.Service.Test\DataDomain.Template.Service.Test.csproj", "{9F763B50-9E2B-426F-ACFB-27F3D3F255D5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Phytel.Mongo", "..\..\..\..\..\..\Shared\PhytelServices\Development\Current\Phytel.Mongo\Phytel.Mongo.csproj", "{7C9E786C-E4F7-4382-BDE4-8DBF980EA013}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PhytelServices", "..\..\..\..\..\..\Shared\PhytelServices\Development\Current\PhytelServices\PhytelServices.csproj", "{D790F618-438B-4C39-ABE5-1346122273AC}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Phytel.API.Interface", "..\..\..\..\Interfaces\Development\Current\Phytel.API.Interface\Phytel.API.Interface.csproj", "{ABE948FB-247E-4955-B3AB-B7C93E10A542}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shared", "Shared", "{688504DA-15E9-46D5-B068-020B92F8836D}"
@@ -24,7 +20,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Phytel.API.Common", "..\..\
 EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 9
+		SccNumberOfProjects = 7
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = http://hillstfs2013:8080/tfs/phytel
 		SccProjectUniqueName0 = Template.Service\\DataDomain.Template.Service.csproj
@@ -52,30 +48,18 @@ Global
 		SccAuxPath4 = http://hillstfs2013:8080/tfs/phytel
 		SccLocalPath4 = Template.Service.Test
 		SccProvider4 = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccProjectUniqueName5 = ..\\..\\..\\..\\..\\..\\Shared\\PhytelServices\\Development\\Current\\Phytel.Mongo\\Phytel.Mongo.csproj
+		SccProjectUniqueName5 = ..\\..\\..\\..\\Interfaces\\Development\\Current\\Phytel.API.Interface\\Phytel.API.Interface.csproj
 		SccProjectTopLevelParentUniqueName5 = DataDomain.Template.sln
-		SccProjectName5 = ../../../../../../Shared/PhytelServices/Development/Current/Phytel.Mongo
+		SccProjectName5 = ../../../../Interfaces/Development/Current/Phytel.API.Interface
 		SccAuxPath5 = http://hillstfs2013:8080/tfs/phytel
-		SccLocalPath5 = ..\\..\\..\\..\\..\\..\\Shared\\PhytelServices\\Development\\Current\\Phytel.Mongo
+		SccLocalPath5 = ..\\..\\..\\..\\Interfaces\\Development\\Current\\Phytel.API.Interface
 		SccProvider5 = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccProjectUniqueName6 = ..\\..\\..\\..\\..\\..\\Shared\\PhytelServices\\Development\\Current\\PhytelServices\\PhytelServices.csproj
+		SccProjectUniqueName6 = ..\\..\\..\\..\\Common\\Phytel.API.Common\\Development\\Current\\Phytel.API.Common.csproj
 		SccProjectTopLevelParentUniqueName6 = DataDomain.Template.sln
-		SccProjectName6 = ../../../../../../Shared/PhytelServices/Development/Current/PhytelServices
+		SccProjectName6 = ../../../../Common/Phytel.API.Common/Development/Current
 		SccAuxPath6 = http://hillstfs2013:8080/tfs/phytel
-		SccLocalPath6 = ..\\..\\..\\..\\..\\..\\Shared\\PhytelServices\\Development\\Current\\PhytelServices
+		SccLocalPath6 = ..\\..\\..\\..\\Common\\Phytel.API.Common\\Development\\Current
 		SccProvider6 = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccProjectUniqueName7 = ..\\..\\..\\..\\Interfaces\\Development\\Current\\Phytel.API.Interface\\Phytel.API.Interface.csproj
-		SccProjectTopLevelParentUniqueName7 = DataDomain.Template.sln
-		SccProjectName7 = ../../../../Interfaces/Development/Current/Phytel.API.Interface
-		SccAuxPath7 = http://hillstfs2013:8080/tfs/phytel
-		SccLocalPath7 = ..\\..\\..\\..\\Interfaces\\Development\\Current\\Phytel.API.Interface
-		SccProvider7 = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccProjectUniqueName8 = ..\\..\\..\\..\\Common\\Phytel.API.Common\\Development\\Current\\Phytel.API.Common.csproj
-		SccProjectTopLevelParentUniqueName8 = DataDomain.Template.sln
-		SccProjectName8 = ../../../../Common/Phytel.API.Common/Development/Current
-		SccAuxPath8 = http://hillstfs2013:8080/tfs/phytel
-		SccLocalPath8 = ..\\..\\..\\..\\Common\\Phytel.API.Common\\Development\\Current
-		SccProvider8 = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -102,14 +86,6 @@ Global
 		{9F763B50-9E2B-426F-ACFB-27F3D3F255D5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9F763B50-9E2B-426F-ACFB-27F3D3F255D5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9F763B50-9E2B-426F-ACFB-27F3D3F255D5}.Release|Any CPU.Build.0 = Release|Any CPU
-		{7C9E786C-E4F7-4382-BDE4-8DBF980EA013}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7C9E786C-E4F7-4382-BDE4-8DBF980EA013}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7C9E786C-E4F7-4382-BDE4-8DBF980EA013}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7C9E786C-E4F7-4382-BDE4-8DBF980EA013}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D790F618-438B-4C39-ABE5-1346122273AC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D790F618-438B-4C39-ABE5-1346122273AC}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D790F618-438B-4C39-ABE5-1346122273AC}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D790F618-438B-4C39-ABE5-1346122273AC}.Release|Any CPU.Build.0 = Release|Any CPU
 		{ABE948FB-247E-4955-B3AB-B7C93E10A542}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{ABE948FB-247E-4955-B3AB-B7C93E10A542}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{ABE948FB-247E-4955-B3AB-B7C93E10A542}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -123,9 +99,7 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{25CF3C3F-221F-4A49-B5EF-A8A5FCF9A5BA} = {688504DA-15E9-46D5-B068-020B92F8836D}
 		{ABE948FB-247E-4955-B3AB-B7C93E10A542} = {688504DA-15E9-46D5-B068-020B92F8836D}
-		{7C9E786C-E4F7-4382-BDE4-8DBF980EA013} = {688504DA-15E9-46D5-B068-020B92F8836D}
-		{D790F618-438B-4C39-ABE5-1346122273AC} = {688504DA-15E9-46D5-B068-020B92F8836D}
+		{25CF3C3F-221F-4A49-B5EF-A8A5FCF9A5BA} = {688504DA-15E9-46D5-B068-020B92F8836D}
 	EndGlobalSection
 EndGlobal
