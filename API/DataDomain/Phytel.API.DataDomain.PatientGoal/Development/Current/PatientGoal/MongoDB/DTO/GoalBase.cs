@@ -17,11 +17,6 @@ namespace Phytel.API.DataDomain.PatientGoal.DTO
         [BsonIgnoreIfNull(true)]
         public string Description { get; set; }
 
-        public const string StatusProperty = "sts";
-        [BsonElement(StatusProperty)]
-        [BsonIgnoreIfNull(true)]
-        public string Status { get; set; }
-
         public const string StatusDateProperty = "stsd";
         [BsonElement(StatusDateProperty)]
         [BsonIgnoreIfNull(true)]

@@ -27,10 +27,26 @@ namespace Phytel.API.DataDomain.PatientGoal
 
         public object Insert(object newEntity)
         {
+            PatientTask pt = (PatientTask)newEntity;
             try
             {
-                throw new NotImplementedException();
-                // code here //
+                MEPatientTask pa = new MEPatientTask
+                {
+                    Id = ObjectId.GenerateNewId(),
+                    TTLDate = pt.TTLDate,
+                    DeleteFlag = pt.DeleteFlag,
+                    Status = (GoalTaskStatus)pt.Status
+                };
+
+                using (PatientGoalMongoContext ctx = new PatientGoalMongoContext(_dbName))
+                {
+                    WriteConcernResult wcr = ctx.PatientTasks.Collection.Insert(pa);
+                    if (wcr.Ok)
+                    {
+                        pt.Id = pa.Id.ToString();
+                    }
+                }
+                return pt as object;
             }
             catch (Exception ex) { throw ex; }
         }

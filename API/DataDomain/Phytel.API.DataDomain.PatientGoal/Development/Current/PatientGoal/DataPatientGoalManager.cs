@@ -47,5 +47,32 @@ namespace Phytel.API.DataDomain.PatientGoal
                 throw ex;
             }
         }
+
+        #region // TASKS
+        public static PutNewPatientTaskResponse InsertNewPatientTask(PutNewPatientTaskRequest request)
+        {
+            try
+            {
+                PutNewPatientTaskResponse result = new PutNewPatientTaskResponse();
+
+                IPatientGoalRepository<GetAllPatientGoalsResponse> repo = PatientGoalRepositoryFactory<GetAllPatientGoalsResponse>.GetPatientTaskRepository(request.ContractNumber, request.Context);
+
+                PatientTask mePTask = new PatientTask
+                {
+                    TTLDate = System.DateTime.UtcNow.AddDays(1),
+                    Status = (int)GoalTaskStatus.Pending,
+                    DeleteFlag = true
+                };
+
+                PatientTask rpt = (PatientTask)repo.Insert(mePTask);
+                result.Id = rpt.Id;
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        #endregion
     }
 }   

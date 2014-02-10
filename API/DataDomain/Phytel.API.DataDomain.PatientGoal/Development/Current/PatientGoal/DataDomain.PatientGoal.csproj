@@ -64,6 +64,7 @@
   <ItemGroup>
     <Compile Include="IPatientGoalRepository.cs" />
     <Compile Include="MongoDB\DTO\Enums.cs" />
+    <Compile Include="MongoDB\DTO\Attribute.cs" />
     <Compile Include="MongoDB\DTO\GoalBase.cs" />
     <Compile Include="MongoDB\DTO\MEPatientTask.cs" />
     <Compile Include="MongoDB\DTO\MEPatientIntervention.cs" />

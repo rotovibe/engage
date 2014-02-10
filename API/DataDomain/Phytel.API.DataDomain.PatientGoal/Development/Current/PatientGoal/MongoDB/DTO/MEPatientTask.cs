@@ -15,16 +15,6 @@ namespace Phytel.API.DataDomain.PatientGoal.DTO
         public MEPatientTask() { Id = ObjectId.GenerateNewId(); }
 
         public const string IdProperty = "_id";
-
-        #region Standard IMongoEntity Constants
-        public const string ExtraElementsProperty = "ex";
-        public const string VersionProperty = "v";
-        public const string UpdatedByProperty = "uby";
-        public const string DeleteFlagProperty = "del";
-        public const string TTLDateProperty = "ttl";
-        public const string LastUpdatedOnProperty = "uon";
-        #endregion
-        
         [BsonId]
         public ObjectId Id { get; set; }
 
@@ -33,11 +23,21 @@ namespace Phytel.API.DataDomain.PatientGoal.DTO
         [BsonIgnoreIfNull(false)]
         public string TargetValue { get; set; }
 
+        public const string StatusProperty = "sts";
+        [BsonElement(StatusProperty)]
+        [BsonIgnoreIfNull(true)]
+        public GoalTaskStatus Status { get; set; }
+
         public const string TargetDateProperty = "td";
         [BsonElement(TargetDateProperty)]
         [BsonIgnoreIfNull(true)]
         [BsonDateTimeOptions(Kind = System.DateTimeKind.Local)]
         public DateTime? TargetDate { get; set; }
+
+        public const string AttributesProperty = "attr";
+        [BsonElement(AttributesProperty)]
+        [BsonIgnoreIfNull(false)]
+        public List<Attribute> Attributes { get; set; }
 
         public const string BarriersProperty = "bar";
         [BsonElement(BarriersProperty)]
@@ -45,28 +45,34 @@ namespace Phytel.API.DataDomain.PatientGoal.DTO
         public List<ObjectId> Barriers { get; set; }
 
         #region Standard IMongoEntity Implementation
+        public const string ExtraElementsProperty = "ex";
         [BsonElement(ExtraElementsProperty)]
         [BsonExtraElements()]
         [BsonIgnoreIfNull(true)]
         public Dictionary<string, object> ExtraElements { get; set; }
 
+        public const string VersionProperty = "v";
         [BsonElement(VersionProperty)]
         [BsonDefaultValue("v1")]
         public string Version { get; set; }
 
+        public const string UpdatedByProperty = "uby";
         [BsonElement(UpdatedByProperty)]
         [BsonDefaultValue("-100")]
         public string UpdatedBy { get; set; }
 
+        public const string DeleteFlagProperty = "del";
         [BsonElement(DeleteFlagProperty)]
         [BsonDefaultValue(false)]
         public bool DeleteFlag { get; set; }
 
+        public const string TTLDateProperty = "ttl";
         [BsonElement(TTLDateProperty)]
         [BsonIgnoreIfNull(true)]
         [BsonDateTimeOptions(Kind = System.DateTimeKind.Local)]
         public System.DateTime? TTLDate { get; set; }
 
+        public const string LastUpdatedOnProperty = "uon";
         [BsonElement(LastUpdatedOnProperty)]
         [BsonIgnoreIfNull(true)]
         [BsonDateTimeOptions(Kind = System.DateTimeKind.Local)]

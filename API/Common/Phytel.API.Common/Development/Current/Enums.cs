@@ -110,6 +110,20 @@ namespace Phytel.API.Common
         InputMultiline = 10
     }
 
+    public enum AttributeControlType
+    {
+        YesNo = 1,
+        Text = 2,
+        Input = 3,
+        Single = 4,
+        Multi = 5,
+        Date = 6,
+        Complete = 7,
+        DateTime = 8,
+        Time = 9,
+        InputMultiline = 10
+    }
+
     public enum AuditType
     {
         GetPatient = 375,

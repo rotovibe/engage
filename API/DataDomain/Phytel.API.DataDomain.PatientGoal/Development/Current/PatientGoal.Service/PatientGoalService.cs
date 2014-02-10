@@ -6,7 +6,7 @@ using Phytel.API.Common.Format;
 
 namespace Phytel.API.DataDomain.PatientGoal.Service
 {
-    public class PatientGoalService : ServiceStack.ServiceInterface.Service
+    public partial class PatientGoalService : ServiceStack.ServiceInterface.Service
     {
         public GetPatientGoalResponse Post(GetPatientGoalRequest request)
         {

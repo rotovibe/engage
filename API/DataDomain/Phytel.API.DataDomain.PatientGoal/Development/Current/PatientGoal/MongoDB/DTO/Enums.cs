@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Phytel.API.DataDomain.PatientGoal.DTO
 {
-    internal enum GoalTaskStatus
+    public enum GoalTaskStatus
     {
         Pending,
         Open,
