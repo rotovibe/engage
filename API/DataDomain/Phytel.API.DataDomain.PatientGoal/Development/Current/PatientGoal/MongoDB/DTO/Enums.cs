@@ -8,6 +8,7 @@ namespace Phytel.API.DataDomain.PatientGoal.DTO
 {
     internal enum GoalTaskStatus
     {
+        Pending,
         Open,
         Met,
         NotMet,
@@ -16,12 +17,14 @@ namespace Phytel.API.DataDomain.PatientGoal.DTO
 
     internal enum BarrierStatus
     {
+        Pending,
         Open,
         Resolved
     }
 
     internal enum InterventionStatus
     {
+        Pending,
         Open,
         Completed,
         Removed
