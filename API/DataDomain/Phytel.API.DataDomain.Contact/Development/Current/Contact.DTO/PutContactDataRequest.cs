@@ -11,7 +11,7 @@ namespace Phytel.API.DataDomain.Contact.DTO
         [ApiMember(Name = "PatientId", Description = "Id of the patient for whom Contact is inserted.", ParameterType = "property", DataType = "string", IsRequired = true)]
         public string PatientId { get; set; }
 
-        [ApiMember(Name = "Modes", Description = "List of CommModes being updated", ParameterType = "property", DataType = "List<CommModeData>", IsRequired = false)]
+        [ApiMember(Name = "Modes", Description = "List of CommModes being updated", ParameterType = "property", DataType = "List<CommModeData>", IsRequired = true)]
         public List<CommModeData> Modes { get; set; }
 
         [ApiMember(Name = "WeekDays", Description = "List of Week of days being updated", ParameterType = "property", DataType = "List<int>", IsRequired = false)]
