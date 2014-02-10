@@ -18,7 +18,7 @@ namespace Phytel.API.AppDomain.Program
         public ProgramMongoContext(string contractDBName)
             : base(contractDBName, true)
         {
-            Programs = new MongoSet<MEContractProgram, ObjectId>(this, COLL_ContractProgramS);
+            Programs = new MongoSet<MEProgram, ObjectId>(this, COLL_ContractProgramS);
             PatientPrograms = new MongoSet<MEPatientProgram, ObjectId>(this, COLL_PatientProgramS);
             PatientProgramResponses = new MongoSet<MEPatientProgramResponse, ObjectId>(this, COLL_PatientProgramResponseS);
             Responses = new MongoSet<MEResponse, ObjectId>(this, COLL_StepResponseS);
@@ -28,7 +28,7 @@ namespace Phytel.API.AppDomain.Program
             TempProgramResponses = new MongoSet<METempResponse, ObjectId>(this, COLL_TempResponseS);
         }
 
-        public MongoSet<MEContractProgram, ObjectId> Programs { get; private set; }
+        public MongoSet<MEProgram, ObjectId> Programs { get; private set; }
         public MongoSet<MEPatientProgram, ObjectId> PatientPrograms { get; private set; }
         public MongoSet<MEPatientProgramResponse, ObjectId> PatientProgramResponses { get; private set; }
         public MongoSet<MEResponse, ObjectId> Responses { get; private set; }

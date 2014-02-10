@@ -12,6 +12,6 @@ namespace Phytel.API.DataDomain.Program
     public interface IProgramRepository<T> : IRepository<T>
     {
         List<ProgramInfo> GetActiveProgramsInfoList(GetAllActiveProgramsRequest request);
-        MEContractProgram FindByID(string entityID, bool temp);
+        MEProgram FindByID(string entityID, bool temp);
     }
 }

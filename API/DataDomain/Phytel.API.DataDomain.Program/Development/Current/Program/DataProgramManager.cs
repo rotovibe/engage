@@ -427,7 +427,7 @@ namespace Phytel.API.DataDomain.Program
                 Phytel.API.DataDomain.Program.ProgramRepositoryFactory<GetContractProgramResponse>
                 .GetContractProgramRepository(request.ContractNumber, request.Context);
 
-            MEContractProgram cProg = (MEContractProgram)progAttr.FindByID(request.ContractProgramID, true);
+            MEProgram cProg = (MEProgram)progAttr.FindByID(request.ContractProgramID, true);
 
             foreach (Module m in cProg.Modules)
             {

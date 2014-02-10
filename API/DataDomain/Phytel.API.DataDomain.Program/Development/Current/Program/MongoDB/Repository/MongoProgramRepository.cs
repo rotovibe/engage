@@ -106,7 +106,7 @@ namespace Phytel.API.DataDomain.Program
 
 
 
-        public MEContractProgram FindByID(string entityID, bool temp)
+        public MEProgram FindByID(string entityID, bool temp)
         {
             throw new NotImplementedException();
         }

@@ -42,12 +42,12 @@ namespace Phytel.API.DataDomain.Program
             throw new NotImplementedException();
         }
 
-        public MEContractProgram FindByID(string entityID, bool temp)
+        public MEProgram FindByID(string entityID, bool temp)
         {
-            MEContractProgram program = null;
+            MEProgram program = null;
             using (ProgramMongoContext ctx = new ProgramMongoContext(_dbName))
             {
-                var findcp = Query<MEContractProgram>.EQ(b => b.Id, ObjectId.Parse(entityID));
+                var findcp = Query<MEProgram>.EQ(b => b.Id, ObjectId.Parse(entityID));
                 program = ctx.Programs.Collection.Find(findcp).FirstOrDefault();
             }
             return program;
@@ -80,8 +80,8 @@ namespace Phytel.API.DataDomain.Program
             {
                 using (ProgramMongoContext ctx = new ProgramMongoContext(_dbName))
                 {
-                    IMongoQuery mQuery = Query.EQ(MEContractProgram.StatusProperty, 1);
-                    MongoCursor<MEContractProgram> fnd = ctx.Programs.Collection.Find(mQuery);
+                    IMongoQuery mQuery = Query.EQ(MEProgram.StatusProperty, 1);
+                    MongoCursor<MEProgram> fnd = ctx.Programs.Collection.Find(mQuery);
 
                     result = ctx.Programs.Collection.Find(mQuery).Select(r => new ProgramInfo
                     {
