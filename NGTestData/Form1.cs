@@ -102,6 +102,7 @@ namespace NGTestData
                 List<Address> addresses = new List<Address>();
                 List<Email> emails = new List<Email>();
                 List<Phone> phones = new List<Phone>();
+                List<Phytel.API.DataDomain.Contact.DTO.CommMode> modes = new List<Phytel.API.DataDomain.Contact.DTO.CommMode>();
 
                 string sqlAddressQuery = string.Format("select top 1 Address1, Address2, City, [State], ZipCode from Address Where OwnerID = {0}", patientSystemID);
                 string sqlEmailQuery = string.Format("select top 1 Address from Email Where OwnerID = {0}", patientSystemID);
@@ -128,23 +129,29 @@ namespace NGTestData
                 }
 
                 if (dsEmail.Tables[0].Rows.Count > 0)
-                    emails.Add(new Email { Id = ObjectId.GenerateNewId(), Preferred = true, Text = dsEmail.Tables[0].Rows[0]["Address"].ToString() });
+                    emails.Add(new Email { TypeId = ObjectId.Parse("52e18c2ed433232028e9e3a6"), Id = ObjectId.GenerateNewId(), Preferred = true, Text = dsEmail.Tables[0].Rows[0]["Address"].ToString() });
 
                 if (dsPhone.Tables[0].Rows.Count > 0)
                     phones.Add(new Phone { Id = ObjectId.GenerateNewId(), IsText = true, Number = long.Parse(dsPhone.Tables[0].Rows[0]["DialString"].ToString()), PreferredPhone = true, PreferredText = false, TypeId = ObjectId.Parse("52e18c2ed433232028e9e3a6") });
+
+                modes.Add(new Phytel.API.DataDomain.Contact.DTO.CommMode { ModeId = ObjectId.Parse("52e17cc2d433232028e9e38f"), OptOut = false, Preferred = false });
+                modes.Add(new Phytel.API.DataDomain.Contact.DTO.CommMode { ModeId = ObjectId.Parse("52e17ce6d433232028e9e390"), OptOut = false, Preferred = false });
+                modes.Add(new Phytel.API.DataDomain.Contact.DTO.CommMode { ModeId = ObjectId.Parse("52e17d08d433232028e9e391"), OptOut = false, Preferred = false });
+                modes.Add(new Phytel.API.DataDomain.Contact.DTO.CommMode { ModeId = ObjectId.Parse("52e17d10d433232028e9e392"), OptOut = false, Preferred = false });
 
                 MEContact patContact = new MEContact
                     {
                         Addresses = addresses,
                         Emails = emails,
-                        FirstName = patient.FirstName,
-                        Gender = patient.Gender,
-                        LastName = patient.LastName,
-                        MiddleName = patient.MiddleName,
+                        FirstName = string.Empty,
+                        Gender = string.Empty,
+                        LastName = string.Empty,
+                        MiddleName = string.Empty,
                         PatientId = patient.Id,
                         Phones = phones,
-                        PreferredName = patient.PreferredName,
-                        TimeZone = ObjectId.Parse("52e1817dd433232028e9e39e")
+                        PreferredName = string.Empty,
+                        TimeZone = ObjectId.Parse("52e1817dd433232028e9e39e"),
+                        Modes = modes
                     };
 
                 MEPatientSystem patSystem = new MEPatientSystem
