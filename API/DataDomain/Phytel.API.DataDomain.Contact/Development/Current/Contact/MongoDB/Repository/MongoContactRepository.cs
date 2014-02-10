@@ -33,39 +33,150 @@ namespace Phytel.API.DataDomain.Contact
             PutContactDataRequest request = newEntity as PutContactDataRequest;
             try
             {
-                MEContact meContact = new MEContact
-                {
-                    Id = ObjectId.GenerateNewId(),
-                    PatientId = ObjectId.Parse(request.PatientId),
-                    Version = request.Version,
-                    LastUpdatedOn = DateTime.UtcNow,
-                    UpdatedBy = request.UserId,
-                    DeleteFlag = false
-                };
-
-                //Timezone
-                if (request.TimeZoneId != null)
-                { 
-                    meContact.TimeZone = ObjectId.Parse(request.TimeZoneId);
-                }
-                //Modes
-                if (request.Modes != null && request.Modes.Count > 0)
-                {
-                    List<CommMode> commModes = new List<CommMode>();
-                    foreach (CommModeData c in request.Modes)
-                    {
-                        commModes.Add(new CommMode { ModeId = ObjectId.Parse(c.ModeId), OptOut = c.OptOut, Preferred = c.Preferred });
-                    }
-                    meContact.Modes = commModes;
-                }
-
+                
                 using (ContactMongoContext ctx = new ContactMongoContext(_dbName))
                 {
-                    ctx.Contacts.Collection.Insert(meContact);
+                    List<IMongoQuery> queries = new List<IMongoQuery>();
+                    queries.Add(Query.EQ(MEContact.PatientIdProperty, ObjectId.Parse(request.PatientId)));
+                    queries.Add(Query.EQ(MEContact.DeleteFlagProperty, false));
+                    IMongoQuery query = Query.And(queries);
+                    MEContact mc = ctx.Contacts.Collection.Find(query).FirstOrDefault();
+                    if (mc != null)
+                    {
+                        throw new ApplicationException("A contact record already exists for the patient.");
+                    }
+                    else
+                    {
+                        MEContact meContact = new MEContact
+                        {
+                            Id = ObjectId.GenerateNewId(),
+                            PatientId = ObjectId.Parse(request.PatientId),
+                            Version = request.Version,
+                            LastUpdatedOn = DateTime.UtcNow,
+                            UpdatedBy = request.UserId,
+                            DeleteFlag = false
+                        };
+
+                        //Timezone
+                        if (request.TimeZoneId != null)
+                        {
+                            meContact.TimeZone = ObjectId.Parse(request.TimeZoneId);
+                        }
+                        //Modes
+                        if (request.Modes != null && request.Modes.Count > 0)
+                        {
+                            List<CommMode> commModes = new List<CommMode>();
+                            foreach (CommModeData c in request.Modes)
+                            {
+                                commModes.Add(new CommMode { ModeId = ObjectId.Parse(c.ModeId), OptOut = c.OptOut, Preferred = c.Preferred });
+                            }
+                            meContact.Modes = commModes;
+                        }
+
+                        //Weekdays
+                        if (request.WeekDays != null && request.WeekDays.Count > 0)
+                        {
+                            meContact.WeekDays = request.WeekDays;
+                        }
+
+                        //TimesOfDays
+                        if (request.TimesOfDaysId != null && request.TimesOfDaysId.Count > 0)
+                        {
+                            List<ObjectId> ids = new List<ObjectId>();
+                            foreach (string s in request.TimesOfDaysId)
+                            {
+                                ids.Add(ObjectId.Parse(s));
+                            }
+                            meContact.TimesOfDays = ids;
+                        }
+
+                        //Languages
+                        if (request.Languages != null && request.Languages.Count > 0)
+                        {
+                            List<Language> languages = new List<Language>();
+                            foreach (LanguageData c in request.Languages)
+                            {
+                                languages.Add(new Language { LookUpLanguageId = ObjectId.Parse(c.LookUpLanguageId), Preferred = c.Preferred });
+                            }
+                            meContact.Languages = languages;
+                        }
+
+                        //Addresses
+                        if (request.Addresses != null && request.Addresses.Count > 0)
+                        {
+                            List<Address> meAddresses = new List<Address>();
+                            List<AddressData> addressData = request.Addresses;
+                            foreach (AddressData p in addressData)
+                            {
+                                Address me = new Address
+                                {
+                                    Id = ObjectId.GenerateNewId(),
+                                    TypeId = ObjectId.Parse(p.TypeId),
+                                    Line1 = p.Line1,
+                                    Line2 = p.Line2,
+                                    Line3 = p.Line3,
+                                    City = p.City,
+                                    StateId = ObjectId.Parse(p.StateId),
+                                    PostalCode = p.PostalCode,
+                                    Preferred = p.Preferred,
+                                    OptOut = p.OptOut,
+                                    DeleteFlag = false
+                                };
+                                meAddresses.Add(me);
+                            }
+                            meContact.Addresses = meAddresses;
+                        }
+
+                        //Phones
+                        if (request.Phones != null && request.Phones.Count > 0)
+                        {
+                            List<Phone> mePhones = new List<Phone>();
+                            List<PhoneData> phoneData = request.Phones;
+                            foreach (PhoneData p in phoneData)
+                            {
+                                Phone mePh = new Phone
+                                {
+                                    Id = ObjectId.GenerateNewId(),
+                                    Number = p.Number,
+                                    IsText = p.IsText,
+                                    TypeId = ObjectId.Parse(p.TypeId),
+                                    PreferredPhone = p.PhonePreferred,
+                                    PreferredText = p.TextPreferred,
+                                    OptOut = p.OptOut,
+                                    DeleteFlag = false
+                                };
+                                mePhones.Add(mePh);
+                            }
+                            meContact.Phones = mePhones;
+                        }
+
+                        //Emails
+                        if (request.Emails != null && request.Emails.Count > 0)
+                        {
+                            List<Email> meEmails = new List<Email>();
+                            List<EmailData> emailData = request.Emails;
+                            foreach (EmailData p in emailData)
+                            {
+                                Email me = new Email
+                                {
+                                    Id = ObjectId.GenerateNewId(),
+                                    Text = p.Text,
+                                    Preferred = p.Preferred,
+                                    TypeId = ObjectId.Parse(p.TypeId),
+                                    OptOut = p.OptOut,
+                                    DeleteFlag = false
+                                };
+                                meEmails.Add(me);
+                            }
+                            meContact.Emails = meEmails;
+                        }
+
+                        ctx.Contacts.Collection.Insert(meContact);
+                        //Send back the newly inserted object.
+                        response = new PutContactDataResponse();
+                        response.ContactId = meContact.Id.ToString();
+                    }
                 }
-                //Send back the newly inserted object.
-                response = new PutContactDataResponse();
-                response.ContactId = meContact.Id.ToString();
             }
             catch (Exception ex)
             {
