@@ -419,58 +419,6 @@ namespace Phytel.API.DataDomain.Program
             return response;
         }
 
-        public static GetContractProgramResponse ImportContractProgramResponses(GetContractProgramRequest request)
-        {
-            GetContractProgramResponse response = new GetContractProgramResponse();
-
-            IProgramRepository<GetContractProgramResponse> progAttr =
-                Phytel.API.DataDomain.Program.ProgramRepositoryFactory<GetContractProgramResponse>
-                .GetContractProgramRepository(request.ContractNumber, request.Context);
-
-            MEProgram cProg = (MEProgram)progAttr.FindByID(request.ContractProgramID, true);
-
-            foreach (Module m in cProg.Modules)
-            {
-                foreach (MongoDB.DTO.Action a in m.Actions)
-                {
-                    foreach (MongoDB.DTO.Step s in a.Steps)
-                    {
-                        GetResponsesForStep(s, request.ContractNumber, request.Context);
-                    }
-                }
-            }
-
-            return response;
-        }
-
-        private static void GetResponsesForStep(Step step, string contract, string context)
-        {
-            GetStepResponseListResponse response = null;
-            response = DTOUtils.GetStepResponses(step.Id.ToString(), contract, true);
-            List<StepResponse> respList = response.StepResponseList;
-
-            IProgramRepository<GetStepResponseListResponse> progAttr =
-                Phytel.API.DataDomain.Program.ProgramRepositoryFactory<GetStepResponseListResponse>
-                .GetTempContractResponsesRepository(contract, context);
-
-            foreach(StepResponse s in respList){
-                MEResponse mresp = new MEResponse
-                {
-                    Value = s.Value,
-                    Text = s.Text,
-                    StepId = ObjectId.Parse(s.StepId),
-                    Spawn = CreateSpawn(s.Spawn),
-                    Required = s.Required,
-                    Order = s.Order,
-                    Nominal = s.Nominal,
-                    NextStepId = ObjectId.Parse(s.NextStepId),
-                    Id = ObjectId.Parse(s.Id)
-                };
-
-                object result = progAttr.Insert(mresp );
-            };
-        }
-
         private static List<SpawnElement> CreateSpawn(List<SpawnElementDetail> list)
         {
             List<SpawnElement> se = new List<SpawnElement>();

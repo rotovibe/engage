@@ -68,15 +68,5 @@ namespace Phytel.API.DataDomain.Program
 
             return repo;
         }
-
-        internal static IProgramRepository<T> GetTempContractResponsesRepository(string dbName, string productName)
-        {
-            IProgramRepository<T> repo = null;
-
-            //We only have 1 repository at this time, just return it
-            repo = new MongoTempContractProgramResponseRepository<T>(dbName) as IProgramRepository<T>;
-
-            return repo;
-        }
     }
 }

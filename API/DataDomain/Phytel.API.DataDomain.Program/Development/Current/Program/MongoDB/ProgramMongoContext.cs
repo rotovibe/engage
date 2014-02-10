@@ -12,8 +12,6 @@ namespace Phytel.API.AppDomain.Program
         private static string COLL_PatientProgramResponseS = "PatientProgramResponse";
         private static string COLL_StepResponseS = "Response";
         private static string COLL_ProgramAttributeS = "PatientProgramAttribute";
-        // this is temp!!!
-        private static string COLL_TempResponseS = "Temp_Response";
 
         public ProgramMongoContext(string contractDBName)
             : base(contractDBName, true)
@@ -23,9 +21,6 @@ namespace Phytel.API.AppDomain.Program
             PatientProgramResponses = new MongoSet<MEPatientProgramResponse, ObjectId>(this, COLL_PatientProgramResponseS);
             Responses = new MongoSet<MEResponse, ObjectId>(this, COLL_StepResponseS);
             ProgramAttributes = new MongoSet<MEProgramAttribute, ObjectId>(this, COLL_ProgramAttributeS);
-
-            // temp!!
-            TempProgramResponses = new MongoSet<METempResponse, ObjectId>(this, COLL_TempResponseS);
         }
 
         public MongoSet<MEProgram, ObjectId> Programs { get; private set; }
@@ -33,8 +28,5 @@ namespace Phytel.API.AppDomain.Program
         public MongoSet<MEPatientProgramResponse, ObjectId> PatientProgramResponses { get; private set; }
         public MongoSet<MEResponse, ObjectId> Responses { get; private set; }
         public MongoSet<MEProgramAttribute, ObjectId> ProgramAttributes { get; private set; }
-
-        // temp!
-        public MongoSet<METempResponse, ObjectId> TempProgramResponses { get; private set; }
     }
 }

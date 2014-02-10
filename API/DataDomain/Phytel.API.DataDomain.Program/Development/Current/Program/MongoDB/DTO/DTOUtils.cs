@@ -955,38 +955,6 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             }
         }
 
-        private static List<MEPatientProgramResponse> StepConvert(List<MEResponse> list)
-        {
-            try
-            {
-                List<MEPatientProgramResponse> meresp = new List<MEPatientProgramResponse>();
-
-                if (list == null)
-                {
-                    list.ForEach(r =>
-                    {
-                        meresp.Add(new MEPatientProgramResponse
-                        {
-                            Id = r.Id,
-                            NextStepId = r.NextStepId,
-                            Nominal = r.Nominal,
-                            Order = r.Order,
-                            Required = r.Required,
-                            Spawn = r.Spawn,
-                            StepId = r.StepId,
-                            Text = r.Text,
-                            Value = r.Value
-                        });
-                    });
-                }
-                return meresp;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("DataDomain:StepConvert():" + ex.Message, ex.InnerException);
-            }
-        }
-
         public static List<SpawnElementDetail> GetResponseSpawnElement(List<SpawnElement> mESpawnElement)
         {
             try

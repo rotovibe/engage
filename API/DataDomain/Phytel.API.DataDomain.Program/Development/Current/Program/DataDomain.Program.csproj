@@ -83,7 +83,6 @@
     <Compile Include="MongoDB\DTO\SpawnElement.cs" />
     <Compile Include="MongoDB\DTO\ProgramBase.cs" />
     <Compile Include="MongoDB\Repository\MongoPatientProgramAttributeRepository.cs" />
-    <Compile Include="MongoDB\Repository\MongoTempContractProgramResponseRepository.cs" />
     <Compile Include="MongoDB\Repository\MongoPatientProgramResponseRepository.cs" />
     <Compile Include="MongoDB\Repository\MongopResponseRepository.cs" />
     <Compile Include="MongoDB\Repository\MongoPatientProgramRepository.cs" />

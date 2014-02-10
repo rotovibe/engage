@@ -26,7 +26,21 @@ namespace Phytel.API.DataDomain.Program
 
         public object Insert(object newEntity)
         {
-            MEResponse mer = newEntity as MEResponse;
+            ResponseDetail rs = (ResponseDetail)newEntity;
+            MEResponse mer = new MEResponse
+            {
+                Id = ObjectId.Parse(rs.Id),
+                NextStepId = ObjectId.Parse(rs.NextStepId),
+                Nominal = rs.Nominal,
+                Order = rs.Order,
+                Required = rs.Required,
+                Spawn = DTOUtils.GetSpawnElements(rs.SpawnElement),
+                StepId = ObjectId.Parse(rs.StepId),
+                Text = rs.Text,
+                Value = rs.Value
+            };
+
+            //MEResponse mer = newEntity as MEResponse;
             bool res = false;
             try
             {
