@@ -13,5 +13,6 @@ namespace Phytel.API.AppDomain.NG.Service
 {
     public partial class NGService : ServiceStack.ServiceInterface.Service
     {
+
     }
 }
