@@ -59,9 +59,7 @@ namespace Phytel.API.DataDomain.PatientGoal
 
                 PatientTask mePTask = new PatientTask
                 {
-                    TTLDate = System.DateTime.UtcNow.AddDays(1),
-                    Status = (int)GoalTaskStatus.Pending,
-                    DeleteFlag = true
+                    TTLDate = System.DateTime.UtcNow.AddDays(1)
                 };
 
                 PatientTask rpt = (PatientTask)repo.Insert(mePTask);
