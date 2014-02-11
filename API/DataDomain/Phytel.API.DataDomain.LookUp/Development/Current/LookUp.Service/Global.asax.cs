@@ -5,10 +5,10 @@ namespace Phytel.API.DataDomain.Patient.Service
 {
     public class Global : System.Web.HttpApplication
     {
-        public class PatientAppHost : AppHostBase
+        public class LookUpAppHost : AppHostBase
         {
             //Tell Service Stack the name of your application and where to find your web services
-            public PatientAppHost() : base("Phytel LookUp Data Domain Services", typeof(LookUpService).Assembly) { }
+            public LookUpAppHost() : base("Phytel LookUp Data Domain Services", typeof(LookUpService).Assembly) { }
 
             public override void Configure(Funq.Container container)
             {
@@ -19,7 +19,7 @@ namespace Phytel.API.DataDomain.Patient.Service
 
         protected void Application_Start(object sender, EventArgs e)
         {
-            new PatientAppHost().Init();
+            new LookUpAppHost().Init();
 
         }
 

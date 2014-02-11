@@ -1343,13 +1343,13 @@ namespace Phytel.API.AppDomain.NG
             {
                 List<LookUp> response = new List<LookUp>();
                 IRestClient client = new JsonServiceClient();
-                // [Route("/{Context}/{Version}/{ContractNumber}/{Type}", "GET")]
-                Phytel.API.DataDomain.LookUp.DTO.GetLookUpsDataResponse dataDomainResponse = client.Get<Phytel.API.DataDomain.LookUp.DTO.GetLookUpsDataResponse>(string.Format("{0}/{1}/{2}/{3}/{4}",
+                //[Route("/{Context}/{Version}/{ContractNumber}/Type/{Name}", "GET")]
+                Phytel.API.DataDomain.LookUp.DTO.GetLookUpsDataResponse dataDomainResponse = client.Get<Phytel.API.DataDomain.LookUp.DTO.GetLookUpsDataResponse>(string.Format("{0}/{1}/{2}/{3}/Type/{4}",
                                                                                                                 DDLookupServiceUrl,
                                                                                                                 "NG",
                                                                                                                 request.Version,
                                                                                                                 request.ContractNumber,
-                                                                                                                request.Type));
+                                                                                                                request.TypeName));
 
                 List<LookUpData> dataList = dataDomainResponse.LookUpsData;
 

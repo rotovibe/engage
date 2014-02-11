@@ -489,26 +489,41 @@ namespace Phytel.API.DataDomain.LookUp
         public List<LookUpData> GetLookps(string type)
         {
             List<LookUpData> lookupList = null;
-            using (LookUpMongoContext ctx = new LookUpMongoContext(_dbName))
+            try
             {
-                List<IMongoQuery> queries = new List<IMongoQuery>();
-                queries.Add(Query.EQ(MELookup.TypeProperty, type));
-                queries.Add(Query.EQ(MELookup.DeleteFlagProperty, false));
-                IMongoQuery mQuery = Query.And(queries);
-                MELookup meLookup = ctx.LookUps.Collection.Find(mQuery).FirstOrDefault();
-                if (meLookup != null)
+                LookUpType lookUpValue;
+                if (Enum.TryParse(type, out lookUpValue))
                 {
-                    if (meLookup.Data != null)
+                    using (LookUpMongoContext ctx = new LookUpMongoContext(_dbName))
                     {
-                        lookupList = new List<LookUpData>();
-                        foreach (LookUpBase m in meLookup.Data)
+                        List<IMongoQuery> queries = new List<IMongoQuery>();
+                        queries.Add(Query.EQ(MELookup.TypeProperty, lookUpValue));
+                        queries.Add(Query.EQ(MELookup.DeleteFlagProperty, false));
+                        IMongoQuery mQuery = Query.And(queries);
+                        MELookup meLookup = ctx.LookUps.Collection.Find(mQuery).FirstOrDefault();
+                        if (meLookup != null)
                         {
-                            LookUpData data = new LookUpData { ID = m.DataID.ToString(), Name = m.Name };
-                            lookupList.Add(data);
+                            if (meLookup.Data != null)
+                            {
+                                lookupList = new List<LookUpData>();
+                                foreach (LookUpBase m in meLookup.Data)
+                                {
+                                    LookUpData data = new LookUpData { ID = m.DataID.ToString(), Name = m.Name };
+                                    lookupList.Add(data);
+                                }
+                                lookupList = lookupList.OrderBy(s => s.Name).ToList();
+                            }
                         }
-                        lookupList = lookupList.OrderBy(s => s.Name).ToList();
                     }
                 }
+                else
+                {
+                    throw new ApplicationException("Type requested does not exists.");
+                }
+            }
+            catch (Exception ex)
+            { 
+                throw ex;
             }
             return lookupList;
         }

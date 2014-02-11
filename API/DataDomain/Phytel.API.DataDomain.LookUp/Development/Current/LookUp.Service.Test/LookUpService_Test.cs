@@ -186,5 +186,25 @@ namespace Phytel.API.DataDomain.LookUp.Services.Test
             Assert.AreNotEqual(0, response.Languages.Count);
         } 
         #endregion
+
+
+
+        [TestMethod]
+        public void GetLookUpByType_Test()
+        {
+            // Arrange
+            string version = "v1";
+            string contractNumber = "InHealth001";
+            string context = "NG";
+            IRestClient client = new JsonServiceClient();
+
+            // Act
+            GetLookUpsDataResponse response = client.Get<GetLookUpsDataResponse>
+                (string.Format("{0}/{1}/{2}/{3}/{4}",
+                  "http://localhost:8888/LookUp/", context, version, contractNumber, "FocusArea"));
+
+            // Assert
+            Assert.AreNotEqual(0, response.LookUpsData.Count);
+        }
     }
 }

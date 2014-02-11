@@ -4,11 +4,11 @@ using ServiceStack.ServiceHost;
 namespace Phytel.API.DataDomain.LookUp.DTO
 {
     [Api(Description = "A Request object to get the lookups by type from the API.")]
-    [Route("/{Context}/{Version}/{ContractNumber}/{Type}", "GET")]
+    [Route("/{Context}/{Version}/{ContractNumber}/Type/{Name}", "GET")]
     public class GetLookUpsDataRequest : IDataDomainRequest
     {
-        [ApiMember(Name = "Type", Description = "Type of the lookup being requested.", ParameterType = "body", DataType = "string", IsRequired = true)]
-        public string Type { get; set; }
+        [ApiMember(Name = "Name", Description = "Type of the lookup being requested.", ParameterType = "body", DataType = "string", IsRequired = true)]
+        public string Name { get; set; }
 
         [ApiMember(Name = "Context", Description = "Context", ParameterType = "body", DataType = "string", IsRequired = false)]
         public string Context { get; set; }

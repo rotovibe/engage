@@ -177,7 +177,7 @@ namespace Phytel.API.DataDomain.LookUp
             GetLookUpsDataResponse response = new GetLookUpsDataResponse();
 
             ILookUpRepository<LookUpData> repo = LookUpRepositoryFactory<LookUpData>.GetLookUpRepository(request.ContractNumber, request.Context);
-            List<LookUpData> data = repo.GetLookps(request.Type);
+            List<LookUpData> data = repo.GetLookps(request.Name);
 
             if (data != null)
             {
