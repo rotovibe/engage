@@ -94,6 +94,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="GoalsManager.cs" />
     <Compile Include="InterviewManager.cs" />
     <Compile Include="IUnitOfWork.cs" />
     <Compile Include="ManagerBase.cs" />

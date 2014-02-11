@@ -242,58 +242,9 @@ namespace Phytel.API.DataDomain.Program
                         Previous = cp.Previous,
                         SourceId = cp.SourceId,
                         SpawnElement = DTOUtils.GetResponseSpawnElement(cp.Spawn),
-                        Modules = cp.Modules.Where(h => h.Status == Common.Status.Active).Select(r => new ModuleDetail
-                        {
-                            Id = r.Id.ToString(),
-                            Description = r.Description,
-                            Name = r.Name,
-                            Status = (int)r.Status,
-                            Objectives = r.Objectives
-                            .Select(o => new ObjectivesDetail
-                            {
-                                Id = o.Id.ToString(),
-                                Value = o.Value,
-                                Status = (int)o.Status,
-                                Unit = o.Unit
-                            }).ToList(),
-                            Actions = r.Actions.Where(i => i.Status == Common.Status.Active).Select(a => new ActionsDetail
-                            {
-                                CompletedBy = a.CompletedBy,
-                                Description = a.Description,
-                                Id = a.Id.ToString(),
-                                Name = a.Name,
-                                Status = (int)a.Status,
-                                Objectives = a.Objectives
-                                .Select(x => new ObjectivesDetail
-                                {
-                                    Id = x.Id.ToString(),
-                                    Unit = x.Unit,
-                                    Status = (int)x.Status,
-                                    Value = x.Value
-                                }).ToList(),
-                                Steps = a.Steps.Where(j => j.Status == Common.Status.Active).Select(s => new StepsDetail
-                                {
-                                    Description = s.Description,
-                                    Ex = s.Ex,
-                                    Id = s.Id.ToString(),
-                                    Notes = s.Notes,
-                                    Question = s.Question,
-                                    Status = (int)s.Status,
-                                    Title = s.Title,
-                                    Text = s.Text,
-                                    StepTypeId = s.StepTypeId
-                                }).ToList()
-                            }).ToList()
-                        }).ToList(),
+                        Modules = DTOUtils.GetModules(cp.Modules, _dbName),
                         Name = cp.Name,
-                        ObjectivesInfo = cp.ObjectivesInfo
-                        .Select(r => new ObjectivesDetail
-                        {
-                            Id = r.Id.ToString(),
-                            Unit = r.Unit,
-                            Status = (int)r.Status,
-                            Value = r.Value
-                        }).ToList(),
+                        ObjectivesInfo = DTOUtils.GetObjectives(cp.ObjectivesInfo),
                         PatientId = cp.PatientId.ToString(),
                         ProgramState = (int)cp.ProgramState,
                         ShortName = cp.ShortName,

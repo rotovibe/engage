@@ -228,51 +228,58 @@ namespace Phytel.API.DataDomain.Program
 
         public static GetPatientProgramsResponse GetPatientPrograms(GetPatientProgramsRequest request)
         {
-            GetPatientProgramsResponse response = new GetPatientProgramsResponse(); ;
-
-            IProgramRepository<GetPatientProgramsResponse> repo =
-                Phytel.API.DataDomain.Program.ProgramRepositoryFactory<GetPatientProgramsResponse>
-                .GetPatientProgramRepository(request.ContractNumber, request.Context);
-
-            ICollection<SelectExpression> selectExpressions = new List<SelectExpression>();
-
-            // PatientID
-            SelectExpression patientSelectExpression = new SelectExpression();
-            patientSelectExpression.FieldName = MEPatientProgram.PatientIdProperty;
-            patientSelectExpression.Type = SelectExpressionType.EQ;
-            patientSelectExpression.Value = request.PatientId;
-            patientSelectExpression.ExpressionOrder = 1;
-            patientSelectExpression.GroupID = 1;
-            selectExpressions.Add(patientSelectExpression);
-
-            APIExpression apiExpression = new APIExpression();
-            apiExpression.Expressions = selectExpressions;
-
-            Tuple<string, IEnumerable<object>> patientPrograms = repo.Select(apiExpression);
-
-            if (patientPrograms != null)
+            try
             {
-                List<ProgramDetail> pds = patientPrograms.Item2.Cast<ProgramDetail>().ToList();
-                if (pds.Count > 0)
+                GetPatientProgramsResponse response = new GetPatientProgramsResponse(); ;
+
+                IProgramRepository<GetPatientProgramsResponse> repo =
+                    Phytel.API.DataDomain.Program.ProgramRepositoryFactory<GetPatientProgramsResponse>
+                    .GetPatientProgramRepository(request.ContractNumber, request.Context);
+
+                ICollection<SelectExpression> selectExpressions = new List<SelectExpression>();
+
+                // PatientID
+                SelectExpression patientSelectExpression = new SelectExpression();
+                patientSelectExpression.FieldName = MEPatientProgram.PatientIdProperty;
+                patientSelectExpression.Type = SelectExpressionType.EQ;
+                patientSelectExpression.Value = request.PatientId;
+                patientSelectExpression.ExpressionOrder = 1;
+                patientSelectExpression.GroupID = 1;
+                selectExpressions.Add(patientSelectExpression);
+
+                APIExpression apiExpression = new APIExpression();
+                apiExpression.Expressions = selectExpressions;
+
+                Tuple<string, IEnumerable<object>> patientPrograms = repo.Select(apiExpression);
+
+                if (patientPrograms != null)
                 {
+                    List<ProgramDetail> pds = patientPrograms.Item2.Cast<ProgramDetail>().ToList();
+                    if (pds.Count > 0)
+                    {
 
-                    List<ProgramInfo> lpi = new List<ProgramInfo>();
-                    pds.ForEach(pd => lpi.Add(new ProgramInfo
-                        {
-                            Id = pd.Id,
-                            Name = pd.Name,
-                            PatientId = pd.PatientId,
-                            ProgramState = pd.ProgramState,
-                            ShortName = pd.ShortName,
-                            Status = pd.Status,
-                             ElementState = pd.ElementState
-                        })
-                    );
-                    response.programs = lpi;
+                        List<ProgramInfo> lpi = new List<ProgramInfo>();
+                        pds.ForEach(pd => lpi.Add(new ProgramInfo
+                            {
+                                Id = pd.Id,
+                                Name = pd.Name,
+                                PatientId = pd.PatientId,
+                                ProgramState = pd.ProgramState,
+                                ShortName = pd.ShortName,
+                                Status = pd.Status,
+                                ElementState = pd.ElementState
+                            })
+                        );
+                        response.programs = lpi;
+                    }
                 }
-            }
 
-            return response;
+                return response;
+            }
+            catch
+            {
+                throw;
+            }
         }
 
         public static PutUpdateResponseResponse PutUpdateResponse(PutUpdateResponseRequest r)
