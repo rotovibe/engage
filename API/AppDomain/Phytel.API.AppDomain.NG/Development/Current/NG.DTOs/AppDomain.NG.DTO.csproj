@@ -96,6 +96,10 @@
     <Compile Include="Contact\PutUpdateContactResponse.cs" />
     <Compile Include="GetPatientProgramsRequest.cs" />
     <Compile Include="GetPatientProgramsResponse.cs" />
+    <Compile Include="Goal\GetInitializeTaskRequest.cs" />
+    <Compile Include="Goal\GetInitializeTaskResponse.cs" />
+    <Compile Include="Goal\NGTaskAttribute.cs" />
+    <Compile Include="Goal\PatientTask.cs" />
     <Compile Include="LookUp\Goal\GetLookUpsRequest.cs" />
     <Compile Include="LookUp\Goal\GetLookUpsResponse.cs" />
     <Compile Include="LookUp\Contact\GetAllLanguagesRequest.cs" />
