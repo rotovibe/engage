@@ -212,5 +212,24 @@ namespace Phytel.API.DataDomain.Patient.Service
 
         #endregion
 
+
+        #region Goal Related LookUps
+        public GetLookUpsDataResponse Get(GetLookUpsDataRequest request)
+        {
+            GetLookUpsDataResponse response = new GetLookUpsDataResponse();
+            try
+            {
+                response = LookUpDataManager.GetLookUpsByType(request);
+            }
+            catch (Exception ex)
+            {
+                //TODO: Log this to the SQL database via ASE
+                base.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                response.Status = new ServiceStack.ServiceInterface.ServiceModel.ResponseStatus("Exception", ex.Message);
+            }
+            return response;
+        }
+        #endregion  
+
     }
 }

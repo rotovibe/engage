@@ -73,6 +73,11 @@ namespace Phytel.API.DataDomain.LookUp.DTO
         State = 6,
         TimesOfDay = 7,
         TimeZone = 8,
-        Language = 9
+        Language = 9,
+        FocusArea = 10,
+        Source = 11,
+        StageOfChange = 12,
+        BarrierCategory = 13,
+        InterventionCategory = 14
     }
 }

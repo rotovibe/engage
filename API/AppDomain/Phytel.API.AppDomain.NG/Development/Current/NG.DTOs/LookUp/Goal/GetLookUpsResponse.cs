@@ -8,11 +8,10 @@ using Phytel.API.Interface;
 
 namespace Phytel.API.AppDomain.NG.DTO
 {
-    public class GetAllBarrierCategoriesResponse : IDomainResponse
+    public class GetLookUpsResponse : IDomainResponse
     {
-        public List<LookUp> BarrierCategories { get; set; }
+        public List<LookUp> LookUps { get; set; }
         public ResponseStatus Status { get; set; }
         public string Version { get; set; }
-
     }
 }

@@ -170,5 +170,21 @@ namespace Phytel.API.DataDomain.LookUp
             return response;
         }
         #endregion
+
+        #region Goal Related LookUps
+        public static GetLookUpsDataResponse GetLookUpsByType(GetLookUpsDataRequest request)
+        {
+            GetLookUpsDataResponse response = new GetLookUpsDataResponse();
+
+            ILookUpRepository<LookUpData> repo = LookUpRepositoryFactory<LookUpData>.GetLookUpRepository(request.ContractNumber, request.Context);
+            List<LookUpData> data = repo.GetLookps(request.Type);
+
+            if (data != null)
+            {
+                response.LookUpsData = data;
+            }
+            return response;
+        }
+        #endregion  
     }
 }   

@@ -3,10 +3,13 @@ using Phytel.API.Interface;
 
 namespace Phytel.API.AppDomain.NG.DTO
 {
-     [Route("/{Version}/{ContractNumber}/lookup/sources", "GET")]
-    public class GetAllSourcesRequest : IAppDomainRequest
+     [Route("/{Version}/{ContractNumber}/lookup/{Type}", "GET")]
+    public class GetLookUpsRequest : IAppDomainRequest
     {
-        [ApiMember(Name = "ContractNumber", Description = "Contract parameter will be defined in the route.", ParameterType = "property", DataType = "string", IsRequired = false)]
+         [ApiMember(Name = "Type", Description = "Type of the lookup", ParameterType = "property", DataType = "string", IsRequired = true)]
+         public string Type { get; set; }
+         
+         [ApiMember(Name = "ContractNumber", Description = "Contract parameter will be defined in the route.", ParameterType = "property", DataType = "string", IsRequired = false)]
         public string ContractNumber { get; set; }
 
         [ApiMember(Name = "Token", Description = "Token parameter in Header", ParameterType = "property", DataType = "string", IsRequired = true)]
@@ -18,6 +21,6 @@ namespace Phytel.API.AppDomain.NG.DTO
         [ApiMember(Name = "UserID", Description = "ID of the user making the request (Internally used ONLY)", ParameterType = "property", DataType = "string", IsRequired = false)]
         public string UserId { get; set; }
 
-        public GetAllSourcesRequest() { }
+        public GetLookUpsRequest() { }
     }
 }

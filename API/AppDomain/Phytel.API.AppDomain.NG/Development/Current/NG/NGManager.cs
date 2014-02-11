@@ -1336,6 +1336,39 @@ namespace Phytel.API.AppDomain.NG
         }
         #endregion
 
+        #region Goal
+        public List<LookUp> GetLookUps(GetLookUpsRequest request)
+        {
+            try
+            {
+                List<LookUp> response = new List<LookUp>();
+                IRestClient client = new JsonServiceClient();
+                // [Route("/{Context}/{Version}/{ContractNumber}/{Type}", "GET")]
+                Phytel.API.DataDomain.LookUp.DTO.GetLookUpsDataResponse dataDomainResponse = client.Get<Phytel.API.DataDomain.LookUp.DTO.GetLookUpsDataResponse>(string.Format("{0}/{1}/{2}/{3}/{4}",
+                                                                                                                DDLookupServiceUrl,
+                                                                                                                "NG",
+                                                                                                                request.Version,
+                                                                                                                request.ContractNumber,
+                                                                                                                request.Type));
+
+                List<LookUpData> dataList = dataDomainResponse.LookUpsData;
+
+                foreach (LookUpData d in dataList)
+                {
+                    LookUp lookUp = new LookUp();
+                    lookUp.Id = d.ID;
+                    lookUp.Name = d.Name;
+                    response.Add(lookUp);
+                }
+                return response;
+            }
+            catch (WebServiceException wse)
+            {
+                Exception ae = new Exception(wse.ResponseBody, wse.InnerException);
+                throw ae;
+            }
+        } 
+        #endregion
 
         public void LogAuditData(IAppDomainRequest request, HttpRequest webreq, string returnTypeName)
         {

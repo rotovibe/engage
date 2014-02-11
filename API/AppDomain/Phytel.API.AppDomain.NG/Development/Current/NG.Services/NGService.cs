@@ -620,5 +620,35 @@ namespace Phytel.API.AppDomain.NG.Service
 
         #endregion
 
+        #region LookUps GoalRelated
+        public GetLookUpsResponse Get(GetLookUpsRequest request)
+        {
+            GetLookUpsResponse response = new GetLookUpsResponse();
+            try
+            {
+                NGManager ngm = new NGManager();
+
+                ValidateTokenResponse result = ngm.IsUserValidated(request.Version, request.Token);
+                if (result.UserId.Trim() != string.Empty)
+                {
+                    request.UserId = result.UserId;
+                    response.LookUps = ngm.GetLookUps(request);
+                }
+                else
+                    throw new UnauthorizedAccessException();
+
+                ngm.LogAuditData(request, System.Web.HttpContext.Current.Request, request.GetType().Name);
+
+                return response;
+            }
+            catch (Exception ex)
+            {
+                //TODO: Log this to the SQL database via ASE
+                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+                return response;
+            }
+        }
+        #endregion
+
     }
 }

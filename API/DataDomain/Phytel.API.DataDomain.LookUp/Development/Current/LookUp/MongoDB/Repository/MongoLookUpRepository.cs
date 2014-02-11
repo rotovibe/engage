@@ -55,6 +55,26 @@ namespace Phytel.API.DataDomain.LookUp
             if (MongoDB.Bson.Serialization.BsonClassMap.IsClassMapRegistered(typeof(Language)) == false)
             {
                 MongoDB.Bson.Serialization.BsonClassMap.RegisterClassMap<Language>();
+            }
+            if (MongoDB.Bson.Serialization.BsonClassMap.IsClassMapRegistered(typeof(FocusArea)) == false)
+            {
+                MongoDB.Bson.Serialization.BsonClassMap.RegisterClassMap<FocusArea>();
+            }
+            if (MongoDB.Bson.Serialization.BsonClassMap.IsClassMapRegistered(typeof(Source)) == false)
+            {
+                MongoDB.Bson.Serialization.BsonClassMap.RegisterClassMap<Source>();
+            }
+            if (MongoDB.Bson.Serialization.BsonClassMap.IsClassMapRegistered(typeof(StageOfChange)) == false)
+            {
+                MongoDB.Bson.Serialization.BsonClassMap.RegisterClassMap<StageOfChange>();
+            }
+            if (MongoDB.Bson.Serialization.BsonClassMap.IsClassMapRegistered(typeof(BarrierCategory)) == false)
+            {
+                MongoDB.Bson.Serialization.BsonClassMap.RegisterClassMap<BarrierCategory>();
+            }
+            if (MongoDB.Bson.Serialization.BsonClassMap.IsClassMapRegistered(typeof(InterventionCategory)) == false)
+            {
+                MongoDB.Bson.Serialization.BsonClassMap.RegisterClassMap<InterventionCategory>();
             } 
             #endregion
         }
@@ -464,5 +484,33 @@ namespace Phytel.API.DataDomain.LookUp
         }
 
         #endregion
+
+        #region Goal LookUps
+        public List<LookUpData> GetLookps(string type)
+        {
+            List<LookUpData> lookupList = null;
+            using (LookUpMongoContext ctx = new LookUpMongoContext(_dbName))
+            {
+                List<IMongoQuery> queries = new List<IMongoQuery>();
+                queries.Add(Query.EQ(MELookup.TypeProperty, type));
+                queries.Add(Query.EQ(MELookup.DeleteFlagProperty, false));
+                IMongoQuery mQuery = Query.And(queries);
+                MELookup meLookup = ctx.LookUps.Collection.Find(mQuery).FirstOrDefault();
+                if (meLookup != null)
+                {
+                    if (meLookup.Data != null)
+                    {
+                        lookupList = new List<LookUpData>();
+                        foreach (LookUpBase m in meLookup.Data)
+                        {
+                            LookUpData data = new LookUpData { ID = m.DataID.ToString(), Name = m.Name };
+                            lookupList.Add(data);
+                        }
+                    }
+                }
+            }
+            return lookupList;
+        }
+        #endregion  
     }
 }

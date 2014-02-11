@@ -87,14 +87,19 @@
   <ItemGroup>
     <Compile Include="DataLookUpManager.cs" />
     <Compile Include="ILookUpRepository.cs" />
+    <Compile Include="MongoDB\DTO\Goal\InterventionCategory.cs" />
+    <Compile Include="MongoDB\DTO\Goal\BarrierCategory.cs" />
+    <Compile Include="MongoDB\DTO\Goal\StageOfChange.cs" />
+    <Compile Include="MongoDB\DTO\Goal\Source.cs" />
+    <Compile Include="MongoDB\DTO\Goal\FocusArea.cs" />
     <Compile Include="MongoDB\DTO\ILookUpData.cs" />
     <Compile Include="MongoDB\DTO\LookUpBase.cs" />
-    <Compile Include="MongoDB\DTO\Language.cs" />
-    <Compile Include="MongoDB\DTO\CommType.cs" />
-    <Compile Include="MongoDB\DTO\State.cs" />
-    <Compile Include="MongoDB\DTO\TimesOfDay.cs" />
-    <Compile Include="MongoDB\DTO\TimeZone.cs" />
-    <Compile Include="MongoDB\DTO\CommMode.cs" />
+    <Compile Include="MongoDB\DTO\Contact\Language.cs" />
+    <Compile Include="MongoDB\DTO\Contact\CommType.cs" />
+    <Compile Include="MongoDB\DTO\Contact\State.cs" />
+    <Compile Include="MongoDB\DTO\Contact\TimesOfDay.cs" />
+    <Compile Include="MongoDB\DTO\Contact\TimeZone.cs" />
+    <Compile Include="MongoDB\DTO\Contact\CommMode.cs" />
     <Compile Include="MongoDB\DTO\Category.cs" />
     <Compile Include="MongoDB\DTO\MELookup.cs" />
     <Compile Include="MongoDB\DTO\Objective.cs" />

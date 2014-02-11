@@ -78,6 +78,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Goal\GetLookUpsDataRequest.cs" />
+    <Compile Include="Goal\GetLookUpsDataResponse.cs" />
     <Compile Include="Contact\GetAllLanguageDataRequest.cs" />
     <Compile Include="Contact\GetAllLanguagesDataResponse.cs" />
     <Compile Include="Contact\GetAllCommTypesDataRequest.cs" />
