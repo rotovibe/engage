@@ -211,5 +211,21 @@ namespace Phytel.API.DataDomain.LookUp.Test
         }
         #endregion
 
+        [TestMethod]
+        public void GetLookUpsByType_Test()
+        {
+            // Arrange
+            string version = "v1";
+            string contractNumber = "InHealth001";
+            string context = "NG";
+            GetLookUpsDataRequest request = new GetLookUpsDataRequest { Context = context, ContractNumber = contractNumber, Version = version, Type = "BarrierCategory" };
+
+            // Act
+            GetLookUpsDataResponse response = LookUpDataManager.GetLookUpsByType(request);
+
+            // Assert
+            Assert.IsTrue(response.LookUpsData.Count > 0);
+        }
+
     }
 }

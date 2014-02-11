@@ -506,6 +506,7 @@ namespace Phytel.API.DataDomain.LookUp
                             LookUpData data = new LookUpData { ID = m.DataID.ToString(), Name = m.Name };
                             lookupList.Add(data);
                         }
+                        lookupList = lookupList.OrderBy(s => s.Name).ToList();
                     }
                 }
             }
