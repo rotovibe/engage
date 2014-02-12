@@ -4,16 +4,10 @@ using Phytel.API.Interface;
 
 namespace Phytel.API.DataDomain.PatientGoal.DTO
 {
-    public class GetPatientGoalResponse : IDomainResponse
+    public class PutGoalDataResponse : IDomainResponse
     {
-        public PatientGoal PatientGoal { get; set; }
+        public string Id { get; set; }
         public string Version { get; set; }
         public ResponseStatus Status { get; set; }
-    }
-
-    public class PatientGoal
-    {
-        public string PatientGoalID { get; set; }
-        public string Version { get; set; }
     }
 }

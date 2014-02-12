@@ -8,9 +8,9 @@ namespace Phytel.API.DataDomain.PatientGoal.Service
 {
     public partial class PatientGoalService : ServiceStack.ServiceInterface.Service
     {
-        public GetPatientGoalResponse Post(GetPatientGoalRequest request)
+        public GetPatientGoalDataResponse Post(GetPatientGoalDataRequest request)
         {
-            GetPatientGoalResponse response = new GetPatientGoalResponse();
+            GetPatientGoalDataResponse response = new GetPatientGoalDataResponse();
             try
             {
                 response = PatientGoalDataManager.GetPatientGoalByID(request);
@@ -25,9 +25,9 @@ namespace Phytel.API.DataDomain.PatientGoal.Service
             return response;
         }
 
-        public GetPatientGoalResponse Get(GetPatientGoalRequest request)
+        public GetPatientGoalDataResponse Get(GetPatientGoalDataRequest request)
         {
-            GetPatientGoalResponse response = new GetPatientGoalResponse();
+            GetPatientGoalDataResponse response = new GetPatientGoalDataResponse();
             try
             {
                 response = PatientGoalDataManager.GetPatientGoalByID(request);
@@ -42,9 +42,9 @@ namespace Phytel.API.DataDomain.PatientGoal.Service
             return response;
         }
 
-        public GetAllPatientGoalsResponse Post(GetAllPatientGoalsRequest request)
+        public GetAllPatientGoalsDataResponse Post(GetAllPatientGoalsDataRequest request)
         {
-            GetAllPatientGoalsResponse response = new GetAllPatientGoalsResponse();
+            GetAllPatientGoalsDataResponse response = new GetAllPatientGoalsDataResponse();
             try
             {
                 response = PatientGoalDataManager.GetPatientGoalList(request);

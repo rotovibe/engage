@@ -1,4 +1,5 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Phytel.API.DataDomain.PatientGoal;
 using Phytel.API.DataDomain.PatientGoal.DTO;
 
 namespace Phytel.API.DataDomain.PatientGoal.Test
@@ -9,11 +10,11 @@ namespace Phytel.API.DataDomain.PatientGoal.Test
         [TestMethod]
         public void GetPatientGoalByID()
         {
-            GetPatientGoalRequest request = new GetPatientGoalRequest{ PatientGoalID = "5"};
+            GetPatientGoalDataRequest request = new GetPatientGoalDataRequest { PatientGoalId = "5" };
 
-            GetPatientGoalResponse response = PatientGoalDataManager.GetPatientGoalByID(request);
+            GetPatientGoalDataResponse response = PatientGoalDataManager.GetPatientGoalByID(request);
 
-            Assert.IsTrue(response.PatientGoal.PatientGoalID == "Tony");
+            Assert.IsTrue(response.PatientGoal.Name == "Tony");
         }
     }
 }

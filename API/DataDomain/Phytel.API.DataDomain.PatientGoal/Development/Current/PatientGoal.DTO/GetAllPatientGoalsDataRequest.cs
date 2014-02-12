@@ -4,7 +4,7 @@ using ServiceStack.ServiceHost;
 namespace Phytel.API.DataDomain.PatientGoal.DTO
 {
     [Route("/{Context}/{Version}/{ContractNumber}/PatientGoal/{PatientGoalID}", "GET")]
-    public class GetAllPatientGoalsRequest : IDataDomainRequest
+    public class GetAllPatientGoalsDataRequest : IDataDomainRequest
     {
         /*
          * Put custom fields here

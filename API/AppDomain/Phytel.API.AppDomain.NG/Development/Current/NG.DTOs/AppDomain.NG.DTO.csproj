@@ -96,7 +96,9 @@
     <Compile Include="Contact\PutUpdateContactResponse.cs" />
     <Compile Include="GetPatientProgramsRequest.cs" />
     <Compile Include="GetPatientProgramsResponse.cs" />
+    <Compile Include="Goal\PostInitializeGoalRequest.cs" />
     <Compile Include="Goal\GetInitializeTaskRequest.cs" />
+    <Compile Include="Goal\PostInitializeGoalResponse.cs" />
     <Compile Include="Goal\GetInitializeTaskResponse.cs" />
     <Compile Include="Goal\NGTaskAttribute.cs" />
     <Compile Include="Goal\PatientTask.cs" />

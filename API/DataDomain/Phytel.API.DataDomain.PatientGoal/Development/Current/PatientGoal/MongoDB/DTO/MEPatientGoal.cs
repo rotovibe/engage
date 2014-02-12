@@ -15,6 +15,15 @@ namespace Phytel.API.DataDomain.PatientGoal.DTO
         public MEPatientGoal() { Id = ObjectId.GenerateNewId(); }
 
         public const string IdProperty = "_id";
+        public const string FocusAreaProperty = "focs";
+        public const string SourceProperty = "src";
+        public const string ProgramProperty = "progs";
+        public const string TypeProperty = "type";
+        public const string StatusProperty = "sts";
+        public const string EndDateProperty = "ed";
+        public const string TargetValueProperty = "trgv";
+        public const string TargetDateProperty = "trgd";
+        
 
         #region Standard IMongoEntity Constants
         public const string ExtraElementsProperty = "ex";
@@ -27,7 +36,38 @@ namespace Phytel.API.DataDomain.PatientGoal.DTO
 
         [BsonId]
         public ObjectId Id { get; set; }
+        
+        [BsonElement(FocusAreaProperty)]
+        [BsonIgnoreIfNull(true)]
+        public List<ObjectId> FocusAreas { get; set; }
+        
+        [BsonElement(SourceProperty)]
+        [BsonIgnoreIfNull(true)]
+        public ObjectId? Source { get; set; }
+        
+        [BsonElement(ProgramProperty)]
+        [BsonIgnoreIfNull(true)]
+        public List<ObjectId> Programs { get; set; }
 
+        [BsonElement(TypeProperty)]
+        [BsonIgnoreIfNull(true)]
+        public ObjectId? Type { get; set; }
+
+        [BsonElement(StatusProperty)]
+        [BsonIgnoreIfNull(true)]
+        public GoalTaskStatus Status { get; set; }
+
+        [BsonElement(EndDateProperty)]
+        [BsonIgnoreIfNull(true)]
+        public DateTime? EndDate { get; set; }
+
+        [BsonElement(TargetValueProperty)]
+        [BsonIgnoreIfNull(true)]
+        public string TargetValue { get; set; }
+
+        [BsonElement(TargetDateProperty)]
+        [BsonIgnoreIfNull(true)]
+        public DateTime? TargetDate { get; set; }
 
         #region Standard IMongoEntity Implementation
         [BsonElement(ExtraElementsProperty)]

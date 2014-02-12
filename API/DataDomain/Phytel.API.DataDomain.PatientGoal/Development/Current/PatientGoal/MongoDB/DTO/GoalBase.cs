@@ -12,7 +12,12 @@ namespace Phytel.API.DataDomain.PatientGoal.DTO
     {
         public GoalBase() {}
 
-        public const string DescriptionProperty = "dsc";
+        public const string NameProperty = "nm";
+        [BsonElement(NameProperty)]
+        [BsonIgnoreIfNull(true)]
+        public string Name { get; set; }
+
+        public const string DescriptionProperty = "desc";
         [BsonElement(DescriptionProperty)]
         [BsonIgnoreIfNull(true)]
         public string Description { get; set; }

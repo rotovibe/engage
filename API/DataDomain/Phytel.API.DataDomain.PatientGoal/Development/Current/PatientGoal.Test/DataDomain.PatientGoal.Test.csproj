@@ -69,11 +69,11 @@
       <Name>Phytel.API.Interface</Name>
     </ProjectReference>
     <ProjectReference Include="..\PatientGoal.DTO\DataDomain.PatientGoal.DTO.csproj">
-      <Project>{1c2c63a1-4246-4ec9-bad1-c00e9ecd85f6}</Project>
+      <Project>{92488af4-963e-4098-8ba8-23d6952bd952}</Project>
       <Name>DataDomain.PatientGoal.DTO</Name>
     </ProjectReference>
     <ProjectReference Include="..\PatientGoal\DataDomain.PatientGoal.csproj">
-      <Project>{f1a478d1-dca1-4be6-ae83-e0acdd4fdffd}</Project>
+      <Project>{73fa0644-f0b9-45ad-a52a-0930b66c6c10}</Project>
       <Name>DataDomain.PatientGoal</Name>
     </ProjectReference>
   </ItemGroup>

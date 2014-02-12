@@ -8,14 +8,14 @@ namespace Phytel.API.DataDomain.PatientGoal
 {
     public static class PatientGoalDataManager
     {
-        public static GetPatientGoalResponse GetPatientGoalByID(GetPatientGoalRequest request)
+        public static GetPatientGoalDataResponse GetPatientGoalByID(GetPatientGoalDataRequest request)
         {
             try
             {
-                GetPatientGoalResponse result = new GetPatientGoalResponse();
+                GetPatientGoalDataResponse result = new GetPatientGoalDataResponse();
 
-                IPatientGoalRepository<GetPatientGoalResponse> repo = PatientGoalRepositoryFactory<GetPatientGoalResponse>.GetPatientGoalRepository(request.ContractNumber, request.Context);
-                result = repo.FindByID(request.PatientGoalID) as GetPatientGoalResponse;
+                IPatientGoalRepository<GetPatientGoalDataResponse> repo = PatientGoalRepositoryFactory<GetPatientGoalDataResponse>.GetPatientGoalRepository(request.ContractNumber, request.Context);
+                result = repo.FindByID(request.PatientGoalId) as GetPatientGoalDataResponse;
 
                 // if cross-domain service call has error
                 //if (result.Status != null)
@@ -23,7 +23,7 @@ namespace Phytel.API.DataDomain.PatientGoal
                 //    throw new ArgumentException(result.Status.Message, new Exception() { Source = result.Status.StackTrace });
                 //}
 
-                return (result != null ? result : new GetPatientGoalResponse());
+                return (result != null ? result : new GetPatientGoalDataResponse());
             }
             catch (Exception ex)
             {
@@ -31,13 +31,13 @@ namespace Phytel.API.DataDomain.PatientGoal
             }
         }
 
-        public static GetAllPatientGoalsResponse GetPatientGoalList(GetAllPatientGoalsRequest request)
+        public static GetAllPatientGoalsDataResponse GetPatientGoalList(GetAllPatientGoalsDataRequest request)
         {
             try
             {
-                GetAllPatientGoalsResponse result = new GetAllPatientGoalsResponse();
+                GetAllPatientGoalsDataResponse result = new GetAllPatientGoalsDataResponse();
 
-                IPatientGoalRepository<GetAllPatientGoalsResponse> repo = PatientGoalRepositoryFactory<GetAllPatientGoalsResponse>.GetPatientGoalRepository(request.ContractNumber, request.Context);
+                IPatientGoalRepository<GetAllPatientGoalsDataResponse> repo = PatientGoalRepositoryFactory<GetAllPatientGoalsDataResponse>.GetPatientGoalRepository(request.ContractNumber, request.Context);
                
 
                 return result;
@@ -55,7 +55,7 @@ namespace Phytel.API.DataDomain.PatientGoal
             {
                 PutInitializeTaskResponse result = new PutInitializeTaskResponse();
 
-                IPatientGoalRepository<GetAllPatientGoalsResponse> repo = PatientGoalRepositoryFactory<GetAllPatientGoalsResponse>.GetPatientTaskRepository(request.ContractNumber, request.Context);
+                IPatientGoalRepository<GetAllPatientGoalsDataResponse> repo = PatientGoalRepositoryFactory<GetAllPatientGoalsDataResponse>.GetPatientTaskRepository(request.ContractNumber, request.Context);
 
                 PatientTask mePTask = new PatientTask
                 {
