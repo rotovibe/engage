@@ -49,11 +49,11 @@ namespace Phytel.API.DataDomain.PatientGoal
         }
 
         #region // TASKS
-        public static PutNewPatientTaskResponse InsertNewPatientTask(PutNewPatientTaskRequest request)
+        public static PutInitializeTaskResponse InsertNewPatientTask(PutInitializeTaskRequest request)
         {
             try
             {
-                PutNewPatientTaskResponse result = new PutNewPatientTaskResponse();
+                PutInitializeTaskResponse result = new PutInitializeTaskResponse();
 
                 IPatientGoalRepository<GetAllPatientGoalsResponse> repo = PatientGoalRepositoryFactory<GetAllPatientGoalsResponse>.GetPatientTaskRepository(request.ContractNumber, request.Context);
 

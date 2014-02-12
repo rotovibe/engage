@@ -11,9 +11,9 @@ namespace Phytel.API.DataDomain.PatientGoal.Service
     /// </summary>
     public partial class PatientGoalService : ServiceStack.ServiceInterface.Service
     {
-        public PutNewPatientTaskResponse Put(PutNewPatientTaskRequest request)
+        public PutInitializeTaskResponse Put(PutInitializeTaskRequest request)
         {
-            PutNewPatientTaskResponse response = new PutNewPatientTaskResponse();
+            PutInitializeTaskResponse response = new PutInitializeTaskResponse();
             try
             {
                 response = PatientGoalDataManager.InsertNewPatientTask(request);

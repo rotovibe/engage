@@ -33,9 +33,7 @@ namespace Phytel.API.DataDomain.PatientGoal
                 MEPatientTask pa = new MEPatientTask
                 {
                     Id = ObjectId.GenerateNewId(),
-                    TTLDate = pt.TTLDate,
-                    DeleteFlag = pt.DeleteFlag,
-                    Status = (GoalTaskStatus)pt.Status
+                    TTLDate = pt.TTLDate
                 };
 
                 using (PatientGoalMongoContext ctx = new PatientGoalMongoContext(_dbName))

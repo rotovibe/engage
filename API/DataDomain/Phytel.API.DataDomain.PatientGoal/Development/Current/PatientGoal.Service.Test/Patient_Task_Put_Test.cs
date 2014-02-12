@@ -18,14 +18,14 @@ namespace Phytel.API.DataDomain.PatientGoal.Services.Test
             string version = "v1";
             IRestClient client = new JsonServiceClient();
 
-            PutNewPatientTaskResponse response = client.Put<PutNewPatientTaskResponse>(
-                string.Format("{0}/{1}/{2}/{3}/Patient/{4}/PatientTask/Insert",
+            PutInitializeTaskResponse response = client.Put<PutInitializeTaskResponse>(
+                string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Task/Initialize",
                 url,
                 context,
                 version,
                 contractNumber,
                 patientId),
-                new PutNewPatientTaskRequest() as object);
+                new PutInitializeTaskRequest() as object);
         }
     }
 }
