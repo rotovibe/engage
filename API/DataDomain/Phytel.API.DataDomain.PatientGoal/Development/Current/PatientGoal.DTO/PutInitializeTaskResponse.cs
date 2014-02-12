@@ -4,7 +4,7 @@ using Phytel.API.Interface;
 
 namespace Phytel.API.DataDomain.PatientGoal.DTO
 {
-    public class PutNewPatientTaskResponse : IDomainResponse
+    public class PutInitializeTaskResponse : IDomainResponse
     {
         public string Id { get; set; }
         public string Version { get; set; }

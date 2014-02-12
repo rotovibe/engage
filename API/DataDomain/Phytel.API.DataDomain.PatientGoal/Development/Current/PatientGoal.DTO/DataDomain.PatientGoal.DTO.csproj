@@ -71,12 +71,13 @@
   <ItemGroup>
     <Compile Include="GetAllPatientGoalsRequest.cs" />
     <Compile Include="PatientTask.cs" />
-    <Compile Include="PutNewPatientTaskRequest.cs" />
+    <Compile Include="PutInitializeTaskRequest.cs" />
     <Compile Include="GetPatientGoalRequest.cs" />
     <Compile Include="GetAllPatientGoalsResponse.cs" />
-    <Compile Include="PutNewPatientTaskResponse.cs" />
+    <Compile Include="PutInitializeTaskResponse.cs" />
     <Compile Include="GetPatientGoalResponse.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TaskAttribute.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

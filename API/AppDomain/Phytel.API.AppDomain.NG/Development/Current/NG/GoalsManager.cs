@@ -15,6 +15,20 @@ namespace Phytel.API.AppDomain.NG
 {
     public class GoalsManager : ManagerBase
     {
-        
+
+        public GetInitializeTaskResponse GetInitialTask(GetInitializeTaskRequest request)
+        {
+            try
+            {
+                GetInitializeTaskResponse itr = new GetInitializeTaskResponse();
+                string id = GoalsEndpointUtil.GetInitialTaskRequest(request);
+                itr.Id = id;
+                return itr;
+            }
+            catch(Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }
