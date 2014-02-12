@@ -28,6 +28,11 @@ namespace Phytel.API.DataDomain.PatientGoal.MongoDB.DTO
         [BsonElement(ControlTypeProperty)]
         [BsonIgnoreIfNull(false)]
         public AttributeControlType ControlType { get; set; }
+
+        public const string OrderProperty = "o";
+        [BsonElement(OrderProperty)]
+        [BsonIgnoreIfNull(true)]
+        public int Order { get; set; }
     }
 }
 
