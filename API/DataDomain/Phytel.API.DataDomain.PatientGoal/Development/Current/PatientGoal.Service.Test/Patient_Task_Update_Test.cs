@@ -52,10 +52,10 @@ namespace Phytel.API.DataDomain.PatientGoal.Services.Test
             return ints;
         }
 
-        private List<TaskAttribute> GetAttributes()
+        private List<AttributeData> GetAttributes()
         {
-            List<PatientGoal.DTO.TaskAttribute> tas = new List<PatientGoal.DTO.TaskAttribute>();
-            tas.Add(new PatientGoal.DTO.TaskAttribute
+            List<AttributeData> tas = new List<AttributeData>();
+            tas.Add(new AttributeData
             {
                 ControlType = "2",
                 Name = "Attribute name",

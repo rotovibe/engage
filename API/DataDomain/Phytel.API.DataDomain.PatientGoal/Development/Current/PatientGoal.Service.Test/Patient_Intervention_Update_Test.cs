@@ -30,7 +30,7 @@ namespace Phytel.API.DataDomain.PatientGoal.Services.Test
                 id),
                 new PutUpdateInterventionRequest
                 {
-                    Task = new PatientIntervention
+                    Task = new PatientInterventionData
                     {
                         Id = "52fd1cf8fe7a592d046c548f",
                         Description = "This is an example update",
@@ -59,10 +59,10 @@ namespace Phytel.API.DataDomain.PatientGoal.Services.Test
             return ints;
         }
 
-        private List<InterventionAttribute> GetAttributes()
+        private List<AttributeData> GetAttributes()
         {
-            List<InterventionAttribute> tas = new List<InterventionAttribute>();
-            tas.Add(new InterventionAttribute
+            List<AttributeData> tas = new List<AttributeData>();
+            tas.Add(new AttributeData
             {
                 ControlType = "2",
                 Name = "Attribute name",
