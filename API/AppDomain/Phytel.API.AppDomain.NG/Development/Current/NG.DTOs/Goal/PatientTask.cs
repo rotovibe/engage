@@ -12,7 +12,7 @@ namespace Phytel.API.AppDomain.NG.DTO
         public string TargetValue { get; set; }
         public int Status { get; set; }
         public DateTime? TargetDate { get; set; }
-        public List<TaskAttribute> Attributes { get; set; }
+        public List<Attribute> Attributes { get; set; }
         public List<string> Barriers { get; set; }
         public string Description { get; set; }
         public DateTime? StatusDate { get; set; }

@@ -6,10 +6,11 @@ using System.Threading.Tasks;
 
 namespace Phytel.API.DataDomain.PatientGoal.DTO
 {
-    public class TaskAttribute
+    public class AttributeData
     {
-        public string Name { get; set; }
-        public string Value { get; set; }
-        public string ControlType { get; set; } // need to change to enum type
+        public string Name;
+        public string Value;
+        public string ControlType;
+        public int Order; 
     }
 }

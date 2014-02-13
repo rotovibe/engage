@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Phytel.API.DataDomain.PatientGoal.MongoDB.DTO;
 
 namespace Phytel.API.DataDomain.PatientGoal.MongoDB
 {
@@ -31,16 +32,16 @@ namespace Phytel.API.DataDomain.PatientGoal.MongoDB
             }
         }
 
-        internal static List<MongoDB.DTO.TaskAttribute> GetTaskAttributes(List<PatientGoal.DTO.TaskAttribute> list)
+        internal static List<MAttribute> GetTaskAttributes(List<PatientGoal.DTO.AttributeData> list)
         {
-            List<MongoDB.DTO.TaskAttribute> ta = new List<MongoDB.DTO.TaskAttribute>();
+            List<MongoDB.DTO.MAttribute> ta = new List<MongoDB.DTO.MAttribute>();
             try
             {
                 if (list != null && list.Count > 0)
                 {
                     list.ForEach(t =>
                     {
-                        ta.Add(new MongoDB.DTO.TaskAttribute
+                        ta.Add(new MongoDB.DTO.MAttribute
                         {
                             ControlType = (AttributeControlType)Enum.Parse(typeof(AttributeControlType), t.ControlType),
                             Name = t.Name,
@@ -57,16 +58,16 @@ namespace Phytel.API.DataDomain.PatientGoal.MongoDB
 
         }
 
-        internal static List<DTO.InterventionAttribute> GetInterventionAttributes(List<PatientGoal.DTO.InterventionAttribute> list)
+        internal static List<MAttribute> GetInterventionAttributes(List<PatientGoal.DTO.AttributeData> list)
         {
-            List<MongoDB.DTO.InterventionAttribute> ta = new List<MongoDB.DTO.InterventionAttribute>();
+            List<MAttribute> ta = new List<MAttribute>();
             try
             {
                 if (list != null && list.Count > 0)
                 {
                     list.ForEach(t =>
                     {
-                        ta.Add(new MongoDB.DTO.InterventionAttribute
+                        ta.Add(new MAttribute
                         {
                             ControlType = (AttributeControlType)Enum.Parse(typeof(AttributeControlType), t.ControlType),
                             Name = t.Name,

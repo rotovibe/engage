@@ -65,8 +65,7 @@
     <Compile Include="IPatientGoalRepository.cs" />
     <Compile Include="MongoDB\DTOUtil.cs" />
     <Compile Include="MongoDB\DTO\Enums.cs" />
-    <Compile Include="MongoDB\DTO\InterventionAttribute.cs" />
-    <Compile Include="MongoDB\DTO\TaskAttribute.cs" />
+    <Compile Include="MongoDB\DTO\MAttribute.cs" />
     <Compile Include="MongoDB\DTO\GoalBase.cs" />
     <Compile Include="MongoDB\DTO\MEPatientTask.cs" />
     <Compile Include="MongoDB\DTO\MEPatientIntervention.cs" />

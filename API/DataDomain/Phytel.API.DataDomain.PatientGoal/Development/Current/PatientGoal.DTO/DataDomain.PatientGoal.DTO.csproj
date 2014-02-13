@@ -69,29 +69,27 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="PatientIntervention.cs" />
     <Compile Include="GetAllPatientGoalsDataRequest.cs" />
-    <Compile Include="PutInitializeInterventionRequest.cs" />
-    <Compile Include="PutInitializeInterventionResponse.cs" />
-    <Compile Include="PutUpdateInterventionRequest.cs" />
-    <Compile Include="PutUpdateTaskRequest.cs" />
     <Compile Include="PatientGoalData.cs" />
     <Compile Include="PatientBarrierData.cs" />
-    <Compile Include="PatientInterventionData.cs" />
+    <Compile Include="PatientIntervention.cs" />
     <Compile Include="PatientTaskData.cs" />
     <Compile Include="PutGoalDataRequest.cs" />
     <Compile Include="PutInitializeGoalDataRequest.cs" />
     <Compile Include="PutGoalDataResponse.cs" />
+    <Compile Include="PutInitializeInterventionRequest.cs" />
+    <Compile Include="PutInitializeInterventionResponse.cs" />
     <Compile Include="PutInitializeTaskRequest.cs" />
-    <Compile Include="PutUpdateInterventionResponse.cs" />
-    <Compile Include="PutUpdateTaskResponse.cs" />
     <Compile Include="GetPatientGoalDataRequest.cs" />
     <Compile Include="GetAllPatientGoalsDataResponse.cs" />
     <Compile Include="PutInitializeGoalDataResponse.cs" />
     <Compile Include="PutInitializeTaskResponse.cs" />
     <Compile Include="GetPatientGoalDataResponse.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="InterventionAttribute.cs" />
+    <Compile Include="PutUpdateInterventionRequest.cs" />
+    <Compile Include="PutUpdateInterventionResponse.cs" />
+    <Compile Include="PutUpdateTaskRequest.cs" />
+    <Compile Include="PutUpdateTaskResponse.cs" />
     <Compile Include="TaskAttribute.cs" />
   </ItemGroup>
   <ItemGroup>

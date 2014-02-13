@@ -14,6 +14,7 @@ using MongoDB.Bson;
 using Phytel.API.Common;
 using Phytel.API.Common.Data;
 using Phytel.API.DataDomain.PatientGoal.MongoDB;
+using Phytel.API.DataDomain.PatientGoal.MongoDB.DTO;
 
 namespace Phytel.API.DataDomain.PatientGoal
 {
@@ -28,7 +29,7 @@ namespace Phytel.API.DataDomain.PatientGoal
 
         public object Insert(object newEntity)
         {
-            PatientIntervention pt = (PatientIntervention)newEntity;
+            PatientInterventionData pt = (PatientInterventionData)newEntity;
             try
             {
                 MEPatientIntervention pa = new MEPatientIntervention
@@ -121,7 +122,7 @@ namespace Phytel.API.DataDomain.PatientGoal
         public object Update(object entity)
         {
             bool result = false;
-            PatientIntervention pt = (PatientIntervention)entity;
+            PatientInterventionData pt = (PatientInterventionData)entity;
             try
             {
                 using (PatientGoalMongoContext ctx = new PatientGoalMongoContext(_dbName))
@@ -136,7 +137,7 @@ namespace Phytel.API.DataDomain.PatientGoal
                     if (pt.Status != 0) uv.Add(MB.Update.Set(MEPatientIntervention.StatusProperty, pt.Status));
                     if (pt.Order != 0) uv.Add(MB.Update.Set(MEPatientIntervention.OrderProperty, pt.Order));
                     if (pt.Category != 0) uv.Add(MB.Update.Set(MEPatientIntervention.CategoryProperty, pt.Category));
-                    if (pt.Attributes != null) { uv.Add(MB.Update.SetWrapped<List<MongoDB.DTO.InterventionAttribute>>(MEPatientIntervention.AttributesProperty, DTOUtil.GetInterventionAttributes(pt.Attributes))); }
+                    if (pt.Attributes != null) { uv.Add(MB.Update.SetWrapped<List<MAttribute>>(MEPatientIntervention.AttributesProperty, DTOUtil.GetInterventionAttributes(pt.Attributes))); }
                     if (pt.Barriers != null) { uv.Add(MB.Update.SetWrapped<List<ObjectId>>(MEPatientIntervention.BarriersProperty, DTOUtil.ConvertObjectId(pt.Barriers))); }
 
                     IMongoUpdate update = MB.Update.Combine(uv);

@@ -42,7 +42,7 @@ namespace Phytel.API.DataDomain.PatientGoal.DTO
         public const string AttributesProperty = "attr";
         [BsonElement(AttributesProperty)]
         [BsonIgnoreIfNull(false)]
-        public List<TaskAttribute> Attributes { get; set; }
+        public List<AttributeData> Attributes { get; set; }
 
         public const string BarriersProperty = "bar";
         [BsonElement(BarriersProperty)]

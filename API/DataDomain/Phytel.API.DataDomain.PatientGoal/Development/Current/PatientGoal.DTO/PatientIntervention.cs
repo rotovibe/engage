@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Phytel.API.DataDomain.PatientGoal.DTO
 {
-    public class PatientIntervention
+    public class PatientInterventionData
     {
         public string Id { get; set; }
         public int Category { get; set; }
@@ -17,7 +17,7 @@ namespace Phytel.API.DataDomain.PatientGoal.DTO
         public int Status { get; set; }
         public DateTime? StatusDate { get; set; }
         public DateTime? StartDate { get; set; }
-        public List<InterventionAttribute> Attributes { get; set; }
+        public List<AttributeData> Attributes { get; set; }
 
         public System.DateTime? TTLDate { get; set; }
     }

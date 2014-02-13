@@ -10,7 +10,7 @@ namespace Phytel.API.DataDomain.PatientGoal.DTO
         public string InterventionId { get; set; }
 
         [ApiMember(Name = "UserId", Description = "UserId of the logged in user", ParameterType = "property", DataType = "string", IsRequired = false)]
-        public PatientIntervention Task { get; set; }
+        public PatientInterventionData Task { get; set; }
 
         [ApiMember(Name = "PatientId", Description = "UserId of the logged in user", ParameterType = "property", DataType = "string", IsRequired = false)]
         public string PatientId { get; set; }

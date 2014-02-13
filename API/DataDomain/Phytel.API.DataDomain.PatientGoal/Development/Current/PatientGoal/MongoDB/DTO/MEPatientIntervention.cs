@@ -56,7 +56,7 @@ namespace Phytel.API.DataDomain.PatientGoal.DTO
         public const string AttributesProperty = "attr";
         [BsonElement(AttributesProperty)]
         [BsonIgnoreIfNull(false)]
-        public List<InterventionAttribute> Attributes { get; set; }
+        public List<Attribute> Attributes { get; set; }
 
         #region Standard IMongoEntity Implementation
         [BsonElement(ExtraElementsProperty)]
