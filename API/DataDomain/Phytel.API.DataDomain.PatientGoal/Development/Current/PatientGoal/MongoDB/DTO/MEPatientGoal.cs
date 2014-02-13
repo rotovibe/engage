@@ -83,18 +83,6 @@ namespace Phytel.API.DataDomain.PatientGoal.DTO
         [BsonIgnoreIfNull(false)]
         public List<MAttribute> Attributes { get; set; }
 
-        [BsonElement(BarriersProperty)]
-        [BsonIgnoreIfNull(false)]
-        public List<ObjectId> Barriers { get; set; }
-
-        [BsonElement(TasksProperty)]
-        [BsonIgnoreIfNull(false)]
-        public List<ObjectId> Tasks { get; set; }
-
-        [BsonElement(InterventionsProperty)]
-        [BsonIgnoreIfNull(false)]
-        public List<ObjectId> Interventions { get; set; }
-
         #region Standard IMongoEntity Implementation
         [BsonElement(ExtraElementsProperty)]
         [BsonExtraElements()]
