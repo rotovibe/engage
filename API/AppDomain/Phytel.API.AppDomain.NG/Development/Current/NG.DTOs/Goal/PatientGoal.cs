@@ -11,7 +11,7 @@ namespace Phytel.API.AppDomain.NG.DTO
         public List<string> FocusAreas { get; set; }
         public string Name { get; set; }
         public string Source { get; set; }
-        public List<IdNamePair> Programs { get; set; }
+        public List<string> Programs { get; set; }
         public string Type { get; set; }
         public string Status { get; set; }
         public DateTime? StartDate { get; set; }
