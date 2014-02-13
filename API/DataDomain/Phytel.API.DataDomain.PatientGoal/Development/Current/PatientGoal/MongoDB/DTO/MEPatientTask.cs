@@ -18,6 +18,11 @@ namespace Phytel.API.DataDomain.PatientGoal.DTO
         [BsonId]
         public ObjectId Id { get; set; }
 
+        public const string PatientGoalIdProperty = "pgid";
+        [BsonElement(PatientGoalIdProperty)]
+        [BsonIgnoreIfNull(false)]
+        public ObjectId PatientGoalId { get; set; }
+
         public const string TargetValueProperty = "tv";
         [BsonElement(TargetValueProperty)]
         [BsonIgnoreIfNull(false)]

@@ -17,22 +17,25 @@ namespace Phytel.API.DataDomain.PatientGoal.Services.Test
             string contractNumber = "InHealth001";
             string context = "NG";
             string version = "v1";
-            string id = "52fd1aa2fe7a592d04b9d0a9";
+            string id = "52fd4832fe7a5912b0050354";
+            string patientGoaldId = "52fd1aa2fe7a592d04b9d567";
             IRestClient client = new JsonServiceClient();
 
             PutUpdateTaskResponse response = client.Put<PutUpdateTaskResponse>(
-                string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Task/{5}/Update",
+                string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Goal/{5}/Task/{6}/Update",
                 url,
                 context,
                 version,
                 contractNumber,
                 patientId,
+                patientGoaldId,
                 id),
                 new PutUpdateTaskRequest
                 {
                     Task = new PatientTaskData
                     {
-                        Id = "52fd1aa2fe7a592d04b9d0a9",
+                        Id = id,
+                        PatientGoalId = patientGoaldId,
                         Description = "Roumel Testing This!!",
                         StartDate = System.DateTime.UtcNow,
                         Status = 2,

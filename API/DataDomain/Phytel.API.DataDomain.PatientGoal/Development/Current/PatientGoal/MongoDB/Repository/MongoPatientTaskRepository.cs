@@ -169,6 +169,7 @@ namespace Phytel.API.DataDomain.PatientGoal
                 MEPatientTask pa = new MEPatientTask
                 {
                     Id = ObjectId.GenerateNewId(),
+                    PatientGoalId = ObjectId.Parse(ptr.PatientGoalId),
                     TTLDate = System.DateTime.UtcNow.AddDays(1),
                     UpdatedBy = ptr.UserId,
                     LastUpdatedOn = DateTime.UtcNow

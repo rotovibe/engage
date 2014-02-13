@@ -10,6 +10,7 @@ namespace Phytel.API.DataDomain.PatientGoal.DTO
     {
         public string Id { get; set; }
         public string TargetValue { get; set; }
+        public string PatientGoalId { get; set; }
         public int Status { get; set; }
         public int Order { get; set; }
         public DateTime? TargetDate { get; set; }
