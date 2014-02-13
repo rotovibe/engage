@@ -7,6 +7,7 @@ namespace Phytel.API.AppDomain.NG.DTO
     public class PatientGoal
     {
         public string Id { get; set; }
+        public string PatientId { get; set; }
         public List<string> FocusAreas { get; set; }
         public string Name { get; set; }
         public string Source { get; set; }

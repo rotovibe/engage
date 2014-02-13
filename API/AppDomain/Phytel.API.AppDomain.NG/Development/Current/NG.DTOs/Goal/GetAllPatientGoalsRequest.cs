@@ -1,15 +1,12 @@
 using Phytel.API.Interface;
 using ServiceStack.ServiceHost;
 
-namespace Phytel.API.DataDomain.PatientGoal.DTO
+namespace Phytel.API.AppDomain.NG.DTO
 {
-    [Route("/{Context}/{Version}/{ContractNumber}/Patient/{PatientId}/Goal/{Id}", "GET")]
-    public class GetPatientGoalDataRequest : IDataDomainRequest
+    [Route("/{Version}/{ContractNumber}/Patient/{PatientId}/Goals", "GET")]
+    public class GetAllPatientGoalsRequest : IAppDomainRequest
     {
-        [ApiMember(Name = "Id", Description = "ID of the PatientGoal being requested", ParameterType = "property", DataType = "string", IsRequired = true)]
-        public string Id { get; set; }
-
-        [ApiMember(Name = "PatientId", Description = "Id of the Patient for whom a goal is being created.", ParameterType = "property", DataType = "string", IsRequired = true)]
+        [ApiMember(Name = "PatientId", Description = "Id of the patient for whom a goal is being created.", ParameterType = "path", DataType = "string", IsRequired = true)]
         public string PatientId { get; set; }
 
         [ApiMember(Name = "Context", Description = "Product Context requesting the PatientGoal", ParameterType = "property", DataType = "string", IsRequired = true)]
@@ -23,5 +20,10 @@ namespace Phytel.API.DataDomain.PatientGoal.DTO
 
         [ApiMember(Name = "UserId", Description = "UserId of the logged in user", ParameterType = "property", DataType = "string", IsRequired = true)]
         public string UserId { get; set; }
+
+        [ApiMember(Name = "Token", Description = "Request Token", ParameterType = "QueryString", DataType = "string", IsRequired = true)]
+        public string Token { get; set; }
+
+        public GetAllPatientGoalsRequest() { }
     }
 }

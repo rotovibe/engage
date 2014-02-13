@@ -3,12 +3,11 @@ using ServiceStack.ServiceHost;
 
 namespace Phytel.API.DataDomain.PatientGoal.DTO
 {
-    [Route("/{Context}/{Version}/{ContractNumber}/PatientGoal/{PatientGoalID}", "GET")]
+    [Route("/{Context}/{Version}/{ContractNumber}/Patient/{PatientId}/Goals", "GET")]
     public class GetAllPatientGoalsDataRequest : IDataDomainRequest
     {
-        /*
-         * Put custom fields here
-        */
+        [ApiMember(Name = "PatientId", Description = "Id of the Patient for whom a goal is being created.", ParameterType = "property", DataType = "string", IsRequired = true)]
+        public string PatientId { get; set; }
 
         [ApiMember(Name = "UserId", Description = "UserId of the logged in user", ParameterType = "property", DataType = "string", IsRequired = false)]
         public string UserId { get; set; }

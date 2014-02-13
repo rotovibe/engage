@@ -74,10 +74,10 @@
     <Compile Include="PatientBarrierData.cs" />
     <Compile Include="PatientInterventionData.cs" />
     <Compile Include="PatientTaskData.cs" />
-    <Compile Include="PutGoalDataRequest.cs" />
+    <Compile Include="PutPatientGoalDataRequest.cs" />
     <Compile Include="PutInitializeBarrierDataRequest.cs" />
     <Compile Include="PutInitializeGoalDataRequest.cs" />
-    <Compile Include="PutGoalDataResponse.cs" />
+    <Compile Include="PutPatientGoalDataResponse.cs" />
     <Compile Include="PutInitializeBarrierDataResponse.cs" />
     <Compile Include="PutInitializeInterventionRequest.cs" />
     <Compile Include="PutInitializeInterventionResponse.cs" />

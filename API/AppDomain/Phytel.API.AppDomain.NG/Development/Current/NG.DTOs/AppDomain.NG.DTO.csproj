@@ -96,9 +96,11 @@
     <Compile Include="Contact\PutUpdateContactResponse.cs" />
     <Compile Include="GetPatientProgramsRequest.cs" />
     <Compile Include="GetPatientProgramsResponse.cs" />
+    <Compile Include="Goal\GetAllPatientGoalsRequest.cs" />
     <Compile Include="Goal\GetInitializeInterventionRequest.cs" />
     <Compile Include="Goal\GetInitializeInterventionResponse.cs" />
     <Compile Include="Goal\GetPatientGoalRequest.cs" />
+    <Compile Include="Goal\GetAllPatientGoalsResponse.cs" />
     <Compile Include="Goal\GetPatientGoalResponse.cs" />
     <Compile Include="Goal\PatientGoal.cs" />
     <Compile Include="Goal\PatientBarrier.cs" />
@@ -111,6 +113,8 @@
     <Compile Include="Goal\GetInitializeTaskResponse.cs" />
     <Compile Include="Goal\Attribute.cs" />
     <Compile Include="Goal\PatientTask.cs" />
+    <Compile Include="Goal\PostPatientGoalRequest.cs" />
+    <Compile Include="Goal\PostPatientGoalResponse.cs" />
     <Compile Include="LookUp\Goal\GetLookUpsRequest.cs" />
     <Compile Include="LookUp\Goal\GetLookUpsResponse.cs" />
     <Compile Include="LookUp\Contact\GetAllLanguagesRequest.cs" />
