@@ -92,7 +92,7 @@
     <Compile Include="PutUpdateInterventionResponse.cs" />
     <Compile Include="PutUpdateTaskRequest.cs" />
     <Compile Include="PutUpdateTaskResponse.cs" />
-    <Compile Include="TaskAttribute.cs" />
+    <Compile Include="AttributeData.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
