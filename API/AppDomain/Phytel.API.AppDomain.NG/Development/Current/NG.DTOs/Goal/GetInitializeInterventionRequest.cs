@@ -4,8 +4,8 @@ using System.Runtime.Serialization;
 
 namespace Phytel.API.AppDomain.NG.DTO
 {
-    [Route("/{Version}/{ContractNumber}/Patient/{PatientId}/Goal/{PatientGoalId}/Task/Initialize", "GET")]
-    public class GetInitializeTaskRequest : IAppDomainRequest
+    [Route("/{Version}/{ContractNumber}/Patient/{PatientId}/Goal/{PatientGoalId}/Intervention/Initialize", "GET")]
+    public class GetInitializeInterventionRequest : IAppDomainRequest
     {
         [ApiMember(Name = "PatientId", Description = "PatientId", ParameterType = "path", DataType = "string", IsRequired = true)]
         public string PatientId { get; set; }

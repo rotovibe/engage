@@ -64,5 +64,21 @@ namespace Phytel.API.AppDomain.NG
                 throw ex;
             }
         }
+
+        public GetInitializeInterventionResponse GetInitialIntervention(GetInitializeInterventionRequest request)
+        {
+            try
+            {
+                GetInitializeInterventionResponse itr = new GetInitializeInterventionResponse();
+                string id = GoalsEndpointUtil.GetInitialInterventionRequest(request);
+                itr.Id = id;
+                itr.Version = request.Version;
+                return itr;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }

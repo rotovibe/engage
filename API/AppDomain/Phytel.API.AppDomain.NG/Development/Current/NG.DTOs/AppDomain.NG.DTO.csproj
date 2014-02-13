@@ -96,6 +96,8 @@
     <Compile Include="Contact\PutUpdateContactResponse.cs" />
     <Compile Include="GetPatientProgramsRequest.cs" />
     <Compile Include="GetPatientProgramsResponse.cs" />
+    <Compile Include="Goal\GetInitializeInterventionRequest.cs" />
+    <Compile Include="Goal\GetInitializeInterventionResponse.cs" />
     <Compile Include="Goal\GetPatientGoalRequest.cs" />
     <Compile Include="Goal\GetPatientGoalResponse.cs" />
     <Compile Include="Goal\PatientGoal.cs" />

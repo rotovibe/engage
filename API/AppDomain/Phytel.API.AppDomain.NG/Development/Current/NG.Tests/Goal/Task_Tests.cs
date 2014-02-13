@@ -14,15 +14,17 @@ namespace Phytel.API.DataDomain.Patient.Service.Test
             string contractNumber = "InHealth001";
             string context = "NG";
             string version = "v1";
-            string token = "52fba33cd6a4850aa450d8f1";
+            string token = "52fd3964d6a4850f681dd269";
             string patientId = "52e26f0b072ef7191c111c4d";
+            string patientGoalId = "52e26f0b072ef7191c111234";
             IRestClient client = new JsonServiceClient();
 
             GetInitializeTaskResponse response = client.Get<GetInitializeTaskResponse>(
-                string.Format(@"http://localhost:888/Nightingale/{0}/{1}/Patient/{2}/Task/initialize/?Token={3}",
+                string.Format(@"http://localhost:888/Nightingale/{0}/{1}/Patient/{2}/Goal/{3}/Task/initialize/?Token={4}",
                 version,
                 contractNumber,
                 patientId,
+                patientGoalId,
                 token));
         }
     }

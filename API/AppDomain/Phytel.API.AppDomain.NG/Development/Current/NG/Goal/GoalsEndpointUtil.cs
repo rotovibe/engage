@@ -90,13 +90,44 @@ namespace Phytel.API.AppDomain.NG
 
                 IRestClient client = new JsonServiceClient();
                 PutInitializeTaskResponse response = client.Put<PutInitializeTaskResponse>(
-                    string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Task/Initialize",
+                    string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Goal/{5}/Task/Initialize",
                     DDPatientGoalsServiceUrl,
                     "NG",
                     request.Version,
                     request.ContractNumber,
-                    request.PatientId),
+                    request.PatientId,
+                    request.PatientGoalId),
                     new PutInitializeTaskRequest() as object);
+
+                if (response != null)
+                {
+                    result = response.Id;
+                }
+
+                return result;
+            }
+            catch (WebServiceException ex)
+            {
+                throw new WebServiceException("AD:GetInitialTaskRequest()" + ex.Message, ex.InnerException);
+            }
+        }
+
+        internal static string GetInitialInterventionRequest(GetInitializeInterventionRequest request)
+        {
+            try
+            {
+                string result = string.Empty;
+
+                IRestClient client = new JsonServiceClient();
+                PutInitializeInterventionResponse response = client.Put<PutInitializeInterventionResponse>(
+                    string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Goal/{5}/Intervention/Initialize",
+                    DDPatientGoalsServiceUrl,
+                    "NG",
+                    request.Version,
+                    request.ContractNumber,
+                    request.PatientId,
+                    request.PatientGoalId),
+                    new PutInitializeInterventionRequest() as object);
 
                 if (response != null)
                 {

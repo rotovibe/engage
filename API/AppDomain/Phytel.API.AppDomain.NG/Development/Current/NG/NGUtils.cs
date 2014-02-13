@@ -444,6 +444,12 @@ namespace Phytel.API.AppDomain.NG
             }
         }
 
+
+        /// <summary>
+        /// Converts Step collection into StepsDetail collection.
+        /// </summary>
+        /// <param name="list">Step list</param>
+        /// <returns>StepsDetail list</returns>
         public static List<StepsDetail> GetADSteps(List<Step> list)
         {
             try
@@ -474,7 +480,7 @@ namespace Phytel.API.AppDomain.NG
                             Order = s.Order,
                             Previous = s.Previous,
                             Question = s.Question,
-                            Responses = GetADResponses(s.Responses),
+                            //Responses = GetADResponses(s.Responses),
                             SelectedResponseId = s.SelectedResponseId,
                             SelectType = s.SelectType,
                             SourceId = s.SourceId,
