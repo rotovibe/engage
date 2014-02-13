@@ -18,7 +18,7 @@ namespace Phytel.API.DataDomain.PatientGoal.DTO
         public const string PatientIdProperty = "pid";
         public const string FocusAreaProperty = "focs";
         public const string SourceProperty = "src";
-        public const string ProgramProperty = "progs";
+        public const string ProgramProperty = "prog";
         public const string TypeProperty = "type";
         public const string StatusProperty = "sts";
         public const string EndDateProperty = "ed";
@@ -26,9 +26,9 @@ namespace Phytel.API.DataDomain.PatientGoal.DTO
         public const string TargetDateProperty = "td";
         public const string AttributesProperty = "attr";
 
-        public const string BarriersProperty = "bars";
-        public const string TasksProperty = "tasks";
-        public const string InterventionsProperty = "intvs";
+        public const string BarriersProperty = "bar";
+        public const string TasksProperty = "task";
+        public const string InterventionsProperty = "intv";
         
 
         #region Standard IMongoEntity Constants
