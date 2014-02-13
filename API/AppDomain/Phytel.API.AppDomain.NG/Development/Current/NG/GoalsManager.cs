@@ -32,7 +32,22 @@ namespace Phytel.API.AppDomain.NG
                 throw ex;
             }
         }
-       
+
+        public PostInitializeBarrierResponse PostInitialBarrierRequest(PostInitializeBarrierRequest request)
+        {
+            try
+            {
+                PostInitializeBarrierResponse response = new PostInitializeBarrierResponse();
+                string id = GoalsEndpointUtil.PostInitialBarrierRequest(request);
+                response.Id = id;
+                response.Version = request.Version;
+                return response;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
         
         public GetInitializeTaskResponse GetInitialTask(GetInitializeTaskRequest request)
         {

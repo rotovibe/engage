@@ -101,8 +101,10 @@
     <Compile Include="Goal\PatientGoal.cs" />
     <Compile Include="Goal\PatientBarrier.cs" />
     <Compile Include="Goal\PatientIntervention.cs" />
+    <Compile Include="Goal\PostInitializeBarrierRequest.cs" />
     <Compile Include="Goal\PostInitializeGoalRequest.cs" />
     <Compile Include="Goal\GetInitializeTaskRequest.cs" />
+    <Compile Include="Goal\PostInitializeBarrierResponse.cs" />
     <Compile Include="Goal\PostInitializeGoalResponse.cs" />
     <Compile Include="Goal\GetInitializeTaskResponse.cs" />
     <Compile Include="Goal\Attribute.cs" />

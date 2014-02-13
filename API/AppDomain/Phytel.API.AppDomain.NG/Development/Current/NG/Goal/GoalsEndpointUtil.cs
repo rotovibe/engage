@@ -50,8 +50,36 @@ namespace Phytel.API.AppDomain.NG
             {
                 throw new WebServiceException("App Domain:PostInitialGoalRequest()" + ex.Message, ex.InnerException);
             }
+        }
 
+        public static string PostInitialBarrierRequest(PostInitializeBarrierRequest request)
+        {
+            try
+            {
+                string result = string.Empty;
+                //   [Route("/{Version}/{ContractNumber}/Patient/{PatientId}/Goal/{PatientGoalId}/Barrier/Initialize", "POST")]
+                IRestClient client = new JsonServiceClient();
+                PutInitializeBarrierDataResponse dataDomainResponse = client.Put<PutInitializeBarrierDataResponse>(
+                    string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Goal/{5}/Barrier/Initialize",
+                    DDPatientGoalsServiceUrl,
+                    "NG",
+                    request.Version,
+                    request.ContractNumber,
+                    request.PatientId,
+                    request.PatientGoalId),
+                    new PutInitializeBarrierDataRequest() as object);
 
+                if (dataDomainResponse != null)
+                {
+                    result = dataDomainResponse.Id;
+                }
+
+                return result;
+            }
+            catch (WebServiceException ex)
+            {
+                throw new WebServiceException("App Domain:PostInitialBarrierRequest()" + ex.Message, ex.InnerException);
+            }
         }
 
         public static string GetInitialTaskRequest(GetInitializeTaskRequest request)

@@ -67,9 +67,11 @@
     <Compile Include="MongoDB\DTO\Enums.cs" />
     <Compile Include="MongoDB\DTO\MAttribute.cs" />
     <Compile Include="MongoDB\DTO\GoalBase.cs" />
+    <Compile Include="MongoDB\DTO\MEPatientBarrier.cs" />
     <Compile Include="MongoDB\DTO\MEPatientTask.cs" />
     <Compile Include="MongoDB\DTO\MEPatientIntervention.cs" />
     <Compile Include="MongoDB\DTO\MEPatientGoal.cs" />
+    <Compile Include="MongoDB\Repository\MongoPatientBarrierRepository.cs" />
     <Compile Include="MongoDB\Repository\MongoPatientInterventionRepository.cs" />
     <Compile Include="MongoDB\Repository\MongoPatientGoalRepository.cs" />
     <Compile Include="MongoDB\PatientGoalMongoContext.cs" />

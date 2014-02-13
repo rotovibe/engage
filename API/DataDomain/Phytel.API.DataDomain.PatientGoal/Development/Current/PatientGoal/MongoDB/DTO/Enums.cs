@@ -14,7 +14,7 @@ namespace Phytel.API.DataDomain.PatientGoal.DTO
         Abandoned
     }
 
-    internal enum BarrierStatus
+    public enum BarrierStatus
     {
         Open = 1,
         Resolved
@@ -27,7 +27,7 @@ namespace Phytel.API.DataDomain.PatientGoal.DTO
         Removed
     }
 
-    internal enum GoalType
+    public enum GoalType
     {
         Longterm = 1,
         Shortterm = 2

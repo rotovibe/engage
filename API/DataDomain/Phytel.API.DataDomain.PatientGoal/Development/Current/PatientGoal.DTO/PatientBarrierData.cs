@@ -9,6 +9,10 @@ namespace Phytel.API.DataDomain.PatientGoal.DTO
     public class PatientBarrierData
     {
         public string Id { get; set; }
-        // TO DO
+        public string PatientGoalId { get; set; }
+        public string Category { get; set; }
+        public string Name { get; set; }
+        public string Status { get; set; }
+        public DateTime? StatusDate { get; set; }
     }
 }
