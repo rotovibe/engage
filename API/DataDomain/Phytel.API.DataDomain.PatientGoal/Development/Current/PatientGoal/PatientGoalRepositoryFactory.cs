@@ -42,5 +42,22 @@ namespace Phytel.API.DataDomain.PatientGoal
                 throw ex;
             }
         }
+
+        internal static IPatientGoalRepository<T> GetPatientInterventionRepository(string dbName, string productName)
+        {
+            try
+            {
+                IPatientGoalRepository<T> repo = null;
+
+                //We only have 1 repository at this time, just return it
+                repo = new MongoPatientInterventionRepository<T>(dbName) as IPatientGoalRepository<T>;
+
+                return repo;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }

@@ -13,6 +13,7 @@ using MB = MongoDB.Driver.Builders;
 using MongoDB.Bson;
 using Phytel.API.Common;
 using Phytel.API.Common.Data;
+using Phytel.API.DataDomain.PatientGoal.MongoDB;
 
 namespace Phytel.API.DataDomain.PatientGoal
 {
@@ -27,10 +28,24 @@ namespace Phytel.API.DataDomain.PatientGoal
 
         public object Insert(object newEntity)
         {
+            PatientIntervention pt = (PatientIntervention)newEntity;
             try
             {
-                throw new NotImplementedException();
-                // code here //
+                MEPatientIntervention pa = new MEPatientIntervention
+                {
+                    Id = ObjectId.GenerateNewId(),
+                    TTLDate = pt.TTLDate
+                };
+
+                using (PatientGoalMongoContext ctx = new PatientGoalMongoContext(_dbName))
+                {
+                    WriteConcernResult wcr = ctx.PatientInterventions.Collection.Insert(pa);
+                    if (wcr.Ok)
+                    {
+                        pt.Id = pa.Id.ToString();
+                    }
+                }
+                return pt as object;
             }
             catch (Exception ex) { throw ex; }
         }
@@ -105,10 +120,31 @@ namespace Phytel.API.DataDomain.PatientGoal
 
         public object Update(object entity)
         {
+            bool result = false;
+            PatientIntervention pt = (PatientIntervention)entity;
             try
             {
-                throw new NotImplementedException();
-                // code here //
+                using (PatientGoalMongoContext ctx = new PatientGoalMongoContext(_dbName))
+                {
+                    var q = MB.Query<MEPatientIntervention>.EQ(b => b.Id, ObjectId.Parse(pt.Id));
+
+                    var uv = new List<MB.UpdateBuilder>();
+                    uv.Add(MB.Update.Set(MEPatientIntervention.TTLDateProperty, BsonNull.Value));
+                    if (pt.Description != null) uv.Add(MB.Update.Set(MEPatientIntervention.DescriptionProperty, pt.Description));
+                    if (pt.StartDate != null) uv.Add(MB.Update.Set(MEPatientIntervention.StartDateProperty, pt.StartDate));
+                    if (pt.StatusDate != null) uv.Add(MB.Update.Set(MEPatientIntervention.StatusDateProperty, pt.StatusDate));
+                    if (pt.Status != 0) uv.Add(MB.Update.Set(MEPatientIntervention.StatusProperty, pt.Status));
+                    if (pt.Order != 0) uv.Add(MB.Update.Set(MEPatientIntervention.OrderProperty, pt.Order));
+                    if (pt.Category != 0) uv.Add(MB.Update.Set(MEPatientIntervention.CategoryProperty, pt.Category));
+                    if (pt.Attributes != null) { uv.Add(MB.Update.SetWrapped<List<MongoDB.DTO.InterventionAttribute>>(MEPatientIntervention.AttributesProperty, DTOUtil.GetInterventionAttributes(pt.Attributes))); }
+                    if (pt.Barriers != null) { uv.Add(MB.Update.SetWrapped<List<ObjectId>>(MEPatientIntervention.BarriersProperty, DTOUtil.ConvertObjectId(pt.Barriers))); }
+
+                    IMongoUpdate update = MB.Update.Combine(uv);
+                    WriteConcernResult res = ctx.PatientInterventions.Collection.Update(q, update);
+                    if (res.Ok)
+                        result = true;
+                }
+                return result as object;
             }
             catch (Exception ex) { throw ex; }
         }
@@ -125,10 +161,27 @@ namespace Phytel.API.DataDomain.PatientGoal
 
         public string Initialize(object newEntity)
         {
+            PutInitializeInterventionRequest ptr = (PutInitializeInterventionRequest)newEntity;
+            string intrvId = null;
             try
             {
-                throw new NotImplementedException();
-                // code here //
+                MEPatientIntervention pi = new MEPatientIntervention
+                {
+                    Id = ObjectId.GenerateNewId(),
+                    TTLDate = System.DateTime.UtcNow.AddDays(1),
+                    UpdatedBy = ptr.UserId,
+                    LastUpdatedOn = DateTime.UtcNow
+                };
+
+                using (PatientGoalMongoContext ctx = new PatientGoalMongoContext(_dbName))
+                {
+                    WriteConcernResult wcr = ctx.PatientInterventions.Collection.Insert(pi);
+                    if (wcr.Ok)
+                    {
+                        intrvId = pi.Id.ToString();
+                    }
+                }
+                return intrvId;
             }
             catch (Exception ex) { throw ex; }
         }

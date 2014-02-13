@@ -67,15 +67,27 @@ namespace Phytel.API.DataDomain.PatientGoal
             {
                 PutInitializeTaskResponse result = new PutInitializeTaskResponse();
 
-                IPatientGoalRepository<GetAllPatientGoalsDataResponse> repo = PatientGoalRepositoryFactory<GetAllPatientGoalsDataResponse>.GetPatientTaskRepository(request.ContractNumber, request.Context);
+                IPatientGoalRepository<PutInitializeTaskResponse> repo = PatientGoalRepositoryFactory<PutInitializeTaskResponse>.GetPatientTaskRepository(request.ContractNumber, request.Context);
 
-                PatientTaskData mePTask = new PatientTaskData
-                {
-                    TTLDate = System.DateTime.UtcNow.AddDays(1)
-                };
+                result.Id = repo.Initialize(request);
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
 
-                PatientTaskData rpt = (PatientTaskData)repo.Insert(mePTask);
-                result.Id = rpt.Id;
+        public static PutUpdateTaskResponse UpdatePatientTask(PutUpdateTaskRequest request)
+        {
+            try
+            {
+                PutUpdateTaskResponse result = new PutUpdateTaskResponse();
+
+                IPatientGoalRepository<PutUpdateTaskResponse> repo = PatientGoalRepositoryFactory<PutUpdateTaskResponse>.GetPatientTaskRepository(request.ContractNumber, request.Context);
+                bool status = (bool)repo.Update(request.Task);
+
+                result.Updated = status;
                 return result;
             }
             catch (Exception ex)
@@ -84,5 +96,40 @@ namespace Phytel.API.DataDomain.PatientGoal
             }
         }
         #endregion
+
+        public static PutInitializeInterventionResponse InsertNewPatientIntervention(PutInitializeInterventionRequest request)
+        {
+            try
+            {
+                PutInitializeInterventionResponse result = new PutInitializeInterventionResponse();
+
+                IPatientGoalRepository<PutInitializeInterventionResponse> repo = PatientGoalRepositoryFactory<PutInitializeInterventionResponse>.GetPatientInterventionRepository(request.ContractNumber, request.Context);
+
+                result.Id = repo.Initialize(request);
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public static PutUpdateInterventionResponse UpdatePatientIntervention(PutUpdateInterventionRequest request)
+        {
+            try
+            {
+                PutUpdateInterventionResponse result = new PutUpdateInterventionResponse();
+
+                IPatientGoalRepository<PutUpdateInterventionResponse> repo = PatientGoalRepositoryFactory<PutUpdateInterventionResponse>.GetPatientInterventionRepository(request.ContractNumber, request.Context);
+                bool status = (bool)repo.Update(request.Task);
+
+                result.Updated = status;
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }   

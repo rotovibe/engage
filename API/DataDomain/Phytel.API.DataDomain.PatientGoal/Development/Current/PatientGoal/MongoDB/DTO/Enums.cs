@@ -20,7 +20,7 @@ namespace Phytel.API.DataDomain.PatientGoal.DTO
         Resolved
     }
 
-    internal enum InterventionStatus
+    public enum InterventionStatus
     {
         Open = 1,
         Completed,

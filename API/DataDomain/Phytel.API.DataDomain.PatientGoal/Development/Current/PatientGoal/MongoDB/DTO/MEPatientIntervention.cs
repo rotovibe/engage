@@ -28,6 +28,11 @@ namespace Phytel.API.DataDomain.PatientGoal.DTO
         [BsonId]
         public ObjectId Id { get; set; }
 
+        public const string OrderProperty = "o";
+        [BsonElement(OrderProperty)]
+        [BsonIgnoreIfNull(false)]
+        public int Order { get; set; }
+
         public const string CategoryProperty = "cat";
         [BsonElement(CategoryProperty)]
         [BsonIgnoreIfNull(false)]
@@ -42,6 +47,16 @@ namespace Phytel.API.DataDomain.PatientGoal.DTO
         [BsonElement(BarriersProperty)]
         [BsonIgnoreIfNull(false)]
         public List<ObjectId> Barriers { get; set; }
+
+        public const string StatusProperty = "sts";
+        [BsonElement(StatusProperty)]
+        [BsonIgnoreIfNull(true)]
+        public InterventionStatus Status { get; set; }
+
+        public const string AttributesProperty = "attr";
+        [BsonElement(AttributesProperty)]
+        [BsonIgnoreIfNull(false)]
+        public List<InterventionAttribute> Attributes { get; set; }
 
         #region Standard IMongoEntity Implementation
         [BsonElement(ExtraElementsProperty)]

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Phytel.API.DataDomain.PatientGoal.DTO
 {
-    public class TaskAttribute
+    public class InterventionAttribute
     {
         public string Name { get; set; }
         public string Value { get; set; }

@@ -63,6 +63,9 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="Patient_Intervention_Put_Test.cs" />
+    <Compile Include="Patient_Intervention_Update_Test.cs" />
+    <Compile Include="Patient_Task_Update_Test.cs" />
     <Compile Include="Patient_Task_Put_Test.cs" />
     <Compile Include="PatientGoal_Test.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -23,6 +23,11 @@ namespace Phytel.API.DataDomain.PatientGoal.DTO
         [BsonIgnoreIfNull(false)]
         public string TargetValue { get; set; }
 
+        public const string OrderProperty = "o";
+        [BsonElement(OrderProperty)]
+        [BsonIgnoreIfNull(false)]
+        public int Order { get; set; }
+
         public const string StatusProperty = "sts";
         [BsonElement(StatusProperty)]
         [BsonIgnoreIfNull(true)]
@@ -37,7 +42,7 @@ namespace Phytel.API.DataDomain.PatientGoal.DTO
         public const string AttributesProperty = "attr";
         [BsonElement(AttributesProperty)]
         [BsonIgnoreIfNull(false)]
-        public List<Attribute> Attributes { get; set; }
+        public List<TaskAttribute> Attributes { get; set; }
 
         public const string BarriersProperty = "bar";
         [BsonElement(BarriersProperty)]
