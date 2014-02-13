@@ -135,7 +135,7 @@ namespace Phytel.API.Common
         GetCohorts = 386,
         GetContact = 387,
         GetModuleInfo = 388,
-        GetPatientProblems = 389,
+        GetAllPatientProblems = 389,
         GetPatientProgramDetailsSummary = 390,
         GetProblems = 391,
         GetResponses = 392,

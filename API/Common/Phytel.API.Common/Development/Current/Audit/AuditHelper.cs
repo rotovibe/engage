@@ -1,10 +1,14 @@
 ﻿using System;
 using System.Configuration;
 using System.Data;
+using System.Diagnostics;
+using System.Threading;
 using System.Web;
 using Phytel.API.Interface;
+using Phytel.Framework.ASE.Data.Common;
 using Phytel.Services;
 using ServiceStack.ServiceHost;
+using ASE = Phytel.Framework.ASE.Process;
 
 namespace Phytel.API.Common.Audit
 {
@@ -23,12 +27,21 @@ namespace Phytel.API.Common.Audit
                 AuditTypeId = auditTypeId, //derive this from the type passed in (lookup on PNG.AuditType.Name column)
                 UserId = new Guid(request.UserId), //derive this from Mongo.APISessions.uid...lookup on Mongo.APISessions._id)
                 SourcePage = methodCalledFrom, //derive this from querystring...utility function
-                SourceIP = webrequest.UserHostAddress,
                 Browser = webrequest.Browser.Type,
                 SessionId = request.Token,
                 ContractID = GetContractID(request.ContractNumber) //request.ContractNumber
             };
 
+            //this assignment is randomly throwing an exception, so it needs it's own method
+            try 
+            {	
+                auditLog.SourceIP =  webrequest.UserHostAddress; 
+            }	
+            catch (Exception)
+            {
+                auditLog.SourceIP = "Unknown";
+            }
+                
             return auditLog;
         }
 
@@ -112,8 +125,8 @@ namespace Phytel.API.Common.Audit
                     audittypeid = (int)AuditType.GetModuleInfo;
                     break;
 
-                case "GetPatientProblems":
-                    audittypeid = (int)AuditType.GetPatientProblems;
+                case "GetAllPatientProblems":
+                    audittypeid = (int)AuditType.GetAllPatientProblems;
                     break;
 
                 case "GetPatientProgramDetailsSummary":
@@ -157,6 +170,60 @@ namespace Phytel.API.Common.Audit
         {
             return returnTypeName.ToString().Replace("Request", "").Replace("Response", "");
         }
+
+        public static void LogAuditData(IAppDomainRequest request, HttpRequest webreq, string returnTypeName)
+        {
+            //hand to a new thread here, and immediately return this thread to caller
+            try
+            {
+                //throw new SystemException("test before new thread starts");
+                    new Thread(() =>
+                                {
+                                    try
+                                    {
+                                        AuditAsynch(request, webreq, returnTypeName);
+                                     }   
+                                    catch (Exception newthreadex)
+                                    {
+                                        //if there's an error from the new thread, handle it here, so we don't black the main thread
+
+                                        int procID = int.Parse(ConfigurationManager.AppSettings.Get("ASEProcessID"));
+                                        ASE.Log.LogError(procID, newthreadex, LogErrorCode.Error, LogErrorSeverity.Medium );
+
+                                        //drop into queue
+                                        //write to log
+                                        //email to admin
+                                        //NLog?
+                                        Debug.WriteLine(string.Format("^^^^^ Error calling ^^^^^{0}", webreq.RawUrl));
+                                        //Console.WriteLine(string.Format("Error calling {0}", webreq.QueryString));
+                                     }
+                                    
+                                }).Start();
+                
+            }
+            catch (Exception ex)
+            {
+                //handle the exception here, to make sure we don't block the main thread?
+                
+             }
+
+            return;
+
+
+        }
+
+        private static void AuditAsynch(IAppDomainRequest request, HttpRequest webreq, string returnTypeName)
+        {
+            //throw new SystemException("test error in new thread starts");
+
+            string callingMethod = FindMethodType(returnTypeName);
+            int auditTypeId = GetAuditTypeID(callingMethod);
+            AuditData data = GetAuditLog(auditTypeId, request, webreq, callingMethod);
+
+            AuditDispatcher.WriteAudit(data);
+        }
+
+
 
     }
 }

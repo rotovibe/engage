@@ -1359,55 +1359,5 @@ namespace Phytel.API.AppDomain.NG
         } 
         #endregion
 
-        public void LogAuditData(IAppDomainRequest request, HttpRequest webreq, string returnTypeName)
-        {
-            //hand to a new thread here, and immediately return this thread to caller
-            try
-            {
-                //throw new SystemException("test before new thread starts");
-                    new Thread(() =>
-                                {
-                                    try
-                                    {
-                                        AuditAsynch(request, webreq, returnTypeName);
-                                     }   
-                                    catch (Exception newthreadex)
-                                    {
-                                        //if there's an error from the new thread, handle it here, so we don't black the main thread
-                                        //drop into queue
-                                        //write to log
-                                        //email to admin
-                                        //NLog?
-                                        Debug.WriteLine(string.Format("^^^^^ Error calling ^^^^^{0}", webreq.RawUrl));
-                                        //Console.WriteLine(string.Format("Error calling {0}", webreq.QueryString));
-                    
-                                    }
-                                    
-                                }).Start();
-                
-            }
-            catch (Exception ex)
-            {
-                //handle the exception here, to make sure we don't block the main thread
-
-             }
-
-            return;
-
-
-        }
-
-        private static void AuditAsynch(IAppDomainRequest request, HttpRequest webreq, string returnTypeName)
-        {
-            //throw new SystemException("test error in new thread starts");
-
-            string callingMethod = AuditHelper.FindMethodType(returnTypeName);
-            int auditTypeId = AuditHelper.GetAuditTypeID(callingMethod);
-            AuditData data = AuditHelper.GetAuditLog(auditTypeId, request, webreq, callingMethod);
-
-            AuditDispatcher.WriteAudit(data);
-        }
-
-
     }
 }

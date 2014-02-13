@@ -43,25 +43,6 @@ namespace Phytel.API.Common.Audit
             //        , args.payload);
         }
 
-        public static void LogAuditAsynch(AuditData data)
-        { 
-
-//#if DEBUG
-//            // synchronous for testing
-//            WriteAudit(data);
-//#else
-//          //hand this to a new thread so the original process can continue
-//            new Thread(() =>
-//            {
-//                // handle work here
-//                //test the response to here, even though I don't send it back to the client
-//                WriteAudit(data);
-
-//            }).Start();
-//#endif
-            
-        }
-
         public static void WriteAudit(AuditData auditLogToProcess)
         {
             AuditData auditLog = auditLogToProcess;
@@ -96,7 +77,7 @@ namespace Phytel.API.Common.Audit
 
                 MessageQueueHelper.SendMessage(@messageQueue, newMessage, title);
             }
-            //return auditLog;
+            
         }
 
         private static string ToXML(Object oObject)
