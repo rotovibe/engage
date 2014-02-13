@@ -33,12 +33,12 @@ namespace Phytel.API.DataDomain.PatientGoal.Services.Test
                     Task = new PatientTaskData
                     {
                         Id = "52fd1aa2fe7a592d04b9d0a9",
-                        Description = "This is an example update",
+                        Description = "Roumel Testing This!!",
                         StartDate = System.DateTime.UtcNow,
-                        Status = 1,
+                        Status = 2,
                         StatusDate = System.DateTime.UtcNow,
                         TargetDate = System.DateTime.UtcNow.AddDays(7),
-                        TargetValue = "This is a task update test",
+                        TargetValue = "!!This is a task update test",
                         Attributes = GetAttributes(),
                         Barriers = GetBarriers()
                     }
@@ -60,6 +60,13 @@ namespace Phytel.API.DataDomain.PatientGoal.Services.Test
                 ControlType = "2",
                 Name = "Attribute name",
                 Value = "This is the value"
+            });
+
+            tas.Add(new AttributeData
+            {
+                ControlType = "1",
+                Name = "Think language",
+                Value = "Value of think."
             });
             return tas;
         }

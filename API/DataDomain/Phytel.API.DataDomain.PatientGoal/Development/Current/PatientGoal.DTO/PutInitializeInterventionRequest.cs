@@ -3,7 +3,7 @@ using ServiceStack.ServiceHost;
 
 namespace Phytel.API.DataDomain.PatientGoal.DTO
 {
-    [Route("/{Context}/{Version}/{ContractNumber}/Patient/{PatientId}/Intervention/Initialize", "PUT")]
+    [Route("/{Context}/{Version}/{ContractNumber}/Patient/{PatientId}/Goal/{Id}/Intervention/Initialize", "PUT")]
     public class PutInitializeInterventionRequest : IDataDomainRequest
     {
         [ApiMember(Name = "PatientId", Description = "UserId of the logged in user", ParameterType = "property", DataType = "string", IsRequired = false)]
