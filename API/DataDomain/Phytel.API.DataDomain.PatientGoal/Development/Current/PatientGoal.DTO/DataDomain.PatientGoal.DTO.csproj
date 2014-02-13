@@ -72,7 +72,7 @@
     <Compile Include="GetAllPatientGoalsDataRequest.cs" />
     <Compile Include="PatientGoalData.cs" />
     <Compile Include="PatientBarrierData.cs" />
-    <Compile Include="PatientIntervention.cs" />
+    <Compile Include="PatientInterventionData.cs" />
     <Compile Include="PatientTaskData.cs" />
     <Compile Include="PutGoalDataRequest.cs" />
     <Compile Include="PutInitializeGoalDataRequest.cs" />
