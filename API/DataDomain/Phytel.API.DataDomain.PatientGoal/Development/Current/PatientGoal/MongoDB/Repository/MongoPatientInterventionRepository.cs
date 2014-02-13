@@ -14,7 +14,6 @@ using MongoDB.Bson;
 using Phytel.API.Common;
 using Phytel.API.Common.Data;
 using Phytel.API.DataDomain.PatientGoal.MongoDB;
-using Phytel.API.DataDomain.PatientGoal.MongoDB.DTO;
 
 namespace Phytel.API.DataDomain.PatientGoal
 {

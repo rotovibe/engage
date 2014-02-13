@@ -5,7 +5,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Phytel.API.DataDomain.PatientGoal.MongoDB.DTO;
+using Phytel.API.DataDomain.PatientGoal.MongoDB;
+using Phytel.API.DataDomain.PatientGoal.DTO;
 
 namespace Phytel.API.DataDomain.PatientGoal.MongoDB
 {
@@ -34,14 +35,14 @@ namespace Phytel.API.DataDomain.PatientGoal.MongoDB
 
         internal static List<MAttribute> GetTaskAttributes(List<PatientGoal.DTO.AttributeData> list)
         {
-            List<MongoDB.DTO.MAttribute> ta = new List<MongoDB.DTO.MAttribute>();
+            List<MAttribute> ta = new List<MAttribute>();
             try
             {
                 if (list != null && list.Count > 0)
                 {
                     list.ForEach(t =>
                     {
-                        ta.Add(new MongoDB.DTO.MAttribute
+                        ta.Add(new MAttribute
                         {
                             ControlType = (AttributeControlType)Enum.Parse(typeof(AttributeControlType), t.ControlType),
                             Name = t.Name,

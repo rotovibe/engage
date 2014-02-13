@@ -8,7 +8,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 
 
-namespace Phytel.API.DataDomain.PatientGoal.MongoDB.DTO
+namespace Phytel.API.DataDomain.PatientGoal.DTO
 {
     public class MAttribute
     {

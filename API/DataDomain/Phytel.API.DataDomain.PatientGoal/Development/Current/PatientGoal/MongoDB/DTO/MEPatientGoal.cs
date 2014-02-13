@@ -24,6 +24,7 @@ namespace Phytel.API.DataDomain.PatientGoal.DTO
         public const string EndDateProperty = "ed";
         public const string TargetValueProperty = "tv";
         public const string TargetDateProperty = "td";
+        public const string AttributesProperty = "attr";
 
         public const string BarriersProperty = "bars";
         public const string TasksProperty = "tasks";
@@ -77,6 +78,10 @@ namespace Phytel.API.DataDomain.PatientGoal.DTO
         [BsonElement(TargetDateProperty)]
         [BsonIgnoreIfNull(true)]
         public DateTime? TargetDate { get; set; }
+
+        [BsonElement(AttributesProperty)]
+        [BsonIgnoreIfNull(false)]
+        public List<MAttribute> Attributes { get; set; }
 
         [BsonElement(BarriersProperty)]
         [BsonIgnoreIfNull(false)]
