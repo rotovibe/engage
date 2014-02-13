@@ -18,9 +18,9 @@ namespace Phytel.API.DataDomain.PatientGoal.Services.Test
             string version = "v1";
             IRestClient client = new JsonServiceClient();
 
-            GetPatientGoalResponse response = client.Post<GetPatientGoalResponse>(
+            GetPatientGoalDataResponse response = client.Post<GetPatientGoalDataResponse>(
                 string.Format("{0}/{1}/{2}/{3}/PatientGoal/{4}", url, context, version, contractNumber, ProgramID),
-                new GetPatientGoalResponse() as object);
+                new GetPatientGoalDataResponse() as object);
 
             Assert.AreEqual(string.Empty, string.Empty);
         }
