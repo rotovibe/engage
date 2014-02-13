@@ -33,6 +33,7 @@ namespace Phytel.API.DataDomain.PatientGoal.Services.Test
                     Task = new PatientInterventionData
                     {
                         Id = "52fd1cf8fe7a592d046c548f",
+                        PatientGoalId = "12341cf8fe7a592d046c548f",
                         Description = "This is an example update",
                         StartDate = System.DateTime.UtcNow,
                         Status = 1,

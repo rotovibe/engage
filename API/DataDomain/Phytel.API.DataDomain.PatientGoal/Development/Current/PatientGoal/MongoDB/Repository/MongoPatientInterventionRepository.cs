@@ -34,7 +34,8 @@ namespace Phytel.API.DataDomain.PatientGoal
                 MEPatientIntervention pa = new MEPatientIntervention
                 {
                     Id = ObjectId.GenerateNewId(),
-                    TTLDate = pt.TTLDate
+                    TTLDate = pt.TTLDate,
+                    PatientGoalId = ObjectId.Parse(pt.PatientGoalId)
                 };
 
                 using (PatientGoalMongoContext ctx = new PatientGoalMongoContext(_dbName))
@@ -129,6 +130,7 @@ namespace Phytel.API.DataDomain.PatientGoal
                     var q = MB.Query<MEPatientIntervention>.EQ(b => b.Id, ObjectId.Parse(pt.Id));
 
                     var uv = new List<MB.UpdateBuilder>();
+                    uv.Add(MB.Update.Set(MEPatientIntervention.UpdatedByProperty, pt.PatientGoalId));
                     uv.Add(MB.Update.Set(MEPatientIntervention.TTLDateProperty, BsonNull.Value));
                     if (pt.Description != null) uv.Add(MB.Update.Set(MEPatientIntervention.DescriptionProperty, pt.Description));
                     if (pt.StartDate != null) uv.Add(MB.Update.Set(MEPatientIntervention.StartDateProperty, pt.StartDate));
@@ -168,6 +170,7 @@ namespace Phytel.API.DataDomain.PatientGoal
                 MEPatientIntervention pi = new MEPatientIntervention
                 {
                     Id = ObjectId.GenerateNewId(),
+                    PatientGoalId = ObjectId.Parse(ptr.PatientGoalId),
                     TTLDate = System.DateTime.UtcNow.AddDays(1),
                     UpdatedBy = ptr.UserId,
                     LastUpdatedOn = DateTime.UtcNow
