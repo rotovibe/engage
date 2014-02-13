@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using Phytel.API.Interface;
 using System;
 
-namespace Phytel.API.DataDomain.PatientGoal.DTO
+namespace Phytel.API.AppDomain.NG.DTO
 {
-    public class GetPatientGoalDataResponse : IDomainResponse
+    public class GetPatientGoalResponse : IDomainResponse
     {
-        public PatientGoalData GoalData { get; set; }
+        public PatientGoal Goal { get; set; }
         public string Version { get; set; }
         public ResponseStatus Status { get; set; }
     }

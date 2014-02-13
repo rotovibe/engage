@@ -5,12 +5,13 @@ using System.Text;
 using System.Threading.Tasks;
 using ServiceStack.ServiceInterface.ServiceModel;
 using Phytel.API.Interface;
+using Phytel.API.Common.CustomObjects;
 
 namespace Phytel.API.AppDomain.NG.DTO
 {
     public class GetLookUpsResponse : IDomainResponse
     {
-        public List<LookUp> LookUps { get; set; }
+        public List<IdNamePair> LookUps { get; set; }
         public ResponseStatus Status { get; set; }
         public string Version { get; set; }
     }

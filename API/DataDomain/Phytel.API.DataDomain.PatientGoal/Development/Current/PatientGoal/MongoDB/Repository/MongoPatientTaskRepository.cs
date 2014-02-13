@@ -27,7 +27,7 @@ namespace Phytel.API.DataDomain.PatientGoal
 
         public object Insert(object newEntity)
         {
-            PatientTask pt = (PatientTask)newEntity;
+            PatientTaskData pt = (PatientTaskData)newEntity;
             try
             {
                 MEPatientTask pa = new MEPatientTask
@@ -128,6 +128,16 @@ namespace Phytel.API.DataDomain.PatientGoal
         }
 
         public void CacheByID(List<string> entityIDs)
+        {
+            try
+            {
+                throw new NotImplementedException();
+                // code here //
+            }
+            catch (Exception ex) { throw ex; }
+        }
+
+        public string Initialize(object newEntity)
         {
             try
             {

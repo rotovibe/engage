@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using ServiceStack.ServiceInterface.ServiceModel;
 using Phytel.API.Interface;
+using Phytel.API.Common.CustomObjects;
 
 namespace Phytel.API.AppDomain.NG.DTO
 {
@@ -16,7 +17,7 @@ namespace Phytel.API.AppDomain.NG.DTO
 
     }
 
-    public class StatesLookUp : LookUp
+    public class StatesLookUp : IdNamePair
     {
         public string Code { get; set; }
     }

@@ -96,11 +96,16 @@
     <Compile Include="Contact\PutUpdateContactResponse.cs" />
     <Compile Include="GetPatientProgramsRequest.cs" />
     <Compile Include="GetPatientProgramsResponse.cs" />
+    <Compile Include="Goal\GetPatientGoalRequest.cs" />
+    <Compile Include="Goal\GetPatientGoalResponse.cs" />
+    <Compile Include="Goal\PatientGoal.cs" />
+    <Compile Include="Goal\PatientBarrier.cs" />
+    <Compile Include="Goal\PatientIntervention.cs" />
     <Compile Include="Goal\PostInitializeGoalRequest.cs" />
     <Compile Include="Goal\GetInitializeTaskRequest.cs" />
     <Compile Include="Goal\PostInitializeGoalResponse.cs" />
     <Compile Include="Goal\GetInitializeTaskResponse.cs" />
-    <Compile Include="Goal\NGTaskAttribute.cs" />
+    <Compile Include="Goal\TaskAttribute.cs" />
     <Compile Include="Goal\PatientTask.cs" />
     <Compile Include="LookUp\Goal\GetLookUpsRequest.cs" />
     <Compile Include="LookUp\Goal\GetLookUpsResponse.cs" />
@@ -119,7 +124,6 @@
     <Compile Include="Contact\GetContactResponse.cs" />
     <Compile Include="IPlanElement.cs" />
     <Compile Include="CohortPatient.cs" />
-    <Compile Include="LookUp\LookUp.cs" />
     <Compile Include="PostProcessActionRequest.cs" />
     <Compile Include="PostProcessActionResponse.cs" />
     <Compile Include="GetPatientProgramDetailsSummaryResponse.cs" />
@@ -159,6 +163,10 @@
     <None Include="PlanElementsDiagram.cd" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\..\Common\Phytel.API.Common\Development\Current\Phytel.API.Common.csproj">
+      <Project>{25cf3c3f-221f-4a49-b5ef-a8a5fcf9a5ba}</Project>
+      <Name>Phytel.API.Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\..\..\Interfaces\Development\Current\Phytel.API.Interface\Phytel.API.Interface.csproj">
       <Project>{abe948fb-247e-4955-b3ab-b7c93e10a542}</Project>
       <Name>Phytel.API.Interface</Name>

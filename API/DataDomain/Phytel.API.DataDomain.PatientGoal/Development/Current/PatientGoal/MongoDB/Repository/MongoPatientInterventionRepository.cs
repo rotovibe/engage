@@ -122,5 +122,15 @@ namespace Phytel.API.DataDomain.PatientGoal
             }
             catch (Exception ex) { throw ex; }
         }
+
+        public string Initialize(object newEntity)
+        {
+            try
+            {
+                throw new NotImplementedException();
+                // code here //
+            }
+            catch (Exception ex) { throw ex; }
+        }
     }
 }

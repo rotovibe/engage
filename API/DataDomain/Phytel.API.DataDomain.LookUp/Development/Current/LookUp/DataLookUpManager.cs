@@ -3,6 +3,7 @@ using System.Linq;
 using Phytel.API.Interface;
 using System;
 using Phytel.API.DataDomain.LookUp.DTO;
+using Phytel.API.Common.CustomObjects;
 
 namespace Phytel.API.DataDomain.LookUp
 {
@@ -76,8 +77,8 @@ namespace Phytel.API.DataDomain.LookUp
         {
             GetAllCommModesDataResponse response = new GetAllCommModesDataResponse();
 
-            ILookUpRepository<LookUpData> repo = LookUpRepositoryFactory<LookUpData>.GetLookUpRepository(request.ContractNumber, request.Context);
-            List<LookUpData> data = repo.GetAllCommModes();
+            ILookUpRepository<IdNamePair> repo = LookUpRepositoryFactory<IdNamePair>.GetLookUpRepository(request.ContractNumber, request.Context);
+            List<IdNamePair> data = repo.GetAllCommModes();
 
             if (data != null)
             {
@@ -104,8 +105,8 @@ namespace Phytel.API.DataDomain.LookUp
         {
             GetAllTimesOfDaysDataResponse response = new GetAllTimesOfDaysDataResponse();
 
-            ILookUpRepository<LookUpData> repo = LookUpRepositoryFactory<LookUpData>.GetLookUpRepository(request.ContractNumber, request.Context);
-            List<LookUpData> data = repo.GetAllTimesOfDays();
+            ILookUpRepository<IdNamePair> repo = LookUpRepositoryFactory<IdNamePair>.GetLookUpRepository(request.ContractNumber, request.Context);
+            List<IdNamePair> data = repo.GetAllTimesOfDays();
 
             if (data != null)
             {
@@ -176,8 +177,8 @@ namespace Phytel.API.DataDomain.LookUp
         {
             GetLookUpsDataResponse response = new GetLookUpsDataResponse();
 
-            ILookUpRepository<LookUpData> repo = LookUpRepositoryFactory<LookUpData>.GetLookUpRepository(request.ContractNumber, request.Context);
-            List<LookUpData> data = repo.GetLookps(request.Name);
+            ILookUpRepository<IdNamePair> repo = LookUpRepositoryFactory<IdNamePair>.GetLookUpRepository(request.ContractNumber, request.Context);
+            List<IdNamePair> data = repo.GetLookps(request.Name);
 
             if (data != null)
             {

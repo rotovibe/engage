@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Phytel.API.Interface;
 using ServiceStack.ServiceHost;
 using Phytel.API.DataDomain.LookUp.DTO;
+using Phytel.API.Common.CustomObjects;
 
 namespace Phytel.API.DataDomain.Objective.DTO
 {
@@ -11,7 +12,7 @@ namespace Phytel.API.DataDomain.Objective.DTO
    {
 
       [ApiMember(DataType = "List<LookUpData>", Description = "List of Objectives.", IsRequired = true, Name = "Objectives", ParameterType = "body")]
-       public List<LookUpData> Objectives { get; set; }
+       public List<IdNamePair> Objectives { get; set; }
 
        [ApiMember(DataType = "ResponseStatus", Description = "HTTP(S) Response Status identifying the result of the request.  This will come in the form of standard HTTP(S) responses (200, 401, 500, etc...)", IsRequired = true, Name = "Status", ParameterType = "body")]
        public ResponseStatus Status { get; set; }

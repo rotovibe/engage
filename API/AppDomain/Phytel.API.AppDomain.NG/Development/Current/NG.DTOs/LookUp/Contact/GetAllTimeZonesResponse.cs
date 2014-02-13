@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using ServiceStack.ServiceInterface.ServiceModel;
 using Phytel.API.Interface;
+using Phytel.API.Common.CustomObjects;
 
 namespace Phytel.API.AppDomain.NG.DTO
 {
@@ -11,7 +12,7 @@ namespace Phytel.API.AppDomain.NG.DTO
         public string Version { get; set; }
     }
 
-    public class TimeZonesLookUp : LookUp
+    public class TimeZonesLookUp : IdNamePair
     {
         public bool DefaultZone { get; set; }
     }

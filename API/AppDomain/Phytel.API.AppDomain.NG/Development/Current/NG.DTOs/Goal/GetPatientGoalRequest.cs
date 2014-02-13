@@ -1,10 +1,10 @@
 using Phytel.API.Interface;
 using ServiceStack.ServiceHost;
 
-namespace Phytel.API.DataDomain.PatientGoal.DTO
+namespace Phytel.API.AppDomain.NG.DTO
 {
-    [Route("/{Context}/{Version}/{ContractNumber}/Goal/{Id}", "GET")]
-    public class GetPatientGoalDataRequest : IDataDomainRequest
+    [Route("/{Version}/{ContractNumber}/Goal/{Id}", "GET")]
+    public class GetPatientDataRequest : IAppDomainRequest
     {
         [ApiMember(Name = "Id", Description = "ID of the PatientGoal being requested", ParameterType = "property", DataType = "string", IsRequired = true)]
         public string Id { get; set; }
@@ -20,5 +20,10 @@ namespace Phytel.API.DataDomain.PatientGoal.DTO
 
         [ApiMember(Name = "UserId", Description = "UserId of the logged in user", ParameterType = "property", DataType = "string", IsRequired = true)]
         public string UserId { get; set; }
+
+        [ApiMember(Name = "Token", Description = "Request Token", ParameterType = "QueryString", DataType = "string", IsRequired = true)]
+        public string Token { get; set; }
+
+        public GetPatientDataRequest() { }
     }
 }

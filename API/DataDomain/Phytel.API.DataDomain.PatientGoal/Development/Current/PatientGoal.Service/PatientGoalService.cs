@@ -8,13 +8,13 @@ namespace Phytel.API.DataDomain.PatientGoal.Service
 {
     public partial class PatientGoalService : ServiceStack.ServiceInterface.Service
     {
-        public GetPatientGoalDataResponse Post(GetPatientGoalDataRequest request)
+
+        public PutInitializeGoalDataResponse Put(PutInitializeGoalDataRequest request)
         {
-            GetPatientGoalDataResponse response = new GetPatientGoalDataResponse();
+            PutInitializeGoalDataResponse response = new PutInitializeGoalDataResponse();
             try
             {
-                response = PatientGoalDataManager.GetPatientGoalByID(request);
-                response.Version = request.Version;
+                response = PatientGoalDataManager.InitializeGoal(request);
             }
             catch (Exception ex)
             {
@@ -30,8 +30,7 @@ namespace Phytel.API.DataDomain.PatientGoal.Service
             GetPatientGoalDataResponse response = new GetPatientGoalDataResponse();
             try
             {
-                response = PatientGoalDataManager.GetPatientGoalByID(request);
-                response.Version = request.Version;
+                response = PatientGoalDataManager.GetPatientGoal(request);
             }
             catch (Exception ex)
             {
@@ -42,21 +41,21 @@ namespace Phytel.API.DataDomain.PatientGoal.Service
             return response;
         }
 
-        public GetAllPatientGoalsDataResponse Post(GetAllPatientGoalsDataRequest request)
-        {
-            GetAllPatientGoalsDataResponse response = new GetAllPatientGoalsDataResponse();
-            try
-            {
-                response = PatientGoalDataManager.GetPatientGoalList(request);
-                response.Version = request.Version;
-            }
-            catch (Exception ex)
-            {
-                //TODO: Log this to C3 database via ASE
-                base.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-                response.Status = new ServiceStack.ServiceInterface.ServiceModel.ResponseStatus("Exception", ex.Message);
-            }
-            return response;
-        }
+        //public GetAllPatientGoalsDataResponse Post(GetAllPatientGoalsDataRequest request)
+        //{
+        //    GetAllPatientGoalsDataResponse response = new GetAllPatientGoalsDataResponse();
+        //    try
+        //    {
+        //        response = PatientGoalDataManager.GetPatientGoalList(request);
+        //        response.Version = request.Version;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        //TODO: Log this to C3 database via ASE
+        //        base.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+        //        response.Status = new ServiceStack.ServiceInterface.ServiceModel.ResponseStatus("Exception", ex.Message);
+        //    }
+        //    return response;
+        //}
     }
 }

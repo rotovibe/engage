@@ -15,14 +15,19 @@ namespace Phytel.API.DataDomain.PatientGoal.DTO
         public MEPatientGoal() { Id = ObjectId.GenerateNewId(); }
 
         public const string IdProperty = "_id";
+        public const string PatientIdProperty = "pid";
         public const string FocusAreaProperty = "focs";
         public const string SourceProperty = "src";
         public const string ProgramProperty = "progs";
         public const string TypeProperty = "type";
         public const string StatusProperty = "sts";
         public const string EndDateProperty = "ed";
-        public const string TargetValueProperty = "trgv";
-        public const string TargetDateProperty = "trgd";
+        public const string TargetValueProperty = "tv";
+        public const string TargetDateProperty = "td";
+
+        public const string BarriersProperty = "bars";
+        public const string TasksProperty = "tasks";
+        public const string InterventionsProperty = "intvs";
         
 
         #region Standard IMongoEntity Constants
@@ -36,6 +41,10 @@ namespace Phytel.API.DataDomain.PatientGoal.DTO
 
         [BsonId]
         public ObjectId Id { get; set; }
+
+        [BsonElement(PatientIdProperty)]
+        [BsonIgnoreIfNull(true)]
+        public ObjectId PatientId { get; set; }
         
         [BsonElement(FocusAreaProperty)]
         [BsonIgnoreIfNull(true)]
@@ -68,6 +77,18 @@ namespace Phytel.API.DataDomain.PatientGoal.DTO
         [BsonElement(TargetDateProperty)]
         [BsonIgnoreIfNull(true)]
         public DateTime? TargetDate { get; set; }
+
+        [BsonElement(BarriersProperty)]
+        [BsonIgnoreIfNull(false)]
+        public List<ObjectId> Barriers { get; set; }
+
+        [BsonElement(TasksProperty)]
+        [BsonIgnoreIfNull(false)]
+        public List<ObjectId> Tasks { get; set; }
+
+        [BsonElement(InterventionsProperty)]
+        [BsonIgnoreIfNull(false)]
+        public List<ObjectId> Interventions { get; set; }
 
         #region Standard IMongoEntity Implementation
         [BsonElement(ExtraElementsProperty)]

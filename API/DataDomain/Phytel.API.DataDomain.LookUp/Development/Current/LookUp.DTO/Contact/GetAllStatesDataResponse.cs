@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using ServiceStack.ServiceInterface.ServiceModel;
 using Phytel.API.Interface;
+using Phytel.API.Common.CustomObjects;
 
 namespace Phytel.API.DataDomain.LookUp.DTO
 {
@@ -11,7 +12,7 @@ namespace Phytel.API.DataDomain.LookUp.DTO
        public ResponseStatus Status { get; set; }
     }
 
-    public class StateData : LookUpData
+    public class StateData : IdNamePair
     {
         public string Code { get; set; }
     }

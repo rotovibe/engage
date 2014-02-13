@@ -22,6 +22,38 @@ namespace Phytel.API.AppDomain.NG
     {
         static readonly string DDPatientGoalsServiceUrl = ConfigurationManager.AppSettings["DDPatientGoalUrl"];
 
+
+        public static string PostInitialGoalRequest(PostInitializeGoalRequest request)
+        {
+            try
+            {
+                string result = string.Empty;
+                //[Route("/{Context}/{Version}/{ContractNumber}/Patient/{PatientId}/Goal/Initialize", "PUT")]
+                IRestClient client = new JsonServiceClient();
+                PutInitializeGoalDataResponse dataDomainResponse = client.Put<PutInitializeGoalDataResponse>(
+                    string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Goal/Initialize",
+                    DDPatientGoalsServiceUrl,
+                    "NG",
+                    request.Version,
+                    request.ContractNumber,
+                    request.PatientId),
+                    new PutInitializeGoalDataRequest() as object);
+
+                if (dataDomainResponse != null)
+                {
+                    result = dataDomainResponse.Id;
+                }
+
+                return result;
+            }
+            catch (WebServiceException ex)
+            {
+                throw new WebServiceException("App Domain:PostInitialGoalRequest()" + ex.Message, ex.InnerException);
+            }
+
+
+        }
+
         public static string GetInitialTaskRequest(GetInitializeTaskRequest request)
         {
             try

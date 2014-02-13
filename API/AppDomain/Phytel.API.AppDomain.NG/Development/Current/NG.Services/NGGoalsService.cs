@@ -15,7 +15,7 @@ namespace Phytel.API.AppDomain.NG.Service
     {
         public PostInitializeGoalResponse Post(PostInitializeGoalRequest request)
         {
-            PostInitializeGoalResponse response = null;
+            PostInitializeGoalResponse response = new PostInitializeGoalResponse();
             try
             {
                 GoalsManager gm = new GoalsManager();
@@ -23,7 +23,7 @@ namespace Phytel.API.AppDomain.NG.Service
                 if (result.UserId.Trim() != string.Empty)
                 {
                     request.UserId = result.UserId;
-                    response.Id = gm.PostInitialGoalRequest(request);
+                    response = gm.PostInitialGoalRequest(request);
                 }
                 else
                     throw new UnauthorizedAccessException();

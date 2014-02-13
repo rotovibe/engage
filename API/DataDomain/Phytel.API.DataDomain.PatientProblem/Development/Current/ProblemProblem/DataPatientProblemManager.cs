@@ -42,7 +42,7 @@ namespace Phytel.API.DataDomain.PatientProblem
                 List<ProblemData> problems = problemLookUpResponse.Problems;
                 foreach (ProblemData p in problems)
                 {
-                    activeProblemIDs.Add(p.ID);
+                    activeProblemIDs.Add(p.Id);
                 }
 
           

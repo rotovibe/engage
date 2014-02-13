@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Phytel.API.AppDomain.NG.DTO.Goal
+namespace Phytel.API.AppDomain.NG.DTO
 {
-    public class NGTaskAttribute
+    public class TaskAttribute
     {
     }
 }

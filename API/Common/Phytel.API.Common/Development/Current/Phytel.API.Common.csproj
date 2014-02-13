@@ -111,6 +111,7 @@
     <Compile Include="Audit\AuditHelper.cs" />
     <Compile Include="Audit\DispatchEventArgs.cs" />
     <Compile Include="Audit\DispatchRequest.cs" />
+    <Compile Include="CustomObjects\IdNamePair.cs" />
     <Compile Include="Data\MongoDataUtil.cs" />
     <Compile Include="Enums.cs" />
     <Compile Include="Extensions\LinqExtensions.cs" />

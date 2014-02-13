@@ -8,38 +8,33 @@ namespace Phytel.API.DataDomain.PatientGoal
 {
     public static class PatientGoalDataManager
     {
-        public static GetPatientGoalDataResponse GetPatientGoalByID(GetPatientGoalDataRequest request)
+        public static PutInitializeGoalDataResponse InitializeGoal(PutInitializeGoalDataRequest request)
         {
+            PutInitializeGoalDataResponse response = null;
             try
             {
-                GetPatientGoalDataResponse result = new GetPatientGoalDataResponse();
-
-                IPatientGoalRepository<GetPatientGoalDataResponse> repo = PatientGoalRepositoryFactory<GetPatientGoalDataResponse>.GetPatientGoalRepository(request.ContractNumber, request.Context);
-                result = repo.FindByID(request.PatientGoalId) as GetPatientGoalDataResponse;
-
-                // if cross-domain service call has error
-                //if (result.Status != null)
-                //{
-                //    throw new ArgumentException(result.Status.Message, new Exception() { Source = result.Status.StackTrace });
-                //}
-
-                return (result != null ? result : new GetPatientGoalDataResponse());
+                response = new PutInitializeGoalDataResponse();
+                IPatientGoalRepository<PutInitializeGoalDataResponse> repo = PatientGoalRepositoryFactory<PutInitializeGoalDataResponse>.GetPatientGoalRepository(request.ContractNumber, request.Context);
+                response.Id = repo.Initialize(request);
+                response.Version = request.Version;
             }
             catch (Exception ex)
             {
                 throw ex;
             }
+            return response;
         }
 
-        public static GetAllPatientGoalsDataResponse GetPatientGoalList(GetAllPatientGoalsDataRequest request)
+        public static GetPatientGoalDataResponse GetPatientGoal(GetPatientGoalDataRequest request)
         {
+            GetPatientGoalDataResponse result = null;
             try
             {
-                GetAllPatientGoalsDataResponse result = new GetAllPatientGoalsDataResponse();
+                result = new GetPatientGoalDataResponse();
 
-                IPatientGoalRepository<GetAllPatientGoalsDataResponse> repo = PatientGoalRepositoryFactory<GetAllPatientGoalsDataResponse>.GetPatientGoalRepository(request.ContractNumber, request.Context);
-               
-
+                IPatientGoalRepository<GetPatientGoalDataResponse> repo = PatientGoalRepositoryFactory<GetPatientGoalDataResponse>.GetPatientGoalRepository(request.ContractNumber, request.Context);
+                result.GoalData = repo.FindByID(request.Id) as PatientGoalData;
+                result.Version = request.Version;
                 return result;
             }
             catch (Exception ex)
@@ -47,6 +42,23 @@ namespace Phytel.API.DataDomain.PatientGoal
                 throw ex;
             }
         }
+
+        //public static GetAllPatientGoalsDataResponse GetPatientGoalList(GetAllPatientGoalsDataRequest request)
+        //{
+        //    try
+        //    {
+        //        GetAllPatientGoalsDataResponse result = new GetAllPatientGoalsDataResponse();
+
+        //        IPatientGoalRepository<GetAllPatientGoalsDataResponse> repo = PatientGoalRepositoryFactory<GetAllPatientGoalsDataResponse>.GetPatientGoalRepository(request.ContractNumber, request.Context);
+               
+
+        //        return result;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw ex;
+        //    }
+        //}
 
         #region // TASKS
         public static PutInitializeTaskResponse InsertNewPatientTask(PutInitializeTaskRequest request)
@@ -57,12 +69,12 @@ namespace Phytel.API.DataDomain.PatientGoal
 
                 IPatientGoalRepository<GetAllPatientGoalsDataResponse> repo = PatientGoalRepositoryFactory<GetAllPatientGoalsDataResponse>.GetPatientTaskRepository(request.ContractNumber, request.Context);
 
-                PatientTask mePTask = new PatientTask
+                PatientTaskData mePTask = new PatientTaskData
                 {
                     TTLDate = System.DateTime.UtcNow.AddDays(1)
                 };
 
-                PatientTask rpt = (PatientTask)repo.Insert(mePTask);
+                PatientTaskData rpt = (PatientTaskData)repo.Insert(mePTask);
                 result.Id = rpt.Id;
                 return result;
             }

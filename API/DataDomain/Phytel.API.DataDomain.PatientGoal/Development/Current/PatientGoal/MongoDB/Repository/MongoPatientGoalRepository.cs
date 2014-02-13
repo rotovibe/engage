@@ -67,10 +67,27 @@ namespace Phytel.API.DataDomain.PatientGoal
 
         public object FindByID(string entityID)
         {
+            PatientGoalData goalData = null;
             try
             {
-                throw new NotImplementedException();
-                // code here //
+                using (PatientGoalMongoContext ctx = new PatientGoalMongoContext(_dbName))
+                {
+                    List<IMongoQuery> queries = new List<IMongoQuery>();
+                    queries.Add(Query.EQ(MEPatientGoal.IdProperty, ObjectId.Parse(entityID)));
+                    queries.Add(Query.EQ(MEPatientGoal.DeleteFlagProperty, false));
+                    queries.Add(Query.NE(MEPatientGoal.TTLDateProperty, null));
+                    IMongoQuery mQuery = Query.And(queries);
+                    MEPatientGoal mePG = ctx.PatientGoals.Collection.Find(mQuery).FirstOrDefault();
+                    if (mePG != null)
+                    {
+                        goalData = new PatientGoalData
+                        {
+                            
+
+                        };
+                    }
+                }
+                return goalData;
             }
             catch (Exception ex) { throw ex; }
         }
@@ -119,6 +136,34 @@ namespace Phytel.API.DataDomain.PatientGoal
             {
                 throw new NotImplementedException();
                 // code here //
+            }
+            catch (Exception ex) { throw ex; }
+        }
+
+        public string Initialize(object newEntity)
+        {
+            PutInitializeGoalDataRequest request = (PutInitializeGoalDataRequest)newEntity;
+            string patientGoalId = null;
+            try
+            {
+                MEPatientGoal mePg = new MEPatientGoal
+                {
+                    Id = ObjectId.GenerateNewId(),
+                    PatientId = ObjectId.Parse(request.PatientId),
+                    TTLDate = System.DateTime.UtcNow.AddDays(1),
+                    UpdatedBy = request.UserId,
+                    LastUpdatedOn = DateTime.UtcNow
+                };
+
+                using (PatientGoalMongoContext ctx = new PatientGoalMongoContext(_dbName))
+                {
+                    WriteConcernResult wcr = ctx.PatientGoals.Collection.Insert(mePg);
+                    if (wcr.Ok)
+                    {
+                        patientGoalId = mePg.Id.ToString();
+                    }
+                }
+                return patientGoalId;
             }
             catch (Exception ex) { throw ex; }
         }

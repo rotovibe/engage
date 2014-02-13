@@ -6,6 +6,7 @@ using MongoDB.Driver;
 using MongoDB.Driver.Builders;
 using MongoDB.Bson;
 using System;
+using Phytel.API.Common.CustomObjects;
 
 namespace Phytel.API.AppDomain.NG.Test
 {
@@ -71,7 +72,7 @@ namespace Phytel.API.AppDomain.NG.Test
                 Version = _version
             };
             // Act
-            List<LookUp> response = ngManager.GetProblems(request);
+            List<IdNamePair> response = ngManager.GetProblems(request);
 
             //Assert
             Assert.IsTrue(response.Count > 0);
@@ -90,7 +91,7 @@ namespace Phytel.API.AppDomain.NG.Test
                 Version = _version
             };
             // Act
-            List<LookUp> response = ngManager.GetAllCommModes(request);
+            List<IdNamePair> response = ngManager.GetAllCommModes(request);
 
             //Assert
             Assert.IsTrue(response.Count > 0);

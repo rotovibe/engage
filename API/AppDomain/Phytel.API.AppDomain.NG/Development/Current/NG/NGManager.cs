@@ -21,6 +21,7 @@ using System.Threading;
 using Phytel.API.Interface;
 using System.Web;
 using System.Diagnostics;
+using Phytel.API.Common.CustomObjects;
 
 namespace Phytel.API.AppDomain.NG
 {
@@ -192,11 +193,11 @@ namespace Phytel.API.AppDomain.NG
         #endregion
 
         #region Problem Requests
-        public List<LookUp> GetProblems(GetAllProblemsRequest request)
+        public List<IdNamePair> GetProblems(GetAllProblemsRequest request)
         {
             try
             {
-                List<LookUp> response = new List<LookUp>();
+                List<IdNamePair> response = new List<IdNamePair>();
 
                 IRestClient client = new JsonServiceClient();
                 //[Route("/{Context}/{Version}/{ContractNumber}/problems", "GET")]
@@ -210,8 +211,8 @@ namespace Phytel.API.AppDomain.NG
 
                 foreach (ProblemData c in problems)
                 {
-                    LookUp lookUp = new LookUp();
-                    lookUp.Id = c.ID;
+                    IdNamePair lookUp = new IdNamePair();
+                    lookUp.Id = c.Id;
                     lookUp.Name = c.Name;
                     response.Add(lookUp);
                 }
@@ -786,11 +787,11 @@ namespace Phytel.API.AppDomain.NG
         }
 
         #region LookUp - ContactRelated
-        public List<LookUp> GetAllCommModes(GetAllCommModesRequest request)
+        public List<IdNamePair> GetAllCommModes(GetAllCommModesRequest request)
         {
             try
             {
-                List<LookUp> response = new List<LookUp>();
+                List<IdNamePair> response = new List<IdNamePair>();
                 IRestClient client = new JsonServiceClient();
                 // [Route("/{Context}/{Version}/{ContractNumber}/commmodes", "GET")]
                 Phytel.API.DataDomain.LookUp.DTO.GetAllCommModesDataResponse dataDomainResponse = client.Get<Phytel.API.DataDomain.LookUp.DTO.GetAllCommModesDataResponse>(string.Format("{0}/{1}/{2}/{3}/commmodes",
@@ -799,14 +800,10 @@ namespace Phytel.API.AppDomain.NG
                                                                                                                 request.Version,
                                                                                                                 request.ContractNumber));
 
-                List<LookUpData> dataList  = dataDomainResponse.CommModes;
-
-                foreach (LookUpData d in dataList)
+                List<IdNamePair> dataList  = dataDomainResponse.CommModes;
+                if (dataList != null && dataList.Count > 0)
                 {
-                    LookUp lookUp = new LookUp();
-                    lookUp.Id = d.ID;
-                    lookUp.Name = d.Name;
-                    response.Add(lookUp);
+                    response = dataList;
                 }
                 return response;
             }
@@ -835,7 +832,7 @@ namespace Phytel.API.AppDomain.NG
                 foreach (StateData d in dataList)
                 {
                     StatesLookUp lookUp = new StatesLookUp();
-                    lookUp.Id = d.ID;
+                    lookUp.Id = d.Id;
                     lookUp.Name = d.Name;
                     lookUp.Code = d.Code;
                     response.Add(lookUp);
@@ -849,11 +846,11 @@ namespace Phytel.API.AppDomain.NG
             }
         }
 
-        public List<LookUp> GetAllTimesOfDays(GetAllTimesOfDaysRequest request)
+        public List<IdNamePair> GetAllTimesOfDays(GetAllTimesOfDaysRequest request)
         {
             try
             {
-                List<LookUp> response = new List<LookUp>();
+                List<IdNamePair> response = new List<IdNamePair>();
                 IRestClient client = new JsonServiceClient();
                 //[Route("/{Context}/{Version}/{ContractNumber}/timesOfDays", "GET")]
                 Phytel.API.DataDomain.LookUp.DTO.GetAllTimesOfDaysDataResponse dataDomainResponse = client.Get<Phytel.API.DataDomain.LookUp.DTO.GetAllTimesOfDaysDataResponse>(string.Format("{0}/{1}/{2}/{3}/timesOfDays",
@@ -862,14 +859,10 @@ namespace Phytel.API.AppDomain.NG
                                                                                                                 request.Version,
                                                                                                                 request.ContractNumber));
 
-                List<LookUpData> dataList = dataDomainResponse.TimesOfDays;
-
-                foreach (LookUpData d in dataList)
+                List<IdNamePair> dataList = dataDomainResponse.TimesOfDays;
+                if (dataList != null && dataList.Count > 0)
                 {
-                    LookUp lookUp = new LookUp();
-                    lookUp.Id = d.ID;
-                    lookUp.Name = d.Name;
-                    response.Add(lookUp);
+                    response = dataList;
                 }
                 return response;
             }
@@ -898,7 +891,7 @@ namespace Phytel.API.AppDomain.NG
                 foreach (CommTypeData d in dataList)
                 {
                     CommTypeLookUp lookUp = new CommTypeLookUp();
-                    lookUp.Id = d.ID;
+                    lookUp.Id = d.Id;
                     lookUp.Name = d.Name;
                     lookUp.CommModes = d.CommModes;
                     response.Add(lookUp);
@@ -935,7 +928,7 @@ namespace Phytel.API.AppDomain.NG
                     foreach (Phytel.API.DataDomain.LookUp.DTO.LanguageData d in activeLanguages)
                     {
                         LanguagesLookUp lookUp = new LanguagesLookUp();
-                        lookUp.Id = d.ID;
+                        lookUp.Id = d.Id;
                         lookUp.Name = d.Name;
                         lookUp.Code = d.Code;
                         response.Add(lookUp);
@@ -968,7 +961,7 @@ namespace Phytel.API.AppDomain.NG
                 foreach (TimeZoneData d in dataList)
                 {
                     TimeZonesLookUp lookUp = new TimeZonesLookUp();
-                    lookUp.Id = d.ID;
+                    lookUp.Id = d.Id;
                     lookUp.Name = d.Name;
                     lookUp.DefaultZone = d.Default;
                     response.Add(lookUp);
@@ -997,7 +990,7 @@ namespace Phytel.API.AppDomain.NG
                                                                                                                 request.ContractNumber));
 
                 TimeZoneData data = dataDomainResponse.TimeZone;
-                response.Id = data.ID;
+                response.Id = data.Id;
                 response.Name = data.Name;
                 response.DefaultZone = data.Default;
             }
@@ -1028,10 +1021,10 @@ namespace Phytel.API.AppDomain.NG
                 List<CommModeData> commModeData = new List<CommModeData>();
                 List<CommMode> commMode = new List<CommMode>();
                 GetAllCommModesRequest commRequest = new GetAllCommModesRequest { ContractNumber  = contractNumber, UserId = userId, Version = version};
-                List<LookUp> modesLookUp = GetAllCommModes(commRequest);
+                List<IdNamePair> modesLookUp = GetAllCommModes(commRequest);
                 if (modesLookUp != null && modesLookUp.Count > 0)
                 {
-                    foreach(LookUp l in modesLookUp)
+                    foreach(IdNamePair l in modesLookUp)
                     {
                         commModeData.Add(new CommModeData { ModeId = l.Id, OptOut = false, Preferred = false });
                         commMode.Add(new CommMode { LookUpModeId = l.Id, OptOut = false, Preferred = false });
@@ -1337,11 +1330,11 @@ namespace Phytel.API.AppDomain.NG
         #endregion
 
         #region Goal
-        public List<LookUp> GetLookUps(GetLookUpsRequest request)
+        public List<IdNamePair> GetLookUps(GetLookUpsRequest request)
         {
             try
             {
-                List<LookUp> response = new List<LookUp>();
+                List<IdNamePair> response = new List<IdNamePair>();
                 IRestClient client = new JsonServiceClient();
                 //[Route("/{Context}/{Version}/{ContractNumber}/Type/{Name}", "GET")]
                 Phytel.API.DataDomain.LookUp.DTO.GetLookUpsDataResponse dataDomainResponse = client.Get<Phytel.API.DataDomain.LookUp.DTO.GetLookUpsDataResponse>(string.Format("{0}/{1}/{2}/{3}/Type/{4}",
@@ -1351,14 +1344,10 @@ namespace Phytel.API.AppDomain.NG
                                                                                                                 request.ContractNumber,
                                                                                                                 request.TypeName));
 
-                List<LookUpData> dataList = dataDomainResponse.LookUpsData;
-
-                foreach (LookUpData d in dataList)
+                List<IdNamePair> dataList = dataDomainResponse.LookUpsData;
+                if (dataList != null && dataList.Count > 0)
                 {
-                    LookUp lookUp = new LookUp();
-                    lookUp.Id = d.ID;
-                    lookUp.Name = d.Name;
-                    response.Add(lookUp);
+                    response = dataList;
                 }
                 return response;
             }

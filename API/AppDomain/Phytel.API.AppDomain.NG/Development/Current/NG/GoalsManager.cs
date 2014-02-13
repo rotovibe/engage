@@ -17,34 +17,19 @@ namespace Phytel.API.AppDomain.NG
     public class GoalsManager : ManagerBase
     {
 
-        static readonly string DDPatientGoalsServiceUrl = ConfigurationManager.AppSettings["DDPatientGoalUrl"];
-
-        public string PostInitialGoalRequest(PostInitializeGoalRequest request)
+        public PostInitializeGoalResponse PostInitialGoalRequest(PostInitializeGoalRequest request)
         {
             try
             {
-                string result = string.Empty;
-
-                IRestClient client = new JsonServiceClient();
-                PutInitializeGoalDataResponse response = client.Put<PutInitializeGoalDataResponse>(
-                    string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Goal/Initialize",
-                    DDPatientGoalsServiceUrl,
-                    "NG",
-                    request.Version,
-                    request.ContractNumber,
-                    request.PatientId),
-                    new PutInitializeGoalDataRequest() as object);
-
-                if (response != null)
-                {
-                    result = response.Id;
-                }
-
-                return result;
+                PostInitializeGoalResponse response = new PostInitializeGoalResponse();
+                string id = GoalsEndpointUtil.PostInitialGoalRequest(request);
+                response.Id = id;
+                response.Version = request.Version;
+                return response;
             }
-            catch (WebServiceException ex)
+            catch (Exception ex)
             {
-                throw new WebServiceException("App Domain:PostInitialGoalRequest()" + ex.Message, ex.InnerException);
+                throw ex;
             }
         }
        
@@ -56,6 +41,7 @@ namespace Phytel.API.AppDomain.NG
                 GetInitializeTaskResponse itr = new GetInitializeTaskResponse();
                 string id = GoalsEndpointUtil.GetInitialTaskRequest(request);
                 itr.Id = id;
+                itr.Version = request.Version;
                 return itr;
             }
             catch(Exception ex)
