@@ -808,7 +808,7 @@ Global
 		{BE7CFA5D-9FBE-413B-B8A6-832F6A5BBB05} = {58D0CB4A-2F1E-42AE-9928-91CC8B61811F}
 	EndGlobalSection
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 69
+		SccNumberOfProjects = 68
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = http://hillstfs2013:8080/tfs/phytel
 		SccLocalPath0 = .
