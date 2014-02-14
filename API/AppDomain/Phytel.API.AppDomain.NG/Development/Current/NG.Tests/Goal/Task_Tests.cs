@@ -26,6 +26,8 @@ namespace Phytel.API.DataDomain.Patient.Service.Test
                 patientId,
                 patientGoalId,
                 token));
+
+            //GetInitializeTaskResponse response = client.Get<GetInitializeTaskResponse>(@"http://azurephyteldev.cloudapp.net:59900/Nightingale/v1/InHealth001/Patient/52f55873072ef709f84e6810/Goal/52fd2d6cd433231c845e7d25/Task/Initialize/?Token=52fe461ad6a4850b2c8f7a9d");
         }
     }
 }
