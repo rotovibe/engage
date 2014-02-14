@@ -21,31 +21,43 @@ namespace Phytel.API.AppDomain.NG
     public static class GoalsUtil
     {
 
-        public static void SavePatientGoalTasks(PostPatientGoalRequest request)
+        public static bool SavePatientGoalTasks(PostPatientGoalRequest request)
         {
-            List<PatientTaskData> ptd = new List<PatientTaskData>();
-            request.Goal.Tasks.ForEach(t =>
+            bool result = false;
+            try
             {
-                ptd.Add(new PatientTaskData
+                if (request.Goal.Tasks != null && request.Goal.Tasks.Count > 0)
                 {
-                    Id = t.Id,
-                    Attributes = GetAttributeData(t.Attributes),
-                    Barriers = t.Barriers,
-                    Description = t.Description,
-                    Order = t.Order,
-                    PatientGoalId = request.Goal.Id,
-                    StartDate = t.StartDate,
-                    Status = t.Status,
-                    StatusDate = t.StatusDate,
-                    TargetDate = t.TargetDate,
-                    TargetValue = t.TargetValue
-                });
-            });
+                    List<PatientTaskData> ptd = new List<PatientTaskData>();
+                    request.Goal.Tasks.ForEach(t =>
+                    {
+                        ptd.Add(new PatientTaskData
+                        {
+                            Id = t.Id,
+                            Attributes = GetAttributeData(t.Attributes),
+                            Barriers = t.Barriers,
+                            Description = t.Description,
+                            Order = t.Order,
+                            PatientGoalId = request.Goal.Id,
+                            StartDate = t.StartDate,
+                            Status = t.Status,
+                            StatusDate = t.StatusDate,
+                            TargetDate = t.TargetDate,
+                            TargetValue = t.TargetValue
+                        });
+                    });
 
-            ptd.ForEach(td =>
+                    ptd.ForEach(td =>
+                    {
+                        GoalsEndpointUtil.PostUpdateTaskRequest(request, td);
+                    });
+                }
+                return result;
+            }
+            catch (Exception ex)
             {
-                GoalsEndpointUtil.PostUpdateTaskRequest(request, td);
-            });
+                throw new Exception("AD:SavePatientGoalTasks():" + ex.Message, ex.InnerException);
+            }
         }
 
         public static List<AttributeData> GetAttributeData(List<DTO.Attribute> list)
@@ -55,6 +67,7 @@ namespace Phytel.API.AppDomain.NG
                 List<AttributeData> ad = new List<AttributeData>();
                 if (list != null && list.Count > 0)
                 {
+
                     list.ForEach(a =>
                     {
                         ad.Add(new AttributeData
@@ -70,35 +83,81 @@ namespace Phytel.API.AppDomain.NG
             }
             catch (Exception ex)
             {
-                throw;
+                throw new Exception("AD:GetAttributeData():" + ex.Message, ex.InnerException);
             }
         }
 
-        public static void SavePatientGoalInterventions(PostPatientGoalRequest request)
+        public static bool SavePatientGoalInterventions(PostPatientGoalRequest request)
         {
-            List<PatientInterventionData> pid = new List<PatientInterventionData>();
-            request.Goal.Interventions.ForEach(i =>
+            bool result = false;
+            try
             {
-                pid.Add(new PatientInterventionData
+                if (request.Goal.Interventions != null && request.Goal.Interventions.Count > 0)
                 {
-                    AssignedTo = i.AssignedTo,
-                    Attributes = GetAttributeData(i.Attributes),
-                    Barriers = i.Barriers,
-                    Category = i.Category,
-                    Description = i.Description,
-                    Id = i.Id,
-                    Order = i.Order,
-                    PatientGoalId = i.PatientGoalId,
-                    StartDate = i.StartDate,
-                    Status = i.Status,
-                    StatusDate = i.StatusDate
-                });
-            });
+                    List<PatientInterventionData> pid = new List<PatientInterventionData>();
+                    request.Goal.Interventions.ForEach(i =>
+                    {
+                        pid.Add(new PatientInterventionData
+                        {
+                            AssignedTo = i.AssignedTo,
+                            Attributes = GetAttributeData(i.Attributes),
+                            Barriers = i.Barriers,
+                            Category = i.Category,
+                            Description = i.Description,
+                            Id = i.Id,
+                            Order = i.Order,
+                            PatientGoalId = i.PatientGoalId,
+                            StartDate = i.StartDate,
+                            Status = i.Status,
+                            StatusDate = i.StatusDate
+                        });
+                    });
 
-            pid.ForEach(pi =>
+                    pid.ForEach(pi =>
+                    {
+                        result = GoalsEndpointUtil.PostUpdateInterventionRequest(request, pi);
+                    });
+                }
+                return result;
+            }
+            catch (Exception ex)
             {
-                GoalsEndpointUtil.PostUpdateInterventionRequest(request, pi);
-            });
+                throw new Exception("AD:SavePatientGoalInterventions():" + ex.Message, ex.InnerException);
+            }
+        }
+
+        public static bool SavePatientGoalBarriers(PostPatientGoalRequest request)
+        {
+            bool result = false;
+            try
+            {
+                if (request.Goal.Barriers != null && request.Goal.Barriers.Count > 0)
+                {
+                    List<PatientBarrierData> pbd = new List<PatientBarrierData>();
+                    request.Goal.Barriers.ForEach(b =>
+                    {
+                        pbd.Add(new PatientBarrierData
+                        {
+                            Category = b.Category,
+                            Id = b.Id,
+                            Name = b.Name,
+                            PatientGoalId = b.PatientGoalId,
+                            Status = b.Status,
+                            StatusDate = b.StatusDate
+                        });
+                    });
+
+                    pbd.ForEach(bd =>
+                    {
+                        result = GoalsEndpointUtil.PostUpdateBarrierRequest(request, bd);
+                    });
+                }
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("AD:SavePatientGoalBarriers():" + ex.Message, ex.InnerException);
+            }
         }
     }
 }

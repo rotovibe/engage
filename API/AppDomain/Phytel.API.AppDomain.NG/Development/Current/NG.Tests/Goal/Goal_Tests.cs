@@ -15,7 +15,7 @@ namespace Phytel.API.DataDomain.Patient.Service.Test
             string contractNumber = "InHealth001";
             string context = "NG";
             string version = "v1";
-            string token = "52fd3964d6a4850f681dd269";
+            string token = "52fe4a7ed6a4850b2c8f7baf";
             string patientId = "52e26f0b072ef7191c111c4d";
             string patientGoalId = "52fd2d6cd433231c845e7d25";
             IRestClient client = new JsonServiceClient();
@@ -49,7 +49,7 @@ namespace Phytel.API.DataDomain.Patient.Service.Test
                 Tasks = GetPatientTasks(),
                 Type = "52a0da34fe7a5915485bdfd6",
                 Programs = GetProgramsList(),
-                //Barriers = GetBarriers(),
+                Barriers = GetBarriers(),
                 Attributes = GetAttributes(),
                 FocusAreas = GetFocusAreas()
             };
@@ -127,11 +127,10 @@ namespace Phytel.API.DataDomain.Patient.Service.Test
             List<PatientBarrier> barriers = new List<PatientBarrier>();
             barriers.Add(new PatientBarrier
             {
-                Category = "category value",
-                Id = "52fd96c0fe7a5913503f1c64",
+                Id = "52fe51a1d6a4850944a9d19d",
                 Name = "Barrier name",
                 PatientGoalId = "52fd2d6cd433231c845e7d25",
-                Status = "1",
+                Status = 1,
                 StatusDate = System.DateTime.UtcNow
             });
             return barriers;

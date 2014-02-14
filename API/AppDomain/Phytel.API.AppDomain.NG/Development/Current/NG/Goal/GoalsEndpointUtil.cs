@@ -281,5 +281,35 @@ namespace Phytel.API.AppDomain.NG
                 throw new WebServiceException("AD:PostUpdateInterventionRequest()" + ex.Message, ex.InnerException);
             }
         }
+
+        internal static bool PostUpdateBarrierRequest(PostPatientGoalRequest request, PatientBarrierData bd)
+        {
+            try
+            {
+                bool result = false;
+
+                IRestClient client = new JsonServiceClient();
+                PutUpdateBarrierResponse response = client.Put<PutUpdateBarrierResponse>(
+                    string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Goal/{5}/Barrier/{6}/Update",
+                    DDPatientGoalsServiceUrl,
+                    "NG",
+                    request.Version,
+                    request.ContractNumber,
+                    request.PatientId,
+                    request.Goal.Id,
+                   bd.Id), new PutUpdateBarrierRequest { UserId = request.UserId, Barrier = bd } as object);
+
+                if (response != null)
+                {
+                    result = true;
+                }
+
+                return result;
+            }
+            catch (WebServiceException ex)
+            {
+                throw new WebServiceException("AD:PostUpdateBarrierRequest()" + ex.Message, ex.InnerException);
+            }
+        }
     }
 }
