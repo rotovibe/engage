@@ -62,11 +62,17 @@ namespace Phytel.API.DataDomain.Patient.DTO
         [ApiMember(Name = "Email1Preferred", Description = "Preference of first email being inserted", ParameterType = "property", DataType = "boolean", IsRequired = false)]
         public bool Email1Preferred { get; set; }
 
+        [ApiMember(Name = "Email1Type", Description = "Type of the first email being inserted", ParameterType = "property", DataType = "string", IsRequired = false)]
+        public string Email1Type { get; set; }
+
         [ApiMember(Name = "Email2", Description = "Second email being inserted", ParameterType = "property", DataType = "string", IsRequired = false)]
         public string Email2 { get; set; }
 
         [ApiMember(Name = "Email2Preferred", Description = "Preference of second email being inserted", ParameterType = "property", DataType = "boolean", IsRequired = false)]
         public bool Email2Preferred { get; set; }
+
+        [ApiMember(Name = "Email2Type", Description = "Type of the second email being inserted", ParameterType = "property", DataType = "string", IsRequired = false)]
+        public string Email2Type { get; set; }
 
         [ApiMember(Name = "Address1Line1", Description = "First line of the first address being inserted", ParameterType = "property", DataType = "string", IsRequired = false)]
         public string Address1Line1 { get; set; }
@@ -89,6 +95,9 @@ namespace Phytel.API.DataDomain.Patient.DTO
         [ApiMember(Name = "Address1Preferred", Description = "Third line of the first address being inserted", ParameterType = "property", DataType = "bool", IsRequired = false)]
         public bool Address1Preferred { get; set; }
 
+        [ApiMember(Name = "Address1Type", Description = "Type of the first address being inserted", ParameterType = "property", DataType = "string", IsRequired = false)]
+        public string Address1Type { get; set; }
+
         [ApiMember(Name = "Address2Line1", Description = "First line of the second address being inserted", ParameterType = "property", DataType = "string", IsRequired = false)]
         public string Address2Line1 { get; set; }
 
@@ -109,6 +118,9 @@ namespace Phytel.API.DataDomain.Patient.DTO
 
         [ApiMember(Name = "Address2Preferred", Description = "Third line of the second address being inserted", ParameterType = "property", DataType = "bool", IsRequired = false)]
         public bool Address2Preferred { get; set; }
+
+        [ApiMember(Name = "Address2Type", Description = "Type of the second address being inserted", ParameterType = "property", DataType = "string", IsRequired = false)]
+        public string Address2Type { get; set; }
 
         [ApiMember(Name = "Context", Description = "Product Context creating the patient", ParameterType = "property", DataType = "string", IsRequired = true)]
         public string Context { get; set; }
