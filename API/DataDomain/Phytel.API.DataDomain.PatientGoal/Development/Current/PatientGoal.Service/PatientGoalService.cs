@@ -41,6 +41,22 @@ namespace Phytel.API.DataDomain.PatientGoal.Service
             return response;
         }
 
+        public PutPatientGoalDataResponse Put(PutPatientGoalDataRequest request)
+        {
+            PutPatientGoalDataResponse response = new PutPatientGoalDataResponse();
+            try
+            {
+                response = PatientGoalDataManager.PutPatientGoal(request);
+            }
+            catch (Exception ex)
+            {
+                //TODO: Log this to C3 database via ASE
+                base.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                response.Status = new ServiceStack.ServiceInterface.ServiceModel.ResponseStatus("Exception", ex.Message);
+            }
+            return response;
+        }
+
         //public GetAllPatientGoalsDataResponse Post(GetAllPatientGoalsDataRequest request)
         //{
         //    GetAllPatientGoalsDataResponse response = new GetAllPatientGoalsDataResponse();

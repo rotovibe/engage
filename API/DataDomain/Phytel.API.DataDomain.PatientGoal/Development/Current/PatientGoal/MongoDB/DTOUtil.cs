@@ -33,7 +33,7 @@ namespace Phytel.API.DataDomain.PatientGoal.MongoDB
             }
         }
 
-        internal static List<MAttribute> GetTaskAttributes(List<PatientGoal.DTO.AttributeData> list)
+        internal static List<MAttribute> GetAttributes(List<PatientGoal.DTO.AttributeData> list)
         {
             List<MAttribute> ta = new List<MAttribute>();
             try

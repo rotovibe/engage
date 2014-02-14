@@ -5,12 +5,15 @@ using ServiceStack.ServiceHost;
 
 namespace Phytel.API.DataDomain.PatientGoal.DTO
 {
-    [Route("/{Context}/{Version}/{ContractNumber}/Patient/{PatientId}/Goal/Update", "PUT")]
+    [Route("/{Context}/{Version}/{ContractNumber}/Patient/{PatientId}/Goal/{PatientGoalId}/Update", "PUT")]
     public class PutPatientGoalDataRequest : IDataDomainRequest
     {
         [ApiMember(Name = "PatientId", Description = "Id of the Patient for whom a goal is being created.", ParameterType = "property", DataType = "string", IsRequired = true)]
         public string PatientId { get; set; }
-        
+
+        [ApiMember(Name = "PatientGoalId", Description = "PatientGoalId of the goal associated", ParameterType = "property", DataType = "string", IsRequired = false)]
+        public string PatientGoalId { get; set; }
+
         [ApiMember(Name = "PatientGoal", Description = "PatientGoal object", ParameterType = "property", DataType = "PatientGoal", IsRequired = true)]
         public PatientGoalData GoalData { get; set; }
         

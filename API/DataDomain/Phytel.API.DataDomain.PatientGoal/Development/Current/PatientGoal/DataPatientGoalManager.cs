@@ -121,7 +121,25 @@ namespace Phytel.API.DataDomain.PatientGoal
                 PutUpdateInterventionResponse result = new PutUpdateInterventionResponse();
 
                 IPatientGoalRepository<PutUpdateInterventionResponse> repo = PatientGoalRepositoryFactory<PutUpdateInterventionResponse>.GetPatientInterventionRepository(request.ContractNumber, request.Context);
-                bool status = (bool)repo.Update(request.Task);
+                bool status = (bool)repo.Update(request.Intervention);
+
+                result.Updated = status;
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public static PutPatientGoalDataResponse PutPatientGoal(PutPatientGoalDataRequest request)
+        {
+            try
+            {
+                PutPatientGoalDataResponse result = new PutPatientGoalDataResponse();
+
+                IPatientGoalRepository<PutPatientGoalDataResponse> repo = PatientGoalRepositoryFactory<PutPatientGoalDataResponse>.GetPatientGoalRepository(request.ContractNumber, request.Context);
+                bool status = (bool)repo.Update(request.GoalData);
 
                 result.Updated = status;
                 return result;

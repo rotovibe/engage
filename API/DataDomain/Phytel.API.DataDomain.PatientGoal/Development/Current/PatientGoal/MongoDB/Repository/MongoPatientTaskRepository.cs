@@ -47,7 +47,7 @@ namespace Phytel.API.DataDomain.PatientGoal
                 }
                 return pt as object;
             }
-            catch (Exception ex) { throw ex; }
+            catch (Exception ex) { throw; }
         }
 
         public object InsertAll(List<object> entities)
@@ -137,7 +137,7 @@ namespace Phytel.API.DataDomain.PatientGoal
                     if (pt.TargetDate != null) uv.Add(MB.Update.Set(MEPatientTask.TargetDateProperty, pt.TargetDate));
                     if (pt.TargetValue != null) uv.Add(MB.Update.Set(MEPatientTask.TargetValueProperty, pt.TargetValue));
                     if (pt.Order != 0) uv.Add(MB.Update.Set(MEPatientTask.OrderProperty, pt.Order));
-                    if (pt.Attributes != null) { uv.Add(MB.Update.SetWrapped<List<MAttribute>>(MEPatientTask.AttributesProperty, DTOUtil.GetTaskAttributes(pt.Attributes))); }
+                    if (pt.Attributes != null) { uv.Add(MB.Update.SetWrapped<List<MAttribute>>(MEPatientTask.AttributesProperty, DTOUtil.GetAttributes(pt.Attributes))); }
                     if (pt.Barriers != null) { uv.Add(MB.Update.SetWrapped<List<ObjectId>>(MEPatientTask.BarriersProperty, DTOUtil.ConvertObjectId(pt.Barriers))); }
 
                     IMongoUpdate update = MB.Update.Combine(uv);
@@ -147,7 +147,7 @@ namespace Phytel.API.DataDomain.PatientGoal
                 }
                 return result as object;
             }
-            catch (Exception ex) { throw ex; }
+            catch (Exception ex) { throw; }
         }
 
         public void CacheByID(List<string> entityIDs)
@@ -157,7 +157,7 @@ namespace Phytel.API.DataDomain.PatientGoal
                 throw new NotImplementedException();
                 // code here //
             }
-            catch (Exception ex) { throw ex; }
+            catch (Exception ex) { throw; }
         }
 
         public string Initialize(object newEntity)
@@ -185,7 +185,7 @@ namespace Phytel.API.DataDomain.PatientGoal
                 }
                 return taskId;
             }
-            catch (Exception ex) { throw ex; }
+            catch (Exception ex) { throw; }
         }
     }
 }
