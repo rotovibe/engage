@@ -111,7 +111,7 @@
       <Project>{f0a3623a-6d1d-46de-a00e-794ebc856eb5}</Project>
       <Name>DataDomain.LookUp</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Services\API\DataDomain\Phytel.API.DataDomain.PatientProblem\Development\Current\ProblemProblem\DataDomain.PatientProblem.csproj">
+    <ProjectReference Include="..\..\Services\API\DataDomain\Phytel.API.DataDomain.PatientProblem\Development\Current\PatientProblem\DataDomain.PatientProblem.csproj">
       <Project>{afd0f5b1-a29e-402c-958b-d6d82b4278e5}</Project>
       <Name>DataDomain.PatientProblem</Name>
     </ProjectReference>
