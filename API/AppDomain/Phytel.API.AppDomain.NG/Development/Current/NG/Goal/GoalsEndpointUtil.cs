@@ -186,7 +186,7 @@ namespace Phytel.API.AppDomain.NG
                     Programs = pg.Programs,
                     Source = pg.Source,
                     StartDate = pg.StartDate,
-                    Status = pg.Status,
+                    StatusId = pg.Status,
                     TargetDate = pg.TargetDate,
                     TargetValue = pg.TargetValue,
                     Type = pg.Type

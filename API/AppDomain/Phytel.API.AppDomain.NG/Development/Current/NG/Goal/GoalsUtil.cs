@@ -40,7 +40,7 @@ namespace Phytel.API.AppDomain.NG
                             Order = t.Order,
                             PatientGoalId = request.Goal.Id,
                             StartDate = t.StartDate,
-                            Status = t.Status,
+                            StatusId = t.Status,
                             StatusDate = t.StatusDate,
                             TargetDate = t.TargetDate,
                             TargetValue = t.TargetValue
@@ -102,13 +102,13 @@ namespace Phytel.API.AppDomain.NG
                             AssignedTo = i.AssignedTo,
                             Attributes = GetAttributeData(i.Attributes),
                             Barriers = i.Barriers,
-                            Category = i.Category,
+                            CategoryId = i.Category,
                             Description = i.Description,
                             Id = i.Id,
                             Order = i.Order,
                             PatientGoalId = i.PatientGoalId,
                             StartDate = i.StartDate,
-                            Status = i.Status,
+                            StatusId = i.Status,
                             StatusDate = i.StatusDate
                         });
                     });
@@ -138,11 +138,11 @@ namespace Phytel.API.AppDomain.NG
                     {
                         pbd.Add(new PatientBarrierData
                         {
-                            Category = b.Category,
+                            CategoryId = b.Category,
                             Id = b.Id,
                             Name = b.Name,
                             PatientGoalId = b.PatientGoalId,
-                            Status = b.Status,
+                            StatusId = b.Status,
                             StatusDate = b.StatusDate
                         });
                     });
