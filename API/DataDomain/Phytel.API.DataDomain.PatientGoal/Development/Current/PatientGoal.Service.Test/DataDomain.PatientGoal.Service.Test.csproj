@@ -66,6 +66,8 @@
     <Compile Include="Patient_Intervention_Put_Test.cs" />
     <Compile Include="Patient_Intervention_Update_Test.cs" />
     <Compile Include="Patient_Goal_Update_Test.cs" />
+    <Compile Include="Patient_Barrier_Update_Test.cs" />
+    <Compile Include="Patient_Barrier_Put_Test .cs" />
     <Compile Include="Patient_Task_Update_Test.cs" />
     <Compile Include="Patient_Task_Put_Test.cs" />
     <Compile Include="PatientGoal_Test.cs" />

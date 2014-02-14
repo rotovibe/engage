@@ -166,5 +166,23 @@ namespace Phytel.API.DataDomain.PatientGoal
                 throw ex;
             }
         }
+
+        public static PutUpdateBarrierResponse UpdatePatientBarrier(PutUpdateBarrierRequest request)
+        {
+            try
+            {
+                PutUpdateBarrierResponse result = new PutUpdateBarrierResponse();
+
+                IPatientGoalRepository<PutUpdateBarrierResponse> repo = PatientGoalRepositoryFactory<PutUpdateBarrierResponse>.GetPatientBarrierRepository(request.ContractNumber, request.Context);
+                bool status = (bool)repo.Update(request);
+
+                result.Updated = status;
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }   

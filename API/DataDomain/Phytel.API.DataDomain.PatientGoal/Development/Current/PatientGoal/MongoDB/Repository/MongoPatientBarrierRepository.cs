@@ -105,12 +105,33 @@ namespace Phytel.API.DataDomain.PatientGoal
 
         public object Update(object entity)
         {
+            bool result = false;
+            PutUpdateBarrierRequest pbr = (PutUpdateBarrierRequest)entity;
+            PatientBarrierData pb = pbr.Barrier;
             try
             {
-                throw new NotImplementedException();
-                // code here //
+                using (PatientGoalMongoContext ctx = new PatientGoalMongoContext(_dbName))
+                {
+                    var q = MB.Query<MEPatientBarrier>.EQ(b => b.Id, ObjectId.Parse(pb.Id));
+
+                    var uv = new List<MB.UpdateBuilder>();
+                    uv.Add(MB.Update.Set(MEPatientBarrier.TTLDateProperty, BsonNull.Value));
+                    uv.Add(MB.Update.Set(MEPatientBarrier.UpdatedByProperty, pbr.UserId));
+                    uv.Add(MB.Update.Set(MEPatientBarrier.LastUpdatedOnProperty, System.DateTime.UtcNow));
+                    if (pb.Name != null) uv.Add(MB.Update.Set(MEPatientBarrier.NameProperty, pb.Name));
+                    if (pb.PatientGoalId != null) uv.Add(MB.Update.Set(MEPatientBarrier.PatientGoalIdProperty, ObjectId.Parse(pb.PatientGoalId)));
+                    if (pb.Status != 0) uv.Add(MB.Update.Set(MEPatientBarrier.StatusProperty, pb.Status));
+                    if (pb.StatusDate != null) uv.Add(MB.Update.Set(MEPatientBarrier.StatusDateProperty, pb.StatusDate));
+                    if (pb.Category != null) uv.Add(MB.Update.Set(MEPatientBarrier.CategoryProperty, ObjectId.Parse(pb.Category)));
+
+                    IMongoUpdate update = MB.Update.Combine(uv);
+                    WriteConcernResult res = ctx.PatientBarriers.Collection.Update(q, update);
+                    if (res.Ok)
+                        result = true;
+                }
+                return result as object;
             }
-            catch (Exception ex) { throw ex; }
+            catch (Exception ex) { throw new Exception("DD:MongoPatientBarrierRepository:Update()" + ex.Message, ex.InnerException); }
         }
 
         public void CacheByID(List<string> entityIDs)
