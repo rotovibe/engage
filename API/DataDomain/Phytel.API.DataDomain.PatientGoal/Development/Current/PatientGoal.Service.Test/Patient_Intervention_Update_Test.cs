@@ -10,6 +10,30 @@ namespace Phytel.API.DataDomain.PatientGoal.Services.Test
     public class Patient_Intervention_Update_Test
     {
         [TestMethod]
+        public void Delete_Intervention_Test()
+        {
+            string url = "http://localhost:8888/PatientGoal";
+            string patientId = "52a0da34fe7a5915485bdfd6";
+            string contractNumber = "InHealth001";
+            string context = "NG";
+            string version = "v1";
+            string id = "52fd3fcefe7a5912b0149acd";
+            string patientGoaldId = "52fd2d6cd433231c845e7d25";
+            IRestClient client = new JsonServiceClient();
+
+            DeleteTaskResponse response = client.Delete<DeleteTaskResponse>(
+                string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Goal/{5}/Intervention/{6}/Delete/?UserId={7}",
+                url,
+                context,
+                version,
+                contractNumber,
+                patientId,
+                patientGoaldId,
+                id,
+                patientId));
+        }
+
+        [TestMethod]
         public void Update_Patient_Intervention()
         {
             string url = "http://localhost:8888/PatientGoal";

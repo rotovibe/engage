@@ -158,12 +158,63 @@ namespace Phytel.API.DataDomain.PatientGoal.Service
             return response;
         }
 
-        public DeletePatientGoalDataResponse Put(DeletePatientGoalDataRequest request)
+        public DeletePatientGoalDataResponse Delete(DeletePatientGoalDataRequest request)
         {
             DeletePatientGoalDataResponse response = new DeletePatientGoalDataResponse();
             try
             {
                 response = PatientGoalDataManager.DeletePatientGoal(request);
+                response.Version = request.Version;
+            }
+            catch (Exception ex)
+            {
+                //TODO: Log this to C3 database via ASE
+                base.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                response.Status = new ServiceStack.ServiceInterface.ServiceModel.ResponseStatus("Exception", ex.Message);
+            }
+            return response;
+        }
+
+        public DeleteTaskResponse Delete(DeleteTaskRequest request)
+        {
+            DeleteTaskResponse response = new DeleteTaskResponse();
+            try
+            {
+                response = PatientGoalDataManager.DeleteTask(request);
+                response.Version = request.Version;
+            }
+            catch (Exception ex)
+            {
+                //TODO: Log this to C3 database via ASE
+                base.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                response.Status = new ServiceStack.ServiceInterface.ServiceModel.ResponseStatus("Exception", ex.Message);
+            }
+            return response;
+        }
+
+        public DeleteInterventionResponse Delete(DeleteInterventionRequest request)
+        {
+            DeleteInterventionResponse response = new DeleteInterventionResponse();
+            try
+            {
+                response = PatientGoalDataManager.DeleteIntervention(request);
+                response.Version = request.Version;
+            }
+            catch (Exception ex)
+            {
+                //TODO: Log this to C3 database via ASE
+                base.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                response.Status = new ServiceStack.ServiceInterface.ServiceModel.ResponseStatus("Exception", ex.Message);
+            }
+            return response;
+        }
+
+        public DeleteBarrierResponse Delete(DeleteBarrierRequest request)
+        {
+            DeleteBarrierResponse response = new DeleteBarrierResponse();
+            try
+            {
+                response = PatientGoalDataManager.DeleteBarrier(request);
                 response.Version = request.Version;
             }
             catch (Exception ex)

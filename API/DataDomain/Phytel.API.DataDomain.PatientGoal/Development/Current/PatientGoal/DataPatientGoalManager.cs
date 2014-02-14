@@ -202,5 +202,59 @@ namespace Phytel.API.DataDomain.PatientGoal
                 throw ex;
             }
         }
+
+        public static DeleteTaskResponse DeleteTask(DeleteTaskRequest request)
+        {
+            try
+            {
+                DeleteTaskResponse result = new DeleteTaskResponse();
+
+                IPatientGoalRepository<DeleteTaskResponse> repo = PatientGoalRepositoryFactory<DeleteTaskResponse>.GetPatientTaskRepository(request.ContractNumber, request.Context);
+                repo.Delete(request);
+
+                result.Deleted = true;
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public static DeleteInterventionResponse DeleteIntervention(DeleteInterventionRequest request)
+        {
+            try
+            {
+                DeleteInterventionResponse result = new DeleteInterventionResponse();
+
+                IPatientGoalRepository<DeleteInterventionResponse> repo = PatientGoalRepositoryFactory<DeleteInterventionResponse>.GetPatientInterventionRepository(request.ContractNumber, request.Context);
+                repo.Delete(request);
+
+                result.Deleted = true;
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public static DeleteBarrierResponse DeleteBarrier(DeleteBarrierRequest request)
+        {
+            try
+            {
+                DeleteBarrierResponse result = new DeleteBarrierResponse();
+
+                IPatientGoalRepository<DeleteBarrierResponse> repo = PatientGoalRepositoryFactory<DeleteBarrierResponse>.GetPatientBarrierRepository(request.ContractNumber, request.Context);
+                repo.Delete(request);
+
+                result.Deleted = true;
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }   

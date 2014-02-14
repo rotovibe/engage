@@ -62,12 +62,23 @@ namespace Phytel.API.DataDomain.PatientGoal
 
         public void Delete(object entity)
         {
+            DeleteTaskRequest request = (DeleteTaskRequest)entity;
             try
             {
-                throw new NotImplementedException();
-                // code here //
+                using (PatientGoalMongoContext ctx = new PatientGoalMongoContext(_dbName))
+                {
+                    var q = MB.Query<MEPatientTask>.EQ(b => b.Id, ObjectId.Parse(request.TaskId));
+
+                    var uv = new List<MB.UpdateBuilder>();
+                    uv.Add(MB.Update.Set(MEPatientTask.TTLDateProperty, System.DateTime.UtcNow.AddDays(7)));
+                    uv.Add(MB.Update.Set(MEPatientTask.DeleteFlagProperty, true));
+                    uv.Add(MB.Update.Set(MEPatientTask.UpdatedByProperty, request.UserId));
+
+                    IMongoUpdate update = MB.Update.Combine(uv);
+                    WriteConcernResult res = ctx.PatientTasks.Collection.Update(q, update);
+                }
             }
-            catch (Exception ex) { throw ex; }
+            catch (Exception ex) { throw; }
         }
 
         public void DeleteAll(List<object> entities)
