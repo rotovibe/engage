@@ -36,10 +36,10 @@ namespace Phytel.API.DataDomain.PatientGoal.Services.Test
                     Barrier = new PatientBarrierData
                    {
                        Id = id,
-                       Category = "52a0da34fe7a5915485bdfd6",
+                       CategoryId = "52a0da34fe7a5915485bdfd6",
                        Name = "this is a test name " + new Random().Next(1, 100),
                        PatientGoalId = patientGoaldId,
-                       Status = 2,
+                       StatusId = 2,
                        StatusDate = System.DateTime.UtcNow,
                    },
                     UserId = "52a0da34fe7a5915485bdfd6"

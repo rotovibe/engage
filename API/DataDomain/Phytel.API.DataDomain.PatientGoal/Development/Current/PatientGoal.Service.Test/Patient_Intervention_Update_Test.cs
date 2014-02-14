@@ -38,12 +38,12 @@ namespace Phytel.API.DataDomain.PatientGoal.Services.Test
                         PatientGoalId = "12341cf8fe7a592d046c548f",
                         Description = "This is an example update",
                         StartDate = System.DateTime.UtcNow,
-                        Status = 1,
+                        StatusId = 1,
                         StatusDate = System.DateTime.UtcNow,
                         Attributes = GetAttributes(),
                         Barriers = GetBarriers(),
                         AssignedTo = "Test",
-                        Category = 1
+                        CategoryId = "12341cf8fe7a592d046c548f"
                     }
                 } as object);
         }

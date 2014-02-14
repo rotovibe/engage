@@ -38,7 +38,7 @@ namespace Phytel.API.DataDomain.PatientGoal.Services.Test
                         PatientGoalId = patientGoaldId,
                         Description = "Roumel Testing This!!",
                         StartDate = System.DateTime.UtcNow,
-                        Status = 2,
+                        StatusId = 2,
                         StatusDate = System.DateTime.UtcNow,
                         TargetDate = System.DateTime.UtcNow.AddDays(7),
                         TargetValue = "!!This is a task update test",

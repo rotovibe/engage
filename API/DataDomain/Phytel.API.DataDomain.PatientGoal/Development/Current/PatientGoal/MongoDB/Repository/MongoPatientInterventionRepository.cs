@@ -135,9 +135,9 @@ namespace Phytel.API.DataDomain.PatientGoal
                     if (pt.Description != null) uv.Add(MB.Update.Set(MEPatientIntervention.DescriptionProperty, pt.Description));
                     if (pt.StartDate != null) uv.Add(MB.Update.Set(MEPatientIntervention.StartDateProperty, pt.StartDate));
                     if (pt.StatusDate != null) uv.Add(MB.Update.Set(MEPatientIntervention.StatusDateProperty, pt.StatusDate));
-                    if (pt.Status != 0) uv.Add(MB.Update.Set(MEPatientIntervention.StatusProperty, pt.Status));
+                    if (pt.StatusId != 0) uv.Add(MB.Update.Set(MEPatientIntervention.StatusProperty, pt.StatusId));
                     if (pt.Order != 0) uv.Add(MB.Update.Set(MEPatientIntervention.OrderProperty, pt.Order));
-                    if (pt.Category != 0) uv.Add(MB.Update.Set(MEPatientIntervention.CategoryProperty, pt.Category));
+                    if (pt.CategoryId != null) uv.Add(MB.Update.Set(MEPatientIntervention.CategoryProperty, pt.CategoryId));
                     if (pt.Attributes != null) { uv.Add(MB.Update.SetWrapped<List<MAttribute>>(MEPatientIntervention.AttributesProperty, DTOUtil.GetInterventionAttributes(pt.Attributes))); }
                     if (pt.Barriers != null) { uv.Add(MB.Update.SetWrapped<List<ObjectId>>(MEPatientIntervention.BarriersProperty, DTOUtil.ConvertObjectId(pt.Barriers))); }
 

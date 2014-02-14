@@ -184,5 +184,23 @@ namespace Phytel.API.DataDomain.PatientGoal
                 throw ex;
             }
         }
+
+        public static DeletePatientGoalDataResponse DeletePatientGoal(DeletePatientGoalDataRequest request)
+        {
+            try
+            {
+                DeletePatientGoalDataResponse result = new DeletePatientGoalDataResponse();
+
+                IPatientGoalRepository<DeletePatientGoalDataResponse> repo = PatientGoalRepositoryFactory<DeletePatientGoalDataResponse>.GetPatientGoalRepository(request.ContractNumber, request.Context);
+                repo.Delete(request);
+
+                result.Deleted = true;
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }   

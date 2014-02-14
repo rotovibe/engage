@@ -48,12 +48,23 @@ namespace Phytel.API.DataDomain.PatientGoal
 
         public void Delete(object entity)
         {
+            DeletePatientGoalDataRequest request = (DeletePatientGoalDataRequest)entity;
             try
             {
-                throw new NotImplementedException();
-                // code here //
+                using (PatientGoalMongoContext ctx = new PatientGoalMongoContext(_dbName))
+                {
+                    var q = MB.Query<MEPatientGoal>.EQ(b => b.Id, ObjectId.Parse(request.PatientGoalId));
+
+                    var uv = new List<MB.UpdateBuilder>();
+                    uv.Add(MB.Update.Set(MEPatientGoal.TTLDateProperty, System.DateTime.UtcNow.AddDays(7)));
+                    uv.Add(MB.Update.Set(MEPatientGoal.DeleteFlagProperty, true));
+                    uv.Add(MB.Update.Set(MEPatientGoal.UpdatedByProperty, request.UserId));
+
+                    IMongoUpdate update = MB.Update.Combine(uv);
+                    WriteConcernResult res = ctx.PatientGoals.Collection.Update(q, update);
+                }
             }
-            catch (Exception ex) { throw ex; }
+            catch (Exception ex) { throw; }
         }
 
         public void DeleteAll(List<object> entities)
@@ -134,12 +145,12 @@ namespace Phytel.API.DataDomain.PatientGoal
                     var uv = new List<MB.UpdateBuilder>();
                     uv.Add(MB.Update.Set(MEPatientGoal.TTLDateProperty, BsonNull.Value));
                     if (pt.PatientId != null) uv.Add(MB.Update.Set(MEPatientGoal.PatientIdProperty, ObjectId.Parse(pt.PatientId)));
-                    if (pt.FocusAreas != null) { uv.Add(MB.Update.SetWrapped<List<ObjectId>>(MEPatientGoal.FocusAreaProperty, DTOUtil.ConvertObjectId(pt.FocusAreas))); }
+                    if (pt.FocusAreaIds != null) { uv.Add(MB.Update.SetWrapped<List<ObjectId>>(MEPatientGoal.FocusAreaProperty, DTOUtil.ConvertObjectId(pt.FocusAreaIds))); }
                     if (pt.Name != null) uv.Add(MB.Update.Set(MEPatientGoal.NameProperty, pt.Name));
                     if (pt.Source != null) uv.Add(MB.Update.Set(MEPatientGoal.SourceProperty, pt.Source));
                     if (pt.Programs != null) { uv.Add(MB.Update.SetWrapped<List<ObjectId>>(MEPatientGoal.ProgramProperty, DTOUtil.ConvertObjectId(pt.Programs))); }
                     if (pt.Type != null) uv.Add(MB.Update.Set(MEPatientGoal.TypeProperty, ObjectId.Parse(pt.Type))); // why is this an objectid?
-                    if (pt.Status != 0) uv.Add(MB.Update.Set(MEPatientGoal.StatusProperty, pt.Status ));
+                    if (pt.StatusId != 0) uv.Add(MB.Update.Set(MEPatientGoal.StatusProperty, pt.StatusId ));
                     if (pt.StartDate != null) uv.Add(MB.Update.Set(MEPatientGoal.StartDateProperty, pt.StartDate));
                     if (pt.EndDate != null) uv.Add(MB.Update.Set(MEPatientGoal.EndDateProperty, pt.EndDate));
                     if (pt.TargetValue != null) uv.Add(MB.Update.Set(MEPatientGoal.TargetValueProperty, pt.TargetValue));
