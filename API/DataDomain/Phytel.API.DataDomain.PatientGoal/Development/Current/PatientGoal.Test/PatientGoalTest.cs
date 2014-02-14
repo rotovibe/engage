@@ -26,5 +26,16 @@ namespace Phytel.API.DataDomain.PatientGoal.Test
 
             Assert.IsNotNull(response.Id);
         }
+
+
+        [TestMethod]
+        public void InitializePatientBarrier()
+        {
+            PutInitializeBarrierDataRequest request = new PutInitializeBarrierDataRequest { PatientGoalId = "52fc609fd43323258c5c8c71" };
+
+            PutInitializeBarrierDataResponse response = PatientGoalDataManager.InitializeBarrier(request);
+
+            Assert.IsNotNull(response.Id);
+        }
     }
 }

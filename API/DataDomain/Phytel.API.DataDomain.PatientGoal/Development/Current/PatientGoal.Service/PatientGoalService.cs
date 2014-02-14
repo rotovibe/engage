@@ -25,6 +25,22 @@ namespace Phytel.API.DataDomain.PatientGoal.Service
             return response;
         }
 
+        public PutInitializeBarrierDataResponse Put(PutInitializeBarrierDataRequest request)
+        {
+            PutInitializeBarrierDataResponse response = new PutInitializeBarrierDataResponse();
+            try
+            {
+                response = PatientGoalDataManager.InitializeBarrier(request);
+            }
+            catch (Exception ex)
+            {
+                //TODO: Log this to C3 database via ASE
+                base.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                response.Status = new ServiceStack.ServiceInterface.ServiceModel.ResponseStatus("Exception", ex.Message);
+            }
+            return response;
+        }
+
         public GetPatientGoalDataResponse Get(GetPatientGoalDataRequest request)
         {
             GetPatientGoalDataResponse response = new GetPatientGoalDataResponse();

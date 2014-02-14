@@ -25,6 +25,23 @@ namespace Phytel.API.DataDomain.PatientGoal
             return response;
         }
 
+        public static PutInitializeBarrierDataResponse InitializeBarrier(PutInitializeBarrierDataRequest request)
+        {
+            PutInitializeBarrierDataResponse response = null;
+            try
+            {
+                response = new PutInitializeBarrierDataResponse();
+                IPatientGoalRepository<PutInitializeBarrierDataResponse> repo = PatientGoalRepositoryFactory<PutInitializeBarrierDataResponse>.GetPatientBarrierRepository(request.ContractNumber, request.Context);
+                response.Id = repo.Initialize(request);
+                response.Version = request.Version;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return response;
+        }
+
         public static GetPatientGoalDataResponse GetPatientGoal(GetPatientGoalDataRequest request)
         {
             GetPatientGoalDataResponse result = null;
