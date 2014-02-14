@@ -149,15 +149,14 @@ namespace Phytel.API.AppDomain.NG
                 PatientGoal result = new PatientGoal();
                 //[Route("/{Context}/{Version}/{ContractNumber}/Patient/{PatientId}/Goal/{Id}", "GET")]
                 IRestClient client = new JsonServiceClient();
-                PutInitializeTaskResponse response = client.Put<PutInitializeTaskResponse>(
+                GetPatientGoalDataResponse response = client.Get<GetPatientGoalDataResponse>(
                     string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Goal/{5}",
                     DDPatientGoalsServiceUrl,
                     "NG",
                     request.Version,
                     request.ContractNumber,
                     request.PatientId,
-                    request.Id),
-                    new PutInitializeTaskRequest() as object);
+                    request.Id));
 
                 if (response != null)
                 {
@@ -179,14 +178,13 @@ namespace Phytel.API.AppDomain.NG
                 List<PatientGoalView> result = new List<PatientGoalView>();
                 //[Route("/{Context}/{Version}/{ContractNumber}/Patient/{PatientId}/Goals", "GET")]
                 IRestClient client = new JsonServiceClient();
-                PutInitializeTaskResponse response = client.Put<PutInitializeTaskResponse>(
+                GetAllPatientGoalsDataResponse response = client.Get<GetAllPatientGoalsDataResponse>(
                     string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Goals",
                     DDPatientGoalsServiceUrl,
                     "NG",
                     request.Version,
                     request.ContractNumber,
-                    request.PatientId),
-                    new PutInitializeTaskRequest() as object);
+                    request.PatientId));
 
                 if (response != null)
                 {
