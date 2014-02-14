@@ -157,7 +157,6 @@ namespace Phytel.API.AppDomain.NG
                 throw new Exception("AD:SavePatientGoalBarriers():" + ex.Message, ex.InnerException);
             }
         }
-
         internal static bool DeletePatientGoalBarriers(PostDeletePatientGoalRequest request)
         {
             bool result = false;
@@ -266,6 +265,108 @@ namespace Phytel.API.AppDomain.NG
             {
                 throw new Exception("AD:DeletePatientGoalInterventions():" + ex.Message, ex.InnerException);
             }
+        }
+
+        public static List<Phytel.API.AppDomain.NG.DTO.Attribute> GetAttributes(List<AttributeData> list)
+        {
+            List<Phytel.API.AppDomain.NG.DTO.Attribute> attr = null;
+            if (list != null && list.Count > 0)
+            {
+                attr = new List<Phytel.API.AppDomain.NG.DTO.Attribute>();
+                foreach(AttributeData ad in list)
+                {
+                    attr.Add(new Phytel.API.AppDomain.NG.DTO.Attribute { Name = ad.Name, Value = ad.Value, ControlType = ad.ControlType, Order = ad.Order });
+                }
+            }
+            return attr;
+        }
+
+        public static List<PatientBarrier> GetBarriers(List<PatientBarrierData> list)
+        {
+            List<PatientBarrier> barrierList = null;
+            if (list != null && list.Count > 0)
+            {
+                barrierList = new List<PatientBarrier>();
+                foreach (PatientBarrierData b in list)
+                {
+                    barrierList.Add(new PatientBarrier 
+                        { 
+                            Id = b.Id, 
+                            StatusId = b.StatusId,
+                            CategoryId = b.CategoryId,
+                            Name = b.Name,
+                            PatientGoalId = b.Name, 
+                            StatusDate = b.StatusDate
+                        });
+                }
+            }
+            return barrierList;
+        }
+
+        public static List<PatientTask> GetTasks(List<PatientTaskData> list)
+        {
+            List<PatientTask> taskList = null;
+            if (list != null && list.Count > 0)
+            {
+                taskList = new List<PatientTask>();
+                foreach (PatientTaskData t in list)
+                {
+                    taskList.Add(new PatientTask
+                    {
+                        Id = t.Id,
+                        PatientGoalId = t.PatientGoalId,
+                        TargetValue = t.TargetValue,
+                        StatusId = t.StatusId,
+                        TargetDate = t.TargetDate,
+                        Attributes = GetAttributes(t.Attributes),
+                        BarrierIds = t.Barriers,
+                        Description = t.Description,
+                        StatusDate = t.StatusDate,
+                        StartDate  = t.StartDate
+                    });
+                }
+            }
+            return taskList;
+        }
+
+        public static List<PatientIntervention> GetInterventions(List<PatientInterventionData> list)
+        {
+            List<PatientIntervention> interventionList = null;
+            if (list != null && list.Count > 0)
+            {
+                interventionList = new List<PatientIntervention>();
+                foreach (PatientInterventionData i in list)
+                {
+                    interventionList.Add(new PatientIntervention
+                    {
+                        Id = i.Id,
+                        PatientGoalId = i.PatientGoalId,
+                        CategoryId = i.CategoryId,
+                        StatusId = i.StatusId,
+                        AssignedToId = i.AssignedToId,
+                        Attributes = GetAttributes(i.Attributes),
+                        BarrierIds = i.Barriers,
+                        Description = i.Description,
+                        StatusDate = i.StatusDate,
+                        StartDate = i.StartDate
+                    });
+                }
+            }
+            return interventionList;
+        }
+
+        public static List<ChildView> GetChildView(List<ChildViewData> list)
+        {
+            List<ChildView> cvList = null;
+            if (list != null && list.Count > 0)
+            {
+                cvList = new List<ChildView>();
+                foreach (ChildViewData c in list)
+                {
+                    cvList.Add(new ChildView {Id = c.Id, Name = c.Name, StatusId = c.StatusId });
+                }
+            }
+            return cvList;
         }
     }
 }

@@ -11,8 +11,8 @@ namespace Phytel.API.DataDomain.PatientGoal.DTO
         public string PatientId { get; set; }
         public List<string> FocusAreaIds { get; set; }
         public string Name { get; set; }
-        public string Source { get; set; }
-        public List<string> Programs { get; set; }
+        public string SourceId { get; set; }
+        public List<string> ProgramIds { get; set; }
         public string Type { get; set; }
         public int StatusId { get; set; }
         public DateTime? StartDate { get; set; }

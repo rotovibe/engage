@@ -79,17 +79,17 @@ namespace Phytel.API.DataDomain.PatientGoal
             try
             {
                 result = new GetAllPatientGoalsDataResponse();
-                List<PatientGoalDataView> goalViewDataList = getGoalsViewByPatientId(request.ContractNumber, request.Context, request.PatientId);
-                List<PatientGoalDataView> goalDataView = null;
+                List<PatientGoalViewData> goalViewDataList = getGoalsViewByPatientId(request.ContractNumber, request.Context, request.PatientId);
+                List<PatientGoalViewData> goalDataView = null;
                 if (goalViewDataList != null && goalViewDataList.Count > 0)
                 {
-                    goalDataView = new List<PatientGoalDataView>();
-                    foreach(PatientGoalDataView p in goalViewDataList)
+                    goalDataView = new List<PatientGoalViewData>();
+                    foreach(PatientGoalViewData p in goalViewDataList)
                     {
                         string contractNumber = request.ContractNumber;
                         string context  = request.Context;
                         
-                        PatientGoalDataView view = new PatientGoalDataView();
+                        PatientGoalViewData view = new PatientGoalViewData();
                         view = p;
 
                         //Barriers
@@ -100,7 +100,7 @@ namespace Phytel.API.DataDomain.PatientGoal
                             barrierChildView = new List<ChildViewData>();
                             foreach(PatientBarrierData b in barrierData)
                             {
-                                barrierChildView.Add(new ChildViewData { Id = b.Id, Name = b.Name, Status = ((int)(b.StatusId))});
+                                barrierChildView.Add(new ChildViewData { Id = b.Id, Name = b.Name, StatusId = ((int)(b.StatusId))});
                             }
                         }
                         view.BarriersViewData =  barrierChildView; 
@@ -113,7 +113,7 @@ namespace Phytel.API.DataDomain.PatientGoal
                             taskChildView = new List<ChildViewData>();
                             foreach(PatientTaskData b in taskData)
                             {
-                                taskChildView.Add(new ChildViewData { Id = b.Id, Name = b.Description, Status = ((int)(b.StatusId)) });
+                                taskChildView.Add(new ChildViewData { Id = b.Id, Name = b.Description, StatusId = ((int)(b.StatusId)) });
                             }
                         }
                         view.TasksViewData = taskChildView;
@@ -126,7 +126,7 @@ namespace Phytel.API.DataDomain.PatientGoal
                             interChildView = new List<ChildViewData>();
                             foreach (PatientInterventionData b in interData)
                             {
-                                interChildView.Add(new ChildViewData { Id = b.Id, Name = b.Description, Status = ((int)(b.StatusId))});
+                                interChildView.Add(new ChildViewData { Id = b.Id, Name = b.Description, StatusId = ((int)(b.StatusId))});
                             }
                         }
                         view.InterventionsViewData = interChildView;
@@ -145,11 +145,11 @@ namespace Phytel.API.DataDomain.PatientGoal
         } 
 
         #region Private methods
-        private static List<PatientGoalDataView> getGoalsViewByPatientId(string contractNumber, string context, string patientId)
+        private static List<PatientGoalViewData> getGoalsViewByPatientId(string contractNumber, string context, string patientId)
         {
-            List<PatientGoalDataView> goalViewDataList = null;
+            List<PatientGoalViewData> goalViewDataList = null;
 
-            IPatientGoalRepository<PatientGoalDataView> goalRepo = PatientGoalRepositoryFactory<PatientGoalDataView>.GetPatientGoalRepository(contractNumber, context);
+            IPatientGoalRepository<PatientGoalViewData> goalRepo = PatientGoalRepositoryFactory<PatientGoalViewData>.GetPatientGoalRepository(contractNumber, context);
             ICollection<SelectExpression> selectExpressions = new List<SelectExpression>();
 
             //PatientId
@@ -187,7 +187,7 @@ namespace Phytel.API.DataDomain.PatientGoal
 
             if (goalViewData != null)
             {
-                goalViewDataList = goalViewData.Item2.Cast<PatientGoalDataView>().ToList();
+                goalViewDataList = goalViewData.Item2.Cast<PatientGoalViewData>().ToList();
             }
 
             return goalViewDataList;

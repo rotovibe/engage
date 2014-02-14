@@ -97,8 +97,8 @@ namespace Phytel.API.DataDomain.PatientGoal
                             Id = mePG.Id.ToString(),
                             FocusAreaIds = Helper.ConvertToStringList(mePG.FocusAreas),
                             Name = mePG.Name,
-                            Source = (mePG.Source == null) ? null : mePG.Source.ToString(),
-                            Programs = Helper.ConvertToStringList(mePG.Programs),
+                            SourceId = (mePG.Source == null) ? null : mePG.Source.ToString(),
+                            ProgramIds = Helper.ConvertToStringList(mePG.Programs),
                             Type = mePG.Type.ToString(),
                             StatusId = ((int)mePG.Status),
                             StartDate = mePG.StartDate,
@@ -124,19 +124,19 @@ namespace Phytel.API.DataDomain.PatientGoal
                 IMongoQuery mQuery = MongoDataUtil.ExpressionQueryBuilder(expression);
                 using (PatientGoalMongoContext ctx = new PatientGoalMongoContext(_dbName))
                 {
-                    List<PatientGoalDataView> goalsViewDataList = null;
+                    List<PatientGoalViewData> goalsViewDataList = null;
                     List<MEPatientGoal> meGoals = ctx.PatientGoals.Collection.Find(mQuery).ToList();
                     if (meGoals != null)
                     {
-                        goalsViewDataList = new List<PatientGoalDataView>();
+                        goalsViewDataList = new List<PatientGoalViewData>();
                         foreach (MEPatientGoal b in meGoals)
                         {
-                            PatientGoalDataView goalViewData = new PatientGoalDataView
+                            PatientGoalViewData goalViewData = new PatientGoalViewData
                             {
                                 Id = b.Id.ToString(),
                                 FocusAreaIds = Helper.ConvertToStringList(b.FocusAreas),
                                 Name = b.Name,
-                                Status = ((int)b.Status)
+                                StatusId = ((int)b.Status)
 
                             };
                             goalsViewDataList.Add(goalViewData);
@@ -174,8 +174,8 @@ namespace Phytel.API.DataDomain.PatientGoal
                     if (pt.PatientId != null) uv.Add(MB.Update.Set(MEPatientGoal.PatientIdProperty, ObjectId.Parse(pt.PatientId)));
                     if (pt.FocusAreaIds != null) { uv.Add(MB.Update.SetWrapped<List<ObjectId>>(MEPatientGoal.FocusAreaProperty, DTOUtil.ConvertObjectId(pt.FocusAreaIds))); }
                     if (pt.Name != null) uv.Add(MB.Update.Set(MEPatientGoal.NameProperty, pt.Name));
-                    if (pt.Source != null) uv.Add(MB.Update.Set(MEPatientGoal.SourceProperty, pt.Source));
-                    if (pt.Programs != null) { uv.Add(MB.Update.SetWrapped<List<ObjectId>>(MEPatientGoal.ProgramProperty, DTOUtil.ConvertObjectId(pt.Programs))); }
+                    if (pt.SourceId != null) uv.Add(MB.Update.Set(MEPatientGoal.SourceProperty, pt.SourceId));
+                    if (pt.ProgramIds != null) { uv.Add(MB.Update.SetWrapped<List<ObjectId>>(MEPatientGoal.ProgramProperty, DTOUtil.ConvertObjectId(pt.ProgramIds))); }
                     if (pt.Type != null) uv.Add(MB.Update.Set(MEPatientGoal.TypeProperty, ObjectId.Parse(pt.Type))); // why is this an objectid?
                     if (pt.StatusId != 0) uv.Add(MB.Update.Set(MEPatientGoal.StatusProperty, pt.StatusId ));
                     if (pt.StartDate != null) uv.Add(MB.Update.Set(MEPatientGoal.StartDateProperty, pt.StartDate));

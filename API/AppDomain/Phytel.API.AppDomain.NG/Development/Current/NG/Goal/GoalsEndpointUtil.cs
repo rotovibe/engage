@@ -146,23 +146,42 @@ namespace Phytel.API.AppDomain.NG
         {
             try
             {
-                PatientGoal result = new PatientGoal();
+                PatientGoal result = null;
                 //[Route("/{Context}/{Version}/{ContractNumber}/Patient/{PatientId}/Goal/{Id}", "GET")]
                 IRestClient client = new JsonServiceClient();
-                GetPatientGoalDataResponse response = client.Get<GetPatientGoalDataResponse>(
-                    string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Goal/{5}",
+                GetPatientGoalDataResponse ddResponse = client.Get<GetPatientGoalDataResponse>(
+                    string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Goal/{5}?UserId={6}",
                     DDPatientGoalsServiceUrl,
                     "NG",
                     request.Version,
                     request.ContractNumber,
                     request.PatientId,
-                    request.Id));
+                    request.Id,
+                    request.UserId));
 
-                if (response != null)
+                if (ddResponse != null && ddResponse.GoalData != null)
                 {
-                   // result = response.Id;
+                    PatientGoalData g = ddResponse.GoalData;
+                    result = new PatientGoal
+                    {
+                        Id  = g.Id,
+                        PatientId = g.PatientId, 
+                        Name = g.Name, 
+                        FocusAreaIds = g.FocusAreaIds,
+                        SourceId = g.SourceId,
+                        ProgramIds = g.ProgramIds,
+                        Type = g.Type,
+                        StatusId = g.StatusId, 
+                        StartDate = g.StartDate, 
+                        EndDate = g.EndDate,
+                        TargetDate = g.TargetDate,
+                        TargetValue = g.TargetValue,
+                        Attributes = GoalsUtil.GetAttributes(g.Attributes),
+                        Barriers = GoalsUtil.GetBarriers(g.BarriersData),
+                        Tasks = GoalsUtil.GetTasks(g.TasksData),
+                        Interventions = GoalsUtil.GetInterventions(g.InterventionsData)
+                    };
                 }
-
                 return result;
             }
             catch (WebServiceException ex)
@@ -175,20 +194,34 @@ namespace Phytel.API.AppDomain.NG
         {
             try
             {
-                List<PatientGoalView> result = new List<PatientGoalView>();
+                List<PatientGoalView> result = null;
                 //[Route("/{Context}/{Version}/{ContractNumber}/Patient/{PatientId}/Goals", "GET")]
                 IRestClient client = new JsonServiceClient();
-                GetAllPatientGoalsDataResponse response = client.Get<GetAllPatientGoalsDataResponse>(
-                    string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Goals",
+                GetAllPatientGoalsDataResponse ddResponse = client.Get<GetAllPatientGoalsDataResponse>(
+                    string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Goals?UserId={5}",
                     DDPatientGoalsServiceUrl,
                     "NG",
                     request.Version,
                     request.ContractNumber,
-                    request.PatientId));
+                    request.PatientId,
+                    request.UserId));
 
-                if (response != null)
+                if (ddResponse != null && ddResponse.PatientGoalsViewData != null && ddResponse.PatientGoalsViewData.Count > 0)
                 {
-                  //  result = response.Id;
+                    result = new List<PatientGoalView>();
+                    List<PatientGoalViewData> gdvList = ddResponse.PatientGoalsViewData;
+                    foreach(PatientGoalViewData gdv in gdvList)
+                    {
+                        PatientGoalView gv = new PatientGoalView();
+                        gv.Id = gdv.Id;
+                        gv.FocusAreaIds = gdv.FocusAreaIds;
+                        gv.Name = gdv.Name;
+                        gv.StatusId = gdv.StatusId;
+                        gv.BarriersView = GoalsUtil.GetChildView(gdv.BarriersViewData);
+                        gv.TasksView = GoalsUtil.GetChildView(gdv.TasksViewData); ;
+                        gv.InterventionsView = GoalsUtil.GetChildView(gdv.InterventionsViewData); ;
+                        result.Add(gv);
+                    }
                 }
 
                 return result;
@@ -240,8 +273,8 @@ namespace Phytel.API.AppDomain.NG
                     FocusAreaIds = pg.FocusAreaIds,
                     Name = pg.Name,
                     PatientId = pg.PatientId,
-                    Programs = pg.ProgramIds,
-                    Source = pg.SourceId,
+                    ProgramIds = pg.ProgramIds,
+                    SourceId = pg.SourceId,
                     StartDate = pg.StartDate,
                     StatusId = pg.StatusId,
                     TargetDate = pg.TargetDate,
