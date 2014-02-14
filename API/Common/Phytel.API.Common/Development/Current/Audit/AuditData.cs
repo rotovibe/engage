@@ -28,7 +28,7 @@ namespace Phytel.API.Common.Audit
         // patient list
         [XmlArray("PatientIDList")]
         [XmlArrayItem("PatientID")]
-        public List<int> Patients { get; set; }
+        public List<string> Patients { get; set; }
         public Guid EditedUserId { get; set; }
         public string EnteredUserName { get; set; }
         public string SearchText { get; set; }

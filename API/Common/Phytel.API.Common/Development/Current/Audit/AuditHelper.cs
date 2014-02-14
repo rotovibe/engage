@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 using System.Diagnostics;
@@ -18,7 +19,7 @@ namespace Phytel.API.Common.Audit
         /// Gets an auditdata record for the current context
         /// </summary>
         /// <returns></returns>
-        public static AuditData GetAuditLog(int auditTypeId, IAppDomainRequest request, HttpRequest webrequest, string methodCalledFrom, bool isError = false)
+        public static AuditData GetAuditLog(int auditTypeId, IAppDomainRequest request, List<string> patientids, HttpRequest webrequest, string methodCalledFrom, bool isError = false)
         {
             ///{Version}/{ContractNumber}/patient/{PatientID}
             AuditData auditLog = new AuditData() 
@@ -29,7 +30,8 @@ namespace Phytel.API.Common.Audit
                 SourcePage = methodCalledFrom, //derive this from querystring...utility function
                 Browser = webrequest.Browser.Type,
                 SessionId = request.Token,
-                ContractID = GetContractID(request.ContractNumber) //request.ContractNumber
+                ContractID = GetContractID(request.ContractNumber), //request.ContractNumber
+                Patients = patientids
             };
 
             //this assignment is randomly throwing an exception, so it needs it's own method
@@ -171,7 +173,7 @@ namespace Phytel.API.Common.Audit
             return returnTypeName.ToString().Replace("Request", "").Replace("Response", "");
         }
 
-        public static void LogAuditData(IAppDomainRequest request, HttpRequest webreq, string returnTypeName)
+        public static void LogAuditData(IAppDomainRequest request, List<string> patientids, HttpRequest webreq, string returnTypeName)
         {
             //hand to a new thread here, and immediately return this thread to caller
             try
@@ -181,7 +183,7 @@ namespace Phytel.API.Common.Audit
                                 {
                                     try
                                     {
-                                        AuditAsynch(request, webreq, returnTypeName);
+                                        AuditAsynch(request, patientids, webreq, returnTypeName);
                                      }   
                                     catch (Exception newthreadex)
                                     {
@@ -212,14 +214,13 @@ namespace Phytel.API.Common.Audit
 
         }
 
-        private static void AuditAsynch(IAppDomainRequest request, HttpRequest webreq, string returnTypeName)
+        private static void AuditAsynch(IAppDomainRequest request, List<string> patientids, HttpRequest webreq, string returnTypeName)
         {
             //throw new SystemException("test error in new thread starts");
 
             string callingMethod = FindMethodType(returnTypeName);
             int auditTypeId = GetAuditTypeID(callingMethod);
-            AuditData data = GetAuditLog(auditTypeId, request, webreq, callingMethod);
-
+            AuditData data = GetAuditLog(auditTypeId, request, patientids, webreq, callingMethod);
             AuditDispatcher.WriteAudit(data);
         }
 
