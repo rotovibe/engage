@@ -170,7 +170,7 @@ namespace Phytel.API.AppDomain.NG
                         FocusAreaIds = g.FocusAreaIds,
                         SourceId = g.SourceId,
                         ProgramIds = g.ProgramIds,
-                        Type = g.Type,
+                        TypeId = g.TypeId,
                         StatusId = g.StatusId, 
                         StartDate = g.StartDate, 
                         EndDate = g.EndDate,
@@ -279,7 +279,7 @@ namespace Phytel.API.AppDomain.NG
                     StatusId = pg.StatusId,
                     TargetDate = pg.TargetDate,
                     TargetValue = pg.TargetValue,
-                    Type = pg.Type
+                    TypeId = pg.TypeId
                 };
                 return pgd;
             }

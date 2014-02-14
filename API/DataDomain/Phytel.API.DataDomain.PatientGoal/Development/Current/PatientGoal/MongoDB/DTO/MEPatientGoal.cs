@@ -61,7 +61,7 @@ namespace Phytel.API.DataDomain.PatientGoal.DTO
 
         [BsonElement(TypeProperty)]
         [BsonIgnoreIfNull(true)]
-        public ObjectId? Type { get; set; }
+        public GoalType Type { get; set; }
 
         [BsonElement(StatusProperty)]
         [BsonIgnoreIfNull(true)]

@@ -47,7 +47,7 @@ namespace Phytel.API.DataDomain.Patient.Service.Test
                 TargetDate = System.DateTime.UtcNow,
                 TargetValue = "Cats have nine lives.",
                 Tasks = GetPatientTasks(),
-                Type = "52a0da34fe7a5915485bdfd6",
+                TypeId = 2,
                 ProgramIds = GetProgramsList(),
                 Barriers = GetBarriers(),
                 Attributes = GetAttributes(),

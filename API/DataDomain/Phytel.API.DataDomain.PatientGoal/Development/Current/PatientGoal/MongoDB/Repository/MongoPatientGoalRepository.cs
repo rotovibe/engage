@@ -99,7 +99,7 @@ namespace Phytel.API.DataDomain.PatientGoal
                             Name = mePG.Name,
                             SourceId = (mePG.Source == null) ? null : mePG.Source.ToString(),
                             ProgramIds = Helper.ConvertToStringList(mePG.Programs),
-                            Type = mePG.Type.ToString(),
+                            TypeId =((int)mePG.Type),
                             StatusId = ((int)mePG.Status),
                             StartDate = mePG.StartDate,
                             EndDate = mePG.EndDate,
@@ -176,7 +176,7 @@ namespace Phytel.API.DataDomain.PatientGoal
                     if (pt.Name != null) uv.Add(MB.Update.Set(MEPatientGoal.NameProperty, pt.Name));
                     if (pt.SourceId != null) uv.Add(MB.Update.Set(MEPatientGoal.SourceProperty, pt.SourceId));
                     if (pt.ProgramIds != null) { uv.Add(MB.Update.SetWrapped<List<ObjectId>>(MEPatientGoal.ProgramProperty, DTOUtil.ConvertObjectId(pt.ProgramIds))); }
-                    if (pt.Type != null) uv.Add(MB.Update.Set(MEPatientGoal.TypeProperty, ObjectId.Parse(pt.Type))); // why is this an objectid?
+                    if (pt.TypeId != null) uv.Add(MB.Update.Set(MEPatientGoal.TypeProperty, pt.TypeId)); 
                     if (pt.StatusId != 0) uv.Add(MB.Update.Set(MEPatientGoal.StatusProperty, pt.StatusId ));
                     if (pt.StartDate != null) uv.Add(MB.Update.Set(MEPatientGoal.StartDateProperty, pt.StartDate));
                     if (pt.EndDate != null) uv.Add(MB.Update.Set(MEPatientGoal.EndDateProperty, pt.EndDate));
