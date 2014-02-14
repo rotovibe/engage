@@ -224,7 +224,7 @@ namespace Phytel.API.AppDomain.NG
             }
             catch (WebServiceException ex)
             {
-                throw new WebServiceException("AD:GetInitialTaskRequest()" + ex.Message, ex.InnerException);
+                throw new WebServiceException("AD:PostUpdateGoalRequest()" + ex.Message, ex.InnerException);
             }
         }
 
@@ -366,6 +366,129 @@ namespace Phytel.API.AppDomain.NG
             catch (WebServiceException ex)
             {
                 throw new WebServiceException("AD:PostUpdateBarrierRequest()" + ex.Message, ex.InnerException);
+            }
+        }
+
+        internal static bool DeleteGoalRequest(PostDeletePatientGoalRequest request)
+        {
+            try
+            {
+                bool result = false;
+
+                IRestClient client = new JsonServiceClient();
+                DeletePatientGoalDataResponse response = client.Delete<DeletePatientGoalDataResponse>(
+                    string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Goal/{5}/Delete/?UserId={6}",
+                    DDPatientGoalsServiceUrl,
+                    "NG",
+                    request.Version,
+                    request.ContractNumber,
+                    request.PatientId,
+                    request.PatientGoalId,
+                    request.UserId));
+
+                if (response != null)
+                {
+                    result = true;
+                }
+
+                return result;
+            }
+            catch (WebServiceException ex)
+            {
+                throw new WebServiceException("AD:DeleteGoalRequest()" + ex.Message, ex.InnerException);
+            }
+        }
+
+        internal static bool DeleteBarrierRequest(PostDeletePatientGoalRequest request, string id)
+        {
+            try
+            {
+                bool result = false;
+
+                IRestClient client = new JsonServiceClient();
+                DeleteBarrierResponse response = client.Delete<DeleteBarrierResponse>(
+                    string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Goal/{5}/Barrier/{6}/Delete/?UserId={7}",
+                    DDPatientGoalsServiceUrl,
+                    "NG",
+                    request.Version,
+                    request.ContractNumber,
+                    request.PatientId,
+                    request.Goal.Id,
+                   id,
+                   request.UserId));
+
+                if (response != null)
+                {
+                    result = true;
+                }
+
+                return result;
+            }
+            catch (WebServiceException ex)
+            {
+                throw new WebServiceException("AD:DeleteBarrierRequest()" + ex.Message, ex.InnerException);
+            }
+        }
+
+        internal static bool DeleteTaskRequest(PostDeletePatientGoalRequest request, string id)
+        {
+            try
+            {
+                bool result = false;
+
+                IRestClient client = new JsonServiceClient();
+                DeleteTaskResponse response = client.Delete<DeleteTaskResponse>(
+                    string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Goal/{5}/Task/{6}/Delete/?UserId={7}",
+                    DDPatientGoalsServiceUrl,
+                    "NG",
+                    request.Version,
+                    request.ContractNumber,
+                    request.PatientId,
+                    request.Goal.Id,
+                    id,
+                    request.UserId));
+
+                if (response != null)
+                {
+                    result = true;
+                }
+
+                return result;
+            }
+            catch (WebServiceException ex)
+            {
+                throw new WebServiceException("AD:DeleteTaskRequest()" + ex.Message, ex.InnerException);
+            }
+        }
+
+        internal static bool DeleteInterventionRequest(PostDeletePatientGoalRequest request, string id)
+        {
+            try
+            {
+                bool result = false;
+
+                IRestClient client = new JsonServiceClient();
+                DeleteInterventionResponse response = client.Delete<DeleteInterventionResponse>(
+                    string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Goal/{5}/Intervention/{6}/Delete/?UserId={7}",
+                    DDPatientGoalsServiceUrl,
+                    "NG",
+                    request.Version,
+                    request.ContractNumber,
+                    request.PatientId,
+                    request.Goal.Id,
+                    id,
+                    request.UserId));
+
+                if (response != null)
+                {
+                    result = true;
+                }
+
+                return result;
+            }
+            catch (WebServiceException ex)
+            {
+                throw new WebServiceException("AD:DeleteInterventionRequest()" + ex.Message, ex.InnerException);
             }
         }
     }

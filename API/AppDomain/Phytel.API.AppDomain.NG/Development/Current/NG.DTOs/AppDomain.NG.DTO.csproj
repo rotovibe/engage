@@ -113,7 +113,9 @@
     <Compile Include="Goal\GetInitializeTaskResponse.cs" />
     <Compile Include="Goal\Attribute.cs" />
     <Compile Include="Goal\PatientTask.cs" />
+    <Compile Include="Goal\PostDeletePatientGoalRequest.cs" />
     <Compile Include="Goal\PostPatientGoalRequest.cs" />
+    <Compile Include="Goal\PostDeletePatientGoalResponse.cs" />
     <Compile Include="Goal\PostPatientGoalResponse.cs" />
     <Compile Include="LookUp\Goal\GetLookUpsRequest.cs" />
     <Compile Include="LookUp\Goal\GetLookUpsResponse.cs" />

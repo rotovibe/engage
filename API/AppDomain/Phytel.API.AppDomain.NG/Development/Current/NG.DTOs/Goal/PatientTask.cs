@@ -9,6 +9,7 @@ namespace Phytel.API.AppDomain.NG.DTO
     public class PatientTask
     {
         public string Id { get; set; }
+        public string PatientGoalId { get; set; }
         public string TargetValue { get; set; }
         public int StatusId { get; set; }
         public DateTime? TargetDate { get; set; }

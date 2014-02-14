@@ -7,10 +7,10 @@ using System.Collections.Generic;
 namespace Phytel.API.DataDomain.Patient.Service.Test
 {
     [TestClass]
-    public class Goal_Tests
+    public class Goal_Delete_Tests
     {
         [TestMethod]
-        public void Post_PatientGoal_Update_Test()
+        public void Post_PatientGoal_Delete_Test()
         {
             string contractNumber = "InHealth001";
             string context = "NG";
@@ -21,7 +21,7 @@ namespace Phytel.API.DataDomain.Patient.Service.Test
             IRestClient client = new JsonServiceClient();
 
             PostPatientGoalResponse response = client.Post<PostPatientGoalResponse>(
-                string.Format(@"http://localhost:888/Nightingale/{0}/{1}/Patient/{2}/Goal/{3}/Update/?Token={4}",
+                string.Format(@"http://localhost:888/Nightingale/{0}/{1}/Patient/{2}/Goal/{3}/Delete/?Token={4}",
                 version,
                 contractNumber,
                 patientId,
@@ -49,7 +49,7 @@ namespace Phytel.API.DataDomain.Patient.Service.Test
                 Tasks = GetPatientTasks(),
                 Type = "52a0da34fe7a5915485bdfd6",
                 ProgramIds = GetProgramsList(),
-                //Barriers = GetBarriers(),
+                Barriers = GetBarriers(),
                 Attributes = GetAttributes(),
                 FocusAreaIds = GetFocusAreas()
             };
@@ -127,8 +127,7 @@ namespace Phytel.API.DataDomain.Patient.Service.Test
             List<PatientBarrier> barriers = new List<PatientBarrier>();
             barriers.Add(new PatientBarrier
             {
-                CategoryId = "category value",
-                Id = "52fd96c0fe7a5913503f1c64",
+                Id = "52fe51a1d6a4850944a9d19d",
                 Name = "Barrier name",
                 PatientGoalId = "52fd2d6cd433231c845e7d25",
                 StatusId = 1,

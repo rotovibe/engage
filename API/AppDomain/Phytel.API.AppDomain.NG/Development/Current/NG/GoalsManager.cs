@@ -140,5 +140,35 @@ namespace Phytel.API.AppDomain.NG
                 throw new Exception("AD:SavePatientGoal:" + ex.Message, ex.InnerException);
             }
         }
+
+        public PostDeletePatientGoalResponse DeletePatientGoal(PostDeletePatientGoalRequest request)
+        {
+            try
+            {
+                PostDeletePatientGoalResponse pgr = new PostDeletePatientGoalResponse();
+                bool result = false;
+
+                // we can thread here if we want!
+                // save goals
+                result = GoalsEndpointUtil.DeleteGoalRequest(request);
+
+                // save barriers
+                result = GoalsUtil.DeletePatientGoalBarriers(request);
+
+                // save tasks
+                result = GoalsUtil.DeletePatientGoalTasks(request);
+
+                // save interventions
+                result = GoalsUtil.DeletePatientGoalInterventions(request);
+
+                pgr.Result = result;
+
+                return pgr;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("AD:SavePatientGoal:" + ex.Message, ex.InnerException);
+            }
+        }
     }
 }

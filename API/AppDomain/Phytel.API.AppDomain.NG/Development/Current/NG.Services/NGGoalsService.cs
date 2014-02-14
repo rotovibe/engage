@@ -187,5 +187,30 @@ namespace Phytel.API.AppDomain.NG.Service
                 return response;
             }
         }
+
+        public PostDeletePatientGoalResponse Post(PostDeletePatientGoalRequest request)
+        {
+            PostDeletePatientGoalResponse response = null;
+            try
+            {
+                GoalsManager gm = new GoalsManager();
+                ValidateTokenResponse result = gm.IsUserValidated(request.Version, request.Token);
+                if (result.UserId.Trim() != string.Empty)
+                {
+                    request.UserId = result.UserId;
+                    response = gm.DeletePatientGoal(request);
+                }
+                else
+                    throw new UnauthorizedAccessException();
+
+                return response;
+            }
+            catch (Exception ex)
+            {
+                //TODO: Log this to the SQL database via ASE
+                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+                return response;
+            }
+        }
     }
 }
