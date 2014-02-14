@@ -66,7 +66,7 @@ namespace Phytel.API.DataDomain.PatientGoal.Services.Test
                         StatusDate = System.DateTime.UtcNow,
                         Attributes = GetAttributes(),
                         Barriers = GetBarriers(),
-                        AssignedTo = "Test",
+                        AssignedToId = "Test",
                         CategoryId = "12341cf8fe7a592d046c548f"
                     }
                 } as object);
