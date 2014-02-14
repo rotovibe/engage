@@ -112,5 +112,30 @@ namespace Phytel.API.AppDomain.NG.Service
                 return response;
             }
         }
+
+        public PostPatientGoalResponse Post(PostPatientGoalRequest request)
+        {
+            PostPatientGoalResponse response = null;
+            try
+            {
+                GoalsManager gm = new GoalsManager();
+                ValidateTokenResponse result = gm.IsUserValidated(request.Version, request.Token);
+                if (result.UserId.Trim() != string.Empty)
+                {
+                    request.UserId = result.UserId;
+                    response = gm.SavePatientGoal(request);
+                }
+                else
+                    throw new UnauthorizedAccessException();
+
+                return response;
+            }
+            catch (Exception ex)
+            {
+                //TODO: Log this to the SQL database via ASE
+                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+                return response;
+            }
+        }
     }
 }

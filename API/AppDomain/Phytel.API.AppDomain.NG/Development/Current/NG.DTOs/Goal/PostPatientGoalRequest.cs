@@ -5,9 +5,15 @@ using ServiceStack.ServiceHost;
 namespace Phytel.API.AppDomain.NG.DTO
 {
     [Api(Description = "A Request object to update a patient goal.")]
-    [Route("/{Version}/{ContractNumber}/Patient/{PatientId}/Goal/Update", "POST")]
+    [Route("/{Version}/{ContractNumber}/Patient/{PatientId}/Goal/{PatientGoalId}/Update", "POST")]
     public class PostPatientGoalRequest : IAppDomainRequest
     {
+        [ApiMember(Name = "PatientId", Description = "Id of the patient for whom a goal is being created.", ParameterType = "path", DataType = "string", IsRequired = true)]
+        public string PatientId { get; set; }
+
+        [ApiMember(Name = "PatientGoalId", Description = "PatientGoalId of the goal associated", ParameterType = "property", DataType = "string", IsRequired = false)]
+        public string PatientGoalId { get; set; }
+
         [ApiMember(Name = "Goal", Description = "PatientGoal being updated", ParameterType = "property", DataType = "PatientGoal", IsRequired = true)]
         public PatientGoal Goal { get; set; }
         

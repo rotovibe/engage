@@ -11,6 +11,7 @@ namespace Phytel.API.AppDomain.NG.DTO
         public string Id { get; set; }
         public string TargetValue { get; set; }
         public int Status { get; set; }
+        public int Order { get; set; }
         public DateTime? TargetDate { get; set; }
         public List<Attribute> Attributes { get; set; }
         public List<string> Barriers { get; set; }

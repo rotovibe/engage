@@ -141,5 +141,145 @@ namespace Phytel.API.AppDomain.NG
                 throw new WebServiceException("AD:GetInitialTaskRequest()" + ex.Message, ex.InnerException);
             }
         }
+
+        internal static bool PostUpdateGoalRequest(PostPatientGoalRequest request)
+        {
+            try
+            {
+                bool result = false;
+
+                IRestClient client = new JsonServiceClient();
+                PutPatientGoalDataResponse response = client.Put<PutPatientGoalDataResponse>(
+                    string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Goal/{5}/Update",
+                    DDPatientGoalsServiceUrl,
+                    "NG",
+                    request.Version,
+                    request.ContractNumber,
+                    request.PatientId,
+                    request.Goal.Id), new PutPatientGoalDataRequest {  GoalData = GetGoalData(request.Goal)} as object);
+
+                if (response != null)
+                {
+                    result = true;
+                }
+
+                return result;
+            }
+            catch (WebServiceException ex)
+            {
+                throw new WebServiceException("AD:GetInitialTaskRequest()" + ex.Message, ex.InnerException);
+            }
+        }
+
+        private static PatientGoalData GetGoalData(PatientGoal pg)
+        {
+            try
+            {
+                PatientGoalData pgd = new PatientGoalData
+                {
+                    Id = pg.Id,
+                    Attributes = GetPatientGoalAttributes(pg.Attributes),
+                    EndDate = pg.EndDate,
+                    FocusAreas = pg.FocusAreas,
+                    Name = pg.Name,
+                    PatientId = pg.PatientId,
+                    Programs = pg.Programs,
+                    Source = pg.Source,
+                    StartDate = pg.StartDate,
+                    Status = pg.Status,
+                    TargetDate = pg.TargetDate,
+                    TargetValue = pg.TargetValue,
+                    Type = pg.Type
+                };
+                return pgd;
+            }
+            catch { throw; }
+        }
+
+        private static List<AttributeData> GetPatientGoalAttributes(List<AD.Attribute> list)
+        {
+            try
+            {
+                List<AttributeData> ad = new List<AttributeData>();
+                if (list != null)
+                {
+                    list.ForEach(a =>
+                    {
+                        ad.Add(new AttributeData
+                        {
+                            ControlType = a.ControlType,
+                            Name = a.Name,
+                            Order = a.Order,
+                            Value = a.Value
+                        });
+                    });
+                }
+                return ad;
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+
+        internal static bool PostUpdateTaskRequest(PostPatientGoalRequest request, PatientTaskData td)
+        {
+            try
+            {
+                bool result = false;
+
+                IRestClient client = new JsonServiceClient();
+                PutUpdateTaskResponse response = client.Put<PutUpdateTaskResponse>(
+                    string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Goal/{5}/Task/{6}/Update",
+                    DDPatientGoalsServiceUrl,
+                    "NG",
+                    request.Version,
+                    request.ContractNumber,
+                    request.PatientId,
+                    request.Goal.Id,
+                    td.Id), new PutUpdateTaskRequest {  Task = td } as object);
+
+                if (response != null)
+                {
+                    result = true;
+                }
+
+                return result;
+            }
+            catch (WebServiceException ex)
+            {
+                throw new WebServiceException("AD:PostUpdateTaskRequest()" + ex.Message, ex.InnerException);
+            }
+        }
+
+        internal static bool PostUpdateInterventionRequest(PostPatientGoalRequest request, PatientInterventionData pi)
+        {
+            try
+            {
+                bool result = false;
+
+                IRestClient client = new JsonServiceClient();
+                PutUpdateInterventionResponse response = client.Put<PutUpdateInterventionResponse>(
+                    string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Goal/{5}/Intervention/{6}/Update",
+                    DDPatientGoalsServiceUrl,
+                    "NG",
+                    request.Version,
+                    request.ContractNumber,
+                    request.PatientId,
+                    request.Goal.Id,
+                    pi.Id), new PutUpdateInterventionRequest { Intervention = pi  } as object);
+
+                if (response != null)
+                {
+                    result = true;
+                }
+
+                return result;
+            }
+            catch (WebServiceException ex)
+            {
+                throw new WebServiceException("AD:PostUpdateInterventionRequest()" + ex.Message, ex.InnerException);
+            }
+        }
     }
 }

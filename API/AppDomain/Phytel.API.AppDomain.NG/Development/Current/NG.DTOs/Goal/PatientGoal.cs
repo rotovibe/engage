@@ -13,7 +13,7 @@ namespace Phytel.API.AppDomain.NG.DTO
         public string Source { get; set; }
         public List<string> Programs { get; set; }
         public string Type { get; set; }
-        public string Status { get; set; }
+        public int Status { get; set; }
         public DateTime? StartDate { get; set; }
         public DateTime? EndDate { get; set; }
         public string TargetValue { get; set; }
