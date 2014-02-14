@@ -95,6 +95,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="GoalsManager.cs" />
+    <Compile Include="Goal\GoalsUtil.cs" />
     <Compile Include="Goal\GoalsEndpointUtil.cs" />
     <Compile Include="InterviewManager.cs" />
     <Compile Include="IUnitOfWork.cs" />
