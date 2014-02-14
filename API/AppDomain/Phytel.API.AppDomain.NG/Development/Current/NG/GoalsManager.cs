@@ -81,6 +81,36 @@ namespace Phytel.API.AppDomain.NG
             }
         }
 
+        public GetPatientGoalResponse GetPatientGoal(GetPatientGoalRequest request)
+        {
+            try
+            {
+                GetPatientGoalResponse response = new GetPatientGoalResponse();
+                response.Goal = GoalsEndpointUtil.GetPatientGoal(request);
+                response.Version = request.Version;
+                return response;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public GetAllPatientGoalsResponse GetAllPatientGoals(GetAllPatientGoalsRequest request)
+        {
+            try
+            {
+                GetAllPatientGoalsResponse response = new GetAllPatientGoalsResponse();
+                response.GoalsView = GoalsEndpointUtil.GetAllPatientGoals(request);
+                response.Version = request.Version;
+                return response;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
         public PostPatientGoalResponse SavePatientGoal(PostPatientGoalRequest request)
         {
             try

@@ -13,7 +13,7 @@ using MB = MongoDB.Driver.Builders;
 using MongoDB.Bson;
 using Phytel.API.Common;
 using Phytel.API.Common.Data;
-using Phytel.API.DataDomain.PatientGoal.MongoDB;
+using Phytel.API.DataDomain.PatientGoal;
 
 namespace Phytel.API.DataDomain.PatientGoal
 {
@@ -28,26 +28,12 @@ namespace Phytel.API.DataDomain.PatientGoal
 
         public object Insert(object newEntity)
         {
-            PatientTaskData pt = (PatientTaskData)newEntity;
             try
             {
-                MEPatientTask pa = new MEPatientTask
-                {
-                    Id = ObjectId.GenerateNewId(),
-                    TTLDate = pt.TTLDate
-                };
-
-                using (PatientGoalMongoContext ctx = new PatientGoalMongoContext(_dbName))
-                {
-                    WriteConcernResult wcr = ctx.PatientTasks.Collection.Insert(pa);
-                    if (wcr.Ok)
-                    {
-                        pt.Id = pa.Id.ToString();
-                    }
-                }
-                return pt as object;
+                throw new NotImplementedException();
+                // code here //
             }
-            catch (Exception ex) { throw; }
+            catch (Exception ex) { throw ex; }
         }
 
         public object InsertAll(List<object> entities)
@@ -105,16 +91,37 @@ namespace Phytel.API.DataDomain.PatientGoal
         {
             try
             {
-                IMongoQuery mQuery = null;
-                List<object> PatientGoalItems = new List<object>();
-
-                mQuery = MongoDataUtil.ExpressionQueryBuilder(expression);
-
-                //using (PatientGoalMongoContext ctx = new PatientGoalMongoContext(_dbName))
-                //{
-                //}
-
-                return new Tuple<string, IEnumerable<object>>(expression.ExpressionID, PatientGoalItems);
+                IEnumerable<object> returnQuery = null;
+                IMongoQuery mQuery = MongoDataUtil.ExpressionQueryBuilder(expression);
+                using (PatientGoalMongoContext ctx = new PatientGoalMongoContext(_dbName))
+                {
+                    List<PatientTaskData> tasksDataList = null;
+                    List<MEPatientTask> meTasks = ctx.PatientTasks.Collection.Find(mQuery).ToList();
+                    if (meTasks != null)
+                    {
+                        tasksDataList = new List<PatientTaskData>();
+                        foreach (MEPatientTask b in meTasks)
+                        {
+                            PatientTaskData taskData = new PatientTaskData
+                            {
+                                Id = b.Id.ToString(),
+                                TargetValue = b.TargetValue, 
+                                PatientGoalId = b.PatientGoalId.ToString(),
+                                StatusId = ((int)b.Status), 
+                                TargetDate = b.TargetDate,
+                                Attributes = DTOUtil.ConvertToAttributeDataList(b.Attributes), 
+                                Barriers = Helper.ConvertToStringList(b.Barriers),
+                                Description = b.Description,
+                                StatusDate = b.StatusDate, 
+                                StartDate = b.StartDate
+                                
+                            };
+                            tasksDataList.Add(taskData);
+                        }
+                    }
+                    returnQuery = tasksDataList.AsQueryable<object>();
+                }
+                return new Tuple<string, IEnumerable<object>>(expression.ExpressionID, returnQuery);
             }
             catch (Exception ex) { throw ex; }
         }
@@ -147,7 +154,6 @@ namespace Phytel.API.DataDomain.PatientGoal
                     if (pt.StatusId != 0) uv.Add(MB.Update.Set(MEPatientTask.StatusProperty, pt.StatusId));
                     if (pt.TargetDate != null) uv.Add(MB.Update.Set(MEPatientTask.TargetDateProperty, pt.TargetDate));
                     if (pt.TargetValue != null) uv.Add(MB.Update.Set(MEPatientTask.TargetValueProperty, pt.TargetValue));
-                    if (pt.Order != 0) uv.Add(MB.Update.Set(MEPatientTask.OrderProperty, pt.Order));
                     if (pt.Attributes != null) { uv.Add(MB.Update.SetWrapped<List<MAttribute>>(MEPatientTask.AttributesProperty, DTOUtil.GetAttributes(pt.Attributes))); }
                     if (pt.Barriers != null) { uv.Add(MB.Update.SetWrapped<List<ObjectId>>(MEPatientTask.BarriersProperty, DTOUtil.ConvertObjectId(pt.Barriers))); }
 

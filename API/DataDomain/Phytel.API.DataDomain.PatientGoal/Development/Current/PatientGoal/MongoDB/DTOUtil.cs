@@ -5,10 +5,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Phytel.API.DataDomain.PatientGoal.MongoDB;
+using Phytel.API.DataDomain.PatientGoal;
 using Phytel.API.DataDomain.PatientGoal.DTO;
 
-namespace Phytel.API.DataDomain.PatientGoal.MongoDB
+namespace Phytel.API.DataDomain.PatientGoal
 {
     public static class DTOUtil
     {
@@ -82,6 +82,20 @@ namespace Phytel.API.DataDomain.PatientGoal.MongoDB
             {
                 throw ex;
             }
+        }
+
+        internal static List<AttributeData> ConvertToAttributeDataList(List<MAttribute> meAttributes)
+        {
+            List<AttributeData> attrDataList = null;
+            if (meAttributes != null && meAttributes.Count != 0)
+            {
+                attrDataList = new List<AttributeData>();
+                foreach (MAttribute ma in meAttributes)
+                {
+                    attrDataList.Add(new AttributeData { Name = ma.Name, Value = ma.Value, Order = ma.Order, ControlType = Enum.GetName(typeof(AttributeControlType), ma.ControlType) });
+                }
+            }
+            return attrDataList;
         }
     }
 }

@@ -28,11 +28,6 @@ namespace Phytel.API.DataDomain.PatientGoal.DTO
         [BsonIgnoreIfNull(false)]
         public string TargetValue { get; set; }
 
-        public const string OrderProperty = "o";
-        [BsonElement(OrderProperty)]
-        [BsonIgnoreIfNull(false)]
-        public int Order { get; set; }
-
         public const string StatusProperty = "sts";
         [BsonElement(StatusProperty)]
         [BsonIgnoreIfNull(true)]

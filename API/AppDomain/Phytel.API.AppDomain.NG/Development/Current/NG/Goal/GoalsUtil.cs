@@ -28,30 +28,29 @@ namespace Phytel.API.AppDomain.NG
             {
                 if (request.Goal.Tasks != null && request.Goal.Tasks.Count > 0)
                 {
-                    List<PatientTaskData> ptd = new List<PatientTaskData>();
-                    request.Goal.Tasks.ForEach(t =>
-                    {
-                        ptd.Add(new PatientTaskData
-                        {
-                            Id = t.Id,
-                            Attributes = GetAttributeData(t.Attributes),
-                            Barriers = t.Barriers,
-                            Description = t.Description,
-                            Order = t.Order,
-                            PatientGoalId = request.Goal.Id,
-                            StartDate = t.StartDate,
-                            StatusId = t.Status,
-                            StatusDate = t.StatusDate,
-                            TargetDate = t.TargetDate,
-                            TargetValue = t.TargetValue
-                        });
-                    });
+            List<PatientTaskData> ptd = new List<PatientTaskData>();
+            request.Goal.Tasks.ForEach(t =>
+            {
+                ptd.Add(new PatientTaskData
+                {
+                    Id = t.Id,
+                    Attributes = GetAttributeData(t.Attributes),
+                    Barriers = t.BarrierIds,
+                    Description = t.Description,
+                    PatientGoalId = request.Goal.Id,
+                    StartDate = t.StartDate,
+                            StatusId = t.StatusId,
+                    StatusDate = t.StatusDate,
+                    TargetDate = t.TargetDate,
+                    TargetValue = t.TargetValue
+                });
+            });
 
-                    ptd.ForEach(td =>
-                    {
-                        GoalsEndpointUtil.PostUpdateTaskRequest(request, td);
-                    });
-                }
+            ptd.ForEach(td =>
+            {
+                GoalsEndpointUtil.PostUpdateTaskRequest(request, td);
+            });
+        }
                 return result;
             }
             catch (Exception ex)
@@ -93,28 +92,27 @@ namespace Phytel.API.AppDomain.NG
             try
             {
                 if (request.Goal.Interventions != null && request.Goal.Interventions.Count > 0)
+        {
+            List<PatientInterventionData> pid = new List<PatientInterventionData>();
+            request.Goal.Interventions.ForEach(i =>
+            {
+                pid.Add(new PatientInterventionData
                 {
-                    List<PatientInterventionData> pid = new List<PatientInterventionData>();
-                    request.Goal.Interventions.ForEach(i =>
-                    {
-                        pid.Add(new PatientInterventionData
-                        {
-                            AssignedTo = i.AssignedTo,
-                            Attributes = GetAttributeData(i.Attributes),
-                            Barriers = i.Barriers,
-                            CategoryId = i.Category.ToString(),
-                            Description = i.Description,
-                            Id = i.Id,
-                            Order = i.Order,
-                            PatientGoalId = i.PatientGoalId,
-                            StartDate = i.StartDate,
-                            StatusId = i.Status,
-                            StatusDate = i.StatusDate
-                        });
-                    });
+                    AssignedToId = i.AssignedToId,
+                    Attributes = GetAttributeData(i.Attributes),
+                    Barriers = i.BarrierIds,
+                    CategoryId = i.CategoryId,
+                    Description = i.Description,
+                    Id = i.Id,
+                    PatientGoalId = i.PatientGoalId,
+                    StartDate = i.StartDate,
+                            StatusId = i.StatusId,
+                    StatusDate = i.StatusDate
+                });
+            });
 
-                    pid.ForEach(pi =>
-                    {
+            pid.ForEach(pi =>
+            {
                         result = GoalsEndpointUtil.PostUpdateInterventionRequest(request, pi);
                     });
                 }
@@ -138,11 +136,11 @@ namespace Phytel.API.AppDomain.NG
                     {
                         pbd.Add(new PatientBarrierData
                         {
-                            CategoryId = b.Category,
+                            CategoryId = b.CategoryId,
                             Id = b.Id,
                             Name = b.Name,
                             PatientGoalId = b.PatientGoalId,
-                            StatusId = b.Status,
+                            StatusId = b.StatusId,
                             StatusDate = b.StatusDate
                         });
                     });
@@ -150,8 +148,8 @@ namespace Phytel.API.AppDomain.NG
                     pbd.ForEach(bd =>
                     {
                         result = GoalsEndpointUtil.PostUpdateBarrierRequest(request, bd);
-                    });
-                }
+            });
+        }
                 return result;
             }
             catch (Exception ex)

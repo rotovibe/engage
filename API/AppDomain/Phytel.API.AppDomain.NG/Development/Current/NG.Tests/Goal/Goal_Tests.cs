@@ -41,15 +41,15 @@ namespace Phytel.API.DataDomain.Patient.Service.Test
                 Interventions = GetInterventions(),
                 Name = "Remember cat facts.",
                 PatientId = "52f55852072ef709f84e5be1",
-                Source = "Source of all cat knowledge",
+                SourceId = "Source of all cat knowledge",
                 StartDate = System.DateTime.UtcNow,
-                Status = 1,
+                StatusId = 1,
                 TargetDate = System.DateTime.UtcNow,
                 TargetValue = "Cats have nine lives.",
                 Tasks = GetPatientTasks(),
                 Type = "52a0da34fe7a5915485bdfd6",
-                Programs = GetProgramsList(),
-                Barriers = GetBarriers(),
+                ProgramIds = GetProgramsList(),
+                //Barriers = GetBarriers(),
                 Attributes = GetAttributes(),
                 FocusAreaIds = GetFocusAreas()
             };
@@ -84,10 +84,10 @@ namespace Phytel.API.DataDomain.Patient.Service.Test
             {
                 Id = "52fd4d29fe7a5912b0979dee",
                 Attributes = new List<Attribute> { new Attribute { Value = "2", Order = 1, Name = "task attribute", ControlType = "1" } },
-                Barriers = new List<string> { "52fd96c0fe7a5913503f1c64" },
+                BarrierIds = new List<string> { "52fd96c0fe7a5913503f1c64" },
                 Description = "test description",
                 StartDate = System.DateTime.UtcNow,
-                Status = 1,
+                StatusId = 1,
                 StatusDate = System.DateTime.UtcNow,
                 TargetDate = System.DateTime.UtcNow,
                 TargetValue = "target value"
@@ -108,15 +108,14 @@ namespace Phytel.API.DataDomain.Patient.Service.Test
             interventions.Add(new PatientIntervention
             {
                 Id = "52fd3fcefe7a5912b0149acd",
-                AssignedTo = "assigned to me",
+                AssignedToId = "assigned to me",
                 Attributes = new List<Attribute> { new Attribute { Value = "2", Order = 1, Name = "task attribute", ControlType = "1" } },
-                Barriers = new List<string> { "52fd96c0fe7a5913503f1c64" },
-                Category = 2,
+                BarrierIds = new List<string> { "52fd96c0fe7a5913503f1c64" },
+                CategoryId = null,
                 Description = "This is a description of interventions.",
-                Order = 1,
                 PatientGoalId = "52fd2d6cd433231c845e7d25",
                 StartDate = System.DateTime.UtcNow,
-                Status = 1,
+                StatusId = 1,
                 StatusDate = System.DateTime.UtcNow
             });
             return interventions;
@@ -127,10 +126,11 @@ namespace Phytel.API.DataDomain.Patient.Service.Test
             List<PatientBarrier> barriers = new List<PatientBarrier>();
             barriers.Add(new PatientBarrier
             {
-                Id = "52fe51a1d6a4850944a9d19d",
+                CategoryId = "category value",
+                Id = "52fd96c0fe7a5913503f1c64",
                 Name = "Barrier name",
                 PatientGoalId = "52fd2d6cd433231c845e7d25",
-                Status = 1,
+                StatusId = 1,
                 StatusDate = System.DateTime.UtcNow
             });
             return barriers;

@@ -142,6 +142,65 @@ namespace Phytel.API.AppDomain.NG
             }
         }
 
+        public static PatientGoal GetPatientGoal(GetPatientGoalRequest request)
+        {
+            try
+            {
+                PatientGoal result = new PatientGoal();
+                //[Route("/{Context}/{Version}/{ContractNumber}/Patient/{PatientId}/Goal/{Id}", "GET")]
+                IRestClient client = new JsonServiceClient();
+                PutInitializeTaskResponse response = client.Put<PutInitializeTaskResponse>(
+                    string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Goal/{5}",
+                    DDPatientGoalsServiceUrl,
+                    "NG",
+                    request.Version,
+                    request.ContractNumber,
+                    request.PatientId,
+                    request.Id),
+                    new PutInitializeTaskRequest() as object);
+
+                if (response != null)
+                {
+                   // result = response.Id;
+                }
+
+                return result;
+            }
+            catch (WebServiceException ex)
+            {
+                throw new WebServiceException("AD:GetPatientGoal()" + ex.Message, ex.InnerException);
+            }
+        }
+
+        public static List<PatientGoalView> GetAllPatientGoals(GetAllPatientGoalsRequest request)
+        {
+            try
+            {
+                List<PatientGoalView> result = new List<PatientGoalView>();
+                //[Route("/{Context}/{Version}/{ContractNumber}/Patient/{PatientId}/Goals", "GET")]
+                IRestClient client = new JsonServiceClient();
+                PutInitializeTaskResponse response = client.Put<PutInitializeTaskResponse>(
+                    string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Goals",
+                    DDPatientGoalsServiceUrl,
+                    "NG",
+                    request.Version,
+                    request.ContractNumber,
+                    request.PatientId),
+                    new PutInitializeTaskRequest() as object);
+
+                if (response != null)
+                {
+                  //  result = response.Id;
+                }
+
+                return result;
+            }
+            catch (WebServiceException ex)
+            {
+                throw new WebServiceException("AD:GetPatientGoal()" + ex.Message, ex.InnerException);
+            }
+        }
+
         internal static bool PostUpdateGoalRequest(PostPatientGoalRequest request)
         {
             try
@@ -183,10 +242,10 @@ namespace Phytel.API.AppDomain.NG
                     FocusAreaIds = pg.FocusAreaIds,
                     Name = pg.Name,
                     PatientId = pg.PatientId,
-                    Programs = pg.Programs,
-                    Source = pg.Source,
+                    Programs = pg.ProgramIds,
+                    Source = pg.SourceId,
                     StartDate = pg.StartDate,
-                    StatusId = pg.Status,
+                    StatusId = pg.StatusId,
                     TargetDate = pg.TargetDate,
                     TargetValue = pg.TargetValue,
                     Type = pg.Type

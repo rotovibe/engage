@@ -13,7 +13,7 @@ using MB = MongoDB.Driver.Builders;
 using MongoDB.Bson;
 using Phytel.API.Common;
 using Phytel.API.Common.Data;
-using Phytel.API.DataDomain.PatientGoal.MongoDB;
+using Phytel.API.DataDomain.PatientGoal;
 
 namespace Phytel.API.DataDomain.PatientGoal
 {
@@ -87,15 +87,25 @@ namespace Phytel.API.DataDomain.PatientGoal
                     List<IMongoQuery> queries = new List<IMongoQuery>();
                     queries.Add(Query.EQ(MEPatientGoal.IdProperty, ObjectId.Parse(entityID)));
                     queries.Add(Query.EQ(MEPatientGoal.DeleteFlagProperty, false));
-                    queries.Add(Query.NE(MEPatientGoal.TTLDateProperty, null));
+                    queries.Add(Query.EQ(MEPatientGoal.TTLDateProperty, null));
                     IMongoQuery mQuery = Query.And(queries);
                     MEPatientGoal mePG = ctx.PatientGoals.Collection.Find(mQuery).FirstOrDefault();
                     if (mePG != null)
                     {
                         goalData = new PatientGoalData
                         {
-                            
-
+                            Id = mePG.Id.ToString(),
+                            FocusAreaIds = Helper.ConvertToStringList(mePG.FocusAreas),
+                            Name = mePG.Name,
+                            Source = (mePG.Source == null) ? null : mePG.Source.ToString(),
+                            Programs = Helper.ConvertToStringList(mePG.Programs),
+                            Type = mePG.Type.ToString(),
+                            StatusId = ((int)mePG.Status),
+                            StartDate = mePG.StartDate,
+                            EndDate = mePG.EndDate,
+                            TargetDate = mePG.TargetDate,
+                            TargetValue = mePG.TargetValue,
+                            Attributes = DTOUtil.ConvertToAttributeDataList(mePG.Attributes)
                         };
                     }
                 }
@@ -104,20 +114,37 @@ namespace Phytel.API.DataDomain.PatientGoal
             catch (Exception ex) { throw ex; }
         }
 
+
+
         public Tuple<string, IEnumerable<object>> Select(Interface.APIExpression expression)
         {
             try
             {
-                IMongoQuery mQuery = null;
-                List<object> PatientGoalItems = new List<object>();
+                IEnumerable<object> returnQuery = null;
+                IMongoQuery mQuery = MongoDataUtil.ExpressionQueryBuilder(expression);
+                using (PatientGoalMongoContext ctx = new PatientGoalMongoContext(_dbName))
+                {
+                    List<PatientGoalDataView> goalsViewDataList = null;
+                    List<MEPatientGoal> meGoals = ctx.PatientGoals.Collection.Find(mQuery).ToList();
+                    if (meGoals != null)
+                    {
+                        goalsViewDataList = new List<PatientGoalDataView>();
+                        foreach (MEPatientGoal b in meGoals)
+                        {
+                            PatientGoalDataView goalViewData = new PatientGoalDataView
+                            {
+                                Id = b.Id.ToString(),
+                                FocusAreaIds = Helper.ConvertToStringList(b.FocusAreas),
+                                Name = b.Name,
+                                Status = ((int)b.Status)
 
-                mQuery = MongoDataUtil.ExpressionQueryBuilder(expression);
-
-                //using (PatientGoalMongoContext ctx = new PatientGoalMongoContext(_dbName))
-                //{
-                //}
-
-                return new Tuple<string, IEnumerable<object>>(expression.ExpressionID, PatientGoalItems);
+                            };
+                            goalsViewDataList.Add(goalViewData);
+                        }
+                    }
+                    returnQuery = goalsViewDataList.AsQueryable<object>();
+                }
+                return new Tuple<string, IEnumerable<object>>(expression.ExpressionID, returnQuery);
             }
             catch (Exception ex) { throw ex; }
         }

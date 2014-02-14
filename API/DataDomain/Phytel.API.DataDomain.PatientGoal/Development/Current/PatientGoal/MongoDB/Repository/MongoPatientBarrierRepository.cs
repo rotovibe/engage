@@ -90,17 +90,33 @@ namespace Phytel.API.DataDomain.PatientGoal
         {
             try
             {
-                IMongoQuery mQuery = null;
-                List<object> PatientGoalItems = new List<object>();
-
-                mQuery = MongoDataUtil.ExpressionQueryBuilder(expression);
-
-                //using (PatientGoalMongoContext ctx = new PatientGoalMongoContext(_dbName))
-                //{
-                //}
-
-                return new Tuple<string, IEnumerable<object>>(expression.ExpressionID, PatientGoalItems);
-            }
+                IEnumerable<object> returnQuery = null; 
+                IMongoQuery mQuery = MongoDataUtil.ExpressionQueryBuilder(expression);
+                using (PatientGoalMongoContext ctx = new PatientGoalMongoContext(_dbName))
+                {
+                    List<PatientBarrierData> barriersDataList = null;
+                    List<MEPatientBarrier> meBarriers = ctx.PatientBarriers.Collection.Find(mQuery).ToList();
+                    if (meBarriers != null)
+                    {
+                        barriersDataList = new List<PatientBarrierData>();
+                        foreach (MEPatientBarrier b in meBarriers)
+                        {
+                            PatientBarrierData barrierData = new PatientBarrierData
+                            {
+                                Id = b.Id.ToString(), 
+                                Name = b.Name, 
+                                PatientGoalId  = b.PatientGoalId.ToString(),
+                                CategoryId = b.Category == null ? null : b.Category.ToString(), 
+                                StatusId = ((int)b.Status),
+                                StatusDate = b.StatusDate
+                            };
+                            barriersDataList.Add(barrierData);
+                        }
+                    }
+                    returnQuery = barriersDataList.AsQueryable<object>();
+                }
+                return new Tuple<string, IEnumerable<object>>(expression.ExpressionID, returnQuery);
+           }
             catch (Exception ex) { throw ex; }
         }
 

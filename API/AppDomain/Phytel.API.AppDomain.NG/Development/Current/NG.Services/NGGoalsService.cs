@@ -113,6 +113,56 @@ namespace Phytel.API.AppDomain.NG.Service
             }
         }
 
+        public GetPatientGoalResponse Get(GetPatientGoalRequest request)
+        {
+            GetPatientGoalResponse response = new GetPatientGoalResponse();
+            try
+            {
+                GoalsManager gm = new GoalsManager();
+                ValidateTokenResponse result = gm.IsUserValidated(request.Version, request.Token);
+                if (result.UserId.Trim() != string.Empty)
+                {
+                    request.UserId = result.UserId;
+                    response = gm.GetPatientGoal(request);
+                }
+                else
+                    throw new UnauthorizedAccessException();
+
+                return response;
+            }
+            catch (Exception ex)
+            {
+                //TODO: Log this to the SQL database via ASE
+                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+                return response;
+            }
+        }
+
+        public GetAllPatientGoalsResponse Get(GetAllPatientGoalsRequest request)
+        {
+            GetAllPatientGoalsResponse response = new GetAllPatientGoalsResponse();
+            try
+            {
+                GoalsManager gm = new GoalsManager();
+                ValidateTokenResponse result = gm.IsUserValidated(request.Version, request.Token);
+                if (result.UserId.Trim() != string.Empty)
+                {
+                    request.UserId = result.UserId;
+                    response = gm.GetAllPatientGoals(request);
+                }
+                else
+                    throw new UnauthorizedAccessException();
+
+                return response;
+            }
+            catch (Exception ex)
+            {
+                //TODO: Log this to the SQL database via ASE
+                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+                return response;
+            }
+        }
+
         public PostPatientGoalResponse Post(PostPatientGoalRequest request)
         {
             PostPatientGoalResponse response = null;

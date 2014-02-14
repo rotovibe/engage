@@ -6,7 +6,7 @@ namespace Phytel.API.DataDomain.PatientGoal.DTO
     [Route("/{Context}/{Version}/{ContractNumber}/Patient/{PatientId}/Goals", "GET")]
     public class GetAllPatientGoalsDataRequest : IDataDomainRequest
     {
-        [ApiMember(Name = "PatientId", Description = "Id of the Patient for whom a goal is being created.", ParameterType = "property", DataType = "string", IsRequired = true)]
+        [ApiMember(Name = "PatientId", Description = "Id of the Patient for whom a all the goals are requested.", ParameterType = "property", DataType = "string", IsRequired = true)]
         public string PatientId { get; set; }
 
         [ApiMember(Name = "UserId", Description = "UserId of the logged in user", ParameterType = "property", DataType = "string", IsRequired = false)]

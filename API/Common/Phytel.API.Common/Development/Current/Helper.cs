@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using MongoDB.Bson;
 
 namespace Phytel.API.Common
 {
@@ -30,6 +31,25 @@ namespace Phytel.API.Common
                 return "Not Met";
             }
             return null;
+        }
+
+        /// <summary>
+        /// Converts a list of objectIds to list of strings.
+        /// </summary>
+        /// <param name="objectIds">list of objectIds</param>
+        /// <returns>list of strings</returns>
+        public static List<string> ConvertToStringList(List<ObjectId> objectIds)
+        {
+            List<string> stringList = null;
+            if (objectIds != null && objectIds.Count != 0)
+            {
+                stringList = new List<string>();
+                foreach (ObjectId o in objectIds)
+                {
+                    stringList.Add(o.ToString());
+                }
+            }
+            return stringList;
         }
     }
 }

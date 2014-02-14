@@ -10,6 +10,7 @@ using MB = MongoDB.Driver.Builders;
 using MongoDB.Bson;
 using Phytel.API.AppDomain.Contact;
 using MongoDB.Driver.Builders;
+using Phytel.API.Common;
 
 namespace Phytel.API.DataDomain.Contact
 {
@@ -768,7 +769,7 @@ namespace Phytel.API.DataDomain.Contact
                         Gender = mc.Gender,
                         TimeZoneId = mc.TimeZone == null ? null : mc.TimeZone.ToString(),
                         WeekDays = mc.WeekDays,
-                        TimesOfDaysId = convertToStringList(mc.TimesOfDays)
+                        TimesOfDaysId = Helper.ConvertToStringList(mc.TimesOfDays)
                     };
 
                     //Modes
@@ -852,23 +853,5 @@ namespace Phytel.API.DataDomain.Contact
             return contactData;
         }
 
-        /// <summary>
-        /// Converts a list of objectIds to list of strings.
-        /// </summary>
-        /// <param name="objectIds">list of objectIds</param>
-        /// <returns>list of strings</returns>
-        private List<string> convertToStringList(List<ObjectId> objectIds)
-        {
-            List<string> stringList= null;
-            if (objectIds != null && objectIds.Count != 0)
-            {
-                stringList = new List<string>();
-                foreach (ObjectId o in objectIds)
-                {
-                    stringList.Add(o.ToString());
-                }
-            }
-            return stringList;
-        }
     }
 }
