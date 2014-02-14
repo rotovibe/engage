@@ -23,7 +23,7 @@ namespace Phytel.API.AppDomain.NG
         static readonly string DDPatientGoalsServiceUrl = ConfigurationManager.AppSettings["DDPatientGoalUrl"];
 
 
-        public static string PostInitialGoalRequest(PostInitializeGoalRequest request)
+        public static string GetInitialGoalRequest(GetInitializeGoalRequest request)
         {
             try
             {
@@ -52,7 +52,7 @@ namespace Phytel.API.AppDomain.NG
             }
         }
 
-        public static string PostInitialBarrierRequest(PostInitializeBarrierRequest request)
+        public static string GetInitialBarrierRequest(GetInitializeBarrierRequest request)
         {
             try
             {

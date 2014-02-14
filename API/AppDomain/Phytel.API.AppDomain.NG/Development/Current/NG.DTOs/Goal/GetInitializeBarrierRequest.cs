@@ -4,11 +4,14 @@ using System.Runtime.Serialization;
 
 namespace Phytel.API.AppDomain.NG.DTO
 {
-    [Route("/{Version}/{ContractNumber}/Patient/{PatientId}/Goal/Initialize", "POST")]
-    public class PostInitializeGoalRequest : IAppDomainRequest
+    [Route("/{Version}/{ContractNumber}/Patient/{PatientId}/Goal/{PatientGoalId}/Barrier/Initialize", "GET")]
+    public class GetInitializeBarrierRequest : IAppDomainRequest
     {
         [ApiMember(Name = "PatientId", Description = "Id of the patient for whom a goal is being created.", ParameterType = "path", DataType = "string", IsRequired = true)]
         public string PatientId { get; set; }
+
+        [ApiMember(Name = "PatientGoalId", Description = "Id of the PatientGoal.", ParameterType = "property", DataType = "string", IsRequired = true)]
+        public string PatientGoalId { get; set; }
 
         [ApiMember(Name = "UserID", Description = "ID of the user making the request (Internally used ONLY)", ParameterType = "property", DataType = "string", IsRequired = true)]
         public string UserId { get; set; }
@@ -25,6 +28,6 @@ namespace Phytel.API.AppDomain.NG.DTO
         [ApiMember(Name = "Context", Description = "Product Context requesting the Program", ParameterType = "property", DataType = "string", IsRequired = false)]
         public string Context { get; set; }
 
-        public PostInitializeGoalRequest() { }
+        public GetInitializeBarrierRequest() { }
     }
 }

@@ -14,14 +14,14 @@ namespace Phytel.API.AppDomain.NG.Test
         [TestMethod]
         public void UpdatePatient_Test()
         {
-            PostInitializeGoalRequest request = new PostInitializeGoalRequest();
+            GetInitializeGoalRequest request = new GetInitializeGoalRequest();
             request.ContractNumber = "InHealth001";
             request.UserId = "AD_TestHarness"; 
             request.Version = "v1";
             request.PatientId = "52f55874072ef709f84e68c5";
 
             GoalsManager gManager = new GoalsManager();
-            PostInitializeGoalResponse response = gManager.PostInitialGoalRequest(request);
+            GetInitializeGoalResponse response = gManager.GetInitialGoalRequest(request);
 
             Assert.IsNotNull(response);
         }

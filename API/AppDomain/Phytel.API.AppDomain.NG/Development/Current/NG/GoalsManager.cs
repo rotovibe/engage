@@ -17,12 +17,12 @@ namespace Phytel.API.AppDomain.NG
     public class GoalsManager : ManagerBase
     {
 
-        public PostInitializeGoalResponse PostInitialGoalRequest(PostInitializeGoalRequest request)
+        public GetInitializeGoalResponse GetInitialGoalRequest(GetInitializeGoalRequest request)
         {
             try
             {
-                PostInitializeGoalResponse response = new PostInitializeGoalResponse();
-                string id = GoalsEndpointUtil.PostInitialGoalRequest(request);
+                GetInitializeGoalResponse response = new GetInitializeGoalResponse();
+                string id = GoalsEndpointUtil.GetInitialGoalRequest(request);
                 response.Id = id;
                 response.Version = request.Version;
                 return response;
@@ -33,12 +33,12 @@ namespace Phytel.API.AppDomain.NG
             }
         }
 
-        public PostInitializeBarrierResponse PostInitialBarrierRequest(PostInitializeBarrierRequest request)
+        public GetInitializeBarrierResponse GetInitialBarrierRequest(GetInitializeBarrierRequest request)
         {
             try
             {
-                PostInitializeBarrierResponse response = new PostInitializeBarrierResponse();
-                string id = GoalsEndpointUtil.PostInitialBarrierRequest(request);
+                GetInitializeBarrierResponse response = new GetInitializeBarrierResponse();
+                string id = GoalsEndpointUtil.GetInitialBarrierRequest(request);
                 response.Id = id;
                 response.Version = request.Version;
                 return response;

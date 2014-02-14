@@ -13,9 +13,9 @@ namespace Phytel.API.AppDomain.NG.Service
 {
     public partial class NGService : ServiceStack.ServiceInterface.Service
     {
-        public PostInitializeGoalResponse Post(PostInitializeGoalRequest request)
+        public GetInitializeGoalResponse Get(GetInitializeGoalRequest request)
         {
-            PostInitializeGoalResponse response = new PostInitializeGoalResponse();
+            GetInitializeGoalResponse response = new GetInitializeGoalResponse();
             try
             {
                 GoalsManager gm = new GoalsManager();
@@ -23,7 +23,7 @@ namespace Phytel.API.AppDomain.NG.Service
                 if (result.UserId.Trim() != string.Empty)
                 {
                     request.UserId = result.UserId;
-                    response = gm.PostInitialGoalRequest(request);
+                    response = gm.GetInitialGoalRequest(request);
                 }
                 else
                     throw new UnauthorizedAccessException();
@@ -38,9 +38,9 @@ namespace Phytel.API.AppDomain.NG.Service
             }
         }
 
-        public PostInitializeBarrierResponse Post(PostInitializeBarrierRequest request)
+        public GetInitializeBarrierResponse Get(GetInitializeBarrierRequest request)
         {
-            PostInitializeBarrierResponse response = new PostInitializeBarrierResponse();
+            GetInitializeBarrierResponse response = new GetInitializeBarrierResponse();
             try
             {
                 GoalsManager gm = new GoalsManager();
@@ -48,7 +48,7 @@ namespace Phytel.API.AppDomain.NG.Service
                 if (result.UserId.Trim() != string.Empty)
                 {
                     request.UserId = result.UserId;
-                    response = gm.PostInitialBarrierRequest(request);
+                    response = gm.GetInitialBarrierRequest(request);
                 }
                 else
                     throw new UnauthorizedAccessException();

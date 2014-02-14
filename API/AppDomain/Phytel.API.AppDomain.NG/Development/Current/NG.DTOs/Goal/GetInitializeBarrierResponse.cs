@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace Phytel.API.AppDomain.NG.DTO
 {
-    public class PostInitializeBarrierResponse : IDomainResponse
+    public class GetInitializeBarrierResponse : IDomainResponse
     {
         public string Id { get; set; }
         public ResponseStatus Status { get; set; }
