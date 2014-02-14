@@ -180,7 +180,7 @@ namespace Phytel.API.AppDomain.NG
                     Id = pg.Id,
                     Attributes = GetPatientGoalAttributes(pg.Attributes),
                     EndDate = pg.EndDate,
-                    FocusAreaIds = pg.FocusAreas,
+                    FocusAreaIds = pg.FocusAreaIds,
                     Name = pg.Name,
                     PatientId = pg.PatientId,
                     Programs = pg.Programs,

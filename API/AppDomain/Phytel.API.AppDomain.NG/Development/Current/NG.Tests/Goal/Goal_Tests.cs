@@ -51,7 +51,7 @@ namespace Phytel.API.DataDomain.Patient.Service.Test
                 Programs = GetProgramsList(),
                 Barriers = GetBarriers(),
                 Attributes = GetAttributes(),
-                FocusAreas = GetFocusAreas()
+                FocusAreaIds = GetFocusAreas()
             };
 
 
