@@ -98,6 +98,10 @@
       <Project>{f133e537-1d48-4a42-aba9-5587e057f5b3}</Project>
       <Name>DataDomain.PatientProblem.DTO</Name>
     </ProjectReference>
+    <ProjectReference Include="..\PatientProblem\DataDomain.PatientProblem.csproj">
+      <Project>{afd0f5b1-a29e-402c-958b-d6d82b4278e5}</Project>
+      <Name>DataDomain.PatientProblem</Name>
+    </ProjectReference>
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
