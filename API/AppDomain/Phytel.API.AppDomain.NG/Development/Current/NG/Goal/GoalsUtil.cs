@@ -102,7 +102,7 @@ namespace Phytel.API.AppDomain.NG
                             AssignedTo = i.AssignedTo,
                             Attributes = GetAttributeData(i.Attributes),
                             Barriers = i.Barriers,
-                            CategoryId = i.Category,
+                            CategoryId = i.Category.ToString(),
                             Description = i.Description,
                             Id = i.Id,
                             Order = i.Order,
