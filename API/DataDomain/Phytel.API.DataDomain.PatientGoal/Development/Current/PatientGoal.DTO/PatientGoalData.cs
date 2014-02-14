@@ -9,7 +9,7 @@ namespace Phytel.API.DataDomain.PatientGoal.DTO
     {
         public string Id { get; set; }
         public string PatientId { get; set; }
-        public List<string> FocusAreas { get; set; }
+        public List<string> FocusAreaIds { get; set; }
         public string Name { get; set; }
         public string Source { get; set; }
         public List<string> Programs { get; set; }
