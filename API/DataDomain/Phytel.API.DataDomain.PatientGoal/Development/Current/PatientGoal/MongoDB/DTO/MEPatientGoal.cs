@@ -24,12 +24,7 @@ namespace Phytel.API.DataDomain.PatientGoal.DTO
         public const string EndDateProperty = "ed";
         public const string TargetValueProperty = "tv";
         public const string TargetDateProperty = "td";
-        public const string AttributesProperty = "attr";
-
-        public const string BarriersProperty = "bar";
-        public const string TasksProperty = "task";
-        public const string InterventionsProperty = "intv";
-        
+        public const string AttributesProperty = "attr";        
 
         #region Standard IMongoEntity Constants
         public const string ExtraElementsProperty = "ex";

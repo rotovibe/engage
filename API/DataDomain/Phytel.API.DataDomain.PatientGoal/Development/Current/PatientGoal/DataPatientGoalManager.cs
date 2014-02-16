@@ -172,13 +172,13 @@ namespace Phytel.API.DataDomain.PatientGoal
             selectExpressions.Add(deleteFlagSelectExpression);
 
             // TTL is null.
-            SelectExpression ttlSelectExpression = new SelectExpression();
-            ttlSelectExpression.FieldName = MEPatientGoal.TTLDateProperty;
-            ttlSelectExpression.Type = SelectExpressionType.EQ;
-            ttlSelectExpression.Value = null;
-            ttlSelectExpression.ExpressionOrder = 3;
-            ttlSelectExpression.GroupID = 1;
-            selectExpressions.Add(ttlSelectExpression);
+            //SelectExpression ttlSelectExpression = new SelectExpression();
+            //ttlSelectExpression.FieldName = MEPatientGoal.TTLDateProperty;
+            //ttlSelectExpression.Type = SelectExpressionType.EQ;
+            //ttlSelectExpression.Value = null;
+            //ttlSelectExpression.ExpressionOrder = 3;
+            //ttlSelectExpression.GroupID = 1;
+            //selectExpressions.Add(ttlSelectExpression);
 
             APIExpression apiExpression = new APIExpression();
             apiExpression.Expressions = selectExpressions;
@@ -220,13 +220,13 @@ namespace Phytel.API.DataDomain.PatientGoal
             selectExpressions.Add(deleteFlagSelectExpression);
 
             // TTL is null.
-            SelectExpression ttlSelectExpression = new SelectExpression();
-            ttlSelectExpression.FieldName = MEPatientBarrier.TTLDateProperty;
-            ttlSelectExpression.Type = SelectExpressionType.EQ;
-            ttlSelectExpression.Value = null;
-            ttlSelectExpression.ExpressionOrder = 3;
-            ttlSelectExpression.GroupID = 1;
-            selectExpressions.Add(ttlSelectExpression);
+            //SelectExpression ttlSelectExpression = new SelectExpression();
+            //ttlSelectExpression.FieldName = MEPatientBarrier.TTLDateProperty;
+            //ttlSelectExpression.Type = SelectExpressionType.EQ;
+            //ttlSelectExpression.Value = null;
+            //ttlSelectExpression.ExpressionOrder = 3;
+            //ttlSelectExpression.GroupID = 1;
+            //selectExpressions.Add(ttlSelectExpression);
 
             APIExpression apiExpression = new APIExpression();
             apiExpression.Expressions = selectExpressions;
@@ -268,13 +268,13 @@ namespace Phytel.API.DataDomain.PatientGoal
             selectExpressions.Add(deleteFlagSelectExpression);
 
             // TTL is null.
-            SelectExpression ttlSelectExpression = new SelectExpression();
-            ttlSelectExpression.FieldName = MEPatientTask.TTLDateProperty;
-            ttlSelectExpression.Type = SelectExpressionType.EQ;
-            ttlSelectExpression.Value = null;
-            ttlSelectExpression.ExpressionOrder = 3;
-            ttlSelectExpression.GroupID = 1;
-            selectExpressions.Add(ttlSelectExpression);
+            //SelectExpression ttlSelectExpression = new SelectExpression();
+            //ttlSelectExpression.FieldName = MEPatientTask.TTLDateProperty;
+            //ttlSelectExpression.Type = SelectExpressionType.EQ;
+            //ttlSelectExpression.Value = null;
+            //ttlSelectExpression.ExpressionOrder = 3;
+            //ttlSelectExpression.GroupID = 1;
+            //selectExpressions.Add(ttlSelectExpression);
 
             APIExpression apiExpression = new APIExpression();
             apiExpression.Expressions = selectExpressions;
@@ -316,13 +316,13 @@ namespace Phytel.API.DataDomain.PatientGoal
             selectExpressions.Add(deleteFlagSelectExpression);
 
             // TTL is null.
-            SelectExpression ttlSelectExpression = new SelectExpression();
-            ttlSelectExpression.FieldName = MEPatientIntervention.TTLDateProperty;
-            ttlSelectExpression.Type = SelectExpressionType.EQ;
-            ttlSelectExpression.Value = null;
-            ttlSelectExpression.ExpressionOrder = 3;
-            ttlSelectExpression.GroupID = 1;
-            selectExpressions.Add(ttlSelectExpression);
+            //SelectExpression ttlSelectExpression = new SelectExpression();
+            //ttlSelectExpression.FieldName = MEPatientIntervention.TTLDateProperty;
+            //ttlSelectExpression.Type = SelectExpressionType.EQ;
+            //ttlSelectExpression.Value = null;
+            //ttlSelectExpression.ExpressionOrder = 3;
+            //ttlSelectExpression.GroupID = 1;
+            //selectExpressions.Add(ttlSelectExpression);
 
             APIExpression apiExpression = new APIExpression();
             apiExpression.Expressions = selectExpressions;

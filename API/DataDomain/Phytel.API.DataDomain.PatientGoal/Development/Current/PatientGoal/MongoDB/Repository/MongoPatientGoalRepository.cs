@@ -87,7 +87,7 @@ namespace Phytel.API.DataDomain.PatientGoal
                     List<IMongoQuery> queries = new List<IMongoQuery>();
                     queries.Add(Query.EQ(MEPatientGoal.IdProperty, ObjectId.Parse(entityID)));
                     queries.Add(Query.EQ(MEPatientGoal.DeleteFlagProperty, false));
-                    queries.Add(Query.EQ(MEPatientGoal.TTLDateProperty, null));
+                   // queries.Add(Query.EQ(MEPatientGoal.TTLDateProperty, null));
                     IMongoQuery mQuery = Query.And(queries);
                     MEPatientGoal mePG = ctx.PatientGoals.Collection.Find(mQuery).FirstOrDefault();
                     if (mePG != null)
