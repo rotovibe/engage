@@ -234,7 +234,7 @@ namespace Phytel.API.DataDomain.PatientGoal
                 PutUpdateInterventionResponse result = new PutUpdateInterventionResponse();
 
                 IPatientGoalRepository<PutUpdateInterventionResponse> repo = PatientGoalRepositoryFactory<PutUpdateInterventionResponse>.GetPatientInterventionRepository(request.ContractNumber, request.Context);
-                bool status = (bool)repo.Update(request.Intervention);
+                bool status = (bool)repo.Update(request);
 
                 result.Updated = status;
                 return result;

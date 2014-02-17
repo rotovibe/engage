@@ -110,7 +110,8 @@ namespace Phytel.API.DataDomain.PatientGoal
         public object Update(object entity)
         {
             bool result = false;
-            PatientInterventionData pt = (PatientInterventionData)entity;
+            PutUpdateInterventionRequest ir = (PutUpdateInterventionRequest)entity;
+            PatientInterventionData pt = ir.Intervention;
             try
             {
                 using (PatientGoalMongoContext ctx = new PatientGoalMongoContext(_dbName))
@@ -118,8 +119,8 @@ namespace Phytel.API.DataDomain.PatientGoal
                     var q = MB.Query<MEPatientIntervention>.EQ(b => b.Id, ObjectId.Parse(pt.Id));
 
                     var uv = new List<MB.UpdateBuilder>();
-                    uv.Add(MB.Update.Set(MEPatientIntervention.UpdatedByProperty, pt.PatientGoalId));
                     uv.Add(MB.Update.Set(MEPatientIntervention.TTLDateProperty, BsonNull.Value));
+                    if (ir.UserId != null) uv.Add(MB.Update.Set(MEPatientIntervention.UpdatedByProperty, ir.UserId));
                     if (pt.Description != null) uv.Add(MB.Update.Set(MEPatientIntervention.DescriptionProperty, pt.Description));
                     if (pt.StartDate != null) uv.Add(MB.Update.Set(MEPatientIntervention.StartDateProperty, pt.StartDate));
                     if (pt.StatusDate != null) uv.Add(MB.Update.Set(MEPatientIntervention.StatusDateProperty, pt.StatusDate));
