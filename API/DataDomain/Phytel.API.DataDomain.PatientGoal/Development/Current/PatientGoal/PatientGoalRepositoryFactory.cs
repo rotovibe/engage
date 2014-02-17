@@ -60,7 +60,7 @@ namespace Phytel.API.DataDomain.PatientGoal
             }
         }
 
-        internal static IPatientGoalRepository<T> GetPatientInterventionRepository(string dbName, string productName)
+        public static IPatientGoalRepository<T> GetPatientInterventionRepository(string dbName, string productName)
         {
             try
             {
@@ -77,7 +77,7 @@ namespace Phytel.API.DataDomain.PatientGoal
             }
         }
 
-        internal static IAttributeRepository<T> GetAttributeLibraryRepository(string dbName, string productName)
+        public static IAttributeRepository<T> GetAttributeLibraryRepository(string dbName, string productName)
         {
             try
             {

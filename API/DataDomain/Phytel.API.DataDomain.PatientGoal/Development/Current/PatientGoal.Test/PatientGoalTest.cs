@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Phytel.API.DataDomain.PatientGoal;
 using Phytel.API.DataDomain.PatientGoal.DTO;
@@ -46,6 +47,16 @@ namespace Phytel.API.DataDomain.PatientGoal.Test
             PutInitializeBarrierDataResponse response = PatientGoalDataManager.InitializeBarrier(request);
 
             Assert.IsNotNull(response.Id);
+        }
+
+        [TestMethod]
+        public void GeCustomAttributesByType()
+        {
+            GetCustomAttributesDataRequest request = new GetCustomAttributesDataRequest { Type= "goal" };
+
+            List<CustomAttributeData> response = PatientGoalDataManager.GetCustomAttributesByType(request);
+
+            Assert.IsNotNull(response);
         }
     }
 }

@@ -17,7 +17,7 @@ using Phytel.API.DataDomain.PatientGoal;
 
 namespace Phytel.API.DataDomain.PatientGoal
 {
-    public class MongoAttributeLibraryRepository<T> : IRepository<T>
+    public class MongoAttributeLibraryRepository<T> : IAttributeRepository<T>
     {
         private string _dbName = string.Empty;
 
@@ -79,10 +79,6 @@ namespace Phytel.API.DataDomain.PatientGoal
                 EntityType entityType;
                 if (Enum.TryParse(type, true, out entityType))
                 {
-                    throw new ApplicationException("Type provided in the request is not a valid.");
-                }
-                else
-                {
                     List<IMongoQuery> queries = new List<IMongoQuery>();
                     queries.Add(Query.EQ(MEAttributeLibrary.TypeProperty, entityType));
                     queries.Add(Query.EQ(MEAttributeLibrary.DeleteFlagProperty, false));
@@ -106,6 +102,10 @@ namespace Phytel.API.DataDomain.PatientGoal
                         }
                     }
                     return customAttributesList;
+                }
+                else
+                {
+                    throw new ApplicationException("Type provided in the request is not a valid.");
                 }
             }
             catch (Exception ex) { throw ex; };
