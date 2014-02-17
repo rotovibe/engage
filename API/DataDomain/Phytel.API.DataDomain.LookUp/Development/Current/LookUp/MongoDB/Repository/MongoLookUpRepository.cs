@@ -65,10 +65,6 @@ namespace Phytel.API.DataDomain.LookUp
             {
                 MongoDB.Bson.Serialization.BsonClassMap.RegisterClassMap<Source>();
             }
-            if (MongoDB.Bson.Serialization.BsonClassMap.IsClassMapRegistered(typeof(StageOfChange)) == false)
-            {
-                MongoDB.Bson.Serialization.BsonClassMap.RegisterClassMap<StageOfChange>();
-            }
             if (MongoDB.Bson.Serialization.BsonClassMap.IsClassMapRegistered(typeof(BarrierCategory)) == false)
             {
                 MongoDB.Bson.Serialization.BsonClassMap.RegisterClassMap<BarrierCategory>();

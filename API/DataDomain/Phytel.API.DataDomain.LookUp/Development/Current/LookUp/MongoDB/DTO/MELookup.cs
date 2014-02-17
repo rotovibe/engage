@@ -76,8 +76,7 @@ namespace Phytel.API.DataDomain.LookUp.DTO
         Language = 9,
         FocusArea = 10,
         Source = 11,
-        StageOfChange = 12,
-        BarrierCategory = 13,
-        InterventionCategory = 14
+        BarrierCategory = 12,
+        InterventionCategory = 13
     }
 }

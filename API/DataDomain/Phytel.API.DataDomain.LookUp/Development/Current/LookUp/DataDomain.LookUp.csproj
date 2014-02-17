@@ -89,7 +89,6 @@
     <Compile Include="ILookUpRepository.cs" />
     <Compile Include="MongoDB\DTO\Goal\InterventionCategory.cs" />
     <Compile Include="MongoDB\DTO\Goal\BarrierCategory.cs" />
-    <Compile Include="MongoDB\DTO\Goal\StageOfChange.cs" />
     <Compile Include="MongoDB\DTO\Goal\Source.cs" />
     <Compile Include="MongoDB\DTO\Goal\FocusArea.cs" />
     <Compile Include="MongoDB\DTO\ILookUpData.cs" />
