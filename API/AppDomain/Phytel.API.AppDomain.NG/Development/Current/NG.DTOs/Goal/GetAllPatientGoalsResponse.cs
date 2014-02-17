@@ -15,6 +15,7 @@ namespace Phytel.API.AppDomain.NG.DTO
     public class PatientGoalView
     {
         public string Id { get; set; }
+        public string PatientId { get; set; }
         public List<string> FocusAreaIds { get; set; }
         public string Name { get; set; }
         public int StatusId { get; set; }
@@ -27,7 +28,9 @@ namespace Phytel.API.AppDomain.NG.DTO
     public class ChildView
     {
         public string Id { get; set; }
+        public string PatientGoalId { get; set; }
         public string Name { get; set; }
+        public string Description { get; set; }
         public int StatusId { get; set; }
     }
 }

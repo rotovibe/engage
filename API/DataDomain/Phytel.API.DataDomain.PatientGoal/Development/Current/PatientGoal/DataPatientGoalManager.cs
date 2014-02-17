@@ -80,7 +80,8 @@ namespace Phytel.API.DataDomain.PatientGoal
             try
             {
                 result = new GetAllPatientGoalsDataResponse();
-                List<PatientGoalViewData> goalViewDataList = getGoalsViewByPatientId(request.ContractNumber, request.Context, request.PatientId);
+                IPatientGoalRepository<PatientGoalViewData> goalRepo = PatientGoalRepositoryFactory<PatientGoalViewData>.GetPatientGoalRepository(request.ContractNumber, request.Context);
+                List<PatientGoalViewData> goalViewDataList = goalRepo.Find(request.PatientId) as List<PatientGoalViewData>;
                 List<PatientGoalViewData> goalDataView = null;
                 if (goalViewDataList != null && goalViewDataList.Count > 0)
                 {
@@ -101,7 +102,8 @@ namespace Phytel.API.DataDomain.PatientGoal
                             barrierChildView = new List<ChildViewData>();
                             foreach(PatientBarrierData b in barrierData)
                             {
-                                barrierChildView.Add(new ChildViewData { Id = b.Id, Name = b.Name, StatusId = ((int)(b.StatusId))});
+                                barrierChildView.Add(new ChildViewData { Id = b.Id, PatientGoalId = b.PatientGoalId, Name = b.Name, StatusId = ((int)(b.StatusId))});
+                                barrierChildView = barrierChildView.OrderBy(o => o.Name).ToList();
                             }
                         }
                         view.BarriersData =  barrierChildView; 
@@ -114,7 +116,8 @@ namespace Phytel.API.DataDomain.PatientGoal
                             taskChildView = new List<ChildViewData>();
                             foreach(PatientTaskData b in taskData)
                             {
-                                taskChildView.Add(new ChildViewData { Id = b.Id, Name = b.Description, StatusId = ((int)(b.StatusId)) });
+                                taskChildView.Add(new ChildViewData { Id = b.Id, PatientGoalId = b.PatientGoalId, Description = b.Description, StatusId = ((int)(b.StatusId)) });
+                                taskChildView = taskChildView.OrderBy(o => o.Description).ToList();
                             }
                         }
                         view.TasksData = taskChildView;
@@ -127,7 +130,8 @@ namespace Phytel.API.DataDomain.PatientGoal
                             interChildView = new List<ChildViewData>();
                             foreach (PatientInterventionData b in interData)
                             {
-                                interChildView.Add(new ChildViewData { Id = b.Id, Name = b.Description, StatusId = ((int)(b.StatusId))});
+                                interChildView.Add(new ChildViewData { Id = b.Id, PatientGoalId = b.PatientGoalId, Description = b.Description, StatusId = ((int)(b.StatusId)) });
+                                interChildView.OrderBy(o => o.Description).ToList();
                             }
                         }
                         view.InterventionsData = interChildView;
@@ -146,195 +150,24 @@ namespace Phytel.API.DataDomain.PatientGoal
         } 
 
         #region Private methods
-        private static List<PatientGoalViewData> getGoalsViewByPatientId(string contractNumber, string context, string patientId)
-        {
-            List<PatientGoalViewData> goalViewDataList = null;
-
-            IPatientGoalRepository<PatientGoalViewData> goalRepo = PatientGoalRepositoryFactory<PatientGoalViewData>.GetPatientGoalRepository(contractNumber, context);
-            ICollection<SelectExpression> selectExpressions = new List<SelectExpression>();
-
-            //PatientId
-            SelectExpression pgIdSelectExpression = new SelectExpression();
-            pgIdSelectExpression.FieldName = MEPatientGoal.PatientIdProperty;
-            pgIdSelectExpression.Type = SelectExpressionType.EQ;
-            pgIdSelectExpression.Value = patientId;
-            pgIdSelectExpression.NextExpressionType = SelectExpressionGroupType.AND;
-            pgIdSelectExpression.ExpressionOrder = 1;
-            pgIdSelectExpression.GroupID = 1;
-            selectExpressions.Add(pgIdSelectExpression);
-
-            // DeleteFlag = false.
-            SelectExpression deleteFlagSelectExpression = new SelectExpression();
-            deleteFlagSelectExpression.FieldName = MEPatientGoal.DeleteFlagProperty;
-            deleteFlagSelectExpression.Type = SelectExpressionType.EQ;
-            deleteFlagSelectExpression.Value = false;
-            deleteFlagSelectExpression.ExpressionOrder = 2;
-            deleteFlagSelectExpression.GroupID = 1;
-            selectExpressions.Add(deleteFlagSelectExpression);
-
-            //// TTL is null.
-            //SelectExpression ttlSelectExpression = new SelectExpression();
-            //ttlSelectExpression.FieldName = MEPatientGoal.TTLDateProperty;
-            //ttlSelectExpression.Type = SelectExpressionType.EQ;
-            //ttlSelectExpression.Value = BsonNull.Value;
-            //ttlSelectExpression.ExpressionOrder = 3;
-            //ttlSelectExpression.GroupID = 1;
-            //selectExpressions.Add(ttlSelectExpression);
-
-            APIExpression apiExpression = new APIExpression();
-            apiExpression.Expressions = selectExpressions;
-
-            Tuple<string, IEnumerable<object>> goalViewData = goalRepo.Select(apiExpression);
-
-            if (goalViewData != null)
-            {
-                goalViewDataList = goalViewData.Item2.Cast<PatientGoalViewData>().ToList();
-            }
-
-            return goalViewDataList;
-        }
-
         private static List<PatientBarrierData> getBarriersByPatientGoalId(string contractNumber, string context, string patientGoalId)
         {
-            List<PatientBarrierData> barrierDataList = null;
-
             IPatientGoalRepository<PatientBarrierData> barrierRepo = PatientGoalRepositoryFactory<PatientBarrierData>.GetPatientBarrierRepository(contractNumber, context);
-            ICollection<SelectExpression> selectExpressions = new List<SelectExpression>();
-
-            //PatientGoalId
-            SelectExpression pgIdSelectExpression = new SelectExpression();
-            pgIdSelectExpression.FieldName = MEPatientBarrier.PatientGoalIdProperty;
-            pgIdSelectExpression.Type = SelectExpressionType.EQ;
-            pgIdSelectExpression.Value = patientGoalId;
-            pgIdSelectExpression.NextExpressionType = SelectExpressionGroupType.AND;
-            pgIdSelectExpression.ExpressionOrder = 1;
-            pgIdSelectExpression.GroupID = 1;
-            selectExpressions.Add(pgIdSelectExpression);
-
-            // DeleteFlag = false.
-            SelectExpression deleteFlagSelectExpression = new SelectExpression();
-            deleteFlagSelectExpression.FieldName = MEPatientBarrier.DeleteFlagProperty;
-            deleteFlagSelectExpression.Type = SelectExpressionType.EQ;
-            deleteFlagSelectExpression.Value = false;
-            deleteFlagSelectExpression.ExpressionOrder = 2;
-            deleteFlagSelectExpression.GroupID = 1;
-            selectExpressions.Add(deleteFlagSelectExpression);
-
-            //// TTL is null.
-            //SelectExpression ttlSelectExpression = new SelectExpression();
-            //ttlSelectExpression.FieldName = MEPatientBarrier.TTLDateProperty;
-            //ttlSelectExpression.Type = SelectExpressionType.EQ;
-            //ttlSelectExpression.Value = BsonNull.Value;
-            //ttlSelectExpression.ExpressionOrder = 3;
-            //ttlSelectExpression.GroupID = 1;
-            //selectExpressions.Add(ttlSelectExpression);
-
-            APIExpression apiExpression = new APIExpression();
-            apiExpression.Expressions = selectExpressions;
-
-            Tuple<string, IEnumerable<object>> barrierData = barrierRepo.Select(apiExpression);
-
-            if (barrierData != null)
-            {
-                barrierDataList = barrierData.Item2.Cast<PatientBarrierData>().ToList();
-            }
-
+            List<PatientBarrierData> barrierDataList = barrierRepo.Find(patientGoalId) as List<PatientBarrierData>; 
             return barrierDataList;
         }
 
         private static List<PatientTaskData> getTasksByPatientGoalId(string contractNumber, string context, string patientGoalId)
         {
-            List<PatientTaskData> taskDataList = null;
-
             IPatientGoalRepository<PatientTaskData> taskRepo = PatientGoalRepositoryFactory<PatientTaskData>.GetPatientTaskRepository(contractNumber, context);
-            ICollection<SelectExpression> selectExpressions = new List<SelectExpression>();
-
-            //PatientGoalId
-            SelectExpression pgIdSelectExpression = new SelectExpression();
-            pgIdSelectExpression.FieldName = MEPatientTask.PatientGoalIdProperty;
-            pgIdSelectExpression.Type = SelectExpressionType.EQ;
-            pgIdSelectExpression.Value = patientGoalId;
-            pgIdSelectExpression.NextExpressionType = SelectExpressionGroupType.AND;
-            pgIdSelectExpression.ExpressionOrder = 1;
-            pgIdSelectExpression.GroupID = 1;
-            selectExpressions.Add(pgIdSelectExpression);
-
-            // DeleteFlag = false.
-            SelectExpression deleteFlagSelectExpression = new SelectExpression();
-            deleteFlagSelectExpression.FieldName = MEPatientTask.DeleteFlagProperty;
-            deleteFlagSelectExpression.Type = SelectExpressionType.EQ;
-            deleteFlagSelectExpression.Value = false;
-            deleteFlagSelectExpression.ExpressionOrder = 2;
-            deleteFlagSelectExpression.GroupID = 1;
-            selectExpressions.Add(deleteFlagSelectExpression);
-
-            //// TTL is null.
-            //SelectExpression ttlSelectExpression = new SelectExpression();
-            //ttlSelectExpression.FieldName = MEPatientTask.TTLDateProperty;
-            //ttlSelectExpression.Type = SelectExpressionType.EQ;
-            //ttlSelectExpression.Value = BsonNull.Value;
-            //ttlSelectExpression.ExpressionOrder = 3;
-            //ttlSelectExpression.GroupID = 1;
-            //selectExpressions.Add(ttlSelectExpression);
-
-            APIExpression apiExpression = new APIExpression();
-            apiExpression.Expressions = selectExpressions;
-
-            Tuple<string, IEnumerable<object>> taskData = taskRepo.Select(apiExpression);
-
-            if (taskData != null)
-            {
-                taskDataList = taskData.Item2.Cast<PatientTaskData>().ToList();
-            }
-
+            List<PatientTaskData> taskDataList = taskRepo.Find(patientGoalId) as List<PatientTaskData>;
             return taskDataList;
         }
 
         private static List<PatientInterventionData> getInterventionsByPatientGoalId(string contractNumber, string context, string patientGoalId)
         {
-            List<PatientInterventionData> interventionDataList = null;
-
             IPatientGoalRepository<PatientInterventionData> interventionRepo = PatientGoalRepositoryFactory<PatientInterventionData>.GetPatientInterventionRepository(contractNumber, context);
-            ICollection<SelectExpression> selectExpressions = new List<SelectExpression>();
-
-            //PatientGoalId
-            SelectExpression pgIdSelectExpression = new SelectExpression();
-            pgIdSelectExpression.FieldName = MEPatientIntervention.PatientGoalIdProperty;
-            pgIdSelectExpression.Type = SelectExpressionType.EQ;
-            pgIdSelectExpression.Value = patientGoalId;
-            pgIdSelectExpression.NextExpressionType = SelectExpressionGroupType.AND;
-            pgIdSelectExpression.ExpressionOrder = 1;
-            pgIdSelectExpression.GroupID = 1;
-            selectExpressions.Add(pgIdSelectExpression);
-
-            // DeleteFlag = false.
-            SelectExpression deleteFlagSelectExpression = new SelectExpression();
-            deleteFlagSelectExpression.FieldName = MEPatientIntervention.DeleteFlagProperty;
-            deleteFlagSelectExpression.Type = SelectExpressionType.EQ;
-            deleteFlagSelectExpression.Value = false;
-            deleteFlagSelectExpression.ExpressionOrder = 2;
-            deleteFlagSelectExpression.GroupID = 1;
-            selectExpressions.Add(deleteFlagSelectExpression);
-
-            //// TTL is null.
-            //SelectExpression ttlSelectExpression = new SelectExpression();
-            //ttlSelectExpression.FieldName = MEPatientIntervention.TTLDateProperty;
-            //ttlSelectExpression.Type = SelectExpressionType.EQ;
-            //ttlSelectExpression.Value = BsonNull.Value;
-            //ttlSelectExpression.ExpressionOrder = 3;
-            //ttlSelectExpression.GroupID = 1;
-            //selectExpressions.Add(ttlSelectExpression);
-
-            APIExpression apiExpression = new APIExpression();
-            apiExpression.Expressions = selectExpressions;
-
-            Tuple<string, IEnumerable<object>> interventionData = interventionRepo.Select(apiExpression);
-
-            if (interventionData != null)
-            {
-                interventionDataList = interventionData.Item2.Cast<PatientInterventionData>().ToList();
-            }
-
+            List<PatientInterventionData> interventionDataList = interventionRepo.Find(patientGoalId) as List<PatientInterventionData>;
             return interventionDataList;
         }
 

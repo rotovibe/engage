@@ -11,5 +11,6 @@ namespace Phytel.API.DataDomain.PatientGoal
     public interface IPatientGoalRepository<T> : IRepository<T>
     {
         string Initialize(object newEntity);
+        IEnumerable<object> Find(string Id);
     }
 }

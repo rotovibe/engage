@@ -87,7 +87,7 @@ namespace Phytel.API.DataDomain.PatientGoal
                     List<IMongoQuery> queries = new List<IMongoQuery>();
                     queries.Add(Query.EQ(MEPatientGoal.IdProperty, ObjectId.Parse(entityID)));
                     queries.Add(Query.EQ(MEPatientGoal.DeleteFlagProperty, false));
-                   // queries.Add(Query.EQ(MEPatientGoal.TTLDateProperty, null));
+                    queries.Add(Query.EQ(MEPatientGoal.TTLDateProperty, BsonNull.Value));
                     IMongoQuery mQuery = Query.And(queries);
                     MEPatientGoal mePG = ctx.PatientGoals.Collection.Find(mQuery).FirstOrDefault();
                     if (mePG != null)
@@ -114,37 +114,12 @@ namespace Phytel.API.DataDomain.PatientGoal
             catch (Exception ex) { throw ex; }
         }
 
-
-
         public Tuple<string, IEnumerable<object>> Select(Interface.APIExpression expression)
         {
             try
             {
-                IEnumerable<object> returnQuery = null;
-                IMongoQuery mQuery = MongoDataUtil.ExpressionQueryBuilder(expression);
-                using (PatientGoalMongoContext ctx = new PatientGoalMongoContext(_dbName))
-                {
-                    List<PatientGoalViewData> goalsViewDataList = null;
-                    List<MEPatientGoal> meGoals = ctx.PatientGoals.Collection.Find(mQuery).ToList();
-                    if (meGoals != null)
-                    {
-                        goalsViewDataList = new List<PatientGoalViewData>();
-                        foreach (MEPatientGoal b in meGoals)
-                        {
-                            PatientGoalViewData goalViewData = new PatientGoalViewData
-                            {
-                                Id = b.Id.ToString(),
-                                FocusAreaIds = Helper.ConvertToStringList(b.FocusAreas),
-                                Name = b.Name,
-                                StatusId = ((int)b.Status)
-
-                            };
-                            goalsViewDataList.Add(goalViewData);
-                        }
-                    }
-                    returnQuery = goalsViewDataList.AsQueryable<object>();
-                }
-                return new Tuple<string, IEnumerable<object>>(expression.ExpressionID, returnQuery);
+                throw new NotImplementedException();
+                // code here //
             }
             catch (Exception ex) { throw ex; }
         }
@@ -215,6 +190,8 @@ namespace Phytel.API.DataDomain.PatientGoal
                 {
                     Id = ObjectId.GenerateNewId(),
                     PatientId = ObjectId.Parse(request.PatientId),
+                    Status = GoalTaskStatus.Open,
+                    StatusDate = DateTime.UtcNow,
                     TTLDate = System.DateTime.UtcNow.AddDays(1),
                     UpdatedBy = request.UserId,
                     LastUpdatedOn = DateTime.UtcNow
@@ -229,6 +206,43 @@ namespace Phytel.API.DataDomain.PatientGoal
                     }
                 }
                 return patientGoalId;
+            }
+            catch (Exception ex) { throw ex; }
+        }
+
+        public IEnumerable<object> Find(string Id)
+        {
+            try
+            {
+                List<PatientGoalViewData> goalsViewDataList = null;
+                List<IMongoQuery> queries = new List<IMongoQuery>();
+                queries.Add(Query.EQ(MEPatientGoal.PatientIdProperty, ObjectId.Parse(Id)));
+                queries.Add(Query.EQ(MEPatientGoal.DeleteFlagProperty, false));
+                queries.Add(Query.EQ(MEPatientGoal.TTLDateProperty, BsonNull.Value));
+                IMongoQuery mQuery = Query.And(queries);
+                using (PatientGoalMongoContext ctx = new PatientGoalMongoContext(_dbName))
+                {
+                    
+                    List<MEPatientGoal> meGoals = ctx.PatientGoals.Collection.Find(mQuery).ToList();
+                    if (meGoals != null)
+                    {
+                        goalsViewDataList = new List<PatientGoalViewData>();
+                        foreach (MEPatientGoal b in meGoals)
+                        {
+                            PatientGoalViewData goalViewData = new PatientGoalViewData
+                            {
+                                Id = b.Id.ToString(),
+                                PatientId = b.PatientId.ToString(),
+                                FocusAreaIds = Helper.ConvertToStringList(b.FocusAreas),
+                                Name = b.Name,
+                                StatusId = ((int)b.Status)
+
+                            };
+                            goalsViewDataList.Add(goalViewData);
+                        }
+                    }
+                }
+                return goalsViewDataList;
             }
             catch (Exception ex) { throw ex; }
         }

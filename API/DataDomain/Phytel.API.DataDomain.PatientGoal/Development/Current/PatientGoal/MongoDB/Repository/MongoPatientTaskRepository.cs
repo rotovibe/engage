@@ -91,39 +91,10 @@ namespace Phytel.API.DataDomain.PatientGoal
         {
             try
             {
-                IEnumerable<object> returnQuery = null;
-                IMongoQuery mQuery = MongoDataUtil.ExpressionQueryBuilder(expression);
-                using (PatientGoalMongoContext ctx = new PatientGoalMongoContext(_dbName))
-                {
-                    List<PatientTaskData> tasksDataList = null;
-                    List<MEPatientTask> meTasks = ctx.PatientTasks.Collection.Find(mQuery).ToList();
-                    if (meTasks != null)
-                    {
-                        tasksDataList = new List<PatientTaskData>();
-                        foreach (MEPatientTask b in meTasks)
-                        {
-                            PatientTaskData taskData = new PatientTaskData
-                            {
-                                Id = b.Id.ToString(),
-                                TargetValue = b.TargetValue, 
-                                PatientGoalId = b.PatientGoalId.ToString(),
-                                StatusId = ((int)b.Status), 
-                                TargetDate = b.TargetDate,
-                                Attributes = DTOUtil.ConvertToAttributeDataList(b.Attributes), 
-                                Barriers = Helper.ConvertToStringList(b.Barriers),
-                                Description = b.Description,
-                                StatusDate = b.StatusDate, 
-                                StartDate = b.StartDate
-                                
-                            };
-                            tasksDataList.Add(taskData);
-                        }
-                    }
-                    returnQuery = tasksDataList.AsQueryable<object>();
-                }
-                return new Tuple<string, IEnumerable<object>>(expression.ExpressionID, returnQuery);
+                throw new NotImplementedException();
+                // code here //
             }
-            catch (Exception ex) { throw ex; }
+            catch (Exception ex) { throw; }
         }
 
         public IEnumerable<object> SelectAll()
@@ -187,6 +158,8 @@ namespace Phytel.API.DataDomain.PatientGoal
                 {
                     Id = ObjectId.GenerateNewId(),
                     PatientGoalId = ObjectId.Parse(ptr.PatientGoalId),
+                    Status = GoalTaskStatus.Open,
+                    StatusDate = DateTime.UtcNow,
                     TTLDate = System.DateTime.UtcNow.AddDays(1),
                     UpdatedBy = ptr.UserId,
                     LastUpdatedOn = DateTime.UtcNow
@@ -203,6 +176,47 @@ namespace Phytel.API.DataDomain.PatientGoal
                 return taskId;
             }
             catch (Exception ex) { throw; }
+        }
+
+        public IEnumerable<object> Find(string Id)
+        {
+            try
+            {
+                List<PatientTaskData> tasksDataList = null;
+                List<IMongoQuery> queries = new List<IMongoQuery>();
+                queries.Add(Query.EQ(MEPatientTask.PatientGoalIdProperty, ObjectId.Parse(Id)));
+                queries.Add(Query.EQ(MEPatientTask.DeleteFlagProperty, false));
+                queries.Add(Query.EQ(MEPatientTask.TTLDateProperty, BsonNull.Value));
+                IMongoQuery mQuery = Query.And(queries);
+                using (PatientGoalMongoContext ctx = new PatientGoalMongoContext(_dbName))
+                {
+                    List<MEPatientTask> meTasks = ctx.PatientTasks.Collection.Find(mQuery).ToList();
+                    if (meTasks != null)
+                    {
+                        tasksDataList = new List<PatientTaskData>();
+                        foreach (MEPatientTask b in meTasks)
+                        {
+                            PatientTaskData taskData = new PatientTaskData
+                            {
+                                Id = b.Id.ToString(),
+                                TargetValue = b.TargetValue,
+                                PatientGoalId = b.PatientGoalId.ToString(),
+                                StatusId = ((int)b.Status),
+                                TargetDate = b.TargetDate,
+                                Attributes = DTOUtil.ConvertToAttributeDataList(b.Attributes),
+                                Barriers = Helper.ConvertToStringList(b.Barriers),
+                                Description = b.Description,
+                                StatusDate = b.StatusDate,
+                                StartDate = b.StartDate
+
+                            };
+                            tasksDataList.Add(taskData);
+                        }
+                    }
+                }
+                return tasksDataList;
+            }
+            catch (Exception ex) { throw ex; }
         }
     }
 }

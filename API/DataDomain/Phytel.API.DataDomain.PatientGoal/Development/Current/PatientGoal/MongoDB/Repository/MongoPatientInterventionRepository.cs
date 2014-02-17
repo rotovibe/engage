@@ -91,36 +91,8 @@ namespace Phytel.API.DataDomain.PatientGoal
         {
             try
             {
-                IEnumerable<object> returnQuery = null;
-                IMongoQuery mQuery = MongoDataUtil.ExpressionQueryBuilder(expression);
-                using (PatientGoalMongoContext ctx = new PatientGoalMongoContext(_dbName))
-                {
-                    List<PatientInterventionData> interventionsDataList = null;
-                    List<MEPatientIntervention> meInterventions = ctx.PatientInterventions.Collection.Find(mQuery).ToList();
-                    if (meInterventions != null)
-                    {
-                        interventionsDataList = new List<PatientInterventionData>();
-                        foreach (MEPatientIntervention b in meInterventions)
-                        {
-                            PatientInterventionData interventionData = new PatientInterventionData
-                            {
-                                Id = b.Id.ToString(),
-                                Description = b.Description,
-                                PatientGoalId = b.PatientGoalId.ToString(),
-                                CategoryId = b.Category == null ? null : b.Category.ToString(),
-                                AssignedToId = b.AssignedTo == null ? null : b.AssignedTo.ToString(),
-                                Barriers = Helper.ConvertToStringList(b.Barriers),
-                                StatusId = ((int)b.Status),
-                                StatusDate = b.StatusDate,
-                                StartDate = b.StartDate,
-                                Attributes = DTOUtil .ConvertToAttributeDataList(b.Attributes)
-                            };
-                            interventionsDataList.Add(interventionData);
-                        }
-                    }
-                    returnQuery = interventionsDataList.AsQueryable<object>();
-                }
-                return new Tuple<string, IEnumerable<object>>(expression.ExpressionID, returnQuery);
+                throw new NotImplementedException();
+                // code here //
             }
             catch (Exception ex) { throw ex; }
         }
@@ -186,6 +158,8 @@ namespace Phytel.API.DataDomain.PatientGoal
                 {
                     Id = ObjectId.GenerateNewId(),
                     PatientGoalId = ObjectId.Parse(ptr.PatientGoalId),
+                    Status = InterventionStatus.Open,
+                    StatusDate = DateTime.UtcNow,
                     TTLDate = System.DateTime.UtcNow.AddDays(1),
                     UpdatedBy = ptr.UserId,
                     LastUpdatedOn = DateTime.UtcNow
@@ -202,6 +176,47 @@ namespace Phytel.API.DataDomain.PatientGoal
                 return intrvId;
             }
             catch (Exception ex) { throw ex; }
+        }
+
+        public IEnumerable<object> Find(string Id)
+        {
+            try
+            {
+                List<PatientInterventionData> interventionsDataList = null;
+                List<IMongoQuery> queries = new List<IMongoQuery>();
+                queries.Add(Query.EQ(MEPatientIntervention.PatientGoalIdProperty, ObjectId.Parse(Id)));
+                queries.Add(Query.EQ(MEPatientIntervention.DeleteFlagProperty, false));
+                queries.Add(Query.EQ(MEPatientIntervention.TTLDateProperty, BsonNull.Value));
+                IMongoQuery mQuery = Query.And(queries);
+                using (PatientGoalMongoContext ctx = new PatientGoalMongoContext(_dbName))
+                {
+                    List<MEPatientIntervention> meInterventions = ctx.PatientInterventions.Collection.Find(mQuery).ToList();
+                    if (meInterventions != null)
+                    {
+                        interventionsDataList = new List<PatientInterventionData>();
+                        foreach (MEPatientIntervention b in meInterventions)
+                        {
+                            PatientInterventionData interventionData = new PatientInterventionData
+                            {
+                                Id = b.Id.ToString(),
+                                Description = b.Description,
+                                PatientGoalId = b.PatientGoalId.ToString(),
+                                CategoryId = b.Category == null ? null : b.Category.ToString(),
+                                AssignedToId = b.AssignedTo == null ? null : b.AssignedTo.ToString(),
+                                Barriers = Helper.ConvertToStringList(b.Barriers),
+                                StatusId = ((int)b.Status),
+                                StatusDate = b.StatusDate,
+                                StartDate = b.StartDate,
+                                Attributes = DTOUtil.ConvertToAttributeDataList(b.Attributes)
+                            };
+                            interventionsDataList.Add(interventionData);
+                        }
+                    }
+                }
+                return interventionsDataList;
+            }
+            catch (Exception ex) { throw ex; }
+
         }
     }
 }

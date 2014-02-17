@@ -90,33 +90,9 @@ namespace Phytel.API.DataDomain.PatientGoal
         {
             try
             {
-                IEnumerable<object> returnQuery = null; 
-                IMongoQuery mQuery = MongoDataUtil.ExpressionQueryBuilder(expression);
-                using (PatientGoalMongoContext ctx = new PatientGoalMongoContext(_dbName))
-                {
-                    List<PatientBarrierData> barriersDataList = null;
-                    List<MEPatientBarrier> meBarriers = ctx.PatientBarriers.Collection.Find(mQuery).ToList();
-                    if (meBarriers != null)
-                    {
-                        barriersDataList = new List<PatientBarrierData>();
-                        foreach (MEPatientBarrier b in meBarriers)
-                        {
-                            PatientBarrierData barrierData = new PatientBarrierData
-                            {
-                                Id = b.Id.ToString(), 
-                                Name = b.Name, 
-                                PatientGoalId  = b.PatientGoalId.ToString(),
-                                CategoryId = b.Category == null ? null : b.Category.ToString(), 
-                                StatusId = ((int)b.Status),
-                                StatusDate = b.StatusDate
-                            };
-                            barriersDataList.Add(barrierData);
-                        }
-                    }
-                    returnQuery = barriersDataList.AsQueryable<object>();
-                }
-                return new Tuple<string, IEnumerable<object>>(expression.ExpressionID, returnQuery);
-           }
+                throw new NotImplementedException();
+                // code here //
+            }
             catch (Exception ex) { throw ex; }
         }
 
@@ -181,6 +157,8 @@ namespace Phytel.API.DataDomain.PatientGoal
                 {
                     Id = ObjectId.GenerateNewId(),
                     PatientGoalId = ObjectId.Parse(request.PatientGoalId),
+                    Status = BarrierStatus.Open,
+                    StatusDate = DateTime.UtcNow,
                     TTLDate = System.DateTime.UtcNow.AddDays(1),
                     UpdatedBy = request.UserId,
                     LastUpdatedOn = DateTime.UtcNow
@@ -195,6 +173,42 @@ namespace Phytel.API.DataDomain.PatientGoal
                     }
                 }
                 return Id;
+            }
+            catch (Exception ex) { throw ex; }
+        }
+
+        public IEnumerable<object> Find(string Id)
+        {
+            try
+            {
+                List<PatientBarrierData> barriersDataList = null;
+                List<IMongoQuery> queries = new List<IMongoQuery>();
+                queries.Add(Query.EQ(MEPatientBarrier.PatientGoalIdProperty, ObjectId.Parse(Id)));
+                queries.Add(Query.EQ(MEPatientBarrier.DeleteFlagProperty, false));
+                queries.Add(Query.EQ(MEPatientBarrier.TTLDateProperty, BsonNull.Value));
+                IMongoQuery mQuery = Query.And(queries);
+                using (PatientGoalMongoContext ctx = new PatientGoalMongoContext(_dbName))
+                {
+                    List<MEPatientBarrier> meBarriers = ctx.PatientBarriers.Collection.Find(mQuery).ToList();
+                    if (meBarriers != null)
+                    {
+                        barriersDataList = new List<PatientBarrierData>();
+                        foreach (MEPatientBarrier b in meBarriers)
+                        {
+                            PatientBarrierData barrierData = new PatientBarrierData
+                            {
+                                Id = b.Id.ToString(),
+                                Name = b.Name,
+                                PatientGoalId = b.PatientGoalId.ToString(),
+                                CategoryId = b.Category == null ? null : b.Category.ToString(),
+                                StatusId = ((int)b.Status),
+                                StatusDate = b.StatusDate
+                            };
+                            barriersDataList.Add(barrierData);
+                        }
+                    }
+                }
+                return barriersDataList;
             }
             catch (Exception ex) { throw ex; }
         }

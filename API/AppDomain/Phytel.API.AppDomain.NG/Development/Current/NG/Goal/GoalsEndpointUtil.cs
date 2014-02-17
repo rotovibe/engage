@@ -214,6 +214,7 @@ namespace Phytel.API.AppDomain.NG
                     {
                         PatientGoalView gv = new PatientGoalView();
                         gv.Id = gdv.Id;
+                        gv.PatientId = gdv.PatientId;
                         gv.FocusAreaIds = gdv.FocusAreaIds;
                         gv.Name = gdv.Name;
                         gv.StatusId = gdv.StatusId;

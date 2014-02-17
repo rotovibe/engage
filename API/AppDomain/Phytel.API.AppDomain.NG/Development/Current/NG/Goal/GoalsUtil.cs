@@ -363,9 +363,8 @@ namespace Phytel.API.AppDomain.NG
                 cvList = new List<ChildView>();
                 foreach (ChildViewData c in list)
                 {
-                    cvList.Add(new ChildView {Id = c.Id, Name = c.Name, StatusId = c.StatusId });
+                    cvList.Add(new ChildView {Id = c.Id, PatientGoalId = c.PatientGoalId , Name = c.Name , Description = c.Description, StatusId = c.StatusId });
                 }
-                cvList = cvList.OrderBy(o => o.Name).ToList();
             }
             return cvList;
         }
