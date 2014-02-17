@@ -241,6 +241,8 @@ namespace Phytel.API.AppDomain.NG
 
                 if (request.Goal == null)
                     throw new Exception("The Goal property is null in the request.");
+                else if (string.IsNullOrEmpty(request.Goal.Name) || string.IsNullOrEmpty(request.Goal.SourceId))
+                    throw new Exception("The goal name and source are required fields.");
 
                 IRestClient client = new JsonServiceClient();
                 PutPatientGoalDataResponse response = client.Put<PutPatientGoalDataResponse>(

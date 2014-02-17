@@ -58,5 +58,22 @@ namespace Phytel.API.AppDomain.NG.Test
 
             Assert.IsNotNull(response);
         }
+
+        [TestMethod]
+        public void SavePatientGoal_Test()
+        {
+            PostPatientGoalRequest request = new PostPatientGoalRequest();
+            request.ContractNumber = "InHealth001";
+            request.UserId = "AD_TestHarness";
+            request.Version = "v1";
+            request.PatientId = "52f55874072ef709f84e68c5";
+            request.UserId = "Snehal";
+            request.Goal = new PatientGoal { Name =  "null", SourceId = "null"};
+
+            GoalsManager gManager = new GoalsManager();
+            PostPatientGoalResponse response = gManager.SavePatientGoal(request);
+
+            Assert.IsNotNull(response);
+        }
     }
 }
