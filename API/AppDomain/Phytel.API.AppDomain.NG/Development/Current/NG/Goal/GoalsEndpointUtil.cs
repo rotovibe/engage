@@ -206,10 +206,10 @@ namespace Phytel.API.AppDomain.NG
                     request.PatientId,
                     request.UserId));
 
-                if (ddResponse != null && ddResponse.PatientGoalsViewData != null && ddResponse.PatientGoalsViewData.Count > 0)
+                if (ddResponse != null && ddResponse.PatientGoalsData != null && ddResponse.PatientGoalsData.Count > 0)
                 {
                     result = new List<PatientGoalView>();
-                    List<PatientGoalViewData> gdvList = ddResponse.PatientGoalsViewData;
+                    List<PatientGoalViewData> gdvList = ddResponse.PatientGoalsData;
                     foreach(PatientGoalViewData gdv in gdvList)
                     {
                         PatientGoalView gv = new PatientGoalView();
@@ -217,9 +217,9 @@ namespace Phytel.API.AppDomain.NG
                         gv.FocusAreaIds = gdv.FocusAreaIds;
                         gv.Name = gdv.Name;
                         gv.StatusId = gdv.StatusId;
-                        gv.BarriersView = GoalsUtil.GetChildView(gdv.BarriersViewData);
-                        gv.TasksView = GoalsUtil.GetChildView(gdv.TasksViewData); ;
-                        gv.InterventionsView = GoalsUtil.GetChildView(gdv.InterventionsViewData); ;
+                        gv.Barriers = GoalsUtil.GetChildView(gdv.BarriersData);
+                        gv.Tasks = GoalsUtil.GetChildView(gdv.TasksData); ;
+                        gv.Interventions = GoalsUtil.GetChildView(gdv.InterventionsData); ;
                         result.Add(gv);
                     }
                 }

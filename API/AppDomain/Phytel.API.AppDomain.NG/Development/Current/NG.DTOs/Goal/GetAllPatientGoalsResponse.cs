@@ -7,7 +7,7 @@ namespace Phytel.API.AppDomain.NG.DTO
 {
     public class GetAllPatientGoalsResponse : IDomainResponse
     {
-        public List<PatientGoalView> GoalsView { get; set; }
+        public List<PatientGoalView> Goals { get; set; }
         public string Version { get; set; }
         public ResponseStatus Status { get; set; }
     }
@@ -19,9 +19,9 @@ namespace Phytel.API.AppDomain.NG.DTO
         public string Name { get; set; }
         public int StatusId { get; set; }
 
-        public List<ChildView> BarriersView { get; set; }
-        public List<ChildView> TasksView { get; set; }
-        public List<ChildView> InterventionsView { get; set; }
+        public List<ChildView> Barriers { get; set; }
+        public List<ChildView> Tasks { get; set; }
+        public List<ChildView> Interventions { get; set; }
     }
 
     public class ChildView

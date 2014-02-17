@@ -24,7 +24,7 @@ namespace Phytel.API.DataDomain.PatientGoal.Test
 
             GetAllPatientGoalsDataResponse response = PatientGoalDataManager.GetPatientGoalList(request);
 
-            Assert.IsNotNull(response.PatientGoalsViewData);
+            Assert.IsNotNull(response.PatientGoalsData);
         }
 
         [TestMethod]

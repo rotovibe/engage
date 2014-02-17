@@ -101,7 +101,7 @@ namespace Phytel.API.AppDomain.NG
             try
             {
                 GetAllPatientGoalsResponse response = new GetAllPatientGoalsResponse();
-                response.GoalsView = GoalsEndpointUtil.GetAllPatientGoals(request);
+                response.Goals = GoalsEndpointUtil.GetAllPatientGoals(request);
                 response.Version = request.Version;
                 return response;
             }

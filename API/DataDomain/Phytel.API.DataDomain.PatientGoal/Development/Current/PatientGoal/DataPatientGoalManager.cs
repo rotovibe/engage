@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Phytel.API.Interface;
+using MongoDB.Bson;
 
 namespace Phytel.API.DataDomain.PatientGoal
 {
@@ -103,7 +104,7 @@ namespace Phytel.API.DataDomain.PatientGoal
                                 barrierChildView.Add(new ChildViewData { Id = b.Id, Name = b.Name, StatusId = ((int)(b.StatusId))});
                             }
                         }
-                        view.BarriersViewData =  barrierChildView; 
+                        view.BarriersData =  barrierChildView; 
 
                         //Tasks
                         List<ChildViewData> taskChildView = null;
@@ -116,7 +117,7 @@ namespace Phytel.API.DataDomain.PatientGoal
                                 taskChildView.Add(new ChildViewData { Id = b.Id, Name = b.Description, StatusId = ((int)(b.StatusId)) });
                             }
                         }
-                        view.TasksViewData = taskChildView;
+                        view.TasksData = taskChildView;
 
                         //Interventions
                         List<ChildViewData> interChildView = null;
@@ -129,12 +130,12 @@ namespace Phytel.API.DataDomain.PatientGoal
                                 interChildView.Add(new ChildViewData { Id = b.Id, Name = b.Description, StatusId = ((int)(b.StatusId))});
                             }
                         }
-                        view.InterventionsViewData = interChildView;
+                        view.InterventionsData = interChildView;
                         goalDataView.Add(view);
                     }
                 }
 
-                result.PatientGoalsViewData = goalDataView;
+                result.PatientGoalsData = goalDataView;
                 result.Version = request.Version;
                 return result;
             }
@@ -171,11 +172,11 @@ namespace Phytel.API.DataDomain.PatientGoal
             deleteFlagSelectExpression.GroupID = 1;
             selectExpressions.Add(deleteFlagSelectExpression);
 
-            // TTL is null.
+            //// TTL is null.
             //SelectExpression ttlSelectExpression = new SelectExpression();
             //ttlSelectExpression.FieldName = MEPatientGoal.TTLDateProperty;
             //ttlSelectExpression.Type = SelectExpressionType.EQ;
-            //ttlSelectExpression.Value = null;
+            //ttlSelectExpression.Value = BsonNull.Value;
             //ttlSelectExpression.ExpressionOrder = 3;
             //ttlSelectExpression.GroupID = 1;
             //selectExpressions.Add(ttlSelectExpression);
@@ -219,11 +220,11 @@ namespace Phytel.API.DataDomain.PatientGoal
             deleteFlagSelectExpression.GroupID = 1;
             selectExpressions.Add(deleteFlagSelectExpression);
 
-            // TTL is null.
+            //// TTL is null.
             //SelectExpression ttlSelectExpression = new SelectExpression();
             //ttlSelectExpression.FieldName = MEPatientBarrier.TTLDateProperty;
             //ttlSelectExpression.Type = SelectExpressionType.EQ;
-            //ttlSelectExpression.Value = null;
+            //ttlSelectExpression.Value = BsonNull.Value;
             //ttlSelectExpression.ExpressionOrder = 3;
             //ttlSelectExpression.GroupID = 1;
             //selectExpressions.Add(ttlSelectExpression);
@@ -267,11 +268,11 @@ namespace Phytel.API.DataDomain.PatientGoal
             deleteFlagSelectExpression.GroupID = 1;
             selectExpressions.Add(deleteFlagSelectExpression);
 
-            // TTL is null.
+            //// TTL is null.
             //SelectExpression ttlSelectExpression = new SelectExpression();
             //ttlSelectExpression.FieldName = MEPatientTask.TTLDateProperty;
             //ttlSelectExpression.Type = SelectExpressionType.EQ;
-            //ttlSelectExpression.Value = null;
+            //ttlSelectExpression.Value = BsonNull.Value;
             //ttlSelectExpression.ExpressionOrder = 3;
             //ttlSelectExpression.GroupID = 1;
             //selectExpressions.Add(ttlSelectExpression);
@@ -315,11 +316,11 @@ namespace Phytel.API.DataDomain.PatientGoal
             deleteFlagSelectExpression.GroupID = 1;
             selectExpressions.Add(deleteFlagSelectExpression);
 
-            // TTL is null.
+            //// TTL is null.
             //SelectExpression ttlSelectExpression = new SelectExpression();
             //ttlSelectExpression.FieldName = MEPatientIntervention.TTLDateProperty;
             //ttlSelectExpression.Type = SelectExpressionType.EQ;
-            //ttlSelectExpression.Value = null;
+            //ttlSelectExpression.Value = BsonNull.Value;
             //ttlSelectExpression.ExpressionOrder = 3;
             //ttlSelectExpression.GroupID = 1;
             //selectExpressions.Add(ttlSelectExpression);
