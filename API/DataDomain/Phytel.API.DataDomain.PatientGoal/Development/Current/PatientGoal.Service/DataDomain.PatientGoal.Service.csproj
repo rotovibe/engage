@@ -98,6 +98,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
+    <Content Include="App.config" />
     <None Include="Properties\PublishProfiles\Azure Dev Publish.pubxml" />
     <None Include="Properties\PublishProfiles\Azure Model Publish.pubxml" />
     <None Include="Web.Debug.config">
