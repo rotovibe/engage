@@ -110,7 +110,6 @@ namespace Phytel.API.DataDomain.Patient.Service.Test
             {
                 Id = "52fd3fcefe7a5912b0149acd",
                 AssignedToId = "assigned to me",
-                Attributes = new List<Attribute> { new Attribute { Value = "2", Order = 1, Name = "task attribute", ControlType = "1" } },
                 BarrierIds = new List<string> { "52fd96c0fe7a5913503f1c64" },
                 CategoryId = null,
                 Description = "This is a description of interventions.",

@@ -99,7 +99,6 @@ namespace Phytel.API.AppDomain.NG
                 pid.Add(new PatientInterventionData
                 {
                     AssignedToId = i.AssignedToId,
-                    Attributes = GetAttributeData(i.Attributes),
                     Barriers = i.BarrierIds,
                     CategoryId = i.CategoryId,
                     Description = i.Description,
@@ -242,7 +241,6 @@ namespace Phytel.API.AppDomain.NG
                         pid.Add(new PatientInterventionData
                         {
                             AssignedToId = i.AssignedToId,
-                            Attributes = GetAttributeData(i.Attributes),
                             Barriers = i.BarrierIds,
                             CategoryId = i.CategoryId != null ? i.CategoryId.ToString() : null,
                             Description = i.Description,
@@ -344,7 +342,6 @@ namespace Phytel.API.AppDomain.NG
                         CategoryId = i.CategoryId,
                         StatusId = i.StatusId,
                         AssignedToId = i.AssignedToId,
-                        Attributes = GetAttributes(i.Attributes),
                         BarrierIds = i.Barriers,
                         Description = i.Description,
                         StatusDate = i.StatusDate,

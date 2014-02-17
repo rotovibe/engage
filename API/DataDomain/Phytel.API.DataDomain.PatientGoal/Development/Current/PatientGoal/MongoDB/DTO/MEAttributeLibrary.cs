@@ -87,7 +87,6 @@ namespace Phytel.API.DataDomain.PatientGoal.DTO
     {
         Goal = 1,
         Task = 2,
-        Intervention = 3
     }
 }
 
