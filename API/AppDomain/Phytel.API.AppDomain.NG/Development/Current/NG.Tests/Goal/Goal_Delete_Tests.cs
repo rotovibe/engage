@@ -50,7 +50,7 @@ namespace Phytel.API.DataDomain.Patient.Service.Test
                 TypeId = 2,
                 ProgramIds = GetProgramsList(),
                 Barriers = GetBarriers(),
-                Attributes = GetAttributes(),
+                CustomAttributes = GetAttributes(),
                 FocusAreaIds = GetFocusAreas()
             };
 
@@ -64,15 +64,14 @@ namespace Phytel.API.DataDomain.Patient.Service.Test
             return focusAreas;
         }
 
-        private List<Attribute> GetAttributes()
+        private List<CustomAttribute> GetAttributes()
         {
-            List<Attribute> attr = new List<Attribute>();
-            attr.Add(new Attribute
+            List<CustomAttribute> attr = new List<CustomAttribute>();
+            attr.Add(new CustomAttribute
             {
                 ControlType = "2",
                 Name = "Heart Rate",
-                Order = 1,
-                Values = new List<string> { "200" }
+                Order = 1
             });
             return attr;
         }
@@ -83,7 +82,7 @@ namespace Phytel.API.DataDomain.Patient.Service.Test
             tasks.Add(new PatientTask
             {
                 Id = "52fd4d29fe7a5912b0979dee",
-                Attributes = new List<Attribute> { new Attribute { Values = new List<string> { "2" }, Order = 1, Name = "task attribute", ControlType = "1" } },
+                CustomAttributes = new List<CustomAttribute> { new CustomAttribute { Values = new List<string> { "2" }, Order = 1, Name = "task attribute", ControlType = "1" } },
                 BarrierIds = new List<string> { "52fd96c0fe7a5913503f1c64" },
                 PatientGoalId = "52fd96c0fe7a5913503f1c64",
                 Description = "test description",

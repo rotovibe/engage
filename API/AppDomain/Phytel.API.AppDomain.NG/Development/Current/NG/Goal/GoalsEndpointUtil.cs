@@ -175,7 +175,7 @@ namespace Phytel.API.AppDomain.NG
                         EndDate = g.EndDate,
                         TargetDate = g.TargetDate,
                         TargetValue = g.TargetValue,
-                        Attributes = GoalsUtil.GetAttributes(g.Attributes),
+                        CustomAttributes = GoalsUtil.GetAttributes(g.CustomAttributes),
                         Barriers = GoalsUtil.GetBarriers(g.BarriersData),
                         Tasks = GoalsUtil.GetTasks(g.TasksData),
                         Interventions = GoalsUtil.GetInterventions(g.InterventionsData)
@@ -273,7 +273,7 @@ namespace Phytel.API.AppDomain.NG
                 PatientGoalData pgd = new PatientGoalData
                 {
                     Id = pg.Id,
-                    Attributes = GetPatientGoalAttributes(pg.Attributes),
+                    CustomAttributes = GetPatientGoalAttributes(pg.CustomAttributes),
                     EndDate = pg.EndDate,
                     FocusAreaIds = pg.FocusAreaIds,
                     Name = pg.Name,
@@ -291,16 +291,16 @@ namespace Phytel.API.AppDomain.NG
             catch { throw; }
         }
 
-        private static List<AttributeData> GetPatientGoalAttributes(List<AD.Attribute> list)
+        private static List<CustomAttributeData> GetPatientGoalAttributes(List<AD.CustomAttribute> list)
         {
             try
             {
-                List<AttributeData> ad = new List<AttributeData>();
+                List<CustomAttributeData> ad = new List<CustomAttributeData>();
                 if (list != null)
                 {
                     list.ForEach(a =>
                     {
-                        ad.Add(new AttributeData
+                        ad.Add(new CustomAttributeData
                         {
                             ControlType = a.ControlType,
                             Name = a.Name,
@@ -530,9 +530,9 @@ namespace Phytel.API.AppDomain.NG
             }
         }
 
-        internal static List<AD.Attribute> GetAttributesForInitialize(IAppDomainRequest request, string type)
+        internal static List<AD.CustomAttribute> GetAttributesForInitialize(IAppDomainRequest request, string type)
         {
-            List<AD.Attribute> attr = new List<AD.Attribute>();
+            List<AD.CustomAttribute> attr = new List<AD.CustomAttribute>();
             try
             {
                 IRestClient client = new JsonServiceClient();
@@ -546,7 +546,7 @@ namespace Phytel.API.AppDomain.NG
 
                 response.CustomAttributes.ForEach(ca =>
                 {
-                    attr.Add(new AD.Attribute
+                    attr.Add(new AD.CustomAttribute
                     {
                         Order = ca.Order,
                         Options = ca.Options,

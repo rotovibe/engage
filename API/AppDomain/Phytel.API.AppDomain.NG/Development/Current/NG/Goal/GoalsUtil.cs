@@ -34,7 +34,7 @@ namespace Phytel.API.AppDomain.NG
                 ptd.Add(new PatientTaskData
                 {
                     Id = t.Id,
-                    Attributes = GetAttributeData(t.Attributes),
+                    Attributes = GetAttributeData(t.CustomAttributes),
                     Barriers = t.BarrierIds,
                     Description = t.Description,
                     PatientGoalId = request.Goal.Id,
@@ -59,19 +59,18 @@ namespace Phytel.API.AppDomain.NG
             }
         }
 
-        public static List<AttributeData> GetAttributeData(List<DTO.Attribute> list)
+        public static List<CustomAttributeData> GetAttributeData(List<DTO.CustomAttribute> list)
         {
             try
             {
-                List<AttributeData> ad = new List<AttributeData>();
+                List<CustomAttributeData> ad = new List<CustomAttributeData>();
                 if (list != null && list.Count > 0)
                 {
 
                     list.ForEach(a =>
                     {
-                        ad.Add(new AttributeData
+                        ad.Add(new CustomAttributeData
                         {
-                            Values = a.Values,
                             Order = a.Order,
                             Name = a.Name,
                             ControlType = a.ControlType
@@ -203,7 +202,7 @@ namespace Phytel.API.AppDomain.NG
                         ptd.Add(new PatientTaskData
                         {
                             Id = t.Id,
-                            Attributes = GetAttributeData(t.Attributes),
+                            Attributes = GetAttributeData(t.CustomAttributes),
                             Barriers = t.BarrierIds,
                             Description = t.Description,
                             PatientGoalId = request.Goal.Id,
@@ -265,15 +264,15 @@ namespace Phytel.API.AppDomain.NG
             }
         }
 
-        public static List<Phytel.API.AppDomain.NG.DTO.Attribute> GetAttributes(List<AttributeData> list)
+        public static List<Phytel.API.AppDomain.NG.DTO.CustomAttribute> GetAttributes(List<CustomAttributeData> list)
         {
-            List<Phytel.API.AppDomain.NG.DTO.Attribute> attr = null;
+            List<Phytel.API.AppDomain.NG.DTO.CustomAttribute> attr = null;
             if (list != null && list.Count > 0)
             {
-                attr = new List<Phytel.API.AppDomain.NG.DTO.Attribute>();
-                foreach(AttributeData ad in list)
+                attr = new List<Phytel.API.AppDomain.NG.DTO.CustomAttribute>();
+                foreach(CustomAttributeData ad in list)
                 {
-                    attr.Add(new Phytel.API.AppDomain.NG.DTO.Attribute { Name = ad.Name, Values = ad.Values, ControlType = ad.ControlType, Order = ad.Order });
+                    attr.Add(new Phytel.API.AppDomain.NG.DTO.CustomAttribute { Name = ad.Name, ControlType = ad.ControlType, Order = ad.Order });
                 }
             }
             return attr;
@@ -316,7 +315,7 @@ namespace Phytel.API.AppDomain.NG
                         TargetValue = t.TargetValue,
                         StatusId = t.StatusId,
                         TargetDate = t.TargetDate,
-                        Attributes = GetAttributes(t.Attributes),
+                        CustomAttributes = GetAttributes(t.Attributes),
                         BarrierIds = t.Barriers,
                         Description = t.Description,
                         StatusDate = t.StatusDate,
@@ -373,7 +372,7 @@ namespace Phytel.API.AppDomain.NG
             {
                 pg = new PatientGoal
                 {
-                    Attributes = GoalsEndpointUtil.GetAttributesForInitialize(request, "Goal"), //GetAttributesForInitialize(pgd.Attributes), // change this call when attributes are ready
+                    CustomAttributes = GoalsEndpointUtil.GetAttributesForInitialize(request, "Goal"), //GetAttributesForInitialize(pgd.Attributes), // change this call when attributes are ready
                     EndDate = pgd.EndDate,
                     Id = pgd.Id,
                     Name = pgd.Name,
@@ -396,7 +395,7 @@ namespace Phytel.API.AppDomain.NG
             {
                 pt = new PatientTask
                 {
-                    Attributes = GoalsEndpointUtil.GetAttributesForInitialize(request, "Task"),
+                    CustomAttributes = GoalsEndpointUtil.GetAttributesForInitialize(request, "Task"),
                     Id = ptd.Id,
                     StartDate = ptd.StartDate,
                     StatusId = ptd.StatusId,
@@ -407,16 +406,16 @@ namespace Phytel.API.AppDomain.NG
             return pt;
         }
 
-        private static List<AD.Attribute> GetAttributesForInitialize(List<AttributeData> list)
+        private static List<AD.CustomAttribute> GetAttributesForInitialize(List<CustomAttributeData> list)
         {
             try
             {
-                List<AD.Attribute> attrs = new List<AD.Attribute>();
+                List<AD.CustomAttribute> attrs = new List<AD.CustomAttribute>();
                 if (list != null && list.Count > 0)
                 {
                     list.ForEach(a =>
                     {
-                        new AD.Attribute
+                        new AD.CustomAttribute
                         {
                             Values = a.Values,
                             ControlType = a.ControlType,

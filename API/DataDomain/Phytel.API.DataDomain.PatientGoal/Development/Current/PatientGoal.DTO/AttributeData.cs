@@ -8,7 +8,7 @@ namespace Phytel.API.DataDomain.PatientGoal.DTO
 {
     public class AttributeData
     {
-        public string Name { get; set; }
+        public string Id { get; set; }
         public List<string> Values { get; set; }
         public Dictionary<int, string> Options { get; set; }
         public string ControlType { get; set; }

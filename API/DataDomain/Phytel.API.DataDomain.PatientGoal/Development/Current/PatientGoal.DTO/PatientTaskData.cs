@@ -13,7 +13,7 @@ namespace Phytel.API.DataDomain.PatientGoal.DTO
         public string PatientGoalId { get; set; }
         public int StatusId { get; set; }
         public DateTime? TargetDate { get; set; }
-        public List<AttributeData> Attributes { get; set; }
+        public List<CustomAttributeData> Attributes { get; set; }
         public List<string> Barriers { get; set; }
         public string Description { get; set; }
         public DateTime? StatusDate { get; set; }
