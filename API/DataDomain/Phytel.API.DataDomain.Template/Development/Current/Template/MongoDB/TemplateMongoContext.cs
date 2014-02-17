@@ -2,7 +2,7 @@
 using Phytel.API.DataDomain.Template.DTO;
 using Phytel.Mongo.Linq;
 
-namespace Phytel.API.AppDomain.Template
+namespace Phytel.API.DataDomain.Template
 {
     public class TemplateMongoContext : MongoContext
     {
