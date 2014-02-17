@@ -8,6 +8,7 @@ using Phytel.API.Common.Format;
 using Phytel.API.AppDomain.Security.DTO;
 using ServiceStack.ServiceClient.Web;
 using ServiceStack.ServiceInterface.Cors;
+using System.Text;
 
 namespace Phytel.API.AppDomain.NG.Service
 {
@@ -165,7 +166,8 @@ namespace Phytel.API.AppDomain.NG.Service
 
         public PostPatientGoalResponse Post(PostPatientGoalRequest request)
         {
-            PostPatientGoalResponse response = null;
+            PostPatientGoalResponse response = new PostPatientGoalResponse();
+
             try
             {
                 GoalsManager gm = new GoalsManager();

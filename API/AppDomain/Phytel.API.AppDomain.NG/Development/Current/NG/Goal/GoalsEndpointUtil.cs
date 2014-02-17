@@ -239,6 +239,9 @@ namespace Phytel.API.AppDomain.NG
             {
                 bool result = false;
 
+                if (request.Goal == null)
+                    throw new Exception("The Goal property is null in the request.");
+
                 IRestClient client = new JsonServiceClient();
                 PutPatientGoalDataResponse response = client.Put<PutPatientGoalDataResponse>(
                     string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Goal/{5}/Update",
@@ -358,7 +361,7 @@ namespace Phytel.API.AppDomain.NG
                     request.ContractNumber,
                     request.PatientId,
                     request.Goal.Id,
-                    pi.Id), new PutUpdateInterventionRequest { Intervention = pi  } as object);
+                    pi.Id), new PutUpdateInterventionRequest { Intervention = pi, UserId=request.UserId  } as object);
 
                 if (response != null)
                 {
