@@ -19,6 +19,7 @@ namespace Phytel.API.AppDomain.NG.DTO
         public string TargetValue { get; set; }
         public DateTime? TargetDate { get; set; }
         public List<Attribute> Attributes { get; set; }
+        public List<CustomAttribute> CustomAttributes { get; set; }
 
         public List<PatientBarrier> Barriers { get; set; }
         public List<PatientTask>  Tasks{ get; set; }
