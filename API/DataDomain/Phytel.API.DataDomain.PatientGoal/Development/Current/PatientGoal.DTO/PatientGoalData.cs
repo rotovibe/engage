@@ -19,7 +19,6 @@ namespace Phytel.API.DataDomain.PatientGoal.DTO
         public DateTime? EndDate { get; set; }
         public string TargetValue { get; set; }
         public DateTime? TargetDate { get; set; }
-        public List<AttributeData> Attributes { get; set; }
         public List<CustomAttributeData> CustomAttributes { get; set; }
 
         public List<PatientBarrierData> BarriersData { get; set; }

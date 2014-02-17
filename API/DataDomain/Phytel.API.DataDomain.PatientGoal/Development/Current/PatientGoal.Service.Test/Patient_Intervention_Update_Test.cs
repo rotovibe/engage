@@ -91,7 +91,7 @@ namespace Phytel.API.DataDomain.PatientGoal.Services.Test
             tas.Add(new AttributeData
             {
                 ControlType = "2",
-                Name = "Attribute name",
+                Id = "5200033cd6a4850aa450d8f1",
                 Values = new List<string> { "This is the value" }
             });
             return tas;

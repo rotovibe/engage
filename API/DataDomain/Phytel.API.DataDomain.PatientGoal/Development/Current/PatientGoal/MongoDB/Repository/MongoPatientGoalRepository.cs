@@ -106,7 +106,7 @@ namespace Phytel.API.DataDomain.PatientGoal
                             EndDate = mePG.EndDate,
                             TargetDate = mePG.TargetDate,
                             TargetValue = mePG.TargetValue,
-                            Attributes = DTOUtil.ConvertToAttributeDataList(mePG.Attributes)
+                            //CustomAttributes = DTOUtil.ConvertToAttributeDataList(mePG.Attributes)
                         };
                     }
                 }
@@ -158,7 +158,7 @@ namespace Phytel.API.DataDomain.PatientGoal
                     if (pt.EndDate != null) uv.Add(MB.Update.Set(MEPatientGoal.EndDateProperty, pt.EndDate));
                     if (pt.TargetValue != null) uv.Add(MB.Update.Set(MEPatientGoal.TargetValueProperty, pt.TargetValue));
                     if (pt.TargetDate != null) uv.Add(MB.Update.Set(MEPatientGoal.TargetDateProperty, pt.TargetDate));
-                    if (pt.Attributes != null) { uv.Add(MB.Update.SetWrapped<List<MAttribute>>(MEPatientGoal.AttributesProperty, DTOUtil.GetAttributes(pt.Attributes))); }
+                    if (pt.CustomAttributes != null) { uv.Add(MB.Update.SetWrapped<List<MAttribute>>(MEPatientGoal.AttributesProperty, DTOUtil.GetAttributes(pt.CustomAttributes))); }
                     
 
                     IMongoUpdate update = MB.Update.Combine(uv);

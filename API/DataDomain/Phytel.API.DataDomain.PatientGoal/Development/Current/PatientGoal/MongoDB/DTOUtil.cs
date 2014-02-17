@@ -33,7 +33,7 @@ namespace Phytel.API.DataDomain.PatientGoal
             }
         }
 
-        internal static List<MAttribute> GetAttributes(List<PatientGoal.DTO.AttributeData> list)
+        internal static List<MAttribute> GetAttributes(List<PatientGoal.DTO.CustomAttributeData> list)
         {
             List<MAttribute> ta = new List<MAttribute>();
             try
@@ -44,8 +44,7 @@ namespace Phytel.API.DataDomain.PatientGoal
                     {
                         ta.Add(new MAttribute
                         {
-                            ControlType = (AttributeControlType)Enum.Parse(typeof(AttributeControlType), t.ControlType),
-                            Name = t.Name,
+                            Id = ObjectId.Parse(t.Id),
                             Values = t.Values
                         });
                     });
@@ -70,8 +69,7 @@ namespace Phytel.API.DataDomain.PatientGoal
                     {
                         ta.Add(new MAttribute
                         {
-                            ControlType = (AttributeControlType)Enum.Parse(typeof(AttributeControlType), t.ControlType),
-                            Name = t.Name,
+                            Id = ObjectId.Parse(t.Id),
                             Values = t.Values
                         });
                     });
@@ -92,7 +90,7 @@ namespace Phytel.API.DataDomain.PatientGoal
                 attrDataList = new List<AttributeData>();
                 foreach (MAttribute ma in meAttributes)
                 {
-                    attrDataList.Add(new AttributeData { Name = ma.Name, Values = ma.Values, Order = ma.Order, ControlType = Enum.GetName(typeof(AttributeControlType), ma.ControlType) });
+                    attrDataList.Add(new AttributeData { Id = ma.Id.ToString(), Values = ma.Values});
                 }
             }
             return attrDataList;

@@ -79,20 +79,20 @@ namespace Phytel.API.DataDomain.PatientGoal.Services.Test
             return ints;
         }
 
-        private List<AttributeData> GetAttributes()
+        private List<CustomAttributeData> GetAttributes()
         {
-            List<AttributeData> tas = new List<AttributeData>();
-            tas.Add(new AttributeData
+            List<CustomAttributeData> tas = new List<CustomAttributeData>();
+            tas.Add(new CustomAttributeData
             {
                 ControlType = "2",
-                Name = "Attribute name",
+                Id = "5200033cd6a4850aa450d8f1",
                 Values = new List<string> { "This is the value" }
             });
 
-            tas.Add(new AttributeData
+            tas.Add(new CustomAttributeData
             {
                 ControlType = "1",
-                Name = "Think language",
+                Id = "5200033cd6a4850aa450d8f1",
                 Values = new List<string> { "This is the value" }
             });
             return tas;
