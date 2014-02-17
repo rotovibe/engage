@@ -96,10 +96,10 @@ namespace Phytel.API.DataDomain.PatientGoal
                                 {
                                     Id = b.Id.ToString(),
                                     Name = b.Name,
-                                    //Type = b.Type,
-                                    //ControlType = b.ControlType,
+                                    Type = Enum.GetName(typeof(EntityType), b.Type),
+                                    ControlType = Enum.GetName(typeof(AttributeControlType), b.ControlType),
                                     Order  = b.Order,
-                                    //Options = b.Order[,
+                                    Options = b.Options,
                                     Required = b.Required
                                 };
                                 customAttributesList.Add(data);
