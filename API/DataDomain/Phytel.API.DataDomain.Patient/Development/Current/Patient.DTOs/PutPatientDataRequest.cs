@@ -1,6 +1,6 @@
 ﻿using Phytel.API.Interface;
 using ServiceStack.ServiceHost;
-using Phytel.API.DataDomain.Contact.DTO;
+//using Phytel.API.DataDomain.Contact.DTO;
 using System.Collections.Generic;
 
 namespace Phytel.API.DataDomain.Patient.DTO
@@ -28,6 +28,9 @@ namespace Phytel.API.DataDomain.Patient.DTO
 
         [ApiMember(Name = "DOB", Description = "Date of birth of the patient being created", ParameterType = "property", DataType = "string", IsRequired = false)]
         public string DOB { get; set; }
+
+        [ApiMember(Name = "SSN", Description = "Social security number of the patient being created", ParameterType = "property", DataType = "string", IsRequired = false)]
+        public string SSN { get; set; }
 
         [ApiMember(Name = "SystemID", Description = "System ID of the patient being created", ParameterType = "property", DataType = "string", IsRequired = false)]
         public string SystemID { get; set; }
