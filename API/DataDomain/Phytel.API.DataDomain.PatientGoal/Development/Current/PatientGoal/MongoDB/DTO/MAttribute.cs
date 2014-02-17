@@ -22,7 +22,7 @@ namespace Phytel.API.DataDomain.PatientGoal.DTO
         public const string ValueProperty = "val";
         [BsonElement(ValueProperty)]
         [BsonIgnoreIfNull(true)]
-        public string Value { get; set; }
+        public List<string> Values { get; set; }
 
         public const string ControlTypeProperty = "aty";
         [BsonElement(ControlTypeProperty)]

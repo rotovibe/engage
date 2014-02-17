@@ -181,10 +181,10 @@ namespace Phytel.API.DataDomain.PatientGoal
             catch (Exception ex) { throw ex; }
         }
 
-        public string Initialize(object newEntity)
+        public object Initialize(object newEntity)
         {
             PutInitializeGoalDataRequest request = (PutInitializeGoalDataRequest)newEntity;
-            string patientGoalId = null;
+            PatientGoalData patientGoalData = null;
             try
             {
                 MEPatientGoal mePg = new MEPatientGoal
@@ -203,10 +203,13 @@ namespace Phytel.API.DataDomain.PatientGoal
                     WriteConcernResult wcr = ctx.PatientGoals.Collection.Insert(mePg);
                     if (wcr.Ok)
                     {
-                        patientGoalId = mePg.Id.ToString();
+                        patientGoalData = new PatientGoalData
+                        {
+                            Id = mePg.Id.ToString()
+                        };
                     }
                 }
-                return patientGoalId;
+                return patientGoalData;
             }
             catch (Exception ex) { throw ex; }
         }

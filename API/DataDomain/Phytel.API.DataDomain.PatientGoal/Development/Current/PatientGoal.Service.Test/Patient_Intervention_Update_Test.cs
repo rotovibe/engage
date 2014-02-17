@@ -64,7 +64,6 @@ namespace Phytel.API.DataDomain.PatientGoal.Services.Test
                         StartDate = System.DateTime.UtcNow,
                         StatusId = 1,
                         StatusDate = System.DateTime.UtcNow,
-                        Attributes = GetAttributes(),
                         Barriers = GetBarriers(),
                         AssignedToId = "Test",
                         CategoryId = "12341cf8fe7a592d046c548f"
@@ -93,7 +92,7 @@ namespace Phytel.API.DataDomain.PatientGoal.Services.Test
             {
                 ControlType = "2",
                 Name = "Attribute name",
-                Value = "This is the value"
+                Values = new List<string> { "This is the value" }
             });
             return tas;
         }

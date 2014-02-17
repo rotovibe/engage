@@ -148,7 +148,7 @@ namespace Phytel.API.DataDomain.PatientGoal
             catch (Exception ex) { throw ex; }
         }
 
-        public string Initialize(object newEntity)
+        public object Initialize(object newEntity)
         {
             PutInitializeInterventionRequest ptr = (PutInitializeInterventionRequest)newEntity;
             string intrvId = null;

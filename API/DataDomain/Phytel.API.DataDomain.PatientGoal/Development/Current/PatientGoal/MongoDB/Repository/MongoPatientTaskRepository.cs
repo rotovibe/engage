@@ -148,13 +148,13 @@ namespace Phytel.API.DataDomain.PatientGoal
             catch (Exception ex) { throw; }
         }
 
-        public string Initialize(object newEntity)
+        public object Initialize(object newEntity)
         {
             PutInitializeTaskRequest ptr = (PutInitializeTaskRequest)newEntity;
-            string taskId = null;
+            PatientTaskData task = null;
             try
             {
-                MEPatientTask pa = new MEPatientTask
+                MEPatientTask pat = new MEPatientTask
                 {
                     Id = ObjectId.GenerateNewId(),
                     PatientGoalId = ObjectId.Parse(ptr.PatientGoalId),
@@ -167,13 +167,16 @@ namespace Phytel.API.DataDomain.PatientGoal
 
                 using (PatientGoalMongoContext ctx = new PatientGoalMongoContext(_dbName))
                 {
-                    WriteConcernResult wcr = ctx.PatientTasks.Collection.Insert(pa);
+                    WriteConcernResult wcr = ctx.PatientTasks.Collection.Insert(pat);
                     if (wcr.Ok)
                     {
-                        taskId = pa.Id.ToString();
+                        task = new PatientTaskData
+                        {
+                            Id = pat.Id.ToString()
+                        };
                     }
                 }
-                return taskId;
+                return task;
             }
             catch (Exception ex) { throw; }
         }

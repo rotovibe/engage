@@ -35,7 +35,7 @@ namespace Phytel.API.DataDomain.PatientGoal.Test
 
             PutInitializeGoalDataResponse response = PatientGoalDataManager.InitializeGoal(request);
 
-            Assert.IsNotNull(response.Id);
+            Assert.IsNotNull(response.Goal);
         }
 
 

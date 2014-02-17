@@ -6,7 +6,7 @@ namespace Phytel.API.DataDomain.PatientGoal.DTO
 {
     public class PutInitializeGoalDataResponse : IDomainResponse
     {
-        public string Id { get; set; }
+        public PatientGoalData Goal { get; set; }
         public string Version { get; set; }
         public ResponseStatus Status { get; set; }
     }

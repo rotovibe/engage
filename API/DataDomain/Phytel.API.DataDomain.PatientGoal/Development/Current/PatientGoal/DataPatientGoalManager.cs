@@ -16,7 +16,7 @@ namespace Phytel.API.DataDomain.PatientGoal
             {
                 response = new PutInitializeGoalDataResponse();
                 IPatientGoalRepository<PutInitializeGoalDataResponse> repo = PatientGoalRepositoryFactory<PutInitializeGoalDataResponse>.GetPatientGoalRepository(request.ContractNumber, request.Context);
-                response.Id = repo.Initialize(request);
+                response.Goal = (PatientGoalData)repo.Initialize(request);
                 response.Version = request.Version;
             }
             catch (Exception ex)
@@ -33,7 +33,7 @@ namespace Phytel.API.DataDomain.PatientGoal
             {
                 response = new PutInitializeBarrierDataResponse();
                 IPatientGoalRepository<PutInitializeBarrierDataResponse> repo = PatientGoalRepositoryFactory<PutInitializeBarrierDataResponse>.GetPatientBarrierRepository(request.ContractNumber, request.Context);
-                response.Id = repo.Initialize(request);
+                response.Id = (string)repo.Initialize(request);
                 response.Version = request.Version;
             }
             catch (Exception ex)
@@ -182,7 +182,7 @@ namespace Phytel.API.DataDomain.PatientGoal
 
                 IPatientGoalRepository<PutInitializeTaskResponse> repo = PatientGoalRepositoryFactory<PutInitializeTaskResponse>.GetPatientTaskRepository(request.ContractNumber, request.Context);
 
-                result.Id = repo.Initialize(request);
+                result.Task = (PatientTaskData)repo.Initialize(request);
                 return result;
             }
             catch (Exception ex)
@@ -218,7 +218,7 @@ namespace Phytel.API.DataDomain.PatientGoal
 
                 IPatientGoalRepository<PutInitializeInterventionResponse> repo = PatientGoalRepositoryFactory<PutInitializeInterventionResponse>.GetPatientInterventionRepository(request.ContractNumber, request.Context);
 
-                result.Id = repo.Initialize(request);
+                result.Id = (string)repo.Initialize(request);
                 return result;
             }
             catch (Exception ex)

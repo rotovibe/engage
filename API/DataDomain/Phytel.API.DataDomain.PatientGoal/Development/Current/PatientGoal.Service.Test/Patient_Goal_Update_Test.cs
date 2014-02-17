@@ -64,14 +64,14 @@ namespace Phytel.API.DataDomain.PatientGoal.Services.Test
             {
                 ControlType = "2",
                 Name = "Attribute name",
-                Value = "This is the value"
+                Values = new List<string>{"This is the value"}
             });
 
             tas.Add(new AttributeData
             {
                 ControlType = "1",
                 Name = "Think language",
-                Value = "Value of think."
+                Values = new List<string> { "value i think" }
             });
             return tas;
         }

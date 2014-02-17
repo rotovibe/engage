@@ -46,7 +46,7 @@ namespace Phytel.API.DataDomain.PatientGoal
                         {
                             ControlType = (AttributeControlType)Enum.Parse(typeof(AttributeControlType), t.ControlType),
                             Name = t.Name,
-                            Value = t.Value
+                            Values = t.Values
                         });
                     });
                 }
@@ -72,7 +72,7 @@ namespace Phytel.API.DataDomain.PatientGoal
                         {
                             ControlType = (AttributeControlType)Enum.Parse(typeof(AttributeControlType), t.ControlType),
                             Name = t.Name,
-                            Value = t.Value
+                            Values = t.Values
                         });
                     });
                 }
@@ -92,7 +92,7 @@ namespace Phytel.API.DataDomain.PatientGoal
                 attrDataList = new List<AttributeData>();
                 foreach (MAttribute ma in meAttributes)
                 {
-                    attrDataList.Add(new AttributeData { Name = ma.Name, Value = ma.Value, Order = ma.Order, ControlType = Enum.GetName(typeof(AttributeControlType), ma.ControlType) });
+                    attrDataList.Add(new AttributeData { Name = ma.Name, Values = ma.Values, Order = ma.Order, ControlType = Enum.GetName(typeof(AttributeControlType), ma.ControlType) });
                 }
             }
             return attrDataList;
