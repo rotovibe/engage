@@ -76,5 +76,22 @@ namespace Phytel.API.DataDomain.PatientGoal
                 throw ex;
             }
         }
+
+        internal static IAttributeRepository<T> GetAttributeLibraryRepository(string dbName, string productName)
+        {
+            try
+            {
+                IAttributeRepository<T> repo = null;
+
+                //We only have 1 repository at this time, just return it
+                repo = new MongoAttributeLibraryRepository<T>(dbName) as IAttributeRepository<T>;
+
+                return repo;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }

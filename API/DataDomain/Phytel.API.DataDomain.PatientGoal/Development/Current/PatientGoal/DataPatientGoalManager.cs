@@ -281,6 +281,7 @@ namespace Phytel.API.DataDomain.PatientGoal
             }
         }
 
+        #region Delete
         public static DeletePatientGoalDataResponse DeletePatientGoal(DeletePatientGoalDataRequest request)
         {
             try
@@ -351,6 +352,23 @@ namespace Phytel.API.DataDomain.PatientGoal
             {
                 throw ex;
             }
+        } 
+        #endregion
+
+        public static List<CustomAttributeData> GetCustomAttributesByType(GetCustomAttributesDataRequest request)
+        {
+            List<CustomAttributeData> result = new List<CustomAttributeData>();
+            try
+            {
+                IAttributeRepository<CustomAttributeData> repo = PatientGoalRepositoryFactory<CustomAttributeData>.GetAttributeLibraryRepository(request.ContractNumber, request.Context);
+                result = repo.FindByType(request.Type) as List<CustomAttributeData>;
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        
         }
     }
 }   
