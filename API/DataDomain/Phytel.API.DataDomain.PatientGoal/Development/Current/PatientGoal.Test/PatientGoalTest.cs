@@ -7,15 +7,25 @@ namespace Phytel.API.DataDomain.PatientGoal.Test
     [TestClass]
     public class PatientGoalTest
     {
-        //[TestMethod]
-        //public void GetPatientGoalByID()
-        //{
-        //    GetPatientGoalDataRequest request = new GetPatientGoalDataRequest { PatientGoalId = "5" };
+        [TestMethod]
+        public void GetPatientGoalByID()
+        {
+            GetPatientGoalDataRequest request = new GetPatientGoalDataRequest { Id = "53011e8ed4332316c093952a" };
 
-        //    GetPatientGoalDataResponse response = PatientGoalDataManager.GetPatientGoalByID(request);
+            GetPatientGoalDataResponse response = PatientGoalDataManager.GetPatientGoal(request);
 
-        //    Assert.IsTrue(response.PatientGoal.Name == "Tony");
-        //}
+            Assert.IsNotNull(response.GoalData);
+        }
+
+        [TestMethod]
+        public void GetAllPatientGoals()
+        {
+            GetAllPatientGoalsDataRequest request = new GetAllPatientGoalsDataRequest { PatientId = "52f55874072ef709f84e68c5" };
+
+            GetAllPatientGoalsDataResponse response = PatientGoalDataManager.GetPatientGoalList(request);
+
+            Assert.IsNotNull(response.PatientGoalsViewData);
+        }
 
         [TestMethod]
         public void InitializePatientGoal()

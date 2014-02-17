@@ -365,6 +365,7 @@ namespace Phytel.API.AppDomain.NG
                 {
                     cvList.Add(new ChildView {Id = c.Id, Name = c.Name, StatusId = c.StatusId });
                 }
+                cvList = cvList.OrderBy(o => o.Name).ToList();
             }
             return cvList;
         }

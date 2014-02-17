@@ -108,7 +108,7 @@ namespace Phytel.API.DataDomain.PatientGoal
                                 Description = b.Description,
                                 PatientGoalId = b.PatientGoalId.ToString(),
                                 CategoryId = b.Category == null ? null : b.Category.ToString(),
-                                AssignedToId = b.AssignedTo,
+                                AssignedToId = b.AssignedTo == null ? null : b.AssignedTo.ToString(),
                                 Barriers = Helper.ConvertToStringList(b.Barriers),
                                 StatusId = ((int)b.Status),
                                 StatusDate = b.StatusDate,
