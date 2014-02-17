@@ -54,9 +54,9 @@ namespace Phytel.API.DataDomain.PatientGoal.Test
         {
             GetCustomAttributesDataRequest request = new GetCustomAttributesDataRequest { Type= "goal" };
 
-            List<CustomAttributeData> response = PatientGoalDataManager.GetCustomAttributesByType(request);
+            GetCustomAttributesDataResponse response = PatientGoalDataManager.GetCustomAttributesByType(request);
 
-            Assert.IsNotNull(response);
+            Assert.IsNotNull(response.CustomAttributes);
         }
     }
 }

@@ -355,13 +355,15 @@ namespace Phytel.API.DataDomain.PatientGoal
         } 
         #endregion
 
-        public static List<CustomAttributeData> GetCustomAttributesByType(GetCustomAttributesDataRequest request)
+        public static GetCustomAttributesDataResponse GetCustomAttributesByType(GetCustomAttributesDataRequest request)
         {
-            List<CustomAttributeData> result = new List<CustomAttributeData>();
+            GetCustomAttributesDataResponse result = null;
             try
             {
-                IAttributeRepository<CustomAttributeData> repo = PatientGoalRepositoryFactory<CustomAttributeData>.GetAttributeLibraryRepository(request.ContractNumber, request.Context);
-                result = repo.FindByType(request.Type) as List<CustomAttributeData>;
+                result = new GetCustomAttributesDataResponse();
+                IAttributeRepository<GetCustomAttributesDataResponse> repo = PatientGoalRepositoryFactory<GetCustomAttributesDataResponse>.GetAttributeLibraryRepository(request.ContractNumber, request.Context);
+                result.CustomAttributes = repo.FindByType(request.Type) as List<CustomAttributeData>;
+                result.Version = request.Version;
                 return result;
             }
             catch (Exception ex)
