@@ -31,22 +31,22 @@ namespace Phytel.API.DataDomain.PatientGoal.Services.Test
                 patientGoaldId),
                 new PutPatientGoalDataRequest
                 {
-                     GoalData = new PatientGoalData
-                    {
-                        Id = id,
-                         EndDate = System.DateTime.UtcNow.AddDays(10),
-                        FocusAreaIds = new List<string> { "52fd4832fe7a5912b0050311" },
-                         Name = "test name",
-                          PatientId = patientId,
-                           Programs = new List<string>{ "52fd4832fe7a591234050354"},
-                            Source = "source data",
-                        Type = "52fd54321e7a5912b0050354",
-                        StartDate = System.DateTime.UtcNow,
-                        StatusId = 2,
-                        TargetDate = System.DateTime.UtcNow.AddDays(7),
-                        TargetValue = "!!This is a task update test",
-                        Attributes = GetAttributes(),
-                    }
+                    GoalData = new PatientGoalData
+                   {
+                       Id = id,
+                       EndDate = System.DateTime.UtcNow.AddDays(10),
+                       FocusAreaIds = new List<string> { "52fd4832fe7a5912b0050311" },
+                       Name = "test name",
+                       PatientId = patientId,
+                       ProgramIds = new List<string> { "52fd4832fe7a591234050354" },
+                       SourceId = "source data",
+                       TypeId = 1,
+                       StartDate = System.DateTime.UtcNow,
+                       StatusId = 2,
+                       TargetDate = System.DateTime.UtcNow.AddDays(7),
+                       TargetValue = "!!This is a task update test",
+                       Attributes = GetAttributes(),
+                   }
                 } as object);
         }
 

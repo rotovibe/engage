@@ -53,7 +53,7 @@ namespace Phytel.API.DataDomain.PatientGoal
             {
                 using (PatientGoalMongoContext ctx = new PatientGoalMongoContext(_dbName))
                 {
-                    var q = MB.Query<MEPatientTask>.EQ(b => b.Id, ObjectId.Parse(request.TaskId));
+                    var q = MB.Query<MEPatientTask>.EQ(b => b.PatientGoalId, ObjectId.Parse(request.PatientGoalId));
 
                     var uv = new List<MB.UpdateBuilder>();
                     uv.Add(MB.Update.Set(MEPatientTask.TTLDateProperty, System.DateTime.UtcNow.AddDays(7)));
