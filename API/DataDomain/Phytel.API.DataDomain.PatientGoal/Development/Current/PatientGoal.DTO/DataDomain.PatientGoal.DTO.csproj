@@ -69,7 +69,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CustomAttributeData.cs" />
+    <Compile Include="GetCustomAttributesDataRequest.cs" />
     <Compile Include="GetAllPatientGoalsDataRequest.cs" />
+    <Compile Include="GetCustomAttributesDataResponse.cs" />
     <Compile Include="PatientGoalData.cs" />
     <Compile Include="PatientBarrierData.cs" />
     <Compile Include="PatientInterventionData.cs" />

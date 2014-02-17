@@ -20,6 +20,7 @@ namespace Phytel.API.DataDomain.PatientGoal.DTO
         public string TargetValue { get; set; }
         public DateTime? TargetDate { get; set; }
         public List<AttributeData> Attributes { get; set; }
+        public List<CustomAttributeData> CustomAttributes { get; set; }
 
         public List<PatientBarrierData> BarriersData { get; set; }
         public List<PatientTaskData> TasksData { get; set; }
