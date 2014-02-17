@@ -95,6 +95,7 @@ namespace Phytel.API.DataDomain.PatientGoal
                         goalData = new PatientGoalData
                         {
                             Id = mePG.Id.ToString(),
+                            PatientId = mePG.PatientId.ToString(),
                             FocusAreaIds = Helper.ConvertToStringList(mePG.FocusAreas),
                             Name = mePG.Name,
                             SourceId = (mePG.Source == null) ? null : mePG.Source.ToString(),
