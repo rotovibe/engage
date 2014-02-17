@@ -72,7 +72,7 @@ namespace Phytel.API.DataDomain.Patient.Service.Test
                 ControlType = "2",
                 Name = "Heart Rate",
                 Order = 1,
-                Value = "200"
+                Values = new List<string> { "200" }
             });
             return attr;
         }
@@ -83,7 +83,7 @@ namespace Phytel.API.DataDomain.Patient.Service.Test
             tasks.Add(new PatientTask
             {
                 Id = "52fd4d29fe7a5912b0979dee",
-                Attributes = new List<Attribute> { new Attribute { Value = "2", Order = 1, Name = "task attribute", ControlType = "1" } },
+                Attributes = new List<Attribute> { new Attribute { Values = new List<string> { "2" }, Order = 1, Name = "task attribute", ControlType = "1" } },
                 BarrierIds = new List<string> { "52fd96c0fe7a5913503f1c64" },
                 PatientGoalId = "52fd96c0fe7a5913503f1c64",
                 Description = "test description",

@@ -22,8 +22,8 @@ namespace Phytel.API.AppDomain.NG
             try
             {
                 GetInitializeGoalResponse response = new GetInitializeGoalResponse();
-                string id = GoalsEndpointUtil.GetInitialGoalRequest(request);
-                response.Id = id;
+                PatientGoalData pg = (PatientGoalData)GoalsEndpointUtil.GetInitialGoalRequest(request);
+                response.Goal = GoalsUtil.GetPatientGoalForInitialize(request, pg);
                 response.Version = request.Version;
                 return response;
             }
@@ -54,8 +54,9 @@ namespace Phytel.API.AppDomain.NG
             try
             {
                 GetInitializeTaskResponse itr = new GetInitializeTaskResponse();
-                string id = GoalsEndpointUtil.GetInitialTaskRequest(request);
-                itr.Id = id;
+                PatientTaskData ptd = (PatientTaskData)GoalsEndpointUtil.GetInitialTaskRequest(request);
+                PatientTask task = GoalsUtil.GetPatientTaskForInitialize(request, ptd);
+                itr.Task = task;
                 itr.Version = request.Version;
                 return itr;
             }
@@ -123,13 +124,13 @@ namespace Phytel.API.AppDomain.NG
                 result = GoalsEndpointUtil.PostUpdateGoalRequest(request);
 
                 // save barriers
-                result = GoalsUtil.SavePatientGoalBarriers(request);
+                GoalsUtil.SavePatientGoalBarriers(request);
 
                 // save tasks
-                result = GoalsUtil.SavePatientGoalTasks(request);
+                GoalsUtil.SavePatientGoalTasks(request);
 
                 // save interventions
-                result = GoalsUtil.SavePatientGoalInterventions(request);
+                GoalsUtil.SavePatientGoalInterventions(request);
 
                 pgr.Result = result;
 

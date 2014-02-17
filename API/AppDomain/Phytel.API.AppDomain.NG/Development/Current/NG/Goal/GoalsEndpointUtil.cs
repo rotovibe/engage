@@ -23,12 +23,11 @@ namespace Phytel.API.AppDomain.NG
         static readonly string DDPatientGoalsServiceUrl = ConfigurationManager.AppSettings["DDPatientGoalUrl"];
 
 
-        public static string GetInitialGoalRequest(GetInitializeGoalRequest request)
+        public static PatientGoalData GetInitialGoalRequest(GetInitializeGoalRequest request)
         {
             try
             {
-                string result = string.Empty;
-                //[Route("/{Context}/{Version}/{ContractNumber}/Patient/{PatientId}/Goal/Initialize", "PUT")]
+                PatientGoalData result = null;
                 IRestClient client = new JsonServiceClient();
                 PutInitializeGoalDataResponse dataDomainResponse = client.Put<PutInitializeGoalDataResponse>(
                     string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Goal/Initialize",
@@ -41,7 +40,7 @@ namespace Phytel.API.AppDomain.NG
 
                 if (dataDomainResponse != null)
                 {
-                    result = dataDomainResponse.Id;
+                    result = dataDomainResponse.Goal;
                 }
 
                 return result;
@@ -82,11 +81,11 @@ namespace Phytel.API.AppDomain.NG
             }
         }
 
-        public static string GetInitialTaskRequest(GetInitializeTaskRequest request)
+        public static PatientTaskData GetInitialTaskRequest(GetInitializeTaskRequest request)
         {
             try
             {
-                string result = string.Empty;
+                PatientTaskData result = null;
 
                 IRestClient client = new JsonServiceClient();
                 PutInitializeTaskResponse response = client.Put<PutInitializeTaskResponse>(
@@ -101,7 +100,7 @@ namespace Phytel.API.AppDomain.NG
 
                 if (response != null)
                 {
-                    result = response.Id;
+                    result = response.Task;
                 }
 
                 return result;
@@ -306,7 +305,7 @@ namespace Phytel.API.AppDomain.NG
                             ControlType = a.ControlType,
                             Name = a.Name,
                             Order = a.Order,
-                            Value = a.Value
+                            Values = a.Values
                         });
                     });
                 }
@@ -528,6 +527,39 @@ namespace Phytel.API.AppDomain.NG
             catch (WebServiceException ex)
             {
                 throw new WebServiceException("AD:DeleteInterventionRequest()" + ex.Message, ex.InnerException);
+            }
+        }
+
+        internal static List<AD.Attribute> GetAttributesForInitialize(IAppDomainRequest request, string type)
+        {
+            List<AD.Attribute> attr = new List<AD.Attribute>();
+            try
+            {
+                IRestClient client = new JsonServiceClient();
+                GetCustomAttributesDataResponse response = client.Get<GetCustomAttributesDataResponse>(
+                    string.Format("{0}/{1}/{2}/{3}/Attributes/{4}",
+                    DDPatientGoalsServiceUrl,
+                    "NG",
+                    request.Version,
+                    request.ContractNumber,
+                    type));
+
+                response.CustomAttributes.ForEach(ca =>
+                {
+                    attr.Add(new AD.Attribute
+                    {
+                        Order = ca.Order,
+                        Options = ca.Options,
+                        Name = ca.Name,
+                        ControlType = ca.ControlType
+                    });
+                });
+
+                return attr;
+            }
+            catch (WebServiceException ex)
+            {
+                throw new WebServiceException("AD:GetAttributesForInitialize()" + ex.Message, ex.InnerException);
             }
         }
     }

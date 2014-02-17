@@ -93,6 +93,7 @@
     <Compile Include="Action_Processing_response_saving_Tests.cs" />
     <Compile Include="Action_Processing_response_spawn_Tests.cs" />
     <Compile Include="Goal\Goal_Delete_Tests.cs" />
+    <Compile Include="Goal\Goal_Initialize_Tests.cs" />
     <Compile Include="Goal\Goal_Tests.cs" />
     <Compile Include="Goal\Task_Tests.cs" />
     <Compile Include="Complete_Action_Tests.cs" />

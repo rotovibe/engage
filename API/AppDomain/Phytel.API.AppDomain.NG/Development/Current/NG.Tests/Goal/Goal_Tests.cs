@@ -7,7 +7,7 @@ using System.Collections.Generic;
 namespace Phytel.API.DataDomain.Patient.Service.Test
 {
     [TestClass]
-    public class Goal_Tests
+    public class Goal_Initialize_Tests
     {
         [TestMethod]
         public void Post_PatientGoal_Update_Test()
@@ -15,7 +15,7 @@ namespace Phytel.API.DataDomain.Patient.Service.Test
             string contractNumber = "InHealth001";
             string context = "NG";
             string version = "v1";
-            string token = "52fe4a7ed6a4850b2c8f7baf";
+            string token = "53025640d6a4850e20091ecf";
             string patientId = "52e26f0b072ef7191c111c4d";
             string patientGoalId = "52fd2d6cd433231c845e7d25";
             IRestClient client = new JsonServiceClient();
@@ -72,7 +72,7 @@ namespace Phytel.API.DataDomain.Patient.Service.Test
                 ControlType = "2",
                 Name = "Heart Rate",
                 Order = 1,
-                Value = "200"
+                Values = new List<string>{"200"}
             });
             return attr;
         }
@@ -83,7 +83,7 @@ namespace Phytel.API.DataDomain.Patient.Service.Test
             tasks.Add(new PatientTask
             {
                 Id = "52fd4d29fe7a5912b0979dee",
-                Attributes = new List<Attribute> { new Attribute { Value = "2", Order = 1, Name = "task attribute", ControlType = "1" } },
+                Attributes = new List<Attribute> { new Attribute { Values = new List<string> { "200" } , Order = 1, Name = "task attribute", ControlType = "1" } },
                 BarrierIds = new List<string> { "52fd96c0fe7a5913503f1c64" },
                 PatientGoalId = "52fd96c0fe7a5913503f1c64",
                 Description = "test description",

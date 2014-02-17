@@ -71,7 +71,7 @@ namespace Phytel.API.AppDomain.NG
                     {
                         ad.Add(new AttributeData
                         {
-                            Value = a.Value,
+                            Values = a.Values,
                             Order = a.Order,
                             Name = a.Name,
                             ControlType = a.ControlType
@@ -147,8 +147,8 @@ namespace Phytel.API.AppDomain.NG
                     pbd.ForEach(bd =>
                     {
                         result = GoalsEndpointUtil.PostUpdateBarrierRequest(request, bd);
-            });
-        }
+                    });
+                }
                 return result;
             }
             catch (Exception ex)
@@ -273,7 +273,7 @@ namespace Phytel.API.AppDomain.NG
                 attr = new List<Phytel.API.AppDomain.NG.DTO.Attribute>();
                 foreach(AttributeData ad in list)
                 {
-                    attr.Add(new Phytel.API.AppDomain.NG.DTO.Attribute { Name = ad.Name, Value = ad.Value, ControlType = ad.ControlType, Order = ad.Order });
+                    attr.Add(new Phytel.API.AppDomain.NG.DTO.Attribute { Name = ad.Name, Values = ad.Values, ControlType = ad.ControlType, Order = ad.Order });
                 }
             }
             return attr;
@@ -364,6 +364,74 @@ namespace Phytel.API.AppDomain.NG
                 }
             }
             return cvList;
+        }
+
+        internal static PatientGoal GetPatientGoalForInitialize(GetInitializeGoalRequest request, PatientGoalData pgd)
+        {
+            PatientGoal pg = null;
+            if (pgd != null)
+            {
+                pg = new PatientGoal
+                {
+                    Attributes = GoalsEndpointUtil.GetAttributesForInitialize(request, "Goal"), //GetAttributesForInitialize(pgd.Attributes), // change this call when attributes are ready
+                    EndDate = pgd.EndDate,
+                    Id = pgd.Id,
+                    Name = pgd.Name,
+                    PatientId = pgd.PatientId,
+                    SourceId = pgd.SourceId,
+                    StartDate = pgd.StartDate,
+                    StatusId = pgd.StatusId,
+                    TargetDate = pgd.TargetDate,
+                    TargetValue = pgd.TargetValue,
+                    TypeId = pgd.TypeId
+                };
+            }
+            return pg;
+        }
+
+        internal static PatientTask GetPatientTaskForInitialize(GetInitializeTaskRequest request, PatientTaskData ptd)
+        {
+            PatientTask pt = null;
+            if (ptd != null)
+            {
+                pt = new PatientTask
+                {
+                    Attributes = GoalsEndpointUtil.GetAttributesForInitialize(request, "Task"),
+                    Id = ptd.Id,
+                    StartDate = ptd.StartDate,
+                    StatusId = ptd.StatusId,
+                    TargetDate = ptd.TargetDate,
+                    TargetValue = ptd.TargetValue,
+                };
+            }
+            return pt;
+        }
+
+        private static List<AD.Attribute> GetAttributesForInitialize(List<AttributeData> list)
+        {
+            try
+            {
+                List<AD.Attribute> attrs = new List<AD.Attribute>();
+                if (list != null && list.Count > 0)
+                {
+                    list.ForEach(a =>
+                    {
+                        new AD.Attribute
+                        {
+                            Values = a.Values,
+                            ControlType = a.ControlType,
+                            Name = a.Name,
+                            Options = a.Options,
+                            Order = a.Order
+                        };
+                    });
+                }
+                return attrs;
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
         }
     }
 }

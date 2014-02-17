@@ -7,7 +7,7 @@ namespace Phytel.API.AppDomain.NG.DTO
 {
     public class GetInitializeTaskResponse : IDomainResponse
     {
-        public string Id { get; set; }
+        public PatientTask Task { get; set; }
         public ResponseStatus Status { get; set; }
         public string Version { get; set; }
     }
