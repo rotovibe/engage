@@ -13,6 +13,7 @@ namespace Phytel.API.DataDomain.PatientGoal.DTO
         public string Type { get; set; }
         public string ControlType { get; set; }
         public int Order { get; set; }
-        public Dictionary<int, string> Options { get; set; } 
+        public Dictionary<int, string> Options { get; set; }
+        public bool Required { get; set; }
     }
 }

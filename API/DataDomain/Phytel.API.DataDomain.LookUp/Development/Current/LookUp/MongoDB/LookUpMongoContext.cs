@@ -2,7 +2,7 @@
 using Phytel.API.DataDomain.LookUp.DTO;
 using Phytel.Mongo.Linq;
 
-namespace Phytel.API.AppDomain.LookUp
+namespace Phytel.API.DataDomain.LookUp
 {
     public class LookUpMongoContext : MongoContext
     {

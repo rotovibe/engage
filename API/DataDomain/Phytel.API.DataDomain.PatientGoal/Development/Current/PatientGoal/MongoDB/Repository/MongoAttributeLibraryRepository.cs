@@ -96,6 +96,11 @@ namespace Phytel.API.DataDomain.PatientGoal
                                 {
                                     Id = b.Id.ToString(),
                                     Name = b.Name,
+                                    //Type = b.Type,
+                                    //ControlType = b.ControlType,
+                                    Order  = b.Order,
+                                    //Options = b.Order[,
+                                    Required = b.Required
                                 };
                                 customAttributesList.Add(data);
                             }

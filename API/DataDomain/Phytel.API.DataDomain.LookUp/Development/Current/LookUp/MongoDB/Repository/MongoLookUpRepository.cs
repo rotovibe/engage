@@ -8,7 +8,7 @@ using Phytel.API.Interface;
 using MongoDB.Driver;
 using MongoDB.Driver.Builders;
 using MongoDB.Bson;
-using Phytel.API.AppDomain.LookUp;
+using Phytel.API.DataDomain.LookUp;
 using Phytel.API.Common.CustomObjects;
 
 namespace Phytel.API.DataDomain.LookUp
