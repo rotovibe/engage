@@ -68,7 +68,7 @@ namespace Phytel.API.AppDomain.NG.Test
             request.Version = "v1";
             request.PatientId = "52f55874072ef709f84e68c5";
             request.UserId = "Snehal";
-            request.Goal = new PatientGoal { Name =  "null", SourceId = "null"};
+            request.Goal = new PatientGoal { Name =  "my name", SourceId = "my source"};
 
             GoalsManager gManager = new GoalsManager();
             PostPatientGoalResponse response = gManager.SavePatientGoal(request);
