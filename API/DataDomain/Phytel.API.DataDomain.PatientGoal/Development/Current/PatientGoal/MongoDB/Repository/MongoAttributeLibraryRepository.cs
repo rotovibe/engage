@@ -97,7 +97,6 @@ namespace Phytel.API.DataDomain.PatientGoal
                                     Id = b.Id.ToString(),
                                     Name = b.Name,
                                     Type = Enum.GetName(typeof(EntityType), b.Type),
-                                    Values = b.Values,
                                     ControlType = Enum.GetName(typeof(AttributeControlType), b.ControlType),
                                     Order  = b.Order,
                                     Options = b.Options,

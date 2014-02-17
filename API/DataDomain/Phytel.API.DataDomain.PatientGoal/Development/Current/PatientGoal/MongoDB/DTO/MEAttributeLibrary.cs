@@ -21,7 +21,6 @@ namespace Phytel.API.DataDomain.PatientGoal.DTO
         public const string OptionsProperty = "opt";
         public const string OrderProperty = "o";
         public const string RequiredProperty = "req";
-        public const string ValueProperty = "val";
 
         #region Standard IMongoEntity Constants
         public const string ExtraElementsProperty = "ex";
@@ -46,10 +45,6 @@ namespace Phytel.API.DataDomain.PatientGoal.DTO
         [BsonElement(ControlTypeProperty)]
         [BsonIgnoreIfNull(false)]
         public AttributeControlType ControlType { get; set; }
-
-        [BsonElement(ValueProperty)]
-        [BsonIgnoreIfNull(false)]
-        public List<string> Values { get; set; }
 
         [BsonElement(OptionsProperty)]
         [BsonIgnoreIfNull(true)]
