@@ -250,5 +250,11 @@ namespace Phytel.API.DataDomain.PatientGoal
             }
             catch (Exception ex) { throw ex; }
         }
+
+
+        public IEnumerable<object> FindByGoalId(string Id)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

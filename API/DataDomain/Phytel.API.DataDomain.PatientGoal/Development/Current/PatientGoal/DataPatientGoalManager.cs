@@ -307,7 +307,12 @@ namespace Phytel.API.DataDomain.PatientGoal
                 DeleteTaskResponse result = new DeleteTaskResponse();
 
                 IPatientGoalRepository<DeleteTaskResponse> repo = PatientGoalRepositoryFactory<DeleteTaskResponse>.GetPatientTaskRepository(request.ContractNumber, request.Context);
-                repo.Delete(request);
+                List<PatientTaskData> ptd = (List<PatientTaskData>)repo.FindByGoalId(request.PatientGoalId);
+                ptd.ForEach(t =>
+                {
+                    request.TaskId = t.Id;
+                    repo.Delete(request);
+                });
 
                 result.Deleted = true;
                 return result;
@@ -325,6 +330,13 @@ namespace Phytel.API.DataDomain.PatientGoal
                 DeleteInterventionResponse result = new DeleteInterventionResponse();
 
                 IPatientGoalRepository<DeleteInterventionResponse> repo = PatientGoalRepositoryFactory<DeleteInterventionResponse>.GetPatientInterventionRepository(request.ContractNumber, request.Context);
+                List<PatientInterventionData> pid = (List<PatientInterventionData>)repo.FindByGoalId(request.PatientGoalId);
+                pid.ForEach(i =>
+                {
+                    request.InterventionId = i.Id;
+                    repo.Delete(request);
+                });
+                
                 repo.Delete(request);
 
                 result.Deleted = true;
@@ -343,6 +355,13 @@ namespace Phytel.API.DataDomain.PatientGoal
                 DeleteBarrierResponse result = new DeleteBarrierResponse();
 
                 IPatientGoalRepository<DeleteBarrierResponse> repo = PatientGoalRepositoryFactory<DeleteBarrierResponse>.GetPatientBarrierRepository(request.ContractNumber, request.Context);
+                List<PatientBarrierData> pbd = (List<PatientBarrierData>)repo.FindByGoalId(request.PatientGoalId);
+                pbd.ForEach(b =>
+                {
+                    request.BarrierId = b.Id;
+                    repo.Delete(request);
+                });
+                
                 repo.Delete(request);
 
                 result.Deleted = true;

@@ -52,7 +52,7 @@ namespace Phytel.API.DataDomain.PatientGoal
             {
                 using (PatientGoalMongoContext ctx = new PatientGoalMongoContext(_dbName))
                 {
-                    var q = MB.Query<MEPatientBarrier>.EQ(b => b.PatientGoalId, ObjectId.Parse(request.PatientGoalId));
+                    var q = MB.Query<MEPatientBarrier>.EQ(b => b.Id, ObjectId.Parse(request.BarrierId));
 
                     var uv = new List<MB.UpdateBuilder>();
                     uv.Add(MB.Update.Set(MEPatientBarrier.TTLDateProperty, System.DateTime.UtcNow.AddDays(7)));
@@ -203,6 +203,37 @@ namespace Phytel.API.DataDomain.PatientGoal
                                 CategoryId = b.Category == null ? null : b.Category.ToString(),
                                 StatusId = ((int)b.Status),
                                 StatusDate = b.StatusDate
+                            };
+                            barriersDataList.Add(barrierData);
+                        }
+                    }
+                }
+                return barriersDataList;
+            }
+            catch (Exception ex) { throw ex; }
+        }
+
+
+        public IEnumerable<object> FindByGoalId(string Id)
+        {
+            try
+            {
+                List<PatientBarrierData> barriersDataList = null;
+                List<IMongoQuery> queries = new List<IMongoQuery>();
+                queries.Add(Query.EQ(MEPatientBarrier.PatientGoalIdProperty, ObjectId.Parse(Id)));
+                IMongoQuery mQuery = Query.And(queries);
+
+                using (PatientGoalMongoContext ctx = new PatientGoalMongoContext(_dbName))
+                {
+                    List<MEPatientBarrier> meBarriers = ctx.PatientBarriers.Collection.Find(mQuery).ToList();
+                    if (meBarriers != null)
+                    {
+                        barriersDataList = new List<PatientBarrierData>();
+                        foreach (MEPatientBarrier b in meBarriers)
+                        {
+                            PatientBarrierData barrierData = new PatientBarrierData
+                            {
+                                Id = b.Id.ToString(),
                             };
                             barriersDataList.Add(barrierData);
                         }

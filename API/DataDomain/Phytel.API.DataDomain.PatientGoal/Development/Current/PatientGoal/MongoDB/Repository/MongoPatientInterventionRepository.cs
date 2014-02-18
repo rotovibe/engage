@@ -53,7 +53,7 @@ namespace Phytel.API.DataDomain.PatientGoal
             {
                 using (PatientGoalMongoContext ctx = new PatientGoalMongoContext(_dbName))
                 {
-                    var q = MB.Query<MEPatientIntervention>.EQ(b => b.PatientGoalId, ObjectId.Parse(request.PatientGoalId));
+                    var q = MB.Query<MEPatientIntervention>.EQ(b => b.Id, ObjectId.Parse(request.InterventionId));
 
                     var uv = new List<MB.UpdateBuilder>();
                     uv.Add(MB.Update.Set(MEPatientIntervention.TTLDateProperty, System.DateTime.UtcNow.AddDays(7)));
@@ -216,6 +216,39 @@ namespace Phytel.API.DataDomain.PatientGoal
             }
             catch (Exception ex) { throw ex; }
 
+        }
+
+
+        public IEnumerable<object> FindByGoalId(string Id)
+        {
+            try
+            {
+                List<PatientInterventionData> interventionsDataList = null;
+                List<IMongoQuery> queries = new List<IMongoQuery>();
+                queries.Add(Query.EQ(MEPatientIntervention.PatientGoalIdProperty, ObjectId.Parse(Id)));
+                IMongoQuery mQuery = Query.And(queries);
+
+                using (PatientGoalMongoContext ctx = new PatientGoalMongoContext(_dbName))
+                {
+                    List<MEPatientIntervention> meInterventions = ctx.PatientInterventions.Collection.Find(mQuery).ToList();
+                    if (meInterventions != null)
+                    {
+                        interventionsDataList = new List<PatientInterventionData>();
+                        foreach (MEPatientIntervention b in meInterventions)
+                        {
+                            PatientInterventionData interventionData = new PatientInterventionData
+                            {
+                                Id = b.Id.ToString(),
+                                 AssignedToId = b.AssignedTo != null ? b.AssignedTo.ToString(): null
+                                 // need to implement all the values needed!
+                            };
+                            interventionsDataList.Add(interventionData);
+                        }
+                    }
+                }
+                return interventionsDataList;
+            }
+            catch (Exception ex) { throw ex; }
         }
     }
 }

@@ -53,8 +53,9 @@ namespace Phytel.API.DataDomain.PatientGoal
             {
                 using (PatientGoalMongoContext ctx = new PatientGoalMongoContext(_dbName))
                 {
-                    var q = MB.Query<MEPatientTask>.EQ(b => b.PatientGoalId, ObjectId.Parse(request.PatientGoalId));
+                    var q = MB.Query<MEPatientTask>.EQ(b => b.Id, ObjectId.Parse(request.TaskId));
 
+                    var f = ctx.PatientTasks.Collection.FindAll();
                     var uv = new List<MB.UpdateBuilder>();
                     uv.Add(MB.Update.Set(MEPatientTask.TTLDateProperty, System.DateTime.UtcNow.AddDays(7)));
                     uv.Add(MB.Update.Set(MEPatientTask.DeleteFlagProperty, true));
@@ -212,6 +213,45 @@ namespace Phytel.API.DataDomain.PatientGoal
                                 StatusDate = b.StatusDate,
                                 StartDate = b.StartDate
 
+                            };
+                            tasksDataList.Add(taskData);
+                        }
+                    }
+                }
+                return tasksDataList;
+            }
+            catch (Exception ex) { throw ex; }
+        }
+
+        public IEnumerable<object> FindByGoalId(string Id)
+        {
+            try
+            {
+                List<PatientTaskData> tasksDataList = null;
+                List<IMongoQuery> queries = new List<IMongoQuery>();
+                queries.Add(Query.EQ(MEPatientTask.PatientGoalIdProperty, ObjectId.Parse(Id)));
+                IMongoQuery mQuery = Query.And(queries);
+
+                using (PatientGoalMongoContext ctx = new PatientGoalMongoContext(_dbName))
+                {
+                    List<MEPatientTask> meTasks = ctx.PatientTasks.Collection.Find(mQuery).ToList();
+                    if (meTasks != null)
+                    {
+                        tasksDataList = new List<PatientTaskData>();
+                        foreach (MEPatientTask b in meTasks)
+                        {
+                            PatientTaskData taskData = new PatientTaskData
+                            {
+                                Id = b.Id.ToString(),
+                                TargetValue = b.TargetValue,
+                                PatientGoalId = b.PatientGoalId.ToString(),
+                                StatusId = ((int)b.Status),
+                                TargetDate = b.TargetDate,
+                                //Attributes = DTOUtil.ConvertToAttributeDataList(b.Attributes),
+                                Barriers = Helper.ConvertToStringList(b.Barriers),
+                                Description = b.Description,
+                                StatusDate = b.StatusDate,
+                                StartDate = b.StartDate
                             };
                             tasksDataList.Add(taskData);
                         }
