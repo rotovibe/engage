@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using AD = Phytel.API.AppDomain.NG.DTO;
 using Phytel.API.DataDomain.PatientGoal.DTO;
+using Phytel.API.AppDomain.NG.DTO.Goal;
 
 namespace Phytel.API.AppDomain.NG
 {
@@ -59,10 +60,8 @@ namespace Phytel.API.AppDomain.NG
                     {
                         ad.Add(new CustomAttributeData
                         {
-                            Order = a.Order,
                             Id = a.Id,
-                            Name = a.Name,
-                            ControlType = a.ControlType
+                            Values = a.Values
                         });
                     });
                 }
@@ -329,26 +328,18 @@ namespace Phytel.API.AppDomain.NG
             return pt;
         }
 
-        private static List<AD.CustomAttribute> GetAttributesForInitialize(List<CustomAttributeData> list)
+        internal static List<AD.Goal.Option> ConvertToOptionList(Dictionary<int, string> dictionary)
         {
             try
             {
-                List<AD.CustomAttribute> attrs = new List<AD.CustomAttribute>();
-                if (list != null && list.Count > 0)
+                List<Option> options = new List<Option>();
+
+                foreach (KeyValuePair<int, string> e in dictionary)
                 {
-                    list.ForEach(a =>
-                    {
-                        new AD.CustomAttribute
-                        {
-                            Values = a.Values,
-                            ControlType = a.ControlType,
-                            Name = a.Name,
-                            Options = a.Options,
-                            Order = a.Order
-                        };
-                    });
+                    options.Add(new Option { Display = e.Value, Value = e.Key });
                 }
-                return attrs;
+
+                return options;
             }
             catch (Exception ex)
             {

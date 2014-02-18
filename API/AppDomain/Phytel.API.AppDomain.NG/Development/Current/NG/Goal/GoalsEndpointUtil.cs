@@ -302,9 +302,6 @@ namespace Phytel.API.AppDomain.NG
                     {
                         ad.Add(new CustomAttributeData
                         {
-                            ControlType = a.ControlType,
-                            Name = a.Name,
-                            Order = a.Order,
                             Values = a.Values,
                             Id = a.Id
                         });
@@ -553,7 +550,7 @@ namespace Phytel.API.AppDomain.NG
                         Name = ca.Name,
                         ControlType = ca.ControlType,
                         Order = ca.Order,
-                        Options = ca.Options
+                        Options = GoalsUtil.ConvertToOptionList(ca.Options)
                     });
                 });
 

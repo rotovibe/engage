@@ -103,6 +103,7 @@
     <Compile Include="Goal\GetPatientGoalRequest.cs" />
     <Compile Include="Goal\GetAllPatientGoalsResponse.cs" />
     <Compile Include="Goal\GetPatientGoalResponse.cs" />
+    <Compile Include="Goal\Option.cs" />
     <Compile Include="Goal\PatientGoal.cs" />
     <Compile Include="Goal\PatientBarrier.cs" />
     <Compile Include="Goal\PatientIntervention.cs" />
