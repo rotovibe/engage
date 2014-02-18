@@ -1327,6 +1327,50 @@ namespace Phytel.API.AppDomain.NG
                 throw ae;
             }
         }
+
+        public List<Contact> GetCareManagers(GetAllCareManagersRequest request)
+        {
+            List<Contact> contactList = null;
+            try
+            {
+                IRestClient client = new JsonServiceClient();
+                //[Route("/{Context}/{Version}/{ContractNumber}/Contact/CareManagers", "GET")]
+                GetAllCareManagersDataResponse dataDomainResponse;
+                dataDomainResponse =
+                    client.Get<GetAllCareManagersDataResponse>(
+                    string.Format("{0}/{1}/{2}/{3}/Contact/CareManagers?UserId={4}",
+                   DDContactServiceUrl,
+                    "NG",
+                    request.Version,
+                    request.ContractNumber,
+                    request.UserId));
+
+                if (dataDomainResponse != null && dataDomainResponse.Contacts != null)
+                {
+                    contactList = new List<Contact>();
+                    List<ContactData> contactDataList = dataDomainResponse.Contacts;
+                    foreach(ContactData cd in contactDataList)
+                    {
+                        contactList.Add(new Contact 
+                        {   
+                            Id = cd.ContactId,
+                            UserId = cd.UserId,
+                            FirstName = cd.FirstName,
+                            MiddleName = cd.MiddleName,
+                            LastName = cd.LastName,
+                            PreferredName = cd.PreferredName,
+                            Gender = cd.Gender
+                        });
+                    }
+                }
+            }
+            catch (WebServiceException wse)
+            {
+                Exception ae = new Exception(wse.ResponseBody, wse.InnerException);
+                throw ae;
+            }
+            return contactList;
+        }
         #endregion
 
         #region Goal
@@ -1338,7 +1382,7 @@ namespace Phytel.API.AppDomain.NG
                 IRestClient client = new JsonServiceClient();
                 //[Route("/{Context}/{Version}/{ContractNumber}/Type/{Name}", "GET")]
                 Phytel.API.DataDomain.LookUp.DTO.GetLookUpsDataResponse dataDomainResponse = client.Get<Phytel.API.DataDomain.LookUp.DTO.GetLookUpsDataResponse>(string.Format("{0}/{1}/{2}/{3}/Type/{4}",
-                                                                                                                DDLookupServiceUrl,
+                                                                                                               DDLookupServiceUrl,
                                                                                                                 "NG",
                                                                                                                 request.Version,
                                                                                                                 request.ContractNumber,

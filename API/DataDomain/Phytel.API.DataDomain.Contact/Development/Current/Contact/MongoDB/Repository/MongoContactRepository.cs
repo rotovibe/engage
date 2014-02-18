@@ -853,5 +853,43 @@ namespace Phytel.API.DataDomain.Contact
             return contactData;
         }
 
+
+        public IEnumerable<object> FindCareManagers()
+        { 
+            List<ContactData> contactDataList = null;
+            try
+            {
+                using (ContactMongoContext ctx = new ContactMongoContext(_dbName))
+                {
+                    List<IMongoQuery> queries = new List<IMongoQuery>();
+                    queries.Add(Query.NE(MEContact.UserIdProperty, BsonNull.Value));
+                    queries.Add(Query.EQ(MEContact.PatientIdProperty, BsonNull.Value));
+                    queries.Add(Query.EQ(MEContact.DeleteFlagProperty, false));
+                    IMongoQuery mQuery = Query.And(queries);
+                    List<MEContact> meContacts = ctx.Contacts.Collection.Find(mQuery).ToList();
+                    if (meContacts != null)
+                    {
+                        contactDataList = new List<ContactData>();
+                        foreach (MEContact c in meContacts)
+                        {
+                            ContactData contactData = new ContactData
+                            {
+                               ContactId = c.Id.ToString(),
+                               UserId = c.UserId.ToString(),
+                               FirstName = c.FirstName,
+                               MiddleName = c.MiddleName,
+                               LastName = c.LastName,
+                               Gender = c.Gender,
+                               PreferredName = c.PreferredName
+                            };
+                            contactDataList.Add(contactData);
+                        }
+
+                    }
+                }
+                return contactDataList;
+            }
+            catch (Exception ex) { throw ex; }
+        }
     }
 }

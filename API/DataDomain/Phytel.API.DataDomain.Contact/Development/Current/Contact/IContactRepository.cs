@@ -11,5 +11,6 @@ namespace Phytel.API.DataDomain.Contact
     public interface IContactRepository<T> : IRepository<T>
     {
         object FindContactByPatientId(GetContactDataRequest request);
+        IEnumerable<object> FindCareManagers();
     }
 }

@@ -89,6 +89,8 @@
     <Compile Include="Contact\Address.cs" />
     <Compile Include="Contact\CommMode.cs" />
     <Compile Include="Contact\Email.cs" />
+    <Compile Include="Contact\GetAllCareManagersRequest.cs" />
+    <Compile Include="Contact\GetAllCareManagersResponse.cs" />
     <Compile Include="Contact\GetContactRequest.cs" />
     <Compile Include="Contact\Language.cs" />
     <Compile Include="Contact\Phone.cs" />

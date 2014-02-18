@@ -55,6 +55,19 @@ namespace Phytel.API.DataDomain.Contact.Test
             Assert.IsNotNull(response);
         }
 
+        [TestMethod]
+        public void GetCareManagers_Test()
+        {
+            GetAllCareManagersDataRequest request = new GetAllCareManagersDataRequest();
+
+            request.ContractNumber = "InHealth001";
+            request.UserId = "DD_TestHarness";
+            request.Version = "v1";
+
+            GetAllCareManagersDataResponse response = ContactDataManager.GetCareManagers(request);
+
+            Assert.IsNotNull(response);
+        }
 
 
         [TestMethod]

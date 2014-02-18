@@ -81,7 +81,9 @@
     <Compile Include="AddressData.cs" />
     <Compile Include="CommModeData.cs" />
     <Compile Include="EmailData.cs" />
+    <Compile Include="GetAllCareManagersDataRequest.cs" />
     <Compile Include="SearchContactsDataRequest.cs" />
+    <Compile Include="GetAllCareManagersDataResponse.cs" />
     <Compile Include="SearchContactsDataResponse.cs" />
     <Compile Include="PutContactDataRequest.cs" />
     <Compile Include="PutUpdateContactDataRequest.cs" />

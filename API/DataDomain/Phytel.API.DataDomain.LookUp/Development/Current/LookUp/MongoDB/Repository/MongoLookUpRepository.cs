@@ -489,7 +489,7 @@ namespace Phytel.API.DataDomain.LookUp
             try
             {
                 LookUpType lookUpValue;
-                if (Enum.TryParse(type, out lookUpValue))
+                if (Enum.TryParse(type, true, out lookUpValue))
                 {
                     using (LookUpMongoContext ctx = new LookUpMongoContext(_dbName))
                     {

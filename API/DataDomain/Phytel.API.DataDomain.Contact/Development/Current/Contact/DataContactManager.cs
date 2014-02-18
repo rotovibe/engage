@@ -99,5 +99,21 @@ namespace Phytel.API.DataDomain.Contact
             }
             return response;
         }
+
+        public static GetAllCareManagersDataResponse GetCareManagers(GetAllCareManagersDataRequest request)
+        {
+            GetAllCareManagersDataResponse response = new GetAllCareManagersDataResponse();
+            try
+            {
+                IContactRepository<List<ContactData>> repo = ContactRepositoryFactory<List<ContactData>>.GetContactRepository(request.ContractNumber, request.Context);
+                response.Contacts = repo.FindCareManagers() as List<ContactData>;
+                response.Version = request.Version;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return response;
+        }
     }
 }   

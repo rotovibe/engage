@@ -75,5 +75,21 @@ namespace Phytel.API.DataDomain.Contact.Service
             return response;
         }
 
+        public GetAllCareManagersDataResponse Get(GetAllCareManagersDataRequest request)
+        {
+            GetAllCareManagersDataResponse response = new GetAllCareManagersDataResponse();
+            response.Version = request.Version;
+            try
+            {
+                response = ContactDataManager.GetCareManagers(request);
+            }
+            catch (Exception ex)
+            {
+                //TODO: Log this to C3 database via ASE
+                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+            }
+            return response;
+        }
+
     }
 }

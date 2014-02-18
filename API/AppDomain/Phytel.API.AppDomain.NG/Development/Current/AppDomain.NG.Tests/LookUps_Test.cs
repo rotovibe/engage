@@ -26,39 +26,6 @@ namespace Phytel.API.AppDomain.NG.Test
         //    _objectContext = context;
         //}
         
-        [ClassInitialize]
-        public static void CreateTestToken()
-        {
-            SecurityMongoContext _objectContext = new SecurityMongoContext();
-            
-            MEAPISession session = new MEAPISession
-            {
-                APIKey = "12345",
-                Product = _product,
-                SessionLengthInMinutes = 480,
-                SessionTimeOut = DateTime.Now.AddMinutes(480),
-                UserName = "testUser"
-            };
-
-            _objectContext.APISessions.Collection.Insert(session);
-        }
-
-        [ClassCleanup]
-        public static void DeleteTestToken()
-        {
-            SecurityMongoContext _objectContext = new SecurityMongoContext();
-            
-            IMongoQuery query = Query.And(
-                            Query.EQ(MEAPISession.IdProperty, ObjectId.Parse(_token)),
-                            Query.EQ(MEAPISession.ProductProperty, _product.ToUpper()));
-
-            MEAPISession session = _objectContext.APISessions.Collection.FindOneById(ObjectId.Parse(_token));
-            if (session != null)
-            {
-                _objectContext.APISessions.Collection.Remove(query);
-            }
-        }
-        
         [TestMethod]
         public void GetAllProblems_Test()
         {
@@ -97,5 +64,43 @@ namespace Phytel.API.AppDomain.NG.Test
             Assert.IsTrue(response.Count > 0);
         }
         #endregion
+
+        [TestMethod]
+        public void GetLookUpByType()
+        {
+            // Arrange
+            NGManager ngManager = new NGManager();
+            GetLookUpsRequest request = new GetLookUpsRequest
+            {
+                ContractNumber = _contractNumber,
+                Token = _token,
+                Version = _version,
+                TypeName = "intercategory"
+            };
+            // Act
+            List<IdNamePair> response = ngManager.GetLookUps(request);
+
+            //Assert
+            Assert.IsTrue(response.Count > 0);
+        }
+
+        [TestMethod]
+        public void GetCareManagers()
+        {
+            // Arrange
+            NGManager ngManager = new NGManager();
+            GetAllCareManagersRequest request = new GetAllCareManagersRequest
+            {
+                ContractNumber = _contractNumber,
+                Token = _token,
+                Version = _version,
+            };
+            // Act
+            List<Contact> response = ngManager.GetCareManagers(request);
+
+            //Assert
+            Assert.IsTrue(response.Count > 0);
+        }
+        
     }
 }

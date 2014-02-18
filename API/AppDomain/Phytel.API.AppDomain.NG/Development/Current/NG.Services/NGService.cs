@@ -430,6 +430,35 @@ namespace Phytel.API.AppDomain.NG.Service
             }
         }
 
+        public GetAllCareManagersResponse Get(GetAllCareManagersRequest request)
+        {
+            GetAllCareManagersResponse response = new GetAllCareManagersResponse();
+            try
+            {
+                NGManager ngm = new NGManager();
+
+                ValidateTokenResponse result = ngm.IsUserValidated(request.Version, request.Token);
+                if (result.UserId.Trim() != string.Empty)
+                {
+                    request.UserId = result.UserId;
+                    response.Contacts = ngm.GetCareManagers(request);
+                    response.Version = request.Version;
+                }
+                else
+                    throw new UnauthorizedAccessException();
+
+                AuditHelper.LogAuditData(request, null, System.Web.HttpContext.Current.Request, request.GetType().Name);
+
+                return response;
+            }
+            catch (Exception ex)
+            {
+                //TODO: Log this to the SQL database via ASE
+                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+                return response;
+            }
+        }
+
         public PutUpdateContactResponse Post(PutUpdateContactRequest request)
         {
             PutUpdateContactResponse response = new PutUpdateContactResponse();
