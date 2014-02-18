@@ -84,14 +84,14 @@ namespace Phytel.API.DataDomain.PatientGoal.Services.Test
             List<CustomAttributeData> tas = new List<CustomAttributeData>();
             tas.Add(new CustomAttributeData
             {
-                ControlType = "2",
+                ControlType = 2,
                 Id = "5200033cd6a4850aa450d8f1",
                 Values = new List<string> { "This is the value" }
             });
 
             tas.Add(new CustomAttributeData
             {
-                ControlType = "1",
+                ControlType = 1,
                 Id = "5200033cd6a4850aa450d8f1",
                 Values = new List<string> { "This is the value" }
             });
