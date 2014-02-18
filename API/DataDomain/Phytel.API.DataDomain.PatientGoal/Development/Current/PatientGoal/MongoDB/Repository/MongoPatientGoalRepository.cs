@@ -191,8 +191,6 @@ namespace Phytel.API.DataDomain.PatientGoal
                 {
                     Id = ObjectId.GenerateNewId(),
                     PatientId = ObjectId.Parse(request.PatientId),
-                    Status = GoalTaskStatus.Open,
-                    StatusDate = DateTime.UtcNow,
                     TTLDate = System.DateTime.UtcNow.AddDays(1),
                     UpdatedBy = request.UserId,
                     LastUpdatedOn = DateTime.UtcNow
