@@ -44,7 +44,7 @@ namespace Phytel.API.DataDomain.PatientGoal
                     {
                         ta.Add(new MAttribute
                         {
-                            Id = ObjectId.Parse(t.Id),
+                            AttributeId = ObjectId.Parse(t.Id),
                             Values = t.Values
                         });
                     });
@@ -66,7 +66,7 @@ namespace Phytel.API.DataDomain.PatientGoal
                 customAttrDataList = new List<CustomAttributeData>();
                 foreach (MAttribute ma in meAttributes)
                 {
-                    customAttrDataList.Add( new CustomAttributeData { Id = ma.Id.ToString(), Values = ma.Values });
+                    customAttrDataList.Add( new CustomAttributeData { Id = ma.AttributeId.ToString(), Values = ma.Values });
                 }
             }
             return customAttrDataList;
