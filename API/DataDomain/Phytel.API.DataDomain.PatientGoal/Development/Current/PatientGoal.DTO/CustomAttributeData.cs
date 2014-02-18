@@ -10,9 +10,9 @@ namespace Phytel.API.DataDomain.PatientGoal.DTO
     {
         public string Id { get; set; }
         public string Name { get; set; }
-        public string Type { get; set; }
+        public int Type { get; set; }
         public List<string> Values { get; set; }
-        public string ControlType { get; set; }
+        public int ControlType { get; set; }
         public int Order { get; set; }
         public Dictionary<int, string> Options { get; set; }
         public bool Required { get; set; }

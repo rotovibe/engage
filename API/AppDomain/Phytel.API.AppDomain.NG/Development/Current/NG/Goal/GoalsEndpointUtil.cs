@@ -531,7 +531,7 @@ namespace Phytel.API.AppDomain.NG
             }
         }
 
-        internal static List<AD.CustomAttribute> GetAttributesForInitialize(IAppDomainRequest request, string type)
+        internal static List<AD.CustomAttribute> GetAttributesForInitialize(IAppDomainRequest request, int typeId)
         {
             List<AD.CustomAttribute> attr = new List<AD.CustomAttribute>();
             try
@@ -543,16 +543,17 @@ namespace Phytel.API.AppDomain.NG
                     "NG",
                     request.Version,
                     request.ContractNumber,
-                    type));
+                    typeId));
 
                 response.CustomAttributes.ForEach(ca =>
                 {
                     attr.Add(new AD.CustomAttribute
                     {
-                        Order = ca.Order,
-                        Options = ca.Options,
+                        Id = ca.Id,
                         Name = ca.Name,
-                        ControlType = ca.ControlType
+                        ControlType = ca.ControlType,
+                        Order = ca.Order,
+                        Options = ca.Options
                     });
                 });
 

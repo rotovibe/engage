@@ -112,7 +112,6 @@
     <Compile Include="Goal\GetInitializeBarrierResponse.cs" />
     <Compile Include="Goal\GetInitializeGoalResponse.cs" />
     <Compile Include="Goal\GetInitializeTaskResponse.cs" />
-    <Compile Include="Goal\Attribute.cs" />
     <Compile Include="Goal\PatientTask.cs" />
     <Compile Include="Goal\PostDeletePatientGoalRequest.cs" />
     <Compile Include="Goal\PostPatientGoalRequest.cs" />

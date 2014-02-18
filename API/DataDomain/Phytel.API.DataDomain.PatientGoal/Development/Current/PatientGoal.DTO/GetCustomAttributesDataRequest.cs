@@ -3,11 +3,11 @@ using ServiceStack.ServiceHost;
 
 namespace Phytel.API.DataDomain.PatientGoal.DTO
 {
-    [Route("/{Context}/{Version}/{ContractNumber}/Attributes/{Type}", "GET")]
+    [Route("/{Context}/{Version}/{ContractNumber}/Attributes/{TypeId}", "GET")]
     public class GetCustomAttributesDataRequest : IDataDomainRequest
     {
-        [ApiMember(Name = "Type", Description = "Type of the custom attributes.", ParameterType = "property", DataType = "string", IsRequired = true)]
-        public string Type { get; set; }
+        [ApiMember(Name = "TypeId", Description = "TypeId of the custom attributes.", ParameterType = "property", DataType = "int", IsRequired = true)]
+        public int TypeId { get; set; }
 
         [ApiMember(Name = "UserId", Description = "UserId of the logged in user", ParameterType = "property", DataType = "string", IsRequired = false)]
         public string UserId { get; set; }

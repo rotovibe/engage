@@ -381,7 +381,7 @@ namespace Phytel.API.DataDomain.PatientGoal
             {
                 result = new GetCustomAttributesDataResponse();
                 IAttributeRepository<GetCustomAttributesDataResponse> repo = PatientGoalRepositoryFactory<GetCustomAttributesDataResponse>.GetAttributeLibraryRepository(request.ContractNumber, request.Context);
-                result.CustomAttributes = repo.FindByType(request.Type) as List<CustomAttributeData>;
+                result.CustomAttributes = repo.FindByType(request.TypeId) as List<CustomAttributeData>;
                 result.Version = request.Version;
                 return result;
             }

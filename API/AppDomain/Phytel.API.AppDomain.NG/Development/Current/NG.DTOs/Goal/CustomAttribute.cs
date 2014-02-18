@@ -9,8 +9,8 @@ namespace Phytel.API.AppDomain.NG.DTO
     {
         public string Id { get; set; }
         public string Name { get; set; }
-        public string Type { get; set; }
-        public string ControlType { get; set; }
+        public int Type { get; set; }
+        public int ControlType { get; set; }
         public List<string> Values { get; set; }
         public int Order { get; set; }
         public Dictionary<int, string> Options { get; set; }

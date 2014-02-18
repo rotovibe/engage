@@ -105,7 +105,6 @@
     <Compile Include="PutUpdateTaskRequest.cs" />
     <Compile Include="DeleteTaskResponse.cs" />
     <Compile Include="PutUpdateTaskResponse.cs" />
-    <Compile Include="AttributeData.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

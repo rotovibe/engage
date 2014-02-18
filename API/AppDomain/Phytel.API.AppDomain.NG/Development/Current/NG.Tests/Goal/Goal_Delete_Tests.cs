@@ -68,7 +68,7 @@ namespace Phytel.API.DataDomain.Patient.Service.Test
             List<CustomAttribute> attr = new List<CustomAttribute>();
             attr.Add(new CustomAttribute
             {
-                ControlType = "2",
+                ControlType = 2,
                 Name = "Heart Rate",
                 Order = 1
             });
@@ -81,7 +81,7 @@ namespace Phytel.API.DataDomain.Patient.Service.Test
             tasks.Add(new PatientTask
             {
                 Id = "52fd4d29fe7a5912b0979dee",
-                CustomAttributes = new List<CustomAttribute> { new CustomAttribute { Values = new List<string> { "2" }, Order = 1, Name = "task attribute", ControlType = "1" } },
+                CustomAttributes = new List<CustomAttribute> { new CustomAttribute { Values = new List<string> { "2" }, Order = 1, Name = "task attribute", ControlType = 1 } },
                 BarrierIds = new List<string> { "52fd96c0fe7a5913503f1c64" },
                 PatientGoalId = "52e26f0b072ef7191c111234",
                 Description = "test description",

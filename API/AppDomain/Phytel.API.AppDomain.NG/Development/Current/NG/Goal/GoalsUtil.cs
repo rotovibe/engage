@@ -1,18 +1,6 @@
 ﻿using Phytel.API.AppDomain.NG.DTO;
-using Phytel.API.AppDomain.NG.PlanCOR;
-using Phytel.API.DataDomain.Patient.DTO;
-using Phytel.API.DataDomain.PatientProblem.DTO;
-using Phytel.API.DataDomain.Program.DTO;
-using Phytel.API.Interface;
-using ServiceStack.Service;
-using ServiceStack.ServiceClient.Web;
 using System;
 using System.Collections.Generic;
-using System.Configuration;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using DD = Phytel.API.DataDomain.Program.DTO;
 using AD = Phytel.API.AppDomain.NG.DTO;
 using Phytel.API.DataDomain.PatientGoal.DTO;
 
@@ -307,7 +295,7 @@ namespace Phytel.API.AppDomain.NG
             {
                 pg = new PatientGoal
                 {
-                    CustomAttributes = GoalsEndpointUtil.GetAttributesForInitialize(request, "Goal"), //GetAttributesForInitialize(pgd.Attributes), // change this call when attributes are ready
+                    CustomAttributes = GoalsEndpointUtil.GetAttributesForInitialize(request, 1), //GetAttributesForInitialize(pgd.Attributes), // change this call when attributes are ready
                     EndDate = pgd.EndDate,
                     Id = pgd.Id,
                     Name = pgd.Name,
@@ -330,7 +318,7 @@ namespace Phytel.API.AppDomain.NG
             {
                 pt = new PatientTask
                 {
-                    CustomAttributes = GoalsEndpointUtil.GetAttributesForInitialize(request, "Task"),
+                    CustomAttributes = GoalsEndpointUtil.GetAttributesForInitialize(request, 2),
                     Id = ptd.Id,
                     StartDate = ptd.StartDate,
                     StatusId = ptd.StatusId,

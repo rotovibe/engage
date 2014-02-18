@@ -52,7 +52,7 @@ namespace Phytel.API.DataDomain.PatientGoal.Test
         [TestMethod]
         public void GeCustomAttributesByType()
         {
-            GetCustomAttributesDataRequest request = new GetCustomAttributesDataRequest { Type= "task" };
+            GetCustomAttributesDataRequest request = new GetCustomAttributesDataRequest { TypeId = 2 };
 
             GetCustomAttributesDataResponse response = PatientGoalDataManager.GetCustomAttributesByType(request);
 

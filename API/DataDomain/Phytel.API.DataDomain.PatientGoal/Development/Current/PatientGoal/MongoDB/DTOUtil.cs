@@ -58,42 +58,18 @@ namespace Phytel.API.DataDomain.PatientGoal
 
         }
 
-        internal static List<MAttribute> GetInterventionAttributes(List<PatientGoal.DTO.AttributeData> list)
+        internal static List<CustomAttributeData> GetIdAndValues(List<MAttribute> meAttributes)
         {
-            List<MAttribute> ta = new List<MAttribute>();
-            try
-            {
-                if (list != null && list.Count > 0)
-                {
-                    list.ForEach(t =>
-                    {
-                        ta.Add(new MAttribute
-                        {
-                            Id = ObjectId.Parse(t.Id),
-                            Values = t.Values
-                        });
-                    });
-                }
-                return ta;
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
-
-        internal static List<AttributeData> ConvertToAttributeDataList(List<MAttribute> meAttributes)
-        {
-            List<AttributeData> attrDataList = null;
+            List<CustomAttributeData> customAttrDataList = null;
             if (meAttributes != null && meAttributes.Count != 0)
             {
-                attrDataList = new List<AttributeData>();
+                customAttrDataList = new List<CustomAttributeData>();
                 foreach (MAttribute ma in meAttributes)
                 {
-                    attrDataList.Add(new AttributeData { Id = ma.Id.ToString(), Values = ma.Values});
+                    customAttrDataList.Add( new CustomAttributeData { Id = ma.Id.ToString(), Values = ma.Values });
                 }
             }
-            return attrDataList;
+            return customAttrDataList;
         }
     }
 }

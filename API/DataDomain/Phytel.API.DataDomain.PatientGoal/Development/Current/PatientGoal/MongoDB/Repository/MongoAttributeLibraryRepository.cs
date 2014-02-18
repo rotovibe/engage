@@ -71,47 +71,39 @@ namespace Phytel.API.DataDomain.PatientGoal
             throw new NotImplementedException();
         }
 
-        public IEnumerable<object> FindByType(string type)
+        public IEnumerable<object> FindByType(int TypeId)
         {
             try
             {
                 List<CustomAttributeData> customAttributesList = null;
-                EntityType entityType;
-                if (Enum.TryParse(type, true, out entityType))
+                List<IMongoQuery> queries = new List<IMongoQuery>();
+                queries.Add(Query.EQ(MEAttributeLibrary.TypeProperty, TypeId));
+                queries.Add(Query.EQ(MEAttributeLibrary.DeleteFlagProperty, false));
+                IMongoQuery mQuery = Query.And(queries);
+                using (PatientGoalMongoContext ctx = new PatientGoalMongoContext(_dbName))
                 {
-                    List<IMongoQuery> queries = new List<IMongoQuery>();
-                    queries.Add(Query.EQ(MEAttributeLibrary.TypeProperty, entityType));
-                    queries.Add(Query.EQ(MEAttributeLibrary.DeleteFlagProperty, false));
-                    IMongoQuery mQuery = Query.And(queries);
-                    using (PatientGoalMongoContext ctx = new PatientGoalMongoContext(_dbName))
-                    {
 
-                        List<MEAttributeLibrary> meAttributes = ctx.AttributesLibrary.Collection.Find(mQuery).ToList();
-                        if (meAttributes != null)
+                    List<MEAttributeLibrary> meAttributes = ctx.AttributesLibrary.Collection.Find(mQuery).ToList();
+                    if (meAttributes != null)
+                    {
+                        customAttributesList = new List<CustomAttributeData>();
+                        foreach (MEAttributeLibrary b in meAttributes)
                         {
-                            customAttributesList = new List<CustomAttributeData>();
-                            foreach (MEAttributeLibrary b in meAttributes)
+                            CustomAttributeData data = new CustomAttributeData
                             {
-                                CustomAttributeData data = new CustomAttributeData
-                                {
-                                    Id = b.Id.ToString(),
-                                    Name = b.Name,
-                                    Type = Enum.GetName(typeof(EntityType), b.Type),
-                                    ControlType = Enum.GetName(typeof(AttributeControlType), b.ControlType),
-                                    Order  = b.Order,
-                                    Options = b.Options,
-                                    Required = b.Required
-                                };
-                                customAttributesList.Add(data);
-                            }
+                                Id = b.Id.ToString(),
+                                Name = b.Name,
+                                Type = ((int)(b.Type)),
+                                ControlType = ((int)(b.ControlType)),
+                                Order  = b.Order,
+                                Options = b.Options,
+                                Required = b.Required
+                            };
+                            customAttributesList.Add(data);
                         }
                     }
-                    return customAttributesList;
                 }
-                else
-                {
-                    throw new ApplicationException("Type provided in the request is not a valid.");
-                }
+                return customAttributesList;
             }
             catch (Exception ex) { throw ex; };
         }

@@ -10,6 +10,6 @@ namespace Phytel.API.DataDomain.PatientGoal
 {
     public interface IAttributeRepository<T> : IRepository<T>
     {
-        IEnumerable<object> FindByType(string type);
+        IEnumerable<object> FindByType(int typeId);
     }
 }

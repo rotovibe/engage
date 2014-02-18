@@ -207,12 +207,11 @@ namespace Phytel.API.DataDomain.PatientGoal
                                 PatientGoalId = b.PatientGoalId.ToString(),
                                 StatusId = ((int)b.Status),
                                 TargetDate = b.TargetDate,
-                                //Attributes = DTOUtil.ConvertToAttributeDataList(b.Attributes),
                                 Barriers = Helper.ConvertToStringList(b.Barriers),
                                 Description = b.Description,
                                 StatusDate = b.StatusDate,
-                                StartDate = b.StartDate
-
+                                StartDate = b.StartDate,
+                                CustomAttributes = DTOUtil.GetIdAndValues(b.Attributes)
                             };
                             tasksDataList.Add(taskData);
                         }
