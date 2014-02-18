@@ -211,7 +211,7 @@ namespace Phytel.API.DataDomain.PatientGoal
                                 Description = b.Description,
                                 StatusDate = b.StatusDate,
                                 StartDate = b.StartDate,
-                                CustomAttributes = DTOUtil.GetIdAndValues(b.Attributes)
+                                CustomAttributes = DTOUtil.GetCustomAttributeIdAndValues(b.Attributes)
                             };
                             tasksDataList.Add(taskData);
                         }

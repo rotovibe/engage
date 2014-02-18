@@ -160,6 +160,10 @@ namespace Phytel.API.AppDomain.NG
 
                 if (ddResponse != null && ddResponse.GoalData != null)
                 {
+                    //Make a call to AttributeLibrary to get attributes details for Goal and Task.
+                    List<CustomAttribute> goalAttributesLibrary = GoalsEndpointUtil.GetAttributesLibraryByType(request, 1);
+                    List<CustomAttribute> taskAttributesLibrary = GoalsEndpointUtil.GetAttributesLibraryByType(request, 2);
+                    
                     PatientGoalData g = ddResponse.GoalData;
                     result = new PatientGoal
                     {
@@ -175,9 +179,9 @@ namespace Phytel.API.AppDomain.NG
                         EndDate = g.EndDate,
                         TargetDate = g.TargetDate,
                         TargetValue = g.TargetValue,
-                        CustomAttributes = GoalsUtil.GetAttributes(g.CustomAttributes),
+                        CustomAttributes = GoalsUtil.GetCustomAttributeDetails(g.CustomAttributes, goalAttributesLibrary),
                         Barriers = GoalsUtil.GetBarriers(g.BarriersData),
-                        Tasks = GoalsUtil.GetTasks(g.TasksData),
+                        Tasks = GoalsUtil.GetTasks(g.TasksData, taskAttributesLibrary),
                         Interventions = GoalsUtil.GetInterventions(g.InterventionsData)
                     };
                 }
@@ -528,9 +532,9 @@ namespace Phytel.API.AppDomain.NG
             }
         }
 
-        internal static List<AD.CustomAttribute> GetAttributesForInitialize(IAppDomainRequest request, int typeId)
+        internal static List<CustomAttribute> GetAttributesLibraryByType(IAppDomainRequest request, int typeId)
         {
-            List<AD.CustomAttribute> attr = new List<AD.CustomAttribute>();
+            List<CustomAttribute> attrList = new List<CustomAttribute>();
             try
             {
                 IRestClient client = new JsonServiceClient();
@@ -542,19 +546,22 @@ namespace Phytel.API.AppDomain.NG
                     request.ContractNumber,
                     typeId));
 
-                response.CustomAttributes.ForEach(ca =>
-                {
-                    attr.Add(new AD.CustomAttribute
+                if(response != null && response.CustomAttributes != null)
+                { 
+                    response.CustomAttributes.ForEach(ca =>
                     {
-                        Id = ca.Id,
-                        Name = ca.Name,
-                        ControlType = ca.ControlType,
-                        Order = ca.Order,
-                        Options = GoalsUtil.ConvertToOptionList(ca.Options)
+                        attrList.Add(new CustomAttribute
+                        {
+                            Id = ca.Id,
+                            Name = ca.Name,
+                            ControlType = ca.ControlType,
+                            Order = ca.Order,
+                            Options = GoalsUtil.ConvertToOptionList(ca.Options),
+                            Required = ca.Required
+                        });
                     });
-                });
-
-                return attr;
+                }
+                return attrList;
             }
             catch (WebServiceException ex)
             {

@@ -106,7 +106,7 @@ namespace Phytel.API.DataDomain.PatientGoal
                             EndDate = mePG.EndDate,
                             TargetDate = mePG.TargetDate,
                             TargetValue = mePG.TargetValue,
-                            CustomAttributes = DTOUtil.GetIdAndValues(mePG.Attributes)
+                            CustomAttributes = DTOUtil.GetCustomAttributeIdAndValues(mePG.Attributes)
                         };
                     }
                 }

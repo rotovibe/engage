@@ -58,7 +58,7 @@ namespace Phytel.API.DataDomain.PatientGoal
 
         }
 
-        internal static List<CustomAttributeData> GetIdAndValues(List<MAttribute> meAttributes)
+        internal static List<CustomAttributeData> GetCustomAttributeIdAndValues(List<MAttribute> meAttributes)
         {
             List<CustomAttributeData> customAttrDataList = null;
             if (meAttributes != null && meAttributes.Count != 0)
