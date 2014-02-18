@@ -33,8 +33,8 @@ namespace Phytel.API.AppDomain.NG.Test
             request.ContractNumber = "InHealth001";
             request.UserId = "AD_TestHarness";
             request.Version = "v1";
-            request.Id = "53011e8ed4332316c093952a";
-            request.PatientId = "52f55874072ef709f84e68c5";
+            request.Id = "5303a5ccd4332316b4a69449";
+            request.PatientId = "52f55877072ef709f84e69b0";
             request.UserId = "Snehal";
 
             GoalsManager gManager = new GoalsManager();
@@ -50,7 +50,7 @@ namespace Phytel.API.AppDomain.NG.Test
             request.ContractNumber = "InHealth001";
             request.UserId = "AD_TestHarness";
             request.Version = "v1";
-            request.PatientId = "52f55874072ef709f84e68c5";
+            request.PatientId = "52f55877072ef709f84e69b0";
             request.UserId = "Snehal";
 
             GoalsManager gManager = new GoalsManager();
@@ -72,6 +72,24 @@ namespace Phytel.API.AppDomain.NG.Test
 
             GoalsManager gManager = new GoalsManager();
             PostPatientGoalResponse response = gManager.SavePatientGoal(request);
+
+            Assert.IsNotNull(response);
+        }
+
+
+        
+        [TestMethod]
+        public void InitializePatientGoal_Test()
+        {
+            GetInitializeGoalRequest request = new GetInitializeGoalRequest();
+            request.ContractNumber = "InHealth001";
+            request.UserId = "AD_TestHarness";
+            request.Version = "v1";
+            request.PatientId = "52f55877072ef709f84e69b0";
+            request.UserId = "Snehal";
+
+            GoalsManager gManager = new GoalsManager();
+            GetInitializeGoalResponse response = gManager.GetInitialGoalRequest(request);
 
             Assert.IsNotNull(response);
         }
