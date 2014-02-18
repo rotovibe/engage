@@ -151,16 +151,16 @@ namespace Phytel.API.AppDomain.NG
 
                 // we can thread here if we want!
                 // save goals
-                result = GoalsEndpointUtil.DeleteGoalRequest(request);
+                GoalsEndpointUtil.DeleteGoalRequest(request);
 
                 // save barriers
-                result = GoalsUtil.DeletePatientGoalBarriers(request);
+                GoalsUtil.DeletePatientGoalBarriers(request);
 
                 // save tasks
-                result = GoalsUtil.DeletePatientGoalTasks(request);
+                GoalsUtil.DeletePatientGoalTasks(request);
 
                 // save interventions
-                result = GoalsUtil.DeletePatientGoalInterventions(request);
+                GoalsUtil.DeletePatientGoalInterventions(request);
 
                 pgr.Result = result;
 

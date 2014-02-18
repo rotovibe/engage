@@ -13,9 +13,6 @@ namespace Phytel.API.AppDomain.NG.DTO
 
         [ApiMember(Name = "PatientGoalId", Description = "PatientGoalId of the goal associated", ParameterType = "property", DataType = "string", IsRequired = false)]
         public string PatientGoalId { get; set; }
-
-        [ApiMember(Name = "Goal", Description = "PatientGoal being updated", ParameterType = "property", DataType = "PatientGoal", IsRequired = true)]
-        public PatientGoal Goal { get; set; }
         
         [ApiMember(Name = "UserId", Description = "ID of the user making the request (Internally used ONLY)", ParameterType = "property", DataType = "string", IsRequired = false)]
         public string UserId { get; set; }

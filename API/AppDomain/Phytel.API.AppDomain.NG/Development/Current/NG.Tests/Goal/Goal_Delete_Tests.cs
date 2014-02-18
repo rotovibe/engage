@@ -15,20 +15,19 @@ namespace Phytel.API.DataDomain.Patient.Service.Test
             string contractNumber = "InHealth001";
             string context = "NG";
             string version = "v1";
-            string token = "52fe4a7ed6a4850b2c8f7baf";
+            string token = "53025640d6a4850e20091ecf";
             string patientId = "52e26f0b072ef7191c111c4d";
-            string patientGoalId = "52fd2d6cd433231c845e7d25";
+            string patientGoalId = "53028959d6a4850e206e39cf";
             IRestClient client = new JsonServiceClient();
 
-            PostPatientGoalResponse response = client.Post<PostPatientGoalResponse>(
+            PostDeletePatientGoalResponse response = client.Post<PostDeletePatientGoalResponse>(
                 string.Format(@"http://localhost:888/Nightingale/{0}/{1}/Patient/{2}/Goal/{3}/Delete/?Token={4}",
                 version,
                 contractNumber,
                 patientId,
                 patientGoalId,
-                token), new PostPatientGoalRequest
+                token), new PostDeletePatientGoalRequest
                 {
-                     Goal = PostInitializeGoalRequest()
                 } as object);
         }
 
@@ -36,7 +35,7 @@ namespace Phytel.API.DataDomain.Patient.Service.Test
         {
             PatientGoal goal = new PatientGoal
             {
-                Id = "52fd2d6cd433231c845e7d25",
+                Id = "53028019d6a4850e206e395b",
                 EndDate = System.DateTime.UtcNow.AddDays(30),
                 Interventions = GetInterventions(),
                 Name = "Remember cat facts.",
@@ -84,7 +83,7 @@ namespace Phytel.API.DataDomain.Patient.Service.Test
                 Id = "52fd4d29fe7a5912b0979dee",
                 CustomAttributes = new List<CustomAttribute> { new CustomAttribute { Values = new List<string> { "2" }, Order = 1, Name = "task attribute", ControlType = "1" } },
                 BarrierIds = new List<string> { "52fd96c0fe7a5913503f1c64" },
-                PatientGoalId = "52fd96c0fe7a5913503f1c64",
+                PatientGoalId = "52e26f0b072ef7191c111234",
                 Description = "test description",
                 StartDate = System.DateTime.UtcNow,
                 StatusId = 1,
@@ -112,7 +111,7 @@ namespace Phytel.API.DataDomain.Patient.Service.Test
                 BarrierIds = new List<string> { "52fd96c0fe7a5913503f1c64" },
                 CategoryId = null,
                 Description = "This is a description of interventions.",
-                PatientGoalId = "52fd2d6cd433231c845e7d25",
+                PatientGoalId = "52e26f0b072ef7191c111234",
                 StartDate = System.DateTime.UtcNow,
                 StatusId = 1,
                 StatusDate = System.DateTime.UtcNow
@@ -127,7 +126,7 @@ namespace Phytel.API.DataDomain.Patient.Service.Test
             {
                 Id = "52fe51a1d6a4850944a9d19d",
                 Name = "Barrier name",
-                PatientGoalId = "52fd2d6cd433231c845e7d25",
+                PatientGoalId = "52e26f0b072ef7191c111234",
                 StatusId = 1,
                 StatusDate = System.DateTime.UtcNow
             });

@@ -72,6 +72,7 @@ namespace Phytel.API.AppDomain.NG
                         ad.Add(new CustomAttributeData
                         {
                             Order = a.Order,
+                            Id = a.Id,
                             Name = a.Name,
                             ControlType = a.ControlType
                         });
@@ -160,27 +161,7 @@ namespace Phytel.API.AppDomain.NG
             bool result = false;
             try
             {
-                if (request.Goal.Barriers != null && request.Goal.Barriers.Count > 0)
-                {
-                    List<PatientBarrierData> pbd = new List<PatientBarrierData>();
-                    request.Goal.Barriers.ForEach(b =>
-                    {
-                        pbd.Add(new PatientBarrierData
-                        {
-                            CategoryId = b.CategoryId,
-                            Id = b.Id,
-                            Name = b.Name,
-                            PatientGoalId = b.PatientGoalId,
-                            StatusId = b.StatusId,
-                            StatusDate = b.StatusDate
-                        });
-                    });
-
-                    pbd.ForEach(bd =>
-                    {
-                        result = GoalsEndpointUtil.DeleteBarrierRequest(request, bd.Id);
-                    });
-                }
+                result = GoalsEndpointUtil.DeleteBarrierRequest(request, request.PatientGoalId);
                 return result;
             }
             catch (Exception ex)
@@ -194,31 +175,8 @@ namespace Phytel.API.AppDomain.NG
             bool result = false;
             try
             {
-                if (request.Goal.Tasks != null && request.Goal.Tasks.Count > 0)
-                {
-                    List<PatientTaskData> ptd = new List<PatientTaskData>();
-                    request.Goal.Tasks.ForEach(t =>
-                    {
-                        ptd.Add(new PatientTaskData
-                        {
-                            Id = t.Id,
-                            Attributes = GetAttributeData(t.CustomAttributes),
-                            Barriers = t.BarrierIds,
-                            Description = t.Description,
-                            PatientGoalId = request.Goal.Id,
-                            StartDate = t.StartDate,
-                            StatusId = t.StatusId,
-                            StatusDate = t.StatusDate,
-                            TargetDate = t.TargetDate,
-                            TargetValue = t.TargetValue
-                        });
-                    });
 
-                    ptd.ForEach(td =>
-                    {
-                        GoalsEndpointUtil.DeleteTaskRequest(request, td.Id);
-                    });
-                }
+                GoalsEndpointUtil.DeleteTaskRequest(request, request.PatientGoalId);
                 return result;
             }
             catch (Exception ex)
@@ -232,30 +190,7 @@ namespace Phytel.API.AppDomain.NG
             bool result = false;
             try
             {
-                if (request.Goal.Interventions != null && request.Goal.Interventions.Count > 0)
-                {
-                    List<PatientInterventionData> pid = new List<PatientInterventionData>();
-                    request.Goal.Interventions.ForEach(i =>
-                    {
-                        pid.Add(new PatientInterventionData
-                        {
-                            AssignedToId = i.AssignedToId,
-                            Barriers = i.BarrierIds,
-                            CategoryId = i.CategoryId != null ? i.CategoryId.ToString() : null,
-                            Description = i.Description,
-                            Id = i.Id,
-                            PatientGoalId = i.PatientGoalId,
-                            StartDate = i.StartDate,
-                            StatusId = i.StatusId,
-                            StatusDate = i.StatusDate
-                        });
-                    });
-
-                    pid.ForEach(pi =>
-                    {
-                        result = GoalsEndpointUtil.DeleteInterventionRequest(request, pi.Id);
-                    });
-                }
+                result = GoalsEndpointUtil.DeleteInterventionRequest(request, request.PatientGoalId);
                 return result;
             }
             catch (Exception ex)

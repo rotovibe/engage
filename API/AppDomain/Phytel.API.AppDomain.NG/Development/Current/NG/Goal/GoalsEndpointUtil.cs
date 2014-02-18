@@ -305,7 +305,8 @@ namespace Phytel.API.AppDomain.NG
                             ControlType = a.ControlType,
                             Name = a.Name,
                             Order = a.Order,
-                            Values = a.Values
+                            Values = a.Values,
+                            Id = a.Id
                         });
                     });
                 }
@@ -451,7 +452,7 @@ namespace Phytel.API.AppDomain.NG
                     request.Version,
                     request.ContractNumber,
                     request.PatientId,
-                    request.Goal.Id,
+                    request.PatientGoalId,
                    id,
                    request.UserId));
 
@@ -482,7 +483,7 @@ namespace Phytel.API.AppDomain.NG
                     request.Version,
                     request.ContractNumber,
                     request.PatientId,
-                    request.Goal.Id,
+                    request.PatientGoalId,
                     id,
                     request.UserId));
 
@@ -513,7 +514,7 @@ namespace Phytel.API.AppDomain.NG
                     request.Version,
                     request.ContractNumber,
                     request.PatientId,
-                    request.Goal.Id,
+                    request.PatientGoalId,
                     id,
                     request.UserId));
 
