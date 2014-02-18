@@ -215,7 +215,7 @@ namespace Phytel.API.AppDomain.NG
                             StatusId = b.StatusId,
                             CategoryId = b.CategoryId,
                             Name = b.Name,
-                            PatientGoalId = b.Name, 
+                            PatientGoalId = b.PatientGoalId, 
                             StatusDate = b.StatusDate
                         });
                 }
