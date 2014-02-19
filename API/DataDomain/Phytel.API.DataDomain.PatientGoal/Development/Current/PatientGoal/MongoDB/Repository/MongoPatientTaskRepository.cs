@@ -114,7 +114,8 @@ namespace Phytel.API.DataDomain.PatientGoal
         public object Update(object entity)
         {
             bool result = false;
-            PatientTaskData pt = (PatientTaskData)entity;
+            PutUpdateTaskRequest ptr = (PutUpdateTaskRequest)entity;
+            PatientTaskData pt = ptr.Task;
             try
             {
                 using (PatientGoalMongoContext ctx = new PatientGoalMongoContext(_dbName))
@@ -133,6 +134,9 @@ namespace Phytel.API.DataDomain.PatientGoal
                     var uv = new List<MB.UpdateBuilder>();
                     uv.Add(MB.Update.Set(MEPatientTask.TTLDateProperty, BsonNull.Value));
                     uv.Add(MB.Update.Set(MEPatientTask.DeleteFlagProperty, false));
+                    uv.Add(MB.Update.Set(MEPatientTask.UpdatedByProperty, ptr.UserId));
+                    uv.Add(MB.Update.Set(MEPatientTask.VersionProperty, ptr.Version));
+                    uv.Add(MB.Update.Set(MEPatientTask.LastUpdatedOnProperty, System.DateTime.UtcNow));
                     if (pt.Description != null) uv.Add(MB.Update.Set(MEPatientTask.DescriptionProperty, pt.Description));
                     if (pt.StartDate != null) uv.Add(MB.Update.Set(MEPatientTask.StartDateProperty, pt.StartDate));
                     if (pt.StatusDate != null) uv.Add(MB.Update.Set(MEPatientTask.StatusDateProperty, pt.StatusDate));

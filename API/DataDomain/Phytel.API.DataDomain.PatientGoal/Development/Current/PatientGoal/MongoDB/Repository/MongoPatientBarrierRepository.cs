@@ -132,8 +132,9 @@ namespace Phytel.API.DataDomain.PatientGoal
 
                     var uv = new List<MB.UpdateBuilder>();
                     uv.Add(MB.Update.Set(MEPatientBarrier.TTLDateProperty, BsonNull.Value));
-                    uv.Add(MB.Update.Set(MEPatientIntervention.DeleteFlagProperty, false));
+                    uv.Add(MB.Update.Set(MEPatientBarrier.DeleteFlagProperty, false));
                     uv.Add(MB.Update.Set(MEPatientBarrier.UpdatedByProperty, pbr.UserId));
+                    uv.Add(MB.Update.Set(MEPatientBarrier.VersionProperty, pbr.Version));
                     uv.Add(MB.Update.Set(MEPatientBarrier.LastUpdatedOnProperty, System.DateTime.UtcNow));
                     if (pb.Name != null) uv.Add(MB.Update.Set(MEPatientBarrier.NameProperty, pb.Name));
                     if (pb.PatientGoalId != null) uv.Add(MB.Update.Set(MEPatientBarrier.PatientGoalIdProperty, ObjectId.Parse(pb.PatientGoalId)));

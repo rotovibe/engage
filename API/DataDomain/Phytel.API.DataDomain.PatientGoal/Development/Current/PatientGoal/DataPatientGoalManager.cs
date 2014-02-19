@@ -230,7 +230,7 @@ namespace Phytel.API.DataDomain.PatientGoal
 
                 bool status = false;
                 if (request.TaskIdsList.Count > 0)
-                    status = (bool)repo.Update(request.Task);
+                    status = (bool)repo.Update(request);
 
                 result.Updated = status;
                 return result;
