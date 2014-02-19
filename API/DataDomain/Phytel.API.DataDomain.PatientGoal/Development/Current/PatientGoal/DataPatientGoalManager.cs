@@ -224,11 +224,13 @@ namespace Phytel.API.DataDomain.PatientGoal
                 excludes.ForEach(ex =>
                 {
                     // create delete task request to insert
-                    DeleteTaskRequest dtr = new DeleteTaskRequest { TaskId = request.TaskId, UserId = request.UserId };
+                    DeleteTaskRequest dtr = new DeleteTaskRequest { TaskId = ex, UserId = request.UserId };
                     repo.Delete(dtr);
                 });
 
-                bool status = (bool)repo.Update(request.Task);
+                bool status = false;
+                if (request.TaskIdsList.Count > 0)
+                    status = (bool)repo.Update(request.Task);
 
                 result.Updated = status;
                 return result;
@@ -254,11 +256,13 @@ namespace Phytel.API.DataDomain.PatientGoal
                 excludes.ForEach(ex =>
                 {
                     // create delete intervention request to insert
-                    DeleteInterventionRequest dtr = new DeleteInterventionRequest { InterventionId = request.InterventionId, UserId = request.UserId };
+                    DeleteInterventionRequest dtr = new DeleteInterventionRequest { InterventionId = ex, UserId = request.UserId };
                     repo.Delete(dtr);
                 });
-                
-                bool status = (bool)repo.Update(request);
+
+                bool status = false;
+                if (request.InterventionIdsList.Count > 0)
+                    status = (bool)repo.Update(request);
 
                 result.Updated = status;
                 return result;
@@ -284,11 +288,13 @@ namespace Phytel.API.DataDomain.PatientGoal
                 excludes.ForEach(ex =>
                 {
                     // create delete barrier request to insert
-                    DeleteBarrierRequest dbr = new DeleteBarrierRequest { InterventionId = request.InterventionId, UserId = request.UserId };
+                    DeleteBarrierRequest dbr = new DeleteBarrierRequest { BarrierId = ex, UserId = request.UserId };
                     repo.Delete(dbr);
                 });
 
-                bool status = (bool)repo.Update(request);
+                bool status = false;
+                if (request.BarrierIdsList.Count > 0)
+                    status = (bool)repo.Update(request);
 
                 result.Updated = status;
                 return result;
