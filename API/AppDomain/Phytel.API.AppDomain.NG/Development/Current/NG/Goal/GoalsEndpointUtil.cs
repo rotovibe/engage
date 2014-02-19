@@ -255,7 +255,7 @@ namespace Phytel.API.AppDomain.NG
                     request.Version,
                     request.ContractNumber,
                     request.PatientId,
-                    request.Goal.Id), new PutPatientGoalDataRequest {  GoalData = GetGoalData(request.Goal)} as object);
+                    request.Goal.Id), new PutPatientGoalDataRequest { GoalData = GetGoalData(request.Goal), UserId = request.UserId } as object);
 
                 if (response != null)
                 {
