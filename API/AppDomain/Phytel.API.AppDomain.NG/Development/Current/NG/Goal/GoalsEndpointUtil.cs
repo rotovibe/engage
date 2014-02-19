@@ -433,6 +433,8 @@ namespace Phytel.API.AppDomain.NG
             {
                 bool result = false;
 
+                List<string> barrierIds = GetBarrierIdsForRequest(request.Goal.Barriers);
+
                 IRestClient client = new JsonServiceClient();
                 PutUpdateBarrierResponse response = client.Put<PutUpdateBarrierResponse>(
                     string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Goal/{5}/Barrier/{6}/Update",
@@ -442,7 +444,7 @@ namespace Phytel.API.AppDomain.NG
                     request.ContractNumber,
                     request.PatientId,
                     request.Goal.Id,
-                   bd.Id), new PutUpdateBarrierRequest { UserId = request.UserId, Barrier = bd } as object);
+                   bd.Id), new PutUpdateBarrierRequest { UserId = request.UserId, Barrier = bd, BarrierIdsList = barrierIds } as object);
 
                 if (response != null)
                 {
@@ -454,6 +456,28 @@ namespace Phytel.API.AppDomain.NG
             catch (WebServiceException ex)
             {
                 throw new WebServiceException("AD:PostUpdateBarrierRequest()" + ex.Message, ex.InnerException);
+            }
+        }
+
+        private static List<string> GetBarrierIdsForRequest(List<PatientBarrier> list)
+        {
+            try
+            {
+                List<string> barrierIds = new List<string>();
+
+                if (list != null && list.Count > 0)
+                {
+                    list.ForEach(t =>
+                    {
+                        barrierIds.Add(t.Id);
+                    });
+                }
+
+                return barrierIds;
+            }
+            catch (WebServiceException ex)
+            {
+                throw new WebServiceException("AD:GetBarrierIdsForRequest()" + ex.Message, ex.InnerException);
             }
         }
 
