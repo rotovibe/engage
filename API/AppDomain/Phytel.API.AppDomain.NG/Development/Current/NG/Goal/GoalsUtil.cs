@@ -41,6 +41,16 @@ namespace Phytel.API.AppDomain.NG
                         GoalsEndpointUtil.PostUpdateTaskRequest(request, td);
                     });
                 }
+                else if (request.Goal.Tasks.Count == 0)
+                {
+                    // just delete all of them
+                    PatientTaskData pbd = new PatientTaskData
+                    {
+                        Id = "0",
+                        PatientGoalId = request.PatientGoalId
+                    };
+                    result = GoalsEndpointUtil.PostUpdateTaskRequest(request, pbd);
+                }
                 return result;
             }
             catch (Exception ex)
@@ -80,28 +90,38 @@ namespace Phytel.API.AppDomain.NG
             try
             {
                 if (request.Goal.Interventions != null && request.Goal.Interventions.Count > 0)
-        {
-            List<PatientInterventionData> pid = new List<PatientInterventionData>();
-            request.Goal.Interventions.ForEach(i =>
-            {
-                pid.Add(new PatientInterventionData
                 {
-                    AssignedToId = i.AssignedToId,
-                    Barriers = i.BarrierIds,
-                    CategoryId = i.CategoryId,
-                    Description = i.Description,
-                    Id = i.Id,
-                    PatientGoalId = i.PatientGoalId,
-                    StartDate = i.StartDate,
+                    List<PatientInterventionData> pid = new List<PatientInterventionData>();
+                    request.Goal.Interventions.ForEach(i =>
+                    {
+                        pid.Add(new PatientInterventionData
+                        {
+                            AssignedToId = i.AssignedToId,
+                            Barriers = i.BarrierIds,
+                            CategoryId = i.CategoryId,
+                            Description = i.Description,
+                            Id = i.Id,
+                            PatientGoalId = i.PatientGoalId,
+                            StartDate = i.StartDate,
                             StatusId = i.StatusId,
-                    StatusDate = i.StatusDate
-                });
-            });
+                            StatusDate = i.StatusDate
+                        });
+                    });
 
-            pid.ForEach(pi =>
-            {
+                    pid.ForEach(pi =>
+                    {
                         result = GoalsEndpointUtil.PostUpdateInterventionRequest(request, pi);
                     });
+                }
+                else if (request.Goal.Interventions.Count == 0)
+                {
+                    // just delete all of them
+                    PatientInterventionData pbd = new PatientInterventionData
+                    {
+                        Id = "0",
+                        PatientGoalId = request.PatientGoalId
+                    };
+                    result = GoalsEndpointUtil.PostUpdateInterventionRequest(request, pbd);
                 }
                 return result;
             }
@@ -136,6 +156,16 @@ namespace Phytel.API.AppDomain.NG
                     {
                         result = GoalsEndpointUtil.PostUpdateBarrierRequest(request, bd);
                     });
+                }
+                else if (request.Goal.Barriers.Count == 0)
+                {
+                    // just delete all of them
+                    PatientBarrierData pbd = new PatientBarrierData
+                        {
+                            Id = "0",
+                            PatientGoalId = request.PatientGoalId
+                        };
+                    result = GoalsEndpointUtil.PostUpdateBarrierRequest(request, pbd);
                 }
                 return result;
             }
