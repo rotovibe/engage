@@ -1355,11 +1355,7 @@ namespace Phytel.API.AppDomain.NG
                         {   
                             Id = cd.ContactId,
                             UserId = cd.UserId,
-                            FirstName = cd.FirstName,
-                            MiddleName = cd.MiddleName,
-                            LastName = cd.LastName,
-                            PreferredName = cd.PreferredName,
-                            Gender = cd.Gender
+                            PreferredName = cd.PreferredName
                         });
                     }
                 }

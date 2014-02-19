@@ -875,11 +875,7 @@ namespace Phytel.API.DataDomain.Contact
                             ContactData contactData = new ContactData
                             {
                                ContactId = c.Id.ToString(),
-                               UserId = c.UserId.ToString(),
-                               FirstName = c.FirstName,
-                               MiddleName = c.MiddleName,
-                               LastName = c.LastName,
-                               Gender = c.Gender,
+                               UserId = c.UserId.Replace("-", string.Empty).ToLower(),
                                PreferredName = c.PreferredName
                             };
                             contactDataList.Add(contactData);
