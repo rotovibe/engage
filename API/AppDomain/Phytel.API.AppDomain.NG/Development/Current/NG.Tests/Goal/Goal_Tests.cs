@@ -15,9 +15,9 @@ namespace Phytel.API.DataDomain.Patient.Service.Test
             string contractNumber = "InHealth001";
             string context = "NG";
             string version = "v1";
-            string token = "53025640d6a4850e20091ecf";
+            string token = "5303ddbdd6a4850f14a7a83c";
             string patientId = "52e26f0b072ef7191c111c4d";
-            string patientGoalId = "52fd2d6cd433231c845e7d25";
+            string patientGoalId = "53011f1ed4332316c093952b";
             IRestClient client = new JsonServiceClient();
 
             PostPatientGoalResponse response = client.Post<PostPatientGoalResponse>(
@@ -36,7 +36,7 @@ namespace Phytel.API.DataDomain.Patient.Service.Test
         {
             PatientGoal goal = new PatientGoal
             {
-                Id = "52fd2d6cd433231c845e7d25",
+                Id = "52e26f0b072ef7191c111234",
                 EndDate = System.DateTime.UtcNow.AddDays(30),
                 Interventions = GetInterventions(),
                 Name = "Remember cat facts.",
@@ -82,10 +82,10 @@ namespace Phytel.API.DataDomain.Patient.Service.Test
             List<PatientTask> tasks = new List<PatientTask>();
             tasks.Add(new PatientTask
             {
-                Id = "52fd4d29fe7a5912b0979dee",
+                Id = "530389e3fe7a592258ffc234",
                 CustomAttributes = new List<CustomAttribute> { new CustomAttribute { Values = new List<string> { "200" }, Order = 1, Id = "52fd96c0fe7a5913503f1c64", Name = "task attribute", ControlType = 1 } },
                 BarrierIds = new List<string> { "52fd96c0fe7a5913503f1c64" },
-                PatientGoalId = "52fd96c0fe7a5913503f1c64",
+                PatientGoalId = "52e26f0b072ef7191c111234",
                 Description = "test description",
                 StartDate = System.DateTime.UtcNow,
                 StatusId = 1,
@@ -113,7 +113,7 @@ namespace Phytel.API.DataDomain.Patient.Service.Test
                 BarrierIds = new List<string> { "52fd96c0fe7a5913503f1c64" },
                 CategoryId = null,
                 Description = "This is a description of interventions.",
-                PatientGoalId = "52fd2d6cd433231c845e7d25",
+                PatientGoalId = "53011f1ed4332316c093952b",
                 StartDate = System.DateTime.UtcNow,
                 StatusId = 1,
                 StatusDate = System.DateTime.UtcNow

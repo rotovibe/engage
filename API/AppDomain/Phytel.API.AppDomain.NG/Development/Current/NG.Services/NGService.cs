@@ -31,9 +31,12 @@ namespace Phytel.API.AppDomain.NG.Service
                 else
                     throw new UnauthorizedAccessException();
 
-                List<string> patientIds = new List<string>();
-                patientIds.Add(response.Patient.Id);
-                AuditHelper.LogAuditData(request, patientIds, System.Web.HttpContext.Current.Request, request.GetType().Name);
+                if (response.Patient != null)
+                {
+                    List<string> patientIds = new List<string>();
+                    patientIds.Add(response.Patient.Id);
+                    AuditHelper.LogAuditData(request, patientIds, System.Web.HttpContext.Current.Request, request.GetType().Name);
+                }
                
                 return response;
             }
@@ -50,7 +53,7 @@ namespace Phytel.API.AppDomain.NG.Service
             GetPatientResponse response = new GetPatientResponse();
 
             IRequestContext req = base.RequestContext;
-           
+
             try
             {
                 NGManager ngm = new NGManager();
@@ -64,10 +67,6 @@ namespace Phytel.API.AppDomain.NG.Service
                 else
                     throw new UnauthorizedAccessException();
 
-                List<string> patientIds = new List<string>();
-                patientIds.Add(response.Patient.Id);
-               AuditHelper.LogAuditData(request, patientIds, System.Web.HttpContext.Current.Request, request.GetType().Name);
-               
                 return response;
             }
             catch (Exception ex)
@@ -75,6 +74,15 @@ namespace Phytel.API.AppDomain.NG.Service
                 //TODO: Log this to the SQL database via ASE
                 CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
                 return response;
+            }
+            finally
+            {
+                if (response.Patient != null)
+                {
+                    List<string> patientIds = new List<string>();
+                    patientIds.Add(response.Patient.Id);
+                    AuditHelper.LogAuditData(request, patientIds, System.Web.HttpContext.Current.Request, request.GetType().Name);
+                }
             }
         }
 
@@ -241,9 +249,12 @@ namespace Phytel.API.AppDomain.NG.Service
                 else
                     throw new UnauthorizedAccessException();
 
-                List<string> patientIds = response.Patients.Select(x => x.Id).ToList();
-                AuditHelper.LogAuditData(request, patientIds, System.Web.HttpContext.Current.Request, request.GetType().Name);
-               
+                if (response.Patients != null)
+                {
+                    List<string> patientIds = response.Patients.Select(x => x.Id).ToList();
+                    AuditHelper.LogAuditData(request, patientIds, System.Web.HttpContext.Current.Request, request.GetType().Name);
+                }
+
                 return response;
             }
             catch (Exception ex)
@@ -388,9 +399,12 @@ namespace Phytel.API.AppDomain.NG.Service
                 else
                     throw new UnauthorizedAccessException();
 
-                List<string> patientIds = response.Programs.Select(x => x.PatientId).ToList();
-                AuditHelper.LogAuditData(request, patientIds, System.Web.HttpContext.Current.Request, request.GetType().Name);
-               
+                if (response.Programs != null)
+                {
+                    List<string> patientIds = response.Programs.Select(x => x.PatientId).ToList();
+                    AuditHelper.LogAuditData(request, patientIds, System.Web.HttpContext.Current.Request, request.GetType().Name);
+                }
+
                 return response;
             }
             catch (Exception ex)

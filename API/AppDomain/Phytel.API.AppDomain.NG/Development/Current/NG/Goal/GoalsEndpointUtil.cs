@@ -325,6 +325,8 @@ namespace Phytel.API.AppDomain.NG
             {
                 bool result = false;
 
+                List<string> taskIds = GetTaskIdsForRequest(request.Goal.Tasks);
+
                 IRestClient client = new JsonServiceClient();
                 PutUpdateTaskResponse response = client.Put<PutUpdateTaskResponse>(
                     string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Goal/{5}/Task/{6}/Update",
@@ -334,7 +336,7 @@ namespace Phytel.API.AppDomain.NG
                     request.ContractNumber,
                     request.PatientId,
                     request.Goal.Id,
-                    td.Id), new PutUpdateTaskRequest {  Task = td } as object);
+                    td.Id), new PutUpdateTaskRequest {  Task = td, TaskIdsList = taskIds, UserId = request.UserId } as object);
 
                 if (response != null)
                 {
@@ -349,11 +351,57 @@ namespace Phytel.API.AppDomain.NG
             }
         }
 
+        private static List<string> GetTaskIdsForRequest(List<PatientTask> list)
+        {
+            try
+            {
+                List<string> taskIds = new List<string>();
+
+                if (list != null && list.Count > 0)
+                {
+                    list.ForEach(t =>
+                    {
+                        taskIds.Add(t.Id);
+                    });
+                }
+
+                return taskIds;
+            }
+            catch (WebServiceException ex)
+            {
+                throw new WebServiceException("AD:GetTaskIdsForRequest()" + ex.Message, ex.InnerException);
+            }
+        }
+
+        private static List<string> GetInterventionIdsForRequest(List<PatientIntervention> list)
+        {
+            try
+            {
+                List<string> taskIds = new List<string>();
+
+                if (list != null && list.Count > 0)
+                {
+                    list.ForEach(t =>
+                    {
+                        taskIds.Add(t.Id);
+                    });
+                }
+
+                return taskIds;
+            }
+            catch (WebServiceException ex)
+            {
+                throw new WebServiceException("AD:GetTaskIdsForRequest()" + ex.Message, ex.InnerException);
+            }
+        }
+
         internal static bool PostUpdateInterventionRequest(PostPatientGoalRequest request, PatientInterventionData pi)
         {
             try
             {
                 bool result = false;
+
+                List<string> interventionsIds = GetInterventionIdsForRequest(request.Goal.Interventions);
 
                 IRestClient client = new JsonServiceClient();
                 PutUpdateInterventionResponse response = client.Put<PutUpdateInterventionResponse>(
@@ -364,7 +412,7 @@ namespace Phytel.API.AppDomain.NG
                     request.ContractNumber,
                     request.PatientId,
                     request.Goal.Id,
-                    pi.Id), new PutUpdateInterventionRequest { Intervention = pi, UserId=request.UserId  } as object);
+                    pi.Id), new PutUpdateInterventionRequest { Intervention = pi, UserId=request.UserId, InterventionIdsList = interventionsIds  } as object);
 
                 if (response != null)
                 {

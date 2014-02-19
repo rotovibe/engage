@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using AD = Phytel.API.AppDomain.NG.DTO;
 using Phytel.API.DataDomain.PatientGoal.DTO;
 using Phytel.API.AppDomain.NG.DTO.Goal;
+using System.Linq;
 
 namespace Phytel.API.AppDomain.NG
 {
@@ -17,29 +18,29 @@ namespace Phytel.API.AppDomain.NG
             {
                 if (request.Goal.Tasks != null && request.Goal.Tasks.Count > 0)
                 {
-            List<PatientTaskData> ptd = new List<PatientTaskData>();
-            request.Goal.Tasks.ForEach(t =>
-            {
-                ptd.Add(new PatientTaskData
-                {
-                    Id = t.Id,
-                    Attributes = GetAttributeData(t.CustomAttributes),
-                    Barriers = t.BarrierIds,
-                    Description = t.Description,
-                    PatientGoalId = request.Goal.Id,
-                    StartDate = t.StartDate,
+                    List<PatientTaskData> ptd = new List<PatientTaskData>();
+                    request.Goal.Tasks.ForEach(t =>
+                    {
+                        ptd.Add(new PatientTaskData
+                        {
+                            Id = t.Id,
+                            Attributes = GetAttributeData(t.CustomAttributes),
+                            Barriers = t.BarrierIds,
+                            Description = t.Description,
+                            PatientGoalId = request.Goal.Id,
+                            StartDate = t.StartDate,
                             StatusId = t.StatusId,
-                    StatusDate = t.StatusDate,
-                    TargetDate = t.TargetDate,
-                    TargetValue = t.TargetValue
-                });
-            });
+                            StatusDate = t.StatusDate,
+                            TargetDate = t.TargetDate,
+                            TargetValue = t.TargetValue
+                        });
+                    });
 
-            ptd.ForEach(td =>
-            {
-                GoalsEndpointUtil.PostUpdateTaskRequest(request, td);
-            });
-        }
+                    ptd.ForEach(td =>
+                    {
+                        GoalsEndpointUtil.PostUpdateTaskRequest(request, td);
+                    });
+                }
                 return result;
             }
             catch (Exception ex)

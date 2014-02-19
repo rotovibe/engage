@@ -15,9 +15,9 @@ namespace Phytel.API.DataDomain.Patient.Service.Test
             string contractNumber = "InHealth001";
             string context = "NG";
             string version = "v1";
-            string token = "53025640d6a4850e20091ecf";
+            string token = "5303ddbdd6a4850f14a7a83c";
             string patientId = "52e26f0b072ef7191c111c4d";
-            string patientGoalId = "53028959d6a4850e206e39cf";
+            string patientGoalId = "52e26f0b072ef7191c111234";
             IRestClient client = new JsonServiceClient();
 
             PostDeletePatientGoalResponse response = client.Post<PostDeletePatientGoalResponse>(
@@ -35,7 +35,7 @@ namespace Phytel.API.DataDomain.Patient.Service.Test
         {
             PatientGoal goal = new PatientGoal
             {
-                Id = "53028019d6a4850e206e395b",
+                Id = "52e26f0b072ef7191c111234",
                 EndDate = System.DateTime.UtcNow.AddDays(30),
                 Interventions = GetInterventions(),
                 Name = "Remember cat facts.",
@@ -80,7 +80,7 @@ namespace Phytel.API.DataDomain.Patient.Service.Test
             List<PatientTask> tasks = new List<PatientTask>();
             tasks.Add(new PatientTask
             {
-                Id = "52fd4d29fe7a5912b0979dee",
+                Id = "530389e3fe7a592258ffc234",
                 CustomAttributes = new List<CustomAttribute> { new CustomAttribute { Values = new List<string> { "2" }, Order = 1, Name = "task attribute", ControlType = 1 } },
                 BarrierIds = new List<string> { "52fd96c0fe7a5913503f1c64" },
                 PatientGoalId = "52e26f0b072ef7191c111234",
