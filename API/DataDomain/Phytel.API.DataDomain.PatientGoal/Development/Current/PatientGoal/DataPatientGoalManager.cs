@@ -198,27 +198,21 @@ namespace Phytel.API.DataDomain.PatientGoal
                 PutUpdateTaskResponse result = new PutUpdateTaskResponse();
 
                 IPatientGoalRepository<PutUpdateTaskResponse> repo = PatientGoalRepositoryFactory<PutUpdateTaskResponse>.GetPatientTaskRepository(request.ContractNumber, request.Context);
+                List<PatientTaskData> ptd = (List<PatientTaskData>)repo.FindByGoalId(request.PatientGoalId);
+                List<string> dbTaskIdList = GetTaskIds(ptd);
+
+                // update existing task entries with a delete
+                List<string> excludes = dbTaskIdList.Except(request.TaskIdsList).ToList<string>();
+                excludes.ForEach(ex =>
+                {
+                    // create delete task request to insert
+                    DeleteTaskRequest dtr = new DeleteTaskRequest { TaskId = request.TaskId, UserId = request.UserId };
+                    repo.Delete(dtr);
+                });
+
                 bool status = (bool)repo.Update(request.Task);
 
                 result.Updated = status;
-                return result;
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
-        #endregion
-
-        public static PutInitializeInterventionResponse InsertNewPatientIntervention(PutInitializeInterventionRequest request)
-        {
-            try
-            {
-                PutInitializeInterventionResponse result = new PutInitializeInterventionResponse();
-
-                IPatientGoalRepository<PutInitializeInterventionResponse> repo = PatientGoalRepositoryFactory<PutInitializeInterventionResponse>.GetPatientInterventionRepository(request.ContractNumber, request.Context);
-
-                result.Id = (string)repo.Initialize(request);
                 return result;
             }
             catch (Exception ex)
@@ -234,9 +228,79 @@ namespace Phytel.API.DataDomain.PatientGoal
                 PutUpdateInterventionResponse result = new PutUpdateInterventionResponse();
 
                 IPatientGoalRepository<PutUpdateInterventionResponse> repo = PatientGoalRepositoryFactory<PutUpdateInterventionResponse>.GetPatientInterventionRepository(request.ContractNumber, request.Context);
+                List<PatientInterventionData> pid = (List<PatientInterventionData>)repo.FindByGoalId(request.PatientGoalId);
+                List<string> dbTaskIdList = GetInterventionIds(pid);
+
+                // update existing task entries with a delete
+                List<string> excludes = dbTaskIdList.Except(request.InterventionIdsList).ToList<string>();
+                excludes.ForEach(ex =>
+                {
+                    // create delete task request to insert
+                    DeleteInterventionRequest dtr = new DeleteInterventionRequest { InterventionId = request.InterventionId, UserId = request.UserId };
+                    repo.Delete(dtr);
+                });
+                
                 bool status = (bool)repo.Update(request);
 
                 result.Updated = status;
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        private static List<string> GetInterventionIds(List<PatientInterventionData> ptd)
+        {
+            List<string> list = new List<string>();
+            try
+            {
+                if (ptd != null && ptd.Count > 0)
+                {
+                    ptd.ForEach(t =>
+                    {
+                        list.Add(t.Id);
+                    });
+                }
+                return list;
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+
+        private static List<string> GetTaskIds(List<PatientTaskData> ptd)
+        {
+            List<string> list = new List<string>();
+            try
+            {
+                if (ptd != null && ptd.Count > 0)
+                {
+                    ptd.ForEach(t =>
+                    {
+                        list.Add(t.Id);
+                    });
+                }
+                return list;
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+        #endregion
+
+        public static PutInitializeInterventionResponse InsertNewPatientIntervention(PutInitializeInterventionRequest request)
+        {
+            try
+            {
+                PutInitializeInterventionResponse result = new PutInitializeInterventionResponse();
+
+                IPatientGoalRepository<PutInitializeInterventionResponse> repo = PatientGoalRepositoryFactory<PutInitializeInterventionResponse>.GetPatientInterventionRepository(request.ContractNumber, request.Context);
+
+                result.Id = (string)repo.Initialize(request);
                 return result;
             }
             catch (Exception ex)

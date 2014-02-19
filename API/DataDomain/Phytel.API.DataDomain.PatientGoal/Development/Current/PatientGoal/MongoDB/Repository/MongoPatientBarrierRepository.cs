@@ -13,12 +13,15 @@ using MB = MongoDB.Driver.Builders;
 using MongoDB.Bson;
 using Phytel.API.Common;
 using Phytel.API.Common.Data;
+using System.Configuration;
 
 namespace Phytel.API.DataDomain.PatientGoal
 {
     public class MongoPatientBarrierRepository<T> : IPatientGoalRepository<T>
     {
         private string _dbName = string.Empty;
+        private int _expireDays = Convert.ToInt32(ConfigurationManager.AppSettings["ExpireDays"]);
+        private int _initializeDays = Convert.ToInt32(ConfigurationManager.AppSettings["InitializeDays"]);
 
         public MongoPatientBarrierRepository(string contractDBName)
         {
@@ -55,7 +58,7 @@ namespace Phytel.API.DataDomain.PatientGoal
                     var q = MB.Query<MEPatientBarrier>.EQ(b => b.Id, ObjectId.Parse(request.BarrierId));
 
                     var uv = new List<MB.UpdateBuilder>();
-                    uv.Add(MB.Update.Set(MEPatientBarrier.TTLDateProperty, System.DateTime.UtcNow.AddDays(7)));
+                    uv.Add(MB.Update.Set(MEPatientBarrier.TTLDateProperty, System.DateTime.UtcNow.AddDays(_expireDays)));
                     uv.Add(MB.Update.Set(MEPatientBarrier.DeleteFlagProperty, true));
                     uv.Add(MB.Update.Set(MEPatientBarrier.UpdatedByProperty, request.UserId));
 
@@ -119,6 +122,7 @@ namespace Phytel.API.DataDomain.PatientGoal
 
                     var uv = new List<MB.UpdateBuilder>();
                     uv.Add(MB.Update.Set(MEPatientBarrier.TTLDateProperty, BsonNull.Value));
+                    uv.Add(MB.Update.Set(MEPatientIntervention.DeleteFlagProperty, false));
                     uv.Add(MB.Update.Set(MEPatientBarrier.UpdatedByProperty, pbr.UserId));
                     uv.Add(MB.Update.Set(MEPatientBarrier.LastUpdatedOnProperty, System.DateTime.UtcNow));
                     if (pb.Name != null) uv.Add(MB.Update.Set(MEPatientBarrier.NameProperty, pb.Name));
@@ -157,7 +161,7 @@ namespace Phytel.API.DataDomain.PatientGoal
                 {
                     Id = ObjectId.GenerateNewId(),
                     PatientGoalId = ObjectId.Parse(request.PatientGoalId),
-                    TTLDate = System.DateTime.UtcNow.AddDays(1),
+                    TTLDate = System.DateTime.UtcNow.AddDays(_initializeDays),
                     UpdatedBy = request.UserId,
                     LastUpdatedOn = DateTime.UtcNow
                 };

@@ -14,12 +14,15 @@ using MongoDB.Bson;
 using Phytel.API.Common;
 using Phytel.API.Common.Data;
 using Phytel.API.DataDomain.PatientGoal;
+using System.Configuration;
 
 namespace Phytel.API.DataDomain.PatientGoal
 {
     public class MongoPatientInterventionRepository<T> : IPatientGoalRepository<T>
     {
         private string _dbName = string.Empty;
+        private int _expireDays = Convert.ToInt32(ConfigurationManager.AppSettings["ExpireDays"]);
+        private int _initializeDays = Convert.ToInt32(ConfigurationManager.AppSettings["InitializeDays"]);
 
         public MongoPatientInterventionRepository(string contractDBName)
         {
@@ -56,7 +59,7 @@ namespace Phytel.API.DataDomain.PatientGoal
                     var q = MB.Query<MEPatientIntervention>.EQ(b => b.Id, ObjectId.Parse(request.InterventionId));
 
                     var uv = new List<MB.UpdateBuilder>();
-                    uv.Add(MB.Update.Set(MEPatientIntervention.TTLDateProperty, System.DateTime.UtcNow.AddDays(7)));
+                    uv.Add(MB.Update.Set(MEPatientIntervention.TTLDateProperty, System.DateTime.UtcNow.AddDays(_expireDays)));
                     uv.Add(MB.Update.Set(MEPatientIntervention.DeleteFlagProperty, true));
                     uv.Add(MB.Update.Set(MEPatientIntervention.UpdatedByProperty, request.UserId));
 
@@ -120,6 +123,7 @@ namespace Phytel.API.DataDomain.PatientGoal
 
                     var uv = new List<MB.UpdateBuilder>();
                     uv.Add(MB.Update.Set(MEPatientIntervention.TTLDateProperty, BsonNull.Value));
+                    uv.Add(MB.Update.Set(MEPatientIntervention.DeleteFlagProperty, false));
                     if (ir.UserId != null) uv.Add(MB.Update.Set(MEPatientIntervention.UpdatedByProperty, ir.UserId));
                     if (pt.Description != null) uv.Add(MB.Update.Set(MEPatientIntervention.DescriptionProperty, pt.Description));
                     if (pt.StartDate != null) uv.Add(MB.Update.Set(MEPatientIntervention.StartDateProperty, pt.StartDate));
@@ -159,7 +163,7 @@ namespace Phytel.API.DataDomain.PatientGoal
                 {
                     Id = ObjectId.GenerateNewId(),
                     PatientGoalId = ObjectId.Parse(ptr.PatientGoalId),
-                    TTLDate = System.DateTime.UtcNow.AddDays(1),
+                    TTLDate = System.DateTime.UtcNow.AddDays(_initializeDays),
                     UpdatedBy = ptr.UserId,
                     LastUpdatedOn = DateTime.UtcNow
                 };
