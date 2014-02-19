@@ -120,7 +120,16 @@ namespace Phytel.API.DataDomain.PatientGoal
                 using (PatientGoalMongoContext ctx = new PatientGoalMongoContext(_dbName))
                 {
                     var q = MB.Query<MEPatientTask>.EQ(b => b.Id, ObjectId.Parse(pt.Id));
-
+                    
+                    // Set the StatusDate to Now if the status is changed.
+                    MEPatientTask existingPB = ctx.PatientTasks.Collection.Find(q).SetFields(MEPatientTask.StatusProperty).FirstOrDefault();
+                    if (existingPB != null)
+                    {
+                        if ((int)existingPB.Status != pt.StatusId)
+                        {
+                            pt.StatusDate = DateTime.UtcNow;
+                        }
+                    }
                     var uv = new List<MB.UpdateBuilder>();
                     uv.Add(MB.Update.Set(MEPatientTask.TTLDateProperty, BsonNull.Value));
                     uv.Add(MB.Update.Set(MEPatientTask.DeleteFlagProperty, false));

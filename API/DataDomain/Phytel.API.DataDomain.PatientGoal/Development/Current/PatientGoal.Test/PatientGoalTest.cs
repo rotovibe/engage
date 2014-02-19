@@ -58,5 +58,23 @@ namespace Phytel.API.DataDomain.PatientGoal.Test
 
             Assert.IsNotNull(response.CustomAttributes);
         }
+
+        [TestMethod]
+        public void UpdateBarriers_Test()
+        {
+            List<string> barrierIds = new List<string>();
+            barrierIds.Add("53050058d6a4850f149fb508");
+            PutUpdateBarrierRequest req = new PutUpdateBarrierRequest
+            {
+                Context = "NG",
+                ContractNumber = "InHealth001",
+                PatientGoalId = "5304fffcd6a4850f149fb4fb",
+                Barrier = new PatientBarrierData {  Id = "53050042d6a4850f149fb504", Name = "name changed", StatusId = 2},
+                BarrierIdsList = barrierIds
+            };
+
+            PutUpdateBarrierResponse response = PatientGoalDataManager.UpdatePatientBarrier(req);
+            Assert.IsTrue(response.Updated);
+        }
     }
 }

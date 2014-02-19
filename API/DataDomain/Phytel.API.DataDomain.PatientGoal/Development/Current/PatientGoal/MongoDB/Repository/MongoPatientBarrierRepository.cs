@@ -120,6 +120,16 @@ namespace Phytel.API.DataDomain.PatientGoal
                 {
                     var q = MB.Query<MEPatientBarrier>.EQ(b => b.Id, ObjectId.Parse(pb.Id));
 
+                    // Set the StatusDate to Now if the status is changed.
+                    MEPatientBarrier existingPB = ctx.PatientBarriers.Collection.Find(q).SetFields(MEPatientBarrier.StatusProperty).FirstOrDefault();
+                    if (existingPB != null)
+                    {
+                        if ((int)existingPB.Status != pb.StatusId)
+                        {
+                            pb.StatusDate = DateTime.UtcNow;
+                        }
+                    }
+
                     var uv = new List<MB.UpdateBuilder>();
                     uv.Add(MB.Update.Set(MEPatientBarrier.TTLDateProperty, BsonNull.Value));
                     uv.Add(MB.Update.Set(MEPatientIntervention.DeleteFlagProperty, false));
