@@ -3,7 +3,7 @@ using Phytel.API.DataDomain.Program.DTO;
 using Phytel.API.DataDomain.Program.MongoDB.DTO;
 using Phytel.Mongo.Linq;
 
-namespace Phytel.API.AppDomain.Program
+namespace Phytel.API.DataDomain.Program
 {
     public class ProgramMongoContext : MongoContext
     {

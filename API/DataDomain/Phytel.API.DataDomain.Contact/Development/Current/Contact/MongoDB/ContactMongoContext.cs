@@ -2,7 +2,7 @@ using MongoDB.Bson;
 using Phytel.API.DataDomain.Contact.DTO;
 using Phytel.Mongo.Linq;
 
-namespace Phytel.API.AppDomain.Contact
+namespace Phytel.API.DataDomain.Contact
 {
     public class ContactMongoContext : MongoContext
     {

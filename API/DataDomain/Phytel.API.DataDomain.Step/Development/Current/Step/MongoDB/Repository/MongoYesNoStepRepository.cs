@@ -8,7 +8,7 @@ using Phytel.API.Interface;
 using MongoDB.Driver;
 using MongoDB.Driver.Builders;
 using MongoDB.Bson;
-using Phytel.API.AppDomain.Step;
+using Phytel.API.DataDomain.Step;
 using Phytel.API.Common;
 
 namespace Phytel.API.DataDomain.Step

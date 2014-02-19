@@ -8,7 +8,7 @@ using Phytel.API.Interface;
 using MongoDB.Driver;
 using MongoDB.Driver.Builders;
 using MongoDB.Bson;
-using Phytel.API.AppDomain.Module;
+using Phytel.API.DataDomain.Module;
 using Phytel.API.DataDomain.Module.MongoDB.DTO;
 
 namespace Phytel.API.DataDomain.Module

@@ -2,7 +2,7 @@ using MongoDB.Bson;
 using Phytel.API.DataDomain.PatientGoal.DTO;
 using Phytel.Mongo.Linq;
 
-namespace Phytel.API.AppDomain.PatientGoal
+namespace Phytel.API.DataDomain.PatientGoal
 {
     public class PatientGoalMongoContext : MongoContext
     {

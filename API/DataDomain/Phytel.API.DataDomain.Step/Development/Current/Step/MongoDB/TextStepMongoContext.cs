@@ -2,7 +2,7 @@ using MongoDB.Bson;
 using Phytel.API.DataDomain.Step.DTO;
 using Phytel.Mongo.Linq;
 
-namespace Phytel.API.AppDomain.Step
+namespace Phytel.API.DataDomain.Step
 {
     public class TextStepMongoContext : MongoContext
     {

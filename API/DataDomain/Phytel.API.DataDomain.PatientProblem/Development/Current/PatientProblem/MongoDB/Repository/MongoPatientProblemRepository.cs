@@ -4,7 +4,7 @@ using System.Linq;
 using MongoDB.Bson;
 using MongoDB.Driver;
 using MongoDB.Driver.Builders;
-using Phytel.API.AppDomain.PatientProblem;
+using Phytel.API.DataDomain.PatientProblem;
 using Phytel.API.DataDomain.PatientProblem.DTO;
 using Phytel.API.Interface;
 using MB = MongoDB.Driver.Builders;

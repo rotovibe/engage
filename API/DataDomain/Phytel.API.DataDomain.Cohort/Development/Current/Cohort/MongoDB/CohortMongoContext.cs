@@ -2,7 +2,7 @@
 using Phytel.API.DataDomain.Cohort.DTO;
 using Phytel.Mongo.Linq;
 
-namespace Phytel.API.AppDomain.Cohort
+namespace Phytel.API.DataDomain.Cohort
 {
     public class CohortMongoContext : MongoContext
     {

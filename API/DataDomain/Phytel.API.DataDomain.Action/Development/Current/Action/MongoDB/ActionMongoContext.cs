@@ -2,7 +2,7 @@ using MongoDB.Bson;
 using Phytel.API.DataDomain.Action.DTO;
 using Phytel.Mongo.Linq;
 
-namespace Phytel.API.AppDomain.Action
+namespace Phytel.API.DataDomain.Action
 {
     public class ActionMongoContext : MongoContext
     {

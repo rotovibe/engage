@@ -2,7 +2,7 @@
 using Phytel.API.DataDomain.PatientProblem.DTO;
 using Phytel.Mongo.Linq;
 
-namespace Phytel.API.AppDomain.PatientProblem
+namespace Phytel.API.DataDomain.PatientProblem
 {
     public class PatientProblemMongoContext : MongoContext
     {
