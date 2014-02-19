@@ -24,7 +24,7 @@ namespace Phytel.API.AppDomain.NG
                         ptd.Add(new PatientTaskData
                         {
                             Id = t.Id,
-                            Attributes = GetAttributeData(t.CustomAttributes),
+                            CustomAttributes = GetAttributeData(t.CustomAttributes),
                             Barriers = t.BarrierIds,
                             Description = t.Description,
                             PatientGoalId = request.Goal.Id,
@@ -244,7 +244,7 @@ namespace Phytel.API.AppDomain.NG
                         TargetValue = t.TargetValue,
                         StatusId = t.StatusId,
                         TargetDate = t.TargetDate,
-                        CustomAttributes = GetCustomAttributeDetails(t.Attributes, taskAttributesLibrary),
+                        CustomAttributes = GetCustomAttributeDetails(t.CustomAttributes, taskAttributesLibrary),
                         BarrierIds = t.Barriers,
                         Description = t.Description,
                         StatusDate = t.StatusDate,

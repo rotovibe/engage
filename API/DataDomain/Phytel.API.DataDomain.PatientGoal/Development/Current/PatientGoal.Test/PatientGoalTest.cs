@@ -11,7 +11,7 @@ namespace Phytel.API.DataDomain.PatientGoal.Test
         [TestMethod]
         public void GetPatientGoalByID()
         {
-            GetPatientGoalDataRequest request = new GetPatientGoalDataRequest { Id = "5303a5ccd4332316b4a69449" };
+            GetPatientGoalDataRequest request = new GetPatientGoalDataRequest { Id = "5304d677d6a4850f14e4cc93" };
 
             GetPatientGoalDataResponse response = PatientGoalDataManager.GetPatientGoal(request);
 
