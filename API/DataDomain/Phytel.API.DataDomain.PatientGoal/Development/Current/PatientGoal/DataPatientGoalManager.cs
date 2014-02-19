@@ -181,7 +181,7 @@ namespace Phytel.API.DataDomain.PatientGoal
                 PutPatientGoalDataResponse result = new PutPatientGoalDataResponse();
 
                 IPatientGoalRepository<PutPatientGoalDataResponse> repo = PatientGoalRepositoryFactory<PutPatientGoalDataResponse>.GetPatientGoalRepository(request.ContractNumber, request.Context);
-                bool status = (bool)repo.Update(request.GoalData);
+                bool status = (bool)repo.Update(request);
 
                 result.Updated = status;
                 return result;
@@ -230,7 +230,7 @@ namespace Phytel.API.DataDomain.PatientGoal
 
                 bool status = false;
                 if (request.TaskIdsList.Count > 0)
-                    status = (bool)repo.Update(request.Task);
+                    status = (bool)repo.Update(request);
 
                 result.Updated = status;
                 return result;

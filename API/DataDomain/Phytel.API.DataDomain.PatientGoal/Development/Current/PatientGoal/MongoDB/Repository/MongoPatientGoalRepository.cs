@@ -141,7 +141,8 @@ namespace Phytel.API.DataDomain.PatientGoal
         public object Update(object entity)
         {
             bool result = false;
-            PatientGoalData pt = (PatientGoalData)entity;
+            PutPatientGoalDataRequest ptg = (PutPatientGoalDataRequest)entity;
+            PatientGoalData pt = ptg.GoalData;
             try
             {
                 using (PatientGoalMongoContext ctx = new PatientGoalMongoContext(_dbName))
@@ -150,7 +151,8 @@ namespace Phytel.API.DataDomain.PatientGoal
 
                     var uv = new List<MB.UpdateBuilder>();
                     uv.Add(MB.Update.Set(MEPatientGoal.TTLDateProperty, BsonNull.Value));
-                    uv.Add(MB.Update.Set(MEPatientIntervention.DeleteFlagProperty, false));
+                    uv.Add(MB.Update.Set(MEPatientGoal.DeleteFlagProperty, false));
+                    uv.Add(MB.Update.Set(MEPatientGoal.UpdatedByProperty, ptg.UserId));
                     if (pt.PatientId != null) uv.Add(MB.Update.Set(MEPatientGoal.PatientIdProperty, ObjectId.Parse(pt.PatientId)));
                     if (pt.FocusAreaIds != null) { uv.Add(MB.Update.SetWrapped<List<ObjectId>>(MEPatientGoal.FocusAreaProperty, DTOUtil.ConvertObjectId(pt.FocusAreaIds))); }
                     if (pt.Name != null) uv.Add(MB.Update.Set(MEPatientGoal.NameProperty, pt.Name));
