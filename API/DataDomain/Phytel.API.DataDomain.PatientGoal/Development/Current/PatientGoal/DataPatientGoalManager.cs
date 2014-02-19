@@ -174,6 +174,24 @@ namespace Phytel.API.DataDomain.PatientGoal
         #endregion
 
         #region // TASKS
+        public static PutPatientGoalDataResponse PutPatientGoal(PutPatientGoalDataRequest request)
+        {
+            try
+            {
+                PutPatientGoalDataResponse result = new PutPatientGoalDataResponse();
+
+                IPatientGoalRepository<PutPatientGoalDataResponse> repo = PatientGoalRepositoryFactory<PutPatientGoalDataResponse>.GetPatientGoalRepository(request.ContractNumber, request.Context);
+                bool status = (bool)repo.Update(request.GoalData);
+
+                result.Updated = status;
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
         public static PutInitializeTaskResponse InsertNewPatientTask(PutInitializeTaskRequest request)
         {
             try
@@ -231,11 +249,11 @@ namespace Phytel.API.DataDomain.PatientGoal
                 List<PatientInterventionData> pid = (List<PatientInterventionData>)repo.FindByGoalId(request.PatientGoalId);
                 List<string> dbTaskIdList = GetInterventionIds(pid);
 
-                // update existing task entries with a delete
+                // update existing intervention entries with a delete
                 List<string> excludes = dbTaskIdList.Except(request.InterventionIdsList).ToList<string>();
                 excludes.ForEach(ex =>
                 {
-                    // create delete task request to insert
+                    // create delete intervention request to insert
                     DeleteInterventionRequest dtr = new DeleteInterventionRequest { InterventionId = request.InterventionId, UserId = request.UserId };
                     repo.Delete(dtr);
                 });
@@ -251,7 +269,57 @@ namespace Phytel.API.DataDomain.PatientGoal
             }
         }
 
+        public static PutUpdateBarrierResponse UpdatePatientBarrier(PutUpdateBarrierRequest request)
+        {
+            try
+            {
+                PutUpdateBarrierResponse result = new PutUpdateBarrierResponse();
+
+                IPatientGoalRepository<PutUpdateBarrierResponse> repo = PatientGoalRepositoryFactory<PutUpdateBarrierResponse>.GetPatientBarrierRepository(request.ContractNumber, request.Context);
+                List<PatientBarrierData> pid = (List<PatientBarrierData>)repo.FindByGoalId(request.PatientGoalId);
+                List<string> dbBarrierIdList = GetBarrierIds(pid);
+
+                // update existing barrier entries with a delete
+                List<string> excludes = dbBarrierIdList.Except(request.BarrierIdsList).ToList<string>();
+                excludes.ForEach(ex =>
+                {
+                    // create delete barrier request to insert
+                    DeleteBarrierRequest dbr = new DeleteBarrierRequest { InterventionId = request.InterventionId, UserId = request.UserId };
+                    repo.Delete(dbr);
+                });
+
+                bool status = (bool)repo.Update(request);
+
+                result.Updated = status;
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
         private static List<string> GetInterventionIds(List<PatientInterventionData> ptd)
+        {
+            List<string> list = new List<string>();
+            try
+            {
+                if (ptd != null && ptd.Count > 0)
+                {
+                    ptd.ForEach(t =>
+                    {
+                        list.Add(t.Id);
+                    });
+                }
+                return list;
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+
+        private static List<string> GetBarrierIds(List<PatientBarrierData> ptd)
         {
             List<string> list = new List<string>();
             try
@@ -301,42 +369,6 @@ namespace Phytel.API.DataDomain.PatientGoal
                 IPatientGoalRepository<PutInitializeInterventionResponse> repo = PatientGoalRepositoryFactory<PutInitializeInterventionResponse>.GetPatientInterventionRepository(request.ContractNumber, request.Context);
 
                 result.Id = (string)repo.Initialize(request);
-                return result;
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
-
-        public static PutPatientGoalDataResponse PutPatientGoal(PutPatientGoalDataRequest request)
-        {
-            try
-            {
-                PutPatientGoalDataResponse result = new PutPatientGoalDataResponse();
-
-                IPatientGoalRepository<PutPatientGoalDataResponse> repo = PatientGoalRepositoryFactory<PutPatientGoalDataResponse>.GetPatientGoalRepository(request.ContractNumber, request.Context);
-                bool status = (bool)repo.Update(request.GoalData);
-
-                result.Updated = status;
-                return result;
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
-
-        public static PutUpdateBarrierResponse UpdatePatientBarrier(PutUpdateBarrierRequest request)
-        {
-            try
-            {
-                PutUpdateBarrierResponse result = new PutUpdateBarrierResponse();
-
-                IPatientGoalRepository<PutUpdateBarrierResponse> repo = PatientGoalRepositoryFactory<PutUpdateBarrierResponse>.GetPatientBarrierRepository(request.ContractNumber, request.Context);
-                bool status = (bool)repo.Update(request);
-
-                result.Updated = status;
                 return result;
             }
             catch (Exception ex)

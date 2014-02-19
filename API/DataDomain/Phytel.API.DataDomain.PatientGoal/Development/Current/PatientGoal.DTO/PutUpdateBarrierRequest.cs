@@ -1,5 +1,6 @@
 using Phytel.API.Interface;
 using ServiceStack.ServiceHost;
+using System.Collections.Generic;
 
 namespace Phytel.API.DataDomain.PatientGoal.DTO
 {
@@ -11,6 +12,9 @@ namespace Phytel.API.DataDomain.PatientGoal.DTO
 
         [ApiMember(Name = "PatientGoalId", Description = "Id of the PatientGoal.", ParameterType = "property", DataType = "string", IsRequired = true)]
         public string PatientGoalId { get; set; }
+
+        [ApiMember(Name = "BarrierIdsList", Description = "BarrierIdsList list to reference", ParameterType = "body", DataType = "string", IsRequired = false)]
+        public List<string> BarrierIdsList { get; set; }
 
         [ApiMember(Name = "BarrierId", Description = "BarrierId", ParameterType = "property", DataType = "string", IsRequired = false)]
         public string BarrierId { get; set; }
