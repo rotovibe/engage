@@ -101,6 +101,7 @@ namespace Phytel.API.DataDomain.PatientGoal
                             };
                             customAttributesList.Add(data);
                         }
+                        customAttributesList = customAttributesList.OrderBy(o => o.Order).ToList();
                     }
                 }
                 return customAttributesList;
