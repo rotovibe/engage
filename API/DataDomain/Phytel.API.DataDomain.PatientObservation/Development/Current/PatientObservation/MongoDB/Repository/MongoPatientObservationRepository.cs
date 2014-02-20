@@ -8,9 +8,8 @@ using Phytel.API.Interface;
 using MongoDB.Driver;
 using MongoDB.Driver.Builders;
 using MongoDB.Bson;
-using Phytel.API.AppDomain.PatientObservation;
+using Phytel.API.DataDomain.PatientObservation;
 using MB = MongoDB.Driver.Builders;
-using MongoDB.Bson;
 using Phytel.API.Common;
 using Phytel.API.Common.Data;
 
