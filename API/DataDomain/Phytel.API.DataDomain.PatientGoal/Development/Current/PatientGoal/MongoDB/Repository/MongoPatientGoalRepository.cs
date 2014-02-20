@@ -250,6 +250,7 @@ namespace Phytel.API.DataDomain.PatientGoal
                             };
                             goalsViewDataList.Add(goalViewData);
                         }
+                        goalsViewDataList = goalsViewDataList.OrderByDescending(o => o.Id).ToList();
                     }
                 }
                 return goalsViewDataList;
