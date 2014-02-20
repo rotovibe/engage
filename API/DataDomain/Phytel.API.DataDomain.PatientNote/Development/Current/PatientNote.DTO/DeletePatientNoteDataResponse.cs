@@ -4,11 +4,10 @@ using Phytel.API.Interface;
 
 namespace Phytel.API.DataDomain.PatientNote.DTO
 {
-    public class GetAllPatientNotesResponse : IDomainResponse
-   {
-        public List<PatientNote> PatientNotes { get; set; }
+    public class DeletePatientNoteDataResponse : IDomainResponse
+    {
+        public bool Success { get; set; }
         public string Version { get; set; }
         public ResponseStatus Status { get; set; }
-   }
-
+    }
 }

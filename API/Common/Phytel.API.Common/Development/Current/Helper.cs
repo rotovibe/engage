@@ -51,5 +51,28 @@ namespace Phytel.API.Common
             }
             return stringList;
         }
+
+        /// <summary>
+        /// Converts a list of strings to list of ObjectIds.
+        /// </summary>
+        /// <param name="objectIds">list of strings</param>
+        /// <returns>list of ObjectIds</returns>
+        public static List<ObjectId> ConvertToObjectIdList(List<string> stringList)
+        {
+            List<ObjectId> objectIdList = null;
+            if (stringList != null && stringList.Count > 0)
+            {
+                objectIdList = new List<ObjectId>();
+                stringList.ForEach(l =>
+                {
+                    ObjectId newObjectId;
+                    if (ObjectId.TryParse(l, out newObjectId))
+                    {
+                        objectIdList.Add(newObjectId);
+                    }
+                });
+            }
+            return objectIdList;
+        }
     }
 }

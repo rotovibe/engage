@@ -15,6 +15,11 @@ namespace Phytel.API.DataDomain.PatientNote.DTO
         public MEPatientNote() { Id = ObjectId.GenerateNewId(); }
 
         public const string IdProperty = "_id";
+        public const string TextProperty = "txt";
+        public const string ProgramProperty = "prog";
+        public const string CreatedOnProperty = "con";
+        public const string CreatedByProperty = "cby";
+        
 
         #region Standard IMongoEntity Constants
         public const string ExtraElementsProperty = "ex";
@@ -28,6 +33,21 @@ namespace Phytel.API.DataDomain.PatientNote.DTO
         [BsonId]
         public ObjectId Id { get; set; }
 
+        [BsonElement(TextProperty)]
+        [BsonIgnoreIfNull(true)]
+        public string Text { get; set; }
+
+        [BsonElement(ProgramProperty)]
+        [BsonIgnoreIfNull(true)]
+        public List<ObjectId> Programs { get; set; }
+
+        [BsonElement(CreatedByProperty)]
+        [BsonIgnoreIfNull(false)]
+        public ObjectId CreatedBy { get; set; }
+
+        [BsonElement(CreatedOnProperty)]
+        [BsonIgnoreIfNull(true)]
+        public DateTime CreatedOn { get; set; }
 
         #region Standard IMongoEntity Implementation
         [BsonElement(ExtraElementsProperty)]

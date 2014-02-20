@@ -13,12 +13,14 @@ using MB = MongoDB.Driver.Builders;
 using MongoDB.Bson;
 using Phytel.API.Common;
 using Phytel.API.Common.Data;
+using System.Configuration;
 
 namespace Phytel.API.DataDomain.PatientNote
 {
     public class MongoPatientNoteRepository<T> : IPatientNoteRepository<T>
     {
         private string _dbName = string.Empty;
+        private int _expireDays = Convert.ToInt32(ConfigurationManager.AppSettings["ExpireDays"]);
 
         public MongoPatientNoteRepository(string contractDBName)
         {
@@ -27,10 +29,32 @@ namespace Phytel.API.DataDomain.PatientNote
 
         public object Insert(object newEntity)
         {
+            PutPatientNoteDataRequest request = (PutPatientNoteDataRequest)newEntity;
+            PatientNoteData noteData = request.PatientNote;
+            bool isInserted = false;
             try
             {
-                throw new NotImplementedException();
-                // code here //
+                MEPatientNote meN = new MEPatientNote
+                {
+                    Id = ObjectId.GenerateNewId(),
+                    Text = noteData.Text,
+                    Programs = Helper.ConvertToObjectIdList(noteData.ProgramIds),
+                    CreatedBy = ObjectId.Parse(noteData.CreatedBy),
+                    CreatedOn = DateTime.UtcNow,
+                    Version = request.Version,
+                    UpdatedBy = request.UserId,
+                    LastUpdatedOn = DateTime.UtcNow
+                };
+
+                using (PatientNoteMongoContext ctx = new PatientNoteMongoContext(_dbName))
+                {
+                    WriteConcernResult wcr = ctx.PatientNotes.Collection.Insert(meN);
+                    if (wcr.Ok)
+                    {
+                        isInserted = true;
+                    }
+                }
+                return isInserted;
             }
             catch (Exception ex) { throw ex; }
         }

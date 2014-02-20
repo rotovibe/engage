@@ -117,11 +117,11 @@
       <Name>Phytel.API.Interface</Name>
     </ProjectReference>
     <ProjectReference Include="..\PatientNote.DTO\DataDomain.PatientNote.DTO.csproj">
-      <Project>{1c2c63a1-4246-4ec9-bad1-c00e9ecd85f6}</Project>
+      <Project>{99f4ec29-b099-424e-9757-223e67029001}</Project>
       <Name>DataDomain.PatientNote.DTO</Name>
     </ProjectReference>
     <ProjectReference Include="..\PatientNote\DataDomain.PatientNote.csproj">
-      <Project>{f1a478d1-dca1-4be6-ae83-e0acdd4fdffd}</Project>
+      <Project>{a98ffdeb-2a95-457f-af31-09ac10ff33bb}</Project>
       <Name>DataDomain.PatientNote</Name>
     </ProjectReference>
   </ItemGroup>
