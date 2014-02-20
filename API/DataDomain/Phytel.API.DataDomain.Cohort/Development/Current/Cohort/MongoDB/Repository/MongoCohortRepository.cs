@@ -5,6 +5,7 @@ using Phytel.API.DataDomain.Cohort.DTO;
 using MongoDB.Driver;
 using MongoDB.Driver.Builders;
 using MongoDB.Bson;
+using Phytel.API.DataDomain.Cohort;
 
 namespace Phytel.API.DataDomain.Cohort
 {
