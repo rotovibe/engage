@@ -28,8 +28,8 @@ namespace Phytel.API.DataDomain.Program.Services.Test
         public void Put_ContractProgramWithPatient()
         {
             string url = "http://localhost:8888/Program";
-            string patientID = "52e26f34072ef7191c115320";
-            string ContractProgramID = "52e024f91e601512a8f03789";
+            string patientID = "52f55854072ef709f84e5c77";
+            string ContractProgramID = "52f9559cc347860198000042";
             string contractNumber = "InHealth001";
             string context = "NG";
             string version = "v1";
