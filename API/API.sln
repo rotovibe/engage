@@ -1,6 +1,6 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.21005.1
+VisualStudioVersion = 12.0.30110.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "AppDomain", "AppDomain", "{2E11BED7-15D8-4A76-B289-E9FE4FF9DD72}"
 EndProject
@@ -172,9 +172,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.PatientGoal.Test
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.PatientProblem", "DataDomain\Phytel.API.DataDomain.PatientProblem\Development\Current\PatientProblem\DataDomain.PatientProblem.csproj", "{AFD0F5B1-A29E-402C-958B-D6D82B4278E5}"
 EndProject
+Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "PhytelNG", "Database\PhytelNG\PhytelNG.sqlproj", "{5F7A39CC-DDCD-4E91-91C1-0BF4835B2051}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 68
+		SccNumberOfProjects = 69
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = http://hillstfs2013:8080/tfs/phytel
 		SccLocalPath0 = .
@@ -446,6 +448,10 @@ Global
 		SccProjectTopLevelParentUniqueName67 = API.sln
 		SccProjectName67 = DataDomain/Phytel.API.DataDomain.PatientProblem/Development/Current/PatientProblem
 		SccLocalPath67 = DataDomain\\Phytel.API.DataDomain.PatientProblem\\Development\\Current\\PatientProblem
+		SccProjectUniqueName68 = Database\\PhytelNG\\PhytelNG.sqlproj
+		SccProjectTopLevelParentUniqueName68 = API.sln
+		SccProjectName68 = Database/PhytelNG
+		SccLocalPath68 = Database\\PhytelNG
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -720,6 +726,12 @@ Global
 		{AFD0F5B1-A29E-402C-958B-D6D82B4278E5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AFD0F5B1-A29E-402C-958B-D6D82B4278E5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AFD0F5B1-A29E-402C-958B-D6D82B4278E5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5F7A39CC-DDCD-4E91-91C1-0BF4835B2051}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5F7A39CC-DDCD-4E91-91C1-0BF4835B2051}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5F7A39CC-DDCD-4E91-91C1-0BF4835B2051}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{5F7A39CC-DDCD-4E91-91C1-0BF4835B2051}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5F7A39CC-DDCD-4E91-91C1-0BF4835B2051}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5F7A39CC-DDCD-4E91-91C1-0BF4835B2051}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -745,6 +757,7 @@ Global
 		{8F553B3A-B649-4FDA-A1D7-F7EFC0DB4B67} = {8E28768D-9A7C-4CA0-A4D0-761C06DA259C}
 		{ABE948FB-247E-4955-B3AB-B7C93E10A542} = {2B73BAC7-448F-4CB9-9481-3C837C901B9C}
 		{6F1A3E2C-0991-427B-94A7-BA8DEDD90C88} = {0921D4F2-8F09-438B-95F6-539E2434CCEF}
+		{5F7A39CC-DDCD-4E91-91C1-0BF4835B2051} = {0921D4F2-8F09-438B-95F6-539E2434CCEF}
 		{1FCB66F1-56D2-430B-85A7-0D1C26A30FA8} = {2FDF8A25-888A-4C5D-9C06-7FCDF0C3C318}
 		{E368DA81-D304-4556-B1C4-D4774C0DEFD2} = {2FDF8A25-888A-4C5D-9C06-7FCDF0C3C318}
 		{E9957107-8F2A-4946-834E-629D4235B9B3} = {2FDF8A25-888A-4C5D-9C06-7FCDF0C3C318}
