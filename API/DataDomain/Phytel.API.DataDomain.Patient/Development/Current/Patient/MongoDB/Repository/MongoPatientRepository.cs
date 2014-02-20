@@ -33,7 +33,7 @@ namespace Phytel.API.DataDomain.Patient
         private List<IdNamePair> timesofDays = new List<IdNamePair>();
         private List<TimeZoneData> timeZones = new List<TimeZoneData>();
         private TimeZoneData timeZone = new TimeZoneData();
-        
+
         #region endpoint addresses
         protected static readonly string DDPatientSystemUrl = ConfigurationManager.AppSettings["DDPatientSystemServiceUrl"];
         protected static readonly string DDContactUrl = ConfigurationManager.AppSettings["DDContactServiceUrl"];
@@ -43,75 +43,15 @@ namespace Phytel.API.DataDomain.Patient
         public MongoPatientRepository(string contractDBName)
         {
             _dbName = contractDBName;
-
-            IRestClient modesClient = new JsonServiceClient();
-            GetAllCommModesDataRequest modeRequest = new GetAllCommModesDataRequest();
-            GetAllCommModesDataResponse modeResponse = modesClient.Get<GetAllCommModesDataResponse>(string.Format("{0}/{1}/{2}/{3}/commmodes",
-                                                                                            DDLookUpUrl,
-                                                                                            "NG",
-                                                                                            "v1",
-                                                                                            "InHealth001"));
-            modesLookUp = modeResponse.CommModes;
-
-            IRestClient typeClient = new JsonServiceClient();
-            GetAllCommTypesDataRequest typeRequest = new GetAllCommTypesDataRequest();
-            GetAllCommTypesDataResponse typeResponse = typeClient.Get<GetAllCommTypesDataResponse>(string.Format("{0}/{1}/{2}/{3}/commtypes",
-                                                                                            DDLookUpUrl,
-                                                                                            "NG",
-                                                                                            "v1",
-                                                                                            "InHealth001"));
-            typesLookUp = typeResponse.CommTypes;
-
-            IRestClient langClient = new JsonServiceClient();
-            GetAllLanguagesDataRequest langRequest = new GetAllLanguagesDataRequest();
-            GetAllLanguagesDataResponse langResponse = typeClient.Get<GetAllLanguagesDataResponse>(string.Format("{0}/{1}/{2}/{3}/languages",
-                                                                                            DDLookUpUrl,                                                                      
-                                                                                            "NG",
-                                                                                            "v1",
-                                                                                            "InHealth001"));
-            langLookUp = langResponse.Languages;
-
-            IRestClient stateClient = new JsonServiceClient();
-            GetAllStatesDataRequest stateRequest = new GetAllStatesDataRequest();
-            GetAllStatesDataResponse stateResponse = stateClient.Get<GetAllStatesDataResponse>(string.Format("{0}/{1}/{2}/{3}/states",
-                                                                                            DDLookUpUrl,
-                                                                                            "NG",
-                                                                                            "v1",
-                                                                                            "InHealth001"));
-            stateLookUp = stateResponse.States;
-
-            IRestClient daysClient = new JsonServiceClient();
-            GetAllTimesOfDaysDataRequest daysRequest = new GetAllTimesOfDaysDataRequest();
-            GetAllTimesOfDaysDataResponse daysResponse = daysClient.Get<GetAllTimesOfDaysDataResponse>(string.Format("{0}/{1}/{2}/{3}/timesOfDays",
-                                                                                            DDLookUpUrl,
-                                                                                            "NG",
-                                                                                            "v1",
-                                                                                            "InHealth001"));
-            timesofDays = daysResponse.TimesOfDays;
-
-            IRestClient zonesClient = new JsonServiceClient();
-            GetAllTimeZonesDataRequest zonesRequest = new GetAllTimeZonesDataRequest();
-            GetAllTimeZonesDataResponse zonesResponse = zonesClient.Get<GetAllTimeZonesDataResponse>(string.Format("{0}/{1}/{2}/{3}/timeZones",
-                                                                                            DDLookUpUrl,
-                                                                                            "NG",
-                                                                                            "v1",
-                                                                                            "InHealth001"));
-            timeZones = zonesResponse.TimeZones;
-
-            IRestClient zoneClient = new JsonServiceClient();
-            GetTimeZoneDataRequest zoneRequest = new GetTimeZoneDataRequest();
-            GetTimeZoneDataResponse zoneResponse = zoneClient.Get<GetTimeZoneDataResponse>(string.Format("{0}/{1}/{2}/{3}/TimeZone/Default",
-                                                                                            DDLookUpUrl,
-                                                                                            "NG",
-                                                                                            "v1",
-                                                                                            "InHealth001"));
-            timeZone = zoneResponse.TimeZone;
         }
 
         public object Insert(object newEntity)
         {
             try
             {
+                //TODO:  need to refactor this method to clean it up and only get lookups as needed.
+                LoadLookups();
+
                 //Patient
                 PutPatientDataRequest request = newEntity as PutPatientDataRequest;
                 MEPatient patient = null;
@@ -416,7 +356,7 @@ namespace Phytel.API.DataDomain.Patient
                             ContractNumber = request.ContractNumber
                         };
 
-                        
+
                         repo.Insert(cohortPatientRequest);
 
                         //PatientSystem
@@ -442,7 +382,7 @@ namespace Phytel.API.DataDomain.Patient
                             patient.DisplayPatientSystemID = ObjectId.Parse(sysResponse.PatientSystemId);
 
                             ctx.Patients.Collection.Save(patient);
-                            
+
                         }
                     }
 
@@ -696,15 +636,15 @@ namespace Phytel.API.DataDomain.Patient
         private List<CareTeamMemberData> getCareTeam(List<CareTeamMember> list)
         {
             List<CareTeamMemberData> careTeam = null;
-            if(list != null)
+            if (list != null)
             {
                 careTeam = new List<CareTeamMemberData>();
-                foreach(CareTeamMember meCtm in list)
+                foreach (CareTeamMember meCtm in list)
                 {
                     CareTeamMemberData ctm = new CareTeamMemberData
-                    { 
+                    {
                         ContactId = meCtm.ContactId.ToString(),
-                        Primary  = meCtm.Primary,
+                        Primary = meCtm.Primary,
                         Type = DTOUtils.ToFriendlyString(meCtm.Type)
                     };
                     careTeam.Add(ctm);
@@ -1009,7 +949,7 @@ namespace Phytel.API.DataDomain.Patient
                             Version = "v1",
                             LastUpdatedOn = System.DateTime.UtcNow,
                             DeleteFlag = false,
-                             UpdatedBy = request.UserId
+                            UpdatedBy = request.UserId
                         });
                         response.flagged = Convert.ToBoolean(request.Flagged);
                     }
@@ -1217,6 +1157,72 @@ namespace Phytel.API.DataDomain.Patient
         public object Update(object entity)
         {
             throw new NotImplementedException();
+        }
+
+        private void LoadLookups()
+        {
+            IRestClient modesClient = new JsonServiceClient();
+            GetAllCommModesDataRequest modeRequest = new GetAllCommModesDataRequest();
+            GetAllCommModesDataResponse modeResponse = modesClient.Get<GetAllCommModesDataResponse>(string.Format("{0}/{1}/{2}/{3}/commmodes",
+                                                                                            DDLookUpUrl,
+                                                                                            "NG",
+                                                                                            "v1",
+                                                                                            "InHealth001"));
+            modesLookUp = modeResponse.CommModes;
+
+            IRestClient typeClient = new JsonServiceClient();
+            GetAllCommTypesDataRequest typeRequest = new GetAllCommTypesDataRequest();
+            GetAllCommTypesDataResponse typeResponse = typeClient.Get<GetAllCommTypesDataResponse>(string.Format("{0}/{1}/{2}/{3}/commtypes",
+                                                                                            DDLookUpUrl,
+                                                                                            "NG",
+                                                                                            "v1",
+                                                                                            "InHealth001"));
+            typesLookUp = typeResponse.CommTypes;
+
+            IRestClient langClient = new JsonServiceClient();
+            GetAllLanguagesDataRequest langRequest = new GetAllLanguagesDataRequest();
+            GetAllLanguagesDataResponse langResponse = typeClient.Get<GetAllLanguagesDataResponse>(string.Format("{0}/{1}/{2}/{3}/languages",
+                                                                                            DDLookUpUrl,
+                                                                                            "NG",
+                                                                                            "v1",
+                                                                                            "InHealth001"));
+            langLookUp = langResponse.Languages;
+
+            IRestClient stateClient = new JsonServiceClient();
+            GetAllStatesDataRequest stateRequest = new GetAllStatesDataRequest();
+            GetAllStatesDataResponse stateResponse = stateClient.Get<GetAllStatesDataResponse>(string.Format("{0}/{1}/{2}/{3}/states",
+                                                                                            DDLookUpUrl,
+                                                                                            "NG",
+                                                                                            "v1",
+                                                                                            "InHealth001"));
+            stateLookUp = stateResponse.States;
+
+            IRestClient daysClient = new JsonServiceClient();
+            GetAllTimesOfDaysDataRequest daysRequest = new GetAllTimesOfDaysDataRequest();
+            GetAllTimesOfDaysDataResponse daysResponse = daysClient.Get<GetAllTimesOfDaysDataResponse>(string.Format("{0}/{1}/{2}/{3}/timesOfDays",
+                                                                                            DDLookUpUrl,
+                                                                                            "NG",
+                                                                                            "v1",
+                                                                                            "InHealth001"));
+            timesofDays = daysResponse.TimesOfDays;
+
+            IRestClient zonesClient = new JsonServiceClient();
+            GetAllTimeZonesDataRequest zonesRequest = new GetAllTimeZonesDataRequest();
+            GetAllTimeZonesDataResponse zonesResponse = zonesClient.Get<GetAllTimeZonesDataResponse>(string.Format("{0}/{1}/{2}/{3}/timeZones",
+                                                                                            DDLookUpUrl,
+                                                                                            "NG",
+                                                                                            "v1",
+                                                                                            "InHealth001"));
+            timeZones = zonesResponse.TimeZones;
+
+            IRestClient zoneClient = new JsonServiceClient();
+            GetTimeZoneDataRequest zoneRequest = new GetTimeZoneDataRequest();
+            GetTimeZoneDataResponse zoneResponse = zoneClient.Get<GetTimeZoneDataResponse>(string.Format("{0}/{1}/{2}/{3}/TimeZone/Default",
+                                                                                            DDLookUpUrl,
+                                                                                            "NG",
+                                                                                            "v1",
+                                                                                            "InHealth001"));
+            timeZone = zoneResponse.TimeZone;
         }
     }
 }

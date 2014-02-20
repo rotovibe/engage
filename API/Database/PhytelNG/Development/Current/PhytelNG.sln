@@ -10,19 +10,23 @@ Global
 		SccNumberOfProjects = 2
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = http://hillstfs2013:8080/tfs/phytel
-		SccProjectUniqueName0 = PhytelNG\\PhytelNG.sqlproj
-		SccProjectName0 = PhytelNG
-		SccLocalPath0 = PhytelNG
-		SccLocalPath1 = .
+		SccLocalPath0 = .
+		SccProjectUniqueName1 = PhytelNG\\PhytelNG.sqlproj
+		SccProjectName1 = PhytelNG
+		SccLocalPath1 = PhytelNG
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
+		DeployDevDatabase|Any CPU = DeployDevDatabase|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{C579A1A4-6614-427A-9AD3-67F7E2A814EC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{C579A1A4-6614-427A-9AD3-67F7E2A814EC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C579A1A4-6614-427A-9AD3-67F7E2A814EC}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{C579A1A4-6614-427A-9AD3-67F7E2A814EC}.DeployDevDatabase|Any CPU.ActiveCfg = DeployDevDatabase|Any CPU
+		{C579A1A4-6614-427A-9AD3-67F7E2A814EC}.DeployDevDatabase|Any CPU.Build.0 = DeployDevDatabase|Any CPU
+		{C579A1A4-6614-427A-9AD3-67F7E2A814EC}.DeployDevDatabase|Any CPU.Deploy.0 = DeployDevDatabase|Any CPU
 		{C579A1A4-6614-427A-9AD3-67F7E2A814EC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C579A1A4-6614-427A-9AD3-67F7E2A814EC}.Release|Any CPU.Build.0 = Release|Any CPU
 		{C579A1A4-6614-427A-9AD3-67F7E2A814EC}.Release|Any CPU.Deploy.0 = Release|Any CPU
