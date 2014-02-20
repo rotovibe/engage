@@ -1,0 +1,45 @@
+﻿using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
+using Phytel.Mongo.Linq;
+using System.Collections.Generic;
+
+namespace Phytel.API.AppDomain.Security
+{
+    [BsonIgnoreExtraElements(false)]
+    [MongoIndex(Keys = new string[] { ApiKeyProperty, ProductProperty, IsActiveProperty })]
+    public class MEAPIKey : IMongoEntity<ObjectId>
+    {
+        public MEAPIKey() { Id = ObjectId.GenerateNewId(); }
+
+        public const string IdProperty = "_id";
+        public const string ApiKeyProperty = "apikey";
+        public const string ProductProperty = "product";
+        public const string IsActiveProperty = "isactive";
+        public const string VersionProperty = "v";
+        public const string ExtraElementsProperty = "ex";
+
+        [BsonId]
+        public ObjectId Id { get; set; }
+
+        [BsonElement(ApiKeyProperty)]
+        [BsonIgnoreIfNull(true)]
+        public string ApiKey { get; set; }
+
+        [BsonElement(ProductProperty)]
+        [BsonIgnoreIfNull(true)]
+        public string Product { get; set; }
+
+        [BsonElement(IsActiveProperty)]
+        [BsonIgnoreIfNull(true)]
+        public bool IsActive { get; set; }
+
+        [BsonElement(VersionProperty)]
+        [BsonDefaultValue("v1")]
+        public string Version { get; set; }
+
+        [BsonExtraElements]
+        [BsonIgnoreIfNull(true)]
+        [BsonElement(ExtraElementsProperty)]
+        Dictionary<string, object> ExtraElements { get; set; }
+    }
+}
