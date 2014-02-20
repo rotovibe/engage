@@ -172,7 +172,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.PatientGoal.Test
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.PatientProblem", "DataDomain\Phytel.API.DataDomain.PatientProblem\Development\Current\PatientProblem\DataDomain.PatientProblem.csproj", "{AFD0F5B1-A29E-402C-958B-D6D82B4278E5}"
 EndProject
-Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "PhytelNG", "Database\PhytelNG\PhytelNG.sqlproj", "{5F7A39CC-DDCD-4E91-91C1-0BF4835B2051}"
+Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "PhytelNG", "Database\PhytelNG\Development\Current\PhytelNG.sqlproj", "{5F7A39CC-DDCD-4E91-91C1-0BF4835B2051}"
 EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
@@ -448,7 +448,7 @@ Global
 		SccProjectTopLevelParentUniqueName67 = API.sln
 		SccProjectName67 = DataDomain/Phytel.API.DataDomain.PatientProblem/Development/Current/PatientProblem
 		SccLocalPath67 = DataDomain\\Phytel.API.DataDomain.PatientProblem\\Development\\Current\\PatientProblem
-		SccProjectUniqueName68 = Database\\PhytelNG\\PhytelNG.sqlproj
+		SccProjectUniqueName68 = Database\\PhytelNG\\Development\\Current\\PhytelNG.sqlproj
 		SccProjectTopLevelParentUniqueName68 = API.sln
 		SccProjectName68 = Database/PhytelNG
 		SccLocalPath68 = Database\\PhytelNG
