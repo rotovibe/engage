@@ -8,7 +8,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectVersion>4.1</ProjectVersion>
     <ProjectGuid>{c579a1a4-6614-427a-9ad3-67f7e2a814ec}</ProjectGuid>
-    <DSP>Microsoft.Data.Tools.Schema.Sql.Sql110DatabaseSchemaProvider</DSP>
+    <DSP>Microsoft.Data.Tools.Schema.Sql.Sql100DatabaseSchemaProvider</DSP>
     <OutputType>Database</OutputType>
     <RootPath>
     </RootPath>
@@ -378,5 +378,8 @@
       <QuotedIdentifier>Off</QuotedIdentifier>
     </Build>
     <Build Include="dbo\Stored Procedures\spPhy_GetControlTabsByUserId_13.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="PhytelNG_Dev.publish.xml" />
   </ItemGroup>
 </Project>
