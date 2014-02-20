@@ -459,7 +459,8 @@ namespace Phytel.API.AppDomain.NG
                         ProgramState = dataDomainResponse.program.ProgramState,
                         ShortName = dataDomainResponse.program.ShortName,
                         Status = dataDomainResponse.program.Status,
-                         PatientId = dataDomainResponse.program.PatientId
+                        PatientId = dataDomainResponse.program.PatientId,
+                        ElementState = dataDomainResponse.program.ElementState
                     };
                 }
 

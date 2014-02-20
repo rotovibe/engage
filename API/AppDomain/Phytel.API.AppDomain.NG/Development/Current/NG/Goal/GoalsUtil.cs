@@ -43,12 +43,7 @@ namespace Phytel.API.AppDomain.NG
                 }
                 else if (request.Goal.Tasks.Count == 0)
                 {
-                    // just delete all of them
-                    PatientTaskData pbd = new PatientTaskData
-                    {
-                        Id = "0",
-                        PatientGoalId = request.PatientGoalId
-                    };
+                    PatientTaskData pbd = new PatientTaskData { Id = "0", PatientGoalId = request.PatientGoalId };
                     result = GoalsEndpointUtil.PostUpdateTaskRequest(request, pbd);
                 }
                 return result;
@@ -116,11 +111,7 @@ namespace Phytel.API.AppDomain.NG
                 else if (request.Goal.Interventions.Count == 0)
                 {
                     // just delete all of them
-                    PatientInterventionData pbd = new PatientInterventionData
-                    {
-                        Id = "0",
-                        PatientGoalId = request.PatientGoalId
-                    };
+                    PatientInterventionData pbd = new PatientInterventionData { Id = "0", PatientGoalId = request.PatientGoalId };
                     result = GoalsEndpointUtil.PostUpdateInterventionRequest(request, pbd);
                 }
                 return result;
@@ -159,12 +150,7 @@ namespace Phytel.API.AppDomain.NG
                 }
                 else if (request.Goal.Barriers.Count == 0)
                 {
-                    // just delete all of them
-                    PatientBarrierData pbd = new PatientBarrierData
-                        {
-                            Id = "0",
-                            PatientGoalId = request.PatientGoalId
-                        };
+                    PatientBarrierData pbd = new PatientBarrierData { Id = "0", PatientGoalId = request.PatientGoalId };
                     result = GoalsEndpointUtil.PostUpdateBarrierRequest(request, pbd);
                 }
                 return result;

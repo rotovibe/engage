@@ -38,13 +38,13 @@ namespace Phytel.API.DataDomain.Patient.Service.Test
             string context = "NG";
             string priority = "3";
             string version = "v1";
-            string token = "52d6e1e5231e250bb89e1c3c";
+            string token = "53062dd8d6a4850694dc63bd";
             //string programId = "52b6304afe7a590654430378";
-            string programId = "52b6304afe7a590654430378";  //valid one
+            string programId = "52e024f91e601512a8f03789";  //valid one
             //string programId = "52b6304afe7a590654431111";
             //string patientId = "528f6dc2072ef708ecd90e41";
             //string patientId = "528f6c42072ef708ecd43f59";
-            string patientId = "528f6dc2072ef708ecd90fbb";
+            string patientId = "52f55899072ef709f84e7672";
             IRestClient client = new JsonServiceClient();
 
             PostPatientToProgramsResponse response = client.Post<PostPatientToProgramsResponse>(
