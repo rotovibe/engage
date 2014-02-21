@@ -157,8 +157,6 @@
     <Build Include="dbo\Views\vw_aspnet_Applications.sql">
       <QuotedIdentifier>Off</QuotedIdentifier>
     </Build>
-    <Build Include="Security\nguser.sql" />
-    <Build Include="Security\RoleMemberships.sql" />
     <Build Include="dbo\Functions\GetContractByUser.sql" />
     <Build Include="dbo\Functions\fnPhy_GetContractByUser.sql" />
     <Build Include="dbo\Functions\fn_Split.sql" />
@@ -391,6 +389,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="PhytelNG_Dev.publish.xml" />
+    <None Include="PhytelNG_Model.publish.xml" />
   </ItemGroup>
   <Target Name="DeployDevDatabase">
     <MSBuild Projects="$(DBProjectPath)" Targets="Build;Publish" Properties="DeployOnBuild=true;SqlPublishProfilePath=PhytelNG_Dev.publish.xml">
