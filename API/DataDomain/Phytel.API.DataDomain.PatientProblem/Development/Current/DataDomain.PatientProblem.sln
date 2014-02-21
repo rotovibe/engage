@@ -6,7 +6,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.PatientProblem.D
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.PatientProblem.Test", "PatientProblem.Tests\DataDomain.PatientProblem.Test.csproj", "{1FDE97CB-3E85-41FB-ABFA-A62720C99FCB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.PatientProblem", "ProblemProblem\DataDomain.PatientProblem.csproj", "{AFD0F5B1-A29E-402C-958B-D6D82B4278E5}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.PatientProblem", "PatientProblem\DataDomain.PatientProblem.csproj", "{AFD0F5B1-A29E-402C-958B-D6D82B4278E5}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.PatientProblem.Service", "PatientProblem.Services\DataDomain.PatientProblem.Service.csproj", "{43DE353A-4B53-4FB5-8013-0BDB37B848A2}"
 EndProject
@@ -31,10 +31,10 @@ Global
 		SccAuxPath1 = http://hillstfs2013:8080/tfs/phytel
 		SccLocalPath1 = PatientProblem.Tests
 		SccProvider1 = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccProjectUniqueName2 = ProblemProblem\\DataDomain.PatientProblem.csproj
-		SccProjectName2 = ProblemProblem
+		SccProjectUniqueName2 = PatientProblem\\DataDomain.PatientProblem.csproj
+		SccProjectName2 = PatientProblem
 		SccAuxPath2 = http://hillstfs2013:8080/tfs/phytel
-		SccLocalPath2 = ProblemProblem
+		SccLocalPath2 = PatientProblem
 		SccProvider2 = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccProjectUniqueName3 = PatientProblem.Services\\DataDomain.PatientProblem.Service.csproj
 		SccProjectName3 = PatientProblem.Services
