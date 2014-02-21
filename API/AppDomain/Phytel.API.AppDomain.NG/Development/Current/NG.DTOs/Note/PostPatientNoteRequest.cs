@@ -5,7 +5,7 @@ using ServiceStack.ServiceHost;
 namespace Phytel.API.AppDomain.NG.DTO
 {
     [Api(Description = "A Request object to insert a patient note.")]
-    [Route("/{Version}/{ContractNumber}/Patient/Note", "POST")]
+    [Route("/{Version}/{ContractNumber}/Patient/{PatientId}/Note/Insert", "POST")]
     public class PostPatientNoteRequest : IAppDomainRequest
     {
         [ApiMember(Name = "PatientId", Description = "Id of the patient", ParameterType = "property", DataType = "string", IsRequired = true)]

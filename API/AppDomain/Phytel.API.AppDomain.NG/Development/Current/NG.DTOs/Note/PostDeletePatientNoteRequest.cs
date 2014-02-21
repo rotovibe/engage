@@ -5,7 +5,7 @@ using ServiceStack.ServiceHost;
 namespace Phytel.API.AppDomain.NG.DTO
 {
     [Api(Description = "A Request object to delete a patient note.")]
-    [Route("/{Version}/{ContractNumber}/Patient/Note/{Id}", "POST")]
+    [Route("/{Version}/{ContractNumber}/Patient/{PatientId}/Note/{Id}/Delete", "POST")]
     public class PostDeletePatientNoteRequest : IAppDomainRequest
     {
         [ApiMember(Name = "Id", Description = "Id of the note that needs to be deleted.", ParameterType = "property", DataType = "string", IsRequired = true)]
