@@ -39,7 +39,13 @@ namespace Phytel.API.DataDomain.Program
 
                     List<MEPatientProgram> pp = ctx.PatientPrograms.Collection.Find(findQ).ToList();
 
-                    if (pp.Count == 0)
+                    // need to refactor this
+                    if (!CanInsertPatientProgram(pp))
+                    {
+                        result.Outcome.Result = 0;
+                        result.Outcome.Reason = pp[0].Name + " is already assigned or reassignment is not allowed";
+                    }
+                    else
                     {
                         var findcp = MB.Query<MEProgram>.EQ(b => b.Id, ObjectId.Parse(request.ContractProgramId));
                         MEProgram cp = ctx.Programs.Collection.Find(findcp).FirstOrDefault();
@@ -65,24 +71,46 @@ namespace Phytel.API.DataDomain.Program
                             Status = (int)patientProgDoc.Status,
                             PatientId = patientProgDoc.PatientId.ToString(),
                             ProgramState = (int)patientProgDoc.ProgramState,
-                             ElementState = (int)patientProgDoc.State
+                            ElementState = (int)patientProgDoc.State
                         };
 
                         result.Outcome.Result = 1;
                         result.Outcome.Reason = "Successfully assigned this program for the patient";
                     }
-                    else
-                    {
-                        result.Outcome.Result = 0;
-                        result.Outcome.Reason = pp[0].Name + " is already assigned";
-                    }
-
                 }
                 return result;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 throw new Exception("DataDomain:Insert():" + ex.Message, ex.InnerException);
+            }
+        }
+
+        private bool CanInsertPatientProgram(List<MEPatientProgram> pp)
+        {
+            try
+            {
+                bool result = true;
+                if (pp == null)
+                {
+                    result = true;
+                }
+                else if (pp.Count >= 1)
+                {
+                    foreach (MEPatientProgram p in pp)
+                    {
+                        if (!p.State.Equals(ElementState.Removed) && !p.State.Equals(ElementState.Completed))
+                        {
+                            result = false;
+                            break;
+                        }
+                    }
+                }
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("DataDomain:CanInsertPatientProgram():" + ex.Message, ex.InnerException);
             }
         }
 
