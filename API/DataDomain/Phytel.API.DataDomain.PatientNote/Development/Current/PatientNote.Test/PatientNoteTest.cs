@@ -19,15 +19,15 @@ namespace Phytel.API.DataDomain.PatientNote.Test
         [TestMethod]
         public void InsertPatientNote_Test()
         {
-            PatientNoteData n = new PatientNoteData { Text = "My first note through the data domain", CreatedBy = "53043e53d433231f48de8a7a", PatientId = "52f55877072ef709f84e69b0" };
+            PatientNoteData n = new PatientNoteData { Text = "My 2nd note through the data domain", CreatedBy = "53043e53d433231f48de8a7a", PatientId = "52f55877072ef709f84e69b0" };
             PutPatientNoteDataRequest request = new PutPatientNoteDataRequest {
                 UserId = "DD_Harness",
                 Version = "v1",
                 PatientNote = n
             };
-            bool isInserted = PatientNoteDataManager.InsertPatientNote(request);
+            string id = PatientNoteDataManager.InsertPatientNote(request);
 
-            Assert.IsTrue(isInserted);
+            Assert.IsNotNull(id);
         }
     }
 }

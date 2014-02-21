@@ -78,7 +78,10 @@ namespace Phytel.API.AppDomain.NG
                                                                                     UserId = request.UserId,
                                                                                     PatientId = request.PatientId
                                                                                 } as object);
-
+                if(dataDomainResponse != null && !(string.IsNullOrEmpty(dataDomainResponse.Id)))
+                {
+                    response.Id = dataDomainResponse.Id;
+                }
                 response.Version = request.Version;   
                 return response;
             }

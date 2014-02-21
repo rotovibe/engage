@@ -6,7 +6,7 @@ namespace Phytel.API.DataDomain.PatientNote.DTO
 {
     public class PutPatientNoteDataResponse : IDomainResponse
     {
-        public bool Success { get; set; }
+        public string Id { get; set; }
         public string Version { get; set; }
         public ResponseStatus Status { get; set; }
     }

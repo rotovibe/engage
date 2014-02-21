@@ -31,7 +31,7 @@ namespace Phytel.API.DataDomain.PatientNote
         {
             PutPatientNoteDataRequest request = (PutPatientNoteDataRequest)newEntity;
             PatientNoteData noteData = request.PatientNote;
-            bool isInserted = false;
+            string noteId = string.Empty;
             try
             {
                 MEPatientNote meN = new MEPatientNote
@@ -52,10 +52,10 @@ namespace Phytel.API.DataDomain.PatientNote
                     WriteConcernResult wcr = ctx.PatientNotes.Collection.Insert(meN);
                     if (wcr.Ok)
                     {
-                        isInserted = true;
+                        noteId = meN.Id.ToString();
                     }
                 }
-                return isInserted;
+                return noteId;
             }
             catch (Exception ex) { throw ex; }
         }

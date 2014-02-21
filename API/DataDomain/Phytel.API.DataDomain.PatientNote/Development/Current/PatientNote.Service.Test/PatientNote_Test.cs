@@ -24,7 +24,7 @@ namespace Phytel.API.DataDomain.PatientNote.Services.Test
                 string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Note/Insert", url, context, version, contractNumber, note.PatientId),
                 new PutPatientNoteDataRequest { Context = context, ContractNumber = contractNumber, PatientId = "52f55877072ef709f84e69b0", PatientNote = note, UserId = "53043e53d433231f48de8a7a", Version = version } as object);
 
-            Assert.AreEqual(response.Success, true);
+            Assert.IsNotNull(response.Id);
         }
     }
 }

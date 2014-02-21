@@ -13,7 +13,7 @@ namespace Phytel.API.DataDomain.PatientNote.Service
             PutPatientNoteDataResponse response = new PutPatientNoteDataResponse();
             try
             {
-                response.Success = PatientNoteDataManager.InsertPatientNote(request);
+                response.Id = PatientNoteDataManager.InsertPatientNote(request);
                 response.Version = request.Version;
             }
             catch (Exception ex)
