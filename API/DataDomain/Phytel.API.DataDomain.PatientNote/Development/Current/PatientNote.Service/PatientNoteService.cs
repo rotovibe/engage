@@ -25,38 +25,38 @@ namespace Phytel.API.DataDomain.PatientNote.Service
             return response;
         }
 
-        //public GetPatientNoteResponse Get(GetPatientNoteRequest request)
-        //{
-        //    GetPatientNoteResponse response = new GetPatientNoteResponse();
-        //    try
-        //    {
-        //        response = PatientNoteDataManager.GetPatientNoteByID(request);
-        //        response.Version = request.Version;
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        //TODO: Log this to C3 database via ASE
-        //        base.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-        //        response.Status = new ServiceStack.ServiceInterface.ServiceModel.ResponseStatus("Exception", ex.Message);
-        //    }
-        //    return response;
-        //}
+        public GetPatientNoteDataResponse Get(GetPatientNoteDataRequest request)
+        {
+            GetPatientNoteDataResponse response = new GetPatientNoteDataResponse();
+            try
+            {
+                response.PatientNote = PatientNoteDataManager.GetPatientNote(request);
+                response.Version = request.Version;
+            }
+            catch (Exception ex)
+            {
+                //TODO: Log this to C3 database via ASE
+                base.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                response.Status = new ServiceStack.ServiceInterface.ServiceModel.ResponseStatus("Exception", ex.Message);
+            }
+            return response;
+        }
 
-        //public GetAllPatientNotesResponse Post(GetAllPatientNotesRequest request)
-        //{
-        //    GetAllPatientNotesResponse response = new GetAllPatientNotesResponse();
-        //    try
-        //    {
-        //        response = PatientNoteDataManager.GetPatientNoteList(request);
-        //        response.Version = request.Version;
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        //TODO: Log this to C3 database via ASE
-        //        base.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-        //        response.Status = new ServiceStack.ServiceInterface.ServiceModel.ResponseStatus("Exception", ex.Message);
-        //    }
-        //    return response;
-        //}
+        public GetAllPatientNotesDataResponse Post(GetAllPatientNotesDataRequest request)
+        {
+            GetAllPatientNotesDataResponse response = new GetAllPatientNotesDataResponse();
+            try
+            {
+                response.PatientNotes = PatientNoteDataManager.GetAllPatientNotes(request);
+                response.Version = request.Version;
+            }
+            catch (Exception ex)
+            {
+                //TODO: Log this to C3 database via ASE
+                base.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                response.Status = new ServiceStack.ServiceInterface.ServiceModel.ResponseStatus("Exception", ex.Message);
+            }
+            return response;
+        }
     }
 }

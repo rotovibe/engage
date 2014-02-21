@@ -14,7 +14,7 @@ namespace Phytel.API.DataDomain.PatientNote.Services.Test
         public void InsertPatientNote_Test()
         {
             string url = "http://localhost:8888/PatientNote";
-            PatientNoteData note = new PatientNoteData { Text = "DD_Service test note 2", CreatedBy = "53043e53d433231f48de8a7a", PatientId = "52f55877072ef709f84e69b0" };
+            PatientNoteData note = new PatientNoteData { Text = "DD_Service test note 2", CreatedById = "53043e53d433231f48de8a7a", PatientId = "52f55877072ef709f84e69b0" };
             string contractNumber = "InHealth001";
             string context = "NG";
             string version = "v1";

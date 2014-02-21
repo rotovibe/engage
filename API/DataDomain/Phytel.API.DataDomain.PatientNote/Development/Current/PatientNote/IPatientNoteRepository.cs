@@ -10,6 +10,6 @@ namespace Phytel.API.DataDomain.PatientNote
 {
     public interface IPatientNoteRepository<T> : IRepository<T>
     {
-        
+        IEnumerable<object> FindByPatientId(object request);
     }
 }

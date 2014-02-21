@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Phytel.API.DataDomain.PatientNote.DTO;
 
@@ -6,20 +7,50 @@ namespace Phytel.API.DataDomain.PatientNote.Test
     [TestClass]
     public class PatientNoteTest
     {
-        //[TestMethod]
-        //public void GetPatientNoteByID()
-        //{
-        //    GetPatientNoteRequest request = new GetPatientNoteRequest{ PatientNoteID = "5"};
+        [TestMethod]
+        public void GetPatientNote_Test_Passes()
+        {
+            GetPatientNoteDataRequest request = new GetPatientNoteDataRequest { Id = "5307b343d433232dd4e94743" };
 
-        //    GetPatientNoteResponse response = PatientNoteDataManager.GetPatientNoteByID(request);
+            PatientNoteData response = PatientNoteDataManager.GetPatientNote(request);
 
-        //    Assert.IsTrue(response.PatientNote.PatientNoteID == "Tony");
-        //}
+            Assert.IsNotNull(response);
+        }
+
+        [TestMethod]
+        public void GetPatientNote_Test_Fails()
+        {
+            GetPatientNoteDataRequest request = new GetPatientNoteDataRequest { Id = "52f5589c072ef709f84e7798" };
+
+            PatientNoteData response = PatientNoteDataManager.GetPatientNote(request);
+
+            Assert.IsNull(response);
+        }
+
+        [TestMethod]
+        public void GetAllPatientNotes_Test_Passes()
+        {
+            GetAllPatientNotesDataRequest request = new GetAllPatientNotesDataRequest { PatientId = "52f5589c072ef709f84e7798", Count = 3 };
+
+            List<PatientNoteData> response = PatientNoteDataManager.GetAllPatientNotes(request);
+
+            Assert.IsTrue(response.Count > 0);
+        }
+
+        [TestMethod]
+        public void GetAllPatientNotes_Test_Fails()
+        {
+            GetAllPatientNotesDataRequest request = new GetAllPatientNotesDataRequest { PatientId = "5307b343d433232dd4e94743", Count = 3 };
+
+            List<PatientNoteData> response = PatientNoteDataManager.GetAllPatientNotes(request);
+
+            Assert.IsTrue(response.Count == 0);
+        }
 
         [TestMethod]
         public void InsertPatientNote_Test()
         {
-            PatientNoteData n = new PatientNoteData { Text = "My 2nd note through the data domain", CreatedBy = "53043e53d433231f48de8a7a", PatientId = "52f55877072ef709f84e69b0" };
+            PatientNoteData n = new PatientNoteData { Text = "Note D data domain", CreatedById = "BB241C64-A0FF-4E01-BA5F-4246EF50780E", PatientId = "52f5589c072ef709f84e7798" };
             PutPatientNoteDataRequest request = new PutPatientNoteDataRequest {
                 UserId = "DD_Harness",
                 Version = "v1",
