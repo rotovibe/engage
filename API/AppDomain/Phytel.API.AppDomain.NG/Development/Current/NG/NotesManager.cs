@@ -49,6 +49,8 @@ namespace Phytel.API.AppDomain.NG
             {
                 if (request.Note == null)
                     throw new Exception("The Note property is null in the request.");
+                else if (string.IsNullOrEmpty(request.Note.Text))
+                    throw new Exception("Note text is a required field.");
 
                 PostPatientNoteResponse response = new PostPatientNoteResponse();
                 //[Route("/{Context}/{Version}/{ContractNumber}/Patient/{PatientId}/Note/Insert", "PUT")]
