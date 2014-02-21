@@ -42,7 +42,7 @@ namespace Phytel.API.DataDomain.PatientNote.Service
             return response;
         }
 
-        public GetAllPatientNotesDataResponse Post(GetAllPatientNotesDataRequest request)
+        public GetAllPatientNotesDataResponse Get(GetAllPatientNotesDataRequest request)
         {
             GetAllPatientNotesDataResponse response = new GetAllPatientNotesDataResponse();
             try
