@@ -92,6 +92,7 @@
   <ItemGroup>
     <Compile Include="Action_Processing_response_saving_Tests.cs" />
     <Compile Include="Action_Processing_response_spawn_Tests.cs" />
+    <Compile Include="Assign_Patient_To_Program_Tests.cs" />
     <Compile Include="Goal\Goal_Delete_Tests.cs" />
     <Compile Include="Goal\Goal_Initialize_Tests.cs" />
     <Compile Include="Goal\Goal_Tests.cs" />
