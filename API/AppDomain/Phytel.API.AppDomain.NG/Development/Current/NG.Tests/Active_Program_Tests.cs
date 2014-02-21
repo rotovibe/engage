@@ -38,9 +38,9 @@ namespace Phytel.API.DataDomain.Patient.Service.Test
             string context = "NG";
             string priority = "3";
             string version = "v1";
-            string token = "52f518add6a4850fd068481f";
+            string token = "5307b137d6a4850cd4abdc3c";
             string patientProgramId = "52f56d9fd6a4850fd025fb67";
-            string patientId = "52f55890072ef709f84e736b";
+            string patientId = "52f55876072ef709f84e6944";
             IRestClient client = new JsonServiceClient();
 
             GetPatientProgramDetailsSummaryResponse response = client.Get<GetPatientProgramDetailsSummaryResponse>(
@@ -52,14 +52,17 @@ namespace Phytel.API.DataDomain.Patient.Service.Test
                 token) );
         }
 
+        /// <summary>
+        /// Gets assigned program details for patient.
+        /// </summary>
         [TestMethod]
         public void Get_patient_program_details_Tests()
         {
             string contractNumber = "InHealth001";
             string context = "NG";
             string version = "v1";
-            string token = "5304d599d6a4850f14a7b332";
-            string patientId = "52f55857072ef709f84e5db3";
+            string token = "5307d950d6a4850cd4abe657";
+            string patientId = "52f55881072ef709f84e6d80";
             IRestClient client = new JsonServiceClient();
 
             GetPatientProgramsResponse response = client.Get<GetPatientProgramsResponse>(
