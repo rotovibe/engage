@@ -1,12 +1,11 @@
 using ServiceStack.ServiceInterface.ServiceModel;
-using System.Collections.Generic;
 using Phytel.API.Interface;
+using System.Collections.Generic;
 
-namespace Phytel.API.DataDomain.PatientNote.DTO
+namespace Phytel.API.AppDomain.NG.DTO
 {
-    public class PutUpdatePatientNoteDataResponse : IDomainResponse
+    public class PostPatientNoteResponse : IDomainResponse
     {
-        public bool Success { get; set; }
         public string Version { get; set; }
         public ResponseStatus Status { get; set; }
     }

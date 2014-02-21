@@ -37,6 +37,7 @@ namespace Phytel.API.DataDomain.PatientNote
                 MEPatientNote meN = new MEPatientNote
                 {
                     Id = ObjectId.GenerateNewId(),
+                    PatientId = ObjectId.Parse(noteData.PatientId),
                     Text = noteData.Text,
                     Programs = Helper.ConvertToObjectIdList(noteData.ProgramIds),
                     CreatedBy = ObjectId.Parse(noteData.CreatedBy),

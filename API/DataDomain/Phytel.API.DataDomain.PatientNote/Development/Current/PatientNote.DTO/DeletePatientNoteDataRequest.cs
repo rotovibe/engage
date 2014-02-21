@@ -3,11 +3,14 @@ using ServiceStack.ServiceHost;
 
 namespace Phytel.API.DataDomain.PatientNote.DTO
 {
-    [Route("/{Context}/{Version}/{ContractNumber}/Patient/Note/{Id}", "DELETE")]
+    [Route("/{Context}/{Version}/{ContractNumber}/Patient/{PatientId}/Note/{Id}", "DELETE")]
     public class DeletePatientNoteDataRequest : IDataDomainRequest
     {
         [ApiMember(Name = "Id", Description = "Id of the patient note to be deleted", ParameterType = "property", DataType = "string", IsRequired = true)]
         public string Id { get; set; }
+
+        [ApiMember(Name = "PatientId", Description = "Id of the patient", ParameterType = "property", DataType = "string", IsRequired = true)]
+        public string PatientId { get; set; }
 
         [ApiMember(Name = "UserId", Description = "UserId of the logged in user", ParameterType = "property", DataType = "string", IsRequired = true)]
         public string UserId { get; set; }

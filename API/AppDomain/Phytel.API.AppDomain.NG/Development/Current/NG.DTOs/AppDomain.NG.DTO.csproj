@@ -137,6 +137,15 @@
     <Compile Include="Contact\GetContactResponse.cs" />
     <Compile Include="IPlanElement.cs" />
     <Compile Include="CohortPatient.cs" />
+    <Compile Include="Note\GetAllPatientNotesRequest.cs" />
+    <Compile Include="Note\GetAllPatientNotesResponse.cs" />
+    <Compile Include="Note\GetPatientNoteRequest.cs" />
+    <Compile Include="Note\GetPatientNoteResponse.cs" />
+    <Compile Include="Note\PatientNote.cs" />
+    <Compile Include="Note\PostDeletePatientNoteRequest.cs" />
+    <Compile Include="Note\PostDeletePatientNoteResponse.cs" />
+    <Compile Include="Note\PostPatientNoteRequest.cs" />
+    <Compile Include="Note\PostPatientNoteResponse.cs" />
     <Compile Include="PostProcessActionRequest.cs" />
     <Compile Include="PostProcessActionResponse.cs" />
     <Compile Include="GetPatientProgramDetailsSummaryResponse.cs" />
@@ -185,6 +194,7 @@
       <Name>Phytel.API.Interface</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

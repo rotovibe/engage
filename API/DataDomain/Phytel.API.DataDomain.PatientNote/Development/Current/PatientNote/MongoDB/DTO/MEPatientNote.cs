@@ -15,6 +15,7 @@ namespace Phytel.API.DataDomain.PatientNote.DTO
         public MEPatientNote() { Id = ObjectId.GenerateNewId(); }
 
         public const string IdProperty = "_id";
+        public const string PatientIdProperty = "pid";
         public const string TextProperty = "txt";
         public const string ProgramProperty = "prog";
         public const string CreatedOnProperty = "con";
@@ -32,6 +33,10 @@ namespace Phytel.API.DataDomain.PatientNote.DTO
 
         [BsonId]
         public ObjectId Id { get; set; }
+
+        [BsonElement(PatientIdProperty)]
+        [BsonIgnoreIfNull(true)]
+        public ObjectId PatientId { get; set; }
 
         [BsonElement(TextProperty)]
         [BsonIgnoreIfNull(true)]

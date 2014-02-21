@@ -98,6 +98,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="Note_Tests.cs" />
     <Compile Include="Goal_Tests.cs" />
     <Compile Include="LookUps_Test.cs" />
     <Compile Include="NGManager_Tests.cs" />

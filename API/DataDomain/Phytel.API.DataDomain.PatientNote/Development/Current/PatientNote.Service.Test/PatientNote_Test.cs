@@ -8,23 +8,23 @@ using ServiceStack.ServiceClient.Web;
 namespace Phytel.API.DataDomain.PatientNote.Services.Test
 {
     [TestClass]
-    public class User_PatientNote_Test
+    public class PatientNote_Test
     {
-        //[TestMethod]
-        //public void Post_PatientNoteByID()
-        //{
-        //    string url = "http://localhost:8888/Program";
-        //    string ProgramID = "52a0da34fe7a5915485bdfd6";
-        //    string contractNumber = "InHealth001";
-        //    string context = "NG";
-        //    string version = "v1";
-        //    IRestClient client = new JsonServiceClient();
+        [TestMethod]
+        public void InsertPatientNote_Test()
+        {
+            string url = "http://localhost:8888/PatientNote";
+            PatientNoteData note = new PatientNoteData { Text = "DD_Service test note 2", CreatedBy = "53043e53d433231f48de8a7a", PatientId = "52f55877072ef709f84e69b0" };
+            string contractNumber = "InHealth001";
+            string context = "NG";
+            string version = "v1";
+            IRestClient client = new JsonServiceClient();
+            //[Route("/{Context}/{Version}/{ContractNumber}/Patient/{PatientId}/Note/Insert", "PUT")]
+            PutPatientNoteDataResponse response = client.Put<PutPatientNoteDataResponse>(
+                string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Note/Insert", url, context, version, contractNumber, note.PatientId),
+                new PutPatientNoteDataRequest { Context = context, ContractNumber = contractNumber, PatientId = "52f55877072ef709f84e69b0", PatientNote = note, UserId = "53043e53d433231f48de8a7a", Version = version } as object);
 
-        //    GetPatientNoteResponse response = client.Post<GetPatientNoteResponse>(
-        //        string.Format("{0}/{1}/{2}/{3}/PatientNote/{4}", url, context, version, contractNumber, ProgramID),
-        //        new GetPatientNoteResponse() as object);
-
-        //    Assert.AreEqual(string.Empty, string.Empty);
-        //}
+            Assert.AreEqual(response.Success, true);
+        }
     }
 }

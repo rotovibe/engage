@@ -1,22 +1,16 @@
 using Phytel.API.Interface;
 using ServiceStack.ServiceHost;
-using System.Collections.Generic;
-using Phytel.API.DataDomain.PatientNote.DTO;
 
-namespace Phytel.API.DataDomain.PatientNote.DTO
+namespace Phytel.API.AppDomain.NG.DTO
 {
-    [Route("/{Context}/{Version}/{ContractNumber}/Patient/{PatientId}/Note/Insert", "PUT")]
-    public class PutPatientNoteDataRequest : IDataDomainRequest
+    [Route("/{Version}/{ContractNumber}/Patient/Note/{Id}", "GET")]
+    public class GetPatientNoteRequest : IAppDomainRequest
     {
+        [ApiMember(Name = "Id", Description = "Id of the PatientNote being requested", ParameterType = "property", DataType = "string", IsRequired = true)]
+        public string Id { get; set; }
 
         [ApiMember(Name = "PatientId", Description = "Id of the patient", ParameterType = "property", DataType = "string", IsRequired = true)]
         public string PatientId { get; set; }
-
-        [ApiMember(Name = "PatientNote", Description = "PatientNote object to be inserted", ParameterType = "property", DataType = "PatientNoteData", IsRequired = false)]
-        public PatientNoteData PatientNote { get; set; }
-
-        [ApiMember(Name = "UserId", Description = "UserId of the logged in user", ParameterType = "property", DataType = "string", IsRequired = true)]
-        public string UserId { get; set; }
 
         [ApiMember(Name = "Context", Description = "Product Context requesting the PatientNote", ParameterType = "property", DataType = "string", IsRequired = true)]
         public string Context { get; set; }
@@ -26,5 +20,13 @@ namespace Phytel.API.DataDomain.PatientNote.DTO
 
         [ApiMember(Name = "Version", Description = "Version of the API being called", ParameterType = "property", DataType = "string", IsRequired = true)]
         public string Version { get; set; }
+
+        [ApiMember(Name = "UserId", Description = "UserId of the logged in user", ParameterType = "property", DataType = "string", IsRequired = true)]
+        public string UserId { get; set; }
+
+        [ApiMember(Name = "Token", Description = "Request Token", ParameterType = "QueryString", DataType = "string", IsRequired = true)]
+        public string Token { get; set; }
+
+        public GetPatientNoteRequest() { }
     }
 }
