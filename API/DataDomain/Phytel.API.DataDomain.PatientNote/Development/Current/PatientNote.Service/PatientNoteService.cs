@@ -58,5 +58,22 @@ namespace Phytel.API.DataDomain.PatientNote.Service
             }
             return response;
         }
+
+        public DeletePatientNoteDataResponse Delete(DeletePatientNoteDataRequest request)
+        {
+            DeletePatientNoteDataResponse response = new DeletePatientNoteDataResponse();
+            try
+            {
+                response.Deleted = PatientNoteDataManager.DeletePatientNote(request);
+                response.Version = request.Version;
+            }
+            catch (Exception ex)
+            {
+                //TODO: Log this to C3 database via ASE
+                base.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                response.Status = new ServiceStack.ServiceInterface.ServiceModel.ResponseStatus("Exception", ex.Message);
+            }
+            return response;
+        }
     }
 }

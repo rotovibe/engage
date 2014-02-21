@@ -50,5 +50,19 @@ namespace Phytel.API.DataDomain.PatientNote
                 throw ex;
             }
         }
+
+        public static bool DeletePatientNote(DeletePatientNoteDataRequest request)
+        {
+            try
+            {
+                IPatientNoteRepository<DeletePatientNoteDataResponse> repo = PatientNoteRepositoryFactory<DeletePatientNoteDataResponse>.GetPatientNoteRepository(request.ContractNumber, request.Context);
+                repo.Delete(request);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        } 
     }
 }   

@@ -60,5 +60,19 @@ namespace Phytel.API.DataDomain.PatientNote.Test
 
             Assert.IsNotNull(id);
         }
+
+        [TestMethod]
+        public void DeletePatientNote_Test()
+        {
+            DeletePatientNoteDataRequest request = new DeletePatientNoteDataRequest
+            {
+                UserId = "DD_Harness",
+                Version = "v1",
+                Id = "5307c1f2d433232860709fef",
+            };
+            bool isDeleted = PatientNoteDataManager.DeletePatientNote(request);
+
+            Assert.IsTrue(isDeleted);
+        }
     }
 }

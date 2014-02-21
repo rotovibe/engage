@@ -72,10 +72,21 @@ namespace Phytel.API.DataDomain.PatientNote
 
         public void Delete(object entity)
         {
+            DeletePatientNoteDataRequest request = (DeletePatientNoteDataRequest)entity;
             try
             {
-                throw new NotImplementedException();
-                // code here //
+                using (PatientNoteMongoContext ctx = new PatientNoteMongoContext(_dbName))
+                {
+                    var q = MB.Query<MEPatientNote>.EQ(b => b.Id, ObjectId.Parse(request.Id));
+
+                    var uv = new List<MB.UpdateBuilder>();
+                    uv.Add(MB.Update.Set(MEPatientNote.TTLDateProperty, System.DateTime.UtcNow.AddDays(_expireDays)));
+                    uv.Add(MB.Update.Set(MEPatientNote.DeleteFlagProperty, true));
+                    uv.Add(MB.Update.Set(MEPatientNote.UpdatedByProperty, request.UserId));
+
+                    IMongoUpdate update = MB.Update.Combine(uv);
+                    ctx.PatientNotes.Collection.Update(q, update);
+                }
             }
             catch (Exception ex) { throw ex; }
         }
