@@ -44,51 +44,7 @@ namespace Phytel.API.DataDomain.Program
                         var findcp = MB.Query<MEProgram>.EQ(b => b.Id, ObjectId.Parse(request.ContractProgramId));
                         MEProgram cp = ctx.Programs.Collection.Find(findcp).FirstOrDefault();
 
-                        MEPatientProgram patientProgDoc = new MEPatientProgram
-                        {
-                            PatientId = ObjectId.Parse(request.PatientId),
-                            AuthoredBy = cp.AuthoredBy,
-                            Client = cp.Client,
-                            ProgramState = Common.ProgramState.NotStarted,
-                            State = Common.ElementState.NotStarted,
-                            AssignedBy = cp.AssignedBy,
-                            AssignedOn = cp.AssignedOn,
-                            StartDate = System.DateTime.UtcNow, // utc time
-                            EndDate = null,
-                            GraduatedFlag = false,
-                            Population = null,
-                            OptOut = null,
-                            DidNotEnrollReason = null,
-                            DisEnrollReason = null,
-                            Eligibility = Common.EligibilityStatus.Eligible,
-                            EligibilityStartDate = System.DateTime.UtcNow,
-                            EligibilityEndDate = null,
-                            EligibilityRequirements = cp.EligibilityRequirements,
-                            Enrollment = Common.GenericStatus.Pending,
-                            EligibilityOverride = Common.GenericSetting.No,
-                            DateCompleted = cp.DateCompleted,
-                            ContractProgramId = cp.Id,
-                            DeleteFlag = cp.DeleteFlag,
-                            Description = cp.Description,
-                            LastUpdatedOn = System.DateTime.UtcNow, // utc time
-                            Locked = cp.Locked,
-                            Name = cp.Name,
-                            ObjectivesInfo = cp.ObjectivesInfo,
-                            CompletedBy = cp.CompletedBy,
-                            UpdatedBy = request.UserId,
-                            SourceId = cp.Id.ToString(),
-                            ShortName = cp.ShortName,
-                            Status = cp.Status,
-                            Version = cp.Version,
-                            Spawn = cp.Spawn,
-                            Completed = cp.Completed,
-                            Enabled = cp.Enabled,
-                            ExtraElements = cp.ExtraElements,
-                            Next = cp.Next,
-                            Order = cp.Order,
-                            Previous = cp.Previous,
-                            Modules = DTOUtils.SetValidModules(cp.Modules, request.ContractNumber)
-                        };
+                        MEPatientProgram patientProgDoc = DTOUtils.CreateInitialMEPatientProgram(request, cp);
 
                         // update to new ids and their references
                         DTOUtils.RecurseAndReplaceIds(patientProgDoc.Modules);
