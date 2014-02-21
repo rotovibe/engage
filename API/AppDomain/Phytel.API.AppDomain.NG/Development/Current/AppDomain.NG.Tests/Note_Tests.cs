@@ -38,38 +38,39 @@ namespace Phytel.API.AppDomain.NG.Test
             Assert.IsNotNull(response);
         }
 
-        //[TestMethod]
-        //public void GetPaitentGoal_Test()
-        //{
-        //    GetPatientGoalRequest request = new GetPatientGoalRequest();
-        //    request.ContractNumber = "InHealth001";
-        //    request.UserId = "AD_TestHarness";
-        //    request.Version = "v1";
-        //    request.Id = "5303a5ccd4332316b4a69449";
-        //    request.PatientId = "52f55877072ef709f84e69b0";
-        //    request.UserId = "Snehal";
+        [TestMethod]
+        public void GetPaitentNote_Test()
+        {
+            GetPatientNoteRequest request = new GetPatientNoteRequest();
+            request.ContractNumber = "InHealth001";
+            request.UserId = "AD_TestHarness";
+            request.Version = "v1";
+            request.Id = "5307b27fd433232ed88e5020";
+            request.PatientId = "52f55877072ef709f84e69b0";
+            request.UserId = "Snehal";
 
-        //    GoalsManager gManager = new GoalsManager();
-        //    GetPatientGoalResponse response = gManager.GetPatientGoal(request);
+            NotesManager gManager = new NotesManager();
+            PatientNote response = gManager.GetPatientNote(request);
 
-        //    Assert.IsNotNull(response);
-        //}
+            Assert.IsNotNull(response);
+        }
 
-        //[TestMethod]
-        //public void GetAllPatientGoal_Test()
-        //{
-        //    GetAllPatientGoalsRequest request = new GetAllPatientGoalsRequest();
-        //    request.ContractNumber = "InHealth001";
-        //    request.UserId = "AD_TestHarness";
-        //    request.Version = "v1";
-        //    request.PatientId = "52f55877072ef709f84e69b0";
-        //    request.UserId = "Snehal";
+        [TestMethod]
+        public void GetAllPatientNotes_Test()
+        {
+            GetAllPatientNotesRequest request = new GetAllPatientNotesRequest();
+            request.ContractNumber = "InHealth001";
+            request.UserId = "AD_TestHarness";
+            request.Version = "v1";
+            request.PatientId = "52f55877072ef709f84e69b0";
+            request.UserId = "Snehal";
+            request.Count = 10;
 
-        //    GoalsManager gManager = new GoalsManager();
-        //    GetAllPatientGoalsResponse response = gManager.GetAllPatientGoals(request);
+            NotesManager gManager = new NotesManager();
+            List<PatientNote> response = gManager.GetAllPatientNotes(request);
 
-        //    Assert.IsNotNull(response);
-        //}
+            Assert.IsNotNull(response);
+        }
 
         //[TestMethod]
         //public void SavePatientGoal_Test()
