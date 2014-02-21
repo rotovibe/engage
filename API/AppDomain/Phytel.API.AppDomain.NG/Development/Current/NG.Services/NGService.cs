@@ -782,6 +782,31 @@ namespace Phytel.API.AppDomain.NG.Service
                 return response;
             }
         }
+
+        public PostDeletePatientNoteResponse Post(PostDeletePatientNoteRequest request)
+        {
+            PostDeletePatientNoteResponse response = null;
+            try
+            {
+                NotesManager nManager = new NotesManager();
+                ValidateTokenResponse result = nManager.IsUserValidated(request.Version, request.Token);
+                if (result.UserId.Trim() != string.Empty)
+                {
+                    request.UserId = result.UserId;
+                    response = nManager.DeletePatientNote(request);
+                }
+                else
+                    throw new UnauthorizedAccessException();
+
+                return response;
+            }
+            catch (Exception ex)
+            {
+                //TODO: Log this to the SQL database via ASE
+                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+                return response;
+            }
+        }
         #endregion
 
     }

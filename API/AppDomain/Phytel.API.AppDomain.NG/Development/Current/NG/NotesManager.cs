@@ -133,8 +133,9 @@ namespace Phytel.API.AppDomain.NG
                 if(dataDomainResponse != null && !(string.IsNullOrEmpty(dataDomainResponse.Id)))
                 {
                     response.Id = dataDomainResponse.Id;
+                    response.Version = dataDomainResponse.Version;   
                 }
-                response.Version = request.Version;   
+                
                 return response;
             }
             catch (WebServiceException wse)
@@ -144,34 +145,33 @@ namespace Phytel.API.AppDomain.NG
             }
         }
 
-        //public PostDeletePatientGoalResponse DeletePatientNote(PostDeletePatientGoalRequest request)
-        //{
-        //    try
-        //    {
-        //        PostDeletePatientGoalResponse pgr = new PostDeletePatientGoalResponse();
-        //        bool result = false;
+        public PostDeletePatientNoteResponse DeletePatientNote(PostDeletePatientNoteRequest request)
+        {
+            PostDeletePatientNoteResponse response = new PostDeletePatientNoteResponse();
+            try
+            {
+                IRestClient client = new JsonServiceClient();
+                //[Route("/{Context}/{Version}/{ContractNumber}/Patient/{PatientId}/Note/{Id}/Delete", "DELETE")]
+                DeletePatientNoteDataResponse ddResponse = client.Delete<DeletePatientNoteDataResponse>(
+                    string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Note/{5}/Delete?UserId={6}",
+                    DDPatientNoteUrl,
+                    "NG",
+                    request.Version,
+                    request.ContractNumber,
+                    request.PatientId,
+                    request.Id,
+                    request.UserId));
 
-        //        // we can thread here if we want!
-        //        // save goals
-        //        GoalsEndpointUtil.DeleteGoalRequest(request);
-
-        //        // save barriers
-        //        GoalsUtil.DeletePatientGoalBarriers(request);
-
-        //        // save tasks
-        //        GoalsUtil.DeletePatientGoalTasks(request);
-
-        //        // save interventions
-        //        GoalsUtil.DeletePatientGoalInterventions(request);
-
-        //        pgr.Result = result;
-
-        //        return pgr;
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        throw new Exception("AD:SavePatientGoal:" + ex.Message, ex.InnerException);
-        //    }
-        //}
+                if (ddResponse != null && ddResponse.Deleted)
+                {
+                    response.Version = ddResponse.Version; 
+                }
+                return response;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("AD:DeletePatientNote:" + ex.Message, ex.InnerException);
+            }
+        }
     }
 }
