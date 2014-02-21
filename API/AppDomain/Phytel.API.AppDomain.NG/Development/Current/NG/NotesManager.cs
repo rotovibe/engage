@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Configuration;
 using Phytel.API.AppDomain.NG.DTO;
 using Phytel.API.DataDomain.PatientNote.DTO;
@@ -13,37 +14,88 @@ namespace Phytel.API.AppDomain.NG
         protected static readonly string DDPatientNoteUrl = ConfigurationManager.AppSettings["DDPatientNoteUrl"];
         #endregion
 
-        //public GetPatientGoalResponse GetPatientNote(GetPatientGoalRequest request)
-        //{
-        //    try
-        //    {
-        //        GetPatientGoalResponse response = new GetPatientGoalResponse();
-        //        response.Goal = GoalsEndpointUtil.GetPatientGoal(request);
-        //        response.Version = request.Version;
-        //        return response;
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        throw ex;
-        //    }
-        //}
+        public PatientNote GetPatientNote(GetPatientNoteRequest request)
+        {
+            try
+            {
+                PatientNote result = null;
+                //[Route("/{Context}/{Version}/{ContractNumber}/Patient/{PatientId}/Note/{Id}", "GET")]
+                IRestClient client = new JsonServiceClient();
+                GetPatientNoteDataResponse ddResponse = client.Get<GetPatientNoteDataResponse>(
+                    string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Note/{5}?UserId={6}",
+                    DDPatientNoteUrl,
+                    "NG",
+                    request.Version,
+                    request.ContractNumber,
+                    request.PatientId,
+                    request.Id,
+                    request.UserId));
 
-        //public GetAllPatientGoalsResponse GetAllPatientNotes(GetAllPatientGoalsRequest request)
-        //{
-        //    try
-        //    {
-        //        GetAllPatientGoalsResponse response = new GetAllPatientGoalsResponse();
-        //        response.Goals = GoalsEndpointUtil.GetAllPatientGoals(request);
-        //        response.Version = request.Version;
-        //        return response;
-        //    }
-        //    catch (Exception ex)C:\TFS2013\PhytelCode\Phytel.Net\Services\API\AppDomain\Phytel.API.AppDomain.NG\Development\Current\NG.DTOs\Goal\GetAllPatientGoalsRequest.cs
-        //    {
-        //        throw ex;
-        //    }
-        //}
+                if (ddResponse != null && ddResponse.PatientNote != null)
+                {
+                    PatientNoteData n = ddResponse.PatientNote;
+                    result = new PatientNote
+                    {
+                        Id = n.Id,
+                        PatientId = n.PatientId,
+                        Text = n.Text,
+                        ProgramIds = n.ProgramIds,
+                        CreatedOn = n.CreatedOn,
+                        CreatedById = n.CreatedById
+                    };
+                }
+                return result;
+            }
+            catch (WebServiceException ex)
+            {
+                throw new WebServiceException("AD:GetPatientNote()" + ex.Message, ex.InnerException);
+            }
+        }
 
-        public PostPatientNoteResponse InsertPatientNote(PostPatientNoteRequest request)
+        public List<PatientNote> GetAllPatientNotes(GetAllPatientNotesRequest request)
+        {
+            try
+            {
+                List<PatientNote> result = null;
+                //[Route("/{Context}/{Version}/{ContractNumber}/Patient/{PatientId}/Notes/{Count}", "GET")]
+                IRestClient client = new JsonServiceClient();
+                GetAllPatientNotesDataResponse ddResponse = client.Get<GetAllPatientNotesDataResponse>(
+                    string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Notes/{5}?UserId={6}",
+                    DDPatientNoteUrl,
+                    "NG",
+                    request.Version,
+                    request.ContractNumber,
+                    request.PatientId,
+                    request.Count,
+                    request.UserId));
+
+                if (ddResponse != null && ddResponse.PatientNotes != null && ddResponse.PatientNotes.Count > 0)
+                {
+                    result = new List<PatientNote>();
+                    List<PatientNoteData> dataList = ddResponse.PatientNotes;
+                    foreach (PatientNoteData n in dataList)
+                    {
+                        result.Add(new PatientNote
+                        {
+                            Id = n.Id,
+                            PatientId = n.PatientId,
+                            Text = n.Text,
+                            ProgramIds = n.ProgramIds,
+                            CreatedOn = n.CreatedOn,
+                            CreatedById = n.CreatedById
+                        }
+                        );
+                    }
+                }
+                return result;
+            }
+            catch (WebServiceException ex)
+            {
+                throw new WebServiceException("AD:GetAllPatientNotes()" + ex.Message, ex.InnerException);
+            }
+        }
+
+        public PostPatientNoteResponse InsertPatientNote(PostPatientNoteRequest request, string createdBy)
         {
             try
             {
@@ -58,7 +110,7 @@ namespace Phytel.API.AppDomain.NG
                 PatientNoteData noteData = new PatientNoteData {
                     Text  = request.Note.Text,
                     ProgramIds  = request.Note.ProgramIds,
-                    CreatedBy = request.Note.CreatedBy,
+                    CreatedById = createdBy,
                     CreatedOn = request.Note.CreatedOn,
                     PatientId = request.Note.PatientId
                 };

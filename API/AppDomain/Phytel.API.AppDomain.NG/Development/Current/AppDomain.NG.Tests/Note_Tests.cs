@@ -14,17 +14,26 @@ namespace Phytel.API.AppDomain.NG.Test
         [TestMethod]
         public void InsertPatientNote_Test()
         {
-            PatientNote note = new PatientNote { Text = "AD note 1", CreatedBy = "53043e53d433231f48de8a7a", PatientId = "52f55877072ef709f84e69b0" };
+            List<string> pgIds = new List<string>();
+            pgIds.Add("52f927abd6a4850e5c0f038b");
+            PatientNote note = new PatientNote { 
+                Id = "-2",
+                Text = "AD Patrick test",
+                CreatedById = "bb241c64a0ff4e01ba5f4246ef50780e",
+                PatientId = "52f5589b072ef709f84e7706",
+                ProgramIds = pgIds
+            };
             
             PostPatientNoteRequest request = new PostPatientNoteRequest();
             request.ContractNumber = "InHealth001";
             request.UserId = "AD_TestHarness"; 
             request.Version = "v1";
-            request.PatientId = "52f55877072ef709f84e69b0";
+            request.PatientId = "52f5589b072ef709f84e7706";
+            request.Token = "5307bcf5d6a4850cd4abe0dd";
             request.Note = note;
 
             NotesManager nManager = new NotesManager();
-            PostPatientNoteResponse response = nManager.InsertPatientNote(request);
+            PostPatientNoteResponse response = nManager.InsertPatientNote(request, note.CreatedById);
 
             Assert.IsNotNull(response);
         }

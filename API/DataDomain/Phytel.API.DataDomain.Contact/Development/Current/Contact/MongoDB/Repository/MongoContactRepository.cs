@@ -875,7 +875,7 @@ namespace Phytel.API.DataDomain.Contact
                             ContactData contactData = new ContactData
                             {
                                ContactId = c.Id.ToString(),
-                               UserId = c.UserId.Replace("-", string.Empty).ToLower(),
+                               UserId = (string.IsNullOrEmpty(c.UserId)) ? string.Empty : c.UserId.Replace("-", string.Empty).ToLower(),
                                PreferredName = c.PreferredName
                             };
                             contactDataList.Add(contactData);

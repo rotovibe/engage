@@ -716,7 +716,7 @@ namespace Phytel.API.AppDomain.NG.Service
                 if (result.UserId.Trim() != string.Empty)
                 {
                     request.UserId = result.UserId;
-                    response = ngm.InsertPatientNote(request);
+                    response = ngm.InsertPatientNote(request, result.UserId);
                 }
                 else
                     throw new UnauthorizedAccessException();
@@ -731,7 +731,57 @@ namespace Phytel.API.AppDomain.NG.Service
                 CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
                 return response;
             }
-        } 
+        }
+
+        public GetPatientNoteResponse Get(GetPatientNoteRequest request)
+        {
+            GetPatientNoteResponse response = new GetPatientNoteResponse();
+            try
+            {
+                NotesManager nManager = new NotesManager();
+                ValidateTokenResponse result = nManager.IsUserValidated(request.Version, request.Token);
+                if (result.UserId.Trim() != string.Empty)
+                {
+                    request.UserId = result.UserId;
+                    response.Note = nManager.GetPatientNote(request);
+                }
+                else
+                    throw new UnauthorizedAccessException();
+
+                return response;
+            }
+            catch (Exception ex)
+            {
+                //TODO: Log this to the SQL database via ASE
+                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+                return response;
+            }
+        }
+
+        public GetAllPatientNotesResponse Get(GetAllPatientNotesRequest request)
+        {
+            GetAllPatientNotesResponse response = new GetAllPatientNotesResponse();
+            try
+            {
+                NotesManager nManager = new NotesManager();
+                ValidateTokenResponse result = nManager.IsUserValidated(request.Version, request.Token);
+                if (result.UserId.Trim() != string.Empty)
+                {
+                    request.UserId = result.UserId;
+                    response.Notes = nManager.GetAllPatientNotes(request);
+                }
+                else
+                    throw new UnauthorizedAccessException();
+
+                return response;
+            }
+            catch (Exception ex)
+            {
+                //TODO: Log this to the SQL database via ASE
+                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+                return response;
+            }
+        }
         #endregion
 
     }

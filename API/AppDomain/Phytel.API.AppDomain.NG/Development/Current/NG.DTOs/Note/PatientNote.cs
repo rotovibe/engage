@@ -10,6 +10,6 @@ namespace Phytel.API.AppDomain.NG.DTO
         public string Text { get; set; }
         public List<string> ProgramIds { get; set; }
         public DateTime CreatedOn { get; set; }
-        public string CreatedBy { get; set; }
+        public string CreatedById { get; set; }
     }
 }
