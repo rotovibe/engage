@@ -31,21 +31,27 @@ namespace Phytel.API.AppDomain.NG.Service
                 else
                     throw new UnauthorizedAccessException();
 
-                if (response.Patient != null)
-                {
-                    List<string> patientIds = new List<string>();
-                    patientIds.Add(response.Patient.Id);
-                    AuditHelper.LogAuditData(request, patientIds, System.Web.HttpContext.Current.Request, request.GetType().Name);
-                }
                
-                return response;
             }
             catch (Exception ex)
             {
                 //TODO: Log this to the SQL database via ASE
                 CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
-                return response;
             }
+            finally
+            {
+                List<string> patientIds = null;
+
+                if (response.Patient != null)
+                {
+                   patientIds = new List<string>();
+                    patientIds.Add(response.Patient.Id);                    
+                }
+                
+                AuditHelper.LogAuditData(request, patientIds, System.Web.HttpContext.Current.Request, request.GetType().Name);
+            }
+
+            return response; 
         }
 
         public GetPatientResponse Get(GetPatientRequest request)
@@ -67,23 +73,26 @@ namespace Phytel.API.AppDomain.NG.Service
                 else
                     throw new UnauthorizedAccessException();
 
-                return response;
             }
             catch (Exception ex)
             {
                 //TODO: Log this to the SQL database via ASE
                 CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
-                return response;
             }
             finally
             {
+                List<string> patientIds = null;
+
                 if (response.Patient != null)
                 {
-                    List<string> patientIds = new List<string>();
-                    patientIds.Add(response.Patient.Id);
-                    AuditHelper.LogAuditData(request, patientIds, System.Web.HttpContext.Current.Request, request.GetType().Name);
+                    patientIds = new List<string>();
+                    patientIds.Add(response.Patient.Id);               
                 }
+
+                AuditHelper.LogAuditData(request, patientIds, System.Web.HttpContext.Current.Request, request.GetType().Name);
             }
+
+            return response;
         }
 
        
@@ -107,18 +116,18 @@ namespace Phytel.API.AppDomain.NG.Service
                 }
                 else
                     throw new UnauthorizedAccessException();
-
-               
-                AuditHelper.LogAuditData(request, null, System.Web.HttpContext.Current.Request, request.GetType().Name);
-               
-                return response;
             }
             catch (Exception ex)
             {
                 //TODO: Log this to the SQL database via ASE
                 CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
-                return response;
             }
+            finally
+            {
+               AuditHelper.LogAuditData(request, null, System.Web.HttpContext.Current.Request, request.GetType().Name);               
+            }
+            
+            return response; 
         }
 
         public GetAllProblemsResponse Get(GetAllProblemsRequest request)
@@ -135,18 +144,19 @@ namespace Phytel.API.AppDomain.NG.Service
                     response.Problems = ngm.GetProblems(request);
                 }
                 else
-                    throw new UnauthorizedAccessException();
-
-                AuditHelper.LogAuditData(request, null, System.Web.HttpContext.Current.Request, request.GetType().Name);
-               
-                return response;
+                    throw new UnauthorizedAccessException();               
             }
             catch (Exception ex)
             {
                 //TODO: Log this to the SQL database via ASE
                 CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
-                return response;
             }
+            finally
+            {
+                AuditHelper.LogAuditData(request, null, System.Web.HttpContext.Current.Request, request.GetType().Name);               
+            }
+            
+            return response; 
         }
 
         public GetAllCohortsResponse Get(GetAllCohortsRequest request)
@@ -164,17 +174,20 @@ namespace Phytel.API.AppDomain.NG.Service
                 }
                 else
                     throw new UnauthorizedAccessException();
-
-                AuditHelper.LogAuditData(request, null, System.Web.HttpContext.Current.Request, request.GetType().Name);
-               
-                return response;
             }
             catch (Exception ex)
             {
                 //TODO: Log this to the SQL database via ASE
                 CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
-                return response;
             }
+            finally
+            {
+
+                AuditHelper.LogAuditData(request, null, System.Web.HttpContext.Current.Request, request.GetType().Name);
+               
+            }
+            
+            return response; 
         }
 
         public PutPatientFlaggedUpdateResponse Post(PutPatientFlaggedUpdateRequest request)
@@ -192,17 +205,20 @@ namespace Phytel.API.AppDomain.NG.Service
                 }
                 else
                     throw new UnauthorizedAccessException();
-
-                AuditHelper.LogAuditData(request, null,  System.Web.HttpContext.Current.Request, request.GetType().Name);
-               
-                return response;
             }
             catch (Exception ex)
             {
                 //TODO: Log this to C3 database via ASE
                 CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
-                return response;
             }
+            finally
+            {
+
+                AuditHelper.LogAuditData(request, null, System.Web.HttpContext.Current.Request, request.GetType().Name);
+
+            }
+            
+            return response; 
         }
 
         public PutPatientDetailsUpdateResponse Post(PutPatientDetailsUpdateRequest request)
@@ -220,17 +236,20 @@ namespace Phytel.API.AppDomain.NG.Service
                 }
                 else
                     throw new UnauthorizedAccessException();
-
-                AuditHelper.LogAuditData(request, null, System.Web.HttpContext.Current.Request, request.GetType().Name);
-               
-                return response;
             }
             catch (Exception ex)
             {
                 //TODO: Log this to C3 database via ASE
                 CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
-                return response;
             }
+            finally
+            {
+
+                AuditHelper.LogAuditData(request, null, System.Web.HttpContext.Current.Request, request.GetType().Name);
+
+            }
+            
+            return response; 
         }
 
         public GetCohortPatientsResponse Get(GetCohortPatientsRequest request)
@@ -249,20 +268,25 @@ namespace Phytel.API.AppDomain.NG.Service
                 else
                     throw new UnauthorizedAccessException();
 
-                if (response.Patients != null)
-                {
-                    List<string> patientIds = response.Patients.Select(x => x.Id).ToList();
-                    AuditHelper.LogAuditData(request, patientIds, System.Web.HttpContext.Current.Request, request.GetType().Name);
-                }
-
-                return response;
             }
             catch (Exception ex)
             {
                 //TODO: Log this to the SQL database via ASE
                 CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
-                return response;
             }
+            finally
+            {
+                List<string> patientIds = null;
+
+                if (response.Patients != null)
+                {
+                    patientIds = response.Patients.Select(x => x.Id).ToList();
+                }
+
+                AuditHelper.LogAuditData(request, patientIds, System.Web.HttpContext.Current.Request, request.GetType().Name);
+            }
+            
+            return response; 
         }
 
         public GetAllSettingsResponse Get(GetAllSettingsRequest request)
@@ -280,17 +304,19 @@ namespace Phytel.API.AppDomain.NG.Service
                 }
                 else
                     throw new UnauthorizedAccessException();
-
-                AuditHelper.LogAuditData(request, null, System.Web.HttpContext.Current.Request, request.GetType().Name);
-               
-                return response;
             }
             catch (Exception ex)
             {
                 //TODO: Log this to the SQL database via ASE
                 CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
-                return response;
             }
+            finally
+            {
+                    AuditHelper.LogAuditData(request, null, System.Web.HttpContext.Current.Request, request.GetType().Name);
+              
+            }
+            
+            return response; 
         }
 
         public GetActiveProgramsResponse Get(GetActiveProgramsRequest request)
@@ -313,17 +339,18 @@ namespace Phytel.API.AppDomain.NG.Service
                 }
                 else
                     throw new UnauthorizedAccessException();
-
-                AuditHelper.LogAuditData(request, null, System.Web.HttpContext.Current.Request, request.GetType().Name);
-               
-                return response;
             }
             catch (Exception ex)
             {
                 //TODO: Log this to the SQL database via ASE
                 CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
-                return response;
             }
+            finally
+            {
+                AuditHelper.LogAuditData(request, null, System.Web.HttpContext.Current.Request, request.GetType().Name);
+            }
+            
+            return response; 
         }
 
         public PostPatientToProgramsResponse Post(PostPatientToProgramsRequest request)
@@ -341,17 +368,18 @@ namespace Phytel.API.AppDomain.NG.Service
                 }
                 else
                     throw new UnauthorizedAccessException();
-
-                AuditHelper.LogAuditData(request, null, System.Web.HttpContext.Current.Request, request.GetType().Name);
-               
-                return response;
             }
             catch (Exception ex)
             {
                 //TODO: Log this to C3 database via ASE
                 CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
-                return response;
             }
+            finally
+            {
+                AuditHelper.LogAuditData(request, null, System.Web.HttpContext.Current.Request, request.GetType().Name);               
+            }
+            
+            return response; 
         }
 
         public GetPatientProgramDetailsSummaryResponse Get(GetPatientProgramDetailsSummaryRequest request)
@@ -370,17 +398,18 @@ namespace Phytel.API.AppDomain.NG.Service
                 else
                     throw new UnauthorizedAccessException();
 
-                List<string> patientIds = null;  //response.Patients.Select(x => x.Id).ToList();
-                AuditHelper.LogAuditData(request, patientIds, System.Web.HttpContext.Current.Request, request.GetType().Name);
-               
-                return response;
             }
             catch (Exception ex)
             {
                 //TODO: Log this to C3 database via ASE
                 CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
-                return response;
             }
+            finally
+            {
+                 AuditHelper.LogAuditData(request, null, System.Web.HttpContext.Current.Request, request.GetType().Name);               
+            }
+            
+            return response; 
         }
 
         public GetPatientProgramsResponse Get(GetPatientProgramsRequest request)
@@ -399,20 +428,27 @@ namespace Phytel.API.AppDomain.NG.Service
                 else
                     throw new UnauthorizedAccessException();
 
-                if (response.Programs != null)
-                {
-                    List<string> patientIds = response.Programs.Select(x => x.PatientId).ToList();
-                    AuditHelper.LogAuditData(request, patientIds, System.Web.HttpContext.Current.Request, request.GetType().Name);
-                }
 
-                return response;
             }
             catch (Exception ex)
             {
                 //TODO: Log this to C3 database via ASE
                 CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
-                return response;
             }
+            finally
+            {
+                List<string> patientIds = null;
+
+                if (response.Programs != null)
+                {
+                    patientIds = response.Programs.Select(x => x.PatientId).ToList();
+                }
+                
+                AuditHelper.LogAuditData(request, patientIds, System.Web.HttpContext.Current.Request, request.GetType().Name);
+
+            }
+            
+            return response; 
         }
 
         #region Contact
@@ -431,17 +467,19 @@ namespace Phytel.API.AppDomain.NG.Service
                 }
                 else
                     throw new UnauthorizedAccessException();
-
-                AuditHelper.LogAuditData(request, null, System.Web.HttpContext.Current.Request, request.GetType().Name);
-               
-                return response;
             }
             catch (Exception ex)
             {
                 //TODO: Log this to the SQL database via ASE
                 CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
-                return response;
             }
+            finally
+            {
+                AuditHelper.LogAuditData(request, null, System.Web.HttpContext.Current.Request, request.GetType().Name);
+               
+            }
+            
+            return response; 
         }
 
         public GetAllCareManagersResponse Get(GetAllCareManagersRequest request)
@@ -460,17 +498,19 @@ namespace Phytel.API.AppDomain.NG.Service
                 }
                 else
                     throw new UnauthorizedAccessException();
-
-                AuditHelper.LogAuditData(request, null, System.Web.HttpContext.Current.Request, request.GetType().Name);
-
-                return response;
             }
             catch (Exception ex)
             {
                 //TODO: Log this to the SQL database via ASE
                 CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
-                return response;
             }
+            finally
+            {
+                AuditHelper.LogAuditData(request, null, System.Web.HttpContext.Current.Request, request.GetType().Name);
+
+            }
+            
+            return response; 
         }
 
         public PutUpdateContactResponse Post(PutUpdateContactRequest request)
@@ -488,17 +528,19 @@ namespace Phytel.API.AppDomain.NG.Service
                 }
                 else
                     throw new UnauthorizedAccessException();
-
-                AuditHelper.LogAuditData(request, null, System.Web.HttpContext.Current.Request, request.GetType().Name);
-               
-                return response;
             }
             catch (Exception ex)
             {
                 //TODO: Log this to C3 database via ASE
                 CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
-                return response;
             }
+            finally
+            {
+                AuditHelper.LogAuditData(request, null, System.Web.HttpContext.Current.Request, request.GetType().Name);
+               
+            }
+            
+            return response; 
         }
         #endregion
 
@@ -518,17 +560,19 @@ namespace Phytel.API.AppDomain.NG.Service
                 }
                 else
                     throw new UnauthorizedAccessException();
-
-                AuditHelper.LogAuditData(request, null, System.Web.HttpContext.Current.Request, request.GetType().Name);
-               
-                return response;
             }
             catch (Exception ex)
             {
                 //TODO: Log this to the SQL database via ASE
                 CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
-                return response;
             }
+            finally
+            {
+                AuditHelper.LogAuditData(request, null, System.Web.HttpContext.Current.Request, request.GetType().Name);
+               
+            }
+            
+            return response; 
         }
 
         public GetAllStatesResponse Get(GetAllStatesRequest request)
@@ -546,17 +590,19 @@ namespace Phytel.API.AppDomain.NG.Service
                 }
                 else
                     throw new UnauthorizedAccessException();
-
-                AuditHelper.LogAuditData(request, null, System.Web.HttpContext.Current.Request, request.GetType().Name);
-               
-                return response;
             }
             catch (Exception ex)
             {
                 //TODO: Log this to the SQL database via ASE
                 CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
-                return response;
             }
+            finally
+            {
+                AuditHelper.LogAuditData(request, null, System.Web.HttpContext.Current.Request, request.GetType().Name);
+               
+            }
+            
+            return response; 
         }
 
         public GetAllTimesOfDaysResponse Get(GetAllTimesOfDaysRequest request)
@@ -574,17 +620,19 @@ namespace Phytel.API.AppDomain.NG.Service
                 }
                 else
                     throw new UnauthorizedAccessException();
-
-                AuditHelper.LogAuditData(request, null, System.Web.HttpContext.Current.Request, request.GetType().Name);
-               
-                return response;
             }
             catch (Exception ex)
             {
                 //TODO: Log this to the SQL database via ASE
                 CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
-                return response;
             }
+            finally
+            {
+                AuditHelper.LogAuditData(request, null, System.Web.HttpContext.Current.Request, request.GetType().Name);
+               
+            }
+            
+            return response; 
         }
 
         public GetAllTimeZonesResponse Get(GetAllTimeZonesRequest request)
@@ -602,17 +650,19 @@ namespace Phytel.API.AppDomain.NG.Service
                 }
                 else
                     throw new UnauthorizedAccessException();
-
-                AuditHelper.LogAuditData(request, null, System.Web.HttpContext.Current.Request, request.GetType().Name);
-               
-                return response;
             }
             catch (Exception ex)
             {
                 //TODO: Log this to the SQL database via ASE
                 CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
-                return response;
             }
+            finally
+            {
+                AuditHelper.LogAuditData(request, null, System.Web.HttpContext.Current.Request, request.GetType().Name);
+               
+            }
+            
+            return response; 
         }
 
         public GetAllCommTypesResponse Get(GetAllCommTypesRequest request)
@@ -630,17 +680,19 @@ namespace Phytel.API.AppDomain.NG.Service
                 }
                 else
                     throw new UnauthorizedAccessException();
-
-                AuditHelper.LogAuditData(request, null, System.Web.HttpContext.Current.Request, request.GetType().Name);
-               
-                return response;
             }
             catch (Exception ex)
             {
                 //TODO: Log this to the SQL database via ASE
                 CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
-                return response;
             }
+            finally
+            {
+                 AuditHelper.LogAuditData(request, null, System.Web.HttpContext.Current.Request, request.GetType().Name);
+               
+            }
+            
+            return response; 
         }
 
         public GetAllLanguagesResponse Get(GetAllLanguagesRequest request)
@@ -658,17 +710,19 @@ namespace Phytel.API.AppDomain.NG.Service
                 }
                 else
                     throw new UnauthorizedAccessException();
-
-                AuditHelper.LogAuditData(request, null, System.Web.HttpContext.Current.Request, request.GetType().Name);
-               
-                return response;
             }
             catch (Exception ex)
             {
                 //TODO: Log this to the SQL database via ASE
                 CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
-                return response;
             }
+            finally
+            {
+                AuditHelper.LogAuditData(request, null, System.Web.HttpContext.Current.Request, request.GetType().Name);
+               
+            }
+            
+            return response; 
         }
 
         #endregion
@@ -689,17 +743,19 @@ namespace Phytel.API.AppDomain.NG.Service
                 }
                 else
                     throw new UnauthorizedAccessException();
-
-                AuditHelper.LogAuditData(request, null, System.Web.HttpContext.Current.Request, request.GetType().Name);
-
-                return response;
             }
             catch (Exception ex)
             {
                 //TODO: Log this to the SQL database via ASE
                 CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
-                return response;
             }
+            finally
+            {
+                AuditHelper.LogAuditData(request, null, System.Web.HttpContext.Current.Request, request.GetType().Name);
+
+            }
+            
+            return response; 
         }
         #endregion
 
