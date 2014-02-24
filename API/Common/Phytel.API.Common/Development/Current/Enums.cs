@@ -63,7 +63,8 @@ namespace Phytel.API.Common
     public enum EligibilityStatus
     {
         NotEligible = 1,
-        Eligible = 2
+        Eligible = 2,
+        Pending = 3
     }
 
     public enum Locked

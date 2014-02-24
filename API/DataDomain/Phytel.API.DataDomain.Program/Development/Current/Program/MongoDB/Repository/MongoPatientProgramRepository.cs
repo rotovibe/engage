@@ -261,17 +261,17 @@ namespace Phytel.API.DataDomain.Program
 
                     var uv = new List<MB.UpdateBuilder>();
                     uv.Add(MB.Update.Set(MEPatientProgram.CompletedProperty, pg.Completed));
-                    uv.Add(MB.Update.Set(MEPatientProgram.StateProperty, (ElementState)pg.ElementState));
                     uv.Add(MB.Update.Set(MEPatientProgram.EnabledProperty, pg.Enabled));
                     uv.Add(MB.Update.Set(MEPatientProgram.OrderProperty, pg.Order));
                     uv.Add(MB.Update.Set(MEPatientProgram.ProgramStateProperty, (ProgramState)pg.ProgramState));
-                    uv.Add(MB.Update.Set(MEPatientProgram.StatusProperty, (Status)pg.Status));
                     uv.Add(MB.Update.Set(MEPatientProgram.LastUpdatedOnProperty, System.DateTime.UtcNow));
                     uv.Add(MB.Update.Set(MEPatientProgram.UpdatedByProperty, p.UserId));
                     uv.Add(MB.Update.Set(MEPatientProgram.EligibilityProperty, pg.Eligibility));
                     uv.Add(MB.Update.Set(MEPatientProgram.EnrollmentProperty, pg.Enrollment));
                     uv.Add(MB.Update.Set(MEPatientProgram.GraduatedFlagProperty, pg.GraduatedFlag));
 
+                    if (pg.ElementState != 0) uv.Add(MB.Update.Set(MEPatientProgram.StateProperty, (ElementState)pg.ElementState));
+                    if (pg.Status != 0) uv.Add(MB.Update.Set(MEPatientProgram.StatusProperty, (Status)pg.Status));
                     if (pg.AssignBy != null) { uv.Add(MB.Update.Set(MEPatientProgram.AssignByProperty, pg.AssignBy)); }
                     if (pg.AssignDate != null) { uv.Add(MB.Update.Set(MEPatientProgram.AssignDateProperty, pg.AssignDate)); }
                     if (pg.Client != null) { uv.Add(MB.Update.Set(MEPatientProgram.ClientProperty, pg.Client)); }

@@ -441,5 +441,25 @@ namespace Phytel.API.AppDomain.NG
                 throw new Exception("AppDomain:SetStartDateForProgramAttributes():" + ex.Message, ex.InnerException);
             }
         }
+
+        internal static void SetProgramInformation(DD.ProgramAttribute _programAttributes, Program p)
+        {
+            try
+            {
+                _programAttributes.PlanElementId = p.Id;
+                _programAttributes.Status = p.Status;
+                _programAttributes.StartDate = p.StartDate;
+                _programAttributes.EndDate = null;
+                _programAttributes.Eligibility = p.Eligibility;
+                _programAttributes.Enrollment = p.Enrollment;
+                _programAttributes.GraduatedFlag = 1;
+                _programAttributes.OptOut = null;
+                _programAttributes.EligibilityOverride = 1;
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
     }
 }

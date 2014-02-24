@@ -30,7 +30,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
                 OptOut = null,
                 DidNotEnrollReason = null,
                 DisEnrollReason = null,
-                Eligibility = Common.EligibilityStatus.Eligible,
+                Eligibility = Common.EligibilityStatus.Pending,
                 EligibilityStartDate = System.DateTime.UtcNow,
                 EligibilityEndDate = null,
                 EligibilityRequirements = cp.EligibilityRequirements,
@@ -1074,6 +1074,40 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             {
                 throw new ArgumentException("DDomain:SaveResponseToDocument()" + ex.Message, ex.InnerException);
             }
+        }
+
+        internal static ProgramAttribute InitializeElementAttributes(ProgramInfo p)
+        {
+            try
+            {
+                ProgramAttribute pa = new ProgramAttribute();
+                pa.PlanElementId = p.Id;
+                pa.Status = p.Status;
+                pa.StartDate = System.DateTime.Now;
+                pa.EndDate = null;
+                pa.Eligibility = 3;
+                pa.Enrollment = 2;
+                pa.GraduatedFlag = 1;
+                pa.OptOut = null;
+                pa.EligibilityOverride = 1;
+                return pa;
+            }
+            catch (Exception ex)
+            {
+                throw new ArgumentException("DDomain:SaveResponseToDocument()" + ex.Message, ex.InnerException);
+            }
+        }
+
+        internal static void InitializeProgramAttributes(PutProgramToPatientRequest request, PutProgramToPatientResponse response)
+        {
+            // create program attribute insertion
+            ProgramAttribute attr = DTOUtils.InitializeElementAttributes(response.program);
+
+            IProgramRepository<PutProgramAttributesResponse> attrRepo =
+                Phytel.API.DataDomain.Program.ProgramRepositoryFactory<PutProgramAttributesResponse>
+                .GetProgramAttributesRepository(request.ContractNumber, request.Context);
+
+            attrRepo.Insert(attr);
         }
     }
 }
