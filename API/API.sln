@@ -188,9 +188,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.PatientNote.Serv
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.PatientNote.Test", "DataDomain\Phytel.API.DataDomain.PatientNote\Development\Current\PatientNote.Test\DataDomain.PatientNote.Test.csproj", "{FCAC9754-51AE-47DF-A0B7-D37855F64B9C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Phytel.API.DataAudit", "Phytel.API.DataAudit\Phytel.API.DataAudit.csproj", "{AE842695-4DD4-4403-9BE4-8473BCA09580}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 74
+		SccNumberOfProjects = 75
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = http://hillstfs2013:8080/tfs/phytel
 		SccLocalPath0 = .
@@ -486,6 +488,10 @@ Global
 		SccProjectTopLevelParentUniqueName73 = API.sln
 		SccProjectName73 = DataDomain/Phytel.API.DataDomain.PatientNote/Development/Current/PatientNote.Test
 		SccLocalPath73 = DataDomain\\Phytel.API.DataDomain.PatientNote\\Development\\Current\\PatientNote.Test
+		SccProjectUniqueName74 = Phytel.API.DataAudit\\Phytel.API.DataAudit.csproj
+		SccProjectTopLevelParentUniqueName74 = API.sln
+		SccProjectName74 = Phytel.API.DataAudit
+		SccLocalPath74 = Phytel.API.DataAudit
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -786,6 +792,10 @@ Global
 		{FCAC9754-51AE-47DF-A0B7-D37855F64B9C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FCAC9754-51AE-47DF-A0B7-D37855F64B9C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FCAC9754-51AE-47DF-A0B7-D37855F64B9C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AE842695-4DD4-4403-9BE4-8473BCA09580}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AE842695-4DD4-4403-9BE4-8473BCA09580}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AE842695-4DD4-4403-9BE4-8473BCA09580}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AE842695-4DD4-4403-9BE4-8473BCA09580}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -833,6 +843,7 @@ Global
 		{D1AB1B95-3FAA-49F1-8158-9E619CDF8D7F} = {08328FF0-1E70-4255-A243-A7F38AE9BE45}
 		{CBBFA1EA-0482-4FB1-B0DE-D3AEC89724B4} = {08328FF0-1E70-4255-A243-A7F38AE9BE45}
 		{25CF3C3F-221F-4A49-B5EF-A8A5FCF9A5BA} = {BE4D6E45-ED2C-41A4-839C-AC49756E4166}
+		{AE842695-4DD4-4403-9BE4-8473BCA09580} = {BE4D6E45-ED2C-41A4-839C-AC49756E4166}
 		{42F7185B-2EE1-49F9-AB6F-E89E6F8AF7C6} = {2A01ECE4-66FB-4A8C-BEA0-74A20BDD6543}
 		{D4489296-17A3-4172-8FDF-DB6C0A7AE748} = {2A01ECE4-66FB-4A8C-BEA0-74A20BDD6543}
 		{229026B1-C3E5-4D2B-8D2B-61D00E8A52CC} = {2A01ECE4-66FB-4A8C-BEA0-74A20BDD6543}

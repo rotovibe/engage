@@ -77,6 +77,7 @@ namespace Phytel.API.DataDomain.LookUp.DTO
         FocusArea = 10,
         Source = 11,
         BarrierCategory = 12,
-        InterventionCategory = 13
+        InterventionCategory = 13,
+        ObservationType = 14
     }
 }
