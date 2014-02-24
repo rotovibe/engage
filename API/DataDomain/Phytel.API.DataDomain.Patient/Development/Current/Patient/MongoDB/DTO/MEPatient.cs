@@ -113,7 +113,7 @@ namespace Phytel.API.DataDomain.Patient.DTO
     public class CareTeamMember
     {
         public const string ContactIdProperty = "cid";
-        public const string PrimaryProperty = "pri";
+        public const string PrimaryProperty = "prim";
         public const string TypeProperty = "type";
 
         [BsonElement(ContactIdProperty)]
