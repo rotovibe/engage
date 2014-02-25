@@ -167,9 +167,9 @@ namespace Phytel.API.DataDomain.CareMember
                         uv.Add(MB.Update.Set(MECareMember.UpdatedByProperty, request.UserId));
                         uv.Add(MB.Update.Set(MECareMember.VersionProperty, request.Version));
                         uv.Add(MB.Update.Set(MECareMember.LastUpdatedOnProperty, System.DateTime.UtcNow));
-                        if (careMemberData.PatientId != null) uv.Add(MB.Update.Set(MECareMember.PatientIdProperty, careMemberData.PatientId));
+                        if (careMemberData.PatientId != null) uv.Add(MB.Update.Set(MECareMember.PatientIdProperty, ObjectId.Parse(careMemberData.PatientId)));
                         if (careMemberData.ContactId != null) uv.Add(MB.Update.Set(MECareMember.ContactIdProperty, ObjectId.Parse(careMemberData.ContactId)));
-                        if (careMemberData.TypeId != null) uv.Add(MB.Update.Set(MECareMember.TypeProperty, careMemberData.TypeId));
+                        if (careMemberData.TypeId != null) uv.Add(MB.Update.Set(MECareMember.TypeProperty, ObjectId.Parse(careMemberData.TypeId)));
                         if (careMemberData.Primary != null) uv.Add(MB.Update.Set(MECareMember.PrimaryProperty, careMemberData.Primary));
 
                         IMongoUpdate update = MB.Update.Combine(uv);
