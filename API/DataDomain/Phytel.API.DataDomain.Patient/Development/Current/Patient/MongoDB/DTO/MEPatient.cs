@@ -23,7 +23,6 @@ namespace Phytel.API.DataDomain.Patient.DTO
         public const string SuffixProperty = "sfx";
         public const string PreferredNameProperty = "pfn";
         public const string PriorityProperty = "pri";
-        public const string CareTeamProperty = "ct";
         public const string ExtraElementsProperty = "ex";
         public const string VersionProperty = "v";
         public const string UpdatedByProperty = "uby";
@@ -70,10 +69,6 @@ namespace Phytel.API.DataDomain.Patient.DTO
         [BsonIgnoreIfNull(true)]
         public PriorityData Priority { get; set; }
 
-        [BsonElement(CareTeamProperty)]
-        [BsonIgnoreIfNull(true)]
-        public List<CareTeamMember> CareTeam { get; set; }
-
         [BsonElement(ExtraElementsProperty)]
         [BsonExtraElements()]
         [BsonIgnoreIfNull(true)]
@@ -108,27 +103,5 @@ namespace Phytel.API.DataDomain.Patient.DTO
         Low = 1,
         Medium = 2,
         High = 3
-    }
-
-    public class CareTeamMember
-    {
-        public const string ContactIdProperty = "cid";
-        public const string PrimaryProperty = "prim";
-        public const string TypeProperty = "type";
-
-        [BsonElement(ContactIdProperty)]
-        public ObjectId ContactId { get; set; }
-
-        [BsonElement(PrimaryProperty)]
-        public bool Primary { get; set; }
-
-        [BsonElement(TypeProperty)]
-        public CareMemberType Type { get; set; }
-    }
-
-    public enum CareMemberType
-    {
-        CareManager = 1,
-        Physician = 2,
     }
 }

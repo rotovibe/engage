@@ -35,21 +35,5 @@ namespace Phytel.API.DataDomain.Patient.MongoDB.DTO
             }
         }
 
-        /// <summary>
-        /// Converts the name of the Enum to a friendly name that can be shown on the UI
-        /// </summary>
-        /// <param name="s">Status enum object</param>
-        /// <returns>friendly string</returns>
-        internal static string ToFriendlyString(CareMemberType t)
-        {
-            switch (t)
-            {
-                case CareMemberType.CareManager:
-                    return "Care Manager";
-                case CareMemberType.Physician:
-                    return "Physician";
-            }
-            return null;
-        }
     }
 }

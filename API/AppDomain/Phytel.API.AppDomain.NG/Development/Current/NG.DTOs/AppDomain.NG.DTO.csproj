@@ -86,6 +86,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Action.cs" />
+    <Compile Include="CareMember\GetAllCareMembersRequest.cs" />
+    <Compile Include="CareMember\GetAllCareMembersResponse.cs" />
+    <Compile Include="CareMember\GetCareMemberRequest.cs" />
+    <Compile Include="CareMember\GetCareMemberResponse.cs" />
+    <Compile Include="CareMember\CareMember.cs" />
+    <Compile Include="CareMember\PostUpdateCareMemberRequest.cs" />
+    <Compile Include="CareMember\PostCareMemberRequest.cs" />
+    <Compile Include="CareMember\PostUpdateCareMemberResponse.cs" />
+    <Compile Include="CareMember\PostCareMemberResponse.cs" />
     <Compile Include="Contact\Address.cs" />
     <Compile Include="Contact\CommMode.cs" />
     <Compile Include="Contact\Email.cs" />

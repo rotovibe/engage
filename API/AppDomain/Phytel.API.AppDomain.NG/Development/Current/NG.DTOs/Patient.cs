@@ -20,14 +20,5 @@ namespace Phytel.API.AppDomain.NG.DTO
         public string DisplaySystemName { get; set; }
         public int Priority { get; set; }
         public int Flagged { get; set; }
-        public List<CareTeamMember> CareTeam { get; set; }
-    }
-
-    public class CareTeamMember
-    {
-        public string PreferredName { get; set; }
-        public string Gender { get; set; }
-        public string Type { get; set; }
-        public bool Primary { get; set; }
     }
 }

@@ -20,7 +20,6 @@ namespace Phytel.API.DataDomain.Patient.DTO
         public string DisplayPatientSystemID { get; set; }
         public PriorityData PriorityData { get; set; }
         public bool Flagged { get; set; }
-        public List<CareTeamMemberData> CareTeamData { get; set; }
     }
 
     public enum PriorityData
@@ -29,12 +28,5 @@ namespace Phytel.API.DataDomain.Patient.DTO
         Low = 1,
         Medium = 2,
         High = 3
-    }
-
-    public class CareTeamMemberData
-    {
-        public string ContactId { get; set; }
-        public string Type { get; set; }
-        public bool Primary { get; set; }
     }
 }
