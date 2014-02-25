@@ -78,6 +78,7 @@ namespace Phytel.API.DataDomain.LookUp.DTO
         Source = 11,
         BarrierCategory = 12,
         InterventionCategory = 13,
-        ObservationType = 14
+        ObservationType = 14,
+        CareMemberType = 15
     }
 }
