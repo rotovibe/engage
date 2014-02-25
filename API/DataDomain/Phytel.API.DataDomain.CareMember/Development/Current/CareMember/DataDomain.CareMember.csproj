@@ -40,6 +40,10 @@
     <Reference Include="MongoDB.Driver">
       <HintPath>..\References\MongoDB.Driver.dll</HintPath>
     </Reference>
+    <Reference Include="Phytel.Mongo, Version=1.1.0.0, Culture=neutral, PublicKeyToken=2125ac4128f3087b, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\References\Phytel.Mongo.dll</HintPath>
+    </Reference>
     <Reference Include="ServiceStack.Common">
       <HintPath>..\..\..\..\..\packages\ServiceStack.Common.3.9.70\lib\net35\ServiceStack.Common.dll</HintPath>
     </Reference>
@@ -51,6 +55,7 @@
       <HintPath>..\..\..\..\..\packages\ServiceStack.Text.3.9.70\lib\net35\ServiceStack.Text.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -68,10 +73,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\..\..\..\Shared\PhytelServices\Development\Current\Phytel.Mongo\Phytel.Mongo.csproj">
-      <Project>{7c9e786c-e4f7-4382-bde4-8dbf980ea013}</Project>
-      <Name>Phytel.Mongo</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\..\..\..\Common\Phytel.API.Common\Development\Current\Phytel.API.Common.csproj">
       <Project>{25cf3c3f-221f-4a49-b5ef-a8a5fcf9a5ba}</Project>
       <Name>Phytel.API.Common</Name>

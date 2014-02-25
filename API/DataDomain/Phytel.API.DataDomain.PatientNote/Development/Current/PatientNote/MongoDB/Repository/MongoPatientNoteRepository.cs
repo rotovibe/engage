@@ -34,25 +34,28 @@ namespace Phytel.API.DataDomain.PatientNote
             string noteId = string.Empty;
             try
             {
-                MEPatientNote meN = new MEPatientNote
+                if(noteData != null)
                 {
-                    Id = ObjectId.GenerateNewId(),
-                    PatientId = ObjectId.Parse(noteData.PatientId),
-                    Text = noteData.Text,
-                    Programs = Helper.ConvertToObjectIdList(noteData.ProgramIds),
-                    CreatedBy = noteData.CreatedById,
-                    CreatedOn = DateTime.UtcNow,
-                    Version = request.Version,
-                    UpdatedBy = request.UserId,
-                    LastUpdatedOn = DateTime.UtcNow
-                };
-
-                using (PatientNoteMongoContext ctx = new PatientNoteMongoContext(_dbName))
-                {
-                    WriteConcernResult wcr = ctx.PatientNotes.Collection.Insert(meN);
-                    if (wcr.Ok)
+                    MEPatientNote meN = new MEPatientNote
                     {
-                        noteId = meN.Id.ToString();
+                        Id = ObjectId.GenerateNewId(),
+                        PatientId = ObjectId.Parse(noteData.PatientId),
+                        Text = noteData.Text,
+                        Programs = Helper.ConvertToObjectIdList(noteData.ProgramIds),
+                        CreatedBy = noteData.CreatedById,
+                        CreatedOn = DateTime.UtcNow,
+                        Version = request.Version,
+                        UpdatedBy = request.UserId,
+                        LastUpdatedOn = DateTime.UtcNow
+                    };
+
+                    using (PatientNoteMongoContext ctx = new PatientNoteMongoContext(_dbName))
+                    {
+                        WriteConcernResult wcr = ctx.PatientNotes.Collection.Insert(meN);
+                        if (wcr.Ok)
+                        {
+                            noteId = meN.Id.ToString();
+                        }
                     }
                 }
                 return noteId;
@@ -80,7 +83,8 @@ namespace Phytel.API.DataDomain.PatientNote
                     var q = MB.Query<MEPatientNote>.EQ(b => b.Id, ObjectId.Parse(request.Id));
 
                     var uv = new List<MB.UpdateBuilder>();
-                    uv.Add(MB.Update.Set(MEPatientNote.TTLDateProperty, System.DateTime.UtcNow.AddDays(_expireDays)));
+                    uv.Add(MB.Update.Set(MEPatientNote.TTLDateProperty, DateTime.UtcNow.AddDays(_expireDays)));
+                    uv.Add(MB.Update.Set(MEPatientNote.LastUpdatedOnProperty, DateTime.UtcNow));
                     uv.Add(MB.Update.Set(MEPatientNote.DeleteFlagProperty, true));
                     uv.Add(MB.Update.Set(MEPatientNote.UpdatedByProperty, request.UserId));
 

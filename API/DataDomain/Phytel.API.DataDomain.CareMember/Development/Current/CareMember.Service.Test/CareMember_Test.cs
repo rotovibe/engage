@@ -18,9 +18,9 @@ namespace Phytel.API.DataDomain.CareMember.Services.Test
             string version = "v1";
             IRestClient client = new JsonServiceClient();
 
-            GetCareMemberResponse response = client.Post<GetCareMemberResponse>(
+            GetCareMemberDataResponse response = client.Post<GetCareMemberDataResponse>(
                 string.Format("{0}/{1}/{2}/{3}/CareMember/{4}", url, context, version, contractNumber, ProgramID),
-                new GetCareMemberResponse() as object);
+                new GetCareMemberDataResponse() as object);
 
             Assert.AreEqual(string.Empty, string.Empty);
         }

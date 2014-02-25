@@ -3,27 +3,50 @@ using System.Data.SqlClient;
 using Phytel.API.DataDomain.CareMember;
 using System;
 using Phytel.API.Common.Format;
+using System.Collections.Generic;
 
 namespace Phytel.API.DataDomain.CareMember
 {
     public static class CareMemberDataManager
     {
-        public static GetCareMemberResponse GetCareMemberByID(GetCareMemberRequest request)
+        public static string InsertCareMember(PutCareMemberDataRequest request)
+        {
+            string careMemberId = string.Empty;
+            try
+            {
+                ICareMemberRepository<PutCareMemberDataResponse> repo = CareMemberRepositoryFactory<PutCareMemberDataResponse>.GetCareMemberRepository(request.ContractNumber, request.Context);
+                careMemberId = (string)repo.Insert(request);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return careMemberId;
+        }
+
+        public static bool UpdateCareMember(PutUpdateCareMemberDataRequest request)
+        {
+            bool updated = false;
+            try
+            {
+                ICareMemberRepository<PutUpdateCareMemberDataResponse> repo = CareMemberRepositoryFactory<PutUpdateCareMemberDataResponse>.GetCareMemberRepository(request.ContractNumber, request.Context);
+                updated = (bool)repo.Update(request);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return updated;
+        }
+
+        public static CareMemberData GetCareMember(GetCareMemberDataRequest request)
         {
             try
             {
-                GetCareMemberResponse result = new GetCareMemberResponse();
-
-                ICareMemberRepository<GetCareMemberResponse> repo = CareMemberRepositoryFactory<GetCareMemberResponse>.GetCareMemberRepository(request.ContractNumber, request.Context);
-                result = repo.FindByID(request.CareMemberID) as GetCareMemberResponse;
-
-                // if cross-domain service call has error
-                //if (result.Status != null)
-                //{
-                //    throw new ArgumentException(result.Status.Message, new Exception() { Source = result.Status.StackTrace });
-                //}
-
-                return (result != null ? result : new GetCareMemberResponse());
+                CareMemberData response = null;
+                ICareMemberRepository<CareMemberData> repo = CareMemberRepositoryFactory<CareMemberData>.GetCareMemberRepository(request.ContractNumber, request.Context);
+                response = repo.FindByID(request.Id) as CareMemberData;
+                return response;
             }
             catch (Exception ex)
             {
@@ -31,16 +54,14 @@ namespace Phytel.API.DataDomain.CareMember
             }
         }
 
-        public static GetAllCareMembersResponse GetCareMemberList(GetAllCareMembersRequest request)
+        public static List<CareMemberData> GetAllCareMembers(GetAllCareMembersDataRequest request)
         {
             try
             {
-                GetAllCareMembersResponse result = new GetAllCareMembersResponse();
-
-                ICareMemberRepository<GetAllCareMembersResponse> repo = CareMemberRepositoryFactory<GetAllCareMembersResponse>.GetCareMemberRepository(request.ContractNumber, request.Context);
-               
-
-                return result;
+                List<CareMemberData> response = null;
+                ICareMemberRepository<List<CareMemberData>> repo = CareMemberRepositoryFactory<List<CareMemberData>>.GetCareMemberRepository(request.ContractNumber, request.Context);
+                response = repo.FindByPatientId(request) as List<CareMemberData>;
+                return response;
             }
             catch (Exception ex)
             {

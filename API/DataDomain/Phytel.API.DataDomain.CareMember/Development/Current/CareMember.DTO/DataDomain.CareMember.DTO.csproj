@@ -69,11 +69,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="GetAllCareMembersRequest.cs" />
-    <Compile Include="GetCareMemberRequest.cs" />
-    <Compile Include="GetAllCareMembersResponse.cs" />
-    <Compile Include="GetCareMemberResponse.cs" />
+    <Compile Include="CareMemberData.cs" />
+    <Compile Include="GetAllCareMembersDataRequest.cs" />
+    <Compile Include="GetAllCareMembersDataResponse.cs" />
+    <Compile Include="GetCareMemberDataRequest.cs" />
+    <Compile Include="GetCareMemberDataResponse.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="PutUpdateCareMemberDataRequest.cs" />
+    <Compile Include="PutCareMemberDataRequest.cs" />
+    <Compile Include="PutUpdateCareMemberDataResponse.cs" />
+    <Compile Include="PutCareMemberDataResponse.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

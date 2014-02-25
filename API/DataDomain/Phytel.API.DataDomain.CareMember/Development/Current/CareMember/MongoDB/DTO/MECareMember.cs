@@ -15,6 +15,10 @@ namespace Phytel.API.DataDomain.CareMember.DTO
         public MECareMember() { Id = ObjectId.GenerateNewId(); }
 
         public const string IdProperty = "_id";
+        public const string PatientIdProperty = "pid";
+        public const string ContactIdProperty = "cid";
+        public const string PrimaryProperty = "prim";
+        public const string TypeProperty = "type";
 
         #region Standard IMongoEntity Constants
         public const string ExtraElementsProperty = "ex";
@@ -28,6 +32,21 @@ namespace Phytel.API.DataDomain.CareMember.DTO
         [BsonId]
         public ObjectId Id { get; set; }
 
+        [BsonElement(PatientIdProperty)]
+        [BsonIgnoreIfNull(true)]
+        public ObjectId PatientId { get; set; }
+
+        [BsonElement(ContactIdProperty)]
+        [BsonIgnoreIfNull(true)]
+        public ObjectId ContactId { get; set; }
+
+        [BsonElement(PrimaryProperty)]
+        [BsonIgnoreIfNull(false)]
+        public bool Primary { get; set; }
+
+        [BsonElement(TypeProperty)]
+        [BsonIgnoreIfNull(false)]
+        public Object Type { get; set; }
 
         #region Standard IMongoEntity Implementation
         [BsonElement(ExtraElementsProperty)]

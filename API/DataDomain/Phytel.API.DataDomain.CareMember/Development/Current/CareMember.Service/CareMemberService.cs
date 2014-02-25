@@ -8,12 +8,12 @@ namespace Phytel.API.DataDomain.CareMember.Service
 {
     public class CareMemberService : ServiceStack.ServiceInterface.Service
     {
-        public GetCareMemberResponse Post(GetCareMemberRequest request)
+        public PutCareMemberDataResponse Put(PutCareMemberDataRequest request)
         {
-            GetCareMemberResponse response = new GetCareMemberResponse();
+            PutCareMemberDataResponse response = new PutCareMemberDataResponse();
             try
             {
-                response = CareMemberDataManager.GetCareMemberByID(request);
+                response.Id = CareMemberDataManager.InsertCareMember(request);
                 response.Version = request.Version;
             }
             catch (Exception ex)
@@ -25,12 +25,12 @@ namespace Phytel.API.DataDomain.CareMember.Service
             return response;
         }
 
-        public GetCareMemberResponse Get(GetCareMemberRequest request)
+        public PutUpdateCareMemberDataResponse Put(PutUpdateCareMemberDataRequest request)
         {
-            GetCareMemberResponse response = new GetCareMemberResponse();
+            PutUpdateCareMemberDataResponse response = new PutUpdateCareMemberDataResponse();
             try
             {
-                response = CareMemberDataManager.GetCareMemberByID(request);
+                response.Updated = CareMemberDataManager.UpdateCareMember(request);
                 response.Version = request.Version;
             }
             catch (Exception ex)
@@ -42,12 +42,29 @@ namespace Phytel.API.DataDomain.CareMember.Service
             return response;
         }
 
-        public GetAllCareMembersResponse Post(GetAllCareMembersRequest request)
+        public GetCareMemberDataResponse Get(GetCareMemberDataRequest request)
         {
-            GetAllCareMembersResponse response = new GetAllCareMembersResponse();
+            GetCareMemberDataResponse response = new GetCareMemberDataResponse();
             try
             {
-                response = CareMemberDataManager.GetCareMemberList(request);
+                response.CareMember = CareMemberDataManager.GetCareMember(request);
+                response.Version = request.Version;
+            }
+            catch (Exception ex)
+            {
+                //TODO: Log this to C3 database via ASE
+                base.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                response.Status = new ServiceStack.ServiceInterface.ServiceModel.ResponseStatus("Exception", ex.Message);
+            }
+            return response;
+        }
+
+        public GetAllCareMembersDataResponse Get(GetAllCareMembersDataRequest request)
+        {
+            GetAllCareMembersDataResponse response = new GetAllCareMembersDataResponse();
+            try
+            {
+                response.CareMembers = CareMemberDataManager.GetAllCareMembers(request);
                 response.Version = request.Version;
             }
             catch (Exception ex)
