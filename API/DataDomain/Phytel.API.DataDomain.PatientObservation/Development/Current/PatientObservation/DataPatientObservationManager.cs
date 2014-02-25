@@ -3,6 +3,8 @@ using System.Data.SqlClient;
 using Phytel.API.DataDomain.PatientObservation;
 using System;
 using Phytel.API.Common.Format;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Phytel.API.DataDomain.PatientObservation
 {
@@ -41,6 +43,144 @@ namespace Phytel.API.DataDomain.PatientObservation
                
 
                 return result;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public static GetStandardObservationsResponse GetStandardObservationsByType(GetStandardObservationsRequest request)
+        {
+            try
+            {
+                GetStandardObservationsResponse result = new GetStandardObservationsResponse();
+
+                // get list of observations
+                IPatientObservationRepository<GetStandardObservationsResponse> repo = PatientObservationRepositoryFactory<GetStandardObservationsResponse>.GetObservationRepository(request.ContractNumber, request.Context);
+                List<ObservationData> odl = (List<ObservationData>)repo.GetStandardObservationsByType(request.TypeId);
+                List<PatientObservationData> podl = new List<PatientObservationData>();
+
+                // load and initialize each observation
+                foreach (ObservationData od in odl)
+                {
+                    PatientObservationData pod = new PatientObservationData
+                    {
+                        Id = od.Id,
+                        Name = od.CommonName != null ? od.CommonName : od.Description,
+                        Order = od.Order,
+                        Standard = od.Standard,
+                        GroupId = od.GroupId,
+                        Values = new List<ObservationValueData>()
+                    };
+
+                    // do an insert here and get an id from mongo
+                    ObservationValueData ovd = InitializePatientObservation(request, pod.Values, od);
+
+                    if (od.GroupId != null)
+                    {
+                        if (GroupExists(podl, od.GroupId))
+                        {
+                            FindAndInsert(podl, od.GroupId, ovd);
+                        }
+                        else
+                        {
+                            podl.Add(pod);
+                        }
+                    }
+                    else
+                    {
+                        podl.Add(pod);
+                    }
+                }
+
+                result.StandardObservations = podl;
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        private static void FindAndInsert(List<PatientObservationData> podl, string gid, ObservationValueData ovd)
+        {
+            try
+            {
+                if (podl != null && podl.Count > 0)
+                {
+                    foreach (PatientObservationData p in podl)
+                    {
+                        if (p.GroupId != null)
+                        {
+                            if (p.GroupId.Equals(gid))
+                            {
+                                if (!p.Values.Exists(x => x.Id == ovd.Id)) p.Values.Add(ovd);
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+
+        private static bool GroupExists(List<PatientObservationData> list, string gid)
+        {
+            bool result = false;
+            try
+            {
+                if (list != null && list.Count > 0)
+                {
+                    foreach (PatientObservationData p in list)
+                    {
+                        if (p.GroupId != null)
+                        {
+                            if (p.GroupId.Equals(gid))
+                            {
+                                result = true;
+                                break;
+                            }
+                        }
+                    }
+                }
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+
+        private static ObservationValueData InitializePatientObservation(GetStandardObservationsRequest request, List<ObservationValueData> list, ObservationData od)
+        {
+            try
+            {
+                IPatientObservationRepository<GetStandardObservationsResponse> repo = PatientObservationRepositoryFactory<GetStandardObservationsResponse>.GetPatientObservationRepository(request.ContractNumber, request.Context);
+                PutInitializeObservationDataRequest req = new PutInitializeObservationDataRequest
+                {
+                    PatientId = request.PatientId,
+                    ObservationId = od.Id,
+                    Context = request.Context,
+                    ContractNumber = request.ContractNumber,
+                    UserId = request.UserId,
+                    Version = request.Version
+                };
+
+                PatientObservationData pod = (PatientObservationData)repo.Initialize(req);
+
+                ObservationValueData ovd = new ObservationValueData
+                {
+                    Id = pod.Id,
+                    Text = od.Description
+                };
+
+                list.Add(ovd);
+
+                return ovd;
             }
             catch (Exception ex)
             {

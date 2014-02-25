@@ -6,80 +6,84 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using Phytel.API.DataDomain.PatientObservation.MongoDB.DTO;
+using Phytel.API.Common;
 
 namespace Phytel.API.DataDomain.PatientObservation.DTO
 {
     [BsonIgnoreExtraElements(false)]
     [MongoIndex(Keys = new string[] { TTLDateProperty }, TimeToLive = 0)]
-    public class MEPatientObservation : IMongoEntity<ObjectId>, IMEEntity
+    public class MEObservation : IMongoEntity<ObjectId>, IMEEntity
     {
-        public MEPatientObservation() { Id = ObjectId.GenerateNewId(); }
+        public MEObservation() { Id = ObjectId.GenerateNewId(); }
 
         public const string IdProperty = "_id";
         [BsonId]
         public ObjectId Id { get; set; }
 
-        public const string ObservationIdProperty = "oid";
-        [BsonElement(ObservationIdProperty)]
+        public const string ObservationTypeProperty = "otype";
+        [BsonElement(ObservationTypeProperty)]
         [BsonIgnoreIfNull(true)]
-        public ObjectId ObservationId { get; set; }
+        public ObjectId ObservationType { get; set; }
 
-        public const string PatientIdProperty = "pid";
-        [BsonElement(PatientIdProperty)]
+        public const string GroupIdProperty = "gid";
+        [BsonElement(GroupIdProperty)]
         [BsonIgnoreIfNull(true)]
-        public ObjectId PatientId { get; set; }
+        public ObjectId? GroupId { get; set; }
 
-        public const string ObservationStateProperty = "st";
-        [BsonElement(ObservationStateProperty)]
+        public const string CommonNameProperty = "cn";
+        [BsonElement(CommonNameProperty)]
         [BsonIgnoreIfNull(true)]
-        public string State { get; set; }
+        public string CommonName { get; set; }
 
-        public const string ReferenceCodingIdProperty = "rcid";
-        [BsonElement(ReferenceCodingIdProperty)]
+        public const string DescriptionProperty = "desc";
+        [BsonElement(DescriptionProperty)]
         [BsonIgnoreIfNull(true)]
-        public string ReferenceCodingId { get; set; }
-
-        public const string NameProperty = "nm";
-        [BsonElement(NameProperty)]
-        [BsonIgnoreIfNull(true)]
-        public string Name { get; set; }
-
-        public const string ValueProperty = "val";
-        [BsonElement(ValueProperty)]
-        [BsonIgnoreIfNull(true)]
-        public List<ObservationValue> Values { get; set; }
-
-        public const string OrderProperty = "o";
-        [BsonElement(OrderProperty)]
-        [BsonIgnoreIfNull(true)]
-        public bool Order { get; set; }
-
-        // non-numeric values!!!
-
-        public const string StartDateProperty = "sd";
-        [BsonElement(StartDateProperty)]
-        [BsonIgnoreIfNull(true)]
-        public DateTime? StartDate { get; set; }
-
-        public const string EndDateProperty = "ed";
-        [BsonElement(EndDateProperty)]
-        [BsonIgnoreIfNull(true)]
-        public DateTime? EndDate { get; set; }
+        public string Description { get; set; }
 
         public const string StandardProperty = "s";
         [BsonElement(StandardProperty)]
         [BsonIgnoreIfNull(true)]
         public bool Standard { get; set; }
 
-        public const string TypeProperty = "type";
-        [BsonElement(TypeProperty)]
+        public const string OrderProperty = "o";
+        [BsonElement(OrderProperty)]
         [BsonIgnoreIfNull(true)]
-        public bool Type { get; set; }
+        public int? Order { get; set; }
+
+        public const string CodingSystemProperty = "cs";
+        [BsonElement(CodingSystemProperty)]
+        [BsonIgnoreIfNull(true)]
+        public string CodingSystem { get; set; }
+
+        public const string CodingSystemCodeProperty = "csc";
+        [BsonElement(CodingSystemCodeProperty)]
+        [BsonIgnoreIfNull(true)]
+        public string CodingSystemCode { get; set; }
+
+        public const string LowValueProperty = "lv";
+        [BsonElement(LowValueProperty)]
+        [BsonIgnoreIfNull(true)]
+        public int? LowValue { get; set; }
+
+        public const string HighValueProperty = "hv";
+        [BsonElement(HighValueProperty)]
+        [BsonIgnoreIfNull(true)]
+        public int? HighValue { get; set; }
+
+        public const string StatusProperty = "sts";
+        [BsonElement(StatusProperty)]
+        [BsonIgnoreIfNull(true)]
+        public Status Status { get; set; }
 
         public const string UnitsProperty = "u";
         [BsonElement(UnitsProperty)]
         [BsonIgnoreIfNull(true)]
         public string Units { get; set; }
+
+        public const string SourceProperty = "src";
+        [BsonElement(SourceProperty)]
+        [BsonIgnoreIfNull(true)]
+        public string Source { get; set; }
 
         #region Standard IMongoEntity Implementation
         public const string ExtraElementsProperty = "ex";

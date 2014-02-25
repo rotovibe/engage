@@ -25,5 +25,22 @@ namespace Phytel.API.DataDomain.PatientObservation
                 throw ex;
             }
         }
+
+        internal static IPatientObservationRepository<T> GetObservationRepository(string dbName, string productName)
+        {
+            try
+            {
+                IPatientObservationRepository<T> repo = null;
+
+                //We only have 1 repository at this time, just return it
+                repo = new MongoObservationRepository<T>(dbName) as IPatientObservationRepository<T>;
+
+                return repo;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }

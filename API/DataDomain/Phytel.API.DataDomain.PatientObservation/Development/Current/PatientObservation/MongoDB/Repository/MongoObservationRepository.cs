@@ -12,18 +12,14 @@ using Phytel.API.DataDomain.PatientObservation;
 using MB = MongoDB.Driver.Builders;
 using Phytel.API.Common;
 using Phytel.API.Common.Data;
-using System.Configuration;
 
 namespace Phytel.API.DataDomain.PatientObservation
 {
-    public class MongoPatientObservationRepository<T> : IPatientObservationRepository<T>
+    public class MongoObservationRepository<T> : IPatientObservationRepository<T>
     {
         private string _dbName = string.Empty;
-        private int _expireDays = Convert.ToInt32(ConfigurationManager.AppSettings["ExpireDays"]);
-        private int _initializeDays = Convert.ToInt32(ConfigurationManager.AppSettings["InitializeDays"]);
 
-
-        public MongoPatientObservationRepository(string contractDBName)
+        public MongoObservationRepository(string contractDBName)
         {
             _dbName = contractDBName;
         }
@@ -173,41 +169,63 @@ namespace Phytel.API.DataDomain.PatientObservation
 
         public object Initialize(object newEntity)
         {
-            PutInitializeObservationDataRequest request = (PutInitializeObservationDataRequest)newEntity;
-            PatientObservationData patientObservationData = null;
-            
-            try
-            {
-                MEPatientObservation mePg = new MEPatientObservation
-                {
-                    Id = ObjectId.GenerateNewId(),
-                    PatientId = ObjectId.Parse(request.PatientId),
-                    TTLDate = System.DateTime.UtcNow.AddDays(_initializeDays),
-                    UpdatedBy = request.UserId,
-                    LastUpdatedOn = DateTime.UtcNow,
-                    ObservationId = ObjectId.Parse(request.ObservationId)
-                };
-
-                using (PatientObservationMongoContext ctx = new PatientObservationMongoContext(_dbName))
-                {
-                    WriteConcernResult wcr = ctx.PatientObservations.Collection.Insert(mePg);
-                    if (wcr.Ok)
-                    {
-                        patientObservationData = new PatientObservationData
-                        {
-                            Id = mePg.Id.ToString()
-                        };
-                    }
-                }
-                return patientObservationData;
-            }
-            catch (Exception ex) { throw ex; }
+            throw new NotImplementedException();
         }
 
 
-        public object GetStandardObservationsByType(object newEntity)
+        public object GetStandardObservationsByType(object type)
         {
-            throw new NotImplementedException();
+            List<ObservationData> odL = new List<ObservationData>();
+            try
+            {
+                if (type != null)
+                {
+                    using (PatientObservationMongoContext ctx = new PatientObservationMongoContext(_dbName))
+                    {
+                        List<IMongoQuery> queries = new List<IMongoQuery>();
+                        queries.Add(Query.EQ(MEObservation.ObservationTypeProperty, ObjectId.Parse(type as string)));
+                        //queries.Add(Query.EQ(MEObservation.DeleteFlagProperty, false));
+                        IMongoQuery mQuery = Query.And(queries);
+
+                        List<MEObservation> meObs = ctx.Observations.Collection.Find(mQuery).ToList();
+
+                        if (meObs != null && meObs.Count > 0)
+                        {
+                            meObs.ForEach(o =>
+                            {
+                                odL.Add(new ObservationData
+                                {
+                                    CodingSystem = o.CodingSystem,
+                                    CodingSystemCode = o.CodingSystemCode,
+                                    DeleteFlag = o.DeleteFlag,
+                                    Description = o.Description,
+                                    ExtraElements = o.ExtraElements,
+                                    GroupId = o.GroupId != null ? o.GroupId.ToString() : null,
+                                    LowValue = o.LowValue,
+                                    HighValue = o.HighValue,
+                                    Id = o.Id.ToString(),
+                                    LastUpdatedOn = o.LastUpdatedOn,
+                                    ObservationType = o.ObservationType.ToString(),
+                                    Order = o.Order,
+                                    Source = o.Source,
+                                    Standard = o.Standard,
+                                    Status = (int)o.Status,
+                                    TTLDate = o.TTLDate,
+                                    Units = o.Units,
+                                    UpdatedBy = o.UpdatedBy,
+                                    Version = o.Version,
+                                    CommonName = o.CommonName
+                                });
+                            });
+                        }
+                    }
+                }
+                return odL;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("DataDomain:GetStandardObservationsByType():" + ex.Message, ex.InnerException);
+            }
         }
     }
 }

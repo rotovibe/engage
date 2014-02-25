@@ -58,5 +58,39 @@ namespace Phytel.API.DataDomain.PatientObservation.Service
             }
             return response;
         }
+
+        public static PutInitializeObservationDataResponse InsertNewPatientObservation(PutInitializeObservationDataRequest request)
+        {
+            try
+            {
+                PutInitializeObservationDataResponse result = new PutInitializeObservationDataResponse();
+
+                IPatientObservationRepository<PutInitializeObservationDataResponse> repo = PatientObservationRepositoryFactory<PutInitializeObservationDataResponse>.GetPatientObservationRepository(request.ContractNumber, request.Context);
+
+                result.ObservationData = (PatientObservationData)repo.Initialize(request);
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public GetStandardObservationsResponse Get(GetStandardObservationsRequest request)
+        {
+            GetStandardObservationsResponse response = new GetStandardObservationsResponse();
+            try
+            {
+                response = PatientObservationDataManager.GetStandardObservationsByType(request);
+                response.Version = request.Version;
+            }
+            catch (Exception ex)
+            {
+                //TODO: Log this to C3 database via ASE
+                base.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                response.Status = new ServiceStack.ServiceInterface.ServiceModel.ResponseStatus("Exception", ex.Message);
+            }
+            return response;
+        }
     }
 }

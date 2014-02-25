@@ -55,6 +55,7 @@
       <HintPath>..\..\..\..\..\packages\ServiceStack.Text.3.9.70\lib\net35\ServiceStack.Text.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -64,7 +65,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="IPatientObservationRepository.cs" />
+    <Compile Include="MongoDB\DTO\MEObservation.cs" />
     <Compile Include="MongoDB\DTO\MEPatientObservation.cs" />
+    <Compile Include="MongoDB\DTO\ObservationValue.cs" />
+    <Compile Include="MongoDB\Repository\MongoObservationRepository.cs" />
     <Compile Include="MongoDB\Repository\MongoPatientObservationRepository.cs" />
     <Compile Include="MongoDB\PatientObservationMongoContext.cs" />
     <Compile Include="DataPatientObservationManager.cs" />
