@@ -23,7 +23,7 @@ namespace Phytel.API.AppDomain.NG
                 IRestClient client = new JsonServiceClient();
                 GetCareMemberDataResponse ddResponse = client.Get<GetCareMemberDataResponse>(
                     string.Format("{0}/{1}/{2}/{3}/Patient/{4}/CareMember/{5}?UserId={6}",
-                    "http://localhost:8888/CareMember",//DDCareMemberUrl,
+                    DDCareMemberUrl,
                     "NG",
                     request.Version,
                     request.ContractNumber,
@@ -60,7 +60,7 @@ namespace Phytel.API.AppDomain.NG
                 IRestClient client = new JsonServiceClient();
                 GetAllCareMembersDataResponse ddResponse = client.Get<GetAllCareMembersDataResponse>(
                     string.Format("{0}/{1}/{2}/{3}/Patient/{4}/CareMembers?UserId={5}",
-                    "http://localhost:8888/CareMember",//DDCareMemberUrl,
+                    DDCareMemberUrl,
                     "NG",
                     request.Version,
                     request.ContractNumber,
@@ -110,7 +110,7 @@ namespace Phytel.API.AppDomain.NG
                 };
                 PutCareMemberDataResponse dataDomainResponse =
                     client.Put<PutCareMemberDataResponse>(string.Format("{0}/{1}/{2}/{3}/patient/{4}/CareMember/Insert?UserId={5}",
-                                                                                "http://localhost:8888/CareMember",//DDCareMemberUrl,
+                                                                                DDCareMemberUrl,
                                                                                 "NG",
                                                                                 request.Version,
                                                                                 request.ContractNumber,
@@ -159,7 +159,7 @@ namespace Phytel.API.AppDomain.NG
                 };
                 PutUpdateCareMemberDataResponse dataDomainResponse =
                     client.Put<PutUpdateCareMemberDataResponse>(string.Format("{0}/{1}/{2}/{3}/patient/{4}/CareMember/Update?UserId={5}",
-                                                                                "http://localhost:8888/CareMember",//DDCareMemberUrl,
+                                                                                DDCareMemberUrl,
                                                                                 "NG",
                                                                                 request.Version,
                                                                                 request.ContractNumber,
