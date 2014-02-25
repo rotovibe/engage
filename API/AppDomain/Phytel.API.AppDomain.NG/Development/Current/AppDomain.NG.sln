@@ -56,9 +56,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DataDomain.PatientGoal", "D
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.PatientGoal.DTO", "..\..\..\..\DataDomain\Phytel.API.DataDomain.PatientGoal\Development\Current\PatientGoal.DTO\DataDomain.PatientGoal.DTO.csproj", "{92488AF4-963E-4098-8BA8-23D6952BD952}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DataDomain.PatientObservation", "DataDomain.PatientObservation", "{F12E2DCB-D46B-4C02-AD5A-26CED82D5D5C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.PatientObservation.DTO", "..\..\..\..\DataDomain\Phytel.API.DataDomain.PatientObservation\Development\Current\PatientObservation.DTO\DataDomain.PatientObservation.DTO.csproj", "{1C2C63A1-4246-4EC9-BAD1-C00E9ECD85F6}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 19
+		SccNumberOfProjects = 20
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = http://hillstfs2013:8080/tfs/phytel
 		SccLocalPath0 = .
@@ -134,6 +138,10 @@ Global
 		SccProjectTopLevelParentUniqueName18 = AppDomain.NG.sln
 		SccProjectName18 = ../../../../DataDomain/Phytel.API.DataDomain.PatientGoal/Development/Current/PatientGoal.DTO
 		SccLocalPath18 = ..\\..\\..\\..\\DataDomain\\Phytel.API.DataDomain.PatientGoal\\Development\\Current\\PatientGoal.DTO
+		SccProjectUniqueName19 = ..\\..\\..\\..\\DataDomain\\Phytel.API.DataDomain.PatientObservation\\Development\\Current\\PatientObservation.DTO\\DataDomain.PatientObservation.DTO.csproj
+		SccProjectTopLevelParentUniqueName19 = AppDomain.NG.sln
+		SccProjectName19 = ../../../../DataDomain/Phytel.API.DataDomain.PatientObservation/Development/Current/PatientObservation.DTO
+		SccLocalPath19 = ..\\..\\..\\..\\DataDomain\\Phytel.API.DataDomain.PatientObservation\\Development\\Current\\PatientObservation.DTO
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -252,6 +260,12 @@ Global
 		{92488AF4-963E-4098-8BA8-23D6952BD952}.Release|Any CPU.Build.0 = Release|Any CPU
 		{92488AF4-963E-4098-8BA8-23D6952BD952}.Test|Any CPU.ActiveCfg = Release|Any CPU
 		{92488AF4-963E-4098-8BA8-23D6952BD952}.Test|Any CPU.Build.0 = Release|Any CPU
+		{1C2C63A1-4246-4EC9-BAD1-C00E9ECD85F6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1C2C63A1-4246-4EC9-BAD1-C00E9ECD85F6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1C2C63A1-4246-4EC9-BAD1-C00E9ECD85F6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1C2C63A1-4246-4EC9-BAD1-C00E9ECD85F6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1C2C63A1-4246-4EC9-BAD1-C00E9ECD85F6}.Test|Any CPU.ActiveCfg = Release|Any CPU
+		{1C2C63A1-4246-4EC9-BAD1-C00E9ECD85F6}.Test|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -275,5 +289,6 @@ Global
 		{4885FE36-03DB-47B7-BE7E-33260943A9DC} = {6D0DA19F-2B2B-452A-8896-D3654C40199D}
 		{0B6E0ED8-ABE5-4A1D-8E10-0AC54F06D9C4} = {3A308AC4-A79B-4865-9F55-146D94E49433}
 		{92488AF4-963E-4098-8BA8-23D6952BD952} = {4DDCC66C-4BFD-4377-8C23-55142175AC6C}
+		{1C2C63A1-4246-4EC9-BAD1-C00E9ECD85F6} = {F12E2DCB-D46B-4C02-AD5A-26CED82D5D5C}
 	EndGlobalSection
 EndGlobal

@@ -103,6 +103,9 @@
     <Compile Include="IUnitOfWork.cs" />
     <Compile Include="ManagerBase.cs" />
     <Compile Include="NGUtils.cs" />
+    <Compile Include="Observation\ObservationEndpointUtil.cs" />
+    <Compile Include="Observation\ObservationsManager.cs" />
+    <Compile Include="Observation\ObservationsUtil.cs" />
     <Compile Include="PlanCOR\ActionPlanProcessor.cs" />
     <Compile Include="PlanCOR\SpawnEventArgs.cs" />
     <Compile Include="PlanCOR\StepPlanProcessor.cs" />
@@ -148,6 +151,10 @@
     <ProjectReference Include="..\..\..\..\..\DataDomain\Phytel.API.DataDomain.PatientNote\Development\Current\PatientNote.DTO\DataDomain.PatientNote.DTO.csproj">
       <Project>{99f4ec29-b099-424e-9757-223e67029001}</Project>
       <Name>DataDomain.PatientNote.DTO</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\DataDomain\Phytel.API.DataDomain.PatientObservation\Development\Current\PatientObservation.DTO\DataDomain.PatientObservation.DTO.csproj">
+      <Project>{1c2c63a1-4246-4ec9-bad1-c00e9ecd85f6}</Project>
+      <Name>DataDomain.PatientObservation.DTO</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\..\..\DataDomain\Phytel.API.DataDomain.PatientProblem\Development\Current\PatientProblem.DTOs\DataDomain.PatientProblem.DTO.csproj">
       <Project>{f133e537-1d48-4a42-aba9-5587e057f5b3}</Project>
