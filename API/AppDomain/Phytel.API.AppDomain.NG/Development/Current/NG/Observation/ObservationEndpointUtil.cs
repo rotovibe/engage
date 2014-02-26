@@ -40,7 +40,35 @@ namespace Phytel.API.AppDomain.NG.Observation
             }
             catch (WebServiceException ex)
             {
-                throw new WebServiceException("App Domain:PostInitialGoalRequest()" + ex.Message, ex.InnerException);
+                throw new WebServiceException("App Domain:GetStandardObservationsRequest()" + ex.Message, ex.InnerException);
+            }
+        }
+
+        internal static List<ObservationLibraryItemData> GetAdditionalObservationsLibraryRequest(GetAdditionalObservationLibraryRequest request)
+        {
+            try
+            {
+                List<ObservationLibraryItemData> result = null;
+                IRestClient client = new JsonServiceClient();
+                GetAdditionalLibraryObservationsResponse dataDomainResponse = client.Get<GetAdditionalLibraryObservationsResponse>(
+                    string.Format("{0}/{1}/{2}/{3}/Observation/Type/{4}/MatchLibrary/?PatientId={5}",
+                    DDPatientObservationsServiceUrl,
+                    "NG",
+                    request.Version,
+                    request.ContractNumber,
+                    request.TypeId,
+                    request.PatientId));
+
+                if (dataDomainResponse != null)
+                {
+                    result = dataDomainResponse.Library;
+                }
+
+                return result;
+            }
+            catch (WebServiceException ex)
+            {
+                throw new WebServiceException("App Domain:GetAdditionalObservationsLibraryRequest()" + ex.Message, ex.InnerException);
             }
         }
     }

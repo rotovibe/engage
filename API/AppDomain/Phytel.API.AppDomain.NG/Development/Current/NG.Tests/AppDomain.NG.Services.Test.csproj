@@ -101,6 +101,7 @@
     <Compile Include="Action_Processing_Bug_572_Tests.cs" />
     <Compile Include="Action_Processing_Problem_Registration_Tests.cs" />
     <Compile Include="Interview_Action_Processing_Tests.cs" />
+    <Compile Include="Observation\Observations_library_Tests.cs" />
     <Compile Include="Observation\Observations_Tests.cs" />
     <Compile Include="Patient_NG_Flagged_Tests.cs" />
     <Compile Include="Active_Program_Tests.cs" />

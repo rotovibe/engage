@@ -40,5 +40,21 @@ namespace Phytel.API.AppDomain.NG.Observation
                 throw ex;
             }
         }
+
+        public GetAdditionalObservationLibraryResponse GetAdditionalObservationsLibraryRequest(GetAdditionalObservationLibraryRequest request)
+        {
+            try
+            {
+                GetAdditionalObservationLibraryResponse response = new GetAdditionalObservationLibraryResponse();
+                List<ObservationLibraryItemData> po = (List<ObservationLibraryItemData>)ObservationEndpointUtil.GetAdditionalObservationsLibraryRequest(request);
+                response.Library = ObservationsUtil.GetAdditionalLibraryObservations(request, po);
+                response.Version = request.Version;
+                return response;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }

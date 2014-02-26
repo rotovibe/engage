@@ -49,5 +49,37 @@ namespace Phytel.API.AppDomain.NG.Service
             
             return response; 
         }
+
+        public GetAdditionalObservationLibraryResponse Get(GetAdditionalObservationLibraryRequest request)
+        {
+            GetAdditionalObservationLibraryResponse response = new GetAdditionalObservationLibraryResponse();
+            try
+            {
+                ObservationsManager om = new ObservationsManager();
+                ValidateTokenResponse result = om.IsUserValidated(request.Version, request.Token);
+                if (result.UserId.Trim() != string.Empty)
+                {
+                    request.UserId = result.UserId;
+                    response = om.GetAdditionalObservationsLibraryRequest(request);
+                }
+                else
+                    throw new UnauthorizedAccessException();
+
+
+            }
+            catch (Exception ex)
+            {
+                //TODO: Log this to the SQL database via ASE
+                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+            }
+            finally
+            {
+                List<string> patientIds = new List<string>();
+                patientIds.Add(request.PatientId);
+                AuditHelper.LogAuditData(request, patientIds, System.Web.HttpContext.Current.Request, request.GetType().Name);
+            }
+
+            return response;
+        }
     }
 }

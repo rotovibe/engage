@@ -155,10 +155,13 @@
     <Compile Include="Note\PostDeletePatientNoteResponse.cs" />
     <Compile Include="Note\PostPatientNoteRequest.cs" />
     <Compile Include="Note\PostPatientNoteResponse.cs" />
+    <Compile Include="Observation\GetAdditionalObservationLibraryRequest.cs" />
     <Compile Include="Observation\GetStandardObservationItemsRequest.cs" />
     <Compile Include="Observation\GetInitializeObservationRequest.cs" />
+    <Compile Include="Observation\GetAdditionalObservationLibraryResponse.cs" />
     <Compile Include="Observation\GetStandardObservationItemsResponse.cs" />
     <Compile Include="Observation\GetInitializeObservationResponse.cs" />
+    <Compile Include="Observation\ObservationLibraryItem.cs" />
     <Compile Include="Observation\ObservationValue.cs" />
     <Compile Include="Observation\PatientObservation.cs" />
     <Compile Include="PostProcessActionRequest.cs" />

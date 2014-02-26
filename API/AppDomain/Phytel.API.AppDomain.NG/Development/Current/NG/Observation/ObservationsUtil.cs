@@ -69,5 +69,29 @@ namespace Phytel.API.AppDomain.NG
                 throw new WebServiceException("App Domain:GetValues()" + ex.Message, ex.InnerException);
             }
         }
+
+        internal static List<ObservationLibraryItem> GetAdditionalLibraryObservations(GetAdditionalObservationLibraryRequest request, List<ObservationLibraryItemData> po)
+        {
+            List<ObservationLibraryItem> result = new List<ObservationLibraryItem>();
+            try
+            {
+                if (po != null && po.Count > 0)
+                {
+                    po.ForEach(o =>
+                    {
+                        result.Add(new ObservationLibraryItem
+                        {
+                            Id = o.Id,
+                            Name = o.Name
+                        });
+                    });
+                }
+                return result;
+            }
+            catch (WebServiceException ex)
+            {
+                throw new WebServiceException("App Domain:PostInitialGoalRequest()" + ex.Message, ex.InnerException);
+            }
+        }
     }
 }
