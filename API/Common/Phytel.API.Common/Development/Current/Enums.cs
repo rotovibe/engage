@@ -149,5 +149,11 @@ namespace Phytel.API.Common
         PutContact = 399
     }
 
-    
+    public enum ObservationState
+    {
+        Complete = 1,
+        Incomplete = 2,
+        Refused = 3,
+        Declined = 4
+    }
 }

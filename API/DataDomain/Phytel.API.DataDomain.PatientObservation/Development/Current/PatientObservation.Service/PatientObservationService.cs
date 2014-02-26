@@ -109,5 +109,22 @@ namespace Phytel.API.DataDomain.PatientObservation.Service
             }
             return response;
         }
+
+        public PutUpdateObservationDataResponse Put(PutUpdateObservationDataRequest request)
+        {
+            PutUpdateObservationDataResponse response = new PutUpdateObservationDataResponse();
+            try
+            {
+                response.Result = PatientObservationDataManager.PutUpdateOfPatientObservationRecord(request);
+                response.Version = request.Version;
+            }
+            catch (Exception ex)
+            {
+                //TODO: Log this to C3 database via ASE
+                base.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                response.Status = new ServiceStack.ServiceInterface.ServiceModel.ResponseStatus("Exception", ex.Message);
+            }
+            return response;
+        }
     }
 }

@@ -227,5 +227,11 @@ namespace Phytel.API.DataDomain.PatientObservation
                 throw new Exception("DataDomain:GetStandardObservationsByType():" + ex.Message, ex.InnerException);
             }
         }
+
+
+        public bool SaveUpdate(PutUpdateObservationDataRequest request)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

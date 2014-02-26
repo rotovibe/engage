@@ -12,5 +12,6 @@ namespace Phytel.API.DataDomain.PatientObservation
     {
         object Initialize(object newEntity);
         object GetObservationsByType(object newEntity, bool standard);
+        bool SaveUpdate(PutUpdateObservationDataRequest request);
     }
 }

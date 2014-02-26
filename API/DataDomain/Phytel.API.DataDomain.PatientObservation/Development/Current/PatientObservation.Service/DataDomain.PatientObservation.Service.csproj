@@ -7,7 +7,7 @@
     <ProductVersion>
     </ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{77AA8AC8-B76D-44DC-A9AB-65E2899B4FB8}</ProjectGuid>
+    <ProjectGuid>{7CA5D01B-9B33-4634-A1F9-1E14025783C2}</ProjectGuid>
     <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
@@ -117,11 +117,11 @@
       <Name>Phytel.API.Interface</Name>
     </ProjectReference>
     <ProjectReference Include="..\PatientObservation.DTO\DataDomain.PatientObservation.DTO.csproj">
-      <Project>{06d69e2b-a395-459c-b4d0-fc750018bdd8}</Project>
+      <Project>{1c2c63a1-4246-4ec9-bad1-c00e9ecd85f6}</Project>
       <Name>DataDomain.PatientObservation.DTO</Name>
     </ProjectReference>
     <ProjectReference Include="..\PatientObservation\DataDomain.PatientObservation.csproj">
-      <Project>{aa8c9e02-7343-4e90-803a-73c8a8dd7499}</Project>
+      <Project>{f1a478d1-dca1-4be6-ae83-e0acdd4fdffd}</Project>
       <Name>DataDomain.PatientObservation</Name>
     </ProjectReference>
   </ItemGroup>

@@ -219,5 +219,22 @@ namespace Phytel.API.DataDomain.PatientObservation
                 throw ex;
             }
         }
+
+        public static bool PutUpdateOfPatientObservationRecord(PutUpdateObservationDataRequest request)
+        {
+            try
+            {
+                bool result = false;
+                IPatientObservationRepository<PutUpdateObservationDataResponse> repo =
+                    PatientObservationRepositoryFactory<PutUpdateObservationDataResponse>.GetPatientObservationRepository(request.ContractNumber, request.Context);
+                result = (bool)repo.SaveUpdate(request);
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }   

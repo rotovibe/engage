@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using Phytel.API.DataDomain.PatientObservation.MongoDB.DTO;
+using Phytel.API.Common;
 
 namespace Phytel.API.DataDomain.PatientObservation.DTO
 {
@@ -29,32 +30,25 @@ namespace Phytel.API.DataDomain.PatientObservation.DTO
         [BsonIgnoreIfNull(true)]
         public ObjectId PatientId { get; set; }
 
-        public const string ObservationStateProperty = "st";
-        [BsonElement(ObservationStateProperty)]
-        [BsonIgnoreIfNull(true)]
-        public string State { get; set; }
-
         public const string ReferenceCodingIdProperty = "rcid";
         [BsonElement(ReferenceCodingIdProperty)]
         [BsonIgnoreIfNull(true)]
         public string ReferenceCodingId { get; set; }
 
-        public const string NameProperty = "nm";
-        [BsonElement(NameProperty)]
+        public const string NumericValueProperty = "nval";
+        [BsonElement(NumericValueProperty)]
         [BsonIgnoreIfNull(true)]
-        public string Name { get; set; }
+        public float? NumericValue { get; set; }
 
-        public const string ValueProperty = "val";
-        [BsonElement(ValueProperty)]
+        public const string NonNumericValueProperty = "nnval";
+        [BsonElement(NonNumericValueProperty)]
         [BsonIgnoreIfNull(true)]
-        public List<ObservationValue> Values { get; set; }
+        public string NonNumericValue { get; set; }
 
-        public const string OrderProperty = "o";
-        [BsonElement(OrderProperty)]
+        public const string ObservationStateProperty = "st";
+        [BsonElement(ObservationStateProperty)]
         [BsonIgnoreIfNull(true)]
-        public bool Order { get; set; }
-
-        // non-numeric values!!!
+        public ObservationState State { get; set; }
 
         public const string StartDateProperty = "sd";
         [BsonElement(StartDateProperty)]
@@ -66,11 +60,6 @@ namespace Phytel.API.DataDomain.PatientObservation.DTO
         [BsonIgnoreIfNull(true)]
         public DateTime? EndDate { get; set; }
 
-        public const string StandardProperty = "s";
-        [BsonElement(StandardProperty)]
-        [BsonIgnoreIfNull(true)]
-        public bool Standard { get; set; }
-
         public const string TypeProperty = "type";
         [BsonElement(TypeProperty)]
         [BsonIgnoreIfNull(true)]
@@ -80,6 +69,16 @@ namespace Phytel.API.DataDomain.PatientObservation.DTO
         [BsonElement(UnitsProperty)]
         [BsonIgnoreIfNull(true)]
         public string Units { get; set; }
+
+        public const string AdministeredByProperty = "adminby";
+        [BsonElement(AdministeredByProperty)]
+        [BsonIgnoreIfNull(true)]
+        public string AdministeredBy { get; set; }
+
+        public const string SourceProperty = "src";
+        [BsonElement(SourceProperty)]
+        [BsonIgnoreIfNull(true)]
+        public string Source { get; set; }
 
         #region Standard IMongoEntity Implementation
         public const string ExtraElementsProperty = "ex";

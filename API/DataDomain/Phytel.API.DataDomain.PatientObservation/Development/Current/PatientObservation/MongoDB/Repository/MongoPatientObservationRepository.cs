@@ -209,5 +209,11 @@ namespace Phytel.API.DataDomain.PatientObservation
         {
             throw new NotImplementedException();
         }
+
+
+        public bool SaveUpdate(PutUpdateObservationDataRequest request)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
