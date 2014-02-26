@@ -10,6 +10,7 @@ namespace Phytel.API.DataDomain.PatientGoal.DTO
 {
     [BsonIgnoreExtraElements(false)]
     [MongoIndex(Keys = new string[] { TTLDateProperty }, TimeToLive = 0)]
+    [MongoIndex(Keys = new string[] { PatientIdProperty, DeleteFlagProperty }, Unique = false)]
     public class MEPatientGoal : GoalBase, IMongoEntity<ObjectId>, IMEEntity
     {
         public MEPatientGoal() { Id = ObjectId.GenerateNewId(); }

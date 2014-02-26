@@ -9,6 +9,8 @@ namespace Phytel.API.DataDomain.Contact.DTO
 {
     [BsonIgnoreExtraElements(false)]
     [MongoIndex(Keys = new string[] { TTLDateProperty }, TimeToLive = 0)]
+    [MongoIndex(Keys = new string[] { PatientIdProperty, DeleteFlagProperty }, Unique = false)]
+    [MongoIndex(Keys = new string[] { UserIdProperty, PatientIdProperty, DeleteFlagProperty }, Unique = false)]
     public class MEContact : IMongoEntity<ObjectId>, IMEEntity
     {
         public MEContact() { Id = ObjectId.GenerateNewId(); }

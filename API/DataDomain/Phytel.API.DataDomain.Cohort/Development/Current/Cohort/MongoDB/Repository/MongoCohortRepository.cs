@@ -65,22 +65,7 @@ namespace Phytel.API.DataDomain.Cohort
 
         public Tuple<string, IEnumerable<object>> Select(Interface.APIExpression expression)
         {
-            //throw new NotImplementedException();
-
-            using (CohortMongoContext ctx = new CohortMongoContext(_dbName))
-            {
-                BsonDocument query = MongoDB.Bson.Serialization.BsonSerializer.Deserialize<BsonDocument>("{'k':'G','t':'Demo','v':'M','a':1}");
-                
-                QueryDocument queryDoc = new QueryDocument(query);
-
-                SortByBuilder builder = new SortByBuilder();
-                builder.Ascending(new string[] { "ln" });
-
-                List<BsonDocument> responses = ctx.GetDatabase().GetCollection("CohortPatientView").FindAs<BsonDocument>(queryDoc).SetSortOrder(builder).SetSkip(100).SetLimit(10).ToList(); // (SortBy.Ascending(new string[] { "sort field" })).SetSkip(100).SetLimit(50);
-
-                int count = responses.Count;
-            }
-            return new Tuple<string, IEnumerable<object>>(string.Empty, null);
+            throw new NotImplementedException();
         }
 
         public IEnumerable<object> SelectAll()

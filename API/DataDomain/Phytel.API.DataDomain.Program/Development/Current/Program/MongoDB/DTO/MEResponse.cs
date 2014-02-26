@@ -9,6 +9,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
 {
     [BsonIgnoreExtraElements(false)]
     [MongoIndex(Keys = new string[] { TTLDateProperty }, TimeToLive = 0)]
+    [MongoIndex(Keys = new string[] { StepIdProperty }, Unique = false)]
     public class MEResponse : ResponseBase, IMEEntity, IMongoEntity<ObjectId>
     {
         public MEResponse() { Id = ObjectId.GenerateNewId(); }
