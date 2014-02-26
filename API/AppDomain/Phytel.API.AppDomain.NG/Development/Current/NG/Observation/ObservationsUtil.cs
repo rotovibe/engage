@@ -27,10 +27,12 @@ namespace Phytel.API.AppDomain.NG
                             EndDate = o.EndDate,
                             GroupId = o.GroupId,
                             Id = o.Id,
+                            PatientId = o.PatientId,
                             Name = o.Name,
                             Standard = o.Standard,
                             StartDate = o.StartDate,
-                            Type = o.Type,
+                            TypeId = o.TypeId,
+                            Units = o.Units,
                             Values = GetValues(o.Values)
                         });
                     });
