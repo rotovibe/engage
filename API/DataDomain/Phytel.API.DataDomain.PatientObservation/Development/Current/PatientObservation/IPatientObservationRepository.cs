@@ -11,6 +11,6 @@ namespace Phytel.API.DataDomain.PatientObservation
     public interface IPatientObservationRepository<T> : IRepository<T>
     {
         object Initialize(object newEntity);
-        object GetStandardObservationsByType(object newEntity);
+        object GetObservationsByType(object newEntity, bool standard);
     }
 }

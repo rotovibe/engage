@@ -173,7 +173,7 @@ namespace Phytel.API.DataDomain.PatientObservation
         }
 
 
-        public object GetStandardObservationsByType(object type)
+        public object GetObservationsByType(object type, bool standard)
         {
             List<ObservationData> odL = new List<ObservationData>();
             try
@@ -184,7 +184,7 @@ namespace Phytel.API.DataDomain.PatientObservation
                     {
                         List<IMongoQuery> queries = new List<IMongoQuery>();
                         queries.Add(Query.EQ(MEObservation.ObservationTypeProperty, ObjectId.Parse(type as string)));
-                        queries.Add(Query.EQ(MEObservation.StandardProperty, true));
+                        queries.Add(Query.EQ(MEObservation.StandardProperty, standard));
                         IMongoQuery mQuery = Query.And(queries);
 
                         List<MEObservation> meObs = ctx.Observations.Collection.Find(mQuery).ToList();

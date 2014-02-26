@@ -58,7 +58,7 @@ namespace Phytel.API.DataDomain.PatientObservation
 
                 // get list of observations
                 IPatientObservationRepository<GetStandardObservationsResponse> repo = PatientObservationRepositoryFactory<GetStandardObservationsResponse>.GetObservationRepository(request.ContractNumber, request.Context);
-                List<ObservationData> odl = (List<ObservationData>)repo.GetStandardObservationsByType(request.TypeId);
+                List<ObservationData> odl = (List<ObservationData>)repo.GetObservationsByType(request.TypeId, true);
                 List<PatientObservationData> podl = new List<PatientObservationData>();
 
                 // load and initialize each observation
@@ -184,6 +184,35 @@ namespace Phytel.API.DataDomain.PatientObservation
                 list.Add(ovd);
 
                 return ovd;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public static GetAdditionalLibraryObservationsResponse GetAdditionalObservationsLibraryByType(GetAdditionalLibraryObservationsRequest request)
+        {
+            try
+            {
+                GetAdditionalLibraryObservationsResponse response = new GetAdditionalLibraryObservationsResponse();
+                List<ObservationLibraryItemData> oli = new List<ObservationLibraryItemData>();
+                IPatientObservationRepository<GetAdditionalLibraryObservationsResponse> repo = 
+                    PatientObservationRepositoryFactory<GetAdditionalLibraryObservationsResponse>.GetObservationRepository(request.ContractNumber, request.Context);
+                List<ObservationData> odl = (List<ObservationData>)repo.GetObservationsByType(request.TypeId, false);
+
+                odl.ForEach(o =>
+                {
+                    oli.Add(new ObservationLibraryItemData
+                    {
+                        Id = o.Id,
+                        Name = o.CommonName != null ? o.CommonName : o.Description
+                    });
+                });
+
+                response.Library = oli;
+
+                return response;
             }
             catch (Exception ex)
             {

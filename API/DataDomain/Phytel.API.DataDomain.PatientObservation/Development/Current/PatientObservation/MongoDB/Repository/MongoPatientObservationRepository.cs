@@ -205,7 +205,7 @@ namespace Phytel.API.DataDomain.PatientObservation
         }
 
 
-        public object GetStandardObservationsByType(object newEntity)
+        public object GetObservationsByType(object newEntity, bool standard)
         {
             throw new NotImplementedException();
         }
