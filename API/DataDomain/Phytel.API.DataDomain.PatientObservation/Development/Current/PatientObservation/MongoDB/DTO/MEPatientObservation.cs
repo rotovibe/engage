@@ -74,7 +74,7 @@ namespace Phytel.API.DataDomain.PatientObservation.DTO
         public const string TypeProperty = "type";
         [BsonElement(TypeProperty)]
         [BsonIgnoreIfNull(true)]
-        public bool Type { get; set; }
+        public string Type { get; set; }
 
         public const string UnitsProperty = "u";
         [BsonElement(UnitsProperty)]

@@ -71,7 +71,10 @@ namespace Phytel.API.DataDomain.PatientObservation
                         Order = od.Order,
                         Standard = od.Standard,
                         GroupId = od.GroupId,
-                        Values = new List<ObservationValueData>()
+                        Units = od.Units,
+                        Values = new List<ObservationValueData>(),
+                        TypeId = od.ObservationType,
+                         PatientId = request.PatientId
                     };
 
                     // do an insert here and get an id from mongo

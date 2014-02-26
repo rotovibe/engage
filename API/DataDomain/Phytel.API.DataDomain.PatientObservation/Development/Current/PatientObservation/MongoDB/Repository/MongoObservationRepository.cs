@@ -184,7 +184,7 @@ namespace Phytel.API.DataDomain.PatientObservation
                     {
                         List<IMongoQuery> queries = new List<IMongoQuery>();
                         queries.Add(Query.EQ(MEObservation.ObservationTypeProperty, ObjectId.Parse(type as string)));
-                        //queries.Add(Query.EQ(MEObservation.DeleteFlagProperty, false));
+                        queries.Add(Query.EQ(MEObservation.StandardProperty, true));
                         IMongoQuery mQuery = Query.And(queries);
 
                         List<MEObservation> meObs = ctx.Observations.Collection.Find(mQuery).ToList();
