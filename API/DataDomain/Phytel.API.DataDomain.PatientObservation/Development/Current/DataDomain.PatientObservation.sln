@@ -1,6 +1,6 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.30110.0
+VisualStudioVersion = 12.0.21005.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.PatientObservation.Service", "PatientObservation.Service\DataDomain.PatientObservation.Service.csproj", "{29DFC6F8-F09F-4881-8A94-43C4229A5583}"
 EndProject
@@ -20,46 +20,33 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Phytel.API.Common", "..\..\
 EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 7
+		SccNumberOfProjects = 8
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = http://hillstfs2013:8080/tfs/phytel
 		SccProjectUniqueName0 = PatientObservation.Service\\DataDomain.PatientObservation.Service.csproj
 		SccProjectName0 = PatientObservation.Service
-		SccAuxPath0 = http://hillstfs2013:8080/tfs/phytel
 		SccLocalPath0 = PatientObservation.Service
-		SccProvider0 = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccProjectUniqueName1 = PatientObservation.Test\\DataDomain.PatientObservation.Test.csproj
 		SccProjectName1 = PatientObservation.Test
-		SccAuxPath1 = http://hillstfs2013:8080/tfs/phytel
 		SccLocalPath1 = PatientObservation.Test
-		SccProvider1 = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccProjectUniqueName2 = PatientObservation\\DataDomain.PatientObservation.csproj
 		SccProjectName2 = PatientObservation
-		SccAuxPath2 = http://hillstfs2013:8080/tfs/phytel
 		SccLocalPath2 = PatientObservation
-		SccProvider2 = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccProjectUniqueName3 = PatientObservation.DTO\\DataDomain.PatientObservation.DTO.csproj
-		SccProjectName3 = PatientObservation.DTO
-		SccAuxPath3 = http://hillstfs2013:8080/tfs/phytel
-		SccLocalPath3 = PatientObservation.DTO
-		SccProvider3 = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccProjectUniqueName4 = PatientObservation.Service.Test\\DataDomain.PatientObservation.Service.Test.csproj
-		SccProjectName4 = PatientObservation.Service.Test
-		SccAuxPath4 = http://hillstfs2013:8080/tfs/phytel
-		SccLocalPath4 = PatientObservation.Service.Test
-		SccProvider4 = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccProjectUniqueName5 = ..\\..\\..\\..\\Interfaces\\Development\\Current\\Phytel.API.Interface\\Phytel.API.Interface.csproj
+		SccProjectUniqueName3 = PatientObservation.Service.Test\\DataDomain.PatientObservation.Service.Test.csproj
+		SccProjectName3 = PatientObservation.Service.Test
+		SccLocalPath3 = PatientObservation.Service.Test
+		SccProjectUniqueName4 = ..\\..\\..\\..\\Interfaces\\Development\\Current\\Phytel.API.Interface\\Phytel.API.Interface.csproj
+		SccProjectTopLevelParentUniqueName4 = DataDomain.PatientObservation.sln
+		SccProjectName4 = ../../../../Interfaces/Development/Current/Phytel.API.Interface
+		SccLocalPath4 = ..\\..\\..\\..\\Interfaces\\Development\\Current\\Phytel.API.Interface
+		SccProjectUniqueName5 = ..\\..\\..\\..\\Common\\Phytel.API.Common\\Development\\Current\\Phytel.API.Common.csproj
 		SccProjectTopLevelParentUniqueName5 = DataDomain.PatientObservation.sln
-		SccProjectName5 = ../../../../Interfaces/Development/Current/Phytel.API.Interface
-		SccAuxPath5 = http://hillstfs2013:8080/tfs/phytel
-		SccLocalPath5 = ..\\..\\..\\..\\Interfaces\\Development\\Current\\Phytel.API.Interface
-		SccProvider5 = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccProjectUniqueName6 = ..\\..\\..\\..\\Common\\Phytel.API.Common\\Development\\Current\\Phytel.API.Common.csproj
-		SccProjectTopLevelParentUniqueName6 = DataDomain.PatientObservation.sln
-		SccProjectName6 = ../../../../Common/Phytel.API.Common/Development/Current
-		SccAuxPath6 = http://hillstfs2013:8080/tfs/phytel
-		SccLocalPath6 = ..\\..\\..\\..\\Common\\Phytel.API.Common\\Development\\Current
-		SccProvider6 = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccProjectName5 = ../../../../Common/Phytel.API.Common/Development/Current
+		SccLocalPath5 = ..\\..\\..\\..\\Common\\Phytel.API.Common\\Development\\Current
+		SccLocalPath6 = .
+		SccProjectUniqueName7 = PatientObservation.DTO\\DataDomain.PatientObservation.DTO.csproj
+		SccProjectName7 = PatientObservation.DTO
+		SccLocalPath7 = PatientObservation.DTO
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
