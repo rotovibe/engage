@@ -228,8 +228,7 @@ namespace Phytel.API.DataDomain.PatientObservation
             }
         }
 
-
-        public bool SaveUpdate(PutUpdateObservationDataRequest request)
+        public IEnumerable<object> FindObservationIdByPatientId(string Id)
         {
             throw new NotImplementedException();
         }

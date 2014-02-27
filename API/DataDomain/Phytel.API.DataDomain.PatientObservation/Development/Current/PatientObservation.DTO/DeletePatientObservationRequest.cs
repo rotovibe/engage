@@ -1,20 +1,16 @@
 using Phytel.API.Interface;
 using ServiceStack.ServiceHost;
-using System.Collections.Generic;
 
 namespace Phytel.API.DataDomain.PatientObservation.DTO
 {
-    [Route("/{Context}/{Version}/{ContractNumber}/Patient/{PatientId}/Observation/Update", "PUT")]
-    public class PutUpdateObservationDataRequest : IDataDomainRequest
+    [Route("/{Context}/{Version}/{ContractNumber}/Patient/{PatientId}/Observation/Delete", "PUT")]
+    public class DeletePatientObservationRequest : IDataDomainRequest
     {
         [ApiMember(Name = "PatientId", Description = "Id of the Patient for whom a goal is being created.", ParameterType = "property", DataType = "string", IsRequired = true)]
         public string PatientId { get; set; }
 
-        [ApiMember(Name = "PatientObservationData", Description = "PatientObservation to update.", ParameterType = "property", DataType = "PatientObservationRecordData", IsRequired = true)]
-        public PatientObservationRecordData PatientObservationData { get; set; }
-
-        [ApiMember(Name = "PatientObservationIdsList", Description = "PatientObservation Ids list to reference", ParameterType = "body", DataType = "string", IsRequired = false)]
-        public List<string> PatientObservationIdsList { get; set; }
+        [ApiMember(Name = "PatientObservationId", Description = "Id of the patient observation to delete.", ParameterType = "property", DataType = "string", IsRequired = true)]
+        public string PatientObservationId { get; set; }
 
         [ApiMember(Name = "UserId", Description = "UserId of the logged in user", ParameterType = "property", DataType = "string", IsRequired = true)]
         public string UserId { get; set; }

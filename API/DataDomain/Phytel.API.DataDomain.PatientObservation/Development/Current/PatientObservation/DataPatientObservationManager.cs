@@ -227,13 +227,52 @@ namespace Phytel.API.DataDomain.PatientObservation
                 bool result = false;
                 IPatientObservationRepository<PutUpdateObservationDataResponse> repo =
                     PatientObservationRepositoryFactory<PutUpdateObservationDataResponse>.GetPatientObservationRepository(request.ContractNumber, request.Context);
-                result = (bool)repo.SaveUpdate(request);
+
+                List<PatientObservationData> pod = (List<PatientObservationData>)repo.FindObservationIdByPatientId(request.PatientId);
+                List<string> dbPatientObservationIdList = GetPatientObservationIds(pod);
+
+                // update existing patientobservation entries with a delete
+                List<string> excludes = dbPatientObservationIdList.Except(request.PatientObservationIdsList).ToList<string>();
+
+                if (excludes != null && excludes.Count > 0)
+                {
+                    excludes.ForEach(ex =>
+                    {
+                        // create delete patientobservation request
+                        DeletePatientObservationRequest dpo = new DeletePatientObservationRequest { PatientObservationId = ex, PatientId = request.PatientId, UserId = request.UserId };
+                        repo.Delete(dpo);
+                    });
+                }
+
+                // update
+                if (request.PatientObservationData != null && request.PatientObservationData.Id != null)
+                    result = (bool)repo.Update(request);
 
                 return result;
             }
             catch (Exception ex)
             {
                 throw ex;
+            }
+        }
+
+        private static List<string> GetPatientObservationIds(List<PatientObservationData> pod)
+        {
+            List<string> list = new List<string>();
+            try
+            {
+                if (pod != null && pod.Count > 0)
+                {
+                    pod.ForEach(t =>
+                    {
+                        list.Add(t.Id);
+                    });
+                }
+                return list;
+            }
+            catch (Exception ex)
+            {
+                throw;
             }
         }
     }

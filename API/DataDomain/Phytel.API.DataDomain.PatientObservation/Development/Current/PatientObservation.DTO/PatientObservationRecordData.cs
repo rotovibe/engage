@@ -16,5 +16,6 @@ namespace Phytel.API.DataDomain.PatientObservation.DTO
         public string Units { get; set; }
         public string TypeId { get; set; }
         public string GroupId { get; set; }
+        public string Source { get; set; }
     }
 }
