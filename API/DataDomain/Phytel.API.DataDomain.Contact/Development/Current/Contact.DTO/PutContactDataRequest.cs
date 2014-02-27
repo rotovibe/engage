@@ -8,8 +8,20 @@ namespace Phytel.API.DataDomain.Contact.DTO
     [Route("/{Context}/{Version}/{ContractNumber}/Patient/Contact/{PatientId}", "PUT")]
     public class PutContactDataRequest : IDataDomainRequest
     {
-        [ApiMember(Name = "PatientId", Description = "Id of the patient for whom Contact is inserted.", ParameterType = "property", DataType = "string", IsRequired = true)]
+        [ApiMember(Name = "PatientId", Description = "Id of the patient for whom Contact is inserted.", ParameterType = "property", DataType = "string", IsRequired = false)]
         public string PatientId { get; set; }
+
+        [ApiMember(Name = "FirstName", Description = "FirstName of the patient for whom Contact is inserted.", ParameterType = "property", DataType = "string", IsRequired = false)]
+        public string FirstName { get; set; }
+
+        [ApiMember(Name = "LastName", Description = "LastName of the patient for whom Contact is inserted.", ParameterType = "property", DataType = "string", IsRequired = false)]
+        public string LastName { get; set; }
+
+        [ApiMember(Name = "PreferredName", Description = "PreferredName of the patient for whom Contact is inserted.", ParameterType = "property", DataType = "string", IsRequired = false)]
+        public string PreferredName { get; set; }
+
+        [ApiMember(Name = "Gender", Description = "Gender of the patient for whom Contact is inserted.", ParameterType = "property", DataType = "string", IsRequired = false)]
+        public string Gender { get; set; }
 
         [ApiMember(Name = "Modes", Description = "List of CommModes being updated", ParameterType = "property", DataType = "List<CommModeData>", IsRequired = true)]
         public List<CommModeData> Modes { get; set; }

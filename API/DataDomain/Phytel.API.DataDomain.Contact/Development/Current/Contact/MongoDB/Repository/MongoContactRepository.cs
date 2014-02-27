@@ -51,12 +51,27 @@ namespace Phytel.API.DataDomain.Contact
                         MEContact meContact = new MEContact
                         {
                             Id = ObjectId.GenerateNewId(),
-                            PatientId = ObjectId.Parse(request.PatientId),
+                            FirstName = request.FirstName,
+                            LastName = request.LastName, 
+                            PreferredName = request.PreferredName,
+                            Gender = request.Gender,
                             Version = request.Version,
                             LastUpdatedOn = DateTime.UtcNow,
                             UpdatedBy = request.UserId,
                             DeleteFlag = false
                         };
+
+                        //PatientId
+                        if (request.PatientId != null)
+                        {
+                            meContact.PatientId = ObjectId.Parse(request.PatientId);
+                        }
+
+                        //UserId
+                        if (request.UserId != null)
+                        {
+                            meContact.UserId = Guid.Parse(request.UserId);
+                        }
 
                         //Timezone
                         if (request.TimeZoneId != null)
@@ -230,7 +245,7 @@ namespace Phytel.API.DataDomain.Contact
                 {
                     contactData = new ContactData { 
                         ContactId = mc.Id.ToString(),
-                        UserId = mc.UserId,
+                        UserId = (mc.UserId == null) ? null : mc.UserId.ToString().Replace("-", string.Empty).ToLower(),
                         FirstName = mc.FirstName,
                         MiddleName = mc.MiddleName,
                         LastName = mc.LastName,
@@ -720,7 +735,7 @@ namespace Phytel.API.DataDomain.Contact
                     contactData = new ContactData { 
                         ContactId = mc.Id.ToString(),
                         PatientId = mc.PatientId.ToString(),
-                        UserId = mc.UserId,
+                        UserId = (mc.UserId == null) ? null : mc.UserId.ToString().Replace("-", string.Empty).ToLower(),
                         FirstName = mc.FirstName,
                         MiddleName = mc.MiddleName,
                         LastName = mc.LastName,
@@ -812,6 +827,33 @@ namespace Phytel.API.DataDomain.Contact
             return contactData;
         }
 
+        public object FindContactByUserId(GetContactByUserIdDataRequest request)
+        {
+            ContactData contactData = null;
+            using (ContactMongoContext ctx = new ContactMongoContext(_dbName))
+            {
+                List<IMongoQuery> queries = new List<IMongoQuery>();
+                queries.Add(Query.EQ(MEContact.UserIdProperty, request.UserId));
+                queries.Add(Query.EQ(MEContact.DeleteFlagProperty, false));
+                IMongoQuery mQuery = Query.And(queries);
+                MEContact mc = ctx.Contacts.Collection.Find(mQuery).FirstOrDefault();
+                if (mc != null)
+                {
+                    contactData = new ContactData
+                    {
+                        ContactId = mc.Id.ToString(),
+                        PatientId = mc.PatientId.ToString(),
+                        UserId = (mc.UserId == null) ? null : mc.UserId.ToString().Replace("-", string.Empty).ToLower(),
+                        FirstName = mc.FirstName,
+                        MiddleName = mc.MiddleName,
+                        LastName = mc.LastName,
+                        PreferredName = mc.PreferredName,
+                        Gender = mc.Gender
+                    };
+                }
+            }
+            return contactData;
+        }
 
         public IEnumerable<object> FindCareManagers()
         { 
@@ -834,7 +876,7 @@ namespace Phytel.API.DataDomain.Contact
                             ContactData contactData = new ContactData
                             {
                                ContactId = c.Id.ToString(),
-                               UserId = (string.IsNullOrEmpty(c.UserId)) ? string.Empty : c.UserId.Replace("-", string.Empty).ToLower(),
+                               UserId = (c.UserId == null) ? null : c.UserId.ToString().Replace("-", string.Empty).ToLower(),
                                PreferredName = c.PreferredName
                             };
                             contactDataList.Add(contactData);

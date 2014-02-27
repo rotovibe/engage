@@ -18,6 +18,16 @@ namespace Phytel.API.DataDomain.Contact.Test
         }
 
         [TestMethod]
+        public void GetContactByUserId_Test()
+        {
+            GetContactByUserIdDataRequest request = new GetContactByUserIdDataRequest { UserId = "EC0849A4-D0A1-44BF-A482-7A97103E96CD" };
+
+            ContactData response = ContactDataManager.GetContactByUserId(request);
+
+            Assert.IsTrue(response.ContactId == "53043e99d433231f48de8a80");
+        }
+
+        [TestMethod]
         public void GetContactByPatientId_Minimal_Test()
         {
             GetContactDataRequest request = new GetContactDataRequest { PatientId = "52e26f53072ef7191c11d5e2" };
@@ -70,6 +80,25 @@ namespace Phytel.API.DataDomain.Contact.Test
             Assert.IsNotNull(response);
         }
 
+
+        [TestMethod]
+        public void InsertContactByUserId_Test()
+        {
+            PutContactDataRequest request = new PutContactDataRequest();
+
+            request.ContractNumber = "InHealth001";
+            request.UserId = "BB241C64-A0FF-4E01-BA5F-4246EF50780E";
+            request.Version = "v1";
+            request.PatientId = "53043e53d433231f48de8a7a";
+            request.FirstName = "InHealth";
+            request.LastName = "Admin";
+            request.PreferredName = "InHealth Admin";
+            request.Gender = "M";
+            request.Version = "v1";
+            
+            PutContactDataResponse response = ContactDataManager.InsertContact(request);
+            Assert.IsNotNull(response);
+        }
 
         [TestMethod]
         public void InsertContact_Test()

@@ -23,6 +23,21 @@ namespace Phytel.API.DataDomain.Contact
             return result;
         }
 
+        public static ContactData GetContactByUserId(GetContactByUserIdDataRequest request)
+        {
+            ContactData result = null;
+            try
+            {
+                IContactRepository<GetContactByUserIdDataResponse> repo = ContactRepositoryFactory<GetContactByUserIdDataResponse>.GetContactRepository(request.ContractNumber, request.Context);
+                result = repo.FindContactByUserId(request) as ContactData;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return result;
+        }
+
         public static SearchContactsDataResponse SearchContacts(SearchContactsDataRequest request)
         {
             SearchContactsDataResponse response = new SearchContactsDataResponse();

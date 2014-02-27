@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
@@ -48,7 +49,7 @@ namespace Phytel.API.DataDomain.Contact.DTO
 
         [BsonElement(UserIdProperty)]
         [BsonIgnoreIfNull(true)]
-        public string UserId { get; set; }
+        public Guid? UserId { get; set; }
 
         [BsonElement(FirstNameProperty)]
         [BsonIgnoreIfNull(true)]
