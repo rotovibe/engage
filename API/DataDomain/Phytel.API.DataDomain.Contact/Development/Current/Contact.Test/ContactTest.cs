@@ -87,7 +87,7 @@ namespace Phytel.API.DataDomain.Contact.Test
             PutContactDataRequest request = new PutContactDataRequest();
 
             request.ContractNumber = "InHealth001";
-            request.UserId = "BB241C64-A0FF-4E01-BA5F-4246EF50780E";
+            request.ResourceId = "BB241C64-A0FF-4E01-BA5F-4246EF50780E";
             request.Version = "v1";
             request.PatientId = "53043e53d433231f48de8a7a";
             request.FirstName = "InHealth";
@@ -95,6 +95,7 @@ namespace Phytel.API.DataDomain.Contact.Test
             request.PreferredName = "InHealth Admin";
             request.Gender = "M";
             request.Version = "v1";
+            request.UserId = "DataDomain_TestHarness";
             
             PutContactDataResponse response = ContactDataManager.InsertContact(request);
             Assert.IsNotNull(response);

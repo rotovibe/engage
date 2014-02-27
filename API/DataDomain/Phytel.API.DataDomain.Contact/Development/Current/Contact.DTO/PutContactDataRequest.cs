@@ -11,6 +11,9 @@ namespace Phytel.API.DataDomain.Contact.DTO
         [ApiMember(Name = "PatientId", Description = "Id of the patient for whom Contact is inserted.", ParameterType = "property", DataType = "string", IsRequired = false)]
         public string PatientId { get; set; }
 
+        [ApiMember(Name = "ResourceId", Description = "Id of the resource for whom Contact is inserted.", ParameterType = "property", DataType = "string", IsRequired = false)]
+        public string ResourceId { get; set; }
+
         [ApiMember(Name = "FirstName", Description = "FirstName of the patient for whom Contact is inserted.", ParameterType = "property", DataType = "string", IsRequired = false)]
         public string FirstName { get; set; }
 

@@ -11,14 +11,14 @@ namespace Phytel.API.DataDomain.Contact.DTO
     [BsonIgnoreExtraElements(false)]
     [MongoIndex(Keys = new string[] { TTLDateProperty }, TimeToLive = 0)]
     [MongoIndex(Keys = new string[] { PatientIdProperty, DeleteFlagProperty }, Unique = false)]
-    [MongoIndex(Keys = new string[] { UserIdProperty, PatientIdProperty, DeleteFlagProperty }, Unique = false)]
+    [MongoIndex(Keys = new string[] { ResourceIdProperty, PatientIdProperty, DeleteFlagProperty }, Unique = false)]
     public class MEContact : IMongoEntity<ObjectId>, IMEEntity
     {
         public MEContact() { Id = ObjectId.GenerateNewId(); }
 
         public const string IdProperty = "_id";
         public const string PatientIdProperty = "pid";
-        public const string UserIdProperty = "uid";
+        public const string ResourceIdProperty = "rid";
         public const string FirstNameProperty = "fn";
         public const string MiddleNameProperty = "mn";
         public const string LastNameProperty = "ln";
@@ -47,9 +47,9 @@ namespace Phytel.API.DataDomain.Contact.DTO
         [BsonIgnoreIfNull(true)]
         public ObjectId? PatientId { get; set; }
 
-        [BsonElement(UserIdProperty)]
+        [BsonElement(ResourceIdProperty)]
         [BsonIgnoreIfNull(true)]
-        public Guid? UserId { get; set; }
+        public Guid? ResourceId { get; set; }
 
         [BsonElement(FirstNameProperty)]
         [BsonIgnoreIfNull(true)]
