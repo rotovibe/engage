@@ -244,53 +244,12 @@ namespace Phytel.API.DataDomain.Contact
 
         public Tuple<string, IEnumerable<object>> Select(Interface.APIExpression expression)
         {
-            IEnumerable<object> returnQuery = null;
-            IMongoQuery mQuery = null;
-
-            List<SelectExpression> selectExpressions = expression.Expressions.ToList();
-            selectExpressions.Where(s => s.GroupID == 1).OrderBy(o => o.ExpressionOrder).ToList();
-
-            SelectExpressionGroupType groupType = SelectExpressionGroupType.AND;
-
-            if (selectExpressions.Count > 0)
+            try
             {
-                IList<IMongoQuery> queries = new List<IMongoQuery>();
-                for (int i = 0; i < selectExpressions.Count; i++)
-                {
-                    groupType = selectExpressions[0].NextExpressionType;
-
-                    IMongoQuery query = SelectExpressionHelper.ApplyQueryOperators(selectExpressions[i].Type, selectExpressions[i].FieldName, selectExpressions[i].Value);
-                    if (query != null)
-                    {
-                        queries.Add(query);
-                    }
-                }
-
-                mQuery = SelectExpressionHelper.BuildQuery(groupType, queries);
-
-                List<ContactData> contactDataList = null;
-                using (ContactMongoContext ctx = new ContactMongoContext(_dbName))
-                {
-                    List<MEContact> meContacts = ctx.Contacts.Collection.Find(mQuery).ToList();
-                    if (meContacts != null)
-                    {
-                        contactDataList = new List<ContactData>();
-                        foreach (MEContact c in meContacts)
-                        {
-                            ContactData contactData = new ContactData
-                            {
-                               ContactId = c.Id.ToString(),
-                               Gender = c.Gender,
-                               PreferredName = c.PreferredName
-                            };
-                            contactDataList.Add(contactData);
-                        }
-                    }
-                }
-                returnQuery = contactDataList.AsQueryable<object>();
+                throw new NotImplementedException();
+                // code here //
             }
-
-            return new Tuple<string, IEnumerable<object>>(expression.ExpressionID, returnQuery);
+            catch (Exception ex) { throw ex; }
         }
 
         public IEnumerable<object> SelectAll()
@@ -881,6 +840,43 @@ namespace Phytel.API.DataDomain.Contact
                             contactDataList.Add(contactData);
                         }
 
+                    }
+                }
+                return contactDataList;
+            }
+            catch (Exception ex) { throw ex; }
+        }
+
+        public IEnumerable<object> SearchContacts(SearchContactsDataRequest request)
+        { 
+            List<ContactData> contactDataList = null;
+            try
+            {
+                using (ContactMongoContext ctx = new ContactMongoContext(_dbName))
+                {
+                    List<IMongoQuery> queries = new List<IMongoQuery>();
+                    List<BsonValue> bsonList = Helper.ConvertToBsonValueList(request.ContactIds);
+                    if (bsonList != null)
+                    {
+                        queries.Add(Query.In(MEContact.IdProperty, bsonList));
+                        queries.Add(Query.EQ(MEContact.DeleteFlagProperty, false));
+                        IMongoQuery mQuery = Query.And(queries);
+                        List<MEContact> meContacts = ctx.Contacts.Collection.Find(mQuery).ToList();
+                        if (meContacts != null)
+                        {
+                            contactDataList = new List<ContactData>();
+                            foreach (MEContact c in meContacts)
+                            {
+                                ContactData contactData = new ContactData
+                                {
+                                    ContactId = c.Id.ToString(),
+                                    Gender = c.Gender,
+                                    PreferredName = c.PreferredName
+                                };
+                                contactDataList.Add(contactData);
+                            }
+
+                        }
                     }
                 }
                 return contactDataList;

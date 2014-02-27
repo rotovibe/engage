@@ -46,9 +46,10 @@ namespace Phytel.API.DataDomain.Contact.Test
             request.UserId = "DD_TestHarness";
             request.Version = "v1";
             List<string> ids = new List<string>();
-            ids.Add("52f012acd433231e1cfbc974");
-            ids.Add("52f012b7d433231e1cfbc975");
-           // request.ContactIds = ids;
+            ids.Add("53043e53d433231f48de8a7a");
+            ids.Add("53043e5fd433231f48de8a7b");
+            ids.Add("52f57462d6a4850fd02cc1b4");
+            //request.ContactIds = ids;
 
             SearchContactsDataResponse response = ContactDataManager.SearchContacts(request);
 
