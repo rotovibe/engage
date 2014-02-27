@@ -87,12 +87,10 @@ namespace Phytel.API.DataDomain.Contact.Test
             PutContactDataRequest request = new PutContactDataRequest();
 
             request.ContractNumber = "InHealth001";
-            request.ResourceId = "BB241C64-A0FF-4E01-BA5F-4246EF50780E";
-            request.Version = "v1";
-            request.PatientId = "53043e53d433231f48de8a7a";
-            request.FirstName = "InHealth";
-            request.LastName = "Admin";
-            request.PreferredName = "InHealth Admin";
+            request.ResourceId = "EC0849A4-D0A1-44BF-A482-7A97103E96CD";
+            request.FirstName = "Tony";
+            request.LastName = "DiGiorgio 1";
+            request.PreferredName = "Tony DiGiorgio 1";
             request.Gender = "M";
             request.Version = "v1";
             request.UserId = "DataDomain_TestHarness";
