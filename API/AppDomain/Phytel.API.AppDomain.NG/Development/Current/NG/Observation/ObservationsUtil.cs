@@ -5,6 +5,7 @@ using ServiceStack.ServiceClient.Web;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Globalization;
 using AD = Phytel.API.AppDomain.NG.DTO.Observation;
 
 namespace Phytel.API.AppDomain.NG
@@ -91,6 +92,63 @@ namespace Phytel.API.AppDomain.NG
             catch (WebServiceException ex)
             {
                 throw new WebServiceException("App Domain:PostInitialGoalRequest()" + ex.Message, ex.InnerException);
+            }
+        }
+
+        internal static PatientObservationRecordData CreatePatientObservationRecord(AD.PatientObservation po, ObservationValue ov)
+        {
+            try
+            {
+                PatientObservationRecordData pord = new PatientObservationRecordData
+                {
+                    Id = ov.Id,
+                    EndDate = po.EndDate,
+                    GroupId = po.GroupId,
+                    StartDate = po.StartDate,
+                    TypeId = po.TypeId,
+                    Units = po.Units,
+                    Source = "CM"
+                };
+
+                float fVal = 0;
+                if (float.TryParse(ov.Value, NumberStyles.Float, CultureInfo.InvariantCulture, out fVal))
+                {
+                    pord.Value = fVal;
+                }
+                else
+                {
+                    pord.NonNumericValue = ov.Value;
+                }
+                return pord;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("App Domain:CreatePatientObservationRecord()" + ex.Message, ex.InnerException);
+            }
+        }
+
+        internal static List<string> GetPatientObservationIds(List<AD.PatientObservation> obsl)
+        {
+            try
+            {
+                List<string> patientObservationIds = new List<string>();
+
+                if (obsl != null && obsl.Count > 0)
+                {
+                    foreach (AD.PatientObservation po in obsl)
+                    {
+                        foreach (AD.ObservationValue v in po.Values)
+                        {
+                            patientObservationIds.Add(v.Id);
+                        }
+                    }
+                }
+
+                return patientObservationIds;
+            }
+            catch (WebServiceException ex)
+            {
+                throw new WebServiceException("AD:GetPatientObservationIds()" + ex.Message, ex.InnerException);
             }
         }
     }

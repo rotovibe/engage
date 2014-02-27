@@ -1,6 +1,7 @@
 ﻿using Phytel.API.AppDomain.NG.DTO;
 using Phytel.API.AppDomain.NG.DTO.Observation;
 using Phytel.API.DataDomain.PatientObservation.DTO;
+using Phytel.API.Interface;
 using ServiceStack.Service;
 using ServiceStack.ServiceClient.Web;
 using System;
@@ -69,6 +70,38 @@ namespace Phytel.API.AppDomain.NG.Observation
             catch (WebServiceException ex)
             {
                 throw new WebServiceException("App Domain:GetAdditionalObservationsLibraryRequest()" + ex.Message, ex.InnerException);
+            }
+        }
+
+        internal static bool UpdatePatientObservation(PostUpdateObservationItemsRequest request, PatientObservationRecordData pord, List<string> observationIds)
+        {
+            bool result = false;
+            try
+            {
+                IRestClient client = new JsonServiceClient();
+                PutUpdateObservationDataResponse dataDomainResponse = client.Put<PutUpdateObservationDataResponse>(
+                    string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Observation/Update/",
+                    DDPatientObservationsServiceUrl,
+                    "NG",
+                    request.Version,
+                    request.ContractNumber,
+                    request.PatientId), new PutUpdateObservationDataRequest
+                    {
+                        PatientObservationData = pord,
+                        UserId = request.UserId,
+                        PatientObservationIdsList = observationIds
+                    } as object);
+
+                if (dataDomainResponse.Result)
+                {
+                    result = dataDomainResponse.Result;
+                }
+
+                return result;
+            }
+            catch (WebServiceException ex)
+            {
+                throw new WebServiceException("App Domain:UpdatePatientObservation()" + ex.Message, ex.InnerException);
             }
         }
     }
