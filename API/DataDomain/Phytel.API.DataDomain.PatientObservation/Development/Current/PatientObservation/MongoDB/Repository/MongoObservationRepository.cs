@@ -232,5 +232,11 @@ namespace Phytel.API.DataDomain.PatientObservation
         {
             throw new NotImplementedException();
         }
+
+
+        public object FindRecentObservationValue(string observationTypeId, string patientId)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

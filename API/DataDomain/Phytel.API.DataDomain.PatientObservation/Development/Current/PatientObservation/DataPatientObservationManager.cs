@@ -74,7 +74,7 @@ namespace Phytel.API.DataDomain.PatientObservation
                         Units = od.Units,
                         Values = new List<ObservationValueData>(),
                         TypeId = od.ObservationType,
-                         PatientId = request.PatientId
+                        PatientId = request.PatientId
                     };
 
                     // do an insert here and get an id from mongo
@@ -173,17 +173,65 @@ namespace Phytel.API.DataDomain.PatientObservation
                     Version = request.Version
                 };
 
+                ObservationValueData ovd = new ObservationValueData();
+
+                // get last value for each observation data
+                GetPreviousValuesForObservation(ovd, request.PatientId, od.Id, request.Context, request.ContractNumber);
+
                 PatientObservationData pod = (PatientObservationData)repo.Initialize(req);
 
-                ObservationValueData ovd = new ObservationValueData
-                {
-                    Id = pod.Id,
-                    Text = od.Description
-                };
+                ovd.Id = pod.Id;
+                ovd.Text = od.Description;
 
                 list.Add(ovd);
 
                 return ovd;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        private static void GetPreviousValuesForObservation(ObservationValueData ovd, string patientId, string observationTypeId, string context, string contract)
+        {
+            try
+            {
+                IPatientObservationRepository<GetStandardObservationsResponse> repo =
+                    PatientObservationRepositoryFactory<GetStandardObservationsResponse>.GetPatientObservationRepository(contract, context);
+                PatientObservationData val = (PatientObservationData)repo.FindRecentObservationValue(observationTypeId, patientId);
+
+                if (val != null)
+                {
+                    ovd.PreviousValue = new PreviousValueData
+                    {
+                        EndDate = val.EndDate,
+                        Source = val.Source,
+                        StartDate = val.StartDate,
+                        Unit = val.Units,
+                        Value = GetPreviousValues(val.Values)
+                    };
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        private static string GetPreviousValues(List<ObservationValueData> list)
+        {
+            string result = string.Empty;
+            try
+            {
+                if (list != null && list.Count > 0)
+                {
+                    list.ForEach(x =>
+                    {
+                        result = result + x.Value;
+                    });
+                }
+                return result;
             }
             catch (Exception ex)
             {

@@ -281,6 +281,65 @@ namespace Phytel.API.DataDomain.PatientObservation
             catch (Exception ex) { throw ex; }
         }
 
+        public object FindRecentObservationValue(string observationTypeId, string patientId)
+        {
+            try
+            {
+                PatientObservationData observationData = null;
+                List<IMongoQuery> queries = new List<IMongoQuery>();
+                queries.Add(Query.EQ(MEPatientObservation.PatientIdProperty, ObjectId.Parse(patientId)));
+                queries.Add(Query.EQ(MEPatientObservation.ObservationIdProperty, ObjectId.Parse(observationTypeId)));
+                IMongoQuery mQuery = Query.And(queries);
+
+                using (PatientObservationMongoContext ctx = new PatientObservationMongoContext(_dbName))
+                {
+                    List<MEPatientObservation> mpl = ctx.PatientObservations.Collection.Find(mQuery).ToList();
+
+                    if (mpl != null && mpl.Count > 0)
+                    {
+                        MEPatientObservation meObservation = ctx.PatientObservations.Collection.Find(mQuery).OrderByDescending(po => po.StartDate).First();
+
+                        if (meObservation != null)
+                        {
+                            observationData = new PatientObservationData
+                            {
+                                Id = meObservation.Id.ToString(),
+                                PatientId = meObservation.PatientId.ToString(),
+                                Values = GetValueList(meObservation.NumericValue, meObservation.NonNumericValue),
+                                Source = meObservation.Source,
+                                StartDate = meObservation.StartDate,
+                                EndDate = meObservation.EndDate,
+                                Units = meObservation.Units
+                            };
+                        }
+                    }
+                }
+                return observationData as object;
+            }
+            catch (Exception ex) { throw ex; }
+        }
+
+        private List<ObservationValueData> GetValueList(float? numericVal, string nonNumericVal)
+        {
+            List<ObservationValueData> ovdl = new List<ObservationValueData>();
+            try
+            {
+                if (numericVal != null)
+                {
+                    ovdl.Add(new ObservationValueData { Value = numericVal.ToString() });
+                }
+                else if (nonNumericVal != null)
+                {
+                    ovdl.Add(new ObservationValueData { Value = nonNumericVal });
+                }
+                return ovdl;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
         public object GetObservationsByType(object newEntity, bool standard)
         {
             throw new NotImplementedException();
