@@ -89,6 +89,7 @@ namespace Phytel.API.AppDomain.NG
                 Actions act = GetActionById(p, actionId);
                 act.Steps.ForEach(s =>
                 {
+                    // add stepresponse ids and step source id
                     if (SaveResponses(s.Responses, request))
                     {
                         s.Responses = null;

@@ -10,5 +10,6 @@ namespace Phytel.API.AppDomain.NG.DTO.Observation
         public string Id { get; set; }
         public string Value { get; set; }
         public string Text { get; set; }
+        public PreviousValue PreviousValue { get; set; }
     }
 }

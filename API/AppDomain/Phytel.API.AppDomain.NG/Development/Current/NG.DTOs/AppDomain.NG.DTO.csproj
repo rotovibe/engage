@@ -166,6 +166,7 @@
     <Compile Include="Observation\ObservationLibraryItem.cs" />
     <Compile Include="Observation\ObservationValue.cs" />
     <Compile Include="Observation\PatientObservation.cs" />
+    <Compile Include="Observation\PreviousValue.cs" />
     <Compile Include="PostProcessActionRequest.cs" />
     <Compile Include="PostProcessActionResponse.cs" />
     <Compile Include="GetPatientProgramDetailsSummaryResponse.cs" />

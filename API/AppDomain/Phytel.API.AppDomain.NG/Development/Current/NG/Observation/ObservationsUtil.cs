@@ -59,7 +59,8 @@ namespace Phytel.API.AppDomain.NG
                         {
                             Id = v.Id,
                             Text = v.Text,
-                            Value = v.Value
+                            Value = v.Value,
+                             PreviousValue = ConvertPreviousValue(v.PreviousValue)
                         });
                     });
                 }
@@ -68,6 +69,30 @@ namespace Phytel.API.AppDomain.NG
             catch (Exception ex)
             {
                 throw new WebServiceException("App Domain:GetValues()" + ex.Message, ex.InnerException);
+            }
+        }
+
+        private static PreviousValue ConvertPreviousValue(PreviousValueData pv)
+        {
+            PreviousValue prevValue = null;
+            try
+            {
+                if (pv != null)
+                {
+                    prevValue = new PreviousValue
+                    {
+                        EndDate = pv.EndDate,
+                        Source = pv.Source,
+                        StartDate = pv.StartDate,
+                        Unit = pv.Unit,
+                        Value = pv.Value
+                    };
+                }
+                return prevValue;
+            }
+            catch (WebServiceException ex)
+            {
+                throw new WebServiceException("App Domain:PostInitialGoalRequest()" + ex.Message, ex.InnerException);
             }
         }
 
