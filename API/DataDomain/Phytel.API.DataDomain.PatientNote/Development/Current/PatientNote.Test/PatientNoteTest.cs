@@ -10,7 +10,7 @@ namespace Phytel.API.DataDomain.PatientNote.Test
         [TestMethod]
         public void GetPatientNote_Test_Passes()
         {
-            GetPatientNoteDataRequest request = new GetPatientNoteDataRequest { Id = "5307b343d433232dd4e94743" };
+            GetPatientNoteDataRequest request = new GetPatientNoteDataRequest { Id = "530fb4d9d433230ea4e8bdfa" };
 
             PatientNoteData response = PatientNoteDataManager.GetPatientNote(request);
 
