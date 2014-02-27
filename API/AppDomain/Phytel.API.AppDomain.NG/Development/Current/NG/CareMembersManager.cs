@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using Phytel.API.AppDomain.NG.DTO;
 using Phytel.API.DataDomain.CareMember.DTO;
+using Phytel.API.DataDomain.Contact.DTO;
 using ServiceStack.Service;
 using ServiceStack.ServiceClient.Web;
 
@@ -12,6 +13,7 @@ namespace Phytel.API.AppDomain.NG
     {
         #region endpoint addresses
         protected static readonly string DDCareMemberUrl = ConfigurationManager.AppSettings["DDCareMemberUrl"];
+        protected static readonly string DDContactServiceUrl = ConfigurationManager.AppSettings["DDContactServiceUrl"];
         #endregion
 
         public CareMember GetCareMember(GetCareMemberRequest request)
@@ -34,11 +36,24 @@ namespace Phytel.API.AppDomain.NG
                 if (ddResponse != null && ddResponse.CareMember != null)
                 {
                     CareMemberData n = ddResponse.CareMember;
+                    List<string> contactIds = new List<string>();
+                    contactIds.Add(n.ContactId);
+                    List<ContactData> contactsData  = getContactDetails(contactIds, request.Version, request.ContractNumber, request.UserId);
+                    string pfName = string.Empty;
+                    string gender = string.Empty;
+                    var contact = contactsData.Find(a => a.ContactId == n.ContactId);
+                    if(contact != null)
+                    {
+                        pfName  = contact.PreferredName;
+                        gender = contact.Gender;
+                    }
                     result = new CareMember
                     {
                         Id = n.Id,
                         PatientId = n.PatientId,
                         ContactId = n.ContactId,
+                        PreferredName  = pfName,
+                        Gender = gender,
                         Primary = n.Primary,
                         TypeId = n.TypeId
                     };
@@ -71,13 +86,32 @@ namespace Phytel.API.AppDomain.NG
                 {
                     result = new List<CareMember>();
                     List<CareMemberData> dataList = ddResponse.CareMembers;
+                    List<string> contactIds = new List<string>();
+                    if(dataList.Count > 0)
+                    {
+                        foreach (CareMemberData ctm in dataList)
+                        {
+                            contactIds.Add(ctm.ContactId);
+                        }
+                    }
+                    List<ContactData> contactsData  = getContactDetails(contactIds, request.Version, request.ContractNumber, request.UserId);
                     foreach (CareMemberData n in dataList)
                     {
+                        string pfName = string.Empty;
+                        string gender = string.Empty;
+                        var contact = contactsData.Find(a => a.ContactId == n.ContactId);
+                        if(contact != null)
+                        {
+                            pfName  = contact.PreferredName;
+                            gender = contact.Gender;
+                        }
                         result.Add(new CareMember
                         {
                             Id = n.Id,
                             PatientId = n.PatientId,
                             ContactId = n.ContactId,
+                            PreferredName = pfName,
+                            Gender = gender,
                             Primary = n.Primary,
                             TypeId = n.TypeId
                         });
@@ -185,5 +219,45 @@ namespace Phytel.API.AppDomain.NG
                 throw ae;
             }
         }
+
+        /// <summary>
+        /// Get the contact Details for a list of Contact ids.
+        /// </summary>
+        /// <param name="contactIds">List of Contact Ids.</param>
+        /// <param name="version">version of the request.</param>
+        /// <param name="contractNumber">contract number of the request.</param>
+        /// <param name="userId">user id making the request.</param>
+        /// <returns>List of contact data.</returns>
+        private List<ContactData> getContactDetails(List<string> contactIds, string version, string contractNumber, string userId)
+        {
+
+            List<ContactData> contactsData = new List<ContactData>();
+            if(contactIds.Count > 0)
+            {
+                SearchContactsDataResponse contactDataResponse = null;
+                IRestClient client = new JsonServiceClient();
+                //[Route("/{Context}/{Version}/{ContractNumber}/Contact", "POST")]
+                contactDataResponse = client.Post<SearchContactsDataResponse>(string.Format("{0}/{1}/{2}/{3}/Contact",
+                                                        DDContactServiceUrl,
+                                                        "NG",
+                                                        version,
+                                                        contractNumber), new SearchContactsDataRequest
+                                                        {
+                                                            ContactIds = contactIds,
+                                                            Context = "NG",
+                                                            ContractNumber = contractNumber,
+                                                            UserId = userId,
+                                                            Version = version
+                                                        } as object
+                                                        );
+
+                if (contactDataResponse != null && contactDataResponse.Contacts != null)
+                {
+                    contactsData = contactDataResponse.Contacts;
+                }
+            }
+            return contactsData;
+        }
     }
+
 }
