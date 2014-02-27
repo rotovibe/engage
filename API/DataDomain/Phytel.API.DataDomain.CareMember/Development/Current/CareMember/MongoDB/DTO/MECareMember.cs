@@ -47,7 +47,7 @@ namespace Phytel.API.DataDomain.CareMember.DTO
 
         [BsonElement(TypeProperty)]
         [BsonIgnoreIfNull(false)]
-        public Object Type { get; set; }
+        public ObjectId Type { get; set; }
 
         #region Standard IMongoEntity Implementation
         [BsonElement(ExtraElementsProperty)]
