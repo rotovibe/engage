@@ -4,7 +4,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{DF5370F2-C561-4599-8A29-653A521376DE}</ProjectGuid>
+    <ProjectGuid>{AA8C9E02-7343-4E90-803A-73C8A8DD7499}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Phytel.API.DataDomain.PatientObservation</RootNamespace>
