@@ -299,9 +299,40 @@ namespace NGTestData
 
         private void button2_Click(object sender, EventArgs e)
         {
-            string userSql = "Select UserID, FirstName, LastName, DisplayName From ";
-            DataSet users = Phytel.Services.SQLDataService.Instance.ExecuteSQLDirect(sqlConn, sqlAddressQuery, 0);
+            string userSql = "Select UserID, FirstName, LastName, DisplayName From [User]";
 
+            string sqlConn = string.Empty;
+            
+            if(rdoDev.Checked)
+                sqlConn = "server=azurePhytelDev.cloudapp.net;database=PhytelNG;user id=nguser;password=ngu$3r;";
+            else
+                sqlConn = "server=azurePhytel.cloudapp.net;database=PhytelNG;user id=nguser;password=ngu$3r;";
+
+            DataSet users = Phytel.Services.SQLDataService.Instance.ExecuteSQLDirect(sqlConn, userSql, 0);
+            foreach(DataRow dr in users.Tables[0].Rows)
+            {
+                MEContact newC = new MEContact
+                {
+                    FirstName = dr["FirstName"].ToString(),
+                    LastName = dr["LastName"].ToString(),
+                    PreferredName = dr["DisplayName"].ToString(),
+                    ResourceId = Guid.Parse(dr["UserID"].ToString())
+                };
+
+                string mongoConnString = string.Empty;
+                if (rdoDev.Checked)
+                    mongoConnString = "mongodb://healthuser:healthu$3r@azurePhytelDev.cloudapp.net:27017/InHealth001";
+                else
+                    mongoConnString = "mongodb://healthuser:healthu$3r@azurePhytel.cloudapp.net:27017/InHealth001";
+
+                MongoDB.Driver.MongoDatabase mongoDB = Phytel.Services.MongoService.Instance.GetDatabase(mongoConnString);
+
+                IMongoQuery query = Query.EQ(MEContact.ResourceIdProperty, Guid.Parse(dr["UserID"].ToString()));
+
+                MEContact existsC = mongoDB.GetCollection("Contact").FindOneAs<MEContact>(query);
+                if(existsC == null)
+                    mongoDB.GetCollection("Contact").Insert(newC);
+            }
         }
     }
 }
