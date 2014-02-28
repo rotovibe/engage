@@ -4,7 +4,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{AA8C9E02-7343-4E90-803A-73C8A8DD7499}</ProjectGuid>
+    <ProjectGuid>{F1A478D1-DCA1-4BE6-AE83-E0ACDD4FDFFD}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Phytel.API.DataDomain.PatientObservation</RootNamespace>
@@ -85,7 +85,7 @@
       <Name>Phytel.API.Interface</Name>
     </ProjectReference>
     <ProjectReference Include="..\PatientObservation.DTO\DataDomain.PatientObservation.DTO.csproj">
-      <Project>{06d69e2b-a395-459c-b4d0-fc750018bdd8}</Project>
+      <Project>{1c2c63a1-4246-4ec9-bad1-c00e9ecd85f6}</Project>
       <Name>DataDomain.PatientObservation.DTO</Name>
     </ProjectReference>
   </ItemGroup>

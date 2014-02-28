@@ -93,6 +93,23 @@ namespace Phytel.API.DataDomain.PatientObservation.Service
             return response;
         }
 
+        public GetAdditionalObservationsResponse Post(GetAdditionalObservationsResponse request)
+        {
+            GetAdditionalObservationsResponse response = new GetAdditionalObservationsResponse();
+            try
+            {
+                response = PatientObservationDataManager.GetAdditionalObservationsByType(request);
+                response.Version = request.Version;
+            }
+            catch (Exception ex)
+            {
+                //TODO: Log this to C3 database via ASE
+                base.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                response.Status = new ServiceStack.ServiceInterface.ServiceModel.ResponseStatus("Exception", ex.Message);
+            }
+            return response;
+        }
+
         public GetAdditionalLibraryObservationsResponse Get(GetAdditionalLibraryObservationsRequest request)
         {
             GetAdditionalLibraryObservationsResponse response = new GetAdditionalLibraryObservationsResponse();

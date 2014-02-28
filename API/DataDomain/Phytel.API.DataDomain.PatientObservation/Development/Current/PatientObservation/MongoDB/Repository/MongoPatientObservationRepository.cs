@@ -147,6 +147,7 @@ namespace Phytel.API.DataDomain.PatientObservation
 
                     var uv = new List<MB.UpdateBuilder>();
                     uv.Add(MB.Update.Set(MEPatientObservation.TTLDateProperty, System.DateTime.UtcNow.AddDays(_expireDays)));
+                    uv.Add(MB.Update.Set(MEPatientObservation.LastUpdatedOnProperty, System.DateTime.UtcNow));
                     uv.Add(MB.Update.Set(MEPatientObservation.DeleteFlagProperty, true));
                     uv.Add(MB.Update.Set(MEPatientObservation.UpdatedByProperty, request.UserId));
 

@@ -5,6 +5,7 @@ using System;
 using Phytel.API.Common.Format;
 using System.Collections.Generic;
 using System.Linq;
+using MongoDB.Bson;
 
 namespace Phytel.API.DataDomain.PatientObservation
 {
@@ -66,7 +67,8 @@ namespace Phytel.API.DataDomain.PatientObservation
                 {
                     PatientObservationData pod = new PatientObservationData
                     {
-                        Id = od.Id,
+                        Id = ObjectId.GenerateNewId().ToString(),
+                        ObservationId = od.Id,
                         Name = od.CommonName != null ? od.CommonName : od.Description,
                         Order = od.Order,
                         Standard = od.Standard,
@@ -322,6 +324,11 @@ namespace Phytel.API.DataDomain.PatientObservation
             {
                 throw;
             }
+        }
+
+        public static GetAdditionalObservationsResponse GetAdditionalObservationsByType(GetAdditionalObservationsResponse request)
+        {
+            throw new NotImplementedException();
         }
     }
 }   
