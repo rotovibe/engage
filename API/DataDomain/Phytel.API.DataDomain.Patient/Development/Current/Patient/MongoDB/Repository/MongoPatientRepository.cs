@@ -26,13 +26,6 @@ namespace Phytel.API.DataDomain.Patient
     public class MongoPatientRepository<T> : IPatientRepository<T>
     {
         private string _dbName = string.Empty;
-        private List<IdNamePair> modesLookUp = new List<IdNamePair>();
-        private List<CommTypeData> typesLookUp = new List<CommTypeData>();
-        private List<LookUp.DTO.LanguageData> langLookUp = new List<LookUp.DTO.LanguageData>();
-        private List<StateData> stateLookUp = new List<StateData>();
-        private List<IdNamePair> timesofDays = new List<IdNamePair>();
-        private List<TimeZoneData> timeZones = new List<TimeZoneData>();
-        private TimeZoneData timeZone = new TimeZoneData();
 
         #region endpoint addresses
         protected static readonly string DDPatientSystemUrl = ConfigurationManager.AppSettings["DDPatientSystemServiceUrl"];
@@ -49,9 +42,6 @@ namespace Phytel.API.DataDomain.Patient
         {
             try
             {
-                //TODO:  need to refactor this method to clean it up and only get lookups as needed.
-                LoadLookups();
-
                 //Patient
                 PutPatientDataRequest request = newEntity as PutPatientDataRequest;
                 MEPatient patient = null;
@@ -111,208 +101,6 @@ namespace Phytel.API.DataDomain.Patient
                         updateCohortResponse.CohortPatientView.LastName = request.LastName;
                         updateCohortResponse.CohortPatientView.SearchFields = updateData;
                         ctx.CohortPatientViews.Collection.Save(updateCohortResponse.CohortPatientView);
-
-                        //PatientSystem
-
-                        //Contact
-
-                        //timezone
-                        TimeZoneData updateZone = new TimeZoneData();
-                        if (request.TimeZone != null)
-                        {
-                            foreach (TimeZoneData t in timeZones)
-                            {
-                                string[] zones = t.Name.Split(" ".ToCharArray());
-                                if (request.TimeZone == zones[0])
-                                {
-                                    updateZone.Id = t.Id;
-                                }
-                            }
-                        }
-                        else
-                        {
-                            updateZone.Id = timeZone.Id;
-                        }
-
-                        List<CommModeData> updateModes = new List<CommModeData>();
-                        List<PhoneData> updatePhones = new List<PhoneData>();
-                        List<AddressData> updateAddresses = new List<AddressData>();
-                        List<EmailData> updateEmails = new List<EmailData>();
-
-                        //modes
-                        if (modesLookUp != null && modesLookUp.Count > 0)
-                        {
-                            foreach (IdNamePair l in modesLookUp)
-                            {
-                                updateModes.Add(new CommModeData { ModeId = l.Id, OptOut = false, Preferred = false });
-                            }
-                        }
-
-
-                        //phones
-                        if (request.Phone1 != "")
-                        {
-                            PhoneData phone1 = new PhoneData
-                            {
-                                Number = Convert.ToInt64(request.Phone1),
-                                PhonePreferred = request.Phone1Preferred,
-                                OptOut = false
-                            };
-                            foreach (CommTypeData c in typesLookUp)
-                            {
-                                if (request.Phone1Type == c.Name)
-                                {
-                                    phone1.TypeId = c.Id;
-                                }
-                            }
-                            updatePhones.Add(phone1);
-                        }
-
-                        if (request.Phone2 != "")
-                        {
-                            PhoneData phone2 = new PhoneData
-                            {
-                                Number = Convert.ToInt64(request.Phone2),
-                                PhonePreferred = request.Phone2Preferred,
-                                OptOut = false
-                            };
-                            foreach (CommTypeData c in typesLookUp)
-                            {
-                                if (request.Phone2Type == c.Name)
-                                {
-                                    phone2.TypeId = c.Id;
-                                }
-                            }
-                            updatePhones.Add(phone2);
-                        }
-
-                        //emails
-                        if (request.Email1 != "")
-                        {
-                            EmailData email1 = new EmailData
-                            {
-                                Text = request.Email1,
-                                Preferred = request.Email1Preferred,
-                                OptOut = false,
-                            };
-                            foreach (CommTypeData c in typesLookUp)
-                            {
-                                if (request.Email1Type == c.Name)
-                                {
-                                    email1.TypeId = c.Id;
-                                }
-                            }
-                            updateEmails.Add(email1);
-                        }
-
-                        if (request.Email2 != "")
-                        {
-                            EmailData email2 = new EmailData
-                            {
-                                Text = request.Email2,
-                                Preferred = request.Email2Preferred,
-                                OptOut = false,
-                            };
-                            foreach (CommTypeData c in typesLookUp)
-                            {
-                                if (request.Email2Type == c.Name)
-                                {
-                                    email2.TypeId = c.Id;
-                                }
-                            }
-                            updateEmails.Add(email2);
-                        }
-
-                        //addresses
-                        if (request.Address1Line1 != "")
-                        {
-                            AddressData add1 = new AddressData
-                            {
-                                Line1 = request.Address1Line1,
-                                Line2 = request.Address1Line2,
-                                Line3 = request.Address1Line3,
-                                City = request.Address1City,
-                                PostalCode = request.Address1Zip,
-                                Preferred = request.Address1Preferred,
-                                OptOut = false
-                            };
-                            foreach (StateData st in stateLookUp)
-                            {
-                                if (st.Name == request.Address1State)
-                                {
-                                    add1.StateId = st.Id;
-                                }
-                            }
-                            foreach (CommTypeData c in typesLookUp)
-                            {
-                                if (request.Address1Type == c.Name)
-                                {
-                                    add1.TypeId = c.Id;
-                                }
-                            }
-                            updateAddresses.Add(add1);
-                        }
-
-                        if (request.Address2Line1 != "")
-                        {
-                            AddressData add2 = new AddressData
-                            {
-                                Line1 = request.Address2Line1,
-                                Line2 = request.Address2Line2,
-                                Line3 = request.Address2Line3,
-                                City = request.Address2City,
-                                PostalCode = request.Address2Zip,
-                                Preferred = request.Address2Preferred,
-                                OptOut = false
-                            };
-                            foreach (StateData st in stateLookUp)
-                            {
-                                if (st.Name == request.Address1State)
-                                {
-                                    add2.StateId = st.Id;
-                                }
-                            }
-                            foreach (CommTypeData c in typesLookUp)
-                            {
-                                if (request.Address2Type == c.Name)
-                                {
-                                    add2.TypeId = c.Id;
-                                }
-                            }
-                            updateAddresses.Add(add2);
-                        }
-
-                        //Test user ID
-                        int updateUser = 123456789;
-                        IRestClient updateClient = new JsonServiceClient();
-                        GetContactDataRequest getContactRequest = new GetContactDataRequest();
-                        GetContactDataResponse getContactResponse = updateClient.Get<GetContactDataResponse>(string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Contact",
-                                                                                                        DDContactUrl,
-                                                                                                        "NG",
-                                                                                                        "v1",
-                                                                                                        "InHealth001",
-                                                                                                        patient.Id.ToString()));
-
-                        PutUpdateContactDataRequest updateRequest = new PutUpdateContactDataRequest
-                        {
-                            ContactId = getContactResponse.Contact.ContactId,
-                            Modes = updateModes,
-                            Phones = updatePhones,
-                            Emails = updateEmails,
-                            Addresses = updateAddresses,
-                            TimeZoneId = updateZone.Id.ToString(),
-                            UserId = updateUser.ToString(),
-                            Context = request.Context,
-                            ContractNumber = request.ContractNumber,
-                            Version = request.Version
-                        };
-
-                        PutUpdateContactDataResponse updateResponse = updateClient.Put<PutUpdateContactDataResponse>(string.Format("{0}/{1}/{2}/{3}/Patient/Contact",
-                                                                                                                DDContactUrl,
-                                                                                                                updateRequest.Context,
-                                                                                                                updateRequest.Version,
-                                                                                                                updateRequest.ContractNumber), updateRequest);
-
                     }
                     else
                     {
@@ -333,7 +121,6 @@ namespace Phytel.API.DataDomain.Patient
                             DeleteFlag = false,
                             LastUpdatedOn = System.DateTime.Now
                         };
-
                         ctx.Patients.Collection.Insert(patient);
 
                         List<SearchFieldData> data = new List<SearchFieldData>();
@@ -355,231 +142,8 @@ namespace Phytel.API.DataDomain.Patient
                             Context = request.Context,
                             ContractNumber = request.ContractNumber
                         };
-
-
                         repo.Insert(cohortPatientRequest);
-
-                        //PatientSystem
-                        if (string.IsNullOrEmpty(request.SystemID) == false)
-                        {
-                            PutPatientSystemDataRequest systemRequest = new PutPatientSystemDataRequest
-                            {
-                                SystemID = request.SystemID,
-                                SystemName = request.SystemName,
-                                PatientID = patient.Id.ToString()
-                            };
-
-
-
-                            IRestClient sysClient = new JsonServiceClient();
-                            PutPatientSystemDataResponse sysResponse = sysClient.Put<PutPatientSystemDataResponse>(string.Format("{0}/{1}/{2}/{3}/PatientSystem",
-                                                                                                    DDPatientSystemUrl,
-                                                                                                    "NG",
-                                                                                                    request.Version,
-                                                                                                    request.ContractNumber), systemRequest);
-
-
-                            patient.DisplayPatientSystemID = ObjectId.Parse(sysResponse.PatientSystemId);
-
-                            ctx.Patients.Collection.Save(patient);
-
-                        }
                     }
-
-                    //Contact
-
-                    //timezone
-                    TimeZoneData tZone = new TimeZoneData();
-                    if (request.TimeZone != null)
-                    {
-                        foreach (TimeZoneData t in timeZones)
-                        {
-                            string[] zones = t.Name.Split(" ".ToCharArray());
-                            if (request.TimeZone == zones[0])
-                            {
-                                tZone.Id = t.Id;
-                            }
-                        }
-                    }
-                    else
-                    {
-                        tZone.Id = timeZone.Id;
-                    }
-
-                    List<CommModeData> modes = new List<CommModeData>();
-                    List<PhoneData> phones = new List<PhoneData>();
-                    List<AddressData> addresses = new List<AddressData>();
-                    List<EmailData> emails = new List<EmailData>();
-
-                    //modes
-                    if (modesLookUp != null && modesLookUp.Count > 0)
-                    {
-                        foreach (IdNamePair l in modesLookUp)
-                        {
-                            modes.Add(new CommModeData { ModeId = l.Id, OptOut = false, Preferred = false });
-                        }
-                    }
-
-
-                    //phones
-                    if (request.Phone1 != "")
-                    {
-                        PhoneData phone1 = new PhoneData
-                        {
-                            Number = Convert.ToInt64(request.Phone1),
-                            PhonePreferred = request.Phone1Preferred,
-                            OptOut = false
-                        };
-                        foreach (CommTypeData c in typesLookUp)
-                        {
-                            if (request.Phone1Type == c.Name)
-                            {
-                                phone1.TypeId = c.Id;
-                            }
-                        }
-                        phones.Add(phone1);
-                    }
-
-                    if (request.Phone2 != "")
-                    {
-                        PhoneData phone2 = new PhoneData
-                        {
-                            Number = Convert.ToInt64(request.Phone2),
-                            PhonePreferred = request.Phone2Preferred,
-                            OptOut = false
-                        };
-                        foreach (CommTypeData c in typesLookUp)
-                        {
-                            if (request.Phone2Type == c.Name)
-                            {
-                                phone2.TypeId = c.Id;
-                            }
-                        }
-                        phones.Add(phone2);
-                    }
-
-                    //emails
-                    if (request.Email1 != "")
-                    {
-                        EmailData email1 = new EmailData
-                        {
-                            Text = request.Email1,
-                            Preferred = request.Email1Preferred,
-                            OptOut = false,
-                        };
-                        foreach (CommTypeData c in typesLookUp)
-                        {
-                            if (request.Email1Type == c.Name)
-                            {
-                                email1.TypeId = c.Id;
-                            }
-                        }
-                        emails.Add(email1);
-                    }
-
-                    if (request.Email2 != "")
-                    {
-                        EmailData email2 = new EmailData
-                        {
-                            Text = request.Email2,
-                            Preferred = request.Email2Preferred,
-                            OptOut = false,
-                        };
-                        foreach (CommTypeData c in typesLookUp)
-                        {
-                            if (request.Email2Type == c.Name)
-                            {
-                                email2.TypeId = c.Id;
-                            }
-                        }
-                        emails.Add(email2);
-                    }
-
-                    //addresses
-                    if (request.Address1Line1 != "")
-                    {
-                        AddressData add1 = new AddressData
-                        {
-                            Line1 = request.Address1Line1,
-                            Line2 = request.Address1Line2,
-                            Line3 = request.Address1Line3,
-                            City = request.Address1City,
-                            PostalCode = request.Address1Zip,
-                            Preferred = request.Address1Preferred,
-                            OptOut = false
-                        };
-                        foreach (StateData st in stateLookUp)
-                        {
-                            if (st.Name == request.Address1State)
-                            {
-                                add1.StateId = st.Id;
-                            }
-                        }
-                        foreach (CommTypeData c in typesLookUp)
-                        {
-                            if (request.Address1Type == c.Name)
-                            {
-                                add1.TypeId = c.Id;
-                            }
-                        }
-                        addresses.Add(add1);
-                    }
-
-                    if (request.Address2Line1 != "")
-                    {
-                        AddressData add2 = new AddressData
-                        {
-                            Line1 = request.Address2Line1,
-                            Line2 = request.Address2Line2,
-                            Line3 = request.Address2Line3,
-                            City = request.Address2City,
-                            PostalCode = request.Address2Zip,
-                            Preferred = request.Address2Preferred,
-                            OptOut = false
-                        };
-                        foreach (StateData st in stateLookUp)
-                        {
-                            if (st.Name == request.Address1State)
-                            {
-                                add2.StateId = st.Id;
-                            }
-                        }
-                        foreach (CommTypeData c in typesLookUp)
-                        {
-                            if (request.Address2Type == c.Name)
-                            {
-                                add2.TypeId = c.Id;
-                            }
-                        }
-                        addresses.Add(add2);
-                    }
-
-                    //Test user ID
-                    int testUser = 123456789;
-
-                    PutContactDataRequest contactRequest = new PutContactDataRequest
-                    {
-                        PatientId = patient.Id.ToString(),
-                        Modes = modes,
-                        TimeZoneId = tZone.Id,
-                        Phones = phones,
-                        Emails = emails,
-                        Addresses = addresses,
-                        Version = patient.Version,
-                        Context = request.Context,
-                        ContractNumber = request.ContractNumber,
-                        UserId = testUser.ToString()
-                    };
-
-                    IRestClient contactClient = new JsonServiceClient();
-                    PutContactDataResponse contactResponse = contactClient.Put<PutContactDataResponse>(string.Format("{0}/{1}/{2}/{3}/Patient/Contact/{4}",
-                                                                                            DDContactUrl,
-                                                                                            "NG",
-                                                                                            contactRequest.Version,
-                                                                                            contactRequest.ContractNumber,
-                                                                                            contactRequest.PatientId), contactRequest);
-
-
 
                     return new PutPatientDataResponse
                     {
@@ -587,10 +151,12 @@ namespace Phytel.API.DataDomain.Patient
                     };
                 }
             }
+               
             catch (Exception ex)
             {
                 throw ex;
             }
+        
         }
 
         public object InsertAll(List<object> entities)
@@ -1014,6 +580,11 @@ namespace Phytel.API.DataDomain.Patient
                         else
                             updt.Set(MEPatient.DOBProperty, request.DOB);
                     }
+                    if (request.DisplayPatientSystemId != null)
+                    {
+                        if (ObjectId.Parse(request.DisplayPatientSystemId) != null)
+                            updt.Set(MEPatient.DisplayPatientSystemIDProperty, request.DisplayPatientSystemId);
+                    }
                     if (request.Version != null)
                     {
                         if ((request.Version == "\"\"") || (request.Version == "\'\'"))
@@ -1134,72 +705,6 @@ namespace Phytel.API.DataDomain.Patient
         public object Update(object entity)
         {
             throw new NotImplementedException();
-        }
-
-        private void LoadLookups()
-        {
-            IRestClient modesClient = new JsonServiceClient();
-            GetAllCommModesDataRequest modeRequest = new GetAllCommModesDataRequest();
-            GetAllCommModesDataResponse modeResponse = modesClient.Get<GetAllCommModesDataResponse>(string.Format("{0}/{1}/{2}/{3}/commmodes",
-                                                                                            DDLookUpUrl,
-                                                                                            "NG",
-                                                                                            "v1",
-                                                                                            "InHealth001"));
-            modesLookUp = modeResponse.CommModes;
-
-            IRestClient typeClient = new JsonServiceClient();
-            GetAllCommTypesDataRequest typeRequest = new GetAllCommTypesDataRequest();
-            GetAllCommTypesDataResponse typeResponse = typeClient.Get<GetAllCommTypesDataResponse>(string.Format("{0}/{1}/{2}/{3}/commtypes",
-                                                                                            DDLookUpUrl,
-                                                                                            "NG",
-                                                                                            "v1",
-                                                                                            "InHealth001"));
-            typesLookUp = typeResponse.CommTypes;
-
-            IRestClient langClient = new JsonServiceClient();
-            GetAllLanguagesDataRequest langRequest = new GetAllLanguagesDataRequest();
-            GetAllLanguagesDataResponse langResponse = typeClient.Get<GetAllLanguagesDataResponse>(string.Format("{0}/{1}/{2}/{3}/languages",
-                                                                                            DDLookUpUrl,
-                                                                                            "NG",
-                                                                                            "v1",
-                                                                                            "InHealth001"));
-            langLookUp = langResponse.Languages;
-
-            IRestClient stateClient = new JsonServiceClient();
-            GetAllStatesDataRequest stateRequest = new GetAllStatesDataRequest();
-            GetAllStatesDataResponse stateResponse = stateClient.Get<GetAllStatesDataResponse>(string.Format("{0}/{1}/{2}/{3}/states",
-                                                                                            DDLookUpUrl,
-                                                                                            "NG",
-                                                                                            "v1",
-                                                                                            "InHealth001"));
-            stateLookUp = stateResponse.States;
-
-            IRestClient daysClient = new JsonServiceClient();
-            GetAllTimesOfDaysDataRequest daysRequest = new GetAllTimesOfDaysDataRequest();
-            GetAllTimesOfDaysDataResponse daysResponse = daysClient.Get<GetAllTimesOfDaysDataResponse>(string.Format("{0}/{1}/{2}/{3}/timesOfDays",
-                                                                                            DDLookUpUrl,
-                                                                                            "NG",
-                                                                                            "v1",
-                                                                                            "InHealth001"));
-            timesofDays = daysResponse.TimesOfDays;
-
-            IRestClient zonesClient = new JsonServiceClient();
-            GetAllTimeZonesDataRequest zonesRequest = new GetAllTimeZonesDataRequest();
-            GetAllTimeZonesDataResponse zonesResponse = zonesClient.Get<GetAllTimeZonesDataResponse>(string.Format("{0}/{1}/{2}/{3}/timeZones",
-                                                                                            DDLookUpUrl,
-                                                                                            "NG",
-                                                                                            "v1",
-                                                                                            "InHealth001"));
-            timeZones = zonesResponse.TimeZones;
-
-            IRestClient zoneClient = new JsonServiceClient();
-            GetTimeZoneDataRequest zoneRequest = new GetTimeZoneDataRequest();
-            GetTimeZoneDataResponse zoneResponse = zoneClient.Get<GetTimeZoneDataResponse>(string.Format("{0}/{1}/{2}/{3}/TimeZone/Default",
-                                                                                            DDLookUpUrl,
-                                                                                            "NG",
-                                                                                            "v1",
-                                                                                            "InHealth001"));
-            timeZone = zoneResponse.TimeZone;
         }
     }
 }

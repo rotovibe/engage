@@ -25,31 +25,39 @@ namespace Phytel.API.DataDomain.Patient
         public object Insert(object newEntity)
         {
             PutCohortPatientViewDataRequest cohortRequest = newEntity as PutCohortPatientViewDataRequest;
-
-            MECohortPatientView patient = new MECohortPatientView
-            {
-                PatientID = ObjectId.Parse(cohortRequest.PatientID),
-                LastName = cohortRequest.LastName
-            };
-
-            if (cohortRequest.SearchFields != null && cohortRequest.SearchFields.Count > 0)
-            {
-                List<SearchField> fields = new List<SearchField>();
-                foreach (SearchFieldData c in cohortRequest.SearchFields)
-                {
-                    fields.Add(new SearchField { Active = c.Active, FieldName = c.FieldName, Value = c.Value });
-                }
-                patient.SearchFields = fields;
-            }
-
+            MECohortPatientView patientView = null;
             using (PatientMongoContext ctx = new PatientMongoContext(_dbName))
             {
-                ctx.CohortPatientViews.Collection.Insert(patient);
+                //Does the patient exist?
+                IMongoQuery query = Query.And(
+                                Query.EQ(MECohortPatientView.PatientIDProperty, cohortRequest.PatientID),
+                                Query.EQ(MECohortPatientView.LastNameProperty, cohortRequest.LastName));
+                patientView = ctx.CohortPatientViews.Collection.FindOneAs<MECohortPatientView>(query);
+                if (patientView == null)
+                {
+                    patientView = new MECohortPatientView
+                    {
+                        PatientID = ObjectId.Parse(cohortRequest.PatientID),
+                        LastName = cohortRequest.LastName
+                    };
+
+                    if (cohortRequest.SearchFields != null && cohortRequest.SearchFields.Count > 0)
+                    {
+                        List<SearchField> fields = new List<SearchField>();
+                        foreach (SearchFieldData c in cohortRequest.SearchFields)
+                        {
+                            fields.Add(new SearchField { Active = c.Active, FieldName = c.FieldName, Value = c.Value });
+                        }
+                        patientView.SearchFields = fields;
+                    }
+
+                    ctx.CohortPatientViews.Collection.Insert(patientView);
+                }
             }
 
             return new PutCohortPatientViewDataResponse
             {
-                PatientID = patient.Id.ToString()
+                PatientID = patientView.Id.ToString()
             };
         }
 
