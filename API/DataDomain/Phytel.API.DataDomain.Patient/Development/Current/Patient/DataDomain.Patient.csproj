@@ -118,7 +118,15 @@
       <Project>{abe948fb-247e-4955-b3ab-b7c93e10a542}</Project>
       <Name>Phytel.API.Interface</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\..\Phytel.API.DataDomain.Cohort\Development\Current\Cohort.DTO\DataDomain.Cohort.DTO.csproj">
+    <ProjectReference Include="..\..\..\..\Phytel.API.DataDomain.Action\Release Candidate\Current\Action.DTO\DataDomain.Action.DTO.csproj">
+      <Project>{1c2c63a1-4246-4ec9-bad1-c00e9ecd85f6}</Project>
+      <Name>DataDomain.Action.DTO</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\Phytel.API.DataDomain.CareMember\Release Candidate\Current\CareMember.DTO\DataDomain.CareMember.DTO.csproj">
+      <Project>{b65577e7-60a6-4553-b1b9-38d6074ac560}</Project>
+      <Name>DataDomain.CareMember.DTO</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\Phytel.API.DataDomain.Cohort\Release Candidate\Current\Cohort.DTO\DataDomain.Cohort.DTO.csproj">
       <Project>{d4489296-17a3-4172-8fdf-db6c0a7ae748}</Project>
       <Name>DataDomain.Cohort.DTO</Name>
     </ProjectReference>
@@ -130,11 +138,7 @@
       <Project>{4885fe36-03db-47b7-be7e-33260943a9dc}</Project>
       <Name>DataDomain.LookUp.DTO</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\..\Phytel.API.DataDomain.LookUp\Development\Current\LookUp\DataDomain.LookUp.csproj">
-      <Project>{f0a3623a-6d1d-46de-a00e-794ebc856eb5}</Project>
-      <Name>DataDomain.LookUp</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\..\Phytel.API.DataDomain.PatientSystem\Development\Current\PatientSystem.DTO\DataDomain.PatientSystem.DTO.csproj">
+    <ProjectReference Include="..\..\..\..\Phytel.API.DataDomain.PatientSystem\Release Candidate\Current\PatientSystem.DTO\DataDomain.PatientSystem.DTO.csproj">
       <Project>{6033a8ea-a3ef-4182-bfdd-4a9826ecf871}</Project>
       <Name>DataDomain.PatientSystem.DTO</Name>
     </ProjectReference>
