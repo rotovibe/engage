@@ -222,9 +222,9 @@ namespace Phytel.API.AppDomain.NG
                 string contactId = string.Empty;
                 //Get the corresponding contactId of the user loggedIn.
                 //[Route("/{Context}/{Version}/{ContractNumber}/Contact/User/{UserId}", "GET")]
-                GetContactDataResponse dataDomainResponse;
+                GetContactByUserIdDataResponse dataDomainResponse;
                     dataDomainResponse =
-                        client.Get<GetContactDataResponse>(
+                        client.Get<GetContactByUserIdDataResponse>(
                         string.Format("{0}/{1}/{2}/{3}/Contact/User/{4}",
                         DDContactServiceUrl,
                         "NG",
