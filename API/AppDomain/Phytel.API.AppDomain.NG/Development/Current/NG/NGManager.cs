@@ -211,7 +211,7 @@ namespace Phytel.API.AppDomain.NG
             }
         }
 
-        public GetCohortPatientsResponse GetCohortPatients(GetCohortPatientsRequest request, IRequestContext httpContext)
+        public GetCohortPatientsResponse GetCohortPatients(GetCohortPatientsRequest request)
         {
             GetCohortPatientsResponse pResponse = new GetCohortPatientsResponse();
             pResponse.Patients = new List<CohortPatient>();
@@ -219,9 +219,27 @@ namespace Phytel.API.AppDomain.NG
             try
             {
                 IRestClient client = new JsonServiceClient();
+                string contactId = string.Empty;
+                //Get the corresponding contactId of the user loggedIn.
+                //[Route("/{Context}/{Version}/{ContractNumber}/Contact/User/{UserId}", "GET")]
+                GetContactDataResponse dataDomainResponse;
+                    dataDomainResponse =
+                        client.Get<GetContactDataResponse>(
+                        string.Format("{0}/{1}/{2}/{3}/Contact/User/{4}",
+                        DDContactServiceUrl,
+                        "NG",
+                        request.Version,
+                        request.ContractNumber,
+                        request.UserId));
 
+                    if (dataDomainResponse != null && dataDomainResponse.Contact != null)
+                    {
+                        contactId = dataDomainResponse.Contact.ContactId;
+                    }
+                
                 // call cohort data domain
-                GetCohortPatientsDataResponse qResponse = client.Get<GetCohortPatientsDataResponse>(string.Format("{0}/{1}/{2}/{3}/CohortPatients/{4}?Skip={5}&Take={6}&SearchFilter={7}",
+                // Route("/{Context}/{Version}/{ContractNumber}/CohortPatients/{CohortID}", "GET")]
+                GetCohortPatientsDataResponse qResponse = client.Get<GetCohortPatientsDataResponse>(string.Format("{0}/{1}/{2}/{3}/CohortPatients/{4}?Skip={5}&Take={6}&SearchFilter={7}&ContactId={8}",
                                                                                             DDPatientServiceURL,
                                                                                             "NG",
                                                                                             request.Version,
@@ -229,7 +247,8 @@ namespace Phytel.API.AppDomain.NG
                                                                                             request.CohortID,
                                                                                             request.Skip,
                                                                                             request.Take,
-                                                                                            request.SearchFilter));
+                                                                                            request.SearchFilter,
+                                                                                            contactId));
 
                 //take qResponse Patient details and map them to "Patient" in the GetCohortPatientsResponse
                 qResponse.CohortPatients.ForEach(x => pResponse.Patients.Add(new CohortPatient

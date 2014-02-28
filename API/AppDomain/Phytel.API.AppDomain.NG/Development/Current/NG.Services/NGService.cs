@@ -263,7 +263,7 @@ namespace Phytel.API.AppDomain.NG.Service
                 if (result.UserId.Trim() != string.Empty)
                 {
                     request.UserId = result.UserId;
-                    response = ngm.GetCohortPatients(request, base.RequestContext);
+                    response = ngm.GetCohortPatients(request);
                 }
                 else
                     throw new UnauthorizedAccessException();

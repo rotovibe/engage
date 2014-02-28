@@ -1,5 +1,7 @@
+using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Phytel.API.DataDomain.Patient.DTO;
+using Phytel.API.DataDomain.Patient.MongoDB.DTO;
 
 namespace Phytel.API.DataDomain.Patient.Test
 {
@@ -11,13 +13,14 @@ namespace Phytel.API.DataDomain.Patient.Test
         {
             GetCohortPatientsDataRequest request = new GetCohortPatientsDataRequest
             {
-                CohortID = "528ed9b3072ef70e10099687",
+                CohortID = "528ed977072ef70e10099685",
                 Version = "v1",
                 Context = "NG",
                 SearchFilter = "",
                 ContractNumber = "InHealth001",
                 Skip = 0,
-                Take = 100
+                Take = 100,
+                ContactId = "530fcad1d4332320e0336a6a"
             };
 
             GetCohortPatientsDataResponse response = PatientDataManager.GetCohortPatients(request);
@@ -99,6 +102,101 @@ namespace Phytel.API.DataDomain.Patient.Test
             GetCohortPatientsDataResponse response = PatientDataManager.GetCohortPatients(request);
 
             Assert.IsTrue(response.CohortPatients.Count > 0);
+        }
+
+        [TestMethod]
+        public void UpdatePatientView_Test()
+        {
+            string version = "v1";
+            string contractNumber = "InHealth001";
+            string context = "NG";
+            string patientId = "52f55858072ef709f84e5dee";
+            string userId = "DDTestHarness";
+            CohortPatientViewData view = GetCohortPatientView();
+            PutUpdateCohortPatientViewRequest request = new PutUpdateCohortPatientViewRequest {
+                CohortPatientView = view,
+                Context = context,
+                ContractNumber = contractNumber,
+                PatientID = patientId,
+                UserId = userId,
+                Version = version
+            };
+
+            PutUpdateCohortPatientViewResponse response = PatientDataManager.UpdateCohortPatientViewProblem(request);
+        }
+
+        private CohortPatientViewData GetCohortPatientView()
+        {
+            CohortPatientViewData cpv = new CohortPatientViewData
+            {
+                Id = "52f55858072ef709f84e5ded",
+                LastName = "Blad",
+                PatientID = "52f55858072ef709f84e5dee",
+                SearchFields = searchFields()
+            };
+
+            return cpv;
+        }
+
+        private List<SearchFieldData> searchFields()
+        {
+            List<SearchFieldData> sfd = new List<SearchFieldData>();
+            sfd.Add(new SearchFieldData
+            {
+                FieldName = Constants.FN,
+                Value = "Linsey",
+                Active = true
+            });
+            sfd.Add(new SearchFieldData
+            {
+                FieldName = Constants.LN,
+                Value = "Blad",
+                Active = true
+            });
+            sfd.Add(new SearchFieldData
+            {
+                FieldName = Constants.G,
+                Value = "M",
+                Active = true
+            });
+            sfd.Add(new SearchFieldData
+            {
+                FieldName = Constants.DOB,
+                Value = "07/10/1900",
+                Active = true
+            });
+            sfd.Add(new SearchFieldData
+            {
+                FieldName = Constants.MN,
+                Value = "WWWW",
+                Active = true
+            });
+            sfd.Add(new SearchFieldData
+            {
+                FieldName = Constants.SFX,
+                Value = "MR",
+                Active = true
+            });
+            sfd.Add(new SearchFieldData
+            {
+                FieldName = Constants.PN,
+                Value = "Linseyo",
+                Active = true
+            });
+            sfd.Add(new SearchFieldData
+            {
+                FieldName = Constants.Problem,
+                Value = "528a66e3d4332317acc5095e",
+                Active = true
+            });
+            sfd.Add(new SearchFieldData
+            {
+                FieldName = Constants.Problem,
+                Value = "528a672fd4332317acc50968",
+                Active = true
+            });
+
+            return sfd;
         }
     }
 }

@@ -79,14 +79,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Constants.cs" />
     <Compile Include="GetCohortPatientsDataRequest.cs" />
     <Compile Include="GetCohortPatientsDataResponse.cs" />
     <Compile Include="GetCohortPatientViewRequest.cs" />
     <Compile Include="GetCohortPatientViewResponse.cs" />
     <Compile Include="PutCohortPatientViewDataRequest.cs" />
     <Compile Include="PutCohortPatientViewDataResponse.cs" />
-    <Compile Include="PutProblemInCohortPatientViewRequest.cs" />
-    <Compile Include="PutProblemInCohortPatientViewResponse.cs" />
+    <Compile Include="PutUpdateCohortPatientViewRequest.cs" />
+    <Compile Include="PutUpdateCohortPatientViewResponse.cs" />
     <Compile Include="GetPatientsDataRequest.cs" />
     <Compile Include="GetPatientsDataResponse.cs" />
     <Compile Include="CohortPatientViewData.cs" />

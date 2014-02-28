@@ -1,25 +1,20 @@
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Phytel.API.DataDomain.Patient.DTO;
-using Phytel.API.Interface;
-using MongoDB.Driver;
-using MB = MongoDB.Driver.Builders;
 using MongoDB.Bson;
-using MongoDB.Driver.Linq;
-using Phytel.API.Common.Format;
+using MongoDB.Driver;
 using MongoDB.Driver.Builders;
+using Phytel.API.Common.CustomObjects;
+using Phytel.API.Common.Format;
+using Phytel.API.DataDomain.Contact.DTO;
+using Phytel.API.DataDomain.LookUp.DTO;
+using Phytel.API.DataDomain.Patient.DTO;
+using Phytel.API.DataDomain.Patient.MongoDB.DTO;
 using Phytel.API.DataDomain.PatientSystem.DTO;
 using ServiceStack.Service;
 using ServiceStack.ServiceClient.Web;
-using System.Configuration;
-using Phytel.API.DataDomain.Patient.MongoDB.DTO;
-using Phytel.API.DataDomain.Contact.DTO;
-using Phytel.API.DataDomain.LookUp.DTO;
-using Phytel.API.DataDomain.LookUp;
-using Phytel.API.Common.CustomObjects;
+using MB = MongoDB.Driver.Builders;
 
 namespace Phytel.API.DataDomain.Patient
 {
@@ -89,13 +84,13 @@ namespace Phytel.API.DataDomain.Patient
                                                                                                                             updateCohortRequest.ContractNumber,
                                                                                                                             updateCohortRequest.PatientID));
                         List<SearchFieldData> updateData = new List<SearchFieldData>();
-                        updateData.Add(new SearchFieldData { Active = true, FieldName = "FN", Value = request.FirstName });
-                        updateData.Add(new SearchFieldData { Active = true, FieldName = "LN", Value = request.LastName });
-                        updateData.Add(new SearchFieldData { Active = true, FieldName = "G", Value = request.Gender.ToUpper() });
-                        updateData.Add(new SearchFieldData { Active = true, FieldName = "DOB", Value = request.DOB });
-                        updateData.Add(new SearchFieldData { Active = true, FieldName = "MN", Value = request.MiddleName });
-                        updateData.Add(new SearchFieldData { Active = true, FieldName = "SFX", Value = request.Suffix });
-                        updateData.Add(new SearchFieldData { Active = true, FieldName = "PN", Value = request.PreferredName });
+                        updateData.Add(new SearchFieldData { Active = true, FieldName = Constants.FN, Value = request.FirstName });
+                        updateData.Add(new SearchFieldData { Active = true, FieldName = Constants.LN, Value = request.LastName });
+                        updateData.Add(new SearchFieldData { Active = true, FieldName = Constants.G, Value = request.Gender.ToUpper() });
+                        updateData.Add(new SearchFieldData { Active = true, FieldName = Constants.DOB, Value = request.DOB });
+                        updateData.Add(new SearchFieldData { Active = true, FieldName = Constants.MN, Value = request.MiddleName });
+                        updateData.Add(new SearchFieldData { Active = true, FieldName = Constants.SFX, Value = request.Suffix });
+                        updateData.Add(new SearchFieldData { Active = true, FieldName = Constants.PN, Value = request.PreferredName });
                         //updateData.Add(new SearchFieldData {Active = true, FieldName = "SSN", Value = patient.SSN });
 
                         updateCohortResponse.CohortPatientView.LastName = request.LastName;
@@ -124,13 +119,13 @@ namespace Phytel.API.DataDomain.Patient
                         ctx.Patients.Collection.Insert(patient);
 
                         List<SearchFieldData> data = new List<SearchFieldData>();
-                        data.Add(new SearchFieldData { Active = true, FieldName = "FN", Value = patient.FirstName });
-                        data.Add(new SearchFieldData { Active = true, FieldName = "LN", Value = patient.LastName });
-                        data.Add(new SearchFieldData { Active = true, FieldName = "G", Value = patient.Gender.ToUpper() });
-                        data.Add(new SearchFieldData { Active = true, FieldName = "DOB", Value = patient.DOB });
-                        data.Add(new SearchFieldData { Active = true, FieldName = "MN", Value = patient.MiddleName });
-                        data.Add(new SearchFieldData { Active = true, FieldName = "SFX", Value = patient.Suffix });
-                        data.Add(new SearchFieldData { Active = true, FieldName = "PN", Value = patient.PreferredName });
+                        data.Add(new SearchFieldData { Active = true, FieldName = Constants.FN, Value = patient.FirstName });
+                        data.Add(new SearchFieldData { Active = true, FieldName = Constants.LN, Value = patient.LastName });
+                        data.Add(new SearchFieldData { Active = true, FieldName = Constants.G, Value = patient.Gender.ToUpper() });
+                        data.Add(new SearchFieldData { Active = true, FieldName = Constants.DOB, Value = patient.DOB });
+                        data.Add(new SearchFieldData { Active = true, FieldName = Constants.MN, Value = patient.MiddleName });
+                        data.Add(new SearchFieldData { Active = true, FieldName = Constants.SFX, Value = patient.Suffix });
+                        data.Add(new SearchFieldData { Active = true, FieldName = Constants.PN, Value = patient.PreferredName });
                         //data.Add(new SearchFieldData {Active = true, FieldName = "SSN", Value = patient.SSN });
 
                         PutCohortPatientViewDataRequest cohortPatientRequest = new PutCohortPatientViewDataRequest
@@ -619,7 +614,7 @@ namespace Phytel.API.DataDomain.Patient
 
         private void UpdateProperty(PutUpdatePatientDataRequest request, SearchField s)
         {
-            if (s.FieldName.Equals("PN"))
+            if (s.FieldName.Equals(Constants.PN))
             {
                 if (request.PreferredName != null)
                 {
@@ -630,7 +625,7 @@ namespace Phytel.API.DataDomain.Patient
                 }
             }
 
-            if (s.FieldName.Equals("SFX"))
+            if (s.FieldName.Equals(Constants.SFX))
             {
                 if (request.Suffix != null)
                 {
@@ -641,7 +636,7 @@ namespace Phytel.API.DataDomain.Patient
                 }
             }
 
-            if (s.FieldName.Equals("MN"))
+            if (s.FieldName.Equals(Constants.MN))
             {
                 if (request.MiddleName != null)
                 {
@@ -652,7 +647,7 @@ namespace Phytel.API.DataDomain.Patient
                 }
             }
 
-            if (s.FieldName.Equals("DOB"))
+            if (s.FieldName.Equals(Constants.DOB))
             {
                 if (request.DOB != null)
                 {
@@ -663,7 +658,7 @@ namespace Phytel.API.DataDomain.Patient
                 }
             }
 
-            if (s.FieldName.Equals("G"))
+            if (s.FieldName.Equals(Constants.G))
             {
                 if (request.Gender != null)
                 {
@@ -674,7 +669,7 @@ namespace Phytel.API.DataDomain.Patient
                 }
             }
 
-            if (s.FieldName.Equals("LN"))
+            if (s.FieldName.Equals(Constants.LN))
             {
                 if (request.LastName != null)
                 {
@@ -684,7 +679,7 @@ namespace Phytel.API.DataDomain.Patient
                         s.Value = request.LastName;
                 }
             }
-            if (s.FieldName.Equals("FN"))
+            if (s.FieldName.Equals(Constants.FN))
             {
                 if (request.FirstName != null)
                 {
