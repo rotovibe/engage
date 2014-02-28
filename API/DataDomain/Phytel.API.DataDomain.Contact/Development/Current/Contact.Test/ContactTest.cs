@@ -24,7 +24,7 @@ namespace Phytel.API.DataDomain.Contact.Test
 
             ContactData response = ContactDataManager.GetContactByUserId(request);
 
-            Assert.IsTrue(response.ContactId == "53043e99d433231f48de8a80");
+            Assert.IsTrue(response.ContactId == "530fcad1d4332320e0336a6a");
         }
 
         [TestMethod]
