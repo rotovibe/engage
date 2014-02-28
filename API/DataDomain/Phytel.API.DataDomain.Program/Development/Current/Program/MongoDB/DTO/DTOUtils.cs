@@ -1094,7 +1094,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             }
             catch (Exception ex)
             {
-                throw new ArgumentException("DDomain:SaveResponseToDocument()" + ex.Message, ex.InnerException);
+                throw new ArgumentException("DDomain:InitializeElementAttributes()" + ex.Message, ex.InnerException);
             }
         }
 
