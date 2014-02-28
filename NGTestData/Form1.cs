@@ -299,7 +299,7 @@ namespace NGTestData
 
         private void button2_Click(object sender, EventArgs e)
         {
-            string userSql = "Select UserID, FirstName, LastName, DisplayName From 
+            string userSql = "Select UserID, FirstName, LastName, DisplayName From ";
             DataSet users = Phytel.Services.SQLDataService.Instance.ExecuteSQLDirect(sqlConn, sqlAddressQuery, 0);
 
         }
