@@ -3,6 +3,7 @@ using System.Net;
 using Phytel.API.DataDomain.PatientObservation;
 using Phytel.API.DataDomain.PatientObservation.DTO;
 using Phytel.API.Common.Format;
+using ServiceStack.Common.Web;
 
 namespace Phytel.API.DataDomain.PatientObservation.Service
 {
@@ -138,8 +139,9 @@ namespace Phytel.API.DataDomain.PatientObservation.Service
             catch (Exception ex)
             {
                 //TODO: Log this to C3 database via ASE
+                string ercode = ((HttpError)ex).ErrorCode;
                 base.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-                response.Status = new ServiceStack.ServiceInterface.ServiceModel.ResponseStatus("Exception", ex.Message);
+                response.Status = new ServiceStack.ServiceInterface.ServiceModel.ResponseStatus(ercode, ex.Message);
             }
             return response;
         }
