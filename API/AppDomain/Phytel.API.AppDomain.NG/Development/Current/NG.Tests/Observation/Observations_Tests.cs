@@ -17,7 +17,7 @@ namespace Phytel.API.DataDomain.Patient.Service.Test
             string context = "NG";
             string version = "v1";
             string token = "53079028d2d8e91748f416cc";
-            string patientId = "530e649fd2d8e92014359e02";
+            string patientId = "52f558a3072ef709f84e79dc";
             string typeId = "53067453fe7a591a348e1b66";
             IRestClient client = new JsonServiceClient();
 
@@ -45,7 +45,7 @@ namespace Phytel.API.DataDomain.Patient.Service.Test
             string context = "NG";
             string version = "v1";
             string token = "53079028d2d8e91748f416cc";
-            string patientId = "52f55854072ef709f84e5c77";
+            string patientId = "52f558a3072ef709f84e79dc";
             IRestClient client = new JsonServiceClient();
 
             PostUpdateObservationItemsResponse response = client.Post<PostUpdateObservationItemsResponse>(
@@ -62,6 +62,7 @@ namespace Phytel.API.DataDomain.Patient.Service.Test
             pos.Add(new PatientObservation
             {
                 Id = "530c2718fe7a592f64473e39",
+                ObservationId = "530c2718fe7a592f64473e39",
                 Name = "Body height",
                 Values = GetValues(),
                 Units = "inches",
@@ -72,6 +73,7 @@ namespace Phytel.API.DataDomain.Patient.Service.Test
             pos.Add(new PatientObservation
             {
                 Id = "530c26fcfe7a592f64473e37",
+                ObservationId = "530c26fcfe7a592f64473e37",
                 Name = "Blood Pressure",
                 Values = GetBPValues(),
                 Units = "mmHg",
@@ -110,14 +112,14 @@ namespace Phytel.API.DataDomain.Patient.Service.Test
             List<ObservationValue> ov = new List<ObservationValue>();
             ov.Add(new ObservationValue
             {
-                Id = "530f9e9dfe7a5920f0dcfa74",
+                Id = "5310fa18fe7a592650d037b0",
                 Text = "Diastolic blood pressure",
-                Value = "72"
+                Value = "60"
             });
 
             ov.Add(new ObservationValue
             {
-                Id = "530f9e9efe7a5920f0dcfa76",
+                Id = "5310fa18fe7a592650d037b3",
                 Text = "Systolic blood pressure",
                 Value = "117"
             });
@@ -130,9 +132,9 @@ namespace Phytel.API.DataDomain.Patient.Service.Test
             List<ObservationValue> ov = new List<ObservationValue>();
             ov.Add(new ObservationValue
             {
-                Id = "530f9e8bfe7a5920f0dcfa6c",
+                Id = "5310fa17fe7a592650d037a4",
                 Text = "Body height",
-                Value = "72"
+                Value = "71"
             });
 
             return ov;
