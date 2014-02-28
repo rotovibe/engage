@@ -50,6 +50,35 @@ namespace Phytel.API.AppDomain.NG.Service
             return response; 
         }
 
+        public GetAdditionalObservationItemsResponse Get(GetAdditionalObservationItemsRequest request)
+        {
+            GetAdditionalObservationItemsResponse response = new GetAdditionalObservationItemsResponse();
+            try
+            {
+                ObservationsManager om = new ObservationsManager();
+                ValidateTokenResponse result = om.IsUserValidated(request.Version, request.Token);
+                if (result.UserId.Trim() != string.Empty)
+                {
+                    request.UserId = result.UserId;
+                    response = om.GetAdditionalObservationsRequest(request);
+                }
+                else
+                    throw new UnauthorizedAccessException();
+            }
+            catch (Exception ex)
+            {
+                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+            }
+            finally
+            {
+                List<string> patientIds = new List<string>();
+                patientIds.Add(request.PatientId);
+                AuditHelper.LogAuditData(request, patientIds, System.Web.HttpContext.Current.Request, request.GetType().Name);
+            }
+
+            return response;
+        }
+
         public GetAdditionalObservationLibraryResponse Get(GetAdditionalObservationLibraryRequest request)
         {
             GetAdditionalObservationLibraryResponse response = new GetAdditionalObservationLibraryResponse();

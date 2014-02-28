@@ -95,5 +95,21 @@ namespace Phytel.API.AppDomain.NG.Observation
                 throw ex;
             }
         }
+
+        public GetAdditionalObservationItemsResponse GetAdditionalObservationsRequest(GetAdditionalObservationItemsRequest request)
+        {
+            try
+            {
+                GetAdditionalObservationItemsResponse response = new GetAdditionalObservationItemsResponse();
+                List<PatientObservationData> po = (List<PatientObservationData>)ObservationEndpointUtil.GetAdditionalObservationsRequest(request);
+                //response.Observations = ObservationsUtil.GetAdditionalObservationsForPatient(request, po);
+                response.Version = request.Version;
+                return response;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }

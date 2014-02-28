@@ -25,6 +25,7 @@ namespace Phytel.API.AppDomain.NG
                     {
                         result.Add(new Phytel.API.AppDomain.NG.DTO.Observation.PatientObservation
                         {
+                            ObservationId = o.ObservationId,
                             EndDate = o.EndDate,
                             GroupId = o.GroupId,
                             Id = o.Id,

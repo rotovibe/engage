@@ -8,6 +8,7 @@ namespace Phytel.API.AppDomain.NG.DTO.Observation
     public class PatientObservation
     {
         public string Id { get; set; }
+        public string ObservationId { get; set; }
         public string PatientId { get; set; }
         public string Name { get; set; }
         public List<ObservationValue> Values { get; set; }

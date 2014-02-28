@@ -104,5 +104,37 @@ namespace Phytel.API.AppDomain.NG.Observation
                 throw new WebServiceException("App Domain:UpdatePatientObservation()" + ex.Message, ex.InnerException);
             }
         }
+
+        internal static List<PatientObservationData> GetAdditionalObservationsRequest(GetAdditionalObservationItemsRequest request)
+        {
+            try
+            {
+                List<PatientObservationData> result = null;
+                IRestClient client = new JsonServiceClient();
+                GetAdditionalObservationsResponse dataDomainResponse = client.Post<GetAdditionalObservationsResponse>(
+                    string.Format("{0}/{1}/{2}/{3}/Observation/Type/{4}?ObservationId={5}&PatientId={6}",
+                    DDPatientObservationsServiceUrl,
+                    "NG",
+                    request.Version,
+                    request.ContractNumber,
+                    request.TypeId,
+                    request.ObservationId,
+                    request.PatientId), new GetAdditionalObservationsRequest
+                    {
+
+                    });
+
+                if (dataDomainResponse != null)
+                {
+                    result = dataDomainResponse.StandardObservations;
+                }
+
+                return result;
+            }
+            catch (WebServiceException ex)
+            {
+                throw new WebServiceException("App Domain:GetAdditionalObservationsRequest()" + ex.Message, ex.InnerException);
+            }
+        }
     }
 }
