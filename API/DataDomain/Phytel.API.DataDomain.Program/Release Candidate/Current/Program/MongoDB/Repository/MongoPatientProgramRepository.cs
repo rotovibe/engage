@@ -39,56 +39,18 @@ namespace Phytel.API.DataDomain.Program
 
                     List<MEPatientProgram> pp = ctx.PatientPrograms.Collection.Find(findQ).ToList();
 
-                    if (pp.Count == 0)
+                    // need to refactor this
+                    if (!CanInsertPatientProgram(pp))
+                    {
+                        result.Outcome.Result = 0;
+                        result.Outcome.Reason = pp[0].Name + " is already assigned or reassignment is not allowed";
+                    }
+                    else
                     {
                         var findcp = MB.Query<MEProgram>.EQ(b => b.Id, ObjectId.Parse(request.ContractProgramId));
                         MEProgram cp = ctx.Programs.Collection.Find(findcp).FirstOrDefault();
 
-                        MEPatientProgram patientProgDoc = new MEPatientProgram
-                        {
-                            PatientId = ObjectId.Parse(request.PatientId),
-                            AuthoredBy = cp.AuthoredBy,
-                            Client = cp.Client,
-                            ProgramState = Common.ProgramState.NotStarted,
-                            State = Common.ElementState.NotStarted,
-                            AssignedBy = cp.AssignedBy,
-                            AssignedOn = cp.AssignedOn,
-                            StartDate = System.DateTime.UtcNow, // utc time
-                            EndDate = null,
-                            GraduatedFlag = false,
-                            Population = null,
-                            OptOut = null,
-                            DidNotEnrollReason = null,
-                            DisEnrollReason = null,
-                            Eligibility = Common.EligibilityStatus.Eligible,
-                            EligibilityStartDate = System.DateTime.UtcNow,
-                            EligibilityEndDate = null,
-                            EligibilityRequirements = cp.EligibilityRequirements,
-                            Enrollment = Common.GenericStatus.Pending,
-                            EligibilityOverride = Common.GenericSetting.No,
-                            DateCompleted = cp.DateCompleted,
-                            ContractProgramId = cp.Id,
-                            DeleteFlag = cp.DeleteFlag,
-                            Description = cp.Description,
-                            LastUpdatedOn = System.DateTime.UtcNow, // utc time
-                            Locked = cp.Locked,
-                            Name = cp.Name,
-                            ObjectivesInfo = cp.ObjectivesInfo,
-                            CompletedBy = cp.CompletedBy,
-                            UpdatedBy = request.UserId,
-                            SourceId = cp.Id.ToString(),
-                            ShortName = cp.ShortName,
-                            Status = cp.Status,
-                            Version = cp.Version,
-                            Spawn = cp.Spawn,
-                            Completed = cp.Completed,
-                            Enabled = cp.Enabled,
-                            ExtraElements = cp.ExtraElements,
-                            Next = cp.Next,
-                            Order = cp.Order,
-                            Previous = cp.Previous,
-                            Modules = DTOUtils.SetValidModules(cp.Modules, request.ContractNumber)
-                        };
+                        MEPatientProgram patientProgDoc = DTOUtils.CreateInitialMEPatientProgram(request, cp);
 
                         // update to new ids and their references
                         DTOUtils.RecurseAndReplaceIds(patientProgDoc.Modules);
@@ -109,24 +71,46 @@ namespace Phytel.API.DataDomain.Program
                             Status = (int)patientProgDoc.Status,
                             PatientId = patientProgDoc.PatientId.ToString(),
                             ProgramState = (int)patientProgDoc.ProgramState,
-                             ElementState = (int)patientProgDoc.State
+                            ElementState = (int)patientProgDoc.State
                         };
 
                         result.Outcome.Result = 1;
                         result.Outcome.Reason = "Successfully assigned this program for the patient";
                     }
-                    else
-                    {
-                        result.Outcome.Result = 0;
-                        result.Outcome.Reason = pp[0].Name + " is already assigned";
-                    }
-
                 }
                 return result;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 throw new Exception("DataDomain:Insert():" + ex.Message, ex.InnerException);
+            }
+        }
+
+        private bool CanInsertPatientProgram(List<MEPatientProgram> pp)
+        {
+            try
+            {
+                bool result = true;
+                if (pp == null)
+                {
+                    result = true;
+                }
+                else if (pp.Count >= 1)
+                {
+                    foreach (MEPatientProgram p in pp)
+                    {
+                        if (!p.State.Equals(ElementState.Removed) && !p.State.Equals(ElementState.Completed))
+                        {
+                            result = false;
+                            break;
+                        }
+                    }
+                }
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("DataDomain:CanInsertPatientProgram():" + ex.Message, ex.InnerException);
             }
         }
 
@@ -277,17 +261,17 @@ namespace Phytel.API.DataDomain.Program
 
                     var uv = new List<MB.UpdateBuilder>();
                     uv.Add(MB.Update.Set(MEPatientProgram.CompletedProperty, pg.Completed));
-                    uv.Add(MB.Update.Set(MEPatientProgram.StateProperty, (ElementState)pg.ElementState));
                     uv.Add(MB.Update.Set(MEPatientProgram.EnabledProperty, pg.Enabled));
                     uv.Add(MB.Update.Set(MEPatientProgram.OrderProperty, pg.Order));
                     uv.Add(MB.Update.Set(MEPatientProgram.ProgramStateProperty, (ProgramState)pg.ProgramState));
-                    uv.Add(MB.Update.Set(MEPatientProgram.StatusProperty, (Status)pg.Status));
                     uv.Add(MB.Update.Set(MEPatientProgram.LastUpdatedOnProperty, System.DateTime.UtcNow));
                     uv.Add(MB.Update.Set(MEPatientProgram.UpdatedByProperty, p.UserId));
                     uv.Add(MB.Update.Set(MEPatientProgram.EligibilityProperty, pg.Eligibility));
                     uv.Add(MB.Update.Set(MEPatientProgram.EnrollmentProperty, pg.Enrollment));
                     uv.Add(MB.Update.Set(MEPatientProgram.GraduatedFlagProperty, pg.GraduatedFlag));
 
+                    if (pg.ElementState != 0) uv.Add(MB.Update.Set(MEPatientProgram.StateProperty, (ElementState)pg.ElementState));
+                    if (pg.Status != 0) uv.Add(MB.Update.Set(MEPatientProgram.StatusProperty, (Status)pg.Status));
                     if (pg.AssignBy != null) { uv.Add(MB.Update.Set(MEPatientProgram.AssignByProperty, pg.AssignBy)); }
                     if (pg.AssignDate != null) { uv.Add(MB.Update.Set(MEPatientProgram.AssignDateProperty, pg.AssignDate)); }
                     if (pg.Client != null) { uv.Add(MB.Update.Set(MEPatientProgram.ClientProperty, pg.Client)); }

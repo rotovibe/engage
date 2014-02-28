@@ -86,6 +86,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Action.cs" />
+    <Compile Include="CareMember\GetAllCareMembersRequest.cs" />
+    <Compile Include="CareMember\GetAllCareMembersResponse.cs" />
+    <Compile Include="CareMember\GetCareMemberRequest.cs" />
+    <Compile Include="CareMember\GetCareMemberResponse.cs" />
+    <Compile Include="CareMember\CareMember.cs" />
+    <Compile Include="CareMember\PostUpdateCareMemberRequest.cs" />
+    <Compile Include="CareMember\PostCareMemberRequest.cs" />
+    <Compile Include="CareMember\PostUpdateCareMemberResponse.cs" />
+    <Compile Include="CareMember\PostCareMemberResponse.cs" />
     <Compile Include="Contact\Address.cs" />
     <Compile Include="Contact\CommMode.cs" />
     <Compile Include="Contact\Email.cs" />
@@ -137,6 +146,29 @@
     <Compile Include="Contact\GetContactResponse.cs" />
     <Compile Include="IPlanElement.cs" />
     <Compile Include="CohortPatient.cs" />
+    <Compile Include="Note\GetAllPatientNotesRequest.cs" />
+    <Compile Include="Note\GetAllPatientNotesResponse.cs" />
+    <Compile Include="Note\GetPatientNoteRequest.cs" />
+    <Compile Include="Note\GetPatientNoteResponse.cs" />
+    <Compile Include="Note\PatientNote.cs" />
+    <Compile Include="Note\PostDeletePatientNoteRequest.cs" />
+    <Compile Include="Note\PostDeletePatientNoteResponse.cs" />
+    <Compile Include="Note\PostPatientNoteRequest.cs" />
+    <Compile Include="Note\PostPatientNoteResponse.cs" />
+    <Compile Include="Observation\GetAdditionalObservationLibraryRequest.cs" />
+    <Compile Include="Observation\GetAdditionalObservationItemsRequest.cs" />
+    <Compile Include="Observation\GetAdditionalObservationItemsResponse.cs" />
+    <Compile Include="Observation\PostUpdateObservationItemsRequest.cs" />
+    <Compile Include="Observation\GetStandardObservationItemsRequest.cs" />
+    <Compile Include="Observation\GetInitializeObservationRequest.cs" />
+    <Compile Include="Observation\GetAdditionalObservationLibraryResponse.cs" />
+    <Compile Include="Observation\PostUpdateObservationItemsResponse.cs" />
+    <Compile Include="Observation\GetStandardObservationItemsResponse.cs" />
+    <Compile Include="Observation\GetInitializeObservationResponse.cs" />
+    <Compile Include="Observation\ObservationLibraryItem.cs" />
+    <Compile Include="Observation\ObservationValue.cs" />
+    <Compile Include="Observation\PatientObservation.cs" />
+    <Compile Include="Observation\PreviousValue.cs" />
     <Compile Include="PostProcessActionRequest.cs" />
     <Compile Include="PostProcessActionResponse.cs" />
     <Compile Include="GetPatientProgramDetailsSummaryResponse.cs" />
@@ -185,6 +217,7 @@
       <Name>Phytel.API.Interface</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

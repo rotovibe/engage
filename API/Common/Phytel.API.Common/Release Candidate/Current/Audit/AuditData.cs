@@ -16,12 +16,12 @@ namespace Phytel.API.Common.Audit
         public int AuditTypeId { get; set; }
         public Guid UserId { get; set; }
         public Guid ImpersonatingUserId { get; set; }
-        public DateTime EventDateTime { get; set; }
         public string SourcePage { get; set; }
         public string SourceIP { get; set; }
         public string Browser { get; set; }
         public string SessionId { get; set; }
         public int ContractID { get; set; }
+        public DateTime EventDateTime { get; set; }
         #endregion
 
         #region Optional Properties

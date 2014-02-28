@@ -63,7 +63,8 @@ namespace Phytel.API.Common
     public enum EligibilityStatus
     {
         NotEligible = 1,
-        Eligible = 2
+        Eligible = 2,
+        Pending = 3
     }
 
     public enum Locked
@@ -146,5 +147,13 @@ namespace Phytel.API.Common
         PutPatientFlaggedUpdate = 397,
         GetContactByPatientID = 398,
         PutContact = 399
+    }
+
+    public enum ObservationState
+    {
+        Complete = 1,
+        Incomplete = 2,
+        Refused = 3,
+        Declined = 4
     }
 }

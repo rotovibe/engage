@@ -18,6 +18,16 @@ namespace Phytel.API.DataDomain.Contact.Test
         }
 
         [TestMethod]
+        public void GetContactByUserId_Test()
+        {
+            GetContactByUserIdDataRequest request = new GetContactByUserIdDataRequest { UserId = "EC0849A4-D0A1-44BF-A482-7A97103E96CD" };
+
+            ContactData response = ContactDataManager.GetContactByUserId(request);
+
+            Assert.IsTrue(response.ContactId == "53043e99d433231f48de8a80");
+        }
+
+        [TestMethod]
         public void GetContactByPatientId_Minimal_Test()
         {
             GetContactDataRequest request = new GetContactDataRequest { PatientId = "52e26f53072ef7191c11d5e2" };
@@ -46,9 +56,10 @@ namespace Phytel.API.DataDomain.Contact.Test
             request.UserId = "DD_TestHarness";
             request.Version = "v1";
             List<string> ids = new List<string>();
-            ids.Add("52f012acd433231e1cfbc974");
-            ids.Add("52f012b7d433231e1cfbc975");
-           // request.ContactIds = ids;
+            ids.Add("53043e53d433231f48de8a7a");
+            ids.Add("53043e5fd433231f48de8a7b");
+            ids.Add("52f57462d6a4850fd02cc1b4");
+            //request.ContactIds = ids;
 
             SearchContactsDataResponse response = ContactDataManager.SearchContacts(request);
 
@@ -69,6 +80,24 @@ namespace Phytel.API.DataDomain.Contact.Test
             Assert.IsNotNull(response);
         }
 
+
+        [TestMethod]
+        public void InsertContactByUserId_Test()
+        {
+            PutContactDataRequest request = new PutContactDataRequest();
+
+            request.ContractNumber = "InHealth001";
+            request.ResourceId = "EC0849A4-D0A1-44BF-A482-7A97103E96CD";
+            request.FirstName = "Tony";
+            request.LastName = "DiGiorgio 1";
+            request.PreferredName = "Tony DiGiorgio 1";
+            request.Gender = "M";
+            request.Version = "v1";
+            request.UserId = "DataDomain_TestHarness";
+            
+            PutContactDataResponse response = ContactDataManager.InsertContact(request);
+            Assert.IsNotNull(response);
+        }
 
         [TestMethod]
         public void InsertContact_Test()

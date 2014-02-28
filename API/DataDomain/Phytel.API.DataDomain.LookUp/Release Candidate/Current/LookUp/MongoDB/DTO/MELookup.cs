@@ -8,7 +8,8 @@ using Phytel.API.Interface;
 namespace Phytel.API.DataDomain.LookUp.DTO
 {
     [BsonIgnoreExtraElements(false)]
-    [MongoIndex(Keys = new string[] { TTLDateProperty, }, TimeToLive = 0)]
+    [MongoIndex(Keys = new string[] { TTLDateProperty }, TimeToLive = 0)]
+    [MongoIndex(Keys = new string[] { TypeProperty, DeleteFlagProperty }, Unique = true)]
     public class MELookup : IMongoEntity<ObjectId>, IMEEntity
     {
         public MELookup() { Id = ObjectId.GenerateNewId(); }
@@ -77,6 +78,8 @@ namespace Phytel.API.DataDomain.LookUp.DTO
         FocusArea = 10,
         Source = 11,
         BarrierCategory = 12,
-        InterventionCategory = 13
+        InterventionCategory = 13,
+        ObservationType = 14,
+        CareMemberType = 15
     }
 }

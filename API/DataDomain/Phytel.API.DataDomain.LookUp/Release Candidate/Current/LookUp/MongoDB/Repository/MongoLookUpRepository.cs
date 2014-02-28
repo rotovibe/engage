@@ -72,7 +72,15 @@ namespace Phytel.API.DataDomain.LookUp
             if (MongoDB.Bson.Serialization.BsonClassMap.IsClassMapRegistered(typeof(InterventionCategory)) == false)
             {
                 MongoDB.Bson.Serialization.BsonClassMap.RegisterClassMap<InterventionCategory>();
-            } 
+            }
+            if (MongoDB.Bson.Serialization.BsonClassMap.IsClassMapRegistered(typeof(ObservationType)) == false)
+            {
+                MongoDB.Bson.Serialization.BsonClassMap.RegisterClassMap<ObservationType>();
+            }
+            if (MongoDB.Bson.Serialization.BsonClassMap.IsClassMapRegistered(typeof(CareMemberType)) == false)
+            {
+                MongoDB.Bson.Serialization.BsonClassMap.RegisterClassMap<CareMemberType>();
+            }
             #endregion
         }
 
@@ -482,7 +490,7 @@ namespace Phytel.API.DataDomain.LookUp
 
         #endregion
 
-        #region Goal LookUps
+        #region Refactored Common LookUps
         public List<IdNamePair> GetLookps(string type)
         {
             List<IdNamePair> lookupList = null;

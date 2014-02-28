@@ -12,6 +12,56 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
 {
     public static class DTOUtils
     {
+        public static MEPatientProgram CreateInitialMEPatientProgram(PutProgramToPatientRequest request, MEProgram cp)
+        {
+            MEPatientProgram patientProgDoc = new MEPatientProgram
+            {
+                PatientId = ObjectId.Parse(request.PatientId),
+                AuthoredBy = cp.AuthoredBy,
+                Client = cp.Client,
+                ProgramState = Common.ProgramState.NotStarted,
+                State = Common.ElementState.NotStarted,
+                AssignedBy = cp.AssignedBy,
+                AssignedOn = cp.AssignedOn,
+                StartDate = System.DateTime.UtcNow, // utc time
+                EndDate = null,
+                GraduatedFlag = false,
+                Population = null,
+                OptOut = null,
+                DidNotEnrollReason = null,
+                DisEnrollReason = null,
+                Eligibility = Common.EligibilityStatus.Pending,
+                EligibilityStartDate = System.DateTime.UtcNow,
+                EligibilityEndDate = null,
+                EligibilityRequirements = cp.EligibilityRequirements,
+                Enrollment = Common.GenericStatus.Pending,
+                EligibilityOverride = Common.GenericSetting.No,
+                DateCompleted = cp.DateCompleted,
+                ContractProgramId = cp.Id,
+                DeleteFlag = cp.DeleteFlag,
+                Description = cp.Description,
+                LastUpdatedOn = System.DateTime.UtcNow, // utc time
+                Locked = cp.Locked,
+                Name = cp.Name,
+                ObjectivesInfo = cp.ObjectivesInfo,
+                CompletedBy = cp.CompletedBy,
+                UpdatedBy = request.UserId,
+                SourceId = cp.Id.ToString(),
+                ShortName = cp.ShortName,
+                Status = cp.Status,
+                Version = cp.Version,
+                Spawn = cp.Spawn,
+                Completed = cp.Completed,
+                Enabled = cp.Enabled,
+                ExtraElements = cp.ExtraElements,
+                Next = cp.Next,
+                Order = cp.Order,
+                Previous = cp.Previous,
+                Modules = DTOUtils.SetValidModules(cp.Modules, request.ContractNumber)
+            };
+            return patientProgDoc;
+        }
+
         public static List<Module> SetValidModules(List<Module> list, string contractNumber)
         {
             try
@@ -1024,6 +1074,40 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             {
                 throw new ArgumentException("DDomain:SaveResponseToDocument()" + ex.Message, ex.InnerException);
             }
+        }
+
+        internal static ProgramAttribute InitializeElementAttributes(ProgramInfo p)
+        {
+            try
+            {
+                ProgramAttribute pa = new ProgramAttribute();
+                pa.PlanElementId = p.Id;
+                pa.Status = p.Status;
+                pa.StartDate = System.DateTime.Now;
+                pa.EndDate = null;
+                pa.Eligibility = 3;
+                pa.Enrollment = 2;
+                pa.GraduatedFlag = 1;
+                pa.OptOut = null;
+                pa.EligibilityOverride = 1;
+                return pa;
+            }
+            catch (Exception ex)
+            {
+                throw new ArgumentException("DDomain:InitializeElementAttributes()" + ex.Message, ex.InnerException);
+            }
+        }
+
+        internal static void InitializeProgramAttributes(PutProgramToPatientRequest request, PutProgramToPatientResponse response)
+        {
+            // create program attribute insertion
+            ProgramAttribute attr = DTOUtils.InitializeElementAttributes(response.program);
+
+            IProgramRepository<PutProgramAttributesResponse> attrRepo =
+                Phytel.API.DataDomain.Program.ProgramRepositoryFactory<PutProgramAttributesResponse>
+                .GetProgramAttributesRepository(request.ContractNumber, request.Context);
+
+            attrRepo.Insert(attr);
         }
     }
 }

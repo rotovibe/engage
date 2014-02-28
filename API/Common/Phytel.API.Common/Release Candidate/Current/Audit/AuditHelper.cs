@@ -10,6 +10,7 @@ using Phytel.Framework.ASE.Data.Common;
 using Phytel.Services;
 using ServiceStack.ServiceHost;
 using ASE = Phytel.Framework.ASE.Process;
+using Phytel.API.DataAudit;
 
 namespace Phytel.API.Common.Audit
 {
@@ -46,7 +47,19 @@ namespace Phytel.API.Common.Audit
                 
             return auditLog;
         }
+        
+        private static DataAudit.DataAudit GetAuditLog(IDataDomainRequest request)
+        {
+            //DataAudit.DataAudit auditLog = new DataAudit.DataAudit()
+            //{
+            //    ContractNumber = request.ContractNumber,
+            //    VersionNumber = request.Version,
 
+            //};
+
+            return null;
+        }
+        
         private static int GetContractID(string contractNumber)
         {
             int id = 0;
@@ -173,7 +186,7 @@ namespace Phytel.API.Common.Audit
             return returnTypeName.ToString().Replace("Request", "").Replace("Response", "");
         }
 
-        public static void LogAuditData(IAppDomainRequest request, List<string> patientids, HttpRequest webreq, string returnTypeName)
+        public static void LogAuditData(IDataDomainRequest request, HttpRequest webreq)
         {
             //hand to a new thread here, and immediately return this thread to caller
             try
@@ -183,7 +196,7 @@ namespace Phytel.API.Common.Audit
                                 {
                                     try
                                     {
-                                        AuditAsynch(request, patientids, webreq, returnTypeName);
+                                        AuditAsynch(request, webreq);
                                      }   
                                     catch (Exception newthreadex)
                                     {
@@ -192,12 +205,6 @@ namespace Phytel.API.Common.Audit
                                         int procID = int.Parse(ConfigurationManager.AppSettings.Get("ASEProcessID"));
                                         ASE.Log.LogError(procID, newthreadex, LogErrorCode.Error, LogErrorSeverity.Medium );
 
-                                        //drop into queue
-                                        //write to log
-                                        //email to admin
-                                        //NLog?
-                                        Debug.WriteLine(string.Format("^^^^^ Error calling ^^^^^{0}", webreq.RawUrl));
-                                        //Console.WriteLine(string.Format("Error calling {0}", webreq.QueryString));
                                      }
                                     
                                 }).Start();
@@ -214,6 +221,41 @@ namespace Phytel.API.Common.Audit
 
         }
 
+        public static void LogAuditData(IAppDomainRequest request, List<string> patientids, HttpRequest webreq, string returnTypeName)
+        {
+            //hand to a new thread here, and immediately return this thread to caller
+            try
+            {
+                //throw new SystemException("test before new thread starts");
+                new Thread(() =>
+                {
+                    try
+                    {
+                        AuditAsynch(request, patientids, webreq, returnTypeName);
+                    }
+                    catch (Exception newthreadex)
+                    {
+                        //if there's an error from the new thread, handle it here, so we don't black the main thread
+
+                        int procID = int.Parse(ConfigurationManager.AppSettings.Get("ASEProcessID"));
+                        ASE.Log.LogError(procID, newthreadex, LogErrorCode.Error, LogErrorSeverity.Medium);
+
+                    }
+
+                }).Start();
+
+            }
+            catch (Exception ex)
+            {
+                //handle the exception here, to make sure we don't block the main thread?
+
+            }
+
+            return;
+
+
+        }
+
         private static void AuditAsynch(IAppDomainRequest request, List<string> patientids, HttpRequest webreq, string returnTypeName)
         {
             //throw new SystemException("test error in new thread starts");
@@ -224,6 +266,15 @@ namespace Phytel.API.Common.Audit
             AuditDispatcher.WriteAudit(data);
         }
 
+        private static void AuditAsynch(IDataDomainRequest request, HttpRequest webreq)
+        {
+            //throw new SystemException("test error in new thread starts");
+
+            //string callingMethod = FindMethodType(returnTypeName);
+            //int auditTypeId = GetAuditTypeID(callingMethod);
+            DataAudit.DataAudit data = GetAuditLog(request);
+            AuditDispatcher.WriteAudit(data);
+        }
 
 
     }

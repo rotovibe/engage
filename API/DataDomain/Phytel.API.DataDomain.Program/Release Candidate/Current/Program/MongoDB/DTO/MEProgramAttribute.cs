@@ -11,6 +11,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
 {
     [BsonIgnoreExtraElements(false)]
     [MongoIndex(Keys = new string[] { TTLDateProperty }, TimeToLive = 0)]
+    [MongoIndex(Keys = new string[] { PlanElementIdProperty }, Unique = false)]
     public class MEProgramAttribute : IMEEntity, IMongoEntity<ObjectId>
     {
         public MEProgramAttribute() { Id = ObjectId.GenerateNewId(); }

@@ -25,6 +25,22 @@ namespace Phytel.API.DataDomain.Contact.Service
             return response;
         }
 
+        public GetContactByUserIdDataResponse Get(GetContactByUserIdDataRequest request)
+        {
+            GetContactByUserIdDataResponse response = new GetContactByUserIdDataResponse();
+            response.Version = request.Version;
+            try
+            {
+                response.Contact = ContactDataManager.GetContactByUserId(request);
+            }
+            catch (Exception ex)
+            {
+                //TODO: Log this to C3 database via ASE
+                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+            }
+            return response;
+        }
+
         public SearchContactsDataResponse Post(SearchContactsDataRequest request)
         {
             SearchContactsDataResponse response = new SearchContactsDataResponse();

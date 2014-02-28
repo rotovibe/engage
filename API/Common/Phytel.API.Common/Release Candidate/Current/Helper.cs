@@ -51,5 +51,103 @@ namespace Phytel.API.Common
             }
             return stringList;
         }
+
+        /// <summary>
+        /// Converts a list of strings to list of ObjectIds.
+        /// </summary>
+        /// <param name="objectIds">list of strings</param>
+        /// <returns>list of ObjectIds</returns>
+        public static List<ObjectId> ConvertToObjectIdList(List<string> stringList)
+        {
+            List<ObjectId> objectIdList = null;
+            if (stringList != null && stringList.Count > 0)
+            {
+                objectIdList = new List<ObjectId>();
+                stringList.ForEach(l =>
+                {
+                    ObjectId newObjectId;
+                    if (ObjectId.TryParse(l, out newObjectId))
+                    {
+                        objectIdList.Add(newObjectId);
+                    }
+                });
+            }
+            return objectIdList;
+        }
+
+        /// <summary>
+        /// Converts the object to an appropriate type.
+        /// </summary>
+        /// <param name="p">object to be converted</param>
+        /// <returns>converted object.</returns>
+        public static object ConvertToAppropriateType(object p)
+        {
+            string type = p.GetType().ToString();
+            switch (type)
+            {
+                case "System.Int32":
+                    return Convert.ToInt32(p);
+                case "System.String":
+                    ObjectId result;
+                    if (ObjectId.TryParse(p.ToString(), out result))
+                    {
+                        return result;
+                    }
+                    else
+                    {
+                        return p.ToString();
+                    }
+                case "System.Int16":
+                    return Convert.ToInt16(p);
+                case "System.Int64":
+                    return Convert.ToInt64(p);
+                case "System.Boolean":
+                    return Convert.ToBoolean(p);
+                default:
+                    return p.ToString();
+            }      
+        }
+
+        /// <summary>
+        /// Converts the object to List of BsonValue.
+        /// </summary>
+        /// <param name="p">object to be converted.</param>
+        /// <returns>List of BsonValue</returns>
+        public static List<BsonValue> ConvertToBsonValueList(object p)
+        {
+            List<BsonValue> bsonValues = null;
+            if(p != null)
+            {
+                string type = p.GetType().ToString();
+                switch (type)
+                {
+                    case "System.Collections.Generic.List`1[System.Int32]":
+                        List<int> intList = (List<int>)p;
+                        if (intList.Count() > 0)
+                        {
+                            bsonValues = new List<BsonValue>();
+                            foreach (int i in intList)
+                            {
+                                bsonValues.Add(BsonValue.Create(ConvertToAppropriateType(i)));
+                            }
+                        }
+                        return bsonValues;
+                    case "System.Collections.Generic.List`1[System.String]":
+                        List<string> stringList = (List<string>)p;
+                        if (stringList.Count() > 0)
+                        {
+                            bsonValues = new List<BsonValue>();
+                            foreach (string s in stringList)
+                            {
+                                bsonValues.Add(BsonValue.Create(ConvertToAppropriateType(s)));
+                            }
+                        }
+                        return bsonValues;
+                    default:
+                        return bsonValues;
+                }         
+            }
+            return bsonValues;
+        }
     }
 }

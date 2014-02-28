@@ -70,6 +70,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DomainWebServiceException.cs" />
     <Compile Include="Helper\SelectExpressionHelper.cs" />
     <Compile Include="IDomainResponse.cs" />
     <Compile Include="IAppDomainRequest.cs" />

@@ -87,11 +87,13 @@
   <ItemGroup>
     <Compile Include="DataLookUpManager.cs" />
     <Compile Include="ILookUpRepository.cs" />
+    <Compile Include="MongoDB\DTO\ObservationType.cs" />
     <Compile Include="MongoDB\DTO\Goal\InterventionCategory.cs" />
     <Compile Include="MongoDB\DTO\Goal\BarrierCategory.cs" />
     <Compile Include="MongoDB\DTO\Goal\Source.cs" />
     <Compile Include="MongoDB\DTO\Goal\FocusArea.cs" />
     <Compile Include="MongoDB\DTO\ILookUpData.cs" />
+    <Compile Include="MongoDB\DTO\CareMemberType.cs" />
     <Compile Include="MongoDB\DTO\LookUpBase.cs" />
     <Compile Include="MongoDB\DTO\Contact\Language.cs" />
     <Compile Include="MongoDB\DTO\Contact\CommType.cs" />

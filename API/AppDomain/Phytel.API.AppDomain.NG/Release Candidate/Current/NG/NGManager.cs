@@ -68,56 +68,7 @@ namespace Phytel.API.AppDomain.NG
                                                                                     request.ContractNumber,
                                                                                     response.Patient.DisplayPatientSystemID));
                     }
-
-                    List<CareTeamMember> careTeam = null;
-                    //Get the List of contact Ids from the PatientDataResponse.
-                    if(response.Patient.CareTeamData != null && response.Patient.CareTeamData.Count > 0)
-                    {
-                        List<CareTeamMemberData> careTeamMembersData = response.Patient.CareTeamData;
-                        List<string> contactIds = new List<string>();
-                        foreach (CareTeamMemberData ctm in careTeamMembersData)
-                        {
-                            contactIds.Add(ctm.ContactId);
-                        }
-
-                        SearchContactsDataResponse contactDataResponse = null;
-                        //[Route("/{Context}/{Version}/{ContractNumber}/Contact", "POST")]
-                        contactDataResponse = client.Post<SearchContactsDataResponse>(string.Format("{0}/{1}/{2}/{3}/Contact",
-                                                                DDContactServiceUrl,
-                                                                "NG",
-                                                                request.Version,
-                                                                request.ContractNumber), new SearchContactsDataRequest 
-                                                                {
-                                                                    ContactIds = contactIds, 
-                                                                    Context = "NG",
-                                                                    ContractNumber = request.ContractNumber,
-                                                                    UserId = request.UserId,
-                                                                    Version = request.Version
-                                                                } as object
-                                                                );
-
-
-                        if(contactDataResponse != null && contactDataResponse.Contacts != null)
-                        {
-                            careTeam = new List<CareTeamMember>();
-                            foreach(CareTeamMemberData ctmData in careTeamMembersData)
-                            {
-                               var contactData = contactDataResponse.Contacts.Where(c => c.ContactId == ctmData.ContactId).FirstOrDefault();
-                               if (contactData != null)
-                               {
-
-                                   CareTeamMember newCM = new CareTeamMember {
-                                       Gender = contactData.Gender, 
-                                       PreferredName = contactData.PreferredName,
-                                       Primary = ctmData.Primary, 
-                                       Type = ctmData.Type 
-                                   };
-                                   careTeam.Add(newCM);
-                               }
-                            }
-                        }
-                    }
-
+                    
                     pResponse.Patient = new NG.DTO.Patient
                     {
                         Id = response.Patient.ID,
@@ -129,8 +80,7 @@ namespace Phytel.API.AppDomain.NG
                         Suffix = response.Patient.Suffix,
                         PreferredName = response.Patient.PreferredName,
                         Priority = (int)response.Patient.PriorityData,
-                        Flagged = Convert.ToInt32(response.Patient.Flagged),
-                        CareTeam = careTeam
+                        Flagged = Convert.ToInt32(response.Patient.Flagged)
                     };
 
                     if (sysResponse != null && sysResponse.PatientSystem != null)

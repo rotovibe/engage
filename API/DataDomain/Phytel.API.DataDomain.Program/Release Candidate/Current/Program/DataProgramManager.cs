@@ -68,10 +68,19 @@ namespace Phytel.API.DataDomain.Program
                 .GetPatientProgramRepository(request.ContractNumber, request.Context);
 
             object resp = patProgRepo.Insert((object)request);
+
             response = (PutProgramToPatientResponse)resp;
+
+            if (response.program != null)
+            {
+                // initialize attributes
+                DTOUtils.InitializeProgramAttributes(request, response);
+            }
 
             return response;
         }
+
+
 
         public static PutProgramActionProcessingResponse PutProgramActionUpdate(PutProgramActionProcessingRequest request)
         {
