@@ -91,7 +91,7 @@ namespace Phytel.API.AppDomain.NG.Test
                 ContractNumber = contractNumber,
                 Token = token,
                 Version = version,
-                CohortID = "530f9d9f072ef715f4b411d0",
+                CohortID = "530f9cff072ef715f4b411cf",
                 SearchFilter = "", 
                 Skip = "0",
                 Take = "100",

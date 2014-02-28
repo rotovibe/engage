@@ -13,7 +13,7 @@ namespace Phytel.API.DataDomain.Patient.Test
         {
             GetCohortPatientsDataRequest request = new GetCohortPatientsDataRequest
             {
-                CohortID = "528ed977072ef70e10099685",
+                CohortID = "530f9cff072ef715f4b411cf",
                 Version = "v1",
                 Context = "NG",
                 SearchFilter = "",
