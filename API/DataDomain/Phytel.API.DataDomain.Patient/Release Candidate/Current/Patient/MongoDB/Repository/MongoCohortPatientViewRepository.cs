@@ -92,8 +92,8 @@ namespace Phytel.API.DataDomain.Patient
 
         public object Update(object entity)
         {
-            PutProblemInCohortPatientViewRequest p = (PutProblemInCohortPatientViewRequest)entity;
-            PutProblemInCohortPatientViewResponse resp = new PutProblemInCohortPatientViewResponse();
+            PutUpdateCohortPatientViewRequest p = (PutUpdateCohortPatientViewRequest)entity;
+            PutUpdateCohortPatientViewResponse resp = new PutUpdateCohortPatientViewResponse();
 
             try
             {
@@ -242,13 +242,13 @@ namespace Phytel.API.DataDomain.Patient
 
                                 foreach (SearchField sf in pat.SearchFields)
                                 {
-                                    cohortPatient.FirstName = ((SearchField)pat.SearchFields.Where(x => x.FieldName == "FN").FirstOrDefault()).Value;
-                                    cohortPatient.LastName = ((SearchField)pat.SearchFields.Where(x => x.FieldName == "LN").FirstOrDefault()).Value;
-                                    cohortPatient.Gender = ((SearchField)pat.SearchFields.Where(x => x.FieldName == "G").FirstOrDefault()).Value;
-                                    cohortPatient.DOB = CommonFormatter.FormatDateOfBirth(((SearchField)pat.SearchFields.Where(x => x.FieldName == "DOB").FirstOrDefault()).Value);
-                                    cohortPatient.MiddleName = ((SearchField)pat.SearchFields.Where(x => x.FieldName == "MN").FirstOrDefault()).Value;
-                                    cohortPatient.Suffix = ((SearchField)pat.SearchFields.Where(x => x.FieldName == "SFX").FirstOrDefault()).Value;
-                                    cohortPatient.PreferredName = ((SearchField)pat.SearchFields.Where(x => x.FieldName == "PN").FirstOrDefault()).Value;
+                                    cohortPatient.FirstName = ((SearchField)pat.SearchFields.Where(x => x.FieldName == Constants.FN).FirstOrDefault()).Value;
+                                    cohortPatient.LastName = ((SearchField)pat.SearchFields.Where(x => x.FieldName == Constants.LN).FirstOrDefault()).Value;
+                                    cohortPatient.Gender = ((SearchField)pat.SearchFields.Where(x => x.FieldName == Constants.G).FirstOrDefault()).Value;
+                                    cohortPatient.DOB = CommonFormatter.FormatDateOfBirth(((SearchField)pat.SearchFields.Where(x => x.FieldName == Constants.DOB).FirstOrDefault()).Value);
+                                    cohortPatient.MiddleName = ((SearchField)pat.SearchFields.Where(x => x.FieldName == Constants.MN).FirstOrDefault()).Value;
+                                    cohortPatient.Suffix = ((SearchField)pat.SearchFields.Where(x => x.FieldName == Constants.SFX).FirstOrDefault()).Value;
+                                    cohortPatient.PreferredName = ((SearchField)pat.SearchFields.Where(x => x.FieldName == Constants.PN).FirstOrDefault()).Value;
                                 }
                                 cohortPatientList.Add(cohortPatient);
                             });

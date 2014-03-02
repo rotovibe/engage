@@ -25,12 +25,17 @@ namespace Phytel.API.DataDomain.Patient
 
                 // 1) lookup query for cohortid in cohorts collection
                 string cohortID = request.CohortID;
-                GetCohortDataResponse response1 = client.Get<GetCohortDataResponse>
+                GetCohortDataResponse response = client.Get<GetCohortDataResponse>
                     (string.Format("{0}/{1}/{2}/{3}/cohort/{4}", DDCohortServiceURL, request.Context, request.Version, request.ContractNumber, request.CohortID));
 
-                // 2) get patientIDs through cohortpatients view
-                IPatientRepository<CohortPatientViewData> repo = PatientRepositoryFactory<CohortPatientViewData>.GetCohortPatientViewRepository(request.ContractNumber, request.Context);
+                string cohortQuery = response.Cohort.Query;
+                //If #USER_ID# is present in the cohort query, replace it with the ContactId.
+                if (!string.IsNullOrEmpty(request.ContactId))
+                {
+                    cohortQuery = response.Cohort.Query.Replace("#USER_ID#", request.ContactId);
+                }
 
+                //Get the filter parameters
                 string field1 = string.Empty;
                 string field2 = string.Empty;
 
@@ -54,7 +59,9 @@ namespace Phytel.API.DataDomain.Patient
 
                 string[] filterParms = new string[] { field1, field2 };
 
-                result.CohortPatients = repo.Select(response1.Cohort.Query, filterParms, response1.Cohort.Sort, request.Skip, request.Take);
+                // 2) get patientIDs through cohortpatients view
+                IPatientRepository<CohortPatientViewData> repo = PatientRepositoryFactory<CohortPatientViewData>.GetCohortPatientViewRepository(request.ContractNumber, request.Context);
+                result.CohortPatients = repo.Select(cohortQuery, filterParms, response.Cohort.Sort, request.Skip, request.Take);
 
                 return result;
             }
@@ -133,10 +140,10 @@ namespace Phytel.API.DataDomain.Patient
             return result;
         }
 
-        public static PutProblemInCohortPatientViewResponse UpdateCohortPatientViewProblem(PutProblemInCohortPatientViewRequest request)
+        public static PutUpdateCohortPatientViewResponse UpdateCohortPatientViewProblem(PutUpdateCohortPatientViewRequest request)
         {
-            IPatientRepository<PutProblemInCohortPatientViewRequest> repo = PatientRepositoryFactory<PutProblemInCohortPatientViewRequest>.GetCohortPatientViewRepository(request.ContractNumber, request.Context);
-            PutProblemInCohortPatientViewResponse result = repo.Update(request) as PutProblemInCohortPatientViewResponse;
+            IPatientRepository<PutUpdateCohortPatientViewRequest> repo = PatientRepositoryFactory<PutUpdateCohortPatientViewRequest>.GetCohortPatientViewRepository(request.ContractNumber, request.Context);
+            PutUpdateCohortPatientViewResponse result = repo.Update(request) as PutUpdateCohortPatientViewResponse;
             return result;
         }
 

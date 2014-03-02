@@ -92,9 +92,9 @@ namespace Phytel.API.DataDomain.Patient.Service
             return response;
         }
 
-        public PutProblemInCohortPatientViewResponse Put(PutProblemInCohortPatientViewRequest request)
+        public PutUpdateCohortPatientViewResponse Put(PutUpdateCohortPatientViewRequest request)
         {
-            PutProblemInCohortPatientViewResponse response = new PutProblemInCohortPatientViewResponse();
+            PutUpdateCohortPatientViewResponse response = new PutUpdateCohortPatientViewResponse();
             try
             {
                 response = PatientDataManager.UpdateCohortPatientViewProblem(request);

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace Phytel.API.DataDomain.Patient.DTO
 {
-    public class PutProblemInCohortPatientViewResponse : IDomainResponse
+    public class PutUpdateCohortPatientViewResponse : IDomainResponse
     {
         public string CohortPatientViewId { get; set; }
         public string Version { get; set; }

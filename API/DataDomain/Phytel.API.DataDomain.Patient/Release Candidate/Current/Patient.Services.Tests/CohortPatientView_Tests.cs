@@ -4,6 +4,7 @@ using ServiceStack.Service;
 using ServiceStack.ServiceClient.Web;
 using System.Collections.Generic;
 using System.Diagnostics;
+using Phytel.API.DataDomain.Patient.MongoDB.DTO;
 
 namespace Phytel.API.DataDomain.Patient.Services.Test
 {
@@ -38,13 +39,13 @@ namespace Phytel.API.DataDomain.Patient.Services.Test
             CohortPatientViewData cohortPatientView = GetCohortPatientView();
 
             IRestClient client = new JsonServiceClient();
-            PutProblemInCohortPatientViewResponse response =
-                client.Put<PutProblemInCohortPatientViewResponse>(string.Format("{0}/{1}/{2}/{3}/patient/{4}/cohortpatientview/update",
+            PutUpdateCohortPatientViewResponse response =
+                client.Put<PutUpdateCohortPatientViewResponse>(string.Format("{0}/{1}/{2}/{3}/patient/{4}/cohortpatientview/update",
                 "http://localhost:8888/Patient",
                 context,
                 version,
                 contractNumber,
-                patientId), new PutProblemInCohortPatientViewRequest
+                patientId), new PutUpdateCohortPatientViewRequest
                 {
                     CohortPatientView = cohortPatientView,
                     ContractNumber = contractNumber,
@@ -70,61 +71,61 @@ namespace Phytel.API.DataDomain.Patient.Services.Test
             List<SearchFieldData> sfd = new List<SearchFieldData>();
             sfd.Add(new SearchFieldData
             {
-                FieldName = "FN",
+                FieldName = Constants.FN,
                 Value = "Heather",
                 Active = true
             });
             sfd.Add(new SearchFieldData
             {
-                FieldName = "LN",
+                FieldName = Constants.LN,
                 Value = "Tomerlin",
                 Active = true
             });
             sfd.Add(new SearchFieldData
             {
-                FieldName = "G",
+                FieldName = Constants.G,
                 Value = "F",
                 Active = true
             });
             sfd.Add(new SearchFieldData
             {
-                FieldName = "DOB",
+                FieldName = Constants.DOB,
                 Value = "",
                 Active = true
             });
             sfd.Add(new SearchFieldData
             {
-                FieldName = "MN",
+                FieldName = Constants.MN,
                 Value = "Q",
                 Active = true
             });
             sfd.Add(new SearchFieldData
             {
-                FieldName = "SFX",
+                FieldName = Constants.SFX,
                 Value = "",
                 Active = true
             });
             sfd.Add(new SearchFieldData
             {
-                FieldName = "PN",
+                FieldName = Constants.PN,
                 Value = "Heathero",
                 Active = true
             });
             sfd.Add(new SearchFieldData
             {
-                FieldName = "Problem",
+                FieldName = Constants.Problem,
                 Value = "528a670ed4332317acc50963",
                 Active = true
             });
             sfd.Add(new SearchFieldData
             {
-                FieldName = "Problem",
+                FieldName = Constants.Problem,
                 Value = "528a66e3d4332317acc5095e",
                 Active = true
             });
             sfd.Add(new SearchFieldData
             {
-                FieldName = "Problem",
+                FieldName = Constants.Problem,
                 Value = "528a671ad4332317acc50965",
                 Active = true
             });
