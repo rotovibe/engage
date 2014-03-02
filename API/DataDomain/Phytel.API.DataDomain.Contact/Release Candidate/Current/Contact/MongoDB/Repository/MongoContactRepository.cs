@@ -833,24 +833,29 @@ namespace Phytel.API.DataDomain.Contact
             using (ContactMongoContext ctx = new ContactMongoContext(_dbName))
             {
                 List<IMongoQuery> queries = new List<IMongoQuery>();
-                queries.Add(Query.EQ(MEContact.ResourceIdProperty, request.UserId));
-                queries.Add(Query.EQ(MEContact.DeleteFlagProperty, false));
-                IMongoQuery mQuery = Query.And(queries);
-                MEContact mc = ctx.Contacts.Collection.Find(mQuery).FirstOrDefault();
-                if (mc != null)
+                Guid resourceId;
+                if(Guid.TryParse(request.UserId, out resourceId))
                 {
-                    contactData = new ContactData
+                    queries.Add(Query.EQ(MEContact.ResourceIdProperty, BsonValue.Create(resourceId)));
+                    queries.Add(Query.EQ(MEContact.DeleteFlagProperty, false));
+                    IMongoQuery mQuery = Query.And(queries);
+                    MEContact mc = ctx.Contacts.Collection.Find(mQuery).FirstOrDefault();
+                    if (mc != null)
                     {
-                        ContactId = mc.Id.ToString(),
-                        PatientId = mc.PatientId.ToString(),
-                        UserId = (mc.ResourceId == null) ? null : mc.ResourceId.ToString().Replace("-", string.Empty).ToLower(),
-                        FirstName = mc.FirstName,
-                        MiddleName = mc.MiddleName,
-                        LastName = mc.LastName,
-                        PreferredName = mc.PreferredName,
-                        Gender = mc.Gender
-                    };
+                        contactData = new ContactData
+                        {
+                            ContactId = mc.Id.ToString(),
+                            PatientId = mc.PatientId.ToString(),
+                            UserId = (mc.ResourceId == null) ? null : mc.ResourceId.ToString().Replace("-", string.Empty).ToLower(),
+                            FirstName = mc.FirstName,
+                            MiddleName = mc.MiddleName,
+                            LastName = mc.LastName,
+                            PreferredName = mc.PreferredName,
+                            Gender = mc.Gender
+                        };
+                    }
                 }
+
             }
             return contactData;
         }
