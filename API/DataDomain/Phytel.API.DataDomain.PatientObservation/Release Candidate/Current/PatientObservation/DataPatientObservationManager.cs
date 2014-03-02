@@ -6,6 +6,7 @@ using Phytel.API.Common.Format;
 using System.Collections.Generic;
 using System.Linq;
 using MongoDB.Bson;
+using ServiceStack.Common.Web;
 
 namespace Phytel.API.DataDomain.PatientObservation
 {
@@ -302,7 +303,7 @@ namespace Phytel.API.DataDomain.PatientObservation
             }
             catch (Exception ex)
             {
-                throw ex;
+                throw;
             }
         }
 
