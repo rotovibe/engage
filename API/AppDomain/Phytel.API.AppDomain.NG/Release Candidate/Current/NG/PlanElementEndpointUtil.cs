@@ -291,13 +291,13 @@ namespace Phytel.API.AppDomain.NG
                 string context = "NG";
 
                 IRestClient client = new JsonServiceClient();
-                PutProblemInCohortPatientViewResponse response =
-                    client.Put<PutProblemInCohortPatientViewResponse>(string.Format("{0}/{1}/{2}/{3}/patient/{4}/cohortpatientview/update",
+                PutUpdateCohortPatientViewResponse response =
+                    client.Put<PutUpdateCohortPatientViewResponse>(string.Format("{0}/{1}/{2}/{3}/patient/{4}/cohortpatientview/update",
                     DDPatientServiceUrl,
                     context,
                     version,
                     contractNumber,
-                    patientId), new PutProblemInCohortPatientViewRequest
+                    patientId), new PutUpdateCohortPatientViewRequest
                     {
                         CohortPatientView = cpvd,
                         ContractNumber = contractNumber,

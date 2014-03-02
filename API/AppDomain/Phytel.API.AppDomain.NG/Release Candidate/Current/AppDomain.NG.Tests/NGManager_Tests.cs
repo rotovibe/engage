@@ -77,6 +77,33 @@ namespace Phytel.API.AppDomain.NG.Test
             Assert.IsTrue(response.Count > 0);
         }
 
+        
+        [TestMethod]
+        public void GetCohortPatients_Test()
+        {
+            // Arrange
+            string version = "v1";
+            string contractNumber = "InHealth001";
+            string token = "1234";
+            NGManager ngManager = new NGManager();
+            GetCohortPatientsRequest request = new GetCohortPatientsRequest
+            {
+                ContractNumber = contractNumber,
+                Token = token,
+                Version = version,
+                CohortID = "530f9cff072ef715f4b411cf",
+                SearchFilter = "", 
+                Skip = "0",
+                Take = "100",
+                UserId =  "EC0849A4-D0A1-44BF-A482-7A97103E96CD"
+            };
+            // Act
+            GetCohortPatientsResponse response = ngManager.GetCohortPatients(request);
+
+            //Assert
+            Assert.IsTrue(response.Patients.Count > 0);
+        }
+
         [TestMethod]
         public void GetAllSettings_Test()
         {

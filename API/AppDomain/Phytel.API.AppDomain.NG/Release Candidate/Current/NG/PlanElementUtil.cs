@@ -310,7 +310,7 @@ namespace Phytel.API.AppDomain.NG
                     {
                         Value = problemId,
                         Active = true,
-                        FieldName = "Problem"
+                        FieldName = Constants.Problem
                     });
                 }
                 else

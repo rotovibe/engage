@@ -16,9 +16,9 @@ namespace Phytel.API.AppDomain.NG.Test
         {
             CareMember cm = new CareMember { 
                 Id = "-2",
-                PatientId = "52f55899072ef709f84e7637",
-                ContactId = "53043e5fd433231f48de8a7b",
-                Primary = false,
+                PatientId = "52f55895072ef709f84e7551",
+                ContactId = "530fca6ad433232d48451703",
+                Primary = true,
                 TypeId = "530cd576d433231ed4ba969c"
             };
             
@@ -26,8 +26,8 @@ namespace Phytel.API.AppDomain.NG.Test
             request.ContractNumber = "InHealth001";
             request.UserId = "AD_TestHarness"; 
             request.Version = "v1";
-            request.PatientId = "52f55899072ef709f84e7637";
-            request.Token = "5307bcf5d6a4850cd4abe0dd";
+            request.PatientId = "52f55895072ef709f84e7551";
+            request.Token = "5310a9bdd6a4850e0477cade";
             request.CareMember = cm;
 
             CareMembersManager nManager = new CareMembersManager();
@@ -41,10 +41,10 @@ namespace Phytel.API.AppDomain.NG.Test
         {
             CareMember cm = new CareMember
             {
-                Id = "530d0fb7d433232bd830c520",
-                PatientId = "52f55899072ef709f84e7637",
-                ContactId = "53043e53d433231f48de8a7a",
-                Primary = false,
+                Id = "5310d3eed6a4850e046e10ed",
+                PatientId = "52f55895072ef709f84e7551",
+                ContactId = "530fcad1d4332320e0336a6a",
+                Primary = true,
                 TypeId = "530cd576d433231ed4ba969c"
             };
 
@@ -52,8 +52,8 @@ namespace Phytel.API.AppDomain.NG.Test
             request.ContractNumber = "InHealth001";
             request.UserId = "AD_TestHarness";
             request.Version = "v1";
-            request.PatientId = "52f55899072ef709f84e7637";
-            request.Token = "5307bcf5d6a4850cd4abe0dd";
+            request.PatientId = "52f55895072ef709f84e7551";
+            request.Token = "5310a9bdd6a4850e0477cade";
             request.CareMember = cm;
 
             CareMembersManager nManager = new CareMembersManager();

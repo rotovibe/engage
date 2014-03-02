@@ -4,6 +4,7 @@ using System.Configuration;
 using Phytel.API.AppDomain.NG.DTO;
 using Phytel.API.DataDomain.CareMember.DTO;
 using Phytel.API.DataDomain.Contact.DTO;
+using Phytel.API.DataDomain.Patient.DTO;
 using ServiceStack.Service;
 using ServiceStack.ServiceClient.Web;
 
@@ -14,6 +15,7 @@ namespace Phytel.API.AppDomain.NG
         #region endpoint addresses
         protected static readonly string DDCareMemberUrl = ConfigurationManager.AppSettings["DDCareMemberUrl"];
         protected static readonly string DDContactServiceUrl = ConfigurationManager.AppSettings["DDContactServiceUrl"];
+        protected static readonly string DDPatientServiceURL = ConfigurationManager.AppSettings["DDPatientServiceUrl"];
         #endregion
 
         public CareMember GetCareMember(GetCareMemberRequest request)
@@ -162,6 +164,12 @@ namespace Phytel.API.AppDomain.NG
                 {
                     response.Id = dataDomainResponse.Id;
                     response.Version = dataDomainResponse.Version;
+
+                    if(request.CareMember.Primary)
+                    {
+                        //Upsert the PrimaryCare Manager's ContactId in the CohortPatientView collection.
+                        upsertCohortPatientView(request.PatientId, request.CareMember.ContactId, response.Version, request.ContractNumber);
+                    }
                 }
 
                 return response;
@@ -210,6 +218,12 @@ namespace Phytel.API.AppDomain.NG
                 if (dataDomainResponse != null && dataDomainResponse.Updated)
                 {
                     response.Version = dataDomainResponse.Version;
+
+                    if (request.CareMember.Primary)
+                    {
+                        //Upsert the PrimaryCare Manager's ContactId in the CohortPatientView collection.
+                        upsertCohortPatientView(request.PatientId, request.CareMember.ContactId, response.Version, request.ContractNumber);
+                    }
                 }
                 return response;
             }
@@ -257,6 +271,66 @@ namespace Phytel.API.AppDomain.NG
                 }
             }
             return contactsData;
+        }
+
+        private void upsertCohortPatientView(string patientId, string contactId, string version, string contractNumber)
+        {
+            string context = "NG";
+            try
+            {
+                IRestClient client = new JsonServiceClient();
+                GetCohortPatientViewResponse getResponse =
+                    client.Get<GetCohortPatientViewResponse>(string.Format("{0}/{1}/{2}/{3}/patient/{4}/cohortpatientview/",
+                    DDPatientServiceURL,
+                    context,
+                    version,
+                    contractNumber,
+                    patientId));
+
+                if (getResponse != null && getResponse.CohortPatientView != null)
+                {
+                    CohortPatientViewData cpvd = getResponse.CohortPatientView;
+                    // check to see if primary care manager's contactId exists in the searchfield
+                    if (!cpvd.SearchFields.Exists(sf => sf.FieldName == Constants.PCM))
+                    {
+                        cpvd.SearchFields.Add(new SearchFieldData
+                        {
+                            Value = contactId,
+                            Active = true,
+                            FieldName = Constants.PCM
+                        });
+                    }
+                    else
+                    {
+                        cpvd.SearchFields.ForEach(sf =>
+                        {
+                            if (sf.FieldName == Constants.PCM)
+                            {
+                                sf.Value = contactId;
+                                sf.Active = true;
+                            }
+                        });
+                    }
+
+                    PutUpdateCohortPatientViewResponse putResponse =
+                        client.Put<PutUpdateCohortPatientViewResponse>(string.Format("{0}/{1}/{2}/{3}/patient/{4}/cohortpatientview/update",
+                        DDPatientServiceURL,
+                        context,
+                        version,
+                        contractNumber,
+                        patientId), new PutUpdateCohortPatientViewRequest
+                        {
+                            CohortPatientView = cpvd,
+                            ContractNumber = contractNumber,
+                            PatientID = patientId
+                        } as object);
+                }
+            }
+            catch (WebServiceException wse)
+            {
+                Exception ae = new Exception(wse.ResponseBody, wse.InnerException);
+                throw ae;
+            }
         }
     }
 
