@@ -18,48 +18,41 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shared", "Shared", "{688504
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Phytel.API.Common", "..\..\..\..\Common\Phytel.API.Common\Development\Current\Phytel.API.Common.csproj", "{25CF3C3F-221F-4A49-B5EF-A8A5FCF9A5BA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Phytel.API.DataAudit", "..\..\..\..\Common\Phytel.API.DataAudit\Development\Current\Phytel.API.DataAudit.csproj", "{AE842695-4DD4-4403-9BE4-8473BCA09580}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 7
+		SccNumberOfProjects = 9
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = http://hillstfs2013:8080/tfs/phytel
 		SccProjectUniqueName0 = PatientGoal.Service\\DataDomain.PatientGoal.Service.csproj
 		SccProjectName0 = PatientGoal.Service
-		SccAuxPath0 = http://hillstfs2013:8080/tfs/phytel
 		SccLocalPath0 = PatientGoal.Service
-		SccProvider0 = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccProjectUniqueName1 = PatientGoal.Test\\DataDomain.PatientGoal.Test.csproj
 		SccProjectName1 = PatientGoal.Test
-		SccAuxPath1 = http://hillstfs2013:8080/tfs/phytel
 		SccLocalPath1 = PatientGoal.Test
-		SccProvider1 = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccProjectUniqueName2 = PatientGoal\\DataDomain.PatientGoal.csproj
 		SccProjectName2 = PatientGoal
-		SccAuxPath2 = http://hillstfs2013:8080/tfs/phytel
 		SccLocalPath2 = PatientGoal
-		SccProvider2 = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccProjectUniqueName3 = PatientGoal.DTO\\DataDomain.PatientGoal.DTO.csproj
 		SccProjectName3 = PatientGoal.DTO
-		SccAuxPath3 = http://hillstfs2013:8080/tfs/phytel
 		SccLocalPath3 = PatientGoal.DTO
-		SccProvider3 = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccProjectUniqueName4 = PatientGoal.Service.Test\\DataDomain.PatientGoal.Service.Test.csproj
 		SccProjectName4 = PatientGoal.Service.Test
-		SccAuxPath4 = http://hillstfs2013:8080/tfs/phytel
 		SccLocalPath4 = PatientGoal.Service.Test
-		SccProvider4 = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccProjectUniqueName5 = ..\\..\\..\\..\\Interfaces\\Development\\Current\\Phytel.API.Interface\\Phytel.API.Interface.csproj
 		SccProjectTopLevelParentUniqueName5 = DataDomain.PatientGoal.sln
 		SccProjectName5 = ../../../../Interfaces/Development/Current/Phytel.API.Interface
-		SccAuxPath5 = http://hillstfs2013:8080/tfs/phytel
 		SccLocalPath5 = ..\\..\\..\\..\\Interfaces\\Development\\Current\\Phytel.API.Interface
-		SccProvider5 = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccProjectUniqueName6 = ..\\..\\..\\..\\Common\\Phytel.API.Common\\Development\\Current\\Phytel.API.Common.csproj
 		SccProjectTopLevelParentUniqueName6 = DataDomain.PatientGoal.sln
 		SccProjectName6 = ../../../../Common/Phytel.API.Common/Development/Current
-		SccAuxPath6 = http://hillstfs2013:8080/tfs/phytel
 		SccLocalPath6 = ..\\..\\..\\..\\Common\\Phytel.API.Common\\Development\\Current
-		SccProvider6 = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccProjectUniqueName7 = ..\\..\\..\\..\\Common\\Phytel.API.DataAudit\\Development\\Current\\Phytel.API.DataAudit.csproj
+		SccProjectTopLevelParentUniqueName7 = DataDomain.PatientGoal.sln
+		SccProjectName7 = ../../../../Common/Phytel.API.DataAudit/Development/Current
+		SccLocalPath7 = ..\\..\\..\\..\\Common\\Phytel.API.DataAudit\\Development\\Current
+		SccLocalPath8 = .
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -94,6 +87,10 @@ Global
 		{25CF3C3F-221F-4A49-B5EF-A8A5FCF9A5BA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{25CF3C3F-221F-4A49-B5EF-A8A5FCF9A5BA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{25CF3C3F-221F-4A49-B5EF-A8A5FCF9A5BA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AE842695-4DD4-4403-9BE4-8473BCA09580}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AE842695-4DD4-4403-9BE4-8473BCA09580}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AE842695-4DD4-4403-9BE4-8473BCA09580}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AE842695-4DD4-4403-9BE4-8473BCA09580}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -101,5 +98,6 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{ABE948FB-247E-4955-B3AB-B7C93E10A542} = {688504DA-15E9-46D5-B068-020B92F8836D}
 		{25CF3C3F-221F-4A49-B5EF-A8A5FCF9A5BA} = {688504DA-15E9-46D5-B068-020B92F8836D}
+		{AE842695-4DD4-4403-9BE4-8473BCA09580} = {688504DA-15E9-46D5-B068-020B92F8836D}
 	EndGlobalSection
 EndGlobal
