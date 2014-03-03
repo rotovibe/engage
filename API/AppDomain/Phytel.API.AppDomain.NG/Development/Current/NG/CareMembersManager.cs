@@ -1,12 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using Phytel.API.AppDomain.NG.DTO;
+﻿using Phytel.API.AppDomain.NG.DTO;
 using Phytel.API.DataDomain.CareMember.DTO;
 using Phytel.API.DataDomain.Contact.DTO;
 using Phytel.API.DataDomain.Patient.DTO;
 using ServiceStack.Service;
 using ServiceStack.ServiceClient.Web;
+using System;
+using System.Collections.Generic;
+using System.Configuration;
 
 namespace Phytel.API.AppDomain.NG
 {

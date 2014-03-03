@@ -1,10 +1,12 @@
-using Phytel.API.DataDomain.LookUp.DTO;
 using Phytel.API.AppDomain.NG.DTO;
+using Phytel.API.Common.CustomObjects;
 using Phytel.API.DataDomain.Cohort.DTO;
+using Phytel.API.DataDomain.Contact.DTO;
+using Phytel.API.DataDomain.LookUp.DTO;
 using Phytel.API.DataDomain.Patient.DTO;
+using Phytel.API.Interface;
 using ServiceStack.Service;
 using ServiceStack.ServiceClient.Web;
-using ServiceStack.ServiceHost;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -14,14 +16,6 @@ using System.Runtime.Serialization.Json;
 using System.Text;
 using System.Web.Hosting;
 using DD = Phytel.API.DataDomain.Program.DTO;
-using Phytel.API.DataDomain.Contact.DTO;
-using System.Runtime.CompilerServices;
-using Phytel.API.Common.Audit;
-using System.Threading;
-using Phytel.API.Interface;
-using System.Web;
-using System.Diagnostics;
-using Phytel.API.Common.CustomObjects;
 
 namespace Phytel.API.AppDomain.NG
 {
@@ -47,7 +41,7 @@ namespace Phytel.API.AppDomain.NG
                 //Execute call(s) to Patient Data Domain
                 IRestClient client = new JsonServiceClient();
 
-                Phytel.API.DataDomain.Patient.DTO.GetPatientDataResponse response = client.Get<Phytel.API.DataDomain.Patient.DTO.GetPatientDataResponse>(string.Format("{0}/{1}/{2}/{3}/patient/{4}?UserId={5}",
+                GetPatientDataResponse response = client.Get<GetPatientDataResponse>(string.Format("{0}/{1}/{2}/{3}/patient/{4}?UserId={5}",
                                                                                             DDPatientServiceURL,
                                                                                             "NG",
                                                                                             request.Version,

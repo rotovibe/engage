@@ -1,10 +1,10 @@
 ﻿using Phytel.API.AppDomain.NG.DTO;
 using Phytel.API.AppDomain.NG.PlanSpecification;
 using Phytel.API.DataDomain.Patient.DTO;
-using DD = Phytel.API.DataDomain.Program.DTO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using DD = Phytel.API.DataDomain.Program.DTO;
 
 namespace Phytel.API.AppDomain.NG
 {
