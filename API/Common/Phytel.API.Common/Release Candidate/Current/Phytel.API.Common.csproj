@@ -135,7 +135,7 @@
       <Project>{abe948fb-247e-4955-b3ab-b7c93e10a542}</Project>
       <Name>Phytel.API.Interface</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\..\Phytel.API.DataAudit\Phytel.API.DataAudit.csproj">
+    <ProjectReference Include="..\..\..\Phytel.API.DataAudit\Development\Current\Phytel.API.DataAudit.csproj">
       <Project>{ae842695-4dd4-4403-9be4-8473bca09580}</Project>
       <Name>Phytel.API.DataAudit</Name>
     </ProjectReference>
