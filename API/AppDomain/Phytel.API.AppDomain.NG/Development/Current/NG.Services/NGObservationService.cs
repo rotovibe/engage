@@ -50,9 +50,9 @@ namespace Phytel.API.AppDomain.NG.Service
             return response; 
         }
 
-        public GetAdditionalObservationItemsResponse Get(GetAdditionalObservationItemsRequest request)
+        public GetAdditionalObservationItemResponse Get(GetAdditionalObservationItemRequest request)
         {
-            GetAdditionalObservationItemsResponse response = new GetAdditionalObservationItemsResponse();
+            GetAdditionalObservationItemResponse response = new GetAdditionalObservationItemResponse();
             try
             {
                 ObservationsManager om = new ObservationsManager();

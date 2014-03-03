@@ -6,9 +6,9 @@ using Phytel.API.AppDomain.NG.DTO.Observation;
 
 namespace Phytel.API.AppDomain.NG.DTO
 {
-    public class GetAdditionalObservationItemsResponse : IDomainResponse
+    public class GetAdditionalObservationItemResponse : IDomainResponse
     {
-        public List<PatientObservation> Observations { get; set; }
+        public PatientObservation Observation { get; set; }
         public ResponseStatus Status { get; set; }
         public string Version { get; set; }
     }

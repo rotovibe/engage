@@ -177,5 +177,32 @@ namespace Phytel.API.AppDomain.NG
                 throw new WebServiceException("AD:GetPatientObservationIds()" + ex.Message, ex.InnerException);
             }
         }
+
+        internal static AD.PatientObservation GetAdditionalObservationItemForPatient(GetAdditionalObservationItemRequest request, PatientObservationData o)
+        {
+            AD.PatientObservation result = new DTO.Observation.PatientObservation();
+            try
+            {
+                result = new Phytel.API.AppDomain.NG.DTO.Observation.PatientObservation
+                {
+                    ObservationId = o.ObservationId,
+                    EndDate = o.EndDate,
+                    GroupId = o.GroupId,
+                    Id = o.Id,
+                    PatientId = o.PatientId,
+                    Name = o.Name,
+                    Standard = o.Standard,
+                    StartDate = o.StartDate,
+                    TypeId = o.TypeId,
+                    Units = o.Units,
+                    Values = GetValues(o.Values)
+                };
+                return result;
+            }
+            catch (WebServiceException ex)
+            {
+                throw new WebServiceException("App Domain:PostInitialGoalRequest()" + ex.Message, ex.InnerException);
+            }
+        }
     }
 }

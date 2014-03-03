@@ -156,8 +156,8 @@
     <Compile Include="Note\PostPatientNoteRequest.cs" />
     <Compile Include="Note\PostPatientNoteResponse.cs" />
     <Compile Include="Observation\GetAdditionalObservationLibraryRequest.cs" />
-    <Compile Include="Observation\GetAdditionalObservationItemsRequest.cs" />
-    <Compile Include="Observation\GetAdditionalObservationItemsResponse.cs" />
+    <Compile Include="Observation\GetAdditionalObservationItemRequest.cs" />
+    <Compile Include="Observation\GetAdditionalObservationItemResponse.cs" />
     <Compile Include="Observation\PostUpdateObservationItemsRequest.cs" />
     <Compile Include="Observation\GetStandardObservationItemsRequest.cs" />
     <Compile Include="Observation\GetInitializeObservationRequest.cs" />

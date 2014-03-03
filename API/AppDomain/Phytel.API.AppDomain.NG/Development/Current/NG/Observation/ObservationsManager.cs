@@ -96,13 +96,13 @@ namespace Phytel.API.AppDomain.NG.Observation
             }
         }
 
-        public GetAdditionalObservationItemsResponse GetAdditionalObservationsRequest(GetAdditionalObservationItemsRequest request)
+        public GetAdditionalObservationItemResponse GetAdditionalObservationsRequest(GetAdditionalObservationItemRequest request)
         {
             try
             {
-                GetAdditionalObservationItemsResponse response = new GetAdditionalObservationItemsResponse();
-                List<PatientObservationData> po = (List<PatientObservationData>)ObservationEndpointUtil.GetAdditionalObservationsRequest(request);
-                //response.Observations = ObservationsUtil.GetAdditionalObservationsForPatient(request, po);
+                GetAdditionalObservationItemResponse response = new GetAdditionalObservationItemResponse();
+                PatientObservationData po = (PatientObservationData)ObservationEndpointUtil.GetAdditionalObservationItemRequest(request);
+                response.Observation = ObservationsUtil.GetAdditionalObservationItemForPatient(request, po);
                 response.Version = request.Version;
                 return response;
             }
