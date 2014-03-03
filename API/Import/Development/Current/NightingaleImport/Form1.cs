@@ -109,335 +109,342 @@ namespace NightingaleImport
 
         private void button1_Click_1(object sender, EventArgs e)
         {
-            Dictionary<string, string> dictionarySucceed = new Dictionary<string, string>();
-            Dictionary<string, string> dictionaryFail = new Dictionary<string, string>();
-
-            foreach (ListViewItem lvi in listView1.CheckedItems)
+            try
             {
-                
-                PutPatientDataRequest patientRequest = new PutPatientDataRequest
+                Dictionary<string, string> dictionarySucceed = new Dictionary<string, string>();
+                Dictionary<string, string> dictionaryFail = new Dictionary<string, string>();
+
+                foreach (ListViewItem lvi in listView1.CheckedItems)
                 {
-                    FirstName = lvi.SubItems[colFirstN].Text,
-                    LastName = lvi.SubItems[colLastN].Text,
-                    MiddleName = lvi.SubItems[colMiddleN].Text,
-                    Suffix = lvi.SubItems[colSuff].Text,
-                    PreferredName = lvi.SubItems[colPrefN].Text,
-                    Gender = lvi.SubItems[colGen].Text,
-                    DOB = lvi.SubItems[colDB].Text,
-                    Context = context,
-                    ContractNumber = contractNumber,
-                    Version = version,
-                    //SSN = lvi.SubItems[colSSN].Text,
-                };
-                PutPatientDataResponse responsePatient = putPatientServiceCall(patientRequest);
 
-                //PatientSystem
-                PutPatientSystemDataRequest patSysRequest = new PutPatientSystemDataRequest
-                {
-                    PatientID = responsePatient.Id,
-                    SystemID = lvi.SubItems[colSID].Text,
-                    SystemName = lvi.SubItems[colSysN].Text,
-                    Version = responsePatient.Version,
-                    Context = patientRequest.Context,
-                    ContractNumber = patientRequest.ContractNumber
-                };
-                PutPatientSystemDataResponse responsePatientPS = putPatientSystemServiceCall(patSysRequest);
-                
-                //Update Patient with DisplayPatientSystemId
-                PutUpdatePatientDataRequest updatePatientRequest = new PutUpdatePatientDataRequest
-                {
-                    Id = responsePatient.Id.ToString(),
-                    FirstName = patientRequest.FirstName,
-                    LastName = patientRequest.LastName,
-                    DisplayPatientSystemId = responsePatientPS.PatientSystemId.ToString(),
-                    Priority = 0,
-                    Context = patientRequest.Context,
-                    ContractNumber = patientRequest.ContractNumber,
-                    Version = patientRequest.Version,
-                    UserId = userId.ToString()
-                };
-
-                PutUpdatePatientDataResponse updateResponsePatient = putUpdatePatientServiceCall(updatePatientRequest, responsePatient.Id.ToString());
-
-                
-
-                //Contact
-                LoadLookUps();
-
-                //timezone
-                TimeZoneData tZone = new TimeZoneData();
-                if (lvi.SubItems[colTimeZ].Text != null)
-                {
-                    foreach (TimeZoneData t in zonesLookUp)
+                    PutPatientDataRequest patientRequest = new PutPatientDataRequest
                     {
-                        string[] zones = t.Name.Split(" ".ToCharArray());
-                        if (lvi.SubItems[colTimeZ].Text == zones[0])
-                        {
-                            tZone.Id = t.Id;
-                        }
-                    }
-                }
-                else
-                {
-                    tZone.Id = zoneDefault.Id;
-                }
+                        FirstName = lvi.SubItems[colFirstN].Text,
+                        LastName = lvi.SubItems[colLastN].Text,
+                        MiddleName = lvi.SubItems[colMiddleN].Text,
+                        Suffix = lvi.SubItems[colSuff].Text,
+                        PreferredName = lvi.SubItems[colPrefN].Text,
+                        Gender = lvi.SubItems[colGen].Text,
+                        DOB = lvi.SubItems[colDB].Text,
+                        Context = context,
+                        ContractNumber = contractNumber,
+                        Version = version,
+                        //SSN = lvi.SubItems[colSSN].Text,
+                    };
+                    PutPatientDataResponse responsePatient = putPatientServiceCall(patientRequest);
 
-                List<CommModeData> modes = new List<CommModeData>();
-                List<PhoneData> phones = new List<PhoneData>();
-                List<AddressData> addresses = new List<AddressData>();
-                List<EmailData> emails = new List<EmailData>();
-
-                //modes
-                if (modesLookUp != null && modesLookUp.Count > 0)
-                {
-                    foreach (IdNamePair l in modesLookUp)
+                    //PatientSystem
+                    PutPatientSystemDataRequest patSysRequest = new PutPatientSystemDataRequest
                     {
-                        modes.Add(new CommModeData { ModeId = l.Id, OptOut = false, Preferred = false });
-                    }
-                }
+                        PatientID = responsePatient.Id,
+                        SystemID = lvi.SubItems[colSID].Text,
+                        SystemName = lvi.SubItems[colSysN].Text,
+                        Version = responsePatient.Version,
+                        Context = patientRequest.Context,
+                        ContractNumber = patientRequest.ContractNumber
+                    };
+                    PutPatientSystemDataResponse responsePatientPS = putPatientSystemServiceCall(patSysRequest);
 
-
-                //phones
-                if (lvi.SubItems[colPh1].Text != "")
-                {
-                    PhoneData phone1 = new PhoneData
+                    //Update Patient with DisplayPatientSystemId
+                    PutUpdatePatientDataRequest updatePatientRequest = new PutUpdatePatientDataRequest
                     {
-                        Number = Convert.ToInt64(lvi.SubItems[colPh1].Text),
-                        OptOut = false
+                        Id = responsePatient.Id.ToString(),
+                        FirstName = patientRequest.FirstName,
+                        LastName = patientRequest.LastName,
+                        DisplayPatientSystemId = responsePatientPS.PatientSystemId.ToString(),
+                        Priority = 0,
+                        Context = patientRequest.Context,
+                        ContractNumber = patientRequest.ContractNumber,
+                        Version = patientRequest.Version,
+                        UserId = userId.ToString()
                     };
 
-                    if (lvi.SubItems[colPh1Pref].Text == "True")
-                    {
-                        phone1.PhonePreferred = true;
-                    }
-                    else
-                        phone1.PhonePreferred = false;
+                    PutUpdatePatientDataResponse updateResponsePatient = putUpdatePatientServiceCall(updatePatientRequest, responsePatient.Id.ToString());
 
-                    foreach (CommTypeData c in typesLookUp)
+
+
+                    //Contact
+                    LoadLookUps();
+
+                    //timezone
+                    TimeZoneData tZone = new TimeZoneData();
+                    if (lvi.SubItems[colTimeZ].Text != null)
                     {
-                        if (lvi.SubItems[colPh1Type].Text == c.Name)
+                        foreach (TimeZoneData t in zonesLookUp)
                         {
-                            phone1.TypeId = c.Id;
+                            string[] zones = t.Name.Split(" ".ToCharArray());
+                            if (lvi.SubItems[colTimeZ].Text == zones[0])
+                            {
+                                tZone.Id = t.Id;
+                            }
                         }
                     }
-                    phones.Add(phone1);
-                }
-
-                if (lvi.SubItems[colPh2].Text != "")
-                {
-                    PhoneData phone2 = new PhoneData
+                    else
                     {
-                        Number = Convert.ToInt64(lvi.SubItems[colPh2].Text),
-                        OptOut = false
+                        tZone.Id = zoneDefault.Id;
+                    }
+
+                    List<CommModeData> modes = new List<CommModeData>();
+                    List<PhoneData> phones = new List<PhoneData>();
+                    List<AddressData> addresses = new List<AddressData>();
+                    List<EmailData> emails = new List<EmailData>();
+
+                    //modes
+                    if (modesLookUp != null && modesLookUp.Count > 0)
+                    {
+                        foreach (IdNamePair l in modesLookUp)
+                        {
+                            modes.Add(new CommModeData { ModeId = l.Id, OptOut = false, Preferred = false });
+                        }
+                    }
+
+
+                    //phones
+                    if (lvi.SubItems[colPh1].Text != "")
+                    {
+                        PhoneData phone1 = new PhoneData
+                        {
+                            Number = Convert.ToInt64(lvi.SubItems[colPh1].Text),
+                            OptOut = false
+                        };
+
+                        if (lvi.SubItems[colPh1Pref].Text == "True")
+                        {
+                            phone1.PhonePreferred = true;
+                        }
+                        else
+                            phone1.PhonePreferred = false;
+
+                        foreach (CommTypeData c in typesLookUp)
+                        {
+                            if (lvi.SubItems[colPh1Type].Text == c.Name)
+                            {
+                                phone1.TypeId = c.Id;
+                            }
+                        }
+                        phones.Add(phone1);
+                    }
+
+                    if (lvi.SubItems[colPh2].Text != "")
+                    {
+                        PhoneData phone2 = new PhoneData
+                        {
+                            Number = Convert.ToInt64(lvi.SubItems[colPh2].Text),
+                            OptOut = false
+                        };
+
+                        if (lvi.SubItems[colPh2Pref].Text == "True")
+                        {
+                            phone2.PhonePreferred = true;
+                        }
+                        else
+                            phone2.PhonePreferred = false;
+
+                        foreach (CommTypeData c in typesLookUp)
+                        {
+                            if (lvi.SubItems[colPh2Type].Text == c.Name)
+                            {
+                                phone2.TypeId = c.Id;
+                            }
+                        }
+                        phones.Add(phone2);
+                    }
+
+                    //emails
+                    if (lvi.SubItems[colEm1].Text != "")
+                    {
+                        EmailData email1 = new EmailData
+                        {
+                            Text = lvi.SubItems[colEm1].Text,
+                            OptOut = false,
+                        };
+
+                        if (lvi.SubItems[colEm1Pref].Text == "True")
+                        {
+                            email1.Preferred = true;
+                        }
+                        else
+                            email1.Preferred = false;
+
+                        foreach (CommTypeData c in typesLookUp)
+                        {
+                            if (lvi.SubItems[colEm1Type].Text == c.Name)
+                            {
+                                email1.TypeId = c.Id;
+                            }
+                        }
+                        emails.Add(email1);
+                    }
+
+                    if (lvi.SubItems[colEm2].Text != "")
+                    {
+                        EmailData email2 = new EmailData
+                        {
+                            Text = lvi.SubItems[colEm2].Text,
+                            OptOut = false,
+                        };
+
+                        if (lvi.SubItems[colEm2Pref].Text == "True")
+                        {
+                            email2.Preferred = true;
+                        }
+                        else
+                            email2.Preferred = false;
+
+                        foreach (CommTypeData c in typesLookUp)
+                        {
+                            if (lvi.SubItems[colEm2Type].Text == c.Name)
+                            {
+                                email2.TypeId = c.Id;
+                            }
+                        }
+                        emails.Add(email2);
+                    }
+
+                    //addresses
+                    if (!(string.IsNullOrEmpty(lvi.SubItems[colAdd1L1].Text)))
+                    {
+                        AddressData add1 = new AddressData
+                        {
+                            Line1 = lvi.SubItems[colAdd1L1].Text,
+                            Line2 = lvi.SubItems[colAdd1L2].Text,
+                            Line3 = lvi.SubItems[colAdd1L3].Text,
+                            City = lvi.SubItems[colAdd1City].Text,
+                            PostalCode = lvi.SubItems[colAdd1Zip].Text,
+                            OptOut = false
+                        };
+
+                        if (lvi.SubItems[colAdd1Pref].Text == "True")
+                        {
+                            add1.Preferred = true;
+                        }
+                        else
+                            add1.Preferred = false;
+
+                        foreach (StateData st in statesLookUp)
+                        {
+                            if (st.Name == lvi.SubItems[colAdd1St].Text)
+                            {
+                                add1.StateId = st.Id;
+                            }
+                        }
+                        foreach (CommTypeData c in typesLookUp)
+                        {
+                            if (lvi.SubItems[colAdd1Type].Text == c.Name)
+                            {
+                                add1.TypeId = c.Id;
+                            }
+                        }
+                        addresses.Add(add1);
+                    }
+
+                    if (!(string.IsNullOrEmpty(lvi.SubItems[colAdd2L1].Text)))
+                    {
+                        AddressData add2 = new AddressData
+                        {
+                            Line1 = lvi.SubItems[colAdd2L1].Text,
+                            Line2 = lvi.SubItems[colAdd2L2].Text,
+                            Line3 = lvi.SubItems[colAdd2L3].Text,
+                            City = lvi.SubItems[colAdd2City].Text,
+                            PostalCode = lvi.SubItems[colAdd2Zip].Text,
+                            OptOut = false
+                        };
+
+                        if (lvi.SubItems[colAdd2Pref].Text == "True")
+                        {
+                            add2.Preferred = true;
+                        }
+                        else
+                            add2.Preferred = false;
+
+                        foreach (StateData st in statesLookUp)
+                        {
+                            if (st.Name == lvi.SubItems[colAdd2St].Text)
+                            {
+                                add2.StateId = st.Id;
+                            }
+                        }
+                        foreach (CommTypeData c in typesLookUp)
+                        {
+                            if (lvi.SubItems[colAdd2Type].Text == c.Name)
+                            {
+                                add2.TypeId = c.Id;
+                            }
+                        }
+                        addresses.Add(add2);
+                    }
+
+                    //contact
+                    PutContactDataRequest contactRequest = new PutContactDataRequest
+                    {
+                        PatientId = responsePatient.Id,
+                        Modes = modes,
+                        TimeZoneId = tZone.Id,
+                        Phones = phones,
+                        Emails = emails,
+                        Addresses = addresses,
+                        Version = patientRequest.Version,
+                        Context = patientRequest.Context,
+                        ContractNumber = patientRequest.ContractNumber
                     };
 
-                    if (lvi.SubItems[colPh2Pref].Text == "True")
-                    {
-                        phone2.PhonePreferred = true;
-                    }
-                    else
-                        phone2.PhonePreferred = false;
+                    PutContactDataResponse responseContact = putContactServiceCall(contactRequest, responsePatient.Id.ToString());
 
-                    foreach (CommTypeData c in typesLookUp)
-                    {
-                        if (lvi.SubItems[colPh2Type].Text == c.Name)
-                        {
-                            phone2.TypeId = c.Id;
-                        }
-                    }
-                    phones.Add(phone2);
-                }
+                    Guid userIdResponse = getUserId(lvi.SubItems[colCMan].Text);
+                    GetContactByUserIdDataResponse contactByUserIdResponse = getContactByUserIdServiceCall(userIdResponse.ToString());
 
-                //emails
-                if (lvi.SubItems[colEm1].Text != "")
-                {
-                    EmailData email1 = new EmailData
+                    CareMemberData careMember = new CareMemberData
                     {
-                        Text = lvi.SubItems[colEm1].Text,
-                        OptOut = false,
+                        PatientId = responsePatient.Id.ToString(),
+                        ContactId = contactByUserIdResponse.Contact.ContactId,
+                        TypeId = contactTypeId,
+                        Primary = true,
                     };
 
-                    if (lvi.SubItems[colEm1Pref].Text == "True")
+                    PutCareMemberDataRequest careMemberRequest = new PutCareMemberDataRequest
                     {
-                        email1.Preferred = true;
-                    }
-                    else
-                        email1.Preferred = false;
-
-                    foreach (CommTypeData c in typesLookUp)
-                    {
-                        if (lvi.SubItems[colEm1Type].Text == c.Name)
-                        {
-                            email1.TypeId = c.Id;
-                        }
-                    }
-                    emails.Add(email1);
-                }
-
-                if (lvi.SubItems[colEm2].Text != "")
-                {
-                    EmailData email2 = new EmailData
-                    {
-                        Text = lvi.SubItems[colEm2].Text,
-                        OptOut = false,
+                        PatientId = responsePatient.Id.ToString(),
+                        UserId = userId.ToString(),
+                        CareMember = careMember
                     };
+                    PutCareMemberDataResponse responseCareMember = putCareMemberServiceCall(careMemberRequest, responsePatient.Id.ToString());
 
-                    if (lvi.SubItems[colEm2Pref].Text == "True")
+
+                    if (responsePatient.Id != null && responseCareMember.Id != null && responsePatient.Status == null)
                     {
-                        email2.Preferred = true;
+                        dictionarySucceed.Add(patientRequest.FirstName + " " + patientRequest.LastName, responsePatient.Id);
+                        int n = listView1.CheckedItems.IndexOf(lvi);
+                        listView1.CheckedItems[n].Remove();
                     }
                     else
-                        email2.Preferred = false;
+                    {
+                        dictionaryFail.Add(patientRequest.FirstName + " " + patientRequest.LastName, responsePatient.Status.ToString());
+                        int n = listView1.CheckedItems.IndexOf(lvi);
+                        listView1.CheckedItems[n].BackColor = Color.Red;
+                        listView1.CheckedItems[n].Checked = false;
+                    }
 
-                    foreach (CommTypeData c in typesLookUp)
-                    {
-                        if (lvi.SubItems[colEm2Type].Text == c.Name)
-                        {
-                            email2.TypeId = c.Id;
-                        }
-                    }
-                    emails.Add(email2);
-                }
-                
-                //addresses
-                if (!(string.IsNullOrEmpty(lvi.SubItems[colAdd1L1].Text)))
-                {
-                    AddressData add1 = new AddressData
-                    {
-                        Line1 = lvi.SubItems[colAdd1L1].Text,
-                        Line2 = lvi.SubItems[colAdd1L2].Text,
-                        Line3 = lvi.SubItems[colAdd1L3].Text,
-                        City = lvi.SubItems[colAdd1City].Text,
-                        PostalCode = lvi.SubItems[colAdd1Zip].Text,
-                        OptOut = false
-                    };
-
-                    if (lvi.SubItems[colAdd1Pref].Text == "True")
-                    {
-                        add1.Preferred = true;
-                    }
-                    else
-                        add1.Preferred = false;
-
-                    foreach (StateData st in statesLookUp)
-                    {
-                        if (st.Name == lvi.SubItems[colAdd1St].Text)
-                        {
-                            add1.StateId = st.Id;
-                        }
-                    }
-                    foreach (CommTypeData c in typesLookUp)
-                    {
-                        if (lvi.SubItems[colAdd1Type].Text == c.Name)
-                        {
-                            add1.TypeId = c.Id;
-                        }
-                    }
-                    addresses.Add(add1);
                 }
 
-                if (!(string.IsNullOrEmpty(lvi.SubItems[colAdd2L1].Text)))
+                string listSucceed = null;
+                foreach (var pairSucceed in dictionarySucceed)
                 {
-                    AddressData add2 = new AddressData
-                    {
-                        Line1 = lvi.SubItems[colAdd2L1].Text,
-                        Line2 = lvi.SubItems[colAdd2L2].Text,
-                        Line3 = lvi.SubItems[colAdd2L3].Text,
-                        City = lvi.SubItems[colAdd2City].Text,
-                        PostalCode = lvi.SubItems[colAdd2Zip].Text,
-                        OptOut = false
-                    };
-
-                    if (lvi.SubItems[colAdd2Pref].Text == "True")
-                    {
-                        add2.Preferred = true;
-                    }
-                    else
-                        add2.Preferred = false;
-
-                    foreach (StateData st in statesLookUp)
-                    {
-                        if (st.Name == lvi.SubItems[colAdd2St].Text)
-                        {
-                            add2.StateId = st.Id;
-                        }
-                    }
-                    foreach (CommTypeData c in typesLookUp)
-                    {
-                        if (lvi.SubItems[colAdd2Type].Text == c.Name)
-                        {
-                            add2.TypeId = c.Id;
-                        }
-                    }
-                    addresses.Add(add2);
+                    listSucceed += pairSucceed + "\n";
                 }
 
-                //contact
-                PutContactDataRequest contactRequest = new PutContactDataRequest
+                string listFail = null;
+                foreach (var pairFail in dictionaryFail)
                 {
-                    PatientId = responsePatient.Id,
-                    Modes = modes,
-                    TimeZoneId = tZone.Id,
-                    Phones = phones,
-                    Emails = emails,
-                    Addresses = addresses,
-                    Version = patientRequest.Version,
-                    Context = patientRequest.Context,
-                    ContractNumber = patientRequest.ContractNumber
-                };
-
-                PutContactDataResponse responseContact = putContactServiceCall(contactRequest, responsePatient.Id.ToString());
-
-                Guid userIdResponse = getUserId(lvi.SubItems[colCMan].Text);
-                GetContactByUserIdDataResponse contactByUserIdResponse = getContactByUserIdServiceCall(userIdResponse.ToString());
-
-                CareMemberData careMember = new CareMemberData
-                {
-                    PatientId = responsePatient.Id.ToString(),
-                    ContactId = contactByUserIdResponse.Contact.ContactId,
-                    TypeId = contactTypeId,
-                    Primary = true,
-                };
-
-                PutCareMemberDataRequest careMemberRequest = new PutCareMemberDataRequest
-                {
-                    PatientId = responsePatient.Id.ToString(),
-                    UserId = userId.ToString(),
-                    CareMember = careMember
-                };
-                PutCareMemberDataResponse responseCareMember = putCareMemberServiceCall(careMemberRequest, responsePatient.Id.ToString());
-
-
-                if(responsePatient.Id != null && responseCareMember.Id != null)
-                {
-                    dictionarySucceed.Add(patientRequest.FirstName + " " + patientRequest.LastName, responsePatient.Id);
-                    int n = listView1.CheckedItems.IndexOf(lvi);
-                    listView1.CheckedItems[n].Remove();
+                    listFail += pairFail + "\n";
                 }
-                else
-                {
-                    //dictionaryFail.Add(patientRequest.FirstName + " " + patientRequest.LastName, responsePatient.Status);
-                    int n = listView1.CheckedItems.IndexOf(lvi);
-                    listView1.CheckedItems[n].BackColor = Color.Red;
-                    listView1.CheckedItems[n].Checked = false;
-                }
-                
+
+                MessageBox.Show(dictionarySucceed.Count() + " patient file(s) successfully imported:\n" + listSucceed + "\n"
+                                    + dictionaryFail.Count() + " patient file(s) failed to import: \n" + listFail);
             }
-
-            string listSucceed = null;
-            foreach(var pairSucceed in dictionarySucceed)
+            catch (Exception ex)
             {
-                listSucceed += pairSucceed + "\n";
+                throw ex;
             }
-
-            string listFail = null;
-            foreach (var pairFail in dictionaryFail)
-            {
-                listFail += pairFail + "\n";
-            }
-
-            MessageBox.Show(dictionarySucceed.Count() + " patient file(s) successfully imported:\n" + listSucceed + "\n"
-                                + dictionaryFail.Count() + " patient file(s) failed to import: \n" + listFail);
         }
 
         private void LoadLookUps()
@@ -728,7 +735,7 @@ namespace NightingaleImport
 
             string sql = string.Format("Select userId from [User] where UserName = '{0}'",
                                         userName);
-            DataSet ds = Phytel.Services.SQLDataService.Instance.ExecuteSQL(contractNumber, true, sql);
+            DataSet ds = Phytel.Services.SQLDataService.Instance.ExecuteSQL("Phytel", false, sql);
             if (ds.Tables[0].Rows.Count > 0)
             {
                 returnId = Guid.Parse(ds.Tables[0].Rows[0]["userId"].ToString());
