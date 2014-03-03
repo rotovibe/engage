@@ -12,13 +12,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.PatientObservati
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.PatientObservation.Service.Test", "PatientObservation.Service.Test\DataDomain.PatientObservation.Service.Test.csproj", "{382C9F88-1CFE-4E65-8800-F5038E61D367}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Phytel.API.Interface", "..\..\..\..\Interfaces\Development\Current\Phytel.API.Interface\Phytel.API.Interface.csproj", "{ABE948FB-247E-4955-B3AB-B7C93E10A542}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Phytel.API.Interface", "..\..\..\..\Interfaces\Release Candidate\Current\Phytel.API.Interface\Phytel.API.Interface.csproj", "{ABE948FB-247E-4955-B3AB-B7C93E10A542}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shared", "Shared", "{688504DA-15E9-46D5-B068-020B92F8836D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Phytel.API.Common", "..\..\..\..\Common\Phytel.API.Common\Development\Current\Phytel.API.Common.csproj", "{25CF3C3F-221F-4A49-B5EF-A8A5FCF9A5BA}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Phytel.API.Common", "..\..\..\..\Common\Phytel.API.Common\Release Candidate\Current\Phytel.API.Common.csproj", "{25CF3C3F-221F-4A49-B5EF-A8A5FCF9A5BA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Phytel.API.DataAudit", "..\..\..\..\Common\Phytel.API.DataAudit\Development\Current\Phytel.API.DataAudit.csproj", "{AE842695-4DD4-4403-9BE4-8473BCA09580}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Phytel.API.DataAudit", "..\..\..\..\Common\Phytel.API.DataAudit\Release Candidate\Current\Phytel.API.DataAudit.csproj", "{AE842695-4DD4-4403-9BE4-8473BCA09580}"
 EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
@@ -38,21 +38,21 @@ Global
 		SccProjectUniqueName4 = PatientObservation.Service.Test\\DataDomain.PatientObservation.Service.Test.csproj
 		SccProjectName4 = PatientObservation.Service.Test
 		SccLocalPath4 = PatientObservation.Service.Test
-		SccProjectUniqueName5 = ..\\..\\..\\..\\Interfaces\\Development\\Current\\Phytel.API.Interface\\Phytel.API.Interface.csproj
+		SccProjectUniqueName5 = ..\\..\\..\\..\\Interfaces\\Release Candidate\\Current\\Phytel.API.Interface\\Phytel.API.Interface.csproj
 		SccProjectTopLevelParentUniqueName5 = DataDomain.PatientObservation.sln
-		SccProjectName5 = ../../../../Interfaces/Development/Current/Phytel.API.Interface
-		SccLocalPath5 = ..\\..\\..\\..\\Interfaces\\Development\\Current\\Phytel.API.Interface
-		SccProjectUniqueName6 = ..\\..\\..\\..\\Common\\Phytel.API.Common\\Development\\Current\\Phytel.API.Common.csproj
+		SccProjectName5 = ../../../../Interfaces/Release Candidate/Current/Phytel.API.Interface
+		SccLocalPath5 = ..\\..\\..\\..\\Interfaces\\Release Candidate\\Current\\Phytel.API.Interface
+		SccProjectUniqueName6 = ..\\..\\..\\..\\Common\\Phytel.API.Common\\Release Candidate\\Current\\Phytel.API.Common.csproj
 		SccProjectTopLevelParentUniqueName6 = DataDomain.PatientObservation.sln
-		SccProjectName6 = ../../../../Common/Phytel.API.Common/Development/Current
-		SccLocalPath6 = ..\\..\\..\\..\\Common\\Phytel.API.Common\\Development\\Current
+		SccProjectName6 = ../../../../Common/Phytel.API.Common/Release Candidate/Current
+		SccLocalPath6 = ..\\..\\..\\..\\Common\\Phytel.API.Common\\Release Candidate\\Current
 		SccProjectUniqueName7 = PatientObservation.DTO\\DataDomain.PatientObservation.DTO.csproj
 		SccProjectName7 = PatientObservation.DTO
 		SccLocalPath7 = PatientObservation.DTO
-		SccProjectUniqueName8 = ..\\..\\..\\..\\Common\\Phytel.API.DataAudit\\Development\\Current\\Phytel.API.DataAudit.csproj
+		SccProjectUniqueName8 = ..\\..\\..\\..\\Common\\Phytel.API.DataAudit\\Release Candidate\\Current\\Phytel.API.DataAudit.csproj
 		SccProjectTopLevelParentUniqueName8 = DataDomain.PatientObservation.sln
-		SccProjectName8 = ../../../../Common/Phytel.API.DataAudit/Development/Current
-		SccLocalPath8 = ..\\..\\..\\..\\Common\\Phytel.API.DataAudit\\Development\\Current
+		SccProjectName8 = ../../../../Common/Phytel.API.DataAudit/Release Candidate/Current
+		SccLocalPath8 = ..\\..\\..\\..\\Common\\Phytel.API.DataAudit\\Release Candidate\\Current
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
