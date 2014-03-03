@@ -1,6 +1,6 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.30110.0
+VisualStudioVersion = 12.0.21005.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "AppDomain", "AppDomain", "{2E11BED7-15D8-4A76-B289-E9FE4FF9DD72}"
 EndProject
@@ -188,8 +188,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.PatientNote.Serv
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.PatientNote.Test", "DataDomain\Phytel.API.DataDomain.PatientNote\Development\Current\PatientNote.Test\DataDomain.PatientNote.Test.csproj", "{FCAC9754-51AE-47DF-A0B7-D37855F64B9C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Phytel.API.DataAudit", "Phytel.API.DataAudit\Phytel.API.DataAudit.csproj", "{AE842695-4DD4-4403-9BE4-8473BCA09580}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CareMember", "CareMember", "{20A81ED1-98B7-45E5-BC46-C5FD31BBED5D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.CareMember", "DataDomain\Phytel.API.DataDomain.CareMember\Development\Current\CareMember\DataDomain.CareMember.csproj", "{E77DEC80-3A95-43A8-9438-1AF394E8A9DA}"
@@ -213,6 +211,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.PatientObservation.Test", "DataDomain\Phytel.API.DataDomain.PatientObservation\Development\Current\PatientObservation.Test\DataDomain.PatientObservation.Test.csproj", "{2520004B-084F-4EB5-B5D7-F64DF9287273}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.PatientObservation.DTO", "DataDomain\Phytel.API.DataDomain.PatientObservation\Development\Current\PatientObservation.DTO\DataDomain.PatientObservation.DTO.csproj", "{06D69E2B-A395-459C-B4D0-FC750018BDD8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Phytel.API.DataAudit", "Common\Phytel.API.DataAudit\Development\Current\Phytel.API.DataAudit.csproj", "{AE842695-4DD4-4403-9BE4-8473BCA09580}"
 EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
@@ -512,50 +512,50 @@ Global
 		SccProjectTopLevelParentUniqueName73 = API.sln
 		SccProjectName73 = DataDomain/Phytel.API.DataDomain.PatientNote/Development/Current/PatientNote.Test
 		SccLocalPath73 = DataDomain\\Phytel.API.DataDomain.PatientNote\\Development\\Current\\PatientNote.Test
-		SccProjectUniqueName74 = Phytel.API.DataAudit\\Phytel.API.DataAudit.csproj
+		SccProjectUniqueName74 = DataDomain\\Phytel.API.DataDomain.CareMember\\Development\\Current\\CareMember\\DataDomain.CareMember.csproj
 		SccProjectTopLevelParentUniqueName74 = API.sln
-		SccProjectName74 = Phytel.API.DataAudit
-		SccLocalPath74 = Phytel.API.DataAudit
-		SccProjectUniqueName75 = DataDomain\\Phytel.API.DataDomain.CareMember\\Development\\Current\\CareMember\\DataDomain.CareMember.csproj
+		SccProjectName74 = DataDomain/Phytel.API.DataDomain.CareMember/Development/Current/CareMember
+		SccLocalPath74 = DataDomain\\Phytel.API.DataDomain.CareMember\\Development\\Current\\CareMember
+		SccProjectUniqueName75 = DataDomain\\Phytel.API.DataDomain.CareMember\\Development\\Current\\CareMember.DTO\\DataDomain.CareMember.DTO.csproj
 		SccProjectTopLevelParentUniqueName75 = API.sln
-		SccProjectName75 = DataDomain/Phytel.API.DataDomain.CareMember/Development/Current/CareMember
-		SccLocalPath75 = DataDomain\\Phytel.API.DataDomain.CareMember\\Development\\Current\\CareMember
-		SccProjectUniqueName76 = DataDomain\\Phytel.API.DataDomain.CareMember\\Development\\Current\\CareMember.DTO\\DataDomain.CareMember.DTO.csproj
+		SccProjectName75 = DataDomain/Phytel.API.DataDomain.CareMember/Development/Current/CareMember.DTO
+		SccLocalPath75 = DataDomain\\Phytel.API.DataDomain.CareMember\\Development\\Current\\CareMember.DTO
+		SccProjectUniqueName76 = DataDomain\\Phytel.API.DataDomain.CareMember\\Development\\Current\\CareMember.Service\\DataDomain.CareMember.Service.csproj
 		SccProjectTopLevelParentUniqueName76 = API.sln
-		SccProjectName76 = DataDomain/Phytel.API.DataDomain.CareMember/Development/Current/CareMember.DTO
-		SccLocalPath76 = DataDomain\\Phytel.API.DataDomain.CareMember\\Development\\Current\\CareMember.DTO
-		SccProjectUniqueName77 = DataDomain\\Phytel.API.DataDomain.CareMember\\Development\\Current\\CareMember.Service\\DataDomain.CareMember.Service.csproj
+		SccProjectName76 = DataDomain/Phytel.API.DataDomain.CareMember/Development/Current/CareMember.Service
+		SccLocalPath76 = DataDomain\\Phytel.API.DataDomain.CareMember\\Development\\Current\\CareMember.Service
+		SccProjectUniqueName77 = DataDomain\\Phytel.API.DataDomain.CareMember\\Development\\Current\\CareMember.Service.Test\\DataDomain.CareMember.Service.Test.csproj
 		SccProjectTopLevelParentUniqueName77 = API.sln
-		SccProjectName77 = DataDomain/Phytel.API.DataDomain.CareMember/Development/Current/CareMember.Service
-		SccLocalPath77 = DataDomain\\Phytel.API.DataDomain.CareMember\\Development\\Current\\CareMember.Service
-		SccProjectUniqueName78 = DataDomain\\Phytel.API.DataDomain.CareMember\\Development\\Current\\CareMember.Service.Test\\DataDomain.CareMember.Service.Test.csproj
+		SccProjectName77 = DataDomain/Phytel.API.DataDomain.CareMember/Development/Current/CareMember.Service.Test
+		SccLocalPath77 = DataDomain\\Phytel.API.DataDomain.CareMember\\Development\\Current\\CareMember.Service.Test
+		SccProjectUniqueName78 = DataDomain\\Phytel.API.DataDomain.CareMember\\Development\\Current\\CareMember.Test\\DataDomain.CareMember.Test.csproj
 		SccProjectTopLevelParentUniqueName78 = API.sln
-		SccProjectName78 = DataDomain/Phytel.API.DataDomain.CareMember/Development/Current/CareMember.Service.Test
-		SccLocalPath78 = DataDomain\\Phytel.API.DataDomain.CareMember\\Development\\Current\\CareMember.Service.Test
-		SccProjectUniqueName79 = DataDomain\\Phytel.API.DataDomain.CareMember\\Development\\Current\\CareMember.Test\\DataDomain.CareMember.Test.csproj
+		SccProjectName78 = DataDomain/Phytel.API.DataDomain.CareMember/Development/Current/CareMember.Test
+		SccLocalPath78 = DataDomain\\Phytel.API.DataDomain.CareMember\\Development\\Current\\CareMember.Test
+		SccProjectUniqueName79 = DataDomain\\Phytel.API.DataDomain.PatientObservation\\Development\\Current\\PatientObservation\\DataDomain.PatientObservation.csproj
 		SccProjectTopLevelParentUniqueName79 = API.sln
-		SccProjectName79 = DataDomain/Phytel.API.DataDomain.CareMember/Development/Current/CareMember.Test
-		SccLocalPath79 = DataDomain\\Phytel.API.DataDomain.CareMember\\Development\\Current\\CareMember.Test
-		SccProjectUniqueName80 = DataDomain\\Phytel.API.DataDomain.PatientObservation\\Development\\Current\\PatientObservation\\DataDomain.PatientObservation.csproj
+		SccProjectName79 = DataDomain/Phytel.API.DataDomain.PatientObservation/Development/Current/PatientObservation
+		SccLocalPath79 = DataDomain\\Phytel.API.DataDomain.PatientObservation\\Development\\Current\\PatientObservation
+		SccProjectUniqueName80 = DataDomain\\Phytel.API.DataDomain.PatientObservation\\Development\\Current\\PatientObservation.Service\\DataDomain.PatientObservation.Service.csproj
 		SccProjectTopLevelParentUniqueName80 = API.sln
-		SccProjectName80 = DataDomain/Phytel.API.DataDomain.PatientObservation/Development/Current/PatientObservation
-		SccLocalPath80 = DataDomain\\Phytel.API.DataDomain.PatientObservation\\Development\\Current\\PatientObservation
-		SccProjectUniqueName81 = DataDomain\\Phytel.API.DataDomain.PatientObservation\\Development\\Current\\PatientObservation.Service\\DataDomain.PatientObservation.Service.csproj
+		SccProjectName80 = DataDomain/Phytel.API.DataDomain.PatientObservation/Development/Current/PatientObservation.Service
+		SccLocalPath80 = DataDomain\\Phytel.API.DataDomain.PatientObservation\\Development\\Current\\PatientObservation.Service
+		SccProjectUniqueName81 = DataDomain\\Phytel.API.DataDomain.PatientObservation\\Development\\Current\\PatientObservation.Service.Test\\DataDomain.PatientObservation.Service.Test.csproj
 		SccProjectTopLevelParentUniqueName81 = API.sln
-		SccProjectName81 = DataDomain/Phytel.API.DataDomain.PatientObservation/Development/Current/PatientObservation.Service
-		SccLocalPath81 = DataDomain\\Phytel.API.DataDomain.PatientObservation\\Development\\Current\\PatientObservation.Service
-		SccProjectUniqueName82 = DataDomain\\Phytel.API.DataDomain.PatientObservation\\Development\\Current\\PatientObservation.Service.Test\\DataDomain.PatientObservation.Service.Test.csproj
+		SccProjectName81 = DataDomain/Phytel.API.DataDomain.PatientObservation/Development/Current/PatientObservation.Service.Test
+		SccLocalPath81 = DataDomain\\Phytel.API.DataDomain.PatientObservation\\Development\\Current\\PatientObservation.Service.Test
+		SccProjectUniqueName82 = DataDomain\\Phytel.API.DataDomain.PatientObservation\\Development\\Current\\PatientObservation.Test\\DataDomain.PatientObservation.Test.csproj
 		SccProjectTopLevelParentUniqueName82 = API.sln
-		SccProjectName82 = DataDomain/Phytel.API.DataDomain.PatientObservation/Development/Current/PatientObservation.Service.Test
-		SccLocalPath82 = DataDomain\\Phytel.API.DataDomain.PatientObservation\\Development\\Current\\PatientObservation.Service.Test
-		SccProjectUniqueName83 = DataDomain\\Phytel.API.DataDomain.PatientObservation\\Development\\Current\\PatientObservation.Test\\DataDomain.PatientObservation.Test.csproj
+		SccProjectName82 = DataDomain/Phytel.API.DataDomain.PatientObservation/Development/Current/PatientObservation.Test
+		SccLocalPath82 = DataDomain\\Phytel.API.DataDomain.PatientObservation\\Development\\Current\\PatientObservation.Test
+		SccProjectUniqueName83 = DataDomain\\Phytel.API.DataDomain.PatientObservation\\Development\\Current\\PatientObservation.DTO\\DataDomain.PatientObservation.DTO.csproj
 		SccProjectTopLevelParentUniqueName83 = API.sln
-		SccProjectName83 = DataDomain/Phytel.API.DataDomain.PatientObservation/Development/Current/PatientObservation.Test
-		SccLocalPath83 = DataDomain\\Phytel.API.DataDomain.PatientObservation\\Development\\Current\\PatientObservation.Test
-		SccProjectUniqueName84 = DataDomain\\Phytel.API.DataDomain.PatientObservation\\Development\\Current\\PatientObservation.DTO\\DataDomain.PatientObservation.DTO.csproj
+		SccProjectName83 = DataDomain/Phytel.API.DataDomain.PatientObservation/Development/Current/PatientObservation.DTO
+		SccLocalPath83 = DataDomain\\Phytel.API.DataDomain.PatientObservation\\Development\\Current\\PatientObservation.DTO
+		SccProjectUniqueName84 = Common\\Phytel.API.DataAudit\\Development\\Current\\Phytel.API.DataAudit.csproj
 		SccProjectTopLevelParentUniqueName84 = API.sln
-		SccProjectName84 = DataDomain/Phytel.API.DataDomain.PatientObservation/Development/Current/PatientObservation.DTO
-		SccLocalPath84 = DataDomain\\Phytel.API.DataDomain.PatientObservation\\Development\\Current\\PatientObservation.DTO
+		SccProjectName84 = Common/Phytel.API.DataAudit/Development/Current
+		SccLocalPath84 = Common\\Phytel.API.DataAudit\\Development\\Current
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -856,10 +856,6 @@ Global
 		{FCAC9754-51AE-47DF-A0B7-D37855F64B9C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FCAC9754-51AE-47DF-A0B7-D37855F64B9C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FCAC9754-51AE-47DF-A0B7-D37855F64B9C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{AE842695-4DD4-4403-9BE4-8473BCA09580}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{AE842695-4DD4-4403-9BE4-8473BCA09580}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{AE842695-4DD4-4403-9BE4-8473BCA09580}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{AE842695-4DD4-4403-9BE4-8473BCA09580}.Release|Any CPU.Build.0 = Release|Any CPU
 		{E77DEC80-3A95-43A8-9438-1AF394E8A9DA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{E77DEC80-3A95-43A8-9438-1AF394E8A9DA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E77DEC80-3A95-43A8-9438-1AF394E8A9DA}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -900,6 +896,10 @@ Global
 		{06D69E2B-A395-459C-B4D0-FC750018BDD8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{06D69E2B-A395-459C-B4D0-FC750018BDD8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{06D69E2B-A395-459C-B4D0-FC750018BDD8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AE842695-4DD4-4403-9BE4-8473BCA09580}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AE842695-4DD4-4403-9BE4-8473BCA09580}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AE842695-4DD4-4403-9BE4-8473BCA09580}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AE842695-4DD4-4403-9BE4-8473BCA09580}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
