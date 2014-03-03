@@ -1,6 +1,6 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.21005.1
+VisualStudioVersion = 12.0.30110.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppDomain.Security.Service", "Security.Services\AppDomain.Security.Service.csproj", "{B84263C2-54D7-4254-B159-DDB1F39D0783}"
 EndProject
@@ -14,11 +14,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppDomain.Security.Services
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "PhytelShared", "PhytelShared", "{C8D1FDB6-CE7C-446E-9AC0-8A37C493CDFB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Phytel.API.Interface", "..\..\..\..\Interfaces\Release Candidate\Current\Phytel.API.Interface\Phytel.API.Interface.csproj", "{ABE948FB-247E-4955-B3AB-B7C93E10A542}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Phytel.API.Interface", "..\..\..\..\Interfaces\Development\Current\Phytel.API.Interface\Phytel.API.Interface.csproj", "{ABE948FB-247E-4955-B3AB-B7C93E10A542}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Phytel.API.Common", "..\..\..\..\Common\Phytel.API.Common\Release Candidate\Current\Phytel.API.Common.csproj", "{25CF3C3F-221F-4A49-B5EF-A8A5FCF9A5BA}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Phytel.API.Common", "..\..\..\..\Common\Phytel.API.Common\Development\Current\Phytel.API.Common.csproj", "{25CF3C3F-221F-4A49-B5EF-A8A5FCF9A5BA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppDomain.Audit.DTO", "..\..\..\Phytel.API.AppDomain.Audit\Release Candidate\Current\Audit.DTOs\AppDomain.Audit.DTO.csproj", "{DDF2CB2B-6351-44AA-A152-35F82D7D0AF2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Phytel.API.DataAudit", "..\..\..\..\Common\Phytel.API.DataAudit\Development\Current\Phytel.API.DataAudit.csproj", "{AE842695-4DD4-4403-9BE4-8473BCA09580}"
 EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
@@ -41,18 +41,18 @@ Global
 		SccProjectUniqueName5 = Security.Tests\\AppDomain.Security.Services.Test.csproj
 		SccProjectName5 = Security.Tests
 		SccLocalPath5 = Security.Tests
-		SccProjectUniqueName6 = ..\\..\\..\\..\\Interfaces\\Release Candidate\\Current\\Phytel.API.Interface\\Phytel.API.Interface.csproj
+		SccProjectUniqueName6 = ..\\..\\..\\..\\Interfaces\\Development\\Current\\Phytel.API.Interface\\Phytel.API.Interface.csproj
 		SccProjectTopLevelParentUniqueName6 = AppDomain.Security.sln
-		SccProjectName6 = ../../../../Interfaces/Release Candidate/Current/Phytel.API.Interface
-		SccLocalPath6 = ..\\..\\..\\..\\Interfaces\\Release Candidate\\Current\\Phytel.API.Interface
-		SccProjectUniqueName7 = ..\\..\\..\\..\\Common\\Phytel.API.Common\\Release Candidate\\Current\\Phytel.API.Common.csproj
+		SccProjectName6 = ../../../../Interfaces/Development/Current/Phytel.API.Interface
+		SccLocalPath6 = ..\\..\\..\\..\\Interfaces\\Development\\Current\\Phytel.API.Interface
+		SccProjectUniqueName7 = ..\\..\\..\\..\\Common\\Phytel.API.Common\\Development\\Current\\Phytel.API.Common.csproj
 		SccProjectTopLevelParentUniqueName7 = AppDomain.Security.sln
-		SccProjectName7 = ../../../../Common/Phytel.API.Common/Release Candidate/Current
-		SccLocalPath7 = ..\\..\\..\\..\\Common\\Phytel.API.Common\\Release Candidate\\Current
-		SccProjectUniqueName8 = ..\\..\\..\\Phytel.API.AppDomain.Audit\\Release Candidate\\Current\\Audit.DTOs\\AppDomain.Audit.DTO.csproj
+		SccProjectName7 = ../../../../Common/Phytel.API.Common/Development/Current
+		SccLocalPath7 = ..\\..\\..\\..\\Common\\Phytel.API.Common\\Development\\Current
+		SccProjectUniqueName8 = ..\\..\\..\\..\\Common\\Phytel.API.DataAudit\\Development\\Current\\Phytel.API.DataAudit.csproj
 		SccProjectTopLevelParentUniqueName8 = AppDomain.Security.sln
-		SccProjectName8 = ../../../Phytel.API.AppDomain.Audit/Release Candidate/Current/Audit.DTOs
-		SccLocalPath8 = ..\\..\\..\\Phytel.API.AppDomain.Audit\\Release Candidate\\Current\\Audit.DTOs
+		SccProjectName8 = ../../../../Common/Phytel.API.DataAudit/Development/Current
+		SccLocalPath8 = ..\\..\\..\\..\\Common\\Phytel.API.DataAudit\\Development\\Current
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -87,10 +87,10 @@ Global
 		{25CF3C3F-221F-4A49-B5EF-A8A5FCF9A5BA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{25CF3C3F-221F-4A49-B5EF-A8A5FCF9A5BA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{25CF3C3F-221F-4A49-B5EF-A8A5FCF9A5BA}.Release|Any CPU.Build.0 = Release|Any CPU
-		{DDF2CB2B-6351-44AA-A152-35F82D7D0AF2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{DDF2CB2B-6351-44AA-A152-35F82D7D0AF2}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{DDF2CB2B-6351-44AA-A152-35F82D7D0AF2}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{DDF2CB2B-6351-44AA-A152-35F82D7D0AF2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AE842695-4DD4-4403-9BE4-8473BCA09580}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AE842695-4DD4-4403-9BE4-8473BCA09580}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AE842695-4DD4-4403-9BE4-8473BCA09580}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AE842695-4DD4-4403-9BE4-8473BCA09580}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -98,6 +98,6 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{ABE948FB-247E-4955-B3AB-B7C93E10A542} = {C8D1FDB6-CE7C-446E-9AC0-8A37C493CDFB}
 		{25CF3C3F-221F-4A49-B5EF-A8A5FCF9A5BA} = {C8D1FDB6-CE7C-446E-9AC0-8A37C493CDFB}
-		{DDF2CB2B-6351-44AA-A152-35F82D7D0AF2} = {C8D1FDB6-CE7C-446E-9AC0-8A37C493CDFB}
+		{AE842695-4DD4-4403-9BE4-8473BCA09580} = {C8D1FDB6-CE7C-446E-9AC0-8A37C493CDFB}
 	EndGlobalSection
 EndGlobal
