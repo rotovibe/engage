@@ -94,12 +94,12 @@ namespace Phytel.API.DataDomain.PatientObservation.Service
             return response;
         }
 
-        public GetAdditionalObservationsResponse Post(GetAdditionalObservationsResponse request)
+        public GetAdditionalObservationDataItemResponse Post(GetAdditionalObservationDataItemRequest request)
         {
-            GetAdditionalObservationsResponse response = new GetAdditionalObservationsResponse();
+            GetAdditionalObservationDataItemResponse response = new GetAdditionalObservationDataItemResponse();
             try
             {
-                response = PatientObservationDataManager.GetAdditionalObservationsByType(request);
+                response = PatientObservationDataManager.GetAdditionalObservationItemById(request);
                 response.Version = request.Version;
             }
             catch (Exception ex)
@@ -129,6 +129,24 @@ namespace Phytel.API.DataDomain.PatientObservation.Service
         }
 
         public PutUpdateObservationDataResponse Put(PutUpdateObservationDataRequest request)
+        {
+            PutUpdateObservationDataResponse response = new PutUpdateObservationDataResponse();
+            try
+            {
+                response.Result = PatientObservationDataManager.PutUpdateOfPatientObservationRecord(request);
+                response.Version = request.Version;
+            }
+            catch (Exception ex)
+            {
+                //TODO: Log this to C3 database via ASE
+                string ercode = ((HttpError)ex).ErrorCode;
+                base.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                response.Status = new ServiceStack.ServiceInterface.ServiceModel.ResponseStatus(ercode, ex.Message);
+            }
+            return response;
+        }
+
+        public PutUpdateObservationDataResponse Post(PutUpdateObservationDataRequest request)
         {
             PutUpdateObservationDataResponse response = new PutUpdateObservationDataResponse();
             try

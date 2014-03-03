@@ -3,8 +3,8 @@ using ServiceStack.ServiceHost;
 
 namespace Phytel.API.DataDomain.PatientObservation.DTO
 {
-    [Route("/{Context}/{Version}/{ContractNumber}/Observation/Type/{TypeId}", "POST")]
-    public class GetAdditionalObservationsRequest : IDataDomainRequest
+    [Route("/{Context}/{Version}/{ContractNumber}/Observation/{ObservationId}/Additional/", "POST")]
+    public class GetAdditionalObservationDataItemRequest : IDataDomainRequest
     {
         [ApiMember(Name = "PatientId", Description = "Id of the Patient for whom a goal is being created.", ParameterType = "property", DataType = "string", IsRequired = true)]
         public string PatientId { get; set; }

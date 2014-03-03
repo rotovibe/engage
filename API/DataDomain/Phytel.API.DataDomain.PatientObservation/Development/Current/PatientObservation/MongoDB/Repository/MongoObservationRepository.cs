@@ -66,10 +66,45 @@ namespace Phytel.API.DataDomain.PatientObservation
 
         public object FindByID(string entityID)
         {
+            ObservationData odL = null;
             try
             {
-                throw new NotImplementedException();
-                // code here //
+                using (PatientObservationMongoContext ctx = new PatientObservationMongoContext(_dbName))
+                {
+                    List<IMongoQuery> queries = new List<IMongoQuery>();
+                    queries.Add(Query.EQ(MEObservation.IdProperty, ObjectId.Parse(entityID)));
+                    IMongoQuery mQuery = Query.And(queries);
+
+                    MEObservation o = ctx.Observations.Collection.Find(mQuery).FirstOrDefault();
+
+                    if (o != null)
+                    {
+                        odL = new ObservationData
+                        {
+                            CodingSystem = o.CodingSystem,
+                            CodingSystemCode = o.CodingSystemCode,
+                            DeleteFlag = o.DeleteFlag,
+                            Description = o.Description,
+                            ExtraElements = o.ExtraElements,
+                            GroupId = o.GroupId != null ? o.GroupId.ToString() : null,
+                            LowValue = o.LowValue,
+                            HighValue = o.HighValue,
+                            Id = o.Id.ToString(),
+                            LastUpdatedOn = o.LastUpdatedOn,
+                            ObservationType = o.ObservationType.ToString(),
+                            Order = o.Order,
+                            Source = o.Source,
+                            Standard = o.Standard,
+                            Status = (int)o.Status,
+                            TTLDate = o.TTLDate,
+                            Units = o.Units,
+                            UpdatedBy = o.UpdatedBy,
+                            Version = o.Version,
+                            CommonName = o.CommonName
+                        };
+                    }
+                }
+                return odL;
             }
             catch (Exception ex) { throw ex; }
         }
@@ -138,11 +173,6 @@ namespace Phytel.API.DataDomain.PatientObservation
         }
 
         void IRepository<T>.DeleteAll(List<object> entities)
-        {
-            throw new NotImplementedException();
-        }
-
-        object IRepository<T>.FindByID(string entityID)
         {
             throw new NotImplementedException();
         }

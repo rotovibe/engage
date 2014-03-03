@@ -72,6 +72,7 @@
     <Compile Include="MongoDB\Repository\MongoPatientObservationRepository.cs" />
     <Compile Include="MongoDB\PatientObservationMongoContext.cs" />
     <Compile Include="DataPatientObservationManager.cs" />
+    <Compile Include="ObservationUtil.cs" />
     <Compile Include="PatientObservationRepositoryFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

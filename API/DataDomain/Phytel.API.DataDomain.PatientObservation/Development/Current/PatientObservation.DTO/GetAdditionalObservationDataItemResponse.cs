@@ -4,9 +4,9 @@ using Phytel.API.Interface;
 
 namespace Phytel.API.DataDomain.PatientObservation.DTO
 {
-    public class GetAdditionalObservationsResponse : IDomainResponse
+    public class GetAdditionalObservationDataItemResponse : IDomainResponse
     {
-        public List<PatientObservationData> StandardObservations { get; set; }
+        public PatientObservationData Observation { get; set; }
         public string Version { get; set; }
         public ResponseStatus Status { get; set; }
     }
