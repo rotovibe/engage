@@ -12,54 +12,47 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.Patient.Test", "
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "PhytelShared", "PhytelShared", "{800769AE-E702-422E-8B96-C0E7B2350F50}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Phytel.API.Interface", "..\..\..\..\Interfaces\Release Candidate\Current\Phytel.API.Interface\Phytel.API.Interface.csproj", "{ABE948FB-247E-4955-B3AB-B7C93E10A542}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Phytel.API.Interface", "..\..\..\..\Interfaces\Development\Current\Phytel.API.Interface\Phytel.API.Interface.csproj", "{ABE948FB-247E-4955-B3AB-B7C93E10A542}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Phytel.API.Common", "..\..\..\..\Common\Phytel.API.Common\Release Candidate\Current\Phytel.API.Common.csproj", "{25CF3C3F-221F-4A49-B5EF-A8A5FCF9A5BA}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Phytel.API.Common", "..\..\..\..\Common\Phytel.API.Common\Development\Current\Phytel.API.Common.csproj", "{25CF3C3F-221F-4A49-B5EF-A8A5FCF9A5BA}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.Patient.Service.Test", "Patient.Services.Tests\DataDomain.Patient.Service.Test.csproj", "{5D22373D-E432-4208-A737-E0BCA0567B5F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Phytel.API.DataAudit", "..\..\..\..\Common\Phytel.API.DataAudit\Development\Current\Phytel.API.DataAudit.csproj", "{AE842695-4DD4-4403-9BE4-8473BCA09580}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 7
+		SccNumberOfProjects = 9
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = http://hillstfs2013:8080/tfs/phytel
 		SccProjectUniqueName0 = Patient.Services\\DataDomain.Patient.Service.csproj
 		SccProjectName0 = Patient.Services
-		SccAuxPath0 = http://hillstfs2013:8080/tfs/phytel
 		SccLocalPath0 = Patient.Services
-		SccProvider0 = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccProjectUniqueName1 = Patient\\DataDomain.Patient.csproj
 		SccProjectName1 = Patient
-		SccAuxPath1 = http://hillstfs2013:8080/tfs/phytel
 		SccLocalPath1 = Patient
-		SccProvider1 = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccProjectUniqueName2 = Patient.DTOs\\DataDomain.Patient.DTO.csproj
 		SccProjectName2 = Patient.DTOs
-		SccAuxPath2 = http://hillstfs2013:8080/tfs/phytel
 		SccLocalPath2 = Patient.DTOs
-		SccProvider2 = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccProjectUniqueName3 = Patient.Tests\\DataDomain.Patient.Test.csproj
 		SccProjectName3 = Patient.Tests
-		SccAuxPath3 = http://hillstfs2013:8080/tfs/phytel
 		SccLocalPath3 = Patient.Tests
-		SccProvider3 = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccProjectUniqueName4 = ..\\..\\..\\..\\Interfaces\\Release Candidate\\Current\\Phytel.API.Interface\\Phytel.API.Interface.csproj
+		SccProjectUniqueName4 = ..\\..\\..\\..\\Interfaces\\Development\\Current\\Phytel.API.Interface\\Phytel.API.Interface.csproj
 		SccProjectTopLevelParentUniqueName4 = DataDomain.Patient.sln
-		SccProjectName4 = ../../../../Interfaces/Release Candidate/Current/Phytel.API.Interface
-		SccAuxPath4 = http://hillstfs2013:8080/tfs/phytel
-		SccLocalPath4 = ..\\..\\..\\..\\Interfaces\\Release Candidate\\Current\\Phytel.API.Interface
-		SccProvider4 = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccProjectUniqueName5 = ..\\..\\..\\..\\Common\\Phytel.API.Common\\Release Candidate\\Current\\Phytel.API.Common.csproj
+		SccProjectName4 = ../../../../Interfaces/Development/Current/Phytel.API.Interface
+		SccLocalPath4 = ..\\..\\..\\..\\Interfaces\\Development\\Current\\Phytel.API.Interface
+		SccProjectUniqueName5 = ..\\..\\..\\..\\Common\\Phytel.API.Common\\Development\\Current\\Phytel.API.Common.csproj
 		SccProjectTopLevelParentUniqueName5 = DataDomain.Patient.sln
-		SccProjectName5 = ../../../../Common/Phytel.API.Common/Release Candidate/Current
-		SccAuxPath5 = http://hillstfs2013:8080/tfs/phytel
-		SccLocalPath5 = ..\\..\\..\\..\\Common\\Phytel.API.Common\\Release Candidate\\Current
-		SccProvider5 = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccProjectName5 = ../../../../Common/Phytel.API.Common/Development/Current
+		SccLocalPath5 = ..\\..\\..\\..\\Common\\Phytel.API.Common\\Development\\Current
 		SccProjectUniqueName6 = Patient.Services.Tests\\DataDomain.Patient.Service.Test.csproj
 		SccProjectName6 = Patient.Services.Tests
-		SccAuxPath6 = http://hillstfs2013:8080/tfs/phytel
 		SccLocalPath6 = Patient.Services.Tests
-		SccProvider6 = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccProjectUniqueName7 = ..\\..\\..\\..\\Common\\Phytel.API.DataAudit\\Development\\Current\\Phytel.API.DataAudit.csproj
+		SccProjectTopLevelParentUniqueName7 = DataDomain.Patient.sln
+		SccProjectName7 = ../../../../Common/Phytel.API.DataAudit/Development/Current
+		SccLocalPath7 = ..\\..\\..\\..\\Common\\Phytel.API.DataAudit\\Development\\Current
+		SccLocalPath8 = .
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -94,6 +87,10 @@ Global
 		{5D22373D-E432-4208-A737-E0BCA0567B5F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5D22373D-E432-4208-A737-E0BCA0567B5F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5D22373D-E432-4208-A737-E0BCA0567B5F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AE842695-4DD4-4403-9BE4-8473BCA09580}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AE842695-4DD4-4403-9BE4-8473BCA09580}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AE842695-4DD4-4403-9BE4-8473BCA09580}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AE842695-4DD4-4403-9BE4-8473BCA09580}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -101,5 +98,6 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{ABE948FB-247E-4955-B3AB-B7C93E10A542} = {800769AE-E702-422E-8B96-C0E7B2350F50}
 		{25CF3C3F-221F-4A49-B5EF-A8A5FCF9A5BA} = {800769AE-E702-422E-8B96-C0E7B2350F50}
+		{AE842695-4DD4-4403-9BE4-8473BCA09580} = {800769AE-E702-422E-8B96-C0E7B2350F50}
 	EndGlobalSection
 EndGlobal
