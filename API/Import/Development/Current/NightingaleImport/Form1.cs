@@ -116,7 +116,7 @@ namespace NightingaleImport
 
                 foreach (ListViewItem lvi in listView1.CheckedItems)
                 {
-
+                    
                     PutPatientDataRequest patientRequest = new PutPatientDataRequest
                     {
                         FirstName = lvi.SubItems[colFirstN].Text,
@@ -132,6 +132,10 @@ namespace NightingaleImport
                         //SSN = lvi.SubItems[colSSN].Text,
                     };
                     PutPatientDataResponse responsePatient = putPatientServiceCall(patientRequest);
+                    if (responsePatient.Id == null)
+                    {
+                        throw new Exception("Patient import request failed.");
+                    }
 
                     //PatientSystem
                     PutPatientSystemDataRequest patSysRequest = new PutPatientSystemDataRequest
@@ -143,24 +147,33 @@ namespace NightingaleImport
                         Context = patientRequest.Context,
                         ContractNumber = patientRequest.ContractNumber
                     };
-                    PutPatientSystemDataResponse responsePatientPS = putPatientSystemServiceCall(patSysRequest);
-
-                    //Update Patient with DisplayPatientSystemId
-                    PutUpdatePatientDataRequest updatePatientRequest = new PutUpdatePatientDataRequest
+                    if (patSysRequest.SystemID != null && patSysRequest.SystemName != null)
                     {
-                        Id = responsePatient.Id.ToString(),
-                        FirstName = patientRequest.FirstName,
-                        LastName = patientRequest.LastName,
-                        DisplayPatientSystemId = responsePatientPS.PatientSystemId.ToString(),
-                        Priority = 0,
-                        Context = patientRequest.Context,
-                        ContractNumber = patientRequest.ContractNumber,
-                        Version = patientRequest.Version,
-                        UserId = userId.ToString()
-                    };
+                        PutPatientSystemDataResponse responsePatientPS = putPatientSystemServiceCall(patSysRequest);
+                        if (responsePatientPS.PatientSystemId == null)
+                        {
+                            throw new Exception("Patient System import request failed.");
+                        }
+                        //Update Patient with DisplayPatientSystemId
+                        PutUpdatePatientDataRequest updatePatientRequest = new PutUpdatePatientDataRequest
+                        {
+                            Id = responsePatient.Id.ToString(),
+                            FirstName = patientRequest.FirstName,
+                            LastName = patientRequest.LastName,
+                            DisplayPatientSystemId = responsePatientPS.PatientSystemId.ToString(),
+                            Priority = 0,
+                            Context = patientRequest.Context,
+                            ContractNumber = patientRequest.ContractNumber,
+                            Version = patientRequest.Version,
+                            UserId = userId.ToString()
+                        };
 
-                    PutUpdatePatientDataResponse updateResponsePatient = putUpdatePatientServiceCall(updatePatientRequest, responsePatient.Id.ToString());
-
+                        PutUpdatePatientDataResponse updateResponsePatient = putUpdatePatientServiceCall(updatePatientRequest, responsePatient.Id.ToString());
+                        if (updatePatientRequest.Id == null)
+                        {
+                            throw new Exception("Patient was not successfully updated with Patient System ID");
+                        }
+                    }
 
 
                     //Contact
@@ -389,28 +402,38 @@ namespace NightingaleImport
                     };
 
                     PutContactDataResponse responseContact = putContactServiceCall(contactRequest, responsePatient.Id.ToString());
-
-                    Guid userIdResponse = getUserId(lvi.SubItems[colCMan].Text);
-                    GetContactByUserIdDataResponse contactByUserIdResponse = getContactByUserIdServiceCall(userIdResponse.ToString());
-
-                    CareMemberData careMember = new CareMemberData
+                    if (responseContact.ContactId == null)
                     {
-                        PatientId = responsePatient.Id.ToString(),
-                        ContactId = contactByUserIdResponse.Contact.ContactId,
-                        TypeId = contactTypeId,
-                        Primary = true,
-                    };
+                        throw new Exception("Contact card import request failed.");
+                    }
 
-                    PutCareMemberDataRequest careMemberRequest = new PutCareMemberDataRequest
+                    if (!(string.IsNullOrEmpty(lvi.SubItems[colCMan].Text)))
                     {
-                        PatientId = responsePatient.Id.ToString(),
-                        UserId = userId.ToString(),
-                        CareMember = careMember
-                    };
-                    PutCareMemberDataResponse responseCareMember = putCareMemberServiceCall(careMemberRequest, responsePatient.Id.ToString());
+                        Guid userIdResponse = getUserId(lvi.SubItems[colCMan].Text);
+                        GetContactByUserIdDataResponse contactByUserIdResponse = getContactByUserIdServiceCall(userIdResponse.ToString());
 
+                        CareMemberData careMember = new CareMemberData
+                        {
+                            PatientId = responsePatient.Id.ToString(),
+                            ContactId = contactByUserIdResponse.Contact.ContactId,
+                            TypeId = contactTypeId,
+                            Primary = true,
+                        };
 
-                    if (responsePatient.Id != null && responseCareMember.Id != null && responsePatient.Status == null)
+                        PutCareMemberDataRequest careMemberRequest = new PutCareMemberDataRequest
+                        {
+                            PatientId = responsePatient.Id.ToString(),
+                            UserId = userId.ToString(),
+                            CareMember = careMember
+                        };
+                        PutCareMemberDataResponse responseCareMember = putCareMemberServiceCall(careMemberRequest, responsePatient.Id.ToString());
+                        if (responseCareMember.Id == null)
+                        {
+                            throw new Exception("Care Member import request failed.");
+                        }
+                    }
+
+                    if (responsePatient.Id != null && responsePatient.Status == null)
                     {
                         dictionarySucceed.Add(patientRequest.FirstName + " " + patientRequest.LastName, responsePatient.Id);
                         int n = listView1.CheckedItems.IndexOf(lvi);
@@ -443,7 +466,7 @@ namespace NightingaleImport
             }
             catch (Exception ex)
             {
-                throw ex;
+                MessageBox.Show(ex.Message);
             }
         }
 
@@ -668,23 +691,71 @@ namespace NightingaleImport
 
         private void openFileDialog1_FileOk(object sender, CancelEventArgs e)
         {
-            if (openFileDialog1.CheckFileExists)
+            try
             {
-                filename = openFileDialog1.FileName;
-                textBox1.Text = filename;
-                string[] attributes;
-                string[]filelines = File.ReadAllLines(filename);
-                foreach (string line in filelines)
+                if (openFileDialog1.CheckFileExists)
                 {
-                    attributes = line.Split(",".ToCharArray());
-                    ListViewItem lvi = new ListViewItem(attributes[colFirstN]);
-                    for (int i = 1; i < attributes.Count(); i++)
+                    filename = openFileDialog1.FileName;
+                    textBox1.Text = filename;
+                    string[] attributes;
+                    string[] filelines = File.ReadAllLines(filename);
+                    foreach (string line in filelines)
                     {
-                        lvi.SubItems.Add(attributes[i]);
+                        attributes = line.Split(",".ToCharArray());
+                        ListViewItem lvi = new ListViewItem(attributes[colFirstN]);
+                        for (int i = 1; i < attributes.Count(); i++)
+                        {
+                            lvi.SubItems.Add(attributes[i]);
+                        }
+                        //Check for required fields
+                        if (lvi.SubItems[colFirstN].Text == "" || lvi.SubItems[colLastN].Text == ""
+                            || lvi.SubItems[colGen].Text == "" || lvi.SubItems[colDB].Text == "")
+                        {
+                            throw new Exception("Required Patient data not found. Check patient: " + line);
+                        }
+                        else if ((lvi.SubItems[colSID].Text != "" && lvi.SubItems[colSysN].Text == "") 
+                                    || (lvi.SubItems[colSysN].Text != "" && lvi.SubItems[colSID].Text == ""))
+                        {
+                            throw new Exception("Required Patient System data not found. Check patient: " + line);
+                        }
+                        else if (lvi.SubItems[colPh1].Text != "" && (lvi.SubItems[colPh1Type].Text == ""))
+                        {
+                            throw new Exception("Required Phone 1 data not found. Check patient: " + line);
+                        }
+                        else if (lvi.SubItems[colPh2].Text != "" && (lvi.SubItems[colPh2Type].Text == ""))
+                        {
+                            throw new Exception("Required Phone 2 data not found. Check patient: " + line);
+                        }
+                        else if (lvi.SubItems[colEm1].Text != "" && (lvi.SubItems[colEm1Type].Text == ""))
+                        {
+                            throw new Exception("Required Email 1 data not found. Check patient: " + line);
+                        }
+                        else if (lvi.SubItems[colEm2].Text != "" && (lvi.SubItems[colEm2Type].Text == ""))
+                        {
+                            throw new Exception("Required Email 2 data not found. Check patient: " + line);
+                        }
+                        else if (lvi.SubItems[colAdd1L1].Text != "" && (lvi.SubItems[colAdd1City].Text == "" 
+                                    || lvi.SubItems[colAdd1St].Text == "" || lvi.SubItems[colAdd1Zip].Text == "" 
+                                    || lvi.SubItems[colAdd1Type].Text == ""))
+                        {
+                            throw new Exception("Required Address 1 data not found. Check patient: " + line);
+                        }
+                        else if (lvi.SubItems[colAdd2L1].Text != "" && (lvi.SubItems[colAdd2City].Text == ""
+                                    || lvi.SubItems[colAdd2St].Text == "" || lvi.SubItems[colAdd2Zip].Text == ""
+                                    || lvi.SubItems[colAdd2Type].Text == ""))
+                        {
+                            throw new Exception("Required Address 2 data not found. Check patient: " + line);
+                        }
+                        else
+                        {
+                            listView1.Items.Add(lvi);
+                        }
                     }
-                   
-                    listView1.Items.Add(lvi);
-                }    
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
             }
         }
 
@@ -731,16 +802,23 @@ namespace NightingaleImport
 
         private Guid getUserId(string userName)
         {
-            Guid returnId = Guid.Empty;
-
-            string sql = string.Format("Select userId from [User] where UserName = '{0}'",
-                                        userName);
-            DataSet ds = Phytel.Services.SQLDataService.Instance.ExecuteSQL("Phytel", false, sql);
-            if (ds.Tables[0].Rows.Count > 0)
+            try
             {
-                returnId = Guid.Parse(ds.Tables[0].Rows[0]["userId"].ToString());
+                Guid returnId = Guid.Empty;
+
+                string sql = string.Format("Select userId from [User] where UserName = '{0}'",
+                                            userName);
+                DataSet ds = Phytel.Services.SQLDataService.Instance.ExecuteSQL("Phytel", false, sql);
+                if (ds.Tables[0].Rows.Count > 0)
+                {
+                    returnId = Guid.Parse(ds.Tables[0].Rows[0]["userId"].ToString());
+                }
+                return returnId;
             }
-            return returnId;
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
 
         private PutPatientDataResponse putPatientServiceCall(PutPatientDataRequest putPatientRequest)
