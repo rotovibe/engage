@@ -37,7 +37,7 @@ Global
 		SccProjectName5 = Cohort.Test
 		SccLocalPath5 = Cohort.Test
 		SccProjectUniqueName6 = ..\\..\\..\\..\\Interfaces\\Release Candidate\\Current\\Phytel.API.Interface\\Phytel.API.Interface.csproj
-		SccProjectName6 = ../../../../Interfaces/Development/Current/Phytel.API.Interface
+		SccProjectName6 = ../../../../Interfaces/Release Candidate/Current/Phytel.API.Interface
 		SccLocalPath6 = ..\\..\\..\\..\\Interfaces\\Release Candidate\\Current\\Phytel.API.Interface
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

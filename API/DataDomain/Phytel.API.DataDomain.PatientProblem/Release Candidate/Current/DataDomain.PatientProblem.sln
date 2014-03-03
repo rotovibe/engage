@@ -42,12 +42,12 @@ Global
 		SccLocalPath3 = PatientProblem.Services
 		SccProvider3 = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccProjectUniqueName4 = ..\\..\\..\\..\\Interfaces\\Release Candidate\\Current\\Phytel.API.Interface\\Phytel.API.Interface.csproj
-		SccProjectName4 = ../../../../Interfaces/Development/Current/Phytel.API.Interface
+		SccProjectName4 = ../../../../Interfaces/Release Candidate/Current/Phytel.API.Interface
 		SccAuxPath4 = http://hillstfs2013:8080/tfs/phytel
 		SccLocalPath4 = ..\\..\\..\\..\\Interfaces\\Release Candidate\\Current\\Phytel.API.Interface
 		SccProvider4 = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccProjectUniqueName5 = ..\\..\\..\\Phytel.API.DataDomain.LookUp\\Release Candidate\\Current\\LookUp.DTO\\DataDomain.LookUp.DTO.csproj
-		SccProjectName5 = ../../../Phytel.API.DataDomain.LookUp/Development/Current/LookUp.DTO
+		SccProjectName5 = ../../../Phytel.API.DataDomain.LookUp/Release Candidate/Current/LookUp.DTO
 		SccAuxPath5 = http://hillstfs2013:8080/tfs/phytel
 		SccLocalPath5 = ..\\..\\..\\Phytel.API.DataDomain.LookUp\\Release Candidate\\Current\\LookUp.DTO
 		SccProvider5 = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}

@@ -37,11 +37,11 @@ Global
 		SccLocalPath3 = PatientObservation.Service.Test
 		SccProjectUniqueName4 = ..\\..\\..\\..\\Interfaces\\Release Candidate\\Current\\Phytel.API.Interface\\Phytel.API.Interface.csproj
 		SccProjectTopLevelParentUniqueName4 = DataDomain.PatientObservation.sln
-		SccProjectName4 = ../../../../Interfaces/Development/Current/Phytel.API.Interface
+		SccProjectName4 = ../../../../Interfaces/Release Candidate/Current/Phytel.API.Interface
 		SccLocalPath4 = ..\\..\\..\\..\\Interfaces\\Release Candidate\\Current\\Phytel.API.Interface
 		SccProjectUniqueName5 = ..\\..\\..\\..\\Common\\Phytel.API.Common\\Release Candidate\\Current\\Phytel.API.Common.csproj
 		SccProjectTopLevelParentUniqueName5 = DataDomain.PatientObservation.sln
-		SccProjectName5 = ../../../../Common/Phytel.API.Common/Development/Current
+		SccProjectName5 = ../../../../Common/Phytel.API.Common/Release Candidate/Current
 		SccLocalPath5 = ..\\..\\..\\..\\Common\\Phytel.API.Common\\Release Candidate\\Current
 		SccLocalPath6 = .
 		SccProjectUniqueName7 = PatientObservation.DTO\\DataDomain.PatientObservation.DTO.csproj

@@ -50,13 +50,13 @@ Global
 		SccProvider4 = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccProjectUniqueName5 = ..\\..\\..\\..\\Interfaces\\Release Candidate\\Current\\Phytel.API.Interface\\Phytel.API.Interface.csproj
 		SccProjectTopLevelParentUniqueName5 = DataDomain.Module.sln
-		SccProjectName5 = ../../../../Interfaces/Development/Current/Phytel.API.Interface
+		SccProjectName5 = ../../../../Interfaces/Release Candidate/Current/Phytel.API.Interface
 		SccAuxPath5 = http://hillstfs2013:8080/tfs/phytel
 		SccLocalPath5 = ..\\..\\..\\..\\Interfaces\\Release Candidate\\Current\\Phytel.API.Interface
 		SccProvider5 = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccProjectUniqueName6 = ..\\..\\..\\..\\Common\\Phytel.API.Common\\Release Candidate\\Current\\Phytel.API.Common.csproj
 		SccProjectTopLevelParentUniqueName6 = DataDomain.Module.sln
-		SccProjectName6 = ../../../../Common/Phytel.API.Common/Development/Current
+		SccProjectName6 = ../../../../Common/Phytel.API.Common/Release Candidate/Current
 		SccAuxPath6 = http://hillstfs2013:8080/tfs/phytel
 		SccLocalPath6 = ..\\..\\..\\..\\Common\\Phytel.API.Common\\Release Candidate\\Current
 		SccProvider6 = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}

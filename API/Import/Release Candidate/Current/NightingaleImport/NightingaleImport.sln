@@ -15,10 +15,10 @@ Global
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = http://hillstfs2013:8080/tfs/phytel
 		SccProjectUniqueName0 = ..\\..\\..\\..\\..\\..\\Projects\\tfs2013\\Phytel.Net\\Services\\API\\DataDomain\\Phytel.API.DataDomain.Patient\\Release Candidate\\Current\\Patient.DTOs\\DataDomain.Patient.DTO.csproj
-		SccProjectName0 = ../../DataDomain/Phytel.API.DataDomain.Patient/Development/Current/Patient.DTOs
+		SccProjectName0 = ../../DataDomain/Phytel.API.DataDomain.Patient/Release Candidate/Current/Patient.DTOs
 		SccLocalPath0 = ..\\..\\..\\..\\..\\..\\Projects\\tfs2013\\Phytel.Net\\Services\\API\\DataDomain\\Phytel.API.DataDomain.Patient\\Release Candidate\\Current\\Patient.DTOs
 		SccProjectUniqueName1 = ..\\..\\..\\..\\..\\..\\Projects\\tfs2013\\Phytel.Net\\Services\\API\\Interfaces\\Release Candidate\\Current\\Phytel.API.Interface\\Phytel.API.Interface.csproj
-		SccProjectName1 = ../../Interfaces/Development/Current/Phytel.API.Interface
+		SccProjectName1 = ../../Interfaces/Release Candidate/Current/Phytel.API.Interface
 		SccLocalPath1 = ..\\..\\..\\..\\..\\..\\Projects\\tfs2013\\Phytel.Net\\Services\\API\\Interfaces\\Release Candidate\\Current\\Phytel.API.Interface
 		SccLocalPath2 = .
 		SccProjectUniqueName3 = NightingaleImport.csproj
