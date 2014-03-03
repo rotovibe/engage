@@ -19,9 +19,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Phytel.API.Common", "..\..\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Phytel.API.Interface", "..\..\..\..\Interfaces\Development\Current\Phytel.API.Interface\Phytel.API.Interface.csproj", "{ABE948FB-247E-4955-B3AB-B7C93E10A542}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Phytel.API.DataAudit", "..\..\..\..\Common\Phytel.API.DataAudit\Development\Current\Phytel.API.DataAudit.csproj", "{AE842695-4DD4-4403-9BE4-8473BCA09580}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 8
+		SccNumberOfProjects = 9
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = http://hillstfs2013:8080/tfs/phytel
 		SccLocalPath0 = .
@@ -48,6 +50,10 @@ Global
 		SccProjectTopLevelParentUniqueName7 = DataDomain.Action.Service.sln
 		SccProjectName7 = ../../../../Interfaces/Development/Current/Phytel.API.Interface
 		SccLocalPath7 = ..\\..\\..\\..\\Interfaces\\Development\\Current\\Phytel.API.Interface
+		SccProjectUniqueName8 = ..\\..\\..\\..\\Common\\Phytel.API.DataAudit\\Development\\Current\\Phytel.API.DataAudit.csproj
+		SccProjectTopLevelParentUniqueName8 = DataDomain.Action.Service.sln
+		SccProjectName8 = ../../../../Common/Phytel.API.DataAudit/Development/Current
+		SccLocalPath8 = ..\\..\\..\\..\\Common\\Phytel.API.DataAudit\\Development\\Current
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -97,6 +103,12 @@ Global
 		{ABE948FB-247E-4955-B3AB-B7C93E10A542}.Release|Any CPU.Build.0 = Release|Any CPU
 		{ABE948FB-247E-4955-B3AB-B7C93E10A542}.Test|Any CPU.ActiveCfg = Test|Any CPU
 		{ABE948FB-247E-4955-B3AB-B7C93E10A542}.Test|Any CPU.Build.0 = Test|Any CPU
+		{AE842695-4DD4-4403-9BE4-8473BCA09580}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AE842695-4DD4-4403-9BE4-8473BCA09580}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AE842695-4DD4-4403-9BE4-8473BCA09580}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AE842695-4DD4-4403-9BE4-8473BCA09580}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AE842695-4DD4-4403-9BE4-8473BCA09580}.Test|Any CPU.ActiveCfg = Release|Any CPU
+		{AE842695-4DD4-4403-9BE4-8473BCA09580}.Test|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -104,5 +116,6 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{25CF3C3F-221F-4A49-B5EF-A8A5FCF9A5BA} = {F37B57AC-0C37-47F1-A738-443EABCABBC5}
 		{ABE948FB-247E-4955-B3AB-B7C93E10A542} = {F37B57AC-0C37-47F1-A738-443EABCABBC5}
+		{AE842695-4DD4-4403-9BE4-8473BCA09580} = {F37B57AC-0C37-47F1-A738-443EABCABBC5}
 	EndGlobalSection
 EndGlobal
