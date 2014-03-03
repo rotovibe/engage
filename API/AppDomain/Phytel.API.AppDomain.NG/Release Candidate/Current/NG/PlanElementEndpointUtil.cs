@@ -10,10 +10,8 @@ using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using DD = Phytel.API.DataDomain.Program.DTO;
 using AD = Phytel.API.AppDomain.NG.DTO;
+using DD = Phytel.API.DataDomain.Program.DTO;
 
 namespace Phytel.API.AppDomain.NG
 {
