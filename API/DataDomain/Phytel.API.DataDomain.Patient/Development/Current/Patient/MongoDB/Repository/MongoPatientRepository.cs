@@ -51,53 +51,7 @@ namespace Phytel.API.DataDomain.Patient
 
                     patient = ctx.Patients.Collection.FindOneAs<MEPatient>(query);
                     MongoCohortPatientViewRepository<T> repo = new MongoCohortPatientViewRepository<T>(_dbName);
-                    if (patient != null)
-                    {
-                        //Got one, update it and save it here..
-                        //Patient
-                        patient.FirstName = request.FirstName;
-                        patient.LastName = request.LastName;
-                        patient.MiddleName = request.MiddleName;
-                        patient.Suffix = request.Suffix;
-                        patient.PreferredName = request.PreferredName;
-                        patient.Gender = request.Gender;
-                        patient.DOB = request.DOB;
-                        //patient.SSN = request.SSN;
-                        patient.Version = request.Version;
-                        //UpdatedBy = security token user id;
-                        patient.LastUpdatedOn = System.DateTime.Now;
-                        ctx.Patients.Collection.Save(patient);
-
-                        //CohortPatientView
-                        IRestClient updateCohortClient = new JsonServiceClient();
-                        GetCohortPatientViewRequest updateCohortRequest = new GetCohortPatientViewRequest
-                        {
-                            PatientID = patient.Id.ToString(),
-                            Context = request.Context,
-                            Version = request.Version,
-                            ContractNumber = request.ContractNumber
-                        };
-                        GetCohortPatientViewResponse updateCohortResponse = updateCohortClient.Get<GetCohortPatientViewResponse>(string.Format("{0}/{1}/{2}/{3}/patient/{4}/cohortpatientview/",
-                                                                                                                            "http://localhost:8888/Patient",
-                                                                                                                            updateCohortRequest.Context,
-                                                                                                                            updateCohortRequest.Version,
-                                                                                                                            updateCohortRequest.ContractNumber,
-                                                                                                                            updateCohortRequest.PatientID));
-                        List<SearchFieldData> updateData = new List<SearchFieldData>();
-                        updateData.Add(new SearchFieldData { Active = true, FieldName = Constants.FN, Value = request.FirstName });
-                        updateData.Add(new SearchFieldData { Active = true, FieldName = Constants.LN, Value = request.LastName });
-                        updateData.Add(new SearchFieldData { Active = true, FieldName = Constants.G, Value = request.Gender.ToUpper() });
-                        updateData.Add(new SearchFieldData { Active = true, FieldName = Constants.DOB, Value = request.DOB });
-                        updateData.Add(new SearchFieldData { Active = true, FieldName = Constants.MN, Value = request.MiddleName });
-                        updateData.Add(new SearchFieldData { Active = true, FieldName = Constants.SFX, Value = request.Suffix });
-                        updateData.Add(new SearchFieldData { Active = true, FieldName = Constants.PN, Value = request.PreferredName });
-                        //updateData.Add(new SearchFieldData {Active = true, FieldName = "SSN", Value = patient.SSN });
-
-                        updateCohortResponse.CohortPatientView.LastName = request.LastName;
-                        updateCohortResponse.CohortPatientView.SearchFields = updateData;
-                        ctx.CohortPatientViews.Collection.Save(updateCohortResponse.CohortPatientView);
-                    }
-                    else
+                    if (patient == null)
                     {
                         patient = new MEPatient
                         {
@@ -139,6 +93,7 @@ namespace Phytel.API.DataDomain.Patient
                         };
                         repo.Insert(cohortPatientRequest);
                     }
+                    
 
                     return new PutPatientDataResponse
                     {
