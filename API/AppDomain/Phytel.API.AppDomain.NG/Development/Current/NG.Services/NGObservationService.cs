@@ -26,7 +26,7 @@ namespace Phytel.API.AppDomain.NG.Service
             try
             {
                 ObservationsManager om = new ObservationsManager();
-                ValidateTokenResponse result = om.IsUserValidated(request.Version, request.Token, HttpContext.Current.Request);
+                ValidateTokenResponse result = om.IsUserValidated(request.Version, request.Token);
                 if (result.UserId.Trim() != string.Empty)
                 {
                     request.UserId = result.UserId;
@@ -58,7 +58,7 @@ namespace Phytel.API.AppDomain.NG.Service
             try
             {
                 ObservationsManager om = new ObservationsManager();
-                ValidateTokenResponse result = om.IsUserValidated(request.Version, request.Token, HttpContext.Current.Request);
+                ValidateTokenResponse result = om.IsUserValidated(request.Version, request.Token);
                 if (result.UserId.Trim() != string.Empty)
                 {
                     request.UserId = result.UserId;
@@ -87,7 +87,7 @@ namespace Phytel.API.AppDomain.NG.Service
             try
             {
                 ObservationsManager om = new ObservationsManager();
-                ValidateTokenResponse result = om.IsUserValidated(request.Version, request.Token, HttpContext.Current.Request);
+                ValidateTokenResponse result = om.IsUserValidated(request.Version, request.Token);
                 if (result.UserId.Trim() != string.Empty)
                 {
                     request.UserId = result.UserId;
@@ -119,7 +119,7 @@ namespace Phytel.API.AppDomain.NG.Service
             try
             {
                 ObservationsManager om = new ObservationsManager();
-                ValidateTokenResponse result = om.IsUserValidated(request.Version, request.Token, HttpContext.Current.Request);
+                ValidateTokenResponse result = om.IsUserValidated(request.Version, request.Token);
                 if (result.UserId.Trim() != string.Empty)
                 {
                     request.UserId = result.UserId;

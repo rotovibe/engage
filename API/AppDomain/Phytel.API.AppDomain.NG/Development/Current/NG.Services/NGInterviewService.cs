@@ -24,7 +24,7 @@ namespace Phytel.API.AppDomain.NG.Service
             {
                 PlanManager intm = new PlanManager();
 
-                ValidateTokenResponse result = intm.IsUserValidated(request.Version, request.Token, HttpContext.Current.Request);
+                ValidateTokenResponse result = intm.IsUserValidated(request.Version, request.Token);
                 if (result.UserId.Trim() != string.Empty)
                 {
                     request.UserId = result.UserId;

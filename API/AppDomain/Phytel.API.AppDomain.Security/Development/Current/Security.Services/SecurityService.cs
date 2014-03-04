@@ -18,18 +18,22 @@ namespace Phytel.API.AppDomain.Security.Service
             AuthenticateResponse response = new AuthenticateResponse();
             try
             {
-                string securityToken = HttpContext.Current.Request.Headers.Get(_phytelSecurityToken);
+                //Generate the new security token because this is a first time authentication request
+
+                //build the token from the user authentication request remote machine for additional security
+                //this will then be passed in from calling domains via the header for validation
+                string securityToken = BuildSecurityToken();
 
                 // validate user against apiuser datastore
                 response = SecurityManager.ValidateCredentials(request.Token, securityToken, request.APIKey, request.Context);
                 return response;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 //TODO: Log this to the SQL database via ASE
                 CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
-            return response;
-        }
+                return response;
+            }
         }
 
         public UserAuthenticateResponse Post(UserAuthenticateRequest request)
@@ -37,7 +41,9 @@ namespace Phytel.API.AppDomain.Security.Service
             UserAuthenticateResponse response = new UserAuthenticateResponse();
             try
             {
-                string securityToken = HttpContext.Current.Request.Headers.Get(_phytelSecurityToken);
+                //build the token from the user authentication request remote machine for additional security
+                //this will then be passed in from calling domains via the header for validation
+                string securityToken = BuildSecurityToken();
 
                 // validate user against apiuser datastore
                 response = SecurityManager.ValidateCredentials(request.UserName, request.Password, securityToken, request.APIKey, request.Context);
@@ -47,8 +53,8 @@ namespace Phytel.API.AppDomain.Security.Service
             {
                 //TODO: Log this to the SQL database via ASE
                 CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
-            return response;
-        }
+                return response;
+            }
         }
 
         public ValidateTokenResponse Post(ValidateTokenRequest request)
@@ -56,6 +62,7 @@ namespace Phytel.API.AppDomain.Security.Service
             ValidateTokenResponse response = new ValidateTokenResponse();
             try
             {
+                //pull token from request coming in to validate token
                 string securityToken = HttpContext.Current.Request.Headers.Get(_phytelSecurityToken);
 
                 // validate user against apiuser datastore
@@ -86,6 +93,26 @@ namespace Phytel.API.AppDomain.Security.Service
                 CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
                 return response;
             }
+        }
+
+        private string BuildSecurityToken()
+        {
+            string securityToken = "Unknown";
+            try
+            {
+#if(DEBUG)
+                securityToken = "Engineer";
+#else
+                securityToken = string.Format("{0}-{1}",
+                    HttpContext.Current.Request.UserAgent,
+                    HttpContext.Current.Request.Params["REMOTE_ADDR"]);
+#endif
+            }
+            catch
+            {
+                securityToken = "Unknown";
+            }
+            return securityToken;
         }
     }
 }
