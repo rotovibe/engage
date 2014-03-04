@@ -14,6 +14,7 @@ using Phytel.API.Common.Audit;
 using System.Collections.Generic;
 using Phytel.API.AppDomain.NG.Observation;
 using System.Web;
+using Phytel.API.DataAudit;
 
 namespace Phytel.API.AppDomain.NG.Service
 {

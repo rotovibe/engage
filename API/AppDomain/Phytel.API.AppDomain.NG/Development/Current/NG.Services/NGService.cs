@@ -10,6 +10,7 @@ using Phytel.API.AppDomain.Security.DTO;
 using ServiceStack.ServiceClient.Web;
 using Phytel.API.Common.Audit;
 using System.Collections.Generic;
+using Phytel.API.DataAudit;
 using System.Web;
 
 namespace Phytel.API.AppDomain.NG.Service

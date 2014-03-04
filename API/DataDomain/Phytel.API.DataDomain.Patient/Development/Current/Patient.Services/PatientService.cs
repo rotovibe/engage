@@ -3,6 +3,8 @@ using Phytel.API.DataDomain.Patient;
 using Phytel.API.DataDomain.Patient.DTO;
 using System;
 using System.Net;
+using Phytel.API.Common.Audit;
+using Phytel.API.DataAudit;
 
 namespace Phytel.API.DataDomain.Patient.Service
 {
@@ -72,6 +74,11 @@ namespace Phytel.API.DataDomain.Patient.Service
                 base.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
                 response.Status = new ServiceStack.ServiceInterface.ServiceModel.ResponseStatus("Exception", ex.Message);
             }
+            finally
+            {
+                AuditHelper.LogAuditData(request.UserId, "Patient", response.Id??string.Empty, Common.DataAuditType.Insert, request.ContractNumber);
+            }
+            
             return response;
         }
 

@@ -219,9 +219,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.PatientObservati
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Phytel.API.DataAudit", "Common\Phytel.API.DataAudit\Development\Current\Phytel.API.DataAudit.csproj", "{AE842695-4DD4-4403-9BE4-8473BCA09580}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DataAudit", "DataAudit", "{AD5FA64E-094E-42F9-9E98-662258CCC25D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataAuditProcessor", "Audit\DataAudit\Development\Current\DataAuditProcessor\DataAuditProcessor.csproj", "{8437F30E-2F49-433D-BD34-8E47DBC8C404}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 85
+		SccNumberOfProjects = 86
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = http://hillstfs2013:8080/tfs/phytel
 		SccLocalPath0 = .
@@ -561,6 +565,10 @@ Global
 		SccProjectTopLevelParentUniqueName84 = API.sln
 		SccProjectName84 = Common/Phytel.API.DataAudit/Development/Current
 		SccLocalPath84 = Common\\Phytel.API.DataAudit\\Development\\Current
+		SccProjectUniqueName85 = Audit\\DataAudit\\Development\\Current\\DataAuditProcessor\\DataAuditProcessor.csproj
+		SccProjectTopLevelParentUniqueName85 = API.sln
+		SccProjectName85 = Audit/DataAudit/Development/Current/DataAuditProcessor
+		SccLocalPath85 = Audit\\DataAudit\\Development\\Current\\DataAuditProcessor
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -901,6 +909,10 @@ Global
 		{AE842695-4DD4-4403-9BE4-8473BCA09580}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AE842695-4DD4-4403-9BE4-8473BCA09580}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AE842695-4DD4-4403-9BE4-8473BCA09580}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8437F30E-2F49-433D-BD34-8E47DBC8C404}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8437F30E-2F49-433D-BD34-8E47DBC8C404}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8437F30E-2F49-433D-BD34-8E47DBC8C404}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8437F30E-2F49-433D-BD34-8E47DBC8C404}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -1006,5 +1018,6 @@ Global
 		{382C9F88-1CFE-4E65-8800-F5038E61D367} = {56E9EF60-63EB-4CED-A8C5-451A2AE238D1}
 		{2520004B-084F-4EB5-B5D7-F64DF9287273} = {56E9EF60-63EB-4CED-A8C5-451A2AE238D1}
 		{06D69E2B-A395-459C-B4D0-FC750018BDD8} = {56E9EF60-63EB-4CED-A8C5-451A2AE238D1}
+		{8437F30E-2F49-433D-BD34-8E47DBC8C404} = {AD5FA64E-094E-42F9-9E98-662258CCC25D}
 	EndGlobalSection
 EndGlobal

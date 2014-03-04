@@ -6,6 +6,7 @@ using Phytel.API.AppDomain.Security.DTO;
 using Phytel.API.Common.Audit;
 using Phytel.API.Common.Format;
 using System.Web;
+using Phytel.API.DataAudit;
 
 namespace Phytel.API.AppDomain.NG.Service
 {
