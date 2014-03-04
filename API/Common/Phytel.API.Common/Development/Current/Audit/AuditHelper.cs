@@ -284,7 +284,7 @@ namespace Phytel.API.DataAudit
             //throw new SystemException("test error in new thread starts");
 
             DataAudit data = GetAuditLog(userId, collectionName, entityId, auditType, contractNumber);
-            AuditDispatcher.WriteAudit(data);
+            AuditDispatcher.WriteAudit(data, string.Format("{0}_{1}", data.Type, data.EntityType));
         }
 
 
