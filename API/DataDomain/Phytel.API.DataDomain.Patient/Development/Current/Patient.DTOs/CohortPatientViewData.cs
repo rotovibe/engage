@@ -14,7 +14,7 @@ namespace Phytel.API.DataDomain.Patient.DTO
     public class SearchFieldData
     {
         public string FieldName { get; set; }
-        public string Value { get; set; }
+        public string? Value { get; set; }
         public bool Active { get; set; }
     }
 }

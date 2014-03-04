@@ -18,7 +18,7 @@ namespace Phytel.API.DataDomain.Patient.DTO
         public string FieldName { get; set; }
 
         [BsonElement(ValueProperty)]
-        public string Value { get; set; }
+        public string? Value { get; set; }
 
         [BsonElement(ActiveProperty)]
         public bool Active { get; set; }

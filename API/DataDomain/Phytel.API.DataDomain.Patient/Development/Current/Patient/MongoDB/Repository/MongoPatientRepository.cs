@@ -80,6 +80,7 @@ namespace Phytel.API.DataDomain.Patient
                         data.Add(new SearchFieldData { Active = true, FieldName = Constants.MN, Value = patient.MiddleName });
                         data.Add(new SearchFieldData { Active = true, FieldName = Constants.SFX, Value = patient.Suffix });
                         data.Add(new SearchFieldData { Active = true, FieldName = Constants.PN, Value = patient.PreferredName });
+                        data.Add(new SearchFieldData { Active = true, FieldName = Constants.PCM }); //value left null on purpose
                         //data.Add(new SearchFieldData {Active = true, FieldName = "SSN", Value = patient.SSN });
 
                         PutCohortPatientViewDataRequest cohortPatientRequest = new PutCohortPatientViewDataRequest
