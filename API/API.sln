@@ -1,6 +1,6 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.21005.1
+VisualStudioVersion = 12.0.30110.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "AppDomain", "AppDomain", "{2E11BED7-15D8-4A76-B289-E9FE4FF9DD72}"
 EndProject
@@ -831,11 +831,7 @@ Global
 		{AFD0F5B1-A29E-402C-958B-D6D82B4278E5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AFD0F5B1-A29E-402C-958B-D6D82B4278E5}.Release|Any CPU.Build.0 = Release|Any CPU
 		{C579A1A4-6614-427A-9AD3-67F7E2A814EC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C579A1A4-6614-427A-9AD3-67F7E2A814EC}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C579A1A4-6614-427A-9AD3-67F7E2A814EC}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
 		{C579A1A4-6614-427A-9AD3-67F7E2A814EC}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C579A1A4-6614-427A-9AD3-67F7E2A814EC}.Release|Any CPU.Build.0 = Release|Any CPU
-		{C579A1A4-6614-427A-9AD3-67F7E2A814EC}.Release|Any CPU.Deploy.0 = Release|Any CPU
 		{A98FFDEB-2A95-457F-AF31-09AC10FF33BB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{A98FFDEB-2A95-457F-AF31-09AC10FF33BB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A98FFDEB-2A95-457F-AF31-09AC10FF33BB}.Release|Any CPU.ActiveCfg = Release|Any CPU

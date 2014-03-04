@@ -14,11 +14,16 @@ namespace Phytel.API.DataDomain.Patient.DTO
         public const string ValueProperty = "val";
         public const string ActiveProperty = "act";
 
+        public SearchField()
+        {
+            Value = null;
+        }
+
         [BsonElement(FieldNameProperty)]
         public string FieldName { get; set; }
 
         [BsonElement(ValueProperty)]
-        public string? Value { get; set; }
+        public string Value { get; set; }
 
         [BsonElement(ActiveProperty)]
         public bool Active { get; set; }
