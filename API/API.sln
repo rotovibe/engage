@@ -29,6 +29,11 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppDomain.NG.Test", "AppDomain\Phytel.API.AppDomain.NG\Development\Current\AppDomain.NG.Tests\AppDomain.NG.Test.csproj", "{1FCB66F1-56D2-430B-85A7-0D1C26A30FA8}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppDomain.NG", "AppDomain\Phytel.API.AppDomain.NG\Development\Current\NG\AppDomain.NG.csproj", "{E368DA81-D304-4556-B1C4-D4774C0DEFD2}"
+	ProjectSection(ProjectDependencies) = postProject
+		{71E4BD1E-0FDF-4B80-8322-4C38B8BB671C} = {71E4BD1E-0FDF-4B80-8322-4C38B8BB671C}
+		{06D69E2B-A395-459C-B4D0-FC750018BDD8} = {06D69E2B-A395-459C-B4D0-FC750018BDD8}
+		{6862B598-6967-430D-803A-BBE00FE98050} = {6862B598-6967-430D-803A-BBE00FE98050}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppDomain.NG.DTO", "AppDomain\Phytel.API.AppDomain.NG\Development\Current\NG.DTOs\AppDomain.NG.DTO.csproj", "{E9957107-8F2A-4946-834E-629D4235B9B3}"
 EndProject

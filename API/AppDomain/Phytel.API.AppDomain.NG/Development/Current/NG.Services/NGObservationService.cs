@@ -13,6 +13,7 @@ using System.Linq;
 using Phytel.API.Common.Audit;
 using System.Collections.Generic;
 using Phytel.API.AppDomain.NG.Observation;
+using System.Web;
 
 namespace Phytel.API.AppDomain.NG.Service
 {
@@ -24,7 +25,7 @@ namespace Phytel.API.AppDomain.NG.Service
             try
             {
                 ObservationsManager om = new ObservationsManager();
-                ValidateTokenResponse result = om.IsUserValidated(request.Version, request.Token);
+                ValidateTokenResponse result = om.IsUserValidated(request.Version, request.Token, HttpContext.Current.Request);
                 if (result.UserId.Trim() != string.Empty)
                 {
                     request.UserId = result.UserId;
@@ -56,7 +57,7 @@ namespace Phytel.API.AppDomain.NG.Service
             try
             {
                 ObservationsManager om = new ObservationsManager();
-                ValidateTokenResponse result = om.IsUserValidated(request.Version, request.Token);
+                ValidateTokenResponse result = om.IsUserValidated(request.Version, request.Token, HttpContext.Current.Request);
                 if (result.UserId.Trim() != string.Empty)
                 {
                     request.UserId = result.UserId;
@@ -85,7 +86,7 @@ namespace Phytel.API.AppDomain.NG.Service
             try
             {
                 ObservationsManager om = new ObservationsManager();
-                ValidateTokenResponse result = om.IsUserValidated(request.Version, request.Token);
+                ValidateTokenResponse result = om.IsUserValidated(request.Version, request.Token, HttpContext.Current.Request);
                 if (result.UserId.Trim() != string.Empty)
                 {
                     request.UserId = result.UserId;
@@ -117,7 +118,7 @@ namespace Phytel.API.AppDomain.NG.Service
             try
             {
                 ObservationsManager om = new ObservationsManager();
-                ValidateTokenResponse result = om.IsUserValidated(request.Version, request.Token);
+                ValidateTokenResponse result = om.IsUserValidated(request.Version, request.Token, HttpContext.Current.Request);
                 if (result.UserId.Trim() != string.Empty)
                 {
                     request.UserId = result.UserId;

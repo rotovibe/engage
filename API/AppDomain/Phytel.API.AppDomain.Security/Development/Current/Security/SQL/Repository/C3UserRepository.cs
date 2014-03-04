@@ -58,7 +58,7 @@ namespace Phytel.API.AppDomain.Security
             throw new NotImplementedException();
         }
 
-        public DTO.AuthenticateResponse LoginUser(string token)
+        public DTO.AuthenticateResponse LoginUser(string token, string securityToken)
         {
             try
             {
@@ -111,22 +111,22 @@ namespace Phytel.API.AppDomain.Security
             }
         }
 
-        public DTO.AuthenticateResponse LoginUser(AuthenticateResponse existingReponse, string apiKey, string productName)
+        public DTO.AuthenticateResponse LoginUser(AuthenticateResponse existingReponse, string securityToken, string apiKey, string productName)
         {
             throw new NotImplementedException();
         }
 
-        public DTO.UserAuthenticateResponse LoginUser(string userName, string password, string apiKey, string productName)
+        public DTO.UserAuthenticateResponse LoginUser(string userName, string password, string securityToken, string apiKey, string productName)
         {
             throw new NotImplementedException();
         }
 
-        public DTO.ValidateTokenResponse Validate(string token, string productName)
+        public DTO.ValidateTokenResponse Validate(string token, string securityToken, string productName)
         {
             throw new NotImplementedException();
         }
 
-        public DTO.LogoutResponse Logout(string token, string productName)
+        public DTO.LogoutResponse Logout(string token, string securityToken, string productName)
         {
             throw new NotImplementedException();
         }

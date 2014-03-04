@@ -5,18 +5,23 @@ using ServiceStack.ServiceHost;
 using ServiceStack.ServiceInterface.ServiceModel;
 using System;
 using System.Net;
+using System.Web;
 
 namespace Phytel.API.AppDomain.Security.Service
 {
     public class SecurityService : ServiceStack.ServiceInterface.Service
     {
+        private const string _phytelSecurityToken = "x-Phytel-Security";
+
         public AuthenticateResponse Post(AuthenticateRequest request)
         {
             AuthenticateResponse response = new AuthenticateResponse();
             try
             {
+                string securityToken = HttpContext.Current.Request.Headers.Get(_phytelSecurityToken);
+
                 // validate user against apiuser datastore
-                response = SecurityManager.ValidateCredentials(request.Token, request.APIKey, request.Context);
+                response = SecurityManager.ValidateCredentials(request.Token, securityToken, request.APIKey, request.Context);
                 return response;
             }
             catch(Exception ex)
@@ -32,8 +37,10 @@ namespace Phytel.API.AppDomain.Security.Service
             UserAuthenticateResponse response = new UserAuthenticateResponse();
             try
             {
+                string securityToken = HttpContext.Current.Request.Headers.Get(_phytelSecurityToken);
+
                 // validate user against apiuser datastore
-                response = SecurityManager.ValidateCredentials(request.UserName, request.Password, request.APIKey, request.Context);
+                response = SecurityManager.ValidateCredentials(request.UserName, request.Password, securityToken, request.APIKey, request.Context);
                 return response;
             }
             catch (Exception ex)
@@ -49,8 +56,10 @@ namespace Phytel.API.AppDomain.Security.Service
             ValidateTokenResponse response = new ValidateTokenResponse();
             try
             {
+                string securityToken = HttpContext.Current.Request.Headers.Get(_phytelSecurityToken);
+
                 // validate user against apiuser datastore
-                response = SecurityManager.ValidateToken(request);
+                response = SecurityManager.ValidateToken(request, securityToken);
                 return response;
             }
             catch (Exception ex)
@@ -66,7 +75,9 @@ namespace Phytel.API.AppDomain.Security.Service
             LogoutResponse response = new LogoutResponse();
             try
             {
-                response = SecurityManager.Logout(request);
+                string securityToken = HttpContext.Current.Request.Headers.Get(_phytelSecurityToken);
+
+                response = SecurityManager.Logout(request, securityToken);
                 return response;
             }
             catch (Exception ex)

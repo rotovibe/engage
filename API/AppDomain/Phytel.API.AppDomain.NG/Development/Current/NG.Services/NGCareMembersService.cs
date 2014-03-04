@@ -5,6 +5,7 @@ using Phytel.API.AppDomain.NG.DTO;
 using Phytel.API.AppDomain.Security.DTO;
 using Phytel.API.Common.Audit;
 using Phytel.API.Common.Format;
+using System.Web;
 
 namespace Phytel.API.AppDomain.NG.Service
 {
@@ -17,7 +18,7 @@ namespace Phytel.API.AppDomain.NG.Service
             {
                 CareMembersManager ngm = new CareMembersManager();
 
-                ValidateTokenResponse result = ngm.IsUserValidated(request.Version, request.Token);
+                ValidateTokenResponse result = ngm.IsUserValidated(request.Version, request.Token, HttpContext.Current.Request);
                 if (result.UserId.Trim() != string.Empty)
                 {
                     request.UserId = result.UserId;
@@ -45,7 +46,7 @@ namespace Phytel.API.AppDomain.NG.Service
             {
                 CareMembersManager ngm = new CareMembersManager();
 
-                ValidateTokenResponse result = ngm.IsUserValidated(request.Version, request.Token);
+                ValidateTokenResponse result = ngm.IsUserValidated(request.Version, request.Token, HttpContext.Current.Request);
                 if (result.UserId.Trim() != string.Empty)
                 {
                     request.UserId = result.UserId;
@@ -72,7 +73,7 @@ namespace Phytel.API.AppDomain.NG.Service
             try
             {
                 CareMembersManager nManager = new CareMembersManager();
-                ValidateTokenResponse result = nManager.IsUserValidated(request.Version, request.Token);
+                ValidateTokenResponse result = nManager.IsUserValidated(request.Version, request.Token, HttpContext.Current.Request);
                 if (result.UserId.Trim() != string.Empty)
                 {
                     request.UserId = result.UserId;
@@ -97,7 +98,7 @@ namespace Phytel.API.AppDomain.NG.Service
             try
             {
                 CareMembersManager nManager = new CareMembersManager();
-                ValidateTokenResponse result = nManager.IsUserValidated(request.Version, request.Token);
+                ValidateTokenResponse result = nManager.IsUserValidated(request.Version, request.Token, HttpContext.Current.Request);
                 if (result.UserId.Trim() != string.Empty)
                 {
                     request.UserId = result.UserId;

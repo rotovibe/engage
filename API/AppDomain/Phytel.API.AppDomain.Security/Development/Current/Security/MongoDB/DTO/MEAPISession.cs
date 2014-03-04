@@ -7,12 +7,14 @@ using System.Collections.Generic;
 namespace Phytel.API.AppDomain.Security
 {
     [BsonIgnoreExtraElements(false)]
+    [MongoIndex(Keys = new string[] { IdProperty, SecurityTokenProperty, ProductProperty }, Unique = true)]
     [MongoIndex(Keys = new string[] { SessionTimeOutProperty }, TimeToLive = 0)]
     public class MEAPISession : IMongoEntity<ObjectId>
     {
         public MEAPISession() { Id = ObjectId.GenerateNewId(); }
 
         public const string IdProperty = "_id";
+        public const string SecurityTokenProperty = "stkn";
         public const string UserNameProperty = "un";
         public const string UserIDProperty = "uid";
         public const string ProductProperty = "prd";
@@ -24,6 +26,10 @@ namespace Phytel.API.AppDomain.Security
 
         [BsonId]
         public ObjectId Id { get; set; } // token
+
+        [BsonElement(SecurityTokenProperty)]
+        [BsonIgnoreIfNull(true)]
+        public string SecurityToken { get; set; }
 
         [BsonElement(UserNameProperty)]
         [BsonIgnoreIfNull(true)]

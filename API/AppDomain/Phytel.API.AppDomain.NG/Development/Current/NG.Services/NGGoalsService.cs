@@ -12,6 +12,7 @@ using System.Text;
 using System.Linq;
 using Phytel.API.Common.Audit;
 using System.Collections.Generic;
+using System.Web;
 
 namespace Phytel.API.AppDomain.NG.Service
 {
@@ -23,7 +24,7 @@ namespace Phytel.API.AppDomain.NG.Service
             try
             {
                 GoalsManager gm = new GoalsManager();
-                ValidateTokenResponse result = gm.IsUserValidated(request.Version, request.Token);
+                ValidateTokenResponse result = gm.IsUserValidated(request.Version, request.Token, HttpContext.Current.Request);
                 if (result.UserId.Trim() != string.Empty)
                 {
                     request.UserId = result.UserId;
@@ -61,7 +62,7 @@ namespace Phytel.API.AppDomain.NG.Service
             try
             {
                 GoalsManager gm = new GoalsManager();
-                ValidateTokenResponse result = gm.IsUserValidated(request.Version, request.Token);
+                ValidateTokenResponse result = gm.IsUserValidated(request.Version, request.Token, HttpContext.Current.Request);
                 if (result.UserId.Trim() != string.Empty)
                 {
                     request.UserId = result.UserId;
@@ -94,7 +95,7 @@ namespace Phytel.API.AppDomain.NG.Service
             try
             {
                 GoalsManager gm = new GoalsManager();
-                ValidateTokenResponse result = gm.IsUserValidated(request.Version, request.Token);
+                ValidateTokenResponse result = gm.IsUserValidated(request.Version, request.Token, HttpContext.Current.Request);
                 if (result.UserId.Trim() != string.Empty)
                 {
                     request.UserId = result.UserId;
@@ -123,7 +124,7 @@ namespace Phytel.API.AppDomain.NG.Service
             try
             {
                 GoalsManager gm = new GoalsManager();
-                ValidateTokenResponse result = gm.IsUserValidated(request.Version, request.Token);
+                ValidateTokenResponse result = gm.IsUserValidated(request.Version, request.Token, HttpContext.Current.Request);
                 if (result.UserId.Trim() != string.Empty)
                 {
                     request.UserId = result.UserId;
@@ -152,7 +153,7 @@ namespace Phytel.API.AppDomain.NG.Service
             try
             {
                 GoalsManager gm = new GoalsManager();
-                ValidateTokenResponse result = gm.IsUserValidated(request.Version, request.Token);
+                ValidateTokenResponse result = gm.IsUserValidated(request.Version, request.Token, HttpContext.Current.Request);
                 if (result.UserId.Trim() != string.Empty)
                 {
                     request.UserId = result.UserId;
@@ -191,7 +192,7 @@ namespace Phytel.API.AppDomain.NG.Service
             try
             {
                 GoalsManager gm = new GoalsManager();
-                ValidateTokenResponse result = gm.IsUserValidated(request.Version, request.Token);
+                ValidateTokenResponse result = gm.IsUserValidated(request.Version, request.Token, HttpContext.Current.Request);
                 if (result.UserId.Trim() != string.Empty)
                 {
                     request.UserId = result.UserId;
@@ -230,7 +231,7 @@ namespace Phytel.API.AppDomain.NG.Service
             try
             {
                 GoalsManager gm = new GoalsManager();
-                ValidateTokenResponse result = gm.IsUserValidated(request.Version, request.Token);
+                ValidateTokenResponse result = gm.IsUserValidated(request.Version, request.Token, HttpContext.Current.Request);
                 if (result.UserId.Trim() != string.Empty)
                 {
                     request.UserId = result.UserId;
@@ -259,7 +260,7 @@ namespace Phytel.API.AppDomain.NG.Service
             try
             {
                 GoalsManager gm = new GoalsManager();
-                ValidateTokenResponse result = gm.IsUserValidated(request.Version, request.Token);
+                ValidateTokenResponse result = gm.IsUserValidated(request.Version, request.Token, HttpContext.Current.Request);
                 if (result.UserId.Trim() != string.Empty)
                 {
                     request.UserId = result.UserId;
