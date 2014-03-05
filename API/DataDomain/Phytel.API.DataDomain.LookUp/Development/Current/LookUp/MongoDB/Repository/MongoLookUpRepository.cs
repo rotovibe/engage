@@ -81,6 +81,10 @@ namespace Phytel.API.DataDomain.LookUp
             {
                 MongoDB.Bson.Serialization.BsonClassMap.RegisterClassMap<CareMemberType>();
             }
+            if (MongoDB.Bson.Serialization.BsonClassMap.IsClassMapRegistered(typeof(CodingSystem)) == false)
+            {
+                MongoDB.Bson.Serialization.BsonClassMap.RegisterClassMap<CodingSystem>();
+            }
             #endregion
         }
 
