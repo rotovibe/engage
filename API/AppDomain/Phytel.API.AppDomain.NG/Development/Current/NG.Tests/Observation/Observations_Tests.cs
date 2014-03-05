@@ -112,16 +112,16 @@ namespace Phytel.API.DataDomain.Patient.Service.Test
             List<ObservationValue> ov = new List<ObservationValue>();
             ov.Add(new ObservationValue
             {
-                Id = "531746b8fe7a591ef85c3786",
+                Id = "531762a1fe7a59042c3c3274",
                 Text = "Diastolic blood pressure",
-                Value = "60.4"
+                Value = "99.9"
             });
 
             ov.Add(new ObservationValue
             {
-                Id = "531746b8fe7a591ef85c3789",
+                Id = "531762a2fe7a59042c3c3278",
                 Text = "Systolic blood pressure",
-                Value = "117.1"
+                Value = "999.9"
             });
 
             return ov;
@@ -132,9 +132,9 @@ namespace Phytel.API.DataDomain.Patient.Service.Test
             List<ObservationValue> ov = new List<ObservationValue>();
             ov.Add(new ObservationValue
             {
-                Id = "531746b7fe7a591ef85c377a",
+                Id = "5317629bfe7a59042c3c3267",
                 Text = "Body height",
-                Value = "71.1"
+                Value = "99.9"
             });
 
             return ov;
