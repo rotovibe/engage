@@ -99,10 +99,10 @@ namespace Phytel.API.DataDomain.PatientGoal
                         {
                             Id = mePG.Id.ToString(),
                             PatientId = mePG.PatientId.ToString(),
-                            FocusAreaIds = Helper.ConvertToStringList(mePG.FocusAreas),
+                            FocusAreaIds = Helper.ConvertToStringList(mePG.FocusAreaIds),
                             Name = mePG.Name,
-                            SourceId = (mePG.Source == null) ? null : mePG.Source.ToString(),
-                            ProgramIds = Helper.ConvertToStringList(mePG.Programs),
+                            SourceId = (mePG.SourceId == null) ? null : mePG.SourceId.ToString(),
+                            ProgramIds = Helper.ConvertToStringList(mePG.ProgramIds),
                             TypeId =((int)mePG.Type),
                             StatusId = ((int)mePG.Status),
                             StartDate = mePG.StartDate,
@@ -243,7 +243,7 @@ namespace Phytel.API.DataDomain.PatientGoal
                             {
                                 Id = b.Id.ToString(),
                                 PatientId = b.PatientId.ToString(),
-                                FocusAreaIds = Helper.ConvertToStringList(b.FocusAreas),
+                                FocusAreaIds = Helper.ConvertToStringList(b.FocusAreaIds),
                                 Name = b.Name,
                                 StatusId = ((int)b.Status)
 

@@ -217,9 +217,9 @@ namespace Phytel.API.DataDomain.PatientGoal
                                 Id = b.Id.ToString(),
                                 Description = b.Description,
                                 PatientGoalId = b.PatientGoalId.ToString(),
-                                CategoryId = b.Category == null ? null : b.Category.ToString(),
-                                AssignedToId = b.AssignedTo == null ? null : b.AssignedTo.ToString(),
-                                Barriers = Helper.ConvertToStringList(b.Barriers),
+                                CategoryId = b.CategoryId == null ? null : b.CategoryId.ToString(),
+                                AssignedToId = b.AssignedToId == null ? null : b.AssignedToId.ToString(),
+                                Barriers = Helper.ConvertToStringList(b.BarrierIds),
                                 StatusId = ((int)b.Status),
                                 StatusDate = b.StatusDate,
                                 StartDate = b.StartDate,
@@ -255,7 +255,7 @@ namespace Phytel.API.DataDomain.PatientGoal
                             PatientInterventionData interventionData = new PatientInterventionData
                             {
                                 Id = b.Id.ToString(),
-                                 AssignedToId = b.AssignedTo != null ? b.AssignedTo.ToString(): null
+                                 AssignedToId = b.AssignedToId != null ? b.AssignedToId.ToString(): null
                                  // need to implement all the values needed!
                             };
                             interventionsDataList.Add(interventionData);

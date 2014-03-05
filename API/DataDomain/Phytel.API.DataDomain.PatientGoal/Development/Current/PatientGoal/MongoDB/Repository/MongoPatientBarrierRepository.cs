@@ -214,7 +214,7 @@ namespace Phytel.API.DataDomain.PatientGoal
                                 Id = b.Id.ToString(),
                                 Name = b.Name,
                                 PatientGoalId = b.PatientGoalId.ToString(),
-                                CategoryId = b.Category == null ? null : b.Category.ToString(),
+                                CategoryId = b.CategoryId == null ? null : b.CategoryId.ToString(),
                                 StatusId = ((int)b.Status),
                                 StatusDate = b.StatusDate
                             };

@@ -39,7 +39,7 @@ namespace Phytel.API.DataDomain.PatientGoal.DTO
         
         [BsonElement(CategoryProperty)]
         [BsonIgnoreIfNull(true)]
-        public ObjectId? Category { get; set; }
+        public ObjectId? CategoryId { get; set; }
 
         [BsonElement(StatusProperty)]
         [BsonIgnoreIfNull(true)]
