@@ -7,8 +7,8 @@
     <ProjectGuid>{8437F30E-2F49-433D-BD34-8E47DBC8C404}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>DataAuditProcessor</RootNamespace>
-    <AssemblyName>DataAuditProcessor</AssemblyName>
+    <RootNamespace>Phytel.API.DataAuditProcessor</RootNamespace>
+    <AssemblyName>Phytel.API.DataAuditProcessor</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SccProjectName>SAK</SccProjectName>
@@ -34,6 +34,15 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="ASECore">
+      <HintPath>..\..\..\..\..\..\..\Shared\ReferenceBin\ASE\2.2.4.2\ASECore.dll</HintPath>
+    </Reference>
+    <Reference Include="ASEData">
+      <HintPath>..\..\..\..\..\..\..\Shared\ReferenceBin\ASE\2.2.4.2\ASEData.dll</HintPath>
+    </Reference>
+    <Reference Include="PhytelServices">
+      <HintPath>..\..\..\..\..\..\..\Shared\ReferenceBin\ASE\2.2.4.2\PhytelServices.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -43,7 +52,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DataAuditProcessor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\..\Common\Phytel.API.DataAudit\Development\Current\Phytel.API.DataAudit.csproj">
+      <Project>{ae842695-4dd4-4403-9be4-8473bca09580}</Project>
+      <Name>Phytel.API.DataAudit</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
