@@ -22,7 +22,8 @@ namespace Phytel.API.AppDomain.NG.Test
                 ContractNumber = contractNumber,
                 Token = token,
                 Version = version,
-                PatientID = "52e26f11072ef7191c111caf"
+                PatientID = "52f55899072ef709f84e7637",
+                UserId = "bb241c64-a0ff-4e01-ba5f-4246ef50780e"
             };
             // Act
             GetPatientResponse response = ngManager.GetPatient(request);

@@ -149,7 +149,7 @@ namespace Phytel.API.DataDomain.Patient
             return patient;
         }
 
-        public object FindByID(string entityId, string userId)
+        public object FindByID(string entityId, string contactId)
         {
             DTO.PatientData patient = null;
             using (PatientMongoContext ctx = new PatientMongoContext(_dbName))
@@ -168,18 +168,18 @@ namespace Phytel.API.DataDomain.Patient
                                Suffix = p.Suffix,
                                PriorityData = (DTO.PriorityData)((int)p.Priority),
                                DisplayPatientSystemID = p.DisplayPatientSystemID.ToString(),
-                               Flagged = GetFlaggedStatus(entityId, userId)
+                               Flagged = GetFlaggedStatus(entityId, contactId)
                            }).FirstOrDefault();
             }
             return patient;
         }
 
-        private bool GetFlaggedStatus(string entityId, string userId)
+        private bool GetFlaggedStatus(string patientId, string contactId)
         {
             bool result = false;
             using (PatientMongoContext ctx = new PatientMongoContext(_dbName))
             {
-                var patientUsr = FindPatientUser(entityId, userId, ctx);
+                var patientUsr = FindPatientUser(patientId, contactId, ctx);
 
                 if (patientUsr != null)
                 {
@@ -189,11 +189,11 @@ namespace Phytel.API.DataDomain.Patient
             return result;
         }
 
-        private static MEPatientUser FindPatientUser(string entityId, string userId, PatientMongoContext ctx)
+        private static MEPatientUser FindPatientUser(string patientId, string contactId, PatientMongoContext ctx)
         {
             var findQ = MB.Query.And(
-                MB.Query<MEPatientUser>.EQ(b => b.PatientId, ObjectId.Parse(entityId)),
-                MB.Query<MEPatientUser>.EQ(b => b.UserId, userId)
+                MB.Query<MEPatientUser>.EQ(b => b.PatientId, ObjectId.Parse(patientId)),
+                MB.Query<MEPatientUser>.EQ(b => b.ContactId, ObjectId.Parse(contactId))
             );
 
             var patientUsr = ctx.PatientUsers.Collection.Find(findQ).FirstOrDefault();
@@ -426,26 +426,26 @@ namespace Phytel.API.DataDomain.Patient
         public PutPatientFlaggedResponse UpdateFlagged(PutPatientFlaggedRequest request)
         {
             PutPatientFlaggedResponse response = new PutPatientFlaggedResponse();
+            response.Success = false;
             try
             {
                 using (PatientMongoContext ctx = new PatientMongoContext(_dbName))
                 {
 
-                    var patientUsr = FindPatientUser(request.PatientId, request.UserId, ctx);
+                    var patientUsr = FindPatientUser(request.PatientId, request.ContactId, ctx);
 
                     if (patientUsr == null)
                     {
                         ctx.PatientUsers.Collection.Insert(new MEPatientUser
                         {
                             PatientId = ObjectId.Parse(request.PatientId),
-                            UserId = request.UserId,
+                            ContactId = ObjectId.Parse(request.ContactId),
                             Flagged = Convert.ToBoolean(request.Flagged),
                             Version = "v1",
                             LastUpdatedOn = System.DateTime.UtcNow,
                             DeleteFlag = false,
                             UpdatedBy = request.UserId
                         });
-                        response.flagged = Convert.ToBoolean(request.Flagged);
                     }
                     else
                     {
@@ -455,8 +455,8 @@ namespace Phytel.API.DataDomain.Patient
                         MB.UpdateBuilder updt = new MB.UpdateBuilder().Set(MEPatientUser.FlaggedProperty, Convert.ToBoolean(request.Flagged))
                             .Set(MEPatientUser.UpdatedByProperty, request.UserId);
                         var pt = ctx.PatientUsers.Collection.FindAndModify(pUQuery, sortBy, updt, true);
-                        response.flagged = Convert.ToBoolean(request.Flagged);
                     }
+                    response.Success = true;
                 }
                 return response;
             }

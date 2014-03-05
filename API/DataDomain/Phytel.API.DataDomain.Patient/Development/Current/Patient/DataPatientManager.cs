@@ -78,7 +78,7 @@ namespace Phytel.API.DataDomain.Patient
                 GetPatientDataResponse result = new GetPatientDataResponse();
 
                 IPatientRepository<GetPatientDataResponse> repo = PatientRepositoryFactory<GetPatientDataResponse>.GetPatientRepository(request.ContractNumber, request.Context);
-                result.Patient = repo.FindByID(request.PatientID, request.UserId) as DTO.PatientData;
+                result.Patient = repo.FindByID(request.PatientID, request.ContactId) as DTO.PatientData;
 
                 return (result != null ? result : new GetPatientDataResponse());
             }
