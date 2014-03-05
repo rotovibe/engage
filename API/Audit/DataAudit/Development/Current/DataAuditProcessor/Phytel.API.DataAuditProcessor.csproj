@@ -34,16 +34,32 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="ASECore">
-      <HintPath>..\..\..\..\..\..\..\Shared\ReferenceBin\ASE\2.2.4.2\ASECore.dll</HintPath>
+    <Reference Include="ASECore, Version=2.2.4.2, Culture=neutral, PublicKeyToken=2125ac4128f3087b, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\References\ASECore.dll</HintPath>
     </Reference>
-    <Reference Include="ASEData">
-      <HintPath>..\..\..\..\..\..\..\Shared\ReferenceBin\ASE\2.2.4.2\ASEData.dll</HintPath>
+    <Reference Include="ASEData, Version=2.2.4.2, Culture=neutral, PublicKeyToken=2125ac4128f3087b, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\References\ASEData.dll</HintPath>
     </Reference>
-    <Reference Include="PhytelServices">
-      <HintPath>..\..\..\..\..\..\..\Shared\ReferenceBin\ASE\2.2.4.2\PhytelServices.dll</HintPath>
+    <Reference Include="MongoDB.Bson, Version=1.8.1.20, Culture=neutral, PublicKeyToken=f686731cfb9cc103, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\References\MongoDB.Bson.dll</HintPath>
+    </Reference>
+    <Reference Include="MongoDB.Driver, Version=1.8.1.20, Culture=neutral, PublicKeyToken=f686731cfb9cc103, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\References\MongoDB.Driver.dll</HintPath>
+    </Reference>
+    <Reference Include="Phytel.Mongo, Version=1.2.2.0, Culture=neutral, PublicKeyToken=2125ac4128f3087b, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\References\Phytel.Mongo.dll</HintPath>
+    </Reference>
+    <Reference Include="PhytelServices, Version=1.2.2.0, Culture=neutral, PublicKeyToken=2125ac4128f3087b, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\References\PhytelServices.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -52,6 +68,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DataAuditMongoContext.cs" />
     <Compile Include="DataAuditProcessor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

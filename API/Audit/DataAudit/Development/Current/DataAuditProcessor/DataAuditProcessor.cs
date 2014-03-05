@@ -6,14 +6,18 @@ using System.Threading.Tasks;
 using System.Xml;
 using Phytel.Framework.ASE.Process;
 using Phytel.API.DataAudit;
+using Phytel.Mongo.Linq;
+using System.Configuration;
+using MongoDB.Driver;
 
 namespace Phytel.API.DataAuditProcessor
 {
     public class DataAuditProcessor: QueueProcessBase
     {
         private XmlDocument _bodyDom = null;
-        string _DBConnName;
-        //MongoContext
+
+        string _DBConnName = "";
+        string _dbName = "";
 
         string _xpath = "//DataAudit/{0}";
 
@@ -27,17 +31,14 @@ namespace Phytel.API.DataAuditProcessor
         string _entity;
         DateTime _timestamp = DateTime.Now;
 
-        public DataAuditProcessor()
-        {
-
-        }
-
+        
         public override void Execute(QueueMessage queueMessage)
         {
             _bodyDom = new XmlDocument();
             _bodyDom.LoadXml(queueMessage.Body);
 
             _DBConnName = _bodyDom.SelectSingleNode("//Phytel.ASE.Process/ProcessConfiguration/PhytelServicesConnName").InnerText;
+            _dbName = "Inhealth001_audit";  //derive this from the _dbconnname
 
             SetupBaseProperties();
             WriteAuditLog();
@@ -45,16 +46,30 @@ namespace Phytel.API.DataAuditProcessor
 
         private void WriteAuditLog()
         {
-            DataAudit.DataAudit da = new DataAudit.DataAudit
+            try
             {
-                EntityID = _entityid,
-                UserId = _userid,
-                Contract = _contractnumber,
-                EntityType = _entitytype,
-                TimeStamp = _timestamp,
-                Type = _type,
-                Entity = _entity
-            };
+                DataAudit.DataAudit da = new DataAudit.DataAudit
+                {
+                    EntityID = _entityid,
+                    UserId = _userid,
+                    Contract = _contractnumber,
+                    EntityType = _entitytype,
+                    TimeStamp = _timestamp,
+                    Type = _type,
+                    Entity = _entity
+                };
+
+                MongoDatabase db = Phytel.Services.MongoService.Instance.GetDatabase(_DBConnName, da.Contract, true, "Audit");
+                db.GetCollection(da.Type).Insert(da);
+
+            }
+            catch (Exception ex)
+            {
+                
+                throw;
+            }
+
+            
 
 
         }
