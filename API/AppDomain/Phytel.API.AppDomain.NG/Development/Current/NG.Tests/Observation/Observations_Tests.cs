@@ -16,8 +16,8 @@ namespace Phytel.API.DataDomain.Patient.Service.Test
             string contractNumber = "InHealth001";
             string context = "NG";
             string version = "v1";
-            string token = "53079028d2d8e91748f416cc";
-            string patientId = "52f558a3072ef709f84e79dc";
+            string token = "5317440bd6a4850c20c998a2";
+            string patientId = "52f5586e072ef709f84e65fd";
             string typeId = "53067453fe7a591a348e1b66";
             IRestClient client = new JsonServiceClient();
 
@@ -44,8 +44,8 @@ namespace Phytel.API.DataDomain.Patient.Service.Test
             string contractNumber = "InHealth001";
             string context = "NG";
             string version = "v1";
-            string token = "53079028d2d8e91748f416cc";
-            string patientId = "52f558a3072ef709f84e79dc";
+            string token = "5317440bd6a4850c20c998a2";
+            string patientId = "52f5586e072ef709f84e65fd";
             IRestClient client = new JsonServiceClient();
 
             PostUpdateObservationItemsResponse response = client.Post<PostUpdateObservationItemsResponse>(
@@ -112,16 +112,16 @@ namespace Phytel.API.DataDomain.Patient.Service.Test
             List<ObservationValue> ov = new List<ObservationValue>();
             ov.Add(new ObservationValue
             {
-                Id = "5310fa18fe7a592650d037b0",
+                Id = "531746b8fe7a591ef85c3786",
                 Text = "Diastolic blood pressure",
-                Value = "60"
+                Value = "60.4"
             });
 
             ov.Add(new ObservationValue
             {
-                Id = "5310fa18fe7a592650d037b3",
+                Id = "531746b8fe7a591ef85c3789",
                 Text = "Systolic blood pressure",
-                Value = "117"
+                Value = "117.1"
             });
 
             return ov;
@@ -132,9 +132,9 @@ namespace Phytel.API.DataDomain.Patient.Service.Test
             List<ObservationValue> ov = new List<ObservationValue>();
             ov.Add(new ObservationValue
             {
-                Id = "5310fa17fe7a592650d037a4",
+                Id = "531746b7fe7a591ef85c377a",
                 Text = "Body height",
-                Value = "71"
+                Value = "71.1"
             });
 
             return ov;

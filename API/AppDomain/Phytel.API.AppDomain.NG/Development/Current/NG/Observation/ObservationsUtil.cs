@@ -136,10 +136,10 @@ namespace Phytel.API.AppDomain.NG
                     Source = "CM"
                 };
 
-                float fVal = 0;
-                if (float.TryParse(ov.Value, NumberStyles.Float, CultureInfo.InvariantCulture, out fVal))
+                double dVal = 0;
+                if (double.TryParse(ov.Value, out dVal))
                 {
-                    pord.Value = fVal;
+                    pord.Value = dVal;
                 }
                 else
                 {

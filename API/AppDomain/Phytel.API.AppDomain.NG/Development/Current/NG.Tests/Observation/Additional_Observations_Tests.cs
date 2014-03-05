@@ -16,10 +16,10 @@ namespace Phytel.API.DataDomain.Patient.Service.Test
             string contractNumber = "InHealth001";
             string context = "NG";
             string version = "v1";
-            string token = "53079028d2d8e91748f416cc";
-            string patientId = "52f558a3072ef709f84e79dc";
+            string token = "5317440bd6a4850c20c998a2";
+            string patientId = "52f5586e072ef709f84e65fd";
             string typeId = "53067453fe7a591a348e1b66";
-            string observationId = "530c275bfe7a592f64473e3e";
+            string observationId = "530c275bfe7a592f64473e3e"; //Respiratory rate
             IRestClient client = new JsonServiceClient();
 
             GetAdditionalObservationItemResponse response = client.Get<GetAdditionalObservationItemResponse>(
@@ -37,8 +37,8 @@ namespace Phytel.API.DataDomain.Patient.Service.Test
             string contractNumber = "InHealth001";
             string context = "NG";
             string version = "v1";
-            string token = "53079028d2d8e91748f416cc";
-            string patientId = "52f558a3072ef709f84e79dc";
+            string token = "5317440bd6a4850c20c998a2";
+            string patientId = "52f5586e072ef709f84e65fd";
             string typeId = "53067453fe7a591a348e1b66";
             string observationId = "530c26fcfe7a592f64473e37"; // diastolic BP
             IRestClient client = new JsonServiceClient();
@@ -58,8 +58,8 @@ namespace Phytel.API.DataDomain.Patient.Service.Test
             string contractNumber = "InHealth001";
             string context = "NG";
             string version = "v1";
-            string token = "53079028d2d8e91748f416cc";
-            string patientId = "52f558a3072ef709f84e79dc";
+            string token = "5317440bd6a4850c20c998a2";
+            string patientId = "52f5586e072ef709f84e65fd";
             string typeId = "53067453fe7a591a348e1b66";
             string observationId = "530c270afe7a592f64473e38"; // diastolic BP
             IRestClient client = new JsonServiceClient();

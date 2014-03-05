@@ -73,7 +73,7 @@ namespace Phytel.API.AppDomain.NG.Observation
             }
         }
 
-        internal static bool UpdatePatientObservation(PostUpdateObservationItemsRequest request, PatientObservationRecordData pord, List<string> observationIds)
+        internal static bool UpdatePatientObservation(PostUpdateObservationItemsRequest request, PatientObservationRecordData pord)
         {
             bool result = false;
             try
@@ -88,8 +88,7 @@ namespace Phytel.API.AppDomain.NG.Observation
                     request.PatientId), new PutUpdateObservationDataRequest
                     {
                         PatientObservationData = pord,
-                        UserId = request.UserId,
-                        PatientObservationIdsList = observationIds
+                        UserId = request.UserId
                     } as object);
 
                 if (dataDomainResponse.Result)

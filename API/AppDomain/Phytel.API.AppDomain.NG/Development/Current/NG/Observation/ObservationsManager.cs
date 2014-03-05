@@ -66,7 +66,7 @@ namespace Phytel.API.AppDomain.NG.Observation
 
                 List<Phytel.API.AppDomain.NG.DTO.Observation.PatientObservation> obsl = request.Observations;
 
-                List<string> patientObservationIds = ObservationsUtil.GetPatientObservationIds(obsl);
+                //List<string> patientObservationIds = ObservationsUtil.GetPatientObservationIds(obsl);
 
                 if (request.Observations != null && request.Observations.Count > 0)
                 {
@@ -76,14 +76,14 @@ namespace Phytel.API.AppDomain.NG.Observation
                         {
                             PatientObservationRecordData pord = ObservationsUtil.CreatePatientObservationRecord(po, ov);
 
-                            ObservationEndpointUtil.UpdatePatientObservation(request, pord, patientObservationIds);
+                            ObservationEndpointUtil.UpdatePatientObservation(request, pord);
                         }
                     }
                 }
                 else
                 {
                     PatientObservationRecordData epord = new PatientObservationRecordData();
-                    ObservationEndpointUtil.UpdatePatientObservation(request, epord, patientObservationIds);
+                    ObservationEndpointUtil.UpdatePatientObservation(request, epord);
                 }
 
                 response.Result = true;

@@ -147,13 +147,13 @@ namespace Phytel.API.AppDomain.NG
                         if (state.Equals(1)) // not eligible
                         {
                             program.ElementState = 5;
-                            //program.EndDate = System.DateTime.UtcNow; // remove after testing
-                            //closedby ???
+                            progAttr.Eligibility = 1;
                             progAttr.EndDate = System.DateTime.UtcNow;
                         }
                         else if (state.Equals(2)) // eligible
                         {
                             program.ElementState = 4;
+                            progAttr.Eligibility = 2;
                         }
                     }
                 }
