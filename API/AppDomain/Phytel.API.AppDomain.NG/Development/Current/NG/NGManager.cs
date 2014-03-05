@@ -396,7 +396,7 @@ namespace Phytel.API.AppDomain.NG
             }
             catch (WebServiceException wse)
             {
-                Exception ae = new Exception(wse.ResponseBody, wse.InnerException);
+                Exception ae = new Exception("PostPatientToProgram()"+ wse.ResponseBody, wse.InnerException);
                 throw ae;
             }
         }
