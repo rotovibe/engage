@@ -38,7 +38,7 @@ namespace Phytel.API.DataDomain.PatientObservation.DTO
         public const string NumericValueProperty = "nval";
         [BsonElement(NumericValueProperty)]
         [BsonIgnoreIfNull(true)]
-        public float? NumericValue { get; set; }
+        public double? NumericValue { get; set; }
 
         public const string NonNumericValueProperty = "nnval";
         [BsonElement(NonNumericValueProperty)]

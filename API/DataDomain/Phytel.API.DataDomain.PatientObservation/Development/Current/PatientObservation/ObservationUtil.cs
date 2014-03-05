@@ -16,7 +16,7 @@ namespace Phytel.API.DataDomain.PatientObservation
             try
             {
                 PatientObservationData pod = CreatePatientObservationData(request, od);
-                ObservationValueData ovd = PatientObservationDataManager.InitializePatientObservation(request, request.PatientId, pod.Values, od);
+                ObservationValueData ovd = PatientObservationDataManager.InitializePatientObservation(request, request.PatientId, pod.Values, od, request.SetId);
 
                 // account for composite BP observation
                 if (pod.GroupId != null && pod.GroupId.Equals("530cb50dfe7a591ee4a58c51"))
@@ -25,7 +25,7 @@ namespace Phytel.API.DataDomain.PatientObservation
                     observationId = od.Id.Equals("530c26fcfe7a592f64473e37") ? "530c270afe7a592f64473e38" : "530c26fcfe7a592f64473e37";
                     ObservationData od2 = (ObservationData)repo.FindByID(observationId);
                     PatientObservationData pod2 = CreatePatientObservationData(request, od2);
-                    ObservationValueData ovd2 = PatientObservationDataManager.InitializePatientObservation(request, request.PatientId, pod.Values, od2);
+                    ObservationValueData ovd2 = PatientObservationDataManager.InitializePatientObservation(request, request.PatientId, pod.Values, od2, request.SetId);
                 }
                 return pod;
             }
