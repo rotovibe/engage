@@ -294,13 +294,12 @@ namespace Phytel.API.DataDomain.PatientObservation
                 queries.Add(Query.EQ(MEPatientObservation.ObservationIdProperty, ObjectId.Parse(observationTypeId)));
                 queries.Add(Query.EQ(MEPatientObservation.DeleteFlagProperty, false));
                 IMongoQuery mQuery = Query.And(queries);
-                IMongoSortBy sortB = SortBy.Descending(MEPatientObservation.StartDateProperty);
 
                 MEPatientObservation meObservation = null;
 
                 using (PatientObservationMongoContext ctx = new PatientObservationMongoContext(_dbName))
                 {
-                    meObservation = ctx.PatientObservations.Collection.Find(mQuery).SetSortOrder(SortBy.Descending(MEPatientObservation.StartDateProperty)).FirstOrDefault();
+                    meObservation = ctx.PatientObservations.Collection.Find(mQuery).SetSortOrder(SortBy.Descending(MEPatientObservation.StartDateProperty).Descending(MEPatientObservation.LastUpdatedOnProperty)).FirstOrDefault();
 
                     if (meObservation != null)
                     {
