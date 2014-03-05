@@ -294,29 +294,26 @@ namespace Phytel.API.DataDomain.PatientObservation
                 queries.Add(Query.EQ(MEPatientObservation.ObservationIdProperty, ObjectId.Parse(observationTypeId)));
                 queries.Add(Query.EQ(MEPatientObservation.DeleteFlagProperty, false));
                 IMongoQuery mQuery = Query.And(queries);
+                IMongoSortBy sortB = SortBy.Descending(MEPatientObservation.StartDateProperty);
+
                 MEPatientObservation meObservation = null;
 
                 using (PatientObservationMongoContext ctx = new PatientObservationMongoContext(_dbName))
                 {
-                    List<MEPatientObservation> mpl = ctx.PatientObservations.Collection.Find(mQuery).ToList();
+                    meObservation = ctx.PatientObservations.Collection.Find(mQuery).SetSortOrder(SortBy.Descending(MEPatientObservation.StartDateProperty)).FirstOrDefault();
 
-                    if (mpl != null && mpl.Count > 0)
+                    if (meObservation != null)
                     {
-                        meObservation = ctx.PatientObservations.Collection.Find(mQuery).OrderByDescending(po => po.StartDate).First();
-
-                        if (meObservation != null)
+                        observationData = new PatientObservationData
                         {
-                            observationData = new PatientObservationData
-                            {
-                                Id = meObservation.Id.ToString(),
-                                PatientId = meObservation.PatientId.ToString(),
-                                Values = GetValueList(meObservation.NumericValue, meObservation.NonNumericValue),
-                                Source = meObservation.Source,
-                                StartDate = meObservation.StartDate,
-                                EndDate = meObservation.EndDate,
-                                Units = meObservation.Units
-                            };
-                        }
+                            Id = meObservation.Id.ToString(),
+                            PatientId = meObservation.PatientId.ToString(),
+                            Values = GetValueList(meObservation.NumericValue, meObservation.NonNumericValue),
+                            Source = meObservation.Source != null ? meObservation.Source : null,
+                            StartDate = meObservation.StartDate,
+                            EndDate = meObservation.EndDate,
+                            Units = meObservation.Units != null ? meObservation.Units : null
+                        };
                     }
                 }
                 return observationData as object;
