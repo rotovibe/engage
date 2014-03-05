@@ -81,8 +81,8 @@ namespace Phytel.API.DataDomain.PatientObservation
                     {
                         odL = new ObservationData
                         {
-                            CodingSystem = o.CodingSystem,
-                            CodingSystemCode = o.CodingSystemCode,
+                            CodingSystem = o.CodingSystemId,
+                            CodingSystemCode = o.Code,
                             DeleteFlag = o.DeleteFlag,
                             Description = o.Description,
                             ExtraElements = o.ExtraElements,
@@ -91,7 +91,7 @@ namespace Phytel.API.DataDomain.PatientObservation
                             HighValue = o.HighValue,
                             Id = o.Id.ToString(),
                             LastUpdatedOn = o.LastUpdatedOn,
-                            ObservationType = o.ObservationType.ToString(),
+                            ObservationType = o.ObservationTypeId.ToString(),
                             Order = o.Order,
                             Source = o.Source,
                             Standard = o.Standard,
@@ -215,6 +215,7 @@ namespace Phytel.API.DataDomain.PatientObservation
                         List<IMongoQuery> queries = new List<IMongoQuery>();
                         queries.Add(Query.EQ(MEObservation.ObservationTypeProperty, ObjectId.Parse(type as string)));
                         queries.Add(Query.EQ(MEObservation.StandardProperty, standard));
+                        queries.Add(Query.EQ(MEObservation.StatusProperty, 1)); // active
                         IMongoQuery mQuery = Query.And(queries);
 
                         List<MEObservation> meObs = ctx.Observations.Collection.Find(mQuery).ToList();
@@ -225,8 +226,8 @@ namespace Phytel.API.DataDomain.PatientObservation
                             {
                                 odL.Add(new ObservationData
                                 {
-                                    CodingSystem = o.CodingSystem,
-                                    CodingSystemCode = o.CodingSystemCode,
+                                    CodingSystem = o.CodingSystemId,
+                                    CodingSystemCode = o.Code,
                                     DeleteFlag = o.DeleteFlag,
                                     Description = o.Description,
                                     ExtraElements = o.ExtraElements,
@@ -235,7 +236,7 @@ namespace Phytel.API.DataDomain.PatientObservation
                                     HighValue = o.HighValue,
                                     Id = o.Id.ToString(),
                                     LastUpdatedOn = o.LastUpdatedOn,
-                                    ObservationType = o.ObservationType.ToString(),
+                                    ObservationType = o.ObservationTypeId.ToString(),
                                     Order = o.Order,
                                     Source = o.Source,
                                     Standard = o.Standard,

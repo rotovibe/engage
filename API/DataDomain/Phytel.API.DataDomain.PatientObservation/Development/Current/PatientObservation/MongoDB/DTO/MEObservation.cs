@@ -23,7 +23,7 @@ namespace Phytel.API.DataDomain.PatientObservation.DTO
         public const string ObservationTypeProperty = "otype";
         [BsonElement(ObservationTypeProperty)]
         [BsonIgnoreIfNull(true)]
-        public ObjectId ObservationType { get; set; }
+        public ObjectId ObservationTypeId { get; set; }
 
         public const string GroupIdProperty = "gid";
         [BsonElement(GroupIdProperty)]
@@ -53,12 +53,12 @@ namespace Phytel.API.DataDomain.PatientObservation.DTO
         public const string CodingSystemProperty = "cs";
         [BsonElement(CodingSystemProperty)]
         [BsonIgnoreIfNull(true)]
-        public string CodingSystem { get; set; }
+        public string CodingSystemId { get; set; }
 
         public const string CodingSystemCodeProperty = "csc";
         [BsonElement(CodingSystemCodeProperty)]
         [BsonIgnoreIfNull(true)]
-        public string CodingSystemCode { get; set; }
+        public string Code { get; set; }
 
         public const string LowValueProperty = "lv";
         [BsonElement(LowValueProperty)]

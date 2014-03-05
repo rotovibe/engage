@@ -30,11 +30,6 @@ namespace Phytel.API.DataDomain.PatientObservation.DTO
         [BsonIgnoreIfNull(true)]
         public ObjectId PatientId { get; set; }
 
-        public const string ReferenceCodingIdProperty = "rcid";
-        [BsonElement(ReferenceCodingIdProperty)]
-        [BsonIgnoreIfNull(true)]
-        public string ReferenceCodingId { get; set; }
-
         public const string NumericValueProperty = "nval";
         [BsonElement(NumericValueProperty)]
         [BsonIgnoreIfNull(true)]
