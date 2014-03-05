@@ -53,7 +53,7 @@ namespace Phytel.API.DataDomain.PatientObservation.DTO
         public const string CodingSystemProperty = "cs";
         [BsonElement(CodingSystemProperty)]
         [BsonIgnoreIfNull(true)]
-        public string CodingSystemId { get; set; }
+        public ObjectId? CodingSystemId { get; set; }
 
         public const string CodingSystemCodeProperty = "csc";
         [BsonElement(CodingSystemCodeProperty)]

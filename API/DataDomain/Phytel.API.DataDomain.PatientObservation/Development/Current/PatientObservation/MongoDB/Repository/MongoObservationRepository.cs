@@ -81,7 +81,7 @@ namespace Phytel.API.DataDomain.PatientObservation
                     {
                         odL = new ObservationData
                         {
-                            CodingSystem = o.CodingSystemId,
+                            CodingSystem = o.CodingSystemId.ToString(),
                             CodingSystemCode = o.Code,
                             DeleteFlag = o.DeleteFlag,
                             Description = o.Description,
@@ -226,7 +226,7 @@ namespace Phytel.API.DataDomain.PatientObservation
                             {
                                 odL.Add(new ObservationData
                                 {
-                                    CodingSystem = o.CodingSystemId,
+                                    CodingSystem = o.CodingSystemId.ToString(),
                                     CodingSystemCode = o.Code,
                                     DeleteFlag = o.DeleteFlag,
                                     Description = o.Description,
