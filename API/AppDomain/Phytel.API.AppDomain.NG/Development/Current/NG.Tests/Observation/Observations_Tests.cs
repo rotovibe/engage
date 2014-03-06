@@ -67,7 +67,8 @@ namespace Phytel.API.DataDomain.Patient.Service.Test
                 Values = GetValues(),
                 Units = "inches",
                 StartDate = System.DateTime.UtcNow,
-                EndDate = null
+                EndDate = null,
+                Source = "CM"
             });
 
             pos.Add(new PatientObservation
@@ -78,7 +79,8 @@ namespace Phytel.API.DataDomain.Patient.Service.Test
                 Values = GetBPValues(),
                 Units = "mmHg",
                 StartDate = System.DateTime.UtcNow,
-                EndDate = null
+                EndDate = null,
+                Source = "CM"
             });
 
             //pos.Add(new PatientObservation
