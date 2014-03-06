@@ -337,11 +337,15 @@ namespace Phytel.API.DataDomain.Patient
             throw new NotImplementedException();
         }
 
-        public DTO.PutPatientFlaggedResponse UpdateFlagged(DTO.PutPatientFlaggedRequest request)
+        public DTO.PutPatientBackgroundDataResponse UpdateBackground(DTO.PutPatientBackgroundDataRequest request)
         {
             throw new NotImplementedException();
         }
 
+        public DTO.PutPatientFlaggedResponse UpdateFlagged(DTO.PutPatientFlaggedRequest request)
+        {
+            throw new NotImplementedException();
+        }
         public object FindByID(string patientId, string userId)
         {
             throw new NotImplementedException();

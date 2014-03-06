@@ -15,6 +15,7 @@ namespace Phytel.API.DataDomain.Patient
         List<PatientData> Select(string query, string[] filterData, string querySort, int skip, int take);
         PutPatientPriorityResponse UpdatePriority(PutPatientPriorityRequest request);
         PutPatientFlaggedResponse UpdateFlagged(PutPatientFlaggedRequest request);
+        PutPatientBackgroundDataResponse UpdateBackground(PutPatientBackgroundDataRequest request);
         object FindByID(string patientId, string userId);
         object Update(PutUpdatePatientDataRequest request);
     }

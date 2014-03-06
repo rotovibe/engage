@@ -75,13 +75,15 @@ namespace Phytel.API.AppDomain.NG
                         Suffix = response.Patient.Suffix,
                         PreferredName = response.Patient.PreferredName,
                         Priority = (int)response.Patient.PriorityData,
-                        Flagged = Convert.ToInt32(response.Patient.Flagged)
+                        Flagged = Convert.ToInt32(response.Patient.Flagged),
+                        Background = response.Patient.Background
                     };
 
                     if (sysResponse != null && sysResponse.PatientSystem != null)
                     {
                         pResponse.Patient.DisplaySystemId = sysResponse.PatientSystem.SystemID;
                         pResponse.Patient.DisplaySystemName = sysResponse.PatientSystem.SystemName;
+                        pResponse.Patient.DisplayLabel = sysResponse.PatientSystem.DisplayLabel;
                     }
                 }
 
@@ -196,6 +198,42 @@ namespace Phytel.API.AppDomain.NG
                 if (dataDomainResponse != null && dataDomainResponse.Success)
                 {
                     response = new PutPatientFlaggedUpdateResponse();
+                }
+                return response;
+            }
+            catch (WebServiceException wse)
+            {
+                Exception ae = new Exception(wse.ResponseBody, wse.InnerException);
+                throw ae;
+            }
+        }
+
+        public PutPatientBackgroundResponse UpdateBackground(PutPatientBackgroundRequest request)
+        {
+            try
+            {
+                PutPatientBackgroundResponse response = null;
+                IRestClient client = new JsonServiceClient();
+                //[Route("/{Context}/{Version}/{ContractNumber}/Patient/{PatientId}/Background", "PUT")]
+                PutPatientBackgroundDataResponse dataDomainResponse =
+                    client.Put<PutPatientBackgroundDataResponse>(string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Background?UserId={5}",
+                                                                                DDPatientServiceURL,
+                                                                                "NG",
+                                                                                request.Version,
+                                                                                request.ContractNumber,
+                                                                                request.PatientId,
+                                                                                request.UserId), new PutPatientBackgroundDataRequest
+                                                                                {
+                                                                                    Background = request.Background,
+                                                                                    Context = "NG",
+                                                                                    ContractNumber = request.ContractNumber,
+                                                                                    Version = request.Version,
+                                                                                    UserId = request.UserId,
+                                                                                    PatientId = request.PatientId
+                                                                                } as object);
+                if (dataDomainResponse != null && dataDomainResponse.Success)
+                {
+                    response = new PutPatientBackgroundResponse();
                 }
                 return response;
             }

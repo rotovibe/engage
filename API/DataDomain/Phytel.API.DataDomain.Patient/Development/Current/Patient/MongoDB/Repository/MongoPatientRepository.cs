@@ -63,6 +63,7 @@ namespace Phytel.API.DataDomain.Patient
                             PreferredName = request.PreferredName,
                             Gender = request.Gender,
                             DOB = request.DOB,
+                            Background = request.Background,
                             //SSN = request.SSN,
                             Version = request.Version,
                             //UpdatedBy = security token user id,
@@ -143,7 +144,8 @@ namespace Phytel.API.DataDomain.Patient
                                 MiddleName = p.MiddleName,
                                 Suffix = p.Suffix,
                                 PriorityData = (DTO.PriorityData)((int)p.Priority),
-                                DisplayPatientSystemID = p.DisplayPatientSystemID.ToString()
+                                DisplayPatientSystemID = p.DisplayPatientSystemID.ToString(),
+                                Background = p.Background
                             }).FirstOrDefault();
             }
             return patient;
@@ -168,6 +170,7 @@ namespace Phytel.API.DataDomain.Patient
                                Suffix = p.Suffix,
                                PriorityData = (DTO.PriorityData)((int)p.Priority),
                                DisplayPatientSystemID = p.DisplayPatientSystemID.ToString(),
+                               Background = p.Background,
                                Flagged = GetFlaggedStatus(entityId, contactId)
                            }).FirstOrDefault();
             }
@@ -389,7 +392,8 @@ namespace Phytel.API.DataDomain.Patient
                         Suffix = mp.Suffix,
                         Version = mp.Version,
                         PriorityData = (PriorityData)((int)mp.Priority),
-                        DisplayPatientSystemID = mp.DisplayPatientSystemID.ToString()
+                        DisplayPatientSystemID = mp.DisplayPatientSystemID.ToString(),
+                        Background = mp.Background
                     });
                 }
             }
@@ -457,6 +461,35 @@ namespace Phytel.API.DataDomain.Patient
                         var pt = ctx.PatientUsers.Collection.FindAndModify(pUQuery, sortBy, updt, true);
                     }
                     response.Success = true;
+                }
+                return response;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public PutPatientBackgroundDataResponse UpdateBackground(PutPatientBackgroundDataRequest request)
+        {
+            PutPatientBackgroundDataResponse response = new PutPatientBackgroundDataResponse();
+            response.Success = false;
+            try
+            {
+                using (PatientMongoContext ctx = new PatientMongoContext(_dbName))
+                {
+                    string background = string.Empty;
+                    if (!string.IsNullOrEmpty(request.Background))
+                    {
+                        background = request.Background;
+                    }
+                    
+                    FindAndModifyResult result = ctx.Patients.Collection.FindAndModify(MB.Query.EQ(MEPatient.IdProperty, ObjectId.Parse(request.PatientId)), MB.SortBy.Null,
+                                                new MB.UpdateBuilder().Set(MEPatient.BackgroundProperty, background).Set(MEPatient.UpdatedByProperty, request.UserId).Set(MEPatient.LastUpdatedOnProperty, DateTime.UtcNow));
+                    if (result.Ok)
+                    {
+                        response.Success = true;
+                    }
                 }
                 return response;
             }

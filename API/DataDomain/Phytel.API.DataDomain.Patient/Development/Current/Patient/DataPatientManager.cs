@@ -139,6 +139,14 @@ namespace Phytel.API.DataDomain.Patient
             return response;
         }
 
+        public static PutPatientBackgroundDataResponse UpdatePatientBackground(PutPatientBackgroundDataRequest request)
+        {
+            PutPatientBackgroundDataResponse response = new PutPatientBackgroundDataResponse();
+            IPatientRepository<PutPatientBackgroundDataRequest> repo = PatientRepositoryFactory<PutPatientBackgroundDataRequest>.GetPatientRepository(request.ContractNumber, request.Context);
+            response = repo.UpdateBackground(request) as PutPatientBackgroundDataResponse;
+            return response;
+        }
+
         public static PutUpdatePatientDataResponse UpdatePatient(PutUpdatePatientDataRequest request)
         {
             IPatientRepository<PutUpdatePatientDataRequest> repo = PatientRepositoryFactory<PutUpdatePatientDataRequest>.GetPatientRepository(request.ContractNumber, request.Context);

@@ -146,6 +146,21 @@ namespace Phytel.API.DataDomain.Patient.Service
             return response;
         }
 
+        public PutPatientBackgroundDataResponse Put(PutPatientBackgroundDataRequest request)
+        {
+            PutPatientBackgroundDataResponse response = new PutPatientBackgroundDataResponse();
+            try
+            {
+                response = PatientDataManager.UpdatePatientBackground(request);
+                response.Version = request.Version;
+            }
+            catch (Exception ex)
+            {
+                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+            }
+            return response;
+        }
+
         public GetCohortPatientsDataResponse Get(GetCohortPatientsDataRequest request)
         {
             GetCohortPatientsDataResponse response = new GetCohortPatientsDataResponse();
