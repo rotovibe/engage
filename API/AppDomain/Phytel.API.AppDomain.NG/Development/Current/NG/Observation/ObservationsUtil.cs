@@ -133,7 +133,7 @@ namespace Phytel.API.AppDomain.NG
                     StartDate = po.StartDate,
                     TypeId = po.TypeId,
                     Units = po.Units,
-                    Source = po.Source
+                    Source = "CM" //po.Source
                 };
 
                 double dVal = 0;
