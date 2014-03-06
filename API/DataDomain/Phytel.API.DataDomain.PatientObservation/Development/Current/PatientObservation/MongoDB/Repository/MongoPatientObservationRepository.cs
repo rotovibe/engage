@@ -194,9 +194,9 @@ namespace Phytel.API.DataDomain.PatientObservation
                     uv.Add(MB.Update.Set(MEPatientObservation.TTLDateProperty, BsonNull.Value));
                     uv.Add(MB.Update.Set(MEPatientObservation.DeleteFlagProperty, false));
                     uv.Add(MB.Update.Set(MEPatientObservation.UpdatedByProperty, odr.UserId));
-                    uv.Add(MB.Update.Set(MEPatientObservation.SourceProperty, pord.Source));
                     uv.Add(MB.Update.Set(MEPatientObservation.LastUpdatedOnProperty, System.DateTime.UtcNow));
 
+                    if (pord.Source != null) uv.Add(MB.Update.Set(MEPatientObservation.SourceProperty, pord.Source));
                     if (pord.NonNumericValue != null) uv.Add(MB.Update.Set(MEPatientObservation.NonNumericValueProperty, pord.NonNumericValue));
                     if (pord.Value != null) uv.Add(MB.Update.Set(MEPatientObservation.NumericValueProperty, BsonDouble.Create(pord.Value)));
                     if (pord.Units != null) uv.Add(MB.Update.Set(MEPatientObservation.UnitsProperty, pord.Units));

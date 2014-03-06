@@ -48,7 +48,8 @@ namespace Phytel.API.DataDomain.PatientObservation
                 Units = od.Units,
                 Values = new List<ObservationValueData>(),
                 TypeId = od.ObservationType,
-                PatientId = request.PatientId
+                PatientId = request.PatientId,
+                Source = od.Source
             };
             return pod;
         }
