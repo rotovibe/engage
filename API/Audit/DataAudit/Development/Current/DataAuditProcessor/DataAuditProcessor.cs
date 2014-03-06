@@ -37,9 +37,8 @@ namespace Phytel.API.DataAuditProcessor
             _bodyDom = new XmlDocument();
             _bodyDom.LoadXml(queueMessage.Body);
 
-            _DBConnName = _bodyDom.SelectSingleNode("//Phytel.ASE.Process/ProcessConfiguration/PhytelServicesConnName").InnerText;
-            _dbName = "Inhealth001_audit";  //derive this from the _dbconnname
-
+            _DBConnName = base.Configuration.SelectSingleNode("//Phytel.ASE.Process/ProcessConfiguration/PhytelServicesConnName").InnerText;
+            
             SetupBaseProperties();
             WriteAuditLog();
         }
@@ -60,7 +59,7 @@ namespace Phytel.API.DataAuditProcessor
                 };
 
                 MongoDatabase db = Phytel.Services.MongoService.Instance.GetDatabase(_DBConnName, da.Contract, true, "Audit");
-                db.GetCollection(da.Type).Insert(da);
+                db.GetCollection(da.EntityType).Insert(da);
 
             }
             catch (Exception ex)
