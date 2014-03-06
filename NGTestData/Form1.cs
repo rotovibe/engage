@@ -33,7 +33,7 @@ namespace NGTestData
         {
             string sqlPatientQuery = string.Format("Select Top {0} ID, FirstName, LastName, CONVERT(VARCHAR, BirthDate, 101) as BirthDate, MiddleInitial, Gender, Suffix From ContactEntities where CategoryCode = 'PT' and DeleteFlag = 0", numPatients.Value.ToString());
 
-            string sqlConn = "server=10.90.1.10;database=JCMR001;user id=jcmrtestuser;password=testuser;";
+            string sqlConn = txtSQLConn.Text;
 
             List<MEPatient> patients = new List<MEPatient>();
             List<MEPatientProblem> patientProblems = new List<MEPatientProblem>();
@@ -44,11 +44,7 @@ namespace NGTestData
             List<Problem> problems = null;
             List<State> states = null;
 
-            string mongoConnString = string.Empty;
-            if (rdoDev.Checked)
-                mongoConnString = "mongodb://healthuser:healthu$3r@azurePhytelDev.cloudapp.net:27017/InHealth001";
-            else
-                mongoConnString = "mongodb://healthuser:healthu$3r@azurePhytel.cloudapp.net:27017/InHealth001";
+            string mongoConnString = txtMongoConn.Text;
 
             MongoDB.Driver.MongoDatabase mongoDB = Phytel.Services.MongoService.Instance.GetDatabase(mongoConnString);
 
@@ -63,6 +59,14 @@ namespace NGTestData
             mongoDB.GetCollection("PatientProgram").RemoveAll();
             mongoDB.GetCollection("PatientProgramAttribute").RemoveAll();
             mongoDB.GetCollection("PatientProgramResponse").RemoveAll();
+
+            mongoDB.GetCollection("PatientBarrier").RemoveAll();
+            mongoDB.GetCollection("PatientGoal").RemoveAll();
+            mongoDB.GetCollection("PatientIntervention").RemoveAll();
+            mongoDB.GetCollection("PatientNote").RemoveAll();
+            mongoDB.GetCollection("PatientObservation").RemoveAll();
+            mongoDB.GetCollection("PatientTask").RemoveAll();
+            mongoDB.GetCollection("PatientProgram").RemoveAll();
 
             IMongoQuery q = Query.EQ("type", 1);
 
@@ -182,6 +186,7 @@ namespace NGTestData
                 currentPatientView.SearchFields.Add(new SearchField { Active = true, FieldName = "MN", Value = patient.MiddleName });
                 currentPatientView.SearchFields.Add(new SearchField { Active = true, FieldName = "SFX", Value = patient.Suffix });
                 currentPatientView.SearchFields.Add(new SearchField { Active = true, FieldName = "PN", Value = patient.PreferredName });
+                currentPatientView.SearchFields.Add(new SearchField { Active = true, FieldName = "PCM" });
 
                 List<int> prodIds = new List<int>();
                 for(int i = 0; i < numProblems.Value; i++)
@@ -299,14 +304,12 @@ namespace NGTestData
 
         private void button2_Click(object sender, EventArgs e)
         {
-            string userSql = "Select UserID, FirstName, LastName, DisplayName From [User]";
+            string userSql = string.Format("Select u.UserID, u.FirstName, u.LastName, u.DisplayName From [User] u " +
+                                "inner join usercontract uc on u.userid = uc.userid " +
+                                "inner join contract c on uc.contractid = c.contractid " +
+                                "where c.number = '{0}'", txtContract.Text);
 
-            string sqlConn = string.Empty;
-            
-            if(rdoDev.Checked)
-                sqlConn = "server=azurePhytelDev.cloudapp.net;database=PhytelNG;user id=nguser;password=ngu$3r;";
-            else
-                sqlConn = "server=azurePhytel.cloudapp.net;database=PhytelNG;user id=nguser;password=ngu$3r;";
+            string sqlConn = txtSQLNGConn.Text;
 
             DataSet users = Phytel.Services.SQLDataService.Instance.ExecuteSQLDirect(sqlConn, userSql, 0);
             foreach(DataRow dr in users.Tables[0].Rows)
@@ -319,11 +322,7 @@ namespace NGTestData
                     ResourceId = Guid.Parse(dr["UserID"].ToString())
                 };
 
-                string mongoConnString = string.Empty;
-                if (rdoDev.Checked)
-                    mongoConnString = "mongodb://healthuser:healthu$3r@azurePhytelDev.cloudapp.net:27017/InHealth001";
-                else
-                    mongoConnString = "mongodb://healthuser:healthu$3r@azurePhytel.cloudapp.net:27017/InHealth001";
+                string mongoConnString = txtMongoConn.Text;
 
                 MongoDB.Driver.MongoDatabase mongoDB = Phytel.Services.MongoService.Instance.GetDatabase(mongoConnString);
 
