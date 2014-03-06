@@ -44,7 +44,7 @@ namespace Phytel.API.DataDomain.Patient.Service.Test
             string contractNumber = "InHealth001";
             string context = "NG";
             string version = "v1";
-            string token = "5317440bd6a4850c20c998a2";
+            string token = "5318e69cd6a48503fc5fbbd8";
             string patientId = "52f5586e072ef709f84e65fd";
             IRestClient client = new JsonServiceClient();
 
