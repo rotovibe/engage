@@ -10,7 +10,7 @@ namespace Phytel.API.AppDomain.NG.DTO
         [ApiMember(Name = "PatientId", Description = "Id of the patient being updated", ParameterType = "property", DataType = "string", IsRequired = true)]
         public string PatientId { get; set; }
 
-        [ApiMember(Name = "Flagged", Description = "Background value of the patient being updated", ParameterType = "property", DataType = "string", IsRequired = false)]
+        [ApiMember(Name = "Background", Description = "Background value of the patient being updated", ParameterType = "property", DataType = "string", IsRequired = false)]
         public string Background { get; set; }
 
         [ApiMember(Name = "Token", Description = "Token parameter", ParameterType = "path", DataType = "string", IsRequired = true)]
