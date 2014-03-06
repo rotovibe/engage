@@ -33,8 +33,8 @@ namespace Phytel.API.AppDomain.NG
                    string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Problem/?ProblemId={5}",
                    DDPatientProblemServiceUrl,
                    "NG",
-                   "v1",
-                   "InHealth001",
+                   e.DomainRequest.Version,
+                   e.DomainRequest.ContractNumber,
                    e.PatientId,
                    probId));
 
@@ -254,12 +254,12 @@ namespace Phytel.API.AppDomain.NG
             return pd;
         }
 
-        internal static CohortPatientViewData RequestCohortPatientViewData(string patientId)
+        internal static CohortPatientViewData RequestCohortPatientViewData(string patientId, IAppDomainRequest request)
         {
             try
             {
-                string version = "v1";
-                string contractNumber = "InHealth001";
+                string version = request.Version;
+                string contractNumber = request.ContractNumber;
                 string context = "NG";
 
                 IRestClient client = new JsonServiceClient();
@@ -280,12 +280,12 @@ namespace Phytel.API.AppDomain.NG
             }
         }
 
-        internal static void UpdateCohortPatientViewProblem(CohortPatientViewData cpvd, string patientId)
+        internal static void UpdateCohortPatientViewProblem(CohortPatientViewData cpvd, string patientId, IAppDomainRequest request)
         {
             try
             {
-                string version = "v1";
-                string contractNumber = "InHealth001";
+                string version = request.Version;
+                string contractNumber = request.ContractNumber;
                 string context = "NG";
 
                 IRestClient client = new JsonServiceClient();
@@ -309,7 +309,7 @@ namespace Phytel.API.AppDomain.NG
             }
         }
 
-        internal static PutNewPatientProblemResponse PutNewPatientProblem(string patientId, string userId, string elementId)
+        internal static PutNewPatientProblemResponse PutNewPatientProblem(string patientId, string userId, string elementId, IAppDomainRequest request)
         {
             try
             {
@@ -320,8 +320,8 @@ namespace Phytel.API.AppDomain.NG
                    string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Problem/Insert",
                    DDPatientProblemServiceUrl,
                    "NG",
-                   "v1",
-                   "InHealth001",
+                   request.Version,
+                   request.ContractNumber,
                    patientId), new PutNewPatientProblemRequest
                    {
                        ProblemId = elementId,
@@ -339,7 +339,7 @@ namespace Phytel.API.AppDomain.NG
             }
         }
 
-        internal static PutUpdatePatientProblemResponse UpdatePatientProblem(string patientId, string userId, string elementId, PatientProblemData ppd, bool _active)
+        internal static PutUpdatePatientProblemResponse UpdatePatientProblem(string patientId, string userId, string elementId, PatientProblemData ppd, bool _active, IAppDomainRequest request)
         {
             try
             {
@@ -350,8 +350,8 @@ namespace Phytel.API.AppDomain.NG
                    string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Problem/Update/",
                    DDPatientProblemServiceUrl,
                    "NG",
-                   "v1",
-                   "InHealth001",
+                   request.Version,
+                   request.ContractNumber,
                    patientId), new PutUpdatePatientProblemRequest
                    {
                        Id = ppd.ID,
@@ -371,13 +371,13 @@ namespace Phytel.API.AppDomain.NG
             }
         }
 
-        internal static ProgramAttribute GetProgramAttributes(string planElemId)
+        internal static ProgramAttribute GetProgramAttributes(string planElemId, IAppDomainRequest request)
         {
             ProgramAttribute progAttr = null;
             try
             {
-                string version = "v1";
-                string contractNumber = "InHealth001";
+                string version = request.Version;
+                string contractNumber = request.ContractNumber;
                 string context = "NG";
 
 
@@ -400,13 +400,13 @@ namespace Phytel.API.AppDomain.NG
             }
         }
 
-        internal static bool UpdateProgramAttributes(ProgramAttribute pAtt)
+        internal static bool UpdateProgramAttributes(ProgramAttribute pAtt, IAppDomainRequest request)
         {
             bool result = false;
             try
             {
-                string version = "v1";
-                string contractNumber = "InHealth001";
+                string version = request.Version;
+                string contractNumber = request.ContractNumber;
                 string context = "NG";
 
 
@@ -435,13 +435,13 @@ namespace Phytel.API.AppDomain.NG
             }
         }
 
-        internal static bool InsertNewProgramAttribute(ProgramAttribute pa)
+        internal static bool InsertNewProgramAttribute(ProgramAttribute pa, IAppDomainRequest request)
         {
             bool result = false;
             try
             {
-                string version = "v1";
-                string contractNumber = "InHealth001";
+                string version = request.Version;
+                string contractNumber = request.ContractNumber;
                 string context = "NG";
 
 
