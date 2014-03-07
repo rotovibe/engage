@@ -69,9 +69,9 @@ namespace Phytel.API.AppDomain.Security.Service
                 response = SecurityManager.ValidateToken(request, securityToken);
                 return response;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                throw ex;
+                throw;
             }
         }
 
