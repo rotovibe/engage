@@ -49,7 +49,7 @@ namespace Phytel.API.DataDomain.Contact.DTO
 
         [BsonElement(ResourceIdProperty)]
         [BsonIgnoreIfNull(true)]
-        public Guid? ResourceId { get; set; }
+        public string ResourceId { get; set; }
 
         [BsonElement(FirstNameProperty)]
         [BsonIgnoreIfNull(true)]

@@ -56,6 +56,7 @@ namespace Phytel.API.DataDomain.Contact
                         LastName = request.LastName, 
                         PreferredName = request.PreferredName,
                         Gender = request.Gender,
+                        ResourceId = request.ResourceId,
                         Version = request.Version,
                         LastUpdatedOn = DateTime.UtcNow,
                         UpdatedBy = request.UserId,
@@ -67,13 +68,6 @@ namespace Phytel.API.DataDomain.Contact
                     {
                         meContact.PatientId = ObjectId.Parse(request.PatientId);
                     }
-
-                    //ResourceId
-                    if (request.ResourceId != null)
-                    {
-                        meContact.ResourceId = Guid.Parse(request.ResourceId);
-                    }
-
                     //Timezone
                     if (request.TimeZoneId != null)
                     {
@@ -245,7 +239,7 @@ namespace Phytel.API.DataDomain.Contact
                 {
                     contactData = new ContactData { 
                         ContactId = mc.Id.ToString(),
-                        UserId = (mc.ResourceId == null) ? null : mc.ResourceId.ToString().Replace("-", string.Empty).ToLower(),
+                        UserId = (string.IsNullOrEmpty(mc.ResourceId)) ? string.Empty : mc.ResourceId.ToString().Replace("-", string.Empty).ToLower(),
                         FirstName = mc.FirstName,
                         MiddleName = mc.MiddleName,
                         LastName = mc.LastName,
@@ -735,7 +729,7 @@ namespace Phytel.API.DataDomain.Contact
                     contactData = new ContactData { 
                         ContactId = mc.Id.ToString(),
                         PatientId = mc.PatientId.ToString(),
-                        UserId = (mc.ResourceId == null) ? null : mc.ResourceId.ToString().Replace("-", string.Empty).ToLower(),
+                        UserId = (string.IsNullOrEmpty(mc.ResourceId)) ? string.Empty : mc.ResourceId.ToString().Replace("-", string.Empty).ToLower(),
                         FirstName = mc.FirstName,
                         MiddleName = mc.MiddleName,
                         LastName = mc.LastName,
@@ -846,7 +840,7 @@ namespace Phytel.API.DataDomain.Contact
                         {
                             ContactId = mc.Id.ToString(),
                             PatientId = mc.PatientId.ToString(),
-                            UserId = (mc.ResourceId == null) ? null : mc.ResourceId.ToString().Replace("-", string.Empty).ToLower(),
+                            UserId = (string.IsNullOrEmpty(mc.ResourceId)) ? string.Empty : mc.ResourceId.ToString().Replace("-", string.Empty).ToLower(),
                             FirstName = mc.FirstName,
                             MiddleName = mc.MiddleName,
                             LastName = mc.LastName,
@@ -881,7 +875,7 @@ namespace Phytel.API.DataDomain.Contact
                             ContactData contactData = new ContactData
                             {
                                ContactId = c.Id.ToString(),
-                               UserId = (c.ResourceId == null) ? null : c.ResourceId.ToString().Replace("-", string.Empty).ToLower(),
+                               UserId = (string.IsNullOrEmpty(c.ResourceId)) ? string.Empty : c.ResourceId.ToString().Replace("-", string.Empty).ToLower(),
                                PreferredName = c.PreferredName
                             };
                             contactDataList.Add(contactData);
