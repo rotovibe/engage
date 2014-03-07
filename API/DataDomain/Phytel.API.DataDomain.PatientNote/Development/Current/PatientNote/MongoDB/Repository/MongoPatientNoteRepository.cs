@@ -42,7 +42,7 @@ namespace Phytel.API.DataDomain.PatientNote
                         PatientId = ObjectId.Parse(noteData.PatientId),
                         Text = noteData.Text,
                         Programs = Helper.ConvertToObjectIdList(noteData.ProgramIds),
-                        CreatedBy = Guid.Parse(noteData.CreatedById),
+                        CreatedBy = noteData.CreatedById,
                         CreatedOn = DateTime.UtcNow,
                         Version = request.Version,
                         UpdatedBy = request.UserId,
@@ -126,7 +126,7 @@ namespace Phytel.API.DataDomain.PatientNote
                             Text = meN.Text,
                             ProgramIds = Helper.ConvertToStringList(meN.Programs),
                             CreatedOn = meN.CreatedOn,
-                            CreatedById = meN.CreatedBy.ToString().Replace("-", string.Empty).ToLower()
+                            CreatedById = (string.IsNullOrEmpty(meN.CreatedBy)) ? string.Empty : meN.CreatedBy.Replace("-", string.Empty).ToLower()
                         };
                     }
                 }
@@ -207,7 +207,7 @@ namespace Phytel.API.DataDomain.PatientNote
                                 Text = meN.Text,
                                 ProgramIds = Helper.ConvertToStringList(meN.Programs),
                                 CreatedOn = meN.CreatedOn,
-                                CreatedById = meN.CreatedBy.ToString().Replace("-", string.Empty).ToLower()
+                                CreatedById = (string.IsNullOrEmpty(meN.CreatedBy)) ? string.Empty : meN.CreatedBy.Replace("-", string.Empty).ToLower()
                             });
                         }
                     }
