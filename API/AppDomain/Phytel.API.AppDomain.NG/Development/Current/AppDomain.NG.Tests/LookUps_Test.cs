@@ -6,7 +6,7 @@ using MongoDB.Driver;
 using MongoDB.Driver.Builders;
 using MongoDB.Bson;
 using System;
-using Phytel.API.Common.CustomObjects;
+using Phytel.API.Common.CustomObject;
 
 namespace Phytel.API.AppDomain.NG.Test
 {

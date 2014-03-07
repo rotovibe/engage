@@ -9,6 +9,7 @@ using System.Runtime.CompilerServices;
 using Phytel.API.Common;
 using ServiceStack.ServiceHost;
 using System.Web;
+using Phytel.API.Common.CustomObject;
 
 namespace Phytel.API.AppDomain.NG
 {
@@ -22,7 +23,7 @@ namespace Phytel.API.AppDomain.NG
             try
             {
                 if (string.IsNullOrEmpty(token))
-                    throw new ArgumentException("Token is null or empty.");
+                    throw new InvalidTokenException("Token is null or empty.");
 
                 string additionalToken = BuildSecurityToken();
 
@@ -31,7 +32,10 @@ namespace Phytel.API.AppDomain.NG
                 JsonServiceClient.HttpWebRequestFilter = x =>
                     x.Headers.Add(string.Format("{0}: {1}", PhytelSecurityHeaderKey, additionalToken));
 
-                ValidateTokenResponse response = client.Post<ValidateTokenResponse>(string.Format("{0}/{1}/{2}/token", ADSecurityServiceURL, "NG", version),
+                ValidateTokenResponse response = client.Post<ValidateTokenResponse>(string.Format("{0}/{1}/{2}/token", 
+                    ADSecurityServiceURL,
+                    "NG",
+                    version),
                     new ValidateTokenRequest { Token = token } as object);
 
                 return response;

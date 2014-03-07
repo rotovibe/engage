@@ -1,5 +1,5 @@
 using Phytel.API.AppDomain.NG.DTO;
-using Phytel.API.Common.CustomObjects;
+using Phytel.API.Common.CustomObject;
 using Phytel.API.DataDomain.Cohort.DTO;
 using Phytel.API.DataDomain.Contact.DTO;
 using Phytel.API.DataDomain.LookUp.DTO;

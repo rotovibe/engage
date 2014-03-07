@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using ServiceStack.ServiceInterface.ServiceModel;
 using Phytel.API.Interface;
-using Phytel.API.Common.CustomObjects;
+using Phytel.API.Common.CustomObject;
 
 namespace Phytel.API.AppDomain.NG.DTO
 {
