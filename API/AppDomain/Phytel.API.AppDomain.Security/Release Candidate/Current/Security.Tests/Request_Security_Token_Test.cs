@@ -15,10 +15,12 @@ namespace Phytel.API.AppDomain.Security.Services.Test
             // need to make sure that there is a registration in the apiusertoken table in the DB for this user.
             string controlValue = "inhealthadmin";
             string sampleValue;
+            string token = "1cc93a7a-dde8-44a3-a534-a568d02e5ff0";
+
             IRestClient client = new JsonServiceClient();
 
-            AuthenticateResponse response = client.Post<AuthenticateResponse>("http://localhost:999/api/security/login",
-                new AuthenticateRequest { APIKey = "12345", Context = "NG", Token = "1234" } as object);
+            AuthenticateResponse response = client.Post<AuthenticateResponse>("http://localhost:888/security/v1/login",
+                new AuthenticateRequest { APIKey = "12345", Context = "NG", Token = token } as object);
             sampleValue = response.UserName;
             Assert.AreEqual(controlValue, sampleValue);
         }
@@ -28,7 +30,7 @@ namespace Phytel.API.AppDomain.Security.Services.Test
         {
             IRestClient client = new JsonServiceClient();
             LogoutResponse response = client.Post<LogoutResponse>("http://localhost:888/security/v1/logout",
-                new LogoutRequest { Context = "NG", Token = "52a887c6d6a4850a8cd99f02" } as object);
+                new LogoutRequest { Context = "NG", Token = "53162017072ef71b5c3d8e4f" } as object);
             Assert.AreEqual(response.SuccessfulLogout, true);
         }
     }

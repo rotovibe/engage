@@ -1100,14 +1100,21 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
 
         internal static void InitializeProgramAttributes(PutProgramToPatientRequest request, PutProgramToPatientResponse response)
         {
-            // create program attribute insertion
-            ProgramAttribute attr = DTOUtils.InitializeElementAttributes(response.program);
+            try
+            {
+                // create program attribute insertion
+                ProgramAttribute attr = DTOUtils.InitializeElementAttributes(response.program);
 
-            IProgramRepository<PutProgramAttributesResponse> attrRepo =
-                Phytel.API.DataDomain.Program.ProgramRepositoryFactory<PutProgramAttributesResponse>
-                .GetProgramAttributesRepository(request.ContractNumber, request.Context);
+                IProgramRepository<PutProgramAttributesResponse> attrRepo =
+                    Phytel.API.DataDomain.Program.ProgramRepositoryFactory<PutProgramAttributesResponse>
+                    .GetProgramAttributesRepository(request.ContractNumber, request.Context);
 
-            attrRepo.Insert(attr);
+                attrRepo.Insert(attr);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("DD: InitializeProgramAttributes()" + ex.Message, ex.InnerException);
+            }
         }
     }
 }

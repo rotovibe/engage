@@ -11,7 +11,7 @@ using Phytel.API.Common;
 namespace Phytel.API.DataDomain.PatientObservation.DTO
 {
     [BsonIgnoreExtraElements(false)]
-    [MongoIndex(Keys = new string[] { TTLDateProperty }, TimeToLive = 0)]
+    [MongoIndex(Keys = new string[] { PatientIdProperty,ObservationIdProperty, DeleteFlagProperty, TTLDateProperty })]
     public class MEPatientObservation : IMongoEntity<ObjectId>, IMEEntity
     {
         public MEPatientObservation() { Id = ObjectId.GenerateNewId(); }
@@ -30,15 +30,10 @@ namespace Phytel.API.DataDomain.PatientObservation.DTO
         [BsonIgnoreIfNull(true)]
         public ObjectId PatientId { get; set; }
 
-        public const string ReferenceCodingIdProperty = "rcid";
-        [BsonElement(ReferenceCodingIdProperty)]
-        [BsonIgnoreIfNull(true)]
-        public string ReferenceCodingId { get; set; }
-
         public const string NumericValueProperty = "nval";
         [BsonElement(NumericValueProperty)]
         [BsonIgnoreIfNull(true)]
-        public float? NumericValue { get; set; }
+        public double? NumericValue { get; set; }
 
         public const string NonNumericValueProperty = "nnval";
         [BsonElement(NonNumericValueProperty)]

@@ -9,6 +9,9 @@ namespace Phytel.API.DataDomain.PatientObservation.DTO
         [ApiMember(Name = "PatientId", Description = "Id of the Patient for whom a goal is being created.", ParameterType = "property", DataType = "string", IsRequired = true)]
         public string PatientId { get; set; }
 
+        [ApiMember(Name = "SetId", Description = "Id of the set to update.", ParameterType = "property", DataType = "string", IsRequired = true)]
+        public string SetId { get; set; }
+
         [ApiMember(Name = "PatientObservationId", Description = "Id of the patient observation to delete.", ParameterType = "property", DataType = "string", IsRequired = true)]
         public string PatientObservationId { get; set; }
 

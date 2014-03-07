@@ -13,6 +13,10 @@ namespace Phytel.API.DataDomain.Patient.DTO
 
     public class SearchFieldData
     {
+        public SearchFieldData()
+        {
+            Value = null;
+        }
         public string FieldName { get; set; }
         public string Value { get; set; }
         public bool Active { get; set; }

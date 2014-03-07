@@ -1,6 +1,7 @@
 ﻿using Phytel.API.AppDomain.NG.DTO;
 using Phytel.API.AppDomain.NG.PlanSpecification;
 using Phytel.API.DataDomain.Patient.DTO;
+using Phytel.API.Interface;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -147,13 +148,13 @@ namespace Phytel.API.AppDomain.NG
                         if (state.Equals(1)) // not eligible
                         {
                             program.ElementState = 5;
-                            //program.EndDate = System.DateTime.UtcNow; // remove after testing
-                            //closedby ???
+                            progAttr.Eligibility = 1;
                             progAttr.EndDate = System.DateTime.UtcNow;
                         }
                         else if (state.Equals(2)) // eligible
                         {
                             program.ElementState = 4;
+                            progAttr.Eligibility = 2;
                         }
                     }
                 }
@@ -298,11 +299,11 @@ namespace Phytel.API.AppDomain.NG
             }
         }
 
-        internal static void RegisterCohortPatientViewProblemToPatient(string problemId, string patientId)
+        internal static void RegisterCohortPatientViewProblemToPatient(string problemId, string patientId, IAppDomainRequest request)
         {
             try
             {
-                CohortPatientViewData cpvd = GetCohortPatientViewRecord(patientId);
+                CohortPatientViewData cpvd = GetCohortPatientViewRecord(patientId, request);
                 // check to see if problem exists in the searchfield
                 if (!cpvd.SearchFields.Exists(sf => sf.Value == problemId))
                 {
@@ -325,7 +326,7 @@ namespace Phytel.API.AppDomain.NG
                     });
                 }
 
-                PlanElementEndpointUtil.UpdateCohortPatientViewProblem(cpvd, patientId);
+                PlanElementEndpointUtil.UpdateCohortPatientViewProblem(cpvd, patientId, request);
             }
             catch (Exception ex)
             {
@@ -333,11 +334,11 @@ namespace Phytel.API.AppDomain.NG
             }
         }
 
-        private static CohortPatientViewData GetCohortPatientViewRecord(string patientId)
+        private static CohortPatientViewData GetCohortPatientViewRecord(string patientId, IAppDomainRequest request)
         {
             try
             {
-                CohortPatientViewData cpvd = PlanElementEndpointUtil.RequestCohortPatientViewData(patientId);
+                CohortPatientViewData cpvd = PlanElementEndpointUtil.RequestCohortPatientViewData(patientId, request);
                 return cpvd;
             }
             catch (Exception ex)
@@ -346,24 +347,24 @@ namespace Phytel.API.AppDomain.NG
             }
         }
 
-        internal static void SaveReportingAttributes(DD.ProgramAttribute _programAttributes)
+        internal static void SaveReportingAttributes(DD.ProgramAttribute _programAttributes, IAppDomainRequest request)
         {
             try
             {
                 // 1) get program attribute
-                DD.ProgramAttribute pAtt = PlanElementEndpointUtil.GetProgramAttributes(_programAttributes.PlanElementId);
+                DD.ProgramAttribute pAtt = PlanElementEndpointUtil.GetProgramAttributes(_programAttributes.PlanElementId, request);
                 // 2) update existing attributes
                 if (pAtt != null)
                 {
                     bool dirty = ModifyProgramAttributePropertiesForUpdate(pAtt, _programAttributes);
                     if (dirty)
                     {
-                        PlanElementEndpointUtil.UpdateProgramAttributes(pAtt);
+                        PlanElementEndpointUtil.UpdateProgramAttributes(pAtt, request);
                     }
                 }
                 else
                 {
-                    PlanElementEndpointUtil.InsertNewProgramAttribute(_programAttributes);
+                    PlanElementEndpointUtil.InsertNewProgramAttribute(_programAttributes, request);
                 }
             }
             catch (Exception ex)
@@ -412,7 +413,7 @@ namespace Phytel.API.AppDomain.NG
             }
         }
 
-        internal static void SetStartDateForProgramAttributes(string programId)
+        internal static void SetStartDateForProgramAttributes(string programId, IAppDomainRequest request)
         {
             try
             {
@@ -423,16 +424,16 @@ namespace Phytel.API.AppDomain.NG
                 };
 
                 // 1) get program attribute
-                DD.ProgramAttribute pAtt = PlanElementEndpointUtil.GetProgramAttributes(pa.PlanElementId);
+                DD.ProgramAttribute pAtt = PlanElementEndpointUtil.GetProgramAttributes(pa.PlanElementId, request);
                 // 2) update existing attributes
                 if (pAtt != null)
                 {
                     ModifyProgramAttributePropertiesForUpdate(pAtt, pa);
-                    PlanElementEndpointUtil.UpdateProgramAttributes(pAtt);
+                    PlanElementEndpointUtil.UpdateProgramAttributes(pAtt, request);
                 }
                 else
                 {
-                    PlanElementEndpointUtil.InsertNewProgramAttribute(pa);
+                    PlanElementEndpointUtil.InsertNewProgramAttribute(pa, request);
                 }
 
             }

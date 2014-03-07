@@ -73,7 +73,7 @@ namespace Phytel.API.AppDomain.NG.Observation
             }
         }
 
-        internal static bool UpdatePatientObservation(PostUpdateObservationItemsRequest request, PatientObservationRecordData pord, List<string> observationIds)
+        internal static bool UpdatePatientObservation(PostUpdateObservationItemsRequest request, PatientObservationRecordData pord)
         {
             bool result = false;
             try
@@ -88,8 +88,7 @@ namespace Phytel.API.AppDomain.NG.Observation
                     request.PatientId), new PutUpdateObservationDataRequest
                     {
                         PatientObservationData = pord,
-                        UserId = request.UserId,
-                        PatientObservationIdsList = observationIds
+                        UserId = request.UserId
                     } as object);
 
                 if (dataDomainResponse.Result)
@@ -105,28 +104,27 @@ namespace Phytel.API.AppDomain.NG.Observation
             }
         }
 
-        internal static List<PatientObservationData> GetAdditionalObservationsRequest(GetAdditionalObservationItemsRequest request)
+        internal static PatientObservationData GetAdditionalObservationItemRequest(GetAdditionalObservationItemRequest request)
         {
             try
             {
-                List<PatientObservationData> result = null;
+                PatientObservationData result = null;
                 IRestClient client = new JsonServiceClient();
-                GetAdditionalObservationsResponse dataDomainResponse = client.Post<GetAdditionalObservationsResponse>(
-                    string.Format("{0}/{1}/{2}/{3}/Observation/Type/{4}?ObservationId={5}&PatientId={6}",
+                GetAdditionalObservationDataItemResponse dataDomainResponse = client.Post<GetAdditionalObservationDataItemResponse>(
+                    string.Format("{0}/{1}/{2}/{3}/Observation/{4}/Additional/",
                     DDPatientObservationsServiceUrl,
                     "NG",
                     request.Version,
                     request.ContractNumber,
-                    request.TypeId,
-                    request.ObservationId,
-                    request.PatientId), new GetAdditionalObservationsRequest
+                    request.ObservationId), new GetAdditionalObservationDataItemRequest
                     {
-
+                        UserId = request.UserId,
+                        PatientId = request.PatientId
                     });
 
                 if (dataDomainResponse != null)
                 {
-                    result = dataDomainResponse.StandardObservations;
+                    result = dataDomainResponse.Observation;
                 }
 
                 return result;

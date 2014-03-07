@@ -149,6 +149,13 @@ namespace Phytel.API.Common
         PutContact = 399
     }
 
+    public enum DataAuditType
+    { 
+        Insert,
+        Update,
+        Delete
+    }
+
     public enum ObservationState
     {
         Complete = 1,

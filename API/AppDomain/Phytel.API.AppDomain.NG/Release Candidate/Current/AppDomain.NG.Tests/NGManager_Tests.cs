@@ -22,13 +22,40 @@ namespace Phytel.API.AppDomain.NG.Test
                 ContractNumber = contractNumber,
                 Token = token,
                 Version = version,
-                PatientID = "52e26f11072ef7191c111caf"
+                PatientID = "52f55899072ef709f84e7637",
+                UserId = "bb241c64-a0ff-4e01-ba5f-4246ef50780e"
             };
             // Act
             GetPatientResponse response = ngManager.GetPatient(request);
 
             //Assert
             Assert.IsTrue(response.Patient != null);
+        }
+
+        [TestMethod]
+        public void UpdatePatientBackground_Test()
+        {
+            // Arrange
+            string version = "v1";
+            string contractNumber = "InHealth001";
+            string token = "1234";
+            NGManager ngManager = new NGManager();
+            PutPatientBackgroundRequest request = new PutPatientBackgroundRequest
+            {
+                ContractNumber = contractNumber,
+                Token = token,
+                Version = version,
+                PatientId = "52f55899072ef709f84e7637",
+                UserId = "bb241c64-a0ff-4e01-ba5f-4246ef50780e",
+                Background = "Hello new first BG."
+            };
+
+            // Act
+            PutPatientBackgroundResponse response = ngManager.UpdateBackground(request);
+
+            //Assert
+            Assert.IsTrue(response != null);
+        
         }
 
         #region PatientProblem

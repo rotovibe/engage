@@ -37,17 +37,17 @@ namespace Phytel.API.DataDomain.PatientGoal.DTO
         public const string CategoryProperty = "cat";
         [BsonElement(CategoryProperty)]
         [BsonIgnoreIfNull(false)]
-        public ObjectId? Category { get; set; }
+        public ObjectId? CategoryId { get; set; }
 
         public const string AssignedToProperty = "ato";
         [BsonElement(AssignedToProperty)]
         [BsonIgnoreIfNull(false)]
-        public ObjectId? AssignedTo { get; set; }
+        public ObjectId? AssignedToId { get; set; }
 
         public const string BarriersProperty = "bar";
         [BsonElement(BarriersProperty)]
         [BsonIgnoreIfNull(false)]
-        public List<ObjectId> Barriers { get; set; }
+        public List<ObjectId> BarrierIds { get; set; }
 
         public const string StatusProperty = "sts";
         [BsonElement(StatusProperty)]

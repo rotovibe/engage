@@ -45,15 +45,15 @@ namespace Phytel.API.DataDomain.PatientGoal.DTO
         
         [BsonElement(FocusAreaProperty)]
         [BsonIgnoreIfNull(true)]
-        public List<ObjectId> FocusAreas { get; set; }
+        public List<ObjectId> FocusAreaIds { get; set; }
         
         [BsonElement(SourceProperty)]
         [BsonIgnoreIfNull(true)]
-        public ObjectId? Source { get; set; }
+        public ObjectId? SourceId { get; set; }
         
         [BsonElement(ProgramProperty)]
         [BsonIgnoreIfNull(true)]
-        public List<ObjectId> Programs { get; set; }
+        public List<ObjectId> ProgramIds { get; set; }
 
         [BsonElement(TypeProperty)]
         [BsonIgnoreIfNull(true)]

@@ -133,13 +133,13 @@ namespace Phytel.API.AppDomain.NG
                     StartDate = po.StartDate,
                     TypeId = po.TypeId,
                     Units = po.Units,
-                    Source = "CM"
+                    Source = "CM" //po.Source
                 };
 
-                float fVal = 0;
-                if (float.TryParse(ov.Value, NumberStyles.Float, CultureInfo.InvariantCulture, out fVal))
+                double dVal = 0;
+                if (double.TryParse(ov.Value, out dVal))
                 {
-                    pord.Value = fVal;
+                    pord.Value = dVal;
                 }
                 else
                 {
@@ -175,6 +175,33 @@ namespace Phytel.API.AppDomain.NG
             catch (WebServiceException ex)
             {
                 throw new WebServiceException("AD:GetPatientObservationIds()" + ex.Message, ex.InnerException);
+            }
+        }
+
+        internal static AD.PatientObservation GetAdditionalObservationItemForPatient(GetAdditionalObservationItemRequest request, PatientObservationData o)
+        {
+            AD.PatientObservation result = new DTO.Observation.PatientObservation();
+            try
+            {
+                result = new Phytel.API.AppDomain.NG.DTO.Observation.PatientObservation
+                {
+                    ObservationId = o.ObservationId,
+                    EndDate = o.EndDate,
+                    GroupId = o.GroupId,
+                    Id = o.Id,
+                    PatientId = o.PatientId,
+                    Name = o.Name,
+                    Standard = o.Standard,
+                    StartDate = o.StartDate,
+                    TypeId = o.TypeId,
+                    Units = o.Units,
+                    Values = GetValues(o.Values)
+                };
+                return result;
+            }
+            catch (WebServiceException ex)
+            {
+                throw new WebServiceException("App Domain:PostInitialGoalRequest()" + ex.Message, ex.InnerException);
             }
         }
     }

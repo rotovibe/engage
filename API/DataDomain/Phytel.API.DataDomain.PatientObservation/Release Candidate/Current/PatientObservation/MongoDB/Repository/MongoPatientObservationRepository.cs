@@ -194,11 +194,11 @@ namespace Phytel.API.DataDomain.PatientObservation
                     uv.Add(MB.Update.Set(MEPatientObservation.TTLDateProperty, BsonNull.Value));
                     uv.Add(MB.Update.Set(MEPatientObservation.DeleteFlagProperty, false));
                     uv.Add(MB.Update.Set(MEPatientObservation.UpdatedByProperty, odr.UserId));
-                    uv.Add(MB.Update.Set(MEPatientObservation.SourceProperty, pord.Source));
                     uv.Add(MB.Update.Set(MEPatientObservation.LastUpdatedOnProperty, System.DateTime.UtcNow));
 
+                    if (pord.Source != null) uv.Add(MB.Update.Set(MEPatientObservation.SourceProperty, pord.Source));
                     if (pord.NonNumericValue != null) uv.Add(MB.Update.Set(MEPatientObservation.NonNumericValueProperty, pord.NonNumericValue));
-                    if (pord.Value != 0) uv.Add(MB.Update.Set(MEPatientObservation.NumericValueProperty, pord.Value));
+                    if (pord.Value != null) uv.Add(MB.Update.Set(MEPatientObservation.NumericValueProperty, BsonDouble.Create(pord.Value)));
                     if (pord.Units != null) uv.Add(MB.Update.Set(MEPatientObservation.UnitsProperty, pord.Units));
                     if (pord.EndDate != null) uv.Add(MB.Update.Set(MEPatientObservation.EndDateProperty, pord.EndDate));
                     if (pord.StartDate != null) uv.Add(MB.Update.Set(MEPatientObservation.StartDateProperty, pord.StartDate));
@@ -222,7 +222,7 @@ namespace Phytel.API.DataDomain.PatientObservation
         {
             PutInitializeObservationDataRequest request = (PutInitializeObservationDataRequest)newEntity;
             PatientObservationData patientObservationData = null;
-            
+
             try
             {
                 MEPatientObservation mePg = new MEPatientObservation
@@ -232,7 +232,8 @@ namespace Phytel.API.DataDomain.PatientObservation
                     TTLDate = System.DateTime.UtcNow.AddDays(_initializeDays),
                     UpdatedBy = request.UserId,
                     LastUpdatedOn = DateTime.UtcNow,
-                    ObservationId = ObjectId.Parse(request.ObservationId)
+                    ObservationId = ObjectId.Parse(request.ObservationId),
+                    DeleteFlag = true
                 };
 
                 using (PatientObservationMongoContext ctx = new PatientObservationMongoContext(_dbName))
@@ -242,7 +243,8 @@ namespace Phytel.API.DataDomain.PatientObservation
                     {
                         patientObservationData = new PatientObservationData
                         {
-                            Id = mePg.Id.ToString()
+                            Id = mePg.Id.ToString(),
+                            PatientId = mePg.PatientId.ToString()
                         };
                     }
                 }
@@ -290,29 +292,27 @@ namespace Phytel.API.DataDomain.PatientObservation
                 List<IMongoQuery> queries = new List<IMongoQuery>();
                 queries.Add(Query.EQ(MEPatientObservation.PatientIdProperty, ObjectId.Parse(patientId)));
                 queries.Add(Query.EQ(MEPatientObservation.ObservationIdProperty, ObjectId.Parse(observationTypeId)));
+                queries.Add(Query.EQ(MEPatientObservation.DeleteFlagProperty, false));
                 IMongoQuery mQuery = Query.And(queries);
+
+                MEPatientObservation meObservation = null;
 
                 using (PatientObservationMongoContext ctx = new PatientObservationMongoContext(_dbName))
                 {
-                    List<MEPatientObservation> mpl = ctx.PatientObservations.Collection.Find(mQuery).ToList();
+                    meObservation = ctx.PatientObservations.Collection.Find(mQuery).SetSortOrder(SortBy.Descending(MEPatientObservation.StartDateProperty).Descending(MEPatientObservation.LastUpdatedOnProperty)).FirstOrDefault();
 
-                    if (mpl != null && mpl.Count > 0)
+                    if (meObservation != null)
                     {
-                        MEPatientObservation meObservation = ctx.PatientObservations.Collection.Find(mQuery).OrderByDescending(po => po.StartDate).First();
-
-                        if (meObservation != null)
+                        observationData = new PatientObservationData
                         {
-                            observationData = new PatientObservationData
-                            {
-                                Id = meObservation.Id.ToString(),
-                                PatientId = meObservation.PatientId.ToString(),
-                                Values = GetValueList(meObservation.NumericValue, meObservation.NonNumericValue),
-                                Source = meObservation.Source,
-                                StartDate = meObservation.StartDate,
-                                EndDate = meObservation.EndDate,
-                                Units = meObservation.Units
-                            };
-                        }
+                            Id = meObservation.Id.ToString(),
+                            PatientId = meObservation.PatientId.ToString(),
+                            Values = GetValueList(meObservation.NumericValue, meObservation.NonNumericValue),
+                            Source = meObservation.Source != null ? meObservation.Source : null,
+                            StartDate = meObservation.StartDate,
+                            EndDate = meObservation.EndDate,
+                            Units = meObservation.Units != null ? meObservation.Units : null
+                        };
                     }
                 }
                 return observationData as object;
@@ -320,7 +320,7 @@ namespace Phytel.API.DataDomain.PatientObservation
             catch (Exception ex) { throw ex; }
         }
 
-        private List<ObservationValueData> GetValueList(float? numericVal, string nonNumericVal)
+        private List<ObservationValueData> GetValueList(double? numericVal, string nonNumericVal)
         {
             List<ObservationValueData> ovdl = new List<ObservationValueData>();
             try

@@ -78,8 +78,14 @@ namespace Phytel.API.DataDomain.Patient
                 GetPatientDataResponse result = new GetPatientDataResponse();
 
                 IPatientRepository<GetPatientDataResponse> repo = PatientRepositoryFactory<GetPatientDataResponse>.GetPatientRepository(request.ContractNumber, request.Context);
-                result.Patient = repo.FindByID(request.PatientID, request.UserId) as DTO.PatientData;
-
+                if (string.IsNullOrEmpty(request.ContactId))
+                {
+                    result.Patient = repo.FindByID(request.PatientID) as DTO.PatientData;
+                }
+                else 
+                {
+                    result.Patient = repo.FindByID(request.PatientID, request.ContactId) as DTO.PatientData;
+                }
                 return (result != null ? result : new GetPatientDataResponse());
             }
             catch (Exception)
@@ -130,6 +136,14 @@ namespace Phytel.API.DataDomain.Patient
             PutPatientFlaggedResponse response = new PutPatientFlaggedResponse();
             IPatientRepository<PutPatientFlaggedRequest> repo = PatientRepositoryFactory<PutPatientFlaggedRequest>.GetPatientRepository(request.ContractNumber, request.Context);
             response = repo.UpdateFlagged(request) as PutPatientFlaggedResponse;
+            return response;
+        }
+
+        public static PutPatientBackgroundDataResponse UpdatePatientBackground(PutPatientBackgroundDataRequest request)
+        {
+            PutPatientBackgroundDataResponse response = new PutPatientBackgroundDataResponse();
+            IPatientRepository<PutPatientBackgroundDataRequest> repo = PatientRepositoryFactory<PutPatientBackgroundDataRequest>.GetPatientRepository(request.ContractNumber, request.Context);
+            response = repo.UpdateBackground(request) as PutPatientBackgroundDataResponse;
             return response;
         }
 

@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using MongoDB.Bson;
 using ServiceStack.Common.Web;
+using Phytel.API.Interface;
 
 namespace Phytel.API.DataDomain.PatientObservation
 {
@@ -64,6 +65,7 @@ namespace Phytel.API.DataDomain.PatientObservation
                 List<PatientObservationData> podl = new List<PatientObservationData>();
 
                 // load and initialize each observation
+                string initSetId = ObjectId.GenerateNewId().ToString();
                 foreach (ObservationData od in odl)
                 {
                     PatientObservationData pod = new PatientObservationData
@@ -77,17 +79,18 @@ namespace Phytel.API.DataDomain.PatientObservation
                         Units = od.Units,
                         Values = new List<ObservationValueData>(),
                         TypeId = od.ObservationType,
-                        PatientId = request.PatientId
+                        PatientId = request.PatientId,
+                        Source = od.Source
                     };
 
                     // do an insert here and get an id from mongo
-                    ObservationValueData ovd = InitializePatientObservation(request, pod.Values, od);
+                    ObservationValueData ovd = InitializePatientObservation(request, request.PatientId, pod.Values, od, initSetId);
 
                     if (od.GroupId != null)
                     {
-                        if (GroupExists(podl, od.GroupId))
+                        if (ObservationUtil.GroupExists(podl, od.GroupId))
                         {
-                            FindAndInsert(podl, od.GroupId, ovd);
+                            ObservationUtil.FindAndInsert(podl, od.GroupId, ovd);
                         }
                         else
                         {
@@ -110,76 +113,26 @@ namespace Phytel.API.DataDomain.PatientObservation
             }
         }
 
-        private static void FindAndInsert(List<PatientObservationData> podl, string gid, ObservationValueData ovd)
-        {
-            try
-            {
-                if (podl != null && podl.Count > 0)
-                {
-                    foreach (PatientObservationData p in podl)
-                    {
-                        if (p.GroupId != null)
-                        {
-                            if (p.GroupId.Equals(gid))
-                            {
-                                if (!p.Values.Exists(x => x.Id == ovd.Id)) p.Values.Add(ovd);
-                            }
-                        }
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                throw;
-            }
-        }
-
-        private static bool GroupExists(List<PatientObservationData> list, string gid)
-        {
-            bool result = false;
-            try
-            {
-                if (list != null && list.Count > 0)
-                {
-                    foreach (PatientObservationData p in list)
-                    {
-                        if (p.GroupId != null)
-                        {
-                            if (p.GroupId.Equals(gid))
-                            {
-                                result = true;
-                                break;
-                            }
-                        }
-                    }
-                }
-                return result;
-            }
-            catch (Exception ex)
-            {
-                throw;
-            }
-        }
-
-        private static ObservationValueData InitializePatientObservation(GetStandardObservationsRequest request, List<ObservationValueData> list, ObservationData od)
+        public static ObservationValueData InitializePatientObservation(IDataDomainRequest request, string patientId, List<ObservationValueData> list, ObservationData od, string initSetId)
         {
             try
             {
                 IPatientObservationRepository<GetStandardObservationsResponse> repo = PatientObservationRepositoryFactory<GetStandardObservationsResponse>.GetPatientObservationRepository(request.ContractNumber, request.Context);
                 PutInitializeObservationDataRequest req = new PutInitializeObservationDataRequest
                 {
-                    PatientId = request.PatientId,
+                    PatientId = patientId,
                     ObservationId = od.Id,
                     Context = request.Context,
                     ContractNumber = request.ContractNumber,
                     UserId = request.UserId,
-                    Version = request.Version
+                    Version = request.Version,
+                    SetId = initSetId
                 };
 
                 ObservationValueData ovd = new ObservationValueData();
 
                 // get last value for each observation data
-                GetPreviousValuesForObservation(ovd, request.PatientId, od.Id, request.Context, request.ContractNumber);
+                GetPreviousValuesForObservation(ovd, patientId, od.Id, request.Context, request.ContractNumber);
 
                 PatientObservationData pod = (PatientObservationData)repo.Initialize(req);
 
@@ -212,29 +165,9 @@ namespace Phytel.API.DataDomain.PatientObservation
                         Source = val.Source,
                         StartDate = val.StartDate,
                         Unit = val.Units,
-                        Value = GetPreviousValues(val.Values)
+                        Value = ObservationUtil.GetPreviousValues(val.Values)
                     };
                 }
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
-
-        private static string GetPreviousValues(List<ObservationValueData> list)
-        {
-            string result = string.Empty;
-            try
-            {
-                if (list != null && list.Count > 0)
-                {
-                    list.ForEach(x =>
-                    {
-                        result = result + x.Value;
-                    });
-                }
-                return result;
             }
             catch (Exception ex)
             {
@@ -279,21 +212,21 @@ namespace Phytel.API.DataDomain.PatientObservation
                 IPatientObservationRepository<PutUpdateObservationDataResponse> repo =
                     PatientObservationRepositoryFactory<PutUpdateObservationDataResponse>.GetPatientObservationRepository(request.ContractNumber, request.Context);
 
-                List<PatientObservationData> pod = (List<PatientObservationData>)repo.FindObservationIdByPatientId(request.PatientId);
-                List<string> dbPatientObservationIdList = GetPatientObservationIds(pod);
+                //List<PatientObservationData> pod = (List<PatientObservationData>)repo.FindObservationIdByPatientId(request.PatientId);
+                //List<string> dbPatientObservationIdList = ObservationUtil.GetPatientObservationIds(pod);
 
-                // update existing patientobservation entries with a delete
-                List<string> excludes = dbPatientObservationIdList.Except(request.PatientObservationIdsList).ToList<string>();
+                //// update existing patientobservation entries with a delete
+                //List<string> excludes = dbPatientObservationIdList.Except(request.PatientObservationIdsList).ToList<string>();
 
-                if (excludes != null && excludes.Count > 0)
-                {
-                    excludes.ForEach(ex =>
-                    {
-                        // create delete patientobservation request
-                        DeletePatientObservationRequest dpo = new DeletePatientObservationRequest { PatientObservationId = ex, PatientId = request.PatientId, UserId = request.UserId };
-                        repo.Delete(dpo);
-                    });
-                }
+                //if (excludes != null && excludes.Count > 0)
+                //{
+                //    excludes.ForEach(ex =>
+                //    {
+                //        // create delete patientobservation request
+                //        DeletePatientObservationRequest dpo = new DeletePatientObservationRequest { PatientObservationId = ex, SetId = request.PatientObservationData.SetId, PatientId = request.PatientId, UserId = request.UserId };
+                //        repo.Delete(dpo);
+                //    });
+                //}
 
                 // update
                 if (request.PatientObservationData != null && request.PatientObservationData.Id != null)
@@ -307,29 +240,23 @@ namespace Phytel.API.DataDomain.PatientObservation
             }
         }
 
-        private static List<string> GetPatientObservationIds(List<PatientObservationData> pod)
+        public static GetAdditionalObservationDataItemResponse GetAdditionalObservationItemById(GetAdditionalObservationDataItemRequest request)
         {
-            List<string> list = new List<string>();
             try
             {
-                if (pod != null && pod.Count > 0)
-                {
-                    pod.ForEach(t =>
-                    {
-                        list.Add(t.Id);
-                    });
-                }
-                return list;
+                GetAdditionalObservationDataItemResponse result = new GetAdditionalObservationDataItemResponse();
+                IPatientObservationRepository<GetAdditionalObservationDataItemResponse> repo = PatientObservationRepositoryFactory<GetAdditionalObservationDataItemResponse>.GetObservationRepository(request.ContractNumber, request.Context);
+                ObservationData od = (ObservationData)repo.FindByID(request.ObservationId);
+                PatientObservationData pod = ObservationUtil.MakeAdditionalObservation(request, repo, od);
+
+                result.Observation = pod;
+
+                return result;
             }
             catch (Exception ex)
             {
-                throw;
+                throw ex;
             }
-        }
-
-        public static GetAdditionalObservationsResponse GetAdditionalObservationsByType(GetAdditionalObservationsResponse request)
-        {
-            throw new NotImplementedException();
         }
     }
 }   

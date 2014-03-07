@@ -9,7 +9,7 @@ namespace Phytel.API.DataDomain.PatientObservation.DTO
     public class PatientObservationRecordData
     {
         public string Id { get; set; }
-        public float Value { get; set; }
+        public double? Value { get; set; }
         public string NonNumericValue { get; set; }
         public DateTime? StartDate { get; set; }
         public DateTime? EndDate { get; set; }
@@ -17,5 +17,6 @@ namespace Phytel.API.DataDomain.PatientObservation.DTO
         public string TypeId { get; set; }
         public string GroupId { get; set; }
         public string Source { get; set; }
+        public string SetId { get; set; }
     }
 }

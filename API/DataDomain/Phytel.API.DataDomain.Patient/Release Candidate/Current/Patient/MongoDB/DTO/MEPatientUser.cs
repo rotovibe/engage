@@ -9,7 +9,7 @@ namespace Phytel.API.DataDomain.Patient.DTO
 {
     [BsonIgnoreExtraElements(false)]
     [MongoIndex(Keys = new string[] { TTLDateProperty }, TimeToLive=0)]
-    [MongoIndex(Keys = new string[] { PatientIdProperty, UserIdProperty }, Unique = true)]
+    [MongoIndex(Keys = new string[] { PatientIdProperty, ContactIdProperty }, Unique = true)]
     public class MEPatientUser : IMongoEntity<ObjectId>, IMEEntity
     {
         public MEPatientUser() { Id = ObjectId.GenerateNewId(); }
@@ -22,7 +22,7 @@ namespace Phytel.API.DataDomain.Patient.DTO
         public const string TTLDateProperty = "ttl";
         public const string LastUpdatedOnProperty = "uon";
         public const string PatientIdProperty = "pid";
-        public const string UserIdProperty = "uid";
+        public const string ContactIdProperty = "cid";
         public const string FlaggedProperty = "flg";
 
         [BsonId]
@@ -32,9 +32,9 @@ namespace Phytel.API.DataDomain.Patient.DTO
         [BsonIgnoreIfNull(true)]
         public ObjectId PatientId { get; set; }
 
-        [BsonElement(UserIdProperty)]
+        [BsonElement(ContactIdProperty)]
         [BsonIgnoreIfNull(true)]
-        public string UserId { get; set; }
+        public ObjectId ContactId { get; set; }
 
         [BsonElement(FlaggedProperty)]
         [BsonIgnoreIfNull(true)]

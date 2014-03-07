@@ -104,15 +104,39 @@ namespace Phytel.API.Common.Audit
                 newMessage = new QueueMessage(Phytel.Framework.ASE.Data.Common.ASEMessageType.Process, messageQueue);
                 newMessage.Body = xmlBody;
 
-#if DEBUG
-                Debug.WriteLine(string.Format("***** Message Body ***** {0}", newMessage.Body));
-#endif
-
                 string title = string.Empty;
                 if (auditLog.Type.ToString() == "PageView")
                     title = auditLog.Type.ToString();
                 else
                     title = auditLog.Type.ToString();
+
+                MessageQueueHelper.SendMessage(@messageQueue, newMessage, title);
+            }
+
+        }
+
+        public static void WriteAudit(DataAudit.DataAudit auditLogToProcess, string title)
+        {
+            DataAudit.DataAudit auditLog = auditLogToProcess;
+            auditLog.TimeStamp = DateTime.Now;
+
+            QueueMessage newMessage = null;
+
+            //where should I get this?
+            string dbName = ConfigurationManager.AppSettings.Get("PhytelServicesConnName");
+            string configqueue = "DATA_AUDIT_QUEUE";
+
+            DataSet ds = Phytel.Services.SQLDataService.Instance.ExecuteSQL(dbName, false, string.Format("Select [Value] From ApplicationSetting Where [Key] = '{0}'", configqueue));
+
+            if (ds.Tables[0].Rows.Count > 0)
+            {
+                string messageQueue = ds.Tables[0].Rows[0]["Value"].ToString();
+                //string messageQueue = "fake";
+
+                string xmlBody = ToXML(auditLog);
+
+                newMessage = new QueueMessage(Phytel.Framework.ASE.Data.Common.ASEMessageType.Process, messageQueue);
+                newMessage.Body = xmlBody;
 
                 MessageQueueHelper.SendMessage(@messageQueue, newMessage, title);
             }

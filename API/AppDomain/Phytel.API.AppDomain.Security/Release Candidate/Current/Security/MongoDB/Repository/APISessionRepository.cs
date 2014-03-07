@@ -19,12 +19,12 @@ namespace Phytel.API.AppDomain.Security
             _objectContext = context;
         }
 
-        public AuthenticateResponse LoginUser(string token)
+        public AuthenticateResponse LoginUser(string token, string securityToken)
         {
             throw new NotImplementedException();
         }
 
-        public UserAuthenticateResponse LoginUser(string userName, string password, string apiKey, string productName)
+        public UserAuthenticateResponse LoginUser(string userName, string password, string securityToken, string apiKey, string productName)
         {
             try
             {
@@ -42,6 +42,7 @@ namespace Phytel.API.AppDomain.Security
                     {
                         session = new MEAPISession
                         {
+                            SecurityToken = securityToken,
                             APIKey = apiKey,
                             Product = productName,
                             SessionLengthInMinutes = user.SessionLengthInMinutes,
@@ -56,7 +57,7 @@ namespace Phytel.API.AppDomain.Security
                         throw new Exception("Login Failed!  Username and/or Password is incorrect");
 
                     response = new UserAuthenticateResponse 
-                                    { 
+                                    {
                                         APIToken = session.Id.ToString(), 
                                         Contracts = new List<ContractInfo>(), 
                                         Name = user.UserName, 
@@ -75,7 +76,7 @@ namespace Phytel.API.AppDomain.Security
             }
         }
 
-        public AuthenticateResponse LoginUser(AuthenticateResponse existingReponse, string apiKey, string productName)
+        public AuthenticateResponse LoginUser(AuthenticateResponse existingReponse, string securityToken, string apiKey, string productName)
         {
             try
             {
@@ -87,6 +88,7 @@ namespace Phytel.API.AppDomain.Security
                 {
                     MEAPISession session = new MEAPISession
                     {
+                        SecurityToken = securityToken,
                         APIKey = apiKey,
                         Product = productName,
                         SessionLengthInMinutes = existingReponse.SessionTimeout,
@@ -111,8 +113,7 @@ namespace Phytel.API.AppDomain.Security
             }
         }
 
-
-        public ValidateTokenResponse Validate(string token, string productName)
+        public ValidateTokenResponse Validate(string token, string securityToken, string productName)
         {
             try
             {
@@ -120,6 +121,7 @@ namespace Phytel.API.AppDomain.Security
 
                 int sessionLengthInMinutes = (from s in _objectContext.APISessions
                                               where s.Id == ObjectId.Parse(token)
+                                                && s.SecurityToken == securityToken
                                               select s.SessionLengthInMinutes).FirstOrDefault();
 
                 if (sessionLengthInMinutes > 0)
@@ -153,7 +155,7 @@ namespace Phytel.API.AppDomain.Security
             }
         }
 
-        public LogoutResponse Logout(string token, string context)
+        public LogoutResponse Logout(string token, string securityToken, string context)
         {
             LogoutResponse response = new LogoutResponse();
             response.SuccessfulLogout = false;
@@ -161,6 +163,7 @@ namespace Phytel.API.AppDomain.Security
             {
                 IMongoQuery removeQ = Query.And(
                                             Query.EQ(MEAPISession.IdProperty, ObjectId.Parse(token)),
+                                            Query.EQ(MEAPISession.SecurityTokenProperty, securityToken),
                                             Query.EQ(MEAPISession.ProductProperty, context.ToUpper()));
 
                 MEAPISession session = _objectContext.APISessions.Collection.FindOneById(ObjectId.Parse(token));

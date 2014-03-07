@@ -43,7 +43,6 @@
             this.colDOB = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.colSystemID = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.colSystemName = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.colTimeZone = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.colPhone1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.colPhone1Preferred = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.colPhone1Type = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -51,28 +50,30 @@
             this.colPhone2Preferred = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.colPhone2Type = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.colEmail1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.colEmail1Preferred = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.colEmail1Type = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.colEmail2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.colEmail2Preferred = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.colAddress1L1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.colAddress1L2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.colAddress1L3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.colEmail2Type = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.colAddress1Line1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.colAddress1Line2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.colAddress1Line3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.colAddress1City = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.colAddress1State = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.colAddress1ZipCode = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.colAddress1Zip = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.colAddress1Preferred = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.colAddress2L1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.colAddress2L2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.colAddress2L3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.colAddress1Type = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.colAddress2Line1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.colAddress2Line2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.colAddress2Line3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.colAddress2City = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.colAddress2State = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.colAddress2ZipCode = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.colAddress2Zip = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.colAddress2Preferred = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.checkBox1 = new System.Windows.Forms.CheckBox();
-            this.colEmail2Type = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.colEmail1Type = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.colAddress1Type = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.colAddress2Type = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.colCareManagerUserID = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.colTimeZone = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.SuspendLayout();
             // 
             // openFileDialog1
@@ -82,7 +83,7 @@
             // 
             // Browse
             // 
-            this.Browse.Location = new System.Drawing.Point(897, 12);
+            this.Browse.Location = new System.Drawing.Point(426, 12);
             this.Browse.Name = "Browse";
             this.Browse.Size = new System.Drawing.Size(75, 23);
             this.Browse.TabIndex = 1;
@@ -96,13 +97,13 @@
             this.textBox1.Location = new System.Drawing.Point(33, 15);
             this.textBox1.Name = "textBox1";
             this.textBox1.ReadOnly = true;
-            this.textBox1.Size = new System.Drawing.Size(858, 20);
+            this.textBox1.Size = new System.Drawing.Size(393, 20);
             this.textBox1.TabIndex = 2;
             this.textBox1.VisibleChanged += new System.EventHandler(this.textBox1_VisibleChanged);
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(405, 505);
+            this.button1.Location = new System.Drawing.Point(273, 299);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(75, 23);
             this.button1.TabIndex = 4;
@@ -113,7 +114,7 @@
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(486, 505);
+            this.button2.Location = new System.Drawing.Point(354, 299);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(75, 23);
             this.button2.TabIndex = 5;
@@ -148,26 +149,27 @@
             this.colEmail2,
             this.colEmail2Preferred,
             this.colEmail2Type,
-            this.colAddress1L1,
-            this.colAddress1L2,
-            this.colAddress1L3,
+            this.colAddress1Line1,
+            this.colAddress1Line2,
+            this.colAddress1Line3,
             this.colAddress1City,
             this.colAddress1State,
-            this.colAddress1ZipCode,
+            this.colAddress1Zip,
             this.colAddress1Preferred,
             this.colAddress1Type,
-            this.colAddress2L1,
-            this.colAddress2L2,
-            this.colAddress2L3,
+            this.colAddress2Line1,
+            this.colAddress2Line2,
+            this.colAddress2Line3,
             this.colAddress2City,
             this.colAddress2State,
-            this.colAddress2ZipCode,
+            this.colAddress2Zip,
             this.colAddress2Preferred,
-            this.colAddress2Type});
+            this.colAddress2Type,
+            this.colCareManagerUserID});
             this.listView1.FullRowSelect = true;
             this.listView1.Location = new System.Drawing.Point(33, 52);
             this.listView1.Name = "listView1";
-            this.listView1.Size = new System.Drawing.Size(1124, 426);
+            this.listView1.Size = new System.Drawing.Size(731, 227);
             this.listView1.Sorting = System.Windows.Forms.SortOrder.Ascending;
             this.listView1.TabIndex = 6;
             this.listView1.UseCompatibleStateImageBehavior = false;
@@ -177,27 +179,27 @@
             // colFirstName
             // 
             this.colFirstName.Text = "First Name";
-            this.colFirstName.Width = 70;
+            this.colFirstName.Width = 80;
             // 
             // colLastName
             // 
             this.colLastName.Text = "Last Name";
-            this.colLastName.Width = 70;
+            this.colLastName.Width = 73;
             // 
             // colMiddleName
             // 
             this.colMiddleName.Text = "Middle Name";
-            this.colMiddleName.Width = 75;
+            this.colMiddleName.Width = 74;
             // 
             // colSuffix
             // 
             this.colSuffix.Text = "Suffix";
-            this.colSuffix.Width = 45;
+            this.colSuffix.Width = 40;
             // 
             // colPreferredName
             // 
             this.colPreferredName.Text = "Preferred Name";
-            this.colPreferredName.Width = 36;
+            this.colPreferredName.Width = 95;
             // 
             // colGender
             // 
@@ -207,22 +209,16 @@
             // colDOB
             // 
             this.colDOB.Text = "DOB";
-            this.colDOB.Width = 45;
+            this.colDOB.Width = 62;
             // 
             // colSystemID
             // 
             this.colSystemID.Text = "System ID";
-            this.colSystemID.Width = 65;
             // 
             // colSystemName
             // 
             this.colSystemName.Text = "System Name";
-            this.colSystemName.Width = 85;
-            // 
-            // colTimeZone
-            // 
-            this.colTimeZone.Text = "Time Zone";
-            this.colTimeZone.Width = 70;
+            this.colSystemName.Width = 81;
             // 
             // colPhone1
             // 
@@ -231,12 +227,10 @@
             // colPhone1Preferred
             // 
             this.colPhone1Preferred.Text = "Preferred";
-            this.colPhone1Preferred.Width = 55;
             // 
             // colPhone1Type
             // 
             this.colPhone1Type.Text = "Type";
-            this.colPhone1Type.Width = 45;
             // 
             // colPhone2
             // 
@@ -245,106 +239,19 @@
             // colPhone2Preferred
             // 
             this.colPhone2Preferred.Text = "Preferred";
-            this.colPhone2Preferred.Width = 30;
             // 
             // colPhone2Type
             // 
             this.colPhone2Type.Text = "Type";
-            this.colPhone2Type.Width = 29;
             // 
             // colEmail1
             // 
             this.colEmail1.Text = "Email 1";
-            this.colEmail1.Width = 50;
-            // 
-            // colEmail1Preferred
-            // 
-            this.colEmail1Preferred.Text = "Preferred";
-            this.colEmail1Preferred.Width = 55;
-            // 
-            // colEmail2
-            // 
-            this.colEmail2.Text = "Email 2";
-            this.colEmail2.Width = 50;
-            // 
-            // colEmail2Preferred
-            // 
-            this.colEmail2Preferred.Text = "Preferred";
-            this.colEmail2Preferred.Width = 55;
-            // 
-            // colAddress1L1
-            // 
-            this.colAddress1L1.Text = "Address 1";
-            this.colAddress1L1.Width = 70;
-            // 
-            // colAddress1L2
-            // 
-            this.colAddress1L2.Text = "Line 2";
-            this.colAddress1L2.Width = 45;
-            // 
-            // colAddress1L3
-            // 
-            this.colAddress1L3.Text = "Line 3";
-            this.colAddress1L3.Width = 45;
-            // 
-            // colAddress1City
-            // 
-            this.colAddress1City.Text = "City";
-            this.colAddress1City.Width = 40;
-            // 
-            // colAddress1State
-            // 
-            this.colAddress1State.Text = "State";
-            this.colAddress1State.Width = 40;
-            // 
-            // colAddress1ZipCode
-            // 
-            this.colAddress1ZipCode.Text = "Zip Code";
-            this.colAddress1ZipCode.Width = 22;
-            // 
-            // colAddress1Preferred
-            // 
-            this.colAddress1Preferred.Text = "Preferred";
-            this.colAddress1Preferred.Width = 55;
-            // 
-            // colAddress2L1
-            // 
-            this.colAddress2L1.Text = "Address 2";
-            this.colAddress2L1.Width = 70;
-            // 
-            // colAddress2L2
-            // 
-            this.colAddress2L2.Text = "Line 2";
-            this.colAddress2L2.Width = 45;
-            // 
-            // colAddress2L3
-            // 
-            this.colAddress2L3.Text = "Line 3";
-            this.colAddress2L3.Width = 26;
-            // 
-            // colAddress2City
-            // 
-            this.colAddress2City.Text = "City";
-            this.colAddress2City.Width = 40;
-            // 
-            // colAddress2State
-            // 
-            this.colAddress2State.Text = "State";
-            this.colAddress2State.Width = 40;
-            // 
-            // colAddress2ZipCode
-            // 
-            this.colAddress2ZipCode.Text = "Zip Code";
-            // 
-            // colAddress2Preferred
-            // 
-            this.colAddress2Preferred.Text = "Preferred";
-            this.colAddress2Preferred.Width = 55;
             // 
             // checkBox1
             // 
             this.checkBox1.AutoSize = true;
-            this.checkBox1.Location = new System.Drawing.Point(33, 484);
+            this.checkBox1.Location = new System.Drawing.Point(33, 285);
             this.checkBox1.Name = "checkBox1";
             this.checkBox1.Size = new System.Drawing.Size(70, 17);
             this.checkBox1.TabIndex = 7;
@@ -352,27 +259,103 @@
             this.checkBox1.UseVisualStyleBackColor = true;
             this.checkBox1.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged);
             // 
-            // colEmail2Type
+            // colEmail1Preferred
             // 
-            this.colEmail2Type.Text = "Type";
+            this.colEmail1Preferred.Text = "Preferred";
             // 
             // colEmail1Type
             // 
             this.colEmail1Type.Text = "Type";
             // 
+            // colEmail2
+            // 
+            this.colEmail2.Text = "Email 2";
+            // 
+            // colEmail2Preferred
+            // 
+            this.colEmail2Preferred.Text = "Preferred";
+            // 
+            // colEmail2Type
+            // 
+            this.colEmail2Type.Text = "Type";
+            // 
+            // colAddress1Line1
+            // 
+            this.colAddress1Line1.Text = "Address 1";
+            // 
+            // colAddress1Line2
+            // 
+            this.colAddress1Line2.Text = "Line 2";
+            // 
+            // colAddress1Line3
+            // 
+            this.colAddress1Line3.Text = "Line 3";
+            // 
+            // colAddress1City
+            // 
+            this.colAddress1City.Text = "City";
+            // 
+            // colAddress1State
+            // 
+            this.colAddress1State.Text = "State";
+            // 
+            // colAddress1Zip
+            // 
+            this.colAddress1Zip.Text = "Zip Code";
+            // 
+            // colAddress1Preferred
+            // 
+            this.colAddress1Preferred.Text = "Preferred";
+            // 
             // colAddress1Type
             // 
             this.colAddress1Type.Text = "Type";
+            // 
+            // colAddress2Line1
+            // 
+            this.colAddress2Line1.Text = "Address 2";
+            // 
+            // colAddress2Line2
+            // 
+            this.colAddress2Line2.Text = "Line 2";
+            // 
+            // colAddress2Line3
+            // 
+            this.colAddress2Line3.Text = "Line 3";
+            // 
+            // colAddress2City
+            // 
+            this.colAddress2City.Text = "City";
+            // 
+            // colAddress2State
+            // 
+            this.colAddress2State.Text = "State";
+            // 
+            // colAddress2Zip
+            // 
+            this.colAddress2Zip.Text = "Zip Code";
+            // 
+            // colAddress2Preferred
+            // 
+            this.colAddress2Preferred.Text = "Preferred";
             // 
             // colAddress2Type
             // 
             this.colAddress2Type.Text = "Type";
             // 
+            // colCareManagerUserID
+            // 
+            this.colCareManagerUserID.Text = "Care Manager User ID";
+            // 
+            // colTimeZone
+            // 
+            this.colTimeZone.Text = "Time Zone";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1184, 540);
+            this.ClientSize = new System.Drawing.Size(776, 512);
             this.Controls.Add(this.checkBox1);
             this.Controls.Add(this.listView1);
             this.Controls.Add(this.button2);
@@ -412,27 +395,28 @@
         private System.Windows.Forms.ColumnHeader colPhone2Type;
         private System.Windows.Forms.ColumnHeader colEmail1;
         private System.Windows.Forms.ColumnHeader colEmail1Preferred;
+        private System.Windows.Forms.ColumnHeader colEmail1Type;
         private System.Windows.Forms.ColumnHeader colEmail2;
         private System.Windows.Forms.ColumnHeader colEmail2Preferred;
-        private System.Windows.Forms.ColumnHeader colAddress1L1;
-        private System.Windows.Forms.ColumnHeader colAddress1L2;
-        private System.Windows.Forms.ColumnHeader colAddress1L3;
+        private System.Windows.Forms.ColumnHeader colEmail2Type;
+        private System.Windows.Forms.ColumnHeader colAddress1Line1;
+        private System.Windows.Forms.ColumnHeader colAddress1Line2;
+        private System.Windows.Forms.ColumnHeader colAddress1Line3;
         private System.Windows.Forms.ColumnHeader colAddress1City;
         private System.Windows.Forms.ColumnHeader colAddress1State;
-        private System.Windows.Forms.ColumnHeader colAddress1ZipCode;
+        private System.Windows.Forms.ColumnHeader colAddress1Zip;
         private System.Windows.Forms.ColumnHeader colAddress1Preferred;
-        private System.Windows.Forms.ColumnHeader colAddress2L1;
-        private System.Windows.Forms.ColumnHeader colAddress2L2;
-        private System.Windows.Forms.ColumnHeader colAddress2L3;
+        private System.Windows.Forms.ColumnHeader colAddress1Type;
+        private System.Windows.Forms.ColumnHeader colAddress2Line1;
+        private System.Windows.Forms.ColumnHeader colAddress2Line2;
+        private System.Windows.Forms.ColumnHeader colAddress2Line3;
         private System.Windows.Forms.ColumnHeader colAddress2City;
         private System.Windows.Forms.ColumnHeader colAddress2State;
-        private System.Windows.Forms.ColumnHeader colAddress2ZipCode;
+        private System.Windows.Forms.ColumnHeader colAddress2Zip;
         private System.Windows.Forms.ColumnHeader colAddress2Preferred;
-        private System.Windows.Forms.ColumnHeader colTimeZone;
-        private System.Windows.Forms.ColumnHeader colEmail1Type;
-        private System.Windows.Forms.ColumnHeader colEmail2Type;
-        private System.Windows.Forms.ColumnHeader colAddress1Type;
         private System.Windows.Forms.ColumnHeader colAddress2Type;
+        private System.Windows.Forms.ColumnHeader colCareManagerUserID;
+        private System.Windows.Forms.ColumnHeader colTimeZone;
     }
 }
 

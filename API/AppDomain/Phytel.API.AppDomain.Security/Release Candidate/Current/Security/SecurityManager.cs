@@ -8,7 +8,7 @@ namespace Phytel.API.AppDomain.Security
     public static class SecurityManager
     {
         // add validation checks
-        public static AuthenticateResponse ValidateCredentials(string token, string apiKey, string productName)
+        public static AuthenticateResponse ValidateCredentials(string token, string securityToken, string apiKey, string productName)
         {
             try
             {
@@ -20,9 +20,9 @@ namespace Phytel.API.AppDomain.Security
                 ISecurityRepository<AuthenticateResponse> userRepo = SecurityRepositoryFactory<AuthenticateResponse>.GetUserRepository(productName);
                 ISecurityRepository<AuthenticateResponse> securityRepo = SecurityRepositoryFactory<AuthenticateResponse>.GetSecurityRepository(productName);
 
-                AuthenticateResponse userResponse = userRepo.LoginUser(token);
+                AuthenticateResponse userResponse = userRepo.LoginUser(token, securityToken);
                 if (userResponse.UserID != Guid.Empty)
-                    userResponse = securityRepo.LoginUser(userResponse, apiKey, productName);
+                    userResponse = securityRepo.LoginUser(userResponse, securityToken, apiKey, productName);
 
                 return userResponse;
             }
@@ -32,13 +32,13 @@ namespace Phytel.API.AppDomain.Security
             }
         }
 
-        public static UserAuthenticateResponse ValidateCredentials(string userName, string password, string apiKey, string productName)
+        public static UserAuthenticateResponse ValidateCredentials(string userName, string password, string securityToken, string apiKey, string productName)
         {
             try
             {
                 ISecurityRepository<UserAuthenticateResponse> securityRepo = SecurityRepositoryFactory<UserAuthenticateResponse>.GetSecurityRepository(productName);
 
-                UserAuthenticateResponse response = securityRepo.LoginUser(userName, password, apiKey, productName);
+                UserAuthenticateResponse response = securityRepo.LoginUser(userName, password, securityToken, apiKey, productName);
 
                 return response;
             }
@@ -48,13 +48,13 @@ namespace Phytel.API.AppDomain.Security
             }
         }
 
-        public static ValidateTokenResponse ValidateToken(ValidateTokenRequest request)
+        public static ValidateTokenResponse ValidateToken(ValidateTokenRequest request, string securityToken)
         {
             try
             {
                 ISecurityRepository<AuthenticateResponse> securityRepo = SecurityRepositoryFactory<AuthenticateResponse>.GetSecurityRepository(request.Context);
 
-                return securityRepo.Validate(request.Token, request.Context);
+                return securityRepo.Validate(request.Token, securityToken, request.Context);
             }
             catch (Exception)
             {
@@ -62,11 +62,11 @@ namespace Phytel.API.AppDomain.Security
             }
         }
 
-        public static LogoutResponse Logout(LogoutRequest request)
+        public static LogoutResponse Logout(LogoutRequest request, string securityToken)
         {
             ISecurityRepository<AuthenticateResponse> securityRepo = SecurityRepositoryFactory<AuthenticateResponse>.GetSecurityRepository(request.Context);
 
-            return securityRepo.Logout(request.Token, request.Context);
+            return securityRepo.Logout(request.Token, securityToken, request.Context);
         }
     }
 }

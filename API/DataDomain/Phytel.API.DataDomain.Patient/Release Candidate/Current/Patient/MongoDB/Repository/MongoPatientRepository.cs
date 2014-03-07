@@ -51,53 +51,7 @@ namespace Phytel.API.DataDomain.Patient
 
                     patient = ctx.Patients.Collection.FindOneAs<MEPatient>(query);
                     MongoCohortPatientViewRepository<T> repo = new MongoCohortPatientViewRepository<T>(_dbName);
-                    if (patient != null)
-                    {
-                        //Got one, update it and save it here..
-                        //Patient
-                        patient.FirstName = request.FirstName;
-                        patient.LastName = request.LastName;
-                        patient.MiddleName = request.MiddleName;
-                        patient.Suffix = request.Suffix;
-                        patient.PreferredName = request.PreferredName;
-                        patient.Gender = request.Gender;
-                        patient.DOB = request.DOB;
-                        //patient.SSN = request.SSN;
-                        patient.Version = request.Version;
-                        //UpdatedBy = security token user id;
-                        patient.LastUpdatedOn = System.DateTime.Now;
-                        ctx.Patients.Collection.Save(patient);
-
-                        //CohortPatientView
-                        IRestClient updateCohortClient = new JsonServiceClient();
-                        GetCohortPatientViewRequest updateCohortRequest = new GetCohortPatientViewRequest
-                        {
-                            PatientID = patient.Id.ToString(),
-                            Context = request.Context,
-                            Version = request.Version,
-                            ContractNumber = request.ContractNumber
-                        };
-                        GetCohortPatientViewResponse updateCohortResponse = updateCohortClient.Get<GetCohortPatientViewResponse>(string.Format("{0}/{1}/{2}/{3}/patient/{4}/cohortpatientview/",
-                                                                                                                            "http://localhost:8888/Patient",
-                                                                                                                            updateCohortRequest.Context,
-                                                                                                                            updateCohortRequest.Version,
-                                                                                                                            updateCohortRequest.ContractNumber,
-                                                                                                                            updateCohortRequest.PatientID));
-                        List<SearchFieldData> updateData = new List<SearchFieldData>();
-                        updateData.Add(new SearchFieldData { Active = true, FieldName = Constants.FN, Value = request.FirstName });
-                        updateData.Add(new SearchFieldData { Active = true, FieldName = Constants.LN, Value = request.LastName });
-                        updateData.Add(new SearchFieldData { Active = true, FieldName = Constants.G, Value = request.Gender.ToUpper() });
-                        updateData.Add(new SearchFieldData { Active = true, FieldName = Constants.DOB, Value = request.DOB });
-                        updateData.Add(new SearchFieldData { Active = true, FieldName = Constants.MN, Value = request.MiddleName });
-                        updateData.Add(new SearchFieldData { Active = true, FieldName = Constants.SFX, Value = request.Suffix });
-                        updateData.Add(new SearchFieldData { Active = true, FieldName = Constants.PN, Value = request.PreferredName });
-                        //updateData.Add(new SearchFieldData {Active = true, FieldName = "SSN", Value = patient.SSN });
-
-                        updateCohortResponse.CohortPatientView.LastName = request.LastName;
-                        updateCohortResponse.CohortPatientView.SearchFields = updateData;
-                        ctx.CohortPatientViews.Collection.Save(updateCohortResponse.CohortPatientView);
-                    }
-                    else
+                    if (patient == null)
                     {
                         patient = new MEPatient
                         {
@@ -109,6 +63,7 @@ namespace Phytel.API.DataDomain.Patient
                             PreferredName = request.PreferredName,
                             Gender = request.Gender,
                             DOB = request.DOB,
+                            Background = request.Background,
                             //SSN = request.SSN,
                             Version = request.Version,
                             //UpdatedBy = security token user id,
@@ -126,6 +81,7 @@ namespace Phytel.API.DataDomain.Patient
                         data.Add(new SearchFieldData { Active = true, FieldName = Constants.MN, Value = patient.MiddleName });
                         data.Add(new SearchFieldData { Active = true, FieldName = Constants.SFX, Value = patient.Suffix });
                         data.Add(new SearchFieldData { Active = true, FieldName = Constants.PN, Value = patient.PreferredName });
+                        data.Add(new SearchFieldData { Active = true, FieldName = Constants.PCM }); //value left null on purpose
                         //data.Add(new SearchFieldData {Active = true, FieldName = "SSN", Value = patient.SSN });
 
                         PutCohortPatientViewDataRequest cohortPatientRequest = new PutCohortPatientViewDataRequest
@@ -139,6 +95,7 @@ namespace Phytel.API.DataDomain.Patient
                         };
                         repo.Insert(cohortPatientRequest);
                     }
+                    
 
                     return new PutPatientDataResponse
                     {
@@ -187,13 +144,14 @@ namespace Phytel.API.DataDomain.Patient
                                 MiddleName = p.MiddleName,
                                 Suffix = p.Suffix,
                                 PriorityData = (DTO.PriorityData)((int)p.Priority),
-                                DisplayPatientSystemID = p.DisplayPatientSystemID.ToString()
+                                DisplayPatientSystemID = p.DisplayPatientSystemID.ToString(),
+                                Background = p.Background
                             }).FirstOrDefault();
             }
             return patient;
         }
 
-        public object FindByID(string entityId, string userId)
+        public object FindByID(string entityId, string contactId)
         {
             DTO.PatientData patient = null;
             using (PatientMongoContext ctx = new PatientMongoContext(_dbName))
@@ -212,18 +170,19 @@ namespace Phytel.API.DataDomain.Patient
                                Suffix = p.Suffix,
                                PriorityData = (DTO.PriorityData)((int)p.Priority),
                                DisplayPatientSystemID = p.DisplayPatientSystemID.ToString(),
-                               Flagged = GetFlaggedStatus(entityId, userId)
+                               Background = p.Background,
+                               Flagged = GetFlaggedStatus(entityId, contactId)
                            }).FirstOrDefault();
             }
             return patient;
         }
 
-        private bool GetFlaggedStatus(string entityId, string userId)
+        private bool GetFlaggedStatus(string patientId, string contactId)
         {
             bool result = false;
             using (PatientMongoContext ctx = new PatientMongoContext(_dbName))
             {
-                var patientUsr = FindPatientUser(entityId, userId, ctx);
+                var patientUsr = FindPatientUser(patientId, contactId, ctx);
 
                 if (patientUsr != null)
                 {
@@ -233,11 +192,11 @@ namespace Phytel.API.DataDomain.Patient
             return result;
         }
 
-        private static MEPatientUser FindPatientUser(string entityId, string userId, PatientMongoContext ctx)
+        private static MEPatientUser FindPatientUser(string patientId, string contactId, PatientMongoContext ctx)
         {
             var findQ = MB.Query.And(
-                MB.Query<MEPatientUser>.EQ(b => b.PatientId, ObjectId.Parse(entityId)),
-                MB.Query<MEPatientUser>.EQ(b => b.UserId, userId)
+                MB.Query<MEPatientUser>.EQ(b => b.PatientId, ObjectId.Parse(patientId)),
+                MB.Query<MEPatientUser>.EQ(b => b.ContactId, ObjectId.Parse(contactId))
             );
 
             var patientUsr = ctx.PatientUsers.Collection.Find(findQ).FirstOrDefault();
@@ -433,7 +392,8 @@ namespace Phytel.API.DataDomain.Patient
                         Suffix = mp.Suffix,
                         Version = mp.Version,
                         PriorityData = (PriorityData)((int)mp.Priority),
-                        DisplayPatientSystemID = mp.DisplayPatientSystemID.ToString()
+                        DisplayPatientSystemID = mp.DisplayPatientSystemID.ToString(),
+                        Background = mp.Background
                     });
                 }
             }
@@ -470,26 +430,26 @@ namespace Phytel.API.DataDomain.Patient
         public PutPatientFlaggedResponse UpdateFlagged(PutPatientFlaggedRequest request)
         {
             PutPatientFlaggedResponse response = new PutPatientFlaggedResponse();
+            response.Success = false;
             try
             {
                 using (PatientMongoContext ctx = new PatientMongoContext(_dbName))
                 {
 
-                    var patientUsr = FindPatientUser(request.PatientId, request.UserId, ctx);
+                    var patientUsr = FindPatientUser(request.PatientId, request.ContactId, ctx);
 
                     if (patientUsr == null)
                     {
                         ctx.PatientUsers.Collection.Insert(new MEPatientUser
                         {
                             PatientId = ObjectId.Parse(request.PatientId),
-                            UserId = request.UserId,
+                            ContactId = ObjectId.Parse(request.ContactId),
                             Flagged = Convert.ToBoolean(request.Flagged),
                             Version = "v1",
                             LastUpdatedOn = System.DateTime.UtcNow,
                             DeleteFlag = false,
                             UpdatedBy = request.UserId
                         });
-                        response.flagged = Convert.ToBoolean(request.Flagged);
                     }
                     else
                     {
@@ -499,7 +459,36 @@ namespace Phytel.API.DataDomain.Patient
                         MB.UpdateBuilder updt = new MB.UpdateBuilder().Set(MEPatientUser.FlaggedProperty, Convert.ToBoolean(request.Flagged))
                             .Set(MEPatientUser.UpdatedByProperty, request.UserId);
                         var pt = ctx.PatientUsers.Collection.FindAndModify(pUQuery, sortBy, updt, true);
-                        response.flagged = Convert.ToBoolean(request.Flagged);
+                    }
+                    response.Success = true;
+                }
+                return response;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public PutPatientBackgroundDataResponse UpdateBackground(PutPatientBackgroundDataRequest request)
+        {
+            PutPatientBackgroundDataResponse response = new PutPatientBackgroundDataResponse();
+            response.Success = false;
+            try
+            {
+                using (PatientMongoContext ctx = new PatientMongoContext(_dbName))
+                {
+                    string background = string.Empty;
+                    if (!string.IsNullOrEmpty(request.Background))
+                    {
+                        background = request.Background;
+                    }
+                    
+                    FindAndModifyResult result = ctx.Patients.Collection.FindAndModify(MB.Query.EQ(MEPatient.IdProperty, ObjectId.Parse(request.PatientId)), MB.SortBy.Null,
+                                                new MB.UpdateBuilder().Set(MEPatient.BackgroundProperty, background).Set(MEPatient.UpdatedByProperty, request.UserId).Set(MEPatient.LastUpdatedOnProperty, DateTime.UtcNow));
+                    if (result.Ok)
+                    {
+                        response.Success = true;
                     }
                 }
                 return response;

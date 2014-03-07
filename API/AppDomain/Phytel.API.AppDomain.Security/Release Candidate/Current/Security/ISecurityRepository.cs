@@ -5,10 +5,10 @@ namespace Phytel.API.AppDomain.Security
 {
     public interface ISecurityRepository<T> : IRepository<T>
     {
-        AuthenticateResponse LoginUser(string token);
-        AuthenticateResponse LoginUser(AuthenticateResponse existingReponse, string apiKey, string productName);
-        UserAuthenticateResponse LoginUser(string userName, string password, string apiKey, string productName);
-        ValidateTokenResponse Validate(string token, string productName);
-        LogoutResponse Logout(string token, string context);
+        AuthenticateResponse LoginUser(string token, string securityToken);
+        AuthenticateResponse LoginUser(AuthenticateResponse existingReponse, string securityToken, string apiKey, string productName);
+        UserAuthenticateResponse LoginUser(string userName, string password, string securityToken, string apiKey, string productName);
+        ValidateTokenResponse Validate(string token, string securityToken, string productName);
+        LogoutResponse Logout(string token, string securityToken, string context);
     }
 }

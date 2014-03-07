@@ -13,6 +13,8 @@ using System.Linq;
 using Phytel.API.Common.Audit;
 using System.Collections.Generic;
 using Phytel.API.AppDomain.NG.Observation;
+using System.Web;
+using Phytel.API.DataAudit;
 
 namespace Phytel.API.AppDomain.NG.Service
 {
@@ -50,9 +52,9 @@ namespace Phytel.API.AppDomain.NG.Service
             return response; 
         }
 
-        public GetAdditionalObservationItemsResponse Get(GetAdditionalObservationItemsRequest request)
+        public GetAdditionalObservationItemResponse Get(GetAdditionalObservationItemRequest request)
         {
-            GetAdditionalObservationItemsResponse response = new GetAdditionalObservationItemsResponse();
+            GetAdditionalObservationItemResponse response = new GetAdditionalObservationItemResponse();
             try
             {
                 ObservationsManager om = new ObservationsManager();

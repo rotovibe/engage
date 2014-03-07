@@ -156,8 +156,8 @@
     <Compile Include="Note\PostPatientNoteRequest.cs" />
     <Compile Include="Note\PostPatientNoteResponse.cs" />
     <Compile Include="Observation\GetAdditionalObservationLibraryRequest.cs" />
-    <Compile Include="Observation\GetAdditionalObservationItemsRequest.cs" />
-    <Compile Include="Observation\GetAdditionalObservationItemsResponse.cs" />
+    <Compile Include="Observation\GetAdditionalObservationItemRequest.cs" />
+    <Compile Include="Observation\GetAdditionalObservationItemResponse.cs" />
     <Compile Include="Observation\PostUpdateObservationItemsRequest.cs" />
     <Compile Include="Observation\GetStandardObservationItemsRequest.cs" />
     <Compile Include="Observation\GetInitializeObservationRequest.cs" />
@@ -195,8 +195,10 @@
     <Compile Include="Patient.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="PutPatientBackgroundRequest.cs" />
     <Compile Include="PutPatientFlaggedUpdateRequest.cs" />
     <Compile Include="PutPatientDetailsUpdateRequest.cs" />
+    <Compile Include="PutPatientBackgroundResponse.cs" />
     <Compile Include="PutPatientFlaggedUpdateResponse.cs" />
     <Compile Include="PutPatientDetailsUpdateResponse.cs" />
     <Compile Include="Response.cs" />

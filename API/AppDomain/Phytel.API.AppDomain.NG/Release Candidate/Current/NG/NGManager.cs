@@ -21,7 +21,7 @@ namespace Phytel.API.AppDomain.NG
 {
     public class NGManager : ManagerBase
     {
-        #region endpoint addresses
+        #region Endpoint addresses
         protected static readonly string DDPatientServiceURL = ConfigurationManager.AppSettings["DDPatientServiceUrl"];
         protected static readonly string DDPatientProblemServiceUrl = ConfigurationManager.AppSettings["DDPatientProblemServiceUrl"];
         protected static readonly string DDLookupServiceUrl = ConfigurationManager.AppSettings["DDLookupServiceUrl"];
@@ -31,7 +31,7 @@ namespace Phytel.API.AppDomain.NG
         protected static readonly string DDContactServiceUrl = ConfigurationManager.AppSettings["DDContactServiceUrl"];
         #endregion
 
-        #region Patient Requests
+        #region Patient
         public NG.DTO.GetPatientResponse GetPatient(NG.DTO.GetPatientRequest request)
         {
             NG.DTO.GetPatientResponse pResponse = new NG.DTO.GetPatientResponse();
@@ -40,14 +40,15 @@ namespace Phytel.API.AppDomain.NG
             {
                 //Execute call(s) to Patient Data Domain
                 IRestClient client = new JsonServiceClient();
-
-                GetPatientDataResponse response = client.Get<GetPatientDataResponse>(string.Format("{0}/{1}/{2}/{3}/patient/{4}?UserId={5}",
+                string contactId = getContactIdForLoggedInUser(request.Version, request.ContractNumber, request.UserId, client);
+                GetPatientDataResponse response = client.Get<GetPatientDataResponse>(string.Format("{0}/{1}/{2}/{3}/patient/{4}?UserId={5}&ContactId={6}",
                                                                                             DDPatientServiceURL,
                                                                                             "NG",
                                                                                             request.Version,
                                                                                             request.ContractNumber,
                                                                                             request.PatientID,
-                                                                                            request.UserId));
+                                                                                            request.UserId,
+                                                                                            contactId));
 
                 if (response != null && response.Patient != null)
                 {
@@ -74,13 +75,15 @@ namespace Phytel.API.AppDomain.NG
                         Suffix = response.Patient.Suffix,
                         PreferredName = response.Patient.PreferredName,
                         Priority = (int)response.Patient.PriorityData,
-                        Flagged = Convert.ToInt32(response.Patient.Flagged)
+                        Flagged = Convert.ToInt32(response.Patient.Flagged),
+                        Background = response.Patient.Background
                     };
 
                     if (sysResponse != null && sysResponse.PatientSystem != null)
                     {
                         pResponse.Patient.DisplaySystemId = sysResponse.PatientSystem.SystemID;
                         pResponse.Patient.DisplaySystemName = sysResponse.PatientSystem.SystemName;
+                        pResponse.Patient.DisplayLabel = sysResponse.PatientSystem.DisplayLabel;
                     }
                 }
 
@@ -134,168 +137,6 @@ namespace Phytel.API.AppDomain.NG
                 throw ae;
             }
         }
-        #endregion
-
-        #region Problem Requests
-        public List<IdNamePair> GetProblems(GetAllProblemsRequest request)
-        {
-            try
-            {
-                List<IdNamePair> response = new List<IdNamePair>();
-
-                IRestClient client = new JsonServiceClient();
-                //[Route("/{Context}/{Version}/{ContractNumber}/problems", "GET")]
-                Phytel.API.DataDomain.LookUp.DTO.GetAllProblemsDataResponse dataDomainResponse = client.Get<Phytel.API.DataDomain.LookUp.DTO.GetAllProblemsDataResponse>(string.Format("{0}/{1}/{2}/{3}/problems",
-                                                                                                                DDLookupServiceUrl,
-                                                                                                                "NG",
-                                                                                                                request.Version,
-                                                                                                                request.ContractNumber));
-
-                List<ProblemData> problems = dataDomainResponse.Problems;
-
-                foreach (ProblemData c in problems)
-                {
-                    IdNamePair lookUp = new IdNamePair();
-                    lookUp.Id = c.Id;
-                    lookUp.Name = c.Name;
-                    response.Add(lookUp);
-                }
-
-                return response;
-            }
-            catch (WebServiceException wse)
-            {
-                Exception ae = new Exception(wse.ResponseBody, wse.InnerException);
-                throw ae;
-            }
-        }
-
-        #endregion
-
-        #region Cohort Requests
-        public List<Phytel.API.AppDomain.NG.DTO.Cohort> GetCohorts(NG.DTO.GetAllCohortsRequest request)
-        {
-            try
-            {
-                List<Phytel.API.AppDomain.NG.DTO.Cohort> response = new List<Phytel.API.AppDomain.NG.DTO.Cohort>();
-
-                IRestClient client = new JsonServiceClient();
-
-                GetAllCohortsDataResponse dataDomainResponse = client.Get<GetAllCohortsDataResponse>(string.Format("{0}/{1}/{2}/{3}/Cohorts",
-                                                                                                                DDCohortServiceUrl,
-                                                                                                                "NG",
-                                                                                                                request.Version,
-                                                                                                                request.ContractNumber));
-
-                List<CohortData> cohorts = dataDomainResponse.Cohorts;
-
-                foreach (CohortData c in cohorts)
-                {
-                    Phytel.API.AppDomain.NG.DTO.Cohort cohort = new Phytel.API.AppDomain.NG.DTO.Cohort();
-                    cohort.ID = c.ID;
-                    cohort.SName = c.SName;
-                    response.Add(cohort);
-                }
-                return response;
-            }
-            catch (WebServiceException wse)
-            {
-                Exception ae = new Exception(wse.ResponseBody, wse.InnerException);
-                throw ae;
-            }
-        }
-
-        public GetCohortPatientsResponse GetCohortPatients(GetCohortPatientsRequest request)
-        {
-            GetCohortPatientsResponse pResponse = new GetCohortPatientsResponse();
-            pResponse.Patients = new List<CohortPatient>();
-
-            try
-            {
-                IRestClient client = new JsonServiceClient();
-                string contactId = string.Empty;
-                //Get the corresponding contactId of the user loggedIn.
-                //[Route("/{Context}/{Version}/{ContractNumber}/Contact/User/{UserId}", "GET")]
-                GetContactByUserIdDataResponse dataDomainResponse;
-                    dataDomainResponse =
-                        client.Get<GetContactByUserIdDataResponse>(
-                        string.Format("{0}/{1}/{2}/{3}/Contact/User/{4}",
-                        DDContactServiceUrl,
-                        "NG",
-                        request.Version,
-                        request.ContractNumber,
-                        request.UserId));
-
-                    if (dataDomainResponse != null && dataDomainResponse.Contact != null)
-                    {
-                        contactId = dataDomainResponse.Contact.ContactId;
-                    }
-                
-                // call cohort data domain
-                // Route("/{Context}/{Version}/{ContractNumber}/CohortPatients/{CohortID}", "GET")]
-                GetCohortPatientsDataResponse qResponse = client.Get<GetCohortPatientsDataResponse>(string.Format("{0}/{1}/{2}/{3}/CohortPatients/{4}?Skip={5}&Take={6}&SearchFilter={7}&ContactId={8}",
-                                                                                            DDPatientServiceURL,
-                                                                                            "NG",
-                                                                                            request.Version,
-                                                                                            request.ContractNumber,
-                                                                                            request.CohortID,
-                                                                                            request.Skip,
-                                                                                            request.Take,
-                                                                                            request.SearchFilter,
-                                                                                            contactId));
-
-                //take qResponse Patient details and map them to "Patient" in the GetCohortPatientsResponse
-                qResponse.CohortPatients.ForEach(x => pResponse.Patients.Add(new CohortPatient
-                {
-                    Id = x.ID,
-                    DOB = x.DOB,
-                    FirstName = x.FirstName,
-                    Gender = x.Gender,
-                    LastName = x.LastName,
-                    MiddleName = x.MiddleName,
-                    PreferredName = x.PreferredName,
-                    Suffix = x.Suffix
-                }));
-
-                if (qResponse.Status != null)
-                {
-                    pResponse.Status = qResponse.Status;
-                }
-
-                return pResponse;
-            }
-            catch (WebServiceException wse)
-            {
-                Exception ae = new Exception(wse.ResponseBody, wse.InnerException);
-                throw ae;
-            }
-        }
-        #endregion
-
-        #region SettingRequest
-        public GetAllSettingsResponse GetAllSettings(GetAllSettingsRequest request)
-        {
-            try
-            {
-                GetAllSettingsResponse response = new GetAllSettingsResponse();
-                using (StreamReader r = new StreamReader(HostingEnvironment.MapPath("/Nightingale/settings.json")))
-                {
-                    using (MemoryStream stream1 = new MemoryStream(Encoding.UTF8.GetBytes(r.ReadToEnd())))
-                    {
-                        DataContractJsonSerializer serializer = new DataContractJsonSerializer(typeof(List<Setting>));
-                        var settings = serializer.ReadObject(stream1) as List<Setting>;
-                        response.Settings = settings;
-                    }
-                }
-                return response;
-            }
-            catch (WebServiceException wse)
-            {
-                Exception ae = new Exception(wse.ResponseBody, wse.InnerException);
-                throw ae;
-            }
-        } 
-        #endregion
 
         public PutPatientDetailsUpdateResponse PutPatientDetailsUpdate(PutPatientDetailsUpdateRequest request)
         {
@@ -340,19 +181,25 @@ namespace Phytel.API.AppDomain.NG
         {
             try
             {
-                PutPatientFlaggedUpdateResponse response = new PutPatientFlaggedUpdateResponse();
+                PutPatientFlaggedUpdateResponse response = null;
 
                 IRestClient client = new JsonServiceClient();
-                PutPatientFlaggedUpdateResponse dataDomainResponse =
-                    client.Put<PutPatientFlaggedUpdateResponse>(string.Format("{0}/{1}/{2}/{3}/patient/{4}/flagged/{5}?UserId={6}",
+                string contactId = getContactIdForLoggedInUser(request.Version, request.ContractNumber, request.UserId, client);
+                PutPatientFlaggedResponse dataDomainResponse =
+                    client.Put<PutPatientFlaggedResponse>(string.Format("{0}/{1}/{2}/{3}/patient/{4}/flagged/{5}?UserId={6}&ContactId={7}",
                                                                                 DDPatientServiceURL,
                                                                                 "NG",
                                                                                 request.Version,
                                                                                 request.ContractNumber,
                                                                                 request.PatientId,
                                                                                 request.Flagged,
-                                                                                request.UserId), new PutPatientFlaggedUpdateResponse { } as object);
-                return dataDomainResponse;
+                                                                                request.UserId,
+                                                                                contactId), new PutPatientFlaggedResponse { } as object);
+                if (dataDomainResponse != null && dataDomainResponse.Success)
+                {
+                    response = new PutPatientFlaggedUpdateResponse();
+                }
+                return response;
             }
             catch (WebServiceException wse)
             {
@@ -361,6 +208,153 @@ namespace Phytel.API.AppDomain.NG
             }
         }
 
+        public PutPatientBackgroundResponse UpdateBackground(PutPatientBackgroundRequest request)
+        {
+            try
+            {
+                PutPatientBackgroundResponse response = null;
+                IRestClient client = new JsonServiceClient();
+                //[Route("/{Context}/{Version}/{ContractNumber}/Patient/{PatientId}/Background", "PUT")]
+                PutPatientBackgroundDataResponse dataDomainResponse =
+                    client.Put<PutPatientBackgroundDataResponse>(string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Background?UserId={5}",
+                                                                                DDPatientServiceURL,
+                                                                                "NG",
+                                                                                request.Version,
+                                                                                request.ContractNumber,
+                                                                                request.PatientId,
+                                                                                request.UserId), new PutPatientBackgroundDataRequest
+                                                                                {
+                                                                                    Background = request.Background,
+                                                                                    Context = "NG",
+                                                                                    ContractNumber = request.ContractNumber,
+                                                                                    Version = request.Version,
+                                                                                    UserId = request.UserId,
+                                                                                    PatientId = request.PatientId
+                                                                                } as object);
+                if (dataDomainResponse != null && dataDomainResponse.Success)
+                {
+                    response = new PutPatientBackgroundResponse();
+                }
+                return response;
+            }
+            catch (WebServiceException wse)
+            {
+                Exception ae = new Exception(wse.ResponseBody, wse.InnerException);
+                throw ae;
+            }
+        }
+        #endregion
+
+        #region Cohort 
+        public List<Phytel.API.AppDomain.NG.DTO.Cohort> GetCohorts(NG.DTO.GetAllCohortsRequest request)
+        {
+            try
+            {
+                List<Phytel.API.AppDomain.NG.DTO.Cohort> response = new List<Phytel.API.AppDomain.NG.DTO.Cohort>();
+
+                IRestClient client = new JsonServiceClient();
+
+                GetAllCohortsDataResponse dataDomainResponse = client.Get<GetAllCohortsDataResponse>(string.Format("{0}/{1}/{2}/{3}/Cohorts",
+                                                                                                                DDCohortServiceUrl,
+                                                                                                                "NG",
+                                                                                                                request.Version,
+                                                                                                                request.ContractNumber));
+
+                List<CohortData> cohorts = dataDomainResponse.Cohorts;
+
+                foreach (CohortData c in cohorts)
+                {
+                    Phytel.API.AppDomain.NG.DTO.Cohort cohort = new Phytel.API.AppDomain.NG.DTO.Cohort();
+                    cohort.ID = c.ID;
+                    cohort.SName = c.SName;
+                    response.Add(cohort);
+                }
+                return response;
+            }
+            catch (WebServiceException wse)
+            {
+                Exception ae = new Exception(wse.ResponseBody, wse.InnerException);
+                throw ae;
+            }
+        }
+
+        public GetCohortPatientsResponse GetCohortPatients(GetCohortPatientsRequest request)
+        {
+            GetCohortPatientsResponse pResponse = new GetCohortPatientsResponse();
+            pResponse.Patients = new List<CohortPatient>();
+
+            try
+            {
+                IRestClient client = new JsonServiceClient();
+                string contactId = getContactIdForLoggedInUser(request.Version, request.ContractNumber, request.UserId, client);
+                // call cohort data domain
+                // Route("/{Context}/{Version}/{ContractNumber}/CohortPatients/{CohortID}", "GET")]
+                GetCohortPatientsDataResponse qResponse = client.Get<GetCohortPatientsDataResponse>(string.Format("{0}/{1}/{2}/{3}/CohortPatients/{4}?Skip={5}&Take={6}&SearchFilter={7}&ContactId={8}",
+                                                                                            DDPatientServiceURL,
+                                                                                            "NG",
+                                                                                            request.Version,
+                                                                                            request.ContractNumber,
+                                                                                            request.CohortID,
+                                                                                            request.Skip,
+                                                                                            request.Take,
+                                                                                            request.SearchFilter,
+                                                                                            contactId));
+
+                //take qResponse Patient details and map them to "Patient" in the GetCohortPatientsResponse
+                qResponse.CohortPatients.ForEach(x => pResponse.Patients.Add(new CohortPatient
+                {
+                    Id = x.ID,
+                    DOB = x.DOB,
+                    FirstName = x.FirstName,
+                    Gender = x.Gender,
+                    LastName = x.LastName,
+                    MiddleName = x.MiddleName,
+                    PreferredName = x.PreferredName,
+                    Suffix = x.Suffix
+                }));
+
+                if (qResponse.Status != null)
+                {
+                    pResponse.Status = qResponse.Status;
+                }
+
+                return pResponse;
+            }
+            catch (WebServiceException wse)
+            {
+                Exception ae = new Exception(wse.ResponseBody, wse.InnerException);
+                throw ae;
+            }
+        }
+
+        #endregion
+
+        #region Setting
+        public GetAllSettingsResponse GetAllSettings(GetAllSettingsRequest request)
+        {
+            try
+            {
+                GetAllSettingsResponse response = new GetAllSettingsResponse();
+                using (StreamReader r = new StreamReader(HostingEnvironment.MapPath("/Nightingale/settings.json")))
+                {
+                    using (MemoryStream stream1 = new MemoryStream(Encoding.UTF8.GetBytes(r.ReadToEnd())))
+                    {
+                        DataContractJsonSerializer serializer = new DataContractJsonSerializer(typeof(List<Setting>));
+                        var settings = serializer.ReadObject(stream1) as List<Setting>;
+                        response.Settings = settings;
+                    }
+                }
+                return response;
+            }
+            catch (WebServiceException wse)
+            {
+                Exception ae = new Exception(wse.ResponseBody, wse.InnerException);
+                throw ae;
+            }
+        } 
+        #endregion
+
+        #region Programs
         public GetActiveProgramsResponse GetActivePrograms(GetActiveProgramsRequest request)
         {
             GetActiveProgramsResponse pResponse = new GetActiveProgramsResponse();
@@ -375,12 +369,12 @@ namespace Phytel.API.AppDomain.NG
                     dataDomainResponse =
                         client.Get<GetActiveProgramsResponse>(
                         string.Format("{0}/{1}/{2}/{3}/Programs/Active",
-                        DDProgramServiceUrl, 
-                        "NG", 
+                        DDProgramServiceUrl,
+                        "NG",
                         request.Version,
                         request.ContractNumber));
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     throw new WebServiceException(ex.Message, ex.InnerException);
                 }
@@ -440,7 +434,7 @@ namespace Phytel.API.AppDomain.NG
             }
             catch (WebServiceException wse)
             {
-                Exception ae = new Exception(wse.ResponseBody, wse.InnerException);
+                Exception ae = new Exception("PostPatientToProgram()"+ wse.ResponseBody, wse.InnerException);
                 throw ae;
             }
         }
@@ -492,11 +486,11 @@ namespace Phytel.API.AppDomain.NG
                             AssignBy = resp.Program.AssignBy,
                             AssignDate = resp.Program.AssignDate,
                             ElementState = resp.Program.ElementState,
-                            SpawnElement = GetSpawnElement(resp.Program),
+                            SpawnElement = getSpawnElement(resp.Program),
                             SourceId = resp.Program.SourceId,
-                             CompletedBy = resp.Program.CompletedBy,
-                              DateCompleted = resp.Program.DateCompleted,
-                            Modules = GetModuleInfo(resp, request),
+                            CompletedBy = resp.Program.CompletedBy,
+                            DateCompleted = resp.Program.DateCompleted,
+                            Modules = getModuleInfo(resp, request),
                             ObjectivesInfo = resp.Program.ObjectivesInfo.Select(r => new Objective
                             {
                                 Id = r.Id.ToString(),
@@ -564,193 +558,43 @@ namespace Phytel.API.AppDomain.NG
                 Exception ae = new Exception(wse.ResponseBody, wse.InnerException);
                 throw ae;
             }
-        }
+        } 
+        #endregion
 
-        private List<Module> GetModuleInfo(DD.GetProgramDetailsSummaryResponse resp, IAppDomainRequest request)
-        {
-            return resp.Program.Modules.Select(r => new Module
-            {
-                Id = r.Id,
-                ProgramId = r.ProgramId,
-                Description = r.Description,
-                Name = r.Name,
-                Status = (int)r.Status,
-                Completed = r.Completed,
-                Enabled = r.Enabled,
-                Next = r.Next,
-                Order = r.Order,
-                Previous = r.Previous,
-                SpawnElement = GetSpawnElement(r),
-                SourceId = r.SourceId,
-                AssignBy = r.AssignBy,
-                AssignDate = r.AssignDate,
-                ElementState = r.ElementState,
-                CompletedBy = r.CompletedBy,
-                DateCompleted = r.DateCompleted,
-                Objectives = r.Objectives.Select(o => new Objective
-                {
-                    Id = o.Id.ToString(),
-                    Value = o.Value,
-                    Status = (int)o.Status,
-                    Unit = o.Unit
-                }).ToList(),
-                Actions = GetActionsInfo(r, request)
-            }).ToList();
-        }
-
-        private List<Actions> GetActionsInfo(DD.ModuleDetail r, IAppDomainRequest request)
-        {
-            List<Actions> action = null;
-            action = r.Actions.Select(a => new Actions
-            {
-                CompletedBy = a.CompletedBy,
-                Description = a.Description,
-                Id = a.Id,
-                ModuleId = a.ModuleId,
-                Name = a.Name,
-                Status = (int)a.Status,
-                Completed = a.Completed,
-                Enabled = a.Enabled,
-                Next = a.Next,
-                Order = a.Order,
-                Previous = a.Previous,
-                SpawnElement = GetSpawnElement(a),
-                SourceId = a.SourceId,
-                AssignBy = a.AssignBy,
-                AssignDate = a.AssignDate,
-                ElementState = a.ElementState,
-                DateCompleted = a.DateCompleted,
-                Objectives = a.Objectives.Select(x => new Objective
-                {
-                    Id = x.Id.ToString(),
-                    Unit = x.Unit,
-                    Status = (int)x.Status,
-                    Value = x.Value
-                }).ToList(),
-                Steps = GetStepsInfo(a, request)
-            }).ToList();
-
-            return action;
-        }
-
-        private List<Step> GetStepsInfo(DD.ActionsDetail a, IAppDomainRequest request)
-        {
-            List<Step> steps = a.Steps.Select(s => new Step
-            {
-                Description = s.Description,
-                Ex = s.Ex,
-                Id = s.Id,
-                SourceId = s.SourceId,
-                ActionId = s.ActionId,
-                Notes = s.Notes,
-                Question = s.Question,
-                Status = (int)s.Status,
-                Title = s.Title,
-                Text = s.Text,
-                StepTypeId = s.StepTypeId,
-                Completed = s.Completed,
-                ControlType = s.ControlType,
-                Enabled = s.Enabled,
-                Header = s.Header,
-                Next = s.Next,
-                Order = s.Order,
-                Previous = s.Previous,
-                IncludeTime = s.IncludeTime,
-                SelectType = s.SelectType,
-                AssignBy = s.AssignBy,
-                AssignDate = s.AssignDate,
-                ElementState = s.ElementState,
-                Responses = GetResponses(s, request),
-                SelectedResponseId = s.SelectedResponseId,
-                CompletedBy = s.CompletedBy,
-                DateCompleted = s.DateCompleted,
-                SpawnElement = GetSpawnElement(s)
-            }).ToList();
-
-            return steps;
-        }
-
-        private List<Response> GetResponses(DD.StepsDetail s, IAppDomainRequest request)
-        {
-            List<Response> resps = null;
-            if (s.Responses != null && s.Responses.Count > 0)
-            {
-                resps = s.Responses.Select(z => new Response
-                                            {
-                                                Id = z.Id,
-                                                NextStepId = z.NextStepId,
-                                                Nominal = z.Nominal,
-                                                Order = z.Order,
-                                                Required = z.Required,
-                                                StepId = z.StepId,
-                                                Text = z.Text,
-                                                Value = z.Value,
-                                                SpawnElement = GetADSpawnElement(z.SpawnElement)
-                                            }).ToList();
-            }
-            else
-            {
-                // get the responses for step.
-                resps = new List<Response>();
-                List<DD.StepResponse> rsps = PlanElementEndpointUtil.GetResponsesForStep(s.Id, request);
-                rsps.ForEach(r => resps.Add(new Response
-                {
-                    Id = r.Id,
-                    NextStepId = r.NextStepId,
-                    Nominal = r.Nominal,
-                    Order = r.Order,
-                    Required = r.Required,
-                    SpawnElement = GetADSpawnElement(r.Spawn),
-                    StepId = r.StepId,
-                    Text = r.Text,
-                    Value = r.Value
-                }));
-            }
-            return resps;
-        }
-
-        private List<SpawnElement> GetADSpawnElement(List<DD.SpawnElementDetail> sed)
+        #region LookUp
+        public List<IdNamePair> GetProblems(GetAllProblemsRequest request)
         {
             try
             {
-                List<SpawnElement> se = new List<SpawnElement>();
-                if (sed != null)
+                List<IdNamePair> response = new List<IdNamePair>();
+
+                IRestClient client = new JsonServiceClient();
+                //[Route("/{Context}/{Version}/{ContractNumber}/problems", "GET")]
+                Phytel.API.DataDomain.LookUp.DTO.GetAllProblemsDataResponse dataDomainResponse = client.Get<Phytel.API.DataDomain.LookUp.DTO.GetAllProblemsDataResponse>(string.Format("{0}/{1}/{2}/{3}/problems",
+                                                                                                                DDLookupServiceUrl,
+                                                                                                                "NG",
+                                                                                                                request.Version,
+                                                                                                                request.ContractNumber));
+
+                List<ProblemData> problems = dataDomainResponse.Problems;
+
+                foreach (ProblemData c in problems)
                 {
-                    sed.ForEach(x =>
-                    {
-                        se.Add(new SpawnElement
-                        {
-                            ElementId = x.ElementId,
-                            ElementType = x.ElementType,
-                            Tag = x.Tag
-                        });
-                    });
+                    IdNamePair lookUp = new IdNamePair();
+                    lookUp.Id = c.Id;
+                    lookUp.Name = c.Name;
+                    response.Add(lookUp);
                 }
-                return se;
+
+                return response;
             }
-            catch (Exception ex)
+            catch (WebServiceException wse)
             {
-                throw new Exception("AppDomain:GetADSpawnElement():" + ex.Message, ex.InnerException);
+                Exception ae = new Exception(wse.ResponseBody, wse.InnerException);
+                throw ae;
             }
         }
 
-        private List<SpawnElement> GetSpawnElement(DD.PlanElementDetail planElement)
-        {
-            List<SpawnElement> spawn = new List<SpawnElement>();
-
-            if (planElement.SpawnElement != null)
-            {
-                spawn = planElement.SpawnElement.Select(s => new SpawnElement
-                {
-                    ElementId = s.ElementId,
-                    ElementType = s.ElementType,
-                    Tag = s.Tag
-                }).ToList();
-            }
-            return spawn;
-        }
-
-        #region LookUp - ContactRelated
         public List<IdNamePair> GetAllCommModes(GetAllCommModesRequest request)
         {
             try
@@ -939,99 +783,34 @@ namespace Phytel.API.AppDomain.NG
             }
         }
 
-        private TimeZonesLookUp getDefaultTimeZone(GetTimeZoneDataRequest request)
+        public List<IdNamePair> GetLookUps(GetLookUpsRequest request)
         {
-            TimeZonesLookUp response = null;
             try
             {
-                response = new TimeZonesLookUp();
+                List<IdNamePair> response = new List<IdNamePair>();
                 IRestClient client = new JsonServiceClient();
-                //  [Route("/{Context}/{Version}/{ContractNumber}/TimeZone/Default", "GET")]
-                Phytel.API.DataDomain.LookUp.DTO.GetTimeZoneDataResponse dataDomainResponse = client.Get<Phytel.API.DataDomain.LookUp.DTO.GetTimeZoneDataResponse>(string.Format("{0}/{1}/{2}/{3}/TimeZone/Default",
-                                                                                                                DDLookupServiceUrl,
+                //[Route("/{Context}/{Version}/{ContractNumber}/Type/{Name}", "GET")]
+                Phytel.API.DataDomain.LookUp.DTO.GetLookUpsDataResponse dataDomainResponse = client.Get<Phytel.API.DataDomain.LookUp.DTO.GetLookUpsDataResponse>(string.Format("{0}/{1}/{2}/{3}/Type/{4}",
+                                                                                                               DDLookupServiceUrl,
                                                                                                                 "NG",
                                                                                                                 request.Version,
-                                                                                                                request.ContractNumber));
+                                                                                                                request.ContractNumber,
+                                                                                                                request.TypeName));
 
-                TimeZoneData data = dataDomainResponse.TimeZone;
-                response.Id = data.Id;
-                response.Name = data.Name;
-                response.DefaultZone = data.Default;
+                List<IdNamePair> dataList = dataDomainResponse.LookUpsData;
+                if (dataList != null && dataList.Count > 0)
+                {
+                    response = dataList;
+                }
+                return response;
             }
             catch (WebServiceException wse)
             {
                 Exception ae = new Exception(wse.ResponseBody, wse.InnerException);
                 throw ae;
             }
-            return response;
-        }
+        } 
 
-        private Contact insertContactForPatient(string context, string version, string contractNumber, string patientId, string userId)
-        {
-
-            Contact newContact = null;
-            try
-            {
-                // Get the default TimeZone that is set in TimeZone LookUp table. 
-                string defaultTimeZone = null;
-                GetTimeZoneDataRequest tzDataRequest = new GetTimeZoneDataRequest { ContractNumber = contractNumber, Version = version };
-                TimeZonesLookUp tz = getDefaultTimeZone(tzDataRequest);
-                if (tz != null)
-                {
-                    defaultTimeZone = tz.Id;
-                }
-                
-                //Get all the available comm modes in the lookup.
-                List<CommModeData> commModeData = new List<CommModeData>();
-                List<CommMode> commMode = new List<CommMode>();
-                GetAllCommModesRequest commRequest = new GetAllCommModesRequest { ContractNumber  = contractNumber, UserId = userId, Version = version};
-                List<IdNamePair> modesLookUp = GetAllCommModes(commRequest);
-                if (modesLookUp != null && modesLookUp.Count > 0)
-                {
-                    foreach(IdNamePair l in modesLookUp)
-                    {
-                        commModeData.Add(new CommModeData { ModeId = l.Id, OptOut = false, Preferred = false });
-                        commMode.Add(new CommMode { LookUpModeId = l.Id, OptOut = false, Preferred = false });
-                    }
-                }
-                
-                // [Route("/{Context}/{Version}/{ContractNumber}/Patient/Contact/{PatientId}", "PUT")]
-                IRestClient client = new JsonServiceClient();
-                PutContactDataResponse dataDomainResponse =
-                    client.Put<PutContactDataResponse>(string.Format("{0}/{1}/{2}/{3}/patient/contact/{4}?UserId={5}",
-                                                                                DDContactServiceUrl,
-                                                                                context,
-                                                                                version,
-                                                                                contractNumber,
-                                                                                patientId,
-                                                                                userId), new PutContactDataRequest
-                                                                                {
-                                                                                    PatientId = patientId,
-                                                                                    TimeZoneId = defaultTimeZone,
-                                                                                    Modes = commModeData,
-                                                                                    Context = context, 
-                                                                                    ContractNumber = contractNumber, 
-                                                                                    Version = version,
-                                                                                    UserId = userId
-                                                                                    
-                                                                                } as object);
-
-                if(dataDomainResponse != null && !string.IsNullOrEmpty(dataDomainResponse.ContactId))
-                {
-                    newContact = new Contact();
-                    newContact.Id = dataDomainResponse.ContactId;
-                    newContact.PatientId = patientId;
-                    newContact.TimeZoneId = defaultTimeZone;
-                    newContact.Modes = commMode;
-                }
-            }
-            catch (WebServiceException wse)
-            {
-                Exception ae = new Exception(wse.ResponseBody, wse.InnerException);
-                throw ae;
-            }
-            return newContact;
-        }
         #endregion
 
         #region Contact
@@ -1333,35 +1112,306 @@ namespace Phytel.API.AppDomain.NG
         }
         #endregion
 
-        #region Goal
-        public List<IdNamePair> GetLookUps(GetLookUpsRequest request)
+        #region Private methods
+        private List<Module> getModuleInfo(DD.GetProgramDetailsSummaryResponse resp, IAppDomainRequest request)
+        {
+            return resp.Program.Modules.Select(r => new Module
+            {
+                Id = r.Id,
+                ProgramId = r.ProgramId,
+                Description = r.Description,
+                Name = r.Name,
+                Status = (int)r.Status,
+                Completed = r.Completed,
+                Enabled = r.Enabled,
+                Next = r.Next,
+                Order = r.Order,
+                Previous = r.Previous,
+                SpawnElement = getSpawnElement(r),
+                SourceId = r.SourceId,
+                AssignBy = r.AssignBy,
+                AssignDate = r.AssignDate,
+                ElementState = r.ElementState,
+                CompletedBy = r.CompletedBy,
+                DateCompleted = r.DateCompleted,
+                Objectives = r.Objectives.Select(o => new Objective
+                {
+                    Id = o.Id.ToString(),
+                    Value = o.Value,
+                    Status = (int)o.Status,
+                    Unit = o.Unit
+                }).ToList(),
+                Actions = getActionsInfo(r, request)
+            }).ToList();
+        }
+
+        private List<Actions> getActionsInfo(DD.ModuleDetail r, IAppDomainRequest request)
+        {
+            List<Actions> action = null;
+            action = r.Actions.Select(a => new Actions
+            {
+                CompletedBy = a.CompletedBy,
+                Description = a.Description,
+                Id = a.Id,
+                ModuleId = a.ModuleId,
+                Name = a.Name,
+                Status = (int)a.Status,
+                Completed = a.Completed,
+                Enabled = a.Enabled,
+                Next = a.Next,
+                Order = a.Order,
+                Previous = a.Previous,
+                SpawnElement = getSpawnElement(a),
+                SourceId = a.SourceId,
+                AssignBy = a.AssignBy,
+                AssignDate = a.AssignDate,
+                ElementState = a.ElementState,
+                DateCompleted = a.DateCompleted,
+                Objectives = a.Objectives.Select(x => new Objective
+                {
+                    Id = x.Id.ToString(),
+                    Unit = x.Unit,
+                    Status = (int)x.Status,
+                    Value = x.Value
+                }).ToList(),
+                Steps = getStepsInfo(a, request)
+            }).ToList();
+
+            return action;
+        }
+
+        private List<Step> getStepsInfo(DD.ActionsDetail a, IAppDomainRequest request)
+        {
+            List<Step> steps = a.Steps.Select(s => new Step
+            {
+                Description = s.Description,
+                Ex = s.Ex,
+                Id = s.Id,
+                SourceId = s.SourceId,
+                ActionId = s.ActionId,
+                Notes = s.Notes,
+                Question = s.Question,
+                Status = (int)s.Status,
+                Title = s.Title,
+                Text = s.Text,
+                StepTypeId = s.StepTypeId,
+                Completed = s.Completed,
+                ControlType = s.ControlType,
+                Enabled = s.Enabled,
+                Header = s.Header,
+                Next = s.Next,
+                Order = s.Order,
+                Previous = s.Previous,
+                IncludeTime = s.IncludeTime,
+                SelectType = s.SelectType,
+                AssignBy = s.AssignBy,
+                AssignDate = s.AssignDate,
+                ElementState = s.ElementState,
+                Responses = getResponses(s, request),
+                SelectedResponseId = s.SelectedResponseId,
+                CompletedBy = s.CompletedBy,
+                DateCompleted = s.DateCompleted,
+                SpawnElement = getSpawnElement(s)
+            }).ToList();
+
+            return steps;
+        }
+
+        private List<Response> getResponses(DD.StepsDetail s, IAppDomainRequest request)
+        {
+            List<Response> resps = null;
+            if (s.Responses != null && s.Responses.Count > 0)
+            {
+                resps = s.Responses.Select(z => new Response
+                {
+                    Id = z.Id,
+                    NextStepId = z.NextStepId,
+                    Nominal = z.Nominal,
+                    Order = z.Order,
+                    Required = z.Required,
+                    StepId = z.StepId,
+                    Text = z.Text,
+                    Value = z.Value,
+                    SpawnElement = getADSpawnElement(z.SpawnElement)
+                }).ToList();
+            }
+            else
+            {
+                // get the responses for step.
+                resps = new List<Response>();
+                List<DD.StepResponse> rsps = PlanElementEndpointUtil.GetResponsesForStep(s.Id, request);
+                rsps.ForEach(r => resps.Add(new Response
+                {
+                    Id = r.Id,
+                    NextStepId = r.NextStepId,
+                    Nominal = r.Nominal,
+                    Order = r.Order,
+                    Required = r.Required,
+                    SpawnElement = getADSpawnElement(r.Spawn),
+                    StepId = r.StepId,
+                    Text = r.Text,
+                    Value = r.Value
+                }));
+            }
+            return resps;
+        }
+
+        private List<SpawnElement> getADSpawnElement(List<DD.SpawnElementDetail> sed)
         {
             try
             {
-                List<IdNamePair> response = new List<IdNamePair>();
+                List<SpawnElement> se = new List<SpawnElement>();
+                if (sed != null)
+                {
+                    sed.ForEach(x =>
+                    {
+                        se.Add(new SpawnElement
+                        {
+                            ElementId = x.ElementId,
+                            ElementType = x.ElementType,
+                            Tag = x.Tag
+                        });
+                    });
+                }
+                return se;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("AppDomain:GetADSpawnElement():" + ex.Message, ex.InnerException);
+            }
+        }
+
+        private List<SpawnElement> getSpawnElement(DD.PlanElementDetail planElement)
+        {
+            List<SpawnElement> spawn = new List<SpawnElement>();
+
+            if (planElement.SpawnElement != null)
+            {
+                spawn = planElement.SpawnElement.Select(s => new SpawnElement
+                {
+                    ElementId = s.ElementId,
+                    ElementType = s.ElementType,
+                    Tag = s.Tag
+                }).ToList();
+            }
+            return spawn;
+        }
+
+        private TimeZonesLookUp getDefaultTimeZone(GetTimeZoneDataRequest request)
+        {
+            TimeZonesLookUp response = null;
+            try
+            {
+                response = new TimeZonesLookUp();
                 IRestClient client = new JsonServiceClient();
-                //[Route("/{Context}/{Version}/{ContractNumber}/Type/{Name}", "GET")]
-                Phytel.API.DataDomain.LookUp.DTO.GetLookUpsDataResponse dataDomainResponse = client.Get<Phytel.API.DataDomain.LookUp.DTO.GetLookUpsDataResponse>(string.Format("{0}/{1}/{2}/{3}/Type/{4}",
-                                                                                                               DDLookupServiceUrl,
+                //  [Route("/{Context}/{Version}/{ContractNumber}/TimeZone/Default", "GET")]
+                Phytel.API.DataDomain.LookUp.DTO.GetTimeZoneDataResponse dataDomainResponse = client.Get<Phytel.API.DataDomain.LookUp.DTO.GetTimeZoneDataResponse>(string.Format("{0}/{1}/{2}/{3}/TimeZone/Default",
+                                                                                                                DDLookupServiceUrl,
                                                                                                                 "NG",
                                                                                                                 request.Version,
-                                                                                                                request.ContractNumber,
-                                                                                                                request.TypeName));
+                                                                                                                request.ContractNumber));
 
-                List<IdNamePair> dataList = dataDomainResponse.LookUpsData;
-                if (dataList != null && dataList.Count > 0)
-                {
-                    response = dataList;
-                }
-                return response;
+                TimeZoneData data = dataDomainResponse.TimeZone;
+                response.Id = data.Id;
+                response.Name = data.Name;
+                response.DefaultZone = data.Default;
             }
             catch (WebServiceException wse)
             {
                 Exception ae = new Exception(wse.ResponseBody, wse.InnerException);
                 throw ae;
             }
+            return response;
+        }
+
+        private Contact insertContactForPatient(string context, string version, string contractNumber, string patientId, string userId)
+        {
+
+            Contact newContact = null;
+            try
+            {
+                // Get the default TimeZone that is set in TimeZone LookUp table. 
+                string defaultTimeZone = null;
+                GetTimeZoneDataRequest tzDataRequest = new GetTimeZoneDataRequest { ContractNumber = contractNumber, Version = version };
+                TimeZonesLookUp tz = getDefaultTimeZone(tzDataRequest);
+                if (tz != null)
+                {
+                    defaultTimeZone = tz.Id;
+                }
+
+                //Get all the available comm modes in the lookup.
+                List<CommModeData> commModeData = new List<CommModeData>();
+                List<CommMode> commMode = new List<CommMode>();
+                GetAllCommModesRequest commRequest = new GetAllCommModesRequest { ContractNumber = contractNumber, UserId = userId, Version = version };
+                List<IdNamePair> modesLookUp = GetAllCommModes(commRequest);
+                if (modesLookUp != null && modesLookUp.Count > 0)
+                {
+                    foreach (IdNamePair l in modesLookUp)
+                    {
+                        commModeData.Add(new CommModeData { ModeId = l.Id, OptOut = false, Preferred = false });
+                        commMode.Add(new CommMode { LookUpModeId = l.Id, OptOut = false, Preferred = false });
+                    }
+                }
+
+                // [Route("/{Context}/{Version}/{ContractNumber}/Patient/Contact/{PatientId}", "PUT")]
+                IRestClient client = new JsonServiceClient();
+                PutContactDataResponse dataDomainResponse =
+                    client.Put<PutContactDataResponse>(string.Format("{0}/{1}/{2}/{3}/patient/contact/{4}?UserId={5}",
+                                                                                DDContactServiceUrl,
+                                                                                context,
+                                                                                version,
+                                                                                contractNumber,
+                                                                                patientId,
+                                                                                userId), new PutContactDataRequest
+                                                                                {
+                                                                                    PatientId = patientId,
+                                                                                    TimeZoneId = defaultTimeZone,
+                                                                                    Modes = commModeData,
+                                                                                    Context = context,
+                                                                                    ContractNumber = contractNumber,
+                                                                                    Version = version,
+                                                                                    UserId = userId
+
+                                                                                } as object);
+
+                if (dataDomainResponse != null && !string.IsNullOrEmpty(dataDomainResponse.ContactId))
+                {
+                    newContact = new Contact();
+                    newContact.Id = dataDomainResponse.ContactId;
+                    newContact.PatientId = patientId;
+                    newContact.TimeZoneId = defaultTimeZone;
+                    newContact.Modes = commMode;
+                }
+            }
+            catch (WebServiceException wse)
+            {
+                Exception ae = new Exception(wse.ResponseBody, wse.InnerException);
+                throw ae;
+            }
+            return newContact;
+        }
+
+        private static string getContactIdForLoggedInUser(string version, string contractNumber, string userId, IRestClient client)
+        {
+            string contactId = string.Empty;
+            //Get the corresponding contactId of the user loggedIn.
+            //[Route("/{Context}/{Version}/{ContractNumber}/Contact/User/{UserId}", "GET")]
+            GetContactByUserIdDataResponse dataDomainResponse;
+            dataDomainResponse =
+                client.Get<GetContactByUserIdDataResponse>(
+                string.Format("{0}/{1}/{2}/{3}/Contact/User/{4}",
+                DDContactServiceUrl,
+                "NG",
+                version,
+                contractNumber,
+                userId));
+
+            if (dataDomainResponse != null && dataDomainResponse.Contact != null)
+            {
+                contactId = dataDomainResponse.Contact.ContactId;
+            }
+            return contactId;
         } 
         #endregion
-
     }
 }

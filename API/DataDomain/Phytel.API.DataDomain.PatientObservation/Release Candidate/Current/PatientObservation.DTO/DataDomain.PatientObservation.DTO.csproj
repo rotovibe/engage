@@ -77,9 +77,9 @@
     <Compile Include="GetPatientObservationRequest.cs" />
     <Compile Include="GetAllPatientObservationsResponse.cs" />
     <Compile Include="GetPatientObservationResponse.cs" />
-    <Compile Include="GetAdditionalObservationsRequest.cs" />
+    <Compile Include="GetAdditionalObservationDataItemRequest.cs" />
     <Compile Include="GetStandardObservationsRequest.cs" />
-    <Compile Include="GetAdditionalObservationsResponse.cs" />
+    <Compile Include="GetAdditionalObservationDataItemResponse.cs" />
     <Compile Include="GetStandardObservationsResponse.cs" />
     <Compile Include="ObservationData.cs" />
     <Compile Include="ObservationLibraryItemData.cs" />
