@@ -5,16 +5,9 @@ using System.Linq;
 using MongoDB.Bson;
 using MongoDB.Driver;
 using MongoDB.Driver.Builders;
-using Phytel.API.Common.CustomObjects;
 using Phytel.API.Common.Format;
 using Phytel.API.DataAudit;
-using Phytel.API.DataDomain.Contact.DTO;
-using Phytel.API.DataDomain.LookUp.DTO;
 using Phytel.API.DataDomain.Patient.DTO;
-using Phytel.API.DataDomain.Patient.MongoDB.DTO;
-using Phytel.API.DataDomain.PatientSystem.DTO;
-using ServiceStack.Service;
-using ServiceStack.ServiceClient.Web;
 using MB = MongoDB.Driver.Builders;
 
 namespace Phytel.API.DataDomain.Patient

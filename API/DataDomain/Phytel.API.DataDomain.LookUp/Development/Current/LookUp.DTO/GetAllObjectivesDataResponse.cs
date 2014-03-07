@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Phytel.API.Interface;
 using ServiceStack.ServiceHost;
 using Phytel.API.DataDomain.LookUp.DTO;
-using Phytel.API.Common.CustomObjects;
+using Phytel.API.Common.CustomObject;
 
 namespace Phytel.API.DataDomain.Objective.DTO
 {

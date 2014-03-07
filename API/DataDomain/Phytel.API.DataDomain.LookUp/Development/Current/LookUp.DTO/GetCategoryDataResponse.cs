@@ -2,7 +2,7 @@ using ServiceStack.ServiceInterface.ServiceModel;
 using System.Collections.Generic;
 using Phytel.API.Interface;
 using ServiceStack.ServiceHost;
-using Phytel.API.Common.CustomObjects;
+using Phytel.API.Common.CustomObject;
 
 namespace Phytel.API.DataDomain.LookUp.DTO
 {

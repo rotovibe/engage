@@ -9,7 +9,7 @@ using MongoDB.Driver;
 using MongoDB.Driver.Builders;
 using MongoDB.Bson;
 using Phytel.API.DataDomain.LookUp;
-using Phytel.API.Common.CustomObjects;
+using Phytel.API.Common.CustomObject;
 
 namespace Phytel.API.DataDomain.LookUp
 {
