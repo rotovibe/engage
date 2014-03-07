@@ -71,9 +71,7 @@ namespace Phytel.API.AppDomain.Security.Service
             }
             catch (Exception ex)
             {
-                //TODO: Log this to the SQL database via ASE
-                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
-                return response;
+                throw ex;
             }
         }
 
