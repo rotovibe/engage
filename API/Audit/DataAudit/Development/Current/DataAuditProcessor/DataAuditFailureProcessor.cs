@@ -12,11 +12,11 @@ using MongoDB.Driver;
 
 namespace Phytel.API.DataAuditProcessor
 {
-    public class DataAuditProcessor: QueueProcessBase
+    public class DataAuditFailureProcessor: QueueProcessBase
     {
         private XmlDocument _bodyDom = null;
 
-        string _DBConnName = "";
+        string _filepath = "";
         string _dbName = "";
 
         string _xpath = "//DataAudit/{0}";
@@ -36,17 +36,13 @@ namespace Phytel.API.DataAuditProcessor
         {
             try
             {
-                _DBConnName = base.Configuration.SelectSingleNode("//Phytel.ASE.Process/ProcessConfiguration/PhytelServicesConnName").InnerText;
+                _filepath = base.Configuration.SelectSingleNode("//Phytel.ASE.Process/ProcessConfiguration/FilePath").InnerText;
 
-                DataAudit.DataAudit da = MessageQueueHelper.DeserializeObject(queueMessage.Body, typeof(DataAudit.DataAudit)) as DataAudit.DataAudit;
-
-                MongoDatabase db = Phytel.Services.MongoService.Instance.GetDatabase(_DBConnName, da.Contract, true, "Audit");
-                db.GetCollection(da.EntityType).Insert(da);
+                //format & write the queuemessage body to the filepath
             }
             catch(Exception ex)
             {
                 base.LogError(ex, Framework.ASE.Data.Common.LogErrorCode.Error, Framework.ASE.Data.Common.LogErrorSeverity.Critical);
-                throw;
             }
         }
 

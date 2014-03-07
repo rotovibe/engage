@@ -74,10 +74,10 @@ namespace Phytel.API.DataDomain.Patient.Service
                 base.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
                 response.Status = new ServiceStack.ServiceInterface.ServiceModel.ResponseStatus("Exception", ex.Message);
             }
-            finally
-            {
-                AuditHelper.LogAuditData(request.UserId, "Patient", response.Id??string.Empty, Common.DataAuditType.Insert, request.ContractNumber);
-            }
+            //finally
+            //{
+            //    AuditHelper.LogAuditData(request.UserId, "Patient", response.Id??string.Empty, Common.DataAuditType.Insert, request.ContractNumber);
+            //}
             
             return response;
         }

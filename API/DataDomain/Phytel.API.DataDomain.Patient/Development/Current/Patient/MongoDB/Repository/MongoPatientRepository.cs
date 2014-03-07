@@ -7,6 +7,7 @@ using MongoDB.Driver;
 using MongoDB.Driver.Builders;
 using Phytel.API.Common.CustomObjects;
 using Phytel.API.Common.Format;
+using Phytel.API.DataAudit;
 using Phytel.API.DataDomain.Contact.DTO;
 using Phytel.API.DataDomain.LookUp.DTO;
 using Phytel.API.DataDomain.Patient.DTO;
@@ -73,6 +74,8 @@ namespace Phytel.API.DataDomain.Patient
                         };
                         ctx.Patients.Collection.Insert(patient);
 
+                        //AuditHelper.LogAuditData(request.UserId, ctx.Patients.Collection.Name, patient.Id.ToString(),Common.DataAuditType.Insert, request.ContractNumber);
+
                         List<SearchFieldData> data = new List<SearchFieldData>();
                         data.Add(new SearchFieldData { Active = true, FieldName = Constants.FN, Value = patient.FirstName });
                         data.Add(new SearchFieldData { Active = true, FieldName = Constants.LN, Value = patient.LastName });
@@ -95,7 +98,8 @@ namespace Phytel.API.DataDomain.Patient
                         };
                         repo.Insert(cohortPatientRequest);
                     }
-                    
+
+                    AuditHelper.LogAuditData(request.UserId, ctx.Patients.Collection.Name, patient.Id.ToString(), Common.DataAuditType.Insert, request.ContractNumber);
 
                     return new PutPatientDataResponse
                     {

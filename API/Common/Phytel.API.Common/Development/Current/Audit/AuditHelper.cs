@@ -5,10 +5,13 @@ using System.Data;
 using System.Diagnostics;
 using System.Threading;
 using System.Web;
+using MongoDB.Bson;
+using MongoDB.Driver;
 using Phytel.API.Common;
 using Phytel.API.Common.Audit;
 using Phytel.API.Interface;
 using Phytel.Framework.ASE.Data.Common;
+using Phytel.Mongo.Linq;
 using Phytel.Services;
 using ServiceStack.ServiceHost;
 using ASE = Phytel.Framework.ASE.Process;
@@ -62,14 +65,26 @@ namespace Phytel.API.DataAudit
                 Contract = contractNumber,
                 EntityType = collectionName,
                 Type = auditType.ToString(),
-                Entity = GetMongoEntity(collectionName, entityId)
+                Entity = GetMongoEntity(contractNumber, collectionName, entityId)
             };
 
             return auditLog;
         }
 
-        private static object GetMongoEntity(string collectionName, string entityId)
+        private static string GetMongoEntity(string contract, string collectionName, string entityId)
         {
+            try
+            {
+                MongoDatabase db = Phytel.Services.MongoService.Instance.GetDatabase(contract, true);
+                return db.GetCollection(collectionName).FindOneById(ObjectId.Parse(entityId)).ToJson();
+                //MongoCollection coll = db.GetCollection(collectionName);
+            }
+            catch (Exception ex)
+            {
+                //if I can't find the entity, for right now, return null
+                return null;
+            }
+            
             return null; ///returning null until I can get the process to run end to end, then I'll build the getter for this
         }
 
