@@ -80,7 +80,10 @@ namespace Phytel.API.AppDomain.Security.Service
 
         protected void Application_BeginRequest(object sender, EventArgs e)
         {
+        }
 
+        protected void Application_EndRequest(object sender, EventArgs e)
+        {
         }
 
         protected void Application_AuthenticateRequest(object sender, EventArgs e)
