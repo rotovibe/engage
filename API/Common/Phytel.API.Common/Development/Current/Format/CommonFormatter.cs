@@ -19,7 +19,11 @@ namespace Phytel.API.Common.Format
             {
                 httpResponse.StatusCode = (int)HttpStatusCode.Unauthorized;
             }
-            httpResponse.StatusCode = (int)HttpStatusCode.InternalServerError;
+            else
+            {
+                httpResponse.StatusCode = (int)HttpStatusCode.InternalServerError;
+            }
+            
             response.Status = new ResponseStatus(ex.ToErrorCode(), ex.Message);
             response.Status.ErrorCode = ex.ToErrorCode();
             response.Status.Message = ex.Message;
