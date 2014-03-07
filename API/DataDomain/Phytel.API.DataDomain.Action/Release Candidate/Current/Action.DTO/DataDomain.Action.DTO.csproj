@@ -4,7 +4,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{625D5C1F-D939-4695-9E39-DF0C65795414}</ProjectGuid>
+    <ProjectGuid>{1C2C63A1-4246-4EC9-BAD1-C00E9ECD85F6}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Phytel.API.DataDomain.Action.DTO</RootNamespace>
