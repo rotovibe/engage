@@ -15,7 +15,7 @@ namespace Phytel.API.Common.Format
     {
         public static void FormatExceptionResponse<T>(T response, IHttpResponse httpResponse, Exception ex) where T : IDomainResponse
         {
-            if (ex is InvalidTokenException)
+            if (ex is InvalidTokenException || ex.Message == "InvalidTokenException")
             {
                 httpResponse.StatusCode = (int)HttpStatusCode.Unauthorized;
             }
