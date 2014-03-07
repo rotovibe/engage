@@ -83,7 +83,7 @@ namespace Phytel.API.AppDomain.Security.Service
             try
             {
                 string securityToken = HttpContext.Current.Request.Headers.Get(_phytelSecurityToken);
-
+                request.Token = base.Request.Headers["Token"] as string;
                 response = SecurityManager.Logout(request, securityToken);
                 return response;
             }

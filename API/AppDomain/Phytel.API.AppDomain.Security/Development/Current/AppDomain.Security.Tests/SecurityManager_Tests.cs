@@ -26,15 +26,15 @@ namespace Phytel.API.AppDomain.Security.Test
         [TestMethod]
         public void IsTokenExpired_Test()
         {
-            ValidateTokenRequest request = new ValidateTokenRequest { Context = "NG", Token = "5318f9f1d6a48503fc5fc4a5", Version = "v1" };
+            ValidateTokenRequest request = new ValidateTokenRequest { Context = "NG", Token = "5319ef98d6a4850f64d90920", Version = "v1" };
             ValidateTokenResponse response = SecurityManager.ValidateToken(request, secToken);
         }
 
         [TestMethod]
         public void Logout_Test()
         {
-            LogoutRequest request = new LogoutRequest { Context = "NG", Token = "52a87fe2d6a4850a8cd99ed5" };
-            LogoutResponse response = SecurityManager.Logout(request, secToken);
+            LogoutRequest request = new LogoutRequest { Context = "NG", Token = "531a0786d6a4850f64d90fb2" };
+            LogoutResponse response = SecurityManager.Logout(request, "Engineer");
         }
 
     }
