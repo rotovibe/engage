@@ -150,9 +150,9 @@ namespace Phytel.API.AppDomain.Security
                 else
                     throw new InvalidTokenException("Security Token does not exist");
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw;
+                throw ex;
             }
         }
 
