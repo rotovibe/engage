@@ -26,6 +26,7 @@ namespace Phytel.API.AppDomain.NG.Service
             try
             {
                 ObservationsManager om = new ObservationsManager();
+                request.Token = base.Request.Headers["Token"] as string;
                 ValidateTokenResponse result = om.IsUserValidated(request.Version, request.Token);
                 if (result.UserId.Trim() != string.Empty)
                 {
@@ -58,6 +59,7 @@ namespace Phytel.API.AppDomain.NG.Service
             try
             {
                 ObservationsManager om = new ObservationsManager();
+                request.Token = base.Request.Headers["Token"] as string;
                 ValidateTokenResponse result = om.IsUserValidated(request.Version, request.Token);
                 if (result.UserId.Trim() != string.Empty)
                 {
@@ -87,6 +89,7 @@ namespace Phytel.API.AppDomain.NG.Service
             try
             {
                 ObservationsManager om = new ObservationsManager();
+                request.Token = base.Request.Headers["Token"] as string;
                 ValidateTokenResponse result = om.IsUserValidated(request.Version, request.Token);
                 if (result.UserId.Trim() != string.Empty)
                 {
@@ -119,6 +122,7 @@ namespace Phytel.API.AppDomain.NG.Service
             try
             {
                 ObservationsManager om = new ObservationsManager();
+                request.Token = base.Request.Headers["Token"] as string;
                 ValidateTokenResponse result = om.IsUserValidated(request.Version, request.Token);
                 if (result.UserId.Trim() != string.Empty)
                 {

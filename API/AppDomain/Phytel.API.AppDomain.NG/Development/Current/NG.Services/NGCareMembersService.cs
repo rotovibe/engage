@@ -18,7 +18,7 @@ namespace Phytel.API.AppDomain.NG.Service
             try
             {
                 CareMembersManager ngm = new CareMembersManager();
-
+                request.Token = base.Request.Headers["Token"] as string;
                 ValidateTokenResponse result = ngm.IsUserValidated(request.Version, request.Token);
                 if (result.UserId.Trim() != string.Empty)
                 {
@@ -46,7 +46,7 @@ namespace Phytel.API.AppDomain.NG.Service
             try
             {
                 CareMembersManager ngm = new CareMembersManager();
-
+                request.Token = base.Request.Headers["Token"] as string;
                 ValidateTokenResponse result = ngm.IsUserValidated(request.Version, request.Token);
                 if (result.UserId.Trim() != string.Empty)
                 {
@@ -74,6 +74,7 @@ namespace Phytel.API.AppDomain.NG.Service
             try
             {
                 CareMembersManager nManager = new CareMembersManager();
+                request.Token = base.Request.Headers["Token"] as string;
                 ValidateTokenResponse result = nManager.IsUserValidated(request.Version, request.Token);
                 if (result.UserId.Trim() != string.Empty)
                 {
@@ -99,6 +100,7 @@ namespace Phytel.API.AppDomain.NG.Service
             try
             {
                 CareMembersManager nManager = new CareMembersManager();
+                request.Token = base.Request.Headers["Token"] as string;
                 ValidateTokenResponse result = nManager.IsUserValidated(request.Version, request.Token);
                 if (result.UserId.Trim() != string.Empty)
                 {

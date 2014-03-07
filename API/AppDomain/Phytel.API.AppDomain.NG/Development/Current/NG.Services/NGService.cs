@@ -23,7 +23,7 @@ namespace Phytel.API.AppDomain.NG.Service
             try
             {
                 NGManager ngm = new NGManager();
-
+                request.Token = base.Request.Headers["Token"] as string;
                 ValidateTokenResponse result = ngm.IsUserValidated(request.Version, request.Token);
                 if (result.UserId.Trim() != string.Empty)
                 {
@@ -65,7 +65,7 @@ namespace Phytel.API.AppDomain.NG.Service
             try
             {
                 NGManager ngm = new NGManager();
-
+                request.Token = base.Request.Headers["Token"] as string;
                 ValidateTokenResponse result = ngm.IsUserValidated(request.Version, request.Token);
                 if (result.UserId.Trim() != string.Empty)
                 {
@@ -109,7 +109,7 @@ namespace Phytel.API.AppDomain.NG.Service
             try
             {
                 NGManager ngm = new NGManager();
-
+                request.Token = base.Request.Headers["Token"] as string;
                 ValidateTokenResponse result = ngm.IsUserValidated(request.Version, request.Token);
                 if (result.UserId.Trim() != string.Empty)
                 {
@@ -138,7 +138,7 @@ namespace Phytel.API.AppDomain.NG.Service
             try
             {
                 NGManager ngm = new NGManager();
-
+                request.Token = base.Request.Headers["Token"] as string;
                 ValidateTokenResponse result = ngm.IsUserValidated(request.Version, request.Token);
                 if (result.UserId.Trim() != string.Empty)
                 {
@@ -167,7 +167,7 @@ namespace Phytel.API.AppDomain.NG.Service
             try
             {
                 NGManager ngm = new NGManager();
-
+                request.Token = base.Request.Headers["Token"] as string;
                 ValidateTokenResponse result = ngm.IsUserValidated(request.Version, request.Token);
                 if (result.UserId.Trim() != string.Empty)
                 {
@@ -198,7 +198,7 @@ namespace Phytel.API.AppDomain.NG.Service
             try
             {
                 NGManager ngm = new NGManager();
-
+                request.Token = base.Request.Headers["Token"] as string;
                 ValidateTokenResponse result = ngm.IsUserValidated(request.Version, request.Token);
                 if (result.UserId.Trim() != string.Empty)
                 {
@@ -229,7 +229,7 @@ namespace Phytel.API.AppDomain.NG.Service
             try
             {
                 NGManager ngm = new NGManager();
-
+                request.Token = base.Request.Headers["Token"] as string;
                 ValidateTokenResponse result = ngm.IsUserValidated(request.Version, request.Token);
                 if (result.UserId.Trim() != string.Empty)
                 {
@@ -260,7 +260,7 @@ namespace Phytel.API.AppDomain.NG.Service
             try
             {
                 NGManager ngm = new NGManager();
-
+                request.Token = base.Request.Headers["Token"] as string;
                 ValidateTokenResponse result = ngm.IsUserValidated(request.Version, request.Token);
                 if (result.UserId.Trim() != string.Empty)
                 {
@@ -289,7 +289,7 @@ namespace Phytel.API.AppDomain.NG.Service
         {
             GetCohortPatientsResponse response = new GetCohortPatientsResponse();
             NGManager ngm = new NGManager();
-
+            request.Token = base.Request.Headers["Token"] as string;
             try
             {
                 ValidateTokenResponse result = ngm.IsUserValidated(request.Version, request.Token);
@@ -328,7 +328,7 @@ namespace Phytel.API.AppDomain.NG.Service
             try
             {
                 NGManager ngm = new NGManager();
-
+                request.Token = base.Request.Headers["Token"] as string;
                 ValidateTokenResponse result = ngm.IsUserValidated(request.Version, request.Token);
                 if (result.UserId.Trim() != string.Empty)
                 {
@@ -358,7 +358,7 @@ namespace Phytel.API.AppDomain.NG.Service
             try
             {
                 NGManager ngm = new NGManager();
-
+                request.Token = base.Request.Headers["Token"] as string;
                 ValidateTokenResponse result = ngm.IsUserValidated(request.Version, request.Token);
                 if (result.UserId != null)
                 {
@@ -392,7 +392,7 @@ namespace Phytel.API.AppDomain.NG.Service
             try
             {
                 NGManager ngm = new NGManager();
-
+                request.Token = base.Request.Headers["Token"] as string;
                 ValidateTokenResponse result = ngm.IsUserValidated(request.Version, request.Token);
                 if (result.UserId.Trim() != string.Empty)
                 {
@@ -421,7 +421,7 @@ namespace Phytel.API.AppDomain.NG.Service
             try
             {
                 NGManager ngm = new NGManager();
-
+                request.Token = base.Request.Headers["Token"] as string;
                 ValidateTokenResponse result = ngm.IsUserValidated(request.Version, request.Token);
                 if (result.UserId.Trim() != string.Empty)
                 {
@@ -451,7 +451,7 @@ namespace Phytel.API.AppDomain.NG.Service
             try
             {
                 NGManager ngm = new NGManager();
-
+                request.Token = base.Request.Headers["Token"] as string;
                 ValidateTokenResponse result = ngm.IsUserValidated(request.Version, request.Token);
                 if (result.UserId.Trim() != string.Empty)
                 {
@@ -491,7 +491,7 @@ namespace Phytel.API.AppDomain.NG.Service
             try
             {
                 NGManager ngm = new NGManager();
-
+                request.Token = base.Request.Headers["Token"] as string;
                 ValidateTokenResponse result = ngm.IsUserValidated(request.Version, request.Token);
                 if (result.UserId.Trim() != string.Empty)
                 {
@@ -521,7 +521,7 @@ namespace Phytel.API.AppDomain.NG.Service
             try
             {
                 NGManager ngm = new NGManager();
-
+                request.Token = base.Request.Headers["Token"] as string;
                 ValidateTokenResponse result = ngm.IsUserValidated(request.Version, request.Token);
                 if (result.UserId.Trim() != string.Empty)
                 {
@@ -552,7 +552,7 @@ namespace Phytel.API.AppDomain.NG.Service
             try
             {
                 NGManager ngm = new NGManager();
-
+                request.Token = base.Request.Headers["Token"] as string;
                 ValidateTokenResponse result = ngm.IsUserValidated(request.Version, request.Token);
                 if (result.UserId.Trim() != string.Empty)
                 {
@@ -584,7 +584,7 @@ namespace Phytel.API.AppDomain.NG.Service
             try
             {
                 NGManager ngm = new NGManager();
-
+                request.Token = base.Request.Headers["Token"] as string;
                 ValidateTokenResponse result = ngm.IsUserValidated(request.Version, request.Token);
                 if (result.UserId.Trim() != string.Empty)
                 {
@@ -614,7 +614,7 @@ namespace Phytel.API.AppDomain.NG.Service
             try
             {
                 NGManager ngm = new NGManager();
-
+                request.Token = base.Request.Headers["Token"] as string;
                 ValidateTokenResponse result = ngm.IsUserValidated(request.Version, request.Token);
                 if (result.UserId.Trim() != string.Empty)
                 {
@@ -644,7 +644,7 @@ namespace Phytel.API.AppDomain.NG.Service
             try
             {
                 NGManager ngm = new NGManager();
-
+                request.Token = base.Request.Headers["Token"] as string;
                 ValidateTokenResponse result = ngm.IsUserValidated(request.Version, request.Token);
                 if (result.UserId.Trim() != string.Empty)
                 {
@@ -674,7 +674,7 @@ namespace Phytel.API.AppDomain.NG.Service
             try
             {
                 NGManager ngm = new NGManager();
-
+                request.Token = base.Request.Headers["Token"] as string;
                 ValidateTokenResponse result = ngm.IsUserValidated(request.Version, request.Token);
                 if (result.UserId.Trim() != string.Empty)
                 {
@@ -704,7 +704,7 @@ namespace Phytel.API.AppDomain.NG.Service
             try
             {
                 NGManager ngm = new NGManager();
-
+                request.Token = base.Request.Headers["Token"] as string;
                 ValidateTokenResponse result = ngm.IsUserValidated(request.Version, request.Token);
                 if (result.UserId.Trim() != string.Empty)
                 {
@@ -734,7 +734,7 @@ namespace Phytel.API.AppDomain.NG.Service
             try
             {
                 NGManager ngm = new NGManager();
-
+                request.Token = base.Request.Headers["Token"] as string;
                 ValidateTokenResponse result = ngm.IsUserValidated(request.Version, request.Token);
                 if (result.UserId.Trim() != string.Empty)
                 {
@@ -767,7 +767,7 @@ namespace Phytel.API.AppDomain.NG.Service
             try
             {
                 NGManager ngm = new NGManager();
-
+                request.Token = base.Request.Headers["Token"] as string;
                 ValidateTokenResponse result = ngm.IsUserValidated(request.Version, request.Token);
                 if (result.UserId.Trim() != string.Empty)
                 {
@@ -800,7 +800,7 @@ namespace Phytel.API.AppDomain.NG.Service
             try
             {
                 NotesManager ngm = new NotesManager();
-
+                request.Token = base.Request.Headers["Token"] as string;
                 ValidateTokenResponse result = ngm.IsUserValidated(request.Version, request.Token);
                 if (result.UserId.Trim() != string.Empty)
                 {
@@ -828,6 +828,7 @@ namespace Phytel.API.AppDomain.NG.Service
             try
             {
                 NotesManager nManager = new NotesManager();
+                request.Token = base.Request.Headers["Token"] as string;
                 ValidateTokenResponse result = nManager.IsUserValidated(request.Version, request.Token);
                 if (result.UserId.Trim() != string.Empty)
                 {
@@ -853,6 +854,7 @@ namespace Phytel.API.AppDomain.NG.Service
             try
             {
                 NotesManager nManager = new NotesManager();
+                request.Token = base.Request.Headers["Token"] as string;
                 ValidateTokenResponse result = nManager.IsUserValidated(request.Version, request.Token);
                 if (result.UserId.Trim() != string.Empty)
                 {
@@ -878,6 +880,7 @@ namespace Phytel.API.AppDomain.NG.Service
             try
             {
                 NotesManager nManager = new NotesManager();
+                request.Token = base.Request.Headers["Token"] as string;
                 ValidateTokenResponse result = nManager.IsUserValidated(request.Version, request.Token);
                 if (result.UserId.Trim() != string.Empty)
                 {

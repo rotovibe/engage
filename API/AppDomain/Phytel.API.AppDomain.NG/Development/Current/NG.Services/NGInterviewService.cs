@@ -23,7 +23,7 @@ namespace Phytel.API.AppDomain.NG.Service
             try
             {
                 PlanManager intm = new PlanManager();
-
+                request.Token = base.Request.Headers["Token"] as string;
                 ValidateTokenResponse result = intm.IsUserValidated(request.Version, request.Token);
                 if (result.UserId.Trim() != string.Empty)
                 {
