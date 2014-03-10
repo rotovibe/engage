@@ -80,14 +80,18 @@ namespace Phytel.API.AppDomain.Security.Service
             LogoutResponse response = new LogoutResponse();
             try
             {
-                string securityToken = HttpContext.Current.Request.Headers.Get(_phytelSecurityToken);
+                //build the token from the user authentication request remote machine for additional security
+                //this will then be passed in from calling domains via the header for validation
+                string securityToken = BuildSecurityToken();
                 request.Token = base.Request.Headers["Token"] as string;
                 response = SecurityManager.Logout(request, securityToken);
                 return response;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw;
+                //TODO: Log this to the SQL database via ASE
+                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+                return response;
             }
         }
 

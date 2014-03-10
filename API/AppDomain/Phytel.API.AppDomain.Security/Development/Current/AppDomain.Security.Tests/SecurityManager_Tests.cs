@@ -33,7 +33,7 @@ namespace Phytel.API.AppDomain.Security.Test
         [TestMethod]
         public void Logout_Test()
         {
-            LogoutRequest request = new LogoutRequest { Context = "NG", Token = "531a0786d6a4850f64d90fb2" };
+            LogoutRequest request = new LogoutRequest { Context = "NG", Token = "531ddd4ed6a4850398308056" };
             LogoutResponse response = SecurityManager.Logout(request, "Engineer");
         }
 
