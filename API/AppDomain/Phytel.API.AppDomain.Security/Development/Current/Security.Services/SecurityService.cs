@@ -85,11 +85,9 @@ namespace Phytel.API.AppDomain.Security.Service
                 response = SecurityManager.Logout(request, securityToken);
                 return response;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                //TODO: Log this to the SQL database via ASE
-                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
-                return response;
+                throw;
             }
         }
 
