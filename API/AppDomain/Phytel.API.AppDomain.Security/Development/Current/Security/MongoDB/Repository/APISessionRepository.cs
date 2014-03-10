@@ -53,7 +53,7 @@ namespace Phytel.API.AppDomain.Security
                         _objectContext.APISessions.Collection.Insert(session);
                     }
                     else
-                        throw new Exception("Login Failed!  Username and/or Password is incorrect");
+                        throw new UnauthorizedAccessException("Login Failed!  Username and/or Password is incorrect");
 
                     response = new UserAuthenticateResponse 
                                     {
@@ -65,7 +65,7 @@ namespace Phytel.API.AppDomain.Security
                                     };
                 }
                 else
-                    throw new Exception("Login Failed! Unknown Username/Password");
+                    throw new UnauthorizedAccessException("Login Failed! Unknown Username/Password");
 
                 return response;
             }
@@ -102,7 +102,7 @@ namespace Phytel.API.AppDomain.Security
                     response.APIToken = session.Id.ToString();
                 }
                 else
-                    throw new Exception("Login Failed! Unknown Username/Password");
+                    throw new UnauthorizedAccessException("Login Failed! Unknown Username/Password");
 
                 return response;
             }
