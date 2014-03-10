@@ -23,6 +23,8 @@ namespace Phytel.API.AppDomain.Security
                 AuthenticateResponse userResponse = userRepo.LoginUser(token, securityToken);
                 if (userResponse.UserID != Guid.Empty)
                     userResponse = securityRepo.LoginUser(userResponse, securityToken, apiKey, productName);
+                else
+                    throw new UnauthorizedAccessException("Login Failed! Unknown token and security token.");
 
                 return userResponse;
             }
