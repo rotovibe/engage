@@ -45,15 +45,14 @@ namespace Phytel.API.AppDomain.NG
 
                     //// create a responsibility chain to process each elemnt in the hierachy
                     ProgramPlanProcessor pChain = InitializeProgramChain();
+
                     //// process steps in action
-                    action.Steps.ForEach(s =>
-                    {
-                        pChain.ProcessWorkflow((IPlanElement)s, p, request.UserId, request.PatientId, action, request);
-                    });
+                    action.Steps.ForEach(s => { pChain.ProcessWorkflow((IPlanElement)s, p, request.UserId, request.PatientId, action, request); });
 
+                    //// process action
                     pChain.ProcessWorkflow((IPlanElement)action, p, request.UserId, request.PatientId, action, request);
+                    
                     Module mod = PlanElementUtil.FindElementById(p.Modules, action.ModuleId);
-
                     if (mod != null)
                     {
                         // set enabled status for action dependencies
@@ -61,6 +60,7 @@ namespace Phytel.API.AppDomain.NG
                         // set enable/visibility of actions after action processing.
                         pChain.ProcessWorkflow((IPlanElement)mod, p, request.UserId, request.PatientId, action, request);
                     }
+
                     // set module visibility for modules
                     PlanElementUtil.SetEnabledStatusByPrevious(p.Modules);
 

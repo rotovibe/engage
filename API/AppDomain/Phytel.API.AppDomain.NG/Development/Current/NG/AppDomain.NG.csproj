@@ -152,12 +152,8 @@
       <Project>{99f4ec29-b099-424e-9757-223e67029001}</Project>
       <Name>DataDomain.PatientNote.DTO</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\..\..\DataDomain\Phytel.API.DataDomain.Action\Development\Current\Action.DTO\DataDomain.Action.DTO.csproj">
-      <Project>{1c2c63a1-4246-4ec9-bad1-c00e9ecd85f6}</Project>
-      <Name>DataDomain.Action.DTO</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\..\..\..\DataDomain\Phytel.API.DataDomain.PatientObservation\Development\Current\PatientObservation.DTO\DataDomain.PatientObservation.DTO.csproj">
-      <Project>{06d69e2b-a395-459c-b4d0-fc750018bdd8}</Project>
+      <Project>{1c2c63a1-4246-4ec9-bad1-c00e9ecd85f6}</Project>
       <Name>DataDomain.PatientObservation.DTO</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\..\..\DataDomain\Phytel.API.DataDomain.PatientProblem\Development\Current\PatientProblem.DTOs\DataDomain.PatientProblem.DTO.csproj">
@@ -195,6 +191,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="spawncodes.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

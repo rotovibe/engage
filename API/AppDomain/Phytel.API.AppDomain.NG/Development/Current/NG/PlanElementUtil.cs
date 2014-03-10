@@ -182,7 +182,7 @@ namespace Phytel.API.AppDomain.NG
                     if (r.Tag == null)
                         throw new ArgumentException("Cannot set attribute of type " + r.ElementType + ". Tag value is null.");
 
-                    progAttr.OptOut = (!string.IsNullOrEmpty(r.Tag))? r.Tag : null;
+                    progAttr.OptOut = (!string.IsNullOrEmpty(r.Tag))? Convert.ToBoolean(r.Tag) : false  ;
                 }
                 else if (r.ElementType.Equals(17))
                 {
@@ -454,7 +454,7 @@ namespace Phytel.API.AppDomain.NG
                 _programAttributes.Eligibility = p.Eligibility;
                 _programAttributes.Enrollment = p.Enrollment;
                 _programAttributes.GraduatedFlag = 1;
-                _programAttributes.OptOut = null;
+                _programAttributes.OptOut = false;
                 _programAttributes.EligibilityOverride = 1;
             }
             catch (Exception ex)

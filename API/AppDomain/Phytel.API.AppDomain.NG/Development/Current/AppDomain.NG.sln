@@ -1,6 +1,6 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.30110.0
+VisualStudioVersion = 12.0.21005.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppDomain.NG", "NG\AppDomain.NG.csproj", "{E368DA81-D304-4556-B1C4-D4774C0DEFD2}"
 EndProject
@@ -46,8 +46,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.PatientGoal.DTO"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DataDomain.PatientObservation", "DataDomain.PatientObservation", "{F12E2DCB-D46B-4C02-AD5A-26CED82D5D5C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.PatientObservation.DTO", "..\..\..\..\DataDomain\Phytel.API.DataDomain.PatientObservation\Development\Current\PatientObservation.DTO\DataDomain.PatientObservation.DTO.csproj", "{1C2C63A1-4246-4EC9-BAD1-C00E9ECD85F6}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.CareMember.DTO", "..\..\..\..\DataDomain\Phytel.API.DataDomain.CareMember\Development\Current\CareMember.DTO\DataDomain.CareMember.DTO.csproj", "{B65577E7-60A6-4553-B1B9-38D6074AC560}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.Cohort.DTO", "..\..\..\..\DataDomain\Phytel.API.DataDomain.Cohort\Development\Current\Cohort.DTO\DataDomain.Cohort.DTO.csproj", "{D4489296-17A3-4172-8FDF-DB6C0A7AE748}"
@@ -69,6 +67,8 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DataDomain.PatientNote", "DataDomain.PatientNote", "{1F01636E-6959-4134-BFC1-4E2C384EC5EE}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DataDomain.PatientSystem", "DataDomain.PatientSystem", "{091B3A36-A6F7-4AE7-942F-AC28091E2131}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.PatientObservation.DTO", "..\..\..\..\DataDomain\Phytel.API.DataDomain.PatientObservation\Development\Current\PatientObservation.DTO\DataDomain.PatientObservation.DTO.csproj", "{1C2C63A1-4246-4EC9-BAD1-C00E9ECD85F6}"
 EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
@@ -128,34 +128,34 @@ Global
 		SccProjectTopLevelParentUniqueName13 = AppDomain.NG.sln
 		SccProjectName13 = ../../../../DataDomain/Phytel.API.DataDomain.PatientGoal/Development/Current/PatientGoal.DTO
 		SccLocalPath13 = ..\\..\\..\\..\\DataDomain\\Phytel.API.DataDomain.PatientGoal\\Development\\Current\\PatientGoal.DTO
-		SccProjectUniqueName14 = ..\\..\\..\\..\\DataDomain\\Phytel.API.DataDomain.PatientObservation\\Development\\Current\\PatientObservation.DTO\\DataDomain.PatientObservation.DTO.csproj
+		SccProjectUniqueName14 = ..\\..\\..\\..\\DataDomain\\Phytel.API.DataDomain.CareMember\\Development\\Current\\CareMember.DTO\\DataDomain.CareMember.DTO.csproj
 		SccProjectTopLevelParentUniqueName14 = AppDomain.NG.sln
-		SccProjectName14 = ../../../../DataDomain/Phytel.API.DataDomain.PatientObservation/Development/Current/PatientObservation.DTO
-		SccLocalPath14 = ..\\..\\..\\..\\DataDomain\\Phytel.API.DataDomain.PatientObservation\\Development\\Current\\PatientObservation.DTO
-		SccProjectUniqueName15 = ..\\..\\..\\..\\DataDomain\\Phytel.API.DataDomain.CareMember\\Development\\Current\\CareMember.DTO\\DataDomain.CareMember.DTO.csproj
+		SccProjectName14 = ../../../../DataDomain/Phytel.API.DataDomain.CareMember/Development/Current/CareMember.DTO
+		SccLocalPath14 = ..\\..\\..\\..\\DataDomain\\Phytel.API.DataDomain.CareMember\\Development\\Current\\CareMember.DTO
+		SccProjectUniqueName15 = ..\\..\\..\\..\\DataDomain\\Phytel.API.DataDomain.Cohort\\Development\\Current\\Cohort.DTO\\DataDomain.Cohort.DTO.csproj
 		SccProjectTopLevelParentUniqueName15 = AppDomain.NG.sln
-		SccProjectName15 = ../../../../DataDomain/Phytel.API.DataDomain.CareMember/Development/Current/CareMember.DTO
-		SccLocalPath15 = ..\\..\\..\\..\\DataDomain\\Phytel.API.DataDomain.CareMember\\Development\\Current\\CareMember.DTO
-		SccProjectUniqueName16 = ..\\..\\..\\..\\DataDomain\\Phytel.API.DataDomain.Cohort\\Development\\Current\\Cohort.DTO\\DataDomain.Cohort.DTO.csproj
+		SccProjectName15 = ../../../../DataDomain/Phytel.API.DataDomain.Cohort/Development/Current/Cohort.DTO
+		SccLocalPath15 = ..\\..\\..\\..\\DataDomain\\Phytel.API.DataDomain.Cohort\\Development\\Current\\Cohort.DTO
+		SccProjectUniqueName16 = ..\\..\\..\\..\\DataDomain\\Phytel.API.DataDomain.PatientSystem\\Development\\Current\\PatientSystem.DTO\\DataDomain.PatientSystem.DTO.csproj
 		SccProjectTopLevelParentUniqueName16 = AppDomain.NG.sln
-		SccProjectName16 = ../../../../DataDomain/Phytel.API.DataDomain.Cohort/Development/Current/Cohort.DTO
-		SccLocalPath16 = ..\\..\\..\\..\\DataDomain\\Phytel.API.DataDomain.Cohort\\Development\\Current\\Cohort.DTO
-		SccProjectUniqueName17 = ..\\..\\..\\..\\DataDomain\\Phytel.API.DataDomain.PatientSystem\\Development\\Current\\PatientSystem.DTO\\DataDomain.PatientSystem.DTO.csproj
+		SccProjectName16 = ../../../../DataDomain/Phytel.API.DataDomain.PatientSystem/Development/Current/PatientSystem.DTO
+		SccLocalPath16 = ..\\..\\..\\..\\DataDomain\\Phytel.API.DataDomain.PatientSystem\\Development\\Current\\PatientSystem.DTO
+		SccProjectUniqueName17 = ..\\..\\..\\..\\DataDomain\\Phytel.API.DataDomain.PatientNote\\Development\\Current\\PatientNote.DTO\\DataDomain.PatientNote.DTO.csproj
 		SccProjectTopLevelParentUniqueName17 = AppDomain.NG.sln
-		SccProjectName17 = ../../../../DataDomain/Phytel.API.DataDomain.PatientSystem/Development/Current/PatientSystem.DTO
-		SccLocalPath17 = ..\\..\\..\\..\\DataDomain\\Phytel.API.DataDomain.PatientSystem\\Development\\Current\\PatientSystem.DTO
-		SccProjectUniqueName18 = ..\\..\\..\\..\\DataDomain\\Phytel.API.DataDomain.PatientNote\\Development\\Current\\PatientNote.DTO\\DataDomain.PatientNote.DTO.csproj
+		SccProjectName17 = ../../../../DataDomain/Phytel.API.DataDomain.PatientNote/Development/Current/PatientNote.DTO
+		SccLocalPath17 = ..\\..\\..\\..\\DataDomain\\Phytel.API.DataDomain.PatientNote\\Development\\Current\\PatientNote.DTO
+		SccProjectUniqueName18 = ..\\..\\..\\..\\DataDomain\\Phytel.API.DataDomain.Patient\\Development\\Current\\Patient.DTOs\\DataDomain.Patient.DTO.csproj
 		SccProjectTopLevelParentUniqueName18 = AppDomain.NG.sln
-		SccProjectName18 = ../../../../DataDomain/Phytel.API.DataDomain.PatientNote/Development/Current/PatientNote.DTO
-		SccLocalPath18 = ..\\..\\..\\..\\DataDomain\\Phytel.API.DataDomain.PatientNote\\Development\\Current\\PatientNote.DTO
-		SccProjectUniqueName19 = ..\\..\\..\\..\\DataDomain\\Phytel.API.DataDomain.Patient\\Development\\Current\\Patient.DTOs\\DataDomain.Patient.DTO.csproj
+		SccProjectName18 = ../../../../DataDomain/Phytel.API.DataDomain.Patient/Development/Current/Patient.DTOs
+		SccLocalPath18 = ..\\..\\..\\..\\DataDomain\\Phytel.API.DataDomain.Patient\\Development\\Current\\Patient.DTOs
+		SccProjectUniqueName19 = ..\\..\\..\\..\\Common\\Phytel.API.DataAudit\\Development\\Current\\Phytel.API.DataAudit.csproj
 		SccProjectTopLevelParentUniqueName19 = AppDomain.NG.sln
-		SccProjectName19 = ../../../../DataDomain/Phytel.API.DataDomain.Patient/Development/Current/Patient.DTOs
-		SccLocalPath19 = ..\\..\\..\\..\\DataDomain\\Phytel.API.DataDomain.Patient\\Development\\Current\\Patient.DTOs
-		SccProjectUniqueName20 = ..\\..\\..\\..\\Common\\Phytel.API.DataAudit\\Development\\Current\\Phytel.API.DataAudit.csproj
+		SccProjectName19 = ../../../../Common/Phytel.API.DataAudit/Development/Current
+		SccLocalPath19 = ..\\..\\..\\..\\Common\\Phytel.API.DataAudit\\Development\\Current
+		SccProjectUniqueName20 = ..\\..\\..\\..\\DataDomain\\Phytel.API.DataDomain.PatientObservation\\Development\\Current\\PatientObservation.DTO\\DataDomain.PatientObservation.DTO.csproj
 		SccProjectTopLevelParentUniqueName20 = AppDomain.NG.sln
-		SccProjectName20 = ../../../../Common/Phytel.API.DataAudit/Development/Current
-		SccLocalPath20 = ..\\..\\..\\..\\Common\\Phytel.API.DataAudit\\Development\\Current
+		SccProjectName20 = ../../../../DataDomain/Phytel.API.DataDomain.PatientObservation/Development/Current/PatientObservation.DTO
+		SccLocalPath20 = ..\\..\\..\\..\\DataDomain\\Phytel.API.DataDomain.PatientObservation\\Development\\Current\\PatientObservation.DTO
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -244,12 +244,6 @@ Global
 		{92488AF4-963E-4098-8BA8-23D6952BD952}.Release|Any CPU.Build.0 = Release|Any CPU
 		{92488AF4-963E-4098-8BA8-23D6952BD952}.Test|Any CPU.ActiveCfg = Release|Any CPU
 		{92488AF4-963E-4098-8BA8-23D6952BD952}.Test|Any CPU.Build.0 = Release|Any CPU
-		{1C2C63A1-4246-4EC9-BAD1-C00E9ECD85F6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{1C2C63A1-4246-4EC9-BAD1-C00E9ECD85F6}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{1C2C63A1-4246-4EC9-BAD1-C00E9ECD85F6}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{1C2C63A1-4246-4EC9-BAD1-C00E9ECD85F6}.Release|Any CPU.Build.0 = Release|Any CPU
-		{1C2C63A1-4246-4EC9-BAD1-C00E9ECD85F6}.Test|Any CPU.ActiveCfg = Release|Any CPU
-		{1C2C63A1-4246-4EC9-BAD1-C00E9ECD85F6}.Test|Any CPU.Build.0 = Release|Any CPU
 		{B65577E7-60A6-4553-B1B9-38D6074AC560}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{B65577E7-60A6-4553-B1B9-38D6074AC560}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B65577E7-60A6-4553-B1B9-38D6074AC560}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -286,6 +280,12 @@ Global
 		{AE842695-4DD4-4403-9BE4-8473BCA09580}.Release|Any CPU.Build.0 = Release|Any CPU
 		{AE842695-4DD4-4403-9BE4-8473BCA09580}.Test|Any CPU.ActiveCfg = Release|Any CPU
 		{AE842695-4DD4-4403-9BE4-8473BCA09580}.Test|Any CPU.Build.0 = Release|Any CPU
+		{1C2C63A1-4246-4EC9-BAD1-C00E9ECD85F6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1C2C63A1-4246-4EC9-BAD1-C00E9ECD85F6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1C2C63A1-4246-4EC9-BAD1-C00E9ECD85F6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1C2C63A1-4246-4EC9-BAD1-C00E9ECD85F6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1C2C63A1-4246-4EC9-BAD1-C00E9ECD85F6}.Test|Any CPU.ActiveCfg = Release|Any CPU
+		{1C2C63A1-4246-4EC9-BAD1-C00E9ECD85F6}.Test|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -306,10 +306,10 @@ Global
 		{0B6E0ED8-ABE5-4A1D-8E10-0AC54F06D9C4} = {3A308AC4-A79B-4865-9F55-146D94E49433}
 		{92488AF4-963E-4098-8BA8-23D6952BD952} = {4DDCC66C-4BFD-4377-8C23-55142175AC6C}
 		{1C2C63A1-4246-4EC9-BAD1-C00E9ECD85F6} = {F12E2DCB-D46B-4C02-AD5A-26CED82D5D5C}
-		{1B3148A8-FB57-4461-91BC-F1CD38A013B6} = {3D608E7E-7654-4490-AF9C-3426C8A6E98C}
 		{B65577E7-60A6-4553-B1B9-38D6074AC560} = {F22A6490-34E9-4E7A-89FB-B7612DFA416E}
 		{D4489296-17A3-4172-8FDF-DB6C0A7AE748} = {9F9725A5-C30A-47BD-B3CD-E958A2998944}
-		{99F4EC29-B099-424E-9757-223E67029001} = {1F01636E-6959-4134-BFC1-4E2C384EC5EE}
 		{6033A8EA-A3EF-4182-BFDD-4A9826ECF871} = {091B3A36-A6F7-4AE7-942F-AC28091E2131}
+		{99F4EC29-B099-424E-9757-223E67029001} = {1F01636E-6959-4134-BFC1-4E2C384EC5EE}
+		{1B3148A8-FB57-4461-91BC-F1CD38A013B6} = {3D608E7E-7654-4490-AF9C-3426C8A6E98C}
 	EndGlobalSection
 EndGlobal
