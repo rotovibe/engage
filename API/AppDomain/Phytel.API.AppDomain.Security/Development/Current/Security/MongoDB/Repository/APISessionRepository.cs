@@ -117,36 +117,41 @@ namespace Phytel.API.AppDomain.Security
             try
             {
                 ValidateTokenResponse response = null;
-
-                int sessionLengthInMinutes = (from s in _objectContext.APISessions
-                                              where s.Id == ObjectId.Parse(token)
-                                                && s.SecurityToken == securityToken
-                                              select s.SessionLengthInMinutes).FirstOrDefault();
-
-                if (sessionLengthInMinutes > 0)
+                ObjectId tokenObjectId;
+                if (ObjectId.TryParse(token, out tokenObjectId))
                 {
-                    FindAndModifyResult result = _objectContext.APISessions.Collection.FindAndModify(Query.EQ(MEAPISession.IdProperty, ObjectId.Parse(token)), SortBy.Null,
-                                                MongoDB.Driver.Builders.Update.Set(MEAPISession.SessionTimeOutProperty, DateTime.Now.AddMinutes(sessionLengthInMinutes)), true);
+                    int sessionLengthInMinutes = (from s in _objectContext.APISessions
+                                                  where s.Id == tokenObjectId
+                                                    && s.SecurityToken == securityToken
+                                                  select s.SessionLengthInMinutes).FirstOrDefault();
 
-                    if (result != null && result.ModifiedDocument != null)
+                    if (sessionLengthInMinutes > 0)
                     {
-                        MEAPISession session = BsonSerializer.Deserialize<MEAPISession>(result.ModifiedDocument);
-                        response = new ValidateTokenResponse
-                                        {
-                                            SessionLengthInMinutes = session.SessionLengthInMinutes,
-                                            SessionTimeOut = session.SessionTimeOut,
-                                            TokenId = session.Id.ToString(),
-                                            UserId = session.UserId,
-                                            UserName = session.UserName
-                                        };
+                        FindAndModifyResult result = _objectContext.APISessions.Collection.FindAndModify(Query.EQ(MEAPISession.IdProperty, tokenObjectId), SortBy.Null,
+                                                    MongoDB.Driver.Builders.Update.Set(MEAPISession.SessionTimeOutProperty, DateTime.Now.AddMinutes(sessionLengthInMinutes)), true);
+
+                        if (result != null && result.ModifiedDocument != null)
+                        {
+                            MEAPISession session = BsonSerializer.Deserialize<MEAPISession>(result.ModifiedDocument);
+                            response = new ValidateTokenResponse
+                                            {
+                                                SessionLengthInMinutes = session.SessionLengthInMinutes,
+                                                SessionTimeOut = session.SessionTimeOut,
+                                                TokenId = session.Id.ToString(),
+                                                UserId = session.UserId,
+                                                UserName = session.UserName
+                                            };
+                        }
+                        else
+                            throw new UnauthorizedAccessException("Security Token does not exist");
+
+                        return response;
                     }
                     else
                         throw new UnauthorizedAccessException("Security Token does not exist");
-
-                    return response;
                 }
                 else
-                    throw new UnauthorizedAccessException("Security Token does not exist");
+                    throw new UnauthorizedAccessException("Security Token is not in correct format.");
             }
             catch (Exception ex)
             {
