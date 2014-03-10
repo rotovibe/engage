@@ -1,15 +1,8 @@
 ﻿using Phytel.API.AppDomain.Security.DTO;
-using Phytel.API.Common.Audit;
-using Phytel.API.Common.Format;
 using ServiceStack.Service;
 using ServiceStack.ServiceClient.Web;
 using System;
 using System.Configuration;
-using System.Runtime.CompilerServices;
-using Phytel.API.Common;
-using ServiceStack.ServiceHost;
-using System.Web;
-using Phytel.API.Common.CustomObject;
 
 namespace Phytel.API.AppDomain.NG
 {
@@ -23,7 +16,7 @@ namespace Phytel.API.AppDomain.NG
             try
             {
                 if (string.IsNullOrEmpty(token))
-                    throw new InvalidTokenException("Token is null or empty.");
+                    throw new UnauthorizedAccessException("Token is null or empty.");
 
                 string additionalToken = BuildSecurityToken();
 

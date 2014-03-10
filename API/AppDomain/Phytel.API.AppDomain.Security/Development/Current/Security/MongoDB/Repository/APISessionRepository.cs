@@ -6,8 +6,6 @@ using Phytel.API.AppDomain.Security.DTO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
-using Phytel.API.Common.CustomObject;
 
 namespace Phytel.API.AppDomain.Security
 {
@@ -143,12 +141,12 @@ namespace Phytel.API.AppDomain.Security
                                         };
                     }
                     else
-                        throw new InvalidTokenException("Security Token does not exist");
+                        throw new UnauthorizedAccessException("Security Token does not exist");
 
                     return response;
                 }
                 else
-                    throw new InvalidTokenException("Security Token does not exist");
+                    throw new UnauthorizedAccessException("Security Token does not exist");
             }
             catch (Exception ex)
             {

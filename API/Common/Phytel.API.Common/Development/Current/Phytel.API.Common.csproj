@@ -112,7 +112,6 @@
     <Compile Include="Audit\DispatchEventArgs.cs" />
     <Compile Include="Audit\DispatchRequest.cs" />
     <Compile Include="CustomObject\IdNamePair.cs" />
-    <Compile Include="CustomObject\InvalidTokenException.cs" />
     <Compile Include="Data\MongoDataUtil.cs" />
     <Compile Include="Enums.cs" />
     <Compile Include="Extensions\LinqExtensions.cs" />
