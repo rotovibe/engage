@@ -163,4 +163,9 @@ namespace Phytel.API.Common
         Refused = 3,
         Declined = 4
     }
+
+    public enum MongoCollectionName
+    { 
+        Patient
+    }
 }

@@ -61,7 +61,7 @@ namespace Phytel.API.Common.Audit
                 string messageQueue = ds.Tables[0].Rows[0]["Value"].ToString();
                 //string messageQueue = "fake";
 
-                string xmlBody = MessageQueueHelper.SerializeObject(auditLog);
+                string xmlBody = ToXML(auditLog);
 
                 newMessage = new QueueMessage(Phytel.Framework.ASE.Data.Common.ASEMessageType.Process, messageQueue);
                 newMessage.Body = xmlBody;
@@ -143,5 +143,19 @@ namespace Phytel.API.Common.Audit
             }
 
         }
+
+        private static string ToXML(Object oObject)
+        {
+            XmlDocument xmlDoc = new XmlDocument();
+            XmlSerializer xmlSerializer = new XmlSerializer(oObject.GetType());
+            using (MemoryStream xmlStream = new MemoryStream())
+            {
+                xmlSerializer.Serialize(xmlStream, oObject);
+                xmlStream.Position = 0;
+                xmlDoc.Load(xmlStream);
+                return xmlDoc.InnerXml;
+            }
+        }
+			
     }
 }

@@ -5,6 +5,7 @@ using System.Linq;
 using MongoDB.Bson;
 using MongoDB.Driver;
 using MongoDB.Driver.Builders;
+using Phytel.API.Common;
 using Phytel.API.Common.Format;
 using Phytel.API.DataAudit;
 using Phytel.API.DataDomain.Patient.DTO;
@@ -67,9 +68,7 @@ namespace Phytel.API.DataDomain.Patient
                         };
                         ctx.Patients.Collection.Insert(patient);
 
-                        //AuditHelper.LogAuditData(request.UserId, ctx.Patients.Collection.Name, patient.Id.ToString(),Common.DataAuditType.Insert, request.ContractNumber);
-
-                        List<SearchFieldData> data = new List<SearchFieldData>();
+                       List<SearchFieldData> data = new List<SearchFieldData>();
                         data.Add(new SearchFieldData { Active = true, FieldName = Constants.FN, Value = patient.FirstName });
                         data.Add(new SearchFieldData { Active = true, FieldName = Constants.LN, Value = patient.LastName });
                         data.Add(new SearchFieldData { Active = true, FieldName = Constants.G, Value = patient.Gender.ToUpper() });
@@ -590,11 +589,16 @@ namespace Phytel.API.DataDomain.Patient
 
                     ctx.CohortPatientViews.Collection.Update(findQ, MB.Update.SetWrapped<List<SearchField>>("sf", sfs).Set(MECohortPatientView.LastNameProperty, request.LastName));
                 }
+
                 return response;
             }
             catch (Exception)
             {
                 throw;
+            }
+            finally
+            {
+                AuditHelper.LogAuditData(request.UserId, MongoCollectionName.Patient.ToString(), request.Id.ToString(), Common.DataAuditType.Update, request.ContractNumber);
             }
         }
 

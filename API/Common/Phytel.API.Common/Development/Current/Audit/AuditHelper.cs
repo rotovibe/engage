@@ -60,7 +60,7 @@ namespace Phytel.API.DataAudit
            
             DataAudit auditLog = new DataAudit()
             {
-                EntityID = entityId,
+                EntityID = new ObjectId(entityId),
                 UserId = userId,
                 Contract = contractNumber,
                 EntityType = collectionName,
