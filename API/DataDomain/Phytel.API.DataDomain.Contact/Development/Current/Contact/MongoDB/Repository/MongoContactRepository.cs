@@ -827,27 +827,23 @@ namespace Phytel.API.DataDomain.Contact
             using (ContactMongoContext ctx = new ContactMongoContext(_dbName))
             {
                 List<IMongoQuery> queries = new List<IMongoQuery>();
-                Guid resourceId;
-                if(Guid.TryParse(request.UserId, out resourceId))
+                queries.Add(Query.EQ(MEContact.ResourceIdProperty, request.UserId));
+                queries.Add(Query.EQ(MEContact.DeleteFlagProperty, false));
+                IMongoQuery mQuery = Query.And(queries);
+                MEContact mc = ctx.Contacts.Collection.Find(mQuery).FirstOrDefault();
+                if (mc != null)
                 {
-                    queries.Add(Query.EQ(MEContact.ResourceIdProperty, BsonValue.Create(resourceId)));
-                    queries.Add(Query.EQ(MEContact.DeleteFlagProperty, false));
-                    IMongoQuery mQuery = Query.And(queries);
-                    MEContact mc = ctx.Contacts.Collection.Find(mQuery).FirstOrDefault();
-                    if (mc != null)
+                    contactData = new ContactData
                     {
-                        contactData = new ContactData
-                        {
-                            ContactId = mc.Id.ToString(),
-                            PatientId = mc.PatientId.ToString(),
-                            UserId = (string.IsNullOrEmpty(mc.ResourceId)) ? string.Empty : mc.ResourceId.ToString().Replace("-", string.Empty).ToLower(),
-                            FirstName = mc.FirstName,
-                            MiddleName = mc.MiddleName,
-                            LastName = mc.LastName,
-                            PreferredName = mc.PreferredName,
-                            Gender = mc.Gender
-                        };
-                    }
+                        ContactId = mc.Id.ToString(),
+                        PatientId = mc.PatientId.ToString(),
+                        UserId = (string.IsNullOrEmpty(mc.ResourceId)) ? string.Empty : mc.ResourceId.ToString().Replace("-", string.Empty).ToLower(),
+                        FirstName = mc.FirstName,
+                        MiddleName = mc.MiddleName,
+                        LastName = mc.LastName,
+                        PreferredName = mc.PreferredName,
+                        Gender = mc.Gender
+                    };
                 }
 
             }

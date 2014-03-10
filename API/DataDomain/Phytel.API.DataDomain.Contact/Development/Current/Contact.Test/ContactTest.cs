@@ -20,7 +20,7 @@ namespace Phytel.API.DataDomain.Contact.Test
         [TestMethod]
         public void GetContactByUserId_Test()
         {
-            GetContactByUserIdDataRequest request = new GetContactByUserIdDataRequest { UserId = "EC0849A4-D0A1-44BF-A482-7A97103E96CD" };
+            GetContactByUserIdDataRequest request = new GetContactByUserIdDataRequest { UserId = "abe05e86-a890-4d61-8c78-b04923cbb3d6" };
 
             ContactData response = ContactDataManager.GetContactByUserId(request);
 
