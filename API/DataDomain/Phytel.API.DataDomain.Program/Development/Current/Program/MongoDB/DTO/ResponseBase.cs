@@ -45,5 +45,15 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
         [BsonElement(SpawnElementProperty)]
         [BsonIgnoreIfNull(true)]
         public List<SpawnElement> Spawn { get; set; }
+
+        #region // new properties for reporting
+        public const string SelectedProperty = "sel";
+        [BsonElement(SelectedProperty)]
+        public bool Selected { get; set; }
+
+        public const string StepSourceIdProperty = "ssid";
+        [BsonElement(StepSourceIdProperty)]
+        public ObjectId StepSourceId { get; set; }
+        #endregion
     }
 }

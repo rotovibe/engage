@@ -17,7 +17,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             MEPatientProgram patientProgDoc = new MEPatientProgram
             {
                 PatientId = ObjectId.Parse(request.PatientId),
-                AuthoredBy = cp.AuthoredBy,
+                //AuthoredBy = cp.AuthoredBy,
                 Client = cp.Client,
                 ProgramState = Common.ProgramState.NotStarted,
                 State = Common.ElementState.NotStarted,
@@ -25,28 +25,28 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
                 AssignedOn = cp.AssignedOn,
                 StartDate = System.DateTime.UtcNow, // utc time
                 EndDate = null,
-                GraduatedFlag = false,
-                Population = null,
-                OptOut = null,
-                DidNotEnrollReason = null,
-                DisEnrollReason = null,
-                Eligibility = Common.EligibilityStatus.Pending,
-                EligibilityStartDate = System.DateTime.UtcNow,
-                EligibilityEndDate = null,
-                EligibilityRequirements = cp.EligibilityRequirements,
-                Enrollment = Common.GenericStatus.Pending,
-                EligibilityOverride = Common.GenericSetting.No,
+                //GraduatedFlag = false,
+                //Population = null,
+                //OptOut = null,
+                //DidNotEnrollReason = null,
+                //DisEnrollReason = null,
+                //Eligibility = Common.EligibilityStatus.Pending,
+                //EligibilityStartDate = System.DateTime.UtcNow,
+                //EligibilityEndDate = null,
+                //EligibilityRequirements = cp.EligibilityRequirements,
+                //Enrollment = Common.GenericStatus.Pending,
+                //EligibilityOverride = Common.GenericSetting.No,
                 DateCompleted = cp.DateCompleted,
                 ContractProgramId = cp.Id,
                 DeleteFlag = cp.DeleteFlag,
                 Description = cp.Description,
                 LastUpdatedOn = System.DateTime.UtcNow, // utc time
-                Locked = cp.Locked,
+                //Locked = cp.Locked,
                 Name = cp.Name,
                 ObjectivesInfo = cp.ObjectivesInfo,
                 CompletedBy = cp.CompletedBy,
                 UpdatedBy = request.UserId,
-                SourceId = cp.Id.ToString(),
+                SourceId = cp.Id,
                 ShortName = cp.ShortName,
                 Status = cp.Status,
                 Version = cp.Version,
@@ -463,9 +463,12 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
                 {
                     foreach (SpawnElement sp in pln.Spawn)
                     {
-                        if (sp.SpawnId.Equals(kv.Key))
+                        if (sp.SpawnId != null)
                         {
-                            sp.SpawnId = kv.Value;
+                            if (sp.SpawnId.Equals(kv.Key))
+                            {
+                                sp.SpawnId = kv.Value;
+                            }
                         }
                     }
                 }
@@ -482,9 +485,9 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             {
                 if (s.SelectedResponseId != null)
                 {
-                    if (s.SelectedResponseId.Equals(kv.Key.ToString()))
+                    if (s.SelectedResponseId.Equals(kv.Key))
                     {
-                        s.SelectedResponseId = kv.Value.ToString();
+                        s.SelectedResponseId = kv.Value;
                     }
                 }
             }
@@ -520,7 +523,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
                         new SpawnElement
                         {
                             SpawnId = ObjectId.Parse(s.ElementId),
-                            Type = s.ElementType,
+                            Type = (SpawnElementTypeCode)s.ElementType,
                             Tag = s.Tag
                         });
                     });
@@ -547,8 +550,8 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
                         spawnList.Add(
                         new SpawnElementDetail
                         {
-                            ElementId = s.SpawnId.ToString(),
-                            ElementType = s.Type,
+                            ElementId = s.SpawnId != null ? s.SpawnId.ToString() : null,
+                            ElementType = (int)s.Type,
                             Tag = s.Tag
                         });
                     });
@@ -591,7 +594,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
                             Objectives = GetObjectives(a.Objectives),
                             Order = a.Order,
                             Previous = a.Previous,
-                            SourceId = a.SourceId,
+                            SourceId = ObjectId.Parse(a.SourceId),
                             Spawn = GetSpawnElements(a.SpawnElement),
                             Status = (Status)a.Status
                         });
@@ -625,7 +628,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
                             AssignedOn = st.AssignDate,
                             Completed = st.Completed,
                             CompletedBy = st.CompletedBy,
-                            ControlType = st.ControlType,
+                            ControlType = (ControlType)st.ControlType,
                             DateCompleted = st.DateCompleted,
                             Description = st.Description,
                             State = (ElementState)st.ElementState,
@@ -638,9 +641,9 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
                             Order = st.Order,
                             Previous = st.Previous,
                             Question = st.Question,
-                            SelectedResponseId = st.SelectedResponseId,
-                            SelectType = st.SelectType,
-                            SourceId = st.SourceId,
+                            SelectedResponseId = DTOUtils.ParseObjectId(st.SelectedResponseId),
+                            SelectType = (SelectType)st.SelectType,
+                            SourceId = ObjectId.Parse(st.SourceId),
                             Status = (Status)st.Status,
                             StepTypeId = st.StepTypeId,
                             Text = st.Text,
@@ -655,6 +658,20 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             catch (Exception ex)
             {
                 throw new Exception("DataDomain:GetStepsInfo():" + ex.Message, ex.InnerException);
+            }
+        }
+
+        private static ObjectId? ParseObjectId(string p)
+        {
+            try
+            {
+                ObjectId? obj = null;
+                if (!String.IsNullOrEmpty(p)) { ObjectId.Parse(p); }
+                return obj;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("DataDomain:ParseObjectId():" + ex.Message, ex.InnerException);
             }
         }
 
@@ -704,7 +721,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
                         sp.Add(new SpawnElement
                         {
                             SpawnId =  sed.ElementId != null ? ObjectId.Parse(sed.ElementId) : ObjectId.Parse("000000000000000000000000"),
-                            Type = sed.ElementType,
+                            Type = (SpawnElementTypeCode)sed.ElementType,
                             Tag = sed.Tag
                         });
                     });
@@ -726,8 +743,8 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
                 {
                     sp = new SpawnElementDetail
                     {
-                        ElementType = s.Type,
-                        ElementId = s.SpawnId.ToString(),
+                        ElementType = (int)s.Type,
+                        ElementId = s.SpawnId != null ? s.SpawnId.ToString() : null,
                         Tag = s.Tag
                     };
                 }
@@ -797,7 +814,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
                             Objectives = DTOUtils.GetObjectives(m.Objectives),
                             Order = m.Order,
                             ProgramId = ObjectId.Parse(m.ProgramId),
-                            SourceId = m.SourceId,
+                            SourceId = ObjectId.Parse(m.SourceId),
                             Status = (Status)m.Status
                         });
                     });
@@ -829,7 +846,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
                     Previous = r.Previous,
                     Order = r.Order,
                     SpawnElement = GetSpawnElement(r),
-                    SourceId = r.SourceId,
+                    SourceId = r.SourceId.ToString(),
                     AssignBy = r.AssignedBy,
                     AssignDate = r.AssignedOn,
                     ElementState = (int)r.State,
@@ -888,7 +905,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
                     Previous = a.Previous,
                     Order = a.Order,
                     SpawnElement = GetSpawnElement(a),
-                    SourceId = a.SourceId,
+                    SourceId = a.SourceId.ToString(),
                     AssignBy = a.AssignedBy,
                     AssignDate = a.AssignedOn,
                     ElementState = (int)a.State,
@@ -915,7 +932,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
                         Description = s.Description,
                         Ex = s.Ex,
                         Id = s.Id.ToString(),
-                        SourceId = s.SourceId,
+                        SourceId = s.SourceId.ToString(),
                         ActionId = s.ActionId.ToString(),
                         Notes = s.Notes,
                         Question = s.Question,
@@ -928,11 +945,11 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
                         Next = s.Next,
                         Previous = s.Previous,
                         Order = s.Order,
-                        ControlType = s.ControlType,
+                        ControlType = (int)s.ControlType,
                         Header = s.Header,
-                        SelectedResponseId = s.SelectedResponseId,
+                        SelectedResponseId = s.SelectedResponseId.ToString(),
                         IncludeTime = s.IncludeTime,
-                        SelectType = s.SelectType,
+                        SelectType = (int)s.SelectType,
                         AssignBy = s.AssignedBy,
                         AssignDate = s.AssignedOn,
                         ElementState = (int)s.State,
@@ -959,8 +976,8 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
                 {
                     spawn = a.Spawn.Select(s => new SpawnElementDetail
                     {
-                        ElementId = s.SpawnId.ToString(),
-                        ElementType = s.Type,
+                        ElementId = s.SpawnId != null ? s.SpawnId.ToString() : null,
+                        ElementType = (int)s.Type,
                         Tag = s.Tag
                     }).ToList();
                 }
@@ -1016,8 +1033,8 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
                     {
                         sed.Add(new SpawnElementDetail
                         {
-                            ElementId = se.SpawnId.ToString(),
-                            ElementType = se.Type,
+                            ElementId = se.SpawnId != null ? se.SpawnId.ToString(): null,
+                            ElementType = (int)se.Type,
                             Tag = se.Tag
                         });
                     });
@@ -1043,6 +1060,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
                             bool success = false;
                             foreach (MEPatientProgramResponse r in s.Responses)
                             {
+                                r.StepSourceId = s.SourceId;
                                 success = SaveResponseToDocument(r, contractNumber);
                             }
                             if (success)
@@ -1088,7 +1106,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
                 pa.Eligibility = 3;
                 pa.Enrollment = 2;
                 pa.GraduatedFlag = 1;
-                pa.OptOut = null;
+                pa.OptOut = false;
                 pa.EligibilityOverride = 1;
                 return pa;
             }

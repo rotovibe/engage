@@ -21,7 +21,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
         public const string SourceIdProperty = "srcid";
         [BsonElement(SourceIdProperty)]
         [BsonIgnoreIfNull(false)]
-        public string SourceId { get; set; }
+        public ObjectId SourceId { get; set; }
 
         public const string OrderProperty = "o";
         [BsonElement(OrderProperty)]

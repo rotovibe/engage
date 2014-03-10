@@ -14,14 +14,10 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
         public Step() { Id = ObjectId.GenerateNewId(); }
 
         public const string IdProperty = "_id";
-        public const string ActionIdProperty = "actid";
-        public const string HeaderProperty = "hdr";
-        public const string QuestionProperty = "q";
-        public const string ExProperty = "ex";
-
         [BsonElement(IdProperty)]
         public ObjectId Id { get; set; }
 
+        public const string ActionIdProperty = "actid";
         [BsonElement(ActionIdProperty)]
         public ObjectId ActionId { get; set; }
 
@@ -29,28 +25,30 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
         [BsonElement(TypeProperty)]
         public int StepTypeId { get; set; }
 
+        public const string HeaderProperty = "hdr";
         [BsonElement(HeaderProperty)]
         public string Header { get; set; }
 
         public const string SelectedResponseIdProperty = "srid";
         [BsonElement(SelectedResponseIdProperty)]
         [BsonIgnoreIfNull(true)]
-        public string SelectedResponseId { get; set; }
+        public ObjectId? SelectedResponseId { get; set; }
 
         public const string ControlTypeProperty = "ctype";
         [BsonElement(ControlTypeProperty)]
-        public int ControlType { get; set; }
+        public ControlType ControlType { get; set; }
 
         public const string SelectTypeProperty = "selt";
         [BsonElement(SelectTypeProperty)]
         [BsonIgnoreIfNull(true)]
-        public int SelectType { get; set; }
+        public SelectType SelectType { get; set; }
 
         public const string IncludeTimeProperty = "it";
         [BsonElement(IncludeTimeProperty)]
         [BsonIgnoreIfNull(true)]
         public bool IncludeTime { get; set; }
 
+        public const string QuestionProperty = "q";
         [BsonElement(QuestionProperty)]
         public string Question { get; set; }
 
@@ -72,6 +70,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
         [BsonElement(TextProperty)]
         public string Text { get; set; }
 
+        public const string ExProperty = "ex";
         [BsonElement(ExProperty)]
         public string Ex { get; set; }
 

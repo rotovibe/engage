@@ -36,7 +36,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
         public const string ClientProperty = "cli";
         [BsonElement(ClientProperty)]
         [BsonIgnoreIfNull(true)]
-        public string Client { get; set; }
+        public ObjectId? Client { get; set; }
 
         public const string StatusProperty = "sts";
         [BsonElement(StatusProperty)]
@@ -54,30 +54,30 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
         public List<Module> Modules { get; set; }
 
         #region // will be refactored
-        public const string EligibilityRequirementsProperty = "er";
-        [BsonElement(EligibilityRequirementsProperty)]
-        [BsonIgnoreIfNull(true)]
-        public string EligibilityRequirements { get; set; }
+        //public const string EligibilityRequirementsProperty = "er";
+        //[BsonElement(EligibilityRequirementsProperty)]
+        //[BsonIgnoreIfNull(true)]
+        //public string EligibilityRequirements { get; set; }
 
-        public const string EligibilityStartDateProperty = "esd";
-        [BsonElement(EligibilityStartDateProperty)]
-        [BsonIgnoreIfNull(true)]
-        public DateTime? EligibilityStartDate { get; set; }
+        //public const string EligibilityStartDateProperty = "esd";
+        //[BsonElement(EligibilityStartDateProperty)]
+        //[BsonIgnoreIfNull(true)]
+        //public DateTime? EligibilityStartDate { get; set; }
 
-        public const string EligibilityEndDateProperty = "eedt";
-        [BsonElement(EligibilityEndDateProperty)]
-        [BsonIgnoreIfNull(false)]
-        public DateTime? EligibilityEndDate { get; set; }
+        //public const string EligibilityEndDateProperty = "eedt";
+        //[BsonElement(EligibilityEndDateProperty)]
+        //[BsonIgnoreIfNull(false)]
+        //public DateTime? EligibilityEndDate { get; set; }
 
-        public const string AuthoredByProperty = "athby";
-        [BsonElement(AuthoredByProperty)]
-        [BsonIgnoreIfNull(true)]
-        public string AuthoredBy { get; set; }
+        //public const string AuthoredByProperty = "athby";
+        //[BsonElement(AuthoredByProperty)]
+        //[BsonIgnoreIfNull(true)]
+        //public string AuthoredBy { get; set; }
 
-        public const string LockedProperty = "lck";
-        [BsonElement(LockedProperty)]
-        [BsonIgnoreIfNull(true)]
-        public bool Locked { get; set; }
+        //public const string LockedProperty = "lck";
+        //[BsonElement(LockedProperty)]
+        //[BsonIgnoreIfNull(true)]
+        //public bool Locked { get; set; }
         #endregion
     }
 }

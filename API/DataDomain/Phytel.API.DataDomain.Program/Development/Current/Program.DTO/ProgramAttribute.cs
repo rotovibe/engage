@@ -22,7 +22,7 @@ namespace Phytel.API.DataDomain.Program.DTO
         public int EligibilityOverride { get; set; }
         public int Enrollment { get; set; }
         public int GraduatedFlag { get; set; }
-        public string OptOut { get; set; }
+        public bool OptOut { get; set; }
         public string OptOutReason { get; set; }
         public DateTime? OptOutDate { get; set; }
         public string Population { get; set; }

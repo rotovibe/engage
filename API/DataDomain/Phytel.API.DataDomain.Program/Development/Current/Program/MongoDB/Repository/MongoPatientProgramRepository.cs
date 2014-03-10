@@ -195,36 +195,36 @@ namespace Phytel.API.DataDomain.Program
                     cps.ForEach(cp => patList.Add(new ProgramDetail
                     {
                         Id = cp.Id.ToString(),
-                        Client = cp.Client,
+                        Client = cp.Client != null ? cp.Client.ToString() : null,
                         ContractProgramId = cp.ContractProgramId.ToString(),
                         Description = cp.Description,
-                        EligibilityEndDate = cp.EligibilityEndDate,
-                        EligibilityRequirements = cp.EligibilityRequirements,
-                        EligibilityStartDate = cp.EligibilityStartDate,
+                        //EligibilityEndDate = cp.EligibilityEndDate,
+                        //EligibilityRequirements = cp.EligibilityRequirements,
+                        //EligibilityStartDate = cp.EligibilityStartDate,
                         EndDate = cp.EndDate,
-                        RemovedReason = cp.RemovedReason,
-                        OverrideReason = cp.OverrideReason,
-                        OptOutReason = cp.OptOutReason,
-                        OptOutDate = cp.OptOutDate,
-                        OptOut = cp.OptOut,
-                        IneligibleReason = cp.IneligibleReason,
-                        GraduatedFlag = cp.GraduatedFlag,
-                        Enrollment = (int)cp.Enrollment,
-                        EligibilityOverride = (int)cp.EligibilityOverride,
-                        DisEnrollReason = cp.DisEnrollReason,
-                        DidNotEnrollReason = cp.DidNotEnrollReason,
+                        //RemovedReason = cp.RemovedReason,
+                        //OverrideReason = cp.OverrideReason,
+                        //OptOutReason = cp.OptOutReason,
+                        //OptOutDate = cp.OptOutDate,
+                        //OptOut = cp.OptOut,
+                        //IneligibleReason = cp.IneligibleReason,
+                        //GraduatedFlag = cp.GraduatedFlag,
+                        //Enrollment = (int)cp.Enrollment,
+                        //EligibilityOverride = (int)cp.EligibilityOverride,
+                        //DisEnrollReason = cp.DisEnrollReason,
+                        //DidNotEnrollReason = cp.DidNotEnrollReason,
                         AssignBy = cp.AssignedBy,
                         AssignDate = cp.AssignedOn,
                         Completed = cp.Completed,
                         CompletedBy = cp.CompletedBy,
                         DateCompleted = cp.DateCompleted,
                         ElementState = (int)cp.State,
-                        Eligibility = (int)cp.Eligibility,
+                        //Eligibility = (int)cp.Eligibility,
                         Enabled = cp.Enabled,
                         Next = cp.Next,
                         Order = cp.Order,
                         Previous = cp.Previous,
-                        SourceId = cp.SourceId,
+                        SourceId = cp.SourceId.ToString(),
                         SpawnElement = DTOUtils.GetResponseSpawnElement(cp.Spawn),
                         Modules = DTOUtils.GetModules(cp.Modules, _dbName),
                         Name = cp.Name,
@@ -266,9 +266,9 @@ namespace Phytel.API.DataDomain.Program
                     uv.Add(MB.Update.Set(MEPatientProgram.ProgramStateProperty, (ProgramState)pg.ProgramState));
                     uv.Add(MB.Update.Set(MEPatientProgram.LastUpdatedOnProperty, System.DateTime.UtcNow));
                     uv.Add(MB.Update.Set(MEPatientProgram.UpdatedByProperty, p.UserId));
-                    uv.Add(MB.Update.Set(MEPatientProgram.EligibilityProperty, pg.Eligibility));
-                    uv.Add(MB.Update.Set(MEPatientProgram.EnrollmentProperty, pg.Enrollment));
-                    uv.Add(MB.Update.Set(MEPatientProgram.GraduatedFlagProperty, pg.GraduatedFlag));
+                    //uv.Add(MB.Update.Set(MEPatientProgram.EligibilityProperty, pg.Eligibility));
+                    //uv.Add(MB.Update.Set(MEPatientProgram.EnrollmentProperty, pg.Enrollment));
+                    //uv.Add(MB.Update.Set(MEPatientProgram.GraduatedFlagProperty, pg.GraduatedFlag));
 
                     if (pg.ElementState != 0) uv.Add(MB.Update.Set(MEPatientProgram.StateProperty, (ElementState)pg.ElementState));
                     if (pg.Status != 0) uv.Add(MB.Update.Set(MEPatientProgram.StatusProperty, (Status)pg.Status));
@@ -279,13 +279,13 @@ namespace Phytel.API.DataDomain.Program
                     if (pg.ContractProgramId != null) { uv.Add(MB.Update.Set(MEPatientProgram.ContractProgramIdProperty, ObjectId.Parse(pg.ContractProgramId))); }
                     if (pg.DateCompleted != null) { uv.Add(MB.Update.Set(MEPatientProgram.CompletedOnProperty, pg.DateCompleted)); }
                     if (pg.Description != null) { uv.Add(MB.Update.Set(MEPatientProgram.DescriptionProperty, pg.Description)); }
-                    if (pg.EligibilityEndDate != null) { uv.Add(MB.Update.Set(MEPatientProgram.EligibilityEndDateProperty, pg.EligibilityEndDate)); }
-                    if (pg.EligibilityRequirements != null) { uv.Add(MB.Update.Set(MEPatientProgram.EligibilityRequirementsProperty, pg.EligibilityRequirements)); }
-                    if (pg.EligibilityStartDate != null) { uv.Add(MB.Update.Set(MEPatientProgram.EligibilityStartDateProperty, pg.EligibilityStartDate)); }
-                    if (pg.IneligibleReason != null) { uv.Add(MB.Update.Set(MEPatientProgram.IneligibleReasonProperty, pg.IneligibleReason)); }
-                    if (pg.OptOut != null) { uv.Add(MB.Update.Set(MEPatientProgram.OptOutProperty, pg.OptOut)); }
-                    if (pg.OptOutReason != null) { uv.Add(MB.Update.Set(MEPatientProgram.OptOutReasonProperty, pg.OptOutReason)); }
-                    if (pg.OptOutDate != null) { uv.Add(MB.Update.Set(MEPatientProgram.OptOutDateProperty, pg.OptOutDate)); }
+                    //if (pg.EligibilityEndDate != null) { uv.Add(MB.Update.Set(MEPatientProgram.EligibilityEndDateProperty, pg.EligibilityEndDate)); }
+                    //if (pg.EligibilityRequirements != null) { uv.Add(MB.Update.Set(MEPatientProgram.EligibilityRequirementsProperty, pg.EligibilityRequirements)); }
+                    //if (pg.EligibilityStartDate != null) { uv.Add(MB.Update.Set(MEPatientProgram.EligibilityStartDateProperty, pg.EligibilityStartDate)); }
+                    //if (pg.IneligibleReason != null) { uv.Add(MB.Update.Set(MEPatientProgram.IneligibleReasonProperty, pg.IneligibleReason)); }
+                    //if (pg.OptOut != null) { uv.Add(MB.Update.Set(MEPatientProgram.OptOutProperty, pg.OptOut)); }
+                    //if (pg.OptOutReason != null) { uv.Add(MB.Update.Set(MEPatientProgram.OptOutReasonProperty, pg.OptOutReason)); }
+                    //if (pg.OptOutDate != null) { uv.Add(MB.Update.Set(MEPatientProgram.OptOutDateProperty, pg.OptOutDate)); }
                     if (pg.EndDate != null) { uv.Add(MB.Update.Set(MEPatientProgram.EndDateProperty, pg.EndDate)); }
                     if (pg.Name != null) { uv.Add(MB.Update.Set(MEPatientProgram.NameProperty, pg.Name)); }
                     if (pg.Next != null) { uv.Add(MB.Update.Set(MEPatientProgram.NextProperty, pg.Next)); }

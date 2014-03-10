@@ -211,7 +211,7 @@ namespace Phytel.API.DataDomain.Program
                 response.Program = new ProgramDetail
                 {
                     Id = mepp.Id.ToString(),
-                    Client = mepp.Client,
+                    Client = mepp.Client != null ? mepp.Client.ToString() : null,
                     ContractProgramId = mepp.ContractProgramId.ToString(),
                     Description = mepp.Description,
                     Name = mepp.Name,
@@ -221,28 +221,28 @@ namespace Phytel.API.DataDomain.Program
                     StartDate = mepp.StartDate,
                     Status = (int)mepp.Status,
                     Version = mepp.Version,
-                    Eligibility = (int)mepp.Eligibility,
-                    EligibilityEndDate = mepp.EligibilityEndDate,
-                    EligibilityRequirements = mepp.EligibilityRequirements,
-                    EligibilityStartDate = mepp.EligibilityStartDate,
-                    DidNotEnrollReason = mepp.DidNotEnrollReason,
-                    DisEnrollReason = mepp.DisEnrollReason,
-                    EligibilityOverride = (int)mepp.EligibilityOverride,
-                    Enrollment = (int)mepp.Enrollment,
-                    GraduatedFlag = mepp.GraduatedFlag,
-                    IneligibleReason = mepp.IneligibleReason,
-                    OptOut = mepp.OptOut,
-                    OptOutDate = mepp.OptOutDate,
-                    OptOutReason = mepp.OptOutReason,
-                    OverrideReason = mepp.OverrideReason,
-                    RemovedReason = mepp.RemovedReason,
+                    //Eligibility = (int)mepp.Eligibility,
+                    //EligibilityEndDate = mepp.EligibilityEndDate,
+                    //EligibilityRequirements = mepp.EligibilityRequirements,
+                    //EligibilityStartDate = mepp.EligibilityStartDate,
+                    //DidNotEnrollReason = mepp.DidNotEnrollReason,
+                    //DisEnrollReason = mepp.DisEnrollReason,
+                    //EligibilityOverride = (int)mepp.EligibilityOverride,
+                    //Enrollment = (int)mepp.Enrollment,
+                    //GraduatedFlag = mepp.GraduatedFlag,
+                    //IneligibleReason = mepp.IneligibleReason,
+                    //OptOut = mepp.OptOut,
+                    //OptOutDate = mepp.OptOutDate,
+                    //OptOutReason = mepp.OptOutReason,
+                    //OverrideReason = mepp.OverrideReason,
+                    //RemovedReason = mepp.RemovedReason,
                     EndDate = mepp.EndDate,
                     Completed = mepp.Completed,
                     Enabled = mepp.Enabled,
                     Next = mepp.Next,
                     Order = mepp.Order,
                     Previous = mepp.Previous,
-                    SourceId = mepp.SourceId,
+                    SourceId = mepp.SourceId.ToString(),
                     AssignBy = mepp.AssignedBy,
                     AssignDate = mepp.AssignedOn,
                     ElementState = (int)mepp.State,
@@ -355,8 +355,7 @@ namespace Phytel.API.DataDomain.Program
                         {
                             SpawnId = (s.ElementId != null) ? ObjectId.Parse(s.ElementId) : ObjectId.Parse("000000000000000000000000"),
                             Tag = s.Tag,
-                            Type = s.ElementType
-
+                            Type = (SpawnElementTypeCode)s.ElementType
                         });
                     });
                 }
@@ -472,7 +471,7 @@ namespace Phytel.API.DataDomain.Program
                     {
                         SpawnId = (s.ElementId != null)? ObjectId.Parse(s.ElementId) : ObjectId.Parse("000000000000000000000000"),
                         Tag = s.Tag,
-                        Type = s.ElementType
+                        Type = (SpawnElementTypeCode)s.ElementType
                     });
                 });
             }

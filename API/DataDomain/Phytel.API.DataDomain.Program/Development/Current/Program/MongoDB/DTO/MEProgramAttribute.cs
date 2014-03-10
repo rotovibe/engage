@@ -82,7 +82,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
 
         public const string OptOutProperty = "oo";
         [BsonElement(OptOutProperty)]
-        public string OptOut { get; set; }
+        public bool OptOut { get; set; }
 
         public const string OptOutReasonProperty = "oor";
         [BsonElement(OptOutReasonProperty)]
