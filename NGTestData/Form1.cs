@@ -319,14 +319,14 @@ namespace NGTestData
                     FirstName = dr["FirstName"].ToString(),
                     LastName = dr["LastName"].ToString(),
                     PreferredName = dr["DisplayName"].ToString(),
-                    ResourceId = Guid.Parse(dr["UserID"].ToString())
+                    ResourceId = dr["UserID"].ToString()
                 };
 
                 string mongoConnString = txtMongoConn.Text;
 
                 MongoDB.Driver.MongoDatabase mongoDB = Phytel.Services.MongoService.Instance.GetDatabase(mongoConnString);
 
-                IMongoQuery query = Query.EQ(MEContact.ResourceIdProperty, Guid.Parse(dr["UserID"].ToString()));
+                IMongoQuery query = Query.EQ(MEContact.ResourceIdProperty, dr["UserID"].ToString());
 
                 MEContact existsC = mongoDB.GetCollection("Contact").FindOneAs<MEContact>(query);
                 if(existsC == null)
