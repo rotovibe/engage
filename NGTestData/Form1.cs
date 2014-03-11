@@ -96,10 +96,10 @@ namespace NGTestData
                         MiddleName = dr["MiddleInitial"].ToString(),
                         Suffix = dr["Suffix"].ToString(),
                         PreferredName = dr["FirstName"].ToString() + "o",
-                        UpdatedBy = null,
+                        UpdatedBy = ObjectId.Empty,
                         DeleteFlag = false,
                         TTLDate = null,
-                        Version = "v1",
+                        Version = 1,
                         LastUpdatedOn = DateTime.Now
                     };
 
@@ -163,10 +163,10 @@ namespace NGTestData
                         PatientID = patient.Id,
                         SystemID = patientSystemID,
                         SystemName = "Atmosphere",
-                        UpdatedBy = null,
+                        UpdatedBy = ObjectId.Empty,
                         DeleteFlag = false,
                         TTLDate = null,
-                        Version = "v1",
+                        Version = 1,
                         LastUpdatedOn = DateTime.Now
                     };
 
@@ -210,7 +210,7 @@ namespace NGTestData
                             ProblemID = problems[probID].DataID,
                             StartDate = null,
                             TTLDate = null,
-                            Version = "v1"
+                            Version = 1
                         });
                     currentPatientView.SearchFields.Add(new SearchField { Active = true, FieldName = "Problem", Value = problems[probID].DataID.ToString() });
                 }
