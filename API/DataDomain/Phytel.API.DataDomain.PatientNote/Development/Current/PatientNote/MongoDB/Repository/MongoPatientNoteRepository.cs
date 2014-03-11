@@ -42,13 +42,15 @@ namespace Phytel.API.DataDomain.PatientNote
                         PatientId = ObjectId.Parse(noteData.PatientId),
                         Text = noteData.Text,
                         Programs = Helper.ConvertToObjectIdList(noteData.ProgramIds),
-                        CreatedBy = noteData.CreatedById,
                         CreatedOn = DateTime.UtcNow,
                         Version = request.Version,
                         UpdatedBy = ObjectId.Parse(request.UserId),
                         LastUpdatedOn = DateTime.UtcNow
                     };
-
+                    if (!string.IsNullOrEmpty(noteData.CreatedById))
+                    {
+                        meN.CreatedBy = ObjectId.Parse(noteData.CreatedById);
+                    }
                     using (PatientNoteMongoContext ctx = new PatientNoteMongoContext(_dbName))
                     {
                         WriteConcernResult wcr = ctx.PatientNotes.Collection.Insert(meN);
@@ -126,7 +128,7 @@ namespace Phytel.API.DataDomain.PatientNote
                             Text = meN.Text,
                             ProgramIds = Helper.ConvertToStringList(meN.Programs),
                             CreatedOn = meN.CreatedOn,
-                            CreatedById = (string.IsNullOrEmpty(meN.CreatedBy)) ? string.Empty : meN.CreatedBy.Replace("-", string.Empty).ToLower()
+                            CreatedById = (meN.CreatedBy == null) ? string.Empty : meN.CreatedBy.ToString()
                         };
                     }
                 }
@@ -207,7 +209,7 @@ namespace Phytel.API.DataDomain.PatientNote
                                 Text = meN.Text,
                                 ProgramIds = Helper.ConvertToStringList(meN.Programs),
                                 CreatedOn = meN.CreatedOn,
-                                CreatedById = (string.IsNullOrEmpty(meN.CreatedBy)) ? string.Empty : meN.CreatedBy.Replace("-", string.Empty).ToLower()
+                                CreatedById = (meN.CreatedBy == null) ? string.Empty : meN.CreatedBy.ToString()
                             });
                         }
                     }

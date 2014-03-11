@@ -49,7 +49,7 @@ namespace Phytel.API.DataDomain.PatientNote.DTO
 
         [BsonElement(CreatedByProperty)]
         [BsonIgnoreIfNull(false)]
-        public string CreatedBy { get; set; }
+        public ObjectId? CreatedBy { get; set; }
 
         [BsonElement(CreatedOnProperty)]
         [BsonIgnoreIfNull(true)]
