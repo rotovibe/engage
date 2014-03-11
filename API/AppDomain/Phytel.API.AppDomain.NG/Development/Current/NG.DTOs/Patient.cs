@@ -22,5 +22,7 @@ namespace Phytel.API.AppDomain.NG.DTO
         public int Priority { get; set; }
         public int Flagged { get; set; }
         public string Background { get; set; }
+        public int? LastFourSSN { get; set; }
+        public string FullSSN { get; set; }
     }
 }

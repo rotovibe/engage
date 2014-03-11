@@ -21,6 +21,8 @@ namespace Phytel.API.DataDomain.Patient.DTO
         public PriorityData PriorityData { get; set; }
         public bool Flagged { get; set; }
         public string Background { get; set; }
+        public int? LastFourSSN { get; set; }
+        public string FullSSN { get; set; }
     }
 
     public enum PriorityData

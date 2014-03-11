@@ -45,7 +45,6 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
                 Name = cp.Name,
                 ObjectivesInfo = cp.ObjectivesInfo,
                 CompletedBy = cp.CompletedBy,
-                UpdatedBy = ObjectId.Parse(request.UserId),
                 SourceId = cp.Id,
                 ShortName = cp.ShortName,
                 Status = cp.Status,
@@ -59,6 +58,10 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
                 Previous = cp.Previous,
                 Modules = DTOUtils.SetValidModules(cp.Modules, request.ContractNumber)
             };
+            if(!string.IsNullOrEmpty(request.UserId))
+            {
+                patientProgDoc.UpdatedBy = ObjectId.Parse(request.UserId);
+            }
             return patientProgDoc;
         }
 

@@ -124,61 +124,59 @@ namespace Phytel.API.DataDomain.Patient
 
         public object FindByID(string entityID)
         {
-            DTO.PatientData patient = null;
-            using (PatientMongoContext ctx = new PatientMongoContext(_dbName))
+            PatientData patientData = null;
+            var patient = FindByID(entityID, string.Empty);
+            if (patient != null)
             {
-                patient = (from p in ctx.Patients
-                           where p.Id == ObjectId.Parse(entityID)
-                           select new DTO.PatientData
-                            {
-                                ID = p.Id.ToString(),
-                                DOB = CommonFormatter.FormatDateOfBirth(p.DOB),
-                                FirstName = p.FirstName,
-                                Gender = p.Gender,
-                                LastName = p.LastName,
-                                PreferredName = p.PreferredName,
-                                MiddleName = p.MiddleName,
-                                Suffix = p.Suffix,
-                                PriorityData = (DTO.PriorityData)((int)p.Priority),
-                                DisplayPatientSystemID = p.DisplayPatientSystemID.ToString(),
-                                Background = p.Background
-                            }).FirstOrDefault();
+                patientData = (PatientData)patient;
             }
-            return patient;
+            return patientData;
         }
 
-        public object FindByID(string entityId, string contactId)
+        public object FindByID(string entityId, string userId)
         {
-            DTO.PatientData patient = null;
+            PatientData patientData = null;
             using (PatientMongoContext ctx = new PatientMongoContext(_dbName))
             {
-                patient = (from p in ctx.Patients
-                           where p.Id == ObjectId.Parse(entityId)
-                           select new DTO.PatientData
-                           {
-                               ID = p.Id.ToString(),
-                               DOB = CommonFormatter.FormatDateOfBirth(p.DOB),
-                               FirstName = p.FirstName,
-                               Gender = p.Gender,
-                               LastName = p.LastName,
-                               PreferredName = p.PreferredName,
-                               MiddleName = p.MiddleName,
-                               Suffix = p.Suffix,
-                               PriorityData = (DTO.PriorityData)((int)p.Priority),
-                               DisplayPatientSystemID = p.DisplayPatientSystemID.ToString(),
-                               Background = p.Background,
-                               Flagged = GetFlaggedStatus(entityId, contactId)
-                           }).FirstOrDefault();
+                var query = MB.Query.And(
+                                MB.Query<MEPatient>.EQ(b => b.Id, ObjectId.Parse(entityId)),
+                                MB.Query<MEPatient>.EQ(b => b.DeleteFlag, false)
+                            );
+
+                var mePatient = ctx.Patients.Collection.Find(query).FirstOrDefault();
+                if (mePatient != null)
+                {
+                    patientData = new PatientData
+                    {
+                        ID = mePatient.Id.ToString(),
+                        DOB = CommonFormatter.FormatDateOfBirth(mePatient.DOB),
+                        FirstName = mePatient.FirstName,
+                        Gender = mePatient.Gender,
+                        LastName = mePatient.LastName,
+                        PreferredName = mePatient.PreferredName,
+                        MiddleName = mePatient.MiddleName,
+                        Suffix = mePatient.Suffix,
+                        PriorityData = (DTO.PriorityData)((int)mePatient.Priority),
+                        DisplayPatientSystemID = mePatient.DisplayPatientSystemID.ToString(),
+                        Background = mePatient.Background,
+                        LastFourSSN = mePatient.LastFourSSN,
+                        FullSSN = mePatient.FullSSN
+                    };
+                    if (!string.IsNullOrEmpty(userId))
+                    {
+                        patientData.Flagged = GetFlaggedStatus(entityId, userId);
+                    }
+                }
             }
-            return patient;
+            return patientData;
         }
 
-        private bool GetFlaggedStatus(string patientId, string contactId)
+        private bool GetFlaggedStatus(string patientId, string userId)
         {
             bool result = false;
             using (PatientMongoContext ctx = new PatientMongoContext(_dbName))
             {
-                var patientUsr = FindPatientUser(patientId, contactId, ctx);
+                var patientUsr = FindPatientUser(patientId, userId, ctx);
 
                 if (patientUsr != null)
                 {
@@ -188,11 +186,11 @@ namespace Phytel.API.DataDomain.Patient
             return result;
         }
 
-        private static MEPatientUser FindPatientUser(string patientId, string contactId, PatientMongoContext ctx)
+        private static MEPatientUser FindPatientUser(string patientId, string userId, PatientMongoContext ctx)
         {
             var findQ = MB.Query.And(
                 MB.Query<MEPatientUser>.EQ(b => b.PatientId, ObjectId.Parse(patientId)),
-                MB.Query<MEPatientUser>.EQ(b => b.ContactId, ObjectId.Parse(contactId))
+                MB.Query<MEPatientUser>.EQ(b => b.ContactId, ObjectId.Parse(userId))
             );
 
             var patientUsr = ctx.PatientUsers.Collection.Find(findQ).FirstOrDefault();
@@ -389,7 +387,9 @@ namespace Phytel.API.DataDomain.Patient
                         Version = mp.Version,
                         PriorityData = (PriorityData)((int)mp.Priority),
                         DisplayPatientSystemID = mp.DisplayPatientSystemID.ToString(),
-                        Background = mp.Background
+                        Background = mp.Background,
+                        LastFourSSN = mp.LastFourSSN,
+                        FullSSN = mp.FullSSN
                     });
                 }
             }

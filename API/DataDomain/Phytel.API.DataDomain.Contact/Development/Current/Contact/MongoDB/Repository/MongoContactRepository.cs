@@ -59,9 +59,14 @@ namespace Phytel.API.DataDomain.Contact
                         ResourceId = request.ResourceId,
                         Version = request.Version,
                         LastUpdatedOn = DateTime.UtcNow,
-                        UpdatedBy = ObjectId.Parse(request.UserId),
                         DeleteFlag = false
                     };
+
+                    //UpdatedBy
+                    if (!string.IsNullOrEmpty(request.UserId))
+                    {
+                        meContact.UpdatedBy = ObjectId.Parse(request.UserId);
+                    }
 
                     //PatientId
                     if (request.PatientId != null)

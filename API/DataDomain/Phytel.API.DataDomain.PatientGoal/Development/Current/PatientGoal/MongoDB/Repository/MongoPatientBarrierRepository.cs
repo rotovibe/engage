@@ -184,9 +184,12 @@ namespace Phytel.API.DataDomain.PatientGoal
                     PatientGoalId = ObjectId.Parse(request.PatientGoalId),
                     TTLDate = System.DateTime.UtcNow.AddDays(_initializeDays),
                     StatusDate = DateTime.UtcNow,
-                    UpdatedBy = ObjectId.Parse(request.UserId),
                     LastUpdatedOn = DateTime.UtcNow
                 };
+                if(!string.IsNullOrEmpty(request.UserId))
+                {
+                    mePb.UpdatedBy = ObjectId.Parse(request.UserId);
+                }
 
                 using (PatientGoalMongoContext ctx = new PatientGoalMongoContext(_dbName))
                 {

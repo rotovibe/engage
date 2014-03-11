@@ -187,10 +187,12 @@ namespace Phytel.API.DataDomain.PatientGoal
                     PatientGoalId = ObjectId.Parse(ptr.PatientGoalId),
                     TTLDate = System.DateTime.UtcNow.AddDays(_initializeDays),
                     StatusDate = DateTime.UtcNow,
-                    UpdatedBy = ObjectId.Parse(ptr.UserId),
                     LastUpdatedOn = DateTime.UtcNow
                 };
-
+                if (!string.IsNullOrEmpty(ptr.UserId))
+                {
+                    pat.UpdatedBy = ObjectId.Parse(ptr.UserId);
+                }
                 using (PatientGoalMongoContext ctx = new PatientGoalMongoContext(_dbName))
                 {
                     WriteConcernResult wcr = ctx.PatientTasks.Collection.Insert(pat);

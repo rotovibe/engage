@@ -230,12 +230,15 @@ namespace Phytel.API.DataDomain.PatientObservation
                     Id = ObjectId.GenerateNewId(),
                     PatientId = ObjectId.Parse(request.PatientId),
                     TTLDate = System.DateTime.UtcNow.AddDays(_initializeDays),
-                    UpdatedBy = ObjectId.Parse(request.UserId),
                     LastUpdatedOn = DateTime.UtcNow,
                     ObservationId = ObjectId.Parse(request.ObservationId),
                     DeleteFlag = true
                 };
 
+                if (!string.IsNullOrEmpty(request.UserId))
+                {
+                    mePg.UpdatedBy = ObjectId.Parse(request.UserId);
+                }
                 using (PatientObservationMongoContext ctx = new PatientObservationMongoContext(_dbName))
                 {
                     WriteConcernResult wcr = ctx.PatientObservations.Collection.Insert(mePg);

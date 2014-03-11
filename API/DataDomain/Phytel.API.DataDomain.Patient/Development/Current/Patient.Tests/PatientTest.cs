@@ -9,7 +9,7 @@ namespace Phytel.API.DataDomain.Patient.Test
         [TestMethod]
         public void GetPatientByID()
         {
-            GetPatientDataRequest request = new GetPatientDataRequest { PatientID = "52e26f5b072ef7191c11e0b6" };
+            GetPatientDataRequest request = new GetPatientDataRequest { PatientID = "531f2dcd072ef727c4d29fb0"};
 
             GetPatientDataResponse response = PatientDataManager.GetPatientByID(request);
 

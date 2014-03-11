@@ -50,9 +50,8 @@ namespace Phytel.API.DataDomain.PatientNote.Test
         [TestMethod]
         public void InsertPatientNote_Test()
         {
-            PatientNoteData n = new PatientNoteData { Text = "Note D data domain", CreatedById = "BB241C64-A0FF-4E01-BA5F-4246EF50780E", PatientId = "52f5589c072ef709f84e7798" };
+            PatientNoteData n = new PatientNoteData { Text = "Note D data domain", PatientId = "531f2dcf072ef727c4d2a150", CreatedById = "531f2df5072ef727c4d2a3bc" };
             PutPatientNoteDataRequest request = new PutPatientNoteDataRequest {
-                UserId = "DD_Harness",
                 Version = 1,
                 PatientNote = n
             };

@@ -85,8 +85,8 @@ namespace Phytel.API.AppDomain.NG.Test
             request.ContractNumber = "InHealth001";
             request.UserId = "AD_TestHarness";
             request.Version = 1;
-            request.PatientId = "52f55877072ef709f84e69b0";
-            request.UserId = "Snehal";
+            request.PatientId = "531f2dcd072ef727c4d29fb0";
+            request.UserId = "531f2df5072ef727c4d2a3bc";
 
             GoalsManager gManager = new GoalsManager();
             GetInitializeGoalResponse response = gManager.GetInitialGoalRequest(request);
