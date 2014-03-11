@@ -77,7 +77,7 @@ namespace Phytel.API.AppDomain.Security
 
                 while (reader.Read())
                 {
-                    response.UserId = reader.GetGuid(colUserId).ToString();
+                    response.SQLUserID = reader.GetGuid(colUserId).ToString();
                     response.UserName = reader.GetString(colUserName);
                     response.FirstName = reader.GetString(colFirstName);
                     response.LastName = reader.GetString(colLastName);

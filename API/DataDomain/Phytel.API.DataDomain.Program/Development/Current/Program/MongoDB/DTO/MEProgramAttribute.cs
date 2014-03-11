@@ -157,7 +157,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
         public const string UpdatedByProperty = "uby";
         [BsonElement(UpdatedByProperty)]
         [BsonIgnoreIfNull(true)]
-        public ObjectId UpdatedBy { get; set; }
+        public ObjectId? UpdatedBy { get; set; }
 
         public const string DeleteFlagProperty = "del";
         [BsonElement(DeleteFlagProperty)]

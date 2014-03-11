@@ -66,7 +66,7 @@ namespace Phytel.API.DataDomain.PatientNote.DTO
         public double Version { get; set; }
 
         [BsonElement(UpdatedByProperty)]
-        public ObjectId UpdatedBy { get; set; }
+        public ObjectId? UpdatedBy { get; set; }
 
         [BsonElement(DeleteFlagProperty)]
         [BsonDefaultValue(false)]

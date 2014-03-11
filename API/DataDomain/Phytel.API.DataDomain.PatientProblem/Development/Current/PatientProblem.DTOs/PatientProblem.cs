@@ -17,7 +17,7 @@ namespace Phytel.API.DataDomain.PatientProblem.DTO
         public DateTime? StartDate { get; set; }
         public DateTime? EndDate { get; set; }
         public double Version { get; set; }
-        //public ObjectId UpdatedBy { get; set; }
+        //public ObjectId? UpdatedBy { get; set; }
         public bool DeleteFlag { get; set; }
         public DateTime? TTLDate { get; set; }
         public DateTime? LastUpdatedOn { get; set; }

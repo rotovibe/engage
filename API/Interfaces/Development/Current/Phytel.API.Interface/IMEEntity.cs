@@ -21,7 +21,7 @@ namespace Phytel.API.Interface
 
         [BsonElement( "uby")]
         [BsonIgnoreIfNull(true)]
-        ObjectId UpdatedBy { get; set; }
+        ObjectId? UpdatedBy { get; set; }
 
         [BsonElement("del")]
         [BsonDefaultValue(false)]

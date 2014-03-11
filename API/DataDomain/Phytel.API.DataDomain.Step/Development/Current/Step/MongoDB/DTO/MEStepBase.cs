@@ -47,7 +47,7 @@ namespace Phytel.API.DataDomain.Step.DTO
 
         public const string UpdatedByProperty = "uby";
         [BsonElement(UpdatedByProperty)]
-        public ObjectId UpdatedBy { get; set; }
+        public ObjectId? UpdatedBy { get; set; }
 
         public const string DeleteFlagProperty = "del";
         [BsonElement(DeleteFlagProperty)]

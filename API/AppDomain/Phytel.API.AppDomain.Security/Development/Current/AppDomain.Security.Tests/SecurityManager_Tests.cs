@@ -11,8 +11,8 @@ namespace Phytel.API.AppDomain.Security.Test
 
         [TestMethod]
         public void Validate_Credentials_Test()
-        {            
-            AuthenticateResponse response = SecurityManager.ValidateCredentials("b25eaff2-35f4-4d79-9ea8-5dc8b7a4cfe1", secToken, "12345", "NG");
+        {
+            AuthenticateResponse response = SecurityManager.ValidateCredentials("bdd78ca7-405e-4999-be4c-602f3b0af783", secToken, "12345", "NG");
             Assert.IsTrue(response.UserId != string.Empty);
         }
 
