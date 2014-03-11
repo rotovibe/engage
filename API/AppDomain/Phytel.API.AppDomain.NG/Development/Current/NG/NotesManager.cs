@@ -95,7 +95,7 @@ namespace Phytel.API.AppDomain.NG
             }
         }
 
-        public PostPatientNoteResponse InsertPatientNote(PostPatientNoteRequest request, string createdBy)
+        public PostPatientNoteResponse InsertPatientNote(PostPatientNoteRequest request)
         {
             try
             {
@@ -110,7 +110,7 @@ namespace Phytel.API.AppDomain.NG
                 PatientNoteData noteData = new PatientNoteData {
                     Text  = request.Note.Text,
                     ProgramIds  = request.Note.ProgramIds,
-                    CreatedById = createdBy,
+                    CreatedById = request.UserId,
                     CreatedOn = request.Note.CreatedOn,
                     PatientId = request.Note.PatientId
                 };

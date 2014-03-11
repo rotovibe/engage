@@ -805,7 +805,7 @@ namespace Phytel.API.AppDomain.NG.Service
                 if (result.UserId.Trim() != string.Empty)
                 {
                     request.UserId = result.UserId;
-                    response = ngm.InsertPatientNote(request, result.UserId);
+                    response = ngm.InsertPatientNote(request);
                 }
                 else
                     throw new UnauthorizedAccessException();

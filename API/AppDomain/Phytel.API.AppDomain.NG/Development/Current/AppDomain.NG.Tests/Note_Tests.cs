@@ -33,7 +33,7 @@ namespace Phytel.API.AppDomain.NG.Test
             request.Note = note;
 
             NotesManager nManager = new NotesManager();
-            PostPatientNoteResponse response = nManager.InsertPatientNote(request, note.CreatedById);
+            PostPatientNoteResponse response = nManager.InsertPatientNote(request);
 
             Assert.IsNotNull(response);
         }
