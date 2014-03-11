@@ -334,7 +334,8 @@ namespace Phytel.API.DataDomain.Program
                 Order = r.ResponseDetail.Order,
                 StepId = ObjectId.Parse(r.ResponseDetail.StepId),
                 Text = r.ResponseDetail.Text,
-                Value = r.ResponseDetail.Value
+                Value = r.ResponseDetail.Value,
+                 //Selected = r
             };
 
             result.Result = (bool)responseRepo.Update(meres);

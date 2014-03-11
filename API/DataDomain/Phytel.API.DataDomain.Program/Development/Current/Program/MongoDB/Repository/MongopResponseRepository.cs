@@ -37,7 +37,8 @@ namespace Phytel.API.DataDomain.Program
                 Spawn = DTOUtils.GetSpawnElements(rs.SpawnElement),
                 StepId = ObjectId.Parse(rs.StepId),
                 Text = rs.Text,
-                Value = rs.Value
+                Value = rs.Value,
+                DeleteFlag = true
             };
 
             //MEResponse mer = newEntity as MEResponse;
@@ -129,6 +130,8 @@ namespace Phytel.API.DataDomain.Program
                     uv.Add(MB.Update.Set(MEResponse.StepIdProperty, resp.StepId));
                     uv.Add(MB.Update.Set(MEResponse.NominalProperty, resp.Nominal));
                     uv.Add(MB.Update.Set(MEResponse.RequiredProperty, resp.Required));
+                    uv.Add(MB.Update.Set(MEResponse.DeleteFlagProperty, false));
+                    uv.Add(MB.Update.Set(MEResponse.SelectedProperty, resp.Selected));
                     if (resp.Order != 0) uv.Add(MB.Update.Set(MEResponse.OrderProperty, resp.Order));
                     if (resp.Text != null) uv.Add(MB.Update.Set(MEResponse.TextProperty, resp.Text));
                     if (resp.Value != null) uv.Add(MB.Update.Set(MEResponse.ValueProperty, resp.Value));
