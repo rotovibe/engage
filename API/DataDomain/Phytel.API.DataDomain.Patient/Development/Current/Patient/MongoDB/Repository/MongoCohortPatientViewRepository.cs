@@ -354,6 +354,11 @@ namespace Phytel.API.DataDomain.Patient
         {
             throw new NotImplementedException();
         }
+
+        public object GetSSN(string patientId)
+        {
+            throw new NotImplementedException();
+        }
         #endregion
     }
 }

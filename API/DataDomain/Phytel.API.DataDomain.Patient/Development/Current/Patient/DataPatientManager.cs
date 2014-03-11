@@ -94,6 +94,23 @@ namespace Phytel.API.DataDomain.Patient
             }
         }
 
+        public static GetPatientSSNDataResponse GetPatientSSN(GetPatientSSNDataRequest request)
+        {
+            try
+            {
+                GetPatientSSNDataResponse result = new GetPatientSSNDataResponse();
+
+                IPatientRepository<GetPatientSSNDataResponse> repo = PatientRepositoryFactory<GetPatientSSNDataResponse>.GetPatientRepository(request.ContractNumber, request.Context);
+                result.SSN = repo.GetSSN(request.PatientId) as string;
+
+                return result;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
         public static GetPatientsDataResponse GetPatients(GetPatientsDataRequest request)
         {
             try

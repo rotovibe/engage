@@ -9,6 +9,7 @@ using Phytel.API.Common;
 using Phytel.API.Common.Format;
 using Phytel.API.DataAudit;
 using Phytel.API.DataDomain.Patient.DTO;
+using Phytel.Services;
 using MB = MongoDB.Driver.Builders;
 
 namespace Phytel.API.DataDomain.Patient
@@ -168,6 +169,26 @@ namespace Phytel.API.DataDomain.Patient
                 }
             }
             return patientData;
+        }
+
+        public object GetSSN(string patientId)
+        {
+            string ssn = string.Empty;
+            using (PatientMongoContext ctx = new PatientMongoContext(_dbName))
+            {
+                var query = MB.Query.And(
+                                MB.Query<MEPatient>.EQ(b => b.Id, ObjectId.Parse(patientId)),
+                                MB.Query<MEPatient>.EQ(b => b.DeleteFlag, false)
+                            );
+
+                var mePatient = ctx.Patients.Collection.Find(query).SetFields(MEPatient.FullSSNProperty).FirstOrDefault();
+                if (mePatient != null)
+                {
+                    DataProtector protector = new DataProtector(Services.DataProtector.Store.USE_SIMPLE_STORE);
+                    ssn = protector.Decrypt(mePatient.FullSSN);  
+                }
+            }
+            return ssn;
         }
 
         private bool GetFlaggedStatus(string patientId, string userId)
@@ -562,6 +583,37 @@ namespace Phytel.API.DataDomain.Patient
                     {
                         if (ObjectId.Parse(request.DisplayPatientSystemId) != null)
                             updt.Set(MEPatient.DisplayPatientSystemIDProperty, request.DisplayPatientSystemId);
+                    }
+                    if (request.FullSSN != null)
+                    {
+                        if (request.FullSSN == "\"\"" || (request.FullSSN == "\'\'"))
+                        {
+                            updt.Set(MEPatient.FullSSNProperty, string.Empty);
+                            updt.Set(MEPatient.LastFourSSNProperty, BsonNull.Value);
+                        }
+                        else
+                        {
+                            
+                            string fullSSN = request.FullSSN.Replace("-", string.Empty);
+                            if (fullSSN.Length != 9)
+                            {
+                                throw new ArgumentException("SSN does not contain 9 digits.");
+                            }
+                            else
+                            {
+                                // Save the last 4 digits in LastFourSSN field.
+                                int lastFourSSN;
+                                if (int.TryParse(fullSSN.Substring(5, 4), out lastFourSSN))
+                                {
+                                    updt.Set(MEPatient.LastFourSSNProperty, lastFourSSN);
+                                }
+
+                                // Save the full SSN in the encrypted form.
+                                DataProtector protector = new DataProtector(Services.DataProtector.Store.USE_SIMPLE_STORE);
+                                string encryptedSSN = protector.Encrypt(fullSSN);
+                                updt.Set(MEPatient.FullSSNProperty, encryptedSSN);
+                            }
+                        }
                     }
                     
                     updt.Set("uon", System.DateTime.UtcNow);

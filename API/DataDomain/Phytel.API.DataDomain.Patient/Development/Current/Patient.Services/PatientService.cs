@@ -29,6 +29,24 @@ namespace Phytel.API.DataDomain.Patient.Service
             return response;
         }
 
+        public GetPatientSSNDataResponse Get(GetPatientSSNDataRequest request)
+        {
+            GetPatientSSNDataResponse response = new GetPatientSSNDataResponse();
+            try
+            {
+                response = PatientDataManager.GetPatientSSN(request);
+                response.Version = request.Version;
+            }
+            catch (Exception ex)
+            {
+                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+
+                string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
+                Common.Helper.LogException(int.Parse(aseProcessID), ex);
+            }
+            return response;
+        }
+
         public GetPatientsDataResponse Post(GetPatientsDataRequest request)
         {
             GetPatientsDataResponse response = new GetPatientsDataResponse();

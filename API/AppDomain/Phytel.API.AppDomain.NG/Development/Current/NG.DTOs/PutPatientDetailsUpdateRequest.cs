@@ -33,6 +33,9 @@ namespace Phytel.API.AppDomain.NG.DTO
         [ApiMember(Name = "Priority", Description = "Priority value of the patient being updated", ParameterType = "property", DataType = "string", IsRequired = true)]
         public int Priority { get; set; }
 
+        [ApiMember(Name = "FullSSN", Description = "SSN value of the patient being updated", ParameterType = "property", DataType = "string", IsRequired = true)]
+        public string FullSSN { get; set; }
+
         [ApiMember(Name = "Token", Description = "Token parameter", ParameterType = "path", DataType = "string", IsRequired = true)]
         public string Token { get; set; }
 

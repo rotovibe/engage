@@ -32,8 +32,8 @@ namespace Phytel.API.DataDomain.Patient.DTO
         [ApiMember(Name = "Background", Description = "Background of the patient being created", ParameterType = "property", DataType = "string", IsRequired = false)]
         public string Background { get; set; }
 
-        [ApiMember(Name = "SSN", Description = "Social security number of the patient being created", ParameterType = "property", DataType = "string", IsRequired = false)]
-        public string SSN { get; set; }
+        [ApiMember(Name = "FullSSN", Description = "SSN value of the patient being created", ParameterType = "property", DataType = "string", IsRequired = true)]
+        public string FullSSN { get; set; }
 
         [ApiMember(Name = "Context", Description = "Product Context creating the patient", ParameterType = "property", DataType = "string", IsRequired = true)]
         public string Context { get; set; }

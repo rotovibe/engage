@@ -74,7 +74,8 @@ namespace Phytel.API.AppDomain.NG
                         PreferredName = response.Patient.PreferredName,
                         Priority = (int)response.Patient.PriorityData,
                         Flagged = Convert.ToInt32(response.Patient.Flagged),
-                        Background = response.Patient.Background
+                        Background = response.Patient.Background,
+                        LastFourSSN = response.Patient.LastFourSSN
                     };
 
                     if (sysResponse != null && sysResponse.PatientSystem != null)
@@ -90,6 +91,32 @@ namespace Phytel.API.AppDomain.NG
             catch (WebServiceException wse)
             {
                 throw new WebServiceException("AD:GetPatient()::" + wse.Message, wse.InnerException);
+            }
+        }
+
+        public GetPatientSSNResponse GetPatientSSN(GetPatientSSNRequest request)
+        {
+            GetPatientSSNResponse result = new GetPatientSSNResponse();
+            try
+            {
+                IRestClient client = new JsonServiceClient();
+                GetPatientSSNDataResponse response = client.Get<GetPatientSSNDataResponse>(string.Format("{0}/{1}/{2}/{3}/Patient/{4}/SSN?UserId={5}",
+                                                                                            DDPatientServiceURL,
+                                                                                            "NG",
+                                                                                            request.Version,
+                                                                                            request.ContractNumber,
+                                                                                            request.PatientId,
+                                                                                            request.UserId));
+
+                if (response != null)
+                {
+                    result.SSN = response.SSN;
+                }
+                return result;
+            }
+            catch (WebServiceException wse)
+            {
+                throw new WebServiceException("AD:GetPatientSSN()::" + wse.Message, wse.InnerException);
             }
         }
 
@@ -158,6 +185,7 @@ namespace Phytel.API.AppDomain.NG
                                                                                     MiddleName = request.MiddleName,
                                                                                     PreferredName = request.PreferredName,
                                                                                     Priority = request.Priority,
+                                                                                    FullSSN = request.FullSSN,
                                                                                     Suffix = request.Suffix,
                                                                                     Token = request.Token,
                                                                                     UserId = request.UserId,

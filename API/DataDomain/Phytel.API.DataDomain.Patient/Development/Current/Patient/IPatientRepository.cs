@@ -18,5 +18,6 @@ namespace Phytel.API.DataDomain.Patient
         PutPatientBackgroundDataResponse UpdateBackground(PutPatientBackgroundDataRequest request);
         object FindByID(string patientId, string userId);
         object Update(PutUpdatePatientDataRequest request);
+        object GetSSN(string patientId);
     }
 }

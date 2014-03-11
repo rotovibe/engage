@@ -92,6 +92,48 @@ namespace Phytel.API.AppDomain.NG.Service
             return response;
         }
 
+        public GetPatientSSNResponse Get(GetPatientSSNRequest request)
+        {
+            GetPatientSSNResponse response = new GetPatientSSNResponse();
+            NGManager ngm = new NGManager();
+
+            IRequestContext req = base.RequestContext;
+
+            try
+            {
+                request.Token = base.Request.Headers["Token"] as string;
+                ValidateTokenResponse result = ngm.IsUserValidated(request.Version, request.Token, request.ContractNumber);
+                if (result.UserId.Trim() != string.Empty)
+                {
+                    request.UserId = result.UserId;
+                    response = ngm.GetPatientSSN(request);
+                }
+                else
+                    throw new UnauthorizedAccessException();
+
+            }
+            catch (Exception ex)
+            {
+                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+                if ((ex is WebServiceException) == false)
+                    ngm.LogException(ex);
+            }
+            finally
+            {
+                List<string> patientIds = null;
+
+                if (response != null)
+                {
+                    patientIds = new List<string>();
+                    patientIds.Add(request.PatientId);
+                }
+
+                AuditHelper.LogAuditData(request, patientIds, System.Web.HttpContext.Current.Request, request.GetType().Name);
+            }
+
+            return response;
+        }
+
        
         /// <summary>
         ///     ServiceStack's GET endpoint for getting active problems for a patient
