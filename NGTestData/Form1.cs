@@ -166,6 +166,7 @@ namespace NGTestData
                         DeleteFlag = false,
                         TTLDate = null,
                         Version = 1.0,
+                        DisplayLabel = "ID",
                         LastUpdatedOn = DateTime.Now
                     };
 
