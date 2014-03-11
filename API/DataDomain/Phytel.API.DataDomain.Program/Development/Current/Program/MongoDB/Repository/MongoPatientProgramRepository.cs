@@ -266,9 +266,7 @@ namespace Phytel.API.DataDomain.Program
                     uv.Add(MB.Update.Set(MEPatientProgram.ProgramStateProperty, (ProgramState)pg.ProgramState));
                     uv.Add(MB.Update.Set(MEPatientProgram.LastUpdatedOnProperty, System.DateTime.UtcNow));
                     uv.Add(MB.Update.Set(MEPatientProgram.UpdatedByProperty, p.UserId));
-                    //uv.Add(MB.Update.Set(MEPatientProgram.EligibilityProperty, pg.Eligibility));
-                    //uv.Add(MB.Update.Set(MEPatientProgram.EnrollmentProperty, pg.Enrollment));
-                    //uv.Add(MB.Update.Set(MEPatientProgram.GraduatedFlagProperty, pg.GraduatedFlag));
+                    uv.Add(MB.Update.Set(MEPatientProgram.VersionProperty, pg.Version)); 
 
                     if (pg.ElementState != 0) uv.Add(MB.Update.Set(MEPatientProgram.StateProperty, (ElementState)pg.ElementState));
                     if (pg.Status != 0) uv.Add(MB.Update.Set(MEPatientProgram.StatusProperty, (Status)pg.Status));
@@ -279,13 +277,6 @@ namespace Phytel.API.DataDomain.Program
                     if (pg.ContractProgramId != null) { uv.Add(MB.Update.Set(MEPatientProgram.ContractProgramIdProperty, ObjectId.Parse(pg.ContractProgramId))); }
                     if (pg.DateCompleted != null) { uv.Add(MB.Update.Set(MEPatientProgram.CompletedOnProperty, pg.DateCompleted)); }
                     if (pg.Description != null) { uv.Add(MB.Update.Set(MEPatientProgram.DescriptionProperty, pg.Description)); }
-                    //if (pg.EligibilityEndDate != null) { uv.Add(MB.Update.Set(MEPatientProgram.EligibilityEndDateProperty, pg.EligibilityEndDate)); }
-                    //if (pg.EligibilityRequirements != null) { uv.Add(MB.Update.Set(MEPatientProgram.EligibilityRequirementsProperty, pg.EligibilityRequirements)); }
-                    //if (pg.EligibilityStartDate != null) { uv.Add(MB.Update.Set(MEPatientProgram.EligibilityStartDateProperty, pg.EligibilityStartDate)); }
-                    //if (pg.IneligibleReason != null) { uv.Add(MB.Update.Set(MEPatientProgram.IneligibleReasonProperty, pg.IneligibleReason)); }
-                    //if (pg.OptOut != null) { uv.Add(MB.Update.Set(MEPatientProgram.OptOutProperty, pg.OptOut)); }
-                    //if (pg.OptOutReason != null) { uv.Add(MB.Update.Set(MEPatientProgram.OptOutReasonProperty, pg.OptOutReason)); }
-                    //if (pg.OptOutDate != null) { uv.Add(MB.Update.Set(MEPatientProgram.OptOutDateProperty, pg.OptOutDate)); }
                     if (pg.EndDate != null) { uv.Add(MB.Update.Set(MEPatientProgram.EndDateProperty, pg.EndDate)); }
                     if (pg.Name != null) { uv.Add(MB.Update.Set(MEPatientProgram.NameProperty, pg.Name)); }
                     if (pg.Next != null) { uv.Add(MB.Update.Set(MEPatientProgram.NextProperty, pg.Next)); }
@@ -293,7 +284,6 @@ namespace Phytel.API.DataDomain.Program
                     if (pg.ShortName != null) { uv.Add(MB.Update.Set(MEPatientProgram.ShortNameProperty, pg.ShortName)); }
                     if (pg.SourceId != null) { uv.Add(MB.Update.Set(MEPatientProgram.SourceIdProperty, pg.SourceId)); }
                     if (pg.StartDate != null) { uv.Add(MB.Update.Set(MEPatientProgram.StartDateProperty, pg.StartDate)); }
-                    if (pg.Version != null) { uv.Add(MB.Update.Set(MEPatientProgram.VersionProperty, pg.Version)); }
                     if (mods != null) { uv.Add(MB.Update.SetWrapped<List<Module>>(MEPatientProgram.ModulesProperty, mods)); }
                     if (pg.SpawnElement != null) { uv.Add(MB.Update.SetWrapped<List<SpawnElement>>(MEPatientProgram.SpawnProperty, DTOUtils.GetSpawnElements(pg.SpawnElement))); }
                     if (pg.ObjectivesInfo != null) { uv.Add(MB.Update.SetWrapped<List<Objective>>(MEPatientProgram.ObjectivesInfoProperty, DTOUtils.GetObjectives(pg.ObjectivesInfo))); }

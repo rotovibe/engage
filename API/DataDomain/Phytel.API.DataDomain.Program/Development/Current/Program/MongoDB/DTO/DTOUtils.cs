@@ -697,7 +697,8 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
                                     Required = r.Required,
                                     Text = r.Text,
                                     Value = r.Value,
-                                    Spawn = GetSPawnElement(r.SpawnElement)
+                                    Spawn = GetSPawnElement(r.SpawnElement),
+                                    DeleteFlag = r.Delete
                                 });
                         });
                 }
