@@ -134,7 +134,7 @@ namespace Phytel.API.Common.Audit
                 string messageQueue = ds.Tables[0].Rows[0]["Value"].ToString();
                 //string messageQueue = "fake";
 
-                string xmlBody = MessageQueueHelper.SerializeObject(auditLog);
+                string xmlBody = ToXML(auditLog);
 
                 newMessage = new QueueMessage(Phytel.Framework.ASE.Data.Common.ASEMessageType.Process, messageQueue);
                 newMessage.Body = xmlBody;
