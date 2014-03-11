@@ -44,7 +44,7 @@ namespace Phytel.API.DataDomain.CareMember
                         Primary = careMemberData.Primary,
                         Type = ObjectId.Parse(careMemberData.TypeId),
                         Version = request.Version,
-                        UpdatedBy = request.UserId,
+                        UpdatedBy = ObjectId.Parse(request.UserId),
                         LastUpdatedOn = DateTime.UtcNow
                     };
 

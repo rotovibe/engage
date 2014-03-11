@@ -11,7 +11,7 @@ namespace Phytel.API.AppDomain.NG
         protected static readonly string ADSecurityServiceURL = ConfigurationManager.AppSettings["ADSecurityServiceUrl"];
         protected static readonly string PhytelSecurityHeaderKey = "x-Phytel-Security";
 
-        public ValidateTokenResponse IsUserValidated(string version, string token)
+        public ValidateTokenResponse IsUserValidated(double version, string token, string contractNumber)
         {
             try
             {
@@ -25,10 +25,12 @@ namespace Phytel.API.AppDomain.NG
                 JsonServiceClient.HttpWebRequestFilter = x =>
                     x.Headers.Add(string.Format("{0}: {1}", PhytelSecurityHeaderKey, additionalToken));
 
-                ValidateTokenResponse response = client.Post<ValidateTokenResponse>(string.Format("{0}/{1}/{2}/token", 
+                //[Route("/{Context}/{Version}/{ContractNumber}/token", "POST")]
+                ValidateTokenResponse response = client.Post<ValidateTokenResponse>(string.Format("{0}/{1}/{2}/{3}/token", 
                     ADSecurityServiceURL,
                     "NG",
-                    version),
+                    version,
+                    contractNumber),
                     new ValidateTokenRequest { Token = token } as object);
 
                 return response;

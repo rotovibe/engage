@@ -7,7 +7,7 @@ namespace Phytel.API.DataDomain.CareMember.DTO
     public class GetCareMemberDataResponse : IDomainResponse
     {
         public CareMemberData CareMember { get; set; }
-        public string Version { get; set; }
+        public double Version { get; set; }
         public ResponseStatus Status { get; set; }
     }
 }

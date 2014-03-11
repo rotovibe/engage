@@ -18,7 +18,7 @@ namespace Phytel.API.DataDomain.Cohort.Test
         public void GetCohortByID_Test()
         {
             // Arrange
-            string version = "v1";
+            double version = 1.0;
             string contractNumber = "InHealth001";
             string context = "NG";
             GetCohortDataRequest request = new GetCohortDataRequest { CohortID = "528aa055d4332317acc50978", Context = context, ContractNumber = contractNumber, Version = version };
@@ -35,7 +35,7 @@ namespace Phytel.API.DataDomain.Cohort.Test
         public void GetAllCohorts_Test()
         {
             // Arrange
-            string version = "v1";
+            double version = 1.0;
             string contractNumber = "InHealth001";
             string context = "NG";
             GetAllCohortsDataRequest request = new GetAllCohortsDataRequest { Context = context, ContractNumber = contractNumber, Version = version };

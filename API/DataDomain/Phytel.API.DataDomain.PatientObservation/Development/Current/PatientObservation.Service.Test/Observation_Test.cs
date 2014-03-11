@@ -17,7 +17,7 @@ namespace Phytel.API.DataDomain.PatientObservation.Services.Test
             string patientId = "52f55853072ef709f84e5bf0";
             string contractNumber = "InHealth001";
             string context = "NG";
-            string version = "v1";
+            double version = 1.0;
             IRestClient client = new JsonServiceClient();
 
             GetStandardObservationsResponse response = client.Get<GetStandardObservationsResponse>(

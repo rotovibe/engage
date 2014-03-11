@@ -9,6 +9,6 @@ namespace Phytel.API.AppDomain.NG.DTO
     {
         public PatientTask Task { get; set; }
         public ResponseStatus Status { get; set; }
-        public string Version { get; set; }
+        public double Version { get; set; }
     }
 }

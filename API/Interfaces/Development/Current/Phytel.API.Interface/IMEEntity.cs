@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using MongoDB.Bson.Serialization.Attributes;
+using MongoDB.Bson;
 
 namespace Phytel.API.Interface
 {
@@ -15,12 +16,12 @@ namespace Phytel.API.Interface
         Dictionary<string, object> ExtraElements { get; set; }
 
         [BsonElement("v")]
-        [BsonDefaultValue("v1")]
-        string Version { get; set; }
+        [BsonDefaultValue(1.0)]
+        double Version { get; set; }
 
         [BsonElement( "uby")]
         [BsonIgnoreIfNull(true)]
-        string UpdatedBy { get; set; }
+        ObjectId UpdatedBy { get; set; }
 
         [BsonElement("del")]
         [BsonDefaultValue(false)]

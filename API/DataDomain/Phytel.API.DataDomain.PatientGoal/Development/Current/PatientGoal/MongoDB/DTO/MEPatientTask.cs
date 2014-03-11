@@ -59,13 +59,12 @@ namespace Phytel.API.DataDomain.PatientGoal.DTO
 
         public const string VersionProperty = "v";
         [BsonElement(VersionProperty)]
-        [BsonDefaultValue("v1")]
-        public string Version { get; set; }
+        [BsonDefaultValue(1.0)]
+        public double Version { get; set; }
 
         public const string UpdatedByProperty = "uby";
         [BsonElement(UpdatedByProperty)]
-        [BsonDefaultValue("-100")]
-        public string UpdatedBy { get; set; }
+        public ObjectId UpdatedBy { get; set; }
 
         public const string DeleteFlagProperty = "del";
         [BsonElement(DeleteFlagProperty)]

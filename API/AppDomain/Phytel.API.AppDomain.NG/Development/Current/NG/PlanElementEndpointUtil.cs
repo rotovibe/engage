@@ -258,7 +258,7 @@ namespace Phytel.API.AppDomain.NG
         {
             try
             {
-                string version = request.Version;
+                double version = request.Version;
                 string contractNumber = request.ContractNumber;
                 string context = "NG";
 
@@ -284,7 +284,7 @@ namespace Phytel.API.AppDomain.NG
         {
             try
             {
-                string version = request.Version;
+                double version = request.Version;
                 string contractNumber = request.ContractNumber;
                 string context = "NG";
 
@@ -376,7 +376,7 @@ namespace Phytel.API.AppDomain.NG
             ProgramAttribute progAttr = null;
             try
             {
-                string version = request.Version;
+                double version = request.Version;
                 string contractNumber = request.ContractNumber;
                 string context = "NG";
 
@@ -405,7 +405,7 @@ namespace Phytel.API.AppDomain.NG
             bool result = false;
             try
             {
-                string version = request.Version;
+                double version = request.Version;
                 string contractNumber = request.ContractNumber;
                 string context = "NG";
 
@@ -440,7 +440,7 @@ namespace Phytel.API.AppDomain.NG
             bool result = false;
             try
             {
-                string version = request.Version;
+                double version = request.Version;
                 string contractNumber = request.ContractNumber;
                 string context = "NG";
 

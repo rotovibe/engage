@@ -7,7 +7,7 @@ namespace Phytel.API.DataDomain.Program.DTO
     public class GetAllActiveProgramsResponse : IDomainResponse
    {
         public List<ProgramInfo> Programs { get; set; }
-        public string Version { get; set; }
+        public double Version { get; set; }
         public ResponseStatus Status { get; set; }
    }
 }

@@ -12,7 +12,7 @@ namespace Phytel.API.DataDomain.Patient.DTO
     public class GetCohortPatientsDataResponse : IDomainResponse
     {
         public List<PatientData> CohortPatients { get; set; }
-        public string Version { get; set; }
+        public double Version { get; set; }
         public ResponseStatus Status { get; set; }
     }
 }

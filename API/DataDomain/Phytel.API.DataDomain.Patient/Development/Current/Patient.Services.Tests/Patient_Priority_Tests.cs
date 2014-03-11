@@ -16,7 +16,7 @@ namespace Phytel.API.DataDomain.Patient.Service.Test
             string contractNumber = "InHealth001";
             string context ="NG";
             int priority = 1;
-            string version = "v1";
+            double version = 1.0;
             string firstname = null;
             IRestClient client = new JsonServiceClient();
 

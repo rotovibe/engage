@@ -45,7 +45,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
                 Name = cp.Name,
                 ObjectivesInfo = cp.ObjectivesInfo,
                 CompletedBy = cp.CompletedBy,
-                UpdatedBy = request.UserId,
+                UpdatedBy = ObjectId.Parse(request.UserId),
                 SourceId = cp.Id,
                 ShortName = cp.ShortName,
                 Status = cp.Status,

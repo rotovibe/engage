@@ -17,7 +17,7 @@ namespace Phytel.API.DataDomain.Patient.Service.Test
             string contractNumber = "InHealth001";
             string context ="NG";
             string flagged = "1";
-            string version = "v1";
+            double version = 1.0;
             IRestClient client = new JsonServiceClient();
 
             GetPatientDataResponse response = client.Put<GetPatientDataResponse>(
@@ -34,7 +34,7 @@ namespace Phytel.API.DataDomain.Patient.Service.Test
             string contractNumber = "InHealth001";
             string context = "NG";
             string flagged = "1";
-            string version = "v1";
+            double version = 1.0;
             IRestClient client = new JsonServiceClient();
 
             GetPatientDataResponse response = client.Put<GetPatientDataResponse>(
@@ -51,7 +51,7 @@ namespace Phytel.API.DataDomain.Patient.Service.Test
             string contractNumber = "InHealth001";
             string context = "NG";
             string flagged = "0";
-            string version = "v1";
+            double version = 1.0;
             IRestClient client = new JsonServiceClient();
 
             GetPatientDataResponse response = client.Put<GetPatientDataResponse>(

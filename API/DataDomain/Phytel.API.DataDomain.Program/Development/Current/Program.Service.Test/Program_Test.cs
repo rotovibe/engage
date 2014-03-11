@@ -15,7 +15,7 @@ namespace Phytel.API.DataDomain.Program.Services.Test
             string ProgramID = "52a0da34fe7a5915485bdfd6";
             string contractNumber = "InHealth001";
             string context ="NG";
-            string version = "v1";
+            double version = 1.0;
             IRestClient client = new JsonServiceClient();
 
             GetProgramResponse response = client.Get<GetProgramResponse>(
@@ -31,7 +31,7 @@ namespace Phytel.API.DataDomain.Program.Services.Test
             string ProgramID = "52a0da34fe7a5915485bdfd6";
             string contractNumber = "InHealth001";
             string context = "NG";
-            string version = "v1";
+            double version = 1.0;
             IRestClient client = new JsonServiceClient();
 
             GetProgramResponse response = client.Post<GetProgramResponse>(

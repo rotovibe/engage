@@ -9,7 +9,7 @@ namespace Phytel.API.Interface
 {
     public interface IDomainResponse
     {
-        string Version { get; set; }
+        double Version { get; set; }
         ResponseStatus Status { get; set; }
     }
 }

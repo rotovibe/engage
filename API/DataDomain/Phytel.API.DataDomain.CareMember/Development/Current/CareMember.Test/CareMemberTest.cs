@@ -34,7 +34,7 @@ namespace Phytel.API.DataDomain.CareMember.Test
             PutCareMemberDataRequest request = new PutCareMemberDataRequest
             {
                 UserId = "DD_Harness",
-                Version = "v1",
+                Version = 1,
                 CareMember = n
             };
             string id = CareMemberDataManager.InsertCareMember(request);
@@ -49,7 +49,7 @@ namespace Phytel.API.DataDomain.CareMember.Test
             PutUpdateCareMemberDataRequest request = new PutUpdateCareMemberDataRequest
             {
                 UserId = "DD_Harness",
-                Version = "v1",
+                Version = 1,
                 CareMember = n
             };
             bool updated = CareMemberDataManager.UpdateCareMember(request);

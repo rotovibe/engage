@@ -13,7 +13,7 @@ namespace Phytel.API.DataDomain.PatientProblem.Service.Test
         public void Get_Patient_Problem_True_Test()
         {
             // Arrange
-            string version = "v1";
+            double version = 1.0;
             string contractNumber = "InHealth001";
             string context = "NG";
             string patientID = "528f6d46072ef708ecd78728";
@@ -38,7 +38,7 @@ namespace Phytel.API.DataDomain.PatientProblem.Service.Test
         public void Get_Patient_Problem_False_Test()
         {
             // Arrange
-            string version = "v1";
+            double version = 1.0;
             string contractNumber = "InHealth001";
             string context = "NG";
             string patientID = "528f6d46072ef708ecd78711";
@@ -68,13 +68,13 @@ namespace Phytel.API.DataDomain.PatientProblem.Service.Test
             //"act" : true,
             //"f" : true,
             //"l" : 1,
-            //"v" : "v1",
+            //"v" : 1,
             //"uby" : null,
             //"del" : false,
             //"uon" : ISODate("2014-01-24T13:49:15.345Z")
 
             // Arrange
-            string version = "v1";
+            double version = 1.0;
             string contractNumber = "InHealth001";
             string context = "NG";
             string patientID = "52e26f5b072ef7191c11ef73";

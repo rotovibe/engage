@@ -25,7 +25,7 @@ namespace Phytel.API.AppDomain.NG.Test
             PostCareMemberRequest request = new PostCareMemberRequest();
             request.ContractNumber = "InHealth001";
             request.UserId = "AD_TestHarness"; 
-            request.Version = "v1";
+            request.Version = 1;
             request.PatientId = "52f55895072ef709f84e7551";
             request.Token = "5310a9bdd6a4850e0477cade";
             request.CareMember = cm;
@@ -51,7 +51,7 @@ namespace Phytel.API.AppDomain.NG.Test
             PostUpdateCareMemberRequest request = new PostUpdateCareMemberRequest();
             request.ContractNumber = "InHealth001";
             request.UserId = "AD_TestHarness";
-            request.Version = "v1";
+            request.Version = 1;
             request.PatientId = "52f55895072ef709f84e7551";
             request.Token = "5310a9bdd6a4850e0477cade";
             request.CareMember = cm;
@@ -68,7 +68,7 @@ namespace Phytel.API.AppDomain.NG.Test
             GetCareMemberRequest request = new GetCareMemberRequest();
             request.ContractNumber = "InHealth001";
             request.UserId = "AD_TestHarness";
-            request.Version = "v1";
+            request.Version = 1;
             request.Id = "530d0fb7d433232bd830c520";
             request.PatientId = "52f55899072ef709f84e7637";
             request.UserId = "Snehal";
@@ -85,7 +85,7 @@ namespace Phytel.API.AppDomain.NG.Test
             GetAllCareMembersRequest request = new GetAllCareMembersRequest();
             request.ContractNumber = "InHealth001";
             request.UserId = "AD_TestHarness";
-            request.Version = "v1";
+            request.Version = 1;
             request.PatientId = "52f55899072ef709f84e7637";
             request.UserId = "Snehal";
 

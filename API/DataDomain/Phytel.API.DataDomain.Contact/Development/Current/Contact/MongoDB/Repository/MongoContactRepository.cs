@@ -59,7 +59,7 @@ namespace Phytel.API.DataDomain.Contact
                         ResourceId = request.ResourceId,
                         Version = request.Version,
                         LastUpdatedOn = DateTime.UtcNow,
-                        UpdatedBy = request.UserId,
+                        UpdatedBy = ObjectId.Parse(request.UserId),
                         DeleteFlag = false
                     };
 

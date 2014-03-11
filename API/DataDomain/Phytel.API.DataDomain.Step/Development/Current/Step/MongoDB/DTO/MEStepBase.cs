@@ -31,7 +31,7 @@ namespace Phytel.API.DataDomain.Step.DTO
         public const string StatusProperty = "st";
         [BsonElement(StatusProperty)]
         [BsonIgnoreIfNull(true)]
-        [BsonDefaultValue(1)]
+        [BsonDefaultValue(1.0)]
         public Status Status { get; set; }
 
         public const string ExtraElementsProperty = "ex";
@@ -42,13 +42,12 @@ namespace Phytel.API.DataDomain.Step.DTO
 
         public const string VersionProperty = "v";
         [BsonElement(VersionProperty)]
-        [BsonDefaultValue("v1")]
-        public string Version { get; set; }
+        [BsonDefaultValue(1.0)]
+        public double Version { get; set; }
 
         public const string UpdatedByProperty = "uby";
         [BsonElement(UpdatedByProperty)]
-        [BsonDefaultValue("-100")]
-        public string UpdatedBy { get; set; }
+        public ObjectId UpdatedBy { get; set; }
 
         public const string DeleteFlagProperty = "del";
         [BsonElement(DeleteFlagProperty)]

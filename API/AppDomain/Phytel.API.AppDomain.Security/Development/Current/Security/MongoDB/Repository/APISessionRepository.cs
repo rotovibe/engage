@@ -3,14 +3,22 @@ using MongoDB.Bson.Serialization;
 using MongoDB.Driver;
 using MongoDB.Driver.Builders;
 using Phytel.API.AppDomain.Security.DTO;
+using Phytel.API.DataDomain.Contact.DTO;
+using ServiceStack.Service;
+using ServiceStack.ServiceClient.Web;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 
 namespace Phytel.API.AppDomain.Security
 {
     public class APISessionRepository<T> : ISecurityRepository<T>
     {
+        #region Endpoint addresses
+        protected static readonly string DDContactServiceUrl = ConfigurationManager.AppSettings["DDContactServiceUrl"];
+        #endregion
+
         protected SecurityMongoContext _objectContext;
 
         public APISessionRepository(SecurityMongoContext context)
@@ -25,54 +33,56 @@ namespace Phytel.API.AppDomain.Security
 
         public UserAuthenticateResponse LoginUser(string userName, string password, string securityToken, string apiKey, string productName)
         {
-            try
-            {
-                UserAuthenticateResponse response = new UserAuthenticateResponse();
-                MEAPISession session = null;
+            throw new NotImplementedException();
 
-                //need to do a lookup against the APIKey collection to see if apiKey/Product combination exists
-                MEAPIUser user = (from k in _objectContext.APIUsers where k.UserName == userName && k.ApiKey == apiKey && k.Product == productName && k.IsActive == true select k).FirstOrDefault();
-                if (user != null)
-                {
-                    //validate password
-                    Phytel.Services.DataProtector protector = new Services.DataProtector(Services.DataProtector.Store.USE_SIMPLE_STORE);
-                    string dbPwd = protector.Decrypt(user.Password);
-                    if (dbPwd.Equals(password))
-                    {
-                        session = new MEAPISession
-                        {
-                            SecurityToken = securityToken,
-                            APIKey = apiKey,
-                            Product = productName,
-                            SessionLengthInMinutes = user.SessionLengthInMinutes,
-                            SessionTimeOut = DateTime.Now.AddMinutes(user.SessionLengthInMinutes),
-                            UserName = user.UserName,
-                            UserId = user.Id.ToString()
-                        };
+            //try
+            //{
+            //    UserAuthenticateResponse response = new UserAuthenticateResponse();
+            //    MEAPISession session = null;
 
-                        _objectContext.APISessions.Collection.Insert(session);
-                    }
-                    else
-                        throw new UnauthorizedAccessException("Login Failed!  Username and/or Password is incorrect");
+            //    //need to do a lookup against the APIKey collection to see if apiKey/Product combination exists
+            //    MEAPIUser user = (from k in _objectContext.APIUsers where k.UserName == userName && k.ApiKey == apiKey && k.Product == productName && k.IsActive == true select k).FirstOrDefault();
+            //    if (user != null)
+            //    {
+            //        //validate password
+            //        Phytel.Services.DataProtector protector = new Services.DataProtector(Services.DataProtector.Store.USE_SIMPLE_STORE);
+            //        string dbPwd = protector.Decrypt(user.Password);
+            //        if (dbPwd.Equals(password))
+            //        {
+            //            session = new MEAPISession
+            //            {
+            //                SecurityToken = securityToken,
+            //                APIKey = apiKey,
+            //                Product = productName,
+            //                SessionLengthInMinutes = user.SessionLengthInMinutes,
+            //                SessionTimeOut = DateTime.Now.AddMinutes(user.SessionLengthInMinutes),
+            //                UserName = user.UserName,
+            //                SQLUserId = user.Id.ToString()
+            //            };
 
-                    response = new UserAuthenticateResponse 
-                                    {
-                                        APIToken = session.Id.ToString(), 
-                                        Contracts = new List<ContractInfo>(), 
-                                        Name = user.UserName, 
-                                        SessionTimeout = user.SessionLengthInMinutes, 
-                                        UserName = user.UserName 
-                                    };
-                }
-                else
-                    throw new UnauthorizedAccessException("Login Failed! Unknown Username/Password");
+            //            _objectContext.APISessions.Collection.Insert(session);
+            //        }
+            //        else
+            //            throw new UnauthorizedAccessException("Login Failed!  Username and/or Password is incorrect");
 
-                return response;
-            }
-            catch (Exception)
-            {
-                throw;
-            }
+            //        response = new UserAuthenticateResponse 
+            //                        {
+            //                            APIToken = session.Id.ToString(), 
+            //                            Contracts = new List<ContractInfo>(), 
+            //                            Name = user.UserName, 
+            //                            SessionTimeout = user.SessionLengthInMinutes, 
+            //                            UserName = user.UserName 
+            //                        };
+            //    }
+            //    else
+            //        throw new UnauthorizedAccessException("Login Failed! Unknown Username/Password");
+
+            //    return response;
+            //}
+            //catch (Exception)
+            //{
+            //    throw;
+            //}
         }
 
         public AuthenticateResponse LoginUser(AuthenticateResponse existingReponse, string securityToken, string apiKey, string productName)
@@ -85,21 +95,30 @@ namespace Phytel.API.AppDomain.Security
                 MEAPIKey key = (from k in _objectContext.APIKeys where k.ApiKey == apiKey && k.Product == productName && k.IsActive == true select k).FirstOrDefault();
                 if (key != null)
                 {
-                    MEAPISession session = new MEAPISession
+                    string contractNumber = existingReponse.Contracts[0].Number;
+                    ObjectId UserId = GetUserId(contractNumber, productName, existingReponse.SQLUserID);
+                    if (UserId != ObjectId.Empty)
                     {
-                        SecurityToken = securityToken,
-                        APIKey = apiKey,
-                        Product = productName,
-                        SessionLengthInMinutes = existingReponse.SessionTimeout,
-                        SessionTimeOut = DateTime.Now.AddMinutes(existingReponse.SessionTimeout),
-                        UserName = existingReponse.UserName,
-                        UserId = existingReponse.UserID.ToString()
-                    };
+                        MEAPISession session = new MEAPISession
+                        {
+                            SecurityToken = securityToken,
+                            APIKey = apiKey,
+                            Product = productName,
+                            SessionLengthInMinutes = existingReponse.SessionTimeout,
+                            SessionTimeOut = DateTime.Now.AddMinutes(existingReponse.SessionTimeout),
+                            UserName = existingReponse.UserName,
+                            UserId = UserId,
+                            ContractNumber = contractNumber,
+                            SQLUserId = existingReponse.SQLUserID
+                        };
 
-                    _objectContext.APISessions.Collection.Insert(session);
+                        _objectContext.APISessions.Collection.Insert(session);
 
-                    response = existingReponse;
-                    response.APIToken = session.Id.ToString();
+                        response = existingReponse;
+                        response.APIToken = session.Id.ToString();
+                    }
+                    else
+                        throw new UnauthorizedAccessException("Login Failed! User does not have a valid contact card");
                 }
                 else
                     throw new UnauthorizedAccessException("Login Failed! Unknown Username/Password");
@@ -112,17 +131,20 @@ namespace Phytel.API.AppDomain.Security
             }
         }
 
-        public ValidateTokenResponse Validate(string token, string securityToken, string productName)
+        public ValidateTokenResponse Validate(ValidateTokenRequest request, string securityToken)
         {
             try
             {
                 ValidateTokenResponse response = null;
                 ObjectId tokenObjectId;
-                if (ObjectId.TryParse(token, out tokenObjectId))
+                //IdProperty, SecurityTokenProperty, ContractNumberProperty, ProductProperty
+                if (ObjectId.TryParse(request.Token, out tokenObjectId))
                 {
                     int sessionLengthInMinutes = (from s in _objectContext.APISessions
                                                   where s.Id == tokenObjectId
                                                     && s.SecurityToken == securityToken
+                                                    && s.ContractNumber == request.ContractNumber
+                                                    && s.Product == request.Context.ToUpper()
                                                   select s.SessionLengthInMinutes).FirstOrDefault();
 
                     if (sessionLengthInMinutes > 0)
@@ -138,7 +160,8 @@ namespace Phytel.API.AppDomain.Security
                                                 SessionLengthInMinutes = session.SessionLengthInMinutes,
                                                 SessionTimeOut = session.SessionTimeOut,
                                                 TokenId = session.Id.ToString(),
-                                                UserId = session.UserId,
+                                                SQLUserId = session.SQLUserId,
+                                                UserId = session.UserId.ToString(),
                                                 UserName = session.UserName
                                             };
                         }
@@ -159,7 +182,7 @@ namespace Phytel.API.AppDomain.Security
             }
         }
 
-        public LogoutResponse Logout(string token, string securityToken, string context)
+        public LogoutResponse Logout(string token, string securityToken, string context, string contractNumber)
         {
             LogoutResponse response = new LogoutResponse();
             response.SuccessfulLogout = false;
@@ -168,6 +191,7 @@ namespace Phytel.API.AppDomain.Security
                 IMongoQuery removeQ = Query.And(
                                             Query.EQ(MEAPISession.IdProperty, ObjectId.Parse(token)),
                                             Query.EQ(MEAPISession.SecurityTokenProperty, securityToken),
+                                            Query.EQ(MEAPISession.ContractNumberProperty, contractNumber),
                                             Query.EQ(MEAPISession.ProductProperty, context.ToUpper()));
 
                 MEAPISession session = _objectContext.APISessions.Collection.FindOneById(ObjectId.Parse(token));
@@ -225,5 +249,28 @@ namespace Phytel.API.AppDomain.Security
         {
             throw new NotImplementedException();
         }
+
+        #region Private Methods
+        private ObjectId GetUserId(string contractNumber, string productContext, string sqlUserID)
+        {
+            ObjectId returnId = ObjectId.Empty;
+
+            GetContactByUserIdDataResponse contactDataResponse = null;
+            IRestClient client = new JsonServiceClient();
+            
+            //[Route("/{Context}/{Version}/{ContractNumber}/Contact/User/{UserId}", "GET")]
+
+            contactDataResponse = client.Get<GetContactByUserIdDataResponse>(string.Format("{0}/{1}/1.0/{2}/Contact/User/{3}",
+                                                    DDContactServiceUrl,
+                                                    productContext,
+                                                    contractNumber,
+                                                    sqlUserID));
+
+            if (contactDataResponse != null && contactDataResponse.Contact != null)
+                returnId = ObjectId.Parse(contactDataResponse.Contact.ContactId);
+            
+            return returnId;
+        }
+        #endregion
     }
 }

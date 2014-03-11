@@ -13,7 +13,7 @@ namespace Phytel.API.AppDomain.NG.DTO
     {
         public List<IdNamePair> Problems { get; set; }
         public ResponseStatus Status { get; set; }
-        public string Version { get; set; }
+        public double Version { get; set; }
 
     }
 }

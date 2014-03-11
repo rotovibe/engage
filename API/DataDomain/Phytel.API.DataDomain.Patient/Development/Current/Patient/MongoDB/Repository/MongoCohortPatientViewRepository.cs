@@ -106,8 +106,7 @@ namespace Phytel.API.DataDomain.Patient
                     var uv = new List<MB.UpdateBuilder>();
                     if (!String.IsNullOrEmpty(cpvd.LastName)) uv.Add(MB.Update.Set(MECohortPatientView.LastNameProperty, cpvd.LastName));
                     if (!String.IsNullOrEmpty(cpvd.PatientID)) uv.Add(MB.Update.Set(MECohortPatientView.PatientIDProperty, ObjectId.Parse(cpvd.PatientID)));
-                    if (!String.IsNullOrEmpty(cpvd.Version)) uv.Add(MB.Update.Set(MECohortPatientView.VersionProperty, cpvd.Version));
-
+                    
                     if (p.CohortPatientView != null) { uv.Add(MB.Update.SetWrapped<List<SearchField>>(MECohortPatientView.SearchFieldsProperty, sfds)); }
 
                     IMongoUpdate update = MB.Update.Combine(uv);

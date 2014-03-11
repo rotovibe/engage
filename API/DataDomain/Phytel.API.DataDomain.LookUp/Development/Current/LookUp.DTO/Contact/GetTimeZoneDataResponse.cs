@@ -6,7 +6,7 @@ namespace Phytel.API.DataDomain.LookUp.DTO
     public class GetTimeZoneDataResponse : IDomainResponse
    {
        public TimeZoneData TimeZone { get; set; }
-       public string Version { get; set; }
+       public double Version { get; set; }
        public ResponseStatus Status { get; set; }
     }
 }

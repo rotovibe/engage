@@ -14,7 +14,7 @@ namespace Phytel.API.DataDomain.Patient.Services.Test
         [TestMethod]
         public void Get_CohortPatientView_Response_Test()
         {
-            string version = "v1";
+            double version = 1.0;
             string contractNumber = "InHealth001";
             string context = "NG";
             string patientId = "52e26f11072ef7191c111c54";
@@ -32,7 +32,7 @@ namespace Phytel.API.DataDomain.Patient.Services.Test
         [TestMethod]
         public void Put_Problem_In_CohortPatientView_Response_Test()
         {
-            string version = "v1";
+            double version = 1.0;
             string contractNumber = "InHealth001";
             string context = "NG";
             string patientId = "52e26f11072ef7191c111c54";

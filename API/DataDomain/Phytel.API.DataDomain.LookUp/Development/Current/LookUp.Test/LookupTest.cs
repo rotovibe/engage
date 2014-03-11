@@ -12,7 +12,7 @@ namespace Phytel.API.DataDomain.LookUp.Test
         public void GetProblemByID_Test()
         {
             // Arrange
-            string version = "v1";
+            double version = 1.0;
             string contractNumber = "InHealth001";
             string context = "NG";
             GetProblemDataRequest request = new GetProblemDataRequest { ProblemID = "528a66d6d4332317acc5095d", Context = context, ContractNumber = contractNumber, Version = version };
@@ -29,7 +29,7 @@ namespace Phytel.API.DataDomain.LookUp.Test
         public void GetProblems_Test()
         {
             // Arrange
-            string version = "v1";
+            double version = 1.0;
             string contractNumber = "InHealth001";
             string context = "NG";
             GetAllProblemsDataRequest request = new GetAllProblemsDataRequest { Context = context, ContractNumber = contractNumber, Version = version };
@@ -45,7 +45,7 @@ namespace Phytel.API.DataDomain.LookUp.Test
         public void SearchProblem_Test()
         {
             // Arrange
-            string version = "v1";
+            double version = 1.0;
             string contractNumber = "InHealth001";
             string context = "NG";
             SearchProblemsDataRequest request = new SearchProblemsDataRequest { Active = true, Type = "Chronic", Context = context, ContractNumber = contractNumber, Version = version };
@@ -63,7 +63,7 @@ namespace Phytel.API.DataDomain.LookUp.Test
         public void GetObjectiveByID_Test()
         {
             // Arrange
-            string version = "v1";
+            double version = 1.0;
             string contractNumber = "InHealth001";
             string context = "NG";
             GetObjectiveDataRequest request = new GetObjectiveDataRequest { ObjectiveID = "52a0beb9d43323141c9eb26c", Context = context, ContractNumber = contractNumber, Version = version };
@@ -83,7 +83,7 @@ namespace Phytel.API.DataDomain.LookUp.Test
         public void GetCategoryByID_Test()
         {
             // Arrange
-            string version = "v1";
+            double version = 1.0;
             string contractNumber = "InHealth001";
             string context = "NG";
             GetCategoryDataRequest request = new GetCategoryDataRequest { CategoryID = "52a0bc3fd4332322b4aed5b5", Context = context, ContractNumber = contractNumber, Version = version };
@@ -102,7 +102,7 @@ namespace Phytel.API.DataDomain.LookUp.Test
         public void GetAllCommModes_Test()
         {
             // Arrange
-            string version = "v1";
+            double version = 1.0;
             string contractNumber = "InHealth001";
             string context = "NG";
             GetAllCommModesDataRequest request = new GetAllCommModesDataRequest { Context = context, ContractNumber = contractNumber, Version = version };
@@ -118,7 +118,7 @@ namespace Phytel.API.DataDomain.LookUp.Test
         public void GetAllStates_Test()
         {
             // Arrange
-            string version = "v1";
+            double version = 1.0;
             string contractNumber = "InHealth001";
             string context = "NG";
             GetAllStatesDataRequest request = new GetAllStatesDataRequest { Context = context, ContractNumber = contractNumber, Version = version };
@@ -134,7 +134,7 @@ namespace Phytel.API.DataDomain.LookUp.Test
         public void GetAllTimesOfDays_Test()
         {
             // Arrange
-            string version = "v1";
+            double version = 1.0;
             string contractNumber = "InHealth001";
             string context = "NG";
             GetAllTimesOfDaysDataRequest request = new GetAllTimesOfDaysDataRequest { Context = context, ContractNumber = contractNumber, Version = version };
@@ -150,7 +150,7 @@ namespace Phytel.API.DataDomain.LookUp.Test
         public void GetAllTimeZones_Test()
         {
             // Arrange
-            string version = "v1";
+            double version = 1.0;
             string contractNumber = "InHealth001";
             string context = "NG";
             GetAllTimeZonesDataRequest request = new GetAllTimeZonesDataRequest { Context = context, ContractNumber = contractNumber, Version = version };
@@ -166,7 +166,7 @@ namespace Phytel.API.DataDomain.LookUp.Test
         public void GetAllCommTypes_Test()
         {
             // Arrange
-            string version = "v1";
+            double version = 1.0;
             string contractNumber = "InHealth001";
             string context = "NG";
             GetAllCommTypesDataRequest request = new GetAllCommTypesDataRequest { Context = context, ContractNumber = contractNumber, Version = version };
@@ -182,7 +182,7 @@ namespace Phytel.API.DataDomain.LookUp.Test
         public void GetAllLanguages_Test()
         {
             // Arrange
-            string version = "v1";
+            double version = 1.0;
             string contractNumber = "InHealth001";
             string context = "NG";
             GetAllLanguagesDataRequest request = new GetAllLanguagesDataRequest { Context = context, ContractNumber = contractNumber, Version = version };
@@ -198,7 +198,7 @@ namespace Phytel.API.DataDomain.LookUp.Test
         public void GetDefaultTimeZone_Test()
         {
             // Arrange
-            string version = "v1";
+            double version = 1.0;
             string contractNumber = "InHealth001";
             string context = "NG";
             GetTimeZoneDataRequest request = new GetTimeZoneDataRequest { Context = context, ContractNumber = contractNumber, Version = version };
@@ -215,7 +215,7 @@ namespace Phytel.API.DataDomain.LookUp.Test
         public void GetLookUpsByType_Test()
         {
             // Arrange
-            string version = "v1";
+            double version = 1.0;
             string contractNumber = "InHealth001";
             string context = "NG";
             GetLookUpsDataRequest request = new GetLookUpsDataRequest { Context = context, ContractNumber = contractNumber, Version = version, Name = "InterventionCategory" };

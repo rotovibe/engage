@@ -27,7 +27,7 @@ namespace Phytel.API.AppDomain.NG.Service
             {
                 ObservationsManager om = new ObservationsManager();
                 request.Token = base.Request.Headers["Token"] as string;
-                ValidateTokenResponse result = om.IsUserValidated(request.Version, request.Token);
+                ValidateTokenResponse result = om.IsUserValidated(request.Version, request.Token, request.ContractNumber);
                 if (result.UserId.Trim() != string.Empty)
                 {
                     request.UserId = result.UserId;
@@ -60,7 +60,7 @@ namespace Phytel.API.AppDomain.NG.Service
             {
                 ObservationsManager om = new ObservationsManager();
                 request.Token = base.Request.Headers["Token"] as string;
-                ValidateTokenResponse result = om.IsUserValidated(request.Version, request.Token);
+                ValidateTokenResponse result = om.IsUserValidated(request.Version, request.Token, request.ContractNumber);
                 if (result.UserId.Trim() != string.Empty)
                 {
                     request.UserId = result.UserId;
@@ -90,7 +90,7 @@ namespace Phytel.API.AppDomain.NG.Service
             {
                 ObservationsManager om = new ObservationsManager();
                 request.Token = base.Request.Headers["Token"] as string;
-                ValidateTokenResponse result = om.IsUserValidated(request.Version, request.Token);
+                ValidateTokenResponse result = om.IsUserValidated(request.Version, request.Token, request.ContractNumber);
                 if (result.UserId.Trim() != string.Empty)
                 {
                     request.UserId = result.UserId;
@@ -123,7 +123,7 @@ namespace Phytel.API.AppDomain.NG.Service
             {
                 ObservationsManager om = new ObservationsManager();
                 request.Token = base.Request.Headers["Token"] as string;
-                ValidateTokenResponse result = om.IsUserValidated(request.Version, request.Token);
+                ValidateTokenResponse result = om.IsUserValidated(request.Version, request.Token, request.ContractNumber);
                 if (result.UserId.Trim() != string.Empty)
                 {
                     request.UserId = result.UserId;

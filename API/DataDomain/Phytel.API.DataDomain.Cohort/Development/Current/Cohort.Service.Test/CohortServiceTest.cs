@@ -13,7 +13,7 @@ namespace Phytel.API.DataDomain.Cohort.Service.Test
         public void GetAllCohorts_Test()
         {
             // Arrange
-            string version = "v1";
+            double version = 1.0;
             string contractNumber = "InHealth001";
             string context = "NG";
             IRestClient client = new JsonServiceClient();
@@ -32,7 +32,7 @@ namespace Phytel.API.DataDomain.Cohort.Service.Test
         {
             // Arrange
             string expectedValue = "All(f)";
-            string version = "v1";
+            double version = 1.0;
             string contractNumber = "InHealth001";
             string context = "NG";
             string cohortID = "528aa055d4332317acc50978";

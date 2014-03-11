@@ -14,7 +14,7 @@ namespace Phytel.API.DataDomain.Patient.Test
             GetCohortPatientsDataRequest request = new GetCohortPatientsDataRequest
             {
                 CohortID = "530f9cff072ef715f4b411cf",
-                Version = "v1",
+                Version = 1,
                 Context = "NG",
                 SearchFilter = "",
                 ContractNumber = "InHealth001",
@@ -34,7 +34,7 @@ namespace Phytel.API.DataDomain.Patient.Test
             GetCohortPatientsDataRequest request = new GetCohortPatientsDataRequest
             {
                 CohortID = "528ed9b3072ef70e10099687",
-                Version = "v1",
+                Version = 1,
                 Context = "NG",
                 SearchFilter = "Jonell",
                 ContractNumber = "InHealth001",
@@ -53,7 +53,7 @@ namespace Phytel.API.DataDomain.Patient.Test
             GetCohortPatientsDataRequest request = new GetCohortPatientsDataRequest
             {
                 CohortID = "528ed9b3072ef70e10099687",
-                Version = "v1",
+                Version = 1,
                 Context = "NG",
                 SearchFilter = "Jonell Tigue",
                 ContractNumber = "InHealth001",
@@ -72,7 +72,7 @@ namespace Phytel.API.DataDomain.Patient.Test
             GetCohortPatientsDataRequest request = new GetCohortPatientsDataRequest
             {
                 CohortID = "528ed9b3072ef70e10099687",
-                Version = "v1",
+                Version = 1,
                 Context = "NG",
                 SearchFilter = "Tigue, Jonell",
                 ContractNumber = "InHealth001",
@@ -91,7 +91,7 @@ namespace Phytel.API.DataDomain.Patient.Test
             GetCohortPatientsDataRequest request = new GetCohortPatientsDataRequest
             {
                 CohortID = "528ed9b3072ef70e10099687",
-                Version = "v1",
+                Version = 1,
                 Context = "NG",
                 SearchFilter = ", Jonell",
                 ContractNumber = "InHealth001",
@@ -107,7 +107,7 @@ namespace Phytel.API.DataDomain.Patient.Test
         [TestMethod]
         public void UpdatePatientView_Test()
         {
-            string version = "v1";
+            double version = 1.0;
             string contractNumber = "InHealth001";
             string context = "NG";
             string patientId = "52f55858072ef709f84e5dee";

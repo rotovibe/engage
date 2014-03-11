@@ -7,7 +7,7 @@ namespace Phytel.API.DataDomain.PatientGoal.DTO
     public class GetAllPatientGoalsDataResponse : IDomainResponse
    {
         public List<PatientGoalViewData> PatientGoalsData { get; set; }
-        public string Version { get; set; }
+        public double Version { get; set; }
         public ResponseStatus Status { get; set; }
    }
 

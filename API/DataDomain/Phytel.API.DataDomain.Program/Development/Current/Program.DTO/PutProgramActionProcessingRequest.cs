@@ -27,7 +27,7 @@ namespace Phytel.API.DataDomain.Program.DTO
         //[ApiMember(Name = "Token", Description = "Request Token", ParameterType = "path", DataType = "string", IsRequired = true)]
         //public string Token { get; set; }
 
-        [ApiMember(Name = "Version", Description = "Version of the API being called", ParameterType = "property", DataType = "string", IsRequired = false)]
-        public string Version { get; set; }
+        [ApiMember(Name = "Version", Description = "Version of the API being called", ParameterType = "property", DataType = "double", IsRequired = false)]
+        public double Version { get; set; }
     }
 }

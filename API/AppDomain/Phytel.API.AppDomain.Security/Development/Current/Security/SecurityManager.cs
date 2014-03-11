@@ -21,7 +21,7 @@ namespace Phytel.API.AppDomain.Security
                 ISecurityRepository<AuthenticateResponse> securityRepo = SecurityRepositoryFactory<AuthenticateResponse>.GetSecurityRepository(productName);
 
                 AuthenticateResponse userResponse = userRepo.LoginUser(token, securityToken);
-                if (userResponse.UserID != Guid.Empty)
+                if (string.IsNullOrEmpty(userResponse.SQLUserID) == false)
                     userResponse = securityRepo.LoginUser(userResponse, securityToken, apiKey, productName);
                 else
                     throw new UnauthorizedAccessException("Login Failed! Unknown token and security token.");
@@ -38,11 +38,13 @@ namespace Phytel.API.AppDomain.Security
         {
             try
             {
-                ISecurityRepository<UserAuthenticateResponse> securityRepo = SecurityRepositoryFactory<UserAuthenticateResponse>.GetSecurityRepository(productName);
+                throw new NotImplementedException();
 
-                UserAuthenticateResponse response = securityRepo.LoginUser(userName, password, securityToken, apiKey, productName);
+                //ISecurityRepository<UserAuthenticateResponse> securityRepo = SecurityRepositoryFactory<UserAuthenticateResponse>.GetSecurityRepository(productName);
 
-                return response;
+                //UserAuthenticateResponse response = securityRepo.LoginUser(userName, password, securityToken, apiKey, productName);
+
+                //return response;
             }
             catch (Exception)
             {
@@ -56,7 +58,7 @@ namespace Phytel.API.AppDomain.Security
             {
                 ISecurityRepository<AuthenticateResponse> securityRepo = SecurityRepositoryFactory<AuthenticateResponse>.GetSecurityRepository(request.Context);
 
-                return securityRepo.Validate(request.Token, securityToken, request.Context);
+                return securityRepo.Validate(request, securityToken);
             }
             catch (Exception)
             {
@@ -68,7 +70,7 @@ namespace Phytel.API.AppDomain.Security
         {
             ISecurityRepository<AuthenticateResponse> securityRepo = SecurityRepositoryFactory<AuthenticateResponse>.GetSecurityRepository(request.Context);
 
-            return securityRepo.Logout(request.Token, securityToken, request.Context);
+            return securityRepo.Logout(request.Token, securityToken, request.Context, request.ContractNumber);
         }
     }
 }

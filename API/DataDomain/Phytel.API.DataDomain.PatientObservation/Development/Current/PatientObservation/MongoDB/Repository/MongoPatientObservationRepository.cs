@@ -230,7 +230,7 @@ namespace Phytel.API.DataDomain.PatientObservation
                     Id = ObjectId.GenerateNewId(),
                     PatientId = ObjectId.Parse(request.PatientId),
                     TTLDate = System.DateTime.UtcNow.AddDays(_initializeDays),
-                    UpdatedBy = request.UserId,
+                    UpdatedBy = ObjectId.Parse(request.UserId),
                     LastUpdatedOn = DateTime.UtcNow,
                     ObservationId = ObjectId.Parse(request.ObservationId),
                     DeleteFlag = true

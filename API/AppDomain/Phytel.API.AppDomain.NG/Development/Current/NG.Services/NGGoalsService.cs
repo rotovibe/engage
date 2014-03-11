@@ -26,7 +26,7 @@ namespace Phytel.API.AppDomain.NG.Service
             {
                 GoalsManager gm = new GoalsManager();
                 request.Token = base.Request.Headers["Token"] as string;
-                ValidateTokenResponse result = gm.IsUserValidated(request.Version, request.Token);
+                ValidateTokenResponse result = gm.IsUserValidated(request.Version, request.Token, request.ContractNumber);
                 if (result.UserId.Trim() != string.Empty)
                 {
                     request.UserId = result.UserId;
@@ -65,7 +65,7 @@ namespace Phytel.API.AppDomain.NG.Service
             {
                 GoalsManager gm = new GoalsManager();
                 request.Token = base.Request.Headers["Token"] as string;
-                ValidateTokenResponse result = gm.IsUserValidated(request.Version, request.Token);
+                ValidateTokenResponse result = gm.IsUserValidated(request.Version, request.Token, request.ContractNumber);
                 if (result.UserId.Trim() != string.Empty)
                 {
                     request.UserId = result.UserId;
@@ -99,7 +99,7 @@ namespace Phytel.API.AppDomain.NG.Service
             {
                 GoalsManager gm = new GoalsManager();
                 request.Token = base.Request.Headers["Token"] as string;
-                ValidateTokenResponse result = gm.IsUserValidated(request.Version, request.Token);
+                ValidateTokenResponse result = gm.IsUserValidated(request.Version, request.Token, request.ContractNumber);
                 if (result.UserId.Trim() != string.Empty)
                 {
                     request.UserId = result.UserId;
@@ -129,7 +129,7 @@ namespace Phytel.API.AppDomain.NG.Service
             {
                 GoalsManager gm = new GoalsManager();
                 request.Token = base.Request.Headers["Token"] as string;
-                ValidateTokenResponse result = gm.IsUserValidated(request.Version, request.Token);
+                ValidateTokenResponse result = gm.IsUserValidated(request.Version, request.Token, request.ContractNumber);
                 if (result.UserId.Trim() != string.Empty)
                 {
                     request.UserId = result.UserId;
@@ -159,7 +159,7 @@ namespace Phytel.API.AppDomain.NG.Service
             {
                 GoalsManager gm = new GoalsManager();
                 request.Token = base.Request.Headers["Token"] as string;
-                ValidateTokenResponse result = gm.IsUserValidated(request.Version, request.Token);
+                ValidateTokenResponse result = gm.IsUserValidated(request.Version, request.Token, request.ContractNumber);
                 if (result.UserId.Trim() != string.Empty)
                 {
                     request.UserId = result.UserId;
@@ -199,7 +199,7 @@ namespace Phytel.API.AppDomain.NG.Service
             {
                 GoalsManager gm = new GoalsManager();
                 request.Token = base.Request.Headers["Token"] as string;
-                ValidateTokenResponse result = gm.IsUserValidated(request.Version, request.Token);
+                ValidateTokenResponse result = gm.IsUserValidated(request.Version, request.Token, request.ContractNumber);
                 if (result.UserId.Trim() != string.Empty)
                 {
                     request.UserId = result.UserId;
@@ -239,7 +239,7 @@ namespace Phytel.API.AppDomain.NG.Service
             {
                 GoalsManager gm = new GoalsManager();
                 request.Token = base.Request.Headers["Token"] as string;
-                ValidateTokenResponse result = gm.IsUserValidated(request.Version, request.Token);
+                ValidateTokenResponse result = gm.IsUserValidated(request.Version, request.Token, request.ContractNumber);
                 if (result.UserId.Trim() != string.Empty)
                 {
                     request.UserId = result.UserId;
@@ -269,7 +269,7 @@ namespace Phytel.API.AppDomain.NG.Service
             {
                 GoalsManager gm = new GoalsManager();
                 request.Token = base.Request.Headers["Token"] as string;
-                ValidateTokenResponse result = gm.IsUserValidated(request.Version, request.Token);
+                ValidateTokenResponse result = gm.IsUserValidated(request.Version, request.Token, request.ContractNumber);
                 if (result.UserId.Trim() != string.Empty)
                 {
                     request.UserId = result.UserId;

@@ -9,8 +9,11 @@ namespace Phytel.API.AppDomain.Security.DTO
     [Api(Description = "Response posted back when the API authenticates the user requesting access")]
     public class AuthenticateResponse: IDomainResponse
     {
-        [ApiMember(DataType="Guid", Description="Unique ID of the user logged into the product with access to the API", IsRequired=true, Name="UserID", ParameterType="body")]
-        public Guid UserID { get; set; }
+        [ApiMember(DataType = "string", Description = "Unique SQL ID of the user logged into the product with access to the API", IsRequired = true, Name = "SQLUserID", ParameterType = "body")]
+        public string SQLUserID { get; set; }
+
+        [ApiMember(DataType = "string", Description = "Users Contact ID of the user logged into the product", IsRequired = true, Name = "UserId", ParameterType = "body")]
+        public string UserId { get; set; }
 
         [ApiMember(DataType = "string", Description = "User Name the user logged into the product with access to the API", IsRequired = true, Name = "UserName", ParameterType = "body")]
         public string UserName { get; set; }
@@ -33,7 +36,7 @@ namespace Phytel.API.AppDomain.Security.DTO
         [ApiMember(DataType = "ResponseStatus", Description = "HTTP(S) Response Status identifying the result of the request.  This will come in the form of standard HTTP(S) responses (200, 401, 500, etc...)", IsRequired = true, Name = "Status", ParameterType = "body")]
         public ResponseStatus Status { get; set; }
 
-        [ApiMember(DataType = "string", Description = "The specific version of the Response object being returned to support backward compatibility", IsRequired = true, Name = "Version", ParameterType = "body")]
-        public string Version { get; set; }
+        [ApiMember(DataType = "double", Description = "The specific version of the Response object being returned to support backward compatibility", IsRequired = true, Name = "Version", ParameterType = "body")]
+        public double Version { get; set; }
     }
 }

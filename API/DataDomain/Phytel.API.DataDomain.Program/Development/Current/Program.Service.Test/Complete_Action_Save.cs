@@ -15,7 +15,7 @@ namespace Phytel.API.DataDomain.Patient.Service.Test
             string contractNumber = "InHealth001";
             string context = "NG";
             string priority = "3";
-            string version = "v1";
+            double version = 1.0;
             string token = "52d58da0d6a4850e90240706";
             string programId = "52deedd0d6a4850fac29d83a";
             string patientId = "528f6cfa072ef708ecd68c94";

@@ -10,7 +10,7 @@ namespace Phytel.API.DataDomain.PatientProblem.Test
         public void GetPatientProblemByID_Test()
         {
             // Arrange
-            string version = "v1";
+            double version = 1.0;
             string contractNumber = "InHealth001";
             string context = "NG";
             GetAllPatientProblemsDataRequest request = new GetAllPatientProblemsDataRequest

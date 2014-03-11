@@ -441,10 +441,10 @@ namespace Phytel.API.DataDomain.Patient
                             PatientId = ObjectId.Parse(request.PatientId),
                             ContactId = ObjectId.Parse(request.ContactId),
                             Flagged = Convert.ToBoolean(request.Flagged),
-                            Version = "v1",
+                            Version = 1,
                             LastUpdatedOn = System.DateTime.UtcNow,
                             DeleteFlag = false,
-                            UpdatedBy = request.UserId
+                            UpdatedBy = ObjectId.Parse(request.UserId)
                         });
                     }
                     else
@@ -565,13 +565,7 @@ namespace Phytel.API.DataDomain.Patient
                         if (ObjectId.Parse(request.DisplayPatientSystemId) != null)
                             updt.Set(MEPatient.DisplayPatientSystemIDProperty, request.DisplayPatientSystemId);
                     }
-                    if (request.Version != null)
-                    {
-                        if ((request.Version == "\"\"") || (request.Version == "\'\'"))
-                            updt.Set(MEPatient.VersionProperty, string.Empty);
-                        else
-                            updt.Set(MEPatient.VersionProperty, request.Version);
-                    }
+                    
                     updt.Set("uon", System.DateTime.UtcNow);
                     updt.Set("pri", request.Priority);
                     updt.Set("uby", request.UserId);

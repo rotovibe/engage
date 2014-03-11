@@ -9,7 +9,7 @@ namespace Phytel.API.DataDomain.Program.DTO
     public class GetProgramResponse : IDomainResponse
     {
         public Program Program { get; set; }
-        public string Version { get; set; }
+        public double Version { get; set; }
         public ResponseStatus Status { get; set; }
     }
 
@@ -32,6 +32,6 @@ namespace Phytel.API.DataDomain.Program.DTO
         //public List<string> Attributes { get; set; }
         public string AuthoredBy { get; set; }
         public bool Locked { get; set; }
-        public string Version { get; set; }
+        public double Version { get; set; }
     }
 }

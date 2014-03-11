@@ -45,7 +45,7 @@ namespace Phytel.API.DataDomain.PatientNote
                         CreatedBy = noteData.CreatedById,
                         CreatedOn = DateTime.UtcNow,
                         Version = request.Version,
-                        UpdatedBy = request.UserId,
+                        UpdatedBy = ObjectId.Parse(request.UserId),
                         LastUpdatedOn = DateTime.UtcNow
                     };
 

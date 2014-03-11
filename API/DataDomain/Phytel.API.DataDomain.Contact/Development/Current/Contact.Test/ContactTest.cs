@@ -54,7 +54,7 @@ namespace Phytel.API.DataDomain.Contact.Test
 
             request.ContractNumber = "InHealth001";
             request.UserId = "DD_TestHarness";
-            request.Version = "v1";
+            request.Version = 1;
             List<string> ids = new List<string>();
             ids.Add("53043e53d433231f48de8a7a");
             ids.Add("53043e5fd433231f48de8a7b");
@@ -73,7 +73,7 @@ namespace Phytel.API.DataDomain.Contact.Test
 
             request.ContractNumber = "InHealth001";
             request.UserId = "DD_TestHarness";
-            request.Version = "v1";
+            request.Version = 1;
 
             GetAllCareManagersDataResponse response = ContactDataManager.GetCareManagers(request);
 
@@ -92,7 +92,7 @@ namespace Phytel.API.DataDomain.Contact.Test
             request.LastName = "DiGiorgio 1";
             request.PreferredName = "Tony DiGiorgio 1";
             request.Gender = "M";
-            request.Version = "v1";
+            request.Version = 1;
             request.UserId = "DataDomain_TestHarness";
             
             PutContactDataResponse response = ContactDataManager.InsertContact(request);
@@ -107,7 +107,7 @@ namespace Phytel.API.DataDomain.Contact.Test
 
             request.ContractNumber = "InHealth001";
             request.UserId = "DD_TestHarness";
-            request.Version = "v1";
+            request.Version = 1;
 
             List<int> weekDays = new List<int>();
             List<string> timesOfday = new List<string>();
@@ -191,7 +191,7 @@ namespace Phytel.API.DataDomain.Contact.Test
 
             request.ContractNumber = "InHealth001";
             request.UserId = "DD_TestHarness";
-            request.Version = "v1";
+            request.Version = 1;
             
             //List<CommModeData> modes = new List<CommModeData>();
             //modes.Add(new CommModeData { ModeId = "52e17cc2d433232028e9e38f", OptOut = false, Preferred = false });

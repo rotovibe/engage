@@ -174,7 +174,7 @@ namespace Phytel.API.DataDomain.PatientGoal
                     PatientGoalId = ObjectId.Parse(request.PatientGoalId),
                     TTLDate = System.DateTime.UtcNow.AddDays(_initializeDays),
                     StatusDate = DateTime.UtcNow,
-                    UpdatedBy = request.UserId,
+                    UpdatedBy = ObjectId.Parse(request.UserId),
                     LastUpdatedOn = DateTime.UtcNow
                 };
 

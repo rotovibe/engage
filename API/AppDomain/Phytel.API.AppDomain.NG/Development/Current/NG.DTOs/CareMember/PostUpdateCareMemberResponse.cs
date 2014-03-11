@@ -6,7 +6,7 @@ namespace Phytel.API.AppDomain.NG.DTO
 {
     public class PostUpdateCareMemberResponse : IDomainResponse
     {
-        public string Version { get; set; }
+        public double Version { get; set; }
         public ResponseStatus Status { get; set; }
     }
 }

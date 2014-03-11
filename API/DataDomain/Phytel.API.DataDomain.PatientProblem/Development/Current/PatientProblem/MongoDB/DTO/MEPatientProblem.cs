@@ -54,7 +54,7 @@ namespace Phytel.API.DataDomain.PatientProblem.DTO
 
         [BsonElement(LevelProperty)]
         [BsonIgnoreIfNull(true)]
-        [BsonDefaultValue(1)]
+        [BsonDefaultValue(1.0)]
         public int Level { get; set; }
 
         [BsonElement(StartDateProperty)]
@@ -73,12 +73,11 @@ namespace Phytel.API.DataDomain.PatientProblem.DTO
         public Dictionary<string, object> ExtraElements { get; set; }
 
         [BsonElement(VersionProperty)]
-        [BsonDefaultValue("v1")]
-        public string Version { get; set; }
+        [BsonDefaultValue(1.0)]
+        public double Version { get; set; }
 
         [BsonElement(UpdatedByProperty)]
-        [BsonDefaultValue("-100")]
-        public string UpdatedBy { get; set; }
+        public ObjectId UpdatedBy { get; set; }
 
         [BsonElement(DeleteFlagProperty)]
         [BsonDefaultValue(false)]

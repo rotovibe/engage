@@ -24,7 +24,7 @@ namespace Phytel.API.AppDomain.NG.DTO
         public int Status { get; set; }
         public List<Objective> ObjectivesInfo { get; set; }
         public List<Module> Modules { get; set; }
-        public string Version { get; set; }
+        public double Version { get; set; }
         public string Text { get; set; }
 
         public int EligibilityOverride { get; set; }

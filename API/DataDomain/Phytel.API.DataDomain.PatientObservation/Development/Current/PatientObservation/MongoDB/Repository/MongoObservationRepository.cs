@@ -98,7 +98,7 @@ namespace Phytel.API.DataDomain.PatientObservation
                             Status = (int)o.Status,
                             TTLDate = o.TTLDate,
                             Units = o.Units,
-                            UpdatedBy = o.UpdatedBy,
+                            UpdatedBy = o.UpdatedBy.ToString(),
                             Version = o.Version,
                             CommonName = o.CommonName
                         };
@@ -243,7 +243,7 @@ namespace Phytel.API.DataDomain.PatientObservation
                                     Status = (int)o.Status,
                                     TTLDate = o.TTLDate,
                                     Units = o.Units,
-                                    UpdatedBy = o.UpdatedBy,
+                                    UpdatedBy = o.UpdatedBy.ToString(),
                                     Version = o.Version,
                                     CommonName = o.CommonName
                                 });

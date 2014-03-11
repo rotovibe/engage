@@ -14,7 +14,7 @@ namespace Phytel.API.DataDomain.Program.Services.Test
             string url = "http://localhost:8888/Program";
             string contractNumber = "InHealth001";
             string context ="NG";
-            string version = "v1";
+            double version = 1.0;
             IRestClient client = new JsonServiceClient();
 
             GetAllActiveProgramsResponse response = client.Get<GetAllActiveProgramsResponse>(

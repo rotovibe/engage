@@ -7,7 +7,7 @@ namespace Phytel.API.DataDomain.PatientObservation.DTO
     public class PutInitializeObservationDataResponse : IDomainResponse
     {
         public PatientObservationData ObservationData { get; set; }
-        public string Version { get; set; }
+        public double Version { get; set; }
         public ResponseStatus Status { get; set; }
     }
 }

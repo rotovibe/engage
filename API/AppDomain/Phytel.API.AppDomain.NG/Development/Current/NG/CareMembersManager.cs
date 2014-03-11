@@ -242,7 +242,7 @@ namespace Phytel.API.AppDomain.NG
         /// <param name="contractNumber">contract number of the request.</param>
         /// <param name="userId">user id making the request.</param>
         /// <returns>List of contact data.</returns>
-        private List<ContactData> getContactDetails(List<string> contactIds, string version, string contractNumber, string userId)
+        private List<ContactData> getContactDetails(List<string> contactIds, double version, string contractNumber, string userId)
         {
 
             List<ContactData> contactsData = new List<ContactData>();
@@ -273,7 +273,7 @@ namespace Phytel.API.AppDomain.NG
             return contactsData;
         }
 
-        private void upsertCohortPatientView(string patientId, string contactId, string version, string contractNumber)
+        private void upsertCohortPatientView(string patientId, string contactId, double version, string contractNumber)
         {
             string context = "NG";
             try

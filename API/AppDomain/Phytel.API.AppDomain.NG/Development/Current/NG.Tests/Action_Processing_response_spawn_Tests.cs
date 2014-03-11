@@ -18,7 +18,7 @@ namespace Phytel.API.DataDomain.Patient.Service.Test
             string contractNumber = "InHealth001";
             string context = "NG";
             string priority = "3";
-            string version = "v1";
+            double version = 1.0;
             string token = "52e97904d6a4850eb84b0497";
             string programId = "52e97f4ed6a4850eb8b70d59";
             string patientId = "52e26f11072ef7191c111c54";
@@ -50,7 +50,7 @@ namespace Phytel.API.DataDomain.Patient.Service.Test
             string contractNumber = "InHealth001";
             string context = "NG";
             string priority = "3";
-            string version = "v1";
+            double version = 1.0;
             string token = "52e7c8b3d6a4850f88f19c4a";
             string programId = "52e51ef5d6a48505344c9efc";
             string patientId = "52e26f11072ef7191c111d6c";
@@ -82,7 +82,7 @@ namespace Phytel.API.DataDomain.Patient.Service.Test
             string contractNumber = "InHealth001";
             string context = "NG";
             string priority = "3";
-            string version = "v1";
+            double version = 1.0;
             string token = "52ea72f9d6a4850eb84b0dbc";
             string programId = "52ea84cfd6a4850eb802962d";
             string patientId = "52e26f5b072ef7191c11ef73";
@@ -114,7 +114,7 @@ namespace Phytel.API.DataDomain.Patient.Service.Test
             string contractNumber = "InHealth001";
             string context = "NG";
             string priority = "3";
-            string version = "v1";
+            double version = 1.0;
             string token = "52efa855d6a4850fb4f20fc3";
             string programId = "52efc1ddfe7a5921e450d7fe";
             string patientId = "52e26f11072ef7191c111f02";

@@ -380,7 +380,7 @@ namespace Phytel.API.AppDomain.NG
                 }
 
                 pResponse.Programs = dataDomainResponse.Programs;
-                pResponse.Version = "v1";
+                pResponse.Version = 1;
                 return pResponse;
             }
             catch (WebServiceException wse)
@@ -1324,7 +1324,7 @@ namespace Phytel.API.AppDomain.NG
             return response;
         }
 
-        private Contact insertContactForPatient(string context, string version, string contractNumber, string patientId, string userId)
+        private Contact insertContactForPatient(string context, double version, string contractNumber, string patientId, string userId)
         {
 
             Contact newContact = null;
@@ -1391,7 +1391,7 @@ namespace Phytel.API.AppDomain.NG
             return newContact;
         }
 
-        private static string getContactIdForLoggedInUser(string version, string contractNumber, string userId, IRestClient client)
+        private static string getContactIdForLoggedInUser(double version, string contractNumber, string userId, IRestClient client)
         {
             string contactId = string.Empty;
             //Get the corresponding contactId of the user loggedIn.

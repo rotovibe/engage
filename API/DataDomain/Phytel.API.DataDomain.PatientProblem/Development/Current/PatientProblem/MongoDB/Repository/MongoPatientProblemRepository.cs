@@ -36,7 +36,7 @@ namespace Phytel.API.DataDomain.PatientProblem
                         Level = request.Level,
                         PatientID = ObjectId.Parse(request.PatientId),
                         ProblemID = ObjectId.Parse(request.ProblemId),
-                        Version = "v1",
+                        Version = 1,
                         DeleteFlag = false,
                         LastUpdatedOn = System.DateTime.UtcNow
 

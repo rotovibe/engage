@@ -149,7 +149,7 @@ namespace Phytel.API.DataDomain.Program
                 string path = ConfigurationManager.AppSettings["DDPatientServiceUrl"];
                 string contractNumber = request.ContractNumber;
                 string context = request.Context;
-                string version = request.Version;
+                double version = request.Version;
                 IRestClient client = new JsonServiceClient();
                 GetPatientDataResponse response = client.Get<GetPatientDataResponse>(
                     string.Format("{0}/{1}/{2}/{3}/patient/{4}",

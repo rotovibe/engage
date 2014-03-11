@@ -15,8 +15,8 @@ namespace Phytel.API.AppDomain.NG.DTO
         [ApiMember(Name = "ContractNumber", Description = "Contract Number to retrieve data from", ParameterType = "property", DataType = "string", IsRequired = true)]
         public string ContractNumber { get; set; }
 
-        [ApiMember(Name = "Version", Description = "Version of the API being called", ParameterType = "property", DataType = "string", IsRequired = true)]
-        public string Version { get; set; }
+        [ApiMember(Name = "Version", Description = "Version of the API being called", ParameterType = "property", DataType = "double", IsRequired = true)]
+        public double Version { get; set; }
 
         [ApiMember(Name = "UserId", Description = "UserId of the logged in user", ParameterType = "property", DataType = "string", IsRequired = true)]
         public string UserId { get; set; }

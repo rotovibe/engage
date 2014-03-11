@@ -15,7 +15,7 @@ namespace Phytel.API.DataDomain.Patient.Service.Test
             string url = "http://localhost:8888/Program";
             string contractNumber = "InHealth001";
             string context = "NG";
-            string version = "v1";
+            double version = 1.0;
             string stepId = "52ed9eaffe7a5921b4880cd4";
             string userId = "bb241c64-a0ff-4e01-ba5f-4246ef50780e";
 
@@ -53,7 +53,7 @@ namespace Phytel.API.DataDomain.Patient.Service.Test
             string url = "http://localhost:8888/Program";
             string contractNumber = "InHealth001";
             string context = "NG";
-            string version = "v1";
+            double version = 1.0;
             string stepId = "52ed9eaffe7a5921b4880cd4";
             string userId = "bb241c64-a0ff-4e01-ba5f-4246ef50780e";
             string responseId = "52ede291fe7a590728e1a382";

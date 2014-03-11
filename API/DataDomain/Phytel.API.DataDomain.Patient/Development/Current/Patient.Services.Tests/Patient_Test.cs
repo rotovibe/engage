@@ -77,7 +77,7 @@ namespace Phytel.API.DataDomain.Patient.Service.Test
             string patientID = "528b972f072ef70eec772872";
             string contractNumber = "InHealth001";
             string context = "NG";
-            string version = "v1";
+            double version = 1.0;
 
             JsonServiceClient client = new JsonServiceClient();
             GetPatientsDataResponse response = client.Post<GetPatientsDataResponse>

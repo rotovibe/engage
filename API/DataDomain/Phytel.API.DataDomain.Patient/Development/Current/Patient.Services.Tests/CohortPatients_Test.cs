@@ -32,7 +32,7 @@ namespace Phytel.API.DataDomain.Patient.Services.Test
         [TestMethod]
         public void Get_CohortPatientsList_Test()
         {
-            string version = "v1";
+            double version = 1.0;
             string contractNumber = "InHealth001";
             string context = "NG";
             string cohortID = "528ed9b3072ef70e10099687";
@@ -58,7 +58,7 @@ namespace Phytel.API.DataDomain.Patient.Services.Test
         [TestMethod]
         public void Get_CohortPatientsListWithFilter_Test()
         {
-            string version = "v1";
+            double version = 1.0;
             string contractNumber = "InHealth001";
             string context = "NG";
             string cohortID = "528ed9b3072ef70e10099687";

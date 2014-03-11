@@ -26,8 +26,8 @@ namespace Phytel.API.AppDomain.NG.DTO
         [ApiMember(Name = "Token", Description = "Request Token", ParameterType = "QueryString", DataType = "string", IsRequired = true)]
         public string Token { get; set; }
 
-        [ApiMember(Name = "Version", Description = "Version of the API being called", ParameterType = "property", DataType = "string", IsRequired = true)]
-        public string Version { get; set; }
+        [ApiMember(Name = "Version", Description = "Version of the API being called", ParameterType = "property", DataType = "double", IsRequired = true)]
+        public double Version { get; set; }
 
         [ApiMember(Name = "Context", Description = "Product Context requesting the Program", ParameterType = "property", DataType = "string", IsRequired = false)]
         public string Context { get; set; }

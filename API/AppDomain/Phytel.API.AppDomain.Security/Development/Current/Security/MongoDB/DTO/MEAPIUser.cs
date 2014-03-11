@@ -51,8 +51,8 @@ namespace Phytel.API.AppDomain.Security
         public int SessionLengthInMinutes { get; set; }
 
         [BsonElement(VersionProperty)]
-        [BsonDefaultValue("v1")]
-        public string Version { get; set; }
+        [BsonDefaultValue(1.0)]
+        public double Version { get; set; }
 
         [BsonExtraElements]
         [BsonIgnoreIfNull(true)]

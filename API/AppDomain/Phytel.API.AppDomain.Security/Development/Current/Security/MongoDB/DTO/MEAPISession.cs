@@ -7,7 +7,7 @@ using System.Collections.Generic;
 namespace Phytel.API.AppDomain.Security
 {
     [BsonIgnoreExtraElements(false)]
-    [MongoIndex(Keys = new string[] { IdProperty, SecurityTokenProperty, ProductProperty }, Unique = true)]
+    [MongoIndex(Keys = new string[] { IdProperty, SecurityTokenProperty, ContractNumberProperty, ProductProperty }, Unique = true)]
     [MongoIndex(Keys = new string[] { SessionTimeOutProperty }, TimeToLive = 0)]
     public class MEAPISession : IMongoEntity<ObjectId>
     {
@@ -16,7 +16,9 @@ namespace Phytel.API.AppDomain.Security
         public const string IdProperty = "_id";
         public const string SecurityTokenProperty = "stkn";
         public const string UserNameProperty = "un";
-        public const string UserIDProperty = "uid";
+        public const string UserIdProperty = "uid";
+        public const string SQLUserIDProperty = "suid";
+        public const string ContractNumberProperty = "cnum";
         public const string ProductProperty = "prd";
         public const string APIKeyProperty = "apiKey";
         public const string SessionLengthInMinutesProperty = "slim";
@@ -35,13 +37,21 @@ namespace Phytel.API.AppDomain.Security
         [BsonIgnoreIfNull(true)]
         public string UserName { get; set; }
 
-        [BsonElement(UserIDProperty)]
+        [BsonElement(UserIdProperty)]
         [BsonIgnoreIfNull(true)]
-        public string UserId { get; set; }
+        public ObjectId UserId { get; set; }
+
+        [BsonElement(SQLUserIDProperty)]
+        [BsonIgnoreIfNull(true)]
+        public string SQLUserId { get; set; }
 
         [BsonElement(APIKeyProperty)]
         [BsonIgnoreIfNull(true)]
         public string APIKey { get; set; }
+
+        [BsonElement(ContractNumberProperty)]
+        [BsonIgnoreIfNull(true)]
+        public string ContractNumber { get; set; }
 
         [BsonElement(ProductProperty)]
         [BsonIgnoreIfNull(true)]
@@ -57,8 +67,8 @@ namespace Phytel.API.AppDomain.Security
         public int SessionLengthInMinutes { get; set; }
 
         [BsonElement(VersionProperty)]
-        [BsonDefaultValue("v1")]
-        public string Version { get; set; }
+        [BsonDefaultValue(1.0)]
+        public double Version { get; set; }
 
         [BsonExtraElements]
         [BsonIgnoreIfNull(true)]

@@ -111,7 +111,7 @@ namespace Phytel.API.AppDomain.NG.Services.Test
         {
 
             // Arrange
-            string version = "v1";
+            double version = 1.0;
             string contractNumber = "InHealth001";
             string token = "528cc924d6a4850fe05b3afa";
             string patientID = "528bdccc072ef7071c2e22ae";
@@ -134,7 +134,7 @@ namespace Phytel.API.AppDomain.NG.Services.Test
         {
 
             // Arrange
-            string version = "v1";
+            double version = 1.0;
             string contractNumber = "InHealth001";
             string context = "NG";
             string token = "528cc924d6a4850fe05b3afa";

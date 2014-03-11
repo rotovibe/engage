@@ -10,7 +10,7 @@ namespace Phytel.API.DataDomain.Action.Test
         public void GetActionByID_Test()
         {
             // Arrange
-            string version = "v1";
+            double version = 1.0;
             string contractNumber = "InHealth001";
             string context = "NG";
             GetActionDataRequest request = new GetActionDataRequest { ActionID = "52a0f33bd43323141c9eb274", Context = context, ContractNumber = contractNumber, Version = version };

@@ -15,7 +15,7 @@ namespace Phytel.API.DataDomain.Patient.Service.Test
             string url = "http://localhost:8888/Program";
             string contractNumber = "InHealth001";
             string context = "NG";
-            string version = "v1";
+            double version = 1.0;
             string planElementId = "52ede291fe7a590728e1a382";
 
             IRestClient client = new JsonServiceClient();
@@ -35,7 +35,7 @@ namespace Phytel.API.DataDomain.Patient.Service.Test
             string url = "http://localhost:8888/Program";
             string contractNumber = "InHealth001";
             string context = "NG";
-            string version = "v1";
+            double version = 1.0;
             string planElementId = "52ede291fe7a590728e1a382";
 
             IRestClient client = new JsonServiceClient();
@@ -63,7 +63,7 @@ namespace Phytel.API.DataDomain.Patient.Service.Test
             string url = "http://localhost:8888/Program";
             string contractNumber = "InHealth001";
             string context = "NG";
-            string version = "v1";
+            double version = 1.0;
             string planElementId = "52ede291fe7a590728e1a382";
 
             IRestClient client = new JsonServiceClient();
