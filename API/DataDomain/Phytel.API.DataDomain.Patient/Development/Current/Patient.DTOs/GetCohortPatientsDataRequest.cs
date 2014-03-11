@@ -18,9 +18,6 @@ namespace Phytel.API.DataDomain.Patient.DTO
         [ApiMember(Name = "Take", Description = "number of records to retrieve.", ParameterType = "property", DataType = "string", IsRequired = true)]
         public int Take { get; set; }
 
-        [ApiMember(Name = "ContactId", Description = "ContactId of the user logged in.", ParameterType = "property", DataType = "string", IsRequired = true)]
-        public string ContactId { get; set; }
-
         [ApiMember(Name = "Context", Description = "Context", ParameterType = "body", DataType = "string", IsRequired = false)]
         public string Context { get; set; }
 

@@ -9,9 +9,6 @@ namespace Phytel.API.DataDomain.Patient.DTO
         [ApiMember(Name = "PatientId", Description = "Id of the patient being updated", ParameterType = "property", DataType = "string", IsRequired = true)]
         public string PatientId { get; set; }
 
-        [ApiMember(Name = "ContactId", Description = "ContactId of the care manager logged in.", ParameterType = "property", DataType = "string", IsRequired = true)]
-        public string ContactId { get; set; }
-
         [ApiMember(Name = "Flagged", Description = "Flagged value of the patient being updated", ParameterType = "property", DataType = "string", IsRequired = true)]
         public int Flagged { get; set; }
 

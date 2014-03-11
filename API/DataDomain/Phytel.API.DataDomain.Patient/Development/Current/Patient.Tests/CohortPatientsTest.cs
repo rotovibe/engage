@@ -19,8 +19,7 @@ namespace Phytel.API.DataDomain.Patient.Test
                 SearchFilter = "",
                 ContractNumber = "InHealth001",
                 Skip = 0,
-                Take = 100,
-                ContactId = "530fcad1d4332320e0336a6a"
+                Take = 100
             };
 
             GetCohortPatientsDataResponse response = PatientDataManager.GetCohortPatients(request);

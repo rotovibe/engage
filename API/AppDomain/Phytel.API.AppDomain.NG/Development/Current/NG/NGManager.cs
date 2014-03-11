@@ -40,15 +40,13 @@ namespace Phytel.API.AppDomain.NG
             {
                 //Execute call(s) to Patient Data Domain
                 IRestClient client = new JsonServiceClient();
-                string contactId = getContactIdForLoggedInUser(request.Version, request.ContractNumber, request.UserId, client);
-                GetPatientDataResponse response = client.Get<GetPatientDataResponse>(string.Format("{0}/{1}/{2}/{3}/patient/{4}?UserId={5}&ContactId={6}",
+                GetPatientDataResponse response = client.Get<GetPatientDataResponse>(string.Format("{0}/{1}/{2}/{3}/patient/{4}?UserId={5}",
                                                                                             DDPatientServiceURL,
                                                                                             "NG",
                                                                                             request.Version,
                                                                                             request.ContractNumber,
                                                                                             request.PatientID,
-                                                                                            request.UserId,
-                                                                                            contactId));
+                                                                                            request.UserId));
 
                 if (response != null && response.Patient != null)
                 {
@@ -184,17 +182,15 @@ namespace Phytel.API.AppDomain.NG
                 PutPatientFlaggedUpdateResponse response = null;
 
                 IRestClient client = new JsonServiceClient();
-                string contactId = getContactIdForLoggedInUser(request.Version, request.ContractNumber, request.UserId, client);
                 PutPatientFlaggedResponse dataDomainResponse =
-                    client.Put<PutPatientFlaggedResponse>(string.Format("{0}/{1}/{2}/{3}/patient/{4}/flagged/{5}?UserId={6}&ContactId={7}",
+                    client.Put<PutPatientFlaggedResponse>(string.Format("{0}/{1}/{2}/{3}/patient/{4}/flagged/{5}?UserId={6}",
                                                                                 DDPatientServiceURL,
                                                                                 "NG",
                                                                                 request.Version,
                                                                                 request.ContractNumber,
                                                                                 request.PatientId,
                                                                                 request.Flagged,
-                                                                                request.UserId,
-                                                                                contactId), new PutPatientFlaggedResponse { } as object);
+                                                                                request.UserId), new PutPatientFlaggedResponse { } as object);
                 if (dataDomainResponse != null && dataDomainResponse.Success)
                 {
                     response = new PutPatientFlaggedUpdateResponse();
@@ -286,10 +282,9 @@ namespace Phytel.API.AppDomain.NG
             try
             {
                 IRestClient client = new JsonServiceClient();
-                string contactId = getContactIdForLoggedInUser(request.Version, request.ContractNumber, request.UserId, client);
                 // call cohort data domain
                 // Route("/{Context}/{Version}/{ContractNumber}/CohortPatients/{CohortID}", "GET")]
-                GetCohortPatientsDataResponse qResponse = client.Get<GetCohortPatientsDataResponse>(string.Format("{0}/{1}/{2}/{3}/CohortPatients/{4}?Skip={5}&Take={6}&SearchFilter={7}&ContactId={8}",
+                GetCohortPatientsDataResponse qResponse = client.Get<GetCohortPatientsDataResponse>(string.Format("{0}/{1}/{2}/{3}/CohortPatients/{4}?Skip={5}&Take={6}&SearchFilter={7}&UserId={8}",
                                                                                             DDPatientServiceURL,
                                                                                             "NG",
                                                                                             request.Version,
@@ -298,7 +293,7 @@ namespace Phytel.API.AppDomain.NG
                                                                                             request.Skip,
                                                                                             request.Take,
                                                                                             request.SearchFilter,
-                                                                                            contactId));
+                                                                                            request.UserId));
 
                 //take qResponse Patient details and map them to "Patient" in the GetCohortPatientsResponse
                 qResponse.CohortPatients.ForEach(x => pResponse.Patients.Add(new CohortPatient
@@ -1390,28 +1385,6 @@ namespace Phytel.API.AppDomain.NG
             }
             return newContact;
         }
-
-        private static string getContactIdForLoggedInUser(double version, string contractNumber, string userId, IRestClient client)
-        {
-            string contactId = string.Empty;
-            //Get the corresponding contactId of the user loggedIn.
-            //[Route("/{Context}/{Version}/{ContractNumber}/Contact/User/{UserId}", "GET")]
-            GetContactByUserIdDataResponse dataDomainResponse;
-            dataDomainResponse =
-                client.Get<GetContactByUserIdDataResponse>(
-                string.Format("{0}/{1}/{2}/{3}/Contact/User/{4}",
-                DDContactServiceUrl,
-                "NG",
-                version,
-                contractNumber,
-                userId));
-
-            if (dataDomainResponse != null && dataDomainResponse.Contact != null)
-            {
-                contactId = dataDomainResponse.Contact.ContactId;
-            }
-            return contactId;
-        } 
         #endregion
     }
 }

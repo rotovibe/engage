@@ -432,14 +432,14 @@ namespace Phytel.API.DataDomain.Patient
                 using (PatientMongoContext ctx = new PatientMongoContext(_dbName))
                 {
 
-                    var patientUsr = FindPatientUser(request.PatientId, request.ContactId, ctx);
+                    var patientUsr = FindPatientUser(request.PatientId, request.UserId, ctx);
 
                     if (patientUsr == null)
                     {
                         ctx.PatientUsers.Collection.Insert(new MEPatientUser
                         {
                             PatientId = ObjectId.Parse(request.PatientId),
-                            ContactId = ObjectId.Parse(request.ContactId),
+                            ContactId = ObjectId.Parse(request.UserId),
                             Flagged = Convert.ToBoolean(request.Flagged),
                             Version = 1,
                             LastUpdatedOn = System.DateTime.UtcNow,

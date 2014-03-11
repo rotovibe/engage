@@ -30,9 +30,9 @@ namespace Phytel.API.DataDomain.Patient
 
                 string cohortQuery = response.Cohort.Query;
                 //If #USER_ID# is present in the cohort query, replace it with the ContactId.
-                if (!string.IsNullOrEmpty(request.ContactId))
+                if (!string.IsNullOrEmpty(request.UserId))
                 {
-                    cohortQuery = response.Cohort.Query.Replace("#USER_ID#", request.ContactId);
+                    cohortQuery = response.Cohort.Query.Replace("#USER_ID#", request.UserId);
                 }
 
                 //Get the filter parameters
@@ -78,14 +78,7 @@ namespace Phytel.API.DataDomain.Patient
                 GetPatientDataResponse result = new GetPatientDataResponse();
 
                 IPatientRepository<GetPatientDataResponse> repo = PatientRepositoryFactory<GetPatientDataResponse>.GetPatientRepository(request.ContractNumber, request.Context);
-                if (string.IsNullOrEmpty(request.ContactId))
-                {
-                    result.Patient = repo.FindByID(request.PatientID) as DTO.PatientData;
-                }
-                else 
-                {
-                    result.Patient = repo.FindByID(request.PatientID, request.ContactId) as DTO.PatientData;
-                }
+                result.Patient = repo.FindByID(request.PatientID, request.UserId) as DTO.PatientData;
                 return (result != null ? result : new GetPatientDataResponse());
             }
             catch (Exception)
