@@ -319,7 +319,8 @@ namespace NGTestData
                     FirstName = dr["FirstName"].ToString(),
                     LastName = dr["LastName"].ToString(),
                     PreferredName = dr["DisplayName"].ToString(),
-                    ResourceId = dr["UserID"].ToString()
+                    ResourceId = dr["UserID"].ToString(),
+                    Version = 1.0
                 };
 
                 string mongoConnString = txtMongoConn.Text;
