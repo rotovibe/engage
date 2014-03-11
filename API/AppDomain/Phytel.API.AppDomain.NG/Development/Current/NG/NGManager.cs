@@ -82,6 +82,7 @@ namespace Phytel.API.AppDomain.NG
                         pResponse.Patient.DisplaySystemId = sysResponse.PatientSystem.SystemID;
                         pResponse.Patient.DisplaySystemName = sysResponse.PatientSystem.SystemName;
                         pResponse.Patient.DisplayLabel = sysResponse.PatientSystem.DisplayLabel;
+                        throw new Exception("Just a test");
                     }
                 }
 

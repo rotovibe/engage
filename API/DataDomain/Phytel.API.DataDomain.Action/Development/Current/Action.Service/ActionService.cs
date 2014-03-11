@@ -2,6 +2,7 @@ using System;
 using System.Net;
 using Phytel.API.DataDomain.Action;
 using Phytel.API.DataDomain.Action.DTO;
+using ServiceStack.ServiceClient.Web;
 
 namespace Phytel.API.DataDomain.Action.Service
 {
