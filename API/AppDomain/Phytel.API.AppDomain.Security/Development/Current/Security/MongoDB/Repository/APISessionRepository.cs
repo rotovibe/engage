@@ -109,7 +109,8 @@ namespace Phytel.API.AppDomain.Security
                             UserName = existingReponse.UserName,
                             UserId = UserId,
                             ContractNumber = contractNumber,
-                            SQLUserId = existingReponse.SQLUserID
+                            SQLUserId = existingReponse.SQLUserID,
+                            Version = 1.0
                         };
 
                         _objectContext.APISessions.Collection.Insert(session);
