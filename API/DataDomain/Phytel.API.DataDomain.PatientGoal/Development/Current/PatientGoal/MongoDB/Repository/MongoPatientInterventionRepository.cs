@@ -15,6 +15,7 @@ using Phytel.API.Common;
 using Phytel.API.Common.Data;
 using Phytel.API.DataDomain.PatientGoal;
 using System.Configuration;
+using Phytel.API.DataAudit;
 
 namespace Phytel.API.DataDomain.PatientGoal
 {
@@ -68,6 +69,10 @@ namespace Phytel.API.DataDomain.PatientGoal
                 }
             }
             catch (Exception ex) { throw; }
+             finally
+            {
+                AuditHelper.LogAuditData(request.UserId, MongoCollectionName.PatientIntervention.ToString(), request.InterventionId.ToString(), Common.DataAuditType.Delete, request.ContractNumber);
+            }
         }
 
         public void DeleteAll(List<object> entities)
@@ -153,6 +158,10 @@ namespace Phytel.API.DataDomain.PatientGoal
                 return result as object;
             }
             catch (Exception ex) { throw ex; }
+            finally
+            {
+                AuditHelper.LogAuditData(ir.UserId, MongoCollectionName.PatientIntervention.ToString(), pt.Id.ToString(), Common.DataAuditType.Update, ir.ContractNumber);
+            }
         }
 
         public void CacheByID(List<string> entityIDs)

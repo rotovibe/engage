@@ -14,6 +14,7 @@ using MongoDB.Bson;
 using Phytel.API.Common;
 using Phytel.API.Common.Data;
 using System.Configuration;
+using Phytel.API.DataAudit;
 
 namespace Phytel.API.DataDomain.CareMember
 {
@@ -60,6 +61,11 @@ namespace Phytel.API.DataDomain.CareMember
                 return careMemberId;
             }
             catch (Exception ex) { throw ex; }
+             finally
+            {
+                AuditHelper.LogAuditData(request.UserId, MongoCollectionName.CareMember.ToString(), request.PatientId.ToString(), Common.DataAuditType.Insert, request.ContractNumber);
+            }
+
         }
 
         public object InsertAll(List<object> entities)
@@ -180,7 +186,11 @@ namespace Phytel.API.DataDomain.CareMember
                 }
                 return result as object;
             }
-            catch (Exception ex) { throw new Exception("DD:MongoCareMemberRepository:Update()::" + ex.Message, ex.InnerException); }
+            catch (Exception ex) { throw new Exception("DD:MongoCareMemberRepository:Update()" + ex.Message, ex.InnerException); }
+            finally
+            {
+                AuditHelper.LogAuditData(request.UserId, MongoCollectionName.CareMember.ToString(), request.CareMember.Id.ToString(), Common.DataAuditType.Update, request.ContractNumber);
+            }
         }
 
         public void CacheByID(List<string> entityIDs)

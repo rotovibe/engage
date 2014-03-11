@@ -14,6 +14,7 @@ using MongoDB.Bson;
 using Phytel.API.Common;
 using Phytel.API.Common.Data;
 using System.Configuration;
+using Phytel.API.DataAudit;
 
 namespace Phytel.API.DataDomain.PatientNote
 {
@@ -63,6 +64,10 @@ namespace Phytel.API.DataDomain.PatientNote
                 return noteId;
             }
             catch (Exception ex) { throw ex; }
+             finally
+            {
+                AuditHelper.LogAuditData(request.UserId, MongoCollectionName.PatientNote.ToString(), request.PatientId.ToString(), Common.DataAuditType.Insert, request.ContractNumber);
+            }
         }
 
         public object InsertAll(List<object> entities)
@@ -95,6 +100,10 @@ namespace Phytel.API.DataDomain.PatientNote
                 }
             }
             catch (Exception ex) { throw ex; }
+            finally
+            {
+                AuditHelper.LogAuditData(request.UserId, MongoCollectionName.PatientNote.ToString(), request.Id.ToString(), Common.DataAuditType.Delete, request.ContractNumber);
+            }
         }
 
         public void DeleteAll(List<object> entities)

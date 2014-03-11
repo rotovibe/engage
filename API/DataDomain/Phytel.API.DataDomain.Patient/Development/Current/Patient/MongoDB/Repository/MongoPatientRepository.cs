@@ -91,7 +91,7 @@ namespace Phytel.API.DataDomain.Patient
                         repo.Insert(cohortPatientRequest);
                     }
 
-                    AuditHelper.LogAuditData(request.UserId, ctx.Patients.Collection.Name, patient.Id.ToString(), Common.DataAuditType.Insert, request.ContractNumber);
+                    AuditHelper.LogAuditData(request.UserId, MongoCollectionName.Patient.ToString(), patient.Id.ToString(), Common.DataAuditType.Insert, request.ContractNumber);
 
                     return new PutPatientDataResponse
                     {

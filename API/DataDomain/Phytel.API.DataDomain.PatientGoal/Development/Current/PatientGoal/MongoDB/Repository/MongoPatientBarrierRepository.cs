@@ -14,6 +14,7 @@ using MongoDB.Bson;
 using Phytel.API.Common;
 using Phytel.API.Common.Data;
 using System.Configuration;
+using Phytel.API.DataAudit;
 
 namespace Phytel.API.DataDomain.PatientGoal
 {
@@ -67,6 +68,10 @@ namespace Phytel.API.DataDomain.PatientGoal
                 }
             }
             catch (Exception ex) { throw; }
+            finally
+            {
+                AuditHelper.LogAuditData(request.UserId, MongoCollectionName.PatientBarrier.ToString(), request.BarrierId.ToString(), Common.DataAuditType.Delete, request.ContractNumber);
+        }
         }
 
         public void DeleteAll(List<object> entities)
@@ -143,13 +148,18 @@ namespace Phytel.API.DataDomain.PatientGoal
                     if (pb.CategoryId != null) uv.Add(MB.Update.Set(MEPatientBarrier.CategoryProperty, ObjectId.Parse(pb.CategoryId)));
 
                     IMongoUpdate update = MB.Update.Combine(uv);
+                    
                     WriteConcernResult res = ctx.PatientBarriers.Collection.Update(q, update);
                     if (res.Ok)
                         result = true;
                 }
                 return result as object;
             }
-            catch (Exception ex) { throw new Exception("DD:MongoPatientBarrierRepository:Update()::" + ex.Message, ex.InnerException); }
+            catch (Exception ex) { throw new Exception("DD:MongoPatientBarrierRepository:Update()" + ex.Message, ex.InnerException); }
+             finally
+            {
+                AuditHelper.LogAuditData(pbr.UserId, MongoCollectionName.PatientBarrierRequest.ToString(), pb.Id.ToString(), Common.DataAuditType.Update, pbr.ContractNumber);
+            }
         }
 
         public void CacheByID(List<string> entityIDs)

@@ -201,7 +201,14 @@ namespace Phytel.API.Common
     }
 
     public enum MongoCollectionName
-    { 
-        Patient
+    {
+        Patient,
+        PatientBarrier,
+        PatientBarrierRequest,
+        PatientIntervention,
+        PatientTask,
+        PatientGoal,
+        PatientNote,
+        CareMember
     }
 }
