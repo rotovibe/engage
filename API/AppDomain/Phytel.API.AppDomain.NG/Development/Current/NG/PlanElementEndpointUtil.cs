@@ -87,7 +87,7 @@ namespace Phytel.API.AppDomain.NG
                 act.Steps.ForEach(s =>
                 {
                     // add stepresponse ids and step source id
-                    if (SaveResponses(s.Responses, request))
+                    if (SaveResponses(s, request))
                     {
                         s.Responses = null;
                     }
@@ -99,9 +99,10 @@ namespace Phytel.API.AppDomain.NG
             }
         }
 
-        private static bool SaveResponses(List<Response> list, IAppDomainRequest request)
+        private static bool SaveResponses(Step step, IAppDomainRequest request)
         {
             bool result = false;
+            List<Response> list = step.Responses;
             try
             {
                 if (list != null)
@@ -110,6 +111,15 @@ namespace Phytel.API.AppDomain.NG
                     {
                         if (ResponseExistsRequest(r.StepId, r.Id, request))
                         {
+                            if (step.SelectedResponseId.Equals(r.Id))
+                            {
+                                r.Selected = true;
+                            }
+                            else
+                            {
+                                r.Selected = false;
+                            }
+
                             UpdateResponseRequest(request, r);
                             result = true;
                         }
@@ -202,7 +212,9 @@ namespace Phytel.API.AppDomain.NG
                             SpawnElement = NGUtils.GetDDSpawnElement(r.SpawnElement),
                             StepId = r.StepId,
                             Text = r.Text,
-                            Value = r.Value
+                            Value = r.Value,
+                            Selected = r.Selected,
+                            Delete = r.Delete
                         },
                         UserId = request.UserId,
                         Version = request.Version
