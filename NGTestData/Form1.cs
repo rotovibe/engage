@@ -96,7 +96,6 @@ namespace NGTestData
                         MiddleName = dr["MiddleInitial"].ToString(),
                         Suffix = dr["Suffix"].ToString(),
                         PreferredName = dr["FirstName"].ToString() + "o",
-                        UpdatedBy = ObjectId.Empty,
                         DeleteFlag = false,
                         TTLDate = null,
                         Version = 1,
@@ -155,7 +154,8 @@ namespace NGTestData
                         Phones = phones,
                         PreferredName = string.Empty,
                         TimeZone = ObjectId.Parse("52e1817dd433232028e9e39e"),
-                        Modes = modes
+                        Modes = modes,
+                        Version = 1.0
                     };
 
                 MEPatientSystem patSystem = new MEPatientSystem
@@ -163,10 +163,9 @@ namespace NGTestData
                         PatientID = patient.Id,
                         SystemID = patientSystemID,
                         SystemName = "Atmosphere",
-                        UpdatedBy = ObjectId.Empty,
                         DeleteFlag = false,
                         TTLDate = null,
-                        Version = 1,
+                        Version = 1.0,
                         LastUpdatedOn = DateTime.Now
                     };
 
@@ -178,6 +177,7 @@ namespace NGTestData
 
                 currentPatientView.PatientID = patient.Id;
                 currentPatientView.LastName = patient.LastName;
+                currentPatientView.Version = 1.0;
                 currentPatientView.SearchFields = new List<SearchField>();
                 currentPatientView.SearchFields.Add(new SearchField { Active = true, FieldName = "FN", Value = patient.FirstName });
                 currentPatientView.SearchFields.Add(new SearchField { Active = true, FieldName = "LN", Value = patient.LastName });
@@ -210,7 +210,7 @@ namespace NGTestData
                             ProblemID = problems[probID].DataID,
                             StartDate = null,
                             TTLDate = null,
-                            Version = 1
+                            Version = 1.0
                         });
                     currentPatientView.SearchFields.Add(new SearchField { Active = true, FieldName = "Problem", Value = problems[probID].DataID.ToString() });
                 }
