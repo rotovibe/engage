@@ -115,6 +115,10 @@ namespace Phytel.API.DataDomain.Program
                     uv.Add(MB.Update.Set(MEPatientProgramResponse.StepIdProperty, resp.StepId));
                     uv.Add(MB.Update.Set(MEPatientProgramResponse.NominalProperty, resp.Nominal));
                     uv.Add(MB.Update.Set(MEPatientProgramResponse.RequiredProperty, resp.Required));
+                    uv.Add(MB.Update.Set(MEPatientProgramResponse.SelectedProperty, resp.Selected));
+                    uv.Add(MB.Update.Set(MEPatientProgramResponse.VersionProperty, resp.Version));
+                    uv.Add(MB.Update.Set(MEPatientProgramResponse.LastUpdatedOnProperty, System.DateTime.UtcNow));
+                    uv.Add(MB.Update.Set(MEPatientProgramResponse.DeleteFlagProperty, resp.DeleteFlag));
                     if (resp.Order != 0) uv.Add(MB.Update.Set(MEPatientProgramResponse.OrderProperty, resp.Order));
                     if (resp.Text != null) uv.Add(MB.Update.Set(MEPatientProgramResponse.TextProperty, resp.Text));
                     if (resp.Value != null) uv.Add(MB.Update.Set(MEPatientProgramResponse.ValueProperty, resp.Value));

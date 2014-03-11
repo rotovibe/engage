@@ -53,7 +53,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
                 Spawn = cp.Spawn,
                 Completed = cp.Completed,
                 Enabled = cp.Enabled,
-                ExtraElements = cp.ExtraElements,
+                //ExtraElements = cp.ExtraElements,
                 Next = cp.Next,
                 Order = cp.Order,
                 Previous = cp.Previous,
@@ -1061,6 +1061,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
                             foreach (MEPatientProgramResponse r in s.Responses)
                             {
                                 r.StepSourceId = s.SourceId;
+                                r.DeleteFlag = true;
                                 success = SaveResponseToDocument(r, contractNumber);
                             }
                             if (success)
