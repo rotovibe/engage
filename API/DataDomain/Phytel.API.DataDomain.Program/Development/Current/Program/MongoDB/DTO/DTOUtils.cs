@@ -173,7 +173,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             }
             catch (Exception ex)
             {
-                throw new Exception("DataDomain:SetValidModules():" + ex.Message, ex.InnerException);
+                throw new Exception("DataDomain:SetValidModules()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -225,7 +225,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             }
             catch (Exception ex)
             {
-                throw new Exception("DataDomain:GetContractStepResponses():" + ex.Message, ex.InnerException);
+                throw new Exception("DataDomain:GetContractStepResponses()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -261,7 +261,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             }
             catch (Exception ex)
             {
-                throw new Exception("DataDomain:GetStepResponses():" + ex.Message, ex.InnerException);
+                throw new Exception("DataDomain:GetStepResponses()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -316,7 +316,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             }
             catch (Exception ex)
             {
-                throw new Exception("DataDomain:GetStepResponses():" + ex.Message, ex.InnerException);
+                throw new Exception("DataDomain:GetStepResponses()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -532,7 +532,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             }
             catch (Exception ex)
             {
-                throw new Exception("DataDomain:GetSpawnElements():" + ex.Message, ex.InnerException);
+                throw new Exception("DataDomain:GetSpawnElements()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -560,7 +560,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             }
             catch (Exception ex)
             {
-                throw new Exception("DataDomain:GetSpawnElements():" + ex.Message, ex.InnerException);
+                throw new Exception("DataDomain:GetSpawnElements()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -604,7 +604,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             }
             catch (Exception ex)
             {
-                throw new Exception("DataDomain:GetActionElements():" + ex.Message, ex.InnerException);
+                throw new Exception("DataDomain:GetActionElements()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -657,7 +657,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             }
             catch (Exception ex)
             {
-                throw new Exception("DataDomain:GetStepsInfo():" + ex.Message, ex.InnerException);
+                throw new Exception("DataDomain:GetStepsInfo()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -671,7 +671,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             }
             catch (Exception ex)
             {
-                throw new Exception("DataDomain:ParseObjectId():" + ex.Message, ex.InnerException);
+                throw new Exception("DataDomain:ParseObjectId()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -705,7 +705,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             }
             catch (Exception ex)
             {
-                throw new Exception("DataDomain:GetResponses():" + ex.Message, ex.InnerException);
+                throw new Exception("DataDomain:GetResponses()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -730,7 +730,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             }
             catch (Exception ex)
             {
-                throw new Exception("DataDomain:GetSpawnElement():" + ex.Message, ex.InnerException);
+                throw new Exception("DataDomain:GetSpawnElement()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -752,7 +752,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             }
             catch (Exception ex)
             {
-                throw new Exception("DataDomain:GetSpawnElement():" + ex.Message, ex.InnerException);
+                throw new Exception("DataDomain:GetSpawnElement()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -780,7 +780,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             }
             catch (Exception ex)
             {
-                throw new Exception("DataDomain:GetObjectives():" + ex.Message, ex.InnerException);
+                throw new Exception("DataDomain:GetObjectives()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -823,7 +823,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             }
             catch (Exception ex)
             {
-                throw new Exception("DataDomain:CloneAppDomainModules():" + ex.Message, ex.InnerException);
+                throw new Exception("DataDomain:CloneAppDomainModules()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -859,7 +859,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             }
             catch (Exception ex)
             {
-                throw new Exception("DataDomain:GetModules():" + ex.Message, ex.InnerException);
+                throw new Exception("DataDomain:GetModules()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -882,7 +882,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             }
             catch (Exception ex)
             {
-                throw new Exception("DataDomain:GetObjectives():" + ex.Message, ex.InnerException);
+                throw new Exception("DataDomain:GetObjectives()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -917,7 +917,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             }
             catch (Exception ex)
             {
-                throw new Exception("DataDomain:GetActions():" + ex.Message, ex.InnerException);
+                throw new Exception("DataDomain:GetActions()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -962,7 +962,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             }
             catch (Exception ex)
             {
-                throw new Exception("DataDomain:GetSteps():" + ex.Message, ex.InnerException);
+                throw new Exception("DataDomain:GetSteps()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -985,7 +985,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             }
             catch (Exception ex)
             {
-                throw new Exception("DataDomain:GetSpawnElement():" + ex.Message, ex.InnerException);
+                throw new Exception("DataDomain:GetSpawnElement()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -1018,7 +1018,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             }
             catch (Exception ex)
             {
-                throw new Exception("DataDomain:GetResponses():" + ex.Message, ex.InnerException);
+                throw new Exception("DataDomain:GetResponses()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -1043,7 +1043,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             }
             catch (Exception ex)
             {
-                throw new ArgumentException("DDomain:GetResponseSpawnElement()" + ex.Message, ex.InnerException);
+                throw new ArgumentException("DDomain:GetResponseSpawnElement()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -1073,7 +1073,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             }
             catch (Exception ex)
             {
-                throw new ArgumentException("DDomain:RecurseAndSaveResponseObjects()" + ex.Message, ex.InnerException);
+                throw new ArgumentException("DDomain:RecurseAndSaveResponseObjects()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -1090,7 +1090,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             }
             catch (Exception ex)
             {
-                throw new ArgumentException("DDomain:SaveResponseToDocument()" + ex.Message, ex.InnerException);
+                throw new ArgumentException("DDomain:SaveResponseToDocument()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -1112,7 +1112,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             }
             catch (Exception ex)
             {
-                throw new ArgumentException("DDomain:InitializeElementAttributes()" + ex.Message, ex.InnerException);
+                throw new ArgumentException("DDomain:InitializeElementAttributes()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -1131,7 +1131,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             }
             catch (Exception ex)
             {
-                throw new Exception("DD: InitializeProgramAttributes()" + ex.Message, ex.InnerException);
+                throw new Exception("DD: InitializeProgramAttributes()::" + ex.Message, ex.InnerException);
             }
         }
     }

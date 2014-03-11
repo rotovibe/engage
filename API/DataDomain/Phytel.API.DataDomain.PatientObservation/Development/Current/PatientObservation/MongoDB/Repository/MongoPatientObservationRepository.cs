@@ -210,7 +210,7 @@ namespace Phytel.API.DataDomain.PatientObservation
                 }
                 return result as object;
             }
-            catch (Exception ex) { throw new Exception("DD:MongoPatientBarrierRepository:Update()" + ex.Message, ex.InnerException); }
+            catch (Exception ex) { throw new Exception("DD:MongoPatientBarrierRepository:Update()::" + ex.Message, ex.InnerException); }
         }
 
         void IRepository<T>.CacheByID(List<string> entityIDs)

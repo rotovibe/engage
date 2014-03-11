@@ -102,7 +102,7 @@ namespace Phytel.API.AppDomain.NG
             }
             catch (Exception ex)
             {
-                throw new Exception("AppDomain:FormatProgramDetail():" + ex.Message, ex.InnerException);
+                throw new Exception("AD:FormatProgramDetail()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -162,7 +162,7 @@ namespace Phytel.API.AppDomain.NG
             }
             catch (Exception ex)
             {
-                throw new Exception("AppDomain:FormatProgramDetail():" + ex.Message, ex.InnerException);
+                throw new Exception("AD:FormatProgramDetail()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -188,7 +188,7 @@ namespace Phytel.API.AppDomain.NG
             }
             catch (Exception ex)
             {
-                throw new Exception("AppDomain:GetADSpawnElements():" + ex.Message, ex.InnerException);
+                throw new Exception("AD:GetADSpawnElements()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -214,7 +214,7 @@ namespace Phytel.API.AppDomain.NG
             }
             catch (Exception ex)
             {
-                throw new Exception("AppDomain:GetADSpawnElements():" + ex.Message, ex.InnerException);
+                throw new Exception("AD:GetADSpawnElements()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -241,7 +241,7 @@ namespace Phytel.API.AppDomain.NG
             }
             catch (Exception ex)
             {
-                throw new Exception("AppDomain:GetADObjectives():" + ex.Message, ex.InnerException);
+                throw new Exception("AD:GetADObjectives()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -268,7 +268,7 @@ namespace Phytel.API.AppDomain.NG
             }
             catch (Exception ex)
             {
-                throw new Exception("AppDomain:GetADObjectives():" + ex.Message, ex.InnerException);
+                throw new Exception("AD:GetADObjectives()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -311,7 +311,7 @@ namespace Phytel.API.AppDomain.NG
             }
             catch (Exception ex)
             {
-                throw new Exception("AppDomain:GetADModules():" + ex.Message, ex.InnerException);
+                throw new Exception("AD:GetADModules()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -354,7 +354,7 @@ namespace Phytel.API.AppDomain.NG
             }
             catch (Exception ex)
             {
-                throw new Exception("AppDomain:GetADModules():" + ex.Message, ex.InnerException);
+                throw new Exception("AD:GetADModules()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -397,7 +397,7 @@ namespace Phytel.API.AppDomain.NG
             }
             catch (Exception ex)
             {
-                throw new Exception("AppDomain:GetADActions():" + ex.Message, ex.InnerException);
+                throw new Exception("AD:GetADActions()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -440,7 +440,7 @@ namespace Phytel.API.AppDomain.NG
             }
             catch (Exception ex)
             {
-                throw new Exception("AppDomain:GetADActions():" + ex.Message, ex.InnerException);
+                throw new Exception("AD:GetADActions()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -497,7 +497,7 @@ namespace Phytel.API.AppDomain.NG
             }
             catch (Exception ex)
             {
-                throw new Exception("AppDomain:GetADSteps():" + ex.Message, ex.InnerException);
+                throw new Exception("AD:GetADSteps()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -548,7 +548,7 @@ namespace Phytel.API.AppDomain.NG
             }
             catch (Exception ex)
             {
-                throw new Exception("AppDomain:GetADSteps():" + ex.Message, ex.InnerException);
+                throw new Exception("AD:GetADSteps()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -580,7 +580,7 @@ namespace Phytel.API.AppDomain.NG
             }
             catch (Exception ex)
             {
-                throw new Exception("AppDomain:GetADResponses():" + ex.Message, ex.InnerException);
+                throw new Exception("AD:GetADResponses()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -605,7 +605,7 @@ namespace Phytel.API.AppDomain.NG
             }
             catch (Exception ex)
             {
-                throw new Exception("AppDomain:GetDDSpawnElement():" + ex.Message, ex.InnerException);
+                throw new Exception("AD:GetDDSpawnElement()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -637,7 +637,7 @@ namespace Phytel.API.AppDomain.NG
             }
             catch (Exception ex)
             {
-                throw new Exception("AppDomain:GetADResponses():" + ex.Message, ex.InnerException);
+                throw new Exception("AD:GetADResponses()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -661,7 +661,7 @@ namespace Phytel.API.AppDomain.NG
             }
             catch (Exception ex)
             {
-                throw new Exception("AppDomain:GetADResponses():" + ex.Message, ex.InnerException);
+                throw new Exception("AD:GetADResponses()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -676,12 +676,6 @@ namespace Phytel.API.AppDomain.NG
                     if (replaced)
                         break;
                 }
-                //m.Actions.ForEach(a =>
-                //{
-                //    bool replaced = ReplaceAction(ac, m, a);
-                //    if (replaced)
-                //        return;
-                //});
             });
         }
 

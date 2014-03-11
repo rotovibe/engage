@@ -1,19 +1,11 @@
-using System;
-using System.Net;
 using Phytel.API.AppDomain.NG.DTO;
-using Phytel.API.Interface;
-using ServiceStack.ServiceInterface.ServiceModel;
-using ServiceStack.ServiceHost;
-using Phytel.API.Common.Format;
 using Phytel.API.AppDomain.Security.DTO;
-using ServiceStack.ServiceClient.Web;
-using ServiceStack.ServiceInterface.Cors;
-using System.Text;
-using System.Linq;
-using Phytel.API.Common.Audit;
-using System.Collections.Generic;
-using System.Web;
+using Phytel.API.Common.Format;
 using Phytel.API.DataAudit;
+using ServiceStack.ServiceClient.Web;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Phytel.API.AppDomain.NG.Service
 {
@@ -22,9 +14,10 @@ namespace Phytel.API.AppDomain.NG.Service
         public GetInitializeGoalResponse Get(GetInitializeGoalRequest request)
         {
             GetInitializeGoalResponse response = new GetInitializeGoalResponse();
+            GoalsManager gm = new GoalsManager();
+
             try
             {
-                GoalsManager gm = new GoalsManager();
                 request.Token = base.Request.Headers["Token"] as string;
                 ValidateTokenResponse result = gm.IsUserValidated(request.Version, request.Token, request.ContractNumber);
                 if (result.UserId.Trim() != string.Empty)
@@ -34,13 +27,12 @@ namespace Phytel.API.AppDomain.NG.Service
                 }
                 else
                     throw new UnauthorizedAccessException();
-
-
             }
             catch (Exception ex)
             {
-                //TODO: Log this to the SQL database via ASE
                 CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+                if ((ex is WebServiceException) == false)
+                    gm.LogException(ex);
             }
             finally
             {
@@ -61,9 +53,10 @@ namespace Phytel.API.AppDomain.NG.Service
         public GetInitializeBarrierResponse Get(GetInitializeBarrierRequest request)
         {
             GetInitializeBarrierResponse response = new GetInitializeBarrierResponse();
+            GoalsManager gm = new GoalsManager();
+
             try
             {
-                GoalsManager gm = new GoalsManager();
                 request.Token = base.Request.Headers["Token"] as string;
                 ValidateTokenResponse result = gm.IsUserValidated(request.Version, request.Token, request.ContractNumber);
                 if (result.UserId.Trim() != string.Empty)
@@ -73,31 +66,27 @@ namespace Phytel.API.AppDomain.NG.Service
                 }
                 else
                     throw new UnauthorizedAccessException();
-
-
-
-
             }
             catch (Exception ex)
             {
-                //TODO: Log this to the SQL database via ASE
                 CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+                if ((ex is WebServiceException) == false)
+                    gm.LogException(ex);
             }
             finally
             {
                 AuditHelper.LogAuditData(request, null, System.Web.HttpContext.Current.Request, request.GetType().Name);
-
             }
-            
             return response; 
         }
         
         public GetInitializeTaskResponse Get(GetInitializeTaskRequest request)
         {
             GetInitializeTaskResponse response = null;
+            GoalsManager gm = new GoalsManager();
+
             try
             {
-                GoalsManager gm = new GoalsManager();
                 request.Token = base.Request.Headers["Token"] as string;
                 ValidateTokenResponse result = gm.IsUserValidated(request.Version, request.Token, request.ContractNumber);
                 if (result.UserId.Trim() != string.Empty)
@@ -110,13 +99,13 @@ namespace Phytel.API.AppDomain.NG.Service
             }
             catch (Exception ex)
             {
-                //TODO: Log this to the SQL database via ASE
                 CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+                if ((ex is WebServiceException) == false)
+                    gm.LogException(ex);
             }
             finally
             {
                 AuditHelper.LogAuditData(request, null, System.Web.HttpContext.Current.Request, request.GetType().Name);
-
             }
             
             return response; 
@@ -125,9 +114,10 @@ namespace Phytel.API.AppDomain.NG.Service
         public GetInitializeInterventionResponse Get(GetInitializeInterventionRequest request)
         {
             GetInitializeInterventionResponse response = null;
+            GoalsManager gm = new GoalsManager();
+
             try
             {
-                GoalsManager gm = new GoalsManager();
                 request.Token = base.Request.Headers["Token"] as string;
                 ValidateTokenResponse result = gm.IsUserValidated(request.Version, request.Token, request.ContractNumber);
                 if (result.UserId.Trim() != string.Empty)
@@ -140,24 +130,24 @@ namespace Phytel.API.AppDomain.NG.Service
             }
             catch (Exception ex)
             {
-                //TODO: Log this to the SQL database via ASE
                 CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+                if ((ex is WebServiceException) == false)
+                    gm.LogException(ex);
             }
             finally
             {
                 AuditHelper.LogAuditData(request, null, System.Web.HttpContext.Current.Request, request.GetType().Name);
-
             }
-            
             return response; 
         }
 
         public GetPatientGoalResponse Get(GetPatientGoalRequest request)
         {
             GetPatientGoalResponse response = new GetPatientGoalResponse();
+            GoalsManager gm = new GoalsManager();
+
             try
             {
-                GoalsManager gm = new GoalsManager();
                 request.Token = base.Request.Headers["Token"] as string;
                 ValidateTokenResponse result = gm.IsUserValidated(request.Version, request.Token, request.ContractNumber);
                 if (result.UserId.Trim() != string.Empty)
@@ -167,13 +157,12 @@ namespace Phytel.API.AppDomain.NG.Service
                 }
                 else
                     throw new UnauthorizedAccessException();
-
-
             }
             catch (Exception ex)
             {
-                //TODO: Log this to the SQL database via ASE
                 CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+                if ((ex is WebServiceException) == false)
+                    gm.LogException(ex);
             }
             finally
             {
@@ -186,18 +175,17 @@ namespace Phytel.API.AppDomain.NG.Service
                  }
 
                 AuditHelper.LogAuditData(request, patientIds, System.Web.HttpContext.Current.Request, request.GetType().Name);
-                
             }
-            
             return response; 
         }
 
         public GetAllPatientGoalsResponse Get(GetAllPatientGoalsRequest request)
         {
             GetAllPatientGoalsResponse response = new GetAllPatientGoalsResponse();
+            GoalsManager gm = new GoalsManager();
+
             try
             {
-                GoalsManager gm = new GoalsManager();
                 request.Token = base.Request.Headers["Token"] as string;
                 ValidateTokenResponse result = gm.IsUserValidated(request.Version, request.Token, request.ContractNumber);
                 if (result.UserId.Trim() != string.Empty)
@@ -207,13 +195,12 @@ namespace Phytel.API.AppDomain.NG.Service
                 }
                 else
                     throw new UnauthorizedAccessException();
-
-
             }
             catch (Exception ex)
             {
-                //TODO: Log this to the SQL database via ASE
                 CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+                if ((ex is WebServiceException) == false)
+                    gm.LogException(ex);
             }
             finally
             {
@@ -225,19 +212,17 @@ namespace Phytel.API.AppDomain.NG.Service
                 }
 
                 AuditHelper.LogAuditData(request, patientIds, System.Web.HttpContext.Current.Request, request.GetType().Name);
-
             }
-            
             return response; 
         }
 
         public PostPatientGoalResponse Post(PostPatientGoalRequest request)
         {
             PostPatientGoalResponse response = new PostPatientGoalResponse();
+            GoalsManager gm = new GoalsManager();
 
             try
             {
-                GoalsManager gm = new GoalsManager();
                 request.Token = base.Request.Headers["Token"] as string;
                 ValidateTokenResponse result = gm.IsUserValidated(request.Version, request.Token, request.ContractNumber);
                 if (result.UserId.Trim() != string.Empty)
@@ -250,24 +235,24 @@ namespace Phytel.API.AppDomain.NG.Service
             }
             catch (Exception ex)
             {
-                //TODO: Log this to the SQL database via ASE
                 CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+                if ((ex is WebServiceException) == false)
+                    gm.LogException(ex);
             }
             finally
             {
                 AuditHelper.LogAuditData(request, null, System.Web.HttpContext.Current.Request, request.GetType().Name);
-
             }
-            
             return response; 
         }
 
         public PostDeletePatientGoalResponse Post(PostDeletePatientGoalRequest request)
         {
             PostDeletePatientGoalResponse response = null;
+            GoalsManager gm = new GoalsManager();
+
             try
             {
-                GoalsManager gm = new GoalsManager();
                 request.Token = base.Request.Headers["Token"] as string;
                 ValidateTokenResponse result = gm.IsUserValidated(request.Version, request.Token, request.ContractNumber);
                 if (result.UserId.Trim() != string.Empty)
@@ -280,15 +265,14 @@ namespace Phytel.API.AppDomain.NG.Service
             }
             catch (Exception ex)
             {
-                //TODO: Log this to the SQL database via ASE
                 CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+                if ((ex is WebServiceException) == false)
+                    gm.LogException(ex);
             }
             finally
             {
                 AuditHelper.LogAuditData(request, null, System.Web.HttpContext.Current.Request, request.GetType().Name);
-
             }
-            
             return response; 
         }
     }

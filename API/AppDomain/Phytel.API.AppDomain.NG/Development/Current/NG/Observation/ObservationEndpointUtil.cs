@@ -41,7 +41,7 @@ namespace Phytel.API.AppDomain.NG.Observation
             }
             catch (WebServiceException ex)
             {
-                throw new WebServiceException("App Domain:GetStandardObservationsRequest()" + ex.Message, ex.InnerException);
+                throw new WebServiceException("AD:GetStandardObservationsRequest()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -69,7 +69,7 @@ namespace Phytel.API.AppDomain.NG.Observation
             }
             catch (WebServiceException ex)
             {
-                throw new WebServiceException("App Domain:GetAdditionalObservationsLibraryRequest()" + ex.Message, ex.InnerException);
+                throw new WebServiceException("AD:GetAdditionalObservationsLibraryRequest()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -100,7 +100,7 @@ namespace Phytel.API.AppDomain.NG.Observation
             }
             catch (WebServiceException ex)
             {
-                throw new WebServiceException("App Domain:UpdatePatientObservation()" + ex.Message, ex.InnerException);
+                throw new WebServiceException("AD:UpdatePatientObservation()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -131,7 +131,7 @@ namespace Phytel.API.AppDomain.NG.Observation
             }
             catch (WebServiceException ex)
             {
-                throw new WebServiceException("App Domain:GetAdditionalObservationsRequest()" + ex.Message, ex.InnerException);
+                throw new WebServiceException("AD:GetAdditionalObservationsRequest()::" + ex.Message, ex.InnerException);
             }
         }
     }

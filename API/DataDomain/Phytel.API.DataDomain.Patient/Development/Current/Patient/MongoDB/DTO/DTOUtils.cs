@@ -31,7 +31,7 @@ namespace Phytel.API.DataDomain.Patient.MongoDB.DTO
             }
             catch (Exception ex)
             {
-                throw new Exception("DataDomain:CloneAppDomainCohortPatientViews():" + ex.Message, ex.InnerException);
+                throw new Exception("DataDomain:CloneAppDomainCohortPatientViews()::" + ex.Message, ex.InnerException);
             }
         }
 

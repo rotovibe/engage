@@ -42,7 +42,7 @@ namespace Phytel.API.DataDomain.Program
             }
             catch(Exception ex)
             {
-                throw new Exception("DataDomain:Insert():" + ex.Message, ex.InnerException);
+                throw new Exception("DataDomain:Insert()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -76,7 +76,7 @@ namespace Phytel.API.DataDomain.Program
             }
             catch(Exception ex)
             {
-                throw new Exception("DataDomain:FindById():" + ex.Message, ex.InnerException);
+                throw new Exception("DataDomain:FindById()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -129,7 +129,7 @@ namespace Phytel.API.DataDomain.Program
             }
             catch (Exception ex)
             {
-                throw new Exception("DataDomain:Update():" + ex.Message, ex.InnerException);
+                throw new Exception("DataDomain:Update()::" + ex.Message, ex.InnerException);
             }
         }
 

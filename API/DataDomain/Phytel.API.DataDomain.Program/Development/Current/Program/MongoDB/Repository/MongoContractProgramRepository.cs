@@ -96,7 +96,7 @@ namespace Phytel.API.DataDomain.Program
             }
             catch (Exception ex)
             {
-                throw new Exception("DataDomain:GetActiveProgramsInfoList()" + ex.Message, ex.InnerException);
+                throw new Exception("DataDomain:GetActiveProgramsInfoList()::" + ex.Message, ex.InnerException);
             }
         }
 

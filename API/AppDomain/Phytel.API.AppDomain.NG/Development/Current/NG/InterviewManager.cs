@@ -87,9 +87,9 @@ namespace Phytel.API.AppDomain.NG
 
                 return response;
             }
-            catch (Exception wse)
+            catch (Exception ex)
             {
-                throw;
+                throw new Exception("AD:ProcessActionResults()::" + ex.Message, ex.InnerException);
             }
         }
 

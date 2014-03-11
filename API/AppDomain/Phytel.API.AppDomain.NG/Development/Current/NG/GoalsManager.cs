@@ -29,7 +29,7 @@ namespace Phytel.API.AppDomain.NG
             }
             catch (Exception ex)
             {
-                throw ex;
+                throw new Exception("AD:GetInitialGoalRequest()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -45,7 +45,7 @@ namespace Phytel.API.AppDomain.NG
             }
             catch (Exception ex)
             {
-                throw ex;
+                throw new Exception("AD:GetInitialBarrierRequest()::" + ex.Message, ex.InnerException);
             }
         }
         
@@ -60,9 +60,9 @@ namespace Phytel.API.AppDomain.NG
                 itr.Version = request.Version;
                 return itr;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                throw ex;
+                throw new Exception("AD:GetInitialTask()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -76,9 +76,9 @@ namespace Phytel.API.AppDomain.NG
                 itr.Version = request.Version;
                 return itr;
             }
-            catch
+            catch (Exception ex)
             {
-                throw;
+                throw new Exception("AD:GetInitialIntervention()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -93,7 +93,7 @@ namespace Phytel.API.AppDomain.NG
             }
             catch (Exception ex)
             {
-                throw ex;
+                throw new Exception("AD:GetPatientGoal()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -108,7 +108,7 @@ namespace Phytel.API.AppDomain.NG
             }
             catch (Exception ex)
             {
-                throw ex;
+                throw new Exception("AD:GetAllPatientGoals()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -138,7 +138,7 @@ namespace Phytel.API.AppDomain.NG
             }
             catch (Exception ex)
             {
-                throw new Exception("AD:SavePatientGoal:" + ex.Message, ex.InnerException);
+                throw new Exception("AD:SavePatientGoal()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -168,7 +168,7 @@ namespace Phytel.API.AppDomain.NG
             }
             catch (Exception ex)
             {
-                throw new Exception("AD:SavePatientGoal:" + ex.Message, ex.InnerException);
+                throw new Exception("AD:DeletePatientGoal()::" + ex.Message, ex.InnerException);
             }
         }
     }

@@ -14,7 +14,6 @@ namespace Phytel.API.AppDomain.NG
     {
         static readonly string DDPatientGoalsServiceUrl = ConfigurationManager.AppSettings["DDPatientGoalUrl"];
 
-
         public static PatientGoalData GetInitialGoalRequest(GetInitializeGoalRequest request)
         {
             try
@@ -39,7 +38,7 @@ namespace Phytel.API.AppDomain.NG
             }
             catch (WebServiceException ex)
             {
-                throw new WebServiceException("App Domain:PostInitialGoalRequest()" + ex.Message, ex.InnerException);
+                throw new WebServiceException("AD:GetInitialGoalRequest()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -69,7 +68,7 @@ namespace Phytel.API.AppDomain.NG
             }
             catch (WebServiceException ex)
             {
-                throw new WebServiceException("App Domain:PostInitialBarrierRequest()" + ex.Message, ex.InnerException);
+                throw new WebServiceException("AD:GetInitialBarrierRequest()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -99,37 +98,7 @@ namespace Phytel.API.AppDomain.NG
             }
             catch (WebServiceException ex)
             {
-                throw new WebServiceException("AD:GetInitialTaskRequest()" + ex.Message, ex.InnerException);
-            }
-        }
-
-        internal static string GetInitialInterventionRequest(GetInitializeInterventionRequest request)
-        {
-            try
-            {
-                string result = string.Empty;
-
-                IRestClient client = new JsonServiceClient();
-                PutInitializeInterventionResponse response = client.Put<PutInitializeInterventionResponse>(
-                    string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Goal/{5}/Intervention/Initialize",
-                    DDPatientGoalsServiceUrl,
-                    "NG",
-                    request.Version,
-                    request.ContractNumber,
-                    request.PatientId,
-                    request.PatientGoalId),
-                    new PutInitializeInterventionRequest() as object);
-
-                if (response != null)
-                {
-                    result = response.Id;
-                }
-
-                return result;
-            }
-            catch (WebServiceException ex)
-            {
-                throw new WebServiceException("AD:GetInitialTaskRequest()" + ex.Message, ex.InnerException);
+                throw new WebServiceException("AD:GetInitialTaskRequest()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -181,7 +150,7 @@ namespace Phytel.API.AppDomain.NG
             }
             catch (WebServiceException ex)
             {
-                throw new WebServiceException("AD:GetPatientGoal()" + ex.Message, ex.InnerException);
+                throw new WebServiceException("AD:GetPatientGoal()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -224,7 +193,295 @@ namespace Phytel.API.AppDomain.NG
             }
             catch (WebServiceException ex)
             {
-                throw new WebServiceException("AD:GetPatientGoal()" + ex.Message, ex.InnerException);
+                throw new WebServiceException("AD:GetAllPatientGoals()::" + ex.Message, ex.InnerException);
+            }
+        }
+
+        #region Internal Methods
+
+        internal static bool DeleteGoalRequest(PostDeletePatientGoalRequest request)
+        {
+            try
+            {
+                bool result = false;
+
+                IRestClient client = new JsonServiceClient();
+                DeletePatientGoalDataResponse response = client.Delete<DeletePatientGoalDataResponse>(
+                    string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Goal/{5}/Delete/?UserId={6}",
+                    DDPatientGoalsServiceUrl,
+                    "NG",
+                    request.Version,
+                    request.ContractNumber,
+                    request.PatientId,
+                    request.PatientGoalId,
+                    request.UserId));
+
+                if (response != null)
+                {
+                    result = true;
+                }
+
+                return result;
+            }
+            catch (WebServiceException ex)
+            {
+                throw new WebServiceException("AD:DeleteGoalRequest()::" + ex.Message, ex.InnerException);
+            }
+        }
+
+        internal static bool DeleteBarrierRequest(PostDeletePatientGoalRequest request, string id)
+        {
+            try
+            {
+                bool result = false;
+
+                IRestClient client = new JsonServiceClient();
+                DeleteBarrierResponse response = client.Delete<DeleteBarrierResponse>(
+                    string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Goal/{5}/Barrier/{6}/Delete/?UserId={7}",
+                    DDPatientGoalsServiceUrl,
+                    "NG",
+                    request.Version,
+                    request.ContractNumber,
+                    request.PatientId,
+                    request.PatientGoalId,
+                   id,
+                   request.UserId));
+
+                if (response != null)
+                {
+                    result = true;
+                }
+
+                return result;
+            }
+            catch (WebServiceException ex)
+            {
+                throw new WebServiceException("AD:DeleteBarrierRequest()::" + ex.Message, ex.InnerException);
+            }
+        }
+
+        internal static bool DeleteTaskRequest(PostDeletePatientGoalRequest request, string id)
+        {
+            try
+            {
+                bool result = false;
+
+                IRestClient client = new JsonServiceClient();
+                DeleteTaskResponse response = client.Delete<DeleteTaskResponse>(
+                    string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Goal/{5}/Task/{6}/Delete/?UserId={7}",
+                    DDPatientGoalsServiceUrl,
+                    "NG",
+                    request.Version,
+                    request.ContractNumber,
+                    request.PatientId,
+                    request.PatientGoalId,
+                    id,
+                    request.UserId));
+
+                if (response != null)
+                {
+                    result = true;
+                }
+
+                return result;
+            }
+            catch (WebServiceException ex)
+            {
+                throw new WebServiceException("AD:DeleteTaskRequest()::" + ex.Message, ex.InnerException);
+            }
+        }
+
+        internal static bool DeleteInterventionRequest(PostDeletePatientGoalRequest request, string id)
+        {
+            try
+            {
+                bool result = false;
+
+                IRestClient client = new JsonServiceClient();
+                DeleteInterventionResponse response = client.Delete<DeleteInterventionResponse>(
+                    string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Goal/{5}/Intervention/{6}/Delete/?UserId={7}",
+                    DDPatientGoalsServiceUrl,
+                    "NG",
+                    request.Version,
+                    request.ContractNumber,
+                    request.PatientId,
+                    request.PatientGoalId,
+                    id,
+                    request.UserId));
+
+                if (response != null)
+                {
+                    result = true;
+                }
+
+                return result;
+            }
+            catch (WebServiceException ex)
+            {
+                throw new WebServiceException("AD:DeleteInterventionRequest()::" + ex.Message, ex.InnerException);
+            }
+        }
+
+        internal static List<CustomAttribute> GetAttributesLibraryByType(IAppDomainRequest request, int typeId)
+        {
+            List<CustomAttribute> attrList = new List<CustomAttribute>();
+            try
+            {
+                IRestClient client = new JsonServiceClient();
+                GetCustomAttributesDataResponse response = client.Get<GetCustomAttributesDataResponse>(
+                    string.Format("{0}/{1}/{2}/{3}/Attributes/{4}",
+                    DDPatientGoalsServiceUrl,
+                    "NG",
+                    request.Version,
+                    request.ContractNumber,
+                    typeId));
+
+                if (response != null && response.CustomAttributes != null)
+                {
+                    response.CustomAttributes.ForEach(ca =>
+                    {
+                        attrList.Add(new CustomAttribute
+                        {
+                            Id = ca.Id,
+                            Name = ca.Name,
+                            ControlType = ca.ControlType,
+                            Order = ca.Order,
+                            Options = GoalsUtil.ConvertToOptionList(ca.Options),
+                            Required = ca.Required
+                        });
+                    });
+                }
+                return attrList;
+            }
+            catch (WebServiceException ex)
+            {
+                throw new WebServiceException("AD:GetAttributesLibraryByType()::" + ex.Message, ex.InnerException);
+            }
+        }
+
+        internal static bool PostUpdateInterventionRequest(PostPatientGoalRequest request, PatientInterventionData pi)
+        {
+            try
+            {
+                bool result = false;
+
+                List<string> interventionsIds = GetInterventionIdsForRequest(request.Goal.Interventions);
+
+                IRestClient client = new JsonServiceClient();
+                PutUpdateInterventionResponse response = client.Put<PutUpdateInterventionResponse>(
+                    string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Goal/{5}/Intervention/{6}/Update",
+                    DDPatientGoalsServiceUrl,
+                    "NG",
+                    request.Version,
+                    request.ContractNumber,
+                    request.PatientId,
+                    request.Goal.Id,
+                    pi.Id), new PutUpdateInterventionRequest { Intervention = pi, UserId = request.UserId, InterventionIdsList = interventionsIds } as object);
+
+                if (response != null)
+                {
+                    result = true;
+                }
+
+                return result;
+            }
+            catch (WebServiceException ex)
+            {
+                throw new WebServiceException("AD:PostUpdateInterventionRequest()::" + ex.Message, ex.InnerException);
+            }
+        }
+
+        internal static bool PostUpdateBarrierRequest(PostPatientGoalRequest request, PatientBarrierData bd)
+        {
+            try
+            {
+                bool result = false;
+
+                List<string> barrierIds = GetBarrierIdsForRequest(request.Goal.Barriers);
+
+                IRestClient client = new JsonServiceClient();
+                PutUpdateBarrierResponse response = client.Put<PutUpdateBarrierResponse>(
+                    string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Goal/{5}/Barrier/{6}/Update",
+                    DDPatientGoalsServiceUrl,
+                    "NG",
+                    request.Version,
+                    request.ContractNumber,
+                    request.PatientId,
+                    request.Goal.Id,
+                   bd.Id), new PutUpdateBarrierRequest { UserId = request.UserId, Barrier = bd, BarrierIdsList = barrierIds } as object);
+
+                if (response != null)
+                {
+                    result = true;
+                }
+
+                return result;
+            }
+            catch (WebServiceException ex)
+            {
+                throw new WebServiceException("AD:PostUpdateBarrierRequest()::" + ex.Message, ex.InnerException);
+            }
+        }
+
+        internal static bool PostUpdateTaskRequest(PostPatientGoalRequest request, PatientTaskData td)
+        {
+            try
+            {
+                bool result = false;
+
+                List<string> taskIds = GetTaskIdsForRequest(request.Goal.Tasks);
+
+                IRestClient client = new JsonServiceClient();
+                PutUpdateTaskResponse response = client.Put<PutUpdateTaskResponse>(
+                    string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Goal/{5}/Task/{6}/Update",
+                    DDPatientGoalsServiceUrl,
+                    "NG",
+                    request.Version,
+                    request.ContractNumber,
+                    request.PatientId,
+                    request.Goal.Id,
+                    td.Id), new PutUpdateTaskRequest { Task = td, TaskIdsList = taskIds, UserId = request.UserId } as object);
+
+                if (response != null)
+                {
+                    result = true;
+                }
+
+                return result;
+            }
+            catch (WebServiceException ex)
+            {
+                throw new WebServiceException("AD:PostUpdateTaskRequest()::" + ex.Message, ex.InnerException);
+            }
+        }
+
+        internal static string GetInitialInterventionRequest(GetInitializeInterventionRequest request)
+        {
+            try
+            {
+                string result = string.Empty;
+
+                IRestClient client = new JsonServiceClient();
+                PutInitializeInterventionResponse response = client.Put<PutInitializeInterventionResponse>(
+                    string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Goal/{5}/Intervention/Initialize",
+                    DDPatientGoalsServiceUrl,
+                    "NG",
+                    request.Version,
+                    request.ContractNumber,
+                    request.PatientId,
+                    request.PatientGoalId),
+                    new PutInitializeInterventionRequest() as object);
+
+                if (response != null)
+                {
+                    result = response.Id;
+                }
+
+                return result;
+            }
+            catch (WebServiceException ex)
+            {
+                throw new WebServiceException("AD:GetInitialTaskRequest()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -258,203 +515,82 @@ namespace Phytel.API.AppDomain.NG
             }
             catch (WebServiceException ex)
             {
-                throw new WebServiceException("AD:PostUpdateGoalRequest()" + ex.Message, ex.InnerException);
+                throw new WebServiceException("AD:PostUpdateGoalRequest()::" + ex.Message, ex.InnerException);
             }
         }
+        #endregion
 
+        #region Private Methods
         private static PatientGoalData GetGoalData(PatientGoal pg)
         {
-            try
+            PatientGoalData pgd = new PatientGoalData
             {
-                PatientGoalData pgd = new PatientGoalData
-                {
-                    Id = pg.Id,
-                    CustomAttributes = GetPatientGoalAttributes(pg.CustomAttributes),
-                    EndDate = pg.EndDate,
-                    FocusAreaIds = pg.FocusAreaIds,
-                    Name = pg.Name,
-                    PatientId = pg.PatientId,
-                    ProgramIds = pg.ProgramIds,
-                    SourceId = pg.SourceId,
-                    StartDate = pg.StartDate,
-                    StatusId = pg.StatusId,
-                    TargetDate = pg.TargetDate,
-                    TargetValue = pg.TargetValue,
-                    TypeId = pg.TypeId
-                };
-                return pgd;
-            }
-            catch { throw; }
+                Id = pg.Id,
+                CustomAttributes = GetPatientGoalAttributes(pg.CustomAttributes),
+                EndDate = pg.EndDate,
+                FocusAreaIds = pg.FocusAreaIds,
+                Name = pg.Name,
+                PatientId = pg.PatientId,
+                ProgramIds = pg.ProgramIds,
+                SourceId = pg.SourceId,
+                StartDate = pg.StartDate,
+                StatusId = pg.StatusId,
+                TargetDate = pg.TargetDate,
+                TargetValue = pg.TargetValue,
+                TypeId = pg.TypeId
+            };
+            return pgd;
         }
 
         private static List<CustomAttributeData> GetPatientGoalAttributes(List<AD.CustomAttribute> list)
         {
-            try
+            List<CustomAttributeData> ad = new List<CustomAttributeData>();
+            if (list != null)
             {
-                List<CustomAttributeData> ad = new List<CustomAttributeData>();
-                if (list != null)
+                list.ForEach(a =>
                 {
-                    list.ForEach(a =>
+                    ad.Add(new CustomAttributeData
                     {
-                        ad.Add(new CustomAttributeData
-                        {
-                            Values = a.Values,
-                            Id = a.Id
-                        });
+                        Values = a.Values,
+                        Id = a.Id
                     });
-                }
-                return ad;
+                });
             }
-            catch (Exception ex)
-            {
-                throw;
-            }
-        }
-
-        internal static bool PostUpdateTaskRequest(PostPatientGoalRequest request, PatientTaskData td)
-        {
-            try
-            {
-                bool result = false;
-
-                List<string> taskIds = GetTaskIdsForRequest(request.Goal.Tasks);
-
-                IRestClient client = new JsonServiceClient();
-                PutUpdateTaskResponse response = client.Put<PutUpdateTaskResponse>(
-                    string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Goal/{5}/Task/{6}/Update",
-                    DDPatientGoalsServiceUrl,
-                    "NG",
-                    request.Version,
-                    request.ContractNumber,
-                    request.PatientId,
-                    request.Goal.Id,
-                    td.Id), new PutUpdateTaskRequest {  Task = td, TaskIdsList = taskIds, UserId = request.UserId } as object);
-
-                if (response != null)
-                {
-                    result = true;
-                }
-
-                return result;
-            }
-            catch (WebServiceException ex)
-            {
-                throw new WebServiceException("AD:PostUpdateTaskRequest()" + ex.Message, ex.InnerException);
-            }
+            return ad;
         }
 
         private static List<string> GetTaskIdsForRequest(List<PatientTask> list)
         {
-            try
-            {
-                List<string> taskIds = new List<string>();
+            List<string> taskIds = new List<string>();
 
-                if (list != null && list.Count > 0)
+            if (list != null && list.Count > 0)
+            {
+                list.ForEach(t =>
                 {
-                    list.ForEach(t =>
-                    {
-                        taskIds.Add(t.Id);
-                    });
-                }
+                    taskIds.Add(t.Id);
+                });
+            }
 
-                return taskIds;
-            }
-            catch (WebServiceException ex)
-            {
-                throw new WebServiceException("AD:GetTaskIdsForRequest()" + ex.Message, ex.InnerException);
-            }
+            return taskIds;
         }
 
         private static List<string> GetInterventionIdsForRequest(List<PatientIntervention> list)
         {
-            try
-            {
-                List<string> taskIds = new List<string>();
+            List<string> taskIds = new List<string>();
 
-                if (list != null && list.Count > 0)
+            if (list != null && list.Count > 0)
+            {
+                list.ForEach(t =>
                 {
-                    list.ForEach(t =>
-                    {
-                        taskIds.Add(t.Id);
-                    });
-                }
-
-                return taskIds;
+                    taskIds.Add(t.Id);
+                });
             }
-            catch (WebServiceException ex)
-            {
-                throw new WebServiceException("AD:GetTaskIdsForRequest()" + ex.Message, ex.InnerException);
-            }
-        }
 
-        internal static bool PostUpdateInterventionRequest(PostPatientGoalRequest request, PatientInterventionData pi)
-        {
-            try
-            {
-                bool result = false;
-
-                List<string> interventionsIds = GetInterventionIdsForRequest(request.Goal.Interventions);
-
-                IRestClient client = new JsonServiceClient();
-                PutUpdateInterventionResponse response = client.Put<PutUpdateInterventionResponse>(
-                    string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Goal/{5}/Intervention/{6}/Update",
-                    DDPatientGoalsServiceUrl,
-                    "NG",
-                    request.Version,
-                    request.ContractNumber,
-                    request.PatientId,
-                    request.Goal.Id,
-                    pi.Id), new PutUpdateInterventionRequest { Intervention = pi, UserId=request.UserId, InterventionIdsList = interventionsIds  } as object);
-
-                if (response != null)
-                {
-                    result = true;
-                }
-
-                return result;
-            }
-            catch (WebServiceException ex)
-            {
-                throw new WebServiceException("AD:PostUpdateInterventionRequest()" + ex.Message, ex.InnerException);
-            }
-        }
-
-        internal static bool PostUpdateBarrierRequest(PostPatientGoalRequest request, PatientBarrierData bd)
-        {
-            try
-            {
-                bool result = false;
-
-                List<string> barrierIds = GetBarrierIdsForRequest(request.Goal.Barriers);
-
-                IRestClient client = new JsonServiceClient();
-                PutUpdateBarrierResponse response = client.Put<PutUpdateBarrierResponse>(
-                    string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Goal/{5}/Barrier/{6}/Update",
-                    DDPatientGoalsServiceUrl,
-                    "NG",
-                    request.Version,
-                    request.ContractNumber,
-                    request.PatientId,
-                    request.Goal.Id,
-                   bd.Id), new PutUpdateBarrierRequest { UserId = request.UserId, Barrier = bd, BarrierIdsList = barrierIds } as object);
-
-                if (response != null)
-                {
-                    result = true;
-                }
-
-                return result;
-            }
-            catch (WebServiceException ex)
-            {
-                throw new WebServiceException("AD:PostUpdateBarrierRequest()" + ex.Message, ex.InnerException);
-            }
+            return taskIds;
         }
 
         private static List<string> GetBarrierIdsForRequest(List<PatientBarrier> list)
         {
-            try
-            {
                 List<string> barrierIds = new List<string>();
 
                 if (list != null && list.Count > 0)
@@ -466,171 +602,7 @@ namespace Phytel.API.AppDomain.NG
                 }
 
                 return barrierIds;
-            }
-            catch (WebServiceException ex)
-            {
-                throw new WebServiceException("AD:GetBarrierIdsForRequest()" + ex.Message, ex.InnerException);
-            }
         }
-
-        internal static bool DeleteGoalRequest(PostDeletePatientGoalRequest request)
-        {
-            try
-            {
-                bool result = false;
-
-                IRestClient client = new JsonServiceClient();
-                DeletePatientGoalDataResponse response = client.Delete<DeletePatientGoalDataResponse>(
-                    string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Goal/{5}/Delete/?UserId={6}",
-                    DDPatientGoalsServiceUrl,
-                    "NG",
-                    request.Version,
-                    request.ContractNumber,
-                    request.PatientId,
-                    request.PatientGoalId,
-                    request.UserId));
-
-                if (response != null)
-                {
-                    result = true;
-                }
-
-                return result;
-            }
-            catch (WebServiceException ex)
-            {
-                throw new WebServiceException("AD:DeleteGoalRequest()" + ex.Message, ex.InnerException);
-            }
-        }
-
-        internal static bool DeleteBarrierRequest(PostDeletePatientGoalRequest request, string id)
-        {
-            try
-            {
-                bool result = false;
-
-                IRestClient client = new JsonServiceClient();
-                DeleteBarrierResponse response = client.Delete<DeleteBarrierResponse>(
-                    string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Goal/{5}/Barrier/{6}/Delete/?UserId={7}",
-                    DDPatientGoalsServiceUrl,
-                    "NG",
-                    request.Version,
-                    request.ContractNumber,
-                    request.PatientId,
-                    request.PatientGoalId,
-                   id,
-                   request.UserId));
-
-                if (response != null)
-                {
-                    result = true;
-                }
-
-                return result;
-            }
-            catch (WebServiceException ex)
-            {
-                throw new WebServiceException("AD:DeleteBarrierRequest()" + ex.Message, ex.InnerException);
-            }
-        }
-
-        internal static bool DeleteTaskRequest(PostDeletePatientGoalRequest request, string id)
-        {
-            try
-            {
-                bool result = false;
-
-                IRestClient client = new JsonServiceClient();
-                DeleteTaskResponse response = client.Delete<DeleteTaskResponse>(
-                    string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Goal/{5}/Task/{6}/Delete/?UserId={7}",
-                    DDPatientGoalsServiceUrl,
-                    "NG",
-                    request.Version,
-                    request.ContractNumber,
-                    request.PatientId,
-                    request.PatientGoalId,
-                    id,
-                    request.UserId));
-
-                if (response != null)
-                {
-                    result = true;
-                }
-
-                return result;
-            }
-            catch (WebServiceException ex)
-            {
-                throw new WebServiceException("AD:DeleteTaskRequest()" + ex.Message, ex.InnerException);
-            }
-        }
-
-        internal static bool DeleteInterventionRequest(PostDeletePatientGoalRequest request, string id)
-        {
-            try
-            {
-                bool result = false;
-
-                IRestClient client = new JsonServiceClient();
-                DeleteInterventionResponse response = client.Delete<DeleteInterventionResponse>(
-                    string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Goal/{5}/Intervention/{6}/Delete/?UserId={7}",
-                    DDPatientGoalsServiceUrl,
-                    "NG",
-                    request.Version,
-                    request.ContractNumber,
-                    request.PatientId,
-                    request.PatientGoalId,
-                    id,
-                    request.UserId));
-
-                if (response != null)
-                {
-                    result = true;
-                }
-
-                return result;
-            }
-            catch (WebServiceException ex)
-            {
-                throw new WebServiceException("AD:DeleteInterventionRequest()" + ex.Message, ex.InnerException);
-            }
-        }
-
-        internal static List<CustomAttribute> GetAttributesLibraryByType(IAppDomainRequest request, int typeId)
-        {
-            List<CustomAttribute> attrList = new List<CustomAttribute>();
-            try
-            {
-                IRestClient client = new JsonServiceClient();
-                GetCustomAttributesDataResponse response = client.Get<GetCustomAttributesDataResponse>(
-                    string.Format("{0}/{1}/{2}/{3}/Attributes/{4}",
-                    DDPatientGoalsServiceUrl,
-                    "NG",
-                    request.Version,
-                    request.ContractNumber,
-                    typeId));
-
-                if(response != null && response.CustomAttributes != null)
-                { 
-                    response.CustomAttributes.ForEach(ca =>
-                    {
-                        attrList.Add(new CustomAttribute
-                        {
-                            Id = ca.Id,
-                            Name = ca.Name,
-                            ControlType = ca.ControlType,
-                            Order = ca.Order,
-                            Options = GoalsUtil.ConvertToOptionList(ca.Options),
-                            Required = ca.Required
-                        });
-                    });
-                }
-                return attrList;
-            }
-            catch (WebServiceException ex)
-            {
-                throw new WebServiceException("AD:GetAttributesForInitialize()" + ex.Message, ex.InnerException);
-            }
-        }
+        #endregion
     }
 }

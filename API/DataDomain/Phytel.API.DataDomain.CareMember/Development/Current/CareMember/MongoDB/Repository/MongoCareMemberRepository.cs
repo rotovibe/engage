@@ -180,7 +180,7 @@ namespace Phytel.API.DataDomain.CareMember
                 }
                 return result as object;
             }
-            catch (Exception ex) { throw new Exception("DD:MongoCareMemberRepository:Update()" + ex.Message, ex.InnerException); }
+            catch (Exception ex) { throw new Exception("DD:MongoCareMemberRepository:Update()::" + ex.Message, ex.InnerException); }
         }
 
         public void CacheByID(List<string> entityIDs)

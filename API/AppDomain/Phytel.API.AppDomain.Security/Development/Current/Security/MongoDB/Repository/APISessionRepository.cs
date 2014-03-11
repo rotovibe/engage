@@ -116,6 +116,7 @@ namespace Phytel.API.AppDomain.Security
                         _objectContext.APISessions.Collection.Insert(session);
 
                         response = existingReponse;
+                        response.UserId = UserId.ToString();
                         response.APIToken = session.Id.ToString();
                     }
                     else

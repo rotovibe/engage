@@ -50,7 +50,7 @@ namespace Phytel.API.AppDomain.NG
             }
             catch (Exception ex)
             {
-                throw new Exception("AppDomain:SetEnabledStatusByPrevious():" + ex.Message, ex.InnerException);
+                throw new Exception("AD:SetEnabledStatusByPrevious()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -81,7 +81,7 @@ namespace Phytel.API.AppDomain.NG
             }
             catch (Exception ex)
             {
-                throw new Exception("AppDomain:SetEnabledState():" + ex.Message, ex.InnerException);
+                throw new Exception("AD:SetEnabledState()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -102,7 +102,7 @@ namespace Phytel.API.AppDomain.NG
             }
             catch (Exception ex)
             {
-                throw new Exception("AppDomain:DisableCompleteButtonForAction():" + ex.Message, ex.InnerException);
+                throw new Exception("AD:DisableCompleteButtonForAction()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -124,7 +124,7 @@ namespace Phytel.API.AppDomain.NG
             }
             catch (Exception ex)
             {
-                throw new Exception("AppDomain:SpawnElementsInList():" + ex.Message, ex.InnerException);
+                throw new Exception("AD:SpawnElementsInList()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -207,7 +207,7 @@ namespace Phytel.API.AppDomain.NG
             }
             catch (Exception ex)
             {
-                throw new Exception("AppDomain:SpawnElementsInList():" + ex.Message, ex.InnerException);
+                throw new Exception("AD:SpawnElementsInList()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -295,7 +295,7 @@ namespace Phytel.API.AppDomain.NG
             }
             catch (Exception ex)
             {
-                throw new Exception("AppDomain:SpawnElementsInList():" + ex.Message, ex.InnerException);
+                throw new Exception("AD:SpawnElementsInList()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -330,7 +330,7 @@ namespace Phytel.API.AppDomain.NG
             }
             catch (Exception ex)
             {
-                throw new Exception("AppDomain:RegisterProblemCodeToPatient():" + ex.Message, ex.InnerException);
+                throw new Exception("AD:RegisterProblemCodeToPatient()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -343,7 +343,7 @@ namespace Phytel.API.AppDomain.NG
             }
             catch (Exception ex)
             {
-                throw new Exception("AppDomain:GetCohortPatientViewRecord():" + ex.Message, ex.InnerException);
+                throw new Exception("AD:GetCohortPatientViewRecord()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -369,7 +369,7 @@ namespace Phytel.API.AppDomain.NG
             }
             catch (Exception ex)
             {
-                throw new Exception("AppDomain:SaveReportingAttributes():" + ex.Message, ex.InnerException);
+                throw new Exception("AD:SaveReportingAttributes()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -409,7 +409,7 @@ namespace Phytel.API.AppDomain.NG
             }
             catch (Exception ex)
             {
-                throw new Exception("AppDomain:ModifyProgramAttributePropertiesForUpdate():" + ex.Message, ex.InnerException);
+                throw new Exception("AD:ModifyProgramAttributePropertiesForUpdate()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -439,7 +439,7 @@ namespace Phytel.API.AppDomain.NG
             }
             catch (Exception ex)
             {
-                throw new Exception("AppDomain:SetStartDateForProgramAttributes():" + ex.Message, ex.InnerException);
+                throw new Exception("AD:SetStartDateForProgramAttributes()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -459,7 +459,7 @@ namespace Phytel.API.AppDomain.NG
             }
             catch (Exception ex)
             {
-                throw;
+                throw new Exception("AD:SetProgramInformation()::" + ex.Message, ex.InnerException);
             }
         }
     }

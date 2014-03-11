@@ -1,4 +1,5 @@
 ﻿using Phytel.API.AppDomain.Security.DTO;
+using Phytel.Framework.ASE.Process;
 using ServiceStack.Service;
 using ServiceStack.ServiceClient.Web;
 using System;
@@ -35,10 +36,17 @@ namespace Phytel.API.AppDomain.NG
 
                 return response;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw;
+                throw new Exception("AD:IsUserValidated()::" + ex.Message, ex.InnerException);
             }
+        }
+
+        public void LogException(Exception ex)
+        {
+            string _aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
+            Log.LogError(int.Parse(_aseProcessID), ex, Framework.ASE.Data.Common.LogErrorCode.Error, Framework.ASE.Data.Common.LogErrorSeverity.High);
+
         }
 
         private string BuildSecurityToken()

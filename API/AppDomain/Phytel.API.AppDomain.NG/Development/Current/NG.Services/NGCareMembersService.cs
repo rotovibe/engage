@@ -1,12 +1,9 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using Phytel.API.AppDomain.NG.DTO;
 using Phytel.API.AppDomain.Security.DTO;
-using Phytel.API.Common.Audit;
 using Phytel.API.Common.Format;
-using System.Web;
 using Phytel.API.DataAudit;
+using ServiceStack.ServiceClient.Web;
+using System;
 
 namespace Phytel.API.AppDomain.NG.Service
 {
@@ -15,9 +12,10 @@ namespace Phytel.API.AppDomain.NG.Service
         public PostCareMemberResponse Post(PostCareMemberRequest request)
         {
             PostCareMemberResponse response = new PostCareMemberResponse();
+            CareMembersManager ngm = new CareMembersManager();
+
             try
             {
-                CareMembersManager ngm = new CareMembersManager();
                 request.Token = base.Request.Headers["Token"] as string;
                 ValidateTokenResponse result = ngm.IsUserValidated(request.Version, request.Token, request.ContractNumber);
                 if (result.UserId.Trim() != string.Empty)
@@ -27,25 +25,27 @@ namespace Phytel.API.AppDomain.NG.Service
                 }
                 else
                     throw new UnauthorizedAccessException();
-
-                AuditHelper.LogAuditData(request, null, System.Web.HttpContext.Current.Request, request.GetType().Name);
-
-                return response;
             }
             catch (Exception ex)
             {
-                //TODO: Log this to C3 database via ASE
                 CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
-                return response;
+                if ((ex is WebServiceException) == false)
+                    ngm.LogException(ex);
             }
+            finally
+            {
+                AuditHelper.LogAuditData(request, null, System.Web.HttpContext.Current.Request, request.GetType().Name);
+            }
+            return response;
         }
 
         public PostUpdateCareMemberResponse Post(PostUpdateCareMemberRequest request)
         {
             PostUpdateCareMemberResponse response = new PostUpdateCareMemberResponse();
+            CareMembersManager ngm = new CareMembersManager();
+
             try
             {
-                CareMembersManager ngm = new CareMembersManager();
                 request.Token = base.Request.Headers["Token"] as string;
                 ValidateTokenResponse result = ngm.IsUserValidated(request.Version, request.Token, request.ContractNumber);
                 if (result.UserId.Trim() != string.Empty)
@@ -55,25 +55,27 @@ namespace Phytel.API.AppDomain.NG.Service
                 }
                 else
                     throw new UnauthorizedAccessException();
-
-                AuditHelper.LogAuditData(request, null, System.Web.HttpContext.Current.Request, request.GetType().Name);
-
-                return response;
             }
             catch (Exception ex)
             {
-                //TODO: Log this to C3 database via ASE
                 CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
-                return response;
+                if ((ex is WebServiceException) == false)
+                    ngm.LogException(ex);
             }
+            finally
+            {
+                AuditHelper.LogAuditData(request, null, System.Web.HttpContext.Current.Request, request.GetType().Name);
+            }
+            return response;
         }
 
         public GetCareMemberResponse Get(GetCareMemberRequest request)
         {
             GetCareMemberResponse response = new GetCareMemberResponse();
+            CareMembersManager nManager = new CareMembersManager();
+
             try
             {
-                CareMembersManager nManager = new CareMembersManager();
                 request.Token = base.Request.Headers["Token"] as string;
                 ValidateTokenResponse result = nManager.IsUserValidated(request.Version, request.Token, request.ContractNumber);
                 if (result.UserId.Trim() != string.Empty)
@@ -83,23 +85,27 @@ namespace Phytel.API.AppDomain.NG.Service
                 }
                 else
                     throw new UnauthorizedAccessException();
-
-                return response;
             }
             catch (Exception ex)
             {
-                //TODO: Log this to the SQL database via ASE
                 CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
-                return response;
+                if ((ex is WebServiceException) == false)
+                    nManager.LogException(ex);
             }
+            finally
+            {
+                AuditHelper.LogAuditData(request, null, System.Web.HttpContext.Current.Request, request.GetType().Name);
+            }
+            return response;
         }
 
         public GetAllCareMembersResponse Get(GetAllCareMembersRequest request)
         {
             GetAllCareMembersResponse response = new GetAllCareMembersResponse();
+            CareMembersManager nManager = new CareMembersManager();
+
             try
             {
-                CareMembersManager nManager = new CareMembersManager();
                 request.Token = base.Request.Headers["Token"] as string;
                 ValidateTokenResponse result = nManager.IsUserValidated(request.Version, request.Token, request.ContractNumber);
                 if (result.UserId.Trim() != string.Empty)
@@ -109,15 +115,18 @@ namespace Phytel.API.AppDomain.NG.Service
                 }
                 else
                     throw new UnauthorizedAccessException();
-
-                return response;
             }
             catch (Exception ex)
             {
-                //TODO: Log this to the SQL database via ASE
                 CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
-                return response;
+                if ((ex is WebServiceException) == false)
+                    nManager.LogException(ex);
             }
+            finally
+            {
+                AuditHelper.LogAuditData(request, null, System.Web.HttpContext.Current.Request, request.GetType().Name);
+            }
+            return response;
         }
     }
 }

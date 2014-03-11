@@ -89,8 +89,7 @@ namespace Phytel.API.AppDomain.NG
             }
             catch (WebServiceException wse)
             {
-                Exception ae = new Exception(wse.ResponseBody, wse.InnerException);
-                throw ae;
+                throw new WebServiceException("AD:GetPatient()::" + wse.Message, wse.InnerException);
             }
         }
 
@@ -131,8 +130,7 @@ namespace Phytel.API.AppDomain.NG
             }
             catch (WebServiceException wse)
             {
-                Exception ae = new Exception(wse.ResponseBody, wse.InnerException);
-                throw ae;
+                throw new WebServiceException("AD:GetPatientProblem()::" + wse.Message, wse.InnerException);
             }
         }
 
@@ -170,8 +168,7 @@ namespace Phytel.API.AppDomain.NG
             }
             catch (WebServiceException wse)
             {
-                Exception ae = new Exception(wse.ResponseBody, wse.InnerException);
-                throw ae;
+                throw new WebServiceException("AD:PutPatientDetailsUpdate()::" + wse.Message, wse.InnerException);
             }
         }
 
@@ -199,8 +196,7 @@ namespace Phytel.API.AppDomain.NG
             }
             catch (WebServiceException wse)
             {
-                Exception ae = new Exception(wse.ResponseBody, wse.InnerException);
-                throw ae;
+                throw new WebServiceException("AD:PutPatientFlaggedUpdate()::" + wse.Message, wse.InnerException);
             }
         }
 
@@ -235,8 +231,7 @@ namespace Phytel.API.AppDomain.NG
             }
             catch (WebServiceException wse)
             {
-                Exception ae = new Exception(wse.ResponseBody, wse.InnerException);
-                throw ae;
+                throw new WebServiceException("AD:UpdateBackground()::" + wse.Message, wse.InnerException);
             }
         }
         #endregion
@@ -269,8 +264,7 @@ namespace Phytel.API.AppDomain.NG
             }
             catch (WebServiceException wse)
             {
-                Exception ae = new Exception(wse.ResponseBody, wse.InnerException);
-                throw ae;
+                throw new WebServiceException("AD:GetCohorts()::" + wse.Message, wse.InnerException);
             }
         }
 
@@ -317,8 +311,7 @@ namespace Phytel.API.AppDomain.NG
             }
             catch (WebServiceException wse)
             {
-                Exception ae = new Exception(wse.ResponseBody, wse.InnerException);
-                throw ae;
+                throw new WebServiceException("AD:GetCohortPatients()::" + wse.Message, wse.InnerException);
             }
         }
 
@@ -343,8 +336,7 @@ namespace Phytel.API.AppDomain.NG
             }
             catch (WebServiceException wse)
             {
-                Exception ae = new Exception(wse.ResponseBody, wse.InnerException);
-                throw ae;
+                throw new WebServiceException("AD:GetAllSettings()::" + wse.Message, wse.InnerException);
             }
         } 
         #endregion
@@ -380,8 +372,7 @@ namespace Phytel.API.AppDomain.NG
             }
             catch (WebServiceException wse)
             {
-                Exception ae = new Exception(wse.ResponseBody, wse.InnerException);
-                throw ae;
+                throw new WebServiceException("AD:GetActivePrograms()::" + wse.Message, wse.InnerException);
             }
         }
 
@@ -429,8 +420,7 @@ namespace Phytel.API.AppDomain.NG
             }
             catch (WebServiceException wse)
             {
-                Exception ae = new Exception("PostPatientToProgram()"+ wse.ResponseBody, wse.InnerException);
-                throw ae;
+                throw new WebServiceException("AD:PostPatientToProgram()::" + wse.Message, wse.InnerException);
             }
         }
 
@@ -503,8 +493,7 @@ namespace Phytel.API.AppDomain.NG
             }
             catch (WebServiceException wse)
             {
-                Exception ae = new Exception(wse.ResponseBody, wse.InnerException);
-                throw ae;
+                throw new WebServiceException("AD:GetPatientProgramDetailsSummary()::" + wse.Message, wse.InnerException);
             }
         }
 
@@ -550,8 +539,7 @@ namespace Phytel.API.AppDomain.NG
             }
             catch (WebServiceException wse)
             {
-                Exception ae = new Exception(wse.ResponseBody, wse.InnerException);
-                throw ae;
+                throw new WebServiceException("AD:GetPatientPrograms()::" + wse.Message, wse.InnerException);
             }
         } 
         #endregion
@@ -585,8 +573,7 @@ namespace Phytel.API.AppDomain.NG
             }
             catch (WebServiceException wse)
             {
-                Exception ae = new Exception(wse.ResponseBody, wse.InnerException);
-                throw ae;
+                throw new WebServiceException("AD:GetProblems()::" + wse.Message, wse.InnerException);
             }
         }
 
@@ -612,8 +599,7 @@ namespace Phytel.API.AppDomain.NG
             }
             catch (WebServiceException wse)
             {
-                Exception ae = new Exception(wse.ResponseBody, wse.InnerException);
-                throw ae;
+                throw new WebServiceException("AD:GetAllCommModes()::" + wse.Message, wse.InnerException);
             }
         }
 
@@ -644,8 +630,7 @@ namespace Phytel.API.AppDomain.NG
             }
             catch (WebServiceException wse)
             {
-                Exception ae = new Exception(wse.ResponseBody, wse.InnerException);
-                throw ae;
+                throw new WebServiceException("AD:GetAllStates()::" + wse.Message, wse.InnerException);
             }
         }
 
@@ -671,8 +656,7 @@ namespace Phytel.API.AppDomain.NG
             }
             catch (WebServiceException wse)
             {
-                Exception ae = new Exception(wse.ResponseBody, wse.InnerException);
-                throw ae;
+                throw new WebServiceException("AD:GetAllTimesOfDays()::" + wse.Message, wse.InnerException);
             }
         }
 
@@ -703,8 +687,7 @@ namespace Phytel.API.AppDomain.NG
             }
             catch (WebServiceException wse)
             {
-                Exception ae = new Exception(wse.ResponseBody, wse.InnerException);
-                throw ae;
+                throw new WebServiceException("AD:GetAllCommTypes()::" + wse.Message, wse.InnerException);
             }
         }
 
@@ -741,8 +724,7 @@ namespace Phytel.API.AppDomain.NG
             }
             catch (WebServiceException wse)
             {
-                Exception ae = new Exception(wse.ResponseBody, wse.InnerException);
-                throw ae;
+                throw new WebServiceException("AD:GetAllLanguages()::" + wse.Message, wse.InnerException);
             }
         }
 
@@ -773,8 +755,7 @@ namespace Phytel.API.AppDomain.NG
             }
             catch (WebServiceException wse)
             {
-                Exception ae = new Exception(wse.ResponseBody, wse.InnerException);
-                throw ae;
+                throw new WebServiceException("AD:GetAllTimeZones()::" + wse.Message, wse.InnerException);
             }
         }
 
@@ -801,8 +782,7 @@ namespace Phytel.API.AppDomain.NG
             }
             catch (WebServiceException wse)
             {
-                Exception ae = new Exception(wse.ResponseBody, wse.InnerException);
-                throw ae;
+                throw new WebServiceException("AD:GetLookUps()::" + wse.Message, wse.InnerException);
             }
         } 
 
@@ -921,8 +901,7 @@ namespace Phytel.API.AppDomain.NG
             }
             catch (WebServiceException wse)
             {
-                Exception ae = new Exception(wse.ResponseBody, wse.InnerException);
-                throw ae;
+                throw new WebServiceException("AD:GetContactByPatientId()::" + wse.Message, wse.InnerException);
             }
             return contact;
         }
@@ -1061,8 +1040,7 @@ namespace Phytel.API.AppDomain.NG
             }
             catch (WebServiceException wse)
             {
-                Exception ae = new Exception(wse.ResponseBody, wse.InnerException);
-                throw ae;
+                throw new WebServiceException("AD:PutUpdateContact()::" + wse.Message, wse.InnerException);
             }
         }
 
@@ -1100,8 +1078,7 @@ namespace Phytel.API.AppDomain.NG
             }
             catch (WebServiceException wse)
             {
-                Exception ae = new Exception(wse.ResponseBody, wse.InnerException);
-                throw ae;
+                throw new WebServiceException("AD:GetCareManagers()::" + wse.Message, wse.InnerException);
             }
             return contactList;
         }
@@ -1253,27 +1230,20 @@ namespace Phytel.API.AppDomain.NG
 
         private List<SpawnElement> getADSpawnElement(List<DD.SpawnElementDetail> sed)
         {
-            try
+            List<SpawnElement> se = new List<SpawnElement>();
+            if (sed != null)
             {
-                List<SpawnElement> se = new List<SpawnElement>();
-                if (sed != null)
+                sed.ForEach(x =>
                 {
-                    sed.ForEach(x =>
+                    se.Add(new SpawnElement
                     {
-                        se.Add(new SpawnElement
-                        {
-                            ElementId = x.ElementId,
-                            ElementType = x.ElementType,
-                            Tag = x.Tag
-                        });
+                        ElementId = x.ElementId,
+                        ElementType = x.ElementType,
+                        Tag = x.Tag
                     });
-                }
-                return se;
+                });
             }
-            catch (Exception ex)
-            {
-                throw new Exception("AppDomain:GetADSpawnElement():" + ex.Message, ex.InnerException);
-            }
+            return se;
         }
 
         private List<SpawnElement> getSpawnElement(DD.PlanElementDetail planElement)
@@ -1313,8 +1283,7 @@ namespace Phytel.API.AppDomain.NG
             }
             catch (WebServiceException wse)
             {
-                Exception ae = new Exception(wse.ResponseBody, wse.InnerException);
-                throw ae;
+                throw new WebServiceException("AD:GetDefaultTimeZone()::" + wse.Message, wse.InnerException);
             }
             return response;
         }
@@ -1380,8 +1349,7 @@ namespace Phytel.API.AppDomain.NG
             }
             catch (WebServiceException wse)
             {
-                Exception ae = new Exception(wse.ResponseBody, wse.InnerException);
-                throw ae;
+                throw new WebServiceException("AD:InsertContactForPatient()::" + wse.Message, wse.InnerException);
             }
             return newContact;
         }

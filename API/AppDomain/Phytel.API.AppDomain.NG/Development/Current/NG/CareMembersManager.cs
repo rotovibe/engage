@@ -64,7 +64,7 @@ namespace Phytel.API.AppDomain.NG
             }
             catch (WebServiceException ex)
             {
-                throw new WebServiceException("AD:GetCareMember()" + ex.Message, ex.InnerException);
+                throw new WebServiceException("AD:GetCareMember()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -123,7 +123,7 @@ namespace Phytel.API.AppDomain.NG
             }
             catch (WebServiceException ex)
             {
-                throw new WebServiceException("AD:GetAllCareMembers()" + ex.Message, ex.InnerException);
+                throw new WebServiceException("AD:GetAllCareMembers()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -174,10 +174,9 @@ namespace Phytel.API.AppDomain.NG
 
                 return response;
             }
-            catch (WebServiceException wse)
+            catch (WebServiceException ex)
             {
-                Exception ae = new Exception(wse.ResponseBody, wse.InnerException);
-                throw ae;
+                throw new WebServiceException("AD:InsertCareMember()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -227,10 +226,9 @@ namespace Phytel.API.AppDomain.NG
                 }
                 return response;
             }
-            catch (WebServiceException wse)
+            catch (WebServiceException ex)
             {
-                Exception ae = new Exception(wse.ResponseBody, wse.InnerException);
-                throw ae;
+                throw new WebServiceException("AD:UpdateCareMember()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -326,10 +324,9 @@ namespace Phytel.API.AppDomain.NG
                         } as object);
                 }
             }
-            catch (WebServiceException wse)
+            catch (WebServiceException ex)
             {
-                Exception ae = new Exception(wse.ResponseBody, wse.InnerException);
-                throw ae;
+                throw new WebServiceException("AD:UpsertCohortPatientView()::" + ex.Message, ex.InnerException);
             }
         }
     }

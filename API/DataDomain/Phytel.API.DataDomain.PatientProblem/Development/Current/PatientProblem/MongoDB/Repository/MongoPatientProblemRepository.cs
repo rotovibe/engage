@@ -168,7 +168,7 @@ namespace Phytel.API.DataDomain.PatientProblem
             }
             catch (Exception ex)
             {
-                throw new Exception("DataDomain:Update():" + ex.Message, ex.InnerException);
+                throw new Exception("DataDomain:Update()::" + ex.Message, ex.InnerException);
             }
         }
 

@@ -48,7 +48,7 @@ namespace Phytel.API.AppDomain.NG
             }
             catch (WebServiceException ex)
             {
-                throw new WebServiceException("AD:GetPatientNote()" + ex.Message, ex.InnerException);
+                throw new WebServiceException("AD:GetPatientNote()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -91,7 +91,7 @@ namespace Phytel.API.AppDomain.NG
             }
             catch (WebServiceException ex)
             {
-                throw new WebServiceException("AD:GetAllPatientNotes()" + ex.Message, ex.InnerException);
+                throw new WebServiceException("AD:GetAllPatientNotes()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -138,10 +138,9 @@ namespace Phytel.API.AppDomain.NG
                 
                 return response;
             }
-            catch (WebServiceException wse)
+            catch (WebServiceException ex)
             {
-                Exception ae = new Exception(wse.ResponseBody, wse.InnerException);
-                throw ae;
+                throw new WebServiceException("AD:InsertPatientNote()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -168,9 +167,9 @@ namespace Phytel.API.AppDomain.NG
                 }
                 return response;
             }
-            catch (Exception ex)
+            catch (WebServiceException ex)
             {
-                throw new Exception("AD:DeletePatientNote:" + ex.Message, ex.InnerException);
+                throw new WebServiceException("AD:DeletePatientNote()::" + ex.Message, ex.InnerException);
             }
         }
     }

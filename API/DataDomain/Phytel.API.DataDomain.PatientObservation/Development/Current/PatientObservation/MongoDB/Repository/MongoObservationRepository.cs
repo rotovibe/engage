@@ -255,7 +255,7 @@ namespace Phytel.API.DataDomain.PatientObservation
             }
             catch (Exception ex)
             {
-                throw new Exception("DataDomain:GetStandardObservationsByType():" + ex.Message, ex.InnerException);
+                throw new Exception("DataDomain:GetStandardObservationsByType()::" + ex.Message, ex.InnerException);
             }
         }
 
