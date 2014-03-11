@@ -43,14 +43,6 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="ASECore, Version=2.2.4.2, Culture=neutral, PublicKeyToken=2125ac4128f3087b, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\References\ASECore.dll</HintPath>
-    </Reference>
-    <Reference Include="ASEData, Version=2.2.4.2, Culture=neutral, PublicKeyToken=2125ac4128f3087b, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\References\ASEData.dll</HintPath>
-    </Reference>
     <Reference Include="MongoDB.Bson, Version=1.8.1.20, Culture=neutral, PublicKeyToken=f686731cfb9cc103, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\References\MongoDB.Bson.dll</HintPath>

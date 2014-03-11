@@ -2,6 +2,8 @@ using System;
 using System.Net;
 using Phytel.API.DataDomain.Program;
 using Phytel.API.DataDomain.Program.DTO;
+using Phytel.API.Common.Format;
+using System.Configuration;
 
 namespace Phytel.API.DataDomain.Program.Service
 {
@@ -17,9 +19,10 @@ namespace Phytel.API.DataDomain.Program.Service
             }
             catch (Exception ex)
             {
-                //TODO: Log this to C3 database via ASE
-                base.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-                response.Status = new ServiceStack.ServiceInterface.ServiceModel.ResponseStatus("Exception", ex.Message);
+                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+
+                string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
+                Common.Helper.LogException(int.Parse(aseProcessID), ex);
             }
             return response;
         }
@@ -34,9 +37,10 @@ namespace Phytel.API.DataDomain.Program.Service
             }
             catch (Exception ex)
             {
-                //TODO: Log this to C3 database via ASE
-                base.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-                response.Status = new ServiceStack.ServiceInterface.ServiceModel.ResponseStatus("Exception", ex.Message);
+                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+
+                string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
+                Common.Helper.LogException(int.Parse(aseProcessID), ex);
             }
             return response;
         }
@@ -51,9 +55,10 @@ namespace Phytel.API.DataDomain.Program.Service
             }
             catch (Exception ex)
             {
-                //TODO: Log this to C3 database via ASE
-                base.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-                response.Status = new ServiceStack.ServiceInterface.ServiceModel.ResponseStatus("Exception", ex.Message);
+                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+
+                string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
+                Common.Helper.LogException(int.Parse(aseProcessID), ex);
             }
             return response;
         }
@@ -68,9 +73,10 @@ namespace Phytel.API.DataDomain.Program.Service
             }
             catch (Exception ex)
             {
-                //TODO: Log this to C3 database via ASE
-                base.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-                response.Status = new ServiceStack.ServiceInterface.ServiceModel.ResponseStatus("Exception", ex.Message);
+                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+
+                string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
+                Common.Helper.LogException(int.Parse(aseProcessID), ex);
             }
             return response;
         }
@@ -85,9 +91,10 @@ namespace Phytel.API.DataDomain.Program.Service
             }
             catch (Exception ex)
             {
-                //TODO: Log this to C3 database via ASE
-                base.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-                response.Status = new ServiceStack.ServiceInterface.ServiceModel.ResponseStatus("Exception", ex.Message);
+                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+
+                string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
+                Common.Helper.LogException(int.Parse(aseProcessID), ex);
             }
             return response;
         }
@@ -102,9 +109,10 @@ namespace Phytel.API.DataDomain.Program.Service
             }
             catch (Exception ex)
             {
-                //TODO: Log this to C3 database via ASE
-                base.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-                response.Status = new ServiceStack.ServiceInterface.ServiceModel.ResponseStatus("Exception", ex.Message);
+                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+
+                string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
+                Common.Helper.LogException(int.Parse(aseProcessID), ex);
             }
             return response;
         }
@@ -119,9 +127,10 @@ namespace Phytel.API.DataDomain.Program.Service
             }
             catch (Exception ex)
             {
-                //TODO: Log this to C3 database via ASE
-                base.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-                response.Status = new ServiceStack.ServiceInterface.ServiceModel.ResponseStatus("Exception", ex.Message);
+                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+
+                string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
+                Common.Helper.LogException(int.Parse(aseProcessID), ex);
             }
             return response;
         }
@@ -136,9 +145,10 @@ namespace Phytel.API.DataDomain.Program.Service
             }
             catch (Exception ex)
             {
-                //TODO: Log this to C3 database via ASE
-                base.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-                response.Status = new ServiceStack.ServiceInterface.ServiceModel.ResponseStatus("Exception", ex.Message);
+                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+
+                string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
+                Common.Helper.LogException(int.Parse(aseProcessID), ex);
             }
             return response;
         }
@@ -153,9 +163,10 @@ namespace Phytel.API.DataDomain.Program.Service
             }
             catch (Exception ex)
             {
-                //TODO: Log this to C3 database via ASE
-                base.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-                response.Status = new ServiceStack.ServiceInterface.ServiceModel.ResponseStatus("Exception", ex.Message);
+                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+
+                string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
+                Common.Helper.LogException(int.Parse(aseProcessID), ex);
             }
             return response;
         }
@@ -170,29 +181,13 @@ namespace Phytel.API.DataDomain.Program.Service
             }
             catch (Exception ex)
             {
-                //TODO: Log this to C3 database via ASE
-                base.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-                response.Status = new ServiceStack.ServiceInterface.ServiceModel.ResponseStatus("Exception", ex.Message);
+                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+
+                string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
+                Common.Helper.LogException(int.Parse(aseProcessID), ex);
             }
             return response;
         }
-
-        //public GetAllProgramsResponse Post(GetAllProgramsRequest request)
-        //{
-        //    GetAllProgramsResponse response = new GetAllProgramsResponse();
-        //    try
-        //    {
-        //        response = ProgramDataManager.GetProgramList(request);
-        //        response.Version = request.Version;
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        //TODO: Log this to C3 database via ASE
-        //        base.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-        //        response.Status = new ServiceStack.ServiceInterface.ServiceModel.ResponseStatus("Exception", ex.Message);
-        //    }
-        //    return response;
-        //}
 
         public GetProgramAttributeResponse Get(GetProgramAttributeRequest request)
         {
@@ -204,9 +199,10 @@ namespace Phytel.API.DataDomain.Program.Service
             }
             catch (Exception ex)
             {
-                //TODO: Log this to C3 database via ASE
-                base.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-                response.Status = new ServiceStack.ServiceInterface.ServiceModel.ResponseStatus("Exception", ex.Message);
+                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+
+                string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
+                Common.Helper.LogException(int.Parse(aseProcessID), ex);
             }
             return response;
         }
@@ -221,9 +217,10 @@ namespace Phytel.API.DataDomain.Program.Service
             }
             catch (Exception ex)
             {
-                //TODO: Log this to C3 database via ASE
-                base.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-                response.Status = new ServiceStack.ServiceInterface.ServiceModel.ResponseStatus("Exception", ex.Message);
+                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+
+                string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
+                Common.Helper.LogException(int.Parse(aseProcessID), ex);
             }
             return response;
         }
@@ -238,9 +235,10 @@ namespace Phytel.API.DataDomain.Program.Service
             }
             catch (Exception ex)
             {
-                //TODO: Log this to C3 database via ASE
-                base.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-                response.Status = new ServiceStack.ServiceInterface.ServiceModel.ResponseStatus("Exception", ex.Message);
+                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+
+                string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
+                Common.Helper.LogException(int.Parse(aseProcessID), ex);
             }
             return response;
         }

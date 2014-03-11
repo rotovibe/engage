@@ -15,14 +15,5 @@ namespace Phytel.API.DataDomain.Action
             
             return (result != null ? result : new GetActionDataResponse());
         }
-
-        //public static GetAllActionsResponse GetActionList(GetAllActionsRequest request)
-        //{
-        //    GetAllActionsResponse result = new GetAllActionsResponse();
-
-        //    IActionRepository<GetAllActionsResponse> repo = ActionRepositoryFactory<GetAllActionsResponse>.GetActionRepository(request.ContractNumber, request.Context);
-
-        //    return result;
-        //}
     }
 }   

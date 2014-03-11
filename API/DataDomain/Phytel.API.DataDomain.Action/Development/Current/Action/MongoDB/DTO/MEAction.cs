@@ -12,7 +12,11 @@ namespace Phytel.API.DataDomain.Action.DTO
     [MongoIndex(Keys = new string[] { TTLDateProperty, }, TimeToLive = 0)]
     public class MEAction : IMongoEntity<ObjectId>, IMEEntity
     {
-        public MEAction() { Id = ObjectId.GenerateNewId(); }
+        public MEAction()
+        {
+            Id = ObjectId.GenerateNewId();
+            Version = 1.0;
+        }
 
         public const string IdProperty = "_id";
         public const string NameProperty = "nm";

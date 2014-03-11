@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using MongoDB.Bson;
+using Phytel.Framework.ASE.Process;
 
 namespace Phytel.API.Common
 {
@@ -149,5 +150,11 @@ namespace Phytel.API.Common
             }
             return bsonValues;
         }
+
+        public static void LogException(int processId, Exception ex)
+        {
+            Log.LogError(processId, ex, Framework.ASE.Data.Common.LogErrorCode.Error, Framework.ASE.Data.Common.LogErrorSeverity.High);
+        }
+
     }
 }
