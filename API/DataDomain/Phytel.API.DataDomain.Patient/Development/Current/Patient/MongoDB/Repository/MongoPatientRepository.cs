@@ -159,8 +159,7 @@ namespace Phytel.API.DataDomain.Patient
                         PriorityData = (DTO.PriorityData)((int)mePatient.Priority),
                         DisplayPatientSystemID = mePatient.DisplayPatientSystemID.ToString(),
                         Background = mePatient.Background,
-                        LastFourSSN = mePatient.LastFourSSN,
-                        FullSSN = mePatient.FullSSN
+                        LastFourSSN = mePatient.LastFourSSN
                     };
                     if (!string.IsNullOrEmpty(userId))
                     {
@@ -388,8 +387,7 @@ namespace Phytel.API.DataDomain.Patient
                         PriorityData = (PriorityData)((int)mp.Priority),
                         DisplayPatientSystemID = mp.DisplayPatientSystemID.ToString(),
                         Background = mp.Background,
-                        LastFourSSN = mp.LastFourSSN,
-                        FullSSN = mp.FullSSN
+                        LastFourSSN = mp.LastFourSSN
                     });
                 }
             }
