@@ -15,6 +15,11 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
         [BsonId]
         public ObjectId Id { get; set; }
 
+        public const string ActionIdProperty = "actid";
+        [BsonElement(ActionIdProperty)]
+        [BsonIgnoreIfNull(true)]
+        public ObjectId? ActionId { get; set; }
+
         #region standard
         public const string ExtraElementsProperty = "ex";
         [BsonExtraElements]

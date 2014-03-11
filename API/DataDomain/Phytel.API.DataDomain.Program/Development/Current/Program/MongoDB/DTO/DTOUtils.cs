@@ -1066,6 +1066,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
                             {
                                 r.StepSourceId = s.SourceId;
                                 r.DeleteFlag = true;
+                                r.ActionId = a.Id;
                                 success = SaveResponseToDocument(r, contractNumber);
                             }
                             if (success)
