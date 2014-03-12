@@ -14,23 +14,7 @@ namespace Phytel.API.DataAuditProcessor
 {
     public class DataAuditProcessor: QueueProcessBase
     {
-        private XmlDocument _bodyDom = null;
-
         string _DBConnName = "";
-        string _dbName = "";
-
-        string _xpath = "//DataAudit/{0}";
-
-        XmlNode _message = null;
-
-        string _entityid;
-        string _userid;
-        string _contractnumber;
-        string _entitytype;
-        string _type;
-        string _entity;
-        DateTime _timestamp = DateTime.Now;
-
 
         public override void Execute(QueueMessage queueMessage)
         {

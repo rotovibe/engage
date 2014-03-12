@@ -14,24 +14,8 @@ namespace Phytel.API.DataAuditProcessor
 {
     public class DataAuditFailureProcessor: QueueProcessBase
     {
-        private XmlDocument _bodyDom = null;
-
         string _filepath = "";
-        string _dbName = "";
-
-        string _xpath = "//DataAudit/{0}";
-
-        XmlNode _message = null;
-
-        string _entityid;
-        string _userid;
-        string _contractnumber;
-        string _entitytype;
-        string _type;
-        string _entity;
-        DateTime _timestamp = DateTime.Now;
-
-
+        
         public override void Execute(QueueMessage queueMessage)
         {
             try
@@ -45,36 +29,6 @@ namespace Phytel.API.DataAuditProcessor
                 base.LogError(ex, Framework.ASE.Data.Common.LogErrorCode.Error, Framework.ASE.Data.Common.LogErrorSeverity.Critical);
             }
         }
-
-        //private void WriteAuditLog()
-        //{
-        //    try
-        //    {
-        //        DataAudit.DataAudit da = new DataAudit.DataAudit
-        //        {
-        //            EntityID = _entityid,
-        //            UserId = _userid,
-        //            Contract = _contractnumber,
-        //            EntityType = _entitytype,
-        //            TimeStamp = _timestamp,
-        //            Type = _type,
-        //            Entity = _entity
-        //        };
-
-        //        MongoDatabase db = Phytel.Services.MongoService.Instance.GetDatabase(_DBConnName, da.Contract, true, "Audit");
-        //        db.GetCollection(da.EntityType).Insert(da);
-
-        //    }
-        //    catch (Exception ex)
-        //    {
-                
-        //        throw;
-        //    }
-
-            
-
-
-        //}
 
         //private void SetupBaseProperties()
         //{
@@ -97,5 +51,6 @@ namespace Phytel.API.DataAuditProcessor
         //    else
         //        return string.Empty;
         //}
+
     }
 }
