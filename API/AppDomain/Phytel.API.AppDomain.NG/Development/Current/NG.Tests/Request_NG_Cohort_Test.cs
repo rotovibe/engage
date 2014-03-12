@@ -18,7 +18,7 @@ namespace Phytel.API.AppDomain.NG.Services.Test
 
             IRestClient client = new JsonServiceClient();
             JsonServiceClient.HttpWebRequestFilter = x => x.Headers.Add(string.Format("APIToken: {0}", token));
-            
+
             GetAllCohortsResponse response = client.Post<GetAllCohortsResponse>("http://localhost:888/Nightingale/v1/NG/InHealth001/cohort",
                 new GetAllCohortsRequest { } as object);
 

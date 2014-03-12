@@ -119,5 +119,7 @@ namespace Phytel.API.DataDomain.Program
         {
             throw new NotImplementedException();
         }
+
+        public string UserId { get; set; }
     }
 }

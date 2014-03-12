@@ -13,6 +13,7 @@ namespace Phytel.API.DataDomain.Cohort
             GetCohortDataResponse response = new GetCohortDataResponse();
 
             ICohortRepository<GetCohortDataResponse> repo = CohortRepositoryFactory<GetCohortDataResponse>.GetCohortRepository(request.ContractNumber, request.Context);
+            repo.UserId = request.UserId;
             response = repo.FindByID(request.CohortID) as GetCohortDataResponse;
 
             return response;
@@ -23,7 +24,7 @@ namespace Phytel.API.DataDomain.Cohort
             GetAllCohortsDataResponse response = new GetAllCohortsDataResponse();
 
             ICohortRepository<API.DataDomain.Cohort.DTO.CohortData> repo = CohortRepositoryFactory<API.DataDomain.Cohort.DTO.CohortData>.GetCohortRepository(request.ContractNumber, request.Context);
-
+            repo.UserId = request.UserId;
             List<API.DataDomain.Cohort.DTO.CohortData> cohorts = repo.SelectAll() as List<API.DataDomain.Cohort.DTO.CohortData>;
 
             if (cohorts != null)

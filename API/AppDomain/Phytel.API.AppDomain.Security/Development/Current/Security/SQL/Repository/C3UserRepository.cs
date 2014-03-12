@@ -58,6 +58,8 @@ namespace Phytel.API.AppDomain.Security
             throw new NotImplementedException();
         }
 
+        public string UserId { get; set; }
+
         public DTO.AuthenticateResponse LoginUser(string token, string securityToken)
         {
             try

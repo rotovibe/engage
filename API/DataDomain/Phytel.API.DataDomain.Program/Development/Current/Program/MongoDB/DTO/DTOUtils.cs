@@ -56,7 +56,8 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
                 Next = cp.Next,
                 Order = cp.Order,
                 Previous = cp.Previous,
-                Modules = DTOUtils.SetValidModules(cp.Modules, request.ContractNumber)
+                Modules = DTOUtils.SetValidModules(cp.Modules, request.ContractNumber),
+                UpdatedBy = ObjectId.Parse(request.UserId)
             };
             if(!string.IsNullOrEmpty(request.UserId))
             {

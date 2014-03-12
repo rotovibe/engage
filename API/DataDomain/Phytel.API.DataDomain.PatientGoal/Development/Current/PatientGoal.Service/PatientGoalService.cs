@@ -4,18 +4,23 @@ using Phytel.API.DataDomain.PatientGoal;
 using Phytel.API.DataDomain.PatientGoal.DTO;
 using Phytel.API.Common.Format;
 using System.Configuration;
+using System.Web;
 
 namespace Phytel.API.DataDomain.PatientGoal.Service
 {
     public class PatientGoalService : ServiceStack.ServiceInterface.Service
     {
+        private const string _phytelUserIDToken = "x-Phytel-UserID";
 
         public PutInitializeGoalDataResponse Put(PutInitializeGoalDataRequest request)
         {
             PutInitializeGoalDataResponse response = new PutInitializeGoalDataResponse();
             try
             {
+                //Get the UserId from the Header and update the request object
+                request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
                 response = PatientGoalDataManager.InitializeGoal(request);
+                response.Version = request.Version;
             }
             catch (Exception ex)
             {
@@ -32,7 +37,10 @@ namespace Phytel.API.DataDomain.PatientGoal.Service
             PutInitializeBarrierDataResponse response = new PutInitializeBarrierDataResponse();
             try
             {
+                //Get the UserId from the Header and update the request object
+                request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
                 response = PatientGoalDataManager.InitializeBarrier(request);
+                response.Version = request.Version;
             }
             catch (Exception ex)
             {
@@ -49,7 +57,10 @@ namespace Phytel.API.DataDomain.PatientGoal.Service
             GetPatientGoalDataResponse response = new GetPatientGoalDataResponse();
             try
             {
+                //Get the UserId from the Header and update the request object
+                request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
                 response = PatientGoalDataManager.GetPatientGoal(request);
+                response.Version = request.Version;
             }
             catch (Exception ex)
             {
@@ -66,7 +77,10 @@ namespace Phytel.API.DataDomain.PatientGoal.Service
             GetAllPatientGoalsDataResponse response = new GetAllPatientGoalsDataResponse();
             try
             {
+                //Get the UserId from the Header and update the request object
+                request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
                 response = PatientGoalDataManager.GetPatientGoalList(request);
+                response.Version = request.Version;
             }
             catch (Exception ex)
             {
@@ -83,7 +97,10 @@ namespace Phytel.API.DataDomain.PatientGoal.Service
             PutPatientGoalDataResponse response = new PutPatientGoalDataResponse();
             try
             {
+                //Get the UserId from the Header and update the request object
+                request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
                 response = PatientGoalDataManager.PutPatientGoal(request);
+                response.Version = request.Version;
             }
             catch (Exception ex)
             {
@@ -100,6 +117,8 @@ namespace Phytel.API.DataDomain.PatientGoal.Service
             PutInitializeTaskResponse response = new PutInitializeTaskResponse();
             try
             {
+                //Get the UserId from the Header and update the request object
+                request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
                 response = PatientGoalDataManager.InsertNewPatientTask(request);
                 response.Version = request.Version;
             }
@@ -118,6 +137,8 @@ namespace Phytel.API.DataDomain.PatientGoal.Service
             PutUpdateTaskResponse response = new PutUpdateTaskResponse();
             try
             {
+                //Get the UserId from the Header and update the request object
+                request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
                 response = PatientGoalDataManager.UpdatePatientTask(request);
                 response.Version = request.Version;
             }
@@ -136,6 +157,8 @@ namespace Phytel.API.DataDomain.PatientGoal.Service
             PutInitializeInterventionResponse response = new PutInitializeInterventionResponse();
             try
             {
+                //Get the UserId from the Header and update the request object
+                request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
                 response = PatientGoalDataManager.InsertNewPatientIntervention(request);
                 response.Version = request.Version;
             }
@@ -154,6 +177,8 @@ namespace Phytel.API.DataDomain.PatientGoal.Service
             PutUpdateInterventionResponse response = new PutUpdateInterventionResponse();
             try
             {
+                //Get the UserId from the Header and update the request object
+                request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
                 response = PatientGoalDataManager.UpdatePatientIntervention(request);
                 response.Version = request.Version;
             }
@@ -172,6 +197,8 @@ namespace Phytel.API.DataDomain.PatientGoal.Service
             PutUpdateBarrierResponse response = new PutUpdateBarrierResponse();
             try
             {
+                //Get the UserId from the Header and update the request object
+                request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
                 response = PatientGoalDataManager.UpdatePatientBarrier(request);
                 response.Version = request.Version;
             }
@@ -190,6 +217,8 @@ namespace Phytel.API.DataDomain.PatientGoal.Service
             DeletePatientGoalDataResponse response = new DeletePatientGoalDataResponse();
             try
             {
+                //Get the UserId from the Header and update the request object
+                request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
                 response = PatientGoalDataManager.DeletePatientGoal(request);
                 response.Version = request.Version;
             }
@@ -208,6 +237,8 @@ namespace Phytel.API.DataDomain.PatientGoal.Service
             DeleteTaskResponse response = new DeleteTaskResponse();
             try
             {
+                //Get the UserId from the Header and update the request object
+                request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
                 response = PatientGoalDataManager.DeleteTask(request);
                 response.Version = request.Version;
             }
@@ -226,6 +257,8 @@ namespace Phytel.API.DataDomain.PatientGoal.Service
             DeleteInterventionResponse response = new DeleteInterventionResponse();
             try
             {
+                //Get the UserId from the Header and update the request object
+                request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
                 response = PatientGoalDataManager.DeleteIntervention(request);
                 response.Version = request.Version;
             }
@@ -244,6 +277,8 @@ namespace Phytel.API.DataDomain.PatientGoal.Service
             DeleteBarrierResponse response = new DeleteBarrierResponse();
             try
             {
+                //Get the UserId from the Header and update the request object
+                request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
                 response = PatientGoalDataManager.DeleteBarrier(request);
                 response.Version = request.Version;
             }
@@ -262,7 +297,10 @@ namespace Phytel.API.DataDomain.PatientGoal.Service
             GetCustomAttributesDataResponse response = new GetCustomAttributesDataResponse();
             try
             {
+                //Get the UserId from the Header and update the request object
+                request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
                 response = PatientGoalDataManager.GetCustomAttributesByType(request);
+                response.Version = request.Version;
             }
             catch (Exception ex)
             {

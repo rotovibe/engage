@@ -103,12 +103,12 @@ namespace Phytel.API.DataDomain.Program
         {
             throw new NotImplementedException();
         }
-
-
-
+        
         public MEProgram FindByID(string entityID, bool temp)
         {
             throw new NotImplementedException();
         }
+
+        public string UserId { get; set; }
     }
 }

@@ -2,16 +2,21 @@ using Phytel.API.Common.Format;
 using Phytel.API.DataDomain.PatientObservation.DTO;
 using System;
 using System.Configuration;
+using System.Web;
 
 namespace Phytel.API.DataDomain.PatientObservation.Service
 {
     public class PatientObservationService : ServiceStack.ServiceInterface.Service
     {
+        private const string _phytelUserIDToken = "x-Phytel-UserID";
+
         public GetPatientObservationResponse Post(GetPatientObservationRequest request)
         {
             GetPatientObservationResponse response = new GetPatientObservationResponse();
             try
             {
+                //Get the UserId from the Header and update the request object
+                request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
                 response = PatientObservationDataManager.GetPatientObservationByID(request);
                 response.Version = request.Version;
             }
@@ -30,6 +35,8 @@ namespace Phytel.API.DataDomain.PatientObservation.Service
             GetPatientObservationResponse response = new GetPatientObservationResponse();
             try
             {
+                //Get the UserId from the Header and update the request object
+                request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
                 response = PatientObservationDataManager.GetPatientObservationByID(request);
                 response.Version = request.Version;
             }
@@ -48,6 +55,8 @@ namespace Phytel.API.DataDomain.PatientObservation.Service
             GetAllPatientObservationsResponse response = new GetAllPatientObservationsResponse();
             try
             {
+                //Get the UserId from the Header and update the request object
+                request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
                 response = PatientObservationDataManager.GetPatientObservationList(request);
                 response.Version = request.Version;
             }
@@ -67,7 +76,10 @@ namespace Phytel.API.DataDomain.PatientObservation.Service
 
             try
             {
+                //Get the UserId from the Header and update the request object
+                request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
                 IPatientObservationRepository<PutInitializeObservationDataResponse> repo = PatientObservationRepositoryFactory<PutInitializeObservationDataResponse>.GetPatientObservationRepository(request.ContractNumber, request.Context);
+                repo.UserId = request.UserId;
 
                 response.ObservationData = (PatientObservationData)repo.Initialize(request);
             }
@@ -86,6 +98,8 @@ namespace Phytel.API.DataDomain.PatientObservation.Service
             GetStandardObservationsResponse response = new GetStandardObservationsResponse();
             try
             {
+                //Get the UserId from the Header and update the request object
+                request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
                 response = PatientObservationDataManager.GetStandardObservationsByType(request);
                 response.Version = request.Version;
             }
@@ -104,6 +118,8 @@ namespace Phytel.API.DataDomain.PatientObservation.Service
             GetAdditionalObservationDataItemResponse response = new GetAdditionalObservationDataItemResponse();
             try
             {
+                //Get the UserId from the Header and update the request object
+                request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
                 response = PatientObservationDataManager.GetAdditionalObservationItemById(request);
                 response.Version = request.Version;
             }
@@ -122,6 +138,8 @@ namespace Phytel.API.DataDomain.PatientObservation.Service
             GetAdditionalLibraryObservationsResponse response = new GetAdditionalLibraryObservationsResponse();
             try
             {
+                //Get the UserId from the Header and update the request object
+                request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
                 response = PatientObservationDataManager.GetAdditionalObservationsLibraryByType(request);
                 response.Version = request.Version;
             }
@@ -140,6 +158,8 @@ namespace Phytel.API.DataDomain.PatientObservation.Service
             PutUpdateObservationDataResponse response = new PutUpdateObservationDataResponse();
             try
             {
+                //Get the UserId from the Header and update the request object
+                request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
                 response.Result = PatientObservationDataManager.PutUpdateOfPatientObservationRecord(request);
                 response.Version = request.Version;
             }
@@ -158,6 +178,8 @@ namespace Phytel.API.DataDomain.PatientObservation.Service
             PutUpdateObservationDataResponse response = new PutUpdateObservationDataResponse();
             try
             {
+                //Get the UserId from the Header and update the request object
+                request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
                 response.Result = PatientObservationDataManager.PutUpdateOfPatientObservationRecord(request);
                 response.Version = request.Version;
             }

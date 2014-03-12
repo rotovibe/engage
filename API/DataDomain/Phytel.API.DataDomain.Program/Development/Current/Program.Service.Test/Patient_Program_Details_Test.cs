@@ -19,6 +19,8 @@ namespace Phytel.API.DataDomain.Program.Services.Test
             double version = 1.0;
             string token = "52efa855d6a4850fb4f20fc3";
             IRestClient client = new JsonServiceClient();
+            JsonServiceClient.HttpWebRequestFilter = x =>
+                            x.Headers.Add(string.Format("{0}: {1}", "x-Phytel-UserID", "531f2df9072ef727c4d2a3df"));
 
             GetProgramDetailsSummaryResponse response = client.Get<GetProgramDetailsSummaryResponse>(
                 string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Program/{5}/Details/?ProgramId={6}&Token={7}", 
@@ -44,6 +46,8 @@ namespace Phytel.API.DataDomain.Program.Services.Test
             double version = 1.0;
             string token = "52f1211fd6a485055ce1d4cf";
             IRestClient client = new JsonServiceClient();
+            JsonServiceClient.HttpWebRequestFilter = x =>
+                            x.Headers.Add(string.Format("{0}: {1}", "x-Phytel-UserID", "531f2df9072ef727c4d2a3df"));
 
             GetPatientProgramsResponse response = client.Get<GetPatientProgramsResponse>(
                 string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Programs/",

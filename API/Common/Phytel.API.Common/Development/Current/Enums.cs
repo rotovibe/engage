@@ -204,11 +204,18 @@ namespace Phytel.API.Common
     {
         Patient,
         PatientBarrier,
-        PatientBarrierRequest,
         PatientIntervention,
         PatientTask,
         PatientGoal,
         PatientNote,
+        PatientObservation,
+        PatientProblem,
+        PatientProgram,
+        PatientSystem,
+        PatientUser,
+        PatientProgramAttribute,
+        PatientProgramResponse,
+        Contact,
         CareMember
     }
 }

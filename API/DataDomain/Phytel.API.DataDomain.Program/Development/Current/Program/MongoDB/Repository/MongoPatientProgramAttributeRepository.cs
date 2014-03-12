@@ -12,6 +12,7 @@ using Phytel.API.DataDomain.Program;
 using Phytel.API.DataDomain.Program.MongoDB.DTO;
 using Phytel.API.Common;
 using Phytel.API.Common.Data;
+using Phytel.API.DataAudit;
 
 namespace Phytel.API.DataDomain.Program
 {
@@ -27,13 +28,13 @@ namespace Phytel.API.DataDomain.Program
         public object Insert(object newEntity)
         {
             bool result = false;
+            ProgramAttribute pa = (ProgramAttribute)newEntity;
+            MEProgramAttribute mepa = null;
             try
             {
-                ProgramAttribute pa = (ProgramAttribute)newEntity;
-
                 using (ProgramMongoContext ctx = new ProgramMongoContext(_dbName))
                 {
-                    MEProgramAttribute mepa = new MEProgramAttribute
+                    mepa = new MEProgramAttribute
                     {
                         Status = (Status)pa.Status,
                         RemovedReason = pa.OverrideReason,
@@ -61,7 +62,9 @@ namespace Phytel.API.DataDomain.Program
                         EndDate = pa.EndDate,
                         Enrollment = (EnrollmentStatus)pa.Enrollment,
                         GraduatedFlag = (Graduated)pa.GraduatedFlag,
-                        StartDate = pa.StartDate
+                        StartDate = pa.StartDate,
+                        LastUpdatedOn = DateTime.UtcNow,
+                        UpdatedBy = ObjectId.Parse(this.UserId)
                     };
 
                     WriteConcernResult wcr =  ctx.ProgramAttributes.Collection.Insert(mepa);
@@ -75,6 +78,10 @@ namespace Phytel.API.DataDomain.Program
             catch(Exception ex)
             {
                 throw new Exception("DataDomain:Insert()::" + ex.Message, ex.InnerException);
+            }
+            finally
+            {
+                AuditHelper.LogDataAudit(this.UserId, MongoCollectionName.PatientProgramAttribute.ToString(), mepa.Id.ToString(), Common.DataAuditType.Insert, _dbName);
             }
         }
 
@@ -256,6 +263,9 @@ namespace Phytel.API.DataDomain.Program
                     if (mepa.DidNotEnrollReason != null) uv.Add(MB.Update.Set(MEProgramAttribute.DidNotEnrollReasonProperty, mepa.DidNotEnrollReason));
                     if (mepa.DisEnrollReason != null) uv.Add(MB.Update.Set(MEProgramAttribute.DisEnrollReasonProperty, mepa.DisEnrollReason));
 
+                    uv.Add(MB.Update.Set(MEProgramAttribute.UpdatedByProperty, ObjectId.Parse(this.UserId)));
+                    uv.Add(MB.Update.Set(MEProgramAttribute.LastUpdatedOnProperty, DateTime.UtcNow));
+                    
                     if (uv.Count > 0)
                     {
                         IMongoUpdate update = MB.Update.Combine(uv);
@@ -272,6 +282,10 @@ namespace Phytel.API.DataDomain.Program
             {
                 throw new Exception("DataDomain:Update()::" + ex.Message, ex.InnerException);
             }
+            finally
+            {
+                AuditHelper.LogDataAudit(this.UserId, MongoCollectionName.PatientProgramAttribute.ToString(), mepa.PlanElementId, Common.DataAuditType.Update, _dbName);
+            }
         }
 
         public List<ProgramInfo> GetActiveProgramsInfoList(GetAllActiveProgramsRequest request)
@@ -283,11 +297,12 @@ namespace Phytel.API.DataDomain.Program
         {
             throw new NotImplementedException();
         }
-
-
+        
         public MEProgram FindByID(string entityID, bool temp)
         {
             throw new NotImplementedException();
         }
+
+        public string UserId { get; set; }
     }
 }

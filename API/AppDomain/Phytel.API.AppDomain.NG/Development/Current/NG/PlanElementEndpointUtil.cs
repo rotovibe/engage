@@ -21,13 +21,14 @@ namespace Phytel.API.AppDomain.NG
         static readonly string DDPatientServiceUrl = ConfigurationManager.AppSettings["DDPatientServiceUrl"];
         static readonly string DDProgramServiceUrl = ConfigurationManager.AppSettings["DDProgramServiceUrl"];
 
-        public static PatientProblemData GetPatientProblem(string probId, PlanElementEventArg e)
+        public static PatientProblemData GetPatientProblem(string probId, PlanElementEventArg e, string userId)
         {
             try
             {
                 PatientProblemData result = null;
 
-                IRestClient client = new JsonServiceClient();
+                IRestClient client = Common.Helper.GetJsonServiceClient(userId);
+
                 GetPatientProblemsDataResponse dataDomainResponse =
                    client.Get<GetPatientProblemsDataResponse>(
                    string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Problem/?ProblemId={5}",
@@ -60,7 +61,8 @@ namespace Phytel.API.AppDomain.NG
 
                 DD.ProgramDetail pD = NGUtils.FormatProgramDetail(p);
 
-                IRestClient client = new JsonServiceClient();
+                IRestClient client = Common.Helper.GetJsonServiceClient(request.UserId);
+
                 DD.PutProgramActionProcessingResponse response = client.Put<DD.PutProgramActionProcessingResponse>(
                     string.Format(@"{0}/{1}/{2}/{3}/Patient/{4}/Programs/{5}/Update",
                     DDProgramServiceUrl,
@@ -138,7 +140,8 @@ namespace Phytel.API.AppDomain.NG
             List<StepResponse> result = null;
             try
             {
-                IRestClient client = new JsonServiceClient();
+                IRestClient client = Common.Helper.GetJsonServiceClient(request.UserId);
+
                 GetStepResponseListResponse resp =
                                     client.Get<GetStepResponseListResponse>(
                                     string.Format("{0}/{1}/{2}/{3}/Program/Module/Action/Step/{4}/Responses/",
@@ -166,7 +169,8 @@ namespace Phytel.API.AppDomain.NG
             bool result = false;
             try
             {
-                IRestClient client = new JsonServiceClient();
+                IRestClient client = Common.Helper.GetJsonServiceClient(request.UserId);
+
                 GetStepResponseResponse resp =
                                     client.Get<GetStepResponseResponse>(
                                     string.Format("{0}/{1}/{2}/{3}/Program/Module/Action/Step/{4}/Response/?ResponseId={5}",
@@ -192,7 +196,8 @@ namespace Phytel.API.AppDomain.NG
         {
             try
             {
-                IRestClient client = new JsonServiceClient();
+                IRestClient client = Common.Helper.GetJsonServiceClient(request.UserId);
+
                 DD.PutUpdateResponseResponse resp =
                     client.Put<DD.PutUpdateResponseResponse>(
                     string.Format("{0}/{1}/{2}/{3}/Program/Module/Action/Step/{4}/Responses/Update",
@@ -243,7 +248,8 @@ namespace Phytel.API.AppDomain.NG
         public static AD.Program RequestPatientProgramDetail(PostProcessActionRequest request)
         {
             AD.Program pd = null;
-            IRestClient client = new JsonServiceClient();
+            IRestClient client = Common.Helper.GetJsonServiceClient(request.UserId);
+
             DD.GetProgramDetailsSummaryResponse resp =
                 client.Get<DD.GetProgramDetailsSummaryResponse>(
                 string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Program/{5}/Details/?Token={6}",
@@ -268,7 +274,8 @@ namespace Phytel.API.AppDomain.NG
                 string contractNumber = request.ContractNumber;
                 string context = "NG";
 
-                IRestClient client = new JsonServiceClient();
+                IRestClient client = Common.Helper.GetJsonServiceClient(request.UserId);
+
                 GetCohortPatientViewResponse response =
                     client.Get<GetCohortPatientViewResponse>(string.Format("{0}/{1}/{2}/{3}/patient/{4}/cohortpatientview/",
                     DDPatientServiceUrl,
@@ -293,7 +300,8 @@ namespace Phytel.API.AppDomain.NG
                 string contractNumber = request.ContractNumber;
                 string context = "NG";
 
-                IRestClient client = new JsonServiceClient();
+                IRestClient client = Common.Helper.GetJsonServiceClient(request.UserId);
+
                 PutUpdateCohortPatientViewResponse response =
                     client.Put<PutUpdateCohortPatientViewResponse>(string.Format("{0}/{1}/{2}/{3}/patient/{4}/cohortpatientview/update",
                     DDPatientServiceUrl,
@@ -318,7 +326,8 @@ namespace Phytel.API.AppDomain.NG
             try
             {
                 //register call to remote serivce.
-                IRestClient client = new JsonServiceClient();
+                IRestClient client = Common.Helper.GetJsonServiceClient(request.UserId);
+
                 PutNewPatientProblemResponse dataDomainResponse =
                    client.Put<PutNewPatientProblemResponse>(
                    string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Problem/Insert",
@@ -347,7 +356,8 @@ namespace Phytel.API.AppDomain.NG
             try
             {
                 //register call to remote serivce.
-                IRestClient client = new JsonServiceClient();
+                IRestClient client = Common.Helper.GetJsonServiceClient(request.UserId);
+
                 PutUpdatePatientProblemResponse dataDomainResponse =
                    client.Put<PutUpdatePatientProblemResponse>(
                    string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Problem/Update/",
@@ -382,8 +392,8 @@ namespace Phytel.API.AppDomain.NG
                 string contractNumber = request.ContractNumber;
                 string context = "NG";
 
+                IRestClient client = Common.Helper.GetJsonServiceClient(request.UserId);
 
-                IRestClient client = new JsonServiceClient();
                 GetProgramAttributeResponse resp =
                                     client.Get<GetProgramAttributeResponse>(
                                     string.Format("{0}/{1}/{2}/{3}/Program/Attributes/?PlanElementId={4}",
@@ -411,7 +421,8 @@ namespace Phytel.API.AppDomain.NG
                 string context = "NG";
 
 
-                IRestClient client = new JsonServiceClient();
+                IRestClient client = Common.Helper.GetJsonServiceClient(request.UserId);
+
                 PutUpdateProgramAttributesResponse resp =
                                     client.Put<PutUpdateProgramAttributesResponse>(
                                     string.Format("{0}/{1}/{2}/{3}/Program/Attributes/Update/",
@@ -443,9 +454,9 @@ namespace Phytel.API.AppDomain.NG
                 double version = request.Version;
                 string contractNumber = request.ContractNumber;
                 string context = "NG";
+                
+                IRestClient client = Common.Helper.GetJsonServiceClient(request.UserId);
 
-
-                IRestClient client = new JsonServiceClient();
                 PutProgramAttributesResponse resp =
                                     client.Put<PutProgramAttributesResponse>(
                                     string.Format("{0}/{1}/{2}/{3}/Program/Attributes/Insert/",

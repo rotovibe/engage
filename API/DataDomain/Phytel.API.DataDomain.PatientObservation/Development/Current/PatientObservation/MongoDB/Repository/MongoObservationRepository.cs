@@ -201,8 +201,7 @@ namespace Phytel.API.DataDomain.PatientObservation
         {
             throw new NotImplementedException();
         }
-
-
+        
         public object GetObservationsByType(object type, bool standard)
         {
             List<ObservationData> odL = new List<ObservationData>();
@@ -263,11 +262,12 @@ namespace Phytel.API.DataDomain.PatientObservation
         {
             throw new NotImplementedException();
         }
-
-
+        
         public object FindRecentObservationValue(string observationTypeId, string patientId)
         {
             throw new NotImplementedException();
         }
+
+        public string UserId { get; set; }
     }
 }

@@ -18,8 +18,8 @@ namespace Phytel.API.DataDomain.Patient.Services.Test
             string contractNumber = "InHealth001";
             string context ="NG";
             IRestClient client = new JsonServiceClient();
-
-            //JsonServiceClient.HttpWebRequestFilter = x => x.Headers.Add(string.Format("APIKey:{0}", "12345"));
+            JsonServiceClient.HttpWebRequestFilter = x =>
+                            x.Headers.Add(string.Format("{0}: {1}", "x-Phytel-UserID", "531f2df9072ef727c4d2a3df"));
 
             GetCohortPatientsDataResponse response = client.Post<GetCohortPatientsDataResponse>("http://localhost:8888/NG/data/CohortPatients",
                 new GetCohortPatientsDataRequest { CohortID = cohortID, ContractNumber = contractNumber, Context = context } as object);
@@ -38,6 +38,8 @@ namespace Phytel.API.DataDomain.Patient.Services.Test
             string cohortID = "528ed9b3072ef70e10099687";
 
             IRestClient client = new JsonServiceClient();
+            JsonServiceClient.HttpWebRequestFilter = x =>
+                            x.Headers.Add(string.Format("{0}: {1}", "x-Phytel-UserID", "531f2df9072ef727c4d2a3df"));
 
             Stopwatch sw = new Stopwatch();
             sw.Start();
@@ -65,6 +67,8 @@ namespace Phytel.API.DataDomain.Patient.Services.Test
             string searchFilter = "Jul";
 
             IRestClient client = new JsonServiceClient();
+            JsonServiceClient.HttpWebRequestFilter = x =>
+                            x.Headers.Add(string.Format("{0}: {1}", "x-Phytel-UserID", "531f2df9072ef727c4d2a3df"));
 
             Stopwatch sw = new Stopwatch();
             sw.Start();

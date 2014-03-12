@@ -13,11 +13,12 @@ namespace Phytel.API.AppDomain.NG.Service
         {
             PostCareMemberResponse response = new PostCareMemberResponse();
             CareMembersManager ngm = new CareMembersManager();
+            ValidateTokenResponse result = null;
 
             try
             {
                 request.Token = base.Request.Headers["Token"] as string;
-                ValidateTokenResponse result = ngm.IsUserValidated(request.Version, request.Token, request.ContractNumber);
+                result = ngm.IsUserValidated(request.Version, request.Token, request.ContractNumber);
                 if (result.UserId.Trim() != string.Empty)
                 {
                     request.UserId = result.UserId;
@@ -34,7 +35,8 @@ namespace Phytel.API.AppDomain.NG.Service
             }
             finally
             {
-                AuditHelper.LogAuditData(request, null, System.Web.HttpContext.Current.Request, request.GetType().Name);
+                if(result != null)
+                    AuditHelper.LogAuditData(request, result.SQLUserId, null, System.Web.HttpContext.Current.Request, request.GetType().Name);
             }
             return response;
         }
@@ -43,11 +45,12 @@ namespace Phytel.API.AppDomain.NG.Service
         {
             PostUpdateCareMemberResponse response = new PostUpdateCareMemberResponse();
             CareMembersManager ngm = new CareMembersManager();
+            ValidateTokenResponse result = null;
 
             try
             {
                 request.Token = base.Request.Headers["Token"] as string;
-                ValidateTokenResponse result = ngm.IsUserValidated(request.Version, request.Token, request.ContractNumber);
+                result = ngm.IsUserValidated(request.Version, request.Token, request.ContractNumber);
                 if (result.UserId.Trim() != string.Empty)
                 {
                     request.UserId = result.UserId;
@@ -64,7 +67,8 @@ namespace Phytel.API.AppDomain.NG.Service
             }
             finally
             {
-                AuditHelper.LogAuditData(request, null, System.Web.HttpContext.Current.Request, request.GetType().Name);
+                if(result != null)
+                    AuditHelper.LogAuditData(request, result.SQLUserId, null, System.Web.HttpContext.Current.Request, request.GetType().Name);
             }
             return response;
         }
@@ -73,11 +77,12 @@ namespace Phytel.API.AppDomain.NG.Service
         {
             GetCareMemberResponse response = new GetCareMemberResponse();
             CareMembersManager nManager = new CareMembersManager();
+            ValidateTokenResponse result = null;
 
             try
             {
                 request.Token = base.Request.Headers["Token"] as string;
-                ValidateTokenResponse result = nManager.IsUserValidated(request.Version, request.Token, request.ContractNumber);
+                result = nManager.IsUserValidated(request.Version, request.Token, request.ContractNumber);
                 if (result.UserId.Trim() != string.Empty)
                 {
                     request.UserId = result.UserId;
@@ -94,7 +99,8 @@ namespace Phytel.API.AppDomain.NG.Service
             }
             finally
             {
-                AuditHelper.LogAuditData(request, null, System.Web.HttpContext.Current.Request, request.GetType().Name);
+                if(result != null)
+                    AuditHelper.LogAuditData(request, result.SQLUserId, null, System.Web.HttpContext.Current.Request, request.GetType().Name);
             }
             return response;
         }
@@ -103,11 +109,12 @@ namespace Phytel.API.AppDomain.NG.Service
         {
             GetAllCareMembersResponse response = new GetAllCareMembersResponse();
             CareMembersManager nManager = new CareMembersManager();
+            ValidateTokenResponse result = null;
 
             try
             {
                 request.Token = base.Request.Headers["Token"] as string;
-                ValidateTokenResponse result = nManager.IsUserValidated(request.Version, request.Token, request.ContractNumber);
+                result = nManager.IsUserValidated(request.Version, request.Token, request.ContractNumber);
                 if (result.UserId.Trim() != string.Empty)
                 {
                     request.UserId = result.UserId;
@@ -124,7 +131,8 @@ namespace Phytel.API.AppDomain.NG.Service
             }
             finally
             {
-                AuditHelper.LogAuditData(request, null, System.Web.HttpContext.Current.Request, request.GetType().Name);
+                if(result != null)
+                    AuditHelper.LogAuditData(request, result.SQLUserId, null, System.Web.HttpContext.Current.Request, request.GetType().Name);
             }
             return response;
         }

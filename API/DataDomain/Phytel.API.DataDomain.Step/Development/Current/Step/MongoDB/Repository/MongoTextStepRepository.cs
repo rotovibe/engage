@@ -89,5 +89,7 @@ namespace Phytel.API.DataDomain.Step
         {
             throw new NotImplementedException();
         }
+
+        public string UserId { get; set; }
     }
 }

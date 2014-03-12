@@ -11,6 +11,7 @@ using MongoDB.Bson;
 using Phytel.API.DataDomain.Program;
 using Phytel.API.DataDomain.Program.MongoDB.DTO;
 using Phytel.API.Common;
+using Phytel.API.DataAudit;
 
 namespace Phytel.API.DataDomain.Program
 {
@@ -25,11 +26,12 @@ namespace Phytel.API.DataDomain.Program
 
         public object Insert(object newEntity)
         {
+            PutProgramToPatientRequest request = (PutProgramToPatientRequest)newEntity;
+            PutProgramToPatientResponse result = new PutProgramToPatientResponse();
+            result.Outcome = new Outcome();
+
             try
             {
-                PutProgramToPatientRequest request = (PutProgramToPatientRequest)newEntity;
-                PutProgramToPatientResponse result = new PutProgramToPatientResponse();
-                result.Outcome = new Outcome();
                 using (ProgramMongoContext ctx = new ProgramMongoContext(_dbName))
                 {
                     var findQ = MB.Query.And(
@@ -61,6 +63,8 @@ namespace Phytel.API.DataDomain.Program
                         var q = MB.Query<MEPatientProgram>.EQ(b => b.Id, patientProgDoc.Id);
                         patientProgDoc.Modules.ForEach(s => s.ProgramId = patientProgDoc.Id);
                         ctx.PatientPrograms.Collection.Update(q, MB.Update.SetWrapped<List<Module>>(MEPatientProgram.ModulesProperty, patientProgDoc.Modules));
+
+                        AuditHelper.LogDataAudit(this.UserId, MongoCollectionName.PatientProgram.ToString(), patientProgDoc.Id.ToString(), Common.DataAuditType.Insert, _dbName);
 
                         // hydrate response object
                         result.program = new ProgramInfo
@@ -250,10 +254,10 @@ namespace Phytel.API.DataDomain.Program
         public object Update(object entity)
         {
             PutProgramActionProcessingRequest p = (PutProgramActionProcessingRequest)entity;
-
+            ProgramDetail pg = p.Program;
+            
             try
             {
-                ProgramDetail pg = p.Program;
                 using (ProgramMongoContext ctx = new ProgramMongoContext(_dbName))
                 {
                     var q = MB.Query<MEPatientProgram>.EQ(b => b.Id, ObjectId.Parse(p.ProgramId));
@@ -265,7 +269,7 @@ namespace Phytel.API.DataDomain.Program
                     uv.Add(MB.Update.Set(MEPatientProgram.OrderProperty, pg.Order));
                     uv.Add(MB.Update.Set(MEPatientProgram.ProgramStateProperty, (ProgramState)pg.ProgramState));
                     uv.Add(MB.Update.Set(MEPatientProgram.LastUpdatedOnProperty, System.DateTime.UtcNow));
-                    uv.Add(MB.Update.Set(MEPatientProgram.UpdatedByProperty, p.UserId));
+                    uv.Add(MB.Update.Set(MEPatientProgram.UpdatedByProperty, ObjectId.Parse(this.UserId)));
                     uv.Add(MB.Update.Set(MEPatientProgram.VersionProperty, pg.Version)); 
 
                     if (pg.ElementState != 0) uv.Add(MB.Update.Set(MEPatientProgram.StateProperty, (ElementState)pg.ElementState));
@@ -297,6 +301,10 @@ namespace Phytel.API.DataDomain.Program
             {
                 throw new Exception("DataDomain:Update()::" + ex.Message, ex.InnerException);
             }
+            finally
+            {
+                AuditHelper.LogDataAudit(this.UserId, MongoCollectionName.PatientProgram.ToString(), pg.Id, Common.DataAuditType.Update, _dbName);
+            }
         }
 
         public List<ProgramInfo> GetActiveProgramsInfoList(GetAllActiveProgramsRequest request)
@@ -308,11 +316,12 @@ namespace Phytel.API.DataDomain.Program
         {
             throw new NotImplementedException();
         }
-
-
+        
         public MEProgram FindByID(string entityID, bool temp)
         {
             throw new NotImplementedException();
         }
+
+        public string UserId { get; set; }
     }
 }

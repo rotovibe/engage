@@ -15,6 +15,7 @@ namespace Phytel.API.DataDomain.CareMember
             try
             {
                 ICareMemberRepository<PutCareMemberDataResponse> repo = CareMemberRepositoryFactory<PutCareMemberDataResponse>.GetCareMemberRepository(request.ContractNumber, request.Context);
+                repo.UserId = request.UserId;
                 careMemberId = (string)repo.Insert(request);
             }
             catch (Exception ex)
@@ -30,6 +31,7 @@ namespace Phytel.API.DataDomain.CareMember
             try
             {
                 ICareMemberRepository<PutUpdateCareMemberDataResponse> repo = CareMemberRepositoryFactory<PutUpdateCareMemberDataResponse>.GetCareMemberRepository(request.ContractNumber, request.Context);
+                repo.UserId = request.UserId;
                 updated = (bool)repo.Update(request);
             }
             catch (Exception ex)
@@ -45,6 +47,7 @@ namespace Phytel.API.DataDomain.CareMember
             {
                 CareMemberData response = null;
                 ICareMemberRepository<CareMemberData> repo = CareMemberRepositoryFactory<CareMemberData>.GetCareMemberRepository(request.ContractNumber, request.Context);
+                repo.UserId = request.UserId;
                 response = repo.FindByID(request.Id) as CareMemberData;
                 return response;
             }
@@ -60,6 +63,7 @@ namespace Phytel.API.DataDomain.CareMember
             {
                 List<CareMemberData> response = null;
                 ICareMemberRepository<List<CareMemberData>> repo = CareMemberRepositoryFactory<List<CareMemberData>>.GetCareMemberRepository(request.ContractNumber, request.Context);
+                repo.UserId = request.UserId;
                 response = repo.FindByPatientId(request) as List<CareMemberData>;
                 return response;
             }

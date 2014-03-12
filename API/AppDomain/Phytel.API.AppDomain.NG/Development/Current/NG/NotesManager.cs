@@ -20,7 +20,8 @@ namespace Phytel.API.AppDomain.NG
             {
                 PatientNote result = null;
                 //[Route("/{Context}/{Version}/{ContractNumber}/Patient/{PatientId}/Note/{Id}", "GET")]
-                IRestClient client = new JsonServiceClient();
+                IRestClient client = Common.Helper.GetJsonServiceClient(request.UserId);
+
                 GetPatientNoteDataResponse ddResponse = client.Get<GetPatientNoteDataResponse>(
                     string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Note/{5}?UserId={6}",
                     DDPatientNoteUrl,
@@ -58,7 +59,8 @@ namespace Phytel.API.AppDomain.NG
             {
                 List<PatientNote> result = null;
                 //[Route("/{Context}/{Version}/{ContractNumber}/Patient/{PatientId}/Notes/{Count}", "GET")]
-                IRestClient client = new JsonServiceClient();
+                IRestClient client = Common.Helper.GetJsonServiceClient(request.UserId);
+
                 GetAllPatientNotesDataResponse ddResponse = client.Get<GetAllPatientNotesDataResponse>(
                     string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Notes/{5}?UserId={6}",
                     DDPatientNoteUrl,
@@ -106,7 +108,8 @@ namespace Phytel.API.AppDomain.NG
 
                 PostPatientNoteResponse response = new PostPatientNoteResponse();
                 //[Route("/{Context}/{Version}/{ContractNumber}/Patient/{PatientId}/Note/Insert", "PUT")]
-                IRestClient client = new JsonServiceClient();
+                IRestClient client = Common.Helper.GetJsonServiceClient(request.UserId);
+
                 PatientNoteData noteData = new PatientNoteData {
                     Text  = request.Note.Text,
                     ProgramIds  = request.Note.ProgramIds,
@@ -149,7 +152,8 @@ namespace Phytel.API.AppDomain.NG
             PostDeletePatientNoteResponse response = new PostDeletePatientNoteResponse();
             try
             {
-                IRestClient client = new JsonServiceClient();
+                IRestClient client = Common.Helper.GetJsonServiceClient(request.UserId);
+
                 //[Route("/{Context}/{Version}/{ContractNumber}/Patient/{PatientId}/Note/{Id}/Delete", "DELETE")]
                 DeletePatientNoteDataResponse ddResponse = client.Delete<DeletePatientNoteDataResponse>(
                     string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Note/{5}/Delete?UserId={6}",

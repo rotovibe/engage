@@ -81,5 +81,7 @@ namespace Phytel.API.DataDomain.Module
         {
             throw new NotImplementedException();
         }
+
+        public string UserId { get; set; }
     }
 }

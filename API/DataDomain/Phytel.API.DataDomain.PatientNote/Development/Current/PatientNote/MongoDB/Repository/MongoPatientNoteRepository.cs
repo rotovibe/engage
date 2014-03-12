@@ -33,11 +33,12 @@ namespace Phytel.API.DataDomain.PatientNote
             PutPatientNoteDataRequest request = (PutPatientNoteDataRequest)newEntity;
             PatientNoteData noteData = request.PatientNote;
             string noteId = string.Empty;
+            MEPatientNote meN = null;
             try
             {
                 if(noteData != null)
                 {
-                    MEPatientNote meN = new MEPatientNote
+                    meN = new MEPatientNote
                     {
                         Id = ObjectId.GenerateNewId(),
                         PatientId = ObjectId.Parse(noteData.PatientId),
@@ -45,13 +46,11 @@ namespace Phytel.API.DataDomain.PatientNote
                         Programs = Helper.ConvertToObjectIdList(noteData.ProgramIds),
                         CreatedOn = DateTime.UtcNow,
                         Version = request.Version,
-                        UpdatedBy = ObjectId.Parse(request.UserId),
-                        LastUpdatedOn = DateTime.UtcNow
+                        UpdatedBy = ObjectId.Parse(this.UserId),
+                        LastUpdatedOn = DateTime.UtcNow,
+                        CreatedBy = ObjectId.Parse(this.UserId)
                     };
-                    if (!string.IsNullOrEmpty(noteData.CreatedById))
-                    {
-                        meN.CreatedBy = ObjectId.Parse(noteData.CreatedById);
-                    }
+
                     using (PatientNoteMongoContext ctx = new PatientNoteMongoContext(_dbName))
                     {
                         WriteConcernResult wcr = ctx.PatientNotes.Collection.Insert(meN);
@@ -66,7 +65,7 @@ namespace Phytel.API.DataDomain.PatientNote
             catch (Exception ex) { throw ex; }
              finally
             {
-                AuditHelper.LogAuditData(request.UserId, MongoCollectionName.PatientNote.ToString(), request.PatientId.ToString(), Common.DataAuditType.Insert, request.ContractNumber);
+                AuditHelper.LogDataAudit(this.UserId, MongoCollectionName.PatientNote.ToString(), meN.Id.ToString(), Common.DataAuditType.Insert, request.ContractNumber);
             }
         }
 
@@ -93,7 +92,7 @@ namespace Phytel.API.DataDomain.PatientNote
                     uv.Add(MB.Update.Set(MEPatientNote.TTLDateProperty, DateTime.UtcNow.AddDays(_expireDays)));
                     uv.Add(MB.Update.Set(MEPatientNote.LastUpdatedOnProperty, DateTime.UtcNow));
                     uv.Add(MB.Update.Set(MEPatientNote.DeleteFlagProperty, true));
-                    uv.Add(MB.Update.Set(MEPatientNote.UpdatedByProperty, request.UserId));
+                    uv.Add(MB.Update.Set(MEPatientNote.UpdatedByProperty, ObjectId.Parse(this.UserId)));
 
                     IMongoUpdate update = MB.Update.Combine(uv);
                     ctx.PatientNotes.Collection.Update(q, update);
@@ -102,7 +101,7 @@ namespace Phytel.API.DataDomain.PatientNote
             catch (Exception ex) { throw ex; }
             finally
             {
-                AuditHelper.LogAuditData(request.UserId, MongoCollectionName.PatientNote.ToString(), request.Id.ToString(), Common.DataAuditType.Delete, request.ContractNumber);
+                AuditHelper.LogDataAudit(this.UserId, MongoCollectionName.PatientNote.ToString(), request.Id.ToString(), Common.DataAuditType.Delete, request.ContractNumber);
             }
         }
 
@@ -227,5 +226,7 @@ namespace Phytel.API.DataDomain.PatientNote
             }
             catch (Exception ex) { throw ex; }
         }
+
+        public string UserId { get; set; }
     }
 }

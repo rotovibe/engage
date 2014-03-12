@@ -15,11 +15,12 @@ namespace Phytel.API.AppDomain.NG.Service
         {
             GetStandardObservationItemsResponse response = new GetStandardObservationItemsResponse();
             ObservationsManager om = new ObservationsManager();
+            ValidateTokenResponse result = null;
 
             try
             {
                 request.Token = base.Request.Headers["Token"] as string;
-                ValidateTokenResponse result = om.IsUserValidated(request.Version, request.Token, request.ContractNumber);
+                result = om.IsUserValidated(request.Version, request.Token, request.ContractNumber);
                 if (result.UserId.Trim() != string.Empty)
                 {
                     request.UserId = result.UserId;
@@ -38,7 +39,9 @@ namespace Phytel.API.AppDomain.NG.Service
             {
                 List<string> patientIds = new List<string>();
                 patientIds.Add(request.PatientId);
-                AuditHelper.LogAuditData(request, patientIds, System.Web.HttpContext.Current.Request, request.GetType().Name);
+
+                if(result != null)
+                    AuditHelper.LogAuditData(request, result.SQLUserId, patientIds, System.Web.HttpContext.Current.Request, request.GetType().Name);
             }
             return response; 
         }
@@ -47,11 +50,12 @@ namespace Phytel.API.AppDomain.NG.Service
         {
             GetAdditionalObservationItemResponse response = new GetAdditionalObservationItemResponse();
             ObservationsManager om = new ObservationsManager();
+            ValidateTokenResponse result = null;
 
             try
             {
                 request.Token = base.Request.Headers["Token"] as string;
-                ValidateTokenResponse result = om.IsUserValidated(request.Version, request.Token, request.ContractNumber);
+                result = om.IsUserValidated(request.Version, request.Token, request.ContractNumber);
                 if (result.UserId.Trim() != string.Empty)
                 {
                     request.UserId = result.UserId;
@@ -70,7 +74,9 @@ namespace Phytel.API.AppDomain.NG.Service
             {
                 List<string> patientIds = new List<string>();
                 patientIds.Add(request.PatientId);
-                AuditHelper.LogAuditData(request, patientIds, System.Web.HttpContext.Current.Request, request.GetType().Name);
+                
+                if(result != null)
+                    AuditHelper.LogAuditData(request, result.SQLUserId, patientIds, System.Web.HttpContext.Current.Request, request.GetType().Name);
             }
 
             return response;
@@ -80,11 +86,12 @@ namespace Phytel.API.AppDomain.NG.Service
         {
             GetAdditionalObservationLibraryResponse response = new GetAdditionalObservationLibraryResponse();
             ObservationsManager om = new ObservationsManager();
+            ValidateTokenResponse result = null;
 
             try
             {
                 request.Token = base.Request.Headers["Token"] as string;
-                ValidateTokenResponse result = om.IsUserValidated(request.Version, request.Token, request.ContractNumber);
+                result = om.IsUserValidated(request.Version, request.Token, request.ContractNumber);
                 if (result.UserId.Trim() != string.Empty)
                 {
                     request.UserId = result.UserId;
@@ -103,7 +110,9 @@ namespace Phytel.API.AppDomain.NG.Service
             {
                 List<string> patientIds = new List<string>();
                 patientIds.Add(request.PatientId);
-                AuditHelper.LogAuditData(request, patientIds, System.Web.HttpContext.Current.Request, request.GetType().Name);
+
+                if(result != null)
+                    AuditHelper.LogAuditData(request, result.SQLUserId, patientIds, System.Web.HttpContext.Current.Request, request.GetType().Name);
             }
 
             return response;
@@ -113,10 +122,12 @@ namespace Phytel.API.AppDomain.NG.Service
         {
             PostUpdateObservationItemsResponse response = new PostUpdateObservationItemsResponse();
             ObservationsManager om = new ObservationsManager();
+            ValidateTokenResponse result = null;
+
             try
             {
                 request.Token = base.Request.Headers["Token"] as string;
-                ValidateTokenResponse result = om.IsUserValidated(request.Version, request.Token, request.ContractNumber);
+                result = om.IsUserValidated(request.Version, request.Token, request.ContractNumber);
                 if (result.UserId.Trim() != string.Empty)
                 {
                     request.UserId = result.UserId;
@@ -135,7 +146,9 @@ namespace Phytel.API.AppDomain.NG.Service
             {
                 List<string> patientIds = new List<string>();
                 patientIds.Add(request.PatientId);
-                AuditHelper.LogAuditData(request, patientIds, System.Web.HttpContext.Current.Request, request.GetType().Name);
+
+                if(result != null)
+                    AuditHelper.LogAuditData(request, result.SQLUserId, patientIds, System.Web.HttpContext.Current.Request, request.GetType().Name);
             }
 
             return response;

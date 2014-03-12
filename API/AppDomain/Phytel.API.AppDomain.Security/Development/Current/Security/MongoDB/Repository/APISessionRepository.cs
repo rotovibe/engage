@@ -16,6 +16,8 @@ namespace Phytel.API.AppDomain.Security
     public class APISessionRepository<T> : ISecurityRepository<T>
     {
         #region Endpoint addresses
+
+        static readonly string PhytelUserIDHeaderKey = "x-Phytel-UserID";
         protected static readonly string DDContactServiceUrl = ConfigurationManager.AppSettings["DDContactServiceUrl"];
         #endregion
 
@@ -252,15 +254,15 @@ namespace Phytel.API.AppDomain.Security
             throw new NotImplementedException();
         }
 
+        public string UserId { get; set; }
+
         #region Private Methods
         private ObjectId GetUserId(string contractNumber, string productContext, string sqlUserID)
         {
             ObjectId returnId = ObjectId.Empty;
 
             GetContactByUserIdDataResponse contactDataResponse = null;
-            IRestClient client = new JsonServiceClient();
-            
-            //[Route("/{Context}/{Version}/{ContractNumber}/Contact/User/{UserId}", "GET")]
+            IRestClient client = GetJsonServiceClient(returnId.ToString());
 
             contactDataResponse = client.Get<GetContactByUserIdDataResponse>(string.Format("{0}/{1}/1.0/{2}/Contact/User/{3}",
                                                     DDContactServiceUrl,
@@ -272,6 +274,16 @@ namespace Phytel.API.AppDomain.Security
                 returnId = ObjectId.Parse(contactDataResponse.Contact.ContactId);
             
             return returnId;
+        }
+
+        public static IRestClient GetJsonServiceClient(string userId)
+        {
+            IRestClient client = new JsonServiceClient();
+
+            JsonServiceClient.HttpWebRequestFilter = x =>
+                x.Headers.Add(string.Format("{0}: {1}", PhytelUserIDHeaderKey, userId));
+
+            return client;
         }
         #endregion
     }

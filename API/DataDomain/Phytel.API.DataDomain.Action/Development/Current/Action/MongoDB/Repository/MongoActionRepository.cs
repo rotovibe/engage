@@ -71,7 +71,7 @@ namespace Phytel.API.DataDomain.Action
                         ID = meAction.Id.ToString(),
                         Name = meAction.Name,
                         Description = meAction.Description,
-                        CompletedBy = meAction.CompletedBy,
+                        CompletedBy = meAction.CompletedBy.ToString(),
                         Objectives = objectiveIDs,
                         Status = Helper.ToFriendlyString(meAction.Status)
                     };
@@ -100,5 +100,7 @@ namespace Phytel.API.DataDomain.Action
         {
             throw new NotImplementedException();
         }
+
+        public string UserId { get; set; }
     }
 }

@@ -10,7 +10,7 @@ namespace Phytel.API.AppDomain.NG
     {
         protected static readonly string ADSecurityServiceURL = ConfigurationManager.AppSettings["ADSecurityServiceUrl"];
         protected static readonly string PhytelSecurityHeaderKey = "x-Phytel-Security";
-
+        
         public ValidateTokenResponse IsUserValidated(double version, string token, string contractNumber)
         {
             try
@@ -20,7 +20,7 @@ namespace Phytel.API.AppDomain.NG
 
                 string additionalToken = BuildSecurityToken();
 
-                IRestClient client = new JsonServiceClient();
+                IRestClient client = new JsonServiceClient(); //we don't use the ngutils createjson service because we are not calling a data domain here
 
                 JsonServiceClient.HttpWebRequestFilter = x =>
                     x.Headers.Add(string.Format("{0}: {1}", PhytelSecurityHeaderKey, additionalToken));

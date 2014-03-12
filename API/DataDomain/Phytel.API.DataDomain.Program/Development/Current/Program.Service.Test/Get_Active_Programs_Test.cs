@@ -16,6 +16,8 @@ namespace Phytel.API.DataDomain.Program.Services.Test
             string context ="NG";
             double version = 1.0;
             IRestClient client = new JsonServiceClient();
+            JsonServiceClient.HttpWebRequestFilter = x =>
+                            x.Headers.Add(string.Format("{0}: {1}", "x-Phytel-UserID", "531f2df9072ef727c4d2a3df"));
 
             GetAllActiveProgramsResponse response = client.Get<GetAllActiveProgramsResponse>(
                 string.Format("{0}/{1}/{2}/{3}/Programs/Active",

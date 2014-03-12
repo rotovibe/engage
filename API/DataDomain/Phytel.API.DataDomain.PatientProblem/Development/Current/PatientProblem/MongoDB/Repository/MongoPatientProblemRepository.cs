@@ -8,6 +8,8 @@ using Phytel.API.DataDomain.PatientProblem;
 using Phytel.API.DataDomain.PatientProblem.DTO;
 using Phytel.API.Interface;
 using MB = MongoDB.Driver.Builders;
+using Phytel.API.DataAudit;
+using Phytel.API.Common;
 
 namespace Phytel.API.DataDomain.PatientProblem
 {
@@ -22,14 +24,14 @@ namespace Phytel.API.DataDomain.PatientProblem
 
         public object Insert(object newEntity)
         {
+            PutNewPatientProblemRequest request = (PutNewPatientProblemRequest)newEntity;
+            DTO.PatientProblem pb = null;
+            MEPatientProblem pp = null;
             try
             {
-                PutNewPatientProblemRequest request = (PutNewPatientProblemRequest)newEntity;
-                DTO.PatientProblem pb = null;
-
                 using (PatientProblemMongoContext ctx = new PatientProblemMongoContext(_dbName))
                 {
-                    MEPatientProblem pp = new MEPatientProblem
+                    pp = new MEPatientProblem
                     {
                         Active = request.Active,
                         Featured = request.Featured,
@@ -38,8 +40,8 @@ namespace Phytel.API.DataDomain.PatientProblem
                         ProblemID = ObjectId.Parse(request.ProblemId),
                         Version = 1,
                         DeleteFlag = false,
-                        LastUpdatedOn = System.DateTime.UtcNow
-
+                        LastUpdatedOn = System.DateTime.UtcNow,
+                        UpdatedBy = ObjectId.Parse(this.UserId)
                     };
                     ctx.PatientProblems.Collection.Insert(pp);
 
@@ -61,6 +63,10 @@ namespace Phytel.API.DataDomain.PatientProblem
             catch (Exception ex)
             {
                 throw ex;
+            }
+            finally
+            {
+                AuditHelper.LogDataAudit(this.UserId, MongoCollectionName.PatientProblem.ToString(), pp.Id.ToString(), Common.DataAuditType.Insert, request.ContractNumber);
             }
         }
 
@@ -136,8 +142,7 @@ namespace Phytel.API.DataDomain.PatientProblem
 
             return new Tuple<string, IEnumerable<object>>(expression.ExpressionID, returnQuery);
         }
-
-
+        
         public IEnumerable<object> SelectAll()
         {
             throw new NotImplementedException();
@@ -158,9 +163,10 @@ namespace Phytel.API.DataDomain.PatientProblem
                     uv.Add(MB.Update.Set(MEPatientProblem.ActiveProperty, p.Active));
                     uv.Add(MB.Update.Set(MEPatientProblem.FeaturedProperty, p.Featured));
                     uv.Add(MB.Update.Set(MEPatientProblem.LastUpdatedOnProperty, System.DateTime.UtcNow));
-                    if (p.Level != 0) { uv.Add(MB.Update.Set(MEPatientProblem.LevelProperty, p.Level)); }
-                    if (p.UserId != null) { uv.Add(MB.Update.Set(MEPatientProblem.UpdatedByProperty, p.UserId)); }
+                    uv.Add(MB.Update.Set(MEPatientProblem.UpdatedByProperty, ObjectId.Parse(this.UserId)));
 
+                    if (p.Level != 0) { uv.Add(MB.Update.Set(MEPatientProblem.LevelProperty, p.Level)); }
+                    
                     IMongoUpdate update = MB.Update.Combine(uv);
                     ctx.PatientProblems.Collection.Update(q, update);
                 }
@@ -170,12 +176,18 @@ namespace Phytel.API.DataDomain.PatientProblem
             {
                 throw new Exception("DataDomain:Update()::" + ex.Message, ex.InnerException);
             }
+            finally
+            {
+                AuditHelper.LogDataAudit(this.UserId, MongoCollectionName.PatientProblem.ToString(), p.Id, Common.DataAuditType.Update, p.ContractNumber);
+            }
         }
 
         public void CacheByID(List<string> entityIDs)
         {
             throw new NotImplementedException();
         }
+
+        public string UserId { get; set; }
     }
 
 }

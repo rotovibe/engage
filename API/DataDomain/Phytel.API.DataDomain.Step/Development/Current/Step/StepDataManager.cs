@@ -18,6 +18,7 @@ namespace Phytel.API.DataDomain.Step
             GetYesNoStepDataResponse result = new GetYesNoStepDataResponse();
 
             IStepRepository<GetYesNoStepDataResponse> repo = StepRepositoryFactory<GetYesNoStepDataResponse>.GetStepRepository(request.ContractNumber, request.Context, yesnostep);
+            repo.UserId = request.UserId;
             result = repo.FindByID(request.YesNoStepID) as GetYesNoStepDataResponse;
 
             return (result != null ? result : new GetYesNoStepDataResponse());
@@ -28,6 +29,7 @@ namespace Phytel.API.DataDomain.Step
             GetTextStepDataResponse result = new GetTextStepDataResponse();
 
             IStepRepository<GetTextStepDataResponse> repo = StepRepositoryFactory<GetTextStepDataResponse>.GetStepRepository(request.ContractNumber, request.Context, textstep);
+            repo.UserId = request.UserId;
             result = repo.FindByID(request.TextStepID) as GetTextStepDataResponse;
 
             return (result != null ? result : new GetTextStepDataResponse());

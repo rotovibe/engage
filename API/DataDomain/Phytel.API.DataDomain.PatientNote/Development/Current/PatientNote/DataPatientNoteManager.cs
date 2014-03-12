@@ -12,6 +12,7 @@ namespace Phytel.API.DataDomain.PatientNote
             try
             {
                 IPatientNoteRepository<PutPatientNoteDataResponse> repo = PatientNoteRepositoryFactory<PutPatientNoteDataResponse>.GetPatientNoteRepository(request.ContractNumber, request.Context);
+                repo.UserId = request.UserId;
                 noteId = (string)repo.Insert(request);
             }
             catch (Exception ex)
@@ -27,6 +28,7 @@ namespace Phytel.API.DataDomain.PatientNote
             {
                 PatientNoteData response = null;
                 IPatientNoteRepository<PatientNoteData> repo = PatientNoteRepositoryFactory<PatientNoteData>.GetPatientNoteRepository(request.ContractNumber, request.Context);
+                repo.UserId = request.UserId;
                 response = repo.FindByID(request.Id) as PatientNoteData;
                 return response;
             }
@@ -42,6 +44,7 @@ namespace Phytel.API.DataDomain.PatientNote
             {
                 List<PatientNoteData> response = null;
                 IPatientNoteRepository<List<PatientNoteData>> repo = PatientNoteRepositoryFactory<List<PatientNoteData>>.GetPatientNoteRepository(request.ContractNumber, request.Context);
+                repo.UserId = request.UserId;
                 response = repo.FindByPatientId(request) as List<PatientNoteData>;
                 return response;
             }
@@ -56,6 +59,7 @@ namespace Phytel.API.DataDomain.PatientNote
             try
             {
                 IPatientNoteRepository<DeletePatientNoteDataResponse> repo = PatientNoteRepositoryFactory<DeletePatientNoteDataResponse>.GetPatientNoteRepository(request.ContractNumber, request.Context);
+                repo.UserId = request.UserId;
                 repo.Delete(request);
                 return true;
             }

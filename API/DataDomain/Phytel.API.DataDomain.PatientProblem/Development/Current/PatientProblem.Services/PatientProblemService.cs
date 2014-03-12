@@ -5,17 +5,23 @@ using Phytel.API.DataDomain.PatientProblem;
 using Phytel.API.DataDomain.PatientProblem.DTO;
 using System.Configuration;
 using Phytel.API.Common.Format;
+using System.Web;
 
 namespace Phytel.API.DataDomain.PatientProblem.Service
 {
     public class PatientProblemService : ServiceStack.ServiceInterface.Service
     {
+        private const string _phytelUserIDToken = "x-Phytel-UserID";
+
         public GetAllPatientProblemsDataResponse Get(GetAllPatientProblemsDataRequest request)
         {
             GetAllPatientProblemsDataResponse response = new GetAllPatientProblemsDataResponse();
             try
             {
+                //Get the UserId from the Header and update the request object
+                request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
                 response = DataPatientProblemManager.GetAllPatientProblem(request);
+                response.Version = request.Version;
             }
             catch (Exception ex)
             {
@@ -33,7 +39,10 @@ namespace Phytel.API.DataDomain.PatientProblem.Service
             GetPatientProblemsDataResponse response = new GetPatientProblemsDataResponse();
             try
             {
+                //Get the UserId from the Header and update the request object
+                request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
                 response = DataPatientProblemManager.GetPatientProblem(request);
+                response.Version = request.Version;
             }
             catch (Exception ex)
             {
@@ -51,7 +60,10 @@ namespace Phytel.API.DataDomain.PatientProblem.Service
             PutNewPatientProblemResponse response = new PutNewPatientProblemResponse();
             try
             {
+                //Get the UserId from the Header and update the request object
+                request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
                 response = DataPatientProblemManager.PutPatientProblem(request);
+                response.Version = request.Version;
             }
             catch (Exception ex)
             {
@@ -69,7 +81,10 @@ namespace Phytel.API.DataDomain.PatientProblem.Service
             PutUpdatePatientProblemResponse response = new PutUpdatePatientProblemResponse();
             try
             {
+                //Get the UserId from the Header and update the request object
+                request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
                 response = DataPatientProblemManager.PutUpdatePatientProblem(request);
+                response.Version = request.Version;
             }
             catch (Exception ex)
             {

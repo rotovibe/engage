@@ -19,6 +19,9 @@ namespace Phytel.API.DataDomain.PatientNote.Services.Test
             string context = "NG";
             double version = 1.0;
             IRestClient client = new JsonServiceClient();
+            JsonServiceClient.HttpWebRequestFilter = x =>
+                            x.Headers.Add(string.Format("{0}: {1}", "x-Phytel-UserID", "531f2df9072ef727c4d2a3df"));
+
             //[Route("/{Context}/{Version}/{ContractNumber}/Patient/{PatientId}/Note/Insert", "PUT")]
             PutPatientNoteDataResponse response = client.Put<PutPatientNoteDataResponse>(
                 string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Note/Insert", url, context, version, contractNumber, note.PatientId),

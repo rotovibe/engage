@@ -20,6 +20,9 @@ namespace Phytel.API.DataDomain.Patient.Services.Test
             string patientId = "52e26f11072ef7191c111c54";
 
             IRestClient client = new JsonServiceClient();
+            JsonServiceClient.HttpWebRequestFilter = x =>
+                            x.Headers.Add(string.Format("{0}: {1}", "x-Phytel-UserID", "531f2df9072ef727c4d2a3df"));
+            
             GetCohortPatientViewResponse response =
                 client.Get<GetCohortPatientViewResponse>(string.Format("{0}/{1}/{2}/{3}/patient/{4}/cohortpatientview/",
                 "http://localhost:8888/Patient",
@@ -39,6 +42,9 @@ namespace Phytel.API.DataDomain.Patient.Services.Test
             CohortPatientViewData cohortPatientView = GetCohortPatientView();
 
             IRestClient client = new JsonServiceClient();
+            JsonServiceClient.HttpWebRequestFilter = x =>
+                            x.Headers.Add(string.Format("{0}: {1}", "x-Phytel-UserID", "531f2df9072ef727c4d2a3df"));
+
             PutUpdateCohortPatientViewResponse response =
                 client.Put<PutUpdateCohortPatientViewResponse>(string.Format("{0}/{1}/{2}/{3}/patient/{4}/cohortpatientview/update",
                 "http://localhost:8888/Patient",

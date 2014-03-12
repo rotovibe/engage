@@ -12,6 +12,7 @@ using Phytel.API.DataDomain.Program;
 using Phytel.API.DataDomain.Program.MongoDB.DTO;
 using Phytel.API.Common;
 using Phytel.API.Common.Data;
+using Phytel.API.DataAudit;
 
 namespace Phytel.API.DataDomain.Program
 {
@@ -43,6 +44,10 @@ namespace Phytel.API.DataDomain.Program
             catch(Exception ex)
             {
                 throw new Exception("DataDomain:Insert()::" + ex.Message, ex.InnerException);
+            }
+            finally
+            {
+                AuditHelper.LogDataAudit(this.UserId, MongoCollectionName.PatientProgramResponse.ToString(), mer.Id.ToString(), Common.DataAuditType.Insert, _dbName);
             }
         }
 
@@ -119,6 +124,8 @@ namespace Phytel.API.DataDomain.Program
                     uv.Add(MB.Update.Set(MEPatientProgramResponse.VersionProperty, resp.Version));
                     uv.Add(MB.Update.Set(MEPatientProgramResponse.LastUpdatedOnProperty, System.DateTime.UtcNow));
                     uv.Add(MB.Update.Set(MEPatientProgramResponse.DeleteFlagProperty, resp.DeleteFlag));
+                    uv.Add(MB.Update.Set(MEPatientProgramResponse.UpdatedByProperty, ObjectId.Parse(this.UserId)));
+
                     if (resp.Order != 0) uv.Add(MB.Update.Set(MEPatientProgramResponse.OrderProperty, resp.Order));
                     if (resp.Text != null) uv.Add(MB.Update.Set(MEPatientProgramResponse.TextProperty, resp.Text));
                     if (resp.Value != null) uv.Add(MB.Update.Set(MEPatientProgramResponse.ValueProperty, resp.Value));
@@ -135,6 +142,10 @@ namespace Phytel.API.DataDomain.Program
             {
                 throw new Exception("DataDomain:Update()::" + ex.Message, ex.InnerException);
             }
+            finally
+            {
+                AuditHelper.LogDataAudit(this.UserId, MongoCollectionName.PatientProgramResponse.ToString(), resp.Id.ToString(), Common.DataAuditType.Update, _dbName);
+            }
         }
 
         public List<ProgramInfo> GetActiveProgramsInfoList(GetAllActiveProgramsRequest request)
@@ -146,11 +157,12 @@ namespace Phytel.API.DataDomain.Program
         {
             throw new NotImplementedException();
         }
-
-
+        
         public MEProgram FindByID(string entityID, bool temp)
         {
             throw new NotImplementedException();
         }
+
+        public string UserId { get; set; }
     }
 }

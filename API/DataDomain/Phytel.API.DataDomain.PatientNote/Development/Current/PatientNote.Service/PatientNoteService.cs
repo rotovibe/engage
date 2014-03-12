@@ -4,16 +4,21 @@ using Phytel.API.DataDomain.PatientNote;
 using Phytel.API.DataDomain.PatientNote.DTO;
 using Phytel.API.Common.Format;
 using System.Configuration;
+using System.Web;
 
 namespace Phytel.API.DataDomain.PatientNote.Service
 {
     public class PatientNoteService : ServiceStack.ServiceInterface.Service
     {
+        private const string _phytelUserIDToken = "x-Phytel-UserID";
+
         public PutPatientNoteDataResponse Put(PutPatientNoteDataRequest request)
         {
             PutPatientNoteDataResponse response = new PutPatientNoteDataResponse();
             try
             {
+                //Get the UserId from the Header and update the request object
+                request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
                 response.Id = PatientNoteDataManager.InsertPatientNote(request);
                 response.Version = request.Version;
             }
@@ -32,6 +37,8 @@ namespace Phytel.API.DataDomain.PatientNote.Service
             GetPatientNoteDataResponse response = new GetPatientNoteDataResponse();
             try
             {
+                //Get the UserId from the Header and update the request object
+                request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
                 response.PatientNote = PatientNoteDataManager.GetPatientNote(request);
                 response.Version = request.Version;
             }
@@ -50,6 +57,8 @@ namespace Phytel.API.DataDomain.PatientNote.Service
             GetAllPatientNotesDataResponse response = new GetAllPatientNotesDataResponse();
             try
             {
+                //Get the UserId from the Header and update the request object
+                request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
                 response.PatientNotes = PatientNoteDataManager.GetAllPatientNotes(request);
                 response.Version = request.Version;
             }
@@ -68,6 +77,8 @@ namespace Phytel.API.DataDomain.PatientNote.Service
             DeletePatientNoteDataResponse response = new DeletePatientNoteDataResponse();
             try
             {
+                //Get the UserId from the Header and update the request object
+                request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
                 response.Deleted = PatientNoteDataManager.DeletePatientNote(request);
                 response.Version = request.Version;
             }

@@ -99,5 +99,7 @@ namespace Phytel.API.DataDomain.Cohort
         {
             throw new NotImplementedException();
         }
+
+        public string UserId { get; set; }
     }
 }

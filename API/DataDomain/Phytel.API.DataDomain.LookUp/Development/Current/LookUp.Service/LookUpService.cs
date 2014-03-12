@@ -5,18 +5,24 @@ using Phytel.API.DataDomain.LookUp;
 using Phytel.API.DataDomain.LookUp.DTO;
 using Phytel.API.Common.Format;
 using System.Configuration;
+using System.Web;
 
 namespace Phytel.API.DataDomain.Patient.Service
 {
     public class LookUpService : ServiceStack.ServiceInterface.Service
     {
+        private const string _phytelUserIDToken = "x-Phytel-UserID";
+
         #region Problems
         public GetProblemDataResponse Get(GetProblemDataRequest request)
         {
             GetProblemDataResponse response = new GetProblemDataResponse();
             try
             {
+                //Get the UserId from the Header and update the request object
+                request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
                 response = LookUpDataManager.GetProblem(request);
+                response.Version = request.Version;
             }
             catch (Exception ex)
             {
@@ -33,7 +39,10 @@ namespace Phytel.API.DataDomain.Patient.Service
             GetAllProblemsDataResponse response = new GetAllProblemsDataResponse();
             try
             {
+                //Get the UserId from the Header and update the request object
+                request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
                 response = LookUpDataManager.GetAllProblems(request);
+                response.Version = request.Version;
             }
             catch (Exception ex)
             {
@@ -50,7 +59,10 @@ namespace Phytel.API.DataDomain.Patient.Service
             SearchProblemsDataResponse response = new SearchProblemsDataResponse();
             try
             {
+                //Get the UserId from the Header and update the request object
+                request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
                 response = LookUpDataManager.SearchProblem(request);
+                response.Version = request.Version;
             }
             catch (Exception ex)
             {
@@ -69,6 +81,8 @@ namespace Phytel.API.DataDomain.Patient.Service
             GetObjectiveDataResponse response = new GetObjectiveDataResponse();
             try
             {
+                //Get the UserId from the Header and update the request object
+                request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
                 response = LookUpDataManager.GetObjectiveByID(request);
                 response.Version = request.Version;
             }
@@ -89,6 +103,8 @@ namespace Phytel.API.DataDomain.Patient.Service
             GetCategoryDataResponse response = new GetCategoryDataResponse();
             try
             {
+                //Get the UserId from the Header and update the request object
+                request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
                 response = LookUpDataManager.GetCategoryByID(request);
                 response.Version = request.Version;
             }
@@ -109,7 +125,10 @@ namespace Phytel.API.DataDomain.Patient.Service
             GetAllCommModesDataResponse response = new GetAllCommModesDataResponse();
             try
             {
+                //Get the UserId from the Header and update the request object
+                request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
                 response = LookUpDataManager.GetAllCommModes(request);
+                response.Version = request.Version;
             }
             catch (Exception ex)
             {
@@ -126,7 +145,10 @@ namespace Phytel.API.DataDomain.Patient.Service
             GetAllStatesDataResponse response = new GetAllStatesDataResponse();
             try
             {
+                //Get the UserId from the Header and update the request object
+                request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
                 response = LookUpDataManager.GetAllStates(request);
+                response.Version = request.Version;
             }
             catch (Exception ex)
             {
@@ -143,7 +165,10 @@ namespace Phytel.API.DataDomain.Patient.Service
             GetAllTimesOfDaysDataResponse response = new GetAllTimesOfDaysDataResponse();
             try
             {
+                //Get the UserId from the Header and update the request object
+                request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
                 response = LookUpDataManager.GetAllTimesOfDays(request);
+                response.Version = request.Version;
             }
             catch (Exception ex)
             {
@@ -160,7 +185,10 @@ namespace Phytel.API.DataDomain.Patient.Service
             GetAllTimeZonesDataResponse response = new GetAllTimeZonesDataResponse();
             try
             {
+                //Get the UserId from the Header and update the request object
+                request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
                 response = LookUpDataManager.GetAllTimeZones(request);
+                response.Version = request.Version;
             }
             catch (Exception ex)
             {
@@ -177,7 +205,10 @@ namespace Phytel.API.DataDomain.Patient.Service
             GetAllCommTypesDataResponse response = new GetAllCommTypesDataResponse();
             try
             {
+                //Get the UserId from the Header and update the request object
+                request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
                 response = LookUpDataManager.GetAllCommTypes(request);
+                response.Version = request.Version;
             }
             catch (Exception ex)
             {
@@ -194,7 +225,10 @@ namespace Phytel.API.DataDomain.Patient.Service
             GetAllLanguagesDataResponse response = new GetAllLanguagesDataResponse();
             try
             {
+                //Get the UserId from the Header and update the request object
+                request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
                 response = LookUpDataManager.GetAllLanguages(request);
+                response.Version = request.Version;
             }
             catch (Exception ex)
             {
@@ -211,7 +245,10 @@ namespace Phytel.API.DataDomain.Patient.Service
             GetTimeZoneDataResponse response = new GetTimeZoneDataResponse();
             try
             {
+                //Get the UserId from the Header and update the request object
+                request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
                 response = LookUpDataManager.GetDefaultTimeZone(request);
+                response.Version = request.Version;
             }
             catch (Exception ex)
             {
@@ -232,7 +269,10 @@ namespace Phytel.API.DataDomain.Patient.Service
             GetLookUpsDataResponse response = new GetLookUpsDataResponse();
             try
             {
+                //Get the UserId from the Header and update the request object
+                request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
                 response = LookUpDataManager.GetLookUpsByType(request);
+                response.Version = request.Version;
             }
             catch (Exception ex)
             {

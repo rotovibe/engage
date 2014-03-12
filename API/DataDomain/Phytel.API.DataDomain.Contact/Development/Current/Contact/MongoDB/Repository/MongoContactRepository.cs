@@ -11,6 +11,7 @@ using MongoDB.Bson;
 using Phytel.API.DataDomain.Contact;
 using MongoDB.Driver.Builders;
 using Phytel.API.Common;
+using Phytel.API.DataAudit;
 
 namespace Phytel.API.DataDomain.Contact
 {
@@ -32,6 +33,7 @@ namespace Phytel.API.DataDomain.Contact
         {
             PutContactDataResponse response = null;
             PutContactDataRequest request = newEntity as PutContactDataRequest;
+            MEContact meContact = null;
             try
             {
                 
@@ -49,7 +51,7 @@ namespace Phytel.API.DataDomain.Contact
                             throw new ApplicationException("A contact record already exists for the patient.");
                         }
                     }
-                    MEContact meContact = new MEContact
+                    meContact = new MEContact
                     {
                         Id = ObjectId.GenerateNewId(),
                         FirstName = request.FirstName,
@@ -59,15 +61,10 @@ namespace Phytel.API.DataDomain.Contact
                         ResourceId = request.ResourceId,
                         Version = request.Version,
                         LastUpdatedOn = DateTime.UtcNow,
+                        UpdatedBy = ObjectId.Parse(this.UserId),
                         DeleteFlag = false
                     };
-
-                    //UpdatedBy
-                    if (!string.IsNullOrEmpty(request.UserId))
-                    {
-                        meContact.UpdatedBy = ObjectId.Parse(request.UserId);
-                    }
-
+                    
                     //PatientId
                     if (request.PatientId != null)
                     {
@@ -196,6 +193,10 @@ namespace Phytel.API.DataDomain.Contact
             catch (Exception ex)
             {
                 throw ex;
+            }
+            finally
+            {
+                AuditHelper.LogDataAudit(this.UserId, MongoCollectionName.CareMember.ToString(), meContact.Id.ToString(), Common.DataAuditType.Insert, request.ContractNumber);
             }
             return response;
         }
@@ -684,7 +685,7 @@ namespace Phytel.API.DataDomain.Contact
                         uv.Add(MB.Update.Set(MEContact.LastUpdatedOnProperty,DateTime.UtcNow));
 
                         //UpdatedBy
-                        uv.Add(MB.Update.Set(MEContact.UpdatedByProperty, request.UserId));
+                        uv.Add(MB.Update.Set(MEContact.UpdatedByProperty, this.UserId));
 
                         IMongoUpdate update = MB.Update.Combine(uv);
                         ctx.Contacts.Collection.Update(query, update);
@@ -925,5 +926,7 @@ namespace Phytel.API.DataDomain.Contact
             }
             catch (Exception ex) { throw ex; }
         }
+
+        public string UserId { get; set; }
     }
 }

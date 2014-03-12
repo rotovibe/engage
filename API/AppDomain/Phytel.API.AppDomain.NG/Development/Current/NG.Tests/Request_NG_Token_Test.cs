@@ -27,7 +27,7 @@ namespace Phytel.API.AppDomain.NG.Services.Test
 
             IRestClient client = new JsonServiceClient();
             JsonServiceClient.HttpWebRequestFilter = x => x.Headers.Add(string.Format("APIToken: {0}", token));
-            
+
             GetPatientResponse response = client.Post<GetPatientResponse>("http://localhost:888/Nightingale/v1/InHealth001/patient",
                 new GetPatientRequest { PatientID = patientID, Token = token } as object);
 

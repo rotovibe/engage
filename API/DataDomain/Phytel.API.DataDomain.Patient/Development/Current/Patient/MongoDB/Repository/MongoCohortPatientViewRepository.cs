@@ -2,7 +2,9 @@ using MongoDB.Bson;
 using MongoDB.Bson.Serialization;
 using MongoDB.Driver;
 using MongoDB.Driver.Builders;
+using Phytel.API.Common;
 using Phytel.API.Common.Format;
+using Phytel.API.DataAudit;
 using Phytel.API.DataDomain.Patient.DTO;
 using Phytel.API.DataDomain.Patient.MongoDB.DTO;
 using Phytel.API.Interface;
@@ -38,7 +40,8 @@ namespace Phytel.API.DataDomain.Patient
                     patientView = new MECohortPatientView
                     {
                         PatientID = ObjectId.Parse(cohortRequest.PatientID),
-                        LastName = cohortRequest.LastName
+                        LastName = cohortRequest.LastName,
+                        Version = cohortRequest.Version
                     };
 
                     if (cohortRequest.SearchFields != null && cohortRequest.SearchFields.Count > 0)
@@ -319,6 +322,8 @@ namespace Phytel.API.DataDomain.Patient
         {
             throw new NotImplementedException();
         }
+
+        public string UserId { get; set; }
 
         #region needs to be taken out of IPatientRepository . In place right now to accomidate the interface
         public void CacheByID(List<string> entityIDs)

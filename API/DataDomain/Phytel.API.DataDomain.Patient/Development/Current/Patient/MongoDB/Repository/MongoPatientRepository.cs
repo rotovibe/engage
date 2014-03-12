@@ -42,11 +42,12 @@ namespace Phytel.API.DataDomain.Patient
                     IMongoQuery query = Query.And(
                                     Query.EQ(MEPatient.FirstNameProperty, request.FirstName),
                                     Query.EQ(MEPatient.LastNameProperty, request.LastName),
-                                    //Query.EQ(MEPatient.SSNProperty, request.SSN),
                                     Query.EQ(MEPatient.DOBProperty, request.DOB));
 
                     patient = ctx.Patients.Collection.FindOneAs<MEPatient>(query);
                     MongoCohortPatientViewRepository<T> repo = new MongoCohortPatientViewRepository<T>(_dbName);
+                    repo.UserId = this.UserId;
+
                     if (patient == null)
                     {
                         patient = new MEPatient
@@ -60,12 +61,11 @@ namespace Phytel.API.DataDomain.Patient
                             Gender = request.Gender,
                             DOB = request.DOB,
                             Background = request.Background,
-                            //SSN = request.SSN,
                             Version = request.Version,
-                            //UpdatedBy = security token user id,
+                            UpdatedBy = ObjectId.Parse(this.UserId),
                             TTLDate = null,
                             DeleteFlag = false,
-                            LastUpdatedOn = System.DateTime.Now
+                            LastUpdatedOn = System.DateTime.UtcNow
                         };
                         ctx.Patients.Collection.Insert(patient);
 
@@ -78,7 +78,6 @@ namespace Phytel.API.DataDomain.Patient
                         data.Add(new SearchFieldData { Active = true, FieldName = Constants.SFX, Value = patient.Suffix });
                         data.Add(new SearchFieldData { Active = true, FieldName = Constants.PN, Value = patient.PreferredName });
                         data.Add(new SearchFieldData { Active = true, FieldName = Constants.PCM }); //value left null on purpose
-                        //data.Add(new SearchFieldData {Active = true, FieldName = "SSN", Value = patient.SSN });
 
                         PutCohortPatientViewDataRequest cohortPatientRequest = new PutCohortPatientViewDataRequest
                         {
@@ -92,7 +91,7 @@ namespace Phytel.API.DataDomain.Patient
                         repo.Insert(cohortPatientRequest);
                     }
 
-                    AuditHelper.LogAuditData(request.UserId, MongoCollectionName.Patient.ToString(), patient.Id.ToString(), Common.DataAuditType.Insert, request.ContractNumber);
+                    AuditHelper.LogDataAudit(this.UserId, MongoCollectionName.Patient.ToString(), patient.Id.ToString(), Common.DataAuditType.Insert, request.ContractNumber);
 
                     return new PutPatientDataResponse
                     {
@@ -432,8 +431,14 @@ namespace Phytel.API.DataDomain.Patient
                 using (PatientMongoContext ctx = new PatientMongoContext(_dbName))
                 {
                     FindAndModifyResult result = ctx.Patients.Collection.FindAndModify(MB.Query.EQ(MEPatient.IdProperty, ObjectId.Parse(request.PatientId)), MB.SortBy.Null,
-                                                new MB.UpdateBuilder().Set(MEPatient.PriorityProperty, (PriorityData)request.Priority).Set(MEPatient.UpdatedByProperty, request.UserId));
+                                                new MB.UpdateBuilder()
+                                                .Set(MEPatient.PriorityProperty, (PriorityData)request.Priority)
+                                                .Set(MEPatient.LastUpdatedOnProperty, DateTime.UtcNow)
+                                                .Set(MEPatient.UpdatedByProperty, ObjectId.Parse(this.UserId)));
                 }
+
+                AuditHelper.LogDataAudit(this.UserId, MongoCollectionName.Patient.ToString(), request.PatientId, Common.DataAuditType.Update, request.ContractNumber);
+
                 return response;
             }
             catch (Exception)
@@ -455,7 +460,7 @@ namespace Phytel.API.DataDomain.Patient
 
                     if (patientUsr == null)
                     {
-                        ctx.PatientUsers.Collection.Insert(new MEPatientUser
+                        MEPatientUser pu = new MEPatientUser
                         {
                             PatientId = ObjectId.Parse(request.PatientId),
                             ContactId = ObjectId.Parse(request.UserId),
@@ -463,17 +468,23 @@ namespace Phytel.API.DataDomain.Patient
                             Version = 1,
                             LastUpdatedOn = System.DateTime.UtcNow,
                             DeleteFlag = false,
-                            UpdatedBy = ObjectId.Parse(request.UserId)
-                        });
+                            UpdatedBy = ObjectId.Parse(this.UserId)
+                        };
+                        ctx.PatientUsers.Collection.Insert(pu);
+                        AuditHelper.LogDataAudit(this.UserId, MongoCollectionName.PatientUser.ToString(), pu.Id.ToString(), Common.DataAuditType.Insert, request.ContractNumber);
                     }
                     else
                     {
 
                         var pUQuery = new QueryDocument(MEPatientUser.IdProperty, patientUsr.Id);
                         var sortBy = new MB.SortByBuilder().Ascending("_id");
-                        MB.UpdateBuilder updt = new MB.UpdateBuilder().Set(MEPatientUser.FlaggedProperty, Convert.ToBoolean(request.Flagged))
-                            .Set(MEPatientUser.UpdatedByProperty, request.UserId);
+                        MB.UpdateBuilder updt = new MB.UpdateBuilder()
+                            .Set(MEPatientUser.FlaggedProperty, Convert.ToBoolean(request.Flagged))
+                            .Set(MEPatientUser.LastUpdatedOnProperty, DateTime.UtcNow)
+                            .Set(MEPatientUser.UpdatedByProperty, ObjectId.Parse(request.UserId));
                         var pt = ctx.PatientUsers.Collection.FindAndModify(pUQuery, sortBy, updt, true);
+
+                        AuditHelper.LogDataAudit(this.UserId, MongoCollectionName.PatientUser.ToString(), patientUsr.Id.ToString(), Common.DataAuditType.Update, request.ContractNumber);
                     }
                     response.Success = true;
                 }
@@ -500,11 +511,16 @@ namespace Phytel.API.DataDomain.Patient
                     }
                     
                     FindAndModifyResult result = ctx.Patients.Collection.FindAndModify(MB.Query.EQ(MEPatient.IdProperty, ObjectId.Parse(request.PatientId)), MB.SortBy.Null,
-                                                new MB.UpdateBuilder().Set(MEPatient.BackgroundProperty, background).Set(MEPatient.UpdatedByProperty, request.UserId).Set(MEPatient.LastUpdatedOnProperty, DateTime.UtcNow));
+                                                new MB.UpdateBuilder()
+                                                .Set(MEPatient.BackgroundProperty, background)
+                                                .Set(MEPatient.UpdatedByProperty, ObjectId.Parse(this.UserId))
+                                                .Set(MEPatient.LastUpdatedOnProperty, DateTime.UtcNow));
                     if (result.Ok)
                     {
                         response.Success = true;
                     }
+
+                    AuditHelper.LogDataAudit(this.UserId, MongoCollectionName.Patient.ToString(), request.PatientId, Common.DataAuditType.Update, request.ContractNumber);
                 }
                 return response;
             }
@@ -616,9 +632,10 @@ namespace Phytel.API.DataDomain.Patient
                         }
                     }
                     
-                    updt.Set("uon", System.DateTime.UtcNow);
-                    updt.Set("pri", request.Priority);
-                    updt.Set("uby", request.UserId);
+                    updt.Set(MEPatient.LastUpdatedOnProperty, System.DateTime.UtcNow);
+                    updt.Set(MEPatient.PriorityProperty, request.Priority);
+                    updt.Set(MEPatient.UpdatedByProperty, ObjectId.Parse(this.UserId));
+                    updt.Set(MEPatient.VersionProperty, request.Version);
 
                     var sortBy = new MB.SortByBuilder().Ascending("_id");
                     var pt = ctx.Patients.Collection.FindAndModify(pUQuery, sortBy, updt, true);
@@ -642,7 +659,7 @@ namespace Phytel.API.DataDomain.Patient
             }
             finally
             {
-                AuditHelper.LogAuditData(request.UserId, MongoCollectionName.Patient.ToString(), request.Id.ToString(), Common.DataAuditType.Update, request.ContractNumber);
+                AuditHelper.LogDataAudit(this.UserId, MongoCollectionName.Patient.ToString(), request.Id.ToString(), Common.DataAuditType.Update, request.ContractNumber);
             }
         }
 
@@ -730,10 +747,11 @@ namespace Phytel.API.DataDomain.Patient
             throw new NotImplementedException();
         }
 
-
         public object Update(object entity)
         {
             throw new NotImplementedException();
         }
+
+        public string UserId { get; set; }
     }
 }

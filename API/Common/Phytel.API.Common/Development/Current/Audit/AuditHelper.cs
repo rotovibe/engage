@@ -27,14 +27,14 @@ namespace Phytel.API.DataAudit
         /// Gets an auditdata record for the current context
         /// </summary>
         /// <returns></returns>
-        public static AuditData GetAuditLog(int auditTypeId, IAppDomainRequest request, List<string> patientids, HttpRequest webrequest, string methodCalledFrom, bool isError = false)
+        public static AuditData GetAuditLog(int auditTypeId, IAppDomainRequest request, string sqlUserID, List<string> patientids, HttpRequest webrequest, string methodCalledFrom, bool isError = false)
         {
             ///{Version}/{ContractNumber}/patient/{PatientID}
             AuditData auditLog = new AuditData()
             {
                 Type = isError ? "ErrorMessage" : string.Format("NG_{0}", methodCalledFrom),
                 AuditTypeId = auditTypeId, //derive this from the type passed in (lookup on PNG.AuditType.Name column)
-                UserId = new Guid(request.UserId), //derive this from Mongo.APISessions.uid...lookup on Mongo.APISessions._id)
+                UserId = new Guid(sqlUserID), //derive this from Mongo.APISessions.uid...lookup on Mongo.APISessions._id)
                 SourcePage = methodCalledFrom, //derive this from querystring...utility function
                 Browser = webrequest.Browser.Type,
                 SessionId = request.Token,
@@ -55,9 +55,8 @@ namespace Phytel.API.DataAudit
             return auditLog;
         }
 
-        private static DataAudit GetAuditLog(string userId, string collectionName, string entityId, DataAuditType auditType, string contractNumber)
+        private static DataAudit GetDataAuditLog(ObjectId userId, string collectionName, string entityId, DataAuditType auditType, string contractNumber)
         {
-           
             DataAudit auditLog = new DataAudit()
             {
                 EntityID = new ObjectId(entityId),
@@ -214,7 +213,7 @@ namespace Phytel.API.DataAudit
             return returnTypeName.ToString().Replace("Request", "").Replace("Response", "");
         }
 
-        public static void LogAuditData(string userId, string collectionName, string entityId, DataAuditType auditType, string contractNumber)
+        public static void LogDataAudit(string userId, string collectionName, string entityId, DataAuditType auditType, string contractNumber)
         {
             //hand to a new thread here, and immediately return this thread to caller
             try
@@ -224,7 +223,7 @@ namespace Phytel.API.DataAudit
                 {
                     try
                     {
-                        AuditAsynch(userId, collectionName, entityId, auditType, contractNumber);
+                        DataAuditAsynch(ObjectId.Parse(userId), collectionName, entityId, auditType, contractNumber);
                     }
                     catch (Exception newthreadex)
                     {
@@ -249,7 +248,7 @@ namespace Phytel.API.DataAudit
 
         }
 
-        public static void LogAuditData(IAppDomainRequest request, List<string> patientids, HttpRequest webreq, string returnTypeName)
+        public static void LogAuditData(IAppDomainRequest request, string sqlUserID, List<string> patientids, HttpRequest webreq, string returnTypeName)
         {
             //hand to a new thread here, and immediately return this thread to caller
             try
@@ -259,7 +258,7 @@ namespace Phytel.API.DataAudit
                 {
                     try
                     {
-                        AuditAsynch(request, patientids, webreq, returnTypeName);
+                        AuditAsynch(request, sqlUserID, patientids, webreq, returnTypeName);
                     }
                     catch (Exception newthreadex)
                     {
@@ -284,21 +283,21 @@ namespace Phytel.API.DataAudit
 
         }
 
-        private static void AuditAsynch(IAppDomainRequest request, List<string> patientids, HttpRequest webreq, string returnTypeName)
+        private static void AuditAsynch(IAppDomainRequest request, string sqlUserID, List<string> patientids, HttpRequest webreq, string returnTypeName)
         {
             //throw new SystemException("test error in new thread starts");
 
             string callingMethod = FindMethodType(returnTypeName);
             int auditTypeId = GetAuditTypeID(callingMethod);
-            AuditData data = GetAuditLog(auditTypeId, request, patientids, webreq, callingMethod);
+            AuditData data = GetAuditLog(auditTypeId, request, sqlUserID, patientids, webreq, callingMethod);
             AuditDispatcher.WriteAudit(data);
         }
 
-        private static void AuditAsynch(string userId, string collectionName, string entityId, DataAuditType auditType, string contractNumber)
+        private static void DataAuditAsynch(ObjectId userId, string collectionName, string entityId, DataAuditType auditType, string contractNumber)
         {
             //throw new SystemException("test error in new thread starts");
 
-            DataAudit data = GetAuditLog(userId, collectionName, entityId, auditType, contractNumber);
+            DataAudit data = GetDataAuditLog(userId, collectionName, entityId, auditType, contractNumber);
             AuditDispatcher.WriteAudit(data, string.Format("{0}_{1}", data.Type, data.EntityType));
         }
 

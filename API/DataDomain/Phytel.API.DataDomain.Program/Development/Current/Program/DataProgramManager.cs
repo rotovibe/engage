@@ -24,6 +24,8 @@ namespace Phytel.API.DataDomain.Program
             DTO.Program result;
 
             IProgramRepository<GetProgramResponse> repo = ProgramRepositoryFactory<GetProgramResponse>.GetProgramRepository(request.ContractNumber, request.Context);
+            repo.UserId = request.UserId;
+
             result = repo.FindByID(request.ProgramID) as DTO.Program;
 
             programResponse.Program = result;
@@ -37,6 +39,7 @@ namespace Phytel.API.DataDomain.Program
 
             IProgramRepository<GetAllActiveProgramsResponse> repo =
                 Phytel.API.DataDomain.Program.ProgramRepositoryFactory<GetAllActiveProgramsResponse>.GetContractProgramRepository(request.ContractNumber, request.Context);
+            repo.UserId = request.UserId;
 
             result = repo.GetActiveProgramsInfoList(request);
             response.Programs = result;
@@ -68,6 +71,7 @@ namespace Phytel.API.DataDomain.Program
                 IProgramRepository<PutProgramToPatientResponse> patProgRepo =
                     Phytel.API.DataDomain.Program.ProgramRepositoryFactory<PutProgramToPatientResponse>
                     .GetPatientProgramRepository(request.ContractNumber, request.Context);
+                patProgRepo.UserId = request.UserId;
 
                 object resp = patProgRepo.Insert((object)request);
 
@@ -98,6 +102,7 @@ namespace Phytel.API.DataDomain.Program
                 IProgramRepository<PutProgramActionProcessingResponse> patProgRepo =
                     Phytel.API.DataDomain.Program.ProgramRepositoryFactory<PutProgramActionProcessingResponse>
                     .GetPatientProgramRepository(request.ContractNumber, request.Context);
+                patProgRepo.UserId = request.UserId;
 
                 response.program = (ProgramDetail)patProgRepo.Update((object)request);
 
@@ -124,6 +129,7 @@ namespace Phytel.API.DataDomain.Program
                 IProgramRepository<ContractProgram> contractProgRepo =
                                 Phytel.API.DataDomain.Program.ProgramRepositoryFactory<ContractProgram>
                                 .GetContractProgramRepository(p.ContractNumber, p.Context);
+                contractProgRepo.UserId = p.UserId;
 
                 ContractProgram c = contractProgRepo.FindByID(p.ContractProgramId) as ContractProgram;
 
@@ -150,7 +156,8 @@ namespace Phytel.API.DataDomain.Program
                 string contractNumber = request.ContractNumber;
                 string context = request.Context;
                 double version = request.Version;
-                IRestClient client = new JsonServiceClient();
+                IRestClient client = Common.Helper.GetJsonServiceClient(request.UserId);
+
                 GetPatientDataResponse response = client.Get<GetPatientDataResponse>(
                     string.Format("{0}/{1}/{2}/{3}/patient/{4}",
                     path,
@@ -180,6 +187,7 @@ namespace Phytel.API.DataDomain.Program
                 IProgramRepository<PutProgramToPatientResponse> contractProgRepo =
                                 Phytel.API.DataDomain.Program.ProgramRepositoryFactory<PutProgramToPatientResponse>
                                 .GetContractProgramRepository(request.ContractNumber, request.Context);
+                contractProgRepo.UserId = request.UserId;
 
                 object contractProgram = contractProgRepo.FindByID(request.ContractProgramId);
                 if (contractProgram != null)
@@ -204,6 +212,7 @@ namespace Phytel.API.DataDomain.Program
                 IProgramRepository<GetProgramDetailsSummaryResponse> repo =
                     Phytel.API.DataDomain.Program.ProgramRepositoryFactory<GetProgramDetailsSummaryResponse>
                     .GetPatientProgramRepository(request.ContractNumber, request.Context);
+                repo.UserId = request.UserId;
 
                 //response = as GetProgramDetailsSummaryResponse;
 
@@ -270,6 +279,7 @@ namespace Phytel.API.DataDomain.Program
                 IProgramRepository<GetPatientProgramsResponse> repo =
                     Phytel.API.DataDomain.Program.ProgramRepositoryFactory<GetPatientProgramsResponse>
                     .GetPatientProgramRepository(request.ContractNumber, request.Context);
+                repo.UserId = request.UserId;
 
                 ICollection<SelectExpression> selectExpressions = new List<SelectExpression>();
 
@@ -323,6 +333,7 @@ namespace Phytel.API.DataDomain.Program
             IProgramRepository<PutUpdateResponseResponse> responseRepo =
                             Phytel.API.DataDomain.Program.ProgramRepositoryFactory<PutUpdateResponseResponse>
                             .GetPatientProgramStepResponseRepository(r.ContractNumber, r.Context);
+            responseRepo.UserId = r.UserId;
 
             MEPatientProgramResponse meres = new MEPatientProgramResponse
             {
@@ -381,6 +392,8 @@ namespace Phytel.API.DataDomain.Program
             GetStepResponseResponse response = new GetStepResponseResponse();
 
             IProgramRepository<GetStepResponseResponse> repo = ProgramRepositoryFactory<GetStepResponseResponse>.GetPatientProgramStepResponseRepository(request.ContractNumber, request.Context);
+            repo.UserId = request.UserId;
+            
             MEPatientProgramResponse result = repo.FindByID(request.ResponseId) as MEPatientProgramResponse;
 
             if (result != null)
@@ -421,6 +434,8 @@ namespace Phytel.API.DataDomain.Program
 
             IProgramRepository<GetProgramAttributeResponse> repo = 
                 ProgramRepositoryFactory<GetProgramAttributeResponse>.GetProgramAttributesRepository(request.ContractNumber, request.Context);
+            repo.UserId = request.UserId;
+            
             Tuple<string, IEnumerable<object>> result = repo.Select(apiExpression);
 
             if (result != null)
@@ -441,6 +456,7 @@ namespace Phytel.API.DataDomain.Program
             IProgramRepository<PutUpdateProgramAttributesResponse> responseRepo =
                             Phytel.API.DataDomain.Program.ProgramRepositoryFactory<PutUpdateProgramAttributesResponse>
                             .GetProgramAttributesRepository(request.ContractNumber, request.Context);
+            responseRepo.UserId = request.UserId;
 
             ProgramAttribute pa = request.ProgramAttributes;
             result.Result = (bool)responseRepo.Update(pa);
@@ -455,6 +471,7 @@ namespace Phytel.API.DataDomain.Program
             IProgramRepository<PutProgramAttributesResponse> progAttr =
                 Phytel.API.DataDomain.Program.ProgramRepositoryFactory<PutProgramAttributesResponse>
                 .GetProgramAttributesRepository(request.ContractNumber, request.Context);
+            progAttr.UserId = request.UserId;
 
             bool resp = (bool)progAttr.Insert((object)request.ProgramAttributes);
             response.Result = resp;

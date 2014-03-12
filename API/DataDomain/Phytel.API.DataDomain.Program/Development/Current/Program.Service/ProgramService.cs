@@ -4,16 +4,21 @@ using Phytel.API.DataDomain.Program;
 using Phytel.API.DataDomain.Program.DTO;
 using Phytel.API.Common.Format;
 using System.Configuration;
+using System.Web;
 
 namespace Phytel.API.DataDomain.Program.Service
 {
     public class ProgramService : ServiceStack.ServiceInterface.Service
     {
+        private const string _phytelUserIDToken = "x-Phytel-UserID";
+
         public GetProgramResponse Post(GetProgramRequest request)
         {
             GetProgramResponse response = new GetProgramResponse();
             try
             {
+                //Get the UserId from the Header and update the request object
+                request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
                 response = ProgramDataManager.GetProgramByID(request);
                 response.Version = request.Version;
             }
@@ -32,6 +37,8 @@ namespace Phytel.API.DataDomain.Program.Service
             GetAllActiveProgramsResponse response = new GetAllActiveProgramsResponse();
             try
             {
+                //Get the UserId from the Header and update the request object
+                request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
                 response = ProgramDataManager.GetAllActiveContractPrograms(request);
                 response.Version = request.Version;
             }
@@ -50,6 +57,8 @@ namespace Phytel.API.DataDomain.Program.Service
             PutProgramToPatientResponse response = new PutProgramToPatientResponse();
             try
             {
+                //Get the UserId from the Header and update the request object
+                request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
                 response = ProgramDataManager.PutPatientToProgram(request);
                 response.Version = request.Version;
             }
@@ -68,6 +77,8 @@ namespace Phytel.API.DataDomain.Program.Service
             PutUpdateResponseResponse response = new PutUpdateResponseResponse();
             try
             {
+                //Get the UserId from the Header and update the request object
+                request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
                 response = ProgramDataManager.PutUpdateResponse(request);
                 response.Version = request.Version;
             }
@@ -86,6 +97,8 @@ namespace Phytel.API.DataDomain.Program.Service
             PutProgramActionProcessingResponse response = new PutProgramActionProcessingResponse();
             try
             {
+                //Get the UserId from the Header and update the request object
+                request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
                 response = ProgramDataManager.PutProgramActionUpdate(request);
                 response.Version = request.Version;
             }
@@ -104,6 +117,8 @@ namespace Phytel.API.DataDomain.Program.Service
             GetProgramResponse response = new GetProgramResponse();
             try
             {
+                //Get the UserId from the Header and update the request object
+                request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
                 response = ProgramDataManager.GetProgramByID(request);
                 response.Version = request.Version;
             }
@@ -122,6 +137,8 @@ namespace Phytel.API.DataDomain.Program.Service
             GetProgramDetailsSummaryResponse response = new GetProgramDetailsSummaryResponse();
             try
             {
+                //Get the UserId from the Header and update the request object
+                request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
                 response = ProgramDataManager.GetPatientProgramDetailsById(request);
                 response.Version = request.Version;
             }
@@ -140,6 +157,8 @@ namespace Phytel.API.DataDomain.Program.Service
             GetPatientProgramsResponse response = new GetPatientProgramsResponse();
             try
             {
+                //Get the UserId from the Header and update the request object
+                request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
                 response = ProgramDataManager.GetPatientPrograms(request);
                 response.Version = request.Version;
             }
@@ -158,6 +177,8 @@ namespace Phytel.API.DataDomain.Program.Service
             GetStepResponseResponse response = new GetStepResponseResponse();
             try
             {
+                //Get the UserId from the Header and update the request object
+                request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
                 response = ProgramDataManager.GetStepResponse(request);
                 response.Version = request.Version;
             }
@@ -176,6 +197,8 @@ namespace Phytel.API.DataDomain.Program.Service
             GetStepResponseListResponse response = new GetStepResponseListResponse();
             try
             {
+                //Get the UserId from the Header and update the request object
+                request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
                 response = ProgramDataManager.GetStepResponse(request);
                 response.Version = request.Version;
             }
@@ -194,6 +217,8 @@ namespace Phytel.API.DataDomain.Program.Service
             GetProgramAttributeResponse response = new GetProgramAttributeResponse();
             try
             {
+                //Get the UserId from the Header and update the request object
+                request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
                 response = ProgramDataManager.GetProgramAttributes(request);
                 response.Version = request.Version;
             }
@@ -212,6 +237,8 @@ namespace Phytel.API.DataDomain.Program.Service
             PutUpdateProgramAttributesResponse response = new PutUpdateProgramAttributesResponse();
             try
             {
+                //Get the UserId from the Header and update the request object
+                request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
                 response = ProgramDataManager.PutUpdateProgramAttributes(request);
                 response.Version = request.Version;
             }
@@ -230,6 +257,8 @@ namespace Phytel.API.DataDomain.Program.Service
             PutProgramAttributesResponse response = new PutProgramAttributesResponse();
             try
             {
+                //Get the UserId from the Header and update the request object
+                request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
                 response = ProgramDataManager.InsertProgramAttributes(request);
                 response.Version = request.Version;
             }

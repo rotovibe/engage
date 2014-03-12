@@ -38,7 +38,10 @@ namespace Phytel.API.DataDomain.Program
                 StepId = ObjectId.Parse(rs.StepId),
                 Text = rs.Text,
                 Value = rs.Value,
-                DeleteFlag = true
+                DeleteFlag = true,
+                LastUpdatedOn = DateTime.UtcNow,
+                Version = 1.0,
+                UpdatedBy = ObjectId.Parse(this.UserId)
             };
 
             //MEResponse mer = newEntity as MEResponse;
@@ -132,6 +135,10 @@ namespace Phytel.API.DataDomain.Program
                     uv.Add(MB.Update.Set(MEResponse.RequiredProperty, resp.Required));
                     uv.Add(MB.Update.Set(MEResponse.DeleteFlagProperty, false));
                     uv.Add(MB.Update.Set(MEResponse.SelectedProperty, resp.Selected));
+
+                    uv.Add(MB.Update.Set(MEResponse.LastUpdatedOnProperty, DateTime.UtcNow));
+                    uv.Add(MB.Update.Set(MEResponse.UpdatedByProperty, ObjectId.Parse(this.UserId)));
+
                     if (resp.Order != 0) uv.Add(MB.Update.Set(MEResponse.OrderProperty, resp.Order));
                     if (resp.Text != null) uv.Add(MB.Update.Set(MEResponse.TextProperty, resp.Text));
                     if (resp.Value != null) uv.Add(MB.Update.Set(MEResponse.ValueProperty, resp.Value));
@@ -159,11 +166,12 @@ namespace Phytel.API.DataDomain.Program
         {
             throw new NotImplementedException();
         }
-
-
+        
         public MEProgram FindByID(string entityID, bool temp)
         {
             throw new NotImplementedException();
         }
+
+        public string UserId { get; set; }
     }
 }

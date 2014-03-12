@@ -19,6 +19,8 @@ namespace Phytel.API.DataDomain.PatientProblem.Service.Test
             string patientID = "528f6d46072ef708ecd78728";
             string problemID = "528a66fdd4332317acc50960";
             IRestClient client = new JsonServiceClient();
+            JsonServiceClient.HttpWebRequestFilter = x =>
+                            x.Headers.Add(string.Format("{0}: {1}", "x-Phytel-UserID", "531f2df9072ef727c4d2a3df"));
 
             // Act
             GetPatientProblemsDataResponse response = client.Get<GetPatientProblemsDataResponse>(
@@ -44,6 +46,8 @@ namespace Phytel.API.DataDomain.PatientProblem.Service.Test
             string patientID = "528f6d46072ef708ecd78711";
             string problemID = "528a66fdd4332317acc50960";
             IRestClient client = new JsonServiceClient();
+            JsonServiceClient.HttpWebRequestFilter = x =>
+                            x.Headers.Add(string.Format("{0}: {1}", "x-Phytel-UserID", "531f2df9072ef727c4d2a3df"));
 
             // Act
             GetPatientProblemsDataResponse response = client.Get<GetPatientProblemsDataResponse>(
@@ -85,6 +89,8 @@ namespace Phytel.API.DataDomain.PatientProblem.Service.Test
             int level = 1;
 
             IRestClient client = new JsonServiceClient();
+            JsonServiceClient.HttpWebRequestFilter = x =>
+                            x.Headers.Add(string.Format("{0}: {1}", "x-Phytel-UserID", "531f2df9072ef727c4d2a3df"));
 
             // Act
             PutUpdatePatientProblemResponse response = client.Put<PutUpdatePatientProblemResponse>(

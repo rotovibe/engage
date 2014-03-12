@@ -61,16 +61,17 @@ namespace Phytel.API.DataDomain.PatientGoal
                     var uv = new List<MB.UpdateBuilder>();
                     uv.Add(MB.Update.Set(MEPatientBarrier.TTLDateProperty, System.DateTime.UtcNow.AddDays(_expireDays)));
                     uv.Add(MB.Update.Set(MEPatientBarrier.DeleteFlagProperty, true));
-                    uv.Add(MB.Update.Set(MEPatientBarrier.UpdatedByProperty, request.UserId));
+                    uv.Add(MB.Update.Set(MEPatientBarrier.UpdatedByProperty, ObjectId.Parse(this.UserId)));
+                    uv.Add(MB.Update.Set(MEPatientBarrier.LastUpdatedOnProperty, DateTime.UtcNow));
 
                     IMongoUpdate update = MB.Update.Combine(uv);
                     WriteConcernResult res = ctx.PatientBarriers.Collection.Update(q, update);
                 }
             }
-            catch (Exception ex) { throw; }
+            catch (Exception) { throw; }
             finally
             {
-                AuditHelper.LogAuditData(request.UserId, MongoCollectionName.PatientBarrier.ToString(), request.BarrierId.ToString(), Common.DataAuditType.Delete, request.ContractNumber);
+                AuditHelper.LogDataAudit(this.UserId, MongoCollectionName.PatientBarrier.ToString(), request.BarrierId.ToString(), Common.DataAuditType.Delete, request.ContractNumber);
         }
         }
 
@@ -138,7 +139,7 @@ namespace Phytel.API.DataDomain.PatientGoal
                     var uv = new List<MB.UpdateBuilder>();
                     uv.Add(MB.Update.Set(MEPatientBarrier.TTLDateProperty, BsonNull.Value));
                     uv.Add(MB.Update.Set(MEPatientBarrier.DeleteFlagProperty, false));
-                    uv.Add(MB.Update.Set(MEPatientBarrier.UpdatedByProperty, pbr.UserId));
+                    uv.Add(MB.Update.Set(MEPatientBarrier.UpdatedByProperty, ObjectId.Parse(this.UserId)));
                     uv.Add(MB.Update.Set(MEPatientBarrier.VersionProperty, pbr.Version));
                     uv.Add(MB.Update.Set(MEPatientBarrier.LastUpdatedOnProperty, System.DateTime.UtcNow));
                     if (pb.Name != null) uv.Add(MB.Update.Set(MEPatientBarrier.NameProperty, pb.Name));
@@ -156,9 +157,9 @@ namespace Phytel.API.DataDomain.PatientGoal
                 return result as object;
             }
             catch (Exception ex) { throw new Exception("DD:MongoPatientBarrierRepository:Update()" + ex.Message, ex.InnerException); }
-             finally
+            finally
             {
-                AuditHelper.LogAuditData(pbr.UserId, MongoCollectionName.PatientBarrierRequest.ToString(), pb.Id.ToString(), Common.DataAuditType.Update, pbr.ContractNumber);
+                AuditHelper.LogDataAudit(pbr.UserId, MongoCollectionName.PatientBarrier.ToString(), pb.Id.ToString(), Common.DataAuditType.Update, pbr.ContractNumber);
             }
         }
 
@@ -184,7 +185,9 @@ namespace Phytel.API.DataDomain.PatientGoal
                     PatientGoalId = ObjectId.Parse(request.PatientGoalId),
                     TTLDate = System.DateTime.UtcNow.AddDays(_initializeDays),
                     StatusDate = DateTime.UtcNow,
-                    LastUpdatedOn = DateTime.UtcNow
+                    LastUpdatedOn = DateTime.UtcNow,
+                    UpdatedBy = ObjectId.Parse(this.UserId),
+                    Version = request.Version
                 };
                 if(!string.IsNullOrEmpty(request.UserId))
                 {
@@ -202,6 +205,10 @@ namespace Phytel.API.DataDomain.PatientGoal
                 return Id;
             }
             catch (Exception ex) { throw ex; }
+            finally
+            {
+                AuditHelper.LogDataAudit(this.UserId, MongoCollectionName.PatientBarrier.ToString(), Id.ToString(), Common.DataAuditType.Insert, request.ContractNumber);
+            }
         }
 
         public IEnumerable<object> Find(string Id)
@@ -239,8 +246,7 @@ namespace Phytel.API.DataDomain.PatientGoal
             }
             catch (Exception ex) { throw ex; }
         }
-
-
+        
         public IEnumerable<object> FindByGoalId(string Id)
         {
             try
@@ -270,5 +276,7 @@ namespace Phytel.API.DataDomain.PatientGoal
             }
             catch (Exception ex) { throw ex; }
         }
+
+        public string UserId { get; set; }
     }
 }

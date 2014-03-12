@@ -19,6 +19,9 @@ namespace Phytel.API.DataDomain.Patient.Service.Test
             string planElementId = "52ede291fe7a590728e1a382";
 
             IRestClient client = new JsonServiceClient();
+            JsonServiceClient.HttpWebRequestFilter = x =>
+                            x.Headers.Add(string.Format("{0}: {1}", "x-Phytel-UserID", "531f2df9072ef727c4d2a3df"));
+
             GetProgramAttributeResponse resp =
                                 client.Get<GetProgramAttributeResponse>(
                                 string.Format("{0}/{1}/{2}/{3}/Program/Attributes/?PlanElementId={4}",
@@ -39,6 +42,9 @@ namespace Phytel.API.DataDomain.Patient.Service.Test
             string planElementId = "52ede291fe7a590728e1a382";
 
             IRestClient client = new JsonServiceClient();
+            JsonServiceClient.HttpWebRequestFilter = x =>
+                            x.Headers.Add(string.Format("{0}: {1}", "x-Phytel-UserID", "531f2df9072ef727c4d2a3df"));
+
             PutUpdateProgramAttributesResponse resp =
                                 client.Put<PutUpdateProgramAttributesResponse>(
                                 string.Format("{0}/{1}/{2}/{3}/Program/Attributes/Update/",
@@ -67,6 +73,9 @@ namespace Phytel.API.DataDomain.Patient.Service.Test
             string planElementId = "52ede291fe7a590728e1a382";
 
             IRestClient client = new JsonServiceClient();
+            JsonServiceClient.HttpWebRequestFilter = x =>
+                            x.Headers.Add(string.Format("{0}: {1}", "x-Phytel-UserID", "531f2df9072ef727c4d2a3df"));
+
             PutProgramAttributesResponse resp =
                                 client.Put<PutProgramAttributesResponse>(
                                 string.Format("{0}/{1}/{2}/{3}/Program/Attributes/Insert/",

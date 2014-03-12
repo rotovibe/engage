@@ -20,6 +20,7 @@ namespace Phytel.API.DataDomain.PatientObservation
                 GetPatientObservationResponse result = new GetPatientObservationResponse();
 
                 IPatientObservationRepository<GetPatientObservationResponse> repo = PatientObservationRepositoryFactory<GetPatientObservationResponse>.GetPatientObservationRepository(request.ContractNumber, request.Context);
+                repo.UserId = request.UserId;
                 result = repo.FindByID(request.PatientObservationID) as GetPatientObservationResponse;
 
                 // if cross-domain service call has error
@@ -43,8 +44,8 @@ namespace Phytel.API.DataDomain.PatientObservation
                 GetAllPatientObservationsResponse result = new GetAllPatientObservationsResponse();
 
                 IPatientObservationRepository<GetAllPatientObservationsResponse> repo = PatientObservationRepositoryFactory<GetAllPatientObservationsResponse>.GetPatientObservationRepository(request.ContractNumber, request.Context);
-               
-
+                repo.UserId = request.UserId;
+                
                 return result;
             }
             catch (Exception ex)
@@ -61,6 +62,7 @@ namespace Phytel.API.DataDomain.PatientObservation
 
                 // get list of observations
                 IPatientObservationRepository<GetStandardObservationsResponse> repo = PatientObservationRepositoryFactory<GetStandardObservationsResponse>.GetObservationRepository(request.ContractNumber, request.Context);
+                repo.UserId = request.UserId;
                 List<ObservationData> odl = (List<ObservationData>)repo.GetObservationsByType(request.TypeId, true);
                 List<PatientObservationData> podl = new List<PatientObservationData>();
 
@@ -118,6 +120,7 @@ namespace Phytel.API.DataDomain.PatientObservation
             try
             {
                 IPatientObservationRepository<GetStandardObservationsResponse> repo = PatientObservationRepositoryFactory<GetStandardObservationsResponse>.GetPatientObservationRepository(request.ContractNumber, request.Context);
+                repo.UserId = request.UserId;
                 PutInitializeObservationDataRequest req = new PutInitializeObservationDataRequest
                 {
                     PatientId = patientId,
@@ -132,7 +135,7 @@ namespace Phytel.API.DataDomain.PatientObservation
                 ObservationValueData ovd = new ObservationValueData();
 
                 // get last value for each observation data
-                GetPreviousValuesForObservation(ovd, patientId, od.Id, request.Context, request.ContractNumber);
+                GetPreviousValuesForObservation(ovd, patientId, od.Id, request.Context, request.ContractNumber, request.UserId);
 
                 PatientObservationData pod = (PatientObservationData)repo.Initialize(req);
 
@@ -149,12 +152,15 @@ namespace Phytel.API.DataDomain.PatientObservation
             }
         }
 
-        private static void GetPreviousValuesForObservation(ObservationValueData ovd, string patientId, string observationTypeId, string context, string contract)
+        private static void GetPreviousValuesForObservation(ObservationValueData ovd, string patientId, string observationTypeId, string context, string contract, string userId)
         {
             try
             {
                 IPatientObservationRepository<GetStandardObservationsResponse> repo =
                     PatientObservationRepositoryFactory<GetStandardObservationsResponse>.GetPatientObservationRepository(contract, context);
+
+                repo.UserId = userId;
+                
                 PatientObservationData val = (PatientObservationData)repo.FindRecentObservationValue(observationTypeId, patientId);
 
                 if (val != null)
@@ -183,6 +189,9 @@ namespace Phytel.API.DataDomain.PatientObservation
                 List<ObservationLibraryItemData> oli = new List<ObservationLibraryItemData>();
                 IPatientObservationRepository<GetAdditionalLibraryObservationsResponse> repo = 
                     PatientObservationRepositoryFactory<GetAdditionalLibraryObservationsResponse>.GetObservationRepository(request.ContractNumber, request.Context);
+
+                repo.UserId = request.UserId;
+                
                 List<ObservationData> odl = (List<ObservationData>)repo.GetObservationsByType(request.TypeId, false);
 
                 odl.ForEach(o =>
@@ -211,7 +220,8 @@ namespace Phytel.API.DataDomain.PatientObservation
                 bool result = false;
                 IPatientObservationRepository<PutUpdateObservationDataResponse> repo =
                     PatientObservationRepositoryFactory<PutUpdateObservationDataResponse>.GetPatientObservationRepository(request.ContractNumber, request.Context);
-
+                repo.UserId = request.UserId;
+                
                 //List<PatientObservationData> pod = (List<PatientObservationData>)repo.FindObservationIdByPatientId(request.PatientId);
                 //List<string> dbPatientObservationIdList = ObservationUtil.GetPatientObservationIds(pod);
 
@@ -234,7 +244,7 @@ namespace Phytel.API.DataDomain.PatientObservation
 
                 return result;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 throw;
             }
@@ -246,6 +256,8 @@ namespace Phytel.API.DataDomain.PatientObservation
             {
                 GetAdditionalObservationDataItemResponse result = new GetAdditionalObservationDataItemResponse();
                 IPatientObservationRepository<GetAdditionalObservationDataItemResponse> repo = PatientObservationRepositoryFactory<GetAdditionalObservationDataItemResponse>.GetObservationRepository(request.ContractNumber, request.Context);
+                repo.UserId = request.UserId;
+                
                 ObservationData od = (ObservationData)repo.FindByID(request.ObservationId);
                 PatientObservationData pod = ObservationUtil.MakeAdditionalObservation(request, repo, od);
 

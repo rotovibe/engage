@@ -13,6 +13,7 @@ using MB = MongoDB.Driver.Builders;
 using Phytel.API.Common;
 using Phytel.API.Common.Data;
 using System.Configuration;
+using Phytel.API.DataAudit;
 
 namespace Phytel.API.DataDomain.PatientObservation
 {
@@ -149,13 +150,17 @@ namespace Phytel.API.DataDomain.PatientObservation
                     uv.Add(MB.Update.Set(MEPatientObservation.TTLDateProperty, System.DateTime.UtcNow.AddDays(_expireDays)));
                     uv.Add(MB.Update.Set(MEPatientObservation.LastUpdatedOnProperty, System.DateTime.UtcNow));
                     uv.Add(MB.Update.Set(MEPatientObservation.DeleteFlagProperty, true));
-                    uv.Add(MB.Update.Set(MEPatientObservation.UpdatedByProperty, request.UserId));
+                    uv.Add(MB.Update.Set(MEPatientObservation.UpdatedByProperty, ObjectId.Parse(this.UserId)));
 
                     IMongoUpdate update = MB.Update.Combine(uv);
                     WriteConcernResult res = ctx.PatientObservations.Collection.Update(q, update);
                 }
             }
-            catch (Exception ex) { throw; }
+            catch (Exception) { throw; }
+            finally
+            {
+                AuditHelper.LogDataAudit(this.UserId, MongoCollectionName.PatientObservation.ToString(), request.PatientObservationId, Common.DataAuditType.Delete, request.ContractNumber);
+            }
         }
 
         void IRepository<T>.DeleteAll(List<object> entities)
@@ -193,8 +198,9 @@ namespace Phytel.API.DataDomain.PatientObservation
                     var uv = new List<MB.UpdateBuilder>();
                     uv.Add(MB.Update.Set(MEPatientObservation.TTLDateProperty, BsonNull.Value));
                     uv.Add(MB.Update.Set(MEPatientObservation.DeleteFlagProperty, false));
-                    uv.Add(MB.Update.Set(MEPatientObservation.UpdatedByProperty, odr.UserId));
+                    uv.Add(MB.Update.Set(MEPatientObservation.UpdatedByProperty, ObjectId.Parse(this.UserId)));
                     uv.Add(MB.Update.Set(MEPatientObservation.LastUpdatedOnProperty, System.DateTime.UtcNow));
+                    uv.Add(MB.Update.Set(MEPatientObservation.VersionProperty, odr.Version));
 
                     if (pord.Source != null) uv.Add(MB.Update.Set(MEPatientObservation.SourceProperty, pord.Source));
                     if (pord.NonNumericValue != null) uv.Add(MB.Update.Set(MEPatientObservation.NonNumericValueProperty, pord.NonNumericValue));
@@ -211,6 +217,10 @@ namespace Phytel.API.DataDomain.PatientObservation
                 return result as object;
             }
             catch (Exception ex) { throw new Exception("DD:MongoPatientBarrierRepository:Update()::" + ex.Message, ex.InnerException); }
+            finally
+            {
+                AuditHelper.LogDataAudit(this.UserId, MongoCollectionName.PatientObservation.ToString(), pord.Id, Common.DataAuditType.Update, odr.ContractNumber);
+            }
         }
 
         void IRepository<T>.CacheByID(List<string> entityIDs)
@@ -222,17 +232,20 @@ namespace Phytel.API.DataDomain.PatientObservation
         {
             PutInitializeObservationDataRequest request = (PutInitializeObservationDataRequest)newEntity;
             PatientObservationData patientObservationData = null;
+            MEPatientObservation mePg = null;
 
             try
             {
-                MEPatientObservation mePg = new MEPatientObservation
+                mePg = new MEPatientObservation
                 {
                     Id = ObjectId.GenerateNewId(),
                     PatientId = ObjectId.Parse(request.PatientId),
                     TTLDate = System.DateTime.UtcNow.AddDays(_initializeDays),
                     LastUpdatedOn = DateTime.UtcNow,
                     ObservationId = ObjectId.Parse(request.ObservationId),
-                    DeleteFlag = true
+                    DeleteFlag = true,
+                    Version = request.Version,
+                    UpdatedBy = ObjectId.Parse(this.UserId)
                 };
 
                 if (!string.IsNullOrEmpty(request.UserId))
@@ -254,6 +267,10 @@ namespace Phytel.API.DataDomain.PatientObservation
                 return patientObservationData;
             }
             catch (Exception ex) { throw ex; }
+            finally
+            {
+                AuditHelper.LogDataAudit(this.UserId, MongoCollectionName.PatientObservation.ToString(), mePg.Id.ToString(), Common.DataAuditType.Insert, request.ContractNumber);
+            }
         }
 
         public IEnumerable<object> FindObservationIdByPatientId(string Id)
@@ -348,5 +365,7 @@ namespace Phytel.API.DataDomain.PatientObservation
         {
             throw new NotImplementedException();
         }
+
+        public string UserId { get; set; }
     }
 }

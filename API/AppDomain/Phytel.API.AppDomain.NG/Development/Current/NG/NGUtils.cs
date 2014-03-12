@@ -1,5 +1,7 @@
 ﻿using Phytel.API.AppDomain.NG.DTO;
 using Phytel.API.DataDomain.Program.DTO;
+using ServiceStack.Service;
+using ServiceStack.ServiceClient.Web;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +12,6 @@ namespace Phytel.API.AppDomain.NG
 {
     public static class NGUtils
     {
-
         public static bool IsDateValid(string p)
         {
             DateTime date;

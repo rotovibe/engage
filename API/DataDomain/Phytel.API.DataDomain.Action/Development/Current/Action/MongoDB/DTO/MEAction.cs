@@ -45,7 +45,7 @@ namespace Phytel.API.DataDomain.Action.DTO
 
         [BsonElement(CompletedByProperty)]
         [BsonIgnoreIfNull(true)]
-        public string CompletedBy { get; set; }
+        public ObjectId CompletedBy { get; set; }
 
         [BsonElement(ObjectivesProperty)]
         [BsonIgnoreIfNull(true)]

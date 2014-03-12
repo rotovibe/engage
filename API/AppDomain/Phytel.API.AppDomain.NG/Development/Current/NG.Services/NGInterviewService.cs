@@ -14,11 +14,12 @@ namespace Phytel.API.AppDomain.NG.Service
         {
             PostProcessActionResponse response = new PostProcessActionResponse();
             PlanManager intm = new PlanManager();
+            ValidateTokenResponse result = null;
 
             try
             {
                 request.Token = base.Request.Headers["Token"] as string;
-                ValidateTokenResponse result = intm.IsUserValidated(request.Version, request.Token, request.ContractNumber);
+                result = intm.IsUserValidated(request.Version, request.Token, request.ContractNumber);
                 if (result.UserId.Trim() != string.Empty)
                 {
                     request.UserId = result.UserId;
@@ -43,7 +44,8 @@ namespace Phytel.API.AppDomain.NG.Service
                     patientIds.Add(response.PatientId);
                 }
 
-                AuditHelper.LogAuditData(request, patientIds, System.Web.HttpContext.Current.Request, request.GetType().Name);
+                if(result != null)
+                    AuditHelper.LogAuditData(request, result.SQLUserId, patientIds, System.Web.HttpContext.Current.Request, request.GetType().Name);
             }
             return response; 
         }

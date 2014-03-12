@@ -14,6 +14,7 @@ namespace Phytel.API.DataDomain.PatientProblem
     {
         #region endpoint addresses
         private static readonly string DDLookUpServiceUrl = ConfigurationManager.AppSettings["DDLookUpServiceUrl"];
+        private static readonly string PhytelUserIDHeaderKey = "x-Phytel-UserID";
         #endregion
         
         public static GetAllPatientProblemsDataResponse GetAllPatientProblem(GetAllPatientProblemsDataRequest request)
@@ -21,7 +22,8 @@ namespace Phytel.API.DataDomain.PatientProblem
             GetAllPatientProblemsDataResponse response = null;
 
             // Call LookUp data domain to fetch all active problems.
-            IRestClient client = new JsonServiceClient();
+            IRestClient client = Common.Helper.GetJsonServiceClient(request.UserId);
+
             SearchProblemsDataResponse problemLookUpResponse = client.Post<SearchProblemsDataResponse>
                 (string.Format("{0}/{1}/{2}/{3}/problems",
                    DDLookUpServiceUrl,
@@ -47,7 +49,8 @@ namespace Phytel.API.DataDomain.PatientProblem
 
           
                 IPatientProblemRepository<PatientProblemData> repo = Phytel.API.DataDomain.PatientProblem.PatientProblemRepositoryFactory<PatientProblemData>.GetPatientProblemRepository(request.ContractNumber, request.Context);
-            
+                repo.UserId = request.UserId;
+
                 ICollection<SelectExpression> selectExpressions = new List<SelectExpression>();
 
                 // PatientID
@@ -122,6 +125,7 @@ namespace Phytel.API.DataDomain.PatientProblem
             GetPatientProblemsDataResponse response = null;
 
             IPatientProblemRepository<PatientProblemData> repo = Phytel.API.DataDomain.PatientProblem.PatientProblemRepositoryFactory<PatientProblemData>.GetPatientProblemRepository(request.ContractNumber, request.Context);
+            repo.UserId = request.UserId;
 
             ICollection<SelectExpression> selectExpressions = new List<SelectExpression>();
 
@@ -189,6 +193,7 @@ namespace Phytel.API.DataDomain.PatientProblem
 
             IPatientProblemRepository<PutNewPatientProblemResponse> repo = PatientProblem.PatientProblemRepositoryFactory<PutNewPatientProblemResponse>
                 .GetPatientProblemRepository(request.ContractNumber, request.Context);
+            repo.UserId = request.UserId;
 
             response.PatientProblem = (DTO.PatientProblem)repo.Insert(request);
 
@@ -201,6 +206,7 @@ namespace Phytel.API.DataDomain.PatientProblem
 
             IPatientProblemRepository<PutUpdatePatientProblemResponse> repo = PatientProblem.PatientProblemRepositoryFactory<PutUpdatePatientProblemResponse>
                 .GetPatientProblemRepository(request.ContractNumber, request.Context);
+            repo.UserId = request.UserId;
 
             var result = repo.Update(request);
             if (result != null)

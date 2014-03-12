@@ -20,6 +20,9 @@ namespace Phytel.API.DataDomain.Patient.Service.Test
             string userId = "bb241c64-a0ff-4e01-ba5f-4246ef50780e";
 
             IRestClient client = new JsonServiceClient();
+            JsonServiceClient.HttpWebRequestFilter = x =>
+                            x.Headers.Add(string.Format("{0}: {1}", "x-Phytel-UserID", "531f2df9072ef727c4d2a3df"));
+
             PutUpdateResponseResponse resp =
                                 client.Put<PutUpdateResponseResponse>(
                                 string.Format("{0}/{1}/{2}/{3}/Program/Module/Action/Step/{4}/Responses/Update/",
@@ -59,6 +62,9 @@ namespace Phytel.API.DataDomain.Patient.Service.Test
             string responseId = "52ede291fe7a590728e1a382";
 
             IRestClient client = new JsonServiceClient();
+            JsonServiceClient.HttpWebRequestFilter = x =>
+                            x.Headers.Add(string.Format("{0}: {1}", "x-Phytel-UserID", "531f2df9072ef727c4d2a3df"));
+
             GetStepResponseResponse resp =
                                 client.Get<GetStepResponseResponse>(
                                 string.Format("{0}/{1}/{2}/{3}/Program/Module/Action/Step/{4}/Response/?ResponseId={5}",

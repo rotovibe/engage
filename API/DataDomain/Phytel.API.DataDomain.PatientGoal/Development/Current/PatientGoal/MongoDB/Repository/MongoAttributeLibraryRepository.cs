@@ -108,5 +108,7 @@ namespace Phytel.API.DataDomain.PatientGoal
             }
             catch (Exception ex) { throw ex; };
         }
+
+        public string UserId { get; set; }
     }
 }

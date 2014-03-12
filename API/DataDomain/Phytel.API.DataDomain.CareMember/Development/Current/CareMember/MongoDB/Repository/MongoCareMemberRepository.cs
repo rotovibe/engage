@@ -45,7 +45,7 @@ namespace Phytel.API.DataDomain.CareMember
                         Primary = careMemberData.Primary,
                         Type = ObjectId.Parse(careMemberData.TypeId),
                         Version = request.Version,
-                        UpdatedBy = ObjectId.Parse(request.UserId),
+                        UpdatedBy = ObjectId.Parse(this.UserId),
                         LastUpdatedOn = DateTime.UtcNow
                     };
 
@@ -61,11 +61,10 @@ namespace Phytel.API.DataDomain.CareMember
                 return careMemberId;
             }
             catch (Exception ex) { throw ex; }
-             finally
+            finally
             {
-                AuditHelper.LogAuditData(request.UserId, MongoCollectionName.CareMember.ToString(), request.PatientId.ToString(), Common.DataAuditType.Insert, request.ContractNumber);
+                AuditHelper.LogDataAudit(this.UserId, MongoCollectionName.CareMember.ToString(), careMemberId, Common.DataAuditType.Insert, request.ContractNumber);
             }
-
         }
 
         public object InsertAll(List<object> entities)
@@ -170,13 +169,13 @@ namespace Phytel.API.DataDomain.CareMember
                         var uv = new List<MB.UpdateBuilder>();
                         uv.Add(MB.Update.Set(MECareMember.TTLDateProperty, BsonNull.Value));
                         uv.Add(MB.Update.Set(MECareMember.DeleteFlagProperty, false));
-                        uv.Add(MB.Update.Set(MECareMember.UpdatedByProperty, request.UserId));
+                        uv.Add(MB.Update.Set(MECareMember.UpdatedByProperty, this.UserId));
                         uv.Add(MB.Update.Set(MECareMember.VersionProperty, request.Version));
                         uv.Add(MB.Update.Set(MECareMember.LastUpdatedOnProperty, System.DateTime.UtcNow));
+                        uv.Add(MB.Update.Set(MECareMember.PrimaryProperty, careMemberData.Primary));
                         if (careMemberData.PatientId != null) uv.Add(MB.Update.Set(MECareMember.PatientIdProperty, ObjectId.Parse(careMemberData.PatientId)));
                         if (careMemberData.ContactId != null) uv.Add(MB.Update.Set(MECareMember.ContactIdProperty, ObjectId.Parse(careMemberData.ContactId)));
                         if (careMemberData.TypeId != null) uv.Add(MB.Update.Set(MECareMember.TypeProperty, ObjectId.Parse(careMemberData.TypeId)));
-                        if (careMemberData.Primary != null) uv.Add(MB.Update.Set(MECareMember.PrimaryProperty, careMemberData.Primary));
 
                         IMongoUpdate update = MB.Update.Combine(uv);
                         WriteConcernResult res = ctx.CareMembers.Collection.Update(q, update);
@@ -189,7 +188,7 @@ namespace Phytel.API.DataDomain.CareMember
             catch (Exception ex) { throw new Exception("DD:MongoCareMemberRepository:Update()" + ex.Message, ex.InnerException); }
             finally
             {
-                AuditHelper.LogAuditData(request.UserId, MongoCollectionName.CareMember.ToString(), request.CareMember.Id.ToString(), Common.DataAuditType.Update, request.ContractNumber);
+                AuditHelper.LogDataAudit(this.UserId, MongoCollectionName.CareMember.ToString(), careMemberData.Id, Common.DataAuditType.Update, request.ContractNumber);
             }
         }
 
@@ -236,5 +235,7 @@ namespace Phytel.API.DataDomain.CareMember
             }
             catch (Exception ex) { throw ex; }
         }
+
+        public string UserId { get; set; }
     }
 }

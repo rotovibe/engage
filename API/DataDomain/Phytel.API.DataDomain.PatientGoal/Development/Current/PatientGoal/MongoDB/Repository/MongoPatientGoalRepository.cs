@@ -62,16 +62,17 @@ namespace Phytel.API.DataDomain.PatientGoal
                     var uv = new List<MB.UpdateBuilder>();
                     uv.Add(MB.Update.Set(MEPatientGoal.TTLDateProperty, System.DateTime.UtcNow.AddDays(_expireDays)));
                     uv.Add(MB.Update.Set(MEPatientGoal.DeleteFlagProperty, true));
-                    uv.Add(MB.Update.Set(MEPatientGoal.UpdatedByProperty, request.UserId));
+                    uv.Add(MB.Update.Set(MEPatientGoal.UpdatedByProperty, ObjectId.Parse(this.UserId)));
+                    uv.Add(MB.Update.Set(MEPatientGoal.LastUpdatedOnProperty, DateTime.UtcNow));
 
                     IMongoUpdate update = MB.Update.Combine(uv);
                     WriteConcernResult res = ctx.PatientGoals.Collection.Update(q, update);
                 }
             }
-            catch (Exception ex) { throw; }
+            catch (Exception) { throw; }
             finally
             {
-                AuditHelper.LogAuditData(request.UserId, MongoCollectionName.PatientGoal.ToString(), request.PatientGoalId.ToString(), Common.DataAuditType.Delete, request.ContractNumber);
+                AuditHelper.LogDataAudit(this.UserId, MongoCollectionName.PatientGoal.ToString(), request.PatientGoalId.ToString(), Common.DataAuditType.Delete, request.ContractNumber);
             }
         }
 
@@ -159,7 +160,7 @@ namespace Phytel.API.DataDomain.PatientGoal
                     uv.Add(MB.Update.Set(MEPatientGoal.DeleteFlagProperty, false));
                     uv.Add(MB.Update.Set(MEPatientGoal.VersionProperty, pgr.Version));
                     uv.Add(MB.Update.Set(MEPatientGoal.LastUpdatedOnProperty, DateTime.UtcNow));
-                    uv.Add(MB.Update.Set(MEPatientGoal.UpdatedByProperty, pgr.UserId));
+                    uv.Add(MB.Update.Set(MEPatientGoal.UpdatedByProperty, ObjectId.Parse(this.UserId)));
                     if (pt.PatientId != null) uv.Add(MB.Update.Set(MEPatientGoal.PatientIdProperty, ObjectId.Parse(pt.PatientId)));
                     if (pt.FocusAreaIds != null) { uv.Add(MB.Update.SetWrapped<List<ObjectId>>(MEPatientGoal.FocusAreaProperty, DTOUtil.ConvertObjectId(pt.FocusAreaIds))); }
                     if (pt.Name != null) uv.Add(MB.Update.Set(MEPatientGoal.NameProperty, pt.Name));
@@ -181,10 +182,10 @@ namespace Phytel.API.DataDomain.PatientGoal
                 }
                 return result as object;
             }
-            catch (Exception ex) { throw; }
-             finally
+            catch (Exception) { throw; }
+            finally
             {
-                AuditHelper.LogAuditData(pgr.UserId, MongoCollectionName.PatientGoal.ToString(), pgr.PatientGoalId.ToString(), Common.DataAuditType.Update, pgr.ContractNumber);
+                AuditHelper.LogDataAudit(this.UserId, MongoCollectionName.PatientGoal.ToString(), pgr.PatientGoalId.ToString(), Common.DataAuditType.Update, pgr.ContractNumber);
             }
         }
 
@@ -202,19 +203,18 @@ namespace Phytel.API.DataDomain.PatientGoal
         {
             PutInitializeGoalDataRequest request = (PutInitializeGoalDataRequest)newEntity;
             PatientGoalData patientGoalData = null;
+            MEPatientGoal mePg = null;
             try
             {
-                MEPatientGoal mePg = new MEPatientGoal
+                mePg = new MEPatientGoal
                 {
                     Id = ObjectId.GenerateNewId(),
                     PatientId = ObjectId.Parse(request.PatientId),
                     TTLDate = System.DateTime.UtcNow.AddDays(_initializeDays),
-                    LastUpdatedOn = DateTime.UtcNow
+                    LastUpdatedOn = DateTime.UtcNow,
+                    UpdatedBy = ObjectId.Parse(this.UserId)
                 };
-                if (!string.IsNullOrEmpty(request.UserId))
-                {
-                    mePg.UpdatedBy = ObjectId.Parse(request.UserId);
-                }
+                
                 using (PatientGoalMongoContext ctx = new PatientGoalMongoContext(_dbName))
                 {
                     WriteConcernResult wcr = ctx.PatientGoals.Collection.Insert(mePg);
@@ -229,6 +229,10 @@ namespace Phytel.API.DataDomain.PatientGoal
                 return patientGoalData;
             }
             catch (Exception ex) { throw ex; }
+            finally
+            {
+                AuditHelper.LogDataAudit(this.UserId, MongoCollectionName.PatientGoal.ToString(), mePg.Id.ToString(), Common.DataAuditType.Update, request.ContractNumber);
+            }
         }
 
         public IEnumerable<object> Find(string Id)
@@ -268,11 +272,12 @@ namespace Phytel.API.DataDomain.PatientGoal
             }
             catch (Exception ex) { throw ex; }
         }
-
-
+        
         public IEnumerable<object> FindByGoalId(string Id)
         {
             throw new NotImplementedException();
         }
+
+        public string UserId { get; set; }
     }
 }

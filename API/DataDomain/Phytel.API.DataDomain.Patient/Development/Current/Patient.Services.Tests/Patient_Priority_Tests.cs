@@ -19,6 +19,8 @@ namespace Phytel.API.DataDomain.Patient.Service.Test
             double version = 1.0;
             string firstname = null;
             IRestClient client = new JsonServiceClient();
+            JsonServiceClient.HttpWebRequestFilter = x =>
+                            x.Headers.Add(string.Format("{0}: {1}", "x-Phytel-UserID", "531f2df9072ef727c4d2a3df"));
 
             PutUpdatePatientDataResponse response = client.Put<PutUpdatePatientDataResponse>(
                 string.Format(@"http://localhost:8888/Patient/{0}/{1}/{2}/patient/{3}", context, version, contractNumber, patientID),

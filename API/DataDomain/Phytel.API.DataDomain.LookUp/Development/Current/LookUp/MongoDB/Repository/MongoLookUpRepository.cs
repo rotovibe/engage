@@ -133,6 +133,8 @@ namespace Phytel.API.DataDomain.LookUp
             throw new NotImplementedException();
         }
 
+        public string UserId { get; set; }
+
         #region Problem
         public object FindProblemByID(string entityID)
         {

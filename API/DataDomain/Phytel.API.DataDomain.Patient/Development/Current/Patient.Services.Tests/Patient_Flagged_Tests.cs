@@ -19,6 +19,8 @@ namespace Phytel.API.DataDomain.Patient.Service.Test
             string flagged = "1";
             double version = 1.0;
             IRestClient client = new JsonServiceClient();
+            JsonServiceClient.HttpWebRequestFilter = x =>
+                            x.Headers.Add(string.Format("{0}: {1}", "x-Phytel-UserID", "531f2df9072ef727c4d2a3df"));
 
             GetPatientDataResponse response = client.Put<GetPatientDataResponse>(
                 string.Format(@"http://localhost:8888/Patient/{0}/{1}/{2}/patient/{3}/flagged/{4}?UserId={5}", context, version, contractNumber, patientID, flagged, userId),
@@ -36,6 +38,8 @@ namespace Phytel.API.DataDomain.Patient.Service.Test
             string flagged = "1";
             double version = 1.0;
             IRestClient client = new JsonServiceClient();
+            JsonServiceClient.HttpWebRequestFilter = x =>
+                            x.Headers.Add(string.Format("{0}: {1}", "x-Phytel-UserID", "531f2df9072ef727c4d2a3df"));
 
             GetPatientDataResponse response = client.Put<GetPatientDataResponse>(
                 string.Format(@"http://localhost:8888/Patient/{0}/{1}/{2}/patient/{3}/flagged/{4}?UserId={5}", context, version, contractNumber, patientID, flagged, userId),
@@ -53,6 +57,8 @@ namespace Phytel.API.DataDomain.Patient.Service.Test
             string flagged = "0";
             double version = 1.0;
             IRestClient client = new JsonServiceClient();
+            JsonServiceClient.HttpWebRequestFilter = x =>
+                                        x.Headers.Add(string.Format("{0}: {1}", "x-Phytel-UserID", "531f2df9072ef727c4d2a3df"));
 
             GetPatientDataResponse response = client.Put<GetPatientDataResponse>(
                 string.Format(@"http://localhost:8888/Patient/{0}/{1}/{2}/patient/{3}/flagged/{4}?UserId={5}", context, version, contractNumber, patientID, flagged, userId),

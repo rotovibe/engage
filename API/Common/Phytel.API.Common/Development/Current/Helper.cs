@@ -5,11 +5,26 @@ using System.Text;
 using System.Threading.Tasks;
 using MongoDB.Bson;
 using Phytel.Framework.ASE.Process;
+using ServiceStack.Service;
+using ServiceStack.ServiceClient.Web;
 
 namespace Phytel.API.Common
 {
     public static class Helper
     {
+        static readonly string PhytelUserIDHeaderKey = "x-Phytel-UserID";
+
+        public static IRestClient GetJsonServiceClient(string userId)
+        {
+            IRestClient client = new JsonServiceClient();
+
+            if (userId.Trim() != string.Empty)
+            {
+                JsonServiceClient.HttpWebRequestFilter = x =>
+                    x.Headers.Add(string.Format("{0}: {1}", PhytelUserIDHeaderKey, userId.Trim()));
+            }
+            return client;
+        }
 
         /// <summary>
         /// Converts the name of the Enum to a friendly name that can be shown on the UI

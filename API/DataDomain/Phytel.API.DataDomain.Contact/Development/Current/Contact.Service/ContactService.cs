@@ -4,11 +4,13 @@ using Phytel.API.DataDomain.Contact;
 using Phytel.API.DataDomain.Contact.DTO;
 using Phytel.API.Common.Format;
 using System.Configuration;
+using System.Web;
 
 namespace Phytel.API.DataDomain.Contact.Service
 {
     public class ContactService : ServiceStack.ServiceInterface.Service
     {
+        private const string _phytelUserIDToken = "x-Phytel-UserID";
 
         public GetContactDataResponse Get(GetContactDataRequest request)
         {
@@ -16,7 +18,9 @@ namespace Phytel.API.DataDomain.Contact.Service
             response.Version = request.Version;
             try
             {
-                response.Contact = ContactDataManager.GetContactByPatientId(request); 
+                //Get the UserId from the Header and update the request object
+                request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
+                response.Contact = ContactDataManager.GetContactByPatientId(request);
             }
             catch (Exception ex)
             {
@@ -34,6 +38,8 @@ namespace Phytel.API.DataDomain.Contact.Service
             response.Version = request.Version;
             try
             {
+                //Get the UserId from the Header and update the request object
+                request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
                 response.Contact = ContactDataManager.GetContactByUserId(request);
             }
             catch (Exception ex)
@@ -52,6 +58,8 @@ namespace Phytel.API.DataDomain.Contact.Service
             response.Version = request.Version;
             try
             {
+                //Get the UserId from the Header and update the request object
+                request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
                 response = ContactDataManager.SearchContacts(request);
             }
             catch (Exception ex)
@@ -70,6 +78,8 @@ namespace Phytel.API.DataDomain.Contact.Service
             response.Version = request.Version;
             try
             {
+                //Get the UserId from the Header and update the request object
+                request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
                 response = ContactDataManager.InsertContact(request);
             }
             catch (Exception ex)
@@ -88,6 +98,8 @@ namespace Phytel.API.DataDomain.Contact.Service
             response.Version = request.Version;
             try
             {
+                //Get the UserId from the Header and update the request object
+                request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
                 response = ContactDataManager.UpdateContact(request);
             }
             catch (Exception ex)
@@ -106,6 +118,8 @@ namespace Phytel.API.DataDomain.Contact.Service
             response.Version = request.Version;
             try
             {
+                //Get the UserId from the Header and update the request object
+                request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
                 response = ContactDataManager.GetCareManagers(request);
             }
             catch (Exception ex)
