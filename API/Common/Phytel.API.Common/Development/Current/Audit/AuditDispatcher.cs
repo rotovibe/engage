@@ -144,7 +144,7 @@ namespace Phytel.API.Common.Audit
 
         }
 
-        private static string ToXML(Object oObject)
+        public static string ToXML(Object oObject)
         {
             XmlDocument xmlDoc = new XmlDocument();
             XmlSerializer xmlSerializer = new XmlSerializer(oObject.GetType());

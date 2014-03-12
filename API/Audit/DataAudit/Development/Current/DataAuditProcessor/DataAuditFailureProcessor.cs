@@ -9,6 +9,7 @@ using Phytel.API.DataAudit;
 using Phytel.Mongo.Linq;
 using System.Configuration;
 using MongoDB.Driver;
+using System.IO;
 
 namespace Phytel.API.DataAuditProcessor
 {
@@ -22,7 +23,9 @@ namespace Phytel.API.DataAuditProcessor
             {
                 _filepath = base.Configuration.SelectSingleNode("//Phytel.ASE.Process/ProcessConfiguration/FilePath").InnerText;
 
-                //format & write the queuemessage body to the filepath
+                FileInfo file = new FileInfo(_filepath);
+                file.Directory.Create();
+                File.WriteAllText(string.Format(@"{0}\{1}.xml", _filepath, Guid.NewGuid()), queueMessage.Body);
             }
             catch(Exception ex)
             {

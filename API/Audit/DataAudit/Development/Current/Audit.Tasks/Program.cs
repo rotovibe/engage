@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Phytel.API.Common.Audit;
+using Phytel.API.DataAudit;
+using Phytel.Framework.ASE.Process;
 //using Phytel.API.Audit.DataAudit;
 //using Audit.DataAudit.Service;
 
@@ -23,12 +26,42 @@ namespace Audit.Tasks
 
         static void Main(string[] args)
         {
-            EndpointTest test = new EndpointTest(_token, _version, _contractnumber, _patientid, _cohortid,
-                                                                        _patientprogramid, _typename, _flagged, _patientgoalid, _id);
+            //EndpointTest test = new EndpointTest(_token, _version, _contractnumber, _patientid, _cohortid,
+            //                                                            _patientprogramid, _typename, _flagged, _patientgoalid, _id);
 
-            test.HitEndpoints_GET(true);
+            //test.HitEndpoints_GET(true);
+
+            TestAuditFailure(3);
 
             Console.ReadLine();
+        }
+
+        private static void TestAuditFailure(int numberOfMessagesToCreate)
+        {
+            while (numberOfMessagesToCreate > 0)
+            {
+                QueueMessage msg = new QueueMessage();
+
+                DataAudit da = new DataAudit();
+                da.Contract = "inhealth001";
+                da.EntityID = new MongoDB.Bson.ObjectId("531f2dcc072ef727c4d29e22");
+                da.EntityType = "testentitytype";
+                da.UserId = "yyyyyyyy";
+                da.TimeStamp = DateTime.Now;
+
+                string xmlBody = AuditDispatcher.ToXML(da);
+                string messageQueue = @".\private$\failure";
+
+
+                QueueMessage newMessage = new QueueMessage(Phytel.Framework.ASE.Data.Common.ASEMessageType.Process, messageQueue);
+                newMessage.Body = xmlBody;
+
+                MessageQueueHelper.SendMessage(@messageQueue, newMessage, "TestFailureType");
+
+                --numberOfMessagesToCreate;
+            }
+
+
         }
     }
 }

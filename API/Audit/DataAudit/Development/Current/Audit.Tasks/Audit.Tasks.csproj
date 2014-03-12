@@ -39,8 +39,25 @@
   <PropertyGroup />
   <PropertyGroup />
   <ItemGroup>
+    <Reference Include="ASECore">
+      <HintPath>..\..\..\..\..\Common\Phytel.API.Common\Development\Current\References\ASECore.dll</HintPath>
+    </Reference>
+    <Reference Include="ASEData">
+      <HintPath>..\..\..\..\..\Common\Phytel.API.Common\Development\Current\References\ASEData.dll</HintPath>
+    </Reference>
+    <Reference Include="MongoDB.Bson, Version=1.8.1.20, Culture=neutral, PublicKeyToken=f686731cfb9cc103, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\Common\Phytel.API.Common\Development\Current\References\MongoDB.Bson.dll</HintPath>
+    </Reference>
+    <Reference Include="MongoDB.Driver, Version=1.8.1.20, Culture=neutral, PublicKeyToken=f686731cfb9cc103, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\Common\Phytel.API.Common\Development\Current\References\MongoDB.Driver.dll</HintPath>
+    </Reference>
     <Reference Include="Phytel.API.Interface">
       <HintPath>..\..\..\..\..\Interfaces\Development\Current\Phytel.API.Interface\bin\Debug\Phytel.API.Interface.dll</HintPath>
+    </Reference>
+    <Reference Include="Phytel.Mongo">
+      <HintPath>..\..\..\..\..\Common\Phytel.API.Common\Development\Current\References\Phytel.Mongo.dll</HintPath>
     </Reference>
     <Reference Include="ServiceStack">
       <HintPath>packages\ServiceStack.4.0.12\lib\net40\ServiceStack.dll</HintPath>
@@ -73,6 +90,16 @@
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\..\Common\Phytel.API.Common\Development\Current\Phytel.API.Common.csproj">
+      <Project>{25cf3c3f-221f-4a49-b5ef-a8a5fcf9a5ba}</Project>
+      <Name>Phytel.API.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\Common\Phytel.API.DataAudit\Development\Current\Phytel.API.DataAudit.csproj">
+      <Project>{ae842695-4dd4-4403-9be4-8473bca09580}</Project>
+      <Name>Phytel.API.DataAudit</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
