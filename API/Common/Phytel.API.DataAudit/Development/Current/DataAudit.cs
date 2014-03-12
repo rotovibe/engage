@@ -18,7 +18,7 @@ namespace Phytel.API.DataAudit
         public const string ContractProperty = "ct";
 
         [BsonElement(UserIDProperty)]
-        public ObjectId UserId { get; set; }
+        public string UserId { get; set; }
 
         [BsonElement(TypeProperty)]
         public string Type { get; set; }  //Insert, Update, Delete
@@ -27,7 +27,7 @@ namespace Phytel.API.DataAudit
         public string EntityType { get; set; }
 
         [BsonElement(EntityIDProperty)]
-        public ObjectId EntityID { get; set; }
+        public string EntityID { get; set; }
 
         [BsonElement(EntityProperty)]
         public string Entity { get; set; }

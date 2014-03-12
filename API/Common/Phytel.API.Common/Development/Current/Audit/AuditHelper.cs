@@ -55,11 +55,11 @@ namespace Phytel.API.DataAudit
             return auditLog;
         }
 
-        private static DataAudit GetDataAuditLog(ObjectId userId, string collectionName, string entityId, DataAuditType auditType, string contractNumber)
+        private static DataAudit GetDataAuditLog(string userId, string collectionName, string entityId, DataAuditType auditType, string contractNumber)
         {
             DataAudit auditLog = new DataAudit()
             {
-                EntityID = new ObjectId(entityId),
+                EntityID = entityId,
                 UserId = userId,
                 Contract = contractNumber,
                 EntityType = collectionName,
@@ -223,7 +223,7 @@ namespace Phytel.API.DataAudit
                 {
                     try
                     {
-                        DataAuditAsynch(ObjectId.Parse(userId), collectionName, entityId, auditType, contractNumber);
+                        DataAuditAsynch(userId, collectionName, entityId, auditType, contractNumber);
                     }
                     catch (Exception newthreadex)
                     {
@@ -293,7 +293,7 @@ namespace Phytel.API.DataAudit
             AuditDispatcher.WriteAudit(data);
         }
 
-        private static void DataAuditAsynch(ObjectId userId, string collectionName, string entityId, DataAuditType auditType, string contractNumber)
+        private static void DataAuditAsynch(string userId, string collectionName, string entityId, DataAuditType auditType, string contractNumber)
         {
             //throw new SystemException("test error in new thread starts");
 

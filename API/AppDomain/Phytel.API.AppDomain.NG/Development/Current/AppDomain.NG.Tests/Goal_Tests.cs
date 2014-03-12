@@ -16,7 +16,7 @@ namespace Phytel.API.AppDomain.NG.Test
         {
             GetInitializeGoalRequest request = new GetInitializeGoalRequest();
             request.ContractNumber = "InHealth001";
-            request.UserId = "AD_TestHarness"; 
+            request.UserId = "531f2df4072ef727c4d2a3b2"; 
             request.Version = 1;
             request.PatientId = "52f55874072ef709f84e68c5";
 
