@@ -489,7 +489,15 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             {
                 if (s.SelectedResponseId != null)
                 {
-                    if (s.SelectedResponseId.Equals(kv.Key))
+                    if (s.SelectedResponseId.ToString().Equals("52d241a31e601521285e97e8") && kv.Key.ToString().Equals("52d241a31e601521285e97e8"))
+                    {
+                        string test = "test";
+                    }
+
+                    // need to cast to non nullable type to compare
+                    ObjectId sObjId = (ObjectId)s.SelectedResponseId;
+
+                    if (sObjId.Equals(kv.Key))
                     {
                         s.SelectedResponseId = kv.Value;
                     }
@@ -670,7 +678,10 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             try
             {
                 ObjectId? obj = null;
-                if (!String.IsNullOrEmpty(p)) { ObjectId.Parse(p); }
+                if (!String.IsNullOrEmpty(p))
+                {
+                    obj = ObjectId.Parse(p);
+                }
                 return obj;
             }
             catch (Exception ex)
@@ -1134,6 +1145,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
                     Phytel.API.DataDomain.Program.ProgramRepositoryFactory<PutProgramAttributesResponse>
                     .GetProgramAttributesRepository(request.ContractNumber, request.Context);
 
+                attrRepo.UserId = request.UserId;
                 attrRepo.Insert(attr);
             }
             catch (Exception ex)

@@ -122,6 +122,7 @@ namespace Phytel.API.AppDomain.NG
                                 r.Selected = false;
                             }
 
+                            SetDeleteFlagByStepCompletion(step, r);
                             UpdateResponseRequest(request, r);
                             result = true;
                         }
@@ -132,6 +133,24 @@ namespace Phytel.API.AppDomain.NG
             catch (WebServiceException ex)
             {
                 throw new WebServiceException("AD:SaveResponses()::" + ex.Message, ex.InnerException);
+            }
+        }
+
+        private static void SetDeleteFlagByStepCompletion(Step step, Response r)
+        {
+            try
+            {
+                if (step != null && r != null)
+                {
+                    if (step.Completed)
+                        r.Delete = false;
+                    else
+                        r.Delete = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new WebServiceException("AD:SetDeleteFlagByStepCompletion()::" + ex.Message, ex.InnerException);
             }
         }
 

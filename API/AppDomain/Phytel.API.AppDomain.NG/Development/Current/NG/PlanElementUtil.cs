@@ -138,7 +138,14 @@ namespace Phytel.API.AppDomain.NG
                         throw new ArgumentException("Cannot set attribute of type " + r.ElementType + ". Tag value is null.");
 
                     // eligibility series
-                    progAttr.Eligibility = (!string.IsNullOrEmpty(r.Tag))? Convert.ToInt32(r.Tag) : 0;
+                    try
+                    {
+                        progAttr.Eligibility = (!string.IsNullOrEmpty(r.Tag)) ? Convert.ToInt32(r.Tag) : 0;
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new Exception("AD:SetProgramAttributes()::Eligibility" + ex.Message, ex.InnerException);
+                    }
 
                     int state; // no = 1, yes = 2
                     bool isNum = int.TryParse(r.Tag, out state);
@@ -175,14 +182,28 @@ namespace Phytel.API.AppDomain.NG
                     if (r.Tag == null)
                         throw new ArgumentException("Cannot set attribute of type " + r.ElementType + ". Tag value is null.");
 
-                    progAttr.Enrollment = (!string.IsNullOrEmpty(r.Tag)) ? Convert.ToInt32(r.Tag) : 0;
+                    try
+                    {
+                        progAttr.Enrollment = (!string.IsNullOrEmpty(r.Tag)) ? Convert.ToInt32(r.Tag) : 0;
+                    }
+                    catch(Exception ex)
+                    {
+                        throw new Exception("AD:SetProgramAttributes()::Enrollment" + ex.Message, ex.InnerException);
+                    }
                 }
                 else if (r.ElementType.Equals(16))
                 {
                     if (r.Tag == null)
                         throw new ArgumentException("Cannot set attribute of type " + r.ElementType + ". Tag value is null.");
 
-                    progAttr.OptOut = (!string.IsNullOrEmpty(r.Tag))? Convert.ToBoolean(r.Tag) : false  ;
+                    try
+                    {
+                        progAttr.OptOut = (!string.IsNullOrEmpty(r.Tag)) ? Convert.ToBoolean(r.Tag) : false;
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new Exception("AD:SetProgramAttributes()::OptOut" + ex.Message, ex.InnerException);
+                    }
                 }
                 else if (r.ElementType.Equals(17))
                 {
@@ -190,7 +211,7 @@ namespace Phytel.API.AppDomain.NG
                     if (r.Tag == null)
                         throw new ArgumentException("Cannot set attribute of type " + r.ElementType + ". Tag value is null.");
 
-                    progAttr.OptOutReason = (!string.IsNullOrEmpty(r.Tag))? r.Tag : null;
+                    progAttr.OptOutReason = (!string.IsNullOrEmpty(r.Tag)) ? r.Tag : null;
                 }
                 else if (r.ElementType.Equals(18))
                 {
@@ -202,12 +223,19 @@ namespace Phytel.API.AppDomain.NG
                     if (r.Tag == null)
                         throw new ArgumentException("Cannot set attribute of type " + r.ElementType + ". Tag value is null.");
 
-                    progAttr.GraduatedFlag = (!string.IsNullOrEmpty(r.Tag))? Convert.ToInt32(r.Tag) : 0;
+                    try
+                    {
+                        progAttr.GraduatedFlag = (!string.IsNullOrEmpty(r.Tag)) ? Convert.ToInt32(r.Tag) : 0;
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new Exception("AD:SetProgramAttributes()::GraduatedFlag" + ex.Message, ex.InnerException);
+                    }
                 }
             }
             catch (Exception ex)
             {
-                throw new Exception("AD:SpawnElementsInList()::" + ex.Message, ex.InnerException);
+                throw new Exception("AD:SetProgramAttributes()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -295,7 +323,7 @@ namespace Phytel.API.AppDomain.NG
             }
             catch (Exception ex)
             {
-                throw new Exception("AD:SpawnElementsInList()::" + ex.Message, ex.InnerException);
+                throw new Exception("AD:IsProgramCompleted()::" + ex.Message, ex.InnerException);
             }
         }
 
