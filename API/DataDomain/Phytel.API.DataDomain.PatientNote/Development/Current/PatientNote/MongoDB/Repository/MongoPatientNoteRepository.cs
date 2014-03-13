@@ -44,11 +44,9 @@ namespace Phytel.API.DataDomain.PatientNote
                         PatientId = ObjectId.Parse(noteData.PatientId),
                         Text = noteData.Text,
                         ProgramIds = Helper.ConvertToObjectIdList(noteData.ProgramIds),
-                        CreatedOn = DateTime.UtcNow,
                         Version = request.Version,
                         UpdatedBy = ObjectId.Parse(this.UserId),
-                        LastUpdatedOn = DateTime.UtcNow,
-                        CreatedBy = ObjectId.Parse(this.UserId)
+                        LastUpdatedOn = DateTime.UtcNow
                     };
 
                     using (PatientNoteMongoContext ctx = new PatientNoteMongoContext(_dbName))
@@ -138,8 +136,8 @@ namespace Phytel.API.DataDomain.PatientNote
                             PatientId = meN.PatientId.ToString(),
                             Text = meN.Text,
                             ProgramIds = Helper.ConvertToStringList(meN.ProgramIds),
-                            CreatedOn = meN.CreatedOn,
-                            CreatedById = (meN.CreatedBy == null) ? string.Empty : meN.CreatedBy.ToString()
+                            CreatedOn = meN.RecordCreatedOn,
+                            CreatedById = meN.RecordCreatedBy.ToString()
                         };
                     }
                 }
@@ -208,7 +206,7 @@ namespace Phytel.API.DataDomain.PatientNote
                     queries.Add(Query.EQ(MEPatientNote.PatientIdProperty, ObjectId.Parse(dataRequest.PatientId)));
                     queries.Add(Query.EQ(MEPatientNote.DeleteFlagProperty, false));
                     IMongoQuery mQuery = Query.And(queries);
-                    List<MEPatientNote> meNotes = ctx.PatientNotes.Collection.Find(mQuery).OrderByDescending(o => o.CreatedOn).Take(dataRequest.Count).ToList();
+                    List<MEPatientNote> meNotes = ctx.PatientNotes.Collection.Find(mQuery).OrderByDescending(o => o.RecordCreatedOn).Take(dataRequest.Count).ToList();
                     if (meNotes != null && meNotes.Count > 0)
                     {
                         noteDataList = new List<PatientNoteData>();
@@ -219,8 +217,8 @@ namespace Phytel.API.DataDomain.PatientNote
                                 PatientId = meN.PatientId.ToString(),
                                 Text = meN.Text,
                                 ProgramIds = Helper.ConvertToStringList(meN.ProgramIds),
-                                CreatedOn = meN.CreatedOn,
-                                CreatedById = (meN.CreatedBy == null) ? string.Empty : meN.CreatedBy.ToString()
+                                CreatedOn = meN.RecordCreatedOn,
+                                CreatedById = meN.RecordCreatedBy.ToString()
                             });
                         }
                     }

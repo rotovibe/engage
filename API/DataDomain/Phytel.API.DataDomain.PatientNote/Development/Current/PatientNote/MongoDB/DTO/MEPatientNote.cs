@@ -25,9 +25,6 @@ namespace Phytel.API.DataDomain.PatientNote.DTO
         public const string PatientIdProperty = "pid";
         public const string TextProperty = "txt";
         public const string ProgramProperty = "prog";
-        public const string CreatedOnProperty = "con";
-        public const string CreatedByProperty = "cby";
-        
 
         #region Standard IMongoEntity Constants
         public const string ExtraElementsProperty = "ex";
@@ -54,14 +51,6 @@ namespace Phytel.API.DataDomain.PatientNote.DTO
         [BsonElement(ProgramProperty)]
         [BsonIgnoreIfNull(true)]
         public List<ObjectId> ProgramIds { get; set; }
-
-        [BsonElement(CreatedByProperty)]
-        [BsonIgnoreIfNull(false)]
-        public ObjectId? CreatedBy { get; set; }
-
-        [BsonElement(CreatedOnProperty)]
-        [BsonIgnoreIfNull(true)]
-        public DateTime CreatedOn { get; set; }
 
         #region Standard IMongoEntity Implementation
         [BsonElement(ExtraElementsProperty)]
