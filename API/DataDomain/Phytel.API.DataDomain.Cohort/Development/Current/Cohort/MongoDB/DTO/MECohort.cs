@@ -26,7 +26,7 @@ namespace Phytel.API.DataDomain.Cohort.DTO
         public const string DescriptionProperty = "desc";
         public const string QueryProperty = "query";
         public const string QueryWithFilterProperty = "qwf";
-        public const string SortProperty = "s";
+        public const string SortProperty = "sort";
 
         public const string ExtraElementsProperty = "ex";
         public const string VersionProperty = "v";
