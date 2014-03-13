@@ -152,7 +152,7 @@ namespace Phytel.API.DataDomain.PatientGoal
                     if (pt.TargetDate != null) uv.Add(MB.Update.Set(MEPatientTask.TargetDateProperty, pt.TargetDate));
                     if (pt.TargetValue != null) uv.Add(MB.Update.Set(MEPatientTask.TargetValueProperty, pt.TargetValue));
                     if (pt.CustomAttributes != null) { uv.Add(MB.Update.SetWrapped<List<MAttribute>>(MEPatientTask.AttributesProperty, DTOUtil.GetAttributes(pt.CustomAttributes))); }
-                    if (pt.Barriers != null) { uv.Add(MB.Update.SetWrapped<List<ObjectId>>(MEPatientTask.BarriersProperty, DTOUtil.ConvertObjectId(pt.Barriers))); }
+                    if (pt.BarrierIds != null) { uv.Add(MB.Update.SetWrapped<List<ObjectId>>(MEPatientTask.BarriersProperty, DTOUtil.ConvertObjectId(pt.BarrierIds))); }
 
                     IMongoUpdate update = MB.Update.Combine(uv);
                     ctx.PatientTasks.Collection.Update(q, update);
@@ -242,7 +242,7 @@ namespace Phytel.API.DataDomain.PatientGoal
                                 PatientGoalId = b.PatientGoalId.ToString(),
                                 StatusId = ((int)b.Status),
                                 TargetDate = b.TargetDate,
-                                Barriers = Helper.ConvertToStringList(b.Barriers),
+                                BarrierIds = Helper.ConvertToStringList(b.BarrierIds),
                                 Description = b.Description,
                                 StatusDate = b.StatusDate,
                                 StartDate = b.StartDate,
@@ -282,7 +282,7 @@ namespace Phytel.API.DataDomain.PatientGoal
                                 StatusId = ((int)b.Status),
                                 TargetDate = b.TargetDate,
                                 //Attributes = DTOUtil.ConvertToAttributeDataList(b.Attributes),
-                                Barriers = Helper.ConvertToStringList(b.Barriers),
+                                BarrierIds = Helper.ConvertToStringList(b.BarrierIds),
                                 Description = b.Description,
                                 StatusDate = b.StatusDate,
                                 StartDate = b.StartDate

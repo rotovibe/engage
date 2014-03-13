@@ -24,7 +24,7 @@ namespace Phytel.API.AppDomain.NG
                         {
                             Id = t.Id,
                             CustomAttributes = GetAttributeData(t.CustomAttributes),
-                            Barriers = t.BarrierIds,
+                            BarrierIds = t.BarrierIds,
                             Description = t.Description,
                             PatientGoalId = request.Goal.Id,
                             StartDate = t.StartDate,
@@ -91,7 +91,7 @@ namespace Phytel.API.AppDomain.NG
                         pid.Add(new PatientInterventionData
                         {
                             AssignedToId = i.AssignedToId,
-                            Barriers = i.BarrierIds,
+                            BarrierIds = i.BarrierIds,
                             CategoryId = i.CategoryId,
                             Description = i.Description,
                             Id = i.Id,
@@ -242,7 +242,7 @@ namespace Phytel.API.AppDomain.NG
                             StatusId = t.StatusId,
                             TargetDate = t.TargetDate,
                             CustomAttributes = GetCustomAttributeDetails(t.CustomAttributes, taskAttributesLibrary),
-                            BarrierIds = t.Barriers,
+                            BarrierIds = t.BarrierIds,
                             Description = t.Description,
                             StatusDate = t.StatusDate,
                             StartDate = t.StartDate
@@ -274,7 +274,7 @@ namespace Phytel.API.AppDomain.NG
                             CategoryId = i.CategoryId,
                             StatusId = i.StatusId,
                             AssignedToId = i.AssignedToId,
-                            BarrierIds = i.Barriers,
+                            BarrierIds = i.BarrierIds,
                             Description = i.Description,
                             StatusDate = i.StatusDate,
                             StartDate = i.StartDate

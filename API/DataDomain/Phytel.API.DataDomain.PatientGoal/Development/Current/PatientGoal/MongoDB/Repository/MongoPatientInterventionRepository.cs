@@ -151,7 +151,7 @@ namespace Phytel.API.DataDomain.PatientGoal
                     if (pt.StatusId != 0) uv.Add(MB.Update.Set(MEPatientIntervention.StatusProperty, pt.StatusId));
                     if (pt.CategoryId != null) uv.Add(MB.Update.Set(MEPatientIntervention.CategoryProperty, ObjectId.Parse(pt.CategoryId)));
                     if (pt.AssignedToId != null) uv.Add(MB.Update.Set(MEPatientIntervention.AssignedToProperty, ObjectId.Parse(pt.AssignedToId)));
-                    if (pt.Barriers != null) { uv.Add(MB.Update.SetWrapped<List<ObjectId>>(MEPatientIntervention.BarriersProperty, DTOUtil.ConvertObjectId(pt.Barriers))); }
+                    if (pt.BarrierIds != null) { uv.Add(MB.Update.SetWrapped<List<ObjectId>>(MEPatientIntervention.BarriersProperty, DTOUtil.ConvertObjectId(pt.BarrierIds))); }
 
                     IMongoUpdate update = MB.Update.Combine(uv);
                     ctx.PatientInterventions.Collection.Update(q, update);
@@ -237,7 +237,7 @@ namespace Phytel.API.DataDomain.PatientGoal
                                 PatientGoalId = b.PatientGoalId.ToString(),
                                 CategoryId = b.CategoryId == null ? null : b.CategoryId.ToString(),
                                 AssignedToId = b.AssignedToId == null ? null : b.AssignedToId.ToString(),
-                                Barriers = Helper.ConvertToStringList(b.BarrierIds),
+                                BarrierIds = Helper.ConvertToStringList(b.BarrierIds),
                                 StatusId = ((int)b.Status),
                                 StatusDate = b.StatusDate,
                                 StartDate = b.StartDate,

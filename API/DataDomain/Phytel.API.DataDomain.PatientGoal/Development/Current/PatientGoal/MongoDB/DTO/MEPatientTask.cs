@@ -57,7 +57,7 @@ namespace Phytel.API.DataDomain.PatientGoal.DTO
         public const string BarriersProperty = "bar";
         [BsonElement(BarriersProperty)]
         [BsonIgnoreIfNull(false)]
-        public List<ObjectId> Barriers { get; set; }
+        public List<ObjectId> BarrierIds { get; set; }
 
         #region Standard IMongoEntity Implementation
         public const string ExtraElementsProperty = "ex";

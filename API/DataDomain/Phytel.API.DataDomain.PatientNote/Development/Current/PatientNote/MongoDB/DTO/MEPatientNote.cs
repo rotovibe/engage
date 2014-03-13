@@ -53,7 +53,7 @@ namespace Phytel.API.DataDomain.PatientNote.DTO
 
         [BsonElement(ProgramProperty)]
         [BsonIgnoreIfNull(true)]
-        public List<ObjectId> Programs { get; set; }
+        public List<ObjectId> ProgramIds { get; set; }
 
         [BsonElement(CreatedByProperty)]
         [BsonIgnoreIfNull(false)]
