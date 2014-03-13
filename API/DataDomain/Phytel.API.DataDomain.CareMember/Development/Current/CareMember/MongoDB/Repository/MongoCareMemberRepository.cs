@@ -21,6 +21,11 @@ namespace Phytel.API.DataDomain.CareMember
         public MongoCareMemberRepository(string contractDBName)
         {
             _dbName = contractDBName;
+
+            #region Register ClassMap
+            if (MongoDB.Bson.Serialization.BsonClassMap.IsClassMapRegistered(typeof(MECareMember)) == false)
+                MongoDB.Bson.Serialization.BsonClassMap.RegisterClassMap<MECareMember>();
+            #endregion
         }
 
         public object Insert(object newEntity)

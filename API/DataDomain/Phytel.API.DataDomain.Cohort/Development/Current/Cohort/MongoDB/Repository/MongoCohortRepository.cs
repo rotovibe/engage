@@ -16,6 +16,11 @@ namespace Phytel.API.DataDomain.Cohort
         public MongoCohortRepository(string contractDBName)
         {
             _dbName = contractDBName;
+
+            #region Register ClassMap
+            if (MongoDB.Bson.Serialization.BsonClassMap.IsClassMapRegistered(typeof(MECohort)) == false)
+                MongoDB.Bson.Serialization.BsonClassMap.RegisterClassMap<MECohort>();
+            #endregion
         }
 
         public object Insert(object newEntity)

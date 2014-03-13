@@ -22,6 +22,26 @@ namespace Phytel.API.DataDomain.Contact
         public MongoContactRepository(string contractDBName)
         {
             _dbName = contractDBName;
+
+            #region Register ClassMap
+            if (MongoDB.Bson.Serialization.BsonClassMap.IsClassMapRegistered(typeof(MEContact)) == false)
+                MongoDB.Bson.Serialization.BsonClassMap.RegisterClassMap<MEContact>();
+
+            if (MongoDB.Bson.Serialization.BsonClassMap.IsClassMapRegistered(typeof(Address)) == false)
+                MongoDB.Bson.Serialization.BsonClassMap.RegisterClassMap<Address>();
+
+            if (MongoDB.Bson.Serialization.BsonClassMap.IsClassMapRegistered(typeof(CommMode)) == false)
+                MongoDB.Bson.Serialization.BsonClassMap.RegisterClassMap<CommMode>();
+
+            if (MongoDB.Bson.Serialization.BsonClassMap.IsClassMapRegistered(typeof(Email)) == false)
+                MongoDB.Bson.Serialization.BsonClassMap.RegisterClassMap<Email>();
+
+            if (MongoDB.Bson.Serialization.BsonClassMap.IsClassMapRegistered(typeof(Language)) == false)
+                MongoDB.Bson.Serialization.BsonClassMap.RegisterClassMap<Language>();
+
+            if (MongoDB.Bson.Serialization.BsonClassMap.IsClassMapRegistered(typeof(Phone)) == false)
+                MongoDB.Bson.Serialization.BsonClassMap.RegisterClassMap<Phone>();
+            #endregion
         }
 
         /// <summary>

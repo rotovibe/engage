@@ -11,6 +11,7 @@ using Phytel.API.DataAudit;
 using Phytel.API.DataDomain.Patient.DTO;
 using Phytel.Services;
 using MB = MongoDB.Driver.Builders;
+using MongoDB.Bson.Serialization;
 
 namespace Phytel.API.DataDomain.Patient
 {
@@ -27,6 +28,14 @@ namespace Phytel.API.DataDomain.Patient
         public MongoPatientRepository(string contractDBName)
         {
             _dbName = contractDBName;
+
+            #region Register ClassMap
+            if (BsonClassMap.IsClassMapRegistered(typeof(MEPatient)) == false)
+                BsonClassMap.RegisterClassMap<MEPatient>();
+
+            if (BsonClassMap.IsClassMapRegistered(typeof(MEPatientUser)) == false)
+                BsonClassMap.RegisterClassMap<MEPatientUser>();
+            #endregion
         }
 
         public object Insert(object newEntity)

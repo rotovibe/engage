@@ -10,6 +10,7 @@ using Phytel.API.Interface;
 using MB = MongoDB.Driver.Builders;
 using Phytel.API.DataAudit;
 using Phytel.API.Common;
+using MongoDB.Bson.Serialization;
 
 namespace Phytel.API.DataDomain.PatientProblem
 {
@@ -20,6 +21,11 @@ namespace Phytel.API.DataDomain.PatientProblem
         public MongoPatientProblemRepository(string contractDBName)
         {
             _dbName = contractDBName;
+
+            #region Register ClassMap
+            if (BsonClassMap.IsClassMapRegistered(typeof(MEPatientProblem)) == false)
+                BsonClassMap.RegisterClassMap<MEPatientProblem>();
+            #endregion
         }
 
         public object Insert(object newEntity)

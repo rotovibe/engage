@@ -15,6 +15,7 @@ using Phytel.API.Common;
 using Phytel.API.Common.Data;
 using System.Configuration;
 using Phytel.API.DataAudit;
+using MongoDB.Bson.Serialization;
 
 namespace Phytel.API.DataDomain.PatientNote
 {
@@ -26,6 +27,11 @@ namespace Phytel.API.DataDomain.PatientNote
         public MongoPatientNoteRepository(string contractDBName)
         {
             _dbName = contractDBName;
+
+            #region Register ClassMap
+            if (BsonClassMap.IsClassMapRegistered(typeof(MEPatientNote)) == false)
+                BsonClassMap.RegisterClassMap<MEPatientNote>();
+            #endregion
         }
 
         public object Insert(object newEntity)

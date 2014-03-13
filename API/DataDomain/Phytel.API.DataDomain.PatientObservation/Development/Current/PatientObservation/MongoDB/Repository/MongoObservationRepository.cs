@@ -12,6 +12,8 @@ using Phytel.API.DataDomain.PatientObservation;
 using MB = MongoDB.Driver.Builders;
 using Phytel.API.Common;
 using Phytel.API.Common.Data;
+using MongoDB.Bson.Serialization;
+using Phytel.API.DataDomain.PatientObservation.MongoDB.DTO;
 
 namespace Phytel.API.DataDomain.PatientObservation
 {
@@ -22,6 +24,14 @@ namespace Phytel.API.DataDomain.PatientObservation
         public MongoObservationRepository(string contractDBName)
         {
             _dbName = contractDBName;
+
+            #region Register ClassMap
+            if (BsonClassMap.IsClassMapRegistered(typeof(ObservationValue)) == false)
+                BsonClassMap.RegisterClassMap<ObservationValue>();
+            
+            if (BsonClassMap.IsClassMapRegistered(typeof(MEObservation)) == false)
+                BsonClassMap.RegisterClassMap<MEObservation>();
+            #endregion
         }
 
         public object Insert(object newEntity)

@@ -14,6 +14,8 @@ using Phytel.API.Common;
 using Phytel.API.Common.Data;
 using System.Configuration;
 using Phytel.API.DataAudit;
+using Phytel.API.DataDomain.PatientObservation.MongoDB.DTO;
+using MongoDB.Bson.Serialization;
 
 namespace Phytel.API.DataDomain.PatientObservation
 {
@@ -23,10 +25,17 @@ namespace Phytel.API.DataDomain.PatientObservation
         private int _expireDays = Convert.ToInt32(ConfigurationManager.AppSettings["ExpireDays"]);
         private int _initializeDays = Convert.ToInt32(ConfigurationManager.AppSettings["InitializeDays"]);
 
-
         public MongoPatientObservationRepository(string contractDBName)
         {
             _dbName = contractDBName;
+
+            #region Register ClassMap
+            if (BsonClassMap.IsClassMapRegistered(typeof(ObservationValue)) == false)
+                BsonClassMap.RegisterClassMap<ObservationValue>();
+
+            if (BsonClassMap.IsClassMapRegistered(typeof(MEPatientObservation)) == false)
+                BsonClassMap.RegisterClassMap<MEPatientObservation>();
+            #endregion
         }
 
         public object Insert(object newEntity)

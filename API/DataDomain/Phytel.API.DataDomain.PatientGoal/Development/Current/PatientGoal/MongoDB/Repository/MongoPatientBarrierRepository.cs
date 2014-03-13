@@ -15,6 +15,7 @@ using Phytel.API.Common;
 using Phytel.API.Common.Data;
 using System.Configuration;
 using Phytel.API.DataAudit;
+using MongoDB.Bson.Serialization;
 
 namespace Phytel.API.DataDomain.PatientGoal
 {
@@ -27,6 +28,14 @@ namespace Phytel.API.DataDomain.PatientGoal
         public MongoPatientBarrierRepository(string contractDBName)
         {
             _dbName = contractDBName;
+
+            #region Register ClassMap
+            if (BsonClassMap.IsClassMapRegistered(typeof(GoalBase)) == false)
+                BsonClassMap.RegisterClassMap<GoalBase>();
+
+            if (BsonClassMap.IsClassMapRegistered(typeof(MEPatientBarrier)) == false)
+                BsonClassMap.RegisterClassMap<MEPatientBarrier>();
+            #endregion
         }
 
         public object Insert(object newEntity)
