@@ -620,15 +620,14 @@ namespace Phytel.API.DataDomain.Patient
                     }
                     if (request.FullSSN != null)
                     {
-                        if (request.FullSSN == "\"\"" || (request.FullSSN == "\'\'"))
+                        string fullSSN = request.FullSSN.Trim().Replace("-", string.Empty);
+                        if (fullSSN == "\"\"" || (fullSSN == "\'\'") || (fullSSN.Length == 0))
                         {
                             updt.Set(MEPatient.FullSSNProperty, string.Empty);
                             updt.Set(MEPatient.LastFourSSNProperty, BsonNull.Value);
                         }
                         else
                         {
-                            
-                            string fullSSN = request.FullSSN.Trim().Replace("-", string.Empty);
                             if (fullSSN.Length != 9)
                             {
                                 throw new ArgumentException("SSN does not contain 9 digits.");
