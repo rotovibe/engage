@@ -153,6 +153,18 @@ namespace Audit.Tasks
             int i = 0;
 
             IRestClient client = new JsonServiceClient();
+
+            JsonServiceClient client = new JsonServiceClient();
+            client.HttpMethod = HttpMethods.Get;
+
+            JsonServiceClient.h
+            //client.Headers.Add("x-Phytel-UserID", "bb241c64-a0ff-4e01-ba5f-4246ef50780e");
+
+            //JsonServiceClient.HttpWebRequestFilter filter
+
+            //JsonServiceClient client.HttpHeaders.HttpWebRequestFilter = x =>
+            //        x.Headers.Add(string.Format("{0}: {1}", "x-Phytel-UserID", "Valid User ID"));
+
             IDomainResponse sysResponse;
 
             foreach(string endpoint in endpoints)

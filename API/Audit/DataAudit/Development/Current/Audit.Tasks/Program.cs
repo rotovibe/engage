@@ -14,7 +14,7 @@ namespace Audit.Tasks
     class Program
     {
         static string _token = "531796e0d6a4850c20c9c97d";
-        static string _version = "v1";
+        static string _version = "1.0";
         static string _contractnumber = "inhealth001";
         static string _patientid = "52f55859072ef709f84e5e20";
         static string _cohortid = "528ed977072ef70e10099685";
@@ -26,12 +26,12 @@ namespace Audit.Tasks
 
         static void Main(string[] args)
         {
-            //EndpointTest test = new EndpointTest(_token, _version, _contractnumber, _patientid, _cohortid,
-            //                                                            _patientprogramid, _typename, _flagged, _patientgoalid, _id);
+            EndpointTest test = new EndpointTest(_token, _version, _contractnumber, _patientid, _cohortid,
+                                                                        _patientprogramid, _typename, _flagged, _patientgoalid, _id);
 
-            //test.HitEndpoints_GET(true);
+            test.HitEndpoints_GET(true);
 
-            TestAuditFailure(3);
+            //TestAuditFailure(3);
 
             Console.ReadLine();
         }
@@ -44,9 +44,9 @@ namespace Audit.Tasks
 
                 DataAudit da = new DataAudit();
                 da.Contract = "inhealth001";
-                da.EntityID = new MongoDB.Bson.ObjectId("531f2dcc072ef727c4d29e22");
+                da.EntityID = "531f2dcc072ef727c4d29e22";
                 da.EntityType = "testentitytype";
-                da.UserId = "yyyyyyyy";
+                da.UserId = "531f2dcc072ef727c4d29yyy";
                 da.TimeStamp = DateTime.Now;
 
                 string xmlBody = AuditDispatcher.ToXML(da);
