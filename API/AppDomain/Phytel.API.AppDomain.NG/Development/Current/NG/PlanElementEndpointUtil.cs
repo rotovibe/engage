@@ -46,9 +46,9 @@ namespace Phytel.API.AppDomain.NG
 
                 return result;
             }
-            catch (WebServiceException ex)
+            catch (Exception ex)
             {
-                throw new WebServiceException("AD:GetPatientProblem()::" + ex.Message, ex.InnerException);
+                throw new Exception("AD:PlanElementEndpointUtil:GetPatientProblem()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -75,9 +75,9 @@ namespace Phytel.API.AppDomain.NG
 
                 return response.program;
             }
-            catch (WebServiceException ex)
+            catch (Exception ex)
             {
-                throw new WebServiceException("AD:SaveAction()::" + ex.Message, ex.InnerException);
+                throw new Exception("AD:PlanElementEndpointUtil:SaveAction()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -95,9 +95,9 @@ namespace Phytel.API.AppDomain.NG
                     }
                 });
             }
-            catch (WebServiceException ex)
+            catch (Exception ex)
             {
-                throw new WebServiceException("AD:SaveResponsesFromProgram()::" + ex.Message, ex.InnerException);
+                throw new Exception("AD:PlanElementEndpointUtil:SaveResponsesFromProgram()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -130,9 +130,9 @@ namespace Phytel.API.AppDomain.NG
                 }
                 return result;
             }
-            catch (WebServiceException ex)
+            catch (Exception ex)
             {
-                throw new WebServiceException("AD:SaveResponses()::" + ex.Message, ex.InnerException);
+                throw new Exception("AD:PlanElementEndpointUtil:SaveResponses()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -150,7 +150,7 @@ namespace Phytel.API.AppDomain.NG
             }
             catch (Exception ex)
             {
-                throw new WebServiceException("AD:SetDeleteFlagByStepCompletion()::" + ex.Message, ex.InnerException);
+                throw new Exception("AD:PlanElementEndpointUtil:SetDeleteFlagByStepCompletion()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -177,9 +177,9 @@ namespace Phytel.API.AppDomain.NG
 
                 return result;
             }
-            catch (WebServiceException ex)
+            catch (Exception ex)
             {
-                throw new WebServiceException("AD:GetResponsesForStep()::" + ex.Message, ex.InnerException);
+                throw new Exception("AD:PlanElementEndpointUtil:GetResponsesForStep()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -205,9 +205,9 @@ namespace Phytel.API.AppDomain.NG
 
                 return result;
             }
-            catch (WebServiceException ex)
+            catch (Exception ex)
             {
-                throw new WebServiceException("AD:ResponseExistsRequest()::" + ex.Message, ex.InnerException);
+                throw new Exception("AD:PlanElementEndpointUtil:ResponseExistsRequest()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -244,9 +244,9 @@ namespace Phytel.API.AppDomain.NG
                         Version = request.Version
                     } as object);
             }
-            catch (WebServiceException ex)
+            catch (Exception ex)
             {
-                throw new WebServiceException("AD:UpdateResponseRequest()::" + ex.Message, ex.InnerException);
+                throw new Exception("AD:PlanElementEndpointUtil:UpdateResponseRequest()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -260,29 +260,36 @@ namespace Phytel.API.AppDomain.NG
             }
             catch (Exception ex)
             {
-                throw new Exception("AD:GetActionById()::" + ex.Message, ex.InnerException);
+                throw new Exception("AD:PlanElementEndpointUtil:GetActionById()::" + ex.Message, ex.InnerException);
             }
         }
 
         public static AD.Program RequestPatientProgramDetail(PostProcessActionRequest request)
         {
-            AD.Program pd = null;
-            IRestClient client = Common.Helper.GetJsonServiceClient(request.UserId);
+            try
+            {
+                AD.Program pd = null;
+                IRestClient client = Common.Helper.GetJsonServiceClient(request.UserId);
 
-            DD.GetProgramDetailsSummaryResponse resp =
-                client.Get<DD.GetProgramDetailsSummaryResponse>(
-                string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Program/{5}/Details/?Token={6}",
-                DDProgramServiceUrl,
-                "NG",
-                request.Version,
-                request.ContractNumber,
-                request.PatientId,
-                request.ProgramId,
-                request.Token));
+                DD.GetProgramDetailsSummaryResponse resp =
+                    client.Get<DD.GetProgramDetailsSummaryResponse>(
+                    string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Program/{5}/Details/?Token={6}",
+                    DDProgramServiceUrl,
+                    "NG",
+                    request.Version,
+                    request.ContractNumber,
+                    request.PatientId,
+                    request.ProgramId,
+                    request.Token));
 
-            pd = NGUtils.FormatProgramDetail(resp.Program);
+                pd = NGUtils.FormatProgramDetail(resp.Program);
 
-            return pd;
+                return pd;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("AD:PlanElementEndpointUtil:RequestPatientProgramDetail()::" + ex.Message, ex.InnerException);
+            }
         }
 
         internal static CohortPatientViewData RequestCohortPatientViewData(string patientId, IAppDomainRequest request)
@@ -305,9 +312,9 @@ namespace Phytel.API.AppDomain.NG
 
                 return response.CohortPatientView;
             }
-            catch (WebServiceException ex)
+            catch (Exception ex)
             {
-                throw new WebServiceException("AD:RequestCohortPatientViewData()::" + ex.Message, ex.InnerException);
+                throw new Exception("AD:PlanElementEndpointUtil:RequestCohortPatientViewData()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -334,9 +341,9 @@ namespace Phytel.API.AppDomain.NG
                         PatientID = patientId
                     } as object);
             }
-            catch (WebServiceException ex)
+            catch (Exception ex)
             {
-                throw new WebServiceException("AD:UpdateCohortPatientViewProblem()::" + ex.Message, ex.InnerException);
+                throw new Exception("AD:PlanElementEndpointUtil:UpdateCohortPatientViewProblem()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -364,9 +371,9 @@ namespace Phytel.API.AppDomain.NG
                    } as object);
                 return dataDomainResponse;
             }
-            catch (WebServiceException ex)
+            catch (Exception ex)
             {
-                throw new WebServiceException("AD:PutNewPatientProblem()::" + ex.Message, ex.InnerException);
+                throw new Exception("AD:PlanElementEndpointUtil:PutNewPatientProblem()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -396,9 +403,9 @@ namespace Phytel.API.AppDomain.NG
 
                 return dataDomainResponse;
             }
-            catch (WebServiceException ex)
+            catch (Exception ex)
             {
-                throw new WebServiceException("AD:UpdatePatientProblem()::" + ex.Message, ex.InnerException);
+                throw new Exception("AD:PlanElementEndpointUtil:UpdatePatientProblem()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -424,9 +431,9 @@ namespace Phytel.API.AppDomain.NG
 
                 return progAttr = resp.ProgramAttribute;
             }
-            catch (WebServiceException ex)
+            catch (Exception ex)
             {
-                throw new WebServiceException("AD:GetProgramAttributes()::" + ex.Message, ex.InnerException);
+                throw new Exception("AD:PlanElementEndpointUtil:GetProgramAttributes()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -459,9 +466,9 @@ namespace Phytel.API.AppDomain.NG
 
                 return result;
             }
-            catch (WebServiceException ex)
+            catch (Exception ex)
             {
-                throw new WebServiceException("AD:UpdateProgramAttributes()::" + ex.Message, ex.InnerException);
+                throw new Exception("AD:PlanElementEndpointUtil:UpdateProgramAttributes()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -493,9 +500,9 @@ namespace Phytel.API.AppDomain.NG
 
                 return result;
             }
-            catch (WebServiceException ex)
+            catch (Exception ex)
             {
-                throw new WebServiceException("AD:InsertNewProgramAttribute()::" + ex.Message, ex.InnerException);
+                throw new Exception("AD:PlanElementEndpointUtil:InsertNewProgramAttribute()::" + ex.Message, ex.InnerException);
             }
         }
     }

@@ -89,7 +89,7 @@ namespace Phytel.API.AppDomain.NG
             }
             catch (Exception ex)
             {
-                throw new Exception("AD:ProcessActionResults()::" + ex.Message, ex.InnerException);
+                throw new Exception("AD:InterviewManager:ProcessActionResults()::" + ex.Message, ex.InnerException);
             }
         }
 
