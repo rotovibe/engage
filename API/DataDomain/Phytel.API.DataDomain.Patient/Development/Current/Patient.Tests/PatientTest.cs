@@ -44,7 +44,7 @@ namespace Phytel.API.DataDomain.Patient.Test
                 Id = "531f2dcc072ef727c4d29e1a",
                 FirstName = "Arlie_Update",
                 Gender = "F",
-                FullSSN = "123-45-7896",
+                FullSSN = "   123-45-7896    ",
                 UserId = "531f2df6072ef727c4d2a3c0",
                 Priority = 1
             };

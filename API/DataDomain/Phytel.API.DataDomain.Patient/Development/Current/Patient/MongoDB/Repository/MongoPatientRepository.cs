@@ -628,7 +628,7 @@ namespace Phytel.API.DataDomain.Patient
                         else
                         {
                             
-                            string fullSSN = request.FullSSN.Replace("-", string.Empty);
+                            string fullSSN = request.FullSSN.Trim().Replace("-", string.Empty);
                             if (fullSSN.Length != 9)
                             {
                                 throw new ArgumentException("SSN does not contain 9 digits.");
