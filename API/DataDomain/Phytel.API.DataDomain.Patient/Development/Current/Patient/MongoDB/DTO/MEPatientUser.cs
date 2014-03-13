@@ -74,11 +74,13 @@ namespace Phytel.API.DataDomain.Patient.DTO
         [BsonDateTimeOptions(Kind = System.DateTimeKind.Utc)]
         public System.DateTime? LastUpdatedOn { get; set; }
 
+        [BsonIgnoreIfNull(true)]
         [BsonElement(RecordCreatedByProperty)]
-        public ObjectId RecordCreatedBy { get; set; }
+        public ObjectId RecordCreatedBy { get; private set; }
 
+        [BsonIgnoreIfNull(true)]
         [BsonElement(RecordCreatedOnProperty)]
         [BsonDateTimeOptions(Kind = System.DateTimeKind.Utc)]
-        public System.DateTime RecordCreatedOn { get; set; }
+        public System.DateTime RecordCreatedOn { get; private set; }
     }
 }

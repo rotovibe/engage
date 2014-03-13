@@ -33,6 +33,8 @@ namespace Phytel.API.DataDomain.Action.DTO
         public const string DeleteFlagProperty = "del";
         public const string TTLDateProperty = "ttl";
         public const string LastUpdatedOnProperty = "uon";
+        public const string RecordCreatedByProperty = "rcby";
+        public const string RecordCreatedOnProperty = "rcon";
 
         [BsonId]
         public ObjectId Id { get; set; }
@@ -83,12 +85,14 @@ namespace Phytel.API.DataDomain.Action.DTO
         [BsonDateTimeOptions(Kind = System.DateTimeKind.Utc)]
         public System.DateTime? LastUpdatedOn { get; set; }
 
-        [BsonElement("rcby")]
-        public ObjectId RecordCreatedBy { get; set; }
+        [BsonIgnoreIfNull(true)]
+        [BsonElement(RecordCreatedByProperty)]
+        public ObjectId RecordCreatedBy { get; private set; }
 
-        [BsonElement("rcon")]
+        [BsonIgnoreIfNull(true)]
+        [BsonElement(RecordCreatedOnProperty)]
         [BsonDateTimeOptions(Kind = System.DateTimeKind.Utc)]
-        public System.DateTime RecordCreatedOn { get; set; }
+        public System.DateTime RecordCreatedOn { get; private set; }
     }
 
     public class ObjectiveInfo

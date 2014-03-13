@@ -38,11 +38,13 @@ namespace Phytel.API.Interface
         [BsonDateTimeOptions(Kind = System.DateTimeKind.Utc)]
         DateTime? LastUpdatedOn { get; set; }
 
+        [BsonIgnoreIfNull(true)]
         [BsonElement("rcby")]
-        ObjectId RecordCreatedBy { get; set; }
+        ObjectId RecordCreatedBy { get; }
 
+        [BsonIgnoreIfNull(true)]
         [BsonElement("rcon")]
         [BsonDateTimeOptions(Kind = System.DateTimeKind.Utc)]
-        DateTime RecordCreatedOn { get; set; }
+        DateTime RecordCreatedOn { get; }
     }
 }
