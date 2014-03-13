@@ -26,38 +26,39 @@ namespace Phytel.API.DataDomain.Program
 
         public object Insert(object newEntity)
         {
-            ResponseDetail rs = (ResponseDetail)newEntity;
-            MEResponse mer = new MEResponse(this.UserId)
-            {
-                Id = ObjectId.Parse(rs.Id),
-                NextStepId = ObjectId.Parse(rs.NextStepId),
-                Nominal = rs.Nominal,
-                Order = rs.Order,
-                Required = rs.Required,
-                Spawn = DTOUtils.GetSpawnElements(rs.SpawnElement),
-                StepId = ObjectId.Parse(rs.StepId),
-                Text = rs.Text,
-                Value = rs.Value,
-                DeleteFlag = true,
-                LastUpdatedOn = DateTime.UtcNow,
-                Version = 1.0,
-                UpdatedBy = ObjectId.Parse(this.UserId)
-            };
-
-            bool res = false;
             try
             {
+                ResponseDetail rs = (ResponseDetail)newEntity;
+                MEResponse mer = new MEResponse(this.UserId)
+                {
+                    Id = ObjectId.Parse(rs.Id),
+                    NextStepId = ObjectId.Parse(rs.NextStepId),
+                    Nominal = rs.Nominal,
+                    Order = rs.Order,
+                    Required = rs.Required,
+                    Spawn = DTOUtils.GetSpawnElements(rs.SpawnElement),
+                    StepId = ObjectId.Parse(rs.StepId),
+                    Text = rs.Text,
+                    Value = rs.Value,
+                    DeleteFlag = true,
+                    LastUpdatedOn = DateTime.UtcNow,
+                    Version = 1.0,
+                    UpdatedBy = ObjectId.Parse(this.UserId)
+                };
+
+                bool res = false;
+
                 using (ProgramMongoContext ctx = new ProgramMongoContext(_dbName))
                 {
                     ctx.Responses.Collection.Insert(mer);
-                    
+
                     res = true;
                 }
                 return res as object;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                throw new Exception("ProgramDD:Insert()::" + ex.Message, ex.InnerException);
+                throw new Exception("DD:ResponseRepository:Insert()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -91,23 +92,30 @@ namespace Phytel.API.DataDomain.Program
             }
             catch(Exception ex)
             {
-                throw new Exception("ProgramDD:FindById()::" + ex.Message, ex.InnerException);
+                throw new Exception("DD:ResponseRepository:FindById()::" + ex.Message, ex.InnerException);
             }
         }
 
         public Tuple<string, IEnumerable<object>> Select(Interface.APIExpression expression)
         {
-            IMongoQuery mQuery = null;
-            List<object> rps;
-
-            mQuery = MongoDataUtil.ExpressionQueryBuilder(expression);
-
-            using (ProgramMongoContext ctx = new ProgramMongoContext(_dbName))
+            try
             {
-                rps = ctx.Responses.Collection.Find(mQuery).ToList<object>();
-            }
+                IMongoQuery mQuery = null;
+                List<object> rps;
 
-            return new Tuple<string, IEnumerable<object>>(expression.ExpressionID, rps);
+                mQuery = MongoDataUtil.ExpressionQueryBuilder(expression);
+
+                using (ProgramMongoContext ctx = new ProgramMongoContext(_dbName))
+                {
+                    rps = ctx.Responses.Collection.Find(mQuery).ToList<object>();
+                }
+
+                return new Tuple<string, IEnumerable<object>>(expression.ExpressionID, rps);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("DD:ResponseRepository:Select()::" + ex.Message, ex.InnerException);
+            }
         }
 
         public IEnumerable<object> SelectAll()
@@ -150,7 +158,7 @@ namespace Phytel.API.DataDomain.Program
             }
             catch (Exception ex)
             {
-                throw new Exception("ProgramDD:Update()::" + ex.Message, ex.InnerException);
+                throw new Exception("DD:ResponseRepository:Update()::" + ex.Message, ex.InnerException);
             }
         }
 

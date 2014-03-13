@@ -79,9 +79,9 @@ namespace Phytel.API.DataDomain.Program
                 }
                 return result;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                throw new Exception("ProgramDD:Insert()::" + ex.Message, ex.InnerException);
+                throw new Exception("DD:PatientProgramAttributeRepository:Insert()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -150,55 +150,62 @@ namespace Phytel.API.DataDomain.Program
                 }
                 return result;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                throw new Exception("ProgramDD:FindById()::" + ex.Message, ex.InnerException);
+                throw new Exception("DD:PatientProgramAttributeRepository:FindById()::" + ex.Message, ex.InnerException);
             }
         }
 
         public Tuple<string, IEnumerable<object>> Select(Interface.APIExpression expression)
         {
-            IMongoQuery mQuery = null;
-            List<object> pAtts = new List<object>();
-
-            mQuery = MongoDataUtil.ExpressionQueryBuilder(expression);
-
-            using (ProgramMongoContext ctx = new ProgramMongoContext(_dbName))
+            try
             {
-                // check to see which properties from planelement we need.
-                List<MEProgramAttribute> pa = ctx.ProgramAttributes.Collection.Find(mQuery).ToList();
+                IMongoQuery mQuery = null;
+                List<object> pAtts = new List<object>();
 
-                if (pa != null)
+                mQuery = MongoDataUtil.ExpressionQueryBuilder(expression);
+
+                using (ProgramMongoContext ctx = new ProgramMongoContext(_dbName))
                 {
-                    pa.ForEach(cp => pAtts.Add(new ProgramAttribute
-                    {
-                        Id = cp.Id.ToString(),
-                        AuthoredBy = cp.AuthoredBy,
-                        DidNotEnrollReason = cp.DidNotEnrollReason,
-                        DisEnrollReason = cp.DisEnrollReason,
-                        Eligibility = (int)cp.Eligibility,
-                        EligibilityEndDate = cp.EligibilityEndDate,
-                        EligibilityOverride = (int)cp.EligibilityOverride,
-                        EligibilityRequirements = cp.EligibilityRequirements,
-                        EligibilityStartDate = cp.EligibilityStartDate,
-                        EndDate = cp.EndDate,
-                        Enrollment = (int)cp.Enrollment,
-                        GraduatedFlag = (int)cp.GraduatedFlag,
-                        IneligibleReason = cp.IneligibleReason,
-                        Locked = (int)cp.Locked,
-                        OptOut = cp.OptOut,
-                        OptOutDate = cp.OptOutDate,
-                        OptOutReason = cp.OptOutReason,
-                        OverrideReason = cp.OverrideReason,
-                        PlanElementId = cp.PlanElementId.ToString(),
-                        Population = cp.Population,
-                        RemovedReason = cp.RemovedReason,
-                        Status = (int)cp.Status
-                    }));
-                }
-            }
+                    // check to see which properties from planelement we need.
+                    List<MEProgramAttribute> pa = ctx.ProgramAttributes.Collection.Find(mQuery).ToList();
 
-            return new Tuple<string, IEnumerable<object>>(expression.ExpressionID, pAtts);
+                    if (pa != null)
+                    {
+                        pa.ForEach(cp => pAtts.Add(new ProgramAttribute
+                        {
+                            Id = cp.Id.ToString(),
+                            AuthoredBy = cp.AuthoredBy,
+                            DidNotEnrollReason = cp.DidNotEnrollReason,
+                            DisEnrollReason = cp.DisEnrollReason,
+                            Eligibility = (int)cp.Eligibility,
+                            EligibilityEndDate = cp.EligibilityEndDate,
+                            EligibilityOverride = (int)cp.EligibilityOverride,
+                            EligibilityRequirements = cp.EligibilityRequirements,
+                            EligibilityStartDate = cp.EligibilityStartDate,
+                            EndDate = cp.EndDate,
+                            Enrollment = (int)cp.Enrollment,
+                            GraduatedFlag = (int)cp.GraduatedFlag,
+                            IneligibleReason = cp.IneligibleReason,
+                            Locked = (int)cp.Locked,
+                            OptOut = cp.OptOut,
+                            OptOutDate = cp.OptOutDate,
+                            OptOutReason = cp.OptOutReason,
+                            OverrideReason = cp.OverrideReason,
+                            PlanElementId = cp.PlanElementId.ToString(),
+                            Population = cp.Population,
+                            RemovedReason = cp.RemovedReason,
+                            Status = (int)cp.Status
+                        }));
+                    }
+                }
+
+                return new Tuple<string, IEnumerable<object>>(expression.ExpressionID, pAtts);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("DD:PatientProgramAttributeRepository:Select()::" + ex.Message, ex.InnerException);
+            }
         }
 
         public IEnumerable<object> SelectAll()
@@ -270,7 +277,7 @@ namespace Phytel.API.DataDomain.Program
             }
             catch (Exception ex)
             {
-                throw new Exception("ProgramDD:Update()::" + ex.Message, ex.InnerException);
+                throw new Exception("DD:PatientProgramAttributeRepository:Update()::" + ex.Message, ex.InnerException);
             }
         }
 

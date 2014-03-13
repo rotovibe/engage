@@ -44,32 +44,46 @@ namespace Phytel.API.DataDomain.Program
 
         public MEProgram FindByID(string entityID, bool temp)
         {
-            MEProgram program = null;
-            using (ProgramMongoContext ctx = new ProgramMongoContext(_dbName))
+            try
             {
-                var findcp = Query<MEProgram>.EQ(b => b.Id, ObjectId.Parse(entityID));
-                program = ctx.Programs.Collection.Find(findcp).FirstOrDefault();
+                MEProgram program = null;
+                using (ProgramMongoContext ctx = new ProgramMongoContext(_dbName))
+                {
+                    var findcp = Query<MEProgram>.EQ(b => b.Id, ObjectId.Parse(entityID));
+                    program = ctx.Programs.Collection.Find(findcp).FirstOrDefault();
+                }
+                return program;
             }
-            return program;
+            catch (Exception ex)
+            {
+                throw new Exception("DD:ContractProgramRepository:FindByID()::" + ex.Message, ex.InnerException);
+            }
         }
 
         public object FindByID(string entityID)
         {
-            ContractProgram program = null;
-            using (ProgramMongoContext ctx = new ProgramMongoContext(_dbName))
+            try
             {
-                program = (from p in ctx.Programs
-                           where p.Id == ObjectId.Parse(entityID)
-                           select new ContractProgram
-                           {
-                               Delete = p.DeleteFlag,
-                               Id = p.Id.ToString(),
-                               Name = p.Name,
-                               ShortName = p.ShortName,
-                               Status = (int)p.Status
-                           }).FirstOrDefault();
+                ContractProgram program = null;
+                using (ProgramMongoContext ctx = new ProgramMongoContext(_dbName))
+                {
+                    program = (from p in ctx.Programs
+                               where p.Id == ObjectId.Parse(entityID)
+                               select new ContractProgram
+                               {
+                                   Delete = p.DeleteFlag,
+                                   Id = p.Id.ToString(),
+                                   Name = p.Name,
+                                   ShortName = p.ShortName,
+                                   Status = (int)p.Status
+                               }).FirstOrDefault();
+                }
+                return program;
             }
-            return program;
+            catch (Exception ex)
+            {
+                throw new Exception("DD:ContractProgramRepository:FindByID()::" + ex.Message, ex.InnerException);
+            }
         }
 
         public List<ProgramInfo> GetActiveProgramsInfoList(GetAllActiveProgramsRequest request)
@@ -96,7 +110,7 @@ namespace Phytel.API.DataDomain.Program
             }
             catch (Exception ex)
             {
-                throw new Exception("ProgramDD:GetActiveProgramsInfoList()::" + ex.Message, ex.InnerException);
+                throw new Exception("DD:ContractProgramRepository:GetActiveProgramsInfoList()::" + ex.Message, ex.InnerException);
             }
         }
 

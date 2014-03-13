@@ -20,31 +20,45 @@ namespace Phytel.API.DataDomain.Program
     {
         public static GetProgramResponse GetProgramByID(GetProgramRequest request)
         {
-            GetProgramResponse programResponse = new GetProgramResponse();
-            DTO.Program result;
+            try
+            {
+                GetProgramResponse programResponse = new GetProgramResponse();
+                DTO.Program result;
 
-            IProgramRepository<GetProgramResponse> repo = ProgramRepositoryFactory<GetProgramResponse>.GetProgramRepository(request.ContractNumber, request.Context);
-            repo.UserId = request.UserId;
+                IProgramRepository<GetProgramResponse> repo = ProgramRepositoryFactory<GetProgramResponse>.GetProgramRepository(request.ContractNumber, request.Context);
+                repo.UserId = request.UserId;
 
-            result = repo.FindByID(request.ProgramID) as DTO.Program;
+                result = repo.FindByID(request.ProgramID) as DTO.Program;
 
-            programResponse.Program = result;
-            return (programResponse != null ? programResponse : new GetProgramResponse());
+                programResponse.Program = result;
+                return (programResponse != null ? programResponse : new GetProgramResponse());
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("DD:GetProgramByID()::" + ex.Message, ex.InnerException);
+            }
         }
 
         public static GetAllActiveProgramsResponse GetAllActiveContractPrograms(GetAllActiveProgramsRequest request)
         {
-            GetAllActiveProgramsResponse response = new GetAllActiveProgramsResponse();
-            List<ProgramInfo> result;
+            try
+            {
+                GetAllActiveProgramsResponse response = new GetAllActiveProgramsResponse();
+                List<ProgramInfo> result;
 
-            IProgramRepository<GetAllActiveProgramsResponse> repo =
-                Phytel.API.DataDomain.Program.ProgramRepositoryFactory<GetAllActiveProgramsResponse>.GetContractProgramRepository(request.ContractNumber, request.Context);
-            repo.UserId = request.UserId;
+                IProgramRepository<GetAllActiveProgramsResponse> repo =
+                    Phytel.API.DataDomain.Program.ProgramRepositoryFactory<GetAllActiveProgramsResponse>.GetContractProgramRepository(request.ContractNumber, request.Context);
+                repo.UserId = request.UserId;
 
-            result = repo.GetActiveProgramsInfoList(request);
-            response.Programs = result;
+                result = repo.GetActiveProgramsInfoList(request);
+                response.Programs = result;
 
-            return response;
+                return response;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("DD:GetAllActiveContractPrograms()::" + ex.Message, ex.InnerException);
+            }
         }
 
         public static PutProgramToPatientResponse PutPatientToProgram(PutProgramToPatientRequest request)
@@ -87,7 +101,7 @@ namespace Phytel.API.DataDomain.Program
             }
             catch (Exception ex)
             {
-                throw new Exception("ProgramDD:PutPatientToProgram()::" + ex.Message, ex.InnerException);
+                throw new Exception("DD:PutPatientToProgram()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -108,17 +122,24 @@ namespace Phytel.API.DataDomain.Program
 
                 return response;
             }
-            catch
+            catch (Exception ex)
             {
-                throw;
+                throw new Exception("DD:PutProgramActionUpdate()::" + ex.Message, ex.InnerException);
             }
         }
 
         private static PutProgramToPatientResponse FormatExceptionResponse(PutProgramToPatientResponse response, string reason, string errorcode)
         {
-            response.Status = new ResponseStatus(errorcode, reason);
-            response.Outcome = new Outcome() { Reason = reason, Result = 0 };
-            return response;
+            try
+            {
+                response.Status = new ResponseStatus(errorcode, reason);
+                response.Outcome = new Outcome() { Reason = reason, Result = 0 };
+                return response;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("DD:FormatExceptionResponse()::" + ex.Message, ex.InnerException);
+            }
         }
 
         private static bool IsContractProgramAssignable(PutProgramToPatientRequest p)
@@ -230,21 +251,6 @@ namespace Phytel.API.DataDomain.Program
                     StartDate = mepp.StartDate,
                     Status = (int)mepp.Status,
                     Version = mepp.Version,
-                    //Eligibility = (int)mepp.Eligibility,
-                    //EligibilityEndDate = mepp.EligibilityEndDate,
-                    //EligibilityRequirements = mepp.EligibilityRequirements,
-                    //EligibilityStartDate = mepp.EligibilityStartDate,
-                    //DidNotEnrollReason = mepp.DidNotEnrollReason,
-                    //DisEnrollReason = mepp.DisEnrollReason,
-                    //EligibilityOverride = (int)mepp.EligibilityOverride,
-                    //Enrollment = (int)mepp.Enrollment,
-                    //GraduatedFlag = mepp.GraduatedFlag,
-                    //IneligibleReason = mepp.IneligibleReason,
-                    //OptOut = mepp.OptOut,
-                    //OptOutDate = mepp.OptOutDate,
-                    //OptOutReason = mepp.OptOutReason,
-                    //OverrideReason = mepp.OverrideReason,
-                    //RemovedReason = mepp.RemovedReason,
                     EndDate = mepp.EndDate,
                     Completed = mepp.Completed,
                     Enabled = mepp.Enabled,
@@ -264,9 +270,9 @@ namespace Phytel.API.DataDomain.Program
 
                 return response;
             }
-            catch
+            catch (Exception ex)
             {
-                throw;
+                throw new Exception("ProgramDD:GetPatientProgramDetailsById()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -321,38 +327,45 @@ namespace Phytel.API.DataDomain.Program
 
                 return response;
             }
-            catch
+            catch(Exception ex)
             {
-                throw;
+                throw new Exception("DD:GetPatientPrograms()::" + ex.Message, ex.InnerException);
             }
         }
 
         public static PutUpdateResponseResponse PutUpdateResponse(PutUpdateResponseRequest r)
         {
-            PutUpdateResponseResponse result = new PutUpdateResponseResponse();
-            IProgramRepository<PutUpdateResponseResponse> responseRepo =
-                            Phytel.API.DataDomain.Program.ProgramRepositoryFactory<PutUpdateResponseResponse>
-                            .GetPatientProgramStepResponseRepository(r.ContractNumber, r.Context);
-            responseRepo.UserId = r.UserId;
-
-            MEPatientProgramResponse meres = new MEPatientProgramResponse
+            try
             {
-                Id = ObjectId.Parse(r.ResponseDetail.Id),
-                NextStepId = ObjectId.Parse(r.ResponseDetail.NextStepId),
-                Nominal = r.ResponseDetail.Nominal,
-                Spawn = ParseSpawnElements(r.ResponseDetail.SpawnElement),
-                Required = r.ResponseDetail.Required,
-                Order = r.ResponseDetail.Order,
-                StepId = ObjectId.Parse(r.ResponseDetail.StepId),
-                Text = r.ResponseDetail.Text,
-                Value = r.ResponseDetail.Value,
-                Selected = r.ResponseDetail.Selected,
-                DeleteFlag = r.ResponseDetail.Delete
-            };
+                PutUpdateResponseResponse result = new PutUpdateResponseResponse();
+                IProgramRepository<PutUpdateResponseResponse> responseRepo =
+                                Phytel.API.DataDomain.Program.ProgramRepositoryFactory<PutUpdateResponseResponse>
+                                .GetPatientProgramStepResponseRepository(r.ContractNumber, r.Context);
+                responseRepo.UserId = r.UserId;
 
-            result.Result = (bool)responseRepo.Update(meres);
+                MEPatientProgramResponse meres = new MEPatientProgramResponse
+                {
+                    Id = ObjectId.Parse(r.ResponseDetail.Id),
+                    NextStepId = ObjectId.Parse(r.ResponseDetail.NextStepId),
+                    Nominal = r.ResponseDetail.Nominal,
+                    Spawn = ParseSpawnElements(r.ResponseDetail.SpawnElement),
+                    Required = r.ResponseDetail.Required,
+                    Order = r.ResponseDetail.Order,
+                    StepId = ObjectId.Parse(r.ResponseDetail.StepId),
+                    Text = r.ResponseDetail.Text,
+                    Value = r.ResponseDetail.Value,
+                    Selected = r.ResponseDetail.Selected,
+                    DeleteFlag = r.ResponseDetail.Delete
+                };
 
-            return result;
+                result.Result = (bool)responseRepo.Update(meres);
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("DD:PutUpdateResponse()::" + ex.Message, ex.InnerException);
+            }
         }
 
         private static List<SpawnElement> ParseSpawnElements(List<SpawnElementDetail> list)
@@ -376,126 +389,167 @@ namespace Phytel.API.DataDomain.Program
             }
             catch (Exception ex)
             {
-                throw new Exception("ProgramDD:ParseSpawnElements()::" + ex.Message, ex.InnerException);
+                throw new Exception("DD:ParseSpawnElements()::" + ex.Message, ex.InnerException);
             }
         }
 
         public static GetStepResponseListResponse GetStepResponse(GetStepResponseListRequest request)
         {
-            GetStepResponseListResponse response = null;
-            response = DTOUtils.GetStepResponses(request.StepId, request.ContractNumber, true);
-            return response;
+            try
+            {
+                GetStepResponseListResponse response = null;
+                response = DTOUtils.GetStepResponses(request.StepId, request.ContractNumber, true);
+                return response;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("DD:GetStepResponse()::" + ex.Message, ex.InnerException);
+            }
         }
 
         public static GetStepResponseResponse GetStepResponse(GetStepResponseRequest request)
         {
-            GetStepResponseResponse response = new GetStepResponseResponse();
-
-            IProgramRepository<GetStepResponseResponse> repo = ProgramRepositoryFactory<GetStepResponseResponse>.GetPatientProgramStepResponseRepository(request.ContractNumber, request.Context);
-            repo.UserId = request.UserId;
-            
-            MEPatientProgramResponse result = repo.FindByID(request.ResponseId) as MEPatientProgramResponse;
-
-            if (result != null)
+            try
             {
-                response.StepResponse = new StepResponse
-                {
-                    Id = result.Id.ToString(),
-                    NextStepId = result.NextStepId.ToString(),
-                    Nominal = result.Nominal,
-                    Order = result.Order,
-                    Required = result.Required,
-                    Spawn = DTOUtils.GetResponseSpawnElement(result.Spawn),
-                    StepId = result.StepId.ToString(),
-                    Text = result.Text,
-                    Value = result.Value
-                };
-            }
+                GetStepResponseResponse response = new GetStepResponseResponse();
+                IProgramRepository<GetStepResponseResponse> repo = ProgramRepositoryFactory<GetStepResponseResponse>.GetPatientProgramStepResponseRepository(request.ContractNumber, request.Context);
+                repo.UserId = request.UserId;
 
-            return response;
+                MEPatientProgramResponse result = repo.FindByID(request.ResponseId) as MEPatientProgramResponse;
+
+                if (result != null)
+                {
+                    response.StepResponse = new StepResponse
+                    {
+                        Id = result.Id.ToString(),
+                        NextStepId = result.NextStepId.ToString(),
+                        Nominal = result.Nominal,
+                        Order = result.Order,
+                        Required = result.Required,
+                        Spawn = DTOUtils.GetResponseSpawnElement(result.Spawn),
+                        StepId = result.StepId.ToString(),
+                        Text = result.Text,
+                        Value = result.Value
+                    };
+                }
+
+                return response;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("DD:GetStepResponse()::" + ex.Message, ex.InnerException);
+            }
         }
 
         public static GetProgramAttributeResponse GetProgramAttributes(GetProgramAttributeRequest request)
         {
-            GetProgramAttributeResponse response = new GetProgramAttributeResponse();
-            ICollection<SelectExpression> selectExpressions = new List<SelectExpression>();
-
-            // PlanElementId
-            SelectExpression patientSelectExpression = new SelectExpression();
-            patientSelectExpression.FieldName = MEProgramAttribute.PlanElementIdProperty;
-            patientSelectExpression.Type = SelectExpressionType.EQ;
-            patientSelectExpression.Value = request.PlanElementId;
-            patientSelectExpression.ExpressionOrder = 1;
-            patientSelectExpression.GroupID = 1;
-            selectExpressions.Add(patientSelectExpression);
-
-            APIExpression apiExpression = new APIExpression();
-            apiExpression.Expressions = selectExpressions;
-
-            IProgramRepository<GetProgramAttributeResponse> repo = 
-                ProgramRepositoryFactory<GetProgramAttributeResponse>.GetProgramAttributesRepository(request.ContractNumber, request.Context);
-            repo.UserId = request.UserId;
-            
-            Tuple<string, IEnumerable<object>> result = repo.Select(apiExpression);
-
-            if (result != null)
+            try
             {
-                List<ProgramAttribute> pds = result.Item2.Cast<ProgramAttribute>().ToList();
-                if (pds.Count > 0)
-                {
-                    response.ProgramAttribute = pds.FirstOrDefault();
-                }
-            }
+                GetProgramAttributeResponse response = new GetProgramAttributeResponse();
+                ICollection<SelectExpression> selectExpressions = new List<SelectExpression>();
 
-            return response;
+                // PlanElementId
+                SelectExpression patientSelectExpression = new SelectExpression();
+                patientSelectExpression.FieldName = MEProgramAttribute.PlanElementIdProperty;
+                patientSelectExpression.Type = SelectExpressionType.EQ;
+                patientSelectExpression.Value = request.PlanElementId;
+                patientSelectExpression.ExpressionOrder = 1;
+                patientSelectExpression.GroupID = 1;
+                selectExpressions.Add(patientSelectExpression);
+
+                APIExpression apiExpression = new APIExpression();
+                apiExpression.Expressions = selectExpressions;
+
+                IProgramRepository<GetProgramAttributeResponse> repo =
+                    ProgramRepositoryFactory<GetProgramAttributeResponse>.GetProgramAttributesRepository(request.ContractNumber, request.Context);
+                repo.UserId = request.UserId;
+
+                Tuple<string, IEnumerable<object>> result = repo.Select(apiExpression);
+
+                if (result != null)
+                {
+                    List<ProgramAttribute> pds = result.Item2.Cast<ProgramAttribute>().ToList();
+                    if (pds.Count > 0)
+                    {
+                        response.ProgramAttribute = pds.FirstOrDefault();
+                    }
+                }
+
+                return response;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("DD:GetProgramAttributes()::" + ex.Message, ex.InnerException);
+            }
         }
 
         public static PutUpdateProgramAttributesResponse PutUpdateProgramAttributes(PutUpdateProgramAttributesRequest request)
         {
-            PutUpdateProgramAttributesResponse result = new PutUpdateProgramAttributesResponse();
-            IProgramRepository<PutUpdateProgramAttributesResponse> responseRepo =
-                            Phytel.API.DataDomain.Program.ProgramRepositoryFactory<PutUpdateProgramAttributesResponse>
-                            .GetProgramAttributesRepository(request.ContractNumber, request.Context);
-            responseRepo.UserId = request.UserId;
+            try
+            {
+                PutUpdateProgramAttributesResponse result = new PutUpdateProgramAttributesResponse();
+                IProgramRepository<PutUpdateProgramAttributesResponse> responseRepo =
+                                Phytel.API.DataDomain.Program.ProgramRepositoryFactory<PutUpdateProgramAttributesResponse>
+                                .GetProgramAttributesRepository(request.ContractNumber, request.Context);
+                responseRepo.UserId = request.UserId;
 
-            ProgramAttribute pa = request.ProgramAttributes;
-            result.Result = (bool)responseRepo.Update(pa);
+                ProgramAttribute pa = request.ProgramAttributes;
+                result.Result = (bool)responseRepo.Update(pa);
 
-            return result;
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("DD:PutUpdateProgramAttributes()::" + ex.Message, ex.InnerException);
+            }
         }
 
         public static PutProgramAttributesResponse InsertProgramAttributes(PutProgramAttributesRequest request)
         {
-            PutProgramAttributesResponse response = new PutProgramAttributesResponse();
+            try
+            {
+                PutProgramAttributesResponse response = new PutProgramAttributesResponse();
 
-            IProgramRepository<PutProgramAttributesResponse> progAttr =
-                Phytel.API.DataDomain.Program.ProgramRepositoryFactory<PutProgramAttributesResponse>
-                .GetProgramAttributesRepository(request.ContractNumber, request.Context);
-            progAttr.UserId = request.UserId;
+                IProgramRepository<PutProgramAttributesResponse> progAttr =
+                    Phytel.API.DataDomain.Program.ProgramRepositoryFactory<PutProgramAttributesResponse>
+                    .GetProgramAttributesRepository(request.ContractNumber, request.Context);
+                progAttr.UserId = request.UserId;
 
-            bool resp = (bool)progAttr.Insert((object)request.ProgramAttributes);
-            response.Result = resp;
+                bool resp = (bool)progAttr.Insert((object)request.ProgramAttributes);
+                response.Result = resp;
 
-            return response;
+                return response;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("DD:InsertProgramAttributes()::" + ex.Message, ex.InnerException);
+            }
         }
 
         private static List<SpawnElement> CreateSpawn(List<SpawnElementDetail> list)
         {
-            List<SpawnElement> se = new List<SpawnElement>();
-            if (list != null)
+            try
             {
-                list.ForEach(s =>
+                List<SpawnElement> se = new List<SpawnElement>();
+                if (list != null)
                 {
-                    se.Add(new SpawnElement
+                    list.ForEach(s =>
                     {
-                        SpawnId = (s.ElementId != null)? ObjectId.Parse(s.ElementId) : ObjectId.Parse("000000000000000000000000"),
-                        Tag = s.Tag,
-                        Type = (SpawnElementTypeCode)s.ElementType
+                        se.Add(new SpawnElement
+                        {
+                            SpawnId = (s.ElementId != null) ? ObjectId.Parse(s.ElementId) : ObjectId.Parse("000000000000000000000000"),
+                            Tag = s.Tag,
+                            Type = (SpawnElementTypeCode)s.ElementType
+                        });
                     });
-                });
-            }
+                }
 
-            return se;
+                return se;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("DD:CreateSpawn()::" + ex.Message, ex.InnerException);
+            }
         }
     }
 }   

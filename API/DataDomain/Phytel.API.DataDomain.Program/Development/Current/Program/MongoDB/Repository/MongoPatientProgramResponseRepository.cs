@@ -45,9 +45,9 @@ namespace Phytel.API.DataDomain.Program
                 }
                 return res as object;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                throw new Exception("ProgramDD:Insert()::" + ex.Message, ex.InnerException);
+                throw new Exception("DD:PatientProgramResponseRepository:Insert()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -79,25 +79,32 @@ namespace Phytel.API.DataDomain.Program
 
                 return response;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                throw new Exception("ProgramDD:FindById()::" + ex.Message, ex.InnerException);
+                throw new Exception("DD:PatientProgramResponseRepository:FindByID()::" + ex.Message, ex.InnerException);
             }
         }
 
         public Tuple<string, IEnumerable<object>> Select(Interface.APIExpression expression)
         {
-            IMongoQuery mQuery = null;
-            List<object> rps;
-
-            mQuery = MongoDataUtil.ExpressionQueryBuilder(expression);
-
-            using (ProgramMongoContext ctx = new ProgramMongoContext(_dbName))
+            try
             {
-                rps = ctx.PatientProgramResponses.Collection.Find(mQuery).ToList<object>();
-            }
+                IMongoQuery mQuery = null;
+                List<object> rps;
 
-            return new Tuple<string, IEnumerable<object>>(expression.ExpressionID, rps);
+                mQuery = MongoDataUtil.ExpressionQueryBuilder(expression);
+
+                using (ProgramMongoContext ctx = new ProgramMongoContext(_dbName))
+                {
+                    rps = ctx.PatientProgramResponses.Collection.Find(mQuery).ToList<object>();
+                }
+
+                return new Tuple<string, IEnumerable<object>>(expression.ExpressionID, rps);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("DD:PatientProgramResponseRepository:Select()::" + ex.Message, ex.InnerException);
+            }
         }
 
         public IEnumerable<object> SelectAll()
@@ -146,7 +153,7 @@ namespace Phytel.API.DataDomain.Program
             }
             catch (Exception ex)
             {
-                throw new Exception("ProgramDD:Update()::" + ex.Message, ex.InnerException);
+                throw new Exception("DD:PatientProgramResponseRepository:Update()::" + ex.Message, ex.InnerException);
             }
         }
 

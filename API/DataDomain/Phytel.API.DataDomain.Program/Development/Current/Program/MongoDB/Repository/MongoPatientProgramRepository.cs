@@ -90,7 +90,7 @@ namespace Phytel.API.DataDomain.Program
             }
             catch (Exception ex)
             {
-                throw new Exception("ProgramDD:Insert()::" + ex.Message, ex.InnerException);
+                throw new Exception("DD:PatientProgram:Insert()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -118,7 +118,7 @@ namespace Phytel.API.DataDomain.Program
             }
             catch (Exception ex)
             {
-                throw new Exception("ProgramDD:CanInsertPatientProgram()::" + ex.Message, ex.InnerException);
+                throw new Exception("DD:PatientProgramRepository:CanInsertPatientProgram()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -159,80 +159,87 @@ namespace Phytel.API.DataDomain.Program
                 }
                 return result;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                throw new Exception("ProgramDD:FindById()::" + ex.Message, ex.InnerException);
+                throw new Exception("DD:PatientProgramRepository:FindByID()::" + ex.Message, ex.InnerException);
             }
         }
 
         public Tuple<string, IEnumerable<object>> Select(Interface.APIExpression expression)
         {
-            IMongoQuery mQuery = null;
-            List<object> patList = new List<object>();
-
-            List<SelectExpression> selectExpressions = expression.Expressions.ToList();
-            selectExpressions.Where(s => s.GroupID == 1).OrderBy(o => o.ExpressionOrder).ToList();
-
-            SelectExpressionGroupType groupType = SelectExpressionGroupType.AND;
-
-            if (selectExpressions.Count > 0)
+            try
             {
-                IList<IMongoQuery> queries = new List<IMongoQuery>();
-                for (int i = 0; i < selectExpressions.Count; i++)
-                {
-                    groupType = selectExpressions[0].NextExpressionType;
+                IMongoQuery mQuery = null;
+                List<object> patList = new List<object>();
 
-                    IMongoQuery query = SelectExpressionHelper.ApplyQueryOperators(selectExpressions[i].Type, selectExpressions[i].FieldName, selectExpressions[i].Value);
-                    if (query != null)
+                List<SelectExpression> selectExpressions = expression.Expressions.ToList();
+                selectExpressions.Where(s => s.GroupID == 1).OrderBy(o => o.ExpressionOrder).ToList();
+
+                SelectExpressionGroupType groupType = SelectExpressionGroupType.AND;
+
+                if (selectExpressions.Count > 0)
+                {
+                    IList<IMongoQuery> queries = new List<IMongoQuery>();
+                    for (int i = 0; i < selectExpressions.Count; i++)
                     {
-                        queries.Add(query);
+                        groupType = selectExpressions[0].NextExpressionType;
+
+                        IMongoQuery query = SelectExpressionHelper.ApplyQueryOperators(selectExpressions[i].Type, selectExpressions[i].FieldName, selectExpressions[i].Value);
+                        if (query != null)
+                        {
+                            queries.Add(query);
+                        }
+                    }
+
+                    mQuery = SelectExpressionHelper.BuildQuery(groupType, queries);
+                }
+
+                using (ProgramMongoContext ctx = new ProgramMongoContext(_dbName))
+                {
+                    //var findcp = Query<MEPatientProgram>.EQ(b => b.Id, ObjectId.Parse(request.PatientProgramId));
+                    //MEPatientProgram cp = ctx.PatientPrograms.Collection.Find(findcp).FirstOrDefault();
+                    List<MEPatientProgram> cps = ctx.PatientPrograms.Collection.Find(mQuery).ToList();
+
+                    if (cps != null)
+                    {
+                        cps.ForEach(cp => patList.Add(new ProgramDetail
+                        {
+                            Id = cp.Id.ToString(),
+                            Client = cp.Client != null ? cp.Client.ToString() : null,
+                            ContractProgramId = cp.ContractProgramId.ToString(),
+                            Description = cp.Description,
+                            EndDate = cp.EndDate,
+                            AssignBy = cp.AssignedBy,
+                            AssignDate = cp.AssignedOn,
+                            Completed = cp.Completed,
+                            CompletedBy = cp.CompletedBy,
+                            DateCompleted = cp.DateCompleted,
+                            ElementState = (int)cp.State,
+                            Enabled = cp.Enabled,
+                            Next = cp.Next,
+                            Order = cp.Order,
+                            Previous = cp.Previous,
+                            SourceId = cp.SourceId.ToString(),
+                            SpawnElement = DTOUtils.GetResponseSpawnElement(cp.Spawn),
+                            Modules = DTOUtils.GetModules(cp.Modules, _dbName),
+                            Name = cp.Name,
+                            ObjectivesInfo = DTOUtils.GetObjectives(cp.ObjectivesInfo),
+                            PatientId = cp.PatientId.ToString(),
+                            ProgramState = (int)cp.ProgramState,
+                            ShortName = cp.ShortName,
+                            StartDate = cp.StartDate,
+                            Status = (int)cp.Status,
+                            Version = cp.Version
+                        }));
                     }
                 }
 
-                mQuery = SelectExpressionHelper.BuildQuery(groupType, queries);
+                return new Tuple<string, IEnumerable<object>>(expression.ExpressionID, patList);
             }
-
-            using (ProgramMongoContext ctx = new ProgramMongoContext(_dbName))
+            catch (Exception ex)
             {
-                //var findcp = Query<MEPatientProgram>.EQ(b => b.Id, ObjectId.Parse(request.PatientProgramId));
-                //MEPatientProgram cp = ctx.PatientPrograms.Collection.Find(findcp).FirstOrDefault();
-                List<MEPatientProgram> cps = ctx.PatientPrograms.Collection.Find(mQuery).ToList();
-
-                if (cps != null)
-                {
-                    cps.ForEach(cp => patList.Add(new ProgramDetail
-                    {
-                        Id = cp.Id.ToString(),
-                        Client = cp.Client != null ? cp.Client.ToString() : null,
-                        ContractProgramId = cp.ContractProgramId.ToString(),
-                        Description = cp.Description,
-                        EndDate = cp.EndDate,
-                        AssignBy = cp.AssignedBy,
-                        AssignDate = cp.AssignedOn,
-                        Completed = cp.Completed,
-                        CompletedBy = cp.CompletedBy,
-                        DateCompleted = cp.DateCompleted,
-                        ElementState = (int)cp.State,
-                        Enabled = cp.Enabled,
-                        Next = cp.Next,
-                        Order = cp.Order,
-                        Previous = cp.Previous,
-                        SourceId = cp.SourceId.ToString(),
-                        SpawnElement = DTOUtils.GetResponseSpawnElement(cp.Spawn),
-                        Modules = DTOUtils.GetModules(cp.Modules, _dbName),
-                        Name = cp.Name,
-                        ObjectivesInfo = DTOUtils.GetObjectives(cp.ObjectivesInfo),
-                        PatientId = cp.PatientId.ToString(),
-                        ProgramState = (int)cp.ProgramState,
-                        ShortName = cp.ShortName,
-                        StartDate = cp.StartDate,
-                        Status = (int)cp.Status,
-                        Version = cp.Version
-                    }));
-                }
+                throw new Exception("DD:PatientProgramRepository:Select()::" + ex.Message, ex.InnerException);
             }
-
-            return new Tuple<string, IEnumerable<object>>(expression.ExpressionID, patList);
         }
 
         public IEnumerable<object> SelectAll()
@@ -295,7 +302,7 @@ namespace Phytel.API.DataDomain.Program
             }
             catch (Exception ex)
             {
-                throw new Exception("ProgramDD:Update()::" + ex.Message, ex.InnerException);
+                throw new Exception("DD:PatientProgramRepository:Update()::" + ex.Message, ex.InnerException);
             }
         }
 
