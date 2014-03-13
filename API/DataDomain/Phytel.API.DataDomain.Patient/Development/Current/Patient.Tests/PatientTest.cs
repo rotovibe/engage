@@ -19,7 +19,7 @@ namespace Phytel.API.DataDomain.Patient.Test
         [TestMethod]
         public void GetPatientSSN()
         {
-            GetPatientSSNDataRequest request = new GetPatientSSNDataRequest { PatientId = "531f2dcc072ef727c4d29e1a", UserId = "531f2df6072ef727c4d2a3c0"  };
+            GetPatientSSNDataRequest request = new GetPatientSSNDataRequest { PatientId = "531f2dce072ef727c4d2a065", UserId = "531f2df6072ef727c4d2a3c0" };
 
             GetPatientSSNDataResponse response = PatientDataManager.GetPatientSSN(request);
 
@@ -41,14 +41,12 @@ namespace Phytel.API.DataDomain.Patient.Test
         {
             PutUpdatePatientDataRequest request = new PutUpdatePatientDataRequest
             {
-                Id = "531f2dcc072ef727c4d29e1a",
-                FirstName = "Arlie_Update",
-                Gender = "F",
-                FullSSN = "  \"\"    ",
-                UserId = "531f2df6072ef727c4d2a3c0",
+                Id = "531f2dce072ef727c4d2a065",
+                FullSSN = "888-88-8888",
+                UserId = "531f2df5072ef727c4d2a3bc",
                 Priority = 1,
-                PreferredName = "\"\""
-
+                PreferredName = "\"\"",
+                LastName = "Aarsvold"
             };
 
             PutUpdatePatientDataResponse response = PatientDataManager.UpdatePatient(request);

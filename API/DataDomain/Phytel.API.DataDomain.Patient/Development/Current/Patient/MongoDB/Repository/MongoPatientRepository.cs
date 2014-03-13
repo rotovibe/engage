@@ -637,23 +637,31 @@ namespace Phytel.API.DataDomain.Patient
                         }
                         else
                         {
-                            if (fullSSN.Length != 9)
+                            int SSNinInt;
+                            if (int.TryParse(fullSSN, out SSNinInt))
                             {
-                                throw new ArgumentException("SSN does not contain 9 digits.");
+                                if (fullSSN.Length == 9)
+                                {
+                                    // Save the last 4 digits in LastFourSSN field.
+                                    int lastFourSSN;
+                                    if (int.TryParse(fullSSN.Substring(5, 4), out lastFourSSN))
+                                    {
+                                        updt.Set(MEPatient.LastFourSSNProperty, lastFourSSN);
+                                    }
+
+                                    // Save the full SSN in the encrypted form.
+                                    DataProtector protector = new DataProtector(Services.DataProtector.Store.USE_SIMPLE_STORE);
+                                    string encryptedSSN = protector.Encrypt(fullSSN);
+                                    updt.Set(MEPatient.FullSSNProperty, encryptedSSN);
+                                }
+                                else
+                                {
+                                    throw new ArgumentException("Incorrect SSN length - It does not contain all 9 digits.");
+                                }
                             }
                             else
                             {
-                                // Save the last 4 digits in LastFourSSN field.
-                                int lastFourSSN;
-                                if (int.TryParse(fullSSN.Substring(5, 4), out lastFourSSN))
-                                {
-                                    updt.Set(MEPatient.LastFourSSNProperty, lastFourSSN);
-                                }
-
-                                // Save the full SSN in the encrypted form.
-                                DataProtector protector = new DataProtector(Services.DataProtector.Store.USE_SIMPLE_STORE);
-                                string encryptedSSN = protector.Encrypt(fullSSN);
-                                updt.Set(MEPatient.FullSSNProperty, encryptedSSN);
+                                throw new ArgumentException("Incorrect SSN format- It does not contain digits.");
                             }
                         }
                     }
