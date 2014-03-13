@@ -13,7 +13,7 @@ namespace Phytel.API.DataDomain.Template.Test
 
             GetTemplateResponse response = TemplateDataManager.GetTemplateByID(request);
 
-            Assert.IsTrue(response.Template.TemplateID == "Tony");
+            Assert.IsTrue(response.Template.TemplateID == "??");
         }
     }
 }

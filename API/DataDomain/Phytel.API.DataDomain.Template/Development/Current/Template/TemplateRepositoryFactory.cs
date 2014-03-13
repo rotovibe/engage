@@ -9,7 +9,7 @@ namespace Phytel.API.DataDomain.Template
 {
     public abstract class TemplateRepositoryFactory<T>
     {
-        public static ITemplateRepository<T> GetTemplateRepository(string dbName, string productName)
+        public static ITemplateRepository<T> GetTemplateRepository(string dbName, string productName, string userId)
         {
             try
             {
@@ -17,7 +17,7 @@ namespace Phytel.API.DataDomain.Template
 
                 //We only have 1 repository at this time, just return it
                 repo = new MongoTemplateRepository<T>(dbName) as ITemplateRepository<T>;
-
+                repo.UserId = userId;
                 return repo;
             }
             catch (Exception ex)

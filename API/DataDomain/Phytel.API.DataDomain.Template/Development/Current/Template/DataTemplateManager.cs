@@ -14,20 +14,15 @@ namespace Phytel.API.DataDomain.Template
             {
                 GetTemplateResponse result = new GetTemplateResponse();
 
-                ITemplateRepository<GetTemplateResponse> repo = TemplateRepositoryFactory<GetTemplateResponse>.GetTemplateRepository(request.ContractNumber, request.Context);
+                ITemplateRepository<GetTemplateResponse> repo = TemplateRepositoryFactory<GetTemplateResponse>.GetTemplateRepository(request.ContractNumber, request.Context, request.UserId);
+                repo.UserId = request.UserId;
                 result = repo.FindByID(request.TemplateID) as GetTemplateResponse;
-
-                // if cross-domain service call has error
-                //if (result.Status != null)
-                //{
-                //    throw new ArgumentException(result.Status.Message, new Exception() { Source = result.Status.StackTrace });
-                //}
 
                 return (result != null ? result : new GetTemplateResponse());
             }
             catch (Exception ex)
-            {
-                throw ex;
+            { 
+                throw new Exception("TemplateDD:GetTemplateByID()::" + ex.Message, ex.InnerException); 
             }
         }
 
@@ -37,14 +32,15 @@ namespace Phytel.API.DataDomain.Template
             {
                 GetAllTemplatesResponse result = new GetAllTemplatesResponse();
 
-                ITemplateRepository<GetAllTemplatesResponse> repo = TemplateRepositoryFactory<GetAllTemplatesResponse>.GetTemplateRepository(request.ContractNumber, request.Context);
-               
+                ITemplateRepository<GetAllTemplatesResponse> repo = TemplateRepositoryFactory<GetAllTemplatesResponse>.GetTemplateRepository(request.ContractNumber, request.Context, request.UserId);
+                repo.UserId = request.UserId;
+                result = repo.SelectAll() as GetAllTemplatesResponse;
 
-                return result;
+                return (result != null ? result : new GetAllTemplatesResponse());
             }
             catch (Exception ex)
             {
-                throw ex;
+                throw new Exception("TemplateDD:GetTemplateList()::" + ex.Message, ex.InnerException);
             }
         }
     }

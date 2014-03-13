@@ -1,18 +1,7 @@
+using MongoDB.Driver;
+using Phytel.API.Common.Data;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Phytel.API.DataDomain.Template.DTO;
-using Phytel.API.Interface;
-using MongoDB.Driver;
-using MongoDB.Driver.Builders;
-using MongoDB.Bson;
-using Phytel.API.AppDomain.Template;
-using MB = MongoDB.Driver.Builders;
-using MongoDB.Bson;
-using Phytel.API.Common;
-using Phytel.API.Common.Data;
 
 namespace Phytel.API.DataDomain.Template
 {
@@ -25,102 +14,51 @@ namespace Phytel.API.DataDomain.Template
             _dbName = contractDBName;
         }
 
+        public string UserId { get; set; }
+
         public object Insert(object newEntity)
         {
-            try
-            {
-                throw new NotImplementedException();
-                // code here //
-            }
-            catch (Exception ex) { throw ex; }
+            throw new NotImplementedException();
         }
 
         public object InsertAll(List<object> entities)
         {
-            try
-            {
-                throw new NotImplementedException();
-                // code here //
-            }
-            catch (Exception ex) { throw ex; }
+            throw new NotImplementedException();
         }
 
         public void Delete(object entity)
         {
-            try
-            {
-                throw new NotImplementedException();
-                // code here //
-            }
-            catch (Exception ex) { throw ex; }
+            throw new NotImplementedException();
         }
 
         public void DeleteAll(List<object> entities)
         {
-            try
-            {
-                throw new NotImplementedException();
-                // code here //
-            }
-            catch (Exception ex) { throw ex; }
+            throw new NotImplementedException();
         }
 
         public object FindByID(string entityID)
         {
-            try
-            {
-                throw new NotImplementedException();
-                // code here //
-            }
-            catch (Exception ex) { throw ex; }
+            throw new NotImplementedException();
         }
 
         public Tuple<string, IEnumerable<object>> Select(Interface.APIExpression expression)
         {
-            try
-            {
-                IMongoQuery mQuery = null;
-                List<object> TemplateItems = new List<object>();
-
-                mQuery = MongoDataUtil.ExpressionQueryBuilder(expression);
-
-                //using (TemplateMongoContext ctx = new TemplateMongoContext(_dbName))
-                //{
-                //}
-
-                return new Tuple<string, IEnumerable<object>>(expression.ExpressionID, TemplateItems);
-            }
-            catch (Exception ex) { throw ex; }
+            throw new NotImplementedException();
         }
 
         public IEnumerable<object> SelectAll()
         {
-            try
-            {
-                throw new NotImplementedException();
-                // code here //
-            }
-            catch (Exception ex) { throw ex; }
+            throw new NotImplementedException();
         }
 
         public object Update(object entity)
         {
-            try
-            {
-                throw new NotImplementedException();
-                // code here //
-            }
-            catch (Exception ex) { throw ex; }
+            throw new NotImplementedException();
         }
 
         public void CacheByID(List<string> entityIDs)
         {
-            try
-            {
-                throw new NotImplementedException();
-                // code here //
-            }
-            catch (Exception ex) { throw ex; }
+            throw new NotImplementedException();
         }
     }
 }
