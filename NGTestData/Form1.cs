@@ -86,7 +86,7 @@ namespace NGTestData
 
                 string patientSystemID = dr["ID"].ToString();
 
-                MEPatient patient = new MEPatient
+                MEPatient patient = new MEPatient(txtUserID.Text)
                     {
                         DisplayPatientSystemID = null,
                         FirstName = dr["FirstName"].ToString(),
@@ -99,7 +99,7 @@ namespace NGTestData
                         DeleteFlag = false,
                         TTLDate = null,
                         Version = 1,
-                        LastUpdatedOn = DateTime.Now
+                        LastUpdatedOn = DateTime.UtcNow
                     };
 
                 List<Address> addresses = new List<Address>();
@@ -142,7 +142,7 @@ namespace NGTestData
                 modes.Add(new Phytel.API.DataDomain.Contact.DTO.CommMode { ModeId = ObjectId.Parse("52e17d08d433232028e9e391"), OptOut = false, Preferred = false });
                 modes.Add(new Phytel.API.DataDomain.Contact.DTO.CommMode { ModeId = ObjectId.Parse("52e17d10d433232028e9e392"), OptOut = false, Preferred = false });
 
-                MEContact patContact = new MEContact
+                MEContact patContact = new MEContact(txtUserID.Text)
                     {
                         Addresses = addresses,
                         Emails = emails,
@@ -158,7 +158,7 @@ namespace NGTestData
                         Version = 1.0
                     };
 
-                MEPatientSystem patSystem = new MEPatientSystem
+                MEPatientSystem patSystem = new MEPatientSystem(txtUserID.Text)
                     {
                         PatientID = patient.Id,
                         SystemID = patientSystemID,
@@ -167,7 +167,7 @@ namespace NGTestData
                         TTLDate = null,
                         Version = 1.0,
                         DisplayLabel = "ID",
-                        LastUpdatedOn = DateTime.Now
+                        LastUpdatedOn = DateTime.UtcNow
                     };
 
                 patient.DisplayPatientSystemID = patSystem.Id;
@@ -199,14 +199,14 @@ namespace NGTestData
                     }
 
                     prodIds.Add(probID);
-                    patientProblems.Add(new MEPatientProblem
+                    patientProblems.Add(new MEPatientProblem(txtUserID.Text)
                         {
                             PatientID = patient.Id,
                             Active = true,
                             DeleteFlag = false,
                             EndDate = null,
                             Featured = true,
-                            LastUpdatedOn = DateTime.Now,
+                            LastUpdatedOn = DateTime.UtcNow,
                             Level = 1,
                             ProblemID = problems[probID].DataID,
                             StartDate = null,
@@ -315,7 +315,7 @@ namespace NGTestData
             DataSet users = Phytel.Services.SQLDataService.Instance.ExecuteSQLDirect(sqlConn, userSql, 0);
             foreach(DataRow dr in users.Tables[0].Rows)
             {
-                MEContact newC = new MEContact
+                MEContact newC = new MEContact(txtUserID.Text)
                 {
                     FirstName = dr["FirstName"].ToString(),
                     LastName = dr["LastName"].ToString(),

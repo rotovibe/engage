@@ -42,6 +42,8 @@
             this.txtSQLNGConn = new System.Windows.Forms.TextBox();
             this.txtContract = new System.Windows.Forms.TextBox();
             this.label6 = new System.Windows.Forms.Label();
+            this.label7 = new System.Windows.Forms.Label();
+            this.txtUserID = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.numPatients)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numProblems)).BeginInit();
             this.SuspendLayout();
@@ -202,11 +204,31 @@
             this.label6.TabIndex = 15;
             this.label6.Text = "Contract Number:";
             // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(394, 164);
+            this.label7.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(111, 17);
+            this.label7.TabIndex = 17;
+            this.label7.Text = "User Contact ID:";
+            // 
+            // txtUserID
+            // 
+            this.txtUserID.Location = new System.Drawing.Point(512, 161);
+            this.txtUserID.Name = "txtUserID";
+            this.txtUserID.Size = new System.Drawing.Size(208, 22);
+            this.txtUserID.TabIndex = 16;
+            this.txtUserID.Text = "531f2df9072ef727c4d2a3df";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(732, 194);
+            this.Controls.Add(this.label7);
+            this.Controls.Add(this.txtUserID);
             this.Controls.Add(this.label6);
             this.Controls.Add(this.txtContract);
             this.Controls.Add(this.label5);
@@ -247,6 +269,8 @@
         private System.Windows.Forms.TextBox txtSQLNGConn;
         private System.Windows.Forms.TextBox txtContract;
         private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.TextBox txtUserID;
     }
 }
 
