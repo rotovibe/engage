@@ -33,21 +33,21 @@ namespace Phytel.API.DataDomain.Program
             {
                 using (ProgramMongoContext ctx = new ProgramMongoContext(_dbName))
                 {
-                    WriteConcernResult result = ctx.PatientProgramResponses.Collection.Insert(mer);
-                    if (result.Ok)
-                    {
-                        res = true;
-                    }
+                    ctx.PatientProgramResponses.Collection.Insert(mer);
+
+                    AuditHelper.LogDataAudit(this.UserId, 
+                                            MongoCollectionName.PatientProgramResponse.ToString(), 
+                                            mer.Id.ToString(), 
+                                            Common.DataAuditType.Insert, 
+                                            _dbName);
+
+                    res = true;
                 }
                 return res as object;
             }
             catch(Exception ex)
             {
-                throw new Exception("DataDomain:Insert()::" + ex.Message, ex.InnerException);
-            }
-            finally
-            {
-                AuditHelper.LogDataAudit(this.UserId, MongoCollectionName.PatientProgramResponse.ToString(), mer.Id.ToString(), Common.DataAuditType.Insert, _dbName);
+                throw new Exception("ProgramDD:Insert()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -81,7 +81,7 @@ namespace Phytel.API.DataDomain.Program
             }
             catch(Exception ex)
             {
-                throw new Exception("DataDomain:FindById()::" + ex.Message, ex.InnerException);
+                throw new Exception("ProgramDD:FindById()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -132,19 +132,21 @@ namespace Phytel.API.DataDomain.Program
                     if (resp.Spawn != null) { uv.Add(MB.Update.SetWrapped<List<SpawnElement>>(MEPatientProgramResponse.SpawnElementProperty, resp.Spawn)); }
 
                     IMongoUpdate update = MB.Update.Combine(uv);
-                    WriteConcernResult res = ctx.PatientProgramResponses.Collection.Update(q, update);
-                    if (res.Ok)
-                        result = true;
+                    ctx.PatientProgramResponses.Collection.Update(q, update);
+
+                    AuditHelper.LogDataAudit(this.UserId,
+                                            MongoCollectionName.PatientProgramResponse.ToString(), 
+                                            resp.Id.ToString(), 
+                                            Common.DataAuditType.Update, 
+                                            _dbName);
+
+                    result = true;
                 }
                 return result as object;
             }
             catch (Exception ex)
             {
-                throw new Exception("DataDomain:Update()::" + ex.Message, ex.InnerException);
-            }
-            finally
-            {
-                AuditHelper.LogDataAudit(this.UserId, MongoCollectionName.PatientProgramResponse.ToString(), resp.Id.ToString(), Common.DataAuditType.Update, _dbName);
+                throw new Exception("ProgramDD:Update()::" + ex.Message, ex.InnerException);
             }
         }
 

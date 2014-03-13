@@ -36,7 +36,7 @@ namespace Phytel.API.DataDomain.PatientGoal
                 throw new NotImplementedException();
                 // code here //
             }
-            catch (Exception ex) { throw ex; }
+            catch (Exception) { throw; }
         }
 
         public object InsertAll(List<object> entities)
@@ -46,7 +46,7 @@ namespace Phytel.API.DataDomain.PatientGoal
                 throw new NotImplementedException();
                 // code here //
             }
-            catch (Exception ex) { throw ex; }
+            catch (Exception) { throw; }
         }
 
         public void Delete(object entity)
@@ -66,13 +66,15 @@ namespace Phytel.API.DataDomain.PatientGoal
 
                     IMongoUpdate update = MB.Update.Combine(uv);
                     WriteConcernResult res = ctx.PatientBarriers.Collection.Update(q, update);
+
+                    AuditHelper.LogDataAudit(this.UserId, 
+                                            MongoCollectionName.PatientBarrier.ToString(), 
+                                            request.BarrierId.ToString(), 
+                                            Common.DataAuditType.Delete, 
+                                            request.ContractNumber);
                 }
             }
             catch (Exception) { throw; }
-            finally
-            {
-                AuditHelper.LogDataAudit(this.UserId, MongoCollectionName.PatientBarrier.ToString(), request.BarrierId.ToString(), Common.DataAuditType.Delete, request.ContractNumber);
-        }
         }
 
         public void DeleteAll(List<object> entities)
@@ -82,7 +84,7 @@ namespace Phytel.API.DataDomain.PatientGoal
                 throw new NotImplementedException();
                 // code here //
             }
-            catch (Exception ex) { throw ex; }
+            catch (Exception) { throw; }
         }
 
         public object FindByID(string entityID)
@@ -92,7 +94,7 @@ namespace Phytel.API.DataDomain.PatientGoal
                 throw new NotImplementedException();
                 // code here //
             }
-            catch (Exception ex) { throw ex; }
+            catch (Exception) { throw; }
         }
 
         public Tuple<string, IEnumerable<object>> Select(Interface.APIExpression expression)
@@ -102,7 +104,7 @@ namespace Phytel.API.DataDomain.PatientGoal
                 throw new NotImplementedException();
                 // code here //
             }
-            catch (Exception ex) { throw ex; }
+            catch (Exception) { throw; }
         }
 
         public IEnumerable<object> SelectAll()
@@ -112,7 +114,7 @@ namespace Phytel.API.DataDomain.PatientGoal
                 throw new NotImplementedException();
                 // code here //
             }
-            catch (Exception ex) { throw ex; }
+            catch (Exception) { throw; }
         }
 
         public object Update(object entity)
@@ -150,17 +152,18 @@ namespace Phytel.API.DataDomain.PatientGoal
 
                     IMongoUpdate update = MB.Update.Combine(uv);
                     
-                    WriteConcernResult res = ctx.PatientBarriers.Collection.Update(q, update);
-                    if (res.Ok)
-                        result = true;
+                    ctx.PatientBarriers.Collection.Update(q, update);
+
+                    AuditHelper.LogDataAudit(pbr.UserId, 
+                                            MongoCollectionName.PatientBarrier.ToString(), 
+                                            pb.Id.ToString(), 
+                                            Common.DataAuditType.Update, 
+                                            pbr.ContractNumber);
+
                 }
                 return result as object;
             }
-            catch (Exception ex) { throw new Exception("DD:MongoPatientBarrierRepository:Update()" + ex.Message, ex.InnerException); }
-            finally
-            {
-                AuditHelper.LogDataAudit(pbr.UserId, MongoCollectionName.PatientBarrier.ToString(), pb.Id.ToString(), Common.DataAuditType.Update, pbr.ContractNumber);
-            }
+            catch (Exception ex) { throw new Exception("PatientGoalDD:MongoPatientBarrierRepository:Update()" + ex.Message, ex.InnerException); }
         }
 
         public void CacheByID(List<string> entityIDs)
@@ -170,16 +173,16 @@ namespace Phytel.API.DataDomain.PatientGoal
                 throw new NotImplementedException();
                 // code here //
             }
-            catch (Exception ex) { throw ex; }
+            catch (Exception) { throw; }
         }
 
         public object Initialize(object newEntity)
         {
             PutInitializeBarrierDataRequest request = (PutInitializeBarrierDataRequest)newEntity;
-            string Id = null;
+            MEPatientBarrier mePb = null;
             try
             {
-                MEPatientBarrier mePb = new MEPatientBarrier
+                mePb = new MEPatientBarrier(this.UserId)
                 {
                     Id = ObjectId.GenerateNewId(),
                     PatientGoalId = ObjectId.Parse(request.PatientGoalId),
@@ -189,26 +192,20 @@ namespace Phytel.API.DataDomain.PatientGoal
                     UpdatedBy = ObjectId.Parse(this.UserId),
                     Version = request.Version
                 };
-                if(!string.IsNullOrEmpty(request.UserId))
-                {
-                    mePb.UpdatedBy = ObjectId.Parse(request.UserId);
-                }
 
                 using (PatientGoalMongoContext ctx = new PatientGoalMongoContext(_dbName))
                 {
-                    WriteConcernResult wcr = ctx.PatientBarriers.Collection.Insert(mePb);
-                    if (wcr.Ok)
-                    {
-                        Id = mePb.Id.ToString();
-                    }
+                    ctx.PatientBarriers.Collection.Insert(mePb);
+
+                    AuditHelper.LogDataAudit(this.UserId, 
+                                            MongoCollectionName.PatientBarrier.ToString(),
+                                            mePb.Id.ToString(), 
+                                            Common.DataAuditType.Insert, 
+                                            request.ContractNumber);
                 }
-                return Id;
+                return mePb.Id.ToString();
             }
-            catch (Exception ex) { throw ex; }
-            finally
-            {
-                AuditHelper.LogDataAudit(this.UserId, MongoCollectionName.PatientBarrier.ToString(), Id.ToString(), Common.DataAuditType.Insert, request.ContractNumber);
-            }
+            catch (Exception) { throw; }
         }
 
         public IEnumerable<object> Find(string Id)
@@ -244,7 +241,7 @@ namespace Phytel.API.DataDomain.PatientGoal
                 }
                 return barriersDataList;
             }
-            catch (Exception ex) { throw ex; }
+            catch (Exception) { throw; }
         }
         
         public IEnumerable<object> FindByGoalId(string Id)
@@ -274,7 +271,7 @@ namespace Phytel.API.DataDomain.PatientGoal
                 }
                 return barriersDataList;
             }
-            catch (Exception ex) { throw ex; }
+            catch (Exception) { throw; }
         }
 
         public string UserId { get; set; }

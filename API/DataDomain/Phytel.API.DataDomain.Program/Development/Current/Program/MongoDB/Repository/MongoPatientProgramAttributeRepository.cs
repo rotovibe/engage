@@ -34,7 +34,7 @@ namespace Phytel.API.DataDomain.Program
             {
                 using (ProgramMongoContext ctx = new ProgramMongoContext(_dbName))
                 {
-                    mepa = new MEProgramAttribute
+                    mepa = new MEProgramAttribute(this.UserId)
                     {
                         Status = (Status)pa.Status,
                         RemovedReason = pa.OverrideReason,
@@ -67,21 +67,21 @@ namespace Phytel.API.DataDomain.Program
                         UpdatedBy = ObjectId.Parse(this.UserId)
                     };
 
-                    WriteConcernResult wcr =  ctx.ProgramAttributes.Collection.Insert(mepa);
-                    if (wcr.Ok)
-                    {
-                        result = true;
-                    }
+                    ctx.ProgramAttributes.Collection.Insert(mepa);
+                    
+                    AuditHelper.LogDataAudit(this.UserId, 
+                                            MongoCollectionName.PatientProgramAttribute.ToString(), 
+                                            mepa.Id.ToString(), 
+                                            Common.DataAuditType.Insert, 
+                                            _dbName);
+
+                    result = true;
                 }
                 return result;
             }
             catch(Exception ex)
             {
-                throw new Exception("DataDomain:Insert()::" + ex.Message, ex.InnerException);
-            }
-            finally
-            {
-                AuditHelper.LogDataAudit(this.UserId, MongoCollectionName.PatientProgramAttribute.ToString(), mepa.Id.ToString(), Common.DataAuditType.Insert, _dbName);
+                throw new Exception("ProgramDD:Insert()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -126,21 +126,6 @@ namespace Phytel.API.DataDomain.Program
                             StartDate = cp.StartDate,
                             Status = (int)cp.Status,
                             Version = cp.Version,
-                            //Eligibility = (int)cp.Eligibility,
-                            //EligibilityEndDate = cp.EligibilityEndDate,
-                            //EligibilityRequirements = cp.EligibilityRequirements,
-                            //EligibilityStartDate = cp.EligibilityStartDate,
-                            //DidNotEnrollReason = cp.DidNotEnrollReason,
-                            //DisEnrollReason = cp.DisEnrollReason,
-                            //EligibilityOverride = (int)cp.EligibilityOverride,
-                            //Enrollment = (int)cp.Enrollment,
-                            //GraduatedFlag = cp.GraduatedFlag,
-                            //IneligibleReason = cp.IneligibleReason,
-                            //OptOut = cp.OptOut,
-                            //OptOutDate = cp.OptOutDate,
-                            //OptOutReason = cp.OptOutReason,
-                            //OverrideReason = cp.OverrideReason,
-                            //RemovedReason = cp.RemovedReason,
                             EndDate = cp.EndDate,
                             Completed = cp.Completed,
                             Enabled = cp.Enabled,
@@ -167,7 +152,7 @@ namespace Phytel.API.DataDomain.Program
             }
             catch(Exception ex)
             {
-                throw new Exception("DataDomain:FindById()::" + ex.Message, ex.InnerException);
+                throw new Exception("ProgramDD:FindById()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -269,22 +254,23 @@ namespace Phytel.API.DataDomain.Program
                     if (uv.Count > 0)
                     {
                         IMongoUpdate update = MB.Update.Combine(uv);
-                        WriteConcernResult wcr = ctx.ProgramAttributes.Collection.Update(q, update);
-                        if (wcr.Ok)
-                        {
-                            result = true;
-                        }
+                        ctx.ProgramAttributes.Collection.Update(q, update);
+                        
+                        AuditHelper.LogDataAudit(this.UserId, 
+                                                MongoCollectionName.PatientProgramAttribute.ToString(), 
+                                                mepa.PlanElementId, 
+                                                MEProgramAttribute.PlanElementIdProperty,
+                                                Common.DataAuditType.Update, 
+                                                _dbName);
+
+                        result = true;
                     }
                 }
                 return result;
             }
             catch (Exception ex)
             {
-                throw new Exception("DataDomain:Update()::" + ex.Message, ex.InnerException);
-            }
-            finally
-            {
-                AuditHelper.LogDataAudit(this.UserId, MongoCollectionName.PatientProgramAttribute.ToString(), mepa.PlanElementId, Common.DataAuditType.Update, _dbName);
+                throw new Exception("ProgramDD:Update()::" + ex.Message, ex.InnerException);
             }
         }
 

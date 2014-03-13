@@ -11,11 +11,19 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
 {
     [BsonIgnoreExtraElements(false)]
     [MongoIndex(Keys = new string[] { TTLDateProperty }, TimeToLive = 0)]
-    [MongoIndex(Keys = new string[] { PatientIdProperty }, Unique = false)]
-    [MongoIndex(Keys = new string[] { ContractProgramIdProperty }, Unique = false)]
+    [MongoIndex(Keys = new string[] { PatientIdProperty, ContractProgramIdProperty, ProgramStateProperty }, Unique = false)]
     public class MEPatientProgram : ProgramBase, IMEEntity, IMongoEntity<ObjectId>
     {
-        public MEPatientProgram() { Id = ObjectId.GenerateNewId(); }
+        public MEPatientProgram(string userId)
+        {
+            Id = ObjectId.GenerateNewId();
+            Version = 1.0;
+            RecordCreatedBy = ObjectId.Parse(userId);
+            RecordCreatedOn = DateTime.UtcNow;
+        }
+
+        public const string RecordCreatedByProperty = "rcby";
+        public const string RecordCreatedOnProperty = "rcon";
 
         public const string IdProperty = "_id";
         [BsonId]
@@ -60,14 +68,21 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
         [BsonElement(TTLDateProperty)]
         [BsonDefaultValue(null)]
         [BsonIgnoreIfNull(true)]
-        [BsonDateTimeOptions(Kind = System.DateTimeKind.Local)]
+        [BsonDateTimeOptions(Kind = System.DateTimeKind.Utc)]
         public DateTime? TTLDate { get; set; }
 
         public const string LastUpdatedOnProperty = "uon";
         [BsonIgnoreIfNull(true)]
         [BsonElement(LastUpdatedOnProperty)]
-        [BsonDateTimeOptions(Kind = System.DateTimeKind.Local)]
+        [BsonDateTimeOptions(Kind = System.DateTimeKind.Utc)]
         public DateTime? LastUpdatedOn { get; set; }
+
+        [BsonElement(RecordCreatedByProperty)]
+        public ObjectId RecordCreatedBy { get; set; }
+
+        [BsonElement(RecordCreatedOnProperty)]
+        [BsonDateTimeOptions(Kind = System.DateTimeKind.Utc)]
+        public System.DateTime RecordCreatedOn { get; set; }
 
         #region // will be moved to other collection
         //public const string IneligibleReasonProperty = "ir";

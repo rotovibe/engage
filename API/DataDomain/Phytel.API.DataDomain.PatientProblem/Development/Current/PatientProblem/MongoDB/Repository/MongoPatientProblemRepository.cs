@@ -31,7 +31,7 @@ namespace Phytel.API.DataDomain.PatientProblem
             {
                 using (PatientProblemMongoContext ctx = new PatientProblemMongoContext(_dbName))
                 {
-                    pp = new MEPatientProblem
+                    pp = new MEPatientProblem(this.UserId)
                     {
                         Active = request.Active,
                         Featured = request.Featured,
@@ -44,6 +44,12 @@ namespace Phytel.API.DataDomain.PatientProblem
                         UpdatedBy = ObjectId.Parse(this.UserId)
                     };
                     ctx.PatientProblems.Collection.Insert(pp);
+
+                    AuditHelper.LogDataAudit(this.UserId, 
+                                            MongoCollectionName.PatientProblem.ToString(), 
+                                            pp.Id.ToString(), 
+                                            Common.DataAuditType.Insert, 
+                                            request.ContractNumber);
 
                     pb = new DTO.PatientProblem
                     {
@@ -60,14 +66,7 @@ namespace Phytel.API.DataDomain.PatientProblem
 
                 return pb as object;
             }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-            finally
-            {
-                AuditHelper.LogDataAudit(this.UserId, MongoCollectionName.PatientProblem.ToString(), pp.Id.ToString(), Common.DataAuditType.Insert, request.ContractNumber);
-            }
+            catch (Exception) { throw; }
         }
 
         public object InsertAll(List<object> entities)
@@ -169,16 +168,19 @@ namespace Phytel.API.DataDomain.PatientProblem
                     
                     IMongoUpdate update = MB.Update.Combine(uv);
                     ctx.PatientProblems.Collection.Update(q, update);
+
+                    AuditHelper.LogDataAudit(this.UserId, 
+                                            MongoCollectionName.PatientProblem.ToString(), 
+                                            p.Id, 
+                                            Common.DataAuditType.Update, 
+                                            p.ContractNumber);
+
                 }
                 return pr;
             }
             catch (Exception ex)
             {
-                throw new Exception("DataDomain:Update()::" + ex.Message, ex.InnerException);
-            }
-            finally
-            {
-                AuditHelper.LogDataAudit(this.UserId, MongoCollectionName.PatientProblem.ToString(), p.Id, Common.DataAuditType.Update, p.ContractNumber);
+                throw new Exception("PatientProblemDD:Update()::" + ex.Message, ex.InnerException);
             }
         }
 

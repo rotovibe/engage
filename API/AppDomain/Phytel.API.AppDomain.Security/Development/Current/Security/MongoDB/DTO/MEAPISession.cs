@@ -58,7 +58,7 @@ namespace Phytel.API.AppDomain.Security
         public string Product { get; set; }
 
         [BsonIgnoreIfNull(true)]
-        [BsonDateTimeOptions(Kind = DateTimeKind.Local)]
+        [BsonDateTimeOptions(Kind = DateTimeKind.Utc)]
         [BsonElement(SessionTimeOutProperty)]
         public DateTime SessionTimeOut { get; set; }
 

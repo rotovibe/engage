@@ -36,7 +36,7 @@ namespace Phytel.API.DataDomain.PatientObservation
                 throw new NotImplementedException();
                 // code here //
             }
-            catch (Exception ex) { throw ex; }
+            catch (Exception) { throw; }
         }
 
         public object InsertAll(List<object> entities)
@@ -46,7 +46,7 @@ namespace Phytel.API.DataDomain.PatientObservation
                 throw new NotImplementedException();
                 // code here //
             }
-            catch (Exception ex) { throw ex; }
+            catch (Exception) { throw; }
         }
 
         public void Delete(object entity)
@@ -56,7 +56,7 @@ namespace Phytel.API.DataDomain.PatientObservation
                 throw new NotImplementedException();
                 // code here //
             }
-            catch (Exception ex) { throw ex; }
+            catch (Exception) { throw; }
         }
 
         public void DeleteAll(List<object> entities)
@@ -66,7 +66,7 @@ namespace Phytel.API.DataDomain.PatientObservation
                 throw new NotImplementedException();
                 // code here //
             }
-            catch (Exception ex) { throw ex; }
+            catch (Exception) { throw; }
         }
 
         public object FindByID(string entityID)
@@ -76,7 +76,7 @@ namespace Phytel.API.DataDomain.PatientObservation
                 throw new NotImplementedException();
                 // code here //
             }
-            catch (Exception ex) { throw ex; }
+            catch (Exception) { throw; }
         }
 
         public Tuple<string, IEnumerable<object>> Select(Interface.APIExpression expression)
@@ -94,7 +94,7 @@ namespace Phytel.API.DataDomain.PatientObservation
 
                 return new Tuple<string, IEnumerable<object>>(expression.ExpressionID, PatientObservationItems);
             }
-            catch (Exception ex) { throw ex; }
+            catch (Exception) { throw; }
         }
 
         public IEnumerable<object> SelectAll()
@@ -104,7 +104,7 @@ namespace Phytel.API.DataDomain.PatientObservation
                 throw new NotImplementedException();
                 // code here //
             }
-            catch (Exception ex) { throw ex; }
+            catch (Exception) { throw; }
         }
 
         public object Update(object entity)
@@ -114,7 +114,7 @@ namespace Phytel.API.DataDomain.PatientObservation
                 throw new NotImplementedException();
                 // code here //
             }
-            catch (Exception ex) { throw ex; }
+            catch (Exception) { throw; }
         }
 
         public void CacheByID(List<string> entityIDs)
@@ -124,7 +124,7 @@ namespace Phytel.API.DataDomain.PatientObservation
                 throw new NotImplementedException();
                 // code here //
             }
-            catch (Exception ex) { throw ex; }
+            catch (Exception) { throw; }
         }
 
         object IRepository<T>.Insert(object newEntity)
@@ -153,14 +153,16 @@ namespace Phytel.API.DataDomain.PatientObservation
                     uv.Add(MB.Update.Set(MEPatientObservation.UpdatedByProperty, ObjectId.Parse(this.UserId)));
 
                     IMongoUpdate update = MB.Update.Combine(uv);
-                    WriteConcernResult res = ctx.PatientObservations.Collection.Update(q, update);
+                    ctx.PatientObservations.Collection.Update(q, update);
+
+                    AuditHelper.LogDataAudit(this.UserId, 
+                                            MongoCollectionName.PatientObservation.ToString(), 
+                                            request.PatientObservationId, 
+                                            Common.DataAuditType.Delete, 
+                                            request.ContractNumber);
                 }
             }
             catch (Exception) { throw; }
-            finally
-            {
-                AuditHelper.LogDataAudit(this.UserId, MongoCollectionName.PatientObservation.ToString(), request.PatientObservationId, Common.DataAuditType.Delete, request.ContractNumber);
-            }
         }
 
         void IRepository<T>.DeleteAll(List<object> entities)
@@ -210,17 +212,19 @@ namespace Phytel.API.DataDomain.PatientObservation
                     if (pord.StartDate != null) uv.Add(MB.Update.Set(MEPatientObservation.StartDateProperty, pord.StartDate));
 
                     IMongoUpdate update = MB.Update.Combine(uv);
-                    WriteConcernResult res = ctx.PatientObservations.Collection.Update(q, update);
-                    if (res.Ok)
-                        result = true;
+                    ctx.PatientObservations.Collection.Update(q, update);
+
+                    AuditHelper.LogDataAudit(this.UserId, 
+                                            MongoCollectionName.PatientObservation.ToString(), 
+                                            pord.Id, 
+                                            Common.DataAuditType.Update, 
+                                            odr.ContractNumber);
+
+                    result = true;
                 }
                 return result as object;
             }
-            catch (Exception ex) { throw new Exception("DD:MongoPatientBarrierRepository:Update()::" + ex.Message, ex.InnerException); }
-            finally
-            {
-                AuditHelper.LogDataAudit(this.UserId, MongoCollectionName.PatientObservation.ToString(), pord.Id, Common.DataAuditType.Update, odr.ContractNumber);
-            }
+            catch (Exception ex) { throw new Exception("PatientObservationDD:MongoPatientBarrierRepository:Update()::" + ex.Message, ex.InnerException); }
         }
 
         void IRepository<T>.CacheByID(List<string> entityIDs)
@@ -236,7 +240,7 @@ namespace Phytel.API.DataDomain.PatientObservation
 
             try
             {
-                mePg = new MEPatientObservation
+                mePg = new MEPatientObservation(this.UserId)
                 {
                     Id = ObjectId.GenerateNewId(),
                     PatientId = ObjectId.Parse(request.PatientId),
@@ -248,29 +252,25 @@ namespace Phytel.API.DataDomain.PatientObservation
                     UpdatedBy = ObjectId.Parse(this.UserId)
                 };
 
-                if (!string.IsNullOrEmpty(request.UserId))
-                {
-                    mePg.UpdatedBy = ObjectId.Parse(request.UserId);
-                }
                 using (PatientObservationMongoContext ctx = new PatientObservationMongoContext(_dbName))
                 {
-                    WriteConcernResult wcr = ctx.PatientObservations.Collection.Insert(mePg);
-                    if (wcr.Ok)
+                    ctx.PatientObservations.Collection.Insert(mePg);
+
+                    AuditHelper.LogDataAudit(this.UserId, 
+                                            MongoCollectionName.PatientObservation.ToString(), 
+                                            mePg.Id.ToString(), 
+                                            Common.DataAuditType.Insert, 
+                                            request.ContractNumber);
+
+                    patientObservationData = new PatientObservationData
                     {
-                        patientObservationData = new PatientObservationData
-                        {
-                            Id = mePg.Id.ToString(),
-                            PatientId = mePg.PatientId.ToString()
-                        };
-                    }
+                        Id = mePg.Id.ToString(),
+                        PatientId = mePg.PatientId.ToString()
+                    };
                 }
                 return patientObservationData;
             }
-            catch (Exception ex) { throw ex; }
-            finally
-            {
-                AuditHelper.LogDataAudit(this.UserId, MongoCollectionName.PatientObservation.ToString(), mePg.Id.ToString(), Common.DataAuditType.Insert, request.ContractNumber);
-            }
+            catch (Exception) { throw; }
         }
 
         public IEnumerable<object> FindObservationIdByPatientId(string Id)
@@ -301,7 +301,7 @@ namespace Phytel.API.DataDomain.PatientObservation
                 }
                 return observationsDataList;
             }
-            catch (Exception ex) { throw ex; }
+            catch (Exception) { throw; }
         }
 
         public object FindRecentObservationValue(string observationTypeId, string patientId)
@@ -337,7 +337,7 @@ namespace Phytel.API.DataDomain.PatientObservation
                 }
                 return observationData as object;
             }
-            catch (Exception ex) { throw ex; }
+            catch (Exception) { throw; }
         }
 
         private List<ObservationValueData> GetValueList(double? numericVal, string nonNumericVal)

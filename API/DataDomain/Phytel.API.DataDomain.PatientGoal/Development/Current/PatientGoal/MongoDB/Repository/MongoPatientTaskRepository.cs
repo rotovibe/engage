@@ -37,7 +37,7 @@ namespace Phytel.API.DataDomain.PatientGoal
                 throw new NotImplementedException();
                 // code here //
             }
-            catch (Exception ex) { throw ex; }
+            catch (Exception) { throw; }
         }
 
         public object InsertAll(List<object> entities)
@@ -47,7 +47,7 @@ namespace Phytel.API.DataDomain.PatientGoal
                 throw new NotImplementedException();
                 // code here //
             }
-            catch (Exception ex) { throw ex; }
+            catch (Exception) { throw; }
         }
 
         public void Delete(object entity)
@@ -67,14 +67,16 @@ namespace Phytel.API.DataDomain.PatientGoal
                     uv.Add(MB.Update.Set(MEPatientTask.LastUpdatedOnProperty, DateTime.UtcNow));
 
                     IMongoUpdate update = MB.Update.Combine(uv);
-                    WriteConcernResult res = ctx.PatientTasks.Collection.Update(q, update);
+                    ctx.PatientTasks.Collection.Update(q, update);
+
+                    AuditHelper.LogDataAudit(this.UserId, 
+                                            MongoCollectionName.PatientTask.ToString(), 
+                                            request.TaskId.ToString(), 
+                                            Common.DataAuditType.Delete, 
+                                            request.ContractNumber);
                 }
             }
             catch (Exception) { throw; }
-            finally
-            {
-                AuditHelper.LogDataAudit(this.UserId, MongoCollectionName.PatientTask.ToString(), request.TaskId.ToString(), Common.DataAuditType.Delete, request.ContractNumber);
-            }
         }
 
         public void DeleteAll(List<object> entities)
@@ -84,7 +86,7 @@ namespace Phytel.API.DataDomain.PatientGoal
                 throw new NotImplementedException();
                 // code here //
             }
-            catch (Exception ex) { throw ex; }
+            catch (Exception) { throw; }
         }
 
         public object FindByID(string entityID)
@@ -94,7 +96,7 @@ namespace Phytel.API.DataDomain.PatientGoal
                 throw new NotImplementedException();
                 // code here //
             }
-            catch (Exception ex) { throw ex; }
+            catch (Exception) { throw; }
         }
 
         public Tuple<string, IEnumerable<object>> Select(Interface.APIExpression expression)
@@ -114,7 +116,7 @@ namespace Phytel.API.DataDomain.PatientGoal
                 throw new NotImplementedException();
                 // code here //
             }
-            catch (Exception ex) { throw ex; }
+            catch (Exception) { throw; }
         }
 
         public object Update(object entity)
@@ -153,17 +155,19 @@ namespace Phytel.API.DataDomain.PatientGoal
                     if (pt.Barriers != null) { uv.Add(MB.Update.SetWrapped<List<ObjectId>>(MEPatientTask.BarriersProperty, DTOUtil.ConvertObjectId(pt.Barriers))); }
 
                     IMongoUpdate update = MB.Update.Combine(uv);
-                    WriteConcernResult res = ctx.PatientTasks.Collection.Update(q, update);
-                    if (res.Ok)
-                        result = true;
+                    ctx.PatientTasks.Collection.Update(q, update);
+
+                    AuditHelper.LogDataAudit(this.UserId, 
+                                            MongoCollectionName.PatientTask.ToString(), 
+                                            pt.Id, 
+                                            Common.DataAuditType.Update, 
+                                            ptr.ContractNumber);
+
+                    result = true;
                 }
                 return result as object;
             }
             catch (Exception) { throw; }
-            finally
-            {
-                AuditHelper.LogDataAudit(this.UserId, MongoCollectionName.PatientTask.ToString(), pt.Id, Common.DataAuditType.Update, ptr.ContractNumber);
-            }
         }
 
         public void CacheByID(List<string> entityIDs)
@@ -183,7 +187,7 @@ namespace Phytel.API.DataDomain.PatientGoal
             MEPatientTask pat = null;
             try
             {
-                pat = new MEPatientTask
+                pat = new MEPatientTask(this.UserId)
                 {
                     Id = ObjectId.GenerateNewId(),
                     PatientGoalId = ObjectId.Parse(ptr.PatientGoalId),
@@ -195,22 +199,22 @@ namespace Phytel.API.DataDomain.PatientGoal
 
                 using (PatientGoalMongoContext ctx = new PatientGoalMongoContext(_dbName))
                 {
-                    WriteConcernResult wcr = ctx.PatientTasks.Collection.Insert(pat);
-                    if (wcr.Ok)
+                    ctx.PatientTasks.Collection.Insert(pat);
+
+                    AuditHelper.LogDataAudit(this.UserId, 
+                                            MongoCollectionName.PatientTask.ToString(), 
+                                            pat.Id.ToString(), 
+                                            Common.DataAuditType.Insert, 
+                                            ptr.ContractNumber);
+
+                    task = new PatientTaskData
                     {
-                        task = new PatientTaskData
-                        {
-                            Id = pat.Id.ToString()
-                        };
-                    }
+                        Id = pat.Id.ToString()
+                    };
                 }
                 return task;
             }
             catch (Exception) { throw; }
-            finally
-            {
-                AuditHelper.LogDataAudit(this.UserId, MongoCollectionName.PatientTask.ToString(), pat.Id.ToString(), Common.DataAuditType.Insert, ptr.ContractNumber);
-            }
         }
 
         public IEnumerable<object> Find(string Id)
@@ -250,7 +254,7 @@ namespace Phytel.API.DataDomain.PatientGoal
                 }
                 return tasksDataList;
             }
-            catch (Exception ex) { throw ex; }
+            catch (Exception) { throw; }
         }
 
         public IEnumerable<object> FindByGoalId(string Id)
@@ -289,7 +293,7 @@ namespace Phytel.API.DataDomain.PatientGoal
                 }
                 return tasksDataList;
             }
-            catch (Exception ex) { throw ex; }
+            catch (Exception) { throw; }
         }
 
         public string UserId { get; set; }

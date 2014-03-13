@@ -14,7 +14,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
     {
         public static MEPatientProgram CreateInitialMEPatientProgram(PutProgramToPatientRequest request, MEProgram cp)
         {
-            MEPatientProgram patientProgDoc = new MEPatientProgram
+            MEPatientProgram patientProgDoc = new MEPatientProgram(request.UserId)
             {
                 PatientId = ObjectId.Parse(request.PatientId),
                 //AuthoredBy = cp.AuthoredBy,
@@ -177,7 +177,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             }
             catch (Exception ex)
             {
-                throw new Exception("DataDomain:SetValidModules()::" + ex.Message, ex.InnerException);
+                throw new Exception("ProgramDD:SetValidModules()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -229,7 +229,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             }
             catch (Exception ex)
             {
-                throw new Exception("DataDomain:GetContractStepResponses()::" + ex.Message, ex.InnerException);
+                throw new Exception("ProgramDD:GetContractStepResponses()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -265,7 +265,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             }
             catch (Exception ex)
             {
-                throw new Exception("DataDomain:GetStepResponses()::" + ex.Message, ex.InnerException);
+                throw new Exception("ProgramDD:GetStepResponses()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -320,7 +320,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             }
             catch (Exception ex)
             {
-                throw new Exception("DataDomain:GetStepResponses()::" + ex.Message, ex.InnerException);
+                throw new Exception("ProgramDD:GetStepResponses()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -544,7 +544,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             }
             catch (Exception ex)
             {
-                throw new Exception("DataDomain:GetSpawnElements()::" + ex.Message, ex.InnerException);
+                throw new Exception("ProgramDD:GetSpawnElements()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -572,7 +572,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             }
             catch (Exception ex)
             {
-                throw new Exception("DataDomain:GetSpawnElements()::" + ex.Message, ex.InnerException);
+                throw new Exception("ProgramDD:GetSpawnElements()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -616,7 +616,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             }
             catch (Exception ex)
             {
-                throw new Exception("DataDomain:GetActionElements()::" + ex.Message, ex.InnerException);
+                throw new Exception("ProgramDD:GetActionElements()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -669,7 +669,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             }
             catch (Exception ex)
             {
-                throw new Exception("DataDomain:GetStepsInfo()::" + ex.Message, ex.InnerException);
+                throw new Exception("ProgramDD:GetStepsInfo()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -686,7 +686,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             }
             catch (Exception ex)
             {
-                throw new Exception("DataDomain:ParseObjectId()::" + ex.Message, ex.InnerException);
+                throw new Exception("ProgramDD:ParseObjectId()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -721,7 +721,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             }
             catch (Exception ex)
             {
-                throw new Exception("DataDomain:GetResponses()::" + ex.Message, ex.InnerException);
+                throw new Exception("ProgramDD:GetResponses()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -746,7 +746,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             }
             catch (Exception ex)
             {
-                throw new Exception("DataDomain:GetSpawnElement()::" + ex.Message, ex.InnerException);
+                throw new Exception("ProgramDD:GetSpawnElement()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -768,7 +768,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             }
             catch (Exception ex)
             {
-                throw new Exception("DataDomain:GetSpawnElement()::" + ex.Message, ex.InnerException);
+                throw new Exception("ProgramDD:GetSpawnElement()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -796,7 +796,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             }
             catch (Exception ex)
             {
-                throw new Exception("DataDomain:GetObjectives()::" + ex.Message, ex.InnerException);
+                throw new Exception("ProgramDD:GetObjectives()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -839,7 +839,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             }
             catch (Exception ex)
             {
-                throw new Exception("DataDomain:CloneAppDomainModules()::" + ex.Message, ex.InnerException);
+                throw new Exception("ProgramDD:CloneAppDomainModules()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -875,7 +875,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             }
             catch (Exception ex)
             {
-                throw new Exception("DataDomain:GetModules()::" + ex.Message, ex.InnerException);
+                throw new Exception("ProgramDD:GetModules()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -898,7 +898,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             }
             catch (Exception ex)
             {
-                throw new Exception("DataDomain:GetObjectives()::" + ex.Message, ex.InnerException);
+                throw new Exception("ProgramDD:GetObjectives()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -933,7 +933,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             }
             catch (Exception ex)
             {
-                throw new Exception("DataDomain:GetActions()::" + ex.Message, ex.InnerException);
+                throw new Exception("ProgramDD:GetActions()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -978,7 +978,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             }
             catch (Exception ex)
             {
-                throw new Exception("DataDomain:GetSteps()::" + ex.Message, ex.InnerException);
+                throw new Exception("ProgramDD:GetSteps()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -1001,7 +1001,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             }
             catch (Exception ex)
             {
-                throw new Exception("DataDomain:GetSpawnElement()::" + ex.Message, ex.InnerException);
+                throw new Exception("ProgramDD:GetSpawnElement()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -1034,7 +1034,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             }
             catch (Exception ex)
             {
-                throw new Exception("DataDomain:GetResponses()::" + ex.Message, ex.InnerException);
+                throw new Exception("ProgramDD:GetResponses()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -1059,7 +1059,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             }
             catch (Exception ex)
             {
-                throw new ArgumentException("DDomain:GetResponseSpawnElement()::" + ex.Message, ex.InnerException);
+                throw new ArgumentException("ProgramDD:GetResponseSpawnElement()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -1091,7 +1091,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             }
             catch (Exception ex)
             {
-                throw new ArgumentException("DDomain:RecurseAndSaveResponseObjects()::" + ex.Message, ex.InnerException);
+                throw new ArgumentException("ProgramDD:RecurseAndSaveResponseObjects()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -1108,7 +1108,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             }
             catch (Exception ex)
             {
-                throw new ArgumentException("DDomain:SaveResponseToDocument()::" + ex.Message, ex.InnerException);
+                throw new ArgumentException("ProgramDD:SaveResponseToDocument()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -1119,7 +1119,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
                 ProgramAttribute pa = new ProgramAttribute();
                 pa.PlanElementId = p.Id;
                 pa.Status = p.Status;
-                pa.StartDate = System.DateTime.Now;
+                pa.StartDate = System.DateTime.UtcNow;
                 pa.EndDate = null;
                 pa.Eligibility = 3;
                 pa.Enrollment = 2;
@@ -1130,7 +1130,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             }
             catch (Exception ex)
             {
-                throw new ArgumentException("DDomain:InitializeElementAttributes()::" + ex.Message, ex.InnerException);
+                throw new ArgumentException("ProgramDD:InitializeElementAttributes()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -1150,7 +1150,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             }
             catch (Exception ex)
             {
-                throw new Exception("DD: InitializeProgramAttributes()::" + ex.Message, ex.InnerException);
+                throw new Exception("ProgramDD:InitializeProgramAttributes()::" + ex.Message, ex.InnerException);
             }
         }
     }

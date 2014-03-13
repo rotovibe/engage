@@ -51,7 +51,7 @@ namespace Phytel.API.DataDomain.Contact
                             throw new ApplicationException("A contact record already exists for the patient.");
                         }
                     }
-                    meContact = new MEContact
+                    meContact = new MEContact(this.UserId)
                     {
                         Id = ObjectId.GenerateNewId(),
                         FirstName = request.FirstName,
@@ -185,6 +185,13 @@ namespace Phytel.API.DataDomain.Contact
                     }
 
                     ctx.Contacts.Collection.Insert(meContact);
+
+                    AuditHelper.LogDataAudit(this.UserId, 
+                                            MongoCollectionName.Contact.ToString(), 
+                                            meContact.Id.ToString(), 
+                                            Common.DataAuditType.Insert, 
+                                            request.ContractNumber);
+
                     //Send back the newly inserted object.
                     response = new PutContactDataResponse();
                     response.ContactId = meContact.Id.ToString();
@@ -193,10 +200,6 @@ namespace Phytel.API.DataDomain.Contact
             catch (Exception ex)
             {
                 throw ex;
-            }
-            finally
-            {
-                AuditHelper.LogDataAudit(this.UserId, MongoCollectionName.CareMember.ToString(), meContact.Id.ToString(), Common.DataAuditType.Insert, request.ContractNumber);
             }
             return response;
         }
@@ -685,10 +688,16 @@ namespace Phytel.API.DataDomain.Contact
                         uv.Add(MB.Update.Set(MEContact.LastUpdatedOnProperty,DateTime.UtcNow));
 
                         //UpdatedBy
-                        uv.Add(MB.Update.Set(MEContact.UpdatedByProperty, this.UserId));
+                        uv.Add(MB.Update.Set(MEContact.UpdatedByProperty, ObjectId.Parse(this.UserId)));
 
                         IMongoUpdate update = MB.Update.Combine(uv);
                         ctx.Contacts.Collection.Update(query, update);
+
+                        AuditHelper.LogDataAudit(this.UserId,
+                                                MongoCollectionName.Contact.ToString(),
+                                                request.ContactId,
+                                                Common.DataAuditType.Insert,
+                                                request.ContractNumber);
 
                         //set the response
                         response.SuccessData = true;

@@ -13,7 +13,13 @@ namespace Phytel.API.DataDomain.PatientNote.DTO
     [MongoIndex(Keys = new string[] { PatientIdProperty, DeleteFlagProperty }, Unique = false)]
     public class MEPatientNote : IMongoEntity<ObjectId>, IMEEntity
     {
-        public MEPatientNote() { Id = ObjectId.GenerateNewId(); }
+        public MEPatientNote(string userId)
+        {
+            Id = ObjectId.GenerateNewId();
+            Version = 1.0;
+            RecordCreatedBy = ObjectId.Parse(userId);
+            RecordCreatedOn = DateTime.UtcNow;
+        }
 
         public const string IdProperty = "_id";
         public const string PatientIdProperty = "pid";
@@ -30,6 +36,8 @@ namespace Phytel.API.DataDomain.PatientNote.DTO
         public const string DeleteFlagProperty = "del";
         public const string TTLDateProperty = "ttl";
         public const string LastUpdatedOnProperty = "uon";
+        public const string RecordCreatedByProperty = "rcby";
+        public const string RecordCreatedOnProperty = "rcon";
         #endregion
 
         [BsonId]
@@ -74,13 +82,20 @@ namespace Phytel.API.DataDomain.PatientNote.DTO
 
         [BsonElement(TTLDateProperty)]
         [BsonIgnoreIfNull(true)]
-        [BsonDateTimeOptions(Kind = System.DateTimeKind.Local)]
+        [BsonDateTimeOptions(Kind = System.DateTimeKind.Utc)]
         public System.DateTime? TTLDate { get; set; }
 
         [BsonElement(LastUpdatedOnProperty)]
         [BsonIgnoreIfNull(true)]
-        [BsonDateTimeOptions(Kind = System.DateTimeKind.Local)]
+        [BsonDateTimeOptions(Kind = System.DateTimeKind.Utc)]
         public System.DateTime? LastUpdatedOn { get; set; }
+
+        [BsonElement(RecordCreatedByProperty)]
+        public ObjectId RecordCreatedBy { get; set; }
+
+        [BsonElement(RecordCreatedOnProperty)]
+        [BsonDateTimeOptions(Kind = System.DateTimeKind.Utc)]
+        public System.DateTime RecordCreatedOn { get; set; }
         #endregion
     }
 }

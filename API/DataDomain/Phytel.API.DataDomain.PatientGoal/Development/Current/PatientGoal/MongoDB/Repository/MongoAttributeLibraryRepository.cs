@@ -82,7 +82,6 @@ namespace Phytel.API.DataDomain.PatientGoal
                 IMongoQuery mQuery = Query.And(queries);
                 using (PatientGoalMongoContext ctx = new PatientGoalMongoContext(_dbName))
                 {
-
                     List<MEAttributeLibrary> meAttributes = ctx.AttributesLibrary.Collection.Find(mQuery).ToList();
                     if (meAttributes != null)
                     {
@@ -106,7 +105,7 @@ namespace Phytel.API.DataDomain.PatientGoal
                 }
                 return customAttributesList;
             }
-            catch (Exception ex) { throw ex; };
+            catch (Exception) { throw; };
         }
 
         public string UserId { get; set; }

@@ -57,7 +57,7 @@ namespace Phytel.API.AppDomain.Security
             //                APIKey = apiKey,
             //                Product = productName,
             //                SessionLengthInMinutes = user.SessionLengthInMinutes,
-            //                SessionTimeOut = DateTime.Now.AddMinutes(user.SessionLengthInMinutes),
+            //                SessionTimeOut = DateTime.UtcNow.AddMinutes(user.SessionLengthInMinutes),
             //                UserName = user.UserName,
             //                SQLUserId = user.Id.ToString()
             //            };
@@ -107,7 +107,7 @@ namespace Phytel.API.AppDomain.Security
                             APIKey = apiKey,
                             Product = productName,
                             SessionLengthInMinutes = existingReponse.SessionTimeout,
-                            SessionTimeOut = DateTime.Now.AddMinutes(existingReponse.SessionTimeout),
+                            SessionTimeOut = DateTime.UtcNow.AddMinutes(existingReponse.SessionTimeout),
                             UserName = existingReponse.UserName,
                             UserId = UserId,
                             ContractNumber = contractNumber,
@@ -154,7 +154,7 @@ namespace Phytel.API.AppDomain.Security
                     if (sessionLengthInMinutes > 0)
                     {
                         FindAndModifyResult result = _objectContext.APISessions.Collection.FindAndModify(Query.EQ(MEAPISession.IdProperty, tokenObjectId), SortBy.Null,
-                                                    MongoDB.Driver.Builders.Update.Set(MEAPISession.SessionTimeOutProperty, DateTime.Now.AddMinutes(sessionLengthInMinutes)), true);
+                                                    MongoDB.Driver.Builders.Update.Set(MEAPISession.SessionTimeOutProperty, DateTime.UtcNow.AddMinutes(sessionLengthInMinutes)), true);
 
                         if (result != null && result.ModifiedDocument != null)
                         {

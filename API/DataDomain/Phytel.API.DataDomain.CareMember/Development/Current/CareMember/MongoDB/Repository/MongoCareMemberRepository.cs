@@ -1,20 +1,15 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Phytel.API.DataDomain.CareMember.DTO;
-using Phytel.API.Interface;
+using MongoDB.Bson;
 using MongoDB.Driver;
 using MongoDB.Driver.Builders;
-using MongoDB.Bson;
-using Phytel.API.DataDomain.CareMember;
-using MB = MongoDB.Driver.Builders;
-using MongoDB.Bson;
 using Phytel.API.Common;
 using Phytel.API.Common.Data;
-using System.Configuration;
 using Phytel.API.DataAudit;
+using Phytel.API.DataDomain.CareMember.DTO;
+using System;
+using System.Collections.Generic;
+using System.Configuration;
+using System.Linq;
+using MB = MongoDB.Driver.Builders;
 
 namespace Phytel.API.DataDomain.CareMember
 {
@@ -32,12 +27,13 @@ namespace Phytel.API.DataDomain.CareMember
         {
             PutCareMemberDataRequest request = (PutCareMemberDataRequest)newEntity;
             CareMemberData careMemberData = request.CareMember;
-            string careMemberId = string.Empty;
+            MECareMember meCM = null;
+
             try
             {
                 if (careMemberData != null)
                 {
-                    MECareMember meCM = new MECareMember
+                    meCM = new MECareMember(this.UserId)
                     {
                         Id = ObjectId.GenerateNewId(),
                         PatientId = ObjectId.Parse(careMemberData.PatientId),
@@ -52,19 +48,19 @@ namespace Phytel.API.DataDomain.CareMember
                     using (CareMemberMongoContext ctx = new CareMemberMongoContext(_dbName))
                     {
                         WriteConcernResult wcr = ctx.CareMembers.Collection.Insert(meCM);
-                        if (wcr.Ok)
-                        {
-                            careMemberId = meCM.Id.ToString();
-                        }
+                        if (wcr.Ok == false)
+                            throw new Exception("Care Member failed to insert: " + wcr.ErrorMessage);
+                        else
+                            AuditHelper.LogDataAudit(this.UserId, 
+                                                        MongoCollectionName.CareMember.ToString(), 
+                                                        meCM.Id.ToString(), 
+                                                        Common.DataAuditType.Insert, 
+                                                        request.ContractNumber);
                     }
                 }
-                return careMemberId;
+                return meCM.Id.ToString();
             }
-            catch (Exception ex) { throw ex; }
-            finally
-            {
-                AuditHelper.LogDataAudit(this.UserId, MongoCollectionName.CareMember.ToString(), careMemberId, Common.DataAuditType.Insert, request.ContractNumber);
-            }
+            catch (Exception) { throw; }
         }
 
         public object InsertAll(List<object> entities)
@@ -74,7 +70,7 @@ namespace Phytel.API.DataDomain.CareMember
                 throw new NotImplementedException();
                 // code here //
             }
-            catch (Exception ex) { throw ex; }
+            catch (Exception) { throw; }
         }
 
         public void Delete(object entity)
@@ -84,7 +80,7 @@ namespace Phytel.API.DataDomain.CareMember
                 throw new NotImplementedException();
                 // code here //
             }
-            catch (Exception ex) { throw ex; }
+            catch (Exception) { throw; }
         }
 
         public void DeleteAll(List<object> entities)
@@ -94,7 +90,7 @@ namespace Phytel.API.DataDomain.CareMember
                 throw new NotImplementedException();
                 // code here //
             }
-            catch (Exception ex) { throw ex; }
+            catch (Exception) { throw; }
         }
 
         public object FindByID(string entityID)
@@ -123,7 +119,7 @@ namespace Phytel.API.DataDomain.CareMember
                 }
                 return careMemberData;
             }
-            catch (Exception ex) { throw ex; }
+            catch (Exception) { throw; }
         }
 
         public Tuple<string, IEnumerable<object>> Select(Interface.APIExpression expression)
@@ -135,13 +131,9 @@ namespace Phytel.API.DataDomain.CareMember
 
                 mQuery = MongoDataUtil.ExpressionQueryBuilder(expression);
 
-                //using (CareMemberMongoContext ctx = new CareMemberMongoContext(_dbName))
-                //{
-                //}
-
                 return new Tuple<string, IEnumerable<object>>(expression.ExpressionID, CareMemberItems);
             }
-            catch (Exception ex) { throw ex; }
+            catch (Exception) { throw; }
         }
 
         public IEnumerable<object> SelectAll()
@@ -151,7 +143,7 @@ namespace Phytel.API.DataDomain.CareMember
                 throw new NotImplementedException();
                 // code here //
             }
-            catch (Exception ex) { throw ex; }
+            catch (Exception) { throw; }
         }
 
         public object Update(object entity)
@@ -169,7 +161,7 @@ namespace Phytel.API.DataDomain.CareMember
                         var uv = new List<MB.UpdateBuilder>();
                         uv.Add(MB.Update.Set(MECareMember.TTLDateProperty, BsonNull.Value));
                         uv.Add(MB.Update.Set(MECareMember.DeleteFlagProperty, false));
-                        uv.Add(MB.Update.Set(MECareMember.UpdatedByProperty, this.UserId));
+                        uv.Add(MB.Update.Set(MECareMember.UpdatedByProperty, ObjectId.Parse(this.UserId)));
                         uv.Add(MB.Update.Set(MECareMember.VersionProperty, request.Version));
                         uv.Add(MB.Update.Set(MECareMember.LastUpdatedOnProperty, System.DateTime.UtcNow));
                         uv.Add(MB.Update.Set(MECareMember.PrimaryProperty, careMemberData.Primary));
@@ -179,17 +171,21 @@ namespace Phytel.API.DataDomain.CareMember
 
                         IMongoUpdate update = MB.Update.Combine(uv);
                         WriteConcernResult res = ctx.CareMembers.Collection.Update(q, update);
-                        if (res.Ok)
-                            result = true;          
+                        if (res.Ok == false)
+                            throw new Exception("Failed to update Care Member: " + res.ErrorMessage);
+                        else
+                            AuditHelper.LogDataAudit(this.UserId, 
+                                                    MongoCollectionName.CareMember.ToString(), 
+                                                    careMemberData.Id, 
+                                                    Common.DataAuditType.Update, 
+                                                    request.ContractNumber);
+
+                        result = true;        
                     }
                 }
                 return result as object;
             }
-            catch (Exception ex) { throw new Exception("DD:MongoCareMemberRepository:Update()" + ex.Message, ex.InnerException); }
-            finally
-            {
-                AuditHelper.LogDataAudit(this.UserId, MongoCollectionName.CareMember.ToString(), careMemberData.Id, Common.DataAuditType.Update, request.ContractNumber);
-            }
+            catch (Exception ex) { throw new Exception("CareMemberDD:MongoCareMemberRepository:Update()" + ex.Message, ex.InnerException); }
         }
 
         public void CacheByID(List<string> entityIDs)
@@ -199,7 +195,7 @@ namespace Phytel.API.DataDomain.CareMember
                 throw new NotImplementedException();
                 // code here //
             }
-            catch (Exception ex) { throw ex; }
+            catch (Exception) { throw; }
         }
 
         public IEnumerable<object> FindByPatientId(object request)
@@ -233,7 +229,7 @@ namespace Phytel.API.DataDomain.CareMember
                 }
                 return careMembersDataList;
             }
-            catch (Exception ex) { throw ex; }
+            catch (Exception) { throw; }
         }
 
         public string UserId { get; set; }

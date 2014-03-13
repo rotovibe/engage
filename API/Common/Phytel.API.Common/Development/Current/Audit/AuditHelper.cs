@@ -15,6 +15,7 @@ using Phytel.Mongo.Linq;
 using Phytel.Services;
 using ServiceStack.ServiceHost;
 using ASE = Phytel.Framework.ASE.Process;
+using MongoDB.Driver.Builders;
 
 namespace Phytel.API.DataAudit
 {
@@ -55,7 +56,7 @@ namespace Phytel.API.DataAudit
             return auditLog;
         }
 
-        private static DataAudit GetDataAuditLog(string userId, string collectionName, string entityId, DataAuditType auditType, string contractNumber)
+        private static DataAudit GetDataAuditLog(string userId, string collectionName, string entityId, string entityKeyField, DataAuditType auditType, string contractNumber)
         {
             DataAudit auditLog = new DataAudit()
             {
@@ -64,27 +65,26 @@ namespace Phytel.API.DataAudit
                 Contract = contractNumber,
                 EntityType = collectionName,
                 Type = auditType.ToString(),
-                Entity = GetMongoEntity(contractNumber, collectionName, entityId)
+                Entity = GetMongoEntity(contractNumber, collectionName, entityId, entityKeyField)
             };
 
             return auditLog;
         }
 
-        private static string GetMongoEntity(string contract, string collectionName, string entityId)
+        private static string GetMongoEntity(string contract, string collectionName, string entityId, string entityKeyField)
         {
             try
             {
                 MongoDatabase db = Phytel.Services.MongoService.Instance.GetDatabase(contract, true);
-                return db.GetCollection(collectionName).FindOneById(ObjectId.Parse(entityId)).ToJson();
-                //MongoCollection coll = db.GetCollection(collectionName);
+
+                IMongoQuery query = Query.EQ(entityKeyField, ObjectId.Parse(entityId));
+                return db.GetCollection(collectionName).FindOne(query).ToJson();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 //if I can't find the entity, for right now, return null
                 return null;
             }
-            
-            return null; ///returning null until I can get the process to run end to end, then I'll build the getter for this
         }
 
         private static int GetContractID(string contractNumber)
@@ -215,6 +215,11 @@ namespace Phytel.API.DataAudit
 
         public static void LogDataAudit(string userId, string collectionName, string entityId, DataAuditType auditType, string contractNumber)
         {
+            AuditHelper.LogDataAudit(userId, collectionName, entityId, "_id", auditType, contractNumber);
+        }
+
+        public static void LogDataAudit(string userId, string collectionName, string entityId, string entityKeyField, DataAuditType auditType, string contractNumber)
+        {
             //hand to a new thread here, and immediately return this thread to caller
             try
             {
@@ -223,7 +228,7 @@ namespace Phytel.API.DataAudit
                 {
                     try
                     {
-                        DataAuditAsynch(userId, collectionName, entityId, auditType, contractNumber);
+                        DataAuditAsynch(userId, collectionName, entityId, entityKeyField, auditType, contractNumber);
                     }
                     catch (Exception newthreadex)
                     {
@@ -293,11 +298,11 @@ namespace Phytel.API.DataAudit
             AuditDispatcher.WriteAudit(data);
         }
 
-        private static void DataAuditAsynch(string userId, string collectionName, string entityId, DataAuditType auditType, string contractNumber)
+        private static void DataAuditAsynch(string userId, string collectionName, string entityId, string entityKeyField, DataAuditType auditType, string contractNumber)
         {
             //throw new SystemException("test error in new thread starts");
 
-            DataAudit data = GetDataAuditLog(userId, collectionName, entityId, auditType, contractNumber);
+            DataAudit data = GetDataAuditLog(userId, collectionName, entityId, entityKeyField, auditType, contractNumber);
             AuditDispatcher.WriteAudit(data, string.Format("{0}_{1}", data.Type, data.EntityType));
         }
 

@@ -46,13 +46,13 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
         [BsonElement(TTLDateProperty)]
         [BsonDefaultValue(null)]
         [BsonIgnoreIfNull(true)]
-        [BsonDateTimeOptions(Kind = System.DateTimeKind.Local)]
+        [BsonDateTimeOptions(Kind = System.DateTimeKind.Utc)]
         public DateTime? TTLDate { get; set; }
 
         public const string LastUpdatedOnProperty = "uon";
         [BsonIgnoreIfNull(true)]
         [BsonElement(LastUpdatedOnProperty)]
-        [BsonDateTimeOptions(Kind = System.DateTimeKind.Local)]
+        [BsonDateTimeOptions(Kind = System.DateTimeKind.Utc)]
         public DateTime? LastUpdatedOn { get; set; }
         #endregion
     }

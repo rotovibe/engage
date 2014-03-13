@@ -32,7 +32,7 @@ namespace Phytel.API.DataDomain.Patient
             {
                 //Does the patient exist?
                 IMongoQuery query = Query.And(
-                                Query.EQ(MECohortPatientView.PatientIDProperty, cohortRequest.PatientID),
+                                Query.EQ(MECohortPatientView.PatientIDProperty, ObjectId.Parse(cohortRequest.PatientID)),
                                 Query.EQ(MECohortPatientView.LastNameProperty, cohortRequest.LastName));
                 patientView = ctx.CohortPatientViews.Collection.FindOneAs<MECohortPatientView>(query);
                 if (patientView == null)
@@ -120,7 +120,7 @@ namespace Phytel.API.DataDomain.Patient
             }
             catch (Exception ex)
             {
-                throw new Exception("DataDomain:Update()::" + ex.Message, ex.InnerException);
+                throw new Exception("CohortPatientDD:Update()::" + ex.Message, ex.InnerException);
             }
         }
 

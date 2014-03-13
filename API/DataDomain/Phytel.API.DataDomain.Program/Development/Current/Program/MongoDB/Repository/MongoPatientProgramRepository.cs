@@ -35,9 +35,9 @@ namespace Phytel.API.DataDomain.Program
                 using (ProgramMongoContext ctx = new ProgramMongoContext(_dbName))
                 {
                     var findQ = MB.Query.And(
-                        MB.Query.In(MEPatientProgram.ProgramStateProperty, new List<BsonValue> { BsonValue.Create(0), BsonValue.Create(1) }),
                         MB.Query<MEPatientProgram>.EQ(b => b.PatientId, ObjectId.Parse(request.PatientId)),
-                        MB.Query<MEPatientProgram>.EQ(b => b.ContractProgramId, ObjectId.Parse(request.ContractProgramId)));
+                        MB.Query<MEPatientProgram>.EQ(b => b.ContractProgramId, ObjectId.Parse(request.ContractProgramId)),
+                        MB.Query.In(MEPatientProgram.ProgramStateProperty, new List<BsonValue> { BsonValue.Create(0), BsonValue.Create(1) }));
 
                     List<MEPatientProgram> pp = ctx.PatientPrograms.Collection.Find(findQ).ToList();
 
@@ -64,7 +64,11 @@ namespace Phytel.API.DataDomain.Program
                         patientProgDoc.Modules.ForEach(s => s.ProgramId = patientProgDoc.Id);
                         ctx.PatientPrograms.Collection.Update(q, MB.Update.SetWrapped<List<Module>>(MEPatientProgram.ModulesProperty, patientProgDoc.Modules));
 
-                        AuditHelper.LogDataAudit(this.UserId, MongoCollectionName.PatientProgram.ToString(), patientProgDoc.Id.ToString(), Common.DataAuditType.Insert, _dbName);
+                        AuditHelper.LogDataAudit(this.UserId, 
+                                                MongoCollectionName.PatientProgram.ToString(), 
+                                                patientProgDoc.Id.ToString(), 
+                                                Common.DataAuditType.Insert, 
+                                                request.ContractNumber);
 
                         // hydrate response object
                         result.program = new ProgramInfo
@@ -86,7 +90,7 @@ namespace Phytel.API.DataDomain.Program
             }
             catch (Exception ex)
             {
-                throw new Exception("DataDomain:Insert()::" + ex.Message, ex.InnerException);
+                throw new Exception("ProgramDD:Insert()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -114,7 +118,7 @@ namespace Phytel.API.DataDomain.Program
             }
             catch (Exception ex)
             {
-                throw new Exception("DataDomain:CanInsertPatientProgram()::" + ex.Message, ex.InnerException);
+                throw new Exception("ProgramDD:CanInsertPatientProgram()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -157,7 +161,7 @@ namespace Phytel.API.DataDomain.Program
             }
             catch(Exception ex)
             {
-                throw new Exception("DataDomain:FindById()::" + ex.Message, ex.InnerException);
+                throw new Exception("ProgramDD:FindById()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -202,28 +206,13 @@ namespace Phytel.API.DataDomain.Program
                         Client = cp.Client != null ? cp.Client.ToString() : null,
                         ContractProgramId = cp.ContractProgramId.ToString(),
                         Description = cp.Description,
-                        //EligibilityEndDate = cp.EligibilityEndDate,
-                        //EligibilityRequirements = cp.EligibilityRequirements,
-                        //EligibilityStartDate = cp.EligibilityStartDate,
                         EndDate = cp.EndDate,
-                        //RemovedReason = cp.RemovedReason,
-                        //OverrideReason = cp.OverrideReason,
-                        //OptOutReason = cp.OptOutReason,
-                        //OptOutDate = cp.OptOutDate,
-                        //OptOut = cp.OptOut,
-                        //IneligibleReason = cp.IneligibleReason,
-                        //GraduatedFlag = cp.GraduatedFlag,
-                        //Enrollment = (int)cp.Enrollment,
-                        //EligibilityOverride = (int)cp.EligibilityOverride,
-                        //DisEnrollReason = cp.DisEnrollReason,
-                        //DidNotEnrollReason = cp.DidNotEnrollReason,
                         AssignBy = cp.AssignedBy,
                         AssignDate = cp.AssignedOn,
                         Completed = cp.Completed,
                         CompletedBy = cp.CompletedBy,
                         DateCompleted = cp.DateCompleted,
                         ElementState = (int)cp.State,
-                        //Eligibility = (int)cp.Eligibility,
                         Enabled = cp.Enabled,
                         Next = cp.Next,
                         Order = cp.Order,
@@ -294,16 +283,19 @@ namespace Phytel.API.DataDomain.Program
 
                     IMongoUpdate update = MB.Update.Combine(uv);
                     ctx.PatientPrograms.Collection.Update(q, update);
+
+                    AuditHelper.LogDataAudit(this.UserId, 
+                                            MongoCollectionName.PatientProgram.ToString(),
+                                            p.ProgramId, 
+                                            Common.DataAuditType.Update, 
+                                            _dbName);
+
                 }
                 return pg;
             }
             catch (Exception ex)
             {
-                throw new Exception("DataDomain:Update()::" + ex.Message, ex.InnerException);
-            }
-            finally
-            {
-                AuditHelper.LogDataAudit(this.UserId, MongoCollectionName.PatientProgram.ToString(), pg.Id, Common.DataAuditType.Update, _dbName);
+                throw new Exception("ProgramDD:Update()::" + ex.Message, ex.InnerException);
             }
         }
 

@@ -30,12 +30,19 @@ namespace Phytel.API.Interface
         [BsonElement("ttl")]
         [BsonDefaultValue(null)]
         [BsonIgnoreIfNull(true)]
-        [BsonDateTimeOptions(Kind = System.DateTimeKind.Local)]
+        [BsonDateTimeOptions(Kind = System.DateTimeKind.Utc)]
         DateTime? TTLDate { get; set; }
 
         [BsonIgnoreIfNull(true)]
         [BsonElement("uon")]
-        [BsonDateTimeOptions(Kind = System.DateTimeKind.Local)]
+        [BsonDateTimeOptions(Kind = System.DateTimeKind.Utc)]
         DateTime? LastUpdatedOn { get; set; }
+
+        [BsonElement("rcby")]
+        ObjectId RecordCreatedBy { get; set; }
+
+        [BsonElement("rcon")]
+        [BsonDateTimeOptions(Kind = System.DateTimeKind.Utc)]
+        DateTime RecordCreatedOn { get; set; }
     }
 }

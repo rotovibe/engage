@@ -87,7 +87,7 @@ namespace Phytel.API.DataDomain.Program
             }
             catch (Exception ex)
             {
-                throw new Exception("DD: PutPatientToProgram()::" + ex.Message, ex.InnerException);
+                throw new Exception("ProgramDD:PutPatientToProgram()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -143,7 +143,7 @@ namespace Phytel.API.DataDomain.Program
             }
             catch (Exception ex)
             {
-                throw new Exception("DD:IsContractProgramAssignable" + ex.Message, ex.InnerException);
+                throw new Exception("ProgramDD:IsContractProgramAssignable" + ex.Message, ex.InnerException);
             }
         }
 
@@ -175,7 +175,7 @@ namespace Phytel.API.DataDomain.Program
             }
             catch (Exception ex)
             {
-                throw new Exception("DD:IsValidPatientId()::" + ex.Message, ex.InnerException);
+                throw new Exception("ProgramDD:IsValidPatientId()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -199,7 +199,7 @@ namespace Phytel.API.DataDomain.Program
             }
             catch (Exception ex)
             {
-                throw new Exception("DD:IsValidContractProgramId()::" + ex.Message, ex.InnerException);
+                throw new Exception("ProgramDD:IsValidContractProgramId()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -376,7 +376,7 @@ namespace Phytel.API.DataDomain.Program
             }
             catch (Exception ex)
             {
-                throw new Exception("DataDomain:ParseSpawnElements()::" + ex.Message, ex.InnerException);
+                throw new Exception("ProgramDD:ParseSpawnElements()::" + ex.Message, ex.InnerException);
             }
         }
 

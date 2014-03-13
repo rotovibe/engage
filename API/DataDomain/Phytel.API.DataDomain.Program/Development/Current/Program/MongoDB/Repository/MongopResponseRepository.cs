@@ -27,7 +27,7 @@ namespace Phytel.API.DataDomain.Program
         public object Insert(object newEntity)
         {
             ResponseDetail rs = (ResponseDetail)newEntity;
-            MEResponse mer = new MEResponse
+            MEResponse mer = new MEResponse(this.UserId)
             {
                 Id = ObjectId.Parse(rs.Id),
                 NextStepId = ObjectId.Parse(rs.NextStepId),
@@ -44,23 +44,20 @@ namespace Phytel.API.DataDomain.Program
                 UpdatedBy = ObjectId.Parse(this.UserId)
             };
 
-            //MEResponse mer = newEntity as MEResponse;
             bool res = false;
             try
             {
                 using (ProgramMongoContext ctx = new ProgramMongoContext(_dbName))
                 {
-                    WriteConcernResult result = ctx.Responses.Collection.Insert(mer);
-                    if (result.Ok)
-                    {
-                        res = true;
-                    }
+                    ctx.Responses.Collection.Insert(mer);
+                    
+                    res = true;
                 }
                 return res as object;
             }
             catch(Exception ex)
             {
-                throw new Exception("DataDomain:Insert()::" + ex.Message, ex.InnerException);
+                throw new Exception("ProgramDD:Insert()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -94,7 +91,7 @@ namespace Phytel.API.DataDomain.Program
             }
             catch(Exception ex)
             {
-                throw new Exception("DataDomain:FindById()::" + ex.Message, ex.InnerException);
+                throw new Exception("ProgramDD:FindById()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -153,7 +150,7 @@ namespace Phytel.API.DataDomain.Program
             }
             catch (Exception ex)
             {
-                throw new Exception("DataDomain:Update()::" + ex.Message, ex.InnerException);
+                throw new Exception("ProgramDD:Update()::" + ex.Message, ex.InnerException);
             }
         }
 

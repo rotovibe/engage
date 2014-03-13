@@ -19,7 +19,7 @@ namespace Phytel.API.Common.Audit
         public static void WriteAudit(AuditData auditLogToProcess)
         {
             AuditData auditLog = auditLogToProcess;
-            auditLog.EventDateTime = DateTime.Now;
+            auditLog.EventDateTime = DateTime.UtcNow;
 
             QueueMessage newMessage = null;
 
@@ -57,7 +57,7 @@ namespace Phytel.API.Common.Audit
         public static void WriteAudit(DataAudit.DataAudit auditLogToProcess)
         {
             DataAudit.DataAudit auditLog = auditLogToProcess;
-            auditLog.TimeStamp = DateTime.Now;
+            auditLog.TimeStamp = DateTime.UtcNow;
 
             QueueMessage newMessage = null;
 
@@ -92,7 +92,7 @@ namespace Phytel.API.Common.Audit
         public static void WriteAudit(DataAudit.DataAudit auditLogToProcess, string title)
         {
             DataAudit.DataAudit auditLog = auditLogToProcess;
-            auditLog.TimeStamp = DateTime.Now;
+            auditLog.TimeStamp = DateTime.UtcNow;
 
             QueueMessage newMessage = null;
 

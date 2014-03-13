@@ -13,14 +13,19 @@ namespace Phytel.API.DataDomain.PatientGoal.DTO
     [MongoIndex(Keys = new string[] { PatientGoalIdProperty, DeleteFlagProperty }, Unique = false)]
     public class MEPatientBarrier : GoalBase, IMongoEntity<ObjectId>, IMEEntity
     {
-        public MEPatientBarrier() { Id = ObjectId.GenerateNewId(); }
+        public MEPatientBarrier(string userId)
+        {
+            Id = ObjectId.GenerateNewId();
+            Version = 1.0;
+            RecordCreatedBy = ObjectId.Parse(userId);
+            RecordCreatedOn = DateTime.UtcNow;
+        }
 
         public const string IdProperty = "_id";
         public const string PatientGoalIdProperty = "pgid";
         public const string CategoryProperty = "cat";
         public const string StatusProperty = "sts";
-
-
+        
         #region Standard IMongoEntity Constants
         public const string ExtraElementsProperty = "ex";
         public const string VersionProperty = "v";
@@ -28,6 +33,8 @@ namespace Phytel.API.DataDomain.PatientGoal.DTO
         public const string DeleteFlagProperty = "del";
         public const string TTLDateProperty = "ttl";
         public const string LastUpdatedOnProperty = "uon";
+        public const string RecordCreatedByProperty = "rcby";
+        public const string RecordCreatedOnProperty = "rcon";
         #endregion
 
         [BsonId]
@@ -64,13 +71,20 @@ namespace Phytel.API.DataDomain.PatientGoal.DTO
 
         [BsonElement(TTLDateProperty)]
         [BsonIgnoreIfNull(true)]
-        [BsonDateTimeOptions(Kind = System.DateTimeKind.Local)]
+        [BsonDateTimeOptions(Kind = System.DateTimeKind.Utc)]
         public System.DateTime? TTLDate { get; set; }
 
         [BsonElement(LastUpdatedOnProperty)]
         [BsonIgnoreIfNull(true)]
-        [BsonDateTimeOptions(Kind = System.DateTimeKind.Local)]
+        [BsonDateTimeOptions(Kind = System.DateTimeKind.Utc)]
         public System.DateTime? LastUpdatedOn { get; set; }
+
+        [BsonElement(RecordCreatedByProperty)]
+        public ObjectId RecordCreatedBy { get; set; }
+
+        [BsonElement(RecordCreatedOnProperty)]
+        [BsonDateTimeOptions(Kind = System.DateTimeKind.Utc)]
+        public System.DateTime RecordCreatedOn { get; set; }
         #endregion
     }
 }

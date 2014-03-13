@@ -12,9 +12,11 @@ namespace Phytel.API.DataDomain.Action.DTO
     [MongoIndex(Keys = new string[] { TTLDateProperty, }, TimeToLive = 0)]
     public class MEAction : IMongoEntity<ObjectId>, IMEEntity
     {
-        public MEAction()
+        public MEAction(string userId)
         {
             Id = ObjectId.GenerateNewId();
+            RecordCreatedBy = ObjectId.Parse(userId);
+            RecordCreatedOn = System.DateTime.UtcNow;
             Version = 1.0;
         }
 
@@ -73,13 +75,20 @@ namespace Phytel.API.DataDomain.Action.DTO
 
         [BsonElement(TTLDateProperty)]
         [BsonIgnoreIfNull(true)]
-        [BsonDateTimeOptions(Kind = System.DateTimeKind.Local)]
+        [BsonDateTimeOptions(Kind = System.DateTimeKind.Utc)]
         public System.DateTime? TTLDate { get; set; }
 
         [BsonElement(LastUpdatedOnProperty)]
         [BsonIgnoreIfNull(true)]
-        [BsonDateTimeOptions(Kind = System.DateTimeKind.Local)]
+        [BsonDateTimeOptions(Kind = System.DateTimeKind.Utc)]
         public System.DateTime? LastUpdatedOn { get; set; }
+
+        [BsonElement("rcby")]
+        public ObjectId RecordCreatedBy { get; set; }
+
+        [BsonElement("rcon")]
+        [BsonDateTimeOptions(Kind = System.DateTimeKind.Utc)]
+        public System.DateTime RecordCreatedOn { get; set; }
     }
 
     public class ObjectiveInfo

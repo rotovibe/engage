@@ -25,13 +25,13 @@ namespace Phytel.API.DataDomain.PatientGoal.DTO
         public const string StatusDateProperty = "stsd";
         [BsonElement(StatusDateProperty)]
         [BsonIgnoreIfNull(true)]
-        [BsonDateTimeOptions(Kind = System.DateTimeKind.Local)]
+        [BsonDateTimeOptions(Kind = System.DateTimeKind.Utc)]
         public DateTime? StatusDate { get; set; }
 
         public const string StartDateProperty = "sd";
         [BsonElement(StartDateProperty)]
         [BsonIgnoreIfNull(true)]
-        [BsonDateTimeOptions(Kind = System.DateTimeKind.Local)]        
+        [BsonDateTimeOptions(Kind = System.DateTimeKind.Utc)]        
         public DateTime? StartDate { get; set; }
     }
 }

@@ -14,7 +14,16 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
     [MongoIndex(Keys = new string[] { StatusProperty }, Unique = false)]
     public class MEProgram : ProgramBase, IMEEntity, IMongoEntity<ObjectId>
     {
-        public MEProgram(){ Id = ObjectId.GenerateNewId(); }
+        public MEProgram(string userId)
+        {
+            Id = ObjectId.GenerateNewId();
+            Version = 1.0;
+            RecordCreatedBy = ObjectId.Parse(userId);
+            RecordCreatedOn = DateTime.UtcNow;
+        }
+
+        public const string RecordCreatedByProperty = "rcby";
+        public const string RecordCreatedOnProperty = "rcon";
 
         public const string IdProperty = "_id";
         [BsonId]
@@ -60,13 +69,20 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
         [BsonElement(TTLDateProperty)]
         [BsonDefaultValue(null)]
         [BsonIgnoreIfNull(true)]
-        [BsonDateTimeOptions(Kind = System.DateTimeKind.Local)]
+        [BsonDateTimeOptions(Kind = System.DateTimeKind.Utc)]
         public DateTime? TTLDate { get; set; }
 
         public const string LastUpdatedOnProperty = "uon";
         [BsonIgnoreIfNull(true)]
         [BsonElement(LastUpdatedOnProperty)]
-        [BsonDateTimeOptions(Kind = System.DateTimeKind.Local)]
+        [BsonDateTimeOptions(Kind = System.DateTimeKind.Utc)]
         public DateTime? LastUpdatedOn { get; set; }
+
+        [BsonElement(RecordCreatedByProperty)]
+        public ObjectId RecordCreatedBy { get; set; }
+
+        [BsonElement(RecordCreatedOnProperty)]
+        [BsonDateTimeOptions(Kind = System.DateTimeKind.Utc)]
+        public System.DateTime RecordCreatedOn { get; set; }
     }
 }

@@ -31,7 +31,7 @@ namespace Phytel.API.DataDomain.PatientObservation
                 throw new NotImplementedException();
                 // code here //
             }
-            catch (Exception ex) { throw ex; }
+            catch (Exception) { throw; }
         }
 
         public object InsertAll(List<object> entities)
@@ -41,7 +41,7 @@ namespace Phytel.API.DataDomain.PatientObservation
                 throw new NotImplementedException();
                 // code here //
             }
-            catch (Exception ex) { throw ex; }
+            catch (Exception) { throw; }
         }
 
         public void Delete(object entity)
@@ -51,7 +51,7 @@ namespace Phytel.API.DataDomain.PatientObservation
                 throw new NotImplementedException();
                 // code here //
             }
-            catch (Exception ex) { throw ex; }
+            catch (Exception) { throw; }
         }
 
         public void DeleteAll(List<object> entities)
@@ -61,7 +61,7 @@ namespace Phytel.API.DataDomain.PatientObservation
                 throw new NotImplementedException();
                 // code here //
             }
-            catch (Exception ex) { throw ex; }
+            catch (Exception) { throw; }
         }
 
         public object FindByID(string entityID)
@@ -106,7 +106,7 @@ namespace Phytel.API.DataDomain.PatientObservation
                 }
                 return odL;
             }
-            catch (Exception ex) { throw ex; }
+            catch (Exception) { throw; }
         }
 
         public Tuple<string, IEnumerable<object>> Select(Interface.APIExpression expression)
@@ -124,7 +124,7 @@ namespace Phytel.API.DataDomain.PatientObservation
 
                 return new Tuple<string, IEnumerable<object>>(expression.ExpressionID, PatientObservationItems);
             }
-            catch (Exception ex) { throw ex; }
+            catch (Exception) { throw; }
         }
 
         public IEnumerable<object> SelectAll()
@@ -134,7 +134,7 @@ namespace Phytel.API.DataDomain.PatientObservation
                 throw new NotImplementedException();
                 // code here //
             }
-            catch (Exception ex) { throw ex; }
+            catch (Exception) { throw; }
         }
 
         public object Update(object entity)
@@ -144,7 +144,7 @@ namespace Phytel.API.DataDomain.PatientObservation
                 throw new NotImplementedException();
                 // code here //
             }
-            catch (Exception ex) { throw ex; }
+            catch (Exception) { throw; }
         }
 
         public void CacheByID(List<string> entityIDs)
@@ -154,7 +154,7 @@ namespace Phytel.API.DataDomain.PatientObservation
                 throw new NotImplementedException();
                 // code here //
             }
-            catch (Exception ex) { throw ex; }
+            catch (Exception) { throw; }
         }
 
         object IRepository<T>.Insert(object newEntity)
@@ -254,7 +254,7 @@ namespace Phytel.API.DataDomain.PatientObservation
             }
             catch (Exception ex)
             {
-                throw new Exception("DataDomain:GetStandardObservationsByType()::" + ex.Message, ex.InnerException);
+                throw new Exception("PatientObservationDD:GetStandardObservationsByType()::" + ex.Message, ex.InnerException);
             }
         }
 
