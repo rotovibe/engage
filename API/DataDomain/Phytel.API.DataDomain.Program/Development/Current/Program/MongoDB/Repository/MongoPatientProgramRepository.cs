@@ -56,7 +56,7 @@ namespace Phytel.API.DataDomain.Program
 
                         // update to new ids and their references
                         DTOUtils.RecurseAndReplaceIds(patientProgDoc.Modules);
-                        DTOUtils.RecurseAndSaveResponseObjects(patientProgDoc, request.ContractNumber);
+                        DTOUtils.RecurseAndSaveResponseObjects(patientProgDoc, request.ContractNumber, request.UserId);
                         ctx.PatientPrograms.Collection.Insert(patientProgDoc);
 
                         // update programid in modules
@@ -221,7 +221,7 @@ namespace Phytel.API.DataDomain.Program
                             Previous = cp.Previous,
                             SourceId = cp.SourceId.ToString(),
                             SpawnElement = DTOUtils.GetResponseSpawnElement(cp.Spawn),
-                            Modules = DTOUtils.GetModules(cp.Modules, _dbName),
+                            Modules = DTOUtils.GetModules(cp.Modules, _dbName, this.UserId),
                             Name = cp.Name,
                             ObjectivesInfo = DTOUtils.GetObjectives(cp.ObjectivesInfo),
                             PatientId = cp.PatientId.ToString(),
@@ -238,7 +238,7 @@ namespace Phytel.API.DataDomain.Program
             }
             catch (Exception ex)
             {
-                throw new Exception("DD:PatientProgramRepository:Select()::" + ex.Message, ex.InnerException);
+                throw new Exception("DD:PatientProgramRepository:Select()::" + ex.Message, ex.InnerException); 
             }
         }
 

@@ -61,8 +61,8 @@ namespace Phytel.API.DataDomain.Patient
                 string[] filterParms = new string[] { field1, field2 };
 
                 // 2) get patientIDs through cohortpatients view
-                IPatientRepository<CohortPatientViewData> repo = PatientRepositoryFactory<CohortPatientViewData>.GetCohortPatientViewRepository(request.ContractNumber, request.Context);
-                repo.UserId = request.UserId;
+                IPatientRepository<CohortPatientViewData> repo = PatientRepositoryFactory<CohortPatientViewData>.GetCohortPatientViewRepository(request.ContractNumber, request.Context, request.UserId);
+
                 result.CohortPatients = repo.Select(cohortQuery, filterParms, response.Cohort.Sort, request.Skip, request.Take);
 
                 return result;
@@ -79,8 +79,8 @@ namespace Phytel.API.DataDomain.Patient
             {
                 GetPatientDataResponse result = new GetPatientDataResponse();
 
-                IPatientRepository<GetPatientDataResponse> repo = PatientRepositoryFactory<GetPatientDataResponse>.GetPatientRepository(request.ContractNumber, request.Context);
-                repo.UserId = request.UserId;
+                IPatientRepository<GetPatientDataResponse> repo = PatientRepositoryFactory<GetPatientDataResponse>.GetPatientRepository(request.ContractNumber, request.Context, request.UserId);
+
                 if (string.IsNullOrEmpty(request.UserId))
                 {
                     result.Patient = repo.FindByID(request.PatientID) as DTO.PatientData;
@@ -103,8 +103,8 @@ namespace Phytel.API.DataDomain.Patient
             {
                 GetPatientSSNDataResponse result = new GetPatientSSNDataResponse();
 
-                IPatientRepository<GetPatientSSNDataResponse> repo = PatientRepositoryFactory<GetPatientSSNDataResponse>.GetPatientRepository(request.ContractNumber, request.Context);
-                repo.UserId = request.UserId;
+                IPatientRepository<GetPatientSSNDataResponse> repo = PatientRepositoryFactory<GetPatientSSNDataResponse>.GetPatientRepository(request.ContractNumber, request.Context, request.UserId);
+
                 result.SSN = repo.GetSSN(request.PatientId) as string;
 
                 return result;
@@ -119,8 +119,8 @@ namespace Phytel.API.DataDomain.Patient
         {
             try
             {
-                IPatientRepository<GetPatientsDataResponse> repo = PatientRepositoryFactory<GetPatientsDataResponse>.GetPatientRepository(request.ContractNumber, request.Context);
-                repo.UserId = request.UserId;
+                IPatientRepository<GetPatientsDataResponse> repo = PatientRepositoryFactory<GetPatientsDataResponse>.GetPatientRepository(request.ContractNumber, request.Context, request.UserId);
+
                 GetPatientsDataResponse result = repo.Select(request.PatientIDs);
 
                 return result;
@@ -133,16 +133,16 @@ namespace Phytel.API.DataDomain.Patient
 
         public static PutPatientDataResponse InsertPatient(PutPatientDataRequest request)
         {
-           IPatientRepository<PutPatientDataRequest> repo = PatientRepositoryFactory<PutPatientDataRequest>.GetPatientRepository(request.ContractNumber, request.Context);
-           repo.UserId = request.UserId;
+           IPatientRepository<PutPatientDataRequest> repo = PatientRepositoryFactory<PutPatientDataRequest>.GetPatientRepository(request.ContractNumber, request.Context, request.UserId);
+
            PutPatientDataResponse result = repo.Insert(request) as PutPatientDataResponse;
            return result;
         }
 
         public static PutCohortPatientViewDataResponse InsertCohortPatientView(PutCohortPatientViewDataRequest request)
         {
-            IPatientRepository<PutCohortPatientViewDataRequest> repo = PatientRepositoryFactory<PutCohortPatientViewDataRequest>.GetCohortPatientViewRepository(request.ContractNumber, request.Context);
-            repo.UserId = request.UserId;
+            IPatientRepository<PutCohortPatientViewDataRequest> repo = PatientRepositoryFactory<PutCohortPatientViewDataRequest>.GetCohortPatientViewRepository(request.ContractNumber, request.Context, request.UserId);
+
             PutCohortPatientViewDataResponse result = repo.Insert(request) as PutCohortPatientViewDataResponse;
             return result;
         }
@@ -150,8 +150,8 @@ namespace Phytel.API.DataDomain.Patient
         public static PutPatientPriorityResponse UpdatePatientPriority(PutPatientPriorityRequest request)
         {
             PutPatientPriorityResponse response = new PutPatientPriorityResponse();
-            IPatientRepository<PutPatientPriorityRequest> repo = PatientRepositoryFactory<PutPatientPriorityRequest>.GetPatientRepository(request.ContractNumber, request.Context);
-            repo.UserId = request.UserId;
+            IPatientRepository<PutPatientPriorityRequest> repo = PatientRepositoryFactory<PutPatientPriorityRequest>.GetPatientRepository(request.ContractNumber, request.Context, request.UserId);
+
             response = repo.UpdatePriority(request) as PutPatientPriorityResponse;
             return response;
         }
@@ -159,8 +159,8 @@ namespace Phytel.API.DataDomain.Patient
         public static PutPatientFlaggedResponse UpdatePatientFlagged(PutPatientFlaggedRequest request)
         {
             PutPatientFlaggedResponse response = new PutPatientFlaggedResponse();
-            IPatientRepository<PutPatientFlaggedRequest> repo = PatientRepositoryFactory<PutPatientFlaggedRequest>.GetPatientRepository(request.ContractNumber, request.Context);
-            repo.UserId = request.UserId;
+            IPatientRepository<PutPatientFlaggedRequest> repo = PatientRepositoryFactory<PutPatientFlaggedRequest>.GetPatientRepository(request.ContractNumber, request.Context, request.UserId);
+
             response = repo.UpdateFlagged(request) as PutPatientFlaggedResponse;
             return response;
         }
@@ -168,32 +168,32 @@ namespace Phytel.API.DataDomain.Patient
         public static PutPatientBackgroundDataResponse UpdatePatientBackground(PutPatientBackgroundDataRequest request)
         {
             PutPatientBackgroundDataResponse response = new PutPatientBackgroundDataResponse();
-            IPatientRepository<PutPatientBackgroundDataRequest> repo = PatientRepositoryFactory<PutPatientBackgroundDataRequest>.GetPatientRepository(request.ContractNumber, request.Context);
-            repo.UserId = request.UserId;
+            IPatientRepository<PutPatientBackgroundDataRequest> repo = PatientRepositoryFactory<PutPatientBackgroundDataRequest>.GetPatientRepository(request.ContractNumber, request.Context, request.UserId);
+
             response = repo.UpdateBackground(request) as PutPatientBackgroundDataResponse;
             return response;
         }
 
         public static PutUpdatePatientDataResponse UpdatePatient(PutUpdatePatientDataRequest request)
         {
-            IPatientRepository<PutUpdatePatientDataRequest> repo = PatientRepositoryFactory<PutUpdatePatientDataRequest>.GetPatientRepository(request.ContractNumber, request.Context);
-            repo.UserId = request.UserId;
+            IPatientRepository<PutUpdatePatientDataRequest> repo = PatientRepositoryFactory<PutUpdatePatientDataRequest>.GetPatientRepository(request.ContractNumber, request.Context, request.UserId);
+
             PutUpdatePatientDataResponse result = repo.Update(request) as PutUpdatePatientDataResponse;
             return result;
         }
 
         public static PutUpdateCohortPatientViewResponse UpdateCohortPatientViewProblem(PutUpdateCohortPatientViewRequest request)
         {
-            IPatientRepository<PutUpdateCohortPatientViewRequest> repo = PatientRepositoryFactory<PutUpdateCohortPatientViewRequest>.GetCohortPatientViewRepository(request.ContractNumber, request.Context);
-            repo.UserId = request.UserId;
+            IPatientRepository<PutUpdateCohortPatientViewRequest> repo = PatientRepositoryFactory<PutUpdateCohortPatientViewRequest>.GetCohortPatientViewRepository(request.ContractNumber, request.Context, request.UserId);
+
             PutUpdateCohortPatientViewResponse result = repo.Update(request) as PutUpdateCohortPatientViewResponse;
             return result;
         }
 
         public static GetCohortPatientViewResponse GetCohortPatientView(GetCohortPatientViewRequest request)
         {
-            IPatientRepository<GetCohortPatientViewRequest> repo = PatientRepositoryFactory<GetCohortPatientViewRequest>.GetCohortPatientViewRepository(request.ContractNumber, request.Context);
-            repo.UserId = request.UserId;
+            IPatientRepository<GetCohortPatientViewRequest> repo = PatientRepositoryFactory<GetCohortPatientViewRequest>.GetCohortPatientViewRepository(request.ContractNumber, request.Context, request.UserId);
+
             GetCohortPatientViewResponse result = new GetCohortPatientViewResponse();
             ICollection<SelectExpression> selectExpressions = new List<SelectExpression>();
 

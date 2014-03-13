@@ -9,7 +9,7 @@ namespace Phytel.API.DataDomain.Cohort.Test
         [TestMethod]
         public void GetCohortByID()
         {
-            ICohortRepository<GetCohortDataResponse> repo = CohortRepositoryFactory<GetCohortDataResponse>.GetCohortRepository("InHealth001", "NG");
+            ICohortRepository<GetCohortDataResponse> repo = CohortRepositoryFactory<GetCohortDataResponse>.GetCohortRepository("InHealth001", "NG", "");
 
             repo.Select(new Interface.APIExpression());
         }

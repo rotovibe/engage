@@ -9,13 +9,13 @@ namespace Phytel.API.DataDomain.PatientProblem
 {
     public abstract class PatientProblemRepositoryFactory<T>
     {
-        public static IPatientProblemRepository<T> GetPatientProblemRepository(string dbName, string productName)
+        public static IPatientProblemRepository<T> GetPatientProblemRepository(string dbName, string productName, string userId)
         {
             IPatientProblemRepository<T> repo = null;
 
             //We only have 1 repository at this time, just return it
             repo = new MongoPatientProblemRepository<T>(dbName) as IPatientProblemRepository<T>;
-
+            repo.UserId = userId;
             return repo;
         }
     }

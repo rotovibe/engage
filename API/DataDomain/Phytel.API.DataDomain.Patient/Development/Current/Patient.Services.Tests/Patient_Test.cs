@@ -42,7 +42,7 @@ namespace Phytel.API.DataDomain.Patient.Service.Test
                             x.Headers.Add(string.Format("{0}: {1}", "x-Phytel-UserID", "531f2df9072ef727c4d2a3df"));
 
             GetPatientDataResponse response = client.Get<GetPatientDataResponse>(string.Format
-                ("http://localhost:8888/Patient/NG/v1/InHealth001/patient/{0}?UserId={1}",
+                ("http://localhost:8888/Patient/NG/1.0/InHealth001/patient/{0}?UserId={1}",
                 patientId,
                 userId));
 
@@ -63,7 +63,7 @@ namespace Phytel.API.DataDomain.Patient.Service.Test
             JsonServiceClient.HttpWebRequestFilter = x =>
                             x.Headers.Add(string.Format("{0}: {1}", "x-Phytel-UserID", "531f2df9072ef727c4d2a3df"));
 
-            GetPatientDataResponse response = client.Get<GetPatientDataResponse>("http://localhost:8888/Patient/NG/v1/InHealth001/patient/" + patientID);
+            GetPatientDataResponse response = client.Get<GetPatientDataResponse>("http://localhost:8888/Patient/NG/1.0/InHealth001/patient/" + patientID);
 
             sampleValue = response.Patient.FirstName;
 

@@ -78,8 +78,7 @@ namespace Phytel.API.DataDomain.PatientObservation.Service
             {
                 //Get the UserId from the Header and update the request object
                 request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
-                IPatientObservationRepository<PutInitializeObservationDataResponse> repo = PatientObservationRepositoryFactory<PutInitializeObservationDataResponse>.GetPatientObservationRepository(request.ContractNumber, request.Context);
-                repo.UserId = request.UserId;
+                IPatientObservationRepository<PutInitializeObservationDataResponse> repo = PatientObservationRepositoryFactory<PutInitializeObservationDataResponse>.GetPatientObservationRepository(request.ContractNumber, request.Context, request.UserId);
 
                 response.ObservationData = (PatientObservationData)repo.Initialize(request);
             }

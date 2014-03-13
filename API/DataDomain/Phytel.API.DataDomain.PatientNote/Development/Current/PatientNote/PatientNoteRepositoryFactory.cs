@@ -9,7 +9,7 @@ namespace Phytel.API.DataDomain.PatientNote
 {
     public abstract class PatientNoteRepositoryFactory<T>
     {
-        public static IPatientNoteRepository<T> GetPatientNoteRepository(string dbName, string productName)
+        public static IPatientNoteRepository<T> GetPatientNoteRepository(string dbName, string productName, string userId)
         {
             try
             {
@@ -17,7 +17,7 @@ namespace Phytel.API.DataDomain.PatientNote
 
                 //We only have 1 repository at this time, just return it
                 repo = new MongoPatientNoteRepository<T>(dbName) as IPatientNoteRepository<T>;
-
+                repo.UserId = userId;
                 return repo;
             }
             catch (Exception ex)

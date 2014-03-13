@@ -13,8 +13,8 @@ namespace Phytel.API.DataDomain.Contact
             ContactData result = null;
             try
             {
-                IContactRepository<GetContactDataResponse> repo = ContactRepositoryFactory<GetContactDataResponse>.GetContactRepository(request.ContractNumber, request.Context);
-                repo.UserId = request.UserId;
+                IContactRepository<GetContactDataResponse> repo = ContactRepositoryFactory<GetContactDataResponse>.GetContactRepository(request.ContractNumber, request.Context, request.UserId);
+                
                 result = repo.FindContactByPatientId(request) as ContactData;
             }
             catch (Exception ex)
@@ -29,8 +29,8 @@ namespace Phytel.API.DataDomain.Contact
             ContactData result = null;
             try
             {
-                IContactRepository<GetContactByUserIdDataResponse> repo = ContactRepositoryFactory<GetContactByUserIdDataResponse>.GetContactRepository(request.ContractNumber, request.Context);
-                repo.UserId = request.UserId;
+                IContactRepository<GetContactByUserIdDataResponse> repo = ContactRepositoryFactory<GetContactByUserIdDataResponse>.GetContactRepository(request.ContractNumber, request.Context, request.UserId);
+
                 result = repo.FindContactByUserId(request) as ContactData;
             }
             catch (Exception ex)
@@ -45,8 +45,8 @@ namespace Phytel.API.DataDomain.Contact
             SearchContactsDataResponse response = new SearchContactsDataResponse();
             try
             {
-                IContactRepository<List<ContactData>> repo = ContactRepositoryFactory<List<ContactData>>.GetContactRepository(request.ContractNumber, request.Context);
-                repo.UserId = request.UserId;
+                IContactRepository<List<ContactData>> repo = ContactRepositoryFactory<List<ContactData>>.GetContactRepository(request.ContractNumber, request.Context, request.UserId);
+
                 response.Contacts = repo.SearchContacts(request) as List<ContactData>;
                 response.Version = request.Version;
             }
@@ -62,8 +62,8 @@ namespace Phytel.API.DataDomain.Contact
             PutContactDataResponse response = null;
             try
             {
-                IContactRepository<PutContactDataResponse> repo = ContactRepositoryFactory<PutContactDataResponse>.GetContactRepository(request.ContractNumber, request.Context);
-                repo.UserId = request.UserId;
+                IContactRepository<PutContactDataResponse> repo = ContactRepositoryFactory<PutContactDataResponse>.GetContactRepository(request.ContractNumber, request.Context, request.UserId);
+                
                 response = repo.Insert(request) as PutContactDataResponse;
             }
             catch (Exception ex)
@@ -78,8 +78,8 @@ namespace Phytel.API.DataDomain.Contact
             PutUpdateContactDataResponse response = null;
             try
             {
-                IContactRepository<PutUpdateContactDataResponse> repo = ContactRepositoryFactory<PutUpdateContactDataResponse>.GetContactRepository(request.ContractNumber, request.Context);
-                repo.UserId = request.UserId;
+                IContactRepository<PutUpdateContactDataResponse> repo = ContactRepositoryFactory<PutUpdateContactDataResponse>.GetContactRepository(request.ContractNumber, request.Context, request.UserId);
+
                 response = repo.Update(request) as PutUpdateContactDataResponse;
             }
             catch (Exception ex)
@@ -94,8 +94,8 @@ namespace Phytel.API.DataDomain.Contact
             GetAllCareManagersDataResponse response = new GetAllCareManagersDataResponse();
             try
             {
-                IContactRepository<List<ContactData>> repo = ContactRepositoryFactory<List<ContactData>>.GetContactRepository(request.ContractNumber, request.Context);
-                repo.UserId = request.UserId;
+                IContactRepository<List<ContactData>> repo = ContactRepositoryFactory<List<ContactData>>.GetContactRepository(request.ContractNumber, request.Context, request.UserId);
+
                 response.Contacts = repo.FindCareManagers() as List<ContactData>;
                 response.Version = request.Version;
             }

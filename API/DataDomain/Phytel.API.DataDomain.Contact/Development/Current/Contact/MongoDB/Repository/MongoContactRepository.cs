@@ -842,7 +842,7 @@ namespace Phytel.API.DataDomain.Contact
             using (ContactMongoContext ctx = new ContactMongoContext(_dbName))
             {
                 List<IMongoQuery> queries = new List<IMongoQuery>();
-                queries.Add(Query.EQ(MEContact.ResourceIdProperty, request.UserId));
+                queries.Add(Query.EQ(MEContact.ResourceIdProperty, request.SQLUserId));
                 queries.Add(Query.EQ(MEContact.DeleteFlagProperty, false));
                 IMongoQuery mQuery = Query.And(queries);
                 MEContact mc = ctx.Contacts.Collection.Find(mQuery).FirstOrDefault();

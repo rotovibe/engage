@@ -56,7 +56,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
                 Next = cp.Next,
                 Order = cp.Order,
                 Previous = cp.Previous,
-                Modules = DTOUtils.SetValidModules(cp.Modules, request.ContractNumber),
+                Modules = DTOUtils.SetValidModules(cp.Modules, request.ContractNumber, request.UserId),
                 UpdatedBy = ObjectId.Parse(request.UserId)
             };
             if(!string.IsNullOrEmpty(request.UserId))
@@ -66,7 +66,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             return patientProgDoc;
         }
 
-        public static List<Module> SetValidModules(List<Module> list, string contractNumber)
+        public static List<Module> SetValidModules(List<Module> list, string contractNumber, string userId)
         {
             try
             {
@@ -150,7 +150,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
                                         Title = b.Title,
                                         Text = b.Text,
                                         StepTypeId = b.StepTypeId,
-                                        Responses = GetContractStepResponses(b.Id, contractNumber),
+                                        Responses = GetContractStepResponses(b.Id, contractNumber, userId),
                                         Completed = b.Completed,
                                         ControlType = b.ControlType,
                                         Enabled = b.Enabled,
@@ -181,14 +181,14 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             }
         }
 
-        private static List<MEPatientProgramResponse> GetContractStepResponses(ObjectId stepId, string contractNumber)
+        private static List<MEPatientProgramResponse> GetContractStepResponses(ObjectId stepId, string contractNumber, string userId)
         {
             List<MEResponse> responseList = null;
             List<MEPatientProgramResponse> ppresponseList = new List<MEPatientProgramResponse>();
             try
             {
                 IProgramRepository<GetStepResponseListResponse> repo =
-                    ProgramRepositoryFactory<GetStepResponseListResponse>.GetStepResponseRepository(contractNumber, "NG");
+                    ProgramRepositoryFactory<GetStepResponseListResponse>.GetStepResponseRepository(contractNumber, "NG", userId);
 
                 ICollection<SelectExpression> selectExpressions = new List<SelectExpression>();
 
@@ -233,13 +233,13 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             }
         }
 
-        private static List<MEPatientProgramResponse> GetStepResponses(ObjectId stepId, string contractNumber)
+        private static List<MEPatientProgramResponse> GetStepResponses(ObjectId stepId, string contractNumber, string userId)
         {
             List<MEPatientProgramResponse> responseList = null;
             try
             {
                 IProgramRepository<GetStepResponseListResponse> repo =
-                    ProgramRepositoryFactory<GetStepResponseListResponse>.GetPatientProgramStepResponseRepository(contractNumber, "NG");
+                    ProgramRepositoryFactory<GetStepResponseListResponse>.GetPatientProgramStepResponseRepository(contractNumber, "NG", userId);
 
                 ICollection<SelectExpression> selectExpressions = new List<SelectExpression>();
 
@@ -269,7 +269,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             }
         }
 
-        public static GetStepResponseListResponse GetStepResponses(string stepId, string contractNumber, bool? service)
+        public static GetStepResponseListResponse GetStepResponses(string stepId, string contractNumber, bool? service, string userId)
         {
             GetStepResponseListResponse StepResponseResponse = new GetStepResponseListResponse(); 
             List<MEResponse> responseList = null;
@@ -277,7 +277,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             try
             {
                 IProgramRepository<GetStepResponseListResponse> repo =
-                    ProgramRepositoryFactory<GetStepResponseListResponse>.GetStepResponseRepository(contractNumber, "NG");
+                    ProgramRepositoryFactory<GetStepResponseListResponse>.GetStepResponseRepository(contractNumber, "NG", userId);
 
                 ICollection<SelectExpression> selectExpressions = new List<SelectExpression>();
 
@@ -844,7 +844,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
         }
 
 
-        public static List<ModuleDetail> GetModules(List<Module> list, string contractNumber)
+        public static List<ModuleDetail> GetModules(List<Module> list, string contractNumber, string userId)
         {
             try
             {
@@ -869,7 +869,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
                     CompletedBy = r.CompletedBy,
                     DateCompleted = r.DateCompleted,
                     Objectives = GetObjectives(r.Objectives),
-                    Actions = GetActions(r.Actions, contractNumber)
+                    Actions = GetActions(r.Actions, contractNumber, userId)
                 }));
                 return mods;
             }
@@ -902,7 +902,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             }
         }
 
-        public static List<ActionsDetail> GetActions(List<Action> list, string contract)
+        public static List<ActionsDetail> GetActions(List<Action> list, string contract, string userId)
         {
             try
             {
@@ -927,7 +927,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
                     ElementState = (int)a.State,
                     DateCompleted = a.DateCompleted,
                     Objectives = GetObjectives(a.Objectives),
-                    Steps = GetSteps(a.Steps, contract)
+                    Steps = GetSteps(a.Steps, contract, userId)
                 }));
                 return acts;
             }
@@ -937,7 +937,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             }
         }
 
-        public static List<StepsDetail> GetSteps(List<Step> list, string contract)
+        public static List<StepsDetail> GetSteps(List<Step> list, string contract, string userId)
         {
             try
             {
@@ -971,7 +971,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
                         ElementState = (int)s.State,
                         CompletedBy = s.CompletedBy,
                         DateCompleted = s.DateCompleted,
-                        Responses = GetResponses(s, contract),
+                        Responses = GetResponses(s, contract, userId),
                         SpawnElement = GetSpawnElement(s)
                     }));
                 return steps;
@@ -1005,7 +1005,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             }
         }
 
-        public static List<ResponseDetail> GetResponses(Step step, string contract)
+        public static List<ResponseDetail> GetResponses(Step step, string contract, string userId)
         {
             try
             {
@@ -1014,7 +1014,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
 
                 if (meresp == null || meresp.Count == 0)
                 {
-                    meresp = GetStepResponses(step.Id, contract);
+                    meresp = GetStepResponses(step.Id, contract, userId);
                 }
 
                 resp = meresp.Select(x => new ResponseDetail
@@ -1063,7 +1063,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             }
         }
 
-        public static void RecurseAndSaveResponseObjects(MEPatientProgram prog, string contractNumber)
+        public static void RecurseAndSaveResponseObjects(MEPatientProgram prog, string contractNumber, string userId)
         {
             try
             {
@@ -1079,7 +1079,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
                                 r.StepSourceId = s.SourceId;
                                 r.DeleteFlag = true;
                                 r.ActionId = a.Id;
-                                success = SaveResponseToDocument(r, contractNumber);
+                                success = SaveResponseToDocument(r, contractNumber, userId);
                             }
                             if (success)
                             {
@@ -1095,13 +1095,13 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             }
         }
 
-        private static bool SaveResponseToDocument(MEPatientProgramResponse r, string contractNumber)
+        private static bool SaveResponseToDocument(MEPatientProgramResponse r, string contractNumber, string userId)
         {
             bool result = false;
             try
             {
                 IProgramRepository<MEPatientProgramResponse> repo =
-                    ProgramRepositoryFactory<MEPatientProgramResponse>.GetPatientProgramStepResponseRepository(contractNumber, "NG");
+                    ProgramRepositoryFactory<MEPatientProgramResponse>.GetPatientProgramStepResponseRepository(contractNumber, "NG", userId);
 
                 result = (Boolean)repo.Insert(r);
                 return result;
@@ -1143,9 +1143,8 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
 
                 IProgramRepository<PutProgramAttributesResponse> attrRepo =
                     Phytel.API.DataDomain.Program.ProgramRepositoryFactory<PutProgramAttributesResponse>
-                    .GetProgramAttributesRepository(request.ContractNumber, request.Context);
+                    .GetProgramAttributesRepository(request.ContractNumber, request.Context, request.UserId);
 
-                attrRepo.UserId = request.UserId;
                 attrRepo.Insert(attr);
             }
             catch (Exception ex)
