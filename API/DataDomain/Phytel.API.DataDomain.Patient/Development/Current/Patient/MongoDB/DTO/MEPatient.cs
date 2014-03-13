@@ -32,7 +32,6 @@ namespace Phytel.API.DataDomain.Patient.DTO
         public const string BackgroundProperty = "bkgrd";
         public const string LastFourSSNProperty = "lssn";
         public const string FullSSNProperty = "fssn";
-        public const string ExtraElementsProperty = "ex";
         public const string VersionProperty = "v";
         public const string UpdatedByProperty = "uby";
         public const string DeleteFlagProperty = "del";
@@ -92,10 +91,8 @@ namespace Phytel.API.DataDomain.Patient.DTO
         [BsonIgnoreIfNull(true)]
         public string FullSSN { get; set; }
 
-        [BsonElement(ExtraElementsProperty)]
-        [BsonExtraElements()]
-        [BsonIgnoreIfNull(true)]
-        public Dictionary<string, object> ExtraElements { get; set; }
+        [BsonExtraElements]
+        public BsonDocument ExtraElements { get; set; }
 
         [BsonElement(VersionProperty)]
         [BsonDefaultValue(1.0)]

@@ -27,7 +27,6 @@ namespace Phytel.API.DataDomain.Action.DTO
         public const string ObjectivesProperty = "obj";
         public const string StatusProperty = "sts";
 
-        public const string ExtraElementsProperty = "ex";
         public const string VersionProperty = "v";
         public const string UpdatedByProperty = "uby";
         public const string DeleteFlagProperty = "del";
@@ -59,10 +58,8 @@ namespace Phytel.API.DataDomain.Action.DTO
         [BsonIgnoreIfNull(true)]
         public Status Status { get; set; }
 
-        [BsonElement(ExtraElementsProperty)]
         [BsonExtraElements()]
-        [BsonIgnoreIfNull(true)]
-        public Dictionary<string, object> ExtraElements { get; set; }
+        public BsonDocument ExtraElements { get; set; }
 
         [BsonElement(VersionProperty)]
         [BsonDefaultValue(1.0)]

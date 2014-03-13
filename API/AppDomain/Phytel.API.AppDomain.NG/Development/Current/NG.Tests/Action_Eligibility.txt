@@ -37,7 +37,6 @@
          "Title":"P4H Program Details",
          "Description":"P4H Enrollment detail script and eligibility details",
          "Text":"Partner for Health is an ABC co wellness initiative designed to support employees and their spouses in their efforts to improve overall health through the implementation of a  combination of advanced laboratory tesing and individual lifestyle coaching.",
-         "Ex":null,
          "Status":1,
          "Responses":[
             {
@@ -77,7 +76,6 @@
          "Question":"Are you an ABC Employee?",
          "Description":null,
          "Text":null,
-         "Ex":null,
          "Status":1,
          "Responses":[
             {
@@ -119,7 +117,6 @@
          "Question":"Are you a spouse of an ABC Employee?",
          "Description":null,
          "Text":null,
-         "Ex":null,
          "Status":1,
          "Responses":[
             {
@@ -161,7 +158,6 @@
          "Question":"Is the HRA complete?",
          "Description":null,
          "Text":null,
-         "Ex":null,
          "Status":1,
          "Responses":[
             {
@@ -204,7 +200,6 @@
          "Title":"P4H Program Details",
          "Description":"P4H program eligibility details",
          "Text":"You are eligible for the program ",
-         "Ex":null,
          "Status":1,
          "Responses":[
             {
@@ -238,7 +233,6 @@
          "Description":"P4H program in-eligibility details",
          "Notes":"NOTE:",
          "Text":"You do not qualify for the program since the screening was not Completed",
-         "Ex":null,
          "Status":1,
          "Responses":[
             {
@@ -270,7 +264,6 @@
          "Question":null,
          "Description":"complete - final step in action",
          "Text":"complete",
-         "Ex":null,
          "Status":1,
          "Responses":null
       }

@@ -39,7 +39,6 @@ namespace Phytel.API.DataDomain.Contact.DTO
         public const string TimeZoneProperty = "tz";
         public const string LanguagesProperty = "lans";
 
-        public const string ExtraElementsProperty = "ex";
         public const string VersionProperty = "v";
         public const string UpdatedByProperty = "uby";
         public const string DeleteFlagProperty = "del";
@@ -110,11 +109,9 @@ namespace Phytel.API.DataDomain.Contact.DTO
         [BsonElement(LanguagesProperty)]
         [BsonIgnoreIfNull(true)]
         public List<Language> Languages { get; set; }
-        
-        [BsonElement(ExtraElementsProperty)]
-        [BsonExtraElements()]
-        [BsonIgnoreIfNull(true)]
-        public Dictionary<string, object> ExtraElements { get; set; }
+
+        [BsonExtraElements]
+        public BsonDocument ExtraElements { get; set; }
 
         [BsonElement(VersionProperty)]
         [BsonDefaultValue(1.0)]

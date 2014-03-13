@@ -21,11 +21,8 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
         public ObjectId? ActionId { get; set; }
 
         #region standard
-        public const string ExtraElementsProperty = "ex";
         [BsonExtraElements]
-        [BsonIgnoreIfNull(true)]
-        [BsonElement(ExtraElementsProperty)]
-        public Dictionary<string, object> ExtraElements { get; set; }
+        public BsonDocument ExtraElements { get; set; }
 
         public const string VersionProperty = "v";
         [BsonElement(VersionProperty)]

@@ -11,9 +11,7 @@ namespace Phytel.API.Interface
     public interface IMEEntity
     {
         [BsonExtraElements]
-        [BsonIgnoreIfNull(true)]
-        [BsonElement("ex")]
-        Dictionary<string, object> ExtraElements { get; set; }
+        BsonDocument ExtraElements { get; set; }
 
         [BsonElement("v")]
         [BsonDefaultValue(1.0)]

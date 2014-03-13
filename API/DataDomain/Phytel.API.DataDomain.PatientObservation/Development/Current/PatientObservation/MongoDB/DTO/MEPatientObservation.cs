@@ -85,11 +85,8 @@ namespace Phytel.API.DataDomain.PatientObservation.DTO
         public string Source { get; set; }
 
         #region Standard IMongoEntity Implementation
-        public const string ExtraElementsProperty = "ex";
-        [BsonElement(ExtraElementsProperty)]
-        [BsonExtraElements()]
-        [BsonIgnoreIfNull(true)]
-        public Dictionary<string, object> ExtraElements { get; set; }
+        [BsonExtraElements]
+        public BsonDocument ExtraElements { get; set; }
 
         public const string VersionProperty = "v";
         [BsonElement(VersionProperty)]

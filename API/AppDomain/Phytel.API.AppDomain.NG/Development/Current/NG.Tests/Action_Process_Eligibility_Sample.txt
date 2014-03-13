@@ -37,7 +37,6 @@
          "Title":"P4H Program Details",
          "Description":"P4H Enrollment detail script and eligibility details",
          "Text":"Partner for Health is an ABC co wellness initiative designed to support employees and their spouses in their efforts to improve overall health through the implementation of a  combination of advanced laboratory tesing and individual lifestyle coaching.",
-         "Ex":null,
          "Status":1,
          "Responses":[
             {

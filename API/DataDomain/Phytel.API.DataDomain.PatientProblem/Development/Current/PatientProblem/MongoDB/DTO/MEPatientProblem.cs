@@ -30,7 +30,6 @@ namespace Phytel.API.DataDomain.PatientProblem.DTO
         public const string StartDateProperty = "sd";
         public const string EndDateProperty = "ed";
 
-        public const string ExtraElementsProperty = "ex";
         public const string VersionProperty = "v";
         public const string UpdatedByProperty = "uby";
         public const string DeleteFlagProperty = "del";
@@ -75,10 +74,8 @@ namespace Phytel.API.DataDomain.PatientProblem.DTO
         [BsonDateTimeOptions(Kind = System.DateTimeKind.Utc)]
         public DateTime? EndDate { get; set; }
 
-        [BsonElement(ExtraElementsProperty)]
-        [BsonExtraElements()]
-        [BsonIgnoreIfNull(true)]
-        public Dictionary<string, object> ExtraElements { get; set; }
+        [BsonExtraElements]
+        public BsonDocument ExtraElements { get; set; }
 
         [BsonElement(VersionProperty)]
         [BsonDefaultValue(1.0)]

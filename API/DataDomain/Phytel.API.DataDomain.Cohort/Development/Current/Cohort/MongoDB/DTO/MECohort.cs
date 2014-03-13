@@ -28,7 +28,6 @@ namespace Phytel.API.DataDomain.Cohort.DTO
         public const string QueryWithFilterProperty = "qwf";
         public const string SortProperty = "sort";
 
-        public const string ExtraElementsProperty = "ex";
         public const string VersionProperty = "v";
         public const string UpdatedByProperty = "uby";
         public const string DeleteFlagProperty = "del";
@@ -65,10 +64,8 @@ namespace Phytel.API.DataDomain.Cohort.DTO
         [BsonIgnoreIfNull(true)]
         public string Sort { get; set; }
 
-        [BsonElement(ExtraElementsProperty)]
-        [BsonExtraElements()]
-        [BsonIgnoreIfNull(true)]
-        public Dictionary<string, object> ExtraElements { get; set; }
+        [BsonExtraElements]
+        public BsonDocument ExtraElements { get; set; }
 
         [BsonElement(VersionProperty)]
         [BsonDefaultValue(1.0)]

@@ -43,11 +43,8 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
         [BsonElement(ProgramStateProperty)]
         public ProgramState ProgramState { get; set; }
 
-        public const string ExtraElementsProperty = "ex";
         [BsonExtraElements]
-        [BsonIgnoreIfNull(true)]
-        [BsonElement(ExtraElementsProperty)]
-        public Dictionary<string, object> ExtraElements { get; set; }
+        public BsonDocument ExtraElements { get; set; }
 
         public const string VersionProperty = "v";
         [BsonElement(VersionProperty)]

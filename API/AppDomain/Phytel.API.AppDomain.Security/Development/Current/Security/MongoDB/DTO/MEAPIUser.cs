@@ -21,7 +21,6 @@ namespace Phytel.API.AppDomain.Security
         public const string IsActiveProperty = "isactive";
         public const string SessionLengthInMinutesProperty = "slim";
         public const string VersionProperty = "v";
-        public const string ExtraElementsProperty = "ex";
 
         [BsonId]
         public ObjectId Id { get; set; }
@@ -55,8 +54,6 @@ namespace Phytel.API.AppDomain.Security
         public double Version { get; set; }
 
         [BsonExtraElements]
-        [BsonIgnoreIfNull(true)]
-        [BsonElement(ExtraElementsProperty)]
-        Dictionary<string, object> ExtraElements { get; set; }
+        public BsonDocument ExtraElements { get; set; }
     }
 }

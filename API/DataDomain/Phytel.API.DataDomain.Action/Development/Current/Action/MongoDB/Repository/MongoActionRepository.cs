@@ -20,6 +20,11 @@ namespace Phytel.API.DataDomain.Action
         public MongoActionRepository(string contractDBName)
         {
             _dbName = contractDBName;
+
+            #region Register ClassMap
+            if (MongoDB.Bson.Serialization.BsonClassMap.IsClassMapRegistered(typeof(MEAction)) == false)
+                MongoDB.Bson.Serialization.BsonClassMap.RegisterClassMap<MEAction>();
+            #endregion
         }
 
         public object Insert(object newEntity)

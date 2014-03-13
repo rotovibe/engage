@@ -31,7 +31,6 @@ namespace Phytel.API.DataDomain.PatientGoal.DTO
         public const string RequiredProperty = "req";
 
         #region Standard IMongoEntity Constants
-        public const string ExtraElementsProperty = "ex";
         public const string VersionProperty = "v";
         public const string UpdatedByProperty = "uby";
         public const string DeleteFlagProperty = "del";
@@ -70,10 +69,8 @@ namespace Phytel.API.DataDomain.PatientGoal.DTO
         public bool Required { get; set; }
 
         #region Standard IMongoEntity Implementation
-        [BsonElement(ExtraElementsProperty)]
-        [BsonExtraElements()]
-        [BsonIgnoreIfNull(true)]
-        public Dictionary<string, object> ExtraElements { get; set; }
+        [BsonExtraElements]
+        public BsonDocument ExtraElements { get; set; }
 
         [BsonElement(VersionProperty)]
         [BsonDefaultValue(1.0)]

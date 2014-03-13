@@ -28,7 +28,6 @@ namespace Phytel.API.DataDomain.Module.MongoDB.DTO
         public const string DescriptionProperty = "dsc";
         public const string StatusProperty = "stat";
 
-        public const string ExtraElementsProperty = "ex";
         public const string VersionProperty = "v";
         public const string UpdatedByProperty = "uby";
         public const string DeleteFlagProperty = "del";
@@ -55,11 +54,9 @@ namespace Phytel.API.DataDomain.Module.MongoDB.DTO
         [BsonElement(StatusProperty)]
         [BsonIgnoreIfNull(true)]
         public Status Status { get; set; }
-        
-        [BsonElement(ExtraElementsProperty)]
-        [BsonExtraElements()]
-        [BsonIgnoreIfNull(true)]
-        public Dictionary<string, object> ExtraElements { get; set; }
+
+        [BsonExtraElements]
+        public BsonDocument ExtraElements { get; set; }
 
         [BsonElement(VersionProperty)]
         [BsonDefaultValue(1.0)]

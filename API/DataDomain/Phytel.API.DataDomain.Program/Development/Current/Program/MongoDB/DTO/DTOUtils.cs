@@ -142,7 +142,6 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
                                     {
                                         Status = b.Status,
                                         Description = b.Description,
-                                        Ex = b.Ex,
                                         Id = b.Id,
                                         ActionId = b.ActionId,
                                         Notes = b.Notes,
@@ -645,7 +644,6 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
                             Description = st.Description,
                             State = (ElementState)st.ElementState,
                             Enabled = st.Enabled,
-                            Ex = st.Ex,
                             Header = st.Header,
                             IncludeTime = st.IncludeTime,
                             Next = st.Next,
@@ -946,7 +944,6 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
                     new StepsDetail
                     {
                         Description = s.Description,
-                        Ex = s.Ex,
                         Id = s.Id.ToString(),
                         SourceId = s.SourceId.ToString(),
                         ActionId = s.ActionId.ToString(),

@@ -70,10 +70,6 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
         [BsonElement(TextProperty)]
         public string Text { get; set; }
 
-        public const string ExProperty = "ex";
-        [BsonElement(ExProperty)]
-        public string Ex { get; set; }
-
         public const string StatusProperty = "sts";
         [BsonElement(StatusProperty)]
         public Status Status { get; set; }

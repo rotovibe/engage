@@ -34,11 +34,8 @@ namespace Phytel.API.DataDomain.Step.DTO
         [BsonDefaultValue(1.0)]
         public Status Status { get; set; }
 
-        public const string ExtraElementsProperty = "ex";
-        [BsonElement(ExtraElementsProperty)]
-        [BsonExtraElements()]
-        [BsonIgnoreIfNull(true)]
-        public Dictionary<string, object> ExtraElements { get; set; }
+        [BsonExtraElements]
+        public BsonDocument ExtraElements { get; set; }
 
         public const string VersionProperty = "v";
         [BsonElement(VersionProperty)]

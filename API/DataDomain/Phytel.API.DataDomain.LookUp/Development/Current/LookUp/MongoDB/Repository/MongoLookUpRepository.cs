@@ -21,6 +21,10 @@ namespace Phytel.API.DataDomain.LookUp
         {
             _dbName = contractDBName;
             #region Register ClassMap
+            if (MongoDB.Bson.Serialization.BsonClassMap.IsClassMapRegistered(typeof(MELookup)) == false)
+            {
+                MongoDB.Bson.Serialization.BsonClassMap.RegisterClassMap<MELookup>();
+            }
             if (MongoDB.Bson.Serialization.BsonClassMap.IsClassMapRegistered(typeof(Problem)) == false)
             {
                 MongoDB.Bson.Serialization.BsonClassMap.RegisterClassMap<Problem>();
