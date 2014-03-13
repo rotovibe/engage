@@ -55,6 +55,12 @@ namespace Phytel.API.DataDomain.Patient
                     }
 
                     ctx.CohortPatientViews.Collection.Insert(patientView);
+
+                    AuditHelper.LogDataAudit(this.UserId,
+                                            MongoCollectionName.CohortPatientView.ToString(),
+                                            cohortRequest.PatientID.ToString(),
+                                            Common.DataAuditType.Insert,
+                                            cohortRequest.ContractNumber);
                 }
             }
 

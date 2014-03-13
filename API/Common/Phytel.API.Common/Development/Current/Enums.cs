@@ -216,6 +216,8 @@ namespace Phytel.API.Common
         PatientProgramAttribute,
         PatientProgramResponse,
         Contact,
-        CareMember
+        CareMember,
+        CohortPatientView,
+        Response
     }
 }

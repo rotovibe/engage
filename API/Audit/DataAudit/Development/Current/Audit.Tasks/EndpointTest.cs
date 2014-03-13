@@ -8,8 +8,8 @@ using System.Threading.Tasks;
 using Phytel.API.Interface;
 using ServiceStack;
 //using ServiceStack.Service;
-//using ServiceStack.ServiceClient.Web;
-//using ServiceStack.ServiceHost;
+using ServiceStack.ServiceClient.Web;
+using ServiceStack.ServiceHost;
 
 namespace Audit.Tasks
 {
@@ -152,12 +152,12 @@ namespace Audit.Tasks
             List<string> endpoints = isGet ? GetEndpoints_GET() : GetEndpoints_POST();
             int i = 0;
 
-            IRestClient client = new JsonServiceClient();
+            //IRestClient client = new JsonServiceClient();
 
-            JsonServiceClient client = new JsonServiceClient();
-            client.HttpMethod = HttpMethods.Get;
+            //JsonServiceClient client = new JsonServiceClient();
+            //client.HttpMethod = HttpMethods.Get;
 
-            JsonServiceClient.h
+            //JsonServiceClient.h
             //client.Headers.Add("x-Phytel-UserID", "bb241c64-a0ff-4e01-ba5f-4246ef50780e");
 
             //JsonServiceClient.HttpWebRequestFilter filter
@@ -173,7 +173,7 @@ namespace Audit.Tasks
                 {
                     i += 1;
                     //Console.WriteLine("Calling {0}", endpoint);
-                    sysResponse = client.Get<IDomainResponse>(endpoint);
+                    //sysResponse = client.Get<IDomainResponse>(endpoint);
                     
                 }
                 catch (WebServiceException wex)

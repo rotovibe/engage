@@ -12,6 +12,7 @@ using Phytel.API.DataDomain.Program;
 using Phytel.API.DataDomain.Program.MongoDB.DTO;
 using Phytel.API.Common;
 using Phytel.API.Common.Data;
+using Phytel.API.DataAudit;
 
 namespace Phytel.API.DataDomain.Program
 {
@@ -28,29 +29,35 @@ namespace Phytel.API.DataDomain.Program
         {
             try
             {
-                ResponseDetail rs = (ResponseDetail)newEntity;
-                MEResponse mer = new MEResponse(this.UserId)
-                {
-                    Id = ObjectId.Parse(rs.Id),
-                    NextStepId = ObjectId.Parse(rs.NextStepId),
-                    Nominal = rs.Nominal,
-                    Order = rs.Order,
-                    Required = rs.Required,
-                    Spawn = DTOUtils.GetSpawnElements(rs.SpawnElement),
-                    StepId = ObjectId.Parse(rs.StepId),
-                    Text = rs.Text,
-                    Value = rs.Value,
-                    DeleteFlag = true,
-                    LastUpdatedOn = DateTime.UtcNow,
-                    Version = 1.0,
-                    UpdatedBy = ObjectId.Parse(this.UserId)
-                };
+            ResponseDetail rs = (ResponseDetail)newEntity;
+            MEResponse mer = new MEResponse(this.UserId)
+            {
+                Id = ObjectId.Parse(rs.Id),
+                NextStepId = ObjectId.Parse(rs.NextStepId),
+                Nominal = rs.Nominal,
+                Order = rs.Order,
+                Required = rs.Required,
+                Spawn = DTOUtils.GetSpawnElements(rs.SpawnElement),
+                StepId = ObjectId.Parse(rs.StepId),
+                Text = rs.Text,
+                Value = rs.Value,
+                DeleteFlag = true,
+                LastUpdatedOn = DateTime.UtcNow,
+                Version = 1.0,
+                UpdatedBy = ObjectId.Parse(this.UserId)
+            };
 
-                bool res = false;
+            bool res = false;
 
                 using (ProgramMongoContext ctx = new ProgramMongoContext(_dbName))
                 {
                     ctx.Responses.Collection.Insert(mer);
+                    
+                    AuditHelper.LogDataAudit(this.UserId,
+                        MongoCollectionName.Response.ToString(),
+                        mer.Id.ToString(),
+                        Common.DataAuditType.Insert,
+                        "");
 
                     res = true;
                 }
@@ -100,18 +107,18 @@ namespace Phytel.API.DataDomain.Program
         {
             try
             {
-                IMongoQuery mQuery = null;
-                List<object> rps;
+            IMongoQuery mQuery = null;
+            List<object> rps;
 
-                mQuery = MongoDataUtil.ExpressionQueryBuilder(expression);
+            mQuery = MongoDataUtil.ExpressionQueryBuilder(expression);
 
-                using (ProgramMongoContext ctx = new ProgramMongoContext(_dbName))
-                {
-                    rps = ctx.Responses.Collection.Find(mQuery).ToList<object>();
-                }
-
-                return new Tuple<string, IEnumerable<object>>(expression.ExpressionID, rps);
+            using (ProgramMongoContext ctx = new ProgramMongoContext(_dbName))
+            {
+                rps = ctx.Responses.Collection.Find(mQuery).ToList<object>();
             }
+
+            return new Tuple<string, IEnumerable<object>>(expression.ExpressionID, rps);
+        }
             catch (Exception ex)
             {
                 throw new Exception("DD:ResponseRepository:Select()::" + ex.Message, ex.InnerException);
@@ -152,7 +159,14 @@ namespace Phytel.API.DataDomain.Program
                     IMongoUpdate update = MB.Update.Combine(uv);
                     WriteConcernResult res = ctx.Responses.Collection.Update(q, update);
                     if (res.Ok)
+                    {
                         result = true;
+                        AuditHelper.LogDataAudit(this.UserId,
+                       MongoCollectionName.Response.ToString(),
+                       resp.Id.ToString(),
+                       Common.DataAuditType.Update,
+                       "");
+                    }
                 }
                 return result as object;
             }
