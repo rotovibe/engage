@@ -81,13 +81,9 @@ namespace Phytel.API.AppDomain.NG
 
                     if (sysResponse != null && sysResponse.PatientSystem != null)
                     {
-                        // Populate the system id details only if it primary.
-                        if(sysResponse.PatientSystem.PrimarySystem)
-                        {
-                            pResponse.Patient.DisplaySystemId = sysResponse.PatientSystem.SystemID;
-                            pResponse.Patient.DisplaySystemName = sysResponse.PatientSystem.SystemName;
-                            pResponse.Patient.DisplayLabel = sysResponse.PatientSystem.DisplayLabel;
-                        }
+                        pResponse.Patient.DisplaySystemId = sysResponse.PatientSystem.SystemID;
+                        pResponse.Patient.DisplaySystemName = sysResponse.PatientSystem.SystemName;
+                        pResponse.Patient.DisplayLabel = sysResponse.PatientSystem.DisplayLabel;
                     }
                 }
 
