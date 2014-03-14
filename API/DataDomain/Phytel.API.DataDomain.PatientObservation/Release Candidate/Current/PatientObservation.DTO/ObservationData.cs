@@ -22,8 +22,8 @@ namespace Phytel.API.DataDomain.PatientObservation.DTO
         public int Status { get; set; }
         public string Units { get; set; }
         public string Source { get; set; }
-        public Dictionary<string, object> ExtraElements { get; set; }
-        public string Version { get; set; }
+        //public string ExtraElements { get; set; }
+        public double Version { get; set; }
         public string UpdatedBy { get; set; }
         public bool DeleteFlag { get; set; }
         public DateTime? TTLDate { get; set; }

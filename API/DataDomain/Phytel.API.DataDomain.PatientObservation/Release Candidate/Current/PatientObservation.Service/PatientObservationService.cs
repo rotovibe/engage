@@ -1,27 +1,34 @@
-using System;
-using System.Net;
-using Phytel.API.DataDomain.PatientObservation;
-using Phytel.API.DataDomain.PatientObservation.DTO;
 using Phytel.API.Common.Format;
-using ServiceStack.Common.Web;
+using Phytel.API.DataDomain.PatientObservation.DTO;
+using System;
+using System.Configuration;
+using System.Web;
 
 namespace Phytel.API.DataDomain.PatientObservation.Service
 {
     public class PatientObservationService : ServiceStack.ServiceInterface.Service
     {
+        private const string _phytelUserIDToken = "x-Phytel-UserID";
+
         public GetPatientObservationResponse Post(GetPatientObservationRequest request)
         {
             GetPatientObservationResponse response = new GetPatientObservationResponse();
             try
             {
+                //Get the UserId from the Header and update the request object
+                request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
+                if (string.IsNullOrEmpty(request.UserId))
+                    throw new UnauthorizedAccessException("PatientObservationDD:Post()::Unauthorized Access");
+
                 response = PatientObservationDataManager.GetPatientObservationByID(request);
                 response.Version = request.Version;
             }
             catch (Exception ex)
             {
-                //TODO: Log this to C3 database via ASE
-                base.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-                response.Status = new ServiceStack.ServiceInterface.ServiceModel.ResponseStatus("Exception", ex.Message);
+                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+
+                string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
+                Common.Helper.LogException(int.Parse(aseProcessID), ex);
             }
             return response;
         }
@@ -31,14 +38,20 @@ namespace Phytel.API.DataDomain.PatientObservation.Service
             GetPatientObservationResponse response = new GetPatientObservationResponse();
             try
             {
+                //Get the UserId from the Header and update the request object
+                request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
+                if (string.IsNullOrEmpty(request.UserId))
+                    throw new UnauthorizedAccessException("PatientObservationDD:Get()::Unauthorized Access");
+
                 response = PatientObservationDataManager.GetPatientObservationByID(request);
                 response.Version = request.Version;
             }
             catch (Exception ex)
             {
-                //TODO: Log this to C3 database via ASE
-                base.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-                response.Status = new ServiceStack.ServiceInterface.ServiceModel.ResponseStatus("Exception", ex.Message);
+                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+
+                string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
+                Common.Helper.LogException(int.Parse(aseProcessID), ex);
             }
             return response;
         }
@@ -48,33 +61,47 @@ namespace Phytel.API.DataDomain.PatientObservation.Service
             GetAllPatientObservationsResponse response = new GetAllPatientObservationsResponse();
             try
             {
+                //Get the UserId from the Header and update the request object
+                request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
+                if (string.IsNullOrEmpty(request.UserId))
+                    throw new UnauthorizedAccessException("PatientObservationDD:Post()::Unauthorized Access");
+
                 response = PatientObservationDataManager.GetPatientObservationList(request);
                 response.Version = request.Version;
             }
             catch (Exception ex)
             {
-                //TODO: Log this to C3 database via ASE
-                base.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-                response.Status = new ServiceStack.ServiceInterface.ServiceModel.ResponseStatus("Exception", ex.Message);
+                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+
+                string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
+                Common.Helper.LogException(int.Parse(aseProcessID), ex);
             }
             return response;
         }
 
-        public static PutInitializeObservationDataResponse InsertNewPatientObservation(PutInitializeObservationDataRequest request)
+        public PutInitializeObservationDataResponse InsertNewPatientObservation(PutInitializeObservationDataRequest request)
         {
+            PutInitializeObservationDataResponse response = new PutInitializeObservationDataResponse();
+
             try
             {
-                PutInitializeObservationDataResponse result = new PutInitializeObservationDataResponse();
+                //Get the UserId from the Header and update the request object
+                request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
+                if (string.IsNullOrEmpty(request.UserId))
+                    throw new UnauthorizedAccessException("PatientObservationDD:Insert()");
 
-                IPatientObservationRepository<PutInitializeObservationDataResponse> repo = PatientObservationRepositoryFactory<PutInitializeObservationDataResponse>.GetPatientObservationRepository(request.ContractNumber, request.Context);
+                IPatientObservationRepository<PutInitializeObservationDataResponse> repo = PatientObservationRepositoryFactory<PutInitializeObservationDataResponse>.GetPatientObservationRepository(request.ContractNumber, request.Context, request.UserId);
 
-                result.ObservationData = (PatientObservationData)repo.Initialize(request);
-                return result;
+                response.ObservationData = (PatientObservationData)repo.Initialize(request);
             }
             catch (Exception ex)
             {
-                throw ex;
+                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+
+                string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
+                Common.Helper.LogException(int.Parse(aseProcessID), ex);
             }
+            return response;
         }
 
         public GetStandardObservationsResponse Get(GetStandardObservationsRequest request)
@@ -82,14 +109,20 @@ namespace Phytel.API.DataDomain.PatientObservation.Service
             GetStandardObservationsResponse response = new GetStandardObservationsResponse();
             try
             {
+                //Get the UserId from the Header and update the request object
+                request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
+                if (string.IsNullOrEmpty(request.UserId))
+                    throw new UnauthorizedAccessException("PatientObservationDD:Get()::Unauthorized Access");
+
                 response = PatientObservationDataManager.GetStandardObservationsByType(request);
                 response.Version = request.Version;
             }
             catch (Exception ex)
             {
-                //TODO: Log this to C3 database via ASE
-                base.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-                response.Status = new ServiceStack.ServiceInterface.ServiceModel.ResponseStatus("Exception", ex.Message);
+                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+
+                string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
+                Common.Helper.LogException(int.Parse(aseProcessID), ex);
             }
             return response;
         }
@@ -99,14 +132,20 @@ namespace Phytel.API.DataDomain.PatientObservation.Service
             GetAdditionalObservationDataItemResponse response = new GetAdditionalObservationDataItemResponse();
             try
             {
+                //Get the UserId from the Header and update the request object
+                request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
+                if (string.IsNullOrEmpty(request.UserId))
+                    throw new UnauthorizedAccessException("PatientObservationDD:Post()::Unauthorized Access");
+
                 response = PatientObservationDataManager.GetAdditionalObservationItemById(request);
                 response.Version = request.Version;
             }
             catch (Exception ex)
             {
-                //TODO: Log this to C3 database via ASE
-                base.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-                response.Status = new ServiceStack.ServiceInterface.ServiceModel.ResponseStatus("Exception", ex.Message);
+                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+
+                string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
+                Common.Helper.LogException(int.Parse(aseProcessID), ex);
             }
             return response;
         }
@@ -116,14 +155,20 @@ namespace Phytel.API.DataDomain.PatientObservation.Service
             GetAdditionalLibraryObservationsResponse response = new GetAdditionalLibraryObservationsResponse();
             try
             {
+                //Get the UserId from the Header and update the request object
+                request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
+                if (string.IsNullOrEmpty(request.UserId))
+                    throw new UnauthorizedAccessException("PatientObservationDD:Get()::Unauthorized Access");
+
                 response = PatientObservationDataManager.GetAdditionalObservationsLibraryByType(request);
                 response.Version = request.Version;
             }
             catch (Exception ex)
             {
-                //TODO: Log this to C3 database via ASE
-                base.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-                response.Status = new ServiceStack.ServiceInterface.ServiceModel.ResponseStatus("Exception", ex.Message);
+                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+
+                string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
+                Common.Helper.LogException(int.Parse(aseProcessID), ex);
             }
             return response;
         }
@@ -133,15 +178,20 @@ namespace Phytel.API.DataDomain.PatientObservation.Service
             PutUpdateObservationDataResponse response = new PutUpdateObservationDataResponse();
             try
             {
+                //Get the UserId from the Header and update the request object
+                request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
+                if (string.IsNullOrEmpty(request.UserId))
+                    throw new UnauthorizedAccessException("PatientObservationDD:Put()::Unauthorized Access");
+
                 response.Result = PatientObservationDataManager.PutUpdateOfPatientObservationRecord(request);
                 response.Version = request.Version;
             }
             catch (Exception ex)
             {
-                //TODO: Log this to C3 database via ASE
-                string ercode = ((HttpError)ex).ErrorCode;
-                base.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-                response.Status = new ServiceStack.ServiceInterface.ServiceModel.ResponseStatus(ercode, ex.Message);
+                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+
+                string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
+                Common.Helper.LogException(int.Parse(aseProcessID), ex);
             }
             return response;
         }
@@ -151,15 +201,20 @@ namespace Phytel.API.DataDomain.PatientObservation.Service
             PutUpdateObservationDataResponse response = new PutUpdateObservationDataResponse();
             try
             {
+                //Get the UserId from the Header and update the request object
+                request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
+                if (string.IsNullOrEmpty(request.UserId))
+                    throw new UnauthorizedAccessException("PatientObservationDD:Post()::Unauthorized Access");
+
                 response.Result = PatientObservationDataManager.PutUpdateOfPatientObservationRecord(request);
                 response.Version = request.Version;
             }
             catch (Exception ex)
             {
-                //TODO: Log this to C3 database via ASE
-                string ercode = ((HttpError)ex).ErrorCode;
-                base.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-                response.Status = new ServiceStack.ServiceInterface.ServiceModel.ResponseStatus(ercode, ex.Message);
+                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+
+                string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
+                Common.Helper.LogException(int.Parse(aseProcessID), ex);
             }
             return response;
         }

@@ -9,7 +9,7 @@ namespace Phytel.API.DataDomain.PatientObservation
 {
     public abstract class PatientObservationRepositoryFactory<T>
     {
-        public static IPatientObservationRepository<T> GetPatientObservationRepository(string dbName, string productName)
+        public static IPatientObservationRepository<T> GetPatientObservationRepository(string dbName, string productName, string userId)
         {
             try
             {
@@ -17,7 +17,7 @@ namespace Phytel.API.DataDomain.PatientObservation
 
                 //We only have 1 repository at this time, just return it
                 repo = new MongoPatientObservationRepository<T>(dbName) as IPatientObservationRepository<T>;
-
+                repo.UserId = userId;
                 return repo;
             }
             catch (Exception ex)
@@ -26,7 +26,7 @@ namespace Phytel.API.DataDomain.PatientObservation
             }
         }
 
-        internal static IPatientObservationRepository<T> GetObservationRepository(string dbName, string productName)
+        internal static IPatientObservationRepository<T> GetObservationRepository(string dbName, string productName, string userId)
         {
             try
             {
@@ -34,6 +34,7 @@ namespace Phytel.API.DataDomain.PatientObservation
 
                 //We only have 1 repository at this time, just return it
                 repo = new MongoObservationRepository<T>(dbName) as IPatientObservationRepository<T>;
+                repo.UserId = userId;
 
                 return repo;
             }

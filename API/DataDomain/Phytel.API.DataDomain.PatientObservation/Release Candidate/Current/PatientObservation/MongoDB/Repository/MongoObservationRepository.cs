@@ -12,6 +12,8 @@ using Phytel.API.DataDomain.PatientObservation;
 using MB = MongoDB.Driver.Builders;
 using Phytel.API.Common;
 using Phytel.API.Common.Data;
+using MongoDB.Bson.Serialization;
+using Phytel.API.DataDomain.PatientObservation.MongoDB.DTO;
 
 namespace Phytel.API.DataDomain.PatientObservation
 {
@@ -22,6 +24,14 @@ namespace Phytel.API.DataDomain.PatientObservation
         public MongoObservationRepository(string contractDBName)
         {
             _dbName = contractDBName;
+
+            #region Register ClassMap
+            if (BsonClassMap.IsClassMapRegistered(typeof(ObservationValue)) == false)
+                BsonClassMap.RegisterClassMap<ObservationValue>();
+            
+            if (BsonClassMap.IsClassMapRegistered(typeof(MEObservation)) == false)
+                BsonClassMap.RegisterClassMap<MEObservation>();
+            #endregion
         }
 
         public object Insert(object newEntity)
@@ -31,7 +41,7 @@ namespace Phytel.API.DataDomain.PatientObservation
                 throw new NotImplementedException();
                 // code here //
             }
-            catch (Exception ex) { throw ex; }
+            catch (Exception) { throw; }
         }
 
         public object InsertAll(List<object> entities)
@@ -41,7 +51,7 @@ namespace Phytel.API.DataDomain.PatientObservation
                 throw new NotImplementedException();
                 // code here //
             }
-            catch (Exception ex) { throw ex; }
+            catch (Exception) { throw; }
         }
 
         public void Delete(object entity)
@@ -51,7 +61,7 @@ namespace Phytel.API.DataDomain.PatientObservation
                 throw new NotImplementedException();
                 // code here //
             }
-            catch (Exception ex) { throw ex; }
+            catch (Exception) { throw; }
         }
 
         public void DeleteAll(List<object> entities)
@@ -61,7 +71,7 @@ namespace Phytel.API.DataDomain.PatientObservation
                 throw new NotImplementedException();
                 // code here //
             }
-            catch (Exception ex) { throw ex; }
+            catch (Exception) { throw; }
         }
 
         public object FindByID(string entityID)
@@ -85,7 +95,7 @@ namespace Phytel.API.DataDomain.PatientObservation
                             CodingSystemCode = o.Code,
                             DeleteFlag = o.DeleteFlag,
                             Description = o.Description,
-                            ExtraElements = o.ExtraElements,
+                            //ExtraElements = o.ExtraElements,
                             GroupId = o.GroupId != null ? o.GroupId.ToString() : null,
                             LowValue = o.LowValue,
                             HighValue = o.HighValue,
@@ -98,7 +108,7 @@ namespace Phytel.API.DataDomain.PatientObservation
                             Status = (int)o.Status,
                             TTLDate = o.TTLDate,
                             Units = o.Units,
-                            UpdatedBy = o.UpdatedBy,
+                            UpdatedBy = o.UpdatedBy.ToString(),
                             Version = o.Version,
                             CommonName = o.CommonName
                         };
@@ -106,7 +116,7 @@ namespace Phytel.API.DataDomain.PatientObservation
                 }
                 return odL;
             }
-            catch (Exception ex) { throw ex; }
+            catch (Exception) { throw; }
         }
 
         public Tuple<string, IEnumerable<object>> Select(Interface.APIExpression expression)
@@ -124,7 +134,7 @@ namespace Phytel.API.DataDomain.PatientObservation
 
                 return new Tuple<string, IEnumerable<object>>(expression.ExpressionID, PatientObservationItems);
             }
-            catch (Exception ex) { throw ex; }
+            catch (Exception) { throw; }
         }
 
         public IEnumerable<object> SelectAll()
@@ -134,7 +144,7 @@ namespace Phytel.API.DataDomain.PatientObservation
                 throw new NotImplementedException();
                 // code here //
             }
-            catch (Exception ex) { throw ex; }
+            catch (Exception) { throw; }
         }
 
         public object Update(object entity)
@@ -144,7 +154,7 @@ namespace Phytel.API.DataDomain.PatientObservation
                 throw new NotImplementedException();
                 // code here //
             }
-            catch (Exception ex) { throw ex; }
+            catch (Exception) { throw; }
         }
 
         public void CacheByID(List<string> entityIDs)
@@ -154,7 +164,7 @@ namespace Phytel.API.DataDomain.PatientObservation
                 throw new NotImplementedException();
                 // code here //
             }
-            catch (Exception ex) { throw ex; }
+            catch (Exception) { throw; }
         }
 
         object IRepository<T>.Insert(object newEntity)
@@ -201,8 +211,7 @@ namespace Phytel.API.DataDomain.PatientObservation
         {
             throw new NotImplementedException();
         }
-
-
+        
         public object GetObservationsByType(object type, bool standard)
         {
             List<ObservationData> odL = new List<ObservationData>();
@@ -230,7 +239,6 @@ namespace Phytel.API.DataDomain.PatientObservation
                                     CodingSystemCode = o.Code,
                                     DeleteFlag = o.DeleteFlag,
                                     Description = o.Description,
-                                    ExtraElements = o.ExtraElements,
                                     GroupId = o.GroupId != null ? o.GroupId.ToString() : null,
                                     LowValue = o.LowValue,
                                     HighValue = o.HighValue,
@@ -243,7 +251,7 @@ namespace Phytel.API.DataDomain.PatientObservation
                                     Status = (int)o.Status,
                                     TTLDate = o.TTLDate,
                                     Units = o.Units,
-                                    UpdatedBy = o.UpdatedBy,
+                                    UpdatedBy = o.UpdatedBy.ToString(),
                                     Version = o.Version,
                                     CommonName = o.CommonName
                                 });
@@ -255,7 +263,7 @@ namespace Phytel.API.DataDomain.PatientObservation
             }
             catch (Exception ex)
             {
-                throw new Exception("DataDomain:GetStandardObservationsByType():" + ex.Message, ex.InnerException);
+                throw new Exception("PatientObservationDD:GetStandardObservationsByType()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -263,11 +271,12 @@ namespace Phytel.API.DataDomain.PatientObservation
         {
             throw new NotImplementedException();
         }
-
-
+        
         public object FindRecentObservationValue(string observationTypeId, string patientId)
         {
             throw new NotImplementedException();
         }
+
+        public string UserId { get; set; }
     }
 }
