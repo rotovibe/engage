@@ -17,8 +17,8 @@ namespace Phytel.API.DataDomain.Patient.Service.Test
             string contractNumber = "InHealth001";
             string context ="NG";
             IRestClient client = new JsonServiceClient();
-
-            //JsonServiceClient.HttpWebRequestFilter = x => x.Headers.Add(string.Format("APIKey:{0}", "12345"));
+            JsonServiceClient.HttpWebRequestFilter = x =>
+                            x.Headers.Add(string.Format("{0}: {1}", "x-Phytel-UserID", "531f2df9072ef727c4d2a3df"));
 
             GetPatientDataResponse response = client.Post<GetPatientDataResponse>("http://localhost:8888/Patient/NG/data/patient",
                 new GetPatientDataRequest { PatientID = patientID, ContractNumber = contractNumber, Context = context } as object);
@@ -38,11 +38,11 @@ namespace Phytel.API.DataDomain.Patient.Service.Test
             string contractNumber = "InHealth001";
             string context = "NG";
             IRestClient client = new JsonServiceClient();
-
-            //JsonServiceClient.HttpWebRequestFilter = x => x.Headers.Add(string.Format("APIKey:{0}", "12345"));
+            JsonServiceClient.HttpWebRequestFilter = x =>
+                            x.Headers.Add(string.Format("{0}: {1}", "x-Phytel-UserID", "531f2df9072ef727c4d2a3df"));
 
             GetPatientDataResponse response = client.Get<GetPatientDataResponse>(string.Format
-                ("http://localhost:8888/Patient/NG/v1/InHealth001/patient/{0}?UserId={1}",
+                ("http://localhost:8888/Patient/NG/1.0/InHealth001/patient/{0}?UserId={1}",
                 patientId,
                 userId));
 
@@ -60,10 +60,10 @@ namespace Phytel.API.DataDomain.Patient.Service.Test
             string contractNumber = "InHealth001";
             string context = "NG";
             IRestClient client = new JsonServiceClient();
+            JsonServiceClient.HttpWebRequestFilter = x =>
+                            x.Headers.Add(string.Format("{0}: {1}", "x-Phytel-UserID", "531f2df9072ef727c4d2a3df"));
 
-            //JsonServiceClient.HttpWebRequestFilter = x => x.Headers.Add(string.Format("APIKey:{0}", "12345"));
-
-            GetPatientDataResponse response = client.Get<GetPatientDataResponse>("http://localhost:8888/Patient/NG/v1/InHealth001/patient/" + patientID);
+            GetPatientDataResponse response = client.Get<GetPatientDataResponse>("http://localhost:8888/Patient/NG/1.0/InHealth001/patient/" + patientID);
 
             sampleValue = response.Patient.FirstName;
 
@@ -77,7 +77,7 @@ namespace Phytel.API.DataDomain.Patient.Service.Test
             string patientID = "528b972f072ef70eec772872";
             string contractNumber = "InHealth001";
             string context = "NG";
-            string version = "v1";
+            double version = 1.0;
 
             JsonServiceClient client = new JsonServiceClient();
             GetPatientsDataResponse response = client.Post<GetPatientsDataResponse>

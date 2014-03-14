@@ -20,7 +20,6 @@ namespace Phytel.API.DataDomain.Patient.DTO
         public const string SearchFieldsProperty = "sf";
         public const string LastNameProperty = "ln";
         public const string VersionProperty = "v";
-        public const string ExtraElementsProperty = "ex";
 
         [BsonId]
         public ObjectId Id { get; set; }
@@ -36,13 +35,11 @@ namespace Phytel.API.DataDomain.Patient.DTO
         public string LastName { get; set; }
 
         [BsonElement(VersionProperty)]
-        [BsonDefaultValue("v1")]
-        public string Version { get; set; }
+        [BsonDefaultValue(1.0)]
+        public double Version { get; set; }
 
         [BsonExtraElements]
-        [BsonIgnoreIfNull(true)]
-        [BsonElement(ExtraElementsProperty)]
-        Dictionary<string, object> ExtraElements { get; set; }
+        public BsonDocument ExtraElements { get; set; }
     }
 }
 

@@ -4,9 +4,9 @@ using System.Collections.Generic;
 
 namespace Phytel.API.DataDomain.Patient.DTO
 {
-    public class GetCohortPatientViewResponse : IDomainResponse
+    public class GetPatientSSNDataResponse : IDomainResponse
    {
-       public CohortPatientViewData CohortPatientView { get; set; }
+       public string SSN { get; set; }
        public double Version { get; set; }
        public ResponseStatus Status { get; set; }
     }

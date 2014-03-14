@@ -8,7 +8,7 @@ namespace Phytel.API.DataDomain.Patient.DTO
         public string PatientID { get; set; }
         public List<SearchFieldData> SearchFields { get; set; }
         public string LastName { get; set; }
-        public string Version { get; set; }
+        public double Version { get; set; }
     }
 
     public class SearchFieldData

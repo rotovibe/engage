@@ -9,11 +9,21 @@ namespace Phytel.API.DataDomain.Patient.Test
         [TestMethod]
         public void GetPatientByID()
         {
-            GetPatientDataRequest request = new GetPatientDataRequest { PatientID = "52e26f5b072ef7191c11e0b6" };
+            GetPatientDataRequest request = new GetPatientDataRequest { PatientID = "531f2dcc072ef727c4d29e1a" };
 
             GetPatientDataResponse response = PatientDataManager.GetPatientByID(request);
 
             Assert.IsTrue(response.Patient.FirstName == "Phyliss");
+        }
+
+        [TestMethod]
+        public void GetPatientSSN()
+        {
+            GetPatientSSNDataRequest request = new GetPatientSSNDataRequest { PatientId = "531f2dce072ef727c4d2a065", UserId = "531f2df6072ef727c4d2a3c0" };
+
+            GetPatientSSNDataResponse response = PatientDataManager.GetPatientSSN(request);
+
+            Assert.IsNotNull(response.SSN);
         }
 
         [TestMethod]
@@ -24,6 +34,24 @@ namespace Phytel.API.DataDomain.Patient.Test
             PutPatientBackgroundDataResponse response = PatientDataManager.UpdatePatientBackground(request);
 
             Assert.IsTrue(response.Success);
+        }
+
+        [TestMethod]
+        public void UpdatePatient_Test()
+        {
+            PutUpdatePatientDataRequest request = new PutUpdatePatientDataRequest
+            {
+                Id = "531f2dce072ef727c4d2a065",
+                FullSSN = "\"\"",
+                UserId = "531f2df5072ef727c4d2a3bc",
+                Priority = 1,
+                PreferredName = "\"\"",
+                LastName = "Aarsvold"
+            };
+
+            PutUpdatePatientDataResponse response = PatientDataManager.UpdatePatient(request);
+
+            Assert.IsNotNull(response);
         }
     }
 }

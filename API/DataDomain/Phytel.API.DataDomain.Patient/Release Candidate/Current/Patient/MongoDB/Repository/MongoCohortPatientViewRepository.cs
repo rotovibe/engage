@@ -2,7 +2,9 @@ using MongoDB.Bson;
 using MongoDB.Bson.Serialization;
 using MongoDB.Driver;
 using MongoDB.Driver.Builders;
+using Phytel.API.Common;
 using Phytel.API.Common.Format;
+using Phytel.API.DataAudit;
 using Phytel.API.DataDomain.Patient.DTO;
 using Phytel.API.DataDomain.Patient.MongoDB.DTO;
 using Phytel.API.Interface;
@@ -20,6 +22,14 @@ namespace Phytel.API.DataDomain.Patient
         public MongoCohortPatientViewRepository(string contractDBName)
         {
             _dbName = contractDBName;
+
+            #region Register ClassMap
+            if (BsonClassMap.IsClassMapRegistered(typeof(MECohortPatientView)) == false)
+                BsonClassMap.RegisterClassMap<MECohortPatientView>();
+
+            if (BsonClassMap.IsClassMapRegistered(typeof(SearchField)) == false)
+                BsonClassMap.RegisterClassMap<SearchField>();
+            #endregion
         }
 
         public object Insert(object newEntity)
@@ -30,7 +40,7 @@ namespace Phytel.API.DataDomain.Patient
             {
                 //Does the patient exist?
                 IMongoQuery query = Query.And(
-                                Query.EQ(MECohortPatientView.PatientIDProperty, cohortRequest.PatientID),
+                                Query.EQ(MECohortPatientView.PatientIDProperty, ObjectId.Parse(cohortRequest.PatientID)),
                                 Query.EQ(MECohortPatientView.LastNameProperty, cohortRequest.LastName));
                 patientView = ctx.CohortPatientViews.Collection.FindOneAs<MECohortPatientView>(query);
                 if (patientView == null)
@@ -38,7 +48,8 @@ namespace Phytel.API.DataDomain.Patient
                     patientView = new MECohortPatientView
                     {
                         PatientID = ObjectId.Parse(cohortRequest.PatientID),
-                        LastName = cohortRequest.LastName
+                        LastName = cohortRequest.LastName,
+                        Version = cohortRequest.Version
                     };
 
                     if (cohortRequest.SearchFields != null && cohortRequest.SearchFields.Count > 0)
@@ -52,6 +63,12 @@ namespace Phytel.API.DataDomain.Patient
                     }
 
                     ctx.CohortPatientViews.Collection.Insert(patientView);
+
+                    AuditHelper.LogDataAudit(this.UserId,
+                                            MongoCollectionName.CohortPatientView.ToString(),
+                                            cohortRequest.PatientID.ToString(),
+                                            Common.DataAuditType.Insert,
+                                            cohortRequest.ContractNumber);
                 }
             }
 
@@ -106,8 +123,7 @@ namespace Phytel.API.DataDomain.Patient
                     var uv = new List<MB.UpdateBuilder>();
                     if (!String.IsNullOrEmpty(cpvd.LastName)) uv.Add(MB.Update.Set(MECohortPatientView.LastNameProperty, cpvd.LastName));
                     if (!String.IsNullOrEmpty(cpvd.PatientID)) uv.Add(MB.Update.Set(MECohortPatientView.PatientIDProperty, ObjectId.Parse(cpvd.PatientID)));
-                    if (!String.IsNullOrEmpty(cpvd.Version)) uv.Add(MB.Update.Set(MECohortPatientView.VersionProperty, cpvd.Version));
-
+                    
                     if (p.CohortPatientView != null) { uv.Add(MB.Update.SetWrapped<List<SearchField>>(MECohortPatientView.SearchFieldsProperty, sfds)); }
 
                     IMongoUpdate update = MB.Update.Combine(uv);
@@ -118,7 +134,7 @@ namespace Phytel.API.DataDomain.Patient
             }
             catch (Exception ex)
             {
-                throw new Exception("DataDomain:Update():" + ex.Message, ex.InnerException);
+                throw new Exception("CohortPatientDD:Update()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -321,6 +337,8 @@ namespace Phytel.API.DataDomain.Patient
             throw new NotImplementedException();
         }
 
+        public string UserId { get; set; }
+
         #region needs to be taken out of IPatientRepository . In place right now to accomidate the interface
         public void CacheByID(List<string> entityIDs)
         {
@@ -352,6 +370,11 @@ namespace Phytel.API.DataDomain.Patient
         }
 
         public object Update(DTO.PutUpdatePatientDataRequest request)
+        {
+            throw new NotImplementedException();
+        }
+
+        public object GetSSN(string patientId)
         {
             throw new NotImplementedException();
         }

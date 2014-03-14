@@ -9,9 +9,6 @@ namespace Phytel.API.DataDomain.Patient.DTO
         [ApiMember(Name = "PatientId", Description = "Id of the patient being updated", ParameterType = "property", DataType = "string", IsRequired = true)]
         public string PatientId { get; set; }
 
-        [ApiMember(Name = "ContactId", Description = "ContactId of the care manager logged in.", ParameterType = "property", DataType = "string", IsRequired = true)]
-        public string ContactId { get; set; }
-
         [ApiMember(Name = "Flagged", Description = "Flagged value of the patient being updated", ParameterType = "property", DataType = "string", IsRequired = true)]
         public int Flagged { get; set; }
 
@@ -21,8 +18,8 @@ namespace Phytel.API.DataDomain.Patient.DTO
         [ApiMember(Name = "ContractNumber", Description = "Contract Number to retrieve data from", ParameterType = "property", DataType = "string", IsRequired = true)]
         public string ContractNumber { get; set; }
 
-        [ApiMember(Name = "Version", Description = "Version of the API being called", ParameterType = "property", DataType = "string", IsRequired = true)]
-        public string Version { get; set; }
+        [ApiMember(Name = "Version", Description = "Version of the API being called", ParameterType = "property", DataType = "double", IsRequired = true)]
+        public double Version { get; set; }
 
         [ApiMember(Name = "UserID", Description = "ID of the user making the request (Internally used ONLY)", ParameterType = "property", DataType = "string", IsRequired = false)]
         public string UserId { get; set; }

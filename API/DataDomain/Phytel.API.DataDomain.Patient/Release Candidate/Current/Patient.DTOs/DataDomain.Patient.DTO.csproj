@@ -84,6 +84,8 @@
     <Compile Include="GetCohortPatientsDataResponse.cs" />
     <Compile Include="GetCohortPatientViewRequest.cs" />
     <Compile Include="GetCohortPatientViewResponse.cs" />
+    <Compile Include="GetPatientSSNDataRequest.cs" />
+    <Compile Include="GetPatientSSNDataResponse.cs" />
     <Compile Include="PutCohortPatientViewDataRequest.cs" />
     <Compile Include="PutCohortPatientViewDataResponse.cs" />
     <Compile Include="PutUpdateCohortPatientViewRequest.cs" />

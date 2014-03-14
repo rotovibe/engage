@@ -16,11 +16,13 @@ namespace Phytel.API.DataDomain.Patient.DTO
         public string PreferredName { get; set; }
         public string Gender { get; set; }
         public string DOB { get; set; }
-        public string Version { get; set; }
-        public string DisplayPatientSystemID { get; set; }
+        public double Version { get; set; }
+        public string DisplayPatientSystemId { get; set; }
         public PriorityData PriorityData { get; set; }
         public bool Flagged { get; set; }
         public string Background { get; set; }
+        public int? LastFourSSN { get; set; }
+        public string FullSSN { get; set; }
     }
 
     public enum PriorityData

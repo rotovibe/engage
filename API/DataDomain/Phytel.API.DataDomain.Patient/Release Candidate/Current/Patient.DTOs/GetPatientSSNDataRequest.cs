@@ -3,11 +3,11 @@ using ServiceStack.ServiceHost;
 
 namespace Phytel.API.DataDomain.Patient.DTO
 {
-    [Route("/{Context}/{Version}/{ContractNumber}/patientdetails", "POST")]
-    public class GetPatientsDataRequest : IDataDomainRequest
+    [Route("/{Context}/{Version}/{ContractNumber}/Patient/{PatientId}/SSN", "GET")]
+    public class GetPatientSSNDataRequest : IDataDomainRequest
     {
-        [ApiMember(Name = "PatientIDs", Description = "Array of PatientIDs", ParameterType = "property", DataType = "string", IsRequired = false)]
-        public string[] PatientIDs { get; set; }
+        [ApiMember(Name = "PatientId", Description = "ID of the patient being requested", ParameterType = "property", DataType = "string", IsRequired = false)]
+        public string PatientId { get; set; }
 
         [ApiMember(Name = "Context", Description = "Product Context requesting the patient", ParameterType = "property", DataType = "string", IsRequired = false)]
         public string Context { get; set; }
@@ -20,6 +20,5 @@ namespace Phytel.API.DataDomain.Patient.DTO
 
         [ApiMember(Name = "UserID", Description = "ID of the user making the request (Internally used ONLY)", ParameterType = "property", DataType = "string", IsRequired = false)]
         public string UserId { get; set; }
-
     }
 }

@@ -14,12 +14,15 @@ namespace Phytel.API.DataDomain.Patient.Services.Test
         [TestMethod]
         public void Get_CohortPatientView_Response_Test()
         {
-            string version = "v1";
+            double version = 1.0;
             string contractNumber = "InHealth001";
             string context = "NG";
             string patientId = "52e26f11072ef7191c111c54";
 
             IRestClient client = new JsonServiceClient();
+            JsonServiceClient.HttpWebRequestFilter = x =>
+                            x.Headers.Add(string.Format("{0}: {1}", "x-Phytel-UserID", "531f2df9072ef727c4d2a3df"));
+            
             GetCohortPatientViewResponse response =
                 client.Get<GetCohortPatientViewResponse>(string.Format("{0}/{1}/{2}/{3}/patient/{4}/cohortpatientview/",
                 "http://localhost:8888/Patient",
@@ -32,13 +35,16 @@ namespace Phytel.API.DataDomain.Patient.Services.Test
         [TestMethod]
         public void Put_Problem_In_CohortPatientView_Response_Test()
         {
-            string version = "v1";
+            double version = 1.0;
             string contractNumber = "InHealth001";
             string context = "NG";
             string patientId = "52e26f11072ef7191c111c54";
             CohortPatientViewData cohortPatientView = GetCohortPatientView();
 
             IRestClient client = new JsonServiceClient();
+            JsonServiceClient.HttpWebRequestFilter = x =>
+                            x.Headers.Add(string.Format("{0}: {1}", "x-Phytel-UserID", "531f2df9072ef727c4d2a3df"));
+
             PutUpdateCohortPatientViewResponse response =
                 client.Put<PutUpdateCohortPatientViewResponse>(string.Format("{0}/{1}/{2}/{3}/patient/{4}/cohortpatientview/update",
                 "http://localhost:8888/Patient",
