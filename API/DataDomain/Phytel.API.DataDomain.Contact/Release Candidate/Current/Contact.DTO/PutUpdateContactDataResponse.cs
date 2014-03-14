@@ -10,7 +10,7 @@ namespace Phytel.API.DataDomain.Contact.DTO
         public List<CleanupIdData> UpdatedPhoneData { get; set; }
         public List<CleanupIdData> UpdatedEmailData { get; set; }
         public List<CleanupIdData> UpdatedAddressData { get; set; }
-        public string Version { get; set; }
+        public double Version { get; set; }
         public ResponseStatus Status { get; set; }
     }
 

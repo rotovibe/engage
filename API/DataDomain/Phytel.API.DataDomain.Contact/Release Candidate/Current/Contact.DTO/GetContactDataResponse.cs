@@ -7,7 +7,7 @@ namespace Phytel.API.DataDomain.Contact.DTO
     public class GetContactDataResponse : IDomainResponse
     {
         public ContactData Contact { get; set; }
-        public string Version { get; set; }
+        public double Version { get; set; }
         public ResponseStatus Status { get; set; }
     }
 

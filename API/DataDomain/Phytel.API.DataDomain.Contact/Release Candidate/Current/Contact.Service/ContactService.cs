@@ -3,11 +3,14 @@ using System.Net;
 using Phytel.API.DataDomain.Contact;
 using Phytel.API.DataDomain.Contact.DTO;
 using Phytel.API.Common.Format;
+using System.Configuration;
+using System.Web;
 
 namespace Phytel.API.DataDomain.Contact.Service
 {
     public class ContactService : ServiceStack.ServiceInterface.Service
     {
+        private const string _phytelUserIDToken = "x-Phytel-UserID";
 
         public GetContactDataResponse Get(GetContactDataRequest request)
         {
@@ -15,12 +18,19 @@ namespace Phytel.API.DataDomain.Contact.Service
             response.Version = request.Version;
             try
             {
-                response.Contact = ContactDataManager.GetContactByPatientId(request); 
+                //Get the UserId from the Header and update the request object
+                request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
+                if (string.IsNullOrEmpty(request.UserId))
+                    throw new UnauthorizedAccessException("ContactDD:Get()::Unauthorized Access");
+
+                response.Contact = ContactDataManager.GetContactByPatientId(request);
             }
             catch (Exception ex)
             {
-                //TODO: Log this to C3 database via ASE
                 CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+
+                string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
+                Common.Helper.LogException(int.Parse(aseProcessID), ex);
             }
             return response;
         }
@@ -31,12 +41,19 @@ namespace Phytel.API.DataDomain.Contact.Service
             response.Version = request.Version;
             try
             {
+                //Get the UserId from the Header and update the request object
+                request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
+                if (string.IsNullOrEmpty(request.UserId))
+                    throw new UnauthorizedAccessException("ContactDD:Get()::Unauthorized Access");
+
                 response.Contact = ContactDataManager.GetContactByUserId(request);
             }
             catch (Exception ex)
             {
-                //TODO: Log this to C3 database via ASE
                 CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+
+                string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
+                Common.Helper.LogException(int.Parse(aseProcessID), ex);
             }
             return response;
         }
@@ -47,12 +64,19 @@ namespace Phytel.API.DataDomain.Contact.Service
             response.Version = request.Version;
             try
             {
+                //Get the UserId from the Header and update the request object
+                request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
+                if (string.IsNullOrEmpty(request.UserId))
+                    throw new UnauthorizedAccessException("ContactDD:Post()::Unauthorized Access");
+
                 response = ContactDataManager.SearchContacts(request);
             }
             catch (Exception ex)
             {
-                //TODO: Log this to C3 database via ASE
                 CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+
+                string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
+                Common.Helper.LogException(int.Parse(aseProcessID), ex);
             }
             return response;
         }
@@ -63,13 +87,19 @@ namespace Phytel.API.DataDomain.Contact.Service
             response.Version = request.Version;
             try
             {
+                //Get the UserId from the Header and update the request object
+                request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
+                if (string.IsNullOrEmpty(request.UserId))
+                    throw new UnauthorizedAccessException("ContactDD:Put()::Unauthorized Access");
+
                 response = ContactDataManager.InsertContact(request);
             }
             catch (Exception ex)
             {
-                //TODO: Log this to the SQL database via ASE
-                base.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-                response.Status = new ServiceStack.ServiceInterface.ServiceModel.ResponseStatus("Exception", ex.Message);
+                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+
+                string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
+                Common.Helper.LogException(int.Parse(aseProcessID), ex);
             }
             return response;
         }
@@ -80,13 +110,19 @@ namespace Phytel.API.DataDomain.Contact.Service
             response.Version = request.Version;
             try
             {
+                //Get the UserId from the Header and update the request object
+                request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
+                if (string.IsNullOrEmpty(request.UserId))
+                    throw new UnauthorizedAccessException("ContactDD:Put()::Unauthorized Access");
+
                 response = ContactDataManager.UpdateContact(request);
             }
             catch (Exception ex)
             {
-                //TODO: Log this to the SQL database via ASE
-                base.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-                response.Status = new ServiceStack.ServiceInterface.ServiceModel.ResponseStatus("Exception", ex.Message);
+                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+
+                string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
+                Common.Helper.LogException(int.Parse(aseProcessID), ex);
             }
             return response;
         }
@@ -97,12 +133,19 @@ namespace Phytel.API.DataDomain.Contact.Service
             response.Version = request.Version;
             try
             {
+                //Get the UserId from the Header and update the request object
+                request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
+                if (string.IsNullOrEmpty(request.UserId))
+                    throw new UnauthorizedAccessException("ContactDD:Get()::Unauthorized Access");
+
                 response = ContactDataManager.GetCareManagers(request);
             }
             catch (Exception ex)
             {
-                //TODO: Log this to C3 database via ASE
                 CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+
+                string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
+                Common.Helper.LogException(int.Parse(aseProcessID), ex);
             }
             return response;
         }

@@ -11,6 +11,7 @@ using MongoDB.Bson;
 using Phytel.API.DataDomain.Contact;
 using MongoDB.Driver.Builders;
 using Phytel.API.Common;
+using Phytel.API.DataAudit;
 
 namespace Phytel.API.DataDomain.Contact
 {
@@ -21,6 +22,26 @@ namespace Phytel.API.DataDomain.Contact
         public MongoContactRepository(string contractDBName)
         {
             _dbName = contractDBName;
+
+            #region Register ClassMap
+            if (MongoDB.Bson.Serialization.BsonClassMap.IsClassMapRegistered(typeof(MEContact)) == false)
+                MongoDB.Bson.Serialization.BsonClassMap.RegisterClassMap<MEContact>();
+
+            if (MongoDB.Bson.Serialization.BsonClassMap.IsClassMapRegistered(typeof(Address)) == false)
+                MongoDB.Bson.Serialization.BsonClassMap.RegisterClassMap<Address>();
+
+            if (MongoDB.Bson.Serialization.BsonClassMap.IsClassMapRegistered(typeof(CommMode)) == false)
+                MongoDB.Bson.Serialization.BsonClassMap.RegisterClassMap<CommMode>();
+
+            if (MongoDB.Bson.Serialization.BsonClassMap.IsClassMapRegistered(typeof(Email)) == false)
+                MongoDB.Bson.Serialization.BsonClassMap.RegisterClassMap<Email>();
+
+            if (MongoDB.Bson.Serialization.BsonClassMap.IsClassMapRegistered(typeof(Language)) == false)
+                MongoDB.Bson.Serialization.BsonClassMap.RegisterClassMap<Language>();
+
+            if (MongoDB.Bson.Serialization.BsonClassMap.IsClassMapRegistered(typeof(Phone)) == false)
+                MongoDB.Bson.Serialization.BsonClassMap.RegisterClassMap<Phone>();
+            #endregion
         }
 
         /// <summary>
@@ -32,6 +53,7 @@ namespace Phytel.API.DataDomain.Contact
         {
             PutContactDataResponse response = null;
             PutContactDataRequest request = newEntity as PutContactDataRequest;
+            MEContact meContact = null;
             try
             {
                 
@@ -49,35 +71,29 @@ namespace Phytel.API.DataDomain.Contact
                             throw new ApplicationException("A contact record already exists for the patient.");
                         }
                     }
-                    MEContact meContact = new MEContact
+                    meContact = new MEContact(this.UserId)
                     {
                         Id = ObjectId.GenerateNewId(),
                         FirstName = request.FirstName,
                         LastName = request.LastName, 
                         PreferredName = request.PreferredName,
                         Gender = request.Gender,
+                        ResourceId = request.ResourceId,
                         Version = request.Version,
                         LastUpdatedOn = DateTime.UtcNow,
-                        UpdatedBy = request.UserId,
+                        UpdatedBy = ObjectId.Parse(this.UserId),
                         DeleteFlag = false
                     };
-
+                    
                     //PatientId
                     if (request.PatientId != null)
                     {
                         meContact.PatientId = ObjectId.Parse(request.PatientId);
                     }
-
-                    //ResourceId
-                    if (request.ResourceId != null)
-                    {
-                        meContact.ResourceId = Guid.Parse(request.ResourceId);
-                    }
-
                     //Timezone
                     if (request.TimeZoneId != null)
                     {
-                        meContact.TimeZone = ObjectId.Parse(request.TimeZoneId);
+                        meContact.TimeZoneId = ObjectId.Parse(request.TimeZoneId);
                     }
                     //Modes
                     if (request.Modes != null && request.Modes.Count > 0)
@@ -189,6 +205,13 @@ namespace Phytel.API.DataDomain.Contact
                     }
 
                     ctx.Contacts.Collection.Insert(meContact);
+
+                    AuditHelper.LogDataAudit(this.UserId, 
+                                            MongoCollectionName.Contact.ToString(), 
+                                            meContact.Id.ToString(), 
+                                            Common.DataAuditType.Insert, 
+                                            request.ContractNumber);
+
                     //Send back the newly inserted object.
                     response = new PutContactDataResponse();
                     response.ContactId = meContact.Id.ToString();
@@ -245,7 +268,7 @@ namespace Phytel.API.DataDomain.Contact
                 {
                     contactData = new ContactData { 
                         ContactId = mc.Id.ToString(),
-                        UserId = (mc.ResourceId == null) ? null : mc.ResourceId.ToString().Replace("-", string.Empty).ToLower(),
+                        UserId = (string.IsNullOrEmpty(mc.ResourceId)) ? string.Empty : mc.ResourceId.ToString().Replace("-", string.Empty).ToLower(),
                         FirstName = mc.FirstName,
                         MiddleName = mc.MiddleName,
                         LastName = mc.LastName,
@@ -685,10 +708,16 @@ namespace Phytel.API.DataDomain.Contact
                         uv.Add(MB.Update.Set(MEContact.LastUpdatedOnProperty,DateTime.UtcNow));
 
                         //UpdatedBy
-                        uv.Add(MB.Update.Set(MEContact.UpdatedByProperty, request.UserId));
+                        uv.Add(MB.Update.Set(MEContact.UpdatedByProperty, ObjectId.Parse(this.UserId)));
 
                         IMongoUpdate update = MB.Update.Combine(uv);
                         ctx.Contacts.Collection.Update(query, update);
+
+                        AuditHelper.LogDataAudit(this.UserId,
+                                                MongoCollectionName.Contact.ToString(),
+                                                request.ContactId,
+                                                Common.DataAuditType.Insert,
+                                                request.ContractNumber);
 
                         //set the response
                         response.SuccessData = true;
@@ -735,13 +764,13 @@ namespace Phytel.API.DataDomain.Contact
                     contactData = new ContactData { 
                         ContactId = mc.Id.ToString(),
                         PatientId = mc.PatientId.ToString(),
-                        UserId = (mc.ResourceId == null) ? null : mc.ResourceId.ToString().Replace("-", string.Empty).ToLower(),
+                        UserId = (string.IsNullOrEmpty(mc.ResourceId)) ? string.Empty : mc.ResourceId.ToString().Replace("-", string.Empty).ToLower(),
                         FirstName = mc.FirstName,
                         MiddleName = mc.MiddleName,
                         LastName = mc.LastName,
                         PreferredName = mc.PreferredName,
                         Gender = mc.Gender,
-                        TimeZoneId = mc.TimeZone == null ? null : mc.TimeZone.ToString(),
+                        TimeZoneId = mc.TimeZoneId == null ? null : mc.TimeZoneId.ToString(),
                         WeekDays = mc.WeekDays,
                         TimesOfDaysId = Helper.ConvertToStringList(mc.TimesOfDays)
                     };
@@ -833,27 +862,23 @@ namespace Phytel.API.DataDomain.Contact
             using (ContactMongoContext ctx = new ContactMongoContext(_dbName))
             {
                 List<IMongoQuery> queries = new List<IMongoQuery>();
-                Guid resourceId;
-                if(Guid.TryParse(request.UserId, out resourceId))
+                queries.Add(Query.EQ(MEContact.ResourceIdProperty, request.SQLUserId));
+                queries.Add(Query.EQ(MEContact.DeleteFlagProperty, false));
+                IMongoQuery mQuery = Query.And(queries);
+                MEContact mc = ctx.Contacts.Collection.Find(mQuery).FirstOrDefault();
+                if (mc != null)
                 {
-                    queries.Add(Query.EQ(MEContact.ResourceIdProperty, BsonValue.Create(resourceId)));
-                    queries.Add(Query.EQ(MEContact.DeleteFlagProperty, false));
-                    IMongoQuery mQuery = Query.And(queries);
-                    MEContact mc = ctx.Contacts.Collection.Find(mQuery).FirstOrDefault();
-                    if (mc != null)
+                    contactData = new ContactData
                     {
-                        contactData = new ContactData
-                        {
-                            ContactId = mc.Id.ToString(),
-                            PatientId = mc.PatientId.ToString(),
-                            UserId = (mc.ResourceId == null) ? null : mc.ResourceId.ToString().Replace("-", string.Empty).ToLower(),
-                            FirstName = mc.FirstName,
-                            MiddleName = mc.MiddleName,
-                            LastName = mc.LastName,
-                            PreferredName = mc.PreferredName,
-                            Gender = mc.Gender
-                        };
-                    }
+                        ContactId = mc.Id.ToString(),
+                        PatientId = mc.PatientId.ToString(),
+                        UserId = (string.IsNullOrEmpty(mc.ResourceId)) ? string.Empty : mc.ResourceId.ToString().Replace("-", string.Empty).ToLower(),
+                        FirstName = mc.FirstName,
+                        MiddleName = mc.MiddleName,
+                        LastName = mc.LastName,
+                        PreferredName = mc.PreferredName,
+                        Gender = mc.Gender
+                    };
                 }
 
             }
@@ -881,7 +906,7 @@ namespace Phytel.API.DataDomain.Contact
                             ContactData contactData = new ContactData
                             {
                                ContactId = c.Id.ToString(),
-                               UserId = (c.ResourceId == null) ? null : c.ResourceId.ToString().Replace("-", string.Empty).ToLower(),
+                               UserId = (string.IsNullOrEmpty(c.ResourceId)) ? string.Empty : c.ResourceId.ToString().Replace("-", string.Empty).ToLower(),
                                PreferredName = c.PreferredName
                             };
                             contactDataList.Add(contactData);
@@ -930,5 +955,7 @@ namespace Phytel.API.DataDomain.Contact
             }
             catch (Exception ex) { throw ex; }
         }
+
+        public string UserId { get; set; }
     }
 }
