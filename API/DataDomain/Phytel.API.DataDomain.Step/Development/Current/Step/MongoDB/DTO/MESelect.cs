@@ -20,17 +20,17 @@ namespace Phytel.API.DataDomain.Step.DTO
         [BsonRequired]
         public string Question { get; set; }
 
-        public const string ResponseProperty = "responses";
+        public const string ResponseProperty = "resp";
         [BsonElement(ResponseProperty)]
         [BsonIgnoreIfNull(true)]
         public List<MEResponse> Response { get; set; }
 
-        public const string SelectTypeProperty = "selecttype";
+        public const string SelectTypeProperty = "selt";
         [BsonElement(SelectTypeProperty)]
         [BsonIgnoreIfNull(true)]
         public SelectType SelectType { get; set; }
 
-        public const string ControlTypeProperty = "controltype";
+        public const string ControlTypeProperty = "ctype";
         [BsonElement(ControlTypeProperty)]
         [BsonIgnoreIfNull(true)]
         public ControlType ControlType { get; set; }

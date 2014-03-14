@@ -147,7 +147,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
         [BsonIgnoreIfNull(false)]
         public Completed Completed { get; set; }
 
-        public const string CompletedOnProperty = "con";
+        public const string CompletedOnProperty = "dc";
         [BsonElement(CompletedOnProperty)]
         [BsonIgnoreIfNull(true)]
         public DateTime? DateCompleted { get; set; }

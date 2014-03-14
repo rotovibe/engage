@@ -9,18 +9,18 @@ namespace Phytel.API.DataDomain.Step.DTO
     [BsonIgnoreExtraElements(false)]
     public class METextInput : MEStepBase
     {
-        public const string InstructionsProperty = "instructions";
+        public const string InstructionsProperty = "inst";
         [BsonElement(InstructionsProperty)]
         [BsonIgnoreIfNull(true)]
         public string Instructions { get; set; }
 
-        public const string TextPromptProperty = "text";
+        public const string TextPromptProperty = "txt";
         [BsonElement(TextPromptProperty)]
         [BsonIgnoreIfNull(true)]
         [BsonRequired]
-        public string TextPrompt { get; set; }
+        public string Text { get; set; }
 
-        public const string ResponseProperty = "responses";
+        public const string ResponseProperty = "resp";
         [BsonElement(ResponseProperty)]
         [BsonIgnoreIfNull(true)]
         public List<MEResponse> Response { get; set; }

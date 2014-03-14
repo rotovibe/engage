@@ -24,7 +24,6 @@ namespace Phytel.API.DataDomain.Action.DTO
         public const string NameProperty = "nm";
         public const string DescriptionProperty = "desc";
         public const string CompletedByProperty = "cby";
-        public const string ObjectivesProperty = "obj";
         public const string StatusProperty = "sts";
 
         public const string VersionProperty = "v";
@@ -50,9 +49,10 @@ namespace Phytel.API.DataDomain.Action.DTO
         [BsonIgnoreIfNull(true)]
         public ObjectId CompletedBy { get; set; }
 
+        public const string ObjectivesProperty = "obj";
         [BsonElement(ObjectivesProperty)]
         [BsonIgnoreIfNull(true)]
-        public List<ObjectiveInfo> ObjectivesInfo { get; set; }
+        public List<Objective> Objectives { get; set; }
 
         [BsonElement(StatusProperty)]
         [BsonIgnoreIfNull(true)]
@@ -92,7 +92,7 @@ namespace Phytel.API.DataDomain.Action.DTO
         public System.DateTime RecordCreatedOn { get; private set; }
     }
 
-    public class ObjectiveInfo
+    public class Objective
     {
         public const string IDProperty = "_id";
         public const string ValueProperty = "val";

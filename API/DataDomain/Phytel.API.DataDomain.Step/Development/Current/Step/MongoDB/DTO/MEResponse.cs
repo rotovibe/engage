@@ -34,7 +34,7 @@ namespace Phytel.API.DataDomain.Step.DTO
         [BsonElement(StepIdProperty)]
         public ObjectId StepId { get; set; }
 
-        public const string NominalProperty = "nominal";
+        public const string NominalProperty = "nml";
         [BsonElement(NominalProperty)]
         public bool Nominal { get; set; }
 

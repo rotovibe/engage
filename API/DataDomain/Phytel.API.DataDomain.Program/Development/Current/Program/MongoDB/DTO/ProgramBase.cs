@@ -28,7 +28,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
         [BsonIgnoreIfNull(true)]
         public string ShortName { get; set; }
 
-        public const string DescriptionProperty = "dsc";
+        public const string DescriptionProperty = "desc";
         [BsonElement(DescriptionProperty)]
         [BsonIgnoreIfNull(true)]
         public string Description { get; set; }
@@ -46,7 +46,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
         public const string ObjectivesInfoProperty = "obj";
         [BsonElement(ObjectivesInfoProperty)]
         [BsonIgnoreIfNull(true)]
-        public List<Objective> ObjectivesInfo { get; set; }
+        public List<Objective> Objectives { get; set; }
 
         public const string ModulesProperty = "ms";
         [BsonElement(ModulesProperty)]

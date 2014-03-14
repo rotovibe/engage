@@ -39,7 +39,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
         [BsonIgnoreIfNull(false)]
         public string Population { get; set; }
 
-        public const string ContractIdProperty = "cid";
+        public const string ContractIdProperty = "ctid";
         [BsonElement(ContractIdProperty)]
         [BsonIgnoreIfNull(false)]
         public string ContractId { get; set; }

@@ -235,7 +235,7 @@ namespace Phytel.API.DataDomain.Program
                             SpawnElement = DTOUtils.GetResponseSpawnElement(cp.Spawn),
                             Modules = DTOUtils.GetModules(cp.Modules, _dbName, this.UserId),
                             Name = cp.Name,
-                            ObjectivesInfo = DTOUtils.GetObjectives(cp.ObjectivesInfo),
+                            ObjectivesInfo = DTOUtils.GetObjectives(cp.Objectives),
                             PatientId = cp.PatientId.ToString(),
                             ProgramState = (int)cp.ProgramState,
                             ShortName = cp.ShortName,

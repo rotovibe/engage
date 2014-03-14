@@ -20,7 +20,7 @@ namespace Phytel.API.DataDomain.Step.DTO
         [BsonRequired]
         public string TextPrompt { get; set; }
 
-        public const string ResponseProperty = "responses";
+        public const string ResponseProperty = "resp";
         [BsonElement(ResponseProperty)]
         [BsonIgnoreIfNull(true)]
         public List<MEResponse> Response { get; set; }

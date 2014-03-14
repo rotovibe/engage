@@ -1204,7 +1204,6 @@ namespace Phytel.API.AppDomain.NG
             List<Step> steps = a.Steps.Select(s => new Step
             {
                 Description = s.Description,
-                Ex = s.Ex,
                 Id = s.Id,
                 SourceId = s.SourceId,
                 ActionId = s.ActionId,

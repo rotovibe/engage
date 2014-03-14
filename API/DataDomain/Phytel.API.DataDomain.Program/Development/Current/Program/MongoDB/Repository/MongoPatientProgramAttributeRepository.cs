@@ -150,7 +150,7 @@ namespace Phytel.API.DataDomain.Program
                             ElementState = (int)cp.State,
                             CompletedBy = cp.CompletedBy,
                             DateCompleted = cp.DateCompleted,
-                            ObjectivesInfo = DTOUtils.GetObjectives(cp.ObjectivesInfo),
+                            ObjectivesInfo = DTOUtils.GetObjectives(cp.Objectives),
                             SpawnElement = DTOUtils.GetSpawnElement(cp),
                             Modules = DTOUtils.GetModules(cp.Modules, _dbName, this.UserId)
                         };

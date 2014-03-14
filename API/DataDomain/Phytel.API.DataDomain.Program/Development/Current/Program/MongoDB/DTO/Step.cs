@@ -21,7 +21,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
         [BsonElement(ActionIdProperty)]
         public ObjectId ActionId { get; set; }
 
-        public const string TypeProperty = "type";
+        public const string TypeProperty = "sttid";
         [BsonElement(TypeProperty)]
         public int StepTypeId { get; set; }
 

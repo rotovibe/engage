@@ -25,7 +25,7 @@ namespace Phytel.API.DataDomain.Module.MongoDB.DTO
         public const string IdProperty = "_id";
         public const string NameProperty = "nm";
         public const string ObjectiveProperty = "obj";
-        public const string DescriptionProperty = "dsc";
+        public const string DescriptionProperty = "desc";
         public const string StatusProperty = "stat";
 
         public const string VersionProperty = "v";

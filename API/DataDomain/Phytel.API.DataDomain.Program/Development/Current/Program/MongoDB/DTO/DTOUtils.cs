@@ -14,56 +14,50 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
     {
         public static MEPatientProgram CreateInitialMEPatientProgram(PutProgramToPatientRequest request, MEProgram cp)
         {
-            MEPatientProgram patientProgDoc = new MEPatientProgram(request.UserId)
+            try
             {
-                PatientId = ObjectId.Parse(request.PatientId),
-                //AuthoredBy = cp.AuthoredBy,
-                Client = cp.Client,
-                ProgramState = Common.ProgramState.NotStarted,
-                State = Common.ElementState.NotStarted,
-                AssignedBy = cp.AssignedBy,
-                AssignedOn = cp.AssignedOn,
-                StartDate = System.DateTime.UtcNow, // utc time
-                EndDate = null,
-                //GraduatedFlag = false,
-                //Population = null,
-                //OptOut = null,
-                //DidNotEnrollReason = null,
-                //DisEnrollReason = null,
-                //Eligibility = Common.EligibilityStatus.Pending,
-                //EligibilityStartDate = System.DateTime.UtcNow,
-                //EligibilityEndDate = null,
-                //EligibilityRequirements = cp.EligibilityRequirements,
-                //Enrollment = Common.GenericStatus.Pending,
-                //EligibilityOverride = Common.GenericSetting.No,
-                DateCompleted = cp.DateCompleted,
-                ContractProgramId = cp.Id,
-                DeleteFlag = cp.DeleteFlag,
-                Description = cp.Description,
-                LastUpdatedOn = System.DateTime.UtcNow, // utc time
-                //Locked = cp.Locked,
-                Name = cp.Name,
-                ObjectivesInfo = cp.ObjectivesInfo,
-                CompletedBy = cp.CompletedBy,
-                SourceId = cp.Id,
-                ShortName = cp.ShortName,
-                Status = cp.Status,
-                Version = cp.Version,
-                Spawn = cp.Spawn,
-                Completed = cp.Completed,
-                Enabled = cp.Enabled,
-                //ExtraElements = cp.ExtraElements,
-                Next = cp.Next,
-                Order = cp.Order,
-                Previous = cp.Previous,
-                Modules = DTOUtils.SetValidModules(cp.Modules, request.ContractNumber, request.UserId),
-                UpdatedBy = ObjectId.Parse(request.UserId)
-            };
-            if(!string.IsNullOrEmpty(request.UserId))
-            {
-                patientProgDoc.UpdatedBy = ObjectId.Parse(request.UserId);
+                MEPatientProgram patientProgDoc = new MEPatientProgram(request.UserId)
+                {
+                    PatientId = ObjectId.Parse(request.PatientId),
+                    //AuthoredBy = cp.AuthoredBy,
+                    Client = cp.Client,
+                    ProgramState = Common.ProgramState.NotStarted,
+                    State = Common.ElementState.NotStarted,
+                    AssignedBy = cp.AssignedBy,
+                    AssignedOn = cp.AssignedOn,
+                    StartDate = System.DateTime.UtcNow, // utc time
+                    EndDate = null,
+                    DateCompleted = cp.DateCompleted,
+                    ContractProgramId = cp.Id,
+                    DeleteFlag = cp.DeleteFlag,
+                    Description = cp.Description,
+                    LastUpdatedOn = System.DateTime.UtcNow, // utc time
+                    Name = cp.Name,
+                    Objectives = cp.Objectives,
+                    CompletedBy = cp.CompletedBy,
+                    SourceId = cp.Id,
+                    ShortName = cp.ShortName,
+                    Status = cp.Status,
+                    Version = cp.Version,
+                    Spawn = cp.Spawn,
+                    Completed = cp.Completed,
+                    Enabled = cp.Enabled,
+                    Next = cp.Next,
+                    Order = cp.Order,
+                    Previous = cp.Previous,
+                    Modules = DTOUtils.SetValidModules(cp.Modules, request.ContractNumber, request.UserId),
+                    UpdatedBy = ObjectId.Parse(request.UserId)
+                };
+                if (!string.IsNullOrEmpty(request.UserId))
+                {
+                    patientProgDoc.UpdatedBy = ObjectId.Parse(request.UserId);
+                }
+                return patientProgDoc;
             }
-            return patientProgDoc;
+            catch (Exception ex)
+            {
+                throw new Exception("DD:DTOUtils:CreateInitialMEPatientProgram()::" + ex.Message, ex.InnerException);
+            }
         }
 
         public static List<Module> SetValidModules(List<Module> list, string contractNumber, string userId)
@@ -176,7 +170,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             }
             catch (Exception ex)
             {
-                throw new Exception("ProgramDD:SetValidModules()::" + ex.Message, ex.InnerException);
+                throw new Exception("DD:DTOUtils:SetValidModules()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -228,7 +222,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             }
             catch (Exception ex)
             {
-                throw new Exception("ProgramDD:GetContractStepResponses()::" + ex.Message, ex.InnerException);
+                throw new Exception("DD:DTOUtils:GetContractStepResponses()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -264,7 +258,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             }
             catch (Exception ex)
             {
-                throw new Exception("ProgramDD:GetStepResponses()::" + ex.Message, ex.InnerException);
+                throw new Exception("DD:DTOUtils:GetStepResponses()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -319,7 +313,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             }
             catch (Exception ex)
             {
-                throw new Exception("ProgramDD:GetStepResponses()::" + ex.Message, ex.InnerException);
+                throw new Exception("DD:DTOUtils:GetStepResponses()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -361,7 +355,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             }
             catch (Exception ex)
             {
-                throw ex;
+                throw new Exception("DD:DTOUtils:RecurseAndReplaceIds()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -429,7 +423,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             }
             catch (Exception ex)
             {
-                throw ex;
+                throw new Exception("DD:DTOUtils:ScanAndReplaceIdReferences()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -454,7 +448,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             }
             catch (Exception ex)
             {
-                throw ex;
+                throw new Exception("DD:DTOUtils:ReplaceNextAndPreviousIds()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -478,7 +472,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             }
             catch (Exception ex)
             {
-                throw ex;
+                throw new Exception("DD:DTOUtils:ReplaceSpawnIdReferences()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -504,19 +498,26 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             }
             catch (Exception ex)
             {
-                throw ex;
+                throw new Exception("DD:DTOUtils:ReplaceSelectedResponseId()::" + ex.Message, ex.InnerException);
             }
         }
 
         private static ObjectId RegisterIds(Dictionary<ObjectId, ObjectId> list, ObjectId id)
         {
-            ObjectId old = id;
-            ObjectId newId = ObjectId.GenerateNewId();
-            if (!list.ContainsKey(id))
+            try
             {
-                list.Add(id, newId);
+                ObjectId old = id;
+                ObjectId newId = ObjectId.GenerateNewId();
+                if (!list.ContainsKey(id))
+                {
+                    list.Add(id, newId);
+                }
+                return newId;
             }
-            return newId;
+            catch (Exception ex)
+            {
+                throw new Exception("DD:DTOUtils:RegisterIds()::" + ex.Message, ex.InnerException);
+            }
         }
 
         internal static List<SpawnElement> GetSpawnElements(List<Program.DTO.SpawnElementDetail> list)
@@ -543,7 +544,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             }
             catch (Exception ex)
             {
-                throw new Exception("ProgramDD:GetSpawnElements()::" + ex.Message, ex.InnerException);
+                throw new Exception("DD:DTOUtils:GetSpawnElements()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -571,7 +572,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             }
             catch (Exception ex)
             {
-                throw new Exception("ProgramDD:GetSpawnElements()::" + ex.Message, ex.InnerException);
+                throw new Exception("DD:DTOUtils:GetSpawnElements()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -615,7 +616,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             }
             catch (Exception ex)
             {
-                throw new Exception("ProgramDD:GetActionElements()::" + ex.Message, ex.InnerException);
+                throw new Exception("DD:DTOUtils:GetActionElements()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -667,7 +668,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             }
             catch (Exception ex)
             {
-                throw new Exception("ProgramDD:GetStepsInfo()::" + ex.Message, ex.InnerException);
+                throw new Exception("DD:DTOUtils:GetStepsInfo()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -684,7 +685,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             }
             catch (Exception ex)
             {
-                throw new Exception("ProgramDD:ParseObjectId()::" + ex.Message, ex.InnerException);
+                throw new Exception("DD:DTOUtils:ParseObjectId()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -719,7 +720,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             }
             catch (Exception ex)
             {
-                throw new Exception("ProgramDD:GetResponses()::" + ex.Message, ex.InnerException);
+                throw new Exception("DD:DTOUtils:GetResponses()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -744,7 +745,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             }
             catch (Exception ex)
             {
-                throw new Exception("ProgramDD:GetSpawnElement()::" + ex.Message, ex.InnerException);
+                throw new Exception("DD:DTOUtils:GetSpawnElement()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -766,7 +767,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             }
             catch (Exception ex)
             {
-                throw new Exception("ProgramDD:GetSpawnElement()::" + ex.Message, ex.InnerException);
+                throw new Exception("DD:DTOUtils:GetSpawnElement()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -785,7 +786,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
                         {
                             Id = ObjectId.Parse(o.Id),
                             Status = (Status)o.Status,
-                            Unit = o.Unit,
+                            Units = o.Unit,
                             Value = o.Value
                         });
                     });
@@ -794,7 +795,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             }
             catch (Exception ex)
             {
-                throw new Exception("ProgramDD:GetObjectives()::" + ex.Message, ex.InnerException);
+                throw new Exception("DD:DTOUtils:GetObjectives()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -837,7 +838,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             }
             catch (Exception ex)
             {
-                throw new Exception("ProgramDD:CloneAppDomainModules()::" + ex.Message, ex.InnerException);
+                throw new Exception("DD:DTOUtils:CloneAppDomainModules()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -873,7 +874,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             }
             catch (Exception ex)
             {
-                throw new Exception("ProgramDD:GetModules()::" + ex.Message, ex.InnerException);
+                throw new Exception("DD:DTOUtils:GetModules()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -889,14 +890,14 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
                         Id = o.Id.ToString(),
                         Value = o.Value,
                         Status = (int)o.Status,
-                        Unit = o.Unit
+                        Unit = o.Units
                     }));
                 }
                 return objs;
             }
             catch (Exception ex)
             {
-                throw new Exception("ProgramDD:GetObjectives()::" + ex.Message, ex.InnerException);
+                throw new Exception("DD:DTOUtils:GetObjectives()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -931,7 +932,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             }
             catch (Exception ex)
             {
-                throw new Exception("ProgramDD:GetActions()::" + ex.Message, ex.InnerException);
+                throw new Exception("DD:DTOUtils:GetActions()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -975,7 +976,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             }
             catch (Exception ex)
             {
-                throw new Exception("ProgramDD:GetSteps()::" + ex.Message, ex.InnerException);
+                throw new Exception("DD:DTOUtils:GetSteps()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -998,7 +999,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             }
             catch (Exception ex)
             {
-                throw new Exception("ProgramDD:GetSpawnElement()::" + ex.Message, ex.InnerException);
+                throw new Exception("DD:DTOUtils:GetSpawnElement()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -1031,7 +1032,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             }
             catch (Exception ex)
             {
-                throw new Exception("ProgramDD:GetResponses()::" + ex.Message, ex.InnerException);
+                throw new Exception("DD:DTOUtils:GetResponses()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -1056,7 +1057,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             }
             catch (Exception ex)
             {
-                throw new ArgumentException("ProgramDD:GetResponseSpawnElement()::" + ex.Message, ex.InnerException);
+                throw new ArgumentException("DD:DTOUtils:GetResponseSpawnElement()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -1088,7 +1089,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             }
             catch (Exception ex)
             {
-                throw new ArgumentException("ProgramDD:RecurseAndSaveResponseObjects()::" + ex.Message, ex.InnerException);
+                throw new ArgumentException("DD:DTOUtils:RecurseAndSaveResponseObjects()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -1105,7 +1106,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             }
             catch (Exception ex)
             {
-                throw new ArgumentException("ProgramDD:SaveResponseToDocument()::" + ex.Message, ex.InnerException);
+                throw new ArgumentException("DD:DTOUtils:SaveResponseToDocument()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -1127,7 +1128,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             }
             catch (Exception ex)
             {
-                throw new ArgumentException("ProgramDD:InitializeElementAttributes()::" + ex.Message, ex.InnerException);
+                throw new ArgumentException("DD:DTOUtils:InitializeElementAttributes()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -1146,7 +1147,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             }
             catch (Exception ex)
             {
-                throw new Exception("ProgramDD:InitializeProgramAttributes()::" + ex.Message, ex.InnerException);
+                throw new Exception("DD:DTOUtils:InitializeProgramAttributes()::" + ex.Message, ex.InnerException);
             }
         }
     }

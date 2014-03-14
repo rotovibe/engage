@@ -63,9 +63,9 @@ namespace Phytel.API.DataDomain.Action
 
                     List<string> objectiveIDs = new List<string>();
 
-                    if (meAction.ObjectivesInfo != null)
+                    if (meAction.Objectives != null)
                     {
-                        foreach (ObjectiveInfo oi in meAction.ObjectivesInfo)
+                        foreach (Objective oi in meAction.Objectives)
                         {
                             objectiveIDs.Add(oi.Id.ToString());
                         }

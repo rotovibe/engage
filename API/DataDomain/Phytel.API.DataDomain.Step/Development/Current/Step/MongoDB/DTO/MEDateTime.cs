@@ -20,12 +20,12 @@ namespace Phytel.API.DataDomain.Step.DTO
         [BsonRequired]
         public string Question { get; set; }
 
-        public const string ResponseProperty = "responses";
+        public const string ResponseProperty = "resp";
         [BsonElement(ResponseProperty)]
         [BsonIgnoreIfNull(true)]
         public List<MEResponse> Response { get; set; }
 
-        public const string IncludeTimeProperty = "inctime";
+        public const string IncludeTimeProperty = "it";
         [BsonElement(IncludeTimeProperty)]
         [BsonIgnoreIfNull(true)]
         [BsonRequired]
