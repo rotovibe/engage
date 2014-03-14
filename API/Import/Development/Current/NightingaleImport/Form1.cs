@@ -7,6 +7,7 @@ using Phytel.API.DataDomain.PatientSystem.DTO;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Configuration;
 using System.Data;
 using System.Drawing;
 using System.IO;
@@ -62,22 +63,20 @@ namespace NightingaleImport
         static int colAdd2Pref = 36;
         static int colAdd2Type = 37;
         static int colCMan = 38;
-        //static int colSSN = 39;
-
-
+        
         private List<IdNamePair> modesLookUp = new List<IdNamePair>();
         private List<CommTypeData> typesLookUp = new List<CommTypeData>();
         private List<StateData> statesLookUp = new List<StateData>();
         private List<TimeZoneData> zonesLookUp = new List<TimeZoneData>();
         private TimeZoneData zoneDefault = new TimeZoneData();
 
-        //TODO: Move to app config
-        private double version = 1.0;
-        private string context = "NG";
-        private string contractNumber = "InHealth001";
-        private string contactTypeId = "530cd571d433231ed4ba969b";
+        private double version = double.Parse(ConfigurationManager.AppSettings.Get("version"));
+        private string context = ConfigurationManager.AppSettings.Get("context");
+        private string contractNumber = ConfigurationManager.AppSettings.Get("contractNumber");
+        private string contactTypeId = ConfigurationManager.AppSettings.Get("contactTypeId");
+        private string DataDomainURL = ConfigurationManager.AppSettings.Get("DataDomainURL");
+        private string phytelServicesConnName = ConfigurationManager.AppSettings.Get("PhytelServicesConnName");
 
-                
         public Form1()
         {
             InitializeComponent();
@@ -123,8 +122,7 @@ namespace NightingaleImport
                         DOB = lvi.SubItems[colDB].Text,
                         Context = context,
                         ContractNumber = contractNumber,
-                        Version = version,
-                        //SSN = lvi.SubItems[colSSN].Text,
+                        Version = version
                     };
                     PutPatientDataResponse responsePatient = putPatientServiceCall(patientRequest);
                     if (responsePatient.Id == null)
@@ -334,7 +332,12 @@ namespace NightingaleImport
                     }
 
                     //addresses
-                    if (string.IsNullOrEmpty(lvi.SubItems[colAdd1L1].Text) == false)
+                    if ((string.IsNullOrEmpty(lvi.SubItems[colAdd1L1].Text) == false)
+                        || (string.IsNullOrEmpty(lvi.SubItems[colAdd1L2].Text) == false)
+                        || (string.IsNullOrEmpty(lvi.SubItems[colAdd1L3].Text) == false)
+                        || (string.IsNullOrEmpty(lvi.SubItems[colAdd1City].Text) == false)
+                        || (string.IsNullOrEmpty(lvi.SubItems[colAdd1St].Text) == false)
+                        || (string.IsNullOrEmpty(lvi.SubItems[colAdd1Zip].Text) == false))
                     {
                         AddressData add1 = new AddressData
                         {
@@ -355,7 +358,8 @@ namespace NightingaleImport
 
                         foreach (StateData st in statesLookUp)
                         {
-                            if (st.Name == lvi.SubItems[colAdd1St].Text)
+                            if ((st.Name == lvi.SubItems[colAdd1St].Text)
+                                || (st.Code == lvi.SubItems[colAdd1St].Text))
                             {
                                 add1.StateId = st.Id;
                             }
@@ -377,7 +381,12 @@ namespace NightingaleImport
                         addresses.Add(add1);
                     }
 
-                    if (string.IsNullOrEmpty(lvi.SubItems[colAdd2L1].Text) == false)
+                    if ((string.IsNullOrEmpty(lvi.SubItems[colAdd2L1].Text) == false)
+                        || (string.IsNullOrEmpty(lvi.SubItems[colAdd2L2].Text) == false)
+                        || (string.IsNullOrEmpty(lvi.SubItems[colAdd2L3].Text) == false)
+                        || (string.IsNullOrEmpty(lvi.SubItems[colAdd2City].Text) == false)
+                        || (string.IsNullOrEmpty(lvi.SubItems[colAdd2St].Text) == false)
+                        || (string.IsNullOrEmpty(lvi.SubItems[colAdd2Zip].Text) == false))
                     {
                         AddressData add2 = new AddressData
                         {
@@ -398,7 +407,8 @@ namespace NightingaleImport
 
                         foreach (StateData st in statesLookUp)
                         {
-                            if (st.Name == lvi.SubItems[colAdd2St].Text)
+                            if ((st.Name == lvi.SubItems[colAdd2St].Text)
+                                || (st.Code == lvi.SubItems[colAdd2St].Text))
                             {
                                 add2.StateId = st.Id;
                             }
@@ -509,8 +519,8 @@ namespace NightingaleImport
         private void LoadLookUps()
         {
             //modes
-            Uri modesUri = new Uri(string.Format("{0}/{1}/{2}/{3}/commmodes",
-                                                    "http://localhost:8888/LookUp",
+            Uri modesUri = new Uri(string.Format("{0}/LookUp/{1}/{2}/{3}/commmodes",
+                                                    DataDomainURL,
                                                     context,
                                                     version,
                                                     contractNumber));
@@ -547,8 +557,8 @@ namespace NightingaleImport
             modesLookUp = responseModes.CommModes;
 
             //types
-            Uri typesUri = new Uri(string.Format("{0}/{1}/{2}/{3}/commtypes",
-                                                    "http://localhost:8888/LookUp",
+            Uri typesUri = new Uri(string.Format("{0}/LookUp/{1}/{2}/{3}/commtypes",
+                                                    DataDomainURL,
                                                     context,
                                                     version,
                                                     contractNumber));
@@ -585,8 +595,8 @@ namespace NightingaleImport
             typesLookUp = responseTypes.CommTypes;
 
             //states
-            Uri statesUri = new Uri(string.Format("{0}/{1}/{2}/{3}/states",
-                                                    "http://localhost:8888/LookUp",
+            Uri statesUri = new Uri(string.Format("{0}/LookUp/{1}/{2}/{3}/states",
+                                                    DataDomainURL,
                                                     context,
                                                     version,
                                                     contractNumber));
@@ -623,8 +633,8 @@ namespace NightingaleImport
             statesLookUp = responseStates.States;
 
             //timezones
-            Uri zonesUri = new Uri(string.Format("{0}/{1}/{2}/{3}/timeZones",
-                                                    "http://localhost:8888/LookUp",
+            Uri zonesUri = new Uri(string.Format("{0}/LookUp/{1}/{2}/{3}/timeZones",
+                                                    DataDomainURL,
                                                     context,
                                                     version,
                                                     contractNumber));
@@ -661,8 +671,8 @@ namespace NightingaleImport
             zonesLookUp = responseZones.TimeZones;
 
             //default timezone
-            Uri zoneUri = new Uri(string.Format("{0}/{1}/{2}/{3}/TimeZone/Default",
-                                                    "http://localhost:8888/LookUp",
+            Uri zoneUri = new Uri(string.Format("{0}/LookUp/{1}/{2}/{3}/TimeZone/Default",
+                                                    DataDomainURL,
                                                     context,
                                                     version,
                                                     contractNumber));
@@ -728,10 +738,10 @@ namespace NightingaleImport
                     foreach (string line in filelines)
                     {
                         attributes = line.Split(",".ToCharArray());
-                        ListViewItem lvi = new ListViewItem(attributes[colFirstN]);
+                        ListViewItem lvi = new ListViewItem(attributes[colFirstN].Trim());
                         for (int i = 1; i < attributes.Count(); i++)
                         {
-                            lvi.SubItems.Add(attributes[i]);
+                            lvi.SubItems.Add(attributes[i].Trim());
                         }
                         //Check for required fields
                         if (lvi.SubItems[colFirstN].Text == "" || lvi.SubItems[colLastN].Text == ""
@@ -739,39 +749,6 @@ namespace NightingaleImport
                         {
                             throw new Exception("Required Patient data not found. Check patient: " + line);
                         }
-                        //else if ((lvi.SubItems[colSID].Text != "" && lvi.SubItems[colSysN].Text == "") 
-                        //            || (lvi.SubItems[colSysN].Text != "" && lvi.SubItems[colSID].Text == ""))
-                        //{
-                        //    throw new Exception("Required Patient System data not found. Check patient: " + line);
-                        //}
-                        //else if (lvi.SubItems[colPh1].Text != "" && (lvi.SubItems[colPh1Type].Text == ""))
-                        //{
-                        //    throw new Exception("Required Phone 1 data not found. Check patient: " + line);
-                        //}
-                        //else if (lvi.SubItems[colPh2].Text != "" && (lvi.SubItems[colPh2Type].Text == ""))
-                        //{
-                        //    throw new Exception("Required Phone 2 data not found. Check patient: " + line);
-                        //}
-                        //else if (lvi.SubItems[colEm1].Text != "" && (lvi.SubItems[colEm1Type].Text == ""))
-                        //{
-                        //    throw new Exception("Required Email 1 data not found. Check patient: " + line);
-                        //}
-                        //else if (lvi.SubItems[colEm2].Text != "" && (lvi.SubItems[colEm2Type].Text == ""))
-                        //{
-                        //    throw new Exception("Required Email 2 data not found. Check patient: " + line);
-                        //}
-                        //else if (lvi.SubItems[colAdd1L1].Text != "" && (lvi.SubItems[colAdd1City].Text == "" 
-                        //            || lvi.SubItems[colAdd1St].Text == "" || lvi.SubItems[colAdd1Zip].Text == "" 
-                        //            || lvi.SubItems[colAdd1Type].Text == ""))
-                        //{
-                        //    throw new Exception("Required Address 1 data not found. Check patient: " + line);
-                        //}
-                        //else if (lvi.SubItems[colAdd2L1].Text != "" && (lvi.SubItems[colAdd2City].Text == ""
-                        //            || lvi.SubItems[colAdd2St].Text == "" || lvi.SubItems[colAdd2Zip].Text == ""
-                        //            || lvi.SubItems[colAdd2Type].Text == ""))
-                        //{
-                        //    throw new Exception("Required Address 2 data not found. Check patient: " + line);
-                        //}
                         else
                         {
                             listView1.Items.Add(lvi);
@@ -837,7 +814,7 @@ namespace NightingaleImport
 
                 string sql = string.Format("Select userId from [User] where UserName = '{0}'",
                                             userName);
-                DataSet ds = Phytel.Services.SQLDataService.Instance.ExecuteSQL("Phytel", false, sql);
+                DataSet ds = Phytel.Services.SQLDataService.Instance.ExecuteSQL(phytelServicesConnName, false, sql);
                 if (ds.Tables[0].Rows.Count > 0)
                 {
                     returnId = Guid.Parse(ds.Tables[0].Rows[0]["userId"].ToString());
@@ -853,8 +830,8 @@ namespace NightingaleImport
         private PutPatientDataResponse putPatientServiceCall(PutPatientDataRequest putPatientRequest)
         {
             //Patient
-            Uri theUri = new Uri(string.Format("{0}/{1}/{2}/{3}/patient",
-                                                 "http://localhost:8888/Patient",
+            Uri theUri = new Uri(string.Format("{0}/Patient/{1}/{2}/{3}/patient",
+                                                 DataDomainURL,
                                                  context,
                                                  version,
                                                  contractNumber));
@@ -893,8 +870,8 @@ namespace NightingaleImport
         private PutPatientSystemDataResponse putPatientSystemServiceCall(PutPatientSystemDataRequest putPatSysRequest)
         {
             //PatientSystem
-            Uri theUriPS = new Uri(string.Format("{0}/{1}/{2}/{3}/patientsystem",
-                                                   "http://localhost:8888/PatientSystem",
+            Uri theUriPS = new Uri(string.Format("{0}/PatientSystem/{1}/{2}/{3}/patientsystem",
+                                                   DataDomainURL,
                                                    context,
                                                    version,
                                                    contractNumber));
@@ -931,8 +908,8 @@ namespace NightingaleImport
 
         private PutUpdatePatientDataResponse putUpdatePatientServiceCall(PutUpdatePatientDataRequest putUpdatePatient, string patientId)
         {
-            Uri updateUri = new Uri(string.Format("{0}/{1}/{2}/{3}/patient/{4}",
-                                                        "http://localhost:8888/Patient",
+            Uri updateUri = new Uri(string.Format("{0}/Patient/{1}/{2}/{3}/patient/{4}",
+                                                        DataDomainURL,
                                                         context,
                                                         version,
                                                         contractNumber,
@@ -972,8 +949,8 @@ namespace NightingaleImport
         
         private PutContactDataResponse putContactServiceCall(PutContactDataRequest putContactRequest, string patientId)
         {
-            Uri contactUri = new Uri(string.Format("{0}/{1}/{2}/{3}/patient/contact/{4}",
-                                            "http://localhost:8888/Contact",
+            Uri contactUri = new Uri(string.Format("{0}/Contact/{1}/{2}/{3}/patient/contact/{4}",
+                                            DataDomainURL,
                                             context,
                                             version,
                                             contractNumber,
@@ -1008,8 +985,8 @@ namespace NightingaleImport
         private PutCareMemberDataResponse putCareMemberServiceCall(PutCareMemberDataRequest putCareMemberRequest, string patientId)
         {
             //Patient
-            Uri careMemberUri = new Uri(string.Format("{0}/{1}/{2}/{3}/Patient/{4}/CareMember/Insert",
-                                                 "http://localhost:8888/CareMember",
+            Uri careMemberUri = new Uri(string.Format("{0}/CareMember/{1}/{2}/{3}/Patient/{4}/CareMember/Insert",
+                                                 DataDomainURL,
                                                  context,
                                                  version,
                                                  contractNumber,
@@ -1047,8 +1024,8 @@ namespace NightingaleImport
 
         private GetContactByUserIdDataResponse getContactByUserIdServiceCall(string userId)
         {
-            Uri getContactUri = new Uri(string.Format("{0}/{1}/{2}/{3}/Contact/User/{4}",
-                                                    "http://localhost:8888/Contact",
+            Uri getContactUri = new Uri(string.Format("{0}/Contact/{1}/{2}/{3}/Contact/User/{4}",
+                                                    DataDomainURL,
                                                     context,
                                                     version,
                                                     contractNumber,
@@ -1131,8 +1108,8 @@ namespace NightingaleImport
 
         private GetCohortPatientViewResponse getCohortPatientViewServiceCall(string patientId)
         {
-            Uri getCohortUri = new Uri(string.Format("{0}/{1}/{2}/{3}/patient/{4}/cohortpatientview/",
-                                                        "http://localhost:8888/Patient",
+            Uri getCohortUri = new Uri(string.Format("{0}/Patient/{1}/{2}/{3}/patient/{4}/cohortpatientview/",
+                                                        DataDomainURL,
                                                         context,
                                                         version,
                                                         contractNumber,
@@ -1157,8 +1134,8 @@ namespace NightingaleImport
 
         private PutUpdateCohortPatientViewResponse putCohortPatientViewServiceCall(PutUpdateCohortPatientViewRequest request, string patientId)
         {
-            Uri cohortPatientUri = new Uri(string.Format("{0}/{1}/{2}/{3}/patient/{4}/cohortpatientview/update",
-                                                 "http://localhost:8888/Patient",
+            Uri cohortPatientUri = new Uri(string.Format("{0}/Patient/{1}/{2}/{3}/patient/{4}/cohortpatientview/update",
+                                                 DataDomainURL,
                                                  context,
                                                  version,
                                                  contractNumber,
