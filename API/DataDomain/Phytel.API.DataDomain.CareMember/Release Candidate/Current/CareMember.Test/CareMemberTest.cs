@@ -10,7 +10,7 @@ namespace Phytel.API.DataDomain.CareMember.Test
         [TestMethod]
         public void GetCareMember_Test_Passes()
         {
-            GetCareMemberDataRequest request = new GetCareMemberDataRequest { Id = "530cf7fbd4332326bc7bbcbc" };
+            GetCareMemberDataRequest request = new GetCareMemberDataRequest { Id = "531dedbbd6a485039854650b" };
 
             CareMemberData response = CareMemberDataManager.GetCareMember(request);
 
@@ -20,7 +20,7 @@ namespace Phytel.API.DataDomain.CareMember.Test
         [TestMethod]
         public void GetAllCareMembers_Test_Passes()
         {
-            GetAllCareMembersDataRequest request = new GetAllCareMembersDataRequest { PatientId = "52f5589c072ef709f84e7798" };
+            GetAllCareMembersDataRequest request = new GetAllCareMembersDataRequest { PatientId = "52f55899072ef709f84e7637" };
 
             List<CareMemberData> response = CareMemberDataManager.GetAllCareMembers(request);
 
@@ -34,7 +34,7 @@ namespace Phytel.API.DataDomain.CareMember.Test
             PutCareMemberDataRequest request = new PutCareMemberDataRequest
             {
                 UserId = "DD_Harness",
-                Version = "v1",
+                Version = 1,
                 CareMember = n
             };
             string id = CareMemberDataManager.InsertCareMember(request);
@@ -49,7 +49,7 @@ namespace Phytel.API.DataDomain.CareMember.Test
             PutUpdateCareMemberDataRequest request = new PutUpdateCareMemberDataRequest
             {
                 UserId = "DD_Harness",
-                Version = "v1",
+                Version = 1,
                 CareMember = n
             };
             bool updated = CareMemberDataManager.UpdateCareMember(request);

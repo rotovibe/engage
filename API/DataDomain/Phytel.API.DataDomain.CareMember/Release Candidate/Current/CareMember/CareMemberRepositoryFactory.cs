@@ -9,7 +9,7 @@ namespace Phytel.API.DataDomain.CareMember
 {
     public abstract class CareMemberRepositoryFactory<T>
     {
-        public static ICareMemberRepository<T> GetCareMemberRepository(string dbName, string productName)
+        public static ICareMemberRepository<T> GetCareMemberRepository(string dbName, string productName, string userId)
         {
             try
             {
@@ -17,7 +17,7 @@ namespace Phytel.API.DataDomain.CareMember
 
                 //We only have 1 repository at this time, just return it
                 repo = new MongoCareMemberRepository<T>(dbName) as ICareMemberRepository<T>;
-
+                repo.UserId = userId;
                 return repo;
             }
             catch (Exception ex)

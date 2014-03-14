@@ -14,7 +14,8 @@ namespace Phytel.API.DataDomain.CareMember
             string careMemberId = string.Empty;
             try
             {
-                ICareMemberRepository<PutCareMemberDataResponse> repo = CareMemberRepositoryFactory<PutCareMemberDataResponse>.GetCareMemberRepository(request.ContractNumber, request.Context);
+                ICareMemberRepository<PutCareMemberDataResponse> repo = CareMemberRepositoryFactory<PutCareMemberDataResponse>.GetCareMemberRepository(request.ContractNumber, request.Context, request.UserId);
+
                 careMemberId = (string)repo.Insert(request);
             }
             catch (Exception ex)
@@ -29,7 +30,8 @@ namespace Phytel.API.DataDomain.CareMember
             bool updated = false;
             try
             {
-                ICareMemberRepository<PutUpdateCareMemberDataResponse> repo = CareMemberRepositoryFactory<PutUpdateCareMemberDataResponse>.GetCareMemberRepository(request.ContractNumber, request.Context);
+                ICareMemberRepository<PutUpdateCareMemberDataResponse> repo = CareMemberRepositoryFactory<PutUpdateCareMemberDataResponse>.GetCareMemberRepository(request.ContractNumber, request.Context, request.UserId);
+
                 updated = (bool)repo.Update(request);
             }
             catch (Exception ex)
@@ -44,7 +46,8 @@ namespace Phytel.API.DataDomain.CareMember
             try
             {
                 CareMemberData response = null;
-                ICareMemberRepository<CareMemberData> repo = CareMemberRepositoryFactory<CareMemberData>.GetCareMemberRepository(request.ContractNumber, request.Context);
+                ICareMemberRepository<CareMemberData> repo = CareMemberRepositoryFactory<CareMemberData>.GetCareMemberRepository(request.ContractNumber, request.Context, request.UserId);
+
                 response = repo.FindByID(request.Id) as CareMemberData;
                 return response;
             }
@@ -59,7 +62,8 @@ namespace Phytel.API.DataDomain.CareMember
             try
             {
                 List<CareMemberData> response = null;
-                ICareMemberRepository<List<CareMemberData>> repo = CareMemberRepositoryFactory<List<CareMemberData>>.GetCareMemberRepository(request.ContractNumber, request.Context);
+                ICareMemberRepository<List<CareMemberData>> repo = CareMemberRepositoryFactory<List<CareMemberData>>.GetCareMemberRepository(request.ContractNumber, request.Context, request.UserId);
+
                 response = repo.FindByPatientId(request) as List<CareMemberData>;
                 return response;
             }
