@@ -104,7 +104,7 @@ namespace Phytel.API.DataDomain.Contact.DTO
 
         [BsonElement(TimeZoneProperty)]
         [BsonIgnoreIfNull(true)]
-        public ObjectId? TimeZone { get; set; }
+        public ObjectId? TimeZoneId { get; set; }
 
         [BsonElement(LanguagesProperty)]
         [BsonIgnoreIfNull(true)]

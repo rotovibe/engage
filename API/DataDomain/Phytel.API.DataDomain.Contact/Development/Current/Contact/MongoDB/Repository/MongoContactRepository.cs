@@ -93,7 +93,7 @@ namespace Phytel.API.DataDomain.Contact
                     //Timezone
                     if (request.TimeZoneId != null)
                     {
-                        meContact.TimeZone = ObjectId.Parse(request.TimeZoneId);
+                        meContact.TimeZoneId = ObjectId.Parse(request.TimeZoneId);
                     }
                     //Modes
                     if (request.Modes != null && request.Modes.Count > 0)
@@ -770,7 +770,7 @@ namespace Phytel.API.DataDomain.Contact
                         LastName = mc.LastName,
                         PreferredName = mc.PreferredName,
                         Gender = mc.Gender,
-                        TimeZoneId = mc.TimeZone == null ? null : mc.TimeZone.ToString(),
+                        TimeZoneId = mc.TimeZoneId == null ? null : mc.TimeZoneId.ToString(),
                         WeekDays = mc.WeekDays,
                         TimesOfDaysId = Helper.ConvertToStringList(mc.TimesOfDays)
                     };
