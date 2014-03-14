@@ -20,6 +20,11 @@ namespace Phytel.API.DataDomain.Action
         public MongoActionRepository(string contractDBName)
         {
             _dbName = contractDBName;
+
+            #region Register ClassMap
+            if (MongoDB.Bson.Serialization.BsonClassMap.IsClassMapRegistered(typeof(MEAction)) == false)
+                MongoDB.Bson.Serialization.BsonClassMap.RegisterClassMap<MEAction>();
+            #endregion
         }
 
         public object Insert(object newEntity)
@@ -58,9 +63,9 @@ namespace Phytel.API.DataDomain.Action
 
                     List<string> objectiveIDs = new List<string>();
 
-                    if (meAction.ObjectivesInfo != null)
+                    if (meAction.Objectives != null)
                     {
-                        foreach (ObjectiveInfo oi in meAction.ObjectivesInfo)
+                        foreach (Objective oi in meAction.Objectives)
                         {
                             objectiveIDs.Add(oi.Id.ToString());
                         }
@@ -71,7 +76,7 @@ namespace Phytel.API.DataDomain.Action
                         ID = meAction.Id.ToString(),
                         Name = meAction.Name,
                         Description = meAction.Description,
-                        CompletedBy = meAction.CompletedBy,
+                        CompletedBy = meAction.CompletedBy.ToString(),
                         Objectives = objectiveIDs,
                         Status = Helper.ToFriendlyString(meAction.Status)
                     };
@@ -100,5 +105,7 @@ namespace Phytel.API.DataDomain.Action
         {
             throw new NotImplementedException();
         }
+
+        public string UserId { get; set; }
     }
 }

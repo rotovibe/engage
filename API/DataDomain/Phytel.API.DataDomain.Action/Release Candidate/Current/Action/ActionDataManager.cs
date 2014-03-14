@@ -10,19 +10,11 @@ namespace Phytel.API.DataDomain.Action
         {
             GetActionDataResponse result = new GetActionDataResponse();
 
-            IActionRepository<GetActionDataResponse> repo = ActionRepositoryFactory<GetActionDataResponse>.GetActionRepository(request.ContractNumber, request.Context);
+            IActionRepository<GetActionDataResponse> repo = ActionRepositoryFactory<GetActionDataResponse>.GetActionRepository(request.ContractNumber, request.Context, request.UserId);
+
             result = repo.FindByID(request.ActionID) as GetActionDataResponse;
             
             return (result != null ? result : new GetActionDataResponse());
         }
-
-        //public static GetAllActionsResponse GetActionList(GetAllActionsRequest request)
-        //{
-        //    GetAllActionsResponse result = new GetAllActionsResponse();
-
-        //    IActionRepository<GetAllActionsResponse> repo = ActionRepositoryFactory<GetAllActionsResponse>.GetActionRepository(request.ContractNumber, request.Context);
-
-        //    return result;
-        //}
     }
 }   
