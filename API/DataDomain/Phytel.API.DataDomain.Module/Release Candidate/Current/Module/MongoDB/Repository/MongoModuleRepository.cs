@@ -10,6 +10,7 @@ using MongoDB.Driver.Builders;
 using MongoDB.Bson;
 using Phytel.API.DataDomain.Module;
 using Phytel.API.DataDomain.Module.MongoDB.DTO;
+using MongoDB.Bson.Serialization;
 
 namespace Phytel.API.DataDomain.Module
 {
@@ -20,6 +21,11 @@ namespace Phytel.API.DataDomain.Module
         public MongoModuleRepository(string contractDBName)
         {
             _dbName = contractDBName;
+
+            #region Register ClassMap
+            if (BsonClassMap.IsClassMapRegistered(typeof(MEModule)) == false)
+                BsonClassMap.RegisterClassMap<MEModule>();
+            #endregion
         }
 
         public object Insert(object newEntity)
@@ -81,5 +87,7 @@ namespace Phytel.API.DataDomain.Module
         {
             throw new NotImplementedException();
         }
+
+        public string UserId { get; set; }
     }
 }

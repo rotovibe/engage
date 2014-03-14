@@ -10,7 +10,8 @@ namespace Phytel.API.DataDomain.Module
         {
             GetModuleResponse result = new GetModuleResponse();
 
-            IModuleRepository<GetModuleResponse> repo = ModuleRepositoryFactory<GetModuleResponse>.GetModuleRepository(request.ContractNumber, request.Context);
+            IModuleRepository<GetModuleResponse> repo = ModuleRepositoryFactory<GetModuleResponse>.GetModuleRepository(request.ContractNumber, request.Context, request.UserId);
+
             var module = repo.FindByID(request.ModuleID);
             result.Module = module as DTO.Module;
             
@@ -21,8 +22,8 @@ namespace Phytel.API.DataDomain.Module
         {
             GetAllModulesResponse result = new GetAllModulesResponse();
 
-            IModuleRepository<GetAllModulesResponse> repo = ModuleRepositoryFactory<GetAllModulesResponse>.GetModuleRepository(request.ContractNumber, request.Context);
-
+            IModuleRepository<GetAllModulesResponse> repo = ModuleRepositoryFactory<GetAllModulesResponse>.GetModuleRepository(request.ContractNumber, request.Context, request.UserId);
+            
             return result;
         }
     }

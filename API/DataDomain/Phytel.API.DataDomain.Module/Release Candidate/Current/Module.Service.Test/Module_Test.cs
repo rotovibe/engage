@@ -15,8 +15,10 @@ namespace Phytel.API.DataDomain.Module.Services.Test
             string moduleID = "52a0a8c2fe7a5915485bdfd4";
             string contractNumber = "InHealth001";
             string context = "NG";
-            string version = "v1";
+            double version = 1.0;
             IRestClient client = new JsonServiceClient();
+            JsonServiceClient.HttpWebRequestFilter = x =>
+                            x.Headers.Add(string.Format("{0}: {1}", "x-Phytel-UserID", "531f2df9072ef727c4d2a3df"));
 
             GetModuleResponse response = client.Get<GetModuleResponse>(
                 string.Format("{0}/{1}/{2}/{3}/Module/{4}", url, context, version, contractNumber, moduleID));
@@ -32,8 +34,10 @@ namespace Phytel.API.DataDomain.Module.Services.Test
             string moduleID = "52a0a775fe7a5915485bdfd1";
             string contractNumber = "InHealth001";
             string context = "NG";
-            string version = "v1";
+            double version = 1.0;
             IRestClient client = new JsonServiceClient();
+            JsonServiceClient.HttpWebRequestFilter = x =>
+                            x.Headers.Add(string.Format("{0}: {1}", "x-Phytel-UserID", "531f2df9072ef727c4d2a3df"));
 
             GetModuleResponse response = client.Get<GetModuleResponse>(
                 string.Format("{0}/{1}/{2}/{3}/Module/{4}", url, context, version, contractNumber, moduleID));
@@ -49,8 +53,10 @@ namespace Phytel.API.DataDomain.Module.Services.Test
             string moduleID = "52a0a7fffe7a5915485bdfd2";
             string contractNumber = "InHealth001";
             string context = "NG";
-            string version = "v1";
+            double version = 1.0;
             IRestClient client = new JsonServiceClient();
+            JsonServiceClient.HttpWebRequestFilter = x =>
+                            x.Headers.Add(string.Format("{0}: {1}", "x-Phytel-UserID", "531f2df9072ef727c4d2a3df"));
 
             GetModuleResponse response = client.Get<GetModuleResponse>(
                 string.Format("{0}/{1}/{2}/{3}/Module/{4}", url, context, version, contractNumber, moduleID));
@@ -66,8 +72,10 @@ namespace Phytel.API.DataDomain.Module.Services.Test
         //    string moduleID = "52a0a8c2fe7a5915485bdfd4";
         //    string contractNumber = "InHealth001";
         //    string context = "NG";
-        //    string version = "v1";
+        //    double version = 1.0;
         //    IRestClient client = new JsonServiceClient();
+        //    JsonServiceClient.HttpWebRequestFilter = x =>
+        //                    x.Headers.Add(string.Format("{0}: {1}", "x-Phytel-UserID", "531f2df9072ef727c4d2a3df"));
 
         //    GetModuleResponse response = client.Get<GetModuleResponse>(
         //        string.Format("{0}/{1}/{2}/{3}/Module/{4}", url, context, version, contractNumber, moduleID));
