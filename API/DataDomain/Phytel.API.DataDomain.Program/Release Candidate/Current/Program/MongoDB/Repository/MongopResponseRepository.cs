@@ -12,6 +12,8 @@ using Phytel.API.DataDomain.Program;
 using Phytel.API.DataDomain.Program.MongoDB.DTO;
 using Phytel.API.Common;
 using Phytel.API.Common.Data;
+using Phytel.API.DataAudit;
+using MongoDB.Bson.Serialization;
 
 namespace Phytel.API.DataDomain.Program
 {
@@ -22,12 +24,22 @@ namespace Phytel.API.DataDomain.Program
         public MongoResponseRepository(string contractDBName)
         {
             _dbName = contractDBName;
+
+            #region Register ClassMap
+            if (BsonClassMap.IsClassMapRegistered(typeof(ProgramBase)) == false)
+                BsonClassMap.RegisterClassMap<ProgramBase>();
+
+            if (BsonClassMap.IsClassMapRegistered(typeof(MEResponse)) == false)
+                BsonClassMap.RegisterClassMap<MEResponse>();
+            #endregion
         }
 
         public object Insert(object newEntity)
         {
+            try
+            {
             ResponseDetail rs = (ResponseDetail)newEntity;
-            MEResponse mer = new MEResponse
+            MEResponse mer = new MEResponse(this.UserId)
             {
                 Id = ObjectId.Parse(rs.Id),
                 NextStepId = ObjectId.Parse(rs.NextStepId),
@@ -37,26 +49,32 @@ namespace Phytel.API.DataDomain.Program
                 Spawn = DTOUtils.GetSpawnElements(rs.SpawnElement),
                 StepId = ObjectId.Parse(rs.StepId),
                 Text = rs.Text,
-                Value = rs.Value
+                Value = rs.Value,
+                DeleteFlag = true,
+                LastUpdatedOn = DateTime.UtcNow,
+                Version = 1.0,
+                UpdatedBy = ObjectId.Parse(this.UserId)
             };
 
-            //MEResponse mer = newEntity as MEResponse;
             bool res = false;
-            try
-            {
+
                 using (ProgramMongoContext ctx = new ProgramMongoContext(_dbName))
                 {
-                    WriteConcernResult result = ctx.Responses.Collection.Insert(mer);
-                    if (result.Ok)
-                    {
-                        res = true;
-                    }
+                    ctx.Responses.Collection.Insert(mer);
+                    
+                    AuditHelper.LogDataAudit(this.UserId,
+                        MongoCollectionName.Response.ToString(),
+                        mer.Id.ToString(),
+                        Common.DataAuditType.Insert,
+                        "");
+
+                    res = true;
                 }
                 return res as object;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                throw new Exception("DataDomain:Insert():" + ex.Message, ex.InnerException);
+                throw new Exception("DD:ResponseRepository:Insert()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -90,12 +108,14 @@ namespace Phytel.API.DataDomain.Program
             }
             catch(Exception ex)
             {
-                throw new Exception("DataDomain:FindById():" + ex.Message, ex.InnerException);
+                throw new Exception("DD:ResponseRepository:FindById()::" + ex.Message, ex.InnerException);
             }
         }
 
         public Tuple<string, IEnumerable<object>> Select(Interface.APIExpression expression)
         {
+            try
+            {
             IMongoQuery mQuery = null;
             List<object> rps;
 
@@ -107,6 +127,11 @@ namespace Phytel.API.DataDomain.Program
             }
 
             return new Tuple<string, IEnumerable<object>>(expression.ExpressionID, rps);
+        }
+            catch (Exception ex)
+            {
+                throw new Exception("DD:ResponseRepository:Select()::" + ex.Message, ex.InnerException);
+            }
         }
 
         public IEnumerable<object> SelectAll()
@@ -129,6 +154,12 @@ namespace Phytel.API.DataDomain.Program
                     uv.Add(MB.Update.Set(MEResponse.StepIdProperty, resp.StepId));
                     uv.Add(MB.Update.Set(MEResponse.NominalProperty, resp.Nominal));
                     uv.Add(MB.Update.Set(MEResponse.RequiredProperty, resp.Required));
+                    uv.Add(MB.Update.Set(MEResponse.DeleteFlagProperty, false));
+                    uv.Add(MB.Update.Set(MEResponse.SelectedProperty, resp.Selected));
+
+                    uv.Add(MB.Update.Set(MEResponse.LastUpdatedOnProperty, DateTime.UtcNow));
+                    uv.Add(MB.Update.Set(MEResponse.UpdatedByProperty, ObjectId.Parse(this.UserId)));
+
                     if (resp.Order != 0) uv.Add(MB.Update.Set(MEResponse.OrderProperty, resp.Order));
                     if (resp.Text != null) uv.Add(MB.Update.Set(MEResponse.TextProperty, resp.Text));
                     if (resp.Value != null) uv.Add(MB.Update.Set(MEResponse.ValueProperty, resp.Value));
@@ -137,13 +168,20 @@ namespace Phytel.API.DataDomain.Program
                     IMongoUpdate update = MB.Update.Combine(uv);
                     WriteConcernResult res = ctx.Responses.Collection.Update(q, update);
                     if (res.Ok)
+                    {
                         result = true;
+                        AuditHelper.LogDataAudit(this.UserId,
+                       MongoCollectionName.Response.ToString(),
+                       resp.Id.ToString(),
+                       Common.DataAuditType.Update,
+                       "");
+                    }
                 }
                 return result as object;
             }
             catch (Exception ex)
             {
-                throw new Exception("DataDomain:Update():" + ex.Message, ex.InnerException);
+                throw new Exception("DD:ResponseRepository:Update()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -156,11 +194,12 @@ namespace Phytel.API.DataDomain.Program
         {
             throw new NotImplementedException();
         }
-
-
+        
         public MEProgram FindByID(string entityID, bool temp)
         {
             throw new NotImplementedException();
         }
+
+        public string UserId { get; set; }
     }
 }

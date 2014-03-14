@@ -11,6 +11,8 @@ using MongoDB.Bson;
 using Phytel.API.DataDomain.Program;
 using Phytel.API.DataDomain.Program.MongoDB.DTO;
 using Phytel.API.Common;
+using Phytel.API.DataAudit;
+using MongoDB.Bson.Serialization;
 
 namespace Phytel.API.DataDomain.Program
 {
@@ -21,21 +23,33 @@ namespace Phytel.API.DataDomain.Program
         public MongoPatientProgramRepository(string contractDBName)
         {
             _dbName = contractDBName;
+
+            #region Register ClassMap
+            if (BsonClassMap.IsClassMapRegistered(typeof(ProgramBase)) == false)
+                BsonClassMap.RegisterClassMap<ProgramBase>();
+
+            if (BsonClassMap.IsClassMapRegistered(typeof(MEPatientProgram)) == false)
+                BsonClassMap.RegisterClassMap<MEPatientProgram>();
+
+            if (BsonClassMap.IsClassMapRegistered(typeof(MEProgram)) == false)
+                BsonClassMap.RegisterClassMap<MEProgram>();
+            #endregion
         }
 
         public object Insert(object newEntity)
         {
+            PutProgramToPatientRequest request = (PutProgramToPatientRequest)newEntity;
+            PutProgramToPatientResponse result = new PutProgramToPatientResponse();
+            result.Outcome = new Outcome();
+
             try
             {
-                PutProgramToPatientRequest request = (PutProgramToPatientRequest)newEntity;
-                PutProgramToPatientResponse result = new PutProgramToPatientResponse();
-                result.Outcome = new Outcome();
                 using (ProgramMongoContext ctx = new ProgramMongoContext(_dbName))
                 {
                     var findQ = MB.Query.And(
-                        MB.Query.In(MEPatientProgram.ProgramStateProperty, new List<BsonValue> { BsonValue.Create(0), BsonValue.Create(1) }),
                         MB.Query<MEPatientProgram>.EQ(b => b.PatientId, ObjectId.Parse(request.PatientId)),
-                        MB.Query<MEPatientProgram>.EQ(b => b.ContractProgramId, ObjectId.Parse(request.ContractProgramId)));
+                        MB.Query<MEPatientProgram>.EQ(b => b.ContractProgramId, ObjectId.Parse(request.ContractProgramId)),
+                        MB.Query.In(MEPatientProgram.ProgramStateProperty, new List<BsonValue> { BsonValue.Create(0), BsonValue.Create(1) }));
 
                     List<MEPatientProgram> pp = ctx.PatientPrograms.Collection.Find(findQ).ToList();
 
@@ -54,13 +68,19 @@ namespace Phytel.API.DataDomain.Program
 
                         // update to new ids and their references
                         DTOUtils.RecurseAndReplaceIds(patientProgDoc.Modules);
-                        DTOUtils.RecurseAndSaveResponseObjects(patientProgDoc, request.ContractNumber);
+                        DTOUtils.RecurseAndSaveResponseObjects(patientProgDoc, request.ContractNumber, request.UserId);
                         ctx.PatientPrograms.Collection.Insert(patientProgDoc);
 
                         // update programid in modules
                         var q = MB.Query<MEPatientProgram>.EQ(b => b.Id, patientProgDoc.Id);
                         patientProgDoc.Modules.ForEach(s => s.ProgramId = patientProgDoc.Id);
                         ctx.PatientPrograms.Collection.Update(q, MB.Update.SetWrapped<List<Module>>(MEPatientProgram.ModulesProperty, patientProgDoc.Modules));
+
+                        AuditHelper.LogDataAudit(this.UserId, 
+                                                MongoCollectionName.PatientProgram.ToString(), 
+                                                patientProgDoc.Id.ToString(), 
+                                                Common.DataAuditType.Insert, 
+                                                request.ContractNumber);
 
                         // hydrate response object
                         result.program = new ProgramInfo
@@ -82,7 +102,7 @@ namespace Phytel.API.DataDomain.Program
             }
             catch (Exception ex)
             {
-                throw new Exception("DataDomain:Insert():" + ex.Message, ex.InnerException);
+                throw new Exception("DD:PatientProgram:Insert()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -110,7 +130,7 @@ namespace Phytel.API.DataDomain.Program
             }
             catch (Exception ex)
             {
-                throw new Exception("DataDomain:CanInsertPatientProgram():" + ex.Message, ex.InnerException);
+                throw new Exception("DD:PatientProgramRepository:CanInsertPatientProgram()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -151,95 +171,87 @@ namespace Phytel.API.DataDomain.Program
                 }
                 return result;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                throw new Exception("DataDomain:FindById():" + ex.Message, ex.InnerException);
+                throw new Exception("DD:PatientProgramRepository:FindByID()::" + ex.Message, ex.InnerException);
             }
         }
 
         public Tuple<string, IEnumerable<object>> Select(Interface.APIExpression expression)
         {
-            IMongoQuery mQuery = null;
-            List<object> patList = new List<object>();
-
-            List<SelectExpression> selectExpressions = expression.Expressions.ToList();
-            selectExpressions.Where(s => s.GroupID == 1).OrderBy(o => o.ExpressionOrder).ToList();
-
-            SelectExpressionGroupType groupType = SelectExpressionGroupType.AND;
-
-            if (selectExpressions.Count > 0)
+            try
             {
-                IList<IMongoQuery> queries = new List<IMongoQuery>();
-                for (int i = 0; i < selectExpressions.Count; i++)
-                {
-                    groupType = selectExpressions[0].NextExpressionType;
+                IMongoQuery mQuery = null;
+                List<object> patList = new List<object>();
 
-                    IMongoQuery query = SelectExpressionHelper.ApplyQueryOperators(selectExpressions[i].Type, selectExpressions[i].FieldName, selectExpressions[i].Value);
-                    if (query != null)
+                List<SelectExpression> selectExpressions = expression.Expressions.ToList();
+                selectExpressions.Where(s => s.GroupID == 1).OrderBy(o => o.ExpressionOrder).ToList();
+
+                SelectExpressionGroupType groupType = SelectExpressionGroupType.AND;
+
+                if (selectExpressions.Count > 0)
+                {
+                    IList<IMongoQuery> queries = new List<IMongoQuery>();
+                    for (int i = 0; i < selectExpressions.Count; i++)
                     {
-                        queries.Add(query);
+                        groupType = selectExpressions[0].NextExpressionType;
+
+                        IMongoQuery query = SelectExpressionHelper.ApplyQueryOperators(selectExpressions[i].Type, selectExpressions[i].FieldName, selectExpressions[i].Value);
+                        if (query != null)
+                        {
+                            queries.Add(query);
+                        }
+                    }
+
+                    mQuery = SelectExpressionHelper.BuildQuery(groupType, queries);
+                }
+
+                using (ProgramMongoContext ctx = new ProgramMongoContext(_dbName))
+                {
+                    //var findcp = Query<MEPatientProgram>.EQ(b => b.Id, ObjectId.Parse(request.PatientProgramId));
+                    //MEPatientProgram cp = ctx.PatientPrograms.Collection.Find(findcp).FirstOrDefault();
+                    List<MEPatientProgram> cps = ctx.PatientPrograms.Collection.Find(mQuery).ToList();
+
+                    if (cps != null)
+                    {
+                        cps.ForEach(cp => patList.Add(new ProgramDetail
+                        {
+                            Id = cp.Id.ToString(),
+                            Client = cp.Client != null ? cp.Client.ToString() : null,
+                            ContractProgramId = cp.ContractProgramId.ToString(),
+                            Description = cp.Description,
+                            EndDate = cp.EndDate,
+                            AssignBy = cp.AssignedBy,
+                            AssignDate = cp.AssignedOn,
+                            Completed = cp.Completed,
+                            CompletedBy = cp.CompletedBy,
+                            DateCompleted = cp.DateCompleted,
+                            ElementState = (int)cp.State,
+                            Enabled = cp.Enabled,
+                            Next = cp.Next != null ? cp.Next.ToString() : string.Empty,
+                            Order = cp.Order,
+                            Previous = cp.Previous != null ? cp.Previous.ToString() : string.Empty,
+                            SourceId = cp.SourceId.ToString(),
+                            SpawnElement = DTOUtils.GetResponseSpawnElement(cp.Spawn),
+                            Modules = DTOUtils.GetModules(cp.Modules, _dbName, this.UserId),
+                            Name = cp.Name,
+                            ObjectivesInfo = DTOUtils.GetObjectives(cp.Objectives),
+                            PatientId = cp.PatientId.ToString(),
+                            ProgramState = (int)cp.ProgramState,
+                            ShortName = cp.ShortName,
+                            StartDate = cp.StartDate,
+                            Status = (int)cp.Status,
+                            Version = cp.Version
+                        }));
                     }
                 }
 
-                mQuery = SelectExpressionHelper.BuildQuery(groupType, queries);
+                return new Tuple<string, IEnumerable<object>>(expression.ExpressionID, patList);
             }
-
-            using (ProgramMongoContext ctx = new ProgramMongoContext(_dbName))
+            catch (Exception ex)
             {
-                //var findcp = Query<MEPatientProgram>.EQ(b => b.Id, ObjectId.Parse(request.PatientProgramId));
-                //MEPatientProgram cp = ctx.PatientPrograms.Collection.Find(findcp).FirstOrDefault();
-                List<MEPatientProgram> cps = ctx.PatientPrograms.Collection.Find(mQuery).ToList();
-
-                if (cps != null)
-                {
-                    cps.ForEach(cp => patList.Add(new ProgramDetail
-                    {
-                        Id = cp.Id.ToString(),
-                        Client = cp.Client,
-                        ContractProgramId = cp.ContractProgramId.ToString(),
-                        Description = cp.Description,
-                        EligibilityEndDate = cp.EligibilityEndDate,
-                        EligibilityRequirements = cp.EligibilityRequirements,
-                        EligibilityStartDate = cp.EligibilityStartDate,
-                        EndDate = cp.EndDate,
-                        RemovedReason = cp.RemovedReason,
-                        OverrideReason = cp.OverrideReason,
-                        OptOutReason = cp.OptOutReason,
-                        OptOutDate = cp.OptOutDate,
-                        OptOut = cp.OptOut,
-                        IneligibleReason = cp.IneligibleReason,
-                        GraduatedFlag = cp.GraduatedFlag,
-                        Enrollment = (int)cp.Enrollment,
-                        EligibilityOverride = (int)cp.EligibilityOverride,
-                        DisEnrollReason = cp.DisEnrollReason,
-                        DidNotEnrollReason = cp.DidNotEnrollReason,
-                        AssignBy = cp.AssignedBy,
-                        AssignDate = cp.AssignedOn,
-                        Completed = cp.Completed,
-                        CompletedBy = cp.CompletedBy,
-                        DateCompleted = cp.DateCompleted,
-                        ElementState = (int)cp.State,
-                        Eligibility = (int)cp.Eligibility,
-                        Enabled = cp.Enabled,
-                        Next = cp.Next,
-                        Order = cp.Order,
-                        Previous = cp.Previous,
-                        SourceId = cp.SourceId,
-                        SpawnElement = DTOUtils.GetResponseSpawnElement(cp.Spawn),
-                        Modules = DTOUtils.GetModules(cp.Modules, _dbName),
-                        Name = cp.Name,
-                        ObjectivesInfo = DTOUtils.GetObjectives(cp.ObjectivesInfo),
-                        PatientId = cp.PatientId.ToString(),
-                        ProgramState = (int)cp.ProgramState,
-                        ShortName = cp.ShortName,
-                        StartDate = cp.StartDate,
-                        Status = (int)cp.Status,
-                        Version = cp.Version
-                    }));
-                }
+                throw new Exception("DD:PatientProgramRepository:Select()::" + ex.Message, ex.InnerException); 
             }
-
-            return new Tuple<string, IEnumerable<object>>(expression.ExpressionID, patList);
         }
 
         public IEnumerable<object> SelectAll()
@@ -250,10 +262,10 @@ namespace Phytel.API.DataDomain.Program
         public object Update(object entity)
         {
             PutProgramActionProcessingRequest p = (PutProgramActionProcessingRequest)entity;
-
+            ProgramDetail pg = p.Program;
+            
             try
             {
-                ProgramDetail pg = p.Program;
                 using (ProgramMongoContext ctx = new ProgramMongoContext(_dbName))
                 {
                     var q = MB.Query<MEPatientProgram>.EQ(b => b.Id, ObjectId.Parse(p.ProgramId));
@@ -265,10 +277,8 @@ namespace Phytel.API.DataDomain.Program
                     uv.Add(MB.Update.Set(MEPatientProgram.OrderProperty, pg.Order));
                     uv.Add(MB.Update.Set(MEPatientProgram.ProgramStateProperty, (ProgramState)pg.ProgramState));
                     uv.Add(MB.Update.Set(MEPatientProgram.LastUpdatedOnProperty, System.DateTime.UtcNow));
-                    uv.Add(MB.Update.Set(MEPatientProgram.UpdatedByProperty, p.UserId));
-                    uv.Add(MB.Update.Set(MEPatientProgram.EligibilityProperty, pg.Eligibility));
-                    uv.Add(MB.Update.Set(MEPatientProgram.EnrollmentProperty, pg.Enrollment));
-                    uv.Add(MB.Update.Set(MEPatientProgram.GraduatedFlagProperty, pg.GraduatedFlag));
+                    uv.Add(MB.Update.Set(MEPatientProgram.UpdatedByProperty, ObjectId.Parse(this.UserId)));
+                    uv.Add(MB.Update.Set(MEPatientProgram.VersionProperty, pg.Version)); 
 
                     if (pg.ElementState != 0) uv.Add(MB.Update.Set(MEPatientProgram.StateProperty, (ElementState)pg.ElementState));
                     if (pg.Status != 0) uv.Add(MB.Update.Set(MEPatientProgram.StatusProperty, (Status)pg.Status));
@@ -279,33 +289,32 @@ namespace Phytel.API.DataDomain.Program
                     if (pg.ContractProgramId != null) { uv.Add(MB.Update.Set(MEPatientProgram.ContractProgramIdProperty, ObjectId.Parse(pg.ContractProgramId))); }
                     if (pg.DateCompleted != null) { uv.Add(MB.Update.Set(MEPatientProgram.CompletedOnProperty, pg.DateCompleted)); }
                     if (pg.Description != null) { uv.Add(MB.Update.Set(MEPatientProgram.DescriptionProperty, pg.Description)); }
-                    if (pg.EligibilityEndDate != null) { uv.Add(MB.Update.Set(MEPatientProgram.EligibilityEndDateProperty, pg.EligibilityEndDate)); }
-                    if (pg.EligibilityRequirements != null) { uv.Add(MB.Update.Set(MEPatientProgram.EligibilityRequirementsProperty, pg.EligibilityRequirements)); }
-                    if (pg.EligibilityStartDate != null) { uv.Add(MB.Update.Set(MEPatientProgram.EligibilityStartDateProperty, pg.EligibilityStartDate)); }
-                    if (pg.IneligibleReason != null) { uv.Add(MB.Update.Set(MEPatientProgram.IneligibleReasonProperty, pg.IneligibleReason)); }
-                    if (pg.OptOut != null) { uv.Add(MB.Update.Set(MEPatientProgram.OptOutProperty, pg.OptOut)); }
-                    if (pg.OptOutReason != null) { uv.Add(MB.Update.Set(MEPatientProgram.OptOutReasonProperty, pg.OptOutReason)); }
-                    if (pg.OptOutDate != null) { uv.Add(MB.Update.Set(MEPatientProgram.OptOutDateProperty, pg.OptOutDate)); }
                     if (pg.EndDate != null) { uv.Add(MB.Update.Set(MEPatientProgram.EndDateProperty, pg.EndDate)); }
                     if (pg.Name != null) { uv.Add(MB.Update.Set(MEPatientProgram.NameProperty, pg.Name)); }
-                    if (pg.Next != null) { uv.Add(MB.Update.Set(MEPatientProgram.NextProperty, pg.Next)); }
-                    if (pg.Previous != null) { uv.Add(MB.Update.Set(MEPatientProgram.PreviousProperty, pg.Previous)); }
+                    if (pg.Next != null) { uv.Add(MB.Update.Set(MEPatientProgram.NextProperty, ObjectId.Parse(pg.Next))); }
+                    if (pg.Previous != null) { uv.Add(MB.Update.Set(MEPatientProgram.PreviousProperty, ObjectId.Parse(pg.Previous))); }
                     if (pg.ShortName != null) { uv.Add(MB.Update.Set(MEPatientProgram.ShortNameProperty, pg.ShortName)); }
                     if (pg.SourceId != null) { uv.Add(MB.Update.Set(MEPatientProgram.SourceIdProperty, pg.SourceId)); }
                     if (pg.StartDate != null) { uv.Add(MB.Update.Set(MEPatientProgram.StartDateProperty, pg.StartDate)); }
-                    if (pg.Version != null) { uv.Add(MB.Update.Set(MEPatientProgram.VersionProperty, pg.Version)); }
                     if (mods != null) { uv.Add(MB.Update.SetWrapped<List<Module>>(MEPatientProgram.ModulesProperty, mods)); }
                     if (pg.SpawnElement != null) { uv.Add(MB.Update.SetWrapped<List<SpawnElement>>(MEPatientProgram.SpawnProperty, DTOUtils.GetSpawnElements(pg.SpawnElement))); }
                     if (pg.ObjectivesInfo != null) { uv.Add(MB.Update.SetWrapped<List<Objective>>(MEPatientProgram.ObjectivesInfoProperty, DTOUtils.GetObjectives(pg.ObjectivesInfo))); }
 
                     IMongoUpdate update = MB.Update.Combine(uv);
                     ctx.PatientPrograms.Collection.Update(q, update);
+
+                    AuditHelper.LogDataAudit(this.UserId, 
+                                            MongoCollectionName.PatientProgram.ToString(),
+                                            p.ProgramId, 
+                                            Common.DataAuditType.Update, 
+                                            _dbName);
+
                 }
                 return pg;
             }
             catch (Exception ex)
             {
-                throw new Exception("DataDomain:Update():" + ex.Message, ex.InnerException);
+                throw new Exception("DD:PatientProgramRepository:Update()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -318,11 +327,12 @@ namespace Phytel.API.DataDomain.Program
         {
             throw new NotImplementedException();
         }
-
-
+        
         public MEProgram FindByID(string entityID, bool temp)
         {
             throw new NotImplementedException();
         }
+
+        public string UserId { get; set; }
     }
 }

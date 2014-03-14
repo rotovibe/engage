@@ -14,7 +14,16 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
     [MongoIndex(Keys = new string[] { StatusProperty }, Unique = false)]
     public class MEProgram : ProgramBase, IMEEntity, IMongoEntity<ObjectId>
     {
-        public MEProgram(){ Id = ObjectId.GenerateNewId(); }
+        public MEProgram(string userId)
+        {
+            Id = ObjectId.GenerateNewId();
+            Version = 1.0;
+            RecordCreatedBy = ObjectId.Parse(userId);
+            RecordCreatedOn = DateTime.UtcNow;
+        }
+
+        public const string RecordCreatedByProperty = "rcby";
+        public const string RecordCreatedOnProperty = "rcon";
 
         public const string IdProperty = "_id";
         [BsonId]
@@ -30,26 +39,23 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
         [BsonIgnoreIfNull(false)]
         public string Population { get; set; }
 
-        public const string ContractIdProperty = "cid";
+        public const string ContractIdProperty = "ctid";
         [BsonElement(ContractIdProperty)]
         [BsonIgnoreIfNull(false)]
         public string ContractId { get; set; }
 
-        public const string ExtraElementsProperty = "ex";
         [BsonExtraElements]
-        [BsonIgnoreIfNull(true)]
-        [BsonElement(ExtraElementsProperty)]
-        public Dictionary<string, object> ExtraElements { get; set; }
+        public BsonDocument ExtraElements { get; set; }
 
         public const string VersionProperty = "v";
         [BsonElement(VersionProperty)]
-        [BsonDefaultValue("v1")]
-        public string Version { get; set; }
+        [BsonDefaultValue(1.0)]
+        public double Version { get; set; }
 
         public const string UpdatedByProperty = "uby";
         [BsonElement(UpdatedByProperty)]
         [BsonIgnoreIfNull(true)]
-        public string UpdatedBy { get; set; }
+        public ObjectId? UpdatedBy { get; set; }
 
         public const string DeleteFlagProperty = "del";
         [BsonElement(DeleteFlagProperty)]
@@ -60,13 +66,22 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
         [BsonElement(TTLDateProperty)]
         [BsonDefaultValue(null)]
         [BsonIgnoreIfNull(true)]
-        [BsonDateTimeOptions(Kind = System.DateTimeKind.Local)]
+        [BsonDateTimeOptions(Kind = System.DateTimeKind.Utc)]
         public DateTime? TTLDate { get; set; }
 
         public const string LastUpdatedOnProperty = "uon";
         [BsonIgnoreIfNull(true)]
         [BsonElement(LastUpdatedOnProperty)]
-        [BsonDateTimeOptions(Kind = System.DateTimeKind.Local)]
+        [BsonDateTimeOptions(Kind = System.DateTimeKind.Utc)]
         public DateTime? LastUpdatedOn { get; set; }
+
+        [BsonIgnoreIfNull(true)]
+        [BsonElement(RecordCreatedByProperty)]
+        public ObjectId RecordCreatedBy { get; private set; }
+
+        [BsonIgnoreIfNull(true)]
+        [BsonElement(RecordCreatedOnProperty)]
+        [BsonDateTimeOptions(Kind = System.DateTimeKind.Utc)]
+        public System.DateTime RecordCreatedOn { get; private set; }
     }
 }

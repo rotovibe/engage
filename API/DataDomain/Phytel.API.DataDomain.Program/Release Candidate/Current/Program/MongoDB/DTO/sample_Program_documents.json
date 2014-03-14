@@ -9,7 +9,6 @@
     "eled" : null,
     "elr" : "Must be obese and HTN",
     "elsd" : null,
-    "ex" : ISODate("2013-11-22T14:44:18.931Z"),
     "lck" : true,
     "nm" : null,
     "oi" : [{
@@ -57,7 +56,6 @@
                 "desc" : null,
                 "notes" : "this is an example note.",
                 "txt" : null,
-                "ex" : null,
                 "stat" : 1
             }, {
                 "_id" : ObjectId("52a641f1d433231824878c90"),
@@ -67,7 +65,6 @@
                 "desc" : null,
                 "notes" : "this is an example note.",
                 "txt" : null,
-                "ex" : null,
                 "stat" : 1,
             }],
             "stat" : 1
@@ -98,7 +95,6 @@
     "eled" : null,
     "elr" : "Must be obese and HTN",
     "elsd" : null,
-    "ex" : ISODate("2013-11-22T14:44:18.931Z"),
     "lck" : true,
     "nm" : "Program Test 2",
     "oi" : [{
@@ -146,7 +142,6 @@
                 "desc" : null,
                 "notes" : "this is an example note.",
                 "txt" : null,
-                "ex" : null,
                 "stat" : 1
             }, {
                 "_id" : ObjectId("52a641f1d433231824878c90"),
@@ -156,7 +151,6 @@
                 "desc" : null,
                 "notes" : "this is an example note.",
                 "txt" : null,
-                "ex" : null,
                 "stat" : 1,
             }],
             "stat" : 1
@@ -187,7 +181,6 @@
     "eled" : null,
     "elr" : "Must be obese and HTN",
     "elsd" : null,
-    "ex" : ISODate("2013-11-22T14:44:18.931Z"),
     "lck" : true,
     "nm" : null,
     "oi" : [{
@@ -235,7 +228,6 @@
                 "desc" : null,
                 "notes" : "this is an example note.",
                 "txt" : null,
-                "ex" : null,
                 "stat" : 1
             }, {
                 "_id" : ObjectId("52a641f1d433231824878c90"),
@@ -245,7 +237,6 @@
                 "desc" : null,
                 "notes" : "this is an example note.",
                 "txt" : null,
-                "ex" : null,
                 "stat" : 1,
             }],
             "stat" : 1

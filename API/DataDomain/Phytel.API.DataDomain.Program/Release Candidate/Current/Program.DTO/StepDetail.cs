@@ -16,7 +16,6 @@ namespace Phytel.API.DataDomain.Program.DTO
         public string Description { get; set; }
         public string Notes { get; set; }
         public string Text { get; set; }
-        public string Ex { get; set; }
         public int Status { get; set; }
         public int ControlType { get; set; }
         public int SelectType { get; set; }

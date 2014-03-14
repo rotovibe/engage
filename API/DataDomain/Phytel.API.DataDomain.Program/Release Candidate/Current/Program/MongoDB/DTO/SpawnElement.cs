@@ -16,12 +16,12 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
         public const string TypeProperty = "type";
         [BsonElement(TypeProperty)]
         [BsonIgnoreIfNull(true)]
-        public int Type { get; set; }
+        public SpawnElementTypeCode Type { get; set; }
 
         public const string SpawnIdProperty = "spwnid";
         [BsonElement(SpawnIdProperty)]
         [BsonIgnoreIfNull(true)]
-        public ObjectId SpawnId { get; set; }
+        public ObjectId? SpawnId { get; set; }
 
         public const string TagProperty = "tag";
         [BsonElement(TagProperty)]

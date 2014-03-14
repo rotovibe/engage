@@ -15,8 +15,10 @@ namespace Phytel.API.DataDomain.Program.Services.Test
             string ProgramID = "52a0da34fe7a5915485bdfd6";
             string contractNumber = "InHealth001";
             string context ="NG";
-            string version = "v1";
+            double version = 1.0;
             IRestClient client = new JsonServiceClient();
+            JsonServiceClient.HttpWebRequestFilter = x =>
+                            x.Headers.Add(string.Format("{0}: {1}", "x-Phytel-UserID", "531f2df9072ef727c4d2a3df"));
 
             GetProgramResponse response = client.Get<GetProgramResponse>(
                 string.Format("{0}/{1}/{2}/{3}/Program/{4}", url, context, version, contractNumber, ProgramID));
@@ -31,8 +33,10 @@ namespace Phytel.API.DataDomain.Program.Services.Test
             string ProgramID = "52a0da34fe7a5915485bdfd6";
             string contractNumber = "InHealth001";
             string context = "NG";
-            string version = "v1";
+            double version = 1.0;
             IRestClient client = new JsonServiceClient();
+            JsonServiceClient.HttpWebRequestFilter = x =>
+                            x.Headers.Add(string.Format("{0}: {1}", "x-Phytel-UserID", "531f2df9072ef727c4d2a3df"));
 
             GetProgramResponse response = client.Post<GetProgramResponse>(
                 string.Format("{0}/{1}/{2}/{3}/Program/{4}", url, context, version, contractNumber, ProgramID), 

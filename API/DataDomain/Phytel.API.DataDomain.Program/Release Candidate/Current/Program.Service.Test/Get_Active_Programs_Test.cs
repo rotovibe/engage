@@ -14,8 +14,10 @@ namespace Phytel.API.DataDomain.Program.Services.Test
             string url = "http://localhost:8888/Program";
             string contractNumber = "InHealth001";
             string context ="NG";
-            string version = "v1";
+            double version = 1.0;
             IRestClient client = new JsonServiceClient();
+            JsonServiceClient.HttpWebRequestFilter = x =>
+                            x.Headers.Add(string.Format("{0}: {1}", "x-Phytel-UserID", "531f2df9072ef727c4d2a3df"));
 
             GetAllActiveProgramsResponse response = client.Get<GetAllActiveProgramsResponse>(
                 string.Format("{0}/{1}/{2}/{3}/Programs/Active",

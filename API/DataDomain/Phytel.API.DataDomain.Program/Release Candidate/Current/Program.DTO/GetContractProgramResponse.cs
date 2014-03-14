@@ -9,7 +9,7 @@ namespace Phytel.API.DataDomain.Program.DTO
     public class GetContractProgramResponse : IDomainResponse
     {
         public Program Program { get; set; }
-        public string Version { get; set; }
+        public double Version { get; set; }
         public ResponseStatus Status { get; set; }
     }
 }

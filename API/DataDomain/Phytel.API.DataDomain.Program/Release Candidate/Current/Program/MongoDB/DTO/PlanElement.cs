@@ -21,7 +21,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
         public const string SourceIdProperty = "srcid";
         [BsonElement(SourceIdProperty)]
         [BsonIgnoreIfNull(false)]
-        public string SourceId { get; set; }
+        public ObjectId SourceId { get; set; }
 
         public const string OrderProperty = "o";
         [BsonElement(OrderProperty)]
@@ -58,7 +58,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
         [BsonIgnoreIfNull(false)]
         public bool Completed { get; set; }
 
-        public const string CompletedOnProperty = "con";
+        public const string CompletedOnProperty = "dc";
         [BsonElement(CompletedOnProperty)]
         [BsonIgnoreIfNull(true)]
         public DateTime? DateCompleted { get; set; }
@@ -66,12 +66,12 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
         public const string NextProperty = "nxt";
         [BsonElement(NextProperty)]
         [BsonIgnoreIfNull(true)]
-        public string Next { get; set; }
+        public ObjectId? Next { get; set; }
 
         public const string PreviousProperty = "prev";
         [BsonElement(PreviousProperty)]
         [BsonIgnoreIfNull(true)]
-        public string Previous { get; set; }
+        public ObjectId? Previous { get; set; }
 
         public const string SpawnProperty = "spwn";
         [BsonElement(SpawnProperty)]

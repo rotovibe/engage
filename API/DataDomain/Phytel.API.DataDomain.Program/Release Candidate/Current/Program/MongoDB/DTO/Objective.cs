@@ -21,9 +21,9 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
         [BsonElement(ValueProperty)]
         public string Value { get; set; }
 
-        public const string UnitProperty = "unit";
+        public const string UnitProperty = "u";
         [BsonElement(UnitProperty)]
-        public string Unit { get; set; }
+        public string Units { get; set; }
 
         public const string StatusProperty = "sts";
         [BsonElement(StatusProperty)]

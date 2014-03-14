@@ -16,5 +16,7 @@ namespace Phytel.API.DataDomain.Program.DTO
         public bool Required { get; set; }
         public string NextStepId { get; set; }
         public List<SpawnElementDetail> SpawnElement { get; set; }
+        public bool Selected { get; set; }
+        public bool Delete { get; set; }
     }
 }

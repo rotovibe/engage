@@ -15,12 +15,14 @@ namespace Phytel.API.DataDomain.Patient.Service.Test
             string contractNumber = "InHealth001";
             string context = "NG";
             string priority = "3";
-            string version = "v1";
+            double version = 1.0;
             string token = "52d58da0d6a4850e90240706";
             string programId = "52deedd0d6a4850fac29d83a";
             string patientId = "528f6cfa072ef708ecd68c94";
             string actionID = "52a0f33bd43323141c9eb274";
             IRestClient client = new JsonServiceClient();
+            JsonServiceClient.HttpWebRequestFilter = x =>
+                            x.Headers.Add(string.Format("{0}: {1}", "x-Phytel-UserID", "531f2df9072ef727c4d2a3df"));
 
             PutProgramActionProcessingResponse response = client.Put<PutProgramActionProcessingResponse>(
                 string.Format(@"http://localhost:8888/Program/{0}/{1}/{2}/Patient/{3}/Programs/{4}/Update",

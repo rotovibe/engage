@@ -24,7 +24,7 @@ namespace Phytel.API.DataDomain.Program.DTO
         public int Status { get; set; }
         public List<ObjectivesDetail> ObjectivesInfo { get; set; }
         public List<ModuleDetail> Modules { get; set; }
-        public string Version { get; set; }
+        public double Version { get; set; }
         public string Text { get; set; }
 
         public int EligibilityOverride { get; set; }
