@@ -1,4 +1,4 @@
-﻿namespace Phytel.API.Common.CustomObjects
+﻿namespace Phytel.API.Common.CustomObject
 {
     public class IdNamePair
     {

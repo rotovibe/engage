@@ -15,38 +15,11 @@ namespace Phytel.API.Common.Audit
     public static class AuditDispatcher
     {
         static readonly string AuditSystemUrl = ConfigurationManager.AppSettings["AuditSystemUrl"];
-
-        public static void SendDispatchAsynch(DispatchEventArgs args)
-        {
-
-#if Debug
-            // synchronous for testing
-            FireDispatch(args);
-#else
-            //asynch call
-            Task.Factory.StartNew(() => FireDispatch(args));
-#endif
-        }
-
-        private static void FireDispatch(DispatchEventArgs args)
-        {
-            //IRestClient client = new JsonServiceClient();
-            //string className = args.payload.GetType().Name;
-            //string pathName = className.Substring(3, className.Length - 10).ToLower();
-
-            ////{Version}/{ContractNumber}/auditerror/{ObjectID} ??
-            //PutAuditResponse par = client.Post<PutAuditResponse>(string.Format("{0}/{1}/{2}/{3}",
-            //        AuditSystemUrl,
-            //        ((IAppDomainRequest)args.payload).Version,
-            //        ((IAppDomainRequest)args.payload).ContractNumber,
-            //        pathName)
-            //        , args.payload);
-        }
-
+        
         public static void WriteAudit(AuditData auditLogToProcess)
         {
             AuditData auditLog = auditLogToProcess;
-            auditLog.EventDateTime = DateTime.Now;
+            auditLog.EventDateTime = DateTime.UtcNow;
 
             QueueMessage newMessage = null;
 
@@ -84,7 +57,7 @@ namespace Phytel.API.Common.Audit
         public static void WriteAudit(DataAudit.DataAudit auditLogToProcess)
         {
             DataAudit.DataAudit auditLog = auditLogToProcess;
-            auditLog.TimeStamp = DateTime.Now;
+            auditLog.TimeStamp = DateTime.UtcNow;
 
             QueueMessage newMessage = null;
 
@@ -99,7 +72,8 @@ namespace Phytel.API.Common.Audit
                 string messageQueue = ds.Tables[0].Rows[0]["Value"].ToString();
                 //string messageQueue = "fake";
 
-                string xmlBody = ToXML(auditLog);
+                //string xmlBody = ToXML(auditLog);
+                string xmlBody = MessageQueueHelper.SerializeObject(auditLog);
 
                 newMessage = new QueueMessage(Phytel.Framework.ASE.Data.Common.ASEMessageType.Process, messageQueue);
                 newMessage.Body = xmlBody;
@@ -118,7 +92,7 @@ namespace Phytel.API.Common.Audit
         public static void WriteAudit(DataAudit.DataAudit auditLogToProcess, string title)
         {
             DataAudit.DataAudit auditLog = auditLogToProcess;
-            auditLog.TimeStamp = DateTime.Now;
+            auditLog.TimeStamp = DateTime.UtcNow;
 
             QueueMessage newMessage = null;
 
@@ -143,7 +117,7 @@ namespace Phytel.API.Common.Audit
 
         }
 
-        private static string ToXML(Object oObject)
+        public static string ToXML(Object oObject)
         {
             XmlDocument xmlDoc = new XmlDocument();
             XmlSerializer xmlSerializer = new XmlSerializer(oObject.GetType());
@@ -154,7 +128,7 @@ namespace Phytel.API.Common.Audit
                 xmlDoc.Load(xmlStream);
                 return xmlDoc.InnerXml;
             }
-
         }
+			
     }
 }

@@ -6,12 +6,47 @@ using System.Threading.Tasks;
 
 namespace Phytel.API.Common
 {
+    public enum SpawnElementTypeCode
+    {
+        Program = 1,
+        Module = 2,
+        Action = 3,
+        Step = 4,
+        Eligibility = 10,
+        IneligibleReason = 11,
+        ProgramState = 12,
+        ProgramStartdate = 13,
+        ProgramEnddate = 14,
+        EnrollmentStatus = 15,
+        OptOut = 16,
+        OptOutReason = 17,
+        OptOutDate = 18,
+        Graduated = 19,
+        Locked = 20,
+        EligibilityOverride = 21,
+        Diabetes = 101
+    }
+
     public enum DispatchType
     {
         auditerror,
         auditaction,
         auditview
     }
+
+    public enum SelectType
+    {
+        Single = 1,
+        Multi = 2
+    }
+
+    public enum ControlType
+    {
+        CheckBox = 1,
+        List = 2,
+        Radio = 3
+    }
+
 
     /// <summary>
     /// Enum that denotes the various statuses in a workflow for program, module, action, step, objective, etc.
@@ -55,9 +90,10 @@ namespace Phytel.API.Common
 
     public enum EnrollmentStatus
     {
-        NotSet = 1,
+        Enrolled = 1,
         Pending = 2,
-        NotEligible = 3
+        DidNotEnroll = 3,
+        Disenrolled = 4
     }
 
     public enum EligibilityStatus
@@ -162,5 +198,26 @@ namespace Phytel.API.Common
         Incomplete = 2,
         Refused = 3,
         Declined = 4
+    }
+
+    public enum MongoCollectionName
+    {
+        Patient,
+        PatientBarrier,
+        PatientIntervention,
+        PatientTask,
+        PatientGoal,
+        PatientNote,
+        PatientObservation,
+        PatientProblem,
+        PatientProgram,
+        PatientSystem,
+        PatientUser,
+        PatientProgramAttribute,
+        PatientProgramResponse,
+        Contact,
+        CareMember,
+        CohortPatientView,
+        Response
     }
 }

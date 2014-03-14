@@ -2,11 +2,7 @@
 using ServiceStack.ServiceInterface.ServiceModel;
 using ServiceStack.ServiceHost;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Phytel.API.Common.Format
 {
@@ -14,7 +10,15 @@ namespace Phytel.API.Common.Format
     {
         public static void FormatExceptionResponse<T>(T response, IHttpResponse httpResponse, Exception ex) where T : IDomainResponse
         {
-            httpResponse.StatusCode = (int)HttpStatusCode.InternalServerError;
+            if (ex is UnauthorizedAccessException || ex.Message == "UnauthorizedAccessException")
+            {
+                httpResponse.StatusCode = (int)HttpStatusCode.Unauthorized;
+            }
+            else
+            {
+                httpResponse.StatusCode = (int)HttpStatusCode.InternalServerError;
+            }
+            
             response.Status = new ResponseStatus(ex.ToErrorCode(), ex.Message);
             response.Status.ErrorCode = ex.ToErrorCode();
             response.Status.Message = ex.Message;
