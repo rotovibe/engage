@@ -13,10 +13,12 @@ namespace Phytel.API.DataDomain.Cohort.Service.Test
         public void GetAllCohorts_Test()
         {
             // Arrange
-            string version = "v1";
+            double version = 1.0;
             string contractNumber = "InHealth001";
             string context = "NG";
             IRestClient client = new JsonServiceClient();
+            JsonServiceClient.HttpWebRequestFilter = x =>
+                            x.Headers.Add(string.Format("{0}: {1}", "x-Phytel-UserID", "531f2df9072ef727c4d2a3df"));
 
             // Act
             GetAllCohortsDataResponse response = client.Get <GetAllCohortsDataResponse>
@@ -32,11 +34,13 @@ namespace Phytel.API.DataDomain.Cohort.Service.Test
         {
             // Arrange
             string expectedValue = "All(f)";
-            string version = "v1";
+            double version = 1.0;
             string contractNumber = "InHealth001";
             string context = "NG";
             string cohortID = "528aa055d4332317acc50978";
             IRestClient client = new JsonServiceClient();
+            JsonServiceClient.HttpWebRequestFilter = x =>
+                            x.Headers.Add(string.Format("{0}: {1}", "x-Phytel-UserID", "531f2df9072ef727c4d2a3df"));
 
             // Act
             GetCohortDataResponse response = client.Get<GetCohortDataResponse>
