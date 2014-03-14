@@ -4,7 +4,7 @@ namespace Phytel.API.DataDomain.LookUp.DTO
 {
     public interface ILookUpData
     {
-        ObjectId DataID { get; set; }
+        ObjectId DataId { get; set; }
         string Name { get; set; }
     }
 }

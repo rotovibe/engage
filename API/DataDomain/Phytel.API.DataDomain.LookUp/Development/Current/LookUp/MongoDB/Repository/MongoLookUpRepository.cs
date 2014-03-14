@@ -155,10 +155,10 @@ namespace Phytel.API.DataDomain.LookUp
                     if (meLookup.Data.Count > 0)
                     {
                         problemResponse = new GetProblemDataResponse();
-                        Problem meProblem = (Problem)meLookup.Data.Where(a => a.DataID == ObjectId.Parse(entityID)).FirstOrDefault();
+                        Problem meProblem = (Problem)meLookup.Data.Where(a => a.DataId == ObjectId.Parse(entityID)).FirstOrDefault();
                         if (meProblem != null)
                         {
-                            ProblemData problemData = new ProblemData { Id = meProblem.DataID.ToString(), Name = meProblem.Name, Active = meProblem.Active };
+                            ProblemData problemData = new ProblemData { Id = meProblem.DataId.ToString(), Name = meProblem.Name, Active = meProblem.Active };
                             problemResponse.Problem = problemData;
                         }
                     }
@@ -194,7 +194,7 @@ namespace Phytel.API.DataDomain.LookUp
 
                         foreach (Problem m in meproblems)
                         {
-                            ProblemData problem = new ProblemData {  Id = m.DataID.ToString(), Name = m.Name, Active = m.Active };
+                            ProblemData problem = new ProblemData {  Id = m.DataId.ToString(), Name = m.Name, Active = m.Active };
                             problemList.Add(problem);
                         }
                     }
@@ -221,7 +221,7 @@ namespace Phytel.API.DataDomain.LookUp
                         problemList = new List<ProblemData>();
                         foreach (Problem m in meLookup.Data)
                         {
-                            ProblemData problem = new ProblemData { Id = m.DataID.ToString(), Name = m.Name, Active = m.Active };
+                            ProblemData problem = new ProblemData { Id = m.DataId.ToString(), Name = m.Name, Active = m.Active };
                             problemList.Add(problem);
                         }
                     }
@@ -248,12 +248,12 @@ namespace Phytel.API.DataDomain.LookUp
                     if (meLookup.Data.Count > 0)
                     {
                         categoryResponse = new GetCategoryDataResponse();
-                        Category meCategory = (Category)meLookup.Data.Where(a => a.DataID == ObjectId.Parse(entityID)).FirstOrDefault();
+                        Category meCategory = (Category)meLookup.Data.Where(a => a.DataId == ObjectId.Parse(entityID)).FirstOrDefault();
                         if (meCategory != null)
                         {
                             IdNamePair objective = new IdNamePair
                             {
-                                Id = meCategory.DataID.ToString(),
+                                Id = meCategory.DataId.ToString(),
                                 Name = meCategory.Name
                             };
                             categoryResponse.Category = objective;
@@ -282,12 +282,12 @@ namespace Phytel.API.DataDomain.LookUp
                     if (meLookup.Data.Count > 0)
                     {
                         objectiveResponse = new GetObjectiveDataResponse();
-                        DTO.Objective meObjective = (DTO.Objective)meLookup.Data.Where(a => a.DataID == ObjectId.Parse(entityID)).FirstOrDefault();
+                        DTO.Objective meObjective = (DTO.Objective)meLookup.Data.Where(a => a.DataId == ObjectId.Parse(entityID)).FirstOrDefault();
                         if (meObjective != null)
                         {
                             IdNamePair objective = new IdNamePair
                             {
-                                Id = meObjective.DataID.ToString(),
+                                Id = meObjective.DataId.ToString(),
                                 Name = meObjective.Name
                             };
                             objectiveResponse.Objective = objective;
@@ -318,7 +318,7 @@ namespace Phytel.API.DataDomain.LookUp
                         commModeList = new List<IdNamePair>();
                         foreach (CommMode m in meLookup.Data)
                         {
-                            IdNamePair data = new IdNamePair { Id = m.DataID.ToString(), Name = m.Name };
+                            IdNamePair data = new IdNamePair { Id = m.DataId.ToString(), Name = m.Name };
                             commModeList.Add(data);
                         }
                     }
@@ -345,7 +345,7 @@ namespace Phytel.API.DataDomain.LookUp
                         stateList = new List<StateData>();
                         foreach (State m in meLookup.Data)
                         {
-                            StateData data = new StateData { Id = m.DataID.ToString(), Name = m.Name, Code = m.Code };
+                            StateData data = new StateData { Id = m.DataId.ToString(), Name = m.Name, Code = m.Code };
                             stateList.Add(data);
                         }
                     }
@@ -372,7 +372,7 @@ namespace Phytel.API.DataDomain.LookUp
                         timesOfDayList = new List<IdNamePair>();
                         foreach (TimesOfDay m in meLookup.Data)
                         {
-                            IdNamePair data = new IdNamePair { Id = m.DataID.ToString(), Name = m.Name };
+                            IdNamePair data = new IdNamePair { Id = m.DataId.ToString(), Name = m.Name };
                             timesOfDayList.Add(data);
                         }
                     }
@@ -399,7 +399,7 @@ namespace Phytel.API.DataDomain.LookUp
                         timeZoneList = new List<TimeZoneData>();
                         foreach (DTO.TimeZone m in meLookup.Data)
                         {
-                            TimeZoneData data = new TimeZoneData { Id = m.DataID.ToString(), Name = m.Name, Default = m.Default };
+                            TimeZoneData data = new TimeZoneData { Id = m.DataId.ToString(), Name = m.Name, Default = m.Default };
                             timeZoneList.Add(data);
                         }
                         timeZoneList = timeZoneList.OrderBy(s => s.Name).ToList();
@@ -436,7 +436,7 @@ namespace Phytel.API.DataDomain.LookUp
                                     commModes.Add(id.ToString());
                                 }
                             }
-                            CommTypeData data = new CommTypeData { Id = m.DataID.ToString(), Name = m.Name, CommModes = commModes };
+                            CommTypeData data = new CommTypeData { Id = m.DataId.ToString(), Name = m.Name, CommModes = commModes };
                             commTypeList.Add(data);
                         }
                     }
@@ -462,7 +462,7 @@ namespace Phytel.API.DataDomain.LookUp
                         LanguageList = new List<LanguageData>();
                         foreach (Language m in meLookup.Data)
                         {
-                            LanguageData data = new LanguageData { Id = m.DataID.ToString(), Name = m.Name, Code = m.Code, Active = m.Active };
+                            LanguageData data = new LanguageData { Id = m.DataId.ToString(), Name = m.Name, Code = m.Code, Active = m.Active };
                             LanguageList.Add(data);
                         }
                     }
@@ -490,7 +490,7 @@ namespace Phytel.API.DataDomain.LookUp
                         DTO.TimeZone meTz = meLookup.Data.Cast<DTO.TimeZone>().Where(a => a.Default == true).FirstOrDefault();
                         if (meTz != null)
                         {
-                            tz = new TimeZoneData { Id = meTz.DataID.ToString(), Name = meTz.Name, Default = meTz.Default };
+                            tz = new TimeZoneData { Id = meTz.DataId.ToString(), Name = meTz.Name, Default = meTz.Default };
                         }
                     }
                 }
@@ -523,7 +523,7 @@ namespace Phytel.API.DataDomain.LookUp
                                 lookupList = new List<IdNamePair>();
                                 foreach (LookUpBase m in meLookup.Data)
                                 {
-                                    IdNamePair data = new IdNamePair { Id = m.DataID.ToString(), Name = m.Name };
+                                    IdNamePair data = new IdNamePair { Id = m.DataId.ToString(), Name = m.Name };
                                     lookupList.Add(data);
                                 }
                                 lookupList = lookupList.OrderBy(s => s.Name).ToList();
