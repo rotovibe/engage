@@ -76,6 +76,9 @@
             this.chkSelectAll = new System.Windows.Forms.CheckBox();
             this.label1 = new System.Windows.Forms.Label();
             this.txtContactID = new System.Windows.Forms.TextBox();
+            this.label2 = new System.Windows.Forms.Label();
+            this.lblUrl = new System.Windows.Forms.Label();
+            this.lblStatus = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // openFileDialog1
@@ -370,9 +373,9 @@
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(656, 380);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(174, 17);
+            this.label1.Size = new System.Drawing.Size(169, 17);
             this.label1.TabIndex = 8;
-            this.label1.Text = "Import Data As Contact ID:";
+            this.label1.Text = "Import Admin User Name:";
             // 
             // txtContactID
             // 
@@ -380,13 +383,42 @@
             this.txtContactID.Name = "txtContactID";
             this.txtContactID.Size = new System.Drawing.Size(217, 22);
             this.txtContactID.TabIndex = 9;
-            this.txtContactID.Text = "532336c6072ef712f010f797";
+            this.txtContactID.Text = "inhealthadmin";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(656, 407);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(83, 17);
+            this.label2.TabIndex = 10;
+            this.label2.Text = "Import URL:";
+            // 
+            // lblUrl
+            // 
+            this.lblUrl.AutoSize = true;
+            this.lblUrl.Location = new System.Drawing.Point(745, 407);
+            this.lblUrl.Name = "lblUrl";
+            this.lblUrl.Size = new System.Drawing.Size(0, 17);
+            this.lblUrl.TabIndex = 11;
+            // 
+            // lblStatus
+            // 
+            this.lblStatus.AutoSize = true;
+            this.lblStatus.Location = new System.Drawing.Point(41, 407);
+            this.lblStatus.Name = "lblStatus";
+            this.lblStatus.Size = new System.Drawing.Size(83, 17);
+            this.lblStatus.TabIndex = 12;
+            this.lblStatus.Text = "Import URL:";
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1064, 439);
+            this.Controls.Add(this.lblStatus);
+            this.Controls.Add(this.lblUrl);
+            this.Controls.Add(this.label2);
             this.Controls.Add(this.txtContactID);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.chkSelectAll);
@@ -399,6 +431,7 @@
             this.Name = "Form1";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Nightingale Import Utility";
+            this.Load += new System.EventHandler(this.Form1_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -454,6 +487,9 @@
         private System.Windows.Forms.ColumnHeader colTimeZone;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TextBox txtContactID;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label lblUrl;
+        private System.Windows.Forms.Label lblStatus;
     }
 }
 
