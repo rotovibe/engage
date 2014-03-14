@@ -20,7 +20,7 @@ namespace Phytel.API.DataDomain.Patient.DTO
         }
 
         public const string IdProperty = "_id";
-        public const string DisplayPatientSystemIDProperty = "dpsid";
+        public const string DisplayPatientSystemIdProperty = "dpsid";
         public const string FirstNameProperty = "fn";
         public const string LastNameProperty = "ln";
         public const string GenderProperty = "g";
@@ -43,9 +43,9 @@ namespace Phytel.API.DataDomain.Patient.DTO
         [BsonId]
         public ObjectId Id { get; set; }
 
-        [BsonElement(DisplayPatientSystemIDProperty)]
+        [BsonElement(DisplayPatientSystemIdProperty)]
         [BsonIgnoreIfNull(true)]
-        public ObjectId? DisplayPatientSystemID { get; set; }
+        public ObjectId? DisplayPatientSystemId { get; set; }
 
         [BsonElement(FirstNameProperty)]
         [BsonIgnoreIfNull(true)]

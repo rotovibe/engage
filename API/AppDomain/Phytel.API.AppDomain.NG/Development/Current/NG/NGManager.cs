@@ -53,14 +53,14 @@ namespace Phytel.API.AppDomain.NG
                 {
                     Phytel.API.DataDomain.PatientSystem.DTO.GetPatientSystemDataResponse sysResponse = null;
 
-                    if (string.IsNullOrEmpty(response.Patient.DisplayPatientSystemID) == false)
+                    if (string.IsNullOrEmpty(response.Patient.DisplayPatientSystemId) == false)
                     {
                         sysResponse = client.Get<Phytel.API.DataDomain.PatientSystem.DTO.GetPatientSystemDataResponse>(string.Format("{0}/{1}/{2}/{3}/PatientSystem/{4}",
                                                                                     DDPatientSystemUrl,
                                                                                     "NG",
                                                                                     request.Version,
                                                                                     request.ContractNumber,
-                                                                                    response.Patient.DisplayPatientSystemID));
+                                                                                    response.Patient.DisplayPatientSystemId));
                     }
                     
                     pResponse.Patient = new NG.DTO.Patient

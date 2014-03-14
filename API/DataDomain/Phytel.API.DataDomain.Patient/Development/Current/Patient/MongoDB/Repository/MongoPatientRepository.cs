@@ -169,7 +169,7 @@ namespace Phytel.API.DataDomain.Patient
                         MiddleName = mePatient.MiddleName,
                         Suffix = mePatient.Suffix,
                         PriorityData = (DTO.PriorityData)((int)mePatient.Priority),
-                        DisplayPatientSystemID = mePatient.DisplayPatientSystemID.ToString(),
+                        DisplayPatientSystemId = mePatient.DisplayPatientSystemId.ToString(),
                         Background = mePatient.Background,
                         LastFourSSN = mePatient.LastFourSSN
                     };
@@ -417,7 +417,7 @@ namespace Phytel.API.DataDomain.Patient
                         Suffix = mp.Suffix,
                         Version = mp.Version,
                         PriorityData = (PriorityData)((int)mp.Priority),
-                        DisplayPatientSystemID = mp.DisplayPatientSystemID.ToString(),
+                        DisplayPatientSystemId = mp.DisplayPatientSystemId.ToString(),
                         Background = mp.Background,
                         LastFourSSN = mp.LastFourSSN
                     });
@@ -625,7 +625,7 @@ namespace Phytel.API.DataDomain.Patient
                     if (request.DisplayPatientSystemId != null)
                     {
                         if (ObjectId.Parse(request.DisplayPatientSystemId) != null)
-                            updt.Set(MEPatient.DisplayPatientSystemIDProperty, ObjectId.Parse(request.DisplayPatientSystemId));
+                            updt.Set(MEPatient.DisplayPatientSystemIdProperty, ObjectId.Parse(request.DisplayPatientSystemId));
                     }
                     if (request.FullSSN != null)
                     {

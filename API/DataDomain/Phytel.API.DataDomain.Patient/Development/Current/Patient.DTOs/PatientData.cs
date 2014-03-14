@@ -17,7 +17,7 @@ namespace Phytel.API.DataDomain.Patient.DTO
         public string Gender { get; set; }
         public string DOB { get; set; }
         public double Version { get; set; }
-        public string DisplayPatientSystemID { get; set; }
+        public string DisplayPatientSystemId { get; set; }
         public PriorityData PriorityData { get; set; }
         public bool Flagged { get; set; }
         public string Background { get; set; }
