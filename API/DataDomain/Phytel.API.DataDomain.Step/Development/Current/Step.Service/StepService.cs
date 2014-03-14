@@ -19,6 +19,9 @@ namespace Phytel.API.DataDomain.Step.Service
             {
                 //Get the UserId from the Header and update the request object
                 request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
+                if (string.IsNullOrEmpty(request.UserId))
+                    throw new UnauthorizedAccessException("StepDD:Get()");
+
                 response = StepDataManager.GetYesNoStepByID(request);
                 response.Version = request.Version;
             }
@@ -39,6 +42,9 @@ namespace Phytel.API.DataDomain.Step.Service
             {
                 //Get the UserId from the Header and update the request object
                 request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
+                if (string.IsNullOrEmpty(request.UserId))
+                    throw new UnauthorizedAccessException("StepDD:Get()");
+
                 response = StepDataManager.GetTextStepByID(request);
                 response.Version = request.Version;
             }

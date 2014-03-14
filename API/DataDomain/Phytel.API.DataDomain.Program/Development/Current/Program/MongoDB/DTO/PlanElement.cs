@@ -66,12 +66,12 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
         public const string NextProperty = "nxt";
         [BsonElement(NextProperty)]
         [BsonIgnoreIfNull(true)]
-        public string Next { get; set; }
+        public ObjectId? Next { get; set; }
 
         public const string PreviousProperty = "prev";
         [BsonElement(PreviousProperty)]
         [BsonIgnoreIfNull(true)]
-        public string Previous { get; set; }
+        public ObjectId? Previous { get; set; }
 
         public const string SpawnProperty = "spwn";
         [BsonElement(SpawnProperty)]

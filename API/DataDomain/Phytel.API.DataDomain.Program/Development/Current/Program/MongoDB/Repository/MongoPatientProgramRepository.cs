@@ -228,9 +228,9 @@ namespace Phytel.API.DataDomain.Program
                             DateCompleted = cp.DateCompleted,
                             ElementState = (int)cp.State,
                             Enabled = cp.Enabled,
-                            Next = cp.Next,
+                            Next = cp.Next != null ? cp.Next.ToString() : string.Empty,
                             Order = cp.Order,
-                            Previous = cp.Previous,
+                            Previous = cp.Previous != null ? cp.Previous.ToString() : string.Empty,
                             SourceId = cp.SourceId.ToString(),
                             SpawnElement = DTOUtils.GetResponseSpawnElement(cp.Spawn),
                             Modules = DTOUtils.GetModules(cp.Modules, _dbName, this.UserId),
@@ -291,8 +291,8 @@ namespace Phytel.API.DataDomain.Program
                     if (pg.Description != null) { uv.Add(MB.Update.Set(MEPatientProgram.DescriptionProperty, pg.Description)); }
                     if (pg.EndDate != null) { uv.Add(MB.Update.Set(MEPatientProgram.EndDateProperty, pg.EndDate)); }
                     if (pg.Name != null) { uv.Add(MB.Update.Set(MEPatientProgram.NameProperty, pg.Name)); }
-                    if (pg.Next != null) { uv.Add(MB.Update.Set(MEPatientProgram.NextProperty, pg.Next)); }
-                    if (pg.Previous != null) { uv.Add(MB.Update.Set(MEPatientProgram.PreviousProperty, pg.Previous)); }
+                    if (pg.Next != null) { uv.Add(MB.Update.Set(MEPatientProgram.NextProperty, ObjectId.Parse(pg.Next))); }
+                    if (pg.Previous != null) { uv.Add(MB.Update.Set(MEPatientProgram.PreviousProperty, ObjectId.Parse(pg.Previous))); }
                     if (pg.ShortName != null) { uv.Add(MB.Update.Set(MEPatientProgram.ShortNameProperty, pg.ShortName)); }
                     if (pg.SourceId != null) { uv.Add(MB.Update.Set(MEPatientProgram.SourceIdProperty, pg.SourceId)); }
                     if (pg.StartDate != null) { uv.Add(MB.Update.Set(MEPatientProgram.StartDateProperty, pg.StartDate)); }

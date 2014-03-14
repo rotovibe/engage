@@ -19,6 +19,9 @@ namespace Phytel.API.DataDomain.PatientNote.Service
             {
                 //Get the UserId from the Header and update the request object
                 request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
+                if (string.IsNullOrEmpty(request.UserId))
+                    throw new UnauthorizedAccessException("PatientNoteDD:Put()");
+
                 response.Id = PatientNoteDataManager.InsertPatientNote(request);
                 response.Version = request.Version;
             }
@@ -39,6 +42,9 @@ namespace Phytel.API.DataDomain.PatientNote.Service
             {
                 //Get the UserId from the Header and update the request object
                 request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
+                if (string.IsNullOrEmpty(request.UserId))
+                    throw new UnauthorizedAccessException("PatientNoteDD:Get()");
+
                 response.PatientNote = PatientNoteDataManager.GetPatientNote(request);
                 response.Version = request.Version;
             }
@@ -59,6 +65,9 @@ namespace Phytel.API.DataDomain.PatientNote.Service
             {
                 //Get the UserId from the Header and update the request object
                 request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
+                if (string.IsNullOrEmpty(request.UserId))
+                    throw new UnauthorizedAccessException("PatientNoteDD:Get()");
+
                 response.PatientNotes = PatientNoteDataManager.GetAllPatientNotes(request);
                 response.Version = request.Version;
             }
@@ -79,6 +88,9 @@ namespace Phytel.API.DataDomain.PatientNote.Service
             {
                 //Get the UserId from the Header and update the request object
                 request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
+                if (string.IsNullOrEmpty(request.UserId))
+                    throw new UnauthorizedAccessException("PatientNoteDD:Delete()");
+
                 response.Deleted = PatientNoteDataManager.DeletePatientNote(request);
                 response.Version = request.Version;
             }

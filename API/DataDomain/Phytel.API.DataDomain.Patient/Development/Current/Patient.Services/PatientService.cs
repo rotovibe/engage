@@ -21,6 +21,9 @@ namespace Phytel.API.DataDomain.Patient.Service
             {
                 //Get the UserId from the Header and update the request object
                 request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
+                if (string.IsNullOrEmpty(request.UserId))
+                    throw new UnauthorizedAccessException("PatientDD:Get()");
+
                 response = PatientDataManager.GetPatientByID(request);
                 response.Version = request.Version;
             }
@@ -41,6 +44,9 @@ namespace Phytel.API.DataDomain.Patient.Service
             {
                 //Get the UserId from the Header and update the request object
                 request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
+                if (string.IsNullOrEmpty(request.UserId))
+                    throw new UnauthorizedAccessException("PatientDD:Get()");
+
                 response = PatientDataManager.GetPatientSSN(request);
                 response.Version = request.Version;
             }
@@ -61,6 +67,9 @@ namespace Phytel.API.DataDomain.Patient.Service
             {
                 //Get the UserId from the Header and update the request object
                 request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
+                if (string.IsNullOrEmpty(request.UserId))
+                    throw new UnauthorizedAccessException("PatientDD:Post()");
+
                 response = PatientDataManager.GetPatients(request);
                 response.Version = request.Version;
             }
@@ -81,6 +90,9 @@ namespace Phytel.API.DataDomain.Patient.Service
             {
                 //Get the UserId from the Header and update the request object
                 request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
+                if (string.IsNullOrEmpty(request.UserId))
+                    throw new UnauthorizedAccessException("PatientDD:Put()");
+
                 response = PatientDataManager.UpdatePatient(request);
                 response.Version = request.Version;
             }
@@ -101,6 +113,9 @@ namespace Phytel.API.DataDomain.Patient.Service
             {
                 //Get the UserId from the Header and update the request object
                 request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
+                if (string.IsNullOrEmpty(request.UserId))
+                    throw new UnauthorizedAccessException("PatientDD:Put()");
+
                 response = PatientDataManager.InsertPatient(request);
                 response.Version = request.Version;
                 //throw new Exception("Just a test error");
@@ -123,6 +138,9 @@ namespace Phytel.API.DataDomain.Patient.Service
             {
                 //Get the UserId from the Header and update the request object
                 request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
+                if (string.IsNullOrEmpty(request.UserId))
+                    throw new UnauthorizedAccessException("PatientDD:Put()");
+
                 response = PatientDataManager.InsertCohortPatientView(request);
                 response.Version = request.Version;
             }
@@ -143,6 +161,9 @@ namespace Phytel.API.DataDomain.Patient.Service
             {
                 //Get the UserId from the Header and update the request object
                 request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
+                if (string.IsNullOrEmpty(request.UserId))
+                    throw new UnauthorizedAccessException("PatientDD:Put()");
+
                 response = PatientDataManager.UpdateCohortPatientViewProblem(request);
                 response.Version = request.Version;
             }
@@ -163,6 +184,9 @@ namespace Phytel.API.DataDomain.Patient.Service
             {
                 //Get the UserId from the Header and update the request object
                 request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
+                if (string.IsNullOrEmpty(request.UserId))
+                    throw new UnauthorizedAccessException("PatientDD:Put()");
+
                 response = PatientDataManager.UpdatePatientPriority(request);
                 response.Version = request.Version;
             }
@@ -183,6 +207,9 @@ namespace Phytel.API.DataDomain.Patient.Service
             {
                 //Get the UserId from the Header and update the request object
                 request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
+                if (string.IsNullOrEmpty(request.UserId))
+                    throw new UnauthorizedAccessException("PatientDD:Put()");
+
                 response = PatientDataManager.UpdatePatientFlagged(request);
                 response.Version = request.Version;
             }
@@ -203,6 +230,9 @@ namespace Phytel.API.DataDomain.Patient.Service
             {
                 //Get the UserId from the Header and update the request object
                 request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
+                if (string.IsNullOrEmpty(request.UserId))
+                    throw new UnauthorizedAccessException("PatientDD:Put()");
+
                 response = PatientDataManager.UpdatePatientBackground(request);
                 response.Version = request.Version;
             }
@@ -224,6 +254,9 @@ namespace Phytel.API.DataDomain.Patient.Service
             {
                 //Get the UserId from the Header and update the request object
                 request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
+                if (string.IsNullOrEmpty(request.UserId))
+                    throw new UnauthorizedAccessException("PatientDD:Get()");
+
                 response = PatientDataManager.GetCohortPatients(request);
                 response.Version = request.Version;
             }
@@ -245,6 +278,9 @@ namespace Phytel.API.DataDomain.Patient.Service
             {
                 //Get the UserId from the Header and update the request object
                 request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
+                if (string.IsNullOrEmpty(request.UserId))
+                    throw new UnauthorizedAccessException("PatientDD:Get()");
+
                 response = PatientDataManager.GetCohortPatientView(request);
                 response.Version = request.Version;
             }

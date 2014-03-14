@@ -439,16 +439,16 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             {
                 if (md.Previous != null)
                 {
-                    if (md.Previous.Equals(kv.Key.ToString()))
+                    if (md.Previous.Equals(kv.Key))
                     {
-                        md.Previous = kv.Value.ToString();
+                        md.Previous = kv.Value;
                     }
                 }
                 if (md.Next != null)
                 {
-                    if (md.Next.Equals(kv.Key.ToString()))
+                    if (md.Next.Equals(kv.Key))
                     {
-                        md.Next = kv.Value.ToString();
+                        md.Next = kv.Value;
                     }
                 }
             }
@@ -601,10 +601,10 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
                             State = (ElementState)a.ElementState,
                             Enabled = a.Enabled,
                             Name = a.Name,
-                            Next = a.Next,
+                            Next = ObjectId.Parse(a.Next),
                             Objectives = GetObjectives(a.Objectives),
                             Order = a.Order,
-                            Previous = a.Previous,
+                            Previous = ObjectId.Parse(a.Previous),
                             SourceId = ObjectId.Parse(a.SourceId),
                             Spawn = GetSpawnElements(a.SpawnElement),
                             Status = (Status)a.Status
@@ -646,10 +646,10 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
                             Enabled = st.Enabled,
                             Header = st.Header,
                             IncludeTime = st.IncludeTime,
-                            Next = st.Next,
+                            Next = ObjectId.Parse(st.Next),
                             Notes = st.Notes,
                             Order = st.Order,
-                            Previous = st.Previous,
+                            Previous = ObjectId.Parse(st.Previous),
                             Question = st.Question,
                             SelectedResponseId = DTOUtils.ParseObjectId(st.SelectedResponseId),
                             SelectType = (SelectType)st.SelectType,
@@ -813,8 +813,8 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
                         {
                             Id = ObjectId.Parse(m.Id),
                             DateCompleted = m.DateCompleted,
-                            Next = m.Next,
-                            Previous = m.Previous,
+                            Next = ObjectId.Parse(m.Next),
+                            Previous = ObjectId.Parse(m.Previous),
                             Spawn = DTOUtils.GetSpawnElements(m.SpawnElement),
                             Actions = DTOUtils.GetActionElements(m.Actions),
                             AssignedBy = m.AssignBy,
@@ -856,8 +856,8 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
                     Status = (int)r.Status,
                     Completed = r.Completed,
                     Enabled = r.Enabled,
-                    Next = r.Next,
-                    Previous = r.Previous,
+                    Next = r.Next != null ? r.Next.ToString() : string.Empty,
+                    Previous = r.Previous != null ? r.Previous.ToString() : string.Empty,
                     Order = r.Order,
                     SpawnElement = GetSpawnElement(r),
                     SourceId = r.SourceId.ToString(),
@@ -915,8 +915,8 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
                     Status = (int)a.Status,
                     Completed = a.Completed,
                     Enabled = a.Enabled,
-                    Next = a.Next,
-                    Previous = a.Previous,
+                    Next = a.Next != null ? a.Next.ToString() : string.Empty,
+                    Previous = a.Previous != null ? a.Previous.ToString() : string.Empty,
                     Order = a.Order,
                     SpawnElement = GetSpawnElement(a),
                     SourceId = a.SourceId.ToString(),
@@ -955,8 +955,8 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
                         StepTypeId = s.StepTypeId,
                         Completed = s.Completed,
                         Enabled = s.Enabled,
-                        Next = s.Next,
-                        Previous = s.Previous,
+                        Next = s.Next != null ? s.Next.ToString() : string.Empty,
+                        Previous = s.Previous != null ? s.Previous.ToString() : string.Empty,
                         Order = s.Order,
                         ControlType = (int)s.ControlType,
                         Header = s.Header,

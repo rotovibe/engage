@@ -20,6 +20,9 @@ namespace Phytel.API.DataDomain.Action.Service
             {
                 //Get the UserId from the Header and update the request object
                 request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
+                if (string.IsNullOrEmpty(request.UserId))
+                    throw new UnauthorizedAccessException("ActionDD:Get()");
+
                 response = ActionDataManager.GetActionByID(request);
                 response.Version = request.Version;
             }
