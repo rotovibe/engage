@@ -13,6 +13,7 @@ using Phytel.API.DataDomain.Program.MongoDB.DTO;
 using Phytel.API.Common;
 using Phytel.API.Common.Data;
 using Phytel.API.DataAudit;
+using MongoDB.Bson.Serialization;
 
 namespace Phytel.API.DataDomain.Program
 {
@@ -23,6 +24,14 @@ namespace Phytel.API.DataDomain.Program
         public MongoResponseRepository(string contractDBName)
         {
             _dbName = contractDBName;
+
+            #region Register ClassMap
+            if (BsonClassMap.IsClassMapRegistered(typeof(ProgramBase)) == false)
+                BsonClassMap.RegisterClassMap<ProgramBase>();
+
+            if (BsonClassMap.IsClassMapRegistered(typeof(MEResponse)) == false)
+                BsonClassMap.RegisterClassMap<MEResponse>();
+            #endregion
         }
 
         public object Insert(object newEntity)

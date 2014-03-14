@@ -10,6 +10,7 @@ using MongoDB.Driver.Builders;
 using MongoDB.Bson;
 using Phytel.API.DataDomain.Program;
 using Phytel.API.DataDomain.Program.MongoDB.DTO;
+using MongoDB.Bson.Serialization;
 
 namespace Phytel.API.DataDomain.Program
 {
@@ -20,6 +21,14 @@ namespace Phytel.API.DataDomain.Program
         public MongoContractProgramRepository(string contractDBName)
         {
             _dbName = contractDBName;
+
+            #region Register ClassMap
+            if (BsonClassMap.IsClassMapRegistered(typeof(ProgramBase)) == false)
+                BsonClassMap.RegisterClassMap<ProgramBase>();
+
+            if (BsonClassMap.IsClassMapRegistered(typeof(MEProgram)) == false)
+                BsonClassMap.RegisterClassMap<MEProgram>();
+            #endregion
         }
 
         public object Insert(object newEntity)

@@ -10,6 +10,7 @@ using MongoDB.Driver.Builders;
 using MongoDB.Bson;
 using Phytel.API.DataDomain.Step;
 using Phytel.API.Common;
+using MongoDB.Bson.Serialization;
 
 namespace Phytel.API.DataDomain.Step
 {
@@ -20,6 +21,14 @@ namespace Phytel.API.DataDomain.Step
         public MongoTextStepRepository(string contractDBName)
         {
             _dbName = contractDBName;
+
+            #region Register ClassMap
+            if (BsonClassMap.IsClassMapRegistered(typeof(MEStepBase)) == false)
+                BsonClassMap.RegisterClassMap<MEStepBase>();
+
+            if (BsonClassMap.IsClassMapRegistered(typeof(METext)) == false)
+                BsonClassMap.RegisterClassMap<METext>();
+            #endregion
         }
 
         public object Insert(object newEntity)
