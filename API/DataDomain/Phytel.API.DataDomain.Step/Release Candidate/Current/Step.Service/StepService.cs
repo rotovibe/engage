@@ -2,41 +2,35 @@ using System;
 using System.Net;
 using Phytel.API.DataDomain.Step;
 using Phytel.API.DataDomain.Step.DTO;
+using System.Configuration;
+using Phytel.API.Common.Format;
+using System.Web;
 
 namespace Phytel.API.DataDomain.Step.Service
 {
     public class StepService : ServiceStack.ServiceInterface.Service
     {
-        //public GetStepResponse Post(GetStepRequest request)
-        //{
-        //    GetStepResponse response = new GetStepResponse();
-        //    try
-        //    {
-        //        response = StepDataManager.GetStepByID(request);
-        //        response.Version = request.Version;
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        //TODO: Log this to the SQL database via ASE
-        //        base.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-        //        response.Status = new ServiceStack.ServiceInterface.ServiceModel.ResponseStatus("Exception", ex.Message);
-        //    }
-        //    return response;
-        //}
+        private const string _phytelUserIDToken = "x-Phytel-UserID";
 
         public GetYesNoStepDataResponse Get(GetYesNoStepDataRequest request)
         {
             GetYesNoStepDataResponse response = new GetYesNoStepDataResponse();
             try
             {
+                //Get the UserId from the Header and update the request object
+                request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
+                if (string.IsNullOrEmpty(request.UserId))
+                    throw new UnauthorizedAccessException("StepDD:Get()::Unauthorized Access");
+
                 response = StepDataManager.GetYesNoStepByID(request);
                 response.Version = request.Version;
             }
             catch (Exception ex)
             {
-                //TODO: Log this to the SQL database via ASE
-                base.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-                response.Status = new ServiceStack.ServiceInterface.ServiceModel.ResponseStatus("Exception", ex.Message);
+                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+
+                string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
+                Common.Helper.LogException(int.Parse(aseProcessID), ex);
             }
             return response;
         }
@@ -46,33 +40,22 @@ namespace Phytel.API.DataDomain.Step.Service
             GetTextStepDataResponse response = new GetTextStepDataResponse();
             try
             {
+                //Get the UserId from the Header and update the request object
+                request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
+                if (string.IsNullOrEmpty(request.UserId))
+                    throw new UnauthorizedAccessException("StepDD:Get()::Unauthorized Access");
+
                 response = StepDataManager.GetTextStepByID(request);
                 response.Version = request.Version;
             }
             catch (Exception ex)
             {
-                //TODO: Log this to the SQL database via ASE
-                base.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-                response.Status = new ServiceStack.ServiceInterface.ServiceModel.ResponseStatus("Exception", ex.Message);
+                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+
+                string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
+                Common.Helper.LogException(int.Parse(aseProcessID), ex);
             }
             return response;
         }
-
-        //public GetAllStepsResponse Post(GetAllStepsRequest request)
-        //{
-        //    GetAllStepsResponse response = new GetAllStepsResponse();
-        //    try
-        //    {
-        //        response = StepDataManager.GetStepList(request);
-        //        response.Version = request.Version;
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        //TODO: Log this to the SQL database via ASE
-        //        base.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-        //        response.Status = new ServiceStack.ServiceInterface.ServiceModel.ResponseStatus("Exception", ex.Message);
-        //    }
-        //    return response;
-        //}
     }
 }

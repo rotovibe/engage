@@ -14,10 +14,10 @@ namespace Phytel.API.DataDomain.Step.DTO
         [BsonIgnoreIfNull(true)]
         public string Title { get; set; }
 
-        public const string TextPromptProperty = "text";
+        public const string TextPromptProperty = "txt";
         [BsonElement(TextPromptProperty)]
         [BsonIgnoreIfNull(true)]
         [BsonRequired]
-        public string TextPrompt { get; set; }
+        public string Text { get; set; }
     }
 }

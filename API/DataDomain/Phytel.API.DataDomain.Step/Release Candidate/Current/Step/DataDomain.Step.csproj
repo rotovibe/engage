@@ -70,6 +70,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="IStepRepository.cs" />
+    <Compile Include="MongoDB\DTO\MEModal.cs" />
     <Compile Include="MongoDB\DTO\MEDateTime.cs" />
     <Compile Include="MongoDB\DTO\MEComplete.cs" />
     <Compile Include="MongoDB\DTO\METextInput.cs" />

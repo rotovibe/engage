@@ -10,13 +10,13 @@ namespace Phytel.API.DataDomain.Step.DTO
     public class MEYesNo : MEStepBase
     {
         //public const string QuestionProperty = "q";
-        public const string NotesProperty = "n";
 
         [BsonElement(QuestionProperty)]
         [BsonIgnoreIfNull(true)]
         [BsonRequired]
         public string Question { get; set; }
 
+        public const string NotesProperty = "nts";
         [BsonElement(NotesProperty)]
         [BsonIgnoreIfNull(true)]
         public string Notes { get; set; }

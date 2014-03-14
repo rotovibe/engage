@@ -31,24 +31,20 @@ namespace Phytel.API.DataDomain.Step.DTO
         public const string StatusProperty = "st";
         [BsonElement(StatusProperty)]
         [BsonIgnoreIfNull(true)]
-        [BsonDefaultValue(1)]
+        [BsonDefaultValue(1.0)]
         public Status Status { get; set; }
 
-        public const string ExtraElementsProperty = "ex";
-        [BsonElement(ExtraElementsProperty)]
-        [BsonExtraElements()]
-        [BsonIgnoreIfNull(true)]
-        public Dictionary<string, object> ExtraElements { get; set; }
+        [BsonExtraElements]
+        public BsonDocument ExtraElements { get; set; }
 
         public const string VersionProperty = "v";
         [BsonElement(VersionProperty)]
-        [BsonDefaultValue("v1")]
-        public string Version { get; set; }
+        [BsonDefaultValue(1.0)]
+        public double Version { get; set; }
 
         public const string UpdatedByProperty = "uby";
         [BsonElement(UpdatedByProperty)]
-        [BsonDefaultValue("-100")]
-        public string UpdatedBy { get; set; }
+        public ObjectId? UpdatedBy { get; set; }
 
         public const string DeleteFlagProperty = "del";
         [BsonElement(DeleteFlagProperty)]
@@ -58,13 +54,13 @@ namespace Phytel.API.DataDomain.Step.DTO
         public const string TTLDateProperty = "ttl";
         [BsonElement(TTLDateProperty)]
         [BsonIgnoreIfNull(true)]
-        [BsonDateTimeOptions(Kind = System.DateTimeKind.Local)]
+        [BsonDateTimeOptions(Kind = System.DateTimeKind.Utc)]
         public System.DateTime? TTLDate { get; set; }
 
         public const string LastUpdatedOnProperty = "uon";
         [BsonElement(LastUpdatedOnProperty)]
         [BsonIgnoreIfNull(true)]
-        [BsonDateTimeOptions(Kind = System.DateTimeKind.Local)]
+        [BsonDateTimeOptions(Kind = System.DateTimeKind.Utc)]
         public System.DateTime? LastUpdatedOn { get; set; }
 
     }

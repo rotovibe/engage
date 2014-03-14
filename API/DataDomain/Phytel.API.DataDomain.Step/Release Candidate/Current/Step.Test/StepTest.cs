@@ -10,7 +10,7 @@ namespace Phytel.API.DataDomain.Step.Test
         public void GetYesNoStepByID_Test()
         {
             // Arrange
-            string version = "v1";
+            double version = 1.0;
             string contractNumber = "InHealth001";
             string context = "NG";
             GetYesNoStepDataRequest request = new GetYesNoStepDataRequest { YesNoStepID = "52a641e8d433231824878c8f", Context = context, ContractNumber = contractNumber, Version = version };
@@ -27,7 +27,7 @@ namespace Phytel.API.DataDomain.Step.Test
         public void GetTextStepByID_Test()
         {
             // Arrange
-            string version = "v1";
+            double version = 1.0;
             string contractNumber = "InHealth001";
             string context = "NG";
             GetTextStepDataRequest request = new GetTextStepDataRequest { TextStepID = "52a64270d433231824878c93", Context = context, ContractNumber = contractNumber, Version = version };
