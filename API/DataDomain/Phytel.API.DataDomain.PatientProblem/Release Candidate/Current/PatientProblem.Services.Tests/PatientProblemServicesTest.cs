@@ -13,11 +13,13 @@ namespace Phytel.API.DataDomain.PatientProblem.Service.Test
         public void GetPatientProblem_Test()
         {
             // Arrange
-            string version = "v1";
+            double version = 1.0;
             string contractNumber = "InHealth001";
             string context = "NG";
             string patientID = "528bdccc072ef7071c2e22ae";
             IRestClient client = new JsonServiceClient();
+            JsonServiceClient.HttpWebRequestFilter = x =>
+                            x.Headers.Add(string.Format("{0}: {1}", "x-Phytel-UserID", "531f2df9072ef727c4d2a3df"));
 
             // Act
             GetAllPatientProblemsDataResponse response = client.Get<GetAllPatientProblemsDataResponse>(string.Format("{0}/{1}/{2}/{3}/patientproblems/{4}", "http://localhost:8888/PatientProblem", context, version, contractNumber, patientID));
