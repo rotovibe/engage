@@ -41,9 +41,9 @@ namespace Phytel.API.AppDomain.NG
                 }
                 return result;
             }
-            catch (WebServiceException ex)
+            catch (Exception ex)
             {
-                throw new WebServiceException("App Domain:PostInitialGoalRequest()" + ex.Message, ex.InnerException);
+                throw new Exception("AD:GetStandardObservationsForPatient()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -69,7 +69,7 @@ namespace Phytel.API.AppDomain.NG
             }
             catch (Exception ex)
             {
-                throw new WebServiceException("App Domain:GetValues()" + ex.Message, ex.InnerException);
+                throw new Exception("AD:GetValues()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -91,9 +91,9 @@ namespace Phytel.API.AppDomain.NG
                 }
                 return prevValue;
             }
-            catch (WebServiceException ex)
+            catch (Exception ex)
             {
-                throw new WebServiceException("App Domain:PostInitialGoalRequest()" + ex.Message, ex.InnerException);
+                throw new Exception("AD:ConvertPreviousValue()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -115,9 +115,9 @@ namespace Phytel.API.AppDomain.NG
                 }
                 return result;
             }
-            catch (WebServiceException ex)
+            catch (Exception ex)
             {
-                throw new WebServiceException("App Domain:PostInitialGoalRequest()" + ex.Message, ex.InnerException);
+                throw new Exception("AD:GetAdditionalLibraryObservations()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -149,7 +149,7 @@ namespace Phytel.API.AppDomain.NG
             }
             catch (Exception ex)
             {
-                throw new Exception("App Domain:CreatePatientObservationRecord()" + ex.Message, ex.InnerException);
+                throw new Exception("AD:CreatePatientObservationRecord()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -172,9 +172,9 @@ namespace Phytel.API.AppDomain.NG
 
                 return patientObservationIds;
             }
-            catch (WebServiceException ex)
+            catch (Exception ex)
             {
-                throw new WebServiceException("AD:GetPatientObservationIds()" + ex.Message, ex.InnerException);
+                throw new Exception("AD:GetPatientObservationIds()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -199,9 +199,9 @@ namespace Phytel.API.AppDomain.NG
                 };
                 return result;
             }
-            catch (WebServiceException ex)
+            catch (Exception ex)
             {
-                throw new WebServiceException("App Domain:PostInitialGoalRequest()" + ex.Message, ex.InnerException);
+                throw new Exception("AD:GetAdditionalObservationItemForPatient()::" + ex.Message, ex.InnerException);
             }
         }
     }

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -124,63 +124,59 @@
     <Compile Include="PlanElementStrategy\SpawnElementStrategy.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\..\Common\Phytel.API.Common\Release Candidate\Current\Phytel.API.Common.csproj">
+    <ProjectReference Include="..\..\..\..\..\Common\Phytel.API.Common\Development\Current\Phytel.API.Common.csproj">
       <Project>{25cf3c3f-221f-4a49-b5ef-a8a5fcf9a5ba}</Project>
       <Name>Phytel.API.Common</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\..\..\DataDomain\Phytel.API.DataDomain.CareMember\Release Candidate\Current\CareMember.DTO\DataDomain.CareMember.DTO.csproj">
+    <ProjectReference Include="..\..\..\..\..\DataDomain\Phytel.API.DataDomain.CareMember\Development\Current\CareMember.DTO\DataDomain.CareMember.DTO.csproj">
       <Project>{b65577e7-60a6-4553-b1b9-38d6074ac560}</Project>
       <Name>DataDomain.CareMember.DTO</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\..\..\DataDomain\Phytel.API.DataDomain.Cohort\Release Candidate\Current\Cohort.DTO\DataDomain.Cohort.DTO.csproj">
+    <ProjectReference Include="..\..\..\..\..\DataDomain\Phytel.API.DataDomain.Cohort\Development\Current\Cohort.DTO\DataDomain.Cohort.DTO.csproj">
       <Project>{d4489296-17a3-4172-8fdf-db6c0a7ae748}</Project>
       <Name>DataDomain.Cohort.DTO</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\..\..\DataDomain\Phytel.API.DataDomain.Contact\Release Candidate\Current\Contact.DTO\DataDomain.Contact.DTO.csproj">
+    <ProjectReference Include="..\..\..\..\..\DataDomain\Phytel.API.DataDomain.Contact\Development\Current\Contact.DTO\DataDomain.Contact.DTO.csproj">
       <Project>{0b6e0ed8-abe5-4a1d-8e10-0ac54f06d9c4}</Project>
       <Name>DataDomain.Contact.DTO</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\..\..\DataDomain\Phytel.API.DataDomain.LookUp\Release Candidate\Current\LookUp.DTO\DataDomain.LookUp.DTO.csproj">
+    <ProjectReference Include="..\..\..\..\..\DataDomain\Phytel.API.DataDomain.LookUp\Development\Current\LookUp.DTO\DataDomain.LookUp.DTO.csproj">
       <Project>{4885fe36-03db-47b7-be7e-33260943a9dc}</Project>
       <Name>DataDomain.LookUp.DTO</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\..\..\DataDomain\Phytel.API.DataDomain.PatientGoal\Release Candidate\Current\PatientGoal.DTO\DataDomain.PatientGoal.DTO.csproj">
+    <ProjectReference Include="..\..\..\..\..\DataDomain\Phytel.API.DataDomain.PatientGoal\Development\Current\PatientGoal.DTO\DataDomain.PatientGoal.DTO.csproj">
       <Project>{92488af4-963e-4098-8ba8-23d6952bd952}</Project>
       <Name>DataDomain.PatientGoal.DTO</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\..\..\DataDomain\Phytel.API.DataDomain.PatientNote\Release Candidate\Current\PatientNote.DTO\DataDomain.PatientNote.DTO.csproj">
+    <ProjectReference Include="..\..\..\..\..\DataDomain\Phytel.API.DataDomain.PatientNote\Development\Current\PatientNote.DTO\DataDomain.PatientNote.DTO.csproj">
       <Project>{99f4ec29-b099-424e-9757-223e67029001}</Project>
       <Name>DataDomain.PatientNote.DTO</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\..\..\DataDomain\Phytel.API.DataDomain.Action\Release Candidate\Current\Action.DTO\DataDomain.Action.DTO.csproj">
-      <Project>{1c2c63a1-4246-4ec9-bad1-c00e9ecd85f6}</Project>
-      <Name>DataDomain.Action.DTO</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\..\..\DataDomain\Phytel.API.DataDomain.PatientObservation\Release Candidate\Current\PatientObservation.DTO\DataDomain.PatientObservation.DTO.csproj">
+    <ProjectReference Include="..\..\..\..\..\DataDomain\Phytel.API.DataDomain.PatientObservation\Development\Current\PatientObservation.DTO\DataDomain.PatientObservation.DTO.csproj">
       <Project>{06d69e2b-a395-459c-b4d0-fc750018bdd8}</Project>
       <Name>DataDomain.PatientObservation.DTO</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\..\..\DataDomain\Phytel.API.DataDomain.PatientProblem\Release Candidate\Current\PatientProblem.DTOs\DataDomain.PatientProblem.DTO.csproj">
+    <ProjectReference Include="..\..\..\..\..\DataDomain\Phytel.API.DataDomain.PatientProblem\Development\Current\PatientProblem.DTOs\DataDomain.PatientProblem.DTO.csproj">
       <Project>{f133e537-1d48-4a42-aba9-5587e057f5b3}</Project>
       <Name>DataDomain.PatientProblem.DTO</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\..\..\DataDomain\Phytel.API.DataDomain.PatientSystem\Release Candidate\Current\PatientSystem.DTO\DataDomain.PatientSystem.DTO.csproj">
+    <ProjectReference Include="..\..\..\..\..\DataDomain\Phytel.API.DataDomain.PatientSystem\Development\Current\PatientSystem.DTO\DataDomain.PatientSystem.DTO.csproj">
       <Project>{6033a8ea-a3ef-4182-bfdd-4a9826ecf871}</Project>
       <Name>DataDomain.PatientSystem.DTO</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\..\..\DataDomain\Phytel.API.DataDomain.Patient\Release Candidate\Current\Patient.DTOs\DataDomain.Patient.DTO.csproj">
+    <ProjectReference Include="..\..\..\..\..\DataDomain\Phytel.API.DataDomain.Patient\Development\Current\Patient.DTOs\DataDomain.Patient.DTO.csproj">
       <Project>{1b3148a8-fb57-4461-91bc-f1cd38a013b6}</Project>
       <Name>DataDomain.Patient.DTO</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\..\..\DataDomain\Phytel.API.DataDomain.Program\Release Candidate\Current\Program.DTO\DataDomain.Program.DTO.csproj">
+    <ProjectReference Include="..\..\..\..\..\DataDomain\Phytel.API.DataDomain.Program\Development\Current\Program.DTO\DataDomain.Program.DTO.csproj">
       <Project>{4e9f9dbf-e01b-4226-9e4f-246149ebbb3f}</Project>
       <Name>DataDomain.Program.DTO</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\..\..\Interfaces\Release Candidate\Current\Phytel.API.Interface\Phytel.API.Interface.csproj">
+    <ProjectReference Include="..\..\..\..\..\Interfaces\Development\Current\Phytel.API.Interface\Phytel.API.Interface.csproj">
       <Project>{abe948fb-247e-4955-b3ab-b7c93e10a542}</Project>
       <Name>Phytel.API.Interface</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\..\Phytel.API.AppDomain.Security\Release Candidate\Current\Security.DTOs\AppDomain.Security.DTO.csproj">
+    <ProjectReference Include="..\..\..\..\Phytel.API.AppDomain.Security\Development\Current\Security.DTOs\AppDomain.Security.DTO.csproj">
       <Project>{5d9c233b-e53d-4be1-b578-1aa9722de1cf}</Project>
       <Name>AppDomain.Security.DTO</Name>
     </ProjectReference>

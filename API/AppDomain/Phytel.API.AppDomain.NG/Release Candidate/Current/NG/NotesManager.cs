@@ -20,7 +20,8 @@ namespace Phytel.API.AppDomain.NG
             {
                 PatientNote result = null;
                 //[Route("/{Context}/{Version}/{ContractNumber}/Patient/{PatientId}/Note/{Id}", "GET")]
-                IRestClient client = new JsonServiceClient();
+                IRestClient client = Common.Helper.GetJsonServiceClient(request.UserId);
+
                 GetPatientNoteDataResponse ddResponse = client.Get<GetPatientNoteDataResponse>(
                     string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Note/{5}?UserId={6}",
                     DDPatientNoteUrl,
@@ -48,7 +49,7 @@ namespace Phytel.API.AppDomain.NG
             }
             catch (WebServiceException ex)
             {
-                throw new WebServiceException("AD:GetPatientNote()" + ex.Message, ex.InnerException);
+                throw new WebServiceException("AD:GetPatientNote()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -58,7 +59,8 @@ namespace Phytel.API.AppDomain.NG
             {
                 List<PatientNote> result = null;
                 //[Route("/{Context}/{Version}/{ContractNumber}/Patient/{PatientId}/Notes/{Count}", "GET")]
-                IRestClient client = new JsonServiceClient();
+                IRestClient client = Common.Helper.GetJsonServiceClient(request.UserId);
+
                 GetAllPatientNotesDataResponse ddResponse = client.Get<GetAllPatientNotesDataResponse>(
                     string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Notes/{5}?UserId={6}",
                     DDPatientNoteUrl,
@@ -91,11 +93,11 @@ namespace Phytel.API.AppDomain.NG
             }
             catch (WebServiceException ex)
             {
-                throw new WebServiceException("AD:GetAllPatientNotes()" + ex.Message, ex.InnerException);
+                throw new WebServiceException("AD:GetAllPatientNotes()::" + ex.Message, ex.InnerException);
             }
         }
 
-        public PostPatientNoteResponse InsertPatientNote(PostPatientNoteRequest request, string createdBy)
+        public PostPatientNoteResponse InsertPatientNote(PostPatientNoteRequest request)
         {
             try
             {
@@ -106,11 +108,12 @@ namespace Phytel.API.AppDomain.NG
 
                 PostPatientNoteResponse response = new PostPatientNoteResponse();
                 //[Route("/{Context}/{Version}/{ContractNumber}/Patient/{PatientId}/Note/Insert", "PUT")]
-                IRestClient client = new JsonServiceClient();
+                IRestClient client = Common.Helper.GetJsonServiceClient(request.UserId);
+
                 PatientNoteData noteData = new PatientNoteData {
                     Text  = request.Note.Text,
                     ProgramIds  = request.Note.ProgramIds,
-                    CreatedById = createdBy,
+                    CreatedById = request.UserId,
                     CreatedOn = request.Note.CreatedOn,
                     PatientId = request.Note.PatientId
                 };
@@ -138,10 +141,9 @@ namespace Phytel.API.AppDomain.NG
                 
                 return response;
             }
-            catch (WebServiceException wse)
+            catch (WebServiceException ex)
             {
-                Exception ae = new Exception(wse.ResponseBody, wse.InnerException);
-                throw ae;
+                throw new WebServiceException("AD:InsertPatientNote()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -150,7 +152,8 @@ namespace Phytel.API.AppDomain.NG
             PostDeletePatientNoteResponse response = new PostDeletePatientNoteResponse();
             try
             {
-                IRestClient client = new JsonServiceClient();
+                IRestClient client = Common.Helper.GetJsonServiceClient(request.UserId);
+
                 //[Route("/{Context}/{Version}/{ContractNumber}/Patient/{PatientId}/Note/{Id}/Delete", "DELETE")]
                 DeletePatientNoteDataResponse ddResponse = client.Delete<DeletePatientNoteDataResponse>(
                     string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Note/{5}/Delete?UserId={6}",
@@ -168,9 +171,9 @@ namespace Phytel.API.AppDomain.NG
                 }
                 return response;
             }
-            catch (Exception ex)
+            catch (WebServiceException ex)
             {
-                throw new Exception("AD:DeletePatientNote:" + ex.Message, ex.InnerException);
+                throw new WebServiceException("AD:DeletePatientNote()::" + ex.Message, ex.InnerException);
             }
         }
     }

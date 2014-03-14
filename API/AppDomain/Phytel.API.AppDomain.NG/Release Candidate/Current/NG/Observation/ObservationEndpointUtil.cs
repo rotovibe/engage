@@ -22,7 +22,8 @@ namespace Phytel.API.AppDomain.NG.Observation
             try
             {
                 List<PatientObservationData> result = null;
-                IRestClient client = new JsonServiceClient();
+                IRestClient client = Common.Helper.GetJsonServiceClient(request.UserId);
+
                 GetStandardObservationsResponse dataDomainResponse = client.Get<GetStandardObservationsResponse>(
                     string.Format("{0}/{1}/{2}/{3}/Observation/?TypeId={4}&PatientId={5}",
                     DDPatientObservationsServiceUrl,
@@ -41,7 +42,7 @@ namespace Phytel.API.AppDomain.NG.Observation
             }
             catch (WebServiceException ex)
             {
-                throw new WebServiceException("App Domain:GetStandardObservationsRequest()" + ex.Message, ex.InnerException);
+                throw new WebServiceException("AD:GetStandardObservationsRequest()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -50,7 +51,8 @@ namespace Phytel.API.AppDomain.NG.Observation
             try
             {
                 List<ObservationLibraryItemData> result = null;
-                IRestClient client = new JsonServiceClient();
+                IRestClient client = Common.Helper.GetJsonServiceClient(request.UserId);
+
                 GetAdditionalLibraryObservationsResponse dataDomainResponse = client.Get<GetAdditionalLibraryObservationsResponse>(
                     string.Format("{0}/{1}/{2}/{3}/Observation/Type/{4}/MatchLibrary/?PatientId={5}",
                     DDPatientObservationsServiceUrl,
@@ -69,7 +71,7 @@ namespace Phytel.API.AppDomain.NG.Observation
             }
             catch (WebServiceException ex)
             {
-                throw new WebServiceException("App Domain:GetAdditionalObservationsLibraryRequest()" + ex.Message, ex.InnerException);
+                throw new WebServiceException("AD:GetAdditionalObservationsLibraryRequest()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -78,7 +80,8 @@ namespace Phytel.API.AppDomain.NG.Observation
             bool result = false;
             try
             {
-                IRestClient client = new JsonServiceClient();
+                IRestClient client = Common.Helper.GetJsonServiceClient(request.UserId);
+
                 PutUpdateObservationDataResponse dataDomainResponse = client.Put<PutUpdateObservationDataResponse>(
                     string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Observation/Update/",
                     DDPatientObservationsServiceUrl,
@@ -100,7 +103,7 @@ namespace Phytel.API.AppDomain.NG.Observation
             }
             catch (WebServiceException ex)
             {
-                throw new WebServiceException("App Domain:UpdatePatientObservation()" + ex.Message, ex.InnerException);
+                throw new WebServiceException("AD:UpdatePatientObservation()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -109,7 +112,8 @@ namespace Phytel.API.AppDomain.NG.Observation
             try
             {
                 PatientObservationData result = null;
-                IRestClient client = new JsonServiceClient();
+                IRestClient client = Common.Helper.GetJsonServiceClient(request.UserId);
+
                 GetAdditionalObservationDataItemResponse dataDomainResponse = client.Post<GetAdditionalObservationDataItemResponse>(
                     string.Format("{0}/{1}/{2}/{3}/Observation/{4}/Additional/",
                     DDPatientObservationsServiceUrl,
@@ -131,7 +135,7 @@ namespace Phytel.API.AppDomain.NG.Observation
             }
             catch (WebServiceException ex)
             {
-                throw new WebServiceException("App Domain:GetAdditionalObservationsRequest()" + ex.Message, ex.InnerException);
+                throw new WebServiceException("AD:GetAdditionalObservationsRequest()::" + ex.Message, ex.InnerException);
             }
         }
     }

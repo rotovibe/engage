@@ -6,7 +6,7 @@ using MongoDB.Driver;
 using MongoDB.Driver.Builders;
 using MongoDB.Bson;
 using System;
-using Phytel.API.Common.CustomObjects;
+using Phytel.API.Common.CustomObject;
 
 namespace Phytel.API.AppDomain.NG.Test
 {
@@ -15,7 +15,7 @@ namespace Phytel.API.AppDomain.NG.Test
     {
 
         public static string _token;
-        public static string _version = "v1";
+        public static double _version = 1.0;
         public static string _contractNumber = "InHealth001";
         public static string _product = "NG";
 

@@ -18,8 +18,8 @@ namespace Phytel.API.AppDomain.NG.Services.Test
 
             IRestClient client = new JsonServiceClient();
             JsonServiceClient.HttpWebRequestFilter = x => x.Headers.Add(string.Format("APIToken: {0}", token));
-            
-            GetAllCohortsResponse response = client.Post<GetAllCohortsResponse>("http://localhost:888/Nightingale/v1/NG/InHealth001/cohort",
+
+            GetAllCohortsResponse response = client.Post<GetAllCohortsResponse>("http://localhost:888/Nightingale/1.0/NG/InHealth001/cohort",
                 new GetAllCohortsRequest { } as object);
 
         }
@@ -32,11 +32,11 @@ namespace Phytel.API.AppDomain.NG.Services.Test
             IRestClient client = new JsonServiceClient();
 
             GetCohortPatientsResponse response = client.Get<GetCohortPatientsResponse>(
-                "http://localhost:888/Nightingale/v1/InHealth001/cohortpatients/528ed977072ef70e10099685?Skip=0&Take=50&SearchFilter=s&Token=52e4a8afd6a4850534c80421"
+                "http://localhost:888/Nightingale/1.0/InHealth001/cohortpatients/528ed977072ef70e10099685?Skip=0&Take=50&SearchFilter=s&Token=52e4a8afd6a4850534c80421"
                 );
 
             //GetCohortPatientsResponse response = client.Get<GetCohortPatientsResponse>(
-            //    string.Format("{0}/{1}/{2}/cohortpatients/{3}/{4}", "http://localhost:888/Nightingale", "v1", "InHealth001", cohortID, "?Skip=0&Take=1000&Token=52e4a8afd6a4850534c80421")
+            //    string.Format("{0}/{1}/{2}/cohortpatients/{3}/{4}", "http://localhost:888/Nightingale", 1, "InHealth001", cohortID, "?Skip=0&Take=1000&Token=52e4a8afd6a4850534c80421")
             //    );
         }
 

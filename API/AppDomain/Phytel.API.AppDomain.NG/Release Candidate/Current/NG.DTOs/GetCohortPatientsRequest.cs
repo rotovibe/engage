@@ -16,8 +16,8 @@ namespace Phytel.API.AppDomain.NG.DTO
         [ApiMember(Name = "Token", Description = "Request Token", ParameterType = "header", DataType = "string", IsRequired = true)]        
         public string Token { get; set; }
 
-        [ApiMember(Name = "Version", Description = "Version of the Request", ParameterType = "path", DataType = "string", IsRequired = true)]
-        public string Version { get; set; }
+        [ApiMember(Name = "Version", Description = "Version of the Request", ParameterType = "path", DataType = "double", IsRequired = true)]
+        public double Version { get; set; }
 
         [ApiMember(Name = "CohortID", Description = "Cohort Identifier", ParameterType = "path", DataType = "string", IsRequired = true)]
         public string CohortID { get; set; }

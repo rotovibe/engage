@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using ServiceStack.ServiceInterface.ServiceModel;
 using Phytel.API.Interface;
-using Phytel.API.Common.CustomObjects;
+using Phytel.API.Common.CustomObject;
 
 namespace Phytel.API.AppDomain.NG.DTO
 {
@@ -13,7 +13,7 @@ namespace Phytel.API.AppDomain.NG.DTO
     {
         public List<IdNamePair> Problems { get; set; }
         public ResponseStatus Status { get; set; }
-        public string Version { get; set; }
+        public double Version { get; set; }
 
     }
 }

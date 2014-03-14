@@ -16,8 +16,8 @@ namespace Phytel.API.AppDomain.NG.Test
         {
             GetInitializeGoalRequest request = new GetInitializeGoalRequest();
             request.ContractNumber = "InHealth001";
-            request.UserId = "AD_TestHarness"; 
-            request.Version = "v1";
+            request.UserId = "531f2df4072ef727c4d2a3b2"; 
+            request.Version = 1;
             request.PatientId = "52f55874072ef709f84e68c5";
 
             GoalsManager gManager = new GoalsManager();
@@ -32,7 +32,7 @@ namespace Phytel.API.AppDomain.NG.Test
             GetPatientGoalRequest request = new GetPatientGoalRequest();
             request.ContractNumber = "InHealth001";
             request.UserId = "AD_TestHarness";
-            request.Version = "v1";
+            request.Version = 1;
             request.Id = "5303a5ccd4332316b4a69449";
             request.PatientId = "52f55877072ef709f84e69b0";
             request.UserId = "Snehal";
@@ -49,7 +49,7 @@ namespace Phytel.API.AppDomain.NG.Test
             GetAllPatientGoalsRequest request = new GetAllPatientGoalsRequest();
             request.ContractNumber = "InHealth001";
             request.UserId = "AD_TestHarness";
-            request.Version = "v1";
+            request.Version = 1;
             request.PatientId = "52f55877072ef709f84e69b0";
             request.UserId = "Snehal";
 
@@ -65,7 +65,7 @@ namespace Phytel.API.AppDomain.NG.Test
             PostPatientGoalRequest request = new PostPatientGoalRequest();
             request.ContractNumber = "InHealth001";
             request.UserId = "AD_TestHarness";
-            request.Version = "v1";
+            request.Version = 1;
             request.PatientId = "52f55874072ef709f84e68c5";
             request.UserId = "Snehal";
             request.Goal = new PatientGoal { Name =  "my name", SourceId = "my source"};
@@ -84,9 +84,9 @@ namespace Phytel.API.AppDomain.NG.Test
             GetInitializeGoalRequest request = new GetInitializeGoalRequest();
             request.ContractNumber = "InHealth001";
             request.UserId = "AD_TestHarness";
-            request.Version = "v1";
-            request.PatientId = "52f55877072ef709f84e69b0";
-            request.UserId = "Snehal";
+            request.Version = 1;
+            request.PatientId = "531f2dcd072ef727c4d29fb0";
+            request.UserId = "531f2df5072ef727c4d2a3bc";
 
             GoalsManager gManager = new GoalsManager();
             GetInitializeGoalResponse response = gManager.GetInitialGoalRequest(request);

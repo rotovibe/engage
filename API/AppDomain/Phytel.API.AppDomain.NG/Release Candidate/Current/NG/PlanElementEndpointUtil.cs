@@ -21,13 +21,14 @@ namespace Phytel.API.AppDomain.NG
         static readonly string DDPatientServiceUrl = ConfigurationManager.AppSettings["DDPatientServiceUrl"];
         static readonly string DDProgramServiceUrl = ConfigurationManager.AppSettings["DDProgramServiceUrl"];
 
-        public static PatientProblemData GetPatientProblem(string probId, PlanElementEventArg e)
+        public static PatientProblemData GetPatientProblem(string probId, PlanElementEventArg e, string userId)
         {
             try
             {
                 PatientProblemData result = null;
 
-                IRestClient client = new JsonServiceClient();
+                IRestClient client = Common.Helper.GetJsonServiceClient(userId);
+
                 GetPatientProblemsDataResponse dataDomainResponse =
                    client.Get<GetPatientProblemsDataResponse>(
                    string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Problem/?ProblemId={5}",
@@ -45,9 +46,9 @@ namespace Phytel.API.AppDomain.NG
 
                 return result;
             }
-            catch (WebServiceException ex)
+            catch (Exception ex)
             {
-                throw new WebServiceException("AD:CheckIfPatientProblemExistsForPatient()" + ex.Message, ex.InnerException);
+                throw new Exception("AD:PlanElementEndpointUtil:GetPatientProblem()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -60,7 +61,8 @@ namespace Phytel.API.AppDomain.NG
 
                 DD.ProgramDetail pD = NGUtils.FormatProgramDetail(p);
 
-                IRestClient client = new JsonServiceClient();
+                IRestClient client = Common.Helper.GetJsonServiceClient(request.UserId);
+
                 DD.PutProgramActionProcessingResponse response = client.Put<DD.PutProgramActionProcessingResponse>(
                     string.Format(@"{0}/{1}/{2}/{3}/Patient/{4}/Programs/{5}/Update",
                     DDProgramServiceUrl,
@@ -73,10 +75,9 @@ namespace Phytel.API.AppDomain.NG
 
                 return response.program;
             }
-            catch (WebServiceException wse)
+            catch (Exception ex)
             {
-                Exception ae = new Exception(wse.ResponseBody, wse.InnerException);
-                throw ae;
+                throw new Exception("AD:PlanElementEndpointUtil:SaveAction()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -88,22 +89,22 @@ namespace Phytel.API.AppDomain.NG
                 act.Steps.ForEach(s =>
                 {
                     // add stepresponse ids and step source id
-                    if (SaveResponses(s.Responses, request))
+                    if (SaveResponses(s, request))
                     {
                         s.Responses = null;
                     }
                 });
             }
-            catch (WebServiceException wse)
+            catch (Exception ex)
             {
-                Exception ae = new Exception(wse.ResponseBody, wse.InnerException);
-                throw ae;
+                throw new Exception("AD:PlanElementEndpointUtil:SaveResponsesFromProgram()::" + ex.Message, ex.InnerException);
             }
         }
 
-        private static bool SaveResponses(List<Response> list, IAppDomainRequest request)
+        private static bool SaveResponses(Step step, IAppDomainRequest request)
         {
             bool result = false;
+            List<Response> list = step.Responses;
             try
             {
                 if (list != null)
@@ -112,6 +113,16 @@ namespace Phytel.API.AppDomain.NG
                     {
                         if (ResponseExistsRequest(r.StepId, r.Id, request))
                         {
+                            if (step.SelectedResponseId.Equals(r.Id))
+                            {
+                                r.Selected = true;
+                            }
+                            else
+                            {
+                                r.Selected = false;
+                            }
+
+                            SetDeleteFlagByStepCompletion(step, r);
                             UpdateResponseRequest(request, r);
                             result = true;
                         }
@@ -119,10 +130,27 @@ namespace Phytel.API.AppDomain.NG
                 }
                 return result;
             }
-            catch (WebServiceException wse)
+            catch (Exception ex)
             {
-                Exception ae = new Exception(wse.ResponseBody, wse.InnerException);
-                throw ae;
+                throw new Exception("AD:PlanElementEndpointUtil:SaveResponses()::" + ex.Message, ex.InnerException);
+            }
+        }
+
+        private static void SetDeleteFlagByStepCompletion(Step step, Response r)
+        {
+            try
+            {
+                if (step != null && r != null)
+                {
+                    if (step.Completed)
+                        r.Delete = false;
+                    else
+                        r.Delete = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("AD:PlanElementEndpointUtil:SetDeleteFlagByStepCompletion()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -131,7 +159,8 @@ namespace Phytel.API.AppDomain.NG
             List<StepResponse> result = null;
             try
             {
-                IRestClient client = new JsonServiceClient();
+                IRestClient client = Common.Helper.GetJsonServiceClient(request.UserId);
+
                 GetStepResponseListResponse resp =
                                     client.Get<GetStepResponseListResponse>(
                                     string.Format("{0}/{1}/{2}/{3}/Program/Module/Action/Step/{4}/Responses/",
@@ -148,10 +177,9 @@ namespace Phytel.API.AppDomain.NG
 
                 return result;
             }
-            catch (WebServiceException wse)
+            catch (Exception ex)
             {
-                Exception ae = new Exception(wse.ResponseBody, wse.InnerException);
-                throw ae;
+                throw new Exception("AD:PlanElementEndpointUtil:GetResponsesForStep()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -160,7 +188,8 @@ namespace Phytel.API.AppDomain.NG
             bool result = false;
             try
             {
-                IRestClient client = new JsonServiceClient();
+                IRestClient client = Common.Helper.GetJsonServiceClient(request.UserId);
+
                 GetStepResponseResponse resp =
                                     client.Get<GetStepResponseResponse>(
                                     string.Format("{0}/{1}/{2}/{3}/Program/Module/Action/Step/{4}/Response/?ResponseId={5}",
@@ -176,10 +205,9 @@ namespace Phytel.API.AppDomain.NG
 
                 return result;
             }
-            catch (WebServiceException wse)
+            catch (Exception ex)
             {
-                Exception ae = new Exception(wse.ResponseBody, wse.InnerException);
-                throw ae;
+                throw new Exception("AD:PlanElementEndpointUtil:ResponseExistsRequest()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -187,7 +215,8 @@ namespace Phytel.API.AppDomain.NG
         {
             try
             {
-                IRestClient client = new JsonServiceClient();
+                IRestClient client = Common.Helper.GetJsonServiceClient(request.UserId);
+
                 DD.PutUpdateResponseResponse resp =
                     client.Put<DD.PutUpdateResponseResponse>(
                     string.Format("{0}/{1}/{2}/{3}/Program/Module/Action/Step/{4}/Responses/Update",
@@ -207,16 +236,17 @@ namespace Phytel.API.AppDomain.NG
                             SpawnElement = NGUtils.GetDDSpawnElement(r.SpawnElement),
                             StepId = r.StepId,
                             Text = r.Text,
-                            Value = r.Value
+                            Value = r.Value,
+                            Selected = r.Selected,
+                            Delete = r.Delete
                         },
                         UserId = request.UserId,
                         Version = request.Version
                     } as object);
             }
-            catch (WebServiceException wse)
+            catch (Exception ex)
             {
-                Exception ae = new Exception(wse.ResponseBody, wse.InnerException);
-                throw ae;
+                throw new Exception("AD:PlanElementEndpointUtil:UpdateResponseRequest()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -230,39 +260,48 @@ namespace Phytel.API.AppDomain.NG
             }
             catch (Exception ex)
             {
-                throw new Exception("DataDomain:GetActionById():" + ex.Message, ex.InnerException);
+                throw new Exception("AD:PlanElementEndpointUtil:GetActionById()::" + ex.Message, ex.InnerException);
             }
         }
 
         public static AD.Program RequestPatientProgramDetail(PostProcessActionRequest request)
         {
-            AD.Program pd = null;
-            IRestClient client = new JsonServiceClient();
-            DD.GetProgramDetailsSummaryResponse resp =
-                client.Get<DD.GetProgramDetailsSummaryResponse>(
-                string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Program/{5}/Details/?Token={6}",
-                DDProgramServiceUrl,
-                "NG",
-                request.Version,
-                request.ContractNumber,
-                request.PatientId,
-                request.ProgramId,
-                request.Token));
+            try
+            {
+                AD.Program pd = null;
+                IRestClient client = Common.Helper.GetJsonServiceClient(request.UserId);
 
-            pd = NGUtils.FormatProgramDetail(resp.Program);
+                DD.GetProgramDetailsSummaryResponse resp =
+                    client.Get<DD.GetProgramDetailsSummaryResponse>(
+                    string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Program/{5}/Details/?Token={6}",
+                    DDProgramServiceUrl,
+                    "NG",
+                    request.Version,
+                    request.ContractNumber,
+                    request.PatientId,
+                    request.ProgramId,
+                    request.Token));
 
-            return pd;
+                pd = NGUtils.FormatProgramDetail(resp.Program);
+
+                return pd;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("AD:PlanElementEndpointUtil:RequestPatientProgramDetail()::" + ex.Message, ex.InnerException);
+            }
         }
 
         internal static CohortPatientViewData RequestCohortPatientViewData(string patientId, IAppDomainRequest request)
         {
             try
             {
-                string version = request.Version;
+                double version = request.Version;
                 string contractNumber = request.ContractNumber;
                 string context = "NG";
 
-                IRestClient client = new JsonServiceClient();
+                IRestClient client = Common.Helper.GetJsonServiceClient(request.UserId);
+
                 GetCohortPatientViewResponse response =
                     client.Get<GetCohortPatientViewResponse>(string.Format("{0}/{1}/{2}/{3}/patient/{4}/cohortpatientview/",
                     DDPatientServiceUrl,
@@ -273,10 +312,9 @@ namespace Phytel.API.AppDomain.NG
 
                 return response.CohortPatientView;
             }
-            catch (WebServiceException wse)
+            catch (Exception ex)
             {
-                Exception ae = new Exception(wse.ResponseBody, wse.InnerException);
-                throw ae;
+                throw new Exception("AD:PlanElementEndpointUtil:RequestCohortPatientViewData()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -284,11 +322,12 @@ namespace Phytel.API.AppDomain.NG
         {
             try
             {
-                string version = request.Version;
+                double version = request.Version;
                 string contractNumber = request.ContractNumber;
                 string context = "NG";
 
-                IRestClient client = new JsonServiceClient();
+                IRestClient client = Common.Helper.GetJsonServiceClient(request.UserId);
+
                 PutUpdateCohortPatientViewResponse response =
                     client.Put<PutUpdateCohortPatientViewResponse>(string.Format("{0}/{1}/{2}/{3}/patient/{4}/cohortpatientview/update",
                     DDPatientServiceUrl,
@@ -302,10 +341,9 @@ namespace Phytel.API.AppDomain.NG
                         PatientID = patientId
                     } as object);
             }
-            catch (WebServiceException wse)
+            catch (Exception ex)
             {
-                Exception ae = new Exception(wse.ResponseBody, wse.InnerException);
-                throw ae;
+                throw new Exception("AD:PlanElementEndpointUtil:UpdateCohortPatientViewProblem()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -314,7 +352,8 @@ namespace Phytel.API.AppDomain.NG
             try
             {
                 //register call to remote serivce.
-                IRestClient client = new JsonServiceClient();
+                IRestClient client = Common.Helper.GetJsonServiceClient(request.UserId);
+
                 PutNewPatientProblemResponse dataDomainResponse =
                    client.Put<PutNewPatientProblemResponse>(
                    string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Problem/Insert",
@@ -332,10 +371,9 @@ namespace Phytel.API.AppDomain.NG
                    } as object);
                 return dataDomainResponse;
             }
-            catch (WebServiceException wse)
+            catch (Exception ex)
             {
-                Exception ae = new Exception(wse.ResponseBody, wse.InnerException);
-                throw ae;
+                throw new Exception("AD:PlanElementEndpointUtil:PutNewPatientProblem()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -344,7 +382,8 @@ namespace Phytel.API.AppDomain.NG
             try
             {
                 //register call to remote serivce.
-                IRestClient client = new JsonServiceClient();
+                IRestClient client = Common.Helper.GetJsonServiceClient(request.UserId);
+
                 PutUpdatePatientProblemResponse dataDomainResponse =
                    client.Put<PutUpdatePatientProblemResponse>(
                    string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Problem/Update/",
@@ -364,10 +403,9 @@ namespace Phytel.API.AppDomain.NG
 
                 return dataDomainResponse;
             }
-            catch (WebServiceException wse)
+            catch (Exception ex)
             {
-                Exception ae = new Exception(wse.ResponseBody, wse.InnerException);
-                throw ae;
+                throw new Exception("AD:PlanElementEndpointUtil:UpdatePatientProblem()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -376,12 +414,12 @@ namespace Phytel.API.AppDomain.NG
             ProgramAttribute progAttr = null;
             try
             {
-                string version = request.Version;
+                double version = request.Version;
                 string contractNumber = request.ContractNumber;
                 string context = "NG";
 
+                IRestClient client = Common.Helper.GetJsonServiceClient(request.UserId);
 
-                IRestClient client = new JsonServiceClient();
                 GetProgramAttributeResponse resp =
                                     client.Get<GetProgramAttributeResponse>(
                                     string.Format("{0}/{1}/{2}/{3}/Program/Attributes/?PlanElementId={4}",
@@ -393,10 +431,9 @@ namespace Phytel.API.AppDomain.NG
 
                 return progAttr = resp.ProgramAttribute;
             }
-            catch (WebServiceException wse)
+            catch (Exception ex)
             {
-                Exception ae = new Exception(wse.ResponseBody, wse.InnerException);
-                throw ae;
+                throw new Exception("AD:PlanElementEndpointUtil:GetProgramAttributes()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -405,12 +442,13 @@ namespace Phytel.API.AppDomain.NG
             bool result = false;
             try
             {
-                string version = request.Version;
+                double version = request.Version;
                 string contractNumber = request.ContractNumber;
                 string context = "NG";
 
 
-                IRestClient client = new JsonServiceClient();
+                IRestClient client = Common.Helper.GetJsonServiceClient(request.UserId);
+
                 PutUpdateProgramAttributesResponse resp =
                                     client.Put<PutUpdateProgramAttributesResponse>(
                                     string.Format("{0}/{1}/{2}/{3}/Program/Attributes/Update/",
@@ -428,10 +466,9 @@ namespace Phytel.API.AppDomain.NG
 
                 return result;
             }
-            catch (WebServiceException wse)
+            catch (Exception ex)
             {
-                Exception ae = new Exception(wse.ResponseBody, wse.InnerException);
-                throw ae;
+                throw new Exception("AD:PlanElementEndpointUtil:UpdateProgramAttributes()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -440,12 +477,12 @@ namespace Phytel.API.AppDomain.NG
             bool result = false;
             try
             {
-                string version = request.Version;
+                double version = request.Version;
                 string contractNumber = request.ContractNumber;
                 string context = "NG";
+                
+                IRestClient client = Common.Helper.GetJsonServiceClient(request.UserId);
 
-
-                IRestClient client = new JsonServiceClient();
                 PutProgramAttributesResponse resp =
                                     client.Put<PutProgramAttributesResponse>(
                                     string.Format("{0}/{1}/{2}/{3}/Program/Attributes/Insert/",
@@ -463,10 +500,9 @@ namespace Phytel.API.AppDomain.NG
 
                 return result;
             }
-            catch (WebServiceException wse)
+            catch (Exception ex)
             {
-                Exception ae = new Exception(wse.ResponseBody, wse.InnerException);
-                throw ae;
+                throw new Exception("AD:PlanElementEndpointUtil:InsertNewProgramAttribute()::" + ex.Message, ex.InnerException);
             }
         }
     }

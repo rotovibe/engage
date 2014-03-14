@@ -24,7 +24,8 @@ namespace Phytel.API.AppDomain.NG
             {
                 CareMember result = null;
                 //[Route("/{Context}/{Version}/{ContractNumber}/Patient/{PatientId}/CareMember/{Id}", "GET")]
-                IRestClient client = new JsonServiceClient();
+                IRestClient client = Common.Helper.GetJsonServiceClient(request.UserId);
+
                 GetCareMemberDataResponse ddResponse = client.Get<GetCareMemberDataResponse>(
                     string.Format("{0}/{1}/{2}/{3}/Patient/{4}/CareMember/{5}?UserId={6}",
                     DDCareMemberUrl,
@@ -64,7 +65,7 @@ namespace Phytel.API.AppDomain.NG
             }
             catch (WebServiceException ex)
             {
-                throw new WebServiceException("AD:GetCareMember()" + ex.Message, ex.InnerException);
+                throw new WebServiceException("AD:GetCareMember()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -74,7 +75,8 @@ namespace Phytel.API.AppDomain.NG
             {
                 List<CareMember> result = null;
                 //[Route("/{Context}/{Version}/{ContractNumber}/Patient/{PatientId}/CareMembers", "GET")]
-                IRestClient client = new JsonServiceClient();
+                IRestClient client = Common.Helper.GetJsonServiceClient(request.UserId);
+
                 GetAllCareMembersDataResponse ddResponse = client.Get<GetAllCareMembersDataResponse>(
                     string.Format("{0}/{1}/{2}/{3}/Patient/{4}/CareMembers?UserId={5}",
                     DDCareMemberUrl,
@@ -123,7 +125,7 @@ namespace Phytel.API.AppDomain.NG
             }
             catch (WebServiceException ex)
             {
-                throw new WebServiceException("AD:GetAllCareMembers()" + ex.Message, ex.InnerException);
+                throw new WebServiceException("AD:GetAllCareMembers()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -136,7 +138,8 @@ namespace Phytel.API.AppDomain.NG
 
                 PostCareMemberResponse response = new PostCareMemberResponse();
                 //[Route("/{Context}/{Version}/{ContractNumber}/Patient/{PatientId}/CareMember/Insert", "PUT")]
-                IRestClient client = new JsonServiceClient();
+                IRestClient client = Common.Helper.GetJsonServiceClient(request.UserId);
+
                 CareMemberData cmData = new CareMemberData
                 {
                     PatientId = request.CareMember.PatientId,
@@ -168,16 +171,15 @@ namespace Phytel.API.AppDomain.NG
                     if(request.CareMember.Primary)
                     {
                         //Upsert the PrimaryCare Manager's ContactId in the CohortPatientView collection.
-                        upsertCohortPatientView(request.PatientId, request.CareMember.ContactId, response.Version, request.ContractNumber);
+                        upsertCohortPatientView(request.PatientId, request.CareMember.ContactId, response.Version, request.ContractNumber, request.UserId);
                     }
                 }
 
                 return response;
             }
-            catch (WebServiceException wse)
+            catch (WebServiceException ex)
             {
-                Exception ae = new Exception(wse.ResponseBody, wse.InnerException);
-                throw ae;
+                throw new WebServiceException("AD:InsertCareMember()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -190,7 +192,8 @@ namespace Phytel.API.AppDomain.NG
 
                 PostUpdateCareMemberResponse response = new PostUpdateCareMemberResponse();
                 //[Route("/{Context}/{Version}/{ContractNumber}/Patient/{PatientId}/CareMember/Update", "PUT")]
-                IRestClient client = new JsonServiceClient();
+                IRestClient client = Common.Helper.GetJsonServiceClient(request.UserId);
+
                 CareMemberData cmData = new CareMemberData
                 {
                     Id = request.CareMember.Id,
@@ -222,15 +225,14 @@ namespace Phytel.API.AppDomain.NG
                     if (request.CareMember.Primary)
                     {
                         //Upsert the PrimaryCare Manager's ContactId in the CohortPatientView collection.
-                        upsertCohortPatientView(request.PatientId, request.CareMember.ContactId, response.Version, request.ContractNumber);
+                        upsertCohortPatientView(request.PatientId, request.CareMember.ContactId, response.Version, request.ContractNumber, request.UserId);
                     }
                 }
                 return response;
             }
-            catch (WebServiceException wse)
+            catch (WebServiceException ex)
             {
-                Exception ae = new Exception(wse.ResponseBody, wse.InnerException);
-                throw ae;
+                throw new WebServiceException("AD:UpdateCareMember()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -242,14 +244,15 @@ namespace Phytel.API.AppDomain.NG
         /// <param name="contractNumber">contract number of the request.</param>
         /// <param name="userId">user id making the request.</param>
         /// <returns>List of contact data.</returns>
-        private List<ContactData> getContactDetails(List<string> contactIds, string version, string contractNumber, string userId)
+        private List<ContactData> getContactDetails(List<string> contactIds, double version, string contractNumber, string userId)
         {
 
             List<ContactData> contactsData = new List<ContactData>();
             if(contactIds.Count > 0)
             {
                 SearchContactsDataResponse contactDataResponse = null;
-                IRestClient client = new JsonServiceClient();
+                IRestClient client = Common.Helper.GetJsonServiceClient(userId);
+
                 //[Route("/{Context}/{Version}/{ContractNumber}/Contact", "POST")]
                 contactDataResponse = client.Post<SearchContactsDataResponse>(string.Format("{0}/{1}/{2}/{3}/Contact",
                                                         DDContactServiceUrl,
@@ -273,12 +276,13 @@ namespace Phytel.API.AppDomain.NG
             return contactsData;
         }
 
-        private void upsertCohortPatientView(string patientId, string contactId, string version, string contractNumber)
+        private void upsertCohortPatientView(string patientId, string contactId, double version, string contractNumber, string userId)
         {
             string context = "NG";
             try
             {
-                IRestClient client = new JsonServiceClient();
+                IRestClient client = Common.Helper.GetJsonServiceClient(userId);
+
                 GetCohortPatientViewResponse getResponse =
                     client.Get<GetCohortPatientViewResponse>(string.Format("{0}/{1}/{2}/{3}/patient/{4}/cohortpatientview/",
                     DDPatientServiceURL,
@@ -326,10 +330,9 @@ namespace Phytel.API.AppDomain.NG
                         } as object);
                 }
             }
-            catch (WebServiceException wse)
+            catch (WebServiceException ex)
             {
-                Exception ae = new Exception(wse.ResponseBody, wse.InnerException);
-                throw ae;
+                throw new WebServiceException("AD:UpsertCohortPatientView()::" + ex.Message, ex.InnerException);
             }
         }
     }

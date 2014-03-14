@@ -4,12 +4,11 @@ using System.Runtime.Serialization;
 
 namespace Phytel.API.AppDomain.NG.DTO
 {
-    [Route("/{Version}/{ContractNumber}/patient", "POST")]
-    [Route("/{Version}/{ContractNumber}/patient/{PatientID}", "GET")]
-    public class GetPatientRequest : IAppDomainRequest
+    [Route("/{Version}/{ContractNumber}/Patient/{PatientId}/SSN", "GET")]
+    public class GetPatientSSNRequest : IAppDomainRequest
     {
-        [ApiMember(Name = "PatientID", Description = "ID parameter", ParameterType = "property", DataType = "string", IsRequired = false)]
-        public string PatientID { get; set; }
+        [ApiMember(Name = "PatientId", Description = "ID parameter", ParameterType = "property", DataType = "string", IsRequired = false)]
+        public string PatientId { get; set; }
 
         [ApiMember(Name = "ContractNumber", Description = "Contract parameter will be defined in the route.", ParameterType = "path", DataType = "string", IsRequired = false)]
         public string ContractNumber { get; set; }
@@ -23,6 +22,6 @@ namespace Phytel.API.AppDomain.NG.DTO
         [ApiMember(Name = "UserID", Description = "ID of the user making the request (Internally used ONLY)", ParameterType = "property", DataType = "string", IsRequired = false)]
         public string UserId { get; set; }
 
-        public GetPatientRequest() { }
+        public GetPatientSSNRequest() { }
     }
 }

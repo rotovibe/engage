@@ -1,17 +1,12 @@
-using System;
-using System.Net;
-using System.Linq;
 using Phytel.API.AppDomain.NG.DTO;
-using Phytel.API.Interface;
-using ServiceStack.ServiceInterface.ServiceModel;
-using ServiceStack.ServiceHost;
-using Phytel.API.Common.Format;
 using Phytel.API.AppDomain.Security.DTO;
-using ServiceStack.ServiceClient.Web;
-using Phytel.API.Common.Audit;
-using System.Collections.Generic;
+using Phytel.API.Common.Format;
 using Phytel.API.DataAudit;
-using System.Web;
+using ServiceStack.ServiceClient.Web;
+using ServiceStack.ServiceHost;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Phytel.API.AppDomain.NG.Service
 {
@@ -20,11 +15,13 @@ namespace Phytel.API.AppDomain.NG.Service
         public GetPatientResponse Post(GetPatientRequest request)
         {
             GetPatientResponse response = new GetPatientResponse();
+            NGManager ngm = new NGManager();
+            ValidateTokenResponse result = null;
+
             try
             {
-                NGManager ngm = new NGManager();
-
-                ValidateTokenResponse result = ngm.IsUserValidated(request.Version, request.Token);
+                request.Token = base.Request.Headers["Token"] as string;
+                result = ngm.IsUserValidated(request.Version, request.Token, request.ContractNumber);
                 if (result.UserId.Trim() != string.Empty)
                 {
                     request.UserId = result.UserId;
@@ -32,13 +29,12 @@ namespace Phytel.API.AppDomain.NG.Service
                 }
                 else
                     throw new UnauthorizedAccessException();
-
-               
             }
             catch (Exception ex)
             {
-                //TODO: Log this to the SQL database via ASE
                 CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+                if ((ex is WebServiceException) == false)
+                    ngm.LogException(ex);
             }
             finally
             {
@@ -49,8 +45,9 @@ namespace Phytel.API.AppDomain.NG.Service
                    patientIds = new List<string>();
                     patientIds.Add(response.Patient.Id);                    
                 }
-                
-                AuditHelper.LogAuditData(request, patientIds, System.Web.HttpContext.Current.Request, request.GetType().Name);
+
+                if (result != null)
+                    AuditHelper.LogAuditData(request, result.SQLUserId, patientIds, System.Web.HttpContext.Current.Request, request.GetType().Name);
             }
 
             return response; 
@@ -59,14 +56,13 @@ namespace Phytel.API.AppDomain.NG.Service
         public GetPatientResponse Get(GetPatientRequest request)
         {
             GetPatientResponse response = new GetPatientResponse();
-
-            IRequestContext req = base.RequestContext;
+            NGManager ngm = new NGManager();
+            ValidateTokenResponse result = null;
 
             try
             {
-                NGManager ngm = new NGManager();
-
-                ValidateTokenResponse result = ngm.IsUserValidated(request.Version, request.Token);
+                request.Token = base.Request.Headers["Token"] as string;
+                result = ngm.IsUserValidated(request.Version, request.Token, request.ContractNumber);
                 if (result.UserId.Trim() != string.Empty)
                 {
                     request.UserId = result.UserId;
@@ -78,8 +74,9 @@ namespace Phytel.API.AppDomain.NG.Service
             }
             catch (Exception ex)
             {
-                //TODO: Log this to the SQL database via ASE
                 CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+                if ((ex is WebServiceException) == false)
+                    ngm.LogException(ex);
             }
             finally
             {
@@ -91,7 +88,50 @@ namespace Phytel.API.AppDomain.NG.Service
                     patientIds.Add(response.Patient.Id);               
                 }
 
-                AuditHelper.LogAuditData(request, patientIds, System.Web.HttpContext.Current.Request, request.GetType().Name);
+                if (result != null)
+                    AuditHelper.LogAuditData(request, result.SQLUserId, patientIds, System.Web.HttpContext.Current.Request, request.GetType().Name);
+            }
+
+            return response;
+        }
+
+        public GetPatientSSNResponse Get(GetPatientSSNRequest request)
+        {
+            GetPatientSSNResponse response = new GetPatientSSNResponse();
+            NGManager ngm = new NGManager();
+            ValidateTokenResponse result = null;
+
+            try
+            {
+                request.Token = base.Request.Headers["Token"] as string;
+                result = ngm.IsUserValidated(request.Version, request.Token, request.ContractNumber);
+                if (result.UserId.Trim() != string.Empty)
+                {
+                    request.UserId = result.UserId;
+                    response = ngm.GetPatientSSN(request);
+                }
+                else
+                    throw new UnauthorizedAccessException();
+
+            }
+            catch (Exception ex)
+            {
+                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+                if ((ex is WebServiceException) == false)
+                    ngm.LogException(ex);
+            }
+            finally
+            {
+                List<string> patientIds = null;
+
+                if (response != null)
+                {
+                    patientIds = new List<string>();
+                    patientIds.Add(request.PatientId);
+                }
+
+                if(result != null)
+                    AuditHelper.LogAuditData(request, result.SQLUserId, patientIds, System.Web.HttpContext.Current.Request, request.GetType().Name);
             }
 
             return response;
@@ -106,11 +146,13 @@ namespace Phytel.API.AppDomain.NG.Service
         public GetAllPatientProblemsResponse Get(GetAllPatientProblemsRequest request)
         {
             GetAllPatientProblemsResponse response = new GetAllPatientProblemsResponse();
+            NGManager ngm = new NGManager();
+            ValidateTokenResponse result = null;
+
             try
             {
-                NGManager ngm = new NGManager();
-
-                ValidateTokenResponse result = ngm.IsUserValidated(request.Version, request.Token);
+                request.Token = base.Request.Headers["Token"] as string;
+                result = ngm.IsUserValidated(request.Version, request.Token, request.ContractNumber);
                 if (result.UserId.Trim() != string.Empty)
                 {
                     request.UserId = result.UserId;
@@ -121,12 +163,14 @@ namespace Phytel.API.AppDomain.NG.Service
             }
             catch (Exception ex)
             {
-                //TODO: Log this to the SQL database via ASE
                 CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+                if ((ex is WebServiceException) == false)
+                    ngm.LogException(ex);
             }
             finally
             {
-               AuditHelper.LogAuditData(request, null, System.Web.HttpContext.Current.Request, request.GetType().Name);               
+                if(result != null)
+                    AuditHelper.LogAuditData(request, result.SQLUserId, null, System.Web.HttpContext.Current.Request, request.GetType().Name);               
             }
             
             return response; 
@@ -135,11 +179,13 @@ namespace Phytel.API.AppDomain.NG.Service
         public GetAllProblemsResponse Get(GetAllProblemsRequest request)
         {
             GetAllProblemsResponse response = new GetAllProblemsResponse();
+            NGManager ngm = new NGManager();
+            ValidateTokenResponse result = null;
+
             try
             {
-                NGManager ngm = new NGManager();
-
-                ValidateTokenResponse result = ngm.IsUserValidated(request.Version, request.Token);
+                request.Token = base.Request.Headers["Token"] as string;
+                result = ngm.IsUserValidated(request.Version, request.Token, request.ContractNumber);
                 if (result.UserId.Trim() != string.Empty)
                 {
                     request.UserId = result.UserId;
@@ -150,12 +196,14 @@ namespace Phytel.API.AppDomain.NG.Service
             }
             catch (Exception ex)
             {
-                //TODO: Log this to the SQL database via ASE
                 CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+                if ((ex is WebServiceException) == false)
+                    ngm.LogException(ex);
             }
             finally
             {
-                AuditHelper.LogAuditData(request, null, System.Web.HttpContext.Current.Request, request.GetType().Name);               
+                if(result != null)
+                    AuditHelper.LogAuditData(request, result.SQLUserId, null, System.Web.HttpContext.Current.Request, request.GetType().Name);               
             }
             
             return response; 
@@ -164,11 +212,13 @@ namespace Phytel.API.AppDomain.NG.Service
         public GetAllCohortsResponse Get(GetAllCohortsRequest request)
         {
             GetAllCohortsResponse response = new GetAllCohortsResponse();
+            NGManager ngm = new NGManager();
+            ValidateTokenResponse result = null;
+
             try
             {
-                NGManager ngm = new NGManager();
-
-                ValidateTokenResponse result = ngm.IsUserValidated(request.Version, request.Token);
+                request.Token = base.Request.Headers["Token"] as string;
+                result = ngm.IsUserValidated(request.Version, request.Token, request.ContractNumber);
                 if (result.UserId.Trim() != string.Empty)
                 {
                     request.UserId = result.UserId;
@@ -179,14 +229,14 @@ namespace Phytel.API.AppDomain.NG.Service
             }
             catch (Exception ex)
             {
-                //TODO: Log this to the SQL database via ASE
                 CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+                if ((ex is WebServiceException) == false)
+                    ngm.LogException(ex);
             }
             finally
             {
-
-                AuditHelper.LogAuditData(request, null, System.Web.HttpContext.Current.Request, request.GetType().Name);
-               
+                if (result != null)
+                    AuditHelper.LogAuditData(request, result.SQLUserId, null, System.Web.HttpContext.Current.Request, request.GetType().Name);
             }
             
             return response; 
@@ -195,11 +245,13 @@ namespace Phytel.API.AppDomain.NG.Service
         public PutPatientFlaggedUpdateResponse Post(PutPatientFlaggedUpdateRequest request)
         {
             PutPatientFlaggedUpdateResponse response = new PutPatientFlaggedUpdateResponse();
+            NGManager ngm = new NGManager();
+            ValidateTokenResponse result = null;
+
             try
             {
-                NGManager ngm = new NGManager();
-
-                ValidateTokenResponse result = ngm.IsUserValidated(request.Version, request.Token);
+                request.Token = base.Request.Headers["Token"] as string;
+                result = ngm.IsUserValidated(request.Version, request.Token, request.ContractNumber);
                 if (result.UserId.Trim() != string.Empty)
                 {
                     request.UserId = result.UserId;
@@ -210,14 +262,14 @@ namespace Phytel.API.AppDomain.NG.Service
             }
             catch (Exception ex)
             {
-                //TODO: Log this to C3 database via ASE
                 CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+                if ((ex is WebServiceException) == false)
+                    ngm.LogException(ex);
             }
             finally
             {
-
-                AuditHelper.LogAuditData(request, null, System.Web.HttpContext.Current.Request, request.GetType().Name);
-
+                if (result != null)
+                    AuditHelper.LogAuditData(request, result.SQLUserId, null, System.Web.HttpContext.Current.Request, request.GetType().Name);
             }
             
             return response; 
@@ -226,11 +278,13 @@ namespace Phytel.API.AppDomain.NG.Service
         public PutPatientBackgroundResponse Post(PutPatientBackgroundRequest request)
         {
             PutPatientBackgroundResponse response = new PutPatientBackgroundResponse();
+            NGManager ngm = new NGManager();
+            ValidateTokenResponse result = null;
+
             try
             {
-                NGManager ngm = new NGManager();
-
-                ValidateTokenResponse result = ngm.IsUserValidated(request.Version, request.Token);
+                request.Token = base.Request.Headers["Token"] as string;
+                result = ngm.IsUserValidated(request.Version, request.Token, request.ContractNumber);
                 if (result.UserId.Trim() != string.Empty)
                 {
                     request.UserId = result.UserId;
@@ -241,14 +295,14 @@ namespace Phytel.API.AppDomain.NG.Service
             }
             catch (Exception ex)
             {
-                //TODO: Log this to C3 database via ASE
                 CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+                if ((ex is WebServiceException) == false)
+                    ngm.LogException(ex);
             }
             finally
             {
-
-                AuditHelper.LogAuditData(request, null, System.Web.HttpContext.Current.Request, request.GetType().Name);
-
+                if (result != null)
+                    AuditHelper.LogAuditData(request, result.SQLUserId, null, System.Web.HttpContext.Current.Request, request.GetType().Name);
             }
 
             return response;
@@ -257,11 +311,13 @@ namespace Phytel.API.AppDomain.NG.Service
         public PutPatientDetailsUpdateResponse Post(PutPatientDetailsUpdateRequest request)
         {
             PutPatientDetailsUpdateResponse response = new PutPatientDetailsUpdateResponse();
+            NGManager ngm = new NGManager();
+            ValidateTokenResponse result = null;
+
             try
             {
-                NGManager ngm = new NGManager();
-
-                ValidateTokenResponse result = ngm.IsUserValidated(request.Version, request.Token);
+                request.Token = base.Request.Headers["Token"] as string;
+                result = ngm.IsUserValidated(request.Version, request.Token, request.ContractNumber);
                 if (result.UserId.Trim() != string.Empty)
                 {
                     request.UserId = result.UserId;
@@ -272,14 +328,14 @@ namespace Phytel.API.AppDomain.NG.Service
             }
             catch (Exception ex)
             {
-                //TODO: Log this to C3 database via ASE
                 CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+                if ((ex is WebServiceException) == false)
+                    ngm.LogException(ex);
             }
             finally
             {
-
-                AuditHelper.LogAuditData(request, null, System.Web.HttpContext.Current.Request, request.GetType().Name);
-
+                if (result != null)
+                    AuditHelper.LogAuditData(request, result.SQLUserId, null, System.Web.HttpContext.Current.Request, request.GetType().Name);
             }
             
             return response; 
@@ -289,10 +345,12 @@ namespace Phytel.API.AppDomain.NG.Service
         {
             GetCohortPatientsResponse response = new GetCohortPatientsResponse();
             NGManager ngm = new NGManager();
+            ValidateTokenResponse result = null;
 
             try
             {
-                ValidateTokenResponse result = ngm.IsUserValidated(request.Version, request.Token);
+                request.Token = base.Request.Headers["Token"] as string;
+                result = ngm.IsUserValidated(request.Version, request.Token, request.ContractNumber);
                 if (result.UserId.Trim() != string.Empty)
                 {
                     request.UserId = result.UserId;
@@ -304,8 +362,9 @@ namespace Phytel.API.AppDomain.NG.Service
             }
             catch (Exception ex)
             {
-                //TODO: Log this to the SQL database via ASE
                 CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+                if ((ex is WebServiceException) == false)
+                    ngm.LogException(ex);
             }
             finally
             {
@@ -316,7 +375,8 @@ namespace Phytel.API.AppDomain.NG.Service
                     patientIds = response.Patients.Select(x => x.Id).ToList();
                 }
 
-                AuditHelper.LogAuditData(request, patientIds, System.Web.HttpContext.Current.Request, request.GetType().Name);
+                if (result != null)
+                    AuditHelper.LogAuditData(request, result.SQLUserId, patientIds, System.Web.HttpContext.Current.Request, request.GetType().Name);
             }
             
             return response; 
@@ -325,11 +385,13 @@ namespace Phytel.API.AppDomain.NG.Service
         public GetAllSettingsResponse Get(GetAllSettingsRequest request)
         {
             GetAllSettingsResponse response = new GetAllSettingsResponse();
+            NGManager ngm = new NGManager();
+            ValidateTokenResponse result = null;
+
             try
             {
-                NGManager ngm = new NGManager();
-
-                ValidateTokenResponse result = ngm.IsUserValidated(request.Version, request.Token);
+                request.Token = base.Request.Headers["Token"] as string;
+                result = ngm.IsUserValidated(request.Version, request.Token, request.ContractNumber);
                 if (result.UserId.Trim() != string.Empty)
                 {
                     request.UserId = result.UserId;
@@ -340,13 +402,14 @@ namespace Phytel.API.AppDomain.NG.Service
             }
             catch (Exception ex)
             {
-                //TODO: Log this to the SQL database via ASE
                 CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+                if ((ex is WebServiceException) == false)
+                    ngm.LogException(ex);
             }
             finally
             {
-                    AuditHelper.LogAuditData(request, null, System.Web.HttpContext.Current.Request, request.GetType().Name);
-              
+                if (result != null)
+                    AuditHelper.LogAuditData(request, result.SQLUserId, null, System.Web.HttpContext.Current.Request, request.GetType().Name);
             }
             
             return response; 
@@ -355,11 +418,13 @@ namespace Phytel.API.AppDomain.NG.Service
         public GetActiveProgramsResponse Get(GetActiveProgramsRequest request)
         {
             GetActiveProgramsResponse response = new GetActiveProgramsResponse();
+            NGManager ngm = new NGManager();
+            ValidateTokenResponse result = null;
+
             try
             {
-                NGManager ngm = new NGManager();
-
-                ValidateTokenResponse result = ngm.IsUserValidated(request.Version, request.Token);
+                request.Token = base.Request.Headers["Token"] as string;
+                result = ngm.IsUserValidated(request.Version, request.Token, request.ContractNumber);
                 if (result.UserId != null)
                 {
                     if (result.UserId.Trim() != string.Empty)
@@ -375,12 +440,14 @@ namespace Phytel.API.AppDomain.NG.Service
             }
             catch (Exception ex)
             {
-                //TODO: Log this to the SQL database via ASE
                 CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+                if ((ex is WebServiceException) == false)
+                    ngm.LogException(ex);
             }
             finally
             {
-                AuditHelper.LogAuditData(request, null, System.Web.HttpContext.Current.Request, request.GetType().Name);
+                if (result != null)
+                    AuditHelper.LogAuditData(request, result.SQLUserId, null, System.Web.HttpContext.Current.Request, request.GetType().Name);
             }
             
             return response; 
@@ -389,11 +456,13 @@ namespace Phytel.API.AppDomain.NG.Service
         public PostPatientToProgramsResponse Post(PostPatientToProgramsRequest request)
         {
             PostPatientToProgramsResponse response = new PostPatientToProgramsResponse();
+            NGManager ngm = new NGManager();
+            ValidateTokenResponse result = null;
+
             try
             {
-                NGManager ngm = new NGManager();
-
-                ValidateTokenResponse result = ngm.IsUserValidated(request.Version, request.Token);
+                request.Token = base.Request.Headers["Token"] as string;
+                result = ngm.IsUserValidated(request.Version, request.Token, request.ContractNumber);
                 if (result.UserId.Trim() != string.Empty)
                 {
                     request.UserId = result.UserId;
@@ -404,12 +473,14 @@ namespace Phytel.API.AppDomain.NG.Service
             }
             catch (Exception ex)
             {
-                //TODO: Log this to C3 database via ASE
                 CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+                if ((ex is WebServiceException) == false)
+                    ngm.LogException(ex);
             }
             finally
             {
-                AuditHelper.LogAuditData(request, null, System.Web.HttpContext.Current.Request, request.GetType().Name);               
+                if (result != null)
+                    AuditHelper.LogAuditData(request, result.SQLUserId, null, System.Web.HttpContext.Current.Request, request.GetType().Name);               
             }
             
             return response; 
@@ -418,11 +489,13 @@ namespace Phytel.API.AppDomain.NG.Service
         public GetPatientProgramDetailsSummaryResponse Get(GetPatientProgramDetailsSummaryRequest request)
         {
             GetPatientProgramDetailsSummaryResponse response = new GetPatientProgramDetailsSummaryResponse();
+            NGManager ngm = new NGManager();
+            ValidateTokenResponse result = null;
+
             try
             {
-                NGManager ngm = new NGManager();
-
-                ValidateTokenResponse result = ngm.IsUserValidated(request.Version, request.Token);
+                request.Token = base.Request.Headers["Token"] as string;
+                result = ngm.IsUserValidated(request.Version, request.Token, request.ContractNumber);
                 if (result.UserId.Trim() != string.Empty)
                 {
                     request.UserId = result.UserId;
@@ -434,12 +507,14 @@ namespace Phytel.API.AppDomain.NG.Service
             }
             catch (Exception ex)
             {
-                //TODO: Log this to C3 database via ASE
                 CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+                if ((ex is WebServiceException) == false)
+                    ngm.LogException(ex);
             }
             finally
             {
-                 AuditHelper.LogAuditData(request, null, System.Web.HttpContext.Current.Request, request.GetType().Name);               
+                if (result != null)
+                    AuditHelper.LogAuditData(request, result.SQLUserId, null, System.Web.HttpContext.Current.Request, request.GetType().Name);               
             }
             
             return response; 
@@ -448,11 +523,13 @@ namespace Phytel.API.AppDomain.NG.Service
         public GetPatientProgramsResponse Get(GetPatientProgramsRequest request)
         {
             GetPatientProgramsResponse response = new GetPatientProgramsResponse();
+            NGManager ngm = new NGManager();
+            ValidateTokenResponse result = null;
+
             try
             {
-                NGManager ngm = new NGManager();
-
-                ValidateTokenResponse result = ngm.IsUserValidated(request.Version, request.Token);
+                request.Token = base.Request.Headers["Token"] as string;
+                result = ngm.IsUserValidated(request.Version, request.Token, request.ContractNumber);
                 if (result.UserId.Trim() != string.Empty)
                 {
                     request.UserId = result.UserId;
@@ -460,13 +537,12 @@ namespace Phytel.API.AppDomain.NG.Service
                 }
                 else
                     throw new UnauthorizedAccessException();
-
-
             }
             catch (Exception ex)
             {
-                //TODO: Log this to C3 database via ASE
                 CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+                if ((ex is WebServiceException) == false)
+                    ngm.LogException(ex);
             }
             finally
             {
@@ -477,7 +553,8 @@ namespace Phytel.API.AppDomain.NG.Service
                     patientIds = response.Programs.Select(x => x.PatientId).ToList();
                 }
                 
-                AuditHelper.LogAuditData(request, patientIds, System.Web.HttpContext.Current.Request, request.GetType().Name);
+                if(result != null)
+                    AuditHelper.LogAuditData(request, result.SQLUserId, patientIds, System.Web.HttpContext.Current.Request, request.GetType().Name);
 
             }
             
@@ -488,11 +565,13 @@ namespace Phytel.API.AppDomain.NG.Service
         public GetContactResponse Get(GetContactRequest request)
         {
             GetContactResponse response = new GetContactResponse();
+            NGManager ngm = new NGManager();
+            ValidateTokenResponse result = null;
+
             try
             {
-                NGManager ngm = new NGManager();
-
-                ValidateTokenResponse result = ngm.IsUserValidated(request.Version, request.Token);
+                request.Token = base.Request.Headers["Token"] as string;
+                result = ngm.IsUserValidated(request.Version, request.Token, request.ContractNumber);
                 if (result.UserId.Trim() != string.Empty)
                 {
                     request.UserId = result.UserId;
@@ -503,13 +582,14 @@ namespace Phytel.API.AppDomain.NG.Service
             }
             catch (Exception ex)
             {
-                //TODO: Log this to the SQL database via ASE
                 CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+                if ((ex is WebServiceException) == false)
+                    ngm.LogException(ex);
             }
             finally
             {
-                AuditHelper.LogAuditData(request, null, System.Web.HttpContext.Current.Request, request.GetType().Name);
-               
+                if (result != null)
+                    AuditHelper.LogAuditData(request, result.SQLUserId, null, System.Web.HttpContext.Current.Request, request.GetType().Name);
             }
             
             return response; 
@@ -518,11 +598,13 @@ namespace Phytel.API.AppDomain.NG.Service
         public GetAllCareManagersResponse Get(GetAllCareManagersRequest request)
         {
             GetAllCareManagersResponse response = new GetAllCareManagersResponse();
+            NGManager ngm = new NGManager();
+            ValidateTokenResponse result = null;
+
             try
             {
-                NGManager ngm = new NGManager();
-
-                ValidateTokenResponse result = ngm.IsUserValidated(request.Version, request.Token);
+                request.Token = base.Request.Headers["Token"] as string;
+                result = ngm.IsUserValidated(request.Version, request.Token, request.ContractNumber);
                 if (result.UserId.Trim() != string.Empty)
                 {
                     request.UserId = result.UserId;
@@ -534,13 +616,14 @@ namespace Phytel.API.AppDomain.NG.Service
             }
             catch (Exception ex)
             {
-                //TODO: Log this to the SQL database via ASE
                 CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+                if ((ex is WebServiceException) == false)
+                    ngm.LogException(ex);
             }
             finally
             {
-                AuditHelper.LogAuditData(request, null, System.Web.HttpContext.Current.Request, request.GetType().Name);
-
+                if (result != null)
+                    AuditHelper.LogAuditData(request, result.SQLUserId, null, System.Web.HttpContext.Current.Request, request.GetType().Name);
             }
             
             return response; 
@@ -549,11 +632,13 @@ namespace Phytel.API.AppDomain.NG.Service
         public PutUpdateContactResponse Post(PutUpdateContactRequest request)
         {
             PutUpdateContactResponse response = new PutUpdateContactResponse();
+            NGManager ngm = new NGManager();
+            ValidateTokenResponse result = null;
+
             try
             {
-                NGManager ngm = new NGManager();
-
-                ValidateTokenResponse result = ngm.IsUserValidated(request.Version, request.Token);
+                request.Token = base.Request.Headers["Token"] as string;
+                result = ngm.IsUserValidated(request.Version, request.Token, request.ContractNumber);
                 if (result.UserId.Trim() != string.Empty)
                 {
                     request.UserId = result.UserId;
@@ -564,13 +649,14 @@ namespace Phytel.API.AppDomain.NG.Service
             }
             catch (Exception ex)
             {
-                //TODO: Log this to C3 database via ASE
                 CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+                if ((ex is WebServiceException) == false)
+                    ngm.LogException(ex);
             }
             finally
             {
-                AuditHelper.LogAuditData(request, null, System.Web.HttpContext.Current.Request, request.GetType().Name);
-               
+                if (result != null)
+                    AuditHelper.LogAuditData(request, result.SQLUserId, null, System.Web.HttpContext.Current.Request, request.GetType().Name);
             }
             
             return response; 
@@ -581,11 +667,13 @@ namespace Phytel.API.AppDomain.NG.Service
         public GetAllCommModesResponse Get(GetAllCommModesRequest request)
         {
             GetAllCommModesResponse response = new GetAllCommModesResponse();
+            NGManager ngm = new NGManager();
+            ValidateTokenResponse result = null;
+
             try
             {
-                NGManager ngm = new NGManager();
-
-                ValidateTokenResponse result = ngm.IsUserValidated(request.Version, request.Token);
+                request.Token = base.Request.Headers["Token"] as string;
+                result = ngm.IsUserValidated(request.Version, request.Token, request.ContractNumber);
                 if (result.UserId.Trim() != string.Empty)
                 {
                     request.UserId = result.UserId;
@@ -596,13 +684,14 @@ namespace Phytel.API.AppDomain.NG.Service
             }
             catch (Exception ex)
             {
-                //TODO: Log this to the SQL database via ASE
                 CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+                if ((ex is WebServiceException) == false)
+                    ngm.LogException(ex);
             }
             finally
             {
-                AuditHelper.LogAuditData(request, null, System.Web.HttpContext.Current.Request, request.GetType().Name);
-               
+                if (result != null)
+                    AuditHelper.LogAuditData(request, result.SQLUserId, null, System.Web.HttpContext.Current.Request, request.GetType().Name);
             }
             
             return response; 
@@ -611,11 +700,13 @@ namespace Phytel.API.AppDomain.NG.Service
         public GetAllStatesResponse Get(GetAllStatesRequest request)
         {
             GetAllStatesResponse response = new GetAllStatesResponse();
+            NGManager ngm = new NGManager();
+            ValidateTokenResponse result = null;
+
             try
             {
-                NGManager ngm = new NGManager();
-
-                ValidateTokenResponse result = ngm.IsUserValidated(request.Version, request.Token);
+                request.Token = base.Request.Headers["Token"] as string;
+                result = ngm.IsUserValidated(request.Version, request.Token, request.ContractNumber);
                 if (result.UserId.Trim() != string.Empty)
                 {
                     request.UserId = result.UserId;
@@ -626,13 +717,14 @@ namespace Phytel.API.AppDomain.NG.Service
             }
             catch (Exception ex)
             {
-                //TODO: Log this to the SQL database via ASE
                 CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+                if ((ex is WebServiceException) == false)
+                    ngm.LogException(ex);
             }
             finally
             {
-                AuditHelper.LogAuditData(request, null, System.Web.HttpContext.Current.Request, request.GetType().Name);
-               
+                if (result != null)
+                    AuditHelper.LogAuditData(request, result.SQLUserId, null, System.Web.HttpContext.Current.Request, request.GetType().Name);
             }
             
             return response; 
@@ -641,11 +733,13 @@ namespace Phytel.API.AppDomain.NG.Service
         public GetAllTimesOfDaysResponse Get(GetAllTimesOfDaysRequest request)
         {
             GetAllTimesOfDaysResponse response = new GetAllTimesOfDaysResponse();
+            NGManager ngm = new NGManager();
+            ValidateTokenResponse result = null;
+
             try
             {
-                NGManager ngm = new NGManager();
-
-                ValidateTokenResponse result = ngm.IsUserValidated(request.Version, request.Token);
+                request.Token = base.Request.Headers["Token"] as string;
+                result = ngm.IsUserValidated(request.Version, request.Token, request.ContractNumber);
                 if (result.UserId.Trim() != string.Empty)
                 {
                     request.UserId = result.UserId;
@@ -656,13 +750,14 @@ namespace Phytel.API.AppDomain.NG.Service
             }
             catch (Exception ex)
             {
-                //TODO: Log this to the SQL database via ASE
                 CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+                if ((ex is WebServiceException) == false)
+                    ngm.LogException(ex);
             }
             finally
             {
-                AuditHelper.LogAuditData(request, null, System.Web.HttpContext.Current.Request, request.GetType().Name);
-               
+                if (result != null)
+                    AuditHelper.LogAuditData(request, result.SQLUserId, null, System.Web.HttpContext.Current.Request, request.GetType().Name);
             }
             
             return response; 
@@ -671,11 +766,13 @@ namespace Phytel.API.AppDomain.NG.Service
         public GetAllTimeZonesResponse Get(GetAllTimeZonesRequest request)
         {
             GetAllTimeZonesResponse response = new GetAllTimeZonesResponse();
+            NGManager ngm = new NGManager();
+            ValidateTokenResponse result = null;
+
             try
             {
-                NGManager ngm = new NGManager();
-
-                ValidateTokenResponse result = ngm.IsUserValidated(request.Version, request.Token);
+                request.Token = base.Request.Headers["Token"] as string;
+                result = ngm.IsUserValidated(request.Version, request.Token, request.ContractNumber);
                 if (result.UserId.Trim() != string.Empty)
                 {
                     request.UserId = result.UserId;
@@ -686,13 +783,14 @@ namespace Phytel.API.AppDomain.NG.Service
             }
             catch (Exception ex)
             {
-                //TODO: Log this to the SQL database via ASE
                 CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+                if ((ex is WebServiceException) == false)
+                    ngm.LogException(ex);
             }
             finally
             {
-                AuditHelper.LogAuditData(request, null, System.Web.HttpContext.Current.Request, request.GetType().Name);
-               
+                if (result != null)
+                    AuditHelper.LogAuditData(request, result.SQLUserId, null, System.Web.HttpContext.Current.Request, request.GetType().Name);
             }
             
             return response; 
@@ -701,11 +799,13 @@ namespace Phytel.API.AppDomain.NG.Service
         public GetAllCommTypesResponse Get(GetAllCommTypesRequest request)
         {
             GetAllCommTypesResponse response = new GetAllCommTypesResponse();
+            NGManager ngm = new NGManager();
+            ValidateTokenResponse result = null;
+
             try
             {
-                NGManager ngm = new NGManager();
-
-                ValidateTokenResponse result = ngm.IsUserValidated(request.Version, request.Token);
+                request.Token = base.Request.Headers["Token"] as string;
+                result = ngm.IsUserValidated(request.Version, request.Token, request.ContractNumber);
                 if (result.UserId.Trim() != string.Empty)
                 {
                     request.UserId = result.UserId;
@@ -716,13 +816,14 @@ namespace Phytel.API.AppDomain.NG.Service
             }
             catch (Exception ex)
             {
-                //TODO: Log this to the SQL database via ASE
                 CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+                if ((ex is WebServiceException) == false)
+                    ngm.LogException(ex);
             }
             finally
             {
-                 AuditHelper.LogAuditData(request, null, System.Web.HttpContext.Current.Request, request.GetType().Name);
-               
+                if (result != null)
+                    AuditHelper.LogAuditData(request, result.SQLUserId, null, System.Web.HttpContext.Current.Request, request.GetType().Name);
             }
             
             return response; 
@@ -731,11 +832,13 @@ namespace Phytel.API.AppDomain.NG.Service
         public GetAllLanguagesResponse Get(GetAllLanguagesRequest request)
         {
             GetAllLanguagesResponse response = new GetAllLanguagesResponse();
+            NGManager ngm = new NGManager();
+            ValidateTokenResponse result = null;
+
             try
             {
-                NGManager ngm = new NGManager();
-
-                ValidateTokenResponse result = ngm.IsUserValidated(request.Version, request.Token);
+                request.Token = base.Request.Headers["Token"] as string;
+                result = ngm.IsUserValidated(request.Version, request.Token, request.ContractNumber);
                 if (result.UserId.Trim() != string.Empty)
                 {
                     request.UserId = result.UserId;
@@ -746,13 +849,14 @@ namespace Phytel.API.AppDomain.NG.Service
             }
             catch (Exception ex)
             {
-                //TODO: Log this to the SQL database via ASE
                 CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+                if ((ex is WebServiceException) == false)
+                    ngm.LogException(ex);
             }
             finally
             {
-                AuditHelper.LogAuditData(request, null, System.Web.HttpContext.Current.Request, request.GetType().Name);
-               
+                if (result != null)
+                    AuditHelper.LogAuditData(request, result.SQLUserId, null, System.Web.HttpContext.Current.Request, request.GetType().Name);
             }
             
             return response; 
@@ -764,11 +868,13 @@ namespace Phytel.API.AppDomain.NG.Service
         public GetLookUpsResponse Get(GetLookUpsRequest request)
         {
             GetLookUpsResponse response = new GetLookUpsResponse();
+            NGManager ngm = new NGManager();
+            ValidateTokenResponse result = null;
+
             try
             {
-                NGManager ngm = new NGManager();
-
-                ValidateTokenResponse result = ngm.IsUserValidated(request.Version, request.Token);
+                request.Token = base.Request.Headers["Token"] as string;
+                result = ngm.IsUserValidated(request.Version, request.Token, request.ContractNumber);
                 if (result.UserId.Trim() != string.Empty)
                 {
                     request.UserId = result.UserId;
@@ -779,13 +885,14 @@ namespace Phytel.API.AppDomain.NG.Service
             }
             catch (Exception ex)
             {
-                //TODO: Log this to the SQL database via ASE
                 CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+                if ((ex is WebServiceException) == false)
+                    ngm.LogException(ex);
             }
             finally
             {
-                AuditHelper.LogAuditData(request, null, System.Web.HttpContext.Current.Request, request.GetType().Name);
-
+                if (result != null)
+                    AuditHelper.LogAuditData(request, result.SQLUserId, null, System.Web.HttpContext.Current.Request, request.GetType().Name);
             }
             
             return response; 
@@ -797,104 +904,142 @@ namespace Phytel.API.AppDomain.NG.Service
         public PostPatientNoteResponse Post(PostPatientNoteRequest request)
         {
             PostPatientNoteResponse response = new PostPatientNoteResponse();
+            NotesManager ngm = new NotesManager();
+            ValidateTokenResponse result = null;
+
             try
             {
-                NotesManager ngm = new NotesManager();
-
-                ValidateTokenResponse result = ngm.IsUserValidated(request.Version, request.Token);
+                request.Token = base.Request.Headers["Token"] as string;
+                result = ngm.IsUserValidated(request.Version, request.Token, request.ContractNumber);
                 if (result.UserId.Trim() != string.Empty)
                 {
                     request.UserId = result.UserId;
-                    response = ngm.InsertPatientNote(request, result.UserId);
+                    response = ngm.InsertPatientNote(request);
                 }
                 else
                     throw new UnauthorizedAccessException();
-
-                AuditHelper.LogAuditData(request, null, System.Web.HttpContext.Current.Request, request.GetType().Name);
-
-                return response;
             }
             catch (Exception ex)
             {
-                //TODO: Log this to C3 database via ASE
                 CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
-                return response;
+                if ((ex is WebServiceException) == false)
+                    ngm.LogException(ex);
             }
+            finally
+            {
+                if (result != null)
+                    AuditHelper.LogAuditData(request, result.SQLUserId, null, System.Web.HttpContext.Current.Request, request.GetType().Name);
+            }
+
+            return response;
         }
 
         public GetPatientNoteResponse Get(GetPatientNoteRequest request)
         {
             GetPatientNoteResponse response = new GetPatientNoteResponse();
+            NotesManager ngm = new NotesManager();
+            ValidateTokenResponse result = null;
+
             try
             {
-                NotesManager nManager = new NotesManager();
-                ValidateTokenResponse result = nManager.IsUserValidated(request.Version, request.Token);
+                request.Token = base.Request.Headers["Token"] as string;
+                result = ngm.IsUserValidated(request.Version, request.Token, request.ContractNumber);
                 if (result.UserId.Trim() != string.Empty)
                 {
                     request.UserId = result.UserId;
-                    response.Note = nManager.GetPatientNote(request);
+                    response.Note = ngm.GetPatientNote(request);
                 }
                 else
                     throw new UnauthorizedAccessException();
-
-                return response;
             }
             catch (Exception ex)
             {
-                //TODO: Log this to the SQL database via ASE
                 CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
-                return response;
+                if ((ex is WebServiceException) == false)
+                    ngm.LogException(ex);
             }
+            finally
+            {
+                List<string> patientIds = null;
+
+                if (response.Note != null)
+                    patientIds.Add(response.Note.PatientId);
+
+                if (result != null)
+                    AuditHelper.LogAuditData(request, result.SQLUserId, patientIds, System.Web.HttpContext.Current.Request, request.GetType().Name);
+            }
+            return response;
         }
 
         public GetAllPatientNotesResponse Get(GetAllPatientNotesRequest request)
         {
             GetAllPatientNotesResponse response = new GetAllPatientNotesResponse();
+            NotesManager ngm = new NotesManager();
+            ValidateTokenResponse result = null;
+
             try
             {
-                NotesManager nManager = new NotesManager();
-                ValidateTokenResponse result = nManager.IsUserValidated(request.Version, request.Token);
+                request.Token = base.Request.Headers["Token"] as string;
+                result = ngm.IsUserValidated(request.Version, request.Token, request.ContractNumber);
                 if (result.UserId.Trim() != string.Empty)
                 {
                     request.UserId = result.UserId;
-                    response.Notes = nManager.GetAllPatientNotes(request);
+                    response.Notes = ngm.GetAllPatientNotes(request);
                 }
                 else
                     throw new UnauthorizedAccessException();
-
-                return response;
             }
             catch (Exception ex)
             {
-                //TODO: Log this to the SQL database via ASE
                 CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
-                return response;
+                if ((ex is WebServiceException) == false)
+                    ngm.LogException(ex);
             }
+            finally
+            {
+                List<string> patientIds = null;
+
+                if (response.Notes != null)
+                {
+                    patientIds = response.Notes.Select(x => x.PatientId).ToList();
+                }
+
+                if (result != null)
+                    AuditHelper.LogAuditData(request, result.SQLUserId, patientIds, System.Web.HttpContext.Current.Request, request.GetType().Name);
+            }
+            return response;
         }
 
         public PostDeletePatientNoteResponse Post(PostDeletePatientNoteRequest request)
         {
             PostDeletePatientNoteResponse response = null;
+            NotesManager ngm = new NotesManager();
+            ValidateTokenResponse result = null;
+
             try
             {
-                NotesManager nManager = new NotesManager();
-                ValidateTokenResponse result = nManager.IsUserValidated(request.Version, request.Token);
+                request.Token = base.Request.Headers["Token"] as string;
+                result = ngm.IsUserValidated(request.Version, request.Token, request.ContractNumber);
                 if (result.UserId.Trim() != string.Empty)
                 {
                     request.UserId = result.UserId;
-                    response = nManager.DeletePatientNote(request);
+                    response = ngm.DeletePatientNote(request);
                 }
                 else
                     throw new UnauthorizedAccessException();
-
-                return response;
             }
             catch (Exception ex)
             {
-                //TODO: Log this to the SQL database via ASE
                 CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
-                return response;
+                if ((ex is WebServiceException) == false)
+                    ngm.LogException(ex);
             }
+            finally
+            {
+                if (result != null)
+                    AuditHelper.LogAuditData(request, result.SQLUserId, null, System.Web.HttpContext.Current.Request, request.GetType().Name);
+            }
+            return response;
         }
         #endregion
 

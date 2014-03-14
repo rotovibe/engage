@@ -13,7 +13,7 @@ namespace Phytel.API.AppDomain.NG.Test
         {
             
             // Arrange
-            string version = "v1";
+            double version = 1.0;
             string contractNumber = "InHealth001";
             string token = "1234";
             NGManager ngManager = new NGManager();
@@ -22,8 +22,7 @@ namespace Phytel.API.AppDomain.NG.Test
                 ContractNumber = contractNumber,
                 Token = token,
                 Version = version,
-                PatientID = "52f55899072ef709f84e7637",
-                UserId = "bb241c64-a0ff-4e01-ba5f-4246ef50780e"
+                PatientID = "531f2dcc072ef727c4d29e1a"
             };
             // Act
             GetPatientResponse response = ngManager.GetPatient(request);
@@ -36,7 +35,7 @@ namespace Phytel.API.AppDomain.NG.Test
         public void UpdatePatientBackground_Test()
         {
             // Arrange
-            string version = "v1";
+            double version = 1.0;
             string contractNumber = "InHealth001";
             string token = "1234";
             NGManager ngManager = new NGManager();
@@ -63,7 +62,7 @@ namespace Phytel.API.AppDomain.NG.Test
         public void GetAllPatientProblems_Test()
         {
             // Arrange
-            string version = "v1";
+            double version = 1.0;
             string contractNumber = "InHealth001";
             string token = "1234";
             NGManager ngManager = new NGManager();
@@ -87,7 +86,7 @@ namespace Phytel.API.AppDomain.NG.Test
         public void GetAllCohorts_Test()
         {
             // Arrange
-            string version = "v1";
+            double version = 1.0;
             string contractNumber = "InHealth001";
             string token = "1234";
             NGManager ngManager = new NGManager();
@@ -109,7 +108,7 @@ namespace Phytel.API.AppDomain.NG.Test
         public void GetCohortPatients_Test()
         {
             // Arrange
-            string version = "v1";
+            double version = 1.0;
             string contractNumber = "InHealth001";
             string token = "1234";
             NGManager ngManager = new NGManager();
@@ -135,7 +134,7 @@ namespace Phytel.API.AppDomain.NG.Test
         public void GetAllSettings_Test()
         {
             // Arrange
-            string version = "v1";
+            double version = 1.0;
             string contractNumber = "InHealth001";
             string token = "52936c88d6a48509e8d30632";
             NGManager ngManager = new NGManager();
@@ -158,7 +157,7 @@ namespace Phytel.API.AppDomain.NG.Test
         public void GetContactByPatientId_Test()
         {
             // Arrange
-            string version = "v1";
+            double version = 1.0;
             string contractNumber = "InHealth001";
             string token = "1234";
             NGManager ngManager = new NGManager();
@@ -182,7 +181,7 @@ namespace Phytel.API.AppDomain.NG.Test
             PutUpdateContactRequest request = new PutUpdateContactRequest();
             request.ContractNumber = "InHealth001";
             request.UserId = "AD_TestHarness"; 
-            request.Version = "v1";
+            request.Version = 1;
             Contact contact = new Contact();
             contact.Modes = new List<CommMode>();
 

@@ -10,7 +10,6 @@ namespace Phytel.API.AppDomain.NG
 {
     public static class GoalsUtil
     {
-
         public static bool SavePatientGoalTasks(PostPatientGoalRequest request)
         {
             bool result = false;
@@ -25,7 +24,7 @@ namespace Phytel.API.AppDomain.NG
                         {
                             Id = t.Id,
                             CustomAttributes = GetAttributeData(t.CustomAttributes),
-                            Barriers = t.BarrierIds,
+                            BarrierIds = t.BarrierIds,
                             Description = t.Description,
                             PatientGoalId = request.Goal.Id,
                             StartDate = t.StartDate,
@@ -50,7 +49,7 @@ namespace Phytel.API.AppDomain.NG
             }
             catch (Exception ex)
             {
-                throw new Exception("AD:SavePatientGoalTasks():" + ex.Message, ex.InnerException);
+                throw new Exception("AD:SavePatientGoalTasks()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -75,7 +74,7 @@ namespace Phytel.API.AppDomain.NG
             }
             catch (Exception ex)
             {
-                throw new Exception("AD:GetAttributeData():" + ex.Message, ex.InnerException);
+                throw new Exception("AD:GetAttributeData()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -92,7 +91,7 @@ namespace Phytel.API.AppDomain.NG
                         pid.Add(new PatientInterventionData
                         {
                             AssignedToId = i.AssignedToId,
-                            Barriers = i.BarrierIds,
+                            BarrierIds = i.BarrierIds,
                             CategoryId = i.CategoryId,
                             Description = i.Description,
                             Id = i.Id,
@@ -118,7 +117,7 @@ namespace Phytel.API.AppDomain.NG
             }
             catch (Exception ex)
             {
-                throw new Exception("AD:SavePatientGoalInterventions():" + ex.Message, ex.InnerException);
+                throw new Exception("AD:SavePatientGoalInterventions()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -157,9 +156,161 @@ namespace Phytel.API.AppDomain.NG
             }
             catch (Exception ex)
             {
-                throw new Exception("AD:SavePatientGoalBarriers():" + ex.Message, ex.InnerException);
+                throw new Exception("AD:SavePatientGoalBarriers()::" + ex.Message, ex.InnerException);
             }
         }
+
+        public static List<CustomAttribute> GetCustomAttributeDetails(List<CustomAttributeData> list, List<CustomAttribute> attributesLibrary)
+        {
+            List<CustomAttribute> attrList = null;
+            try
+            {
+                if (list != null && list.Count > 0)
+                {
+                    attrList = new List<CustomAttribute>();
+                    foreach (CustomAttributeData cad in list)
+                    {
+                        var libraryItem = attributesLibrary.Find(i => i.Id == cad.Id);
+                        if (libraryItem != null)
+                        {
+                            attrList.Add(new CustomAttribute
+                            {
+                                Id = cad.Id,
+                                Name = libraryItem.Name,
+                                ControlType = libraryItem.ControlType,
+                                Options = libraryItem.Options,
+                                Order = libraryItem.Order,
+                                Required = libraryItem.Required,
+                                Values = cad.Values
+                            });
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("AD:GetCustomAttributeDetails()::" + ex.Message, ex.InnerException);
+            } 
+            return attrList;
+        }
+
+        public static List<PatientBarrier> GetBarriers(List<PatientBarrierData> list)
+        {
+            List<PatientBarrier> barrierList = null;
+            try
+            {
+                if (list != null && list.Count > 0)
+                {
+                    barrierList = new List<PatientBarrier>();
+                    foreach (PatientBarrierData b in list)
+                    {
+                        barrierList.Add(new PatientBarrier
+                            {
+                                Id = b.Id,
+                                StatusId = b.StatusId,
+                                CategoryId = b.CategoryId,
+                                Name = b.Name,
+                                PatientGoalId = b.PatientGoalId,
+                                StatusDate = b.StatusDate
+                            });
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("AD:GetBarriers()::" + ex.Message, ex.InnerException);
+            } 
+            return barrierList;
+        }
+
+        public static List<PatientTask> GetTasks(List<PatientTaskData> list, List<CustomAttribute> taskAttributesLibrary)
+        {
+            List<PatientTask> taskList = null;
+
+            try
+            {
+                if (list != null && list.Count > 0)
+                {
+                    taskList = new List<PatientTask>();
+                    foreach (PatientTaskData t in list)
+                    {
+                        taskList.Add(new PatientTask
+                        {
+                            Id = t.Id,
+                            PatientGoalId = t.PatientGoalId,
+                            TargetValue = t.TargetValue,
+                            StatusId = t.StatusId,
+                            TargetDate = t.TargetDate,
+                            CustomAttributes = GetCustomAttributeDetails(t.CustomAttributes, taskAttributesLibrary),
+                            BarrierIds = t.BarrierIds,
+                            Description = t.Description,
+                            StatusDate = t.StatusDate,
+                            StartDate = t.StartDate
+                        });
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("AD:GetTasks()::" + ex.Message, ex.InnerException);
+            }
+            return taskList;
+        }
+
+        public static List<PatientIntervention> GetInterventions(List<PatientInterventionData> list)
+        {
+            List<PatientIntervention> interventionList = null;
+            try
+            {
+                if (list != null && list.Count > 0)
+                {
+                    interventionList = new List<PatientIntervention>();
+                    foreach (PatientInterventionData i in list)
+                    {
+                        interventionList.Add(new PatientIntervention
+                        {
+                            Id = i.Id,
+                            PatientGoalId = i.PatientGoalId,
+                            CategoryId = i.CategoryId,
+                            StatusId = i.StatusId,
+                            AssignedToId = i.AssignedToId,
+                            BarrierIds = i.BarrierIds,
+                            Description = i.Description,
+                            StatusDate = i.StatusDate,
+                            StartDate = i.StartDate
+                        });
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("AD:GetInterventions()::" + ex.Message, ex.InnerException);
+            } 
+            return interventionList;
+        }
+
+        public static List<ChildView> GetChildView(List<ChildViewData> list)
+        {
+            List<ChildView> cvList = null;
+            try
+            {
+                if (list != null && list.Count > 0)
+                {
+                    cvList = new List<ChildView>();
+                    foreach (ChildViewData c in list)
+                    {
+                        cvList.Add(new ChildView { Id = c.Id, PatientGoalId = c.PatientGoalId, Name = c.Name, Description = c.Description, StatusId = c.StatusId });
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("AD:GetChildView()::" + ex.Message, ex.InnerException);
+            }
+            return cvList;
+        }
+
+        #region Internal Methods
         internal static bool DeletePatientGoalBarriers(PostDeletePatientGoalRequest request)
         {
             bool result = false;
@@ -170,7 +321,7 @@ namespace Phytel.API.AppDomain.NG
             }
             catch (Exception ex)
             {
-                throw new Exception("AD:DeletePatientGoalBarriers():" + ex.Message, ex.InnerException);
+                throw new Exception("AD:DeletePatientGoalBarriers()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -185,7 +336,7 @@ namespace Phytel.API.AppDomain.NG
             }
             catch (Exception ex)
             {
-                throw new Exception("AD:DeletePatientGoalTasks():" + ex.Message, ex.InnerException);
+                throw new Exception("AD:DeletePatientGoalTasks()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -199,136 +350,36 @@ namespace Phytel.API.AppDomain.NG
             }
             catch (Exception ex)
             {
-                throw new Exception("AD:DeletePatientGoalInterventions():" + ex.Message, ex.InnerException);
+                throw new Exception("AD:DeletePatientGoalInterventions()::" + ex.Message, ex.InnerException);
             }
-        }
-
-        public static List<CustomAttribute> GetCustomAttributeDetails(List<CustomAttributeData> list, List<CustomAttribute> attributesLibrary)
-        {
-            List<CustomAttribute> attrList = null;
-            if (list != null && list.Count > 0)
-            {
-                attrList = new List<CustomAttribute>();
-                foreach(CustomAttributeData cad in list)
-                {
-                    var libraryItem = attributesLibrary.Find(i => i.Id == cad.Id);
-                    if (libraryItem != null)
-                    {
-                        attrList.Add(new CustomAttribute { 
-                              Id = cad.Id, Name = libraryItem.Name, ControlType = libraryItem.ControlType, Options = libraryItem.Options, Order = libraryItem.Order, Required = libraryItem.Required, Values =  cad.Values
-                        });    
-                    }
-                }
-            }
-            return attrList;
-        }
-
-        public static List<PatientBarrier> GetBarriers(List<PatientBarrierData> list)
-        {
-            List<PatientBarrier> barrierList = null;
-            if (list != null && list.Count > 0)
-            {
-                barrierList = new List<PatientBarrier>();
-                foreach (PatientBarrierData b in list)
-                {
-                    barrierList.Add(new PatientBarrier 
-                        { 
-                            Id = b.Id, 
-                            StatusId = b.StatusId,
-                            CategoryId = b.CategoryId,
-                            Name = b.Name,
-                            PatientGoalId = b.PatientGoalId, 
-                            StatusDate = b.StatusDate
-                        });
-                }
-            }
-            return barrierList;
-        }
-
-        public static List<PatientTask> GetTasks(List<PatientTaskData> list, List<CustomAttribute> taskAttributesLibrary)
-        {
-            List<PatientTask> taskList = null;
-            if (list != null && list.Count > 0)
-            {
-                taskList = new List<PatientTask>();
-                foreach (PatientTaskData t in list)
-                {
-                    taskList.Add(new PatientTask
-                    {
-                        Id = t.Id,
-                        PatientGoalId = t.PatientGoalId,
-                        TargetValue = t.TargetValue,
-                        StatusId = t.StatusId,
-                        TargetDate = t.TargetDate,
-                        CustomAttributes = GetCustomAttributeDetails(t.CustomAttributes, taskAttributesLibrary),
-                        BarrierIds = t.Barriers,
-                        Description = t.Description,
-                        StatusDate = t.StatusDate,
-                        StartDate  = t.StartDate
-                    });
-                }
-            }
-            return taskList;
-        }
-
-        public static List<PatientIntervention> GetInterventions(List<PatientInterventionData> list)
-        {
-            List<PatientIntervention> interventionList = null;
-            if (list != null && list.Count > 0)
-            {
-                interventionList = new List<PatientIntervention>();
-                foreach (PatientInterventionData i in list)
-                {
-                    interventionList.Add(new PatientIntervention
-                    {
-                        Id = i.Id,
-                        PatientGoalId = i.PatientGoalId,
-                        CategoryId = i.CategoryId,
-                        StatusId = i.StatusId,
-                        AssignedToId = i.AssignedToId,
-                        BarrierIds = i.Barriers,
-                        Description = i.Description,
-                        StatusDate = i.StatusDate,
-                        StartDate = i.StartDate
-                    });
-                }
-            }
-            return interventionList;
-        }
-
-        public static List<ChildView> GetChildView(List<ChildViewData> list)
-        {
-            List<ChildView> cvList = null;
-            if (list != null && list.Count > 0)
-            {
-                cvList = new List<ChildView>();
-                foreach (ChildViewData c in list)
-                {
-                    cvList.Add(new ChildView {Id = c.Id, PatientGoalId = c.PatientGoalId , Name = c.Name , Description = c.Description, StatusId = c.StatusId });
-                }
-            }
-            return cvList;
         }
 
         internal static PatientGoal GetPatientGoalForInitialize(GetInitializeGoalRequest request, PatientGoalData pgd)
         {
             PatientGoal pg = null;
-            if (pgd != null)
+            try
             {
-                pg = new PatientGoal
+                if (pgd != null)
                 {
-                    CustomAttributes = GoalsEndpointUtil.GetAttributesLibraryByType(request, 1), //GetAttributesForInitialize(pgd.Attributes), // change this call when attributes are ready
-                    EndDate = pgd.EndDate,
-                    Id = pgd.Id,
-                    Name = pgd.Name,
-                    PatientId = pgd.PatientId,
-                    SourceId = pgd.SourceId,
-                    StartDate = pgd.StartDate,
-                    StatusId = pgd.StatusId,
-                    TargetDate = pgd.TargetDate,
-                    TargetValue = pgd.TargetValue,
-                    TypeId = pgd.TypeId
-                };
+                    pg = new PatientGoal
+                    {
+                        CustomAttributes = GoalsEndpointUtil.GetAttributesLibraryByType(request, 1), //GetAttributesForInitialize(pgd.Attributes), // change this call when attributes are ready
+                        EndDate = pgd.EndDate,
+                        Id = pgd.Id,
+                        Name = pgd.Name,
+                        PatientId = pgd.PatientId,
+                        SourceId = pgd.SourceId,
+                        StartDate = pgd.StartDate,
+                        StatusId = pgd.StatusId,
+                        TargetDate = pgd.TargetDate,
+                        TargetValue = pgd.TargetValue,
+                        TypeId = pgd.TypeId
+                    };
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("AD:GetPatientGoalForInitialize()::" + ex.Message, ex.InnerException);
             }
             return pg;
         }
@@ -336,17 +387,24 @@ namespace Phytel.API.AppDomain.NG
         internal static PatientTask GetPatientTaskForInitialize(GetInitializeTaskRequest request, PatientTaskData ptd)
         {
             PatientTask pt = null;
-            if (ptd != null)
+            try
             {
-                pt = new PatientTask
+                if (ptd != null)
                 {
-                    CustomAttributes = GoalsEndpointUtil.GetAttributesLibraryByType(request, 2),
-                    Id = ptd.Id,
-                    StartDate = ptd.StartDate,
-                    StatusId = ptd.StatusId,
-                    TargetDate = ptd.TargetDate,
-                    TargetValue = ptd.TargetValue,
-                };
+                    pt = new PatientTask
+                    {
+                        CustomAttributes = GoalsEndpointUtil.GetAttributesLibraryByType(request, 2),
+                        Id = ptd.Id,
+                        StartDate = ptd.StartDate,
+                        StatusId = ptd.StatusId,
+                        TargetDate = ptd.TargetDate,
+                        TargetValue = ptd.TargetValue,
+                    };
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("AD:GetPatientTaskForInitialize()::" + ex.Message, ex.InnerException);
             }
             return pt;
         }
@@ -366,8 +424,9 @@ namespace Phytel.API.AppDomain.NG
             }
             catch (Exception ex)
             {
-                throw;
+                throw new Exception("AD:ConvertToOptionList()::" + ex.Message, ex.InnerException);
             }
         }
+        #endregion
     }
 }

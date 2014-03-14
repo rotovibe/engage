@@ -10,22 +10,6 @@ namespace Phytel.API.AppDomain.NG.Observation
 {
     public class ObservationsManager : ManagerBase
     {
-        //public GetInitializeObservationResponse GetInitialGoalRequest(GetInitializeObservationRequest request)
-        //{
-        //    try
-        //    {
-        //        GetInitializeObservationResponse response = new GetInitializeObservationResponse();
-        //        PatientObservationData po = (PatientObservationData)ObservationsUtil.GetInitialObservationRequest(request);
-        //        response.Observation = ObservationsUtil.GetObservationForInitialize(request, po);
-        //        response.Version = request.Version;
-        //        return response;
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        throw ex;
-        //    }
-        //}
-
         public GetStandardObservationItemsResponse GetStandardObservationsRequest(GetStandardObservationItemsRequest request)
         {
             try
@@ -38,7 +22,7 @@ namespace Phytel.API.AppDomain.NG.Observation
             }
             catch (Exception ex)
             {
-                throw ex;
+                throw new Exception("AD:GetStandardObservationsRequest()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -54,7 +38,7 @@ namespace Phytel.API.AppDomain.NG.Observation
             }
             catch (Exception ex)
             {
-                throw ex;
+                throw new Exception("AD:GetAdditionalObservationsLibraryRequest()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -92,7 +76,7 @@ namespace Phytel.API.AppDomain.NG.Observation
             }
             catch (Exception ex)
             {
-                throw ex;
+                throw new Exception("AD:SavePatientObservations()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -108,7 +92,7 @@ namespace Phytel.API.AppDomain.NG.Observation
             }
             catch (Exception ex)
             {
-                throw ex;
+                throw new Exception("AD:GetAdditionalObservationsRequest()::" + ex.Message, ex.InnerException);
             }
         }
     }

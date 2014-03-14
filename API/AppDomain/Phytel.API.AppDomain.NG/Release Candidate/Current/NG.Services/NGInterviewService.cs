@@ -1,17 +1,10 @@
-using System;
-using System.Net;
 using Phytel.API.AppDomain.NG.DTO;
-using Phytel.API.Interface;
-using ServiceStack.ServiceInterface.ServiceModel;
-using ServiceStack.ServiceHost;
-using Phytel.API.Common.Format;
 using Phytel.API.AppDomain.Security.DTO;
-using ServiceStack.ServiceClient.Web;
-using ServiceStack.ServiceInterface.Cors;
-using Phytel.API.Common.Audit;
-using System.Collections.Generic;
-using System.Web;
+using Phytel.API.Common.Format;
 using Phytel.API.DataAudit;
+using ServiceStack.ServiceClient.Web;
+using System;
+using System.Collections.Generic;
 
 namespace Phytel.API.AppDomain.NG.Service
 {
@@ -20,11 +13,13 @@ namespace Phytel.API.AppDomain.NG.Service
         public PostProcessActionResponse Post(PostProcessActionRequest request)
         {
             PostProcessActionResponse response = new PostProcessActionResponse();
+            PlanManager intm = new PlanManager();
+            ValidateTokenResponse result = null;
+
             try
             {
-                PlanManager intm = new PlanManager();
-
-                ValidateTokenResponse result = intm.IsUserValidated(request.Version, request.Token);
+                request.Token = base.Request.Headers["Token"] as string;
+                result = intm.IsUserValidated(request.Version, request.Token, request.ContractNumber);
                 if (result.UserId.Trim() != string.Empty)
                 {
                     request.UserId = result.UserId;
@@ -32,13 +27,12 @@ namespace Phytel.API.AppDomain.NG.Service
                 }
                 else
                     throw new UnauthorizedAccessException();
-
-
             }
             catch (Exception ex)
             {
-                //TODO: Log this to the SQL database via ASE
                 CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+                if ((ex is WebServiceException) == false)
+                    intm.LogException(ex);
             }
             finally
             {
@@ -50,10 +44,9 @@ namespace Phytel.API.AppDomain.NG.Service
                     patientIds.Add(response.PatientId);
                 }
 
-                AuditHelper.LogAuditData(request, patientIds, System.Web.HttpContext.Current.Request, request.GetType().Name);
-                
+                if(result != null)
+                    AuditHelper.LogAuditData(request, result.SQLUserId, patientIds, System.Web.HttpContext.Current.Request, request.GetType().Name);
             }
-            
             return response; 
         }
     }

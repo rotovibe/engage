@@ -27,13 +27,13 @@ namespace Phytel.API.AppDomain.NG.Test
             PostPatientNoteRequest request = new PostPatientNoteRequest();
             request.ContractNumber = "InHealth001";
             request.UserId = "AD_TestHarness"; 
-            request.Version = "v1";
+            request.Version = 1;
             request.PatientId = "52f5589b072ef709f84e7706";
             request.Token = "5307bcf5d6a4850cd4abe0dd";
             request.Note = note;
 
             NotesManager nManager = new NotesManager();
-            PostPatientNoteResponse response = nManager.InsertPatientNote(request, note.CreatedById);
+            PostPatientNoteResponse response = nManager.InsertPatientNote(request);
 
             Assert.IsNotNull(response);
         }
@@ -44,7 +44,7 @@ namespace Phytel.API.AppDomain.NG.Test
             GetPatientNoteRequest request = new GetPatientNoteRequest();
             request.ContractNumber = "InHealth001";
             request.UserId = "AD_TestHarness";
-            request.Version = "v1";
+            request.Version = 1;
             request.Id = "5307b27fd433232ed88e5020";
             request.PatientId = "52f55877072ef709f84e69b0";
             request.UserId = "Snehal";
@@ -61,7 +61,7 @@ namespace Phytel.API.AppDomain.NG.Test
             GetAllPatientNotesRequest request = new GetAllPatientNotesRequest();
             request.ContractNumber = "InHealth001";
             request.UserId = "AD_TestHarness";
-            request.Version = "v1";
+            request.Version = 1;
             request.PatientId = "52f55877072ef709f84e69b0";
             request.UserId = "Snehal";
             request.Count = 10;
@@ -78,7 +78,7 @@ namespace Phytel.API.AppDomain.NG.Test
         //    PostPatientGoalRequest request = new PostPatientGoalRequest();
         //    request.ContractNumber = "InHealth001";
         //    request.UserId = "AD_TestHarness";
-        //    request.Version = "v1";
+        //    request.Version = 1;
         //    request.PatientId = "52f55874072ef709f84e68c5";
         //    request.UserId = "Snehal";
         //    request.Goal = new PatientGoal { Name =  "my name", SourceId = "my source"};
@@ -97,7 +97,7 @@ namespace Phytel.API.AppDomain.NG.Test
         //    GetInitializeGoalRequest request = new GetInitializeGoalRequest();
         //    request.ContractNumber = "InHealth001";
         //    request.UserId = "AD_TestHarness";
-        //    request.Version = "v1";
+        //    request.Version = 1;
         //    request.PatientId = "52f55877072ef709f84e69b0";
         //    request.UserId = "Snehal";
 

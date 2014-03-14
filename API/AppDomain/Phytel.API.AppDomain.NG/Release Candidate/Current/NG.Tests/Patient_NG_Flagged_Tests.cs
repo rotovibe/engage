@@ -11,13 +11,13 @@ namespace Phytel.API.DataDomain.Patient.Service.Test
         [TestMethod]
         public void Update_Patient_Flagged_By_PatientID()
         {
-            // http://localhost:8888/Patient/NG/v1/InHealth001/patient/999/flagged/2?UserId=12345
+            // http://localhost:8888/Patient/NG/1.0/InHealth001/patient/999/flagged/2?UserId=12345
             string patientID = "528f6d09072ef708ecd6d08e";
             string userId = "ba9b277d-4b53-4a53-a2c5-15d4969423ec";
             string contractNumber = "InHealth001";
             string context = "NG";
             string flagged = "1";
-            string version = "v1";
+            double version = 1.0;
             string token = "52cc3dcbd6a4850cf4c0ce58";
 
             IRestClient client = new JsonServiceClient();

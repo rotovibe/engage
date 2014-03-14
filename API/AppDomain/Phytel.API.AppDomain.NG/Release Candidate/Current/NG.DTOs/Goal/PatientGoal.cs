@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using Phytel.API.Common.CustomObjects;
+using Phytel.API.Common.CustomObject;
 
 namespace Phytel.API.AppDomain.NG.DTO
 {

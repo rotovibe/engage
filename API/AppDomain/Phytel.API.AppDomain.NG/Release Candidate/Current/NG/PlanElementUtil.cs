@@ -19,21 +19,35 @@ namespace Phytel.API.AppDomain.NG
         /// <returns></returns>
         public static bool SetCompletionStatus<T>(List<T> list)
         {
-            bool result = false;
-            int completed = list.FindAll(new Completed<T>().IsSatisfiedBy).Count();
-            int count = list.Count;
-
-            if (completed.Equals(count))
+            try
             {
-                result = true;
+                bool result = false;
+                int completed = list.FindAll(new Completed<T>().IsSatisfiedBy).Count();
+                int count = list.Count;
+
+                if (completed.Equals(count))
+                {
+                    result = true;
+                }
+                return result;
             }
-            return result;
+            catch (Exception ex)
+            {
+                throw new Exception("AD:PlanElementUtil:SetCompletionStatus()::" + ex.Message, ex.InnerException);
+            }
         }
 
         public static T FindElementById<T>(List<T> list, string id)
         {
-            var mod = list.Where(r => ((IPlanElement)Convert.ChangeType(r, typeof(T))).Id == id).FirstOrDefault();
-            return mod;
+            try
+            {
+                var mod = list.Where(r => ((IPlanElement)Convert.ChangeType(r, typeof(T))).Id == id).FirstOrDefault();
+                return mod;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("AD:PlanElementUtil:FindElementById()::" + ex.Message, ex.InnerException);
+            }
         }
 
         public static void SetEnabledStatusByPrevious<T>(List<T> actions)
@@ -50,7 +64,7 @@ namespace Phytel.API.AppDomain.NG
             }
             catch (Exception ex)
             {
-                throw new Exception("AppDomain:SetEnabledStatusByPrevious():" + ex.Message, ex.InnerException);
+                throw new Exception("AD:PlanElementUtil:SetEnabledStatusByPrevious()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -81,7 +95,7 @@ namespace Phytel.API.AppDomain.NG
             }
             catch (Exception ex)
             {
-                throw new Exception("AppDomain:SetEnabledState():" + ex.Message, ex.InnerException);
+                throw new Exception("AD:PlanElementUtil:SetEnabledState()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -102,7 +116,7 @@ namespace Phytel.API.AppDomain.NG
             }
             catch (Exception ex)
             {
-                throw new Exception("AppDomain:DisableCompleteButtonForAction():" + ex.Message, ex.InnerException);
+                throw new Exception("AD:PlanElementUtil:DisableCompleteButtonForAction()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -124,7 +138,7 @@ namespace Phytel.API.AppDomain.NG
             }
             catch (Exception ex)
             {
-                throw new Exception("AppDomain:SpawnElementsInList():" + ex.Message, ex.InnerException);
+                throw new Exception("AD:PlanElementUtil:SpawnElementsInList()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -138,7 +152,14 @@ namespace Phytel.API.AppDomain.NG
                         throw new ArgumentException("Cannot set attribute of type " + r.ElementType + ". Tag value is null.");
 
                     // eligibility series
-                    progAttr.Eligibility = (!string.IsNullOrEmpty(r.Tag))? Convert.ToInt32(r.Tag) : 0;
+                    try
+                    {
+                        progAttr.Eligibility = (!string.IsNullOrEmpty(r.Tag)) ? Convert.ToInt32(r.Tag) : 0;
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new Exception("AD:SetProgramAttributes()::Eligibility" + ex.Message, ex.InnerException);
+                    }
 
                     int state; // no = 1, yes = 2
                     bool isNum = int.TryParse(r.Tag, out state);
@@ -175,14 +196,28 @@ namespace Phytel.API.AppDomain.NG
                     if (r.Tag == null)
                         throw new ArgumentException("Cannot set attribute of type " + r.ElementType + ". Tag value is null.");
 
-                    progAttr.Enrollment = (!string.IsNullOrEmpty(r.Tag)) ? Convert.ToInt32(r.Tag) : 0;
+                    try
+                    {
+                        progAttr.Enrollment = (!string.IsNullOrEmpty(r.Tag)) ? Convert.ToInt32(r.Tag) : 0;
+                    }
+                    catch(Exception ex)
+                    {
+                        throw new Exception("AD:SetProgramAttributes()::Enrollment" + ex.Message, ex.InnerException);
+                    }
                 }
                 else if (r.ElementType.Equals(16))
                 {
                     if (r.Tag == null)
                         throw new ArgumentException("Cannot set attribute of type " + r.ElementType + ". Tag value is null.");
 
-                    progAttr.OptOut = (!string.IsNullOrEmpty(r.Tag))? r.Tag : null;
+                    try
+                    {
+                        progAttr.OptOut = (!string.IsNullOrEmpty(r.Tag)) ? Convert.ToBoolean(r.Tag) : false;
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new Exception("AD:SetProgramAttributes()::OptOut" + ex.Message, ex.InnerException);
+                    }
                 }
                 else if (r.ElementType.Equals(17))
                 {
@@ -190,7 +225,7 @@ namespace Phytel.API.AppDomain.NG
                     if (r.Tag == null)
                         throw new ArgumentException("Cannot set attribute of type " + r.ElementType + ". Tag value is null.");
 
-                    progAttr.OptOutReason = (!string.IsNullOrEmpty(r.Tag))? r.Tag : null;
+                    progAttr.OptOutReason = (!string.IsNullOrEmpty(r.Tag)) ? r.Tag : null;
                 }
                 else if (r.ElementType.Equals(18))
                 {
@@ -202,74 +237,116 @@ namespace Phytel.API.AppDomain.NG
                     if (r.Tag == null)
                         throw new ArgumentException("Cannot set attribute of type " + r.ElementType + ". Tag value is null.");
 
-                    progAttr.GraduatedFlag = (!string.IsNullOrEmpty(r.Tag))? Convert.ToInt32(r.Tag) : 0;
+                    try
+                    {
+                        progAttr.GraduatedFlag = (!string.IsNullOrEmpty(r.Tag)) ? Convert.ToInt32(r.Tag) : 0;
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new Exception("AD:SetProgramAttributes()::GraduatedFlag" + ex.Message, ex.InnerException);
+                    }
                 }
             }
             catch (Exception ex)
             {
-                throw new Exception("AppDomain:SpawnElementsInList():" + ex.Message, ex.InnerException);
+                throw new Exception("AD:PlanElementUtil:SetProgramAttributes()::" + ex.Message, ex.InnerException);
             }
         }
 
         private static void SetEnabledStateRecursion(string p, Program program)
         {
-            foreach (Module m in program.Modules)
+            try
             {
-                if (m.Id.ToString().Equals(p))
+                foreach (Module m in program.Modules)
                 {
-                    SetInitialProperties(m);
+                    if (m.Id.ToString().Equals(p))
+                    {
+                        SetInitialProperties(m);
+                    }
+                    else
+                    {
+                        FindIdInActions(p, m);
+                    }
                 }
-                else
-                {
-                    FindIdInActions(p, m);
-                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("AD:PlanElementUtil:SetEnabledStateRecursion()::" + ex.Message, ex.InnerException);
             }
         }
 
         private static void FindIdInActions(string p, Module m)
         {
-            if (m.Actions != null)
+            try
             {
-                foreach (Actions a in m.Actions)
+                if (m.Actions != null)
                 {
-                    if (a.Id.ToString().Equals(p))
+                    foreach (Actions a in m.Actions)
                     {
-                        SetInitialProperties(a);
-                    }
-                    else
-                    {
-                        FindIdInSteps(p, a);
+                        if (a.Id.ToString().Equals(p))
+                        {
+                            SetInitialProperties(a);
+                        }
+                        else
+                        {
+                            FindIdInSteps(p, a);
+                        }
                     }
                 }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("AD:PlanElementUtil:FindIdInActions()::" + ex.Message, ex.InnerException);
             }
         }
 
         private static void FindIdInSteps(string p, Actions a)
         {
-            if (a.Steps != null)
+            try
             {
-                foreach (Step s in a.Steps)
+                if (a.Steps != null)
                 {
-                    if (s.Id.ToString().Equals(p))
+                    foreach (Step s in a.Steps)
                     {
-                        SetInitialProperties(s);
+                        if (s.Id.ToString().Equals(p))
+                        {
+                            SetInitialProperties(s);
+                        }
                     }
                 }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("AD:PlanElementUtil:FindIdInSteps()::" + ex.Message, ex.InnerException);
             }
         }
 
         private static void SetInitialProperties(IPlanElement m)
         {
-            m.Enabled = true;
-            m.AssignDate = System.DateTime.UtcNow;
-            m.ElementState = 0;
-            m.AssignBy = "System";
+            try
+            {
+                m.Enabled = true;
+                m.AssignDate = System.DateTime.UtcNow;
+                m.ElementState = 0;
+                m.AssignBy = "System";
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("AD:PlanElementUtil:SetInitialProperties()::" + ex.Message, ex.InnerException);
+            }
         }
 
         public static Actions GetProcessingAction(List<Module> list, string actionId)
         {
-            Actions query = list.SelectMany(module => module.Actions).Where(action => action.Id == actionId).FirstOrDefault();
-            return query;
+            try
+            {
+                Actions query = list.SelectMany(module => module.Actions).Where(action => action.Id == actionId).FirstOrDefault();
+                return query;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("AD:PlanElementUtil:GetProcessingAction()::" + ex.Message, ex.InnerException);
+            }
         }
 
         internal static bool IsProgramCompleted(Program p, string userId)
@@ -295,7 +372,7 @@ namespace Phytel.API.AppDomain.NG
             }
             catch (Exception ex)
             {
-                throw new Exception("AppDomain:SpawnElementsInList():" + ex.Message, ex.InnerException);
+                throw new Exception("AD:PlanElementUtil:IsProgramCompleted()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -330,7 +407,7 @@ namespace Phytel.API.AppDomain.NG
             }
             catch (Exception ex)
             {
-                throw new Exception("AppDomain:RegisterProblemCodeToPatient():" + ex.Message, ex.InnerException);
+                throw new Exception("AD:PlanElementUtil:RegisterCohortPatientViewProblemToPatient()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -343,7 +420,7 @@ namespace Phytel.API.AppDomain.NG
             }
             catch (Exception ex)
             {
-                throw new Exception("AppDomain:GetCohortPatientViewRecord():" + ex.Message, ex.InnerException);
+                throw new Exception("AD:PlanElementUtil:GetCohortPatientViewRecord()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -369,7 +446,7 @@ namespace Phytel.API.AppDomain.NG
             }
             catch (Exception ex)
             {
-                throw new Exception("AppDomain:SaveReportingAttributes():" + ex.Message, ex.InnerException);
+                throw new Exception("AD:PlanElementUtil:SaveReportingAttributes()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -389,7 +466,7 @@ namespace Phytel.API.AppDomain.NG
                 if (_pAtt.EligibilityStartDate != null){ pAtt.EligibilityStartDate = _pAtt.EligibilityStartDate; dirty = true;}
                 if (_pAtt.EndDate != null){ pAtt.EndDate = _pAtt.EndDate; dirty = true;}
                 if (_pAtt.IneligibleReason != null){ pAtt.IneligibleReason = _pAtt.IneligibleReason; dirty = true;}
-                if (_pAtt.OptOut != null){ pAtt.OptOut = _pAtt.OptOut; dirty = true;}
+                if (_pAtt.OptOut != false){ pAtt.OptOut = _pAtt.OptOut; dirty = true;}
                 if (_pAtt.OptOutDate != null){ pAtt.OptOutDate = _pAtt.OptOutDate; dirty = true;}
                 if (_pAtt.OptOutReason != null){ pAtt.OptOutReason = _pAtt.OptOutReason; dirty = true;}
                 if (_pAtt.OverrideReason != null){ pAtt.OverrideReason = _pAtt.OverrideReason; dirty = true;}
@@ -409,7 +486,7 @@ namespace Phytel.API.AppDomain.NG
             }
             catch (Exception ex)
             {
-                throw new Exception("AppDomain:ModifyProgramAttributePropertiesForUpdate():" + ex.Message, ex.InnerException);
+                throw new Exception("AD:PlanElementUtil:ModifyProgramAttributePropertiesForUpdate()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -439,7 +516,7 @@ namespace Phytel.API.AppDomain.NG
             }
             catch (Exception ex)
             {
-                throw new Exception("AppDomain:SetStartDateForProgramAttributes():" + ex.Message, ex.InnerException);
+                throw new Exception("AD:PlanElementUtil:SetStartDateForProgramAttributes()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -454,12 +531,12 @@ namespace Phytel.API.AppDomain.NG
                 _programAttributes.Eligibility = p.Eligibility;
                 _programAttributes.Enrollment = p.Enrollment;
                 _programAttributes.GraduatedFlag = 1;
-                _programAttributes.OptOut = null;
+                _programAttributes.OptOut = false;
                 _programAttributes.EligibilityOverride = 1;
             }
             catch (Exception ex)
             {
-                throw;
+                throw new Exception("AD:PlanElementUtil:SetProgramInformation()::" + ex.Message, ex.InnerException);
             }
         }
     }

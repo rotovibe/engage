@@ -27,8 +27,8 @@ namespace Phytel.API.AppDomain.NG.Services.Test
 
             IRestClient client = new JsonServiceClient();
             JsonServiceClient.HttpWebRequestFilter = x => x.Headers.Add(string.Format("APIToken: {0}", token));
-            
-            GetPatientResponse response = client.Post<GetPatientResponse>("http://localhost:888/Nightingale/v1/InHealth001/patient",
+
+            GetPatientResponse response = client.Post<GetPatientResponse>("http://localhost:888/Nightingale/1.0/InHealth001/patient",
                 new GetPatientRequest { PatientID = patientID, Token = token } as object);
 
             lnsampleValue = response.Patient.LastName;
@@ -64,7 +64,7 @@ namespace Phytel.API.AppDomain.NG.Services.Test
             IRestClient client = new JsonServiceClient();
             //JsonServiceClient.HttpWebRequestFilter = x => x.Headers.Add(string.Format("APIToken: {0}", token));
 
-            GetPatientResponse response = client.Get<GetPatientResponse>(string.Format("http://localhost:888/Nightingale/v1/InHealth001/patient/{0}?token={1}", patientID, token));
+            GetPatientResponse response = client.Get<GetPatientResponse>(string.Format("http://localhost:888/Nightingale/1.0/InHealth001/patient/{0}?token={1}", patientID, token));
 
             lnsampleValue = response.Patient.LastName;
             fnsampleValue = response.Patient.FirstName;
@@ -94,7 +94,7 @@ namespace Phytel.API.AppDomain.NG.Services.Test
 
             IRestClient client = new JsonServiceClient();
 
-            GetPatientResponse response = client.Post<GetPatientResponse>("http://localhost:888/v1/NG/InHealth001/patient",
+            GetPatientResponse response = client.Post<GetPatientResponse>("http://localhost:888/1.0/NG/InHealth001/patient",
                 new GetPatientRequest { PatientID = patientID, Token = token } as object);
 
             lnsampleValue = response.Patient.LastName;
@@ -111,7 +111,7 @@ namespace Phytel.API.AppDomain.NG.Services.Test
         {
 
             // Arrange
-            string version = "v1";
+            double version = 1.0;
             string contractNumber = "InHealth001";
             string token = "528cc924d6a4850fe05b3afa";
             string patientID = "528bdccc072ef7071c2e22ae";
@@ -134,7 +134,7 @@ namespace Phytel.API.AppDomain.NG.Services.Test
         {
 
             // Arrange
-            string version = "v1";
+            double version = 1.0;
             string contractNumber = "InHealth001";
             string context = "NG";
             string token = "528cc924d6a4850fe05b3afa";
