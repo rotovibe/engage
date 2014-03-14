@@ -11,30 +11,30 @@ namespace Phytel.API.AppDomain.Security.Test
 
         [TestMethod]
         public void Validate_Credentials_Test()
-        {            
-            AuthenticateResponse response = SecurityManager.ValidateCredentials("b25eaff2-35f4-4d79-9ea8-5dc8b7a4cfe1", secToken, "12345", "NG");
-            Assert.IsTrue(response.UserID != Guid.Empty);
+        {
+            AuthenticateResponse response = SecurityManager.ValidateCredentials("bdd78ca7-405e-4999-be4c-602f3b0af783", secToken, "12345", "NG");
+            Assert.IsTrue(response.UserId != string.Empty);
         }
 
         [TestMethod]
         public void Validate_Credentials_Test_Fail()
         {
             AuthenticateResponse response = SecurityManager.ValidateCredentials("abcxyz5", secToken, "12345", "NG");
-            Assert.IsTrue(response.UserID == Guid.Empty);
+            Assert.IsTrue(response.UserId == string.Empty);
         }
 
         [TestMethod]
         public void IsTokenExpired_Test()
         {
-            ValidateTokenRequest request = new ValidateTokenRequest { Context = "NG", Token = "abc", Version = "v1" };
-            ValidateTokenResponse response = SecurityManager.ValidateToken(request, secToken);
+            ValidateTokenRequest request = new ValidateTokenRequest { Context = "NG", Token = "531a1fedd6a4850f643204e0", Version = 1 };
+            ValidateTokenResponse response = SecurityManager.ValidateToken(request, "Engineer");
         }
 
         [TestMethod]
         public void Logout_Test()
         {
-            LogoutRequest request = new LogoutRequest { Context = "NG", Token = "52a87fe2d6a4850a8cd99ed5" };
-            LogoutResponse response = SecurityManager.Logout(request, secToken);
+            LogoutRequest request = new LogoutRequest { Context = "NG", Token = "531ddd4ed6a4850398308056" };
+            LogoutResponse response = SecurityManager.Logout(request, "Engineer");
         }
 
     }

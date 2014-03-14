@@ -17,7 +17,7 @@ namespace Phytel.API.AppDomain.Security.DTO
         [ApiMember(Name = "Context", Description = "Context Requesting Access", ParameterType = "property", DataType = "string", IsRequired = true)]
         public string Context { get; set; }
 
-        [ApiMember(Name = "Version", Description = "Version of the API being called", ParameterType = "property", DataType = "string", IsRequired = false)]
-        public string Version { get; set; }
+        [ApiMember(Name = "Version", Description = "Version of the API being called", ParameterType = "property", DataType = "double", IsRequired = false)]
+        public double Version { get; set; }
     }
 }

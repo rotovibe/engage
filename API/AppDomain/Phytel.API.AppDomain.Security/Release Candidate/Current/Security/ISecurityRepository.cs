@@ -8,7 +8,7 @@ namespace Phytel.API.AppDomain.Security
         AuthenticateResponse LoginUser(string token, string securityToken);
         AuthenticateResponse LoginUser(AuthenticateResponse existingReponse, string securityToken, string apiKey, string productName);
         UserAuthenticateResponse LoginUser(string userName, string password, string securityToken, string apiKey, string productName);
-        ValidateTokenResponse Validate(string token, string securityToken, string productName);
-        LogoutResponse Logout(string token, string securityToken, string context);
+        ValidateTokenResponse Validate(ValidateTokenRequest request, string securityToken);
+        LogoutResponse Logout(string token, string securityToken, string context, string contractNumber);
     }
 }

@@ -9,10 +9,11 @@ namespace Phytel.API.AppDomain.Security.DTO
     {
         public string UserName { get; set; }
         public string Name { get; set; }
+        public string UserId { get; set; }
         public int SessionTimeout { get; set; }
         public string APIToken { get; set; }
         public List<ContractInfo> Contracts { get; set; }
         public ResponseStatus Status { get; set; }
-        public string Version { get; set; }
+        public double Version { get; set; }
     }
 }

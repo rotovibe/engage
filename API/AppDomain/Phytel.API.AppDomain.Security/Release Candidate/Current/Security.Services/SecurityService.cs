@@ -38,23 +38,25 @@ namespace Phytel.API.AppDomain.Security.Service
 
         public UserAuthenticateResponse Post(UserAuthenticateRequest request)
         {
-            UserAuthenticateResponse response = new UserAuthenticateResponse();
-            try
-            {
-                //build the token from the user authentication request remote machine for additional security
-                //this will then be passed in from calling domains via the header for validation
-                string securityToken = BuildSecurityToken();
+            throw new NotImplementedException();
 
-                // validate user against apiuser datastore
-                response = SecurityManager.ValidateCredentials(request.UserName, request.Password, securityToken, request.APIKey, request.Context);
-                return response;
-            }
-            catch (Exception ex)
-            {
-                //TODO: Log this to the SQL database via ASE
-                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
-                return response;
-            }
+            //UserAuthenticateResponse response = new UserAuthenticateResponse();
+            //try
+            //{
+            //    //build the token from the user authentication request remote machine for additional security
+            //    //this will then be passed in from calling domains via the header for validation
+            //    string securityToken = BuildSecurityToken();
+
+            //    // validate user against apiuser datastore
+            //    response = SecurityManager.ValidateCredentials(request.UserName, request.Password, securityToken, request.APIKey, request.Context);
+            //    return response;
+            //}
+            //catch (Exception ex)
+            //{
+            //    //TODO: Log this to the SQL database via ASE
+            //    CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+            //    return response;
+            //}
         }
 
         public ValidateTokenResponse Post(ValidateTokenRequest request)
@@ -69,11 +71,9 @@ namespace Phytel.API.AppDomain.Security.Service
                 response = SecurityManager.ValidateToken(request, securityToken);
                 return response;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                //TODO: Log this to the SQL database via ASE
-                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
-                return response;
+                throw;
             }
         }
 
@@ -82,8 +82,10 @@ namespace Phytel.API.AppDomain.Security.Service
             LogoutResponse response = new LogoutResponse();
             try
             {
-                string securityToken = HttpContext.Current.Request.Headers.Get(_phytelSecurityToken);
-
+                //build the token from the user authentication request remote machine for additional security
+                //this will then be passed in from calling domains via the header for validation
+                string securityToken = BuildSecurityToken();
+                request.Token = base.Request.Headers["Token"] as string;
                 response = SecurityManager.Logout(request, securityToken);
                 return response;
             }

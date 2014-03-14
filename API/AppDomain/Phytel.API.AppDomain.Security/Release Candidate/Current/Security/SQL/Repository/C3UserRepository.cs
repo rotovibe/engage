@@ -58,6 +58,8 @@ namespace Phytel.API.AppDomain.Security
             throw new NotImplementedException();
         }
 
+        public string UserId { get; set; }
+
         public DTO.AuthenticateResponse LoginUser(string token, string securityToken)
         {
             try
@@ -77,7 +79,7 @@ namespace Phytel.API.AppDomain.Security
 
                 while (reader.Read())
                 {
-                    response.UserID = reader.GetGuid(colUserId);
+                    response.SQLUserID = reader.GetGuid(colUserId).ToString();
                     response.UserName = reader.GetString(colUserName);
                     response.FirstName = reader.GetString(colFirstName);
                     response.LastName = reader.GetString(colLastName);
@@ -121,12 +123,12 @@ namespace Phytel.API.AppDomain.Security
             throw new NotImplementedException();
         }
 
-        public DTO.ValidateTokenResponse Validate(string token, string securityToken, string productName)
+        public DTO.ValidateTokenResponse Validate(ValidateTokenRequest request, string securityToken)
         {
             throw new NotImplementedException();
         }
 
-        public DTO.LogoutResponse Logout(string token, string securityToken, string productName)
+        public DTO.LogoutResponse Logout(string token, string securityToken, string productName, string contractNumber)
         {
             throw new NotImplementedException();
         }
