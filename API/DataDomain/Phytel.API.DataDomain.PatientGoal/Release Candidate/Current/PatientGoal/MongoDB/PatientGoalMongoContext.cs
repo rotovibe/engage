@@ -10,7 +10,7 @@ namespace Phytel.API.DataDomain.PatientGoal
         private static string COLL_PatientGoalBarrierS = "PatientBarrier";
         private static string COLL_PatientGoalTaskS = "PatientTask";
         private static string COLL_PatientGoalInterventionS = "PatientIntervention";
-        private static string COLL_Attributes = "Attribute";
+        private static string COLL_Attributes = "GoalAttribute";
 
         public PatientGoalMongoContext(string contractDBName)
             : base(contractDBName, true)

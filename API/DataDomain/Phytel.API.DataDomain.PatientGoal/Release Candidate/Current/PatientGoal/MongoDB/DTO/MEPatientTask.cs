@@ -13,7 +13,16 @@ namespace Phytel.API.DataDomain.PatientGoal.DTO
     [MongoIndex(Keys = new string[] { PatientGoalIdProperty, DeleteFlagProperty }, Unique = false)]
     public class MEPatientTask : GoalBase, IMongoEntity<ObjectId>, IMEEntity
     {
-        public MEPatientTask() { Id = ObjectId.GenerateNewId(); }
+        public MEPatientTask(string userId)
+        {
+            Id = ObjectId.GenerateNewId();
+            Version = 1.0;
+            RecordCreatedBy = ObjectId.Parse(userId);
+            RecordCreatedOn = DateTime.UtcNow;
+        }
+
+        public const string RecordCreatedByProperty = "rcby";
+        public const string RecordCreatedOnProperty = "rcon";
 
         public const string IdProperty = "_id";
         [BsonId]
@@ -37,7 +46,7 @@ namespace Phytel.API.DataDomain.PatientGoal.DTO
         public const string TargetDateProperty = "td";
         [BsonElement(TargetDateProperty)]
         [BsonIgnoreIfNull(true)]
-        [BsonDateTimeOptions(Kind = System.DateTimeKind.Local)]
+        [BsonDateTimeOptions(Kind = System.DateTimeKind.Utc)]
         public DateTime? TargetDate { get; set; }
 
         public const string AttributesProperty = "attr";
@@ -48,24 +57,20 @@ namespace Phytel.API.DataDomain.PatientGoal.DTO
         public const string BarriersProperty = "bar";
         [BsonElement(BarriersProperty)]
         [BsonIgnoreIfNull(false)]
-        public List<ObjectId> Barriers { get; set; }
+        public List<ObjectId> BarrierIds { get; set; }
 
         #region Standard IMongoEntity Implementation
-        public const string ExtraElementsProperty = "ex";
-        [BsonElement(ExtraElementsProperty)]
-        [BsonExtraElements()]
-        [BsonIgnoreIfNull(true)]
-        public Dictionary<string, object> ExtraElements { get; set; }
+        [BsonExtraElements]
+        public BsonDocument ExtraElements { get; set; }
 
         public const string VersionProperty = "v";
         [BsonElement(VersionProperty)]
-        [BsonDefaultValue("v1")]
-        public string Version { get; set; }
+        [BsonDefaultValue(1.0)]
+        public double Version { get; set; }
 
         public const string UpdatedByProperty = "uby";
         [BsonElement(UpdatedByProperty)]
-        [BsonDefaultValue("-100")]
-        public string UpdatedBy { get; set; }
+        public ObjectId? UpdatedBy { get; set; }
 
         public const string DeleteFlagProperty = "del";
         [BsonElement(DeleteFlagProperty)]
@@ -75,14 +80,23 @@ namespace Phytel.API.DataDomain.PatientGoal.DTO
         public const string TTLDateProperty = "ttl";
         [BsonElement(TTLDateProperty)]
         [BsonIgnoreIfNull(true)]
-        [BsonDateTimeOptions(Kind = System.DateTimeKind.Local)]
+        [BsonDateTimeOptions(Kind = System.DateTimeKind.Utc)]
         public System.DateTime? TTLDate { get; set; }
 
         public const string LastUpdatedOnProperty = "uon";
         [BsonElement(LastUpdatedOnProperty)]
         [BsonIgnoreIfNull(true)]
-        [BsonDateTimeOptions(Kind = System.DateTimeKind.Local)]
+        [BsonDateTimeOptions(Kind = System.DateTimeKind.Utc)]
         public System.DateTime? LastUpdatedOn { get; set; }
+
+        [BsonIgnoreIfNull(true)]
+        [BsonElement(RecordCreatedByProperty)]
+        public ObjectId RecordCreatedBy { get; private set; }
+
+        [BsonIgnoreIfNull(true)]
+        [BsonElement(RecordCreatedOnProperty)]
+        [BsonDateTimeOptions(Kind = System.DateTimeKind.Utc)]
+        public System.DateTime RecordCreatedOn { get; private set; }
         #endregion
     }
 }

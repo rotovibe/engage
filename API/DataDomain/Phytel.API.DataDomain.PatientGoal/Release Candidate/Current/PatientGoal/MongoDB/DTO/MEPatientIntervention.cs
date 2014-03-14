@@ -18,7 +18,6 @@ namespace Phytel.API.DataDomain.PatientGoal.DTO
         public const string IdProperty = "_id";
 
         #region Standard IMongoEntity Constants
-        public const string ExtraElementsProperty = "ex";
         public const string VersionProperty = "v";
         public const string UpdatedByProperty = "uby";
         public const string DeleteFlagProperty = "del";
@@ -55,18 +54,15 @@ namespace Phytel.API.DataDomain.PatientGoal.DTO
         public InterventionStatus Status { get; set; }
 
         #region Standard IMongoEntity Implementation
-        [BsonElement(ExtraElementsProperty)]
-        [BsonExtraElements()]
-        [BsonIgnoreIfNull(true)]
-        public Dictionary<string, object> ExtraElements { get; set; }
+        [BsonExtraElements]
+        public BsonDocument ExtraElements { get; set; }
 
         [BsonElement(VersionProperty)]
-        [BsonDefaultValue("v1")]
-        public string Version { get; set; }
+        [BsonDefaultValue(1.0)]
+        public double Version { get; set; }
 
         [BsonElement(UpdatedByProperty)]
-        [BsonDefaultValue("-100")]
-        public string UpdatedBy { get; set; }
+        public ObjectId? UpdatedBy { get; set; }
 
         [BsonElement(DeleteFlagProperty)]
         [BsonDefaultValue(false)]
@@ -74,12 +70,12 @@ namespace Phytel.API.DataDomain.PatientGoal.DTO
 
         [BsonElement(TTLDateProperty)]
         [BsonIgnoreIfNull(true)]
-        [BsonDateTimeOptions(Kind = System.DateTimeKind.Local)]
+        [BsonDateTimeOptions(Kind = System.DateTimeKind.Utc)]
         public System.DateTime? TTLDate { get; set; }
 
         [BsonElement(LastUpdatedOnProperty)]
         [BsonIgnoreIfNull(true)]
-        [BsonDateTimeOptions(Kind = System.DateTimeKind.Local)]
+        [BsonDateTimeOptions(Kind = System.DateTimeKind.Utc)]
         public System.DateTime? LastUpdatedOn { get; set; }
         #endregion
     }

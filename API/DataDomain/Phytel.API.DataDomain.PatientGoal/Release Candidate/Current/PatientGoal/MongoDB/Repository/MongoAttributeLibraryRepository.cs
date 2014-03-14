@@ -14,6 +14,7 @@ using MongoDB.Bson;
 using Phytel.API.Common;
 using Phytel.API.Common.Data;
 using Phytel.API.DataDomain.PatientGoal;
+using MongoDB.Bson.Serialization;
 
 namespace Phytel.API.DataDomain.PatientGoal
 {
@@ -24,6 +25,17 @@ namespace Phytel.API.DataDomain.PatientGoal
         public MongoAttributeLibraryRepository(string contractDBName)
         {
             _dbName = contractDBName;
+
+            #region Register ClassMap
+            if (BsonClassMap.IsClassMapRegistered(typeof(GoalBase)) == false)
+                BsonClassMap.RegisterClassMap<GoalBase>();
+
+            if (BsonClassMap.IsClassMapRegistered(typeof(MEAttributeLibrary)) == false)
+                BsonClassMap.RegisterClassMap<MEAttributeLibrary>();
+
+            if (BsonClassMap.IsClassMapRegistered(typeof(MAttribute)) == false)
+                BsonClassMap.RegisterClassMap<MAttribute>();
+            #endregion
         }
 
         public object Insert(object newEntity)
@@ -82,7 +94,6 @@ namespace Phytel.API.DataDomain.PatientGoal
                 IMongoQuery mQuery = Query.And(queries);
                 using (PatientGoalMongoContext ctx = new PatientGoalMongoContext(_dbName))
                 {
-
                     List<MEAttributeLibrary> meAttributes = ctx.AttributesLibrary.Collection.Find(mQuery).ToList();
                     if (meAttributes != null)
                     {
@@ -106,7 +117,9 @@ namespace Phytel.API.DataDomain.PatientGoal
                 }
                 return customAttributesList;
             }
-            catch (Exception ex) { throw ex; };
+            catch (Exception) { throw; };
         }
+
+        public string UserId { get; set; }
     }
 }

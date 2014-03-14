@@ -31,7 +31,7 @@ namespace Phytel.API.DataDomain.PatientGoal.Test
         [TestMethod]
         public void InitializePatientGoal()
         {
-            PutInitializeGoalDataRequest request = new PutInitializeGoalDataRequest { PatientId = "52f55874072ef709f84e68c5" };
+            PutInitializeGoalDataRequest request = new PutInitializeGoalDataRequest { PatientId = "531f2dcd072ef727c4d29fb0" };
 
             PutInitializeGoalDataResponse response = PatientGoalDataManager.InitializeGoal(request);
 

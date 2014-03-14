@@ -15,6 +15,8 @@ using Phytel.API.Common;
 using Phytel.API.Common.Data;
 using Phytel.API.DataDomain.PatientGoal;
 using System.Configuration;
+using Phytel.API.DataAudit;
+using MongoDB.Bson.Serialization;
 
 namespace Phytel.API.DataDomain.PatientGoal
 {
@@ -27,6 +29,14 @@ namespace Phytel.API.DataDomain.PatientGoal
         public MongoPatientTaskRepository(string contractDBName)
         {
             _dbName = contractDBName;
+
+            #region Register ClassMap
+            if (BsonClassMap.IsClassMapRegistered(typeof(GoalBase)) == false)
+                BsonClassMap.RegisterClassMap<GoalBase>();
+
+            if (BsonClassMap.IsClassMapRegistered(typeof(MEPatientTask)) == false)
+                BsonClassMap.RegisterClassMap<MEPatientTask>();
+            #endregion
         }
 
         public object Insert(object newEntity)
@@ -36,7 +46,7 @@ namespace Phytel.API.DataDomain.PatientGoal
                 throw new NotImplementedException();
                 // code here //
             }
-            catch (Exception ex) { throw ex; }
+            catch (Exception) { throw; }
         }
 
         public object InsertAll(List<object> entities)
@@ -46,7 +56,7 @@ namespace Phytel.API.DataDomain.PatientGoal
                 throw new NotImplementedException();
                 // code here //
             }
-            catch (Exception ex) { throw ex; }
+            catch (Exception) { throw; }
         }
 
         public void Delete(object entity)
@@ -62,13 +72,20 @@ namespace Phytel.API.DataDomain.PatientGoal
                     var uv = new List<MB.UpdateBuilder>();
                     uv.Add(MB.Update.Set(MEPatientTask.TTLDateProperty, System.DateTime.UtcNow.AddDays(_expireDays)));
                     uv.Add(MB.Update.Set(MEPatientTask.DeleteFlagProperty, true));
-                    uv.Add(MB.Update.Set(MEPatientTask.UpdatedByProperty, request.UserId));
+                    uv.Add(MB.Update.Set(MEPatientTask.UpdatedByProperty, ObjectId.Parse(this.UserId)));
+                    uv.Add(MB.Update.Set(MEPatientTask.LastUpdatedOnProperty, DateTime.UtcNow));
 
                     IMongoUpdate update = MB.Update.Combine(uv);
-                    WriteConcernResult res = ctx.PatientTasks.Collection.Update(q, update);
+                    ctx.PatientTasks.Collection.Update(q, update);
+
+                    AuditHelper.LogDataAudit(this.UserId, 
+                                            MongoCollectionName.PatientTask.ToString(), 
+                                            request.TaskId.ToString(), 
+                                            Common.DataAuditType.Delete, 
+                                            request.ContractNumber);
                 }
             }
-            catch (Exception ex) { throw; }
+            catch (Exception) { throw; }
         }
 
         public void DeleteAll(List<object> entities)
@@ -78,7 +95,7 @@ namespace Phytel.API.DataDomain.PatientGoal
                 throw new NotImplementedException();
                 // code here //
             }
-            catch (Exception ex) { throw ex; }
+            catch (Exception) { throw; }
         }
 
         public object FindByID(string entityID)
@@ -88,7 +105,7 @@ namespace Phytel.API.DataDomain.PatientGoal
                 throw new NotImplementedException();
                 // code here //
             }
-            catch (Exception ex) { throw ex; }
+            catch (Exception) { throw; }
         }
 
         public Tuple<string, IEnumerable<object>> Select(Interface.APIExpression expression)
@@ -108,7 +125,7 @@ namespace Phytel.API.DataDomain.PatientGoal
                 throw new NotImplementedException();
                 // code here //
             }
-            catch (Exception ex) { throw ex; }
+            catch (Exception) { throw; }
         }
 
         public object Update(object entity)
@@ -134,7 +151,7 @@ namespace Phytel.API.DataDomain.PatientGoal
                     var uv = new List<MB.UpdateBuilder>();
                     uv.Add(MB.Update.Set(MEPatientTask.TTLDateProperty, BsonNull.Value));
                     uv.Add(MB.Update.Set(MEPatientTask.DeleteFlagProperty, false));
-                    uv.Add(MB.Update.Set(MEPatientTask.UpdatedByProperty, ptr.UserId));
+                    uv.Add(MB.Update.Set(MEPatientTask.UpdatedByProperty, ObjectId.Parse(this.UserId)));
                     uv.Add(MB.Update.Set(MEPatientTask.VersionProperty, ptr.Version));
                     uv.Add(MB.Update.Set(MEPatientTask.LastUpdatedOnProperty, System.DateTime.UtcNow));
                     if (pt.Description != null) uv.Add(MB.Update.Set(MEPatientTask.DescriptionProperty, pt.Description));
@@ -144,16 +161,22 @@ namespace Phytel.API.DataDomain.PatientGoal
                     if (pt.TargetDate != null) uv.Add(MB.Update.Set(MEPatientTask.TargetDateProperty, pt.TargetDate));
                     if (pt.TargetValue != null) uv.Add(MB.Update.Set(MEPatientTask.TargetValueProperty, pt.TargetValue));
                     if (pt.CustomAttributes != null) { uv.Add(MB.Update.SetWrapped<List<MAttribute>>(MEPatientTask.AttributesProperty, DTOUtil.GetAttributes(pt.CustomAttributes))); }
-                    if (pt.Barriers != null) { uv.Add(MB.Update.SetWrapped<List<ObjectId>>(MEPatientTask.BarriersProperty, DTOUtil.ConvertObjectId(pt.Barriers))); }
+                    if (pt.BarrierIds != null) { uv.Add(MB.Update.SetWrapped<List<ObjectId>>(MEPatientTask.BarriersProperty, DTOUtil.ConvertObjectId(pt.BarrierIds))); }
 
                     IMongoUpdate update = MB.Update.Combine(uv);
-                    WriteConcernResult res = ctx.PatientTasks.Collection.Update(q, update);
-                    if (res.Ok)
-                        result = true;
+                    ctx.PatientTasks.Collection.Update(q, update);
+
+                    AuditHelper.LogDataAudit(this.UserId, 
+                                            MongoCollectionName.PatientTask.ToString(), 
+                                            pt.Id, 
+                                            Common.DataAuditType.Update, 
+                                            ptr.ContractNumber);
+
+                    result = true;
                 }
                 return result as object;
             }
-            catch (Exception ex) { throw; }
+            catch (Exception) { throw; }
         }
 
         public void CacheByID(List<string> entityIDs)
@@ -163,39 +186,44 @@ namespace Phytel.API.DataDomain.PatientGoal
                 throw new NotImplementedException();
                 // code here //
             }
-            catch (Exception ex) { throw; }
+            catch (Exception) { throw; }
         }
 
         public object Initialize(object newEntity)
         {
             PutInitializeTaskRequest ptr = (PutInitializeTaskRequest)newEntity;
             PatientTaskData task = null;
+            MEPatientTask pat = null;
             try
             {
-                MEPatientTask pat = new MEPatientTask
+                pat = new MEPatientTask(this.UserId)
                 {
                     Id = ObjectId.GenerateNewId(),
                     PatientGoalId = ObjectId.Parse(ptr.PatientGoalId),
                     TTLDate = System.DateTime.UtcNow.AddDays(_initializeDays),
                     StatusDate = DateTime.UtcNow,
-                    UpdatedBy = ptr.UserId,
-                    LastUpdatedOn = DateTime.UtcNow
+                    LastUpdatedOn = DateTime.UtcNow,
+                    UpdatedBy = ObjectId.Parse(this.UserId)
                 };
 
                 using (PatientGoalMongoContext ctx = new PatientGoalMongoContext(_dbName))
                 {
-                    WriteConcernResult wcr = ctx.PatientTasks.Collection.Insert(pat);
-                    if (wcr.Ok)
+                    ctx.PatientTasks.Collection.Insert(pat);
+
+                    AuditHelper.LogDataAudit(this.UserId, 
+                                            MongoCollectionName.PatientTask.ToString(), 
+                                            pat.Id.ToString(), 
+                                            Common.DataAuditType.Insert, 
+                                            ptr.ContractNumber);
+
+                    task = new PatientTaskData
                     {
-                        task = new PatientTaskData
-                        {
-                            Id = pat.Id.ToString()
-                        };
-                    }
+                        Id = pat.Id.ToString()
+                    };
                 }
                 return task;
             }
-            catch (Exception ex) { throw; }
+            catch (Exception) { throw; }
         }
 
         public IEnumerable<object> Find(string Id)
@@ -223,7 +251,7 @@ namespace Phytel.API.DataDomain.PatientGoal
                                 PatientGoalId = b.PatientGoalId.ToString(),
                                 StatusId = ((int)b.Status),
                                 TargetDate = b.TargetDate,
-                                Barriers = Helper.ConvertToStringList(b.Barriers),
+                                BarrierIds = Helper.ConvertToStringList(b.BarrierIds),
                                 Description = b.Description,
                                 StatusDate = b.StatusDate,
                                 StartDate = b.StartDate,
@@ -235,7 +263,7 @@ namespace Phytel.API.DataDomain.PatientGoal
                 }
                 return tasksDataList;
             }
-            catch (Exception ex) { throw ex; }
+            catch (Exception) { throw; }
         }
 
         public IEnumerable<object> FindByGoalId(string Id)
@@ -263,7 +291,7 @@ namespace Phytel.API.DataDomain.PatientGoal
                                 StatusId = ((int)b.Status),
                                 TargetDate = b.TargetDate,
                                 //Attributes = DTOUtil.ConvertToAttributeDataList(b.Attributes),
-                                Barriers = Helper.ConvertToStringList(b.Barriers),
+                                BarrierIds = Helper.ConvertToStringList(b.BarrierIds),
                                 Description = b.Description,
                                 StatusDate = b.StatusDate,
                                 StartDate = b.StartDate
@@ -274,7 +302,9 @@ namespace Phytel.API.DataDomain.PatientGoal
                 }
                 return tasksDataList;
             }
-            catch (Exception ex) { throw ex; }
+            catch (Exception) { throw; }
         }
+
+        public string UserId { get; set; }
     }
 }
