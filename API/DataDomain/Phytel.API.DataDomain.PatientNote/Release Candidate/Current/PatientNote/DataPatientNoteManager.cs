@@ -11,7 +11,8 @@ namespace Phytel.API.DataDomain.PatientNote
             string noteId = string.Empty;
             try
             {
-                IPatientNoteRepository<PutPatientNoteDataResponse> repo = PatientNoteRepositoryFactory<PutPatientNoteDataResponse>.GetPatientNoteRepository(request.ContractNumber, request.Context);
+                IPatientNoteRepository<PutPatientNoteDataResponse> repo = PatientNoteRepositoryFactory<PutPatientNoteDataResponse>.GetPatientNoteRepository(request.ContractNumber, request.Context, request.UserId);
+
                 noteId = (string)repo.Insert(request);
             }
             catch (Exception ex)
@@ -26,7 +27,8 @@ namespace Phytel.API.DataDomain.PatientNote
             try
             {
                 PatientNoteData response = null;
-                IPatientNoteRepository<PatientNoteData> repo = PatientNoteRepositoryFactory<PatientNoteData>.GetPatientNoteRepository(request.ContractNumber, request.Context);
+                IPatientNoteRepository<PatientNoteData> repo = PatientNoteRepositoryFactory<PatientNoteData>.GetPatientNoteRepository(request.ContractNumber, request.Context, request.UserId);
+
                 response = repo.FindByID(request.Id) as PatientNoteData;
                 return response;
             }
@@ -41,7 +43,8 @@ namespace Phytel.API.DataDomain.PatientNote
             try
             {
                 List<PatientNoteData> response = null;
-                IPatientNoteRepository<List<PatientNoteData>> repo = PatientNoteRepositoryFactory<List<PatientNoteData>>.GetPatientNoteRepository(request.ContractNumber, request.Context);
+                IPatientNoteRepository<List<PatientNoteData>> repo = PatientNoteRepositoryFactory<List<PatientNoteData>>.GetPatientNoteRepository(request.ContractNumber, request.Context, request.UserId);
+
                 response = repo.FindByPatientId(request) as List<PatientNoteData>;
                 return response;
             }
@@ -55,7 +58,8 @@ namespace Phytel.API.DataDomain.PatientNote
         {
             try
             {
-                IPatientNoteRepository<DeletePatientNoteDataResponse> repo = PatientNoteRepositoryFactory<DeletePatientNoteDataResponse>.GetPatientNoteRepository(request.ContractNumber, request.Context);
+                IPatientNoteRepository<DeletePatientNoteDataResponse> repo = PatientNoteRepositoryFactory<DeletePatientNoteDataResponse>.GetPatientNoteRepository(request.ContractNumber, request.Context, request.UserId);
+
                 repo.Delete(request);
                 return true;
             }

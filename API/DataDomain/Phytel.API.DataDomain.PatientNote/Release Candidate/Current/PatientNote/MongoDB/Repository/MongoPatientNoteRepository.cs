@@ -14,6 +14,8 @@ using MongoDB.Bson;
 using Phytel.API.Common;
 using Phytel.API.Common.Data;
 using System.Configuration;
+using Phytel.API.DataAudit;
+using MongoDB.Bson.Serialization;
 
 namespace Phytel.API.DataDomain.PatientNote
 {
@@ -25,6 +27,11 @@ namespace Phytel.API.DataDomain.PatientNote
         public MongoPatientNoteRepository(string contractDBName)
         {
             _dbName = contractDBName;
+
+            #region Register ClassMap
+            if (BsonClassMap.IsClassMapRegistered(typeof(MEPatientNote)) == false)
+                BsonClassMap.RegisterClassMap<MEPatientNote>();
+            #endregion
         }
 
         public object Insert(object newEntity)
@@ -32,35 +39,38 @@ namespace Phytel.API.DataDomain.PatientNote
             PutPatientNoteDataRequest request = (PutPatientNoteDataRequest)newEntity;
             PatientNoteData noteData = request.PatientNote;
             string noteId = string.Empty;
+            MEPatientNote meN = null;
             try
             {
                 if(noteData != null)
                 {
-                    MEPatientNote meN = new MEPatientNote
+                    meN = new MEPatientNote(this.UserId)
                     {
                         Id = ObjectId.GenerateNewId(),
                         PatientId = ObjectId.Parse(noteData.PatientId),
                         Text = noteData.Text,
-                        Programs = Helper.ConvertToObjectIdList(noteData.ProgramIds),
-                        CreatedBy = Guid.Parse(noteData.CreatedById),
-                        CreatedOn = DateTime.UtcNow,
+                        ProgramIds = Helper.ConvertToObjectIdList(noteData.ProgramIds),
                         Version = request.Version,
-                        UpdatedBy = request.UserId,
+                        UpdatedBy = ObjectId.Parse(this.UserId),
                         LastUpdatedOn = DateTime.UtcNow
                     };
 
                     using (PatientNoteMongoContext ctx = new PatientNoteMongoContext(_dbName))
                     {
-                        WriteConcernResult wcr = ctx.PatientNotes.Collection.Insert(meN);
-                        if (wcr.Ok)
-                        {
-                            noteId = meN.Id.ToString();
-                        }
+                        ctx.PatientNotes.Collection.Insert(meN);
+
+                        AuditHelper.LogDataAudit(this.UserId, 
+                                                MongoCollectionName.PatientNote.ToString(), 
+                                                meN.Id.ToString(), 
+                                                Common.DataAuditType.Insert, 
+                                                request.ContractNumber);
+
+                        noteId = meN.Id.ToString();
                     }
                 }
                 return noteId;
             }
-            catch (Exception ex) { throw ex; }
+            catch (Exception) { throw; }
         }
 
         public object InsertAll(List<object> entities)
@@ -70,7 +80,7 @@ namespace Phytel.API.DataDomain.PatientNote
                 throw new NotImplementedException();
                 // code here //
             }
-            catch (Exception ex) { throw ex; }
+            catch (Exception) { throw; }
         }
 
         public void Delete(object entity)
@@ -86,13 +96,20 @@ namespace Phytel.API.DataDomain.PatientNote
                     uv.Add(MB.Update.Set(MEPatientNote.TTLDateProperty, DateTime.UtcNow.AddDays(_expireDays)));
                     uv.Add(MB.Update.Set(MEPatientNote.LastUpdatedOnProperty, DateTime.UtcNow));
                     uv.Add(MB.Update.Set(MEPatientNote.DeleteFlagProperty, true));
-                    uv.Add(MB.Update.Set(MEPatientNote.UpdatedByProperty, request.UserId));
+                    uv.Add(MB.Update.Set(MEPatientNote.UpdatedByProperty, ObjectId.Parse(this.UserId)));
 
                     IMongoUpdate update = MB.Update.Combine(uv);
                     ctx.PatientNotes.Collection.Update(q, update);
+
+                    AuditHelper.LogDataAudit(this.UserId, 
+                                            MongoCollectionName.PatientNote.ToString(), 
+                                            request.Id.ToString(), 
+                                            Common.DataAuditType.Delete, 
+                                            request.ContractNumber);
+                
                 }
             }
-            catch (Exception ex) { throw ex; }
+            catch (Exception) { throw; }
         }
 
         public void DeleteAll(List<object> entities)
@@ -102,7 +119,7 @@ namespace Phytel.API.DataDomain.PatientNote
                 throw new NotImplementedException();
                 // code here //
             }
-            catch (Exception ex) { throw ex; }
+            catch (Exception) { throw; }
         }
 
         public object FindByID(string entityID)
@@ -124,15 +141,15 @@ namespace Phytel.API.DataDomain.PatientNote
                             Id = meN.Id.ToString(),
                             PatientId = meN.PatientId.ToString(),
                             Text = meN.Text,
-                            ProgramIds = Helper.ConvertToStringList(meN.Programs),
-                            CreatedOn = meN.CreatedOn,
-                            CreatedById = meN.CreatedBy.ToString().Replace("-", string.Empty).ToLower()
+                            ProgramIds = Helper.ConvertToStringList(meN.ProgramIds),
+                            CreatedOn = meN.RecordCreatedOn,
+                            CreatedById = meN.RecordCreatedBy.ToString()
                         };
                     }
                 }
                 return noteData;
             }
-            catch (Exception ex) { throw ex; }
+            catch (Exception) { throw; }
         }
 
         public Tuple<string, IEnumerable<object>> Select(Interface.APIExpression expression)
@@ -150,7 +167,7 @@ namespace Phytel.API.DataDomain.PatientNote
 
                 return new Tuple<string, IEnumerable<object>>(expression.ExpressionID, PatientNoteItems);
             }
-            catch (Exception ex) { throw ex; }
+            catch (Exception) { throw; }
         }
 
         public IEnumerable<object> SelectAll()
@@ -160,7 +177,7 @@ namespace Phytel.API.DataDomain.PatientNote
                 throw new NotImplementedException();
                 // code here //
             }
-            catch (Exception ex) { throw ex; }
+            catch (Exception) { throw; }
         }
 
         public object Update(object entity)
@@ -170,7 +187,7 @@ namespace Phytel.API.DataDomain.PatientNote
                 throw new NotImplementedException();
                 // code here //
             }
-            catch (Exception ex) { throw ex; }
+            catch (Exception) { throw; }
         }
 
         public void CacheByID(List<string> entityIDs)
@@ -180,7 +197,7 @@ namespace Phytel.API.DataDomain.PatientNote
                 throw new NotImplementedException();
                 // code here //
             }
-            catch (Exception ex) { throw ex; }
+            catch (Exception) { throw; }
         }
 
         public IEnumerable<object> FindByPatientId(object request)
@@ -195,7 +212,7 @@ namespace Phytel.API.DataDomain.PatientNote
                     queries.Add(Query.EQ(MEPatientNote.PatientIdProperty, ObjectId.Parse(dataRequest.PatientId)));
                     queries.Add(Query.EQ(MEPatientNote.DeleteFlagProperty, false));
                     IMongoQuery mQuery = Query.And(queries);
-                    List<MEPatientNote> meNotes = ctx.PatientNotes.Collection.Find(mQuery).OrderByDescending(o => o.CreatedOn).Take(dataRequest.Count).ToList();
+                    List<MEPatientNote> meNotes = ctx.PatientNotes.Collection.Find(mQuery).OrderByDescending(o => o.RecordCreatedOn).Take(dataRequest.Count).ToList();
                     if (meNotes != null && meNotes.Count > 0)
                     {
                         noteDataList = new List<PatientNoteData>();
@@ -205,16 +222,18 @@ namespace Phytel.API.DataDomain.PatientNote
                                 Id = meN.Id.ToString(),
                                 PatientId = meN.PatientId.ToString(),
                                 Text = meN.Text,
-                                ProgramIds = Helper.ConvertToStringList(meN.Programs),
-                                CreatedOn = meN.CreatedOn,
-                                CreatedById = meN.CreatedBy.ToString().Replace("-", string.Empty).ToLower()
+                                ProgramIds = Helper.ConvertToStringList(meN.ProgramIds),
+                                CreatedOn = meN.RecordCreatedOn,
+                                CreatedById = meN.RecordCreatedBy.ToString()
                             });
                         }
                     }
                 }
                 return noteDataList;
             }
-            catch (Exception ex) { throw ex; }
+            catch (Exception) { throw; }
         }
+
+        public string UserId { get; set; }
     }
 }
