@@ -88,7 +88,7 @@ namespace NGTestData
 
                 MEPatient patient = new MEPatient(txtUserID.Text)
                     {
-                        DisplayPatientSystemID = null,
+                        DisplayPatientSystemId = null,
                         FirstName = dr["FirstName"].ToString(),
                         LastName = dr["LastName"].ToString(),
                         Gender = dr["Gender"].ToString().ToUpper(),
@@ -117,7 +117,7 @@ namespace NGTestData
 
                 if (dsAddress.Tables[0].Rows.Count > 0)
                 {
-                    ObjectId stateID = states.Where(x => x.Code == dsAddress.Tables[0].Rows[0]["State"].ToString()).Select(y => y.DataID).FirstOrDefault();
+                    ObjectId stateID = states.Where(x => x.Code == dsAddress.Tables[0].Rows[0]["State"].ToString()).Select(y => y.DataId).FirstOrDefault();
 
                     addresses.Add(new Address
                     {
@@ -153,7 +153,7 @@ namespace NGTestData
                         PatientId = patient.Id,
                         Phones = phones,
                         PreferredName = string.Empty,
-                        TimeZone = ObjectId.Parse("52e1817dd433232028e9e39e"),
+                        TimeZoneId = ObjectId.Parse("52e1817dd433232028e9e39e"),
                         Modes = modes,
                         Version = 1.0
                     };
@@ -170,7 +170,7 @@ namespace NGTestData
                         LastUpdatedOn = DateTime.UtcNow
                     };
 
-                patient.DisplayPatientSystemID = patSystem.Id;
+                patient.DisplayPatientSystemId = patSystem.Id;
                 
                 patients.Add(patient);
                 patientSystems.Add(patSystem);
@@ -208,12 +208,12 @@ namespace NGTestData
                             Featured = true,
                             LastUpdatedOn = DateTime.UtcNow,
                             Level = 1,
-                            ProblemID = problems[probID].DataID,
+                            ProblemID = problems[probID].DataId,
                             StartDate = null,
                             TTLDate = null,
                             Version = 1.0
                         });
-                    currentPatientView.SearchFields.Add(new SearchField { Active = true, FieldName = "Problem", Value = problems[probID].DataID.ToString() });
+                    currentPatientView.SearchFields.Add(new SearchField { Active = true, FieldName = "Problem", Value = problems[probID].DataId.ToString() });
                 }
 
                 cohortPatients.Add(currentPatientView);
