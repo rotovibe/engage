@@ -220,7 +220,7 @@
             this.txtUserID.Name = "txtUserID";
             this.txtUserID.Size = new System.Drawing.Size(208, 22);
             this.txtUserID.TabIndex = 16;
-            this.txtUserID.Text = "531f2df9072ef727c4d2a3df";
+            this.txtUserID.Text = "000000000000000000000000";
             // 
             // Form1
             // 
