@@ -42,7 +42,7 @@ namespace Phytel.API.DataDomain.Patient.Test
             PutUpdatePatientDataRequest request = new PutUpdatePatientDataRequest
             {
                 Id = "531f2dce072ef727c4d2a065",
-                FullSSN = "888-88-8888",
+                FullSSN = "\"\"",
                 UserId = "531f2df5072ef727c4d2a3bc",
                 Priority = 1,
                 PreferredName = "\"\"",

@@ -630,7 +630,7 @@ namespace Phytel.API.DataDomain.Patient
                     if (request.FullSSN != null)
                     {
                         string fullSSN = request.FullSSN.Trim().Replace("-", string.Empty);
-                        if (fullSSN == "\"\"" || (fullSSN == "\'\'") || (fullSSN.Length == 0))
+                        if (fullSSN == "\"\"" || (fullSSN == "\'\'"))
                         {
                             updt.Set(MEPatient.FullSSNProperty, string.Empty);
                             updt.Set(MEPatient.LastFourSSNProperty, BsonNull.Value);
