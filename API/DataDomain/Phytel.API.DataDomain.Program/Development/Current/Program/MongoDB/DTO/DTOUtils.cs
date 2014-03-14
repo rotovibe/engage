@@ -602,10 +602,10 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
                             State = (ElementState)a.ElementState,
                             Enabled = a.Enabled,
                             Name = a.Name,
-                            Next = ObjectId.Parse(a.Next),
+                            Next = ParseObjectId(a.Next),
                             Objectives = GetObjectives(a.Objectives),
                             Order = a.Order,
-                            Previous = ObjectId.Parse(a.Previous),
+                            Previous = ParseObjectId(a.Previous),
                             SourceId = ObjectId.Parse(a.SourceId),
                             Spawn = GetSpawnElements(a.SpawnElement),
                             Status = (Status)a.Status
@@ -647,10 +647,10 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
                             Enabled = st.Enabled,
                             Header = st.Header,
                             IncludeTime = st.IncludeTime,
-                            Next = ObjectId.Parse(st.Next),
+                            Next = ParseObjectId(st.Next),
                             Notes = st.Notes,
                             Order = st.Order,
-                            Previous = ObjectId.Parse(st.Previous),
+                            Previous = ParseObjectId(st.Previous),
                             Question = st.Question,
                             SelectedResponseId = DTOUtils.ParseObjectId(st.SelectedResponseId),
                             SelectType = (SelectType)st.SelectType,
@@ -672,7 +672,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             }
         }
 
-        private static ObjectId? ParseObjectId(string p)
+        public static ObjectId? ParseObjectId(string p)
         {
             try
             {
@@ -814,8 +814,8 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
                         {
                             Id = ObjectId.Parse(m.Id),
                             DateCompleted = m.DateCompleted,
-                            Next = ObjectId.Parse(m.Next),
-                            Previous = ObjectId.Parse(m.Previous),
+                            Next = ParseObjectId(m.Next),
+                            Previous = ParseObjectId(m.Previous),
                             Spawn = DTOUtils.GetSpawnElements(m.SpawnElement),
                             Actions = DTOUtils.GetActionElements(m.Actions),
                             AssignedBy = m.AssignBy,
