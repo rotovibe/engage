@@ -44,7 +44,7 @@ namespace Phytel.API.DataDomain.CareMember
                         PatientId = ObjectId.Parse(careMemberData.PatientId),
                         ContactId = ObjectId.Parse(careMemberData.ContactId),
                         Primary = careMemberData.Primary,
-                        Type = ObjectId.Parse(careMemberData.TypeId),
+                        TypeId = ObjectId.Parse(careMemberData.TypeId),
                         Version = request.Version,
                         UpdatedBy = ObjectId.Parse(this.UserId),
                         LastUpdatedOn = DateTime.UtcNow
@@ -118,7 +118,7 @@ namespace Phytel.API.DataDomain.CareMember
                             PatientId = meCM.PatientId.ToString(),
                             ContactId = meCM.ContactId.ToString(),
                             Primary = meCM.Primary,
-                            TypeId = meCM.Type.ToString()
+                            TypeId = meCM.TypeId.ToString()
                         };
                     }
                 }
@@ -227,7 +227,7 @@ namespace Phytel.API.DataDomain.CareMember
                                 PatientId = meCM.PatientId.ToString(),
                                 ContactId = meCM.ContactId.ToString(),
                                 Primary = meCM.Primary,
-                                TypeId = meCM.Type.ToString()
+                                TypeId = meCM.TypeId.ToString()
                             });
                         }
                     }

@@ -25,7 +25,7 @@ namespace Phytel.API.DataDomain.CareMember.DTO
         public const string PatientIdProperty = "pid";
         public const string ContactIdProperty = "cid";
         public const string PrimaryProperty = "prim";
-        public const string TypeProperty = "type";
+        public const string TypeProperty = "typeid";
 
         #region Standard IMongoEntity Constants
         public const string VersionProperty = "v";
@@ -55,7 +55,7 @@ namespace Phytel.API.DataDomain.CareMember.DTO
 
         [BsonElement(TypeProperty)]
         [BsonIgnoreIfNull(false)]
-        public ObjectId Type { get; set; }
+        public ObjectId TypeId { get; set; }
 
         #region Standard IMongoEntity Implementation
         [BsonExtraElements]
