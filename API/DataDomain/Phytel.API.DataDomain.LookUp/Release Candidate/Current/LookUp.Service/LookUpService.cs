@@ -3,24 +3,36 @@ using System.Collections.Generic;
 using System.Net;
 using Phytel.API.DataDomain.LookUp;
 using Phytel.API.DataDomain.LookUp.DTO;
+using Phytel.API.Common.Format;
+using System.Configuration;
+using System.Web;
 
 namespace Phytel.API.DataDomain.Patient.Service
 {
     public class LookUpService : ServiceStack.ServiceInterface.Service
     {
+        private const string _phytelUserIDToken = "x-Phytel-UserID";
+
         #region Problems
         public GetProblemDataResponse Get(GetProblemDataRequest request)
         {
             GetProblemDataResponse response = new GetProblemDataResponse();
             try
             {
+                //Get the UserId from the Header and update the request object
+                request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
+                if (string.IsNullOrEmpty(request.UserId))
+                    throw new UnauthorizedAccessException("LookUpDD:Get()::Unauthorized Access");
+
                 response = LookUpDataManager.GetProblem(request);
+                response.Version = request.Version;
             }
             catch (Exception ex)
             {
-                //TODO: Log this to the SQL database via ASE
-                base.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-                response.Status = new ServiceStack.ServiceInterface.ServiceModel.ResponseStatus("Exception", ex.Message);
+                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+
+                string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
+                Common.Helper.LogException(int.Parse(aseProcessID), ex);
             }
             return response;
         }
@@ -30,13 +42,20 @@ namespace Phytel.API.DataDomain.Patient.Service
             GetAllProblemsDataResponse response = new GetAllProblemsDataResponse();
             try
             {
+                //Get the UserId from the Header and update the request object
+                request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
+                if (string.IsNullOrEmpty(request.UserId))
+                    throw new UnauthorizedAccessException("LookUpDD:Get()::Unauthorized Access");
+
                 response = LookUpDataManager.GetAllProblems(request);
+                response.Version = request.Version;
             }
             catch (Exception ex)
             {
-                //TODO: Log this to the SQL database via ASE
-                base.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-                response.Status = new ServiceStack.ServiceInterface.ServiceModel.ResponseStatus("Exception", ex.Message);
+                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+
+                string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
+                Common.Helper.LogException(int.Parse(aseProcessID), ex);
             }
             return response;
         }
@@ -46,13 +65,20 @@ namespace Phytel.API.DataDomain.Patient.Service
             SearchProblemsDataResponse response = new SearchProblemsDataResponse();
             try
             {
+                //Get the UserId from the Header and update the request object
+                request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
+                if (string.IsNullOrEmpty(request.UserId))
+                    throw new UnauthorizedAccessException("LookUpDD:Post()::Unauthorized Access");
+
                 response = LookUpDataManager.SearchProblem(request);
+                response.Version = request.Version;
             }
             catch (Exception ex)
             {
-                //TODO: Log this to the SQL database via ASE
-                base.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-                response.Status = new ServiceStack.ServiceInterface.ServiceModel.ResponseStatus("Exception", ex.Message);
+                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+
+                string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
+                Common.Helper.LogException(int.Parse(aseProcessID), ex);
             }
             return response;
         } 
@@ -64,14 +90,20 @@ namespace Phytel.API.DataDomain.Patient.Service
             GetObjectiveDataResponse response = new GetObjectiveDataResponse();
             try
             {
+                //Get the UserId from the Header and update the request object
+                request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
+                if (string.IsNullOrEmpty(request.UserId))
+                    throw new UnauthorizedAccessException("LookUpDD:Get()::Unauthorized Access");
+
                 response = LookUpDataManager.GetObjectiveByID(request);
                 response.Version = request.Version;
             }
             catch (Exception ex)
             {
-                //TODO: Log this to the SQL database via ASE
-                base.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-                response.Status = new ServiceStack.ServiceInterface.ServiceModel.ResponseStatus("Exception", ex.Message);
+                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+
+                string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
+                Common.Helper.LogException(int.Parse(aseProcessID), ex);
             }
             return response;
         } 
@@ -83,14 +115,20 @@ namespace Phytel.API.DataDomain.Patient.Service
             GetCategoryDataResponse response = new GetCategoryDataResponse();
             try
             {
+                //Get the UserId from the Header and update the request object
+                request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
+                if (string.IsNullOrEmpty(request.UserId))
+                    throw new UnauthorizedAccessException("LookUpDD:Get()::Unauthorized Access");
+
                 response = LookUpDataManager.GetCategoryByID(request);
                 response.Version = request.Version;
             }
             catch (Exception ex)
             {
-                //TODO: Log this to the SQL database via ASE
-                base.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-                response.Status = new ServiceStack.ServiceInterface.ServiceModel.ResponseStatus("Exception", ex.Message);
+                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+
+                string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
+                Common.Helper.LogException(int.Parse(aseProcessID), ex);
             }
             return response;
         } 
@@ -102,13 +140,20 @@ namespace Phytel.API.DataDomain.Patient.Service
             GetAllCommModesDataResponse response = new GetAllCommModesDataResponse();
             try
             {
+                //Get the UserId from the Header and update the request object
+                request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
+                if (string.IsNullOrEmpty(request.UserId))
+                    throw new UnauthorizedAccessException("LookUpDD:Get()::Unauthorized Access");
+
                 response = LookUpDataManager.GetAllCommModes(request);
+                response.Version = request.Version;
             }
             catch (Exception ex)
             {
-                //TODO: Log this to the SQL database via ASE
-                base.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-                response.Status = new ServiceStack.ServiceInterface.ServiceModel.ResponseStatus("Exception", ex.Message);
+                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+
+                string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
+                Common.Helper.LogException(int.Parse(aseProcessID), ex);
             }
             return response;
         }
@@ -118,13 +163,20 @@ namespace Phytel.API.DataDomain.Patient.Service
             GetAllStatesDataResponse response = new GetAllStatesDataResponse();
             try
             {
+                //Get the UserId from the Header and update the request object
+                request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
+                if (string.IsNullOrEmpty(request.UserId))
+                    throw new UnauthorizedAccessException("LookUpDD:Get()::Unauthorized Access");
+
                 response = LookUpDataManager.GetAllStates(request);
+                response.Version = request.Version;
             }
             catch (Exception ex)
             {
-                //TODO: Log this to the SQL database via ASE
-                base.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-                response.Status = new ServiceStack.ServiceInterface.ServiceModel.ResponseStatus("Exception", ex.Message);
+                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+
+                string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
+                Common.Helper.LogException(int.Parse(aseProcessID), ex);
             }
             return response;
         }
@@ -134,13 +186,20 @@ namespace Phytel.API.DataDomain.Patient.Service
             GetAllTimesOfDaysDataResponse response = new GetAllTimesOfDaysDataResponse();
             try
             {
+                //Get the UserId from the Header and update the request object
+                request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
+                if (string.IsNullOrEmpty(request.UserId))
+                    throw new UnauthorizedAccessException("LookUpDD:Get()::Unauthorized Access");
+
                 response = LookUpDataManager.GetAllTimesOfDays(request);
+                response.Version = request.Version;
             }
             catch (Exception ex)
             {
-                //TODO: Log this to the SQL database via ASE
-                base.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-                response.Status = new ServiceStack.ServiceInterface.ServiceModel.ResponseStatus("Exception", ex.Message);
+                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+
+                string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
+                Common.Helper.LogException(int.Parse(aseProcessID), ex);
             }
             return response;
         }
@@ -150,13 +209,20 @@ namespace Phytel.API.DataDomain.Patient.Service
             GetAllTimeZonesDataResponse response = new GetAllTimeZonesDataResponse();
             try
             {
+                //Get the UserId from the Header and update the request object
+                request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
+                if (string.IsNullOrEmpty(request.UserId))
+                    throw new UnauthorizedAccessException("LookUpDD:Get()::Unauthorized Access");
+
                 response = LookUpDataManager.GetAllTimeZones(request);
+                response.Version = request.Version;
             }
             catch (Exception ex)
             {
-                //TODO: Log this to the SQL database via ASE
-                base.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-                response.Status = new ServiceStack.ServiceInterface.ServiceModel.ResponseStatus("Exception", ex.Message);
+                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+
+                string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
+                Common.Helper.LogException(int.Parse(aseProcessID), ex);
             }
             return response;
         }
@@ -166,13 +232,20 @@ namespace Phytel.API.DataDomain.Patient.Service
             GetAllCommTypesDataResponse response = new GetAllCommTypesDataResponse();
             try
             {
+                //Get the UserId from the Header and update the request object
+                request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
+                if (string.IsNullOrEmpty(request.UserId))
+                    throw new UnauthorizedAccessException("LookUpDD:Get()::Unauthorized Access");
+
                 response = LookUpDataManager.GetAllCommTypes(request);
+                response.Version = request.Version;
             }
             catch (Exception ex)
             {
-                //TODO: Log this to the SQL database via ASE
-                base.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-                response.Status = new ServiceStack.ServiceInterface.ServiceModel.ResponseStatus("Exception", ex.Message);
+                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+
+                string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
+                Common.Helper.LogException(int.Parse(aseProcessID), ex);
             }
             return response;
         }
@@ -182,13 +255,20 @@ namespace Phytel.API.DataDomain.Patient.Service
             GetAllLanguagesDataResponse response = new GetAllLanguagesDataResponse();
             try
             {
+                //Get the UserId from the Header and update the request object
+                request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
+                if (string.IsNullOrEmpty(request.UserId))
+                    throw new UnauthorizedAccessException("LookUpDD:Get()::Unauthorized Access");
+
                 response = LookUpDataManager.GetAllLanguages(request);
+                response.Version = request.Version;
             }
             catch (Exception ex)
             {
-                //TODO: Log this to the SQL database via ASE
-                base.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-                response.Status = new ServiceStack.ServiceInterface.ServiceModel.ResponseStatus("Exception", ex.Message);
+                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+
+                string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
+                Common.Helper.LogException(int.Parse(aseProcessID), ex);
             }
             return response;
         }
@@ -198,13 +278,20 @@ namespace Phytel.API.DataDomain.Patient.Service
             GetTimeZoneDataResponse response = new GetTimeZoneDataResponse();
             try
             {
+                //Get the UserId from the Header and update the request object
+                request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
+                if (string.IsNullOrEmpty(request.UserId))
+                    throw new UnauthorizedAccessException("LookUpDD:Get()::Unauthorized Access");
+
                 response = LookUpDataManager.GetDefaultTimeZone(request);
+                response.Version = request.Version;
             }
             catch (Exception ex)
             {
-                //TODO: Log this to the SQL database via ASE
-                base.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-                response.Status = new ServiceStack.ServiceInterface.ServiceModel.ResponseStatus("Exception", ex.Message);
+                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+
+                string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
+                Common.Helper.LogException(int.Parse(aseProcessID), ex);
             }
             return response;
         }
@@ -212,20 +299,26 @@ namespace Phytel.API.DataDomain.Patient.Service
 
         #endregion
 
-
         #region Goal Related LookUps
         public GetLookUpsDataResponse Get(GetLookUpsDataRequest request)
         {
             GetLookUpsDataResponse response = new GetLookUpsDataResponse();
             try
             {
+                //Get the UserId from the Header and update the request object
+                request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
+                if (string.IsNullOrEmpty(request.UserId))
+                    throw new UnauthorizedAccessException("LookUpDD:Get()::Unauthorized Access");
+
                 response = LookUpDataManager.GetLookUpsByType(request);
+                response.Version = request.Version;
             }
             catch (Exception ex)
             {
-                //TODO: Log this to the SQL database via ASE
-                base.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-                response.Status = new ServiceStack.ServiceInterface.ServiceModel.ResponseStatus("Exception", ex.Message);
+                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+
+                string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
+                Common.Helper.LogException(int.Parse(aseProcessID), ex);
             }
             return response;
         }

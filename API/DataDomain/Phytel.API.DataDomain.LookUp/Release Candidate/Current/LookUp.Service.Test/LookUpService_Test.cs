@@ -14,10 +14,12 @@ namespace Phytel.API.DataDomain.LookUp.Services.Test
         public void GetAllProblem_Test()
         {
             // Arrange
-            string version = "v1";
+            double version = 1.0;
             string contractNumber = "InHealth001";
             string context = "NG";
             IRestClient client = new JsonServiceClient();
+            JsonServiceClient.HttpWebRequestFilter = x =>
+                            x.Headers.Add(string.Format("{0}: {1}", "x-Phytel-UserID", "531f2df9072ef727c4d2a3df"));
 
             // Act
             GetAllProblemsDataResponse response = client.Get<GetAllProblemsDataResponse>
@@ -33,11 +35,13 @@ namespace Phytel.API.DataDomain.LookUp.Services.Test
         {
             // Arrange
             string expectedValue = "Arthritis";
-            string version = "v1";
+            double version = 1.0;
             string contractNumber = "InHealth001";
             string context = "NG";
             string problemID = "528a66fdd4332317acc50960";
             IRestClient client = new JsonServiceClient();
+            JsonServiceClient.HttpWebRequestFilter = x =>
+                            x.Headers.Add(string.Format("{0}: {1}", "x-Phytel-UserID", "531f2df9072ef727c4d2a3df"));
 
             // Act
             GetProblemDataResponse response = client.Get<GetProblemDataResponse>
@@ -53,11 +57,13 @@ namespace Phytel.API.DataDomain.LookUp.Services.Test
         public void SearchProblem_Test()
         {
             // Arrange
-            string version = "v1";
+            double version = 1.0;
             string contractNumber = "InHealth001";
             string context = "NG";
 
             IRestClient client = new JsonServiceClient();
+            JsonServiceClient.HttpWebRequestFilter = x =>
+                            x.Headers.Add(string.Format("{0}: {1}", "x-Phytel-UserID", "531f2df9072ef727c4d2a3df"));
 
             // Act
             GetAllProblemsDataResponse response = client.Post<GetAllProblemsDataResponse>
@@ -82,10 +88,12 @@ namespace Phytel.API.DataDomain.LookUp.Services.Test
         public void GetAllCommModes_Test()
         {
             // Arrange
-            string version = "v1";
+            double version = 1.0;
             string contractNumber = "InHealth001";
             string context = "NG";
             IRestClient client = new JsonServiceClient();
+            JsonServiceClient.HttpWebRequestFilter = x =>
+                            x.Headers.Add(string.Format("{0}: {1}", "x-Phytel-UserID", "531f2df9072ef727c4d2a3df"));
 
             // Act
             GetAllCommModesDataResponse response = client.Get<GetAllCommModesDataResponse>
@@ -100,10 +108,12 @@ namespace Phytel.API.DataDomain.LookUp.Services.Test
         public void GetAllStates_Test()
         {
             // Arrange
-            string version = "v1";
+            double version = 1.0;
             string contractNumber = "InHealth001";
             string context = "NG";
             IRestClient client = new JsonServiceClient();
+            JsonServiceClient.HttpWebRequestFilter = x =>
+                            x.Headers.Add(string.Format("{0}: {1}", "x-Phytel-UserID", "531f2df9072ef727c4d2a3df"));
 
             // Act
             GetAllStatesDataResponse response = client.Get<GetAllStatesDataResponse>
@@ -118,10 +128,12 @@ namespace Phytel.API.DataDomain.LookUp.Services.Test
         public void GetAllTimesOfDays_Test()
         {
             // Arrange
-            string version = "v1";
+            double version = 1.0;
             string contractNumber = "InHealth001";
             string context = "NG";
             IRestClient client = new JsonServiceClient();
+            JsonServiceClient.HttpWebRequestFilter = x =>
+                            x.Headers.Add(string.Format("{0}: {1}", "x-Phytel-UserID", "531f2df9072ef727c4d2a3df"));
 
             // Act
             GetAllTimesOfDaysDataResponse response = client.Get<GetAllTimesOfDaysDataResponse>
@@ -136,10 +148,12 @@ namespace Phytel.API.DataDomain.LookUp.Services.Test
         public void GetAllTimeZones_Test()
         {
             // Arrange
-            string version = "v1";
+            double version = 1.0;
             string contractNumber = "InHealth001";
             string context = "NG";
             IRestClient client = new JsonServiceClient();
+            JsonServiceClient.HttpWebRequestFilter = x =>
+                            x.Headers.Add(string.Format("{0}: {1}", "x-Phytel-UserID", "531f2df9072ef727c4d2a3df"));
 
             // Act
             GetAllTimeZonesDataResponse response = client.Get<GetAllTimeZonesDataResponse>
@@ -154,10 +168,12 @@ namespace Phytel.API.DataDomain.LookUp.Services.Test
         public void GetAllCommTypes_Test()
         {
             // Arrange
-            string version = "v1";
+            double version = 1.0;
             string contractNumber = "InHealth001";
             string context = "NG";
             IRestClient client = new JsonServiceClient();
+            JsonServiceClient.HttpWebRequestFilter = x =>
+                            x.Headers.Add(string.Format("{0}: {1}", "x-Phytel-UserID", "531f2df9072ef727c4d2a3df"));
 
             // Act
             GetAllCommTypesDataResponse response = client.Get<GetAllCommTypesDataResponse>
@@ -172,10 +188,12 @@ namespace Phytel.API.DataDomain.LookUp.Services.Test
         public void GetAllLanguages_Test()
         {
             // Arrange
-            string version = "v1";
+            double version = 1.0;
             string contractNumber = "InHealth001";
             string context = "NG";
             IRestClient client = new JsonServiceClient();
+            JsonServiceClient.HttpWebRequestFilter = x =>
+                            x.Headers.Add(string.Format("{0}: {1}", "x-Phytel-UserID", "531f2df9072ef727c4d2a3df"));
 
             // Act
             GetAllLanguagesDataResponse response = client.Get<GetAllLanguagesDataResponse>
@@ -193,10 +211,12 @@ namespace Phytel.API.DataDomain.LookUp.Services.Test
         public void GetLookUpByType_Test()
         {
             // Arrange
-            string version = "v1";
+            double version = 1.0;
             string contractNumber = "InHealth001";
             string context = "NG";
             IRestClient client = new JsonServiceClient();
+            JsonServiceClient.HttpWebRequestFilter = x =>
+                            x.Headers.Add(string.Format("{0}: {1}", "x-Phytel-UserID", "531f2df9072ef727c4d2a3df"));
 
             // Act
             GetLookUpsDataResponse response = client.Get<GetLookUpsDataResponse>

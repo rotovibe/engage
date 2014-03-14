@@ -9,10 +9,11 @@ namespace Phytel.API.DataDomain.LookUp
 {
     public abstract class LookUpRepositoryFactory<T>
     {
-        public static ILookUpRepository<T> GetLookUpRepository(string dbName, string productName)
+        public static ILookUpRepository<T> GetLookUpRepository(string dbName, string productName, string userId)
         {
             ILookUpRepository<T> repo = null;
             repo = new MongoLookUpRepository<T>(dbName) as ILookUpRepository<T>;
+            repo.UserId = userId;
             return repo;
         }
     }
