@@ -20,7 +20,7 @@ namespace Phytel.API.DataDomain.PatientGoal.Service
                 //Get the UserId from the Header and update the request object
                 request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
                 if (string.IsNullOrEmpty(request.UserId))
-                    throw new UnauthorizedAccessException("PatientGoalDD:Put()");
+                    throw new UnauthorizedAccessException("PatientGoalDD:Put()::Unauthorized Access");
 
                 response = PatientGoalDataManager.InitializeGoal(request);
                 response.Version = request.Version;
@@ -43,7 +43,7 @@ namespace Phytel.API.DataDomain.PatientGoal.Service
                 //Get the UserId from the Header and update the request object
                 request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
                 if (string.IsNullOrEmpty(request.UserId))
-                    throw new UnauthorizedAccessException("PatientGoalDD:Put()");
+                    throw new UnauthorizedAccessException("PatientGoalDD:Put()::Unauthorized Access");
 
                 response = PatientGoalDataManager.InitializeBarrier(request);
                 response.Version = request.Version;
@@ -66,7 +66,7 @@ namespace Phytel.API.DataDomain.PatientGoal.Service
                 //Get the UserId from the Header and update the request object
                 request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
                 if (string.IsNullOrEmpty(request.UserId))
-                    throw new UnauthorizedAccessException("PatientGoalDD:Get()");
+                    throw new UnauthorizedAccessException("PatientGoalDD:Get()::Unauthorized Access");
 
                 response = PatientGoalDataManager.GetPatientGoal(request);
                 response.Version = request.Version;
@@ -89,7 +89,7 @@ namespace Phytel.API.DataDomain.PatientGoal.Service
                 //Get the UserId from the Header and update the request object
                 request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
                 if (string.IsNullOrEmpty(request.UserId))
-                    throw new UnauthorizedAccessException("PatientGoalDD:Get()");
+                    throw new UnauthorizedAccessException("PatientGoalDD:Get()::Unauthorized Access");
 
                 response = PatientGoalDataManager.GetPatientGoalList(request);
                 response.Version = request.Version;
@@ -112,7 +112,7 @@ namespace Phytel.API.DataDomain.PatientGoal.Service
                 //Get the UserId from the Header and update the request object
                 request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
                 if (string.IsNullOrEmpty(request.UserId))
-                    throw new UnauthorizedAccessException("PatientGoalDD:Put()");
+                    throw new UnauthorizedAccessException("PatientGoalDD:Put()::Unauthorized Access");
 
                 response = PatientGoalDataManager.PutPatientGoal(request);
                 response.Version = request.Version;
@@ -135,7 +135,7 @@ namespace Phytel.API.DataDomain.PatientGoal.Service
                 //Get the UserId from the Header and update the request object
                 request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
                 if (string.IsNullOrEmpty(request.UserId))
-                    throw new UnauthorizedAccessException("PatientGoalDD:Put()");
+                    throw new UnauthorizedAccessException("PatientGoalDD:Put()::Unauthorized Access");
 
                 response = PatientGoalDataManager.InsertNewPatientTask(request);
                 response.Version = request.Version;
@@ -158,7 +158,7 @@ namespace Phytel.API.DataDomain.PatientGoal.Service
                 //Get the UserId from the Header and update the request object
                 request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
                 if (string.IsNullOrEmpty(request.UserId))
-                    throw new UnauthorizedAccessException("PatientGoalDD:Put()");
+                    throw new UnauthorizedAccessException("PatientGoalDD:Put()::Unauthorized Access");
 
                 response = PatientGoalDataManager.UpdatePatientTask(request);
                 response.Version = request.Version;
@@ -181,7 +181,7 @@ namespace Phytel.API.DataDomain.PatientGoal.Service
                 //Get the UserId from the Header and update the request object
                 request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
                 if (string.IsNullOrEmpty(request.UserId))
-                    throw new UnauthorizedAccessException("PatientGoalDD:Put()");
+                    throw new UnauthorizedAccessException("PatientGoalDD:Put()::Unauthorized Access");
 
                 response = PatientGoalDataManager.InsertNewPatientIntervention(request);
                 response.Version = request.Version;
@@ -204,7 +204,7 @@ namespace Phytel.API.DataDomain.PatientGoal.Service
                 //Get the UserId from the Header and update the request object
                 request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
                 if (string.IsNullOrEmpty(request.UserId))
-                    throw new UnauthorizedAccessException("PatientGoalDD:Put()");
+                    throw new UnauthorizedAccessException("PatientGoalDD:Put()::Unauthorized Access");
 
                 response = PatientGoalDataManager.UpdatePatientIntervention(request);
                 response.Version = request.Version;
@@ -227,7 +227,7 @@ namespace Phytel.API.DataDomain.PatientGoal.Service
                 //Get the UserId from the Header and update the request object
                 request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
                 if (string.IsNullOrEmpty(request.UserId))
-                    throw new UnauthorizedAccessException("PatientGoalDD:Put()");
+                    throw new UnauthorizedAccessException("PatientGoalDD:Put()::Unauthorized Access");
 
                 response = PatientGoalDataManager.UpdatePatientBarrier(request);
                 response.Version = request.Version;
@@ -250,7 +250,7 @@ namespace Phytel.API.DataDomain.PatientGoal.Service
                 //Get the UserId from the Header and update the request object
                 request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
                 if (string.IsNullOrEmpty(request.UserId))
-                    throw new UnauthorizedAccessException("PatientGoalDD:Get()");
+                    throw new UnauthorizedAccessException("PatientGoalDD:Get()::Unauthorized Access");
 
                 response = PatientGoalDataManager.DeletePatientGoal(request);
                 response.Version = request.Version;
@@ -273,7 +273,7 @@ namespace Phytel.API.DataDomain.PatientGoal.Service
                 //Get the UserId from the Header and update the request object
                 request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
                 if (string.IsNullOrEmpty(request.UserId))
-                    throw new UnauthorizedAccessException("PatientGoalDD:Get()");
+                    throw new UnauthorizedAccessException("PatientGoalDD:Get()::Unauthorized Access");
 
                 response = PatientGoalDataManager.DeleteTask(request);
                 response.Version = request.Version;
@@ -296,7 +296,7 @@ namespace Phytel.API.DataDomain.PatientGoal.Service
                 //Get the UserId from the Header and update the request object
                 request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
                 if (string.IsNullOrEmpty(request.UserId))
-                    throw new UnauthorizedAccessException("PatientGoalDD:Get()");
+                    throw new UnauthorizedAccessException("PatientGoalDD:Get()::Unauthorized Access");
 
                 response = PatientGoalDataManager.DeleteIntervention(request);
                 response.Version = request.Version;
@@ -319,7 +319,7 @@ namespace Phytel.API.DataDomain.PatientGoal.Service
                 //Get the UserId from the Header and update the request object
                 request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
                 if (string.IsNullOrEmpty(request.UserId))
-                    throw new UnauthorizedAccessException("PatientGoalDD:Get()");
+                    throw new UnauthorizedAccessException("PatientGoalDD:Get()::Unauthorized Access");
 
                 response = PatientGoalDataManager.DeleteBarrier(request);
                 response.Version = request.Version;
@@ -342,7 +342,7 @@ namespace Phytel.API.DataDomain.PatientGoal.Service
                 //Get the UserId from the Header and update the request object
                 request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
                 if (string.IsNullOrEmpty(request.UserId))
-                    throw new UnauthorizedAccessException("PatientGoalDD:Get()");
+                    throw new UnauthorizedAccessException("PatientGoalDD:Get()::Unauthorized Access");
 
                 response = PatientGoalDataManager.GetCustomAttributesByType(request);
                 response.Version = request.Version;

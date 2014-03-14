@@ -20,7 +20,7 @@ namespace Phytel.API.DataDomain.Module.Service
                 //Get the UserId from the Header and update the request object
                 request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
                 if (string.IsNullOrEmpty(request.UserId))
-                    throw new UnauthorizedAccessException("ModuleDD:Get()");
+                    throw new UnauthorizedAccessException("ModuleDD:Get()::Unauthorized Access");
 
                 response = ModuleDataManager.GetModuleByID(request);
                 response.Version = request.Version;

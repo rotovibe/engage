@@ -22,7 +22,7 @@ namespace Phytel.API.DataDomain.Patient.Service
                 //Get the UserId from the Header and update the request object
                 request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
                 if (string.IsNullOrEmpty(request.UserId))
-                    throw new UnauthorizedAccessException("LookUpDD:Get()");
+                    throw new UnauthorizedAccessException("LookUpDD:Get()::Unauthorized Access");
 
                 response = LookUpDataManager.GetProblem(request);
                 response.Version = request.Version;
@@ -45,7 +45,7 @@ namespace Phytel.API.DataDomain.Patient.Service
                 //Get the UserId from the Header and update the request object
                 request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
                 if (string.IsNullOrEmpty(request.UserId))
-                    throw new UnauthorizedAccessException("LookUpDD:Get()");
+                    throw new UnauthorizedAccessException("LookUpDD:Get()::Unauthorized Access");
 
                 response = LookUpDataManager.GetAllProblems(request);
                 response.Version = request.Version;
@@ -68,7 +68,7 @@ namespace Phytel.API.DataDomain.Patient.Service
                 //Get the UserId from the Header and update the request object
                 request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
                 if (string.IsNullOrEmpty(request.UserId))
-                    throw new UnauthorizedAccessException("LookUpDD:Post()");
+                    throw new UnauthorizedAccessException("LookUpDD:Post()::Unauthorized Access");
 
                 response = LookUpDataManager.SearchProblem(request);
                 response.Version = request.Version;
@@ -93,7 +93,7 @@ namespace Phytel.API.DataDomain.Patient.Service
                 //Get the UserId from the Header and update the request object
                 request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
                 if (string.IsNullOrEmpty(request.UserId))
-                    throw new UnauthorizedAccessException("LookUpDD:Get()");
+                    throw new UnauthorizedAccessException("LookUpDD:Get()::Unauthorized Access");
 
                 response = LookUpDataManager.GetObjectiveByID(request);
                 response.Version = request.Version;
@@ -118,7 +118,7 @@ namespace Phytel.API.DataDomain.Patient.Service
                 //Get the UserId from the Header and update the request object
                 request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
                 if (string.IsNullOrEmpty(request.UserId))
-                    throw new UnauthorizedAccessException("LookUpDD:Get()");
+                    throw new UnauthorizedAccessException("LookUpDD:Get()::Unauthorized Access");
 
                 response = LookUpDataManager.GetCategoryByID(request);
                 response.Version = request.Version;
@@ -143,7 +143,7 @@ namespace Phytel.API.DataDomain.Patient.Service
                 //Get the UserId from the Header and update the request object
                 request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
                 if (string.IsNullOrEmpty(request.UserId))
-                    throw new UnauthorizedAccessException("LookUpDD:Get()");
+                    throw new UnauthorizedAccessException("LookUpDD:Get()::Unauthorized Access");
 
                 response = LookUpDataManager.GetAllCommModes(request);
                 response.Version = request.Version;
@@ -166,7 +166,7 @@ namespace Phytel.API.DataDomain.Patient.Service
                 //Get the UserId from the Header and update the request object
                 request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
                 if (string.IsNullOrEmpty(request.UserId))
-                    throw new UnauthorizedAccessException("LookUpDD:Get()");
+                    throw new UnauthorizedAccessException("LookUpDD:Get()::Unauthorized Access");
 
                 response = LookUpDataManager.GetAllStates(request);
                 response.Version = request.Version;
@@ -189,7 +189,7 @@ namespace Phytel.API.DataDomain.Patient.Service
                 //Get the UserId from the Header and update the request object
                 request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
                 if (string.IsNullOrEmpty(request.UserId))
-                    throw new UnauthorizedAccessException("LookUpDD:Get()");
+                    throw new UnauthorizedAccessException("LookUpDD:Get()::Unauthorized Access");
 
                 response = LookUpDataManager.GetAllTimesOfDays(request);
                 response.Version = request.Version;
@@ -212,7 +212,7 @@ namespace Phytel.API.DataDomain.Patient.Service
                 //Get the UserId from the Header and update the request object
                 request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
                 if (string.IsNullOrEmpty(request.UserId))
-                    throw new UnauthorizedAccessException("LookUpDD:Get()");
+                    throw new UnauthorizedAccessException("LookUpDD:Get()::Unauthorized Access");
 
                 response = LookUpDataManager.GetAllTimeZones(request);
                 response.Version = request.Version;
@@ -235,7 +235,7 @@ namespace Phytel.API.DataDomain.Patient.Service
                 //Get the UserId from the Header and update the request object
                 request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
                 if (string.IsNullOrEmpty(request.UserId))
-                    throw new UnauthorizedAccessException("LookUpDD:Get()");
+                    throw new UnauthorizedAccessException("LookUpDD:Get()::Unauthorized Access");
 
                 response = LookUpDataManager.GetAllCommTypes(request);
                 response.Version = request.Version;
@@ -258,7 +258,7 @@ namespace Phytel.API.DataDomain.Patient.Service
                 //Get the UserId from the Header and update the request object
                 request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
                 if (string.IsNullOrEmpty(request.UserId))
-                    throw new UnauthorizedAccessException("LookUpDD:Get()");
+                    throw new UnauthorizedAccessException("LookUpDD:Get()::Unauthorized Access");
 
                 response = LookUpDataManager.GetAllLanguages(request);
                 response.Version = request.Version;
@@ -281,7 +281,7 @@ namespace Phytel.API.DataDomain.Patient.Service
                 //Get the UserId from the Header and update the request object
                 request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
                 if (string.IsNullOrEmpty(request.UserId))
-                    throw new UnauthorizedAccessException("LookUpDD:Get()");
+                    throw new UnauthorizedAccessException("LookUpDD:Get()::Unauthorized Access");
 
                 response = LookUpDataManager.GetDefaultTimeZone(request);
                 response.Version = request.Version;
@@ -308,7 +308,7 @@ namespace Phytel.API.DataDomain.Patient.Service
                 //Get the UserId from the Header and update the request object
                 request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
                 if (string.IsNullOrEmpty(request.UserId))
-                    throw new UnauthorizedAccessException("LookUpDD:Get()");
+                    throw new UnauthorizedAccessException("LookUpDD:Get()::Unauthorized Access");
 
                 response = LookUpDataManager.GetLookUpsByType(request);
                 response.Version = request.Version;

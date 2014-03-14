@@ -20,7 +20,7 @@ namespace Phytel.API.DataDomain.PatientNote.Service
                 //Get the UserId from the Header and update the request object
                 request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
                 if (string.IsNullOrEmpty(request.UserId))
-                    throw new UnauthorizedAccessException("PatientNoteDD:Put()");
+                    throw new UnauthorizedAccessException("PatientNoteDD:Put()::Unauthorized Access");
 
                 response.Id = PatientNoteDataManager.InsertPatientNote(request);
                 response.Version = request.Version;
@@ -43,7 +43,7 @@ namespace Phytel.API.DataDomain.PatientNote.Service
                 //Get the UserId from the Header and update the request object
                 request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
                 if (string.IsNullOrEmpty(request.UserId))
-                    throw new UnauthorizedAccessException("PatientNoteDD:Get()");
+                    throw new UnauthorizedAccessException("PatientNoteDD:Get()::Unauthorized Access");
 
                 response.PatientNote = PatientNoteDataManager.GetPatientNote(request);
                 response.Version = request.Version;
@@ -66,7 +66,7 @@ namespace Phytel.API.DataDomain.PatientNote.Service
                 //Get the UserId from the Header and update the request object
                 request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
                 if (string.IsNullOrEmpty(request.UserId))
-                    throw new UnauthorizedAccessException("PatientNoteDD:Get()");
+                    throw new UnauthorizedAccessException("PatientNoteDD:Get()::Unauthorized Access");
 
                 response.PatientNotes = PatientNoteDataManager.GetAllPatientNotes(request);
                 response.Version = request.Version;

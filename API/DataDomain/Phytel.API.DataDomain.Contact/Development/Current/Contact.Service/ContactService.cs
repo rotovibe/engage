@@ -21,7 +21,7 @@ namespace Phytel.API.DataDomain.Contact.Service
                 //Get the UserId from the Header and update the request object
                 request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
                 if (string.IsNullOrEmpty(request.UserId))
-                    throw new UnauthorizedAccessException("ContactDD:Get()");
+                    throw new UnauthorizedAccessException("ContactDD:Get()::Unauthorized Access");
 
                 response.Contact = ContactDataManager.GetContactByPatientId(request);
             }
@@ -44,7 +44,7 @@ namespace Phytel.API.DataDomain.Contact.Service
                 //Get the UserId from the Header and update the request object
                 request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
                 if (string.IsNullOrEmpty(request.UserId))
-                    throw new UnauthorizedAccessException("ContactDD:Get()");
+                    throw new UnauthorizedAccessException("ContactDD:Get()::Unauthorized Access");
 
                 response.Contact = ContactDataManager.GetContactByUserId(request);
             }
@@ -67,7 +67,7 @@ namespace Phytel.API.DataDomain.Contact.Service
                 //Get the UserId from the Header and update the request object
                 request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
                 if (string.IsNullOrEmpty(request.UserId))
-                    throw new UnauthorizedAccessException("ContactDD:Post()");
+                    throw new UnauthorizedAccessException("ContactDD:Post()::Unauthorized Access");
 
                 response = ContactDataManager.SearchContacts(request);
             }
@@ -90,7 +90,7 @@ namespace Phytel.API.DataDomain.Contact.Service
                 //Get the UserId from the Header and update the request object
                 request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
                 if (string.IsNullOrEmpty(request.UserId))
-                    throw new UnauthorizedAccessException("ContactDD:Put()");
+                    throw new UnauthorizedAccessException("ContactDD:Put()::Unauthorized Access");
 
                 response = ContactDataManager.InsertContact(request);
             }
@@ -113,7 +113,7 @@ namespace Phytel.API.DataDomain.Contact.Service
                 //Get the UserId from the Header and update the request object
                 request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
                 if (string.IsNullOrEmpty(request.UserId))
-                    throw new UnauthorizedAccessException("ContactDD:Put()");
+                    throw new UnauthorizedAccessException("ContactDD:Put()::Unauthorized Access");
 
                 response = ContactDataManager.UpdateContact(request);
             }
@@ -136,7 +136,7 @@ namespace Phytel.API.DataDomain.Contact.Service
                 //Get the UserId from the Header and update the request object
                 request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
                 if (string.IsNullOrEmpty(request.UserId))
-                    throw new UnauthorizedAccessException("ContactDD:Get()");
+                    throw new UnauthorizedAccessException("ContactDD:Get()::Unauthorized Access");
 
                 response = ContactDataManager.GetCareManagers(request);
             }

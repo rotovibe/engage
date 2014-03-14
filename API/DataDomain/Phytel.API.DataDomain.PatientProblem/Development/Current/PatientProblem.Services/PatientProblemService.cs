@@ -21,7 +21,7 @@ namespace Phytel.API.DataDomain.PatientProblem.Service
                 //Get the UserId from the Header and update the request object
                 request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
                 if (string.IsNullOrEmpty(request.UserId))
-                    throw new UnauthorizedAccessException("PatientProblemDD:Get()");
+                    throw new UnauthorizedAccessException("PatientProblemDD:Get()::Unauthorized Access");
 
                 response = DataPatientProblemManager.GetAllPatientProblem(request);
                 response.Version = request.Version;
@@ -45,7 +45,7 @@ namespace Phytel.API.DataDomain.PatientProblem.Service
                 //Get the UserId from the Header and update the request object
                 request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
                 if (string.IsNullOrEmpty(request.UserId))
-                    throw new UnauthorizedAccessException("PatientProblemDD:Get()");
+                    throw new UnauthorizedAccessException("PatientProblemDD:Get()::Unauthorized Access");
 
                 response = DataPatientProblemManager.GetPatientProblem(request);
                 response.Version = request.Version;
@@ -69,7 +69,7 @@ namespace Phytel.API.DataDomain.PatientProblem.Service
                 //Get the UserId from the Header and update the request object
                 request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
                 if (string.IsNullOrEmpty(request.UserId))
-                    throw new UnauthorizedAccessException("PatientProblemDD:Put()");
+                    throw new UnauthorizedAccessException("PatientProblemDD:Put()::Unauthorized Access");
 
                 response = DataPatientProblemManager.PutPatientProblem(request);
                 response.Version = request.Version;
@@ -93,7 +93,7 @@ namespace Phytel.API.DataDomain.PatientProblem.Service
                 //Get the UserId from the Header and update the request object
                 request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
                 if (string.IsNullOrEmpty(request.UserId))
-                    throw new UnauthorizedAccessException("PatientProblemDD:Put()");
+                    throw new UnauthorizedAccessException("PatientProblemDD:Put()::Unauthorized Access");
 
                 response = DataPatientProblemManager.PutUpdatePatientProblem(request);
                 response.Version = request.Version;

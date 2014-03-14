@@ -18,7 +18,7 @@ namespace Phytel.API.DataDomain.PatientObservation.Service
                 //Get the UserId from the Header and update the request object
                 request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
                 if (string.IsNullOrEmpty(request.UserId))
-                    throw new UnauthorizedAccessException("PatientObservationDD:Post()");
+                    throw new UnauthorizedAccessException("PatientObservationDD:Post()::Unauthorized Access");
 
                 response = PatientObservationDataManager.GetPatientObservationByID(request);
                 response.Version = request.Version;
@@ -41,7 +41,7 @@ namespace Phytel.API.DataDomain.PatientObservation.Service
                 //Get the UserId from the Header and update the request object
                 request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
                 if (string.IsNullOrEmpty(request.UserId))
-                    throw new UnauthorizedAccessException("PatientObservationDD:Get()");
+                    throw new UnauthorizedAccessException("PatientObservationDD:Get()::Unauthorized Access");
 
                 response = PatientObservationDataManager.GetPatientObservationByID(request);
                 response.Version = request.Version;
@@ -64,7 +64,7 @@ namespace Phytel.API.DataDomain.PatientObservation.Service
                 //Get the UserId from the Header and update the request object
                 request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
                 if (string.IsNullOrEmpty(request.UserId))
-                    throw new UnauthorizedAccessException("PatientObservationDD:Post()");
+                    throw new UnauthorizedAccessException("PatientObservationDD:Post()::Unauthorized Access");
 
                 response = PatientObservationDataManager.GetPatientObservationList(request);
                 response.Version = request.Version;
@@ -112,7 +112,7 @@ namespace Phytel.API.DataDomain.PatientObservation.Service
                 //Get the UserId from the Header and update the request object
                 request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
                 if (string.IsNullOrEmpty(request.UserId))
-                    throw new UnauthorizedAccessException("PatientObservationDD:Get()");
+                    throw new UnauthorizedAccessException("PatientObservationDD:Get()::Unauthorized Access");
 
                 response = PatientObservationDataManager.GetStandardObservationsByType(request);
                 response.Version = request.Version;
@@ -135,7 +135,7 @@ namespace Phytel.API.DataDomain.PatientObservation.Service
                 //Get the UserId from the Header and update the request object
                 request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
                 if (string.IsNullOrEmpty(request.UserId))
-                    throw new UnauthorizedAccessException("PatientObservationDD:Post()");
+                    throw new UnauthorizedAccessException("PatientObservationDD:Post()::Unauthorized Access");
 
                 response = PatientObservationDataManager.GetAdditionalObservationItemById(request);
                 response.Version = request.Version;
@@ -158,7 +158,7 @@ namespace Phytel.API.DataDomain.PatientObservation.Service
                 //Get the UserId from the Header and update the request object
                 request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
                 if (string.IsNullOrEmpty(request.UserId))
-                    throw new UnauthorizedAccessException("PatientObservationDD:Get()");
+                    throw new UnauthorizedAccessException("PatientObservationDD:Get()::Unauthorized Access");
 
                 response = PatientObservationDataManager.GetAdditionalObservationsLibraryByType(request);
                 response.Version = request.Version;
@@ -181,7 +181,7 @@ namespace Phytel.API.DataDomain.PatientObservation.Service
                 //Get the UserId from the Header and update the request object
                 request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
                 if (string.IsNullOrEmpty(request.UserId))
-                    throw new UnauthorizedAccessException("PatientObservationDD:Put()");
+                    throw new UnauthorizedAccessException("PatientObservationDD:Put()::Unauthorized Access");
 
                 response.Result = PatientObservationDataManager.PutUpdateOfPatientObservationRecord(request);
                 response.Version = request.Version;
@@ -204,7 +204,7 @@ namespace Phytel.API.DataDomain.PatientObservation.Service
                 //Get the UserId from the Header and update the request object
                 request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
                 if (string.IsNullOrEmpty(request.UserId))
-                    throw new UnauthorizedAccessException("PatientObservationDD:Post()");
+                    throw new UnauthorizedAccessException("PatientObservationDD:Post()::Unauthorized Access");
 
                 response.Result = PatientObservationDataManager.PutUpdateOfPatientObservationRecord(request);
                 response.Version = request.Version;

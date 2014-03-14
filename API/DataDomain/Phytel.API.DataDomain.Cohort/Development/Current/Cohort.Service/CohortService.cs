@@ -20,7 +20,7 @@ namespace Phytel.API.DataDomain.Cohort.Service
                 //Get the UserId from the Header and update the request object
                 request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
                 if (string.IsNullOrEmpty(request.UserId))
-                    throw new UnauthorizedAccessException("CohortDD:Get()");
+                    throw new UnauthorizedAccessException("CohortDD:Get()::Unauthorized Access");
 
                 response = DataCohortManager.GetCohortByID(request);
                 response.Version = request.Version;
@@ -43,7 +43,7 @@ namespace Phytel.API.DataDomain.Cohort.Service
                 //Get the UserId from the Header and update the request object
                 request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
                 if (string.IsNullOrEmpty(request.UserId))
-                    throw new UnauthorizedAccessException("CohortDD:Get()");
+                    throw new UnauthorizedAccessException("CohortDD:Get()::Unauthorized Access");
 
                 response = DataCohortManager.GetCohorts(request);
                 response.Version = request.Version;

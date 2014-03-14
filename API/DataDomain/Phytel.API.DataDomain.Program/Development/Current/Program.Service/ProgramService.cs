@@ -20,7 +20,7 @@ namespace Phytel.API.DataDomain.Program.Service
                 //Get the UserId from the Header and update the request object
                 request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
                 if (string.IsNullOrEmpty(request.UserId))
-                    throw new UnauthorizedAccessException("ProgramDD:Post()");
+                    throw new UnauthorizedAccessException("ProgramDD:Post()::Unauthorized Access");
 
                 response = ProgramDataManager.GetProgramByID(request);
                 response.Version = request.Version;
@@ -43,7 +43,7 @@ namespace Phytel.API.DataDomain.Program.Service
                 //Get the UserId from the Header and update the request object
                 request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
                 if (string.IsNullOrEmpty(request.UserId))
-                    throw new UnauthorizedAccessException("ProgramDD:Get()");
+                    throw new UnauthorizedAccessException("ProgramDD:Get()::Unauthorized Access");
 
                 response = ProgramDataManager.GetAllActiveContractPrograms(request);
                 response.Version = request.Version;
@@ -66,7 +66,7 @@ namespace Phytel.API.DataDomain.Program.Service
                 //Get the UserId from the Header and update the request object
                 request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
                 if (string.IsNullOrEmpty(request.UserId))
-                    throw new UnauthorizedAccessException("ProgramDD:Put()");
+                    throw new UnauthorizedAccessException("ProgramDD:Put()::Unauthorized Access");
 
                 response = ProgramDataManager.PutPatientToProgram(request);
                 response.Version = request.Version;
@@ -89,7 +89,7 @@ namespace Phytel.API.DataDomain.Program.Service
                 //Get the UserId from the Header and update the request object
                 request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
                 if (string.IsNullOrEmpty(request.UserId))
-                    throw new UnauthorizedAccessException("ProgramDD:Put()");
+                    throw new UnauthorizedAccessException("ProgramDD:Put()::Unauthorized Access");
 
                 response = ProgramDataManager.PutUpdateResponse(request);
                 response.Version = request.Version;
@@ -112,7 +112,7 @@ namespace Phytel.API.DataDomain.Program.Service
                 //Get the UserId from the Header and update the request object
                 request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
                 if (string.IsNullOrEmpty(request.UserId))
-                    throw new UnauthorizedAccessException("ProgramDD:Put()");
+                    throw new UnauthorizedAccessException("ProgramDD:Put()::Unauthorized Access");
 
                 response = ProgramDataManager.PutProgramActionUpdate(request);
                 response.Version = request.Version;
@@ -135,7 +135,7 @@ namespace Phytel.API.DataDomain.Program.Service
                 //Get the UserId from the Header and update the request object
                 request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
                 if (string.IsNullOrEmpty(request.UserId))
-                    throw new UnauthorizedAccessException("ProgramDD:Get()");
+                    throw new UnauthorizedAccessException("ProgramDD:Get()::Unauthorized Access");
 
                 response = ProgramDataManager.GetProgramByID(request);
                 response.Version = request.Version;
@@ -158,7 +158,7 @@ namespace Phytel.API.DataDomain.Program.Service
                 //Get the UserId from the Header and update the request object
                 request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
                 if (string.IsNullOrEmpty(request.UserId))
-                    throw new UnauthorizedAccessException("ProgramDD:Get()");
+                    throw new UnauthorizedAccessException("ProgramDD:Get()::Unauthorized Access");
 
                 response = ProgramDataManager.GetPatientProgramDetailsById(request);
                 response.Version = request.Version;
@@ -181,7 +181,7 @@ namespace Phytel.API.DataDomain.Program.Service
                 //Get the UserId from the Header and update the request object
                 request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
                 if (string.IsNullOrEmpty(request.UserId))
-                    throw new UnauthorizedAccessException("ProgramDD:Get()");
+                    throw new UnauthorizedAccessException("ProgramDD:Get()::Unauthorized Access");
 
                 response = ProgramDataManager.GetPatientPrograms(request);
                 response.Version = request.Version;
@@ -204,7 +204,7 @@ namespace Phytel.API.DataDomain.Program.Service
                 //Get the UserId from the Header and update the request object
                 request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
                 if (string.IsNullOrEmpty(request.UserId))
-                    throw new UnauthorizedAccessException("ProgramDD:Get()");
+                    throw new UnauthorizedAccessException("ProgramDD:Get()::Unauthorized Access");
 
                 response = ProgramDataManager.GetStepResponse(request);
                 response.Version = request.Version;
@@ -227,7 +227,7 @@ namespace Phytel.API.DataDomain.Program.Service
                 //Get the UserId from the Header and update the request object
                 request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
                 if (string.IsNullOrEmpty(request.UserId))
-                    throw new UnauthorizedAccessException("ProgramDD:Get()");
+                    throw new UnauthorizedAccessException("ProgramDD:Get()::Unauthorized Access");
 
                 response = ProgramDataManager.GetStepResponse(request);
                 response.Version = request.Version;
@@ -250,7 +250,7 @@ namespace Phytel.API.DataDomain.Program.Service
                 //Get the UserId from the Header and update the request object
                 request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
                 if (string.IsNullOrEmpty(request.UserId))
-                    throw new UnauthorizedAccessException("ProgramDD:Get()");
+                    throw new UnauthorizedAccessException("ProgramDD:Get()::Unauthorized Access");
 
                 response = ProgramDataManager.GetProgramAttributes(request);
                 response.Version = request.Version;
@@ -273,7 +273,7 @@ namespace Phytel.API.DataDomain.Program.Service
                 //Get the UserId from the Header and update the request object
                 request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
                 if (string.IsNullOrEmpty(request.UserId))
-                    throw new UnauthorizedAccessException("ProgramDD:Put()");
+                    throw new UnauthorizedAccessException("ProgramDD:Put()::Unauthorized Access");
 
                 response = ProgramDataManager.PutUpdateProgramAttributes(request);
                 response.Version = request.Version;
@@ -296,7 +296,7 @@ namespace Phytel.API.DataDomain.Program.Service
                 //Get the UserId from the Header and update the request object
                 request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
                 if (string.IsNullOrEmpty(request.UserId))
-                    throw new UnauthorizedAccessException("ProgramDD:Put()");
+                    throw new UnauthorizedAccessException("ProgramDD:Put()::Unauthorized Access");
 
                 response = ProgramDataManager.InsertProgramAttributes(request);
                 response.Version = request.Version;
