@@ -1,25 +1,21 @@
-﻿using System;
-using System.Collections;
+﻿using Phytel.API.Common.CustomObject;
+using Phytel.API.DataDomain.CareMember.DTO;
+using Phytel.API.DataDomain.Contact.DTO;
+using Phytel.API.DataDomain.LookUp.DTO;
+using Phytel.API.DataDomain.Patient.DTO;
+using Phytel.API.DataDomain.PatientSystem.DTO;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
-using System.Data.SqlClient;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 using System.IO;
-using System.Text.RegularExpressions;
+using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using Phytel.API.Common.CustomObjects;
-using Phytel.API.DataDomain.Patient.DTO;
-using Phytel.API.DataDomain.PatientSystem.DTO;
-using Phytel.API.DataDomain.LookUp.DTO;
-using Phytel.API.DataDomain.Contact.DTO;
-using Phytel.API.DataDomain.CareMember.DTO;
 using System.Runtime.Serialization.Json;
+using System.Text;
+using System.Windows.Forms;
 
 namespace NightingaleImport
 {
@@ -76,10 +72,9 @@ namespace NightingaleImport
         private TimeZoneData zoneDefault = new TimeZoneData();
 
         //TODO: Move to app config
-        private string version = "v1";
+        private double version = 1.0;
         private string context = "NG";
         private string contractNumber = "InHealth001";
-        private Guid userId = Guid.Parse("BB241C64-A0FF-4E01-BA5F-4246EF50780E");
         private string contactTypeId = "530cd571d433231ed4ba969b";
 
                 
@@ -143,6 +138,7 @@ namespace NightingaleImport
                         PatientID = responsePatient.Id,
                         SystemID = lvi.SubItems[colSID].Text,
                         SystemName = lvi.SubItems[colSysN].Text,
+                        DisplayLabel = "ID",
                         Version = responsePatient.Version,
                         Context = patientRequest.Context,
                         ContractNumber = patientRequest.ContractNumber
@@ -164,8 +160,7 @@ namespace NightingaleImport
                             Priority = 0,
                             Context = patientRequest.Context,
                             ContractNumber = patientRequest.ContractNumber,
-                            Version = patientRequest.Version,
-                            UserId = userId.ToString()
+                            Version = patientRequest.Version
                         };
 
                         PutUpdatePatientDataResponse updateResponsePatient = putUpdatePatientServiceCall(updatePatientRequest, responsePatient.Id.ToString());
@@ -181,7 +176,7 @@ namespace NightingaleImport
 
                     //timezone
                     TimeZoneData tZone = new TimeZoneData();
-                    if (lvi.SubItems[colTimeZ].Text != null)
+                    if (string.IsNullOrEmpty(lvi.SubItems[colTimeZ].Text) == false)
                     {
                         foreach (TimeZoneData t in zonesLookUp)
                         {
@@ -213,11 +208,11 @@ namespace NightingaleImport
 
 
                     //phones
-                    if (lvi.SubItems[colPh1].Text != "")
+                    if (string.IsNullOrEmpty(lvi.SubItems[colPh1].Text) == false)
                     {
                         PhoneData phone1 = new PhoneData
                         {
-                            Number = Convert.ToInt64(lvi.SubItems[colPh1].Text),
+                            Number = Convert.ToInt64(lvi.SubItems[colPh1].Text.Replace("-",string.Empty)),
                             OptOut = false
                         };
 
@@ -228,21 +223,27 @@ namespace NightingaleImport
                         else
                             phone1.PhonePreferred = false;
 
-                        foreach (CommTypeData c in typesLookUp)
+                        if (string.IsNullOrEmpty(lvi.SubItems[colPh1Type].Text) == false)
                         {
-                            if (lvi.SubItems[colPh1Type].Text == c.Name)
+                            foreach (CommTypeData c in typesLookUp)
                             {
-                                phone1.TypeId = c.Id;
+                                if (lvi.SubItems[colPh1Type].Text == c.Name)
+                                {
+                                    phone1.TypeId = c.Id;
+                                }
                             }
                         }
+                        else
+                            phone1.TypeId = typesLookUp[0].Id;
+
                         phones.Add(phone1);
                     }
 
-                    if (lvi.SubItems[colPh2].Text != "")
+                    if (string.IsNullOrEmpty(lvi.SubItems[colPh2].Text) == false)
                     {
                         PhoneData phone2 = new PhoneData
                         {
-                            Number = Convert.ToInt64(lvi.SubItems[colPh2].Text),
+                            Number = Convert.ToInt64(lvi.SubItems[colPh2].Text.Replace("-", string.Empty)),
                             OptOut = false
                         };
 
@@ -253,18 +254,24 @@ namespace NightingaleImport
                         else
                             phone2.PhonePreferred = false;
 
-                        foreach (CommTypeData c in typesLookUp)
+                        if (string.IsNullOrEmpty(lvi.SubItems[colPh2Type].Text) == false)
                         {
-                            if (lvi.SubItems[colPh2Type].Text == c.Name)
+                            foreach (CommTypeData c in typesLookUp)
                             {
-                                phone2.TypeId = c.Id;
+                                if (lvi.SubItems[colPh2Type].Text == c.Name)
+                                {
+                                    phone2.TypeId = c.Id;
+                                }
                             }
                         }
+                        else
+                            phone2.TypeId = typesLookUp[0].Id;
+
                         phones.Add(phone2);
                     }
 
                     //emails
-                    if (lvi.SubItems[colEm1].Text != "")
+                    if (string.IsNullOrEmpty(lvi.SubItems[colEm1].Text) == false)
                     {
                         EmailData email1 = new EmailData
                         {
@@ -279,17 +286,23 @@ namespace NightingaleImport
                         else
                             email1.Preferred = false;
 
-                        foreach (CommTypeData c in typesLookUp)
+                        if (string.IsNullOrEmpty(lvi.SubItems[colEm1Type].Text) == false)
                         {
-                            if (lvi.SubItems[colEm1Type].Text == c.Name)
+                            foreach (CommTypeData c in typesLookUp)
                             {
-                                email1.TypeId = c.Id;
+                                if (lvi.SubItems[colEm1Type].Text == c.Name)
+                                {
+                                    email1.TypeId = c.Id;
+                                }
                             }
                         }
+                        else
+                            email1.TypeId = typesLookUp[0].Id;
+
                         emails.Add(email1);
                     }
 
-                    if (lvi.SubItems[colEm2].Text != "")
+                    if (string.IsNullOrEmpty(lvi.SubItems[colEm2].Text) == false)
                     {
                         EmailData email2 = new EmailData
                         {
@@ -304,18 +317,24 @@ namespace NightingaleImport
                         else
                             email2.Preferred = false;
 
-                        foreach (CommTypeData c in typesLookUp)
+                        if (string.IsNullOrEmpty(lvi.SubItems[colEm2Type].Text) == false)
                         {
-                            if (lvi.SubItems[colEm2Type].Text == c.Name)
+                            foreach (CommTypeData c in typesLookUp)
                             {
-                                email2.TypeId = c.Id;
+                                if (lvi.SubItems[colEm2Type].Text == c.Name)
+                                {
+                                    email2.TypeId = c.Id;
+                                }
                             }
                         }
+                        else
+                            email2.TypeId = typesLookUp[0].Id;
+
                         emails.Add(email2);
                     }
 
                     //addresses
-                    if (!(string.IsNullOrEmpty(lvi.SubItems[colAdd1L1].Text)))
+                    if (string.IsNullOrEmpty(lvi.SubItems[colAdd1L1].Text) == false)
                     {
                         AddressData add1 = new AddressData
                         {
@@ -341,17 +360,24 @@ namespace NightingaleImport
                                 add1.StateId = st.Id;
                             }
                         }
-                        foreach (CommTypeData c in typesLookUp)
+
+                        if (string.IsNullOrEmpty(lvi.SubItems[colAdd1Type].Text) == false)
                         {
-                            if (lvi.SubItems[colAdd1Type].Text == c.Name)
+                            foreach (CommTypeData c in typesLookUp)
                             {
-                                add1.TypeId = c.Id;
+                                if (lvi.SubItems[colAdd1Type].Text == c.Name)
+                                {
+                                    add1.TypeId = c.Id;
+                                }
                             }
                         }
+                        else
+                            add1.TypeId = typesLookUp[0].Id;
+
                         addresses.Add(add1);
                     }
 
-                    if (!(string.IsNullOrEmpty(lvi.SubItems[colAdd2L1].Text)))
+                    if (string.IsNullOrEmpty(lvi.SubItems[colAdd2L1].Text) == false)
                     {
                         AddressData add2 = new AddressData
                         {
@@ -377,13 +403,20 @@ namespace NightingaleImport
                                 add2.StateId = st.Id;
                             }
                         }
-                        foreach (CommTypeData c in typesLookUp)
+
+                        if (string.IsNullOrEmpty(lvi.SubItems[colAdd2Type].Text) == false)
                         {
-                            if (lvi.SubItems[colAdd2Type].Text == c.Name)
+                            foreach (CommTypeData c in typesLookUp)
                             {
-                                add2.TypeId = c.Id;
+                                if (lvi.SubItems[colAdd2Type].Text == c.Name)
+                                {
+                                    add2.TypeId = c.Id;
+                                }
                             }
                         }
+                        else
+                            add2.TypeId = typesLookUp[0].Id;
+
                         addresses.Add(add2);
                     }
 
@@ -407,29 +440,32 @@ namespace NightingaleImport
                         throw new Exception("Contact card import request failed.");
                     }
 
-                    if (!(string.IsNullOrEmpty(lvi.SubItems[colCMan].Text)))
+                    if (string.IsNullOrEmpty(lvi.SubItems[colCMan].Text) == false)
                     {
                         Guid userIdResponse = getUserId(lvi.SubItems[colCMan].Text);
-                        GetContactByUserIdDataResponse contactByUserIdResponse = getContactByUserIdServiceCall(userIdResponse.ToString());
+                        if (userIdResponse != Guid.Empty)
+                        {
+                            GetContactByUserIdDataResponse contactByUserIdResponse = getContactByUserIdServiceCall(userIdResponse.ToString());
 
-                        CareMemberData careMember = new CareMemberData
-                        {
-                            PatientId = responsePatient.Id.ToString(),
-                            ContactId = contactByUserIdResponse.Contact.ContactId,
-                            TypeId = contactTypeId,
-                            Primary = true,
-                        };
+                            CareMemberData careMember = new CareMemberData
+                            {
+                                PatientId = responsePatient.Id.ToString(),
+                                ContactId = contactByUserIdResponse.Contact.ContactId,
+                                TypeId = contactTypeId,
+                                Primary = true,
+                            };
 
-                        PutCareMemberDataRequest careMemberRequest = new PutCareMemberDataRequest
-                        {
-                            PatientId = responsePatient.Id.ToString(),
-                            UserId = userId.ToString(),
-                            CareMember = careMember
-                        };
-                        PutCareMemberDataResponse responseCareMember = putCareMemberServiceCall(careMemberRequest, responsePatient.Id.ToString());
-                        if (responseCareMember.Id == null)
-                        {
-                            throw new Exception("Care Member import request failed.");
+                            PutCareMemberDataRequest careMemberRequest = new PutCareMemberDataRequest
+                            {
+                                PatientId = responsePatient.Id.ToString(),
+                                CareMember = careMember
+                            };
+                            PutCareMemberDataResponse responseCareMember = putCareMemberServiceCall(careMemberRequest, responsePatient.Id.ToString());
+                            if (responseCareMember.Id == null)
+                            {
+                                throw new Exception("Care Member import request failed.");
+                            }
+                            UpdateCohortPatientView(responsePatient.Id.ToString(), contactByUserIdResponse.Contact.ContactId);
                         }
                     }
 
@@ -478,9 +514,7 @@ namespace NightingaleImport
                                                     context,
                                                     version,
                                                     contractNumber));
-            HttpClient modesClient = new HttpClient();
-            modesClient.DefaultRequestHeaders.Host = modesUri.Host;
-            modesClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            HttpClient modesClient = GetHttpClient(modesUri);
 
             GetAllCommModesDataRequest modesRequest = new GetAllCommModesDataRequest
             {
@@ -518,9 +552,7 @@ namespace NightingaleImport
                                                     context,
                                                     version,
                                                     contractNumber));
-            HttpClient typesClient = new HttpClient();
-            typesClient.DefaultRequestHeaders.Host = typesUri.Host;
-            typesClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            HttpClient typesClient = GetHttpClient(typesUri);
 
             GetAllCommTypesDataRequest typesRequest = new GetAllCommTypesDataRequest
             {
@@ -558,9 +590,7 @@ namespace NightingaleImport
                                                     context,
                                                     version,
                                                     contractNumber));
-            HttpClient statesClient = new HttpClient();
-            statesClient.DefaultRequestHeaders.Host = statesUri.Host;
-            statesClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            HttpClient statesClient = GetHttpClient(statesUri);
 
             GetAllStatesDataRequest statesRequest = new GetAllStatesDataRequest
             {
@@ -598,9 +628,7 @@ namespace NightingaleImport
                                                     context,
                                                     version,
                                                     contractNumber));
-            HttpClient zonesClient = new HttpClient();
-            zonesClient.DefaultRequestHeaders.Host = zonesUri.Host;
-            zonesClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            HttpClient zonesClient = GetHttpClient(zonesUri);
 
             GetAllTimeZonesDataRequest zonesRequest = new GetAllTimeZonesDataRequest
             {
@@ -638,9 +666,7 @@ namespace NightingaleImport
                                                     context,
                                                     version,
                                                     contractNumber));
-            HttpClient zoneClient = new HttpClient();
-            zoneClient.DefaultRequestHeaders.Host = zoneUri.Host;
-            zoneClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            HttpClient zoneClient = GetHttpClient(zoneUri);
 
             GetTimeZoneDataRequest zoneRequest = new GetTimeZoneDataRequest
             {
@@ -713,39 +739,39 @@ namespace NightingaleImport
                         {
                             throw new Exception("Required Patient data not found. Check patient: " + line);
                         }
-                        else if ((lvi.SubItems[colSID].Text != "" && lvi.SubItems[colSysN].Text == "") 
-                                    || (lvi.SubItems[colSysN].Text != "" && lvi.SubItems[colSID].Text == ""))
-                        {
-                            throw new Exception("Required Patient System data not found. Check patient: " + line);
-                        }
-                        else if (lvi.SubItems[colPh1].Text != "" && (lvi.SubItems[colPh1Type].Text == ""))
-                        {
-                            throw new Exception("Required Phone 1 data not found. Check patient: " + line);
-                        }
-                        else if (lvi.SubItems[colPh2].Text != "" && (lvi.SubItems[colPh2Type].Text == ""))
-                        {
-                            throw new Exception("Required Phone 2 data not found. Check patient: " + line);
-                        }
-                        else if (lvi.SubItems[colEm1].Text != "" && (lvi.SubItems[colEm1Type].Text == ""))
-                        {
-                            throw new Exception("Required Email 1 data not found. Check patient: " + line);
-                        }
-                        else if (lvi.SubItems[colEm2].Text != "" && (lvi.SubItems[colEm2Type].Text == ""))
-                        {
-                            throw new Exception("Required Email 2 data not found. Check patient: " + line);
-                        }
-                        else if (lvi.SubItems[colAdd1L1].Text != "" && (lvi.SubItems[colAdd1City].Text == "" 
-                                    || lvi.SubItems[colAdd1St].Text == "" || lvi.SubItems[colAdd1Zip].Text == "" 
-                                    || lvi.SubItems[colAdd1Type].Text == ""))
-                        {
-                            throw new Exception("Required Address 1 data not found. Check patient: " + line);
-                        }
-                        else if (lvi.SubItems[colAdd2L1].Text != "" && (lvi.SubItems[colAdd2City].Text == ""
-                                    || lvi.SubItems[colAdd2St].Text == "" || lvi.SubItems[colAdd2Zip].Text == ""
-                                    || lvi.SubItems[colAdd2Type].Text == ""))
-                        {
-                            throw new Exception("Required Address 2 data not found. Check patient: " + line);
-                        }
+                        //else if ((lvi.SubItems[colSID].Text != "" && lvi.SubItems[colSysN].Text == "") 
+                        //            || (lvi.SubItems[colSysN].Text != "" && lvi.SubItems[colSID].Text == ""))
+                        //{
+                        //    throw new Exception("Required Patient System data not found. Check patient: " + line);
+                        //}
+                        //else if (lvi.SubItems[colPh1].Text != "" && (lvi.SubItems[colPh1Type].Text == ""))
+                        //{
+                        //    throw new Exception("Required Phone 1 data not found. Check patient: " + line);
+                        //}
+                        //else if (lvi.SubItems[colPh2].Text != "" && (lvi.SubItems[colPh2Type].Text == ""))
+                        //{
+                        //    throw new Exception("Required Phone 2 data not found. Check patient: " + line);
+                        //}
+                        //else if (lvi.SubItems[colEm1].Text != "" && (lvi.SubItems[colEm1Type].Text == ""))
+                        //{
+                        //    throw new Exception("Required Email 1 data not found. Check patient: " + line);
+                        //}
+                        //else if (lvi.SubItems[colEm2].Text != "" && (lvi.SubItems[colEm2Type].Text == ""))
+                        //{
+                        //    throw new Exception("Required Email 2 data not found. Check patient: " + line);
+                        //}
+                        //else if (lvi.SubItems[colAdd1L1].Text != "" && (lvi.SubItems[colAdd1City].Text == "" 
+                        //            || lvi.SubItems[colAdd1St].Text == "" || lvi.SubItems[colAdd1Zip].Text == "" 
+                        //            || lvi.SubItems[colAdd1Type].Text == ""))
+                        //{
+                        //    throw new Exception("Required Address 1 data not found. Check patient: " + line);
+                        //}
+                        //else if (lvi.SubItems[colAdd2L1].Text != "" && (lvi.SubItems[colAdd2City].Text == ""
+                        //            || lvi.SubItems[colAdd2St].Text == "" || lvi.SubItems[colAdd2Zip].Text == ""
+                        //            || lvi.SubItems[colAdd2Type].Text == ""))
+                        //{
+                        //    throw new Exception("Required Address 2 data not found. Check patient: " + line);
+                        //}
                         else
                         {
                             listView1.Items.Add(lvi);
@@ -757,8 +783,11 @@ namespace NightingaleImport
             {
                 MessageBox.Show(ex.Message);
             }
+            finally
+            {
+                chkSelectAll.Text = string.Format("Select All ({0} Patients)", listView1.Items.Count);
+            }
         }
-
 
         private void listView1_ColumnClick(object sender, ColumnClickEventArgs e)
         {
@@ -786,11 +815,11 @@ namespace NightingaleImport
             }
         }
 
-        private void checkBox1_CheckedChanged(object sender, EventArgs e)
+        private void chkSelectAll_CheckedChanged(object sender, EventArgs e)
         {
             for (int i = 0; i < listView1.Items.Count; i++)
             {
-                if (checkBox1.Checked)
+                if (chkSelectAll.Checked)
                 {
                     listView1.Items[i].Checked = true;
                 }
@@ -829,12 +858,8 @@ namespace NightingaleImport
                                                  context,
                                                  version,
                                                  contractNumber));
-            HttpClient client = new HttpClient();
-            client.DefaultRequestHeaders.Host = theUri.Host;
 
-            // Add an Accept header for JSON format.
-            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
+            HttpClient client = GetHttpClient(theUri);
 
             DataContractJsonSerializer jsonSer = new DataContractJsonSerializer(typeof(PutPatientDataRequest));
 
@@ -873,9 +898,7 @@ namespace NightingaleImport
                                                    context,
                                                    version,
                                                    contractNumber));
-            HttpClient clientPS = new HttpClient();
-            clientPS.DefaultRequestHeaders.Host = theUriPS.Host;
-            clientPS.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            HttpClient clientPS = GetHttpClient(theUriPS);
 
             DataContractJsonSerializer jsonSerPS = new DataContractJsonSerializer(typeof(PutPatientSystemDataRequest));
 
@@ -914,11 +937,8 @@ namespace NightingaleImport
                                                         version,
                                                         contractNumber,
                                                         patientId));
-            HttpClient updateClient = new HttpClient();
-            updateClient.DefaultRequestHeaders.Host = updateUri.Host;
+            HttpClient updateClient = GetHttpClient(updateUri);
 
-            // Add an Accept header for JSON format.
-            updateClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             PutUpdatePatientDataResponse updateResponsePatient = null;
 
             DataContractJsonSerializer updateJsonSer = new DataContractJsonSerializer(typeof(PutUpdatePatientDataRequest));
@@ -958,9 +978,8 @@ namespace NightingaleImport
                                             version,
                                             contractNumber,
                                             patientId));
-            HttpClient contactClient = new HttpClient();
-            contactClient.DefaultRequestHeaders.Host = contactUri.Host;
-            contactClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            HttpClient contactClient = GetHttpClient(contactUri);
+
             DataContractJsonSerializer contactJsonSer = new DataContractJsonSerializer(typeof(PutContactDataRequest));
             MemoryStream contactMs = new MemoryStream();
             contactJsonSer.WriteObject(contactMs, putContactRequest);
@@ -995,13 +1014,8 @@ namespace NightingaleImport
                                                  version,
                                                  contractNumber,
                                                  patientId));
-            HttpClient client = new HttpClient();
-            client.DefaultRequestHeaders.Host = careMemberUri.Host;
-
-            // Add an Accept header for JSON format.
-            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
-
+            HttpClient client = GetHttpClient(careMemberUri);
+            
             DataContractJsonSerializer jsonSer = new DataContractJsonSerializer(typeof(PutCareMemberDataRequest));
 
             // use the serializer to write the object to a MemoryStream 
@@ -1039,13 +1053,11 @@ namespace NightingaleImport
                                                     version,
                                                     contractNumber,
                                                     userId));
-            HttpClient getContactClient = new HttpClient();
-            getContactClient.DefaultRequestHeaders.Host = getContactUri.Host;
-            getContactClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            HttpClient getContactClient = GetHttpClient(getContactUri);
 
             GetContactByUserIdDataRequest getContactRequest = new GetContactByUserIdDataRequest
             {
-                UserId = userId,
+                SQLUserId = userId,
                 Context = context,
                 Version = version,
                 ContractNumber = contractNumber
@@ -1074,5 +1086,124 @@ namespace NightingaleImport
             }
             return responseContact;
         }
+
+        private void UpdateCohortPatientView(string patientId, string careMemberContactId)
+        {
+            GetCohortPatientViewResponse getResponse = getCohortPatientViewServiceCall(patientId);
+
+            if (getResponse != null && getResponse.CohortPatientView != null)
+            {
+                CohortPatientViewData cpvd = getResponse.CohortPatientView;
+                // check to see if primary care manager's contactId exists in the searchfield
+                if (!cpvd.SearchFields.Exists(sf => sf.FieldName == Constants.PCM))
+                {
+                    cpvd.SearchFields.Add(new SearchFieldData
+                    {
+                        Value = careMemberContactId,
+                        Active = true,
+                        FieldName = Constants.PCM
+                    });
+                }
+                else
+                {
+                    cpvd.SearchFields.ForEach(sf =>
+                    {
+                        if (sf.FieldName == Constants.PCM)
+                        {
+                            sf.Value = careMemberContactId;
+                            sf.Active = true;
+                        }
+                    });
+                }
+
+                PutUpdateCohortPatientViewRequest request = new PutUpdateCohortPatientViewRequest
+                    {
+                        CohortPatientView = cpvd,
+                        ContractNumber = contractNumber,
+                        PatientID = patientId
+                    };
+
+                PutUpdateCohortPatientViewResponse response = putCohortPatientViewServiceCall(request, patientId);
+                if (string.IsNullOrEmpty(response.CohortPatientViewId))
+                    throw new Exception("Unable to update Cohort Patient View");
+            }
+        }
+
+        private GetCohortPatientViewResponse getCohortPatientViewServiceCall(string patientId)
+        {
+            Uri getCohortUri = new Uri(string.Format("{0}/{1}/{2}/{3}/patient/{4}/cohortpatientview/",
+                                                        "http://localhost:8888/Patient",
+                                                        context,
+                                                        version,
+                                                        contractNumber,
+                                                        patientId));
+
+            HttpClient getCohortClient = GetHttpClient(getCohortUri);
+
+            var getCohortResponse = getCohortClient.GetStringAsync(getCohortUri);
+            var getCohortResponseContent = getCohortResponse.Result;
+
+            string getCohortResponseString = getCohortResponseContent;
+            GetCohortPatientViewResponse responseContact = null;
+
+            using (var getCohortMsResponse = new MemoryStream(Encoding.Unicode.GetBytes(getCohortResponseString)))
+            {
+                var getContactSerializer = new DataContractJsonSerializer(typeof(GetCohortPatientViewResponse));
+                responseContact = (GetCohortPatientViewResponse)getContactSerializer.ReadObject(getCohortMsResponse);
+            }
+
+            return responseContact;
+        }
+
+        private PutUpdateCohortPatientViewResponse putCohortPatientViewServiceCall(PutUpdateCohortPatientViewRequest request, string patientId)
+        {
+            Uri cohortPatientUri = new Uri(string.Format("{0}/{1}/{2}/{3}/patient/{4}/cohortpatientview/update",
+                                                 "http://localhost:8888/Patient",
+                                                 context,
+                                                 version,
+                                                 contractNumber,
+                                                 patientId));
+            HttpClient client = GetHttpClient(cohortPatientUri);
+
+            DataContractJsonSerializer jsonSer = new DataContractJsonSerializer(typeof(PutUpdateCohortPatientViewRequest));
+
+            // use the serializer to write the object to a MemoryStream 
+            MemoryStream ms = new MemoryStream();
+            jsonSer.WriteObject(ms, request);
+            ms.Position = 0;
+
+            //use a Stream reader to construct the StringContent (Json) 
+            StreamReader sr = new StreamReader(ms);
+
+            StringContent theContent = new StringContent(sr.ReadToEnd(), System.Text.Encoding.UTF8, "application/json");
+
+            //Post the data 
+            var response = client.PutAsync(cohortPatientUri, theContent);
+            var responseContent = response.Result.Content;
+
+            string responseString = responseContent.ReadAsStringAsync().Result;
+            PutUpdateCohortPatientViewResponse responseCohortPatientView = null;
+
+            using (var msResponse = new MemoryStream(Encoding.Unicode.GetBytes(responseString)))
+            {
+                var serializer = new DataContractJsonSerializer(typeof(PutUpdateCohortPatientViewResponse));
+                responseCohortPatientView = (PutUpdateCohortPatientViewResponse)serializer.ReadObject(msResponse);
+            }
+
+            return responseCohortPatientView;
+        }
+
+        private HttpClient GetHttpClient(Uri uri)
+        {
+            HttpClient client = new HttpClient();
+            client.DefaultRequestHeaders.Host = uri.Host;
+            client.DefaultRequestHeaders.Add("x-Phytel-UserID", txtContactID.Text);
+
+            // Add an Accept header for JSON format.
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+            return client;
+        }
+
     }
 }

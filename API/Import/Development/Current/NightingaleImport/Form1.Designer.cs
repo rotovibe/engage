@@ -43,6 +43,7 @@
             this.colDOB = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.colSystemID = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.colSystemName = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.colTimeZone = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.colPhone1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.colPhone1Preferred = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.colPhone1Type = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -50,7 +51,6 @@
             this.colPhone2Preferred = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.colPhone2Type = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.colEmail1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.colEmail1Preferred = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.colEmail1Type = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.colEmail2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -73,7 +73,9 @@
             this.colAddress2Preferred = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.colAddress2Type = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.colCareManagerUserID = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.colTimeZone = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.chkSelectAll = new System.Windows.Forms.CheckBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.txtContactID = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // openFileDialog1
@@ -83,9 +85,10 @@
             // 
             // Browse
             // 
-            this.Browse.Location = new System.Drawing.Point(426, 12);
+            this.Browse.Location = new System.Drawing.Point(568, 15);
+            this.Browse.Margin = new System.Windows.Forms.Padding(4);
             this.Browse.Name = "Browse";
-            this.Browse.Size = new System.Drawing.Size(75, 23);
+            this.Browse.Size = new System.Drawing.Size(100, 28);
             this.Browse.TabIndex = 1;
             this.Browse.Text = "Browse";
             this.Browse.UseVisualStyleBackColor = true;
@@ -94,18 +97,21 @@
             // 
             // textBox1
             // 
-            this.textBox1.Location = new System.Drawing.Point(33, 15);
+            this.textBox1.Location = new System.Drawing.Point(44, 18);
+            this.textBox1.Margin = new System.Windows.Forms.Padding(4);
             this.textBox1.Name = "textBox1";
             this.textBox1.ReadOnly = true;
-            this.textBox1.Size = new System.Drawing.Size(393, 20);
+            this.textBox1.Size = new System.Drawing.Size(523, 22);
             this.textBox1.TabIndex = 2;
             this.textBox1.VisibleChanged += new System.EventHandler(this.textBox1_VisibleChanged);
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(273, 299);
+            this.button1.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
+            this.button1.Location = new System.Drawing.Point(382, 396);
+            this.button1.Margin = new System.Windows.Forms.Padding(4);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
+            this.button1.Size = new System.Drawing.Size(100, 28);
             this.button1.TabIndex = 4;
             this.button1.Text = "Import";
             this.button1.UseVisualStyleBackColor = true;
@@ -114,9 +120,11 @@
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(354, 299);
+            this.button2.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
+            this.button2.Location = new System.Drawing.Point(490, 396);
+            this.button2.Margin = new System.Windows.Forms.Padding(4);
             this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(75, 23);
+            this.button2.Size = new System.Drawing.Size(100, 28);
             this.button2.TabIndex = 5;
             this.button2.Text = "Cancel";
             this.button2.UseVisualStyleBackColor = true;
@@ -125,6 +133,9 @@
             // 
             // listView1
             // 
+            this.listView1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.listView1.CheckBoxes = true;
             this.listView1.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.colFirstName,
@@ -167,9 +178,10 @@
             this.colAddress2Type,
             this.colCareManagerUserID});
             this.listView1.FullRowSelect = true;
-            this.listView1.Location = new System.Drawing.Point(33, 52);
+            this.listView1.Location = new System.Drawing.Point(44, 64);
+            this.listView1.Margin = new System.Windows.Forms.Padding(4);
             this.listView1.Name = "listView1";
-            this.listView1.Size = new System.Drawing.Size(731, 227);
+            this.listView1.Size = new System.Drawing.Size(1009, 306);
             this.listView1.Sorting = System.Windows.Forms.SortOrder.Ascending;
             this.listView1.TabIndex = 6;
             this.listView1.UseCompatibleStateImageBehavior = false;
@@ -220,6 +232,10 @@
             this.colSystemName.Text = "System Name";
             this.colSystemName.Width = 81;
             // 
+            // colTimeZone
+            // 
+            this.colTimeZone.Text = "Time Zone";
+            // 
             // colPhone1
             // 
             this.colPhone1.Text = "Phone 1";
@@ -247,17 +263,6 @@
             // colEmail1
             // 
             this.colEmail1.Text = "Email 1";
-            // 
-            // checkBox1
-            // 
-            this.checkBox1.AutoSize = true;
-            this.checkBox1.Location = new System.Drawing.Point(33, 285);
-            this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Size = new System.Drawing.Size(70, 17);
-            this.checkBox1.TabIndex = 7;
-            this.checkBox1.Text = "Select All";
-            this.checkBox1.UseVisualStyleBackColor = true;
-            this.checkBox1.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged);
             // 
             // colEmail1Preferred
             // 
@@ -347,23 +352,53 @@
             // 
             this.colCareManagerUserID.Text = "Care Manager User ID";
             // 
-            // colTimeZone
+            // chkSelectAll
             // 
-            this.colTimeZone.Text = "Time Zone";
+            this.chkSelectAll.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.chkSelectAll.AutoSize = true;
+            this.chkSelectAll.Location = new System.Drawing.Point(44, 379);
+            this.chkSelectAll.Margin = new System.Windows.Forms.Padding(4);
+            this.chkSelectAll.Name = "chkSelectAll";
+            this.chkSelectAll.Size = new System.Drawing.Size(88, 21);
+            this.chkSelectAll.TabIndex = 7;
+            this.chkSelectAll.Text = "Select All";
+            this.chkSelectAll.UseVisualStyleBackColor = true;
+            this.chkSelectAll.CheckedChanged += new System.EventHandler(this.chkSelectAll_CheckedChanged);
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(656, 380);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(174, 17);
+            this.label1.TabIndex = 8;
+            this.label1.Text = "Import Data As Contact ID:";
+            // 
+            // txtContactID
+            // 
+            this.txtContactID.Location = new System.Drawing.Point(836, 377);
+            this.txtContactID.Name = "txtContactID";
+            this.txtContactID.Size = new System.Drawing.Size(217, 22);
+            this.txtContactID.TabIndex = 9;
+            this.txtContactID.Text = "531f2df5072ef727c4d2a3bc";
             // 
             // Form1
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(776, 512);
-            this.Controls.Add(this.checkBox1);
+            this.ClientSize = new System.Drawing.Size(1064, 439);
+            this.Controls.Add(this.txtContactID);
+            this.Controls.Add(this.label1);
+            this.Controls.Add(this.chkSelectAll);
             this.Controls.Add(this.listView1);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.textBox1);
             this.Controls.Add(this.Browse);
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "Form1";
-            this.Text = "Form1";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            this.Text = "Nightingale Import Utility";
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -384,7 +419,7 @@
         private System.Windows.Forms.ColumnHeader colPreferredName;
         private System.Windows.Forms.ColumnHeader colGender;
         private System.Windows.Forms.ColumnHeader colDOB;
-        private System.Windows.Forms.CheckBox checkBox1;
+        private System.Windows.Forms.CheckBox chkSelectAll;
         private System.Windows.Forms.ColumnHeader colSystemID;
         private System.Windows.Forms.ColumnHeader colSystemName;
         private System.Windows.Forms.ColumnHeader colPhone1;
@@ -417,6 +452,8 @@
         private System.Windows.Forms.ColumnHeader colAddress2Type;
         private System.Windows.Forms.ColumnHeader colCareManagerUserID;
         private System.Windows.Forms.ColumnHeader colTimeZone;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.TextBox txtContactID;
     }
 }
 
