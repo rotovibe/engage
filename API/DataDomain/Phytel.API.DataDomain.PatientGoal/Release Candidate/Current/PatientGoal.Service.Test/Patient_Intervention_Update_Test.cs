@@ -64,7 +64,7 @@ namespace Phytel.API.DataDomain.PatientGoal.Services.Test
                         StartDate = System.DateTime.UtcNow,
                         StatusId = 1,
                         StatusDate = System.DateTime.UtcNow,
-                        Barriers = GetBarriers(),
+                        BarrierIds = GetBarriers(),
                         AssignedToId = "Test",
                         CategoryId = "12341cf8fe7a592d046c548f"
                     }
