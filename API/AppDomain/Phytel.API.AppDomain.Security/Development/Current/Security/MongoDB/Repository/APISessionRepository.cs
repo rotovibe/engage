@@ -141,37 +141,31 @@ namespace Phytel.API.AppDomain.Security
             {
                 ValidateTokenResponse response = null;
                 ObjectId tokenObjectId;
-                //IdProperty, SecurityTokenProperty, ContractNumberProperty, ProductProperty
+
                 if (ObjectId.TryParse(request.Token, out tokenObjectId))
                 {
-                    
-                    int sessionLengthInMinutes = (from s in _objectContext.APISessions
-                                                  where s.Id == tokenObjectId
-                                                    && s.SecurityToken == securityToken
-                                                    && s.ContractNumber == request.ContractNumber
-                                                    && s.Product == request.Context.ToUpper()
-                                                  select s.SessionLengthInMinutes).FirstOrDefault();
+                    MEAPISession session = _objectContext.APISessions.Collection.FindOneByIdAs<MEAPISession>(tokenObjectId);
 
-                    if (sessionLengthInMinutes > 0)
+                    if (session != null)
                     {
-                        FindAndModifyResult result = _objectContext.APISessions.Collection.FindAndModify(Query.EQ(MEAPISession.IdProperty, tokenObjectId), SortBy.Null,
-                                                    MongoDB.Driver.Builders.Update.Set(MEAPISession.SessionTimeOutProperty, DateTime.UtcNow.AddMinutes(sessionLengthInMinutes)), true);
-
-                        if (result != null && result.ModifiedDocument != null)
+                        if (session.SecurityToken.Equals(securityToken) &&
+                            session.ContractNumber.Equals(request.ContractNumber) &&
+                            session.Product.Equals(request.Context))
                         {
-                            MEAPISession session = BsonSerializer.Deserialize<MEAPISession>(result.ModifiedDocument);
+                            session.SessionTimeOut = DateTime.UtcNow.AddMinutes(session.SessionLengthInMinutes);
                             response = new ValidateTokenResponse
-                                            {
-                                                SessionLengthInMinutes = session.SessionLengthInMinutes,
-                                                SessionTimeOut = session.SessionTimeOut,
-                                                TokenId = session.Id.ToString(),
-                                                SQLUserId = session.SQLUserId,
-                                                UserId = session.UserId.ToString(),
-                                                UserName = session.UserName
-                                            };
+                            {
+                                SessionLengthInMinutes = session.SessionLengthInMinutes,
+                                SessionTimeOut = session.SessionTimeOut,
+                                TokenId = session.Id.ToString(),
+                                SQLUserId = session.SQLUserId,
+                                UserId = session.UserId.ToString(),
+                                UserName = session.UserName
+                            };
+                            _objectContext.APISessions.Collection.Save(session);
                         }
                         else
-                            throw new UnauthorizedAccessException("Security Token does not exist (result is null)");
+                            throw new UnauthorizedAccessException("Invalid Security Authorization Request");
 
                         return response;
                     }
@@ -181,7 +175,7 @@ namespace Phytel.API.AppDomain.Security
                 else
                     throw new UnauthorizedAccessException("Security Token is not in correct format.");
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 throw;
             }
@@ -191,19 +185,15 @@ namespace Phytel.API.AppDomain.Security
         {
             LogoutResponse response = new LogoutResponse();
             response.SuccessfulLogout = false;
+            ObjectId tokenObjectId;
             try
             {
-                IMongoQuery removeQ = Query.And(
-                                            Query.EQ(MEAPISession.IdProperty, ObjectId.Parse(token)),
-                                            Query.EQ(MEAPISession.SecurityTokenProperty, securityToken),
-                                            Query.EQ(MEAPISession.ContractNumberProperty, contractNumber),
-                                            Query.EQ(MEAPISession.ProductProperty, context.ToUpper()));
-
-                MEAPISession session = _objectContext.APISessions.Collection.FindOneById(ObjectId.Parse(token));
-                if (session != null && session.Product.ToUpper().Equals(context.ToUpper()))
+                if (ObjectId.TryParse(token, out tokenObjectId))
                 {
-                    _objectContext.APISessions.Collection.Remove(removeQ);
-                    response.SuccessfulLogout = true;
+                    IMongoQuery removeQ = Query.EQ(MEAPISession.IdProperty, ObjectId.Parse(token));
+
+                    WriteConcernResult wcr = _objectContext.APISessions.Collection.Remove(removeQ);
+                    response.SuccessfulLogout = (wcr.Ok);
                 }
             }
             catch (Exception) { throw; }
