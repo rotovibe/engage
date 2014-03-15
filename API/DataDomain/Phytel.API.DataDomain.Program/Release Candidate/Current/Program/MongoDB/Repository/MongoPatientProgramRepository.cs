@@ -291,8 +291,8 @@ namespace Phytel.API.DataDomain.Program
                     if (pg.Description != null) { uv.Add(MB.Update.Set(MEPatientProgram.DescriptionProperty, pg.Description)); }
                     if (pg.EndDate != null) { uv.Add(MB.Update.Set(MEPatientProgram.EndDateProperty, pg.EndDate)); }
                     if (pg.Name != null) { uv.Add(MB.Update.Set(MEPatientProgram.NameProperty, pg.Name)); }
-                    if (pg.Next != null) { uv.Add(MB.Update.Set(MEPatientProgram.NextProperty, ObjectId.Parse(pg.Next))); }
-                    if (pg.Previous != null) { uv.Add(MB.Update.Set(MEPatientProgram.PreviousProperty, ObjectId.Parse(pg.Previous))); }
+                    if (pg.Next != null) { uv.Add(MB.Update.Set(MEPatientProgram.NextProperty, DTOUtils.ParseObjectId(pg.Next))); }
+                    if (pg.Previous != null) { uv.Add(MB.Update.Set(MEPatientProgram.PreviousProperty, DTOUtils.ParseObjectId(pg.Previous))); }
                     if (pg.ShortName != null) { uv.Add(MB.Update.Set(MEPatientProgram.ShortNameProperty, pg.ShortName)); }
                     if (pg.SourceId != null) { uv.Add(MB.Update.Set(MEPatientProgram.SourceIdProperty, pg.SourceId)); }
                     if (pg.StartDate != null) { uv.Add(MB.Update.Set(MEPatientProgram.StartDateProperty, pg.StartDate)); }
