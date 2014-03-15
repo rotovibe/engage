@@ -67,7 +67,7 @@ namespace Phytel.API.DataDomain.PatientGoal.Services.Test
                         TargetDate = System.DateTime.UtcNow.AddDays(7),
                         TargetValue = "!!This is a task update test",
                         CustomAttributes = GetAttributes(),
-                        Barriers = GetBarriers()
+                        BarrierIds = GetBarriers()
                     }
                 } as object);
         }
