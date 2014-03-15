@@ -7,7 +7,6 @@ using System.Collections.Generic;
 namespace Phytel.API.AppDomain.Security
 {
     [BsonIgnoreExtraElements(false)]
-    [MongoIndex(Keys = new string[] { IdProperty, SecurityTokenProperty, ContractNumberProperty, ProductProperty }, Unique = true)]
     [MongoIndex(Keys = new string[] { SessionTimeOutProperty }, TimeToLive = 0)]
     public class MEAPISession : IMongoEntity<ObjectId>
     {
