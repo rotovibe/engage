@@ -144,6 +144,7 @@ namespace Phytel.API.AppDomain.Security
                 //IdProperty, SecurityTokenProperty, ContractNumberProperty, ProductProperty
                 if (ObjectId.TryParse(request.Token, out tokenObjectId))
                 {
+                    
                     int sessionLengthInMinutes = (from s in _objectContext.APISessions
                                                   where s.Id == tokenObjectId
                                                     && s.SecurityToken == securityToken
@@ -170,19 +171,19 @@ namespace Phytel.API.AppDomain.Security
                                             };
                         }
                         else
-                            throw new UnauthorizedAccessException("Security Token does not exist");
+                            throw new UnauthorizedAccessException("Security Token does not exist (result is null)");
 
                         return response;
                     }
                     else
-                        throw new UnauthorizedAccessException("Security Token does not exist");
+                        throw new UnauthorizedAccessException("Security Token does not exist (can't find security token)");
                 }
                 else
                     throw new UnauthorizedAccessException("Security Token is not in correct format.");
             }
             catch (Exception ex)
             {
-                throw ex;
+                throw;
             }
         }
 
