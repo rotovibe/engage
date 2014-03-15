@@ -55,6 +55,7 @@ namespace Phytel.API.AppDomain.NG
 
                     if (string.IsNullOrEmpty(response.Patient.DisplayPatientSystemId) == false)
                     {
+                        client = Common.Helper.GetJsonServiceClient(request.UserId);
                         sysResponse = client.Get<Phytel.API.DataDomain.PatientSystem.DTO.GetPatientSystemDataResponse>(string.Format("{0}/{1}/{2}/{3}/PatientSystem/{4}",
                                                                                     DDPatientSystemUrl,
                                                                                     "NG",
