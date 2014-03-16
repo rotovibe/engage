@@ -37,17 +37,71 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="ASEContext">
+      <HintPath>References\ASEContext.dll</HintPath>
+    </Reference>
+    <Reference Include="ASECore">
+      <HintPath>References\ASECore.dll</HintPath>
+    </Reference>
+    <Reference Include="ASEData">
+      <HintPath>References\ASEData.dll</HintPath>
+    </Reference>
     <Reference Include="MongoDB.Bson">
-      <HintPath>..\..\Services\API\AppDomain\Phytel.API.AppDomain.NG\Development\Current\References\MongoDB.Bson.dll</HintPath>
+      <HintPath>References\MongoDB.Bson.dll</HintPath>
     </Reference>
     <Reference Include="MongoDB.Driver">
-      <HintPath>..\..\Services\API\AppDomain\Phytel.API.AppDomain.NG\Development\Current\References\MongoDB.Driver.dll</HintPath>
+      <HintPath>References\MongoDB.Driver.dll</HintPath>
+    </Reference>
+    <Reference Include="Phytel.API.Common">
+      <HintPath>References\Phytel.API.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Phytel.API.DataAudit">
+      <HintPath>References\Phytel.API.DataAudit.dll</HintPath>
+    </Reference>
+    <Reference Include="Phytel.API.DataDomain.Cohort">
+      <HintPath>References\Phytel.API.DataDomain.Cohort.dll</HintPath>
+    </Reference>
+    <Reference Include="Phytel.API.DataDomain.Cohort.DTO">
+      <HintPath>References\Phytel.API.DataDomain.Cohort.DTO.dll</HintPath>
+    </Reference>
+    <Reference Include="Phytel.API.DataDomain.Contact">
+      <HintPath>References\Phytel.API.DataDomain.Contact.dll</HintPath>
+    </Reference>
+    <Reference Include="Phytel.API.DataDomain.Contact.DTO">
+      <HintPath>References\Phytel.API.DataDomain.Contact.DTO.dll</HintPath>
+    </Reference>
+    <Reference Include="Phytel.API.DataDomain.LookUp">
+      <HintPath>References\Phytel.API.DataDomain.LookUp.dll</HintPath>
+    </Reference>
+    <Reference Include="Phytel.API.DataDomain.LookUp.DTO">
+      <HintPath>References\Phytel.API.DataDomain.LookUp.DTO.dll</HintPath>
+    </Reference>
+    <Reference Include="Phytel.API.DataDomain.Patient">
+      <HintPath>References\Phytel.API.DataDomain.Patient.dll</HintPath>
+    </Reference>
+    <Reference Include="Phytel.API.DataDomain.Patient.DTO">
+      <HintPath>References\Phytel.API.DataDomain.Patient.DTO.dll</HintPath>
+    </Reference>
+    <Reference Include="Phytel.API.DataDomain.PatientProblem">
+      <HintPath>References\Phytel.API.DataDomain.PatientProblem.dll</HintPath>
+    </Reference>
+    <Reference Include="Phytel.API.DataDomain.PatientProblem.DTO">
+      <HintPath>References\Phytel.API.DataDomain.PatientProblem.DTO.dll</HintPath>
+    </Reference>
+    <Reference Include="Phytel.API.DataDomain.PatientSystem">
+      <HintPath>References\Phytel.API.DataDomain.PatientSystem.dll</HintPath>
+    </Reference>
+    <Reference Include="Phytel.API.DataDomain.PatientSystem.DTO">
+      <HintPath>References\Phytel.API.DataDomain.PatientSystem.DTO.dll</HintPath>
+    </Reference>
+    <Reference Include="Phytel.API.Interface">
+      <HintPath>References\Phytel.API.Interface.dll</HintPath>
     </Reference>
     <Reference Include="Phytel.Mongo">
-      <HintPath>..\..\Services\API\AppDomain\Phytel.API.AppDomain.NG\Development\Current\References\Phytel.Mongo.dll</HintPath>
+      <HintPath>References\Phytel.Mongo.dll</HintPath>
     </Reference>
     <Reference Include="PhytelServices">
-      <HintPath>..\..\Services\API\AppDomain\Phytel.API.AppDomain.NG\Development\Current\References\PhytelServices.dll</HintPath>
+      <HintPath>References\PhytelServices.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -93,44 +147,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\Services\API\Common\Phytel.API.Common\Development\Current\Phytel.API.Common.csproj">
-      <Project>{25cf3c3f-221f-4a49-b5ef-a8a5fcf9a5ba}</Project>
-      <Name>Phytel.API.Common</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Services\API\DataDomain\Phytel.API.DataDomain.Cohort\Release Candidate\Current\Cohort\DataDomain.Cohort.csproj">
-      <Project>{229026b1-c3e5-4d2b-8d2b-61d00e8a52cc}</Project>
-      <Name>DataDomain.Cohort</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Services\API\DataDomain\Phytel.API.DataDomain.Contact\Release Candidate\Current\Contact\DataDomain.Contact.csproj">
-      <Project>{16143ea0-7971-4959-8b3b-eac8584279c2}</Project>
-      <Name>DataDomain.Contact</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Services\API\DataDomain\Phytel.API.DataDomain.LookUp\Release Candidate\Current\LookUp\DataDomain.LookUp.csproj">
-      <Project>{f0a3623a-6d1d-46de-a00e-794ebc856eb5}</Project>
-      <Name>DataDomain.LookUp</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Services\API\DataDomain\Phytel.API.DataDomain.PatientProblem\Release Candidate\Current\PatientProblem\DataDomain.PatientProblem.csproj">
-      <Project>{afd0f5b1-a29e-402c-958b-d6d82b4278e5}</Project>
-      <Name>DataDomain.PatientProblem</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Services\API\DataDomain\Phytel.API.DataDomain.PatientSystem\Development\Current\PatientSystem\DataDomain.PatientSystem.csproj">
-      <Project>{bf2f1262-d5cc-41f0-bcfc-7ccdce479795}</Project>
-      <Name>DataDomain.PatientSystem</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Services\API\DataDomain\Phytel.API.DataDomain.Patient\Release Candidate\Current\Patient\DataDomain.Patient.csproj">
-      <Project>{1536cd0a-6308-4daf-8618-35bba0816997}</Project>
-      <Name>DataDomain.Patient</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Services\API\DataDomain\Phytel.API.DataDomain.Program\Development\Current\Program\DataDomain.Program.csproj">
-      <Project>{34271552-e2e1-428f-b612-7186e01b6c54}</Project>
-      <Name>DataDomain.Program</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Services\API\Interfaces\Development\Current\Phytel.API.Interface\Phytel.API.Interface.csproj">
-      <Project>{abe948fb-247e-4955-b3ab-b7c93e10a542}</Project>
-      <Name>Phytel.API.Interface</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

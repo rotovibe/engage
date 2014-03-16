@@ -1,24 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using System.Data.SqlClient;
-using Phytel.API.DataDomain.Patient.DTO;
-using Phytel.API.DataDomain.LookUp.DTO;
-using Phytel.API.DataDomain.PatientProblem.DTO;
-using Phytel.API.DataDomain.PatientSystem.DTO;
+﻿using MongoDB.Bson;
+using MongoDB.Bson.Serialization;
 using MongoDB.Driver;
 using MongoDB.Driver.Builders;
-using Phytel.API.DataDomain.Program.MongoDB.DTO;
 using Phytel.API.DataDomain.Contact.DTO;
-
-using MongoDB.Bson.Serialization;
-using MongoDB.Bson;
+using Phytel.API.DataDomain.LookUp.DTO;
+using Phytel.API.DataDomain.Patient.DTO;
+using Phytel.API.DataDomain.PatientProblem.DTO;
+using Phytel.API.DataDomain.PatientSystem.DTO;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Linq;
+using System.Windows.Forms;
 
 namespace NGTestData
 {
