@@ -22,8 +22,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Phytel.API.Interface", "Int
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Interfaces", "Interfaces", "{2B73BAC7-448F-4CB9-9481-3C837C901B9C}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shared", "Shared", "{0921D4F2-8F09-438B-95F6-539E2434CCEF}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NG", "NG", "{2FDF8A25-888A-4C5D-9C06-7FCDF0C3C318}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppDomain.NG.Test", "AppDomain\Phytel.API.AppDomain.NG\Development\Current\AppDomain.NG.Tests\AppDomain.NG.Test.csproj", "{1FCB66F1-56D2-430B-85A7-0D1C26A30FA8}"
