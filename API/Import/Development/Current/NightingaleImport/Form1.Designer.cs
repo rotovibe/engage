@@ -77,13 +77,19 @@
             this.label1 = new System.Windows.Forms.Label();
             this.txtContactID = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
-            this.lblUrl = new System.Windows.Forms.Label();
             this.lblStatus = new System.Windows.Forms.Label();
+            this.txtURL = new System.Windows.Forms.TextBox();
+            this.txtContract = new System.Windows.Forms.TextBox();
+            this.label3 = new System.Windows.Forms.Label();
+            this.txtSQLConn = new System.Windows.Forms.TextBox();
+            this.label4 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // openFileDialog1
             // 
             this.openFileDialog1.FileName = "openFileDialog1";
+            this.openFileDialog1.Filter = "Import Files|*.csv";
+            this.openFileDialog1.Title = "Select Import File...";
             this.openFileDialog1.FileOk += new System.ComponentModel.CancelEventHandler(this.openFileDialog1_FileOk);
             // 
             // Browse
@@ -111,7 +117,7 @@
             // button1
             // 
             this.button1.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
-            this.button1.Location = new System.Drawing.Point(382, 396);
+            this.button1.Location = new System.Drawing.Point(410, 423);
             this.button1.Margin = new System.Windows.Forms.Padding(4);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(100, 28);
@@ -124,7 +130,7 @@
             // button2
             // 
             this.button2.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
-            this.button2.Location = new System.Drawing.Point(490, 396);
+            this.button2.Location = new System.Drawing.Point(518, 423);
             this.button2.Margin = new System.Windows.Forms.Padding(4);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(100, 28);
@@ -181,10 +187,10 @@
             this.colAddress2Type,
             this.colCareManagerUserID});
             this.listView1.FullRowSelect = true;
-            this.listView1.Location = new System.Drawing.Point(44, 64);
+            this.listView1.Location = new System.Drawing.Point(44, 83);
             this.listView1.Margin = new System.Windows.Forms.Padding(4);
             this.listView1.Name = "listView1";
-            this.listView1.Size = new System.Drawing.Size(1009, 306);
+            this.listView1.Size = new System.Drawing.Size(1045, 332);
             this.listView1.Sorting = System.Windows.Forms.SortOrder.Ascending;
             this.listView1.TabIndex = 6;
             this.listView1.UseCompatibleStateImageBehavior = false;
@@ -359,7 +365,7 @@
             // 
             this.chkSelectAll.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.chkSelectAll.AutoSize = true;
-            this.chkSelectAll.Location = new System.Drawing.Point(44, 379);
+            this.chkSelectAll.Location = new System.Drawing.Point(44, 423);
             this.chkSelectAll.Margin = new System.Windows.Forms.Padding(4);
             this.chkSelectAll.Name = "chkSelectAll";
             this.chkSelectAll.Size = new System.Drawing.Size(88, 21);
@@ -370,8 +376,9 @@
             // 
             // label1
             // 
+            this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(656, 380);
+            this.label1.Location = new System.Drawing.Point(692, 425);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(169, 17);
             this.label1.TabIndex = 8;
@@ -379,7 +386,8 @@
             // 
             // txtContactID
             // 
-            this.txtContactID.Location = new System.Drawing.Point(836, 377);
+            this.txtContactID.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtContactID.Location = new System.Drawing.Point(872, 422);
             this.txtContactID.Name = "txtContactID";
             this.txtContactID.Size = new System.Drawing.Size(217, 22);
             this.txtContactID.TabIndex = 9;
@@ -387,37 +395,79 @@
             // 
             // label2
             // 
+            this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(656, 407);
+            this.label2.Location = new System.Drawing.Point(692, 452);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(83, 17);
             this.label2.TabIndex = 10;
             this.label2.Text = "Import URL:";
             // 
-            // lblUrl
-            // 
-            this.lblUrl.AutoSize = true;
-            this.lblUrl.Location = new System.Drawing.Point(745, 407);
-            this.lblUrl.Name = "lblUrl";
-            this.lblUrl.Size = new System.Drawing.Size(0, 17);
-            this.lblUrl.TabIndex = 11;
-            // 
             // lblStatus
             // 
+            this.lblStatus.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.lblStatus.AutoSize = true;
-            this.lblStatus.Location = new System.Drawing.Point(41, 407);
+            this.lblStatus.Location = new System.Drawing.Point(47, 53);
             this.lblStatus.Name = "lblStatus";
-            this.lblStatus.Size = new System.Drawing.Size(83, 17);
+            this.lblStatus.Size = new System.Drawing.Size(85, 17);
             this.lblStatus.TabIndex = 12;
-            this.lblStatus.Text = "Import URL:";
+            this.lblStatus.Text = "Select File...";
+            // 
+            // txtURL
+            // 
+            this.txtURL.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtURL.Location = new System.Drawing.Point(781, 449);
+            this.txtURL.Name = "txtURL";
+            this.txtURL.Size = new System.Drawing.Size(308, 22);
+            this.txtURL.TabIndex = 13;
+            // 
+            // txtContract
+            // 
+            this.txtContract.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtContract.Location = new System.Drawing.Point(781, 477);
+            this.txtContract.Name = "txtContract";
+            this.txtContract.Size = new System.Drawing.Size(308, 22);
+            this.txtContract.TabIndex = 15;
+            // 
+            // label3
+            // 
+            this.label3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(692, 480);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(65, 17);
+            this.label3.TabIndex = 14;
+            this.label3.Text = "Contract:";
+            // 
+            // txtSQLConn
+            // 
+            this.txtSQLConn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtSQLConn.Location = new System.Drawing.Point(478, 505);
+            this.txtSQLConn.Name = "txtSQLConn";
+            this.txtSQLConn.Size = new System.Drawing.Size(610, 22);
+            this.txtSQLConn.TabIndex = 17;
+            // 
+            // label4
+            // 
+            this.label4.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(320, 508);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(152, 17);
+            this.label4.TabIndex = 16;
+            this.label4.Text = "SQL User Conn String:";
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1064, 439);
+            this.ClientSize = new System.Drawing.Size(1100, 539);
+            this.Controls.Add(this.txtSQLConn);
+            this.Controls.Add(this.label4);
+            this.Controls.Add(this.txtContract);
+            this.Controls.Add(this.label3);
+            this.Controls.Add(this.txtURL);
             this.Controls.Add(this.lblStatus);
-            this.Controls.Add(this.lblUrl);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.txtContactID);
             this.Controls.Add(this.label1);
@@ -488,8 +538,12 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TextBox txtContactID;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Label lblUrl;
         private System.Windows.Forms.Label lblStatus;
+        private System.Windows.Forms.TextBox txtURL;
+        private System.Windows.Forms.TextBox txtContract;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.TextBox txtSQLConn;
+        private System.Windows.Forms.Label label4;
     }
 }
 

@@ -69,13 +69,10 @@ namespace NightingaleImport
         private List<StateData> statesLookUp = new List<StateData>();
         private List<TimeZoneData> zonesLookUp = new List<TimeZoneData>();
         private TimeZoneData zoneDefault = new TimeZoneData();
+        private List<IdNamePair> careMemberLookUp = new List<IdNamePair>();
 
         private double version = double.Parse(ConfigurationManager.AppSettings.Get("version"));
         private string context = ConfigurationManager.AppSettings.Get("context");
-        private string contractNumber = ConfigurationManager.AppSettings.Get("contractNumber");
-        private string contactTypeId = ConfigurationManager.AppSettings.Get("contactTypeId");
-        private string DataDomainURL = ConfigurationManager.AppSettings.Get("DataDomainURL");
-        private string phytelServicesConnName = ConfigurationManager.AppSettings.Get("PhytelServicesConnName");
 
         string _headerUserId = string.Empty;
 
@@ -83,13 +80,11 @@ namespace NightingaleImport
         {
             InitializeComponent();
             this.listView1.ColumnClick += new System.Windows.Forms.ColumnClickEventHandler(this.listView1_ColumnClick);
-
         }
 
         public void button1_Click(object sender, EventArgs e)
         {
             openFileDialog1.ShowDialog();
-            
         }
 
         private void button1_VisibleChanged(object sender, EventArgs e)
@@ -119,6 +114,11 @@ namespace NightingaleImport
                     Dictionary<string, string> dictionarySucceed = new Dictionary<string, string>();
                     Dictionary<string, string> dictionaryFail = new Dictionary<string, string>();
 
+                    LoadLookUps();
+
+                    //"Care Manager
+                    string contactTypeId = careMemberLookUp.Where(x => x.Name == "Care Manager").FirstOrDefault().Id;
+
                     foreach (ListViewItem lvi in listView1.CheckedItems)
                     {
 
@@ -132,7 +132,7 @@ namespace NightingaleImport
                             Gender = lvi.SubItems[colGen].Text,
                             DOB = lvi.SubItems[colDB].Text,
                             Context = context,
-                            ContractNumber = contractNumber,
+                            ContractNumber = txtContract.Text,
                             Version = version
                         };
 
@@ -183,9 +183,7 @@ namespace NightingaleImport
                             }
                         }
 
-
                         //Contact
-                        LoadLookUps();
 
                         //timezone
                         TimeZoneData tZone = new TimeZoneData();
@@ -510,12 +508,15 @@ namespace NightingaleImport
 
                     }
 
-                    string listSucceed = null;
-                    foreach (var pairSucceed in dictionarySucceed)
-                    {
-                        listSucceed += pairSucceed + "\n";
-                    }
+                    string listSucceed = string.Empty;
 
+                    if (dictionarySucceed.Count < 10)
+                    {
+                        foreach (var pairSucceed in dictionarySucceed)
+                        {
+                            listSucceed += pairSucceed + "\n";
+                        }
+                    }
                     string listFail = null;
                     foreach (var pairFail in dictionaryFail)
                     {
@@ -538,17 +539,17 @@ namespace NightingaleImport
         {
             //modes
             Uri modesUri = new Uri(string.Format("{0}/LookUp/{1}/{2}/{3}/commmodes",
-                                                    DataDomainURL,
+                                                    txtURL.Text,
                                                     context,
                                                     version,
-                                                    contractNumber));
+                                                    txtContract.Text));
             HttpClient modesClient = GetHttpClient(modesUri);
 
             GetAllCommModesDataRequest modesRequest = new GetAllCommModesDataRequest
             {
                 Version = version,
                 Context = context,
-                ContractNumber = contractNumber
+                ContractNumber = txtContract.Text
             };
 
             DataContractJsonSerializer modesJsonSer = new DataContractJsonSerializer(typeof(GetAllCommModesDataRequest));
@@ -576,17 +577,17 @@ namespace NightingaleImport
 
             //types
             Uri typesUri = new Uri(string.Format("{0}/LookUp/{1}/{2}/{3}/commtypes",
-                                                    DataDomainURL,
+                                                    txtURL.Text,
                                                     context,
                                                     version,
-                                                    contractNumber));
+                                                    txtContract.Text));
             HttpClient typesClient = GetHttpClient(typesUri);
 
             GetAllCommTypesDataRequest typesRequest = new GetAllCommTypesDataRequest
             {
                 Version = version,
                 Context = context,
-                ContractNumber = contractNumber
+                ContractNumber = txtContract.Text
             };
 
             DataContractJsonSerializer typesJsonSer = new DataContractJsonSerializer(typeof(GetAllCommTypesDataRequest));
@@ -614,17 +615,17 @@ namespace NightingaleImport
 
             //states
             Uri statesUri = new Uri(string.Format("{0}/LookUp/{1}/{2}/{3}/states",
-                                                    DataDomainURL,
+                                                    txtURL.Text,
                                                     context,
                                                     version,
-                                                    contractNumber));
+                                                    txtContract.Text));
             HttpClient statesClient = GetHttpClient(statesUri);
 
             GetAllStatesDataRequest statesRequest = new GetAllStatesDataRequest
             {
                 Version = version,
                 Context = context,
-                ContractNumber = contractNumber
+                ContractNumber = txtContract.Text
             };
 
             DataContractJsonSerializer statesJsonSer = new DataContractJsonSerializer(typeof(GetAllStatesDataRequest));
@@ -652,17 +653,17 @@ namespace NightingaleImport
 
             //timezones
             Uri zonesUri = new Uri(string.Format("{0}/LookUp/{1}/{2}/{3}/timeZones",
-                                                    DataDomainURL,
+                                                    txtURL.Text,
                                                     context,
                                                     version,
-                                                    contractNumber));
+                                                    txtContract.Text));
             HttpClient zonesClient = GetHttpClient(zonesUri);
 
             GetAllTimeZonesDataRequest zonesRequest = new GetAllTimeZonesDataRequest
             {
                 Version = version,
                 Context = context,
-                ContractNumber = contractNumber
+                ContractNumber = txtContract.Text
             };
 
             DataContractJsonSerializer zonesJsonSer = new DataContractJsonSerializer(typeof(GetAllTimeZonesDataRequest));
@@ -690,17 +691,17 @@ namespace NightingaleImport
 
             //default timezone
             Uri zoneUri = new Uri(string.Format("{0}/LookUp/{1}/{2}/{3}/TimeZone/Default",
-                                                    DataDomainURL,
+                                                    txtURL.Text,
                                                     context,
                                                     version,
-                                                    contractNumber));
+                                                    txtContract.Text));
             HttpClient zoneClient = GetHttpClient(zoneUri);
 
             GetTimeZoneDataRequest zoneRequest = new GetTimeZoneDataRequest
             {
                 Version = version,
                 Context = context,
-                ContractNumber = contractNumber
+                ContractNumber = txtContract.Text
             };
 
             DataContractJsonSerializer zoneJsonSer = new DataContractJsonSerializer(typeof(GetTimeZoneDataRequest));
@@ -725,6 +726,46 @@ namespace NightingaleImport
                 responseZone = (GetTimeZoneDataResponse)zoneSerializer.ReadObject(zoneMsResponse);
             }
             zoneDefault = responseZone.TimeZone;
+
+            //Care Member
+            ///{Context}/{Version}/{txtContract.Text}/Type/{Name}
+            Uri careMemberUri = new Uri(string.Format("{0}/LookUp/{1}/{2}/{3}/Type/CareMemberType",
+                                                    txtURL.Text,
+                                                    context,
+                                                    version,
+                                                    txtContract.Text));
+            HttpClient careMemberClient = GetHttpClient(careMemberUri);
+
+            GetLookUpsDataRequest careMemberRequest = new GetLookUpsDataRequest
+            {
+                Version = version,
+                Context = context,
+                ContractNumber = txtContract.Text
+            };
+
+            DataContractJsonSerializer careMemberJsonSer = new DataContractJsonSerializer(typeof(GetLookUpsDataRequest));
+            MemoryStream careMemberMs = new MemoryStream();
+            careMemberJsonSer.WriteObject(careMemberMs, careMemberRequest);
+            careMemberMs.Position = 0;
+
+            //use a Stream reader to construct the StringContent (Json) 
+            StreamReader careMemberSr = new StreamReader(careMemberMs);
+            StringContent careMemberContent = new StringContent(careMemberSr.ReadToEnd(), System.Text.Encoding.UTF8, "application/json");
+
+            //Post the data 
+            var careMemberResponse = careMemberClient.GetStringAsync(careMemberUri);
+            var careMemberResponseContent = careMemberResponse.Result;
+
+            string careMemberResponseString = careMemberResponseContent;
+            GetLookUpsDataResponse responsecareMember = null;
+
+            using (var careMemberMsResponse = new MemoryStream(Encoding.Unicode.GetBytes(careMemberResponseString)))
+            {
+                var careMemberSerializer = new DataContractJsonSerializer(typeof(GetLookUpsDataResponse));
+                responsecareMember = (GetLookUpsDataResponse)careMemberSerializer.ReadObject(careMemberMsResponse);
+            }
+            careMemberLookUp = responsecareMember.LookUpsData;
+
         }
 
         private void button1_VisibleChanged_1(object sender, EventArgs e)
@@ -781,6 +822,7 @@ namespace NightingaleImport
             finally
             {
                 chkSelectAll.Text = string.Format("Select All ({0} Patients)", listView1.Items.Count);
+                lblStatus.Text = "Select Individuals to Import...";
             }
         }
 
@@ -832,7 +874,7 @@ namespace NightingaleImport
 
                 string sql = string.Format("Select userId from [User] where UserName = '{0}'",
                                             userName);
-                DataSet ds = Phytel.Services.SQLDataService.Instance.ExecuteSQL(phytelServicesConnName, false, sql);
+                DataSet ds = Phytel.Services.SQLDataService.Instance.ExecuteSQLDirect(txtSQLConn.Text, sql, 30);
                 if (ds.Tables[0].Rows.Count > 0)
                 {
                     returnId = Guid.Parse(ds.Tables[0].Rows[0]["userId"].ToString());
@@ -849,10 +891,10 @@ namespace NightingaleImport
         {
             //Patient
             Uri theUri = new Uri(string.Format("{0}/Patient/{1}/{2}/{3}/patient",
-                                                 DataDomainURL,
+                                                 txtURL.Text,
                                                  context,
                                                  version,
-                                                 contractNumber));
+                                                 txtContract.Text));
 
             HttpClient client = GetHttpClient(theUri);
 
@@ -889,10 +931,10 @@ namespace NightingaleImport
         {
             //PatientSystem
             Uri theUriPS = new Uri(string.Format("{0}/PatientSystem/{1}/{2}/{3}/patientsystem",
-                                                   DataDomainURL,
+                                                   txtURL.Text,
                                                    context,
                                                    version,
-                                                   contractNumber));
+                                                   txtContract.Text));
             HttpClient clientPS = GetHttpClient(theUriPS);
 
             DataContractJsonSerializer jsonSerPS = new DataContractJsonSerializer(typeof(PutPatientSystemDataRequest));
@@ -927,10 +969,10 @@ namespace NightingaleImport
         private PutUpdatePatientDataResponse putUpdatePatientServiceCall(PutUpdatePatientDataRequest putUpdatePatient, string patientId)
         {
             Uri updateUri = new Uri(string.Format("{0}/Patient/{1}/{2}/{3}/patient/{4}",
-                                                        DataDomainURL,
+                                                        txtURL.Text,
                                                         context,
                                                         version,
-                                                        contractNumber,
+                                                        txtContract.Text,
                                                         patientId));
             HttpClient updateClient = GetHttpClient(updateUri);
 
@@ -968,10 +1010,10 @@ namespace NightingaleImport
         private PutContactDataResponse putContactServiceCall(PutContactDataRequest putContactRequest, string patientId)
         {
             Uri contactUri = new Uri(string.Format("{0}/Contact/{1}/{2}/{3}/patient/contact/{4}",
-                                            DataDomainURL,
+                                            txtURL.Text,
                                             context,
                                             version,
-                                            contractNumber,
+                                            txtContract.Text,
                                             patientId));
             HttpClient contactClient = GetHttpClient(contactUri);
 
@@ -1004,10 +1046,10 @@ namespace NightingaleImport
         {
             //Patient
             Uri careMemberUri = new Uri(string.Format("{0}/CareMember/{1}/{2}/{3}/Patient/{4}/CareMember/Insert",
-                                                 DataDomainURL,
+                                                 txtURL.Text,
                                                  context,
                                                  version,
-                                                 contractNumber,
+                                                 txtContract.Text,
                                                  patientId));
             HttpClient client = GetHttpClient(careMemberUri);
             
@@ -1043,10 +1085,10 @@ namespace NightingaleImport
         private GetContactByUserIdDataResponse getContactByUserIdServiceCall(string userId)
         {
             Uri getContactUri = new Uri(string.Format("{0}/Contact/{1}/{2}/{3}/Contact/User/{4}",
-                                                    DataDomainURL,
+                                                    txtURL.Text,
                                                     context,
                                                     version,
-                                                    contractNumber,
+                                                    txtContract.Text,
                                                     userId));
             HttpClient getContactClient = GetHttpClient(getContactUri);
 
@@ -1055,7 +1097,7 @@ namespace NightingaleImport
                 SQLUserId = userId,
                 Context = context,
                 Version = version,
-                ContractNumber = contractNumber
+                ContractNumber = txtContract.Text
             };
 
             DataContractJsonSerializer getContactJsonSer = new DataContractJsonSerializer(typeof(GetContactByUserIdDataRequest));
@@ -1114,7 +1156,7 @@ namespace NightingaleImport
                 PutUpdateCohortPatientViewRequest request = new PutUpdateCohortPatientViewRequest
                     {
                         CohortPatientView = cpvd,
-                        ContractNumber = contractNumber,
+                        ContractNumber = txtContract.Text,
                         PatientID = patientId
                     };
 
@@ -1127,10 +1169,10 @@ namespace NightingaleImport
         private GetCohortPatientViewResponse getCohortPatientViewServiceCall(string patientId)
         {
             Uri getCohortUri = new Uri(string.Format("{0}/Patient/{1}/{2}/{3}/patient/{4}/cohortpatientview/",
-                                                        DataDomainURL,
+                                                        txtURL.Text,
                                                         context,
                                                         version,
-                                                        contractNumber,
+                                                        txtContract.Text,
                                                         patientId));
 
             HttpClient getCohortClient = GetHttpClient(getCohortUri);
@@ -1153,10 +1195,10 @@ namespace NightingaleImport
         private PutUpdateCohortPatientViewResponse putCohortPatientViewServiceCall(PutUpdateCohortPatientViewRequest request, string patientId)
         {
             Uri cohortPatientUri = new Uri(string.Format("{0}/Patient/{1}/{2}/{3}/patient/{4}/cohortpatientview/update",
-                                                 DataDomainURL,
+                                                 txtURL.Text,
                                                  context,
                                                  version,
-                                                 contractNumber,
+                                                 txtContract.Text,
                                                  patientId));
             HttpClient client = GetHttpClient(cohortPatientUri);
 
@@ -1205,7 +1247,9 @@ namespace NightingaleImport
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            lblUrl.Text = DataDomainURL;
+            txtContract.Text = ConfigurationManager.AppSettings.Get("contractNumber");
+            txtURL.Text = ConfigurationManager.AppSettings.Get("DataDomainURL");
+            txtSQLConn.Text = Phytel.Services.SQLDataService.Instance.GetConnectionString(ConfigurationManager.AppSettings.Get("PhytelServicesConnName"), false);
         }
 
     }
