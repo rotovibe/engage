@@ -4,8 +4,8 @@ using System.Runtime.Serialization;
 
 namespace Phytel.API.AppDomain.NG.DTO
 {
-    [Route("/{Version}/{ContractNumber}/Patient/{PatientId}/Program/Module/Action/Process", "POST")]
-    public class PostProcessActionRequest : IAppDomainRequest, IProcessActionRequest
+    [Route("/{Version}/{ContractNumber}/Patient/{PatientId}/Program/Module/Action/Save", "POST")]
+    public class PostSaveActionRequest : IAppDomainRequest, IProcessActionRequest
     {
         [ApiMember(Name = "UserID", Description = "UserID of the user making the request (Internally used ONLY)", ParameterType = "body", DataType = "string", IsRequired = true)]
         public string UserId { get; set; }

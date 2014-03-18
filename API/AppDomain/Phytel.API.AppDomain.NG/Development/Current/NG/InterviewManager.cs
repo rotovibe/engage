@@ -93,6 +93,35 @@ namespace Phytel.API.AppDomain.NG
             }
         }
 
+        public PostSaveActionResponse SaveActionResults(PostSaveActionRequest request)
+        {
+            try
+            {
+                // need to refactor this into a mediator.
+                RelatedChanges.Clear();
+                PostSaveActionResponse response = new PostSaveActionResponse();
+
+                Program p = PlanElementEndpointUtil.RequestPatientProgramDetail(request);
+                Actions action = request.Action;
+                NGUtils.UpdateProgramAction(action, p);
+
+                // save
+                PlanElementEndpointUtil.SaveAction(request, action.Id, p);
+
+                //response.Program = p;
+                response.Saved = true;
+                response.RelatedChanges = RelatedChanges;
+                response.PatientId = request.PatientId;
+                response.Version = request.Version;
+
+                return response;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("AD:InterviewManager:ProcessActionResults()::" + ex.Message, ex.InnerException);
+            }
+        }
+
         private ProgramPlanProcessor InitializeProgramChain()
         {
             ProgramPlanProcessor progProc = new ProgramPlanProcessor();

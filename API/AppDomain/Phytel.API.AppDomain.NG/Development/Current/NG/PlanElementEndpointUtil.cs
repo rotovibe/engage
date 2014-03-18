@@ -52,7 +52,7 @@ namespace Phytel.API.AppDomain.NG
             }
         }
 
-        public static DD.ProgramDetail SaveAction(PostProcessActionRequest request, string actionId, AD.Program p)
+        public static DD.ProgramDetail SaveAction(IProcessActionRequest request, string actionId, AD.Program p)
         {
             try
             {
@@ -81,7 +81,7 @@ namespace Phytel.API.AppDomain.NG
             }
         }
 
-        private static void SaveResponsesFromProgram(AD.Program p, string actionId, IAppDomainRequest request)
+        private static void SaveResponsesFromProgram(AD.Program p, string actionId, IProcessActionRequest request)
         {
             try
             {
@@ -101,7 +101,7 @@ namespace Phytel.API.AppDomain.NG
             }
         }
 
-        private static bool SaveResponses(Step step, IAppDomainRequest request)
+        private static bool SaveResponses(Step step, IProcessActionRequest request)
         {
             bool result = false;
             List<Response> list = step.Responses;
@@ -183,7 +183,7 @@ namespace Phytel.API.AppDomain.NG
             }
         }
 
-        private static bool ResponseExistsRequest(string stepId, string responseId, IAppDomainRequest request)
+        private static bool ResponseExistsRequest(string stepId, string responseId, IProcessActionRequest request)
         {
             bool result = false;
             try
@@ -211,7 +211,7 @@ namespace Phytel.API.AppDomain.NG
             }
         }
 
-        private static void UpdateResponseRequest(IAppDomainRequest request, Response r)
+        private static void UpdateResponseRequest(IProcessActionRequest request, Response r)
         {
             try
             {
@@ -264,7 +264,7 @@ namespace Phytel.API.AppDomain.NG
             }
         }
 
-        public static AD.Program RequestPatientProgramDetail(PostProcessActionRequest request)
+        public static AD.Program RequestPatientProgramDetail(IProcessActionRequest request)
         {
             try
             {
