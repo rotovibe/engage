@@ -175,9 +175,9 @@ namespace Phytel.API.AppDomain.Security
                 else
                     throw new UnauthorizedAccessException("Security Token is not in correct format.");
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw;
+                throw new Exception("SD:APISessionRepository:Validate()::" + ex.Message, ex.InnerException);
             }
         }
 
