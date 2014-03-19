@@ -1,4 +1,5 @@
 ﻿using Phytel.API.AppDomain.NG.DTO;
+using Phytel.API.AppDomain.NG.PlanCOR;
 using Phytel.API.AppDomain.NG.PlanSpecification;
 using Phytel.API.DataDomain.Patient.DTO;
 using Phytel.API.Interface;
@@ -9,8 +10,20 @@ using DD = Phytel.API.DataDomain.Program.DTO;
 
 namespace Phytel.API.AppDomain.NG
 {
+    public delegate void ProcessedElementInUtilEventHandler(ProcessElementEventArgs e);
+
     public static class PlanElementUtil
     {
+        public static event ProcessedElementInUtilEventHandler _processedElementEvent;
+
+        private static void OnProcessIdEvent(object pe)
+        {
+            if (_processedElementEvent != null)
+            {
+                _processedElementEvent(new ProcessElementEventArgs { PlanElement = pe });
+            }
+        }
+
         /// <summary>
         /// Checks to see if completion status count is equal to the list count. Return true if equal.
         /// </summary>
@@ -88,6 +101,8 @@ namespace Phytel.API.AppDomain.NG
                             else
                             {
                                 ((IPlanElement)x).Enabled = true;
+                                // only track elements who are enabled for now.
+                                OnProcessIdEvent(Convert.ChangeType(x, typeof(T)));
                             }
                         }
                     }
@@ -110,6 +125,7 @@ namespace Phytel.API.AppDomain.NG
                         if (s.StepTypeId.Equals(7))
                         {
                             s.Enabled = false;
+                            OnProcessIdEvent(s);
                         }
                     });
                 }
@@ -128,7 +144,7 @@ namespace Phytel.API.AppDomain.NG
                 {
                     if (r.ElementType < 10)
                     {
-                        SetEnabledStateRecursion(r.ElementId, program);
+                        SetElementEnabledState(r.ElementId, program);
                     }
                     else
                     {
@@ -253,7 +269,7 @@ namespace Phytel.API.AppDomain.NG
             }
         }
 
-        private static void SetEnabledStateRecursion(string p, Program program)
+        private static void SetElementEnabledState(string p, Program program)
         {
             try
             {
@@ -262,6 +278,7 @@ namespace Phytel.API.AppDomain.NG
                     if (m.Id.ToString().Equals(p))
                     {
                         SetInitialProperties(m);
+                        OnProcessIdEvent(m);
                     }
                     else
                     {
@@ -286,6 +303,7 @@ namespace Phytel.API.AppDomain.NG
                         if (a.Id.ToString().Equals(p))
                         {
                             SetInitialProperties(a);
+                            OnProcessIdEvent(a);
                         }
                         else
                         {
@@ -311,6 +329,7 @@ namespace Phytel.API.AppDomain.NG
                         if (s.Id.ToString().Equals(p))
                         {
                             SetInitialProperties(s);
+                            OnProcessIdEvent(s);
                         }
                     }
                 }
@@ -349,33 +368,7 @@ namespace Phytel.API.AppDomain.NG
             }
         }
 
-        internal static bool IsProgramCompleted(Program p, string userId)
-        {
-            try
-            {
-                bool result = false;
-                int modulesCompleted = 0;
-                p.Modules.ForEach(m =>
-                {
-                    if (m.Completed)
-                    {
-                        modulesCompleted++;
-                    }
-                });
-
-                if (modulesCompleted.Equals(p.Modules.Count))
-                {
-                    result = true;
-                }
-
-                return result;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("AD:PlanElementUtil:IsProgramCompleted()::" + ex.Message, ex.InnerException);
-            }
-        }
-
+        #region cohort patient
         internal static void RegisterCohortPatientViewProblemToPatient(string problemId, string patientId, IAppDomainRequest request)
         {
             try
@@ -421,6 +414,35 @@ namespace Phytel.API.AppDomain.NG
             catch (Exception ex)
             {
                 throw new Exception("AD:PlanElementUtil:GetCohortPatientViewRecord()::" + ex.Message, ex.InnerException);
+            }
+        }
+        #endregion
+
+        #region program related tasks
+        internal static bool IsProgramCompleted(Program p, string userId)
+        {
+            try
+            {
+                bool result = false;
+                int modulesCompleted = 0;
+                p.Modules.ForEach(m =>
+                {
+                    if (m.Completed)
+                    {
+                        modulesCompleted++;
+                    }
+                });
+
+                if (modulesCompleted.Equals(p.Modules.Count))
+                {
+                    result = true;
+                }
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("AD:PlanElementUtil:IsProgramCompleted()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -537,6 +559,229 @@ namespace Phytel.API.AppDomain.NG
             catch (Exception ex)
             {
                 throw new Exception("AD:PlanElementUtil:SetProgramInformation()::" + ex.Message, ex.InnerException);
+            }
+        }
+        #endregion
+
+
+        internal static void HydratePlanElementLists(List<object> ProcessedElements, PostProcessActionResponse response)
+        {
+            try
+            {
+                if (ProcessedElements != null && ProcessedElements.Count > 0)
+                {
+                    response.PlanElems = new PlanElements();
+
+                    foreach (Object obj in ProcessedElements)
+                    {
+                        if (obj.GetType().Equals(typeof(Program)))
+                        {
+                            if (!response.PlanElems.Programs.Contains(obj))
+                            {
+                                Program p = PlanElementUtil.CloneProgram((Program)obj);
+                                response.PlanElems.Programs.Add(p);
+                            }
+                        }
+                        else if (obj.GetType().Equals(typeof(Module)))
+                        {
+                            if (!response.PlanElems.Modules.Contains(obj))
+                            {
+                                Module m = PlanElementUtil.CloneModule((Module)obj);
+                                response.PlanElems.Modules.Add(m);
+                            }
+                        }
+                        else if (obj.GetType().Equals(typeof(Actions)))
+                        {
+                            if (!response.PlanElems.Actions.Contains(obj))
+                            {
+                                Actions a = PlanElementUtil.CloneAction((Actions)obj);
+                                response.PlanElems.Actions.Add(a);
+                            }
+                        }
+                        else if (obj.GetType().Equals(typeof(Step)))
+                        {
+                            if (!response.PlanElems.Steps.Contains(obj))
+                            {
+                                Step s = PlanElementUtil.CloneStep((Step)obj);
+                                response.PlanElems.Steps.Add(s);
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("AD:PlanElementUtil:HydratePlanElementLists()::" + ex.Message, ex.InnerException);
+            }
+        }
+
+        private static Module CloneModule(Module md)
+        {
+            try
+            {
+                Module m = new Module
+                {
+                    AssignBy = md.AssignBy,
+                    AssignDate = md.AssignDate,
+                    Completed = md.Completed,
+                    CompletedBy = md.CompletedBy,
+                    DateCompleted = md.DateCompleted,
+                    Description = md.Description,
+                    ElementState = md.ElementState,
+                    Enabled = md.Enabled,
+                    Id = md.Id,
+                    Name = md.Name,
+                    Next = md.Next,
+                    Objectives = md.Objectives,
+                    Order = md.Order,
+                    Previous = md.Previous,
+                    ProgramId = md.ProgramId,
+                    SourceId = md.SourceId,
+                    SpawnElement = md.SpawnElement,
+                    Status = md.Status,
+                    Text = md.Text,
+                    Actions = new List<Actions>()
+                };
+                return m;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("AD:PlanElementUtil:CloneModule()::" + ex.Message, ex.InnerException);
+            }
+        }
+
+        private static Actions CloneAction(Actions ac)
+        {
+            try
+            {
+                Actions a = new Actions
+                {
+                    AssignBy = ac.AssignBy,
+                    AssignDate = ac.AssignDate,
+                    Completed = ac.Completed,
+                    CompletedBy = ac.CompletedBy,
+                    DateCompleted = ac.DateCompleted,
+                    Description = ac.Description,
+                    ElementState = ac.ElementState,
+                    Enabled = ac.Enabled,
+                    Id = ac.Id,
+                    ModuleId = ac.ModuleId,
+                    Name = ac.Name,
+                    Next = ac.Next,
+                    Objectives = ac.Objectives,
+                    Order = ac.Order,
+                    Previous = ac.Previous,
+                    SourceId = ac.SourceId,
+                    SpawnElement = ac.SpawnElement,
+                    Status = ac.Status,
+                    Text = ac.Text,
+                    Steps = new List<Step>()
+                };
+                return a;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("AD:PlanElementUtil:CloneAction()::" + ex.Message, ex.InnerException);
+            }
+        }
+
+        private static Step CloneStep(Step st)
+        {
+            try
+            {
+                Step s = new Step
+                {
+                    ActionId = st.ActionId,
+                    AssignBy = st.AssignBy,
+                    AssignDate = st.AssignDate,
+                    Completed = st.Completed,
+                    CompletedBy = st.CompletedBy,
+                    ControlType = st.ControlType,
+                    DateCompleted = st.DateCompleted,
+                    Description = st.Description,
+                    ElementState = st.ElementState,
+                    Enabled = st.Enabled,
+                    Ex = st.Ex,
+                    Header = st.Header,
+                    Id = st.Id,
+                    IncludeTime = st.IncludeTime,
+                    Next = st.Next,
+                    Notes = st.Notes,
+                    Order = st.Order,
+                    Previous = st.Previous,
+                    Question = st.Question,
+                    Responses = st.Responses,
+                    SelectedResponseId = st.SelectedResponseId,
+                    SelectType = st.SelectType,
+                    SourceId = st.SourceId,
+                    SpawnElement = st.SpawnElement,
+                    Status = st.Status,
+                    StepTypeId = st.StepTypeId,
+                    Text = st.Text,
+                    Title = st.Title
+                };
+                return s;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("AD:PlanElementUtil:CloneStep()::" + ex.Message, ex.InnerException);
+            }
+        }
+
+        private static Program CloneProgram(Program pr)
+        {
+            try
+            {
+                Program p = new Program
+                {
+                    AssignBy = pr.AssignBy,
+                    AssignDate = pr.AssignDate,
+                    Client = pr.Client,
+                    Completed = pr.Completed,
+                    CompletedBy = pr.CompletedBy,
+                    Previous = pr.Previous,
+                    ContractProgramId = pr.ContractProgramId,
+                    DateCompleted = pr.DateCompleted,
+                    Description = pr.Description,
+                    DidNotEnrollReason = pr.DidNotEnrollReason,
+                    DisEnrollReason = pr.DisEnrollReason,
+                    ElementState = pr.ElementState,
+                    Eligibility = pr.Eligibility,
+                    EligibilityEndDate = pr.EligibilityEndDate,
+                    EligibilityOverride = pr.EligibilityOverride,
+                    EligibilityRequirements = pr.EligibilityRequirements,
+                    EligibilityStartDate = pr.EligibilityStartDate,
+                    Enabled = pr.Enabled,
+                    EndDate = pr.EndDate,
+                    Enrollment = pr.Enrollment,
+                    GraduatedFlag = pr.GraduatedFlag,
+                    Id = pr.Id,
+                    IneligibleReason = pr.IneligibleReason,
+                    Name = pr.Name,
+                    Next = pr.Next,
+                    ObjectivesInfo = pr.ObjectivesInfo,
+                    OptOut = pr.OptOut,
+                    OptOutDate = pr.OptOutDate,
+                    OptOutReason = pr.OptOutReason,
+                    Order = pr.Order,
+                    OverrideReason = pr.OverrideReason,
+                    PatientId = pr.PatientId,
+                    ProgramState = pr.ProgramState,
+                    RemovedReason = pr.RemovedReason,
+                    ShortName = pr.ShortName,
+                    SourceId = pr.SourceId,
+                    SpawnElement = pr.SpawnElement,
+                    StartDate = pr.StartDate,
+                    Status = pr.Status,
+                    Text = pr.Text,
+                    Version = pr.Version,
+                    Modules = new List<Module>()
+                };
+                return p;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("AD:PlanElementUtil:CloneProgram()::" + ex.Message, ex.InnerException);
             }
         }
     }

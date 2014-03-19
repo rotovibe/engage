@@ -16,10 +16,12 @@ namespace Phytel.API.AppDomain.NG
     public class PlanManager : ManagerBase
     {
         public List<string> RelatedChanges { get; set; }
+        public List<object> ProcessedElements { get; set; }
 
         public PlanManager()
         {
             RelatedChanges = new List<string>();
+            ProcessedElements = new List<object>();
         }
 
         public PostProcessActionResponse ProcessActionResults(PostProcessActionRequest request)
@@ -28,6 +30,7 @@ namespace Phytel.API.AppDomain.NG
             {
                 // need to refactor this into a mediator.
                 RelatedChanges.Clear();
+                ProcessedElements.Clear();
                 PostProcessActionResponse response = new PostProcessActionResponse();
 
                 Program p = PlanElementEndpointUtil.RequestPatientProgramDetail(request);
@@ -59,6 +62,7 @@ namespace Phytel.API.AppDomain.NG
                         PlanElementUtil.SetEnabledStatusByPrevious(mod.Actions);
                         // set enable/visibility of actions after action processing.
                         pChain.ProcessWorkflow((IPlanElement)mod, p, request.UserId, request.PatientId, action, request);
+                        AddUniquePlanElementToProcessedList(mod);
                     }
 
                     // set module visibility for modules
@@ -70,6 +74,7 @@ namespace Phytel.API.AppDomain.NG
                         p.Completed = true;
                         pChain.ProcessWorkflow((IPlanElement)p, p, request.UserId, request.PatientId, action, request);
                     }
+                    AddUniquePlanElementToProcessedList(action);
                 }
                 else
                 {
@@ -77,10 +82,15 @@ namespace Phytel.API.AppDomain.NG
                     action.ElementState = 4; // in progress
                 }
 
+                AddUniquePlanElementToProcessedList(p);
+
                 // save
                 PlanElementEndpointUtil.SaveAction(request, action.Id, p);
 
-                response.Program = p;
+                // create element changed lists 
+                PlanElementUtil.HydratePlanElementLists(ProcessedElements, response);
+
+                //response.Program = p;
                 response.RelatedChanges = RelatedChanges;
                 response.PatientId = request.PatientId;
                 response.Version = request.Version;
@@ -129,6 +139,8 @@ namespace Phytel.API.AppDomain.NG
             ActionPlanProcessor actProc = new ActionPlanProcessor();
             StepPlanProcessor stepProc = new StepPlanProcessor();
             stepProc._spawnEvent += stepProc__spawnEvent;
+            stepProc._processedElementEvent += Proc__processedIdEvent;
+            PlanElementUtil._processedElementEvent += PlanElementUtil__processedElementEvent;
             progProc.Successor = modProc;
             modProc.Successor = actProc;
             actProc.Successor = stepProc;
@@ -136,9 +148,32 @@ namespace Phytel.API.AppDomain.NG
             return progProc;
         }
 
+        void PlanElementUtil__processedElementEvent(ProcessElementEventArgs e)
+        {
+            AddUniquePlanElementToProcessedList(e.PlanElement);
+        }
+
+        void Proc__processedIdEvent(object s, ProcessElementEventArgs e)
+        {
+            AddUniquePlanElementToProcessedList(e.PlanElement);
+        }
+
+        private void AddUniquePlanElementToProcessedList(object e)
+        {
+            try
+            {
+                if (!ProcessedElements.Contains(e))
+                    ProcessedElements.Add(e);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("AD:InterviewManager:AddUniquePlanElementToProcessedList()::" + ex.Message, ex.InnerException);
+            }
+        }
+
         void stepProc__spawnEvent(object s, SpawnEventArgs e)
         {
-            this.RelatedChanges.Add(e.Name);
+            RelatedChanges.Add(e.Name);
         }
     }
 }
