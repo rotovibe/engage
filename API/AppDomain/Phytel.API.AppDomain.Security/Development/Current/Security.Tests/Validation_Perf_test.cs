@@ -20,11 +20,11 @@ namespace Phytel.API.AppDomain.Security.Services.Test
             // Arrange
             double version = 1.0;
             string contractNumber = "InHealth001";
-            string token = "5327104ad6a4850adcc085ce";
+            string token = "5329910cd6a4850ebc313228";
             string securityUrl = "http://localhost:888/Security";
             string PhytelSecurityHeaderKey = "x-Phytel-Security";
             string additionalToken = "Engineer";
-            int cycles = 25;
+            int cycles = 1500;
             int[] nums = Enumerable.Range(0, cycles).ToArray();
 
             Parallel.ForEach(nums, num =>
@@ -49,6 +49,10 @@ namespace Phytel.API.AppDomain.Security.Services.Test
                         new ValidateTokenRequest { Token = token } as object);
 
                     st.Stop();
+
+                    if (String.IsNullOrEmpty(response.UserId))
+                        throw new Exception("token: " + token + " Userid is null.");
+
                     Debug.WriteLine("thread" + num + " :: " + System.DateTime.Now.ToLongTimeString() + " :: " + st.ElapsedMilliseconds.ToString());
                 }
                 catch (Exception ex)
