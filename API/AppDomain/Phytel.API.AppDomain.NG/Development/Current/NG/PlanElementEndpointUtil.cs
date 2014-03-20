@@ -135,7 +135,7 @@ namespace Phytel.API.AppDomain.NG
                 r.Selected = false;
                 if (step.SelectedResponseId.Equals(r.Id))
                 {
-                    if ((step.StepTypeId.Equals(1)) || (step.StepTypeId.Equals(4)) || (step.StepTypeId.Equals(7)))
+                    if ((step.StepTypeId.Equals(1)) || (step.StepTypeId.Equals(4)))
                     {
                         r.Selected = true;
                     }
