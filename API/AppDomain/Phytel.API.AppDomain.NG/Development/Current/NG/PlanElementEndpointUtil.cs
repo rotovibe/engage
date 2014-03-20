@@ -113,15 +113,7 @@ namespace Phytel.API.AppDomain.NG
                     {
                         if (ResponseExistsRequest(r.StepId, r.Id, request))
                         {
-                            if (step.SelectedResponseId.Equals(r.Id))
-                            {
-                                r.Selected = true;
-                            }
-                            else
-                            {
-                                r.Selected = false;
-                            }
-
+                            SetSelectedResponseProperty(step, r);
                             SetDeleteFlagByStepCompletion(step, r);
                             UpdateResponseRequest(request, r);
                             result = true;
@@ -133,6 +125,25 @@ namespace Phytel.API.AppDomain.NG
             catch (Exception ex)
             {
                 throw new Exception("AD:PlanElementEndpointUtil:SaveResponses()::" + ex.Message, ex.InnerException);
+            }
+        }
+
+        private static void SetSelectedResponseProperty(Step step, Response r)
+        {
+            try
+            {
+                r.Selected = false;
+                if (step.SelectedResponseId.Equals(r.Id))
+                {
+                    if ((step.StepTypeId.Equals(1)) || (step.StepTypeId.Equals(4)) || (step.StepTypeId.Equals(7)))
+                    {
+                        r.Selected = true;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("AD:PlanElementEndpointUtil:SetSelectedResponseProperty()::" + ex.Message, ex.InnerException);
             }
         }
 
