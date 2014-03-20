@@ -18,14 +18,11 @@ namespace Phytel.API.DataAudit
 {
     public class AuditHelper
     {
-        static string _requesttype;
-        static string _entitytype;
-
         /// <summary>
         /// Gets an auditdata record for the current context
         /// </summary>
         /// <returns></returns>
-        public static AuditData GetAuditLog(int auditTypeId, IAppDomainRequest request, string sqlUserID, List<string> patientids, HttpRequest webrequest, string methodCalledFrom, bool isError = false)
+        public static AuditData GetAuditLog(int auditTypeId, IAppDomainRequest request, string sqlUserID, List<string> patientids, string browser, string userIPAddress, string methodCalledFrom, bool isError = false)
         {
             ///{Version}/{ContractNumber}/patient/{PatientID}
             AuditData auditLog = new AuditData()
@@ -34,7 +31,7 @@ namespace Phytel.API.DataAudit
                 AuditTypeId = auditTypeId, //derive this from the type passed in (lookup on PNG.AuditType.Name column)
                 UserId = new Guid(sqlUserID), //derive this from Mongo.APISessions.uid...lookup on Mongo.APISessions._id)
                 SourcePage = methodCalledFrom, //derive this from querystring...utility function
-                Browser = webrequest.Browser.Type,
+                Browser = browser, //webrequest.Browser.Type,
                 SessionId = request.Token,
                 ContractID = GetContractID(request.ContractNumber), //request.ContractNumber
                 Patients = patientids
@@ -43,11 +40,11 @@ namespace Phytel.API.DataAudit
             //this assignment is randomly throwing an exception, so it needs it's own method
             try
             {
-                auditLog.SourceIP = webrequest.UserHostAddress;// .ServerVariables["REMOTE_ADDR"]; //webrequest.UserHostAddress;
+                auditLog.SourceIP = userIPAddress; // webrequest.UserHostAddress;// .ServerVariables["REMOTE_ADDR"]; //webrequest.UserHostAddress;
             }
             catch (Exception ex)
             {
-                auditLog.SourceIP = string.Format("Unknown: {0}", ex.Message);
+                auditLog.SourceIP = ex.Message;
             }
 
             return auditLog;
@@ -260,7 +257,7 @@ namespace Phytel.API.DataAudit
                 {
                     try
                     {
-                        AuditAsynch(request, sqlUserID, patientids, webreq, returnTypeName);
+                        AuditAsynch(request, sqlUserID, patientids, webreq.Browser.Type, webreq.UserHostAddress, returnTypeName);
                     }
                     catch (Exception newthreadex)
                     {
@@ -285,13 +282,13 @@ namespace Phytel.API.DataAudit
 
         }
 
-        private static void AuditAsynch(IAppDomainRequest request, string sqlUserID, List<string> patientids, HttpRequest webreq, string returnTypeName)
+        private static void AuditAsynch(IAppDomainRequest request, string sqlUserID, List<string> patientids, string browser, string userIPAddress, string returnTypeName)
         {
             //throw new SystemException("test error in new thread starts");
 
             string callingMethod = FindMethodType(returnTypeName);
             int auditTypeId = GetAuditTypeID(callingMethod);
-            AuditData data = GetAuditLog(auditTypeId, request, sqlUserID, patientids, webreq, callingMethod);
+            AuditData data = GetAuditLog(auditTypeId, request, sqlUserID, patientids, browser, userIPAddress, callingMethod);
             AuditDispatcher.WriteAudit(data);
         }
 
