@@ -27,7 +27,7 @@ namespace Phytel.API.DataDomain.PatientObservation
             }
             catch (Exception ex)
             {
-                throw ex;
+                throw new Exception("DD.DataPatientObservationManager:GetPatientObservationByID()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -43,7 +43,7 @@ namespace Phytel.API.DataDomain.PatientObservation
             }
             catch (Exception ex)
             {
-                throw ex;
+                throw new Exception("DD.DataPatientObservationManager:GetPatientObservationList()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -104,7 +104,7 @@ namespace Phytel.API.DataDomain.PatientObservation
             }
             catch (Exception ex)
             {
-                throw ex;
+                throw new Exception("DD.DataPatientObservationManager:GetStandardObservationsByType()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -141,7 +141,7 @@ namespace Phytel.API.DataDomain.PatientObservation
             }
             catch (Exception ex)
             {
-                throw ex;
+                throw new Exception("DD.DataPatientObservationManager:InitializePatientObservation()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -168,7 +168,7 @@ namespace Phytel.API.DataDomain.PatientObservation
             }
             catch (Exception ex)
             {
-                throw ex;
+                throw new Exception("DD.DataPatientObservationManager:GetPreviousValuesForObservation()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -198,7 +198,7 @@ namespace Phytel.API.DataDomain.PatientObservation
             }
             catch (Exception ex)
             {
-                throw ex;
+                throw new Exception("DD.DataPatientObservationManager:GetAdditionalObservationsLibraryByType()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -216,9 +216,9 @@ namespace Phytel.API.DataDomain.PatientObservation
 
                 return result;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw;
+                throw new Exception("DD.DataPatientObservationManager:PutUpdateOfPatientObservationRecord()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -238,7 +238,7 @@ namespace Phytel.API.DataDomain.PatientObservation
             }
             catch (Exception ex)
             {
-                throw ex;
+                throw new Exception("DD.DataPatientObservationManager:GetAdditionalObservationItemById()::" + ex.Message, ex.InnerException);
             }
         }
     }
