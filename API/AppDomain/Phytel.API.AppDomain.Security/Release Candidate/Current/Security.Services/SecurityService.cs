@@ -1,9 +1,11 @@
 ﻿using Phytel.API.AppDomain.Security.DTO;
 using Phytel.API.Common.Format;
 using Phytel.API.Interface;
+using ServiceStack.ServiceClient.Web;
 using ServiceStack.ServiceHost;
 using ServiceStack.ServiceInterface.ServiceModel;
 using System;
+using System.Configuration;
 using System.Net;
 using System.Web;
 
@@ -69,12 +71,14 @@ namespace Phytel.API.AppDomain.Security.Service
 
                 // validate user against apiuser datastore
                 response = SecurityManager.ValidateToken(request, securityToken);
-                return response;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw;
+                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+                if ((ex is WebServiceException) == false)
+                    LogException(ex);
             }
+            return response;
         }
 
         public LogoutResponse Post(LogoutRequest request)
@@ -95,6 +99,12 @@ namespace Phytel.API.AppDomain.Security.Service
                 CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
                 return response;
             }
+        }
+
+        public void LogException(Exception ex)
+        {
+            string _aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
+            Common.Helper.LogException(int.Parse(_aseProcessID), ex);
         }
 
         private string BuildSecurityToken()
