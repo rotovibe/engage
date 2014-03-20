@@ -232,7 +232,7 @@ namespace Phytel.API.DataDomain.PatientGoal
                     AuditHelper.LogDataAudit(this.UserId, 
                                             MongoCollectionName.PatientGoal.ToString(), 
                                             mePg.Id.ToString(), 
-                                            Common.DataAuditType.Update, 
+                                            Common.DataAuditType.Insert, 
                                             request.ContractNumber);
 
                     patientGoalData = new PatientGoalData
