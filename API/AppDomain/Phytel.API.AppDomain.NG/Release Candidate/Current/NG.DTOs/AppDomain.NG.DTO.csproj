@@ -131,6 +131,7 @@
     <Compile Include="Goal\PostPatientGoalRequest.cs" />
     <Compile Include="Goal\PostDeletePatientGoalResponse.cs" />
     <Compile Include="Goal\PostPatientGoalResponse.cs" />
+    <Compile Include="IProcessActionRequest.cs" />
     <Compile Include="LookUp\Goal\GetLookUpsRequest.cs" />
     <Compile Include="LookUp\Goal\GetLookUpsResponse.cs" />
     <Compile Include="LookUp\Contact\GetAllLanguagesRequest.cs" />
@@ -171,7 +172,9 @@
     <Compile Include="Observation\ObservationValue.cs" />
     <Compile Include="Observation\PatientObservation.cs" />
     <Compile Include="Observation\PreviousValue.cs" />
+    <Compile Include="PostSaveActionRequest.cs" />
     <Compile Include="PostProcessActionRequest.cs" />
+    <Compile Include="PostSaveActionResponse.cs" />
     <Compile Include="PostProcessActionResponse.cs" />
     <Compile Include="GetPatientProgramDetailsSummaryResponse.cs" />
     <Compile Include="GetPatientProgramDetailsSummaryRequest.cs" />

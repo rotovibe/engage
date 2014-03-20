@@ -15,7 +15,10 @@ namespace Phytel.API.DataDomain.Patient.Service.Test
             string context = "NG";
             string priority = "3";
             double version = 1.0;
-            string token = "52e0118cd6a4850d00a4c9af";
+            string token = "532763f5d6a4850720b45543";
+
+            JsonServiceClient.HttpWebRequestFilter = x => x.Headers.Add(string.Format("Token: {0}", token));
+
             IRestClient client = new JsonServiceClient();
 
             GetActiveProgramsResponse response = client.Get<GetActiveProgramsResponse>(

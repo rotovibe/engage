@@ -107,6 +107,7 @@
     <Compile Include="Observation\ObservationsManager.cs" />
     <Compile Include="Observation\ObservationsUtil.cs" />
     <Compile Include="PlanCOR\ActionPlanProcessor.cs" />
+    <Compile Include="PlanCOR\ProcessIdEventArgs.cs" />
     <Compile Include="PlanCOR\SpawnEventArgs.cs" />
     <Compile Include="PlanCOR\StepPlanProcessor.cs" />
     <Compile Include="PlanCOR\PlanElementEventArg.cs" />

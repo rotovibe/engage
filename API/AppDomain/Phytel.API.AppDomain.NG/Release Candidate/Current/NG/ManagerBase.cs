@@ -34,6 +34,9 @@ namespace Phytel.API.AppDomain.NG
                     contractNumber),
                     new ValidateTokenRequest { Token = token } as object);
 
+                if (String.IsNullOrEmpty(response.UserId))
+                    throw new Exception("token: " + token + " Userid is null.");
+
                 return response;
             }
             catch (Exception ex)
