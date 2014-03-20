@@ -43,11 +43,11 @@ namespace Phytel.API.DataAudit
             //this assignment is randomly throwing an exception, so it needs it's own method
             try
             {
-                auditLog.SourceIP = webrequest.ServerVariables["REMOTE_ADDR"]; //webrequest.UserHostAddress;
+                auditLog.SourceIP = webrequest.UserHostAddress;// .ServerVariables["REMOTE_ADDR"]; //webrequest.UserHostAddress;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                auditLog.SourceIP = "Unknown";
+                auditLog.SourceIP = string.Format("Unknown: {0}", ex.Message);
             }
 
             return auditLog;
