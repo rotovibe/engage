@@ -716,7 +716,7 @@ namespace Phytel.API.DataDomain.Contact
                         AuditHelper.LogDataAudit(this.UserId,
                                                 MongoCollectionName.Contact.ToString(),
                                                 request.ContactId,
-                                                Common.DataAuditType.Insert,
+                                                Common.DataAuditType.Update,
                                                 request.ContractNumber);
 
                         //set the response
