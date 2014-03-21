@@ -346,7 +346,7 @@ namespace Phytel.API.AppDomain.NG
             {
                 m.Enabled = true;
                 m.AssignDate = System.DateTime.UtcNow;
-                m.ElementState = 0;
+                m.ElementState = 2;
                 m.AssignBy = "System";
             }
             catch (Exception ex)
