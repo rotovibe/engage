@@ -261,8 +261,14 @@ namespace Phytel.API.DataAudit
                         string userHostAddress = "Unknown IP address";
                         if (webreq != null)
                         {
-                            browserType = webreq.Browser.Type;
-                            userHostAddress = webreq.UserHostAddress;
+                            try
+                            {
+                                browserType = webreq.Browser.Type;
+                                userHostAddress = webreq.UserHostAddress;
+                            }
+                            catch (Exception)
+                            {
+                            }
                         }
                         AuditAsynch(request, sqlUserID, patientids, browserType, userHostAddress, returnTypeName);
                     }
