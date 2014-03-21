@@ -21,17 +21,19 @@ namespace ProgramBuilder
         private List<Module> loadModules = new List<Module>();
         //private double version = double.Parse(ConfigurationManager.AppSettings.Get("version"));
         //private string context = ConfigurationManager.AppSettings.Get("context");
+        string _headerUserId = string.Empty;
 
         //TODO
         private String contractNumber = "InHealth001";
         private double version = 1.0;
         private String context = "NG";
+        
 
         public ModuleListForm()
         {
             InitializeComponent();
-            GetAllModulesResponse modulesResponse = GetAllModulesRequestServiceCall();
-            MessageBox.Show(modulesResponse.Modules.ToString());
+            //GetAllModulesResponse modulesResponse = GetAllModulesRequestServiceCall();
+            //MessageBox.Show(modulesResponse.Modules.ToString());
         }
 
         public GetAllModulesResponse GetAllModulesRequestServiceCall()
@@ -47,7 +49,8 @@ namespace ProgramBuilder
             {
                 Version = version,
                 Context = context,
-                ContractNumber = contractNumber
+                ContractNumber = contractNumber,
+                UserId = "InHealthAdmin"
             };
 
             DataContractJsonSerializer modulesJsonSer = new DataContractJsonSerializer(typeof(GetAllModulesRequest));
@@ -79,10 +82,10 @@ namespace ProgramBuilder
         {
             HttpClient client = new HttpClient();
 
-            //string userId = (_headerUserId != string.Empty ? _headerUserId : "000000000000000000000000");
+            string userId = (_headerUserId != string.Empty ? _headerUserId : "000000000000000000000000");
 
             client.DefaultRequestHeaders.Host = uri.Host;
-            //client.DefaultRequestHeaders.Add("x-Phytel-UserID", userId);
+            client.DefaultRequestHeaders.Add("x-Phytel-UserID", userId);
 
             // Add an Accept header for JSON format.
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
@@ -97,6 +100,17 @@ namespace ProgramBuilder
         private void ModuleListForm_Load(object sender, EventArgs e)
         {
 
+        }
+
+        private void addModuleButton_Click(object sender, EventArgs e)
+        {
+            NewModuleForm newModule = new NewModuleForm();
+            newModule.ShowDialog();
+        }
+
+        private void closeButton_Click(object sender, EventArgs e)
+        {
+            this.Close();
         }
     }
 }

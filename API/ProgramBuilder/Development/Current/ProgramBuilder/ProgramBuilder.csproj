@@ -49,6 +49,7 @@
     <Reference Include="System" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.DirectoryServices" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Web" />
@@ -62,6 +63,24 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ActionListForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ActionListForm.Designer.cs">
+      <DependentUpon>ActionListForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="NewActionForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="NewActionForm.Designer.cs">
+      <DependentUpon>NewActionForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="NewModuleForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="NewModuleForm.Designer.cs">
+      <DependentUpon>NewModuleForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="ModuleListForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -82,8 +101,17 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="ActionListForm.resx">
+      <DependentUpon>ActionListForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="ModuleListForm.resx">
       <DependentUpon>ModuleListForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="NewActionForm.resx">
+      <DependentUpon>NewActionForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="NewModuleForm.resx">
+      <DependentUpon>NewModuleForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ProgramForm.resx">
       <DependentUpon>ProgramForm.cs</DependentUpon>
@@ -114,11 +142,11 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\DataDomain\Phytel.API.DataDomain.Module\Development\Current\Module.DTO\DataDomain.Module.DTO.csproj">
+    <ProjectReference Include="..\..\..\..\..\..\Projects\tfs2013\Phytel.Net\Services\API\DataDomain\Phytel.API.DataDomain.Module\Development\Current\Module.DTO\DataDomain.Module.DTO.csproj">
       <Project>{6862b598-6967-430d-803a-bbe00fe98050}</Project>
       <Name>DataDomain.Module.DTO</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\..\Interfaces\Development\Current\Phytel.API.Interface\Phytel.API.Interface.csproj">
+    <ProjectReference Include="..\..\..\..\..\..\Projects\tfs2013\Phytel.Net\Services\API\Interfaces\Development\Current\Phytel.API.Interface\Phytel.API.Interface.csproj">
       <Project>{abe948fb-247e-4955-b3ab-b7c93e10a542}</Project>
       <Name>Phytel.API.Interface</Name>
     </ProjectReference>
