@@ -257,8 +257,8 @@ namespace Phytel.API.DataAudit
                 {
                     try
                     {
-                        string browserType = "Unknown browser type";
-                        string userHostAddress = "Unknown IP address";
+                        string browserType = "Unknown browser";
+                        string userHostAddress = "Unknown IP";
                         if (webreq != null)
                         {
                             try
