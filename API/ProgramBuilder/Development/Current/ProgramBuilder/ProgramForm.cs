@@ -29,31 +29,25 @@ namespace ProgramBuilder
 
         private void mnuNewModule_Click(object sender, EventArgs e)
         {
-            ModuleNameForm moduleName = new ModuleNameForm();
+            ModuleListForm moduleName = new ModuleListForm();
             moduleName.ShowDialog();
         }
 
         private void ProgramTree_MouseUp(object sender, MouseEventArgs e)
         {
-            
-            // Show menu only if the right mouse button is clicked.
             if (e.Button == MouseButtons.Right)
             {
-
-                // Point where the mouse is clicked.
                 Point p = new Point(e.X, e.Y);
+                TreeNode node = ProgramTree.GetNodeAt(p);
+                if (node != null)
+                {
 
-                // Get the node that the user has clicked.
-                TreeNode node = treeView1.GetNodeAt(p);
-                //if (node != null)
-                //{
+                     //Select the node the user has clicked.
+                     //The node appears selected until the menu is displayed on the screen.
+                    m_OldSelectNode = treeView1.SelectedNode;
+                    treeView1.SelectedNode = node;
 
-                    // Select the node the user has clicked.
-                    // The node appears selected until the menu is displayed on the screen.
-                    //m_OldSelectNode = treeView1.SelectedNode;
-                    //treeView1.SelectedNode = node;
-
-                    // Find the appropriate ContextMenu depending on the selected node.
+                     //Find the appropriate ContextMenu depending on the selected node.
                     contextMenuStrip1.Show(ProgramTree, p);
                     //switch (Convert.ToString(node.Tag))
                     //{
@@ -68,7 +62,7 @@ namespace ProgramBuilder
                     // Highlight the selected node.
                     treeView1.SelectedNode = m_OldSelectNode;
                     m_OldSelectNode = null;
-                //}
+                }
             }
         }
 

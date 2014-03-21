@@ -37,8 +37,21 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="PhytelServices">
+      <HintPath>..\..\..\..\..\..\Projects\tfs2013\Phytel.Net\Services\API\Common\Phytel.API.Common\Development\Current\References\PhytelServices.dll</HintPath>
+    </Reference>
+    <Reference Include="ServiceStack.Interfaces">
+      <HintPath>..\..\..\..\..\..\Projects\tfs2013\Phytel.Net\Services\API\packages\ServiceStack.Common.3.9.71\lib\net35\ServiceStack.Interfaces.dll</HintPath>
+    </Reference>
+    <Reference Include="ServiceStack.ServiceInterface">
+      <HintPath>..\..\..\..\..\..\Projects\tfs2013\Phytel.Net\Services\API\packages\ServiceStack.3.9.69\lib\net35\ServiceStack.ServiceInterface.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
+    <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -49,11 +62,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ModuleNameForm.cs">
+    <Compile Include="ModuleListForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ModuleNameForm.Designer.cs">
-      <DependentUpon>ModuleNameForm.cs</DependentUpon>
+    <Compile Include="ModuleListForm.Designer.cs">
+      <DependentUpon>ModuleListForm.cs</DependentUpon>
     </Compile>
     <Compile Include="ProgramNameForm.cs">
       <SubType>Form</SubType>
@@ -69,8 +82,8 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="ModuleNameForm.resx">
-      <DependentUpon>ModuleNameForm.cs</DependentUpon>
+    <EmbeddedResource Include="ModuleListForm.resx">
+      <DependentUpon>ModuleListForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ProgramForm.resx">
       <DependentUpon>ProgramForm.cs</DependentUpon>
@@ -99,6 +112,16 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\..\..\Projects\tfs2013\Phytel.Net\Services\API\DataDomain\Phytel.API.DataDomain.Module\Development\Current\Module.DTO\DataDomain.Module.DTO.csproj">
+      <Project>{6862b598-6967-430d-803a-bbe00fe98050}</Project>
+      <Name>DataDomain.Module.DTO</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\..\Projects\tfs2013\Phytel.Net\Services\API\Interfaces\Development\Current\Phytel.API.Interface\Phytel.API.Interface.csproj">
+      <Project>{abe948fb-247e-4955-b3ab-b7c93e10a542}</Project>
+      <Name>Phytel.API.Interface</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -1,6 +1,6 @@
 ﻿namespace ProgramBuilder
 {
-    partial class ModuleNameForm
+    partial class ModuleListForm
     {
         /// <summary>
         /// Required designer variable.
@@ -28,19 +28,32 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.moduleListView = new System.Windows.Forms.ListView();
             this.SuspendLayout();
             // 
-            // ModuleNameForm
+            // moduleListView
+            // 
+            this.moduleListView.Location = new System.Drawing.Point(12, 12);
+            this.moduleListView.Name = "moduleListView";
+            this.moduleListView.Size = new System.Drawing.Size(280, 260);
+            this.moduleListView.TabIndex = 0;
+            this.moduleListView.UseCompatibleStateImageBehavior = false;
+            this.moduleListView.SelectedIndexChanged += new System.EventHandler(this.listView1_SelectedIndexChanged);
+            // 
+            // ModuleListForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(284, 262);
-            this.Name = "ModuleNameForm";
-            this.Text = "New Module Name";
+            this.ClientSize = new System.Drawing.Size(304, 328);
+            this.Controls.Add(this.moduleListView);
+            this.Name = "ModuleListForm";
+            this.Text = "Module List";
             this.ResumeLayout(false);
 
         }
 
         #endregion
+
+        private System.Windows.Forms.ListView moduleListView;
     }
 }
