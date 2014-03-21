@@ -16,26 +16,14 @@ namespace Phytel.API.Common
 
         public static IRestClient GetJsonServiceClient(string userId)
         {
-            try
+            IRestClient client = new JsonServiceClient();
+
+            if (userId.Trim() != string.Empty)
             {
-                IRestClient client = new JsonServiceClient();
-                string id = userId.Trim();
-                if (string.IsNullOrEmpty(id))
-                {
-                    throw new UnauthorizedAccessException("Common.Helper:GetJsonServiceClient():: Token is null or empty.");
-                }
-                else
-                {
-                    JsonServiceClient.HttpWebRequestFilter = x =>
-                          x.Headers.Add(string.Format("{0}: {1}", PhytelUserIDHeaderKey, id));
-            
-                }
-                return client;
+                JsonServiceClient.HttpWebRequestFilter = x =>
+                    x.Headers.Add(string.Format("{0}: {1}", PhytelUserIDHeaderKey, userId.Trim()));
             }
-            catch (Exception ex)
-            {
-                throw new Exception("Common.Helper:GetJsonServiceClient()::" + ex.Message, ex.InnerException);
-            }
+            return client;
         }
 
         /// <summary>
