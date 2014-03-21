@@ -48,6 +48,7 @@
             this.Controls.Add(this.moduleListView);
             this.Name = "ModuleListForm";
             this.Text = "Module List";
+            this.Load += new System.EventHandler(this.ModuleListForm_Load);
             this.ResumeLayout(false);
 
         }

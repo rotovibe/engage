@@ -22,6 +22,8 @@ namespace ProgramBuilder
         {
             ProgramNameForm programName = new ProgramNameForm();
             programName.ShowDialog();
+            programName.NameBox.Focus();
+            
             string programNameText = programName.getProgramName();
             TreeNode prNT = new TreeNode(programNameText);
             ProgramTree.Nodes.Add(prNT);
@@ -30,7 +32,7 @@ namespace ProgramBuilder
         private void mnuNewModule_Click(object sender, EventArgs e)
         {
             ModuleListForm moduleName = new ModuleListForm();
-            moduleName.ShowDialog();
+            moduleName.ShowDialog();            
         }
 
         private void ProgramTree_MouseUp(object sender, MouseEventArgs e)

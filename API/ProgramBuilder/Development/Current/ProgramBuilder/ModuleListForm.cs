@@ -36,7 +36,8 @@ namespace ProgramBuilder
 
         public GetAllModulesResponse GetAllModulesRequestServiceCall()
         {
-            Uri modulesUri = new Uri(string.Format("{0}/{1}/{2}/Module/{ModuleID}",
+            Uri modulesUri = new Uri(string.Format("{0}/{1}/{2}/{3}/Module/",
+                                                    ConfigurationManager.AppSettings["urlhost"].ToString(),
                                                     context,
                                                     version,
                                                     contractNumber));
@@ -91,6 +92,11 @@ namespace ProgramBuilder
 
         private void listView1_SelectedIndexChanged(object sender, EventArgs e)
         {
+        }
+
+        private void ModuleListForm_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }

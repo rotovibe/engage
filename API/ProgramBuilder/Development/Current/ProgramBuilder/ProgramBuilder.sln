@@ -5,9 +5,11 @@ VisualStudioVersion = 12.0.21005.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProgramBuilder", "ProgramBuilder.csproj", "{B8B41A72-C45B-4356-8F51-97BD4E696B2A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.Module.DTO", "..\..\..\..\..\..\Projects\tfs2013\Phytel.Net\Services\API\DataDomain\Phytel.API.DataDomain.Module\Development\Current\Module.DTO\DataDomain.Module.DTO.csproj", "{6862B598-6967-430D-803A-BBE00FE98050}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.Module.DTO", "..\..\..\..\DataDomain\Phytel.API.DataDomain.Module\Development\Current\Module.DTO\DataDomain.Module.DTO.csproj", "{6862B598-6967-430D-803A-BBE00FE98050}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Phytel.API.Interface", "..\..\..\..\..\..\Projects\tfs2013\Phytel.Net\Services\API\Interfaces\Development\Current\Phytel.API.Interface\Phytel.API.Interface.csproj", "{ABE948FB-247E-4955-B3AB-B7C93E10A542}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Project Refs", "Project Refs", "{8C8C93A8-E87D-471B-B373-9CD3B74FCF28}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Phytel.API.Interface", "..\..\..\..\Interfaces\Development\Current\Phytel.API.Interface\Phytel.API.Interface.csproj", "{ABE948FB-247E-4955-B3AB-B7C93E10A542}"
 EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
@@ -17,12 +19,14 @@ Global
 		SccLocalPath0 = .
 		SccProjectUniqueName1 = ProgramBuilder.csproj
 		SccLocalPath1 = .
-		SccProjectUniqueName2 = ..\\..\\..\\..\\..\\..\\Projects\\tfs2013\\Phytel.Net\\Services\\API\\DataDomain\\Phytel.API.DataDomain.Module\\Development\\Current\\Module.DTO\\DataDomain.Module.DTO.csproj
+		SccProjectUniqueName2 = ..\\..\\..\\..\\DataDomain\\Phytel.API.DataDomain.Module\\Development\\Current\\Module.DTO\\DataDomain.Module.DTO.csproj
+		SccProjectTopLevelParentUniqueName2 = ProgramBuilder.sln
 		SccProjectName2 = ../../../../DataDomain/Phytel.API.DataDomain.Module/Development/Current/Module.DTO
-		SccLocalPath2 = ..\\..\\..\\..\\..\\..\\Projects\\tfs2013\\Phytel.Net\\Services\\API\\DataDomain\\Phytel.API.DataDomain.Module\\Development\\Current\\Module.DTO
-		SccProjectUniqueName3 = ..\\..\\..\\..\\..\\..\\Projects\\tfs2013\\Phytel.Net\\Services\\API\\Interfaces\\Development\\Current\\Phytel.API.Interface\\Phytel.API.Interface.csproj
+		SccLocalPath2 = ..\\..\\..\\..\\DataDomain\\Phytel.API.DataDomain.Module\\Development\\Current\\Module.DTO
+		SccProjectUniqueName3 = ..\\..\\..\\..\\Interfaces\\Development\\Current\\Phytel.API.Interface\\Phytel.API.Interface.csproj
+		SccProjectTopLevelParentUniqueName3 = ProgramBuilder.sln
 		SccProjectName3 = ../../../../Interfaces/Development/Current/Phytel.API.Interface
-		SccLocalPath3 = ..\\..\\..\\..\\..\\..\\Projects\\tfs2013\\Phytel.Net\\Services\\API\\Interfaces\\Development\\Current\\Phytel.API.Interface
+		SccLocalPath3 = ..\\..\\..\\..\\Interfaces\\Development\\Current\\Phytel.API.Interface
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -51,5 +55,9 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{ABE948FB-247E-4955-B3AB-B7C93E10A542} = {8C8C93A8-E87D-471B-B373-9CD3B74FCF28}
+		{6862B598-6967-430D-803A-BBE00FE98050} = {8C8C93A8-E87D-471B-B373-9CD3B74FCF28}
 	EndGlobalSection
 EndGlobal

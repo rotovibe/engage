@@ -30,7 +30,7 @@
         {
             this.ExitButton = new System.Windows.Forms.Button();
             this.OkButton = new System.Windows.Forms.Button();
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.NameBox = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
@@ -54,12 +54,12 @@
             this.OkButton.UseVisualStyleBackColor = true;
             this.OkButton.Click += new System.EventHandler(this.OkButton_Click);
             // 
-            // textBox1
+            // NameBox
             // 
-            this.textBox1.Location = new System.Drawing.Point(27, 40);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(230, 20);
-            this.textBox1.TabIndex = 2;
+            this.NameBox.Location = new System.Drawing.Point(27, 40);
+            this.NameBox.Name = "NameBox";
+            this.NameBox.Size = new System.Drawing.Size(230, 20);
+            this.NameBox.TabIndex = 2;
             // 
             // label1
             // 
@@ -76,11 +76,12 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(284, 115);
             this.Controls.Add(this.label1);
-            this.Controls.Add(this.textBox1);
+            this.Controls.Add(this.NameBox);
             this.Controls.Add(this.OkButton);
             this.Controls.Add(this.ExitButton);
             this.Name = "ProgramNameForm";
             this.Text = "New Program Name";
+            this.Load += new System.EventHandler(this.ProgramNameForm_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -90,7 +91,7 @@
 
         private System.Windows.Forms.Button ExitButton;
         private System.Windows.Forms.Button OkButton;
-        private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.Label label1;
+        public System.Windows.Forms.TextBox NameBox;
     }
 }

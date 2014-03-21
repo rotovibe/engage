@@ -26,13 +26,13 @@ namespace ProgramBuilder
 
         private void OkButton_Click(object sender, EventArgs e)
         {
-            if (String.IsNullOrEmpty(textBox1.Text))
+            if (String.IsNullOrEmpty(NameBox.Text))
             {
                 MessageBox.Show("Please enter a name for the new Program");
             }
             else
             {
-                programNameText = textBox1.Text;
+                programNameText = NameBox.Text;
                 this.Close();
             }
         }
@@ -40,6 +40,11 @@ namespace ProgramBuilder
         public string getProgramName()
         {
             return programNameText;
+        }
+
+        private void ProgramNameForm_Load(object sender, EventArgs e)
+        {
+            
         }
 
     }
