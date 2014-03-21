@@ -203,6 +203,34 @@ namespace Phytel.API.AppDomain.NG
 
                     progAttr.IneligibleReason = (!string.IsNullOrEmpty(r.Tag))?r.Tag : null;
                 }
+                else if (r.ElementType.Equals(12))
+                {
+                    if (r.Tag == null)
+                        throw new ArgumentException("Cannot set attribute of type " + r.ElementType + ". Tag value is null.");
+
+                    try
+                    {
+                        program.ElementState = (!string.IsNullOrEmpty(r.Tag)) ? Convert.ToInt32(r.Tag) : 0;
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new Exception("AD:SetProgramAttributes()::ElementState" + ex.Message, ex.InnerException);
+                    }
+                }
+                else if (r.ElementType.Equals(13))
+                {
+                    if (r.Tag == null)
+                        throw new ArgumentException("Cannot set attribute of type " + r.ElementType + ". Tag value is null.");
+
+                    try
+                    {
+                        progAttr.StartDate = (!string.IsNullOrEmpty(r.Tag)) ? (DateTime?)Convert.ToDateTime(r.Tag) : null;
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new Exception("AD:SetProgramAttributes()::StartDate" + ex.Message, ex.InnerException);
+                    }
+                }
                 else if (r.ElementType.Equals(14))
                 {
                     progAttr.EndDate = System.DateTime.UtcNow;
@@ -260,6 +288,34 @@ namespace Phytel.API.AppDomain.NG
                     catch (Exception ex)
                     {
                         throw new Exception("AD:SetProgramAttributes()::GraduatedFlag" + ex.Message, ex.InnerException);
+                    }
+                }
+                else if (r.ElementType.Equals(20))
+                {
+                    if (r.Tag == null)
+                        throw new ArgumentException("Cannot set attribute of type " + r.ElementType + ". Tag value is null.");
+
+                    try
+                    {
+                        progAttr.Locked = (!string.IsNullOrEmpty(r.Tag)) ? Convert.ToInt32(r.Tag) : 0;
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new Exception("AD:SetProgramAttributes()::Locked" + ex.Message, ex.InnerException);
+                    }
+                }
+                else if (r.ElementType.Equals(21))
+                {
+                    if (r.Tag == null)
+                        throw new ArgumentException("Cannot set attribute of type " + r.ElementType + ". Tag value is null.");
+
+                    try
+                    {
+                        progAttr.EligibilityOverride = (!string.IsNullOrEmpty(r.Tag)) ? Convert.ToInt32(r.Tag) : 0;
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new Exception("AD:SetProgramAttributes()::EligibilityOverride" + ex.Message, ex.InnerException);
                     }
                 }
             }
