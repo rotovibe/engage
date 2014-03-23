@@ -257,12 +257,18 @@ namespace Phytel.API.DataAudit
                 {
                     try
                     {
-                        string browserType = "Unknown browser type";
-                        string userHostAddress = "Unknown IP address";
+                        string browserType = "Unknown browser";
+                        string userHostAddress = "Unknown IP";
                         if (webreq != null)
                         {
-                            browserType = webreq.Browser.Type;
-                            userHostAddress = webreq.UserHostAddress;
+                            try
+                            {
+                                browserType = webreq.Browser.Type;
+                                userHostAddress = webreq.UserHostAddress;
+                            }
+                            catch (Exception)
+                            {
+                            }
                         }
                         AuditAsynch(request, sqlUserID, patientids, browserType, userHostAddress, returnTypeName);
                     }
