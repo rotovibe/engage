@@ -19,17 +19,28 @@ namespace Phytel.API.DataDomain.Patient
     {
         private string _dbName = string.Empty;
 
+        static MongoCohortPatientViewRepository()
+        {
+            #region Register ClassMap           
+            try
+            {
+                if (BsonClassMap.IsClassMapRegistered(typeof(MECohortPatientView)) == false)
+                    BsonClassMap.RegisterClassMap<MECohortPatientView>();
+            }
+            catch { }
+
+            try
+            {
+                if (BsonClassMap.IsClassMapRegistered(typeof(SearchField)) == false)
+                    BsonClassMap.RegisterClassMap<SearchField>();
+            }
+            catch { }
+            #endregion
+        }
+
         public MongoCohortPatientViewRepository(string contractDBName)
         {
             _dbName = contractDBName;
-
-            #region Register ClassMap
-            if (BsonClassMap.IsClassMapRegistered(typeof(MECohortPatientView)) == false)
-                BsonClassMap.RegisterClassMap<MECohortPatientView>();
-
-            if (BsonClassMap.IsClassMapRegistered(typeof(SearchField)) == false)
-                BsonClassMap.RegisterClassMap<SearchField>();
-            #endregion
         }
 
         public object Insert(object newEntity)

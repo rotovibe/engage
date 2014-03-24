@@ -18,14 +18,20 @@ namespace Phytel.API.DataDomain.PatientProblem
     {
         private string _dbName = string.Empty;
 
+        static MongoPatientProblemRepository()
+        {
+            try 
+            {
+                #region Register ClassMap
+                if (BsonClassMap.IsClassMapRegistered(typeof(MEPatientProblem)) == false)
+                    BsonClassMap.RegisterClassMap<MEPatientProblem>();
+                #endregion
+            }
+            catch { }
+        }
         public MongoPatientProblemRepository(string contractDBName)
         {
             _dbName = contractDBName;
-
-            #region Register ClassMap
-            if (BsonClassMap.IsClassMapRegistered(typeof(MEPatientProblem)) == false)
-                BsonClassMap.RegisterClassMap<MEPatientProblem>();
-            #endregion
         }
 
         public object Insert(object newEntity)
