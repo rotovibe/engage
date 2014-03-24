@@ -21,17 +21,28 @@ namespace Phytel.API.DataDomain.PatientObservation
     {
         private string _dbName = string.Empty;
 
+        static MongoObservationRepository()
+        {
+            #region Register ClassMap
+            try
+            {
+                if (BsonClassMap.IsClassMapRegistered(typeof(ObservationValue)) == false)
+                    BsonClassMap.RegisterClassMap<ObservationValue>();
+            }
+            catch { }
+
+            try
+            {
+                if (BsonClassMap.IsClassMapRegistered(typeof(MEObservation)) == false)
+                    BsonClassMap.RegisterClassMap<MEObservation>();
+            }
+            catch { }
+            #endregion
+        }
+
         public MongoObservationRepository(string contractDBName)
         {
             _dbName = contractDBName;
-
-            #region Register ClassMap
-            if (BsonClassMap.IsClassMapRegistered(typeof(ObservationValue)) == false)
-                BsonClassMap.RegisterClassMap<ObservationValue>();
-            
-            if (BsonClassMap.IsClassMapRegistered(typeof(MEObservation)) == false)
-                BsonClassMap.RegisterClassMap<MEObservation>();
-            #endregion
         }
 
         public object Insert(object newEntity)

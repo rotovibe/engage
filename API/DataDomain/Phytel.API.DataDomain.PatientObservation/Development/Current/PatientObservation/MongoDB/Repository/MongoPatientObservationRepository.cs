@@ -25,17 +25,28 @@ namespace Phytel.API.DataDomain.PatientObservation
         private int _expireDays = Convert.ToInt32(ConfigurationManager.AppSettings["ExpireDays"]);
         private int _initializeDays = Convert.ToInt32(ConfigurationManager.AppSettings["InitializeDays"]);
 
+        static MongoPatientObservationRepository()
+        {
+            #region Register ClassMap
+            try
+            {
+            if (BsonClassMap.IsClassMapRegistered(typeof(ObservationValue)) == false)
+                BsonClassMap.RegisterClassMap<ObservationValue>();
+            }
+            catch { }
+
+            try
+            {
+            if (BsonClassMap.IsClassMapRegistered(typeof(MEPatientObservation)) == false)
+                BsonClassMap.RegisterClassMap<MEPatientObservation>();
+            }
+            catch { }
+            #endregion
+        }
+
         public MongoPatientObservationRepository(string contractDBName)
         {
             _dbName = contractDBName;
-
-            #region Register ClassMap
-            if (BsonClassMap.IsClassMapRegistered(typeof(ObservationValue)) == false)
-                BsonClassMap.RegisterClassMap<ObservationValue>();
-
-            if (BsonClassMap.IsClassMapRegistered(typeof(MEPatientObservation)) == false)
-                BsonClassMap.RegisterClassMap<MEPatientObservation>();
-            #endregion
         }
 
         public object Insert(object newEntity)
