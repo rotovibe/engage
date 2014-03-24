@@ -11,6 +11,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using ProgramBuilder.UserControls;
 
 namespace ProgramBuilder
 {
@@ -95,23 +96,24 @@ namespace ProgramBuilder
 
         private void ProgramTree_AfterSelect(object sender, TreeViewEventArgs e)
         {
-            programPanel.Visible = false;
-            modulePanel.Visible = false;
-            actionPanel.Visible = false;
-            stepPanel.Visible = false;
+            this.mainPanel.Controls.Clear();
             switch (Convert.ToString(ProgramTree.SelectedNode.Tag))
             {
                 case "Program":
-                    programPanel.Visible = true;
+                    ProgramsUserControl puc = new ProgramsUserControl();
+                    this.mainPanel.Controls.Add(puc);
                     break;
                 case "Module":
-                    modulePanel.Visible = true;
+                    ModulesUserControl muc = new ModulesUserControl();
+                    this.mainPanel.Controls.Add(muc);
                     break;
                 case "Action":
-                    actionPanel.Visible = true;
+                    ActionsUserControl auc = new ActionsUserControl();
+                    this.mainPanel.Controls.Add(auc);
                     break;
                 case "Step":
-                    stepPanel.Visible = true;
+                    StepsUserControl suc = new StepsUserControl();
+                    this.mainPanel.Controls.Add(suc);
                     break;
             }
         }
@@ -127,7 +129,7 @@ namespace ProgramBuilder
             if (MessageBox.Show("Do you want to delete this Program?", "Warning", MessageBoxButtons.YesNo) == DialogResult.Yes)
             {
                 ProgramTree.SelectedNode.Remove();
-                programPanel.Visible = false;
+                this.mainPanel.Controls.Clear();
             }
         }
 
@@ -136,7 +138,7 @@ namespace ProgramBuilder
             if (MessageBox.Show("Do you want to delete this Module?", "Warning", MessageBoxButtons.YesNo) == DialogResult.Yes)
             {
                 ProgramTree.SelectedNode.Remove();
-                modulePanel.Visible = false;
+                //modulePanel.Visible = false;
             }
         }
 
@@ -145,7 +147,7 @@ namespace ProgramBuilder
             if (MessageBox.Show("Do you want to delete this Action?", "Warning", MessageBoxButtons.YesNo) == DialogResult.Yes)
             {
                 ProgramTree.SelectedNode.Remove();
-                actionPanel.Visible = false;
+                //actionPanel.Visible = false;
             }
         }
 
@@ -154,7 +156,7 @@ namespace ProgramBuilder
             if (MessageBox.Show("Do you want to delete this Step?", "Warning", MessageBoxButtons.YesNo) == DialogResult.Yes)
             {
                 ProgramTree.SelectedNode.Remove();
-                stepPanel.Visible = false;
+                //stepPanel.Visible = false;
             }
         }
 
@@ -178,82 +180,53 @@ namespace ProgramBuilder
 
         private void saveButton_Click(object sender, EventArgs e)
         {
-            MEProgram newProgram = new MEProgram("")
-            {
-                //ContractId
-                Client = ObjectId.Parse(cliTextBox.Text),
-                //Completed
-                DeleteFlag = false,
-                Description = descTextBox.Text,
-                //Enabled
-                EndDate = System.DateTime.Parse(edTextBox.Text),
-                Name = nmTextBox.Text,
-                //Next = ObjectId.Parse(""),
-                //Order
-                //Objectives
-                //Previous = ObjectId.Parse(""),
-                //ProgramTemplateId
-                StartDate = System.DateTime.Parse(sdTextBox.Text),
-                ShortName = snTextBox.Text,
-                //SourceId
-                //Status = stsNumericUpDwn.Value
-                //TTLDate
-                //UpdatedBy
-                //LastUpdatedOn
-                //Version
-            };
+            ProgramsUserControl puc = new ProgramsUserControl();
 
-            MEProgramAttribute newProgramAttribute = new MEProgramAttribute("")
-            {
-               AuthoredBy = athbyTextBox.Text,
-               //Completed
-               DeleteFlag = false,
-               EndDate = System.DateTime.Parse(edTextBox.Text),
-               //EligibilityEndDate
-               //EligibilityRequirements
-               //EligibilityStartDate
-               //Locked
-               StartDate = System.DateTime.Parse(sdTextBox.Text)
-               //Status
-               //TTLDate
-               //UpdatedBy
-               //LastUpdatedOn
-               //Version
-            };
-        }
+            //MEProgram newProgram = new MEProgram("000000000000000000000000")
+            //{
+            //    //ContractId
+            //    Client = ObjectId.Parse(puc.cliTextBox.Text),
+            //    //Completed
+            //    DeleteFlag = false,
+            //    Description = puc.descTextBox.Text,
+            //    //Enabled
+            //    EndDate = System.DateTime.Parse(puc.edTextBox.Text),
+            //    Name = puc.nmTextBox.Text,
+            //    //Next = ObjectId.Parse(""),
+            //    //Order = puc.oNumericUpDown.Value,
+            //    //Objectives
+            //    //Population = 
+            //    //Previous = ObjectId.Parse(""),
+            //    //ProgramTemplateId
+            //    StartDate = System.DateTime.Parse(puc.sdTextBox.Text),
+            //    ShortName = puc.snTextBox.Text,
+            //    //SourceId
+            //    //Status = puc.stsNumericUpDwn.Value
+            //    //TTLDate
+            //    //UpdatedBy
+            //    //LastUpdatedOn
+            //    //Version
+            //};
 
-        private void descTextBox_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void sdLabel_Click(object sender, EventArgs e)
-        {
+            //MEProgramAttribute newProgramAttribute = new MEProgramAttribute("000000000000000000000000")
+            //{
+            //    AuthoredBy = puc.athbyTextBox.Text,
+            //    //Completed
+            //    DeleteFlag = false,
+            //    EndDate = System.DateTime.Parse(puc.edTextBox.Text),
+            //    //EligibilityEndDate
+            //    //EligibilityRequirements
+            //    //EligibilityStartDate
+            //    //Locked
+            //    //Population
+            //    StartDate = System.DateTime.Parse(puc.sdTextBox.Text)
+            //    //Status puc.stsNumericUpDwn.Value,
+            //    //TTLDate
+            //    //UpdatedBy
+            //    //LastUpdatedOn
+            //    //Version
+            //};
 
         }
-
-        private void sdTextBox_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void edLabel_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void edTextBox_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void descLabel_Click(object sender, EventArgs e)
-        {
-
-        }
-
-
-
-        
     }
 }

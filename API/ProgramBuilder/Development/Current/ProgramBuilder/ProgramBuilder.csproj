@@ -122,8 +122,32 @@
     <Compile Include="Forms\ProgramForm.Designer.cs">
       <DependentUpon>ProgramForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\ActionsUserControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\ActionsUserControl.Designer.cs">
+      <DependentUpon>ActionsUserControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\ModulesUserControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\ModulesUserControl.Designer.cs">
+      <DependentUpon>ModulesUserControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Program.cs" />
+    <Compile Include="UserControls\ProgramsUserControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\ProgramsUserControl.Designer.cs">
+      <DependentUpon>ProgramsUserControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UserControls\StepsUserControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\StepsUserControl.Designer.cs">
+      <DependentUpon>StepsUserControl.cs</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="Forms\ActionListForm.resx">
       <DependentUpon>ActionListForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -145,6 +169,15 @@
     <EmbeddedResource Include="Forms\ProgramNameForm.resx">
       <DependentUpon>ProgramNameForm.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\ActionsUserControl.resx">
+      <DependentUpon>ActionsUserControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\ModulesUserControl.resx">
+      <DependentUpon>ModulesUserControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\ProgramsUserControl.resx">
+      <DependentUpon>ProgramsUserControl.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -156,6 +189,9 @@
     </Compile>
     <EmbeddedResource Include="Forms\StepListForm.resx">
       <DependentUpon>StepListForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\StepsUserControl.resx">
+      <DependentUpon>StepsUserControl.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
