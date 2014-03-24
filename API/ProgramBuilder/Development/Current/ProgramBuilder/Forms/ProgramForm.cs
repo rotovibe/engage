@@ -1,4 +1,8 @@
-﻿using System;
+﻿using Phytel.API.Common.CustomObject;
+using Phytel.API.DataDomain.Program.MongoDB.DTO;
+using ProgramBuilder.Forms;
+using MongoDB.Bson;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -30,13 +34,13 @@ namespace ProgramBuilder
             ProgramTree.Nodes.Add(prNT);
             TreeNode test = new TreeNode("ModuleTest");
             test.Tag = "Module";
-            ProgramTree.Nodes.Add(test);
+            prNT.Nodes.Add(test);
             TreeNode test1 = new TreeNode("ActionTest");
             test1.Tag = "Action";
-            ProgramTree.Nodes.Add(test1);
+            test.Nodes.Add(test1);
             TreeNode test2 = new TreeNode("StepTest");
             test2.Tag = "Step";
-            ProgramTree.Nodes.Add(test2);
+            test1.Nodes.Add(test2);
         }
 
         private void mnuNewModule_Click(object sender, EventArgs e)
@@ -112,13 +116,13 @@ namespace ProgramBuilder
             }
         }
 
-        private void addActionToolStripMenuItem_Click(object sender, EventArgs e)
+        private void mnuNewAction_Click(object sender, EventArgs e)
         {
             ActionListForm actionList = new ActionListForm();
             actionList.ShowDialog();
         }
 
-        private void deleteToolStripMenuItem_Click(object sender, EventArgs e)
+        private void mnuDeleteProgram_Click(object sender, EventArgs e)
         {
             if (MessageBox.Show("Do you want to delete this Program?", "Warning", MessageBoxButtons.YesNo) == DialogResult.Yes)
             {
@@ -127,7 +131,7 @@ namespace ProgramBuilder
             }
         }
 
-        private void deleteToolStripMenuItem1_Click(object sender, EventArgs e)
+        private void mnuDeleteModule_Click(object sender, EventArgs e)
         {
             if (MessageBox.Show("Do you want to delete this Module?", "Warning", MessageBoxButtons.YesNo) == DialogResult.Yes)
             {
@@ -136,7 +140,7 @@ namespace ProgramBuilder
             }
         }
 
-        private void deleteToolStripMenuItem2_Click(object sender, EventArgs e)
+        private void mnuDeleteAction_Click(object sender, EventArgs e)
         {
             if (MessageBox.Show("Do you want to delete this Action?", "Warning", MessageBoxButtons.YesNo) == DialogResult.Yes)
             {
@@ -145,13 +149,107 @@ namespace ProgramBuilder
             }
         }
 
-        private void deleteToolStripMenuItem3_Click(object sender, EventArgs e)
+        private void mnuDeleteStep_Click(object sender, EventArgs e)
         {
             if (MessageBox.Show("Do you want to delete this Step?", "Warning", MessageBoxButtons.YesNo) == DialogResult.Yes)
             {
                 ProgramTree.SelectedNode.Remove();
                 stepPanel.Visible = false;
             }
+        }
+
+        private void mnuNewStep_Click(object sender, EventArgs e)
+        {
+            StepListForm stepList = new StepListForm();
+            stepList.ShowDialog();
+        }
+
+        private void updateProgramButton_Click(object sender, EventArgs e)
+        {
+            //MEProgram newProgram = new MEProgram("000000000000000000000000")
+            //{
+            //    Name = ProgramTree.SelectedNode.Text,
+            //    Description = descTextBox.Text,
+            //    StartDate = System.DateTime.Parse(sdTextBox.Text),
+            //    EndDate = System.DateTime.Parse(edTextBox.Text)
+
+            //};
+        }
+
+        private void saveButton_Click(object sender, EventArgs e)
+        {
+            MEProgram newProgram = new MEProgram("")
+            {
+                //ContractId
+                Client = ObjectId.Parse(cliTextBox.Text),
+                //Completed
+                DeleteFlag = false,
+                Description = descTextBox.Text,
+                //Enabled
+                EndDate = System.DateTime.Parse(edTextBox.Text),
+                Name = nmTextBox.Text,
+                //Next = ObjectId.Parse(""),
+                //Order
+                //Objectives
+                //Previous = ObjectId.Parse(""),
+                //ProgramTemplateId
+                StartDate = System.DateTime.Parse(sdTextBox.Text),
+                ShortName = snTextBox.Text,
+                //SourceId
+                //Status = stsNumericUpDwn.Value
+                //TTLDate
+                //UpdatedBy
+                //LastUpdatedOn
+                //Version
+            };
+
+            MEProgramAttribute newProgramAttribute = new MEProgramAttribute("")
+            {
+               AuthoredBy = athbyTextBox.Text,
+               //Completed
+               DeleteFlag = false,
+               EndDate = System.DateTime.Parse(edTextBox.Text),
+               //EligibilityEndDate
+               //EligibilityRequirements
+               //EligibilityStartDate
+               //Locked
+               StartDate = System.DateTime.Parse(sdTextBox.Text)
+               //Status
+               //TTLDate
+               //UpdatedBy
+               //LastUpdatedOn
+               //Version
+            };
+        }
+
+        private void descTextBox_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void sdLabel_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void sdTextBox_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void edLabel_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void edTextBox_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void descLabel_Click(object sender, EventArgs e)
+        {
+
         }
 
 

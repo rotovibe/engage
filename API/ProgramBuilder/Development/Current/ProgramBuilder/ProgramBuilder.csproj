@@ -37,8 +37,19 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="MongoDB.Bson, Version=1.8.1.20, Culture=neutral, PublicKeyToken=f686731cfb9cc103, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\..\Projects\tfs2013\Phytel.Net\Services\API\Interfaces\Development\Current\References\MongoDB.Bson.dll</HintPath>
+    </Reference>
+    <Reference Include="Phytel.Mongo, Version=1.2.3.0, Culture=neutral, PublicKeyToken=2125ac4128f3087b, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\..\Projects\tfs2013\Phytel.Net\Services\API\Interfaces\Development\Current\References\Phytel.Mongo.dll</HintPath>
+    </Reference>
     <Reference Include="PhytelServices">
       <HintPath>..\References\PhytelServices.dll</HintPath>
+    </Reference>
+    <Reference Include="ServiceStack.Common">
+      <HintPath>..\..\..\..\..\..\Projects\tfs2013\Phytel.Net\Services\API\packages\ServiceStack.Common.3.9.71\lib\net35\ServiceStack.Common.dll</HintPath>
     </Reference>
     <Reference Include="ServiceStack.Interfaces">
       <HintPath>..\..\..\..\packages\ServiceStack.Common.3.9.71\lib\net35\ServiceStack.Interfaces.dll</HintPath>
@@ -63,60 +74,75 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ActionListForm.cs">
+    <Compile Include="Forms\ActionListForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ActionListForm.Designer.cs">
+    <Compile Include="Forms\ActionListForm.Designer.cs">
       <DependentUpon>ActionListForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="NewActionForm.cs">
+    <Compile Include="Forms\NewStepForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="NewActionForm.Designer.cs">
+    <Compile Include="Forms\NewStepForm.Designer.cs">
+      <DependentUpon>NewStepForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\StepListForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\StepListForm.Designer.cs">
+      <DependentUpon>StepListForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\NewActionForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\NewActionForm.Designer.cs">
       <DependentUpon>NewActionForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="NewModuleForm.cs">
+    <Compile Include="Forms\NewModuleForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="NewModuleForm.Designer.cs">
+    <Compile Include="Forms\NewModuleForm.Designer.cs">
       <DependentUpon>NewModuleForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="ModuleListForm.cs">
+    <Compile Include="Forms\ModuleListForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ModuleListForm.Designer.cs">
+    <Compile Include="Forms\ModuleListForm.Designer.cs">
       <DependentUpon>ModuleListForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="ProgramNameForm.cs">
+    <Compile Include="Forms\ProgramNameForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ProgramNameForm.Designer.cs">
+    <Compile Include="Forms\ProgramNameForm.Designer.cs">
       <DependentUpon>ProgramNameForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="ProgramForm.cs">
+    <Compile Include="Forms\ProgramForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ProgramForm.Designer.cs">
+    <Compile Include="Forms\ProgramForm.Designer.cs">
       <DependentUpon>ProgramForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="ActionListForm.resx">
+    <EmbeddedResource Include="Forms\ActionListForm.resx">
       <DependentUpon>ActionListForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="ModuleListForm.resx">
+    <EmbeddedResource Include="Forms\NewStepForm.resx">
+      <DependentUpon>NewStepForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\ModuleListForm.resx">
       <DependentUpon>ModuleListForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="NewActionForm.resx">
+    <EmbeddedResource Include="Forms\NewActionForm.resx">
       <DependentUpon>NewActionForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="NewModuleForm.resx">
+    <EmbeddedResource Include="Forms\NewModuleForm.resx">
       <DependentUpon>NewModuleForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="ProgramForm.resx">
+    <EmbeddedResource Include="Forms\ProgramForm.resx">
       <DependentUpon>ProgramForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="ProgramNameForm.resx">
+    <EmbeddedResource Include="Forms\ProgramNameForm.resx">
       <DependentUpon>ProgramNameForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
@@ -128,6 +154,9 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="Forms\StepListForm.resx">
+      <DependentUpon>StepListForm.cs</DependentUpon>
+    </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -142,14 +171,25 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\..\..\Projects\tfs2013\Phytel.Net\Services\API\Common\Phytel.API.Common\Development\Current\Phytel.API.Common.csproj">
+      <Project>{25cf3c3f-221f-4a49-b5ef-a8a5fcf9a5ba}</Project>
+      <Name>Phytel.API.Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\..\..\..\Projects\tfs2013\Phytel.Net\Services\API\DataDomain\Phytel.API.DataDomain.Module\Development\Current\Module.DTO\DataDomain.Module.DTO.csproj">
       <Project>{6862b598-6967-430d-803a-bbe00fe98050}</Project>
       <Name>DataDomain.Module.DTO</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\..\Projects\tfs2013\Phytel.Net\Services\API\DataDomain\Phytel.API.DataDomain.Program\Development\Current\Program\DataDomain.Program.csproj">
+      <Project>{34271552-e2e1-428f-b612-7186e01b6c54}</Project>
+      <Name>DataDomain.Program</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\..\..\..\Projects\tfs2013\Phytel.Net\Services\API\Interfaces\Development\Current\Phytel.API.Interface\Phytel.API.Interface.csproj">
       <Project>{abe948fb-247e-4955-b3ab-b7c93e10a542}</Project>
       <Name>Phytel.API.Interface</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

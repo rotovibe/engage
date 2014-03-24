@@ -38,7 +38,7 @@ namespace ProgramBuilder
 
         public GetAllModulesResponse GetAllModulesRequestServiceCall()
         {
-            Uri modulesUri = new Uri(string.Format("{0}/{1}/{2}/{3}/Module/",
+            Uri modulesUri = new Uri(string.Format("{0}/{1}/{2}/{3}/Module",
                                                     ConfigurationManager.AppSettings["urlhost"].ToString(),
                                                     context,
                                                     version,

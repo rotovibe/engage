@@ -8,19 +8,13 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace ProgramBuilder
+namespace ProgramBuilder.Forms
 {
-    public partial class ActionListForm : Form
+    public partial class NewStepForm : Form
     {
-        public ActionListForm()
+        public NewStepForm()
         {
             InitializeComponent();
-        }
-
-        private void addActionButton_Click(object sender, EventArgs e)
-        {
-            NewActionForm newAction = new NewActionForm();
-            newAction.ShowDialog();
         }
 
         private void closeButton_Click(object sender, EventArgs e)
