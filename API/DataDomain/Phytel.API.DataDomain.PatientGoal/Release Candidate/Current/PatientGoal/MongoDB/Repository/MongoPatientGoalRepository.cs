@@ -26,17 +26,28 @@ namespace Phytel.API.DataDomain.PatientGoal
         private int _expireDays = Convert.ToInt32(ConfigurationManager.AppSettings["ExpireDays"]);
         private int _initializeDays = Convert.ToInt32(ConfigurationManager.AppSettings["InitializeDays"]);
 
+        static MongoPatientGoalRepository()
+        {
+            #region Register ClassMap
+            try 
+            { 
+            if (BsonClassMap.IsClassMapRegistered(typeof(GoalBase)) == false)
+                BsonClassMap.RegisterClassMap<GoalBase>();
+            }
+            catch { }
+
+            try
+            {
+                if (BsonClassMap.IsClassMapRegistered(typeof(MEPatientGoal)) == false)
+                    BsonClassMap.RegisterClassMap<MEPatientGoal>();
+            }
+            catch { }
+            #endregion
+        }
+
         public MongoPatientGoalRepository(string contractDBName)
         {
             _dbName = contractDBName;
-
-            #region Register ClassMap
-            if (BsonClassMap.IsClassMapRegistered(typeof(GoalBase)) == false)
-                BsonClassMap.RegisterClassMap<GoalBase>();
-
-            if (BsonClassMap.IsClassMapRegistered(typeof(MEPatientGoal)) == false)
-                BsonClassMap.RegisterClassMap<MEPatientGoal>();
-            #endregion
         }
 
         public object Insert(object newEntity)
