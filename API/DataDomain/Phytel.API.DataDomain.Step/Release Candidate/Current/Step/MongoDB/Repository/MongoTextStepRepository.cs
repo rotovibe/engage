@@ -18,17 +18,28 @@ namespace Phytel.API.DataDomain.Step
     {
         private string _dbName = string.Empty;
 
+        static MongoTextStepRepository()
+        {
+            #region Register ClassMap
+            try
+            {
+                if (BsonClassMap.IsClassMapRegistered(typeof(MEStepBase)) == false)
+                    BsonClassMap.RegisterClassMap<MEStepBase>();
+            }
+            catch { }
+
+            try
+            {
+                if (BsonClassMap.IsClassMapRegistered(typeof(METext)) == false)
+                    BsonClassMap.RegisterClassMap<METext>();
+            }
+            catch { }
+            #endregion
+        }
+
         public MongoTextStepRepository(string contractDBName)
         {
             _dbName = contractDBName;
-
-            #region Register ClassMap
-            if (BsonClassMap.IsClassMapRegistered(typeof(MEStepBase)) == false)
-                BsonClassMap.RegisterClassMap<MEStepBase>();
-
-            if (BsonClassMap.IsClassMapRegistered(typeof(METext)) == false)
-                BsonClassMap.RegisterClassMap<METext>();
-            #endregion
         }
 
         public object Insert(object newEntity)
