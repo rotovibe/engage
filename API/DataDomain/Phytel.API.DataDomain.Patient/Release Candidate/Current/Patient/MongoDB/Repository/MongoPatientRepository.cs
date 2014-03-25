@@ -25,17 +25,30 @@ namespace Phytel.API.DataDomain.Patient
         protected static readonly string DDLookUpUrl = ConfigurationManager.AppSettings["DDLookUpServiceUrl"];
         #endregion
 
+        static MongoPatientRepository()
+        {             
+            
+            #region Register ClassMap
+            try
+            {
+                if (BsonClassMap.IsClassMapRegistered(typeof(MEPatient)) == false)
+                    BsonClassMap.RegisterClassMap<MEPatient>();
+            }
+            catch { }
+
+            try 
+            {
+                if (BsonClassMap.IsClassMapRegistered(typeof(MEPatientUser)) == false)
+                    BsonClassMap.RegisterClassMap<MEPatientUser>();
+            }
+            catch { }
+            
+            #endregion
+        
+        }
         public MongoPatientRepository(string contractDBName)
         {
             _dbName = contractDBName;
-
-            #region Register ClassMap
-            if (BsonClassMap.IsClassMapRegistered(typeof(MEPatient)) == false)
-                BsonClassMap.RegisterClassMap<MEPatient>();
-
-            if (BsonClassMap.IsClassMapRegistered(typeof(MEPatientUser)) == false)
-                BsonClassMap.RegisterClassMap<MEPatientUser>();
-            #endregion
         }
 
         public object Insert(object newEntity)
