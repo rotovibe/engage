@@ -227,5 +227,17 @@ namespace Phytel.API.DataDomain.LookUp.Test
             Assert.IsTrue(response.LookUpsData.Count > 0);
         }
 
+        [TestMethod]
+        public void CreateRepo()
+        {
+            // Arrange
+            double version = 1.0;
+            string contractNumber = "InHealth001";
+            string context = "NG";
+
+            object repo = LookUpRepositoryFactory<object>.GetLookUpRepository(contractNumber, context, string.Empty);
+            Assert.IsTrue(true);
+        }
+
     }
 }

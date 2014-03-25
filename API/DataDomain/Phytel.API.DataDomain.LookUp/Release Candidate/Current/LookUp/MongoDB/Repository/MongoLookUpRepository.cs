@@ -17,79 +17,168 @@ namespace Phytel.API.DataDomain.LookUp
     {
         private string _dbName = string.Empty;
 
+        static MongoLookUpRepository()
+        {
+            
+            #region Register ClassMap
+            try
+            {
+                if (MongoDB.Bson.Serialization.BsonClassMap.IsClassMapRegistered(typeof(MELookup)) == false)
+                {
+                    MongoDB.Bson.Serialization.BsonClassMap.RegisterClassMap<MELookup>();
+                }
+            }
+            catch {  }
+
+            try
+            {
+                if (MongoDB.Bson.Serialization.BsonClassMap.IsClassMapRegistered(typeof(Problem)) == false)
+                {
+                    MongoDB.Bson.Serialization.BsonClassMap.RegisterClassMap<Problem>();
+                }
+            }
+            catch { }
+                           
+            try
+            {
+                if (MongoDB.Bson.Serialization.BsonClassMap.IsClassMapRegistered(typeof(DTO.Objective)) == false)
+                {
+                    MongoDB.Bson.Serialization.BsonClassMap.RegisterClassMap<DTO.Objective>();
+                }
+            }
+            catch { }
+
+            try
+            {
+                if (MongoDB.Bson.Serialization.BsonClassMap.IsClassMapRegistered(typeof(Category)) == false)
+                {
+                    MongoDB.Bson.Serialization.BsonClassMap.RegisterClassMap<Category>();
+                }
+            }
+            catch { }
+
+            try
+            {
+                if (MongoDB.Bson.Serialization.BsonClassMap.IsClassMapRegistered(typeof(CommMode)) == false)
+                {
+                    MongoDB.Bson.Serialization.BsonClassMap.RegisterClassMap<CommMode>();
+                }
+            }
+            catch { }
+
+            try
+            {
+                if (MongoDB.Bson.Serialization.BsonClassMap.IsClassMapRegistered(typeof(State)) == false)
+                {
+                    MongoDB.Bson.Serialization.BsonClassMap.RegisterClassMap<State>();
+                }
+            }
+            catch { }
+
+            try
+            {
+                if (MongoDB.Bson.Serialization.BsonClassMap.IsClassMapRegistered(typeof(TimesOfDay)) == false)
+                {
+                    MongoDB.Bson.Serialization.BsonClassMap.RegisterClassMap<TimesOfDay>();
+                }
+            }
+            catch { }
+
+            try
+            {
+                if (MongoDB.Bson.Serialization.BsonClassMap.IsClassMapRegistered(typeof(DTO.TimeZone)) == false)
+                {
+                    MongoDB.Bson.Serialization.BsonClassMap.RegisterClassMap<DTO.TimeZone>();
+                }
+            }
+            catch { }
+
+            try
+            {
+                if (MongoDB.Bson.Serialization.BsonClassMap.IsClassMapRegistered(typeof(CommType)) == false)
+                {
+                    MongoDB.Bson.Serialization.BsonClassMap.RegisterClassMap<CommType>();
+                }
+            }
+            catch { }
+
+            try
+            {
+                if (MongoDB.Bson.Serialization.BsonClassMap.IsClassMapRegistered(typeof(Language)) == false)
+                {
+                    MongoDB.Bson.Serialization.BsonClassMap.RegisterClassMap<Language>();
+                }
+            }
+            catch { }
+
+            try
+            {
+                if (MongoDB.Bson.Serialization.BsonClassMap.IsClassMapRegistered(typeof(FocusArea)) == false)
+                {
+                    MongoDB.Bson.Serialization.BsonClassMap.RegisterClassMap<FocusArea>();
+                }
+            }
+            catch { }
+
+            try
+            {
+                if (MongoDB.Bson.Serialization.BsonClassMap.IsClassMapRegistered(typeof(Source)) == false)
+                {
+                    MongoDB.Bson.Serialization.BsonClassMap.RegisterClassMap<Source>();
+                }
+            }
+            catch { }
+
+            try
+            {
+                if (MongoDB.Bson.Serialization.BsonClassMap.IsClassMapRegistered(typeof(BarrierCategory)) == false)
+                {
+                    MongoDB.Bson.Serialization.BsonClassMap.RegisterClassMap<BarrierCategory>();
+                }
+            }
+            catch { }
+
+            try
+            {
+                if (MongoDB.Bson.Serialization.BsonClassMap.IsClassMapRegistered(typeof(InterventionCategory)) == false)
+                {
+                    MongoDB.Bson.Serialization.BsonClassMap.RegisterClassMap<InterventionCategory>();
+                }
+            }
+            catch { }
+
+            try
+            {
+                if (MongoDB.Bson.Serialization.BsonClassMap.IsClassMapRegistered(typeof(ObservationType)) == false)
+                {
+                    MongoDB.Bson.Serialization.BsonClassMap.RegisterClassMap<ObservationType>();
+                }
+            }
+            catch { }
+
+            try
+            {
+                if (MongoDB.Bson.Serialization.BsonClassMap.IsClassMapRegistered(typeof(CareMemberType)) == false)
+                {
+                    MongoDB.Bson.Serialization.BsonClassMap.RegisterClassMap<CareMemberType>();
+                }
+            }
+            catch { }
+
+            try
+            {
+                if (MongoDB.Bson.Serialization.BsonClassMap.IsClassMapRegistered(typeof(CodingSystem)) == false)
+                {
+                    MongoDB.Bson.Serialization.BsonClassMap.RegisterClassMap<CodingSystem>();
+                }
+            }
+            catch { }
+            #endregion
+
+        }
         public MongoLookUpRepository(string contractDBName)
         {
             _dbName = contractDBName;
-            #region Register ClassMap
-            if (MongoDB.Bson.Serialization.BsonClassMap.IsClassMapRegistered(typeof(MELookup)) == false)
-            {
-                MongoDB.Bson.Serialization.BsonClassMap.RegisterClassMap<MELookup>();
-            }
-            if (MongoDB.Bson.Serialization.BsonClassMap.IsClassMapRegistered(typeof(Problem)) == false)
-            {
-                MongoDB.Bson.Serialization.BsonClassMap.RegisterClassMap<Problem>();
-            }
-            if (MongoDB.Bson.Serialization.BsonClassMap.IsClassMapRegistered(typeof(DTO.Objective)) == false)
-            {
-                MongoDB.Bson.Serialization.BsonClassMap.RegisterClassMap<DTO.Objective>();
-            }
-            if (MongoDB.Bson.Serialization.BsonClassMap.IsClassMapRegistered(typeof(Category)) == false)
-            {
-                MongoDB.Bson.Serialization.BsonClassMap.RegisterClassMap<Category>();
-            }
-            if (MongoDB.Bson.Serialization.BsonClassMap.IsClassMapRegistered(typeof(CommMode)) == false)
-            {
-                MongoDB.Bson.Serialization.BsonClassMap.RegisterClassMap<CommMode>();
-            }
-            if (MongoDB.Bson.Serialization.BsonClassMap.IsClassMapRegistered(typeof(State)) == false)
-            {
-                MongoDB.Bson.Serialization.BsonClassMap.RegisterClassMap<State>();
-            }
-            if (MongoDB.Bson.Serialization.BsonClassMap.IsClassMapRegistered(typeof(TimesOfDay)) == false)
-            {
-                MongoDB.Bson.Serialization.BsonClassMap.RegisterClassMap<TimesOfDay>();
-            }
-            if (MongoDB.Bson.Serialization.BsonClassMap.IsClassMapRegistered(typeof(DTO.TimeZone)) == false)
-            {
-                MongoDB.Bson.Serialization.BsonClassMap.RegisterClassMap<DTO.TimeZone>();
-            }
-            if (MongoDB.Bson.Serialization.BsonClassMap.IsClassMapRegistered(typeof(CommType)) == false)
-            {
-                MongoDB.Bson.Serialization.BsonClassMap.RegisterClassMap<CommType>();
-            }
-            if (MongoDB.Bson.Serialization.BsonClassMap.IsClassMapRegistered(typeof(Language)) == false)
-            {
-                MongoDB.Bson.Serialization.BsonClassMap.RegisterClassMap<Language>();
-            }
-            if (MongoDB.Bson.Serialization.BsonClassMap.IsClassMapRegistered(typeof(FocusArea)) == false)
-            {
-                MongoDB.Bson.Serialization.BsonClassMap.RegisterClassMap<FocusArea>();
-            }
-            if (MongoDB.Bson.Serialization.BsonClassMap.IsClassMapRegistered(typeof(Source)) == false)
-            {
-                MongoDB.Bson.Serialization.BsonClassMap.RegisterClassMap<Source>();
-            }
-            if (MongoDB.Bson.Serialization.BsonClassMap.IsClassMapRegistered(typeof(BarrierCategory)) == false)
-            {
-                MongoDB.Bson.Serialization.BsonClassMap.RegisterClassMap<BarrierCategory>();
-            }
-            if (MongoDB.Bson.Serialization.BsonClassMap.IsClassMapRegistered(typeof(InterventionCategory)) == false)
-            {
-                MongoDB.Bson.Serialization.BsonClassMap.RegisterClassMap<InterventionCategory>();
-            }
-            if (MongoDB.Bson.Serialization.BsonClassMap.IsClassMapRegistered(typeof(ObservationType)) == false)
-            {
-                MongoDB.Bson.Serialization.BsonClassMap.RegisterClassMap<ObservationType>();
-            }
-            if (MongoDB.Bson.Serialization.BsonClassMap.IsClassMapRegistered(typeof(CareMemberType)) == false)
-            {
-                MongoDB.Bson.Serialization.BsonClassMap.RegisterClassMap<CareMemberType>();
-            }
-            if (MongoDB.Bson.Serialization.BsonClassMap.IsClassMapRegistered(typeof(CodingSystem)) == false)
-            {
-                MongoDB.Bson.Serialization.BsonClassMap.RegisterClassMap<CodingSystem>();
-            }
-            #endregion
         }
 
         public object Insert(object newEntity)
