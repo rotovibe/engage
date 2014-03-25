@@ -21,20 +21,33 @@ namespace Phytel.API.DataDomain.Program
     {
         private string _dbName = string.Empty;
 
+        static MongoPatientProgramResponseRepository()
+        {
+            #region Register ClassMap
+            try
+            {
+                if (BsonClassMap.IsClassMapRegistered(typeof(ProgramBase)) == false)
+                    BsonClassMap.RegisterClassMap<ProgramBase>();
+            }
+            catch { }
+            try
+            {
+                if (BsonClassMap.IsClassMapRegistered(typeof(MEPatientProgramResponse)) == false)
+                    BsonClassMap.RegisterClassMap<MEPatientProgramResponse>();
+            }
+            catch { }
+            try
+            {
+                if (BsonClassMap.IsClassMapRegistered(typeof(MEResponse)) == false)
+                    BsonClassMap.RegisterClassMap<MEResponse>();
+            }
+            catch { }
+            #endregion
+        }
+
         public MongoPatientProgramResponseRepository(string contractDBName)
         {
             _dbName = contractDBName;
-
-            #region Register ClassMap
-            if (BsonClassMap.IsClassMapRegistered(typeof(ProgramBase)) == false)
-                BsonClassMap.RegisterClassMap<ProgramBase>();
-
-            if (BsonClassMap.IsClassMapRegistered(typeof(MEPatientProgramResponse)) == false)
-                BsonClassMap.RegisterClassMap<MEPatientProgramResponse>();
-
-            if (BsonClassMap.IsClassMapRegistered(typeof(MEResponse)) == false)
-                BsonClassMap.RegisterClassMap<MEResponse>();
-            #endregion
         }
 
         public object Insert(object newEntity)
