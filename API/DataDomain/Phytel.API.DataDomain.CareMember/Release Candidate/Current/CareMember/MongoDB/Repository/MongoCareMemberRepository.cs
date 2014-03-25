@@ -18,14 +18,20 @@ namespace Phytel.API.DataDomain.CareMember
         private string _dbName = string.Empty;
         private int _expireDays = Convert.ToInt32(ConfigurationManager.AppSettings["ExpireDays"]);
 
+        static MongoCareMemberRepository()
+        {
+            try 
+            {
+                #region Register ClassMap
+                if (MongoDB.Bson.Serialization.BsonClassMap.IsClassMapRegistered(typeof(MECareMember)) == false)
+                    MongoDB.Bson.Serialization.BsonClassMap.RegisterClassMap<MECareMember>();
+                #endregion
+            }
+            catch { }
+        }
         public MongoCareMemberRepository(string contractDBName)
         {
             _dbName = contractDBName;
-
-            #region Register ClassMap
-            if (MongoDB.Bson.Serialization.BsonClassMap.IsClassMapRegistered(typeof(MECareMember)) == false)
-                MongoDB.Bson.Serialization.BsonClassMap.RegisterClassMap<MECareMember>();
-            #endregion
         }
 
         public object Insert(object newEntity)
