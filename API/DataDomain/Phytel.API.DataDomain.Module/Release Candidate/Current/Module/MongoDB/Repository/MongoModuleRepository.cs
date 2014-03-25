@@ -18,14 +18,21 @@ namespace Phytel.API.DataDomain.Module
     {
         private string _dbName = string.Empty;
 
+        static MongoModuleRepository()
+        {
+            try 
+            { 
+                #region Register ClassMap
+                if (BsonClassMap.IsClassMapRegistered(typeof(MEModule)) == false)
+                    BsonClassMap.RegisterClassMap<MEModule>();
+                #endregion
+            }
+            catch { }
+        }
+        
         public MongoModuleRepository(string contractDBName)
         {
             _dbName = contractDBName;
-
-            #region Register ClassMap
-            if (BsonClassMap.IsClassMapRegistered(typeof(MEModule)) == false)
-                BsonClassMap.RegisterClassMap<MEModule>();
-            #endregion
         }
 
         public object Insert(object newEntity)
