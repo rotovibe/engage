@@ -17,14 +17,22 @@ namespace Phytel.API.DataDomain.Action
     {
         private string _dbName = string.Empty;
 
+        static MongoActionRepository()
+        {
+            #region Register ClassMap
+            try
+            {
+                if (MongoDB.Bson.Serialization.BsonClassMap.IsClassMapRegistered(typeof(MEAction)) == false)
+                    MongoDB.Bson.Serialization.BsonClassMap.RegisterClassMap<MEAction>();
+            }
+            catch { }
+            
+            #endregion
+        }
+
         public MongoActionRepository(string contractDBName)
         {
             _dbName = contractDBName;
-
-            #region Register ClassMap
-            if (MongoDB.Bson.Serialization.BsonClassMap.IsClassMapRegistered(typeof(MEAction)) == false)
-                MongoDB.Bson.Serialization.BsonClassMap.RegisterClassMap<MEAction>();
-            #endregion
         }
 
         public object Insert(object newEntity)
