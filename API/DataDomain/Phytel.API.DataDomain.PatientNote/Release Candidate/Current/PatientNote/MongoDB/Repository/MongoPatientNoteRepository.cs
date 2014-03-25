@@ -24,14 +24,21 @@ namespace Phytel.API.DataDomain.PatientNote
         private string _dbName = string.Empty;
         private int _expireDays = Convert.ToInt32(ConfigurationManager.AppSettings["ExpireDays"]);
 
+        static MongoPatientNoteRepository()
+        {
+            #region Register ClassMap
+            try
+            {
+                if (BsonClassMap.IsClassMapRegistered(typeof(MEPatientNote)) == false)
+                    BsonClassMap.RegisterClassMap<MEPatientNote>();
+            }
+            catch { }
+            #endregion
+        }
+
         public MongoPatientNoteRepository(string contractDBName)
         {
             _dbName = contractDBName;
-
-            #region Register ClassMap
-            if (BsonClassMap.IsClassMapRegistered(typeof(MEPatientNote)) == false)
-                BsonClassMap.RegisterClassMap<MEPatientNote>();
-            #endregion
         }
 
         public object Insert(object newEntity)
