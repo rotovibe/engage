@@ -20,7 +20,7 @@ namespace Phytel.API.DataDomain.PatientObservation.Services.Test
             double version = 1.0;
             IRestClient client = new JsonServiceClient();
             JsonServiceClient.HttpWebRequestFilter = x =>
-                            x.Headers.Add(string.Format("{0}: {1}", "x-Phytel-UserID", "531f2df9072ef727c4d2a3df"));
+                            x.Headers.Add(string.Format("{0}: {1}", "x-Phytel-UserID", "5331b06cd6a4850998e38975"));
 
             GetStandardObservationsResponse response = client.Get<GetStandardObservationsResponse>(
                 string.Format("{0}/{1}/{2}/{3}/Observation/?TypeId={4}&PatientId={5}", 

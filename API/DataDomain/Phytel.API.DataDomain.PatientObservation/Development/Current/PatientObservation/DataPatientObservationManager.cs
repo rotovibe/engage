@@ -134,6 +134,7 @@ namespace Phytel.API.DataDomain.PatientObservation
 
                 ovd.Id = pod.Id;
                 ovd.Text = od.Description;
+                ovd.Value = string.Empty; // changed to initialize the value.
 
                 list.Add(ovd);
 
