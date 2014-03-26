@@ -1,0 +1,65 @@
+﻿{
+   "SourceId":"52cb202e1e601522209c44a4",
+   "Order":1,
+   "Enabled":true,
+   "ElementState":3,
+   "Completed":true,
+   "Next":"",
+   "Id":"52efc1dffe7a5921e450d805",
+   "ModuleId":"52efc1dffe7a5921e450d806",
+   "Name":"Program Eligibility",
+   "Description":"check Program Eligibility for P4H program",
+   "CompletedBy":"Care Manager",
+   "Objectives":[
+      {
+         "Id":"52a0bef0d43323141c9eb26d",
+         "Value":"75",
+         "Unit":"%",
+         "Status":5
+      }
+   ],
+   "Steps":[
+      {
+         "SourceId":"52a641e8d433231824878c8f",
+         "Order":1,
+         "Enabled":true,
+         "ElementState":0,
+         "Completed":false,
+         "Id":"52efc1dffe7a5921e450d806",
+         "ActionId":"52efc1dffe7a5921e450d805",
+         "StepTypeId":2,
+         "Header":"",
+         "SelectedResponseId":"52e51ef5d6a48505344c9f4d",
+         "ControlType":0,
+         "SelectType":0,
+         "IncludeTime":false,
+         "Question":null,
+         "Title":"P4H Program Details",
+         "Description":"P4H Enrollment detail script and eligibility details",
+         "Text":"Partner for Health is an ABC co wellness initiative designed to support employees and their spouses in their efforts to improve overall health through the implementation of a  combination of advanced laboratory tesing and individual lifestyle coaching.",
+         "Status":1,
+         "Responses":[
+            {
+               "Id":"52e51ef5d6a48505344c9f4d",
+               "Order":1,
+               "Text":"This is a sample text!!",
+               "stepid":"52efc1dffe7a5921e450d806",
+               "Value":"",
+               "Nominal":true,
+               "Required":false,
+               "NextStepId":"52e03b59d6a4850d00a3a8b7",
+                  "SpawnElement" : [{
+                      "ElementType" : 101,
+                      "ElementId" : "528a66f4d4332317acc5095f"
+                    },{
+                      "ElementType" : 10,
+                      "Tag":"0"
+                    },
+					{
+                      "ElementType" : 11,
+                      "Tag":"Neither an employee or spouse of an employee."
+                    }]
+            }]
+      }],
+   "Status":1
+}
