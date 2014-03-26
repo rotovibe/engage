@@ -16,10 +16,14 @@ namespace Phytel.API.DataDomain.Patient.Service.Test
             string contractNumber = "InHealth001";
             string context = "NG";
             double version = 1.0;
-            string token = "5317440bd6a4850c20c998a2";
+            string token = "5331b06cd6a4850998e38975";
             string patientId = "52f5586e072ef709f84e65fd";
             string typeId = "53067453fe7a591a348e1b66";
             IRestClient client = new JsonServiceClient();
+
+            //JsonServiceClient.HttpWebRequestFilter = x =>
+            //                x.Headers.Add(string.Format("{0}: {1}", "x-Phytel-UserID", "5331b06cd6a4850998e38975"));
+            JsonServiceClient.HttpWebRequestFilter = x => x.Headers.Add(string.Format("Token: {0}", token));
 
             GetStandardObservationItemsResponse response = client.Get<GetStandardObservationItemsResponse>(
                 string.Format(@"http://localhost:888/Nightingale/{0}/{1}/Patient/{2}/Observation/?Token={3}&TypeId={4}",
