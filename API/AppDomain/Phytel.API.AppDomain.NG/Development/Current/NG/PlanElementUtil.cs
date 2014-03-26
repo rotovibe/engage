@@ -867,5 +867,31 @@ namespace Phytel.API.AppDomain.NG
                 throw new Exception("AD:PlanElementUtil:CloneProgram()::" + ex.Message, ex.InnerException);
             }
         }
+
+        //input text	    input	3
+        //date	            datepicker	6
+        //time	            timepicker	8
+        //datetime	        datepicker	9
+        //Multi line input text	input	10
+        public static bool ResponseSpawnAllowed(Step s, Response r)
+        {
+            try
+            {
+                bool pass = true;
+                if ((s.StepTypeId != 1) && (s.StepTypeId != 2) && (s.StepTypeId != 4)
+                    && (s.StepTypeId != 5) && (s.StepTypeId != 7) && (s.StepTypeId != 11))
+                {
+                    if (string.IsNullOrEmpty(r.Value))
+                    {
+                        pass = false;
+                    }
+                }
+                return pass;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("AD:StepPlanProcessor:ResponseSpawnAllowed()::" + ex.Message, ex.InnerException);
+            }
+        }
     }
 }
