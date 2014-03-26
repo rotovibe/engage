@@ -10,19 +10,26 @@ namespace KeepAlive
     {
         public override void Execute(QueueMessage queueMessage)
         {
-            string currentSite = string.Empty;
             try
             {
                 XmlNodeList sites = base.Configuration.SelectNodes("//Phytel.ASE.Process/ProcessConfiguration/Sites/Site");
                 foreach (XmlNode site in sites)
                 {
-                    currentSite = site.InnerText;
-                    KeepSiteAlive(currentSite);
+                    string currentSite = string.Empty;
+                    try
+                    {
+                        currentSite = site.InnerText;
+                        KeepSiteAlive(currentSite);
+                    }
+                    catch (Exception ex)
+                    {
+                        LogError(ex.Message, Phytel.Framework.ASE.Data.Common.LogErrorCode.Error, Phytel.Framework.ASE.Data.Common.LogErrorSeverity.Low, currentSite);
+                    }
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                LogError(ex.Message, Phytel.Framework.ASE.Data.Common.LogErrorCode.Error, Phytel.Framework.ASE.Data.Common.LogErrorSeverity.Low, currentSite);
+                LogError(ex, Phytel.Framework.ASE.Data.Common.LogErrorCode.Error, Phytel.Framework.ASE.Data.Common.LogErrorSeverity.Low);
             }
         }
 
