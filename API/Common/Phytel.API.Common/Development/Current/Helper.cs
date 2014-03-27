@@ -12,18 +12,13 @@ namespace Phytel.API.Common
 {
     public static class Helper
     {
-        static readonly string PhytelUserIDHeaderKey = "x-Phytel-UserID";
-
-        public static IRestClient GetJsonServiceClient(string userId)
+        public static string BuildURL(string baseURL, string userId)
         {
-            IRestClient client = new JsonServiceClient();
-
-            if (userId.Trim() != string.Empty)
-            {
-                JsonServiceClient.HttpWebRequestFilter = x =>
-                    x.Headers.Add(string.Format("{0}: {1}", PhytelUserIDHeaderKey, userId.Trim()));
-            }
-            return client;
+            string returnURL = baseURL;
+            if (returnURL.Contains("?"))
+                return string.Format("{0}&UserId={1}", returnURL, userId);
+            else
+                return string.Format("{0}?UserId={1}", returnURL, userId);
         }
 
         /// <summary>
