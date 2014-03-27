@@ -14,7 +14,11 @@ namespace Phytel.API.Common
     {
         public static string BuildURL(string baseURL, string userId)
         {
-            return string.Format("{0}?UserId={1}", baseURL, userId);
+            string returnURL = baseURL;
+            if (returnURL.Contains("?"))
+                return string.Format("{0}&UserId={1}", returnURL, userId);
+            else
+                return string.Format("{0}?UserId={1}", returnURL, userId);
         }
 
         /// <summary>

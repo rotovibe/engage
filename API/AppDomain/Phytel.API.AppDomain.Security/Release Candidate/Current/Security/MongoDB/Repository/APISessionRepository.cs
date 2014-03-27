@@ -260,13 +260,15 @@ namespace Phytel.API.AppDomain.Security
             ObjectId returnId = ObjectId.Empty;
 
             GetContactByUserIdDataResponse contactDataResponse = null;
-            IRestClient client = GetJsonServiceClient(returnId.ToString());
+            IRestClient client = new JsonServiceClient();
 
-            contactDataResponse = client.Get<GetContactByUserIdDataResponse>(string.Format("{0}/{1}/1.0/{2}/Contact/User/{3}",
+            string url = Common.Helper.BuildURL(string.Format("{0}/{1}/1.0/{2}/Contact/User/{3}",
                                                     DDContactServiceUrl,
                                                     productContext,
                                                     contractNumber,
-                                                    sqlUserID));
+                                                    sqlUserID), returnId.ToString());
+
+            contactDataResponse = client.Get<GetContactByUserIdDataResponse>(url);
 
             if (contactDataResponse != null && contactDataResponse.Contact != null)
                 returnId = ObjectId.Parse(contactDataResponse.Contact.ContactId);
@@ -274,15 +276,6 @@ namespace Phytel.API.AppDomain.Security
             return returnId;
         }
 
-        public static IRestClient GetJsonServiceClient(string userId)
-        {
-            IRestClient client = new JsonServiceClient();
-
-            JsonServiceClient.HttpWebRequestFilter = x =>
-                x.Headers.Add(string.Format("{0}: {1}", PhytelUserIDHeaderKey, userId));
-
-            return client;
-        }
         #endregion
     }
 }
