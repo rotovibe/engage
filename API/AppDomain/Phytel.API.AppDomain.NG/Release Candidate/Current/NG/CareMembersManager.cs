@@ -316,13 +316,15 @@ namespace Phytel.API.AppDomain.NG
                         });
                     }
 
-                    PutUpdateCohortPatientViewResponse putResponse =
-                        client.Put<PutUpdateCohortPatientViewResponse>(string.Format("{0}/{1}/{2}/{3}/patient/{4}/cohortpatientview/update",
+                    string cohortPatientViewURL = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/patient/{4}/cohortpatientview/update",
                         DDPatientServiceURL,
                         context,
                         version,
                         contractNumber,
-                        patientId), new PutUpdateCohortPatientViewRequest
+                        patientId), userId);
+
+                    PutUpdateCohortPatientViewResponse putResponse =
+                        client.Put<PutUpdateCohortPatientViewResponse>(cohortPatientViewURL, new PutUpdateCohortPatientViewRequest
                         {
                             CohortPatientView = cpvd,
                             ContractNumber = contractNumber,
