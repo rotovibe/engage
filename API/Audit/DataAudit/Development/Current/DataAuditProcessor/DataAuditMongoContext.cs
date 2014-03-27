@@ -4,14 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Phytel.Mongo.Linq;
+using System.Configuration;
 
 namespace Phytel.API.DataAuditProcessor
 {
     public class DataAuditMongoContext: MongoContext
     {
-
-        public DataAuditMongoContext(string dbName)
-            : base(dbName, true, "Audit")
+        public DataAuditMongoContext(string configName, string dbName)
+            : base(configName, dbName, true, "Audit")
         {
 
         }
