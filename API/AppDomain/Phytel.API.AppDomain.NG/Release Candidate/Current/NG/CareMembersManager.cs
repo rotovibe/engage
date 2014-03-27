@@ -24,17 +24,16 @@ namespace Phytel.API.AppDomain.NG
             {
                 CareMember result = null;
                 //[Route("/{Context}/{Version}/{ContractNumber}/Patient/{PatientId}/CareMember/{Id}", "GET")]
-                IRestClient client = Common.Helper.GetJsonServiceClient(request.UserId);
-
-                GetCareMemberDataResponse ddResponse = client.Get<GetCareMemberDataResponse>(
-                    string.Format("{0}/{1}/{2}/{3}/Patient/{4}/CareMember/{5}?UserId={6}",
+                IRestClient client = new JsonServiceClient();
+                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Patient/{4}/CareMember/{5}",
                     DDCareMemberUrl,
                     "NG",
                     request.Version,
                     request.ContractNumber,
                     request.PatientId,
-                    request.Id,
-                    request.UserId));
+                    request.Id), request.UserId);
+
+                GetCareMemberDataResponse ddResponse = client.Get<GetCareMemberDataResponse>(url);
 
                 if (ddResponse != null && ddResponse.CareMember != null)
                 {
@@ -75,16 +74,15 @@ namespace Phytel.API.AppDomain.NG
             {
                 List<CareMember> result = null;
                 //[Route("/{Context}/{Version}/{ContractNumber}/Patient/{PatientId}/CareMembers", "GET")]
-                IRestClient client = Common.Helper.GetJsonServiceClient(request.UserId);
-
-                GetAllCareMembersDataResponse ddResponse = client.Get<GetAllCareMembersDataResponse>(
-                    string.Format("{0}/{1}/{2}/{3}/Patient/{4}/CareMembers?UserId={5}",
+                IRestClient client = new JsonServiceClient();
+                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Patient/{4}/CareMembers",
                     DDCareMemberUrl,
                     "NG",
                     request.Version,
                     request.ContractNumber,
-                    request.PatientId,
-                    request.UserId));
+                    request.PatientId), request.UserId);
+
+                GetAllCareMembersDataResponse ddResponse = client.Get<GetAllCareMembersDataResponse>(url);
 
                 if (ddResponse != null && ddResponse.CareMembers != null)
                 {
@@ -138,7 +136,13 @@ namespace Phytel.API.AppDomain.NG
 
                 PostCareMemberResponse response = new PostCareMemberResponse();
                 //[Route("/{Context}/{Version}/{ContractNumber}/Patient/{PatientId}/CareMember/Insert", "PUT")]
-                IRestClient client = Common.Helper.GetJsonServiceClient(request.UserId);
+                IRestClient client = new JsonServiceClient();
+                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/patient/{4}/CareMember/Insert",
+                                                                                DDCareMemberUrl,
+                                                                                "NG",
+                                                                                request.Version,
+                                                                                request.ContractNumber,
+                                                                                request.PatientId), request.UserId);
 
                 CareMemberData cmData = new CareMemberData
                 {
@@ -148,13 +152,7 @@ namespace Phytel.API.AppDomain.NG
                     Primary = request.CareMember.Primary
                 };
                 PutCareMemberDataResponse dataDomainResponse =
-                    client.Put<PutCareMemberDataResponse>(string.Format("{0}/{1}/{2}/{3}/patient/{4}/CareMember/Insert?UserId={5}",
-                                                                                DDCareMemberUrl,
-                                                                                "NG",
-                                                                                request.Version,
-                                                                                request.ContractNumber,
-                                                                                request.PatientId,
-                                                                                request.UserId), new PutCareMemberDataRequest
+                    client.Put<PutCareMemberDataResponse>(url, new PutCareMemberDataRequest
                                                                                 {
                                                                                     CareMember = cmData,
                                                                                     Context = "NG",
@@ -192,7 +190,13 @@ namespace Phytel.API.AppDomain.NG
 
                 PostUpdateCareMemberResponse response = new PostUpdateCareMemberResponse();
                 //[Route("/{Context}/{Version}/{ContractNumber}/Patient/{PatientId}/CareMember/Update", "PUT")]
-                IRestClient client = Common.Helper.GetJsonServiceClient(request.UserId);
+                IRestClient client = new JsonServiceClient();
+                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/patient/{4}/CareMember/Update",
+                                                                                DDCareMemberUrl,
+                                                                                "NG",
+                                                                                request.Version,
+                                                                                request.ContractNumber,
+                                                                                request.PatientId), request.UserId);
 
                 CareMemberData cmData = new CareMemberData
                 {
@@ -203,13 +207,7 @@ namespace Phytel.API.AppDomain.NG
                     Primary = request.CareMember.Primary
                 };
                 PutUpdateCareMemberDataResponse dataDomainResponse =
-                    client.Put<PutUpdateCareMemberDataResponse>(string.Format("{0}/{1}/{2}/{3}/patient/{4}/CareMember/Update?UserId={5}",
-                                                                                DDCareMemberUrl,
-                                                                                "NG",
-                                                                                request.Version,
-                                                                                request.ContractNumber,
-                                                                                request.PatientId,
-                                                                                request.UserId), new PutUpdateCareMemberDataRequest
+                    client.Put<PutUpdateCareMemberDataResponse>(url, new PutUpdateCareMemberDataRequest
                                                                                 {
                                                                                     CareMember = cmData,
                                                                                     Context = "NG",
@@ -251,14 +249,15 @@ namespace Phytel.API.AppDomain.NG
             if(contactIds.Count > 0)
             {
                 SearchContactsDataResponse contactDataResponse = null;
-                IRestClient client = Common.Helper.GetJsonServiceClient(userId);
-
-                //[Route("/{Context}/{Version}/{ContractNumber}/Contact", "POST")]
-                contactDataResponse = client.Post<SearchContactsDataResponse>(string.Format("{0}/{1}/{2}/{3}/Contact",
+                IRestClient client = new JsonServiceClient();
+                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Contact",
                                                         DDContactServiceUrl,
                                                         "NG",
                                                         version,
-                                                        contractNumber), new SearchContactsDataRequest
+                                                        contractNumber), userId);
+
+                //[Route("/{Context}/{Version}/{ContractNumber}/Contact", "POST")]
+                contactDataResponse = client.Post<SearchContactsDataResponse>(url, new SearchContactsDataRequest
                                                         {
                                                             ContactIds = contactIds,
                                                             Context = "NG",
@@ -281,15 +280,16 @@ namespace Phytel.API.AppDomain.NG
             string context = "NG";
             try
             {
-                IRestClient client = Common.Helper.GetJsonServiceClient(userId);
-
-                GetCohortPatientViewResponse getResponse =
-                    client.Get<GetCohortPatientViewResponse>(string.Format("{0}/{1}/{2}/{3}/patient/{4}/cohortpatientview/",
+                IRestClient client = new JsonServiceClient();
+                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/patient/{4}/cohortpatientview/",
                     DDPatientServiceURL,
                     context,
                     version,
                     contractNumber,
-                    patientId));
+                    patientId), userId);
+
+                GetCohortPatientViewResponse getResponse =
+                    client.Get<GetCohortPatientViewResponse>(url);
 
                 if (getResponse != null && getResponse.CohortPatientView != null)
                 {

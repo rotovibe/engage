@@ -39,7 +39,7 @@ namespace Phytel.API.AppDomain.NG
             try
             {
                 //Execute call(s) to Patient Data Domain
-                IRestClient client = Common.Helper.GetJsonServiceClient(request.UserId);
+                IRestClient client = new JsonServiceClient();
 
                 GetPatientDataResponse response = client.Get<GetPatientDataResponse>(string.Format("{0}/{1}/{2}/{3}/patient/{4}?UserId={5}",
                                                                                             DDPatientServiceURL,
@@ -55,13 +55,14 @@ namespace Phytel.API.AppDomain.NG
 
                     if (string.IsNullOrEmpty(response.Patient.DisplayPatientSystemId) == false)
                     {
-                        client = Common.Helper.GetJsonServiceClient(request.UserId);
-                        sysResponse = client.Get<Phytel.API.DataDomain.PatientSystem.DTO.GetPatientSystemDataResponse>(string.Format("{0}/{1}/{2}/{3}/PatientSystem/{4}",
+                        client = new JsonServiceClient();
+                        string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/PatientSystem/{4}",
                                                                                     DDPatientSystemUrl,
                                                                                     "NG",
                                                                                     request.Version,
                                                                                     request.ContractNumber,
-                                                                                    response.Patient.DisplayPatientSystemId));
+                                                                                    response.Patient.DisplayPatientSystemId), request.UserId);
+                        sysResponse = client.Get<Phytel.API.DataDomain.PatientSystem.DTO.GetPatientSystemDataResponse>(url);
                     }
                     
                     pResponse.Patient = new NG.DTO.Patient
@@ -101,15 +102,15 @@ namespace Phytel.API.AppDomain.NG
             GetPatientSSNResponse result = new GetPatientSSNResponse();
             try
             {
-                IRestClient client = Common.Helper.GetJsonServiceClient(request.UserId);
-
-                GetPatientSSNDataResponse response = client.Get<GetPatientSSNDataResponse>(string.Format("{0}/{1}/{2}/{3}/Patient/{4}/SSN?UserId={5}",
+                IRestClient client = new JsonServiceClient();
+                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Patient/{4}/SSN",
                                                                                             DDPatientServiceURL,
                                                                                             "NG",
                                                                                             request.Version,
                                                                                             request.ContractNumber,
-                                                                                            request.PatientId,
-                                                                                            request.UserId));
+                                                                                            request.PatientId), request.UserId);
+
+                GetPatientSSNDataResponse response = client.Get<GetPatientSSNDataResponse>(url);
 
                 if (response != null)
                 {
@@ -132,17 +133,16 @@ namespace Phytel.API.AppDomain.NG
 
                 List<Phytel.API.AppDomain.NG.DTO.PatientProblem> response = new List<Phytel.API.AppDomain.NG.DTO.PatientProblem>();
 
-                IRestClient client = Common.Helper.GetJsonServiceClient(request.UserId);
-
-                //[Route("/{Context}/{Version}/{ContractNumber}/Patient/{PatientID}/Problems", "GET")]
-                Phytel.API.DataDomain.PatientProblem.DTO.GetAllPatientProblemsDataResponse dataDomainResponse = client.Get<Phytel.API.DataDomain.PatientProblem.DTO.GetAllPatientProblemsDataResponse>
-                    (string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Problems",
+                IRestClient client = new JsonServiceClient();
+                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Problems",
                         DDPatientProblemServiceUrl,
-                    //"NG",
-                        "Nightingale",
+                        "NG",
                         request.Version,
                         request.ContractNumber,
-                        request.PatientID));
+                        request.PatientID), request.UserId);
+
+                //[Route("/{Context}/{Version}/{ContractNumber}/Patient/{PatientID}/Problems", "GET")]
+                Phytel.API.DataDomain.PatientProblem.DTO.GetAllPatientProblemsDataResponse dataDomainResponse = client.Get<Phytel.API.DataDomain.PatientProblem.DTO.GetAllPatientProblemsDataResponse>(url);
 
                 List<Phytel.API.DataDomain.PatientProblem.DTO.PatientProblemData> problems = dataDomainResponse.PatientProblems;
 
@@ -170,16 +170,17 @@ namespace Phytel.API.AppDomain.NG
             {
                 PutPatientDetailsUpdateResponse response = new PutPatientDetailsUpdateResponse();
 
-                IRestClient client = Common.Helper.GetJsonServiceClient(request.UserId);
-
-                PutPatientDetailsUpdateResponse dataDomainResponse =
-                    client.Put<PutPatientDetailsUpdateResponse>(string.Format("{0}/{1}/{2}/{3}/patient/{4}",
+                IRestClient client = new JsonServiceClient();
+                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/patient/{4}",
                                                                                 DDPatientServiceURL,
                                                                                 "NG",
                                                                                 request.Version,
                                                                                 request.ContractNumber,
                                                                                 request.Id,
-                                                                                request.Priority), new PutPatientDetailsUpdateRequest
+                                                                                request.Priority), request.UserId);
+
+                PutPatientDetailsUpdateResponse dataDomainResponse =
+                    client.Put<PutPatientDetailsUpdateResponse>(url, new PutPatientDetailsUpdateRequest
                                                                                 {
                                                                                     ContractNumber = request.ContractNumber,
                                                                                     DOB = request.DOB,
@@ -210,17 +211,17 @@ namespace Phytel.API.AppDomain.NG
             {
                 PutPatientFlaggedUpdateResponse response = null;
 
-                IRestClient client = Common.Helper.GetJsonServiceClient(request.UserId);
-
-                PutPatientFlaggedResponse dataDomainResponse =
-                    client.Put<PutPatientFlaggedResponse>(string.Format("{0}/{1}/{2}/{3}/patient/{4}/flagged/{5}?UserId={6}",
+                IRestClient client = new JsonServiceClient();
+                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/patient/{4}/flagged/{5}",
                                                                                 DDPatientServiceURL,
                                                                                 "NG",
                                                                                 request.Version,
                                                                                 request.ContractNumber,
                                                                                 request.PatientId,
-                                                                                request.Flagged,
-                                                                                request.UserId), new PutPatientFlaggedResponse { } as object);
+                                                                                request.Flagged), request.UserId);
+
+                PutPatientFlaggedResponse dataDomainResponse =
+                    client.Put<PutPatientFlaggedResponse>(url, new PutPatientFlaggedResponse { } as object);
                 if (dataDomainResponse != null && dataDomainResponse.Success)
                 {
                     response = new PutPatientFlaggedUpdateResponse();
@@ -238,17 +239,17 @@ namespace Phytel.API.AppDomain.NG
             try
             {
                 PutPatientBackgroundResponse response = null;
-                IRestClient client = Common.Helper.GetJsonServiceClient(request.UserId);
-
-                //[Route("/{Context}/{Version}/{ContractNumber}/Patient/{PatientId}/Background", "PUT")]
-                PutPatientBackgroundDataResponse dataDomainResponse =
-                    client.Put<PutPatientBackgroundDataResponse>(string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Background?UserId={5}",
+                IRestClient client = new JsonServiceClient();
+                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Background",
                                                                                 DDPatientServiceURL,
                                                                                 "NG",
                                                                                 request.Version,
                                                                                 request.ContractNumber,
-                                                                                request.PatientId,
-                                                                                request.UserId), new PutPatientBackgroundDataRequest
+                                                                                request.PatientId), request.UserId);
+
+                //[Route("/{Context}/{Version}/{ContractNumber}/Patient/{PatientId}/Background", "PUT")]
+                PutPatientBackgroundDataResponse dataDomainResponse =
+                    client.Put<PutPatientBackgroundDataResponse>(url, new PutPatientBackgroundDataRequest
                                                                                 {
                                                                                     Background = request.Background,
                                                                                     Context = "NG",
@@ -277,13 +278,14 @@ namespace Phytel.API.AppDomain.NG
             {
                 List<Phytel.API.AppDomain.NG.DTO.Cohort> response = new List<Phytel.API.AppDomain.NG.DTO.Cohort>();
 
-                IRestClient client = Common.Helper.GetJsonServiceClient(request.UserId);
+                IRestClient client = new JsonServiceClient();
+                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Cohorts",
+                                                                    DDCohortServiceUrl,
+                                                                    "NG",
+                                                                    request.Version,
+                                                                    request.ContractNumber), request.UserId);
 
-                GetAllCohortsDataResponse dataDomainResponse = client.Get<GetAllCohortsDataResponse>(string.Format("{0}/{1}/{2}/{3}/Cohorts",
-                                                                                                                DDCohortServiceUrl,
-                                                                                                                "NG",
-                                                                                                                request.Version,
-                                                                                                                request.ContractNumber));
+                GetAllCohortsDataResponse dataDomainResponse = client.Get<GetAllCohortsDataResponse>(url);
 
                 List<CohortData> cohorts = dataDomainResponse.Cohorts;
 
@@ -309,10 +311,8 @@ namespace Phytel.API.AppDomain.NG
 
             try
             {
-                IRestClient client = Common.Helper.GetJsonServiceClient(request.UserId);
-
-                // Route("/{Context}/{Version}/{ContractNumber}/CohortPatients/{CohortID}", "GET")]
-                GetCohortPatientsDataResponse qResponse = client.Get<GetCohortPatientsDataResponse>(string.Format("{0}/{1}/{2}/{3}/CohortPatients/{4}?Skip={5}&Take={6}&SearchFilter={7}&UserId={8}",
+                IRestClient client = new JsonServiceClient();
+                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/CohortPatients/{4}?Skip={5}&Take={6}&SearchFilter={7}",
                                                                                             DDPatientServiceURL,
                                                                                             "NG",
                                                                                             request.Version,
@@ -320,8 +320,10 @@ namespace Phytel.API.AppDomain.NG
                                                                                             request.CohortID,
                                                                                             request.Skip,
                                                                                             request.Take,
-                                                                                            request.SearchFilter,
-                                                                                            request.UserId));
+                                                                                            request.SearchFilter), request.UserId);
+
+                // Route("/{Context}/{Version}/{ContractNumber}/CohortPatients/{CohortID}", "GET")]
+                GetCohortPatientsDataResponse qResponse = client.Get<GetCohortPatientsDataResponse>(url);
 
                 //take qResponse Patient details and map them to "Patient" in the GetCohortPatientsResponse
                 qResponse.CohortPatients.ForEach(x => pResponse.Patients.Add(new CohortPatient
@@ -382,18 +384,18 @@ namespace Phytel.API.AppDomain.NG
 
             try
             {
-                IRestClient client = Common.Helper.GetJsonServiceClient(request.UserId);
+                IRestClient client = new JsonServiceClient();
+                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Programs/Active",
+                        DDProgramServiceUrl,
+                        "NG",
+                        request.Version,
+                        request.ContractNumber), request.UserId);
 
                 GetActiveProgramsResponse dataDomainResponse;
                 try
                 {
                     dataDomainResponse =
-                        client.Get<GetActiveProgramsResponse>(
-                        string.Format("{0}/{1}/{2}/{3}/Programs/Active",
-                        DDProgramServiceUrl,
-                        "NG",
-                        request.Version,
-                        request.ContractNumber));
+                        client.Get<GetActiveProgramsResponse>(url);
                 }
                 catch (Exception ex)
                 {
@@ -416,17 +418,17 @@ namespace Phytel.API.AppDomain.NG
             {
                 PostPatientToProgramsResponse response = new PostPatientToProgramsResponse();
 
-                IRestClient client = Common.Helper.GetJsonServiceClient(request.UserId);
+                IRestClient client = new JsonServiceClient();
+                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Programs/?ContractProgramId={5}",
+                                                        DDProgramServiceUrl,
+                                                        "NG",
+                                                        request.Version,
+                                                        request.ContractNumber,
+                                                        request.PatientId,
+                                                        request.ContractProgramId), request.UserId);
 
                 DD.PutProgramToPatientResponse dataDomainResponse =
-                    client.Put<DD.PutProgramToPatientResponse>(
-                    string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Programs/?ContractProgramId={5}",
-                    DDProgramServiceUrl,
-                    "NG",
-                    request.Version,
-                    request.ContractNumber,
-                    request.PatientId,
-                    request.ContractProgramId), new DD.PutProgramToPatientRequest { UserId = request.UserId } as object);
+                    client.Put<DD.PutProgramToPatientResponse>(url, new DD.PutProgramToPatientRequest { UserId = request.UserId } as object);
 
                 if (dataDomainResponse.program != null)
                 {
@@ -465,18 +467,17 @@ namespace Phytel.API.AppDomain.NG
             {
                 GetPatientProgramDetailsSummaryResponse result = new GetPatientProgramDetailsSummaryResponse();
 
-                IRestClient client = Common.Helper.GetJsonServiceClient(request.UserId);
-
-                DD.GetProgramDetailsSummaryResponse resp =
-                    client.Get<DD.GetProgramDetailsSummaryResponse>(
-                    string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Program/{5}/Details/?Token={6}",
+                IRestClient client = new JsonServiceClient();
+                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Program/{5}/Details",
                     DDProgramServiceUrl,
                     "NG",
                     request.Version,
                     request.ContractNumber,
                     request.PatientId,
-                    request.PatientProgramId,
-                    request.Token));
+                    request.PatientProgramId), request.UserId);
+
+                DD.GetProgramDetailsSummaryResponse resp =
+                    client.Get<DD.GetProgramDetailsSummaryResponse>(url);
 
                 if (resp != null)
                 {
@@ -539,17 +540,17 @@ namespace Phytel.API.AppDomain.NG
             {
                 GetPatientProgramsResponse result = new GetPatientProgramsResponse();
 
-                IRestClient client = Common.Helper.GetJsonServiceClient(request.UserId);
-
-                DD.GetPatientProgramsResponse resp =
-                    client.Get<DD.GetPatientProgramsResponse>(
-                    string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Programs/",
+                IRestClient client = new JsonServiceClient();
+                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Programs/",
                     DDProgramServiceUrl,
                     "NG",
                     request.Version,
                     request.ContractNumber,
                     request.PatientId,
-                    request.Token));
+                    request.Token), request.UserId);
+
+                DD.GetPatientProgramsResponse resp =
+                    client.Get<DD.GetPatientProgramsResponse>(url);
 
                 if (resp != null)
                 {
@@ -622,14 +623,15 @@ namespace Phytel.API.AppDomain.NG
             try
             {
                 List<IdNamePair> response = new List<IdNamePair>();
-                IRestClient client = Common.Helper.GetJsonServiceClient(request.UserId);
+                IRestClient client = new JsonServiceClient();
+                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/commmodes",
+                                                                    DDLookupServiceUrl,
+                                                                    "NG",
+                                                                    request.Version,
+                                                                    request.ContractNumber), request.UserId);
 
                 // [Route("/{Context}/{Version}/{ContractNumber}/commmodes", "GET")]
-                Phytel.API.DataDomain.LookUp.DTO.GetAllCommModesDataResponse dataDomainResponse = client.Get<Phytel.API.DataDomain.LookUp.DTO.GetAllCommModesDataResponse>(string.Format("{0}/{1}/{2}/{3}/commmodes",
-                                                                                                                DDLookupServiceUrl,
-                                                                                                                "NG",
-                                                                                                                request.Version,
-                                                                                                                request.ContractNumber));
+                Phytel.API.DataDomain.LookUp.DTO.GetAllCommModesDataResponse dataDomainResponse = client.Get<Phytel.API.DataDomain.LookUp.DTO.GetAllCommModesDataResponse>(url);
 
                 List<IdNamePair> dataList  = dataDomainResponse.CommModes;
                 if (dataList != null && dataList.Count > 0)
@@ -649,14 +651,15 @@ namespace Phytel.API.AppDomain.NG
             try
             {
                 List<StatesLookUp> response = new List<StatesLookUp>();
-                IRestClient client = Common.Helper.GetJsonServiceClient(request.UserId);
+                IRestClient client = new JsonServiceClient();
+                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/states",
+                                                                        DDLookupServiceUrl,
+                                                                        "NG",
+                                                                        request.Version,
+                                                                        request.ContractNumber), request.UserId);
 
                 // [Route("/{Context}/{Version}/{ContractNumber}/states", "GET")]
-                Phytel.API.DataDomain.LookUp.DTO.GetAllStatesDataResponse dataDomainResponse = client.Get<Phytel.API.DataDomain.LookUp.DTO.GetAllStatesDataResponse>(string.Format("{0}/{1}/{2}/{3}/states",
-                                                                                                                DDLookupServiceUrl,
-                                                                                                                "NG",
-                                                                                                                request.Version,
-                                                                                                                request.ContractNumber));
+                Phytel.API.DataDomain.LookUp.DTO.GetAllStatesDataResponse dataDomainResponse = client.Get<Phytel.API.DataDomain.LookUp.DTO.GetAllStatesDataResponse>(url);
 
                 List<StateData> dataList = dataDomainResponse.States;
 
@@ -681,14 +684,14 @@ namespace Phytel.API.AppDomain.NG
             try
             {
                 List<IdNamePair> response = new List<IdNamePair>();
-                IRestClient client = Common.Helper.GetJsonServiceClient(request.UserId);
-
+                IRestClient client = new JsonServiceClient();
+                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/timesOfDays",
+                                                                    DDLookupServiceUrl,
+                                                                    "NG",
+                                                                    request.Version,
+                                                                    request.ContractNumber), request.UserId);
                 //[Route("/{Context}/{Version}/{ContractNumber}/timesOfDays", "GET")]
-                Phytel.API.DataDomain.LookUp.DTO.GetAllTimesOfDaysDataResponse dataDomainResponse = client.Get<Phytel.API.DataDomain.LookUp.DTO.GetAllTimesOfDaysDataResponse>(string.Format("{0}/{1}/{2}/{3}/timesOfDays",
-                                                                                                                DDLookupServiceUrl,
-                                                                                                                "NG",
-                                                                                                                request.Version,
-                                                                                                                request.ContractNumber));
+                Phytel.API.DataDomain.LookUp.DTO.GetAllTimesOfDaysDataResponse dataDomainResponse = client.Get<Phytel.API.DataDomain.LookUp.DTO.GetAllTimesOfDaysDataResponse>(url);
 
                 List<IdNamePair> dataList = dataDomainResponse.TimesOfDays;
                 if (dataList != null && dataList.Count > 0)
@@ -708,14 +711,15 @@ namespace Phytel.API.AppDomain.NG
             try
             {
                 List<CommTypeLookUp> response = new List<CommTypeLookUp>();
-                IRestClient client = Common.Helper.GetJsonServiceClient(request.UserId);
+                IRestClient client = new JsonServiceClient();
+                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/commtypes",
+                                                                    DDLookupServiceUrl,
+                                                                    "NG",
+                                                                    request.Version,
+                                                                    request.ContractNumber), request.UserId);
 
                 // [Route("/{Context}/{Version}/{ContractNumber}/commtypes", "GET")]
-                Phytel.API.DataDomain.LookUp.DTO.GetAllCommTypesDataResponse dataDomainResponse = client.Get<Phytel.API.DataDomain.LookUp.DTO.GetAllCommTypesDataResponse>(string.Format("{0}/{1}/{2}/{3}/commtypes",
-                                                                                                                DDLookupServiceUrl,
-                                                                                                                "NG",
-                                                                                                                request.Version,
-                                                                                                                request.ContractNumber));
+                Phytel.API.DataDomain.LookUp.DTO.GetAllCommTypesDataResponse dataDomainResponse = client.Get<Phytel.API.DataDomain.LookUp.DTO.GetAllCommTypesDataResponse>(url);
 
                 List<CommTypeData> dataList = dataDomainResponse.CommTypes;
 
@@ -740,14 +744,15 @@ namespace Phytel.API.AppDomain.NG
             try
             {
                 List<LanguagesLookUp> response = new List<LanguagesLookUp>();
-                IRestClient client = Common.Helper.GetJsonServiceClient(request.UserId);
+                IRestClient client = new JsonServiceClient();
+                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/languages",
+                                                                    DDLookupServiceUrl,
+                                                                    "NG",
+                                                                    request.Version,
+                                                                    request.ContractNumber), request.UserId);
 
                 // [Route("/{Context}/{Version}/{ContractNumber}/languages", "GET")]
-                Phytel.API.DataDomain.LookUp.DTO.GetAllLanguagesDataResponse dataDomainResponse = client.Get<Phytel.API.DataDomain.LookUp.DTO.GetAllLanguagesDataResponse>(string.Format("{0}/{1}/{2}/{3}/languages",
-                                                                                                                DDLookupServiceUrl,
-                                                                                                                "NG",
-                                                                                                                request.Version,
-                                                                                                                request.ContractNumber));
+                Phytel.API.DataDomain.LookUp.DTO.GetAllLanguagesDataResponse dataDomainResponse = client.Get<Phytel.API.DataDomain.LookUp.DTO.GetAllLanguagesDataResponse>(url);
 
                 List<Phytel.API.DataDomain.LookUp.DTO.LanguageData> dataList = dataDomainResponse.Languages;
 
@@ -778,14 +783,15 @@ namespace Phytel.API.AppDomain.NG
             try
             {
                 List<TimeZonesLookUp> response = new List<TimeZonesLookUp>();
-                IRestClient client = Common.Helper.GetJsonServiceClient(request.UserId);
+                IRestClient client = new JsonServiceClient();
+                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/timeZones",
+                                                                            DDLookupServiceUrl,
+                                                                            "NG",
+                                                                            request.Version,
+                                                                            request.ContractNumber), request.UserId);
 
                 //[Route("/{Context}/{Version}/{ContractNumber}/timeZones", "GET")]
-                Phytel.API.DataDomain.LookUp.DTO.GetAllTimeZonesDataResponse dataDomainResponse = client.Get<Phytel.API.DataDomain.LookUp.DTO.GetAllTimeZonesDataResponse>(string.Format("{0}/{1}/{2}/{3}/timeZones",
-                                                                                                                DDLookupServiceUrl,
-                                                                                                                "NG",
-                                                                                                                request.Version,
-                                                                                                                request.ContractNumber));
+                Phytel.API.DataDomain.LookUp.DTO.GetAllTimeZonesDataResponse dataDomainResponse = client.Get<Phytel.API.DataDomain.LookUp.DTO.GetAllTimeZonesDataResponse>(url);
 
                 List<TimeZoneData> dataList = dataDomainResponse.TimeZones;
 
@@ -810,15 +816,16 @@ namespace Phytel.API.AppDomain.NG
             try
             {
                 List<IdNamePair> response = new List<IdNamePair>();
-                IRestClient client = Common.Helper.GetJsonServiceClient(request.UserId);
+                IRestClient client = new JsonServiceClient();
+                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Type/{4}",
+                                                                        DDLookupServiceUrl,
+                                                                        "NG",
+                                                                        request.Version,
+                                                                        request.ContractNumber,
+                                                                        request.TypeName), request.UserId);
 
                 //[Route("/{Context}/{Version}/{ContractNumber}/Type/{Name}", "GET")]
-                Phytel.API.DataDomain.LookUp.DTO.GetLookUpsDataResponse dataDomainResponse = client.Get<Phytel.API.DataDomain.LookUp.DTO.GetLookUpsDataResponse>(string.Format("{0}/{1}/{2}/{3}/Type/{4}",
-                                                                                                               DDLookupServiceUrl,
-                                                                                                                "NG",
-                                                                                                                request.Version,
-                                                                                                                request.ContractNumber,
-                                                                                                                request.TypeName));
+                Phytel.API.DataDomain.LookUp.DTO.GetLookUpsDataResponse dataDomainResponse = client.Get<Phytel.API.DataDomain.LookUp.DTO.GetLookUpsDataResponse>(url);
 
                 List<IdNamePair> dataList = dataDomainResponse.LookUpsData;
                 if (dataList != null && dataList.Count > 0)
@@ -841,19 +848,18 @@ namespace Phytel.API.AppDomain.NG
             Contact contact = null;
             try
             {
-                IRestClient client = Common.Helper.GetJsonServiceClient(request.UserId);
-
-                //[Route("/{Context}/{Version}/{ContractNumber}/Patient/{PatientId}/Contact", "GET")]
-                GetContactDataResponse dataDomainResponse;
-                    dataDomainResponse =
-                        client.Get<GetContactDataResponse>(
-                        string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Contact?UserId={5}",
+                IRestClient client = new JsonServiceClient();
+                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Contact",
                         DDContactServiceUrl,
                         "NG",
                         request.Version,
                         request.ContractNumber,
-                        request.PatientID,
-                        request.UserId));
+                        request.PatientID), request.UserId);
+
+                //[Route("/{Context}/{Version}/{ContractNumber}/Patient/{PatientId}/Contact", "GET")]
+                GetContactDataResponse dataDomainResponse;
+                    dataDomainResponse =
+                        client.Get<GetContactDataResponse>(url);
 
                 if (dataDomainResponse != null)
                 {
@@ -1020,15 +1026,15 @@ namespace Phytel.API.AppDomain.NG
 
                 PutUpdateContactResponse response = new PutUpdateContactResponse();
                 // [Route("/{Context}/{Version}/{ContractNumber}/Patient/Contact", "PUT")]
-                IRestClient client = Common.Helper.GetJsonServiceClient(request.UserId);
-
-                PutUpdateContactDataResponse dataDomainResponse =
-                    client.Put<PutUpdateContactDataResponse>(string.Format("{0}/{1}/{2}/{3}/patient/contact?UserId={4}",
+                IRestClient client = new JsonServiceClient();
+                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/patient/contact",
                                                                                 DDContactServiceUrl,
                                                                                 "NG",
                                                                                 request.Version,
-                                                                                request.ContractNumber,
-                                                                                request.UserId), new PutUpdateContactDataRequest
+                                                                                request.ContractNumber), request.UserId);
+
+                PutUpdateContactDataResponse dataDomainResponse =
+                    client.Put<PutUpdateContactDataResponse>(url, new PutUpdateContactDataRequest
                                                                                 {
                                                                                    ContactId = request.Contact.Id,
                                                                                    Modes = modesData,
@@ -1098,18 +1104,17 @@ namespace Phytel.API.AppDomain.NG
             List<Contact> contactList = null;
             try
             {
-                IRestClient client = Common.Helper.GetJsonServiceClient(request.UserId);
+                IRestClient client = new JsonServiceClient();
+                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Contact/CareManagers",
+                                                       DDContactServiceUrl,
+                                                       "NG",
+                                                       request.Version,
+                                                       request.ContractNumber), request.UserId);
 
                 //[Route("/{Context}/{Version}/{ContractNumber}/Contact/CareManagers", "GET")]
                 GetAllCareManagersDataResponse dataDomainResponse;
                 dataDomainResponse =
-                    client.Get<GetAllCareManagersDataResponse>(
-                    string.Format("{0}/{1}/{2}/{3}/Contact/CareManagers?UserId={4}",
-                   DDContactServiceUrl,
-                    "NG",
-                    request.Version,
-                    request.ContractNumber,
-                    request.UserId));
+                    client.Get<GetAllCareManagersDataResponse>(url);
 
                 if (dataDomainResponse != null && dataDomainResponse.Contacts != null)
                 {
@@ -1317,14 +1322,15 @@ namespace Phytel.API.AppDomain.NG
             try
             {
                 response = new TimeZonesLookUp();
-                IRestClient client = Common.Helper.GetJsonServiceClient(request.UserId);
+                IRestClient client = new JsonServiceClient();
+                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/TimeZone/Default",
+                                                                        DDLookupServiceUrl,
+                                                                        "NG",
+                                                                        request.Version,
+                                                                        request.ContractNumber), request.UserId);
 
                 //  [Route("/{Context}/{Version}/{ContractNumber}/TimeZone/Default", "GET")]
-                Phytel.API.DataDomain.LookUp.DTO.GetTimeZoneDataResponse dataDomainResponse = client.Get<Phytel.API.DataDomain.LookUp.DTO.GetTimeZoneDataResponse>(string.Format("{0}/{1}/{2}/{3}/TimeZone/Default",
-                                                                                                                DDLookupServiceUrl,
-                                                                                                                "NG",
-                                                                                                                request.Version,
-                                                                                                                request.ContractNumber));
+                Phytel.API.DataDomain.LookUp.DTO.GetTimeZoneDataResponse dataDomainResponse = client.Get<Phytel.API.DataDomain.LookUp.DTO.GetTimeZoneDataResponse>(url);
 
                 TimeZoneData data = dataDomainResponse.TimeZone;
                 response.Id = data.Id;
@@ -1368,26 +1374,26 @@ namespace Phytel.API.AppDomain.NG
                 }
 
                 // [Route("/{Context}/{Version}/{ContractNumber}/Patient/Contact/{PatientId}", "PUT")]
-                IRestClient client = Common.Helper.GetJsonServiceClient(userId);
-
-                PutContactDataResponse dataDomainResponse =
-                    client.Put<PutContactDataResponse>(string.Format("{0}/{1}/{2}/{3}/patient/contact/{4}?UserId={5}",
+                IRestClient client = new JsonServiceClient();
+                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/patient/contact/{4}",
                                                                                 DDContactServiceUrl,
                                                                                 context,
                                                                                 version,
                                                                                 contractNumber,
-                                                                                patientId,
-                                                                                userId), new PutContactDataRequest
-                                                                                {
-                                                                                    PatientId = patientId,
-                                                                                    TimeZoneId = defaultTimeZone,
-                                                                                    Modes = commModeData,
-                                                                                    Context = context,
-                                                                                    ContractNumber = contractNumber,
-                                                                                    Version = version,
-                                                                                    UserId = userId
+                                                                                patientId), userId);
 
-                                                                                } as object);
+                PutContactDataResponse dataDomainResponse =
+                    client.Put<PutContactDataResponse>(url, new PutContactDataRequest
+                                                            {
+                                                                PatientId = patientId,
+                                                                TimeZoneId = defaultTimeZone,
+                                                                Modes = commModeData,
+                                                                Context = context,
+                                                                ContractNumber = contractNumber,
+                                                                Version = version,
+                                                                UserId = userId
+
+                                                            } as object);
 
                 if (dataDomainResponse != null && !string.IsNullOrEmpty(dataDomainResponse.ContactId))
                 {

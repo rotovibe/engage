@@ -20,17 +20,16 @@ namespace Phytel.API.AppDomain.NG
             {
                 PatientNote result = null;
                 //[Route("/{Context}/{Version}/{ContractNumber}/Patient/{PatientId}/Note/{Id}", "GET")]
-                IRestClient client = Common.Helper.GetJsonServiceClient(request.UserId);
+                IRestClient client = new JsonServiceClient();
+                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Note/{5}",
+                                                        DDPatientNoteUrl,
+                                                        "NG",
+                                                        request.Version,
+                                                        request.ContractNumber,
+                                                        request.PatientId,
+                                                        request.Id), request.UserId);
 
-                GetPatientNoteDataResponse ddResponse = client.Get<GetPatientNoteDataResponse>(
-                    string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Note/{5}?UserId={6}",
-                    DDPatientNoteUrl,
-                    "NG",
-                    request.Version,
-                    request.ContractNumber,
-                    request.PatientId,
-                    request.Id,
-                    request.UserId));
+                GetPatientNoteDataResponse ddResponse = client.Get<GetPatientNoteDataResponse>(url);
 
                 if (ddResponse != null && ddResponse.PatientNote != null)
                 {
@@ -59,17 +58,16 @@ namespace Phytel.API.AppDomain.NG
             {
                 List<PatientNote> result = null;
                 //[Route("/{Context}/{Version}/{ContractNumber}/Patient/{PatientId}/Notes/{Count}", "GET")]
-                IRestClient client = Common.Helper.GetJsonServiceClient(request.UserId);
-
-                GetAllPatientNotesDataResponse ddResponse = client.Get<GetAllPatientNotesDataResponse>(
-                    string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Notes/{5}?UserId={6}",
+                IRestClient client = new JsonServiceClient();
+                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Notes/{5}",
                     DDPatientNoteUrl,
                     "NG",
                     request.Version,
                     request.ContractNumber,
                     request.PatientId,
-                    request.Count,
-                    request.UserId));
+                    request.Count), request.UserId);
+
+                GetAllPatientNotesDataResponse ddResponse = client.Get<GetAllPatientNotesDataResponse>(url);
 
                 if (ddResponse != null && ddResponse.PatientNotes != null && ddResponse.PatientNotes.Count > 0)
                 {
@@ -108,7 +106,13 @@ namespace Phytel.API.AppDomain.NG
 
                 PostPatientNoteResponse response = new PostPatientNoteResponse();
                 //[Route("/{Context}/{Version}/{ContractNumber}/Patient/{PatientId}/Note/Insert", "PUT")]
-                IRestClient client = Common.Helper.GetJsonServiceClient(request.UserId);
+                IRestClient client = new JsonServiceClient();
+                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/patient/{4}/note/insert",
+                                                                        DDPatientNoteUrl,
+                                                                        "NG",
+                                                                        request.Version,
+                                                                        request.ContractNumber,
+                                                                        request.PatientId), request.UserId);
 
                 PatientNoteData noteData = new PatientNoteData {
                     Text  = request.Note.Text,
@@ -118,13 +122,7 @@ namespace Phytel.API.AppDomain.NG
                     PatientId = request.Note.PatientId
                 };
                 PutPatientNoteDataResponse dataDomainResponse =
-                    client.Put<PutPatientNoteDataResponse>(string.Format("{0}/{1}/{2}/{3}/patient/{4}/note/insert?UserId={5}",
-                                                                                DDPatientNoteUrl,
-                                                                                "NG",
-                                                                                request.Version,
-                                                                                request.ContractNumber,
-                                                                                request.PatientId,
-                                                                                request.UserId), new PutPatientNoteDataRequest
+                    client.Put<PutPatientNoteDataResponse>(url, new PutPatientNoteDataRequest
                                                                                 {
                                                                                     PatientNote = noteData,
                                                                                     Context = "NG",
@@ -152,18 +150,17 @@ namespace Phytel.API.AppDomain.NG
             PostDeletePatientNoteResponse response = new PostDeletePatientNoteResponse();
             try
             {
-                IRestClient client = Common.Helper.GetJsonServiceClient(request.UserId);
+                IRestClient client = new JsonServiceClient();
+                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Note/{5}/Delete",
+                                                        DDPatientNoteUrl,
+                                                        "NG",
+                                                        request.Version,
+                                                        request.ContractNumber,
+                                                        request.PatientId,
+                                                        request.Id), request.UserId);
 
                 //[Route("/{Context}/{Version}/{ContractNumber}/Patient/{PatientId}/Note/{Id}/Delete", "DELETE")]
-                DeletePatientNoteDataResponse ddResponse = client.Delete<DeletePatientNoteDataResponse>(
-                    string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Note/{5}/Delete?UserId={6}",
-                    DDPatientNoteUrl,
-                    "NG",
-                    request.Version,
-                    request.ContractNumber,
-                    request.PatientId,
-                    request.Id,
-                    request.UserId));
+                DeletePatientNoteDataResponse ddResponse = client.Delete<DeletePatientNoteDataResponse>(url);
 
                 if (ddResponse != null && ddResponse.Deleted)
                 {
