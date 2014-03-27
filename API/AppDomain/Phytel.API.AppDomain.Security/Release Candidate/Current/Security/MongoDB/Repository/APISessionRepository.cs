@@ -4,12 +4,14 @@ using MongoDB.Driver;
 using MongoDB.Driver.Builders;
 using Phytel.API.AppDomain.Security.DTO;
 using Phytel.API.DataDomain.Contact.DTO;
+using Phytel.API.Common;
 using ServiceStack.Service;
 using ServiceStack.ServiceClient.Web;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
+using Phytel.Services;
 
 namespace Phytel.API.AppDomain.Security
 {
@@ -142,38 +144,61 @@ namespace Phytel.API.AppDomain.Security
                 ValidateTokenResponse response = null;
                 ObjectId tokenObjectId;
 
-                if (ObjectId.TryParse(request.Token, out tokenObjectId))
+                if (request != null)
                 {
-                    MEAPISession session = _objectContext.APISessions.Collection.FindOneByIdAs<MEAPISession>(tokenObjectId);
-
-                    if (session != null)
+                    if (ObjectId.TryParse(request.Token, out tokenObjectId))
                     {
-                        if (session.SecurityToken.Equals(securityToken) &&
-                            session.ContractNumber.Equals(request.ContractNumber) &&
-                            session.Product.Equals(request.Context))
+                        MEAPISession session = _objectContext.APISessions.Collection.FindOneByIdAs<MEAPISession>(tokenObjectId);
+
+                        if (session != null)
                         {
-                            session.SessionTimeOut = DateTime.UtcNow.AddMinutes(session.SessionLengthInMinutes);
-                            response = new ValidateTokenResponse
+                            if (session.SecurityToken.ToUpper().Equals(securityToken.ToUpper()) &&
+                                session.ContractNumber.ToUpper().Equals(request.ContractNumber.ToUpper()) &&
+                                session.Product.ToUpper().Equals(request.Context.ToUpper()))
                             {
-                                SessionLengthInMinutes = session.SessionLengthInMinutes,
-                                SessionTimeOut = session.SessionTimeOut,
-                                TokenId = session.Id.ToString(),
-                                SQLUserId = session.SQLUserId,
-                                UserId = session.UserId.ToString(),
-                                UserName = session.UserName
-                            };
-                            _objectContext.APISessions.Collection.Save(session);
+                                try
+                                {
+                                    RetryHelper.DoWithRetry(() =>
+                                    {
+                                        session.SessionTimeOut = DateTime.UtcNow.AddMinutes(session.SessionLengthInMinutes);
+                                        response = new ValidateTokenResponse
+                                        {
+                                            SessionLengthInMinutes = session.SessionLengthInMinutes,
+                                            SessionTimeOut = session.SessionTimeOut,
+                                            TokenId = session.Id.ToString(),
+                                            SQLUserId = session.SQLUserId,
+                                            UserId = session.UserId.ToString(),
+                                            UserName = session.UserName
+                                        };
+                                        _objectContext.APISessions.Collection.Save(session);
+                                    }, RetryHelper.RETRIES, RetryHelper.RETRYDELAY);
+                                }
+                                catch { }
+                            }
+                            else
+                            {
+                                try
+                                {
+                                    string additionalInfo = string.Format("Token:DB-{0}:Request-{1} :: Contract:DB-{2}:Request-{3} :: Context:DB-{4}:Request-{5}",
+                                        session.SecurityToken, securityToken, session.ContractNumber, request.ContractNumber,
+                                        session.Product, request.Context);
+
+                                    string _aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
+                                    Common.Helper.LogException(int.Parse(_aseProcessID), new Exception(additionalInfo));
+                                }
+                                catch { }
+                                throw new UnauthorizedAccessException("Invalid Security Authorization Request");
+                            }
+                            return response;
                         }
                         else
-                            throw new UnauthorizedAccessException("Invalid Security Authorization Request");
-
-                        return response;
+                            throw new UnauthorizedAccessException("Security Token does not exist");
                     }
                     else
-                        throw new UnauthorizedAccessException("Security Token does not exist (can't find security token)");
+                        throw new UnauthorizedAccessException("Security Token is not in correct format.");
                 }
                 else
-                    throw new UnauthorizedAccessException("Security Token is not in correct format.");
+                    throw new UnauthorizedAccessException("Request is invalid");
             }
             catch (Exception ex)
             {

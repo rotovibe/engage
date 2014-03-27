@@ -588,14 +588,16 @@ namespace Phytel.API.AppDomain.NG
             {
                 List<IdNamePair> response = new List<IdNamePair>();
 
-                IRestClient client = Common.Helper.GetJsonServiceClient(request.UserId);
+                IRestClient client = new JsonServiceClient();
+
+                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/problems",
+                                                            DDLookupServiceUrl,
+                                                            "NG",
+                                                            request.Version,
+                                                            request.ContractNumber), request.UserId);
 
                 //[Route("/{Context}/{Version}/{ContractNumber}/problems", "GET")]
-                Phytel.API.DataDomain.LookUp.DTO.GetAllProblemsDataResponse dataDomainResponse = client.Get<Phytel.API.DataDomain.LookUp.DTO.GetAllProblemsDataResponse>(string.Format("{0}/{1}/{2}/{3}/problems",
-                                                                                                                DDLookupServiceUrl,
-                                                                                                                "NG",
-                                                                                                                request.Version,
-                                                                                                                request.ContractNumber));
+                Phytel.API.DataDomain.LookUp.DTO.GetAllProblemsDataResponse dataDomainResponse = client.Get<Phytel.API.DataDomain.LookUp.DTO.GetAllProblemsDataResponse>(url);
 
                 List<ProblemData> problems = dataDomainResponse.Problems;
 
