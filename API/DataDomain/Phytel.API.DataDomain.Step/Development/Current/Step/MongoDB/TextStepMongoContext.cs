@@ -1,6 +1,7 @@
 using MongoDB.Bson;
 using Phytel.API.DataDomain.Step.DTO;
 using Phytel.Mongo.Linq;
+using System.Configuration;
 
 namespace Phytel.API.DataDomain.Step
 {
@@ -9,7 +10,7 @@ namespace Phytel.API.DataDomain.Step
         private static string COLL_Step = "Step";
 
         public TextStepMongoContext(string contractDBName)
-            : base(contractDBName, true)
+            : base(ConfigurationManager.AppSettings.Get("PhytelServicesConnName"), contractDBName, true)
 		{
             TextSteps = new MongoSet<METext, ObjectId>(this, COLL_Step);
 		}

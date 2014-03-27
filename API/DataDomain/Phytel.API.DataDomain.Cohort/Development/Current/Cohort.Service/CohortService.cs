@@ -10,15 +10,11 @@ namespace Phytel.API.DataDomain.Cohort.Service
 {
     public class CohortService : ServiceStack.ServiceInterface.Service
     {
-        private const string _phytelUserIDToken = "x-Phytel-UserID";
-
         public GetCohortDataResponse Get(GetCohortDataRequest request)
         {
             GetCohortDataResponse response = new GetCohortDataResponse();
             try
             {
-                //Get the UserId from the Header and update the request object
-                request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
                 if (string.IsNullOrEmpty(request.UserId))
                     throw new UnauthorizedAccessException("CohortDD:Get()::Unauthorized Access");
 
@@ -40,8 +36,6 @@ namespace Phytel.API.DataDomain.Cohort.Service
             GetAllCohortsDataResponse response = new GetAllCohortsDataResponse();
             try
             {
-                //Get the UserId from the Header and update the request object
-                request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
                 if (string.IsNullOrEmpty(request.UserId))
                     throw new UnauthorizedAccessException("CohortDD:Get()::Unauthorized Access");
 

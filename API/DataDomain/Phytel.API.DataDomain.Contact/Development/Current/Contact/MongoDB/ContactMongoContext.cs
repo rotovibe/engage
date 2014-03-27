@@ -1,6 +1,7 @@
 using MongoDB.Bson;
 using Phytel.API.DataDomain.Contact.DTO;
 using Phytel.Mongo.Linq;
+using System.Configuration;
 
 namespace Phytel.API.DataDomain.Contact
 {
@@ -9,7 +10,7 @@ namespace Phytel.API.DataDomain.Contact
         private static string COLL_ContactS = "Contact";
 
         public ContactMongoContext(string contractDBName)
-            : base(contractDBName, true)
+            : base(ConfigurationManager.AppSettings.Get("PhytelServicesConnName"), contractDBName, true)
 		{
             Contacts = new MongoSet<MEContact, ObjectId>(this, COLL_ContactS);
 		}

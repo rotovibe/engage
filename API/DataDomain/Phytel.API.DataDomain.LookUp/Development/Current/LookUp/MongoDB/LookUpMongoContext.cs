@@ -1,6 +1,7 @@
 ﻿using MongoDB.Bson;
 using Phytel.API.DataDomain.LookUp.DTO;
 using Phytel.Mongo.Linq;
+using System.Configuration;
 
 namespace Phytel.API.DataDomain.LookUp
 {
@@ -9,7 +10,7 @@ namespace Phytel.API.DataDomain.LookUp
         private static string COLL_LOOKUP = "LookUp";
 
         public LookUpMongoContext(string contractDBName)
-            : base(contractDBName, true)
+            : base(ConfigurationManager.AppSettings.Get("PhytelServicesConnName"), contractDBName, true)
 		{
             LookUps = new MongoSet<MELookup, ObjectId>(this, COLL_LOOKUP);
 		}

@@ -1,6 +1,7 @@
 ﻿using MongoDB.Bson;
 using Phytel.API.DataDomain.Cohort.DTO;
 using Phytel.Mongo.Linq;
+using System.Configuration;
 
 namespace Phytel.API.DataDomain.Cohort
 {
@@ -9,7 +10,7 @@ namespace Phytel.API.DataDomain.Cohort
         private static string COLL_CohortS = "Cohort";
 
         public CohortMongoContext(string contractDBName)
-            : base(contractDBName, true)
+            : base(ConfigurationManager.AppSettings.Get("PhytelServicesConnName"), contractDBName, true)
 		{
             Cohorts = new MongoSet<MECohort, ObjectId>(this, COLL_CohortS);
 		}

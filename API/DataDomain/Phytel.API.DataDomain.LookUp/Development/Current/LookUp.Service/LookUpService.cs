@@ -11,16 +11,12 @@ namespace Phytel.API.DataDomain.Patient.Service
 {
     public class LookUpService : ServiceStack.ServiceInterface.Service
     {
-        private const string _phytelUserIDToken = "x-Phytel-UserID";
-
         #region Problems
         public GetProblemDataResponse Get(GetProblemDataRequest request)
         {
             GetProblemDataResponse response = new GetProblemDataResponse();
             try
             {
-                //Get the UserId from the Header and update the request object
-                request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
                 if (string.IsNullOrEmpty(request.UserId))
                     throw new UnauthorizedAccessException("LookUpDD:Get()::Unauthorized Access");
 
@@ -42,8 +38,6 @@ namespace Phytel.API.DataDomain.Patient.Service
             GetAllProblemsDataResponse response = new GetAllProblemsDataResponse();
             try
             {
-                //Get the UserId from the Header and update the request object
-                request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
                 if (string.IsNullOrEmpty(request.UserId))
                     throw new UnauthorizedAccessException("LookUpDD:Get()::Unauthorized Access");
 
@@ -65,8 +59,6 @@ namespace Phytel.API.DataDomain.Patient.Service
             SearchProblemsDataResponse response = new SearchProblemsDataResponse();
             try
             {
-                //Get the UserId from the Header and update the request object
-                request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
                 if (string.IsNullOrEmpty(request.UserId))
                     throw new UnauthorizedAccessException("LookUpDD:Post()::Unauthorized Access");
 
@@ -90,8 +82,6 @@ namespace Phytel.API.DataDomain.Patient.Service
             GetObjectiveDataResponse response = new GetObjectiveDataResponse();
             try
             {
-                //Get the UserId from the Header and update the request object
-                request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
                 if (string.IsNullOrEmpty(request.UserId))
                     throw new UnauthorizedAccessException("LookUpDD:Get()::Unauthorized Access");
 
@@ -115,8 +105,6 @@ namespace Phytel.API.DataDomain.Patient.Service
             GetCategoryDataResponse response = new GetCategoryDataResponse();
             try
             {
-                //Get the UserId from the Header and update the request object
-                request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
                 if (string.IsNullOrEmpty(request.UserId))
                     throw new UnauthorizedAccessException("LookUpDD:Get()::Unauthorized Access");
 
@@ -140,8 +128,6 @@ namespace Phytel.API.DataDomain.Patient.Service
             GetAllCommModesDataResponse response = new GetAllCommModesDataResponse();
             try
             {
-                //Get the UserId from the Header and update the request object
-                request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
                 if (string.IsNullOrEmpty(request.UserId))
                     throw new UnauthorizedAccessException("LookUpDD:Get()::Unauthorized Access");
 
@@ -163,8 +149,6 @@ namespace Phytel.API.DataDomain.Patient.Service
             GetAllStatesDataResponse response = new GetAllStatesDataResponse();
             try
             {
-                //Get the UserId from the Header and update the request object
-                request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
                 if (string.IsNullOrEmpty(request.UserId))
                     throw new UnauthorizedAccessException("LookUpDD:Get()::Unauthorized Access");
 
@@ -186,8 +170,6 @@ namespace Phytel.API.DataDomain.Patient.Service
             GetAllTimesOfDaysDataResponse response = new GetAllTimesOfDaysDataResponse();
             try
             {
-                //Get the UserId from the Header and update the request object
-                request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
                 if (string.IsNullOrEmpty(request.UserId))
                     throw new UnauthorizedAccessException("LookUpDD:Get()::Unauthorized Access");
 
@@ -209,8 +191,6 @@ namespace Phytel.API.DataDomain.Patient.Service
             GetAllTimeZonesDataResponse response = new GetAllTimeZonesDataResponse();
             try
             {
-                //Get the UserId from the Header and update the request object
-                request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
                 if (string.IsNullOrEmpty(request.UserId))
                     throw new UnauthorizedAccessException("LookUpDD:Get()::Unauthorized Access");
 
@@ -232,8 +212,6 @@ namespace Phytel.API.DataDomain.Patient.Service
             GetAllCommTypesDataResponse response = new GetAllCommTypesDataResponse();
             try
             {
-                //Get the UserId from the Header and update the request object
-                request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
                 if (string.IsNullOrEmpty(request.UserId))
                     throw new UnauthorizedAccessException("LookUpDD:Get()::Unauthorized Access");
 
@@ -255,8 +233,6 @@ namespace Phytel.API.DataDomain.Patient.Service
             GetAllLanguagesDataResponse response = new GetAllLanguagesDataResponse();
             try
             {
-                //Get the UserId from the Header and update the request object
-                request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
                 if (string.IsNullOrEmpty(request.UserId))
                     throw new UnauthorizedAccessException("LookUpDD:Get()::Unauthorized Access");
 
@@ -278,8 +254,6 @@ namespace Phytel.API.DataDomain.Patient.Service
             GetTimeZoneDataResponse response = new GetTimeZoneDataResponse();
             try
             {
-                //Get the UserId from the Header and update the request object
-                request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
                 if (string.IsNullOrEmpty(request.UserId))
                     throw new UnauthorizedAccessException("LookUpDD:Get()::Unauthorized Access");
 
@@ -305,8 +279,6 @@ namespace Phytel.API.DataDomain.Patient.Service
             GetLookUpsDataResponse response = new GetLookUpsDataResponse();
             try
             {
-                //Get the UserId from the Header and update the request object
-                request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
                 if (string.IsNullOrEmpty(request.UserId))
                     throw new UnauthorizedAccessException("LookUpDD:Get()::Unauthorized Access");
 
