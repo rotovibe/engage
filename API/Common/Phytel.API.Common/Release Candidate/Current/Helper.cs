@@ -12,8 +12,6 @@ namespace Phytel.API.Common
 {
     public static class Helper
     {
-        static readonly string PhytelUserIDHeaderKey = "x-Phytel-UserID";
-
         public static string BuildURL(string baseURL, string userId)
         {
             return string.Format("{0}?UserId={1}", baseURL, userId);
