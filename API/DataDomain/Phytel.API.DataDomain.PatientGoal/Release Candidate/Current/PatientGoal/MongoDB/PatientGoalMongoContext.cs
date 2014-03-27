@@ -1,6 +1,7 @@
 using MongoDB.Bson;
 using Phytel.API.DataDomain.PatientGoal.DTO;
 using Phytel.Mongo.Linq;
+using System.Configuration;
 
 namespace Phytel.API.DataDomain.PatientGoal
 {
@@ -13,7 +14,7 @@ namespace Phytel.API.DataDomain.PatientGoal
         private static string COLL_Attributes = "GoalAttribute";
 
         public PatientGoalMongoContext(string contractDBName)
-            : base(contractDBName, true)
+            : base(ConfigurationManager.AppSettings.Get("PhytelServicesConnName"), contractDBName, true)
 		{
             PatientGoals = new MongoSet<MEPatientGoal, ObjectId>(this, COLL_PatientGoalS);
             PatientBarriers = new MongoSet<MEPatientBarrier, ObjectId>(this, COLL_PatientGoalBarrierS);

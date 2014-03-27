@@ -2,6 +2,7 @@ using MongoDB.Bson;
 using Phytel.API.DataDomain.Program.DTO;
 using Phytel.API.DataDomain.Program.MongoDB.DTO;
 using Phytel.Mongo.Linq;
+using System.Configuration;
 
 namespace Phytel.API.DataDomain.Program
 {
@@ -14,7 +15,7 @@ namespace Phytel.API.DataDomain.Program
         private static string COLL_ProgramAttributeS = "PatientProgramAttribute";
 
         public ProgramMongoContext(string contractDBName)
-            : base(contractDBName, true)
+            : base(ConfigurationManager.AppSettings.Get("PhytelServicesConnName"), contractDBName, true)
         {
             Programs = new MongoSet<MEProgram, ObjectId>(this, COLL_ContractProgramS);
             PatientPrograms = new MongoSet<MEPatientProgram, ObjectId>(this, COLL_PatientProgramS);

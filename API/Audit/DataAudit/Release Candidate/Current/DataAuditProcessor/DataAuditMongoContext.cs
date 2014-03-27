@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Phytel.Mongo.Linq;
+using System.Configuration;
 
 namespace Phytel.API.DataAuditProcessor
 {
@@ -11,7 +12,7 @@ namespace Phytel.API.DataAuditProcessor
     {
 
         public DataAuditMongoContext(string dbName)
-            : base(dbName, true, "Audit")
+            : base(ConfigurationManager.AppSettings.Get("PhytelServicesConnName"), dbName, true, "Audit")
         {
 
         }

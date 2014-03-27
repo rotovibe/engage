@@ -1,6 +1,7 @@
 using MongoDB.Bson;
 using Phytel.API.DataDomain.Action.DTO;
 using Phytel.Mongo.Linq;
+using System.Configuration;
 
 namespace Phytel.API.DataDomain.Action
 {
@@ -9,7 +10,7 @@ namespace Phytel.API.DataDomain.Action
         private static string COLL_ActionS = "Action";
 
         public ActionMongoContext(string contractDBName)
-            : base(contractDBName, true)
+            : base(ConfigurationManager.AppSettings.Get("PhytelServicesConnName"), contractDBName, true)
 		{
             Actions = new MongoSet<MEAction, ObjectId>(this, COLL_ActionS);
 		}

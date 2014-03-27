@@ -1,6 +1,7 @@
 using MongoDB.Bson;
 using Phytel.API.DataDomain.PatientObservation.DTO;
 using Phytel.Mongo.Linq;
+using System.Configuration;
 
 namespace Phytel.API.DataDomain.PatientObservation
 {
@@ -10,7 +11,7 @@ namespace Phytel.API.DataDomain.PatientObservation
         private static string COLL_ObservationS = "Observation";
 
         public PatientObservationMongoContext(string contractDBName)
-            : base(contractDBName, true)
+            : base(ConfigurationManager.AppSettings.Get("PhytelServicesConnName"), contractDBName, true)
 		{
             PatientObservations = new MongoSet<MEPatientObservation, ObjectId>(this, COLL_PatientObservationS);
             Observations = new MongoSet<MEObservation, ObjectId>(this, COLL_ObservationS);

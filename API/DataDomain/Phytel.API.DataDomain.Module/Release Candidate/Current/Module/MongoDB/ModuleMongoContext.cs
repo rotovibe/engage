@@ -2,6 +2,7 @@ using MongoDB.Bson;
 using Phytel.API.DataDomain.Module.DTO;
 using Phytel.API.DataDomain.Module.MongoDB.DTO;
 using Phytel.Mongo.Linq;
+using System.Configuration;
 
 namespace Phytel.API.DataDomain.Module
 {
@@ -10,7 +11,7 @@ namespace Phytel.API.DataDomain.Module
         private static string COLL_ModuleS = "Module";
 
         public ModuleMongoContext(string contractDBName)
-            : base(contractDBName, true)
+            : base(ConfigurationManager.AppSettings.Get("PhytelServicesConnName"), contractDBName, true)
 		{
             Modules = new MongoSet<MEModule, ObjectId>(this, COLL_ModuleS);
 		}
