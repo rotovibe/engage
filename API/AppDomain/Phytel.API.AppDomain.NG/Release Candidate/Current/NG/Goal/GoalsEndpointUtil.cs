@@ -122,7 +122,7 @@ namespace Phytel.API.AppDomain.NG
                 //[Route("/{Context}/{Version}/{ContractNumber}/Patient/{PatientId}/Goal/{Id}", "GET")]
                 IRestClient client = new JsonServiceClient();
 
-                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Goal/{5}?UserId={6}",
+                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Goal/{5}",
                     DDPatientGoalsServiceUrl,
                     "NG",
                     request.Version,
@@ -177,7 +177,7 @@ namespace Phytel.API.AppDomain.NG
                 //[Route("/{Context}/{Version}/{ContractNumber}/Patient/{PatientId}/Goals", "GET")]
                 IRestClient client = new JsonServiceClient();
 
-                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Goals?UserId={5}",
+                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Goals",
                     DDPatientGoalsServiceUrl,
                     "NG",
                     request.Version,
@@ -226,7 +226,7 @@ namespace Phytel.API.AppDomain.NG
 
                 IRestClient client = new JsonServiceClient();
 
-                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Goal/{5}/Delete/?UserId={6}",
+                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Goal/{5}/Delete/",
                     DDPatientGoalsServiceUrl,
                     "NG",
                     request.Version,
@@ -259,7 +259,7 @@ namespace Phytel.API.AppDomain.NG
 
                 IRestClient client = new JsonServiceClient();
 
-                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Goal/{5}/Barrier/{6}/Delete/?UserId={7}",
+                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Goal/{5}/Barrier/{6}/Delete/",
                     DDPatientGoalsServiceUrl,
                     "NG",
                     request.Version,
@@ -293,7 +293,7 @@ namespace Phytel.API.AppDomain.NG
 
                 IRestClient client = new JsonServiceClient();
 
-                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Goal/{5}/Task/{6}/Delete/?UserId={7}",
+                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Goal/{5}/Task/{6}/Delete/",
                     DDPatientGoalsServiceUrl,
                     "NG",
                     request.Version,
@@ -327,7 +327,7 @@ namespace Phytel.API.AppDomain.NG
 
                 IRestClient client = new JsonServiceClient();
 
-                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Goal/{5}/Intervention/{6}/Delete/?UserId={7}",
+                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Goal/{5}/Intervention/{6}/Delete/",
                     DDPatientGoalsServiceUrl,
                     "NG",
                     request.Version,
