@@ -156,39 +156,21 @@ namespace Phytel.API.AppDomain.Security
                                 session.ContractNumber.ToUpper().Equals(request.ContractNumber.ToUpper()) &&
                                 session.Product.ToUpper().Equals(request.Context.ToUpper()))
                             {
-                                try
+                                session.SessionTimeOut = DateTime.UtcNow.AddMinutes(session.SessionLengthInMinutes);
+                                response = new ValidateTokenResponse
                                 {
-                                    RetryHelper.DoWithRetry(() =>
-                                    {
-                                        session.SessionTimeOut = DateTime.UtcNow.AddMinutes(session.SessionLengthInMinutes);
-                                        response = new ValidateTokenResponse
-                                        {
-                                            SessionLengthInMinutes = session.SessionLengthInMinutes,
-                                            SessionTimeOut = session.SessionTimeOut,
-                                            TokenId = session.Id.ToString(),
-                                            SQLUserId = session.SQLUserId,
-                                            UserId = session.UserId.ToString(),
-                                            UserName = session.UserName
-                                        };
-                                        _objectContext.APISessions.Collection.Save(session);
-                                    }, RetryHelper.RETRIES, RetryHelper.RETRYDELAY);
-                                }
-                                catch { }
+                                    SessionLengthInMinutes = session.SessionLengthInMinutes,
+                                    SessionTimeOut = session.SessionTimeOut,
+                                    TokenId = session.Id.ToString(),
+                                    SQLUserId = session.SQLUserId,
+                                    UserId = session.UserId.ToString(),
+                                    UserName = session.UserName
+                                };
+                                _objectContext.APISessions.Collection.Save(session);
                             }
                             else
-                            {
-                                try
-                                {
-                                    string additionalInfo = string.Format("Token:DB-{0}:Request-{1} :: Contract:DB-{2}:Request-{3} :: Context:DB-{4}:Request-{5}",
-                                        session.SecurityToken, securityToken, session.ContractNumber, request.ContractNumber,
-                                        session.Product, request.Context);
-
-                                    string _aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
-                                    Common.Helper.LogException(int.Parse(_aseProcessID), new Exception(additionalInfo));
-                                }
-                                catch { }
                                 throw new UnauthorizedAccessException("Invalid Security Authorization Request");
-                            }
+
                             return response;
                         }
                         else
