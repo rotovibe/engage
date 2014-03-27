@@ -128,8 +128,7 @@ namespace Phytel.API.AppDomain.NG
                     request.Version,
                     request.ContractNumber,
                     request.PatientId,
-                    request.Id,
-                    request.UserId), request.UserId);
+                    request.Id), request.UserId);
 
                 GetPatientGoalDataResponse ddResponse = client.Get<GetPatientGoalDataResponse>(
                     url);
@@ -182,8 +181,7 @@ namespace Phytel.API.AppDomain.NG
                     "NG",
                     request.Version,
                     request.ContractNumber,
-                    request.PatientId,
-                    request.UserId), request.UserId);
+                    request.PatientId), request.UserId);
 
                 GetAllPatientGoalsDataResponse ddResponse = client.Get<GetAllPatientGoalsDataResponse>(
                     url);
@@ -232,8 +230,7 @@ namespace Phytel.API.AppDomain.NG
                     request.Version,
                     request.ContractNumber,
                     request.PatientId,
-                    request.PatientGoalId,
-                    request.UserId), request.UserId);
+                    request.PatientGoalId), request.UserId);
 
                 DeletePatientGoalDataResponse response = client.Delete<DeletePatientGoalDataResponse>(
                     url);
@@ -266,8 +263,7 @@ namespace Phytel.API.AppDomain.NG
                     request.ContractNumber,
                     request.PatientId,
                     request.PatientGoalId,
-                   id,
-                   request.UserId), request.UserId);
+                   id), request.UserId);
 
                 DeleteBarrierResponse response = client.Delete<DeleteBarrierResponse>(
                     url);
@@ -300,8 +296,7 @@ namespace Phytel.API.AppDomain.NG
                     request.ContractNumber,
                     request.PatientId,
                     request.PatientGoalId,
-                    id,
-                    request.UserId), request.UserId);
+                    id), request.UserId);
 
                 DeleteTaskResponse response = client.Delete<DeleteTaskResponse>(
                     url);
@@ -334,8 +329,7 @@ namespace Phytel.API.AppDomain.NG
                     request.ContractNumber,
                     request.PatientId,
                     request.PatientGoalId,
-                    id,
-                    request.UserId), request.UserId);
+                    id), request.UserId);
 
                 DeleteInterventionResponse response = client.Delete<DeleteInterventionResponse>(
                     url);
