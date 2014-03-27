@@ -10,9 +10,8 @@ namespace Phytel.API.DataAuditProcessor
 {
     public class DataAuditMongoContext: MongoContext
     {
-
-        public DataAuditMongoContext(string dbName)
-            : base(ConfigurationManager.AppSettings.Get("PhytelServicesConnName"), dbName, true, "Audit")
+        public DataAuditMongoContext(string configName, string dbName)
+            : base(configName, dbName, true, "Audit")
         {
 
         }
