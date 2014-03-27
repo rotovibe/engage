@@ -40,14 +40,14 @@ namespace Phytel.API.AppDomain.NG
             {
                 //Execute call(s) to Patient Data Domain
                 IRestClient client = new JsonServiceClient();
-
-                GetPatientDataResponse response = client.Get<GetPatientDataResponse>(string.Format("{0}/{1}/{2}/{3}/patient/{4}?UserId={5}",
+                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/patient/{4}",
                                                                                             DDPatientServiceURL,
                                                                                             "NG",
                                                                                             request.Version,
                                                                                             request.ContractNumber,
-                                                                                            request.PatientID,
-                                                                                            request.UserId));
+                                                                                            request.PatientID), request.UserId);
+
+                GetPatientDataResponse response = client.Get<GetPatientDataResponse>(url);
 
                 if (response != null && response.Patient != null)
                 {
@@ -56,13 +56,13 @@ namespace Phytel.API.AppDomain.NG
                     if (string.IsNullOrEmpty(response.Patient.DisplayPatientSystemId) == false)
                     {
                         client = new JsonServiceClient();
-                        string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/PatientSystem/{4}",
+                        string patientSystemUrl = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/PatientSystem/{4}",
                                                                                     DDPatientSystemUrl,
                                                                                     "NG",
                                                                                     request.Version,
                                                                                     request.ContractNumber,
                                                                                     response.Patient.DisplayPatientSystemId), request.UserId);
-                        sysResponse = client.Get<Phytel.API.DataDomain.PatientSystem.DTO.GetPatientSystemDataResponse>(url);
+                        sysResponse = client.Get<Phytel.API.DataDomain.PatientSystem.DTO.GetPatientSystemDataResponse>(patientSystemUrl);
                     }
                     
                     pResponse.Patient = new NG.DTO.Patient
