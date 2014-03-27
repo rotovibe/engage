@@ -10,15 +10,11 @@ namespace Phytel.API.DataDomain.PatientGoal.Service
 {
     public class PatientGoalService : ServiceStack.ServiceInterface.Service
     {
-        private const string _phytelUserIDToken = "x-Phytel-UserID";
-
         public PutInitializeGoalDataResponse Put(PutInitializeGoalDataRequest request)
         {
             PutInitializeGoalDataResponse response = new PutInitializeGoalDataResponse();
             try
             {
-                //Get the UserId from the Header and update the request object
-                request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
                 if (string.IsNullOrEmpty(request.UserId))
                     throw new UnauthorizedAccessException("PatientGoalDD:Put()::Unauthorized Access");
 
@@ -40,8 +36,6 @@ namespace Phytel.API.DataDomain.PatientGoal.Service
             PutInitializeBarrierDataResponse response = new PutInitializeBarrierDataResponse();
             try
             {
-                //Get the UserId from the Header and update the request object
-                request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
                 if (string.IsNullOrEmpty(request.UserId))
                     throw new UnauthorizedAccessException("PatientGoalDD:Put()::Unauthorized Access");
 
@@ -63,8 +57,6 @@ namespace Phytel.API.DataDomain.PatientGoal.Service
             GetPatientGoalDataResponse response = new GetPatientGoalDataResponse();
             try
             {
-                //Get the UserId from the Header and update the request object
-                request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
                 if (string.IsNullOrEmpty(request.UserId))
                     throw new UnauthorizedAccessException("PatientGoalDD:Get()::Unauthorized Access");
 
@@ -86,8 +78,6 @@ namespace Phytel.API.DataDomain.PatientGoal.Service
             GetAllPatientGoalsDataResponse response = new GetAllPatientGoalsDataResponse();
             try
             {
-                //Get the UserId from the Header and update the request object
-                request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
                 if (string.IsNullOrEmpty(request.UserId))
                     throw new UnauthorizedAccessException("PatientGoalDD:Get()::Unauthorized Access");
 
@@ -109,8 +99,6 @@ namespace Phytel.API.DataDomain.PatientGoal.Service
             PutPatientGoalDataResponse response = new PutPatientGoalDataResponse();
             try
             {
-                //Get the UserId from the Header and update the request object
-                request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
                 if (string.IsNullOrEmpty(request.UserId))
                     throw new UnauthorizedAccessException("PatientGoalDD:Put()::Unauthorized Access");
 
@@ -132,8 +120,6 @@ namespace Phytel.API.DataDomain.PatientGoal.Service
             PutInitializeTaskResponse response = new PutInitializeTaskResponse();
             try
             {
-                //Get the UserId from the Header and update the request object
-                request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
                 if (string.IsNullOrEmpty(request.UserId))
                     throw new UnauthorizedAccessException("PatientGoalDD:Put()::Unauthorized Access");
 
@@ -155,8 +141,6 @@ namespace Phytel.API.DataDomain.PatientGoal.Service
             PutUpdateTaskResponse response = new PutUpdateTaskResponse();
             try
             {
-                //Get the UserId from the Header and update the request object
-                request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
                 if (string.IsNullOrEmpty(request.UserId))
                     throw new UnauthorizedAccessException("PatientGoalDD:Put()::Unauthorized Access");
 
@@ -178,8 +162,6 @@ namespace Phytel.API.DataDomain.PatientGoal.Service
             PutInitializeInterventionResponse response = new PutInitializeInterventionResponse();
             try
             {
-                //Get the UserId from the Header and update the request object
-                request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
                 if (string.IsNullOrEmpty(request.UserId))
                     throw new UnauthorizedAccessException("PatientGoalDD:Put()::Unauthorized Access");
 
@@ -201,8 +183,6 @@ namespace Phytel.API.DataDomain.PatientGoal.Service
             PutUpdateInterventionResponse response = new PutUpdateInterventionResponse();
             try
             {
-                //Get the UserId from the Header and update the request object
-                request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
                 if (string.IsNullOrEmpty(request.UserId))
                     throw new UnauthorizedAccessException("PatientGoalDD:Put()::Unauthorized Access");
 
@@ -224,8 +204,6 @@ namespace Phytel.API.DataDomain.PatientGoal.Service
             PutUpdateBarrierResponse response = new PutUpdateBarrierResponse();
             try
             {
-                //Get the UserId from the Header and update the request object
-                request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
                 if (string.IsNullOrEmpty(request.UserId))
                     throw new UnauthorizedAccessException("PatientGoalDD:Put()::Unauthorized Access");
 
@@ -247,8 +225,6 @@ namespace Phytel.API.DataDomain.PatientGoal.Service
             DeletePatientGoalDataResponse response = new DeletePatientGoalDataResponse();
             try
             {
-                //Get the UserId from the Header and update the request object
-                request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
                 if (string.IsNullOrEmpty(request.UserId))
                     throw new UnauthorizedAccessException("PatientGoalDD:Get()::Unauthorized Access");
 
@@ -270,8 +246,6 @@ namespace Phytel.API.DataDomain.PatientGoal.Service
             DeleteTaskResponse response = new DeleteTaskResponse();
             try
             {
-                //Get the UserId from the Header and update the request object
-                request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
                 if (string.IsNullOrEmpty(request.UserId))
                     throw new UnauthorizedAccessException("PatientGoalDD:Get()::Unauthorized Access");
 
@@ -293,8 +267,6 @@ namespace Phytel.API.DataDomain.PatientGoal.Service
             DeleteInterventionResponse response = new DeleteInterventionResponse();
             try
             {
-                //Get the UserId from the Header and update the request object
-                request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
                 if (string.IsNullOrEmpty(request.UserId))
                     throw new UnauthorizedAccessException("PatientGoalDD:Get()::Unauthorized Access");
 
@@ -316,8 +288,6 @@ namespace Phytel.API.DataDomain.PatientGoal.Service
             DeleteBarrierResponse response = new DeleteBarrierResponse();
             try
             {
-                //Get the UserId from the Header and update the request object
-                request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
                 if (string.IsNullOrEmpty(request.UserId))
                     throw new UnauthorizedAccessException("PatientGoalDD:Get()::Unauthorized Access");
 
@@ -339,8 +309,6 @@ namespace Phytel.API.DataDomain.PatientGoal.Service
             GetCustomAttributesDataResponse response = new GetCustomAttributesDataResponse();
             try
             {
-                //Get the UserId from the Header and update the request object
-                request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
                 if (string.IsNullOrEmpty(request.UserId))
                     throw new UnauthorizedAccessException("PatientGoalDD:Get()::Unauthorized Access");
 

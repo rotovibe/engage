@@ -10,15 +10,11 @@ namespace Phytel.API.DataDomain.PatientNote.Service
 {
     public class PatientNoteService : ServiceStack.ServiceInterface.Service
     {
-        private const string _phytelUserIDToken = "x-Phytel-UserID";
-
         public PutPatientNoteDataResponse Put(PutPatientNoteDataRequest request)
         {
             PutPatientNoteDataResponse response = new PutPatientNoteDataResponse();
             try
             {
-                //Get the UserId from the Header and update the request object
-                request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
                 if (string.IsNullOrEmpty(request.UserId))
                     throw new UnauthorizedAccessException("PatientNoteDD:Put()::Unauthorized Access");
 
@@ -40,8 +36,6 @@ namespace Phytel.API.DataDomain.PatientNote.Service
             GetPatientNoteDataResponse response = new GetPatientNoteDataResponse();
             try
             {
-                //Get the UserId from the Header and update the request object
-                request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
                 if (string.IsNullOrEmpty(request.UserId))
                     throw new UnauthorizedAccessException("PatientNoteDD:Get()::Unauthorized Access");
 
@@ -63,8 +57,6 @@ namespace Phytel.API.DataDomain.PatientNote.Service
             GetAllPatientNotesDataResponse response = new GetAllPatientNotesDataResponse();
             try
             {
-                //Get the UserId from the Header and update the request object
-                request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
                 if (string.IsNullOrEmpty(request.UserId))
                     throw new UnauthorizedAccessException("PatientNoteDD:Get()::Unauthorized Access");
 
@@ -86,8 +78,6 @@ namespace Phytel.API.DataDomain.PatientNote.Service
             DeletePatientNoteDataResponse response = new DeletePatientNoteDataResponse();
             try
             {
-                //Get the UserId from the Header and update the request object
-                request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
                 if (string.IsNullOrEmpty(request.UserId))
                     throw new UnauthorizedAccessException("PatientNoteDD:Delete()");
 

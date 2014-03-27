@@ -11,15 +11,11 @@ namespace Phytel.API.DataDomain.Action.Service
 {
     public class ActionService : ServiceStack.ServiceInterface.Service
     {
-        private const string _phytelUserIDToken = "x-Phytel-UserID";
-
         public GetActionDataResponse Get(GetActionDataRequest request)
         {
             GetActionDataResponse response = new GetActionDataResponse();
             try
             {
-                //Get the UserId from the Header and update the request object
-                request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
                 if (string.IsNullOrEmpty(request.UserId))
                     throw new UnauthorizedAccessException("ActionDD:Get():Unauthorized Access");
 

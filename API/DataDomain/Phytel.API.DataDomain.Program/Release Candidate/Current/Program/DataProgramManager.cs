@@ -172,15 +172,16 @@ namespace Phytel.API.DataDomain.Program
                 string contractNumber = request.ContractNumber;
                 string context = request.Context;
                 double version = request.Version;
-                IRestClient client = Common.Helper.GetJsonServiceClient(request.UserId);
+                IRestClient client = new JsonServiceClient();
 
-                GetPatientDataResponse response = client.Get<GetPatientDataResponse>(
-                    string.Format("{0}/{1}/{2}/{3}/patient/{4}",
+                string url = Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/patient/{4}",
                     path,
                     context,
                     version,
                     contractNumber,
-                    request.PatientId));
+                    request.PatientId), request.UserId);
+
+                GetPatientDataResponse response = client.Get<GetPatientDataResponse>(url);
 
                 if (response.Patient != null)
                 {
