@@ -18,6 +18,11 @@ namespace ProgramBuilder
     public partial class ProgramForm : Form
     {
         private TreeNode m_OldSelectNode;
+        public string programNameText;
+        public string moduleNameText;
+        public string actionNameText;
+        public string stepNameText;
+
         public ProgramForm()
         {
             InitializeComponent();
@@ -28,20 +33,23 @@ namespace ProgramBuilder
             ProgramNameForm programName = new ProgramNameForm();
             programName.ShowDialog();
             programName.NameBox.Focus();
-            
-            string programNameText = programName.getProgramName();
-            TreeNode prNT = new TreeNode(programNameText);
-            prNT.Tag = "Program";
-            ProgramTree.Nodes.Add(prNT);
-            TreeNode test = new TreeNode("ModuleTest");
-            test.Tag = "Module";
-            prNT.Nodes.Add(test);
-            TreeNode test1 = new TreeNode("ActionTest");
-            test1.Tag = "Action";
-            test.Nodes.Add(test1);
-            TreeNode test2 = new TreeNode("StepTest");
-            test2.Tag = "Step";
-            test1.Nodes.Add(test2);
+
+            if (!(String.IsNullOrEmpty(programName.getProgramName())))
+            {
+                programNameText = programName.getProgramName();
+                TreeNode prNT = new TreeNode(programNameText);
+                prNT.Tag = "Program";
+                ProgramTree.Nodes.Add(prNT);
+                TreeNode test = new TreeNode("ModuleTest");
+                test.Tag = "Module";
+                prNT.Nodes.Add(test);
+                TreeNode test1 = new TreeNode("ActionTest");
+                test1.Tag = "Action";
+                test.Nodes.Add(test1);
+                TreeNode test2 = new TreeNode("StepTest");
+                test2.Tag = "Step";
+                test1.Nodes.Add(test2);
+            }
         }
 
         private void mnuNewModule_Click(object sender, EventArgs e)
@@ -100,18 +108,22 @@ namespace ProgramBuilder
             switch (Convert.ToString(ProgramTree.SelectedNode.Tag))
             {
                 case "Program":
-                    ProgramsUserControl puc = new ProgramsUserControl();
+                    programNameText = ProgramTree.SelectedNode.Text;
+                    ProgramsUserControl puc = new ProgramsUserControl(programNameText);
                     this.mainPanel.Controls.Add(puc);
                     break;
                 case "Module":
-                    ModulesUserControl muc = new ModulesUserControl();
+                    moduleNameText = ProgramTree.SelectedNode.Text;
+                    ModulesUserControl muc = new ModulesUserControl(moduleNameText);
                     this.mainPanel.Controls.Add(muc);
                     break;
                 case "Action":
-                    ActionsUserControl auc = new ActionsUserControl();
+                    actionNameText = ProgramTree.SelectedNode.Text;
+                    ActionsUserControl auc = new ActionsUserControl(actionNameText);
                     this.mainPanel.Controls.Add(auc);
                     break;
                 case "Step":
+                    stepNameText = ProgramTree.SelectedNode.Text;
                     StepsUserControl suc = new StepsUserControl();
                     this.mainPanel.Controls.Add(suc);
                     break;
@@ -227,6 +239,13 @@ namespace ProgramBuilder
             //    //Version
             //};
 
+            //Module
+
+        }
+
+        public string getProgramName()
+        {
+            return programNameText;
         }
     }
 }

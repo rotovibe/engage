@@ -12,9 +12,23 @@ namespace ProgramBuilder
 {
     public partial class ModulesUserControl : UserControl
     {
+        public string moduleNameText;
+
         public ModulesUserControl()
         {
             InitializeComponent();
+        }
+
+        public ModulesUserControl(string s)
+        {
+            moduleNameText = s;
+            InitializeComponent();
+        }
+
+        private void ModulesUserControl_Load(object sender, EventArgs e)
+        {
+            uonTextBox.Text = System.DateTime.Now.ToString();
+            nmTextBox.Text = moduleNameText;
         }
     }
 }

@@ -12,10 +12,19 @@ namespace ProgramBuilder
 {
     public partial class ProgramsUserControl : UserControl
     {
+        public string programNameText;
+
         public ProgramsUserControl()
         {
             InitializeComponent();
         }
+
+        public ProgramsUserControl(string s)
+        {
+            programNameText = s;
+            InitializeComponent();
+        }
+
 
         private void athbyTextBox_TextChanged(object sender, EventArgs e)
         {
@@ -34,7 +43,7 @@ namespace ProgramBuilder
 
         private void nmTextBox_TextChanged(object sender, EventArgs e)
         {
-
+            
         }
 
         private void nmLabel_Click(object sender, EventArgs e)
@@ -106,11 +115,11 @@ namespace ProgramBuilder
         {
             vTextBox.Text = "1.0";
             uonTextBox.Text = System.DateTime.Now.ToString();
+            nmTextBox.Text = programNameText;
         }
 
         private void checkBox1_CheckedChanged(object sender, EventArgs e)
         {
-            //MessageBox.Show(checkBox1.CheckState.ToString());
         }
 
     }
