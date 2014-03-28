@@ -22,15 +22,14 @@ namespace Phytel.API.DataDomain.PatientProblem
             GetAllPatientProblemsDataResponse response = null;
 
             // Call LookUp data domain to fetch all active problems.
-            IRestClient client = Common.Helper.GetJsonServiceClient(request.UserId);
-
-            SearchProblemsDataResponse problemLookUpResponse = client.Post<SearchProblemsDataResponse>
-                (string.Format("{0}/{1}/{2}/{3}/problems",
+            IRestClient client = new JsonServiceClient();
+            string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/problems",
                    DDLookUpServiceUrl,
                     request.Context,
                     request.Version,
-                    request.ContractNumber
-                    ),
+                    request.ContractNumber), request.UserId);
+
+            SearchProblemsDataResponse problemLookUpResponse = client.Post<SearchProblemsDataResponse>(url,
                 new SearchProblemsDataRequest {  
                     Active = true,
                     Context = request.Context,
