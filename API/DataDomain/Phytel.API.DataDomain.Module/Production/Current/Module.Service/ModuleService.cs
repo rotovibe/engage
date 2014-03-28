@@ -10,15 +10,11 @@ namespace Phytel.API.DataDomain.Module.Service
 {
     public class ModuleService : ServiceStack.ServiceInterface.Service
     {
-        private const string _phytelUserIDToken = "x-Phytel-UserID";
-
         public GetModuleResponse Get(GetModuleRequest request)
         {
             GetModuleResponse response = new GetModuleResponse();
             try
             {
-                //Get the UserId from the Header and update the request object
-                request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
                 if (string.IsNullOrEmpty(request.UserId))
                     throw new UnauthorizedAccessException("ModuleDD:Get()::Unauthorized Access");
 
