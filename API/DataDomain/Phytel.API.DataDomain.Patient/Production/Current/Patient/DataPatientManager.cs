@@ -22,12 +22,13 @@ namespace Phytel.API.DataDomain.Patient
 
                 GetCohortPatientsDataResponse result = new GetCohortPatientsDataResponse();
 
-                IRestClient client = Common.Helper.GetJsonServiceClient(request.UserId);
+                IRestClient client = new JsonServiceClient();
+
+                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/cohort/{4}", DDCohortServiceURL, request.Context, request.Version, request.ContractNumber, request.CohortID), request.UserId);
 
                 // 1) lookup query for cohortid in cohorts collection
                 string cohortID = request.CohortID;
-                GetCohortDataResponse response = client.Get<GetCohortDataResponse>
-                    (string.Format("{0}/{1}/{2}/{3}/cohort/{4}", DDCohortServiceURL, request.Context, request.Version, request.ContractNumber, request.CohortID));
+                GetCohortDataResponse response = client.Get<GetCohortDataResponse>(url);
 
                 string cohortQuery = response.Cohort.Query;
                 //If #USER_ID# is present in the cohort query, replace it with the ContactId.
