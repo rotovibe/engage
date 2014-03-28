@@ -124,7 +124,7 @@ namespace ProgramBuilder
                     break;
                 case "Step":
                     stepNameText = ProgramTree.SelectedNode.Text;
-                    StepsUserControl suc = new StepsUserControl();
+                    StepsUserControl suc = new StepsUserControl(stepNameText);
                     this.mainPanel.Controls.Add(suc);
                     break;
             }
