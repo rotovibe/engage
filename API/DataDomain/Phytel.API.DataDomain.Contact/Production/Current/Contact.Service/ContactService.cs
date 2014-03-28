@@ -10,16 +10,12 @@ namespace Phytel.API.DataDomain.Contact.Service
 {
     public class ContactService : ServiceStack.ServiceInterface.Service
     {
-        private const string _phytelUserIDToken = "x-Phytel-UserID";
-
         public GetContactDataResponse Get(GetContactDataRequest request)
         {
             GetContactDataResponse response = new GetContactDataResponse();
             response.Version = request.Version;
             try
             {
-                //Get the UserId from the Header and update the request object
-                request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
                 if (string.IsNullOrEmpty(request.UserId))
                     throw new UnauthorizedAccessException("ContactDD:Get()::Unauthorized Access");
 
@@ -41,8 +37,6 @@ namespace Phytel.API.DataDomain.Contact.Service
             response.Version = request.Version;
             try
             {
-                //Get the UserId from the Header and update the request object
-                request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
                 if (string.IsNullOrEmpty(request.UserId))
                     throw new UnauthorizedAccessException("ContactDD:Get()::Unauthorized Access");
 
@@ -64,8 +58,6 @@ namespace Phytel.API.DataDomain.Contact.Service
             response.Version = request.Version;
             try
             {
-                //Get the UserId from the Header and update the request object
-                request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
                 if (string.IsNullOrEmpty(request.UserId))
                     throw new UnauthorizedAccessException("ContactDD:Post()::Unauthorized Access");
 
@@ -87,8 +79,6 @@ namespace Phytel.API.DataDomain.Contact.Service
             response.Version = request.Version;
             try
             {
-                //Get the UserId from the Header and update the request object
-                request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
                 if (string.IsNullOrEmpty(request.UserId))
                     throw new UnauthorizedAccessException("ContactDD:Put()::Unauthorized Access");
 
@@ -110,8 +100,6 @@ namespace Phytel.API.DataDomain.Contact.Service
             response.Version = request.Version;
             try
             {
-                //Get the UserId from the Header and update the request object
-                request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
                 if (string.IsNullOrEmpty(request.UserId))
                     throw new UnauthorizedAccessException("ContactDD:Put()::Unauthorized Access");
 
@@ -133,8 +121,6 @@ namespace Phytel.API.DataDomain.Contact.Service
             response.Version = request.Version;
             try
             {
-                //Get the UserId from the Header and update the request object
-                request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
                 if (string.IsNullOrEmpty(request.UserId))
                     throw new UnauthorizedAccessException("ContactDD:Get()::Unauthorized Access");
 
