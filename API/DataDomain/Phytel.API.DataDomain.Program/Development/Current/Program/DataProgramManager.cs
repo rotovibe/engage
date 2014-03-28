@@ -333,7 +333,7 @@ namespace Phytel.API.DataDomain.Program
                             Phytel.API.DataDomain.Program.ProgramRepositoryFactory<PutUpdateResponseResponse>
                             .GetPatientProgramStepResponseRepository(r.ContractNumber, r.Context, r.UserId);
 
-            MEPatientProgramResponse meres = new MEPatientProgramResponse
+            MEPatientProgramResponse meres = new MEPatientProgramResponse(r.UserId)
             {
                 Id = ObjectId.Parse(r.ResponseDetail.Id),
                 NextStepId = ObjectId.Parse(r.ResponseDetail.NextStepId),

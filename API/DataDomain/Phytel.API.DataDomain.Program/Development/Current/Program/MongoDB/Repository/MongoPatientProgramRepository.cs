@@ -282,7 +282,7 @@ namespace Phytel.API.DataDomain.Program
                 using (ProgramMongoContext ctx = new ProgramMongoContext(_dbName))
                 {
                     var q = MB.Query<MEPatientProgram>.EQ(b => b.Id, ObjectId.Parse(p.ProgramId));
-                    List<Module> mods = DTOUtils.CloneAppDomainModules(pg.Modules);
+                    List<Module> mods = DTOUtils.CloneAppDomainModules(pg.Modules, this.UserId);
 
                     var uv = new List<MB.UpdateBuilder>();
                     uv.Add(MB.Update.Set(MEPatientProgram.CompletedProperty, pg.Completed));

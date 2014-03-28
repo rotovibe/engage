@@ -203,7 +203,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
                     responseList = stepResponses.Item2.Cast<MEResponse>().ToList();
                     responseList.ForEach(rs =>
                     {
-                        ppresponseList.Add(new MEPatientProgramResponse
+                        ppresponseList.Add(new MEPatientProgramResponse(userId)
                         {
                             Id = rs.Id,
                             Value = rs.Value,
@@ -576,7 +576,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             }
         }
 
-        internal static List<Action> GetActionElements(List<Program.DTO.ActionsDetail> list)
+        internal static List<Action> GetActionElements(List<Program.DTO.ActionsDetail> list, string userId)
         {
             try
             {
@@ -592,7 +592,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
                         {
                             Id = ObjectId.Parse(a.Id),
                             ModuleId = ObjectId.Parse(a.ModuleId),
-                            Steps = GetStepsInfo(a.Steps),
+                            Steps = GetStepsInfo(a.Steps, userId),
                             AssignedBy = a.AssignBy,
                             AssignedOn = a.AssignDate,
                             Completed = a.Completed,
@@ -620,7 +620,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             }
         }
 
-        private static List<Step> GetStepsInfo(List<Program.DTO.StepsDetail> list)
+        private static List<Step> GetStepsInfo(List<Program.DTO.StepsDetail> list, string userId)
         {
             try
             {
@@ -660,7 +660,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
                             Text = st.Text,
                             Title = st.Title,
                             Spawn = GetSpawnElements(st.SpawnElement),
-                            Responses = GetResponses(st.Responses)
+                            Responses = GetResponses(st.Responses, userId)
                         });
                     });
                 }
@@ -689,7 +689,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             }
         }
 
-        private static List<MEPatientProgramResponse> GetResponses(List<Program.DTO.ResponseDetail> list)
+        private static List<MEPatientProgramResponse> GetResponses(List<Program.DTO.ResponseDetail> list, string userId)
         {
             try
             {
@@ -701,7 +701,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
                     list.ForEach(r =>
                         {
                             rs.Add(
-                                new MEPatientProgramResponse
+                                new MEPatientProgramResponse(userId)
                                 {
                                     StepId = ObjectId.Parse(r.StepId),
                                     NextStepId = ObjectId.Parse(r.NextStepId),
@@ -799,7 +799,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             }
         }
 
-        public static List<Module> CloneAppDomainModules(List<ModuleDetail> prg)
+        public static List<Module> CloneAppDomainModules(List<ModuleDetail> prg, string userId)
         {
             try
             {
@@ -817,7 +817,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
                             Next = ParseObjectId(m.Next),
                             Previous = ParseObjectId(m.Previous),
                             Spawn = DTOUtils.GetSpawnElements(m.SpawnElement),
-                            Actions = DTOUtils.GetActionElements(m.Actions),
+                            Actions = DTOUtils.GetActionElements(m.Actions, userId),
                             AssignedBy = m.AssignBy,
                             AssignedOn = m.AssignDate,
                             Completed = m.Completed,
