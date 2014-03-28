@@ -38,8 +38,10 @@ namespace ProgramBuilder
 
         public GetAllModulesResponse GetAllModulesRequestServiceCall()
         {
+            const string _userid = "5325db73d6a4850adc047035"; //this is a dummy id used to access the collection; not used for security, just validity
+            
             Uri modulesUri = new Uri(string.Format("{0}/{1}/{2}/{3}/Module",
-                                                    ConfigurationManager.AppSettings["urlhost"].ToString(),
+                                                    ConfigurationManager.AppSettings["urlhost"].ToString() + "/module",
                                                     context,
                                                     version,
                                                     contractNumber));
@@ -50,7 +52,7 @@ namespace ProgramBuilder
                 Version = version,
                 Context = context,
                 ContractNumber = contractNumber,
-                UserId = "InHealthAdmin"
+                UserId = _userid
             };
 
             DataContractJsonSerializer modulesJsonSer = new DataContractJsonSerializer(typeof(GetAllModulesRequest));
@@ -99,7 +101,12 @@ namespace ProgramBuilder
 
         private void ModuleListForm_Load(object sender, EventArgs e)
         {
+            List<Module> list = GetAllModulesRequestServiceCall().Modules;
 
+            foreach (Module module in list)
+            {
+                moduleListView.Items.Add(new ListViewItem(module.Name, module.Id));
+            }
         }
 
         private void addModuleButton_Click(object sender, EventArgs e)

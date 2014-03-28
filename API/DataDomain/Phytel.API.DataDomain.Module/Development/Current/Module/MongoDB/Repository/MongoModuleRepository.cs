@@ -84,6 +84,35 @@ namespace Phytel.API.DataDomain.Module
         {
             throw new NotImplementedException();
         }
+        
+        public GetAllModulesResponse SelectAll(double versionNumber, Common.Status status)
+        {
+            GetAllModulesResponse response = new GetAllModulesResponse()
+            {
+                Version = versionNumber
+            };
+            
+            List<DTO.Module> list = new List<DTO.Module>();
+           
+            using (ModuleMongoContext ctx = new ModuleMongoContext(_dbName))
+            {
+                list = (from m in ctx.Modules
+                        //where m.Status == status
+                        //&& m.Version == versionNumber
+                        select new DTO.Module
+                        {
+                            Id = m.Id.ToString(),
+                            Name = m.Name,
+                            Description = m.Description,
+                            Objectives = m.Objectives.Select(i => i.ID).ToList(),
+                            Status = m.Status,
+                            Version = m.Version
+                        }).ToList();
+            }
+            response.Modules = list;
+
+            return response;
+        }
 
         public object Update(object entity)
         {

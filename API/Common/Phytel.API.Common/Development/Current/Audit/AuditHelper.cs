@@ -207,6 +207,14 @@ namespace Phytel.API.DataAudit
             return returnTypeName.ToString().Replace("Request", "").Replace("Response", "");
         }
 
+        public static void LogDataAudit(string userId, string collectionName, List<string> entityIds, DataAuditType auditType, string contractNumber)
+        {
+            foreach (string entityId in entityIds)
+            {
+                AuditHelper.LogDataAudit(userId, collectionName, entityId, "_id", auditType, contractNumber); 
+            }
+        }
+
         public static void LogDataAudit(string userId, string collectionName, string entityId, DataAuditType auditType, string contractNumber)
         {
             AuditHelper.LogDataAudit(userId, collectionName, entityId, "_id", auditType, contractNumber);
