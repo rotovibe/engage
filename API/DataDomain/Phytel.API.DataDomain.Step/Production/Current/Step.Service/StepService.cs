@@ -10,15 +10,11 @@ namespace Phytel.API.DataDomain.Step.Service
 {
     public class StepService : ServiceStack.ServiceInterface.Service
     {
-        private const string _phytelUserIDToken = "x-Phytel-UserID";
-
         public GetYesNoStepDataResponse Get(GetYesNoStepDataRequest request)
         {
             GetYesNoStepDataResponse response = new GetYesNoStepDataResponse();
             try
             {
-                //Get the UserId from the Header and update the request object
-                request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
                 if (string.IsNullOrEmpty(request.UserId))
                     throw new UnauthorizedAccessException("StepDD:Get()::Unauthorized Access");
 
@@ -40,8 +36,6 @@ namespace Phytel.API.DataDomain.Step.Service
             GetTextStepDataResponse response = new GetTextStepDataResponse();
             try
             {
-                //Get the UserId from the Header and update the request object
-                request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
                 if (string.IsNullOrEmpty(request.UserId))
                     throw new UnauthorizedAccessException("StepDD:Get()::Unauthorized Access");
 
