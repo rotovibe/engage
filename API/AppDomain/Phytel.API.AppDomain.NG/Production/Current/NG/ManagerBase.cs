@@ -59,9 +59,7 @@ namespace Phytel.API.AppDomain.NG
 #if(DEBUG)
                 securityToken = "Engineer";
 #else
-                securityToken = string.Format("{0}-{1}",
-                    HttpContext.Current.Request.UserAgent,
-                    HttpContext.Current.Request.Params["REMOTE_ADDR"]);
+                securityToken = HttpContext.Current.Request.UserAgent;
 #endif
             }
             catch
