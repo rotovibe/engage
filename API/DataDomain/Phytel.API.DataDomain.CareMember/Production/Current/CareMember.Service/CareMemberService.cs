@@ -10,15 +10,11 @@ namespace Phytel.API.DataDomain.CareMember.Service
 {
     public class CareMemberService : ServiceStack.ServiceInterface.Service
     {
-        private const string _phytelUserIDToken = "x-Phytel-UserID";
-
         public PutCareMemberDataResponse Put(PutCareMemberDataRequest request)
         {
             PutCareMemberDataResponse response = new PutCareMemberDataResponse();
             try
             {
-                //Get the UserId from the Header and update the request object
-                request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
                 if (string.IsNullOrEmpty(request.UserId))
                     throw new UnauthorizedAccessException("CareMemberDD:Put()::Unauthorized Access");
 
@@ -40,8 +36,6 @@ namespace Phytel.API.DataDomain.CareMember.Service
             PutUpdateCareMemberDataResponse response = new PutUpdateCareMemberDataResponse();
             try
             {
-                //Get the UserId from the Header and update the request object
-                request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
                 if (string.IsNullOrEmpty(request.UserId))
                     throw new UnauthorizedAccessException("CareMemberDD:Put()::Unauthorized Access");
 
@@ -63,8 +57,6 @@ namespace Phytel.API.DataDomain.CareMember.Service
             GetCareMemberDataResponse response = new GetCareMemberDataResponse();
             try
             {
-                //Get the UserId from the Header and update the request object
-                request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
                 if (string.IsNullOrEmpty(request.UserId))
                     throw new UnauthorizedAccessException("CareMemberDD:Get()::Unauthorized Access");
 
@@ -86,8 +78,6 @@ namespace Phytel.API.DataDomain.CareMember.Service
             GetAllCareMembersDataResponse response = new GetAllCareMembersDataResponse();
             try
             {
-                //Get the UserId from the Header and update the request object
-                request.UserId = HttpContext.Current.Request.Headers.Get(_phytelUserIDToken);
                 if (string.IsNullOrEmpty(request.UserId))
                     throw new UnauthorizedAccessException("CareMemberDD:Get()::Unauthorized Access");
 
