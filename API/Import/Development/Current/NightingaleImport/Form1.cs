@@ -63,7 +63,7 @@ namespace NightingaleImport
         static int colAdd2Pref = 36;
         static int colAdd2Type = 37;
         static int colCMan = 38;
-        
+
         private List<IdNamePair> modesLookUp = new List<IdNamePair>();
         private List<CommTypeData> typesLookUp = new List<CommTypeData>();
         private List<StateData> statesLookUp = new List<StateData>();
@@ -74,7 +74,7 @@ namespace NightingaleImport
         private double version = double.Parse(ConfigurationManager.AppSettings.Get("version"));
         private string context = ConfigurationManager.AppSettings.Get("context");
 
-        string _headerUserId = string.Empty;
+        string _headerUserId = "000000000000000000000000";
 
         public Form1()
         {
@@ -538,14 +538,13 @@ namespace NightingaleImport
         private void LoadLookUps()
         {
             //modes
-            string modesUrl = string.Format("{0}/LookUp/{1}/{2}/{3}/commmodes",
+            Uri modesUri = new Uri(string.Format("{0}/LookUp/{1}/{2}/{3}/commmodes?UserId={4}",
                                                     txtURL.Text,
                                                     context,
                                                     version,
-                                                    txtContract.Text);
-
-            Uri modesUri = null;
-            HttpClient modesClient = GetHttpClient(modesUrl, out modesUri);
+                                                    txtContract.Text,
+                                                    _headerUserId));
+            HttpClient modesClient = GetHttpClient(modesUri);
 
             GetAllCommModesDataRequest modesRequest = new GetAllCommModesDataRequest
             {
@@ -578,14 +577,13 @@ namespace NightingaleImport
             modesLookUp = responseModes.CommModes;
 
             //types
-            string typesUrl = string.Format("{0}/LookUp/{1}/{2}/{3}/commtypes",
+            Uri typesUri = new Uri(string.Format("{0}/LookUp/{1}/{2}/{3}/commtypes?UserId={4}",
                                                     txtURL.Text,
                                                     context,
                                                     version,
-                                                    txtContract.Text);
-
-            Uri typesUri = null;
-            HttpClient typesClient = GetHttpClient(typesUrl, out typesUri);
+                                                    txtContract.Text,
+                                                    _headerUserId));
+            HttpClient typesClient = GetHttpClient(typesUri);
 
             GetAllCommTypesDataRequest typesRequest = new GetAllCommTypesDataRequest
             {
@@ -618,14 +616,13 @@ namespace NightingaleImport
             typesLookUp = responseTypes.CommTypes;
 
             //states
-            string statesURL = (string.Format("{0}/LookUp/{1}/{2}/{3}/states",
+            Uri statesUri = new Uri(string.Format("{0}/LookUp/{1}/{2}/{3}/states?UserId={4}",
                                                     txtURL.Text,
                                                     context,
                                                     version,
-                                                    txtContract.Text));
-
-            Uri statesUri = null;
-            HttpClient statesClient = GetHttpClient(statesURL, out statesUri);
+                                                    txtContract.Text,
+                                                    _headerUserId));
+            HttpClient statesClient = GetHttpClient(statesUri);
 
             GetAllStatesDataRequest statesRequest = new GetAllStatesDataRequest
             {
@@ -658,14 +655,13 @@ namespace NightingaleImport
             statesLookUp = responseStates.States;
 
             //timezones
-            string zonesURL = (string.Format("{0}/LookUp/{1}/{2}/{3}/timeZones",
+            Uri zonesUri = new Uri(string.Format("{0}/LookUp/{1}/{2}/{3}/timeZones?UserId={4}",
                                                     txtURL.Text,
                                                     context,
                                                     version,
-                                                    txtContract.Text));
-
-            Uri zonesUri = null;
-            HttpClient zonesClient = GetHttpClient(zonesURL, out zonesUri);
+                                                    txtContract.Text,
+                                                    _headerUserId));
+            HttpClient zonesClient = GetHttpClient(zonesUri);
 
             GetAllTimeZonesDataRequest zonesRequest = new GetAllTimeZonesDataRequest
             {
@@ -698,14 +694,13 @@ namespace NightingaleImport
             zonesLookUp = responseZones.TimeZones;
 
             //default timezone
-            string zoneURL = (string.Format("{0}/LookUp/{1}/{2}/{3}/TimeZone/Default",
+            Uri zoneUri = new Uri(string.Format("{0}/LookUp/{1}/{2}/{3}/TimeZone/Default?UserId={4}",
                                                     txtURL.Text,
                                                     context,
                                                     version,
-                                                    txtContract.Text));
-
-            Uri zoneUri = null;
-            HttpClient zoneClient = GetHttpClient(zoneURL, out zoneUri);
+                                                    txtContract.Text,
+                                                    _headerUserId));
+            HttpClient zoneClient = GetHttpClient(zoneUri);
 
             GetTimeZoneDataRequest zoneRequest = new GetTimeZoneDataRequest
             {
@@ -739,13 +734,13 @@ namespace NightingaleImport
 
             //Care Member
             ///{Context}/{Version}/{txtContract.Text}/Type/{Name}
-            string cmURL = (string.Format("{0}/LookUp/{1}/{2}/{3}/Type/CareMemberType",
+            Uri careMemberUri = new Uri(string.Format("{0}/LookUp/{1}/{2}/{3}/Type/CareMemberType?UserId={4}",
                                                     txtURL.Text,
                                                     context,
                                                     version,
-                                                    txtContract.Text));
-            Uri careMemberUri = null;
-            HttpClient careMemberClient = GetHttpClient(cmURL, out careMemberUri);
+                                                    txtContract.Text,
+                                                    _headerUserId));
+            HttpClient careMemberClient = GetHttpClient(careMemberUri);
 
             GetLookUpsDataRequest careMemberRequest = new GetLookUpsDataRequest
             {
@@ -901,14 +896,14 @@ namespace NightingaleImport
         private PutPatientDataResponse putPatientServiceCall(PutPatientDataRequest putPatientRequest)
         {
             //Patient
-            string theURL = (string.Format("{0}/Patient/{1}/{2}/{3}/patient",
+            Uri theUri = new Uri(string.Format("{0}/Patient/{1}/{2}/{3}/patient?UserId={4}",
                                                  txtURL.Text,
                                                  context,
                                                  version,
-                                                 txtContract.Text));
+                                                 txtContract.Text,
+                                                 _headerUserId));
 
-            Uri theUri = null;
-            HttpClient client = GetHttpClient(theURL, out theUri);
+            HttpClient client = GetHttpClient(theUri);
 
             DataContractJsonSerializer jsonSer = new DataContractJsonSerializer(typeof(PutPatientDataRequest));
 
@@ -942,13 +937,13 @@ namespace NightingaleImport
         private PutPatientSystemDataResponse putPatientSystemServiceCall(PutPatientSystemDataRequest putPatSysRequest)
         {
             //PatientSystem
-            string theURL = (string.Format("{0}/PatientSystem/{1}/{2}/{3}/patientsystem",
+            Uri theUriPS = new Uri(string.Format("{0}/PatientSystem/{1}/{2}/{3}/patientsystem?UserId={4}",
                                                    txtURL.Text,
                                                    context,
                                                    version,
-                                                   txtContract.Text));
-            Uri theUriPS = null;
-            HttpClient clientPS = GetHttpClient(theURL, out theUriPS);
+                                                   txtContract.Text,
+                                                   _headerUserId));
+            HttpClient clientPS = GetHttpClient(theUriPS);
 
             DataContractJsonSerializer jsonSerPS = new DataContractJsonSerializer(typeof(PutPatientSystemDataRequest));
 
@@ -981,14 +976,14 @@ namespace NightingaleImport
 
         private PutUpdatePatientDataResponse putUpdatePatientServiceCall(PutUpdatePatientDataRequest putUpdatePatient, string patientId)
         {
-            string theURL = (string.Format("{0}/Patient/{1}/{2}/{3}/patient/{4}",
+            Uri updateUri = new Uri(string.Format("{0}/Patient/{1}/{2}/{3}/patient/{4}?UserId={5}",
                                                         txtURL.Text,
                                                         context,
                                                         version,
                                                         txtContract.Text,
-                                                        patientId));
-            Uri updateUri = null;
-            HttpClient updateClient = GetHttpClient(theURL, out updateUri);
+                                                        patientId,
+                                                        _headerUserId));
+            HttpClient updateClient = GetHttpClient(updateUri);
 
             PutUpdatePatientDataResponse updateResponsePatient = null;
 
@@ -1020,17 +1015,17 @@ namespace NightingaleImport
 
             return updateResponsePatient;
         }
-        
+
         private PutContactDataResponse putContactServiceCall(PutContactDataRequest putContactRequest, string patientId)
         {
-            string theURL = (string.Format("{0}/Contact/{1}/{2}/{3}/patient/contact/{4}",
+            Uri contactUri = new Uri(string.Format("{0}/Contact/{1}/{2}/{3}/patient/contact/{4}?UserId={5}",
                                             txtURL.Text,
                                             context,
                                             version,
                                             txtContract.Text,
-                                            patientId));
-            Uri contactUri = null;
-            HttpClient contactClient = GetHttpClient(theURL, out contactUri);
+                                            patientId,
+                                            _headerUserId));
+            HttpClient contactClient = GetHttpClient(contactUri);
 
             DataContractJsonSerializer contactJsonSer = new DataContractJsonSerializer(typeof(PutContactDataRequest));
             MemoryStream contactMs = new MemoryStream();
@@ -1060,15 +1055,15 @@ namespace NightingaleImport
         private PutCareMemberDataResponse putCareMemberServiceCall(PutCareMemberDataRequest putCareMemberRequest, string patientId)
         {
             //Patient
-            string theURL = (string.Format("{0}/CareMember/{1}/{2}/{3}/Patient/{4}/CareMember/Insert",
+            Uri careMemberUri = new Uri(string.Format("{0}/CareMember/{1}/{2}/{3}/Patient/{4}/CareMember/Insert?UserId={5}",
                                                  txtURL.Text,
                                                  context,
                                                  version,
                                                  txtContract.Text,
-                                                 patientId));
-            Uri careMemberUri = null;
-            HttpClient client = GetHttpClient(theURL, out careMemberUri);
-            
+                                                 patientId,
+                                                 _headerUserId));
+            HttpClient client = GetHttpClient(careMemberUri);
+
             DataContractJsonSerializer jsonSer = new DataContractJsonSerializer(typeof(PutCareMemberDataRequest));
 
             // use the serializer to write the object to a MemoryStream 
@@ -1100,14 +1095,14 @@ namespace NightingaleImport
 
         private GetContactByUserIdDataResponse getContactByUserIdServiceCall(string userId)
         {
-            string theURL = (string.Format("{0}/Contact/{1}/{2}/{3}/Contact/User/{4}",
+            Uri getContactUri = new Uri(string.Format("{0}/Contact/{1}/{2}/{3}/Contact/User/{4}?UserId={5}",
                                                     txtURL.Text,
                                                     context,
                                                     version,
                                                     txtContract.Text,
-                                                    userId));
-            Uri getContactUri = null;
-            HttpClient getContactClient = GetHttpClient(theURL, out getContactUri);
+                                                    userId,
+                                                    _headerUserId));
+            HttpClient getContactClient = GetHttpClient(getContactUri);
 
             GetContactByUserIdDataRequest getContactRequest = new GetContactByUserIdDataRequest
             {
@@ -1171,11 +1166,11 @@ namespace NightingaleImport
                 }
 
                 PutUpdateCohortPatientViewRequest request = new PutUpdateCohortPatientViewRequest
-                    {
-                        CohortPatientView = cpvd,
-                        ContractNumber = txtContract.Text,
-                        PatientID = patientId
-                    };
+                {
+                    CohortPatientView = cpvd,
+                    ContractNumber = txtContract.Text,
+                    PatientID = patientId
+                };
 
                 PutUpdateCohortPatientViewResponse response = putCohortPatientViewServiceCall(request, patientId);
                 if (string.IsNullOrEmpty(response.CohortPatientViewId))
@@ -1185,15 +1180,15 @@ namespace NightingaleImport
 
         private GetCohortPatientViewResponse getCohortPatientViewServiceCall(string patientId)
         {
-            string theURL = (string.Format("{0}/Patient/{1}/{2}/{3}/patient/{4}/cohortpatientview/",
+            Uri getCohortUri = new Uri(string.Format("{0}/Patient/{1}/{2}/{3}/patient/{4}/cohortpatientview?UserId={5}",
                                                         txtURL.Text,
                                                         context,
                                                         version,
                                                         txtContract.Text,
-                                                        patientId));
+                                                        patientId,
+                                                        _headerUserId));
 
-            Uri getCohortUri = null;
-            HttpClient getCohortClient = GetHttpClient(theURL, out getCohortUri);
+            HttpClient getCohortClient = GetHttpClient(getCohortUri);
 
             var getCohortResponse = getCohortClient.GetStringAsync(getCohortUri);
             var getCohortResponseContent = getCohortResponse.Result;
@@ -1212,14 +1207,14 @@ namespace NightingaleImport
 
         private PutUpdateCohortPatientViewResponse putCohortPatientViewServiceCall(PutUpdateCohortPatientViewRequest request, string patientId)
         {
-            string theURL = (string.Format("{0}/Patient/{1}/{2}/{3}/patient/{4}/cohortpatientview/update",
+            Uri cohortPatientUri = new Uri(string.Format("{0}/Patient/{1}/{2}/{3}/patient/{4}/cohortpatientview/update?UserId={5}",
                                                  txtURL.Text,
                                                  context,
                                                  version,
                                                  txtContract.Text,
-                                                 patientId));
-            Uri cohortPatientUri = null;
-            HttpClient client = GetHttpClient(theURL, out cohortPatientUri);
+                                                 patientId,
+                                                 _headerUserId));
+            HttpClient client = GetHttpClient(cohortPatientUri);
 
             DataContractJsonSerializer jsonSer = new DataContractJsonSerializer(typeof(PutUpdateCohortPatientViewRequest));
 
@@ -1249,19 +1244,17 @@ namespace NightingaleImport
             return responseCohortPatientView;
         }
 
-        private HttpClient GetHttpClient(string url, out Uri newURI)
+        private HttpClient GetHttpClient(Uri uri)
         {
             HttpClient client = new HttpClient();
 
             string userId = (_headerUserId != string.Empty ? _headerUserId : "000000000000000000000000");
 
-            string newURL = url;
-            if (url.Contains("?"))
-                newURL = string.Format("{0}&UserId={1}", url, userId);
-            else
-                newURL = string.Format("{0}?UserId={1}", url, userId);
+            client.DefaultRequestHeaders.Host = uri.Host;
+            client.DefaultRequestHeaders.Add("x-Phytel-UserID", userId);
 
-            newURI = new Uri(newURL);
+            // Add an Accept header for JSON format.
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
             return client;
         }
