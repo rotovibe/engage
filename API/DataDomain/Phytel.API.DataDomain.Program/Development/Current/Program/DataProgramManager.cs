@@ -18,6 +18,8 @@ namespace Phytel.API.DataDomain.Program
 {
     public static class ProgramDataManager
     {
+        private static List<ObjectId> sIL = new List<ObjectId>();
+
         public static GetProgramResponse GetProgramByID(GetProgramRequest request)
         {
             try
@@ -59,12 +61,58 @@ namespace Phytel.API.DataDomain.Program
             }
         }
 
+        //public static PutProgramToPatientResponse PutPatientToProgram(PutProgramToPatientRequest request)
+        //{
+        //    try
+        //    {
+        //        PutProgramToPatientResponse response = new PutProgramToPatientResponse();
+
+        //        if (!IsValidPatientId(request))
+        //        {
+        //            return FormatExceptionResponse(response, "Patient does not exist or has an invalid id.", "500");
+        //        }
+
+        //        if (!IsValidContractProgramId(request))
+        //        {
+        //            return FormatExceptionResponse(response, "ContractProgram does not exist or has an invalid identifier.", "500");
+        //        }
+
+        //        if (!IsContractProgramAssignable(request))
+        //        {
+        //            return FormatExceptionResponse(response, "ContractProgram is not currently active.", "500");
+        //        }
+
+
+        //        IProgramRepository<PutProgramToPatientResponse> patProgRepo =
+        //            Phytel.API.DataDomain.Program.ProgramRepositoryFactory<PutProgramToPatientResponse>
+        //            .GetPatientProgramRepository(request.ContractNumber, request.Context, request.UserId);
+
+        //        object resp = patProgRepo.Insert((object)request);
+
+        //        response = (PutProgramToPatientResponse)resp;
+
+        //        if (response.program != null)
+        //        {
+        //            // initialize attributes
+        //            DTOUtils.InitializeProgramAttributes(request, response);
+        //        }
+
+        //        return response;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw new Exception("DD:DataProgramManager:PutPatientToProgram()::" + ex.Message, ex.InnerException);
+        //    }
+        //}
+
         public static PutProgramToPatientResponse PutPatientToProgram(PutProgramToPatientRequest request)
         {
             try
             {
                 PutProgramToPatientResponse response = new PutProgramToPatientResponse();
+                response.Outcome = new Outcome();
 
+                #region validation calls
                 if (!IsValidPatientId(request))
                 {
                     return FormatExceptionResponse(response, "Patient does not exist or has an invalid id.", "500");
@@ -79,19 +127,37 @@ namespace Phytel.API.DataDomain.Program
                 {
                     return FormatExceptionResponse(response, "ContractProgram is not currently active.", "500");
                 }
+                #endregion
 
-                IProgramRepository<PutProgramToPatientResponse> patProgRepo =
-                    Phytel.API.DataDomain.Program.ProgramRepositoryFactory<PutProgramToPatientResponse>
-                    .GetPatientProgramRepository(request.ContractNumber, request.Context, request.UserId);
+                /**********************************/
+                List<MEPatientProgram> pp = DTOUtils.FindExistingpatientProgram(request);
 
-                object resp = patProgRepo.Insert((object)request);
-
-                response = (PutProgramToPatientResponse)resp;
-
-                if (response.program != null)
+                if (!DTOUtils.CanInsertPatientProgram(pp))
                 {
-                    // initialize attributes
-                    DTOUtils.InitializeProgramAttributes(request, response);
+                    response.Outcome.Result = 0;
+                    response.Outcome.Reason = pp[0].Name + " is already assigned or reassignment is not allowed";
+                }
+                else
+                {                    
+                    MEProgram cp = DTOUtils.GetProgramForDeepCopy(request);
+
+                    List<ObjectId> stepIdList = new List<ObjectId>();
+                    List<MEResponse> responseList = DTOUtils.GetProgramResponseslist(stepIdList, cp,request);
+                    DTOUtils.HydrateResponsesInProgram(cp, responseList, request.UserId);
+                    MEPatientProgram nmePP = DTOUtils.CreateInitialMEPatientProgram(request, cp, stepIdList);
+                    List<MEPatientProgramResponse> pprs = DTOUtils.InitializePatientProgramAssignment(request, nmePP);
+
+                    ProgramInfo pi = DTOUtils.SaveNewPatientProgram(request, nmePP);
+                    
+                    if (pi != null)
+                    {
+                        response.program = pi;
+                        DTOUtils.SavePatientProgramResponses(pprs, request);
+                        DTOUtils.InitializeProgramAttributes(request, response);
+                    }
+
+                    response.Outcome.Result = 1;
+                    response.Outcome.Reason = "Successfully assigned this program for the patient";
                 }
 
                 return response;
@@ -101,8 +167,6 @@ namespace Phytel.API.DataDomain.Program
                 throw new Exception("DD:DataProgramManager:PutPatientToProgram()::" + ex.Message, ex.InnerException);
             }
         }
-
-
 
         public static PutProgramActionProcessingResponse PutProgramActionUpdate(PutProgramActionProcessingRequest request)
         {
@@ -230,6 +294,7 @@ namespace Phytel.API.DataDomain.Program
                     .GetPatientProgramRepository(request.ContractNumber, request.Context, request.UserId);
 
                 MEPatientProgram mepp = repo.FindByID(request.ProgramId) as MEPatientProgram;
+
                 response.Program = new ProgramDetail
                 {
                     Id = mepp.Id.ToString(),
@@ -259,6 +324,8 @@ namespace Phytel.API.DataDomain.Program
                     SpawnElement = DTOUtils.GetSpawnElement(mepp),
                     Modules = DTOUtils.GetModules(mepp.Modules, request.ContractNumber, request.UserId)
                 };
+
+                // load responses
 
                 return response;
             }

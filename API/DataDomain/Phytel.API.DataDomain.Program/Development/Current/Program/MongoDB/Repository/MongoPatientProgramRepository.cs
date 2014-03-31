@@ -51,99 +51,42 @@ namespace Phytel.API.DataDomain.Program
 
         public object Insert(object newEntity)
         {
-            PutProgramToPatientRequest request = (PutProgramToPatientRequest)newEntity;
-            PutProgramToPatientResponse result = new PutProgramToPatientResponse();
-            result.Outcome = new Outcome();
-
             try
             {
+                MEPatientProgram nmePP = (MEPatientProgram)newEntity;
+                ProgramInfo pi = null;
                 using (ProgramMongoContext ctx = new ProgramMongoContext(_dbName))
                 {
-                    var findQ = MB.Query.And(
-                        MB.Query<MEPatientProgram>.EQ(b => b.PatientId, ObjectId.Parse(request.PatientId)),
-                        MB.Query<MEPatientProgram>.EQ(b => b.ContractProgramId, ObjectId.Parse(request.ContractProgramId)),
-                        MB.Query.In(MEPatientProgram.ProgramStateProperty, new List<BsonValue> { BsonValue.Create(0), BsonValue.Create(1) }));
+                    ctx.PatientPrograms.Collection.Insert(nmePP);
 
-                    List<MEPatientProgram> pp = ctx.PatientPrograms.Collection.Find(findQ).ToList();
+                    // update programid in modules
+                    var q = MB.Query<MEPatientProgram>.EQ(b => b.Id, nmePP.Id);
+                    nmePP.Modules.ForEach(s => s.ProgramId = nmePP.Id);
+                    ctx.PatientPrograms.Collection.Update(q, MB.Update.SetWrapped<List<Module>>(MEPatientProgram.ModulesProperty, nmePP.Modules));
 
-                    // need to refactor this
-                    if (!CanInsertPatientProgram(pp))
+                    // hydrate response object
+                    pi = new ProgramInfo
                     {
-                        result.Outcome.Result = 0;
-                        result.Outcome.Reason = pp[0].Name + " is already assigned or reassignment is not allowed";
-                    }
-                    else
-                    {
-                        var findcp = MB.Query<MEProgram>.EQ(b => b.Id, ObjectId.Parse(request.ContractProgramId));
-                        MEProgram cp = ctx.Programs.Collection.Find(findcp).FirstOrDefault();
+                        Id = nmePP.Id.ToString(),
+                        Name = nmePP.Name,
+                        ShortName = nmePP.ShortName,
+                        Status = (int)nmePP.Status,
+                        PatientId = nmePP.PatientId.ToString(),
+                        ProgramState = (int)nmePP.ProgramState,
+                        ElementState = (int)nmePP.State
+                    };
 
-                        MEPatientProgram patientProgDoc = DTOUtils.CreateInitialMEPatientProgram(request, cp);
-
-                        // update to new ids and their references
-                        DTOUtils.RecurseAndReplaceIds(patientProgDoc.Modules);
-                        DTOUtils.RecurseAndSaveResponseObjects(patientProgDoc, request.ContractNumber, request.UserId);
-                        ctx.PatientPrograms.Collection.Insert(patientProgDoc);
-
-                        // update programid in modules
-                        var q = MB.Query<MEPatientProgram>.EQ(b => b.Id, patientProgDoc.Id);
-                        patientProgDoc.Modules.ForEach(s => s.ProgramId = patientProgDoc.Id);
-                        ctx.PatientPrograms.Collection.Update(q, MB.Update.SetWrapped<List<Module>>(MEPatientProgram.ModulesProperty, patientProgDoc.Modules));
-
-                        AuditHelper.LogDataAudit(this.UserId, 
-                                                MongoCollectionName.PatientProgram.ToString(), 
-                                                patientProgDoc.Id.ToString(), 
-                                                Common.DataAuditType.Insert, 
-                                                request.ContractNumber);
-
-                        // hydrate response object
-                        result.program = new ProgramInfo
-                        {
-                            Id = patientProgDoc.Id.ToString(),
-                            Name = patientProgDoc.Name,
-                            ShortName = patientProgDoc.ShortName,
-                            Status = (int)patientProgDoc.Status,
-                            PatientId = patientProgDoc.PatientId.ToString(),
-                            ProgramState = (int)patientProgDoc.ProgramState,
-                            ElementState = (int)patientProgDoc.State
-                        };
-
-                        result.Outcome.Result = 1;
-                        result.Outcome.Reason = "Successfully assigned this program for the patient";
-                    }
+                    AuditHelper.LogDataAudit(this.UserId,
+                                            MongoCollectionName.PatientProgram.ToString(),
+                                            nmePP.Id.ToString(),
+                                            Common.DataAuditType.Insert,
+                                            _dbName);
                 }
-                return result;
+                return pi;
             }
             catch (Exception ex)
             {
                 throw new Exception("DD:PatientProgram:Insert()::" + ex.Message, ex.InnerException);
-            }
-        }
-
-        private bool CanInsertPatientProgram(List<MEPatientProgram> pp)
-        {
-            try
-            {
-                bool result = true;
-                if (pp == null)
-                {
-                    result = true;
-                }
-                else if (pp.Count >= 1)
-                {
-                    foreach (MEPatientProgram p in pp)
-                    {
-                        if (!p.State.Equals(ElementState.Removed) && !p.State.Equals(ElementState.Completed))
-                        {
-                            result = false;
-                            break;
-                        }
-                    }
-                }
-                return result;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("DD:PatientProgramRepository:CanInsertPatientProgram()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -160,6 +103,29 @@ namespace Phytel.API.DataDomain.Program
         public void DeleteAll(List<object> entities)
         {
             throw new NotImplementedException();
+        }
+
+        public object FindByEntityExistsID(string patientID, string progId)
+        {
+            try
+            {
+                List<MEPatientProgram> pp = null;
+
+                using (ProgramMongoContext ctx = new ProgramMongoContext(_dbName))
+                {
+                    var findQ = MB.Query.And(
+                        MB.Query<MEPatientProgram>.EQ(b => b.PatientId, ObjectId.Parse(patientID)),
+                        MB.Query<MEPatientProgram>.EQ(b => b.ContractProgramId, ObjectId.Parse(progId)),
+                        MB.Query.In(MEPatientProgram.ProgramStateProperty, new List<BsonValue> { BsonValue.Create(0), BsonValue.Create(1) }));
+
+                    pp = ctx.PatientPrograms.Collection.Find(findQ).ToList();
+                }
+                return pp;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("DD:PatientProgramRepository:FindByEntityExistsID()::" + ex.Message, ex.InnerException);
+            }
         }
 
         public object FindByID(string entityID)
@@ -347,5 +313,11 @@ namespace Phytel.API.DataDomain.Program
         }
 
         public string UserId { get; set; }
+        public string ContractNumber { get; set; }
+
+        public IEnumerable<object> Find(string Id)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -14,6 +14,7 @@ using Phytel.API.Common;
 using Phytel.API.Common.Data;
 using Phytel.API.DataAudit;
 using MongoDB.Bson.Serialization;
+using MongoDB.Driver.Builders;
 
 namespace Phytel.API.DataDomain.Program
 {
@@ -211,5 +212,66 @@ namespace Phytel.API.DataDomain.Program
         }
 
         public string UserId { get; set; }
+        public string ContractNumber { get; set; }
+
+        public IEnumerable<object> Find(string Id)
+        {
+            try
+            {
+                List<MEResponse> responses = null;
+                List<IMongoQuery> queries = new List<IMongoQuery>();
+                queries.Add(Query.EQ(MEResponse.StepIdProperty, ObjectId.Parse(Id)));
+                IMongoQuery mQuery = Query.And(queries);
+                using (ProgramMongoContext ctx = new ProgramMongoContext(_dbName))
+                {
+
+                    responses = ctx.Responses.Collection.Find(mQuery).ToList();
+
+                }
+                return responses;
+            }
+            catch (Exception) { throw; }
+        }
+
+        public static List<BsonValue> ConvertToBsonValueList(List<ObjectId> p)
+        {
+            List<BsonValue> bsonValues = null;
+
+            if (p.Count() > 0)
+            {
+                bsonValues = new List<BsonValue>();
+                foreach (ObjectId s in p)
+                {
+                    bsonValues.Add(BsonValue.Create(s));
+                }
+            }
+            return bsonValues;
+        }
+
+        public IEnumerable<object> Find(List<ObjectId> Ids)
+        {
+            try
+            {
+                List<MEResponse> responses = null;
+
+                IList<IMongoQuery> queries = new List<IMongoQuery>();
+
+                IMongoQuery mQuery = null;
+                List<BsonValue> bsonList = ConvertToBsonValueList(Ids);
+                if (bsonList != null)
+                {
+                    mQuery = Query.In(MEResponse.StepIdProperty, bsonList);
+                }
+    
+                using (ProgramMongoContext ctx = new ProgramMongoContext(_dbName))
+                {
+
+                    responses = ctx.Responses.Collection.Find(mQuery).ToList();
+
+                }
+                return responses;
+            }
+            catch (Exception) { throw; }
+        }
     }
 }

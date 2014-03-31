@@ -155,5 +155,12 @@ namespace Phytel.API.DataDomain.Program
         }
 
         public string UserId { get; set; }
+
+        public string ContractNumber { get; set; }
+
+        public IEnumerable<object> Find(string Id)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

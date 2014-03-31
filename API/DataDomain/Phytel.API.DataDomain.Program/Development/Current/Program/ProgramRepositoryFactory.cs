@@ -36,7 +36,6 @@ namespace Phytel.API.DataDomain.Program
             //We only have 1 repository at this time, just return it
             repo = new MongoContractProgramRepository<T>(dbName) as IProgramRepository<T>;
             repo.UserId = userId;
-
             return repo;
         }
 

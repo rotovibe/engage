@@ -31,7 +31,8 @@ namespace Phytel.API.DataDomain.Program.Services.Test
         public void Put_ContractProgramWithPatient()
         {
             string url = "http://localhost:8888/Program";
-            string patientID = "5325db50d6a4850adcbba8e6";
+            string token = "5335c5ded6a4850d341d9ac8";
+            string patientID = "5325db9cd6a4850adcbba9ca";
             string ContractProgramID = "5330920da38116ac180009d2";
             string userID = "5325c821072ef705080d3488";
             string contractNumber = "InHealth001";
@@ -42,6 +43,7 @@ namespace Phytel.API.DataDomain.Program.Services.Test
             st.Start();
 
             IRestClient client = new JsonServiceClient();
+            JsonServiceClient.HttpWebRequestFilter = x => x.Headers.Add(string.Format("Token: {0}", token));
             string urls = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Programs/?ContractProgramId={5}",
                                                     url,
                                                     "NG",

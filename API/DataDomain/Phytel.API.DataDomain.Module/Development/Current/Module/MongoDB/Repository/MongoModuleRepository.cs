@@ -125,5 +125,6 @@ namespace Phytel.API.DataDomain.Module
         }
 
         public string UserId { get; set; }
+
     }
 }
