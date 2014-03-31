@@ -106,6 +106,7 @@
     <Compile Include="PlanCOR\ActionPlanProcessorTests.cs" />
     <Compile Include="PlanCOR\ModulePlanProcessor_Tests.cs" />
     <Compile Include="PlanElementEndpointUtilTests.cs" />
+    <Compile Include="PlanElementUtil_Tests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
