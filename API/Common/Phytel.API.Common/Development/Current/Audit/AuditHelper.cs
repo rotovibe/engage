@@ -207,17 +207,48 @@ namespace Phytel.API.DataAudit
             return returnTypeName.ToString().Replace("Request", "").Replace("Response", "");
         }
 
-        public static void LogDataAudit(string userId, string collectionName, List<string> entityIds, DataAuditType auditType, string contractNumber)
-        {
-            foreach (string entityId in entityIds)
-            {
-                AuditHelper.LogDataAudit(userId, collectionName, entityId, "_id", auditType, contractNumber); 
-            }
-        }
-
         public static void LogDataAudit(string userId, string collectionName, string entityId, DataAuditType auditType, string contractNumber)
         {
             AuditHelper.LogDataAudit(userId, collectionName, entityId, "_id", auditType, contractNumber);
+        }
+
+        public static void LogDataAudit(string userId, string collectionName, List<string> entityIds, DataAuditType auditType, string contractNumber)
+        {
+            new Thread(() =>
+            {
+                foreach (string entityId in entityIds)
+                {
+                    AuditHelper.LogDataAuditNoThread(userId, collectionName, entityId, "_id", auditType, contractNumber);
+                }
+            }).Start();
+        }
+
+        public static void LogDataAuditNoThread(string userId, string collectionName, string entityId, string entityKeyField, DataAuditType auditType, string contractNumber)
+        {
+            //hand to a new thread here, and immediately return this thread to caller
+            try
+            {
+                //throw new SystemException("test before new thread starts");
+                try
+                {
+                    DataAuditAsynch(userId, collectionName, entityId, entityKeyField, auditType, contractNumber);
+                }
+                catch (Exception newthreadex)
+                {
+                    //if there's an error from the new thread, handle it here, so we don't black the main thread
+
+                    int procID = int.Parse(ConfigurationManager.AppSettings.Get("ASEProcessID"));
+                    ASE.Log.LogError(procID, newthreadex, LogErrorCode.Error, LogErrorSeverity.Medium);
+
+                }
+
+            }
+            catch (Exception ex)
+            {
+                //handle the exception here, to make sure we don't block the main thread?
+
+            }
+            return;
         }
 
         public static void LogDataAudit(string userId, string collectionName, string entityId, string entityKeyField, DataAuditType auditType, string contractNumber)
