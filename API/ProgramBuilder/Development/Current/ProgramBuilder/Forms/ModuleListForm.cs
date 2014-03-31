@@ -116,5 +116,10 @@ namespace ProgramBuilder
         {
             this.Close();
         }
+
+        public void addModule(Module newModule)
+        {
+            moduleListView.Items.Add(newModule.Name);
+        }
     }
 }

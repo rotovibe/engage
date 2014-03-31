@@ -73,7 +73,7 @@ namespace ProgramBuilder
                     ProgramTree.SelectedNode = node;
 
                      //Find the appropriate ContextMenu depending on the selected node.
-                    programContextMenuStrip.Show(ProgramTree, p);
+                    //programContextMenuStrip.Show(ProgramTree, p);
                     switch (Convert.ToString(node.Tag))
                     {
                         case "Program":

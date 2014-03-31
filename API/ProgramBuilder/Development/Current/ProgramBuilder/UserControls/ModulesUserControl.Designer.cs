@@ -42,7 +42,9 @@
             this.uonTextBox = new System.Windows.Forms.TextBox();
             this.stsNumericUpDwn = new System.Windows.Forms.NumericUpDown();
             this.stsLabel = new System.Windows.Forms.Label();
+            this.dataGridView1 = new System.Windows.Forms.DataGridView();
             ((System.ComponentModel.ISupportInitialize)(this.stsNumericUpDwn)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
             // 
             // cbyTextBox
@@ -174,11 +176,27 @@
             this.stsLabel.TabIndex = 72;
             this.stsLabel.Text = "Status:";
             // 
+            // dataGridView1
+            // 
+            this.dataGridView1.AllowUserToAddRows = false;
+            this.dataGridView1.AllowUserToDeleteRows = false;
+            this.dataGridView1.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridView1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dataGridView1.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnEnter;
+            this.dataGridView1.Location = new System.Drawing.Point(0, 0);
+            this.dataGridView1.MultiSelect = false;
+            this.dataGridView1.Name = "dataGridView1";
+            this.dataGridView1.Size = new System.Drawing.Size(458, 432);
+            this.dataGridView1.TabIndex = 74;
+            this.dataGridView1.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellContentClick);
+            // 
             // ModulesUserControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ControlLight;
+            this.Controls.Add(this.dataGridView1);
             this.Controls.Add(this.stsNumericUpDwn);
             this.Controls.Add(this.stsLabel);
             this.Controls.Add(this.uonTextBox);
@@ -197,6 +215,7 @@
             this.Size = new System.Drawing.Size(458, 432);
             this.Load += new System.EventHandler(this.ModulesUserControl_Load);
             ((System.ComponentModel.ISupportInitialize)(this.stsNumericUpDwn)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -218,5 +237,6 @@
         private System.Windows.Forms.TextBox uonTextBox;
         public System.Windows.Forms.NumericUpDown stsNumericUpDwn;
         public System.Windows.Forms.Label stsLabel;
+        private System.Windows.Forms.DataGridView dataGridView1;
     }
 }

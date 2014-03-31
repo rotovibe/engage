@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Phytel.API.DataDomain.Module.DTO;
+using MongoDB.Bson;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -20,6 +22,22 @@ namespace ProgramBuilder
         private void closeButton_Click(object sender, EventArgs e)
         {
             this.Close();
+        }
+
+        private void addButton_Click(object sender, EventArgs e)
+        {
+            Module newModule = new Module()
+            {
+                Id = ObjectId.GenerateNewId().ToString(),
+                Name = nmTextBox.Text,
+                Description = descTextBox.Text,
+                //Objectives =
+                //Status = stsNumericUpDwn.Value.ToString(),
+                //Version = 
+            };
+
+            ModuleListForm moduleList = new ModuleListForm();
+            moduleList.addModule(newModule);
         }
     }
 }
