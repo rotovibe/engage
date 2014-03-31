@@ -38,13 +38,14 @@ namespace ProgramBuilder
 
         public GetAllModulesResponse GetAllModulesRequestServiceCall()
         {
-            const string _userid = "5325db73d6a4850adc047035"; //this is a dummy id used to access the collection; not used for security, just validity
-            
-            Uri modulesUri = new Uri(string.Format("{0}/{1}/{2}/{3}/Module",
+            string _userid = "5325db73d6a4850adc047035"; //this is a dummy id used to access the collection; not used for security, just validity
+                        
+            Uri modulesUri = new Uri(string.Format("{0}/{1}/{2}/{3}/Module?userid={4}",
                                                     ConfigurationManager.AppSettings["urlhost"].ToString() + "/module",
                                                     context,
                                                     version,
-                                                    contractNumber));
+                                                    contractNumber,
+                                                    _userid));
             HttpClient modulesClient = GetHttpClient(modulesUri);
 
             GetAllModulesRequest modulesRequest = new GetAllModulesRequest
@@ -52,7 +53,7 @@ namespace ProgramBuilder
                 Version = version,
                 Context = context,
                 ContractNumber = contractNumber,
-                UserId = _userid
+                UserId = "5325db73d6a4850adc047035"
             };
 
             DataContractJsonSerializer modulesJsonSer = new DataContractJsonSerializer(typeof(GetAllModulesRequest));
@@ -81,13 +82,9 @@ namespace ProgramBuilder
         }
 
         private HttpClient GetHttpClient(Uri uri)
-        {
+        {            
             HttpClient client = new HttpClient();
-
-            string userId = (_headerUserId != string.Empty ? _headerUserId : "000000000000000000000000");
-
             client.DefaultRequestHeaders.Host = uri.Host;
-            client.DefaultRequestHeaders.Add("x-Phytel-UserID", userId);
 
             // Add an Accept header for JSON format.
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
@@ -101,9 +98,9 @@ namespace ProgramBuilder
 
         private void ModuleListForm_Load(object sender, EventArgs e)
         {
-            List<Module> list = GetAllModulesRequestServiceCall().Modules;
+            List<Module> list = GetAllModulesRequestServiceCall().Modules;            
 
-            foreach (Module module in list)
+            foreach (Module module in list.OrderBy(x => x.Name))
             {
                 moduleListView.Items.Add(new ListViewItem(module.Name, module.Id));
             }

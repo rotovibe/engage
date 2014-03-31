@@ -37,10 +37,12 @@
             // moduleListView
             // 
             this.moduleListView.Location = new System.Drawing.Point(12, 12);
+            this.moduleListView.MultiSelect = false;
             this.moduleListView.Name = "moduleListView";
             this.moduleListView.Size = new System.Drawing.Size(427, 364);
             this.moduleListView.TabIndex = 0;
             this.moduleListView.UseCompatibleStateImageBehavior = false;
+            this.moduleListView.View = System.Windows.Forms.View.List;
             this.moduleListView.SelectedIndexChanged += new System.EventHandler(this.listView1_SelectedIndexChanged);
             // 
             // addModuleButton
