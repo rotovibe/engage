@@ -412,7 +412,9 @@ namespace Phytel.API.DataDomain.Program
                 Text = r.ResponseDetail.Text,
                 Value = r.ResponseDetail.Value,
                 Selected = r.ResponseDetail.Selected,
-                DeleteFlag = r.ResponseDetail.Delete
+                DeleteFlag = r.ResponseDetail.Delete,
+                LastUpdatedOn = System.DateTime.UtcNow,
+                UpdatedBy = ObjectId.Parse(r.UserId)
             };
 
             result.Result = (bool)responseRepo.Update(meres);
