@@ -15,7 +15,7 @@ using ProgramBuilder.UserControls;
 
 namespace ProgramBuilder
 {
-    public partial class ProgramForm : Form
+    public partial class ProgramForm : Form_Base
     {
         private TreeNode m_OldSelectNode;
         public string programNameText;
