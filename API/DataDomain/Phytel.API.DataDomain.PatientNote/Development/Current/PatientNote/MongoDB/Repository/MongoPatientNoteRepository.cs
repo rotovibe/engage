@@ -58,8 +58,10 @@ namespace Phytel.API.DataDomain.PatientNote
                         Text = noteData.Text,
                         ProgramIds = Helper.ConvertToObjectIdList(noteData.ProgramIds),
                         Version = request.Version,
-                        UpdatedBy = ObjectId.Parse(this.UserId),
-                        LastUpdatedOn = DateTime.UtcNow
+                        DeleteFlag = false
+                        //,
+                        //UpdatedBy = ObjectId.Parse(this.UserId),
+                        //LastUpdatedOn = DateTime.UtcNow
                     };
 
                     using (PatientNoteMongoContext ctx = new PatientNoteMongoContext(_dbName))

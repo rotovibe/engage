@@ -265,11 +265,11 @@ namespace Phytel.API.DataDomain.PatientObservation
                     Id = ObjectId.GenerateNewId(),
                     PatientId = ObjectId.Parse(request.PatientId),
                     TTLDate = System.DateTime.UtcNow.AddDays(_initializeDays),
-                    LastUpdatedOn = DateTime.UtcNow,
+                    //LastUpdatedOn = DateTime.UtcNow,
                     ObservationId = ObjectId.Parse(request.ObservationId),
                     DeleteFlag = true,
-                    Version = request.Version,
-                    UpdatedBy = ObjectId.Parse(this.UserId)
+                    Version = request.Version
+                    //,UpdatedBy = ObjectId.Parse(this.UserId)
                 };
 
                 using (PatientObservationMongoContext ctx = new PatientObservationMongoContext(_dbName))

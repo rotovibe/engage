@@ -231,9 +231,10 @@ namespace Phytel.API.DataDomain.PatientGoal
                 {
                     Id = ObjectId.GenerateNewId(),
                     PatientId = ObjectId.Parse(request.PatientId),
-                    TTLDate = System.DateTime.UtcNow.AddDays(_initializeDays),
-                    LastUpdatedOn = DateTime.UtcNow,
-                    UpdatedBy = ObjectId.Parse(this.UserId)
+                    TTLDate = System.DateTime.UtcNow.AddDays(_initializeDays)
+                    //,
+                    //LastUpdatedOn = DateTime.UtcNow,
+                    //UpdatedBy = ObjectId.Parse(this.UserId)
                 };
                 
                 using (PatientGoalMongoContext ctx = new PatientGoalMongoContext(_dbName))

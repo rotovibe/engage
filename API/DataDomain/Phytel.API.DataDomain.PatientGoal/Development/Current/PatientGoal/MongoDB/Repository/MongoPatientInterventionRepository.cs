@@ -205,14 +205,14 @@ namespace Phytel.API.DataDomain.PatientGoal
             MEPatientIntervention pi = null;
             try
             {
-                pi = new MEPatientIntervention
+                pi = new MEPatientIntervention(this.UserId)
                 {
                     Id = ObjectId.GenerateNewId(),
                     PatientGoalId = ObjectId.Parse(ptr.PatientGoalId),
                     TTLDate = System.DateTime.UtcNow.AddDays(_initializeDays),
                     StatusDate = DateTime.UtcNow,
-                    LastUpdatedOn = DateTime.UtcNow,
-                    UpdatedBy = ObjectId.Parse(this.UserId),
+                    //LastUpdatedOn = DateTime.UtcNow,
+                    //UpdatedBy = ObjectId.Parse(this.UserId),
                     Version = ptr.Version
                 };
                 

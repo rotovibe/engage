@@ -56,11 +56,12 @@ namespace Phytel.API.DataDomain.Patient
                 patientView = ctx.CohortPatientViews.Collection.FindOneAs<MECohortPatientView>(query);
                 if (patientView == null)
                 {
-                    patientView = new MECohortPatientView
+                    patientView = new MECohortPatientView(this.UserId)
                     {
                         PatientID = ObjectId.Parse(cohortRequest.PatientID),
                         LastName = cohortRequest.LastName,
-                        Version = cohortRequest.Version
+                        Version = cohortRequest.Version,
+                        DeleteFlag = false
                     };
 
                     if (cohortRequest.SearchFields != null && cohortRequest.SearchFields.Count > 0)
@@ -134,6 +135,8 @@ namespace Phytel.API.DataDomain.Patient
                     var uv = new List<MB.UpdateBuilder>();
                     if (!String.IsNullOrEmpty(cpvd.LastName)) uv.Add(MB.Update.Set(MECohortPatientView.LastNameProperty, cpvd.LastName));
                     if (!String.IsNullOrEmpty(cpvd.PatientID)) uv.Add(MB.Update.Set(MECohortPatientView.PatientIDProperty, ObjectId.Parse(cpvd.PatientID)));
+                    uv.Add(MB.Update.Set(MECohortPatientView.UpdatedByProperty, ObjectId.Parse(this.UserId)));
+                    uv.Add(MB.Update.Set(MECohortPatientView.LastUpdatedOnProperty, DateTime.UtcNow ));
                     
                     if (p.CohortPatientView != null) { uv.Add(MB.Update.SetWrapped<List<SearchField>>(MECohortPatientView.SearchFieldsProperty, sfds)); }
 

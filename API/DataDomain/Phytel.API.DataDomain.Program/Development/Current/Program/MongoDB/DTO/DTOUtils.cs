@@ -45,8 +45,8 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
                     Next = cp.Next,
                     Order = cp.Order,
                     Previous = cp.Previous,
-                    Modules = DTOUtils.GetClonedModules(cp.Modules, request.ContractNumber, request.UserId, sil),
-                    UpdatedBy = ObjectId.Parse(request.UserId)
+                    Modules = DTOUtils.GetClonedModules(cp.Modules, request.ContractNumber, request.UserId, sil)
+                    //,UpdatedBy = ObjectId.Parse(request.UserId)
                 };
                 if (!string.IsNullOrEmpty(request.UserId))
                 {
@@ -1190,6 +1190,10 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
                         {
                             foreach (MEPatientProgramResponse r in s.Responses)
                             {
+                                r.DeleteFlag = false;
+                                r.RecordCreatedBy = ObjectId.Parse(userId);
+                                r.RecordCreatedOn = DateTime.UtcNow;
+
                                 if (!ppr.Contains(r))
                                     ppr.Add(r);
                             }

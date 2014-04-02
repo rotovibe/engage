@@ -88,8 +88,9 @@ namespace Phytel.API.DataDomain.Program
                         Enrollment = (EnrollmentStatus)pa.Enrollment,
                         GraduatedFlag = (Graduated)pa.GraduatedFlag,
                         StartDate = pa.StartDate,
-                        LastUpdatedOn = DateTime.UtcNow,
-                        UpdatedBy = ObjectId.Parse(this.UserId)
+                        DeleteFlag = false
+                        //,LastUpdatedOn = DateTime.UtcNow,
+                        //UpdatedBy = ObjectId.Parse(this.UserId)
                     };
 
                     ctx.ProgramAttributes.Collection.Insert(mepa);

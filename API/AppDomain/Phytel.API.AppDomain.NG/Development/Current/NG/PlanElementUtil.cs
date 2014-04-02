@@ -868,20 +868,15 @@ namespace Phytel.API.AppDomain.NG
             }
         }
 
-        //input text	    input	3
-        //date	            datepicker	6
-        //time	            timepicker	8
-        //datetime	        datepicker	9
-        //Multi line input text	input	10
         public static bool ResponseSpawnAllowed(Step s, Response r)
         {
             try
             {
                 bool pass = true;
-                if ((s.StepTypeId != 1) && (s.StepTypeId != 2) && (s.StepTypeId != 4)
-                    && (s.StepTypeId != 5) && (s.StepTypeId != 7) && (s.StepTypeId != 11))
+                //if ((s.StepTypeId != 1) && (s.StepTypeId != 2) && (s.StepTypeId != 4) && (s.StepTypeId != 7) && (s.StepTypeId != 11)) // need to create a specification object for this
+                if (new ResponseSpawnAllowed<Step>().IsSatisfiedBy(s))
                 {
-                    if (string.IsNullOrEmpty(r.Value))
+                    if (string.IsNullOrEmpty(r.Value) || r.Value.ToLower().Equals("false"))
                     {
                         pass = false;
                     }

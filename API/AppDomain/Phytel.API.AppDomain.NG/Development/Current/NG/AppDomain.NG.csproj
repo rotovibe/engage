@@ -119,6 +119,7 @@
     <Compile Include="PlanElementStrategy\UpdateSpawnProblemCode.cs" />
     <Compile Include="PlanElementStrategy\RegisterSpawnProblemCode.cs" />
     <Compile Include="PlanElementUtil.cs" />
+    <Compile Include="PlanSpecification\ResponseSpawnAllowedSpecification.cs" />
     <Compile Include="PlanSpecification\CompletedSpecification.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="NGManager.cs" />
