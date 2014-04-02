@@ -217,7 +217,7 @@ namespace Phytel.API.DataDomain.LookUp.Test
             double version = 1.0;
             string contractNumber = "InHealth001";
             string context = "NG";
-            GetLookUpsDataRequest request = new GetLookUpsDataRequest { Context = context, ContractNumber = contractNumber, Version = version, Name = "BarrierCategory" };
+            GetLookUpsDataRequest request = new GetLookUpsDataRequest { Context = context, ContractNumber = contractNumber, Version = version, Name = "FocusArea" };
 
             // Act
             GetLookUpsDataResponse response = LookUpDataManager.GetLookUpsByType(request);

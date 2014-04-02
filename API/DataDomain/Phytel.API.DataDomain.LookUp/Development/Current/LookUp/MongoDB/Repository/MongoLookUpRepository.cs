@@ -18,6 +18,7 @@ namespace Phytel.API.DataDomain.LookUp
     {
         private string _dbName = string.Empty;
         static readonly string redisClientIPAddress;
+        static readonly int redisCacheExpiry = 0;
 
         static MongoLookUpRepository()
         {
@@ -176,9 +177,13 @@ namespace Phytel.API.DataDomain.LookUp
             }
             catch { }
             #endregion
-            
-            // Set the redis IP address.
+
+            // Get the redis IP address from config file.
             redisClientIPAddress = ConfigurationManager.AppSettings.Get("RedisClientIPAddress");
+            // Get the cache expiry time from config file.
+            string expiry = ConfigurationManager.AppSettings.Get("RedisCacheExpireInMinutes");
+            if (!string.IsNullOrEmpty(expiry))
+                redisCacheExpiry = Convert.ToInt32(expiry);
         }
         public MongoLookUpRepository(string contractDBName)
         {
@@ -276,7 +281,7 @@ namespace Phytel.API.DataDomain.LookUp
                     }
                     //put problemData into cache using redisKey now
                     if (client != null)
-                        client.Set<ProblemData>(redisKey, problemData);
+                        client.Set<ProblemData>(redisKey, problemData, TimeSpan.FromMinutes(redisCacheExpiry));
                 }
             }
             catch (Exception ex)
@@ -338,7 +343,7 @@ namespace Phytel.API.DataDomain.LookUp
                     }
                     //put problemList into cache using redisKey now
                     if (client != null)
-                        client.Set<List<ProblemData>>(redisKey, problemList);
+                        client.Set<List<ProblemData>>(redisKey, problemList, TimeSpan.FromMinutes(redisCacheExpiry));
                 }
             }
             catch (Exception ex)
@@ -390,7 +395,7 @@ namespace Phytel.API.DataDomain.LookUp
                     }
                     //put problemList into cache using redisKey now
                     if (client != null)
-                        client.Set<List<ProblemData>>(redisKey, problemList);
+                        client.Set<List<ProblemData>>(redisKey, problemList, TimeSpan.FromMinutes(redisCacheExpiry));
                 }
             }
             catch (Exception ex)
@@ -449,7 +454,7 @@ namespace Phytel.API.DataDomain.LookUp
                     }
                     //put category into cache using redisKey now
                     if (client != null)
-                        client.Set<IdNamePair>(redisKey, category);
+                        client.Set<IdNamePair>(redisKey, category, TimeSpan.FromMinutes(redisCacheExpiry));
                 }
             }
             catch (Exception ex)
@@ -503,7 +508,7 @@ namespace Phytel.API.DataDomain.LookUp
                     }
                     //put objective into cache using redisKey now
                     if (client != null)
-                        client.Set<IdNamePair>(redisKey, objective);
+                        client.Set<IdNamePair>(redisKey, objective, TimeSpan.FromMinutes(redisCacheExpiry));
                 }
             }
             catch (Exception ex)
@@ -558,7 +563,7 @@ namespace Phytel.API.DataDomain.LookUp
                     }
                     //put commModeList into cache using redisKey now
                     if (client != null)
-                        client.Set<List<IdNamePair>>(redisKey, commModeList);
+                        client.Set<List<IdNamePair>>(redisKey, commModeList, TimeSpan.FromMinutes(redisCacheExpiry));
                 }
             }
             catch (Exception ex)
@@ -612,7 +617,7 @@ namespace Phytel.API.DataDomain.LookUp
                 }
                 //put stateList into cache using redisKey now
                 if (client != null)
-                    client.Set<List<StateData>>(redisKey, stateList);
+                    client.Set<List<StateData>>(redisKey, stateList, TimeSpan.FromMinutes(redisCacheExpiry));
             }
             catch (Exception ex)
             {
@@ -664,7 +669,7 @@ namespace Phytel.API.DataDomain.LookUp
                 }
                 //put timesOfDayList into cache using redisKey now
                 if (client != null)
-                    client.Set<List<IdNamePair>>(redisKey, timesOfDayList);
+                    client.Set<List<IdNamePair>>(redisKey, timesOfDayList, TimeSpan.FromMinutes(redisCacheExpiry));
 
             }
             catch (Exception ex)
@@ -718,7 +723,7 @@ namespace Phytel.API.DataDomain.LookUp
             }
             //put timeZoneList into cache using redisKey now
             if (client != null)
-                client.Set<List<TimeZoneData>>(redisKey, timeZoneList);
+                client.Set<List<TimeZoneData>>(redisKey, timeZoneList, TimeSpan.FromMinutes(redisCacheExpiry));
 
             }
             catch (Exception ex)
@@ -779,7 +784,7 @@ namespace Phytel.API.DataDomain.LookUp
                     }
                     //put commTypeList into cache using redisKey now
                     if (client != null)
-                        client.Set<List<CommTypeData>>(redisKey, commTypeList);
+                        client.Set<List<CommTypeData>>(redisKey, commTypeList, TimeSpan.FromMinutes(redisCacheExpiry));
                 }
             
             }
@@ -831,7 +836,7 @@ namespace Phytel.API.DataDomain.LookUp
                     }
                     //put languageList into cache using redisKey now
                     if (client != null)
-                        client.Set<List<LanguageData>>(redisKey, languageList);
+                        client.Set<List<LanguageData>>(redisKey, languageList, TimeSpan.FromMinutes(redisCacheExpiry));
                 }
             }
             catch (Exception ex)
@@ -883,7 +888,7 @@ namespace Phytel.API.DataDomain.LookUp
                     }
                     //put tz into cache using redisKey now
                     if (client != null)
-                        client.Set<TimeZoneData>(redisKey, tz);
+                        client.Set<TimeZoneData>(redisKey, tz, TimeSpan.FromMinutes(redisCacheExpiry));
                 }
             }
             catch (Exception ex)
@@ -942,7 +947,7 @@ namespace Phytel.API.DataDomain.LookUp
                         }
                         //put lookupList into cache using redisKey now
                         if (client != null)
-                            client.Set<List<IdNamePair>>(redisKey, lookupList);
+                            client.Set<List<IdNamePair>>(redisKey, lookupList, TimeSpan.FromMinutes(redisCacheExpiry));
                     }
                 }
                 else
