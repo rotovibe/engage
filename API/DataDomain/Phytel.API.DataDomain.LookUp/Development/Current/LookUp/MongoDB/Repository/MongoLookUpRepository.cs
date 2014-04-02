@@ -10,12 +10,14 @@ using MongoDB.Driver.Builders;
 using MongoDB.Bson;
 using Phytel.API.DataDomain.LookUp;
 using Phytel.API.Common.CustomObject;
+using System.Configuration;
 
 namespace Phytel.API.DataDomain.LookUp
 {
     public class MongoLookUpRepository<T> : ILookUpRepository<T>
     {
         private string _dbName = string.Empty;
+        static readonly string redisClientIPAddress;
 
         static MongoLookUpRepository()
         {
@@ -174,7 +176,9 @@ namespace Phytel.API.DataDomain.LookUp
             }
             catch { }
             #endregion
-
+            
+            // Set the redis IP address.
+            redisClientIPAddress = ConfigurationManager.AppSettings.Get("RedisClientIPAddress");
         }
         public MongoLookUpRepository(string contractDBName)
         {
@@ -231,64 +235,115 @@ namespace Phytel.API.DataDomain.LookUp
         #region Problem
         public object FindProblemByID(string entityID)
         {
-            GetProblemDataResponse problemResponse = null;
-            using (LookUpMongoContext ctx = new LookUpMongoContext(_dbName))
+            ProblemData problemData = null;
+            try
             {
-                List<IMongoQuery> queries = new List<IMongoQuery>();
-                queries.Add(Query.EQ(MELookup.TypeProperty, LookUpType.Problem));
-                queries.Add(Query.EQ(MELookup.DeleteFlagProperty, false));
-                IMongoQuery mQuery = Query.And(queries);
-                MELookup meLookup = ctx.LookUps.Collection.Find(mQuery).FirstOrDefault();
-                if (meLookup != null)
+                problemData = new ProblemData();
+                string redisKey = string.Format("{0}{1}{2}", "Lookup", "Problem", entityID);
+                ServiceStack.Redis.RedisClient client = null;
+
+                if(!string.IsNullOrEmpty(redisClientIPAddress))
+                    client = new ServiceStack.Redis.RedisClient(redisClientIPAddress);
+
+                //If the redisKey is already in Cache (REDIS) get it from there, else re-query
+                if (client != null && client.ContainsKey(redisKey))
                 {
-                    if (meLookup.Data.Count > 0)
+                    //go get problemData from Redis using the redisKey now
+                    problemData = client.Get<ProblemData>(redisKey);
+                }
+                else
+                {
+                    using (LookUpMongoContext ctx = new LookUpMongoContext(_dbName))
                     {
-                        problemResponse = new GetProblemDataResponse();
-                        Problem meProblem = (Problem)meLookup.Data.Where(a => a.DataId == ObjectId.Parse(entityID)).FirstOrDefault();
-                        if (meProblem != null)
+                        List<IMongoQuery> queries = new List<IMongoQuery>();
+                        queries.Add(Query.EQ(MELookup.TypeProperty, LookUpType.Problem));
+                        queries.Add(Query.EQ(MELookup.DeleteFlagProperty, false));
+                        IMongoQuery mQuery = Query.And(queries);
+                        MELookup meLookup = ctx.LookUps.Collection.Find(mQuery).FirstOrDefault();
+                        if (meLookup != null)
                         {
-                            ProblemData problemData = new ProblemData { Id = meProblem.DataId.ToString(), Name = meProblem.Name, Active = meProblem.Active };
-                            problemResponse.Problem = problemData;
+                            if (meLookup.Data.Count > 0)
+                            {
+                                Problem meProblem = (Problem)meLookup.Data.Where(a => a.DataId == ObjectId.Parse(entityID)).FirstOrDefault();
+                                if (meProblem != null)
+                                {
+                                    problemData.Id = meProblem.DataId.ToString();
+                                    problemData.Name = meProblem.Name;
+                                    problemData.Active = meProblem.Active ;
+                                }
+                            }
                         }
                     }
+                    //put problemData into cache using redisKey now
+                    if (client != null)
+                        client.Set<ProblemData>(redisKey, problemData);
                 }
             }
-            return problemResponse;
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return problemData;
         }
 
         public List<ProblemData> SearchProblem(SearchProblemsDataRequest request)
         {
             List<ProblemData> problemList = null;
-            using (LookUpMongoContext ctx = new LookUpMongoContext(_dbName))
+            try
             {
-                List<IMongoQuery> queries = new List<IMongoQuery>();
-                queries.Add(Query.EQ(MELookup.TypeProperty, LookUpType.Problem));
-                queries.Add(Query.EQ(MELookup.DeleteFlagProperty, false));
-                IMongoQuery mQuery = Query.And(queries);
-                MELookup meLookup = ctx.LookUps.Collection.Find(mQuery).FirstOrDefault();
-                if (meLookup != null)
-                {
-                    if (meLookup.Data != null)
-                    {
-                        problemList = new List<ProblemData>();
-                        List<Problem> meproblems = new List<Problem>();
-                        if (string.IsNullOrEmpty(request.Type))
-                        {
-                            meproblems = meLookup.Data.Cast<Problem>().Where(a => a.Active == request.Active).ToList();
-                        }
-                        else
-                        {
-                            meproblems = meLookup.Data.Cast<Problem>().Where(a => a.Type == request.Type && a.Active == request.Active).ToList();
-                        }
+                problemList = new List<ProblemData>();
+                string redisKey = string.Format("{0}{1}{2}{3}", "Lookup", "Problem", request.Active, request.Type);
+                ServiceStack.Redis.RedisClient client = null;
 
-                        foreach (Problem m in meproblems)
+                if (!string.IsNullOrEmpty(redisClientIPAddress))
+                    client = new ServiceStack.Redis.RedisClient(redisClientIPAddress);
+
+                //If the redisKey is already in Cache (REDIS) get it from there, else re-query
+                if (client != null && client.ContainsKey(redisKey))
+                {
+                    //go get problemList from Redis using the redisKey now
+                    problemList = client.Get<List<ProblemData>>(redisKey);
+                }
+                else
+                {
+                    using (LookUpMongoContext ctx = new LookUpMongoContext(_dbName))
+                    {
+                        List<IMongoQuery> queries = new List<IMongoQuery>();
+                        queries.Add(Query.EQ(MELookup.TypeProperty, LookUpType.Problem));
+                        queries.Add(Query.EQ(MELookup.DeleteFlagProperty, false));
+                        IMongoQuery mQuery = Query.And(queries);
+                        MELookup meLookup = ctx.LookUps.Collection.Find(mQuery).FirstOrDefault();
+                        if (meLookup != null)
                         {
-                            ProblemData problem = new ProblemData {  Id = m.DataId.ToString(), Name = m.Name, Active = m.Active };
-                            problemList.Add(problem);
+                            if (meLookup.Data != null)
+                            {
+                                List<Problem> meproblems = new List<Problem>();
+                                if (string.IsNullOrEmpty(request.Type))
+                                {
+                                    meproblems = meLookup.Data.Cast<Problem>().Where(a => a.Active == request.Active).ToList();
+                                }
+                                else
+                                {
+                                    meproblems = meLookup.Data.Cast<Problem>().Where(a => a.Type == request.Type && a.Active == request.Active).ToList();
+                                }
+
+                                foreach (Problem m in meproblems)
+                                {
+                                    ProblemData problem = new ProblemData {  Id = m.DataId.ToString(), Name = m.Name, Active = m.Active };
+                                    problemList.Add(problem);
+                                }
+                            }
+
                         }
                     }
-
+                    //put problemList into cache using redisKey now
+                    if (client != null)
+                        client.Set<List<ProblemData>>(redisKey, problemList);
                 }
+            }
+            catch (Exception ex)
+            { 
+                throw ex;
             }
             return problemList;
         }
@@ -296,26 +351,51 @@ namespace Phytel.API.DataDomain.LookUp
         public List<ProblemData> GetAllProblems()
         {
             List<ProblemData> problemList = null;
-            using (LookUpMongoContext ctx = new LookUpMongoContext(_dbName))
+            try
             {
-                List<IMongoQuery> queries = new List<IMongoQuery>();
-                queries.Add(Query.EQ(MELookup.TypeProperty, LookUpType.Problem));
-                queries.Add(Query.EQ(MELookup.DeleteFlagProperty, false));
-                IMongoQuery mQuery = Query.And(queries);
-                MELookup meLookup = ctx.LookUps.Collection.Find(mQuery).FirstOrDefault();
-                if (meLookup != null)
+                problemList = new List<ProblemData>();
+                string redisKey = string.Format("{0}{1}", "Lookup", "Problems");
+                ServiceStack.Redis.RedisClient client = null;
+
+                if (!string.IsNullOrEmpty(redisClientIPAddress))
+                    client = new ServiceStack.Redis.RedisClient(redisClientIPAddress);
+
+                //If the redisKey is already in Cache (REDIS) get it from there, else re-query
+                if (client != null && client.ContainsKey(redisKey))
                 {
-                    if (meLookup.Data != null)
+                    //go get problemList from Redis using the redisKey now
+                    problemList = client.Get<List<ProblemData>>(redisKey);
+                }
+                else
+                {
+                    using (LookUpMongoContext ctx = new LookUpMongoContext(_dbName))
                     {
-                        problemList = new List<ProblemData>();
-                        foreach (Problem m in meLookup.Data)
+                        List<IMongoQuery> queries = new List<IMongoQuery>();
+                        queries.Add(Query.EQ(MELookup.TypeProperty, LookUpType.Problem));
+                        queries.Add(Query.EQ(MELookup.DeleteFlagProperty, false));
+                        IMongoQuery mQuery = Query.And(queries);
+                        MELookup meLookup = ctx.LookUps.Collection.Find(mQuery).FirstOrDefault();
+                        if (meLookup != null)
                         {
-                            ProblemData problem = new ProblemData { Id = m.DataId.ToString(), Name = m.Name, Active = m.Active };
-                            problemList.Add(problem);
+                            if (meLookup.Data != null)
+                            {
+                                foreach (Problem m in meLookup.Data)
+                                {
+                                    ProblemData problem = new ProblemData { Id = m.DataId.ToString(), Name = m.Name, Active = m.Active };
+                                    problemList.Add(problem);
+                                }
+                            }
+
                         }
                     }
-
+                    //put problemList into cache using redisKey now
+                    if (client != null)
+                        client.Set<List<ProblemData>>(redisKey, problemList);
                 }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
             }
             return problemList;
         } 
@@ -324,68 +404,114 @@ namespace Phytel.API.DataDomain.LookUp
         #region Category
         public object FindCategoryByID(string entityID)
         {
-            GetCategoryDataResponse categoryResponse = null;
-            using (LookUpMongoContext ctx = new LookUpMongoContext(_dbName))
+            IdNamePair category = null;
+            try
             {
-                List<IMongoQuery> queries = new List<IMongoQuery>();
-                queries.Add(Query.EQ(MELookup.TypeProperty, LookUpType.ObjectiveCategory));
-                queries.Add(Query.EQ(MELookup.DeleteFlagProperty, false));
-                IMongoQuery mQuery = Query.And(queries);
-                MELookup meLookup = ctx.LookUps.Collection.Find(mQuery).FirstOrDefault();
-                if (meLookup != null)
-                {
-                    if (meLookup.Data.Count > 0)
-                    {
-                        categoryResponse = new GetCategoryDataResponse();
-                        Category meCategory = (Category)meLookup.Data.Where(a => a.DataId == ObjectId.Parse(entityID)).FirstOrDefault();
-                        if (meCategory != null)
-                        {
-                            IdNamePair objective = new IdNamePair
-                            {
-                                Id = meCategory.DataId.ToString(),
-                                Name = meCategory.Name
-                            };
-                            categoryResponse.Category = objective;
+                category = new IdNamePair();
+                string redisKey = string.Format("{0}{1}{2}", "Lookup", "Category", entityID);
+                ServiceStack.Redis.RedisClient client = null;
 
+                if(!string.IsNullOrEmpty(redisClientIPAddress))
+                    client = new ServiceStack.Redis.RedisClient(redisClientIPAddress);
+
+                //If the redisKey is already in Cache (REDIS) get it from there, else re-query
+                if (client != null && client.ContainsKey(redisKey))
+                {
+                    //go get category from Redis using the redisKey now
+                    category = client.Get<IdNamePair>(redisKey);
+                }
+                else
+                {
+                    using (LookUpMongoContext ctx = new LookUpMongoContext(_dbName))
+                    {
+                        List<IMongoQuery> queries = new List<IMongoQuery>();
+                        queries.Add(Query.EQ(MELookup.TypeProperty, LookUpType.ObjectiveCategory));
+                        queries.Add(Query.EQ(MELookup.DeleteFlagProperty, false));
+                        IMongoQuery mQuery = Query.And(queries);
+                        MELookup meLookup = ctx.LookUps.Collection.Find(mQuery).FirstOrDefault();
+                        if (meLookup != null)
+                        {
+                            if (meLookup.Data.Count > 0)
+                            {
+                                Category meCategory = (Category)meLookup.Data.Where(a => a.DataId == ObjectId.Parse(entityID)).FirstOrDefault();
+                                if (meCategory != null)
+                                {
+                                    IdNamePair objective = new IdNamePair
+                                    {
+                                        Id = meCategory.DataId.ToString(),
+                                        Name = meCategory.Name
+                                    };
+                                    category = objective;
+
+                                }
+                            }
                         }
                     }
+                    //put category into cache using redisKey now
+                    if (client != null)
+                        client.Set<IdNamePair>(redisKey, category);
                 }
             }
-            return categoryResponse;
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return category;
         } 
         #endregion
 
         #region Objective
         public object FindObjectiveByID(string entityID)
         {
-            GetObjectiveDataResponse objectiveResponse = null;
-            using (LookUpMongoContext ctx = new LookUpMongoContext(_dbName))
+            IdNamePair objective = null;
+            try
             {
-                List<IMongoQuery> queries = new List<IMongoQuery>();
-                queries.Add(Query.EQ(MELookup.TypeProperty, LookUpType.Objective));
-                queries.Add(Query.EQ(MELookup.DeleteFlagProperty, false));
-                IMongoQuery mQuery = Query.And(queries);
-                MELookup meLookup = ctx.LookUps.Collection.Find(mQuery).FirstOrDefault();
-                if (meLookup != null)
-                {
-                    if (meLookup.Data.Count > 0)
-                    {
-                        objectiveResponse = new GetObjectiveDataResponse();
-                        DTO.Objective meObjective = (DTO.Objective)meLookup.Data.Where(a => a.DataId == ObjectId.Parse(entityID)).FirstOrDefault();
-                        if (meObjective != null)
-                        {
-                            IdNamePair objective = new IdNamePair
-                            {
-                                Id = meObjective.DataId.ToString(),
-                                Name = meObjective.Name
-                            };
-                            objectiveResponse.Objective = objective;
+                objective = new IdNamePair();
+                string redisKey = string.Format("{0}{1}{2}", "Lookup", "Objective", entityID);
+                ServiceStack.Redis.RedisClient client = null;
 
+                if (!string.IsNullOrEmpty(redisClientIPAddress))
+                    client = new ServiceStack.Redis.RedisClient(redisClientIPAddress);
+
+                //If the redisKey is already in Cache (REDIS) get it from there, else re-query
+                if (client != null && client.ContainsKey(redisKey))
+                {
+                    //go get objective from Redis using the redisKey now
+                    objective = client.Get<IdNamePair>(redisKey);
+                }
+                else
+                {
+                    using (LookUpMongoContext ctx = new LookUpMongoContext(_dbName))
+                    {
+                        List<IMongoQuery> queries = new List<IMongoQuery>();
+                        queries.Add(Query.EQ(MELookup.TypeProperty, LookUpType.Objective));
+                        queries.Add(Query.EQ(MELookup.DeleteFlagProperty, false));
+                        IMongoQuery mQuery = Query.And(queries);
+                        MELookup meLookup = ctx.LookUps.Collection.Find(mQuery).FirstOrDefault();
+                        if (meLookup != null)
+                        {
+                            if (meLookup.Data.Count > 0)
+                            {
+                                DTO.Objective meObjective = (DTO.Objective)meLookup.Data.Where(a => a.DataId == ObjectId.Parse(entityID)).FirstOrDefault();
+                                if (meObjective != null)
+                                {
+                                    objective.Id = meObjective.DataId.ToString();
+                                    objective.Name = meObjective.Name;
+                                }
+                            }
                         }
                     }
+                    //put objective into cache using redisKey now
+                    if (client != null)
+                        client.Set<IdNamePair>(redisKey, objective);
                 }
             }
-            return objectiveResponse;
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+            return objective;
         } 
         #endregion
 
@@ -393,53 +519,104 @@ namespace Phytel.API.DataDomain.LookUp
         public List<IdNamePair> GetAllCommModes()
         {
             List<IdNamePair> commModeList = null;
-            using (LookUpMongoContext ctx = new LookUpMongoContext(_dbName))
+            try 
             {
-                List<IMongoQuery> queries = new List<IMongoQuery>();
-                queries.Add(Query.EQ(MELookup.TypeProperty, LookUpType.CommMode));
-                queries.Add(Query.EQ(MELookup.DeleteFlagProperty, false));
-                IMongoQuery mQuery = Query.And(queries);
-                MELookup meLookup = ctx.LookUps.Collection.Find(mQuery).FirstOrDefault();
-                if (meLookup != null)
+                commModeList = new List<IdNamePair>();
+                string redisKey = string.Format("{0}{1}", "Lookup", "CommModes");
+                ServiceStack.Redis.RedisClient client = null;
+
+                if (!string.IsNullOrEmpty(redisClientIPAddress))
+                    client = new ServiceStack.Redis.RedisClient(redisClientIPAddress);
+
+                //If the redisKey is already in Cache (REDIS) get it from there, else re-query
+                if (client != null && client.ContainsKey(redisKey))
                 {
-                    if (meLookup.Data != null)
+                    //go get commModeList from Redis using the redisKey now
+                    commModeList = client.Get<List<IdNamePair>>(redisKey);
+                }
+                else
+                {
+                    using (LookUpMongoContext ctx = new LookUpMongoContext(_dbName))
                     {
-                        commModeList = new List<IdNamePair>();
-                        foreach (CommMode m in meLookup.Data)
+                        List<IMongoQuery> queries = new List<IMongoQuery>();
+                        queries.Add(Query.EQ(MELookup.TypeProperty, LookUpType.CommMode));
+                        queries.Add(Query.EQ(MELookup.DeleteFlagProperty, false));
+                        IMongoQuery mQuery = Query.And(queries);
+                        MELookup meLookup = ctx.LookUps.Collection.Find(mQuery).FirstOrDefault();
+                        if (meLookup != null)
                         {
-                            IdNamePair data = new IdNamePair { Id = m.DataId.ToString(), Name = m.Name };
-                            commModeList.Add(data);
+                            if (meLookup.Data != null)
+                            {
+                                foreach (CommMode m in meLookup.Data)
+                                {
+                                    IdNamePair data = new IdNamePair { Id = m.DataId.ToString(), Name = m.Name };
+                                    commModeList.Add(data);
+                                }
+                            }
+
                         }
                     }
-
+                    //put commModeList into cache using redisKey now
+                    if (client != null)
+                        client.Set<List<IdNamePair>>(redisKey, commModeList);
                 }
             }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
             return commModeList;
         }
         
         public List<StateData> GetAllStates()
         {
             List<StateData> stateList = null;
-            using (LookUpMongoContext ctx = new LookUpMongoContext(_dbName))
+            try
             {
-                List<IMongoQuery> queries = new List<IMongoQuery>();
-                queries.Add(Query.EQ(MELookup.TypeProperty, LookUpType.State));
-                queries.Add(Query.EQ(MELookup.DeleteFlagProperty, false));
-                IMongoQuery mQuery = Query.And(queries);
-                MELookup meLookup = ctx.LookUps.Collection.Find(mQuery).FirstOrDefault();
-                if (meLookup != null)
+                stateList = new List<StateData>();
+                string redisKey = string.Format("{0}{1}", "Lookup", "States");
+                ServiceStack.Redis.RedisClient client = null;
+
+                if (!string.IsNullOrEmpty(redisClientIPAddress))
+                    client = new ServiceStack.Redis.RedisClient(redisClientIPAddress);
+
+                //If the redisKey is already in Cache (REDIS) get it from there, else re-query
+                if (client != null && client.ContainsKey(redisKey))
                 {
-                    if (meLookup.Data != null)
+                    //go get stateList from Redis using the redisKey now
+                    stateList = client.Get<List<StateData>>(redisKey);
+                }
+                else
+                {
+                    using (LookUpMongoContext ctx = new LookUpMongoContext(_dbName))
                     {
-                        stateList = new List<StateData>();
-                        foreach (State m in meLookup.Data)
+                        List<IMongoQuery> queries = new List<IMongoQuery>();
+                        queries.Add(Query.EQ(MELookup.TypeProperty, LookUpType.State));
+                        queries.Add(Query.EQ(MELookup.DeleteFlagProperty, false));
+                        IMongoQuery mQuery = Query.And(queries);
+                        MELookup meLookup = ctx.LookUps.Collection.Find(mQuery).FirstOrDefault();
+                        if (meLookup != null)
                         {
-                            StateData data = new StateData { Id = m.DataId.ToString(), Name = m.Name, Code = m.Code };
-                            stateList.Add(data);
+                            if (meLookup.Data != null)
+                            {
+                                foreach (State m in meLookup.Data)
+                                {
+                                    StateData data = new StateData { Id = m.DataId.ToString(), Name = m.Name, Code = m.Code };
+                                    stateList.Add(data);
+                                }
+                            }
+
                         }
                     }
-
                 }
+                //put stateList into cache using redisKey now
+                if (client != null)
+                    client.Set<List<StateData>>(redisKey, stateList);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
             }
             return stateList;
         }
@@ -447,26 +624,52 @@ namespace Phytel.API.DataDomain.LookUp
         public List<IdNamePair> GetAllTimesOfDays()
         {
             List<IdNamePair> timesOfDayList = null;
-            using (LookUpMongoContext ctx = new LookUpMongoContext(_dbName))
+            try
             {
-                List<IMongoQuery> queries = new List<IMongoQuery>();
-                queries.Add(Query.EQ(MELookup.TypeProperty, LookUpType.TimesOfDay));
-                queries.Add(Query.EQ(MELookup.DeleteFlagProperty, false));
-                IMongoQuery mQuery = Query.And(queries);
-                MELookup meLookup = ctx.LookUps.Collection.Find(mQuery).FirstOrDefault();
-                if (meLookup != null)
+                timesOfDayList = new List<IdNamePair>();
+                string redisKey = string.Format("{0}{1}", "Lookup", "TimesOfDays");
+                ServiceStack.Redis.RedisClient client = null;
+
+                if (!string.IsNullOrEmpty(redisClientIPAddress))
+                    client = new ServiceStack.Redis.RedisClient(redisClientIPAddress);
+
+                //If the redisKey is already in Cache (REDIS) get it from there, else re-query
+                if (client != null && client.ContainsKey(redisKey))
                 {
-                    if (meLookup.Data != null)
+                    //go get timesOfDayList from Redis using the redisKey now
+                    timesOfDayList = client.Get<List<IdNamePair>>(redisKey);
+                }
+                else
+                {   
+                    using (LookUpMongoContext ctx = new LookUpMongoContext(_dbName))
                     {
-                        timesOfDayList = new List<IdNamePair>();
-                        foreach (TimesOfDay m in meLookup.Data)
+                        List<IMongoQuery> queries = new List<IMongoQuery>();
+                        queries.Add(Query.EQ(MELookup.TypeProperty, LookUpType.TimesOfDay));
+                        queries.Add(Query.EQ(MELookup.DeleteFlagProperty, false));
+                        IMongoQuery mQuery = Query.And(queries);
+                        MELookup meLookup = ctx.LookUps.Collection.Find(mQuery).FirstOrDefault();
+                        if (meLookup != null)
                         {
-                            IdNamePair data = new IdNamePair { Id = m.DataId.ToString(), Name = m.Name };
-                            timesOfDayList.Add(data);
+                            if (meLookup.Data != null)
+                            {
+                                foreach (TimesOfDay m in meLookup.Data)
+                                {
+                                    IdNamePair data = new IdNamePair { Id = m.DataId.ToString(), Name = m.Name };
+                                    timesOfDayList.Add(data);
+                                }
+                            }
+
                         }
                     }
-
                 }
+                //put timesOfDayList into cache using redisKey now
+                if (client != null)
+                    client.Set<List<IdNamePair>>(redisKey, timesOfDayList);
+
+            }
+            catch (Exception ex)
+            {
+                throw ex;
             }
             return timesOfDayList;
         }
@@ -474,115 +677,218 @@ namespace Phytel.API.DataDomain.LookUp
         public List<TimeZoneData> GetAllTimeZones()
         {
             List<TimeZoneData> timeZoneList = null;
-            using (LookUpMongoContext ctx = new LookUpMongoContext(_dbName))
+            try
             {
-                List<IMongoQuery> queries = new List<IMongoQuery>();
-                queries.Add(Query.EQ(MELookup.TypeProperty, LookUpType.TimeZone));
-                queries.Add(Query.EQ(MELookup.DeleteFlagProperty, false));
-                IMongoQuery mQuery = Query.And(queries);
-                MELookup meLookup = ctx.LookUps.Collection.Find(mQuery).FirstOrDefault();
-                if (meLookup != null)
-                {
-                    if (meLookup.Data != null)
-                    {
-                        timeZoneList = new List<TimeZoneData>();
-                        foreach (DTO.TimeZone m in meLookup.Data)
-                        {
-                            TimeZoneData data = new TimeZoneData { Id = m.DataId.ToString(), Name = m.Name, Default = m.Default };
-                            timeZoneList.Add(data);
-                        }
-                        timeZoneList = timeZoneList.OrderBy(s => s.Name).ToList();
-                    }
+                timeZoneList = new List<TimeZoneData>();
+                string redisKey = string.Format("{0}{1}", "Lookup", "TimeZones");
+                ServiceStack.Redis.RedisClient client = null;
 
+                if (!string.IsNullOrEmpty(redisClientIPAddress))
+                    client = new ServiceStack.Redis.RedisClient(redisClientIPAddress);
+
+                //If the redisKey is already in Cache (REDIS) get it from there, else re-query
+                if (client != null && client.ContainsKey(redisKey))
+                {
+                    //go get timeZoneList from Redis using the redisKey now
+                    timeZoneList = client.Get<List<TimeZoneData>>(redisKey);
+                }
+                else
+                {
+                using (LookUpMongoContext ctx = new LookUpMongoContext(_dbName))
+                {
+                    List<IMongoQuery> queries = new List<IMongoQuery>();
+                    queries.Add(Query.EQ(MELookup.TypeProperty, LookUpType.TimeZone));
+                    queries.Add(Query.EQ(MELookup.DeleteFlagProperty, false));
+                    IMongoQuery mQuery = Query.And(queries);
+                    MELookup meLookup = ctx.LookUps.Collection.Find(mQuery).FirstOrDefault();
+                    if (meLookup != null)
+                    {
+                        if (meLookup.Data != null)
+                        {
+                            foreach (DTO.TimeZone m in meLookup.Data)
+                            {
+                                TimeZoneData data = new TimeZoneData { Id = m.DataId.ToString(), Name = m.Name, Default = m.Default };
+                                timeZoneList.Add(data);
+                            }
+                            timeZoneList = timeZoneList.OrderBy(s => s.Name).ToList();
+                        }
+
+                    }
                 }
             }
+            //put timeZoneList into cache using redisKey now
+            if (client != null)
+                client.Set<List<TimeZoneData>>(redisKey, timeZoneList);
+
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
             return timeZoneList;
         }
 
         public List<CommTypeData> GetAllCommTypes()
         {
             List<CommTypeData> commTypeList = null;
-            using (LookUpMongoContext ctx = new LookUpMongoContext(_dbName))
+            try 
             {
-                List<IMongoQuery> queries = new List<IMongoQuery>();
-                queries.Add(Query.EQ(MELookup.TypeProperty, LookUpType.CommType));
-                queries.Add(Query.EQ(MELookup.DeleteFlagProperty, false));
-                IMongoQuery mQuery = Query.And(queries);
-                MELookup meLookup = ctx.LookUps.Collection.Find(mQuery).FirstOrDefault();
-                if (meLookup != null)
+                commTypeList = new List<CommTypeData>();
+                string redisKey = string.Format("{0}{1}", "Lookup", "CommTypes");
+                ServiceStack.Redis.RedisClient client = null;
+
+                if (!string.IsNullOrEmpty(redisClientIPAddress))
+                    client = new ServiceStack.Redis.RedisClient(redisClientIPAddress);
+
+                //If the redisKey is already in Cache (REDIS) get it from there, else re-query
+                if (client != null && client.ContainsKey(redisKey))
                 {
-                    if (meLookup.Data != null)
+                    //go get commTypeList from Redis using the redisKey now
+                    commTypeList = client.Get<List<CommTypeData>>(redisKey);
+                }
+                else
+                {
+                    using (LookUpMongoContext ctx = new LookUpMongoContext(_dbName))
                     {
-                        commTypeList = new List<CommTypeData>();
-                        foreach (CommType m in meLookup.Data)
+                        List<IMongoQuery> queries = new List<IMongoQuery>();
+                        queries.Add(Query.EQ(MELookup.TypeProperty, LookUpType.CommType));
+                        queries.Add(Query.EQ(MELookup.DeleteFlagProperty, false));
+                        IMongoQuery mQuery = Query.And(queries);
+                        MELookup meLookup = ctx.LookUps.Collection.Find(mQuery).FirstOrDefault();
+                        if (meLookup != null)
                         {
-                            List<string> commModes = null;
-                            if (m.CommModes.Count > 0)
+                            if (meLookup.Data != null)
                             {
-                                commModes = new List<string>();
-                                foreach (ObjectId id in m.CommModes)
+                                foreach (CommType m in meLookup.Data)
                                 {
-                                    commModes.Add(id.ToString());
+                                    List<string> commModes = null;
+                                    if (m.CommModes.Count > 0)
+                                    {
+                                        commModes = new List<string>();
+                                        foreach (ObjectId id in m.CommModes)
+                                        {
+                                            commModes.Add(id.ToString());
+                                        }
+                                    }
+                                    CommTypeData data = new CommTypeData { Id = m.DataId.ToString(), Name = m.Name, CommModes = commModes };
+                                    commTypeList.Add(data);
                                 }
                             }
-                            CommTypeData data = new CommTypeData { Id = m.DataId.ToString(), Name = m.Name, CommModes = commModes };
-                            commTypeList.Add(data);
                         }
                     }
+                    //put commTypeList into cache using redisKey now
+                    if (client != null)
+                        client.Set<List<CommTypeData>>(redisKey, commTypeList);
                 }
+            
+            }
+            catch (Exception ex)
+            {
+                throw ex;
             }
             return commTypeList;
         }
 
         public List<LanguageData> GetAllLanguages()
         {
-            List<LanguageData> LanguageList = null;
-            using (LookUpMongoContext ctx = new LookUpMongoContext(_dbName))
+            List<LanguageData> languageList = null;
+            try
             {
-                List<IMongoQuery> queries = new List<IMongoQuery>();
-                queries.Add(Query.EQ(MELookup.TypeProperty, LookUpType.Language));
-                queries.Add(Query.EQ(MELookup.DeleteFlagProperty, false));
-                IMongoQuery mQuery = Query.And(queries);
-                MELookup meLookup = ctx.LookUps.Collection.Find(mQuery).FirstOrDefault();
-                if (meLookup != null)
+                languageList = new List<LanguageData>();
+                string redisKey = string.Format("{0}{1}", "Lookup", "Languages");
+                ServiceStack.Redis.RedisClient client = null;
+
+                if (!string.IsNullOrEmpty(redisClientIPAddress))
+                    client = new ServiceStack.Redis.RedisClient(redisClientIPAddress);
+
+                //If the redisKey is already in Cache (REDIS) get it from there, else re-query
+                if (client != null && client.ContainsKey(redisKey))
                 {
-                    if (meLookup.Data != null)
+                    //go get languageList from Redis using the redisKey now
+                    languageList = client.Get<List<LanguageData>>(redisKey);
+                }
+                else
+                {
+                    using (LookUpMongoContext ctx = new LookUpMongoContext(_dbName))
                     {
-                        LanguageList = new List<LanguageData>();
-                        foreach (Language m in meLookup.Data)
+                        List<IMongoQuery> queries = new List<IMongoQuery>();
+                        queries.Add(Query.EQ(MELookup.TypeProperty, LookUpType.Language));
+                        queries.Add(Query.EQ(MELookup.DeleteFlagProperty, false));
+                        IMongoQuery mQuery = Query.And(queries);
+                        MELookup meLookup = ctx.LookUps.Collection.Find(mQuery).FirstOrDefault();
+                        if (meLookup != null)
                         {
-                            LanguageData data = new LanguageData { Id = m.DataId.ToString(), Name = m.Name, Code = m.Code, Active = m.Active };
-                            LanguageList.Add(data);
+                            if (meLookup.Data != null)
+                            {
+                                foreach (Language m in meLookup.Data)
+                                {
+                                    LanguageData data = new LanguageData { Id = m.DataId.ToString(), Name = m.Name, Code = m.Code, Active = m.Active };
+                                    languageList.Add(data);
+                                }
+                            }
                         }
                     }
+                    //put languageList into cache using redisKey now
+                    if (client != null)
+                        client.Set<List<LanguageData>>(redisKey, languageList);
                 }
             }
-            return LanguageList;
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return languageList;
         }
 
 
         public TimeZoneData GetDefaultTimeZone()
         {
            TimeZoneData tz = null;
-            using (LookUpMongoContext ctx = new LookUpMongoContext(_dbName))
+            try
             {
-                List<IMongoQuery> queries = new List<IMongoQuery>();
-                queries.Add(Query.EQ(MELookup.TypeProperty, LookUpType.TimeZone));
-                queries.Add(Query.EQ(MELookup.DeleteFlagProperty, false));
-                IMongoQuery mQuery = Query.And(queries);
-                MELookup meLookup = ctx.LookUps.Collection.Find(mQuery).FirstOrDefault();
-                if (meLookup != null)
+                tz = new TimeZoneData();
+                string redisKey = string.Format("{0}{1}", "Lookup", "DefaultTimeZone");
+                ServiceStack.Redis.RedisClient client = null;
+
+                if (!string.IsNullOrEmpty(redisClientIPAddress))
+                    client = new ServiceStack.Redis.RedisClient(redisClientIPAddress);
+
+                //If the redisKey is already in Cache (REDIS) get it from there, else re-query
+                if (client != null && client.ContainsKey(redisKey))
                 {
-                    if (meLookup.Data != null)
+                    //go get tz from Redis using the redisKey now
+                    tz = client.Get<TimeZoneData>(redisKey);
+                }
+                else
+                {
+                    using (LookUpMongoContext ctx = new LookUpMongoContext(_dbName))
                     {
-                        tz = new TimeZoneData();
-                        DTO.TimeZone meTz = meLookup.Data.Cast<DTO.TimeZone>().Where(a => a.Default == true).FirstOrDefault();
-                        if (meTz != null)
+                        List<IMongoQuery> queries = new List<IMongoQuery>();
+                        queries.Add(Query.EQ(MELookup.TypeProperty, LookUpType.TimeZone));
+                        queries.Add(Query.EQ(MELookup.DeleteFlagProperty, false));
+                        IMongoQuery mQuery = Query.And(queries);
+                        MELookup meLookup = ctx.LookUps.Collection.Find(mQuery).FirstOrDefault();
+                        if (meLookup != null)
                         {
-                            tz = new TimeZoneData { Id = meTz.DataId.ToString(), Name = meTz.Name, Default = meTz.Default };
+                            if (meLookup.Data != null)
+                            {
+                                DTO.TimeZone meTz = meLookup.Data.Cast<DTO.TimeZone>().Where(a => a.Default == true).FirstOrDefault();
+                                if (meTz != null)
+                                {
+                                    tz = new TimeZoneData { Id = meTz.DataId.ToString(), Name = meTz.Name, Default = meTz.Default };
+                                }
+                            }
                         }
                     }
+                    //put tz into cache using redisKey now
+                    if (client != null)
+                        client.Set<TimeZoneData>(redisKey, tz);
                 }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
             }
             return tz;
         }
@@ -598,26 +904,45 @@ namespace Phytel.API.DataDomain.LookUp
                 LookUpType lookUpValue;
                 if (Enum.TryParse(type, true, out lookUpValue))
                 {
-                    using (LookUpMongoContext ctx = new LookUpMongoContext(_dbName))
+                    lookupList = new List<IdNamePair>();
+                    string redisKey = string.Format("{0}{1}", "Lookup", type);
+                    ServiceStack.Redis.RedisClient client = null;
+
+                    if(!string.IsNullOrEmpty(redisClientIPAddress))
+                        client = new ServiceStack.Redis.RedisClient(redisClientIPAddress);
+
+                    //If the redisKey is already in Cache (REDIS) get it from there, else re-query
+                    if (client != null && client.ContainsKey(redisKey))
                     {
-                        List<IMongoQuery> queries = new List<IMongoQuery>();
-                        queries.Add(Query.EQ(MELookup.TypeProperty, lookUpValue));
-                        queries.Add(Query.EQ(MELookup.DeleteFlagProperty, false));
-                        IMongoQuery mQuery = Query.And(queries);
-                        MELookup meLookup = ctx.LookUps.Collection.Find(mQuery).FirstOrDefault();
-                        if (meLookup != null)
+                        //go get lookupList from Redis using the redisKey now
+                        lookupList = client.Get<List<IdNamePair>>(redisKey);
+                    }
+                    else
+                    {
+                        using (LookUpMongoContext ctx = new LookUpMongoContext(_dbName))
                         {
-                            if (meLookup.Data != null)
+                            List<IMongoQuery> queries = new List<IMongoQuery>();
+                            queries.Add(Query.EQ(MELookup.TypeProperty, lookUpValue));
+                            queries.Add(Query.EQ(MELookup.DeleteFlagProperty, false));
+                            IMongoQuery mQuery = Query.And(queries);
+                            MELookup meLookup = ctx.LookUps.Collection.Find(mQuery).FirstOrDefault();
+                            if (meLookup != null)
                             {
-                                lookupList = new List<IdNamePair>();
-                                foreach (LookUpBase m in meLookup.Data)
+                                if (meLookup.Data != null)
                                 {
-                                    IdNamePair data = new IdNamePair { Id = m.DataId.ToString(), Name = m.Name };
-                                    lookupList.Add(data);
+                                
+                                    foreach (LookUpBase m in meLookup.Data)
+                                    {
+                                        IdNamePair data = new IdNamePair { Id = m.DataId.ToString(), Name = m.Name };
+                                        lookupList.Add(data);
+                                    }
+                                    lookupList = lookupList.OrderBy(s => s.Name).ToList();
                                 }
-                                lookupList = lookupList.OrderBy(s => s.Name).ToList();
                             }
                         }
+                        //put lookupList into cache using redisKey now
+                        if (client != null)
+                            client.Set<List<IdNamePair>>(redisKey, lookupList);
                     }
                 }
                 else

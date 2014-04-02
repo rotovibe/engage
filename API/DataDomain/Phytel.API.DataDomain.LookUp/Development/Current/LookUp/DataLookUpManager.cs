@@ -16,7 +16,7 @@ namespace Phytel.API.DataDomain.LookUp
 
             ILookUpRepository<GetProblemDataResponse> repo = Phytel.API.DataDomain.LookUp.LookUpRepositoryFactory<GetProblemDataResponse>.GetLookUpRepository(request.ContractNumber, request.Context, request.UserId);
             
-            response = repo.FindProblemByID(request.ProblemID) as GetProblemDataResponse;
+            response.Problem = repo.FindProblemByID(request.ProblemID) as ProblemData;
             return response;
         }
 
@@ -58,7 +58,7 @@ namespace Phytel.API.DataDomain.LookUp
 
             ILookUpRepository<GetObjectiveDataResponse> repo = LookUpRepositoryFactory<GetObjectiveDataResponse>.GetLookUpRepository(request.ContractNumber, request.Context, request.UserId);
 
-            result = repo.FindObjectiveByID(request.ObjectiveID) as GetObjectiveDataResponse;
+            result.Objective = repo.FindObjectiveByID(request.ObjectiveID) as IdNamePair;
 
             return (result != null ? result : new GetObjectiveDataResponse());
         } 
@@ -71,7 +71,7 @@ namespace Phytel.API.DataDomain.LookUp
 
             ILookUpRepository<GetCategoryDataResponse> repo = LookUpRepositoryFactory<GetCategoryDataResponse>.GetLookUpRepository(request.ContractNumber, request.Context, request.UserId);
 
-            result = repo.FindCategoryByID(request.CategoryID) as GetCategoryDataResponse;
+            result.Category = repo.FindCategoryByID(request.CategoryID) as IdNamePair;
 
             return (result != null ? result : new GetCategoryDataResponse());
         } 
