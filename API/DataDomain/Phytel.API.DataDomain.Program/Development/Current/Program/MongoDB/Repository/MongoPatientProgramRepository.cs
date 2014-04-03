@@ -57,6 +57,8 @@ namespace Phytel.API.DataDomain.Program
                 ProgramInfo pi = null;
                 using (ProgramMongoContext ctx = new ProgramMongoContext(_dbName))
                 {
+                    nmePP.UpdatedBy = null;
+                    nmePP.LastUpdatedOn = null;
                     ctx.PatientPrograms.Collection.Insert(nmePP);
 
                     // update programid in modules

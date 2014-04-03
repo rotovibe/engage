@@ -23,9 +23,9 @@ namespace Phytel.API.DataDomain.Patient.Service.Test
             string context = "NG";
             string priority = "3";
             double version = 1.0;
-            string token = "53358cb9d6a4850d341d96ee";
+            string token = "533d7d41d6a48508c45b4772";
             string programId = "5330920da38116ac180009d2";  //valid one
-            string patientId = "5325db50d6a4850adcbba8e6";
+            string patientId = "5325daa5d6a4850adcbba6e2";
 
             Stopwatch st = new Stopwatch();
             st.Start();
