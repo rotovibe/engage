@@ -247,8 +247,9 @@ namespace Phytel.API.DataDomain.LookUp
                 string redisKey = string.Format("{0}{1}{2}", "Lookup", "Problem", entityID);
                 ServiceStack.Redis.RedisClient client = null;
 
-                if(!string.IsNullOrEmpty(redisClientIPAddress))
-                    client = new ServiceStack.Redis.RedisClient(redisClientIPAddress);
+                //TODO: Uncomment the following 2 lines to turn Redis cache on
+                // if(!string.IsNullOrEmpty(redisClientIPAddress))
+                //  client = new ServiceStack.Redis.RedisClient(redisClientIPAddress);
 
                 //If the redisKey is already in Cache (REDIS) get it from there, else re-query
                 if (client != null && client.ContainsKey(redisKey))
@@ -300,8 +301,9 @@ namespace Phytel.API.DataDomain.LookUp
                 string redisKey = string.Format("{0}{1}{2}{3}", "Lookup", "Problem", request.Active, request.Type);
                 ServiceStack.Redis.RedisClient client = null;
 
-                if (!string.IsNullOrEmpty(redisClientIPAddress))
-                    client = new ServiceStack.Redis.RedisClient(redisClientIPAddress);
+                //TODO: Uncomment the following 2 lines to turn Redis cache on
+                //if (!string.IsNullOrEmpty(redisClientIPAddress))
+                //    client = new ServiceStack.Redis.RedisClient(redisClientIPAddress);
 
                 //If the redisKey is already in Cache (REDIS) get it from there, else re-query
                 if (client != null && client.ContainsKey(redisKey))
@@ -362,8 +364,9 @@ namespace Phytel.API.DataDomain.LookUp
                 string redisKey = string.Format("{0}{1}", "Lookup", "Problems");
                 ServiceStack.Redis.RedisClient client = null;
 
-                if (!string.IsNullOrEmpty(redisClientIPAddress))
-                    client = new ServiceStack.Redis.RedisClient(redisClientIPAddress);
+                //TODO: Uncomment the following 2 lines to turn Redis cache on
+                //if (!string.IsNullOrEmpty(redisClientIPAddress))
+                //    client = new ServiceStack.Redis.RedisClient(redisClientIPAddress);
 
                 //If the redisKey is already in Cache (REDIS) get it from there, else re-query
                 if (client != null && client.ContainsKey(redisKey))
@@ -416,8 +419,9 @@ namespace Phytel.API.DataDomain.LookUp
                 string redisKey = string.Format("{0}{1}{2}", "Lookup", "Category", entityID);
                 ServiceStack.Redis.RedisClient client = null;
 
-                if(!string.IsNullOrEmpty(redisClientIPAddress))
-                    client = new ServiceStack.Redis.RedisClient(redisClientIPAddress);
+                //TODO: Uncomment the following 2 lines to turn Redis cache on
+                // if(!string.IsNullOrEmpty(redisClientIPAddress))
+                //    client = new ServiceStack.Redis.RedisClient(redisClientIPAddress);
 
                 //If the redisKey is already in Cache (REDIS) get it from there, else re-query
                 if (client != null && client.ContainsKey(redisKey))
@@ -475,8 +479,9 @@ namespace Phytel.API.DataDomain.LookUp
                 string redisKey = string.Format("{0}{1}{2}", "Lookup", "Objective", entityID);
                 ServiceStack.Redis.RedisClient client = null;
 
-                if (!string.IsNullOrEmpty(redisClientIPAddress))
-                    client = new ServiceStack.Redis.RedisClient(redisClientIPAddress);
+                //TODO: Uncomment the following 2 lines to turn Redis cache on
+                //if (!string.IsNullOrEmpty(redisClientIPAddress))
+                //    client = new ServiceStack.Redis.RedisClient(redisClientIPAddress);
 
                 //If the redisKey is already in Cache (REDIS) get it from there, else re-query
                 if (client != null && client.ContainsKey(redisKey))
@@ -530,8 +535,9 @@ namespace Phytel.API.DataDomain.LookUp
                 string redisKey = string.Format("{0}{1}", "Lookup", "CommModes");
                 ServiceStack.Redis.RedisClient client = null;
 
-                if (!string.IsNullOrEmpty(redisClientIPAddress))
-                    client = new ServiceStack.Redis.RedisClient(redisClientIPAddress);
+                //TODO: Uncomment the following 2 lines to turn Redis cache on
+                // if (!string.IsNullOrEmpty(redisClientIPAddress))
+                //   client = new ServiceStack.Redis.RedisClient(redisClientIPAddress);
 
                 //If the redisKey is already in Cache (REDIS) get it from there, else re-query
                 if (client != null && client.ContainsKey(redisKey))
@@ -583,8 +589,9 @@ namespace Phytel.API.DataDomain.LookUp
                 string redisKey = string.Format("{0}{1}", "Lookup", "States");
                 ServiceStack.Redis.RedisClient client = null;
 
-                if (!string.IsNullOrEmpty(redisClientIPAddress))
-                    client = new ServiceStack.Redis.RedisClient(redisClientIPAddress);
+                //TODO: Uncomment the following 2 lines to turn Redis cache on
+                //if (!string.IsNullOrEmpty(redisClientIPAddress))
+                //    client = new ServiceStack.Redis.RedisClient(redisClientIPAddress);
 
                 //If the redisKey is already in Cache (REDIS) get it from there, else re-query
                 if (client != null && client.ContainsKey(redisKey))
@@ -635,8 +642,9 @@ namespace Phytel.API.DataDomain.LookUp
                 string redisKey = string.Format("{0}{1}", "Lookup", "TimesOfDays");
                 ServiceStack.Redis.RedisClient client = null;
 
-                if (!string.IsNullOrEmpty(redisClientIPAddress))
-                    client = new ServiceStack.Redis.RedisClient(redisClientIPAddress);
+                //TODO: Uncomment the following 2 lines to turn Redis cache on
+                //if (!string.IsNullOrEmpty(redisClientIPAddress))
+                //    client = new ServiceStack.Redis.RedisClient(redisClientIPAddress);
 
                 //If the redisKey is already in Cache (REDIS) get it from there, else re-query
                 if (client != null && client.ContainsKey(redisKey))
@@ -688,8 +696,9 @@ namespace Phytel.API.DataDomain.LookUp
                 string redisKey = string.Format("{0}{1}", "Lookup", "TimeZones");
                 ServiceStack.Redis.RedisClient client = null;
 
-                if (!string.IsNullOrEmpty(redisClientIPAddress))
-                    client = new ServiceStack.Redis.RedisClient(redisClientIPAddress);
+                //TODO: Uncomment the following 2 lines to turn Redis cache on
+                //if (!string.IsNullOrEmpty(redisClientIPAddress))
+                //    client = new ServiceStack.Redis.RedisClient(redisClientIPAddress);
 
                 //If the redisKey is already in Cache (REDIS) get it from there, else re-query
                 if (client != null && client.ContainsKey(redisKey))
@@ -743,8 +752,9 @@ namespace Phytel.API.DataDomain.LookUp
                 string redisKey = string.Format("{0}{1}", "Lookup", "CommTypes");
                 ServiceStack.Redis.RedisClient client = null;
 
-                if (!string.IsNullOrEmpty(redisClientIPAddress))
-                    client = new ServiceStack.Redis.RedisClient(redisClientIPAddress);
+                //TODO: Uncomment the following 2 lines to turn Redis cache on
+                //if (!string.IsNullOrEmpty(redisClientIPAddress))
+                //    client = new ServiceStack.Redis.RedisClient(redisClientIPAddress);
 
                 //If the redisKey is already in Cache (REDIS) get it from there, else re-query
                 if (client != null && client.ContainsKey(redisKey))
@@ -804,8 +814,9 @@ namespace Phytel.API.DataDomain.LookUp
                 string redisKey = string.Format("{0}{1}", "Lookup", "Languages");
                 ServiceStack.Redis.RedisClient client = null;
 
-                if (!string.IsNullOrEmpty(redisClientIPAddress))
-                    client = new ServiceStack.Redis.RedisClient(redisClientIPAddress);
+                //TODO: Uncomment the following 2 lines to turn Redis cache on
+                //if (!string.IsNullOrEmpty(redisClientIPAddress))
+                //    client = new ServiceStack.Redis.RedisClient(redisClientIPAddress);
 
                 //If the redisKey is already in Cache (REDIS) get it from there, else re-query
                 if (client != null && client.ContainsKey(redisKey))
@@ -856,8 +867,9 @@ namespace Phytel.API.DataDomain.LookUp
                 string redisKey = string.Format("{0}{1}", "Lookup", "DefaultTimeZone");
                 ServiceStack.Redis.RedisClient client = null;
 
-                if (!string.IsNullOrEmpty(redisClientIPAddress))
-                    client = new ServiceStack.Redis.RedisClient(redisClientIPAddress);
+                //TODO: Uncomment the following 2 lines to turn Redis cache on
+                //if (!string.IsNullOrEmpty(redisClientIPAddress))
+                //    client = new ServiceStack.Redis.RedisClient(redisClientIPAddress);
 
                 //If the redisKey is already in Cache (REDIS) get it from there, else re-query
                 if (client != null && client.ContainsKey(redisKey))
@@ -913,8 +925,9 @@ namespace Phytel.API.DataDomain.LookUp
                     string redisKey = string.Format("{0}{1}", "Lookup", type);
                     ServiceStack.Redis.RedisClient client = null;
 
-                    if(!string.IsNullOrEmpty(redisClientIPAddress))
-                        client = new ServiceStack.Redis.RedisClient(redisClientIPAddress);
+                    //TODO: Uncomment the following 2 lines to turn Redis cache on
+                    //if(!string.IsNullOrEmpty(redisClientIPAddress))
+                    //    client = new ServiceStack.Redis.RedisClient(redisClientIPAddress);
 
                     //If the redisKey is already in Cache (REDIS) get it from there, else re-query
                     if (client != null && client.ContainsKey(redisKey))
