@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MongoDB.Bson;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -23,6 +24,16 @@ namespace ProgramBuilder.Forms
         {
             NewActionForm newAction = new NewActionForm();
             newAction.ShowDialog();
+            if(newAction.DialogResult.Equals(DialogResult.OK))
+            {
+                ActionData nAction = new ActionData
+                {
+                    ID = ObjectId.GenerateNewId().ToString(),
+                    Name = newAction.nmTextBox.Text
+                };
+                ListViewItem lvi = actionListView.Items.Add(new ListViewItem(nAction.Name, nAction.ID.ToString()));
+                lvi.Checked = true;
+            }
         }
 
         private void closeButton_Click(object sender, EventArgs e)
@@ -56,5 +67,11 @@ namespace ProgramBuilder.Forms
             return null;
         }
 
+
+        private void addButton_Click(object sender, EventArgs e)
+        {
+            this.DialogResult = DialogResult.OK;
+            this.Hide();
+        }
     }
 }

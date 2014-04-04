@@ -17,11 +17,18 @@ namespace ProgramBuilder
 {
     public partial class ProgramForm : Form_Base
     {
+        public TreeNode prNT;
+        public TreeNode m;
+        public TreeNode a;
         private TreeNode m_OldSelectNode;
         public string programNameText;
         public string moduleNameText;
         public string actionNameText;
         public string stepNameText;
+        ProgramsUserControl puc = new ProgramsUserControl();
+        ModulesUserControl muc = new ModulesUserControl();
+        ActionsUserControl auc = new ActionsUserControl();
+        StepsUserControl suc = new StepsUserControl();
 
         public ProgramForm()
         {
@@ -37,25 +44,19 @@ namespace ProgramBuilder
             if (!(String.IsNullOrEmpty(programName.getProgramName())))
             {
                 programNameText = programName.getProgramName();
-                TreeNode prNT = new TreeNode(programNameText);
+                prNT = new TreeNode(programNameText);
                 prNT.Tag = "Program";
                 ProgramTree.Nodes.Add(prNT);
-                TreeNode test = new TreeNode("ModuleTest");
-                test.Tag = "Module";
-                prNT.Nodes.Add(test);
-                TreeNode test1 = new TreeNode("ActionTest");
-                test1.Tag = "Action";
-                test.Nodes.Add(test1);
-                TreeNode test2 = new TreeNode("StepTest");
-                test2.Tag = "Step";
-                test1.Nodes.Add(test2);
+                //TreeNode test = new TreeNode("ModuleTest");
+                //test.Tag = "Module";
+                //prNT.Nodes.Add(test);
+                //TreeNode test1 = new TreeNode("ActionTest");
+                //test1.Tag = "Action";
+                //test.Nodes.Add(test1);
+                //TreeNode test2 = new TreeNode("StepTest");
+                //test2.Tag = "Step";
+                //test1.Nodes.Add(test2);
             }
-        }
-
-        private void mnuNewModule_Click(object sender, EventArgs e)
-        {
-            ModuleListForm moduleName = new ModuleListForm();
-            moduleName.ShowDialog();            
         }
 
         private void ProgramTree_MouseUp(object sender, MouseEventArgs e)
@@ -109,24 +110,39 @@ namespace ProgramBuilder
             {
                 case "Program":
                     programNameText = ProgramTree.SelectedNode.Text;
-                    ProgramsUserControl puc = new ProgramsUserControl(programNameText);
+                    puc.addName(programNameText);
                     this.mainPanel.Controls.Add(puc);
                     break;
                 case "Module":
                     moduleNameText = ProgramTree.SelectedNode.Text;
-                    ModulesUserControl muc = new ModulesUserControl(moduleNameText);
+                    muc.addName(moduleNameText);
                     this.mainPanel.Controls.Add(muc);
                     break;
                 case "Action":
                     actionNameText = ProgramTree.SelectedNode.Text;
-                    ActionsUserControl auc = new ActionsUserControl(actionNameText);
+                    auc.addName(actionNameText);
                     this.mainPanel.Controls.Add(auc);
                     break;
                 case "Step":
                     stepNameText = ProgramTree.SelectedNode.Text;
-                    StepsUserControl suc = new StepsUserControl(stepNameText);
+                    suc.addName(stepNameText);
                     this.mainPanel.Controls.Add(suc);
                     break;
+            }
+        }
+
+        private void mnuNewModule_Click(object sender, EventArgs e)
+        {
+            ModuleListForm moduleList = new ModuleListForm();
+            moduleList.ShowDialog();
+            if (moduleList.DialogResult.Equals(DialogResult.OK))
+            {
+                foreach (ListViewItem l in moduleList.moduleListView.CheckedItems)
+                {
+                    m = new TreeNode(l.SubItems[0].Text);
+                    m.Tag = "Module";
+                    prNT.Nodes.Add(m);
+                }
             }
         }
 
@@ -134,6 +150,30 @@ namespace ProgramBuilder
         {
             ActionListForm actionList = new ActionListForm();
             actionList.ShowDialog();
+            if(actionList.DialogResult.Equals(DialogResult.OK))
+            {
+                foreach(ListViewItem l in actionList.actionListView.CheckedItems)
+                {
+                    a = new TreeNode(l.SubItems[0].Text);
+                    a.Tag = "Action";
+                    m.Nodes.Add(a);
+                }
+            }
+        }
+
+        private void mnuNewStep_Click(object sender, EventArgs e)
+        {
+            StepListForm stepList = new StepListForm();
+            stepList.ShowDialog();
+            if(stepList.DialogResult.Equals(DialogResult.OK))
+            {
+                foreach(ListViewItem l in stepList.stepListView.CheckedItems)
+                {
+                    TreeNode s = new TreeNode(l.SubItems[0].Text);
+                    s.Tag = "Step";
+                    a.Nodes.Add(s);
+                }
+            }
         }
 
         private void mnuDeleteProgram_Click(object sender, EventArgs e)
@@ -172,18 +212,43 @@ namespace ProgramBuilder
             }
         }
 
-        private void mnuNewStep_Click(object sender, EventArgs e)
-        {
-            StepListForm stepList = new StepListForm();
-            stepList.ShowDialog();
-        }
-
-
         private void saveButton_Click(object sender, EventArgs e)
         {
-            ProgramsUserControl puc = new ProgramsUserControl();
+            MEProgram newProgram = makeProgram();
+            List<Module> modulesList = new List<Module>();
 
-            //MEProgram newProgram = new MEProgram("000000000000000000000000")
+            foreach(TreeNode t in prNT.Nodes)
+            {
+                Module newModule = makeModule();
+                List<Phytel.API.DataDomain.Program.MongoDB.DTO.Action> actionsList = new List<Phytel.API.DataDomain.Program.MongoDB.DTO.Action>();
+                modulesList.Add(newModule);
+
+                foreach(TreeNode at in m.Nodes)
+                {
+                    Phytel.API.DataDomain.Program.MongoDB.DTO.Action newAction = makeAction();
+                    List<Step> stepsList = new List<Step>();
+                    actionsList.Add(newAction);
+
+                    foreach(TreeNode st in a.Nodes)
+                    {
+                        Step newStep = makeStep();
+                        stepsList.Add(newStep);
+                    }
+
+                    newAction.Steps = stepsList;
+
+                }
+
+                newModule.Actions = actionsList;
+
+            }
+
+            newProgram.Modules = modulesList;
+
+
+
+
+            
             //{
             //    //ContractId
             //    Client = ObjectId.Parse(puc.cliTextBox.Text),
@@ -230,6 +295,162 @@ namespace ProgramBuilder
 
             //Module
 
+        }
+
+        public MEProgram makeProgram()
+        {
+            MEProgram newProgram = new MEProgram("000000000000000000000000")
+            {
+                Id = ObjectId.GenerateNewId()
+            };
+
+            foreach (DataGridViewRow r in puc.dataGridView1.Rows)
+            {
+
+                String rValue = r.Cells[1].Value.ToString();
+
+                switch (r.Cells[0].Value.ToString())
+                {
+                    //case "Client:":
+                    //    newProgram.Client = ObjectId.Parse(rValue);
+                    //    break;
+                    case "Program Name:":
+                        newProgram.Name = rValue;
+                        break;
+                    case "Short Name:":
+                        newProgram.ShortName = rValue;
+                        break;
+                    case "Description:":
+                        newProgram.Description = rValue;
+                        break;
+                    case "Start Date:":
+                        if (String.IsNullOrEmpty(rValue))
+                            break;
+                        else
+                        {
+                            newProgram.StartDate = System.DateTime.Parse(rValue);
+                            break;
+                        }
+                    case "End Date:":
+                        if (String.IsNullOrEmpty(rValue))
+                            break;
+                        else
+                        {
+                            newProgram.EndDate = System.DateTime.Parse(rValue);
+                            break;
+                        }
+                    case "Order:":
+                        if (String.IsNullOrEmpty(rValue))
+                            break;
+                        else
+                        {
+                            newProgram.Order = Convert.ToInt32(rValue);
+                            break;
+                        }
+
+                }
+            }
+
+            return newProgram;
+        }
+
+        public Module makeModule()
+        {
+            Module newModule = new Module()
+            {
+                Id = ObjectId.GenerateNewId()
+            };
+
+            foreach (DataGridViewRow r in muc.dataGridView1.Rows)
+            {
+                String rValue = r.Cells[1].Value.ToString();
+
+                switch (r.Cells[0].Value.ToString())
+                {
+                    case "Module Name:":
+                        newModule.Name = rValue;
+                        break;
+                    case "Description:":
+                        newModule.Description = rValue;
+                        break;
+                    case "Status:":
+                        //newModule.Status =  rValue;
+                        break;
+                }
+            }
+
+            return newModule;
+        }
+
+        public Phytel.API.DataDomain.Program.MongoDB.DTO.Action makeAction()
+        {
+            Phytel.API.DataDomain.Program.MongoDB.DTO.Action newAction = new Phytel.API.DataDomain.Program.MongoDB.DTO.Action()
+            {
+                Id = ObjectId.GenerateNewId()
+            };
+            foreach(DataGridViewRow r in auc.dataGridView1.Rows)
+            {
+                String rValue = r.Cells[1].Value.ToString();
+
+                switch (r.Cells[0].Value.ToString())
+                {
+                    case "Action Name:":
+                        newAction.Name = rValue;
+                        break;
+                    case "Description:":
+                        newAction.Description = rValue;
+                        break;
+                    case "Status:":
+                        //newModule.Status =  rValue;
+                        break;
+                }
+            }
+
+            return newAction;
+        }
+
+        public Step makeStep()
+        {
+            Step newStep = new Step()
+            {
+                Id = ObjectId.GenerateNewId()
+            };
+            foreach(DataGridViewRow r in suc.dataGridView1.Rows)
+            {
+                String rValue = r.Cells[1].Value.ToString();
+
+                switch (r.Cells[0].Value.ToString())
+                {
+                    case "Title:":
+                        newStep.Title = rValue;
+                        break;
+                    case "Description:":
+                        newStep.Description = rValue;
+                        break;
+                    case "Notes:":
+                        newStep.Notes = rValue;
+                        break;
+                    case "Question:":
+                        newStep.Question = rValue;
+                        break;
+                    case "Response:":
+                        //newStep.Responses = rValue;
+                        break;
+                    case "Text:":
+                        newStep.Text = rValue;
+                        break;
+                    case "Type:":
+                        break;
+                    case "Next:":
+                        newStep.Next = ObjectId.Parse(rValue);
+                        break;
+                    case "Previous:":
+                        newStep.Previous = ObjectId.Parse(rValue);
+                        break;
+                }
+            }
+
+            return newStep;
         }
 
         public string getProgramName()

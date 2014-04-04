@@ -19,99 +19,6 @@ namespace ProgramBuilder
             InitializeComponent();
         }
 
-        public ProgramsUserControl(string s)
-        {
-            programNameText = s;
-            InitializeComponent();
-            addItems();
-        }
-
-
-        private void athbyTextBox_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void cliLabel_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void cliTextBox_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void nmTextBox_TextChanged(object sender, EventArgs e)
-        {
-            
-        }
-
-        private void nmLabel_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void athbyLabel_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void snLabel_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void snTextBox_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void descLabel_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void descTextBox_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void sdLabel_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        ////private void sdTextBox_TextChanged(object sender, EventArgs e)
-        //{
-        //    esdTextBox.Text = 
-        //}
-
-        private void edLabel_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        //private void edTextBox_TextChanged(object sender, EventArgs e)
-        //{
-        //    eedTextBox.Text = edTextBox.Text;
-        //}
-
-        private void stsLabel_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void stsNumericUpDwn_ValueChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void label9_Click(object sender, EventArgs e)
-        {
-
-        }
-
         private void ProgramsUserControl_Load(object sender, EventArgs e)
         {
             //vTextBox.Text = "1.0";
@@ -138,6 +45,7 @@ namespace ProgramBuilder
             dt.Rows.Add(dr2);
             DataRow dr3 = dt.NewRow();
             dr3["PropertyName"] = "Program Name:";
+            dr3["PropertyValue"] = programNameText;
             dt.Rows.Add(dr3);
             DataRow dr4 = dt.NewRow();
             dr4["PropertyName"] = "Short Name:";
@@ -203,7 +111,11 @@ namespace ProgramBuilder
             //listView1.Items.Add(v);
         }
 
-       
+        public void addName(String programName)
+        {
+            programNameText = programName;
+            addItems();
+        }
 
 
     }

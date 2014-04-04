@@ -42,6 +42,7 @@
             this.addButton.TabIndex = 7;
             this.addButton.Text = "Add";
             this.addButton.UseVisualStyleBackColor = true;
+            this.addButton.Click += new System.EventHandler(this.addButton_Click);
             // 
             // closeButton
             // 
@@ -65,11 +66,13 @@
             // 
             // stepListView
             // 
+            this.stepListView.CheckBoxes = true;
             this.stepListView.Location = new System.Drawing.Point(12, 18);
             this.stepListView.Name = "stepListView";
             this.stepListView.Size = new System.Drawing.Size(427, 364);
             this.stepListView.TabIndex = 4;
             this.stepListView.UseCompatibleStateImageBehavior = false;
+            this.stepListView.View = System.Windows.Forms.View.List;
             // 
             // StepListForm
             // 
@@ -91,7 +94,7 @@
         private System.Windows.Forms.Button addButton;
         private System.Windows.Forms.Button closeButton;
         private System.Windows.Forms.Button addStepButton;
-        private System.Windows.Forms.ListView stepListView;
+        public System.Windows.Forms.ListView stepListView;
 
     }
 }

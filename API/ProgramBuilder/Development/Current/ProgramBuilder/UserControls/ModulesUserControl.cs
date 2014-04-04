@@ -46,6 +46,7 @@ namespace ProgramBuilder
             DataColumn dc2 = dt.Columns.Add("PropertyValue");
             dr = dt.NewRow();
             dr["PropertyName"] = "Module Name:";
+            dr["PropertyValue"] = moduleNameText;
             dt.Rows.Add(dr);
             DataRow dr2 = dt.NewRow();
             dr2["PropertyName"] = "Description:";
@@ -62,5 +63,10 @@ namespace ProgramBuilder
 
         }
 
+        public void addName(String s)
+        {
+            moduleNameText = s;
+            addItems();
+        }
     }
 }

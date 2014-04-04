@@ -42,6 +42,7 @@
             this.addButton.TabIndex = 11;
             this.addButton.Text = "Add";
             this.addButton.UseVisualStyleBackColor = true;
+            this.addButton.Click += new System.EventHandler(this.addButton_Click);
             // 
             // closeButton
             // 
@@ -65,11 +66,13 @@
             // 
             // actionListView
             // 
+            this.actionListView.CheckBoxes = true;
             this.actionListView.Location = new System.Drawing.Point(12, 18);
             this.actionListView.Name = "actionListView";
             this.actionListView.Size = new System.Drawing.Size(427, 364);
             this.actionListView.TabIndex = 8;
             this.actionListView.UseCompatibleStateImageBehavior = false;
+            this.actionListView.View = System.Windows.Forms.View.List;
             // 
             // ActionListForm
             // 
@@ -92,6 +95,6 @@
         private System.Windows.Forms.Button addButton;
         private System.Windows.Forms.Button closeButton;
         private System.Windows.Forms.Button addActionButton;
-        private System.Windows.Forms.ListView actionListView;
+        public System.Windows.Forms.ListView actionListView;
     }
 }

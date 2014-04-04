@@ -21,5 +21,11 @@ namespace ProgramBuilder.Forms
         {
             this.Close();
         }
+
+        private void addButton_Click(object sender, EventArgs e)
+        {
+            this.DialogResult = DialogResult.OK;
+            this.Hide();
+        }
     }
 }

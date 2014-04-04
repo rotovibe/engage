@@ -22,7 +22,7 @@ using System.Configuration;
 
 namespace ProgramBuilder
 {
-    public abstract class Form_Base : Form
+    public class Form_Base : Form
     {
         //TODO
         protected String contractNumber = "InHealth001";

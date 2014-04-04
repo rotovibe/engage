@@ -36,6 +36,7 @@
             // 
             // moduleListView
             // 
+            this.moduleListView.CheckBoxes = true;
             this.moduleListView.Location = new System.Drawing.Point(12, 12);
             this.moduleListView.MultiSelect = false;
             this.moduleListView.Name = "moduleListView";
@@ -73,6 +74,7 @@
             this.addButton.TabIndex = 3;
             this.addButton.Text = "Add";
             this.addButton.UseVisualStyleBackColor = true;
+            this.addButton.Click += new System.EventHandler(this.addButton_Click);
             // 
             // ModuleListForm
             // 
@@ -92,9 +94,9 @@
 
         #endregion
 
-        private System.Windows.Forms.ListView moduleListView;
         private System.Windows.Forms.Button addModuleButton;
         private System.Windows.Forms.Button closeButton;
         private System.Windows.Forms.Button addButton;
+        public System.Windows.Forms.ListView moduleListView;
     }
 }

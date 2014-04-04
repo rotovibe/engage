@@ -237,6 +237,6 @@
         private System.Windows.Forms.TextBox uonTextBox;
         public System.Windows.Forms.NumericUpDown stsNumericUpDwn;
         public System.Windows.Forms.Label stsLabel;
-        private System.Windows.Forms.DataGridView dataGridView1;
+        public System.Windows.Forms.DataGridView dataGridView1;
     }
 }

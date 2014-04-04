@@ -24,20 +24,10 @@ namespace ProgramBuilder
             this.Close();
         }
 
-        private void addButton_Click(object sender, EventArgs e)
+        public void addButton_Click(object sender, EventArgs e)
         {
-            Module newModule = new Module()
-            {
-                Id = ObjectId.GenerateNewId().ToString(),
-                Name = nmTextBox.Text,
-                Description = descTextBox.Text,
-                //Objectives =
-                //Status = stsNumericUpDwn.Value.ToString(),
-                //Version = 
-            };
-
-            ModuleListForm moduleList = new ModuleListForm();
-            moduleList.addModule(newModule);
+            this.DialogResult = DialogResult.OK;
+            this.Hide();
         }
     }
 }

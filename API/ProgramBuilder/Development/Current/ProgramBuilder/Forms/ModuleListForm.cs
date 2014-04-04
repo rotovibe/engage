@@ -1,4 +1,5 @@
 ﻿using Phytel.API.DataDomain.Module.DTO;
+using MongoDB.Bson;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -19,8 +20,6 @@ namespace ProgramBuilder
     public partial class ModuleListForm : Form_Base
     {
         private List<Module> loadModules = new List<Module>();
-        //private double version = double.Parse(ConfigurationManager.AppSettings.Get("version"));
-        //private string context = ConfigurationManager.AppSettings.Get("context");
         string _headerUserId = string.Empty;
 
         public ModuleListForm()
@@ -59,8 +58,24 @@ namespace ProgramBuilder
 
         private void addModuleButton_Click(object sender, EventArgs e)
         {
-            NewModuleForm newModule = new NewModuleForm();
-            newModule.ShowDialog();
+
+            NewModuleForm newModuleForm = new NewModuleForm();
+            newModuleForm.ShowDialog();
+            if(newModuleForm.DialogResult.Equals(DialogResult.OK))
+            {
+                Module newModule = new Module()
+                {
+                    Id = ObjectId.GenerateNewId().ToString(),
+                    Name = newModuleForm.nmTextBox.Text,
+                    Description = newModuleForm.descTextBox.Text,
+                    //Objectives =
+                    //Status = stsNumericUpDwn.Value.ToString(),
+                    //Version = 
+                };
+                ListViewItem lvi = moduleListView.Items.Add(new ListViewItem(newModule.Name, newModule.Id));
+                lvi.Checked = true;
+            }
+            
         }
 
         private void closeButton_Click(object sender, EventArgs e)
@@ -68,10 +83,12 @@ namespace ProgramBuilder
             this.Close();
         }
 
-        public void addModule(Module newModule)
+        private void addButton_Click(object sender, EventArgs e)
         {
-            moduleListView.Items.Add(newModule.Name);
+            this.DialogResult = DialogResult.OK;
+            this.Hide();
         }
+
 
     }
 }

@@ -19,13 +19,6 @@ namespace ProgramBuilder.UserControls
             InitializeComponent();
         }
 
-        public StepsUserControl(string s)
-        {
-            stepNameText = s;
-            InitializeComponent();
-            addItems();
-        }
-
         private void StepsUserControl_Load(object sender, EventArgs e)
         {
             //uonTextBox.Text = System.DateTime.Now.ToString();
@@ -41,6 +34,7 @@ namespace ProgramBuilder.UserControls
             DataColumn dc2 = dt.Columns.Add("PropertyValue");
             dr = dt.NewRow();
             dr["PropertyName"] = "Title:";
+            dr["PropertyValue"] = stepNameText;
             dt.Rows.Add(dr);
             DataRow dr2 = dt.NewRow();
             dr2["PropertyName"] = "Description:";
@@ -84,6 +78,12 @@ namespace ProgramBuilder.UserControls
 
             dataGridView1.Columns["PropertyName"].ReadOnly = true;
 
+        }
+
+        public void addName(String s)
+        {
+            stepNameText = s;
+            addItems();
         }
     }
 }
