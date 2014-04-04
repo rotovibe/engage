@@ -104,6 +104,31 @@ namespace Phytel.API.DataDomain.Action
             throw new NotImplementedException();
         }
 
+        public GetAllActionsDataResponse SelectAll(double versionNumber, Common.Status status)
+        {
+            GetAllActionsDataResponse response = new GetAllActionsDataResponse()
+            {
+                Version = versionNumber
+            };
+
+            List<DTO.ActionData> list = new List<DTO.ActionData>();
+
+            using (ActionMongoContext ctx = new ActionMongoContext(_dbName))
+            {
+                list = (from a in ctx.Actions
+                        select new DTO.ActionData
+                        {
+                            ID = a.Id.ToString(),
+                            Name = a.Name,
+                            Description = a.Description,
+                            Status = status.ToString()
+                        }).ToList();
+            }
+            response.Actions = list;
+
+            return response;
+        }
+
         public object Update(object entity)
         {
             throw new NotImplementedException();

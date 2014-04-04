@@ -34,7 +34,7 @@ namespace ProgramBuilder
         {
             try
             {
-                return PullData(DataDomainTypes.Module) as GetAllModulesResponse;
+                return GetData(DataDomainTypes.Module) as GetAllModulesResponse;
             }
             catch (Exception ex)
             {

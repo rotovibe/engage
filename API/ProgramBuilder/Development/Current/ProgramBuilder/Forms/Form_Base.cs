@@ -1,5 +1,6 @@
 ﻿using Phytel.API.Common.CustomObject;
 using Phytel.API.DataDomain.Module.DTO;
+using Phytel.API.DataDomain.Action.DTO;
 using ProgramBuilder.Forms;
 using MongoDB.Bson;
 using System;
@@ -35,14 +36,14 @@ namespace ProgramBuilder
         object responsedata;
 
 
-        protected HttpClient GetHttpClient(DataDomainTypes datadomain)
+        protected HttpClient GetHttpClient(DataDomainTypes datadomain, string datadomainName = "")
         {
             requestUri = new Uri(string.Format("{0}/{1}/{2}/{3}/{4}?userid={5}",
-                                                    ConfigurationManager.AppSettings["urlhost"].ToString() + "/module",
+                                                    ConfigurationManager.AppSettings["urlhost"].ToString() + "/" + datadomain.ToString(),
                                                     context,
                                                     version,
                                                     contractNumber,
-                                                    datadomain.ToString(),
+                                                    String.IsNullOrEmpty(datadomainName)?datadomain.ToString():datadomainName,
                                                     _userid));            
             
             HttpClient client = new HttpClient();
@@ -54,10 +55,15 @@ namespace ProgramBuilder
             return client;
         }
 
-        protected object PullData(DataDomainTypes datadomain)
+        protected object GetData(DataDomainTypes datadomain)
+        {
+            return GetData(datadomain, "");
+        }
+
+        protected object GetData(DataDomainTypes datadomain, string datadomainName)
         {
             GetDTOs(datadomain);
-            HttpClient dataClient = GetHttpClient(datadomain);
+            HttpClient dataClient = GetHttpClient(datadomain, datadomainName);
 
             //IDomainResponse responsedata;
             
@@ -97,6 +103,11 @@ namespace ProgramBuilder
                     responsedata = new GetAllModulesResponse();
                     break;
                 
+                case DataDomainTypes.Action:
+                    req = new GetAllActionsDataRequest();
+                    responsedata = new GetAllActionsDataResponse();
+                    break;
+
                 default:
                     break;
             }
@@ -112,7 +123,9 @@ namespace ProgramBuilder
 
     public enum DataDomainTypes
     {
-        Module
+        Module,
+        Action,
+        Step
     }
     
 }

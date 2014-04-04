@@ -82,6 +82,7 @@
             this.Controls.Add(this.actionListView);
             this.Name = "ActionListForm";
             this.Text = "Action List";
+            this.Load += new System.EventHandler(this.ActionListForm_Load);
             this.ResumeLayout(false);
 
         }
