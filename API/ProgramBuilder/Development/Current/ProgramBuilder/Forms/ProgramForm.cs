@@ -178,17 +178,6 @@ namespace ProgramBuilder
             stepList.ShowDialog();
         }
 
-        private void updateProgramButton_Click(object sender, EventArgs e)
-        {
-            //MEProgram newProgram = new MEProgram("000000000000000000000000")
-            //{
-            //    Name = ProgramTree.SelectedNode.Text,
-            //    Description = descTextBox.Text,
-            //    StartDate = System.DateTime.Parse(sdTextBox.Text),
-            //    EndDate = System.DateTime.Parse(edTextBox.Text)
-
-            //};
-        }
 
         private void saveButton_Click(object sender, EventArgs e)
         {

@@ -317,7 +317,7 @@ namespace Phytel.API.DataDomain.Program
             throw new NotImplementedException();
         }
         
-        public MEProgram FindByID(string entityID, bool temp)
+        public DTO.Program FindByName(string entityID)
         {
             throw new NotImplementedException();
         }

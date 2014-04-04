@@ -33,10 +33,30 @@ namespace Phytel.API.DataDomain.Program
 
             programResponse.Program = result;
             return (programResponse != null ? programResponse : new GetProgramResponse());
-        }
+            }
             catch (Exception ex)
             {
                 throw new Exception("DD:DataProgramManager:GetProgramByID()::" + ex.Message, ex.InnerException);
+            }
+        }
+
+        public static GetProgramByNameResponse GetProgramByName(GetProgramByNameRequest request)
+        {
+            try
+            {
+                GetProgramByNameResponse programResponse = new GetProgramByNameResponse();
+                DTO.Program result;
+
+                IProgramRepository<GetProgramResponse> repo = ProgramRepositoryFactory<GetProgramResponse>.GetProgramRepository(request.ContractNumber, request.Context, request.UserId);
+
+                result = repo.FindByName(request.ProgramName) as DTO.Program;
+
+                programResponse.Program = result;
+                return (programResponse != null ? programResponse : new GetProgramByNameResponse());
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("DD:DataProgramManager:GetProgramByName()::" + ex.Message, ex.InnerException);
             }
         }
 

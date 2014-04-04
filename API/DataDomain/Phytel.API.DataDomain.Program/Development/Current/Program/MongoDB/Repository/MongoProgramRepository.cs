@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Phytel.API.DataDomain.Program.DTO;
 using Phytel.API.Interface;
 using MongoDB.Driver;
-using MongoDB.Driver.Builders;
+using MB = MongoDB.Driver.Builders;
 using MongoDB.Bson;
 using Phytel.API.DataDomain.Program;
 using Phytel.API.DataDomain.Program.MongoDB.DTO;
@@ -68,7 +68,7 @@ namespace Phytel.API.DataDomain.Program
                 MEProgram cp = null;
                 using (ProgramMongoContext ctx = new ProgramMongoContext(_dbName))
                 {
-                    var findcp = Query<MEProgram>.EQ(b => b.Id, ObjectId.Parse(entityID));
+                    var findcp = MB.Query<MEProgram>.EQ(b => b.Id, ObjectId.Parse(entityID));
                     cp = ctx.Programs.Collection.Find(findcp).FirstOrDefault();
                 }
                 return cp;
@@ -76,6 +76,37 @@ namespace Phytel.API.DataDomain.Program
             catch (Exception ex)
             {
                 throw new Exception("DD:Program:FindByID()::" + ex.Message, ex.InnerException);
+            }
+        }
+
+        public DTO.Program FindByName(string entityName)
+        {
+            try
+            {
+                DTO.Program result = null;
+
+                using (ProgramMongoContext ctx = new ProgramMongoContext(_dbName))
+                {
+                    var findcp = MB.Query<MEProgram>.EQ(b => b.Name, entityName);
+                    MEProgram cp = ctx.Programs.Collection.Find(findcp).FirstOrDefault();
+
+                    if (cp != null)
+                    {
+                        result = new DTO.Program
+                            {
+                                ProgramID = cp.Id.ToString()
+                            };
+                    }
+                    else
+                    {
+                        throw new ArgumentException("ProgramName is not valid or is missing from the records.");
+                    }
+                }
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("DD:PatientProgramRepository:FindByName()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -106,20 +137,6 @@ namespace Phytel.API.DataDomain.Program
         
         public MEProgram FindByID(string entityID, bool temp)
         {
-            //try
-            //{
-            //    MEProgram cp = null;
-            //    using (ProgramMongoContext ctx = new ProgramMongoContext(_dbName))
-            //    {
-            //        var findcp = Query<MEProgram>.EQ(b => b.Id, ObjectId.Parse(entityID));
-            //        cp = ctx.Programs.Collection.Find(findcp).FirstOrDefault();
-            //    }
-            //    return cp;
-            //}
-            //catch (Exception ex)
-            //{
-            //    throw new Exception("DD:Program:FindByID()::" + ex.Message, ex.InnerException);
-            //}
             throw new NotImplementedException();
         }
 
