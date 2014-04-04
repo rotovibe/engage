@@ -7,8 +7,9 @@ using System;
 
 namespace Phytel.API.AppDomain.NG.Service
 {
-    public partial class NGCareMembersService : ServiceStack.ServiceInterface.Service
+    public partial class NGService : ServiceStack.ServiceInterface.Service
     {
+
         public PostCareMemberResponse Post(PostCareMemberRequest request)
         {
             PostCareMemberResponse response = new PostCareMemberResponse();
@@ -18,7 +19,7 @@ namespace Phytel.API.AppDomain.NG.Service
             try
             {
                 request.Token = base.Request.Headers["Token"] as string;
-                result = ngm.IsUserValidated(request.Version, request.Token, request.ContractNumber);
+                result = _security.IsUserValidated(request.Version, request.Token, request.ContractNumber);
                 if (result.UserId.Trim() != string.Empty)
                 {
                     request.UserId = result.UserId;
@@ -50,7 +51,7 @@ namespace Phytel.API.AppDomain.NG.Service
             try
             {
                 request.Token = base.Request.Headers["Token"] as string;
-                result = ngm.IsUserValidated(request.Version, request.Token, request.ContractNumber);
+                result = _security.IsUserValidated(request.Version, request.Token, request.ContractNumber);
                 if (result.UserId.Trim() != string.Empty)
                 {
                     request.UserId = result.UserId;
@@ -82,7 +83,7 @@ namespace Phytel.API.AppDomain.NG.Service
             try
             {
                 request.Token = base.Request.Headers["Token"] as string;
-                result = nManager.IsUserValidated(request.Version, request.Token, request.ContractNumber);
+                result = _security.IsUserValidated(request.Version, request.Token, request.ContractNumber);
                 if (result.UserId.Trim() != string.Empty)
                 {
                     request.UserId = result.UserId;
@@ -114,7 +115,7 @@ namespace Phytel.API.AppDomain.NG.Service
             try
             {
                 request.Token = base.Request.Headers["Token"] as string;
-                result = nManager.IsUserValidated(request.Version, request.Token, request.ContractNumber);
+                result = _security.IsUserValidated(request.Version, request.Token, request.ContractNumber);
                 if (result.UserId.Trim() != string.Empty)
                 {
                     request.UserId = result.UserId;

@@ -12,6 +12,8 @@ namespace Phytel.API.AppDomain.NG.Service
 {
     public partial class NGService : ServiceStack.ServiceInterface.Service
     {
+        private ISecurityManager _security;
+
         public GetPatientResponse Post(GetPatientRequest request)
         {
             GetPatientResponse response = new GetPatientResponse();
@@ -21,7 +23,7 @@ namespace Phytel.API.AppDomain.NG.Service
             try
             {
                 request.Token = base.Request.Headers["Token"] as string;
-                result = ngm.IsUserValidated(request.Version, request.Token, request.ContractNumber);
+                result = _security.IsUserValidated(request.Version, request.Token, request.ContractNumber);
                 if (result.UserId.Trim() != string.Empty)
                 {
                     request.UserId = result.UserId;
@@ -62,7 +64,7 @@ namespace Phytel.API.AppDomain.NG.Service
             try
             {
                 request.Token = base.Request.Headers["Token"] as string;
-                result = ngm.IsUserValidated(request.Version, request.Token, request.ContractNumber);
+                result = _security.IsUserValidated(request.Version, request.Token, request.ContractNumber);
                 if (result.UserId.Trim() != string.Empty)
                 {
                     request.UserId = result.UserId;
@@ -104,7 +106,7 @@ namespace Phytel.API.AppDomain.NG.Service
             try
             {
                 request.Token = base.Request.Headers["Token"] as string;
-                result = ngm.IsUserValidated(request.Version, request.Token, request.ContractNumber);
+                result = _security.IsUserValidated(request.Version, request.Token, request.ContractNumber);
                 if (result.UserId.Trim() != string.Empty)
                 {
                     request.UserId = result.UserId;
@@ -136,7 +138,6 @@ namespace Phytel.API.AppDomain.NG.Service
 
             return response;
         }
-
        
         /// <summary>
         ///     ServiceStack's GET endpoint for getting active problems for a patient
@@ -152,7 +153,7 @@ namespace Phytel.API.AppDomain.NG.Service
             try
             {
                 request.Token = base.Request.Headers["Token"] as string;
-                result = ngm.IsUserValidated(request.Version, request.Token, request.ContractNumber);
+                result = _security.IsUserValidated(request.Version, request.Token, request.ContractNumber);
                 if (result.UserId.Trim() != string.Empty)
                 {
                     request.UserId = result.UserId;
@@ -185,7 +186,7 @@ namespace Phytel.API.AppDomain.NG.Service
             try
             {
                 request.Token = base.Request.Headers["Token"] as string;
-                result = ngm.IsUserValidated(request.Version, request.Token, request.ContractNumber);
+                result = _security.IsUserValidated(request.Version, request.Token, request.ContractNumber);
                 if (result.UserId.Trim() != string.Empty)
                 {
                     request.UserId = result.UserId;
@@ -218,7 +219,7 @@ namespace Phytel.API.AppDomain.NG.Service
             try
             {
                 request.Token = base.Request.Headers["Token"] as string;
-                result = ngm.IsUserValidated(request.Version, request.Token, request.ContractNumber);
+                result = _security.IsUserValidated(request.Version, request.Token, request.ContractNumber);
                 if (result.UserId.Trim() != string.Empty)
                 {
                     request.UserId = result.UserId;
@@ -251,7 +252,7 @@ namespace Phytel.API.AppDomain.NG.Service
             try
             {
                 request.Token = base.Request.Headers["Token"] as string;
-                result = ngm.IsUserValidated(request.Version, request.Token, request.ContractNumber);
+                result = _security.IsUserValidated(request.Version, request.Token, request.ContractNumber);
                 if (result.UserId.Trim() != string.Empty)
                 {
                     request.UserId = result.UserId;
@@ -284,7 +285,7 @@ namespace Phytel.API.AppDomain.NG.Service
             try
             {
                 request.Token = base.Request.Headers["Token"] as string;
-                result = ngm.IsUserValidated(request.Version, request.Token, request.ContractNumber);
+                result = _security.IsUserValidated(request.Version, request.Token, request.ContractNumber);
                 if (result.UserId.Trim() != string.Empty)
                 {
                     request.UserId = result.UserId;
@@ -317,7 +318,7 @@ namespace Phytel.API.AppDomain.NG.Service
             try
             {
                 request.Token = base.Request.Headers["Token"] as string;
-                result = ngm.IsUserValidated(request.Version, request.Token, request.ContractNumber);
+                result = _security.IsUserValidated(request.Version, request.Token, request.ContractNumber);
                 if (result.UserId.Trim() != string.Empty)
                 {
                     request.UserId = result.UserId;
@@ -350,7 +351,7 @@ namespace Phytel.API.AppDomain.NG.Service
             try
             {
                 request.Token = base.Request.Headers["Token"] as string;
-                result = ngm.IsUserValidated(request.Version, request.Token, request.ContractNumber);
+                result = _security.IsUserValidated(request.Version, request.Token, request.ContractNumber);
                 if (result.UserId.Trim() != string.Empty)
                 {
                     request.UserId = result.UserId;
@@ -391,7 +392,7 @@ namespace Phytel.API.AppDomain.NG.Service
             try
             {
                 request.Token = base.Request.Headers["Token"] as string;
-                result = ngm.IsUserValidated(request.Version, request.Token, request.ContractNumber);
+                result = _security.IsUserValidated(request.Version, request.Token, request.ContractNumber);
                 if (result.UserId.Trim() != string.Empty)
                 {
                     request.UserId = result.UserId;
@@ -424,7 +425,7 @@ namespace Phytel.API.AppDomain.NG.Service
             try
             {
                 request.Token = base.Request.Headers["Token"] as string;
-                result = ngm.IsUserValidated(request.Version, request.Token, request.ContractNumber);
+                result = _security.IsUserValidated(request.Version, request.Token, request.ContractNumber);
                 if (result.UserId != null)
                 {
                     if (result.UserId.Trim() != string.Empty)
@@ -462,7 +463,7 @@ namespace Phytel.API.AppDomain.NG.Service
             try
             {
                 request.Token = base.Request.Headers["Token"] as string;
-                result = ngm.IsUserValidated(request.Version, request.Token, request.ContractNumber);
+                result = _security.IsUserValidated(request.Version, request.Token, request.ContractNumber);
                 if (result.UserId.Trim() != string.Empty)
                 {
                     request.UserId = result.UserId;
@@ -495,7 +496,7 @@ namespace Phytel.API.AppDomain.NG.Service
             try
             {
                 request.Token = base.Request.Headers["Token"] as string;
-                result = ngm.IsUserValidated(request.Version, request.Token, request.ContractNumber);
+                result = _security.IsUserValidated(request.Version, request.Token, request.ContractNumber);
                 if (result.UserId.Trim() != string.Empty)
                 {
                     request.UserId = result.UserId;
@@ -529,7 +530,7 @@ namespace Phytel.API.AppDomain.NG.Service
             try
             {
                 request.Token = base.Request.Headers["Token"] as string;
-                result = ngm.IsUserValidated(request.Version, request.Token, request.ContractNumber);
+                result = _security.IsUserValidated(request.Version, request.Token, request.ContractNumber);
                 if (result.UserId.Trim() != string.Empty)
                 {
                     request.UserId = result.UserId;
@@ -571,7 +572,7 @@ namespace Phytel.API.AppDomain.NG.Service
             try
             {
                 request.Token = base.Request.Headers["Token"] as string;
-                result = ngm.IsUserValidated(request.Version, request.Token, request.ContractNumber);
+                result = _security.IsUserValidated(request.Version, request.Token, request.ContractNumber);
                 if (result.UserId.Trim() != string.Empty)
                 {
                     request.UserId = result.UserId;
@@ -604,7 +605,7 @@ namespace Phytel.API.AppDomain.NG.Service
             try
             {
                 request.Token = base.Request.Headers["Token"] as string;
-                result = ngm.IsUserValidated(request.Version, request.Token, request.ContractNumber);
+                result = _security.IsUserValidated(request.Version, request.Token, request.ContractNumber);
                 if (result.UserId.Trim() != string.Empty)
                 {
                     request.UserId = result.UserId;
@@ -638,7 +639,7 @@ namespace Phytel.API.AppDomain.NG.Service
             try
             {
                 request.Token = base.Request.Headers["Token"] as string;
-                result = ngm.IsUserValidated(request.Version, request.Token, request.ContractNumber);
+                result = _security.IsUserValidated(request.Version, request.Token, request.ContractNumber);
                 if (result.UserId.Trim() != string.Empty)
                 {
                     request.UserId = result.UserId;
@@ -673,7 +674,7 @@ namespace Phytel.API.AppDomain.NG.Service
             try
             {
                 request.Token = base.Request.Headers["Token"] as string;
-                result = ngm.IsUserValidated(request.Version, request.Token, request.ContractNumber);
+                result = _security.IsUserValidated(request.Version, request.Token, request.ContractNumber);
                 if (result.UserId.Trim() != string.Empty)
                 {
                     request.UserId = result.UserId;
@@ -706,7 +707,7 @@ namespace Phytel.API.AppDomain.NG.Service
             try
             {
                 request.Token = base.Request.Headers["Token"] as string;
-                result = ngm.IsUserValidated(request.Version, request.Token, request.ContractNumber);
+                result = _security.IsUserValidated(request.Version, request.Token, request.ContractNumber);
                 if (result.UserId.Trim() != string.Empty)
                 {
                     request.UserId = result.UserId;
@@ -739,7 +740,7 @@ namespace Phytel.API.AppDomain.NG.Service
             try
             {
                 request.Token = base.Request.Headers["Token"] as string;
-                result = ngm.IsUserValidated(request.Version, request.Token, request.ContractNumber);
+                result = _security.IsUserValidated(request.Version, request.Token, request.ContractNumber);
                 if (result.UserId.Trim() != string.Empty)
                 {
                     request.UserId = result.UserId;
@@ -772,7 +773,7 @@ namespace Phytel.API.AppDomain.NG.Service
             try
             {
                 request.Token = base.Request.Headers["Token"] as string;
-                result = ngm.IsUserValidated(request.Version, request.Token, request.ContractNumber);
+                result = _security.IsUserValidated(request.Version, request.Token, request.ContractNumber);
                 if (result.UserId.Trim() != string.Empty)
                 {
                     request.UserId = result.UserId;
@@ -805,7 +806,7 @@ namespace Phytel.API.AppDomain.NG.Service
             try
             {
                 request.Token = base.Request.Headers["Token"] as string;
-                result = ngm.IsUserValidated(request.Version, request.Token, request.ContractNumber);
+                result = _security.IsUserValidated(request.Version, request.Token, request.ContractNumber);
                 if (result.UserId.Trim() != string.Empty)
                 {
                     request.UserId = result.UserId;
@@ -838,7 +839,7 @@ namespace Phytel.API.AppDomain.NG.Service
             try
             {
                 request.Token = base.Request.Headers["Token"] as string;
-                result = ngm.IsUserValidated(request.Version, request.Token, request.ContractNumber);
+                result = _security.IsUserValidated(request.Version, request.Token, request.ContractNumber);
                 if (result.UserId.Trim() != string.Empty)
                 {
                     request.UserId = result.UserId;
@@ -874,7 +875,7 @@ namespace Phytel.API.AppDomain.NG.Service
             try
             {
                 request.Token = base.Request.Headers["Token"] as string;
-                result = ngm.IsUserValidated(request.Version, request.Token, request.ContractNumber);
+                result = _security.IsUserValidated(request.Version, request.Token, request.ContractNumber);
                 if (result.UserId.Trim() != string.Empty)
                 {
                     request.UserId = result.UserId;
@@ -899,7 +900,6 @@ namespace Phytel.API.AppDomain.NG.Service
         }
         #endregion
 
-
         #region PatientNote
         public PostPatientNoteResponse Post(PostPatientNoteRequest request)
         {
@@ -910,7 +910,7 @@ namespace Phytel.API.AppDomain.NG.Service
             try
             {
                 request.Token = base.Request.Headers["Token"] as string;
-                result = ngm.IsUserValidated(request.Version, request.Token, request.ContractNumber);
+                result = _security.IsUserValidated(request.Version, request.Token, request.ContractNumber);
                 if (result.UserId.Trim() != string.Empty)
                 {
                     request.UserId = result.UserId;
@@ -943,7 +943,7 @@ namespace Phytel.API.AppDomain.NG.Service
             try
             {
                 request.Token = base.Request.Headers["Token"] as string;
-                result = ngm.IsUserValidated(request.Version, request.Token, request.ContractNumber);
+                result = _security.IsUserValidated(request.Version, request.Token, request.ContractNumber);
                 if (result.UserId.Trim() != string.Empty)
                 {
                     request.UserId = result.UserId;
@@ -980,7 +980,7 @@ namespace Phytel.API.AppDomain.NG.Service
             try
             {
                 request.Token = base.Request.Headers["Token"] as string;
-                result = ngm.IsUserValidated(request.Version, request.Token, request.ContractNumber);
+                result = _security.IsUserValidated(request.Version, request.Token, request.ContractNumber);
                 if (result.UserId.Trim() != string.Empty)
                 {
                     request.UserId = result.UserId;
@@ -1019,7 +1019,7 @@ namespace Phytel.API.AppDomain.NG.Service
             try
             {
                 request.Token = base.Request.Headers["Token"] as string;
-                result = ngm.IsUserValidated(request.Version, request.Token, request.ContractNumber);
+                result = _security.IsUserValidated(request.Version, request.Token, request.ContractNumber);
                 if (result.UserId.Trim() != string.Empty)
                 {
                     request.UserId = result.UserId;
@@ -1043,5 +1043,9 @@ namespace Phytel.API.AppDomain.NG.Service
         }
         #endregion
 
+        public NGService()
+        {
+            _security = SecurityManagerFactory.Get();
+        }
     }
 }
