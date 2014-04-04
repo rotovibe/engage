@@ -381,6 +381,41 @@ namespace Phytel.API.DataDomain.PatientObservation
             }
         }
 
+        public List<int> GetAllowedObservationStates(string observationType)
+        {
+            List<int> allowedStates = null;
+            try
+            {
+                if (!string.IsNullOrEmpty(observationType))
+                {
+                    switch (observationType)
+                    {
+                        case "Lab":
+                            allowedStates = new List<int>();
+                            allowedStates.Add((int)ObservationState.Complete);
+                            allowedStates.Add((int)ObservationState.Decline);
+                            break;
+                        case "Vitals":
+                            allowedStates = new List<int>();
+                            allowedStates.Add((int)ObservationState.Complete);
+                            allowedStates.Add((int)ObservationState.Decline);
+                            break;
+                        case "Problem":
+                            allowedStates = new List<int>();
+                            allowedStates.Add((int)ObservationState.Active);
+                            allowedStates.Add((int)ObservationState.Inactive);
+                            allowedStates.Add((int)ObservationState.Resolved);
+                            break;
+                    }
+                }
+                return allowedStates;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
         public object GetObservationsByType(object newEntity, bool standard)
         {
             throw new NotImplementedException();

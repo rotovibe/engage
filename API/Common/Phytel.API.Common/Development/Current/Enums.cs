@@ -195,9 +195,10 @@ namespace Phytel.API.Common
     public enum ObservationState
     {
         Complete = 1,
-        Incomplete = 2,
-        Refused = 3,
-        Declined = 4
+        Active = 2,
+        Inactive = 3,
+        Resolved = 4,
+        Decline = 5
     }
 
     public enum MongoCollectionName

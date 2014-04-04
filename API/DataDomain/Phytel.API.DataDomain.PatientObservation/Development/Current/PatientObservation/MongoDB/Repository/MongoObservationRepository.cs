@@ -288,6 +288,11 @@ namespace Phytel.API.DataDomain.PatientObservation
             throw new NotImplementedException();
         }
 
+        public List<int> GetAllowedObservationStates(string observationType)
+        {
+            throw new NotImplementedException();
+        }
+
         public string UserId { get; set; }
     }
 }

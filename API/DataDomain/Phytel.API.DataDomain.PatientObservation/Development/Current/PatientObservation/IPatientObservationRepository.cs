@@ -14,5 +14,6 @@ namespace Phytel.API.DataDomain.PatientObservation
         object GetObservationsByType(object newEntity, bool standard);
         IEnumerable<object> FindObservationIdByPatientId(string Id);
         object FindRecentObservationValue(string observationTypeId, string patientId);
+        List<int> GetAllowedObservationStates(string description);
     }
 }
