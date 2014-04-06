@@ -95,8 +95,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CareMembersManager.cs" />
+    <Compile Include="INGManager.cs" />
     <Compile Include="ISecurityManager.cs" />
-    <Compile Include="Mocks\MockSecurityManager.cs" />
     <Compile Include="SecurityManager.cs" />
     <Compile Include="NotesManager.cs" />
     <Compile Include="GoalsManager.cs" />
@@ -127,7 +127,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="NGManager.cs" />
     <Compile Include="PlanElementStrategy\SpawnElementStrategy.cs" />
-    <Compile Include="SecurityManagerFactory.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\..\Common\Phytel.API.Common\Development\Current\Phytel.API.Common.csproj">
@@ -198,6 +197,7 @@
   <ItemGroup>
     <Content Include="spawncodes.txt" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

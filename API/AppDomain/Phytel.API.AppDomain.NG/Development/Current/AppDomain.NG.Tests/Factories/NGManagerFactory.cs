@@ -1,4 +1,4 @@
-﻿using Phytel.API.AppDomain.NG.Mocks;
+﻿using Phytel.API.AppDomain.NG.Service.Tests.Stubs;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -6,24 +6,24 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Phytel.API.AppDomain.NG
+namespace Phytel.API.AppDomain.NG.Service.Tests.Factories
 {
-    public static class SecurityManagerFactory
+    public static class NGManagerFactory
     {
         private static string mode;
 
-        public static ISecurityManager Get()
+        public static INGManager Get()
         {
             switch (mode)
             {
                 case "true":
-                    return new MockSecurityManager();
+                    return new StubNGManager();
                 default:
-                    return new SecurityManager();
+                    return new NGManager();
             }
         }
 
-        static SecurityManagerFactory()
+        static NGManagerFactory()
         {
             mode = ConfigurationManager.AppSettings["UnitTestMode"];
         }
