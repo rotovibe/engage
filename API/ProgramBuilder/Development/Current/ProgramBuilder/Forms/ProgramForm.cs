@@ -21,11 +21,15 @@ namespace ProgramBuilder
         public TreeNode m;
         public TreeNode a;
         private TreeNode m_OldSelectNode;
+        public string currentTag;
         public string programNameText;
         public string moduleNameText;
         public string actionNameText;
         public string stepNameText;
-        ProgramsUserControl puc = new ProgramsUserControl();
+        List<ProgramsUserControl> pucList = new List<ProgramsUserControl>();
+        List<ModulesUserControl> mucList = new List<ModulesUserControl>();
+        List<ActionsUserControl> aucList = new List<ActionsUserControl>();
+        List<StepsUserControl> sucList = new List<StepsUserControl>();
         ModulesUserControl muc = new ModulesUserControl();
         ActionsUserControl auc = new ActionsUserControl();
         StepsUserControl suc = new StepsUserControl();
@@ -47,15 +51,9 @@ namespace ProgramBuilder
                 prNT = new TreeNode(programNameText);
                 prNT.Tag = "Program";
                 ProgramTree.Nodes.Add(prNT);
-                //TreeNode test = new TreeNode("ModuleTest");
-                //test.Tag = "Module";
-                //prNT.Nodes.Add(test);
-                //TreeNode test1 = new TreeNode("ActionTest");
-                //test1.Tag = "Action";
-                //test.Nodes.Add(test1);
-                //TreeNode test2 = new TreeNode("StepTest");
-                //test2.Tag = "Step";
-                //test1.Nodes.Add(test2);
+                ProgramsUserControl npc = new ProgramsUserControl();
+                npc.addName(programNameText);
+                pucList.Add(npc);
             }
         }
 
@@ -109,24 +107,24 @@ namespace ProgramBuilder
             switch (Convert.ToString(ProgramTree.SelectedNode.Tag))
             {
                 case "Program":
-                    programNameText = ProgramTree.SelectedNode.Text;
-                    puc.addName(programNameText);
-                    this.mainPanel.Controls.Add(puc);
+                    int p = pucList.FindIndex(x => x.programNameText == ProgramTree.SelectedNode.Text);
+                    if(p >= 0)
+                        this.mainPanel.Controls.Add(pucList[p]);
                     break;
                 case "Module":
-                    moduleNameText = ProgramTree.SelectedNode.Text;
-                    muc.addName(moduleNameText);
-                    this.mainPanel.Controls.Add(muc);
+                    int m = mucList.FindIndex(x => x.moduleNameText == ProgramTree.SelectedNode.Text);
+                    if(m >= 0)
+                        this.mainPanel.Controls.Add(mucList[m]);
                     break;
                 case "Action":
-                    actionNameText = ProgramTree.SelectedNode.Text;
-                    auc.addName(actionNameText);
-                    this.mainPanel.Controls.Add(auc);
+                    int a = aucList.FindIndex(x => x.actionNameText == ProgramTree.SelectedNode.Text);
+                    if(a >= 0)
+                        this.mainPanel.Controls.Add(aucList[a]);
                     break;
                 case "Step":
-                    stepNameText = ProgramTree.SelectedNode.Text;
-                    suc.addName(stepNameText);
-                    this.mainPanel.Controls.Add(suc);
+                    int s = sucList.FindIndex(x => x.stepNameText == ProgramTree.SelectedNode.Text);
+                    if(s >= 0)
+                        this.mainPanel.Controls.Add(sucList[s]);
                     break;
             }
         }
@@ -141,7 +139,11 @@ namespace ProgramBuilder
                 {
                     m = new TreeNode(l.SubItems[0].Text);
                     m.Tag = "Module";
-                    prNT.Nodes.Add(m);
+                    ProgramTree.SelectedNode.Nodes.Add(m);
+                    ModulesUserControl nmc = new ModulesUserControl();
+                    moduleNameText = m.Text;
+                    nmc.addName(moduleNameText);
+                    mucList.Add(nmc);
                 }
             }
         }
@@ -156,7 +158,11 @@ namespace ProgramBuilder
                 {
                     a = new TreeNode(l.SubItems[0].Text);
                     a.Tag = "Action";
-                    m.Nodes.Add(a);
+                    ProgramTree.SelectedNode.Nodes.Add(a);
+                    ActionsUserControl nac = new ActionsUserControl();
+                    actionNameText = a.Text;
+                    nac.addName(actionNameText);
+                    aucList.Add(nac);
                 }
             }
         }
@@ -171,7 +177,11 @@ namespace ProgramBuilder
                 {
                     TreeNode s = new TreeNode(l.SubItems[0].Text);
                     s.Tag = "Step";
-                    a.Nodes.Add(s);
+                    ProgramTree.SelectedNode.Nodes.Add(s);
+                    StepsUserControl nsc = new StepsUserControl();
+                    stepNameText = s.Text;
+                    nsc.addName(stepNameText);
+                    sucList.Add(nsc);
                 }
             }
         }
@@ -214,97 +224,102 @@ namespace ProgramBuilder
 
         private void saveButton_Click(object sender, EventArgs e)
         {
-            MEProgram newProgram = makeProgram();
-            List<Module> modulesList = new List<Module>();
+        //    int n = ProgramTree.Nodes[0].GetNodeCount(false);
+        //    for (int p = 0; p < pucList.Count; p++)
+        //    {
+        //        MEProgram newProgram = makeProgram(p);
+        //        List<Module> modulesList = new List<Module>();
 
-            foreach(TreeNode t in prNT.Nodes)
-            {
-                Module newModule = makeModule();
-                List<Phytel.API.DataDomain.Program.MongoDB.DTO.Action> actionsList = new List<Phytel.API.DataDomain.Program.MongoDB.DTO.Action>();
-                modulesList.Add(newModule);
+        //        for(int m = 0; m < mucList.Count; m++)
+        //        {
+        //            Module newModule = makeModule(m);
+        //            List<Phytel.API.DataDomain.Program.MongoDB.DTO.Action> actionsList = new List<Phytel.API.DataDomain.Program.MongoDB.DTO.Action>();
+        //            modulesList.Add(newModule);
 
-                foreach(TreeNode at in m.Nodes)
-                {
-                    Phytel.API.DataDomain.Program.MongoDB.DTO.Action newAction = makeAction();
-                    List<Step> stepsList = new List<Step>();
-                    actionsList.Add(newAction);
+        //            foreach (TreeNode at in m.Nodes)
+        //            {
+        //                Phytel.API.DataDomain.Program.MongoDB.DTO.Action newAction = makeAction();
+        //                List<Step> stepsList = new List<Step>();
+        //                actionsList.Add(newAction);
 
-                    foreach(TreeNode st in a.Nodes)
-                    {
-                        Step newStep = makeStep();
-                        stepsList.Add(newStep);
-                    }
+        //                foreach (TreeNode st in a.Nodes)
+        //                {
+        //                    Step newStep = makeStep();
+        //                    stepsList.Add(newStep);
+        //                }
 
-                    newAction.Steps = stepsList;
+        //                newAction.Steps = stepsList;
 
-                }
+        //            }
 
-                newModule.Actions = actionsList;
+        //            newModule.Actions = actionsList;
 
-            }
+        //        }
 
-            newProgram.Modules = modulesList;
+        //        newProgram.Modules = modulesList;
+
+        //    }
 
 
 
 
             
-            //{
-            //    //ContractId
-            //    Client = ObjectId.Parse(puc.cliTextBox.Text),
-            //    //Completed
-            //    DeleteFlag = false,
-            //    Description = puc.descTextBox.Text,
-            //    //Enabled
-            //    EndDate = System.DateTime.Parse(puc.edTextBox.Text),
-            //    Name = puc.nmTextBox.Text,
-            //    //Next = ObjectId.Parse(""),
-            //    //Order = puc.oNumericUpDown.Value,
-            //    //Objectives
-            //    //Population = 
-            //    //Previous = ObjectId.Parse(""),
-            //    //ProgramTemplateId
-            //    StartDate = System.DateTime.Parse(puc.sdTextBox.Text),
-            //    ShortName = puc.snTextBox.Text,
-            //    //SourceId
-            //    //Status = puc.stsNumericUpDwn.Value
-            //    //TTLDate
-            //    //UpdatedBy
-            //    //LastUpdatedOn
-            //    //Version
-            //};
+        //    //{
+        //    //    //ContractId
+        //    //    Client = ObjectId.Parse(puc.cliTextBox.Text),
+        //    //    //Completed
+        //    //    DeleteFlag = false,
+        //    //    Description = puc.descTextBox.Text,
+        //    //    //Enabled
+        //    //    EndDate = System.DateTime.Parse(puc.edTextBox.Text),
+        //    //    Name = puc.nmTextBox.Text,
+        //    //    //Next = ObjectId.Parse(""),
+        //    //    //Order = puc.oNumericUpDown.Value,
+        //    //    //Objectives
+        //    //    //Population = 
+        //    //    //Previous = ObjectId.Parse(""),
+        //    //    //ProgramTemplateId
+        //    //    StartDate = System.DateTime.Parse(puc.sdTextBox.Text),
+        //    //    ShortName = puc.snTextBox.Text,
+        //    //    //SourceId
+        //    //    //Status = puc.stsNumericUpDwn.Value
+        //    //    //TTLDate
+        //    //    //UpdatedBy
+        //    //    //LastUpdatedOn
+        //    //    //Version
+        //    //};
 
-            //MEProgramAttribute newProgramAttribute = new MEProgramAttribute("000000000000000000000000")
-            //{
-            //    AuthoredBy = puc.athbyTextBox.Text,
-            //    //Completed
-            //    DeleteFlag = false,
-            //    EndDate = System.DateTime.Parse(puc.edTextBox.Text),
-            //    //EligibilityEndDate
-            //    //EligibilityRequirements
-            //    //EligibilityStartDate
-            //    //Locked
-            //    //Population
-            //    StartDate = System.DateTime.Parse(puc.sdTextBox.Text)
-            //    //Status puc.stsNumericUpDwn.Value,
-            //    //TTLDate
-            //    //UpdatedBy
-            //    //LastUpdatedOn
-            //    //Version
-            //};
+        //    //MEProgramAttribute newProgramAttribute = new MEProgramAttribute("000000000000000000000000")
+        //    //{
+        //    //    AuthoredBy = puc.athbyTextBox.Text,
+        //    //    //Completed
+        //    //    DeleteFlag = false,
+        //    //    EndDate = System.DateTime.Parse(puc.edTextBox.Text),
+        //    //    //EligibilityEndDate
+        //    //    //EligibilityRequirements
+        //    //    //EligibilityStartDate
+        //    //    //Locked
+        //    //    //Population
+        //    //    StartDate = System.DateTime.Parse(puc.sdTextBox.Text)
+        //    //    //Status puc.stsNumericUpDwn.Value,
+        //    //    //TTLDate
+        //    //    //UpdatedBy
+        //    //    //LastUpdatedOn
+        //    //    //Version
+        //    //};
 
-            //Module
+        //    //Module
 
         }
 
-        public MEProgram makeProgram()
+        public MEProgram makeProgram(int n)
         {
             MEProgram newProgram = new MEProgram("000000000000000000000000")
             {
                 Id = ObjectId.GenerateNewId()
             };
 
-            foreach (DataGridViewRow r in puc.dataGridView1.Rows)
+            foreach (DataGridViewRow r in pucList[n].dataGridView1.Rows)
             {
 
                 String rValue = r.Cells[1].Value.ToString();
@@ -347,21 +362,21 @@ namespace ProgramBuilder
                             newProgram.Order = Convert.ToInt32(rValue);
                             break;
                         }
-
                 }
             }
 
             return newProgram;
+            
         }
 
-        public Module makeModule()
+        public Module makeModule(int n)
         {
             Module newModule = new Module()
             {
                 Id = ObjectId.GenerateNewId()
             };
 
-            foreach (DataGridViewRow r in muc.dataGridView1.Rows)
+            foreach (DataGridViewRow r in mucList[n].dataGridView1.Rows)
             {
                 String rValue = r.Cells[1].Value.ToString();
 
