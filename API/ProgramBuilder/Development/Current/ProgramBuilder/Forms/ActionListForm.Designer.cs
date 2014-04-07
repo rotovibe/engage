@@ -36,6 +36,7 @@
             // 
             // addButton
             // 
+            this.addButton.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
             this.addButton.Location = new System.Drawing.Point(223, 405);
             this.addButton.Name = "addButton";
             this.addButton.Size = new System.Drawing.Size(75, 23);
@@ -46,6 +47,7 @@
             // 
             // closeButton
             // 
+            this.closeButton.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
             this.closeButton.Location = new System.Drawing.Point(142, 405);
             this.closeButton.Name = "closeButton";
             this.closeButton.Size = new System.Drawing.Size(75, 23);
@@ -56,6 +58,7 @@
             // 
             // addActionButton
             // 
+            this.addActionButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.addActionButton.Location = new System.Drawing.Point(12, 405);
             this.addActionButton.Name = "addActionButton";
             this.addActionButton.Size = new System.Drawing.Size(75, 23);
@@ -66,6 +69,9 @@
             // 
             // actionListView
             // 
+            this.actionListView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.actionListView.CheckBoxes = true;
             this.actionListView.Location = new System.Drawing.Point(12, 18);
             this.actionListView.Name = "actionListView";
@@ -83,6 +89,7 @@
             this.Controls.Add(this.closeButton);
             this.Controls.Add(this.addActionButton);
             this.Controls.Add(this.actionListView);
+            this.MinimumSize = new System.Drawing.Size(467, 484);
             this.Name = "ActionListForm";
             this.Text = "Action List";
             this.Load += new System.EventHandler(this.ActionListForm_Load);

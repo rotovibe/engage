@@ -29,13 +29,9 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            this.NewProgramButton = new System.Windows.Forms.Button();
-            this.ProgramTree = new System.Windows.Forms.TreeView();
             this.mnuNewModule = new System.Windows.Forms.ToolStripMenuItem();
             this.programContextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.mnuDeleteProgram = new System.Windows.Forms.ToolStripMenuItem();
-            this.saveButton = new System.Windows.Forms.Button();
-            this.closeButton = new System.Windows.Forms.Button();
             this.moduleContextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.mnuNewAction = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuDeleteModule = new System.Windows.Forms.ToolStripMenuItem();
@@ -45,30 +41,15 @@
             this.stepContextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.mnuDeleteStep = new System.Windows.Forms.ToolStripMenuItem();
             this.mainPanel = new System.Windows.Forms.Panel();
+            this.closeButton = new System.Windows.Forms.Button();
+            this.saveButton = new System.Windows.Forms.Button();
+            this.ProgramTree = new System.Windows.Forms.TreeView();
+            this.NewProgramButton = new System.Windows.Forms.Button();
             this.programContextMenuStrip.SuspendLayout();
             this.moduleContextMenuStrip.SuspendLayout();
             this.actionContextMenuStrip.SuspendLayout();
             this.stepContextMenuStrip.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // NewProgramButton
-            // 
-            this.NewProgramButton.Location = new System.Drawing.Point(12, 12);
-            this.NewProgramButton.Name = "NewProgramButton";
-            this.NewProgramButton.Size = new System.Drawing.Size(90, 23);
-            this.NewProgramButton.TabIndex = 0;
-            this.NewProgramButton.Text = "New Program";
-            this.NewProgramButton.UseVisualStyleBackColor = true;
-            this.NewProgramButton.Click += new System.EventHandler(this.NewProgramButton_Click);
-            // 
-            // ProgramTree
-            // 
-            this.ProgramTree.Location = new System.Drawing.Point(12, 41);
-            this.ProgramTree.Name = "ProgramTree";
-            this.ProgramTree.Size = new System.Drawing.Size(169, 432);
-            this.ProgramTree.TabIndex = 2;
-            this.ProgramTree.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.ProgramTree_AfterSelect);
-            this.ProgramTree.MouseUp += new System.Windows.Forms.MouseEventHandler(this.ProgramTree_MouseUp);
             // 
             // mnuNewModule
             // 
@@ -91,26 +72,6 @@
             this.mnuDeleteProgram.Size = new System.Drawing.Size(151, 22);
             this.mnuDeleteProgram.Text = "Delete";
             this.mnuDeleteProgram.Click += new System.EventHandler(this.mnuDeleteProgram_Click);
-            // 
-            // saveButton
-            // 
-            this.saveButton.Location = new System.Drawing.Point(581, 481);
-            this.saveButton.Name = "saveButton";
-            this.saveButton.Size = new System.Drawing.Size(75, 23);
-            this.saveButton.TabIndex = 3;
-            this.saveButton.Text = "Save";
-            this.saveButton.UseVisualStyleBackColor = true;
-            this.saveButton.Click += new System.EventHandler(this.saveButton_Click);
-            // 
-            // closeButton
-            // 
-            this.closeButton.Location = new System.Drawing.Point(500, 481);
-            this.closeButton.Name = "closeButton";
-            this.closeButton.Size = new System.Drawing.Size(75, 23);
-            this.closeButton.TabIndex = 4;
-            this.closeButton.Text = "Close";
-            this.closeButton.UseVisualStyleBackColor = true;
-            this.closeButton.Click += new System.EventHandler(this.closeButton_Click);
             // 
             // moduleContextMenuStrip
             // 
@@ -172,10 +133,57 @@
             // 
             // mainPanel
             // 
+            this.mainPanel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.mainPanel.Location = new System.Drawing.Point(198, 41);
             this.mainPanel.Name = "mainPanel";
             this.mainPanel.Size = new System.Drawing.Size(458, 432);
             this.mainPanel.TabIndex = 8;
+            // 
+            // closeButton
+            // 
+            this.closeButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.closeButton.Location = new System.Drawing.Point(500, 481);
+            this.closeButton.Name = "closeButton";
+            this.closeButton.Size = new System.Drawing.Size(75, 23);
+            this.closeButton.TabIndex = 4;
+            this.closeButton.Text = "Close";
+            this.closeButton.UseVisualStyleBackColor = true;
+            this.closeButton.Click += new System.EventHandler(this.closeButton_Click);
+            // 
+            // saveButton
+            // 
+            this.saveButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.saveButton.Location = new System.Drawing.Point(581, 481);
+            this.saveButton.Name = "saveButton";
+            this.saveButton.Size = new System.Drawing.Size(75, 23);
+            this.saveButton.TabIndex = 3;
+            this.saveButton.Text = "Save";
+            this.saveButton.UseVisualStyleBackColor = true;
+            this.saveButton.Click += new System.EventHandler(this.saveButton_Click);
+            // 
+            // ProgramTree
+            // 
+            this.ProgramTree.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.ProgramTree.Location = new System.Drawing.Point(12, 41);
+            this.ProgramTree.Name = "ProgramTree";
+            this.ProgramTree.ShowLines = false;
+            this.ProgramTree.Size = new System.Drawing.Size(169, 432);
+            this.ProgramTree.TabIndex = 2;
+            this.ProgramTree.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.ProgramTree_AfterSelect);
+            this.ProgramTree.MouseUp += new System.Windows.Forms.MouseEventHandler(this.ProgramTree_MouseUp);
+            // 
+            // NewProgramButton
+            // 
+            this.NewProgramButton.Location = new System.Drawing.Point(12, 12);
+            this.NewProgramButton.Name = "NewProgramButton";
+            this.NewProgramButton.Size = new System.Drawing.Size(90, 23);
+            this.NewProgramButton.TabIndex = 0;
+            this.NewProgramButton.Text = "New Program";
+            this.NewProgramButton.UseVisualStyleBackColor = true;
+            this.NewProgramButton.Click += new System.EventHandler(this.NewProgramButton_Click);
             // 
             // ProgramForm
             // 
@@ -187,6 +195,8 @@
             this.Controls.Add(this.saveButton);
             this.Controls.Add(this.ProgramTree);
             this.Controls.Add(this.NewProgramButton);
+            this.Location = new System.Drawing.Point(30, 30);
+            this.MinimumSize = new System.Drawing.Size(682, 551);
             this.Name = "ProgramForm";
             this.Text = "Program";
             this.programContextMenuStrip.ResumeLayout(false);

@@ -17,15 +17,22 @@ namespace ProgramBuilder.Forms
             InitializeComponent();
         }
 
-        private void closeButton_Click(object sender, EventArgs e)
-        {
-            this.Close();
-        }
-
         private void addButton_Click(object sender, EventArgs e)
         {
-            this.DialogResult = DialogResult.OK;
-            this.Hide();
+            if (String.IsNullOrEmpty(nmTextBox.Text))
+            {
+                MessageBox.Show("Please enter a name for the new Step");
+            }
+            else
+            {
+                this.DialogResult = DialogResult.OK;
+                this.Hide();
+            }
+        }
+
+        private void closeButton_Click_1(object sender, EventArgs e)
+        {
+            this.Close();
         }
     }
 }

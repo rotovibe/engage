@@ -79,6 +79,9 @@
             this.Controls.Add(this.NameBox);
             this.Controls.Add(this.OkButton);
             this.Controls.Add(this.ExitButton);
+            this.MaximizeBox = false;
+            this.MaximumSize = new System.Drawing.Size(300, 153);
+            this.MinimumSize = new System.Drawing.Size(300, 153);
             this.Name = "ProgramNameForm";
             this.Text = "New Program Name";
             this.Load += new System.EventHandler(this.ProgramNameForm_Load);

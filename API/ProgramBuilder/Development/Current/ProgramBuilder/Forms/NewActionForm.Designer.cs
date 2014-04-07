@@ -54,7 +54,7 @@
             0});
             this.stsNumericUpDwn.Name = "stsNumericUpDwn";
             this.stsNumericUpDwn.Size = new System.Drawing.Size(34, 20);
-            this.stsNumericUpDwn.TabIndex = 103;
+            this.stsNumericUpDwn.TabIndex = 99;
             this.stsNumericUpDwn.Value = new decimal(new int[] {
             1,
             0,
@@ -107,7 +107,7 @@
             this.button1.Location = new System.Drawing.Point(144, 116);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(75, 23);
-            this.button1.TabIndex = 89;
+            this.button1.TabIndex = 101;
             this.button1.Text = "Add";
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
@@ -117,9 +117,10 @@
             this.button2.Location = new System.Drawing.Point(63, 116);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(75, 23);
-            this.button2.TabIndex = 88;
+            this.button2.TabIndex = 100;
             this.button2.Text = "Close";
             this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
             // NewActionForm
             // 
@@ -134,6 +135,7 @@
             this.Controls.Add(this.nmLabel);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.button2);
+            this.MinimumSize = new System.Drawing.Size(300, 197);
             this.Name = "NewActionForm";
             this.Text = "NewActionForm";
             ((System.ComponentModel.ISupportInitialize)(this.stsNumericUpDwn)).EndInit();

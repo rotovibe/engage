@@ -120,6 +120,7 @@
             this.closeButton.TabIndex = 88;
             this.closeButton.Text = "Close";
             this.closeButton.UseVisualStyleBackColor = true;
+            this.closeButton.Click += new System.EventHandler(this.closeButton_Click_1);
             // 
             // NewStepForm
             // 
@@ -134,6 +135,7 @@
             this.Controls.Add(this.nmLabel);
             this.Controls.Add(this.addButton);
             this.Controls.Add(this.closeButton);
+            this.MinimumSize = new System.Drawing.Size(312, 204);
             this.Name = "NewStepForm";
             this.Text = "NewStepForm";
             ((System.ComponentModel.ISupportInitialize)(this.stsNumericUpDwn)).EndInit();

@@ -20,8 +20,6 @@ namespace ProgramBuilder
         public TreeNode prNT;
         public TreeNode m;
         public TreeNode a;
-        private TreeNode m_OldSelectNode;
-        public string currentTag;
         public string programNameText;
         public string moduleNameText;
         public string actionNameText;
@@ -30,9 +28,6 @@ namespace ProgramBuilder
         List<ModulesUserControl> mucList = new List<ModulesUserControl>();
         List<ActionsUserControl> aucList = new List<ActionsUserControl>();
         List<StepsUserControl> sucList = new List<StepsUserControl>();
-        ModulesUserControl muc = new ModulesUserControl();
-        ActionsUserControl auc = new ActionsUserControl();
-        StepsUserControl suc = new StepsUserControl();
 
         public ProgramForm()
         {
@@ -65,14 +60,7 @@ namespace ProgramBuilder
                 TreeNode node = ProgramTree.GetNodeAt(p);
                 if (node != null)
                 {
-
-                     //Select the node the user has clicked.
-                     //The node appears selected until the menu is displayed on the screen.
-                    m_OldSelectNode = ProgramTree.SelectedNode;
                     ProgramTree.SelectedNode = node;
-
-                     //Find the appropriate ContextMenu depending on the selected node.
-                    //programContextMenuStrip.Show(ProgramTree, p);
                     switch (Convert.ToString(node.Tag))
                     {
                         case "Program":
@@ -88,10 +76,6 @@ namespace ProgramBuilder
                             stepContextMenuStrip.Show(ProgramTree, p);
                             break;
                     }
-
-                    // Highlight the selected node.
-                    ProgramTree.SelectedNode = m_OldSelectNode;
-                    m_OldSelectNode = null;
                 }
             }
         }
@@ -190,6 +174,8 @@ namespace ProgramBuilder
         {
             if (MessageBox.Show("Do you want to delete this Program?", "Warning", MessageBoxButtons.YesNo) == DialogResult.Yes)
             {
+                int p = pucList.FindIndex(x => x.programNameText == ProgramTree.SelectedNode.Text);
+                pucList.RemoveAt(p);
                 ProgramTree.SelectedNode.Remove();
                 this.mainPanel.Controls.Clear();
             }
@@ -199,8 +185,9 @@ namespace ProgramBuilder
         {
             if (MessageBox.Show("Do you want to delete this Module?", "Warning", MessageBoxButtons.YesNo) == DialogResult.Yes)
             {
+                int m = mucList.FindIndex(x => x.moduleNameText == ProgramTree.SelectedNode.Text);
+                mucList.RemoveAt(m);
                 ProgramTree.SelectedNode.Remove();
-                //modulePanel.Visible = false;
             }
         }
 
@@ -208,8 +195,9 @@ namespace ProgramBuilder
         {
             if (MessageBox.Show("Do you want to delete this Action?", "Warning", MessageBoxButtons.YesNo) == DialogResult.Yes)
             {
+                int a = aucList.FindIndex(x => x.actionNameText == ProgramTree.SelectedNode.Text);
+                aucList.RemoveAt(a);
                 ProgramTree.SelectedNode.Remove();
-                //actionPanel.Visible = false;
             }
         }
 
@@ -217,48 +205,43 @@ namespace ProgramBuilder
         {
             if (MessageBox.Show("Do you want to delete this Step?", "Warning", MessageBoxButtons.YesNo) == DialogResult.Yes)
             {
+                int s = sucList.FindIndex(x => x.stepNameText == ProgramTree.SelectedNode.Text);
+                sucList.RemoveAt(s);
                 ProgramTree.SelectedNode.Remove();
-                //stepPanel.Visible = false;
             }
         }
 
         private void saveButton_Click(object sender, EventArgs e)
         {
-        //    int n = ProgramTree.Nodes[0].GetNodeCount(false);
-        //    for (int p = 0; p < pucList.Count; p++)
-        //    {
-        //        MEProgram newProgram = makeProgram(p);
-        //        List<Module> modulesList = new List<Module>();
+            for (int p = 0; p < ProgramTree.GetNodeCount(false); p++)
+            {
+                MEProgram newProgram = makeProgram(p);
+                List<Module> modulesList = new List<Module>();
+                for (int mo = 0; mo < ProgramTree.Nodes[p].GetNodeCount(false); mo++)
+                {
+                    Module newModule = makeModule(mo);
+                    List<Phytel.API.DataDomain.Program.MongoDB.DTO.Action> actionsList = new List<Phytel.API.DataDomain.Program.MongoDB.DTO.Action>();
+                    for (int ac = 0; ac < ProgramTree.Nodes[p].Nodes[mo].GetNodeCount(false); ac++ )
+                    {
+                        Phytel.API.DataDomain.Program.MongoDB.DTO.Action newAction = makeAction(ac);
+                        List<Step> stepsList = new List<Step>();
+                        for (int st = 0; st < ProgramTree.Nodes[p].Nodes[mo].Nodes[ac].GetNodeCount(false); st++)
+                        {
+                            Step newStep = makeStep(st);
+                            stepsList.Add(newStep);
+                        }
 
-        //        for(int m = 0; m < mucList.Count; m++)
-        //        {
-        //            Module newModule = makeModule(m);
-        //            List<Phytel.API.DataDomain.Program.MongoDB.DTO.Action> actionsList = new List<Phytel.API.DataDomain.Program.MongoDB.DTO.Action>();
-        //            modulesList.Add(newModule);
+                        newAction.Steps = stepsList;
+                        actionsList.Add(newAction);
+                    }
 
-        //            foreach (TreeNode at in m.Nodes)
-        //            {
-        //                Phytel.API.DataDomain.Program.MongoDB.DTO.Action newAction = makeAction();
-        //                List<Step> stepsList = new List<Step>();
-        //                actionsList.Add(newAction);
+                    newModule.Actions = actionsList;
+                    modulesList.Add(newModule);
+                }
 
-        //                foreach (TreeNode st in a.Nodes)
-        //                {
-        //                    Step newStep = makeStep();
-        //                    stepsList.Add(newStep);
-        //                }
+                newProgram.Modules = modulesList;
 
-        //                newAction.Steps = stepsList;
-
-        //            }
-
-        //            newModule.Actions = actionsList;
-
-        //        }
-
-        //        newProgram.Modules = modulesList;
-
-        //    }
+            }
 
 
 
@@ -397,13 +380,13 @@ namespace ProgramBuilder
             return newModule;
         }
 
-        public Phytel.API.DataDomain.Program.MongoDB.DTO.Action makeAction()
+        public Phytel.API.DataDomain.Program.MongoDB.DTO.Action makeAction(int n)
         {
             Phytel.API.DataDomain.Program.MongoDB.DTO.Action newAction = new Phytel.API.DataDomain.Program.MongoDB.DTO.Action()
             {
                 Id = ObjectId.GenerateNewId()
             };
-            foreach(DataGridViewRow r in auc.dataGridView1.Rows)
+            foreach(DataGridViewRow r in aucList[n].dataGridView1.Rows)
             {
                 String rValue = r.Cells[1].Value.ToString();
 
@@ -424,13 +407,13 @@ namespace ProgramBuilder
             return newAction;
         }
 
-        public Step makeStep()
+        public Step makeStep(int n)
         {
             Step newStep = new Step()
             {
                 Id = ObjectId.GenerateNewId()
             };
-            foreach(DataGridViewRow r in suc.dataGridView1.Rows)
+            foreach(DataGridViewRow r in sucList[n].dataGridView1.Rows)
             {
                 String rValue = r.Cells[1].Value.ToString();
 

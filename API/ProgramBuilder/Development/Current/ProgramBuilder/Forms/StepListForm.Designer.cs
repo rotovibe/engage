@@ -36,6 +36,7 @@
             // 
             // addButton
             // 
+            this.addButton.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
             this.addButton.Location = new System.Drawing.Point(223, 405);
             this.addButton.Name = "addButton";
             this.addButton.Size = new System.Drawing.Size(75, 23);
@@ -46,6 +47,7 @@
             // 
             // closeButton
             // 
+            this.closeButton.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
             this.closeButton.Location = new System.Drawing.Point(142, 405);
             this.closeButton.Name = "closeButton";
             this.closeButton.Size = new System.Drawing.Size(75, 23);
@@ -56,6 +58,7 @@
             // 
             // addStepButton
             // 
+            this.addStepButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.addStepButton.Location = new System.Drawing.Point(12, 405);
             this.addStepButton.Name = "addStepButton";
             this.addStepButton.Size = new System.Drawing.Size(75, 23);
@@ -66,6 +69,9 @@
             // 
             // stepListView
             // 
+            this.stepListView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.stepListView.CheckBoxes = true;
             this.stepListView.Location = new System.Drawing.Point(12, 18);
             this.stepListView.Name = "stepListView";
@@ -83,6 +89,7 @@
             this.Controls.Add(this.closeButton);
             this.Controls.Add(this.addStepButton);
             this.Controls.Add(this.stepListView);
+            this.MinimumSize = new System.Drawing.Size(467, 484);
             this.Name = "StepListForm";
             this.Text = "Step List";
             this.ResumeLayout(false);

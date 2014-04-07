@@ -135,6 +135,7 @@
             this.Controls.Add(this.nmLabel);
             this.Controls.Add(this.addButton);
             this.Controls.Add(this.closeButton);
+            this.MinimumSize = new System.Drawing.Size(312, 204);
             this.Name = "NewModuleForm";
             this.Text = "New Module";
             ((System.ComponentModel.ISupportInitialize)(this.stsNumericUpDwn)).EndInit();

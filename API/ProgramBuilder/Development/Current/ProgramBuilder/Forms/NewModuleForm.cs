@@ -26,8 +26,15 @@ namespace ProgramBuilder
 
         public void addButton_Click(object sender, EventArgs e)
         {
-            this.DialogResult = DialogResult.OK;
-            this.Hide();
+            if (String.IsNullOrEmpty(nmTextBox.Text))
+            {
+                MessageBox.Show("Please enter a name for the new Module");
+            }
+            else
+            {
+                this.DialogResult = DialogResult.OK;
+                this.Hide();
+            }
         }
     }
 }

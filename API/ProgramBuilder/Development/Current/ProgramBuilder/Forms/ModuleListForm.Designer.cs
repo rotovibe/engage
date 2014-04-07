@@ -36,9 +36,11 @@
             // 
             // moduleListView
             // 
+            this.moduleListView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.moduleListView.CheckBoxes = true;
             this.moduleListView.Location = new System.Drawing.Point(12, 12);
-            this.moduleListView.MultiSelect = false;
             this.moduleListView.Name = "moduleListView";
             this.moduleListView.Size = new System.Drawing.Size(427, 364);
             this.moduleListView.TabIndex = 0;
@@ -48,6 +50,7 @@
             // 
             // addModuleButton
             // 
+            this.addModuleButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.addModuleButton.Location = new System.Drawing.Point(12, 399);
             this.addModuleButton.Name = "addModuleButton";
             this.addModuleButton.Size = new System.Drawing.Size(75, 23);
@@ -58,6 +61,7 @@
             // 
             // closeButton
             // 
+            this.closeButton.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
             this.closeButton.Location = new System.Drawing.Point(142, 399);
             this.closeButton.Name = "closeButton";
             this.closeButton.Size = new System.Drawing.Size(75, 23);
@@ -68,6 +72,7 @@
             // 
             // addButton
             // 
+            this.addButton.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
             this.addButton.Location = new System.Drawing.Point(223, 399);
             this.addButton.Name = "addButton";
             this.addButton.Size = new System.Drawing.Size(75, 23);
@@ -85,6 +90,8 @@
             this.Controls.Add(this.closeButton);
             this.Controls.Add(this.addModuleButton);
             this.Controls.Add(this.moduleListView);
+            this.Location = new System.Drawing.Point(5, 5);
+            this.MinimumSize = new System.Drawing.Size(467, 484);
             this.Name = "ModuleListForm";
             this.Text = "Module List";
             this.Load += new System.EventHandler(this.ModuleListForm_Load);
