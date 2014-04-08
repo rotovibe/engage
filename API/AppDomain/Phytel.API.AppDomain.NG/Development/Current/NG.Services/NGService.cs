@@ -1025,10 +1025,10 @@ namespace Phytel.API.AppDomain.NG.Service
             _ngm = new NGManager();
         }
 
-        public NGService(ISecurityManager sm, INGManager ngm)
-        {
-            _security = sm;
-            _ngm = ngm;
-        }
+        //public NGService(ISecurityManager sm, INGManager ngm)
+        //{
+        //    _security = sm;
+        //    _ngm = ngm;
+        //}
     }
 }
