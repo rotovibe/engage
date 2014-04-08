@@ -54,6 +54,11 @@ namespace Phytel.API.DataDomain.PatientObservation.DTO
         [BsonIgnoreIfNull(true)]
         public ObservationState State { get; set; }
 
+        public const string DisplayProperty = "dis";
+        [BsonElement(DisplayProperty)]
+        [BsonIgnoreIfNull(true)]
+        public ObservationDisplay Display { get; set; }
+
         public const string StartDateProperty = "sd";
         [BsonElement(StartDateProperty)]
         [BsonIgnoreIfNull(true)]

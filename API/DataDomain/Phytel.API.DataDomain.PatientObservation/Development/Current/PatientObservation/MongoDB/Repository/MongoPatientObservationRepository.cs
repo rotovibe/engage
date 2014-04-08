@@ -16,6 +16,7 @@ using System.Configuration;
 using Phytel.API.DataAudit;
 using Phytel.API.DataDomain.PatientObservation.MongoDB.DTO;
 using MongoDB.Bson.Serialization;
+using Phytel.API.Common.CustomObject;
 
 namespace Phytel.API.DataDomain.PatientObservation
 {
@@ -381,42 +382,12 @@ namespace Phytel.API.DataDomain.PatientObservation
             }
         }
 
-        public List<int> GetAllowedObservationStates(string observationType)
+        public List<IdNamePair> GetAllowedObservationStates(object entity)
         {
-            List<int> allowedStates = null;
-            try
-            {
-                if (!string.IsNullOrEmpty(observationType))
-                {
-                    switch (observationType)
-                    {
-                        case "Lab":
-                            allowedStates = new List<int>();
-                            allowedStates.Add((int)ObservationState.Complete);
-                            allowedStates.Add((int)ObservationState.Decline);
-                            break;
-                        case "Vitals":
-                            allowedStates = new List<int>();
-                            allowedStates.Add((int)ObservationState.Complete);
-                            allowedStates.Add((int)ObservationState.Decline);
-                            break;
-                        case "Problem":
-                            allowedStates = new List<int>();
-                            allowedStates.Add((int)ObservationState.Active);
-                            allowedStates.Add((int)ObservationState.Inactive);
-                            allowedStates.Add((int)ObservationState.Resolved);
-                            break;
-                    }
-                }
-                return allowedStates;
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
+            throw new NotImplementedException();
         }
 
-        public object GetObservationsByType(object newEntity, bool standard)
+        public object GetObservationsByType(object newEntity, bool? standard)
         {
             throw new NotImplementedException();
         }

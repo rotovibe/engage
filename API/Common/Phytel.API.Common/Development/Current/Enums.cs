@@ -201,6 +201,13 @@ namespace Phytel.API.Common
         Decline = 5
     }
 
+    public enum ObservationDisplay
+    {
+        None = 0,
+        Primary = 1,
+        Secondary = 2
+    }
+
     public enum MongoCollectionName
     {
         Patient,

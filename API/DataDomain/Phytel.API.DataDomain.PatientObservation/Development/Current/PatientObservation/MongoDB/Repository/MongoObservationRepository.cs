@@ -14,6 +14,7 @@ using Phytel.API.Common;
 using Phytel.API.Common.Data;
 using MongoDB.Bson.Serialization;
 using Phytel.API.DataDomain.PatientObservation.MongoDB.DTO;
+using Phytel.API.Common.CustomObject;
 
 namespace Phytel.API.DataDomain.PatientObservation
 {
@@ -223,7 +224,7 @@ namespace Phytel.API.DataDomain.PatientObservation
             throw new NotImplementedException();
         }
         
-        public object GetObservationsByType(object type, bool standard)
+        public object GetObservationsByType(object type, bool? standard)
         {
             List<ObservationData> odL = new List<ObservationData>();
             try
@@ -234,8 +235,12 @@ namespace Phytel.API.DataDomain.PatientObservation
                     {
                         List<IMongoQuery> queries = new List<IMongoQuery>();
                         queries.Add(Query.EQ(MEObservation.ObservationTypeProperty, ObjectId.Parse(type as string)));
-                        queries.Add(Query.EQ(MEObservation.StandardProperty, standard));
+                        if (standard != null)
+                        {
+                            queries.Add(Query.EQ(MEObservation.StandardProperty, standard));
+                        }
                         queries.Add(Query.EQ(MEObservation.StatusProperty, 1)); // active
+                        queries.Add(Query.EQ(MEObservation.DeleteFlagProperty, false)); // active
                         IMongoQuery mQuery = Query.And(queries);
 
                         List<MEObservation> meObs = ctx.Observations.Collection.Find(mQuery).ToList();
@@ -274,7 +279,7 @@ namespace Phytel.API.DataDomain.PatientObservation
             }
             catch (Exception ex)
             {
-                throw new Exception("PatientObservationDD:GetStandardObservationsByType()::" + ex.Message, ex.InnerException);
+                throw new Exception("PatientObservationDD:GetObservationsByType()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -288,9 +293,41 @@ namespace Phytel.API.DataDomain.PatientObservation
             throw new NotImplementedException();
         }
 
-        public List<int> GetAllowedObservationStates(string observationType)
+        public List<IdNamePair> GetAllowedObservationStates(object entity)
         {
-            throw new NotImplementedException();
+            GetAllowedStatesDataRequest request = (GetAllowedStatesDataRequest)entity;
+            string observationType = request.TypeName;
+            List<IdNamePair> allowedStates = null;
+            try
+            {
+                if (!string.IsNullOrEmpty(observationType))
+                {
+                    switch (observationType)
+                    {
+                        case "Lab":
+                            allowedStates = new List<IdNamePair>();
+                            allowedStates.Add(new IdNamePair { Id = ((int)ObservationState.Complete).ToString(), Name = Enum.GetName(typeof(ObservationState), ObservationState.Complete) });
+                            allowedStates.Add(new IdNamePair { Id = ((int)ObservationState.Decline).ToString(), Name = Enum.GetName(typeof(ObservationState), ObservationState.Decline) });
+                            break;
+                        case "Vitals":
+                            allowedStates = new List<IdNamePair>();
+                            allowedStates.Add(new IdNamePair { Id = ((int)ObservationState.Complete).ToString(), Name = Enum.GetName(typeof(ObservationState), ObservationState.Complete) });
+                            allowedStates.Add(new IdNamePair { Id = ((int)ObservationState.Decline).ToString(), Name = Enum.GetName(typeof(ObservationState), ObservationState.Decline) });
+                            break;
+                        case "Problem":
+                            allowedStates = new List<IdNamePair>();
+                            allowedStates.Add(new IdNamePair { Id = ((int)ObservationState.Active).ToString(), Name = Enum.GetName(typeof(ObservationState), ObservationState.Active) });
+                            allowedStates.Add(new IdNamePair { Id = ((int)ObservationState.Inactive).ToString(), Name = Enum.GetName(typeof(ObservationState), ObservationState.Inactive) });
+                            allowedStates.Add(new IdNamePair { Id = ((int)ObservationState.Resolved).ToString(), Name = Enum.GetName(typeof(ObservationState), ObservationState.Resolved) });
+                            break;
+                    }
+                }
+                return allowedStates;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
 
         public string UserId { get; set; }

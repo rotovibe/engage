@@ -9,7 +9,5 @@ namespace Phytel.API.DataDomain.PatientObservation.DTO
     {
         public string Id { get; set; }
         public string Name { get; set; }
-        //public string TypeId { get; set; }
-        //public string GroupId { get; set; }
     }
 }
