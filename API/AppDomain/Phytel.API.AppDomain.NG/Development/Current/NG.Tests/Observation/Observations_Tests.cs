@@ -145,5 +145,27 @@ namespace Phytel.API.DataDomain.Patient.Service.Test
 
             return ov;
         }
+
+        [TestMethod]
+        public void GetAllowedObservationStates_Test()
+        {
+            string contractNumber = "InHealth001";
+            string context = "NG";
+            double version = 1.0;
+            string token = "534406e6d6a48508c45b62e0";
+            string type = "Lab";
+            IRestClient client = new JsonServiceClient();
+
+            JsonServiceClient.HttpWebRequestFilter = x => x.Headers.Add(string.Format("Token: {0}", token));
+            //GET	/{Version}/{ContractNumber}/Observation/States/{TypeName}	
+            GetAllowedStatesResponse response = client.Get<GetAllowedStatesResponse>(
+                string.Format(@"http://localhost:888/Nightingale/{0}/{1}/Observation/States/{2}?Context={3}",
+                version,
+                contractNumber,
+                type,
+                context));
+
+            Assert.IsNotNull(response.States);
+        }
     }
 }
