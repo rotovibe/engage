@@ -296,7 +296,7 @@ namespace Phytel.API.DataDomain.PatientObservation
         public List<IdNamePair> GetAllowedObservationStates(object entity)
         {
             GetAllowedStatesDataRequest request = (GetAllowedStatesDataRequest)entity;
-            string observationType = request.TypeName;
+            string observationType = request.TypeName.ToLower();
             List<IdNamePair> allowedStates = null;
             try
             {
@@ -304,17 +304,17 @@ namespace Phytel.API.DataDomain.PatientObservation
                 {
                     switch (observationType)
                     {
-                        case "Lab":
+                        case "lab":
                             allowedStates = new List<IdNamePair>();
                             allowedStates.Add(new IdNamePair { Id = ((int)ObservationState.Complete).ToString(), Name = Enum.GetName(typeof(ObservationState), ObservationState.Complete) });
                             allowedStates.Add(new IdNamePair { Id = ((int)ObservationState.Decline).ToString(), Name = Enum.GetName(typeof(ObservationState), ObservationState.Decline) });
                             break;
-                        case "Vitals":
+                        case "vitals":
                             allowedStates = new List<IdNamePair>();
                             allowedStates.Add(new IdNamePair { Id = ((int)ObservationState.Complete).ToString(), Name = Enum.GetName(typeof(ObservationState), ObservationState.Complete) });
                             allowedStates.Add(new IdNamePair { Id = ((int)ObservationState.Decline).ToString(), Name = Enum.GetName(typeof(ObservationState), ObservationState.Decline) });
                             break;
-                        case "Problem":
+                        case "problem":
                             allowedStates = new List<IdNamePair>();
                             allowedStates.Add(new IdNamePair { Id = ((int)ObservationState.Active).ToString(), Name = Enum.GetName(typeof(ObservationState), ObservationState.Active) });
                             allowedStates.Add(new IdNamePair { Id = ((int)ObservationState.Inactive).ToString(), Name = Enum.GetName(typeof(ObservationState), ObservationState.Inactive) });
