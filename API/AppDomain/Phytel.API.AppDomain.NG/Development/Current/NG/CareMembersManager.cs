@@ -7,6 +7,7 @@ using ServiceStack.ServiceClient.Web;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
+using Phytel.API.Common;
 
 namespace Phytel.API.AppDomain.NG
 {
