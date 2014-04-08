@@ -10,6 +10,7 @@ using System.Configuration;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Phytel.API.Common.CustomObject;
 
 namespace Phytel.API.AppDomain.NG.Observation
 {
@@ -144,6 +145,35 @@ namespace Phytel.API.AppDomain.NG.Observation
             catch (WebServiceException ex)
             {
                 throw new WebServiceException("AD:GetAdditionalObservationsRequest()::" + ex.Message, ex.InnerException);
+            }
+        }
+
+        internal static List<IdNamePair> GetAllowedObservationStates(GetAllowedStatesRequest request)
+        {
+            try
+            {
+                List<IdNamePair> result = null;
+                IRestClient client = new JsonServiceClient();
+                // [Route("/{Context}/{Version}/{ContractNumber}/Observation/States/{TypeName}", "GET")]
+                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Observation/States/{4}",
+                                    DDPatientObservationsServiceUrl,
+                                    "NG",
+                                    request.Version,
+                                    request.ContractNumber,
+                                    request.TypeName), request.UserId);
+
+                GetAllowedStatesDataResponse dataDomainResponse = client.Get<GetAllowedStatesDataResponse>(url);
+
+                if (dataDomainResponse != null)
+                {
+                    result = dataDomainResponse.StatesData;
+                }
+
+                return result;
+            }
+            catch (WebServiceException ex)
+            {
+                throw new WebServiceException("AD:GetAllowedObservationStates()::" + ex.Message, ex.InnerException);
             }
         }
     }

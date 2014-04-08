@@ -5,6 +5,7 @@ using Phytel.API.AppDomain.NG.DTO;
 using Phytel.API.AppDomain.NG.Observation;
 using Phytel.API.DataDomain.PatientObservation.DTO;
 using System.Globalization;
+using Phytel.API.Common.CustomObject;
 
 namespace Phytel.API.AppDomain.NG.Observation
 {
@@ -93,6 +94,23 @@ namespace Phytel.API.AppDomain.NG.Observation
             catch (Exception ex)
             {
                 throw new Exception("AD:GetAdditionalObservationsRequest()::" + ex.Message, ex.InnerException);
+            }
+        }
+
+
+        public GetAllowedStatesResponse GetAllowedObservationStates(GetAllowedStatesRequest request)
+        {
+            try
+            {
+                GetAllowedStatesResponse response = new GetAllowedStatesResponse();
+                List<IdNamePair> states = ObservationEndpointUtil.GetAllowedObservationStates(request);
+                response.States = states;
+                response.Version = request.Version;
+                return response;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("AD:GetAllowedObservationStates()::" + ex.Message, ex.InnerException);
             }
         }
     }

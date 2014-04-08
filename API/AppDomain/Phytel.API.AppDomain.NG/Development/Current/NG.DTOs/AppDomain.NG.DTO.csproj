@@ -158,6 +158,8 @@
     <Compile Include="Note\PostDeletePatientNoteResponse.cs" />
     <Compile Include="Note\PostPatientNoteRequest.cs" />
     <Compile Include="Note\PostPatientNoteResponse.cs" />
+    <Compile Include="Observation\GetAllowedStatesRequest.cs" />
+    <Compile Include="Observation\GetAllowedStatesResponse.cs" />
     <Compile Include="Observation\GetAdditionalObservationLibraryRequest.cs" />
     <Compile Include="Observation\GetAdditionalObservationItemRequest.cs" />
     <Compile Include="Observation\GetAdditionalObservationItemResponse.cs" />

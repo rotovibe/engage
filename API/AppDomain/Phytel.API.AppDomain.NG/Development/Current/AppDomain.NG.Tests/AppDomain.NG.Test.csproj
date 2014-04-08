@@ -107,6 +107,8 @@
     <Compile Include="Goal_Tests.cs" />
     <Compile Include="LookUps_Test.cs" />
     <Compile Include="NGManager_Tests.cs" />
+    <Compile Include="ObservationTest.cs" />
+    <Compile Include="PatientObservationTest.cs" />
     <Compile Include="PlanCOR\ActionPlanProcessorTests.cs" />
     <Compile Include="PlanCOR\ModulePlanProcessor_Tests.cs" />
     <Compile Include="PlanCOR\StepPlanProcessor_Tests.cs" />
