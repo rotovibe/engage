@@ -50,15 +50,15 @@ namespace Phytel.API.DataDomain.PatientObservation.Service
             return response;
         }
 
-        public GetAllPatientObservationsResponse Post(GetAllPatientObservationsRequest request)
+        public GetPatientProblemsSummaryResponse Get(GetPatientProblemsSummaryRequest request)
         {
-            GetAllPatientObservationsResponse response = new GetAllPatientObservationsResponse();
+            GetPatientProblemsSummaryResponse response = new GetPatientProblemsSummaryResponse();
             try
             {
                 if (string.IsNullOrEmpty(request.UserId))
                     throw new UnauthorizedAccessException("PatientObservationDD:Post()::Unauthorized Access");
 
-                response = PatientObservationDataManager.GetPatientObservationList(request);
+                response = PatientObservationDataManager.GetPatientProblemList(request);
                 response.Version = request.Version;
             }
             catch (Exception ex)

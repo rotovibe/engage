@@ -32,14 +32,27 @@ namespace Phytel.API.DataDomain.PatientObservation
             }
         }
 
-        public static GetAllPatientObservationsResponse GetPatientObservationList(GetAllPatientObservationsRequest request)
+        public static GetPatientProblemsSummaryResponse GetPatientProblemList(GetPatientProblemsSummaryRequest request)
         {
             try
             {
-                GetAllPatientObservationsResponse result = new GetAllPatientObservationsResponse();
+                GetPatientProblemsSummaryResponse result = new GetPatientProblemsSummaryResponse();
 
-                IPatientObservationRepository<GetAllPatientObservationsResponse> repo = PatientObservationRepositoryFactory<GetAllPatientObservationsResponse>.GetPatientObservationRepository(request.ContractNumber, request.Context, request.UserId);
+                IPatientObservationRepository<GetPatientProblemsSummaryResponse> oRepo =
+                    PatientObservationRepositoryFactory<GetPatientProblemsSummaryResponse>.GetObservationRepository(request.ContractNumber, request.Context, request.UserId);
+                IPatientObservationRepository<GetPatientProblemsSummaryResponse> repo = 
+                    PatientObservationRepositoryFactory<GetPatientProblemsSummaryResponse>.GetPatientObservationRepository(request.ContractNumber, request.Context, request.UserId);
+
+                // 1) get all observationIds that are of type problem that are active.
+                List<ObservationData> oData = (List<ObservationData>)oRepo.GetObservationsByType("533d8278d433231deccaa62d", null, null);
                 
+                List<string> oIds = oData.Select(i => i.Id).ToList();
+
+                // 2) find all current patientobservations within these observationids.
+                List<PatientObservationSummaryData> ol = 
+                    ((MongoPatientObservationRepository<GetPatientProblemsSummaryResponse>)repo).GetAllPatientProblems(request, oIds) as List<PatientObservationSummaryData>;
+                
+                result.PatientObservations = ol;
                 return result;
             }
             catch (Exception ex)
@@ -57,7 +70,7 @@ namespace Phytel.API.DataDomain.PatientObservation
                 // get list of observations
                 IPatientObservationRepository<GetStandardObservationsResponse> repo = PatientObservationRepositoryFactory<GetStandardObservationsResponse>.GetObservationRepository(request.ContractNumber, request.Context, request.UserId);
 
-                List<ObservationData> odl = (List<ObservationData>)repo.GetObservationsByType(request.TypeId, true);
+                List<ObservationData> odl = (List<ObservationData>)repo.GetObservationsByType(request.TypeId, true, null);
                 List<PatientObservationData> podl = new List<PatientObservationData>();
 
                 // load and initialize each observation
@@ -183,7 +196,7 @@ namespace Phytel.API.DataDomain.PatientObservation
                 IPatientObservationRepository<GetAdditionalLibraryObservationsResponse> repo =
                     PatientObservationRepositoryFactory<GetAdditionalLibraryObservationsResponse>.GetObservationRepository(request.ContractNumber, request.Context, request.UserId);
                 
-                List<ObservationData> odl = (List<ObservationData>)repo.GetObservationsByType(request.TypeId, request.Standard);
+                List<ObservationData> odl = (List<ObservationData>)repo.GetObservationsByType(request.TypeId, false, null);
 
                 odl.ForEach(o =>
                 {
@@ -243,6 +256,36 @@ namespace Phytel.API.DataDomain.PatientObservation
                 throw new Exception("DD.DataPatientObservationManager:GetAdditionalObservationItemById()::" + ex.Message, ex.InnerException);
             }
         }
+
+        //public static GetAllActiveProblemsResponse GetAllActiveProblems(GetAllActiveProblemsRequest request)
+        //{
+        //    try
+        //    {
+        //        GetAllActiveProblemsResponse response = new GetAllActiveProblemsResponse();
+        //        List<ObservationLibraryItemData> oli = new List<ObservationLibraryItemData>();
+        //        IPatientObservationRepository<GetAllActiveProblemsResponse> repo =
+        //            PatientObservationRepositoryFactory<GetAllActiveProblemsResponse>.GetObservationRepository(request.ContractNumber, request.Context, request.UserId);
+
+        //        List<ObservationData> odl = (List<ObservationData>)repo.GetObservationsByType(request.TypeId, null, null);
+
+        //        odl.ForEach(o =>
+        //        {
+        //            oli.Add(new ObservationLibraryItemData
+        //            {
+        //                Id = o.Id,
+        //                Name = o.CommonName != null ? o.CommonName : o.Description
+        //            });
+        //        });
+
+        //        response.Library = oli;
+
+        //        return response;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw new Exception("DD.DataPatientObservationManager:GetAllActiveProblems()::" + ex.Message, ex.InnerException);
+        //    }
+        //}
 
         public static GetAllowedStatesDataResponse GetAllowedStates(GetAllowedStatesDataRequest request)
         {

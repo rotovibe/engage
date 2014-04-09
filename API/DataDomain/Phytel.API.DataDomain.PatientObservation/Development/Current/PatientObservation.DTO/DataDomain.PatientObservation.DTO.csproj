@@ -75,9 +75,9 @@
     <Compile Include="GetAdditionalLibraryObservationsRequest.cs" />
     <Compile Include="GetAllowedStatesDataResponse.cs" />
     <Compile Include="GetAdditionalLibraryObservationsResponse.cs" />
-    <Compile Include="GetAllPatientObservationsRequest.cs" />
+    <Compile Include="GetPatientProblemsSummaryRequest.cs" />
     <Compile Include="GetPatientObservationRequest.cs" />
-    <Compile Include="GetAllPatientObservationsResponse.cs" />
+    <Compile Include="GetPatientProblemsSummaryResponse.cs" />
     <Compile Include="GetPatientObservationResponse.cs" />
     <Compile Include="GetAdditionalObservationDataItemRequest.cs" />
     <Compile Include="GetStandardObservationsRequest.cs" />
@@ -86,6 +86,7 @@
     <Compile Include="ObservationData.cs" />
     <Compile Include="ObservationLibraryItemData.cs" />
     <Compile Include="ObservationValueData.cs" />
+    <Compile Include="PatientObservationSummaryData.cs" />
     <Compile Include="PatientObservationData.cs" />
     <Compile Include="PatientObservationRecordData.cs" />
     <Compile Include="PreviousValueData.cs" />

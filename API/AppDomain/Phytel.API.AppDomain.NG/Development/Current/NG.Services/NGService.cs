@@ -12,8 +12,8 @@ namespace Phytel.API.AppDomain.NG.Service
 {
     public partial class NGService : ServiceStack.ServiceInterface.Service
     {
-        private ISecurityManager _security;
-        private INGManager _ngm;
+        public ISecurityManager Security;
+        public INGManager NGManager;
 
         public GetPatientResponse Post(GetPatientRequest request)
         {
@@ -23,11 +23,11 @@ namespace Phytel.API.AppDomain.NG.Service
             try
             {
                 request.Token = base.Request.Headers["Token"] as string;
-                result = _security.IsUserValidated(request.Version, request.Token, request.ContractNumber);
+                result = Security.IsUserValidated(request.Version, request.Token, request.ContractNumber);
                 if (result.UserId.Trim() != string.Empty)
                 {
                     request.UserId = result.UserId;
-                    response = _ngm.GetPatient(request);
+                    response = NGManager.GetPatient(request);
                 }
                 else
                     throw new UnauthorizedAccessException();
@@ -36,7 +36,7 @@ namespace Phytel.API.AppDomain.NG.Service
             {
                 CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
                 if ((ex is WebServiceException) == false)
-                    _ngm.LogException(ex);
+                    NGManager.LogException(ex);
             }
             finally
             {
@@ -63,11 +63,11 @@ namespace Phytel.API.AppDomain.NG.Service
             try
             {
                 request.Token = base.Request.Headers["Token"] as string;
-                result = _security.IsUserValidated(request.Version, request.Token, request.ContractNumber);
+                result = Security.IsUserValidated(request.Version, request.Token, request.ContractNumber);
                 if (result.UserId.Trim() != string.Empty)
                 {
                     request.UserId = result.UserId;
-                    response = _ngm.GetPatient(request);
+                    response = NGManager.GetPatient(request);
                 }
                 else
                     throw new UnauthorizedAccessException();
@@ -77,7 +77,7 @@ namespace Phytel.API.AppDomain.NG.Service
             {
                 CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
                 if ((ex is WebServiceException) == false)
-                    _ngm.LogException(ex);
+                    NGManager.LogException(ex);
             }
             finally
             {
@@ -104,11 +104,11 @@ namespace Phytel.API.AppDomain.NG.Service
             try
             {
                 request.Token = base.Request.Headers["Token"] as string;
-                result = _security.IsUserValidated(request.Version, request.Token, request.ContractNumber);
+                result = Security.IsUserValidated(request.Version, request.Token, request.ContractNumber);
                 if (result.UserId.Trim() != string.Empty)
                 {
                     request.UserId = result.UserId;
-                    response = _ngm.GetPatientSSN(request);
+                    response = NGManager.GetPatientSSN(request);
                 }
                 else
                     throw new UnauthorizedAccessException();
@@ -118,7 +118,7 @@ namespace Phytel.API.AppDomain.NG.Service
             {
                 CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
                 if ((ex is WebServiceException) == false)
-                    _ngm.LogException(ex);
+                    NGManager.LogException(ex);
             }
             finally
             {
@@ -150,11 +150,11 @@ namespace Phytel.API.AppDomain.NG.Service
             try
             {
                 request.Token = base.Request.Headers["Token"] as string;
-                result = _security.IsUserValidated(request.Version, request.Token, request.ContractNumber);
+                result = Security.IsUserValidated(request.Version, request.Token, request.ContractNumber);
                 if (result.UserId.Trim() != string.Empty)
                 {
                     request.UserId = result.UserId;
-                    response.PatientProblems = _ngm.GetPatientProblems(request);
+                    response.PatientProblems = NGManager.GetPatientProblems(request);
                 }
                 else
                     throw new UnauthorizedAccessException();
@@ -163,7 +163,7 @@ namespace Phytel.API.AppDomain.NG.Service
             {
                 CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
                 if ((ex is WebServiceException) == false)
-                    _ngm.LogException(ex);
+                    NGManager.LogException(ex);
             }
             finally
             {
@@ -182,11 +182,11 @@ namespace Phytel.API.AppDomain.NG.Service
             try
             {
                 request.Token = base.Request.Headers["Token"] as string;
-                result = _security.IsUserValidated(request.Version, request.Token, request.ContractNumber);
+                result = Security.IsUserValidated(request.Version, request.Token, request.ContractNumber);
                 if (result.UserId.Trim() != string.Empty)
                 {
                     request.UserId = result.UserId;
-                    response.Problems = _ngm.GetProblems(request);
+                    response.Problems = NGManager.GetProblems(request);
                 }
                 else
                     throw new UnauthorizedAccessException();               
@@ -195,7 +195,7 @@ namespace Phytel.API.AppDomain.NG.Service
             {
                 CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
                 if ((ex is WebServiceException) == false)
-                    _ngm.LogException(ex);
+                    NGManager.LogException(ex);
             }
             finally
             {
@@ -214,11 +214,11 @@ namespace Phytel.API.AppDomain.NG.Service
             try
             {
                 request.Token = base.Request.Headers["Token"] as string;
-                result = _security.IsUserValidated(request.Version, request.Token, request.ContractNumber);
+                result = Security.IsUserValidated(request.Version, request.Token, request.ContractNumber);
                 if (result.UserId.Trim() != string.Empty)
                 {
                     request.UserId = result.UserId;
-                    response.Cohorts = _ngm.GetCohorts(request);
+                    response.Cohorts = NGManager.GetCohorts(request);
                 }
                 else
                     throw new UnauthorizedAccessException();
@@ -227,7 +227,7 @@ namespace Phytel.API.AppDomain.NG.Service
             {
                 CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
                 if ((ex is WebServiceException) == false)
-                    _ngm.LogException(ex);
+                    NGManager.LogException(ex);
             }
             finally
             {
@@ -246,11 +246,11 @@ namespace Phytel.API.AppDomain.NG.Service
             try
             {
                 request.Token = base.Request.Headers["Token"] as string;
-                result = _security.IsUserValidated(request.Version, request.Token, request.ContractNumber);
+                result = Security.IsUserValidated(request.Version, request.Token, request.ContractNumber);
                 if (result.UserId.Trim() != string.Empty)
                 {
                     request.UserId = result.UserId;
-                    response = _ngm.PutPatientFlaggedUpdate(request);
+                    response = NGManager.PutPatientFlaggedUpdate(request);
                 }
                 else
                     throw new UnauthorizedAccessException();
@@ -259,7 +259,7 @@ namespace Phytel.API.AppDomain.NG.Service
             {
                 CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
                 if ((ex is WebServiceException) == false)
-                    _ngm.LogException(ex);
+                    NGManager.LogException(ex);
             }
             finally
             {
@@ -278,11 +278,11 @@ namespace Phytel.API.AppDomain.NG.Service
             try
             {
                 request.Token = base.Request.Headers["Token"] as string;
-                result = _security.IsUserValidated(request.Version, request.Token, request.ContractNumber);
+                result = Security.IsUserValidated(request.Version, request.Token, request.ContractNumber);
                 if (result.UserId.Trim() != string.Empty)
                 {
                     request.UserId = result.UserId;
-                    response = _ngm.UpdateBackground(request);
+                    response = NGManager.UpdateBackground(request);
                 }
                 else
                     throw new UnauthorizedAccessException();
@@ -291,7 +291,7 @@ namespace Phytel.API.AppDomain.NG.Service
             {
                 CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
                 if ((ex is WebServiceException) == false)
-                    _ngm.LogException(ex);
+                    NGManager.LogException(ex);
             }
             finally
             {
@@ -310,11 +310,11 @@ namespace Phytel.API.AppDomain.NG.Service
             try
             {
                 request.Token = base.Request.Headers["Token"] as string;
-                result = _security.IsUserValidated(request.Version, request.Token, request.ContractNumber);
+                result = Security.IsUserValidated(request.Version, request.Token, request.ContractNumber);
                 if (result.UserId.Trim() != string.Empty)
                 {
                     request.UserId = result.UserId;
-                    response = _ngm.PutPatientDetailsUpdate(request);
+                    response = NGManager.PutPatientDetailsUpdate(request);
                 }
                 else
                     throw new UnauthorizedAccessException();
@@ -323,7 +323,7 @@ namespace Phytel.API.AppDomain.NG.Service
             {
                 CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
                 if ((ex is WebServiceException) == false)
-                    _ngm.LogException(ex);
+                    NGManager.LogException(ex);
             }
             finally
             {
@@ -342,11 +342,11 @@ namespace Phytel.API.AppDomain.NG.Service
             try
             {
                 request.Token = base.Request.Headers["Token"] as string;
-                result = _security.IsUserValidated(request.Version, request.Token, request.ContractNumber);
+                result = Security.IsUserValidated(request.Version, request.Token, request.ContractNumber);
                 if (result.UserId.Trim() != string.Empty)
                 {
                     request.UserId = result.UserId;
-                    response = _ngm.GetCohortPatients(request);
+                    response = NGManager.GetCohortPatients(request);
                 }
                 else
                     throw new UnauthorizedAccessException();
@@ -356,7 +356,7 @@ namespace Phytel.API.AppDomain.NG.Service
             {
                 CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
                 if ((ex is WebServiceException) == false)
-                    _ngm.LogException(ex);
+                    NGManager.LogException(ex);
             }
             finally
             {
@@ -382,11 +382,11 @@ namespace Phytel.API.AppDomain.NG.Service
             try
             {
                 request.Token = base.Request.Headers["Token"] as string;
-                result = _security.IsUserValidated(request.Version, request.Token, request.ContractNumber);
+                result = Security.IsUserValidated(request.Version, request.Token, request.ContractNumber);
                 if (result.UserId.Trim() != string.Empty)
                 {
                     request.UserId = result.UserId;
-                    response = _ngm.GetAllSettings(request);
+                    response = NGManager.GetAllSettings(request);
                 }
                 else
                     throw new UnauthorizedAccessException();
@@ -395,7 +395,7 @@ namespace Phytel.API.AppDomain.NG.Service
             {
                 CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
                 if ((ex is WebServiceException) == false)
-                    _ngm.LogException(ex);
+                    NGManager.LogException(ex);
             }
             finally
             {
@@ -414,13 +414,13 @@ namespace Phytel.API.AppDomain.NG.Service
             try
             {
                 request.Token = base.Request.Headers["Token"] as string;
-                result = _security.IsUserValidated(request.Version, request.Token, request.ContractNumber);
+                result = Security.IsUserValidated(request.Version, request.Token, request.ContractNumber);
                 if (result.UserId != null)
                 {
                     if (result.UserId.Trim() != string.Empty)
                     {
                         request.UserId = result.UserId;
-                        response = _ngm.GetActivePrograms(request);
+                        response = NGManager.GetActivePrograms(request);
                     }
                     else
                         throw new UnauthorizedAccessException();
@@ -432,7 +432,7 @@ namespace Phytel.API.AppDomain.NG.Service
             {
                 CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
                 if ((ex is WebServiceException) == false)
-                    _ngm.LogException(ex);
+                    NGManager.LogException(ex);
             }
             finally
             {
@@ -451,11 +451,11 @@ namespace Phytel.API.AppDomain.NG.Service
             try
             {
                 request.Token = base.Request.Headers["Token"] as string;
-                result = _security.IsUserValidated(request.Version, request.Token, request.ContractNumber);
+                result = Security.IsUserValidated(request.Version, request.Token, request.ContractNumber);
                 if (result.UserId.Trim() != string.Empty)
                 {
                     request.UserId = result.UserId;
-                    response = _ngm.PostPatientToProgram(request);
+                    response = NGManager.PostPatientToProgram(request);
                 }
                 else
                     throw new UnauthorizedAccessException();
@@ -464,7 +464,7 @@ namespace Phytel.API.AppDomain.NG.Service
             {
                 CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
                 if ((ex is WebServiceException) == false)
-                    _ngm.LogException(ex);
+                    NGManager.LogException(ex);
             }
             finally
             {
@@ -483,11 +483,11 @@ namespace Phytel.API.AppDomain.NG.Service
             try
             {
                 request.Token = base.Request.Headers["Token"] as string;
-                result = _security.IsUserValidated(request.Version, request.Token, request.ContractNumber);
+                result = Security.IsUserValidated(request.Version, request.Token, request.ContractNumber);
                 if (result.UserId.Trim() != string.Empty)
                 {
                     request.UserId = result.UserId;
-                    response = _ngm.GetPatientProgramDetailsSummary(request);
+                    response = NGManager.GetPatientProgramDetailsSummary(request);
                 }
                 else
                     throw new UnauthorizedAccessException();
@@ -497,7 +497,7 @@ namespace Phytel.API.AppDomain.NG.Service
             {
                 CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
                 if ((ex is WebServiceException) == false)
-                    _ngm.LogException(ex);
+                    NGManager.LogException(ex);
             }
             finally
             {
@@ -516,11 +516,11 @@ namespace Phytel.API.AppDomain.NG.Service
             try
             {
                 request.Token = base.Request.Headers["Token"] as string;
-                result = _security.IsUserValidated(request.Version, request.Token, request.ContractNumber);
+                result = Security.IsUserValidated(request.Version, request.Token, request.ContractNumber);
                 if (result.UserId.Trim() != string.Empty)
                 {
                     request.UserId = result.UserId;
-                    response = _ngm.GetPatientPrograms(request);
+                    response = NGManager.GetPatientPrograms(request);
                 }
                 else
                     throw new UnauthorizedAccessException();
@@ -529,7 +529,7 @@ namespace Phytel.API.AppDomain.NG.Service
             {
                 CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
                 if ((ex is WebServiceException) == false)
-                    _ngm.LogException(ex);
+                    NGManager.LogException(ex);
             }
             finally
             {
@@ -557,11 +557,11 @@ namespace Phytel.API.AppDomain.NG.Service
             try
             {
                 request.Token = base.Request.Headers["Token"] as string;
-                result = _security.IsUserValidated(request.Version, request.Token, request.ContractNumber);
+                result = Security.IsUserValidated(request.Version, request.Token, request.ContractNumber);
                 if (result.UserId.Trim() != string.Empty)
                 {
                     request.UserId = result.UserId;
-                    response.Contact = _ngm.GetContactByPatientId(request);
+                    response.Contact = NGManager.GetContactByPatientId(request);
                 }
                 else
                     throw new UnauthorizedAccessException();
@@ -570,7 +570,7 @@ namespace Phytel.API.AppDomain.NG.Service
             {
                 CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
                 if ((ex is WebServiceException) == false)
-                    _ngm.LogException(ex);
+                    NGManager.LogException(ex);
             }
             finally
             {
@@ -589,11 +589,11 @@ namespace Phytel.API.AppDomain.NG.Service
             try
             {
                 request.Token = base.Request.Headers["Token"] as string;
-                result = _security.IsUserValidated(request.Version, request.Token, request.ContractNumber);
+                result = Security.IsUserValidated(request.Version, request.Token, request.ContractNumber);
                 if (result.UserId.Trim() != string.Empty)
                 {
                     request.UserId = result.UserId;
-                    response.Contacts = _ngm.GetCareManagers(request);
+                    response.Contacts = NGManager.GetCareManagers(request);
                     response.Version = request.Version;
                 }
                 else
@@ -603,7 +603,7 @@ namespace Phytel.API.AppDomain.NG.Service
             {
                 CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
                 if ((ex is WebServiceException) == false)
-                    _ngm.LogException(ex);
+                    NGManager.LogException(ex);
             }
             finally
             {
@@ -622,11 +622,11 @@ namespace Phytel.API.AppDomain.NG.Service
             try
             {
                 request.Token = base.Request.Headers["Token"] as string;
-                result = _security.IsUserValidated(request.Version, request.Token, request.ContractNumber);
+                result = Security.IsUserValidated(request.Version, request.Token, request.ContractNumber);
                 if (result.UserId.Trim() != string.Empty)
                 {
                     request.UserId = result.UserId;
-                    response = _ngm.PutUpdateContact(request);
+                    response = NGManager.PutUpdateContact(request);
                 }
                 else
                     throw new UnauthorizedAccessException();
@@ -635,7 +635,7 @@ namespace Phytel.API.AppDomain.NG.Service
             {
                 CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
                 if ((ex is WebServiceException) == false)
-                    _ngm.LogException(ex);
+                    NGManager.LogException(ex);
             }
             finally
             {
@@ -656,11 +656,11 @@ namespace Phytel.API.AppDomain.NG.Service
             try
             {
                 request.Token = base.Request.Headers["Token"] as string;
-                result = _security.IsUserValidated(request.Version, request.Token, request.ContractNumber);
+                result = Security.IsUserValidated(request.Version, request.Token, request.ContractNumber);
                 if (result.UserId.Trim() != string.Empty)
                 {
                     request.UserId = result.UserId;
-                    response.CommModes = _ngm.GetAllCommModes(request);
+                    response.CommModes = NGManager.GetAllCommModes(request);
                 }
                 else
                     throw new UnauthorizedAccessException();
@@ -669,7 +669,7 @@ namespace Phytel.API.AppDomain.NG.Service
             {
                 CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
                 if ((ex is WebServiceException) == false)
-                    _ngm.LogException(ex);
+                    NGManager.LogException(ex);
             }
             finally
             {
@@ -688,11 +688,11 @@ namespace Phytel.API.AppDomain.NG.Service
             try
             {
                 request.Token = base.Request.Headers["Token"] as string;
-                result = _security.IsUserValidated(request.Version, request.Token, request.ContractNumber);
+                result = Security.IsUserValidated(request.Version, request.Token, request.ContractNumber);
                 if (result.UserId.Trim() != string.Empty)
                 {
                     request.UserId = result.UserId;
-                    response.States = _ngm.GetAllStates(request);
+                    response.States = NGManager.GetAllStates(request);
                 }
                 else
                     throw new UnauthorizedAccessException();
@@ -701,7 +701,7 @@ namespace Phytel.API.AppDomain.NG.Service
             {
                 CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
                 if ((ex is WebServiceException) == false)
-                    _ngm.LogException(ex);
+                    NGManager.LogException(ex);
             }
             finally
             {
@@ -720,11 +720,11 @@ namespace Phytel.API.AppDomain.NG.Service
             try
             {
                 request.Token = base.Request.Headers["Token"] as string;
-                result = _security.IsUserValidated(request.Version, request.Token, request.ContractNumber);
+                result = Security.IsUserValidated(request.Version, request.Token, request.ContractNumber);
                 if (result.UserId.Trim() != string.Empty)
                 {
                     request.UserId = result.UserId;
-                    response.TimesOfDays = _ngm.GetAllTimesOfDays(request);
+                    response.TimesOfDays = NGManager.GetAllTimesOfDays(request);
                 }
                 else
                     throw new UnauthorizedAccessException();
@@ -733,7 +733,7 @@ namespace Phytel.API.AppDomain.NG.Service
             {
                 CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
                 if ((ex is WebServiceException) == false)
-                    _ngm.LogException(ex);
+                    NGManager.LogException(ex);
             }
             finally
             {
@@ -752,11 +752,11 @@ namespace Phytel.API.AppDomain.NG.Service
             try
             {
                 request.Token = base.Request.Headers["Token"] as string;
-                result = _security.IsUserValidated(request.Version, request.Token, request.ContractNumber);
+                result = Security.IsUserValidated(request.Version, request.Token, request.ContractNumber);
                 if (result.UserId.Trim() != string.Empty)
                 {
                     request.UserId = result.UserId;
-                    response.TimeZones = _ngm.GetAllTimeZones(request);
+                    response.TimeZones = NGManager.GetAllTimeZones(request);
                 }
                 else
                     throw new UnauthorizedAccessException();
@@ -765,7 +765,7 @@ namespace Phytel.API.AppDomain.NG.Service
             {
                 CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
                 if ((ex is WebServiceException) == false)
-                    _ngm.LogException(ex);
+                    NGManager.LogException(ex);
             }
             finally
             {
@@ -784,11 +784,11 @@ namespace Phytel.API.AppDomain.NG.Service
             try
             {
                 request.Token = base.Request.Headers["Token"] as string;
-                result = _security.IsUserValidated(request.Version, request.Token, request.ContractNumber);
+                result = Security.IsUserValidated(request.Version, request.Token, request.ContractNumber);
                 if (result.UserId.Trim() != string.Empty)
                 {
                     request.UserId = result.UserId;
-                    response.CommTypes = _ngm.GetAllCommTypes(request);
+                    response.CommTypes = NGManager.GetAllCommTypes(request);
                 }
                 else
                     throw new UnauthorizedAccessException();
@@ -797,7 +797,7 @@ namespace Phytel.API.AppDomain.NG.Service
             {
                 CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
                 if ((ex is WebServiceException) == false)
-                    _ngm.LogException(ex);
+                    NGManager.LogException(ex);
             }
             finally
             {
@@ -816,11 +816,11 @@ namespace Phytel.API.AppDomain.NG.Service
             try
             {
                 request.Token = base.Request.Headers["Token"] as string;
-                result = _security.IsUserValidated(request.Version, request.Token, request.ContractNumber);
+                result = Security.IsUserValidated(request.Version, request.Token, request.ContractNumber);
                 if (result.UserId.Trim() != string.Empty)
                 {
                     request.UserId = result.UserId;
-                    response.Languages = _ngm.GetAllLanguages(request);
+                    response.Languages = NGManager.GetAllLanguages(request);
                 }
                 else
                     throw new UnauthorizedAccessException();
@@ -829,7 +829,7 @@ namespace Phytel.API.AppDomain.NG.Service
             {
                 CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
                 if ((ex is WebServiceException) == false)
-                    _ngm.LogException(ex);
+                    NGManager.LogException(ex);
             }
             finally
             {
@@ -851,11 +851,11 @@ namespace Phytel.API.AppDomain.NG.Service
             try
             {
                 request.Token = base.Request.Headers["Token"] as string;
-                result = _security.IsUserValidated(request.Version, request.Token, request.ContractNumber);
+                result = Security.IsUserValidated(request.Version, request.Token, request.ContractNumber);
                 if (result.UserId.Trim() != string.Empty)
                 {
                     request.UserId = result.UserId;
-                    response.LookUps = _ngm.GetLookUps(request);
+                    response.LookUps = NGManager.GetLookUps(request);
                 }
                 else
                     throw new UnauthorizedAccessException();
@@ -864,7 +864,7 @@ namespace Phytel.API.AppDomain.NG.Service
             {
                 CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
                 if ((ex is WebServiceException) == false)
-                    _ngm.LogException(ex);
+                    NGManager.LogException(ex);
             }
             finally
             {
@@ -886,7 +886,7 @@ namespace Phytel.API.AppDomain.NG.Service
             try
             {
                 request.Token = base.Request.Headers["Token"] as string;
-                result = _security.IsUserValidated(request.Version, request.Token, request.ContractNumber);
+                result = Security.IsUserValidated(request.Version, request.Token, request.ContractNumber);
                 if (result.UserId.Trim() != string.Empty)
                 {
                     request.UserId = result.UserId;
@@ -899,7 +899,7 @@ namespace Phytel.API.AppDomain.NG.Service
             {
                 CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
                 if ((ex is WebServiceException) == false)
-                    _ngm.LogException(ex);
+                    NGManager.LogException(ex);
             }
             finally
             {
@@ -919,7 +919,7 @@ namespace Phytel.API.AppDomain.NG.Service
             try
             {
                 request.Token = base.Request.Headers["Token"] as string;
-                result = _security.IsUserValidated(request.Version, request.Token, request.ContractNumber);
+                result = Security.IsUserValidated(request.Version, request.Token, request.ContractNumber);
                 if (result.UserId.Trim() != string.Empty)
                 {
                     request.UserId = result.UserId;
@@ -932,7 +932,7 @@ namespace Phytel.API.AppDomain.NG.Service
             {
                 CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
                 if ((ex is WebServiceException) == false)
-                    _ngm.LogException(ex);
+                    NGManager.LogException(ex);
             }
             finally
             {
@@ -956,7 +956,7 @@ namespace Phytel.API.AppDomain.NG.Service
             try
             {
                 request.Token = base.Request.Headers["Token"] as string;
-                result = _security.IsUserValidated(request.Version, request.Token, request.ContractNumber);
+                result = Security.IsUserValidated(request.Version, request.Token, request.ContractNumber);
                 if (result.UserId.Trim() != string.Empty)
                 {
                     request.UserId = result.UserId;
@@ -969,7 +969,7 @@ namespace Phytel.API.AppDomain.NG.Service
             {
                 CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
                 if ((ex is WebServiceException) == false)
-                    _ngm.LogException(ex);
+                    NGManager.LogException(ex);
             }
             finally
             {
@@ -995,7 +995,7 @@ namespace Phytel.API.AppDomain.NG.Service
             try
             {
                 request.Token = base.Request.Headers["Token"] as string;
-                result = _security.IsUserValidated(request.Version, request.Token, request.ContractNumber);
+                result = Security.IsUserValidated(request.Version, request.Token, request.ContractNumber);
                 if (result.UserId.Trim() != string.Empty)
                 {
                     request.UserId = result.UserId;
@@ -1008,7 +1008,7 @@ namespace Phytel.API.AppDomain.NG.Service
             {
                 CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
                 if ((ex is WebServiceException) == false)
-                    _ngm.LogException(ex);
+                    NGManager.LogException(ex);
             }
             finally
             {
@@ -1021,14 +1021,8 @@ namespace Phytel.API.AppDomain.NG.Service
 
         public NGService()
         {
-            _security = new SecurityManager();
-            _ngm = new NGManager();
+            Security = new SecurityManager();
+            NGManager = new NGManager();
         }
-
-        //public NGService(ISecurityManager sm, INGManager ngm)
-        //{
-        //    _security = sm;
-        //    _ngm = ngm;
-        //}
     }
 }

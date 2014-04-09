@@ -113,5 +113,21 @@ namespace Phytel.API.AppDomain.NG.Observation
                 throw new Exception("AD:GetAllowedObservationStates()::" + ex.Message, ex.InnerException);
             }
         }
+
+        public GetPatientProblemsResponse GetPatientProblemsSummary(GetPatientProblemsRequest request)
+        {
+            try
+            {
+                GetPatientProblemsResponse response = new GetPatientProblemsResponse();
+                List<PatientProblems> problems = ObservationEndpointUtil.GetPatientProblemSummary(request);
+                response.Problems = problems;
+                response.Version = request.Version;
+                return response;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("AD:GetPatientProblemsSummary()::" + ex.Message, ex.InnerException);
+            }
+        }
     }
 }

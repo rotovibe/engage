@@ -167,5 +167,30 @@ namespace Phytel.API.DataDomain.Patient.Service.Test
 
             Assert.IsNotNull(response.States);
         }
+
+        [TestMethod]
+        public void Get_PatientProblemsSummary_Test()
+        {
+            string contractNumber = "InHealth001";
+            string context = "NG";
+            double version = 1.0;
+            string token = "534592b4d6a48504b492f419";
+            string patientId = "5325db4cd6a4850adcbba8da";
+            string typeId = "53067453fe7a591a348e1b66";
+            IRestClient client = new JsonServiceClient();
+
+            //JsonServiceClient.HttpWebRequestFilter = x =>
+            //                x.Headers.Add(string.Format("{0}: {1}", "x-Phytel-UserID", "5331b06cd6a4850998e38975"));
+            JsonServiceClient.HttpWebRequestFilter = x => x.Headers.Add(string.Format("Token: {0}", token));
+
+            GetPatientProblemsResponse response = client.Get<GetPatientProblemsResponse>(
+                string.Format(@"http://localhost:888/Nightingale/{0}/{1}/Patient/{2}/Observation/Problems",
+                version,
+                contractNumber,
+                patientId,
+                token,
+                typeId));
+
+        }
     }
 }

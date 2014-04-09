@@ -224,7 +224,7 @@ namespace Phytel.API.DataDomain.PatientObservation
             throw new NotImplementedException();
         }
         
-        public object GetObservationsByType(object type, bool? standard)
+        public object GetObservationsByType(object type, bool? standard, bool? status)
         {
             List<ObservationData> odL = new List<ObservationData>();
             try
@@ -233,14 +233,7 @@ namespace Phytel.API.DataDomain.PatientObservation
                 {
                     using (PatientObservationMongoContext ctx = new PatientObservationMongoContext(_dbName))
                     {
-                        List<IMongoQuery> queries = new List<IMongoQuery>();
-                        queries.Add(Query.EQ(MEObservation.ObservationTypeProperty, ObjectId.Parse(type as string)));
-                        if (standard != null)
-                        {
-                            queries.Add(Query.EQ(MEObservation.StandardProperty, standard));
-                        }
-                        queries.Add(Query.EQ(MEObservation.StatusProperty, 1)); // active
-                        queries.Add(Query.EQ(MEObservation.DeleteFlagProperty, false)); // active
+                        List<IMongoQuery> queries = BuildQuery(type, standard, status);
                         IMongoQuery mQuery = Query.And(queries);
 
                         List<MEObservation> meObs = ctx.Observations.Collection.Find(mQuery).ToList();
@@ -281,6 +274,24 @@ namespace Phytel.API.DataDomain.PatientObservation
             {
                 throw new Exception("PatientObservationDD:GetObservationsByType()::" + ex.Message, ex.InnerException);
             }
+        }
+
+        private static List<IMongoQuery> BuildQuery(object type, bool? standard, bool? status)
+        {
+            List<IMongoQuery> queries = new List<IMongoQuery>();
+            queries.Add(Query.EQ(MEObservation.ObservationTypeProperty, ObjectId.Parse(type as string)));
+            if (standard != null)
+            {
+                if ((bool)standard)
+                    queries.Add(Query.EQ(MEObservation.StandardProperty, standard));
+            }
+            if (status != null)
+            {
+                if ((bool)status)
+                    queries.Add(Query.EQ(MEObservation.StatusProperty, 1)); // active
+            }
+            queries.Add(Query.EQ(MEObservation.DeleteFlagProperty, false));
+            return queries;
         }
 
         public IEnumerable<object> FindObservationIdByPatientId(string Id)

@@ -18,8 +18,7 @@ namespace Phytel.API.AppDomain.NG.Service.Tests
             ISecurityManager ism = SecurityManagerFactory.Get();
             INGManager ingm = NGManagerFactory.Get();
 
-            NGService ngs = new NGService();
-
+            NGService ngs = new NGService{ Security = ism, NGManager = ingm };
 
             Assert.Fail();
         }

@@ -176,5 +176,45 @@ namespace Phytel.API.AppDomain.NG.Observation
                 throw new WebServiceException("AD:GetAllowedObservationStates()::" + ex.Message, ex.InnerException);
             }
         }
+
+        internal static List<PatientProblems> GetPatientProblemSummary(GetPatientProblemsRequest request)
+        {
+            try
+            {
+                List<PatientProblems> result = new List<PatientProblems>();
+                IRestClient client = new JsonServiceClient();
+                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Observation/Problems",
+                                    DDPatientObservationsServiceUrl,
+                                    "NG",
+                                    request.Version,
+                                    request.ContractNumber,
+                                    request.PatientId), request.UserId);
+
+                GetPatientProblemsSummaryResponse dataDomainResponse = client.Get<GetPatientProblemsSummaryResponse>(url);
+
+                if (dataDomainResponse != null)
+                {
+                    dataDomainResponse.PatientObservations.ForEach(r =>
+                    {
+                        result.Add(
+                            new PatientProblems
+                            {
+                                Display = r.Display,
+                                Id = r.Id,
+                                Name = r.Name,
+                                ObservationId = r.ObservationId,
+                                Standard = r.Standard,
+                                State = r.State
+                            });
+                    });
+                }
+
+                return result;
+            }
+            catch (WebServiceException ex)
+            {
+                throw new WebServiceException("AD:GetPatientProblemSummary()::" + ex.Message, ex.InnerException);
+            }
+        }
     }
 }
