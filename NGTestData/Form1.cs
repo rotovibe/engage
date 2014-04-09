@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Windows.Forms;
+using System.Configuration;
 
 namespace NGTestData
 {
@@ -327,6 +328,13 @@ namespace NGTestData
                 if(existsC == null)
                     mongoDB.GetCollection("Contact").Insert(newC);
             }
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            txtContract.Text = ConfigurationManager.AppSettings.Get("Contract").ToString();
+            txtMongoConn.Text = Phytel.Services.MongoService.Instance.GetConnectionString("Phytel", txtContract.Text, true);
+            txtSQLNGConn.Text = Phytel.Services.SQLDataService.Instance.GetConnectionString("Phytel", false);
         }
     }
 }

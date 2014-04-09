@@ -50,7 +50,8 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(512, 126);
+            this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.button1.Location = new System.Drawing.Point(488, 122);
             this.button1.Margin = new System.Windows.Forms.Padding(4);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(100, 28);
@@ -78,19 +79,9 @@
             0,
             0,
             0});
-            this.numPatients.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
             this.numPatients.Name = "numPatients";
             this.numPatients.Size = new System.Drawing.Size(160, 22);
             this.numPatients.TabIndex = 2;
-            this.numPatients.Value = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
             // 
             // numProblems
             // 
@@ -122,7 +113,8 @@
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(620, 126);
+            this.button2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.button2.Location = new System.Drawing.Point(596, 122);
             this.button2.Margin = new System.Windows.Forms.Padding(4);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(100, 28);
@@ -133,11 +125,12 @@
             // 
             // txtMongoConn
             // 
+            this.txtMongoConn.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.txtMongoConn.Location = new System.Drawing.Point(153, 12);
             this.txtMongoConn.Name = "txtMongoConn";
-            this.txtMongoConn.Size = new System.Drawing.Size(567, 22);
+            this.txtMongoConn.Size = new System.Drawing.Size(543, 22);
             this.txtMongoConn.TabIndex = 8;
-            this.txtMongoConn.Text = "mongodb://healthuser:healthu$3r@azurePhytelDev.cloudapp.net:27017/InHealth001";
             // 
             // label3
             // 
@@ -161,11 +154,12 @@
             // 
             // txtSQLConn
             // 
+            this.txtSQLConn.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.txtSQLConn.Location = new System.Drawing.Point(153, 40);
             this.txtSQLConn.Name = "txtSQLConn";
-            this.txtSQLConn.Size = new System.Drawing.Size(567, 22);
+            this.txtSQLConn.Size = new System.Drawing.Size(543, 22);
             this.txtSQLConn.TabIndex = 10;
-            this.txtSQLConn.Text = "server=10.90.1.10;database=JCMR001;user id=jcmrtestuser;password=testuser;";
             // 
             // label5
             // 
@@ -179,12 +173,12 @@
             // 
             // txtSQLNGConn
             // 
+            this.txtSQLNGConn.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.txtSQLNGConn.Location = new System.Drawing.Point(153, 68);
             this.txtSQLNGConn.Name = "txtSQLNGConn";
-            this.txtSQLNGConn.Size = new System.Drawing.Size(567, 22);
+            this.txtSQLNGConn.Size = new System.Drawing.Size(543, 22);
             this.txtSQLNGConn.TabIndex = 12;
-            this.txtSQLNGConn.Text = "server=azurePhytelDev.cloudapp.net;database=PhytelNG;user id=nguser;password=ngu$" +
-    "3r;";
             // 
             // txtContract
             // 
@@ -192,7 +186,6 @@
             this.txtContract.Name = "txtContract";
             this.txtContract.Size = new System.Drawing.Size(163, 22);
             this.txtContract.TabIndex = 14;
-            this.txtContract.Text = "InHealth001";
             // 
             // label6
             // 
@@ -206,8 +199,9 @@
             // 
             // label7
             // 
+            this.label7.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(394, 164);
+            this.label7.Location = new System.Drawing.Point(370, 160);
             this.label7.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(111, 17);
@@ -216,7 +210,8 @@
             // 
             // txtUserID
             // 
-            this.txtUserID.Location = new System.Drawing.Point(512, 161);
+            this.txtUserID.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtUserID.Location = new System.Drawing.Point(488, 157);
             this.txtUserID.Name = "txtUserID";
             this.txtUserID.Size = new System.Drawing.Size(208, 22);
             this.txtUserID.TabIndex = 16;
@@ -226,7 +221,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(732, 194);
+            this.ClientSize = new System.Drawing.Size(708, 190);
             this.Controls.Add(this.label7);
             this.Controls.Add(this.txtUserID);
             this.Controls.Add(this.label6);
@@ -244,8 +239,13 @@
             this.Controls.Add(this.label1);
             this.Controls.Add(this.button1);
             this.Margin = new System.Windows.Forms.Padding(4);
+            this.MaximizeBox = false;
+            this.MinimumSize = new System.Drawing.Size(726, 235);
             this.Name = "Form1";
-            this.Text = "Form1";
+            this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Show;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            this.Text = "Nightingale Data Loader / User Creator";
+            this.Load += new System.EventHandler(this.Form1_Load);
             ((System.ComponentModel.ISupportInitialize)(this.numPatients)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numProblems)).EndInit();
             this.ResumeLayout(false);
