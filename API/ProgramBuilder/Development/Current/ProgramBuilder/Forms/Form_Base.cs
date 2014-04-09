@@ -19,6 +19,7 @@ using Phytel.API.Interface;
 using System.Runtime.Serialization.Json;
 using System.IO;
 using System.Configuration;
+using Phytel.API.DataDomain.Step.DTO;
 
 namespace ProgramBuilder
 {
@@ -108,6 +109,16 @@ namespace ProgramBuilder
                     responsedata = new GetAllActionsDataResponse();
                     break;
 
+                case DataDomainTypes.TextStep:
+                    req = new GetAllTextStepDataRequest();
+                    responsedata = new GetAllTextStepDataResponse();
+                    break;
+
+                case DataDomainTypes.YesNoStep:
+                    req = new GetAllYesNoStepDataRequest();
+                    responsedata = new GetAllYesNoStepDataResponse();
+                    break;
+
                 default:
                     break;
             }
@@ -125,7 +136,8 @@ namespace ProgramBuilder
     {
         Module,
         Action,
-        Step
+        YesNoStep,
+        TextStep
     }
     
 }

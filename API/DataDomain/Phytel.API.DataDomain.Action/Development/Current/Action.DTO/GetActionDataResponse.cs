@@ -20,11 +20,18 @@ namespace Phytel.API.DataDomain.Action.DTO
 
     public class ActionData
     {
+        
         public string ID { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
         public string CompletedBy { get; set; }
         public List<string> Objectives { get; set; }
         public string Status { get; set; }
+
+        //used to validate the CompletedBy property
+        public bool ShouldSerializeCompletedBy()
+        {
+            return CompletedBy.Length > 5;
+        }
     }
 }

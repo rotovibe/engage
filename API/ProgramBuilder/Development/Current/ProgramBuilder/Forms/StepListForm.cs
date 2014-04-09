@@ -9,10 +9,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Phytel.API.DataDomain.Step.DTO;
+
 
 namespace ProgramBuilder
 {
-    public partial class StepListForm : Form
+    public partial class StepListForm : Form_Base
     {
         public StepListForm()
         {
@@ -23,7 +25,7 @@ namespace ProgramBuilder
         {
             NewStepForm newStep = new NewStepForm();
             newStep.ShowDialog();
-            if(newStep.DialogResult.Equals(DialogResult.OK))
+            if (newStep.DialogResult.Equals(DialogResult.OK))
             {
                 //Step nStep = new Step
                 //{
@@ -45,6 +47,51 @@ namespace ProgramBuilder
         {
             this.DialogResult = DialogResult.OK;
             this.Hide();
+        }
+
+        private void StepListForm_Load(object sender, EventArgs e)
+        {
+            List<YesNoData> yesnolist = GetYesNoStepDataResponseServiceCall();
+            List<TextData> textlist = GetTextStepDataResponseServiceCall();
+
+            List<StepData> totallist = new List<StepData>();
+            totallist.AddRange(yesnolist);
+            totallist.AddRange(textlist);
+
+
+            foreach (StepData step in totallist)
+            {
+                //actionListView.Items.Add(new ListViewItem(action.Name, action.ID));
+
+            }
+        }
+
+        public List<YesNoData> GetYesNoStepDataResponseServiceCall()
+        {
+            try
+            {
+                GetAllYesNoStepDataResponse response = GetData(DataDomainTypes.YesNoStep, "yesno") as GetAllYesNoStepDataResponse;
+                return response.Steps;
+            }
+            catch (Exception ex)
+            {
+                //TODO
+                return null;
+            }
+        }
+
+        public List<TextData> GetTextStepDataResponseServiceCall()
+        {
+            try
+            {
+                GetAllTextStepDataResponse response = GetData(DataDomainTypes.TextStep, "text") as GetAllTextStepDataResponse;
+                return response.Steps;
+            }
+            catch (Exception ex)
+            {
+                //TODO
+                return null;
+            }
         }
     }
 }

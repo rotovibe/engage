@@ -210,23 +210,27 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\..\..\Projects\tfs2013\Phytel.Net\Services\API\Common\Phytel.API.Common\Development\Current\Phytel.API.Common.csproj">
+    <ProjectReference Include="..\..\..\..\Common\Phytel.API.Common\Development\Current\Phytel.API.Common.csproj">
       <Project>{25cf3c3f-221f-4a49-b5ef-a8a5fcf9a5ba}</Project>
       <Name>Phytel.API.Common</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\..\..\..\Projects\tfs2013\Phytel.Net\Services\API\DataDomain\Phytel.API.DataDomain.Action\Development\Current\Action.DTO\DataDomain.Action.DTO.csproj">
+    <ProjectReference Include="..\..\..\..\DataDomain\Phytel.API.DataDomain.Action\Development\Current\Action.DTO\DataDomain.Action.DTO.csproj">
       <Project>{1c2c63a1-4246-4ec9-bad1-c00e9ecd85f6}</Project>
       <Name>DataDomain.Action.DTO</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\..\..\..\Projects\tfs2013\Phytel.Net\Services\API\DataDomain\Phytel.API.DataDomain.Module\Development\Current\Module.DTO\DataDomain.Module.DTO.csproj">
+    <ProjectReference Include="..\..\..\..\DataDomain\Phytel.API.DataDomain.Module\Development\Current\Module.DTO\DataDomain.Module.DTO.csproj">
       <Project>{6862b598-6967-430d-803a-bbe00fe98050}</Project>
       <Name>DataDomain.Module.DTO</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\..\..\..\Projects\tfs2013\Phytel.Net\Services\API\DataDomain\Phytel.API.DataDomain.Program\Development\Current\Program\DataDomain.Program.csproj">
+    <ProjectReference Include="..\..\..\..\DataDomain\Phytel.API.DataDomain.Program\Development\Current\Program\DataDomain.Program.csproj">
       <Project>{34271552-e2e1-428f-b612-7186e01b6c54}</Project>
       <Name>DataDomain.Program</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\..\..\..\Projects\tfs2013\Phytel.Net\Services\API\Interfaces\Development\Current\Phytel.API.Interface\Phytel.API.Interface.csproj">
+    <ProjectReference Include="..\..\..\..\DataDomain\Phytel.API.DataDomain.Step\Development\Current\Step.DTO\DataDomain.Step.DTO.csproj">
+      <Project>{71e4bd1e-0fdf-4b80-8322-4c38b8bb671c}</Project>
+      <Name>DataDomain.Step.DTO</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\Interfaces\Development\Current\Phytel.API.Interface\Phytel.API.Interface.csproj">
       <Project>{abe948fb-247e-4955-b3ab-b7c93e10a542}</Project>
       <Name>Phytel.API.Interface</Name>
     </ProjectReference>

@@ -24,6 +24,17 @@ namespace Phytel.API.DataDomain.Step
             return (result != null ? result : new GetYesNoStepDataResponse());
         }
 
+        public static GetAllYesNoStepDataResponse GetAllYesNoSteps(GetAllYesNoStepDataRequest request)
+        {
+            GetAllYesNoStepDataResponse result = new GetAllYesNoStepDataResponse();
+
+            IStepRepository<GetAllYesNoStepDataResponse> repo = StepRepositoryFactory<GetAllYesNoStepDataResponse>.GetStepRepository(request.ContractNumber, request.Context, yesnostep);
+            repo.UserId = request.UserId;
+            result = repo.SelectAll() as GetAllYesNoStepDataResponse;
+
+            return result;
+        }
+
         public static GetTextStepDataResponse GetTextStepByID(GetTextStepDataRequest request)
         {
             GetTextStepDataResponse result = new GetTextStepDataResponse();
@@ -33,6 +44,17 @@ namespace Phytel.API.DataDomain.Step
             result = repo.FindByID(request.TextStepID) as GetTextStepDataResponse;
 
             return (result != null ? result : new GetTextStepDataResponse());
+        }
+
+        public static GetAllTextStepDataResponse GetAllTextSteps(GetAllTextStepDataRequest request)
+        {
+            GetAllTextStepDataResponse result = new GetAllTextStepDataResponse();
+
+            IStepRepository<GetAllTextStepDataResponse> repo = StepRepositoryFactory<GetAllTextStepDataResponse>.GetStepRepository(request.ContractNumber, request.Context, "text");
+            repo.UserId = request.UserId;
+            result = repo.SelectAll() as GetAllTextStepDataResponse;
+
+            return result;
         }
     }
 }   

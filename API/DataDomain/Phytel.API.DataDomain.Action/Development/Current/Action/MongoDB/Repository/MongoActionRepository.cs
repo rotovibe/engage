@@ -115,17 +115,28 @@ namespace Phytel.API.DataDomain.Action
 
             using (ActionMongoContext ctx = new ActionMongoContext(_dbName))
             {
-                list = (from a in ctx.Actions
-                        select new DTO.ActionData
-                        {
-                            ID = a.Id.ToString(),
-                            Name = a.Name,
-                            Description = a.Description,
-                            Status = status.ToString()
-                        }).ToList();
-            }
-            response.Actions = list;
+                 //var x = (from a in ctx.Actions
+                 //       //where a.CompletedBy.ToString().Length > 5
+                 //       select new DTO.ActionData
+                 //       {
+                 //           ID = a.Id.ToString(),
+                 //           Name = a.Name,
+                 //           Description = a.Description
+                 //           //Status = status.ToString()
+                 //       });
 
+
+                var l = from a in ctx.Actions
+                        select a;
+
+                 //foreach (ActionData act in x)
+                 //{
+                 //    if(act.CompletedBy.ToString().Length > 5)
+                 //       response.Actions.Add(act);
+                 //}
+
+            }
+           
             return response;
         }
 
