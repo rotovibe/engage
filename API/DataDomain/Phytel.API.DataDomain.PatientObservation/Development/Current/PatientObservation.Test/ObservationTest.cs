@@ -48,5 +48,23 @@ namespace Phytel.API.DataDomain.PatientObservation.Test
 
             Assert.IsNull(response.StatesData);
         }
+
+        [TestMethod]
+        public void GetObservationsByType_StandardIsFalse_Test()
+        {
+            // Arrange
+            string userId = string.Empty;
+            string contractNumber = "InHealth001";
+            string context = "NG";
+            string typeId = "533d8278d433231deccaa62d";
+            bool? standard = null;
+
+            IPatientObservationRepository<object> repo =
+                PatientObservationRepositoryFactory<object>.GetPatientObservationRepository(contractNumber, context, userId);
+            GetAdditionalLibraryObservationsRequest request = new GetAdditionalLibraryObservationsRequest { Standard = standard, TypeId = typeId, Context = context, ContractNumber = contractNumber, UserId = userId, Version = 1 };
+            GetAdditionalLibraryObservationsResponse response = PatientObservationDataManager.GetAdditionalObservationsLibraryByType(request);
+
+            Assert.IsNotNull(response.Library);
+        }
     }
 }

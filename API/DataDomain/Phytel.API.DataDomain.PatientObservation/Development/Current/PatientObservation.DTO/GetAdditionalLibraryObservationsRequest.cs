@@ -3,14 +3,15 @@ using ServiceStack.ServiceHost;
 
 namespace Phytel.API.DataDomain.PatientObservation.DTO
 {
-    [Route("/{Context}/{Version}/{ContractNumber}/Observation/Type/{TypeId}/MatchLibrary/", "GET")]
+     [Route("/{Context}/{Version}/{ContractNumber}/Observation/Type/{TypeId}/MatchLibrary", "GET")]
+    [Route("/{Context}/{Version}/{ContractNumber}/Observation/Type/{TypeId}/MatchLibrary/{Standard}", "GET")]
     public class GetAdditionalLibraryObservationsRequest : IDataDomainRequest
     {
-        [ApiMember(Name = "PatientId", Description = "Id of the Patient for whom a goal is being created.", ParameterType = "property", DataType = "string", IsRequired = true)]
-        public string PatientId { get; set; }
-
         [ApiMember(Name = "TypeId", Description = "Id of the observation type.", ParameterType = "property", DataType = "string", IsRequired = true)]
         public string TypeId { get; set; }
+
+        [ApiMember(Name = "Standard", Description = "Determines if observation is standard or not.", ParameterType = "path", DataType = "boolean", IsRequired = false)]
+        public bool? Standard { get; set; }
 
         [ApiMember(Name = "UserId", Description = "UserId of the logged in user", ParameterType = "property", DataType = "string", IsRequired = true)]
         public string UserId { get; set; }

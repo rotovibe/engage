@@ -183,7 +183,7 @@ namespace Phytel.API.DataDomain.PatientObservation
                 IPatientObservationRepository<GetAdditionalLibraryObservationsResponse> repo =
                     PatientObservationRepositoryFactory<GetAdditionalLibraryObservationsResponse>.GetObservationRepository(request.ContractNumber, request.Context, request.UserId);
                 
-                List<ObservationData> odl = (List<ObservationData>)repo.GetObservationsByType(request.TypeId, false);
+                List<ObservationData> odl = (List<ObservationData>)repo.GetObservationsByType(request.TypeId, request.Standard);
 
                 odl.ForEach(o =>
                 {
@@ -241,36 +241,6 @@ namespace Phytel.API.DataDomain.PatientObservation
             catch (Exception ex)
             {
                 throw new Exception("DD.DataPatientObservationManager:GetAdditionalObservationItemById()::" + ex.Message, ex.InnerException);
-            }
-        }
-
-        public static GetAllActiveProblemsResponse GetAllActiveProblems(GetAllActiveProblemsRequest request)
-        {
-            try
-            {
-                GetAllActiveProblemsResponse response = new GetAllActiveProblemsResponse();
-                List<ObservationLibraryItemData> oli = new List<ObservationLibraryItemData>();
-                IPatientObservationRepository<GetAllActiveProblemsResponse> repo =
-                    PatientObservationRepositoryFactory<GetAllActiveProblemsResponse>.GetObservationRepository(request.ContractNumber, request.Context, request.UserId);
-
-                List<ObservationData> odl = (List<ObservationData>)repo.GetObservationsByType(request.TypeId, null);
-
-                odl.ForEach(o =>
-                {
-                    oli.Add(new ObservationLibraryItemData
-                    {
-                        Id = o.Id,
-                        Name = o.CommonName != null ? o.CommonName : o.Description
-                    });
-                });
-
-                response.Library = oli;
-
-                return response;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("DD.DataPatientObservationManager:GetAllActiveProblems()::" + ex.Message, ex.InnerException);
             }
         }
 

@@ -72,10 +72,8 @@
     <Compile Include="DeletePatientObservationRequest.cs" />
     <Compile Include="DeletePatientObservationResponse.cs" />
     <Compile Include="GetAllowedStatesDataRequest.cs" />
-    <Compile Include="GetAllActiveProblemsRequest.cs" />
     <Compile Include="GetAdditionalLibraryObservationsRequest.cs" />
     <Compile Include="GetAllowedStatesDataResponse.cs" />
-    <Compile Include="GetAllActiveProblemsResponse.cs" />
     <Compile Include="GetAdditionalLibraryObservationsResponse.cs" />
     <Compile Include="GetAllPatientObservationsRequest.cs" />
     <Compile Include="GetPatientObservationRequest.cs" />

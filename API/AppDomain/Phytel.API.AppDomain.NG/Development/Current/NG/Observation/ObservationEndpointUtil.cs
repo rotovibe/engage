@@ -55,14 +55,14 @@ namespace Phytel.API.AppDomain.NG.Observation
             {
                 List<ObservationLibraryItemData> result = null;
                 IRestClient client = new JsonServiceClient();
-
-                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Observation/Type/{4}/MatchLibrary/?PatientId={5}",
+                // [Route("/{Version}/{ContractNumber}/Observation/Type/{TypeId}/MatchLibrary/{Standard}"
+                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Observation/Type/{4}/MatchLibrary/{5}",
                                     DDPatientObservationsServiceUrl,
                                     "NG",
                                     request.Version,
                                     request.ContractNumber,
                                     request.TypeId,
-                                    request.PatientId), request.UserId);
+                                    request.Standard), request.UserId);
 
                 GetAdditionalLibraryObservationsResponse dataDomainResponse = client.Get<GetAdditionalLibraryObservationsResponse>(
                     url);
