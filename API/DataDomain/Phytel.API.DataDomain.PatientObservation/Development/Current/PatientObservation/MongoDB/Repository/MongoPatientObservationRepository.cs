@@ -209,8 +209,8 @@ namespace Phytel.API.DataDomain.PatientObservation
                     if (pord.Units != null) uv.Add(MB.Update.Set(MEPatientObservation.UnitsProperty, pord.Units));
                     if (pord.EndDate != null) uv.Add(MB.Update.Set(MEPatientObservation.EndDateProperty, pord.EndDate));
                     if (pord.StartDate != null) uv.Add(MB.Update.Set(MEPatientObservation.StartDateProperty, pord.StartDate));
-                    if (pord.DisplayId != 0) uv.Add(MB.Update.Set(MEPatientObservation.DisplayProperty, pord.DisplayId));
-                    if (pord.StateId != 0) uv.Add(MB.Update.Set(MEPatientObservation.ObservationStateProperty, pord.StateId));
+                    if (pord.DisplayId != null) uv.Add(MB.Update.Set(MEPatientObservation.DisplayProperty, pord.DisplayId));
+                    if (pord.StateId != null) uv.Add(MB.Update.Set(MEPatientObservation.ObservationStateProperty, pord.StateId));
                     if (pord.Source != null) uv.Add(MB.Update.Set(MEPatientObservation.SourceProperty, pord.Source));
 
                     IMongoUpdate update = MB.Update.Combine(uv);
