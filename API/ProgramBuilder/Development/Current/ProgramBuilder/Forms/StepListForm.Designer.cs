@@ -92,6 +92,7 @@
             this.MinimumSize = new System.Drawing.Size(467, 484);
             this.Name = "StepListForm";
             this.Text = "Step List";
+            this.Load += new System.EventHandler(this.StepListForm_Load);
             this.ResumeLayout(false);
 
         }

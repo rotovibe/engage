@@ -105,11 +105,11 @@ namespace Phytel.API.DataDomain.Step
             using (YesNoStepMongoContext ctx = new YesNoStepMongoContext(_dbName))
             {
                 var steps = (from a in ctx.YesNoSteps
-                        where a.Type == StepType.YesNo
+                        //where a.Type == StepType.YesNo
                         select new DTO.YesNoData
                          {
                              ID = a.Id.ToString(),
-                             Question = a.Question
+                             //Question = a.Question
                          }).ToList();
 
                 response.Steps = steps;

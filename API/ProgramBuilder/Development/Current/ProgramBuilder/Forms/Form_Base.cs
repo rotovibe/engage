@@ -32,6 +32,8 @@ namespace ProgramBuilder
         protected Uri requestUri;
                 
         const string _userid = "5325db73d6a4850adc047035"; //this is a dummy id used to access the collection; not used for security, just validity
+        const string _TEXTSTEP = "step/text";
+        const string _YESNO = "step/yesno";
 
         object requestdata;
         object responsedata;
@@ -63,7 +65,7 @@ namespace ProgramBuilder
 
         protected object GetData(DataDomainTypes datadomain, string datadomainName)
         {
-            GetDTOs(datadomain);
+            GetDTOs(datadomain, datadomainName);
             HttpClient dataClient = GetHttpClient(datadomain, datadomainName);
 
             //IDomainResponse responsedata;
@@ -93,7 +95,7 @@ namespace ProgramBuilder
             return responsedata;
         }
 
-        private void GetDTOs(DataDomainTypes datadomain)
+        private void GetDTOs(DataDomainTypes datadomain, string datadomainName)
         {
             IDataDomainRequest req = null;
 
@@ -109,17 +111,21 @@ namespace ProgramBuilder
                     responsedata = new GetAllActionsDataResponse();
                     break;
 
-                case DataDomainTypes.TextStep:
-                    req = new GetAllTextStepDataRequest();
-                    responsedata = new GetAllTextStepDataResponse();
-                    break;
+                case DataDomainTypes.Step:
+                    switch (datadomainName.ToLower())
+	                {
+                        case _TEXTSTEP:
+                                req = new GetAllTextStepDataRequest();
+                                responsedata = new GetAllTextStepDataResponse();
+                            break;
 
-                case DataDomainTypes.YesNoStep:
-                    req = new GetAllYesNoStepDataRequest();
-                    responsedata = new GetAllYesNoStepDataResponse();
-                    break;
+                        case _YESNO:
+                                req = new GetAllYesNoStepDataRequest();
+                                responsedata = new GetAllYesNoStepDataResponse();
+                            break;
 
-                default:
+	                }
+
                     break;
             }
 
@@ -136,8 +142,7 @@ namespace ProgramBuilder
     {
         Module,
         Action,
-        YesNoStep,
-        TextStep
+        Step
     }
     
 }

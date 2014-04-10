@@ -70,7 +70,7 @@ namespace ProgramBuilder
         {
             try
             {
-                GetAllYesNoStepDataResponse response = GetData(DataDomainTypes.YesNoStep, "yesno") as GetAllYesNoStepDataResponse;
+                GetAllYesNoStepDataResponse response = GetData(DataDomainTypes.Step, "step/yesno") as GetAllYesNoStepDataResponse;
                 return response.Steps;
             }
             catch (Exception ex)
@@ -84,7 +84,7 @@ namespace ProgramBuilder
         {
             try
             {
-                GetAllTextStepDataResponse response = GetData(DataDomainTypes.TextStep, "text") as GetAllTextStepDataResponse;
+                GetAllTextStepDataResponse response = GetData(DataDomainTypes.Step, "text") as GetAllTextStepDataResponse;
                 return response.Steps;
             }
             catch (Exception ex)
