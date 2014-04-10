@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Globalization;
 using AD = Phytel.API.AppDomain.NG.DTO.Observation;
+using Phytel.API.Common;
 
 namespace Phytel.API.AppDomain.NG
 {
@@ -129,7 +130,6 @@ namespace Phytel.API.AppDomain.NG
             {
                 PatientObservationRecordData pord = new PatientObservationRecordData
                 {
-                    EndDate = po.EndDate,
                     GroupId = po.GroupId,
                     StartDate = po.StartDate,
                     TypeId = po.TypeId,
@@ -139,6 +139,17 @@ namespace Phytel.API.AppDomain.NG
                     DeleteFlag = po.DeleteFlag
                 };
 
+                // If the status for PatientObservation(problem) is changed to Resolved or Inactive, then set EndDate to Today.
+                if (IsResolvedOrInactivated(po.StateId))
+                {
+                    pord.EndDate = DateTime.UtcNow;
+                }
+                else 
+                {
+                    pord.EndDate = po.EndDate;
+                }
+
+                // Populate Values for Labs and Vitals
                 if (ov != null)
                 {
                     pord.Id = ov.Id;
@@ -163,6 +174,16 @@ namespace Phytel.API.AppDomain.NG
             {
                 throw new Exception("AD:CreatePatientObservationRecord()::" + ex.Message, ex.InnerException);
             }
+        }
+
+        private static bool IsResolvedOrInactivated(int p)
+        {
+            bool result = false;
+            if (p == (int)ObservationState.Inactive || p == (int)ObservationState.Resolved)
+            {
+                result = true;
+            }
+            return result;
         }
 
         internal static List<string> GetPatientObservationIds(List<AD.PatientObservation> obsl)
