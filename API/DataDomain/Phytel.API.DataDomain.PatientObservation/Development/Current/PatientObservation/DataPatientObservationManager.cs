@@ -260,7 +260,7 @@ namespace Phytel.API.DataDomain.PatientObservation
             }
         }
 
-          public static GetAllowedStatesDataResponse GetAllowedStates(GetAllowedStatesDataRequest request)
+        public static GetAllowedStatesDataResponse GetAllowedStates(GetAllowedStatesDataRequest request)
         {
             try
             {
@@ -275,6 +275,24 @@ namespace Phytel.API.DataDomain.PatientObservation
             catch (Exception ex)
             {
                 throw new Exception("DD.DataPatientObservationManager:GetAllowedStates()::" + ex.Message, ex.InnerException);
+            }
+        }
+
+        public static GetInitializeProblemDataResponse GetInitializeProblem(GetInitializeProblemDataRequest request)
+        {
+            try
+            {
+                GetInitializeProblemDataResponse response = new GetInitializeProblemDataResponse();
+                IPatientObservationRepository<GetInitializeProblemDataResponse> repo =
+                    PatientObservationRepositoryFactory<GetInitializeProblemDataResponse>.GetPatientObservationRepository(request.ContractNumber, request.Context, request.UserId);
+
+                PatientObservationData data = (PatientObservationData)repo.InitializeProblem(request);
+                response.PatientObservation = data;
+                return response;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("DD.DataPatientObservationManager:GetInitializeProblem()::" + ex.Message, ex.InnerException);
             }
         }
 

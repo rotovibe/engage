@@ -12,6 +12,7 @@ namespace Phytel.API.DataDomain.PatientObservation
     public interface IPatientObservationRepository<T> : IRepository<T>
     {
         object Initialize(object newEntity);
+        object InitializeProblem(object newEntity);
         object GetObservationsByType(object newEntity, bool? standard, bool? status);
         IEnumerable<object> FindObservationIdByPatientId(string Id);
         object FindRecentObservationValue(string observationTypeId, string patientId);

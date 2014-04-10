@@ -7,14 +7,19 @@ namespace Phytel.API.DataDomain.PatientObservation.Test
     [TestClass]
     public class PatientObservationTest
     {
+        static string userId = "000000000000000000000000";
+        static string contractNumber = "InHealth001";
+        static string context = "NG";
+        static int version = 1;
+        
         [TestMethod]
-        public void GetPatientObservationByID()
+        public void InitializePatientProblem()
         {
-            GetPatientObservationRequest request = new GetPatientObservationRequest{ PatientObservationID = "5"};
+            GetInitializeProblemDataRequest request = new GetInitializeProblemDataRequest { Context = context, ContractNumber = contractNumber, ObservationId = "533ed16cd4332307bc592bab", PatientId = "5325da03d6a4850adcbba4fe", UserId = userId, Version = version };
 
-            GetPatientObservationResponse response = PatientObservationDataManager.GetPatientObservationByID(request);
+            GetInitializeProblemDataResponse response = PatientObservationDataManager.GetInitializeProblem(request);
 
-            Assert.IsTrue(response.PatientObservation.PatientObservationID == "Tony");
+            Assert.IsNotNull(response.PatientObservation);
         }
     }
 }

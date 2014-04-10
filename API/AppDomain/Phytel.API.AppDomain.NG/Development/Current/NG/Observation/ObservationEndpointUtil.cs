@@ -220,5 +220,35 @@ namespace Phytel.API.AppDomain.NG.Observation
                 throw new WebServiceException("AD:GetPatientProblemSummary()::" + ex.Message, ex.InnerException);
             }
         }
+
+        internal static PatientObservationData GetInitializeProblem(GetInitializeProblemRequest request)
+        {
+            try
+            {
+                PatientObservationData result = null;
+                IRestClient client = new JsonServiceClient();
+                //  [Route("/{Context}/{Version}/{ContractNumber}/Patient/{PatientId}/Observation/{ObservationId}/Problem/Initialize", "GET")]
+                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Observation/{5}/Problem/Initialize",
+                                    DDPatientObservationsServiceUrl,
+                                    "NG",
+                                    request.Version,
+                                    request.ContractNumber,
+                                    request.PatientId,
+                                    request.ObservationId), request.UserId);
+
+                GetInitializeProblemDataResponse dataDomainResponse = client.Get<GetInitializeProblemDataResponse>(url);
+
+                if (dataDomainResponse != null)
+                {
+                    result = dataDomainResponse.PatientObservation;
+                }
+
+                return result;
+            }
+            catch (WebServiceException ex)
+            {
+                throw new WebServiceException("AD:GetInitializeProblem()::" + ex.Message, ex.InnerException);
+            }
+        }
     }
 }

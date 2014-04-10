@@ -214,5 +214,40 @@ namespace Phytel.API.AppDomain.NG.Service
             }
             return response;
         }
+
+        public GetInitializeProblemResponse Get(GetInitializeProblemRequest request)
+        {
+            GetInitializeProblemResponse response = new GetInitializeProblemResponse();
+            ObservationsManager om = new ObservationsManager();
+            ValidateTokenResponse result = null;
+
+            try
+            {
+                request.Token = base.Request.Headers["Token"] as string;
+                result = Security.IsUserValidated(request.Version, request.Token, request.ContractNumber);
+                if (result.UserId.Trim() != string.Empty)
+                {
+                    request.UserId = result.UserId;
+                    response = om.GetInitializeProblem(request);
+                }
+                else
+                    throw new UnauthorizedAccessException();
+            }
+            catch (Exception ex)
+            {
+                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+                if ((ex is WebServiceException) == false)
+                    om.LogException(ex);
+            }
+            finally
+            {
+                List<string> patientIds = new List<string>();
+                patientIds.Add(request.PatientId);
+
+                if (result != null)
+                    AuditHelper.LogAuditData(request, result.SQLUserId, patientIds, System.Web.HttpContext.Current.Request, request.GetType().Name);
+            }
+            return response;
+        }
     }
 }

@@ -294,6 +294,57 @@ namespace Phytel.API.DataDomain.PatientObservation
             catch (Exception) { throw; }
         }
 
+        public object InitializeProblem(object newEntity)
+        {
+            GetInitializeProblemDataRequest request = (GetInitializeProblemDataRequest)newEntity;
+            PatientObservationData patientObservationData = null;
+            MEPatientObservation mePg = null;
+
+            try
+            {
+                mePg = new MEPatientObservation(this.UserId)
+                {
+                    Id = ObjectId.GenerateNewId(),
+                    PatientId = ObjectId.Parse(request.PatientId),
+                    ObservationId = ObjectId.Parse(request.ObservationId),
+                    DeleteFlag = false,
+                    TTLDate = System.DateTime.UtcNow.AddDays(_initializeDays),
+                    StartDate = DateTime.UtcNow,
+                    EndDate = null,
+                    Display = ObservationDisplay.Primary,
+                    State = ObservationState.Active,
+                    Source = Constants.CareManager,
+                    Version = request.Version
+                };
+
+                using (PatientObservationMongoContext ctx = new PatientObservationMongoContext(_dbName))
+                {
+                    ctx.PatientObservations.Collection.Insert(mePg);
+
+                    AuditHelper.LogDataAudit(this.UserId,
+                                            MongoCollectionName.PatientObservation.ToString(),
+                                            mePg.Id.ToString(),
+                                            Common.DataAuditType.Insert,
+                                            request.ContractNumber);
+
+                    patientObservationData = new PatientObservationData
+                    {
+                        Id = mePg.Id.ToString(),
+                        PatientId = mePg.PatientId.ToString(),
+                        ObservationId = mePg.ObservationId.ToString(),
+                        DeleteFlag = mePg.DeleteFlag,
+                        StartDate = mePg.StartDate,
+                        EndDate = mePg.EndDate,
+                        DisplayId = (int)mePg.Display,
+                        StateId = (int)mePg.State,
+                        Source = mePg.Source
+                    };
+                }
+                return patientObservationData;
+            }
+            catch (Exception) { throw; }
+        }
+
         public IEnumerable<object> FindObservationIdByPatientId(string Id)
         {
             try

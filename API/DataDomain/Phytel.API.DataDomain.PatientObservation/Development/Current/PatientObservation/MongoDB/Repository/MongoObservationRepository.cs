@@ -223,7 +223,12 @@ namespace Phytel.API.DataDomain.PatientObservation
         {
             throw new NotImplementedException();
         }
-        
+
+        public object InitializeProblem(object newEntity)
+        {
+            throw new NotImplementedException();
+        }
+
         public object GetObservationsByType(object type, bool? standard, bool? status)
         {
             List<ObservationData> odL = new List<ObservationData>();

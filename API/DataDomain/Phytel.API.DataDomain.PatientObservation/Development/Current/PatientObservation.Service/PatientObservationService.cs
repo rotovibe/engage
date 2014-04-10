@@ -219,5 +219,26 @@ namespace Phytel.API.DataDomain.PatientObservation.Service
             }
             return response;
         }
+
+        public GetInitializeProblemDataResponse Get(GetInitializeProblemDataRequest request)
+        {
+            GetInitializeProblemDataResponse response = new GetInitializeProblemDataResponse();
+            try
+            {
+                if (string.IsNullOrEmpty(request.UserId))
+                    throw new UnauthorizedAccessException("PatientObservationDD:Get()::Unauthorized Access");
+
+                response = PatientObservationDataManager.GetInitializeProblem(request);
+                response.Version = request.Version;
+            }
+            catch (Exception ex)
+            {
+                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+
+                string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
+                Common.Helper.LogException(int.Parse(aseProcessID), ex);
+            }
+            return response;
+        }
     }
 }

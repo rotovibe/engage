@@ -91,6 +91,8 @@
     <Compile Include="PatientObservationRecordData.cs" />
     <Compile Include="PreviousValueData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="GetInitializeProblemDataRequest.cs" />
+    <Compile Include="GetInitializeProblemDataResponse.cs" />
     <Compile Include="PutInitializeObservationDataRequest.cs" />
     <Compile Include="PutInitializeObservationDataResponse.cs" />
     <Compile Include="PutUpdateObservationDataRequest.cs" />
