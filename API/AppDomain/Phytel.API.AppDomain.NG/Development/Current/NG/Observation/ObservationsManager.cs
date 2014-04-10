@@ -58,14 +58,14 @@ namespace Phytel.API.AppDomain.NG.Observation
                     foreach (Phytel.API.AppDomain.NG.DTO.Observation.PatientObservation po in obsl)
                     {
                         PatientObservationRecordData pord = null;
-                        if (po.Values != null && po.Values.Count > 0)
+                        if (po.Values != null && po.Values.Count > 0) // Labs and Vitals have values
                         {
                             foreach (ObservationValue ov in po.Values)
                             {
                                 pord = ObservationsUtil.CreatePatientObservationRecord(po, ov);
                             }
                         }
-                        else 
+                        else // Problem does not have values
                         {
                             pord = ObservationsUtil.CreatePatientObservationRecord(po, null);
                         }
