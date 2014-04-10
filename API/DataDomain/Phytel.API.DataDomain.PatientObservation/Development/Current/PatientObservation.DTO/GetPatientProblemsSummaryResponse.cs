@@ -6,7 +6,7 @@ namespace Phytel.API.DataDomain.PatientObservation.DTO
 {
     public class GetPatientProblemsSummaryResponse : IDomainResponse
    {
-        public List<PatientObservationSummaryData> PatientObservations { get; set; }
+        public List<PatientObservationData> PatientObservations { get; set; }
         public double Version { get; set; }
         public ResponseStatus Status { get; set; }
    }

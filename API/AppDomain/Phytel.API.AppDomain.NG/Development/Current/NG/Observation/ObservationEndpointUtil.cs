@@ -177,11 +177,11 @@ namespace Phytel.API.AppDomain.NG.Observation
             }
         }
 
-        internal static List<PatientProblems> GetPatientProblemSummary(GetPatientProblemsRequest request)
+        internal static List<Phytel.API.AppDomain.NG.DTO.Observation.PatientObservation> GetPatientProblemSummary(GetPatientProblemsRequest request)
         {
             try
             {
-                List<PatientProblems> result = new List<PatientProblems>();
+                List<Phytel.API.AppDomain.NG.DTO.Observation.PatientObservation> result = new List<Phytel.API.AppDomain.NG.DTO.Observation.PatientObservation>();
                 IRestClient client = new JsonServiceClient();
                 string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Observation/Problems",
                                     DDPatientObservationsServiceUrl,
@@ -197,14 +197,18 @@ namespace Phytel.API.AppDomain.NG.Observation
                     dataDomainResponse.PatientObservations.ForEach(r =>
                     {
                         result.Add(
-                            new PatientProblems
+                            new Phytel.API.AppDomain.NG.DTO.Observation.PatientObservation
                             {
-                                Display = r.Display,
                                 Id = r.Id,
-                                Name = r.Name,
                                 ObservationId = r.ObservationId,
-                                Standard = r.Standard,
-                                State = r.State
+                                Name = r.Name,
+                                PatientId = r.PatientId,
+                                StateId = r.StateId,
+                                DisplayId = r.DisplayId,
+                                StartDate = r.StartDate,
+                                EndDate = r.EndDate,
+                                Source = r.Source,
+                                Standard = r.Standard
                             });
                     });
                 }

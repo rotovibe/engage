@@ -343,7 +343,7 @@ namespace Phytel.API.DataDomain.PatientObservation
                 IMongoQuery mQuery = Query.And(queries);
 
                 List<MEPatientObservation> meObservation = null;
-                List<PatientObservationSummaryData> observationDataL = new List<PatientObservationSummaryData>();
+                List<PatientObservationData> observationDataL = new List<PatientObservationData>();
 
                 using (PatientObservationMongoContext ctx = new PatientObservationMongoContext(_dbName))
                 {
@@ -354,13 +354,17 @@ namespace Phytel.API.DataDomain.PatientObservation
                         meObservation.ForEach(o =>
                         {
                             observationDataL.Add(
-                               new PatientObservationSummaryData
+                               new PatientObservationData
                                {
                                    Id = o.Id.ToString(),
                                    ObservationId = o.ObservationId.ToString(),
-                                   Display = (int)o.Display,
+                                   DisplayId = (int)o.Display,
                                    Name = GetObservationName(o.ObservationId),
-                                   State = (int)o.State
+                                   StateId = (int)o.State,
+                                   PatientId = request.PatientId,
+                                   StartDate = o.StartDate,
+                                   EndDate = o.EndDate,
+                                   Source = o.Source
                                });
                         });
                     }

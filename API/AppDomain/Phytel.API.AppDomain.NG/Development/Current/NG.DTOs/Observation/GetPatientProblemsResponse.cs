@@ -7,7 +7,7 @@ namespace Phytel.API.AppDomain.NG.DTO
 {
     public class GetPatientProblemsResponse : IDomainResponse
    {
-        public List<PatientProblems> Problems { get; set; }
+        public List<PatientObservation> Problems { get; set; }
         public double Version { get; set; }
         public ResponseStatus Status { get; set; }
    }

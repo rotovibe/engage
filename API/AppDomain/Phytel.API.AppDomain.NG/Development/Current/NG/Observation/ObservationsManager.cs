@@ -119,7 +119,7 @@ namespace Phytel.API.AppDomain.NG.Observation
             try
             {
                 GetPatientProblemsResponse response = new GetPatientProblemsResponse();
-                List<PatientProblems> problems = ObservationEndpointUtil.GetPatientProblemSummary(request);
+                List<Phytel.API.AppDomain.NG.DTO.Observation.PatientObservation> problems = ObservationEndpointUtil.GetPatientProblemSummary(request);
                 response.Problems = problems;
                 response.Version = request.Version;
                 return response;

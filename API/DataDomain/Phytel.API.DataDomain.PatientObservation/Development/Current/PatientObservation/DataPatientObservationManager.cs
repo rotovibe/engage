@@ -50,8 +50,8 @@ namespace Phytel.API.DataDomain.PatientObservation
                 List<string> oIds = oData.Select(i => i.Id).ToList();
 
                 // 2) find all current patientobservations within these observationids.
-                List<PatientObservationSummaryData> ol = 
-                    ((MongoPatientObservationRepository<GetPatientProblemsSummaryResponse>)repo).GetAllPatientProblems(request, oIds) as List<PatientObservationSummaryData>;
+                List<PatientObservationData> ol = 
+                    ((MongoPatientObservationRepository<GetPatientProblemsSummaryResponse>)repo).GetAllPatientProblems(request, oIds) as List<PatientObservationData>;
                 
                 result.PatientObservations = ol;
                 return result;
@@ -225,6 +225,8 @@ namespace Phytel.API.DataDomain.PatientObservation
                 bool result = false;
                 IPatientObservationRepository<PutUpdateObservationDataResponse> repo =
                     PatientObservationRepositoryFactory<PutUpdateObservationDataResponse>.GetPatientObservationRepository(request.ContractNumber, request.Context, request.UserId);
+
+                //string type = request.PatientObservationData;
 
                 // update
                 if (request.PatientObservationData != null && request.PatientObservationData.Id != null)
