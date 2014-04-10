@@ -203,7 +203,7 @@ namespace Phytel.API.Common
 
     public enum ObservationDisplay
     {
-        None = 0,
+        None = -1,
         Primary = 1,
         Secondary = 2
     }

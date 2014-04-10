@@ -192,5 +192,48 @@ namespace Phytel.API.DataDomain.Patient.Service.Test
                 typeId));
 
         }
+
+        [TestMethod]
+        public void SavePatientProblems_Test()
+        {
+            string contractNumber = "InHealth001";
+            string context = "NG";
+            double version = 1.0;
+            string patientId = "5325db00d6a4850adcbba802";
+            string token = "5346d352d6a48504b4930c16";
+            IRestClient client = new JsonServiceClient();
+            JsonServiceClient.HttpWebRequestFilter = x => x.Headers.Add(string.Format("Token: {0}", token));
+            PostUpdateObservationItemsResponse response = client.Post<PostUpdateObservationItemsResponse>(
+                string.Format(@"http://localhost:888/Nightingale/{0}/{1}/Patient/{2}/Observation/Update",
+                version,
+                contractNumber,
+                patientId), new PostUpdateObservationItemsRequest { Observations = GetProblems() } as object);
+        }
+
+        private List<PatientObservation> GetProblems()
+        {
+            List<PatientObservation> pos = new List<PatientObservation>();
+            pos.Add(new PatientObservation
+            {
+                Id = "5346effcd43323252c52d47b",
+                ObservationId = "533ed16ed4332307bc592bb9",
+                StartDate = System.DateTime.UtcNow.AddDays(2),
+                DisplayId = 2,
+                StateId = 4,
+                DeleteFlag= false
+            });
+
+            pos.Add(new PatientObservation
+            {
+                Id = "5346ef85d4332324584dd049",
+                ObservationId = "533ed16ed4332307bc592bba",
+                StartDate = System.DateTime.UtcNow.AddDays(1),
+                DisplayId = 0,
+                StateId = 3,
+                DeleteFlag = true
+
+            });
+            return pos;
+        }
     }
 }
