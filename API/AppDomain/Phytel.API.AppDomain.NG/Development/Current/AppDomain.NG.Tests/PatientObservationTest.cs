@@ -20,7 +20,7 @@ namespace Phytel.API.AppDomain.NG.Test
             ObservationsManager oManager = new ObservationsManager();
             GetInitializeProblemResponse response = oManager.GetInitializeProblem(request);
 
-            Assert.IsNotNull(response.PatientObservation);
+            Assert.IsNotNull(response.Observation);
         }
     }
 }

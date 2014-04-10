@@ -129,24 +129,34 @@ namespace Phytel.API.AppDomain.NG
             {
                 PatientObservationRecordData pord = new PatientObservationRecordData
                 {
-                    Id = ov.Id,
                     EndDate = po.EndDate,
                     GroupId = po.GroupId,
                     StartDate = po.StartDate,
                     TypeId = po.TypeId,
                     Units = po.Units,
-                    Source = "CM" //po.Source
+                    DisplayId = po.DisplayId,
+                    StateId = po.StateId,
+                    DeleteFlag = po.DeleteFlag
                 };
 
-                double dVal = 0;
-                if (double.TryParse(ov.Value, out dVal))
+                if (ov != null)
                 {
-                    pord.Value = dVal;
+                    pord.Id = ov.Id;
+                    double dVal = 0;
+                    if (double.TryParse(ov.Value, out dVal))
+                    {
+                        pord.Value = dVal;
+                    }
+                    else
+                    {
+                        pord.NonNumericValue = ov.Value;
+                    }
                 }
                 else
                 {
-                    pord.NonNumericValue = ov.Value;
+                    pord.Id = po.Id;
                 }
+
                 return pord;
             }
             catch (Exception ex)

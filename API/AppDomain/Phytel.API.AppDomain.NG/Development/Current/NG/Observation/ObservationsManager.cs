@@ -57,12 +57,19 @@ namespace Phytel.API.AppDomain.NG.Observation
                 {
                     foreach (Phytel.API.AppDomain.NG.DTO.Observation.PatientObservation po in obsl)
                     {
-                        foreach (ObservationValue ov in po.Values)
+                        PatientObservationRecordData pord = null;
+                        if (po.Values != null && po.Values.Count > 0)
                         {
-                            PatientObservationRecordData pord = ObservationsUtil.CreatePatientObservationRecord(po, ov);
-
-                            ObservationEndpointUtil.UpdatePatientObservation(request, pord);
+                            foreach (ObservationValue ov in po.Values)
+                            {
+                                pord = ObservationsUtil.CreatePatientObservationRecord(po, ov);
+                            }
                         }
+                        else 
+                        {
+                            pord = ObservationsUtil.CreatePatientObservationRecord(po, null);
+                        }
+                        ObservationEndpointUtil.UpdatePatientObservation(request, pord);
                     }
                 }
                 else
@@ -136,7 +143,7 @@ namespace Phytel.API.AppDomain.NG.Observation
             {
                 GetInitializeProblemResponse response = new GetInitializeProblemResponse();
                 PatientObservationData po = ObservationEndpointUtil.GetInitializeProblem(request);
-                response.PatientObservation = ObservationsUtil.GetInitializeProblem(request, po);
+                response.Observation = ObservationsUtil.GetInitializeProblem(request, po);
                 response.Version = request.Version;
                 return response;
             }

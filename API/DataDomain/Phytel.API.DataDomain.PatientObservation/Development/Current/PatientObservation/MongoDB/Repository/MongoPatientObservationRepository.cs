@@ -128,16 +128,6 @@ namespace Phytel.API.DataDomain.PatientObservation
             catch (Exception) { throw; }
         }
 
-        public object Update(object entity)
-        {
-            try
-            {
-                throw new NotImplementedException();
-                // code here //
-            }
-            catch (Exception) { throw; }
-        }
-
         public void CacheByID(List<string> entityIDs)
         {
             try
@@ -219,18 +209,27 @@ namespace Phytel.API.DataDomain.PatientObservation
                     var q = MB.Query<MEPatientObservation>.EQ(b => b.Id, ObjectId.Parse(pord.Id));
 
                     var uv = new List<MB.UpdateBuilder>();
-                    uv.Add(MB.Update.Set(MEPatientObservation.TTLDateProperty, BsonNull.Value));
-                    uv.Add(MB.Update.Set(MEPatientObservation.DeleteFlagProperty, false));
+                    uv.Add(MB.Update.Set(MEPatientObservation.DeleteFlagProperty, pord.DeleteFlag));
+                    if (pord.DeleteFlag)
+                    {
+                        uv.Add(MB.Update.Set(MEPatientObservation.TTLDateProperty, System.DateTime.UtcNow.AddDays(_expireDays)));
+                    }
+                    else 
+                    {
+                        uv.Add(MB.Update.Set(MEPatientObservation.TTLDateProperty, BsonNull.Value));
+                    }
                     uv.Add(MB.Update.Set(MEPatientObservation.UpdatedByProperty, ObjectId.Parse(this.UserId)));
                     uv.Add(MB.Update.Set(MEPatientObservation.LastUpdatedOnProperty, System.DateTime.UtcNow));
                     uv.Add(MB.Update.Set(MEPatientObservation.VersionProperty, odr.Version));
 
-                    if (pord.Source != null) uv.Add(MB.Update.Set(MEPatientObservation.SourceProperty, pord.Source));
                     if (pord.NonNumericValue != null) uv.Add(MB.Update.Set(MEPatientObservation.NonNumericValueProperty, pord.NonNumericValue));
                     if (pord.Value != null) uv.Add(MB.Update.Set(MEPatientObservation.NumericValueProperty, BsonDouble.Create(pord.Value)));
                     if (pord.Units != null) uv.Add(MB.Update.Set(MEPatientObservation.UnitsProperty, pord.Units));
                     if (pord.EndDate != null) uv.Add(MB.Update.Set(MEPatientObservation.EndDateProperty, pord.EndDate));
                     if (pord.StartDate != null) uv.Add(MB.Update.Set(MEPatientObservation.StartDateProperty, pord.StartDate));
+                    if (pord.DisplayId != null) uv.Add(MB.Update.Set(MEPatientObservation.DisplayProperty, pord.DisplayId));
+                    if (pord.StateId != null) uv.Add(MB.Update.Set(MEPatientObservation.ObservationStateProperty, pord.StateId));
+                    if (pord.Source != null) uv.Add(MB.Update.Set(MEPatientObservation.SourceProperty, pord.Source));
 
                     IMongoUpdate update = MB.Update.Combine(uv);
                     ctx.PatientObservations.Collection.Update(q, update);
@@ -265,12 +264,14 @@ namespace Phytel.API.DataDomain.PatientObservation
                 {
                     Id = ObjectId.GenerateNewId(),
                     PatientId = ObjectId.Parse(request.PatientId),
-                    TTLDate = System.DateTime.UtcNow.AddDays(_initializeDays),
-                    //LastUpdatedOn = DateTime.UtcNow,
                     ObservationId = ObjectId.Parse(request.ObservationId),
+                    TTLDate = System.DateTime.UtcNow.AddDays(_initializeDays),
                     DeleteFlag = false,
+                    Source = Constants.CareManager,
+                    StartDate = DateTime.UtcNow,
+                    EndDate = DateTime.UtcNow,
+                    State = ObservationState.Complete,
                     Version = request.Version
-                    //,UpdatedBy = ObjectId.Parse(this.UserId)
                 };
 
                 using (PatientObservationMongoContext ctx = new PatientObservationMongoContext(_dbName))
