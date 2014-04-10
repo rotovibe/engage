@@ -319,8 +319,7 @@ namespace Phytel.API.DataDomain.PatientObservation
                         StartDate = mePg.StartDate,
                         EndDate = mePg.EndDate,
                         DisplayId = (int)mePg.Display,
-                        StateId = (int)mePg.State,
-                        Source = mePg.Source
+                        StateId = (int)mePg.State
                     };
                 }
                 return patientObservationData;
@@ -398,8 +397,7 @@ namespace Phytel.API.DataDomain.PatientObservation
                                    PatientId = request.PatientId,
                                    StartDate = o.StartDate,
                                    EndDate = o.EndDate,
-                                   TypeId = "533d8278d433231deccaa62d",
-                                   Source = o.Source
+                                   TypeId = "533d8278d433231deccaa62d"
                                });
                         });
                     }
