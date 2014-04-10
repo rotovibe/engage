@@ -9,7 +9,7 @@ namespace Phytel.API.DataDomain.PatientObservation.DTO
     public class ObservationData
     {
         public string Id { get; set; }
-        public string ObservationType { get; set; }
+        public string ObservationTypeId { get; set; }
         public string GroupId { get; set; }
         public string Description { get; set; }
         public string CommonName { get; set; }

@@ -35,7 +35,9 @@ namespace Phytel.API.AppDomain.NG
                             StartDate = o.StartDate,
                             TypeId = o.TypeId,
                             Units = o.Units,
-                            Values = GetValues(o.Values)
+                            Values = GetValues(o.Values),
+                            StateId = o.StateId,
+                            DisplayId = o.DisplayId,
                         });
                     });
                 }
@@ -192,10 +194,12 @@ namespace Phytel.API.AppDomain.NG
                     PatientId = o.PatientId,
                     Name = o.Name,
                     Standard = o.Standard,
-                    StartDate = o.StartDate,
                     TypeId = o.TypeId,
                     Units = o.Units,
-                    Values = GetValues(o.Values)
+                    Values = GetValues(o.Values),
+                    StartDate = o.StartDate,
+                    DisplayId = o.DisplayId,
+                    StateId = o.StateId
                 };
                 return result;
             }

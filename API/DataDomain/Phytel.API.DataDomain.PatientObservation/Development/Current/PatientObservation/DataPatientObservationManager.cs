@@ -9,6 +9,7 @@ using MongoDB.Bson;
 using ServiceStack.Common.Web;
 using Phytel.API.Interface;
 using Phytel.API.Common.CustomObject;
+using Phytel.API.Common;
 
 namespace Phytel.API.DataDomain.PatientObservation
 {
@@ -87,7 +88,7 @@ namespace Phytel.API.DataDomain.PatientObservation
                         GroupId = od.GroupId,
                         Units = od.Units,
                         Values = new List<ObservationValueData>(),
-                        TypeId = od.ObservationType,
+                        TypeId = od.ObservationTypeId,
                         PatientId = request.PatientId,
                         Source = od.Source
                     };
@@ -257,37 +258,7 @@ namespace Phytel.API.DataDomain.PatientObservation
             }
         }
 
-        //public static GetAllActiveProblemsResponse GetAllActiveProblems(GetAllActiveProblemsRequest request)
-        //{
-        //    try
-        //    {
-        //        GetAllActiveProblemsResponse response = new GetAllActiveProblemsResponse();
-        //        List<ObservationLibraryItemData> oli = new List<ObservationLibraryItemData>();
-        //        IPatientObservationRepository<GetAllActiveProblemsResponse> repo =
-        //            PatientObservationRepositoryFactory<GetAllActiveProblemsResponse>.GetObservationRepository(request.ContractNumber, request.Context, request.UserId);
-
-        //        List<ObservationData> odl = (List<ObservationData>)repo.GetObservationsByType(request.TypeId, null, null);
-
-        //        odl.ForEach(o =>
-        //        {
-        //            oli.Add(new ObservationLibraryItemData
-        //            {
-        //                Id = o.Id,
-        //                Name = o.CommonName != null ? o.CommonName : o.Description
-        //            });
-        //        });
-
-        //        response.Library = oli;
-
-        //        return response;
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        throw new Exception("DD.DataPatientObservationManager:GetAllActiveProblems()::" + ex.Message, ex.InnerException);
-        //    }
-        //}
-
-        public static GetAllowedStatesDataResponse GetAllowedStates(GetAllowedStatesDataRequest request)
+          public static GetAllowedStatesDataResponse GetAllowedStates(GetAllowedStatesDataRequest request)
         {
             try
             {

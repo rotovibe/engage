@@ -268,7 +268,7 @@ namespace Phytel.API.DataDomain.PatientObservation
                     TTLDate = System.DateTime.UtcNow.AddDays(_initializeDays),
                     //LastUpdatedOn = DateTime.UtcNow,
                     ObservationId = ObjectId.Parse(request.ObservationId),
-                    DeleteFlag = true,
+                    DeleteFlag = false,
                     Version = request.Version
                     //,UpdatedBy = ObjectId.Parse(this.UserId)
                 };
@@ -301,6 +301,8 @@ namespace Phytel.API.DataDomain.PatientObservation
                 List<PatientObservationData> observationsDataList = null;
                 List<IMongoQuery> queries = new List<IMongoQuery>();
                 queries.Add(Query.EQ(MEPatientObservation.PatientIdProperty, ObjectId.Parse(Id)));
+                queries.Add(Query.EQ(MEPatientObservation.TTLDateProperty, BsonNull.Value));
+                queries.Add(Query.EQ(MEPatientObservation.DeleteFlagProperty, false));
                 IMongoQuery mQuery = Query.And(queries);
 
                 using (PatientObservationMongoContext ctx = new PatientObservationMongoContext(_dbName))
@@ -334,6 +336,7 @@ namespace Phytel.API.DataDomain.PatientObservation
                 List<ObjectId> oidls = oidlist.Select(r => ObjectId.Parse(r)).ToList<ObjectId>();
                 queries.Add(Query.EQ(MEPatientObservation.PatientIdProperty, ObjectId.Parse(request.PatientId)));
                 queries.Add(Query.EQ(MEPatientObservation.DeleteFlagProperty, false));
+                queries.Add(Query.EQ(MEPatientObservation.TTLDateProperty, BsonNull.Value));
                 queries.Add(Query.EQ(MEPatientObservation.ObservationStateProperty, 2));
                 queries.Add(Query.In(MEPatientObservation.DisplayProperty, new BsonArray(odl)));
                 queries.Add(Query.In(MEPatientObservation.ObservationIdProperty, new BsonArray(oidls)));
@@ -401,6 +404,7 @@ namespace Phytel.API.DataDomain.PatientObservation
                 queries.Add(Query.EQ(MEPatientObservation.PatientIdProperty, ObjectId.Parse(patientId)));
                 queries.Add(Query.EQ(MEPatientObservation.ObservationIdProperty, ObjectId.Parse(observationTypeId)));
                 queries.Add(Query.EQ(MEPatientObservation.DeleteFlagProperty, false));
+                queries.Add(Query.EQ(MEPatientObservation.TTLDateProperty, BsonNull.Value));
                 IMongoQuery mQuery = Query.And(queries);
 
                 MEPatientObservation meObservation = null;
