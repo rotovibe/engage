@@ -70,16 +70,6 @@ namespace Phytel.API.DataDomain.PatientObservation
             catch (Exception) { throw; }
         }
 
-        public void Delete(object entity)
-        {
-            try
-            {
-                throw new NotImplementedException();
-                // code here //
-            }
-            catch (Exception) { throw; }
-        }
-
         public void DeleteAll(List<object> entities)
         {
             try
@@ -104,16 +94,8 @@ namespace Phytel.API.DataDomain.PatientObservation
         {
             try
             {
-                IMongoQuery mQuery = null;
-                List<object> PatientObservationItems = new List<object>();
-
-                mQuery = MongoDataUtil.ExpressionQueryBuilder(expression);
-
-                //using (PatientObservationMongoContext ctx = new PatientObservationMongoContext(_dbName))
-                //{
-                //}
-
-                return new Tuple<string, IEnumerable<object>>(expression.ExpressionID, PatientObservationItems);
+                throw new NotImplementedException();
+                // code here //
             }
             catch (Exception) { throw; }
         }
@@ -227,8 +209,8 @@ namespace Phytel.API.DataDomain.PatientObservation
                     if (pord.Units != null) uv.Add(MB.Update.Set(MEPatientObservation.UnitsProperty, pord.Units));
                     if (pord.EndDate != null) uv.Add(MB.Update.Set(MEPatientObservation.EndDateProperty, pord.EndDate));
                     if (pord.StartDate != null) uv.Add(MB.Update.Set(MEPatientObservation.StartDateProperty, pord.StartDate));
-                    if (pord.DisplayId != null) uv.Add(MB.Update.Set(MEPatientObservation.DisplayProperty, pord.DisplayId));
-                    if (pord.StateId != null) uv.Add(MB.Update.Set(MEPatientObservation.ObservationStateProperty, pord.StateId));
+                    if (pord.DisplayId != 0) uv.Add(MB.Update.Set(MEPatientObservation.DisplayProperty, pord.DisplayId));
+                    if (pord.StateId != 0) uv.Add(MB.Update.Set(MEPatientObservation.ObservationStateProperty, pord.StateId));
                     if (pord.Source != null) uv.Add(MB.Update.Set(MEPatientObservation.SourceProperty, pord.Source));
 
                     IMongoUpdate update = MB.Update.Combine(uv);
