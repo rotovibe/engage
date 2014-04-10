@@ -15,7 +15,7 @@ namespace Phytel.API.DataDomain.PatientObservation.Test
         [TestMethod]
         public void InitializePatientProblem()
         {
-            GetInitializeProblemDataRequest request = new GetInitializeProblemDataRequest { Context = context, ContractNumber = contractNumber, ObservationId = "533ed16cd4332307bc592bab", PatientId = "5325da03d6a4850adcbba4fe", UserId = userId, Version = version };
+            GetInitializeProblemDataRequest request = new GetInitializeProblemDataRequest { Context = context, ContractNumber = contractNumber, ObservationId = "533ed16ed4332307bc592bb9", PatientId = "5325db00d6a4850adcbba802", UserId = userId, Version = version };
 
             GetInitializeProblemDataResponse response = PatientObservationDataManager.GetInitializeProblem(request);
 
