@@ -208,7 +208,8 @@ namespace Phytel.API.AppDomain.NG.Observation
                                 StartDate = r.StartDate,
                                 EndDate = r.EndDate,
                                 Source = r.Source,
-                                Standard = r.Standard
+                                Standard = r.Standard,
+                                TypeId = r.TypeId
                             });
                     });
                 }

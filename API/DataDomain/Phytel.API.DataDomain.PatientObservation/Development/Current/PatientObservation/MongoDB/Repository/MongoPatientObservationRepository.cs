@@ -415,6 +415,7 @@ namespace Phytel.API.DataDomain.PatientObservation
                                    PatientId = request.PatientId,
                                    StartDate = o.StartDate,
                                    EndDate = o.EndDate,
+                                   TypeId = "533d8278d433231deccaa62d",
                                    Source = o.Source
                                });
                         });

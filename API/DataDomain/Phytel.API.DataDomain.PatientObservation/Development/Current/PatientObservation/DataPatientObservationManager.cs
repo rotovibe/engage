@@ -226,7 +226,10 @@ namespace Phytel.API.DataDomain.PatientObservation
                 IPatientObservationRepository<PutUpdateObservationDataResponse> repo =
                     PatientObservationRepositoryFactory<PutUpdateObservationDataResponse>.GetPatientObservationRepository(request.ContractNumber, request.Context, request.UserId);
 
-                //string type = request.PatientObservationData;
+                if (request.PatientObservationData.TypeId.Equals(""))
+                {
+
+                }
 
                 // update
                 if (request.PatientObservationData != null && request.PatientObservationData.Id != null)
