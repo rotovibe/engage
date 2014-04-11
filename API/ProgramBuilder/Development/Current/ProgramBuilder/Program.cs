@@ -16,12 +16,14 @@ namespace ProgramBuilder
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-#if DEBUG
-            Application.Run(new StepListForm());
+//#if DEBUG
+//            Application.Run(new StepListForm());
 
-#else
+//#else
+//            Application.Run(new ProgramForm());
+//#endif
+
             Application.Run(new ProgramForm());
-#endif
         }
     }
 }
