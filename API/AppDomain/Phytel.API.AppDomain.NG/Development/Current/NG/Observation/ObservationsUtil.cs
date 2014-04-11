@@ -139,16 +139,6 @@ namespace Phytel.API.AppDomain.NG
                     DeleteFlag = po.DeleteFlag
                 };
 
-                // If the status for PatientObservation(problem) is changed to Resolved or Inactive, then set EndDate to Today.
-                if (IsResolvedOrInactivated(po.StateId))
-                {
-                    pord.EndDate = DateTime.UtcNow;
-                }
-                else 
-                {
-                    pord.EndDate = po.EndDate;
-                }
-
                 // Populate Values for Labs and Vitals
                 if (ov != null)
                 {
@@ -162,10 +152,21 @@ namespace Phytel.API.AppDomain.NG
                     {
                         pord.NonNumericValue = ov.Value;
                     }
+                    // Set the End date to start date for Labs and Vitals
+                    pord.EndDate = po.StartDate;
                 }
-                else
+                else //  Populate Values for Problems.
                 {
                     pord.Id = po.Id;
+                    // If the status for PatientObservation(problem) is changed to Resolved or Inactive, then set EndDate to Today.
+                    if (IsResolvedOrInactivated(po.StateId))
+                    {
+                        pord.EndDate = DateTime.UtcNow;
+                    }
+                    else
+                    {
+                        pord.EndDate = po.EndDate;
+                    }
                 }
 
                 return pord;
