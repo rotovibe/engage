@@ -63,13 +63,15 @@ namespace Phytel.API.AppDomain.NG.Observation
                             foreach (ObservationValue ov in po.Values)
                             {
                                 pord = ObservationsUtil.CreatePatientObservationRecord(po, ov);
+                                ObservationEndpointUtil.UpdatePatientObservation(request, pord);
                             }
                         }
                         else // Problem does not have values
                         {
                             pord = ObservationsUtil.CreatePatientObservationRecord(po, null);
+                            ObservationEndpointUtil.UpdatePatientObservation(request, pord);
                         }
-                        ObservationEndpointUtil.UpdatePatientObservation(request, pord);
+                        
                     }
                 }
                 else
