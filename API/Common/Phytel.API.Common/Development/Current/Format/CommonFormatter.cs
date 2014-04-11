@@ -3,7 +3,6 @@ using ServiceStack.ServiceInterface.ServiceModel;
 using ServiceStack.ServiceHost;
 using System;
 using System.Net;
-using ServiceStack.ServiceClient.Web;
 
 namespace Phytel.API.Common.Format
 {
