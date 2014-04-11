@@ -287,7 +287,6 @@ namespace Phytel.API.DataDomain.PatientObservation
             queries.Add(Query.EQ(MEObservation.ObservationTypeProperty, ObjectId.Parse(type as string)));
             if (standard != null)
             {
-                if ((bool)standard)
                     queries.Add(Query.EQ(MEObservation.StandardProperty, standard));
             }
             if (status != null)

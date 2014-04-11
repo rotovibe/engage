@@ -12,7 +12,7 @@ namespace Phytel.API.DataDomain.PatientObservation.Services.Test
         public void Get_PatientProblems()
         {
             string url = "http://localhost:8888/PatientObservation";
-            string patientId = "5325da03d6a4850adcbba4fe";
+            string patientId = "5325da6fd6a4850adcbba63e";
             string contractNumber = "InHealth001";
             string context = "NG";
             double version = 1.0;

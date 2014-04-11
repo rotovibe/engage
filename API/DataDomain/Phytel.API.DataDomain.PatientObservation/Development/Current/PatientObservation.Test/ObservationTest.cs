@@ -56,8 +56,8 @@ namespace Phytel.API.DataDomain.PatientObservation.Test
             string userId = string.Empty;
             string contractNumber = "InHealth001";
             string context = "NG";
-            string typeId = "533d8278d433231deccaa62d";
-            bool? standard = null;
+            string typeId = "53067408fe7a591a348e1b65";
+            bool? standard = false;
 
             IPatientObservationRepository<object> repo =
                 PatientObservationRepositoryFactory<object>.GetPatientObservationRepository(contractNumber, context, userId);
