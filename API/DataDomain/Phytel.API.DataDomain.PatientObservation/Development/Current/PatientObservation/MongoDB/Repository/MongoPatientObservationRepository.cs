@@ -354,10 +354,10 @@ namespace Phytel.API.DataDomain.PatientObservation
             catch (Exception) { throw; }
         }
 
-        private DateTime? GetTTLDate(bool p)
+        private DateTime? GetTTLDate(string p)
         {
             DateTime? date = null;
-            if (p)
+            if (string.IsNullOrEmpty(p))
             {
                 date = System.DateTime.UtcNow.AddDays(_initializeDays);
             }

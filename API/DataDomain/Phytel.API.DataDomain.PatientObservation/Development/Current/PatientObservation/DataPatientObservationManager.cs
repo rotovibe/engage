@@ -312,7 +312,7 @@ namespace Phytel.API.DataDomain.PatientObservation
                     ContractNumber = request.ContractNumber,
                     UserId = request.UserId,
                     Version = request.Version,
-                    Initial = false
+                    Initial = "false"
                 };
 
                 PatientObservationData pod = (PatientObservationData)repo.InitializeProblem(req);
