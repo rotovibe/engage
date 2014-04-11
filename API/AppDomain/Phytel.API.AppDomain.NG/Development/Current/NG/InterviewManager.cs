@@ -39,12 +39,21 @@ namespace Phytel.API.AppDomain.NG
 
                 if (action.Completed)
                 {
+                    // pre-process
                     // set program starting date
                     if (action.Order == 1)
                     {
                         //p.StartDate = System.DateTime.UtcNow;
                         PlanElementUtil.SetStartDateForProgramAttributes(request.ProgramId, request);
                     }
+
+                    // get module reference
+                    Module mod = PlanElementUtil.FindElementById(p.Modules, action.ModuleId);
+                    // set to in progress
+                    mod.ElementState = 4;
+                    // set program to in progress
+                    p.ElementState = 4;
+
 
                     //// create a responsibility chain to process each elemnt in the hierachy
                     ProgramPlanProcessor pChain = InitializeProgramChain();
@@ -55,7 +64,6 @@ namespace Phytel.API.AppDomain.NG
                     //// process action
                     pChain.ProcessWorkflow((IPlanElement)action, p, request.UserId, request.PatientId, action, request);
                     
-                    Module mod = PlanElementUtil.FindElementById(p.Modules, action.ModuleId);
                     if (mod != null)
                     {
                         // set enabled status for action dependencies

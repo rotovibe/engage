@@ -23,9 +23,11 @@ namespace Phytel.API.DataDomain.PatientObservation
 
                 IPatientObservationRepository<GetPatientObservationResponse> repo = PatientObservationRepositoryFactory<GetPatientObservationResponse>.GetPatientObservationRepository(request.ContractNumber, request.Context, request.UserId);
 
-                result = repo.FindByID(request.PatientObservationID) as GetPatientObservationResponse;
+                PatientObservationData data = ((MongoPatientObservationRepository<GetPatientObservationResponse>)repo).FindByObservationID(request.ObservationID, request.PatientId) as PatientObservationData;
 
-                return (result != null ? result : new GetPatientObservationResponse());
+                result.PatientObservation = data;
+
+                return result;
             }
             catch (Exception ex)
             {
@@ -294,5 +296,39 @@ namespace Phytel.API.DataDomain.PatientObservation
             }
         }
 
-   }
+
+        public static PutRegisterPatientObservationResponse PutRegisteredObservation(PutRegisterPatientObservationRequest request)
+        {
+            try
+            {
+                PutRegisterPatientObservationResponse response = new PutRegisterPatientObservationResponse();
+                IPatientObservationRepository<GetStandardObservationsResponse> repo = PatientObservationRepositoryFactory<GetStandardObservationsResponse>.GetPatientObservationRepository(request.ContractNumber, request.Context, request.UserId);
+
+                GetInitializeProblemDataRequest req = new GetInitializeProblemDataRequest
+                {
+                    PatientId = request.PatientId,
+                    ObservationId = request.Id,
+                    Context = request.Context,
+                    ContractNumber = request.ContractNumber,
+                    UserId = request.UserId,
+                    Version = request.Version,
+                    Initial = false
+                };
+
+                PatientObservationData pod = (PatientObservationData)repo.InitializeProblem(req);
+
+                if (pod != null)
+                {
+                    response.Outcome = new Outcome { Result = 1, Reason = "Success" };
+                    response.PatientObservation = pod;
+                }
+
+                return response;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("DD.DataPatientObservationManager:InitializePatientObservation()::" + ex.Message, ex.InnerException);
+            }
+        }
+    }
 }   

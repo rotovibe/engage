@@ -113,6 +113,7 @@
     <Compile Include="PlanCOR\ModulePlanProcessor_Tests.cs" />
     <Compile Include="PlanCOR\StepPlanProcessor_Tests.cs" />
     <Compile Include="PlanElementEndpointUtilTests.cs" />
+    <Compile Include="PlanElementEndpointUtil_Tests.cs" />
     <Compile Include="PlanElementUtil_Tests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Stubs\StubNGManager.cs" />
@@ -122,6 +123,10 @@
     <ProjectReference Include="..\..\..\..\..\Common\Phytel.API.Common\Development\Current\Phytel.API.Common.csproj">
       <Project>{25cf3c3f-221f-4a49-b5ef-a8a5fcf9a5ba}</Project>
       <Name>Phytel.API.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\DataDomain\Phytel.API.DataDomain.PatientObservation\Development\Current\PatientObservation.DTO\DataDomain.PatientObservation.DTO.csproj">
+      <Project>{06d69e2b-a395-459c-b4d0-fc750018bdd8}</Project>
+      <Name>DataDomain.PatientObservation.DTO</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\..\..\Interfaces\Development\Current\Phytel.API.Interface\Phytel.API.Interface.csproj">
       <Project>{abe948fb-247e-4955-b3ab-b7c93e10a542}</Project>

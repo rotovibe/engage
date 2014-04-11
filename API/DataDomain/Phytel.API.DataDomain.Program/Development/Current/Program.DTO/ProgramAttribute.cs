@@ -19,16 +19,16 @@ namespace Phytel.API.DataDomain.Program.DTO
         public int Locked { get; set; }
         public string IneligibleReason { get; set; }
         public int Eligibility { get; set; }
-        public int EligibilityOverride { get; set; }
+        //public int EligibilityOverride { get; set; }
         public int Enrollment { get; set; }
         public int GraduatedFlag { get; set; }
         public bool OptOut { get; set; }
-        public string OptOutReason { get; set; }
-        public DateTime? OptOutDate { get; set; }
+        //public string OptOutReason { get; set; }
+        //public DateTime? OptOutDate { get; set; }
         public string Population { get; set; }
         public string RemovedReason { get; set; }
         public string DidNotEnrollReason { get; set; }
-        public string DisEnrollReason { get; set; }
+        //public string DisEnrollReason { get; set; }
         public string OverrideReason { get; set; }
 
         public DateTime? StartDate { get; set; }

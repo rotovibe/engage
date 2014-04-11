@@ -23,5 +23,8 @@ namespace Phytel.API.DataDomain.PatientObservation.DTO
 
         [ApiMember(Name = "Version", Description = "Version of the API being called", ParameterType = "property", DataType = "double", IsRequired = true)]
         public double Version { get; set; }
+
+        [ApiMember(Name = "Initial", Description = "Determines if this is an initialized observation or not.", ParameterType = "property", DataType = "double", IsRequired = true)]
+        public bool Initial { get; set; }
     }
 }

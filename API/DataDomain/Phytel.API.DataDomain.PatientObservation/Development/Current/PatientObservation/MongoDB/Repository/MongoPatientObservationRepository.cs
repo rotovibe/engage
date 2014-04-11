@@ -163,9 +163,34 @@ namespace Phytel.API.DataDomain.PatientObservation
             throw new NotImplementedException();
         }
 
-        object IRepository<T>.FindByID(string entityID)
+        public object FindByObservationID(string entityId, string patientId)
         {
-            throw new NotImplementedException();
+            PatientObservationData odL = null;
+            try
+            {
+                using (PatientObservationMongoContext ctx = new PatientObservationMongoContext(_dbName))
+                {
+                    List<IMongoQuery> queries = new List<IMongoQuery>();
+                    queries.Add(Query.EQ(MEPatientObservation.PatientIdProperty, ObjectId.Parse(patientId)));
+                    queries.Add(Query.EQ(MEPatientObservation.ObservationIdProperty, ObjectId.Parse(entityId)));
+                    queries.Add(Query.EQ(MEPatientObservation.DeleteFlagProperty, false));
+                    queries.Add(Query.EQ(MEPatientObservation.ObservationStateProperty, 2));
+                    IMongoQuery mQuery = Query.And(queries);
+
+                    MEPatientObservation o = ctx.PatientObservations.Collection.Find(mQuery).FirstOrDefault();
+
+                    if (o != null)
+                    {
+                        odL = new PatientObservationData
+                        {
+                            Id = o.Id.ToString(),
+                            StateId = (int)o.State
+                        };
+                    }
+                }
+                return odL;
+            }
+            catch (Exception) { throw; }
         }
 
         Tuple<string, IEnumerable<object>> IRepository<T>.Select(APIExpression expression)
@@ -290,7 +315,7 @@ namespace Phytel.API.DataDomain.PatientObservation
                     PatientId = ObjectId.Parse(request.PatientId),
                     ObservationId = ObjectId.Parse(request.ObservationId),
                     DeleteFlag = false,
-                    TTLDate = System.DateTime.UtcNow.AddDays(_initializeDays),
+                    TTLDate = GetTTLDate(request.Initial),
                     StartDate = DateTime.UtcNow,
                     EndDate = null,
                     Display = ObservationDisplay.Primary,
@@ -327,6 +352,16 @@ namespace Phytel.API.DataDomain.PatientObservation
                 return patientObservationData;
             }
             catch (Exception) { throw; }
+        }
+
+        private DateTime? GetTTLDate(bool p)
+        {
+            DateTime? date = null;
+            if (p)
+            {
+                date = System.DateTime.UtcNow.AddDays(_initializeDays);
+            }
+            return date;
         }
 
         public IEnumerable<object> FindObservationIdByPatientId(string Id)

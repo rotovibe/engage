@@ -86,6 +86,7 @@
     <Compile Include="ObservationData.cs" />
     <Compile Include="ObservationLibraryItemData.cs" />
     <Compile Include="ObservationValueData.cs" />
+    <Compile Include="Outcome.cs" />
     <Compile Include="PatientObservationSummaryData.cs" />
     <Compile Include="PatientObservationData.cs" />
     <Compile Include="PatientObservationRecordData.cs" />
@@ -95,6 +96,8 @@
     <Compile Include="GetInitializeProblemDataResponse.cs" />
     <Compile Include="PutInitializeObservationDataRequest.cs" />
     <Compile Include="PutInitializeObservationDataResponse.cs" />
+    <Compile Include="PutRegisterPatientObservationRequest.cs" />
+    <Compile Include="PutRegisterPatientObservationResponse.cs" />
     <Compile Include="PutUpdateObservationDataRequest.cs" />
     <Compile Include="PutUpdateObservationDataResponse.cs" />
   </ItemGroup>

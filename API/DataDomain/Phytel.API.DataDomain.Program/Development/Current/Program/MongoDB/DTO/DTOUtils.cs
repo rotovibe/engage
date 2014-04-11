@@ -1238,7 +1238,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
                 pa.Enrollment = 2;
                 pa.GraduatedFlag = 1;
                 pa.OptOut = false;
-                pa.EligibilityOverride = 1;
+                //pa.EligibilityOverride = 1;
                 return pa;
             }
             catch (Exception ex)

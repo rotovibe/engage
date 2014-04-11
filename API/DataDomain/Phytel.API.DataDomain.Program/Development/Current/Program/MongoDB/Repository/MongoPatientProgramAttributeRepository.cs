@@ -66,8 +66,8 @@ namespace Phytel.API.DataDomain.Program
                         Population = pa.Population,
                         PlanElementId = ObjectId.Parse(pa.PlanElementId),
                         OverrideReason = pa.OverrideReason,
-                        OptOutReason = pa.OptOutReason,
-                        OptOutDate = pa.OptOutDate,
+                        //OptOutReason = pa.OptOutReason,
+                        //OptOutDate = pa.OptOutDate,
                         OptOut = pa.OptOut,
                         Locked = (Locked)pa.Locked,
                         IneligibleReason = pa.IneligibleReason,
@@ -78,10 +78,10 @@ namespace Phytel.API.DataDomain.Program
                         CompletedBy = pa.CompletedBy,
                         DateCompleted = pa.DateCompleted,
                         DidNotEnrollReason = pa.DidNotEnrollReason,
-                        DisEnrollReason = pa.DisEnrollReason,
+                        //DisEnrollReason = pa.DisEnrollReason,
                         Eligibility = (EligibilityStatus)pa.Eligibility,
                         EligibilityEndDate = pa.EligibilityEndDate,
-                        EligibilityOverride = (EligibilityOverride)pa.EligibilityOverride,
+                        //EligibilityOverride = (EligibilityOverride)pa.EligibilityOverride,
                         EligibilityRequirements = pa.EligibilityRequirements,
                         EligibilityStartDate = pa.EligibilityStartDate,
                         EndDate = pa.EndDate,
@@ -203,10 +203,10 @@ namespace Phytel.API.DataDomain.Program
                             Id = cp.Id.ToString(),
                             AuthoredBy = cp.AuthoredBy,
                             DidNotEnrollReason = cp.DidNotEnrollReason,
-                            DisEnrollReason = cp.DisEnrollReason,
+                            //DisEnrollReason = cp.DisEnrollReason,
                             Eligibility = (int)cp.Eligibility,
                             EligibilityEndDate = cp.EligibilityEndDate,
-                            EligibilityOverride = (int)cp.EligibilityOverride,
+                            //EligibilityOverride = (int)cp.EligibilityOverride,
                             EligibilityRequirements = cp.EligibilityRequirements,
                             EligibilityStartDate = cp.EligibilityStartDate,
                             EndDate = cp.EndDate,
@@ -215,8 +215,8 @@ namespace Phytel.API.DataDomain.Program
                             IneligibleReason = cp.IneligibleReason,
                             Locked = (int)cp.Locked,
                             OptOut = cp.OptOut,
-                            OptOutDate = cp.OptOutDate,
-                            OptOutReason = cp.OptOutReason,
+                            //OptOutDate = cp.OptOutDate,
+                            //OptOutReason = cp.OptOutReason,
                             OverrideReason = cp.OverrideReason,
                             PlanElementId = cp.PlanElementId.ToString(),
                             Population = cp.Population,
@@ -267,19 +267,19 @@ namespace Phytel.API.DataDomain.Program
                     if (mepa.EligibilityRequirements != null) uv.Add(MB.Update.Set(MEProgramAttribute.EligibilityRequirementsProperty, mepa.EligibilityRequirements));
                     if (mepa.EligibilityStartDate != null) uv.Add(MB.Update.Set(MEProgramAttribute.EligibilityStartDateProperty, mepa.EligibilityStartDate));
                     if (mepa.IneligibleReason != null) uv.Add(MB.Update.Set(MEProgramAttribute.IneligibleReasonProperty, mepa.IneligibleReason));
-                    if (mepa.EligibilityOverride != 0) uv.Add(MB.Update.Set(MEProgramAttribute.EligibilityOverrideProperty, (EligibilityOverride)mepa.EligibilityOverride));
+                    //if (mepa.EligibilityOverride != 0) uv.Add(MB.Update.Set(MEProgramAttribute.EligibilityOverrideProperty, (EligibilityOverride)mepa.EligibilityOverride));
                     if (mepa.Eligibility != 0) uv.Add(MB.Update.Set(MEProgramAttribute.EligibilityProperty, (EligibilityStatus)mepa.Eligibility));
                     // optout
-                    if (mepa.OptOutDate != null) uv.Add(MB.Update.Set(MEProgramAttribute.OptOutDateProperty, mepa.OptOutDate));
+                    //if (mepa.OptOutDate != null) uv.Add(MB.Update.Set(MEProgramAttribute.OptOutDateProperty, mepa.OptOutDate));
                     if (mepa.OptOut != null) uv.Add(MB.Update.Set(MEProgramAttribute.OptOutProperty, mepa.OptOut));
-                    if (mepa.OptOutReason != null) uv.Add(MB.Update.Set(MEProgramAttribute.OptOutReasonProperty, mepa.OptOutReason));
+                    //if (mepa.OptOutReason != null) uv.Add(MB.Update.Set(MEProgramAttribute.OptOutReasonProperty, mepa.OptOutReason));
                     // dates
                     if (mepa.StartDate != null) uv.Add(MB.Update.Set(MEProgramAttribute.StartDateProperty, mepa.StartDate));
                     if (mepa.EndDate != null) uv.Add(MB.Update.Set(MEProgramAttribute.EndDateProperty, mepa.EndDate));
                     // enrollment
                     if (mepa.Enrollment != 0) uv.Add(MB.Update.Set(MEProgramAttribute.EnrollmentProperty, (EnrollmentStatus)mepa.Enrollment));
                     if (mepa.DidNotEnrollReason != null) uv.Add(MB.Update.Set(MEProgramAttribute.DidNotEnrollReasonProperty, mepa.DidNotEnrollReason));
-                    if (mepa.DisEnrollReason != null) uv.Add(MB.Update.Set(MEProgramAttribute.DisEnrollReasonProperty, mepa.DisEnrollReason));
+                    //if (mepa.DisEnrollReason != null) uv.Add(MB.Update.Set(MEProgramAttribute.DisEnrollReasonProperty, mepa.DisEnrollReason));
 
                     uv.Add(MB.Update.Set(MEProgramAttribute.UpdatedByProperty, ObjectId.Parse(this.UserId)));
                     uv.Add(MB.Update.Set(MEProgramAttribute.LastUpdatedOnProperty, DateTime.UtcNow));

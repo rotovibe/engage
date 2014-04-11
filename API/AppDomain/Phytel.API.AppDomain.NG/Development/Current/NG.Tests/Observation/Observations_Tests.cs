@@ -190,7 +190,6 @@ namespace Phytel.API.DataDomain.Patient.Service.Test
                 patientId,
                 token,
                 typeId));
-
         }
 
         [TestMethod]

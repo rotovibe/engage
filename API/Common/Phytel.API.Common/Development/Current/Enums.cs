@@ -19,11 +19,11 @@ namespace Phytel.API.Common
         ProgramEnddate = 14,
         EnrollmentStatus = 15,
         OptOut = 16,
-        OptOutReason = 17,
-        OptOutDate = 18,
+        //OptOutReason = 17,
+        //OptOutDate = 18,
         Graduated = 19,
         Locked = 20,
-        EligibilityOverride = 21,
+        //EligibilityOverride = 21,
         Diabetes = 101
     }
 
