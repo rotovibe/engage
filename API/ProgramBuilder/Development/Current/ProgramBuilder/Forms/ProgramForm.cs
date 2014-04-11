@@ -1,4 +1,7 @@
 ﻿using Phytel.API.Common.CustomObject;
+using Phytel.API.DataDomain.Action.DTO;
+using Phytel.API.DataDomain.Module.DTO;
+using Phytel.API.DataDomain.Program.DTO;
 using Phytel.API.DataDomain.Program.MongoDB.DTO;
 using ProgramBuilder.Forms;
 using MongoDB.Bson;
@@ -80,11 +83,6 @@ namespace ProgramBuilder
             }
         }
 
-        private void closeButton_Click(object sender, EventArgs e)
-        {
-            Application.Exit();
-        }
-
         private void ProgramTree_AfterSelect(object sender, TreeViewEventArgs e)
         {
             this.mainPanel.Controls.Clear();
@@ -96,12 +94,12 @@ namespace ProgramBuilder
                         this.mainPanel.Controls.Add(pucList[p]);
                     break;
                 case "Module":
-                    int m = mucList.FindIndex(x => x.moduleNameText == ProgramTree.SelectedNode.Text);
+                    int m = mucList.FindIndex(x => x.m.Name == ProgramTree.SelectedNode.Text);
                     if(m >= 0)
                         this.mainPanel.Controls.Add(mucList[m]);
                     break;
                 case "Action":
-                    int a = aucList.FindIndex(x => x.actionNameText == ProgramTree.SelectedNode.Text);
+                    int a = aucList.FindIndex(x => x.a.Name == ProgramTree.SelectedNode.Text);
                     if(a >= 0)
                         this.mainPanel.Controls.Add(aucList[a]);
                     break;
@@ -109,6 +107,8 @@ namespace ProgramBuilder
                     int s = sucList.FindIndex(x => x.stepNameText == ProgramTree.SelectedNode.Text);
                     if(s >= 0)
                         this.mainPanel.Controls.Add(sucList[s]);
+                    break;
+                default:
                     break;
             }
         }
@@ -119,14 +119,13 @@ namespace ProgramBuilder
             moduleList.ShowDialog();
             if (moduleList.DialogResult.Equals(DialogResult.OK))
             {
-                foreach (ListViewItem l in moduleList.moduleListView.CheckedItems)
+                foreach (Phytel.API.DataDomain.Module.DTO.Module mod in moduleList.listModules)
                 {
-                    m = new TreeNode(l.SubItems[0].Text);
+                    m = new TreeNode(mod.Name);
                     m.Tag = "Module";
                     ProgramTree.SelectedNode.Nodes.Add(m);
                     ModulesUserControl nmc = new ModulesUserControl();
-                    moduleNameText = m.Text;
-                    nmc.addName(moduleNameText);
+                    nmc.addModule(mod);
                     mucList.Add(nmc);
                 }
             }
@@ -138,14 +137,13 @@ namespace ProgramBuilder
             actionList.ShowDialog();
             if(actionList.DialogResult.Equals(DialogResult.OK))
             {
-                foreach(ListViewItem l in actionList.actionListView.CheckedItems)
+                foreach(ActionData ad in actionList.listActions)
                 {
-                    a = new TreeNode(l.SubItems[0].Text);
+                    a = new TreeNode(ad.Name);
                     a.Tag = "Action";
                     ProgramTree.SelectedNode.Nodes.Add(a);
                     ActionsUserControl nac = new ActionsUserControl();
-                    actionNameText = a.Text;
-                    nac.addName(actionNameText);
+                    nac.addAction(ad);
                     aucList.Add(nac);
                 }
             }
@@ -185,7 +183,7 @@ namespace ProgramBuilder
         {
             if (MessageBox.Show("Do you want to delete this Module?", "Warning", MessageBoxButtons.YesNo) == DialogResult.Yes)
             {
-                int m = mucList.FindIndex(x => x.moduleNameText == ProgramTree.SelectedNode.Text);
+                int m = mucList.FindIndex(x => x.m.Name == ProgramTree.SelectedNode.Text);
                 mucList.RemoveAt(m);
                 ProgramTree.SelectedNode.Remove();
             }
@@ -195,7 +193,7 @@ namespace ProgramBuilder
         {
             if (MessageBox.Show("Do you want to delete this Action?", "Warning", MessageBoxButtons.YesNo) == DialogResult.Yes)
             {
-                int a = aucList.FindIndex(x => x.actionNameText == ProgramTree.SelectedNode.Text);
+                int a = aucList.FindIndex(x => x.a.Name == ProgramTree.SelectedNode.Text);
                 aucList.RemoveAt(a);
                 ProgramTree.SelectedNode.Remove();
             }
@@ -211,15 +209,20 @@ namespace ProgramBuilder
             }
         }
 
+        private void closeButton_Click(object sender, EventArgs e)
+        {
+            Application.Exit();
+        }
+
         private void saveButton_Click(object sender, EventArgs e)
         {
             for (int p = 0; p < ProgramTree.GetNodeCount(false); p++)
             {
                 MEProgram newProgram = makeProgram(p);
-                List<Module> modulesList = new List<Module>();
+                List<Phytel.API.DataDomain.Program.MongoDB.DTO.Module> modulesList = new List<Phytel.API.DataDomain.Program.MongoDB.DTO.Module>();
                 for (int mo = 0; mo < ProgramTree.Nodes[p].GetNodeCount(false); mo++)
                 {
-                    Module newModule = makeModule(mo);
+                    Phytel.API.DataDomain.Program.MongoDB.DTO.Module newModule = makeModule(mo);
                     List<Phytel.API.DataDomain.Program.MongoDB.DTO.Action> actionsList = new List<Phytel.API.DataDomain.Program.MongoDB.DTO.Action>();
                     for (int ac = 0; ac < ProgramTree.Nodes[p].Nodes[mo].GetNodeCount(false); ac++ )
                     {
@@ -243,10 +246,7 @@ namespace ProgramBuilder
 
             }
 
-
-
-
-            
+              //Possible fields needed for Program
         //    //{
         //    //    //ContractId
         //    //    Client = ObjectId.Parse(puc.cliTextBox.Text),
@@ -266,7 +266,6 @@ namespace ProgramBuilder
         //    //    ShortName = puc.snTextBox.Text,
         //    //    //SourceId
         //    //    //Status = puc.stsNumericUpDwn.Value
-        //    //    //TTLDate
         //    //    //UpdatedBy
         //    //    //LastUpdatedOn
         //    //    //Version
@@ -285,13 +284,11 @@ namespace ProgramBuilder
         //    //    //Population
         //    //    StartDate = System.DateTime.Parse(puc.sdTextBox.Text)
         //    //    //Status puc.stsNumericUpDwn.Value,
-        //    //    //TTLDate
         //    //    //UpdatedBy
         //    //    //LastUpdatedOn
         //    //    //Version
         //    //};
 
-        //    //Module
 
         }
 
@@ -304,47 +301,33 @@ namespace ProgramBuilder
 
             foreach (DataGridViewRow r in pucList[n].dataGridView1.Rows)
             {
-
                 String rValue = r.Cells[1].Value.ToString();
-
-                switch (r.Cells[0].Value.ToString())
+                if (!(String.IsNullOrEmpty(rValue)))
                 {
-                    //case "Client:":
-                    //    newProgram.Client = ObjectId.Parse(rValue);
-                    //    break;
-                    case "Program Name:":
-                        newProgram.Name = rValue;
-                        break;
-                    case "Short Name:":
-                        newProgram.ShortName = rValue;
-                        break;
-                    case "Description:":
-                        newProgram.Description = rValue;
-                        break;
-                    case "Start Date:":
-                        if (String.IsNullOrEmpty(rValue))
+                    switch (r.Cells[0].Value.ToString())
+                    {
+                        //case "Client:":
+                        //    newProgram.Client = ObjectId.Parse(rValue);
+                        //    break;
+                        case "Program Name:":
+                            newProgram.Name = rValue;
                             break;
-                        else
-                        {
+                        case "Short Name:":
+                            newProgram.ShortName = rValue;
+                            break;
+                        case "Description:":
+                            newProgram.Description = rValue;
+                            break;
+                        case "Start Date:":
                             newProgram.StartDate = System.DateTime.Parse(rValue);
                             break;
-                        }
-                    case "End Date:":
-                        if (String.IsNullOrEmpty(rValue))
-                            break;
-                        else
-                        {
+                        case "End Date:":
                             newProgram.EndDate = System.DateTime.Parse(rValue);
                             break;
-                        }
-                    case "Order:":
-                        if (String.IsNullOrEmpty(rValue))
-                            break;
-                        else
-                        {
-                            newProgram.Order = Convert.ToInt32(rValue);
-                            break;
-                        }
+                        case "Order:":
+                                newProgram.Order = Convert.ToInt32(rValue);
+                                break;
+                    }
                 }
             }
 
@@ -352,9 +335,9 @@ namespace ProgramBuilder
             
         }
 
-        public Module makeModule(int n)
+        public Phytel.API.DataDomain.Program.MongoDB.DTO.Module makeModule(int n)
         {
-            Module newModule = new Module()
+            Phytel.API.DataDomain.Program.MongoDB.DTO.Module newModule = new Phytel.API.DataDomain.Program.MongoDB.DTO.Module()
             {
                 Id = ObjectId.GenerateNewId()
             };
@@ -362,18 +345,20 @@ namespace ProgramBuilder
             foreach (DataGridViewRow r in mucList[n].dataGridView1.Rows)
             {
                 String rValue = r.Cells[1].Value.ToString();
-
-                switch (r.Cells[0].Value.ToString())
+                if (!(String.IsNullOrEmpty(rValue)))
                 {
-                    case "Module Name:":
-                        newModule.Name = rValue;
-                        break;
-                    case "Description:":
-                        newModule.Description = rValue;
-                        break;
-                    case "Status:":
-                        //newModule.Status =  rValue;
-                        break;
+                    switch (r.Cells[0].Value.ToString())
+                    {
+                        case "Module Name:":
+                            newModule.Name = rValue;
+                            break;
+                        case "Description:":
+                            newModule.Description = rValue;
+                            break;
+                        case "Status:":
+                            //newModule.Status =  rValue;
+                            break;
+                    }
                 }
             }
 
@@ -389,18 +374,20 @@ namespace ProgramBuilder
             foreach(DataGridViewRow r in aucList[n].dataGridView1.Rows)
             {
                 String rValue = r.Cells[1].Value.ToString();
-
-                switch (r.Cells[0].Value.ToString())
+                if (!(String.IsNullOrEmpty(rValue)))
                 {
-                    case "Action Name:":
-                        newAction.Name = rValue;
-                        break;
-                    case "Description:":
-                        newAction.Description = rValue;
-                        break;
-                    case "Status:":
-                        //newModule.Status =  rValue;
-                        break;
+                    switch (r.Cells[0].Value.ToString())
+                    {
+                        case "Action Name:":
+                            newAction.Name = rValue;
+                            break;
+                        case "Description:":
+                            newAction.Description = rValue;
+                            break;
+                        case "Status:":
+                            //newModule.Status =  rValue;
+                            break;
+                    }
                 }
             }
 
@@ -416,44 +403,41 @@ namespace ProgramBuilder
             foreach(DataGridViewRow r in sucList[n].dataGridView1.Rows)
             {
                 String rValue = r.Cells[1].Value.ToString();
-
-                switch (r.Cells[0].Value.ToString())
+                if (!(String.IsNullOrEmpty(rValue)))
                 {
-                    case "Title:":
-                        newStep.Title = rValue;
-                        break;
-                    case "Description:":
-                        newStep.Description = rValue;
-                        break;
-                    case "Notes:":
-                        newStep.Notes = rValue;
-                        break;
-                    case "Question:":
-                        newStep.Question = rValue;
-                        break;
-                    case "Response:":
-                        //newStep.Responses = rValue;
-                        break;
-                    case "Text:":
-                        newStep.Text = rValue;
-                        break;
-                    case "Type:":
-                        break;
-                    case "Next:":
-                        newStep.Next = ObjectId.Parse(rValue);
-                        break;
-                    case "Previous:":
-                        newStep.Previous = ObjectId.Parse(rValue);
-                        break;
+                    switch (r.Cells[0].Value.ToString())
+                    {
+                        case "Title:":
+                            newStep.Title = rValue;
+                            break;
+                        case "Description:":
+                            newStep.Description = rValue;
+                            break;
+                        case "Notes:":
+                            newStep.Notes = rValue;
+                            break;
+                        case "Question:":
+                            newStep.Question = rValue;
+                            break;
+                        case "Response:":
+                            //newStep.Responses = rValue;
+                            break;
+                        case "Text:":
+                            newStep.Text = rValue;
+                            break;
+                        case "Type:":
+                            break;
+                        case "Next:":
+                            newStep.Next = ObjectId.Parse(rValue);
+                            break;
+                        case "Previous:":
+                            newStep.Previous = ObjectId.Parse(rValue);
+                            break;
+                    }
                 }
             }
 
             return newStep;
-        }
-
-        public string getProgramName()
-        {
-            return programNameText;
         }
     }
 }

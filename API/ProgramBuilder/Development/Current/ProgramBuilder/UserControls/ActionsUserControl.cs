@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Phytel.API.DataDomain.Action.DTO;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
@@ -12,7 +13,7 @@ namespace ProgramBuilder.UserControls
 {
     public partial class ActionsUserControl : UserControl
     {
-        public string actionNameText;
+        public ActionData a;
 
         public ActionsUserControl()
         {
@@ -34,26 +35,25 @@ namespace ProgramBuilder.UserControls
             DataColumn dc2 = dt.Columns.Add("PropertyValue");
             dr = dt.NewRow();
             dr["PropertyName"] = "Action Name:";
-            dr["PropertyValue"] = actionNameText;
+            dr["PropertyValue"] = a.Name;
             dt.Rows.Add(dr);
             DataRow dr2 = dt.NewRow();
             dr2["PropertyName"] = "Description:";
+            dr["PropertyValue"] = a.Description;
             dt.Rows.Add(dr2);
             DataRow dr3 = dt.NewRow();
             dr3["PropertyName"] = "Status:";
             dt.Rows.Add(dr3);
 
-
             ds.Tables.Add(dt);
             dataGridView1.DataSource = dt.DefaultView;
 
             dataGridView1.Columns["PropertyName"].ReadOnly = true;
-
         }
 
-        public void addName(String s)
+        public void addAction(ActionData action)
         {
-            actionNameText = s;
+            a = action;
             addItems();
         }
     }

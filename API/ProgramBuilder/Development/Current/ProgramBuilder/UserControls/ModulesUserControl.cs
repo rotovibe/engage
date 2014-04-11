@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Phytel.API.DataDomain.Module.DTO;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
@@ -12,29 +13,11 @@ namespace ProgramBuilder
 {
     public partial class ModulesUserControl : UserControl
     {
-        public string moduleNameText;
+        public Module m;
 
         public ModulesUserControl()
         {
             InitializeComponent();
-        }
-
-        public ModulesUserControl(string s)
-        {
-            moduleNameText = s;
-            InitializeComponent();
-            addItems();
-        }
-
-        private void ModulesUserControl_Load(object sender, EventArgs e)
-        {
-            uonTextBox.Text = System.DateTime.Now.ToString();
-            nmTextBox.Text = moduleNameText;
-        }
-
-        private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
-        {
-
         }
 
         private void addItems()
@@ -46,13 +29,15 @@ namespace ProgramBuilder
             DataColumn dc2 = dt.Columns.Add("PropertyValue");
             dr = dt.NewRow();
             dr["PropertyName"] = "Module Name:";
-            dr["PropertyValue"] = moduleNameText;
+            dr["PropertyValue"] = m.Name;
             dt.Rows.Add(dr);
             DataRow dr2 = dt.NewRow();
             dr2["PropertyName"] = "Description:";
+            dr2["PropertyValue"] = m.Description;
             dt.Rows.Add(dr2);
             DataRow dr3 = dt.NewRow();
             dr3["PropertyName"] = "Status:";
+            //dr2["PropertyValue"] = m.Status.ToString();
             dt.Rows.Add(dr3);
             
 
@@ -60,12 +45,11 @@ namespace ProgramBuilder
             dataGridView1.DataSource = dt.DefaultView;
 
             dataGridView1.Columns["PropertyName"].ReadOnly = true;
-
         }
 
-        public void addName(String s)
+        public void addModule(Module mod)
         {
-            moduleNameText = s;
+            m = mod;
             addItems();
         }
     }

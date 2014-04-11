@@ -41,11 +41,5 @@ namespace ProgramBuilder
         {
             return programNameText;
         }
-
-        private void ProgramNameForm_Load(object sender, EventArgs e)
-        {
-            
-        }
-
     }
 }

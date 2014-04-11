@@ -15,6 +15,8 @@ namespace ProgramBuilder.Forms
 {
     public partial class ActionListForm : Form_Base
     {
+        public List<ActionData> listActions = new List<ActionData>();
+
         public ActionListForm()
         {
             InitializeComponent();

@@ -83,9 +83,6 @@ namespace ProgramBuilder
             DataRow dr15 = dt.NewRow();
             dr15["PropertyName"] = "Enabled:";
             dt.Rows.Add(dr15);
-            DataRow dr16 = dt.NewRow();
-            dr16["PropertyName"] = "Objectives:";
-            dt.Rows.Add(dr16);
             DataRow dr17 = dt.NewRow();
             dr17["PropertyName"] = "Contract ID:";
             dt.Rows.Add(dr17);
@@ -95,20 +92,29 @@ namespace ProgramBuilder
             DataRow dr19 = dt.NewRow();
             dr19["PropertyName"] = "Source ID:";
             dt.Rows.Add(dr19);
-
+            
+            
             ds.Tables.Add(dt);
             dataGridView1.DataSource = dt.DefaultView;
+            DataGridViewComboBoxCell ce = new DataGridViewComboBoxCell();
+            //dataGridView1.Columns[1].CellTemplate = ce;
+            //string[] data = { "A", "B", "C" };
+            //ce.Items.AddRange(data);
+            //dataGridView1.Rows.Add();
+            //dataGridView1.Rows[18].Cells[1] = ce;
+            //DataGridViewComboBoxCell combo = dataGridView1.Rows[0].Cells[1] as DataGridViewComboBoxCell;
+            //string[] data = { "item A", "item B", "item C" };
+            //combo.Items.AddRange(data);
+            //this.dataGridView1.Rows[9].Cells[1] = combo;
+            //combo.ValueMember = "column1";
+            //combo.DataSource = new BindingSource(cbdt, "column1");
 
+            //dgvcbc.DisplayMember = "column1";
+            //dgvcbc.DisplayStyle = DataGridViewComboBoxDisplayStyle.ComboBox;
+            //dataGridView1.Rows[0].Cells[0] = dgvcbc;
+            
+            
             dataGridView1.Columns["PropertyName"].ReadOnly = true;
-
-            //ListViewItem ttl = new ListViewItem("TTL:");
-            //listView1.Items.Add(ttl);
-            //ListViewItem uby = new ListViewItem("Updated By:");
-            //listView1.Items.Add(uby);
-            //ListViewItem uon = new ListViewItem("Updated On:");
-            //listView1.Items.Add(uon);
-            //ListViewItem v = new ListViewItem("Version:");
-            //listView1.Items.Add(v);
         }
 
         public void addName(String programName)

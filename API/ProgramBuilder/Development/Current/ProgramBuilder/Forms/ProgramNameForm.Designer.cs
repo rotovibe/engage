@@ -84,7 +84,6 @@
             this.MinimumSize = new System.Drawing.Size(300, 153);
             this.Name = "ProgramNameForm";
             this.Text = "New Program Name";
-            this.Load += new System.EventHandler(this.ProgramNameForm_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 

@@ -20,13 +20,12 @@ namespace ProgramBuilder
     public partial class ModuleListForm : Form_Base
     {
         private List<Module> loadModules = new List<Module>();
+        public List<Module> listModules = new List<Module>();
         string _headerUserId = string.Empty;
 
         public ModuleListForm()
         {
             InitializeComponent();
-            //GetAllModulesResponse modulesResponse = GetAllModulesRequestServiceCall();
-            //MessageBox.Show(modulesResponse.Modules.ToString());
         }
 
         public GetAllModulesResponse GetAllModulesRequestServiceCall()
@@ -40,10 +39,6 @@ namespace ProgramBuilder
                //TODO
                 return null;
             }
-        }
-
-        private void listView1_SelectedIndexChanged(object sender, EventArgs e)
-        {
         }
 
         private void ModuleListForm_Load(object sender, EventArgs e)
@@ -73,6 +68,7 @@ namespace ProgramBuilder
                     //Version = 
                 };
                 ListViewItem lvi = moduleListView.Items.Add(new ListViewItem(newModule.Name, newModule.Id));
+                listModules.Add(newModule);
                 lvi.Checked = true;
             }
             

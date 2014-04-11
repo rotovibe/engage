@@ -16,6 +16,8 @@ namespace ProgramBuilder
 {
     public partial class StepListForm : Form_Base
     {
+        public List<StepData> listSteps = new List<StepData>();
+
         public StepListForm()
         {
             InitializeComponent();
@@ -27,10 +29,10 @@ namespace ProgramBuilder
             newStep.ShowDialog();
             if (newStep.DialogResult.Equals(DialogResult.OK))
             {
-                //Step nStep = new Step
-                //{
-
-                //};
+                StepData nStep = new StepData
+                {
+                    ID = ObjectId.GenerateNewId().ToString()
+                };
                 String sName = newStep.nmTextBox.Text;
                 String sId = ObjectId.GenerateNewId().ToString();
                 ListViewItem lvi = stepListView.Items.Add(new ListViewItem(sName, sId));
