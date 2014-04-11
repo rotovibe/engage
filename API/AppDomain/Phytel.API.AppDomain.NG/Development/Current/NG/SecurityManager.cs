@@ -39,9 +39,9 @@ namespace Phytel.API.AppDomain.NG
 
                 return response;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                throw new Exception("AD:IsUserValidated()::" + ex.Message, ex.InnerException);
+                throw;
             }
         }
 
