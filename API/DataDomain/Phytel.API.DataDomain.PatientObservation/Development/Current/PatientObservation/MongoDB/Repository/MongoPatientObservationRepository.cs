@@ -436,6 +436,7 @@ namespace Phytel.API.DataDomain.PatientObservation
                             };
                             observationDataL.Add(data);
                         }
+                        observationDataL = observationDataL.OrderBy(o => o.Name).ToList();
 
                     }
                 }
