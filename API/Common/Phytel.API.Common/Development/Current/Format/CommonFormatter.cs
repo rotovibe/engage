@@ -14,6 +14,10 @@ namespace Phytel.API.Common.Format
             {
                 httpResponse.StatusCode = (int)HttpStatusCode.Unauthorized;
             }
+            else if ((ex.InnerException != null) && (ex.InnerException is UnauthorizedAccessException || ex.InnerException.Message == "UnauthorizedAccessException"))
+            {
+                httpResponse.StatusCode = (int)HttpStatusCode.Unauthorized;
+            }
             else
             {
                 httpResponse.StatusCode = (int)HttpStatusCode.InternalServerError;
