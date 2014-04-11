@@ -402,13 +402,11 @@ namespace Phytel.API.DataDomain.PatientObservation
             try
             {
                 List<IMongoQuery> queries = new List<IMongoQuery>();
-                List<int> odl = new List<int>() { (int)ObservationDisplay.Primary, (int)ObservationDisplay.Secondary };
                 List<ObjectId> oidls = oidlist.Select(r => ObjectId.Parse(r)).ToList<ObjectId>();
                 queries.Add(Query.EQ(MEPatientObservation.PatientIdProperty, ObjectId.Parse(request.PatientId)));
                 queries.Add(Query.EQ(MEPatientObservation.DeleteFlagProperty, false));
                 queries.Add(Query.EQ(MEPatientObservation.TTLDateProperty, BsonNull.Value));
                 queries.Add(Query.EQ(MEPatientObservation.ObservationStateProperty, (int)ObservationState.Active));
-                queries.Add(Query.In(MEPatientObservation.DisplayProperty, new BsonArray(odl)));
                 queries.Add(Query.In(MEPatientObservation.ObservationIdProperty, new BsonArray(oidls)));
                 IMongoQuery mQuery = Query.And(queries);
 
