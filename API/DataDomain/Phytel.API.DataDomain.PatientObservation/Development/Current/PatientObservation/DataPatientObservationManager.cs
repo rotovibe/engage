@@ -198,8 +198,8 @@ namespace Phytel.API.DataDomain.PatientObservation
                 List<ObservationLibraryItemData> oli = new List<ObservationLibraryItemData>();
                 IPatientObservationRepository<GetAdditionalLibraryObservationsResponse> repo =
                     PatientObservationRepositoryFactory<GetAdditionalLibraryObservationsResponse>.GetObservationRepository(request.ContractNumber, request.Context, request.UserId);
-                
-                List<ObservationData> odl = (List<ObservationData>)repo.GetObservationsByType(request.TypeId, false, true);
+
+                List<ObservationData> odl = (List<ObservationData>)repo.GetObservationsByType(request.TypeId, request.Standard, true);
 
                 odl.ForEach(o =>
                 {
