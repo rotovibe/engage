@@ -27,7 +27,9 @@ namespace Phytel.API.AppDomain.NG.Service
             public override void Configure(Funq.Container container)
             {
                 //register any dependencies your services use, e.g:
-                //container.Register<ICacheClient>(new MemoryCacheClient());
+                container.RegisterAutoWiredAs<SecurityManager, ISecurityManager>();
+                container.RegisterAutoWiredAs<NGManager, INGManager>();
+
                 Plugins.Add(new RequestLogsFeature() { RequiredRoles = new string[] { } });
 
                 var emitGlobalHeadersHandler = new CustomActionHandler((httpReq, httpRes) => httpRes.EndRequest());

@@ -12,8 +12,8 @@ namespace Phytel.API.AppDomain.NG.Service
 {
     public partial class NGService : ServiceStack.ServiceInterface.Service
     {
-        public ISecurityManager Security;
-        public INGManager NGManager;
+        public ISecurityManager Security {get; set;}
+        public INGManager NGManager {get; set;}
 
         public GetPatientResponse Post(GetPatientRequest request)
         {
@@ -1018,11 +1018,5 @@ namespace Phytel.API.AppDomain.NG.Service
             return response;
         }
         #endregion
-
-        public NGService()
-        {
-            Security = new SecurityManager();
-            NGManager = new NGManager();
-        }
     }
 }

@@ -123,6 +123,12 @@ namespace Phytel.API.AppDomain.NG
                 Actions action = request.Action;
                 NGUtils.UpdateProgramAction(action, p);
 
+                // set elementstates to in progress
+                Module mod = PlanElementUtil.FindElementById(p.Modules, action.ModuleId);
+                mod.ElementState = 4;
+                p.ElementState = 4;
+                AddUniquePlanElementToProcessedList(mod);
+
                 // save
                 PlanElementEndpointUtil.SaveAction(request, action.Id, p);
 
