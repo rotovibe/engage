@@ -37,10 +37,10 @@ namespace Phytel.API.DataDomain.ProgramDesign.DTO
         public ObjectId Id { get; private set; }
 
         #region Standard IMongoEntity Implementation
-        [BsonElement(ExtraElementsProperty)]
-        [BsonExtraElements()]
-        [BsonIgnoreIfNull(true)]
-        public Dictionary<string, object> ExtraElements { get; set; }
+        //[BsonElement(ExtraElementsProperty)]
+        //[BsonExtraElements()]
+        //[BsonIgnoreIfNull(true)]
+        //public Dictionary<string, object> ExtraElements { get; set; }
 
         [BsonElement(VersionProperty)]
         [BsonDefaultValue(1.0)]
@@ -72,5 +72,17 @@ namespace Phytel.API.DataDomain.ProgramDesign.DTO
         [BsonDateTimeOptions(Kind = System.DateTimeKind.Utc)]
         public System.DateTime RecordCreatedOn { get; private set; }
         #endregion
+
+        public BsonDocument ExtraElements
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+            set
+            {
+                throw new NotImplementedException();
+            }
+        }
     }
 }
