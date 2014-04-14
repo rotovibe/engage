@@ -69,7 +69,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="GetAllModulesRequest.cs" />
+    <Compile Include="GetAllModulesResponse.cs" />
     <Compile Include="GetAllProgramDesignsRequest.cs" />
+    <Compile Include="GetModuleRequest.cs" />
+    <Compile Include="GetModuleResponse.cs" />
     <Compile Include="GetProgramDesignRequest.cs" />
     <Compile Include="GetAllProgramDesignsResponse.cs" />
     <Compile Include="GetProgramDesignResponse.cs" />
@@ -79,6 +83,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\..\Common\Phytel.API.Common\Development\Current\Phytel.API.Common.csproj">
+      <Project>{25cf3c3f-221f-4a49-b5ef-a8a5fcf9a5ba}</Project>
+      <Name>Phytel.API.Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\..\..\Interfaces\Development\Current\Phytel.API.Interface\Phytel.API.Interface.csproj">
       <Project>{abe948fb-247e-4955-b3ab-b7c93e10a542}</Project>
       <Name>Phytel.API.Interface</Name>
