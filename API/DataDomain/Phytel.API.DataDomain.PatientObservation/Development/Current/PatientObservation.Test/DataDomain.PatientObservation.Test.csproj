@@ -60,6 +60,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="MongoDB\Repository\MongoPatientObservationRepository_Tests.cs" />
     <Compile Include="ObservationTest.cs" />
     <Compile Include="PatientObservationDataManager_Tests.cs" />
     <Compile Include="PatientObservationTest.cs" />

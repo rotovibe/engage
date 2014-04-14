@@ -21,5 +21,21 @@ namespace Phytel.API.DataDomain.PatientObservation.Tests
             request.Version = 1.0;
             PatientObservationDataManager.GetPatientProblemList(request);
         }
+
+        [TestMethod()]
+        public void GetPatientObservationByID_Test()
+        {
+            GetPatientObservationRequest request = new GetPatientObservationRequest
+            {
+                Context = "NG",
+                ContractNumber = "InHealth001",
+                ObservationID = "533ed16dd4332307bc592baf",
+                PatientId = "5325db5ed6a4850adcbba912",
+                UserId = "000000000000000000000000",
+                Version = 1.0
+            };
+            GetPatientObservationResponse response = PatientObservationDataManager.GetPatientObservationByID(request);
+            Assert.IsNotNull(response);
+        }
     }
 }

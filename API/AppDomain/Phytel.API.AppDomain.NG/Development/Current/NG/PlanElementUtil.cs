@@ -429,6 +429,7 @@ namespace Phytel.API.AppDomain.NG
             try
             {
                 m.Enabled = true;
+                
                 m.AssignDate = System.DateTime.UtcNow;
                 m.ElementState = 2;
                 m.AssignBy = "System";
@@ -941,6 +942,32 @@ namespace Phytel.API.AppDomain.NG
             catch (Exception ex)
             {
                 throw new Exception("AD:PlanElementUtil:ActivatePlanElement()::" + ex.Message, ex.InnerException);
+            }
+        }
+
+        internal static bool IsActionInitial(Program p)
+        {
+            try
+            {
+                bool result = true;
+                if (p.Modules != null)
+                {
+                    foreach (Module m in p.Modules)
+                    {
+                        foreach (Actions a in m.Actions)
+                        {
+                            if (a.ElementState == 4 || a.ElementState == 5)
+                            {
+                                result = false;
+                            }
+                        }
+                    }
+                }
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("AD:PlanElementUtil:IsActionInitial()::" + ex.Message, ex.InnerException);
             }
         }
     }

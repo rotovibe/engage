@@ -35,7 +35,6 @@ namespace Phytel.API.AppDomain.NG
 
                 Program p = PlanElementEndpointUtil.RequestPatientProgramDetail(request);
                 Actions action = request.Action;
-                NGUtils.UpdateProgramAction(action, p);
 
                 if (action.Completed)
                 {
@@ -51,9 +50,18 @@ namespace Phytel.API.AppDomain.NG
                     Module mod = PlanElementUtil.FindElementById(p.Modules, action.ModuleId);
                     // set to in progress
                     mod.ElementState = 4;
-                    // set program to in progress
-                    p.ElementState = 4;
+                    
+                    // set in progress state
+                    //new ResponseSpawnAllowed<Step>().IsSatisfiedBy(s)
+                    if (PlanElementUtil.IsActionInitial(p))
+                    //if (new IsActionInitialSpecification<Program>().IsSatisfiedBy(p))
+                    {
+                        // set program to in progress
+                        p.ElementState = 4;
+                    }
 
+                    // insert action update
+                    NGUtils.UpdateProgramAction(action, p);
 
                     //// create a responsibility chain to process each elemnt in the hierachy
                     ProgramPlanProcessor pChain = InitializeProgramChain();
@@ -121,12 +129,21 @@ namespace Phytel.API.AppDomain.NG
 
                 Program p = PlanElementEndpointUtil.RequestPatientProgramDetail(request);
                 Actions action = request.Action;
-                NGUtils.UpdateProgramAction(action, p);
 
                 // set elementstates to in progress
                 Module mod = PlanElementUtil.FindElementById(p.Modules, action.ModuleId);
+                // set to in progress
                 mod.ElementState = 4;
-                p.ElementState = 4;
+                
+                if (PlanElementUtil.IsActionInitial(p))
+                //if (new IsActionInitialSpecification<Program>().IsSatisfiedBy(p))
+                {
+                    // set program to in progress
+                    p.ElementState = 4;
+                }
+                
+                NGUtils.UpdateProgramAction(action, p);
+
                 AddUniquePlanElementToProcessedList(mod);
 
                 // save

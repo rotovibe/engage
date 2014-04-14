@@ -9,6 +9,7 @@ using Phytel.API.AppDomain.NG.DTO.Observation;
 using Phytel.API.Interface;
 using Phytel.API.AppDomain.NG.DTO;
 using Phytel.API.DataDomain.PatientObservation.DTO;
+using Phytel.API.AppDomain.NG.PlanCOR;
 namespace Phytel.API.AppDomain.NG.Tests
 {
     [TestClass()]
@@ -42,6 +43,24 @@ namespace Phytel.API.AppDomain.NG.Tests
             PutRegisterPatientObservationResponse result = PlanElementEndpointUtil.PutNewPatientProblem(patientId, userId, elementId, request);
 
             //Assert.IsTrue(result.Result);
+        }
+
+        [TestMethod()]
+        public void GetPatientProblem_Test()
+        {
+            PlanElementEventArg e = new PlanElementEventArg();
+            PostProcessActionRequest dr = new PostProcessActionRequest
+                {
+                    ContractNumber = "InHealth001",
+                    Version = 1.0,
+                    PatientId = "5325db5ed6a4850adcbba912"
+                };
+
+            e.DomainRequest = dr as IAppDomainRequest;
+            e.PatientId = "5325db5ed6a4850adcbba912";
+
+            PatientObservation po = PlanElementEndpointUtil.GetPatientProblem("533ed16dd4332307bc592baf", e, "000000000000000000000000");
+            Assert.IsNotNull(po);
         }
     }
 }

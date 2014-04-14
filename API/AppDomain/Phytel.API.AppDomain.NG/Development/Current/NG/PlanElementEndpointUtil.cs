@@ -32,8 +32,9 @@ namespace Phytel.API.AppDomain.NG
 
                 IRestClient client = new JsonServiceClient();
 
-                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Problem/?ProblemId={5}",
-                                   DDPatientProblemServiceUrl,
+                //Patient/{PatientId}/Observation/{ObservationID}
+                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Observation/{5}",
+                                   DDPatientObservationServiceUrl,
                                    "NG",
                                    e.DomainRequest.Version,
                                    e.DomainRequest.ContractNumber,

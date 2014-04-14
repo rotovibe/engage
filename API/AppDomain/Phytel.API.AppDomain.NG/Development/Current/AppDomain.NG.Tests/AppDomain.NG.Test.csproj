@@ -115,6 +115,7 @@
     <Compile Include="PlanElementEndpointUtilTests.cs" />
     <Compile Include="PlanElementEndpointUtil_Tests.cs" />
     <Compile Include="PlanElementUtil_Tests.cs" />
+    <Compile Include="PlanManager_Tests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Stubs\StubNGManager.cs" />
     <Compile Include="Stubs\StubSecurityManager.cs" />

@@ -97,6 +97,7 @@
     <Compile Include="CareMembersManager.cs" />
     <Compile Include="INGManager.cs" />
     <Compile Include="ISecurityManager.cs" />
+    <Compile Include="PlanSpecification\IsActionInitialSpecification.cs" />
     <Compile Include="SecurityManager.cs" />
     <Compile Include="NotesManager.cs" />
     <Compile Include="GoalsManager.cs" />
