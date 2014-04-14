@@ -26,10 +26,6 @@ namespace ProgramBuilder
             //nmTextBox.Text = programNameText;
         }
 
-        private void checkBox1_CheckedChanged(object sender, EventArgs e)
-        {
-        }
-
         private void addItems()
         {
             DataSet ds = new DataSet();

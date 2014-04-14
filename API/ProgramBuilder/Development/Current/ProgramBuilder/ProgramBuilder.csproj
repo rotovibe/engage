@@ -80,6 +80,12 @@
     <Compile Include="Forms\ActionListForm.Designer.cs">
       <DependentUpon>ActionListForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\TabForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\TabForm.Designer.cs">
+      <DependentUpon>TabForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\Form_Base.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -171,6 +177,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\ProgramNameForm.resx">
       <DependentUpon>ProgramNameForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\TabForm.resx">
+      <DependentUpon>TabForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\ActionsUserControl.resx">
       <DependentUpon>ActionsUserControl.cs</DependentUpon>
