@@ -4,6 +4,7 @@ using Phytel.API.DataDomain.Contact.DTO;
 using Phytel.API.DataDomain.LookUp.DTO;
 using Phytel.API.DataDomain.Patient.DTO;
 using Phytel.API.DataDomain.PatientSystem.DTO;
+using Phytel.API.DataDomain.Program.DTO;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -63,7 +64,8 @@ namespace NightingaleImport
         static int colAdd2Pref = 36;
         static int colAdd2Type = 37;
         static int colCMan = 38;
-
+        static int colPrNm = 39;
+        
         private List<IdNamePair> modesLookUp = new List<IdNamePair>();
         private List<CommTypeData> typesLookUp = new List<CommTypeData>();
         private List<StateData> statesLookUp = new List<StateData>();
@@ -443,7 +445,7 @@ namespace NightingaleImport
                             addresses.Add(add2);
                         }
 
-                        //contact
+                        //Contact
                         PutContactDataRequest contactRequest = new PutContactDataRequest
                         {
                             PatientId = responsePatient.Id,
@@ -489,6 +491,25 @@ namespace NightingaleImport
                                     throw new Exception("Care Member import request failed.");
                                 }
                                 UpdateCohortPatientView(responsePatient.Id.ToString(), contactByUserIdResponse.Contact.ContactId);
+                            }
+                        }
+
+                        //Program
+                        string patientId = responsePatient.Id.ToString();
+                        if (string.IsNullOrEmpty(lvi.SubItems[colPrNm].Text) == false)
+                        {
+                            GetProgramByNameResponse programResponse = getProgramServiceCall(sqlUserId.ToString(), lvi.SubItems[colPrNm].Text);
+                            
+
+                            if (string.IsNullOrEmpty(programResponse.Program.ProgramID) == false)
+                            {
+                                PutProgramToPatientRequest programRequest = new PutProgramToPatientRequest
+                                {
+                                    UserId = sqlUserId.ToString(),
+                                    ContractProgramId = programResponse.Program.ProgramID,
+                                    PatientId = patientId
+                                };
+                                PutProgramToPatientResponse responseProgram = putProgramToPatientServiceCall(programRequest, patientId);
                             }
                         }
 
@@ -1015,7 +1036,7 @@ namespace NightingaleImport
 
             return updateResponsePatient;
         }
-
+        
         private PutContactDataResponse putContactServiceCall(PutContactDataRequest putContactRequest, string patientId)
         {
             Uri contactUri = new Uri(string.Format("{0}/Contact/{1}/{2}/{3}/patient/contact/{4}?UserId={5}",
@@ -1063,7 +1084,7 @@ namespace NightingaleImport
                                                  patientId,
                                                  _headerUserId));
             HttpClient client = GetHttpClient(careMemberUri);
-
+            
             DataContractJsonSerializer jsonSer = new DataContractJsonSerializer(typeof(PutCareMemberDataRequest));
 
             // use the serializer to write the object to a MemoryStream 
@@ -1166,11 +1187,11 @@ namespace NightingaleImport
                 }
 
                 PutUpdateCohortPatientViewRequest request = new PutUpdateCohortPatientViewRequest
-                {
-                    CohortPatientView = cpvd,
-                    ContractNumber = txtContract.Text,
-                    PatientID = patientId
-                };
+                    {
+                        CohortPatientView = cpvd,
+                        ContractNumber = txtContract.Text,
+                        PatientID = patientId
+                    };
 
                 PutUpdateCohortPatientViewResponse response = putCohortPatientViewServiceCall(request, patientId);
                 if (string.IsNullOrEmpty(response.CohortPatientViewId))
