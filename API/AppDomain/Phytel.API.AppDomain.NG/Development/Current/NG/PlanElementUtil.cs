@@ -901,8 +901,7 @@ namespace Phytel.API.AppDomain.NG
                     {
                         if (m.Id.Equals(p))
                         {
-                            m.Enabled = true;
-                            pe = m;
+                            pe = InitializePlanElementSettings(pe, m);
                             break;
                         }
                         else
@@ -913,8 +912,7 @@ namespace Phytel.API.AppDomain.NG
                                 {
                                     if (a.Id.Equals(p))
                                     {
-                                        a.Enabled = true;
-                                        pe = a;
+                                        pe = InitializePlanElementSettings(pe, a);
                                         break;
                                     }
                                     else
@@ -925,8 +923,7 @@ namespace Phytel.API.AppDomain.NG
                                             {
                                                 if (s.Id.Equals(p))
                                                 {
-                                                    s.Enabled = true;
-                                                    pe = s;
+                                                    pe = InitializePlanElementSettings(pe, s);
                                                     break;
                                                 }
                                             }
@@ -942,6 +939,22 @@ namespace Phytel.API.AppDomain.NG
             catch (Exception ex)
             {
                 throw new Exception("AD:PlanElementUtil:ActivatePlanElement()::" + ex.Message, ex.InnerException);
+            }
+        }
+
+        private static PlanElement InitializePlanElementSettings(PlanElement pe, PlanElement p)
+        {
+            try
+            {
+                p.Enabled = true;
+                p.AssignBy = "system";
+                p.AssignDate = System.DateTime.UtcNow;
+                pe = p;
+                return pe;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("AD:PlanElementUtil:InitializePlanElementSettings()::" + ex.Message, ex.InnerException);
             }
         }
 
