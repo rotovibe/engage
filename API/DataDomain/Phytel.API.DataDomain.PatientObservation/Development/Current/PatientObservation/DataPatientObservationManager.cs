@@ -23,7 +23,7 @@ namespace Phytel.API.DataDomain.PatientObservation
 
                 IPatientObservationRepository<GetPatientObservationResponse> repo = PatientObservationRepositoryFactory<GetPatientObservationResponse>.GetPatientObservationRepository(request.ContractNumber, request.Context, request.UserId);
 
-                PatientObservationData data = ((MongoPatientObservationRepository<GetPatientObservationResponse>)repo).FindByObservationID(request.ObservationID, request.PatientId) as PatientObservationData;
+                PatientObservationData data = repo.FindByObservationID(request.ObservationID, request.PatientId) as PatientObservationData;
 
                 result.PatientObservation = data;
 

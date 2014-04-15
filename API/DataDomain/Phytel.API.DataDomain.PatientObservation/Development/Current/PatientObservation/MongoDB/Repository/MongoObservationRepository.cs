@@ -346,5 +346,11 @@ namespace Phytel.API.DataDomain.PatientObservation
         }
 
         public string UserId { get; set; }
+
+
+        public object FindByObservationID(string entityId, string patientId)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
