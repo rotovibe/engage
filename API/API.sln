@@ -1,6 +1,6 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.21005.1
+VisualStudioVersion = 12.0.30110.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "AppDomain", "AppDomain", "{2E11BED7-15D8-4A76-B289-E9FE4FF9DD72}"
 EndProject
@@ -215,10 +215,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.PatientObservati
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Phytel.API.DataAudit", "Common\Phytel.API.DataAudit\Development\Current\Phytel.API.DataAudit.csproj", "{AE842695-4DD4-4403-9BE4-8473BCA09580}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DataAudit", "DataAudit", "{AD5FA64E-094E-42F9-9E98-662258CCC25D}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Phytel.API.DataAuditProcessor", "Audit\DataAudit\Development\Current\DataAuditProcessor\Phytel.API.DataAuditProcessor.csproj", "{8437F30E-2F49-433D-BD34-8E47DBC8C404}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ProgramDesign", "ProgramDesign", "{566B7B11-C45E-4017-9D10-04A68A683B5C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.ProgramDesign", "DataDomain\Phytel.API.DataDomain.ProgramDesign\Development\Current\ProgramDesign\DataDomain.ProgramDesign.csproj", "{C4142354-12DA-411D-8B1F-567A1FFA9F24}"
@@ -233,7 +229,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.ProgramDesign.Te
 EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 90
+		SccNumberOfProjects = 89
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = http://hillstfs2013:8080/tfs/phytel
 		SccLocalPath0 = .
@@ -569,30 +565,26 @@ Global
 		SccProjectTopLevelParentUniqueName83 = API.sln
 		SccProjectName83 = Common/Phytel.API.DataAudit/Development/Current
 		SccLocalPath83 = Common\\Phytel.API.DataAudit\\Development\\Current
-		SccProjectUniqueName84 = Audit\\DataAudit\\Development\\Current\\DataAuditProcessor\\Phytel.API.DataAuditProcessor.csproj
+		SccProjectUniqueName84 = DataDomain\\Phytel.API.DataDomain.ProgramDesign\\Development\\Current\\ProgramDesign\\DataDomain.ProgramDesign.csproj
 		SccProjectTopLevelParentUniqueName84 = API.sln
-		SccProjectName84 = Audit/DataAudit/Development/Current/DataAuditProcessor
-		SccLocalPath84 = Audit\\DataAudit\\Development\\Current\\DataAuditProcessor
-		SccProjectUniqueName85 = DataDomain\\Phytel.API.DataDomain.ProgramDesign\\Development\\Current\\ProgramDesign\\DataDomain.ProgramDesign.csproj
+		SccProjectName84 = DataDomain/Phytel.API.DataDomain.ProgramDesign/Development/Current/ProgramDesign
+		SccLocalPath84 = DataDomain\\Phytel.API.DataDomain.ProgramDesign\\Development\\Current\\ProgramDesign
+		SccProjectUniqueName85 = DataDomain\\Phytel.API.DataDomain.ProgramDesign\\Development\\Current\\ProgramDesign.DTO\\DataDomain.ProgramDesign.DTO.csproj
 		SccProjectTopLevelParentUniqueName85 = API.sln
-		SccProjectName85 = DataDomain/Phytel.API.DataDomain.ProgramDesign/Development/Current/ProgramDesign
-		SccLocalPath85 = DataDomain\\Phytel.API.DataDomain.ProgramDesign\\Development\\Current\\ProgramDesign
-		SccProjectUniqueName86 = DataDomain\\Phytel.API.DataDomain.ProgramDesign\\Development\\Current\\ProgramDesign.DTO\\DataDomain.ProgramDesign.DTO.csproj
+		SccProjectName85 = DataDomain/Phytel.API.DataDomain.ProgramDesign/Development/Current/ProgramDesign.DTO
+		SccLocalPath85 = DataDomain\\Phytel.API.DataDomain.ProgramDesign\\Development\\Current\\ProgramDesign.DTO
+		SccProjectUniqueName86 = DataDomain\\Phytel.API.DataDomain.ProgramDesign\\Development\\Current\\ProgramDesign.Service\\DataDomain.ProgramDesign.Service.csproj
 		SccProjectTopLevelParentUniqueName86 = API.sln
-		SccProjectName86 = DataDomain/Phytel.API.DataDomain.ProgramDesign/Development/Current/ProgramDesign.DTO
-		SccLocalPath86 = DataDomain\\Phytel.API.DataDomain.ProgramDesign\\Development\\Current\\ProgramDesign.DTO
-		SccProjectUniqueName87 = DataDomain\\Phytel.API.DataDomain.ProgramDesign\\Development\\Current\\ProgramDesign.Service\\DataDomain.ProgramDesign.Service.csproj
+		SccProjectName86 = DataDomain/Phytel.API.DataDomain.ProgramDesign/Development/Current/ProgramDesign.Service
+		SccLocalPath86 = DataDomain\\Phytel.API.DataDomain.ProgramDesign\\Development\\Current\\ProgramDesign.Service
+		SccProjectUniqueName87 = DataDomain\\Phytel.API.DataDomain.ProgramDesign\\Development\\Current\\ProgramDesign.Service.Test\\DataDomain.ProgramDesign.Service.Test.csproj
 		SccProjectTopLevelParentUniqueName87 = API.sln
-		SccProjectName87 = DataDomain/Phytel.API.DataDomain.ProgramDesign/Development/Current/ProgramDesign.Service
-		SccLocalPath87 = DataDomain\\Phytel.API.DataDomain.ProgramDesign\\Development\\Current\\ProgramDesign.Service
-		SccProjectUniqueName88 = DataDomain\\Phytel.API.DataDomain.ProgramDesign\\Development\\Current\\ProgramDesign.Service.Test\\DataDomain.ProgramDesign.Service.Test.csproj
+		SccProjectName87 = DataDomain/Phytel.API.DataDomain.ProgramDesign/Development/Current/ProgramDesign.Service.Test
+		SccLocalPath87 = DataDomain\\Phytel.API.DataDomain.ProgramDesign\\Development\\Current\\ProgramDesign.Service.Test
+		SccProjectUniqueName88 = DataDomain\\Phytel.API.DataDomain.ProgramDesign\\Development\\Current\\ProgramDesign.Test\\DataDomain.ProgramDesign.Test.csproj
 		SccProjectTopLevelParentUniqueName88 = API.sln
-		SccProjectName88 = DataDomain/Phytel.API.DataDomain.ProgramDesign/Development/Current/ProgramDesign.Service.Test
-		SccLocalPath88 = DataDomain\\Phytel.API.DataDomain.ProgramDesign\\Development\\Current\\ProgramDesign.Service.Test
-		SccProjectUniqueName89 = DataDomain\\Phytel.API.DataDomain.ProgramDesign\\Development\\Current\\ProgramDesign.Test\\DataDomain.ProgramDesign.Test.csproj
-		SccProjectTopLevelParentUniqueName89 = API.sln
-		SccProjectName89 = DataDomain/Phytel.API.DataDomain.ProgramDesign/Development/Current/ProgramDesign.Test
-		SccLocalPath89 = DataDomain\\Phytel.API.DataDomain.ProgramDesign\\Development\\Current\\ProgramDesign.Test
+		SccProjectName88 = DataDomain/Phytel.API.DataDomain.ProgramDesign/Development/Current/ProgramDesign.Test
+		SccLocalPath88 = DataDomain\\Phytel.API.DataDomain.ProgramDesign\\Development\\Current\\ProgramDesign.Test
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -929,10 +921,6 @@ Global
 		{AE842695-4DD4-4403-9BE4-8473BCA09580}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AE842695-4DD4-4403-9BE4-8473BCA09580}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AE842695-4DD4-4403-9BE4-8473BCA09580}.Release|Any CPU.Build.0 = Release|Any CPU
-		{8437F30E-2F49-433D-BD34-8E47DBC8C404}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{8437F30E-2F49-433D-BD34-8E47DBC8C404}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{8437F30E-2F49-433D-BD34-8E47DBC8C404}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{8437F30E-2F49-433D-BD34-8E47DBC8C404}.Release|Any CPU.Build.0 = Release|Any CPU
 		{C4142354-12DA-411D-8B1F-567A1FFA9F24}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{C4142354-12DA-411D-8B1F-567A1FFA9F24}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C4142354-12DA-411D-8B1F-567A1FFA9F24}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -1058,7 +1046,6 @@ Global
 		{382C9F88-1CFE-4E65-8800-F5038E61D367} = {56E9EF60-63EB-4CED-A8C5-451A2AE238D1}
 		{2520004B-084F-4EB5-B5D7-F64DF9287273} = {56E9EF60-63EB-4CED-A8C5-451A2AE238D1}
 		{06D69E2B-A395-459C-B4D0-FC750018BDD8} = {56E9EF60-63EB-4CED-A8C5-451A2AE238D1}
-		{8437F30E-2F49-433D-BD34-8E47DBC8C404} = {AD5FA64E-094E-42F9-9E98-662258CCC25D}
 		{C4142354-12DA-411D-8B1F-567A1FFA9F24} = {566B7B11-C45E-4017-9D10-04A68A683B5C}
 		{28DBF8E3-1E5C-4118-B80E-6135CE03CA2E} = {566B7B11-C45E-4017-9D10-04A68A683B5C}
 		{05C421FC-430B-4C5F-B050-0747A9FCCF86} = {566B7B11-C45E-4017-9D10-04A68A683B5C}
