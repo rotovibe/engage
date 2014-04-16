@@ -165,16 +165,8 @@ namespace Phytel.API.DataDomain.PatientNote
         {
             try
             {
-                IMongoQuery mQuery = null;
-                List<object> PatientNoteItems = new List<object>();
-
-                mQuery = MongoDataUtil.ExpressionQueryBuilder(expression);
-
-                //using (PatientNoteMongoContext ctx = new PatientNoteMongoContext(_dbName))
-                //{
-                //}
-
-                return new Tuple<string, IEnumerable<object>>(expression.ExpressionID, PatientNoteItems);
+                throw new NotImplementedException();
+                // code here //
             }
             catch (Exception) { throw; }
         }

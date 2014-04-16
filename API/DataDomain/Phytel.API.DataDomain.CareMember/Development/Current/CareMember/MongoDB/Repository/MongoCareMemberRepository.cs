@@ -135,12 +135,8 @@ namespace Phytel.API.DataDomain.CareMember
         {
             try
             {
-                IMongoQuery mQuery = null;
-                List<object> CareMemberItems = new List<object>();
-
-                mQuery = MongoDataUtil.ExpressionQueryBuilder(expression);
-
-                return new Tuple<string, IEnumerable<object>>(expression.ExpressionID, CareMemberItems);
+                throw new NotImplementedException();
+                // code here //
             }
             catch (Exception) { throw; }
         }
