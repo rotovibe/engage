@@ -627,5 +627,32 @@ namespace Phytel.API.DataDomain.Program
                 throw new Exception("DD:DataProgramManager:CreateSpawn()::" + ex.Message, ex.InnerException);
             }
         }
+
+        public static GetPatientActionDetailsDataResponse GetActionDetails(GetPatientActionDetailsDataRequest request)
+        {
+            try
+            {
+                GetPatientActionDetailsDataResponse response = new GetPatientActionDetailsDataResponse();
+
+                IProgramRepository<GetProgramDetailsSummaryResponse> repo = Phytel.API.DataDomain.Program.ProgramRepositoryFactory<GetProgramDetailsSummaryResponse>.GetPatientProgramRepository(request.ContractNumber, request.Context, request.UserId);
+
+                MEPatientProgram mepp = repo.FindByID(request.PatientProgramId) as MEPatientProgram;
+
+                Module meModule = mepp.Modules.Where(m => m.Id == ObjectId.Parse(request.PatientModuleId)).FirstOrDefault();
+                if (meModule != null)
+                {
+                    MongoDB.DTO.Action meAction = meModule.Actions.Where(a => a.Id == ObjectId.Parse(request.PatientActionId)).FirstOrDefault();  
+                    if(meAction != null)
+                    {
+                        response.ActionData = DTOUtils.GetAction(request.ContractNumber, request.UserId, meAction);
+                    }
+                }
+                return response;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("DD:DataProgramManager:GetActionDetails()::" + ex.Message, ex.InnerException);
+            }
+        }
     }
 }   

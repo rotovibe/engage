@@ -282,5 +282,26 @@ namespace Phytel.API.DataDomain.Program.Service
             }
             return response;
         }
+
+        public GetPatientActionDetailsDataResponse Get(GetPatientActionDetailsDataRequest request)
+        {
+            GetPatientActionDetailsDataResponse response = new GetPatientActionDetailsDataResponse();
+            try
+            {
+                if (string.IsNullOrEmpty(request.UserId))
+                    throw new UnauthorizedAccessException("ProgramDD:Get()::Unauthorized Access");
+
+                response = ProgramDataManager.GetActionDetails(request);
+                response.Version = request.Version;
+            }
+            catch (Exception ex)
+            {
+                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+
+                string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
+                Common.Helper.LogException(int.Parse(aseProcessID), ex);
+            }
+            return response;
+        }
     }
 }

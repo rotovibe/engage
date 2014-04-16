@@ -970,34 +970,51 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             try
             {
                 List<ActionsDetail> acts = new List<ActionsDetail>();
-                list.ForEach(a => acts.Add(new ActionsDetail
-                {
-                    CompletedBy = a.CompletedBy,
-                    Description = a.Description,
-                    Id = a.Id.ToString(),
-                    ModuleId = a.ModuleId.ToString(),
-                    Name = a.Name,
-                    Status = (int)a.Status,
-                    Completed = a.Completed,
-                    Enabled = a.Enabled,
-                    Next = a.Next != null ? a.Next.ToString() : string.Empty,
-                    Previous = a.Previous != null ? a.Previous.ToString() : string.Empty,
-                    Order = a.Order,
-                    SpawnElement = GetSpawnElement(a),
-                    SourceId = a.SourceId.ToString(),
-                    AssignBy = a.AssignedBy,
-                    AssignDate = a.AssignedOn,
-                    ElementState = (int)a.State,
-                    DateCompleted = a.DateCompleted,
-                    Objectives = GetObjectives(a.Objectives),
-                    Steps = GetSteps(a.Steps, contract, userId)
-                }));
+                list.ForEach(a => acts.Add(GetAction(contract, userId, a)));
                 return acts;
             }
             catch (Exception ex)
             {
                 throw new Exception("DD:DTOUtils:GetActions()::" + ex.Message, ex.InnerException);
             }
+        }
+
+        public static ActionsDetail GetAction(string contract, string userId, Action a)
+        {
+            ActionsDetail actionDetail = null;
+            try
+            {
+                if (a != null)
+                {
+                    actionDetail =  new ActionsDetail
+                    {
+                        CompletedBy = a.CompletedBy,
+                        Description = a.Description,
+                        Id = a.Id.ToString(),
+                        ModuleId = a.ModuleId.ToString(),
+                        Name = a.Name,
+                        Status = (int)a.Status,
+                        Completed = a.Completed,
+                        Enabled = a.Enabled,
+                        Next = a.Next != null ? a.Next.ToString() : string.Empty,
+                        Previous = a.Previous != null ? a.Previous.ToString() : string.Empty,
+                        Order = a.Order,
+                        SpawnElement = GetSpawnElement(a),
+                        SourceId = a.SourceId.ToString(),
+                        AssignBy = a.AssignedBy,
+                        AssignDate = a.AssignedOn,
+                        ElementState = (int)a.State,
+                        DateCompleted = a.DateCompleted,
+                        Objectives = GetObjectives(a.Objectives),
+                        Steps = GetSteps(a.Steps, contract, userId)
+                    };
+                }
+            }
+            catch 
+            {
+                throw;
+            }
+            return actionDetail;
         }
 
         public static List<StepsDetail> GetSteps(List<Step> list, string contract, string userId)

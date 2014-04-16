@@ -58,5 +58,33 @@ namespace Phytel.API.DataDomain.Program.Services.Test
                 patientID,
                 token));
         }
+
+        [TestMethod]
+        public void GetPatientActionDetailsTest()
+        {
+            string url = "http://localhost:8888/Program";
+            string contractNumber = "InHealth001";
+            string context = "NG";
+            double version = 1.0;
+            string userId = "000000000000000000000000";
+            IRestClient client = new JsonServiceClient();
+
+            GetPatientActionDetailsDataRequest request = new GetPatientActionDetailsDataRequest { PatientId = "5325d9f2d6a4850adcbba4ca", PatientProgramId = "534c4fb2d6a48504b053346f", PatientModuleId = "534c4fb2d6a48504b05335c2", PatientActionId = "534c4fb2d6a48504b05335c3", UserId = userId };
+
+            // [Route("/{Context}/{Version}/{ContractNumber}/Patient/{PatientId}/Program/{PatientProgramId}/Module/{PatientModuleId}/Action/{PatientActionId}", "GET")]
+            GetPatientActionDetailsDataResponse response = client.Get<GetPatientActionDetailsDataResponse>(
+                string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Program/{5}/Module/{6}/Action/{7}?UserId={8}",
+                url,
+                context,
+                version,
+                contractNumber,
+                request.PatientId,
+                request.PatientProgramId,
+                request.PatientModuleId,
+                request.PatientActionId,
+                request.UserId));
+
+            Assert.IsNotNull(response);
+        }
     }
 }
