@@ -10,7 +10,7 @@ namespace Phytel.API.Common.Format
     {
         public static void FormatExceptionResponse<T>(T response, IHttpResponse httpResponse, Exception ex) where T : IDomainResponse
         {
-            if (ex is UnauthorizedAccessException || ex.Message == "UnauthorizedAccessException")
+            if (ex is UnauthorizedAccessException || ex.Message == "UnauthorizedAccessException" || ex.Message == "Unauthorized")
             {
                 httpResponse.StatusCode = (int)HttpStatusCode.Unauthorized;
             }

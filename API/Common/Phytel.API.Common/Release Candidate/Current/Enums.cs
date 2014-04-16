@@ -19,11 +19,11 @@ namespace Phytel.API.Common
         ProgramEnddate = 14,
         EnrollmentStatus = 15,
         OptOut = 16,
-        OptOutReason = 17,
-        OptOutDate = 18,
+        //OptOutReason = 17,
+        //OptOutDate = 18,
         Graduated = 19,
         Locked = 20,
-        EligibilityOverride = 21,
+        //EligibilityOverride = 21,
         Diabetes = 101
     }
 
@@ -195,9 +195,17 @@ namespace Phytel.API.Common
     public enum ObservationState
     {
         Complete = 1,
-        Incomplete = 2,
-        Refused = 3,
-        Declined = 4
+        Active = 2,
+        Inactive = 3,
+        Resolved = 4,
+        Decline = 5
+    }
+
+    public enum ObservationDisplay
+    {
+        None = -1,
+        Primary = 1,
+        Secondary = 2
     }
 
     public enum MongoCollectionName
