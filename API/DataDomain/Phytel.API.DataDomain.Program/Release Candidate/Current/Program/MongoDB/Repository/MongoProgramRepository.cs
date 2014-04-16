@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Phytel.API.DataDomain.Program.DTO;
 using Phytel.API.Interface;
 using MongoDB.Driver;
-using MongoDB.Driver.Builders;
+using MB = MongoDB.Driver.Builders;
 using MongoDB.Bson;
 using Phytel.API.DataDomain.Program;
 using Phytel.API.DataDomain.Program.MongoDB.DTO;
@@ -63,39 +63,51 @@ namespace Phytel.API.DataDomain.Program
 
         public object FindByID(string entityID)
         {
-            //DTO.Program program = null;
-            //using (ProgramMongoContext ctx = new ProgramMongoContext(_dbName))
-            //{
-            //    program = (from p in ctx.Programs
-            //               where p.Id == ObjectId.Parse(entityID)
-            //               select new DTO.Program
-            //               {
-            //                   ProgramID = p.Id.ToString(),
-            //                   TemplateName = p.TemplateName,
-            //                   Name = p.Name,
-            //                   AuthoredBy = p.AuthoredBy,
-            //                   Client = p.Client,
-            //                   Description = p.Description,
-            //                   EndDate = p.EndDate == null ? string.Empty : String.Format("{0:MM/dd/yyyy}", p.EndDate),
-            //                   StartDate = p.StartDate == null ? string.Empty : String.Format("{0:MM/dd/yyyy}", p.StartDate),
-            //                   ObjectivesInfo = p.ObjectivesInfo.Select(x => new DTO.ObjectivesDetail
-            //                   {
-            //                        Id = x.Id.ToString(),
-            //                       Unit = x.Unit,
-            //                       Status = (int)x.Status,
-            //                       Value = x.Value
-            //                   }).ToList(),
-            //                   Locked = p.Locked,
-            //                   EligibilityRequirements = p.EligibilityRequirements,
-            //                   EligibilityEndDate = p.EligibilityEndDate == null ? string.Empty : String.Format("{0:MM/dd/yyyy}", p.EligibilityEndDate),
-            //                   EligibilityStartDate = p.EligibilityStartDate == null ? string.Empty : String.Format("{0:MM/dd/yyyy}", p.EligibilityStartDate),
-            //                   ShortName = p.ShortName,
-            //                   Status = p.Status,
-            //                   Version = p.Version
-            //               }).FirstOrDefault();
-            //}
-            //return program;
-            throw new NotImplementedException();
+            try
+            {
+                MEProgram cp = null;
+                using (ProgramMongoContext ctx = new ProgramMongoContext(_dbName))
+                {
+                    var findcp = MB.Query<MEProgram>.EQ(b => b.Id, ObjectId.Parse(entityID));
+                    cp = ctx.Programs.Collection.Find(findcp).FirstOrDefault();
+                }
+                return cp;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("DD:Program:FindByID()::" + ex.Message, ex.InnerException);
+            }
+        }
+
+        public DTO.Program FindByName(string entityName)
+        {
+            try
+            {
+                DTO.Program result = null;
+
+                using (ProgramMongoContext ctx = new ProgramMongoContext(_dbName))
+                {
+                    var findcp = MB.Query<MEProgram>.EQ(b => b.Name, entityName);
+                    MEProgram cp = ctx.Programs.Collection.Find(findcp).FirstOrDefault();
+
+                    if (cp != null)
+                    {
+                        result = new DTO.Program
+                            {
+                                ProgramID = cp.Id.ToString()
+                            };
+                    }
+                    else
+                    {
+                        throw new ArgumentException("ProgramName is not valid or is missing from the records.");
+                    }
+                }
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("DD:PatientProgramRepository:FindByName()::" + ex.Message, ex.InnerException);
+            }
         }
 
         public List<ProgramInfo> GetActiveProgramsInfoList(GetAllActiveProgramsRequest request)
@@ -129,5 +141,11 @@ namespace Phytel.API.DataDomain.Program
         }
 
         public string UserId { get; set; }
+        public string ContractNumber { get; set; }
+
+        public IEnumerable<object> Find(string Id)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

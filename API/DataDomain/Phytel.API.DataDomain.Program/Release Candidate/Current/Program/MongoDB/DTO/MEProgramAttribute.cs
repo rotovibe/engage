@@ -77,9 +77,9 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
         [BsonElement(EligibilityProperty)]
         public EligibilityStatus Eligibility { get; set; }
 
-        public const string EligibilityOverrideProperty = "eo";
-        [BsonElement(EligibilityOverrideProperty)]
-        public EligibilityOverride EligibilityOverride { get; set; }
+        //public const string EligibilityOverrideProperty = "eo";
+        //[BsonElement(EligibilityOverrideProperty)]
+        //public EligibilityOverride EligibilityOverride { get; set; }
 
         public const string EnrollmentProperty = "enr";
         [BsonElement(EnrollmentProperty)]
@@ -93,13 +93,13 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
         [BsonElement(OptOutProperty)]
         public bool OptOut { get; set; }
 
-        public const string OptOutReasonProperty = "oor";
-        [BsonElement(OptOutReasonProperty)]
-        public string OptOutReason { get; set; }
+        //public const string OptOutReasonProperty = "oor";
+        //[BsonElement(OptOutReasonProperty)]
+        //public string OptOutReason { get; set; }
 
-        public const string OptOutDateProperty = "ood";
-        [BsonElement(OptOutDateProperty)]
-        public DateTime? OptOutDate { get; set; }
+        //public const string OptOutDateProperty = "ood";
+        //[BsonElement(OptOutDateProperty)]
+        //public DateTime? OptOutDate { get; set; }
 
         public const string PopulationProperty = "pop";
         [BsonElement(PopulationProperty)]
@@ -114,9 +114,9 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
         [BsonElement(DidNotEnrollReasonProperty)]
         public string DidNotEnrollReason { get; set; }
 
-        public const string DisEnrollReasonProperty = "der";
-        [BsonElement(DisEnrollReasonProperty)]
-        public string DisEnrollReason { get; set; }
+        //public const string DisEnrollReasonProperty = "der";
+        //[BsonElement(DisEnrollReasonProperty)]
+        //public string DisEnrollReason { get; set; }
 
         public const string OverrideReasonProperty = "or";
         [BsonElement(OverrideReasonProperty)]

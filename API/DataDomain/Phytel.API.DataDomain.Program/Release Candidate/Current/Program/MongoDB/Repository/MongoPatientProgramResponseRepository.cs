@@ -50,6 +50,38 @@ namespace Phytel.API.DataDomain.Program
             _dbName = contractDBName;
         }
 
+        public object InsertAsBatch(object newEntity)
+        {
+            List<MEPatientProgramResponse> mers = newEntity as List<MEPatientProgramResponse>;
+            bool res = false;
+            try
+            {
+                using (ProgramMongoContext ctx = new ProgramMongoContext(_dbName))
+                {
+                    ctx.PatientProgramResponses.Collection.InsertBatch(mers);
+
+                    List<string> ids = new List<string>();
+                    mers.ForEach(r =>
+                    {
+                        ids.Add(r.Id.ToString());
+                    });
+
+                    AuditHelper.LogDataAudit(this.UserId,
+                                            MongoCollectionName.PatientProgramResponse.ToString(),
+                                            ids,
+                                            Common.DataAuditType.Insert,
+                                            _dbName);
+
+                    res = true;
+                }
+                return res as object;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("DD:PatientProgramResponseRepository:InsertAsBatch()::" + ex.Message, ex.InnerException);
+            }
+        }
+
         public object Insert(object newEntity)
         {
             MEPatientProgramResponse mer = newEntity as MEPatientProgramResponse;
@@ -192,11 +224,17 @@ namespace Phytel.API.DataDomain.Program
             throw new NotImplementedException();
         }
         
-        public MEProgram FindByID(string entityID, bool temp)
+        public DTO.Program FindByName(string entityID)
         {
             throw new NotImplementedException();
         }
 
         public string UserId { get; set; }
+        public string ContractNumber { get; set; }
+
+        public IEnumerable<object> Find(string Id)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

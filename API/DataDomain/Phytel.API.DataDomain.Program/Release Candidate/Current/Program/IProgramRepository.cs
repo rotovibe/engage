@@ -12,6 +12,7 @@ namespace Phytel.API.DataDomain.Program
     public interface IProgramRepository<T> : IRepository<T>
     {
         List<ProgramInfo> GetActiveProgramsInfoList(GetAllActiveProgramsRequest request);
-        MEProgram FindByID(string entityID, bool temp);
+        IEnumerable<object> Find(string Id);
+        DTO.Program FindByName(string entityName);
     }
 }

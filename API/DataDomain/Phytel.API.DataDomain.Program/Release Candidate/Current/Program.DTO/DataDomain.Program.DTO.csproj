@@ -83,6 +83,8 @@
     <Compile Include="GetProgramAttributeRequest.cs" />
     <Compile Include="GetContractProgramRequest.cs" />
     <Compile Include="GetContractProgramResponse.cs" />
+    <Compile Include="GetProgramByNameRequest.cs" />
+    <Compile Include="GetProgramByNameResponse.cs" />
     <Compile Include="GetStepResponseRequest.cs" />
     <Compile Include="GetStepResponseListRequest.cs" />
     <Compile Include="GetProgramAttributeResponse.cs" />

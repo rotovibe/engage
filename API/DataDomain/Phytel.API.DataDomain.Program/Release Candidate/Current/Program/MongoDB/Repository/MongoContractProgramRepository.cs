@@ -62,22 +62,9 @@ namespace Phytel.API.DataDomain.Program
             throw new NotImplementedException();
         }
 
-        public MEProgram FindByID(string entityID, bool temp)
+        public DTO.Program FindByName(string entityID)
         {
-            try
-            {
-                MEProgram program = null;
-                using (ProgramMongoContext ctx = new ProgramMongoContext(_dbName))
-                {
-                    var findcp = Query<MEProgram>.EQ(b => b.Id, ObjectId.Parse(entityID));
-                    program = ctx.Programs.Collection.Find(findcp).FirstOrDefault();
-                }
-                return program;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("DD:ContractProgramRepository:FindByID()::" + ex.Message, ex.InnerException);
-            }
+            throw new NotImplementedException();
         }
 
         public object FindByID(string entityID)
@@ -155,5 +142,12 @@ namespace Phytel.API.DataDomain.Program
         }
 
         public string UserId { get; set; }
+
+        public string ContractNumber { get; set; }
+
+        public IEnumerable<object> Find(string Id)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
