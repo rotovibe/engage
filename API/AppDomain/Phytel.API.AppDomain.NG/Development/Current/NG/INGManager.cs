@@ -22,6 +22,7 @@ namespace Phytel.API.AppDomain.NG
         GetPatientResponse GetPatient(GetPatientRequest request);
         List<PatientProblem> GetPatientProblems(GetAllPatientProblemsRequest request);
         GetPatientProgramDetailsSummaryResponse GetPatientProgramDetailsSummary(GetPatientProgramDetailsSummaryRequest request);
+        GetPatientActionDetailsResponse GetPatientActionDetails(GetPatientActionDetailsRequest request);
         GetPatientProgramsResponse GetPatientPrograms(GetPatientProgramsRequest request);
         GetPatientSSNResponse GetPatientSSN(GetPatientSSNRequest request);
         List<IdNamePair> GetProblems(GetAllProblemsRequest request);

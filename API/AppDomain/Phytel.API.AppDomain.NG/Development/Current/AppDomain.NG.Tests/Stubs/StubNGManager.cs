@@ -93,6 +93,11 @@ namespace Phytel.API.AppDomain.NG.Service.Tests.Stubs
             throw new NotImplementedException();
         }
 
+        public DTO.GetPatientActionDetailsResponse GetPatientActionDetails(DTO.GetPatientActionDetailsRequest request)
+        {
+            throw new NotImplementedException();
+        }
+
         public DTO.GetPatientSSNResponse GetPatientSSN(DTO.GetPatientSSNRequest request)
         {
             throw new NotImplementedException();

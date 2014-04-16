@@ -585,7 +585,45 @@ namespace Phytel.API.AppDomain.NG
             {
                 throw new WebServiceException("AD:GetPatientPrograms()::" + wse.Message, wse.InnerException);
             }
-        } 
+        }
+
+        public GetPatientActionDetailsResponse GetPatientActionDetails(GetPatientActionDetailsRequest request)
+        {
+            try
+            {
+                GetPatientActionDetailsResponse result = new GetPatientActionDetailsResponse();
+                // [Route("/{Context}/{Version}/{ContractNumber}/Patient/{PatientId}/Program/{PatientProgramId}/Module/{PatientModuleId}/Action/{PatientActionId}", "GET")]
+                IRestClient client = new JsonServiceClient();
+                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Program/{5}/Module/{6}/Action/{7}",
+                    DDProgramServiceUrl,
+                    "NG",
+                    request.Version,
+                    request.ContractNumber,
+                    request.PatientId,
+                    request.PatientProgramId,
+                    request.PatientModuleId,
+                    request.PatientActionId), request.UserId);
+
+                DD.GetPatientActionDetailsDataResponse resp = client.Get<DD.GetPatientActionDetailsDataResponse>(url);
+
+                if (resp != null)
+                {
+                    if (resp.ActionData != null)
+                    {
+                        result.Action = getActionInfo(resp.ActionData, request);
+
+                        if (resp.Status != null)
+                            result.Status = resp.Status;
+                    }
+                }
+                return result;
+            }
+            catch (WebServiceException wse)
+            {
+                throw new WebServiceException("AD:GetPatientActionDetails()::" + wse.Message, wse.InnerException);
+            }
+        }
+
         #endregion
 
         #region LookUp
@@ -1181,35 +1219,44 @@ namespace Phytel.API.AppDomain.NG
         private List<Actions> getActionsInfo(DD.ModuleDetail r, IAppDomainRequest request)
         {
             List<Actions> action = null;
-            action = r.Actions.Select(a => new Actions
-            {
-                CompletedBy = a.CompletedBy,
-                Description = a.Description,
-                Id = a.Id,
-                ModuleId = a.ModuleId,
-                Name = a.Name,
-                Status = (int)a.Status,
-                Completed = a.Completed,
-                Enabled = a.Enabled,
-                Next = a.Next,
-                Order = a.Order,
-                Previous = a.Previous,
-                SpawnElement = getSpawnElement(a),
-                SourceId = a.SourceId,
-                AssignBy = a.AssignBy,
-                AssignDate = a.AssignDate,
-                ElementState = a.ElementState,
-                DateCompleted = a.DateCompleted,
-                Objectives = a.Objectives.Select(x => new Objective
-                {
-                    Id = x.Id.ToString(),
-                    Unit = x.Unit,
-                    Status = (int)x.Status,
-                    Value = x.Value
-                }).ToList(),
-                Steps = getStepsInfo(a, request)
-            }).ToList();
+            action = r.Actions.Select(a => getActionInfo(a, request)).ToList();
+            return action;
+        }
 
+        private Actions getActionInfo(DD.ActionsDetail a, IAppDomainRequest request)
+        {
+            Actions action = null;
+            if (a != null)
+            {
+                action = new Actions
+                {
+                    CompletedBy = a.CompletedBy,
+                    Description = a.Description,
+                    Id = a.Id,
+                    ModuleId = a.ModuleId,
+                    Name = a.Name,
+                    Status = (int)a.Status,
+                    Completed = a.Completed,
+                    Enabled = a.Enabled,
+                    Next = a.Next,
+                    Order = a.Order,
+                    Previous = a.Previous,
+                    SpawnElement = getSpawnElement(a),
+                    SourceId = a.SourceId,
+                    AssignBy = a.AssignBy,
+                    AssignDate = a.AssignDate,
+                    ElementState = a.ElementState,
+                    DateCompleted = a.DateCompleted,
+                    Objectives = a.Objectives.Select(x => new Objective
+                    {
+                        Id = x.Id.ToString(),
+                        Unit = x.Unit,
+                        Status = (int)x.Status,
+                        Value = x.Value
+                    }).ToList(),
+                    Steps = getStepsInfo(a, request)
+                };
+            }
             return action;
         }
 

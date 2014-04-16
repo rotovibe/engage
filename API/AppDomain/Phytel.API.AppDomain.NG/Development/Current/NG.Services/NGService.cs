@@ -15,6 +15,7 @@ namespace Phytel.API.AppDomain.NG.Service
         public ISecurityManager Security {get; set;}
         public INGManager NGManager {get; set;}
 
+        #region Patient
         public GetPatientResponse Post(GetPatientRequest request)
         {
             GetPatientResponse response = new GetPatientResponse();
@@ -44,15 +45,15 @@ namespace Phytel.API.AppDomain.NG.Service
 
                 if (response.Patient != null)
                 {
-                   patientIds = new List<string>();
-                    patientIds.Add(response.Patient.Id);                    
+                    patientIds = new List<string>();
+                    patientIds.Add(response.Patient.Id);
                 }
 
                 if (result != null)
                     AuditHelper.LogAuditData(request, result.SQLUserId, patientIds, System.Web.HttpContext.Current.Request, request.GetType().Name);
             }
 
-            return response; 
+            return response;
         }
 
         public GetPatientResponse Get(GetPatientRequest request)
@@ -86,7 +87,7 @@ namespace Phytel.API.AppDomain.NG.Service
                 if (response.Patient != null)
                 {
                     patientIds = new List<string>();
-                    patientIds.Add(response.Patient.Id);               
+                    patientIds.Add(response.Patient.Id);
                 }
 
                 if (result != null)
@@ -130,12 +131,13 @@ namespace Phytel.API.AppDomain.NG.Service
                     patientIds.Add(request.PatientId);
                 }
 
-                if(result != null)
+                if (result != null)
                     AuditHelper.LogAuditData(request, result.SQLUserId, patientIds, System.Web.HttpContext.Current.Request, request.GetType().Name);
             }
 
             return response;
-        }
+        } 
+        #endregion
        
         /// <summary>
         ///     ServiceStack's GET endpoint for getting active problems for a patient
@@ -501,11 +503,54 @@ namespace Phytel.API.AppDomain.NG.Service
             }
             finally
             {
+                List<string> patientIds = null;
+
+                if (request.PatientId != null)
+                    patientIds.Add(request.PatientId);
+
                 if (result != null)
-                    AuditHelper.LogAuditData(request, result.SQLUserId, null, System.Web.HttpContext.Current.Request, request.GetType().Name);               
+                    AuditHelper.LogAuditData(request, result.SQLUserId, patientIds, System.Web.HttpContext.Current.Request, request.GetType().Name);               
             }
             
             return response; 
+        }
+
+        public GetPatientActionDetailsResponse Get(GetPatientActionDetailsRequest request)
+        {
+            GetPatientActionDetailsResponse response = new GetPatientActionDetailsResponse();
+            ValidateTokenResponse result = null;
+
+            try
+            {
+                request.Token = base.Request.Headers["Token"] as string;
+                result = Security.IsUserValidated(request.Version, request.Token, request.ContractNumber);
+                if (result.UserId.Trim() != string.Empty)
+                {
+                    request.UserId = result.UserId;
+                    response = NGManager.GetPatientActionDetails(request);
+                }
+                else
+                    throw new UnauthorizedAccessException();
+
+            }
+            catch (Exception ex)
+            {
+                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+                if ((ex is WebServiceException) == false)
+                    NGManager.LogException(ex);
+            }
+            finally
+            {
+                List<string> patientIds = null;
+
+                if (request.PatientId != null)
+                    patientIds.Add(request.PatientId);
+
+                if (result != null)
+                    AuditHelper.LogAuditData(request, result.SQLUserId, patientIds, System.Web.HttpContext.Current.Request, request.GetType().Name);
+            }
+
+            return response;
         }
 
         public GetPatientProgramsResponse Get(GetPatientProgramsRequest request)

@@ -105,6 +105,8 @@
     <Compile Include="Contact\Phone.cs" />
     <Compile Include="Contact\PutUpdateContactRequest.cs" />
     <Compile Include="Contact\PutUpdateContactResponse.cs" />
+    <Compile Include="GetPatientActionDetailsRequest.cs" />
+    <Compile Include="GetPatientActionDetailsResponse.cs" />
     <Compile Include="Observation\GetPatientProblemsRequest.cs" />
     <Compile Include="Observation\GetPatientProblemsResponse.cs" />
     <Compile Include="GetPatientProgramsRequest.cs" />
