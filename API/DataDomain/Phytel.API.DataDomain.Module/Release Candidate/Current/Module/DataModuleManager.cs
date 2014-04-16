@@ -22,8 +22,11 @@ namespace Phytel.API.DataDomain.Module
         {
             GetAllModulesResponse result = new GetAllModulesResponse();
 
-            IModuleRepository<GetAllModulesResponse> repo = ModuleRepositoryFactory<GetAllModulesResponse>.GetModuleRepository(request.ContractNumber, request.Context, request.UserId);
-            
+            MongoModuleRepository<GetAllModulesResponse> repo = new MongoModuleRepository<GetAllModulesResponse>(request.ContractNumber);
+            repo.UserId = request.UserId;
+
+            result = repo.SelectAll(request.Version, Common.Status.Active);
+
             return result;
         }
     }
