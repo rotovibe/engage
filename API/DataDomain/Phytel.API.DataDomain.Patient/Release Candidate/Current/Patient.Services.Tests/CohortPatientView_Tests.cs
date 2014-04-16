@@ -5,6 +5,7 @@ using ServiceStack.ServiceClient.Web;
 using System.Collections.Generic;
 using System.Diagnostics;
 using Phytel.API.DataDomain.Patient.MongoDB.DTO;
+using Phytel.API.Common;
 
 namespace Phytel.API.DataDomain.Patient.Services.Test
 {
