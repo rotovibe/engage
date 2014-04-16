@@ -20,5 +20,8 @@ namespace Phytel.API.AppDomain.NG.DTO.Observation
         public string GroupId { get; set; }
         public int Order { get; set; }
         public string Source { get; set; }
+        public int StateId { get; set; }
+        public int DisplayId { get; set; }
+        public bool DeleteFlag { get; set; }
     }
 }

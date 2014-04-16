@@ -6,7 +6,7 @@ using Phytel.API.AppDomain.NG.DTO.Observation;
 
 namespace Phytel.API.AppDomain.NG.DTO
 {
-    public class GetInitializeObservationResponse : IDomainResponse
+    public class GetInitializeProblemResponse : IDomainResponse
     {
         public PatientObservation Observation { get; set; }
         public ResponseStatus Status { get; set; }

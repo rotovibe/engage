@@ -5,6 +5,7 @@ using Phytel.API.AppDomain.NG.DTO;
 using Phytel.API.AppDomain.NG.Observation;
 using Phytel.API.DataDomain.PatientObservation.DTO;
 using System.Globalization;
+using Phytel.API.Common.CustomObject;
 
 namespace Phytel.API.AppDomain.NG.Observation
 {
@@ -56,12 +57,21 @@ namespace Phytel.API.AppDomain.NG.Observation
                 {
                     foreach (Phytel.API.AppDomain.NG.DTO.Observation.PatientObservation po in obsl)
                     {
-                        foreach (ObservationValue ov in po.Values)
+                        PatientObservationRecordData pord = null;
+                        if (po.Values != null && po.Values.Count > 0) // Labs and Vitals have values
                         {
-                            PatientObservationRecordData pord = ObservationsUtil.CreatePatientObservationRecord(po, ov);
-
+                            foreach (ObservationValue ov in po.Values)
+                            {
+                                pord = ObservationsUtil.CreatePatientObservationRecord(po, ov);
+                                ObservationEndpointUtil.UpdatePatientObservation(request, pord);
+                            }
+                        }
+                        else // Problem does not have values
+                        {
+                            pord = ObservationsUtil.CreatePatientObservationRecord(po, null);
                             ObservationEndpointUtil.UpdatePatientObservation(request, pord);
                         }
+                        
                     }
                 }
                 else
@@ -93,6 +103,55 @@ namespace Phytel.API.AppDomain.NG.Observation
             catch (Exception ex)
             {
                 throw new Exception("AD:GetAdditionalObservationsRequest()::" + ex.Message, ex.InnerException);
+            }
+        }
+
+
+        public GetAllowedStatesResponse GetAllowedObservationStates(GetAllowedStatesRequest request)
+        {
+            try
+            {
+                GetAllowedStatesResponse response = new GetAllowedStatesResponse();
+                List<IdNamePair> states = ObservationEndpointUtil.GetAllowedObservationStates(request);
+                response.States = states;
+                response.Version = request.Version;
+                return response;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("AD:GetAllowedObservationStates()::" + ex.Message, ex.InnerException);
+            }
+        }
+
+        public GetPatientProblemsResponse GetPatientProblemsSummary(GetPatientProblemsRequest request)
+        {
+            try
+            {
+                GetPatientProblemsResponse response = new GetPatientProblemsResponse();
+                List<Phytel.API.AppDomain.NG.DTO.Observation.PatientObservation> problems = ObservationEndpointUtil.GetPatientProblemSummary(request);
+                response.Problems = problems;
+                response.Version = request.Version;
+                return response;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("AD:GetPatientProblemsSummary()::" + ex.Message, ex.InnerException);
+            }
+        }
+
+        public GetInitializeProblemResponse GetInitializeProblem(GetInitializeProblemRequest request)
+        {
+            try
+            {
+                GetInitializeProblemResponse response = new GetInitializeProblemResponse();
+                PatientObservationData po = ObservationEndpointUtil.GetInitializeProblem(request);
+                response.Observation = ObservationsUtil.GetInitializeProblem(request, po);
+                response.Version = request.Version;
+                return response;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("AD:GetAllowedObservationStates()::" + ex.Message, ex.InnerException);
             }
         }
     }

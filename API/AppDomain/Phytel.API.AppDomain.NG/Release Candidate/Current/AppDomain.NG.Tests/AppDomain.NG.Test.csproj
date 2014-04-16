@@ -84,6 +84,7 @@
       <HintPath>..\..\..\..\..\packages\ServiceStack.Text.3.9.70\lib\net35\ServiceStack.Text.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.configuration" />
   </ItemGroup>
   <Choose>
     <When Condition="('$(VisualStudioVersion)' == '10.0' or '$(VisualStudioVersion)' == '') and '$(TargetFrameworkVersion)' == 'v3.5'">
@@ -99,19 +100,34 @@
   </Choose>
   <ItemGroup>
     <Compile Include="CareMember_Tests.cs" />
+    <Compile Include="Factories\NGManagerFactory.cs" />
+    <Compile Include="Factories\SecurityManagerFactory.cs" />
+    <Compile Include="NGService_Tests.cs" />
     <Compile Include="Note_Tests.cs" />
     <Compile Include="Goal_Tests.cs" />
     <Compile Include="LookUps_Test.cs" />
     <Compile Include="NGManager_Tests.cs" />
+    <Compile Include="ObservationTest.cs" />
+    <Compile Include="PatientObservationTest.cs" />
     <Compile Include="PlanCOR\ActionPlanProcessorTests.cs" />
     <Compile Include="PlanCOR\ModulePlanProcessor_Tests.cs" />
+    <Compile Include="PlanCOR\StepPlanProcessor_Tests.cs" />
     <Compile Include="PlanElementEndpointUtilTests.cs" />
+    <Compile Include="PlanElementEndpointUtil_Tests.cs" />
+    <Compile Include="PlanElementUtil_Tests.cs" />
+    <Compile Include="PlanManager_Tests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Stubs\StubNGManager.cs" />
+    <Compile Include="Stubs\StubSecurityManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\..\Common\Phytel.API.Common\Release Candidate\Current\Phytel.API.Common.csproj">
       <Project>{25cf3c3f-221f-4a49-b5ef-a8a5fcf9a5ba}</Project>
       <Name>Phytel.API.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\DataDomain\Phytel.API.DataDomain.PatientObservation\Release Candidate\Current\PatientObservation.DTO\DataDomain.PatientObservation.DTO.csproj">
+      <Project>{06d69e2b-a395-459c-b4d0-fc750018bdd8}</Project>
+      <Name>DataDomain.PatientObservation.DTO</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\..\..\Interfaces\Release Candidate\Current\Phytel.API.Interface\Phytel.API.Interface.csproj">
       <Project>{abe948fb-247e-4955-b3ab-b7c93e10a542}</Project>
@@ -124,6 +140,10 @@
     <ProjectReference Include="..\NG.DTOs\AppDomain.NG.DTO.csproj">
       <Project>{e9957107-8f2a-4946-834e-629d4235b9b3}</Project>
       <Name>AppDomain.NG.DTO</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NG.Services\AppDomain.NG.Service.csproj">
+      <Project>{10A4CF5C-5B03-4069-9A7F-5BD0627EF148}</Project>
+      <Name>AppDomain.NG.Service</Name>
     </ProjectReference>
     <ProjectReference Include="..\NG\AppDomain.NG.csproj">
       <Project>{e368da81-d304-4556-b1c4-d4774c0defd2}</Project>

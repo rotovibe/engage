@@ -13,20 +13,21 @@ namespace Phytel.API.DataDomain.Patient.Service.Test
         public void Get_Additional_Observation_Library_Test()
         {
             string contractNumber = "InHealth001";
-            string context = "NG";
             double version = 1.0;
-            string token = "53079028d2d8e91748f416cc";
-            string patientId = "52f55875072ef709f84e68e5";
+            string token = "53458596d6a48504b492f1bf";
             string typeId = "53067453fe7a591a348e1b66";
-            IRestClient client = new JsonServiceClient();
+            bool? standard = false;
 
+            JsonServiceClient.HttpWebRequestFilter = x => x.Headers.Add(string.Format("Token: {0}", token));
+
+            IRestClient client = new JsonServiceClient();
+            //[Route("/{Version}/{ContractNumber}/Observation/Type/{TypeId}/MatchLibrary/{Standard}", "GET")]
             GetAdditionalObservationLibraryResponse response = client.Get<GetAdditionalObservationLibraryResponse>(
-                string.Format(@"http://localhost:888/Nightingale/{0}/{1}/Patient/{2}/Observation/Type/{3}/MatchLibrary/?Token={4}",
+                string.Format(@"http://localhost:888/Nightingale/{0}/{1}/Observation/Type/{2}/MatchLibrary/{3}",
                 version,
                 contractNumber,
-                patientId,
                 typeId,
-                token));
+                standard));
         }
     }
 }
