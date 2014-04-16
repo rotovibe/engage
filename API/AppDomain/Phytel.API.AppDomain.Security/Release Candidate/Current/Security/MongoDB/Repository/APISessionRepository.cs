@@ -182,9 +182,9 @@ namespace Phytel.API.AppDomain.Security
                 else
                     throw new UnauthorizedAccessException("Request is invalid");
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                throw new Exception("SD:APISessionRepository:Validate()::" + ex.Message, ex.InnerException);
+                throw;
             }
         }
 

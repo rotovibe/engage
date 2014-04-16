@@ -33,5 +33,25 @@ namespace Phytel.API.AppDomain.Security.Services.Test
                 new LogoutRequest { Context = "NG", Token = "53162017072ef71b5c3d8e4f" } as object);
             Assert.AreEqual(response.SuccessfulLogout, true);
         }
+
+        [TestMethod]
+        public void ValidateToken_Test()
+        {
+            string PhytelSecurityHeaderKey = "x-Phytel-Security";
+            string additionalToken = "Engineer";
+            
+            IRestClient client = new JsonServiceClient();
+            JsonServiceClient.HttpWebRequestFilter = x =>
+            x.Headers.Add(string.Format("{0}: {1}", PhytelSecurityHeaderKey, additionalToken));
+
+            ValidateTokenResponse response = client.Post<ValidateTokenResponse>(string.Format("{0}/{1}/{2}/{3}/token",
+                "http://localhost:888/Security",
+                "NG",
+                1,
+                "InHealth001"),
+                new ValidateTokenRequest { Token = "53162017072ef71b5c3d8e4f" } as object);
+
+            Assert.IsNotNull(response);
+        }
     }
 }
