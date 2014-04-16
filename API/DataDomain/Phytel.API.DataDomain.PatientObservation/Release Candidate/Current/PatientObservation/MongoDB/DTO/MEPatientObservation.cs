@@ -11,6 +11,7 @@ using Phytel.API.Common;
 namespace Phytel.API.DataDomain.PatientObservation.DTO
 {
     [BsonIgnoreExtraElements(false)]
+    [MongoIndex(Keys = new string[] { TTLDateProperty }, TimeToLive = 0)]
     [MongoIndex(Keys = new string[] { PatientIdProperty,ObservationIdProperty, DeleteFlagProperty, TTLDateProperty })]
     public class MEPatientObservation : IMongoEntity<ObjectId>, IMEEntity
     {
@@ -53,6 +54,11 @@ namespace Phytel.API.DataDomain.PatientObservation.DTO
         [BsonElement(ObservationStateProperty)]
         [BsonIgnoreIfNull(true)]
         public ObservationState State { get; set; }
+
+        public const string DisplayProperty = "dis";
+        [BsonElement(DisplayProperty)]
+        [BsonIgnoreIfNull(true)]
+        public ObservationDisplay Display { get; set; }
 
         public const string StartDateProperty = "sd";
         [BsonElement(StartDateProperty)]

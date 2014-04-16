@@ -16,6 +16,7 @@ using System.Configuration;
 using Phytel.API.DataAudit;
 using Phytel.API.DataDomain.PatientObservation.MongoDB.DTO;
 using MongoDB.Bson.Serialization;
+using Phytel.API.Common.CustomObject;
 
 namespace Phytel.API.DataDomain.PatientObservation
 {
@@ -69,16 +70,6 @@ namespace Phytel.API.DataDomain.PatientObservation
             catch (Exception) { throw; }
         }
 
-        public void Delete(object entity)
-        {
-            try
-            {
-                throw new NotImplementedException();
-                // code here //
-            }
-            catch (Exception) { throw; }
-        }
-
         public void DeleteAll(List<object> entities)
         {
             try
@@ -103,31 +94,13 @@ namespace Phytel.API.DataDomain.PatientObservation
         {
             try
             {
-                IMongoQuery mQuery = null;
-                List<object> PatientObservationItems = new List<object>();
-
-                mQuery = MongoDataUtil.ExpressionQueryBuilder(expression);
-
-                //using (PatientObservationMongoContext ctx = new PatientObservationMongoContext(_dbName))
-                //{
-                //}
-
-                return new Tuple<string, IEnumerable<object>>(expression.ExpressionID, PatientObservationItems);
-            }
-            catch (Exception) { throw; }
-        }
-
-        public IEnumerable<object> SelectAll()
-        {
-            try
-            {
                 throw new NotImplementedException();
                 // code here //
             }
             catch (Exception) { throw; }
         }
 
-        public object Update(object entity)
+        public IEnumerable<object> SelectAll()
         {
             try
             {
@@ -190,9 +163,34 @@ namespace Phytel.API.DataDomain.PatientObservation
             throw new NotImplementedException();
         }
 
-        object IRepository<T>.FindByID(string entityID)
+        public object FindByObservationID(string entityId, string patientId)
         {
-            throw new NotImplementedException();
+            PatientObservationData odL = null;
+            try
+            {
+                using (PatientObservationMongoContext ctx = new PatientObservationMongoContext(_dbName))
+                {
+                    List<IMongoQuery> queries = new List<IMongoQuery>();
+                    queries.Add(Query.EQ(MEPatientObservation.PatientIdProperty, ObjectId.Parse(patientId)));
+                    queries.Add(Query.EQ(MEPatientObservation.ObservationIdProperty, ObjectId.Parse(entityId)));
+                    queries.Add(Query.EQ(MEPatientObservation.DeleteFlagProperty, false));
+                    queries.Add(Query.EQ(MEPatientObservation.ObservationStateProperty, 2));
+                    IMongoQuery mQuery = Query.And(queries);
+
+                    MEPatientObservation o = ctx.PatientObservations.Collection.Find(mQuery).FirstOrDefault();
+
+                    if (o != null)
+                    {
+                        odL = new PatientObservationData
+                        {
+                            Id = o.Id.ToString(),
+                            StateId = (int)o.State
+                        };
+                    }
+                }
+                return odL;
+            }
+            catch (Exception) { throw; }
         }
 
         Tuple<string, IEnumerable<object>> IRepository<T>.Select(APIExpression expression)
@@ -218,22 +216,30 @@ namespace Phytel.API.DataDomain.PatientObservation
                     var q = MB.Query<MEPatientObservation>.EQ(b => b.Id, ObjectId.Parse(pord.Id));
 
                     var uv = new List<MB.UpdateBuilder>();
-                    uv.Add(MB.Update.Set(MEPatientObservation.TTLDateProperty, BsonNull.Value));
-                    uv.Add(MB.Update.Set(MEPatientObservation.DeleteFlagProperty, false));
+                    uv.Add(MB.Update.Set(MEPatientObservation.DeleteFlagProperty, pord.DeleteFlag));
+                    if (pord.DeleteFlag)
+                    {
+                        uv.Add(MB.Update.Set(MEPatientObservation.TTLDateProperty, System.DateTime.UtcNow.AddDays(_expireDays)));
+                    }
+                    else 
+                    {
+                        uv.Add(MB.Update.Set(MEPatientObservation.TTLDateProperty, BsonNull.Value));
+                    }
                     uv.Add(MB.Update.Set(MEPatientObservation.UpdatedByProperty, ObjectId.Parse(this.UserId)));
                     uv.Add(MB.Update.Set(MEPatientObservation.LastUpdatedOnProperty, System.DateTime.UtcNow));
                     uv.Add(MB.Update.Set(MEPatientObservation.VersionProperty, odr.Version));
 
-                    if (pord.Source != null) uv.Add(MB.Update.Set(MEPatientObservation.SourceProperty, pord.Source));
                     if (pord.NonNumericValue != null) uv.Add(MB.Update.Set(MEPatientObservation.NonNumericValueProperty, pord.NonNumericValue));
                     if (pord.Value != null) uv.Add(MB.Update.Set(MEPatientObservation.NumericValueProperty, BsonDouble.Create(pord.Value)));
                     if (pord.Units != null) uv.Add(MB.Update.Set(MEPatientObservation.UnitsProperty, pord.Units));
                     if (pord.EndDate != null) uv.Add(MB.Update.Set(MEPatientObservation.EndDateProperty, pord.EndDate));
                     if (pord.StartDate != null) uv.Add(MB.Update.Set(MEPatientObservation.StartDateProperty, pord.StartDate));
+                    if (pord.DisplayId != 0) uv.Add(MB.Update.Set(MEPatientObservation.DisplayProperty, pord.DisplayId));
+                    if (pord.StateId != 0) uv.Add(MB.Update.Set(MEPatientObservation.ObservationStateProperty, pord.StateId));
+                    if (pord.Source != null) uv.Add(MB.Update.Set(MEPatientObservation.SourceProperty, pord.Source));
 
                     IMongoUpdate update = MB.Update.Combine(uv);
                     ctx.PatientObservations.Collection.Update(q, update);
-
                     AuditHelper.LogDataAudit(this.UserId, 
                                             MongoCollectionName.PatientObservation.ToString(), 
                                             pord.Id, 
@@ -264,12 +270,14 @@ namespace Phytel.API.DataDomain.PatientObservation
                 {
                     Id = ObjectId.GenerateNewId(),
                     PatientId = ObjectId.Parse(request.PatientId),
-                    TTLDate = System.DateTime.UtcNow.AddDays(_initializeDays),
-                    LastUpdatedOn = DateTime.UtcNow,
                     ObservationId = ObjectId.Parse(request.ObservationId),
-                    DeleteFlag = true,
-                    Version = request.Version,
-                    UpdatedBy = ObjectId.Parse(this.UserId)
+                    TTLDate = System.DateTime.UtcNow.AddDays(_initializeDays),
+                    DeleteFlag = false,
+                    Source = Constants.CareManager,
+                    StartDate = DateTime.UtcNow,
+                    EndDate = DateTime.UtcNow,
+                    State = ObservationState.Complete,
+                    Version = request.Version
                 };
 
                 using (PatientObservationMongoContext ctx = new PatientObservationMongoContext(_dbName))
@@ -293,6 +301,69 @@ namespace Phytel.API.DataDomain.PatientObservation
             catch (Exception) { throw; }
         }
 
+        public object InitializeProblem(object newEntity)
+        {
+            GetInitializeProblemDataRequest request = (GetInitializeProblemDataRequest)newEntity;
+            PatientObservationData patientObservationData = null;
+            MEPatientObservation mePg = null;
+
+            try
+            {
+                mePg = new MEPatientObservation(this.UserId)
+                {
+                    Id = ObjectId.GenerateNewId(),
+                    PatientId = ObjectId.Parse(request.PatientId),
+                    ObservationId = ObjectId.Parse(request.ObservationId),
+                    DeleteFlag = false,
+                    TTLDate = GetTTLDate(request.Initial),
+                    StartDate = DateTime.UtcNow,
+                    EndDate = null,
+                    Display = ObservationDisplay.Primary,
+                    State = ObservationState.Active,
+                    Source = Constants.CareManager,
+                    Version = request.Version
+                };
+
+                using (PatientObservationMongoContext ctx = new PatientObservationMongoContext(_dbName))
+                {
+                    ctx.PatientObservations.Collection.Insert(mePg);
+
+                    AuditHelper.LogDataAudit(this.UserId,
+                                            MongoCollectionName.PatientObservation.ToString(),
+                                            mePg.Id.ToString(),
+                                            Common.DataAuditType.Insert,
+                                            request.ContractNumber);
+
+                    IdNamePair oDetails = GetObservationDetails(mePg.ObservationId);
+                    patientObservationData = new PatientObservationData
+                    {
+                        Id = mePg.Id.ToString(),
+                        PatientId = mePg.PatientId.ToString(),
+                        ObservationId = mePg.ObservationId.ToString(),
+                        DeleteFlag = mePg.DeleteFlag,
+                        StartDate = mePg.StartDate,
+                        EndDate = mePg.EndDate,
+                        DisplayId = (int)mePg.Display,
+                        StateId = (int)mePg.State,
+                        Name = oDetails == null ? null : oDetails.Name,
+                        TypeId = oDetails == null ? null : oDetails.Id,
+                    };
+                }
+                return patientObservationData;
+            }
+            catch (Exception) { throw; }
+        }
+
+        private DateTime? GetTTLDate(string p)
+        {
+            DateTime? date = null;
+            if (string.IsNullOrEmpty(p))
+            {
+                date = System.DateTime.UtcNow.AddDays(_initializeDays);
+            }
+            return date;
+        }
+
         public IEnumerable<object> FindObservationIdByPatientId(string Id)
         {
             try
@@ -300,6 +371,8 @@ namespace Phytel.API.DataDomain.PatientObservation
                 List<PatientObservationData> observationsDataList = null;
                 List<IMongoQuery> queries = new List<IMongoQuery>();
                 queries.Add(Query.EQ(MEPatientObservation.PatientIdProperty, ObjectId.Parse(Id)));
+                queries.Add(Query.EQ(MEPatientObservation.TTLDateProperty, BsonNull.Value));
+                queries.Add(Query.EQ(MEPatientObservation.DeleteFlagProperty, false));
                 IMongoQuery mQuery = Query.And(queries);
 
                 using (PatientObservationMongoContext ctx = new PatientObservationMongoContext(_dbName))
@@ -324,6 +397,80 @@ namespace Phytel.API.DataDomain.PatientObservation
             catch (Exception) { throw; }
         }
 
+        public object GetAllPatientProblems(GetPatientProblemsSummaryRequest request, List<string> oidlist)
+        {
+            try
+            {
+                List<IMongoQuery> queries = new List<IMongoQuery>();
+                List<ObjectId> oidls = oidlist.Select(r => ObjectId.Parse(r)).ToList<ObjectId>();
+                queries.Add(Query.EQ(MEPatientObservation.PatientIdProperty, ObjectId.Parse(request.PatientId)));
+                queries.Add(Query.EQ(MEPatientObservation.DeleteFlagProperty, false));
+                queries.Add(Query.EQ(MEPatientObservation.TTLDateProperty, BsonNull.Value));
+                queries.Add(Query.EQ(MEPatientObservation.ObservationStateProperty, (int)ObservationState.Active));
+                queries.Add(Query.In(MEPatientObservation.ObservationIdProperty, new BsonArray(oidls)));
+                IMongoQuery mQuery = Query.And(queries);
+
+                List<MEPatientObservation> meObservations = null;
+                List<PatientObservationData> observationDataL = new List<PatientObservationData>();
+
+                using (PatientObservationMongoContext ctx = new PatientObservationMongoContext(_dbName))
+                {
+                    meObservations = ctx.PatientObservations.Collection.Find(mQuery).ToList();
+
+                    if (meObservations != null && meObservations.Count > 0)
+                    {
+                        foreach (MEPatientObservation mePO in meObservations)
+                        {
+                            IdNamePair oDetails = GetObservationDetails(mePO.ObservationId);
+                            PatientObservationData data = new PatientObservationData
+                            {
+                                Id = mePO.Id.ToString(),
+                                ObservationId = mePO.ObservationId.ToString(),
+                                DisplayId = (int)mePO.Display,
+                                Name = oDetails == null ? null : oDetails.Name,
+                                TypeId = oDetails == null ? null : oDetails.Id,
+                                StateId = (int)mePO.State,
+                                PatientId = request.PatientId,
+                                StartDate = mePO.StartDate,
+                                EndDate = mePO.EndDate
+                            };
+                            observationDataL.Add(data);
+                        }
+                        observationDataL = observationDataL.OrderBy(o => o.Name).ToList();
+
+                    }
+                }
+                return observationDataL as object;
+            }
+            catch (Exception ex) { throw new Exception("PatientObservationDD:MongoPatientBarrierRepository:GetAllPatientProblems()::" + ex.Message, ex.InnerException); }
+        }
+
+        private IdNamePair GetObservationDetails(ObjectId objectId)
+        {
+            try
+            {
+                IdNamePair result = null;
+                List<IMongoQuery> queries = new List<IMongoQuery>();
+                queries.Add(Query.EQ(MEObservation.IdProperty, objectId));
+                queries.Add(Query.EQ(MEObservation.DeleteFlagProperty, false));
+                IMongoQuery mQuery = Query.And(queries);
+
+                MEObservation meO = null;
+
+                using (PatientObservationMongoContext ctx = new PatientObservationMongoContext(_dbName))
+                {
+                    meO = ctx.Observations.Collection.Find(mQuery).FirstOrDefault();
+
+                    if (meO != null)
+                    {
+                        result = new IdNamePair { Id = meO.ObservationTypeId.ToString(), Name = meO.CommonName != null ? meO.CommonName : meO.Description };
+                    }
+                }
+                return result;
+            }
+            catch (Exception ex) { throw new Exception("PatientObservationDD:MongoPatientBarrierRepository:GetObservationDetails()::" + ex.Message, ex.InnerException); }
+        }
+
         public object FindRecentObservationValue(string observationTypeId, string patientId)
         {
             try
@@ -333,6 +480,7 @@ namespace Phytel.API.DataDomain.PatientObservation
                 queries.Add(Query.EQ(MEPatientObservation.PatientIdProperty, ObjectId.Parse(patientId)));
                 queries.Add(Query.EQ(MEPatientObservation.ObservationIdProperty, ObjectId.Parse(observationTypeId)));
                 queries.Add(Query.EQ(MEPatientObservation.DeleteFlagProperty, false));
+                queries.Add(Query.EQ(MEPatientObservation.TTLDateProperty, BsonNull.Value));
                 IMongoQuery mQuery = Query.And(queries);
 
                 MEPatientObservation meObservation = null;
@@ -381,7 +529,12 @@ namespace Phytel.API.DataDomain.PatientObservation
             }
         }
 
-        public object GetObservationsByType(object newEntity, bool standard)
+        public List<IdNamePair> GetAllowedObservationStates(object entity)
+        {
+            throw new NotImplementedException();
+        }
+
+        public object GetObservationsByType(object newEntity, bool? standard, bool? status)
         {
             throw new NotImplementedException();
         }

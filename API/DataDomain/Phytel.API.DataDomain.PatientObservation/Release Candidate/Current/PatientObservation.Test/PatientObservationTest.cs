@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Phytel.API.DataDomain.PatientObservation.DTO;
 
@@ -6,14 +7,39 @@ namespace Phytel.API.DataDomain.PatientObservation.Test
     [TestClass]
     public class PatientObservationTest
     {
+        static string userId = "000000000000000000000000";
+        static string contractNumber = "InHealth001";
+        static string context = "NG";
+        static int version = 1;
+        
         [TestMethod]
-        public void GetPatientObservationByID()
+        public void InitializePatientProblem_Test()
         {
-            GetPatientObservationRequest request = new GetPatientObservationRequest{ PatientObservationID = "5"};
+            GetInitializeProblemDataRequest request = new GetInitializeProblemDataRequest { Context = context, ContractNumber = contractNumber, ObservationId = "533ed16ed4332307bc592bb9", PatientId = "5325db00d6a4850adcbba802", UserId = userId, Version = version };
 
-            GetPatientObservationResponse response = PatientObservationDataManager.GetPatientObservationByID(request);
+            GetInitializeProblemDataResponse response = PatientObservationDataManager.GetInitializeProblem(request);
 
-            Assert.IsTrue(response.PatientObservation.PatientObservationID == "Tony");
+            Assert.IsNotNull(response.PatientObservation);
+        }
+
+        [TestMethod]
+        public void UpdatePatientProblem_Test()
+        {
+            PutUpdateObservationDataRequest request = new PutUpdateObservationDataRequest { Context = context, ContractNumber = contractNumber, PatientId = "5325da48d6a4850adcbba5c2", PatientObservationData = GetProblem(), UserId = userId, Version = version };
+
+            bool response = (bool)PatientObservationDataManager.PutUpdateOfPatientObservationRecord(request);
+
+            Assert.IsTrue(response);
+        }
+
+        private PatientObservationRecordData GetProblem()
+        {
+            PatientObservationRecordData data = new PatientObservationRecordData
+            {
+                Id = "5347051dd6a48504b497a186",
+                DeleteFlag = true
+            };
+            return data;
         }
     }
 }
