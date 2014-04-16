@@ -51,9 +51,9 @@ namespace Phytel.API.DataDomain.PatientProblem
                         PatientID = ObjectId.Parse(request.PatientId),
                         ProblemID = ObjectId.Parse(request.ProblemId),
                         Version = 1,
-                        DeleteFlag = false,
-                        LastUpdatedOn = System.DateTime.UtcNow,
-                        UpdatedBy = ObjectId.Parse(this.UserId)
+                        DeleteFlag = false
+                        //,LastUpdatedOn = System.DateTime.UtcNow,
+                        //UpdatedBy = ObjectId.Parse(this.UserId)
                     };
                     ctx.PatientProblems.Collection.Insert(pp);
 
@@ -153,10 +153,15 @@ namespace Phytel.API.DataDomain.PatientProblem
 
             return new Tuple<string, IEnumerable<object>>(expression.ExpressionID, returnQuery);
         }
-        
+
         public IEnumerable<object> SelectAll()
         {
-            throw new NotImplementedException();
+            List<MEPatientProblem> mePatientProblems = null;
+            using (PatientProblemMongoContext ctx = new PatientProblemMongoContext(_dbName))
+            {
+                mePatientProblems = ctx.PatientProblems.Collection.FindAll().ToList();
+            }
+            return mePatientProblems;
         }
 
         public object Update(object entity)
