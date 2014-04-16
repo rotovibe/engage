@@ -1,6 +1,8 @@
 ﻿using Phytel.API.AppDomain.NG.DTO;
 using Phytel.API.AppDomain.NG.DTO.Observation;
 using Phytel.API.AppDomain.NG.PlanCOR;
+//using Phytel.API.AppDomain.NG.Program;
+using Phytel.API.AppDomain.NG.Programs;
 using Phytel.API.DataDomain.Patient.DTO;
 using Phytel.API.DataDomain.PatientObservation.DTO;
 using Phytel.API.DataDomain.PatientProblem.DTO;
@@ -17,14 +19,14 @@ using DD = Phytel.API.DataDomain.Program.DTO;
 
 namespace Phytel.API.AppDomain.NG
 {
-    public static class PlanElementEndpointUtil
+    public class PlanElementEndpointUtils : IPlanElementEndpointUtils
     {
         static readonly string DDPatientProblemServiceUrl = ConfigurationManager.AppSettings["DDPatientProblemServiceUrl"];
         static readonly string DDPatientObservationServiceUrl = ConfigurationManager.AppSettings["DDPatientObservationUrl"];
         static readonly string DDPatientServiceUrl = ConfigurationManager.AppSettings["DDPatientServiceUrl"];
         static readonly string DDProgramServiceUrl = ConfigurationManager.AppSettings["DDProgramServiceUrl"];
 
-        public static PatientObservation GetPatientProblem(string probId, PlanElementEventArg e, string userId)
+        public PatientObservation GetPatientProblem(string probId, PlanElementEventArg e, string userId)
         {
             try
             {
@@ -62,7 +64,7 @@ namespace Phytel.API.AppDomain.NG
             }
         }
 
-        public static DD.ProgramDetail SaveAction(IProcessActionRequest request, string actionId, AD.Program p)
+        public DD.ProgramDetail SaveAction(IProcessActionRequest request, string actionId, AD.Program p)
         {
             try
             {
@@ -93,91 +95,7 @@ namespace Phytel.API.AppDomain.NG
             }
         }
 
-        private static void SaveResponsesFromProgram(AD.Program p, string actionId, IProcessActionRequest request)
-        {
-            try
-            {
-                Actions act = GetActionById(p, actionId);
-                act.Steps.ForEach(s =>
-                {
-                    // add stepresponse ids and step source id
-                    if (SaveResponses(s, request))
-                    {
-                        s.Responses = null;
-                    }
-                });
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("AD:PlanElementEndpointUtil:SaveResponsesFromProgram()::" + ex.Message, ex.InnerException);
-            }
-        }
-
-        private static bool SaveResponses(Step step, IProcessActionRequest request)
-        {
-            bool result = false;
-            List<Response> list = step.Responses;
-            try
-            {
-                if (list != null)
-                {
-                    list.ForEach(r =>
-                    {
-                        if (ResponseExistsRequest(r.StepId, r.Id, request))
-                        {
-                            SetSelectedResponseProperty(step, r);
-                            SetDeleteFlagByStepCompletion(step, r);
-                            UpdateResponseRequest(request, r);
-                            result = true;
-                        }
-                    });
-                }
-                return result;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("AD:PlanElementEndpointUtil:SaveResponses()::" + ex.Message, ex.InnerException);
-            }
-        }
-
-        private static void SetSelectedResponseProperty(Step step, Response r)
-        {
-            try
-            {
-                r.Selected = false;
-                if (step.SelectedResponseId.Equals(r.Id))
-                {
-                    if ((step.StepTypeId.Equals(1)) || (step.StepTypeId.Equals(4)))
-                    {
-                        r.Selected = true;
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("AD:PlanElementEndpointUtil:SetSelectedResponseProperty()::" + ex.Message, ex.InnerException);
-            }
-        }
-
-        private static void SetDeleteFlagByStepCompletion(Step step, Response r)
-        {
-            try
-            {
-                if (step != null && r != null)
-                {
-                    if (step.Completed)
-                        r.Delete = false;
-                    else
-                        r.Delete = true;
-                }
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("AD:PlanElementEndpointUtil:SetDeleteFlagByStepCompletion()::" + ex.Message, ex.InnerException);
-            }
-        }
-
-        public static List<StepResponse> GetResponsesForStep(string stepId, IAppDomainRequest request)
+        public List<StepResponse> GetResponsesForStep(string stepId, IAppDomainRequest request)
         {
             List<StepResponse> result = null;
             try
@@ -208,92 +126,7 @@ namespace Phytel.API.AppDomain.NG
             }
         }
 
-        private static bool ResponseExistsRequest(string stepId, string responseId, IProcessActionRequest request)
-        {
-            bool result = false;
-            try
-            {
-                IRestClient client = new JsonServiceClient();
-
-                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Program/Module/Action/Step/{4}/Response/?ResponseId={5}",
-                                                    DDProgramServiceUrl,
-                                                    "NG",
-                                                    request.Version,
-                                                    request.ContractNumber,
-                                                    stepId,
-                                                    responseId), request.UserId);
-
-                GetStepResponseResponse resp =
-                                    client.Get<GetStepResponseResponse>(
-                                    url);
-
-                if (resp.StepResponse != null)
-                    result = true;
-
-                return result;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("AD:PlanElementEndpointUtil:ResponseExistsRequest()::" + ex.Message, ex.InnerException);
-            }
-        }
-
-        private static void UpdateResponseRequest(IProcessActionRequest request, Response r)
-        {
-            try
-            {
-                IRestClient client = new JsonServiceClient();
-
-                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Program/Module/Action/Step/{4}/Responses/Update",
-                                    DDProgramServiceUrl,
-                                    "NG",
-                                    request.Version,
-                                    request.ContractNumber,
-                                    r.StepId), request.UserId);
-
-                DD.PutUpdateResponseResponse resp =
-                    client.Put<DD.PutUpdateResponseResponse>(
-                    url, new DD.PutUpdateResponseRequest
-                    {
-                        ResponseDetail = new DD.ResponseDetail
-                        {
-                            Id = r.Id,
-                            NextStepId = r.NextStepId,
-                            Nominal = r.Nominal,
-                            Order = r.Order,
-                            Required = r.Required,
-                            SpawnElement = NGUtils.GetDDSpawnElement(r.SpawnElement),
-                            StepId = r.StepId,
-                            Text = r.Text,
-                            Value = r.Value,
-                            Selected = r.Selected,
-                            Delete = r.Delete
-                        },
-                        UserId = request.UserId,
-                        Version = request.Version
-                    } as object);
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("AD:PlanElementEndpointUtil:UpdateResponseRequest()::" + ex.Message, ex.InnerException);
-            }
-        }
-
-        private static Actions GetActionById(AD.Program p, string actionId)
-        {
-            Actions action = null;
-            try
-            {
-                action = p.Modules.SelectMany(module => module.Actions).Where(act => act.Id == actionId).FirstOrDefault();
-                return action;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("AD:PlanElementEndpointUtil:GetActionById()::" + ex.Message, ex.InnerException);
-            }
-        }
-
-        public static AD.Program RequestPatientProgramDetail(IProcessActionRequest request)
+        public AD.Program RequestPatientProgramDetail(IProcessActionRequest request)
         {
             try
             {
@@ -323,7 +156,7 @@ namespace Phytel.API.AppDomain.NG
             }
         }
 
-        internal static CohortPatientViewData RequestCohortPatientViewData(string patientId, IAppDomainRequest request)
+        public CohortPatientViewData RequestCohortPatientViewData(string patientId, IAppDomainRequest request)
         {
             try
             {
@@ -351,7 +184,7 @@ namespace Phytel.API.AppDomain.NG
             }
         }
 
-        internal static void UpdateCohortPatientViewProblem(CohortPatientViewData cpvd, string patientId, IAppDomainRequest request)
+        public void UpdateCohortPatientViewProblem(CohortPatientViewData cpvd, string patientId, IAppDomainRequest request)
         {
             try
             {
@@ -382,7 +215,7 @@ namespace Phytel.API.AppDomain.NG
             }
         }
 
-        public static PutRegisterPatientObservationResponse PutNewPatientProblem(string patientId, string userId, string elementId, IAppDomainRequest request)
+        public PutRegisterPatientObservationResponse PutNewPatientProblem(string patientId, string userId, string elementId, IAppDomainRequest request)
         {
             try
             {
@@ -413,7 +246,7 @@ namespace Phytel.API.AppDomain.NG
             }
         }
 
-        public static PutUpdateObservationDataResponse UpdatePatientProblem(string patientId, string userId, string elementId, PatientObservation pod, bool _active, IAppDomainRequest request)
+        public PutUpdateObservationDataResponse UpdatePatientProblem(string patientId, string userId, string elementId, PatientObservation pod, bool _active, IAppDomainRequest request)
         {
             try
             {
@@ -454,7 +287,7 @@ namespace Phytel.API.AppDomain.NG
             }
         }
 
-        internal static ProgramAttribute GetProgramAttributes(string planElemId, IAppDomainRequest request)
+        public ProgramAttribute GetProgramAttributes(string planElemId, IAppDomainRequest request)
         {
             ProgramAttribute progAttr = null;
             try
@@ -484,7 +317,7 @@ namespace Phytel.API.AppDomain.NG
             }
         }
 
-        internal static bool UpdateProgramAttributes(ProgramAttribute pAtt, IAppDomainRequest request)
+        public bool UpdateProgramAttributes(ProgramAttribute pAtt, IAppDomainRequest request)
         {
             bool result = false;
             try
@@ -521,7 +354,7 @@ namespace Phytel.API.AppDomain.NG
             }
         }
 
-        internal static bool InsertNewProgramAttribute(ProgramAttribute pa, IAppDomainRequest request)
+        public bool InsertNewProgramAttribute(ProgramAttribute pa, IAppDomainRequest request)
         {
             bool result = false;
             try
@@ -556,5 +389,199 @@ namespace Phytel.API.AppDomain.NG
                 throw new Exception("AD:PlanElementEndpointUtil:InsertNewProgramAttribute()::" + ex.Message, ex.InnerException);
             }
         }
+
+        public DD.GetProgramDetailsSummaryResponse RequestPatientProgramDetailsSummary(GetPatientProgramDetailsSummaryRequest request)
+        {
+            try
+            {
+                IRestClient client = new JsonServiceClient();
+                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Program/{5}/Details",
+                    DDProgramServiceUrl,
+                    "NG",
+                    request.Version,
+                    request.ContractNumber,
+                    request.PatientId,
+                    request.PatientProgramId), request.UserId);
+
+                DD.GetProgramDetailsSummaryResponse resp =
+                    client.Get<DD.GetProgramDetailsSummaryResponse>(url);
+                return resp;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("AD:PlanElementEndpointUtil:RequestPatientProgramDetailsSummary()::" + ex.Message, ex.InnerException);
+            }
+        }
+
+        #region private methods
+        private void SaveResponsesFromProgram(AD.Program p, string actionId, IProcessActionRequest request)
+        {
+            try
+            {
+                Actions act = GetActionById(p, actionId);
+                act.Steps.ForEach(s =>
+                {
+                    // add stepresponse ids and step source id
+                    if (SaveResponses(s, request))
+                    {
+                        s.Responses = null;
+                    }
+                });
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("AD:PlanElementEndpointUtil:SaveResponsesFromProgram()::" + ex.Message, ex.InnerException);
+            }
+        }
+
+        private bool ResponseExistsRequest(string stepId, string responseId, IProcessActionRequest request)
+        {
+            bool result = false;
+            try
+            {
+                IRestClient client = new JsonServiceClient();
+
+                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Program/Module/Action/Step/{4}/Response/?ResponseId={5}",
+                                                    DDProgramServiceUrl,
+                                                    "NG",
+                                                    request.Version,
+                                                    request.ContractNumber,
+                                                    stepId,
+                                                    responseId), request.UserId);
+
+                GetStepResponseResponse resp =
+                                    client.Get<GetStepResponseResponse>(
+                                    url);
+
+                if (resp.StepResponse != null)
+                    result = true;
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("AD:PlanElementEndpointUtil:ResponseExistsRequest()::" + ex.Message, ex.InnerException);
+            }
+        }
+
+        private void UpdateResponseRequest(IProcessActionRequest request, Response r)
+        {
+            try
+            {
+                IRestClient client = new JsonServiceClient();
+
+                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Program/Module/Action/Step/{4}/Responses/Update",
+                                    DDProgramServiceUrl,
+                                    "NG",
+                                    request.Version,
+                                    request.ContractNumber,
+                                    r.StepId), request.UserId);
+
+                DD.PutUpdateResponseResponse resp =
+                    client.Put<DD.PutUpdateResponseResponse>(
+                    url, new DD.PutUpdateResponseRequest
+                    {
+                        ResponseDetail = new DD.ResponseDetail
+                        {
+                            Id = r.Id,
+                            NextStepId = r.NextStepId,
+                            Nominal = r.Nominal,
+                            Order = r.Order,
+                            Required = r.Required,
+                            SpawnElement = NGUtils.GetDDSpawnElement(r.SpawnElement),
+                            StepId = r.StepId,
+                            Text = r.Text,
+                            Value = r.Value,
+                            Selected = r.Selected,
+                            Delete = r.Delete
+                        },
+                        UserId = request.UserId,
+                        Version = request.Version
+                    } as object);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("AD:PlanElementEndpointUtil:UpdateResponseRequest()::" + ex.Message, ex.InnerException);
+            }
+        }
+
+        private Actions GetActionById(AD.Program p, string actionId)
+        {
+            Actions action = null;
+            try
+            {
+                action = p.Modules.SelectMany(module => module.Actions).Where(act => act.Id == actionId).FirstOrDefault();
+                return action;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("AD:PlanElementEndpointUtil:GetActionById()::" + ex.Message, ex.InnerException);
+            }
+        }
+
+        private bool SaveResponses(Step step, IProcessActionRequest request)
+        {
+            bool result = false;
+            List<Response> list = step.Responses;
+            try
+            {
+                if (list != null)
+                {
+                    list.ForEach(r =>
+                    {
+                        if (ResponseExistsRequest(r.StepId, r.Id, request))
+                        {
+                            SetSelectedResponseProperty(step, r);
+                            SetDeleteFlagByStepCompletion(step, r);
+                            UpdateResponseRequest(request, r);
+                            result = true;
+                        }
+                    });
+                }
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("AD:PlanElementEndpointUtil:SaveResponses()::" + ex.Message, ex.InnerException);
+            }
+        }
+
+        private void SetSelectedResponseProperty(Step step, Response r)
+        {
+            try
+            {
+                r.Selected = false;
+                if (step.SelectedResponseId.Equals(r.Id))
+                {
+                    if ((step.StepTypeId.Equals(1)) || (step.StepTypeId.Equals(4)))
+                    {
+                        r.Selected = true;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("AD:PlanElementEndpointUtil:SetSelectedResponseProperty()::" + ex.Message, ex.InnerException);
+            }
+        }
+
+        private void SetDeleteFlagByStepCompletion(Step step, Response r)
+        {
+            try
+            {
+                if (step != null && r != null)
+                {
+                    if (step.Completed)
+                        r.Delete = false;
+                    else
+                        r.Delete = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("AD:PlanElementEndpointUtil:SetDeleteFlagByStepCompletion()::" + ex.Message, ex.InnerException);
+            }
+        }
+        #endregion
     }
 }

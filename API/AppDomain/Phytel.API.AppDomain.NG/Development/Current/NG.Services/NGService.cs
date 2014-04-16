@@ -1,5 +1,6 @@
 using Phytel.API.AppDomain.NG.DTO;
 using Phytel.API.AppDomain.Security.DTO;
+using Phytel.API.Common.Audit;
 using Phytel.API.Common.Format;
 using Phytel.API.DataAudit;
 using ServiceStack.ServiceClient.Web;
@@ -7,6 +8,7 @@ using ServiceStack.ServiceHost;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Web;
 
 namespace Phytel.API.AppDomain.NG.Service
 {
@@ -14,8 +16,9 @@ namespace Phytel.API.AppDomain.NG.Service
     {
         public ISecurityManager Security {get; set;}
         public INGManager NGManager {get; set;}
+        public IAuditUtil AuditUtil { get; set; }
+        public ICommonFormatterUtil CommonFormatterUtil { get; set; }
 
-        #region Patient
         public GetPatientResponse Post(GetPatientRequest request)
         {
             GetPatientResponse response = new GetPatientResponse();
@@ -45,15 +48,15 @@ namespace Phytel.API.AppDomain.NG.Service
 
                 if (response.Patient != null)
                 {
-                    patientIds = new List<string>();
-                    patientIds.Add(response.Patient.Id);
+                   patientIds = new List<string>();
+                    patientIds.Add(response.Patient.Id);                    
                 }
 
                 if (result != null)
                     AuditHelper.LogAuditData(request, result.SQLUserId, patientIds, System.Web.HttpContext.Current.Request, request.GetType().Name);
             }
 
-            return response;
+            return response; 
         }
 
         public GetPatientResponse Get(GetPatientRequest request)
@@ -87,7 +90,7 @@ namespace Phytel.API.AppDomain.NG.Service
                 if (response.Patient != null)
                 {
                     patientIds = new List<string>();
-                    patientIds.Add(response.Patient.Id);
+                    patientIds.Add(response.Patient.Id);               
                 }
 
                 if (result != null)
@@ -131,13 +134,12 @@ namespace Phytel.API.AppDomain.NG.Service
                     patientIds.Add(request.PatientId);
                 }
 
-                if (result != null)
+                if(result != null)
                     AuditHelper.LogAuditData(request, result.SQLUserId, patientIds, System.Web.HttpContext.Current.Request, request.GetType().Name);
             }
 
             return response;
-        } 
-        #endregion
+        }
        
         /// <summary>
         ///     ServiceStack's GET endpoint for getting active problems for a patient
@@ -484,7 +486,10 @@ namespace Phytel.API.AppDomain.NG.Service
 
             try
             {
-                request.Token = base.Request.Headers["Token"] as string;
+                if (base.Request != null)
+                {
+                    request.Token = base.Request.Headers["Token"] as string;
+                }
                 result = Security.IsUserValidated(request.Version, request.Token, request.ContractNumber);
                 if (result.UserId.Trim() != string.Empty)
                 {
@@ -497,60 +502,21 @@ namespace Phytel.API.AppDomain.NG.Service
             }
             catch (Exception ex)
             {
-                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+                CommonFormatterUtil.FormatExceptionResponse(response, base.Response, ex);
                 if ((ex is WebServiceException) == false)
                     NGManager.LogException(ex);
             }
             finally
             {
-                List<string> patientIds = null;
-
-                if (request.PatientId != null)
-                    patientIds.Add(request.PatientId);
-
                 if (result != null)
-                    AuditHelper.LogAuditData(request, result.SQLUserId, patientIds, System.Web.HttpContext.Current.Request, request.GetType().Name);               
+                {
+                    string browser = (base.Request != null) ? base.Request.UserAgent : string.Empty;
+                    string hostAddress = (base.Request != null)? base.Request.UserHostAddress : string.Empty;
+                    AuditUtil.LogAuditData(request, result.SQLUserId, null, browser, hostAddress, request.GetType().Name);
+                }
             }
             
             return response; 
-        }
-
-        public GetPatientActionDetailsResponse Get(GetPatientActionDetailsRequest request)
-        {
-            GetPatientActionDetailsResponse response = new GetPatientActionDetailsResponse();
-            ValidateTokenResponse result = null;
-
-            try
-            {
-                request.Token = base.Request.Headers["Token"] as string;
-                result = Security.IsUserValidated(request.Version, request.Token, request.ContractNumber);
-                if (result.UserId.Trim() != string.Empty)
-                {
-                    request.UserId = result.UserId;
-                    response = NGManager.GetPatientActionDetails(request);
-                }
-                else
-                    throw new UnauthorizedAccessException();
-
-            }
-            catch (Exception ex)
-            {
-                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
-                if ((ex is WebServiceException) == false)
-                    NGManager.LogException(ex);
-            }
-            finally
-            {
-                List<string> patientIds = null;
-
-                if (request.PatientId != null)
-                    patientIds.Add(request.PatientId);
-
-                if (result != null)
-                    AuditHelper.LogAuditData(request, result.SQLUserId, patientIds, System.Web.HttpContext.Current.Request, request.GetType().Name);
-            }
-
-            return response;
         }
 
         public GetPatientProgramsResponse Get(GetPatientProgramsRequest request)

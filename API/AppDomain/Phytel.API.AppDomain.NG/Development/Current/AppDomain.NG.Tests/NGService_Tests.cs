@@ -7,6 +7,9 @@ using Phytel.API.AppDomain.NG.Service;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Phytel.API.AppDomain.NG.Service.Tests.Factories;
 using Phytel.API.AppDomain.NG.DTO;
+using Phytel.API.Common.Audit;
+using Phytel.API.AppDomain.NG.Test.Stubs;
+using Phytel.API.Common.Format;
 
 namespace Phytel.API.AppDomain.NG.Service.Tests
 {
@@ -26,6 +29,20 @@ namespace Phytel.API.AppDomain.NG.Service.Tests
             GetPatientResponse response = ngs.Get(request);
 
             Assert.Fail();
+        }
+
+        [TestMethod()]
+        public void Get_Test()
+        {
+            IAuditUtil audit = new StubAuditUtil();
+            INGManager ngm = new StubNGManager();
+            ISecurityManager sm = new StubSecurityManager();
+            ICommonFormatterUtil cf = new StubCommonFormatterUtil();
+
+            NGService ngs = new NGService { AuditUtil = audit, NGManager = ngm, Security = sm, CommonFormatterUtil = cf };
+            GetPatientProgramDetailsSummaryRequest request = new GetPatientProgramDetailsSummaryRequest { ContractNumber = "NG", PatientId = "", Token = "dsafgsdfgdafg", UserId = "", Version = 1.0 };
+            ngs.Get(request);
+
         }
     }
 }

@@ -2,6 +2,59 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Phytel.API.AppDomain.NG.DTO;
 using System;
 using System.Collections.Generic;
+using Phytel.API.AppDomain.NG;
+using Phytel.API.AppDomain.NG.Test.Stubs;
+
+namespace Phytel.API.AppDomain.NG.Tests
+{
+    [TestClass()]
+    public class NGManager_Tests
+    {
+        [TestMethod()]
+        public void GetPatientProgramDetailsSummary_Test()
+        {
+            string patientId = "5325dad4d6a4850adcbba776";
+            string programId = "534d9bffd6a48504b058a2cf";
+            string userId = "0000000000000000000000000";
+
+            INGManager ngm = new NGManager { PlanElementUtils = new StubPlanElementUtils(), PlanElementEndpointUtils = new StubPlanElementEndpointUtils() };
+
+            GetPatientProgramDetailsSummaryRequest request = new GetPatientProgramDetailsSummaryRequest
+            {
+                Version = 1.0,
+                ContractNumber = "InHealth001",
+                PatientId = patientId,
+                PatientProgramId = programId,
+                UserId = userId
+            };
+
+            GetPatientProgramDetailsSummaryResponse response = ngm.GetPatientProgramDetailsSummary(request);
+            Assert.IsNotNull(response);
+        }
+
+        [TestMethod()]
+        public void GetPatientProgramDetailsSummary_Action_with_no_steps_Test()
+        {
+            string patientId = "5325dab8d6a4850adcbba71a";
+            string programId = "534d9217d6a48504b0586f68";
+            string userId = "0000000000000000000000000";
+
+            INGManager ngm = new NGManager { PlanElementUtils = new StubPlanElementUtils(), PlanElementEndpointUtils = new StubPlanElementEndpointUtils() };
+
+            GetPatientProgramDetailsSummaryRequest request = new GetPatientProgramDetailsSummaryRequest
+            {
+                Version = 1.0,
+                ContractNumber = "InHealth001",
+                PatientId = patientId,
+                PatientProgramId = programId,
+                UserId = userId
+            };
+
+            GetPatientProgramDetailsSummaryResponse response = ngm.GetPatientProgramDetailsSummary(request);
+            Assert.IsNull(response.Program.Modules[0].Actions[0].Steps);
+        }
+    }
+}
 
 namespace Phytel.API.AppDomain.NG.Test
 {
@@ -16,7 +69,7 @@ namespace Phytel.API.AppDomain.NG.Test
             double version = 1.0;
             string contractNumber = "InHealth001";
             string token = "1234";
-            NGManager ngManager = new NGManager();
+            NGManager ngManager = new NGManager() { PlanElementUtils = new PlanElementUtils() };
             GetPatientRequest request = new GetPatientRequest
             {
                 ContractNumber = contractNumber,
@@ -38,7 +91,7 @@ namespace Phytel.API.AppDomain.NG.Test
             double version = 1.0;
             string contractNumber = "InHealth001";
             string token = "1234";
-            NGManager ngManager = new NGManager();
+            NGManager ngManager = new NGManager() { PlanElementUtils = new PlanElementUtils() };
             PutPatientBackgroundRequest request = new PutPatientBackgroundRequest
             {
                 ContractNumber = contractNumber,

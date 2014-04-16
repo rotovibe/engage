@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Phytel.API.AppDomain.NG.Service.Tests.Stubs
+namespace Phytel.API.AppDomain.NG.Test.Stubs
 {
     public class StubNGManager: INGManager
     {
@@ -137,6 +137,30 @@ namespace Phytel.API.AppDomain.NG.Service.Tests.Stubs
         public void LogException(Exception ex)
         {
             throw new NotImplementedException();
+        }
+
+        public IPlanElementUtils PlanElementUtils
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+            set
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        public Programs.IPlanElementEndpointUtils PlanElementEndpointUtils
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+            set
+            {
+                throw new NotImplementedException();
+            }
         }
     }
 }

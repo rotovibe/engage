@@ -1,4 +1,5 @@
 ﻿using Phytel.API.AppDomain.NG.DTO;
+using Phytel.API.AppDomain.NG.Programs;
 using Phytel.API.Common.CustomObject;
 using System;
 using System.Collections.Generic;
@@ -6,6 +7,8 @@ namespace Phytel.API.AppDomain.NG
 {
     public interface INGManager
     {
+        IPlanElementUtils PlanElementUtils { get; set; }
+        IPlanElementEndpointUtils PlanElementEndpointUtils { get; set; }
         GetActiveProgramsResponse GetActivePrograms(GetActiveProgramsRequest request);
         List<IdNamePair> GetAllCommModes(GetAllCommModesRequest request);
         List<CommTypeLookUp> GetAllCommTypes(GetAllCommTypesRequest request);

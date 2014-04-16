@@ -85,7 +85,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Action.cs" />
+    <Compile Include="Program\Action.cs" />
     <Compile Include="CareMember\GetAllCareMembersRequest.cs" />
     <Compile Include="CareMember\GetAllCareMembersResponse.cs" />
     <Compile Include="CareMember\GetCareMemberRequest.cs" />
@@ -109,8 +109,8 @@
     <Compile Include="GetPatientActionDetailsResponse.cs" />
     <Compile Include="Observation\GetPatientProblemsRequest.cs" />
     <Compile Include="Observation\GetPatientProblemsResponse.cs" />
-    <Compile Include="GetPatientProgramsRequest.cs" />
-    <Compile Include="GetPatientProgramsResponse.cs" />
+    <Compile Include="Program\GetPatientProgramsRequest.cs" />
+    <Compile Include="Program\GetPatientProgramsResponse.cs" />
     <Compile Include="GetPatientSSNRequest.cs" />
     <Compile Include="GetPatientSSNResponse.cs" />
     <Compile Include="Goal\CustomAttribute.cs" />
@@ -135,7 +135,7 @@
     <Compile Include="Goal\PostPatientGoalRequest.cs" />
     <Compile Include="Goal\PostDeletePatientGoalResponse.cs" />
     <Compile Include="Goal\PostPatientGoalResponse.cs" />
-    <Compile Include="IProcessActionRequest.cs" />
+    <Compile Include="Program\IProcessActionRequest.cs" />
     <Compile Include="LookUp\Goal\GetLookUpsRequest.cs" />
     <Compile Include="LookUp\Goal\GetLookUpsResponse.cs" />
     <Compile Include="LookUp\Contact\GetAllLanguagesRequest.cs" />
@@ -151,7 +151,7 @@
     <Compile Include="LookUp\Contact\GetAllCommTypesResponse.cs" />
     <Compile Include="LookUp\Contact\GetAllCommModesResponse.cs" />
     <Compile Include="Contact\GetContactResponse.cs" />
-    <Compile Include="IPlanElement.cs" />
+    <Compile Include="Program\IPlanElement.cs" />
     <Compile Include="CohortPatient.cs" />
     <Compile Include="Note\GetAllPatientNotesRequest.cs" />
     <Compile Include="Note\GetAllPatientNotesResponse.cs" />
@@ -179,17 +179,17 @@
     <Compile Include="Observation\ObservationValue.cs" />
     <Compile Include="Observation\PatientObservation.cs" />
     <Compile Include="Observation\PreviousValue.cs" />
-    <Compile Include="PostSaveActionRequest.cs" />
-    <Compile Include="PostProcessActionRequest.cs" />
-    <Compile Include="PostSaveActionResponse.cs" />
-    <Compile Include="PostProcessActionResponse.cs" />
-    <Compile Include="GetPatientProgramDetailsSummaryResponse.cs" />
-    <Compile Include="GetPatientProgramDetailsSummaryRequest.cs" />
-    <Compile Include="PlanElement.cs" />
-    <Compile Include="Module.cs" />
-    <Compile Include="Objective.cs" />
-    <Compile Include="PostPatientToProgramsRequest.cs" />
-    <Compile Include="PostPatientToProgramsResponse.cs" />
+    <Compile Include="Program\PostSaveActionRequest.cs" />
+    <Compile Include="Program\PostProcessActionRequest.cs" />
+    <Compile Include="Program\PostSaveActionResponse.cs" />
+    <Compile Include="Program\PostProcessActionResponse.cs" />
+    <Compile Include="Program\GetPatientProgramDetailsSummaryResponse.cs" />
+    <Compile Include="Program\GetPatientProgramDetailsSummaryRequest.cs" />
+    <Compile Include="Program\PlanElement.cs" />
+    <Compile Include="Program\Module.cs" />
+    <Compile Include="Program\Objective.cs" />
+    <Compile Include="Program\PostPatientToProgramsRequest.cs" />
+    <Compile Include="Program\PostPatientToProgramsResponse.cs" />
     <Compile Include="GetAllSettingsResponse.cs" />
     <Compile Include="GetAllSettingsRequest.cs" />
     <Compile Include="LookUp\GetAllProblemsResponse.cs" />
@@ -199,13 +199,13 @@
     <Compile Include="GetAllPatientProblemsRequest.cs" />
     <Compile Include="GetAllPatientProblemsResponse.cs" />
     <Compile Include="GetAllCohortsRequest.cs" />
-    <Compile Include="GetActiveProgramsRequest.cs" />
+    <Compile Include="Program\GetActiveProgramsRequest.cs" />
     <Compile Include="GetPatientRequest.cs" />
     <Compile Include="GetAllCohortsResponse.cs" />
-    <Compile Include="GetActiveProgramsResponse.cs" />
+    <Compile Include="Program\GetActiveProgramsResponse.cs" />
     <Compile Include="GetPatientResponse.cs" />
     <Compile Include="Patient.cs" />
-    <Compile Include="Program.cs" />
+    <Compile Include="Program\Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PutPatientBackgroundRequest.cs" />
     <Compile Include="PutPatientFlaggedUpdateRequest.cs" />
@@ -213,13 +213,13 @@
     <Compile Include="PutPatientBackgroundResponse.cs" />
     <Compile Include="PutPatientFlaggedUpdateResponse.cs" />
     <Compile Include="PutPatientDetailsUpdateResponse.cs" />
-    <Compile Include="Response.cs" />
-    <Compile Include="SpawnElement.cs" />
-    <Compile Include="Step.cs" />
+    <Compile Include="Program\Response.cs" />
+    <Compile Include="Program\SpawnElement.cs" />
+    <Compile Include="Program\Step.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
-    <None Include="PlanElementsDiagram.cd" />
+    <None Include="Program\PlanElementsDiagram.cd" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\..\Common\Phytel.API.Common\Development\Current\Phytel.API.Common.csproj">

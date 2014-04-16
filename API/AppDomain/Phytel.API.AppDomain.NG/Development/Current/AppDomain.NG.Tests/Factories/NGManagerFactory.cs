@@ -1,4 +1,4 @@
-﻿using Phytel.API.AppDomain.NG.Service.Tests.Stubs;
+﻿using Phytel.API.AppDomain.NG.Test.Stubs;
 using System;
 using System.Collections.Generic;
 using System.Configuration;

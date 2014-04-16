@@ -41,10 +41,12 @@ namespace Phytel.API.DataDomain.Patient.Service.Test
             string context = "NG";
             string priority = "3";
             double version = 1.0;
-            string token = "5307b137d6a4850cd4abdc3c";
-            string patientProgramId = "52f56d9fd6a4850fd025fb67";
-            string patientId = "52f55876072ef709f84e6944";
+            string token = "534ee052d6a48504b03b4a9a";
+            string patientProgramId = "534d9bffd6a48504b058a2cf";
+            string patientId = "5325dad4d6a4850adcbba776";
             IRestClient client = new JsonServiceClient();
+
+            JsonServiceClient.HttpWebRequestFilter = x => x.Headers.Add(string.Format("Token: {0}", token));
 
             GetPatientProgramDetailsSummaryResponse response = client.Get<GetPatientProgramDetailsSummaryResponse>(
                 string.Format(@"http://localhost:888/Nightingale/{0}/{1}/Patient/{2}/Program/{3}/?Token={4}",
@@ -67,6 +69,8 @@ namespace Phytel.API.DataDomain.Patient.Service.Test
             string token = "5307d950d6a4850cd4abe657";
             string patientId = "52f55881072ef709f84e6d80";
             IRestClient client = new JsonServiceClient();
+
+            JsonServiceClient.HttpWebRequestFilter = x => x.Headers.Add(string.Format("Token: {0}", token));
 
             GetPatientProgramsResponse response = client.Get<GetPatientProgramsResponse>(
                 string.Format(@"http://localhost:888/Nightingale/{0}/{1}/Patient/{2}/Programs/?Token={3}",

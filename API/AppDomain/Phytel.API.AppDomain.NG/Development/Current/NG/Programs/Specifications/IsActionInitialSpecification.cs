@@ -1,0 +1,40 @@
+﻿using Phytel.API.AppDomain.NG.DTO;
+using Phytel.API.Common.Specification;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Phytel.API.AppDomain.NG.PlanSpecification
+{
+    public class IsActionInitialSpecification<T> : Specification<T>
+    {
+        public override bool IsSatisfiedBy(T obj)
+        {
+            try
+            {
+                Program p = obj as Program;
+                bool result = true;
+                if (p.Modules != null)
+                {
+                    foreach (Module m in p.Modules)
+                    {
+                        foreach (Actions a in m.Actions)
+                        {
+                            if (a.ElementState == 4)
+                            {
+                                result = false;
+                            }
+                        }
+                    }
+                }
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("AD:PlanElementUtil:IsActionInitial()::" + ex.Message, ex.InnerException);
+            }
+        }
+    }
+}

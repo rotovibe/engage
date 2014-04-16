@@ -1,4 +1,5 @@
 using Phytel.API.AppDomain.NG.DTO;
+using Phytel.API.AppDomain.NG.Programs;
 using Phytel.API.Common.CustomObject;
 using Phytel.API.DataDomain.Cohort.DTO;
 using Phytel.API.DataDomain.Contact.DTO;
@@ -21,6 +22,11 @@ namespace Phytel.API.AppDomain.NG
 {
     public class NGManager : INGManager
     {
+        #region dependencies
+        public IPlanElementUtils PlanElementUtils { get; set; }
+        public IPlanElementEndpointUtils PlanElementEndpointUtils { get; set; }
+        #endregion
+
         #region Endpoint addresses
         protected static readonly string DDPatientServiceURL = ConfigurationManager.AppSettings["DDPatientServiceUrl"];
         protected static readonly string DDPatientProblemServiceUrl = ConfigurationManager.AppSettings["DDPatientProblemServiceUrl"];
@@ -473,17 +479,7 @@ namespace Phytel.API.AppDomain.NG
             {
                 GetPatientProgramDetailsSummaryResponse result = new GetPatientProgramDetailsSummaryResponse();
 
-                IRestClient client = new JsonServiceClient();
-                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Program/{5}/Details",
-                    DDProgramServiceUrl,
-                    "NG",
-                    request.Version,
-                    request.ContractNumber,
-                    request.PatientId,
-                    request.PatientProgramId), request.UserId);
-
-                DD.GetProgramDetailsSummaryResponse resp =
-                    client.Get<DD.GetProgramDetailsSummaryResponse>(url);
+                DD.GetProgramDetailsSummaryResponse resp = PlanElementEndpointUtils.RequestPatientProgramDetailsSummary(request);
 
                 if (resp != null)
                 {
@@ -491,16 +487,16 @@ namespace Phytel.API.AppDomain.NG
                     {
                         result.Program = new Program
                         {
-                            Id = resp.Program.Id.ToString(),
+                            Id = resp.Program.Id,
                             Client = resp.Program.Client,
                             Name = resp.Program.Name,
-                            ContractProgramId = resp.Program.ContractProgramId.ToString(),
+                            ContractProgramId = resp.Program.ContractProgramId,
                             Description = resp.Program.Description,
                             EligibilityEndDate = resp.Program.EligibilityEndDate,
                             EligibilityRequirements = resp.Program.EligibilityRequirements,
                             EligibilityStartDate = resp.Program.EligibilityStartDate,
                             EndDate = resp.Program.EndDate,
-                            PatientId = resp.Program.PatientId.ToString(),
+                            PatientId = resp.Program.PatientId,
                             ProgramState = resp.Program.ProgramState,
                             ShortName = resp.Program.ShortName,
                             StartDate = resp.Program.StartDate,
@@ -519,13 +515,7 @@ namespace Phytel.API.AppDomain.NG
                             CompletedBy = resp.Program.CompletedBy,
                             DateCompleted = resp.Program.DateCompleted,
                             Modules = getModuleInfo(resp, request),
-                            ObjectivesInfo = resp.Program.ObjectivesInfo.Select(r => new Objective
-                            {
-                                Id = r.Id.ToString(),
-                                Unit = r.Unit,
-                                Status = r.Status,
-                                Value = r.Value
-                            }).ToList()
+                            ObjectivesInfo = GetObjectivesInfo(resp.Program.ObjectivesInfo)
                         };
 
                         if (resp.Status != null)
@@ -537,6 +527,34 @@ namespace Phytel.API.AppDomain.NG
             catch (WebServiceException wse)
             {
                 throw new WebServiceException("AD:GetPatientProgramDetailsSummary()::" + wse.Message, wse.InnerException);
+            }
+        }
+
+        private List<Objective> GetObjectivesInfo(List<DD.ObjectivesDetail> list)
+        {
+            try
+            {
+                List<Objective> objs = new List<Objective>();
+
+                if (list != null)
+                {
+                    list.ForEach(r =>
+                    {
+                        objs.Add(new Objective
+                            {
+                                Id = r.Id.ToString(),
+                                Unit = r.Unit,
+                                Status = r.Status,
+                                Value = r.Value
+                            });
+                    });
+                }
+
+                return objs;
+        }
+            catch (Exception ex)
+            {
+                throw new WebServiceException("AD:GetObjectivesInfo()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -1186,34 +1204,44 @@ namespace Phytel.API.AppDomain.NG
         #region Private methods
         private List<Module> getModuleInfo(DD.GetProgramDetailsSummaryResponse resp, IAppDomainRequest request)
         {
-            return resp.Program.Modules.Select(r => new Module
+            try
             {
-                Id = r.Id,
-                ProgramId = r.ProgramId,
-                Description = r.Description,
-                Name = r.Name,
-                Status = (int)r.Status,
-                Completed = r.Completed,
-                Enabled = r.Enabled,
-                Next = r.Next,
-                Order = r.Order,
-                Previous = r.Previous,
-                SpawnElement = getSpawnElement(r),
-                SourceId = r.SourceId,
-                AssignBy = r.AssignBy,
-                AssignDate = r.AssignDate,
-                ElementState = r.ElementState,
-                CompletedBy = r.CompletedBy,
-                DateCompleted = r.DateCompleted,
-                Objectives = r.Objectives.Select(o => new Objective
+                List<Module> modules = null;
+                if (resp.Program.Modules != null)
                 {
-                    Id = o.Id.ToString(),
-                    Value = o.Value,
-                    Status = (int)o.Status,
-                    Unit = o.Unit
-                }).ToList(),
-                Actions = getActionsInfo(r, request, false)
-            }).ToList();
+                    modules = new List<Module>();
+                    resp.Program.Modules.ForEach(r =>
+                    {
+                        modules.Add(new Module
+                        {
+                            Id = r.Id,
+                            ProgramId = r.ProgramId,
+                            Description = r.Description,
+                            Name = r.Name,
+                            Status = (int)r.Status,
+                            Completed = r.Completed,
+                            Enabled = r.Enabled,
+                            Next = r.Next,
+                            Order = r.Order,
+                            Previous = r.Previous,
+                            SpawnElement = getSpawnElement(r),
+                            SourceId = r.SourceId,
+                            AssignBy = r.AssignBy,
+                            AssignDate = r.AssignDate,
+                            ElementState = r.ElementState,
+                            CompletedBy = r.CompletedBy,
+                            DateCompleted = r.DateCompleted,
+                            Objectives = GetObjectivesInfo(r.Objectives),
+                            Actions = getActionsInfo(r, request, false)
+                        });
+                    });
+                }
+                return modules;
+            }
+            catch (Exception ex)
+            {
+                throw new WebServiceException("AD:getModuleInfo()::" + ex.Message, ex.InnerException);
+            }
         }
 
         private List<Actions> getActionsInfo(DD.ModuleDetail r, IAppDomainRequest request, bool includeSteps)
@@ -1255,9 +1283,13 @@ namespace Phytel.API.AppDomain.NG
                         Value = x.Value
                     }).ToList()
                 };
-                if(includeSteps)
+                if (includeSteps)
                 {
-                   action.Steps = getStepsInfo(a, request);
+                    action.Steps = getStepsInfo(a, request);
+                }
+                else
+                {
+                    action.Steps = new List<Step>();
                 }
             }
             return action;

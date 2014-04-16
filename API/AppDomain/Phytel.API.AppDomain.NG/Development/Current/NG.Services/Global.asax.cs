@@ -10,6 +10,10 @@ using System.Web;
 using ServiceStack.WebHost.Endpoints.Extensions;
 using ServiceStack.Common.Web;
 using ServiceStack.Text;
+using Phytel.API.DataAudit;
+using Phytel.API.Common.Audit;
+using Phytel.API.Common.Format;
+using Phytel.API.AppDomain.NG.Programs;
 
 namespace Phytel.API.AppDomain.NG.Service
 {
@@ -29,6 +33,11 @@ namespace Phytel.API.AppDomain.NG.Service
                 //register any dependencies your services use, e.g:
                 container.RegisterAutoWiredAs<SecurityManager, ISecurityManager>();
                 container.RegisterAutoWiredAs<NGManager, INGManager>();
+                container.RegisterAutoWiredAs<AuditUtil, IAuditUtil>();
+                container.RegisterAutoWiredAs<CommonFormatterUtil, ICommonFormatterUtil>();
+                container.RegisterAutoWiredAs<PlanElementEndpointUtils, IPlanElementEndpointUtils>();
+                container.RegisterAutoWiredAs<PlanElementUtils, IPlanElementUtils>();
+
 
                 Plugins.Add(new RequestLogsFeature() { RequiredRoles = new string[] { } });
 
