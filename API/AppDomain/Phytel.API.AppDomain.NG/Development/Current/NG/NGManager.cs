@@ -610,7 +610,7 @@ namespace Phytel.API.AppDomain.NG
                 {
                     if (resp.ActionData != null)
                     {
-                        result.Action = getActionInfo(resp.ActionData, request);
+                        result.Action = getActionInfo(resp.ActionData, request, true);
 
                         if (resp.Status != null)
                             result.Status = resp.Status;
@@ -1212,18 +1212,18 @@ namespace Phytel.API.AppDomain.NG
                     Status = (int)o.Status,
                     Unit = o.Unit
                 }).ToList(),
-                Actions = getActionsInfo(r, request)
+                Actions = getActionsInfo(r, request, false)
             }).ToList();
         }
 
-        private List<Actions> getActionsInfo(DD.ModuleDetail r, IAppDomainRequest request)
+        private List<Actions> getActionsInfo(DD.ModuleDetail r, IAppDomainRequest request, bool includeSteps)
         {
             List<Actions> action = null;
-            action = r.Actions.Select(a => getActionInfo(a, request)).ToList();
+            action = r.Actions.Select(a => getActionInfo(a, request, includeSteps)).ToList();
             return action;
         }
 
-        private Actions getActionInfo(DD.ActionsDetail a, IAppDomainRequest request)
+        private Actions getActionInfo(DD.ActionsDetail a, IAppDomainRequest request, bool includeSteps)
         {
             Actions action = null;
             if (a != null)
@@ -1253,9 +1253,12 @@ namespace Phytel.API.AppDomain.NG
                         Unit = x.Unit,
                         Status = (int)x.Status,
                         Value = x.Value
-                    }).ToList(),
-                    Steps = getStepsInfo(a, request)
+                    }).ToList()
                 };
+                if(includeSteps)
+                {
+                   action.Steps = getStepsInfo(a, request);
+                }
             }
             return action;
         }
