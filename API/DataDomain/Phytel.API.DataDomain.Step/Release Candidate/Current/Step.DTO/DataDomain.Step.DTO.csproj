@@ -69,6 +69,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="GetAllTextStepDataRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="GetAllYesNoStepDataRequest.cs" />
+    <Compile Include="GetAllYesNoStepDataResponse.cs" />
+    <Compile Include="GetAllTextStepDataResponse.cs" />
     <Compile Include="GetTextStepDataRequest.cs" />
     <Compile Include="GetYesNoStepDataRequest.cs" />
     <Compile Include="GetTextStepDataResponse.cs" />
