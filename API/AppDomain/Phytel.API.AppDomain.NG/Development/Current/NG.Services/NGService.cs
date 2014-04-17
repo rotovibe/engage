@@ -19,6 +19,9 @@ namespace Phytel.API.AppDomain.NG.Service
         public IAuditUtil AuditUtil { get; set; }
         public ICommonFormatterUtil CommonFormatterUtil { get; set; }
 
+        private const string unknownBrowserType = "Unknown browser";
+        private const string unknownUserHostAddress = "Unknown IP";
+
         public GetPatientResponse Post(GetPatientRequest request)
         {
             GetPatientResponse response = new GetPatientResponse();
@@ -510,8 +513,8 @@ namespace Phytel.API.AppDomain.NG.Service
             {
                 if (result != null)
                 {
-                    string browser = (base.Request != null) ? base.Request.UserAgent : string.Empty;
-                    string hostAddress = (base.Request != null)? base.Request.UserHostAddress : string.Empty;
+                    string browser = (base.Request != null) ? base.Request.UserAgent : unknownBrowserType;
+                    string hostAddress = (base.Request != null)? base.Request.UserHostAddress : unknownUserHostAddress;
                     AuditUtil.LogAuditData(request, result.SQLUserId, null, browser, hostAddress, request.GetType().Name);
                 }
             }
@@ -586,7 +589,11 @@ namespace Phytel.API.AppDomain.NG.Service
             finally
             {
                 if (result != null)
-                    AuditHelper.LogAuditData(request, result.SQLUserId, null, System.Web.HttpContext.Current.Request, request.GetType().Name);
+                {
+                    string browser = (base.Request != null) ? base.Request.UserAgent : unknownBrowserType;
+                    string hostAddress = (base.Request != null) ? base.Request.UserHostAddress : unknownUserHostAddress;
+                    AuditUtil.LogAuditData(request, result.SQLUserId, null, browser, hostAddress, request.GetType().Name);
+                }
             }
 
             return response;
