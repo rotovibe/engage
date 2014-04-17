@@ -559,6 +559,44 @@ namespace Phytel.API.AppDomain.NG.Service
             return response; 
         }
 
+        public GetPatientActionDetailsResponse Get(GetPatientActionDetailsRequest request)
+        {
+            GetPatientActionDetailsResponse response = new GetPatientActionDetailsResponse();
+            ValidateTokenResponse result = null;
+
+            try
+            {
+                request.Token = base.Request.Headers["Token"] as string;
+                result = Security.IsUserValidated(request.Version, request.Token, request.ContractNumber);
+                if (result.UserId.Trim() != string.Empty)
+                {
+                    request.UserId = result.UserId;
+                    response = NGManager.GetPatientActionDetails(request);
+                }
+                else
+                    throw new UnauthorizedAccessException();
+
+            }
+            catch (Exception ex)
+            {
+                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+                if ((ex is WebServiceException) == false)
+                    NGManager.LogException(ex);
+            }
+            finally
+            {
+                List<string> patientIds = null;
+
+                if (request.PatientId != null)
+                    patientIds.Add(request.PatientId);
+
+                if (result != null)
+                    AuditHelper.LogAuditData(request, result.SQLUserId, patientIds, System.Web.HttpContext.Current.Request, request.GetType().Name);
+            }
+
+            return response;
+        }
+
         #region Contact
         public GetContactResponse Get(GetContactRequest request)
         {
