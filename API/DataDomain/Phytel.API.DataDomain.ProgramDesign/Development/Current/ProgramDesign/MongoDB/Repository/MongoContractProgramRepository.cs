@@ -100,7 +100,7 @@ namespace Phytel.API.DataDomain.ProgramDesign
 
             try
             {
-                using (ProgramMongoContext ctx = new ProgramMongoContext(_dbName))
+                using (ProgramDesignMongoContext ctx = new ProgramDesignMongoContext(_dbName))
                 {
                     IMongoQuery mQuery = Query.EQ(MEProgram.StatusProperty, 1);
                     MongoCursor<MEProgram> fnd = ctx.Programs.Collection.Find(mQuery);

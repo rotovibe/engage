@@ -66,26 +66,34 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IActionRepository.cs" />
     <Compile Include="IProgramDesignRepository.cs" />
-    <Compile Include="MongoDB\DTO\Action.cs" />
-    <Compile Include="MongoDB\DTO\DTOUtils.cs" />
+    <Compile Include="IStepRepository.cs" />
+    <Compile Include="MongoDB\DTO\MEAction.cs" />
     <Compile Include="MongoDB\DTO\MEProgram.cs" />
     <Compile Include="MongoDB\DTO\MEProgramAttribute.cs" />
     <Compile Include="MongoDB\DTO\MEProgramDesign.cs" />
     <Compile Include="MongoDB\DTO\MEResponse.cs" />
+    <Compile Include="MongoDB\DTO\MEStepBase.cs" />
+    <Compile Include="MongoDB\DTO\METext.cs" />
+    <Compile Include="MongoDB\DTO\MEYesNo.cs" />
     <Compile Include="MongoDB\DTO\Module.cs" />
-    <Compile Include="MongoDB\DTO\Objective.cs" />
     <Compile Include="MongoDB\DTO\PlanElement.cs" />
     <Compile Include="MongoDB\DTO\ProgramBase.cs" />
     <Compile Include="MongoDB\DTO\ResponseBase.cs" />
     <Compile Include="MongoDB\DTO\SpawnElement.cs" />
     <Compile Include="MongoDB\DTO\Step.cs" />
+    <Compile Include="IModuleRepository.cs" />
+    <Compile Include="MongoDB\Repository\MongoActionRepository.cs" />
     <Compile Include="MongoDB\Repository\MongoContractProgramRepository.cs" />
+    <Compile Include="MongoDB\Repository\MongoModuleRepository.cs" />
     <Compile Include="MongoDB\Repository\MongopResponseRepository.cs" />
     <Compile Include="MongoDB\Repository\MongoProgramDesignRepository.cs" />
     <Compile Include="MongoDB\ProgramDesignMongoContext.cs" />
     <Compile Include="DataProgramDesignManager.cs" />
     <Compile Include="MongoDB\Repository\MongoProgramRepository.cs" />
+    <Compile Include="MongoDB\Repository\MongoTextStepRepository.cs" />
+    <Compile Include="MongoDB\Repository\MongoYesNoStepRepository.cs" />
     <Compile Include="ProgramDesignRepositoryFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

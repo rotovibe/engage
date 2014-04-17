@@ -1,6 +1,6 @@
 ﻿using MongoDB.Bson;
 using Phytel.API.Common;
-using Phytel.API.DataDomain.ProgramDesign.DTO;
+//using Phytel.API.DataDomain.Program.DTO;
 using Phytel.API.Interface;
 using System;
 using System.Collections.Generic;
@@ -12,6 +12,54 @@ namespace Phytel.API.DataDomain.ProgramDesign.MongoDB.DTO
 {
     public static class DTOUtils
     {
+        public static MEPatientProgram CreateInitialMEPatientProgram(PutProgramToPatientRequest request, MEProgram cp, List<ObjectId> sil)
+        {
+            try
+            {
+                MEPatientProgram patientProgDoc = new MEPatientProgram(request.UserId)
+                {
+                    PatientId = ObjectId.Parse(request.PatientId),
+                    //AuthoredBy = cp.AuthoredBy,
+                    Client = cp.Client,
+                    ProgramState = Common.ProgramState.NotStarted,
+                    State = Common.ElementState.NotStarted,
+                    AssignedBy = cp.AssignedBy,
+                    AssignedOn = cp.AssignedOn,
+                    StartDate = System.DateTime.UtcNow, // utc time
+                    EndDate = null,
+                    DateCompleted = cp.DateCompleted,
+                    ContractProgramId = cp.Id,
+                    DeleteFlag = cp.DeleteFlag,
+                    Description = cp.Description,
+                    LastUpdatedOn = System.DateTime.UtcNow, // utc time
+                    Name = cp.Name,
+                    Objectives = cp.Objectives,
+                    CompletedBy = cp.CompletedBy,
+                    SourceId = cp.Id,
+                    ShortName = cp.ShortName,
+                    Status = cp.Status,
+                    Version = cp.Version,
+                    Spawn = cp.Spawn,
+                    Completed = cp.Completed,
+                    Enabled = cp.Enabled,
+                    Next = cp.Next,
+                    Order = cp.Order,
+                    Previous = cp.Previous,
+                    Modules = DTOUtils.GetClonedModules(cp.Modules, request.ContractNumber, request.UserId, sil)
+                    //,UpdatedBy = ObjectId.Parse(request.UserId)
+                };
+                if (!string.IsNullOrEmpty(request.UserId))
+                {
+                    patientProgDoc.UpdatedBy = ObjectId.Parse(request.UserId);
+                }
+                return patientProgDoc;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("DD:DTOUtils:CreateInitialMEPatientProgram()::" + ex.Message, ex.InnerException);
+            }
+        }
+
         public static List<Module> GetClonedModules(List<Module> list, string contractNumber, string userId, List<ObjectId> sil)
         {
             try
@@ -135,7 +183,7 @@ namespace Phytel.API.DataDomain.ProgramDesign.MongoDB.DTO
                             Title = b.Title,
                             Text = b.Text,
                             StepTypeId = b.StepTypeId,
-                            //Responses = b.Responses,
+                            Responses = b.Responses,
                             //Responses = GetContractStepResponses(b.Id, contractNumber, userId),
                             Completed = b.Completed,
                             ControlType = b.ControlType,
@@ -190,6 +238,95 @@ namespace Phytel.API.DataDomain.ProgramDesign.MongoDB.DTO
             //}).ToList();
         }
 
+        private static List<MEPatientProgramResponse> GetContractStepResponses(ObjectId stepId, string contractNumber, string userId)
+        {
+            List<MEResponse> responseList = null;
+            List<MEPatientProgramResponse> ppresponseList = new List<MEPatientProgramResponse>();
+            try
+            {
+                IProgramRepository<GetStepResponseListResponse> repo =
+                    ProgramRepositoryFactory<GetStepResponseListResponse>.GetStepResponseRepository(contractNumber, "NG", userId);
+
+                //ICollection<SelectExpression> selectExpressions = new List<SelectExpression>();
+
+                //SelectExpression stepResponseExpression = new SelectExpression();
+                //stepResponseExpression.FieldName = MEResponse.StepIdProperty;
+                //stepResponseExpression.Type = SelectExpressionType.EQ;
+                //stepResponseExpression.Value = stepId.ToString();
+                //stepResponseExpression.ExpressionOrder = 1;
+                //stepResponseExpression.GroupID = 1;
+                //selectExpressions.Add(stepResponseExpression);
+
+                //APIExpression apiExpression = new APIExpression();
+                //apiExpression.Expressions = selectExpressions;
+
+                //Tuple<string, IEnumerable<object>> stepResponses = repo.Select(apiExpression);
+                List<MEResponse> stepResponses = (List<MEResponse>)repo.Find(stepId.ToString());
+
+                if (stepResponses != null)
+                {
+                    responseList = stepResponses;
+                    responseList.ForEach(rs =>
+                    {
+                        ppresponseList.Add(new MEPatientProgramResponse(userId)
+                        {
+                            Id = rs.Id,
+                            Value = rs.Value,
+                            Text = rs.Text,
+                            StepId = rs.StepId,
+                            Spawn = rs.Spawn,
+                            Required = rs.Required,
+                            Order = rs.Order,
+                            Nominal = rs.Nominal,
+                            NextStepId = rs.NextStepId
+                        });
+                    });
+                }
+
+                return ppresponseList;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("DD:DTOUtils:GetContractStepResponses()::" + ex.Message, ex.InnerException);
+            }
+        }
+
+        private static List<MEPatientProgramResponse> GetStepResponses(ObjectId stepId, string contractNumber, string userId)
+        {
+            List<MEPatientProgramResponse> responseList = null;
+            try
+            {
+                IProgramRepository<GetStepResponseListResponse> repo =
+                    ProgramRepositoryFactory<GetStepResponseListResponse>.GetPatientProgramStepResponseRepository(contractNumber, "NG", userId);
+
+                ICollection<SelectExpression> selectExpressions = new List<SelectExpression>();
+
+                SelectExpression stepResponseExpression = new SelectExpression();
+                stepResponseExpression.FieldName = MEPatientProgramResponse.StepIdProperty;
+                stepResponseExpression.Type = SelectExpressionType.EQ;
+                stepResponseExpression.Value = stepId.ToString();
+                stepResponseExpression.ExpressionOrder = 1;
+                stepResponseExpression.GroupID = 1;
+                selectExpressions.Add(stepResponseExpression);
+
+                APIExpression apiExpression = new APIExpression();
+                apiExpression.Expressions = selectExpressions;
+
+                Tuple<string, IEnumerable<object>> stepResponses = repo.Select(apiExpression);
+
+                if (stepResponses != null)
+                {
+                responseList = stepResponses.Item2.Cast<MEPatientProgramResponse>().ToList();
+                }
+
+                return responseList;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("DD:DTOUtils:GetStepResponses()::" + ex.Message, ex.InnerException);
+            }
+        }
+
         public static GetStepResponseListResponse GetStepResponses(string stepId, string contractNumber, bool? service, string userId)
         {
             GetStepResponseListResponse StepResponseResponse = new GetStepResponseListResponse(); 
@@ -197,8 +334,8 @@ namespace Phytel.API.DataDomain.ProgramDesign.MongoDB.DTO
             List<StepResponse> returnResponseList = new List<StepResponse>();
             try
             {
-                IProgramDesignRepository<GetStepResponseListResponse> repo =
-                    ProgramDesignRepositoryFactory<GetStepResponseListResponse>.GetStepResponseRepository(contractNumber, "NG", userId);
+                IProgramRepository<GetStepResponseListResponse> repo =
+                    ProgramRepositoryFactory<GetStepResponseListResponse>.GetStepResponseRepository(contractNumber, "NG", userId);
 
                 ICollection<SelectExpression> selectExpressions = new List<SelectExpression>();
 
@@ -264,14 +401,14 @@ namespace Phytel.API.DataDomain.ProgramDesign.MongoDB.DTO
                                 {
                                     s.Id = RegisterIds(IdsList, s.Id);
                                     s.ActionId = a.Id;
-                                    //if (s.Responses != null)
-                                    //{
-                                    //    foreach (MEPatientProgramResponse r in s.Responses)
-                                    //    {
-                                    //        r.Id = RegisterIds(IdsList, r.Id);
-                                    //        r.StepId = s.Id;
-                                    //    }
-                                    //}
+                                    if (s.Responses != null)
+                                    {
+                                        foreach (MEPatientProgramResponse r in s.Responses)
+                                        {
+                                            r.Id = RegisterIds(IdsList, r.Id);
+                                            r.StepId = s.Id;
+                                        }
+                                    }
                                 }
                             }
                         }
@@ -309,38 +446,38 @@ namespace Phytel.API.DataDomain.ProgramDesign.MongoDB.DTO
                                         ReplaceNextAndPreviousIds(kv, s);
                                         ReplaceSpawnIdReferences(kv, s);
                                         ReplaceSelectedResponseId(kv, s);
-                                        //if (s.Responses != null)
-                                        //{
-                                        //    foreach (MEPatientProgramResponse r in s.Responses)
-                                        //    {
-                                        //        if (r.Id.Equals(kv.Key))
-                                        //        {
-                                        //            r.Id = kv.Value;
-                                        //        }
+                                        if (s.Responses != null)
+                                        {
+                                            foreach (MEPatientProgramResponse r in s.Responses)
+                                            {
+                                                if (r.Id.Equals(kv.Key))
+                                                {
+                                                    r.Id = kv.Value;
+                                                }
 
-                                        //        if (r.NextStepId != null)
-                                        //        {
-                                        //            if (r.NextStepId.Equals(kv.Key))
-                                        //            {
-                                        //                r.NextStepId = kv.Value;
-                                        //            }
-                                        //        }
+                                                if (r.NextStepId != null)
+                                                {
+                                                    if (r.NextStepId.Equals(kv.Key))
+                                                    {
+                                                        r.NextStepId = kv.Value;
+                                                    }
+                                                }
 
-                                        //        if (r.Spawn != null)
-                                        //        {
-                                        //            foreach (SpawnElement sp in r.Spawn)
-                                        //            {
-                                        //                if (sp.SpawnId != null)
-                                        //                {
-                                        //                    if (sp.SpawnId.Equals(kv.Key))
-                                        //                    {
-                                        //                        sp.SpawnId = kv.Value;
-                                        //                    }
-                                        //                }
-                                        //            }
-                                        //        }
-                                        //    }
-                                        //}
+                                                if (r.Spawn != null)
+                                                {
+                                                    foreach (SpawnElement sp in r.Spawn)
+                                                    {
+                                                        if (sp.SpawnId != null)
+                                                        {
+                                                            if (sp.SpawnId.Equals(kv.Key))
+                                                            {
+                                                                sp.SpawnId = kv.Value;
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
                                     }
                                 }
                             }
@@ -447,7 +584,7 @@ namespace Phytel.API.DataDomain.ProgramDesign.MongoDB.DTO
             }
         }
 
-        internal static List<SpawnElement> GetSpawnElements(List<ProgramDesign.DTO.SpawnElementDetail> list)
+        internal static List<SpawnElement> GetSpawnElements(List<Program.DTO.SpawnElementDetail> list)
         {
             try
             {
@@ -503,7 +640,7 @@ namespace Phytel.API.DataDomain.ProgramDesign.MongoDB.DTO
             }
         }
 
-        internal static List<Action> GetActionElements(List<ProgramDesign.DTO.ActionsDetail> list, string userId)
+        internal static List<Action> GetActionElements(List<Program.DTO.ActionsDetail> list, string userId)
         {
             try
             {
@@ -547,7 +684,7 @@ namespace Phytel.API.DataDomain.ProgramDesign.MongoDB.DTO
             }
         }
 
-        private static List<Step> GetStepsInfo(List<ProgramDesign.DTO.StepsDetail> list, string userId)
+        private static List<Step> GetStepsInfo(List<Program.DTO.StepsDetail> list, string userId)
         {
             try
             {
@@ -587,7 +724,7 @@ namespace Phytel.API.DataDomain.ProgramDesign.MongoDB.DTO
                             Text = st.Text,
                             Title = st.Title,
                             Spawn = GetSpawnElements(st.SpawnElement),
-                            //Responses = GetResponses(st.Responses, userId)
+                            Responses = GetResponses(st.Responses, userId)
                         });
                     });
                 }
@@ -613,6 +750,41 @@ namespace Phytel.API.DataDomain.ProgramDesign.MongoDB.DTO
             catch (Exception ex)
             {
                 throw new Exception("DD:DTOUtils:ParseObjectId()::" + ex.Message, ex.InnerException);
+            }
+        }
+
+        private static List<MEPatientProgramResponse> GetResponses(List<Program.DTO.ResponseDetail> list, string userId)
+        {
+            try
+            {
+                List<MEPatientProgramResponse> rs = null;
+                if (list != null)
+                {
+                    rs = new List<MEPatientProgramResponse>();
+
+                    list.ForEach(r =>
+                        {
+                            rs.Add(
+                                new MEPatientProgramResponse(userId)
+                                {
+                                    StepId = ObjectId.Parse(r.StepId),
+                                    NextStepId = ObjectId.Parse(r.NextStepId),
+                                    Id = ObjectId.Parse(r.Id),
+                                    Nominal = r.Nominal,
+                                    Order = r.Order,
+                                    Required = r.Required,
+                                    Text = r.Text,
+                                    Value = r.Value,
+                                    Spawn = GetSPawnElement(r.SpawnElement),
+                                    DeleteFlag = r.Delete
+                                });
+                        });
+                }
+                return rs;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("DD:DTOUtils:GetResponses()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -663,7 +835,7 @@ namespace Phytel.API.DataDomain.ProgramDesign.MongoDB.DTO
             }
         }
 
-        public static List<Objective> GetObjectives(List<ProgramDesign.DTO.ObjectivesDetail> list)
+        public static List<Objective> GetObjectives(List<Program.DTO.ObjectivesDetail> list)
         {
             try
             {
@@ -863,7 +1035,7 @@ namespace Phytel.API.DataDomain.ProgramDesign.MongoDB.DTO
                             ElementState = (int)s.State,
                             CompletedBy = s.CompletedBy,
                             DateCompleted = s.DateCompleted,
-                            //Responses = GetResponses(s, contract, userId),
+                            Responses = GetResponses(s, contract, userId),
                             SpawnElement = GetSpawnElement(s)
                         });
                 }
@@ -899,38 +1071,38 @@ namespace Phytel.API.DataDomain.ProgramDesign.MongoDB.DTO
             }
         }
 
-        //public static List<ResponseDetail> GetResponses(Step step, string contract, string userId)
-        //{
-        //    try
-        //    {
-        //        List<MEPatientProgramResponse> meresp = step.Responses;
-        //        List<ResponseDetail> resp = null;
+        public static List<ResponseDetail> GetResponses(Step step, string contract, string userId)
+        {
+            try
+            {
+                List<MEPatientProgramResponse> meresp = step.Responses;
+                List<ResponseDetail> resp = null;
 
-        //        if (meresp == null || meresp.Count == 0)
-        //        {
-        //            meresp = GetStepResponses(step.Id, contract, userId);
-        //        }
+                if (meresp == null || meresp.Count == 0)
+                {
+                    meresp = GetStepResponses(step.Id, contract, userId);
+                }
 
-        //        resp = meresp.Select(x => new ResponseDetail
-        //        {
-        //            Id = x.Id.ToString(),
-        //            NextStepId = x.NextStepId.ToString(),
-        //            Nominal = x.Nominal,
-        //            Order = x.Order,
-        //            Required = x.Required,
-        //            StepId = x.StepId.ToString(),
-        //            Text = x.Text,
-        //            Value = x.Value,
-        //            SpawnElement = GetResponseSpawnElement(x.Spawn)
-        //        }).ToList<ResponseDetail>();
+                resp = meresp.Select(x => new ResponseDetail
+                {
+                    Id = x.Id.ToString(),
+                    NextStepId = x.NextStepId.ToString(),
+                    Nominal = x.Nominal,
+                    Order = x.Order,
+                    Required = x.Required,
+                    StepId = x.StepId.ToString(),
+                    Text = x.Text,
+                    Value = x.Value,
+                    SpawnElement = GetResponseSpawnElement(x.Spawn)
+                }).ToList<ResponseDetail>();
 
-        //        return resp;
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        throw new Exception("DD:DTOUtils:GetResponses()::" + ex.Message, ex.InnerException);
-        //    }
-        //}
+                return resp;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("DD:DTOUtils:GetResponses()::" + ex.Message, ex.InnerException);
+            }
+        }
 
         public static List<SpawnElementDetail> GetResponseSpawnElement(List<SpawnElement> mESpawnElement)
         {
@@ -957,85 +1129,101 @@ namespace Phytel.API.DataDomain.ProgramDesign.MongoDB.DTO
             }
         }
 
-        //public static void RecurseAndSaveResponseObjects(MEPatientProgram prog, string contractNumber, string userId)
-        //{
-        //    try
-        //    {
-        //        foreach (Module m in prog.Modules)
-        //        {
-        //            foreach (Action a in m.Actions)
-        //            {
-        //                foreach (Step s in a.Steps)
-        //                {
-        //                    bool success = false;
-        //                        foreach (MEPatientProgramResponse r in s.Responses)
-        //                        {
-        //                            r.StepSourceId = s.SourceId;
-        //                            r.DeleteFlag = true;
-        //                            r.ActionId = a.Id;
-        //                            success = SaveResponseToDocument(r, contractNumber, userId);
-        //                        }
-        //                    if (success)
-        //                    {
-        //                        s.Responses = null;
-        //                    }
-        //                }
-        //            }
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        throw new ArgumentException("DD:DTOUtils:RecurseAndSaveResponseObjects()::" + ex.Message, ex.InnerException);
-        //    }
-        //}
+        public static void RecurseAndSaveResponseObjects(MEPatientProgram prog, string contractNumber, string userId)
+        {
+            try
+            {
+                foreach (Module m in prog.Modules)
+                {
+                    foreach (Action a in m.Actions)
+                    {
+                        foreach (Step s in a.Steps)
+                        {
+                            bool success = false;
+                                foreach (MEPatientProgramResponse r in s.Responses)
+                                {
+                                    r.StepSourceId = s.SourceId;
+                                    r.DeleteFlag = true;
+                                    r.ActionId = a.Id;
+                                    success = SaveResponseToDocument(r, contractNumber, userId);
+                                }
+                            if (success)
+                            {
+                                s.Responses = null;
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new ArgumentException("DD:DTOUtils:RecurseAndSaveResponseObjects()::" + ex.Message, ex.InnerException);
+            }
+        }
 
-        //public static List<MEPatientProgramResponse> RecurseAndStoreResponseObjects(MEPatientProgram prog, string contractNumber, string userId)
-        //{
-        //    try
-        //    {
-        //        List<MEPatientProgramResponse> ppr = new List<MEPatientProgramResponse>();
-        //        foreach (Module m in prog.Modules)
-        //        {
-        //            foreach (Action a in m.Actions)
-        //            {
-        //                foreach (Step s in a.Steps)
-        //                {
-        //                    foreach (MEPatientProgramResponse r in s.Responses)
-        //                    {
-        //                        r.DeleteFlag = false;
-        //                        r.RecordCreatedBy = ObjectId.Parse(userId);
-        //                        r.RecordCreatedOn = DateTime.UtcNow;
+        public static bool SavePatientProgramResponses(List<MEPatientProgramResponse> pprs, PutProgramToPatientRequest request)
+        {
+            try
+            {
+                IProgramRepository<MEPatientProgramResponse> repo =
+                    ProgramRepositoryFactory<MEPatientProgramResponse>.GetPatientProgramStepResponseRepository(request.ContractNumber, "NG", request.UserId);
 
-        //                        if (!ppr.Contains(r))
-        //                            ppr.Add(r);
-        //                    }
-        //                }
-        //            }
-        //        }
-        //        return ppr;
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        throw new ArgumentException("DD:DTOUtils:RecurseAndStoreResponseObjects()::" + ex.Message, ex.InnerException);
-        //    }
-        //}
+                bool result = (bool)((MongoPatientProgramResponseRepository<MEPatientProgramResponse>)repo).InsertAsBatch(pprs);
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw new ArgumentException("DD:DTOUtils:SavePatientProgramResponses()::" + ex.Message, ex.InnerException);
+            }
+        }
 
-        //private static bool SaveResponseToDocument(MEPatientProgramResponse r, string contractNumber, string userId)
-        //{
-        //    bool result = false;
-        //    try
-        //    {
-        //        IProgramRepository<MEPatientProgramResponse> repo =
-        //            ProgramRepositoryFactory<MEPatientProgramResponse>.GetPatientProgramStepResponseRepository(contractNumber, "NG", userId);
+        public static List<MEPatientProgramResponse> RecurseAndStoreResponseObjects(MEPatientProgram prog, string contractNumber, string userId)
+        {
+            try
+            {
+                List<MEPatientProgramResponse> ppr = new List<MEPatientProgramResponse>();
+                foreach (Module m in prog.Modules)
+                {
+                    foreach (Action a in m.Actions)
+                    {
+                        foreach (Step s in a.Steps)
+                        {
+                            foreach (MEPatientProgramResponse r in s.Responses)
+                            {
+                                r.DeleteFlag = false;
+                                r.RecordCreatedBy = ObjectId.Parse(userId);
+                                r.RecordCreatedOn = DateTime.UtcNow;
 
-        //        result = (Boolean)repo.Insert(r);
-        //        return result;
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        throw new ArgumentException("DD:DTOUtils:SaveResponseToDocument()::" + ex.Message, ex.InnerException);
-        //    }
-        //}
+                                if (!ppr.Contains(r))
+                                    ppr.Add(r);
+                            }
+                        }
+                    }
+                }
+                return ppr;
+            }
+            catch (Exception ex)
+            {
+                throw new ArgumentException("DD:DTOUtils:RecurseAndStoreResponseObjects()::" + ex.Message, ex.InnerException);
+            }
+        }
+
+        private static bool SaveResponseToDocument(MEPatientProgramResponse r, string contractNumber, string userId)
+        {
+            bool result = false;
+            try
+            {
+                IProgramRepository<MEPatientProgramResponse> repo =
+                    ProgramRepositoryFactory<MEPatientProgramResponse>.GetPatientProgramStepResponseRepository(contractNumber, "NG", userId);
+
+                result = (Boolean)repo.Insert(r);
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw new ArgumentException("DD:DTOUtils:SaveResponseToDocument()::" + ex.Message, ex.InnerException);
+            }
+        }
 
         internal static ProgramAttribute InitializeElementAttributes(ProgramInfo p)
         {
@@ -1059,88 +1247,185 @@ namespace Phytel.API.DataDomain.ProgramDesign.MongoDB.DTO
             }
         }
 
-        //internal static void InitializeProgramAttributes(PutProgramToPatientRequest request, PutProgramToPatientResponse response)
-        //{
-        //    try
-        //    {
-        //        // create program attribute insertion
-        //        ProgramAttribute attr = DTOUtils.InitializeElementAttributes(response.program);
+        internal static void InitializeProgramAttributes(PutProgramToPatientRequest request, PutProgramToPatientResponse response)
+        {
+            try
+            {
+                // create program attribute insertion
+                ProgramAttribute attr = DTOUtils.InitializeElementAttributes(response.program);
 
-        //        IProgramRepository<PutProgramAttributesResponse> attrRepo =
-        //            Phytel.API.DataDomain.Program.ProgramRepositoryFactory<PutProgramAttributesResponse>
-        //            .GetProgramAttributesRepository(request.ContractNumber, request.Context, request.UserId);
+                IProgramRepository<PutProgramAttributesResponse> attrRepo =
+                    Phytel.API.DataDomain.Program.ProgramRepositoryFactory<PutProgramAttributesResponse>
+                    .GetProgramAttributesRepository(request.ContractNumber, request.Context, request.UserId);
 
-        //        attrRepo.Insert(attr);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        throw new Exception("DD:DTOUtils:InitializeProgramAttributes()::" + ex.Message, ex.InnerException);
-        //    }
-        //}
+                attrRepo.Insert(attr);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("DD:DTOUtils:InitializeProgramAttributes()::" + ex.Message, ex.InnerException);
+            }
+        }
 
-        //internal static List<MEResponse> GetProgramResponseslist(List<ObjectId> idl, MEProgram cp, PutProgramToPatientRequest request)
-        //{
-        //    try
-        //    {
-        //        List<MEResponse> list = null;
-        //        IProgramRepository<PutProgramToPatientResponse> respRepo =
-        //            Phytel.API.DataDomain.Program.ProgramRepositoryFactory<PutProgramToPatientResponse>
-        //            .GetStepResponseRepository(request.ContractNumber, request.Context, request.UserId);
+        internal static bool CanInsertPatientProgram(List<MEPatientProgram> pp)
+        {
+            try
+            {
+                bool result = true;
+                if (pp == null)
+                {
+                    result = true;
+                }
+                else if (pp.Count >= 1)
+                {
+                    foreach (MEPatientProgram p in pp)
+                    {
+                        if (!p.State.Equals(ElementState.Removed) && !p.State.Equals(ElementState.Completed))
+                        {
+                            result = false;
+                            break;
+                        }
+                    }
+                }
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("DD:PatientProgramRepository:CanInsertPatientProgram()::" + ex.Message, ex.InnerException);
+            }
+        }
 
-        //        list = ((MongoResponseRepository<PutProgramToPatientResponse>)respRepo).Find(idl) as List<MEResponse>;
-        //        return list;
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        throw new Exception("DD:DataProgramManager:GetProgramResponseslist()::" + ex.Message, ex.InnerException);
-        //    }
-        //}
+        internal static List<MEPatientProgram> FindExistingpatientProgram(PutProgramToPatientRequest request)
+        {
+            try
+            {
+                IProgramRepository<PutProgramToPatientResponse> pRepo = ProgramRepositoryFactory<PutProgramToPatientResponse>
+                    .GetPatientProgramRepository(request.ContractNumber, request.Context, request.UserId);
 
-        //internal static void HydrateResponsesInProgram(MEProgram prog, List<MEResponse> responseList, string usrId)
-        //{
-        //    try
-        //    {
-        //        foreach (Module m in prog.Modules)
-        //        {
-        //            foreach (Action a in m.Actions)
-        //            {
-        //                foreach (Step s in a.Steps)
-        //                {
-        //                    List<MEResponse> resps = responseList.FindAll(st => st.StepId == s.Id);
-        //                    List<MEPatientProgramResponse> mrp = new List<MEPatientProgramResponse>();
-        //                    resps.ForEach(rs =>
-        //                    {
-        //                        mrp.Add(
-        //                        new MEPatientProgramResponse(usrId)
-        //                        {
-        //                            Id = rs.Id,
-        //                            StepId = rs.StepId,
-        //                            StepSourceId = rs.StepSourceId,
-        //                            NextStepId = rs.NextStepId,
-        //                            Nominal = rs.Nominal,
-        //                            Order = rs.Order,
-        //                            Required = rs.Required,
-        //                            Selected = rs.Selected,
-        //                            Text = rs.Text,
-        //                            Spawn = rs.Spawn,
-        //                            Value = rs.Value,
-        //                            Version = rs.Version
-        //                        });
-        //                    });
-        //                    s.Responses = mrp;
-        //                }
-        //            }
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        throw new ArgumentException("DD:DTOUtils:HydrateResponsesInProgram()::" + ex.Message, ex.InnerException);
-        //    }
-        //}
+                List<MEPatientProgram> pp =
+                    ((MongoPatientProgramRepository<PutProgramToPatientResponse>)pRepo)
+                    .FindByEntityExistsID(request.PatientId, request.ContractProgramId) as List<MEPatientProgram>;
+                return pp;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("DD:DataProgramManager:FindExistingpatientProgram()::" + ex.Message, ex.InnerException);
+            }
+        }
 
-        //internal static List<ObjectId> GetStepIds(MEPatientProgram mepp)
-        //{
-        //    throw new NotImplementedException();
-        //}
+        internal static MEProgram GetProgramForDeepCopy(PutProgramToPatientRequest request)
+        {
+            try
+            {
+                IProgramRepository<PutProgramToPatientResponse> pgRepo = ProgramRepositoryFactory<PutProgramToPatientResponse>
+                    .GetProgramRepository(request.ContractNumber, request.Context, request.UserId);
+                MEProgram cp = (MEProgram)pgRepo.FindByID(request.ContractProgramId.ToString());
+                return cp;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("DD:DataProgramManager:GetProgram()::" + ex.Message, ex.InnerException);
+            }
+        }
+
+        internal static ProgramInfo SaveNewPatientProgram(PutProgramToPatientRequest request, MEPatientProgram nmePP)
+        {
+            try
+            {
+                // give this the formatted patient program ready for saving
+                IProgramRepository<PutProgramToPatientResponse> patProgRepo =
+                    Phytel.API.DataDomain.Program.ProgramRepositoryFactory<PutProgramToPatientResponse>
+                    .GetPatientProgramRepository(request.ContractNumber, request.Context, request.UserId);
+
+                ProgramInfo pi = (ProgramInfo)patProgRepo.Insert((object)nmePP);
+                return pi;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("DD:DataProgramManager:SaveNewPatientProgram()::" + ex.Message, ex.InnerException);
+            }
+        }
+
+        internal static List<MEPatientProgramResponse> InitializePatientProgramAssignment(PutProgramToPatientRequest request, MEPatientProgram nmePP)
+        {
+            try
+            {
+                List<MEPatientProgramResponse> pprs = new List<MEPatientProgramResponse>();
+                // update to new ids and their references
+                Dictionary<ObjectId, ObjectId> IdsList = new Dictionary<ObjectId, ObjectId>();
+                DTOUtils.RecurseAndReplaceIds(nmePP.Modules, IdsList);
+                pprs = DTOUtils.RecurseAndStoreResponseObjects(nmePP, request.ContractNumber, request.UserId);
+                //DTOUtils.RecurseAndSaveResponseObjects(nmePP, request.ContractNumber, request.UserId);
+                return pprs;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("DD:DataProgramManager:InitializePatientProgramAssignment()::" + ex.Message, ex.InnerException);
+            }
+        }
+
+        internal static List<MEResponse> GetProgramResponseslist(List<ObjectId> idl, MEProgram cp, PutProgramToPatientRequest request)
+        {
+            try
+            {
+                List<MEResponse> list = null;
+                IProgramRepository<PutProgramToPatientResponse> respRepo =
+                    Phytel.API.DataDomain.Program.ProgramRepositoryFactory<PutProgramToPatientResponse>
+                    .GetStepResponseRepository(request.ContractNumber, request.Context, request.UserId);
+
+                list = ((MongoResponseRepository<PutProgramToPatientResponse>)respRepo).Find(idl) as List<MEResponse>;
+                return list;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("DD:DataProgramManager:GetProgramResponseslist()::" + ex.Message, ex.InnerException);
+            }
+        }
+
+        internal static void HydrateResponsesInProgram(MEProgram prog, List<MEResponse> responseList, string usrId)
+        {
+            try
+            {
+                foreach (Module m in prog.Modules)
+                {
+                    foreach (Action a in m.Actions)
+                    {
+                        foreach (Step s in a.Steps)
+                        {
+                            List<MEResponse> resps = responseList.FindAll(st => st.StepId == s.Id);
+                            List<MEPatientProgramResponse> mrp = new List<MEPatientProgramResponse>();
+                            resps.ForEach(rs =>
+                            {
+                                mrp.Add(
+                                new MEPatientProgramResponse(usrId)
+                                {
+                                    Id = rs.Id,
+                                    StepId = rs.StepId,
+                                    StepSourceId = rs.StepSourceId,
+                                    NextStepId = rs.NextStepId,
+                                    Nominal = rs.Nominal,
+                                    Order = rs.Order,
+                                    Required = rs.Required,
+                                    Selected = rs.Selected,
+                                    Text = rs.Text,
+                                    Spawn = rs.Spawn,
+                                    Value = rs.Value,
+                                    Version = rs.Version
+                                });
+                            });
+                            s.Responses = mrp;
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new ArgumentException("DD:DTOUtils:HydrateResponsesInProgram()::" + ex.Message, ex.InnerException);
+            }
+        }
+
+        internal static List<ObjectId> GetStepIds(MEPatientProgram mepp)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -35,6 +35,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Phytel.Mongo, Version=1.2.3.0, Culture=neutral, PublicKeyToken=2125ac4128f3087b, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\References\Phytel.Mongo.dll</HintPath>
+    </Reference>
     <Reference Include="ServiceStack">
       <HintPath>..\..\..\..\..\packages\ServiceStack.3.9.70\lib\net35\ServiceStack.dll</HintPath>
     </Reference>
@@ -69,6 +73,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="GetActionDataRequest.cs" />
+    <Compile Include="GetActionDataResponse.cs" />
+    <Compile Include="GetAllActionsDataRequest.cs" />
+    <Compile Include="GetAllActionsDataResponse.cs" />
     <Compile Include="GetAllModulesRequest.cs" />
     <Compile Include="GetAllModulesResponse.cs" />
     <Compile Include="ActionDetail.cs" />
@@ -78,6 +86,10 @@
     <Compile Include="GetAllProgramDesignsRequest.cs" />
     <Compile Include="GetAllProgramsRequest.cs" />
     <Compile Include="GetAllProgramsResponse.cs" />
+    <Compile Include="GetAllTextStepDataRequest.cs" />
+    <Compile Include="GetAllTextStepDataResponse.cs" />
+    <Compile Include="GetAllYesNoStepDataRequest.cs" />
+    <Compile Include="GetAllYesNoStepDataResponse.cs" />
     <Compile Include="GetContractProgramRequest.cs" />
     <Compile Include="GetContractProgramResponse.cs" />
     <Compile Include="GetProgramAttributeRequest.cs" />
@@ -97,6 +109,10 @@
     <Compile Include="GetStepResponseListResponse.cs" />
     <Compile Include="GetStepResponseRequest.cs" />
     <Compile Include="GetStepResponseResponse.cs" />
+    <Compile Include="GetTextStepDataRequest.cs" />
+    <Compile Include="GetTextStepDataResponse.cs" />
+    <Compile Include="GetYesNoStepDataRequest.cs" />
+    <Compile Include="GetYesNoStepDataResponse.cs" />
     <Compile Include="ModuleDetail.cs" />
     <Compile Include="ObjectivesDetail.cs" />
     <Compile Include="PlanElementDetail.cs" />

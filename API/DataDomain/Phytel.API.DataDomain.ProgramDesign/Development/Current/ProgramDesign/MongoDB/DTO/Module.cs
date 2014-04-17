@@ -9,9 +9,9 @@ using Phytel.API.Common;
 
 namespace Phytel.API.DataDomain.ProgramDesign.MongoDB.DTO
 {
-    public class Module : PlanElement
+    public class MEModule : IMongoEntity<ObjectId>, IMEEntity
     {
-        public Module() { Id = ObjectId.GenerateNewId(); }
+        public MEModule() { Id = ObjectId.GenerateNewId(); }
 
         public const string IdProperty = "_id";
         [BsonElement(IdProperty)]
@@ -40,5 +40,87 @@ namespace Phytel.API.DataDomain.ProgramDesign.MongoDB.DTO
         public const string StatusProperty = "sts";
         [BsonElement(StatusProperty)]
         public Status Status { get; set; }
+
+        public BsonDocument ExtraElements
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+            set
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        public double Version
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+            set
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        public ObjectId? UpdatedBy
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+            set
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        public bool DeleteFlag
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+            set
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        public DateTime? TTLDate
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+            set
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        public DateTime? LastUpdatedOn
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+            set
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        public ObjectId RecordCreatedBy
+        {
+            get { throw new NotImplementedException(); }
+        }
+
+        public DateTime RecordCreatedOn
+        {
+            get { throw new NotImplementedException(); }
+        }
     }
 }

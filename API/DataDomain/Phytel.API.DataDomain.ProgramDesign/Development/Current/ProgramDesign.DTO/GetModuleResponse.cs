@@ -2,6 +2,7 @@ using ServiceStack.ServiceInterface.ServiceModel;
 using System.Collections.Generic;
 using Phytel.API.Interface;
 using Phytel.API.Common;
+using Phytel.API.DataDomain.ProgramDesign;
 
 namespace Phytel.API.DataDomain.ProgramDesign.DTO
 {
@@ -20,5 +21,7 @@ namespace Phytel.API.DataDomain.ProgramDesign.DTO
         public List<string> Objectives { get; set; }
         public string Description { get; set; }
         public Status Status { get; set; }
+
+        //public List<Action> Actions { get; set; }
     }
 }

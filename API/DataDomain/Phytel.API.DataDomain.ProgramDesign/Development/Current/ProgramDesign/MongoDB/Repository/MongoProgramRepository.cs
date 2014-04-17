@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Phytel.API.DataDomain.ProgramDesign.DTO;
+//using Phytel.API.DataDomain.ProgramDesign.DTO;
 using Phytel.API.Interface;
 using MongoDB.Driver;
 using MB = MongoDB.Driver.Builders;
@@ -11,6 +11,8 @@ using MongoDB.Bson;
 using Phytel.API.DataDomain.ProgramDesign;
 using Phytel.API.DataDomain.ProgramDesign.MongoDB.DTO;
 using MongoDB.Bson.Serialization;
+using Phytel.API.DataDomain.ProgramDesign;
+using Phytel.API.DataDomain.ProgramDesign.DTO;
 
 namespace Phytel.API.DataDomain.Program
 {
@@ -79,11 +81,11 @@ namespace Phytel.API.DataDomain.Program
             }
         }
 
-        public DTO.Program FindByName(string entityName)
+        public Phytel.API.DataDomain.ProgramDesign.DTO.Program FindByName(string entityName)
         {
             try
             {
-                DTO.Program result = null;
+                Phytel.API.DataDomain.ProgramDesign.DTO.Program result = null;
 
                 using (ProgramDesignMongoContext ctx = new ProgramDesignMongoContext(_dbName))
                 {
@@ -92,7 +94,7 @@ namespace Phytel.API.DataDomain.Program
 
                     if (cp != null)
                     {
-                        result = new DTO.Program
+                        result = new Phytel.API.DataDomain.ProgramDesign.DTO.Program
                             {
                                 ProgramID = cp.Id.ToString()
                             };

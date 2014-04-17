@@ -58,7 +58,7 @@ namespace Phytel.API.DataDomain.ProgramDesign
                 Nominal = rs.Nominal,
                 Order = rs.Order,
                 Required = rs.Required,
-                Spawn = DTOUtils.GetSpawnElements(rs.SpawnElement),
+                //Spawn = DTOUtils.GetSpawnElements(rs.SpawnElement),
                 StepId = ObjectId.Parse(rs.StepId),
                 Text = rs.Text,
                 Value = rs.Value,
@@ -70,7 +70,7 @@ namespace Phytel.API.DataDomain.ProgramDesign
 
             bool res = false;
 
-                using (ProgramMongoContext ctx = new ProgramMongoContext(_dbName))
+                using (ProgramDesignMongoContext ctx = new ProgramDesignMongoContext(_dbName))
                 {
                     ctx.Responses.Collection.Insert(mer);
                     
@@ -110,7 +110,7 @@ namespace Phytel.API.DataDomain.ProgramDesign
             MEResponse response = null;
             try
             {
-                using (ProgramMongoContext ctx = new ProgramMongoContext(_dbName))
+                using (ProgramDesignMongoContext ctx = new ProgramDesignMongoContext(_dbName))
                 {
                     var findcp = MB.Query<MEResponse>.EQ(b => b.Id, ObjectId.Parse(entityID));
                     response = ctx.Responses.Collection.Find(findcp).FirstOrDefault();
@@ -133,7 +133,7 @@ namespace Phytel.API.DataDomain.ProgramDesign
 
             mQuery = MongoDataUtil.ExpressionQueryBuilder(expression);
 
-            using (ProgramMongoContext ctx = new ProgramMongoContext(_dbName))
+            using (ProgramDesignMongoContext ctx = new ProgramDesignMongoContext(_dbName))
             {
                 rps = ctx.Responses.Collection.Find(mQuery).ToList<object>();
             }
@@ -157,7 +157,7 @@ namespace Phytel.API.DataDomain.ProgramDesign
             bool result = false;
             try
             {
-                using (ProgramMongoContext ctx = new ProgramMongoContext(_dbName))
+                using (ProgramDesignMongoContext ctx = new ProgramDesignMongoContext(_dbName))
                 {
                     var q = MB.Query<MEResponse>.EQ(b => b.Id, resp.Id);
 

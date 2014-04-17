@@ -51,6 +51,6 @@ namespace Phytel.API.DataDomain.ProgramDesign.MongoDB.DTO
         public const string ModulesProperty = "ms";
         [BsonElement(ModulesProperty)]
         [BsonIgnoreIfNull(true)]
-        public List<Module> Modules { get; set; }
+        public List<MEModule> Modules { get; set; }
     }
 }
