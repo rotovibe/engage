@@ -45,7 +45,10 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
                     Next = cp.Next,
                     Order = cp.Order,
                     Previous = cp.Previous,
-                    Modules = DTOUtils.GetClonedModules(cp.Modules, request.ContractNumber, request.UserId, sil)
+                    Modules = DTOUtils.GetClonedModules(cp.Modules, request.ContractNumber, request.UserId, sil),
+                    EligibilityEndDate = cp.EligibilityEndDate,
+                    EligibilityStartDate = cp.EligibilityStartDate,
+                    EligibilityRequirements = cp.EligibilityRequirements
                     //,UpdatedBy = ObjectId.Parse(request.UserId)
                 };
                 if (!string.IsNullOrEmpty(request.UserId))

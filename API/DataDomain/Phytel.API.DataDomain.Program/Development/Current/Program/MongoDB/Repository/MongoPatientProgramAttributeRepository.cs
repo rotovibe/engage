@@ -80,10 +80,10 @@ namespace Phytel.API.DataDomain.Program
                         DidNotEnrollReason = pa.DidNotEnrollReason,
                         //DisEnrollReason = pa.DisEnrollReason,
                         Eligibility = (EligibilityStatus)pa.Eligibility,
-                        EligibilityEndDate = pa.EligibilityEndDate,
+                        //EligibilityEndDate = pa.EligibilityEndDate,
                         //EligibilityOverride = (EligibilityOverride)pa.EligibilityOverride,
-                        EligibilityRequirements = pa.EligibilityRequirements,
-                        EligibilityStartDate = pa.EligibilityStartDate,
+                        //EligibilityRequirements = pa.EligibilityRequirements,
+                        //EligibilityStartDate = pa.EligibilityStartDate,
                         EndDate = pa.EndDate,
                         Enrollment = (EnrollmentStatus)pa.Enrollment,
                         GraduatedFlag = (Graduated)pa.GraduatedFlag,
@@ -205,10 +205,10 @@ namespace Phytel.API.DataDomain.Program
                             DidNotEnrollReason = cp.DidNotEnrollReason,
                             //DisEnrollReason = cp.DisEnrollReason,
                             Eligibility = (int)cp.Eligibility,
-                            EligibilityEndDate = cp.EligibilityEndDate,
+                            //EligibilityEndDate = cp.EligibilityEndDate,
                             //EligibilityOverride = (int)cp.EligibilityOverride,
-                            EligibilityRequirements = cp.EligibilityRequirements,
-                            EligibilityStartDate = cp.EligibilityStartDate,
+                            //EligibilityRequirements = cp.EligibilityRequirements,
+                            //EligibilityStartDate = cp.EligibilityStartDate,
                             EndDate = cp.EndDate,
                             Enrollment = (int)cp.Enrollment,
                             GraduatedFlag = (int)cp.GraduatedFlag,
@@ -263,9 +263,9 @@ namespace Phytel.API.DataDomain.Program
                     if (mepa.OverrideReason != null) uv.Add(MB.Update.Set(MEProgramAttribute.OverrideReasonProperty, mepa.OverrideReason));
                     if (mepa.Status != 0) uv.Add(MB.Update.Set(MEProgramAttribute.StatusProperty, (Status)mepa.Status));
                     // eligibility
-                    if (mepa.EligibilityEndDate != null) uv.Add(MB.Update.Set(MEProgramAttribute.EligibilityEndDateProperty, mepa.EligibilityEndDate));
-                    if (mepa.EligibilityRequirements != null) uv.Add(MB.Update.Set(MEProgramAttribute.EligibilityRequirementsProperty, mepa.EligibilityRequirements));
-                    if (mepa.EligibilityStartDate != null) uv.Add(MB.Update.Set(MEProgramAttribute.EligibilityStartDateProperty, mepa.EligibilityStartDate));
+                    //if (mepa.EligibilityEndDate != null) uv.Add(MB.Update.Set(MEProgramAttribute.EligibilityEndDateProperty, mepa.EligibilityEndDate));
+                    //if (mepa.EligibilityRequirements != null) uv.Add(MB.Update.Set(MEProgramAttribute.EligibilityRequirementsProperty, mepa.EligibilityRequirements));
+                    //if (mepa.EligibilityStartDate != null) uv.Add(MB.Update.Set(MEProgramAttribute.EligibilityStartDateProperty, mepa.EligibilityStartDate));
                     if (mepa.IneligibleReason != null) uv.Add(MB.Update.Set(MEProgramAttribute.IneligibleReasonProperty, mepa.IneligibleReason));
                     //if (mepa.EligibilityOverride != 0) uv.Add(MB.Update.Set(MEProgramAttribute.EligibilityOverrideProperty, (EligibilityOverride)mepa.EligibilityOverride));
                     if (mepa.Eligibility != 0) uv.Add(MB.Update.Set(MEProgramAttribute.EligibilityProperty, (EligibilityStatus)mepa.Eligibility));

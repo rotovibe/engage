@@ -296,6 +296,9 @@ namespace Phytel.API.DataDomain.Program
                     ElementState = (int)mepp.State,
                     CompletedBy = mepp.CompletedBy,
                     DateCompleted = mepp.DateCompleted,
+                    EligibilityEndDate = mepp.EligibilityEndDate,
+                    EligibilityStartDate = mepp.EligibilityStartDate,
+                    EligibilityRequirements = mepp.EligibilityRequirements,
                     ObjectivesInfo = DTOUtils.GetObjectives(mepp.Objectives),
                     SpawnElement = DTOUtils.GetSpawnElement(mepp),
                     Modules = DTOUtils.GetModules(mepp.Modules, request.ContractNumber, request.UserId)
