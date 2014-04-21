@@ -1,20 +1,18 @@
+using MongoDB.Bson;
+using MongoDB.Bson.Serialization;
+using MongoDB.Driver;
+using Phytel.API.DataDomain.ProgramDesign;
+using Phytel.API.DataDomain.ProgramDesign.DTO;
+using Phytel.API.DataDomain.ProgramDesign.MongoDB.DTO;
+using Phytel.API.Interface;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-//using Phytel.API.DataDomain.ProgramDesign.DTO;
-using Phytel.API.Interface;
-using MongoDB.Driver;
 using MB = MongoDB.Driver.Builders;
-using MongoDB.Bson;
-using Phytel.API.DataDomain.ProgramDesign;
-using Phytel.API.DataDomain.ProgramDesign.MongoDB.DTO;
-using MongoDB.Bson.Serialization;
-using Phytel.API.DataDomain.ProgramDesign;
-using Phytel.API.DataDomain.ProgramDesign.DTO;
 
-namespace Phytel.API.DataDomain.Program
+namespace Phytel.API.DataDomain.ProgramDesign
 {
     public class MongoProgramRepository<T> : IProgramDesignRepository<T>
     {
@@ -45,7 +43,68 @@ namespace Phytel.API.DataDomain.Program
 
         public object Insert(object newEntity)
         {
-            throw new NotImplementedException();
+            PutProgramDataRequest request = newEntity as PutProgramDataRequest;
+            MEProgram program = new MEProgram(this.UserId)
+            {
+                Id = ObjectId.GenerateNewId(),
+                Name = request.Name,
+                Description = request.Description,
+                ShortName = request.ShortName,
+                AssignedBy = request.AssignedBy,
+                AssignedOn = DateTime.Parse(request.AssignedOn),
+                Client = ObjectId.Parse(request.Client),
+                Order = request.Order
+            };
+
+            //List<MEModule> modules = new List<MEModule>();
+            //foreach(Module m in request.Modules)
+            //{
+            //    MEModule mod = new MEModule()
+            //    {
+            //        Name = m.Name,
+            //        Description = m.Description,
+            //        Id = ObjectId.Parse(m.Id),
+            //        ProgramId = program.Id,
+            //        Status = m.Status,
+            //        Version = m.Version
+            //    };
+
+            //    List<Objective> objectives = new List<Objective>();
+            //    foreach(string o in m.Objectives)
+            //    {
+            //        Objective obj = new Objective()
+            //        {
+            //            Id = ObjectId.GenerateNewId(),
+            //            Value = o
+            //        };
+            //        objectives.Add(obj);
+            //    }
+
+            //    List<MEAction> actions = new List<MEAction>();
+            //    foreach(ActionData a in m.Actions)
+            //    {
+            //        MEAction action = new MEAction(this.UserId)
+            //        {
+            //            Id = ObjectId.Parse(a.ID),
+            //            Name = a.Name,
+            //            Description = a.Description,
+            //            CompletedBy = ObjectId.Parse(a.CompletedBy),
+            //            Status = Common. a.Status
+            //        };
+            //    }
+            //    modules.Add(mod);
+            //}
+            //program.Modules = modules;
+
+            using(ProgramDesignMongoContext ctx = new ProgramDesignMongoContext(_dbName))
+            {
+                ctx.Programs.Collection.Insert(program);
+            }
+
+            return new PutProgramDataResponse
+            {
+                Result = true
+            };
         }
 
         public object InsertAll(List<object> entities)

@@ -124,6 +124,8 @@
     <Compile Include="PutProgramActionProcessingResponse.cs" />
     <Compile Include="PutProgramAttributesRequest.cs" />
     <Compile Include="PutProgramAttributesResponse.cs" />
+    <Compile Include="PutProgramDataRequest.cs" />
+    <Compile Include="PutProgramDataResponse.cs" />
     <Compile Include="PutUpdateProgramAttributesRequest.cs" />
     <Compile Include="PutUpdateProgramAttributesResponse.cs" />
     <Compile Include="PutUpdateResponseRequest.cs" />

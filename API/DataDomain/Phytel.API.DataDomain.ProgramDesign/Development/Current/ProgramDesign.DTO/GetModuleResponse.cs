@@ -21,7 +21,6 @@ namespace Phytel.API.DataDomain.ProgramDesign.DTO
         public List<string> Objectives { get; set; }
         public string Description { get; set; }
         public Status Status { get; set; }
-
-        //public List<Action> Actions { get; set; }
+        public List<ActionData> Actions { get; set; }
     }
 }

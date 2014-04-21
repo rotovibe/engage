@@ -35,7 +35,7 @@ namespace Phytel.API.DataDomain.ProgramDesign.MongoDB.DTO
 
         public const string ActionsProperty = "acts";
         [BsonElement(ActionsProperty)]
-        public List<Action> Actions { get; set; }
+        public List<MEAction> Actions { get; set; }
 
         public const string StatusProperty = "sts";
         [BsonElement(StatusProperty)]
