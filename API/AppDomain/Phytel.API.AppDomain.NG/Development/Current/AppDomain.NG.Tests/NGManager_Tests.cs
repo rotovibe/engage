@@ -51,7 +51,7 @@ namespace Phytel.API.AppDomain.NG.Tests
             };
 
             GetPatientProgramDetailsSummaryResponse response = ngm.GetPatientProgramDetailsSummary(request);
-            Assert.IsNull(response.Program.Modules[0].Actions[0].Steps);
+            Assert.AreEqual(0,  response.Program.Modules[0].Actions[0].Steps.Count);
         }
     }
 }

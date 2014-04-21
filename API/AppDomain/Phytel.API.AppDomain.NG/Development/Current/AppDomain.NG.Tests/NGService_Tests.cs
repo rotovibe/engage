@@ -32,7 +32,7 @@ namespace Phytel.API.AppDomain.NG.Service.Tests
         }
 
         [TestMethod()]
-        public void Get_Test()
+        public void GetPatientProgramDetailsRequest_Test()
         {
             IAuditUtil audit = new StubAuditUtil();
             INGManager ngm = new StubNGManager();
@@ -41,8 +41,9 @@ namespace Phytel.API.AppDomain.NG.Service.Tests
 
             NGService ngs = new NGService { AuditUtil = audit, NGManager = ngm, Security = sm, CommonFormatterUtil = cf };
             GetPatientProgramDetailsSummaryRequest request = new GetPatientProgramDetailsSummaryRequest { ContractNumber = "NG", PatientId = "", Token = "dsafgsdfgdafg", UserId = "", Version = 1.0 };
-            ngs.Get(request);
+            GetPatientProgramDetailsSummaryResponse response = ngs.Get(request);
 
+            Assert.IsNotNull(response);
         }
     }
 }

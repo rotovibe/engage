@@ -1,3 +1,5 @@
+using Phytel.API.Common;
+using Phytel.API.Common.Format;
 using ServiceStack.Text;
 using ServiceStack.WebHost.Endpoints;
 using System;
@@ -15,6 +17,9 @@ namespace Phytel.API.DataDomain.Program.Service
             {
                 //register any dependencies your services use, e.g:
                 //container.Register<ICacheClient>(new MemoryCacheClient());
+                container.RegisterAutoWiredAs<CommonFormatterUtil, ICommonFormatterUtil>();
+                container.RegisterAutoWiredAs<Helpers, IHelpers>();
+                container.RegisterAutoWiredAs<ProgramDataManager, IProgramDataManager>();
 
                 // initialize datetime format
                 JsConfig.DateHandler = JsonDateHandler.ISO8601;

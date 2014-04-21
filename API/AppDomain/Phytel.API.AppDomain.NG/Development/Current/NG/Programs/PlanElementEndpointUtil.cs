@@ -556,21 +556,5 @@ namespace Phytel.API.AppDomain.NG
                 throw new Exception("AD:PlanElementEndpointUtil:InsertNewProgramAttribute()::" + ex.Message, ex.InnerException);
             }
         }
-
-        public static DD.GetProgramDetailsSummaryResponse RequestPatientProgramDetailsSummary(GetPatientProgramDetailsSummaryRequest request)
-        {
-            IRestClient client = new JsonServiceClient();
-            string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Program/{5}/Details",
-                DDProgramServiceUrl,
-                "NG",
-                request.Version,
-                request.ContractNumber,
-                request.PatientId,
-                request.PatientProgramId), request.UserId);
-
-            DD.GetProgramDetailsSummaryResponse resp =
-                client.Get<DD.GetProgramDetailsSummaryResponse>(url);
-            return resp;
-        }
     }
 }

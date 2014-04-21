@@ -51,7 +51,7 @@ namespace Phytel.API.AppDomain.NG.Test.Stubs
 
         public void LogAuditData(Interface.IAppDomainRequest request, string sqlUserID, List<string> patientids, string browser, string hostAddress, string returnTypeName)
         {
-            //throw new NotImplementedException();
+           // pass this
         }
 
         public void LogDataAudit(string userId, string collectionName, List<string> entityIds, Common.DataAuditType auditType, string contractNumber)

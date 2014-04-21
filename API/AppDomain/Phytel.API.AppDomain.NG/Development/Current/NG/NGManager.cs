@@ -1246,9 +1246,19 @@ namespace Phytel.API.AppDomain.NG
 
         private List<Actions> getActionsInfo(DD.ModuleDetail r, IAppDomainRequest request, bool includeSteps)
         {
-            List<Actions> action = null;
-            action = r.Actions.Select(a => getActionInfo(a, request, includeSteps)).ToList();
-            return action;
+            try
+            {
+                List<Actions> action = null;
+                if (r.Actions != null)
+                {
+                    action = r.Actions.Select(a => getActionInfo(a, request, includeSteps)).ToList();
+                }
+                return action;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("AD:getActionsInfo()::" + ex.Message, ex.InnerException);
+            }
         }
 
         private Actions getActionInfo(DD.ActionsDetail a, IAppDomainRequest request, bool includeSteps)
@@ -1275,13 +1285,7 @@ namespace Phytel.API.AppDomain.NG
                     AssignDate = a.AssignDate,
                     ElementState = a.ElementState,
                     DateCompleted = a.DateCompleted,
-                    Objectives = a.Objectives.Select(x => new Objective
-                    {
-                        Id = x.Id.ToString(),
-                        Unit = x.Unit,
-                        Status = (int)x.Status,
-                        Value = x.Value
-                    }).ToList()
+                    Objectives = GetObjectivesInfo(a.Objectives)
                 };
                 if (includeSteps)
                 {

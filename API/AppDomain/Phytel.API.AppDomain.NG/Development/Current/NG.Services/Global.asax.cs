@@ -14,6 +14,8 @@ using Phytel.API.DataAudit;
 using Phytel.API.Common.Audit;
 using Phytel.API.Common.Format;
 using Phytel.API.AppDomain.NG.Programs;
+using ServiceStack.Service;
+using ServiceStack.ServiceClient.Web;
 
 namespace Phytel.API.AppDomain.NG.Service
 {
@@ -37,6 +39,7 @@ namespace Phytel.API.AppDomain.NG.Service
                 container.RegisterAutoWiredAs<CommonFormatterUtil, ICommonFormatterUtil>();
                 container.RegisterAutoWiredAs<PlanElementEndpointUtils, IPlanElementEndpointUtils>();
                 container.RegisterAutoWiredAs<PlanElementUtils, IPlanElementUtils>();
+                container.RegisterAutoWiredAs<JsonServiceClient, IRestClient>();
 
 
                 Plugins.Add(new RequestLogsFeature() { RequiredRoles = new string[] { } });

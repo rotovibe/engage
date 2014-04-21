@@ -1,5 +1,7 @@
 ﻿using Phytel.API.AppDomain.NG.Programs;
 using Phytel.API.DataDomain.Program.DTO;
+using ServiceStack.Service;
+using ServiceStack.ServiceHost;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,6 +12,8 @@ namespace Phytel.API.AppDomain.NG.Test.Stubs
 {
     public class StubPlanElementEndpointUtils : IPlanElementEndpointUtils
     {
+        public IRestClient Client { get; set; }
+
         public DTO.Observation.PatientObservation GetPatientProblem(string probId, PlanCOR.PlanElementEventArg e, string userId)
         {
             throw new NotImplementedException();

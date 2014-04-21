@@ -16,11 +16,11 @@ using Phytel.API.Common;
 
 namespace Phytel.API.DataDomain.Program
 {
-    public static class ProgramDataManager
+    public class ProgramDataManager : IProgramDataManager
     {
-        private static List<ObjectId> sIL = new List<ObjectId>();
+        private List<ObjectId> sIL = new List<ObjectId>();
 
-        public static GetProgramResponse GetProgramByID(GetProgramRequest request)
+        public GetProgramResponse GetProgramByID(GetProgramRequest request)
         {
             try
             {
@@ -40,7 +40,7 @@ namespace Phytel.API.DataDomain.Program
             }
         }
 
-        public static GetProgramByNameResponse GetProgramByName(GetProgramByNameRequest request)
+        public GetProgramByNameResponse GetProgramByName(GetProgramByNameRequest request)
         {
             try
             {
@@ -60,7 +60,7 @@ namespace Phytel.API.DataDomain.Program
             }
         }
 
-        public static GetAllActiveProgramsResponse GetAllActiveContractPrograms(GetAllActiveProgramsRequest request)
+        public GetAllActiveProgramsResponse GetAllActiveContractPrograms(GetAllActiveProgramsRequest request)
         {
             try
             {
@@ -81,51 +81,7 @@ namespace Phytel.API.DataDomain.Program
             }
         }
 
-        //public static PutProgramToPatientResponse PutPatientToProgram(PutProgramToPatientRequest request)
-        //{
-        //    try
-        //    {
-        //        PutProgramToPatientResponse response = new PutProgramToPatientResponse();
-
-        //        if (!IsValidPatientId(request))
-        //        {
-        //            return FormatExceptionResponse(response, "Patient does not exist or has an invalid id.", "500");
-        //        }
-
-        //        if (!IsValidContractProgramId(request))
-        //        {
-        //            return FormatExceptionResponse(response, "ContractProgram does not exist or has an invalid identifier.", "500");
-        //        }
-
-        //        if (!IsContractProgramAssignable(request))
-        //        {
-        //            return FormatExceptionResponse(response, "ContractProgram is not currently active.", "500");
-        //        }
-
-
-        //        IProgramRepository<PutProgramToPatientResponse> patProgRepo =
-        //            Phytel.API.DataDomain.Program.ProgramRepositoryFactory<PutProgramToPatientResponse>
-        //            .GetPatientProgramRepository(request.ContractNumber, request.Context, request.UserId);
-
-        //        object resp = patProgRepo.Insert((object)request);
-
-        //        response = (PutProgramToPatientResponse)resp;
-
-        //        if (response.program != null)
-        //        {
-        //            // initialize attributes
-        //            DTOUtils.InitializeProgramAttributes(request, response);
-        //        }
-
-        //        return response;
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        throw new Exception("DD:DataProgramManager:PutPatientToProgram()::" + ex.Message, ex.InnerException);
-        //    }
-        //}
-
-        public static PutProgramToPatientResponse PutPatientToProgram(PutProgramToPatientRequest request)
+        public PutProgramToPatientResponse PutPatientToProgram(PutProgramToPatientRequest request)
         {
             try
             {
@@ -188,7 +144,7 @@ namespace Phytel.API.DataDomain.Program
             }
         }
 
-        public static PutProgramActionProcessingResponse PutProgramActionUpdate(PutProgramActionProcessingRequest request)
+        public PutProgramActionProcessingResponse PutProgramActionUpdate(PutProgramActionProcessingRequest request)
         {
             try
             {
@@ -208,7 +164,7 @@ namespace Phytel.API.DataDomain.Program
             }
         }
 
-        private static PutProgramToPatientResponse FormatExceptionResponse(PutProgramToPatientResponse response, string reason, string errorcode)
+        private PutProgramToPatientResponse FormatExceptionResponse(PutProgramToPatientResponse response, string reason, string errorcode)
         {
             try
             {
@@ -222,7 +178,7 @@ namespace Phytel.API.DataDomain.Program
             }
         }
 
-        private static bool IsContractProgramAssignable(PutProgramToPatientRequest p)
+        private bool IsContractProgramAssignable(PutProgramToPatientRequest p)
         {
             bool result = false;
             try
@@ -247,7 +203,7 @@ namespace Phytel.API.DataDomain.Program
             }
         }
 
-        private static bool IsValidPatientId(PutProgramToPatientRequest request)
+        private bool IsValidPatientId(PutProgramToPatientRequest request)
         {
             bool result = false;
             try
@@ -280,7 +236,7 @@ namespace Phytel.API.DataDomain.Program
             }
         }
 
-        private static bool IsValidContractProgramId(PutProgramToPatientRequest request)
+        private bool IsValidContractProgramId(PutProgramToPatientRequest request)
         {
             bool result = false;
             try
@@ -303,7 +259,7 @@ namespace Phytel.API.DataDomain.Program
             }
         }
 
-        public static GetProgramDetailsSummaryResponse GetPatientProgramDetailsById(GetProgramDetailsSummaryRequest request)
+        public GetProgramDetailsSummaryResponse GetPatientProgramDetailsById(GetProgramDetailsSummaryRequest request)
         {
             try
             {
@@ -355,7 +311,7 @@ namespace Phytel.API.DataDomain.Program
             }
         }
 
-        public static GetPatientProgramsResponse GetPatientPrograms(GetPatientProgramsRequest request)
+        public GetPatientProgramsResponse GetPatientPrograms(GetPatientProgramsRequest request)
         {
             try
             {
@@ -411,7 +367,7 @@ namespace Phytel.API.DataDomain.Program
             }
         }
 
-        public static PutUpdateResponseResponse PutUpdateResponse(PutUpdateResponseRequest r)
+        public PutUpdateResponseResponse PutUpdateResponse(PutUpdateResponseRequest r)
         {
             try
             {
@@ -447,7 +403,7 @@ namespace Phytel.API.DataDomain.Program
             }
         }
 
-        private static List<SpawnElement> ParseSpawnElements(List<SpawnElementDetail> list)
+        private List<SpawnElement> ParseSpawnElements(List<SpawnElementDetail> list)
         {
             List<SpawnElement> mespn = new List<SpawnElement>();
             try
@@ -472,7 +428,7 @@ namespace Phytel.API.DataDomain.Program
             }
         }
 
-        public static GetStepResponseListResponse GetStepResponse(GetStepResponseListRequest request)
+        public GetStepResponseListResponse GetStepResponse(GetStepResponseListRequest request)
         {
             try
             {
@@ -486,7 +442,7 @@ namespace Phytel.API.DataDomain.Program
             }
         }
 
-        public static GetStepResponseResponse GetStepResponse(GetStepResponseRequest request)
+        public GetStepResponseResponse GetStepResponse(GetStepResponseRequest request)
         {
             try
             {
@@ -520,7 +476,7 @@ namespace Phytel.API.DataDomain.Program
             }
         }
 
-        public static GetProgramAttributeResponse GetProgramAttributes(GetProgramAttributeRequest request)
+        public GetProgramAttributeResponse GetProgramAttributes(GetProgramAttributeRequest request)
         {
             try
             {
@@ -561,7 +517,7 @@ namespace Phytel.API.DataDomain.Program
             }
         }
 
-        public static PutUpdateProgramAttributesResponse PutUpdateProgramAttributes(PutUpdateProgramAttributesRequest request)
+        public PutUpdateProgramAttributesResponse PutUpdateProgramAttributes(PutUpdateProgramAttributesRequest request)
         {
             try
             {
@@ -581,7 +537,7 @@ namespace Phytel.API.DataDomain.Program
             }
         }
 
-        public static PutProgramAttributesResponse InsertProgramAttributes(PutProgramAttributesRequest request)
+        public PutProgramAttributesResponse InsertProgramAttributes(PutProgramAttributesRequest request)
         {
             try
             {
@@ -602,7 +558,7 @@ namespace Phytel.API.DataDomain.Program
             }
         }
 
-        private static List<SpawnElement> CreateSpawn(List<SpawnElementDetail> list)
+        private List<SpawnElement> CreateSpawn(List<SpawnElementDetail> list)
         {
             try
             {
@@ -628,7 +584,7 @@ namespace Phytel.API.DataDomain.Program
             }
         }
 
-        public static GetPatientActionDetailsDataResponse GetActionDetails(GetPatientActionDetailsDataRequest request)
+        public GetPatientActionDetailsDataResponse GetActionDetails(GetPatientActionDetailsDataRequest request)
         {
             try
             {

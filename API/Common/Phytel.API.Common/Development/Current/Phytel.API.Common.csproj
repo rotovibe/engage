@@ -121,7 +121,9 @@
     <Compile Include="Format\CommonFormatterUtil.cs" />
     <Compile Include="Format\CommonFormatter.cs" />
     <Compile Include="Format\ICommonFormatterUtil.cs" />
+    <Compile Include="Helpers.cs" />
     <Compile Include="Helper.cs" />
+    <Compile Include="IHelpers.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Specification\AndSpecification.cs" />
     <Compile Include="Specification\CompositeSpecification.cs" />

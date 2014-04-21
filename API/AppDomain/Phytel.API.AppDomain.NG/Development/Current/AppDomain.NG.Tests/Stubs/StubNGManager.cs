@@ -85,7 +85,12 @@ namespace Phytel.API.AppDomain.NG.Test.Stubs
 
         public DTO.GetPatientProgramDetailsSummaryResponse GetPatientProgramDetailsSummary(DTO.GetPatientProgramDetailsSummaryRequest request)
         {
-            throw new NotImplementedException();
+            DTO.GetPatientProgramDetailsSummaryResponse response = new DTO.GetPatientProgramDetailsSummaryResponse
+            {
+                Program = new DTO.Program { Name = "Test Program", Description = "test description" },
+                 Version = 1.0
+            };
+            return response;
         }
 
         public DTO.GetPatientProgramsResponse GetPatientPrograms(DTO.GetPatientProgramsRequest request)

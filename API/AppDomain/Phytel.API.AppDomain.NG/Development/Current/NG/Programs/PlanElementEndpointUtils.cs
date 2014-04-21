@@ -21,6 +21,7 @@ namespace Phytel.API.AppDomain.NG
 {
     public class PlanElementEndpointUtils : IPlanElementEndpointUtils
     {
+        public IRestClient Client { get; set; }
         static readonly string DDPatientProblemServiceUrl = ConfigurationManager.AppSettings["DDPatientProblemServiceUrl"];
         static readonly string DDPatientObservationServiceUrl = ConfigurationManager.AppSettings["DDPatientObservationUrl"];
         static readonly string DDPatientServiceUrl = ConfigurationManager.AppSettings["DDPatientServiceUrl"];
@@ -394,7 +395,7 @@ namespace Phytel.API.AppDomain.NG
         {
             try
             {
-                IRestClient client = new JsonServiceClient();
+                //client = new JsonServiceClient();
                 string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Program/{5}/Details",
                     DDProgramServiceUrl,
                     "NG",
@@ -404,7 +405,7 @@ namespace Phytel.API.AppDomain.NG
                     request.PatientProgramId), request.UserId);
 
                 DD.GetProgramDetailsSummaryResponse resp =
-                    client.Get<DD.GetProgramDetailsSummaryResponse>(url);
+                    Client.Get<DD.GetProgramDetailsSummaryResponse>(url);
                 return resp;
             }
             catch (Exception ex)
