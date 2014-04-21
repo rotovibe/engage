@@ -117,7 +117,7 @@
     <Compile Include="PlanElementEndpointUtil_Tests.cs" />
     <Compile Include="PlanElementUtil_Tests.cs" />
     <Compile Include="PlanManager_Tests.cs" />
-    <Compile Include="Programs\PlanElementEndpointUtils_Tests.cs" />
+    <Compile Include="Programs\EndpointUtils_Tests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Stubs\StubAuditUtil.cs" />
     <Compile Include="Stubs\StubCommonFormatterUtil.cs" />

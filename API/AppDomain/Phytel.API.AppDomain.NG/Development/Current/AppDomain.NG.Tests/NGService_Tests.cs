@@ -31,19 +31,23 @@ namespace Phytel.API.AppDomain.NG.Service.Tests
             Assert.Fail();
         }
 
-        [TestMethod()]
-        public void GetPatientProgramDetailsRequest_Test()
+        [TestClass()]
+        public class GetPatientProgramDetailsRequest_Method
         {
-            IAuditUtil audit = new StubAuditUtil();
-            INGManager ngm = new StubNGManager();
-            ISecurityManager sm = new StubSecurityManager();
-            ICommonFormatterUtil cf = new StubCommonFormatterUtil();
+            [TestMethod()]
+            public void Get_Valid_Response_Test()
+            {
+                IAuditUtil audit = new StubAuditUtil();
+                INGManager ngm = new StubNGManager();
+                ISecurityManager sm = new StubSecurityManager();
+                ICommonFormatterUtil cf = new StubCommonFormatterUtil();
 
-            NGService ngs = new NGService { AuditUtil = audit, NGManager = ngm, Security = sm, CommonFormatterUtil = cf };
-            GetPatientProgramDetailsSummaryRequest request = new GetPatientProgramDetailsSummaryRequest { ContractNumber = "NG", PatientId = "", Token = "dsafgsdfgdafg", UserId = "", Version = 1.0 };
-            GetPatientProgramDetailsSummaryResponse response = ngs.Get(request);
+                NGService ngs = new NGService { AuditUtil = audit, NGManager = ngm, Security = sm, CommonFormatterUtil = cf };
+                GetPatientProgramDetailsSummaryRequest request = new GetPatientProgramDetailsSummaryRequest { ContractNumber = "NG", PatientId = "", Token = "dsafgsdfgdafg", UserId = "", Version = 1.0 };
+                GetPatientProgramDetailsSummaryResponse response = ngs.Get(request);
 
-            Assert.IsNotNull(response);
+                Assert.IsNotNull(response);
+            }
         }
     }
 }

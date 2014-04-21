@@ -156,7 +156,7 @@ namespace Phytel.API.AppDomain.NG.Test.Stubs
             }
         }
 
-        public Programs.IPlanElementEndpointUtils PlanElementEndpointUtils
+        public Programs.IEndpointUtils EndpointUtils
         {
             get
             {

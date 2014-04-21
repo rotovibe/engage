@@ -10,48 +10,74 @@ namespace Phytel.API.AppDomain.NG.Tests
     [TestClass()]
     public class NGManager_Tests
     {
-        [TestMethod()]
-        public void GetPatientProgramDetailsSummary_Test()
+        [TestClass()]
+        public class GetPatientProgramDetailsSummary_Method
         {
-            string patientId = "5325dad4d6a4850adcbba776";
-            string programId = "534d9bffd6a48504b058a2cf";
-            string userId = "0000000000000000000000000";
-
-            INGManager ngm = new NGManager { PlanElementUtils = new StubPlanElementUtils(), PlanElementEndpointUtils = new StubPlanElementEndpointUtils() };
-
-            GetPatientProgramDetailsSummaryRequest request = new GetPatientProgramDetailsSummaryRequest
+            [TestMethod()]
+            public void Get_Response_Not_Null_Test()
             {
-                Version = 1.0,
-                ContractNumber = "InHealth001",
-                PatientId = patientId,
-                PatientProgramId = programId,
-                UserId = userId
-            };
+                string patientId = "5325dad4d6a4850adcbba776";
+                string programId = "534d9bffd6a48504b058a2cf";
+                string userId = "0000000000000000000000000";
 
-            GetPatientProgramDetailsSummaryResponse response = ngm.GetPatientProgramDetailsSummary(request);
-            Assert.IsNotNull(response);
-        }
+                INGManager ngm = new NGManager { PlanElementUtils = new StubPlanElementUtils(), EndpointUtils = new StubPlanElementEndpointUtils() };
 
-        [TestMethod()]
-        public void GetPatientProgramDetailsSummary_Action_with_no_steps_Test()
-        {
-            string patientId = "5325dab8d6a4850adcbba71a";
-            string programId = "534d9217d6a48504b0586f68";
-            string userId = "0000000000000000000000000";
+                GetPatientProgramDetailsSummaryRequest request = new GetPatientProgramDetailsSummaryRequest
+                {
+                    Version = 1.0,
+                    ContractNumber = "InHealth001",
+                    PatientId = patientId,
+                    PatientProgramId = programId,
+                    UserId = userId
+                };
 
-            INGManager ngm = new NGManager { PlanElementUtils = new StubPlanElementUtils(), PlanElementEndpointUtils = new StubPlanElementEndpointUtils() };
+                GetPatientProgramDetailsSummaryResponse response = ngm.GetPatientProgramDetailsSummary(request);
+                Assert.IsNotNull(response);
+            }
 
-            GetPatientProgramDetailsSummaryRequest request = new GetPatientProgramDetailsSummaryRequest
+            [TestMethod()]
+            public void Get_With_Description_Test()
             {
-                Version = 1.0,
-                ContractNumber = "InHealth001",
-                PatientId = patientId,
-                PatientProgramId = programId,
-                UserId = userId
-            };
+                string patientId = "5325dad4d6a4850adcbba776";
+                string programId = "534d9bffd6a48504b058a2cf";
+                string userId = "0000000000000000000000000";
 
-            GetPatientProgramDetailsSummaryResponse response = ngm.GetPatientProgramDetailsSummary(request);
-            Assert.AreEqual(0,  response.Program.Modules[0].Actions[0].Steps.Count);
+                INGManager ngm = new NGManager { PlanElementUtils = new StubPlanElementUtils(), EndpointUtils = new StubPlanElementEndpointUtils() };
+
+                GetPatientProgramDetailsSummaryRequest request = new GetPatientProgramDetailsSummaryRequest
+                {
+                    Version = 1.0,
+                    ContractNumber = "InHealth001",
+                    PatientId = patientId,
+                    PatientProgramId = programId,
+                    UserId = userId
+                };
+
+                GetPatientProgramDetailsSummaryResponse response = ngm.GetPatientProgramDetailsSummary(request);
+                Assert.IsNotNull(response.Program.Description);
+            }
+
+            [TestMethod()]
+            public void Get_With_No_Steps_Test()
+            {
+                string patientId = "5325dab8d6a4850adcbba71a";
+                string programId = "534d9217d6a48504b0586f68";
+                string userId = "0000000000000000000000000";
+
+                INGManager ngm = new NGManager { PlanElementUtils = new StubPlanElementUtils(), EndpointUtils = new StubPlanElementEndpointUtils() };
+
+                GetPatientProgramDetailsSummaryRequest request = new GetPatientProgramDetailsSummaryRequest
+                {
+                    Version = 1.0,
+                    ContractNumber = "InHealth001",
+                    PatientId = patientId,
+                    PatientProgramId = programId,
+                    UserId = userId
+                };
+
+                GetPatientProgramDetailsSummaryResponse response = ngm.GetPatientProgramDetailsSummary(request);
+                Assert.AreEqual(0, response.Program.Modules[0].Actions[0].Steps.Count);
+            }
         }
     }
 }

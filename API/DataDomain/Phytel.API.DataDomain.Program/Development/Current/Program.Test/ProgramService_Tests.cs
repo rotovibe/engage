@@ -13,29 +13,56 @@ namespace Phytel.API.DataDomain.Program.Service.Tests
     [TestClass()]
     public class ProgramService_Tests
     {
-
-        [TestMethod()]
-        public void GET_GetProgramDetailsSummaryResponse_Test()
+        [TestClass()]
+        public class GET_ProgramDetailsSummary
         {
-            ProgramService ps = new ProgramService
+            [TestMethod()]
+            public void Get_Response_Test()
             {
-                ProgramDataManager = new StubProgramDataManager(),
-                Helpers = new StubHelper(),
-                CommonFormatterUtil = new StubCommonFormatterUtil()
-            };
+                ProgramService ps = new ProgramService
+                {
+                    ProgramDataManager = new StubProgramDataManager(),
+                    Helpers = new StubHelper(),
+                    CommonFormatterUtil = new StubCommonFormatterUtil()
+                };
 
-            GetProgramDetailsSummaryRequest request = new GetProgramDetailsSummaryRequest
+                GetProgramDetailsSummaryRequest request = new GetProgramDetailsSummaryRequest
+                {
+                    Context = "NG",
+                    ContractNumber = "InHealth001",
+                    PatientId = "",
+                    ProgramId = "",
+                    UserId = "nguser",
+                    Version = 1.0
+                };
+
+                GetProgramDetailsSummaryResponse response = ps.Get(request);
+                Assert.IsNotNull(response.Program);
+            }
+
+            [TestMethod()]
+            public void Get_With_Description_Test()
             {
-                Context = "NG",
-                ContractNumber = "InHealth001",
-                PatientId = "",
-                ProgramId = "",
-                UserId = "nguser",
-                Version = 1.0
-            };
+                ProgramService ps = new ProgramService
+                {
+                    ProgramDataManager = new StubProgramDataManager(),
+                    Helpers = new StubHelper(),
+                    CommonFormatterUtil = new StubCommonFormatterUtil()
+                };
 
-            GetProgramDetailsSummaryResponse response =  ps.Get(request);
-            Assert.IsNotNull(response.Program);
+                GetProgramDetailsSummaryRequest request = new GetProgramDetailsSummaryRequest
+                {
+                    Context = "NG",
+                    ContractNumber = "InHealth001",
+                    PatientId = "",
+                    ProgramId = "",
+                    UserId = "nguser",
+                    Version = 1.0
+                };
+
+                GetProgramDetailsSummaryResponse response = ps.Get(request);
+                Assert.IsNotNull(response.Program.Description);
+            }
         }
     }
 }

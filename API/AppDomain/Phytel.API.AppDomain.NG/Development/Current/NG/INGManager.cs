@@ -8,7 +8,7 @@ namespace Phytel.API.AppDomain.NG
     public interface INGManager
     {
         IPlanElementUtils PlanElementUtils { get; set; }
-        IPlanElementEndpointUtils PlanElementEndpointUtils { get; set; }
+        IEndpointUtils EndpointUtils { get; set; }
         GetActiveProgramsResponse GetActivePrograms(GetActiveProgramsRequest request);
         List<IdNamePair> GetAllCommModes(GetAllCommModesRequest request);
         List<CommTypeLookUp> GetAllCommTypes(GetAllCommTypesRequest request);

@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Phytel.API.AppDomain.NG.Test.Stubs
 {
-    public class StubPlanElementEndpointUtils : IPlanElementEndpointUtils
+    public class StubPlanElementEndpointUtils : IEndpointUtils
     {
         public IRestClient Client { get; set; }
 

@@ -1,7 +1,7 @@
 ﻿using System;
 namespace Phytel.API.AppDomain.NG.Programs
 {
-    public interface IPlanElementEndpointUtils
+    public interface IEndpointUtils
     {
         global::Phytel.API.AppDomain.NG.DTO.Observation.PatientObservation GetPatientProblem(string probId, global::Phytel.API.AppDomain.NG.PlanCOR.PlanElementEventArg e, string userId);
         global::Phytel.API.DataDomain.Program.DTO.ProgramAttribute GetProgramAttributes(string planElemId, global::Phytel.API.Interface.IAppDomainRequest request);

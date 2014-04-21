@@ -569,8 +569,6 @@ namespace Phytel.API.AppDomain.NG
                 if (_pAtt.DateCompleted != null){ pAtt.DateCompleted = _pAtt.DateCompleted; dirty = true;}
                 if (_pAtt.DidNotEnrollReason != null){ pAtt.DidNotEnrollReason = _pAtt.DidNotEnrollReason; dirty = true;}
                 //if (_pAtt.DisEnrollReason != null){ pAtt.DisEnrollReason = _pAtt.DisEnrollReason; dirty = true;}
-                if (_pAtt.EligibilityRequirements != null){ pAtt.EligibilityRequirements = _pAtt.EligibilityRequirements; dirty = true;}
-                if (_pAtt.EligibilityStartDate != null){ pAtt.EligibilityStartDate = _pAtt.EligibilityStartDate; dirty = true;}
                 if (_pAtt.EndDate != null){ pAtt.EndDate = _pAtt.EndDate; dirty = true;}
                 if (_pAtt.IneligibleReason != null){ pAtt.IneligibleReason = _pAtt.IneligibleReason; dirty = true;}
                 if (_pAtt.OptOut != false){ pAtt.OptOut = _pAtt.OptOut; dirty = true;}
@@ -583,11 +581,14 @@ namespace Phytel.API.AppDomain.NG
                 if (_pAtt.Status != 0){ pAtt.Status = _pAtt.Status; dirty = true;}
                 if (_pAtt.Completed != 0){ pAtt.Completed = _pAtt.Completed; dirty = true;}
                 if (_pAtt.Eligibility != 0){ pAtt.Eligibility = _pAtt.Eligibility; dirty = true;}
-                if (_pAtt.EligibilityEndDate != null){ pAtt.EligibilityEndDate = _pAtt.EligibilityEndDate; dirty = true;}
                 //if (_pAtt.EligibilityOverride != 0){ pAtt.EligibilityOverride = _pAtt.EligibilityOverride; dirty = true;}
                 if (_pAtt.Enrollment != 0){ pAtt.Enrollment = _pAtt.Enrollment; dirty = true;}
                 if (_pAtt.GraduatedFlag != 0){ pAtt.GraduatedFlag = _pAtt.GraduatedFlag; dirty = true;}
                 if (_pAtt.Locked != 0) { pAtt.Locked = _pAtt.Locked; dirty = true; }
+                // need to refactor back to program
+                if (_pAtt.EligibilityRequirements != null) { pAtt.EligibilityRequirements = _pAtt.EligibilityRequirements; dirty = true; }
+                if (_pAtt.EligibilityStartDate != null) { pAtt.EligibilityStartDate = _pAtt.EligibilityStartDate; dirty = true; }
+                if (_pAtt.EligibilityEndDate != null) { pAtt.EligibilityEndDate = _pAtt.EligibilityEndDate; dirty = true; }
 
                 return dirty;
             }

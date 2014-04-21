@@ -19,7 +19,7 @@ using DD = Phytel.API.DataDomain.Program.DTO;
 
 namespace Phytel.API.AppDomain.NG
 {
-    public class PlanElementEndpointUtils : IPlanElementEndpointUtils
+    public class EndpointUtils : IEndpointUtils
     {
         public IRestClient Client { get; set; }
         static readonly string DDPatientProblemServiceUrl = ConfigurationManager.AppSettings["DDPatientProblemServiceUrl"];

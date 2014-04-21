@@ -99,7 +99,7 @@
     <Compile Include="Programs\IPlanElementEndpointUtils.cs" />
     <Compile Include="Programs\IPlanElementUtils.cs" />
     <Compile Include="ISecurityManager.cs" />
-    <Compile Include="Programs\PlanElementEndpointUtils.cs" />
+    <Compile Include="Programs\EndpointUtils.cs" />
     <Compile Include="Programs\PlanElementUtils.cs" />
     <Compile Include="Programs\Specifications\IsActionInitialSpecification.cs" />
     <Compile Include="SecurityManager.cs" />

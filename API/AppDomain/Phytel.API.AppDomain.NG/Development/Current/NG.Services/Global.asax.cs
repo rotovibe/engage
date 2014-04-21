@@ -37,7 +37,7 @@ namespace Phytel.API.AppDomain.NG.Service
                 container.RegisterAutoWiredAs<NGManager, INGManager>();
                 container.RegisterAutoWiredAs<AuditUtil, IAuditUtil>();
                 container.RegisterAutoWiredAs<CommonFormatterUtil, ICommonFormatterUtil>();
-                container.RegisterAutoWiredAs<PlanElementEndpointUtils, IPlanElementEndpointUtils>();
+                container.RegisterAutoWiredAs<EndpointUtils, IEndpointUtils>();
                 container.RegisterAutoWiredAs<PlanElementUtils, IPlanElementUtils>();
                 container.RegisterAutoWiredAs<JsonServiceClient, IRestClient>();
 

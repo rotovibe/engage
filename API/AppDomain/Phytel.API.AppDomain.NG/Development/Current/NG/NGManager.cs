@@ -24,7 +24,7 @@ namespace Phytel.API.AppDomain.NG
     {
         #region dependencies
         public IPlanElementUtils PlanElementUtils { get; set; }
-        public IPlanElementEndpointUtils PlanElementEndpointUtils { get; set; }
+        public IEndpointUtils EndpointUtils { get; set; }
         #endregion
 
         #region Endpoint addresses
@@ -479,7 +479,7 @@ namespace Phytel.API.AppDomain.NG
             {
                 GetPatientProgramDetailsSummaryResponse result = new GetPatientProgramDetailsSummaryResponse();
 
-                DD.GetProgramDetailsSummaryResponse resp = PlanElementEndpointUtils.RequestPatientProgramDetailsSummary(request);
+                DD.GetProgramDetailsSummaryResponse resp = EndpointUtils.RequestPatientProgramDetailsSummary(request);
 
                 if (resp != null)
                 {

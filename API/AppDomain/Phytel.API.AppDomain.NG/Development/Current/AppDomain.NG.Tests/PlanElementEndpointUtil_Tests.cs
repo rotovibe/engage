@@ -13,54 +13,56 @@ using Phytel.API.AppDomain.NG.PlanCOR;
 namespace Phytel.API.AppDomain.NG.Tests
 {
     [TestClass()]
-    public class PlanElementEndpointUtil_Tests
+    public class EndpointUtil_Tests
     {
-        [TestMethod()]
-        public void UpdatePatientProblem_Test()
-        {
-            string patientId = "5325da03d6a4850adcbba4fe";
-            string userId = "531f2df9072ef727c4d2a3df";
-            string elementId = "5346c582d6a48504b44b4f77";
-            PatientObservation pod = new PatientObservation { Id = elementId, StateId = 2 };
-            bool _active = true;
-            IAppDomainRequest request = new GetActiveProgramsRequest { UserId = userId, Context = "NG", ContractNumber="InHealth001", Version = 1.0 };
+        // moved to endpointutils_test.cs
 
-            PutUpdateObservationDataResponse result = PlanElementEndpointUtil.UpdatePatientProblem(patientId, userId, elementId, pod, _active, request);
+        //[TestMethod()]
+        //public void UpdatePatientProblem_Test()
+        //{
+        //    string patientId = "5325da03d6a4850adcbba4fe";
+        //    string userId = "531f2df9072ef727c4d2a3df";
+        //    string elementId = "5346c582d6a48504b44b4f77";
+        //    PatientObservation pod = new PatientObservation { Id = elementId, StateId = 2 };
+        //    bool _active = true;
+        //    IAppDomainRequest request = new GetActiveProgramsRequest { UserId = userId, Context = "NG", ContractNumber = "InHealth001", Version = 1.0 };
 
-            Assert.IsTrue(result.Result);
-        }
+        //    PutUpdateObservationDataResponse result = PlanElementEndpointUtil.UpdatePatientProblem(patientId, userId, elementId, pod, _active, request);
 
-        [TestMethod()]
-        public void PutNewPatientProblem_Test()
-        {
-            string patientId = "5325da03d6a4850adcbba4fe";
-            string userId = "531f2df9072ef727c4d2a3df";
-            string elementId = "533ed16cd4332307bc592baa";
-            PatientObservation pod = new PatientObservation { Id = elementId, StateId = 2 };
-            bool _active = true;
-            IAppDomainRequest request = new GetActiveProgramsRequest { UserId = userId, Context = "NG", ContractNumber = "InHealth001", Version = 1.0 }; // request object is arbitrary. use any.
+        //    Assert.IsTrue(result.Result);
+        //}
 
-            PutRegisterPatientObservationResponse result = PlanElementEndpointUtil.PutNewPatientProblem(patientId, userId, elementId, request);
+        //[TestMethod()]
+        //public void PutNewPatientProblem_Test()
+        //{
+        //    string patientId = "5325da03d6a4850adcbba4fe";
+        //    string userId = "531f2df9072ef727c4d2a3df";
+        //    string elementId = "533ed16cd4332307bc592baa";
+        //    PatientObservation pod = new PatientObservation { Id = elementId, StateId = 2 };
+        //    bool _active = true;
+        //    IAppDomainRequest request = new GetActiveProgramsRequest { UserId = userId, Context = "NG", ContractNumber = "InHealth001", Version = 1.0 }; // request object is arbitrary. use any.
 
-            //Assert.IsTrue(result.Result);
-        }
+        //    PutRegisterPatientObservationResponse result = PlanElementEndpointUtil.PutNewPatientProblem(patientId, userId, elementId, request);
 
-        [TestMethod()]
-        public void GetPatientProblem_Test()
-        {
-            PlanElementEventArg e = new PlanElementEventArg();
-            PostProcessActionRequest dr = new PostProcessActionRequest
-                {
-                    ContractNumber = "InHealth001",
-                    Version = 1.0,
-                    PatientId = "5325db5ed6a4850adcbba912"
-                };
+        //    //Assert.IsTrue(result.Result);
+        //}
 
-            e.DomainRequest = dr as IAppDomainRequest;
-            e.PatientId = "5325db5ed6a4850adcbba912";
+        //[TestMethod()]
+        //public void GetPatientProblem_Test()
+        //{
+        //    PlanElementEventArg e = new PlanElementEventArg();
+        //    PostProcessActionRequest dr = new PostProcessActionRequest
+        //        {
+        //            ContractNumber = "InHealth001",
+        //            Version = 1.0,
+        //            PatientId = "5325db5ed6a4850adcbba912"
+        //        };
 
-            PatientObservation po = PlanElementEndpointUtil.GetPatientProblem("533ed16dd4332307bc592baf", e, "000000000000000000000000");
-            Assert.IsNotNull(po);
-        }
+        //    e.DomainRequest = dr as IAppDomainRequest;
+        //    e.PatientId = "5325db5ed6a4850adcbba912";
+
+        //    PatientObservation po = PlanElementEndpointUtil.GetPatientProblem("533ed16dd4332307bc592baf", e, "000000000000000000000000");
+        //    Assert.IsNotNull(po);
+        //}
     }
 }
