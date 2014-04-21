@@ -39,6 +39,6 @@ namespace Phytel.API.DataDomain.Program.DTO
         public string DisEnrollReason { get; set; }
         public string OverrideReason { get; set; }
 
-        public PatientProgramAttribute Attributes { get; set; }
+        public PatientProgramAttributeData Attributes { get; set; }
     }
 }
