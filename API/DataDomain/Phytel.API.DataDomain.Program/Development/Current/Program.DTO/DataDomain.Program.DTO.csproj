@@ -92,6 +92,7 @@
     <Compile Include="GetProgramAttributeResponse.cs" />
     <Compile Include="GetStepResponseResponse.cs" />
     <Compile Include="GetStepResponseListResponse.cs" />
+    <Compile Include="PatientProgramAttribute.cs" />
     <Compile Include="PlanElementDetail.cs" />
     <Compile Include="ObjectivesDetail.cs" />
     <Compile Include="ProgramAttribute.cs" />
