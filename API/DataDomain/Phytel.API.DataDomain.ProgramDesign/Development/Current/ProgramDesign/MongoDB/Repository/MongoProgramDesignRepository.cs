@@ -1,7 +1,12 @@
 using MongoDB.Driver;
+using MB = MongoDB.Driver.Builders;
+using MongoDB.Bson;
 using Phytel.API.Common.Data;
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using Phytel.API.DataDomain.ProgramDesign.MongoDB.DTO;
+using Phytel.API.DataDomain.ProgramDesign.DTO;
 
 namespace Phytel.API.DataDomain.ProgramDesign
 {
@@ -37,6 +42,55 @@ namespace Phytel.API.DataDomain.ProgramDesign
         }
 
         public object FindByID(string entityID)
+        {
+            try
+            {
+                MEProgram cp = null;
+                using (ProgramDesignMongoContext ctx = new ProgramDesignMongoContext(_dbName))
+                {
+                    var findcp = MB.Query<MEProgram>.EQ(b => b.Id, ObjectId.Parse(entityID));
+                    cp = ctx.Programs.Collection.Find(findcp).FirstOrDefault();
+                }
+                return cp;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("DD:Program:FindByID()::" + ex.Message, ex.InnerException);
+            }
+        }
+
+        public DTO.Program FindByName(string entityName)
+        {
+            try
+            {
+                DTO.Program result = null;
+
+                using (ProgramDesignMongoContext ctx = new ProgramDesignMongoContext(_dbName))
+                {
+                    var findcp = MB.Query<MEProgram>.EQ(b => b.Name, entityName);
+                    MEProgram cp = ctx.Programs.Collection.Find(findcp).FirstOrDefault();
+
+                    if (cp != null)
+                    {
+                        result = new DTO.Program
+                        {
+                            ProgramID = cp.Id.ToString()
+                        };
+                    }
+                    else
+                    {
+                        throw new ArgumentException("ProgramName is not valid or is missing from the records.");
+                    }
+                }
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("DD:MongoProgramDesignRepository:FindByName()::" + ex.Message, ex.InnerException);
+            }
+        }
+
+        public List<ProgramInfo> GetActiveProgramsInfoList(GetAllActiveProgramsRequest request)
         {
             throw new NotImplementedException();
         }

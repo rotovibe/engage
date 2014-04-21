@@ -67,6 +67,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="IActionRepository.cs" />
+    <Compile Include="IProgramDesignDataManager.cs" />
     <Compile Include="IProgramDesignRepository.cs" />
     <Compile Include="IStepRepository.cs" />
     <Compile Include="MongoDB\DTO\MEAction.cs" />
@@ -90,7 +91,7 @@
     <Compile Include="MongoDB\Repository\MongopResponseRepository.cs" />
     <Compile Include="MongoDB\Repository\MongoProgramDesignRepository.cs" />
     <Compile Include="MongoDB\ProgramDesignMongoContext.cs" />
-    <Compile Include="DataProgramDesignManager.cs" />
+    <Compile Include="ProgramDesignDataManager.cs" />
     <Compile Include="MongoDB\Repository\MongoProgramRepository.cs" />
     <Compile Include="MongoDB\Repository\MongoTextStepRepository.cs" />
     <Compile Include="MongoDB\Repository\MongoYesNoStepRepository.cs" />

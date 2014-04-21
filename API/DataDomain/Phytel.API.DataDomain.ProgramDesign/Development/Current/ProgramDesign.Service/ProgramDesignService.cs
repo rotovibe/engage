@@ -9,11 +9,16 @@ namespace Phytel.API.DataDomain.ProgramDesign.Service
 {
     public class ProgramDesignService : ServiceStack.ServiceInterface.Service
     {
+        public IProgramDesignDataManager ProgramDesignDataManager { get; set; }
+
         public GetProgramDesignResponse Post(GetProgramDesignRequest request)
         {
             GetProgramDesignResponse response = new GetProgramDesignResponse();
             try
             {
+                if (string.IsNullOrEmpty(request.UserId))
+                    throw new UnauthorizedAccessException("ProgramDD:Post()::Unauthorized Access");
+
                 response = ProgramDesignDataManager.GetProgramDesignByID(request);
                 response.Version = request.Version;
             }
