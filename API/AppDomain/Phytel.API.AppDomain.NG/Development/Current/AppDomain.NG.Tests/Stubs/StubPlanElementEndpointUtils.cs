@@ -66,6 +66,9 @@ namespace Phytel.API.AppDomain.NG.Test.Stubs
                 Enabled = true,
                 Name = "test stub program",
                 ShortName = "t s p",
+                EligibilityRequirements = "Individual must be a part of the health plan and have completed HRA and other requirements.",
+                EligibilityStartDate = DateTime.UtcNow.AddDays(1),
+                EligibilityEndDate = DateTime.UtcNow.AddDays(20),
                 Modules = new List<ModuleDetail>() { 
                     new ModuleDetail { Id = "000000000000000000000000", 
                         Name = "Test stub module 1", 

@@ -38,6 +38,17 @@ namespace Phytel.API.AppDomain.NG.Tests
                 GetProgramDetailsSummaryResponse response = peu.RequestPatientProgramDetailsSummary(request);
                 Assert.IsNotNull(response.Program.Description);
             }
+
+            [TestMethod()]
+            public void With_EligiblityRequirements_Test()
+            {
+                StubPlanElementEndpointUtils peu = new StubPlanElementEndpointUtils { Client = new StubJsonRestClient() };
+                GetPatientProgramDetailsSummaryRequest request = new GetPatientProgramDetailsSummaryRequest();
+                GetProgramDetailsSummaryResponse response = peu.RequestPatientProgramDetailsSummary(request);
+                Assert.IsNotNull(response.Program.EligibilityRequirements);
+                Assert.IsNotNull(response.Program.EligibilityStartDate);
+                Assert.IsNotNull(response.Program.EligibilityEndDate);
+            }
         }
 
         [TestClass()]
