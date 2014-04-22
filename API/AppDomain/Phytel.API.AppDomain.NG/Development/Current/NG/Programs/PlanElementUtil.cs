@@ -563,6 +563,7 @@ namespace Phytel.API.AppDomain.NG
             try
             {
                 if (_pAtt.AssignedBy != null){ pAtt.AssignedBy = _pAtt.AssignedBy; dirty = true;}
+                if (_pAtt.AssignedTo != null) { pAtt.AssignedTo = _pAtt.AssignedTo; dirty = true; }
                 if (_pAtt.AssignedOn != null){ pAtt.AssignedOn = _pAtt.AssignedOn; dirty = true;}
                 if (_pAtt.AuthoredBy != null){ pAtt.AuthoredBy = _pAtt.AuthoredBy; dirty = true;}
                 if (_pAtt.CompletedBy != null){ pAtt.CompletedBy = _pAtt.CompletedBy; dirty = true;}

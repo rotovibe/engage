@@ -72,7 +72,8 @@ namespace Phytel.API.DataDomain.Program
                         Locked = (Locked)pa.Locked,
                         IneligibleReason = pa.IneligibleReason,
                         Completed = (Completed)pa.Completed,
-                        AssignedBy = pa.AssignedBy,
+                        AssignedBy = ObjectId.Parse(pa.AssignedBy),
+                        AssignedTo = ObjectId.Parse(pa.AssignedTo),
                         AssignedOn = pa.AssignedOn,
                         AuthoredBy = pa.AuthoredBy,
                         CompletedBy = pa.CompletedBy,
@@ -233,6 +234,7 @@ namespace Phytel.API.DataDomain.Program
                     var uv = new List<MB.UpdateBuilder>();
                     // state
                     if (mepa.AssignedBy != null) uv.Add(MB.Update.Set(MEProgramAttribute.AssignByProperty, mepa.AssignedBy));
+                    if (mepa.AssignedTo != null) uv.Add(MB.Update.Set(MEProgramAttribute.AssignToProperty, mepa.AssignedTo));
                     if (mepa.AssignedOn != null) uv.Add(MB.Update.Set(MEProgramAttribute.AssignDateProperty, mepa.AssignedOn));
                     if (mepa.Population != null) uv.Add(MB.Update.Set(MEProgramAttribute.PopulationProperty, mepa.Population));
                     if (mepa.AuthoredBy != null) uv.Add(MB.Update.Set(MEProgramAttribute.AuthoredByProperty, mepa.AuthoredBy));

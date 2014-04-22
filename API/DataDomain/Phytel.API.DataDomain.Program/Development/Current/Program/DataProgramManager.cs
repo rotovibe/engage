@@ -330,7 +330,8 @@ namespace Phytel.API.DataDomain.Program
                 {
                     pad = new ProgramAttributeData
                     {
-                        AssignedBy = pa.AssignedBy,
+                        AssignedBy = pa.AssignedBy.ToString(),
+                        AssignedTo = pa.AssignedTo.ToString(),
                         AssignedOn = pa.AssignedOn,
                         AuthoredBy = pa.AuthoredBy,
                         Completed = (int)pa.Completed,

@@ -26,6 +26,7 @@ namespace Phytel.API.DataDomain.Program.DTO
         public string OverrideReason { get; set; }
         public DateTime? AssignedOn { get; set; }
         public string AssignedBy { get; set; }
+        public string AssignedTo { get; set; }
         public string CompletedBy { get; set; }
         public int Completed { get; set; }
         public DateTime? DateCompleted { get; set; }
