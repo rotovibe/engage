@@ -84,10 +84,10 @@ namespace Phytel.API.DataDomain.Program
                         //EligibilityOverride = (EligibilityOverride)pa.EligibilityOverride,
                         //EligibilityRequirements = pa.EligibilityRequirements,
                         //EligibilityStartDate = pa.EligibilityStartDate,
-                        EndDate = pa.EndDate,
+                        EndDate = pa.AttrEndDate,
                         Enrollment = (EnrollmentStatus)pa.Enrollment,
                         GraduatedFlag = (Graduated)pa.GraduatedFlag,
-                        StartDate = pa.StartDate,
+                        StartDate = pa.AttrStartDate,
                         DeleteFlag = false
                         //,LastUpdatedOn = DateTime.UtcNow,
                         //UpdatedBy = ObjectId.Parse(this.UserId)
@@ -191,7 +191,7 @@ namespace Phytel.API.DataDomain.Program
                             //EligibilityOverride = (int)cp.EligibilityOverride,
                             //EligibilityRequirements = cp.EligibilityRequirements,
                             //EligibilityStartDate = cp.EligibilityStartDate,
-                            EndDate = cp.EndDate,
+                            AttrEndDate = cp.EndDate,
                             Enrollment = (int)cp.Enrollment,
                             GraduatedFlag = (int)cp.GraduatedFlag,
                             IneligibleReason = cp.IneligibleReason,
@@ -256,8 +256,8 @@ namespace Phytel.API.DataDomain.Program
                     if (mepa.OptOut != null) uv.Add(MB.Update.Set(MEProgramAttribute.OptOutProperty, mepa.OptOut));
                     //if (mepa.OptOutReason != null) uv.Add(MB.Update.Set(MEProgramAttribute.OptOutReasonProperty, mepa.OptOutReason));
                     // dates
-                    if (mepa.StartDate != null) uv.Add(MB.Update.Set(MEProgramAttribute.StartDateProperty, mepa.StartDate));
-                    if (mepa.EndDate != null) uv.Add(MB.Update.Set(MEProgramAttribute.EndDateProperty, mepa.EndDate));
+                    if (mepa.AttrStartDate != null) uv.Add(MB.Update.Set(MEProgramAttribute.StartDateProperty, mepa.AttrStartDate));
+                    if (mepa.AttrEndDate != null) uv.Add(MB.Update.Set(MEProgramAttribute.EndDateProperty, mepa.AttrEndDate));
                     // enrollment
                     if (mepa.Enrollment != 0) uv.Add(MB.Update.Set(MEProgramAttribute.EnrollmentProperty, (EnrollmentStatus)mepa.Enrollment));
                     if (mepa.DidNotEnrollReason != null) uv.Add(MB.Update.Set(MEProgramAttribute.DidNotEnrollReasonProperty, mepa.DidNotEnrollReason));

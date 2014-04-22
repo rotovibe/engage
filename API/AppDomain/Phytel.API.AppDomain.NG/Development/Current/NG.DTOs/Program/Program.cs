@@ -17,7 +17,7 @@ namespace Phytel.API.AppDomain.NG.DTO
         public string Client { get; set; }
         public DateTime? StartDate { get; set; }
         public DateTime? EndDate { get; set; }
-        public int Eligibility { get; set; }
+        public int Eligibility { get; set; } // remove : duplicate
         public string EligibilityRequirements { get; set; }
         public DateTime? EligibilityStartDate { get; set; }
         public DateTime? EligibilityEndDate { get; set; }

@@ -338,7 +338,7 @@ namespace Phytel.API.DataDomain.Program
                         DateCompleted = pa.DateCompleted,
                         DidNotEnrollReason = pa.DidNotEnrollReason,
                         Eligibility = (int)pa.Eligibility,
-                        EndDate = pa.EndDate,
+                        AttrEndDate = pa.EndDate,
                         Enrollment = (int)pa.Enrollment,
                         GraduatedFlag = (int)pa.GraduatedFlag,
                         Id = pa.Id.ToString(),
@@ -349,7 +349,7 @@ namespace Phytel.API.DataDomain.Program
                         PlanElementId = pa.PlanElementId.ToString(),
                         Population = pa.Population,
                         RemovedReason = pa.RemovedReason,
-                        StartDate = pa.StartDate,
+                        AttrStartDate = pa.StartDate,
                         Status = (int)pa.Status
                     };
                 }
