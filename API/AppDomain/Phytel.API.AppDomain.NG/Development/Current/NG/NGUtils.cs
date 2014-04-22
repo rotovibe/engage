@@ -146,17 +146,17 @@ namespace Phytel.API.AppDomain.NG
                     Status = p.Status,
                     Text = p.Text,
                     Version = p.Version,
-                    DisEnrollReason = p.DisEnrollReason,
-                    DidNotEnrollReason = p.DidNotEnrollReason,
-                    EligibilityOverride = p.EligibilityOverride,
-                    Enrollment = p.Enrollment,
-                    GraduatedFlag = p.GraduatedFlag,
-                    IneligibleReason = p.IneligibleReason,
-                    OptOut = p.OptOut,
-                    OptOutDate = p.OptOutDate,
-                    OptOutReason = p.OptOutReason,
-                    OverrideReason = p.OverrideReason,
-                    RemovedReason = p.RemovedReason
+                    //DisEnrollReason = p.DisEnrollReason,
+                    //DidNotEnrollReason = p.DidNotEnrollReason,
+                    //EligibilityOverride = p.EligibilityOverride,
+                    //Enrollment = p.Enrollment,
+                    //GraduatedFlag = p.GraduatedFlag,
+                    //IneligibleReason = p.IneligibleReason,
+                    //OptOut = p.OptOut,
+                    //OptOutDate = p.OptOutDate,
+                    //OptOutReason = p.OptOutReason,
+                    //OverrideReason = p.OverrideReason,
+                    //RemovedReason = p.RemovedReason
                 };
 
                 return pD;

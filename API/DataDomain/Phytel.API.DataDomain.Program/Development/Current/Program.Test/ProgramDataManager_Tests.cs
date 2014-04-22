@@ -11,21 +11,42 @@ namespace Phytel.API.DataDomain.Program.Tests
     [TestClass()]
     public class ProgramDataManager_Tests
     {
-        [TestMethod()]
-        public void GetPatientProgramDetailsById_Test()
+        [TestClass()]
+        public class GetPatientProgramDetailsById_Method
         {
-            ProgramDataManager pm = new ProgramDataManager { };
-            GetProgramDetailsSummaryRequest request = new GetProgramDetailsSummaryRequest
+            [TestMethod()]
+            public void Get_Valid_Program_Test()
             {
-                Version = 1.0,
-                ProgramId = "",
-                PatientId = "",
-                UserId = "",
-                ContractNumber = "InHealth001",
-                Context = "NG"
-            };
-            GetProgramDetailsSummaryResponse response = pm.GetPatientProgramDetailsById(request);
-            Assert.IsNotNull(response.Program);
+                ProgramDataManager pm = new ProgramDataManager { };
+                GetProgramDetailsSummaryRequest request = new GetProgramDetailsSummaryRequest
+                {
+                    Version = 1.0,
+                    ProgramId = "535595ddd6a485044c7f0cdb",
+                    PatientId = "5325da5ed6a4850adcbba60a",
+                    UserId = "nguser",
+                    ContractNumber = "InHealth001",
+                    Context = "NG"
+                };
+                GetProgramDetailsSummaryResponse response = pm.GetPatientProgramDetailsById(request);
+                Assert.IsNotNull(response.Program);
+            }
+
+            [TestMethod()]
+            public void Get_With_Program_Attributes_Test()
+            {
+                ProgramDataManager pm = new ProgramDataManager { };
+                GetProgramDetailsSummaryRequest request = new GetProgramDetailsSummaryRequest
+                {
+                    Version = 1.0,
+                    ProgramId = "535595ddd6a485044c7f0cdb",
+                    PatientId = "5325da5ed6a4850adcbba60a",
+                    UserId = "nguser",
+                    ContractNumber = "InHealth001",
+                    Context = "NG"
+                };
+                GetProgramDetailsSummaryResponse response = pm.GetPatientProgramDetailsById(request);
+                Assert.IsNotNull(response.Program.Attributes);
+            }
         }
     }
 }

@@ -304,13 +304,60 @@ namespace Phytel.API.DataDomain.Program
                     Modules = DTOUtils.GetModules(mepp.Modules, request.ContractNumber, request.UserId)
                 };
 
-                // load responses
+                // load program attributes
+                ProgramAttributeData pad = GetProgramAttributes(mepp.Id.ToString(), request.ContractNumber, request.Context, request.UserId);
+                response.Program.Attributes = pad;
 
                 return response;
             }
             catch (Exception ex)
             {
                 throw new Exception("DD:DataProgramManager:GetPatientProgramDetailsById()::" + ex.Message, ex.InnerException);
+            }
+        }
+
+        public ProgramAttributeData GetProgramAttributes(string objectId, string contract, string context, string userid)
+        {
+            try
+            {
+                ProgramAttributeData pad = null;
+                IProgramRepository<GetProgramAttributeResponse> repo = 
+                    Phytel.API.DataDomain.Program.ProgramRepositoryFactory<GetProgramAttributeResponse>
+                    .GetProgramAttributesRepository(contract, context, userid);
+
+                MEProgramAttribute pa = repo.FindByPlanElementID(objectId) as MEProgramAttribute;
+                if (pa != null)
+                {
+                    pad = new ProgramAttributeData
+                    {
+                        AssignedBy = pa.AssignedBy,
+                        AssignedOn = pa.AssignedOn,
+                        AuthoredBy = pa.AuthoredBy,
+                        Completed = (int)pa.Completed,
+                        CompletedBy = pa.CompletedBy,
+                        DateCompleted = pa.DateCompleted,
+                        DidNotEnrollReason = pa.DidNotEnrollReason,
+                        Eligibility = (int)pa.Eligibility,
+                        EndDate = pa.EndDate,
+                        Enrollment = (int)pa.Enrollment,
+                        GraduatedFlag = (int)pa.GraduatedFlag,
+                        Id = pa.Id.ToString(),
+                        IneligibleReason = pa.IneligibleReason,
+                        Locked = (int)pa.Locked,
+                        OptOut = pa.OptOut,
+                        OverrideReason = pa.OverrideReason,
+                        PlanElementId = pa.PlanElementId.ToString(),
+                        Population = pa.Population,
+                        RemovedReason = pa.RemovedReason,
+                        StartDate = pa.StartDate,
+                        Status = (int)pa.Status
+                    };
+                }
+                return pad;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("DD:DataProgramManager:GetProgramAttributes()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -505,7 +552,7 @@ namespace Phytel.API.DataDomain.Program
 
             if (result != null)
             {
-                List<ProgramAttribute> pds = result.Item2.Cast<ProgramAttribute>().ToList();
+                List<ProgramAttributeData> pds = result.Item2.Cast<ProgramAttributeData>().ToList();
                 if (pds.Count > 0)
                 {
                     response.ProgramAttribute = pds.FirstOrDefault();
@@ -529,7 +576,7 @@ namespace Phytel.API.DataDomain.Program
                             Phytel.API.DataDomain.Program.ProgramRepositoryFactory<PutUpdateProgramAttributesResponse>
                             .GetProgramAttributesRepository(request.ContractNumber, request.Context, request.UserId);
 
-            ProgramAttribute pa = request.ProgramAttributes;
+            ProgramAttributeData pa = request.ProgramAttributes;
             result.Result = (bool)responseRepo.Update(pa);
 
             return result;
@@ -606,6 +653,7 @@ namespace Phytel.API.DataDomain.Program
                         response.ActionData = DTOUtils.GetAction(request.ContractNumber, request.UserId, meAction);
                     }
                 }
+
                 return response;
             }
             catch (Exception ex)

@@ -10,11 +10,11 @@ namespace Phytel.API.AppDomain.NG.PlanCOR
 {
     public class ActionPlanProcessor : PlanProcessor
     {
-        private ProgramAttribute _programAttributes;
+        private ProgramAttributeData _programAttributes;
 
         public ActionPlanProcessor()
         {
-            _programAttributes = new ProgramAttribute();
+            _programAttributes = new ProgramAttributeData();
         }
 
         public override void PlanElementHandler(object sender, PlanElementEventArg e)

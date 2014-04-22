@@ -54,10 +54,10 @@ namespace Phytel.API.DataDomain.Patient.Service.Test
                                 contractNumber,
                                 planElementId), new PutUpdateProgramAttributesRequest
                                 {
-                                    ProgramAttributes = new ProgramAttribute { 
+                                    ProgramAttributes = new ProgramAttributeData { 
                                         PlanElementId = planElementId ,
                                      AssignedBy = "test",
-                                      EligibilityEndDate = System.DateTime.UtcNow,
+                                      //EligibilityEndDate = System.DateTime.UtcNow,
                                        RemovedReason = "This is a removed reason!"
                                     }
                                 } as object);
@@ -85,11 +85,11 @@ namespace Phytel.API.DataDomain.Patient.Service.Test
                                 contractNumber,
                                 planElementId), new PutProgramAttributesRequest
                                 {
-                                    ProgramAttributes = new ProgramAttribute
+                                    ProgramAttributes = new ProgramAttributeData
                                     {
                                         PlanElementId = planElementId,
                                         AssignedBy = "test",
-                                        EligibilityEndDate = System.DateTime.UtcNow,
+                                        //EligibilityEndDate = System.DateTime.UtcNow,
                                         RemovedReason = "This is a removed reason!"
                                     }
                                 } as object);

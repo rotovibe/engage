@@ -20,11 +20,11 @@ namespace Phytel.API.AppDomain.NG.PlanCOR
     {
         public event SpawnEventHandler _spawnEvent;
         public static SpawnElementStrategy SpawnStrategy { get; set; }
-        private ProgramAttribute _programAttributes;
+        private ProgramAttributeData _programAttributes;
 
         public StepPlanProcessor()
         {
-            _programAttributes = new ProgramAttribute();
+            _programAttributes = new ProgramAttributeData();
         }
 
         protected void OnSpawnElementEvent(string type)

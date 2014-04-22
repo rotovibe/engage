@@ -273,5 +273,11 @@ namespace Phytel.API.DataDomain.Program
             }
             catch (Exception) { throw; }
         }
+
+
+        public object FindByPlanElementID(string entityID)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

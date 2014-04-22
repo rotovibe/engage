@@ -19,7 +19,7 @@ namespace Phytel.API.AppDomain.NG.Test.Stubs
             throw new NotImplementedException();
         }
 
-        public DataDomain.Program.DTO.ProgramAttribute GetProgramAttributes(string planElemId, Interface.IAppDomainRequest request)
+        public DataDomain.Program.DTO.ProgramAttributeData GetProgramAttributes(string planElemId, Interface.IAppDomainRequest request)
         {
             throw new NotImplementedException();
         }
@@ -29,7 +29,7 @@ namespace Phytel.API.AppDomain.NG.Test.Stubs
             throw new NotImplementedException();
         }
 
-        public bool InsertNewProgramAttribute(DataDomain.Program.DTO.ProgramAttribute pa, Interface.IAppDomainRequest request)
+        public bool InsertNewProgramAttribute(DataDomain.Program.DTO.ProgramAttributeData pa, Interface.IAppDomainRequest request)
         {
             throw new NotImplementedException();
         }
@@ -97,7 +97,7 @@ namespace Phytel.API.AppDomain.NG.Test.Stubs
             throw new NotImplementedException();
         }
 
-        public bool UpdateProgramAttributes(DataDomain.Program.DTO.ProgramAttribute pAtt, Interface.IAppDomainRequest request)
+        public bool UpdateProgramAttributes(DataDomain.Program.DTO.ProgramAttributeData pAtt, Interface.IAppDomainRequest request)
         {
             throw new NotImplementedException();
         }

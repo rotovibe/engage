@@ -77,5 +77,20 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
         [BsonElement(SpawnProperty)]
         [BsonIgnoreIfNull(true)]
         public List<SpawnElement> Spawn { get; set; }
+
+        public const string EligibilityRequirementsProperty = "er";
+        [BsonElement(EligibilityRequirementsProperty)]
+        [BsonIgnoreIfNull(true)]
+        public string EligibilityRequirements { get; set; }
+
+        public const string EligibilityStartDateProperty = "esd";
+        [BsonElement(EligibilityStartDateProperty)]
+        [BsonIgnoreIfNull(true)]
+        public DateTime? EligibilityStartDate { get; set; }
+
+        public const string EligibilityEndDateProperty = "eedt";
+        [BsonElement(EligibilityEndDateProperty)]
+        [BsonIgnoreIfNull(false)]
+        public DateTime? EligibilityEndDate { get; set; }
     }
 }

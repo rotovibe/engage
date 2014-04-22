@@ -454,9 +454,9 @@ namespace Phytel.API.AppDomain.NG
             }
         }
 
-        internal static ProgramAttribute GetProgramAttributes(string planElemId, IAppDomainRequest request)
+        internal static ProgramAttributeData GetProgramAttributes(string planElemId, IAppDomainRequest request)
         {
-            ProgramAttribute progAttr = null;
+            ProgramAttributeData progAttr = null;
             try
             {
                 double version = request.Version;
@@ -484,7 +484,7 @@ namespace Phytel.API.AppDomain.NG
             }
         }
 
-        internal static bool UpdateProgramAttributes(ProgramAttribute pAtt, IAppDomainRequest request)
+        internal static bool UpdateProgramAttributes(ProgramAttributeData pAtt, IAppDomainRequest request)
         {
             bool result = false;
             try
@@ -521,7 +521,7 @@ namespace Phytel.API.AppDomain.NG
             }
         }
 
-        internal static bool InsertNewProgramAttribute(ProgramAttribute pa, IAppDomainRequest request)
+        internal static bool InsertNewProgramAttribute(ProgramAttributeData pa, IAppDomainRequest request)
         {
             bool result = false;
             try

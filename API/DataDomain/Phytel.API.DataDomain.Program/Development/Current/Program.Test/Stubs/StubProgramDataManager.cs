@@ -26,7 +26,10 @@ namespace Phytel.API.DataDomain.Program.Test.Stubs
                 {
                     Name = "test patient program",
                     Description = "test program description",
-                    Id = "000000000000000000000000"
+                    Id = "000000000000000000000000",
+                    EligibilityRequirements = "Test eligibility requirements",
+                    EligibilityStartDate = System.DateTime.UtcNow,
+                    EligibilityEndDate = System.DateTime.UtcNow
                 },
                 Version = 1.0
             };

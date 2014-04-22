@@ -1245,11 +1245,11 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             }
         }
 
-        internal static ProgramAttribute InitializeElementAttributes(ProgramInfo p)
+        internal static ProgramAttributeData InitializeElementAttributes(ProgramInfo p)
         {
             try
             {
-                ProgramAttribute pa = new ProgramAttribute();
+                ProgramAttributeData pa = new ProgramAttributeData();
                 pa.PlanElementId = p.Id;
                 pa.Status = p.Status;
                 pa.StartDate = System.DateTime.UtcNow;
@@ -1272,7 +1272,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             try
             {
                 // create program attribute insertion
-                ProgramAttribute attr = DTOUtils.InitializeElementAttributes(response.program);
+                ProgramAttributeData attr = DTOUtils.InitializeElementAttributes(response.program);
 
                 IProgramRepository<PutProgramAttributesResponse> attrRepo =
                     Phytel.API.DataDomain.Program.ProgramRepositoryFactory<PutProgramAttributesResponse>

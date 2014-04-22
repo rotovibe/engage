@@ -137,7 +137,7 @@ namespace Phytel.API.AppDomain.NG
             }
         }
 
-        public void SpawnElementsInList(List<SpawnElement> list, Program program, string userId, DD.ProgramAttribute progAttr)
+        public void SpawnElementsInList(List<SpawnElement> list, Program program, string userId, DD.ProgramAttributeData progAttr)
         {
             try
             {
@@ -159,7 +159,7 @@ namespace Phytel.API.AppDomain.NG
             }
         }
 
-        public void SetProgramAttributes(SpawnElement r, Program program, string userId, DD.ProgramAttribute progAttr)
+        public void SetProgramAttributes(SpawnElement r, Program program, string userId, DD.ProgramAttributeData progAttr)
         {
             try
             {
@@ -531,12 +531,12 @@ namespace Phytel.API.AppDomain.NG
             }
         }
 
-        public void SaveReportingAttributes(DD.ProgramAttribute _programAttributes, IAppDomainRequest request)
+        public void SaveReportingAttributes(DD.ProgramAttributeData _programAttributes, IAppDomainRequest request)
         {
             try
             {
                 // 1) get program attribute
-                DD.ProgramAttribute pAtt = PlanElementEndpointUtil.GetProgramAttributes(_programAttributes.PlanElementId, request);
+                DD.ProgramAttributeData pAtt = PlanElementEndpointUtil.GetProgramAttributes(_programAttributes.PlanElementId, request);
                 // 2) update existing attributes
                 if (pAtt != null)
                 {
@@ -557,7 +557,7 @@ namespace Phytel.API.AppDomain.NG
             }
         }
 
-        public bool ModifyProgramAttributePropertiesForUpdate(DD.ProgramAttribute pAtt, DD.ProgramAttribute _pAtt)
+        public bool ModifyProgramAttributePropertiesForUpdate(DD.ProgramAttributeData pAtt, DD.ProgramAttributeData _pAtt)
         {
             bool dirty = false;
             try
@@ -569,8 +569,9 @@ namespace Phytel.API.AppDomain.NG
                 if (_pAtt.DateCompleted != null){ pAtt.DateCompleted = _pAtt.DateCompleted; dirty = true;}
                 if (_pAtt.DidNotEnrollReason != null){ pAtt.DidNotEnrollReason = _pAtt.DidNotEnrollReason; dirty = true;}
                 //if (_pAtt.DisEnrollReason != null){ pAtt.DisEnrollReason = _pAtt.DisEnrollReason; dirty = true;}
-                if (_pAtt.EligibilityRequirements != null){ pAtt.EligibilityRequirements = _pAtt.EligibilityRequirements; dirty = true;}
-                if (_pAtt.EligibilityStartDate != null){ pAtt.EligibilityStartDate = _pAtt.EligibilityStartDate; dirty = true;}
+                //if (_pAtt.EligibilityRequirements != null){ pAtt.EligibilityRequirements = _pAtt.EligibilityRequirements; dirty = true;}
+                //if (_pAtt.EligibilityStartDate != null){ pAtt.EligibilityStartDate = _pAtt.EligibilityStartDate; dirty = true;}
+                //if (_pAtt.EligibilityEndDate != null) { pAtt.EligibilityEndDate = _pAtt.EligibilityEndDate; dirty = true; }
                 if (_pAtt.EndDate != null){ pAtt.EndDate = _pAtt.EndDate; dirty = true;}
                 if (_pAtt.IneligibleReason != null){ pAtt.IneligibleReason = _pAtt.IneligibleReason; dirty = true;}
                 if (_pAtt.OptOut != false){ pAtt.OptOut = _pAtt.OptOut; dirty = true;}
@@ -583,7 +584,6 @@ namespace Phytel.API.AppDomain.NG
                 if (_pAtt.Status != 0){ pAtt.Status = _pAtt.Status; dirty = true;}
                 if (_pAtt.Completed != 0){ pAtt.Completed = _pAtt.Completed; dirty = true;}
                 if (_pAtt.Eligibility != 0){ pAtt.Eligibility = _pAtt.Eligibility; dirty = true;}
-                if (_pAtt.EligibilityEndDate != null){ pAtt.EligibilityEndDate = _pAtt.EligibilityEndDate; dirty = true;}
                 //if (_pAtt.EligibilityOverride != 0){ pAtt.EligibilityOverride = _pAtt.EligibilityOverride; dirty = true;}
                 if (_pAtt.Enrollment != 0){ pAtt.Enrollment = _pAtt.Enrollment; dirty = true;}
                 if (_pAtt.GraduatedFlag != 0){ pAtt.GraduatedFlag = _pAtt.GraduatedFlag; dirty = true;}
@@ -601,14 +601,14 @@ namespace Phytel.API.AppDomain.NG
         {
             try
             {
-                DD.ProgramAttribute pa = new DD.ProgramAttribute
+                DD.ProgramAttributeData pa = new DD.ProgramAttributeData
                 {
                     PlanElementId = programId,
                     StartDate = System.DateTime.UtcNow
                 };
 
                 // 1) get program attribute
-                DD.ProgramAttribute pAtt = PlanElementEndpointUtil.GetProgramAttributes(pa.PlanElementId, request);
+                DD.ProgramAttributeData pAtt = PlanElementEndpointUtil.GetProgramAttributes(pa.PlanElementId, request);
                 // 2) update existing attributes
                 if (pAtt != null)
                 {
@@ -627,7 +627,7 @@ namespace Phytel.API.AppDomain.NG
             }
         }
 
-        public void SetProgramInformation(DD.ProgramAttribute _programAttributes, Program p)
+        public void SetProgramInformation(DD.ProgramAttributeData _programAttributes, Program p)
         {
             try
             {
@@ -636,7 +636,7 @@ namespace Phytel.API.AppDomain.NG
                 _programAttributes.StartDate = p.StartDate;
                 _programAttributes.EndDate = null;
                 _programAttributes.Eligibility = p.Eligibility;
-                _programAttributes.Enrollment = p.Enrollment;
+                //_programAttributes.Enrollment = p.Enrollment;
                 _programAttributes.GraduatedFlag = 1;
                 _programAttributes.OptOut = false;
                 //_programAttributes.EligibilityOverride = 1;
@@ -828,31 +828,31 @@ namespace Phytel.API.AppDomain.NG
                     ContractProgramId = pr.ContractProgramId,
                     DateCompleted = pr.DateCompleted,
                     Description = pr.Description,
-                    DidNotEnrollReason = pr.DidNotEnrollReason,
-                    DisEnrollReason = pr.DisEnrollReason,
+                    //DidNotEnrollReason = pr.DidNotEnrollReason,
+                    //DisEnrollReason = pr.DisEnrollReason,
                     ElementState = pr.ElementState,
                     Eligibility = pr.Eligibility,
                     EligibilityEndDate = pr.EligibilityEndDate,
-                    EligibilityOverride = pr.EligibilityOverride,
+                    //EligibilityOverride = pr.EligibilityOverride,
                     EligibilityRequirements = pr.EligibilityRequirements,
                     EligibilityStartDate = pr.EligibilityStartDate,
                     Enabled = pr.Enabled,
                     EndDate = pr.EndDate,
-                    Enrollment = pr.Enrollment,
-                    GraduatedFlag = pr.GraduatedFlag,
+                    //Enrollment = pr.Enrollment,
+                    //GraduatedFlag = pr.GraduatedFlag,
                     Id = pr.Id,
-                    IneligibleReason = pr.IneligibleReason,
+                    //IneligibleReason = pr.IneligibleReason,
                     Name = pr.Name,
                     Next = pr.Next,
                     ObjectivesInfo = pr.ObjectivesInfo,
-                    OptOut = pr.OptOut,
-                    OptOutDate = pr.OptOutDate,
-                    OptOutReason = pr.OptOutReason,
+                    //OptOut = pr.OptOut,
+                    //OptOutDate = pr.OptOutDate,
+                    //OptOutReason = pr.OptOutReason,
                     Order = pr.Order,
-                    OverrideReason = pr.OverrideReason,
+                    //OverrideReason = pr.OverrideReason,
                     PatientId = pr.PatientId,
                     ProgramState = pr.ProgramState,
-                    RemovedReason = pr.RemovedReason,
+                    //RemovedReason = pr.RemovedReason,
                     ShortName = pr.ShortName,
                     SourceId = pr.SourceId,
                     SpawnElement = pr.SpawnElement,

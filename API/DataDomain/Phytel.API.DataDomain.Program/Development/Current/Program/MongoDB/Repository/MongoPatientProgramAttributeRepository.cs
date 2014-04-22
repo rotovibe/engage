@@ -53,7 +53,7 @@ namespace Phytel.API.DataDomain.Program
         public object Insert(object newEntity)
         {
             bool result = false;
-            ProgramAttribute pa = (ProgramAttribute)newEntity;
+            ProgramAttributeData pa = (ProgramAttributeData)newEntity;
             MEProgramAttribute mepa = null;
             try
             {
@@ -132,53 +132,35 @@ namespace Phytel.API.DataDomain.Program
             {
                 GetProgramDetailsSummaryResponse result = new GetProgramDetailsSummaryResponse();
 
-                using (ProgramMongoContext ctx = new ProgramMongoContext(_dbName))
-                {
-                    var findcp = MB.Query<MEPatientProgram>.EQ(b => b.Id, ObjectId.Parse(entityID));
-                    MEPatientProgram cp = ctx.PatientPrograms.Collection.Find(findcp).FirstOrDefault();
-
-                    if (cp != null)
-                    {
-                        result.Program = new ProgramDetail
-                        {
-                            Id = cp.Id.ToString(),
-                            Client = cp.Client != null ? cp.Client.ToString(): null,
-                            ContractProgramId = cp.ContractProgramId.ToString(),
-                            Description = cp.Description,
-                            Name = cp.Name,
-                            PatientId = cp.PatientId.ToString(),
-                            ProgramState = (int)cp.ProgramState,
-                            ShortName = cp.ShortName,
-                            StartDate = cp.StartDate,
-                            Status = (int)cp.Status,
-                            Version = cp.Version,
-                            EndDate = cp.EndDate,
-                            Completed = cp.Completed,
-                            Enabled = cp.Enabled,
-                            Next = cp.Next != null ? cp.Next.ToString() : string.Empty,
-                            Order = cp.Order,
-                            Previous = cp.Previous != null ? cp.Previous.ToString() : string.Empty,
-                            SourceId = cp.SourceId.ToString(),
-                            AssignBy = cp.AssignedBy,
-                            AssignDate = cp.AssignedOn,
-                            ElementState = (int)cp.State,
-                            CompletedBy = cp.CompletedBy,
-                            DateCompleted = cp.DateCompleted,
-                            ObjectivesInfo = DTOUtils.GetObjectives(cp.Objectives),
-                            SpawnElement = DTOUtils.GetSpawnElement(cp),
-                            Modules = DTOUtils.GetModules(cp.Modules, _dbName, this.UserId)
-                        };
-                    }
-                    else
-                    {
-                        throw new ArgumentException("ProgramID is not valid or is missing from the records.");
-                    }
-                }
+                //using (ProgramMongoContext ctx = new ProgramMongoContext(_dbName))
+                //{
+                //    var findcp = MB.Query<MEPatientProgram>.EQ(b => b.Id, ObjectId.Parse(entityID));
+                //    MEPatientProgram cp = ctx.PatientPrograms.Collection.Find(findcp).FirstOrDefault();
+                //}
                 return result;
             }
             catch (Exception ex)
             {
                 throw new Exception("DD:PatientProgramAttributeRepository:FindById()::" + ex.Message, ex.InnerException);
+            }
+        }
+
+        public object FindByPlanElementID(string entityID)
+        {
+            try
+            {
+                MEProgramAttribute cp = null;
+
+                using (ProgramMongoContext ctx = new ProgramMongoContext(_dbName))
+                {
+                    var findcp = MB.Query<MEProgramAttribute>.EQ(b => b.PlanElementId, ObjectId.Parse(entityID));
+                    cp = ctx.ProgramAttributes.Collection.Find(findcp).FirstOrDefault();
+                }
+                return cp;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("DD:PatientProgramAttributeRepository:FindByPlanElementID()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -198,7 +180,7 @@ namespace Phytel.API.DataDomain.Program
 
                     if (pa != null)
                     {
-                        pa.ForEach(cp => pAtts.Add(new ProgramAttribute
+                        pa.ForEach(cp => pAtts.Add(new ProgramAttributeData
                         {
                             Id = cp.Id.ToString(),
                             AuthoredBy = cp.AuthoredBy,
@@ -241,7 +223,7 @@ namespace Phytel.API.DataDomain.Program
 
         public object Update(object entity)
         {
-            ProgramAttribute mepa = (ProgramAttribute)entity;
+            ProgramAttributeData mepa = (ProgramAttributeData)entity;
             bool result = false;
             try
             {

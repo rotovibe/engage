@@ -20,7 +20,7 @@ namespace Phytel.API.AppDomain.NG.PlanCOR
                         e.Program.Completed = true;
                         e.Program.DateCompleted = System.DateTime.UtcNow;
                         e.Program.CompletedBy = e.UserId;
-                        e.Program.GraduatedFlag = true;
+                        //e.Program.GraduatedFlag = true;
                         OnProcessIdEvent(e.Program);
                     }
                 }

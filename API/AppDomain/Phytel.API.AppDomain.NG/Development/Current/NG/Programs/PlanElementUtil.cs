@@ -137,7 +137,7 @@ namespace Phytel.API.AppDomain.NG
             }
         }
 
-        internal static void SpawnElementsInList(List<SpawnElement> list, Program program, string userId, DD.ProgramAttribute progAttr)
+        internal static void SpawnElementsInList(List<SpawnElement> list, Program program, string userId, DD.ProgramAttributeData progAttr)
         {
             try
             {
@@ -159,7 +159,7 @@ namespace Phytel.API.AppDomain.NG
             }
         }
 
-        public static void SetProgramAttributes(SpawnElement r, Program program, string userId, DD.ProgramAttribute progAttr)
+        public static void SetProgramAttributes(SpawnElement r, Program program, string userId, DD.ProgramAttributeData progAttr)
         {
             try
             {
@@ -531,12 +531,12 @@ namespace Phytel.API.AppDomain.NG
             }
         }
 
-        internal static void SaveReportingAttributes(DD.ProgramAttribute _programAttributes, IAppDomainRequest request)
+        internal static void SaveReportingAttributes(DD.ProgramAttributeData _programAttributes, IAppDomainRequest request)
         {
             try
             {
                 // 1) get program attribute
-                DD.ProgramAttribute pAtt = PlanElementEndpointUtil.GetProgramAttributes(_programAttributes.PlanElementId, request);
+                DD.ProgramAttributeData pAtt = PlanElementEndpointUtil.GetProgramAttributes(_programAttributes.PlanElementId, request);
                 // 2) update existing attributes
                 if (pAtt != null)
                 {
@@ -557,7 +557,7 @@ namespace Phytel.API.AppDomain.NG
             }
         }
 
-        private static bool ModifyProgramAttributePropertiesForUpdate(DD.ProgramAttribute pAtt, DD.ProgramAttribute _pAtt)
+        private static bool ModifyProgramAttributePropertiesForUpdate(DD.ProgramAttributeData pAtt, DD.ProgramAttributeData _pAtt)
         {
             bool dirty = false;
             try
@@ -586,9 +586,9 @@ namespace Phytel.API.AppDomain.NG
                 if (_pAtt.GraduatedFlag != 0){ pAtt.GraduatedFlag = _pAtt.GraduatedFlag; dirty = true;}
                 if (_pAtt.Locked != 0) { pAtt.Locked = _pAtt.Locked; dirty = true; }
                 // need to refactor back to program
-                if (_pAtt.EligibilityRequirements != null) { pAtt.EligibilityRequirements = _pAtt.EligibilityRequirements; dirty = true; }
-                if (_pAtt.EligibilityStartDate != null) { pAtt.EligibilityStartDate = _pAtt.EligibilityStartDate; dirty = true; }
-                if (_pAtt.EligibilityEndDate != null) { pAtt.EligibilityEndDate = _pAtt.EligibilityEndDate; dirty = true; }
+                //if (_pAtt.EligibilityRequirements != null) { pAtt.EligibilityRequirements = _pAtt.EligibilityRequirements; dirty = true; }
+                //if (_pAtt.EligibilityStartDate != null) { pAtt.EligibilityStartDate = _pAtt.EligibilityStartDate; dirty = true; }
+                //if (_pAtt.EligibilityEndDate != null) { pAtt.EligibilityEndDate = _pAtt.EligibilityEndDate; dirty = true; }
 
                 return dirty;
             }
@@ -602,14 +602,14 @@ namespace Phytel.API.AppDomain.NG
         {
             try
             {
-                DD.ProgramAttribute pa = new DD.ProgramAttribute
+                DD.ProgramAttributeData pa = new DD.ProgramAttributeData
                 {
                     PlanElementId = programId,
                     StartDate = System.DateTime.UtcNow
                 };
 
                 // 1) get program attribute
-                DD.ProgramAttribute pAtt = PlanElementEndpointUtil.GetProgramAttributes(pa.PlanElementId, request);
+                DD.ProgramAttributeData pAtt = PlanElementEndpointUtil.GetProgramAttributes(pa.PlanElementId, request);
                 // 2) update existing attributes
                 if (pAtt != null)
                 {
@@ -628,7 +628,7 @@ namespace Phytel.API.AppDomain.NG
             }
         }
 
-        internal static void SetProgramInformation(DD.ProgramAttribute _programAttributes, Program p)
+        internal static void SetProgramInformation(DD.ProgramAttributeData _programAttributes, Program p)
         {
             try
             {
@@ -637,7 +637,7 @@ namespace Phytel.API.AppDomain.NG
                 _programAttributes.StartDate = p.StartDate;
                 _programAttributes.EndDate = null;
                 _programAttributes.Eligibility = p.Eligibility;
-                _programAttributes.Enrollment = p.Enrollment;
+                //_programAttributes.Enrollment = p.Enrollment;
                 _programAttributes.GraduatedFlag = 1;
                 _programAttributes.OptOut = false;
                 //_programAttributes.EligibilityOverride = 1;
@@ -650,56 +650,56 @@ namespace Phytel.API.AppDomain.NG
         #endregion
 
 
-        internal static void HydratePlanElementLists(List<object> ProcessedElements, PostProcessActionResponse response)
-        {
-            try
-            {
-                if (ProcessedElements != null && ProcessedElements.Count > 0)
-                {
-                    response.PlanElems = new PlanElements();
+        //internal static void HydratePlanElementLists(List<object> ProcessedElements, PostProcessActionResponse response)
+        //{
+        //    try
+        //    {
+        //        if (ProcessedElements != null && ProcessedElements.Count > 0)
+        //        {
+        //            response.PlanElems = new PlanElements();
 
-                    foreach (Object obj in ProcessedElements)
-                    {
-                        if (obj.GetType().Equals(typeof(Program)))
-                        {
-                            if (!response.PlanElems.Programs.Contains(obj))
-                            {
-                                Program p = PlanElementUtil.CloneProgram((Program)obj);
-                                response.PlanElems.Programs.Add(p);
-                            }
-                        }
-                        else if (obj.GetType().Equals(typeof(Module)))
-                        {
-                            if (!response.PlanElems.Modules.Contains(obj))
-                            {
-                                Module m = PlanElementUtil.CloneModule((Module)obj);
-                                response.PlanElems.Modules.Add(m);
-                            }
-                        }
-                        else if (obj.GetType().Equals(typeof(Actions)))
-                        {
-                            if (!response.PlanElems.Actions.Contains(obj))
-                            {
-                                Actions a = PlanElementUtil.CloneAction((Actions)obj);
-                                response.PlanElems.Actions.Add(a);
-                            }
-                        }
-                        else if (obj.GetType().Equals(typeof(Step)))
-                        {
-                            if (!response.PlanElems.Steps.Contains(obj))
-                            {
-                                Step s = PlanElementUtil.CloneStep((Step)obj);
-                                response.PlanElems.Steps.Add(s);
-                            }
-                        }
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("AD:PlanElementUtil:HydratePlanElementLists()::" + ex.Message, ex.InnerException);
-            }
-        }
+        //            foreach (Object obj in ProcessedElements)
+        //            {
+        //                if (obj.GetType().Equals(typeof(Program)))
+        //                {
+        //                    if (!response.PlanElems.Programs.Contains(obj))
+        //                    {
+        //                        Program p = PlanElementUtil.CloneProgram((Program)obj);
+        //                        response.PlanElems.Programs.Add(p);
+        //                    }
+        //                }
+        //                else if (obj.GetType().Equals(typeof(Module)))
+        //                {
+        //                    if (!response.PlanElems.Modules.Contains(obj))
+        //                    {
+        //                        Module m = PlanElementUtil.CloneModule((Module)obj);
+        //                        response.PlanElems.Modules.Add(m);
+        //                    }
+        //                }
+        //                else if (obj.GetType().Equals(typeof(Actions)))
+        //                {
+        //                    if (!response.PlanElems.Actions.Contains(obj))
+        //                    {
+        //                        Actions a = PlanElementUtil.CloneAction((Actions)obj);
+        //                        response.PlanElems.Actions.Add(a);
+        //                    }
+        //                }
+        //                else if (obj.GetType().Equals(typeof(Step)))
+        //                {
+        //                    if (!response.PlanElems.Steps.Contains(obj))
+        //                    {
+        //                        Step s = PlanElementUtil.CloneStep((Step)obj);
+        //                        response.PlanElems.Steps.Add(s);
+        //                    }
+        //                }
+        //            }
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw new Exception("AD:PlanElementUtil:HydratePlanElementLists()::" + ex.Message, ex.InnerException);
+        //    }
+        //}
 
         private static Module CloneModule(Module md)
         {
@@ -829,31 +829,31 @@ namespace Phytel.API.AppDomain.NG
                     ContractProgramId = pr.ContractProgramId,
                     DateCompleted = pr.DateCompleted,
                     Description = pr.Description,
-                    DidNotEnrollReason = pr.DidNotEnrollReason,
-                    DisEnrollReason = pr.DisEnrollReason,
+                    //DidNotEnrollReason = pr.DidNotEnrollReason,
+                    //DisEnrollReason = pr.DisEnrollReason,
                     ElementState = pr.ElementState,
                     Eligibility = pr.Eligibility,
                     EligibilityEndDate = pr.EligibilityEndDate,
-                    EligibilityOverride = pr.EligibilityOverride,
+                    //EligibilityOverride = pr.EligibilityOverride,
                     EligibilityRequirements = pr.EligibilityRequirements,
                     EligibilityStartDate = pr.EligibilityStartDate,
                     Enabled = pr.Enabled,
                     EndDate = pr.EndDate,
-                    Enrollment = pr.Enrollment,
-                    GraduatedFlag = pr.GraduatedFlag,
+                    //Enrollment = pr.Enrollment,
+                    //GraduatedFlag = pr.GraduatedFlag,
                     Id = pr.Id,
-                    IneligibleReason = pr.IneligibleReason,
+                    //IneligibleReason = pr.IneligibleReason,
                     Name = pr.Name,
                     Next = pr.Next,
                     ObjectivesInfo = pr.ObjectivesInfo,
-                    OptOut = pr.OptOut,
-                    OptOutDate = pr.OptOutDate,
-                    OptOutReason = pr.OptOutReason,
+                    //OptOut = pr.OptOut,
+                    //OptOutDate = pr.OptOutDate,
+                    //OptOutReason = pr.OptOutReason,
                     Order = pr.Order,
-                    OverrideReason = pr.OverrideReason,
+                    //OverrideReason = pr.OverrideReason,
                     PatientId = pr.PatientId,
                     ProgramState = pr.ProgramState,
-                    RemovedReason = pr.RemovedReason,
+                    //RemovedReason = pr.RemovedReason,
                     ShortName = pr.ShortName,
                     SourceId = pr.SourceId,
                     SpawnElement = pr.SpawnElement,

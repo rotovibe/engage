@@ -15,6 +15,7 @@ namespace Phytel.API.AppDomain.NG
 {
     public class PlanManager : ManagerBase
     {
+        public IPlanElementUtils PlanElementUtils { get; set; }
         public List<string> RelatedChanges { get; set; }
         public List<object> ProcessedElements { get; set; }
 
@@ -104,7 +105,7 @@ namespace Phytel.API.AppDomain.NG
                 PlanElementEndpointUtil.SaveAction(request, action.Id, p);
 
                 // create element changed lists 
-                PlanElementUtil.HydratePlanElementLists(ProcessedElements, response);
+                PlanElementUtils.HydratePlanElementLists(ProcessedElements, response);
 
                 //response.Program = p;
                 response.RelatedChanges = RelatedChanges;

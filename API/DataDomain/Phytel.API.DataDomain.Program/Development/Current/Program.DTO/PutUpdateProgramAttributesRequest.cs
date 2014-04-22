@@ -7,7 +7,7 @@ namespace Phytel.API.DataDomain.Program.DTO
     public class PutUpdateProgramAttributesRequest : IDataDomainRequest
     {
         [ApiMember(Name = "ProgramAttributes", Description = "Program Attributes to update.", ParameterType = "body", DataType = "string", IsRequired = true)]
-        public ProgramAttribute ProgramAttributes { get; set; }
+        public ProgramAttributeData ProgramAttributes { get; set; }
 
         [ApiMember(Name = "UserId", Description = "UserId of the logged in user", ParameterType = "property", DataType = "string", IsRequired = false)]
         public string UserId { get; set; }

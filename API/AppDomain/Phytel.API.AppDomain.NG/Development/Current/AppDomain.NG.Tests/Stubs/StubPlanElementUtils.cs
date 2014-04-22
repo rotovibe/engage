@@ -70,7 +70,7 @@ namespace Phytel.API.AppDomain.NG.Test.Stubs
             throw new NotImplementedException();
         }
 
-        public bool ModifyProgramAttributePropertiesForUpdate(Phytel.API.DataDomain.Program.DTO.ProgramAttribute pAtt, Phytel.API.DataDomain.Program.DTO.ProgramAttribute _pAtt)
+        public bool ModifyProgramAttributePropertiesForUpdate(Phytel.API.DataDomain.Program.DTO.ProgramAttributeData pAtt, Phytel.API.DataDomain.Program.DTO.ProgramAttributeData _pAtt)
         {
             throw new NotImplementedException();
         }
@@ -90,7 +90,7 @@ namespace Phytel.API.AppDomain.NG.Test.Stubs
             throw new NotImplementedException();
         }
 
-        public void SaveReportingAttributes(Phytel.API.DataDomain.Program.DTO.ProgramAttribute _programAttributes, Interface.IAppDomainRequest request)
+        public void SaveReportingAttributes(Phytel.API.DataDomain.Program.DTO.ProgramAttributeData _programAttributes, Interface.IAppDomainRequest request)
         {
             throw new NotImplementedException();
         }
@@ -120,12 +120,12 @@ namespace Phytel.API.AppDomain.NG.Test.Stubs
             throw new NotImplementedException();
         }
 
-        public void SetProgramAttributes(DTO.SpawnElement r, DTO.Program program, string userId, Phytel.API.DataDomain.Program.DTO.ProgramAttribute progAttr)
+        public void SetProgramAttributes(DTO.SpawnElement r, DTO.Program program, string userId, Phytel.API.DataDomain.Program.DTO.ProgramAttributeData progAttr)
         {
             throw new NotImplementedException();
         }
 
-        public void SetProgramInformation(Phytel.API.DataDomain.Program.DTO.ProgramAttribute _programAttributes, DTO.Program p)
+        public void SetProgramInformation(Phytel.API.DataDomain.Program.DTO.ProgramAttributeData _programAttributes, DTO.Program p)
         {
             throw new NotImplementedException();
         }
@@ -135,7 +135,7 @@ namespace Phytel.API.AppDomain.NG.Test.Stubs
             throw new NotImplementedException();
         }
 
-        public void SpawnElementsInList(List<DTO.SpawnElement> list, DTO.Program program, string userId, Phytel.API.DataDomain.Program.DTO.ProgramAttribute progAttr)
+        public void SpawnElementsInList(List<DTO.SpawnElement> list, DTO.Program program, string userId, Phytel.API.DataDomain.Program.DTO.ProgramAttributeData progAttr)
         {
             throw new NotImplementedException();
         }

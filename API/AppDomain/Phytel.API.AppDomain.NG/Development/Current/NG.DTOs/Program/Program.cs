@@ -27,17 +27,17 @@ namespace Phytel.API.AppDomain.NG.DTO
         public double Version { get; set; }
         public string Text { get; set; }
 
-        public int EligibilityOverride { get; set; }
-        public int Enrollment { get; set; }
-        public bool GraduatedFlag { get; set; }
-        public string IneligibleReason { get; set; }
-        public string OptOut { get; set; }
-        public string OptOutReason { get; set; }
-        public DateTime? OptOutDate { get; set; }
-        public string RemovedReason { get; set; }
-        public string DidNotEnrollReason { get; set; }
-        public string DisEnrollReason { get; set; }
-        public string OverrideReason { get; set; }
+        //public int EligibilityOverride { get; set; }
+        //public int Enrollment { get; set; }
+        //public bool GraduatedFlag { get; set; }
+        //public string IneligibleReason { get; set; }
+        //public string OptOut { get; set; }
+        //public string OptOutReason { get; set; }
+        //public DateTime? OptOutDate { get; set; }
+        //public string RemovedReason { get; set; }
+        //public string DidNotEnrollReason { get; set; }
+        //public string DisEnrollReason { get; set; }
+        //public string OverrideReason { get; set; }
 
         public PatientProgramAttribute Attributes { get; set; }
     }

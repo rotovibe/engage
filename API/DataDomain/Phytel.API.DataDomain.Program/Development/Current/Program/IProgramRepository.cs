@@ -14,5 +14,6 @@ namespace Phytel.API.DataDomain.Program
         List<ProgramInfo> GetActiveProgramsInfoList(GetAllActiveProgramsRequest request);
         IEnumerable<object> Find(string Id);
         DTO.Program FindByName(string entityName);
+        object FindByPlanElementID(string entityID);
     }
 }
