@@ -29,8 +29,7 @@ namespace Phytel.API.DataDomain.ProgramDesign
             //Actions = new MongoSet<MEAction, ObjectId>(this, COLL_ActionS);
             //TextSteps = new MongoSet<METext, ObjectId>(this, COLL_Step);
             //YesNoSteps = new MongoSet<MEYesNo, ObjectId>(this, COLL_Step);
-
-            //create repositories for all child collections?
+            
 
 		}
 

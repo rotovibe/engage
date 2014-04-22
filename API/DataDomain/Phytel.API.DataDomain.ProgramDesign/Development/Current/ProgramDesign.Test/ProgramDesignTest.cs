@@ -6,14 +6,14 @@ namespace Phytel.API.DataDomain.ProgramDesign.Test
     [TestClass]
     public class ProgramDesignTest
     {
-        private ProgramDesignDataManager pm;
+        //private ProgramDesignDataManager pm;
 
         [TestMethod]
         public void GetProgramDesignByID()
         {
             GetProgramDesignRequest request = new GetProgramDesignRequest{ ProgramDesignID = "5"};
 
-            GetProgramDesignResponse response = pm.GetProgramDesignByID(request);
+            GetProgramDesignResponse response = ProgramDesignDataManager.GetProgramDesignByID(request);
 
             Assert.IsTrue(response.ProgramDesign.ProgramDesignID == "??");
         }

@@ -11,12 +11,12 @@ using Phytel.API.Interface;
 
 namespace Phytel.API.DataDomain.ProgramDesign
 {
-    public class ProgramDesignDataManager: IProgramDesignDataManager
+    public static class ProgramDesignDataManager
     {
         private static readonly string yesnostep = "yesno";
         private static readonly string textstep = "text";
 
-        public GetActionDataResponse GetActionByID(GetActionDataRequest request)
+        public static GetActionDataResponse GetActionByID(GetActionDataRequest request)
         {
             GetActionDataResponse result = new GetActionDataResponse();
 
@@ -27,7 +27,7 @@ namespace Phytel.API.DataDomain.ProgramDesign
             return (result != null ? result : new GetActionDataResponse());
         }
 
-        public GetAllActionsDataResponse GetActionsList(GetAllActionsDataRequest request)
+        public static GetAllActionsDataResponse GetActionsList(GetAllActionsDataRequest request)
         {
             GetAllActionsDataResponse result = new GetAllActionsDataResponse();
 
@@ -39,7 +39,7 @@ namespace Phytel.API.DataDomain.ProgramDesign
             return result;
         }
 
-        public GetAllActiveProgramsResponse GetAllActiveContractPrograms(GetAllActiveProgramsRequest request)
+        public static GetAllActiveProgramsResponse GetAllActiveContractPrograms(GetAllActiveProgramsRequest request)
         {
             try
             {
@@ -60,7 +60,7 @@ namespace Phytel.API.DataDomain.ProgramDesign
             }
         }
 
-        public GetAllModulesResponse GetModuleList(GetAllModulesRequest request)
+        public static GetAllModulesResponse GetModuleList(GetAllModulesRequest request)
         {
             GetAllModulesResponse result = new GetAllModulesResponse();
 
@@ -72,7 +72,7 @@ namespace Phytel.API.DataDomain.ProgramDesign
             return result;
         }
 
-        public GetAllProgramDesignsResponse GetProgramDesignList(GetAllProgramDesignsRequest request)
+        public static GetAllProgramDesignsResponse GetProgramDesignList(GetAllProgramDesignsRequest request)
         {
             try
             {
@@ -90,9 +90,9 @@ namespace Phytel.API.DataDomain.ProgramDesign
             }
         }
 
-        //public GetAllProgramsResponse
+        //public static GetAllProgramsResponse
 
-        public GetAllTextStepDataResponse GetAllTextSteps(GetAllTextStepDataRequest request)
+        public static GetAllTextStepDataResponse GetAllTextSteps(GetAllTextStepDataRequest request)
         {
             GetAllTextStepDataResponse result = new GetAllTextStepDataResponse();
 
@@ -103,7 +103,7 @@ namespace Phytel.API.DataDomain.ProgramDesign
             return result;
         }
 
-        public GetAllYesNoStepDataResponse GetAllYesNoSteps(GetAllYesNoStepDataRequest request)
+        public static GetAllYesNoStepDataResponse GetAllYesNoSteps(GetAllYesNoStepDataRequest request)
         {
             GetAllYesNoStepDataResponse result = new GetAllYesNoStepDataResponse();
 
@@ -114,9 +114,9 @@ namespace Phytel.API.DataDomain.ProgramDesign
             return result;
         }
 
-        //public GetContractProgramResponse
+        //public static GetContractProgramResponse
 
-        public GetModuleResponse GetModuleByID(GetModuleRequest request)
+        public static GetModuleResponse GetModuleByID(GetModuleRequest request)
         {
             GetModuleResponse result = new GetModuleResponse();
 
@@ -169,7 +169,7 @@ namespace Phytel.API.DataDomain.ProgramDesign
         //    }
         //}
 
-        public GetProgramByNameResponse GetProgramByName(GetProgramByNameRequest request)
+        public static GetProgramByNameResponse GetProgramByName(GetProgramByNameRequest request)
         {
             try
             {
@@ -189,7 +189,7 @@ namespace Phytel.API.DataDomain.ProgramDesign
             }
         }
 
-        public GetProgramDesignResponse GetProgramDesignByID(GetProgramDesignRequest request)
+        public static GetProgramDesignResponse GetProgramDesignByID(GetProgramDesignRequest request)
         {
             try
             {
@@ -260,7 +260,7 @@ namespace Phytel.API.DataDomain.ProgramDesign
         //    }
         //}
 
-        public GetProgramResponse GetProgramByID(GetProgramRequest request)
+        public static GetProgramResponse GetProgramByID(GetProgramRequest request)
         {
             try
             {
@@ -328,7 +328,7 @@ namespace Phytel.API.DataDomain.ProgramDesign
         //    }
         //}
 
-        public GetTextStepDataResponse GetTextStepByID(GetTextStepDataRequest request)
+        public static GetTextStepDataResponse GetTextStepByID(GetTextStepDataRequest request)
         {
             GetTextStepDataResponse result = new GetTextStepDataResponse();
 
@@ -339,7 +339,7 @@ namespace Phytel.API.DataDomain.ProgramDesign
             return (result != null ? result : new GetTextStepDataResponse());
         }
 
-        public GetYesNoStepDataResponse GetYesNoStepByID(GetYesNoStepDataRequest request)
+        public static GetYesNoStepDataResponse GetYesNoStepByID(GetYesNoStepDataRequest request)
         {
             GetYesNoStepDataResponse result = new GetYesNoStepDataResponse();
 
@@ -350,7 +350,7 @@ namespace Phytel.API.DataDomain.ProgramDesign
             return (result != null ? result : new GetYesNoStepDataResponse());
         }
 
-        private List<SpawnElement> ParseSpawnElements(List<SpawnElementDetail> list)
+        private static List<SpawnElement> ParseSpawnElements(List<SpawnElementDetail> list)
         {
             List<SpawnElement> mespn = new List<SpawnElement>();
             try
@@ -382,5 +382,14 @@ namespace Phytel.API.DataDomain.ProgramDesign
         //public PutUpdateProgramAttributesResponse
 
         //public PutUpdateResponseResponse
+
+        public static PutModuleDataResponse InsertModule(PutModuleDataRequest request)
+        {
+            IProgramDesignRepository<PutModuleDataRequest> repo = 
+                ProgramDesignRepositoryFactory<PutModuleDataRequest>.GetModuleRepository(request.ContractNumber, request.Context, request.UserId);
+
+            PutModuleDataResponse result = repo.Insert(request) as PutModuleDataResponse;
+            return result;
+        }
     }
 }   

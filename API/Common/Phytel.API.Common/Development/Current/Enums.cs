@@ -226,6 +226,9 @@ namespace Phytel.API.Common
         Contact,
         CareMember,
         CohortPatientView,
-        Response
+        Response,
+        Module,
+        Action,
+        Step
     }
 }

@@ -120,6 +120,8 @@
     <Compile Include="ProgramDetail.cs" />
     <Compile Include="ProgramInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="PutModuleDataRequest.cs" />
+    <Compile Include="PutModuleDataResponse.cs" />
     <Compile Include="PutProgramActionProcessingRequest.cs" />
     <Compile Include="PutProgramActionProcessingResponse.cs" />
     <Compile Include="PutProgramAttributesRequest.cs" />

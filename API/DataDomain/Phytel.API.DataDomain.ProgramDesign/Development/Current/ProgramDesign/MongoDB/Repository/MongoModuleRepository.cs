@@ -13,10 +13,12 @@ using MongoDB.Bson;
 using MongoDB.Bson.Serialization;
 using Phytel.API.DataDomain.ProgramDesign.DTO;
 using Phytel.API.DataDomain.ProgramDesign.MongoDB.DTO;
+using Phytel.API.DataAudit;
+using Phytel.API.Common;
 
 namespace Phytel.API.DataDomain.ProgramDesign
 {
-    public class MongoModuleRepository<T> : IModuleRepository<T>
+    public class MongoModuleRepository<T> : IProgramDesignRepository<T>
     {
         private string _dbName = string.Empty;
 
@@ -39,7 +41,48 @@ namespace Phytel.API.DataDomain.ProgramDesign
 
         public object Insert(object newEntity)
         {
-            throw new NotImplementedException();
+            GetModuleResponse response = null;
+            PutModuleDataRequest request = newEntity as PutModuleDataRequest;
+
+            MEModule module = null;
+            using (ProgramDesignMongoContext ctx = new ProgramDesignMongoContext(_dbName))
+            {
+                //Does the module exist?
+                IMongoQuery query = Query.And(
+                                Query.EQ(MEModule.NameProperty, request.Name));
+
+                module = ctx.Modules.Collection.FindOneAs<MEModule>(query);
+                MongoProgramDesignRepository<T> repo = new MongoProgramDesignRepository<T>(_dbName);
+                repo.UserId = this.UserId;
+
+                if (module == null)
+                {
+                    module = new MEModule()
+                    {
+                        Id = ObjectId.GenerateNewId(),
+                        Name = request.Name,
+                        ProgramId = new ObjectId(request.ProgramId.ToString()),
+                        Version = request.Version,
+                        UpdatedBy = ObjectId.Parse(this.UserId),
+                        TTLDate = null,
+                        DeleteFlag = false,
+                        LastUpdatedOn = System.DateTime.UtcNow
+                    };
+                }
+                ctx.Modules.Collection.Insert(module);
+
+                AuditHelper.LogDataAudit(this.UserId,
+                                           MongoCollectionName.Module.ToString(),
+                                           module.Id.ToString(),
+                                           Common.DataAuditType.Insert,
+                                           request.ContractNumber);
+
+                return new PutModuleDataResponse
+                {
+                    Id = module.Id.ToString()
+                };
+
+            }
         }
 
         public object InsertAll(List<object> entities)
@@ -125,5 +168,15 @@ namespace Phytel.API.DataDomain.ProgramDesign
 
         public string UserId { get; set; }
 
+
+        public List<ProgramInfo> GetActiveProgramsInfoList(GetAllActiveProgramsRequest request)
+        {
+            throw new NotImplementedException();
+        }
+
+        public DTO.Program FindByName(string entityName)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

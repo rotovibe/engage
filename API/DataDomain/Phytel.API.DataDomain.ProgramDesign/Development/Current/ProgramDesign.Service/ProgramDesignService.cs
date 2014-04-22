@@ -9,7 +9,7 @@ namespace Phytel.API.DataDomain.ProgramDesign.Service
 {
     public class ProgramDesignService : ServiceStack.ServiceInterface.Service
     {
-        public IProgramDesignDataManager ProgramDesignDataManager { get; set; }
+        //public IProgramDesignDataManager ProgramDesignDataManager { get; set; }
 
         public GetProgramDesignResponse Post(GetProgramDesignRequest request)
         {
@@ -65,6 +65,29 @@ namespace Phytel.API.DataDomain.ProgramDesign.Service
                 string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
                 Common.Helper.LogException(int.Parse(aseProcessID), ex);
             }
+            return response;
+        }
+
+        public PutModuleDataResponse Put(PutModuleDataRequest request)
+        {
+            PutModuleDataResponse response = new PutModuleDataResponse();
+            try
+            {
+                if (string.IsNullOrEmpty(request.UserId))
+                    throw new UnauthorizedAccessException("ProgramDesignDD:Put()::Unauthorized Access");
+
+                response = ProgramDesignDataManager.InsertModule(request);
+                response.Version = request.Version;
+                //throw new Exception("Just a test error");
+            }
+            catch (Exception ex)
+            {
+                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+
+                string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
+                Common.Helper.LogException(int.Parse(aseProcessID), ex);
+            }
+
             return response;
         }
     }

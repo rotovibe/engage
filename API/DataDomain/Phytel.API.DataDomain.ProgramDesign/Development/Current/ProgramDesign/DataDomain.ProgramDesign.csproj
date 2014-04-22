@@ -66,10 +66,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="IActionRepository.cs" />
     <Compile Include="IProgramDesignDataManager.cs" />
     <Compile Include="IProgramDesignRepository.cs" />
-    <Compile Include="IStepRepository.cs" />
     <Compile Include="MongoDB\DTO\MEAction.cs" />
     <Compile Include="MongoDB\DTO\MEProgram.cs" />
     <Compile Include="MongoDB\DTO\MEProgramAttribute.cs" />
@@ -84,7 +82,6 @@
     <Compile Include="MongoDB\DTO\ResponseBase.cs" />
     <Compile Include="MongoDB\DTO\SpawnElement.cs" />
     <Compile Include="MongoDB\DTO\Step.cs" />
-    <Compile Include="IModuleRepository.cs" />
     <Compile Include="MongoDB\Repository\MongoActionRepository.cs" />
     <Compile Include="MongoDB\Repository\MongoContractProgramRepository.cs" />
     <Compile Include="MongoDB\Repository\MongoModuleRepository.cs" />

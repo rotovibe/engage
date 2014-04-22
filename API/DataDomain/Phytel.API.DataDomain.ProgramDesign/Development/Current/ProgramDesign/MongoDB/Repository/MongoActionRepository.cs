@@ -16,7 +16,7 @@ using Phytel.API.DataDomain.ProgramDesign.MongoDB.DTO;
 
 namespace Phytel.API.DataDomain.ProgramDesign
 {
-    public class MongoActionRepository<T> : IActionRepository<T>
+    public class MongoActionRepository<T> : IProgramDesignRepository<T>
     {
         private string _dbName = string.Empty;
 
@@ -154,5 +154,15 @@ namespace Phytel.API.DataDomain.ProgramDesign
         }
 
         public string UserId { get; set; }
+
+        public List<ProgramInfo> GetActiveProgramsInfoList(GetAllActiveProgramsRequest request)
+        {
+            throw new NotImplementedException();
+        }
+
+        public DTO.Program FindByName(string entityName)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
