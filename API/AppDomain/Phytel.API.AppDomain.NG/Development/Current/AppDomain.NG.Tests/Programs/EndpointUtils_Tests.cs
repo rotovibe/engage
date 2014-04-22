@@ -49,6 +49,15 @@ namespace Phytel.API.AppDomain.NG.Tests
                 Assert.IsNotNull(response.Program.EligibilityStartDate);
                 Assert.IsNotNull(response.Program.EligibilityEndDate);
             }
+
+            [TestMethod()]
+            public void With_Attributes_AsNull_Test()
+            {
+                StubPlanElementEndpointUtils peu = new StubPlanElementEndpointUtils { Client = new StubJsonRestClient() };
+                GetPatientProgramDetailsSummaryRequest request = new GetPatientProgramDetailsSummaryRequest();
+                GetProgramDetailsSummaryResponse response = peu.RequestPatientProgramDetailsSummary(request);
+                Assert.IsNull(response.Program.Attributes);
+            }
         }
 
         [TestClass()]

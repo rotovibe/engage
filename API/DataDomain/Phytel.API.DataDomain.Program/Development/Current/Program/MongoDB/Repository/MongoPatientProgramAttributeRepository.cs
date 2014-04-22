@@ -72,8 +72,6 @@ namespace Phytel.API.DataDomain.Program
                         Locked = (Locked)pa.Locked,
                         IneligibleReason = pa.IneligibleReason,
                         Completed = (Completed)pa.Completed,
-                        AssignedBy = ObjectId.Parse(pa.AssignedBy),
-                        AssignedTo = ObjectId.Parse(pa.AssignedTo),
                         AssignedOn = pa.AssignedOn,
                         AuthoredBy = pa.AuthoredBy,
                         CompletedBy = pa.CompletedBy,
@@ -93,6 +91,16 @@ namespace Phytel.API.DataDomain.Program
                         //,LastUpdatedOn = DateTime.UtcNow,
                         //UpdatedBy = ObjectId.Parse(this.UserId)
                     };
+
+                    if(pa.AssignedBy != null)
+                    {
+                        mepa.AssignedBy = ObjectId.Parse(pa.AssignedBy);
+                    }
+
+                    if (pa.AssignedTo != null)
+                    {
+                        mepa.AssignedTo = ObjectId.Parse(pa.AssignedTo);
+                    }
 
                     ctx.ProgramAttributes.Collection.Insert(mepa);
                     

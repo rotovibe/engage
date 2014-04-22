@@ -76,7 +76,8 @@ namespace Phytel.API.AppDomain.NG.Test.Stubs
                             new ActionsDetail{ Id = "000000000000000000000000", ElementState = 4, Name ="test action from stub", Text = "test action 1"} } 
                     }
                 },
-                Text = "This is a sample patient program for the request patient details summary test stub"
+                Text = "This is a sample patient program for the request patient details summary test stub",
+                Attributes  = null
             };
 
             return response;
