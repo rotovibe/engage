@@ -113,7 +113,6 @@
     <Compile Include="Audit\DispatchEventArgs.cs" />
     <Compile Include="Audit\DispatchRequest.cs" />
     <Compile Include="Audit\IAuditUtil.cs" />
-    <Compile Include="Constants.cs" />
     <Compile Include="CustomObject\IdNamePair.cs" />
     <Compile Include="Data\MongoDataUtil.cs" />
     <Compile Include="Enums.cs" />

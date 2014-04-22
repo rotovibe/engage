@@ -4,12 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Phytel.API.Common
+namespace Phytel.API.DataDomain.Patient
 {
     public class Constants
     {
-        public const string CareManager = "Care Manager";
-
         // Cohort Patient View
         public const string FN = "FN";
         public const string LN = "LN";

@@ -95,6 +95,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Constants.cs" />
     <Compile Include="MongoDB\DTO\DTOUtils.cs" />
     <Compile Include="MongoDB\DTO\SearchField.cs" />
     <Compile Include="MongoDB\Repository\MongoCohortPatientViewRepository.cs" />
