@@ -515,7 +515,8 @@ namespace Phytel.API.AppDomain.NG
                             CompletedBy = resp.Program.CompletedBy,
                             DateCompleted = resp.Program.DateCompleted,
                             Modules = getModuleInfo(resp, request),
-                            ObjectivesInfo = GetObjectivesInfo(resp.Program.ObjectivesInfo)
+                            ObjectivesInfo = GetObjectivesInfo(resp.Program.ObjectivesInfo),
+                            Attributes = getAttributes(resp.Program.Attributes)
                         };
 
                         if (resp.Status != null)
@@ -1406,6 +1407,39 @@ namespace Phytel.API.AppDomain.NG
                 }).ToList();
             }
             return spawn;
+        }
+
+        private ProgramAttribute getAttributes(DD.ProgramAttributeData programAttributeData)
+        {
+            ProgramAttribute programAttribute = null;
+            if(programAttributeData != null)
+            {
+                programAttribute = new ProgramAttribute
+                {
+                    AssignedBy = programAttributeData.AssignedBy,
+                    AssignedOn = programAttributeData.AssignedOn,
+                    AuthoredBy = programAttributeData.AuthoredBy,
+                    Completed = (int)programAttributeData.Completed,
+                    CompletedBy = programAttributeData.CompletedBy,
+                    DateCompleted = programAttributeData.DateCompleted,
+                    DidNotEnrollReason = programAttributeData.DidNotEnrollReason,
+                    Eligibility = (int)programAttributeData.Eligibility,
+                    EndDate = programAttributeData.EndDate,
+                    Enrollment = (int)programAttributeData.Enrollment,
+                    GraduatedFlag = (int)programAttributeData.GraduatedFlag,
+                    Id = programAttributeData.Id.ToString(),
+                    IneligibleReason = programAttributeData.IneligibleReason,
+                    Locked = (int)programAttributeData.Locked,
+                    OptOut = programAttributeData.OptOut,
+                    OverrideReason = programAttributeData.OverrideReason,
+                    PlanElementId = programAttributeData.PlanElementId.ToString(),
+                    Population = programAttributeData.Population,
+                    RemovedReason = programAttributeData.RemovedReason,
+                    StartDate = programAttributeData.StartDate,
+                    Status = (int)programAttributeData.Status
+                };
+            }
+            return programAttribute;
         }
 
         private TimeZonesLookUp getDefaultTimeZone(GetTimeZoneDataRequest request)

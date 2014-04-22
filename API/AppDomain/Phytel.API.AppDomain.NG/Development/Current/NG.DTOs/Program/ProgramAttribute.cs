@@ -2,7 +2,7 @@
 
 namespace Phytel.API.AppDomain.NG.DTO
 {
-    public class PatientProgramAttribute
+    public class ProgramAttribute
     {
             public string Id { get; set; }
             public string PlanElementId { get; set; }
