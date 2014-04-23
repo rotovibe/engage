@@ -10,12 +10,14 @@ using Phytel.API.AppDomain.NG.PlanCOR;
 using ServiceStack.Service;
 using DD = Phytel.API.DataDomain.Program.DTO;
 using System.Configuration;
+using Phytel.API.AppDomain.NG.Programs;
+using ServiceStack.ServiceInterface.ServiceModel;
 
 namespace Phytel.API.AppDomain.NG
 {
-    public class PlanManager : ManagerBase
+    public class PlanManager : ManagerBase, IPlanManager
     {
-        public IPlanElementUtils PlanElementUtils { get; set; }
+        public IPlanElementUtils PEUtils { get; set; }
         public List<string> RelatedChanges { get; set; }
         public List<object> ProcessedElements { get; set; }
 
@@ -35,6 +37,7 @@ namespace Phytel.API.AppDomain.NG
                 PostProcessActionResponse response = new PostProcessActionResponse();
 
                 Program p = PlanElementEndpointUtil.RequestPatientProgramDetail(request);
+                
                 Actions action = request.Action;
 
                 if (action.Completed)
@@ -105,7 +108,7 @@ namespace Phytel.API.AppDomain.NG
                 PlanElementEndpointUtil.SaveAction(request, action.Id, p);
 
                 // create element changed lists 
-                PlanElementUtils.HydratePlanElementLists(ProcessedElements, response);
+                PlanElementUtil.HydratePlanElementLists(ProcessedElements, response);
 
                 //response.Program = p;
                 response.RelatedChanges = RelatedChanges;

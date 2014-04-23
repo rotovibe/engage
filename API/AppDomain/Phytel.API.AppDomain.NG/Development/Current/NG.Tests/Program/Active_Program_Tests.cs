@@ -66,8 +66,8 @@ namespace Phytel.API.DataDomain.Patient.Service.Test
             string contractNumber = "InHealth001";
             string context = "NG";
             double version = 1.0;
-            string token = "5307d950d6a4850cd4abe657";
-            string patientId = "52f55881072ef709f84e6d80";
+            string token = "5356f171d6a485044c289330";
+            string patientId = "5325dacdd6a4850adcbba75e";
             IRestClient client = new JsonServiceClient();
 
             JsonServiceClient.HttpWebRequestFilter = x => x.Headers.Add(string.Format("Token: {0}", token));

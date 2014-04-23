@@ -892,6 +892,57 @@ namespace Phytel.API.AppDomain.NG
             }
         }
 
+        public static void HydratePlanElementLists(List<object> ProcessedElements, PostProcessActionResponse response)
+        {
+            try
+            {
+                if (ProcessedElements != null && ProcessedElements.Count > 0)
+                {
+                    response.PlanElems = new PlanElements();
+
+                    foreach (Object obj in ProcessedElements)
+                    {
+                        if (obj.GetType().Equals(typeof(Program)))
+                        {
+                            if (!response.PlanElems.Programs.Contains(obj))
+                            {
+                                Program p = CloneProgram((Program)obj);
+                                response.PlanElems.Programs.Add(p);
+                            }
+                        }
+                        else if (obj.GetType().Equals(typeof(Module)))
+                        {
+                            if (!response.PlanElems.Modules.Contains(obj))
+                            {
+                                Module m = CloneModule((Module)obj);
+                                response.PlanElems.Modules.Add(m);
+                            }
+                        }
+                        else if (obj.GetType().Equals(typeof(Actions)))
+                        {
+                            if (!response.PlanElems.Actions.Contains(obj))
+                            {
+                                Actions a = CloneAction((Actions)obj);
+                                response.PlanElems.Actions.Add(a);
+                            }
+                        }
+                        else if (obj.GetType().Equals(typeof(Step)))
+                        {
+                            if (!response.PlanElems.Steps.Contains(obj))
+                            {
+                                Step s = CloneStep((Step)obj);
+                                response.PlanElems.Steps.Add(s);
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("AD:PlanElementUtil:HydratePlanElementLists()::" + ex.Message, ex.InnerException);
+            }
+        }
+
         public static PlanElement ActivatePlanElement(string p, Program program)
         {
             try

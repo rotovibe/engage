@@ -34,12 +34,11 @@ namespace Phytel.API.AppDomain.NG.Service
             {
                 //register any dependencies your services use, e.g:
                 container.RegisterAutoWiredAs<SecurityManager, ISecurityManager>();
-                container.RegisterAutoWiredAs<NGManager, INGManager>();
-                container.RegisterAutoWiredAs<AuditUtil, IAuditUtil>();
                 container.RegisterAutoWiredAs<CommonFormatterUtil, ICommonFormatterUtil>();
                 container.RegisterAutoWiredAs<EndpointUtils, IEndpointUtils>();
                 container.RegisterAutoWiredAs<PlanElementUtils, IPlanElementUtils>();
-                container.RegisterAutoWiredAs<JsonServiceClient, IRestClient>();
+                container.RegisterAutoWiredAs<NGManager, INGManager>();
+                container.RegisterAutoWiredAs<AuditUtil, IAuditUtil>();
 
 
                 Plugins.Add(new RequestLogsFeature() { RequiredRoles = new string[] { } });
