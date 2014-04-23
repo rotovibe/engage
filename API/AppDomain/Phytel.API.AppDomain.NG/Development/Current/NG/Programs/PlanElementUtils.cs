@@ -983,5 +983,38 @@ namespace Phytel.API.AppDomain.NG
                 throw new Exception("AD:PlanElementUtil:IsActionInitial()::" + ex.Message, ex.InnerException);
             }
         }
+
+        public ProgramAttribute getAttributes(DD.ProgramAttributeData programAttributeData)
+        {
+            ProgramAttribute programAttribute = null;
+            if (programAttributeData != null)
+            {
+                programAttribute = new ProgramAttribute
+                {
+                    AssignedBy = programAttributeData.AssignedBy,
+                    AssignedOn = programAttributeData.AssignedOn,
+                    AuthoredBy = programAttributeData.AuthoredBy,
+                    Completed = (int)programAttributeData.Completed,
+                    CompletedBy = programAttributeData.CompletedBy,
+                    DateCompleted = programAttributeData.DateCompleted,
+                    DidNotEnrollReason = programAttributeData.DidNotEnrollReason,
+                    Eligibility = (int)programAttributeData.Eligibility,
+                    AttrEndDate = programAttributeData.AttrEndDate,
+                    Enrollment = (int)programAttributeData.Enrollment,
+                    GraduatedFlag = (int)programAttributeData.GraduatedFlag,
+                    Id = programAttributeData.Id.ToString(),
+                    IneligibleReason = programAttributeData.IneligibleReason,
+                    Locked = (int)programAttributeData.Locked,
+                    OptOut = programAttributeData.OptOut,
+                    OverrideReason = programAttributeData.OverrideReason,
+                    PlanElementId = programAttributeData.PlanElementId.ToString(),
+                    Population = programAttributeData.Population,
+                    RemovedReason = programAttributeData.RemovedReason,
+                    AttrStartDate = programAttributeData.AttrStartDate,
+                    Status = (int)programAttributeData.Status
+                };
+            }
+            return programAttribute;
+        }
     }
 }

@@ -48,5 +48,15 @@ namespace Phytel.API.DataDomain.Program.Tests
                 Assert.IsNotNull(response.Program.Attributes);
             }
         }
+
+        [TestClass()]
+        public class PutProgramActionUpdate_Method
+        {
+            [TestMethod()]
+            public void PutProgramActionUpdate_Test()
+            {
+                Assert.Fail();
+            }
+        }
     }
 }

@@ -155,6 +155,7 @@ namespace Phytel.API.DataDomain.Program
                     .GetPatientProgramRepository(request.ContractNumber, request.Context, request.UserId);
 
                 response.program = (ProgramDetail)patProgRepo.Update((object)request);
+                response.program.Attributes = GetProgramAttributes(response.program.Id, request.ContractNumber, request.Context, request.UserId);
 
                 return response;
             }

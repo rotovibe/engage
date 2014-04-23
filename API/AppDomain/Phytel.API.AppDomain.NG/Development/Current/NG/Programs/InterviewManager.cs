@@ -105,12 +105,12 @@ namespace Phytel.API.AppDomain.NG
                 AddUniquePlanElementToProcessedList(p);
 
                 // save
-                PlanElementEndpointUtil.SaveAction(request, action.Id, p);
+                DD.ProgramDetail pdetail = PlanElementEndpointUtil.SaveAction(request, action.Id, p);
 
                 // create element changed lists 
                 PlanElementUtil.HydratePlanElementLists(ProcessedElements, response);
 
-                //response.Program = p;
+                response.PlanElems.Attributes = PlanElementUtil.GetAttributes(pdetail.Attributes);
                 response.RelatedChanges = RelatedChanges;
                 response.PatientId = request.PatientId;
                 response.Version = request.Version;

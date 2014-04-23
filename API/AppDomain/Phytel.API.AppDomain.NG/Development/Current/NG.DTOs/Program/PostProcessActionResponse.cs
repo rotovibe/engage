@@ -25,6 +25,7 @@ namespace Phytel.API.AppDomain.NG.DTO
         public List<Module> Modules { get; set; }
         public List<Actions> Actions { get; set; }
         public List<Step> Steps { get; set; }
+        public ProgramAttribute Attributes { get; set; }
 
         public PlanElements()
         {
