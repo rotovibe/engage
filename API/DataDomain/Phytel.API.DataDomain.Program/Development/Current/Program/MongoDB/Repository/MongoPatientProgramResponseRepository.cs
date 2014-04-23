@@ -242,5 +242,10 @@ namespace Phytel.API.DataDomain.Program
         {
             throw new NotImplementedException();
         }
+
+        public object GetLimitedProgramFields(string objectId)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

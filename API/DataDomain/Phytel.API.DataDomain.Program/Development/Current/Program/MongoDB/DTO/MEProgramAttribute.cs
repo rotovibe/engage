@@ -44,11 +44,6 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
         [BsonIgnoreIfNull(true)]
         public Status Status { get; set; }
 
-        public const string AuthoredByProperty = "athby";
-        [BsonElement(AuthoredByProperty)]
-        [BsonIgnoreIfNull(true)]
-        public string AuthoredBy { get; set; }
-
         public const string LockedProperty = "lck";
         [BsonElement(LockedProperty)]
         [BsonIgnoreIfNull(true)]

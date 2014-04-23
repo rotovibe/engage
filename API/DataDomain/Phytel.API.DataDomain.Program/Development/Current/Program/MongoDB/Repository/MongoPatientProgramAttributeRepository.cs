@@ -73,7 +73,6 @@ namespace Phytel.API.DataDomain.Program
                         IneligibleReason = pa.IneligibleReason,
                         Completed = (Completed)pa.Completed,
                         AssignedOn = pa.AssignedOn,
-                        AuthoredBy = pa.AuthoredBy,
                         CompletedBy = pa.CompletedBy,
                         DateCompleted = pa.DateCompleted,
                         DidNotEnrollReason = pa.DidNotEnrollReason,
@@ -192,7 +191,6 @@ namespace Phytel.API.DataDomain.Program
                         pa.ForEach(cp => pAtts.Add(new ProgramAttributeData
                         {
                             Id = cp.Id.ToString(),
-                            AuthoredBy = cp.AuthoredBy,
                             DidNotEnrollReason = cp.DidNotEnrollReason,
                             //DisEnrollReason = cp.DisEnrollReason,
                             Eligibility = (int)cp.Eligibility,
@@ -245,7 +243,6 @@ namespace Phytel.API.DataDomain.Program
                     if (mepa.AssignedTo != null) uv.Add(MB.Update.Set(MEProgramAttribute.AssignToProperty, mepa.AssignedTo));
                     if (mepa.AssignedOn != null) uv.Add(MB.Update.Set(MEProgramAttribute.AssignDateProperty, mepa.AssignedOn));
                     if (mepa.Population != null) uv.Add(MB.Update.Set(MEProgramAttribute.PopulationProperty, mepa.Population));
-                    if (mepa.AuthoredBy != null) uv.Add(MB.Update.Set(MEProgramAttribute.AuthoredByProperty, mepa.AuthoredBy));
                     if (mepa.Completed != 0) uv.Add(MB.Update.Set(MEProgramAttribute.CompletedProperty, mepa.Completed));
                     if (mepa.CompletedBy != null) uv.Add(MB.Update.Set(MEProgramAttribute.CompletedByProperty, mepa.CompletedBy));
                     if (mepa.DateCompleted != null) uv.Add(MB.Update.Set(MEProgramAttribute.CompletedOnProperty, mepa.DateCompleted));
@@ -318,6 +315,11 @@ namespace Phytel.API.DataDomain.Program
         public string ContractNumber { get; set; }
 
         public IEnumerable<object> Find(string Id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public object GetLimitedProgramFields(string objectId)
         {
             throw new NotImplementedException();
         }

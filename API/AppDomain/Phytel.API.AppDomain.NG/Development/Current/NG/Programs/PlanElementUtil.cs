@@ -565,7 +565,6 @@ namespace Phytel.API.AppDomain.NG
                 if (_pAtt.AssignedBy != null){ pAtt.AssignedBy = _pAtt.AssignedBy; dirty = true;}
                 if (_pAtt.AssignedTo != null) { pAtt.AssignedTo = _pAtt.AssignedTo; dirty = true; }
                 if (_pAtt.AssignedOn != null){ pAtt.AssignedOn = _pAtt.AssignedOn; dirty = true;}
-                if (_pAtt.AuthoredBy != null){ pAtt.AuthoredBy = _pAtt.AuthoredBy; dirty = true;}
                 if (_pAtt.CompletedBy != null){ pAtt.CompletedBy = _pAtt.CompletedBy; dirty = true;}
                 if (_pAtt.DateCompleted != null){ pAtt.DateCompleted = _pAtt.DateCompleted; dirty = true;}
                 if (_pAtt.DidNotEnrollReason != null){ pAtt.DidNotEnrollReason = _pAtt.DidNotEnrollReason; dirty = true;}
@@ -839,7 +838,13 @@ namespace Phytel.API.AppDomain.NG
                     EligibilityRequirements = pr.EligibilityRequirements,
                     EligibilityStartDate = pr.EligibilityStartDate,
                     Enabled = pr.Enabled,
+                    StartDate = pr.StartDate,
                     EndDate = pr.EndDate,
+                    AuthoredBy = pr.AuthoredBy,
+                    TemplateName = pr.TemplateName,
+                    TemplateVersion = pr.TemplateVersion,
+                    ProgramVersion = pr.ProgramVersion,
+                    ProgramVersionUpdatedOn = pr.ProgramVersionUpdatedOn,
                     //Enrollment = pr.Enrollment,
                     //GraduatedFlag = pr.GraduatedFlag,
                     Id = pr.Id,
@@ -858,7 +863,6 @@ namespace Phytel.API.AppDomain.NG
                     ShortName = pr.ShortName,
                     SourceId = pr.SourceId,
                     SpawnElement = pr.SpawnElement,
-                    StartDate = pr.StartDate,
                     Status = pr.Status,
                     Text = pr.Text,
                     Version = pr.Version,

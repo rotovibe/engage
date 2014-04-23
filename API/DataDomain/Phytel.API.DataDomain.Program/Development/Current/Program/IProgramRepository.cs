@@ -15,5 +15,6 @@ namespace Phytel.API.DataDomain.Program
         IEnumerable<object> Find(string Id);
         DTO.Program FindByName(string entityName);
         object FindByPlanElementID(string entityID);
+        object GetLimitedProgramFields(string objectId);
     }
 }

@@ -79,6 +79,33 @@ namespace Phytel.API.DataDomain.Program
             }
         }
 
+        public object GetLimitedProgramFields(string objectId)
+        {
+            try
+            {
+                MEProgram cp = null;
+                using (ProgramMongoContext ctx = new ProgramMongoContext(_dbName))
+                {
+                     var query = MB.Query.And(
+                        MB.Query<MEProgram>.EQ(b => b.Id, ObjectId.Parse(objectId)),
+                        MB.Query<MEProgram>.EQ(b => b.DeleteFlag, false)
+                    );
+                    cp = ctx.Programs.Collection.Find(query).SetFields(
+                        MEProgram.AuthoredByProperty,
+                        MEProgram.TemplateNameProperty,
+                        MEProgram.TemplateVersionProperty,
+                        MEProgram.ProgramVersionProperty,
+                        MEProgram.ProgramVersionUpdatedOnProperty
+                    ).FirstOrDefault();
+                }
+                return cp;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("DD:Program:GetLimitedProgramFields()::" + ex.Message, ex.InnerException);
+            }
+        }
+
         public DTO.Program FindByName(string entityName)
         {
             try

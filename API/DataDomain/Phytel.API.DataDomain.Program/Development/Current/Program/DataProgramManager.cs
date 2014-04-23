@@ -309,6 +309,21 @@ namespace Phytel.API.DataDomain.Program
                 ProgramAttributeData pad = GetProgramAttributes(mepp.Id.ToString(), request.ContractNumber, request.Context, request.UserId);
                 response.Program.Attributes = pad;
 
+                // Get the fields from Program collection.
+                IProgramRepository<MEProgram> programRepo =
+                    Phytel.API.DataDomain.Program.ProgramRepositoryFactory<MEProgram>
+                    .GetProgramRepository(request.ContractNumber, request.Context, request.UserId);
+
+                MEProgram meProgram = programRepo.GetLimitedProgramFields(mepp.SourceId.ToString()) as MEProgram;
+                if (meProgram != null)
+                {
+                    response.Program.AuthoredBy = meProgram.AuthoredBy;
+                    response.Program.TemplateName = meProgram.TemplateName;
+                    response.Program.TemplateVersion = meProgram.TemplateVersion;
+                    response.Program.ProgramVersion = meProgram.ProgramVersion;
+                    response.Program.ProgramVersionUpdatedOn = meProgram.ProgramVersionUpdatedOn;
+                }
+
                 return response;
             }
             catch (Exception ex)
@@ -334,7 +349,6 @@ namespace Phytel.API.DataDomain.Program
                         AssignedBy = pa.AssignedBy.ToString(),
                         AssignedTo = pa.AssignedTo.ToString(),
                         AssignedOn = pa.AssignedOn,
-                        AuthoredBy = pa.AuthoredBy,
                         Completed = (int)pa.Completed,
                         CompletedBy = pa.CompletedBy,
                         DateCompleted = pa.DateCompleted,
