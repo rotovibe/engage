@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using MongoDB.Bson;
-using Phytel.Framework.ASE.Process;
-using ServiceStack.Service;
-using ServiceStack.ServiceClient.Web;
+using Phytel.API.DataDomain.ASE.Common.Enums;
+using Phytel.ASE.Core;
 
 namespace Phytel.API.Common
 {
@@ -163,7 +161,8 @@ namespace Phytel.API.Common
 
         public void LogException(int processId, Exception ex)
         {
-            Log.LogError(processId, ex, Framework.ASE.Data.Common.LogErrorCode.Error, Framework.ASE.Data.Common.LogErrorSeverity.High);
+            string aseAPIURL = ConfigurationManager.AppSettings.Get("ASEAPI");
+            Log.LogError(aseAPIURL, processId, ex, LogErrorCode.Error, LogErrorSeverity.High);
         }
 
     }
