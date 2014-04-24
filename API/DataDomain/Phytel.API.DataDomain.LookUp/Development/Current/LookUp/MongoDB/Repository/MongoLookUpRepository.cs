@@ -434,7 +434,7 @@ namespace Phytel.API.DataDomain.LookUp
                     using (LookUpMongoContext ctx = new LookUpMongoContext(_dbName))
                     {
                         List<IMongoQuery> queries = new List<IMongoQuery>();
-                        queries.Add(Query.EQ(MELookup.TypeProperty, LookUpType.ObjectiveCategory));
+                        queries.Add(Query.EQ(MELookup.TypeProperty, LookUpType.Category));
                         queries.Add(Query.EQ(MELookup.DeleteFlagProperty, false));
                         IMongoQuery mQuery = Query.And(queries);
                         MELookup meLookup = ctx.LookUps.Collection.Find(mQuery).FirstOrDefault();
@@ -975,5 +975,74 @@ namespace Phytel.API.DataDomain.LookUp
             return lookupList;
         }
         #endregion  
+
+        #region Program
+        public List<ObjectiveData> GetAllObjectives()
+        {
+            List<ObjectiveData> objectiveList = null;
+            try
+            {
+                objectiveList = new List<ObjectiveData>();
+                string redisKey = string.Format("{0}{1}", "Lookup", "Objectives");
+                ServiceStack.Redis.RedisClient client = null;
+
+                //TODO: Uncomment the following 2 lines to turn Redis cache on
+                //if (!string.IsNullOrEmpty(redisClientIPAddress))
+                //    client = new ServiceStack.Redis.RedisClient(redisClientIPAddress);
+
+                //If the redisKey is already in Cache (REDIS) get it from there, else re-query
+                if (client != null && client.ContainsKey(redisKey))
+                {
+                    //go get languageList from Redis using the redisKey now
+                    objectiveList = client.Get<List<ObjectiveData>>(redisKey);
+                }
+                else
+                {
+                    using (LookUpMongoContext ctx = new LookUpMongoContext(_dbName))
+                    {
+                        List<IMongoQuery> queries = new List<IMongoQuery>();
+                        queries.Add(Query.EQ(MELookup.TypeProperty, LookUpType.Objective));
+                        queries.Add(Query.EQ(MELookup.DeleteFlagProperty, false));
+                        IMongoQuery mQuery = Query.And(queries);
+                        MELookup meLookup = ctx.LookUps.Collection.Find(mQuery).FirstOrDefault();
+                        if (meLookup != null)
+                        {
+                            if (meLookup.Data != null & meLookup.Data.Count > 0)
+                            {
+                                // Get all objective cateogories.
+                                List<IdNamePair> categoryData = GetLookps(Enum.GetName(typeof(LookUpType), (LookUpType.Category)));
+                                foreach (Objective m in meLookup.Data)
+                                {
+                                    List<IdNamePair> categories = null; 
+                                    if(m.CategoryIds != null && m.CategoryIds.Count > 0)
+                                    {
+                                        categories = new List<IdNamePair>();
+                                        foreach (ObjectId id in m.CategoryIds)
+                                        {
+                                            IdNamePair cat = categoryData.Where(a => a.Id == id.ToString()).FirstOrDefault();
+                                            if(cat != null)
+                                            {
+                                                categories.Add(cat);
+                                            }
+                                        }
+                                    }
+                                    ObjectiveData data = new ObjectiveData { Id = m.DataId.ToString(), Name = m.Name, CategoriesData = categories };
+                                    objectiveList.Add(data);
+                                }
+                            }
+                        }
+                    }
+                    //put languageList into cache using redisKey now
+                    if (client != null)
+                        client.Set<List<ObjectiveData>>(redisKey, objectiveList, TimeSpan.FromMinutes(redisCacheExpiry));
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return objectiveList;
+        } 
+        #endregion
     }
 }

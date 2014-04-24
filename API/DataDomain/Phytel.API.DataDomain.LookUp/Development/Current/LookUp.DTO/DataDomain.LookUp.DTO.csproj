@@ -99,6 +99,8 @@
     <Compile Include="Contact\GetTimeZoneDataRequest.cs" />
     <Compile Include="Contact\GetTimeZoneDataResponse.cs" />
     <Compile Include="ProblemData.cs" />
+    <Compile Include="Program\GetAllObjectivesDataRequest.cs" />
+    <Compile Include="Program\GetAllObjectivesDataResponse.cs" />
     <Compile Include="SearchProblemsDataResponse .cs" />
     <Compile Include="GetAllProblemsDataResponse.cs" />
     <Compile Include="GetAllProblemsDataRequest.cs" />

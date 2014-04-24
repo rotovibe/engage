@@ -81,7 +81,7 @@ namespace Phytel.API.DataDomain.LookUp.DTO
     { 
         Problem = 1,
         Objective = 2,
-        ObjectiveCategory = 3,
+        Category = 3,
         CommMode = 4,
         CommType = 5,
         State = 6,

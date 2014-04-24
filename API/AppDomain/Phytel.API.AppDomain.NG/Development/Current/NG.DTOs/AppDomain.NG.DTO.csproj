@@ -85,6 +85,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="LookUp\Program\GetAllObjectivesRequest.cs" />
+    <Compile Include="LookUp\Program\GetAllObjectivesResponse.cs" />
     <Compile Include="Program\Action.cs" />
     <Compile Include="CareMember\GetAllCareMembersRequest.cs" />
     <Compile Include="CareMember\GetAllCareMembersResponse.cs" />

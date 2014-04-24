@@ -906,7 +906,43 @@ namespace Phytel.API.AppDomain.NG
             {
                 throw new WebServiceException("AD:GetLookUps()::" + wse.Message, wse.InnerException);
             }
-        } 
+        }
+
+        public List<ObjectivesLookUp> GetAllObjectives(GetAllObjectivesRequest request)
+        {
+            try
+            {
+                List<ObjectivesLookUp> response = new List<ObjectivesLookUp>();
+                IRestClient client = new JsonServiceClient();
+                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Objectives",
+                                                                    DDLookupServiceUrl,
+                                                                    "NG",
+                                                                    request.Version,
+                                                                    request.ContractNumber), request.UserId);
+
+                // [Route("/{Context}/{Version}/{ContractNumber}/Objectives", "GET")]
+                Phytel.API.DataDomain.LookUp.DTO.GetAllObjectivesDataResponse dataDomainResponse = client.Get<Phytel.API.DataDomain.LookUp.DTO.GetAllObjectivesDataResponse>(url);
+
+                List<Phytel.API.DataDomain.LookUp.DTO.ObjectiveData> dataList = dataDomainResponse.ObjectivesData;
+
+                if (dataList != null && dataList.Count > 0)
+                {
+                    foreach (Phytel.API.DataDomain.LookUp.DTO.ObjectiveData d in dataList)
+                    {
+                        ObjectivesLookUp lookUp = new ObjectivesLookUp();
+                        lookUp.Id = d.Id;
+                        lookUp.Name = d.Name;
+                        lookUp.Categories = d.CategoriesData;
+                        response.Add(lookUp);
+                    }
+                }
+                return response;
+            }
+            catch (WebServiceException wse)
+            {
+                throw new WebServiceException("AD:GetAllObjectives()::" + wse.Message, wse.InnerException);
+            }
+        }
 
         #endregion
 

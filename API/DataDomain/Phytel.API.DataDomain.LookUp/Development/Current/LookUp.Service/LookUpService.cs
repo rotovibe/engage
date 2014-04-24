@@ -296,5 +296,28 @@ namespace Phytel.API.DataDomain.Patient.Service
         }
         #endregion  
 
+        #region Program
+        public GetAllObjectivesDataResponse Get(GetAllObjectivesDataRequest request)
+        {
+            GetAllObjectivesDataResponse response = new GetAllObjectivesDataResponse();
+            try
+            {
+                if (string.IsNullOrEmpty(request.UserId))
+                    throw new UnauthorizedAccessException("LookUpDD:Get()::Unauthorized Access");
+
+                response = LookUpDataManager.GetAllObjectives(request);
+                response.Version = request.Version;
+            }
+            catch (Exception ex)
+            {
+                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+
+                string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
+                Common.Helper.LogException(int.Parse(aseProcessID), ex);
+            }
+            return response;
+        } 
+        #endregion
+
     }
 }

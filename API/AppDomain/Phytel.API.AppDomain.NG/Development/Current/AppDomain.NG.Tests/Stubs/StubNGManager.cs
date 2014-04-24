@@ -28,6 +28,11 @@ namespace Phytel.API.AppDomain.NG.Test.Stubs
             throw new NotImplementedException();
         }
 
+        public List<DTO.ObjectivesLookUp> GetAllObjectives(DTO.GetAllObjectivesRequest request)
+        {
+            throw new NotImplementedException();
+        }
+
         public DTO.GetAllSettingsResponse GetAllSettings(DTO.GetAllSettingsRequest request)
         {
             throw new NotImplementedException();
