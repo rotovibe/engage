@@ -33,7 +33,6 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
                     Description = cp.Description,
                     LastUpdatedOn = System.DateTime.UtcNow, // utc time
                     Name = cp.Name,
-                    Objectives = cp.Objectives,
                     CompletedBy = cp.CompletedBy,
                     SourceId = cp.Id,
                     ShortName = cp.ShortName,
