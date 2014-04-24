@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Phytel.API.DataDomain.Program;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Phytel.API.DataDomain.Program.DTO;
+using System.Diagnostics;
 namespace Phytel.API.DataDomain.Program.Tests
 {
     [TestClass()]
@@ -56,6 +57,21 @@ namespace Phytel.API.DataDomain.Program.Tests
             public void PutProgramActionUpdate_Test()
             {
                 Assert.Fail();
+            }
+        }
+
+        [TestClass()]
+        public class GetProgramAttributes_Method
+        {
+            [TestMethod()]
+            public void Processing_Time_Test()
+            {
+                Stopwatch st = new Stopwatch();
+                st.Start();
+                ProgramDataManager dm = new ProgramDataManager();
+                ProgramAttributeData pad = dm.GetProgramAttributes("535808a7d6a485044cedecd6", "InHealth001", "NG", "user");
+                st.Stop();
+                int seconds = st.Elapsed.Milliseconds;
             }
         }
     }
