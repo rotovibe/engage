@@ -30,7 +30,10 @@ namespace Phytel.API.AppDomain.NG.Test.Stubs
 
         public List<DTO.ObjectivesLookUp> GetAllObjectives(DTO.GetAllObjectivesRequest request)
         {
-            throw new NotImplementedException();
+            List<DTO.ObjectivesLookUp> list = new List<DTO.ObjectivesLookUp>();
+            list.Add(new DTO.ObjectivesLookUp { Id = "123", Name = "test", Categories = null });
+            return list;
+
         }
 
         public DTO.GetAllSettingsResponse GetAllSettings(DTO.GetAllSettingsRequest request)
