@@ -310,11 +310,7 @@ namespace Phytel.API.DataDomain.Program
                 response.Program.Attributes = pad;
 
                 // Get the fields from Program collection.
-                IProgramRepository<MEProgram> programRepo =
-                    Phytel.API.DataDomain.Program.ProgramRepositoryFactory<MEProgram>
-                    .GetProgramRepository(request.ContractNumber, request.Context, request.UserId);
-
-                MEProgram meProgram = programRepo.GetLimitedProgramFields(mepp.SourceId.ToString()) as MEProgram;
+                MEProgram meProgram = getLimitedProgramDetails(mepp.SourceId.ToString(), request.ContractNumber, request.Context, request.UserId);
                 if (meProgram != null)
                 {
                     response.Program.AuthoredBy = meProgram.AuthoredBy;
@@ -323,13 +319,19 @@ namespace Phytel.API.DataDomain.Program
                     response.Program.ProgramVersion = meProgram.ProgramVersion;
                     response.Program.ProgramVersionUpdatedOn = meProgram.ProgramVersionUpdatedOn;
                 }
-
                 return response;
             }
             catch (Exception ex)
             {
                 throw new Exception("DD:DataProgramManager:GetPatientProgramDetailsById()::" + ex.Message, ex.InnerException);
             }
+        }
+
+        private MEProgram getLimitedProgramDetails(string objectId, string contract, string context, string userid)
+        {
+            IProgramRepository<MEProgram> programRepo = Phytel.API.DataDomain.Program.ProgramRepositoryFactory<MEProgram>.GetProgramRepository(contract, context, userid);
+            MEProgram meProgram = programRepo.GetLimitedProgramFields(objectId) as MEProgram;
+            return meProgram;
         }
 
         public ProgramAttributeData GetProgramAttributes(string objectId, string contract, string context, string userid)
