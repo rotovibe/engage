@@ -83,8 +83,8 @@ namespace Phytel.API.DataDomain.Patient.Service.Test
             List<SpawnElement> se = new List<SpawnElement>();
             se.Add(new SpawnElement { ElementId = "52dd5c5bd6a4850ea8b7539e", ElementType = 2 });
 
-            List<Objective> objs = new List<Objective>();
-            objs.Add(new Objective { Id = "", Value = "75", Unit ="%", Status = 5 });
+            List<ObjectiveInfo> objs = new List<ObjectiveInfo>();
+            objs.Add(new ObjectiveInfo { Id = "", Value = "75", Unit ="%", Status = 5 });
 
             Actions act = new Actions
             {

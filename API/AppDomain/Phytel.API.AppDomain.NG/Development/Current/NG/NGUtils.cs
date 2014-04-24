@@ -91,7 +91,7 @@ namespace Phytel.API.AppDomain.NG
                     Modules = GetADModules(p.Modules),
                     Name = p.Name,
                     Next = p.Next,
-                    ObjectivesInfo = GetADObjectives(p.ObjectivesInfo),
+                    ObjectivesData = GetADObjectives(p.Objectives),
                     Order = p.Order,
                     PatientId = p.PatientId,
                     Previous = p.Previous,
@@ -145,7 +145,7 @@ namespace Phytel.API.AppDomain.NG
                     Modules = GetADModules(p.Modules),
                     Name = p.Name,
                     Next = p.Next,
-                    ObjectivesInfo = GetADObjectives(p.ObjectivesInfo),
+                    Objectives = GetADObjectives(p.ObjectivesData),
                     Order = p.Order,
                     PatientId = p.PatientId,
                     Previous = p.Previous,
@@ -229,16 +229,16 @@ namespace Phytel.API.AppDomain.NG
             }
         }
 
-        public static List<ObjectivesDetail> GetADObjectives(List<Objective> list)
+        public static List<ObjectiveInfoData> GetADObjectives(List<ObjectiveInfo> list)
         {
             try
             {
-                List<ObjectivesDetail> od = new List<ObjectivesDetail>();
+                List<ObjectiveInfoData> od = new List<ObjectiveInfoData>();
                 if (list != null)
                 {
                     list.ForEach(o =>
                     {
-                        ObjectivesDetail odi = new ObjectivesDetail
+                        ObjectiveInfoData odi = new ObjectiveInfoData
                         {
                             Id = o.Id,
                             Status = o.Status,
@@ -256,16 +256,16 @@ namespace Phytel.API.AppDomain.NG
             }
         }
 
-        public static List<Objective> GetADObjectives(List<ObjectivesDetail> list)
+        public static List<ObjectiveInfo> GetADObjectives(List<ObjectiveInfoData> list)
         {
             try
             {
-                List<Objective> od = new List<Objective>();
+                List<ObjectiveInfo> od = new List<ObjectiveInfo>();
                 if (list != null)
                 {
                     list.ForEach(o =>
                     {
-                        Objective odi = new Objective
+                        ObjectiveInfo odi = new ObjectiveInfo
                         {
                             Id = o.Id,
                             Status = o.Status,

@@ -838,7 +838,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             }
         }
 
-        public static List<Objective> GetObjectives(List<Program.DTO.ObjectivesDetail> list)
+        public static List<Objective> GetObjectives(List<Program.DTO.ObjectiveInfoData> list)
         {
             try
             {
@@ -945,14 +945,14 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             }
         }
 
-        public static List<ObjectivesDetail> GetObjectives(List<Objective> list)
+        public static List<ObjectiveInfoData> GetObjectives(List<Objective> list)
         {
             try
             {
-                List<ObjectivesDetail> objs = new List<ObjectivesDetail>();
+                List<ObjectiveInfoData> objs = new List<ObjectiveInfoData>();
                 if (list != null)
                 {
-                    list.ForEach(o => objs.Add(new ObjectivesDetail
+                    list.ForEach(o => objs.Add(new ObjectiveInfoData
                     {
                         Id = o.Id.ToString(),
                         Value = o.Value,

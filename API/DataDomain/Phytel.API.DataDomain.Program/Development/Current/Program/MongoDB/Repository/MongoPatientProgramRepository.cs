@@ -216,7 +216,7 @@ namespace Phytel.API.DataDomain.Program
                             SpawnElement = DTOUtils.GetResponseSpawnElement(cp.Spawn),
                             Modules = DTOUtils.GetModules(cp.Modules, _dbName, this.UserId),
                             Name = cp.Name,
-                            ObjectivesInfo = DTOUtils.GetObjectives(cp.Objectives),
+                            ObjectivesData = DTOUtils.GetObjectives(cp.Objectives),
                             PatientId = cp.PatientId.ToString(),
                             ProgramState = (int)cp.ProgramState,
                             ShortName = cp.ShortName,
@@ -279,7 +279,7 @@ namespace Phytel.API.DataDomain.Program
                     if (pg.StartDate != null) { uv.Add(MB.Update.Set(MEPatientProgram.StartDateProperty, pg.StartDate)); }
                     if (mods != null) { uv.Add(MB.Update.SetWrapped<List<Module>>(MEPatientProgram.ModulesProperty, mods)); }
                     if (pg.SpawnElement != null) { uv.Add(MB.Update.SetWrapped<List<SpawnElement>>(MEPatientProgram.SpawnProperty, DTOUtils.GetSpawnElements(pg.SpawnElement))); }
-                    if (pg.ObjectivesInfo != null) { uv.Add(MB.Update.SetWrapped<List<Objective>>(MEPatientProgram.ObjectivesInfoProperty, DTOUtils.GetObjectives(pg.ObjectivesInfo))); }
+                    if (pg.ObjectivesData != null) { uv.Add(MB.Update.SetWrapped<List<Objective>>(MEPatientProgram.ObjectivesInfoProperty, DTOUtils.GetObjectives(pg.ObjectivesData))); }
 
                     IMongoUpdate update = MB.Update.Combine(uv);
                     ctx.PatientPrograms.Collection.Update(q, update);

@@ -98,7 +98,7 @@ namespace Phytel.API.DataDomain.Patient.Service.Test
                 ElementType = 2
             });
 
-            List<Objective> obj = new List<Objective> { new Objective{ Id = "52a0bf97d43323141c9eb271",
+            List<ObjectiveInfo> obj = new List<ObjectiveInfo> { new ObjectiveInfo{ Id = "52a0bf97d43323141c9eb271",
              Status = 5, Unit = "%", Value = "75"}};
 
             Actions act = new Actions

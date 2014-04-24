@@ -300,7 +300,7 @@ namespace Phytel.API.DataDomain.Program
                     EligibilityEndDate = mepp.EligibilityEndDate,
                     EligibilityStartDate = mepp.EligibilityStartDate,
                     EligibilityRequirements = mepp.EligibilityRequirements,
-                    ObjectivesInfo = DTOUtils.GetObjectives(mepp.Objectives),
+                    ObjectivesData = DTOUtils.GetObjectives(mepp.Objectives),
                     SpawnElement = DTOUtils.GetSpawnElement(mepp),
                     Modules = DTOUtils.GetModules(mepp.Modules, request.ContractNumber, request.UserId)
                 };

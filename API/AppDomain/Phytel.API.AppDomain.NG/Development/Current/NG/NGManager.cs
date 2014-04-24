@@ -520,7 +520,7 @@ namespace Phytel.API.AppDomain.NG
                             CompletedBy = resp.Program.CompletedBy,
                             DateCompleted = resp.Program.DateCompleted,
                             Modules = getModuleInfo(resp, request),
-                            ObjectivesInfo = GetObjectivesInfo(resp.Program.ObjectivesInfo),
+                            Objectives = GetObjectivesInfo(resp.Program.ObjectivesData),
                             Attributes = getAttributes(resp.Program.Attributes)
                         };
 
@@ -536,17 +536,17 @@ namespace Phytel.API.AppDomain.NG
             }
         }
 
-        private List<Objective> GetObjectivesInfo(List<DD.ObjectivesDetail> list)
+        private List<ObjectiveInfo> GetObjectivesInfo(List<DD.ObjectiveInfoData> list)
         {
             try
             {
-                List<Objective> objs = new List<Objective>();
+                List<ObjectiveInfo> objs = new List<ObjectiveInfo>();
 
                 if (list != null)
                 {
                     list.ForEach(r =>
                     {
-                        objs.Add(new Objective
+                        objs.Add(new ObjectiveInfo
                             {
                                 Id = r.Id.ToString(),
                                 Unit = r.Unit,

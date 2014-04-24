@@ -10,7 +10,7 @@ namespace Phytel.API.AppDomain.NG.DTO
     {
         public string Name { get; set; }
         public string Description { get; set; }
-        public List<Objective> Objectives { get; set; }
+        public List<ObjectiveInfo> Objectives { get; set; }
         public List<Step> Steps { get; set; }
         public int Status { get; set; }
         public string Text { get; set; }

@@ -849,7 +849,7 @@ namespace Phytel.API.AppDomain.NG
                     //IneligibleReason = pr.IneligibleReason,
                     Name = pr.Name,
                     Next = pr.Next,
-                    ObjectivesInfo = pr.ObjectivesInfo,
+                    Objectives = pr.Objectives,
                     //OptOut = pr.OptOut,
                     //OptOutDate = pr.OptOutDate,
                     //OptOutReason = pr.OptOutReason,

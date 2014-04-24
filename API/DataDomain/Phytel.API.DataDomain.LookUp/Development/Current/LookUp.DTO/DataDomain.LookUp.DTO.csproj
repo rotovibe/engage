@@ -90,8 +90,6 @@
     <Compile Include="Contact\GetAllTimesOfDaysDataResponse.cs" />
     <Compile Include="Contact\GetAllStatesDataRequest.cs" />
     <Compile Include="Contact\GetAllStatesDataResponse.cs" />
-    <Compile Include="GetAllObjectivesDataRequest.cs" />
-    <Compile Include="GetAllObjectivesDataResponse.cs" />
     <Compile Include="Contact\GetAllCommModesDataRequest.cs" />
     <Compile Include="Contact\GetAllCommModesDataResponse.cs" />
     <Compile Include="GetCategoryDataRequest.cs" />

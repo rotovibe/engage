@@ -1,11 +1,12 @@
-using ServiceStack.ServiceInterface.ServiceModel;
+﻿using System;
 using System.Collections.Generic;
-using Phytel.API.Interface;
-using System;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace Phytel.API.DataDomain.Program.DTO
+namespace Phytel.API.AppDomain.NG.DTO
 {
-    public class ObjectivesDetail
+    public class ObjectiveInfo
     {
         public string Id { get; set; }
         public string Value { get; set; }

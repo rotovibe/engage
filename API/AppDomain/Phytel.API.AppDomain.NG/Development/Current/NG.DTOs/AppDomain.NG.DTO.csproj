@@ -188,7 +188,7 @@
     <Compile Include="Program\GetPatientProgramDetailsSummaryRequest.cs" />
     <Compile Include="Program\PlanElement.cs" />
     <Compile Include="Program\Module.cs" />
-    <Compile Include="Program\Objective.cs" />
+    <Compile Include="Program\ObjectiveInfo.cs" />
     <Compile Include="Program\PostPatientToProgramsRequest.cs" />
     <Compile Include="Program\PostPatientToProgramsResponse.cs" />
     <Compile Include="GetAllSettingsResponse.cs" />
