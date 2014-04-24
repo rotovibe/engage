@@ -104,7 +104,12 @@ namespace Phytel.API.AppDomain.NG.Test.Stubs
                         AssignedBy = "me",
                         AssignedOn = System.DateTime.UtcNow,
                         Id = "0000000000000000000000000"
-                    }
+                    },
+                    Objectives = new List<DTO.ObjectiveInfo> { new DTO.ObjectiveInfo{ Id="123456789012345678901234",
+                     Status = 1,
+                      Unit = "lbs",
+                       Value = "12"
+                    } }
                 },
                 Version = 1.0
             };

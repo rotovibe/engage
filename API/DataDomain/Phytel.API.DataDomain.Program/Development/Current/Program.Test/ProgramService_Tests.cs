@@ -138,6 +138,30 @@ namespace Phytel.API.DataDomain.Program.Service.Tests
                 DateTime val = System.DateTime.UtcNow;
                 Assert.AreEqual(val, response.Program.EligibilityEndDate);
             }
+
+            [TestMethod()]
+            public void Get_With_Objectives_Test()
+            {
+                ProgramService ps = new ProgramService
+                {
+                    ProgramDataManager = new StubProgramDataManager(),
+                    Helpers = new StubHelper(),
+                    CommonFormatterUtil = new StubCommonFormatterUtil()
+                };
+
+                GetProgramDetailsSummaryRequest request = new GetProgramDetailsSummaryRequest
+                {
+                    Context = "NG",
+                    ContractNumber = "InHealth001",
+                    PatientId = "",
+                    ProgramId = "",
+                    UserId = "nguser",
+                    Version = 1.0
+                };
+
+                GetProgramDetailsSummaryResponse response = ps.Get(request);
+                Assert.IsNotNull(response.Program.ObjectivesData);
+            }
         }
     }
 }

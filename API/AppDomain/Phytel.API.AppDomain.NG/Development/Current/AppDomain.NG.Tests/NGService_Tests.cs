@@ -63,6 +63,21 @@ namespace Phytel.API.AppDomain.NG.Service.Tests
 
                 Assert.IsNotNull(response.Program.Attributes);
             }
+
+            [TestMethod()]
+            public void Get_With_Objectives_Test()
+            {
+                IAuditUtil audit = new StubAuditUtil();
+                INGManager ngm = new StubNGManager();
+                ISecurityManager sm = new StubSecurityManager();
+                ICommonFormatterUtil cf = new StubCommonFormatterUtil();
+
+                NGService ngs = new NGService { AuditUtil = audit, NGManager = ngm, Security = sm, CommonFormatterUtil = cf };
+                GetPatientProgramDetailsSummaryRequest request = new GetPatientProgramDetailsSummaryRequest { ContractNumber = "NG", PatientId = "", Token = "dsafgsdfgdafg", UserId = "", Version = 1.0 };
+                GetPatientProgramDetailsSummaryResponse response = ngs.Get(request);
+
+                Assert.IsNotNull(response.Program.Objectives);
+            }
         }
     }
 }

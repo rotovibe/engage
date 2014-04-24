@@ -95,7 +95,8 @@ namespace Phytel.API.DataDomain.Program
                         MEProgram.TemplateNameProperty,
                         MEProgram.TemplateVersionProperty,
                         MEProgram.ProgramVersionProperty,
-                        MEProgram.ProgramVersionUpdatedOnProperty
+                        MEProgram.ProgramVersionUpdatedOnProperty,
+                        MEProgram.ObjectivesInfoProperty
                     ).FirstOrDefault();
                 }
                 return cp;

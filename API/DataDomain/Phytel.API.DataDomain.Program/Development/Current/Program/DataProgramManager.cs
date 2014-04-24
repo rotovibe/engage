@@ -300,7 +300,7 @@ namespace Phytel.API.DataDomain.Program
                     EligibilityEndDate = mepp.EligibilityEndDate,
                     EligibilityStartDate = mepp.EligibilityStartDate,
                     EligibilityRequirements = mepp.EligibilityRequirements,
-                    ObjectivesData = DTOUtils.GetObjectives(mepp.Objectives),
+                    //ObjectivesData = DTOUtils.GetObjectives(mepp.Objectives),
                     SpawnElement = DTOUtils.GetSpawnElement(mepp),
                     Modules = DTOUtils.GetModules(mepp.Modules, request.ContractNumber, request.UserId)
                 };
@@ -318,6 +318,7 @@ namespace Phytel.API.DataDomain.Program
                     response.Program.TemplateVersion = meProgram.TemplateVersion;
                     response.Program.ProgramVersion = meProgram.ProgramVersion;
                     response.Program.ProgramVersionUpdatedOn = meProgram.ProgramVersionUpdatedOn;
+                    response.Program.ObjectivesData = GetObjectivesData(meProgram.Objectives);
                 }
                 return response;
             }
@@ -327,7 +328,29 @@ namespace Phytel.API.DataDomain.Program
             }
         }
 
-        private MEProgram getLimitedProgramDetails(string objectId, string contract, string context, string userid)
+        public List<ObjectiveInfoData> GetObjectivesData(List<Objective> sobjs)
+        {
+            try
+            {
+                List<ObjectiveInfoData> objs =
+                sobjs.Where(x => x.Status == Status.Active)
+                .Select(o => new ObjectiveInfoData
+                    {
+                        Id = o.Id.ToString(),
+                        Status = (int)o.Status,
+                        Unit = o.Units,
+                        Value = o.Value
+                    }).ToList();
+
+                return objs;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("DD:DataProgramManager:GetObjectivesData()::" + ex.Message, ex.InnerException);
+            }
+        }
+
+        public MEProgram getLimitedProgramDetails(string objectId, string contract, string context, string userid)
         {
             IProgramRepository<MEProgram> programRepo = Phytel.API.DataDomain.Program.ProgramRepositoryFactory<MEProgram>.GetProgramRepository(contract, context, userid);
             MEProgram meProgram = programRepo.GetLimitedProgramFields(objectId) as MEProgram;

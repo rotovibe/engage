@@ -29,7 +29,12 @@ namespace Phytel.API.DataDomain.Program.Test.Stubs
                     Id = "000000000000000000000000",
                     EligibilityRequirements = "Test eligibility requirements",
                     EligibilityStartDate = System.DateTime.UtcNow,
-                    EligibilityEndDate = System.DateTime.UtcNow
+                    EligibilityEndDate = System.DateTime.UtcNow,
+                    ObjectivesData = new List<DTO.ObjectiveInfoData> { new DTO.ObjectiveInfoData{ Id ="123456789012345678901234",
+                         Value = "testing",
+                          Unit = "lbs",
+                           Status = 1
+                    } }
                 },
                 Version = 1.0
             };
