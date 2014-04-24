@@ -25,8 +25,8 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
                     State = Common.ElementState.NotStarted,
                     AssignedBy = cp.AssignedBy,
                     AssignedOn = cp.AssignedOn,
-                    StartDate = System.DateTime.UtcNow, // utc time
-                    EndDate = null,
+                    StartDate = cp.StartDate, 
+                    EndDate = cp.EndDate,
                     DateCompleted = cp.DateCompleted,
                     ContractProgramId = cp.Id,
                     DeleteFlag = cp.DeleteFlag,
