@@ -87,8 +87,18 @@ namespace Phytel.API.AppDomain.NG.Test.Stubs
         {
             DTO.GetPatientProgramDetailsSummaryResponse response = new DTO.GetPatientProgramDetailsSummaryResponse
             {
-                Program = new DTO.Program { Name = "Test Program", Description = "test description" },
-                 Version = 1.0
+                Program = new DTO.Program
+                {
+                    Name = "Test Program",
+                    Description = "test description",
+                    Attributes = new DTO.ProgramAttribute
+                    {
+                        AssignedBy = "me",
+                        AssignedOn = System.DateTime.UtcNow,
+                        Id = "0000000000000000000000000"
+                    }
+                },
+                Version = 1.0
             };
             return response;
         }

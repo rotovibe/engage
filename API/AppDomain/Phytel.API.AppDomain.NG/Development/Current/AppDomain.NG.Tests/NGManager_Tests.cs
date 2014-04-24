@@ -78,6 +78,28 @@ namespace Phytel.API.AppDomain.NG.Tests
                 GetPatientProgramDetailsSummaryResponse response = ngm.GetPatientProgramDetailsSummary(request);
                 Assert.AreEqual(0, response.Program.Modules[0].Actions[0].Steps.Count);
             }
+
+            [TestMethod()]
+            public void Get_With_Attributes_Test()
+            {
+                string patientId = "5325dab8d6a4850adcbba71a";
+                string programId = "534d9217d6a48504b0586f68";
+                string userId = "0000000000000000000000000";
+
+                INGManager ngm = new NGManager { PlanElementUtils = new StubPlanElementUtils(), EndpointUtils = new StubPlanElementEndpointUtils() };
+
+                GetPatientProgramDetailsSummaryRequest request = new GetPatientProgramDetailsSummaryRequest
+                {
+                    Version = 1.0,
+                    ContractNumber = "InHealth001",
+                    PatientId = patientId,
+                    PatientProgramId = programId,
+                    UserId = userId
+                };
+
+                GetPatientProgramDetailsSummaryResponse response = ngm.GetPatientProgramDetailsSummary(request);
+                Assert.IsNotNull(response.Program.Attributes);
+            }
         }
     }
 }
