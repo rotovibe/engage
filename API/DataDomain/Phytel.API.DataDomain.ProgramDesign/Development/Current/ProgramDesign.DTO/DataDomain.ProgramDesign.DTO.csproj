@@ -73,6 +73,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DeleteProgramDataRequest.cs" />
+    <Compile Include="DeleteProgramDataResponse.cs" />
     <Compile Include="GetActionDataRequest.cs" />
     <Compile Include="GetActionDataResponse.cs" />
     <Compile Include="GetAllActionsDataRequest.cs" />
@@ -130,6 +132,8 @@
     <Compile Include="PutProgramDataResponse.cs" />
     <Compile Include="PutUpdateProgramAttributesRequest.cs" />
     <Compile Include="PutUpdateProgramAttributesResponse.cs" />
+    <Compile Include="PutUpdateProgramDataRequest.cs" />
+    <Compile Include="PutUpdateProgramDataResponse.cs" />
     <Compile Include="PutUpdateResponseRequest.cs" />
     <Compile Include="PutUpdateResponseResponse.cs" />
     <Compile Include="ResponseDetail.cs" />

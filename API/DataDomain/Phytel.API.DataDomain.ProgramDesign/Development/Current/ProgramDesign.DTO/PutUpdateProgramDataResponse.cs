@@ -9,7 +9,7 @@ using Phytel.API.Interface;
 
 namespace Phytel.API.DataDomain.ProgramDesign.DTO
 {
-    public class PutProgramDataResponse : IDomainResponse
+    public class PutUpdateProgramDataResponse : IDomainResponse
     {
         public string Id { get; set; }
         public double Version { get; set; }

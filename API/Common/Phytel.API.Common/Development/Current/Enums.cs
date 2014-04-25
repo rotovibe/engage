@@ -63,6 +63,7 @@ namespace Phytel.API.Common
         CareMember,
         CohortPatientView,
         Response,
+        Program,
         Module,
         Action,
         Step

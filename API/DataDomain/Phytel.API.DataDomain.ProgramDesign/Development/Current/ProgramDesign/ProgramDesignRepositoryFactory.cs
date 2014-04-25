@@ -31,7 +31,7 @@ namespace Phytel.API.DataDomain.ProgramDesign
             IProgramDesignRepository<T> repo = null;
 
             //We only have 1 repository at this time, just return it
-            repo = new MongoProgramDesignRepository<T>(dbName) as IProgramDesignRepository<T>;
+            repo = new MongoProgramRepository<T>(dbName) as IProgramDesignRepository<T>;
             repo.UserId = userId;
             return repo;
         }

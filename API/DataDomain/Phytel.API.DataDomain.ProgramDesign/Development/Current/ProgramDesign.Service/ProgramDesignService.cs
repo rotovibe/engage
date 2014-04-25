@@ -68,6 +68,47 @@ namespace Phytel.API.DataDomain.ProgramDesign.Service
             return response;
         }
 
+        public PutProgramDataResponse Put(PutProgramDataRequest request)
+        {
+            PutProgramDataResponse response = new PutProgramDataResponse();
+            try
+            {
+                if (string.IsNullOrEmpty(request.UserId))
+                    throw new UnauthorizedAccessException("ProgramDesignDD:Put()::Unauthorized Access");
+                response = ProgramDesignDataManager.InsertProgram(request);
+                response.Version = request.Version;
+            }
+            catch (Exception ex)
+            {
+                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+
+                string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
+                Common.Helper.LogException(int.Parse(aseProcessID), ex);
+            }
+
+            return response;
+        }
+
+        public PutUpdateProgramDataResponse Put(PutUpdateProgramDataRequest request)
+        {
+            PutUpdateProgramDataResponse response = new PutUpdateProgramDataResponse();
+            try
+            {
+                if (string.IsNullOrEmpty(request.UserId))
+                    throw new UnauthorizedAccessException("ProgramDesignDD:Put()::Unauthorized Access");
+                response = ProgramDesignDataManager.UpdateProgram(request);
+                response.Version = request.Version;
+            }
+            catch (Exception ex)
+            {
+                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+
+                string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
+                Common.Helper.LogException(int.Parse(aseProcessID), ex);
+            }
+            return response;
+        }
+
         public PutModuleDataResponse Put(PutModuleDataRequest request)
         {
             PutModuleDataResponse response = new PutModuleDataResponse();
@@ -88,6 +129,27 @@ namespace Phytel.API.DataDomain.ProgramDesign.Service
                 Common.Helper.LogException(int.Parse(aseProcessID), ex);
             }
 
+            return response;
+        }
+
+        public DeleteProgramDataResponse Delete(DeleteProgramDataRequest request)
+        {
+            DeleteProgramDataResponse response = new DeleteProgramDataResponse();
+            try
+            {
+                if (string.IsNullOrEmpty(request.UserId))
+                    throw new UnauthorizedAccessException("PatientGoalDD:Get()::Unauthorized Access");
+
+                response = ProgramDesignDataManager.DeleteProgram(request);
+                response.Version = request.Version;
+            }
+            catch (Exception ex)
+            {
+                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+
+                string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
+                Common.Helper.LogException(int.Parse(aseProcessID), ex);
+            }
             return response;
         }
     }

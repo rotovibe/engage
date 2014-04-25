@@ -383,6 +383,22 @@ namespace Phytel.API.DataDomain.ProgramDesign
 
         //public PutUpdateResponseResponse
 
+        public static PutProgramDataResponse InsertProgram(PutProgramDataRequest request)
+        {
+            IProgramDesignRepository<PutProgramDataRequest> repo =
+                ProgramDesignRepositoryFactory<PutProgramDataRequest>.GetProgramRepository(request.ContractNumber, request.Context, request.UserId);
+            PutProgramDataResponse result = repo.Insert(request) as PutProgramDataResponse;
+            return result;
+        }
+
+        public static PutUpdateProgramDataResponse UpdateProgram(PutUpdateProgramDataRequest request)
+        {
+            IProgramDesignRepository<PutProgramDataRequest> repo =
+                ProgramDesignRepositoryFactory<PutProgramDataRequest>.GetProgramRepository(request.ContractNumber, request.Context, request.UserId);
+            PutUpdateProgramDataResponse result = repo.Update(request) as PutUpdateProgramDataResponse;
+            return result;
+        }
+
         public static PutModuleDataResponse InsertModule(PutModuleDataRequest request)
         {
             IProgramDesignRepository<PutModuleDataRequest> repo = 
@@ -390,6 +406,25 @@ namespace Phytel.API.DataDomain.ProgramDesign
 
             PutModuleDataResponse result = repo.Insert(request) as PutModuleDataResponse;
             return result;
+        }
+
+        public static DeleteProgramDataResponse DeleteProgram(DeleteProgramDataRequest request)
+        {
+            try
+            {
+                DeleteProgramDataResponse result = new DeleteProgramDataResponse();
+
+                IProgramDesignRepository<DeleteProgramDataResponse> repo = ProgramDesignRepositoryFactory<DeleteProgramDataResponse>.GetProgramRepository(request.ContractNumber, request.Context, request.UserId);
+
+                repo.Delete(request);
+
+                result.Deleted = true;
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
     }
 }   
