@@ -107,7 +107,7 @@ namespace Phytel.API.DataDomain.ProgramDesign
             throw new NotImplementedException();
         }
 
-        public GetAllActionsDataResponse SelectAll(double versionNumber, Common.Status status)
+        public GetAllActionsDataResponse SelectAll(double versionNumber, Status status)
         {
             GetAllActionsDataResponse response = new GetAllActionsDataResponse()
             {

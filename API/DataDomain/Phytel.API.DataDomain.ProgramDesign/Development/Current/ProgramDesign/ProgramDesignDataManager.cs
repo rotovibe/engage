@@ -34,7 +34,7 @@ namespace Phytel.API.DataDomain.ProgramDesign
             MongoActionRepository<GetAllActionsDataResponse> repo = new MongoActionRepository<GetAllActionsDataResponse>(request.ContractNumber);
             repo.UserId = request.UserId;
 
-            result = repo.SelectAll(request.Version, Common.Status.Active);
+            result = repo.SelectAll(request.Version, Status.Active);
 
             return result;
         }
@@ -67,7 +67,7 @@ namespace Phytel.API.DataDomain.ProgramDesign
             MongoModuleRepository<GetAllModulesResponse> repo = new MongoModuleRepository<GetAllModulesResponse>(request.ContractNumber);
             repo.UserId = request.UserId;
 
-            result = repo.SelectAll(request.Version, Common.Status.Active);
+            result = repo.SelectAll(request.Version, Status.Active);
 
             return result;
         }

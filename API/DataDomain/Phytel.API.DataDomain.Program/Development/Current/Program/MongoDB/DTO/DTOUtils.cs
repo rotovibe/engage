@@ -21,8 +21,8 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
                     PatientId = ObjectId.Parse(request.PatientId),
                     //AuthoredBy = cp.AuthoredBy,
                     Client = cp.Client,
-                    ProgramState = Common.ProgramState.NotStarted,
-                    State = Common.ElementState.NotStarted,
+                    ProgramState = ProgramState.NotStarted,
+                    State = ElementState.NotStarted,
                     AssignedBy = cp.AssignedBy,
                     AssignedOn = cp.AssignedOn,
                     StartDate = cp.StartDate, 
@@ -71,7 +71,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
                 //Parallel.ForEach(list, m =>
                 foreach (Module m in list)
                 {
-                    if (m.Status == Common.Status.Active)
+                    if (m.Status == Status.Active)
                     {
                         Module mod = new Module()
                         {
@@ -90,7 +90,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
                             SourceId = m.SourceId,
                             AssignedBy = m.AssignedBy,
                             AssignedOn = m.AssignedOn,
-                            State = Common.ElementState.NotStarted,
+                            State = ElementState.NotStarted,
                             CompletedBy = m.CompletedBy,
                             DateCompleted = m.DateCompleted,
                             //Objectives = m.Objectives.Where(a => a.Status == Common.Status.Active).Select(z => new ObjectivesInfo()
@@ -122,7 +122,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
                 List<Action> actions = new List<Action>();
                 foreach (Action ai in list)
                 {
-                    if (ai.Status == Common.Status.Active)
+                    if (ai.Status == Status.Active)
                     {
                         Action ac = new Action()
                         {
@@ -142,7 +142,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
                             SourceId = ai.SourceId,
                             AssignedBy = ai.AssignedBy,
                             AssignedOn = ai.AssignedOn,
-                            State = Common.ElementState.NotStarted,
+                            State = ElementState.NotStarted,
                             //Objectives = ai.Objectives.Where(r => r.Status == Common.Status.Active).Select(x => new ObjectivesInfo()
                             //{
                             //    Id = x.Id,
@@ -171,7 +171,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
                 //Parallel.ForEach(ai.Steps, b =>
                 foreach (Step b in ai.Steps)
                 {
-                    if (b.Status == Common.Status.Active)
+                    if (b.Status == Status.Active)
                     {
                         sil.Add(b.Id);
                         steps.Add(new Step()

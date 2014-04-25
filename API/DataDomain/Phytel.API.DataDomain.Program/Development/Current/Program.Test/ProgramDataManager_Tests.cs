@@ -118,7 +118,7 @@ namespace Phytel.API.DataDomain.Program.Tests
                 Stopwatch st = new Stopwatch();
                 st.Start();
                 ProgramDataManager dm = new ProgramDataManager();
-                List<Objective> objs = new List<Objective> { new Objective{ Id= ObjectId.Parse("000000000000000000000000"), Status= Common.Status.Active, Value = "Nanny", Units="lbs" } };
+                List<Objective> objs = new List<Objective> { new Objective{ Id= ObjectId.Parse("000000000000000000000000"), Status= Status.Active, Value = "Nanny", Units="lbs" } };
                 List<ObjectiveInfoData> objl = dm.GetObjectivesData(objs);
                 Assert.AreEqual("000000000000000000000000", objl[0].Id);
                 st.Stop();

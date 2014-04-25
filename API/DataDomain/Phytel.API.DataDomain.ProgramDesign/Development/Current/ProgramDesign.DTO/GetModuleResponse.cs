@@ -20,7 +20,7 @@ namespace Phytel.API.DataDomain.ProgramDesign.DTO
         public string Name { get; set; }
         public List<string> Objectives { get; set; }
         public string Description { get; set; }
-        public Status Status { get; set; }
+        public string Status { get; set; }
         public List<ActionData> Actions { get; set; }
     }
 }

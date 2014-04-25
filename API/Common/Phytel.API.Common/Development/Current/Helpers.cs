@@ -20,29 +20,6 @@ namespace Phytel.API.Common
         }
 
         /// <summary>
-        /// Converts the name of the Enum to a friendly name that can be shown on the UI
-        /// </summary>
-        /// <param name="s">Status enum object</param>
-        /// <returns>friendly string</returns>
-        public string ToFriendlyString(Status s)
-        {
-            switch(s)
-            {
-                case Status.Active:
-                return "Active";
-                case Status.Inactive:
-                return "Inactive";
-                case Status.InReview:
-                return "In Review";
-                case Status.Met:
-                return "Met";
-                case Status.NotMet:
-                return "Not Met";
-            }
-            return null;
-        }
-
-        /// <summary>
         /// Converts a list of objectIds to list of strings.
         /// </summary>
         /// <param name="objectIds">list of objectIds</param>

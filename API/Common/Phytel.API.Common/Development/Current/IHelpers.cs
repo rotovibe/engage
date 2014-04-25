@@ -9,6 +9,5 @@ namespace Phytel.API.Common
         System.Collections.Generic.List<MongoDB.Bson.ObjectId> ConvertToObjectIdList(System.Collections.Generic.List<string> stringList);
         System.Collections.Generic.List<string> ConvertToStringList(System.Collections.Generic.List<MongoDB.Bson.ObjectId> objectIds);
         void LogException(int processId, Exception ex);
-        string ToFriendlyString(Status s);
     }
 }

@@ -66,6 +66,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Enums.cs" />
+    <Compile Include="Helper.cs" />
     <Compile Include="IProgramDesignDataManager.cs" />
     <Compile Include="IProgramDesignRepository.cs" />
     <Compile Include="MongoDB\DTO\MEAction.cs" />

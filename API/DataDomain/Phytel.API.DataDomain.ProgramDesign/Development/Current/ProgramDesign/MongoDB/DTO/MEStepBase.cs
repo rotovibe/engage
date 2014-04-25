@@ -64,4 +64,17 @@ namespace Phytel.API.DataDomain.ProgramDesign.DTO
         public System.DateTime? LastUpdatedOn { get; set; }
 
     }
+    public enum StepType
+    {
+        YesNo = 1,
+        Text = 2,
+        Input = 3,
+        Single = 4,
+        Multi = 5,
+        Date = 6,
+        Complete = 7,
+        DateTime = 8,
+        Time = 9,
+        InputMultiline = 10
+    }
 }

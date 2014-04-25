@@ -96,6 +96,7 @@
   <ItemGroup>
     <Compile Include="CareMembersManager.cs" />
     <Compile Include="Constants.cs" />
+    <Compile Include="Enums.cs" />
     <Compile Include="INGManager.cs" />
     <Compile Include="Programs\IPlanElementEndpointUtils.cs" />
     <Compile Include="Programs\IPlanElementUtils.cs" />
