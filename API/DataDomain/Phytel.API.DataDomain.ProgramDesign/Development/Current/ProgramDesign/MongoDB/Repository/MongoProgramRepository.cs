@@ -273,10 +273,6 @@ namespace Phytel.API.DataDomain.ProgramDesign
                         else
                             updt.Set(MEProgram.DescriptionProperty, request.Description);
                     }
-                    if (request.Order != null)
-                    {
-                            updt.Set(MEProgram.OrderProperty, request.Order);
-                    }
                     if (request.ShortName != null)
                     {
                         if (request.ShortName == "\"\"" || (request.ShortName == "\'\'"))
@@ -285,6 +281,7 @@ namespace Phytel.API.DataDomain.ProgramDesign
                             updt.Set(MEProgram.ShortNameProperty, request.ShortName);
                     }
 
+                    updt.Set(MEProgram.OrderProperty, request.Order);
                     updt.Set(MEProgram.LastUpdatedOnProperty, System.DateTime.UtcNow);
                     updt.Set(MEProgram.UpdatedByProperty, ObjectId.Parse(this.UserId));
                     updt.Set(MEProgram.VersionProperty, request.Version);

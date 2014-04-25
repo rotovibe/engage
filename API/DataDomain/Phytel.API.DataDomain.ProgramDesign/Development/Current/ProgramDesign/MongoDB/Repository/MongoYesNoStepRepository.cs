@@ -12,6 +12,8 @@ using MongoDB.Bson;
 using Phytel.API.Common;
 using MongoDB.Bson.Serialization;
 using Phytel.API.DataDomain.ProgramDesign.DTO;
+using MB = MongoDB.Driver.Builders;
+using Phytel.API.DataAudit;
 
 namespace Phytel.API.DataDomain.ProgramDesign
 {
@@ -47,6 +49,38 @@ namespace Phytel.API.DataDomain.ProgramDesign
 
         public object Insert(object newEntity)
         {
+            PutYesNoStepDataRequest request = newEntity as PutYesNoStepDataRequest;
+            MEYesNo step = null;
+            using(ProgramDesignMongoContext ctx = new ProgramDesignMongoContext(_dbName))
+            {
+                IMongoQuery query = Query.And(
+                                Query.EQ(MEYesNo.QuestionProperty, request.Question));
+                step = ctx.YesNoSteps.Collection.FindOneAs<MEYesNo>(query);
+                MongoProgramDesignRepository<T> repo = new MongoProgramDesignRepository<T>(_dbName);
+                repo.UserId = this.UserId;
+
+                if(step == null)
+                {
+                    step = new MEYesNo()
+                    {
+                        Id = ObjectId.GenerateNewId(),
+                        Question = request.Question,
+                        Notes = request.Notes
+                    };
+                }
+                ctx.YesNoSteps.Collection.Insert(step);
+
+                AuditHelper.LogDataAudit(this.UserId,
+                                          MongoCollectionName.Step.ToString(),
+                                          step.Id.ToString(),
+                                          Common.DataAuditType.Insert,
+                                          request.ContractNumber);
+            }
+
+            return new PutYesNoStepDataResponse
+            {
+                Id = step.Id.ToString()
+            };
             throw new NotImplementedException();
         }
 
@@ -128,6 +162,57 @@ namespace Phytel.API.DataDomain.ProgramDesign
         public object Update(object entity)
         {
             throw new NotImplementedException();
+        }
+
+        public PutUpdateYesNoStepDataResponse Update(PutUpdateYesNoStepDataRequest request)
+        {
+            PutUpdateYesNoStepDataResponse response = new PutUpdateYesNoStepDataResponse();
+            try
+            {
+                if (request.UserId == null)
+                    throw new ArgumentException("UserId is missing from the DataDomain request.");
+
+                using (ProgramDesignMongoContext ctx = new ProgramDesignMongoContext(_dbName))
+                {
+                    var pUQuery = new QueryDocument(MEYesNo.IdProperty, ObjectId.Parse(request.StepId));
+
+                    MB.UpdateBuilder updt = new MB.UpdateBuilder();
+                    if (request.Question != null)
+                    {
+                        if (request.Question == "\"\"" || (request.Question == "\'\'"))
+                            updt.Set(MEYesNo.QuestionProperty, string.Empty);
+                        else
+                            updt.Set(MEYesNo.QuestionProperty, request.Question);
+                    }
+                    if (request.Notes != null)
+                    {
+                        if (request.Notes == "\"\"" || (request.Notes == "\'\'"))
+                            updt.Set(MEYesNo.NotesProperty, string.Empty);
+                        else
+                            updt.Set(MEYesNo.NotesProperty, request.Notes);
+                    }
+
+                    updt.Set(MEYesNo.LastUpdatedOnProperty, System.DateTime.UtcNow);
+                    updt.Set(MEYesNo.UpdatedByProperty, ObjectId.Parse(this.UserId));
+                    updt.Set(MEYesNo.VersionProperty, request.Version);
+
+                    var pt = ctx.YesNoSteps.Collection.FindAndModify(pUQuery, SortBy.Null, updt, true);
+
+                    AuditHelper.LogDataAudit(this.UserId,
+                                            MongoCollectionName.Step.ToString(),
+                                            request.StepId.ToString(),
+                                            Common.DataAuditType.Update,
+                                            request.ContractNumber);
+
+                    response.Id = request.StepId;
+                }
+                return response;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
         }
 
         public void CacheByID(List<string> entityIDs)

@@ -393,8 +393,8 @@ namespace Phytel.API.DataDomain.ProgramDesign
 
         public static PutUpdateProgramDataResponse UpdateProgram(PutUpdateProgramDataRequest request)
         {
-            IProgramDesignRepository<PutProgramDataRequest> repo =
-                ProgramDesignRepositoryFactory<PutProgramDataRequest>.GetProgramRepository(request.ContractNumber, request.Context, request.UserId);
+            IProgramDesignRepository<PutUpdateProgramDataRequest> repo =
+                ProgramDesignRepositoryFactory<PutUpdateProgramDataRequest>.GetProgramRepository(request.ContractNumber, request.Context, request.UserId);
             PutUpdateProgramDataResponse result = repo.Update(request) as PutUpdateProgramDataResponse;
             return result;
         }
@@ -405,6 +405,22 @@ namespace Phytel.API.DataDomain.ProgramDesign
                 ProgramDesignRepositoryFactory<PutModuleDataRequest>.GetModuleRepository(request.ContractNumber, request.Context, request.UserId);
 
             PutModuleDataResponse result = repo.Insert(request) as PutModuleDataResponse;
+            return result;
+        }
+
+        public static PutYesNoStepDataResponse InsertYesNoStep(PutYesNoStepDataRequest request)
+        {
+            IProgramDesignRepository<PutYesNoStepDataRequest> repo =
+                ProgramDesignRepositoryFactory<PutYesNoStepDataRequest>.GetStepRepository(request.ContractNumber, request.Context, request.UserId);
+            PutYesNoStepDataResponse result = repo.Insert(request) as PutYesNoStepDataResponse;
+            return result;
+        }
+
+        public static PutUpdateYesNoStepDataResponse UpdateYesNoStep(PutUpdateYesNoStepDataRequest request)
+        {
+            IProgramDesignRepository<PutUpdateYesNoStepDataRequest> repo =
+                ProgramDesignRepositoryFactory<PutUpdateYesNoStepDataRequest>.GetStepRepository(request.ContractNumber, request.Context, request.UserId);
+            PutUpdateYesNoStepDataResponse result = repo.Update(request) as PutUpdateYesNoStepDataResponse;
             return result;
         }
 

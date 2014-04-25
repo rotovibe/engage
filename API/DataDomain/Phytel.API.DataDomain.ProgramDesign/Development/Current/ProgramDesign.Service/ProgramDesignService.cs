@@ -132,6 +132,48 @@ namespace Phytel.API.DataDomain.ProgramDesign.Service
             return response;
         }
 
+        public PutYesNoStepDataResponse Put(PutYesNoStepDataRequest request)
+        {
+            PutYesNoStepDataResponse response = new PutYesNoStepDataResponse();
+            try
+            {
+                if (string.IsNullOrEmpty(request.UserId))
+                    throw new UnauthorizedAccessException("ProgramDesignDD:Put()::Unathorized Access");
+                response = ProgramDesignDataManager.InsertYesNoStep(request);
+                response.Version = request.Version;
+
+            }
+            catch (Exception ex)
+            {
+                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+
+                string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
+                Common.Helper.LogException(int.Parse(aseProcessID), ex);
+            }
+
+            return response;
+        }
+
+        public PutUpdateYesNoStepDataResponse Put(PutUpdateYesNoStepDataRequest request)
+        {
+            PutUpdateYesNoStepDataResponse response = new PutUpdateYesNoStepDataResponse();
+            try
+            {
+                if (string.IsNullOrEmpty(request.UserId))
+                    throw new UnauthorizedAccessException("ProgramDesignDD:Put()::Unauthorized Access");
+                response = ProgramDesignDataManager.UpdateYesNoStep(request);
+                response.Version = request.Version;
+            }
+            catch (Exception ex)
+            {
+                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+
+                string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
+                Common.Helper.LogException(int.Parse(aseProcessID), ex);
+            }
+            return response;
+        }
+
         public DeleteProgramDataResponse Delete(DeleteProgramDataRequest request)
         {
             DeleteProgramDataResponse response = new DeleteProgramDataResponse();

@@ -136,6 +136,10 @@
     <Compile Include="PutUpdateProgramDataResponse.cs" />
     <Compile Include="PutUpdateResponseRequest.cs" />
     <Compile Include="PutUpdateResponseResponse.cs" />
+    <Compile Include="PutUpdateYesNoDataRequest.cs" />
+    <Compile Include="PutUpdateYesNoDataResponse.cs" />
+    <Compile Include="PutYesNoStepDataRequest.cs" />
+    <Compile Include="PutYesNoStepDataResponse.cs" />
     <Compile Include="ResponseDetail.cs" />
     <Compile Include="StepDetail.cs" />
     <Compile Include="StepResponse.cs" />
