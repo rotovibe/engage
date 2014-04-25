@@ -25,7 +25,7 @@ namespace Phytel.API.DataDomain.PatientObservation
         private string _dbName = string.Empty;
         private int _expireDays = Convert.ToInt32(ConfigurationManager.AppSettings["ExpireDays"]);
         private int _initializeDays = Convert.ToInt32(ConfigurationManager.AppSettings["InitializeDays"]);
-        private const string CareManager = "Care Manager";
+        private const string CareManager = "CM";
 
         static MongoPatientObservationRepository()
         {
