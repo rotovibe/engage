@@ -73,8 +73,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DeleteActionDataRequest.cs" />
     <Compile Include="DeleteProgramDataRequest.cs" />
+    <Compile Include="DeleteActionDataResponse.cs" />
+    <Compile Include="DeleteTextStepDataRequest.cs" />
+    <Compile Include="DeleteTextStepDataResponse.cs" />
+    <Compile Include="DeleteYesNoStepDataResponse.cs" />
     <Compile Include="DeleteProgramDataResponse.cs" />
+    <Compile Include="DeleteYesNoStepDataRequest.cs" />
     <Compile Include="GetActionDataRequest.cs" />
     <Compile Include="GetActionDataResponse.cs" />
     <Compile Include="GetAllActionsDataRequest.cs" />
@@ -111,6 +117,12 @@
     <Compile Include="GetStepResponseListResponse.cs" />
     <Compile Include="GetStepResponseRequest.cs" />
     <Compile Include="GetStepResponseResponse.cs" />
+    <Compile Include="PutUpdateActionDataRequest.cs" />
+    <Compile Include="PutActionDataRequest.cs" />
+    <Compile Include="PutUpdateActionDataResponse.cs" />
+    <Compile Include="PutActionDataResponse.cs" />
+    <Compile Include="PutUpdateTextStepDataRequest.cs" />
+    <Compile Include="PutTextStepDataRequest.cs" />
     <Compile Include="GetTextStepDataRequest.cs" />
     <Compile Include="GetTextStepDataResponse.cs" />
     <Compile Include="GetYesNoStepDataRequest.cs" />
@@ -130,6 +142,7 @@
     <Compile Include="PutProgramAttributesResponse.cs" />
     <Compile Include="PutProgramDataRequest.cs" />
     <Compile Include="PutProgramDataResponse.cs" />
+    <Compile Include="PutUpdateTextStepDataResponse.cs" />
     <Compile Include="PutUpdateProgramAttributesRequest.cs" />
     <Compile Include="PutUpdateProgramAttributesResponse.cs" />
     <Compile Include="PutUpdateProgramDataRequest.cs" />
@@ -139,6 +152,7 @@
     <Compile Include="PutUpdateYesNoDataRequest.cs" />
     <Compile Include="PutUpdateYesNoDataResponse.cs" />
     <Compile Include="PutYesNoStepDataRequest.cs" />
+    <Compile Include="PutTextStepDataResponse.cs" />
     <Compile Include="PutYesNoStepDataResponse.cs" />
     <Compile Include="ResponseDetail.cs" />
     <Compile Include="StepDetail.cs" />

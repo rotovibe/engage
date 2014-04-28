@@ -55,21 +55,22 @@ namespace Phytel.API.DataDomain.ProgramDesign
             {
                 IMongoQuery query = Query.And(
                                 Query.EQ(MEProgram.NameProperty, request.Name));
-                program = ctx.Modules.Collection.FindOneAs<MEProgram>(query);
-                MongoProgramDesignRepository<T> repo = new MongoProgramDesignRepository<T>(_dbName);
-                repo.UserId = this.UserId;
+                
+                    program = ctx.Programs.Collection.FindOneAs<MEProgram>(query);
+                    MongoProgramDesignRepository<T> repo = new MongoProgramDesignRepository<T>(_dbName);
+                    repo.UserId = this.UserId;
+                
 
                 if (program == null)
                 {
                     program = new MEProgram(this.UserId)
                     {
-                        Id = ObjectId.GenerateNewId(),
                         Name = request.Name,
                         Description = request.Description,
                         ShortName = request.ShortName,
                         AssignedBy = request.AssignedBy,
-                        AssignedOn = DateTime.Parse(request.AssignedOn),
-                        Client = ObjectId.Parse(request.Client),
+                        //AssignedOn = DateTime.Parse(request.AssignedOn),
+                        //Client = ObjectId.Parse(request.Client),
                         Order = request.Order
                     };
                 }
@@ -222,7 +223,83 @@ namespace Phytel.API.DataDomain.ProgramDesign
 
         public object Update(object entity)
         {
-            throw new NotImplementedException();
+            PutUpdateProgramDataRequest request = entity as PutUpdateProgramDataRequest;
+
+            PutUpdateProgramDataResponse response = new PutUpdateProgramDataResponse();
+            try
+            {
+                if (request.UserId == null)
+                    throw new ArgumentException("UserId is missing from the DataDomain request.");
+
+                using (ProgramDesignMongoContext ctx = new ProgramDesignMongoContext(_dbName))
+                {
+                    var pUQuery = new QueryDocument(MEProgram.IdProperty, ObjectId.Parse(request.Id));
+
+                    MB.UpdateBuilder updt = new MB.UpdateBuilder();
+                    if (request.Name != null)
+                    {
+                        if (request.Name == "\"\"" || (request.Name == "\'\'"))
+                            updt.Set(MEProgram.NameProperty, string.Empty);
+                        else
+                            updt.Set(MEProgram.NameProperty, request.Name);
+                    }
+                    if (request.AssignedBy != null)
+                    {
+                        if (request.AssignedBy == "\"\"" || (request.AssignedBy == "\'\'"))
+                            updt.Set(MEProgram.AssignByProperty, string.Empty);
+                        else
+                            updt.Set(MEProgram.AssignByProperty, request.AssignedBy);
+                    }
+                    if (request.AssignedOn != null)
+                    {
+                        if (request.AssignedOn == "\"\"" || (request.AssignedOn == "\'\'"))
+                            updt.Set(MEProgram.AssignDateProperty, string.Empty);
+                        else
+                            updt.Set(MEProgram.AssignDateProperty, request.AssignedOn);
+                    }
+                    if (request.Client != null)
+                    {
+                        if (request.Client == "\"\"" || (request.Client == "\'\'"))
+                            updt.Set(MEProgram.ClientProperty, string.Empty);
+                        else
+                            updt.Set(MEProgram.ClientProperty, request.Client);
+                    }
+                    if (request.Description != null)
+                    {
+                        if (request.Description == "\"\"" || (request.Description == "\'\'"))
+                            updt.Set(MEProgram.DescriptionProperty, string.Empty);
+                        else
+                            updt.Set(MEProgram.DescriptionProperty, request.Description);
+                    }
+                    if (request.ShortName != null)
+                    {
+                        if (request.ShortName == "\"\"" || (request.ShortName == "\'\'"))
+                            updt.Set(MEProgram.ShortNameProperty, string.Empty);
+                        else
+                            updt.Set(MEProgram.ShortNameProperty, request.ShortName);
+                    }
+
+                    updt.Set(MEProgram.OrderProperty, request.Order);
+                    updt.Set(MEProgram.LastUpdatedOnProperty, System.DateTime.UtcNow);
+                    updt.Set(MEProgram.UpdatedByProperty, ObjectId.Parse(this.UserId));
+                    updt.Set(MEProgram.VersionProperty, request.Version);
+
+                    var pt = ctx.Programs.Collection.FindAndModify(pUQuery, SortBy.Null, updt, true);
+
+                    AuditHelper.LogDataAudit(this.UserId,
+                                            MongoCollectionName.Program.ToString(),
+                                            request.Id.ToString(),
+                                            Common.DataAuditType.Update,
+                                            request.ContractNumber);
+
+                    response.Id = request.Id;
+                }
+                return response;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
 
         public object Update(PutUpdateProgramDataRequest request)

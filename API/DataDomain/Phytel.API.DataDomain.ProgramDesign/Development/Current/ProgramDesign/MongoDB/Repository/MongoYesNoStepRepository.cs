@@ -1,14 +1,13 @@
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-//using Phytel.API.DataDomain.Step.DTO;
 using Phytel.API.Interface;
 using MongoDB.Driver;
 using MongoDB.Driver.Builders;
 using MongoDB.Bson;
-//using Phytel.API.DataDomain.Step;
 using Phytel.API.Common;
 using MongoDB.Bson.Serialization;
 using Phytel.API.DataDomain.ProgramDesign.DTO;
@@ -20,6 +19,7 @@ namespace Phytel.API.DataDomain.ProgramDesign
     public class MongoYesNoStepRepository<T> : IProgramDesignRepository<T>
     {
         private string _dbName = string.Empty;
+        private int _expireDays = Convert.ToInt32(ConfigurationManager.AppSettings["ExpireDays"]);
 
         static MongoYesNoStepRepository()
         {
@@ -65,7 +65,8 @@ namespace Phytel.API.DataDomain.ProgramDesign
                     {
                         Id = ObjectId.GenerateNewId(),
                         Question = request.Question,
-                        Notes = request.Notes
+                        Notes = request.Notes,
+                        Type = StepType.YesNo
                     };
                 }
                 ctx.YesNoSteps.Collection.Insert(step);
@@ -81,7 +82,6 @@ namespace Phytel.API.DataDomain.ProgramDesign
             {
                 Id = step.Id.ToString()
             };
-            throw new NotImplementedException();
         }
 
         public object InsertAll(List<object> entities)
@@ -91,7 +91,34 @@ namespace Phytel.API.DataDomain.ProgramDesign
 
         public void Delete(object entity)
         {
-            throw new NotImplementedException();
+            DeleteYesNoStepDataRequest request = (DeleteYesNoStepDataRequest)entity;
+            try
+            {
+                using (ProgramDesignMongoContext ctx = new ProgramDesignMongoContext(_dbName))
+                {
+                    var q = MB.Query<MEYesNo>.EQ(b => b.Id, ObjectId.Parse(request.StepId));
+
+                    var uv = new List<MB.UpdateBuilder>();
+                    uv.Add(MB.Update.Set(MEYesNo.TTLDateProperty, System.DateTime.UtcNow.AddDays(_expireDays)));
+                    uv.Add(MB.Update.Set(MEYesNo.DeleteFlagProperty, true));
+                    uv.Add(MB.Update.Set(MEYesNo.UpdatedByProperty, ObjectId.Parse(request.UserId)));
+                    uv.Add(MB.Update.Set(MEYesNo.LastUpdatedOnProperty, DateTime.UtcNow));
+
+                    IMongoUpdate update = MB.Update.Combine(uv);
+                    ctx.YesNoSteps.Collection.Update(q, update);
+
+                    AuditHelper.LogDataAudit(this.UserId,
+                                            MongoCollectionName.Step.ToString(),
+                                            request.StepId.ToString(),
+                                            Common.DataAuditType.Delete,
+                                            request.ContractNumber);
+                }
+
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
         }
 
         public void DeleteAll(List<object> entities)
@@ -161,10 +188,56 @@ namespace Phytel.API.DataDomain.ProgramDesign
 
         public object Update(object entity)
         {
-            throw new NotImplementedException();
+            PutUpdateYesNoStepDataRequest request = entity as PutUpdateYesNoStepDataRequest;
+            PutUpdateYesNoStepDataResponse response = new PutUpdateYesNoStepDataResponse();
+            try
+            {
+                if (request.UserId == null)
+                    throw new ArgumentException("UserId is missing from the DataDomain request.");
+
+                using (ProgramDesignMongoContext ctx = new ProgramDesignMongoContext(_dbName))
+                {
+                    var pUQuery = new QueryDocument(MEYesNo.IdProperty, ObjectId.Parse(request.StepId));
+
+                    MB.UpdateBuilder updt = new MB.UpdateBuilder();
+                    if (request.Question != null)
+                    {
+                        if (request.Question == "\"\"" || (request.Question == "\'\'"))
+                            updt.Set(MEYesNo.QuestionProperty, string.Empty);
+                        else
+                            updt.Set(MEYesNo.QuestionProperty, request.Question);
+                    }
+                    if (request.Notes != null)
+                    {
+                        if (request.Notes == "\"\"" || (request.Notes == "\'\'"))
+                            updt.Set(MEYesNo.NotesProperty, string.Empty);
+                        else
+                            updt.Set(MEYesNo.NotesProperty, request.Notes);
+                    }
+
+                    updt.Set(MEYesNo.LastUpdatedOnProperty, System.DateTime.UtcNow);
+                    updt.Set(MEYesNo.UpdatedByProperty, ObjectId.Parse(request.UserId));
+                    updt.Set(MEYesNo.VersionProperty, request.Version);
+
+                    var pt = ctx.YesNoSteps.Collection.FindAndModify(pUQuery, SortBy.Null, updt, true);
+
+                    AuditHelper.LogDataAudit(this.UserId,
+                                            MongoCollectionName.Step.ToString(),
+                                            request.StepId.ToString(),
+                                            Common.DataAuditType.Update,
+                                            request.ContractNumber);
+
+                    response.Id = request.StepId;
+                }
+                return response;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
 
-        public PutUpdateYesNoStepDataResponse Update(PutUpdateYesNoStepDataRequest request)
+        public object Update(PutUpdateYesNoStepDataRequest request)
         {
             PutUpdateYesNoStepDataResponse response = new PutUpdateYesNoStepDataResponse();
             try
@@ -212,7 +285,6 @@ namespace Phytel.API.DataDomain.ProgramDesign
             {
                 throw;
             }
-
         }
 
         public void CacheByID(List<string> entityIDs)

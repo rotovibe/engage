@@ -8,7 +8,7 @@ using ServiceStack.ServiceHost;
 
 namespace Phytel.API.DataDomain.ProgramDesign.DTO
 {
-    [Route("/{Context}/{Version}/{ContractNumber}/ProgramDesign/Program/Update", "PUT")]
+    [Route("/{Context}/{Version}/{ContractNumber}/ProgramDesign/Program/{Id}/Update", "PUT")]
     public class PutUpdateProgramDataRequest : IDataDomainRequest
     {
         [ApiMember(Name = "Name", Description = "Name of the Program being updated", ParameterType = "property", DataType = "string", IsRequired = false)]

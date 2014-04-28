@@ -1,24 +1,26 @@
+using MongoDB.Bson;
+using MongoDB.Bson.Serialization;
+using MongoDB.Driver;
+using MongoDB.Driver.Builders;
+using Phytel.API.Common;
+using Phytel.API.DataAudit;
+using Phytel.API.DataDomain.ProgramDesign.DTO;
+using Phytel.API.DataDomain.ProgramDesign.MongoDB.DTO;
+using Phytel.API.Interface;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-//using Phytel.API.DataDomain.Action.DTO;
-using Phytel.API.Interface;
-using MongoDB.Driver;
-using MongoDB.Driver.Builders;
-using MongoDB.Bson;
-using MongoDB.Bson.Serialization;
-//using Phytel.API.DataDomain.Action;
-using Phytel.API.Common;
-using Phytel.API.DataDomain.ProgramDesign.DTO;
-using Phytel.API.DataDomain.ProgramDesign.MongoDB.DTO;
+using MB = MongoDB.Driver.Builders;
 
 namespace Phytel.API.DataDomain.ProgramDesign
 {
     public class MongoActionRepository<T> : IProgramDesignRepository<T>
     {
         private string _dbName = string.Empty;
+        private int _expireDays = Convert.ToInt32(ConfigurationManager.AppSettings["ExpireDays"]);
 
         static MongoActionRepository()
         {
@@ -40,7 +42,41 @@ namespace Phytel.API.DataDomain.ProgramDesign
 
         public object Insert(object newEntity)
         {
-            throw new NotImplementedException();
+            PutActionDataRequest request = newEntity as PutActionDataRequest;
+
+            MEAction action = null;
+            using (ProgramDesignMongoContext ctx = new ProgramDesignMongoContext(_dbName))
+            {
+                IMongoQuery query = Query.And(
+                                Query.EQ(MEAction.NameProperty, request.Name));
+                action = ctx.Actions.Collection.FindOneAs<MEAction>(query);
+                MongoProgramDesignRepository<T> repo = new MongoProgramDesignRepository<T>(_dbName);
+                repo.UserId = this.UserId;
+
+                if (action == null)
+                {
+                    action = new MEAction(this.UserId)
+                    {
+                        Id = ObjectId.GenerateNewId(),
+                        Name = request.Name,
+                        Description = request.Description,
+                        //CompletedBy = ObjectId.Parse(request.CompletedBy),
+                        Version = request.Version
+                    };
+                }
+                ctx.Actions.Collection.Insert(action);
+
+                AuditHelper.LogDataAudit(this.UserId,
+                                           MongoCollectionName.Action.ToString(),
+                                           action.Id.ToString(),
+                                           Common.DataAuditType.Insert,
+                                           request.ContractNumber);
+            }
+
+            return new PutActionDataResponse
+            {
+                Id = action.Id.ToString()
+            };
         }
 
         public object InsertAll(List<object> entities)
@@ -50,7 +86,34 @@ namespace Phytel.API.DataDomain.ProgramDesign
 
         public void Delete(object entity)
         {
-            throw new NotImplementedException();
+            DeleteActionDataRequest request = (DeleteActionDataRequest)entity;
+            try
+            {
+                using (ProgramDesignMongoContext ctx = new ProgramDesignMongoContext(_dbName))
+                {
+                    var q = MB.Query<MEAction>.EQ(b => b.Id, ObjectId.Parse(request.ActionId));
+
+                    var uv = new List<MB.UpdateBuilder>();
+                    uv.Add(MB.Update.Set(MEAction.TTLDateProperty, System.DateTime.UtcNow.AddDays(_expireDays)));
+                    uv.Add(MB.Update.Set(MEAction.DeleteFlagProperty, true));
+                    uv.Add(MB.Update.Set(MEAction.UpdatedByProperty, ObjectId.Parse(this.UserId)));
+                    uv.Add(MB.Update.Set(MEAction.LastUpdatedOnProperty, DateTime.UtcNow));
+
+                    IMongoUpdate update = MB.Update.Combine(uv);
+                    ctx.Actions.Collection.Update(q, update);
+
+                    AuditHelper.LogDataAudit(this.UserId,
+                                            MongoCollectionName.Action.ToString(),
+                                            request.ActionId.ToString(),
+                                            Common.DataAuditType.Delete,
+                                            request.ContractNumber);
+                }
+
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
         }
 
         public void DeleteAll(List<object> entities)
@@ -145,7 +208,103 @@ namespace Phytel.API.DataDomain.ProgramDesign
 
         public object Update(object entity)
         {
-            throw new NotImplementedException();
+            PutUpdateActionDataRequest request = entity as PutUpdateActionDataRequest;
+            PutUpdateActionDataResponse response = new PutUpdateActionDataResponse();
+            try
+            {
+                if (request.UserId == null)
+                    throw new ArgumentException("UserId is missing from the DataDomain request.");
+
+                using (ProgramDesignMongoContext ctx = new ProgramDesignMongoContext(_dbName))
+                {
+                    var pUQuery = new QueryDocument(MEAction.IdProperty, ObjectId.Parse(request.ActionId));
+
+                    MB.UpdateBuilder updt = new MB.UpdateBuilder();
+                    if (request.Name != null)
+                    {
+                        if (request.Name == "\"\"" || (request.Name == "\'\'"))
+                            updt.Set(MEAction.NameProperty, string.Empty);
+                        else
+                            updt.Set(MEAction.NameProperty, request.Name);
+                    }
+                    if (request.Description != null)
+                    {
+                        if (request.Description == "\"\"" || (request.Description == "\'\'"))
+                            updt.Set(MEAction.DescriptionProperty, string.Empty);
+                        else
+                            updt.Set(MEAction.DescriptionProperty, request.Description);
+                    }
+
+                    updt.Set(MEAction.LastUpdatedOnProperty, System.DateTime.UtcNow);
+                    updt.Set(MEAction.UpdatedByProperty, ObjectId.Parse(this.UserId));
+                    updt.Set(MEAction.VersionProperty, request.Version);
+
+                    var pt = ctx.Actions.Collection.FindAndModify(pUQuery, SortBy.Null, updt, true);
+
+                    AuditHelper.LogDataAudit(this.UserId,
+                                            MongoCollectionName.Action.ToString(),
+                                            request.ActionId.ToString(),
+                                            Common.DataAuditType.Update,
+                                            request.ContractNumber);
+
+                    response.Id = request.ActionId;
+                }
+                return response;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public object Update(PutUpdateActionDataRequest request)
+        {
+            PutUpdateActionDataResponse response = new PutUpdateActionDataResponse();
+            try
+            {
+                if (request.UserId == null)
+                    throw new ArgumentException("UserId is missing from the DataDomain request.");
+
+                using (ProgramDesignMongoContext ctx = new ProgramDesignMongoContext(_dbName))
+                {
+                    var pUQuery = new QueryDocument(MEAction.IdProperty, ObjectId.Parse(request.ActionId));
+
+                    MB.UpdateBuilder updt = new MB.UpdateBuilder();
+                    if (request.Name != null)
+                    {
+                        if (request.Name == "\"\"" || (request.Name == "\'\'"))
+                            updt.Set(MEAction.NameProperty, string.Empty);
+                        else
+                            updt.Set(MEAction.NameProperty, request.Name);
+                    }
+                    if (request.Description != null)
+                    {
+                        if (request.Description == "\"\"" || (request.Description == "\'\'"))
+                            updt.Set(MEAction.DescriptionProperty, string.Empty);
+                        else
+                            updt.Set(MEAction.DescriptionProperty, request.Description);
+                    }
+
+                    updt.Set(MEAction.LastUpdatedOnProperty, System.DateTime.UtcNow);
+                    updt.Set(MEAction.UpdatedByProperty, ObjectId.Parse(this.UserId));
+                    updt.Set(MEAction.VersionProperty, request.Version);
+
+                    var pt = ctx.Actions.Collection.FindAndModify(pUQuery, SortBy.Null, updt, true);
+
+                    AuditHelper.LogDataAudit(this.UserId,
+                                            MongoCollectionName.Action.ToString(),
+                                            request.ActionId.ToString(),
+                                            Common.DataAuditType.Update,
+                                            request.ContractNumber);
+
+                    response.Id = request.ActionId;
+                }
+                return response;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
 
         public void CacheByID(List<string> entityIDs)

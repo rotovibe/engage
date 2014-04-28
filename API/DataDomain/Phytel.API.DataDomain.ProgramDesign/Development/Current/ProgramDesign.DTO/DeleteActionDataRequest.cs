@@ -5,16 +5,16 @@ using ServiceStack.ServiceHost;
 
 namespace Phytel.API.DataDomain.ProgramDesign.DTO
 {
-    [Route("/{Context}/{Version}/{ContractNumber}/ProgramDesign/Program/{ProgramId}/Delete", "DELETE")]
-    public class DeleteProgramDataRequest : IDataDomainRequest
+    [Route("/{Context}/{Version}/{ContractNumber}/ProgramDesign/Action/{ActionId}/Delete", "DELETE")]
+    public class DeleteActionDataRequest : IDataDomainRequest
     {
-        [ApiMember(Name = "ProgramId", Description = "Id of the Program that is being deleted.", ParameterType = "property", DataType = "string", IsRequired = true)]
-        public string ProgramId { get; set; }
+        [ApiMember(Name = "ActionId", Description = "Id of the Action that is beind deleted.", ParameterType = "property", DataType = "string", IsRequired = true)]
+        public string ActionId { get; set; }
 
         [ApiMember(Name = "UserId", Description = "UserId of the logged in user", ParameterType = "property", DataType = "string", IsRequired = true)]
         public string UserId { get; set; }
 
-        [ApiMember(Name = "Context", Description = "Product Context requesting the Program", ParameterType = "property", DataType = "string", IsRequired = true)]
+        [ApiMember(Name = "Context", Description = "Product Context requesting the Action", ParameterType = "property", DataType = "string", IsRequired = true)]
         public string Context { get; set; }
 
         [ApiMember(Name = "ContractNumber", Description = "Contract Number to retrieve data from", ParameterType = "property", DataType = "string", IsRequired = true)]

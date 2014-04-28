@@ -35,8 +35,6 @@ namespace Phytel.API.DataDomain.ProgramDesign.DTO
         [ApiMember(Name = "Order", Description = "Order of the Program being inserted", ParameterType = "property", DataType = "int", IsRequired = false)]
         public int Order { get; set; }
 
-
-
         [ApiMember(Name = "UserId", Description = "UserId of the logged in user", ParameterType = "property", DataType = "string", IsRequired = false)]
         public string UserId { get; set; }
 
