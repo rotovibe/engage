@@ -9,7 +9,6 @@ namespace Phytel.API.DataDomain.ProgramDesign
     public class ProgramDesignMongoContext : MongoContext
     {
         private static string COLL_ProgramDesignS = "ProgramDesign";
-        private static string COLL_ProgramS = "Program";
         private static string COLL_ContractProgramS = "Program"; // switch to Program when done 
         private static string COLL_PatientProgramS = "PatientProgram";
         private static string COLL_PatientProgramResponseS = "PatientProgramResponse";
@@ -23,13 +22,13 @@ namespace Phytel.API.DataDomain.ProgramDesign
             : base(ConfigurationManager.AppSettings.Get("PhytelServicesConnName"), contractDBName, true)
 		{
             ProgramDesigns = new MongoSet<MEProgramDesign, ObjectId>(this, COLL_ProgramDesignS);
-            Programs = new MongoSet<MEProgram, ObjectId>(this, COLL_ProgramS);
+            //Programs = new MongoSet<MEProgram, ObjectId>(this, COLL_ContractProgramS);
             //Responses = new MongoSet<MEResponse, ObjectId>(this, COLL_StepResponseS);
             //ProgramAttributes = new MongoSet<MEProgramAttribute, ObjectId>(this, COLL_ProgramAttributeS);
             Modules = new MongoSet<MEModule, ObjectId>(this, COLL_ModuleS);
-            Actions = new MongoSet<MEAction, ObjectId>(this, COLL_ActionS);
-            TextSteps = new MongoSet<METext, ObjectId>(this, COLL_Step);
-            YesNoSteps = new MongoSet<MEYesNo, ObjectId>(this, COLL_Step);
+            //Actions = new MongoSet<MEAction, ObjectId>(this, COLL_ActionS);
+            //TextSteps = new MongoSet<METext, ObjectId>(this, COLL_Step);
+            //YesNoSteps = new MongoSet<MEYesNo, ObjectId>(this, COLL_Step);
             
 
 		}

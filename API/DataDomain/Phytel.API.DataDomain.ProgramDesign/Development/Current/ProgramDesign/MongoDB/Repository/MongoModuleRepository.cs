@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 //using Phytel.API.DataDomain.Module.DTO;
 using Phytel.API.Interface;
 using MongoDB.Driver;
-using MongoDB.Driver.Builders;
+using MB = MongoDB.Driver.Builders;
 using MongoDB.Bson;
 //using Phytel.API.DataDomain.Module;
 //using Phytel.API.DataDomain.Module.MongoDB.DTO;
@@ -48,22 +48,20 @@ namespace Phytel.API.DataDomain.ProgramDesign
             using (ProgramDesignMongoContext ctx = new ProgramDesignMongoContext(_dbName))
             {
                 //Does the module exist?
-                IMongoQuery query = Query.And(
-                                Query.EQ(MEModule.NameProperty, request.Name));
+                IMongoQuery query = MB.Query.And(
+                                MB.Query.EQ(MEModule.NameProperty, request.Name));
 
                 module = ctx.Modules.Collection.FindOneAs<MEModule>(query);
-                MongoProgramDesignRepository<T> repo = new MongoProgramDesignRepository<T>(_dbName);
-                repo.UserId = this.UserId;
-
+                
                 if (module == null)
                 {
-                    module = new MEModule()
+                    module = new MEModule(request.UserId)
                     {
                         Id = ObjectId.GenerateNewId(),
                         Name = request.Name,
                         ProgramId = new ObjectId(request.ProgramId.ToString()),
                         Version = request.Version,
-                        UpdatedBy = ObjectId.Parse(this.UserId),
+                        UpdatedBy = ObjectId.Parse(request.UserId),
                         TTLDate = null,
                         DeleteFlag = false,
                         LastUpdatedOn = System.DateTime.UtcNow
@@ -92,7 +90,34 @@ namespace Phytel.API.DataDomain.ProgramDesign
 
         public void Delete(object entity)
         {
-            throw new NotImplementedException();
+            DeleteModuleDataRequest request = entity as DeleteModuleDataRequest;
+
+            try
+            {
+                using (ProgramDesignMongoContext ctx = new ProgramDesignMongoContext(_dbName))
+                {
+                    var mUQuery = new QueryDocument(MEModule.IdProperty, ObjectId.Parse(request.ModuleId));
+
+                    MB.UpdateBuilder updt = new MB.UpdateBuilder();
+
+                    updt.Set(MEModule.DeleteFlagProperty, true);
+
+                    var module = ctx.Modules.Collection.FindAndModify(mUQuery, MB.SortBy.Null, updt, true);
+
+                    //set audit call
+                    AuditHelper.LogDataAudit(this.UserId,
+                                           MongoCollectionName.Module.ToString(),
+                                           request.ModuleId.ToString(),
+                                           Common.DataAuditType.Delete,
+                                           request.ContractNumber);
+                }
+            }
+            catch (Exception ex)
+            {
+                //TODO: handle this error
+                throw;
+            }
+            
         }
 
         public void DeleteAll(List<object> entities)
@@ -156,9 +181,55 @@ namespace Phytel.API.DataDomain.ProgramDesign
             return response;
         }
 
+        //public object Update(object entity)
+        //{
+        //    throw new NotImplementedException();
+        //}
+
         public object Update(object entity)
         {
-            throw new NotImplementedException();
+            PutUpdateModuleDataRequest request = entity as PutUpdateModuleDataRequest;
+
+            PutUpdateModuleDataResponse response = new PutUpdateModuleDataResponse();
+            try
+            {
+                using (ProgramDesignMongoContext ctx = new ProgramDesignMongoContext(_dbName))
+                {
+                    var mUQuery = new QueryDocument(MEModule.IdProperty, ObjectId.Parse(request.Id));
+
+                    MB.UpdateBuilder updt = new MB.UpdateBuilder();
+
+                    if (request.Name != null)
+                        updt.Set(MEModule.NameProperty, GetRequestValue(request.Name));
+                        
+                    
+                    var module = ctx.Modules.Collection.FindAndModify(mUQuery, MB.SortBy.Null, updt, true);
+
+                    //set audit call
+                    AuditHelper.LogDataAudit(this.UserId,
+                                           MongoCollectionName.Module.ToString(),
+                                           request.Id.ToString(),
+                                           Common.DataAuditType.Update,
+                                           request.ContractNumber);
+                }
+            }
+            catch(Exception ex)
+            {
+               //TODO: handle this error
+                throw;
+            }
+            
+            return response;
+            
+        }
+        
+
+        private string GetRequestValue(string requestValue)
+        { 
+            if (requestValue == "\"\"" || requestValue == "\'\'")
+                return string.Empty;
+           else
+                return requestValue;
         }
 
         public void CacheByID(List<string> entityIDs)

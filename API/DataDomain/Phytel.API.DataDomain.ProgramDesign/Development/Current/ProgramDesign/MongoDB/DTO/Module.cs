@@ -11,116 +11,83 @@ namespace Phytel.API.DataDomain.ProgramDesign.MongoDB.DTO
 {
     public class MEModule : IMongoEntity<ObjectId>, IMEEntity
     {
-        public MEModule() { Id = ObjectId.GenerateNewId(); }
+        public MEModule(string userId)
+        {
+            Id = ObjectId.GenerateNewId();
+            Version = 1.0;
+            RecordCreatedBy = ObjectId.Parse(userId);
+            RecordCreatedOn = DateTime.UtcNow;
+        }
 
         public const string IdProperty = "_id";
-        [BsonElement(IdProperty)]
+        public const string NameProperty = "nm";
+        public const string ObjectiveProperty = "obj";
+        public const string DescriptionProperty = "desc";
+        public const string StatusProperty = "stat";
+
+        public const string VersionProperty = "v";
+        public const string UpdatedByProperty = "uby";
+        public const string DeleteFlagProperty = "del";
+        public const string TTLDateProperty = "ttl";
+        public const string LastUpdatedOnProperty = "uon";
+        public const string RecordCreatedByProperty = "rcby";
+        public const string RecordCreatedOnProperty = "rcon";
+        public const string ProgramIdProperty = "pid";
+
+        [BsonId]
         public ObjectId Id { get; set; }
 
-        public const string ProgramIdProperty = "progid";
-        [BsonElement(ProgramIdProperty)]
-        public ObjectId ProgramId { get; set; }
 
-        public const string NameProperty = "nm";
         [BsonElement(NameProperty)]
+        [BsonIgnoreIfNull(true)]
         public string Name { get; set; }
 
-        public const string DescriptionProperty = "desc";
-        [BsonElement(DescriptionProperty)]
-        public string Description { get; set; }
-
-        public const string ObjectivesProperty = "obj";
-        [BsonElement(ObjectivesProperty)]
+        [BsonElement(ObjectiveProperty)]
         public List<Objective> Objectives { get; set; }
 
-        public const string ActionsProperty = "acts";
-        [BsonElement(ActionsProperty)]
-        public List<MEAction> Actions { get; set; }
+        [BsonElement(DescriptionProperty)]
+        [BsonIgnoreIfNull(true)]
+        public string Description { get; set; }
 
-        public const string StatusProperty = "sts";
         [BsonElement(StatusProperty)]
+        [BsonIgnoreIfNull(true)]
         public Status Status { get; set; }
 
-        public BsonDocument ExtraElements
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-            set
-            {
-                throw new NotImplementedException();
-            }
-        }
+        [BsonExtraElements]
+        public BsonDocument ExtraElements { get; set; }
 
-        public double Version
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-            set
-            {
-                throw new NotImplementedException();
-            }
-        }
+        [BsonElement(VersionProperty)]
+        [BsonDefaultValue(1.0)]
+        public double Version { get; set; }
 
-        public ObjectId? UpdatedBy
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-            set
-            {
-                throw new NotImplementedException();
-            }
-        }
+        [BsonElement(UpdatedByProperty)]
+        public ObjectId? UpdatedBy { get; set; }
 
-        public bool DeleteFlag
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-            set
-            {
-                throw new NotImplementedException();
-            }
-        }
+        [BsonElement(DeleteFlagProperty)]
+        [BsonDefaultValue(false)]
+        public bool DeleteFlag { get; set; }
 
-        public DateTime? TTLDate
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-            set
-            {
-                throw new NotImplementedException();
-            }
-        }
+        [BsonElement(TTLDateProperty)]
+        [BsonIgnoreIfNull(true)]
+        [BsonDateTimeOptions(Kind = System.DateTimeKind.Utc)]
+        public DateTime? TTLDate { get; set; }
 
-        public DateTime? LastUpdatedOn
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-            set
-            {
-                throw new NotImplementedException();
-            }
-        }
+        [BsonElement(LastUpdatedOnProperty)]
+        [BsonIgnoreIfNull(true)]
+        [BsonDateTimeOptions(Kind = System.DateTimeKind.Utc)]
+        public DateTime? LastUpdatedOn { get; set; }
 
-        public ObjectId RecordCreatedBy
-        {
-            get { throw new NotImplementedException(); }
-        }
+        [BsonIgnoreIfNull(true)]
+        [BsonElement(RecordCreatedByProperty)]
+        public ObjectId RecordCreatedBy { get; private set; }
 
-        public DateTime RecordCreatedOn
-        {
-            get { throw new NotImplementedException(); }
-        }
+        [BsonIgnoreIfNull(true)]
+        [BsonElement(RecordCreatedOnProperty)]
+        [BsonDateTimeOptions(Kind = System.DateTimeKind.Utc)]
+        public System.DateTime RecordCreatedOn { get; private set; }
+
+        [BsonIgnoreIfNull(true)]
+        [BsonElement(ProgramIdProperty)]
+        public ObjectId ProgramId { get; set; }
     }
 }
