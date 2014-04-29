@@ -1,12 +1,11 @@
 ﻿using Phytel.API.AppDomain.NG.DTO;
-using Phytel.API.Common.Specification;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Phytel.API.AppDomain.NG.PlanSpecification
+namespace Phytel.API.AppDomain.NG.Specifications
 {
     public class ResponseSpawnAllowed<T> : Specification<T>
     {

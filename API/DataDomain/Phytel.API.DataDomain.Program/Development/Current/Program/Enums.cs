@@ -6,6 +6,16 @@ using System.Threading.Tasks;
 
 namespace Phytel.API.DataDomain.Program
 {
+    public enum RepositoryType
+    {
+        Program,
+        PatientProgram,
+        ContractProgram,
+        Response,
+        PatientProgramResponse,
+        PatientProgramAttribute
+    }
+
     public enum Status
     {
         Active = 1,

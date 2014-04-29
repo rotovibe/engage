@@ -63,6 +63,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="MongoProcedures_test.cs" />
     <Compile Include="Program_Attributes_Test.cs" />
     <Compile Include="Responses_Test.cs" />
     <Compile Include="Get_Active_Programs_Test.cs" />

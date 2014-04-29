@@ -1,5 +1,6 @@
 using Phytel.API.Common;
 using Phytel.API.Common.Format;
+using Phytel.API.DataDomain.Program.MongoDB.DTO;
 using ServiceStack.Text;
 using ServiceStack.WebHost.Endpoints;
 using System;
@@ -20,6 +21,8 @@ namespace Phytel.API.DataDomain.Program.Service
                 container.RegisterAutoWiredAs<CommonFormatterUtil, ICommonFormatterUtil>();
                 container.RegisterAutoWiredAs<Helpers, IHelpers>();
                 container.RegisterAutoWiredAs<ProgramDataManager, IProgramDataManager>();
+                container.RegisterAutoWiredAs<ProgramRepositoryFactory, IProgramRepositoryFactory>();
+                container.RegisterAutoWiredAs<DTOUtility, IDTOUtility>();
 
                 // initialize datetime format
                 JsConfig.DateHandler = JsonDateHandler.ISO8601;

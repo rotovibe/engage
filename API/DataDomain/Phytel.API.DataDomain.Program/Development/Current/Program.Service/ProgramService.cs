@@ -6,6 +6,7 @@ using Phytel.API.Common.Format;
 using System.Configuration;
 using System.Web;
 using Phytel.API.Common;
+using Phytel.API.DataDomain.Program.MongoDB.DataManagement;
 
 namespace Phytel.API.DataDomain.Program.Service
 {
@@ -305,6 +306,28 @@ namespace Phytel.API.DataDomain.Program.Service
 
                 string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
                 Helpers.LogException(int.Parse(aseProcessID), ex);
+            }
+            return response;
+        }
+
+        public PostMongoProceduresResponse Post(PostMongoProceduresRequest request)
+        {
+            PostMongoProceduresResponse response = new PostMongoProceduresResponse();
+            try
+            {
+                if (string.IsNullOrEmpty(request.UserId))
+                    throw new UnauthorizedAccessException("ProgramDD:Post()::Unauthorized Access");
+
+                IProceduresManager pm = new ProceduresManager();
+                response = pm.ExecuteProcedure(request);
+                response.Version = request.Version;
+            }
+            catch (Exception ex)
+            {
+                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+
+                string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
+                Common.Helper.LogException(int.Parse(aseProcessID), ex);
             }
             return response;
         }

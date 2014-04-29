@@ -14,7 +14,7 @@ using MongoDB.Bson.Serialization;
 
 namespace Phytel.API.DataDomain.Program
 {
-    public class MongoProgramRepository<T> : IProgramRepository<T>
+    public class MongoProgramRepository : IProgramRepository
     {
         private string _dbName = string.Empty;
 
@@ -178,6 +178,24 @@ namespace Phytel.API.DataDomain.Program
 
 
         public object FindByPlanElementID(string entityID)
+        {
+            throw new NotImplementedException();
+        }
+
+
+        public object InsertAsBatch(object newEntity)
+        {
+            throw new NotImplementedException();
+        }
+
+
+        public object FindByEntityExistsID(string patientID, string progId)
+        {
+            throw new NotImplementedException();
+        }
+
+
+        public IEnumerable<object> Find(List<ObjectId> Ids)
         {
             throw new NotImplementedException();
         }

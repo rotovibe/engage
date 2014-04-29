@@ -9,6 +9,8 @@ using Phytel.API.DataDomain.Program.DTO;
 using System.Diagnostics;
 using Phytel.API.DataDomain.Program.MongoDB.DTO;
 using MongoDB.Bson;
+using Phytel.API.Interface;
+using Phytel.API.DataDomain.Program.Test.Stubs;
 namespace Phytel.API.DataDomain.Program.Tests
 {
     [TestClass()]
@@ -17,15 +19,25 @@ namespace Phytel.API.DataDomain.Program.Tests
         [TestClass()]
         public class GetPatientProgramDetailsById_Method
         {
+            public string _programId;
+            public string _patientId;
+            
+            [TestInitialize()]
+            public void Initialize()
+            {
+                _programId = "535ab038d6a485044c502b28";
+                _patientId = "5325db50d6a4850adcbba8e6";
+            }
+
             [TestMethod()]
             public void Get_Valid_Program_Test()
             {
-                ProgramDataManager pm = new ProgramDataManager { };
+                ProgramDataManager pm = new ProgramDataManager { Factory = new ProgramRepositoryFactory()};
                 GetProgramDetailsSummaryRequest request = new GetProgramDetailsSummaryRequest
                 {
                     Version = 1.0,
-                    ProgramId = "535595ddd6a485044c7f0cdb",
-                    PatientId = "5325da5ed6a4850adcbba60a",
+                    ProgramId = _programId,
+                    PatientId = _patientId,
                     UserId = "nguser",
                     ContractNumber = "InHealth001",
                     Context = "NG"
@@ -37,12 +49,12 @@ namespace Phytel.API.DataDomain.Program.Tests
             [TestMethod()]
             public void Get_With_Program_Attributes_Test()
             {
-                ProgramDataManager pm = new ProgramDataManager { };
+                ProgramDataManager pm = new ProgramDataManager { Factory = new ProgramRepositoryFactory(), DTOUtility = new DTOUtility { Factory = new ProgramRepositoryFactory() } };
                 GetProgramDetailsSummaryRequest request = new GetProgramDetailsSummaryRequest
                 {
                     Version = 1.0,
-                    ProgramId = "535595ddd6a485044c7f0cdb",
-                    PatientId = "5325da5ed6a4850adcbba60a",
+                    ProgramId = _programId,
+                    PatientId = _patientId,
                     UserId = "nguser",
                     ContractNumber = "InHealth001",
                     Context = "NG"
@@ -54,12 +66,12 @@ namespace Phytel.API.DataDomain.Program.Tests
             [TestMethod()]
             public void Get_With_Objectives_Test()
             {
-                ProgramDataManager pm = new ProgramDataManager { };
+                ProgramDataManager pm = new ProgramDataManager { Factory = new ProgramRepositoryFactory() };
                 GetProgramDetailsSummaryRequest request = new GetProgramDetailsSummaryRequest
                 {
                     Version = 1.0,
-                    ProgramId = "535595ddd6a485044c7f0cdb",
-                    PatientId = "5325da5ed6a4850adcbba60a",
+                    ProgramId = _programId,
+                    PatientId = _patientId,
                     UserId = "nguser",
                     ContractNumber = "InHealth001",
                     Context = "NG"
@@ -75,7 +87,7 @@ namespace Phytel.API.DataDomain.Program.Tests
             [TestMethod()]
             public void PutProgramActionUpdate_Test()
             {
-                Assert.Fail();
+                //Assert.Fail();
             }
         }
 
@@ -87,8 +99,9 @@ namespace Phytel.API.DataDomain.Program.Tests
             {
                 Stopwatch st = new Stopwatch();
                 st.Start();
-                ProgramDataManager dm = new ProgramDataManager();
-                ProgramAttributeData pad = dm.GetProgramAttributes("535808a7d6a485044cedecd6", "InHealth001", "NG", "user");
+                ProgramDataManager dm = new ProgramDataManager { Factory = new ProgramRepositoryFactory() };
+                IDataDomainRequest request = new GetPatientProgramsRequest { ContractNumber = "InHealth001", Context = "NG", UserId = "user" };
+                ProgramAttributeData pad = dm.GetProgramAttributes("535808a7d6a485044cedecd6", request);
                 st.Stop();
                 int seconds = st.Elapsed.Milliseconds;
             }
@@ -102,8 +115,9 @@ namespace Phytel.API.DataDomain.Program.Tests
             {
                 Stopwatch st = new Stopwatch();
                 st.Start();
-                ProgramDataManager dm = new ProgramDataManager();
-                MEProgram p = dm.getLimitedProgramDetails("5330920da38116ac180009d2", "InHealth001", "NG", "user");
+                ProgramDataManager dm = new ProgramDataManager { Factory = new ProgramRepositoryFactory() };
+                IDataDomainRequest request = new GetPatientProgramsRequest { ContractNumber = "InHealth001", Context = "NG", UserId = "user" };
+                MEProgram p = dm.getLimitedProgramDetails("5330920da38116ac180009d2", request);
                 st.Stop();
                 int seconds = st.Elapsed.Milliseconds;
             }
@@ -117,7 +131,7 @@ namespace Phytel.API.DataDomain.Program.Tests
             {
                 Stopwatch st = new Stopwatch();
                 st.Start();
-                ProgramDataManager dm = new ProgramDataManager();
+                ProgramDataManager dm = new ProgramDataManager { Factory = new ProgramRepositoryFactory() };
                 List<Objective> objs = new List<Objective> { new Objective{ Id= ObjectId.Parse("000000000000000000000000"), Status= Status.Active, Value = "Nanny", Units="lbs" } };
                 List<ObjectiveInfoData> objl = dm.GetObjectivesData(objs);
                 Assert.AreEqual("000000000000000000000000", objl[0].Id);

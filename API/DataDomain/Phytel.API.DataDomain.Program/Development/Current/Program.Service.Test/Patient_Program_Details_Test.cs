@@ -12,18 +12,18 @@ namespace Phytel.API.DataDomain.Program.Services.Test
         public void Get_ProgramDetails_For_Patient_Assignment()
         {
             string url = "http://localhost:8888/Program";
-            string patientID = "531f2dcc072ef727c4d29e1a";
-            string ProgramID = "53208904fe7a592440a8ef64";
+            string patientID = "5325da98d6a4850adcbba6be";
+            string ProgramID = "535aa59ad6a485044c4e4832";
             string contractNumber = "InHealth001";
             string context = "NG";
             double version = 1.0;
-            string token = "5320885dd6a4850b34644db5";
+            string token = "535aa534d6a485044cc9f2ee";
             IRestClient client = new JsonServiceClient();
             JsonServiceClient.HttpWebRequestFilter = x =>
                             x.Headers.Add(string.Format("{0}: {1}", "x-Phytel-UserID", "531f2df9072ef727c4d2a3df"));
 
             GetProgramDetailsSummaryResponse response = client.Get<GetProgramDetailsSummaryResponse>(
-                string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Program/{5}/Details/?ProgramId={6}&Token={7}", 
+                string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Program/{5}/Details/?ProgramId={6}&Token={7}&UserId=nguser", 
                 url, 
                 context, 
                 version, 
@@ -40,17 +40,17 @@ namespace Phytel.API.DataDomain.Program.Services.Test
         public void Get_Patient_Programs_summary()
         {
             string url = "http://localhost:8888/Program";
-            string patientID = "531f2dcc072ef727c4d29e1a";
+            string patientID = "5325dabfd6a4850adcbba732";
             string contractNumber = "InHealth001";
             string context = "NG";
             double version = 1.0;
-            string token = "5320885dd6a4850b34644db5";
+            string token = "535aa534d6a485044cc9f2ee";
             IRestClient client = new JsonServiceClient();
             JsonServiceClient.HttpWebRequestFilter = x =>
                             x.Headers.Add(string.Format("{0}: {1}", "x-Phytel-UserID", "531f2df9072ef727c4d2a3df"));
 
             GetPatientProgramsResponse response = client.Get<GetPatientProgramsResponse>(
-                string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Programs/",
+                string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Programs/?UserId=nguser",
                 url,
                 context,
                 version,

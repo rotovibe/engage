@@ -10,9 +10,11 @@ using System.Threading.Tasks;
 
 namespace Phytel.API.DataDomain.Program.MongoDB.DTO
 {
-    public static class DTOUtils
+    public class DTOUtility : IDTOUtility
     {
-        public static MEPatientProgram CreateInitialMEPatientProgram(PutProgramToPatientRequest request, MEProgram cp, List<ObjectId> sil)
+        public IProgramRepositoryFactory Factory { get; set; }
+
+        public  MEPatientProgram CreateInitialMEPatientProgram(PutProgramToPatientRequest request, MEProgram cp, List<ObjectId> sil)
         {
             try
             {
@@ -47,8 +49,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
                     Modules = DTOUtils.GetClonedModules(cp.Modules, request.ContractNumber, request.UserId, sil),
                     EligibilityEndDate = cp.EligibilityEndDate,
                     EligibilityStartDate = cp.EligibilityStartDate,
-                    EligibilityRequirements = cp.EligibilityRequirements,
-                    Objectives = cp.Objectives
+                    EligibilityRequirements = cp.EligibilityRequirements
                     //,UpdatedBy = ObjectId.Parse(request.UserId)
                 };
                 if (!string.IsNullOrEmpty(request.UserId))
@@ -63,7 +64,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             }
         }
 
-        public static List<Module> GetClonedModules(List<Module> list, string contractNumber, string userId, List<ObjectId> sil)
+        public  List<Module> GetClonedModules(List<Module> list, string contractNumber, string userId, List<ObjectId> sil)
         {
             try
             {
@@ -116,7 +117,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             }
         }
 
-        private static List<Action> GetClonedActions(List<Action> list, string contractNumber, string userId, List<ObjectId> sil)
+        private  List<Action> GetClonedActions(List<Action> list, string contractNumber, string userId, List<ObjectId> sil)
         {
             try
             {
@@ -164,7 +165,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             }
         }
 
-        private static List<Step> GetClonedSteps(string contractNumber, string userId, Action ai, List<ObjectId> sil)
+        private  List<Step> GetClonedSteps(string contractNumber, string userId, Action ai, List<ObjectId> sil)
         {
             try
             {
@@ -280,14 +281,13 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
         //    }
         //}
 
-        private static List<MEPatientProgramResponse> GetStepResponses(ObjectId stepId, string contractNumber, string userId)
+        public  List<MEPatientProgramResponse> GetStepResponses(ObjectId stepId, string contractNumber, string userId)
         {
             List<MEPatientProgramResponse> responseList = null;
             try
             {
                 GetPatientProgramsRequest request = new GetPatientProgramsRequest { ContractNumber = contractNumber, Context = "NG", UserId = userId };
-                IProgramRepository repo =
-                    new ProgramRepositoryFactory().GetRepository(request, RepositoryType.PatientProgramResponse);
+                IProgramRepository repo = Factory.GetRepository(request, RepositoryType.PatientProgramResponse);
 
                 ICollection<SelectExpression> selectExpressions = new List<SelectExpression>();
 
@@ -317,7 +317,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             }
         }
 
-        public static GetStepResponseListResponse GetStepResponses(string stepId, string contractNumber, bool? service, string userId)
+        public  GetStepResponseListResponse GetStepResponses(string stepId, string contractNumber, bool? service, string userId)
         {
             GetStepResponseListResponse StepResponseResponse = new GetStepResponseListResponse(); 
             List<MEResponse> responseList = null;
@@ -372,7 +372,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             }
         }
 
-        public static void RecurseAndReplaceIds(List<Module> mods, Dictionary<ObjectId, ObjectId> IdsList)
+        public  void RecurseAndReplaceIds(List<Module> mods, Dictionary<ObjectId, ObjectId> IdsList)
         {
             try
             {
@@ -413,7 +413,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             }
         }
 
-        private static void ScanAndReplaceIdReferences(Dictionary<ObjectId, ObjectId> IdsList, List<Module> mods)
+        private  void ScanAndReplaceIdReferences(Dictionary<ObjectId, ObjectId> IdsList, List<Module> mods)
         {
             try
             {
@@ -481,7 +481,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             }
         }
 
-        private static void ReplaceNextAndPreviousIds(KeyValuePair<ObjectId, ObjectId> kv, PlanElement md)
+        private  void ReplaceNextAndPreviousIds(KeyValuePair<ObjectId, ObjectId> kv, PlanElement md)
         {
             try
             {
@@ -506,7 +506,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             }
         }
 
-        private static void ReplaceSpawnIdReferences(KeyValuePair<ObjectId, ObjectId> kv, PlanElement pln)
+        private  void ReplaceSpawnIdReferences(KeyValuePair<ObjectId, ObjectId> kv, PlanElement pln)
         {
             try
             {
@@ -530,7 +530,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             }
         }
 
-        private static void ReplaceSelectedResponseId(KeyValuePair<ObjectId, ObjectId> kv, Step s)
+        private  void ReplaceSelectedResponseId(KeyValuePair<ObjectId, ObjectId> kv, Step s)
         {
             try
             {
@@ -556,7 +556,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             }
         }
 
-        private static ObjectId RegisterIds(Dictionary<ObjectId, ObjectId> list, ObjectId id)
+        private  ObjectId RegisterIds(Dictionary<ObjectId, ObjectId> list, ObjectId id)
         {
             try
             {
@@ -574,7 +574,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             }
         }
 
-        internal static List<SpawnElement> GetSpawnElements(List<Program.DTO.SpawnElementDetail> list)
+        public  List<SpawnElement> GetSpawnElements(List<Program.DTO.SpawnElementDetail> list)
         {
             try
             {
@@ -602,7 +602,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             }
         }
 
-        internal static List<SpawnElementDetail> GetSpawnElements(List<SpawnElement> list)
+        public  List<SpawnElementDetail> GetSpawnElements(List<SpawnElement> list)
         {
             try
             {
@@ -630,7 +630,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             }
         }
 
-        internal static List<Action> GetActionElements(List<Program.DTO.ActionsDetail> list, string userId)
+        public  List<Action> GetActionElements(List<Program.DTO.ActionsDetail> list, string userId)
         {
             try
             {
@@ -674,7 +674,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             }
         }
 
-        private static List<Step> GetStepsInfo(List<Program.DTO.StepsDetail> list, string userId)
+        private  List<Step> GetStepsInfo(List<Program.DTO.StepsDetail> list, string userId)
         {
             try
             {
@@ -726,7 +726,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             }
         }
 
-        public static ObjectId? ParseObjectId(string p)
+        public  ObjectId? ParseObjectId(string p)
         {
             try
             {
@@ -743,7 +743,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             }
         }
 
-        private static List<MEPatientProgramResponse> GetResponses(List<Program.DTO.ResponseDetail> list, string userId)
+        private  List<MEPatientProgramResponse> GetResponses(List<Program.DTO.ResponseDetail> list, string userId)
         {
             try
             {
@@ -778,7 +778,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             }
         }
 
-        private static List<SpawnElement> GetSPawnElement(List<SpawnElementDetail> s)
+        private  List<SpawnElement> GetSPawnElement(List<SpawnElementDetail> s)
         {
             try
             {
@@ -803,7 +803,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             }
         }
 
-        private static SpawnElementDetail GetSPawnElement(SpawnElement s)
+        private  SpawnElementDetail GetSPawnElement(SpawnElement s)
         {
             try
             {
@@ -825,7 +825,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             }
         }
 
-        public static List<Objective> GetObjectives(List<Program.DTO.ObjectiveInfoData> list)
+        public  List<Objective> GetObjectives(List<Program.DTO.ObjectiveInfoData> list)
         {
             try
             {
@@ -853,7 +853,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             }
         }
 
-        public static List<Module> CloneAppDomainModules(List<ModuleDetail> prg, string userId)
+        public  List<Module> CloneAppDomainModules(List<ModuleDetail> prg, string userId)
         {
             try
             {
@@ -897,7 +897,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
         }
 
 
-        public static List<ModuleDetail> GetModules(List<Module> list, string contractNumber, string userId)
+        public  List<ModuleDetail> GetModules(List<Module> list, string contractNumber, string userId)
         {
             try
             {
@@ -932,7 +932,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             }
         }
 
-        public static List<ObjectiveInfoData> GetObjectives(List<Objective> list)
+        public  List<ObjectiveInfoData> GetObjectives(List<Objective> list)
         {
             try
             {
@@ -955,7 +955,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             }
         }
 
-        public static List<ActionsDetail> GetActions(List<Action> list, string contract, string userId)
+        public  List<ActionsDetail> GetActions(List<Action> list, string contract, string userId)
         {
             try
             {
@@ -969,7 +969,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             }
         }
 
-        public static ActionsDetail GetAction(string contract, string userId, Action a)
+        public  ActionsDetail GetAction(string contract, string userId, Action a)
         {
             ActionsDetail actionDetail = null;
             try
@@ -1007,7 +1007,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             return actionDetail;
         }
 
-        public static List<StepsDetail> GetSteps(List<Step> list, string contract, string userId)
+        public  List<StepsDetail> GetSteps(List<Step> list, string contract, string userId)
         {
             try
             {
@@ -1055,7 +1055,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             }
         }
 
-        public static List<SpawnElementDetail> GetSpawnElement(PlanElement a)
+        public  List<SpawnElementDetail> GetSpawnElement(PlanElement a)
         {
             try
             {
@@ -1078,7 +1078,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             }
         }
 
-        public static List<ResponseDetail> GetResponses(Step step, string contract, string userId)
+        public  List<ResponseDetail> GetResponses(Step step, string contract, string userId)
         {
             try
             {
@@ -1111,7 +1111,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             }
         }
 
-        public static List<SpawnElementDetail> GetResponseSpawnElement(List<SpawnElement> mESpawnElement)
+        public  List<SpawnElementDetail> GetResponseSpawnElement(List<SpawnElement> mESpawnElement)
         {
             try
             {
@@ -1136,7 +1136,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             }
         }
 
-        public static void RecurseAndSaveResponseObjects(MEPatientProgram prog, string contractNumber, string userId)
+        public  void RecurseAndSaveResponseObjects(MEPatientProgram prog, string contractNumber, string userId)
         {
             try
             {
@@ -1168,7 +1168,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             }
         }
 
-        public static bool SavePatientProgramResponses(List<MEPatientProgramResponse> pprs, PutProgramToPatientRequest request)
+        public  bool SavePatientProgramResponses(List<MEPatientProgramResponse> pprs, PutProgramToPatientRequest request)
         {
             try
             {
@@ -1184,7 +1184,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             }
         }
 
-        public static List<MEPatientProgramResponse> RecurseAndStoreResponseObjects(MEPatientProgram prog, string contractNumber, string userId)
+        public  List<MEPatientProgramResponse> RecurseAndStoreResponseObjects(MEPatientProgram prog, string contractNumber, string userId)
         {
             try
             {
@@ -1215,7 +1215,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             }
         }
 
-        private static bool SaveResponseToDocument(MEPatientProgramResponse r, string contractNumber, string userId)
+        private  bool SaveResponseToDocument(MEPatientProgramResponse r, string contractNumber, string userId)
         {
             bool result = false;
             try
@@ -1232,7 +1232,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             }
         }
 
-        internal static ProgramAttributeData InitializeElementAttributes(ProgramInfo p)
+        public  ProgramAttributeData InitializeElementAttributes(ProgramInfo p)
         {
             try
             {
@@ -1254,14 +1254,14 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             }
         }
 
-        internal static void InitializeProgramAttributes(PutProgramToPatientRequest request, PutProgramToPatientResponse response)
+        public  void InitializeProgramAttributes(PutProgramToPatientRequest request, PutProgramToPatientResponse response)
         {
             try
             {
                 // create program attribute insertion
                 ProgramAttributeData attr = DTOUtils.InitializeElementAttributes(response.program);
 
-                IProgramRepository attrRepo = new ProgramRepositoryFactory().GetRepository(request  , RepositoryType.PatientProgramAttribute);//.GetProgramAttributesRepository(request);
+                IProgramRepository attrRepo = new ProgramRepositoryFactory().GetRepository(request, RepositoryType.PatientProgramAttribute);//.GetProgramAttributesRepository(request);
 
                 attrRepo.Insert(attr);
             }
@@ -1271,7 +1271,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             }
         }
 
-        internal static bool CanInsertPatientProgram(List<MEPatientProgram> pp)
+        public  bool CanInsertPatientProgram(List<MEPatientProgram> pp)
         {
             try
             {
@@ -1299,7 +1299,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             }
         }
 
-        internal static List<MEPatientProgram> FindExistingpatientProgram(PutProgramToPatientRequest request)
+        public  List<MEPatientProgram> FindExistingpatientProgram(PutProgramToPatientRequest request)
         {
             try
             {
@@ -1314,7 +1314,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             }
         }
 
-        internal static MEProgram GetProgramForDeepCopy(PutProgramToPatientRequest request)
+        public  MEProgram GetProgramForDeepCopy(PutProgramToPatientRequest request)
         {
             try
             {
@@ -1328,7 +1328,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             }
         }
 
-        internal static ProgramInfo SaveNewPatientProgram(PutProgramToPatientRequest request, MEPatientProgram nmePP)
+        public  ProgramInfo SaveNewPatientProgram(PutProgramToPatientRequest request, MEPatientProgram nmePP)
         {
             try
             {
@@ -1344,7 +1344,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             }
         }
 
-        internal static List<MEPatientProgramResponse> InitializePatientProgramAssignment(PutProgramToPatientRequest request, MEPatientProgram nmePP)
+        public  List<MEPatientProgramResponse> InitializePatientProgramAssignment(PutProgramToPatientRequest request, MEPatientProgram nmePP)
         {
             try
             {
@@ -1362,7 +1362,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             }
         }
 
-        internal static List<MEResponse> GetProgramResponseslist(List<ObjectId> idl, MEProgram cp, PutProgramToPatientRequest request)
+        public  List<MEResponse> GetProgramResponseslist(List<ObjectId> idl, MEProgram cp, PutProgramToPatientRequest request)
         {
             try
             {
@@ -1378,7 +1378,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             }
         }
 
-        internal static void HydrateResponsesInProgram(MEProgram prog, List<MEResponse> responseList, string usrId)
+        public  void HydrateResponsesInProgram(MEProgram prog, List<MEResponse> responseList, string usrId)
         {
             try
             {
@@ -1420,9 +1420,10 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             }
         }
 
-        internal static List<ObjectId> GetStepIds(MEPatientProgram mepp)
+        public  List<ObjectId> GetStepIds(MEPatientProgram mepp)
         {
             throw new NotImplementedException();
         }
+
     }
 }

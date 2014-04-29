@@ -20,6 +20,21 @@ namespace Phytel.API.Interface
         void CacheByID(List<string> entityIDs);
     }
 
+    public interface IRepository
+    {
+        string UserId { get; set; }
+
+        object Insert(object newEntity);
+        object InsertAll(List<object> entities);
+        void Delete(object entity);
+        void DeleteAll(List<object> entities);
+        object FindByID(string entityID);
+        Tuple<string, IEnumerable<object>> Select(APIExpression expression);
+        IEnumerable<object> SelectAll();
+        object Update(object entity);
+        void CacheByID(List<string> entityIDs);
+    }
+
     public class APIExpression
     {
         public ICollection<SelectExpression> Expressions { get; set; }

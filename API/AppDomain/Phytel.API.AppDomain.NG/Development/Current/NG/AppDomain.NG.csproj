@@ -104,7 +104,13 @@
     <Compile Include="Programs\EndpointUtils.cs" />
     <Compile Include="Programs\IPlanManager.cs" />
     <Compile Include="Programs\PlanElementUtils.cs" />
+    <Compile Include="Programs\Specifications\AndSpecification.cs" />
+    <Compile Include="Programs\Specifications\IsInitialActionSpecification.cs" />
+    <Compile Include="Programs\Specifications\CompositeSpecification.cs" />
     <Compile Include="Programs\Specifications\IsActionInitialSpecification.cs" />
+    <Compile Include="Programs\Specifications\NotSpecification.cs" />
+    <Compile Include="Programs\Specifications\OrSpecification.cs" />
+    <Compile Include="Programs\Specifications\Specification.cs" />
     <Compile Include="SecurityManager.cs" />
     <Compile Include="NotesManager.cs" />
     <Compile Include="GoalsManager.cs" />

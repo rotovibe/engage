@@ -18,21 +18,23 @@ namespace Phytel.API.DataDomain.Program
 {
     public class ProgramDataManager : IProgramDataManager
     {
+        public IDTOUtility DTOUtility { get; set; }
+        public IProgramRepositoryFactory Factory { get; set; }
         private List<ObjectId> sIL = new List<ObjectId>();
 
         public GetProgramResponse GetProgramByID(GetProgramRequest request)
         {
             try
             {
-            GetProgramResponse programResponse = new GetProgramResponse();
-            DTO.Program result;
+                GetProgramResponse programResponse = new GetProgramResponse();
+                DTO.Program result;
 
-            IProgramRepository<GetProgramResponse> repo = ProgramRepositoryFactory<GetProgramResponse>.GetProgramRepository(request.ContractNumber, request.Context, request.UserId);
+                IProgramRepository repo = Factory.GetRepository(request, RepositoryType.Program);
 
-            result = repo.FindByID(request.ProgramID) as DTO.Program;
+                result = repo.FindByID(request.ProgramID) as DTO.Program;
 
-            programResponse.Program = result;
-            return (programResponse != null ? programResponse : new GetProgramResponse());
+                programResponse.Program = result;
+                return (programResponse != null ? programResponse : new GetProgramResponse());
             }
             catch (Exception ex)
             {
@@ -47,7 +49,7 @@ namespace Phytel.API.DataDomain.Program
                 GetProgramByNameResponse programResponse = new GetProgramByNameResponse();
                 DTO.Program result;
 
-                IProgramRepository<GetProgramResponse> repo = ProgramRepositoryFactory<GetProgramResponse>.GetProgramRepository(request.ContractNumber, request.Context, request.UserId);
+                IProgramRepository repo = Factory.GetRepository(request, RepositoryType.Program);
 
                 result = repo.FindByName(request.ProgramName) as DTO.Program;
 
@@ -64,17 +66,16 @@ namespace Phytel.API.DataDomain.Program
         {
             try
             {
-            GetAllActiveProgramsResponse response = new GetAllActiveProgramsResponse();
-            List<ProgramInfo> result;
+                GetAllActiveProgramsResponse response = new GetAllActiveProgramsResponse();
+                List<ProgramInfo> result;
 
-            IProgramRepository<GetAllActiveProgramsResponse> repo =
-                Phytel.API.DataDomain.Program.ProgramRepositoryFactory<GetAllActiveProgramsResponse>.GetContractProgramRepository(request.ContractNumber, request.Context, request.UserId);
+                IProgramRepository repo = Factory.GetRepository(request, RepositoryType.ContractProgram);
 
-            result = repo.GetActiveProgramsInfoList(request);
-            response.Programs = result;
+                result = repo.GetActiveProgramsInfoList(request);
+                response.Programs = result;
 
-            return response;
-        }
+                return response;
+            }
             catch (Exception ex)
             {
                 throw new Exception("DD:DataProgramManager:GetAllActiveContractPrograms()::" + ex.Message, ex.InnerException);
@@ -150,12 +151,11 @@ namespace Phytel.API.DataDomain.Program
             {
                 PutProgramActionProcessingResponse response = new PutProgramActionProcessingResponse();
 
-                IProgramRepository<PutProgramActionProcessingResponse> patProgRepo =
-                    Phytel.API.DataDomain.Program.ProgramRepositoryFactory<PutProgramActionProcessingResponse>
-                    .GetPatientProgramRepository(request.ContractNumber, request.Context, request.UserId);
+                IProgramRepository patProgRepo =
+                    Factory.GetRepository(request, RepositoryType.PatientProgram);
 
                 response.program = (ProgramDetail)patProgRepo.Update((object)request);
-                response.program.Attributes = GetProgramAttributes(response.program.Id, request.ContractNumber, request.Context, request.UserId);
+                response.program.Attributes = GetProgramAttributes(response.program.Id, request);
 
                 return response;
             }
@@ -179,16 +179,14 @@ namespace Phytel.API.DataDomain.Program
             }
         }
 
-        private bool IsContractProgramAssignable(PutProgramToPatientRequest p)
+        private bool IsContractProgramAssignable(PutProgramToPatientRequest request)
         {
             bool result = false;
             try
             {
-                IProgramRepository<ContractProgram> contractProgRepo =
-                                Phytel.API.DataDomain.Program.ProgramRepositoryFactory<ContractProgram>
-                                .GetContractProgramRepository(p.ContractNumber, p.Context, p.UserId);
+                IProgramRepository contractProgRepo = Factory.GetRepository(request, RepositoryType.ContractProgram);
 
-                ContractProgram c = contractProgRepo.FindByID(p.ContractProgramId) as ContractProgram;
+                ContractProgram c = contractProgRepo.FindByID(request.ContractProgramId) as ContractProgram;
 
                 if (c != null)
                 {
@@ -242,9 +240,7 @@ namespace Phytel.API.DataDomain.Program
             bool result = false;
             try
             {
-                IProgramRepository<PutProgramToPatientResponse> contractProgRepo =
-                                Phytel.API.DataDomain.Program.ProgramRepositoryFactory<PutProgramToPatientResponse>
-                                .GetContractProgramRepository(request.ContractNumber, request.Context, request.UserId);
+                IProgramRepository contractProgRepo = Factory.GetRepository(request, RepositoryType.ContractProgram);
 
                 object contractProgram = contractProgRepo.FindByID(request.ContractProgramId);
                 if (contractProgram != null)
@@ -266,9 +262,7 @@ namespace Phytel.API.DataDomain.Program
             {
                 GetProgramDetailsSummaryResponse response = new GetProgramDetailsSummaryResponse();
 
-                IProgramRepository<GetProgramDetailsSummaryResponse> repo =
-                    Phytel.API.DataDomain.Program.ProgramRepositoryFactory<GetProgramDetailsSummaryResponse>
-                    .GetPatientProgramRepository(request.ContractNumber, request.Context, request.UserId);
+                IProgramRepository repo = Factory.GetRepository(request, RepositoryType.PatientProgram);
 
                 MEPatientProgram mepp = repo.FindByID(request.ProgramId) as MEPatientProgram;
 
@@ -301,16 +295,16 @@ namespace Phytel.API.DataDomain.Program
                     EligibilityStartDate = mepp.EligibilityStartDate,
                     EligibilityRequirements = mepp.EligibilityRequirements,
                     //ObjectivesData = DTOUtils.GetObjectives(mepp.Objectives),
-                    SpawnElement = DTOUtils.GetSpawnElement(mepp),
-                    Modules = DTOUtils.GetModules(mepp.Modules, request.ContractNumber, request.UserId)
+                    SpawnElement = DTOUtility.GetSpawnElement(mepp),
+                    Modules = DTOUtility.GetModules(mepp.Modules, request.ContractNumber, request.UserId)
                 };
 
                 // load program attributes
-                ProgramAttributeData pad = GetProgramAttributes(mepp.Id.ToString(), request.ContractNumber, request.Context, request.UserId);
+                ProgramAttributeData pad = GetProgramAttributes(mepp.Id.ToString(), request);
                 response.Program.Attributes = pad;
 
                 // Get the fields from Program collection.
-                MEProgram meProgram = getLimitedProgramDetails(mepp.SourceId.ToString(), request.ContractNumber, request.Context, request.UserId);
+                MEProgram meProgram = getLimitedProgramDetails(mepp.SourceId.ToString(), request);
                 if (meProgram != null)
                 {
                     response.Program.AuthoredBy = meProgram.AuthoredBy;
@@ -350,21 +344,19 @@ namespace Phytel.API.DataDomain.Program
             }
         }
 
-        public MEProgram getLimitedProgramDetails(string objectId, string contract, string context, string userid)
+        public MEProgram getLimitedProgramDetails(string objectId, IDataDomainRequest request)
         {
-            IProgramRepository<MEProgram> programRepo = Phytel.API.DataDomain.Program.ProgramRepositoryFactory<MEProgram>.GetProgramRepository(contract, context, userid);
+            IProgramRepository programRepo = Factory.GetRepository(request, RepositoryType.Program);
             MEProgram meProgram = programRepo.GetLimitedProgramFields(objectId) as MEProgram;
             return meProgram;
         }
 
-        public ProgramAttributeData GetProgramAttributes(string objectId, string contract, string context, string userid)
+        public ProgramAttributeData GetProgramAttributes(string objectId, IDataDomainRequest request)
         {
             try
             {
                 ProgramAttributeData pad = null;
-                IProgramRepository<GetProgramAttributeResponse> repo = 
-                    Phytel.API.DataDomain.Program.ProgramRepositoryFactory<GetProgramAttributeResponse>
-                    .GetProgramAttributesRepository(contract, context, userid);
+                IProgramRepository repo = Factory.GetRepository(request, RepositoryType.PatientProgramAttribute);
 
                 MEProgramAttribute pa = repo.FindByPlanElementID(objectId) as MEProgramAttribute;
                 if (pa != null)
@@ -408,9 +400,7 @@ namespace Phytel.API.DataDomain.Program
             {
                 GetPatientProgramsResponse response = new GetPatientProgramsResponse(); ;
 
-                IProgramRepository<GetPatientProgramsResponse> repo =
-                    Phytel.API.DataDomain.Program.ProgramRepositoryFactory<GetPatientProgramsResponse>
-                    .GetPatientProgramRepository(request.ContractNumber, request.Context, request.UserId);
+                IProgramRepository repo = Factory.GetRepository(request, RepositoryType.PatientProgram);
 
                 ICollection<SelectExpression> selectExpressions = new List<SelectExpression>();
 
@@ -458,30 +448,28 @@ namespace Phytel.API.DataDomain.Program
             }
         }
 
-        public PutUpdateResponseResponse PutUpdateResponse(PutUpdateResponseRequest r)
+        public PutUpdateResponseResponse PutUpdateResponse(PutUpdateResponseRequest request)
         {
             try
             {
             PutUpdateResponseResponse result = new PutUpdateResponseResponse();
-            IProgramRepository<PutUpdateResponseResponse> responseRepo =
-                            Phytel.API.DataDomain.Program.ProgramRepositoryFactory<PutUpdateResponseResponse>
-                            .GetPatientProgramStepResponseRepository(r.ContractNumber, r.Context, r.UserId);
+            IProgramRepository responseRepo = Factory.GetRepository(request, RepositoryType.PatientProgramResponse);
 
-            MEPatientProgramResponse meres = new MEPatientProgramResponse(r.UserId)
+            MEPatientProgramResponse meres = new MEPatientProgramResponse(request.UserId)
             {
-                Id = ObjectId.Parse(r.ResponseDetail.Id),
-                NextStepId = ObjectId.Parse(r.ResponseDetail.NextStepId),
-                Nominal = r.ResponseDetail.Nominal,
-                Spawn = ParseSpawnElements(r.ResponseDetail.SpawnElement),
-                Required = r.ResponseDetail.Required,
-                Order = r.ResponseDetail.Order,
-                StepId = ObjectId.Parse(r.ResponseDetail.StepId),
-                Text = r.ResponseDetail.Text,
-                Value = r.ResponseDetail.Value,
-                Selected = r.ResponseDetail.Selected,
-                DeleteFlag = r.ResponseDetail.Delete,
+                Id = ObjectId.Parse(request.ResponseDetail.Id),
+                NextStepId = ObjectId.Parse(request.ResponseDetail.NextStepId),
+                Nominal = request.ResponseDetail.Nominal,
+                Spawn = ParseSpawnElements(request.ResponseDetail.SpawnElement),
+                Required = request.ResponseDetail.Required,
+                Order = request.ResponseDetail.Order,
+                StepId = ObjectId.Parse(request.ResponseDetail.StepId),
+                Text = request.ResponseDetail.Text,
+                Value = request.ResponseDetail.Value,
+                Selected = request.ResponseDetail.Selected,
+                DeleteFlag = request.ResponseDetail.Delete,
                 LastUpdatedOn = System.DateTime.UtcNow,
-                UpdatedBy = ObjectId.Parse(r.UserId)
+                UpdatedBy = ObjectId.Parse(request.UserId)
             };
 
             result.Result = (bool)responseRepo.Update(meres);
@@ -539,7 +527,7 @@ namespace Phytel.API.DataDomain.Program
             {
             GetStepResponseResponse response = new GetStepResponseResponse();
 
-            IProgramRepository<GetStepResponseResponse> repo = ProgramRepositoryFactory<GetStepResponseResponse>.GetPatientProgramStepResponseRepository(request.ContractNumber, request.Context, request.UserId);
+            IProgramRepository repo = Factory.GetRepository(request, RepositoryType.PatientProgramResponse); //.GetPatientProgramStepResponseRepository(request);
             
             MEPatientProgramResponse result = repo.FindByID(request.ResponseId) as MEPatientProgramResponse;
 
@@ -586,8 +574,7 @@ namespace Phytel.API.DataDomain.Program
             APIExpression apiExpression = new APIExpression();
             apiExpression.Expressions = selectExpressions;
 
-            IProgramRepository<GetProgramAttributeResponse> repo = 
-                ProgramRepositoryFactory<GetProgramAttributeResponse>.GetProgramAttributesRepository(request.ContractNumber, request.Context, request.UserId);
+            IProgramRepository repo = Factory.GetRepository(request, RepositoryType.PatientProgramAttribute);//.GetProgramAttributesRepository(request);
             
             Tuple<string, IEnumerable<object>> result = repo.Select(apiExpression);
 
@@ -613,9 +600,7 @@ namespace Phytel.API.DataDomain.Program
             try
             {
             PutUpdateProgramAttributesResponse result = new PutUpdateProgramAttributesResponse();
-            IProgramRepository<PutUpdateProgramAttributesResponse> responseRepo =
-                            Phytel.API.DataDomain.Program.ProgramRepositoryFactory<PutUpdateProgramAttributesResponse>
-                            .GetProgramAttributesRepository(request.ContractNumber, request.Context, request.UserId);
+            IProgramRepository responseRepo = Factory.GetRepository(request, RepositoryType.PatientProgramAttribute);//.GetProgramAttributesRepository(request);
 
             ProgramAttributeData pa = request.ProgramAttributes;
             result.Result = (bool)responseRepo.Update(pa);
@@ -634,9 +619,7 @@ namespace Phytel.API.DataDomain.Program
             {
             PutProgramAttributesResponse response = new PutProgramAttributesResponse();
 
-            IProgramRepository<PutProgramAttributesResponse> progAttr =
-                Phytel.API.DataDomain.Program.ProgramRepositoryFactory<PutProgramAttributesResponse>
-                .GetProgramAttributesRepository(request.ContractNumber, request.Context, request.UserId);
+            IProgramRepository progAttr = Factory.GetRepository(request, RepositoryType.PatientProgramAttribute);//.GetProgramAttributesRepository(request);
 
             bool resp = (bool)progAttr.Insert((object)request.ProgramAttributes);
             response.Result = resp;
@@ -681,7 +664,7 @@ namespace Phytel.API.DataDomain.Program
             {
                 GetPatientActionDetailsDataResponse response = new GetPatientActionDetailsDataResponse();
 
-                IProgramRepository<GetProgramDetailsSummaryResponse> repo = Phytel.API.DataDomain.Program.ProgramRepositoryFactory<GetProgramDetailsSummaryResponse>.GetPatientProgramRepository(request.ContractNumber, request.Context, request.UserId);
+                IProgramRepository repo = Factory.GetRepository(request, RepositoryType.PatientProgram);//.GetPatientProgramRepository(request);
 
                 MEPatientProgram mepp = repo.FindByID(request.PatientProgramId) as MEPatientProgram;
 

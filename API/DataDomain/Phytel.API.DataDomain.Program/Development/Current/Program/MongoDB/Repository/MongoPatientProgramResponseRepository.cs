@@ -17,7 +17,7 @@ using MongoDB.Bson.Serialization;
 
 namespace Phytel.API.DataDomain.Program
 {
-    public class MongoPatientProgramResponseRepository<T> : IProgramRepository<T>
+    public class MongoPatientProgramResponseRepository : IProgramRepository
     {
         private string _dbName = string.Empty;
 
@@ -244,6 +244,18 @@ namespace Phytel.API.DataDomain.Program
         }
 
         public object GetLimitedProgramFields(string objectId)
+        {
+            throw new NotImplementedException();
+        }
+
+
+        public object FindByEntityExistsID(string patientID, string progId)
+        {
+            throw new NotImplementedException();
+        }
+
+
+        public IEnumerable<object> Find(List<ObjectId> Ids)
         {
             throw new NotImplementedException();
         }

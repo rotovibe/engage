@@ -69,7 +69,16 @@
     <Compile Include="Enums.cs" />
     <Compile Include="IProgramDataManager.cs" />
     <Compile Include="IProgramRepository.cs" />
+    <Compile Include="IProgramRepositoryFactory.cs" />
+    <Compile Include="MongoDB\DataManagement\IMongoProcedure.cs" />
+    <Compile Include="MongoDB\DataManagement\IProceduresManager.cs" />
+    <Compile Include="MongoDB\DataManagement\MongoProcedure.cs" />
+    <Compile Include="MongoDB\DataManagement\MongoProcedureFactory.cs" />
+    <Compile Include="MongoDB\DataManagement\ProceduresManager.cs" />
+    <Compile Include="MongoDB\DataManagement\Procedures\UpdateProgramStartDateToFirstActionStartDate.cs" />
+    <Compile Include="MongoDB\DTO\DTOUtility.cs" />
     <Compile Include="MongoDB\DTO\DTOUtils.cs" />
+    <Compile Include="MongoDB\DTO\IDTOUtility.cs" />
     <Compile Include="MongoDB\DTO\MEPatientProgram.cs" />
     <Compile Include="MongoDB\DTO\MEProgram.cs" />
     <Compile Include="MongoDB\DTO\MEPatientProgramResponse.cs" />

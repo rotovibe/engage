@@ -7,66 +7,102 @@ using Phytel.API.Interface;
 
 namespace Phytel.API.DataDomain.Program
 {
-    public abstract class ProgramRepositoryFactory<T>
+    public class ProgramRepositoryFactory : IProgramRepositoryFactory
     {
-        public static IProgramRepository<T> GetProgramRepository(string dbName, string productName, string userId)
+        public IProgramRepository GetRepository(IDataDomainRequest request, RepositoryType type)
         {
-            IProgramRepository<T> repo = null;
+            IProgramRepository repo = null;
 
-            //We only have 1 repository at this time, just return it
-            repo = new MongoProgramRepository<T>(dbName) as IProgramRepository<T>;
-            repo.UserId = userId;
+            switch (type)
+            {
+                case RepositoryType.Program:
+                    {
+                        repo = new MongoProgramRepository(request.ContractNumber) as IProgramRepository;
+                        break;
+                    }
+                case RepositoryType.PatientProgram:
+                    {
+                        repo = new MongoPatientProgramRepository(request.ContractNumber) as IProgramRepository;
+                        break;
+                    }
+                case RepositoryType.ContractProgram:
+                    {
+                        repo = new MongoContractProgramRepository(request.ContractNumber) as IProgramRepository;
+                        break;
+                    }
+                case RepositoryType.Response:
+                    {
+                        repo = new MongoResponseRepository(request.ContractNumber) as IProgramRepository;
+                        break;
+                    }
+                case RepositoryType.PatientProgramResponse:
+                    {
+                        repo = new MongoPatientProgramResponseRepository(request.ContractNumber) as IProgramRepository;
+                        break;
+                    }
+                case RepositoryType.PatientProgramAttribute:
+                    {
+                        repo = new MongoPatientProgramAttributeRepository(request.ContractNumber) as IProgramRepository;
+                        break;
+                    }
+            }
+
+            repo.UserId = request.UserId;
             return repo;
         }
 
-        public static IProgramRepository<T> GetPatientProgramRepository(string dbName, string productName, string userId)
-        {
-            IProgramRepository<T> repo = null;
+        //public  IProgramRepository GetProgramRepository(IDataDomainRequest request )
+        //{
+        //    IProgramRepository repo = null;
 
-            //We only have 1 repository at this time, just return it
-            repo = new MongoPatientProgramRepository<T>(dbName) as IProgramRepository<T>;
-            repo.UserId = userId;
-            return repo;
-        }
+        //    repo = new MongoProgramRepository(request.ContractNumber) as IProgramRepository;
+        //    repo.UserId = request.UserId;
+        //    return repo;
+        //}
 
-        public static IProgramRepository<T> GetContractProgramRepository(string dbName, string productName, string userId)
-        {
-            IProgramRepository<T> repo = null;
+        //public  IProgramRepository GetPatientProgramRepository(IDataDomainRequest request)
+        //{
+        //    IProgramRepository repo = null;
 
-            //We only have 1 repository at this time, just return it
-            repo = new MongoContractProgramRepository<T>(dbName) as IProgramRepository<T>;
-            repo.UserId = userId;
-            return repo;
-        }
+        //    repo = new MongoPatientProgramRepository(request.ContractNumber) as IProgramRepository;
+        //    repo.UserId = request.UserId;
+        //    return repo;
+        //}
 
-        public static IProgramRepository<T> GetStepResponseRepository(string dbName, string productName, string userId)
-        {
-            IProgramRepository<T> repo = null;
+        //public  IProgramRepository GetContractProgramRepository(IDataDomainRequest request)
+        //{
+        //    IProgramRepository repo = null;
 
-            //We only have 1 repository at this time, just return it
-            repo = new MongoResponseRepository<T>(dbName) as IProgramRepository<T>;
-            repo.UserId = userId;
-            return repo;
-        }
+        //    repo = new MongoContractProgramRepository(request.ContractNumber) as IProgramRepository;
+        //    repo.UserId = request.UserId;
+        //    return repo;
+        //}
 
-        public static IProgramRepository<T> GetPatientProgramStepResponseRepository(string dbName, string productName, string userId)
-        {
-            IProgramRepository<T> repo = null;
+        //public  IProgramRepository GetStepResponseRepository(IDataDomainRequest request)
+        //{
+        //    IProgramRepository repo = null;
 
-            //We only have 1 repository at this time, just return it
-            repo = new MongoPatientProgramResponseRepository<T>(dbName) as IProgramRepository<T>;
-            repo.UserId = userId;
-            return repo;
-        }
+        //    repo = new MongoResponseRepository(request.ContractNumber) as IProgramRepository;
+        //    repo.UserId = request.UserId;
+        //    return repo;
+        //}
 
-        public static IProgramRepository<T> GetProgramAttributesRepository(string dbName, string productName, string userId)
-        {
-            IProgramRepository<T> repo = null;
+        //public  IProgramRepository GetPatientProgramStepResponseRepository(IDataDomainRequest request)
+        //{
+        //    IProgramRepository repo = null;
 
-            //We only have 1 repository at this time, just return it
-            repo = new MongoPatientProgramAttributeRepository<T>(dbName) as IProgramRepository<T>;
-            repo.UserId = userId;
-            return repo;
-        }
+        //    repo = new MongoPatientProgramResponseRepository(request.ContractNumber) as IProgramRepository;
+        //    repo.UserId = request.UserId;
+        //    return repo;
+        //}
+
+        //public  IProgramRepository GetProgramAttributesRepository(IDataDomainRequest request)
+        //{
+        //    IProgramRepository repo = null;
+
+        //    repo = new MongoPatientProgramAttributeRepository(request.ContractNumber) as IProgramRepository;
+        //    repo.UserId = request.UserId;
+        //    return repo;
+        //}
     }
 }
