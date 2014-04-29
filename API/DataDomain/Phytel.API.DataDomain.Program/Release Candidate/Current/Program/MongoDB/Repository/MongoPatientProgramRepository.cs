@@ -237,7 +237,19 @@ namespace Phytel.API.DataDomain.Program
 
         public IEnumerable<object> SelectAll()
         {
-            throw new NotImplementedException();
+            try
+            {
+                List<MEPatientProgram> cps = null;
+                using (ProgramMongoContext ctx = new ProgramMongoContext(_dbName))
+                {
+                    cps = ctx.PatientPrograms.Collection.FindAll().ToList();
+                }
+                return cps;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("DD:PatientProgramRepository:SelectAll()::" + ex.Message, ex.InnerException);
+            }
         }
 
         public object Update(object entity)
