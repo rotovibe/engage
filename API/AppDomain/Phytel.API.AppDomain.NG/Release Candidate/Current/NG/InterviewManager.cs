@@ -17,11 +17,13 @@ namespace Phytel.API.AppDomain.NG
     {
         public List<string> RelatedChanges { get; set; }
         public List<object> ProcessedElements { get; set; }
+        public IsInitialActionSpecification<Program> IsInitialAction { get; set; }
 
         public PlanManager()
         {
             RelatedChanges = new List<string>();
             ProcessedElements = new List<object>();
+            IsInitialAction = new IsInitialActionSpecification<Program>();
         }
 
         public PostProcessActionResponse ProcessActionResults(PostProcessActionRequest request)
@@ -40,7 +42,7 @@ namespace Phytel.API.AppDomain.NG
                 {
                     // pre-process
                     // set program starting date
-                    if (action.Order == 1)
+                    if (IsInitialAction.IsSatisfiedBy(p))
                     {
                         //p.StartDate = System.DateTime.UtcNow;
                         PlanElementUtil.SetStartDateForProgramAttributes(request.ProgramId, request);
