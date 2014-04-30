@@ -1,6 +1,6 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.30110.0
+VisualStudioVersion = 12.0.21005.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "AppDomain", "AppDomain", "{2E11BED7-15D8-4A76-B289-E9FE4FF9DD72}"
 EndProject
@@ -226,6 +226,14 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.ProgramDesign.Service.Test", "DataDomain\Phytel.API.DataDomain.ProgramDesign\Development\Current\ProgramDesign.Service.Test\DataDomain.ProgramDesign.Service.Test.csproj", "{0D83472A-0A00-48AD-B9E0-8F3B0277EC9E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.ProgramDesign.Test", "DataDomain\Phytel.API.DataDomain.ProgramDesign\Development\Current\ProgramDesign.Test\DataDomain.ProgramDesign.Test.csproj", "{F27D6936-A185-42CF-9488-7036883AD029}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "PlayLists", "PlayLists", "{9970CB27-3027-4F71-B6F5-D919BEC9A68C}"
+	ProjectSection(SolutionItems) = preProject
+		Playlists\Factory_Refactoring.playlist = Playlists\Factory_Refactoring.playlist
+		Playlists\NIGHT_903.playlist = Playlists\NIGHT_903.playlist
+		Playlists\NIGHT_917.playlist = Playlists\NIGHT_917.playlist
+		Playlists\NIGHT_941.playlist = Playlists\NIGHT_941.playlist
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
