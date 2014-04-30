@@ -49,7 +49,7 @@ namespace Phytel.API.DataDomain.Program.Tests
             [TestMethod()]
             public void Get_With_Program_Attributes_Test()
             {
-                ProgramDataManager pm = new ProgramDataManager { Factory = new ProgramRepositoryFactory(), DTOUtility = new DTOUtility { Factory = new ProgramRepositoryFactory() } };
+                ProgramDataManager pm = new ProgramDataManager { Factory = new StubProgramRepositoryFactory(), DTOUtility = new DTOUtility { Factory = new StubProgramRepositoryFactory() } };
                 GetProgramDetailsSummaryRequest request = new GetProgramDetailsSummaryRequest
                 {
                     Version = 1.0,
@@ -61,6 +61,29 @@ namespace Phytel.API.DataDomain.Program.Tests
                 };
                 GetProgramDetailsSummaryResponse response = pm.GetPatientProgramDetailsById(request);
                 Assert.IsNotNull(response.Program.Attributes);
+            }
+
+            [TestMethod()]
+            [TestCategory("NIGHT-917")]
+            [TestProperty("TFS", "1899")]
+            public void DD_Get_With_Module_Description_Test()
+            {
+                string desc = "BSHSI - Outreach & Enrollment";
+//                ProgramDataManager pm = new ProgramDataManager { Factory = new ProgramRepositoryFactory(), DTOUtility = new DTOUtility { Factory = new ProgramRepositoryFactory() } };
+                ProgramDataManager pm = new ProgramDataManager { Factory = new StubProgramRepositoryFactory(), DTOUtility = new StubDTOUtility { Factory = new StubProgramRepositoryFactory() } };
+                GetProgramDetailsSummaryRequest request = new GetProgramDetailsSummaryRequest
+                {
+                    Version = 1.0,
+                    ProgramId = _programId,
+                    PatientId = _patientId,
+                    UserId = "000000000000000000000000",
+                    ContractNumber = "InHealth001",
+                    Context = "NG"
+                };
+                GetProgramDetailsSummaryResponse response = pm.GetPatientProgramDetailsById(request);
+                ModuleDetail module = response.Program.Modules.Find(m => m.SourceId == "532b5585a381168abe00042c");
+                string mDesc = module.Description.Trim();
+                Assert.AreEqual(desc, mDesc, true);
             }
 
             [TestMethod()]

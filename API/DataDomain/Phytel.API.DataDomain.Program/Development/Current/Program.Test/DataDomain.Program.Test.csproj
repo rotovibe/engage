@@ -79,7 +79,14 @@
     <Compile Include="ProgramTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Stubs\StubCommonFormatter.cs" />
+    <Compile Include="Stubs\StubDTOUtility.cs" />
     <Compile Include="Stubs\StubHelper.cs" />
+    <Compile Include="Stubs\StubMongoContractProgramRepository.cs" />
+    <Compile Include="Stubs\StubMongoPatientProgramAttributeRepository.cs" />
+    <Compile Include="Stubs\StubMongoPatientProgramRepository.cs" />
+    <Compile Include="Stubs\StubMongoPatientProgramResponseRepository.cs" />
+    <Compile Include="Stubs\StubMongoProgramRepository.cs" />
+    <Compile Include="Stubs\StubMongoResponseRepository.cs" />
     <Compile Include="Stubs\StubProgramDataManager.cs" />
     <Compile Include="Stubs\StubProgramRepositoryFactory.cs" />
   </ItemGroup>

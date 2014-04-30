@@ -40,7 +40,9 @@ namespace Phytel.API.AppDomain.NG.Tests
             }
 
             [TestMethod()]
-            public void With_Module_Description_Test()
+            [TestCategory("NIGHT-917")]
+            [TestProperty("TFS", "1886")]
+            public void AD_With_Module_Description_Test()
             {
                 string desc = "BSHSI - Outreach & Enrollment";
                 StubPlanElementEndpointUtils peu = new StubPlanElementEndpointUtils { Client = new StubJsonRestClient() };

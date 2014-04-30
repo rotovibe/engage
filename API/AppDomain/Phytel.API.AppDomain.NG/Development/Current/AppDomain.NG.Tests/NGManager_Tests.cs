@@ -124,7 +124,9 @@ namespace Phytel.API.AppDomain.NG.Tests
             }
 
             [TestMethod()]
-            public void Get_With_Module_Description_Test()
+            [TestCategory("NIGHT-917")]
+            [TestProperty("TFS", "1886")]
+            public void AD_Get_With_Module_Description_Test()
             {
                 string patientId = "5325dad4d6a4850adcbba776";
                 string programId = "534d9bffd6a48504b058a2cf";

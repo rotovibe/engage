@@ -65,6 +65,36 @@ namespace Phytel.API.DataDomain.Program.Service.Tests
             }
 
             [TestMethod()]
+            [TestCategory("NIGHT-917")]
+            [TestProperty("TFS", "1899")]
+            public void DD_Get_With_Module_Description_Test()
+            {
+                string desc = "BSHSI - Outreach & Enrollment";
+
+                ProgramService ps = new ProgramService
+                {
+                    ProgramDataManager = new StubProgramDataManager(),
+                    Helpers = new StubHelper(),
+                    CommonFormatterUtil = new StubCommonFormatterUtil()
+                };
+
+                GetProgramDetailsSummaryRequest request = new GetProgramDetailsSummaryRequest
+                {
+                    Context = "NG",
+                    ContractNumber = "InHealth001",
+                    PatientId = "",
+                    ProgramId = "",
+                    UserId = "nguser",
+                    Version = 1.0
+                };
+
+                GetProgramDetailsSummaryResponse response = ps.Get(request);
+                ModuleDetail module = response.Program.Modules.Find(m => m.SourceId == "532b5585a381168abe00042c");
+                string mDesc = module.Description.Trim();
+                Assert.AreEqual(desc, mDesc, true);
+            }
+
+            [TestMethod()]
             public void Get_With_Eligibility_Requirements_Test()
             {
                 ProgramService ps = new ProgramService

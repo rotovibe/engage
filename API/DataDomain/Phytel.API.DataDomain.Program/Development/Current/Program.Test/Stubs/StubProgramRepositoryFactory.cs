@@ -8,38 +8,46 @@ namespace Phytel.API.DataDomain.Program.Test.Stubs
 {
     public class StubProgramRepositoryFactory : IProgramRepositoryFactory
     {
-        //public IProgramRepository GetContractProgramRepository(Interface.IDataDomainRequest request)
-        //{
-        //    throw new NotImplementedException();
-        //}
-
-        //public IProgramRepository GetPatientProgramRepository(Interface.IDataDomainRequest request)
-        //{
-        //    throw new NotImplementedException();
-        //}
-
-        //public IProgramRepository GetPatientProgramStepResponseRepository(Interface.IDataDomainRequest request)
-        //{
-        //    throw new NotImplementedException();
-        //}
-
-        //public IProgramRepository GetProgramAttributesRepository(Interface.IDataDomainRequest request)
-        //{
-        //    throw new NotImplementedException();
-        //}
-
-        //public IProgramRepository GetProgramRepository(Interface.IDataDomainRequest request)
-        //{
-        //    throw new NotImplementedException();
-        //}
-
-        //public IProgramRepository GetStepResponseRepository(Interface.IDataDomainRequest request)
-        //{
-        //    throw new NotImplementedException();
-        //}
         public IProgramRepository GetRepository(Interface.IDataDomainRequest request, RepositoryType type)
         {
-            throw new NotImplementedException();
+            IProgramRepository repo = null;
+
+            switch (type)
+            {
+                case RepositoryType.Program:
+                    {
+                        repo = new StubMongoProgramRepository(request.ContractNumber) as IProgramRepository;
+                        break;
+                    }
+                case RepositoryType.PatientProgram:
+                    {
+                        repo = new StubMongoPatientProgramRepository(request.ContractNumber) as IProgramRepository;
+                        break;
+                    }
+                case RepositoryType.ContractProgram:
+                    {
+                        repo = new StubMongoContractProgramRepository(request.ContractNumber) as IProgramRepository;
+                        break;
+                    }
+                case RepositoryType.Response:
+                    {
+                        repo = new StubMongoResponseRepository(request.ContractNumber) as IProgramRepository;
+                        break;
+                    }
+                case RepositoryType.PatientProgramResponse:
+                    {
+                        repo = new StubMongoPatientProgramResponseRepository(request.ContractNumber) as IProgramRepository;
+                        break;
+                    }
+                case RepositoryType.PatientProgramAttribute:
+                    {
+                        repo = new StubMongoPatientProgramAttributeRepository(request.ContractNumber) as IProgramRepository;
+                        break;
+                    }
+            }
+
+            repo.UserId = request.UserId;
+            return repo;
         }
     }
 }

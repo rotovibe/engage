@@ -7,6 +7,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
 {
     public interface IDTOUtility
     {
+        IProgramRepositoryFactory Factory { get; set; }
         bool CanInsertPatientProgram(List<MEPatientProgram> pp);
         List<Module> CloneAppDomainModules(List<ModuleDetail> prg, string userId);
         MEPatientProgram CreateInitialMEPatientProgram(PutProgramToPatientRequest request, MEProgram cp, List<ObjectId> sil);

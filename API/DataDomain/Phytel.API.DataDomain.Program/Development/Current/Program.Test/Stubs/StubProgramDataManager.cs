@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Phytel.API.DataDomain.Program.DTO;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,6 +9,9 @@ namespace Phytel.API.DataDomain.Program.Test.Stubs
 {
     public class StubProgramDataManager : IProgramDataManager
     {
+        public MongoDB.DTO.IDTOUtility DTOUtility { get; set; }
+        public IProgramRepositoryFactory Factory { get; set; }
+
         public DTO.GetPatientActionDetailsDataResponse GetActionDetails(DTO.GetPatientActionDetailsDataRequest request)
         {
             throw new NotImplementedException();
@@ -34,7 +38,16 @@ namespace Phytel.API.DataDomain.Program.Test.Stubs
                          Value = "testing",
                           Unit = "lbs",
                            Status = 1
-                    } }
+                    } },
+                    Modules = new List<ModuleDetail>() { 
+                    new ModuleDetail { Id = "000000000000000000000000", 
+                        Name = "Test stub module 1",
+                         Description = "BSHSI - Outreach & Enrollment",
+                          SourceId ="532b5585a381168abe00042c",
+                        Actions = new List<ActionsDetail>(){ 
+                            new ActionsDetail{ Id = "000000000000000000000000", ElementState = 4, Name ="test action from stub", Text = "test action 1"} } 
+                    }
+                    }
                 },
                 Version = 1.0
             };

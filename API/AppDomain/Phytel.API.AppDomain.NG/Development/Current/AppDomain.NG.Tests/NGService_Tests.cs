@@ -80,7 +80,9 @@ namespace Phytel.API.AppDomain.NG.Service.Tests
             }
 
             [TestMethod()]
-            public void Get_With_Module_Attributes_Test()
+            [TestCategory("NIGHT-917")]
+            [TestProperty("TFS", "1886")]
+            public void AD_Get_With_Module_Description_Test()
             {
                 string desc = "BSHSI - Outreach & Enrollment";
                 IAuditUtil audit = new StubAuditUtil();

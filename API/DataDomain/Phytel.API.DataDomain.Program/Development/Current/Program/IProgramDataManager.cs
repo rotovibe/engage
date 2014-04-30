@@ -1,9 +1,12 @@
 ﻿using Phytel.API.DataDomain.Program.DTO;
+using Phytel.API.DataDomain.Program.MongoDB.DTO;
 using System;
 namespace Phytel.API.DataDomain.Program
 {
     public interface IProgramDataManager
     {
+        IDTOUtility DTOUtility { get; set; }
+        IProgramRepositoryFactory Factory { get; set; }
         GetPatientActionDetailsDataResponse GetActionDetails(Phytel.API.DataDomain.Program.DTO.GetPatientActionDetailsDataRequest request);
         GetAllActiveProgramsResponse GetAllActiveContractPrograms(Phytel.API.DataDomain.Program.DTO.GetAllActiveProgramsRequest request);
         GetProgramDetailsSummaryResponse GetPatientProgramDetailsById(Phytel.API.DataDomain.Program.DTO.GetProgramDetailsSummaryRequest request);

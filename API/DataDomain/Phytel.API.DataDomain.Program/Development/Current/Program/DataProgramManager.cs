@@ -326,16 +326,19 @@ namespace Phytel.API.DataDomain.Program
         {
             try
             {
-                List<ObjectiveInfoData> objs =
-                sobjs.Where(x => x.Status == Status.Active)
-                .Select(o => new ObjectiveInfoData
-                    {
-                        Id = o.Id.ToString(),
-                        Status = (int)o.Status,
-                        Unit = o.Units,
-                        Value = o.Value
-                    }).ToList();
-
+                List<ObjectiveInfoData> objs = null;
+                if (sobjs != null && sobjs.Count > 0)
+                {
+                    objs =
+                    sobjs.Where(x => x.Status == Status.Active)
+                    .Select(o => new ObjectiveInfoData
+                        {
+                            Id = o.Id.ToString(),
+                            Status = (int)o.Status,
+                            Unit = o.Units,
+                            Value = o.Value
+                        }).ToList();
+                }
                 return objs;
             }
             catch (Exception ex)
