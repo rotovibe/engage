@@ -58,15 +58,11 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DataManagement.Procedures
                                                                     if (string.Compare(meR.Text, "Diabetes") == 0)
                                                                     {
                                                                         meR.Text = "Diabetes mellitus";
-                                                                        mePP.LastUpdatedOn = DateTime.UtcNow;
-                                                                        mePP.UpdatedBy = ObjectId.Empty;
                                                                         update = true;
                                                                     }
-                                                                    else if (string.Compare(meR.Text, "HTN") == 0)
+                                                                    if (string.Compare(meR.Text, "HTN") == 0)
                                                                     {
                                                                         meR.Text = "Hypertension";
-                                                                        mePP.LastUpdatedOn = DateTime.UtcNow;
-                                                                        mePP.UpdatedBy = ObjectId.Empty;
                                                                         update = true;
                                                                     }
                                                                 }
@@ -83,6 +79,8 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DataManagement.Procedures
                     }
                     if(update)
                     {
+                        mePP.LastUpdatedOn = DateTime.UtcNow;
+                        mePP.UpdatedBy = ObjectId.Empty;
                         MEPatientProgram updatedProgram = mePP;
                         bool success = repo.Save(updatedProgram);
                         if (success)
