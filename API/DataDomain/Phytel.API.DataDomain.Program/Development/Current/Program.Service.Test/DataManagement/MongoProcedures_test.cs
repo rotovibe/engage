@@ -8,8 +8,24 @@ namespace Phytel.API.DataDomain.Program.Services.Test.DataManagement
     [TestClass]
     public class Mongo_Procedures_Test
     {
+
         [TestMethod]
-        public void Execute_Procedure()
+        public void UpdatePatientProgram_HTNAndDiabetesText_Test()
+        {
+            string procName = "mp_UpdatePatientProgram_HTNAndDiabetesText";
+            Execute_Procedure(procName);
+        }
+
+        [TestMethod]
+        public void UpdateProgramStartDateToFirstActionStartDate_Test()
+        {
+            string procName = "mp_UpdateProgramStartDateToFirstActionStartDate";
+            Execute_Procedure(procName);
+        }
+
+        
+        
+        private void Execute_Procedure(string procName)
         {
             string url = "http://localhost:8888/Program";
             string contractNumber = "InHealth001";
@@ -21,12 +37,12 @@ namespace Phytel.API.DataDomain.Program.Services.Test.DataManagement
 
             PostMongoProceduresRequest request = new PostMongoProceduresRequest
             {
-                Name = "mp_UpdateProgramStartDateToFirstActionStartDate",
+                Name = procName,
                 DocumentVersion = 1.0,
                 Context = "NG",
                 ContractNumber = "InHealth001",
                 Version = 1.0,
-                 UserId = "user"
+                UserId = "user"
             };
 
             PostMongoProceduresResponse response = client.Post<PostMongoProceduresResponse>(

@@ -26,36 +26,52 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DataManagement.Procedures
 
                 foreach (MEPatientProgram mePP in programs)
                 {
+                    bool update = false;
                     if (string.Compare(mePP.Name, "BSHSI - Healthy Weight", true) == 0)
                     {
-                        foreach (Module meM in mePP.Modules)
+                        List<Module> modules = mePP.Modules;
+                        if (modules != null & modules.Count > 0)
                         {
-                            if (string.Compare(meM.Name, "BSHSI - Initial Assessment", true) == 0)
+                            foreach (Module meM in modules)
                             {
-                                List<Phytel.API.DataDomain.Program.MongoDB.DTO.Action> actions = meM.Actions;
-                                foreach(Phytel.API.DataDomain.Program.MongoDB.DTO.Action meA in actions)
+                                if (string.Compare(meM.Name, "BSHSI - Initial Assessment", true) == 0)
                                 {
-                                    if (string.Compare(meA.Name, "Health History", true) == 0)
+                                    List<Phytel.API.DataDomain.Program.MongoDB.DTO.Action> actions = meM.Actions;
+                                    if (actions != null && actions.Count > 0)
                                     {
-                                        List<Step> steps = meA.Steps;
-                                        foreach(Step meS in steps)
+                                        foreach (Phytel.API.DataDomain.Program.MongoDB.DTO.Action meA in actions)
                                         {
-                                            if (string.Compare(meS.Question, "Are there any health conditions that might impact your ability to achieve your health goals?", true) == 0)
+                                            if (string.Compare(meA.Name, "Health History", true) == 0)
                                             {
-                                                List<MEPatientProgramResponse> responses = meS.Responses;
-                                                foreach(MEPatientProgramResponse meR in responses)
+                                                List<Step> steps = meA.Steps;
+                                                if (steps != null & steps.Count > 0)
                                                 {
-                                                    if(string.Compare(meR.Text, "Diabetes") == 0)
+                                                    foreach (Step meS in steps)
                                                     {
-                                                        meR.Text = "Diabetes mellitus";
-                                                        mePP.LastUpdatedOn = DateTime.UtcNow;
-                                                        mePP.UpdatedBy = ObjectId.Empty;
-                                                    }
-                                                    else if (string.Compare(meR.Text, "HTN") == 0)
-                                                    {
-                                                        meR.Text = "Hypertension";
-                                                        mePP.LastUpdatedOn = DateTime.UtcNow;
-                                                        mePP.UpdatedBy = ObjectId.Empty;
+                                                        if (string.Compare(meS.Question, "Are there any health conditions that might impact your ability to achieve your health goals?", true) == 0)
+                                                        {
+                                                            List<MEPatientProgramResponse> responses = meS.Responses;
+                                                            if(responses != null && responses.Count > 0)
+                                                            {
+                                                                foreach (MEPatientProgramResponse meR in responses)
+                                                                {
+                                                                    if (string.Compare(meR.Text, "Diabetes") == 0)
+                                                                    {
+                                                                        meR.Text = "Diabetes mellitus";
+                                                                        mePP.LastUpdatedOn = DateTime.UtcNow;
+                                                                        mePP.UpdatedBy = ObjectId.Empty;
+                                                                        update = true;
+                                                                    }
+                                                                    else if (string.Compare(meR.Text, "HTN") == 0)
+                                                                    {
+                                                                        meR.Text = "Hypertension";
+                                                                        mePP.LastUpdatedOn = DateTime.UtcNow;
+                                                                        mePP.UpdatedBy = ObjectId.Empty;
+                                                                        update = true;
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
                                                     }
                                                 }
                                             }
@@ -64,15 +80,16 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DataManagement.Procedures
                                 }
                             }
                         }
+                    }
+                    if(update)
+                    {
                         MEPatientProgram updatedProgram = mePP;
                         bool success = repo.Save(updatedProgram);
                         if (success)
                         {
                             Results.Add(new Result { Message = "Program Id [" + updatedProgram.Id.ToString() + "] updated." });
                         }
-                        
                     }
-
                 }
             }
             catch (Exception ex)
