@@ -296,5 +296,10 @@ namespace Phytel.API.DataDomain.Program
         {
             throw new NotImplementedException();
         }
+
+        public bool Save(object entity)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

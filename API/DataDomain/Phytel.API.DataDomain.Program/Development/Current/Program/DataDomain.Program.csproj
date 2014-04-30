@@ -75,6 +75,7 @@
     <Compile Include="MongoDB\DataManagement\MongoProcedure.cs" />
     <Compile Include="MongoDB\DataManagement\MongoProcedureFactory.cs" />
     <Compile Include="MongoDB\DataManagement\ProceduresManager.cs" />
+    <Compile Include="MongoDB\DataManagement\Procedures\UpdatePatientProgram_HTNAndDiabetesText.cs" />
     <Compile Include="MongoDB\DataManagement\Procedures\UpdateProgramStartDateToFirstActionStartDate.cs" />
     <Compile Include="MongoDB\DTO\DTOUtility.cs" />
     <Compile Include="MongoDB\DTO\DTOUtils.cs" />

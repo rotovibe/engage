@@ -20,5 +20,6 @@ namespace Phytel.API.DataDomain.Program
         object InsertAsBatch(object newEntity);
         object FindByEntityExistsID(string patientID, string progId);
         IEnumerable<object> Find(List<ObjectId> Ids);
+        bool Save(object entity);
     }
 }

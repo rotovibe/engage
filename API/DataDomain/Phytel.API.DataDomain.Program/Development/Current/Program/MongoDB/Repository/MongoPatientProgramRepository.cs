@@ -251,6 +251,26 @@ namespace Phytel.API.DataDomain.Program
             }
         }
 
+
+        public bool Save(object entity)
+        {
+            bool success = false;
+            MEPatientProgram p = (MEPatientProgram)entity;
+            try
+            {
+                using (ProgramMongoContext ctx = new ProgramMongoContext(_dbName))
+                {
+                    ctx.PatientPrograms.Collection.Save(p);
+                    success = true;
+                }
+                return success;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("DD:PatientProgramRepository:Save()::" + ex.Message, ex.InnerException);
+            }
+        }
+
         public object Update(object entity)
         {
             PutProgramActionProcessingRequest p = (PutProgramActionProcessingRequest)entity;

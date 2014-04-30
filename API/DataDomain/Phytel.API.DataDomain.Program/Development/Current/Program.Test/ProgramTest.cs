@@ -38,8 +38,10 @@ namespace Phytel.API.DataDomain.Program.Test
         public void GetPatientActionDetailsTest()
         {
             string userId = "000000000000000000000000";
-            GetPatientActionDetailsDataRequest request = new GetPatientActionDetailsDataRequest { PatientId = "5325d9f2d6a4850adcbba4ca", PatientProgramId = "534c4fb2d6a48504b053346f", PatientModuleId = "534c4fb2d6a48504b05335c2", PatientActionId = "534c4fb2d6a48504b05335c3", UserId = userId };
+            GetPatientActionDetailsDataRequest request = new GetPatientActionDetailsDataRequest { PatientId = "5325db0fd6a4850adcbba822", PatientProgramId = "535a90dbd6a485044cb7d90e", PatientModuleId = "535a90dbd6a485044cb7dac7", PatientActionId = "535a90dbd6a485044cb7dc24", UserId = userId };
 
+            ProgramDataManager pm = new ProgramDataManager();
+            
             GetPatientActionDetailsDataResponse response = pm.GetActionDetails(request);
 
             Assert.IsNotNull(response);
