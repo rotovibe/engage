@@ -55,12 +55,12 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DataManagement.Procedures
                                                             {
                                                                 foreach (MEPatientProgramResponse meR in responses)
                                                                 {
-                                                                    if (string.Compare(meR.Text, "Diabetes") == 0)
+                                                                    if (string.Compare(meR.Text, "Diabetes", true) == 0)
                                                                     {
                                                                         meR.Text = "Diabetes mellitus";
                                                                         update = true;
                                                                     }
-                                                                    if (string.Compare(meR.Text, "HTN") == 0)
+                                                                    if (string.Compare(meR.Text, "HTN", true) == 0)
                                                                     {
                                                                         meR.Text = "Hypertension";
                                                                         update = true;
