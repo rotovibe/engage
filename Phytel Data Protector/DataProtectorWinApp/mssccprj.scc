@@ -1,0 +1,5 @@
+SCC = This is a Source Code Control file
+
+[DataProtectorWinApp.csproj]
+SCC_Aux_Path = "\\fuji\VSS"
+SCC_Project_Name = "$/Development/Phytel.Net/GUIs/DataProtectorWinApp", IFFCAAAA
