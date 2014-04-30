@@ -130,6 +130,7 @@ namespace Phytel.API.AppDomain.NG.Tests
                 string programId = "534d9bffd6a48504b058a2cf";
                 string userId = "0000000000000000000000000";
                 string desc = "BSHSI - Outreach & Enrollment";
+                string ModuleSourceId = "532b5585a381168abe00042c";
 
                 INGManager ngm = new NGManager { PlanElementUtils = new StubPlanElementUtils(), EndpointUtils = new StubPlanElementEndpointUtils() };
 
@@ -143,7 +144,7 @@ namespace Phytel.API.AppDomain.NG.Tests
                 };
 
                 GetPatientProgramDetailsSummaryResponse response = ngm.GetPatientProgramDetailsSummary(request);
-                Module module = response.Program.Modules.Find(m => m.SourceId == "532b5585a381168abe00042c");
+                Module module = response.Program.Modules.Find(m => m.SourceId == ModuleSourceId);
                 string mDesc = module.Description.Trim();
                 Assert.AreEqual(desc, mDesc, true);
             }
