@@ -48,7 +48,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
                     EligibilityEndDate = cp.EligibilityEndDate,
                     EligibilityStartDate = cp.EligibilityStartDate,
                     EligibilityRequirements = cp.EligibilityRequirements,
-                    Objectives = cp.Objectives
+                    //Objectives = cp.Objectives
                     //,UpdatedBy = ObjectId.Parse(request.UserId)
                 };
                 if (!string.IsNullOrEmpty(request.UserId))
