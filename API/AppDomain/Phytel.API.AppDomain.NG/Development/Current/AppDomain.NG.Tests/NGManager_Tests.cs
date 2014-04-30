@@ -122,6 +122,31 @@ namespace Phytel.API.AppDomain.NG.Tests
                 GetPatientProgramDetailsSummaryResponse response = ngm.GetPatientProgramDetailsSummary(request);
                 Assert.IsNotNull(response.Program.Attributes);
             }
+
+            [TestMethod()]
+            public void Get_With_Module_Description_Test()
+            {
+                string patientId = "5325dad4d6a4850adcbba776";
+                string programId = "534d9bffd6a48504b058a2cf";
+                string userId = "0000000000000000000000000";
+                string desc = "BSHSI - Outreach & Enrollment";
+
+                INGManager ngm = new NGManager { PlanElementUtils = new StubPlanElementUtils(), EndpointUtils = new StubPlanElementEndpointUtils() };
+
+                GetPatientProgramDetailsSummaryRequest request = new GetPatientProgramDetailsSummaryRequest
+                {
+                    Version = 1.0,
+                    ContractNumber = "InHealth001",
+                    PatientId = patientId,
+                    PatientProgramId = programId,
+                    UserId = userId
+                };
+
+                GetPatientProgramDetailsSummaryResponse response = ngm.GetPatientProgramDetailsSummary(request);
+                Module module = response.Program.Modules.Find(m => m.SourceId == "532b5585a381168abe00042c");
+                string mDesc = module.Description.Trim();
+                Assert.AreEqual(desc, mDesc, true);
+            }
         }
     }
 }

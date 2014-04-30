@@ -78,6 +78,24 @@ namespace Phytel.API.AppDomain.NG.Service.Tests
 
                 Assert.IsNotNull(response.Program.Objectives);
             }
+
+            [TestMethod()]
+            public void Get_With_Module_Attributes_Test()
+            {
+                string desc = "BSHSI - Outreach & Enrollment";
+                IAuditUtil audit = new StubAuditUtil();
+                INGManager ngm = new StubNGManager();
+                ISecurityManager sm = new StubSecurityManager();
+                ICommonFormatterUtil cf = new StubCommonFormatterUtil();
+
+                NGService ngs = new NGService { AuditUtil = audit, NGManager = ngm, Security = sm, CommonFormatterUtil = cf };
+                GetPatientProgramDetailsSummaryRequest request = new GetPatientProgramDetailsSummaryRequest { ContractNumber = "NG", PatientId = "", Token = "dsafgsdfgdafg", UserId = "", Version = 1.0 };
+                GetPatientProgramDetailsSummaryResponse response = ngs.Get(request);
+
+                Module module = response.Program.Modules.Find(m => m.SourceId == "532b5585a381168abe00042c");
+                string mDesc = module.Description.Trim();
+                Assert.AreEqual(desc, mDesc, true);
+            }
         }
     }
 }

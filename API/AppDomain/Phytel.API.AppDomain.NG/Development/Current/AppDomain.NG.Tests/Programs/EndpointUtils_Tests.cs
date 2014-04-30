@@ -40,6 +40,19 @@ namespace Phytel.API.AppDomain.NG.Tests
             }
 
             [TestMethod()]
+            public void With_Module_Description_Test()
+            {
+                string desc = "BSHSI - Outreach & Enrollment";
+                StubPlanElementEndpointUtils peu = new StubPlanElementEndpointUtils { Client = new StubJsonRestClient() };
+                GetPatientProgramDetailsSummaryRequest request = new GetPatientProgramDetailsSummaryRequest();
+                GetProgramDetailsSummaryResponse response = peu.RequestPatientProgramDetailsSummary(request);
+
+                ModuleDetail module = response.Program.Modules.Find(m => m.SourceId == "532b5585a381168abe00042c");
+                string mDesc = module.Description.Trim();
+                Assert.AreEqual(desc, mDesc, true);
+            }
+
+            [TestMethod()]
             public void With_EligiblityRequirements_Test()
             {
                 StubPlanElementEndpointUtils peu = new StubPlanElementEndpointUtils { Client = new StubJsonRestClient() };

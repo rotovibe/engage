@@ -94,7 +94,9 @@
     <Compile Include="GetStepResponseListResponse.cs" />
     <Compile Include="PlanElementDetail.cs" />
     <Compile Include="ObjectiveInfoData.cs" />
+    <Compile Include="GetMongoProceduresListRequest.cs" />
     <Compile Include="PostMongoProceduresRequest.cs" />
+    <Compile Include="GetMongoProceduresListResponse.cs" />
     <Compile Include="PostMongoProceduresResponse.cs" />
     <Compile Include="ProgramAttribute.cs" />
     <Compile Include="PutProgramActionProcessingRequest.cs" />

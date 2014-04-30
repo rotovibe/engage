@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Phytel.API.AppDomain.NG.DTO;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -105,6 +106,15 @@ namespace Phytel.API.AppDomain.NG.Test.Stubs
                         AssignedOn = System.DateTime.UtcNow,
                         Id = "0000000000000000000000000"
                     },
+                    Modules = new List<Module>() { 
+                    new Module { Id = "000000000000000000000000", 
+                        Name = "Test stub module 1",
+                         Description = "BSHSI - Outreach & Enrollment",
+                          SourceId ="532b5585a381168abe00042c",
+                        Actions = new List<Actions>(){ 
+                            new Actions{ Id = "000000000000000000000000", ElementState = 4, Name ="test action from stub", Text = "test action 1"} } 
+                    }
+                },
                     Objectives = new List<DTO.ObjectiveInfo> { new DTO.ObjectiveInfo{ Id="123456789012345678901234",
                      Status = 1,
                       Unit = "lbs",

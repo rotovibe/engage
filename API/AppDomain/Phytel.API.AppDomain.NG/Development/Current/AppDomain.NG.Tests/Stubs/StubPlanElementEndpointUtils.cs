@@ -71,7 +71,9 @@ namespace Phytel.API.AppDomain.NG.Test.Stubs
                 EligibilityEndDate = DateTime.UtcNow.AddDays(20),
                 Modules = new List<ModuleDetail>() { 
                     new ModuleDetail { Id = "000000000000000000000000", 
-                        Name = "Test stub module 1", 
+                        Name = "Test stub module 1",
+                         Description = "BSHSI - Outreach & Enrollment",
+                          SourceId ="532b5585a381168abe00042c",
                         Actions = new List<ActionsDetail>(){ 
                             new ActionsDetail{ Id = "000000000000000000000000", ElementState = 4, Name ="test action from stub", Text = "test action 1"} } 
                     }

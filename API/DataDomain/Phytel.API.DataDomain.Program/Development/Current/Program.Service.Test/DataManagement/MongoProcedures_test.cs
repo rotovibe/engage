@@ -3,7 +3,7 @@ using Phytel.API.DataDomain.Program.DTO;
 using ServiceStack.Service;
 using ServiceStack.ServiceClient.Web;
 
-namespace Phytel.API.DataDomain.Program.Services.Test
+namespace Phytel.API.DataDomain.Program.Services.Test.DataManagement
 {
     [TestClass]
     public class Mongo_Procedures_Test

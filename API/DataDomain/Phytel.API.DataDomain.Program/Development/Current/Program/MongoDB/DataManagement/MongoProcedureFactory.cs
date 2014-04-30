@@ -23,7 +23,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DataManagement
             IMongoProcedure pr = null;
 
             string nm = string.Empty;
-            foreach (Type mytype in System.Reflection.Assembly.GetExecutingAssembly().GetTypes()
+            foreach (Type mytype in Assembly.GetExecutingAssembly().GetTypes()
                 .Where(mytype => mytype.GetInterfaces().Contains(typeof(IMongoProcedure)) && !mytype.IsAbstract))
             {
                 if (GetStaticPropertyName(request.Name, mytype))
