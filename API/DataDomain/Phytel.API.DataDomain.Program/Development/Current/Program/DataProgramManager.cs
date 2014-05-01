@@ -286,7 +286,7 @@ namespace Phytel.API.DataDomain.Program
                     Order = mepp.Order,
                     Previous = mepp.Previous != null ? mepp.Previous.ToString() : string.Empty,
                     SourceId = mepp.SourceId.ToString(),
-                    AssignBy = mepp.AssignedBy,
+                    AssignBy = mepp.AssignedBy.ToString(),
                     AssignDate = mepp.AssignedOn,
                     ElementState = (int)mepp.State,
                     CompletedBy = mepp.CompletedBy,
@@ -366,15 +366,15 @@ namespace Phytel.API.DataDomain.Program
                 {
                     pad = new ProgramAttributeData
                     {
-                        AssignedBy = pa.AssignedBy.ToString(),
-                        AssignedTo = pa.AssignedTo.ToString(),
-                        AssignedOn = pa.AssignedOn,
+                      //  AssignedBy = pa.AssignedBy.ToString(), Sprint 12
+                        //  AssignedTo = pa.AssignedTo.ToString(), Sprint 12
+                        // AssignedOn = pa.AssignedOn, Sprint 12
                         Completed = (int)pa.Completed,
                         CompletedBy = pa.CompletedBy,
                         DateCompleted = pa.DateCompleted,
                         DidNotEnrollReason = pa.DidNotEnrollReason,
                         Eligibility = (int)pa.Eligibility,
-                        AttrEndDate = pa.EndDate,
+                        //  AttrEndDate = pa.EndDate, , Sprint 12
                         Enrollment = (int)pa.Enrollment,
                         GraduatedFlag = (int)pa.GraduatedFlag,
                         Id = pa.Id.ToString(),
@@ -385,7 +385,7 @@ namespace Phytel.API.DataDomain.Program
                         PlanElementId = pa.PlanElementId.ToString(),
                         Population = pa.Population,
                         RemovedReason = pa.RemovedReason,
-                        AttrStartDate = pa.StartDate,
+                        // AttrStartDate = pa.StartDate, Sprint 12
                         Status = (int)pa.Status
                     };
                 }

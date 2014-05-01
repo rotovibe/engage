@@ -35,10 +35,10 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
         [BsonIgnoreIfNull(true)]
         public ObjectId PlanElementId { get; set; }
 
-        public const string EndDateProperty = "ed";
-        [BsonElement(EndDateProperty)]
-        [BsonIgnoreIfNull(false)]
-        public DateTime? EndDate { get; set; }
+        //public const string EndDateProperty = "ed"; , Sprint 12
+        //[BsonElement(EndDateProperty)]
+        //[BsonIgnoreIfNull(false)]
+        //public DateTime? EndDate { get; set; }
 
         public const string StatusProperty = "sts";
         [BsonElement(StatusProperty)]
@@ -103,10 +103,10 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
         [BsonElement(OverrideReasonProperty)]
         public string OverrideReason { get; set; }
 
-        public const string StartDateProperty = "sd";
-        [BsonElement(StartDateProperty)]
-        [BsonIgnoreIfNull(true)]
-        public DateTime? StartDate { get; set; }
+        //public const string StartDateProperty = "sd"; , Sprint 12
+        //[BsonElement(StartDateProperty)]
+        //[BsonIgnoreIfNull(true)]
+        //public DateTime? StartDate { get; set; }
 
         public const string AssignDateProperty = "aon";
         [BsonElement(AssignDateProperty)]

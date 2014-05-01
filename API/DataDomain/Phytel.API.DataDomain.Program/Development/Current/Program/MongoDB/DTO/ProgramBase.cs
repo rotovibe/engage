@@ -18,6 +18,11 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
         [BsonIgnoreIfNull(false)]
         public DateTime? EndDate { get; set; }
 
+        public const string StartDateProperty = "sd";
+        [BsonElement(StartDateProperty)]
+        [BsonIgnoreIfNull(true)]
+        public DateTime? StartDate { get; set; }
+
         public const string NameProperty = "nm";
         [BsonElement(NameProperty)]
         [BsonIgnoreIfNull(true)]

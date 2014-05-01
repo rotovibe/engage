@@ -72,7 +72,7 @@ namespace Phytel.API.DataDomain.Program
                         Locked = (Locked)pa.Locked,
                         IneligibleReason = pa.IneligibleReason,
                         Completed = (Completed)pa.Completed,
-                        AssignedOn = pa.AssignedOn,
+                        //AssignedOn = pa.AssignedOn, Sprint 12
                         CompletedBy = pa.CompletedBy,
                         DateCompleted = pa.DateCompleted,
                         DidNotEnrollReason = pa.DidNotEnrollReason,
@@ -82,24 +82,24 @@ namespace Phytel.API.DataDomain.Program
                         //EligibilityOverride = (EligibilityOverride)pa.EligibilityOverride,
                         //EligibilityRequirements = pa.EligibilityRequirements,
                         //EligibilityStartDate = pa.EligibilityStartDate,
-                        EndDate = pa.AttrEndDate,
+                        // EndDate = pa.AttrEndDate, , Sprint 12
                         Enrollment = (EnrollmentStatus)pa.Enrollment,
                         GraduatedFlag = (Graduated)pa.GraduatedFlag,
-                        StartDate = pa.AttrStartDate,
+                        //  StartDate = pa.AttrStartDate, Sprint 12
                         DeleteFlag = false
                         //,LastUpdatedOn = DateTime.UtcNow,
                         //UpdatedBy = ObjectId.Parse(this.UserId)
                     };
 
-                    if(pa.AssignedBy != null)
-                    {
-                        mepa.AssignedBy = ObjectId.Parse(pa.AssignedBy);
-                    }
+                    //if(pa.AssignedBy != null) Sprint 12
+                    //{
+                    //    mepa.AssignedBy = ObjectId.Parse(pa.AssignedBy);
+                    //}
 
-                    if (pa.AssignedTo != null)
-                    {
-                        mepa.AssignedTo = ObjectId.Parse(pa.AssignedTo);
-                    }
+                    //if (pa.AssignedTo != null) Sprint 12
+                    //{
+                    //    mepa.AssignedTo = ObjectId.Parse(pa.AssignedTo);
+                    //}
 
                     ctx.ProgramAttributes.Collection.Insert(mepa);
                     
@@ -198,7 +198,7 @@ namespace Phytel.API.DataDomain.Program
                             //EligibilityOverride = (int)cp.EligibilityOverride,
                             //EligibilityRequirements = cp.EligibilityRequirements,
                             //EligibilityStartDate = cp.EligibilityStartDate,
-                            AttrEndDate = cp.EndDate,
+                            //  AttrEndDate = cp.EndDate, , Sprint 12
                             Enrollment = (int)cp.Enrollment,
                             GraduatedFlag = (int)cp.GraduatedFlag,
                             IneligibleReason = cp.IneligibleReason,
@@ -263,8 +263,8 @@ namespace Phytel.API.DataDomain.Program
                     if (mepa.OptOut != null) uv.Add(MB.Update.Set(MEProgramAttribute.OptOutProperty, mepa.OptOut));
                     //if (mepa.OptOutReason != null) uv.Add(MB.Update.Set(MEProgramAttribute.OptOutReasonProperty, mepa.OptOutReason));
                     // dates
-                    if (mepa.AttrStartDate != null) uv.Add(MB.Update.Set(MEProgramAttribute.StartDateProperty, mepa.AttrStartDate));
-                    if (mepa.AttrEndDate != null) uv.Add(MB.Update.Set(MEProgramAttribute.EndDateProperty, mepa.AttrEndDate));
+                    //if (mepa.AttrStartDate != null) uv.Add(MB.Update.Set(MEProgramAttribute.StartDateProperty, mepa.AttrStartDate)); Sprint 12
+                    //if (mepa.AttrEndDate != null) uv.Add(MB.Update.Set(MEProgramAttribute.EndDateProperty, mepa.AttrEndDate)); Sprint 12
                     // enrollment
                     if (mepa.Enrollment != 0) uv.Add(MB.Update.Set(MEProgramAttribute.EnrollmentProperty, (EnrollmentStatus)mepa.Enrollment));
                     if (mepa.DidNotEnrollReason != null) uv.Add(MB.Update.Set(MEProgramAttribute.DidNotEnrollReasonProperty, mepa.DidNotEnrollReason));

@@ -202,7 +202,7 @@ namespace Phytel.API.DataDomain.Program
                             ContractProgramId = cp.ContractProgramId.ToString(),
                             Description = cp.Description,
                             EndDate = cp.EndDate,
-                            AssignBy = cp.AssignedBy,
+                            AssignBy = cp.AssignedBy.ToString(),
                             AssignDate = cp.AssignedOn,
                             Completed = cp.Completed,
                             CompletedBy = cp.CompletedBy,

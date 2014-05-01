@@ -13,10 +13,17 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
     {
         public PlanElement() { }
 
-        public const string StartDateProperty = "sd";
-        [BsonElement(StartDateProperty)]
+        // This is an individual attribute
+        public const string AttributeEndDateProperty = "attred";
+        [BsonElement(AttributeEndDateProperty)]
+        [BsonIgnoreIfNull(false)]
+        public DateTime? AttributeEndDate { get; set; }
+
+        // This is an individual attribute
+        public const string AttributeStartDateProperty = "attrsd";
+        [BsonElement(AttributeStartDateProperty)]
         [BsonIgnoreIfNull(true)]
-        public DateTime? StartDate { get; set; }
+        public DateTime? AttributeStartDate { get; set; }
 
         public const string SourceIdProperty = "srcid";
         [BsonElement(SourceIdProperty)]
@@ -46,7 +53,12 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
         public const string AssignByProperty = "aby";
         [BsonElement(AssignByProperty)]
         [BsonIgnoreIfNull(true)]
-        public string AssignedBy { get; set; }
+        public ObjectId? AssignedBy { get; set; }
+
+        public const string AssignToProperty = "ato";
+        [BsonElement(AssignToProperty)]
+        [BsonIgnoreIfNull(true)]
+        public ObjectId? AssignedTo { get; set; }
 
         public const string CompletedByProperty = "cby";
         [BsonElement(CompletedByProperty)]
