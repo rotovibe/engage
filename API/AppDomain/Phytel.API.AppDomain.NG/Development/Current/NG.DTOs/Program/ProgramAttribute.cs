@@ -6,7 +6,7 @@ namespace Phytel.API.AppDomain.NG.DTO
     {
             public string Id { get; set; }
             public string PlanElementId { get; set; }
-            public DateTime? AttrEndDate { get; set; }
+            //public DateTime? AttrEndDate { get; set; }  Sprint 12
             public int Status { get; set; }
             public string AuthoredBy { get; set; }
             public int Locked { get; set; }
@@ -19,7 +19,7 @@ namespace Phytel.API.AppDomain.NG.DTO
             public string RemovedReason { get; set; }
             public string DidNotEnrollReason { get; set; }
             public string OverrideReason { get; set; }
-            public DateTime? AttrStartDate { get; set; }
+            //public DateTime? AttrStartDate { get; set; } Sprint 12
             public DateTime? AssignedOn { get; set; }
             public string AssignedBy { get; set; }
             public string AssignedTo { get; set; }

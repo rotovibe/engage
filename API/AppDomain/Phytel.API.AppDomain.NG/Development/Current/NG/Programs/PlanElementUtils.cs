@@ -1003,7 +1003,7 @@ namespace Phytel.API.AppDomain.NG
                     DateCompleted = programAttributeData.DateCompleted,
                     DidNotEnrollReason = programAttributeData.DidNotEnrollReason,
                     Eligibility = (int)programAttributeData.Eligibility,
-                    AttrEndDate = programAttributeData.AttrEndDate,
+                    //AttrEndDate = programAttributeData.AttrEndDate,Sprint 12
                     Enrollment = (int)programAttributeData.Enrollment,
                     GraduatedFlag = (int)programAttributeData.GraduatedFlag,
                     Id = programAttributeData.Id.ToString(),
@@ -1014,7 +1014,7 @@ namespace Phytel.API.AppDomain.NG
                     PlanElementId = programAttributeData.PlanElementId.ToString(),
                     Population = programAttributeData.Population,
                     RemovedReason = programAttributeData.RemovedReason,
-                    AttrStartDate = programAttributeData.AttrStartDate,
+                    //AttrStartDate = programAttributeData.AttrStartDate,Sprint 12
                     Status = (int)programAttributeData.Status
                 };
             }
