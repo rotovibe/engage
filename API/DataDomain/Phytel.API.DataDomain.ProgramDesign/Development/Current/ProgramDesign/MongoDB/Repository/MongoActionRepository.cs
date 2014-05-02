@@ -257,56 +257,6 @@ namespace Phytel.API.DataDomain.ProgramDesign
             }
         }
 
-        public object Update(PutUpdateActionDataRequest request)
-        {
-            PutUpdateActionDataResponse response = new PutUpdateActionDataResponse();
-            try
-            {
-                if (request.UserId == null)
-                    throw new ArgumentException("UserId is missing from the DataDomain request.");
-
-                using (ProgramDesignMongoContext ctx = new ProgramDesignMongoContext(_dbName))
-                {
-                    var pUQuery = new QueryDocument(MEAction.IdProperty, ObjectId.Parse(request.ActionId));
-
-                    MB.UpdateBuilder updt = new MB.UpdateBuilder();
-                    if (request.Name != null)
-                    {
-                        if (request.Name == "\"\"" || (request.Name == "\'\'"))
-                            updt.Set(MEAction.NameProperty, string.Empty);
-                        else
-                            updt.Set(MEAction.NameProperty, request.Name);
-                    }
-                    if (request.Description != null)
-                    {
-                        if (request.Description == "\"\"" || (request.Description == "\'\'"))
-                            updt.Set(MEAction.DescriptionProperty, string.Empty);
-                        else
-                            updt.Set(MEAction.DescriptionProperty, request.Description);
-                    }
-
-                    updt.Set(MEAction.LastUpdatedOnProperty, System.DateTime.UtcNow);
-                    updt.Set(MEAction.UpdatedByProperty, ObjectId.Parse(this.UserId));
-                    updt.Set(MEAction.VersionProperty, request.Version);
-
-                    var pt = ctx.Actions.Collection.FindAndModify(pUQuery, SortBy.Null, updt, true);
-
-                    AuditHelper.LogDataAudit(this.UserId,
-                                            MongoCollectionName.Action.ToString(),
-                                            request.ActionId.ToString(),
-                                            Common.DataAuditType.Update,
-                                            request.ContractNumber);
-
-                    response.Id = request.ActionId;
-                }
-                return response;
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-        }
-
         public void CacheByID(List<string> entityIDs)
         {
             throw new NotImplementedException();

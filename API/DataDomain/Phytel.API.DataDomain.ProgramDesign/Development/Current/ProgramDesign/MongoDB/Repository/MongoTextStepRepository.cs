@@ -239,63 +239,6 @@ namespace Phytel.API.DataDomain.ProgramDesign
             }
         }
 
-        public object Update(PutUpdateTextStepDataRequest request)
-        {
-            PutUpdateTextStepDataResponse response = new PutUpdateTextStepDataResponse();
-            try
-            {
-                if (request.UserId == null)
-                    throw new ArgumentException("UserId is missing from the DataDomain request.");
-
-                using (ProgramDesignMongoContext ctx = new ProgramDesignMongoContext(_dbName))
-                {
-                    var pUQuery = new QueryDocument(METext.IdProperty, ObjectId.Parse(request.StepId));
-
-                    MB.UpdateBuilder updt = new MB.UpdateBuilder();
-                    if (request.Title != null)
-                    {
-                        if (request.Title == "\"\"" || (request.Title == "\'\'"))
-                            updt.Set(METext.QuestionProperty, string.Empty);
-                        else
-                            updt.Set(METext.QuestionProperty, request.Title);
-                    }
-                    if (request.Description != null)
-                    {
-                        if (request.Description == "\"\"" || (request.Description == "\'\'"))
-                            updt.Set(METext.DescriptionProperty, string.Empty);
-                        else
-                            updt.Set(METext.DescriptionProperty, request.Description);
-                    }
-                    if (request.Text != null)
-                    {
-                        if (request.Text == "\"\"" || (request.Text == "\'\'"))
-                            updt.Set(METext.TextPromptProperty, string.Empty);
-                        else
-                            updt.Set(METext.TextPromptProperty, request.Text);
-                    }
-
-                    updt.Set(METext.LastUpdatedOnProperty, System.DateTime.UtcNow);
-                    updt.Set(METext.UpdatedByProperty, ObjectId.Parse(this.UserId));
-                    updt.Set(METext.VersionProperty, request.Version);
-
-                    var pt = ctx.YesNoSteps.Collection.FindAndModify(pUQuery, SortBy.Null, updt, true);
-
-                    AuditHelper.LogDataAudit(this.UserId,
-                                            MongoCollectionName.Step.ToString(),
-                                            request.StepId.ToString(),
-                                            Common.DataAuditType.Update,
-                                            request.ContractNumber);
-
-                    response.Id = request.StepId;
-                }
-                return response;
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-        }
-
         public void CacheByID(List<string> entityIDs)
         {
             throw new NotImplementedException();
