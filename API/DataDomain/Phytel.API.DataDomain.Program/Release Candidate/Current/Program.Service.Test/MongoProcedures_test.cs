@@ -12,6 +12,7 @@ namespace Phytel.API.DataDomain.Program.Services.Test
         public void Execute_Procedure()
         {
             string url = "http://localhost:8888/Program";
+            //string url = "http://azurephytel.cloudapp.net:59901/Program";
             string contractNumber = "InHealth001";
             string context = "NG";
             double version = 1.0;
@@ -19,23 +20,20 @@ namespace Phytel.API.DataDomain.Program.Services.Test
             IRestClient client = new JsonServiceClient();
             //JsonServiceClient.HttpWebRequestFilter = x => x.Headers.Add(string.Format("{0}: {1}", "x-Phytel-UserID", "531f2df9072ef727c4d2a3df"));
 
-            PostMongoProceduresRequest request = new PostMongoProceduresRequest
-            {
-                Name = "mp_UpdateProgramStartDateToFirstActionStartDate",
-                DocumentVersion = 1.0,
-                Context = "NG",
-                ContractNumber = "InHealth001",
-                Version = 1.0,
-                 UserId = "user"
-            };
+            string Name = "mp_UpdateProgramStartDateToFirstActionStartDate";
+            string DocumentVersion = "1.0";
+            string UserId = "user";
 
-            PostMongoProceduresResponse response = client.Post<PostMongoProceduresResponse>(
-                string.Format("{0}/{1}/{2}/{3}/Program/Procedures/Execute",
+            PostMongoProceduresResponse response = client.Get<PostMongoProceduresResponse>(
+                string.Format("{0}/{1}/{2}/{3}/Program/Procedures/Execute/?Name={4}&DocumentVersion={5}&UserId={6}",
                 url,
                 context,
                 version,
-                contractNumber
-                ), request);
+                contractNumber,
+                Name,
+                DocumentVersion,
+                UserId
+                ));
         }
     }
 }

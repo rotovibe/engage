@@ -284,7 +284,7 @@ namespace Phytel.API.DataDomain.Program.Service
             return response;
         }
 
-        public PostMongoProceduresResponse Post(PostMongoProceduresRequest request)
+        public PostMongoProceduresResponse Get(PostMongoProceduresRequest request)
         {
             PostMongoProceduresResponse response = new PostMongoProceduresResponse();
             try
