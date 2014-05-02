@@ -97,7 +97,24 @@ namespace Phytel.API.DataDomain.Step
 
         public IEnumerable<object> SelectAll()
         {
-            throw new NotImplementedException();
+           GetAllTextStepDataResponse response = new GetAllTextStepDataResponse();
+
+            List<DTO.TextData> list = new List<DTO.TextData>();
+
+            using (TextStepMongoContext ctx = new TextStepMongoContext(_dbName))
+            {
+                var steps = (from s in ctx.TextSteps
+                         select new DTO.TextData
+                         {
+                              ID = s.Id.ToString(),
+                              Title = s.Text
+                         }).ToList();
+
+                response.Steps = steps;
+
+            }
+
+            return response.Steps;
         }
 
         public object Update(object entity)

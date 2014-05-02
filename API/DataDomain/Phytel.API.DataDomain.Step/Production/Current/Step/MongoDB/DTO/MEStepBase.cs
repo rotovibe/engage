@@ -25,7 +25,7 @@ namespace Phytel.API.DataDomain.Step.DTO
         public const string TypeProperty = "ty";
         [BsonElement(TypeProperty)]
         [BsonIgnoreIfNull(true)]
-        [BsonRequired]
+        //[BsonRequired]
         public StepType Type { get; set; }
 
         public const string StatusProperty = "st";
