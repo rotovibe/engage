@@ -23,8 +23,6 @@ namespace Phytel.API.DataDomain.Program.Services.Test.DataManagement
             Execute_Procedure(procName);
         }
 
-        
-        
         private void Execute_Procedure(string procName)
         {
             string url = "http://localhost:8888/Program";
@@ -35,23 +33,39 @@ namespace Phytel.API.DataDomain.Program.Services.Test.DataManagement
             IRestClient client = new JsonServiceClient();
             //JsonServiceClient.HttpWebRequestFilter = x => x.Headers.Add(string.Format("{0}: {1}", "x-Phytel-UserID", "531f2df9072ef727c4d2a3df"));
 
-            PostMongoProceduresRequest request = new PostMongoProceduresRequest
-            {
-                Name = procName,
-                DocumentVersion = 1.0,
-                Context = "NG",
-                ContractNumber = "InHealth001",
-                Version = 1.0,
-                UserId = "user"
-            };
+            //string Name = "mp_UpdateProgramStartDateToFirstActionStartDate";
+            string DocumentVersion = "1.0";
+            string UserId = "user";
 
-            PostMongoProceduresResponse response = client.Post<PostMongoProceduresResponse>(
-                string.Format("{0}/{1}/{2}/{3}/Program/Procedures/Execute",
+            GetMongoProceduresResponse response = client.Get<GetMongoProceduresResponse>(
+                string.Format("{0}/{1}/{2}/{3}/Program/Procedures/Execute/?Name={4}&DocumentVersion={5}&UserId={6}",
                 url,
                 context,
                 version,
-                contractNumber
-                ), request);
+                contractNumber,
+                procName,
+                DocumentVersion,
+                UserId
+                ));
+
+
+            //PostMongoProceduresRequest request = new PostMongoProceduresRequest
+            //{
+            //    Name = procName,
+            //    DocumentVersion = 1.0,
+            //    Context = "NG",
+            //    ContractNumber = "InHealth001",
+            //    Version = 1.0,
+            //    UserId = "user"
+            //};
+
+            //PostMongoProceduresResponse response = client.Post<PostMongoProceduresResponse>(
+            //    string.Format("{0}/{1}/{2}/{3}/Program/Procedures/Execute",
+            //    url,
+            //    context,
+            //    version,
+            //    contractNumber
+            //    ), request);
         }
     }
 }

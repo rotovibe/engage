@@ -3,8 +3,8 @@ using ServiceStack.ServiceHost;
 
 namespace Phytel.API.DataDomain.Program.DTO
 {
-    [Route("/{Context}/{Version}/{ContractNumber}/Program/Procedures/Execute", "POST")]
-    public class PostMongoProceduresRequest : IDataDomainRequest
+    [Route("/{Context}/{Version}/{ContractNumber}/Program/Procedures/Execute", "GET")]
+    public class GetMongoProceduresRequest : IDataDomainRequest
     {
         [ApiMember(Name = "Name", Description = "Name of mongo procedure.", ParameterType = "property", DataType = "string", IsRequired = true)]
         public string Name { get; set; }

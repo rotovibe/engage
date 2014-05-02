@@ -25,7 +25,7 @@ namespace Phytel.API.DataDomain.Program.Procs.Tests
                 string context = "NG";
                 string userId = "user";
 
-                PostMongoProceduresRequest request = new PostMongoProceduresRequest { Version = version, Name = procName, DocumentVersion = docVersion, ContractNumber = contract, Context = context, UserId = userId };
+                GetMongoProceduresRequest request = new GetMongoProceduresRequest { Version = version, Name = procName, DocumentVersion = docVersion, ContractNumber = contract, Context = context, UserId = userId };
 
                 MongoProcedureFactory factory = new MongoProcedureFactory();
                 IMongoProcedure proc = factory.GetProcedure(request);
@@ -43,7 +43,7 @@ namespace Phytel.API.DataDomain.Program.Procs.Tests
                 string context = "NG";
                 string userId = "user";
 
-                PostMongoProceduresRequest request = new PostMongoProceduresRequest { Version = version, Name = procName, DocumentVersion = docVersion, ContractNumber = contract, Context = context, UserId = userId };
+                GetMongoProceduresRequest request = new GetMongoProceduresRequest { Version = version, Name = procName, DocumentVersion = docVersion, ContractNumber = contract, Context = context, UserId = userId };
 
                 MongoProcedureFactory factory = new MongoProcedureFactory();
                 IMongoProcedure proc = factory.GetProcedure(request);

@@ -4,7 +4,7 @@ using Phytel.API.Interface;
 
 namespace Phytel.API.DataDomain.Program.DTO
 {
-    public class PostMongoProceduresResponse : IDomainResponse
+    public class GetMongoProceduresResponse : IDomainResponse
     {
         public bool Success { get; set; }
         public double Version { get; set; }

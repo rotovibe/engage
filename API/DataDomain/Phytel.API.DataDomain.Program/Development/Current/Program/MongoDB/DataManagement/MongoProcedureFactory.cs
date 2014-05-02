@@ -11,14 +11,14 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DataManagement
 {
     public class MongoProcedureFactory
     {
-        public IMongoProcedure GetProcedure(PostMongoProceduresRequest request)
+        public IMongoProcedure GetProcedure(GetMongoProceduresRequest request)
         {
             IMongoProcedure proc = GetInstanceFromExecutingAssembly(request);
             proc.Request = request;
             return proc;
         }
 
-        private IMongoProcedure GetInstanceFromExecutingAssembly(PostMongoProceduresRequest request)
+        private IMongoProcedure GetInstanceFromExecutingAssembly(GetMongoProceduresRequest request)
         {
             IMongoProcedure pr = null;
 

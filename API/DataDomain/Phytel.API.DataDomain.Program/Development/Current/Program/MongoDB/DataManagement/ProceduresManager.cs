@@ -19,11 +19,11 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DataManagement
 {
     public class ProceduresManager : IProceduresManager
     {
-        public PostMongoProceduresResponse ExecuteProcedure(PostMongoProceduresRequest request)
+        public GetMongoProceduresResponse ExecuteProcedure(GetMongoProceduresRequest request)
         {
             try
             {
-                PostMongoProceduresResponse response = new PostMongoProceduresResponse();
+                GetMongoProceduresResponse response = new GetMongoProceduresResponse();
 
                 IMongoProcedure proc = new MongoProcedureFactory().GetProcedure(request);
                 proc.Execute();
