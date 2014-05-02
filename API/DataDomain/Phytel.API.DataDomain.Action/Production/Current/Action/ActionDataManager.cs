@@ -16,5 +16,17 @@ namespace Phytel.API.DataDomain.Action
             
             return (result != null ? result : new GetActionDataResponse());
         }
+
+        public static GetAllActionsDataResponse GetActionsList(GetAllActionsDataRequest request)
+        {
+            GetAllActionsDataResponse result = new GetAllActionsDataResponse();
+
+            MongoActionRepository<GetAllActionsDataResponse> repo = new MongoActionRepository<GetAllActionsDataResponse>(request.ContractNumber);
+            repo.UserId = request.UserId;
+
+            result = repo.SelectAll(request.Version, Common.Status.Active);
+
+            return result;
+        }
     }
 }   
