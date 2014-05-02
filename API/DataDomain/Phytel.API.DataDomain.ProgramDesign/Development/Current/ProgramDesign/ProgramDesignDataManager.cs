@@ -399,14 +399,6 @@ namespace Phytel.API.DataDomain.ProgramDesign
             return result;
         }
 
-        public static PutUpdateModuleDataResponse UpdateModule(PutUpdateModuleDataRequest request)
-        {
-            IProgramDesignRepository<PutUpdateModuleDataRequest> repo =
-                ProgramDesignRepositoryFactory<PutUpdateModuleDataRequest>.GetModuleRepository(request.ContractNumber, request.Context, request.UserId);
-            PutUpdateModuleDataResponse result = repo.Update(request) as PutUpdateModuleDataResponse;
-            return result;
-        }
-
         public static PutModuleDataResponse InsertModule(PutModuleDataRequest request)
         {
             IProgramDesignRepository<PutModuleDataRequest> repo = 
@@ -416,10 +408,51 @@ namespace Phytel.API.DataDomain.ProgramDesign
             return result;
         }
 
+        public static PutUpdateModuleDataResponse UpdateModule(PutUpdateModuleDataRequest request)
+        {
+            IProgramDesignRepository<PutUpdateModuleDataRequest> repo =
+                ProgramDesignRepositoryFactory<PutUpdateModuleDataRequest>.GetModuleRepository(request.ContractNumber, request.Context, request.UserId);
+            PutUpdateModuleDataResponse result = repo.Update(request) as PutUpdateModuleDataResponse;
+            return result;
+        }
+
+        public static PutActionDataResponse InsertAction(PutActionDataRequest request)
+        {
+            IProgramDesignRepository<PutActionDataRequest> repo =
+                ProgramDesignRepositoryFactory<PutActionDataRequest>.GetActionRepository(request.ContractNumber, request.Context, request.UserId);
+
+            PutActionDataResponse result = repo.Insert(request) as PutActionDataResponse;
+            return result;
+        }
+
+        public static PutUpdateActionDataResponse UpdateAction(PutUpdateActionDataRequest request)
+        {
+            IProgramDesignRepository<PutUpdateActionDataRequest> repo =
+                ProgramDesignRepositoryFactory<PutUpdateActionDataRequest>.GetActionRepository(request.ContractNumber, request.Context, request.UserId);
+            PutUpdateActionDataResponse result = repo.Update(request) as PutUpdateActionDataResponse;
+            return result;
+        }
+
+        public static PutTextStepDataResponse InsertTextStep(PutTextStepDataRequest request)
+        {
+            IProgramDesignRepository<PutTextStepDataRequest> repo =
+                ProgramDesignRepositoryFactory<PutTextStepDataRequest>.GetStepRepository(request.ContractNumber, request.Context, "text");
+            PutTextStepDataResponse result = repo.Insert(request) as PutTextStepDataResponse;
+            return result;
+        }
+
+        public static PutUpdateTextStepDataResponse UpdateTextStep(PutUpdateTextStepDataRequest request)
+        {
+            IProgramDesignRepository<PutUpdateTextStepDataRequest> repo =
+                ProgramDesignRepositoryFactory<PutUpdateTextStepDataRequest>.GetStepRepository(request.ContractNumber, request.Context, "text");
+            PutUpdateTextStepDataResponse result = repo.Update(request) as PutUpdateTextStepDataResponse;
+            return result;
+        }
+
         public static PutYesNoStepDataResponse InsertYesNoStep(PutYesNoStepDataRequest request)
         {
             IProgramDesignRepository<PutYesNoStepDataRequest> repo =
-                ProgramDesignRepositoryFactory<PutYesNoStepDataRequest>.GetStepRepository(request.ContractNumber, request.Context, request.UserId);
+                ProgramDesignRepositoryFactory<PutYesNoStepDataRequest>.GetStepRepository(request.ContractNumber, request.Context, "yesno");
             PutYesNoStepDataResponse result = repo.Insert(request) as PutYesNoStepDataResponse;
             return result;
         }
@@ -427,7 +460,7 @@ namespace Phytel.API.DataDomain.ProgramDesign
         public static PutUpdateYesNoStepDataResponse UpdateYesNoStep(PutUpdateYesNoStepDataRequest request)
         {
             IProgramDesignRepository<PutUpdateYesNoStepDataRequest> repo =
-                ProgramDesignRepositoryFactory<PutUpdateYesNoStepDataRequest>.GetStepRepository(request.ContractNumber, request.Context, request.UserId);
+                ProgramDesignRepositoryFactory<PutUpdateYesNoStepDataRequest>.GetStepRepository(request.ContractNumber, request.Context, "yesno");
             PutUpdateYesNoStepDataResponse result = repo.Update(request) as PutUpdateYesNoStepDataResponse;
             return result;
         }
@@ -471,6 +504,63 @@ namespace Phytel.API.DataDomain.ProgramDesign
             }
 
             return result;
+        }
+
+        public static DeleteActionDataResponse DeleteAction(DeleteActionDataRequest request)
+        {
+            try
+            {
+                DeleteActionDataResponse result = new DeleteActionDataResponse();
+
+                IProgramDesignRepository<DeleteActionDataResponse> repo = ProgramDesignRepositoryFactory<DeleteActionDataResponse>.GetActionRepository(request.ContractNumber, request.Context, request.UserId);
+
+                repo.Delete(request);
+
+                result.Deleted = true;
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public static DeleteTextStepDataResponse DeleteTextStep(DeleteTextStepDataRequest request)
+        {
+            try
+            {
+                DeleteTextStepDataResponse result = new DeleteTextStepDataResponse();
+
+                IProgramDesignRepository<DeleteTextStepDataResponse> repo = ProgramDesignRepositoryFactory<DeleteTextStepDataResponse>.GetStepRepository(request.ContractNumber, request.Context, "text");
+
+                repo.Delete(request);
+
+                result.Deleted = true;
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public static DeleteYesNoStepDataResponse DeleteYesNoStep(DeleteYesNoStepDataRequest request)
+        {
+            try
+            {
+                DeleteYesNoStepDataResponse result = new DeleteYesNoStepDataResponse();
+
+                IProgramDesignRepository<DeleteYesNoStepDataResponse> repo = ProgramDesignRepositoryFactory<DeleteYesNoStepDataResponse>.GetStepRepository(request.ContractNumber, request.Context, "yesno");
+
+                repo.Delete(request);
+
+                result.Deleted = true;
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
     }
 }   
