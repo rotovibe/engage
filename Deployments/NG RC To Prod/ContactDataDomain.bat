@@ -20,6 +20,3 @@ tf checkout "$/PhytelCode/Phytel.Net/Services/API/DataDomain/Phytel.API.DataDoma
 "UpdateRCProjectInfo.exe" /RF:"C:\Projects\TFS2013\PhytelCode\Phytel.Net\Services\API\DataDomain\Phytel.API.DataDomain.Contact\Production\Current" /RW:"Release Candidate" /WW:"Production"
 
 tf checkin "$/PhytelCode/Phytel.Net/Services/API/DataDomain/Phytel.API.DataDomain.Contact/Production/Current" /comment:"Merge Changes for Prod Release" /recursive /force /noprompt
-
-TFSBuild start http://hillstfs2013:8080/tfs PhytelCode "API Contact Data Domain (Prod Svr1)" /silent
-TFSBuild start http://hillstfs2013:8080/tfs PhytelCode "API Contact Data Domain (Prod Svr2)" /silent

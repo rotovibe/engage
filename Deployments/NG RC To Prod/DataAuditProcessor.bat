@@ -20,6 +20,3 @@ tf checkout "$/PhytelCode/Phytel.Net/Services/API/Audit/DataAudit/Production/Cur
 "UpdateRCProjectInfo.exe" /RF:"C:\Projects\TFS2013\PhytelCode\Phytel.Net\Services\API\Audit\DataAudit\Production\Current" /RW:"Release Candidate" /WW:"Production"
 
 tf checkin "$/PhytelCode/Phytel.Net/Services/API/Audit/DataAudit/Production/Current" /comment:"Merge Changes for Prod Release" /recursive /force /noprompt
-
-TFSBuild start http://hillstfs2013:8080/tfs PhytelCode "PhytelNG DataAudit Processor (Prod Svr1)" /silent
-TFSBuild start http://hillstfs2013:8080/tfs PhytelCode "PhytelNG DataAudit Processor (Prod Svr2)" /silent

@@ -20,6 +20,3 @@ tf checkout "$/PhytelCode/Phytel.Net/Client Apps/Atmosphere/ASEProcessor/Product
 "UpdateRCProjectInfo.exe" /RF:"C:\Projects\TFS2013\PhytelCode\Phytel.Net\Client Apps\Atmosphere\ASEProcessor\Production\Current" /RW:"Release Candidate" /WW:"Production"
 
 tf checkin "$/PhytelCode/Phytel.Net/Client Apps/Atmosphere/ASEProcessor/Production/Current" /comment:"Merge Changes for Prod Release" /recursive /force /noprompt
-
-TFSBuild start http://hillstfs2013:8080/tfs PhytelCode "PhytelNG ASE Processor (Prod Svr1)" /silent
-TFSBuild start http://hillstfs2013:8080/tfs PhytelCode "PhytelNG ASE Processor (Prod Svr2)" /silent

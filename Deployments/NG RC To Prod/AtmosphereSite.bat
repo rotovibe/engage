@@ -26,6 +26,3 @@ tf checkout "$/PhytelCode/Phytel.Net/Client Apps/Atmosphere/Atmosphere.Site/Prod
 
 tf checkin "$/PhytelCode/Phytel.Net/Client Apps/Atmosphere/Atmosphere.Core/Production/Current" /comment:"Merge Changes for Prod Release" /recursive /force /noprompt
 tf checkin "$/PhytelCode/Phytel.Net/Client Apps/Atmosphere/Atmosphere.Site/Production/Current" /comment:"Merge Changes for Prod Release" /recursive /force /noprompt
-
-TFSBuild start http://hillstfs2013:8080/tfs PhytelCode "Atmosphere.Site (Prod Svr1)" /silent
-TFSBuild start http://hillstfs2013:8080/tfs PhytelCode "Atmosphere.Site (Prod Svr2)" /silent

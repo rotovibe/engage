@@ -20,6 +20,3 @@ tf checkout "$/PhytelCode/Phytel.Net/Client Apps/Atmosphere/Nightingale/Producti
 "UpdateRCProjectInfo.exe" /RF:"C:\Projects\TFS2013\PhytelCode\Phytel.Net\Client Apps\Atmosphere\Nightingale\Production\Current" /RW:"Release Candidate" /WW:"Production"
 
 tf checkin "$/PhytelCode/Phytel.Net/Client Apps/Atmosphere/Nightingale/Production/Current" /comment:"Merge Changes for Prod Release" /recursive /force /noprompt
-
-TFSBuild start http://hillstfs2013:8080/tfs PhytelCode "Nightingale UI Site (Prod Svr1)" /silent
-TFSBuild start http://hillstfs2013:8080/tfs PhytelCode "Nightingale UI Site (Prod Svr2)" /silent
