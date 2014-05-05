@@ -59,6 +59,7 @@ namespace Phytel.API.DataDomain.Program
                 {
                     nmePP.UpdatedBy = null;
                     nmePP.LastUpdatedOn = null;
+                    nmePP.AssignedBy = null;
                     ctx.PatientPrograms.Collection.Insert(nmePP);
 
                     // update programid in modules
@@ -293,8 +294,11 @@ namespace Phytel.API.DataDomain.Program
 
                     if (pg.ElementState != 0) uv.Add(MB.Update.Set(MEPatientProgram.StateProperty, (ElementState)pg.ElementState));
                     if (pg.Status != 0) uv.Add(MB.Update.Set(MEPatientProgram.StatusProperty, (Status)pg.Status));
-                    if (pg.AssignBy != null) { uv.Add(MB.Update.Set(MEPatientProgram.AssignByProperty, pg.AssignBy)); }
+                    if (pg.AssignBy != null && !string.IsNullOrEmpty(pg.AssignBy)) { uv.Add(MB.Update.Set(MEPatientProgram.AssignByProperty, pg.AssignBy)); }
+                    if (pg.AssignTo != null && !string.IsNullOrEmpty(pg.AssignTo)) { uv.Add(MB.Update.Set(MEPatientProgram.AssignToProperty, pg.AssignTo)); }
                     if (pg.AssignDate != null) { uv.Add(MB.Update.Set(MEPatientProgram.AssignDateProperty, pg.AssignDate)); }
+                    if (pg.AttrEndDate != null) { uv.Add(MB.Update.Set(MEPatientProgram.AttributeEndDateProperty, pg.AttrEndDate)); }
+                    if (pg.AttrStartDate != null) { uv.Add(MB.Update.Set(MEPatientProgram.AttributeStartDateProperty, pg.AttrStartDate)); }
                     if (pg.Client != null) { uv.Add(MB.Update.Set(MEPatientProgram.ClientProperty, pg.Client)); }
                     if (pg.CompletedBy != null) { uv.Add(MB.Update.Set(MEPatientProgram.CompletedByProperty, pg.CompletedBy)); }
                     if (pg.ContractProgramId != null) { uv.Add(MB.Update.Set(MEPatientProgram.ContractProgramIdProperty, ObjectId.Parse(pg.ContractProgramId))); }
