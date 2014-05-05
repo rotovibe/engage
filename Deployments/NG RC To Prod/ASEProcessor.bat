@@ -10,13 +10,13 @@ set hrMin=%hrMin:~0,2%
 
 set branchDate=%mydate%_%hr%-%hrMin%
 
-tf branch "$/PhytelCode/Phytel.Net/Client Apps/Atmosphere/ASEProcessor/Production/Current" "$/PhytelCode/Phytel.Net/Client Apps/Atmosphere/ASEProcessor/Production/%branchDate%" /checkin /noprompt /silent
+tf branch "$/PhytelCode/Phytel.Net/Client Apps/NG/ASEProcessor/Production/Current" "$/PhytelCode/Phytel.Net/Client Apps/NG/ASEProcessor/Production/%branchDate%" /checkin /noprompt /silent
 
-tf merge "$/PhytelCode/Phytel.Net/Client Apps/Atmosphere/ASEProcessor/Release Candidate/Current" "$/PhytelCode/Phytel.Net/Client Apps/Atmosphere/ASEProcessor/Production/Current" /recursive /nosummary /lock:checkout
+tf merge "$/PhytelCode/Phytel.Net/Client Apps/NG/ASEProcessor/Release Candidate/Current" "$/PhytelCode/Phytel.Net/Client Apps/NG/ASEProcessor/Production/Current" /recursive /nosummary /lock:checkout
 
-tf checkout "$/PhytelCode/Phytel.Net/Client Apps/Atmosphere/ASEProcessor/Production/Current/*.sln" /lock:checkout /recursive
-tf checkout "$/PhytelCode/Phytel.Net/Client Apps/Atmosphere/ASEProcessor/Production/Current/*.csproj" /lock:checkout /recursive
+tf checkout "$/PhytelCode/Phytel.Net/Client Apps/NG/ASEProcessor/Production/Current/*.sln" /lock:checkout /recursive
+tf checkout "$/PhytelCode/Phytel.Net/Client Apps/NG/ASEProcessor/Production/Current/*.csproj" /lock:checkout /recursive
 
 "UpdateRCProjectInfo.exe" /RF:"C:\Projects\TFS2013\PhytelCode\Phytel.Net\Client Apps\Atmosphere\ASEProcessor\Production\Current" /RW:"Release Candidate" /WW:"Production"
 
-tf checkin "$/PhytelCode/Phytel.Net/Client Apps/Atmosphere/ASEProcessor/Production/Current" /comment:"Merge Changes for Prod Release" /recursive /force /noprompt
+tf checkin "$/PhytelCode/Phytel.Net/Client Apps/NG/ASEProcessor/Production/Current" /comment:"Merge Changes for Prod Release" /recursive /force /noprompt
