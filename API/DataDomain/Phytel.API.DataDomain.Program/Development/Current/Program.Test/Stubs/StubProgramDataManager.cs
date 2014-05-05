@@ -48,7 +48,7 @@ namespace Phytel.API.DataDomain.Program.Test.Stubs
                             new ActionsDetail{ Id = "000000000000000000000000", ElementState = 4, Name ="test action from stub", Text = "test action 1"} } ,
                              AttrStartDate = Convert.ToDateTime("1/1/1900"),
                              AttrEndDate = Convert.ToDateTime("1/1/1901"),
-                             AssignedOn = Convert.ToDateTime("1/1/1999"),
+                             AssignDate = Convert.ToDateTime("1/1/1999"),
                              AssignTo = "123456789011111111112222",
                              AssignBy = "123456789011111111112223"
                     }

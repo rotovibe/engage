@@ -58,7 +58,7 @@ namespace Phytel.API.AppDomain.NG.Test.Stubs
                 Id = "000000000000000000000000",
                 AssignBy = "test",
                 Description = "this is a test program from the stub.",
-                AssignedOn = System.DateTime.UtcNow,
+                AssignDate = System.DateTime.UtcNow,
                 Client = "NG",
                 Completed = false,
                 ContractProgramId = "123456789098765432167846",

@@ -183,7 +183,7 @@ namespace Phytel.API.DataDomain.Program.Service.Tests
 
                 GetProgramDetailsSummaryResponse response = ps.Get(request);
                 ModuleDetail module = response.Program.Modules.Find(m => m.SourceId == "532b5585a381168abe00042c");
-                DateTime? mTime = module.AssignedOn;
+                DateTime? mTime = module.AssignDate;
                 Assert.AreEqual(time, mTime);
             }
 

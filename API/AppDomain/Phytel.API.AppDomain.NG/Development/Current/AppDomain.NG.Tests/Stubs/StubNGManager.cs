@@ -102,8 +102,8 @@ namespace Phytel.API.AppDomain.NG.Test.Stubs
                     Description = "test description",
                     Attributes = new DTO.ProgramAttribute
                     {
-                        AssignedBy = "me",
-                        AssignedOn = System.DateTime.UtcNow,
+                        //AssignedBy = "me",
+                        //AssignedOn = System.DateTime.UtcNow,
                         Id = "0000000000000000000000000"
                     },
                     Modules = new List<Module>() { 

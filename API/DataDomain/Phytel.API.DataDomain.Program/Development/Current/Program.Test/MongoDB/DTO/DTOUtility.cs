@@ -105,7 +105,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO.Tests
                 });
 
                 List<ModuleDetail> mds = util.GetModules(mods, "InHealth001", "000000000000000000000000");
-                DateTime? assD = mds[0].AssignedOn;
+                DateTime? assD = mds[0].AssignDate;
                 Assert.AreEqual(assOn, assD);
             }
             

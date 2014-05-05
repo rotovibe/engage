@@ -289,7 +289,7 @@ namespace Phytel.API.DataDomain.Program
                     Previous = mepp.Previous != null ? mepp.Previous.ToString() : string.Empty,
                     SourceId = mepp.SourceId.ToString(),
                     AssignBy = mepp.AssignedBy.ToString(),
-                    AssignedOn = mepp.AssignedOn,
+                    AssignDate = mepp.AssignedOn,
                     ElementState = (int)mepp.State,
                     CompletedBy = mepp.CompletedBy,
                     DateCompleted = mepp.DateCompleted,

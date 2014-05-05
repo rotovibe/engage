@@ -26,6 +26,7 @@ namespace Phytel.API.DataDomain.Program.DTO
         public string Text { get; set; }
         public DateTime? StartDate { get; set; }
         public DateTime? EndDate { get; set; }
+
         public string AuthoredBy { get; set; }
         public string TemplateName { get; set; }
         public string TemplateVersion { get; set; }

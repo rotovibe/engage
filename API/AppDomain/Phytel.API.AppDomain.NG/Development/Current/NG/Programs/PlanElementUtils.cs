@@ -820,6 +820,7 @@ namespace Phytel.API.AppDomain.NG
                 {
                     AssignBy = pr.AssignBy,
                     AssignDate = pr.AssignDate,
+                    AssignTo = pr.AssignTo,
                     Client = pr.Client,
                     Completed = pr.Completed,
                     CompletedBy = pr.CompletedBy,
@@ -838,6 +839,8 @@ namespace Phytel.API.AppDomain.NG
                     Enabled = pr.Enabled,
                     StartDate = pr.StartDate,
                     EndDate = pr.EndDate,
+                    AttrStartDate = pr.AttrStartDate,
+                    AttrEndDate = pr.AttrEndDate,
                     AuthoredBy = pr.AuthoredBy,
                     TemplateName = pr.TemplateName,
                     TemplateVersion = pr.TemplateVersion,
@@ -995,8 +998,8 @@ namespace Phytel.API.AppDomain.NG
             {
                 programAttribute = new ProgramAttribute
                 {
-                    AssignedBy = programAttributeData.AssignedBy,
-                    AssignedOn = programAttributeData.AssignedOn,
+                    // AssignedBy = programAttributeData.AssignedBy,
+                    // AssignedOn = programAttributeData.AssignedOn, Sprint 12
                     AuthoredBy = programAttributeData.AuthoredBy,
                     Completed = (int)programAttributeData.Completed,
                     CompletedBy = programAttributeData.CompletedBy,

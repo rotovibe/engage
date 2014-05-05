@@ -68,7 +68,7 @@ namespace Phytel.API.AppDomain.NG
                 pD = new ProgramDetail
                 {
                     AssignBy = p.AssignBy,
-                    AssignedOn = p.AssignDate,
+                    AssignDate = p.AssignDate,
                     Client = p.Client,
                     Completed = p.Completed,
                     CompletedBy = p.CompletedBy,
@@ -122,7 +122,8 @@ namespace Phytel.API.AppDomain.NG
                 pD = new DTO.Program
                 {
                     AssignBy = p.AssignBy,
-                    AssignDate = p.AssignedOn,
+                    AssignDate = p.AssignDate,
+                    AssignTo = p.AssignTo,
                     Client = p.Client,
                     Completed = p.Completed,
                     CompletedBy = p.CompletedBy,
@@ -136,6 +137,8 @@ namespace Phytel.API.AppDomain.NG
                     Enabled = p.Enabled,
                     StartDate = p.StartDate,
                     EndDate = p.EndDate,
+                    AttrEndDate = p.AttrEndDate,
+                    AttrStartDate = p.AttrStartDate,
                     AuthoredBy = p.AuthoredBy,
                     TemplateName = p.TemplateName,
                     TemplateVersion = p.TemplateVersion,
@@ -296,7 +299,7 @@ namespace Phytel.API.AppDomain.NG
                         {
                             Actions = GetADActions(m.Actions),
                             AssignBy = m.AssignBy,
-                            AssignedOn = m.AssignDate,
+                            AssignDate = m.AssignDate,
                             Completed = m.Completed,
                             CompletedBy = m.CompletedBy,
                             DateCompleted = m.DateCompleted,
@@ -339,7 +342,10 @@ namespace Phytel.API.AppDomain.NG
                         {
                             Actions = GetADActions(m.Actions),
                             AssignBy = m.AssignBy,
-                            AssignDate = m.AssignedOn,
+                            AssignDate = m.AssignDate,
+                            AssignTo = m.AssignTo,
+                            AttrStartDate = m.AttrEndDate,
+                            AttrEndDate = m.AttrEndDate,
                             Completed = m.Completed,
                             CompletedBy = m.CompletedBy,
                             DateCompleted = m.DateCompleted,
@@ -381,7 +387,7 @@ namespace Phytel.API.AppDomain.NG
                         ActionsDetail adi = new ActionsDetail
                         {
                             AssignBy = a.AssignBy,
-                            AssignedOn = a.AssignDate,
+                            AssignDate = a.AssignDate,
                             Completed = a.Completed,
                             CompletedBy = a.CompletedBy,
                             DateCompleted = a.DateCompleted,
@@ -424,7 +430,7 @@ namespace Phytel.API.AppDomain.NG
                         Actions adi = new Actions
                         {
                             AssignBy = a.AssignBy,
-                            AssignDate = a.AssignedOn,
+                            AssignDate = a.AssignDate,
                             Completed = a.Completed,
                             CompletedBy = a.CompletedBy,
                             DateCompleted = a.DateCompleted,
@@ -474,7 +480,7 @@ namespace Phytel.API.AppDomain.NG
                         {
                             ActionId = s.ActionId,
                             AssignBy = s.AssignBy,
-                            AssignedOn = s.AssignDate,
+                            AssignDate = s.AssignDate,
                             Completed = s.Completed,
                             CompletedBy = s.CompletedBy,
                             ControlType = s.ControlType,
@@ -524,7 +530,7 @@ namespace Phytel.API.AppDomain.NG
                         {
                             ActionId = s.ActionId,
                             AssignBy = s.AssignBy,
-                            AssignDate = s.AssignedOn,
+                            AssignDate = s.AssignDate,
                             Completed = s.Completed,
                             CompletedBy = s.CompletedBy,
                             ControlType = s.ControlType,

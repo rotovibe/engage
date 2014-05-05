@@ -497,6 +497,8 @@ namespace Phytel.API.AppDomain.NG
                             EligibilityStartDate = resp.Program.EligibilityStartDate,
                             StartDate = resp.Program.StartDate,
                             EndDate = resp.Program.EndDate,
+                            AttrStartDate = resp.Program.AttrStartDate,
+                            AttrEndDate = resp.Program.AttrEndDate,
                             AuthoredBy = resp.Program.AuthoredBy,
                             TemplateName = resp.Program.TemplateName,
                             TemplateVersion = resp.Program.TemplateVersion,
@@ -512,8 +514,6 @@ namespace Phytel.API.AppDomain.NG
                             Next = resp.Program.Next,
                             Order = resp.Program.Order,
                             Previous = resp.Program.Previous,
-                            AssignBy = resp.Program.AssignBy,
-                            AssignDate = resp.Program.AssignedOn,
                             ElementState = resp.Program.ElementState,
                             SpawnElement = getSpawnElement(resp.Program),
                             SourceId = resp.Program.SourceId,
@@ -521,6 +521,9 @@ namespace Phytel.API.AppDomain.NG
                             DateCompleted = resp.Program.DateCompleted,
                             Modules = getModuleInfo(resp, request),
                             Objectives = GetObjectivesInfo(resp.Program.ObjectivesData),
+                            AssignBy = resp.Program.AssignBy,
+                            AssignDate = resp.Program.AssignDate,
+                            AssignTo = resp.Program.AssignTo,
                             Attributes = getAttributes(resp.Program.Attributes)
                         };
 
@@ -1269,7 +1272,7 @@ namespace Phytel.API.AppDomain.NG
                             SpawnElement = getSpawnElement(r),
                             SourceId = r.SourceId,
                             AssignBy = r.AssignBy,
-                            AssignDate = r.AssignedOn,
+                            AssignDate = r.AssignDate,
                             ElementState = r.ElementState,
                             CompletedBy = r.CompletedBy,
                             DateCompleted = r.DateCompleted,
@@ -1325,7 +1328,7 @@ namespace Phytel.API.AppDomain.NG
                     SpawnElement = getSpawnElement(a),
                     SourceId = a.SourceId,
                     AssignBy = a.AssignBy,
-                    AssignDate = a.AssignedOn,
+                    AssignDate = a.AssignDate,
                     ElementState = a.ElementState,
                     DateCompleted = a.DateCompleted,
                     Objectives = GetObjectivesInfo(a.Objectives)
@@ -1366,7 +1369,7 @@ namespace Phytel.API.AppDomain.NG
                 IncludeTime = s.IncludeTime,
                 SelectType = s.SelectType,
                 AssignBy = s.AssignBy,
-                AssignDate = s.AssignedOn,
+                AssignDate = s.AssignDate,
                 ElementState = s.ElementState,
                 Responses = getResponses(s, request),
                 SelectedResponseId = s.SelectedResponseId,
@@ -1458,8 +1461,8 @@ namespace Phytel.API.AppDomain.NG
             {
                 programAttribute = new ProgramAttribute
                 {
-                    AssignedBy = programAttributeData.AssignedBy,
-                    AssignedOn = programAttributeData.AssignedOn,
+                    //AssignedBy = programAttributeData.AssignedBy, Sprint 12
+                    //AssignedOn = programAttributeData.AssignedOn, Sprint 12
                     Completed = (int)programAttributeData.Completed,
                     CompletedBy = programAttributeData.CompletedBy,
                     DateCompleted = programAttributeData.DateCompleted,

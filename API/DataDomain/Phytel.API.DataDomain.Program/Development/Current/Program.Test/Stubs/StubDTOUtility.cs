@@ -65,7 +65,7 @@ namespace Phytel.API.DataDomain.Program.Test.Stubs
                     SourceId = m.SourceId.ToString(),
                     AttrStartDate = m.AttributeStartDate,
                     AttrEndDate = m.AttributeEndDate,
-                    AssignedOn = m.AssignedOn,
+                    AssignDate = m.AssignedOn,
                     AssignTo = m.AssignedTo.ToString(),
                     AssignBy = m.AssignedBy.ToString()
                 });
