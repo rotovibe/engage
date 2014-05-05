@@ -10,21 +10,21 @@ set hrMin=%hrMin:~0,2%
 
 set branchDate=%mydate%_%hr%-%hrMin%
 
-tf branch "$/PhytelCode/Phytel.Net/Client Apps/Atmosphere/Atmosphere.Core/Release Candidate/Current" "$/PhytelCode/Phytel.Net/Client Apps/Atmosphere/Atmosphere.Core/Release Candidate/%branchDate%" /checkin /noprompt /silent
-tf branch "$/PhytelCode/Phytel.Net/Client Apps/Atmosphere/Atmosphere.Site/Release Candidate/Current" "$/PhytelCode/Phytel.Net/Client Apps/Atmosphere/Atmosphere.Site/Release Candidate/%branchDate%" /checkin /noprompt /silent
+tf branch "$/PhytelCode/Phytel.Net/Client Apps/NG/Atmosphere.Core/Release Candidate/Current" "$/PhytelCode/Phytel.Net/Client Apps/NG/Atmosphere.Core/Release Candidate/%branchDate%" /checkin /noprompt /silent
+tf branch "$/PhytelCode/Phytel.Net/Client Apps/NG/Atmosphere.Site/Release Candidate/Current" "$/PhytelCode/Phytel.Net/Client Apps/NG/Atmosphere.Site/Release Candidate/%branchDate%" /checkin /noprompt /silent
 
-tf merge "$/PhytelCode/Phytel.Net/Client Apps/Atmosphere/Atmosphere.Core/Development/Current" "$/PhytelCode/Phytel.Net/Client Apps/Atmosphere/Atmosphere.Core/Release Candidate/Current" /recursive /nosummary /lock:checkout
-tf merge "$/PhytelCode/Phytel.Net/Client Apps/Atmosphere/Atmosphere.Site/Development/Current" "$/PhytelCode/Phytel.Net/Client Apps/Atmosphere/Atmosphere.Site/Release Candidate/Current" /recursive /nosummary /lock:checkout
+tf merge "$/PhytelCode/Phytel.Net/Client Apps/NG/Atmosphere.Core/Development/Current" "$/PhytelCode/Phytel.Net/Client Apps/NG/Atmosphere.Core/Release Candidate/Current" /recursive /nosummary /lock:checkout
+tf merge "$/PhytelCode/Phytel.Net/Client Apps/NG/Atmosphere.Site/Development/Current" "$/PhytelCode/Phytel.Net/Client Apps/NG/Atmosphere.Site/Release Candidate/Current" /recursive /nosummary /lock:checkout
 
-tf checkout "$/PhytelCode/Phytel.Net/Client Apps/Atmosphere/Atmosphere.Core/Release Candidate/Current/*.sln" /lock:checkout /recursive
-tf checkout "$/PhytelCode/Phytel.Net/Client Apps/Atmosphere/Atmosphere.Site/Release Candidate/Current/*.sln" /lock:checkout /recursive
-tf checkout "$/PhytelCode/Phytel.Net/Client Apps/Atmosphere/Atmosphere.Core/Release Candidate/Current/*.csproj" /lock:checkout /recursive
-tf checkout "$/PhytelCode/Phytel.Net/Client Apps/Atmosphere/Atmosphere.Site/Release Candidate/Current/*.csproj" /lock:checkout /recursive
+tf checkout "$/PhytelCode/Phytel.Net/Client Apps/NG/Atmosphere.Core/Release Candidate/Current/*.sln" /lock:checkout /recursive
+tf checkout "$/PhytelCode/Phytel.Net/Client Apps/NG/Atmosphere.Site/Release Candidate/Current/*.sln" /lock:checkout /recursive
+tf checkout "$/PhytelCode/Phytel.Net/Client Apps/NG/Atmosphere.Core/Release Candidate/Current/*.csproj" /lock:checkout /recursive
+tf checkout "$/PhytelCode/Phytel.Net/Client Apps/NG/Atmosphere.Site/Release Candidate/Current/*.csproj" /lock:checkout /recursive
 
 "UpdateRCProjectInfo.exe" /RF:"C:\Projects\TFS2013\PhytelCode\Phytel.Net\Client Apps\Atmosphere\Atmosphere.Core\Release Candidate\Current" /RW:"Development" /WW:"Release Candidate"
 "UpdateRCProjectInfo.exe" /RF:"C:\Projects\TFS2013\PhytelCode\Phytel.Net\Client Apps\Atmosphere\Atmosphere.Site\Release Candidate\Current" /RW:"Development" /WW:"Release Candidate"
 
-tf checkin "$/PhytelCode/Phytel.Net/Client Apps/Atmosphere/Atmosphere.Core/Release Candidate/Current" /comment:"Merge Changes for RC Release" /recursive /force /noprompt
-tf checkin "$/PhytelCode/Phytel.Net/Client Apps/Atmosphere/Atmosphere.Site/Release Candidate/Current" /comment:"Merge Changes for RC Release" /recursive /force /noprompt
+tf checkin "$/PhytelCode/Phytel.Net/Client Apps/NG/Atmosphere.Core/Release Candidate/Current" /comment:"Merge Changes for RC Release" /recursive /force /noprompt
+tf checkin "$/PhytelCode/Phytel.Net/Client Apps/NG/Atmosphere.Site/Release Candidate/Current" /comment:"Merge Changes for RC Release" /recursive /force /noprompt
 
 TFSBuild start http://hillstfs2013:8080/tfs PhytelCode "Atmosphere.Site (RC)" /silent
