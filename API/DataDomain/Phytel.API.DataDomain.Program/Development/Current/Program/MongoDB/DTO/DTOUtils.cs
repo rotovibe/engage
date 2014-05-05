@@ -1239,8 +1239,8 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
                 ProgramAttributeData pa = new ProgramAttributeData();
                 pa.PlanElementId = p.Id;
                 pa.Status = p.Status;
-                pa.AttrStartDate = System.DateTime.UtcNow;
-                pa.AttrEndDate = null;
+                //pa.AttrStartDate = System.DateTime.UtcNow;
+                //pa.AttrEndDate = null;
                 pa.Eligibility = 3;
                 pa.Enrollment = 2;
                 pa.GraduatedFlag = 1;

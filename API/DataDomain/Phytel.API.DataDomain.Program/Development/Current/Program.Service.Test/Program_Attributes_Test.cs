@@ -56,7 +56,7 @@ namespace Phytel.API.DataDomain.Patient.Service.Test
                                 {
                                     ProgramAttributes = new ProgramAttributeData { 
                                         PlanElementId = planElementId ,
-                                     AssignedBy = "test",
+                                     //AssignedBy = "test",
                                       //EligibilityEndDate = System.DateTime.UtcNow,
                                        RemovedReason = "This is a removed reason!"
                                     }
@@ -88,7 +88,7 @@ namespace Phytel.API.DataDomain.Patient.Service.Test
                                     ProgramAttributes = new ProgramAttributeData
                                     {
                                         PlanElementId = planElementId,
-                                        AssignedBy = "test",
+                                        //AssignedBy = "test",
                                         //EligibilityEndDate = System.DateTime.UtcNow,
                                         RemovedReason = "This is a removed reason!"
                                     }

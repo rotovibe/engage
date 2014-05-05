@@ -37,11 +37,14 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DataManagement.Procedures
                     {
                         rco = (DateTime)date;
                         Request.UserId = p.UpdatedBy.ToString();
+
+                        p.AttributeStartDate = rco;
+
                         IProgramRepository arp = new ProgramRepositoryFactory().GetRepository(Request, RepositoryType.PatientProgramAttribute);
                         ProgramAttributeData pa = new ProgramAttributeData
                         {
                             PlanElementId = p.Id.ToString(),
-                            AttrStartDate = rco,
+                            //AttrStartDate = rco,
                             OptOut = false
                         };
 

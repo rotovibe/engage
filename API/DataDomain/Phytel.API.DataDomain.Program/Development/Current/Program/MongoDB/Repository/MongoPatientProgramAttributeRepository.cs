@@ -239,9 +239,9 @@ namespace Phytel.API.DataDomain.Program
                     var q = MB.Query<MEProgramAttribute>.EQ(b => b.PlanElementId, ObjectId.Parse(mepa.PlanElementId));
                     var uv = new List<MB.UpdateBuilder>();
                     // state
-                    if (mepa.AssignedBy != null) uv.Add(MB.Update.Set(MEProgramAttribute.AssignByProperty, mepa.AssignedBy));
-                    if (mepa.AssignedTo != null) uv.Add(MB.Update.Set(MEProgramAttribute.AssignToProperty, mepa.AssignedTo));
-                    if (mepa.AssignedOn != null) uv.Add(MB.Update.Set(MEProgramAttribute.AssignDateProperty, mepa.AssignedOn));
+                    //if (mepa.AssignedBy != null) uv.Add(MB.Update.Set(MEProgramAttribute.AssignByProperty, mepa.AssignedBy));
+                    //if (mepa.AssignedTo != null) uv.Add(MB.Update.Set(MEProgramAttribute.AssignToProperty, mepa.AssignedTo));
+                    //if (mepa.AssignedOn != null) uv.Add(MB.Update.Set(MEProgramAttribute.AssignDateProperty, mepa.AssignedOn));
                     if (mepa.Population != null) uv.Add(MB.Update.Set(MEProgramAttribute.PopulationProperty, mepa.Population));
                     if (mepa.Completed != 0) uv.Add(MB.Update.Set(MEProgramAttribute.CompletedProperty, mepa.Completed));
                     if (mepa.CompletedBy != null) uv.Add(MB.Update.Set(MEProgramAttribute.CompletedByProperty, mepa.CompletedBy));

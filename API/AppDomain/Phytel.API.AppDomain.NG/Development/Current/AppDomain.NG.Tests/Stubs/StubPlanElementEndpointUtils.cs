@@ -81,8 +81,8 @@ namespace Phytel.API.AppDomain.NG.Test.Stubs
                 Text = "This is a sample patient program for the request patient details summary test stub",
                 Attributes = new ProgramAttributeData
                 {
-                    AssignedBy = "me",
-                    AssignedOn = System.DateTime.UtcNow,
+                    //AssignedBy = "me",
+                    //AssignedOn = System.DateTime.UtcNow,
                     Id = "000000000000000000000000",
                     PlanElementId = "000000000000000000000000"
                 }

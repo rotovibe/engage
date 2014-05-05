@@ -187,7 +187,8 @@ namespace Phytel.API.AppDomain.NG
                         {
                             program.ElementState = 5;
                             progAttr.Eligibility = 1;
-                            progAttr.AttrEndDate = System.DateTime.UtcNow;
+                            //progAttr.AttrEndDate = System.DateTime.UtcNow;
+                            program.AttrEndDate = System.DateTime.UtcNow;
                         }
                         else if (state.Equals(2)) // eligible
                         {
@@ -235,14 +236,16 @@ namespace Phytel.API.AppDomain.NG
 
                         if (string.IsNullOrEmpty(r.Tag))
                         {
-                            progAttr.AttrStartDate = System.DateTime.UtcNow;
+                            //progAttr.AttrStartDate = System.DateTime.UtcNow;
+                            program.AttrStartDate = System.DateTime.UtcNow;
                         }
                         else
                         {
                             DateTime date;
                             if (DateTime.TryParse(r.Tag.ToString(), out date))
                             {
-                                progAttr.AttrStartDate = date;
+                                //progAttr.AttrStartDate = date;
+                                program.AttrStartDate = date;
                             }
                         }
                     }
@@ -253,7 +256,8 @@ namespace Phytel.API.AppDomain.NG
                 }
                 else if (r.ElementType.Equals(14))
                 {
-                    progAttr.AttrEndDate = System.DateTime.UtcNow;
+                    //progAttr.AttrEndDate = System.DateTime.UtcNow;
+                    program.AttrEndDate = System.DateTime.UtcNow;
                 }
                 else if (r.ElementType.Equals(15))
                 {
@@ -562,14 +566,14 @@ namespace Phytel.API.AppDomain.NG
             bool dirty = false;
             try
             {
-                if (_pAtt.AssignedBy != null){ pAtt.AssignedBy = _pAtt.AssignedBy; dirty = true;}
-                if (_pAtt.AssignedTo != null) { pAtt.AssignedTo = _pAtt.AssignedTo; dirty = true; }
-                if (_pAtt.AssignedOn != null){ pAtt.AssignedOn = _pAtt.AssignedOn; dirty = true;}
+                //if (_pAtt.AssignedBy != null){ pAtt.AssignedBy = _pAtt.AssignedBy; dirty = true;}
+                //if (_pAtt.AssignedTo != null) { pAtt.AssignedTo = _pAtt.AssignedTo; dirty = true; }
+                //if (_pAtt.AssignedOn != null){ pAtt.AssignedOn = _pAtt.AssignedOn; dirty = true;}
                 if (_pAtt.CompletedBy != null){ pAtt.CompletedBy = _pAtt.CompletedBy; dirty = true;}
                 if (_pAtt.DateCompleted != null){ pAtt.DateCompleted = _pAtt.DateCompleted; dirty = true;}
                 if (_pAtt.DidNotEnrollReason != null){ pAtt.DidNotEnrollReason = _pAtt.DidNotEnrollReason; dirty = true;}
                 //if (_pAtt.DisEnrollReason != null){ pAtt.DisEnrollReason = _pAtt.DisEnrollReason; dirty = true;}
-                if (_pAtt.AttrEndDate != null){ pAtt.AttrEndDate = _pAtt.AttrEndDate; dirty = true;}
+                //if (_pAtt.AttrEndDate != null){ pAtt.AttrEndDate = _pAtt.AttrEndDate; dirty = true;}
                 if (_pAtt.IneligibleReason != null){ pAtt.IneligibleReason = _pAtt.IneligibleReason; dirty = true;}
                 if (_pAtt.OptOut != false){ pAtt.OptOut = _pAtt.OptOut; dirty = true;}
                 //if (_pAtt.OptOutDate != null){ pAtt.OptOutDate = _pAtt.OptOutDate; dirty = true;}
@@ -577,7 +581,7 @@ namespace Phytel.API.AppDomain.NG
                 if (_pAtt.OverrideReason != null){ pAtt.OverrideReason = _pAtt.OverrideReason; dirty = true;}
                 if (_pAtt.Population != null){ pAtt.Population = _pAtt.Population; dirty = true;}
                 if (_pAtt.RemovedReason != null){ pAtt.RemovedReason = _pAtt.RemovedReason; dirty = true;}
-                if (_pAtt.AttrStartDate != null){ pAtt.AttrStartDate = _pAtt.AttrStartDate; dirty = true;}
+                //if (_pAtt.AttrStartDate != null){ pAtt.AttrStartDate = _pAtt.AttrStartDate; dirty = true;}
                 if (_pAtt.Status != 0){ pAtt.Status = _pAtt.Status; dirty = true;}
                 if (_pAtt.Completed != 0){ pAtt.Completed = _pAtt.Completed; dirty = true;}
                 if (_pAtt.Eligibility != 0){ pAtt.Eligibility = _pAtt.Eligibility; dirty = true;}
@@ -605,7 +609,7 @@ namespace Phytel.API.AppDomain.NG
                 DD.ProgramAttributeData pa = new DD.ProgramAttributeData
                 {
                     PlanElementId = programId,
-                    AttrStartDate = System.DateTime.UtcNow
+                    //AttrStartDate = System.DateTime.UtcNow
                 };
 
                 // 1) get program attribute
@@ -634,8 +638,8 @@ namespace Phytel.API.AppDomain.NG
             {
                 _programAttributes.PlanElementId = p.Id;
                 _programAttributes.Status = p.Status;
-                _programAttributes.AttrStartDate = p.StartDate;
-                _programAttributes.AttrEndDate = null;
+                //_programAttributes.AttrStartDate = p.StartDate;
+                //_programAttributes.AttrEndDate = null;
                 _programAttributes.Eligibility = p.Eligibility;
                 //_programAttributes.Enrollment = p.Enrollment;
                 _programAttributes.GraduatedFlag = 1;

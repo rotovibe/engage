@@ -48,8 +48,8 @@ namespace Phytel.API.AppDomain.NG
                     // set program starting date
                     if (IsInitialAction.IsSatisfiedBy(p))
                     {
-                        //p.StartDate = System.DateTime.UtcNow;
-                        PlanElementUtil.SetStartDateForProgramAttributes(request.ProgramId, request);
+                        p.AttrStartDate = System.DateTime.UtcNow;
+                        //PlanElementUtil.SetStartDateForProgramAttributes(request.ProgramId, request);
                     }
 
                     // get module reference
