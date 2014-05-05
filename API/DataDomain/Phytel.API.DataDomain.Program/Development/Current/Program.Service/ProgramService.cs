@@ -310,9 +310,9 @@ namespace Phytel.API.DataDomain.Program.Service
             return response;
         }
 
-        public PostMongoProceduresResponse Post(PostMongoProceduresRequest request)
+        public GetMongoProceduresResponse Get(GetMongoProceduresRequest request)
         {
-            PostMongoProceduresResponse response = new PostMongoProceduresResponse();
+            GetMongoProceduresResponse response = new GetMongoProceduresResponse();
             try
             {
                 if (string.IsNullOrEmpty(request.UserId))

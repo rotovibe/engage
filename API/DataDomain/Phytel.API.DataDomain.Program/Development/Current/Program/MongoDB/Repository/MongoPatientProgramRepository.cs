@@ -203,7 +203,7 @@ namespace Phytel.API.DataDomain.Program
                             Description = cp.Description,
                             EndDate = cp.EndDate,
                             AssignBy = cp.AssignedBy.ToString(),
-                            AssignDate = cp.AssignedOn,
+                            AssignedOn = cp.AssignedOn,
                             Completed = cp.Completed,
                             CompletedBy = cp.CompletedBy,
                             DateCompleted = cp.DateCompleted,
@@ -251,7 +251,6 @@ namespace Phytel.API.DataDomain.Program
             }
         }
 
-
         public bool Save(object entity)
         {
             bool success = false;
@@ -295,7 +294,7 @@ namespace Phytel.API.DataDomain.Program
                     if (pg.ElementState != 0) uv.Add(MB.Update.Set(MEPatientProgram.StateProperty, (ElementState)pg.ElementState));
                     if (pg.Status != 0) uv.Add(MB.Update.Set(MEPatientProgram.StatusProperty, (Status)pg.Status));
                     if (pg.AssignBy != null) { uv.Add(MB.Update.Set(MEPatientProgram.AssignByProperty, pg.AssignBy)); }
-                    if (pg.AssignDate != null) { uv.Add(MB.Update.Set(MEPatientProgram.AssignDateProperty, pg.AssignDate)); }
+                    if (pg.AssignedOn != null) { uv.Add(MB.Update.Set(MEPatientProgram.AssignDateProperty, pg.AssignedOn)); }
                     if (pg.Client != null) { uv.Add(MB.Update.Set(MEPatientProgram.ClientProperty, pg.Client)); }
                     if (pg.CompletedBy != null) { uv.Add(MB.Update.Set(MEPatientProgram.CompletedByProperty, pg.CompletedBy)); }
                     if (pg.ContractProgramId != null) { uv.Add(MB.Update.Set(MEPatientProgram.ContractProgramIdProperty, ObjectId.Parse(pg.ContractProgramId))); }

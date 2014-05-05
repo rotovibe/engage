@@ -10,7 +10,7 @@ namespace Phytel.API.DataDomain.Program.Test.Stubs
 {
     public class StubMongoPatientProgramRepository : IProgramRepository
     {
-        string userId = "testuser";
+        string userId = "000000000000000000000000";
         public StubMongoPatientProgramRepository(string contract)
         {
         }
@@ -104,18 +104,26 @@ namespace Phytel.API.DataDomain.Program.Test.Stubs
                     EligibilityEndDate = System.DateTime.UtcNow,
                     Objectives = new List<Objective> { new Objective{ Id = ObjectId.Parse("123456789012345678901234"),
                                          Value = "testing",
-                                          Units = "lbs",
-                                           Status = Status.Active
-                    } },
+                                         Units = "lbs",
+                                         Status = Status.Active
+                    }},
                     Modules = new List<Module>() { 
-                                    new Module { Id = ObjectId.Parse("000000000000000000000000"), 
-                                        Name = "Test stub module 1",
-                                         Description = "BSHSI - Outreach & Enrollment",
-                                          SourceId = ObjectId.Parse("532b5585a381168abe00042c"),
+                                    new Module { 
+                                        Id = ObjectId.Parse("000000000000000000000000"), 
+                                        Name = "Test stub module 1", 
+                                        Description = "BSHSI - Outreach & Enrollment", 
+                                        SourceId = ObjectId.Parse("532b5585a381168abe00042c"),
                                         Actions = new List<Phytel.API.DataDomain.Program.MongoDB.DTO.Action>(){ 
-                                            new Phytel.API.DataDomain.Program.MongoDB.DTO.Action{ Id = ObjectId.Parse("000000000000000000000000"),  
-                                                State = ElementState.InProgress, Name ="test action from stub", Description = "test action 1"} 
-                                        }
+                                            new Phytel.API.DataDomain.Program.MongoDB.DTO.Action{ 
+                                                Id = ObjectId.Parse("000000000000000000000000"),  
+                                                State = ElementState.InProgress, 
+                                                Name ="test action from stub", 
+                                                Description = "test action 1"} },
+                                        AttributeStartDate = Convert.ToDateTime("1/1/1900"),
+                                        AttributeEndDate = Convert.ToDateTime("1/1/1901"),
+                                        AssignedOn = Convert.ToDateTime("1/1/1999"),
+                                        AssignedTo = ObjectId.Parse("123456789011111111112222"),
+                                        AssignedBy = ObjectId.Parse("123456789011111111112223")
                                     }
                     }
                 };

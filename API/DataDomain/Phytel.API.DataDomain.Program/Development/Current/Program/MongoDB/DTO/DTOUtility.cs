@@ -648,7 +648,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
                             ModuleId = ObjectId.Parse(a.ModuleId),
                             Steps = GetStepsInfo(a.Steps, userId),
                             AssignedBy = ParseObjectId(a.AssignBy),
-                            AssignedOn = a.AssignDate,
+                            AssignedOn = a.AssignedOn,
                             Completed = a.Completed,
                             CompletedBy = a.CompletedBy,
                             DateCompleted = a.DateCompleted,
@@ -691,7 +691,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
                             Id = ObjectId.Parse(st.Id),
                             ActionId = ObjectId.Parse(st.ActionId),
                             AssignedBy = ParseObjectId(st.AssignBy),
-                            AssignedOn = st.AssignDate,
+                            AssignedOn = st.AssignedOn,
                             Completed = st.Completed,
                             CompletedBy = st.CompletedBy,
                             ControlType = (ControlType)st.ControlType,
@@ -873,7 +873,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
                             Spawn = DTOUtils.GetSpawnElements(m.SpawnElement),
                             Actions = DTOUtils.GetActionElements(m.Actions, userId),
                             AssignedBy = ParseObjectId(m.AssignBy),
-                            AssignedOn = m.AssignDate,
+                            AssignedOn = m.AssignedOn,
                             Completed = m.Completed,
                             CompletedBy = m.CompletedBy,
                             Description = m.Description,
@@ -902,27 +902,30 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             try
             {
                 List<ModuleDetail> mods = new List<ModuleDetail>();
-                list.ForEach(r => mods.Add(new ModuleDetail
+                list.ForEach(m => mods.Add(new ModuleDetail
                 {
-                    Id = r.Id.ToString(),
-                    ProgramId = r.ProgramId.ToString(),
-                    Description = r.Description,
-                    Name = r.Name,
-                    Status = (int)r.Status,
-                    Completed = r.Completed,
-                    Enabled = r.Enabled,
-                    Next = r.Next != null ? r.Next.ToString() : string.Empty,
-                    Previous = r.Previous != null ? r.Previous.ToString() : string.Empty,
-                    Order = r.Order,
-                    SpawnElement = GetSpawnElement(r),
-                    SourceId = r.SourceId.ToString(),
-                    AssignBy = r.AssignedBy.ToString(),
-                    AssignDate = r.AssignedOn,
-                    ElementState = (int)r.State,
-                    CompletedBy = r.CompletedBy,
-                    DateCompleted = r.DateCompleted,
-                    Objectives = GetObjectives(r.Objectives),
-                    Actions = GetActions(r.Actions, contractNumber, userId)
+                    Id = m.Id.ToString(),
+                    ProgramId = m.ProgramId.ToString(),
+                    Description = m.Description,
+                    Name = m.Name,
+                    Status = (int)m.Status,
+                    Completed = m.Completed,
+                    Enabled = m.Enabled,
+                    Next = m.Next != null ? m.Next.ToString() : string.Empty,
+                    Previous = m.Previous != null ? m.Previous.ToString() : string.Empty,
+                    Order = m.Order,
+                    SpawnElement = GetSpawnElement(m),
+                    SourceId = m.SourceId.ToString(),
+                    AssignBy = m.AssignedBy.ToString(),
+                    AssignedOn = m.AssignedOn,
+                    AssignTo = m.AssignedTo != null ? m.AssignedTo.ToString() : null,
+                    AttrEndDate = m.AttributeEndDate,
+                    AttrStartDate = m.AttributeStartDate,
+                    ElementState = (int)m.State,
+                    CompletedBy = m.CompletedBy,
+                    DateCompleted = m.DateCompleted,
+                    Objectives = GetObjectives(m.Objectives),
+                    Actions = GetActions(m.Actions, contractNumber, userId)
                 }));
                 return mods;
             }
@@ -992,7 +995,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
                         SpawnElement = GetSpawnElement(a),
                         SourceId = a.SourceId.ToString(),
                         AssignBy = a.AssignedBy.ToString(),
-                        AssignDate = a.AssignedOn,
+                        AssignedOn = a.AssignedOn,
                         ElementState = (int)a.State,
                         DateCompleted = a.DateCompleted,
                         Objectives = GetObjectives(a.Objectives),
@@ -1007,11 +1010,14 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             return actionDetail;
         }
 
-        public  List<StepsDetail> GetSteps(List<Step> list, string contract, string userId)
+        public List<StepsDetail> GetSteps(List<Step> list, string contract, string userId)
         {
             try
             {
                 List<StepsDetail> steps = new List<StepsDetail>();
+                if (list == null)
+                    return steps;
+
                 list.ForEach(s =>
                 {
                     steps.Add(
@@ -1038,7 +1044,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
                             IncludeTime = s.IncludeTime,
                             SelectType = (int)s.SelectType,
                             AssignBy = s.AssignedBy.ToString(),
-                            AssignDate = s.AssignedOn,
+                            AssignedOn = s.AssignedOn,
                             ElementState = (int)s.State,
                             CompletedBy = s.CompletedBy,
                             DateCompleted = s.DateCompleted,

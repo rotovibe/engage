@@ -72,6 +72,8 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="MongoDB\DTO\DTOUtility.cs" />
+    <Compile Include="MongoDB\Repository\MongoPatientProgramRepository.cs" />
     <Compile Include="MongoProcedureFactoryTests.cs" />
     <Compile Include="ProgramDataManager_Tests.cs" />
     <Compile Include="ProgramRepositoryFactoryTests.cs" />

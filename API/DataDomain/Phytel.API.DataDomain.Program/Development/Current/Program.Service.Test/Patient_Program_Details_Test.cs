@@ -65,6 +65,35 @@ namespace Phytel.API.DataDomain.Program.Services.Test
         }
 
         [TestMethod]
+        public void Get_ProgramDetails_For_Patient_Assignment_With_Module_AssignBy()
+        {
+            string url = "http://localhost:8888/Program";
+            string patientID = "5325da98d6a4850adcbba6be";
+            string ProgramID = "535aa59ad6a485044c4e4832";
+            string contractNumber = "InHealth001";
+            string context = "NG";
+            double version = 1.0;
+            string token = "536799d6d6a485044ccae2ad";
+            IRestClient client = new JsonServiceClient();
+            JsonServiceClient.HttpWebRequestFilter = x =>
+                            x.Headers.Add(string.Format("{0}: {1}", "x-Phytel-UserID", "531f2df9072ef727c4d2a3df"));
+
+            GetProgramDetailsSummaryResponse response = client.Get<GetProgramDetailsSummaryResponse>(
+                string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Program/{5}/Details/?ProgramId={6}&Token={7}&UserId=nguser",
+                url,
+                context,
+                version,
+                contractNumber,
+                patientID,
+                ProgramID,
+                ProgramID,
+                token));
+
+            string ctrl = "";
+            string smpl = response.Program.Modules[0].AssignBy;
+        }
+
+        [TestMethod]
         public void Get_Patient_Programs_summary()
         {
             string url = "http://localhost:8888/Program";

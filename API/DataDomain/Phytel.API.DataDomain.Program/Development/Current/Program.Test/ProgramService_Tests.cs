@@ -95,6 +95,161 @@ namespace Phytel.API.DataDomain.Program.Service.Tests
             }
 
             [TestMethod()]
+            [TestCategory("NIGHT-919")]
+            [TestProperty("TFS", "3838")]
+            [TestProperty("Layer", "DD.Service")]
+            public void DD_Get_Module_StartDate_Test()
+            {
+                DateTime? time = Convert.ToDateTime("1/1/1900");
+
+                ProgramService ps = new ProgramService
+                {
+                    ProgramDataManager = new StubProgramDataManager(),
+                    Helpers = new StubHelper(),
+                    CommonFormatterUtil = new StubCommonFormatterUtil()
+                };
+
+                GetProgramDetailsSummaryRequest request = new GetProgramDetailsSummaryRequest
+                {
+                    Context = "NG",
+                    ContractNumber = "InHealth001",
+                    PatientId = "",
+                    ProgramId = "",
+                    UserId = "nguser",
+                    Version = 1.0
+                };
+
+                GetProgramDetailsSummaryResponse response = ps.Get(request);
+                ModuleDetail module = response.Program.Modules.Find(m => m.SourceId == "532b5585a381168abe00042c");
+                DateTime? mTime = module.AttrStartDate;
+                Assert.AreEqual(time, mTime);
+            }
+
+            [TestMethod()]
+            [TestCategory("NIGHT-919")]
+            [TestProperty("TFS", "3838")]
+            [TestProperty("Layer", "DD.Service")]
+            public void DD_Get_Module_EndDate_Test()
+            {
+                DateTime? time = Convert.ToDateTime("1/1/1901");
+
+                ProgramService ps = new ProgramService
+                {
+                    ProgramDataManager = new StubProgramDataManager(),
+                    Helpers = new StubHelper(),
+                    CommonFormatterUtil = new StubCommonFormatterUtil()
+                };
+
+                GetProgramDetailsSummaryRequest request = new GetProgramDetailsSummaryRequest
+                {
+                    Context = "NG",
+                    ContractNumber = "InHealth001",
+                    PatientId = "",
+                    ProgramId = "",
+                    UserId = "nguser",
+                    Version = 1.0
+                };
+
+                GetProgramDetailsSummaryResponse response = ps.Get(request);
+                ModuleDetail module = response.Program.Modules.Find(m => m.SourceId == "532b5585a381168abe00042c");
+                DateTime? mTime = module.AttrEndDate;
+                Assert.AreEqual(time, mTime);
+            }
+
+            [TestMethod()]
+            [TestCategory("NIGHT-919")]
+            [TestProperty("TFS", "3838")]
+            [TestProperty("Layer", "DD.Service")]
+            public void DD_Get_Module_AssignedOn_Test()
+            {
+                DateTime? time = Convert.ToDateTime("1/1/1999");
+
+                ProgramService ps = new ProgramService
+                {
+                    ProgramDataManager = new StubProgramDataManager(),
+                    Helpers = new StubHelper(),
+                    CommonFormatterUtil = new StubCommonFormatterUtil()
+                };
+
+                GetProgramDetailsSummaryRequest request = new GetProgramDetailsSummaryRequest
+                {
+                    Context = "NG",
+                    ContractNumber = "InHealth001",
+                    PatientId = "",
+                    ProgramId = "",
+                    UserId = "nguser",
+                    Version = 1.0
+                };
+
+                GetProgramDetailsSummaryResponse response = ps.Get(request);
+                ModuleDetail module = response.Program.Modules.Find(m => m.SourceId == "532b5585a381168abe00042c");
+                DateTime? mTime = module.AssignedOn;
+                Assert.AreEqual(time, mTime);
+            }
+
+            [TestMethod()]
+            [TestCategory("NIGHT-919")]
+            [TestProperty("TFS", "3838")]
+            [TestProperty("Layer", "DD.Service")]
+            public void DD_Get_Module_AssignedTo_Test()
+            {
+                string ctrl = "123456789011111111112222";
+
+                ProgramService ps = new ProgramService
+                {
+                    ProgramDataManager = new StubProgramDataManager(),
+                    Helpers = new StubHelper(),
+                    CommonFormatterUtil = new StubCommonFormatterUtil()
+                };
+
+                GetProgramDetailsSummaryRequest request = new GetProgramDetailsSummaryRequest
+                {
+                    Context = "NG",
+                    ContractNumber = "InHealth001",
+                    PatientId = "",
+                    ProgramId = "",
+                    UserId = "nguser",
+                    Version = 1.0
+                };
+
+                GetProgramDetailsSummaryResponse response = ps.Get(request);
+                ModuleDetail module = response.Program.Modules.Find(m => m.SourceId == "532b5585a381168abe00042c");
+                string smpl = module.AssignTo;
+                Assert.AreEqual(ctrl, smpl);
+            }
+
+            [TestMethod()]
+            [TestCategory("NIGHT-919")]
+            [TestProperty("TFS", "3838")]
+            [TestProperty("Layer", "DD.Service")]
+            public void DD_Get_Module_AssignedBy_Test()
+            {
+                string ctrl = "123456789011111111112223";
+
+                ProgramService ps = new ProgramService
+                {
+                    ProgramDataManager = new StubProgramDataManager(),
+                    Helpers = new StubHelper(),
+                    CommonFormatterUtil = new StubCommonFormatterUtil()
+                };
+
+                GetProgramDetailsSummaryRequest request = new GetProgramDetailsSummaryRequest
+                {
+                    Context = "NG",
+                    ContractNumber = "InHealth001",
+                    PatientId = "",
+                    ProgramId = "",
+                    UserId = "nguser",
+                    Version = 1.0
+                };
+
+                GetProgramDetailsSummaryResponse response = ps.Get(request);
+                ModuleDetail module = response.Program.Modules.Find(m => m.SourceId == "532b5585a381168abe00042c");
+                string smpl = module.AssignBy;
+                Assert.AreEqual(ctrl, smpl);
+            }
+
+            [TestMethod()]
             public void Get_With_Eligibility_Requirements_Test()
             {
                 ProgramService ps = new ProgramService

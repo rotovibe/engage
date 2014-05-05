@@ -45,7 +45,12 @@ namespace Phytel.API.DataDomain.Program.Test.Stubs
                          Description = "BSHSI - Outreach & Enrollment",
                           SourceId ="532b5585a381168abe00042c",
                         Actions = new List<ActionsDetail>(){ 
-                            new ActionsDetail{ Id = "000000000000000000000000", ElementState = 4, Name ="test action from stub", Text = "test action 1"} } 
+                            new ActionsDetail{ Id = "000000000000000000000000", ElementState = 4, Name ="test action from stub", Text = "test action 1"} } ,
+                             AttrStartDate = Convert.ToDateTime("1/1/1900"),
+                             AttrEndDate = Convert.ToDateTime("1/1/1901"),
+                             AssignedOn = Convert.ToDateTime("1/1/1999"),
+                             AssignTo = "123456789011111111112222",
+                             AssignBy = "123456789011111111112223"
                     }
                     }
                 },

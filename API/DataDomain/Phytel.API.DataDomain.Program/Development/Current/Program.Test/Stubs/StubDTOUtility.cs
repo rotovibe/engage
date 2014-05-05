@@ -54,16 +54,32 @@ namespace Phytel.API.DataDomain.Program.Test.Stubs
         public List<DTO.ModuleDetail> GetModules(List<Module> list, string contractNumber, string userId)
         {
             List<DTO.ModuleDetail> modules = new List<DTO.ModuleDetail>();
-            modules.Add(
-                    new DTO.ModuleDetail
-                    {
-                        Id = "000000000000000000000000",
-                        Name = "Test stub module 1",
-                        Description = "BSHSI - Outreach & Enrollment",
-                        SourceId = "532b5585a381168abe00042c",
-                        Actions = new List<DTO.ActionsDetail>(){ 
-                            new DTO.ActionsDetail{ Id = "000000000000000000000000", ElementState = 4, Name ="test action from stub", Text = "test action 1"} }
-                    });
+
+            list.ForEach(m =>
+            {
+                modules.Add(new DTO.ModuleDetail
+                {
+                    Id = m.Id.ToString(),
+                    Name = m.Name,
+                    Description = m.Description,
+                    SourceId = m.SourceId.ToString(),
+                    AttrStartDate = m.AttributeStartDate,
+                    AttrEndDate = m.AttributeEndDate,
+                    AssignedOn = m.AssignedOn,
+                    AssignTo = m.AssignedTo.ToString(),
+                    AssignBy = m.AssignedBy.ToString()
+                });
+            });
+            //modules.Add(
+            //        new DTO.ModuleDetail
+            //        {
+            //            Id = "000000000000000000000000",
+            //            Name = "Test stub module 1",
+            //            Description = "BSHSI - Outreach & Enrollment",
+            //            SourceId = "532b5585a381168abe00042c",
+            //            Actions = new List<DTO.ActionsDetail>(){ 
+            //                new DTO.ActionsDetail{ Id = "000000000000000000000000", ElementState = 4, Name ="test action from stub", Text = "test action 1"} }
+            //        });
             return modules;
         }
 
