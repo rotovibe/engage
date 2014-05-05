@@ -21,8 +21,8 @@ tf checkout "$/PhytelCode/Phytel.Net/Client Apps/NG/Atmosphere.Site/Production/C
 tf checkout "$/PhytelCode/Phytel.Net/Client Apps/NG/Atmosphere.Core/Production/Current/*.csproj" /lock:checkout /recursive
 tf checkout "$/PhytelCode/Phytel.Net/Client Apps/NG/Atmosphere.Site/Production/Current/*.csproj" /lock:checkout /recursive
 
-"UpdateRCProjectInfo.exe" /RF:"C:\Projects\TFS2013\PhytelCode\Phytel.Net\Client Apps\Atmosphere\Atmosphere.Core\Production\Current" /RW:"Release Candidate" /WW:"Production"
-"UpdateRCProjectInfo.exe" /RF:"C:\Projects\TFS2013\PhytelCode\Phytel.Net\Client Apps\Atmosphere\Atmosphere.Site\Production\Current" /RW:"Release Candidate" /WW:"Production"
+"UpdateRCProjectInfo.exe" /RF:"C:\Projects\TFS2013\PhytelCode\Phytel.Net\Client Apps\NG\Atmosphere.Core\Production\Current" /RW:"Release Candidate" /WW:"Production"
+"UpdateRCProjectInfo.exe" /RF:"C:\Projects\TFS2013\PhytelCode\Phytel.Net\Client Apps\NG\Atmosphere.Site\Production\Current" /RW:"Release Candidate" /WW:"Production"
 
 tf checkin "$/PhytelCode/Phytel.Net/Client Apps/NG/Atmosphere.Core/Production/Current" /comment:"Merge Changes for Prod Release" /recursive /force /noprompt
 tf checkin "$/PhytelCode/Phytel.Net/Client Apps/NG/Atmosphere.Site/Production/Current" /comment:"Merge Changes for Prod Release" /recursive /force /noprompt
