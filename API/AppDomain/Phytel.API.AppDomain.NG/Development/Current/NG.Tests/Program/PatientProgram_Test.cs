@@ -38,5 +38,28 @@ namespace Phytel.API.DataDomain.Patient.Service.Test
 
             Assert.IsNotNull(response.Action);
         }
+
+        [TestMethod]
+        public void GetPatientProgramDetailsSummary_Test()
+        {
+            string contractNumber = "InHealth001";
+            string context = "NG";
+            double version = 1.0;
+            string token = "53693860d6a485044ccb0f0b";
+            IRestClient client = new JsonServiceClient();
+
+            GetPatientProgramDetailsSummaryRequest request = new GetPatientProgramDetailsSummaryRequest { PatientId = "5325d9f2d6a4850adcbba4ca", UserId = "000000000000000000000000" };
+            JsonServiceClient.HttpWebRequestFilter = x => x.Headers.Add(string.Format("Token: {0}", token));
+            // [Route("/{Version}/{ContractNumber}/Patient/{PatientId}/Program/{PatientProgramId}/", "GET")]
+            GetPatientProgramDetailsSummaryResponse response = client.Get<GetPatientProgramDetailsSummaryResponse>(
+                string.Format(@"http://localhost:888/Nightingale/{0}/{1}/Patient/{2}/Program/{3}?Context={4}",
+                version,
+                contractNumber,
+                request.PatientId,
+                request.PatientProgramId,
+                context));
+
+            Assert.IsNotNull(response.Program.Modules[0].Objectives);
+        }
     }
 }

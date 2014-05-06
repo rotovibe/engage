@@ -14,7 +14,10 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DataManagement
         public IMongoProcedure GetProcedure(GetMongoProceduresRequest request)
         {
             IMongoProcedure proc = GetInstanceFromExecutingAssembly(request);
-            proc.Request = request;
+            if(proc != null)
+            {
+                proc.Request = request;
+            }
             return proc;
         }
 

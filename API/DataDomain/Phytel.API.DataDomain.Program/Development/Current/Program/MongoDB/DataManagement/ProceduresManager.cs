@@ -24,12 +24,14 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DataManagement
             try
             {
                 GetMongoProceduresResponse response = new GetMongoProceduresResponse();
-
+                response.Success = false;
                 IMongoProcedure proc = new MongoProcedureFactory().GetProcedure(request);
-                proc.Execute();
-                response.Results = proc.Results;
-                response.Success = true;
-
+                if (proc != null)
+                {
+                    proc.Execute();
+                    response.Results = proc.Results;
+                    response.Success = true;            
+                }
                 return response;
             }
             catch (Exception ex)
