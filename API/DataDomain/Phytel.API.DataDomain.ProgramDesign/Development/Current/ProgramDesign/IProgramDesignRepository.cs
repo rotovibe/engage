@@ -13,6 +13,6 @@ namespace Phytel.API.DataDomain.ProgramDesign
     {
         List<ProgramInfo> GetActiveProgramsInfoList(GetAllActiveProgramsRequest request);
         //IEnumerable<object> Find(string Id);
-        DTO.Program FindByName(string entityName);
+        object FindByName(string entityName);
     }
 }

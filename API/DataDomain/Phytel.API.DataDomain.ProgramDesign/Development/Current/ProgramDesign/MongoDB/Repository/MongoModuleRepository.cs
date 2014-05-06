@@ -1,26 +1,25 @@
+using MongoDB.Bson;
+using MongoDB.Bson.Serialization;
+using MongoDB.Driver;
+using Phytel.API.Common;
+using Phytel.API.DataAudit;
+using Phytel.API.DataDomain.ProgramDesign.DTO;
+using Phytel.API.DataDomain.ProgramDesign.MongoDB.DTO;
+using Phytel.API.Interface;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-//using Phytel.API.DataDomain.Module.DTO;
-using Phytel.API.Interface;
-using MongoDB.Driver;
 using MB = MongoDB.Driver.Builders;
-using MongoDB.Bson;
-//using Phytel.API.DataDomain.Module;
-//using Phytel.API.DataDomain.Module.MongoDB.DTO;
-using MongoDB.Bson.Serialization;
-using Phytel.API.DataDomain.ProgramDesign.DTO;
-using Phytel.API.DataDomain.ProgramDesign.MongoDB.DTO;
-using Phytel.API.DataAudit;
-using Phytel.API.Common;
 
 namespace Phytel.API.DataDomain.ProgramDesign
 {
     public class MongoModuleRepository<T> : IProgramDesignRepository<T>
     {
         private string _dbName = string.Empty;
+        private int _expireDays = Convert.ToInt32(ConfigurationManager.AppSettings["ExpireDays"]);
 
         static MongoModuleRepository()
         {
@@ -41,7 +40,6 @@ namespace Phytel.API.DataDomain.ProgramDesign
 
         public object Insert(object newEntity)
         {
-            GetModuleResponse response = null;
             PutModuleDataRequest request = newEntity as PutModuleDataRequest;
 
             MEModule module = null;
@@ -52,6 +50,8 @@ namespace Phytel.API.DataDomain.ProgramDesign
                                 MB.Query.EQ(MEModule.NameProperty, request.Name));
 
                 module = ctx.Modules.Collection.FindOneAs<MEModule>(query);
+                MongoProgramDesignRepository<T> repo = new MongoProgramDesignRepository<T>(_dbName);
+                repo.UserId = this.UserId;
                 
                 if (module == null)
                 {
@@ -96,13 +96,16 @@ namespace Phytel.API.DataDomain.ProgramDesign
             {
                 using (ProgramDesignMongoContext ctx = new ProgramDesignMongoContext(_dbName))
                 {
-                    var mUQuery = new QueryDocument(MEModule.IdProperty, ObjectId.Parse(request.ModuleId));
+                    var q = MB.Query<MEProgram>.EQ(b => b.Id, ObjectId.Parse(request.ModuleId));
 
-                    MB.UpdateBuilder updt = new MB.UpdateBuilder();
+                    var uv = new List<MB.UpdateBuilder>();
+                    uv.Add(MB.Update.Set(MEProgram.TTLDateProperty, System.DateTime.UtcNow.AddDays(_expireDays)));
+                    uv.Add(MB.Update.Set(MEProgram.DeleteFlagProperty, true));
+                    uv.Add(MB.Update.Set(MEProgram.UpdatedByProperty, ObjectId.Parse(this.UserId)));
+                    uv.Add(MB.Update.Set(MEProgram.LastUpdatedOnProperty, DateTime.UtcNow));
 
-                    updt.Set(MEModule.DeleteFlagProperty, true);
-
-                    var module = ctx.Modules.Collection.FindAndModify(mUQuery, MB.SortBy.Null, updt, true);
+                    IMongoUpdate update = MB.Update.Combine(uv);
+                    ctx.Programs.Collection.Update(q, update);
 
                     //set audit call
                     AuditHelper.LogDataAudit(this.UserId,
@@ -127,22 +130,51 @@ namespace Phytel.API.DataDomain.ProgramDesign
 
         public object FindByID(string entityID)
         {
-            DTO.Module module = null;
-            using (ProgramDesignMongoContext ctx = new ProgramDesignMongoContext(_dbName))
+            try
             {
-                module = (from m in ctx.Modules
-                          where m.Id == ObjectId.Parse(entityID)
-                          select new DTO.Module
-                          {
-                              Id = m.Id.ToString(),
-                              Name = m.Name,
-                              Description = m.Description,
-                              //Objectives = m.Objectives.Select(i => i.ID).ToList(),
-                              Status = m.Status.ToString(),
-                              Version = m.Version
-                          }).FirstOrDefault();
+                MEProgram cp = null;
+                using (ProgramDesignMongoContext ctx = new ProgramDesignMongoContext(_dbName))
+                {
+                    var findcp = MB.Query<MEModule>.EQ(b => b.Id, ObjectId.Parse(entityID));
+                    cp = ctx.Programs.Collection.Find(findcp).FirstOrDefault();
+                }
+                return cp;
             }
-            return module;
+            catch (Exception ex)
+            {
+                throw new Exception("DD:ProgramDesign:FindByID()::" + ex.Message, ex.InnerException);
+            }
+        }
+
+        public object FindByName(string entityName)
+        {
+            try
+            {
+                Module result = null;
+
+                using (ProgramDesignMongoContext ctx = new ProgramDesignMongoContext(_dbName))
+                {
+                    var findcp = MB.Query<MEModule>.EQ(b => b.Name, entityName);
+                    MEModule cp = ctx.Modules.Collection.Find(findcp).FirstOrDefault();
+
+                    if (cp != null)
+                    {
+                        result = new Module
+                        {
+                            Id = cp.Id.ToString()
+                        };
+                    }
+                    else
+                    {
+                        throw new ArgumentException("ModuleName is not valid or is missing from the records.");
+                    }
+                }
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("DD:MongoModuleRepository:FindByName()::" + ex.Message, ex.InnerException);
+            }
         }
 
         public Tuple<string, IEnumerable<object>> Select(Interface.APIExpression expression)
@@ -193,10 +225,25 @@ namespace Phytel.API.DataDomain.ProgramDesign
                     var mUQuery = new QueryDocument(MEModule.IdProperty, ObjectId.Parse(request.Id));
 
                     MB.UpdateBuilder updt = new MB.UpdateBuilder();
-
                     if (request.Name != null)
-                        updt.Set(MEModule.NameProperty, GetRequestValue(request.Name));
-                        
+                    {
+                        if (request.Name == "\"\"" || (request.Name == "\'\'"))
+                            updt.Set(MEModule.NameProperty, string.Empty);
+                        else
+                            updt.Set(MEModule.NameProperty, request.Name);
+                    }
+                    if (request.Description != null)
+                    {
+                        if (request.Description == "\"\"" || (request.Description == "\'\'"))
+                            updt.Set(MEModule.DescriptionProperty, string.Empty);
+                        else
+                            updt.Set(MEModule.DescriptionProperty, request.Description);
+                    }
+
+                    updt.Set(MEProgram.OrderProperty, request.Order);
+                    updt.Set(MEProgram.LastUpdatedOnProperty, System.DateTime.UtcNow);
+                    updt.Set(MEProgram.UpdatedByProperty, ObjectId.Parse(this.UserId));
+                    updt.Set(MEProgram.VersionProperty, request.Version);
                     
                     var module = ctx.Modules.Collection.FindAndModify(mUQuery, MB.SortBy.Null, updt, true);
 
@@ -238,9 +285,6 @@ namespace Phytel.API.DataDomain.ProgramDesign
             throw new NotImplementedException();
         }
 
-        public DTO.Program FindByName(string entityName)
-        {
-            throw new NotImplementedException();
-        }
+
     }
 }

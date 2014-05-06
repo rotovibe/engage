@@ -1,7 +1,9 @@
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization;
-using MongoDB.Driver.Builders;
 using MongoDB.Driver;
+using MongoDB.Driver.Builders;
+using Phytel.API.Common;
+using Phytel.API.DataAudit;
 using Phytel.API.DataDomain.ProgramDesign;
 using Phytel.API.DataDomain.ProgramDesign.DTO;
 using Phytel.API.DataDomain.ProgramDesign.MongoDB.DTO;
@@ -13,8 +15,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using MB = MongoDB.Driver.Builders;
-using Phytel.API.DataAudit;
-using Phytel.API.Common;
 
 namespace Phytel.API.DataDomain.ProgramDesign
 {
@@ -51,7 +51,7 @@ namespace Phytel.API.DataDomain.ProgramDesign
             PutProgramDataRequest request = newEntity as PutProgramDataRequest;
 
             MEProgram program = null;
-            using(ProgramDesignMongoContext ctx = new ProgramDesignMongoContext(_dbName))
+            using (ProgramDesignMongoContext ctx = new ProgramDesignMongoContext(_dbName))
             {
                 IMongoQuery query = Query.And(
                                 Query.EQ(MEProgram.NameProperty, request.Name));
@@ -65,13 +65,17 @@ namespace Phytel.API.DataDomain.ProgramDesign
                 {
                     program = new MEProgram(this.UserId)
                     {
+                        Id = ObjectId.GenerateNewId(),
                         Name = request.Name,
                         Description = request.Description,
                         ShortName = request.ShortName,
                         AssignedBy = request.AssignedBy,
-                        //AssignedOn = DateTime.Parse(request.AssignedOn),
-                        //Client = ObjectId.Parse(request.Client),
-                        Order = request.Order
+                        Order = request.Order,
+                        Version = request.Version,
+                        UpdatedBy = ObjectId.Parse(request.UserId),
+                        TTLDate = null,
+                        DeleteFlag = false,
+                        LastUpdatedOn = System.DateTime.UtcNow
                     };
                 }
                 ctx.Programs.Collection.Insert(program);
@@ -96,7 +100,7 @@ namespace Phytel.API.DataDomain.ProgramDesign
 
         public void Delete(object entity)
         {
-            DeleteProgramDataRequest request = (DeleteProgramDataRequest) entity;
+            DeleteProgramDataRequest request = entity as DeleteProgramDataRequest;
             try
             {
                 using(ProgramDesignMongoContext ctx = new ProgramDesignMongoContext(_dbName))
@@ -122,6 +126,7 @@ namespace Phytel.API.DataDomain.ProgramDesign
             }
             catch(Exception ex)
             {
+                //TODO: handle this error
                 throw;
             }
         }
@@ -145,11 +150,11 @@ namespace Phytel.API.DataDomain.ProgramDesign
             }
             catch (Exception ex)
             {
-                throw new Exception("DD:Program:FindByID()::" + ex.Message, ex.InnerException);
+                throw new Exception("DD:ProgramDesign:FindByID()::" + ex.Message, ex.InnerException);
             }
         }
 
-        public Program FindByName(string entityName)
+        public object FindByName(string entityName)
         {
             try
             {
@@ -176,7 +181,7 @@ namespace Phytel.API.DataDomain.ProgramDesign
             }
             catch (Exception ex)
             {
-                throw new Exception("DD:PatientProgramRepository:FindByName()::" + ex.Message, ex.InnerException);
+                throw new Exception("DD:MongoProgramRepository:FindByName()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -298,6 +303,7 @@ namespace Phytel.API.DataDomain.ProgramDesign
             }
             catch (Exception)
             {
+                //TODO: handle this error
                 throw;
             }
         }

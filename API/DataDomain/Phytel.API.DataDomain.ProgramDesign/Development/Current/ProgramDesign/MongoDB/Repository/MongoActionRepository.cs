@@ -60,8 +60,11 @@ namespace Phytel.API.DataDomain.ProgramDesign
                         Id = ObjectId.GenerateNewId(),
                         Name = request.Name,
                         Description = request.Description,
-                        //CompletedBy = ObjectId.Parse(request.CompletedBy),
-                        Version = request.Version
+                        Version = request.Version,
+                        UpdatedBy = ObjectId.Parse(request.UserId),
+                        TTLDate = null,
+                        DeleteFlag = false,
+                        LastUpdatedOn = System.DateTime.UtcNow
                     };
                 }
                 ctx.Actions.Collection.Insert(action);
@@ -86,7 +89,7 @@ namespace Phytel.API.DataDomain.ProgramDesign
 
         public void Delete(object entity)
         {
-            DeleteActionDataRequest request = (DeleteActionDataRequest)entity;
+            DeleteActionDataRequest request = entity as DeleteActionDataRequest;
             try
             {
                 using (ProgramDesignMongoContext ctx = new ProgramDesignMongoContext(_dbName))
@@ -112,6 +115,7 @@ namespace Phytel.API.DataDomain.ProgramDesign
             }
             catch (Exception ex)
             {
+                //TODO: handle this error
                 throw;
             }
         }
@@ -123,41 +127,51 @@ namespace Phytel.API.DataDomain.ProgramDesign
 
         public object FindByID(string entityID)
         {
-            GetActionDataResponse actionResponse = null;
-            using (ProgramDesignMongoContext ctx = new ProgramDesignMongoContext(_dbName))
+            try
             {
-                List<IMongoQuery> queries = new List<IMongoQuery>();
-                queries.Add(Query.EQ(MEAction.IdProperty, ObjectId.Parse(entityID)));
-                queries.Add(Query.EQ(MEAction.DeleteFlagProperty, false));
-                IMongoQuery mQuery = Query.And(queries);
-                MEAction meAction = ctx.Actions.Collection.Find(mQuery).FirstOrDefault();
-                if (meAction != null)
+                MEAction cp = null;
+                using (ProgramDesignMongoContext ctx = new ProgramDesignMongoContext(_dbName))
                 {
-                    actionResponse = new GetActionDataResponse();
-
-                    List<string> objectiveIDs = new List<string>();
-
-                    if (meAction.Objectives != null)
-                    {
-                        foreach (Objective oi in meAction.Objectives)
-                        {
-                            objectiveIDs.Add(oi.Id.ToString());
-                        }
-                    }
-                    
-                    ActionData action = new ActionData
-                    {
-                        ID = meAction.Id.ToString(),
-                        Name = meAction.Name,
-                        Description = meAction.Description,
-                        CompletedBy = meAction.CompletedBy.ToString(),
-                        Objectives = objectiveIDs,
-                        Status = Helper.ToFriendlyString(meAction.Status)
-                    };
-                    actionResponse.Action = action;
+                    var findcp = MB.Query<MEAction>.EQ(b => b.Id, ObjectId.Parse(entityID));
+                    cp = ctx.Actions.Collection.Find(findcp).FirstOrDefault();
                 }
+                return cp;
             }
-            return actionResponse;
+            catch (Exception ex)
+            {
+                throw new Exception("DD:ProgramDesign:FindByID()::" + ex.Message, ex.InnerException);
+            }
+        }
+
+        public object FindByName(string entityName)
+        {
+            try
+            {
+                ActionData result = null;
+
+                using (ProgramDesignMongoContext ctx = new ProgramDesignMongoContext(_dbName))
+                {
+                    var findcp = MB.Query<MEAction>.EQ(b => b.Name, entityName);
+                    MEAction cp = ctx.Actions.Collection.Find(findcp).FirstOrDefault();
+
+                    if (cp != null)
+                    {
+                        result = new ActionData
+                        {
+                            ID = cp.Id.ToString()
+                        };
+                    }
+                    else
+                    {
+                        throw new ArgumentException("ActionName is not valid or is missing from the records.");
+                    }
+                }
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("DD:MongoActionRepository:FindByName()::" + ex.Message, ex.InnerException);
+            }
         }
 
         public Tuple<string, IEnumerable<object>> Select(Interface.APIExpression expression)
@@ -253,6 +267,7 @@ namespace Phytel.API.DataDomain.ProgramDesign
             }
             catch (Exception)
             {
+                //TODO: handle this error
                 throw;
             }
         }
@@ -269,9 +284,6 @@ namespace Phytel.API.DataDomain.ProgramDesign
             throw new NotImplementedException();
         }
 
-        public DTO.Program FindByName(string entityName)
-        {
-            throw new NotImplementedException();
-        }
+
     }
 }

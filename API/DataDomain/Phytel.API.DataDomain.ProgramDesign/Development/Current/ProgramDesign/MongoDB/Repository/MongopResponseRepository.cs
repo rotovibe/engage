@@ -207,7 +207,7 @@ namespace Phytel.API.DataDomain.ProgramDesign
             throw new NotImplementedException();
         }
         
-        public DTO.Program FindByName(string entityID)
+        public object FindByName(string entityID)
         {
             throw new NotImplementedException();
         }

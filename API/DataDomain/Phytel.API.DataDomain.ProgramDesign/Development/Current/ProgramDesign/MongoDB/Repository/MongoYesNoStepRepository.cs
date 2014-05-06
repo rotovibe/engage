@@ -1,18 +1,18 @@
+using MongoDB.Bson;
+using MongoDB.Bson.Serialization;
+using MongoDB.Driver;
+using MongoDB.Driver.Builders;
+using Phytel.API.Common;
+using Phytel.API.DataAudit;
+using Phytel.API.DataDomain.ProgramDesign.DTO;
+using Phytel.API.Interface;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Phytel.API.Interface;
-using MongoDB.Driver;
-using MongoDB.Driver.Builders;
-using MongoDB.Bson;
-using Phytel.API.Common;
-using MongoDB.Bson.Serialization;
-using Phytel.API.DataDomain.ProgramDesign.DTO;
 using MB = MongoDB.Driver.Builders;
-using Phytel.API.DataAudit;
 
 namespace Phytel.API.DataDomain.ProgramDesign
 {
@@ -50,8 +50,9 @@ namespace Phytel.API.DataDomain.ProgramDesign
         public object Insert(object newEntity)
         {
             PutYesNoStepDataRequest request = newEntity as PutYesNoStepDataRequest;
+
             MEYesNo step = null;
-            using(ProgramDesignMongoContext ctx = new ProgramDesignMongoContext(_dbName))
+            using (ProgramDesignMongoContext ctx = new ProgramDesignMongoContext(_dbName))
             {
                 IMongoQuery query = Query.And(
                                 Query.EQ(MEYesNo.QuestionProperty, request.Question));
@@ -66,7 +67,12 @@ namespace Phytel.API.DataDomain.ProgramDesign
                         Id = ObjectId.GenerateNewId(),
                         Question = request.Question,
                         Notes = request.Notes,
-                        Type = StepType.YesNo
+                        Type = StepType.YesNo,
+                        Version = request.Version,
+                        UpdatedBy = ObjectId.Parse(request.UserId),
+                        TTLDate = null,
+                        DeleteFlag = false,
+                        LastUpdatedOn = System.DateTime.UtcNow
                     };
                 }
                 ctx.YesNoSteps.Collection.Insert(step);
@@ -91,7 +97,7 @@ namespace Phytel.API.DataDomain.ProgramDesign
 
         public void Delete(object entity)
         {
-            DeleteYesNoStepDataRequest request = (DeleteYesNoStepDataRequest)entity;
+            DeleteYesNoStepDataRequest request = entity as DeleteYesNoStepDataRequest;
             try
             {
                 using (ProgramDesignMongoContext ctx = new ProgramDesignMongoContext(_dbName))
@@ -117,6 +123,7 @@ namespace Phytel.API.DataDomain.ProgramDesign
             }
             catch (Exception ex)
             {
+                //TODO: handle this error
                 throw;
             }
         }
@@ -128,29 +135,51 @@ namespace Phytel.API.DataDomain.ProgramDesign
 
         public object FindByID(string entityID)
         {
-            GetYesNoStepDataResponse response = null;
-            using (ProgramDesignMongoContext ctx = new ProgramDesignMongoContext(_dbName))
+            try
             {
-                List<IMongoQuery> queries = new List<IMongoQuery>();
-                queries.Add(Query.EQ(MEYesNo.IdProperty, ObjectId.Parse(entityID)));
-                queries.Add(Query.EQ(MEYesNo.DeleteFlagProperty, false));
-                IMongoQuery mQuery = Query.And(queries);
-                MEYesNo meYesNo = ctx.YesNoSteps.Collection.Find(mQuery).FirstOrDefault();
-                if (meYesNo != null)
+                MEYesNo cp = null;
+                using (ProgramDesignMongoContext ctx = new ProgramDesignMongoContext(_dbName))
                 {
-                    response = new GetYesNoStepDataResponse();
-                    DTO.YesNoData yesnoStep = new DTO.YesNoData
-                    {
-                        ID = meYesNo.Id.ToString(),
-                        Type = meYesNo.Type.ToString(),
-                        Status = Helper.ToFriendlyString(meYesNo.Status),
-                        Question = meYesNo.Question,
-                        Notes = meYesNo.Notes
-                    };
-                    response.YesNoStep = yesnoStep;
+                    var findcp = MB.Query<MEYesNo>.EQ(b => b.Id, ObjectId.Parse(entityID));
+                    cp = ctx.YesNoSteps.Collection.Find(findcp).FirstOrDefault();
                 }
+                return cp;
             }
-            return response;
+            catch (Exception ex)
+            {
+                throw new Exception("DD:ProgramDesign:FindByID()::" + ex.Message, ex.InnerException);
+            }
+        }
+
+        public object FindByName(string entityName)
+        {
+            try
+            {
+                YesNoData result = null;
+
+                using (ProgramDesignMongoContext ctx = new ProgramDesignMongoContext(_dbName))
+                {
+                    var findcp = MB.Query<MEYesNo>.EQ(b => b.Question, entityName);
+                    MEYesNo cp = ctx.YesNoSteps.Collection.Find(findcp).FirstOrDefault();
+
+                    if (cp != null)
+                    {
+                        result = new YesNoData
+                        {
+                            ID = cp.Id.ToString()
+                        };
+                    }
+                    else
+                    {
+                        throw new ArgumentException("YesNoStepName is not valid or is missing from the records.");
+                    }
+                }
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("DD:MongoYesNoStepRepository:FindByName()::" + ex.Message, ex.InnerException);
+            }
         }
 
         public Tuple<string, IEnumerable<object>> Select(Interface.APIExpression expression)
@@ -249,9 +278,6 @@ namespace Phytel.API.DataDomain.ProgramDesign
             throw new NotImplementedException();
         }
 
-        public DTO.Program FindByName(string entityName)
-        {
-            throw new NotImplementedException();
-        }
+
     }
 }

@@ -48,6 +48,7 @@ namespace Phytel.API.DataDomain.ProgramDesign
         public object Insert(object newEntity)
         {
             PutTextStepDataRequest request = newEntity as PutTextStepDataRequest;
+
             METext step = null;
             using (ProgramDesignMongoContext ctx = new ProgramDesignMongoContext(_dbName))
             {
@@ -66,7 +67,11 @@ namespace Phytel.API.DataDomain.ProgramDesign
                         Description = request.Description,
                         Text = request.Text,
                         Type = StepType.Text,
-                        Version = request.Version
+                        Version = request.Version,
+                        UpdatedBy = ObjectId.Parse(request.UserId),
+                        TTLDate = null,
+                        DeleteFlag = false,
+                        LastUpdatedOn = System.DateTime.UtcNow
                     };
                 }
                 ctx.TextSteps.Collection.Insert(step);
@@ -91,7 +96,7 @@ namespace Phytel.API.DataDomain.ProgramDesign
 
         public void Delete(object entity)
         {
-            DeleteTextStepDataRequest request = (DeleteTextStepDataRequest)entity;
+            DeleteTextStepDataRequest request = entity as DeleteTextStepDataRequest;
             try
             {
                 using (ProgramDesignMongoContext ctx = new ProgramDesignMongoContext(_dbName))
@@ -117,6 +122,7 @@ namespace Phytel.API.DataDomain.ProgramDesign
             }
             catch (Exception ex)
             {
+                //TODO: handle this error
                 throw;
             }
         }
@@ -128,30 +134,51 @@ namespace Phytel.API.DataDomain.ProgramDesign
 
         public object FindByID(string entityID)
         {
-            GetTextStepDataResponse response = null;
-            using (ProgramDesignMongoContext ctx = new ProgramDesignMongoContext(_dbName))
+            try
             {
-                List<IMongoQuery> queries = new List<IMongoQuery>();
-                queries.Add(Query.EQ(METext.IdProperty, ObjectId.Parse(entityID)));
-                queries.Add(Query.EQ(METext.DeleteFlagProperty, false));
-                IMongoQuery mQuery = Query.And(queries);
-                METext meText = ctx.TextSteps.Collection.Find(mQuery).FirstOrDefault();
-                if (meText != null)
+                METext cp = null;
+                using (ProgramDesignMongoContext ctx = new ProgramDesignMongoContext(_dbName))
                 {
-                    response = new GetTextStepDataResponse();
-                    DTO.TextData textStep = new DTO.TextData
-                    {
-                        ID = meText.Id.ToString(),
-                        Type = meText.Type.ToString(),
-                        Status = Helper.ToFriendlyString(meText.Status),
-                        Title = meText.Title,
-                        Description = meText.Description,
-                        TextEntry = meText.Text
-                    };
-                    response.TextStep = textStep;
+                    var findcp = MB.Query<METext>.EQ(b => b.Id, ObjectId.Parse(entityID));
+                    cp = ctx.TextSteps.Collection.Find(findcp).FirstOrDefault();
                 }
+                return cp;
             }
-            return response;
+            catch (Exception ex)
+            {
+                throw new Exception("DD:ProgramDesign:FindByID()::" + ex.Message, ex.InnerException);
+            }
+        }
+
+        public object FindByName(string entityName)
+        {
+            try
+            {
+                TextData result = null;
+
+                using (ProgramDesignMongoContext ctx = new ProgramDesignMongoContext(_dbName))
+                {
+                    var findcp = MB.Query<METext>.EQ(b => b.Title, entityName);
+                    METext cp = ctx.TextSteps.Collection.Find(findcp).FirstOrDefault();
+
+                    if (cp != null)
+                    {
+                        result = new TextData
+                        {
+                            ID = cp.Id.ToString()
+                        };
+                    }
+                    else
+                    {
+                        throw new ArgumentException("TextStepName is not valid or is missing from the records.");
+                    }
+                }
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("DD:MongoTextStepRepository:FindByName()::" + ex.Message, ex.InnerException);
+            }
         }
 
         public Tuple<string, IEnumerable<object>> Select(Interface.APIExpression expression)
@@ -235,6 +262,7 @@ namespace Phytel.API.DataDomain.ProgramDesign
             }
             catch (Exception)
             {
+                //TODO: handle this error
                 throw;
             }
         }
@@ -251,9 +279,6 @@ namespace Phytel.API.DataDomain.ProgramDesign
             throw new NotImplementedException();
         }
 
-        public DTO.Program FindByName(string entityName)
-        {
-            throw new NotImplementedException();
-        }
+
     }
 }

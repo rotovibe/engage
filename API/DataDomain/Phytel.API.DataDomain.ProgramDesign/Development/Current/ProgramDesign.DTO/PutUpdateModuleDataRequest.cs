@@ -21,6 +21,12 @@ namespace Phytel.API.DataDomain.ProgramDesign.DTO
         [ApiMember(Name = "Name", Description = "Name for this module", ParameterType = "property", DataType = "string", IsRequired = false)]
         public string Name { get; set; }
 
+        [ApiMember(Name = "Description", Description = "Description for this module", ParameterType = "property", DataType = "string", IsRequired = false)]
+        public string Description { get; set; }
+
+        [ApiMember(Name = "Order", Description = "Order for this module", ParameterType = "property", DataType = "int", IsRequired = false)]
+        public string Order { get; set; }
+
         [ApiMember(Name = "ProgramId", Description = "Id for the parent Program for this module", ParameterType = "property", DataType = "string", IsRequired = true)]
         public string ProgramId { get; set; }
 

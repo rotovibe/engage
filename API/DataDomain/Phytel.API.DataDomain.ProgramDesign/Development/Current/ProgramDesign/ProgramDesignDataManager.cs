@@ -90,8 +90,6 @@ namespace Phytel.API.DataDomain.ProgramDesign
             }
         }
 
-        //public static GetAllProgramsResponse
-
         public static GetAllTextStepDataResponse GetAllTextSteps(GetAllTextStepDataRequest request)
         {
             GetAllTextStepDataResponse result = new GetAllTextStepDataResponse();
@@ -114,8 +112,6 @@ namespace Phytel.API.DataDomain.ProgramDesign
             return result;
         }
 
-        //public static GetContractProgramResponse
-
         public static GetModuleResponse GetModuleByID(GetModuleRequest request)
         {
             GetModuleResponse result = new GetModuleResponse();
@@ -127,47 +123,6 @@ namespace Phytel.API.DataDomain.ProgramDesign
 
             return (result != null ? result : new GetModuleResponse());
         }
-
-        //public GetProgramAttributeResponse GetProgramAttributes(GetProgramAttributeRequest request)
-        //{
-        //    try
-        //    {
-        //        GetProgramAttributeResponse response = new GetProgramAttributeResponse();
-        //        ICollection<SelectExpression> selectExpressions = new List<SelectExpression>();
-
-        //        // PlanElementId
-        //        SelectExpression patientSelectExpression = new SelectExpression();
-        //        patientSelectExpression.FieldName = MEProgramAttribute.PlanElementIdProperty;
-        //        patientSelectExpression.Type = SelectExpressionType.EQ;
-        //        patientSelectExpression.Value = request.PlanElementId;
-        //        patientSelectExpression.ExpressionOrder = 1;
-        //        patientSelectExpression.GroupID = 1;
-        //        selectExpressions.Add(patientSelectExpression);
-
-        //        APIExpression apiExpression = new APIExpression();
-        //        apiExpression.Expressions = selectExpressions;
-
-        //        IProgramDesignRepository<GetProgramAttributeResponse> repo =
-        //            ProgramDesignRepositoryFactory<GetProgramAttributeResponse>.GetProgramAttributesRepository(request.ContractNumber, request.Context, request.UserId);
-
-        //        Tuple<string, IEnumerable<object>> result = repo.Select(apiExpression);
-
-        //        if (result != null)
-        //        {
-        //            List<ProgramAttribute> pds = result.Item2.Cast<ProgramAttribute>().ToList();
-        //            if (pds.Count > 0)
-        //            {
-        //                response.ProgramAttribute = pds.FirstOrDefault();
-        //            }
-        //        }
-
-        //        return response;
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        throw new Exception("DD:DataProgramManager:GetProgramAttributes()::" + ex.Message, ex.InnerException);
-        //    }
-        //}
 
         public static GetProgramByNameResponse GetProgramByName(GetProgramByNameRequest request)
         {
@@ -208,58 +163,6 @@ namespace Phytel.API.DataDomain.ProgramDesign
             }
         }
 
-        //public GetProgramDetailsSummaryResponse GetPatientProgramDetailsById(GetProgramDetailsSummaryRequest request)
-        //{
-        //    try
-        //    {
-        //        GetProgramDetailsSummaryResponse response = new GetProgramDetailsSummaryResponse();
-
-        //        IProgramRepository<GetProgramDetailsSummaryResponse> repo =
-        //            Phytel.API.DataDomain.Program.ProgramRepositoryFactory<GetProgramDetailsSummaryResponse>
-        //            .GetPatientProgramRepository(request.ContractNumber, request.Context, request.UserId);
-
-        //        MEPatientProgram mepp = repo.FindByID(request.ProgramId) as MEPatientProgram;
-
-        //        response.Program = new ProgramDetail
-        //        {
-        //            Id = mepp.Id.ToString(),
-        //            Client = mepp.Client != null ? mepp.Client.ToString() : null,
-        //            ContractProgramId = mepp.ContractProgramId.ToString(),
-        //            Description = mepp.Description,
-        //            Name = mepp.Name,
-        //            PatientId = mepp.PatientId.ToString(),
-        //            ProgramState = (int)mepp.ProgramState,
-        //            ShortName = mepp.ShortName,
-        //            StartDate = mepp.StartDate,
-        //            Status = (int)mepp.Status,
-        //            Version = mepp.Version,
-        //            EndDate = mepp.EndDate,
-        //            Completed = mepp.Completed,
-        //            Enabled = mepp.Enabled,
-        //            Next = mepp.Next != null ? mepp.Next.ToString() : string.Empty,
-        //            Order = mepp.Order,
-        //            Previous = mepp.Previous != null ? mepp.Previous.ToString() : string.Empty,
-        //            SourceId = mepp.SourceId.ToString(),
-        //            AssignBy = mepp.AssignedBy,
-        //            AssignDate = mepp.AssignedOn,
-        //            ElementState = (int)mepp.State,
-        //            CompletedBy = mepp.CompletedBy,
-        //            DateCompleted = mepp.DateCompleted,
-        //            ObjectivesInfo = DTOUtils.GetObjectives(mepp.Objectives),
-        //            SpawnElement = DTOUtils.GetSpawnElement(mepp),
-        //            Modules = DTOUtils.GetModules(mepp.Modules, request.ContractNumber, request.UserId)
-        //        };
-
-        //        // load responses
-
-        //        return response;
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        throw new Exception("DD:DataProgramManager:GetPatientProgramDetailsById()::" + ex.Message, ex.InnerException);
-        //    }
-        //}
-
         public static GetProgramResponse GetProgramByID(GetProgramRequest request)
         {
             try
@@ -279,54 +182,6 @@ namespace Phytel.API.DataDomain.ProgramDesign
                 throw new Exception("DD:ProgramDesignDataManager:GetProgramByID()::" + ex.Message, ex.InnerException);
             }
         }
-
-        //public GetStepResponseListResponse GetStepResponse(GetStepResponseListRequest request)
-        //{
-        //    try
-        //    {
-        //        GetStepResponseListResponse response = null;
-        //        response = DTOUtils.GetStepResponses(request.StepId, request.ContractNumber, true, request.UserId);
-        //        return response;
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        throw new Exception("DD:DataProgramManager:GetStepResponse()::" + ex.Message, ex.InnerException);
-        //    }
-        //}
-
-        //public GetStepResponseResponse GetStepResponse(GetStepResponseRequest request)
-        //{
-        //    try
-        //    {
-        //        GetStepResponseResponse response = new GetStepResponseResponse();
-
-        //        IProgramDesignRepository<GetStepResponseResponse> repo = ProgramDesignRepositoryFactory<GetStepResponseResponse>.GetPatientProgramStepResponseRepository(request.ContractNumber, request.Context, request.UserId);
-
-        //        MEPatientProgramResponse result = repo.FindByID(request.ResponseId) as MEPatientProgramResponse;
-
-        //        if (result != null)
-        //        {
-        //            response.StepResponse = new StepResponse
-        //            {
-        //                Id = result.Id.ToString(),
-        //                NextStepId = result.NextStepId.ToString(),
-        //                Nominal = result.Nominal,
-        //                Order = result.Order,
-        //                Required = result.Required,
-        //                Spawn = DTOUtils.GetResponseSpawnElement(result.Spawn),
-        //                StepId = result.StepId.ToString(),
-        //                Text = result.Text,
-        //                Value = result.Value
-        //            };
-        //        }
-
-        //        return response;
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        throw new Exception("DD:ProgramDesignDataManager:GetStepResponse()::" + ex.Message, ex.InnerException);
-        //    }
-        //}
 
         public static GetTextStepDataResponse GetTextStepByID(GetTextStepDataRequest request)
         {
@@ -374,14 +229,6 @@ namespace Phytel.API.DataDomain.ProgramDesign
                 throw new Exception("DD:ProgramDesignDataManager:ParseSpawnElements()::" + ex.Message, ex.InnerException);
             }
         }
-
-        //public PutProgramActionProcessingResponse
-
-        //public PutProgramAttributesResponse
-
-        //public PutUpdateProgramAttributesResponse
-
-        //public PutUpdateResponseResponse
 
         public static PutProgramDataResponse InsertProgram(PutProgramDataRequest request)
         {
