@@ -131,6 +131,8 @@ namespace Phytel.API.DataDomain.ProgramDesign.Service
             return response;
         }
 
+
+
         public PutUpdateModuleDataResponse Put(PutUpdateModuleDataRequest request)
         {
             PutUpdateModuleDataResponse response = new PutUpdateModuleDataResponse();
@@ -380,5 +382,93 @@ namespace Phytel.API.DataDomain.ProgramDesign.Service
             }
             return response;
         }
+
+        public PutModuleInProgramResponse Put(PutModuleInProgramRequest request)
+        {
+            PutModuleInProgramResponse response = new PutModuleInProgramResponse();
+            try
+            {
+                if (string.IsNullOrEmpty(request.UserId))
+                    throw new UnauthorizedAccessException("ProgramDesignDD:Put()::Unauthorized Access");
+
+                response = ProgramDesignDataManager.AddModuleToProgram(request);
+                response.Version = request.Version;
+            }
+            catch (Exception ex)
+            {
+                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+
+                string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
+                Common.Helper.LogException(int.Parse(aseProcessID), ex);
+            }
+
+            return response;
+        }
+
+        public PutActionInModuleResponse Put(PutActionInModuleRequest request)
+        {
+            PutActionInModuleResponse response = new PutActionInModuleResponse();
+            try
+            {
+                if (string.IsNullOrEmpty(request.UserId))
+                    throw new UnauthorizedAccessException("ProgramDesignDD:Put()::Unauthorized Access");
+
+                response = ProgramDesignDataManager.AddActionToModule(request);
+                response.Version = request.Version;
+            }
+            catch (Exception ex)
+            {
+                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+
+                string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
+                Common.Helper.LogException(int.Parse(aseProcessID), ex);
+            }
+
+            return response;
+        }
+
+        public PutTextStepInActionResponse Put(PutTextStepInActionRequest request)
+        {
+            PutTextStepInActionResponse response = new PutTextStepInActionResponse();
+            try
+            {
+                if (string.IsNullOrEmpty(request.UserId))
+                    throw new UnauthorizedAccessException("ProgramDesignDD:Put()::Unauthorized Access");
+
+                response = ProgramDesignDataManager.AddTextStepToAction(request);
+                response.Version = request.Version;
+            }
+            catch (Exception ex)
+            {
+                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+
+                string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
+                Common.Helper.LogException(int.Parse(aseProcessID), ex);
+            }
+
+            return response;
+        }
+
+        public PutYesNoStepInActionResponse Put(PutYesNoStepInActionRequest request)
+        {
+            PutYesNoStepInActionResponse response = new PutYesNoStepInActionResponse();
+            try
+            {
+                if (string.IsNullOrEmpty(request.UserId))
+                    throw new UnauthorizedAccessException("ProgramDesignDD:Put()::Unauthorized Access");
+
+                response = ProgramDesignDataManager.AddYesNoStepToAction(request);
+                response.Version = request.Version;
+            }
+            catch (Exception ex)
+            {
+                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+
+                string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
+                Common.Helper.LogException(int.Parse(aseProcessID), ex);
+            }
+
+            return response;
+        }   
     }
 }

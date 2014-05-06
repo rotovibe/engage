@@ -11,6 +11,7 @@ using MongoDB.Bson;
 using Phytel.API.Common;
 using MongoDB.Bson.Serialization;
 using Phytel.API.DataDomain.ProgramDesign.DTO;
+using Phytel.API.DataDomain.ProgramDesign.MongoDB.DTO;
 using Phytel.API.DataAudit;
 using MB = MongoDB.Driver.Builders;
 
@@ -279,6 +280,9 @@ namespace Phytel.API.DataDomain.ProgramDesign
             throw new NotImplementedException();
         }
 
-
+        public object Insert(object newEntity, string type)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

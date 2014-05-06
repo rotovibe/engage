@@ -284,6 +284,10 @@ namespace Phytel.API.DataDomain.ProgramDesign
             throw new NotImplementedException();
         }
 
+        public object Insert(object newEntity, string type)
+        {
+            throw new NotImplementedException();
+        }
 
     }
 }

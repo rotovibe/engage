@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Collections.Generic;
 using Phytel.API.Common;
 using Phytel.API.Interface;
+using System;
 
 namespace Phytel.API.DataDomain.ProgramDesign.MongoDB.DTO
 {
@@ -25,6 +26,8 @@ namespace Phytel.API.DataDomain.ProgramDesign.MongoDB.DTO
         public const string DescriptionProperty = "desc";
         public const string CompletedByProperty = "cby";
         public const string StatusProperty = "sts";
+        public const string TextStepsProperty = "txt";
+        public const string YesNoStepsProperty = "yesno";
 
         public const string VersionProperty = "v";
         public const string UpdatedByProperty = "uby";
@@ -44,6 +47,14 @@ namespace Phytel.API.DataDomain.ProgramDesign.MongoDB.DTO
         [BsonElement(DescriptionProperty)]
         [BsonIgnoreIfNull(true)]
         public string Description { get; set; }
+
+        [BsonElement(TextStepsProperty)]
+        [BsonIgnoreIfNull(true)]
+        public List<METext> TextSteps { get; set; }
+
+        [BsonElement(YesNoStepsProperty)]
+        [BsonIgnoreIfNull(true)]
+        public List<MEYesNo> YesNoSteps { get; set; }
 
         [BsonElement(CompletedByProperty)]
         [BsonIgnoreIfNull(true)]

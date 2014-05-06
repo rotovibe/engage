@@ -1,13 +1,18 @@
 ﻿using Phytel.API.Interface;
 using ServiceStack.ServiceHost;
-//using Phytel.API.DataDomain.Contact.DTO;
 using System.Collections.Generic;
 
 namespace Phytel.API.DataDomain.ProgramDesign.DTO
 {
-    [Route("/{Context}/{Version}/{ContractNumber}/ProgramDesign/Module/Insert", "PUT")]
-    public class PutModuleDataRequest : IDataDomainRequest
+    [Route("/{Context}/{Version}/{ContractNumber}/ProgramDesign/Program/{ProgramId}/Module/{ModuleId}", "PUT")]
+    public class PutModuleInProgramRequest : IDataDomainRequest
     {
+        [ApiMember(Name = "ModuleId", Description = "Id for the Module being added to Program", ParameterType = "property", DataType = "string", IsRequired = true)]
+        public string ModuleId { get; set; }
+
+        [ApiMember(Name = "ProgramId", Description = "Id for the parent Program for this module", ParameterType = "property", DataType = "string", IsRequired = true)]
+        public string ProgramId { get; set; }
+
         [ApiMember(Name = "Context", Description = "Product Context requesting the Module", ParameterType = "path", DataType = "string", IsRequired = false)]
         public string Context { get; set; }
 
@@ -19,11 +24,5 @@ namespace Phytel.API.DataDomain.ProgramDesign.DTO
 
         [ApiMember(Name = "UserID", Description = "ID of the user making the request (Internally used ONLY)", ParameterType = "path", DataType = "string", IsRequired = false)]
         public string UserId { get; set; }
-
-        [ApiMember(Name = "Name", Description = "Name for this module", ParameterType = "property", DataType = "string", IsRequired = false)]
-        public string Name { get; set; }
-
-        [ApiMember(Name = "ProgramId", Description = "Id for the parent Program for this module", ParameterType = "property", DataType = "string", IsRequired = false)]
-        public string ProgramId { get; set; }
     }
 }

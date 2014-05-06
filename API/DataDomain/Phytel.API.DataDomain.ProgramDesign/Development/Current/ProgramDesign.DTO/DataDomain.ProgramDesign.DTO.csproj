@@ -132,7 +132,15 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PutActionDataRequest.cs" />
     <Compile Include="PutActionDataResponse.cs" />
+    <Compile Include="PutYesNoStepInActionRequest.cs" />
+    <Compile Include="PutTextStepInActionRequest.cs" />
+    <Compile Include="PutYesNoStepInActionResponse.cs" />
+    <Compile Include="PutTextStepInActionResponse.cs" />
     <Compile Include="PutModuleDataRequest.cs" />
+    <Compile Include="PutActionInModuleRequest.cs" />
+    <Compile Include="PutModuleInProgramRequest.cs" />
+    <Compile Include="PutActionInModuleResponse.cs" />
+    <Compile Include="PutModuleInProgramResponse.cs" />
     <Compile Include="PutTextStepDataRequest.cs" />
     <Compile Include="PutTextStepDataResponse.cs" />
     <Compile Include="PutUpdateActionDataRequest.cs" />

@@ -24,6 +24,7 @@ namespace Phytel.API.DataDomain.ProgramDesign.MongoDB.DTO
         public const string ObjectiveProperty = "obj";
         public const string DescriptionProperty = "desc";
         public const string StatusProperty = "stat";
+        public const string ActionsProperty = "acts";
 
         public const string VersionProperty = "v";
         public const string UpdatedByProperty = "uby";
@@ -48,6 +49,10 @@ namespace Phytel.API.DataDomain.ProgramDesign.MongoDB.DTO
         [BsonElement(DescriptionProperty)]
         [BsonIgnoreIfNull(true)]
         public string Description { get; set; }
+
+        [BsonElement(ActionsProperty)]
+        [BsonIgnoreIfNull(true)]
+        public List<MEAction> Actions { get; set; }
 
         [BsonElement(StatusProperty)]
         [BsonIgnoreIfNull(true)]

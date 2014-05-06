@@ -1,13 +1,20 @@
 using MongoDB.Bson;
+using MongoDB.Bson.Serialization;
+using MongoDB.Driver;
+using MongoDB.Driver.Builders;
 using Phytel.API.Common;
-using Phytel.API.Common.Format;
+using Phytel.API.DataAudit;
 using Phytel.API.DataDomain.ProgramDesign;
 using Phytel.API.DataDomain.ProgramDesign.DTO;
 using Phytel.API.DataDomain.ProgramDesign.MongoDB.DTO;
+using Phytel.API.Interface;
 using System;
 using System.Collections.Generic;
-using System.Data.SqlClient;
-using Phytel.API.Interface;
+using System.Configuration;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using MB = MongoDB.Driver.Builders;
 
 namespace Phytel.API.DataDomain.ProgramDesign
 {
@@ -408,6 +415,42 @@ namespace Phytel.API.DataDomain.ProgramDesign
             {
                 throw ex;
             }
+        }
+
+        public static PutModuleInProgramResponse AddModuleToProgram(PutModuleInProgramRequest request)
+        {
+            IProgramDesignRepository<PutModuleInProgramRequest> repo =
+                ProgramDesignRepositoryFactory<PutModuleInProgramRequest>.GetProgramDesignRepository(request.ContractNumber, request.Context, request.UserId);
+
+            PutModuleInProgramResponse result = repo.Insert(request, "module") as PutModuleInProgramResponse;
+            return result;
+        }
+
+        public static PutActionInModuleResponse AddActionToModule(PutActionInModuleRequest request)
+        {
+            IProgramDesignRepository<PutActionInModuleRequest> repo =
+                ProgramDesignRepositoryFactory<PutActionInModuleRequest>.GetProgramDesignRepository(request.ContractNumber, request.Context, request.UserId);
+
+            PutActionInModuleResponse result = repo.Insert(request, "action") as PutActionInModuleResponse;
+            return result;
+        }
+
+        public static PutTextStepInActionResponse AddTextStepToAction(PutTextStepInActionRequest request)
+        {
+            IProgramDesignRepository<PutTextStepInActionRequest> repo =
+                ProgramDesignRepositoryFactory<PutTextStepInActionRequest>.GetProgramDesignRepository(request.ContractNumber, request.Context, request.UserId);
+
+            PutTextStepInActionResponse result = repo.Insert(request, "text") as PutTextStepInActionResponse;
+            return result;
+        }
+
+        public static PutYesNoStepInActionResponse AddYesNoStepToAction(PutYesNoStepInActionRequest request)
+        {
+            IProgramDesignRepository<PutYesNoStepInActionRequest> repo =
+                ProgramDesignRepositoryFactory<PutYesNoStepInActionRequest>.GetProgramDesignRepository(request.ContractNumber, request.Context, request.UserId);
+
+            PutYesNoStepInActionResponse result = repo.Insert(request, "yesno") as PutYesNoStepInActionResponse;
+            return result;
         }
     }
 }   

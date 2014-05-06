@@ -59,7 +59,7 @@ namespace Phytel.API.DataDomain.ProgramDesign
                     {
                         Id = ObjectId.GenerateNewId(),
                         Name = request.Name,
-                        ProgramId = new ObjectId(request.ProgramId.ToString()),
+                        //ProgramId = new ObjectId(request.ProgramId.ToString()),
                         Version = request.Version,
                         UpdatedBy = ObjectId.Parse(request.UserId),
                         TTLDate = null,
@@ -285,6 +285,9 @@ namespace Phytel.API.DataDomain.ProgramDesign
             throw new NotImplementedException();
         }
 
-
+        public object Insert(object newEntity, string type)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

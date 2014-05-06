@@ -14,5 +14,6 @@ namespace Phytel.API.DataDomain.ProgramDesign
         List<ProgramInfo> GetActiveProgramsInfoList(GetAllActiveProgramsRequest request);
         //IEnumerable<object> Find(string Id);
         object FindByName(string entityName);
+        object Insert(object newEntity, string type);
     }
 }

@@ -5,6 +5,7 @@ using MongoDB.Driver.Builders;
 using Phytel.API.Common;
 using Phytel.API.DataAudit;
 using Phytel.API.DataDomain.ProgramDesign.DTO;
+using Phytel.API.DataDomain.ProgramDesign.MongoDB.DTO;
 using Phytel.API.Interface;
 using System;
 using System.Collections.Generic;
@@ -278,6 +279,9 @@ namespace Phytel.API.DataDomain.ProgramDesign
             throw new NotImplementedException();
         }
 
-
+        public object Insert(object newEntity, string type)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

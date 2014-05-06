@@ -4,8 +4,9 @@ using Phytel.Mongo.Linq;
 using System.ComponentModel;
 using System.Collections.Generic;
 using Phytel.API.Common;
+using Phytel.API.Interface;
 
-namespace Phytel.API.DataDomain.ProgramDesign.DTO
+namespace Phytel.API.DataDomain.ProgramDesign.MongoDB.DTO
 {
     [BsonIgnoreExtraElements(false)]
     [MongoIndex(Keys = new string[] { TTLDateProperty, }, TimeToLive = 0)]
