@@ -49,6 +49,23 @@ namespace Phytel.API.DataDomain.Program.Procs.Tests
                 IMongoProcedure proc = factory.GetProcedure(request);
                 proc.Execute();
             }
+
+            [TestMethod()]
+            public void Get_MoveProgramAttributeStartDateValue_Test()
+            {
+                string procName = "mp_MoveProgramAttributeStartDateValue";
+                double version = 1.0;
+                double docVersion = 1.0;
+                string contract = "InHealth001";
+                string context = "NG";
+                string userId = "user";
+
+                GetMongoProceduresRequest request = new GetMongoProceduresRequest { Version = version, Name = procName, DocumentVersion = docVersion, ContractNumber = contract, Context = context, UserId = userId };
+
+                MongoProcedureFactory factory = new MongoProcedureFactory();
+                IMongoProcedure proc = factory.GetProcedure(request);
+                proc.Execute();
+            }
         }
     }
 }

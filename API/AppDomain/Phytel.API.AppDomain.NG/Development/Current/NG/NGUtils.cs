@@ -69,6 +69,8 @@ namespace Phytel.API.AppDomain.NG
                 {
                     AssignBy = p.AssignBy,
                     AssignDate = p.AssignDate,
+                    AttrStartDate = p.AttrStartDate,
+                    AttrEndDate = p.AttrEndDate,
                     Client = p.Client,
                     Completed = p.Completed,
                     CompletedBy = p.CompletedBy,
@@ -300,6 +302,8 @@ namespace Phytel.API.AppDomain.NG
                             Actions = GetADActions(m.Actions),
                             AssignBy = m.AssignBy,
                             AssignDate = m.AssignDate,
+                            AttrEndDate = m.AttrEndDate, // night 919
+                            AttrStartDate = m.AttrStartDate, // night 919
                             Completed = m.Completed,
                             CompletedBy = m.CompletedBy,
                             DateCompleted = m.DateCompleted,

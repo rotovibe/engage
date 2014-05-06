@@ -436,7 +436,7 @@ namespace Phytel.API.AppDomain.NG
                 
                 m.AssignDate = System.DateTime.UtcNow;
                 m.ElementState = 2;
-                m.AssignBy = "System";
+                m.AssignBy = "5368ff2ad4332316288f3e3e";
             }
             catch (Exception ex)
             {
@@ -958,7 +958,7 @@ namespace Phytel.API.AppDomain.NG
             try
             {
                 p.Enabled = true;
-                p.AssignBy = "system";
+                p.AssignBy = "5368ff2ad4332316288f3e3e";
                 p.AssignDate = System.DateTime.UtcNow;
                 pe = p;
                 return pe;
