@@ -12,7 +12,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DataManagement.Procedures
     public class MoveProgramAttributeStartDateValue : MongoProcedure, IMongoProcedure
     {
         public const string Name = "mp_MoveProgramAttributeStartDateValue";
-        public const string Description = "Procedure to move the programattribute startdate to the newly migrated attributestartdate on the patientprogram document.";
+        public const string Description = "Procedure to move the programattribute startdate to the newly migrated attributestartdate on the patientprogram document. Updated by is set to system id '5368ff2ad4332316288f3e3e' ";
 
         public override void Implementation()
         {
@@ -27,6 +27,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DataManagement.Procedures
                 programs.ForEach(p =>
                 {
                     Request.UserId = p.UpdatedBy.ToString();
+                    repo.UserId = "5368ff2ad4332316288f3e3e";  // system
 
                     IProgramRepository arp = new ProgramRepositoryFactory().GetRepository(Request, RepositoryType.PatientProgramAttribute);
                     MEProgramAttribute pAtt = (MEProgramAttribute)arp.FindByPlanElementID(p.Id.ToString());
@@ -34,7 +35,17 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DataManagement.Procedures
                     if (p.AttributeStartDate == null && pAtt.StartDate != null)
                     {
                         p.AttributeStartDate = pAtt.StartDate;
-                        repo.Update(p);
+                        ProgramDetail pd = new ProgramDetail
+                        {
+                            AttrStartDate = p.AttributeStartDate,
+                            Id = p.Id.ToString(),
+                            ProgramState = (int)p.State,
+                            Order = p.Order,
+                            Enabled = p.Enabled,
+                            Completed = p.Completed
+                        };
+                        PutProgramActionProcessingRequest request = new PutProgramActionProcessingRequest { Program = pd, ProgramId = p.Id.ToString()};
+                        repo.Update(request);
                         Results.Add(new Result { Message = "PlanElement [" + p.Id.ToString() + "] in PatientProgramAttributes collection startdate moved" });
                     }
                 });
