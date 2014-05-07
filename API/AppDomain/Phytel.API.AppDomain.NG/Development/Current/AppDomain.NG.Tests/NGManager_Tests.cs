@@ -393,20 +393,3 @@ namespace Phytel.API.AppDomain.NG.Test
         #endregion
     }
 }
-//{"Contact":{"Modes":[{"LookUpModeId":"52e17cc2d433232028e9e38f","OptOut":false,"Preferred":false},{"LookUpModeId":"52e17ce6d433232028e9e390","OptOut":true,"Preferred":false},{"LookUpModeId":"52e17d08d433232028e9e391","OptOut":false,"Preferred":true},{"LookUpModeId":"52e17d10d433232028e9e392","OptOut":false,"Preferred":false}],
-
-//"Addresses":[{"Id":"52e75858d43323149870c22a","OptOut":false,"Preferred":true,"TypeId":"52e18c45d433232028e9e3ab","City":"Dallas","StateId":"52e195b8d433232028e9e3e4","PostalCode":"75234","Line1":"phytel","Line2":"11511 luna road","Line3":"suite 600"}],
-
-//"Phones":[{"Id":"52e7583dd43323149870c225","IsText":false,"Number":"2142142147","OptOut":false,"PhonePreferred":true,"TextPreferred":false,"TypeId":"52e18c2ed433232028e9e3a6"},{"Id":"52e75847d43323149870c226","IsText":true,"Number":"8178178179","OptOut":false,"PhonePreferred":false,"TextPreferred":true,"TypeId":"52e18c38d433232028e9e3a8"},{"Id":"52e7584bd43323149870c227","IsText":false,"Number":"9729729723","OptOut":false,"PhonePreferred":false,"TextPreferred":false,"TypeId":"52e18c32d433232028e9e3a7"}],
-
-//"Emails":[{"Id":"52e75852d43323149870c228","OptOut":false,"Preferred":true,"TypeId":"52e18c32d433232028e9e3a7","Text":"test1@gmail.com"},{"Id":"52e75855d43323149870c229","OptOut":false,"Preferred":false,"TypeId":"52e18c41d433232028e9e3aa","Text":"test2@gmail.com"}],
-
-//"Languages":[{"LookUpLanguageId":"52e199dfd433232028e9e3f3","Preferred":true},{"LookUpLanguageId":"52e199d5d433232028e9e3f2","Preferred":false},{"LookUpLanguageId":"52e199d1d433232028e9e3f1","Preferred":false},{"LookUpLanguageId":"52e199cdd433232028e9e3f0","Preferred":false}],
-
-//"TimesOfDaysId":["52e17de8d433232028e9e394","52e17dedd433232028e9e395"],
-//"WeekDays":["1","2","3","4"],
-//"UserId":1,
-//"PatientId":"52e26f5b072ef7191c11e0b6",
-//"Id":"52ebc816d433232150813e49",
-//"TimeZoneId":"52e1817ad433232028e9e39d"},
-//"Token":"52ebf7d3d6a4850b78619119"}

@@ -133,7 +133,16 @@ namespace Phytel.API.AppDomain.NG.Test.Stubs
 
         public DTO.GetPatientActionDetailsResponse GetPatientActionDetails(DTO.GetPatientActionDetailsRequest request)
         {
-            throw new NotImplementedException();
+            DTO.GetPatientActionDetailsResponse response = new DTO.GetPatientActionDetailsResponse
+            {
+                Action = new DTO.Actions
+                {
+                    Name = "Program Completion",
+                    Description = "Program Completion test description"
+                },
+                Version = 1.0
+            };
+            return response;
         }
 
         public DTO.GetPatientSSNResponse GetPatientSSN(DTO.GetPatientSSNRequest request)
@@ -189,7 +198,7 @@ namespace Phytel.API.AppDomain.NG.Test.Stubs
             }
         }
 
-        public Programs.IEndpointUtils EndpointUtils
+        public NG.Programs.IEndpointUtils EndpointUtils
         {
             get
             {
