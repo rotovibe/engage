@@ -51,7 +51,19 @@ namespace Phytel.API.DataDomain.Program.Test.Stubs
                                 Unit = "lbs", 
                                 Status = 1} },
                         Actions = new List<ActionsDetail>(){ 
-                            new ActionsDetail{ Id = "000000000000000000000000", ElementState = 4, Name ="test action from stub", Text = "test action 1"} } ,
+                            new ActionsDetail{ 
+                                Id = "000000000000000000000000", 
+                                SourceId="123456789012345678901234", 
+                                ElementState = 4, 
+                                Name ="test action from stub", 
+                                Text = "test action 1",
+                                AssignBy = "123456789011111111112233",
+                                AssignTo = "123456789011111111112232",
+                                AssignDate = Convert.ToDateTime("1/1/1899"),
+                                AttrStartDate = Convert.ToDateTime("1/1/1800"),
+                                AttrEndDate = Convert.ToDateTime("1/1/1801"),
+                                Description = "BSHSI - Outreach & Enrollment action description"
+                            } } ,
                              AttrStartDate = Convert.ToDateTime("1/1/1900"),
                              AttrEndDate = Convert.ToDateTime("1/1/1901"),
                              AssignDate = Convert.ToDateTime("1/1/1999"),

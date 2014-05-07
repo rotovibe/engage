@@ -69,20 +69,31 @@ namespace Phytel.API.DataDomain.Program.Test.Stubs
                     AssignDate = m.AssignedOn,
                     AssignTo = m.AssignedTo.ToString(),
                     AssignBy = m.AssignedBy.ToString(),
-                    Objectives = this.GetObjectivesData(m.Objectives)
+                    Objectives = this.GetObjectivesData(m.Objectives),
+                     Actions = GetActions(m.Actions)
                 });
             });
-            //modules.Add(
-            //        new DTO.ModuleDetail
-            //        {
-            //            Id = "000000000000000000000000",
-            //            Name = "Test stub module 1",
-            //            Description = "BSHSI - Outreach & Enrollment",
-            //            SourceId = "532b5585a381168abe00042c",
-            //            Actions = new List<DTO.ActionsDetail>(){ 
-            //                new DTO.ActionsDetail{ Id = "000000000000000000000000", ElementState = 4, Name ="test action from stub", Text = "test action 1"} }
-            //        });
             return modules;
+        }
+
+        private List<DTO.ActionsDetail> GetActions(List<MongoDB.DTO.Action> list)
+        {
+            List<DTO.ActionsDetail> acts = new List<DTO.ActionsDetail>();
+            list.ForEach(a =>
+            {
+                acts.Add(new DTO.ActionsDetail
+                {
+                    Description = a.Description,
+                    AttrStartDate = a.AttributeStartDate,
+                    AttrEndDate = a.AttributeEndDate,
+                    AssignTo = a.AssignedTo.ToString(),
+                    AssignBy = a.AssignedBy.ToString(),
+                    AssignDate = a.AssignedOn,
+                    Id = a.Id.ToString(),
+                    SourceId = a.SourceId.ToString()
+                });
+            });
+            return acts;
         }
 
         public List<Objective> GetObjectives(List<DTO.ObjectiveInfoData> list)

@@ -206,6 +206,157 @@ namespace Phytel.API.DataDomain.Program.Tests
                 Assert.AreEqual(ctrl, smpl);
             }
 
+            #region Actions attributes night-921
+            [TestMethod()]
+            [TestCategory("NIGHT-921")]
+            [TestProperty("TFS", "4957")]
+            public void DD_Get_With_Action_Description_Test()
+            {
+                string desc = "BSHSI - Outreach & Enrollment action description";
+                //                ProgramDataManager pm = new ProgramDataManager { Factory = new ProgramRepositoryFactory(), DTOUtility = new DTOUtility { Factory = new ProgramRepositoryFactory() } };
+                ProgramDataManager pm = new ProgramDataManager { Factory = new StubProgramRepositoryFactory(), DTOUtility = new StubDTOUtility { Factory = new StubProgramRepositoryFactory() } };
+                GetProgramDetailsSummaryRequest request = new GetProgramDetailsSummaryRequest
+                {
+                    Version = 1.0,
+                    ProgramId = _programId,
+                    PatientId = _patientId,
+                    UserId = "000000000000000000000000",
+                    ContractNumber = "InHealth001",
+                    Context = "NG"
+                };
+                GetProgramDetailsSummaryResponse response = pm.GetPatientProgramDetailsById(request);
+                ModuleDetail module = response.Program.Modules.Find(m => m.SourceId == "532b5585a381168abe00042c");
+                ActionsDetail action = module.Actions.Find(a => a.SourceId == "123456789012345678901234");
+                string mDesc = action.Description.Trim();
+                Assert.AreEqual(desc, mDesc, true);
+            }
+
+            [TestMethod()]
+            [TestCategory("NIGHT-919")]
+            [TestProperty("TFS", "4957")]
+            [TestProperty("Layer", "DD.DataManager")]
+            public void DD_Get_With_Action_Attr_StartDate_Test()
+            {
+                DateTime? time = Convert.ToDateTime("1/1/1800");
+                //                ProgramDataManager pm = new ProgramDataManager { Factory = new ProgramRepositoryFactory(), DTOUtility = new DTOUtility { Factory = new ProgramRepositoryFactory() } };
+                ProgramDataManager pm = new ProgramDataManager { Factory = new StubProgramRepositoryFactory(), DTOUtility = new StubDTOUtility { Factory = new StubProgramRepositoryFactory() } };
+                GetProgramDetailsSummaryRequest request = new GetProgramDetailsSummaryRequest
+                {
+                    Version = 1.0,
+                    ProgramId = _programId,
+                    PatientId = _patientId,
+                    UserId = "000000000000000000000000",
+                    ContractNumber = "InHealth001",
+                    Context = "NG"
+                };
+                GetProgramDetailsSummaryResponse response = pm.GetPatientProgramDetailsById(request);
+                ModuleDetail module = response.Program.Modules.Find(m => m.SourceId == "532b5585a381168abe00042c");
+                ActionsDetail action = module.Actions.Find(a => a.SourceId == "123456789012345678901234");
+                DateTime? mTime = action.AttrStartDate;
+                Assert.AreEqual(time, mTime);
+            }
+
+            [TestMethod()]
+            [TestCategory("NIGHT-921")]
+            [TestProperty("TFS", "4957")]
+            [TestProperty("Layer", "DD.DataManager")]
+            public void DD_Get_With_Action_Attr_EndDate_Test()
+            {
+                DateTime? time = Convert.ToDateTime("1/1/1801");
+                //                ProgramDataManager pm = new ProgramDataManager { Factory = new ProgramRepositoryFactory(), DTOUtility = new DTOUtility { Factory = new ProgramRepositoryFactory() } };
+                ProgramDataManager pm = new ProgramDataManager { Factory = new StubProgramRepositoryFactory(), DTOUtility = new StubDTOUtility { Factory = new StubProgramRepositoryFactory() } };
+                GetProgramDetailsSummaryRequest request = new GetProgramDetailsSummaryRequest
+                {
+                    Version = 1.0,
+                    ProgramId = _programId,
+                    PatientId = _patientId,
+                    UserId = "000000000000000000000000",
+                    ContractNumber = "InHealth001",
+                    Context = "NG"
+                };
+                GetProgramDetailsSummaryResponse response = pm.GetPatientProgramDetailsById(request);
+                ModuleDetail module = response.Program.Modules.Find(m => m.SourceId == "532b5585a381168abe00042c");
+                ActionsDetail action = module.Actions.Find(a => a.SourceId == "123456789012345678901234");
+                DateTime? mTime = action.AttrEndDate;
+                Assert.AreEqual(time, mTime);
+            }
+
+            [TestMethod()]
+            [TestCategory("NIGHT-921")]
+            [TestProperty("TFS", "4957")]
+            [TestProperty("Layer", "DD.DataManager")]
+            public void DD_Get_With_Action_AssignedOn_Test()
+            {
+                DateTime? time = Convert.ToDateTime("1/1/1899");
+                //                ProgramDataManager pm = new ProgramDataManager { Factory = new ProgramRepositoryFactory(), DTOUtility = new DTOUtility { Factory = new ProgramRepositoryFactory() } };
+                ProgramDataManager pm = new ProgramDataManager { Factory = new StubProgramRepositoryFactory(), DTOUtility = new StubDTOUtility { Factory = new StubProgramRepositoryFactory() } };
+                GetProgramDetailsSummaryRequest request = new GetProgramDetailsSummaryRequest
+                {
+                    Version = 1.0,
+                    ProgramId = _programId,
+                    PatientId = _patientId,
+                    UserId = "000000000000000000000000",
+                    ContractNumber = "InHealth001",
+                    Context = "NG"
+                };
+                GetProgramDetailsSummaryResponse response = pm.GetPatientProgramDetailsById(request);
+                ModuleDetail module = response.Program.Modules.Find(m => m.SourceId == "532b5585a381168abe00042c");
+                ActionsDetail action = module.Actions.Find(a => a.SourceId == "123456789012345678901234");
+                DateTime? mTime = action.AssignDate;
+                Assert.AreEqual(time, mTime);
+            }
+
+            // assignedby
+
+            [TestMethod()]
+            [TestCategory("NIGHT-921")]
+            [TestProperty("TFS", "4957")]
+            [TestProperty("Layer", "DD.DataManager")]
+            public void DD_Get_With_Action_AssignedTo_Test()
+            {
+                string assnTC = "123456789011111111112232";
+                ProgramDataManager pm = new ProgramDataManager { Factory = new StubProgramRepositoryFactory(), DTOUtility = new StubDTOUtility { Factory = new StubProgramRepositoryFactory() } };
+                GetProgramDetailsSummaryRequest request = new GetProgramDetailsSummaryRequest
+                {
+                    Version = 1.0,
+                    ProgramId = _programId,
+                    PatientId = _patientId,
+                    UserId = "000000000000000000000000",
+                    ContractNumber = "InHealth001",
+                    Context = "NG"
+                };
+                GetProgramDetailsSummaryResponse response = pm.GetPatientProgramDetailsById(request);
+                ModuleDetail module = response.Program.Modules.Find(m => m.SourceId == "532b5585a381168abe00042c");
+                ActionsDetail action = module.Actions.Find(a => a.SourceId == "123456789012345678901234");
+                string assnT = action.AssignTo;
+                Assert.AreEqual(assnTC, assnT);
+            }
+
+            [TestMethod()]
+            [TestCategory("NIGHT-921")]
+            [TestProperty("TFS", "4957")]
+            [TestProperty("Layer", "DD.DataManager")]
+            public void DD_Get_With_Action_AssignedBy()
+            {
+                string ctrl = "123456789011111111112233";
+                ProgramDataManager pm = new ProgramDataManager { Factory = new StubProgramRepositoryFactory(), DTOUtility = new StubDTOUtility { Factory = new StubProgramRepositoryFactory() } };
+                GetProgramDetailsSummaryRequest request = new GetProgramDetailsSummaryRequest
+                {
+                    Version = 1.0,
+                    ProgramId = _programId,
+                    PatientId = _patientId,
+                    UserId = "000000000000000000000000",
+                    ContractNumber = "InHealth001",
+                    Context = "NG"
+                };
+                GetProgramDetailsSummaryResponse response = pm.GetPatientProgramDetailsById(request);
+                ModuleDetail module = response.Program.Modules.Find(m => m.SourceId == "532b5585a381168abe00042c");
+                ActionsDetail action = module.Actions.Find(a => a.SourceId == "123456789012345678901234");
+                string smpl = action.AssignBy;
+                Assert.AreEqual(ctrl, smpl);
+            }
+            #endregion 
+
             [TestMethod()]
             [TestCategory("NIGHT-923")]
             [TestProperty("TFS", "3840")]

@@ -302,5 +302,41 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO.Tests
                 Assert.AreEqual(1, odata.Count);
             }
         }
+
+        [TestClass()]
+        public class GetActions
+        {
+            [TestMethod()]
+            [TestCategory("NIGHT-921")]
+            [TestProperty("TFS", "4957")]
+            [TestProperty("Layer", "DD.DTOUtility")]
+            public void DD_Get_Valid_Actions_Test()
+            {
+                DTOUtility dtoUtil = new DTOUtility();
+                dtoUtil.Factory = new StubProgramRepositoryFactory();
+                List<Action> acts = new List<Action>();
+                acts.Add(new Action { Id = ObjectId.GenerateNewId(), SourceId = ObjectId.GenerateNewId(), Name="TestAction", Description ="test action!!!" });
+                List<ActionsDetail> aDetails = dtoUtil.GetActions(acts, "InHealth001", "123456789012345678901234");
+                Assert.AreEqual(acts[0].Id.ToString(), aDetails[0].Id);
+            }
+        }
+
+        [TestClass()]
+        public class GetAction
+        {
+            [TestMethod()]
+            [TestCategory("NIGHT-921")]
+            [TestProperty("TFS", "4957")]
+            [TestProperty("Layer", "DD.DTOUtility")]
+            public void DD_Get_Valid_Action_Test()
+            {
+                DTOUtility dtoUtil = new DTOUtility();
+                dtoUtil.Factory = new StubProgramRepositoryFactory();
+                List<Action> acts = new List<Action>();
+                acts.Add(new Action { Id = ObjectId.GenerateNewId(), SourceId = ObjectId.GenerateNewId(), Name = "TestAction", Description = "test action!!!" });
+                ActionsDetail aDetail = dtoUtil.GetAction("InHealth001", "123456789012345678901234", acts[0]);
+                Assert.AreEqual(acts[0].Id.ToString(), aDetail.Id);
+            }
+        }
     }
 }

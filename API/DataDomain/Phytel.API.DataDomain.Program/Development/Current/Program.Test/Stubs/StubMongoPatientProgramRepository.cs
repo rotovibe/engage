@@ -115,10 +115,17 @@ namespace Phytel.API.DataDomain.Program.Test.Stubs
                                         SourceId = ObjectId.Parse("532b5585a381168abe00042c"),
                                         Actions = new List<Phytel.API.DataDomain.Program.MongoDB.DTO.Action>(){ 
                                             new Phytel.API.DataDomain.Program.MongoDB.DTO.Action{ 
-                                                Id = ObjectId.Parse("000000000000000000000000"),  
+                                                Id = ObjectId.Parse("000000000000000000000000"), 
+                                                SourceId = ObjectId.Parse("123456789012345678901234"),
                                                 State = ElementState.InProgress, 
                                                 Name ="test action from stub", 
-                                                Description = "test action 1"} },
+                                                Description = "BSHSI - Outreach & Enrollment action description",
+                                                AttributeStartDate = Convert.ToDateTime("1/1/1800"),
+                                                AttributeEndDate = Convert.ToDateTime("1/1/1801"),
+                                                AssignedOn = Convert.ToDateTime("1/1/1899"),
+                                                AssignedTo = ObjectId.Parse("123456789011111111112232"),
+                                                AssignedBy = ObjectId.Parse("123456789011111111112233")
+                                            } },
                                         AttributeStartDate = Convert.ToDateTime("1/1/1900"),
                                         AttributeEndDate = Convert.ToDateTime("1/1/1901"),
                                         AssignedOn = Convert.ToDateTime("1/1/1999"),
