@@ -301,5 +301,10 @@ namespace Phytel.API.DataDomain.Program
         {
             throw new NotImplementedException();
         }
+
+        public List<Module> GetProgramModules(ObjectId progId)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

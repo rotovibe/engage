@@ -21,5 +21,7 @@ namespace Phytel.API.DataDomain.Program
         object FindByEntityExistsID(string patientID, string progId);
         IEnumerable<object> Find(List<ObjectId> Ids);
         bool Save(object entity);
+
+        List<Module> GetProgramModules(ObjectId progId);
     }
 }

@@ -23,7 +23,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO.Tests
             public void DD_Module_StartDate()
             {
                 DateTime? sD = Convert.ToDateTime("1/1/1900");
-                DTOUtility util = new DTOUtility();
+                DTOUtility util = new DTOUtility() { Factory = new StubProgramRepositoryFactory() };
                 List<Phytel.API.DataDomain.Program.MongoDB.DTO.Module> mods = new List<Phytel.API.DataDomain.Program.MongoDB.DTO.Module>();
 
                 mods.Add(new Phytel.API.DataDomain.Program.MongoDB.DTO.Module
@@ -54,7 +54,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO.Tests
             public void DD_Module_EndDate()
             {
                 DateTime? eD = Convert.ToDateTime("1/1/1901");
-                DTOUtility util = new DTOUtility();
+                DTOUtility util = new DTOUtility() { Factory = new StubProgramRepositoryFactory() };
                 List<Phytel.API.DataDomain.Program.MongoDB.DTO.Module> mods = new List<Phytel.API.DataDomain.Program.MongoDB.DTO.Module>();
 
                 mods.Add(new Phytel.API.DataDomain.Program.MongoDB.DTO.Module
@@ -85,7 +85,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO.Tests
             public void DD_Module_AssignedOn()
             {
                 DateTime? assOn = Convert.ToDateTime("1/1/1999");
-                DTOUtility util = new DTOUtility();
+                DTOUtility util = new DTOUtility() { Factory = new StubProgramRepositoryFactory() };
                 List<Phytel.API.DataDomain.Program.MongoDB.DTO.Module> mods = new List<Phytel.API.DataDomain.Program.MongoDB.DTO.Module>();
 
                 mods.Add(new Phytel.API.DataDomain.Program.MongoDB.DTO.Module
@@ -117,7 +117,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO.Tests
             public void DD_Module_AssignedTo()
             {
                 string asT = "123456789011111111112222";
-                DTOUtility util = new DTOUtility();
+                DTOUtility util = new DTOUtility() { Factory = new StubProgramRepositoryFactory() };
                 List<Phytel.API.DataDomain.Program.MongoDB.DTO.Module> mods = new List<Phytel.API.DataDomain.Program.MongoDB.DTO.Module>();
 
                 mods.Add(new Phytel.API.DataDomain.Program.MongoDB.DTO.Module
@@ -150,7 +150,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO.Tests
             public void DD_Module_AssignedBy()
             {
                 string asT = "123456789011111111112223";
-                DTOUtility util = new DTOUtility();
+                DTOUtility util = new DTOUtility() { Factory = new StubProgramRepositoryFactory() }; 
                 List<Phytel.API.DataDomain.Program.MongoDB.DTO.Module> mods = new List<Phytel.API.DataDomain.Program.MongoDB.DTO.Module>();
 
                 mods.Add(new Phytel.API.DataDomain.Program.MongoDB.DTO.Module
@@ -184,7 +184,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO.Tests
             public void DD_Module_Objectives()
             {
                 string asT = "123456789011111111112223";
-                DTOUtility util = new DTOUtility();
+                DTOUtility util = new DTOUtility() { Factory = new StubProgramRepositoryFactory()};
                 util.Factory = new StubProgramRepositoryFactory();
                 List<Phytel.API.DataDomain.Program.MongoDB.DTO.Module> mods = new List<Phytel.API.DataDomain.Program.MongoDB.DTO.Module>();
 
@@ -217,7 +217,74 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO.Tests
                 List<ObjectiveInfoData> assT = mds[0].Objectives;
                 Assert.IsNotNull(assT);
             }
+
+            [TestMethod()]
+            [TestCategory("NIGHT-923")]
+            [TestProperty("TFS", "3840")]
+            [TestProperty("Layer", "DD.DTOUtility")]
+            public void DD_Module_Objectives_One_Active()
+            {
+                string asT = "123456789011111111112223";
+                DTOUtility util = new DTOUtility() { Factory = new StubProgramRepositoryFactory() };
+                util.Factory = new StubProgramRepositoryFactory();
+                List<Phytel.API.DataDomain.Program.MongoDB.DTO.Module> mods = new List<Phytel.API.DataDomain.Program.MongoDB.DTO.Module>();
+
+                mods.Add(new Phytel.API.DataDomain.Program.MongoDB.DTO.Module
+                {
+                    Id = ObjectId.Parse("000000000000000000000000"),
+                    Name = "Test stub module 1",
+                    Description = "BSHSI - Outreach & Enrollment",
+                    SourceId = ObjectId.Parse("532b5585a381168abe00042c"),
+                    Actions = new List<Phytel.API.DataDomain.Program.MongoDB.DTO.Action>(){ 
+                                            new Phytel.API.DataDomain.Program.MongoDB.DTO.Action{ 
+                                                Id = ObjectId.Parse("000000000000000000000000"),  
+                                                State = ElementState.InProgress, 
+                                                Name ="test action from stub", 
+                                                Description = "test action 1"} },
+                    AttributeStartDate = Convert.ToDateTime("1/1/1900"),
+                    AttributeEndDate = Convert.ToDateTime("1/1/1901"),
+                    AssignedOn = Convert.ToDateTime("1/1/1999"),
+                    AssignedTo = ObjectId.Parse("123456789011111111112222"),
+                    AssignedBy = ObjectId.Parse("123456789011111111112223"),
+                    Objectives = new List<Objective> { 
+                            new Objective{ 
+                                Id = ObjectId.Parse("123456789012345678901234"), 
+                                Value = "testing", 
+                                Units = "lbs", 
+                                Status =  Status.Active} }
+                });
+
+                List<ModuleDetail> mds = util.GetModules(mods, "123456789012345678901234", "InHealth001", "000000000000000000000000");
+                List<ObjectiveInfoData> assT = mds[0].Objectives;
+                Assert.AreEqual(1, assT.Count);
+            }
         }
+
+        [TestClass()]
+        public class GetObjectivesForModule_Test
+        {
+            [TestMethod()]
+            [TestCategory("NIGHT-923")]
+            [TestProperty("TFS", "3840")]
+            [TestProperty("Layer", "DD.DTOUtility")]
+            public void Get_Objectives_One_Active()
+            {
+                DTOUtility util = new DTOUtility() { Factory = new StubProgramRepositoryFactory() };
+                List<Module> mods = new List<Module> { 
+                    new Module{
+                     Id = ObjectId.GenerateNewId(),
+                     SourceId = ObjectId.Parse("532b5585a381168abe00042c"),
+                     Name = "testmodule",
+                     Objectives = new List<Objective>{ new Objective{ Id=ObjectId.GenerateNewId(), Status = Status.Active, Value = "90", Units="lbs"},
+                     new Objective{ Id=ObjectId.GenerateNewId(), Status = Status.Inactive, Value = "99", Units="hdl"}}
+                    }
+                };
+                List<ObjectiveInfoData> objs =  util.GetObjectivesForModule(mods, ObjectId.Parse("532b5585a381168abe00042c"));
+
+                Assert.AreEqual(1, objs.Count);
+            }
+        }
+
 
         [TestClass()]
         public class GetFromProgramObjectives

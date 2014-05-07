@@ -204,5 +204,33 @@ namespace Phytel.API.DataDomain.Program
         {
             throw new NotImplementedException();
         }
+
+        public List<Module> GetProgramModules(ObjectId progId)
+        {
+            try
+            {
+                List<Module> mods = null;
+
+                using (ProgramMongoContext ctx = new ProgramMongoContext(_dbName))
+                {
+                    var findcp = MB.Query<MEProgram>.EQ(b => b.Id, progId);
+                    MEProgram cp = ctx.Programs.Collection.Find(findcp).FirstOrDefault();
+
+                    if (cp != null)
+                    {
+                        mods = cp.Modules;
+                    }
+                    else
+                    {
+                        throw new ArgumentException("ProgramId is not valid or is missing from the records.");
+                    }
+                }
+                return mods;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("DD:PatientProgramRepository:GetProgramModules()::" + ex.Message, ex.InnerException);
+            }
+        }
     }
 }

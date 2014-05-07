@@ -1,4 +1,5 @@
-﻿using Phytel.API.DataDomain.Program.MongoDB.DTO;
+﻿using MongoDB.Bson;
+using Phytel.API.DataDomain.Program.MongoDB.DTO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -114,6 +115,11 @@ namespace Phytel.API.DataDomain.Program.Test.Stubs
         }
 
         public void CacheByID(List<string> entityIDs)
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<Module> GetProgramModules(ObjectId progId)
         {
             throw new NotImplementedException();
         }

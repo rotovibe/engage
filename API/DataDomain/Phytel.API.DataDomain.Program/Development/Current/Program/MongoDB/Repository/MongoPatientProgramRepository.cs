@@ -65,6 +65,7 @@ namespace Phytel.API.DataDomain.Program
                     // update programid in modules
                     var q = MB.Query<MEPatientProgram>.EQ(b => b.Id, nmePP.Id);
                     nmePP.Modules.ForEach(s => s.ProgramId = nmePP.Id);
+                    nmePP.Modules.ForEach(s => s.Objectives = null);
                     ctx.PatientPrograms.Collection.Update(q, MB.Update.SetWrapped<List<Module>>(MEPatientProgram.ModulesProperty, nmePP.Modules));
 
                     // hydrate response object
@@ -375,6 +376,11 @@ namespace Phytel.API.DataDomain.Program
 
 
         public IEnumerable<object> Find(List<ObjectId> Ids)
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<Module> GetProgramModules(ObjectId progId)
         {
             throw new NotImplementedException();
         }

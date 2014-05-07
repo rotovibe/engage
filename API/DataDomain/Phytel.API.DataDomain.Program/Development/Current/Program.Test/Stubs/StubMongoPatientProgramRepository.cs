@@ -157,5 +157,10 @@ namespace Phytel.API.DataDomain.Program.Test.Stubs
         {
             throw new NotImplementedException();
         }
+
+        public List<Module> GetProgramModules(ObjectId progId)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

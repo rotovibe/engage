@@ -107,7 +107,8 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
                             //}).ToList(),
                             Actions = GetClonedActions(m.Actions, contractNumber, userId, sil)
                         };
-                            mods.Add(mod);
+                        mod.Objectives = null;
+                        mods.Add(mod);
                     }
                 }
                 //);
@@ -904,6 +905,10 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
         {
             try
             {
+                GetProgramDetailsSummaryRequest request = new GetProgramDetailsSummaryRequest { ContractNumber = contractNumber, UserId = userId };
+                IProgramRepository programRepo = Factory.GetRepository(request, RepositoryType.Program);
+                List<Module> pMods = (List<Module>)programRepo.GetProgramModules(ObjectId.Parse(contractProgramId));
+
                 List<ModuleDetail> mods = new List<ModuleDetail>();
                 list.ForEach(m => mods.Add(new ModuleDetail
                 {
@@ -927,7 +932,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
                     ElementState = (int)m.State,
                     CompletedBy = m.CompletedBy,
                     DateCompleted = m.DateCompleted,
-                    Objectives = GetFromProgramObjectives(contractProgramId, new GetProgramDetailsSummaryRequest { ContractNumber= contractNumber, UserId = userId }), //GetObjectives(m.Objectives),
+                    Objectives = GetObjectivesForModule(pMods, m.SourceId),
                     Actions = GetActions(m.Actions, contractNumber, userId)
                 }));
                 return mods;
@@ -935,6 +940,39 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             catch (Exception ex)
             {
                 throw new Exception("DD:DTOUtility:GetModules()::" + ex.Message, ex.InnerException);
+            }
+        }
+
+        public List<ObjectiveInfoData> GetObjectivesForModule(List<Module> mods, ObjectId sourceModId)
+        {
+            try
+            {
+                List<ObjectiveInfoData> oid = new List<ObjectiveInfoData>();
+                if (mods != null)
+                {
+                    Module mod = mods.Find(m => m.SourceId == sourceModId);
+                    if (mod != null && mod.Objectives != null)
+                    {
+                        mod.Objectives.ForEach(o =>
+                        {
+                            if (o.Status == Status.Active)
+                            {
+                                oid.Add(new ObjectiveInfoData
+                                {
+                                    Id = o.Id.ToString(),
+                                    Status = (int)o.Status,
+                                    Unit = o.Units,
+                                    Value = o.Value
+                                });
+                            }
+                        });
+                    }
+                }
+                return oid;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("DD:DTOUtility:GetObjectivesForModule()::" + ex.Message, ex.InnerException);
             }
         }
 

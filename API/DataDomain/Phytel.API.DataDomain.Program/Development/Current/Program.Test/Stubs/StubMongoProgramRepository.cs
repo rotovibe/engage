@@ -125,5 +125,20 @@ namespace Phytel.API.DataDomain.Program.Test.Stubs
         {
             throw new NotImplementedException();
         }
+
+        public List<Module> GetProgramModules(ObjectId progId)
+        {
+            List<Module> mods = new List<Module> {
+            new Module{
+             Id = ObjectId.GenerateNewId(),
+             SourceId = ObjectId.Parse("532b5585a381168abe00042c"),
+             Name = "testmodule",
+             Objectives = new List<Objective>{ new Objective{ Id=ObjectId.GenerateNewId(), Status = Status.Active, Value = "90", Units="lbs"},
+             new Objective{ Id=ObjectId.GenerateNewId(), Status = Status.Inactive, Value = "99", Units="hdl"}}
+            }
+            };
+
+            return mods;
+        }
     }
 }
