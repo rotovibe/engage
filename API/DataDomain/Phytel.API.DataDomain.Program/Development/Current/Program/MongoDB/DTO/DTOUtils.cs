@@ -12,111 +12,111 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
 {
     public static class DTOUtils
     {
-        public static MEPatientProgram CreateInitialMEPatientProgram(PutProgramToPatientRequest request, MEProgram cp, List<ObjectId> sil)
-        {
-            try
-            {
-                MEPatientProgram patientProgDoc = new MEPatientProgram(request.UserId)
-                {
-                    PatientId = ObjectId.Parse(request.PatientId),
-                    //AuthoredBy = cp.AuthoredBy,
-                    Client = cp.Client,
-                    ProgramState = ProgramState.NotStarted,
-                    State = ElementState.NotStarted,
-                    AttributeStartDate = null,
-                    AttributeEndDate = null,
-                    AssignedBy = null,
-                    AssignedOn = null,
-                    StartDate = cp.StartDate, 
-                    EndDate = cp.EndDate,
-                    DateCompleted = cp.DateCompleted,
-                    ContractProgramId = cp.Id,
-                    DeleteFlag = cp.DeleteFlag,
-                    Description = cp.Description,
-                    LastUpdatedOn = System.DateTime.UtcNow, // utc time
-                    Name = cp.Name,
-                    CompletedBy = cp.CompletedBy,
-                    SourceId = cp.Id,
-                    ShortName = cp.ShortName,
-                    Status = cp.Status,
-                    Version = cp.Version,
-                    Spawn = cp.Spawn,
-                    Completed = cp.Completed,
-                    Enabled = cp.Enabled,
-                    Next = cp.Next,
-                    Order = cp.Order,
-                    Previous = cp.Previous,
-                    Modules = DTOUtils.GetClonedModules(cp.Modules, request.ContractNumber, request.UserId, sil),
-                    EligibilityEndDate = cp.EligibilityEndDate,
-                    EligibilityStartDate = cp.EligibilityStartDate,
-                    EligibilityRequirements = cp.EligibilityRequirements,
-                    //Objectives = cp.Objectives
-                    //,UpdatedBy = ObjectId.Parse(request.UserId)
-                };
-                if (!string.IsNullOrEmpty(request.UserId))
-                {
-                    patientProgDoc.UpdatedBy = ObjectId.Parse(request.UserId);
-                }
-                return patientProgDoc;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("DD:DTOUtils:CreateInitialMEPatientProgram()::" + ex.Message, ex.InnerException);
-            }
-        }
+        //public static MEPatientProgram CreateInitialMEPatientProgram(PutProgramToPatientRequest request, MEProgram cp, List<ObjectId> sil)
+        //{
+        //    try
+        //    {
+        //        MEPatientProgram patientProgDoc = new MEPatientProgram(request.UserId)
+        //        {
+        //            PatientId = ObjectId.Parse(request.PatientId),
+        //            //AuthoredBy = cp.AuthoredBy,
+        //            Client = cp.Client,
+        //            ProgramState = ProgramState.NotStarted,
+        //            State = ElementState.NotStarted,
+        //            AttributeStartDate = null,
+        //            AttributeEndDate = null,
+        //            AssignedBy = null,
+        //            AssignedOn = null,
+        //            StartDate = cp.StartDate, 
+        //            EndDate = cp.EndDate,
+        //            DateCompleted = cp.DateCompleted,
+        //            ContractProgramId = cp.Id,
+        //            DeleteFlag = cp.DeleteFlag,
+        //            Description = cp.Description,
+        //            LastUpdatedOn = System.DateTime.UtcNow, // utc time
+        //            Name = cp.Name,
+        //            CompletedBy = cp.CompletedBy,
+        //            SourceId = cp.Id,
+        //            ShortName = cp.ShortName,
+        //            Status = cp.Status,
+        //            Version = cp.Version,
+        //            Spawn = cp.Spawn,
+        //            Completed = cp.Completed,
+        //            Enabled = cp.Enabled,
+        //            Next = cp.Next,
+        //            Order = cp.Order,
+        //            Previous = cp.Previous,
+        //            Modules = DTOUtils.GetClonedModules(cp.Modules, request.ContractNumber, request.UserId, sil),
+        //            EligibilityEndDate = cp.EligibilityEndDate,
+        //            EligibilityStartDate = cp.EligibilityStartDate,
+        //            EligibilityRequirements = cp.EligibilityRequirements,
+        //            //Objectives = cp.Objectives
+        //            //,UpdatedBy = ObjectId.Parse(request.UserId)
+        //        };
+        //        if (!string.IsNullOrEmpty(request.UserId))
+        //        {
+        //            patientProgDoc.UpdatedBy = ObjectId.Parse(request.UserId);
+        //        }
+        //        return patientProgDoc;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw new Exception("DD:DTOUtils:CreateInitialMEPatientProgram()::" + ex.Message, ex.InnerException);
+        //    }
+        //}
 
-        public static List<Module> GetClonedModules(List<Module> list, string contractNumber, string userId, List<ObjectId> sil)
-        {
-            try
-            {
-                List<Module> mods = new List<Module>();
+        //public static List<Module> GetClonedModules(List<Module> list, string contractNumber, string userId, List<ObjectId> sil)
+        //{
+        //    try
+        //    {
+        //        List<Module> mods = new List<Module>();
 
-                //Parallel.ForEach(list, m =>
-                foreach (Module m in list)
-                {
-                    if (m.Status == Status.Active)
-                    {
-                        Module mod = new Module()
-                        {
-                            Id = m.Id,
-                            ProgramId = m.ProgramId,
-                            Description = m.Description,
-                            Name = m.Name,
-                            Status = m.Status,
-                            Objectives = m.Objectives,
-                            Completed = m.Completed,
-                            Enabled = m.Enabled,
-                            Next = m.Next,
-                            Order = m.Order,
-                            Previous = m.Previous,
-                            Spawn = m.Spawn,
-                            SourceId = m.SourceId,
-                            AssignedBy = m.AssignedBy,
-                            AssignedOn = m.AssignedOn,
-                            State = ElementState.NotStarted,
-                            CompletedBy = m.CompletedBy,
-                            DateCompleted = m.DateCompleted,
-                            //Objectives = m.Objectives.Where(a => a.Status == Common.Status.Active).Select(z => new ObjectivesInfo()
-                            //{
-                            //    Id = z.Id,
-                            //    Status = z.Status,
-                            //    Unit = z.Unit,
-                            //    Value = z.Value
-                            //}).ToList(),
-                            Actions = GetClonedActions(m.Actions, contractNumber, userId, sil)
-                        };
-                            mods.Add(mod);
-                    }
-                }
-                //);
+        //        //Parallel.ForEach(list, m =>
+        //        foreach (Module m in list)
+        //        {
+        //            if (m.Status == Status.Active)
+        //            {
+        //                Module mod = new Module()
+        //                {
+        //                    Id = m.Id,
+        //                    ProgramId = m.ProgramId,
+        //                    Description = m.Description,
+        //                    Name = m.Name,
+        //                    Status = m.Status,
+        //                    Objectives = m.Objectives,
+        //                    Completed = m.Completed,
+        //                    Enabled = m.Enabled,
+        //                    Next = m.Next,
+        //                    Order = m.Order,
+        //                    Previous = m.Previous,
+        //                    Spawn = m.Spawn,
+        //                    SourceId = m.SourceId,
+        //                    AssignedBy = m.AssignedBy,
+        //                    AssignedOn = m.AssignedOn,
+        //                    State = ElementState.NotStarted,
+        //                    CompletedBy = m.CompletedBy,
+        //                    DateCompleted = m.DateCompleted,
+        //                    //Objectives = m.Objectives.Where(a => a.Status == Common.Status.Active).Select(z => new ObjectivesInfo()
+        //                    //{
+        //                    //    Id = z.Id,
+        //                    //    Status = z.Status,
+        //                    //    Unit = z.Unit,
+        //                    //    Value = z.Value
+        //                    //}).ToList(),
+        //                    Actions = GetClonedActions(m.Actions, contractNumber, userId, sil)
+        //                };
+        //                    mods.Add(mod);
+        //            }
+        //        }
+        //        //);
 
-                return mods;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("DD:DTOUtils:SetValidModules()::" + ex.Message, ex.InnerException);
-            }
-        }
+        //        return mods;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw new Exception("DD:DTOUtils:GetClonedModules()::" + ex.Message, ex.InnerException);
+        //    }
+        //}
 
         private static List<Action> GetClonedActions(List<Action> list, string contractNumber, string userId, List<ObjectId> sil)
         {
@@ -1170,21 +1170,21 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             }
         }
 
-        public static bool SavePatientProgramResponses(List<MEPatientProgramResponse> pprs, PutProgramToPatientRequest request)
-        {
-            try
-            {
-                IProgramRepository repo =
-                    new ProgramRepositoryFactory().GetRepository(request, RepositoryType.PatientProgramResponse);//.GetPatientProgramStepResponseRepository(request);
+        //public static bool SavePatientProgramResponses(List<MEPatientProgramResponse> pprs, PutProgramToPatientRequest request)
+        //{
+        //    try
+        //    {
+        //        IProgramRepository repo =
+        //            new ProgramRepositoryFactory().GetRepository(request, RepositoryType.PatientProgramResponse);//.GetPatientProgramStepResponseRepository(request);
 
-                bool result = (bool)repo.InsertAsBatch(pprs);
-                return result;
-            }
-            catch (Exception ex)
-            {
-                throw new ArgumentException("DD:DTOUtils:SavePatientProgramResponses()::" + ex.Message, ex.InnerException);
-            }
-        }
+        //        bool result = (bool)repo.InsertAsBatch(pprs);
+        //        return result;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw new ArgumentException("DD:DTOUtils:SavePatientProgramResponses()::" + ex.Message, ex.InnerException);
+        //    }
+        //}
 
         public static List<MEPatientProgramResponse> RecurseAndStoreResponseObjects(MEPatientProgram prog, string contractNumber, string userId)
         {
@@ -1234,151 +1234,151 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             }
         }
 
-        internal static ProgramAttributeData InitializeElementAttributes(ProgramInfo p)
-        {
-            try
-            {
-                ProgramAttributeData pa = new ProgramAttributeData();
-                pa.PlanElementId = p.Id;
-                pa.Status = p.Status;
-                //pa.AttrStartDate = System.DateTime.UtcNow;
-                //pa.AttrEndDate = null;
-                pa.Eligibility = 3;
-                pa.Enrollment = 2;
-                pa.GraduatedFlag = 1;
-                pa.OptOut = false;
-                //pa.EligibilityOverride = 1;
-                return pa;
-            }
-            catch (Exception ex)
-            {
-                throw new ArgumentException("DD:DTOUtils:InitializeElementAttributes()::" + ex.Message, ex.InnerException);
-            }
-        }
+        //internal static ProgramAttributeData InitializeElementAttributes(ProgramInfo p)
+        //{
+        //    try
+        //    {
+        //        ProgramAttributeData pa = new ProgramAttributeData();
+        //        pa.PlanElementId = p.Id;
+        //        pa.Status = p.Status;
+        //        //pa.AttrStartDate = System.DateTime.UtcNow;
+        //        //pa.AttrEndDate = null;
+        //        pa.Eligibility = 3;
+        //        pa.Enrollment = 2;
+        //        pa.GraduatedFlag = 1;
+        //        pa.OptOut = false;
+        //        //pa.EligibilityOverride = 1;
+        //        return pa;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw new ArgumentException("DD:DTOUtils:InitializeElementAttributes()::" + ex.Message, ex.InnerException);
+        //    }
+        //}
 
-        internal static void InitializeProgramAttributes(PutProgramToPatientRequest request, PutProgramToPatientResponse response)
-        {
-            try
-            {
-                // create program attribute insertion
-                ProgramAttributeData attr = DTOUtils.InitializeElementAttributes(response.program);
+        //internal static void InitializeProgramAttributes(PutProgramToPatientRequest request, PutProgramToPatientResponse response)
+        //{
+        //    try
+        //    {
+        //        // create program attribute insertion
+        //        ProgramAttributeData attr = DTOUtils.InitializeElementAttributes(response.program);
 
-                IProgramRepository attrRepo = new ProgramRepositoryFactory().GetRepository(request  , RepositoryType.PatientProgramAttribute);//.GetProgramAttributesRepository(request);
+        //        IProgramRepository attrRepo = new ProgramRepositoryFactory().GetRepository(request  , RepositoryType.PatientProgramAttribute);//.GetProgramAttributesRepository(request);
 
-                attrRepo.Insert(attr);
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("DD:DTOUtils:InitializeProgramAttributes()::" + ex.Message, ex.InnerException);
-            }
-        }
+        //        attrRepo.Insert(attr);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw new Exception("DD:DTOUtils:InitializeProgramAttributes()::" + ex.Message, ex.InnerException);
+        //    }
+        //}
 
-        internal static bool CanInsertPatientProgram(List<MEPatientProgram> pp)
-        {
-            try
-            {
-                bool result = true;
-                if (pp == null)
-                {
-                    result = true;
-                }
-                else if (pp.Count >= 1)
-                {
-                    foreach (MEPatientProgram p in pp)
-                    {
-                        if (!p.State.Equals(ElementState.Removed) && !p.State.Equals(ElementState.Completed))
-                        {
-                            result = false;
-                            break;
-                        }
-                    }
-                }
-                return result;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("DD:PatientProgramRepository:CanInsertPatientProgram()::" + ex.Message, ex.InnerException);
-            }
-        }
+        //internal static bool CanInsertPatientProgram(List<MEPatientProgram> pp)
+        //{
+        //    try
+        //    {
+        //        bool result = true;
+        //        if (pp == null)
+        //        {
+        //            result = true;
+        //        }
+        //        else if (pp.Count >= 1)
+        //        {
+        //            foreach (MEPatientProgram p in pp)
+        //            {
+        //                if (!p.State.Equals(ElementState.Removed) && !p.State.Equals(ElementState.Completed))
+        //                {
+        //                    result = false;
+        //                    break;
+        //                }
+        //            }
+        //        }
+        //        return result;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw new Exception("DD:PatientProgramRepository:CanInsertPatientProgram()::" + ex.Message, ex.InnerException);
+        //    }
+        //}
 
-        internal static List<MEPatientProgram> FindExistingpatientProgram(PutProgramToPatientRequest request)
-        {
-            try
-            {
-                IProgramRepository pRepo = new ProgramRepositoryFactory().GetRepository(request, RepositoryType.PatientProgram);//.GetPatientProgramRepository(request);
+        //internal static List<MEPatientProgram> FindExistingpatientProgram(PutProgramToPatientRequest request)
+        //{
+        //    try
+        //    {
+        //        IProgramRepository pRepo = new ProgramRepositoryFactory().GetRepository(request, RepositoryType.PatientProgram);//.GetPatientProgramRepository(request);
 
-                List<MEPatientProgram> pp = pRepo.FindByEntityExistsID(request.PatientId, request.ContractProgramId) as List<MEPatientProgram>;
-                return pp;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("DD:DataProgramManager:FindExistingpatientProgram()::" + ex.Message, ex.InnerException);
-            }
-        }
+        //        List<MEPatientProgram> pp = pRepo.FindByEntityExistsID(request.PatientId, request.ContractProgramId) as List<MEPatientProgram>;
+        //        return pp;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw new Exception("DD:DataProgramManager:FindExistingpatientProgram()::" + ex.Message, ex.InnerException);
+        //    }
+        //}
 
-        internal static MEProgram GetProgramForDeepCopy(PutProgramToPatientRequest request)
-        {
-            try
-            {
-                IProgramRepository pgRepo = new ProgramRepositoryFactory().GetRepository(request, RepositoryType.Program);//.GetProgramRepository(request);
-                MEProgram cp = (MEProgram)pgRepo.FindByID(request.ContractProgramId.ToString());
-                return cp;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("DD:DataProgramManager:GetProgram()::" + ex.Message, ex.InnerException);
-            }
-        }
+        //internal static MEProgram GetProgramForDeepCopy(PutProgramToPatientRequest request)
+        //{
+        //    try
+        //    {
+        //        IProgramRepository pgRepo = new ProgramRepositoryFactory().GetRepository(request, RepositoryType.Program);//.GetProgramRepository(request);
+        //        MEProgram cp = (MEProgram)pgRepo.FindByID(request.ContractProgramId.ToString());
+        //        return cp;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw new Exception("DD:DataProgramManager:GetProgram()::" + ex.Message, ex.InnerException);
+        //    }
+        //}
 
-        internal static ProgramInfo SaveNewPatientProgram(PutProgramToPatientRequest request, MEPatientProgram nmePP)
-        {
-            try
-            {
-                // give this the formatted patient program ready for saving
-                IProgramRepository patProgRepo = new ProgramRepositoryFactory().GetRepository(request, RepositoryType.PatientProgram);//.GetPatientProgramRepository(request);
+        //internal static ProgramInfo SaveNewPatientProgram(PutProgramToPatientRequest request, MEPatientProgram nmePP)
+        //{
+        //    try
+        //    {
+        //        // give this the formatted patient program ready for saving
+        //        IProgramRepository patProgRepo = new ProgramRepositoryFactory().GetRepository(request, RepositoryType.PatientProgram);//.GetPatientProgramRepository(request);
 
-                ProgramInfo pi = (ProgramInfo)patProgRepo.Insert((object)nmePP);
-                return pi;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("DD:DataProgramManager:SaveNewPatientProgram()::" + ex.Message, ex.InnerException);
-            }
-        }
+        //        ProgramInfo pi = (ProgramInfo)patProgRepo.Insert((object)nmePP);
+        //        return pi;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw new Exception("DD:DataProgramManager:SaveNewPatientProgram()::" + ex.Message, ex.InnerException);
+        //    }
+        //}
 
-        internal static List<MEPatientProgramResponse> InitializePatientProgramAssignment(PutProgramToPatientRequest request, MEPatientProgram nmePP)
-        {
-            try
-            {
-                List<MEPatientProgramResponse> pprs = new List<MEPatientProgramResponse>();
-                // update to new ids and their references
-                Dictionary<ObjectId, ObjectId> IdsList = new Dictionary<ObjectId, ObjectId>();
-                DTOUtils.RecurseAndReplaceIds(nmePP.Modules, IdsList);
-                pprs = DTOUtils.RecurseAndStoreResponseObjects(nmePP, request.ContractNumber, request.UserId);
-                //DTOUtils.RecurseAndSaveResponseObjects(nmePP, request.ContractNumber, request.UserId);
-                return pprs;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("DD:DataProgramManager:InitializePatientProgramAssignment()::" + ex.Message, ex.InnerException);
-            }
-        }
+        //internal static List<MEPatientProgramResponse> InitializePatientProgramAssignment(PutProgramToPatientRequest request, MEPatientProgram nmePP)
+        //{
+        //    try
+        //    {
+        //        List<MEPatientProgramResponse> pprs = new List<MEPatientProgramResponse>();
+        //        // update to new ids and their references
+        //        Dictionary<ObjectId, ObjectId> IdsList = new Dictionary<ObjectId, ObjectId>();
+        //        DTOUtils.RecurseAndReplaceIds(nmePP.Modules, IdsList);
+        //        pprs = DTOUtils.RecurseAndStoreResponseObjects(nmePP, request.ContractNumber, request.UserId);
+        //        //DTOUtils.RecurseAndSaveResponseObjects(nmePP, request.ContractNumber, request.UserId);
+        //        return pprs;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw new Exception("DD:DataProgramManager:InitializePatientProgramAssignment()::" + ex.Message, ex.InnerException);
+        //    }
+        //}
 
-        internal static List<MEResponse> GetProgramResponseslist(List<ObjectId> idl, MEProgram cp, PutProgramToPatientRequest request)
-        {
-            try
-            {
-                List<MEResponse> list = null;
-                IProgramRepository respRepo = new ProgramRepositoryFactory().GetRepository(request, RepositoryType.Response);//.GetStepResponseRepository(request);
+        //internal static List<MEResponse> GetProgramResponseslist(List<ObjectId> idl, MEProgram cp, PutProgramToPatientRequest request)
+        //{
+        //    try
+        //    {
+        //        List<MEResponse> list = null;
+        //        IProgramRepository respRepo = new ProgramRepositoryFactory().GetRepository(request, RepositoryType.Response);//.GetStepResponseRepository(request);
 
-                list = respRepo.Find(idl) as List<MEResponse>;
-                return list;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("DD:DataProgramManager:GetProgramResponseslist()::" + ex.Message, ex.InnerException);
-            }
-        }
+        //        list = respRepo.Find(idl) as List<MEResponse>;
+        //        return list;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw new Exception("DD:DataProgramManager:GetProgramResponseslist()::" + ex.Message, ex.InnerException);
+        //    }
+        //}
 
         internal static void HydrateResponsesInProgram(MEProgram prog, List<MEResponse> responseList, string usrId)
         {

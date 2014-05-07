@@ -107,30 +107,30 @@ namespace Phytel.API.DataDomain.Program
                 #endregion
 
                 /**********************************/
-                List<MEPatientProgram> pp = DTOUtils.FindExistingpatientProgram(request);
+                List<MEPatientProgram> pp = DTOUtility.FindExistingpatientProgram(request);
 
-                if (!DTOUtils.CanInsertPatientProgram(pp))
+                if (!DTOUtility.CanInsertPatientProgram(pp))
                 {
                     response.Outcome.Result = 0;
                     response.Outcome.Reason = pp[0].Name + " is already assigned or reassignment is not allowed";
                 }
                 else
                 {                    
-                    MEProgram cp = DTOUtils.GetProgramForDeepCopy(request);
+                    MEProgram cp = DTOUtility.GetProgramForDeepCopy(request);
 
                     List<ObjectId> stepIdList = new List<ObjectId>();
-                    List<MEResponse> responseList = DTOUtils.GetProgramResponseslist(stepIdList, cp,request);
+                    List<MEResponse> responseList = DTOUtility.GetProgramResponseslist(stepIdList, cp,request);
                     DTOUtils.HydrateResponsesInProgram(cp, responseList, request.UserId);
-                    MEPatientProgram nmePP = DTOUtils.CreateInitialMEPatientProgram(request, cp, stepIdList);
-                    List<MEPatientProgramResponse> pprs = DTOUtils.InitializePatientProgramAssignment(request, nmePP);
+                    MEPatientProgram nmePP = DTOUtility.CreateInitialMEPatientProgram(request, cp, stepIdList);
+                    List<MEPatientProgramResponse> pprs = DTOUtility.InitializePatientProgramAssignment(request, nmePP);
 
-                    ProgramInfo pi = DTOUtils.SaveNewPatientProgram(request, nmePP);
+                    ProgramInfo pi = DTOUtility.SaveNewPatientProgram(request, nmePP);
                     
                     if (pi != null)
                     {
                         response.program = pi;
-                        DTOUtils.SavePatientProgramResponses(pprs, request);
-                        DTOUtils.InitializeProgramAttributes(request, response);
+                        DTOUtility.SavePatientProgramResponses(pprs, request);
+                        DTOUtility.InitializeProgramAttributes(request, response);
                     }
 
                     response.Outcome.Result = 1;
@@ -300,7 +300,7 @@ namespace Phytel.API.DataDomain.Program
                     AuthoredBy = mepp.AuthoredBy,
                     //ObjectivesData = DTOUtils.GetObjectives(mepp.Objectives),
                     SpawnElement = DTOUtility.GetSpawnElement(mepp),
-                    Modules = DTOUtility.GetModules(mepp.Modules, request.ContractNumber, request.UserId)
+                    Modules = DTOUtility.GetModules(mepp.Modules, mepp.ContractProgramId.ToString(), request.ContractNumber, request.UserId)
                 };
 
                 // load program attributes
@@ -308,7 +308,8 @@ namespace Phytel.API.DataDomain.Program
                 response.Program.Attributes = pad;
 
                 // Get the fields from Program collection.
-                MEProgram meProgram = getLimitedProgramDetails(mepp.SourceId.ToString(), request);
+                MEProgram meProgram = DTOUtility.GetLimitedProgramDetails(mepp.SourceId.ToString(), request);
+
                 if (meProgram != null)
                 {
                     response.Program.AuthoredBy = meProgram.AuthoredBy;
@@ -316,7 +317,7 @@ namespace Phytel.API.DataDomain.Program
                     response.Program.TemplateVersion = meProgram.TemplateVersion;
                     response.Program.ProgramVersion = meProgram.ProgramVersion;
                     response.Program.ProgramVersionUpdatedOn = meProgram.ProgramVersionUpdatedOn;
-                    response.Program.ObjectivesData = GetObjectivesData(meProgram.Objectives);
+                    response.Program.ObjectivesData = DTOUtility.GetObjectivesData(meProgram.Objectives);
                 }
                 return response;
             }
@@ -324,38 +325,6 @@ namespace Phytel.API.DataDomain.Program
             {
                 throw new Exception("DD:DataProgramManager:GetPatientProgramDetailsById()::" + ex.Message, ex.InnerException);
             }
-        }
-
-        public List<ObjectiveInfoData> GetObjectivesData(List<Objective> sobjs)
-        {
-            try
-            {
-                List<ObjectiveInfoData> objs = null;
-                if (sobjs != null && sobjs.Count > 0)
-                {
-                    objs =
-                    sobjs.Where(x => x.Status == Status.Active)
-                    .Select(o => new ObjectiveInfoData
-                        {
-                            Id = o.Id.ToString(),
-                            Status = (int)o.Status,
-                            Unit = o.Units,
-                            Value = o.Value
-                        }).ToList();
-                }
-                return objs;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("DD:DataProgramManager:GetObjectivesData()::" + ex.Message, ex.InnerException);
-            }
-        }
-
-        public MEProgram getLimitedProgramDetails(string objectId, IDataDomainRequest request)
-        {
-            IProgramRepository programRepo = Factory.GetRepository(request, RepositoryType.Program);
-            MEProgram meProgram = programRepo.GetLimitedProgramFields(objectId) as MEProgram;
-            return meProgram;
         }
 
         public ProgramAttributeData GetProgramAttributes(string objectId, IDataDomainRequest request)

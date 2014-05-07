@@ -2,6 +2,7 @@
 using MongoDB.Bson;
 using Phytel.API.DataDomain.Program.DTO;
 using System.Collections.Generic;
+using Phytel.API.Interface;
 
 namespace Phytel.API.DataDomain.Program.MongoDB.DTO
 {
@@ -16,7 +17,9 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
         List<Action> GetActionElements(List<ActionsDetail> list, string userId);
         List<ActionsDetail> GetActions(List<Action> list, string contract, string userId);
         List<Module> GetClonedModules(List<Module> list, string contractNumber, string userId, List<ObjectId> sil);
-        List<ModuleDetail> GetModules(List<Module> list, string contractNumber, string userId);
+        List<ModuleDetail> GetModules(List<Module> list, string contractProgramId, string contractNumber, string userId);
+        MEProgram GetLimitedProgramDetails(string objectId, IDataDomainRequest request);
+        List<ObjectiveInfoData> GetObjectivesData(List<Objective> sobjs);
         List<Objective> GetObjectives(System.Collections.Generic.List<ObjectiveInfoData> list);
         List<ObjectiveInfoData> GetObjectives(List<Objective> list);
         MEProgram GetProgramForDeepCopy(PutProgramToPatientRequest request);

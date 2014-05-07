@@ -1,4 +1,5 @@
-﻿using Phytel.API.DataDomain.Program.MongoDB.DTO;
+﻿using MongoDB.Bson;
+using Phytel.API.DataDomain.Program.MongoDB.DTO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -51,7 +52,7 @@ namespace Phytel.API.DataDomain.Program.Test.Stubs
             throw new NotImplementedException();
         }
 
-        public List<DTO.ModuleDetail> GetModules(List<Module> list, string contractNumber, string userId)
+        public List<DTO.ModuleDetail> GetModules(List<Module> list, string contractProgId,  string contractNumber, string userId)
         {
             List<DTO.ModuleDetail> modules = new List<DTO.ModuleDetail>();
 
@@ -67,7 +68,8 @@ namespace Phytel.API.DataDomain.Program.Test.Stubs
                     AttrEndDate = m.AttributeEndDate,
                     AssignDate = m.AssignedOn,
                     AssignTo = m.AssignedTo.ToString(),
-                    AssignBy = m.AssignedBy.ToString()
+                    AssignBy = m.AssignedBy.ToString(),
+                    Objectives = this.GetObjectivesData(m.Objectives)
                 });
             });
             //modules.Add(
@@ -196,6 +198,32 @@ namespace Phytel.API.DataDomain.Program.Test.Stubs
         public bool SavePatientProgramResponses(List<MEPatientProgramResponse> pprs, DTO.PutProgramToPatientRequest request)
         {
             throw new NotImplementedException();
+        }
+
+
+        public MEProgram GetLimitedProgramDetails(string objectId, Interface.IDataDomainRequest request)
+        {
+            MEProgram mep = new MEProgram(request.UserId)
+            {
+                AuthoredBy = "123456789012345678901234",
+                TemplateName = "template stub name",
+                TemplateVersion = "1.0",
+                ProgramVersion = "1.0",
+                ProgramVersionUpdatedOn = System.DateTime.UtcNow,
+                Objectives = new List<Objective> { new Objective { Id = ObjectId.GenerateNewId(), Status = Status.Active, Units = "lbs", Value = "134" } }
+            };
+            return mep;
+        }
+
+        public List<DTO.ObjectiveInfoData> GetObjectivesData(List<Objective> sobjs)
+        {
+            List<DTO.ObjectiveInfoData> objs = new List<DTO.ObjectiveInfoData>();
+            sobjs.ForEach(o =>
+            {
+                objs.Add(new DTO.ObjectiveInfoData { Id = o.Id.ToString(), Status = (int)o.Status,  Unit = o.Units, Value = o.Value });
+            });
+
+            return objs;
         }
     }
 }

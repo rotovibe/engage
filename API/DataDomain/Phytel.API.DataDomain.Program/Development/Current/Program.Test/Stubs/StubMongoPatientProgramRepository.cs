@@ -123,7 +123,15 @@ namespace Phytel.API.DataDomain.Program.Test.Stubs
                                         AttributeEndDate = Convert.ToDateTime("1/1/1901"),
                                         AssignedOn = Convert.ToDateTime("1/1/1999"),
                                         AssignedTo = ObjectId.Parse("123456789011111111112222"),
-                                        AssignedBy = ObjectId.Parse("123456789011111111112223")
+                                        AssignedBy = ObjectId.Parse("123456789011111111112223"),
+                                        Objectives = new List<Objective> { 
+                                            new Objective{ 
+                                                Id = ObjectId.Parse("123456789012345678901234"), 
+                                                Value = "testing", 
+                                                Units = "lbs", 
+                                                Status =  Status.Active
+                                            }
+                                        }
                                     }
                     }
                 };

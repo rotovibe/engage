@@ -41,9 +41,15 @@ namespace Phytel.API.DataDomain.Program.Test.Stubs
                     } },
                     Modules = new List<ModuleDetail>() { 
                     new ModuleDetail { Id = "000000000000000000000000", 
-                        Name = "Test stub module 1",
-                         Description = "BSHSI - Outreach & Enrollment",
-                          SourceId ="532b5585a381168abe00042c",
+                        Name = "Test stub module 1", 
+                        Description = "BSHSI - Outreach & Enrollment", 
+                        SourceId ="532b5585a381168abe00042c", 
+                        Objectives = new List<DTO.ObjectiveInfoData> { 
+                            new DTO.ObjectiveInfoData{ 
+                                Id ="123456789012345678901234", 
+                                Value = "testing", 
+                                Unit = "lbs", 
+                                Status = 1} },
                         Actions = new List<ActionsDetail>(){ 
                             new ActionsDetail{ Id = "000000000000000000000000", ElementState = 4, Name ="test action from stub", Text = "test action 1"} } ,
                              AttrStartDate = Convert.ToDateTime("1/1/1900"),

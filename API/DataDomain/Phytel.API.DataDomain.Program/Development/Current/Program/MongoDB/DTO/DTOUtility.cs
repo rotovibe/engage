@@ -14,7 +14,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
     {
         public IProgramRepositoryFactory Factory { get; set; }
 
-        public  MEPatientProgram CreateInitialMEPatientProgram(PutProgramToPatientRequest request, MEProgram cp, List<ObjectId> sil)
+        public MEPatientProgram CreateInitialMEPatientProgram(PutProgramToPatientRequest request, MEProgram cp, List<ObjectId> sil)
         {
             try
             {
@@ -25,9 +25,11 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
                     Client = cp.Client,
                     ProgramState = ProgramState.NotStarted,
                     State = ElementState.NotStarted,
-                    AssignedBy = cp.AssignedBy,
-                    AssignedOn = cp.AssignedOn,
-                    StartDate = cp.StartDate, 
+                    AttributeStartDate = null,
+                    AttributeEndDate = null,
+                    AssignedBy = null,
+                    AssignedOn = null,
+                    StartDate = cp.StartDate,
                     EndDate = cp.EndDate,
                     DateCompleted = cp.DateCompleted,
                     ContractProgramId = cp.Id,
@@ -46,10 +48,11 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
                     Next = cp.Next,
                     Order = cp.Order,
                     Previous = cp.Previous,
-                    Modules = DTOUtils.GetClonedModules(cp.Modules, request.ContractNumber, request.UserId, sil),
+                    Modules = GetClonedModules(cp.Modules, request.ContractNumber, request.UserId, sil),
                     EligibilityEndDate = cp.EligibilityEndDate,
                     EligibilityStartDate = cp.EligibilityStartDate,
-                    EligibilityRequirements = cp.EligibilityRequirements
+                    EligibilityRequirements = cp.EligibilityRequirements,
+                    //Objectives = cp.Objectives
                     //,UpdatedBy = ObjectId.Parse(request.UserId)
                 };
                 if (!string.IsNullOrEmpty(request.UserId))
@@ -897,7 +900,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
         }
 
 
-        public  List<ModuleDetail> GetModules(List<Module> list, string contractNumber, string userId)
+        public  List<ModuleDetail> GetModules(List<Module> list, string contractProgramId, string contractNumber, string userId)
         {
             try
             {
@@ -924,14 +927,61 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
                     ElementState = (int)m.State,
                     CompletedBy = m.CompletedBy,
                     DateCompleted = m.DateCompleted,
-                    Objectives = GetObjectives(m.Objectives),
+                    Objectives = GetFromProgramObjectives(contractProgramId, new GetProgramDetailsSummaryRequest { ContractNumber= contractNumber, UserId = userId }), //GetObjectives(m.Objectives),
                     Actions = GetActions(m.Actions, contractNumber, userId)
                 }));
                 return mods;
             }
             catch (Exception ex)
             {
-                throw new Exception("DD:DTOUtils:GetModules()::" + ex.Message, ex.InnerException);
+                throw new Exception("DD:DTOUtility:GetModules()::" + ex.Message, ex.InnerException);
+            }
+        }
+
+        public List<ObjectiveInfoData> GetFromProgramObjectives(string pid, IDataDomainRequest request)
+        {
+            try
+            {
+                List<ObjectiveInfoData> odata = new List<ObjectiveInfoData>();
+                MEProgram mep = GetLimitedProgramDetails(pid, request);
+                odata = this.GetObjectivesData(mep.Objectives);
+                return odata;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("DD:DTOUtility:GetFromProgramObjectives()::" + ex.Message, ex.InnerException);
+            }
+        }
+
+        public MEProgram GetLimitedProgramDetails(string objectId, IDataDomainRequest request)
+        {
+            IProgramRepository programRepo = Factory.GetRepository(request, RepositoryType.Program);
+            MEProgram meProgram = programRepo.GetLimitedProgramFields(objectId) as MEProgram;
+            return meProgram;
+        }
+
+        public List<ObjectiveInfoData> GetObjectivesData(List<Objective> sobjs)
+        {
+            try
+            {
+                List<ObjectiveInfoData> objs = null;
+                if (sobjs != null && sobjs.Count > 0)
+                {
+                    objs =
+                    sobjs.Where(x => x.Status == Status.Active)
+                    .Select(o => new ObjectiveInfoData
+                    {
+                        Id = o.Id.ToString(),
+                        Status = (int)o.Status,
+                        Unit = o.Units,
+                        Value = o.Value
+                    }).ToList();
+                }
+                return objs;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("DD:DataProgramManager:GetObjectivesData()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -1265,7 +1315,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             try
             {
                 // create program attribute insertion
-                ProgramAttributeData attr = DTOUtils.InitializeElementAttributes(response.program);
+                ProgramAttributeData attr = InitializeElementAttributes(response.program);
 
                 IProgramRepository attrRepo = new ProgramRepositoryFactory().GetRepository(request, RepositoryType.PatientProgramAttribute);//.GetProgramAttributesRepository(request);
 
@@ -1301,7 +1351,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             }
             catch (Exception ex)
             {
-                throw new Exception("DD:PatientProgramRepository:CanInsertPatientProgram()::" + ex.Message, ex.InnerException);
+                throw new Exception("DD:DTOUtility:CanInsertPatientProgram()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -1316,7 +1366,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             }
             catch (Exception ex)
             {
-                throw new Exception("DD:DataProgramManager:FindExistingpatientProgram()::" + ex.Message, ex.InnerException);
+                throw new Exception("DD:DTOUtility:FindExistingpatientProgram()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -1330,7 +1380,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             }
             catch (Exception ex)
             {
-                throw new Exception("DD:DataProgramManager:GetProgram()::" + ex.Message, ex.InnerException);
+                throw new Exception("DD:DTOUtility:GetProgramForDeepCopy()::" + ex.Message, ex.InnerException);
             }
         }
 

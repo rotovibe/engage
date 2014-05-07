@@ -7,6 +7,7 @@ using Phytel.API.DataDomain.Program.MongoDB.DTO;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Phytel.API.DataDomain.Program.DTO;
 using MongoDB.Bson;
+using Phytel.API.DataDomain.Program.Test.Stubs;
 namespace Phytel.API.DataDomain.Program.MongoDB.DTO.Tests
 {
     [TestClass()]
@@ -41,7 +42,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO.Tests
                     AttributeEndDate = Convert.ToDateTime("1/1/1901")
                 });
 
-                List<ModuleDetail> mds = util.GetModules(mods, "InHealth001", "000000000000000000000000");
+                List<ModuleDetail> mds = util.GetModules(mods, "123456789012345678901234", "InHealth001", "000000000000000000000000");
                 DateTime? startD = mds[0].AttrStartDate;
                 Assert.AreEqual(sD, startD);
             }
@@ -72,7 +73,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO.Tests
                     AttributeEndDate = Convert.ToDateTime("1/1/1901")
                 });
 
-                List<ModuleDetail> mds = util.GetModules(mods, "InHealth001", "000000000000000000000000");
+                List<ModuleDetail> mds = util.GetModules(mods,"123456789012345678901234", "InHealth001", "000000000000000000000000");
                 DateTime? endD = mds[0].AttrEndDate;
                 Assert.AreEqual(eD, endD);
             }
@@ -104,11 +105,11 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO.Tests
                     AssignedOn = Convert.ToDateTime("1/1/1999")
                 });
 
-                List<ModuleDetail> mds = util.GetModules(mods, "InHealth001", "000000000000000000000000");
+                List<ModuleDetail> mds = util.GetModules(mods,"123456789012345678901234", "InHealth001", "000000000000000000000000");
                 DateTime? assD = mds[0].AssignDate;
                 Assert.AreEqual(assOn, assD);
             }
-            
+
             [TestMethod()]
             [TestCategory("NIGHT-919")]
             [TestProperty("TFS", "3838")]
@@ -137,7 +138,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO.Tests
                     AssignedTo = ObjectId.Parse("123456789011111111112222")
                 });
 
-                List<ModuleDetail> mds = util.GetModules(mods, "InHealth001", "000000000000000000000000");
+                List<ModuleDetail> mds = util.GetModules(mods, "123456789012345678901234",  "InHealth001", "000000000000000000000000");
                 string assT = mds[0].AssignTo;
                 Assert.AreEqual(asT, assT);
             }
@@ -171,9 +172,67 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO.Tests
                     AssignedBy = ObjectId.Parse("123456789011111111112223")
                 });
 
-                List<ModuleDetail> mds = util.GetModules(mods, "InHealth001", "000000000000000000000000");
+                List<ModuleDetail> mds = util.GetModules(mods, "123456789012345678901234", "InHealth001", "000000000000000000000000");
                 string assT = mds[0].AssignBy;
                 Assert.AreEqual(asT, assT);
+            }
+
+            [TestMethod()]
+            [TestCategory("NIGHT-923")]
+            [TestProperty("TFS", "3840")]
+            [TestProperty("Layer", "DD.DTOUtility")]
+            public void DD_Module_Objectives()
+            {
+                string asT = "123456789011111111112223";
+                DTOUtility util = new DTOUtility();
+                util.Factory = new StubProgramRepositoryFactory();
+                List<Phytel.API.DataDomain.Program.MongoDB.DTO.Module> mods = new List<Phytel.API.DataDomain.Program.MongoDB.DTO.Module>();
+
+                mods.Add(new Phytel.API.DataDomain.Program.MongoDB.DTO.Module
+                {
+                    Id = ObjectId.Parse("000000000000000000000000"),
+                    Name = "Test stub module 1",
+                    Description = "BSHSI - Outreach & Enrollment",
+                    SourceId = ObjectId.Parse("532b5585a381168abe00042c"),
+                    Actions = new List<Phytel.API.DataDomain.Program.MongoDB.DTO.Action>(){ 
+                                            new Phytel.API.DataDomain.Program.MongoDB.DTO.Action{ 
+                                                Id = ObjectId.Parse("000000000000000000000000"),  
+                                                State = ElementState.InProgress, 
+                                                Name ="test action from stub", 
+                                                Description = "test action 1"} },
+                    AttributeStartDate = Convert.ToDateTime("1/1/1900"),
+                    AttributeEndDate = Convert.ToDateTime("1/1/1901"),
+                    AssignedOn = Convert.ToDateTime("1/1/1999"),
+                    AssignedTo = ObjectId.Parse("123456789011111111112222"),
+                    AssignedBy = ObjectId.Parse("123456789011111111112223"),
+                    Objectives = new List<Objective> { 
+                            new Objective{ 
+                                Id = ObjectId.Parse("123456789012345678901234"), 
+                                Value = "testing", 
+                                Units = "lbs", 
+                                Status =  Status.Active} }
+                });
+
+                List<ModuleDetail> mds = util.GetModules(mods, "123456789012345678901234", "InHealth001", "000000000000000000000000");
+                List<ObjectiveInfoData> assT = mds[0].Objectives;
+                Assert.IsNotNull(assT);
+            }
+        }
+
+        [TestClass()]
+        public class GetFromProgramObjectives
+        {
+            [TestMethod()]
+            [TestCategory("NIGHT-923")]
+            [TestProperty("TFS", "3840")]
+            [TestProperty("Layer", "DD.DTOUtility")]
+            public void Get_With_One_Active_Objective()
+            {
+                DTOUtility dtoUtil = new DTOUtility();
+                dtoUtil.Factory = new StubProgramRepositoryFactory();
+                GetProgramDetailsSummaryRequest request = new GetProgramDetailsSummaryRequest { ContractNumber = "InHealth001", UserId = "000000000000000000000000" };
+                List<ObjectiveInfoData> odata = dtoUtil.GetFromProgramObjectives("000000000000000000000000", request);
+                Assert.AreEqual(1, odata.Count);
             }
         }
     }

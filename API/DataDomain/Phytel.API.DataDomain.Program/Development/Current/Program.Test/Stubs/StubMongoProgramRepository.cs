@@ -1,4 +1,5 @@
-﻿using Phytel.API.DataDomain.Program.MongoDB.DTO;
+﻿using MongoDB.Bson;
+using Phytel.API.DataDomain.Program.MongoDB.DTO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -35,10 +36,17 @@ namespace Phytel.API.DataDomain.Program.Test.Stubs
 
         public object GetLimitedProgramFields(string objectId)
         {
-            MEProgram p = new MEProgram(userId)
+            MEProgram mep = new MEProgram(this.userId)
             {
+                AuthoredBy = "123456789012345678901234",
+                TemplateName = "template stub name",
+                TemplateVersion = "1.0",
+                ProgramVersion = "1.0",
+                ProgramVersionUpdatedOn = System.DateTime.UtcNow,
+                Objectives = new List<Objective> { new Objective { Id = ObjectId.GenerateNewId(), Status = Status.Active, Units = "lbs", Value = "134" },
+                new Objective { Id = ObjectId.GenerateNewId(), Status = Status.Inactive, Units = "oz", Value = "55" }}
             };
-            return p;
+            return mep;
         }
 
         public object InsertAsBatch(object newEntity)
