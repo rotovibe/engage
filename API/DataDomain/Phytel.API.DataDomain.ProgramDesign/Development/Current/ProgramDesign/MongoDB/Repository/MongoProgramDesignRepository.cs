@@ -145,7 +145,7 @@ namespace Phytel.API.DataDomain.ProgramDesign
             PutTextStepInActionRequest request = newEntity as PutTextStepInActionRequest;
 
             MEAction action = null;
-            METext step = null;
+            MEStep step = null;
             using (ProgramDesignMongoContext ctx = new ProgramDesignMongoContext(_dbName))
             {
                 var aUQuery = new QueryDocument(MEAction.IdProperty, ObjectId.Parse(request.ActionId));
@@ -155,19 +155,19 @@ namespace Phytel.API.DataDomain.ProgramDesign
                 repo.UserId = this.UserId;
 
                 //Find step
-                var tUQuery = new QueryDocument(METext.IdProperty, ObjectId.Parse(request.StepId));
-                step = ctx.TextSteps.Collection.FindOneAs<METext>(tUQuery);
+                var tUQuery = new QueryDocument(MEStep.IdProperty, ObjectId.Parse(request.StepId));
+                step = ctx.Steps.Collection.FindOneAs<MEStep>(tUQuery);
 
                 if (action != null && step != null)
                 {
-                    List<METext> list = new List<METext>();
-                    if (action.TextSteps != null)
+                    List<MEStep> list = new List<MEStep>();
+                    if (action.Steps != null)
                     {
-                        list = action.TextSteps;
+                        list = action.Steps;
                     }
                     list.Add(step);
-                    action.TextSteps = list;
-                    ctx.Actions.Collection.Update(aUQuery, MB.Update.SetWrapped<List<METext>>(MEAction.TextStepsProperty, action.TextSteps));
+                    action.Steps = list;
+                    ctx.Actions.Collection.Update(aUQuery, MB.Update.SetWrapped<List<MEStep>>(MEAction.StepsProperty, action.Steps));
                 }
                 else if (action == null)
                     throw new ArgumentException("Program requested is missing from the DataDomain.");
@@ -186,7 +186,7 @@ namespace Phytel.API.DataDomain.ProgramDesign
             PutYesNoStepInActionRequest request = newEntity as PutYesNoStepInActionRequest;
 
             MEAction action = null;
-            MEYesNo step = null;
+            MEStep step = null;
             using (ProgramDesignMongoContext ctx = new ProgramDesignMongoContext(_dbName))
             {
                 var aUQuery = new QueryDocument(MEAction.IdProperty, ObjectId.Parse(request.ActionId));
@@ -196,19 +196,19 @@ namespace Phytel.API.DataDomain.ProgramDesign
                 repo.UserId = this.UserId;
 
                 //Find step
-                var yUQuery = new QueryDocument(MEYesNo.IdProperty, ObjectId.Parse(request.StepId));
-                step = ctx.YesNoSteps.Collection.FindOneAs<MEYesNo>(yUQuery);
+                var yUQuery = new QueryDocument(MEStep.IdProperty, ObjectId.Parse(request.StepId));
+                step = ctx.Steps.Collection.FindOneAs<MEStep>(yUQuery);
 
                 if (action != null && step != null)
                 {
-                    List<MEYesNo> list = new List<MEYesNo>();
-                    if (action.YesNoSteps != null)
+                    List<MEStep> list = new List<MEStep>();
+                    if (action.Steps != null)
                     {
-                        list = action.YesNoSteps;
+                        list = action.Steps;
                     }
                     list.Add(step);
-                    action.YesNoSteps = list;
-                    ctx.Actions.Collection.Update(aUQuery, MB.Update.SetWrapped<List<METext>>(MEAction.TextStepsProperty, action.TextSteps));
+                    action.Steps = list;
+                    ctx.Actions.Collection.Update(aUQuery, MB.Update.SetWrapped<List<MEStep>>(MEAction.StepsProperty, action.Steps));
                 }
                 else if (action == null)
                     throw new ArgumentException("Program requested is missing from the DataDomain.");

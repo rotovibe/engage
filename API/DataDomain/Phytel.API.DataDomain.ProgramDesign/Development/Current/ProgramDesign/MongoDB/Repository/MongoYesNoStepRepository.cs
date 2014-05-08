@@ -35,8 +35,8 @@ namespace Phytel.API.DataDomain.ProgramDesign
 
             try
             {
-                if (BsonClassMap.IsClassMapRegistered(typeof(MEYesNo)) == false)
-                    BsonClassMap.RegisterClassMap<MEYesNo>();
+                if (BsonClassMap.IsClassMapRegistered(typeof(MEStep)) == false)
+                    BsonClassMap.RegisterClassMap<MEStep>();
             }
             catch {  }
             #endregion
@@ -52,23 +52,23 @@ namespace Phytel.API.DataDomain.ProgramDesign
         {
             PutYesNoStepDataRequest request = newEntity as PutYesNoStepDataRequest;
 
-            MEYesNo step = null;
+            MEStep step = null;
             using (ProgramDesignMongoContext ctx = new ProgramDesignMongoContext(_dbName))
             {
                 IMongoQuery query = Query.And(
-                                Query.EQ(MEYesNo.QuestionProperty, request.Question));
-                step = ctx.YesNoSteps.Collection.FindOneAs<MEYesNo>(query);
+                                Query.EQ(MEStep.QuestionProperty, request.Question));
+                step = ctx.Steps.Collection.FindOneAs<MEStep>(query);
                 MongoProgramDesignRepository<T> repo = new MongoProgramDesignRepository<T>(_dbName);
                 repo.UserId = this.UserId;
 
                 if(step == null)
                 {
-                    step = new MEYesNo()
+                    step = new MEStep(this.UserId)
                     {
                         Id = ObjectId.GenerateNewId(),
                         Question = request.Question,
                         Notes = request.Notes,
-                        Type = StepType.YesNo,
+                        StepTypeId = (int) StepType.YesNo,
                         Version = request.Version,
                         UpdatedBy = ObjectId.Parse(request.UserId),
                         TTLDate = null,
@@ -76,7 +76,7 @@ namespace Phytel.API.DataDomain.ProgramDesign
                         LastUpdatedOn = System.DateTime.UtcNow
                     };
                 }
-                ctx.YesNoSteps.Collection.Insert(step);
+                ctx.Steps.Collection.Insert(step);
 
                 AuditHelper.LogDataAudit(this.UserId,
                                           MongoCollectionName.Step.ToString(),
@@ -103,16 +103,16 @@ namespace Phytel.API.DataDomain.ProgramDesign
             {
                 using (ProgramDesignMongoContext ctx = new ProgramDesignMongoContext(_dbName))
                 {
-                    var q = MB.Query<MEYesNo>.EQ(b => b.Id, ObjectId.Parse(request.StepId));
+                    var q = MB.Query<MEStep>.EQ(b => b.Id, ObjectId.Parse(request.StepId));
 
                     var uv = new List<MB.UpdateBuilder>();
-                    uv.Add(MB.Update.Set(MEYesNo.TTLDateProperty, System.DateTime.UtcNow.AddDays(_expireDays)));
-                    uv.Add(MB.Update.Set(MEYesNo.DeleteFlagProperty, true));
-                    uv.Add(MB.Update.Set(MEYesNo.UpdatedByProperty, ObjectId.Parse(request.UserId)));
-                    uv.Add(MB.Update.Set(MEYesNo.LastUpdatedOnProperty, DateTime.UtcNow));
+                    uv.Add(MB.Update.Set(MEStep.TTLDateProperty, System.DateTime.UtcNow.AddDays(_expireDays)));
+                    uv.Add(MB.Update.Set(MEStep.DeleteFlagProperty, true));
+                    uv.Add(MB.Update.Set(MEStep.UpdatedByProperty, ObjectId.Parse(request.UserId)));
+                    uv.Add(MB.Update.Set(MEStep.LastUpdatedOnProperty, DateTime.UtcNow));
 
                     IMongoUpdate update = MB.Update.Combine(uv);
-                    ctx.YesNoSteps.Collection.Update(q, update);
+                    ctx.Steps.Collection.Update(q, update);
 
                     AuditHelper.LogDataAudit(this.UserId,
                                             MongoCollectionName.Step.ToString(),
@@ -138,11 +138,11 @@ namespace Phytel.API.DataDomain.ProgramDesign
         {
             try
             {
-                MEYesNo cp = null;
+                MEStep cp = null;
                 using (ProgramDesignMongoContext ctx = new ProgramDesignMongoContext(_dbName))
                 {
-                    var findcp = MB.Query<MEYesNo>.EQ(b => b.Id, ObjectId.Parse(entityID));
-                    cp = ctx.YesNoSteps.Collection.Find(findcp).FirstOrDefault();
+                    var findcp = MB.Query<MEStep>.EQ(b => b.Id, ObjectId.Parse(entityID));
+                    cp = ctx.Steps.Collection.Find(findcp).FirstOrDefault();
                 }
                 return cp;
             }
@@ -160,8 +160,8 @@ namespace Phytel.API.DataDomain.ProgramDesign
 
                 using (ProgramDesignMongoContext ctx = new ProgramDesignMongoContext(_dbName))
                 {
-                    var findcp = MB.Query<MEYesNo>.EQ(b => b.Question, entityName);
-                    MEYesNo cp = ctx.YesNoSteps.Collection.Find(findcp).FirstOrDefault();
+                    var findcp = MB.Query<MEStep>.EQ(b => b.Question, entityName);
+                    MEStep cp = ctx.Steps.Collection.Find(findcp).FirstOrDefault();
 
                     if (cp != null)
                     {
@@ -204,7 +204,7 @@ namespace Phytel.API.DataDomain.ProgramDesign
                 //                  //Question = a.Question
                 //              }).First();
 
-                var step = from a in ctx.YesNoSteps
+                var step = from a in ctx.Steps
                            where a.Id.Equals(new ObjectId("531a2d05c3478604270000f8"))
                            select a;
 
@@ -227,29 +227,29 @@ namespace Phytel.API.DataDomain.ProgramDesign
 
                 using (ProgramDesignMongoContext ctx = new ProgramDesignMongoContext(_dbName))
                 {
-                    var pUQuery = new QueryDocument(MEYesNo.IdProperty, ObjectId.Parse(request.StepId));
+                    var pUQuery = new QueryDocument(MEStep.IdProperty, ObjectId.Parse(request.StepId));
 
                     MB.UpdateBuilder updt = new MB.UpdateBuilder();
                     if (request.Question != null)
                     {
                         if (request.Question == "\"\"" || (request.Question == "\'\'"))
-                            updt.Set(MEYesNo.QuestionProperty, string.Empty);
+                            updt.Set(MEStep.QuestionProperty, string.Empty);
                         else
-                            updt.Set(MEYesNo.QuestionProperty, request.Question);
+                            updt.Set(MEStep.QuestionProperty, request.Question);
                     }
                     if (request.Notes != null)
                     {
                         if (request.Notes == "\"\"" || (request.Notes == "\'\'"))
-                            updt.Set(MEYesNo.NotesProperty, string.Empty);
+                            updt.Set(MEStep.NotesProperty, string.Empty);
                         else
-                            updt.Set(MEYesNo.NotesProperty, request.Notes);
+                            updt.Set(MEStep.NotesProperty, request.Notes);
                     }
 
-                    updt.Set(MEYesNo.LastUpdatedOnProperty, System.DateTime.UtcNow);
-                    updt.Set(MEYesNo.UpdatedByProperty, ObjectId.Parse(request.UserId));
-                    updt.Set(MEYesNo.VersionProperty, request.Version);
+                    updt.Set(MEStep.LastUpdatedOnProperty, System.DateTime.UtcNow);
+                    updt.Set(MEStep.UpdatedByProperty, ObjectId.Parse(request.UserId));
+                    updt.Set(MEStep.VersionProperty, request.Version);
 
-                    var pt = ctx.YesNoSteps.Collection.FindAndModify(pUQuery, SortBy.Null, updt, true);
+                    var pt = ctx.Steps.Collection.FindAndModify(pUQuery, SortBy.Null, updt, true);
 
                     AuditHelper.LogDataAudit(this.UserId,
                                             MongoCollectionName.Step.ToString(),

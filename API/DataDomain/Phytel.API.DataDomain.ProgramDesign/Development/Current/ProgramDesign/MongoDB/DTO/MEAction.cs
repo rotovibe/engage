@@ -26,8 +26,9 @@ namespace Phytel.API.DataDomain.ProgramDesign.MongoDB.DTO
         public const string DescriptionProperty = "desc";
         public const string CompletedByProperty = "cby";
         public const string StatusProperty = "sts";
-        public const string TextStepsProperty = "txt";
-        public const string YesNoStepsProperty = "yesno";
+        public const string StepsProperty = "sps";
+        //public const string TextStepsProperty = "txt";
+        //public const string YesNoStepsProperty = "yesno";
 
         public const string VersionProperty = "v";
         public const string UpdatedByProperty = "uby";
@@ -48,13 +49,17 @@ namespace Phytel.API.DataDomain.ProgramDesign.MongoDB.DTO
         [BsonIgnoreIfNull(true)]
         public string Description { get; set; }
 
-        [BsonElement(TextStepsProperty)]
+        [BsonElement(StepsProperty)]
         [BsonIgnoreIfNull(true)]
-        public List<METext> TextSteps { get; set; }
+        public List<MEStep> Steps { get; set; }
 
-        [BsonElement(YesNoStepsProperty)]
-        [BsonIgnoreIfNull(true)]
-        public List<MEYesNo> YesNoSteps { get; set; }
+        //[BsonElement(TextStepsProperty)]
+        //[BsonIgnoreIfNull(true)]
+        //public List<METext> TextSteps { get; set; }
+
+        //[BsonElement(YesNoStepsProperty)]
+        //[BsonIgnoreIfNull(true)]
+        //public List<MEYesNo> YesNoSteps { get; set; }
 
         [BsonElement(CompletedByProperty)]
         [BsonIgnoreIfNull(true)]

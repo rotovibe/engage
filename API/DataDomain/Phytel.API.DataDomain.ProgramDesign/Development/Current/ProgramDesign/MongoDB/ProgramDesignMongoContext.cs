@@ -28,8 +28,9 @@ namespace Phytel.API.DataDomain.ProgramDesign
             //ProgramAttributes = new MongoSet<MEProgramAttribute, ObjectId>(this, COLL_ProgramAttributeS);
             Modules = new MongoSet<MEModule, ObjectId>(this, COLL_ModuleS);
             Actions = new MongoSet<MEAction, ObjectId>(this, COLL_ActionS);
-            TextSteps = new MongoSet<METext, ObjectId>(this, COLL_Step);
-            YesNoSteps = new MongoSet<MEYesNo, ObjectId>(this, COLL_Step);
+            Steps = new MongoSet<MEStep, ObjectId>(this, COLL_Step);
+            //TextSteps = new MongoSet<METext, ObjectId>(this, COLL_Step);
+            //YesNoSteps = new MongoSet<MEYesNo, ObjectId>(this, COLL_Step);
             
 
 		}
@@ -40,7 +41,8 @@ namespace Phytel.API.DataDomain.ProgramDesign
         public MongoSet<MEProgramAttribute, ObjectId> ProgramAttributes { get; private set; }
         public MongoSet<MEModule, ObjectId> Modules { get; private set; }
         public MongoSet<MEAction, ObjectId> Actions { get; private set; }
-        public MongoSet<METext, ObjectId> TextSteps { get; private set; }
-        public MongoSet<MEYesNo, ObjectId> YesNoSteps { get; private set; }
+        public MongoSet<MEStep, ObjectId> Steps { get; private set; }
+        //public MongoSet<METext, ObjectId> TextSteps { get; private set; }
+        //public MongoSet<MEYesNo, ObjectId> YesNoSteps { get; private set; }
     }
 }
