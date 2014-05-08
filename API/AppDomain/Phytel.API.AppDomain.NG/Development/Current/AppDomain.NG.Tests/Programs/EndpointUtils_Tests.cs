@@ -12,6 +12,7 @@ using Phytel.API.AppDomain.NG.DTO.Observation;
 using Phytel.API.Interface;
 using Phytel.API.DataDomain.PatientObservation.DTO;
 using Phytel.API.AppDomain.NG.PlanCOR;
+using MongoDB.Bson;
 
 namespace Phytel.API.AppDomain.NG.Tests
 {
@@ -72,6 +73,104 @@ namespace Phytel.API.AppDomain.NG.Tests
                 GetPatientProgramDetailsSummaryRequest request = new GetPatientProgramDetailsSummaryRequest();
                 GetProgramDetailsSummaryResponse response = peu.RequestPatientProgramDetailsSummary(request);
                 Assert.IsNull(response.Program.Attributes);
+            }
+
+            [TestMethod()]
+            [TestCategory("NIGHT-920")]
+            [TestProperty("TFS", "6099")]
+            public void GetActionIndividualAttributes_State_Test()
+            {
+                int actualValue = 4;
+                StubPlanElementEndpointUtils peu = new StubPlanElementEndpointUtils { Client = new StubJsonRestClient() };
+                GetPatientProgramDetailsSummaryRequest request = new GetPatientProgramDetailsSummaryRequest();
+                GetProgramDetailsSummaryResponse response = peu.RequestPatientProgramDetailsSummary(request);
+
+                int expectedValue = response.Program.Modules[0].Actions[0].ElementState;
+                Assert.AreEqual(expectedValue, actualValue);
+            }
+
+            [TestMethod()]
+            [TestCategory("NIGHT-920")]
+            [TestProperty("TFS", "6099")]
+            public void GetActionIndividualAttributes_AssignedBy_Test()
+            {
+                StubPlanElementEndpointUtils peu = new StubPlanElementEndpointUtils { Client = new StubJsonRestClient() };
+                GetPatientProgramDetailsSummaryRequest request = new GetPatientProgramDetailsSummaryRequest();
+                GetProgramDetailsSummaryResponse response = peu.RequestPatientProgramDetailsSummary(request);
+
+                string expectedValue = response.Program.Modules[0].Actions[0].AssignBy;
+                ObjectId objectId;
+                bool success = ObjectId.TryParse(expectedValue, out objectId);
+                Assert.IsTrue(success);
+            }
+
+            [TestMethod()]
+            [TestCategory("NIGHT-920")]
+            [TestProperty("TFS", "6099")]
+            public void GetActionIndividualAttributes_AssignedTo_Test()
+            {
+                StubPlanElementEndpointUtils peu = new StubPlanElementEndpointUtils { Client = new StubJsonRestClient() };
+                GetPatientProgramDetailsSummaryRequest request = new GetPatientProgramDetailsSummaryRequest();
+                GetProgramDetailsSummaryResponse response = peu.RequestPatientProgramDetailsSummary(request);
+
+                string expectedValue = response.Program.Modules[0].Actions[0].AssignTo;
+                ObjectId objectId;
+                bool success = ObjectId.TryParse(expectedValue, out objectId);
+                Assert.IsTrue(success);
+            }
+
+            [TestMethod()]
+            [TestCategory("NIGHT-920")]
+            [TestProperty("TFS", "6099")]
+            public void GetActionIndividualAttributes_AttrStartDate_Test()
+            {
+                DateTime expectedValue = DateTime.UtcNow.Date;
+                StubPlanElementEndpointUtils peu = new StubPlanElementEndpointUtils { Client = new StubJsonRestClient() };
+                GetPatientProgramDetailsSummaryRequest request = new GetPatientProgramDetailsSummaryRequest();
+                GetProgramDetailsSummaryResponse response = peu.RequestPatientProgramDetailsSummary(request);
+
+                DateTime actualValue = (DateTime)response.Program.Modules[0].Actions[0].AttrStartDate;
+                Assert.AreEqual(expectedValue, actualValue.Date);
+            }
+
+            [TestMethod()]
+            [TestCategory("NIGHT-920")]
+            [TestProperty("TFS", "6099")]
+            public void GetActionIndividualAttributes_AttrEndDate_Test()
+            {
+                DateTime expectedValue = DateTime.UtcNow.AddDays(10).Date;
+                StubPlanElementEndpointUtils peu = new StubPlanElementEndpointUtils { Client = new StubJsonRestClient() };
+                GetPatientProgramDetailsSummaryRequest request = new GetPatientProgramDetailsSummaryRequest();
+                GetProgramDetailsSummaryResponse response = peu.RequestPatientProgramDetailsSummary(request);
+
+                DateTime actualValue = (DateTime)response.Program.Modules[0].Actions[0].AttrEndDate;
+                Assert.AreEqual(expectedValue, actualValue.Date);
+            }
+
+
+            [TestMethod()]
+            [TestCategory("NIGHT-924")]
+            [TestProperty("TFS", "6108")]
+            public void GetActionObjectives_Value_Test()
+            {
+                string expectedValue = "5325da08d6a4850adcbba50e";
+                StubPlanElementEndpointUtils peu = new StubPlanElementEndpointUtils { Client = new StubJsonRestClient() };
+                GetPatientProgramDetailsSummaryRequest request = new GetPatientProgramDetailsSummaryRequest();
+                GetProgramDetailsSummaryResponse response = peu.RequestPatientProgramDetailsSummary(request);
+
+                string actualValue = response.Program.Modules[0].Actions[0].Objectives[0].Id;
+                Assert.AreEqual(expectedValue, actualValue);
+            }
+
+            [TestMethod()]
+            [TestCategory("NIGHT-924")]
+            [TestProperty("TFS", "6108")]
+            public void GetActionObjectives_Test()
+            {
+                StubPlanElementEndpointUtils peu = new StubPlanElementEndpointUtils { Client = new StubJsonRestClient() };
+                GetPatientProgramDetailsSummaryRequest request = new GetPatientProgramDetailsSummaryRequest();
+                GetProgramDetailsSummaryResponse response = peu.RequestPatientProgramDetailsSummary(request);
+                Assert.IsNotNull(response.Program.Modules[0].Actions[0].Objectives[0]);
             }
         }
 

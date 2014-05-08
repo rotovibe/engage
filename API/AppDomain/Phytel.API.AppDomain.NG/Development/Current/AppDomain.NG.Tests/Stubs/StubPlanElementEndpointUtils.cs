@@ -75,7 +75,18 @@ namespace Phytel.API.AppDomain.NG.Test.Stubs
                          Description = "BSHSI - Outreach & Enrollment",
                           SourceId ="532b5585a381168abe00042c",
                         Actions = new List<ActionsDetail>(){ 
-                            new ActionsDetail{ Id = "000000000000000000000000", ElementState = 4, Name ="test action from stub", Text = "test action 1"} } 
+                            new ActionsDetail{  Id = "000000000000000000000000", 
+                                                ElementState = 4, 
+                                                Name ="test action from stub",
+                                                Description = "action Description",
+                                                Text = "test action 1",
+                                                AttrEndDate =  DateTime.UtcNow.AddDays(10),
+                                                AttrStartDate =  DateTime.UtcNow,
+                                                AssignTo = "5325d9f7d6a4850adcbba4da",
+                                                AssignBy = "5325d9f7d6a4850adcbb2323",
+                                                AssignDate = System.DateTime.UtcNow,
+                                                Objectives = getObjectives()
+                            } } 
                     }
                 },
                 Text = "This is a sample patient program for the request patient details summary test stub",
@@ -89,6 +100,14 @@ namespace Phytel.API.AppDomain.NG.Test.Stubs
             };
 
             return response;
+        }
+
+        private List<ObjectiveInfoData> getObjectives()
+        {
+            List<ObjectiveInfoData> list = new List<ObjectiveInfoData>();
+            list.Add(new ObjectiveInfoData { Id = "5325da08d6a4850adcbba50e", Status = 1, Unit = "oz", Value = "21" });
+            list.Add(new ObjectiveInfoData { Id = "5325da11d6a4850adcbba522", Status = 1, Unit = "lbs", Value = "455" });
+            return list;
         }
 
         public DataDomain.Program.DTO.ProgramDetail SaveAction(DTO.IProcessActionRequest request, string actionId, DTO.Program p)
