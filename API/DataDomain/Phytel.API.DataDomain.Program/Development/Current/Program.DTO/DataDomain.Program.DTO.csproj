@@ -94,10 +94,10 @@
     <Compile Include="GetStepResponseListResponse.cs" />
     <Compile Include="PlanElementDetail.cs" />
     <Compile Include="ObjectiveInfoData.cs" />
-    <Compile Include="GetMongoProceduresListRequest.cs" />
-    <Compile Include="GetMongoProceduresRequest.cs" />
-    <Compile Include="GetMongoProceduresListResponse.cs" />
-    <Compile Include="GetMongoProceduresResponse.cs" />
+    <Compile Include="MongoProcedures\GetMongoProceduresListRequest.cs" />
+    <Compile Include="MongoProcedures\GetMongoProceduresRequest.cs" />
+    <Compile Include="MongoProcedures\GetMongoProceduresListResponse.cs" />
+    <Compile Include="MongoProcedures\GetMongoProceduresResponse.cs" />
     <Compile Include="ProgramAttribute.cs" />
     <Compile Include="PutProgramActionProcessingRequest.cs" />
     <Compile Include="PutProgramActionProcessingResponse.cs" />

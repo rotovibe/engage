@@ -39,5 +39,27 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DataManagement
                 throw new Exception("DD:DataProgramManager:ExecuteProcedure()::" + ex.Message, ex.InnerException);
             }
         }
+
+
+        public GetMongoProceduresListResponse GetProceduresList(GetMongoProceduresListRequest request)
+        {
+            try
+            {
+                GetMongoProceduresListResponse response = new GetMongoProceduresListResponse();
+                //response.Success = false;
+                //IMongoProcedure proc = new MongoProcedureFactory().GetProcedure(request);
+                //if (proc != null)
+                //{
+                //    proc.Execute();
+                //    response.Results = proc.Results;
+                //    response.Success = true;
+                //}
+                return response;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("DD:DataProgramManager:ExecuteProcedure()::" + ex.Message, ex.InnerException);
+            }
+        }
     }
 }   
