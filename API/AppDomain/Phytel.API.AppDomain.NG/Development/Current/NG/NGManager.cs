@@ -1332,6 +1332,9 @@ namespace Phytel.API.AppDomain.NG
                     SourceId = a.SourceId,
                     AssignBy = a.AssignBy,
                     AssignDate = a.AssignDate,
+                    AssignTo = a.AssignTo,
+                    AttrStartDate = a.AttrStartDate,
+                    AttrEndDate = a.AttrEndDate,
                     ElementState = a.ElementState,
                     DateCompleted = a.DateCompleted,
                     Objectives = GetObjectivesInfo(a.Objectives)
