@@ -51,9 +51,7 @@ namespace Phytel.API.DataDomain.CareMember
                         ContactId = ObjectId.Parse(careMemberData.ContactId),
                         Primary = careMemberData.Primary,
                         TypeId = ObjectId.Parse(careMemberData.TypeId),
-                        Version = request.Version,
-                        UpdatedBy = ObjectId.Parse(this.UserId),
-                        LastUpdatedOn = DateTime.UtcNow
+                        Version = request.Version
                     };
 
                     using (CareMemberMongoContext ctx = new CareMemberMongoContext(_dbName))
