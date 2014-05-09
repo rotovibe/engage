@@ -11,7 +11,8 @@ using Phytel.API.Common;
 namespace Phytel.API.DataDomain.PatientObservation.DTO
 {
     [BsonIgnoreExtraElements(false)]
-    [MongoIndex(Keys = new string[] {IdProperty, ObservationTypeProperty, StandardProperty, TTLDateProperty })]
+    [MongoIndex(Keys = new string[] { TTLDateProperty }, TimeToLive = 0)]
+    [MongoIndex(Keys = new string[] {IdProperty, ObservationTypeProperty, StandardProperty, StatusProperty })]
     public class MEObservation : IMongoEntity<ObjectId>, IMEEntity
     {
         public MEObservation(string userId)

@@ -3,15 +3,14 @@ using ServiceStack.ServiceHost;
 
 namespace Phytel.API.DataDomain.PatientObservation.DTO
 {
-     [Route("/{Context}/{Version}/{ContractNumber}/Observation/Type/{TypeId}/MatchLibrary", "GET")]
-    [Route("/{Context}/{Version}/{ContractNumber}/Observation/Type/{TypeId}/MatchLibrary/{Standard}", "GET")]
-    public class GetAdditionalLibraryObservationsRequest : IDataDomainRequest
+    [Route("/{Context}/{Version}/{ContractNumber}/Patient/{PatientId}/Observation/{ObservationId}/Problem/Initialize", "GET")]
+    public class GetInitializeProblemDataRequest : IDataDomainRequest
     {
-        [ApiMember(Name = "TypeId", Description = "Id of the observation type.", ParameterType = "property", DataType = "string", IsRequired = true)]
-        public string TypeId { get; set; }
+        [ApiMember(Name = "PatientId", Description = "Id of the Patient for whom an observation is being created.", ParameterType = "property", DataType = "string", IsRequired = true)]
+        public string PatientId { get; set; }
 
-        [ApiMember(Name = "Standard", Description = "Determines if observation is standard or not.", ParameterType = "path", DataType = "boolean", IsRequired = false)]
-        public bool? Standard { get; set; }
+        [ApiMember(Name = "ObservationId", Description = "Id of the Observation.", ParameterType = "property", DataType = "string", IsRequired = true)]
+        public string ObservationId { get; set; }
 
         [ApiMember(Name = "UserId", Description = "UserId of the logged in user", ParameterType = "property", DataType = "string", IsRequired = true)]
         public string UserId { get; set; }
@@ -24,5 +23,8 @@ namespace Phytel.API.DataDomain.PatientObservation.DTO
 
         [ApiMember(Name = "Version", Description = "Version of the API being called", ParameterType = "property", DataType = "double", IsRequired = true)]
         public double Version { get; set; }
+
+        [ApiMember(Name = "Initial", Description = "Determines if this is an initialized observation or not.", ParameterType = "property", DataType = "double", IsRequired = true)]
+        public string Initial { get; set; }
     }
 }

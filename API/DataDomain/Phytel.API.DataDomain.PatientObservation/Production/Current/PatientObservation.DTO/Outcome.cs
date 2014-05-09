@@ -2,12 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Phytel.API.DataDomain.PatientObservation.DTO
 {
-    public class ObservationLibraryItemData
+    public class Outcome
     {
-        public string Id { get; set; }
-        public string Name { get; set; }
+        public int Result { get; set; }
+        public string Reason { get; set; }
     }
 }

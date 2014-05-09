@@ -2,7 +2,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Phytel.API.DataDomain.PatientObservation.DTO;
 using ServiceStack.Service;
 using ServiceStack.ServiceClient.Web;
-
+using Phytel.API.Common;
 namespace Phytel.API.DataDomain.PatientObservation.Services.Test
 {
     [TestClass]
@@ -30,6 +30,82 @@ namespace Phytel.API.DataDomain.PatientObservation.Services.Test
                 contractNumber, 
                 TypeID,
                 patientId));
+        }
+
+        [TestMethod]
+        public void GetAllowedObservationStates_CorrectType_Test()
+        {
+            string url = "http://localhost:8888/PatientObservation";
+           //string url = "http://azurePhytel.cloudapp.net:59901/PatientObservation";
+            string type = "Lab";
+            string contractNumber = "InHealth001";
+            string context = "NG";
+            double version = 1.0;
+            string userId = "000000000000000000";
+            IRestClient client = new JsonServiceClient();
+
+            GetAllowedStatesDataResponse response = client.Get<GetAllowedStatesDataResponse>(
+                string.Format("{0}/{1}/{2}/{3}/Observation/States/{4}?UserId={5}",
+                url,
+                context,
+                version,
+                contractNumber,
+                type,
+                userId));
+
+            Assert.IsNotNull(response.StatesData);
+        }
+
+        [TestMethod]
+        public void GetAllowedObservationStates_IncorrectType_Test()
+        {
+            string url = "http://localhost:8888/PatientObservation";
+            //string url = "http://azurePhytel.cloudapp.net:59901/PatientObservation";
+            string type = "Labs";
+            string contractNumber = "InHealth001";
+            string context = "NG";
+            double version = 1.0;
+            string userId = "000000000000000000";
+            IRestClient client = new JsonServiceClient();
+
+            GetAllowedStatesDataResponse response = client.Get<GetAllowedStatesDataResponse>(
+                string.Format("{0}/{1}/{2}/{3}/Observation/States/{4}?UserId={5}",
+                url,
+                context,
+                version,
+                contractNumber,
+                type,
+                userId));
+
+            Assert.IsNull(response.StatesData);
+        }
+
+        [TestMethod]
+        public void GetObservationsByType_StandardIsNull_Test()
+        {
+            string url = "http://localhost:8888/PatientObservation";
+            //string url = "http://azurePhytel.cloudapp.net:59901/PatientObservation";
+            string typeId = "533d8278d433231deccaa62d";
+            bool? standard = true;
+            string contractNumber = "InHealth001";
+            string context = "NG";
+            double version = 1.0;
+            string userId = "000000000000000000";
+            IRestClient client = new JsonServiceClient();
+
+            //[Route("/{Context}/{Version}/{ContractNumber}/Observation/Type/{TypeId}/MatchLibrary/{Standard}", "GET")]
+
+            GetAdditionalLibraryObservationsResponse response = client.Get<GetAdditionalLibraryObservationsResponse>(
+                string.Format("{0}/{1}/{2}/{3}/Observation/Type/{4}/MatchLibrary/{5}?UserId={6}",
+                url,
+                context,
+                version,
+                contractNumber,
+                typeId,
+                standard,
+                userId));
+
+            Assert.IsNotNull(response.Library);
         }
     }
 }

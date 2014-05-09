@@ -50,15 +50,15 @@ namespace Phytel.API.DataDomain.PatientObservation.Service
             return response;
         }
 
-        public GetAllPatientObservationsResponse Post(GetAllPatientObservationsRequest request)
+        public GetPatientProblemsSummaryResponse Get(GetPatientProblemsSummaryRequest request)
         {
-            GetAllPatientObservationsResponse response = new GetAllPatientObservationsResponse();
+            GetPatientProblemsSummaryResponse response = new GetPatientProblemsSummaryResponse();
             try
             {
                 if (string.IsNullOrEmpty(request.UserId))
                     throw new UnauthorizedAccessException("PatientObservationDD:Post()::Unauthorized Access");
 
-                response = PatientObservationDataManager.GetPatientObservationList(request);
+                response = PatientObservationDataManager.GetPatientProblemList(request);
                 response.Version = request.Version;
             }
             catch (Exception ex)
@@ -187,6 +187,69 @@ namespace Phytel.API.DataDomain.PatientObservation.Service
                     throw new UnauthorizedAccessException("PatientObservationDD:Post()::Unauthorized Access");
 
                 response.Result = PatientObservationDataManager.PutUpdateOfPatientObservationRecord(request);
+                response.Version = request.Version;
+            }
+            catch (Exception ex)
+            {
+                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+
+                string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
+                Common.Helper.LogException(int.Parse(aseProcessID), ex);
+            }
+            return response;
+        }
+
+        public PutRegisterPatientObservationResponse Put(PutRegisterPatientObservationRequest request)
+        {
+            PutRegisterPatientObservationResponse response = new PutRegisterPatientObservationResponse();
+            try
+            {
+                if (string.IsNullOrEmpty(request.UserId))
+                    throw new UnauthorizedAccessException("PatientObservationDD:Put()::Unauthorized Access");
+
+                PatientObservationDataManager.PutRegisteredObservation(request);
+                response.Version = request.Version;
+            }
+            catch (Exception ex)
+            {
+                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+
+                string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
+                Common.Helper.LogException(int.Parse(aseProcessID), ex);
+            }
+            return response;
+        }
+
+        public GetAllowedStatesDataResponse Get(GetAllowedStatesDataRequest request)
+        {
+            GetAllowedStatesDataResponse response = new GetAllowedStatesDataResponse();
+            try
+            {
+                if (string.IsNullOrEmpty(request.UserId))
+                    throw new UnauthorizedAccessException("PatientObservationDD:Get()::Unauthorized Access");
+
+                response = PatientObservationDataManager.GetAllowedStates(request);
+                response.Version = request.Version;
+            }
+            catch (Exception ex)
+            {
+                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+
+                string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
+                Common.Helper.LogException(int.Parse(aseProcessID), ex);
+            }
+            return response;
+        }
+
+        public GetInitializeProblemDataResponse Get(GetInitializeProblemDataRequest request)
+        {
+            GetInitializeProblemDataResponse response = new GetInitializeProblemDataResponse();
+            try
+            {
+                if (string.IsNullOrEmpty(request.UserId))
+                    throw new UnauthorizedAccessException("PatientObservationDD:Get()::Unauthorized Access");
+
+                response = PatientObservationDataManager.GetInitializeProblem(request);
                 response.Version = request.Version;
             }
             catch (Exception ex)
