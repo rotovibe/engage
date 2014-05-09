@@ -16,10 +16,14 @@ namespace Phytel.API.DataDomain.Patient.Service.Test
             string contractNumber = "InHealth001";
             string context = "NG";
             double version = 1.0;
-            string token = "5317440bd6a4850c20c998a2";
+            string token = "5331b06cd6a4850998e38975";
             string patientId = "52f5586e072ef709f84e65fd";
             string typeId = "53067453fe7a591a348e1b66";
             IRestClient client = new JsonServiceClient();
+
+            //JsonServiceClient.HttpWebRequestFilter = x =>
+            //                x.Headers.Add(string.Format("{0}: {1}", "x-Phytel-UserID", "5331b06cd6a4850998e38975"));
+            JsonServiceClient.HttpWebRequestFilter = x => x.Headers.Add(string.Format("Token: {0}", token));
 
             GetStandardObservationItemsResponse response = client.Get<GetStandardObservationItemsResponse>(
                 string.Format(@"http://localhost:888/Nightingale/{0}/{1}/Patient/{2}/Observation/?Token={3}&TypeId={4}",
@@ -140,6 +144,95 @@ namespace Phytel.API.DataDomain.Patient.Service.Test
             });
 
             return ov;
+        }
+
+        [TestMethod]
+        public void GetAllowedObservationStates_Test()
+        {
+            string contractNumber = "InHealth001";
+            string context = "NG";
+            double version = 1.0;
+            string token = "534406e6d6a48508c45b62e0";
+            string type = "Lab";
+            IRestClient client = new JsonServiceClient();
+
+            JsonServiceClient.HttpWebRequestFilter = x => x.Headers.Add(string.Format("Token: {0}", token));
+            //GET	/{Version}/{ContractNumber}/Observation/States/{TypeName}	
+            GetAllowedStatesResponse response = client.Get<GetAllowedStatesResponse>(
+                string.Format(@"http://localhost:888/Nightingale/{0}/{1}/Observation/States/{2}?Context={3}",
+                version,
+                contractNumber,
+                type,
+                context));
+
+            Assert.IsNotNull(response.States);
+        }
+
+        [TestMethod]
+        public void Get_PatientProblemsSummary_Test()
+        {
+            string contractNumber = "InHealth001";
+            string context = "NG";
+            double version = 1.0;
+            string token = "5346bbb6d6a48504b493083b";
+            string patientId = "5325da03d6a4850adcbba4fe";
+            string typeId = "53067453fe7a591a348e1b66";
+            IRestClient client = new JsonServiceClient();
+
+            //JsonServiceClient.HttpWebRequestFilter = x =>
+            //                x.Headers.Add(string.Format("{0}: {1}", "x-Phytel-UserID", "5331b06cd6a4850998e38975"));
+            JsonServiceClient.HttpWebRequestFilter = x => x.Headers.Add(string.Format("Token: {0}", token));
+
+            GetPatientProblemsResponse response = client.Get<GetPatientProblemsResponse>(
+                string.Format(@"http://localhost:888/Nightingale/{0}/{1}/Patient/{2}/Observation/Problems",
+                version,
+                contractNumber,
+                patientId,
+                token,
+                typeId));
+        }
+
+        [TestMethod]
+        public void SavePatientProblems_Test()
+        {
+            string contractNumber = "InHealth001";
+            string context = "NG";
+            double version = 1.0;
+            string patientId = "5325db00d6a4850adcbba802";
+            string token = "5346d352d6a48504b4930c16";
+            IRestClient client = new JsonServiceClient();
+            JsonServiceClient.HttpWebRequestFilter = x => x.Headers.Add(string.Format("Token: {0}", token));
+            PostUpdateObservationItemsResponse response = client.Post<PostUpdateObservationItemsResponse>(
+                string.Format(@"http://localhost:888/Nightingale/{0}/{1}/Patient/{2}/Observation/Update",
+                version,
+                contractNumber,
+                patientId), new PostUpdateObservationItemsRequest { Observations = GetProblems() } as object);
+        }
+
+        private List<PatientObservation> GetProblems()
+        {
+            List<PatientObservation> pos = new List<PatientObservation>();
+            pos.Add(new PatientObservation
+            {
+                Id = "5346effcd43323252c52d47b",
+                ObservationId = "533ed16ed4332307bc592bb9",
+                StartDate = System.DateTime.UtcNow.AddDays(2),
+                DisplayId = 2,
+                StateId = 4,
+                DeleteFlag= false
+            });
+
+            pos.Add(new PatientObservation
+            {
+                Id = "5346ef85d4332324584dd049",
+                ObservationId = "533ed16ed4332307bc592bba",
+                StartDate = System.DateTime.UtcNow.AddDays(1),
+                DisplayId = 0,
+                StateId = 3,
+                DeleteFlag = true
+
+            });
+            return pos;
         }
     }
 }

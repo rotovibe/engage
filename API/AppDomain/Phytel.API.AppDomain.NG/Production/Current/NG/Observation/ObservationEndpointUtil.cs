@@ -10,6 +10,7 @@ using System.Configuration;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Phytel.API.Common.CustomObject;
 
 namespace Phytel.API.AppDomain.NG.Observation
 {
@@ -54,14 +55,14 @@ namespace Phytel.API.AppDomain.NG.Observation
             {
                 List<ObservationLibraryItemData> result = null;
                 IRestClient client = new JsonServiceClient();
-
-                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Observation/Type/{4}/MatchLibrary/?PatientId={5}",
+                // [Route("/{Version}/{ContractNumber}/Observation/Type/{TypeId}/MatchLibrary/{Standard}"
+                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Observation/Type/{4}/MatchLibrary/{5}",
                                     DDPatientObservationsServiceUrl,
                                     "NG",
                                     request.Version,
                                     request.ContractNumber,
                                     request.TypeId,
-                                    request.PatientId), request.UserId);
+                                    request.Standard), request.UserId);
 
                 GetAdditionalLibraryObservationsResponse dataDomainResponse = client.Get<GetAdditionalLibraryObservationsResponse>(
                     url);
@@ -144,6 +145,110 @@ namespace Phytel.API.AppDomain.NG.Observation
             catch (WebServiceException ex)
             {
                 throw new WebServiceException("AD:GetAdditionalObservationsRequest()::" + ex.Message, ex.InnerException);
+            }
+        }
+
+        internal static List<IdNamePair> GetAllowedObservationStates(GetAllowedStatesRequest request)
+        {
+            try
+            {
+                List<IdNamePair> result = null;
+                IRestClient client = new JsonServiceClient();
+                // [Route("/{Context}/{Version}/{ContractNumber}/Observation/States/{TypeName}", "GET")]
+                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Observation/States/{4}",
+                                    DDPatientObservationsServiceUrl,
+                                    "NG",
+                                    request.Version,
+                                    request.ContractNumber,
+                                    request.TypeName), request.UserId);
+
+                GetAllowedStatesDataResponse dataDomainResponse = client.Get<GetAllowedStatesDataResponse>(url);
+
+                if (dataDomainResponse != null)
+                {
+                    result = dataDomainResponse.StatesData;
+                }
+
+                return result;
+            }
+            catch (WebServiceException ex)
+            {
+                throw new WebServiceException("AD:GetAllowedObservationStates()::" + ex.Message, ex.InnerException);
+            }
+        }
+
+        internal static List<Phytel.API.AppDomain.NG.DTO.Observation.PatientObservation> GetPatientProblemSummary(GetPatientProblemsRequest request)
+        {
+            try
+            {
+                List<Phytel.API.AppDomain.NG.DTO.Observation.PatientObservation> result = new List<Phytel.API.AppDomain.NG.DTO.Observation.PatientObservation>();
+                IRestClient client = new JsonServiceClient();
+                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Observation/Problems",
+                                    DDPatientObservationsServiceUrl,
+                                    "NG",
+                                    request.Version,
+                                    request.ContractNumber,
+                                    request.PatientId), request.UserId);
+
+                GetPatientProblemsSummaryResponse dataDomainResponse = client.Get<GetPatientProblemsSummaryResponse>(url);
+
+                if (dataDomainResponse != null)
+                {
+                    dataDomainResponse.PatientObservations.ForEach(r =>
+                    {
+                        result.Add(
+                            new Phytel.API.AppDomain.NG.DTO.Observation.PatientObservation
+                            {
+                                Id = r.Id,
+                                ObservationId = r.ObservationId,
+                                Name = r.Name,
+                                PatientId = r.PatientId,
+                                StateId = r.StateId,
+                                DisplayId = r.DisplayId,
+                                StartDate = r.StartDate,
+                                EndDate = r.EndDate,
+                                Source = r.Source,
+                                Standard = r.Standard,
+                                TypeId = r.TypeId
+                            });
+                    });
+                }
+
+                return result;
+            }
+            catch (WebServiceException ex)
+            {
+                throw new WebServiceException("AD:GetPatientProblemSummary()::" + ex.Message, ex.InnerException);
+            }
+        }
+
+        internal static PatientObservationData GetInitializeProblem(GetInitializeProblemRequest request)
+        {
+            try
+            {
+                PatientObservationData result = null;
+                IRestClient client = new JsonServiceClient();
+                //  [Route("/{Context}/{Version}/{ContractNumber}/Patient/{PatientId}/Observation/{ObservationId}/Problem/Initialize", "GET")]
+                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Observation/{5}/Problem/Initialize",
+                                    DDPatientObservationsServiceUrl,
+                                    "NG",
+                                    request.Version,
+                                    request.ContractNumber,
+                                    request.PatientId,
+                                    request.ObservationId), request.UserId);
+
+                GetInitializeProblemDataResponse dataDomainResponse = client.Get<GetInitializeProblemDataResponse>(url);
+
+                if (dataDomainResponse != null)
+                {
+                    result = dataDomainResponse.PatientObservation;
+                }
+
+                return result;
+            }
+            catch (WebServiceException ex)
+            {
+                throw new WebServiceException("AD:GetInitializeProblem()::" + ex.Message, ex.InnerException);
             }
         }
     }

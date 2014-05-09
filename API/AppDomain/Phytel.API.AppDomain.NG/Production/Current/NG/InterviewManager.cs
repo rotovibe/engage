@@ -17,11 +17,13 @@ namespace Phytel.API.AppDomain.NG
     {
         public List<string> RelatedChanges { get; set; }
         public List<object> ProcessedElements { get; set; }
+        public IsInitialActionSpecification<Program> IsInitialAction { get; set; }
 
         public PlanManager()
         {
             RelatedChanges = new List<string>();
             ProcessedElements = new List<object>();
+            IsInitialAction = new IsInitialActionSpecification<Program>();
         }
 
         public PostProcessActionResponse ProcessActionResults(PostProcessActionRequest request)
@@ -35,16 +37,33 @@ namespace Phytel.API.AppDomain.NG
 
                 Program p = PlanElementEndpointUtil.RequestPatientProgramDetail(request);
                 Actions action = request.Action;
-                NGUtils.UpdateProgramAction(action, p);
 
                 if (action.Completed)
                 {
+                    // pre-process
                     // set program starting date
-                    if (action.Order == 1)
+                    if (IsInitialAction.IsSatisfiedBy(p))
                     {
                         //p.StartDate = System.DateTime.UtcNow;
                         PlanElementUtil.SetStartDateForProgramAttributes(request.ProgramId, request);
                     }
+
+                    // get module reference
+                    Module mod = PlanElementUtil.FindElementById(p.Modules, action.ModuleId);
+                    // set to in progress
+                    mod.ElementState = 4;
+                    
+                    // set in progress state
+                    //new ResponseSpawnAllowed<Step>().IsSatisfiedBy(s)
+                    if (PlanElementUtil.IsActionInitial(p))
+                    //if (new IsActionInitialSpecification<Program>().IsSatisfiedBy(p))
+                    {
+                        // set program to in progress
+                        p.ElementState = 4;
+                    }
+
+                    // insert action update
+                    NGUtils.UpdateProgramAction(action, p);
 
                     //// create a responsibility chain to process each elemnt in the hierachy
                     ProgramPlanProcessor pChain = InitializeProgramChain();
@@ -55,7 +74,6 @@ namespace Phytel.API.AppDomain.NG
                     //// process action
                     pChain.ProcessWorkflow((IPlanElement)action, p, request.UserId, request.PatientId, action, request);
                     
-                    Module mod = PlanElementUtil.FindElementById(p.Modules, action.ModuleId);
                     if (mod != null)
                     {
                         // set enabled status for action dependencies
@@ -113,7 +131,22 @@ namespace Phytel.API.AppDomain.NG
 
                 Program p = PlanElementEndpointUtil.RequestPatientProgramDetail(request);
                 Actions action = request.Action;
+
+                // set elementstates to in progress
+                Module mod = PlanElementUtil.FindElementById(p.Modules, action.ModuleId);
+                // set to in progress
+                mod.ElementState = 4;
+                
+                if (PlanElementUtil.IsActionInitial(p))
+                //if (new IsActionInitialSpecification<Program>().IsSatisfiedBy(p))
+                {
+                    // set program to in progress
+                    p.ElementState = 4;
+                }
+                
                 NGUtils.UpdateProgramAction(action, p);
+
+                AddUniquePlanElementToProcessedList(mod);
 
                 // save
                 PlanElementEndpointUtil.SaveAction(request, action.Id, p);

@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Globalization;
 using AD = Phytel.API.AppDomain.NG.DTO.Observation;
+using Phytel.API.Common;
 
 namespace Phytel.API.AppDomain.NG
 {
@@ -35,7 +36,9 @@ namespace Phytel.API.AppDomain.NG
                             StartDate = o.StartDate,
                             TypeId = o.TypeId,
                             Units = o.Units,
-                            Values = GetValues(o.Values)
+                            Values = GetValues(o.Values),
+                            StateId = o.StateId,
+                            DisplayId = o.DisplayId,
                         });
                     });
                 }
@@ -127,30 +130,61 @@ namespace Phytel.API.AppDomain.NG
             {
                 PatientObservationRecordData pord = new PatientObservationRecordData
                 {
-                    Id = ov.Id,
-                    EndDate = po.EndDate,
                     GroupId = po.GroupId,
                     StartDate = po.StartDate,
                     TypeId = po.TypeId,
                     Units = po.Units,
-                    Source = "CM" //po.Source
+                    DisplayId = po.DisplayId,
+                    StateId = po.StateId,
+                    DeleteFlag = po.DeleteFlag
                 };
 
-                double dVal = 0;
-                if (double.TryParse(ov.Value, out dVal))
+                // Populate Values for Labs and Vitals
+                if (ov != null)
                 {
-                    pord.Value = dVal;
+                    pord.Id = ov.Id;
+                    double dVal = 0;
+                    if (double.TryParse(ov.Value, out dVal))
+                    {
+                        pord.Value = dVal;
+                    }
+                    else
+                    {
+                        pord.NonNumericValue = ov.Value;
+                    }
+                    // Set the End date to start date for Labs and Vitals
+                    pord.EndDate = po.StartDate;
                 }
-                else
+                else //  Populate Values for Problems.
                 {
-                    pord.NonNumericValue = ov.Value;
+                    pord.Id = po.Id;
+                    // If the status for PatientObservation(problem) is changed to Resolved or Inactive, then set EndDate to Today.
+                    if (IsResolvedOrInactivated(po.StateId))
+                    {
+                        pord.EndDate = DateTime.UtcNow;
+                    }
+                    else
+                    {
+                        pord.EndDate = po.EndDate;
+                    }
                 }
+
                 return pord;
             }
             catch (Exception ex)
             {
                 throw new Exception("AD:CreatePatientObservationRecord()::" + ex.Message, ex.InnerException);
             }
+        }
+
+        private static bool IsResolvedOrInactivated(int p)
+        {
+            bool result = false;
+            if (p == (int)ObservationState.Inactive || p == (int)ObservationState.Resolved)
+            {
+                result = true;
+            }
+            return result;
         }
 
         internal static List<string> GetPatientObservationIds(List<AD.PatientObservation> obsl)
@@ -192,16 +226,45 @@ namespace Phytel.API.AppDomain.NG
                     PatientId = o.PatientId,
                     Name = o.Name,
                     Standard = o.Standard,
-                    StartDate = o.StartDate,
                     TypeId = o.TypeId,
                     Units = o.Units,
-                    Values = GetValues(o.Values)
+                    Values = GetValues(o.Values),
+                    StartDate = o.StartDate,
+                    DisplayId = o.DisplayId,
+                    StateId = o.StateId
                 };
                 return result;
             }
             catch (Exception ex)
             {
                 throw new Exception("AD:GetAdditionalObservationItemForPatient()::" + ex.Message, ex.InnerException);
+            }
+        }
+
+        internal static AD.PatientObservation GetInitializeProblem(GetInitializeProblemRequest request, PatientObservationData o)
+        {
+            AD.PatientObservation result = new DTO.Observation.PatientObservation();
+            try
+            {
+                result = new Phytel.API.AppDomain.NG.DTO.Observation.PatientObservation
+                {
+                    Id = o.Id,
+                    PatientId = o.PatientId,
+                    ObservationId = o.ObservationId,
+                    TypeId = o.TypeId,
+                    StartDate = o.StartDate,
+                    EndDate = o.EndDate,
+                    Name = o.Name,
+                    DisplayId = o.DisplayId,
+                    StateId = o.StateId,
+                    Source = o.Source,
+                    DeleteFlag  = o.DeleteFlag,
+                };
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("AD:GetInitializeProblem()::" + ex.Message, ex.InnerException);
             }
         }
     }

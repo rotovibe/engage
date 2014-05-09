@@ -1,6 +1,8 @@
 ﻿using Phytel.API.AppDomain.NG.DTO;
+using Phytel.API.AppDomain.NG.DTO.Observation;
 using Phytel.API.AppDomain.NG.PlanCOR;
 using Phytel.API.DataDomain.Patient.DTO;
+using Phytel.API.DataDomain.PatientObservation.DTO;
 using Phytel.API.DataDomain.PatientProblem.DTO;
 using Phytel.API.DataDomain.Program.DTO;
 using Phytel.API.Interface;
@@ -18,32 +20,38 @@ namespace Phytel.API.AppDomain.NG
     public static class PlanElementEndpointUtil
     {
         static readonly string DDPatientProblemServiceUrl = ConfigurationManager.AppSettings["DDPatientProblemServiceUrl"];
+        static readonly string DDPatientObservationServiceUrl = ConfigurationManager.AppSettings["DDPatientObservationUrl"];
         static readonly string DDPatientServiceUrl = ConfigurationManager.AppSettings["DDPatientServiceUrl"];
         static readonly string DDProgramServiceUrl = ConfigurationManager.AppSettings["DDProgramServiceUrl"];
 
-        public static PatientProblemData GetPatientProblem(string probId, PlanElementEventArg e, string userId)
+        public static PatientObservation GetPatientProblem(string probId, PlanElementEventArg e, string userId)
         {
             try
             {
-                PatientProblemData result = null;
+                PatientObservation result = null;
 
                 IRestClient client = new JsonServiceClient();
 
-                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Problem/?ProblemId={5}",
-                                   DDPatientProblemServiceUrl,
+                //Patient/{PatientId}/Observation/{ObservationID}
+                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Observation/{5}",
+                                   DDPatientObservationServiceUrl,
                                    "NG",
                                    e.DomainRequest.Version,
                                    e.DomainRequest.ContractNumber,
                                    e.PatientId,
                                    probId), userId);
 
-                GetPatientProblemsDataResponse dataDomainResponse =
-                   client.Get<GetPatientProblemsDataResponse>(
+                GetPatientObservationResponse dataDomainResponse =
+                   client.Get<GetPatientObservationResponse>(
                    url);
 
-                if (dataDomainResponse.PatientProblem != null)
+                if (dataDomainResponse.PatientObservation != null)
                 {
-                    result = dataDomainResponse.PatientProblem;
+                    result = new PatientObservation
+                    {
+                        Id = dataDomainResponse.PatientObservation.Id,
+                        StateId = dataDomainResponse.PatientObservation.StateId
+                    };
                 }
 
                 return result;
@@ -374,29 +382,28 @@ namespace Phytel.API.AppDomain.NG
             }
         }
 
-        internal static PutNewPatientProblemResponse PutNewPatientProblem(string patientId, string userId, string elementId, IAppDomainRequest request)
+        public static PutRegisterPatientObservationResponse PutNewPatientProblem(string patientId, string userId, string elementId, IAppDomainRequest request)
         {
             try
             {
                 //register call to remote serivce.
                 IRestClient client = new JsonServiceClient();
 
-                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Problem/Insert",
-                                   DDPatientProblemServiceUrl,
+                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Observation/Insert",
+                                   DDPatientObservationServiceUrl,
                                    "NG",
                                    request.Version,
                                    request.ContractNumber,
                                    patientId), request.UserId);
 
-                PutNewPatientProblemResponse dataDomainResponse =
-                   client.Put<PutNewPatientProblemResponse>(
-                   url, new PutNewPatientProblemRequest
+                PutRegisterPatientObservationResponse dataDomainResponse =
+                   client.Put<PutRegisterPatientObservationResponse>(
+                   url, new PutRegisterPatientObservationRequest
                    {
-                       ProblemId = elementId,
-                       Active = true,
-                       Featured = true,
-                       UserId = userId,
-                       Level = 1
+                       Id = elementId,
+                       StateId = 2,
+                       DisplayId = 1,
+                       UserId = userId
                    } as object);
                 return dataDomainResponse;
             }
@@ -406,31 +413,38 @@ namespace Phytel.API.AppDomain.NG
             }
         }
 
-        internal static PutUpdatePatientProblemResponse UpdatePatientProblem(string patientId, string userId, string elementId, PatientProblemData ppd, bool _active, IAppDomainRequest request)
+        public static PutUpdateObservationDataResponse UpdatePatientProblem(string patientId, string userId, string elementId, PatientObservation pod, bool _active, IAppDomainRequest request)
         {
             try
             {
                 //register call to remote serivce.
                 IRestClient client = new JsonServiceClient();
 
-                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Problem/Update/",
-                                   DDPatientProblemServiceUrl,
+                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Observation/Update",
+                                   DDPatientObservationServiceUrl,
                                    "NG",
                                    request.Version,
                                    request.ContractNumber,
                                    patientId), request.UserId);
 
-                PutUpdatePatientProblemResponse dataDomainResponse =
-                   client.Put<PutUpdatePatientProblemResponse>(
-                   url, new PutUpdatePatientProblemRequest
-                   {
-                       Id = ppd.ID,
-                       ProblemId = elementId,
-                       Active = _active,
-                       Featured = true,
-                       UserId = userId,
-                       Level = 1
-                   } as object);
+                PatientObservationRecordData pdata = new PatientObservationRecordData
+                {
+                    Id = pod.Id,
+                    StateId = pod.StateId,
+                    DeleteFlag = false
+                };
+
+                PutUpdateObservationDataRequest purequest = new PutUpdateObservationDataRequest
+                {
+                    PatientObservationData = pdata,
+                    Context = "NG",
+                    ContractNumber = request.ContractNumber,
+                    UserId = request.UserId,
+                };
+
+                PutUpdateObservationDataResponse dataDomainResponse =
+                   client.Put<PutUpdateObservationDataResponse>(
+                   url, purequest as object);
 
                 return dataDomainResponse;
             }

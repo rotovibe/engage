@@ -19,7 +19,7 @@ using DD = Phytel.API.DataDomain.Program.DTO;
 
 namespace Phytel.API.AppDomain.NG
 {
-    public class NGManager : ManagerBase
+    public class NGManager : INGManager
     {
         #region Endpoint addresses
         protected static readonly string DDPatientServiceURL = ConfigurationManager.AppSettings["DDPatientServiceUrl"];
@@ -30,6 +30,12 @@ namespace Phytel.API.AppDomain.NG
         protected static readonly string DDPatientSystemUrl = ConfigurationManager.AppSettings["DDPatientSystemUrl"];
         protected static readonly string DDContactServiceUrl = ConfigurationManager.AppSettings["DDContactServiceUrl"];
         #endregion
+
+        public void LogException(Exception ex)
+        {
+            string _aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
+            Common.Helper.LogException(int.Parse(_aseProcessID), ex);
+        }
 
         #region Patient
         public NG.DTO.GetPatientResponse GetPatient(NG.DTO.GetPatientRequest request)

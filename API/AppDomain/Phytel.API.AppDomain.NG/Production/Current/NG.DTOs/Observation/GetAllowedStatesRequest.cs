@@ -4,11 +4,12 @@ using System.Runtime.Serialization;
 
 namespace Phytel.API.AppDomain.NG.DTO
 {
-    [Route("/{Version}/{ContractNumber}/Patient/{PatientId}/Observation/Initialize", "GET")]
-    public class GetInitializeObservationRequest : IAppDomainRequest
+    [Api(Description = "A Request object to get allowed observation states by type name.")]
+    [Route("/{Version}/{ContractNumber}/Observation/States/{TypeName}", "GET")]
+    public class GetAllowedStatesRequest : IAppDomainRequest
     {
-        [ApiMember(Name = "PatientId", Description = "Id of the patient for whom a goal is being created.", ParameterType = "path", DataType = "string", IsRequired = true)]
-        public string PatientId { get; set; }
+        [ApiMember(Name = "TypeName", Description = "Name of the observation type.", ParameterType = "path", DataType = "string", IsRequired = true)]
+        public string TypeName { get; set; }
 
         [ApiMember(Name = "UserID", Description = "ID of the user making the request (Internally used ONLY)", ParameterType = "property", DataType = "string", IsRequired = true)]
         public string UserId { get; set; }
@@ -25,6 +26,6 @@ namespace Phytel.API.AppDomain.NG.DTO
         [ApiMember(Name = "Context", Description = "Product Context requesting the Program", ParameterType = "property", DataType = "string", IsRequired = false)]
         public string Context { get; set; }
 
-        public GetInitializeObservationRequest() { }
+        public GetAllowedStatesRequest() { }
     }
 }
