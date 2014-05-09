@@ -12,7 +12,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
 {
     public static class DTOUtils
     {
-        public static MEPatientProgram CreateInitialMEPatientProgram(PutProgramToPatientRequest request, MEProgram cp)
+        public static MEPatientProgram CreateInitialMEPatientProgram(PutProgramToPatientRequest request, MEProgram cp, List<ObjectId> sil)
         {
             try
             {
@@ -45,8 +45,8 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
                     Next = cp.Next,
                     Order = cp.Order,
                     Previous = cp.Previous,
-                    Modules = DTOUtils.SetValidModules(cp.Modules, request.ContractNumber, request.UserId),
-                    UpdatedBy = ObjectId.Parse(request.UserId)
+                    Modules = DTOUtils.GetClonedModules(cp.Modules, request.ContractNumber, request.UserId, sil)
+                    //,UpdatedBy = ObjectId.Parse(request.UserId)
                 };
                 if (!string.IsNullOrEmpty(request.UserId))
                 {
@@ -60,14 +60,13 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             }
         }
 
-        public static List<Module> SetValidModules(List<Module> list, string contractNumber, string userId)
+        public static List<Module> GetClonedModules(List<Module> list, string contractNumber, string userId, List<ObjectId> sil)
         {
             try
             {
-                List<Step> steps = new List<Step>();
-                List<Action> acts = new List<Action>();
                 List<Module> mods = new List<Module>();
 
+                //Parallel.ForEach(list, m =>
                 foreach (Module m in list)
                 {
                     if (m.Status == Common.Status.Active)
@@ -99,72 +98,12 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
                             //    Unit = z.Unit,
                             //    Value = z.Value
                             //}).ToList(),
-                            Actions = new List<Action>()
+                            Actions = GetClonedActions(m.Actions, contractNumber, userId, sil)
                         };
-
-                        foreach (Action ai in m.Actions)
-                        {
-                            if (ai.Status == Common.Status.Active)
-                            {
-                                Action ac = new Action()
-                                {
-                                    CompletedBy = ai.CompletedBy,
-                                    Description = ai.Description,
-                                    Id = ai.Id,
-                                    ModuleId = ai.ModuleId,
-                                    Name = ai.Name,
-                                    Status = ai.Status,
-                                    Objectives = ai.Objectives,
-                                    Completed = ai.Completed,
-                                    Enabled = ai.Enabled,
-                                    Next = ai.Next,
-                                    Order = ai.Order,
-                                    Previous = ai.Previous,
-                                    Spawn = ai.Spawn,
-                                    SourceId = ai.SourceId,
-                                    AssignedBy = ai.AssignedBy,
-                                    AssignedOn = ai.AssignedOn,
-                                    State = Common.ElementState.NotStarted,
-                                    //Objectives = ai.Objectives.Where(r => r.Status == Common.Status.Active).Select(x => new ObjectivesInfo()
-                                    //{
-                                    //    Id = x.Id,
-                                    //    Status = x.Status,
-                                    //    Unit = x.Unit,
-                                    //    Value = x.Value
-                                    //}).ToList(),
-                                    Steps = ai.Steps.Where(s => s.Status == Common.Status.Active).Select(b => new Step()
-                                    {
-                                        Status = b.Status,
-                                        Description = b.Description,
-                                        Id = b.Id,
-                                        ActionId = b.ActionId,
-                                        Notes = b.Notes,
-                                        Question = b.Question,
-                                        Title = b.Title,
-                                        Text = b.Text,
-                                        StepTypeId = b.StepTypeId,
-                                        Responses = GetContractStepResponses(b.Id, contractNumber, userId),
-                                        Completed = b.Completed,
-                                        ControlType = b.ControlType,
-                                        Enabled = b.Enabled,
-                                        Header = b.Header,
-                                        Next = b.Next,
-                                        Order = b.Order,
-                                        Previous = b.Previous,
-                                        SelectedResponseId = b.SelectedResponseId,
-                                        Spawn = b.Spawn,
-                                        SourceId = b.SourceId,
-                                        AssignedBy = b.AssignedBy,
-                                        AssignedOn = b.AssignedOn,
-                                        State = b.State
-                                    }).ToList()
-                                };
-                                mod.Actions.Add(ac);
-                            }
-                        }
-                        mods.Add(mod);
+                            mods.Add(mod);
                     }
                 }
+                //);
 
                 return mods;
             }
@@ -172,6 +111,131 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             {
                 throw new Exception("DD:DTOUtils:SetValidModules()::" + ex.Message, ex.InnerException);
             }
+        }
+
+        private static List<Action> GetClonedActions(List<Action> list, string contractNumber, string userId, List<ObjectId> sil)
+        {
+            try
+            {
+                List<Action> actions = new List<Action>();
+                foreach (Action ai in list)
+                {
+                    if (ai.Status == Common.Status.Active)
+                    {
+                        Action ac = new Action()
+                        {
+                            CompletedBy = ai.CompletedBy,
+                            Description = ai.Description,
+                            Id = ai.Id,
+                            ModuleId = ai.ModuleId,
+                            Name = ai.Name,
+                            Status = ai.Status,
+                            Objectives = ai.Objectives,
+                            Completed = ai.Completed,
+                            Enabled = ai.Enabled,
+                            Next = ai.Next,
+                            Order = ai.Order,
+                            Previous = ai.Previous,
+                            Spawn = ai.Spawn,
+                            SourceId = ai.SourceId,
+                            AssignedBy = ai.AssignedBy,
+                            AssignedOn = ai.AssignedOn,
+                            State = Common.ElementState.NotStarted,
+                            //Objectives = ai.Objectives.Where(r => r.Status == Common.Status.Active).Select(x => new ObjectivesInfo()
+                            //{
+                            //    Id = x.Id,
+                            //    Status = x.Status,
+                            //    Unit = x.Unit,
+                            //    Value = x.Value
+                            //}).ToList(),
+                            Steps = GetClonedSteps(contractNumber, userId, ai, sil)
+                        };
+                        actions.Add(ac);
+                    }
+                }
+                return actions;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("DD:DTOUtils:GetClonedActions()::" + ex.Message, ex.InnerException);
+            }
+        }
+
+        private static List<Step> GetClonedSteps(string contractNumber, string userId, Action ai, List<ObjectId> sil)
+        {
+            try
+            {
+                List<Step> steps = new List<Step>();
+                //Parallel.ForEach(ai.Steps, b =>
+                foreach (Step b in ai.Steps)
+                {
+                    if (b.Status == Common.Status.Active)
+                    {
+                        sil.Add(b.Id);
+                        steps.Add(new Step()
+                        {
+                            Status = b.Status,
+                            Description = b.Description,
+                            Id = b.Id,
+                            ActionId = b.ActionId,
+                            Notes = b.Notes,
+                            Question = b.Question,
+                            Title = b.Title,
+                            Text = b.Text,
+                            StepTypeId = b.StepTypeId,
+                            Responses = b.Responses,
+                            //Responses = GetContractStepResponses(b.Id, contractNumber, userId),
+                            Completed = b.Completed,
+                            ControlType = b.ControlType,
+                            Enabled = b.Enabled,
+                            Header = b.Header,
+                            Next = b.Next,
+                            Order = b.Order,
+                            Previous = b.Previous,
+                            SelectedResponseId = b.SelectedResponseId,
+                            Spawn = b.Spawn,
+                            SourceId = b.SourceId,
+                            AssignedBy = b.AssignedBy,
+                            AssignedOn = b.AssignedOn,
+                            State = b.State
+                        });
+                    }
+                }
+                //);
+
+                return steps;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("DD:DTOUtils:GetStepsByParallel()::" + ex.Message, ex.InnerException);
+            }
+
+            //return ai.Steps.Where(s => s.Status == Common.Status.Active).Select(b => new Step()
+            //{
+            //    Status = b.Status,
+            //    Description = b.Description,
+            //    Id = b.Id,
+            //    ActionId = b.ActionId,
+            //    Notes = b.Notes,
+            //    Question = b.Question,
+            //    Title = b.Title,
+            //    Text = b.Text,
+            //    StepTypeId = b.StepTypeId,
+            //    Responses = GetContractStepResponses(b.Id, contractNumber, userId),
+            //    Completed = b.Completed,
+            //    ControlType = b.ControlType,
+            //    Enabled = b.Enabled,
+            //    Header = b.Header,
+            //    Next = b.Next,
+            //    Order = b.Order,
+            //    Previous = b.Previous,
+            //    SelectedResponseId = b.SelectedResponseId,
+            //    Spawn = b.Spawn,
+            //    SourceId = b.SourceId,
+            //    AssignedBy = b.AssignedBy,
+            //    AssignedOn = b.AssignedOn,
+            //    State = b.State
+            //}).ToList();
         }
 
         private static List<MEPatientProgramResponse> GetContractStepResponses(ObjectId stepId, string contractNumber, string userId)
@@ -183,27 +247,28 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
                 IProgramRepository<GetStepResponseListResponse> repo =
                     ProgramRepositoryFactory<GetStepResponseListResponse>.GetStepResponseRepository(contractNumber, "NG", userId);
 
-                ICollection<SelectExpression> selectExpressions = new List<SelectExpression>();
+                //ICollection<SelectExpression> selectExpressions = new List<SelectExpression>();
 
-                SelectExpression stepResponseExpression = new SelectExpression();
-                stepResponseExpression.FieldName = MEResponse.StepIdProperty;
-                stepResponseExpression.Type = SelectExpressionType.EQ;
-                stepResponseExpression.Value = stepId.ToString();
-                stepResponseExpression.ExpressionOrder = 1;
-                stepResponseExpression.GroupID = 1;
-                selectExpressions.Add(stepResponseExpression);
+                //SelectExpression stepResponseExpression = new SelectExpression();
+                //stepResponseExpression.FieldName = MEResponse.StepIdProperty;
+                //stepResponseExpression.Type = SelectExpressionType.EQ;
+                //stepResponseExpression.Value = stepId.ToString();
+                //stepResponseExpression.ExpressionOrder = 1;
+                //stepResponseExpression.GroupID = 1;
+                //selectExpressions.Add(stepResponseExpression);
 
-                APIExpression apiExpression = new APIExpression();
-                apiExpression.Expressions = selectExpressions;
+                //APIExpression apiExpression = new APIExpression();
+                //apiExpression.Expressions = selectExpressions;
 
-                Tuple<string, IEnumerable<object>> stepResponses = repo.Select(apiExpression);
+                //Tuple<string, IEnumerable<object>> stepResponses = repo.Select(apiExpression);
+                List<MEResponse> stepResponses = (List<MEResponse>)repo.Find(stepId.ToString());
 
                 if (stepResponses != null)
                 {
-                    responseList = stepResponses.Item2.Cast<MEResponse>().ToList();
+                    responseList = stepResponses;
                     responseList.ForEach(rs =>
                     {
-                        ppresponseList.Add(new MEPatientProgramResponse
+                        ppresponseList.Add(new MEPatientProgramResponse(userId)
                         {
                             Id = rs.Id,
                             Value = rs.Value,
@@ -251,7 +316,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
 
                 if (stepResponses != null)
                 {
-                    responseList = stepResponses.Item2.Cast<MEPatientProgramResponse>().ToList();
+                responseList = stepResponses.Item2.Cast<MEPatientProgramResponse>().ToList();
                 }
 
                 return responseList;
@@ -317,9 +382,8 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             }
         }
 
-        public static void RecurseAndReplaceIds(List<Module> mods)
+        public static void RecurseAndReplaceIds(List<Module> mods, Dictionary<ObjectId, ObjectId> IdsList)
         {
-            Dictionary<ObjectId, ObjectId> IdsList = new Dictionary<ObjectId, ObjectId>();
             try
             {
                 foreach (Module md in mods)
@@ -576,7 +640,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             }
         }
 
-        internal static List<Action> GetActionElements(List<Program.DTO.ActionsDetail> list)
+        internal static List<Action> GetActionElements(List<Program.DTO.ActionsDetail> list, string userId)
         {
             try
             {
@@ -592,7 +656,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
                         {
                             Id = ObjectId.Parse(a.Id),
                             ModuleId = ObjectId.Parse(a.ModuleId),
-                            Steps = GetStepsInfo(a.Steps),
+                            Steps = GetStepsInfo(a.Steps, userId),
                             AssignedBy = a.AssignBy,
                             AssignedOn = a.AssignDate,
                             Completed = a.Completed,
@@ -620,7 +684,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             }
         }
 
-        private static List<Step> GetStepsInfo(List<Program.DTO.StepsDetail> list)
+        private static List<Step> GetStepsInfo(List<Program.DTO.StepsDetail> list, string userId)
         {
             try
             {
@@ -660,7 +724,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
                             Text = st.Text,
                             Title = st.Title,
                             Spawn = GetSpawnElements(st.SpawnElement),
-                            Responses = GetResponses(st.Responses)
+                            Responses = GetResponses(st.Responses, userId)
                         });
                     });
                 }
@@ -689,7 +753,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             }
         }
 
-        private static List<MEPatientProgramResponse> GetResponses(List<Program.DTO.ResponseDetail> list)
+        private static List<MEPatientProgramResponse> GetResponses(List<Program.DTO.ResponseDetail> list, string userId)
         {
             try
             {
@@ -701,7 +765,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
                     list.ForEach(r =>
                         {
                             rs.Add(
-                                new MEPatientProgramResponse
+                                new MEPatientProgramResponse(userId)
                                 {
                                     StepId = ObjectId.Parse(r.StepId),
                                     NextStepId = ObjectId.Parse(r.NextStepId),
@@ -799,7 +863,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             }
         }
 
-        public static List<Module> CloneAppDomainModules(List<ModuleDetail> prg)
+        public static List<Module> CloneAppDomainModules(List<ModuleDetail> prg, string userId)
         {
             try
             {
@@ -817,7 +881,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
                             Next = ParseObjectId(m.Next),
                             Previous = ParseObjectId(m.Previous),
                             Spawn = DTOUtils.GetSpawnElements(m.SpawnElement),
-                            Actions = DTOUtils.GetActionElements(m.Actions),
+                            Actions = DTOUtils.GetActionElements(m.Actions, userId),
                             AssignedBy = m.AssignBy,
                             AssignedOn = m.AssignDate,
                             Completed = m.Completed,
@@ -941,37 +1005,41 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             try
             {
                 List<StepsDetail> steps = new List<StepsDetail>();
-                list.ForEach(s => steps.Add(
-                    new StepsDetail
-                    {
-                        Description = s.Description,
-                        Id = s.Id.ToString(),
-                        SourceId = s.SourceId.ToString(),
-                        ActionId = s.ActionId.ToString(),
-                        Notes = s.Notes,
-                        Question = s.Question,
-                        Status = (int)s.Status,
-                        Title = s.Title,
-                        Text = s.Text,
-                        StepTypeId = s.StepTypeId,
-                        Completed = s.Completed,
-                        Enabled = s.Enabled,
-                        Next = s.Next != null ? s.Next.ToString() : string.Empty,
-                        Previous = s.Previous != null ? s.Previous.ToString() : string.Empty,
-                        Order = s.Order,
-                        ControlType = (int)s.ControlType,
-                        Header = s.Header,
-                        SelectedResponseId = s.SelectedResponseId.ToString(),
-                        IncludeTime = s.IncludeTime,
-                        SelectType = (int)s.SelectType,
-                        AssignBy = s.AssignedBy,
-                        AssignDate = s.AssignedOn,
-                        ElementState = (int)s.State,
-                        CompletedBy = s.CompletedBy,
-                        DateCompleted = s.DateCompleted,
-                        Responses = GetResponses(s, contract, userId),
-                        SpawnElement = GetSpawnElement(s)
-                    }));
+                list.ForEach(s =>
+                {
+                    steps.Add(
+                        new StepsDetail
+                        {
+                            Description = s.Description,
+                            Id = s.Id.ToString(),
+                            SourceId = s.SourceId.ToString(),
+                            ActionId = s.ActionId.ToString(),
+                            Notes = s.Notes,
+                            Question = s.Question,
+                            Status = (int)s.Status,
+                            Title = s.Title,
+                            Text = s.Text,
+                            StepTypeId = s.StepTypeId,
+                            Completed = s.Completed,
+                            Enabled = s.Enabled,
+                            Next = s.Next != null ? s.Next.ToString() : string.Empty,
+                            Previous = s.Previous != null ? s.Previous.ToString() : string.Empty,
+                            Order = s.Order,
+                            ControlType = (int)s.ControlType,
+                            Header = s.Header,
+                            SelectedResponseId = s.SelectedResponseId.ToString(),
+                            IncludeTime = s.IncludeTime,
+                            SelectType = (int)s.SelectType,
+                            AssignBy = s.AssignedBy,
+                            AssignDate = s.AssignedOn,
+                            ElementState = (int)s.State,
+                            CompletedBy = s.CompletedBy,
+                            DateCompleted = s.DateCompleted,
+                            Responses = GetResponses(s, contract, userId),
+                            SpawnElement = GetSpawnElement(s)
+                        });
+                }
+                );
                 return steps;
             }
             catch (Exception ex)
@@ -1072,13 +1140,13 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
                         foreach (Step s in a.Steps)
                         {
                             bool success = false;
-                            foreach (MEPatientProgramResponse r in s.Responses)
-                            {
-                                r.StepSourceId = s.SourceId;
-                                r.DeleteFlag = true;
-                                r.ActionId = a.Id;
-                                success = SaveResponseToDocument(r, contractNumber, userId);
-                            }
+                                foreach (MEPatientProgramResponse r in s.Responses)
+                                {
+                                    r.StepSourceId = s.SourceId;
+                                    r.DeleteFlag = true;
+                                    r.ActionId = a.Id;
+                                    success = SaveResponseToDocument(r, contractNumber, userId);
+                                }
                             if (success)
                             {
                                 s.Responses = null;
@@ -1090,6 +1158,53 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             catch (Exception ex)
             {
                 throw new ArgumentException("DD:DTOUtils:RecurseAndSaveResponseObjects()::" + ex.Message, ex.InnerException);
+            }
+        }
+
+        public static bool SavePatientProgramResponses(List<MEPatientProgramResponse> pprs, PutProgramToPatientRequest request)
+        {
+            try
+            {
+                IProgramRepository<MEPatientProgramResponse> repo =
+                    ProgramRepositoryFactory<MEPatientProgramResponse>.GetPatientProgramStepResponseRepository(request.ContractNumber, "NG", request.UserId);
+
+                bool result = (bool)((MongoPatientProgramResponseRepository<MEPatientProgramResponse>)repo).InsertAsBatch(pprs);
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw new ArgumentException("DD:DTOUtils:SavePatientProgramResponses()::" + ex.Message, ex.InnerException);
+            }
+        }
+
+        public static List<MEPatientProgramResponse> RecurseAndStoreResponseObjects(MEPatientProgram prog, string contractNumber, string userId)
+        {
+            try
+            {
+                List<MEPatientProgramResponse> ppr = new List<MEPatientProgramResponse>();
+                foreach (Module m in prog.Modules)
+                {
+                    foreach (Action a in m.Actions)
+                    {
+                        foreach (Step s in a.Steps)
+                        {
+                            foreach (MEPatientProgramResponse r in s.Responses)
+                            {
+                                r.DeleteFlag = false;
+                                r.RecordCreatedBy = ObjectId.Parse(userId);
+                                r.RecordCreatedOn = DateTime.UtcNow;
+
+                                if (!ppr.Contains(r))
+                                    ppr.Add(r);
+                            }
+                        }
+                    }
+                }
+                return ppr;
+            }
+            catch (Exception ex)
+            {
+                throw new ArgumentException("DD:DTOUtils:RecurseAndStoreResponseObjects()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -1123,7 +1238,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
                 pa.Enrollment = 2;
                 pa.GraduatedFlag = 1;
                 pa.OptOut = false;
-                pa.EligibilityOverride = 1;
+                //pa.EligibilityOverride = 1;
                 return pa;
             }
             catch (Exception ex)
@@ -1149,6 +1264,168 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             {
                 throw new Exception("DD:DTOUtils:InitializeProgramAttributes()::" + ex.Message, ex.InnerException);
             }
+        }
+
+        internal static bool CanInsertPatientProgram(List<MEPatientProgram> pp)
+        {
+            try
+            {
+                bool result = true;
+                if (pp == null)
+                {
+                    result = true;
+                }
+                else if (pp.Count >= 1)
+                {
+                    foreach (MEPatientProgram p in pp)
+                    {
+                        if (!p.State.Equals(ElementState.Removed) && !p.State.Equals(ElementState.Completed))
+                        {
+                            result = false;
+                            break;
+                        }
+                    }
+                }
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("DD:PatientProgramRepository:CanInsertPatientProgram()::" + ex.Message, ex.InnerException);
+            }
+        }
+
+        internal static List<MEPatientProgram> FindExistingpatientProgram(PutProgramToPatientRequest request)
+        {
+            try
+            {
+                IProgramRepository<PutProgramToPatientResponse> pRepo = ProgramRepositoryFactory<PutProgramToPatientResponse>
+                    .GetPatientProgramRepository(request.ContractNumber, request.Context, request.UserId);
+
+                List<MEPatientProgram> pp =
+                    ((MongoPatientProgramRepository<PutProgramToPatientResponse>)pRepo)
+                    .FindByEntityExistsID(request.PatientId, request.ContractProgramId) as List<MEPatientProgram>;
+                return pp;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("DD:DataProgramManager:FindExistingpatientProgram()::" + ex.Message, ex.InnerException);
+            }
+        }
+
+        internal static MEProgram GetProgramForDeepCopy(PutProgramToPatientRequest request)
+        {
+            try
+            {
+                IProgramRepository<PutProgramToPatientResponse> pgRepo = ProgramRepositoryFactory<PutProgramToPatientResponse>
+                    .GetProgramRepository(request.ContractNumber, request.Context, request.UserId);
+                MEProgram cp = (MEProgram)pgRepo.FindByID(request.ContractProgramId.ToString());
+                return cp;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("DD:DataProgramManager:GetProgram()::" + ex.Message, ex.InnerException);
+            }
+        }
+
+        internal static ProgramInfo SaveNewPatientProgram(PutProgramToPatientRequest request, MEPatientProgram nmePP)
+        {
+            try
+            {
+                // give this the formatted patient program ready for saving
+                IProgramRepository<PutProgramToPatientResponse> patProgRepo =
+                    Phytel.API.DataDomain.Program.ProgramRepositoryFactory<PutProgramToPatientResponse>
+                    .GetPatientProgramRepository(request.ContractNumber, request.Context, request.UserId);
+
+                ProgramInfo pi = (ProgramInfo)patProgRepo.Insert((object)nmePP);
+                return pi;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("DD:DataProgramManager:SaveNewPatientProgram()::" + ex.Message, ex.InnerException);
+            }
+        }
+
+        internal static List<MEPatientProgramResponse> InitializePatientProgramAssignment(PutProgramToPatientRequest request, MEPatientProgram nmePP)
+        {
+            try
+            {
+                List<MEPatientProgramResponse> pprs = new List<MEPatientProgramResponse>();
+                // update to new ids and their references
+                Dictionary<ObjectId, ObjectId> IdsList = new Dictionary<ObjectId, ObjectId>();
+                DTOUtils.RecurseAndReplaceIds(nmePP.Modules, IdsList);
+                pprs = DTOUtils.RecurseAndStoreResponseObjects(nmePP, request.ContractNumber, request.UserId);
+                //DTOUtils.RecurseAndSaveResponseObjects(nmePP, request.ContractNumber, request.UserId);
+                return pprs;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("DD:DataProgramManager:InitializePatientProgramAssignment()::" + ex.Message, ex.InnerException);
+            }
+        }
+
+        internal static List<MEResponse> GetProgramResponseslist(List<ObjectId> idl, MEProgram cp, PutProgramToPatientRequest request)
+        {
+            try
+            {
+                List<MEResponse> list = null;
+                IProgramRepository<PutProgramToPatientResponse> respRepo =
+                    Phytel.API.DataDomain.Program.ProgramRepositoryFactory<PutProgramToPatientResponse>
+                    .GetStepResponseRepository(request.ContractNumber, request.Context, request.UserId);
+
+                list = ((MongoResponseRepository<PutProgramToPatientResponse>)respRepo).Find(idl) as List<MEResponse>;
+                return list;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("DD:DataProgramManager:GetProgramResponseslist()::" + ex.Message, ex.InnerException);
+            }
+        }
+
+        internal static void HydrateResponsesInProgram(MEProgram prog, List<MEResponse> responseList, string usrId)
+        {
+            try
+            {
+                foreach (Module m in prog.Modules)
+                {
+                    foreach (Action a in m.Actions)
+                    {
+                        foreach (Step s in a.Steps)
+                        {
+                            List<MEResponse> resps = responseList.FindAll(st => st.StepId == s.Id);
+                            List<MEPatientProgramResponse> mrp = new List<MEPatientProgramResponse>();
+                            resps.ForEach(rs =>
+                            {
+                                mrp.Add(
+                                new MEPatientProgramResponse(usrId)
+                                {
+                                    Id = rs.Id,
+                                    StepId = rs.StepId,
+                                    StepSourceId = rs.StepSourceId,
+                                    NextStepId = rs.NextStepId,
+                                    Nominal = rs.Nominal,
+                                    Order = rs.Order,
+                                    Required = rs.Required,
+                                    Selected = rs.Selected,
+                                    Text = rs.Text,
+                                    Spawn = rs.Spawn,
+                                    Value = rs.Value,
+                                    Version = rs.Version
+                                });
+                            });
+                            s.Responses = mrp;
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new ArgumentException("DD:DTOUtils:HydrateResponsesInProgram()::" + ex.Message, ex.InnerException);
+            }
+        }
+
+        internal static List<ObjectId> GetStepIds(MEPatientProgram mepp)
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -9,7 +9,13 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
     [MongoIndex(Keys = new string[] { ResponseBase.StepIdProperty }, Unique = false)]
     public class MEPatientProgramResponse : ResponseBase, IMongoEntity<ObjectId>
     {
-        public MEPatientProgramResponse() { Id = ObjectId.GenerateNewId(); }
+        public MEPatientProgramResponse(string userId)
+        {
+            Id = ObjectId.GenerateNewId();
+            Version = 1.0;
+            RecordCreatedBy = ObjectId.Parse(userId);
+            RecordCreatedOn = DateTime.UtcNow;
+        }
 
         public const string IDProperty = "_id";
         [BsonId]
@@ -51,6 +57,15 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
         [BsonElement(LastUpdatedOnProperty)]
         [BsonDateTimeOptions(Kind = System.DateTimeKind.Utc)]
         public DateTime? LastUpdatedOn { get; set; }
+
+        [BsonIgnoreIfNull(true)]
+        [BsonElement("rcby")]
+        public ObjectId RecordCreatedBy { get; set; }
+
+        [BsonIgnoreIfNull(true)]
+        [BsonElement("rcon")]
+        [BsonDateTimeOptions(Kind = System.DateTimeKind.Utc)]
+        public DateTime RecordCreatedOn { get; set; }
         #endregion
     }
 }

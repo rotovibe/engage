@@ -1,6 +1,6 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.30110.0
+VisualStudioVersion = 12.0.21005.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.Program.Service", "Program.Service\DataDomain.Program.Service.csproj", "{DAD5AD45-7669-44E5-B213-C1E66601ADED}"
 EndProject
@@ -45,22 +45,22 @@ Global
 		SccProjectUniqueName5 = Program.Test\\DataDomain.Program.Test.csproj
 		SccProjectName5 = Program.Test
 		SccLocalPath5 = Program.Test
-		SccProjectUniqueName6 = ..\\..\\..\\..\\Interfaces\\Production\\Current\\Phytel.API.Interface\\Phytel.API.Interface.csproj
+		SccProjectUniqueName6 = ..\\..\\..\\..\\Interfaces\\Release\u0020Candidate\\Current\\Phytel.API.Interface\\Phytel.API.Interface.csproj
 		SccProjectTopLevelParentUniqueName6 = DataDomain.Program.sln
-		SccProjectName6 = ../../../../Interfaces/Production/Current/Phytel.API.Interface
-		SccLocalPath6 = ..\\..\\..\\..\\Interfaces\\Production\\Current\\Phytel.API.Interface
-		SccProjectUniqueName7 = ..\\..\\..\\..\\Common\\Phytel.API.Common\\Production\\Current\\Phytel.API.Common.csproj
+		SccProjectName6 = ../../../../Interfaces/Release\u0020Candidate/Current/Phytel.API.Interface
+		SccLocalPath6 = ..\\..\\..\\..\\Interfaces\\Release\u0020Candidate\\Current\\Phytel.API.Interface
+		SccProjectUniqueName7 = ..\\..\\..\\..\\Common\\Phytel.API.Common\\Release\u0020Candidate\\Current\\Phytel.API.Common.csproj
 		SccProjectTopLevelParentUniqueName7 = DataDomain.Program.sln
-		SccProjectName7 = ../../../../Common/Phytel.API.Common/Production/Current
-		SccLocalPath7 = ..\\..\\..\\..\\Common\\Phytel.API.Common\\Production\\Current
-		SccProjectUniqueName8 = ..\\..\\..\\..\\Common\\Phytel.API.DataAudit\\Production\\Current\\Phytel.API.DataAudit.csproj
+		SccProjectName7 = ../../../../Common/Phytel.API.Common/Release\u0020Candidate/Current
+		SccLocalPath7 = ..\\..\\..\\..\\Common\\Phytel.API.Common\\Release\u0020Candidate\\Current
+		SccProjectUniqueName8 = ..\\..\\..\\..\\Common\\Phytel.API.DataAudit\\Release\u0020Candidate\\Current\\Phytel.API.DataAudit.csproj
 		SccProjectTopLevelParentUniqueName8 = DataDomain.Program.sln
-		SccProjectName8 = ../../../../Common/Phytel.API.DataAudit/Production/Current
-		SccLocalPath8 = ..\\..\\..\\..\\Common\\Phytel.API.DataAudit\\Production\\Current
-		SccProjectUniqueName9 = ..\\..\\..\\Phytel.API.DataDomain.Patient\\Production\\Current\\Patient.DTOs\\DataDomain.Patient.DTO.csproj
+		SccProjectName8 = ../../../../Common/Phytel.API.DataAudit/Release\u0020Candidate/Current
+		SccLocalPath8 = ..\\..\\..\\..\\Common\\Phytel.API.DataAudit\\Release\u0020Candidate\\Current
+		SccProjectUniqueName9 = ..\\..\\..\\Phytel.API.DataDomain.Patient\\Release\u0020Candidate\\Current\\Patient.DTOs\\DataDomain.Patient.DTO.csproj
 		SccProjectTopLevelParentUniqueName9 = DataDomain.Program.sln
-		SccProjectName9 = ../../../Phytel.API.DataDomain.Patient/Production/Current/Patient.DTOs
-		SccLocalPath9 = ..\\..\\..\\Phytel.API.DataDomain.Patient\\Production\\Current\\Patient.DTOs
+		SccProjectName9 = ../../../Phytel.API.DataDomain.Patient/Release\u0020Candidate/Current/Patient.DTOs
+		SccLocalPath9 = ..\\..\\..\\Phytel.API.DataDomain.Patient\\Release\u0020Candidate\\Current\\Patient.DTOs
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

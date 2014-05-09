@@ -66,6 +66,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="MongoDB\DataManagement\IMongoProcedure.cs" />
+    <Compile Include="MongoDB\DataManagement\IProceduresManager.cs" />
+    <Compile Include="MongoDB\DataManagement\MongoProcedure.cs" />
+    <Compile Include="MongoDB\DataManagement\MongoProcedureFactory.cs" />
+    <Compile Include="MongoDB\DataManagement\Procedures\UpdateProgramStartDateToFirstActionStartDate.cs" />
+    <Compile Include="MongoDB\DataManagement\ProceduresManager.cs" />
     <Compile Include="IProgramRepository.cs" />
     <Compile Include="MongoDB\DTO\DTOUtils.cs" />
     <Compile Include="MongoDB\DTO\MEPatientProgram.cs" />

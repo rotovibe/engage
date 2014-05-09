@@ -83,6 +83,8 @@
     <Compile Include="GetProgramAttributeRequest.cs" />
     <Compile Include="GetContractProgramRequest.cs" />
     <Compile Include="GetContractProgramResponse.cs" />
+    <Compile Include="GetProgramByNameRequest.cs" />
+    <Compile Include="GetProgramByNameResponse.cs" />
     <Compile Include="GetStepResponseRequest.cs" />
     <Compile Include="GetStepResponseListRequest.cs" />
     <Compile Include="GetProgramAttributeResponse.cs" />
@@ -98,8 +100,10 @@
     <Compile Include="PutProgramAttributesRequest.cs" />
     <Compile Include="PutUpdateProgramAttributesRequest.cs" />
     <Compile Include="PutProgramAttributesResponse.cs" />
+    <Compile Include="PostMongoProceduresRequest.cs" />
     <Compile Include="PutUpdateResponseRequest.cs" />
     <Compile Include="PutUpdateProgramAttributesResponse.cs" />
+    <Compile Include="PostMongoProceduresResponse.cs" />
     <Compile Include="PutUpdateResponseResponse.cs" />
     <Compile Include="ResponseDetail.cs" />
     <Compile Include="StepDetail.cs" />
