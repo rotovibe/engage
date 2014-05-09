@@ -240,13 +240,19 @@ namespace Phytel.API.DataDomain.ProgramDesign
                             updt.Set(MEModule.DescriptionProperty, request.Description);
                     }
 
-                    updt.Set(MEProgram.OrderProperty, request.Order);
+                    if (request.Order != null)
+                    {
+                        updt.Set(MEProgram.OrderProperty, request.Order);
+                    }
+
+
                     updt.Set(MEProgram.LastUpdatedOnProperty, System.DateTime.UtcNow);
                     updt.Set(MEProgram.UpdatedByProperty, ObjectId.Parse(this.UserId));
                     updt.Set(MEProgram.VersionProperty, request.Version);
                     
                     var module = ctx.Modules.Collection.FindAndModify(mUQuery, MB.SortBy.Null, updt, true);
 
+    
                     //set audit call
                     AuditHelper.LogDataAudit(this.UserId,
                                            MongoCollectionName.Module.ToString(),
@@ -260,7 +266,8 @@ namespace Phytel.API.DataDomain.ProgramDesign
                //TODO: handle this error
                 throw;
             }
-            
+
+            response.Id = request.Id;            
             return response;
         }
         

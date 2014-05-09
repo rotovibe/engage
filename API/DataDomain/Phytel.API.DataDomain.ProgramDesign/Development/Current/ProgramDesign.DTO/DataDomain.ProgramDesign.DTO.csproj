@@ -79,7 +79,9 @@
     <Compile Include="DeleteProgramDataRequest.cs" />
     <Compile Include="DeleteModuleDataResponse.cs" />
     <Compile Include="DeleteProgramDataResponse.cs" />
+    <Compile Include="DeleteStepDataRequest.cs" />
     <Compile Include="DeleteTextStepDataRequest.cs" />
+    <Compile Include="DeleteStepDataResponse.cs" />
     <Compile Include="DeleteTextStepDataResponse.cs" />
     <Compile Include="DeleteYesNoStepDataRequest.cs" />
     <Compile Include="DeleteYesNoStepDataResponse.cs" />
@@ -119,8 +121,8 @@
     <Compile Include="GetStepResponseListResponse.cs" />
     <Compile Include="GetStepResponseRequest.cs" />
     <Compile Include="GetStepResponseResponse.cs" />
-    <Compile Include="GetTextStepDataRequest.cs" />
-    <Compile Include="GetTextStepDataResponse.cs" />
+    <Compile Include="GetStepDataRequest.cs" />
+    <Compile Include="GetStepDataResponse.cs" />
     <Compile Include="GetYesNoStepDataRequest.cs" />
     <Compile Include="GetYesNoStepDataResponse.cs" />
     <Compile Include="ModuleDetail.cs" />
@@ -132,6 +134,12 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PutActionDataRequest.cs" />
     <Compile Include="PutActionDataResponse.cs" />
+    <Compile Include="PutStepDataRequest.cs" />
+    <Compile Include="PutStepDataResponse.cs" />
+    <Compile Include="PutStepInActionRequest.cs" />
+    <Compile Include="PutStepInActionResponse.cs" />
+    <Compile Include="PutUpdateStepDataRequest.cs" />
+    <Compile Include="PutUpdateStepDataResponse.cs" />
     <Compile Include="PutYesNoStepInActionRequest.cs" />
     <Compile Include="PutTextStepInActionRequest.cs" />
     <Compile Include="PutYesNoStepInActionResponse.cs" />

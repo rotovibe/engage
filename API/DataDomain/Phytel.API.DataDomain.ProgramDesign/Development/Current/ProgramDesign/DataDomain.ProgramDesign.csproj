@@ -91,6 +91,7 @@
     <Compile Include="MongoDB\Repository\MongopResponseRepository.cs" />
     <Compile Include="MongoDB\Repository\MongoProgramDesignRepository.cs" />
     <Compile Include="MongoDB\ProgramDesignMongoContext.cs" />
+    <Compile Include="MongoDB\Repository\MongoStepRepository.cs" />
     <Compile Include="ProgramDesignDataManager.cs" />
     <Compile Include="MongoDB\Repository\MongoProgramRepository.cs" />
     <Compile Include="MongoDB\Repository\MongoTextStepRepository.cs" />

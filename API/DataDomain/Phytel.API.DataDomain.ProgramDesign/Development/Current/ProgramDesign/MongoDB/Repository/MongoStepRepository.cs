@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
@@ -17,12 +17,12 @@ using MB = MongoDB.Driver.Builders;
 
 namespace Phytel.API.DataDomain.ProgramDesign
 {
-    public class MongoTextStepRepository<T> : IProgramDesignRepository<T>
+    public class MongoStepRepository<T> : IProgramDesignRepository<T>
     {
         private string _dbName = string.Empty;
         private int _expireDays = Convert.ToInt32(ConfigurationManager.AppSettings["ExpireDays"]);
 
-        static MongoTextStepRepository()
+        static MongoStepRepository()
         {
             #region Register ClassMap
             try
@@ -41,16 +41,16 @@ namespace Phytel.API.DataDomain.ProgramDesign
             #endregion
         }
 
-        public MongoTextStepRepository(string contractDBName)
+        public MongoStepRepository(string contractDBName)
         {
             _dbName = contractDBName;
         }
 
         public object Insert(object newEntity)
         {
-            PutTextStepDataRequest request = newEntity as PutTextStepDataRequest;
+            PutStepDataRequest request = newEntity as PutStepDataRequest;
 
-            
+
             MEStep step = null;
             using (ProgramDesignMongoContext ctx = new ProgramDesignMongoContext(_dbName))
             {
@@ -62,18 +62,30 @@ namespace Phytel.API.DataDomain.ProgramDesign
 
                 if (step == null)
                 {
+                    StepType type = new StepType();
+                    switch(request.Type)
+                    {
+                        case ("text"):
+                            type = StepType.Text;
+                            break;
+                        case ("yesno"):
+                            type = StepType.YesNo;
+                            break;
+                    }
                     step = new MEStep(request.UserId)
                     {
                         Id = ObjectId.GenerateNewId(),
                         Title = request.Title,
                         Description = request.Description,
                         Text = request.Text,
-                        StepTypeId = (int) StepType.Text,
-                        //Version = request.Version,
-                        //UpdatedBy = ObjectId.Parse(request.UserId),
-                        //TTLDate = null,
-                        //DeleteFlag = false,
-                        //LastUpdatedOn = System.DateTime.UtcNow
+                        Question = request.Question,
+                        Notes = request.Notes,
+                        StepTypeId = (int) type,
+                        Version = request.Version,
+                        UpdatedBy = ObjectId.Parse(request.UserId),
+                        TTLDate = null,
+                        DeleteFlag = false,
+                        LastUpdatedOn = System.DateTime.UtcNow
                     };
                 }
                 ctx.Steps.Collection.Insert(step);
@@ -85,7 +97,7 @@ namespace Phytel.API.DataDomain.ProgramDesign
                                           request.ContractNumber);
             }
 
-            return new PutTextStepDataResponse
+            return new PutStepDataResponse
             {
                 Id = step.Id.ToString()
             };
@@ -98,7 +110,7 @@ namespace Phytel.API.DataDomain.ProgramDesign
 
         public void Delete(object entity)
         {
-            DeleteTextStepDataRequest request = entity as DeleteTextStepDataRequest;
+            DeleteStepDataRequest request = entity as DeleteStepDataRequest;
             try
             {
                 using (ProgramDesignMongoContext ctx = new ProgramDesignMongoContext(_dbName))
@@ -156,7 +168,7 @@ namespace Phytel.API.DataDomain.ProgramDesign
         {
             try
             {
-                TextData result = null;
+                StepData result = null;
 
                 using (ProgramDesignMongoContext ctx = new ProgramDesignMongoContext(_dbName))
                 {
@@ -165,21 +177,21 @@ namespace Phytel.API.DataDomain.ProgramDesign
 
                     if (cp != null)
                     {
-                        result = new TextData
+                        result = new StepData
                         {
                             ID = cp.Id.ToString()
                         };
                     }
                     else
                     {
-                        throw new ArgumentException("TextStepName is not valid or is missing from the records.");
+                        throw new ArgumentException("StepName is not valid or is missing from the records.");
                     }
                 }
                 return result;
             }
             catch (Exception ex)
             {
-                throw new Exception("DD:MongoTextStepRepository:FindByName()::" + ex.Message, ex.InnerException);
+                throw new Exception("DD:MongoStepRepository:FindByName()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -190,18 +202,18 @@ namespace Phytel.API.DataDomain.ProgramDesign
 
         public IEnumerable<object> SelectAll()
         {
-           GetAllTextStepDataResponse response = new GetAllTextStepDataResponse();
+            GetAllTextStepDataResponse response = new GetAllTextStepDataResponse();
 
             List<DTO.TextData> list = new List<DTO.TextData>();
 
             using (ProgramDesignMongoContext ctx = new ProgramDesignMongoContext(_dbName))
             {
                 var steps = (from s in ctx.Steps
-                         select new DTO.TextData
-                         {
-                              ID = s.Id.ToString(),
-                              Title = s.Text
-                         }).ToList();
+                             select new DTO.TextData
+                             {
+                                 ID = s.Id.ToString(),
+                                 Title = s.Text
+                             }).ToList();
 
                 response.Steps = steps;
 
@@ -212,8 +224,8 @@ namespace Phytel.API.DataDomain.ProgramDesign
 
         public object Update(object entity)
         {
-            PutUpdateTextStepDataRequest request = entity as PutUpdateTextStepDataRequest;
-            PutUpdateTextStepDataResponse response = new PutUpdateTextStepDataResponse();
+            PutUpdateStepDataRequest request = entity as PutUpdateStepDataRequest;
+            PutUpdateStepDataResponse response = new PutUpdateStepDataResponse();
             try
             {
                 if (request.UserId == null)
@@ -244,6 +256,20 @@ namespace Phytel.API.DataDomain.ProgramDesign
                             updt.Set(MEStep.TextProperty, string.Empty);
                         else
                             updt.Set(MEStep.TextProperty, request.Text);
+                    }
+                    if (request.Question != null)
+                    {
+                        if (request.Question == "\"\"" || (request.Question == "\'\'"))
+                            updt.Set(MEStep.QuestionProperty, string.Empty);
+                        else
+                            updt.Set(MEStep.QuestionProperty, request.Question);
+                    }
+                    if (request.Notes != null)
+                    {
+                        if (request.Notes == "\"\"" || (request.Notes == "\'\'"))
+                            updt.Set(MEStep.NotesProperty, string.Empty);
+                        else
+                            updt.Set(MEStep.NotesProperty, request.Notes);
                     }
 
                     updt.Set(MEStep.LastUpdatedOnProperty, System.DateTime.UtcNow);

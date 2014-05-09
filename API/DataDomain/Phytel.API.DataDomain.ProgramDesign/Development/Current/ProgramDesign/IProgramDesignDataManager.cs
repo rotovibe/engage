@@ -20,7 +20,7 @@ namespace Phytel.API.DataDomain.ProgramDesign
         GetAllActionsDataResponse GetActionsList(GetAllActionsDataRequest request);
         GetYesNoStepDataResponse GetYesNoStepByID(GetYesNoStepDataRequest request);
         GetAllYesNoStepDataResponse GetAllYesNoSteps(GetAllYesNoStepDataRequest request);
-        GetTextStepDataResponse GetTextStepByID(GetTextStepDataRequest request);
+        GetStepDataResponse GetTextStepByID(GetStepDataRequest request);
         GetAllTextStepDataResponse GetAllTextSteps(GetAllTextStepDataRequest request);
 
     }

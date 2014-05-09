@@ -76,17 +76,13 @@ namespace Phytel.API.DataDomain.ProgramDesign
             return repo;
         }
 
-        public static IProgramDesignRepository<T> GetStepRepository(string dbName, string productName, string type)
+        public static IProgramDesignRepository<T> GetStepRepository(string dbName, string productName, string userId)
         {
             IProgramDesignRepository<T> repo = null;
-            if (type.Equals("yesno", StringComparison.InvariantCultureIgnoreCase))
-            {
-                repo = new MongoYesNoStepRepository<T>(dbName) as IProgramDesignRepository<T>;
-            }
-            else if (type.Equals("text", StringComparison.InvariantCultureIgnoreCase))
-            {
-                repo = new MongoTextStepRepository<T>(dbName) as IProgramDesignRepository<T>;
-            }
+
+            //We only have 1 repository at this time, just return it
+            repo = new MongoStepRepository<T>(dbName) as IProgramDesignRepository<T>;
+            repo.UserId = userId;
             return repo;
         }
 

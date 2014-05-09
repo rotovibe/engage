@@ -5,10 +5,10 @@ namespace Phytel.API.DataDomain.ProgramDesign.DTO
 {
     [Api(Description = "A Request object to get a Text Step by it's ID from the API.")]
     [Route("/{Context}/{Version}/{ContractNumber}/Step/{StepID}", "GET")]
-    public class GetTextStepDataRequest : IDataDomainRequest
+    public class GetStepDataRequest : IDataDomainRequest
     {
-        [ApiMember(Name = "TextStepID", Description = "ID of the Text Step being requested", ParameterType = "path", DataType = "string", IsRequired = true)]
-        public string TextStepID { get; set; }
+        [ApiMember(Name = "StepID", Description = "ID of the Text Step being requested", ParameterType = "path", DataType = "string", IsRequired = true)]
+        public string StepID { get; set; }
 
         [ApiMember(Name = "Context", Description = "Product Context requesting the Step", ParameterType = "path", DataType = "string", IsRequired = true)]
         public string Context { get; set; }

@@ -63,7 +63,7 @@ namespace Phytel.API.DataDomain.ProgramDesign
 
                 if(step == null)
                 {
-                    step = new MEStep(this.UserId)
+                    step = new MEStep(request.UserId)
                     {
                         Id = ObjectId.GenerateNewId(),
                         Question = request.Question,

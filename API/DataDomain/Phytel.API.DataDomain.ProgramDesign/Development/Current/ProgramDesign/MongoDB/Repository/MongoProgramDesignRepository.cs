@@ -45,6 +45,9 @@ namespace Phytel.API.DataDomain.ProgramDesign
                 case "action":
                     result = AddActionToModule(newEntity);
                     break;
+                case "step":
+                    result = AddStepToAction(newEntity);
+                    break;
                 case "text":
                      result = AddTextStepToAction(newEntity);
                      break;
@@ -140,6 +143,47 @@ namespace Phytel.API.DataDomain.ProgramDesign
             };
         }
 
+        public object AddStepToAction(object newEntity)
+        {
+            PutStepInActionRequest request = newEntity as PutStepInActionRequest;
+
+            MEAction action = null;
+            MEStep step = null;
+            using (ProgramDesignMongoContext ctx = new ProgramDesignMongoContext(_dbName))
+            {
+                var aUQuery = new QueryDocument(MEAction.IdProperty, ObjectId.Parse(request.ActionId));
+                action = ctx.Actions.Collection.FindOneAs<MEAction>(aUQuery);
+
+                MongoProgramDesignRepository<T> repo = new MongoProgramDesignRepository<T>(_dbName);
+                repo.UserId = this.UserId;
+
+                //Find step
+                var tUQuery = new QueryDocument(MEStep.IdProperty, ObjectId.Parse(request.StepId));
+                step = ctx.Steps.Collection.FindOneAs<MEStep>(tUQuery);
+
+                if (action != null && step != null)
+                {
+                    List<MEStep> list = new List<MEStep>();
+                    if (action.Steps != null)
+                    {
+                        list = action.Steps;
+                    }
+                    list.Add(step);
+                    action.Steps = list;
+                    ctx.Actions.Collection.Update(aUQuery, MB.Update.SetWrapped<List<MEStep>>(MEAction.StepsProperty, action.Steps));
+                }
+                else if (action == null)
+                    throw new ArgumentException("Action requested is missing from the DataDomain.");
+                else if (step == null)
+                    throw new ArgumentException("Step requested is missing from the DataDomain.");
+            }
+
+            return new PutStepInActionResponse
+            {
+                Id = action.Id.ToString()
+            };
+        }
+
         public object AddTextStepToAction(object newEntity)
         {
             PutTextStepInActionRequest request = newEntity as PutTextStepInActionRequest;
@@ -170,9 +214,9 @@ namespace Phytel.API.DataDomain.ProgramDesign
                     ctx.Actions.Collection.Update(aUQuery, MB.Update.SetWrapped<List<MEStep>>(MEAction.StepsProperty, action.Steps));
                 }
                 else if (action == null)
-                    throw new ArgumentException("Program requested is missing from the DataDomain.");
+                    throw new ArgumentException("Action requested is missing from the DataDomain.");
                 else if (step == null)
-                    throw new ArgumentException("Module requested is missing from the DataDomain.");
+                    throw new ArgumentException("Step requested is missing from the DataDomain.");
             }
 
             return new PutTextStepInActionResponse
@@ -211,9 +255,9 @@ namespace Phytel.API.DataDomain.ProgramDesign
                     ctx.Actions.Collection.Update(aUQuery, MB.Update.SetWrapped<List<MEStep>>(MEAction.StepsProperty, action.Steps));
                 }
                 else if (action == null)
-                    throw new ArgumentException("Program requested is missing from the DataDomain.");
+                    throw new ArgumentException("Action requested is missing from the DataDomain.");
                 else if (step == null)
-                    throw new ArgumentException("Module requested is missing from the DataDomain.");
+                    throw new ArgumentException("Step requested is missing from the DataDomain.");
             }
 
             return new PutTextStepInActionResponse
