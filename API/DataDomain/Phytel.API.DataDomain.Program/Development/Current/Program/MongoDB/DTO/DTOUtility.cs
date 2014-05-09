@@ -158,6 +158,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
                             //}).ToList(),
                             Steps = GetClonedSteps(contractNumber, userId, ai, sil)
                         };
+                        ac.Objectives = null;
                         actions.Add(ac);
                     }
                 }
@@ -933,7 +934,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
                     CompletedBy = m.CompletedBy,
                     DateCompleted = m.DateCompleted,
                     Objectives = GetObjectivesForModule(pMods, m.SourceId),
-                    Actions = GetActions(m.Actions, contractNumber, userId, pMods.Find(pm => pm.Id == m.SourceId))
+                    Actions = GetActions(m.Actions, contractNumber, userId, pMods.Find(pm => pm.SourceId == m.SourceId))
                 }));
                 return mods;
             }
@@ -1050,15 +1051,22 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
         {
             try
             {
-                List<Action> pacts = null;
-                if (mod.Actions != null)
-                    pacts = (List<Action>)mod.Actions;
+                List<Action> templateActions = null;
+                if (mod != null)
+                {
+                    if (mod.Actions != null)
+                        templateActions = (List<Action>)mod.Actions;
+                }
 
                 List<ActionsDetail> acts = new List<ActionsDetail>();
                 list.ForEach(a =>
                 {
-                    if (pacts != null)
-                        a.Objectives = pacts.Find(pa => pa.Id == a.SourceId).Objectives;
+                    if (templateActions != null)
+                    {
+                        Action act = templateActions.Find(ta => ta.SourceId == a.SourceId);
+                        if (act != null)
+                            a.Objectives = act.Objectives;
+                    }
 
                     acts.Add(GetAction(contract, userId, a));
                 });
