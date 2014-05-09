@@ -15,13 +15,13 @@ namespace Phytel.API.DataDomain.LookUp.Test
             double version = 1.0;
             string contractNumber = "InHealth001";
             string context = "NG";
-            GetProblemDataRequest request = new GetProblemDataRequest { ProblemID = "528a66d6d4332317acc5095d", Context = context, ContractNumber = contractNumber, Version = version };
+            GetProblemDataRequest request = new GetProblemDataRequest { ProblemID = "528a6709d4332317acc50962", Context = context, ContractNumber = contractNumber, Version = version };
 
             // Act
             GetProblemDataResponse response = LookUpDataManager.GetProblem(request);
 
             // Assert
-            Assert.IsTrue(response.Problem.Name == "High Cholesterol");
+            Assert.IsTrue(response.Problem.Name == "CKD");
 
         }
 
@@ -49,7 +49,6 @@ namespace Phytel.API.DataDomain.LookUp.Test
             string contractNumber = "InHealth001";
             string context = "NG";
             SearchProblemsDataRequest request = new SearchProblemsDataRequest { Active = true, Type = "Chronic", Context = context, ContractNumber = contractNumber, Version = version };
-
             // Act
             SearchProblemsDataResponse response = LookUpDataManager.SearchProblem(request);
 
@@ -86,13 +85,13 @@ namespace Phytel.API.DataDomain.LookUp.Test
             double version = 1.0;
             string contractNumber = "InHealth001";
             string context = "NG";
-            GetCategoryDataRequest request = new GetCategoryDataRequest { CategoryID = "52a0bc3fd4332322b4aed5b5", Context = context, ContractNumber = contractNumber, Version = version };
+            GetCategoryDataRequest request = new GetCategoryDataRequest { CategoryID = "52a0bc5fd4332322b4aed5b7", Context = context, ContractNumber = contractNumber, Version = version };
 
             // Act
             GetCategoryDataResponse response = LookUpDataManager.GetCategoryByID(request);
 
             // Assert
-            Assert.IsTrue(response.Category.Name == "Cost");
+            Assert.IsTrue(response.Category.Name == "Process");
 
         } 
         #endregion
@@ -207,7 +206,7 @@ namespace Phytel.API.DataDomain.LookUp.Test
             GetTimeZoneDataResponse response = LookUpDataManager.GetDefaultTimeZone(request);
 
             // Assert
-            Assert.AreEqual("Central (UTC-06:00)", response.TimeZone.Name);
+            Assert.AreEqual("Central", response.TimeZone.Name);
         }
         #endregion
 
@@ -218,7 +217,7 @@ namespace Phytel.API.DataDomain.LookUp.Test
             double version = 1.0;
             string contractNumber = "InHealth001";
             string context = "NG";
-            GetLookUpsDataRequest request = new GetLookUpsDataRequest { Context = context, ContractNumber = contractNumber, Version = version, Name = "caremembertype" };
+            GetLookUpsDataRequest request = new GetLookUpsDataRequest { Context = context, ContractNumber = contractNumber, Version = version, Name = "FocusArea" };
 
             // Act
             GetLookUpsDataResponse response = LookUpDataManager.GetLookUpsByType(request);
