@@ -42,7 +42,7 @@ namespace Phytel.API.DataDomain.Program.Test.Stubs
             throw new NotImplementedException();
         }
 
-        public List<DTO.ActionsDetail> GetActions(List<MongoDB.DTO.Action> list, string contract, string userId)
+        public List<DTO.ActionsDetail> GetActions(List<MongoDB.DTO.Action> list, string contract, string userId, Module mod)
         {
             throw new NotImplementedException();
         }
@@ -90,7 +90,8 @@ namespace Phytel.API.DataDomain.Program.Test.Stubs
                     AssignBy = a.AssignedBy.ToString(),
                     AssignDate = a.AssignedOn,
                     Id = a.Id.ToString(),
-                    SourceId = a.SourceId.ToString()
+                    SourceId = a.SourceId.ToString(),
+                    Objectives = this.GetObjectivesData(a.Objectives)
                 });
             });
             return acts;

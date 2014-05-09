@@ -467,6 +467,36 @@ namespace Phytel.API.DataDomain.Program.Service.Tests
             }
 
             [TestMethod()]
+            [TestCategory("NIGHT-924")]
+            [TestProperty("TFS", "6109")]
+            [TestProperty("Layer", "DD.Service")]
+            public void DD_Get_Action_Objectives_Test()
+            {
+                ProgramService ps = new ProgramService
+                {
+                    ProgramDataManager = new StubProgramDataManager(),
+                    Helpers = new StubHelper(),
+                    CommonFormatterUtil = new StubCommonFormatterUtil()
+                };
+
+                GetProgramDetailsSummaryRequest request = new GetProgramDetailsSummaryRequest
+                {
+                    Context = "NG",
+                    ContractNumber = "InHealth001",
+                    PatientId = "",
+                    ProgramId = "",
+                    UserId = "nguser",
+                    Version = 1.0
+                };
+
+                GetProgramDetailsSummaryResponse response = ps.Get(request);
+                ModuleDetail module = response.Program.Modules.Find(m => m.SourceId == "532b5585a381168abe00042c");
+                ActionsDetail action = module.Actions.Find(a => a.SourceId == "123456789012345678901234");
+                List<ObjectiveInfoData> objs = action.Objectives;
+                Assert.IsNotNull(objs);
+            }
+
+            [TestMethod()]
             public void Get_With_Eligibility_Requirements_Test()
             {
                 ProgramService ps = new ProgramService

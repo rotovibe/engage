@@ -933,7 +933,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
                     CompletedBy = m.CompletedBy,
                     DateCompleted = m.DateCompleted,
                     Objectives = GetObjectivesForModule(pMods, m.SourceId),
-                    Actions = GetActions(m.Actions, contractNumber, userId)
+                    Actions = GetActions(m.Actions, contractNumber, userId, pMods.Find(pm => pm.Id == m.SourceId))
                 }));
                 return mods;
             }
@@ -1030,7 +1030,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
                 List<ObjectiveInfoData> objs = new List<ObjectiveInfoData>();
                 if (list != null)
                 {
-                    list.ForEach(o => objs.Add(new ObjectiveInfoData
+                    list.Where(ob => ob.Status == Status.Active).ToList().ForEach(o => objs.Add(new ObjectiveInfoData
                     {
                         Id = o.Id.ToString(),
                         Value = o.Value,
@@ -1046,12 +1046,22 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             }
         }
 
-        public  List<ActionsDetail> GetActions(List<Action> list, string contract, string userId)
+        public List<ActionsDetail> GetActions(List<Action> list, string contract, string userId, Module mod)
         {
             try
             {
+                List<Action> pacts = null;
+                if (mod.Actions != null)
+                    pacts = (List<Action>)mod.Actions;
+
                 List<ActionsDetail> acts = new List<ActionsDetail>();
-                list.ForEach(a => acts.Add(GetAction(contract, userId, a)));
+                list.ForEach(a =>
+                {
+                    if (pacts != null)
+                        a.Objectives = pacts.Find(pa => pa.Id == a.SourceId).Objectives;
+
+                    acts.Add(GetAction(contract, userId, a));
+                });
                 return acts;
             }
             catch (Exception ex)

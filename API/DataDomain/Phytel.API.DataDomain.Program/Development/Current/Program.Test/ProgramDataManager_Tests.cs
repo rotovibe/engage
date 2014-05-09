@@ -379,6 +379,29 @@ namespace Phytel.API.DataDomain.Program.Tests
             }
 
             [TestMethod()]
+            [TestCategory("NIGHT-924")]
+            [TestProperty("TFS", "6109")]
+            [TestProperty("Layer", "DD.DataManager")]
+            public void DD_Get_With_Action_Objectives()
+            {
+                ProgramDataManager pm = new ProgramDataManager { Factory = new StubProgramRepositoryFactory(), DTOUtility = new StubDTOUtility { Factory = new StubProgramRepositoryFactory() } };
+                GetProgramDetailsSummaryRequest request = new GetProgramDetailsSummaryRequest
+                {
+                    Version = 1.0,
+                    ProgramId = _programId,
+                    PatientId = _patientId,
+                    UserId = "000000000000000000000000",
+                    ContractNumber = "InHealth001",
+                    Context = "NG"
+                };
+                GetProgramDetailsSummaryResponse response = pm.GetPatientProgramDetailsById(request);
+                ModuleDetail module = response.Program.Modules.Find(m => m.SourceId == "532b5585a381168abe00042c");
+                ActionsDetail action = module.Actions.Find(a => a.SourceId == "123456789012345678901234");
+                List<ObjectiveInfoData> objs = action.Objectives;
+                Assert.IsNotNull(objs);
+            }
+
+            [TestMethod()]
             public void Get_With_Objectives_Test()
             {
                 ProgramDataManager pm = new ProgramDataManager { Factory = new ProgramRepositoryFactory() };

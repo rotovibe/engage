@@ -316,8 +316,43 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO.Tests
                 dtoUtil.Factory = new StubProgramRepositoryFactory();
                 List<Action> acts = new List<Action>();
                 acts.Add(new Action { Id = ObjectId.GenerateNewId(), SourceId = ObjectId.GenerateNewId(), Name="TestAction", Description ="test action!!!" });
-                List<ActionsDetail> aDetails = dtoUtil.GetActions(acts, "InHealth001", "123456789012345678901234");
+                List<ActionsDetail> aDetails = dtoUtil.GetActions(acts, "InHealth001", "123456789012345678901234", new Module());
                 Assert.AreEqual(acts[0].Id.ToString(), aDetails[0].Id);
+            }
+
+            [TestMethod()]
+            [TestCategory("NIGHT-920")]
+            [TestProperty("TFS", "6100")]
+            [TestProperty("Layer", "DD.DTOUtility")]
+            public void DD_Get_With_One_Objectives_Test()
+            {
+                DTOUtility dtoUtil = new DTOUtility();
+                dtoUtil.Factory = new StubProgramRepositoryFactory();
+                List<Action> acts = new List<Action>();
+                ObjectId act1 = ObjectId.GenerateNewId();
+                ObjectId actSourceId = ObjectId.GenerateNewId();
+                ObjectId obj1 = ObjectId.GenerateNewId();
+                ObjectId obj2 = ObjectId.GenerateNewId();
+                ObjectId modid = ObjectId.GenerateNewId();
+
+                Module mod = new Module
+                {
+                    Id = ObjectId.GenerateNewId(),
+                    Name = "test Module",
+                    SourceId = modid,
+                    Actions = new List<Action>{
+                     new Action{
+                        Id = actSourceId,
+                        Objectives = new List<Objective> { 
+                            new Objective{ Id = obj1, Status = Status.Inactive, Units = "oz", Value ="50"},
+                            new Objective{ Id = obj2, Status = Status.Active, Units = "oz", Value ="9"}}
+                     }
+                    }
+                };
+
+                acts.Add(new Action { Id = act1, SourceId = actSourceId, Name = "Test Action", Description = "test action!!!" });
+                List<ActionsDetail> aDetails = dtoUtil.GetActions(acts, "InHealth001", "123456789012345678901234", mod);
+                Assert.AreEqual(1, aDetails[0].Objectives.Count);
             }
         }
 
@@ -421,6 +456,23 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO.Tests
 
                 DateTime? sample = acts[0].AttributeEndDate;
                 Assert.AreEqual(sample, ctrl);
+            }
+        }
+
+        [TestClass()]
+        public class GetObjectives
+        {
+            [TestMethod()]
+            public void Get_With_One_Objective()
+            {
+                List<Objective> list = new List<Objective>
+                {
+                    new Objective{ Id = ObjectId.GenerateNewId(), Status = Status.Active, Value = "57", Units = "hdl"},
+                    new Objective{ Id = ObjectId.GenerateNewId(), Status = Status.Inactive, Value = "120", Units = "hdl"}
+                };
+
+                List<ObjectiveInfoData> objList = new DTOUtility().GetObjectives(list);
+                Assert.AreEqual(1, objList.Count);
             }
         }
     }

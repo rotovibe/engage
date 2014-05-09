@@ -62,7 +62,20 @@ namespace Phytel.API.DataDomain.Program.Test.Stubs
                                 AssignDate = Convert.ToDateTime("1/1/1899"),
                                 AttrStartDate = Convert.ToDateTime("1/1/1800"),
                                 AttrEndDate = Convert.ToDateTime("1/1/1801"),
-                                Description = "BSHSI - Outreach & Enrollment action description"
+                                Description = "BSHSI - Outreach & Enrollment action description",
+                                Objectives = new List<DTO.ObjectiveInfoData> 
+                                { new DTO.ObjectiveInfoData{ 
+                                    Id ="123456789012345678901234",
+                                    Value = "Action testing",
+                                    Unit = "lbs",
+                                    Status = 1
+                                },
+                                new DTO.ObjectiveInfoData{ 
+                                    Id ="123456789012345678904567",
+                                    Value = "Action testing 2",
+                                    Unit = "lbs",
+                                    Status = 2
+                                } }
                             } } ,
                              AttrStartDate = Convert.ToDateTime("1/1/1900"),
                              AttrEndDate = Convert.ToDateTime("1/1/1901"),
