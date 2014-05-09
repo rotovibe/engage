@@ -60,9 +60,9 @@ namespace Phytel.API.AppDomain.Security
 
                 return securityRepo.Validate(request, securityToken);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                throw new Exception("SD:SecurityManager:ValidateToken()" + ex.Message, ex.InnerException);
+                throw;
             }
         }
 
