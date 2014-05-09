@@ -650,7 +650,7 @@ namespace Phytel.API.DataDomain.Program
                     MongoDB.DTO.Action meAction = meModule.Actions.Where(a => a.Id == ObjectId.Parse(request.PatientActionId)).FirstOrDefault();  
                     if(meAction != null)
                     {
-                        response.ActionData = DTOUtils.GetAction(request.ContractNumber, request.UserId, meAction);
+                        response.ActionData = DTOUtility.GetAction(request.ContractNumber, request.UserId, meAction);
                     }
                 }
 

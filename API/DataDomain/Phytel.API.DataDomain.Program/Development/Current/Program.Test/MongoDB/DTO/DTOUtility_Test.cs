@@ -307,8 +307,8 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO.Tests
         public class GetActions
         {
             [TestMethod()]
-            [TestCategory("NIGHT-921")]
-            [TestProperty("TFS", "4957")]
+            [TestCategory("NIGHT-920")]
+            [TestProperty("TFS", "6100")]
             [TestProperty("Layer", "DD.DTOUtility")]
             public void DD_Get_Valid_Actions_Test()
             {
@@ -325,8 +325,8 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO.Tests
         public class GetAction
         {
             [TestMethod()]
-            [TestCategory("NIGHT-921")]
-            [TestProperty("TFS", "4957")]
+            [TestCategory("NIGHT-920")]
+            [TestProperty("TFS", "6100")]
             [TestProperty("Layer", "DD.DTOUtility")]
             public void DD_Get_Valid_Action_Test()
             {
@@ -336,6 +336,91 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO.Tests
                 acts.Add(new Action { Id = ObjectId.GenerateNewId(), SourceId = ObjectId.GenerateNewId(), Name = "TestAction", Description = "test action!!!" });
                 ActionsDetail aDetail = dtoUtil.GetAction("InHealth001", "123456789012345678901234", acts[0]);
                 Assert.AreEqual(acts[0].Id.ToString(), aDetail.Id);
+            }
+
+            [TestMethod()]
+            [TestCategory("NIGHT-920")]
+            [TestProperty("TFS", "6100")]
+            [TestProperty("Layer", "DD.DTOUtility")]
+            public void DD_Get_With_AssignTo_Test()
+            {
+                DTOUtility dtoUtil = new DTOUtility();
+                dtoUtil.Factory = new StubProgramRepositoryFactory();
+                List<Action> acts = new List<Action>();
+                ObjectId? ctrl = ObjectId.GenerateNewId();
+                acts.Add(new Action { Id = ObjectId.GenerateNewId(), SourceId = ObjectId.GenerateNewId(), Name = "TestAction", Description = "test action!!!", AssignedTo = ctrl });
+                ActionsDetail aDetail = dtoUtil.GetAction("InHealth001", "123456789012345678901234", acts[0]);
+
+                string sample = acts[0].AssignedTo.ToString();
+                Assert.AreEqual(sample, ctrl.ToString());
+            }
+
+            [TestMethod()]
+            [TestCategory("NIGHT-920")]
+            [TestProperty("TFS", "6100")]
+            [TestProperty("Layer", "DD.DTOUtility")]
+            public void DD_Get_With_AssignBy_Test()
+            {
+                DTOUtility dtoUtil = new DTOUtility();
+                dtoUtil.Factory = new StubProgramRepositoryFactory();
+                List<Action> acts = new List<Action>();
+                ObjectId? ctrl = ObjectId.GenerateNewId();
+                acts.Add(new Action { Id = ObjectId.GenerateNewId(), SourceId = ObjectId.GenerateNewId(), Name = "TestAction", Description = "test action!!!", AssignedBy = ctrl });
+                ActionsDetail aDetail = dtoUtil.GetAction("InHealth001", "123456789012345678901234", acts[0]);
+
+                string sample = acts[0].AssignedBy.ToString();
+                Assert.AreEqual(sample, ctrl.ToString());
+            }
+
+            [TestMethod()]
+            [TestCategory("NIGHT-920")]
+            [TestProperty("TFS", "6100")]
+            [TestProperty("Layer", "DD.DTOUtility")]
+            public void DD_Get_With_AssignDate_Test()
+            {
+                DTOUtility dtoUtil = new DTOUtility();
+                dtoUtil.Factory = new StubProgramRepositoryFactory();
+                List<Action> acts = new List<Action>();
+                DateTime? ctrl = System.DateTime.UtcNow;
+                acts.Add(new Action { Id = ObjectId.GenerateNewId(), SourceId = ObjectId.GenerateNewId(), Name = "TestAction", Description = "test action!!!", AssignedOn = ctrl });
+                ActionsDetail aDetail = dtoUtil.GetAction("InHealth001", "123456789012345678901234", acts[0]);
+
+                DateTime? sample = acts[0].AssignedOn;
+                Assert.AreEqual(sample, ctrl);
+            }
+
+            [TestMethod()]
+            [TestCategory("NIGHT-920")]
+            [TestProperty("TFS", "6100")]
+            [TestProperty("Layer", "DD.DTOUtility")]
+            public void DD_Get_With_Attr_StartDate_Test()
+            {
+                DTOUtility dtoUtil = new DTOUtility();
+                dtoUtil.Factory = new StubProgramRepositoryFactory();
+                List<Action> acts = new List<Action>();
+                DateTime? ctrl = System.DateTime.UtcNow;
+                acts.Add(new Action { Id = ObjectId.GenerateNewId(), SourceId = ObjectId.GenerateNewId(), Name = "TestAction", Description = "test action!!!", AttributeStartDate = ctrl });
+                ActionsDetail aDetail = dtoUtil.GetAction("InHealth001", "123456789012345678901234", acts[0]);
+
+                DateTime? sample = acts[0].AttributeStartDate;
+                Assert.AreEqual(sample, ctrl);
+            }
+
+            [TestMethod()]
+            [TestCategory("NIGHT-920")]
+            [TestProperty("TFS", "6100")]
+            [TestProperty("Layer", "DD.DTOUtility")]
+            public void DD_Get_With_Attr_EndDate_Test()
+            {
+                DTOUtility dtoUtil = new DTOUtility();
+                dtoUtil.Factory = new StubProgramRepositoryFactory();
+                List<Action> acts = new List<Action>();
+                DateTime? ctrl = System.DateTime.UtcNow;
+                acts.Add(new Action { Id = ObjectId.GenerateNewId(), SourceId = ObjectId.GenerateNewId(), Name = "TestAction", Description = "test action!!!", AttributeEndDate = ctrl });
+                ActionsDetail aDetail = dtoUtil.GetAction("InHealth001", "123456789012345678901234", acts[0]);
+
+                DateTime? sample = acts[0].AttributeEndDate;
+                Assert.AreEqual(sample, ctrl);
             }
         }
     }
