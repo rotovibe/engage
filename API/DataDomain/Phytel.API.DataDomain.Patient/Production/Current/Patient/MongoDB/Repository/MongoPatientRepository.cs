@@ -495,9 +495,9 @@ namespace Phytel.API.DataDomain.Patient
                             ContactId = ObjectId.Parse(request.UserId),
                             Flagged = Convert.ToBoolean(request.Flagged),
                             Version = 1,
-                            LastUpdatedOn = System.DateTime.UtcNow,
-                            DeleteFlag = false,
-                            UpdatedBy = ObjectId.Parse(this.UserId)
+                            DeleteFlag = false
+                            //,LastUpdatedOn = System.DateTime.UtcNow,
+                            //UpdatedBy = ObjectId.Parse(this.UserId)
                         };
                         ctx.PatientUsers.Collection.Insert(pu);
 

@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Phytel.API.DataDomain.Patient.DTO;
 using Phytel.API.DataDomain.Patient.MongoDB.DTO;
+using Phytel.API.Common;
 
 namespace Phytel.API.DataDomain.Patient.Test
 {
