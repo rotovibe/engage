@@ -906,9 +906,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
         {
             try
             {
-                GetProgramDetailsSummaryRequest request = new GetProgramDetailsSummaryRequest { ContractNumber = contractNumber, UserId = userId };
-                IProgramRepository programRepo = Factory.GetRepository(request, RepositoryType.Program);
-                List<Module> pMods = (List<Module>)programRepo.GetProgramModules(ObjectId.Parse(contractProgramId));
+                List<Module> pMods = GetTemplateModulesList(contractProgramId, contractNumber, userId);
 
                 List<ModuleDetail> mods = new List<ModuleDetail>();
                 list.ForEach(m => mods.Add(new ModuleDetail
@@ -941,6 +939,21 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             catch (Exception ex)
             {
                 throw new Exception("DD:DTOUtility:GetModules()::" + ex.Message, ex.InnerException);
+            }
+        }
+
+        public List<Module> GetTemplateModulesList(string contractProgramId, string contractNumber, string userId)
+        {
+            try
+            {
+                DataDomainRequest request = new DataDomainRequest { ContractNumber = contractNumber, UserId = userId };
+                IProgramRepository programRepo = Factory.GetRepository(request, RepositoryType.Program);
+                List<Module> pMods = (List<Module>)programRepo.GetProgramModules(ObjectId.Parse(contractProgramId));
+                return pMods;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("DD:DTOUtility:GetTemplateModulesList()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -1051,23 +1064,10 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
         {
             try
             {
-                List<Action> templateActions = null;
-                if (mod != null)
-                {
-                    if (mod.Actions != null)
-                        templateActions = (List<Action>)mod.Actions;
-                }
-
                 List<ActionsDetail> acts = new List<ActionsDetail>();
                 list.ForEach(a =>
                 {
-                    if (templateActions != null)
-                    {
-                        Action act = templateActions.Find(ta => ta.SourceId == a.SourceId);
-                        if (act != null)
-                            a.Objectives = act.Objectives;
-                    }
-
+                    a.Objectives = GetTemplateObjectives(a.SourceId, mod);
                     acts.Add(GetAction(contract, userId, a));
                 });
                 return acts;
@@ -1075,6 +1075,34 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             catch (Exception ex)
             {
                 throw new Exception("DD:DTOUtils:GetActions()::" + ex.Message, ex.InnerException);
+            }
+        }
+
+        public List<Objective> GetTemplateObjectives(ObjectId sourceId, Module mod)
+        {
+            try
+            {
+                List<Objective> objs = new List<Objective>();
+
+                List<Action> templateActions = null;
+                if (mod != null)
+                {
+                    if (mod.Actions != null)
+                        templateActions = (List<Action>)mod.Actions;
+                }
+
+                if (templateActions != null)
+                {
+                    Action act = templateActions.Find(ta => ta.SourceId == sourceId);
+                    if (act != null)
+                        objs = act.Objectives;
+                }
+
+                return objs;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("DD:DTOUtils:GetTemplateObjectives()::" + ex.Message, ex.InnerException);
             }
         }
 

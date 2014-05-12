@@ -43,5 +43,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
         List<MEPatientProgramResponse> RecurseAndStoreResponseObjects(MEPatientProgram prog, string contractNumber, string userId);
         ProgramInfo SaveNewPatientProgram(PutProgramToPatientRequest request, MEPatientProgram nmePP);
         bool SavePatientProgramResponses(List<MEPatientProgramResponse> pprs, PutProgramToPatientRequest request);
+        List<Module> GetTemplateModulesList(string contractProgramId, string contractNumber, string userId);
+        List<Objective> GetTemplateObjectives(ObjectId sourceId, Module mod);
     }
 }

@@ -650,6 +650,12 @@ namespace Phytel.API.DataDomain.Program
                     MongoDB.DTO.Action meAction = meModule.Actions.Where(a => a.Id == ObjectId.Parse(request.PatientActionId)).FirstOrDefault();  
                     if(meAction != null)
                     {
+                        List<Module> tMods = DTOUtility.GetTemplateModulesList(mepp.SourceId.ToString(), request.ContractNumber, request.UserId);
+                        Module tmodule = tMods.Find(tm => tm.SourceId == meModule.SourceId);
+                        if (tmodule != null)
+                        {
+                            meAction.Objectives = DTOUtility.GetTemplateObjectives(meAction.SourceId, tmodule);
+                        }
                         response.ActionData = DTOUtility.GetAction(request.ContractNumber, request.UserId, meAction);
                     }
                 }

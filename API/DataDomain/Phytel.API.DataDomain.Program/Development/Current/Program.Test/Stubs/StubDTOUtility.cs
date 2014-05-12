@@ -237,5 +237,17 @@ namespace Phytel.API.DataDomain.Program.Test.Stubs
 
             return objs;
         }
+
+
+        public List<Module> GetTemplateModulesList(string contractProgramId, string contractNumber, string userId)
+        {
+            throw new NotImplementedException();
+        }
+
+
+        public List<Objective> GetTemplateObjectives(ObjectId sourceId, Module mod)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

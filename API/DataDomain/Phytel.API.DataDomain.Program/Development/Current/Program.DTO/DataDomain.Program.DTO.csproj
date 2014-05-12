@@ -79,6 +79,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="GetPatientActionDetailsDataRequest.cs" />
+    <Compile Include="DataDomainRequest.cs" />
     <Compile Include="GetProgramDetailsSummaryRequest.cs" />
     <Compile Include="ActionDetail.cs" />
     <Compile Include="GetProgramAttributeRequest.cs" />
