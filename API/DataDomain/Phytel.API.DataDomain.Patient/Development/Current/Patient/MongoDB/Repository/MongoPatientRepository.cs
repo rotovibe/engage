@@ -15,7 +15,7 @@ using MongoDB.Bson.Serialization;
 
 namespace Phytel.API.DataDomain.Patient
 {
-    public class MongoPatientRepository<T> : IPatientRepository<T>
+    public class MongoPatientRepository : IPatientRepository
     {
         private string _dbName = string.Empty;
 
@@ -67,7 +67,7 @@ namespace Phytel.API.DataDomain.Patient
                                     Query.EQ(MEPatient.DOBProperty, request.DOB));
 
                     patient = ctx.Patients.Collection.FindOneAs<MEPatient>(query);
-                    MongoCohortPatientViewRepository<T> repo = new MongoCohortPatientViewRepository<T>(_dbName);
+                    MongoCohortPatientViewRepository repo = new MongoCohortPatientViewRepository(_dbName);
                     repo.UserId = this.UserId;
 
                     if (patient == null)

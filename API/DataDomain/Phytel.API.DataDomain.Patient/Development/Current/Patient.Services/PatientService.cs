@@ -7,11 +7,16 @@ using Phytel.API.Common.Audit;
 using Phytel.API.DataAudit;
 using System.Configuration;
 using System.Web;
+using Phytel.API.Common;
 
 namespace Phytel.API.DataDomain.Patient.Service
 {
     public class PatientService : ServiceStack.ServiceInterface.Service
     {
+        public ICommonFormatterUtil CommonFormatterUtil { get; set; }
+        public IHelpers Helpers { get; set; }
+        public IPatientDataManager PatientManager { get; set; }
+
         public GetPatientDataResponse Get(GetPatientDataRequest request)
         {
             GetPatientDataResponse response = new GetPatientDataResponse();
@@ -20,15 +25,15 @@ namespace Phytel.API.DataDomain.Patient.Service
                 if (string.IsNullOrEmpty(request.UserId))
                     throw new UnauthorizedAccessException("PatientDD:Get()::Unauthorized Access");
 
-                response = PatientDataManager.GetPatientByID(request);
+                response = PatientManager.GetPatientByID(request);
                 response.Version = request.Version;
             }
             catch (Exception ex)
             {
-                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+                CommonFormatterUtil.FormatExceptionResponse(response, base.Response, ex);
 
                 string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
-                Common.Helper.LogException(int.Parse(aseProcessID), ex);
+                Helpers.LogException(int.Parse(aseProcessID), ex);
             }
             return response;
         }
@@ -42,15 +47,15 @@ namespace Phytel.API.DataDomain.Patient.Service
                 if (string.IsNullOrEmpty(request.UserId))
                     throw new UnauthorizedAccessException("PatientDD:Get()::Unauthorized Access");
 
-                response = PatientDataManager.GetPatientSSN(request);
+                response = PatientManager.GetPatientSSN(request);
                 response.Version = request.Version;
             }
             catch (Exception ex)
             {
-                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+                CommonFormatterUtil.FormatExceptionResponse(response, base.Response, ex);
 
                 string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
-                Common.Helper.LogException(int.Parse(aseProcessID), ex);
+                Helpers.LogException(int.Parse(aseProcessID), ex);
             }
             return response;
         }
@@ -63,15 +68,15 @@ namespace Phytel.API.DataDomain.Patient.Service
                 if (string.IsNullOrEmpty(request.UserId))
                     throw new UnauthorizedAccessException("PatientDD:Post()::Unauthorized Access");
 
-                response = PatientDataManager.GetPatients(request);
+                response = PatientManager.GetPatients(request);
                 response.Version = request.Version;
             }
             catch (Exception ex)
             {
-                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+                CommonFormatterUtil.FormatExceptionResponse(response, base.Response, ex);
 
                 string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
-                Common.Helper.LogException(int.Parse(aseProcessID), ex);
+                Helpers.LogException(int.Parse(aseProcessID), ex);
             }
             return response;
         }
@@ -84,15 +89,15 @@ namespace Phytel.API.DataDomain.Patient.Service
                 if (string.IsNullOrEmpty(request.UserId))
                     throw new UnauthorizedAccessException("PatientDD:Put()::Unauthorized Access");
 
-                response = PatientDataManager.UpdatePatient(request);
+                response = PatientManager.UpdatePatient(request);
                 response.Version = request.Version;
             }
             catch (Exception ex)
             {
-                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+                CommonFormatterUtil.FormatExceptionResponse(response, base.Response, ex);
 
                 string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
-                Common.Helper.LogException(int.Parse(aseProcessID), ex);
+                Helpers.LogException(int.Parse(aseProcessID), ex);
             }
             return response;
         }
@@ -105,16 +110,16 @@ namespace Phytel.API.DataDomain.Patient.Service
                 if (string.IsNullOrEmpty(request.UserId))
                     throw new UnauthorizedAccessException("PatientDD:Put()::Unauthorized Access");
 
-                response = PatientDataManager.InsertPatient(request);
+                response = PatientManager.InsertPatient(request);
                 response.Version = request.Version;
                 //throw new Exception("Just a test error");
             }
             catch (Exception ex)
             {
-                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+                CommonFormatterUtil.FormatExceptionResponse(response, base.Response, ex);
 
                 string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
-                Common.Helper.LogException(int.Parse(aseProcessID), ex);
+                Helpers.LogException(int.Parse(aseProcessID), ex);
             }
             
             return response;
@@ -128,15 +133,15 @@ namespace Phytel.API.DataDomain.Patient.Service
                 if (string.IsNullOrEmpty(request.UserId))
                     throw new UnauthorizedAccessException("PatientDD:Put()::Unauthorized Access");
 
-                response = PatientDataManager.InsertCohortPatientView(request);
+                response = PatientManager.InsertCohortPatientView(request);
                 response.Version = request.Version;
             }
             catch (Exception ex)
             {
-                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+                CommonFormatterUtil.FormatExceptionResponse(response, base.Response, ex);
 
                 string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
-                Common.Helper.LogException(int.Parse(aseProcessID), ex);
+                Helpers.LogException(int.Parse(aseProcessID), ex);
             }
             return response;
         }
@@ -149,15 +154,15 @@ namespace Phytel.API.DataDomain.Patient.Service
                 if (string.IsNullOrEmpty(request.UserId))
                     throw new UnauthorizedAccessException("PatientDD:Put()::Unauthorized Access");
 
-                response = PatientDataManager.UpdateCohortPatientViewProblem(request);
+                response = PatientManager.UpdateCohortPatientViewProblem(request);
                 response.Version = request.Version;
             }
             catch (Exception ex)
             {
-                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+                CommonFormatterUtil.FormatExceptionResponse(response, base.Response, ex);
 
                 string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
-                Common.Helper.LogException(int.Parse(aseProcessID), ex);
+                Helpers.LogException(int.Parse(aseProcessID), ex);
             }
             return response;
         }
@@ -170,15 +175,15 @@ namespace Phytel.API.DataDomain.Patient.Service
                 if (string.IsNullOrEmpty(request.UserId))
                     throw new UnauthorizedAccessException("PatientDD:Put()::Unauthorized Access");
 
-                response = PatientDataManager.UpdatePatientPriority(request);
+                response = PatientManager.UpdatePatientPriority(request);
                 response.Version = request.Version;
             }
             catch (Exception ex)
             {
-                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+                CommonFormatterUtil.FormatExceptionResponse(response, base.Response, ex);
 
                 string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
-                Common.Helper.LogException(int.Parse(aseProcessID), ex);
+                Helpers.LogException(int.Parse(aseProcessID), ex);
             }
             return response;
         }
@@ -191,15 +196,15 @@ namespace Phytel.API.DataDomain.Patient.Service
                 if (string.IsNullOrEmpty(request.UserId))
                     throw new UnauthorizedAccessException("PatientDD:Put()::Unauthorized Access");
 
-                response = PatientDataManager.UpdatePatientFlagged(request);
+                response = PatientManager.UpdatePatientFlagged(request);
                 response.Version = request.Version;
             }
             catch (Exception ex)
             {
-                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+                CommonFormatterUtil.FormatExceptionResponse(response, base.Response, ex);
 
                 string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
-                Common.Helper.LogException(int.Parse(aseProcessID), ex);
+                Helpers.LogException(int.Parse(aseProcessID), ex);
             }
             return response;
         }
@@ -212,15 +217,15 @@ namespace Phytel.API.DataDomain.Patient.Service
                 if (string.IsNullOrEmpty(request.UserId))
                     throw new UnauthorizedAccessException("PatientDD:Put()::Unauthorized Access");
 
-                response = PatientDataManager.UpdatePatientBackground(request);
+                response = PatientManager.UpdatePatientBackground(request);
                 response.Version = request.Version;
             }
             catch (Exception ex)
             {
-                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+                CommonFormatterUtil.FormatExceptionResponse(response, base.Response, ex);
 
                 string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
-                Common.Helper.LogException(int.Parse(aseProcessID), ex);
+                Helpers.LogException(int.Parse(aseProcessID), ex);
             }
             return response;
         }
@@ -234,15 +239,15 @@ namespace Phytel.API.DataDomain.Patient.Service
                 if (string.IsNullOrEmpty(request.UserId))
                     throw new UnauthorizedAccessException("PatientDD:Get()::Unauthorized Access");
 
-                response = PatientDataManager.GetCohortPatients(request);
+                response = PatientManager.GetCohortPatients(request);
                 response.Version = request.Version;
             }
             catch (Exception ex)
             {
-                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+                CommonFormatterUtil.FormatExceptionResponse(response, base.Response, ex);
 
                 string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
-                Common.Helper.LogException(int.Parse(aseProcessID), ex);
+                Helpers.LogException(int.Parse(aseProcessID), ex);
             }
             return response;
         }
@@ -256,15 +261,15 @@ namespace Phytel.API.DataDomain.Patient.Service
                 if (string.IsNullOrEmpty(request.UserId))
                     throw new UnauthorizedAccessException("PatientDD:Get()::Unauthorized Access");
 
-                response = PatientDataManager.GetCohortPatientView(request);
+                response = PatientManager.GetCohortPatientView(request);
                 response.Version = request.Version;
             }
             catch (Exception ex)
             {
-                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+                CommonFormatterUtil.FormatExceptionResponse(response, base.Response, ex);
 
                 string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
-                Common.Helper.LogException(int.Parse(aseProcessID), ex);
+                Helpers.LogException(int.Parse(aseProcessID), ex);
             }
             return response;
         }

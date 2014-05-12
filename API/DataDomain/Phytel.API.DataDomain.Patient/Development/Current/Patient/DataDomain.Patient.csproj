@@ -96,7 +96,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
+    <Compile Include="Enums.cs" />
+    <Compile Include="IPatientDataManager.cs" />
+    <Compile Include="IPatientRepositoryFactory.cs" />
     <Compile Include="MongoDB\DTO\DTOUtils.cs" />
+    <Compile Include="MongoDB\DTO\IDTOUtils.cs" />
     <Compile Include="MongoDB\DTO\SearchField.cs" />
     <Compile Include="MongoDB\Repository\MongoCohortPatientViewRepository.cs" />
     <Compile Include="PatientsUtils.cs" />
