@@ -15,7 +15,7 @@ using Phytel.API.DataAudit;
 
 namespace Phytel.API.DataDomain.Contact
 {
-    public class MongoContactRepository<T> : IContactRepository<T>
+    public class MongoContactRepository : IContactRepository
     {
         private string _dbName = string.Empty;
 

@@ -8,7 +8,7 @@ using Phytel.API.Interface;
 
 namespace Phytel.API.DataDomain.Contact
 {
-    public interface IContactRepository<T> : IRepository<T>
+    public interface IContactRepository : IRepository
     {
         object FindContactByPatientId(GetContactDataRequest request);
         IEnumerable<object> FindCareManagers();

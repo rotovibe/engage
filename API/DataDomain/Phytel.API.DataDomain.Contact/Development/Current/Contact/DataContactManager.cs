@@ -6,14 +6,16 @@ using Phytel.API.Interface;
 
 namespace Phytel.API.DataDomain.Contact
 {
-    public static class ContactDataManager
+    public class ContactDataManager : IContactDataManager
     {
-        public static ContactData GetContactByPatientId(GetContactDataRequest request)
+        public IContactRepositoryFactory Factory { get; set; }
+
+        public ContactData GetContactByPatientId(GetContactDataRequest request)
         {
             ContactData result = null;
             try
             {
-                IContactRepository<GetContactDataResponse> repo = ContactRepositoryFactory<GetContactDataResponse>.GetContactRepository(request.ContractNumber, request.Context, request.UserId);
+                IContactRepository repo = Factory.GetRepository(request, RepositoryType.Contact);
                 
                 result = repo.FindContactByPatientId(request) as ContactData;
             }
@@ -24,12 +26,12 @@ namespace Phytel.API.DataDomain.Contact
             return result;
         }
 
-        public static ContactData GetContactByUserId(GetContactByUserIdDataRequest request)
+        public ContactData GetContactByUserId(GetContactByUserIdDataRequest request)
         {
             ContactData result = null;
             try
             {
-                IContactRepository<GetContactByUserIdDataResponse> repo = ContactRepositoryFactory<GetContactByUserIdDataResponse>.GetContactRepository(request.ContractNumber, request.Context, request.UserId);
+                IContactRepository repo = Factory.GetRepository(request, RepositoryType.Contact);
 
                 result = repo.FindContactByUserId(request) as ContactData;
             }
@@ -40,12 +42,12 @@ namespace Phytel.API.DataDomain.Contact
             return result;
         }
 
-        public static SearchContactsDataResponse SearchContacts(SearchContactsDataRequest request)
+        public SearchContactsDataResponse SearchContacts(SearchContactsDataRequest request)
         {
             SearchContactsDataResponse response = new SearchContactsDataResponse();
             try
             {
-                IContactRepository<List<ContactData>> repo = ContactRepositoryFactory<List<ContactData>>.GetContactRepository(request.ContractNumber, request.Context, request.UserId);
+                IContactRepository repo = Factory.GetRepository(request, RepositoryType.Contact);
 
                 response.Contacts = repo.SearchContacts(request) as List<ContactData>;
                 response.Version = request.Version;
@@ -57,12 +59,12 @@ namespace Phytel.API.DataDomain.Contact
             return response;
         }
 
-        public static PutContactDataResponse InsertContact(PutContactDataRequest request)
+        public PutContactDataResponse InsertContact(PutContactDataRequest request)
         {
             PutContactDataResponse response = null;
             try
             {
-                IContactRepository<PutContactDataResponse> repo = ContactRepositoryFactory<PutContactDataResponse>.GetContactRepository(request.ContractNumber, request.Context, request.UserId);
+                IContactRepository repo = Factory.GetRepository(request, RepositoryType.Contact);
                 
                 response = repo.Insert(request) as PutContactDataResponse;
             }
@@ -73,12 +75,12 @@ namespace Phytel.API.DataDomain.Contact
             return response;
         }
 
-        public static PutUpdateContactDataResponse UpdateContact(PutUpdateContactDataRequest request)
+        public PutUpdateContactDataResponse UpdateContact(PutUpdateContactDataRequest request)
         {
             PutUpdateContactDataResponse response = null;
             try
             {
-                IContactRepository<PutUpdateContactDataResponse> repo = ContactRepositoryFactory<PutUpdateContactDataResponse>.GetContactRepository(request.ContractNumber, request.Context, request.UserId);
+                IContactRepository repo = Factory.GetRepository(request, RepositoryType.Contact);
 
                 response = repo.Update(request) as PutUpdateContactDataResponse;
             }
@@ -89,12 +91,12 @@ namespace Phytel.API.DataDomain.Contact
             return response;
         }
 
-        public static GetAllCareManagersDataResponse GetCareManagers(GetAllCareManagersDataRequest request)
+        public GetAllCareManagersDataResponse GetCareManagers(GetAllCareManagersDataRequest request)
         {
             GetAllCareManagersDataResponse response = new GetAllCareManagersDataResponse();
             try
             {
-                IContactRepository<List<ContactData>> repo = ContactRepositoryFactory<List<ContactData>>.GetContactRepository(request.ContractNumber, request.Context, request.UserId);
+                IContactRepository repo = Factory.GetRepository(request, RepositoryType.Contact);
 
                 response.Contacts = repo.FindCareManagers() as List<ContactData>;
                 response.Version = request.Version;

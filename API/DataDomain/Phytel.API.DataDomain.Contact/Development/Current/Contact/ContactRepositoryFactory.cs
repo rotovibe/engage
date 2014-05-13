@@ -7,23 +7,40 @@ using Phytel.API.Interface;
 
 namespace Phytel.API.DataDomain.Contact
 {
-    public abstract class ContactRepositoryFactory<T>
+    public class ContactRepositoryFactory : IContactRepositoryFactory
     {
-        public static IContactRepository<T> GetContactRepository(string dbName, string productName, string userId)
+        public IContactRepository GetRepository(IDataDomainRequest request, RepositoryType type)
         {
-            try
-            {
-                IContactRepository<T> repo = null;
+            IContactRepository repo = null;
 
-                //We only have 1 repository at this time, just return it
-                repo = new MongoContactRepository<T>(dbName) as IContactRepository<T>;
-                repo.UserId = userId;
-                return repo;
-            }
-            catch (Exception ex)
+            switch (type)
             {
-                throw ex;
+                case RepositoryType.Contact:
+                    {
+                        repo = new MongoContactRepository(request.ContractNumber) as IContactRepository;
+                        break;
+                    }
             }
+
+            repo.UserId = request.UserId;
+            return repo;
         }
+
+        //public IContactRepository GetContactRepository(string dbName, string productName, string userId)
+        //{
+        //    try
+        //    {
+        //        IContactRepository repo = null;
+
+        //        //We only have 1 repository at this time, just return it
+        //        repo = new MongoContactRepository(dbName) as IContactRepository;
+        //        repo.UserId = userId;
+        //        return repo;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw ex;
+        //    }
+        //}
     }
 }
