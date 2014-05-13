@@ -82,7 +82,7 @@ namespace Phytel.API.DataDomain.Patient.Service.Test
             JsonServiceClient client = new JsonServiceClient();
             GetPatientsDataResponse response = client.Post<GetPatientsDataResponse>
                 (string.Format("{0}/{1}/{2}/{3}/patientdetails", "http://localhost:8888/Patient", context, version, contractNumber),
-                new GetPatientsDataRequest { PatientIDs = new string[]{patientID} } as object);
+                new GetPatientsDataRequest { PatientIds = new string[]{patientID} } as object);
         }
     }
 }

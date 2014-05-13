@@ -57,5 +57,18 @@ namespace Phytel.API.DataDomain.Patient.Test
 
             Assert.IsNotNull(response);
         }
+
+
+        [TestMethod]
+        public void GetPatients()
+        {
+            string[] patientIds = new string[] { "5325da2dd6a4850adcbba576", "5325da31d6a4850adcbba582", "5325da3ad6a4850adcbba59a" };
+            GetPatientsDataRequest request = new GetPatientsDataRequest { PatientIds = patientIds };
+
+            IPatientDataManager pm = new PatientDataManager { Factory = new PatientRepositoryFactory() };
+            GetPatientsDataResponse response = pm.GetPatients(request);
+
+            Assert.IsNotNull(response.Patients);
+        }
     }
 }

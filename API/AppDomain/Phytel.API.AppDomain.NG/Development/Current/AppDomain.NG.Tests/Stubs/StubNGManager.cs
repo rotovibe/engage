@@ -180,6 +180,11 @@ namespace Phytel.API.AppDomain.NG.Test.Stubs
             throw new NotImplementedException();
         }
 
+        public GetRecentPatientsResponse GetRecentPatients(GetRecentPatientsRequest request)
+        {
+            throw new NotImplementedException();
+        }
+
 
         public void LogException(Exception ex)
         {

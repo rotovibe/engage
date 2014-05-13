@@ -1244,6 +1244,45 @@ namespace Phytel.API.AppDomain.NG
             }
             return contactList;
         }
+
+        public GetRecentPatientsResponse GetRecentPatients(GetRecentPatientsRequest request)
+        {
+            GetRecentPatientsResponse response = null;
+            try
+            {
+                IRestClient client = new JsonServiceClient();
+                //[Route("/{Version}/{ContractNumber}/Contact/{ContactId}/RecentPatients", "GET")]
+                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Contact/{4}/RecentPatients",
+                                                       DDContactServiceUrl,
+                                                       "NG",
+                                                       request.Version,
+                                                       request.ContractNumber,
+                                                       request.UserId), request.UserId);
+
+                GetRecentPatientsResponse dataDomainResponse = client.Get<GetRecentPatientsResponse>(url);
+
+                if (dataDomainResponse != null && dataDomainResponse.Patients != null)
+                {
+                    response = new GetRecentPatientsResponse();
+                    // TODO
+                    //List<string> contactDataList = dataDomainResponse.Patients;
+                    //foreach (ContactData cd in contactDataList)
+                    //{
+                    //    response.Add(new Contact
+                    //    {
+                    //        Id = cd.ContactId,
+                    //        UserId = cd.UserId,
+                    //        PreferredName = cd.PreferredName
+                    //    });
+                    //}
+                }
+            }
+            catch (WebServiceException wse)
+            {
+                throw new WebServiceException("AD:GetRecentPatients()::" + wse.Message, wse.InnerException);
+            }
+            return response;
+        }
         #endregion
 
         #region Private methods

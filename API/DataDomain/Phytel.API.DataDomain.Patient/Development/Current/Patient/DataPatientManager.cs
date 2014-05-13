@@ -126,7 +126,7 @@ namespace Phytel.API.DataDomain.Patient
             {
                 IPatientRepository repo = Factory.GetRepository(request, RepositoryType.Patient);
 
-                GetPatientsDataResponse result = repo.Select(request.PatientIDs);
+                GetPatientsDataResponse result = repo.Select(request.PatientIds);
 
                 return result;
             }

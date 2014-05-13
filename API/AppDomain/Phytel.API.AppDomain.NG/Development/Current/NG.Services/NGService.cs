@@ -696,6 +696,46 @@ namespace Phytel.API.AppDomain.NG.Service
             
             return response; 
         }
+
+        public GetRecentPatientsResponse Get(GetRecentPatientsRequest request)
+        {
+            GetRecentPatientsResponse response = new GetRecentPatientsResponse();
+            ValidateTokenResponse result = null;
+
+            try
+            {
+                request.Token = base.Request.Headers["Token"] as string;
+                result = Security.IsUserValidated(request.Version, request.Token, request.ContractNumber);
+                if (result.UserId.Trim() != string.Empty)
+                {
+                    request.UserId = result.UserId;
+                    response = NGManager.GetRecentPatients(request);
+                }
+                else
+                    throw new UnauthorizedAccessException();
+            }
+            catch (Exception ex)
+            {
+                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+                if ((ex is WebServiceException) == false)
+                    NGManager.LogException(ex);
+            }
+            finally
+            {
+                List<string> patientIds = null;
+                if (response.Patients != null && response.Patients.Count >  0)
+                {
+                    patientIds = new List<string>();
+                    foreach (CohortPatient cp in response.Patients)
+                    {
+                        patientIds.Add(cp.Id);
+                    }
+                }
+                if (result != null)
+                    AuditHelper.LogAuditData(request, result.SQLUserId, patientIds, System.Web.HttpContext.Current.Request, request.GetType().Name);
+            }
+            return response;
+        }
         #endregion
 
         #region LookUps ContactRelated
