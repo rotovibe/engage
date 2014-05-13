@@ -105,7 +105,7 @@ namespace Phytel.API.DataDomain.ProgramDesign
                     uv.Add(MB.Update.Set(MEProgram.LastUpdatedOnProperty, DateTime.UtcNow));
 
                     IMongoUpdate update = MB.Update.Combine(uv);
-                    ctx.Programs.Collection.Update(q, update);
+                    ctx.Modules.Collection.Update(q, update);
 
                     //set audit call
                     AuditHelper.LogDataAudit(this.UserId,

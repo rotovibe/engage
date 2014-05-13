@@ -182,7 +182,7 @@ namespace Phytel.API.DataDomain.ProgramDesign.Services.Test
                 userid);
 
             PutStepDataResponse response = client.Put<PutStepDataResponse>(url,
-                new PutStepDataRequest { Title = "programdesign.service.test step", ContractNumber = contractNumber, Context = context } as object);
+                new PutStepDataRequest { Title = "programdesign.service.test step", Type = "text", ContractNumber = contractNumber, Context = context } as object);
 
 
             ObjectId id;
@@ -190,49 +190,49 @@ namespace Phytel.API.DataDomain.ProgramDesign.Services.Test
             Assert.IsTrue(ObjectId.TryParse(response.Id, out id));
         }
 
-        [TestMethod]
-        public void PutTextStepData()
-        {
-            string contractNumber = "InHealth001";
-            string context = "NG";
-            string userid = "5325c821072ef705080d3488";
-            IRestClient client = new JsonServiceClient();
-            JsonServiceClient.HttpWebRequestFilter = x =>
-                            x.Headers.Add(string.Format("{0}: {1}", "x-Phytel-UserID", "531f2df9072ef727c4d2a3df"));
+        //[TestMethod]
+        //public void PutTextStepData()
+        //{
+        //    string contractNumber = "InHealth001";
+        //    string context = "NG";
+        //    string userid = "5325c821072ef705080d3488";
+        //    IRestClient client = new JsonServiceClient();
+        //    JsonServiceClient.HttpWebRequestFilter = x =>
+        //                    x.Headers.Add(string.Format("{0}: {1}", "x-Phytel-UserID", "531f2df9072ef727c4d2a3df"));
 
-            string url = string.Format("http://localhost:8888/ProgramDesign/NG/1/inhealth001/ProgramDesign/TextStep/Insert?userid={0}",
-                userid);
+        //    string url = string.Format("http://localhost:8888/ProgramDesign/NG/1/inhealth001/ProgramDesign/TextStep/Insert?userid={0}",
+        //        userid);
 
-            PutTextStepDataResponse response = client.Put<PutTextStepDataResponse>(url,
-                new PutTextStepDataRequest { Title = "programdesign.service.test", ContractNumber = contractNumber, Context = context } as object);
-
-
-            ObjectId id;
-
-            Assert.IsTrue(ObjectId.TryParse(response.Id, out id));
-        }
-
-        [TestMethod]
-        public void PutYesNoStepData()
-        {
-            string contractNumber = "InHealth001";
-            string context = "NG";
-            string userid = "5325c821072ef705080d3488";
-            IRestClient client = new JsonServiceClient();
-            JsonServiceClient.HttpWebRequestFilter = x =>
-                            x.Headers.Add(string.Format("{0}: {1}", "x-Phytel-UserID", "531f2df9072ef727c4d2a3df"));
-
-            string url = string.Format("http://localhost:8888/ProgramDesign/NG/1/inhealth001/ProgramDesign/YesNoStep/Insert?userid={0}",
-                userid);
-
-            PutYesNoStepDataResponse response = client.Put<PutYesNoStepDataResponse>(url,
-                new PutYesNoStepDataRequest { Question = "programdesign.service.test", ContractNumber = contractNumber, Context = context } as object);
+        //    PutTextStepDataResponse response = client.Put<PutTextStepDataResponse>(url,
+        //        new PutTextStepDataRequest { Title = "programdesign.service.test", ContractNumber = contractNumber, Context = context } as object);
 
 
-            ObjectId id;
+        //    ObjectId id;
 
-            Assert.IsTrue(ObjectId.TryParse(response.Id, out id));
-        }
+        //    Assert.IsTrue(ObjectId.TryParse(response.Id, out id));
+        //}
+
+        //[TestMethod]
+        //public void PutYesNoStepData()
+        //{
+        //    string contractNumber = "InHealth001";
+        //    string context = "NG";
+        //    string userid = "5325c821072ef705080d3488";
+        //    IRestClient client = new JsonServiceClient();
+        //    JsonServiceClient.HttpWebRequestFilter = x =>
+        //                    x.Headers.Add(string.Format("{0}: {1}", "x-Phytel-UserID", "531f2df9072ef727c4d2a3df"));
+
+        //    string url = string.Format("http://localhost:8888/ProgramDesign/NG/1/inhealth001/ProgramDesign/YesNoStep/Insert?userid={0}",
+        //        userid);
+
+        //    PutYesNoStepDataResponse response = client.Put<PutYesNoStepDataResponse>(url,
+        //        new PutYesNoStepDataRequest { Question = "programdesign.service.test", ContractNumber = contractNumber, Context = context } as object);
+
+
+        //    ObjectId id;
+
+        //    Assert.IsTrue(ObjectId.TryParse(response.Id, out id));
+        //}
 
         [TestMethod]
         public void PutUpdateProgramData()
@@ -338,57 +338,57 @@ namespace Phytel.API.DataDomain.ProgramDesign.Services.Test
             Assert.IsTrue(ObjectId.TryParse(response.Id, out id));
         }
 
-        [TestMethod]
-        public void PutUpdateTextStepData()
-        {
-            string contractNumber = "InHealth001";
-            string context = "NG";
-            string userid = "5325c821072ef705080d3488";
-            string textId = "536d001e5a4d1313f8c1757b";
-            IRestClient client = new JsonServiceClient();
-            JsonServiceClient.HttpWebRequestFilter = x =>
-                            x.Headers.Add(string.Format("{0}: {1}", "x-Phytel-UserID", "531f2df9072ef727c4d2a3df"));
+        //[TestMethod]
+        //public void PutUpdateTextStepData()
+        //{
+        //    string contractNumber = "InHealth001";
+        //    string context = "NG";
+        //    string userid = "5325c821072ef705080d3488";
+        //    string textId = "536d001e5a4d1313f8c1757b";
+        //    IRestClient client = new JsonServiceClient();
+        //    JsonServiceClient.HttpWebRequestFilter = x =>
+        //                    x.Headers.Add(string.Format("{0}: {1}", "x-Phytel-UserID", "531f2df9072ef727c4d2a3df"));
 
-            string url = string.Format("http://localhost:8888/ProgramDesign/{0}/1/{1}/ProgramDesign/TextStep/{2}/Update?userid={3}",
-                context,
-                contractNumber,
-                textId,
-                userid);
+        //    string url = string.Format("http://localhost:8888/ProgramDesign/{0}/1/{1}/ProgramDesign/TextStep/{2}/Update?userid={3}",
+        //        context,
+        //        contractNumber,
+        //        textId,
+        //        userid);
 
-            PutUpdateTextStepDataResponse response = client.Put<PutUpdateTextStepDataResponse>(url,
-                new PutUpdateTextStepDataRequest { Description = "programdesign.service.test", ContractNumber = contractNumber, Context = context } as object);
-
-
-            ObjectId id;
-
-            Assert.IsTrue(ObjectId.TryParse(response.Id, out id));
-        }
-
-        [TestMethod]
-        public void PutUpdateYesNoStepData()
-        {
-            string contractNumber = "InHealth001";
-            string context = "NG";
-            string userid = "5325c821072ef705080d3488";
-            string yesNoId = "536d009e5a4d1313f8c17582";
-            IRestClient client = new JsonServiceClient();
-            JsonServiceClient.HttpWebRequestFilter = x =>
-                            x.Headers.Add(string.Format("{0}: {1}", "x-Phytel-UserID", "531f2df9072ef727c4d2a3df"));
-
-            string url = string.Format("http://localhost:8888/ProgramDesign/{0}/1/{1}/ProgramDesign/YesNoStep/{2}/Update?userid={3}",
-                context,
-                contractNumber,
-                yesNoId,
-                userid);
-
-            PutUpdateYesNoStepDataResponse response = client.Put<PutUpdateYesNoStepDataResponse>(url,
-                new PutUpdateYesNoStepDataRequest { Notes = "programdesign.service.test", ContractNumber = contractNumber, Context = context } as object);
+        //    PutUpdateTextStepDataResponse response = client.Put<PutUpdateTextStepDataResponse>(url,
+        //        new PutUpdateTextStepDataRequest { Description = "programdesign.service.test", ContractNumber = contractNumber, Context = context } as object);
 
 
-            ObjectId id;
+        //    ObjectId id;
 
-            Assert.IsTrue(ObjectId.TryParse(response.Id, out id));
-        }
+        //    Assert.IsTrue(ObjectId.TryParse(response.Id, out id));
+        //}
+
+        //[TestMethod]
+        //public void PutUpdateYesNoStepData()
+        //{
+        //    string contractNumber = "InHealth001";
+        //    string context = "NG";
+        //    string userid = "5325c821072ef705080d3488";
+        //    string yesNoId = "536d009e5a4d1313f8c17582";
+        //    IRestClient client = new JsonServiceClient();
+        //    JsonServiceClient.HttpWebRequestFilter = x =>
+        //                    x.Headers.Add(string.Format("{0}: {1}", "x-Phytel-UserID", "531f2df9072ef727c4d2a3df"));
+
+        //    string url = string.Format("http://localhost:8888/ProgramDesign/{0}/1/{1}/ProgramDesign/YesNoStep/{2}/Update?userid={3}",
+        //        context,
+        //        contractNumber,
+        //        yesNoId,
+        //        userid);
+
+        //    PutUpdateYesNoStepDataResponse response = client.Put<PutUpdateYesNoStepDataResponse>(url,
+        //        new PutUpdateYesNoStepDataRequest { Notes = "programdesign.service.test", ContractNumber = contractNumber, Context = context } as object);
+
+
+        //    ObjectId id;
+
+        //    Assert.IsTrue(ObjectId.TryParse(response.Id, out id));
+        //}
 
         [TestMethod]
         public void DeleteProgramData()
@@ -396,7 +396,7 @@ namespace Phytel.API.DataDomain.ProgramDesign.Services.Test
             string contractNumber = "InHealth001";
             string context = "NG";
             string userid = "5325c821072ef705080d3488";
-            string programId = "53694ae85a4d13013059354d";
+            string programId = "53723ccf5a4d1313bc004b04";
             IRestClient client = new JsonServiceClient();
             JsonServiceClient.HttpWebRequestFilter = x =>
                             x.Headers.Add(string.Format("{0}: {1}", "x-Phytel-UserID", "531f2df9072ef727c4d2a3df"));
@@ -416,7 +416,7 @@ namespace Phytel.API.DataDomain.ProgramDesign.Services.Test
             string contractNumber = "InHealth001";
             string context = "NG";
             string userid = "5325c821072ef705080d3488";
-            string moduleId = "53694c135a4d13119cdf0893";
+            string moduleId = "53723d0f5a4d1313bc004b0b";
             IRestClient client = new JsonServiceClient();
             JsonServiceClient.HttpWebRequestFilter = x =>
                             x.Headers.Add(string.Format("{0}: {1}", "x-Phytel-UserID", "531f2df9072ef727c4d2a3df"));
@@ -436,7 +436,7 @@ namespace Phytel.API.DataDomain.ProgramDesign.Services.Test
             string contractNumber = "InHealth001";
             string context = "NG";
             string userid = "5325c821072ef705080d3488";
-            string actionId = "536956315a4d130f58903225";
+            string actionId = "53723d295a4d1313bc004b12";
             IRestClient client = new JsonServiceClient();
             JsonServiceClient.HttpWebRequestFilter = x =>
                             x.Headers.Add(string.Format("{0}: {1}", "x-Phytel-UserID", "531f2df9072ef727c4d2a3df"));
@@ -458,13 +458,13 @@ namespace Phytel.API.DataDomain.ProgramDesign.Services.Test
             string contractNumber = "InHealth001";
             string context = "NG";
             string userid = "5325c821072ef705080d3488";
-            string textId = "53695a295a4d13054cc381f2";
+            string textId = "53723d635a4d1313bc004b19";
             IRestClient client = new JsonServiceClient();
             JsonServiceClient.HttpWebRequestFilter = x =>
                             x.Headers.Add(string.Format("{0}: {1}", "x-Phytel-UserID", "531f2df9072ef727c4d2a3df"));
 
             DeleteStepDataResponse response =
-                client.Delete<DeleteStepDataResponse>(string.Format("http://localhost:8888/ProgramDesign/{0}/1/{1}/ProgramDesign/TextStep/{2}/Delete?userid={3}",
+                client.Delete<DeleteStepDataResponse>(string.Format("http://localhost:8888/ProgramDesign/{0}/1/{1}/ProgramDesign/Step/{2}/Delete?userid={3}",
                                                         context,
                                                         contractNumber,
                                                         textId,
@@ -473,47 +473,47 @@ namespace Phytel.API.DataDomain.ProgramDesign.Services.Test
             Assert.IsTrue(response.Deleted);
         }
 
-        [TestMethod]
-        public void DeleteTextStepData()
-        {
-            string contractNumber = "InHealth001";
-            string context = "NG";
-            string userid = "5325c821072ef705080d3488";
-            string textId = "53695a295a4d13054cc381f2";
-            IRestClient client = new JsonServiceClient();
-            JsonServiceClient.HttpWebRequestFilter = x =>
-                            x.Headers.Add(string.Format("{0}: {1}", "x-Phytel-UserID", "531f2df9072ef727c4d2a3df"));
+        //[TestMethod]
+        //public void DeleteTextStepData()
+        //{
+        //    string contractNumber = "InHealth001";
+        //    string context = "NG";
+        //    string userid = "5325c821072ef705080d3488";
+        //    string textId = "53695a295a4d13054cc381f2";
+        //    IRestClient client = new JsonServiceClient();
+        //    JsonServiceClient.HttpWebRequestFilter = x =>
+        //                    x.Headers.Add(string.Format("{0}: {1}", "x-Phytel-UserID", "531f2df9072ef727c4d2a3df"));
 
-            DeleteTextStepDataResponse response =
-                client.Delete<DeleteTextStepDataResponse>(string.Format("http://localhost:8888/ProgramDesign/{0}/1/{1}/ProgramDesign/TextStep/{2}/Delete?userid={3}",
-                                                        context,
-                                                        contractNumber,
-                                                        textId,
-                                                        userid));
+        //    DeleteTextStepDataResponse response =
+        //        client.Delete<DeleteTextStepDataResponse>(string.Format("http://localhost:8888/ProgramDesign/{0}/1/{1}/ProgramDesign/TextStep/{2}/Delete?userid={3}",
+        //                                                context,
+        //                                                contractNumber,
+        //                                                textId,
+        //                                                userid));
             
-            Assert.IsTrue(response.Deleted);
-        }
+        //    Assert.IsTrue(response.Deleted);
+        //}
 
-        [TestMethod]
-        public void DeleteYesNoStepData()
-        {
-            string contractNumber = "InHealth001";
-            string context = "NG";
-            string userid = "5325c821072ef705080d3488";
-            string yesNoId = "536b97415a4d1310f4c45990";
-            IRestClient client = new JsonServiceClient();
-            JsonServiceClient.HttpWebRequestFilter = x =>
-                            x.Headers.Add(string.Format("{0}: {1}", "x-Phytel-UserID", "531f2df9072ef727c4d2a3df"));
+        //[TestMethod]
+        //public void DeleteYesNoStepData()
+        //{
+        //    string contractNumber = "InHealth001";
+        //    string context = "NG";
+        //    string userid = "5325c821072ef705080d3488";
+        //    string yesNoId = "536b97415a4d1310f4c45990";
+        //    IRestClient client = new JsonServiceClient();
+        //    JsonServiceClient.HttpWebRequestFilter = x =>
+        //                    x.Headers.Add(string.Format("{0}: {1}", "x-Phytel-UserID", "531f2df9072ef727c4d2a3df"));
 
-            DeleteYesNoStepDataResponse response =
-                client.Delete<DeleteYesNoStepDataResponse>(string.Format("http://localhost:8888/ProgramDesign/{0}/1/{1}/ProgramDesign/Step/YesNo/{2}/Delete?userid={3}",
-                                                        context,
-                                                        contractNumber,
-                                                        yesNoId,
-                                                        userid));
+        //    DeleteYesNoStepDataResponse response =
+        //        client.Delete<DeleteYesNoStepDataResponse>(string.Format("http://localhost:8888/ProgramDesign/{0}/1/{1}/ProgramDesign/Step/YesNo/{2}/Delete?userid={3}",
+        //                                                context,
+        //                                                contractNumber,
+        //                                                yesNoId,
+        //                                                userid));
 
-            Assert.IsTrue(response.Deleted);
-        }
+        //    Assert.IsTrue(response.Deleted);
+        //}
 
         [TestMethod]
         public void PutModuleInProgram()
@@ -521,8 +521,8 @@ namespace Phytel.API.DataDomain.ProgramDesign.Services.Test
             string contractNumber = "InHealth001";
             string context = "NG";
             string userid = "5325c821072ef705080d3488";
-            string programId = "536cfb7f5a4d1313f8f41db1";
-            string moduleId = "536cfdbd5a4d1313f8f41db8";
+            string programId = "53723ccf5a4d1313bc004b04";
+            string moduleId = "53723d0f5a4d1313bc004b0b";
             IRestClient client = new JsonServiceClient();
             JsonServiceClient.HttpWebRequestFilter = x =>
                             x.Headers.Add(string.Format("{0}: {1}", "x-Phytel-UserID", "531f2df9072ef727c4d2a3df"));
@@ -549,8 +549,8 @@ namespace Phytel.API.DataDomain.ProgramDesign.Services.Test
             string contractNumber = "InHealth001";
             string context = "NG";
             string userid = "5325c821072ef705080d3488";
-            string moduleId = "536cfdbd5a4d1313f8f41db8";
-            string actionId = "536cfe005a4d1313f8f41dbf";
+            string moduleId = "53723d0f5a4d1313bc004b0b";
+            string actionId = "53723d295a4d1313bc004b12";
             IRestClient client = new JsonServiceClient();
             JsonServiceClient.HttpWebRequestFilter = x =>
                             x.Headers.Add(string.Format("{0}: {1}", "x-Phytel-UserID", "531f2df9072ef727c4d2a3df"));
@@ -577,8 +577,8 @@ namespace Phytel.API.DataDomain.ProgramDesign.Services.Test
             string contractNumber = "InHealth001";
             string context = "NG";
             string userid = "5325c821072ef705080d3488";
-            string actionId = "536cfe005a4d1313f8f41dbf";
-            string textId = "536d001e5a4d1313f8c1757b";
+            string actionId = "53723d295a4d1313bc004b12";
+            string textId = "53723d635a4d1313bc004b19";
             IRestClient client = new JsonServiceClient();
 
             string url = string.Format("http://localhost:8888/ProgramDesign/{0}/1/{1}/ProgramDesign/Action/{2}/Step/{3}?userid={3}",
@@ -597,60 +597,60 @@ namespace Phytel.API.DataDomain.ProgramDesign.Services.Test
             Assert.IsTrue(ObjectId.TryParse(response.Id, out id));
         }
 
-        [TestMethod]
-        public void PutTextStepInAction()
-        {
-            string contractNumber = "InHealth001";
-            string context = "NG";
-            string userid = "5325c821072ef705080d3488";
-            string actionId = "536cfe005a4d1313f8f41dbf";
-            string textId = "536d001e5a4d1313f8c1757b";
-            IRestClient client = new JsonServiceClient();
-            JsonServiceClient.HttpWebRequestFilter = x =>
-                            x.Headers.Add(string.Format("{0}: {1}", "x-Phytel-UserID", "531f2df9072ef727c4d2a3df"));
+        //[TestMethod]
+        //public void PutTextStepInAction()
+        //{
+        //    string contractNumber = "InHealth001";
+        //    string context = "NG";
+        //    string userid = "5325c821072ef705080d3488";
+        //    string actionId = "536cfe005a4d1313f8f41dbf";
+        //    string textId = "536d001e5a4d1313f8c1757b";
+        //    IRestClient client = new JsonServiceClient();
+        //    JsonServiceClient.HttpWebRequestFilter = x =>
+        //                    x.Headers.Add(string.Format("{0}: {1}", "x-Phytel-UserID", "531f2df9072ef727c4d2a3df"));
 
-            string url = string.Format("http://localhost:8888/ProgramDesign/{0}/1/{1}/ProgramDesign/Action/{2}/Text/{3}?userid={3}",
-                context,
-                contractNumber,
-                actionId,
-                textId,
-                userid);
+        //    string url = string.Format("http://localhost:8888/ProgramDesign/{0}/1/{1}/ProgramDesign/Action/{2}/Text/{3}?userid={3}",
+        //        context,
+        //        contractNumber,
+        //        actionId,
+        //        textId,
+        //        userid);
 
-            PutTextStepDataResponse response = client.Put<PutTextStepDataResponse>(url,
-                new PutTextStepDataRequest {  } as object);
-
-
-            ObjectId id;
-
-            Assert.IsTrue(ObjectId.TryParse(response.Id, out id));
-        }
-
-        [TestMethod]
-        public void PutYesNoStepInAction()
-        {
-            string contractNumber = "InHealth001";
-            string context = "NG";
-            string userid = "5325c821072ef705080d3488";
-            string actionId = "536cfe005a4d1313f8f41dbf";
-            string yesNoId = "536d009e5a4d1313f8c17582";
-            IRestClient client = new JsonServiceClient();
-            JsonServiceClient.HttpWebRequestFilter = x =>
-                            x.Headers.Add(string.Format("{0}: {1}", "x-Phytel-UserID", "531f2df9072ef727c4d2a3df"));
-
-            string url = string.Format("http://localhost:8888/ProgramDesign/{0}/1/{1}/ProgramDesign/Action/{2}/YesNo/{3}?userid={3}",
-                context,
-                contractNumber,
-                actionId,
-                yesNoId,
-                userid);
-
-            PutYesNoStepInActionResponse response = client.Put<PutYesNoStepInActionResponse>(url,
-                new PutYesNoStepInActionRequest { Context = context, ContractNumber = contractNumber } as object);
+        //    PutTextStepDataResponse response = client.Put<PutTextStepDataResponse>(url,
+        //        new PutTextStepDataRequest {  } as object);
 
 
-            ObjectId id;
+        //    ObjectId id;
 
-            Assert.IsTrue(ObjectId.TryParse(response.Id, out id));
-        }
+        //    Assert.IsTrue(ObjectId.TryParse(response.Id, out id));
+        //}
+
+        //[TestMethod]
+        //public void PutYesNoStepInAction()
+        //{
+        //    string contractNumber = "InHealth001";
+        //    string context = "NG";
+        //    string userid = "5325c821072ef705080d3488";
+        //    string actionId = "536cfe005a4d1313f8f41dbf";
+        //    string yesNoId = "536d009e5a4d1313f8c17582";
+        //    IRestClient client = new JsonServiceClient();
+        //    JsonServiceClient.HttpWebRequestFilter = x =>
+        //                    x.Headers.Add(string.Format("{0}: {1}", "x-Phytel-UserID", "531f2df9072ef727c4d2a3df"));
+
+        //    string url = string.Format("http://localhost:8888/ProgramDesign/{0}/1/{1}/ProgramDesign/Action/{2}/YesNo/{3}?userid={3}",
+        //        context,
+        //        contractNumber,
+        //        actionId,
+        //        yesNoId,
+        //        userid);
+
+        //    PutYesNoStepInActionResponse response = client.Put<PutYesNoStepInActionResponse>(url,
+        //        new PutYesNoStepInActionRequest { Context = context, ContractNumber = contractNumber } as object);
+
+
+        //    ObjectId id;
+
+        //    Assert.IsTrue(ObjectId.TryParse(response.Id, out id));
+        //}
     }
 }
