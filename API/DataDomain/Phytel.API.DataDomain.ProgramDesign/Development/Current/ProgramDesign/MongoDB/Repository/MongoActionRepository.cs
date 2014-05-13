@@ -135,7 +135,16 @@ namespace Phytel.API.DataDomain.ProgramDesign
                     var findcp = MB.Query<MEAction>.EQ(b => b.Id, ObjectId.Parse(entityID));
                     cp = ctx.Actions.Collection.Find(findcp).FirstOrDefault();
                 }
-                return cp;
+
+                DTO.ActionData action = new ActionData
+                {
+                    ID = cp.Id.ToString(),
+                    Name = cp.Name,
+                    Description = cp.Description,
+                    Status = cp.Status.ToString(),
+                    CompletedBy = cp.CompletedBy.ToString()
+                };
+                return action;
             }
             catch (Exception ex)
             {

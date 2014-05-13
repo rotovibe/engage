@@ -29,11 +29,12 @@ namespace Phytel.API.DataDomain.ProgramDesign.Services.Test
         }
 
         [TestMethod]
-        public void GetProgramData()
+        public void GetProgramDataById()
         {
             string contractNumber = "InHealth001";
             string context = "NG";
             string userid = "531f2df9072ef727c4d2a3df";
+            string programId = "537260915a4d13161889a293";
             IRestClient client = new JsonServiceClient();
             JsonServiceClient.HttpWebRequestFilter = x =>
                             x.Headers.Add(string.Format("{0}: {1}", "x-Phytel-UserID", "531f2df9072ef727c4d2a3df"));
@@ -41,18 +42,20 @@ namespace Phytel.API.DataDomain.ProgramDesign.Services.Test
             GetProgramResponse response = client.Get<GetProgramResponse>(string.Format("http://localhost:8888/ProgramDesign/{0}/1/{1}/ProgramDesign/Program/{2}?userid={3}",
                 context,
                 contractNumber,
-                "53694ae85a4d13013059354d",
+                programId,
                 userid));
 
-            Assert.IsTrue(response.Status.Message == null);
+            Assert.AreEqual(programId, response.Program.ProgramID);
+            //Assert.IsTrue(response.Status.Message == null);
         }
 
         [TestMethod]
-        public void GetModuleData()
+        public void GetModuleDataById()
         {
             string contractNumber = "InHealth001";
             string context = "NG";
             string userid = "531f2df9072ef727c4d2a3df";
+            string moduleId = "53726dfa5a4d131618d2544c";
             IRestClient client = new JsonServiceClient();
             JsonServiceClient.HttpWebRequestFilter = x =>
                             x.Headers.Add(string.Format("{0}: {1}", "x-Phytel-UserID", "531f2df9072ef727c4d2a3df"));
@@ -60,18 +63,20 @@ namespace Phytel.API.DataDomain.ProgramDesign.Services.Test
             GetModuleResponse response = client.Get<GetModuleResponse>(string.Format("http://localhost:8888/ProgramDesign/{0}/1/{1}/ProgramDesign/Module/{2}?userid={3}",
                 context,
                 contractNumber,
-                "53694c135a4d13119cdf0893",
+                moduleId,
                 userid));
 
-            Assert.IsTrue(response.Status.Message == null);
+            Assert.AreEqual(moduleId, response.Module.Id);
+            //Assert.IsTrue(response.Status.Message == null);
         }
 
         [TestMethod]
-        public void GetActionData()
+        public void GetActionDataById()
         {
             string contractNumber = "InHealth001";
             string context = "NG";
             string userid = "531f2df9072ef727c4d2a3df";
+            string actionId = "537270205a4d1316184d6ac5";
             IRestClient client = new JsonServiceClient();
             JsonServiceClient.HttpWebRequestFilter = x =>
                             x.Headers.Add(string.Format("{0}: {1}", "x-Phytel-UserID", "531f2df9072ef727c4d2a3df"));
@@ -79,18 +84,19 @@ namespace Phytel.API.DataDomain.ProgramDesign.Services.Test
             GetActionDataResponse response = client.Get<GetActionDataResponse>(string.Format("http://localhost:8888/ProgramDesign/{0}/1/{1}/ProgramDesign/Action/{2}?userid={3}",
                 context,
                 contractNumber,
-                "536956315a4d130f58903225",
+                actionId,
                 userid));
 
-            Assert.IsTrue(response.Status.Message == null);
+            Assert.AreEqual(actionId, response.Action.ID);
         }
 
         [TestMethod]
-        public void GetStepData()
+        public void GetStepDataById()
         {
             string contractNumber = "InHealth001";
             string context = "NG";
             string userid = "531f2df9072ef727c4d2a3df";
+            string stepId = "53727a675a4d1316182bf23d";
             IRestClient client = new JsonServiceClient();
             JsonServiceClient.HttpWebRequestFilter = x =>
                             x.Headers.Add(string.Format("{0}: {1}", "x-Phytel-UserID", "531f2df9072ef727c4d2a3df"));
@@ -98,10 +104,10 @@ namespace Phytel.API.DataDomain.ProgramDesign.Services.Test
             GetStepDataResponse response = client.Get<GetStepDataResponse>(string.Format("http://localhost:8888/ProgramDesign/{0}/1/{1}/ProgramDesign/Step/{2}?userid={3}",
                 context,
                 contractNumber,
-                "53695a295a4d13054cc381f2",
+                stepId,
                 userid));
 
-            Assert.IsTrue(response.Status.Message == null);
+            Assert.AreEqual(stepId, response.Step.ID);
         }
 
         [TestMethod]

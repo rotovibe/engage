@@ -132,13 +132,23 @@ namespace Phytel.API.DataDomain.ProgramDesign
         {
             try
             {
-                MEProgram cp = null;
+                MEModule cp = null;
                 using (ProgramDesignMongoContext ctx = new ProgramDesignMongoContext(_dbName))
                 {
                     var findcp = MB.Query<MEModule>.EQ(b => b.Id, ObjectId.Parse(entityID));
-                    cp = ctx.Programs.Collection.Find(findcp).FirstOrDefault();
+                    cp = ctx.Modules.Collection.Find(findcp).FirstOrDefault();
                 }
-                return cp;
+
+                DTO.Module module = new DTO.Module
+                {
+                    Description = cp.Description,
+                    Id = cp.Id.ToString(),
+                    Name = cp.Name,
+                    Status = cp.Status.ToString(),
+                    Version = cp.Version
+                };
+
+                return module;
             }
             catch (Exception ex)
             {

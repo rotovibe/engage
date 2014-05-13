@@ -4,7 +4,7 @@ using ServiceStack.ServiceHost;
 namespace Phytel.API.DataDomain.ProgramDesign.DTO
 {
     [Api(Description = "A Request object to get an Action by it's ID from the API.")]
-    [Route("/{Context}/{Version}/{ContractNumber}/Action/{ActionID}", "GET")]
+    [Route("/{Context}/{Version}/{ContractNumber}/ProgramDesign/Action/{ActionID}", "GET")]
     public class GetActionDataRequest : IDataDomainRequest
     {
         [ApiMember(Name = "ActionID", Description = "ID of the Action being requested", ParameterType = "path", DataType = "string", IsRequired = true)]

@@ -4,7 +4,7 @@ using ServiceStack.ServiceHost;
 namespace Phytel.API.DataDomain.ProgramDesign.DTO
 {
     [Api(Description = "A Request object to get a Text Step by it's ID from the API.")]
-    [Route("/{Context}/{Version}/{ContractNumber}/Step/{StepID}", "GET")]
+    [Route("/{Context}/{Version}/{ContractNumber}/ProgramDesign/Step/{StepID}", "GET")]
     public class GetStepDataRequest : IDataDomainRequest
     {
         [ApiMember(Name = "StepID", Description = "ID of the Text Step being requested", ParameterType = "path", DataType = "string", IsRequired = true)]

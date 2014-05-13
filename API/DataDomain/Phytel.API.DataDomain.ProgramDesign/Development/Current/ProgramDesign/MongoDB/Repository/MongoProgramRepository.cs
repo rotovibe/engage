@@ -146,7 +146,20 @@ namespace Phytel.API.DataDomain.ProgramDesign
                     var findcp = MB.Query<MEProgram>.EQ(b => b.Id, ObjectId.Parse(entityID));
                     cp = ctx.Programs.Collection.Find(findcp).FirstOrDefault();
                 }
-                return cp;
+
+                DTO.Program program = new DTO.Program
+                {
+                    ProgramID = cp.Id.ToString(),
+                    Client = cp.Client.ToString(),
+                    Description = cp.Description,
+                    EndDate = cp.EndDate.ToString(),
+                    Name = cp.Name,
+                    ShortName = cp.ShortName,
+                    StartDate = cp.StartDate.ToString(),
+                    Status = (int) cp.Status,
+                    Version = cp.Version
+                };
+                return program;
             }
             catch (Exception ex)
             {

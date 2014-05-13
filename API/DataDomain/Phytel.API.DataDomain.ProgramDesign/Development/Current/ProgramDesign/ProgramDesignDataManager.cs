@@ -29,7 +29,8 @@ namespace Phytel.API.DataDomain.ProgramDesign
 
             IProgramDesignRepository<GetActionDataResponse> repo = ProgramDesignRepositoryFactory<GetActionDataResponse>.GetActionRepository(request.ContractNumber, request.Context, request.UserId);
 
-            result = repo.FindByID(request.ActionID) as GetActionDataResponse;
+            var action = repo.FindByID(request.ActionID);
+            result.Action = action as DTO.ActionData;
 
             return (result != null ? result : new GetActionDataResponse());
         }
@@ -196,7 +197,8 @@ namespace Phytel.API.DataDomain.ProgramDesign
 
             IProgramDesignRepository<GetStepDataResponse> repo = ProgramDesignRepositoryFactory<GetStepDataResponse>.GetStepRepository(request.ContractNumber, request.Context, request.UserId);
             repo.UserId = request.UserId;
-            result = repo.FindByID(request.StepID) as GetStepDataResponse;
+            var step = repo.FindByID(request.StepID);
+            result.Step = step as DTO.StepData;
 
             return (result != null ? result : new GetStepDataResponse());
         }

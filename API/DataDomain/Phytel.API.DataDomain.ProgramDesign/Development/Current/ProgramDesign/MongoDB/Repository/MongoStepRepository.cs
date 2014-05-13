@@ -156,7 +156,19 @@ namespace Phytel.API.DataDomain.ProgramDesign
                     var findcp = MB.Query<MEStep>.EQ(b => b.Id, ObjectId.Parse(entityID));
                     cp = ctx.Steps.Collection.Find(findcp).FirstOrDefault();
                 }
-                return cp;
+
+                DTO.StepData step = new DTO.StepData
+                {
+                    ID = cp.Id.ToString(),
+                    Question = cp.Question,
+                    Description = cp.Description,
+                    Notes = cp.Notes,
+                    Title = cp.Title,
+                    TextEntry = cp.Text,
+                    Status = cp.Status.ToString(),
+                    Type = cp.StepTypeId.ToString()
+                };
+                return step;
             }
             catch (Exception ex)
             {
