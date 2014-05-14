@@ -1251,30 +1251,54 @@ namespace Phytel.API.AppDomain.NG
             try
             {
                 IRestClient client = new JsonServiceClient();
-                //[Route("/{Version}/{ContractNumber}/Contact/{ContactId}/RecentPatients", "GET")]
-                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Contact/{4}/RecentPatients",
+                //[Route("/{Context}/{Version}/{ContractNumber}/Contact/{ContactId}", "GET")]
+                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Contact/{4}",
                                                        DDContactServiceUrl,
                                                        "NG",
                                                        request.Version,
                                                        request.ContractNumber,
                                                        request.UserId), request.UserId);
 
-                GetRecentPatientsResponse dataDomainResponse = client.Get<GetRecentPatientsResponse>(url);
-
-                if (dataDomainResponse != null && dataDomainResponse.Patients != null)
+                GetContactByContactIdDataResponse dataDomainResponse = client.Get<GetContactByContactIdDataResponse>(url);
+                List<CohortPatient> patients = null;
+                if (dataDomainResponse != null && dataDomainResponse.Contact != null)
                 {
+                    List<string> recentPatientIds = dataDomainResponse.Contact.RecentsList;
+                    if (recentPatientIds != null && recentPatientIds.Count > 0)
+                    {
+                        //[Route("/{Context}/{Version}/{ContractNumber}/Patients", "GET")]
+                        string patientDDURL = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Patients",
+                                                       DDPatientServiceURL,
+                                                       "NG",
+                                                       request.Version,
+                                                       request.ContractNumber,
+                                                       request.UserId), request.UserId);
+
+                        GetPatientsDataResponse patientDDResponse = client.Get<GetPatientsDataResponse>(patientDDURL);
+
+                        if (patientDDResponse != null && patientDDResponse.Patients != null)
+                        {   
+                            patients = new List<CohortPatient>();
+                            foreach(PatientData pd in patientDDResponse.Patients)
+                            {
+                                patients.Add(new CohortPatient {
+                                    Id = pd.ID,
+                                    FirstName = pd.FirstName,
+                                    LastName = pd.LastName,
+                                    MiddleName = pd.MiddleName,
+                                    PreferredName = pd.PreferredName, 
+                                    DOB = pd.DOB,
+                                    Gender = pd.Gender,
+                                    Suffix = pd.Suffix
+                                });
+                            }
+                        }
+                    }
                     response = new GetRecentPatientsResponse();
-                    // TODO
-                    //List<string> contactDataList = dataDomainResponse.Patients;
-                    //foreach (ContactData cd in contactDataList)
-                    //{
-                    //    response.Add(new Contact
-                    //    {
-                    //        Id = cd.ContactId,
-                    //        UserId = cd.UserId,
-                    //        PreferredName = cd.PreferredName
-                    //    });
-                    //}
+                    response.ContactId = dataDomainResponse.Contact.ContactId;
+                    response.Limit = dataDomainResponse.Limit;
+                    response.Patients = patients;
+                    response.Version = dataDomainResponse.Version;
                 }
             }
             catch (WebServiceException wse)
