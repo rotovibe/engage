@@ -36,6 +36,28 @@ namespace Phytel.API.DataDomain.Contact.Service
             return response;
         }
 
+        public GetContactByContactIdDataResponse Get(GetContactByContactIdDataRequest request)
+        {
+            GetContactByContactIdDataResponse response = new GetContactByContactIdDataResponse();
+            response.Version = request.Version;
+            try
+            {
+                if (string.IsNullOrEmpty(request.UserId))
+                    throw new UnauthorizedAccessException("ContactDD:Get()::Unauthorized Access");
+                ContactData cData = Manager.GetContactByContactId(request).Contact;
+
+                response.Contact = cData;
+            }
+            catch (Exception ex)
+            {
+                CommonFormat.FormatExceptionResponse(response, base.Response, ex);
+
+                string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
+                Helpers.LogException(int.Parse(aseProcessID), ex);
+            }
+            return response;
+        }
+
         public GetContactByUserIdDataResponse Get(GetContactByUserIdDataRequest request)
         {
             GetContactByUserIdDataResponse response = new GetContactByUserIdDataResponse();

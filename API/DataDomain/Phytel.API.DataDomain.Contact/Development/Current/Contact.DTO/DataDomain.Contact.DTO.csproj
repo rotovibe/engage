@@ -82,7 +82,9 @@
     <Compile Include="CommModeData.cs" />
     <Compile Include="EmailData.cs" />
     <Compile Include="GetAllCareManagersDataRequest.cs" />
+    <Compile Include="GetContactByContactIdDataRequest.cs" />
     <Compile Include="GetContactByUserIdDataRequest.cs" />
+    <Compile Include="GetContactByContactIdDataResponse.cs" />
     <Compile Include="GetContactByUserIdDataResponse.cs" />
     <Compile Include="PutRecentPatientRequest.cs" />
     <Compile Include="PutRecentPatientResponse.cs" />

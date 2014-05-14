@@ -149,5 +149,22 @@ namespace Phytel.API.DataDomain.Contact
                 throw ex;
             }
         }
+
+        public GetContactByContactIdDataResponse GetContactByContactId(GetContactByContactIdDataRequest request)
+        {
+            GetContactByContactIdDataResponse response = new GetContactByContactIdDataResponse();
+
+            try
+            {
+                IContactRepository repo = Factory.GetRepository(request, RepositoryType.Contact);
+
+                response.Contact = repo.FindByID(request.ContactId) as ContactData;
+                return response;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("DD:DataContactManager:GetContactByContactId()::" + ex.Message, ex.InnerException);
+            }
+        }
     }
 }   
