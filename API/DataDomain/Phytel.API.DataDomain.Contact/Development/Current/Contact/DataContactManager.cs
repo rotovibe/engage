@@ -4,11 +4,14 @@ using System.Linq;
 using Phytel.API.DataDomain.Contact.DTO;
 using Phytel.API.Interface;
 using MongoDB.Bson;
+using System.Configuration;
 
 namespace Phytel.API.DataDomain.Contact
 {
     public class ContactDataManager : IContactDataManager
     {
+        protected static readonly int Limit = Convert.ToInt32(ConfigurationManager.AppSettings["RecentLimit"]);
+
         public IContactRepositoryFactory Factory { get; set; }
 
         public ContactData GetContactByPatientId(GetContactDataRequest request)
@@ -115,7 +118,7 @@ namespace Phytel.API.DataDomain.Contact
             try
             {
                 string patientId;
-                int limit = 5;
+                int limit = Limit;
 
                 if (request.PatientId != null && request.PatientId.Length > 0)
                 {
@@ -159,6 +162,7 @@ namespace Phytel.API.DataDomain.Contact
                 IContactRepository repo = Factory.GetRepository(request, RepositoryType.Contact);
 
                 response.Contact = repo.FindByID(request.ContactId) as ContactData;
+                response.Limit = Limit;
                 return response;
             }
             catch (Exception ex)
