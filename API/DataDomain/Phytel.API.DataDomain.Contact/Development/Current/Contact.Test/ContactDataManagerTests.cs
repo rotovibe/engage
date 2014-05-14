@@ -33,8 +33,8 @@ namespace Phytel.API.DataDomain.Contact.Tests
                 };
 
                 PutRecentPatientResponse response = cm.AddRecentPatient(request);
-                int count = response.Recent.Count;
-                Assert.AreEqual(1, count);
+                bool result = response.SuccessData;
+                Assert.IsTrue(result);
             }
 
             [TestMethod()]
@@ -56,7 +56,7 @@ namespace Phytel.API.DataDomain.Contact.Tests
 
                 PutRecentPatientResponse response = cm.AddRecentPatient(request);
                 
-                Assert.IsNotNull(response.Recent);
+                Assert.IsNotNull(response);
             }
         }
     }

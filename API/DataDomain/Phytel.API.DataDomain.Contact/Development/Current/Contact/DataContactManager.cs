@@ -139,10 +139,7 @@ namespace Phytel.API.DataDomain.Contact
 
                     if (repo.UpdateRecentList(request, mruList.RecentList))
                     {
-                        List<string> recIds = mruList.RecentList.ConvertAll(i => i.ToString());
-                        response.Recent = recIds;
                         response.SuccessData = true;
-                        response.Limit = limit;
                     }
                 }
                 return response;

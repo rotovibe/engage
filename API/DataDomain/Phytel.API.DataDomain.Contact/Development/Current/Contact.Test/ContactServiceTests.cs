@@ -39,8 +39,8 @@ namespace Phytel.API.DataDomain.Contact.Service.Tests
 
                 PutRecentPatientResponse response = cs.Put(request);
 
-                int count = response.Recent.Count;
-                Assert.AreEqual(1, count);
+                bool result = response.SuccessData;
+                Assert.IsTrue(result);
             }
         }
     }

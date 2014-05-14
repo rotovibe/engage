@@ -52,11 +52,9 @@ namespace Phytel.API.DataDomain.Contact.Test.Stubs
 
         public object FindByID(string entityID)
         {
-            MEContact mC = new MEContact("666656789012345678906666")
+            ContactData mC = new ContactData
             {
-                Id = ObjectId.Parse("123456789012345678901234"),
-                PatientId = ObjectId.Parse("111156789012345678901111"),
-                DeleteFlag = false
+                UserId = "666656789012345678906666"
             };
             return mC;
         }
