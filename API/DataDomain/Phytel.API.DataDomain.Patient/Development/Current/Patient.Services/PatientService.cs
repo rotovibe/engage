@@ -273,27 +273,5 @@ namespace Phytel.API.DataDomain.Patient.Service
             }
             return response;
         }
-
-        public GetPatientsDataResponse Get(GetPatientsDataRequest request)
-        {
-            GetPatientsDataResponse response = new GetPatientsDataResponse();
-            try
-            {
-                if (string.IsNullOrEmpty(request.UserId))
-                    throw new UnauthorizedAccessException("PatientDD:Get()::Unauthorized Access");
-
-                response = PatientManager.GetPatients(request);
-                response.Version = request.Version;
-            }
-            catch (Exception ex)
-            {
-                CommonFormatterUtil.FormatExceptionResponse(response, base.Response, ex);
-
-                string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
-                Helpers.LogException(int.Parse(aseProcessID), ex);
-            }
-            return response;
-        }
-
     }
 }

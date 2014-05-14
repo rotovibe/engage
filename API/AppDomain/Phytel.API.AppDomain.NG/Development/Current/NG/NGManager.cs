@@ -99,8 +99,31 @@ namespace Phytel.API.AppDomain.NG
                         pResponse.Patient.DisplaySystemName = sysResponse.PatientSystem.SystemName;
                         pResponse.Patient.DisplayLabel = sysResponse.PatientSystem.DisplayLabel;
                     }
-                }
 
+
+                    // Add the recently accessed patient to the User's(Contact) recent list. NIGHT-911.
+                    PutRecentPatientResponse contactDDResponse = null;
+                    //[Route("/{Context}/{Version}/{ContractNumber}/Patient/Contact/Recent", "PUT")]
+                    string contactDDUrl = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Patient/Contact/Recent",
+                                                                                    DDContactServiceUrl,
+                                                                                    "NG",
+                                                                                    request.Version,
+                                                                                    request.ContractNumber), request.UserId);
+
+                    contactDDResponse = client.Put<PutRecentPatientResponse>(contactDDUrl, new PutRecentPatientRequest
+                                        {
+                                            ContactId  = request.UserId,
+                                            PatientId = request.PatientID,
+                                            Context = "NG",
+                                            ContractNumber = request.ContractNumber, 
+                                            UserId = request.UserId,
+                                            Version = request.Version
+                                        } as object);
+                    if (contactDDResponse != null && !contactDDResponse.SuccessData)
+                    {
+                        LogException(new Exception("AD:GetPatient():: Failed to add the patient in the contact's recent list."));
+                    }
+                }
                 return pResponse;
             }
             catch (WebServiceException wse)
@@ -1260,21 +1283,28 @@ namespace Phytel.API.AppDomain.NG
                                                        request.UserId), request.UserId);
 
                 GetContactByContactIdDataResponse dataDomainResponse = client.Get<GetContactByContactIdDataResponse>(url);
-                List<CohortPatient> patients = null;
                 if (dataDomainResponse != null && dataDomainResponse.Contact != null)
                 {
+                    List<CohortPatient> patients = null;
                     List<string> recentPatientIds = dataDomainResponse.Contact.RecentsList;
                     if (recentPatientIds != null && recentPatientIds.Count > 0)
                     {
-                        //[Route("/{Context}/{Version}/{ContractNumber}/Patients", "GET")]
+                        //[Route("/{Context}/{Version}/{ContractNumber}/Patients", "POST")]
                         string patientDDURL = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Patients",
-                                                       DDPatientServiceURL,
-                                                       "NG",
-                                                       request.Version,
-                                                       request.ContractNumber,
-                                                       request.UserId), request.UserId);
+                                                                                        DDPatientServiceURL,
+                                                                                        "NG",
+                                                                                        request.Version,
+                                                                                        request.ContractNumber), request.UserId);
 
-                        GetPatientsDataResponse patientDDResponse = client.Get<GetPatientsDataResponse>(patientDDURL);
+                        GetPatientsDataResponse patientDDResponse =
+                            client.Put<GetPatientsDataResponse>(patientDDURL, new GetPatientsDataRequest
+                            {
+                                Context = "NG",
+                                ContractNumber = request.ContractNumber,
+                                Version = request.Version,
+                                UserId = request.UserId,
+                                PatientIds = recentPatientIds.ToArray()
+                            } as object);
 
                         if (patientDDResponse != null && patientDDResponse.Patients != null)
                         {   

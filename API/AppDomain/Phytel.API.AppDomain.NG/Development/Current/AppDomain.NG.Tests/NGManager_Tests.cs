@@ -173,7 +173,8 @@ namespace Phytel.API.AppDomain.NG.Test
                 ContractNumber = contractNumber,
                 Token = token,
                 Version = version,
-                PatientID = "531f2dcc072ef727c4d29e1a"
+                PatientID = "5325d9f2d6a4850adcbba4ca",
+                UserId = "5325c821072ef705080d3488"
             };
             // Act
             GetPatientResponse response = ngManager.GetPatient(request);
@@ -390,6 +391,31 @@ namespace Phytel.API.AppDomain.NG.Test
 
             Assert.IsNotNull(response);
         }
+
+         [TestMethod]
+         public void GetRecentPatients_Test()
+         {
+
+             // Arrange
+             double version = 1.0;
+             string contractNumber = "InHealth001";
+             string token = "1234";
+             NGManager ngManager = new NGManager() { PlanElementUtils = new PlanElementUtils() };
+             GetRecentPatientsRequest request = new GetRecentPatientsRequest
+             {
+                 ContractNumber = contractNumber,
+                 Token = token,
+                 Version = version,
+                 ContactId = "5325c821072ef705080d3488",
+                 UserId = "5325c821072ef705080d3488"
+             };
+             // Act
+             GetRecentPatientsResponse response = ngManager.GetRecentPatients(request);
+
+             //Assert
+             Assert.IsTrue(response != null);
+         }
+
         #endregion
     }
 }
