@@ -84,6 +84,8 @@
     <Compile Include="GetAllCareManagersDataRequest.cs" />
     <Compile Include="GetContactByUserIdDataRequest.cs" />
     <Compile Include="GetContactByUserIdDataResponse.cs" />
+    <Compile Include="PutRecentPatientRequest.cs" />
+    <Compile Include="PutRecentPatientResponse.cs" />
     <Compile Include="SearchContactsDataRequest.cs" />
     <Compile Include="GetAllCareManagersDataResponse.cs" />
     <Compile Include="SearchContactsDataResponse.cs" />

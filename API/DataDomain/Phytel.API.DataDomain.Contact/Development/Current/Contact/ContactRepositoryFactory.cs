@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Phytel.API.Interface;
+using Phytel.API.DataAudit;
 
 namespace Phytel.API.DataDomain.Contact
 {
@@ -17,7 +18,7 @@ namespace Phytel.API.DataDomain.Contact
             {
                 case RepositoryType.Contact:
                     {
-                        repo = new MongoContactRepository(request.ContractNumber) as IContactRepository;
+                        repo = new MongoContactRepository(request.ContractNumber) { AuditHelpers = new AuditHelpers() } as IContactRepository;
                         break;
                     }
             }

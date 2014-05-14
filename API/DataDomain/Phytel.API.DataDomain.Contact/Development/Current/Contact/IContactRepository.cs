@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Phytel.API.DataDomain.Contact.DTO;
 using Phytel.API.Interface;
+using MongoDB.Bson;
 
 namespace Phytel.API.DataDomain.Contact
 {
@@ -12,6 +13,7 @@ namespace Phytel.API.DataDomain.Contact
     {
         object FindContactByPatientId(GetContactDataRequest request);
         IEnumerable<object> FindCareManagers();
+        bool UpdateRecentList(PutRecentPatientRequest request, List<string> recentList);
         IEnumerable<object> SearchContacts(SearchContactsDataRequest request);
         object FindContactByUserId(GetContactByUserIdDataRequest request);
     }

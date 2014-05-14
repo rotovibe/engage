@@ -1,5 +1,7 @@
 using Phytel.API.Common;
+using Phytel.API.Common.Audit;
 using Phytel.API.Common.Format;
+using Phytel.API.DataAudit;
 using ServiceStack.MiniProfiler;
 using ServiceStack.ServiceInterface.Admin;
 using ServiceStack.WebHost.Endpoints;
@@ -24,6 +26,7 @@ namespace Phytel.API.DataDomain.Contact.Service
                 container.RegisterAutoWiredAs<ContactRepositoryFactory, IContactRepositoryFactory>();
                 container.RegisterAutoWiredAs<Helpers, IHelpers>();
                 container.RegisterAutoWiredAs<ContactDataManager, IContactDataManager>();
+                container.RegisterAutoWiredAs<AuditHelpers, IAuditHelpers>();
             }
         }
 

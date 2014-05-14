@@ -4,10 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Phytel.API.Interface;
+using Phytel.API.DataDomain.Patient.MongoDB.DTO;
 
 namespace Phytel.API.DataDomain.Patient
 {
-    public class PatientRepositoryFactory : IPatientRepositoryFactory 
+    public class PatientRepositoryFactory : IPatientRepositoryFactory
     {
         public IPatientRepository GetRepository(IDataDomainRequest request, RepositoryType type)
         {
@@ -22,7 +23,7 @@ namespace Phytel.API.DataDomain.Patient
                     }
                 case RepositoryType.CohortPatientView:
                     {
-                        repo = new MongoCohortPatientViewRepository(request.ContractNumber) as IPatientRepository;
+                        repo = new MongoCohortPatientViewRepository(request.ContractNumber) { Utils = new DTOUtils() } as IPatientRepository;
                         break;
                     }
             }
@@ -30,21 +31,5 @@ namespace Phytel.API.DataDomain.Patient
             repo.UserId = request.UserId;
             return repo;
         }
-
-        //public static IPatientRepository<T> GetPatientRepository(string dbName, string productName, string userId)
-        //{
-        //    IPatientRepository<T> repo = null;
-        //    repo = new MongoPatientRepository<T>(dbName) as IPatientRepository<T>;
-        //    repo.UserId = userId;
-        //    return repo;
-        //}
-
-        //public static IPatientRepository<T> GetCohortPatientViewRepository(string dbName, string productName, string userId)
-        //{
-        //    IPatientRepository<T> repo = null;
-        //    repo = new MongoCohortPatientViewRepository<T>(dbName) as IPatientRepository<T>;
-        //    repo.UserId = userId;
-        //    return repo;
-        //}
     }
 }
