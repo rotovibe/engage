@@ -12,6 +12,6 @@ namespace Phytel.API.DataDomain.Contact
         SearchContactsDataResponse SearchContacts(SearchContactsDataRequest request);
         PutUpdateContactDataResponse UpdateContact(PutUpdateContactDataRequest request);
         PutRecentPatientResponse AddRecentPatient(PutRecentPatientRequest request);
-        ContactData GetContactByContactId(GetContactByContactIdDataRequest request);
+        GetContactByContactIdDataResponse GetContactByContactId(GetContactByContactIdDataRequest request);
     }
 }

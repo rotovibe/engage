@@ -150,14 +150,15 @@ namespace Phytel.API.DataDomain.Contact
             }
         }
 
-        public ContactData GetContactByContactId(GetContactByContactIdDataRequest request)
+        public GetContactByContactIdDataResponse GetContactByContactId(GetContactByContactIdDataRequest request)
         {
-            ContactData result = null;
+            GetContactByContactIdDataResponse result = new GetContactByContactIdDataResponse();
             try
             {
                 IContactRepository repo = Factory.GetRepository(request, RepositoryType.Contact);
 
-                result = repo.FindByID(request.ContactId) as ContactData;
+                result.Contact = repo.FindByID(request.ContactId) as ContactData;
+                result.Limit = Limit;
             }
             catch (Exception ex)
             {
