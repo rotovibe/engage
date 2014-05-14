@@ -1298,7 +1298,7 @@ namespace Phytel.API.AppDomain.NG
                                                                                         request.ContractNumber), request.UserId);
 
                         GetPatientsDataResponse patientDDResponse =
-                            client.Put<GetPatientsDataResponse>(patientDDURL, new GetPatientsDataRequest
+                            client.Post<GetPatientsDataResponse>(patientDDURL, new GetPatientsDataRequest
                             {
                                 Context = "NG",
                                 ContractNumber = request.ContractNumber,
