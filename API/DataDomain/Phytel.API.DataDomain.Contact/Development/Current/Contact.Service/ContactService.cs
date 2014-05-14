@@ -44,9 +44,8 @@ namespace Phytel.API.DataDomain.Contact.Service
             {
                 if (string.IsNullOrEmpty(request.UserId))
                     throw new UnauthorizedAccessException("ContactDD:Get()::Unauthorized Access");
-                ContactData cData = Manager.GetContactByContactId(request).Contact;
-//                response.Limit = cData.
-                response.Contact = cData;
+
+                response.Contact = Manager.GetContactByContactId(request);
             }
             catch (Exception ex)
             {
