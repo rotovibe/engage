@@ -23,7 +23,7 @@ namespace Phytel.API.DataDomain.Contact.Test
         [TestMethod]
         public void GetContactByPatientId_Test()
         {
-            GetContactDataRequest request = new GetContactDataRequest { PatientId = "52e26f53072ef7191c11d5e2" };
+            GetContactByPatientIdDataRequest request = new GetContactByPatientIdDataRequest { PatientId = "52e26f53072ef7191c11d5e2" };
 
             ContactData response = manager.GetContactByPatientId(request);
 
@@ -43,7 +43,7 @@ namespace Phytel.API.DataDomain.Contact.Test
         [TestMethod]
         public void GetContactByPatientId_Minimal_Test()
         {
-            GetContactDataRequest request = new GetContactDataRequest { PatientId = "52e26f53072ef7191c11d5e2" };
+            GetContactByPatientIdDataRequest request = new GetContactByPatientIdDataRequest { PatientId = "52e26f53072ef7191c11d5e2" };
 
             ContactData response = manager.GetContactByPatientId(request);
 
@@ -53,7 +53,7 @@ namespace Phytel.API.DataDomain.Contact.Test
         [TestMethod]
         public void GetContactByPatientId_Empty_Test()
         {
-            GetContactDataRequest request = new GetContactDataRequest { PatientId = "52e26f4b072ef7191c11b026" };
+            GetContactByPatientIdDataRequest request = new GetContactByPatientIdDataRequest { PatientId = "52e26f4b072ef7191c11b026" };
 
             ContactData response = manager.GetContactByPatientId(request);
 

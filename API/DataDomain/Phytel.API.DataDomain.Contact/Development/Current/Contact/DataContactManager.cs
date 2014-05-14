@@ -14,7 +14,7 @@ namespace Phytel.API.DataDomain.Contact
 
         public IContactRepositoryFactory Factory { get; set; }
 
-        public ContactData GetContactByPatientId(GetContactDataRequest request)
+        public ContactData GetContactByPatientId(GetContactByPatientIdDataRequest request)
         {
             ContactData result = null;
             try

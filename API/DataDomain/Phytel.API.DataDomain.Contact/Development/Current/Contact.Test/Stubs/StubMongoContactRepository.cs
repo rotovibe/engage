@@ -14,7 +14,7 @@ namespace Phytel.API.DataDomain.Contact.Test.Stubs
             throw new NotImplementedException();
         }
 
-        public object FindContactByPatientId(DTO.GetContactDataRequest request)
+        public object FindContactByPatientId(DTO.GetContactByPatientIdDataRequest request)
         {
             throw new NotImplementedException();
         }

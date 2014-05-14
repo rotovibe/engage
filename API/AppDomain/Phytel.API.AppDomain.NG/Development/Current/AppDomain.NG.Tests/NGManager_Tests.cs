@@ -173,7 +173,7 @@ namespace Phytel.API.AppDomain.NG.Test
                 ContractNumber = contractNumber,
                 Token = token,
                 Version = version,
-                PatientID = "5325d9f2d6a4850adcbba4ca",
+                PatientID = "5325db50d6a4850adcbba8e6",
                 UserId = "5325c821072ef705080d3488"
             };
             // Act

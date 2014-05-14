@@ -11,7 +11,7 @@ namespace Phytel.API.DataDomain.Contact
 {
     public interface IContactRepository : IRepository
     {
-        object FindContactByPatientId(GetContactDataRequest request);
+        object FindContactByPatientId(GetContactByPatientIdDataRequest request);
         IEnumerable<object> FindCareManagers();
         bool UpdateRecentList(PutRecentPatientRequest request, List<string> recentList);
         IEnumerable<object> SearchContacts(SearchContactsDataRequest request);

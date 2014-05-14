@@ -15,9 +15,9 @@ namespace Phytel.API.DataDomain.Contact.Service
         public IHelpers Helpers { get; set; }
         public ICommonFormatterUtil CommonFormat { get; set; }
 
-        public GetContactDataResponse Get(GetContactDataRequest request)
+        public GetContactByPatientIdDataResponse Get(GetContactByPatientIdDataRequest request)
         {
-            GetContactDataResponse response = new GetContactDataResponse();
+            GetContactByPatientIdDataResponse response = new GetContactByPatientIdDataResponse();
             response.Version = request.Version;
             try
             {

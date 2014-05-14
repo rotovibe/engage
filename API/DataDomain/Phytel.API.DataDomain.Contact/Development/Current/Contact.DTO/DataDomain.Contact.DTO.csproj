@@ -93,10 +93,10 @@
     <Compile Include="SearchContactsDataResponse.cs" />
     <Compile Include="PutContactDataRequest.cs" />
     <Compile Include="PutUpdateContactDataRequest.cs" />
-    <Compile Include="GetContactDataRequest.cs" />
+    <Compile Include="GetContactByPatientIdDataRequest.cs" />
     <Compile Include="PutContactDataResponse.cs" />
     <Compile Include="PutUpdateContactDataResponse.cs" />
-    <Compile Include="GetContactDataResponse.cs" />
+    <Compile Include="GetContactByPatientIdDataResponse.cs" />
     <Compile Include="LanguageData.cs" />
     <Compile Include="PhoneData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -987,9 +987,9 @@ namespace Phytel.API.AppDomain.NG
                         request.PatientID), request.UserId);
 
                 //[Route("/{Context}/{Version}/{ContractNumber}/Patient/{PatientId}/Contact", "GET")]
-                GetContactDataResponse dataDomainResponse;
+                GetContactByPatientIdDataResponse dataDomainResponse;
                     dataDomainResponse =
-                        client.Get<GetContactDataResponse>(url);
+                        client.Get<GetContactByPatientIdDataResponse>(url);
 
                 if (dataDomainResponse != null)
                 {
@@ -1289,6 +1289,7 @@ namespace Phytel.API.AppDomain.NG
                     List<string> recentPatientIds = dataDomainResponse.Contact.RecentsList;
                     if (recentPatientIds != null && recentPatientIds.Count > 0)
                     {
+                        string[] patientsArray = recentPatientIds.ToArray();
                         //[Route("/{Context}/{Version}/{ContractNumber}/Patients", "POST")]
                         string patientDDURL = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Patients",
                                                                                         DDPatientServiceURL,
@@ -1303,7 +1304,7 @@ namespace Phytel.API.AppDomain.NG
                                 ContractNumber = request.ContractNumber,
                                 Version = request.Version,
                                 UserId = request.UserId,
-                                PatientIds = recentPatientIds.ToArray()
+                                PatientIds = patientsArray
                             } as object);
 
                         if (patientDDResponse != null && patientDDResponse.Patients != null)

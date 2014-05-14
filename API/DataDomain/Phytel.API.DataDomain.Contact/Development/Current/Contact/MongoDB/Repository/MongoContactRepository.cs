@@ -826,7 +826,7 @@ namespace Phytel.API.DataDomain.Contact
         /// </summary>
         /// <param name="request">GetContactDataRequest object</param>
         /// <returns>ContactData object</returns>
-        public object FindContactByPatientId(GetContactDataRequest request)
+        public object FindContactByPatientId(GetContactByPatientIdDataRequest request)
         {
             ContactData contactData = null;
             using (ContactMongoContext ctx = new ContactMongoContext(_dbName))
