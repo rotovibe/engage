@@ -182,7 +182,18 @@ namespace Phytel.API.AppDomain.NG.Test.Stubs
 
         public GetRecentPatientsResponse GetRecentPatients(GetRecentPatientsRequest request)
         {
-            throw new NotImplementedException();
+            GetRecentPatientsResponse response = new GetRecentPatientsResponse();
+            List<CohortPatient> cohortpatients = new List<CohortPatient>();
+            cohortpatients.Add(new CohortPatient { Id = "abc", MiddleName = "e",  LastName = "lopez", FirstName = "eric", Gender = "M", DOB = "01/02/1978", PreferredName ="", Suffix ="Jr" });
+            cohortpatients.Add(new CohortPatient { Id = "efg", MiddleName = "e", LastName = "johnson", FirstName = "miles", Gender = "M", DOB = "01/02/1978", PreferredName = "", Suffix = "II" });
+            cohortpatients.Add(new CohortPatient { Id = "hij", MiddleName = "r", LastName = "miles", FirstName = "raul", Gender = "M", DOB = "01/02/1978", PreferredName = "", Suffix = "Sr" });
+            cohortpatients.Add(new CohortPatient { Id = "lmn", MiddleName = "t", LastName = "hopkins", FirstName = "john", Gender = "M", DOB = "01/02/1978", PreferredName = "", Suffix = "IV" });
+            cohortpatients.Add(new CohortPatient { Id = "opq", MiddleName = "w", LastName = "kennedy", FirstName = "peter", Gender = "M", DOB = "01/02/1943", PreferredName = "", Suffix = "X" });
+            response.Patients = new List<CohortPatient>();
+            response.ContactId = request.ContactId;
+            response.Limit = 5;
+            response.Patients = cohortpatients;
+            return response;
         }
 
 
