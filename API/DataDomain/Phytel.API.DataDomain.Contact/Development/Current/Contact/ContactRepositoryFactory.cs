@@ -18,7 +18,7 @@ namespace Phytel.API.DataDomain.Contact
             {
                 case RepositoryType.Contact:
                     {
-                        repo = new MongoContactRepository(request.ContractNumber) { AuditHelpers = new AuditHelpers() } as IContactRepository;
+                        repo = new MongoContactRepository(request.ContractNumber) as IContactRepository;
                         break;
                     }
             }
@@ -26,22 +26,5 @@ namespace Phytel.API.DataDomain.Contact
             repo.UserId = request.UserId;
             return repo;
         }
-
-        //public IContactRepository GetContactRepository(string dbName, string productName, string userId)
-        //{
-        //    try
-        //    {
-        //        IContactRepository repo = null;
-
-        //        //We only have 1 repository at this time, just return it
-        //        repo = new MongoContactRepository(dbName) as IContactRepository;
-        //        repo.UserId = userId;
-        //        return repo;
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        throw ex;
-        //    }
-        //}
     }
 }

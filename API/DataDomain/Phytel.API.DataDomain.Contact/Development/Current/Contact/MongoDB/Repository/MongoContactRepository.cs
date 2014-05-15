@@ -13,6 +13,8 @@ using MongoDB.Driver.Builders;
 using Phytel.API.Common;
 using Phytel.API.DataAudit;
 using Phytel.API.Common.Audit;
+using ServiceStack.Common;
+using ServiceStack.WebHost.Endpoints;
 
 namespace Phytel.API.DataDomain.Contact
 {
@@ -70,9 +72,10 @@ namespace Phytel.API.DataDomain.Contact
                 #endregion
         }
 
-        public MongoContactRepository(string contractDBName)
+        public MongoContactRepository(string dbname)
         {
-            _dbName = contractDBName;
+            _dbName = dbname;
+            AppHostBase.Instance.Container.AutoWire(this);
         }
 
         /// <summary>

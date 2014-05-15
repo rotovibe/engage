@@ -43,7 +43,7 @@ namespace Phytel.API.DataDomain.Contact.Tests
             [TestProperty("Layer", "DD.ContactDataManager")]
             public void Add_One_Patient_To_Contact_DEV_Success()
             {
-                ContactDataManager cm = new ContactDataManager { Factory = new ContactRepositoryFactory() };
+                ContactDataManager cm = new ContactDataManager { Factory = new StubContactRepositoryFactory() };
                 PutRecentPatientRequest request = new PutRecentPatientRequest
                 {
                     PatientId = "5325d9e7d6a4850adcbba4ad",

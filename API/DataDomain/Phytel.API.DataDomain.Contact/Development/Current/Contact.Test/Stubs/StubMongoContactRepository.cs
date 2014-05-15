@@ -95,5 +95,18 @@ namespace Phytel.API.DataDomain.Contact.Test.Stubs
                 throw new NotImplementedException();
             }
         }
+
+
+        public Common.Audit.IAuditHelpers AuditHelpers
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+            set
+            {
+                throw new NotImplementedException();
+            }
+        }
     }
 }
