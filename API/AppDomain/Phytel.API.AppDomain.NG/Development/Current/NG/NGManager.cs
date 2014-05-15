@@ -1627,7 +1627,7 @@ namespace Phytel.API.AppDomain.NG
             {
                 // Get the default TimeZone that is set in TimeZone LookUp table. 
                 string defaultTimeZone = null;
-                GetTimeZoneDataRequest tzDataRequest = new GetTimeZoneDataRequest { ContractNumber = contractNumber, Version = version };
+                GetTimeZoneDataRequest tzDataRequest = new GetTimeZoneDataRequest { ContractNumber = contractNumber, Version = version, Context = context, UserId = userId };
                 TimeZonesLookUp tz = getDefaultTimeZone(tzDataRequest);
                 if (tz != null)
                 {
