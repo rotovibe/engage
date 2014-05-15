@@ -90,6 +90,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="Contact\ContactService_Test.cs" />
     <Compile Include="Program\Action_Processing_response_saving_Tests.cs" />
     <Compile Include="Program\Action_Processing_response_spawn_Tests.cs" />
     <Compile Include="Program\Assign_Patient_To_Program_Tests.cs" />
@@ -146,6 +147,7 @@
     <Content Include="Program\Action_problem_Sample.txt" />
     <Content Include="Program\Action_Sample.txt" />
   </ItemGroup>
+  <ItemGroup />
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
       <ItemGroup>
