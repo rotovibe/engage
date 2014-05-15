@@ -1310,18 +1310,23 @@ namespace Phytel.API.AppDomain.NG
                         if (patientDDResponse != null && patientDDResponse.Patients != null)
                         {   
                             patients = new List<CohortPatient>();
-                            foreach(PatientData pd in patientDDResponse.Patients)
+                            foreach (string id in recentPatientIds)
                             {
-                                patients.Add(new CohortPatient {
-                                    Id = pd.ID,
-                                    FirstName = pd.FirstName,
-                                    LastName = pd.LastName,
-                                    MiddleName = pd.MiddleName,
-                                    PreferredName = pd.PreferredName, 
-                                    DOB = pd.DOB,
-                                    Gender = pd.Gender,
-                                    Suffix = pd.Suffix
-                                });
+                                PatientData pd = patientDDResponse.Patients.Where(p => p.ID == id).FirstOrDefault();
+                                if(pd != null)
+                                {
+                                    patients.Add(new CohortPatient
+                                    {
+                                        Id = pd.ID,
+                                        FirstName = pd.FirstName,
+                                        LastName = pd.LastName,
+                                        MiddleName = pd.MiddleName,
+                                        PreferredName = pd.PreferredName,
+                                        DOB = pd.DOB,
+                                        Gender = pd.Gender,
+                                        Suffix = pd.Suffix
+                                    });
+                                }
                             }
                         }
                     }
