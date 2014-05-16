@@ -230,6 +230,8 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "PlayLists", "PlayLists", "{9970CB27-3027-4F71-B6F5-D919BEC9A68C}"
 	ProjectSection(SolutionItems) = preProject
 		Playlists\Factory_Refactoring.playlist = Playlists\Factory_Refactoring.playlist
+		Playlists\NIGHT_831.playlist = Playlists\NIGHT_831.playlist
+		Playlists\NIGHT_832.playlist = Playlists\NIGHT_832.playlist
 		Playlists\NIGHT_903.playlist = Playlists\NIGHT_903.playlist
 		Playlists\NIGHT_917.playlist = Playlists\NIGHT_917.playlist
 		Playlists\NIGHT_919.playlist = Playlists\NIGHT_919.playlist
