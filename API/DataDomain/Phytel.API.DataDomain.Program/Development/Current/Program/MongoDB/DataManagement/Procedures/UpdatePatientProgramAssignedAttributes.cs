@@ -23,17 +23,30 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DataManagement.Procedures
 
                 foreach (MEPatientProgram mePP in programs)
                 {
-                    mePP.AssignedBy = systemObjectId;
-                    mePP.AssignedOn = mePP.RecordCreatedOn;
-                    mePP.LastUpdatedOn = DateTime.UtcNow;
-                    mePP.UpdatedBy = systemObjectId;
-                    MEPatientProgram updatedProgram = mePP;
-                    bool success = repo.Save(updatedProgram);
-                    if (success)
+                    bool update = false;
+                    if(mePP.AssignedBy != systemObjectId)
                     {
-                        Results.Add(new Result { Message = "AssignedBy(aby), AssignedDate(aon) for Program Id [" + updatedProgram.Id.ToString() + "] are updated in PatientProgram collection." });
+                        mePP.AssignedBy = systemObjectId;
+                        update = true;
+                    }
+                    if (mePP.AssignedOn != mePP.RecordCreatedOn)
+                    {
+                        mePP.AssignedOn = mePP.RecordCreatedOn;
+                        update = true;
+                    }
+                    if (update)
+                    {
+                        mePP.LastUpdatedOn = DateTime.UtcNow;
+                        mePP.UpdatedBy = systemObjectId;
+                        MEPatientProgram updatedProgram = mePP;
+                        bool success = repo.Save(updatedProgram);
+                        if (success)
+                        {
+                            Results.Add(new Result { Message = "AssignedBy(aby), AssignedDate(aon) for Program Id [" + updatedProgram.Id.ToString() + "] are updated in PatientProgram collection." });
+                        }
                     }
                 }
+                Results.Add(new Result { Message = "Total records updated: " + Results.Count });
             }
             catch (Exception ex)
             {
