@@ -14,6 +14,33 @@ namespace Phytel.API.AppDomain.NG.Tests
         public class GetPatientProgramDetailsSummary_Method
         {
             [TestMethod()]
+            [TestCategory("NIGHT-831")]
+            [TestProperty("TFS", "11172")]
+            [TestProperty("Layer", "NGManager")]
+            public void Get_Response_AssignOn_Test()
+            {
+                string patientId = "5325dad4d6a4850adcbba776";
+                string programId = "534d9bffd6a48504b058a2cf";
+                string userId = "0000000000000000000000000";
+                DateTime now = System.DateTime.UtcNow.Date;
+
+                INGManager ngm = new NGManager { PlanElementUtils = new StubPlanElementUtils(), EndpointUtils = new StubPlanElementEndpointUtils() };
+
+                GetPatientProgramDetailsSummaryRequest request = new GetPatientProgramDetailsSummaryRequest
+                {
+                    Version = 1.0,
+                    ContractNumber = "InHealth001",
+                    PatientId = patientId,
+                    PatientProgramId = programId,
+                    UserId = userId
+                };
+
+                GetPatientProgramDetailsSummaryResponse response = ngm.GetPatientProgramDetailsSummary(request);
+                DateTime assignbyDate = ((DateTime)response.Program.AssignDate).Date;
+                Assert.AreEqual(now, assignbyDate);
+            }
+
+            [TestMethod()]
             [TestCategory("NIGHT-832")]
             [TestProperty("TFS", "11159")]
             [TestProperty("Layer", "NGManager")]

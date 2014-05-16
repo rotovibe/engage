@@ -77,6 +77,34 @@ namespace Phytel.API.AppDomain.NG.Service.Tests
             }
 
             [TestMethod()]
+            [TestCategory("NIGHT-831")]
+            [TestProperty("TFS", "11172")]
+            [TestProperty("Layer", "NGService")]
+            public void Get_AssignDate_Test()
+            {
+                IAuditUtil audit = new StubAuditUtil();
+                INGManager ngm = new StubNGManager();
+                ISecurityManager sm = new StubSecurityManager();
+                ICommonFormatterUtil cf = new StubCommonFormatterUtil();
+                string userid = "000000000000000000000000";
+                DateTime now = System.DateTime.UtcNow.Date;
+
+                NGService ngs = new NGService { AuditUtil = audit, NGManager = ngm, Security = sm, CommonFormatterUtil = cf };
+                GetPatientProgramDetailsSummaryRequest request = new GetPatientProgramDetailsSummaryRequest
+                {
+                    ContractNumber = "NG",
+                    PatientId = "",
+                    Token = "dsafgsdfgdafg",
+                    UserId = userid,
+                    Version = 1.0
+                };
+
+                GetPatientProgramDetailsSummaryResponse response = ngs.Get(request);
+                DateTime assignbyDate = ((DateTime)response.Program.AssignDate).Date;
+                Assert.AreEqual(now, assignbyDate);
+            }
+
+            [TestMethod()]
             public void Get_WithAttributes_Test()
             {
                 IAuditUtil audit = new StubAuditUtil();

@@ -28,7 +28,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
                     AttributeStartDate = null,
                     AttributeEndDate = null,
                     AssignedBy = request.UserId != null ? ObjectId.Parse(request.UserId): ObjectId.Empty,
-                    AssignedOn = null,
+                    AssignedOn = System.DateTime.UtcNow,
                     StartDate = cp.StartDate,
                     EndDate = cp.EndDate,
                     DateCompleted = cp.DateCompleted,

@@ -105,6 +105,36 @@ namespace Phytel.API.AppDomain.NG.Tests
             }
 
             [TestMethod()]
+            [TestCategory("NIGHT-832")]
+            [TestProperty("TFS", "11170")]
+            public void Get_Program_AssignedBy_Test()
+            {
+                StubPlanElementEndpointUtils peu = new StubPlanElementEndpointUtils { Client = new StubJsonRestClient() };
+                GetPatientProgramDetailsSummaryRequest request = new GetPatientProgramDetailsSummaryRequest { UserId = "123456789012345678901234" };
+                GetProgramDetailsSummaryResponse response = peu.RequestPatientProgramDetailsSummary(request);
+
+                string expectedValue = response.Program.AssignBy;
+                ObjectId objectId;
+                bool success = ObjectId.TryParse(expectedValue, out objectId);
+                Assert.IsTrue(success);
+            }
+
+            [TestMethod()]
+            [TestCategory("NIGHT-831")]
+            [TestProperty("TFS", "11172")]
+            public void Get_Program_AssignedDate_Test()
+            {
+                StubPlanElementEndpointUtils peu = new StubPlanElementEndpointUtils { Client = new StubJsonRestClient() };
+                GetPatientProgramDetailsSummaryRequest request = new GetPatientProgramDetailsSummaryRequest();
+                GetProgramDetailsSummaryResponse response = peu.RequestPatientProgramDetailsSummary(request);
+
+                DateTime expected = System.DateTime.UtcNow.Date;
+                DateTime? value = response.Program.AssignDate;
+
+                Assert.AreEqual(expected, ((DateTime)value).Date);
+            }
+
+            [TestMethod()]
             [TestCategory("NIGHT-920")]
             [TestProperty("TFS", "6099")]
             public void GetActionIndividualAttributes_AssignedTo_Test()
