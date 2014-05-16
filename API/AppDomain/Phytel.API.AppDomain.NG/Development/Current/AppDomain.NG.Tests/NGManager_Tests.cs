@@ -21,7 +21,7 @@ namespace Phytel.API.AppDomain.NG.Tests
             {
                 string patientId = "5325dad4d6a4850adcbba776";
                 string programId = "534d9bffd6a48504b058a2cf";
-                string userId = "0000000000000000000000000";
+                string userId = "0000000000000000000000001";
                 DateTime now = System.DateTime.UtcNow.Date;
 
                 INGManager ngm = new NGManager { PlanElementUtils = new StubPlanElementUtils(), EndpointUtils = new StubPlanElementEndpointUtils() };
