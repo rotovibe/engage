@@ -24,7 +24,9 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DataManagement.Procedures
                 foreach (MEPatientProgram mePP in programs)
                 {
                     bool update = false;
-                    if(mePP.AssignedBy != systemObjectId)
+
+                    #region NIGHT-832, NIGHT831
+                    if (mePP.AssignedBy != systemObjectId)
                     {
                         mePP.AssignedBy = systemObjectId;
                         update = true;
@@ -33,7 +35,9 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DataManagement.Procedures
                     {
                         mePP.AssignedOn = mePP.RecordCreatedOn;
                         update = true;
-                    }
+                    } 
+                    #endregion
+
                     if (update)
                     {
                         mePP.LastUpdatedOn = DateTime.UtcNow;

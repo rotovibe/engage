@@ -89,6 +89,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DataManagement.Procedures
                         }
                     }
                 }
+                Results.Add(new Result { Message = "Total records updated: " + Results.Count });
             }
             catch (Exception ex)
             {
