@@ -436,7 +436,7 @@ namespace Phytel.API.AppDomain.NG
                 
                 m.AssignDate = System.DateTime.UtcNow;
                 m.ElementState = 2;
-                m.AssignBy = "5368ff2ad4332316288f3e3e";
+                m.AssignById = "5368ff2ad4332316288f3e3e";
             }
             catch (Exception ex)
             {
@@ -709,7 +709,7 @@ namespace Phytel.API.AppDomain.NG
             {
                 Module m = new Module
                 {
-                    AssignBy = md.AssignBy,
+                    AssignById = md.AssignById,
                     AssignDate = md.AssignDate,
                     Completed = md.Completed,
                     CompletedBy = md.CompletedBy,
@@ -744,7 +744,7 @@ namespace Phytel.API.AppDomain.NG
             {
                 Actions a = new Actions
                 {
-                    AssignBy = ac.AssignBy,
+                    AssignById = ac.AssignById,
                     AssignDate = ac.AssignDate,
                     Completed = ac.Completed,
                     CompletedBy = ac.CompletedBy,
@@ -780,7 +780,7 @@ namespace Phytel.API.AppDomain.NG
                 Step s = new Step
                 {
                     ActionId = st.ActionId,
-                    AssignBy = st.AssignBy,
+                    AssignById = st.AssignById,
                     AssignDate = st.AssignDate,
                     Completed = st.Completed,
                     CompletedBy = st.CompletedBy,
@@ -822,7 +822,7 @@ namespace Phytel.API.AppDomain.NG
             {
                 Program p = new Program
                 {
-                    AssignBy = pr.AssignBy,
+                    AssignById = pr.AssignById,
                     AssignDate = pr.AssignDate,
                     AssignTo = pr.AssignTo,
                     Client = pr.Client,
@@ -958,7 +958,7 @@ namespace Phytel.API.AppDomain.NG
             try
             {
                 p.Enabled = true;
-                p.AssignBy = "5368ff2ad4332316288f3e3e";
+                p.AssignById = "5368ff2ad4332316288f3e3e";
                 p.AssignDate = System.DateTime.UtcNow;
                 pe = p;
                 return pe;

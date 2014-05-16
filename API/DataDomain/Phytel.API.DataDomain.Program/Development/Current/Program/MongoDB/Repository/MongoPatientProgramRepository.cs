@@ -59,7 +59,6 @@ namespace Phytel.API.DataDomain.Program
                 {
                     nmePP.UpdatedBy = null;
                     nmePP.LastUpdatedOn = null;
-                    nmePP.AssignedBy = null;
                     ctx.PatientPrograms.Collection.Insert(nmePP);
 
                     // update programid in modules

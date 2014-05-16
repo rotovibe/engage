@@ -533,5 +533,37 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO.Tests
                 Assert.AreEqual(1, tMod.Count);
             }
         }
+
+        [TestClass()]
+        public class CreateInitialMEPatientProgram_Test
+        {
+            [TestMethod()]
+            [TestCategory("NIGHT-832")]
+            [TestProperty("TFS", "11137")]
+            [TestProperty("Layer", "DD.DTOUtility")]
+            public void Create_With_AssignedBy()
+            {
+                IDTOUtility dtoUtil = new DTOUtility { Factory = new StubProgramRepositoryFactory() };
+                string userid = "123456789012345678901234";
+                PutProgramToPatientRequest request = new PutProgramToPatientRequest
+                {
+                    UserId = userid,
+                    Context = "NG",
+                    ContractNumber = "InHealth001",
+                    PatientId = "123456789012345678901111"
+                };
+
+                MEProgram program = new MEProgram(userid)
+                {
+                     Id = ObjectId.GenerateNewId()
+                };
+
+                List<ObjectId> sil = new List<ObjectId>() { ObjectId.GenerateNewId() };
+                
+                MEPatientProgram mepp = dtoUtil.CreateInitialMEPatientProgram(request, program, sil);
+                
+                Assert.AreEqual(userid, mepp.AssignedBy.ToString());
+            }
+        }
     }
 }

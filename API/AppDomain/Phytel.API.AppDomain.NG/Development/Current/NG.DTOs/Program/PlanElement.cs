@@ -19,7 +19,7 @@ namespace Phytel.API.AppDomain.NG.DTO
         public DateTime? DateCompleted { get; set; }
         public int ElementState { get; set; }
         public DateTime? AssignDate { get; set; }
-        public string AssignBy { get; set; }
+        public string AssignById { get; set; }
         public string AssignTo { get; set; } // Sprint 12
         public DateTime? AttrStartDate { get; set; } // Sprint 12
         public DateTime? AttrEndDate { get; set; } // Sprint 12

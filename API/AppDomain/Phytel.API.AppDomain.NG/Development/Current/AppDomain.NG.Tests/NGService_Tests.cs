@@ -50,6 +50,33 @@ namespace Phytel.API.AppDomain.NG.Service.Tests
             }
 
             [TestMethod()]
+            [TestCategory("NIGHT-832")]
+            [TestProperty("TFS", "11159")]
+            [TestProperty("Layer", "NGService")]
+            public void Get_AssignById_Test()
+            {
+                IAuditUtil audit = new StubAuditUtil();
+                INGManager ngm = new StubNGManager();
+                ISecurityManager sm = new StubSecurityManager();
+                ICommonFormatterUtil cf = new StubCommonFormatterUtil();
+                string userid = "000000000000000000000000";
+
+                NGService ngs = new NGService { AuditUtil = audit, NGManager = ngm, Security = sm, CommonFormatterUtil = cf };
+                GetPatientProgramDetailsSummaryRequest request = new GetPatientProgramDetailsSummaryRequest
+                {
+                    ContractNumber = "NG",
+                    PatientId = "",
+                    Token = "dsafgsdfgdafg",
+                    UserId = userid,
+                    Version = 1.0
+                };
+
+                GetPatientProgramDetailsSummaryResponse response = ngs.Get(request);
+                string result = response.Program.AssignById;
+                Assert.AreEqual(userid, result);
+            }
+
+            [TestMethod()]
             public void Get_WithAttributes_Test()
             {
                 IAuditUtil audit = new StubAuditUtil();

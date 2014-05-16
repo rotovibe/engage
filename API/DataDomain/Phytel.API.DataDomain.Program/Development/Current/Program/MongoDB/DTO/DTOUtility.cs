@@ -27,7 +27,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
                     State = ElementState.NotStarted,
                     AttributeStartDate = null,
                     AttributeEndDate = null,
-                    AssignedBy = null,
+                    AssignedBy = request.UserId != null ? ObjectId.Parse(request.UserId): ObjectId.Empty,
                     AssignedOn = null,
                     StartDate = cp.StartDate,
                     EndDate = cp.EndDate,
@@ -73,46 +73,48 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             {
                 List<Module> mods = new List<Module>();
 
-                //Parallel.ForEach(list, m =>
-                foreach (Module m in list)
+                if (list != null && list.Count > 0)
                 {
-                    if (m.Status == Status.Active)
+                    //Parallel.ForEach(list, m =>
+                    foreach (Module m in list)
                     {
-                        Module mod = new Module()
+                        if (m.Status == Status.Active)
                         {
-                            Id = m.Id,
-                            ProgramId = m.ProgramId,
-                            Description = m.Description,
-                            Name = m.Name,
-                            Status = m.Status,
-                            Objectives = m.Objectives,
-                            Completed = m.Completed,
-                            Enabled = m.Enabled,
-                            Next = m.Next,
-                            Order = m.Order,
-                            Previous = m.Previous,
-                            Spawn = m.Spawn,
-                            SourceId = m.SourceId,
-                            AssignedBy = m.AssignedBy,
-                            AssignedOn = m.AssignedOn,
-                            State = ElementState.NotStarted,
-                            CompletedBy = m.CompletedBy,
-                            DateCompleted = m.DateCompleted,
-                            //Objectives = m.Objectives.Where(a => a.Status == Common.Status.Active).Select(z => new ObjectivesInfo()
-                            //{
-                            //    Id = z.Id,
-                            //    Status = z.Status,
-                            //    Unit = z.Unit,
-                            //    Value = z.Value
-                            //}).ToList(),
-                            Actions = GetClonedActions(m.Actions, contractNumber, userId, sil)
-                        };
-                        mod.Objectives = null;
-                        mods.Add(mod);
+                            Module mod = new Module()
+                            {
+                                Id = m.Id,
+                                ProgramId = m.ProgramId,
+                                Description = m.Description,
+                                Name = m.Name,
+                                Status = m.Status,
+                                Objectives = m.Objectives,
+                                Completed = m.Completed,
+                                Enabled = m.Enabled,
+                                Next = m.Next,
+                                Order = m.Order,
+                                Previous = m.Previous,
+                                Spawn = m.Spawn,
+                                SourceId = m.SourceId,
+                                AssignedBy = m.AssignedBy,
+                                AssignedOn = m.AssignedOn,
+                                State = ElementState.NotStarted,
+                                CompletedBy = m.CompletedBy,
+                                DateCompleted = m.DateCompleted,
+                                //Objectives = m.Objectives.Where(a => a.Status == Common.Status.Active).Select(z => new ObjectivesInfo()
+                                //{
+                                //    Id = z.Id,
+                                //    Status = z.Status,
+                                //    Unit = z.Unit,
+                                //    Value = z.Value
+                                //}).ToList(),
+                                Actions = GetClonedActions(m.Actions, contractNumber, userId, sil)
+                            };
+                            mod.Objectives = null;
+                            mods.Add(mod);
+                        }
                     }
+                    //);
                 }
-                //);
-
                 return mods;
             }
             catch (Exception ex)

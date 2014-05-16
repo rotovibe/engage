@@ -595,5 +595,38 @@ namespace Phytel.API.DataDomain.Program.Service.Tests
                 Assert.IsNotNull(response.Program.ObjectivesData);
             }
         }
+
+        [TestClass()]
+        public class PUT_PatientProgramAssignment
+        {
+            [TestMethod()]
+            [TestCategory("NIGHT-832")]
+            [TestProperty("TFS", "11155")]
+            [TestProperty("Layer", "ProgramService")]
+            public void Success()
+            {
+                PutProgramToPatientRequest request = new PutProgramToPatientRequest
+                {
+                    UserId = "123456789012345678901234",
+                    Context = "NG",
+                    ContractNumber = "InHealth001",
+                    ContractProgramId = "123456789012345678901111",
+                    PatientId = "222256789012345678902222",
+                    Token = "222256789012349999999999",
+                    Version = 1.0
+                };
+
+                ProgramService ps = new ProgramService
+                {
+                    CommonFormatterUtil = new StubCommonFormatterUtil(),
+                    Helpers = new StubHelper(),
+                    ProgramDataManager = new StubProgramDataManager()
+                };
+
+                PutProgramToPatientResponse response = ps.Put(request);
+                int control = 1;
+                Assert.AreEqual(control, response.Outcome.Result);
+            }
+        }
     }
 }

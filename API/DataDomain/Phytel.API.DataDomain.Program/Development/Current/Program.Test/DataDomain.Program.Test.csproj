@@ -78,6 +78,7 @@
     <Compile Include="MongoProcedureFactoryTests.cs" />
     <Compile Include="ProgramDataManager_Tests.cs" />
     <Compile Include="ProgramRepositoryFactoryTests.cs" />
+    <Compile Include="ProgramService_Test.cs" />
     <Compile Include="ProgramService_Tests.cs" />
     <Compile Include="ProgramTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

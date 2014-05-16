@@ -100,6 +100,7 @@ namespace Phytel.API.AppDomain.NG.Test.Stubs
                 {
                     Name = "Test Program",
                     Description = "test description",
+                     AssignById = request.UserId,
                     Attributes = new DTO.ProgramAttribute
                     {
                         //AssignedBy = "me",

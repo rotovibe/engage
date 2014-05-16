@@ -128,7 +128,27 @@ namespace Phytel.API.DataDomain.Program.Test.Stubs
 
         public DTO.PutProgramToPatientResponse PutPatientToProgram(DTO.PutProgramToPatientRequest request)
         {
-            throw new NotImplementedException();
+            DTO.PutProgramToPatientResponse response = new PutProgramToPatientResponse
+            {
+                Outcome = new DTO.Outcome
+                {
+                    Reason = "SUccess!",
+                    Result = 1
+                },
+                program = new ProgramInfo
+                {
+                    ElementState = 1,
+                    Id = request.ContractProgramId,
+                    Name = "Test program",
+                    PatientId = request.PatientId,
+                    ProgramState = 1,
+                    ShortName = "short program",
+                    Status = 1
+                },
+                Version = 1.0
+            };
+
+            return response;
         }
 
         public DTO.PutProgramActionProcessingResponse PutProgramActionUpdate(DTO.PutProgramActionProcessingRequest request)

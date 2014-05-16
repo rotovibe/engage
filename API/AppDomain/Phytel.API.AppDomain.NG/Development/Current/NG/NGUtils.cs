@@ -67,7 +67,7 @@ namespace Phytel.API.AppDomain.NG
 
                 pD = new ProgramDetail
                 {
-                    AssignBy = p.AssignBy,
+                    AssignBy = p.AssignById,
                     AssignDate = p.AssignDate,
                     AttrStartDate = p.AttrStartDate,
                     AttrEndDate = p.AttrEndDate,
@@ -123,7 +123,7 @@ namespace Phytel.API.AppDomain.NG
 
                 pD = new DTO.Program
                 {
-                    AssignBy = p.AssignBy,
+                    AssignById = p.AssignBy,
                     AssignDate = p.AssignDate,
                     AssignTo = p.AssignTo,
                     Client = p.Client,
@@ -300,7 +300,7 @@ namespace Phytel.API.AppDomain.NG
                         ModuleDetail mdi = new ModuleDetail
                         {
                             Actions = GetADActions(m.Actions),
-                            AssignBy = m.AssignBy,
+                            AssignBy = m.AssignById,
                             AssignDate = m.AssignDate,
                             AttrEndDate = m.AttrEndDate, // night 919
                             AttrStartDate = m.AttrStartDate, // night 919
@@ -345,7 +345,7 @@ namespace Phytel.API.AppDomain.NG
                         Module mdi = new Module
                         {
                             Actions = GetADActions(m.Actions),
-                            AssignBy = m.AssignBy,
+                            AssignById = m.AssignBy,
                             AssignDate = m.AssignDate,
                             AssignTo = m.AssignTo,
                             AttrStartDate = m.AttrEndDate,
@@ -390,7 +390,7 @@ namespace Phytel.API.AppDomain.NG
                     {
                         ActionsDetail adi = new ActionsDetail
                         {
-                            AssignBy = a.AssignBy,
+                            AssignBy = a.AssignById,
                             AssignDate = a.AssignDate,
                             Completed = a.Completed,
                             CompletedBy = a.CompletedBy,
@@ -433,7 +433,7 @@ namespace Phytel.API.AppDomain.NG
                     {
                         Actions adi = new Actions
                         {
-                            AssignBy = a.AssignBy,
+                            AssignById = a.AssignBy,
                             AssignDate = a.AssignDate,
                             Completed = a.Completed,
                             CompletedBy = a.CompletedBy,
@@ -483,7 +483,7 @@ namespace Phytel.API.AppDomain.NG
                         StepsDetail sdi = new StepsDetail
                         {
                             ActionId = s.ActionId,
-                            AssignBy = s.AssignBy,
+                            AssignBy = s.AssignById,
                             AssignDate = s.AssignDate,
                             Completed = s.Completed,
                             CompletedBy = s.CompletedBy,
@@ -533,7 +533,7 @@ namespace Phytel.API.AppDomain.NG
                         Step sdi = new Step
                         {
                             ActionId = s.ActionId,
-                            AssignBy = s.AssignBy,
+                            AssignById = s.AssignBy,
                             AssignDate = s.AssignDate,
                             Completed = s.Completed,
                             CompletedBy = s.CompletedBy,
