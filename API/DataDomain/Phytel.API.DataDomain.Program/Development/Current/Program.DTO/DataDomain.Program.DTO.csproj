@@ -78,6 +78,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Constants.cs" />
     <Compile Include="GetPatientActionDetailsDataRequest.cs" />
     <Compile Include="DataDomainRequest.cs" />
     <Compile Include="GetProgramDetailsSummaryRequest.cs" />

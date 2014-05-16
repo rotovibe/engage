@@ -75,6 +75,9 @@
     <Compile Include="MongoDB\DataManagement\MongoProcedure.cs" />
     <Compile Include="MongoDB\DataManagement\MongoProcedureFactory.cs" />
     <Compile Include="MongoDB\DataManagement\ProceduresManager.cs" />
+    <Compile Include="MongoDB\DataManagement\Procedures\UpdatePatientActionAssignedAttributes.cs" />
+    <Compile Include="MongoDB\DataManagement\Procedures\UpdatePatientModuleAssignedAttributes.cs" />
+    <Compile Include="MongoDB\DataManagement\Procedures\UpdatePatientProgramAssignedAttributes.cs" />
     <Compile Include="MongoDB\DataManagement\Procedures\UpdatePatientProgram_HTNAndDiabetesText.cs" />
     <Compile Include="MongoDB\DataManagement\Procedures\MoveProgramAttributeStartDateValue.cs" />
     <Compile Include="MongoDB\DataManagement\Procedures\UpdateProgramStartDateToFirstActionStartDate.cs" />

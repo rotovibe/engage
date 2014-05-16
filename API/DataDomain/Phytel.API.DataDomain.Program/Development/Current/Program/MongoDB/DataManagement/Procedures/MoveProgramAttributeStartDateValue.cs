@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using MongoDB.Bson;
 
 namespace Phytel.API.DataDomain.Program.MongoDB.DataManagement.Procedures
 {
@@ -27,7 +28,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DataManagement.Procedures
                 programs.ForEach(p =>
                 {
                     Request.UserId = p.UpdatedBy.ToString();
-                    repo.UserId = "5368ff2ad4332316288f3e3e";  // system
+                    repo.UserId = Constants.SystemContactId;  // system
 
                     IProgramRepository arp = new ProgramRepositoryFactory().GetRepository(Request, RepositoryType.PatientProgramAttribute);
                     MEProgramAttribute pAtt = (MEProgramAttribute)arp.FindByPlanElementID(p.Id.ToString());

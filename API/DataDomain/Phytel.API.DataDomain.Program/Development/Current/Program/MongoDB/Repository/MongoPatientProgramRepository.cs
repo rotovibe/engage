@@ -263,6 +263,12 @@ namespace Phytel.API.DataDomain.Program
                 {
                     ctx.PatientPrograms.Collection.Save(p);
                     success = true;
+
+                    AuditHelper.LogDataAudit(this.UserId,
+                        MongoCollectionName.PatientProgram.ToString(),
+                        p.Id.ToString(),
+                        Common.DataAuditType.Update,
+                        _dbName);
                 }
                 return success;
             }
