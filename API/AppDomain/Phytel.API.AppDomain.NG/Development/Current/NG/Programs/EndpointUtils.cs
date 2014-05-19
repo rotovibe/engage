@@ -632,9 +632,12 @@ namespace Phytel.API.AppDomain.NG
                 GetPrimaryCareManagerDataResponse dataDomainResponse =
                     client.Get<GetPrimaryCareManagerDataResponse>(url);
 
-                if (dataDomainResponse.CareMember != null)
+                if (dataDomainResponse != null)
                 {
-                    pcmId = dataDomainResponse.CareMember.ContactId;
+                    if (dataDomainResponse.CareMember != null)
+                    {
+                        pcmId = dataDomainResponse.CareMember.ContactId;
+                    }
                 }
 
                 return pcmId;
