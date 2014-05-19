@@ -56,5 +56,15 @@ namespace Phytel.API.DataDomain.CareMember.Test
 
             Assert.IsTrue(updated);
         }
+
+        [TestMethod]
+        public void GetPrimaryCareManager_Test()
+        {
+            GetPrimaryCareManagerDataRequest request = new GetPrimaryCareManagerDataRequest { PatientId = "5325dafed6a4850adcbba7fa", Context = "NG", ContractNumber = "InHealth001", UserId = "000000000000000000000000", Version = 1.0 };
+
+            CareMemberData response = CareMemberDataManager.GetPrimaryCareManager(request);
+
+            Assert.IsNotNull(response);
+        }
     }
 }

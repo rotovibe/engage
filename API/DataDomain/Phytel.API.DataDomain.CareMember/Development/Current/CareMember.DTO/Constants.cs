@@ -8,5 +8,6 @@ namespace Phytel.API.DataDomain.CareMember.DTO
 {
     public class Constants
     {
+        public const string CareManager = "Care Manager";
     }
 }

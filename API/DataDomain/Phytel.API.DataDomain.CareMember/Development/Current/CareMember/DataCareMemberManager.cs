@@ -93,8 +93,8 @@ namespace Phytel.API.DataDomain.CareMember
 
                 List<CareMemberData> careMembers = repo.FindByPatientId(request.PatientId) as List<CareMemberData>;
                 GetLookUpsDataRequest lookupDataRequest = new GetLookUpsDataRequest { Context = request.Context, ContractNumber = request.ContractNumber, Name = LookUpType.CareMemberType.ToString(), UserId = request.UserId, Version = request.Version};
-                //ObjectId careManagerLookUpId  = getCareManagerLookupId(lookupDataRequest);
-                //response = careMembers.Find(c => c.Primary == true && c.TypeId == )
+                string careManagerLookUpId  = getCareManagerLookupId(lookupDataRequest);
+                response = careMembers.Find(c => c.Primary == true && c.TypeId == careManagerLookUpId);
                 return response;
             }
             catch (Exception ex)
@@ -103,33 +103,33 @@ namespace Phytel.API.DataDomain.CareMember
             }
         }
 
-        //private ObjectId getCareMemberTypeLookUps(GetLookUpsDataRequest request)
-        //{
-        //    try
-        //    {
-        //        List<IdNamePair> response = new List<IdNamePair>();
-        //        IRestClient client = new JsonServiceClient();
-        //        string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Type/{4}",
-        //                                                                DDLookupServiceUrl,
-        //                                                                "NG",
-        //                                                                request.Version,
-        //                                                                request.ContractNumber,
-        //                                                                request.Name), request.UserId);
+        private static string getCareManagerLookupId(GetLookUpsDataRequest request)
+        {
+            string lookupId = string.Empty;
+            try
+            {
+                IRestClient client = new JsonServiceClient();
+                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Type/{4}",
+                                                                        DDLookupServiceUrl,
+                                                                        "NG",
+                                                                        request.Version,
+                                                                        request.ContractNumber,
+                                                                        request.Name), request.UserId);
 
-        //        //[Route("/{Context}/{Version}/{ContractNumber}/Type/{Name}", "GET")]
-        //        Phytel.API.DataDomain.LookUp.DTO.GetLookUpsDataResponse dataDomainResponse = client.Get<Phytel.API.DataDomain.LookUp.DTO.GetLookUpsDataResponse>(url);
+                //[Route("/{Context}/{Version}/{ContractNumber}/Type/{Name}", "GET")]
+                Phytel.API.DataDomain.LookUp.DTO.GetLookUpsDataResponse dataDomainResponse = client.Get<Phytel.API.DataDomain.LookUp.DTO.GetLookUpsDataResponse>(url);
 
-        //        List<IdNamePair> dataList = dataDomainResponse.LookUpsData;
-        //        if (dataList != null && dataList.Count > 0)
-        //        {
-        //            response = dataList;
-        //        }
-        //        return response;
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        throw ex;
-        //    }
-        //}
+                List<IdNamePair> dataList = dataDomainResponse.LookUpsData;
+                if (dataList != null && dataList.Count > 0)
+                {
+                    lookupId = dataList.Find(a => a.Name == Constants.CareManager).Id;
+                }
+                return lookupId;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }   
