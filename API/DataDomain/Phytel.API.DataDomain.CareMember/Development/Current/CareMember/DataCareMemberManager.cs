@@ -125,7 +125,9 @@ namespace Phytel.API.DataDomain.CareMember
                 List<IdNamePair> dataList = dataDomainResponse.LookUpsData;
                 if (dataList != null && dataList.Count > 0)
                 {
-                    lookupId = dataList.Find(a => a.Name == Constants.CareManager).Id;
+                    IdNamePair careManagerLookUp = dataList.Find(a => a.Name == Constants.CareManager);
+                    if (careManagerLookUp != null)
+                        lookupId = careManagerLookUp.Id;
                 }
                 return lookupId;
             }
