@@ -92,9 +92,12 @@ namespace Phytel.API.DataDomain.CareMember
                 ICareMemberRepository<List<CareMemberData>> repo = CareMemberRepositoryFactory<List<CareMemberData>>.GetCareMemberRepository(request.ContractNumber, request.Context, request.UserId);
 
                 List<CareMemberData> careMembers = repo.FindByPatientId(request.PatientId) as List<CareMemberData>;
-                GetLookUpsDataRequest lookupDataRequest = new GetLookUpsDataRequest { Context = request.Context, ContractNumber = request.ContractNumber, Name = LookUpType.CareMemberType.ToString(), UserId = request.UserId, Version = request.Version};
-                string careManagerLookUpId  = getCareManagerLookupId(lookupDataRequest);
-                response = careMembers.Find(c => c.Primary == true && c.TypeId == careManagerLookUpId);
+                if(careMembers != null)
+                {
+                    GetLookUpsDataRequest lookupDataRequest = new GetLookUpsDataRequest { Context = request.Context, ContractNumber = request.ContractNumber, Name = LookUpType.CareMemberType.ToString(), UserId = request.UserId, Version = request.Version };
+                    string careManagerLookUpId = getCareManagerLookupId(lookupDataRequest);
+                    response = careMembers.Find(c => c.Primary == true && c.TypeId == careManagerLookUpId);
+                }
                 return response;
             }
             catch (Exception ex)
