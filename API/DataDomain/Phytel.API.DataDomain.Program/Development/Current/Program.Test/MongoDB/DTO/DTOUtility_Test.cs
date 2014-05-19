@@ -669,6 +669,44 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO.Tests
             [TestCategory("NIGHT-833")]
             [TestProperty("TFS", "11222")]
             [TestProperty("Layer", "DD.DTOUtility")]
+            public void With_ZERO_With_PCM_For_AssignToType()
+            {
+                string cmid = "999999999999999999999999";
+                IDTOUtility dtoUtil = new DTOUtility { Factory = new StubProgramRepositoryFactory() };
+                PutProgramToPatientRequest request = new PutProgramToPatientRequest
+                {
+                    CareManagerId = cmid
+                };
+
+                MEProgram mep = new MEProgram("111111111111111111111234") { AssignToType = 0 };
+                string result = dtoUtil.GetCareManagerValueByRule(request, mep);
+
+                Assert.AreEqual(cmid, result);
+            }
+
+            [TestMethod()]
+            [TestCategory("NIGHT-833")]
+            [TestProperty("TFS", "11222")]
+            [TestProperty("Layer", "DD.DTOUtility")]
+            public void With_ZERO_With_NO_PCM_For_AssignToType()
+            {
+                string cmid = null;
+                IDTOUtility dtoUtil = new DTOUtility { Factory = new StubProgramRepositoryFactory() };
+                PutProgramToPatientRequest request = new PutProgramToPatientRequest
+                {
+                    CareManagerId = cmid
+                };
+
+                MEProgram mep = new MEProgram("111111111111111111111234") { AssignToType = 0 };
+                string result = dtoUtil.GetCareManagerValueByRule(request, mep);
+
+                Assert.AreEqual(cmid, result);
+            }
+
+            [TestMethod()]
+            [TestCategory("NIGHT-833")]
+            [TestProperty("TFS", "11222")]
+            [TestProperty("Layer", "DD.DTOUtility")]
             public void With_CM_For_AssignToType()
             {
                 string cmid = "999999999999999999999999";

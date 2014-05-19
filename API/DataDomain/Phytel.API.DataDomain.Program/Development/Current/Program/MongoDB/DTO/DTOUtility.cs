@@ -78,9 +78,6 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             string cmId = null;
             try
             {
-                if (cp.AssignToType == 0)
-                    return cmId;
-
                 switch (cp.AssignToType)
                 {
                     case AssignToType.PCM:
@@ -88,9 +85,13 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
                             cmId = request.CareManagerId != null ? request.CareManagerId : null;
                             break;
                         }
+                    case AssignToType.Unassigned:
+                        {
+                            break;
+                        }
                     default:
                         {
-                            cmId = null;
+                            cmId = request.CareManagerId != null ? request.CareManagerId : null;
                             break;
                         }
                 }
