@@ -64,7 +64,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ICareMemberDataManager.cs" />
     <Compile Include="ICareMemberRepository.cs" />
+    <Compile Include="ICareMemberRepositoryFactory.cs" />
     <Compile Include="MongoDB\DTO\MECareMember.cs" />
     <Compile Include="MongoDB\Repository\MongoCareMemberRepository.cs" />
     <Compile Include="MongoDB\CareMemberMongoContext.cs" />

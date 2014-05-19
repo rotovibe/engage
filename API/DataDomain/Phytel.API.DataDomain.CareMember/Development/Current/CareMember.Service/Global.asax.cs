@@ -1,3 +1,7 @@
+using Phytel.API.Common;
+using Phytel.API.Common.Audit;
+using Phytel.API.Common.Format;
+using Phytel.API.DataAudit;
 using ServiceStack.MiniProfiler;
 using ServiceStack.ServiceInterface.Admin;
 using ServiceStack.WebHost.Endpoints;
@@ -17,6 +21,12 @@ namespace Phytel.API.DataDomain.CareMember.Service
                 //register any dependencies your services use, e.g:
                 //container.Register<ICacheClient>(new MemoryCacheClient());
                 Plugins.Add(new RequestLogsFeature() { RequiredRoles = new string[] { } });
+
+                container.RegisterAutoWiredAs<CommonFormatterUtil, ICommonFormatterUtil>();
+                container.RegisterAutoWiredAs<CareMemberRepositoryFactory, ICareMemberRepositoryFactory>();
+                container.RegisterAutoWiredAs<Helpers, IHelpers>();
+                container.RegisterAutoWiredAs<CareMemberDataManager, ICareMemberDataManager>();
+                container.RegisterAutoWiredAs<AuditHelpers, IAuditHelpers>();
             }
         }
 

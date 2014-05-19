@@ -71,6 +71,7 @@
   <ItemGroup>
     <Compile Include="CareMemberData.cs" />
     <Compile Include="Constants.cs" />
+    <Compile Include="Enums.cs" />
     <Compile Include="GetAllCareMembersDataRequest.cs" />
     <Compile Include="GetAllCareMembersDataResponse.cs" />
     <Compile Include="GetPrimaryCareManagerDataRequest.cs" />

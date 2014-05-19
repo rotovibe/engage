@@ -11,8 +11,8 @@ namespace Phytel.API.DataDomain.CareMember.Test
         public void GetCareMember_Test_Passes()
         {
             GetCareMemberDataRequest request = new GetCareMemberDataRequest { Id = "531dedbbd6a485039854650b" };
-
-            CareMemberData response = CareMemberDataManager.GetCareMember(request);
+            CareMemberDataManager cm = new CareMemberDataManager { Factory = new StubCareMemberRepositoryFactory() };
+            CareMemberData response = cm.GetCareMember(request);
 
             Assert.IsNotNull(response);
         }
@@ -21,8 +21,8 @@ namespace Phytel.API.DataDomain.CareMember.Test
         public void GetAllCareMembers_Test_Passes()
         {
             GetAllCareMembersDataRequest request = new GetAllCareMembersDataRequest { PatientId = "52f55899072ef709f84e7637" };
-
-            List<CareMemberData> response = CareMemberDataManager.GetAllCareMembers(request);
+            CareMemberDataManager cm = new CareMemberDataManager { Factory = new StubCareMemberRepositoryFactory() };
+            List<CareMemberData> response = cm.GetAllCareMembers(request);
 
             Assert.IsTrue(response.Count > 0);
         }
@@ -37,7 +37,8 @@ namespace Phytel.API.DataDomain.CareMember.Test
                 Version = 1,
                 CareMember = n
             };
-            string id = CareMemberDataManager.InsertCareMember(request);
+            CareMemberDataManager cm = new CareMemberDataManager { Factory = new StubCareMemberRepositoryFactory() };
+            string id = cm.InsertCareMember(request);
 
             Assert.IsNotNull(id);
         }
@@ -52,7 +53,8 @@ namespace Phytel.API.DataDomain.CareMember.Test
                 Version = 1,
                 CareMember = n
             };
-            bool updated = CareMemberDataManager.UpdateCareMember(request);
+            CareMemberDataManager cm = new CareMemberDataManager { Factory = new StubCareMemberRepositoryFactory() };
+            bool updated = cm.UpdateCareMember(request);
 
             Assert.IsTrue(updated);
         }
@@ -61,8 +63,8 @@ namespace Phytel.API.DataDomain.CareMember.Test
         public void GetPrimaryCareManager_Test()
         {
             GetPrimaryCareManagerDataRequest request = new GetPrimaryCareManagerDataRequest { PatientId = "5325dafed6a4850adcbba7fa", Context = "NG", ContractNumber = "InHealth001", UserId = "000000000000000000000000", Version = 1.0 };
-
-            CareMemberData response = CareMemberDataManager.GetPrimaryCareManager(request);
+            CareMemberDataManager cm = new CareMemberDataManager { Factory = new StubCareMemberRepositoryFactory() };
+            CareMemberData response = cm.GetPrimaryCareManager(request);
 
             Assert.IsNotNull(response);
         }

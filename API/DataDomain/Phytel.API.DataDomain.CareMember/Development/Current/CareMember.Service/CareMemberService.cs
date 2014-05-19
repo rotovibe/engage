@@ -10,6 +10,8 @@ namespace Phytel.API.DataDomain.CareMember.Service
 {
     public class CareMemberService : ServiceStack.ServiceInterface.Service
     {
+        public ICareMemberDataManager Manager { get; set; }
+        
         public PutCareMemberDataResponse Put(PutCareMemberDataRequest request)
         {
             PutCareMemberDataResponse response = new PutCareMemberDataResponse();
@@ -18,7 +20,7 @@ namespace Phytel.API.DataDomain.CareMember.Service
                 if (string.IsNullOrEmpty(request.UserId))
                     throw new UnauthorizedAccessException("CareMemberDD:Put()::Unauthorized Access");
 
-                response.Id = CareMemberDataManager.InsertCareMember(request);
+                response.Id = Manager.InsertCareMember(request);
                 response.Version = request.Version;
             }
             catch (Exception ex)
@@ -39,7 +41,7 @@ namespace Phytel.API.DataDomain.CareMember.Service
                 if (string.IsNullOrEmpty(request.UserId))
                     throw new UnauthorizedAccessException("CareMemberDD:Put()::Unauthorized Access");
 
-                response.Updated = CareMemberDataManager.UpdateCareMember(request);
+                response.Updated = Manager.UpdateCareMember(request);
                 response.Version = request.Version;
             }
             catch (Exception ex)
@@ -60,7 +62,7 @@ namespace Phytel.API.DataDomain.CareMember.Service
                 if (string.IsNullOrEmpty(request.UserId))
                     throw new UnauthorizedAccessException("CareMemberDD:Get()::Unauthorized Access");
 
-                response.CareMember = CareMemberDataManager.GetCareMember(request);
+                response.CareMember = Manager.GetCareMember(request);
                 response.Version = request.Version;
             }
             catch (Exception ex)
@@ -81,7 +83,7 @@ namespace Phytel.API.DataDomain.CareMember.Service
                 if (string.IsNullOrEmpty(request.UserId))
                     throw new UnauthorizedAccessException("CareMemberDD:Get()::Unauthorized Access");
 
-                response.CareMembers = CareMemberDataManager.GetAllCareMembers(request);
+                response.CareMembers = Manager.GetAllCareMembers(request);
                 response.Version = request.Version;
             }
             catch (Exception ex)
@@ -102,7 +104,7 @@ namespace Phytel.API.DataDomain.CareMember.Service
                 if (string.IsNullOrEmpty(request.UserId))
                     throw new UnauthorizedAccessException("CareMemberDD:Get()::Unauthorized Access");
 
-                response.CareMember = CareMemberDataManager.GetPrimaryCareManager(request);
+                response.CareMember = Manager.GetPrimaryCareManager(request);
                 response.Version = request.Version;
             }
             catch (Exception ex)

@@ -13,19 +13,20 @@ using MongoDB.Bson;
 
 namespace Phytel.API.DataDomain.CareMember
 {
-    public static class CareMemberDataManager
+    public class CareMemberDataManager : ICareMemberDataManager
     {
         #region Endpoint addresses
-        static readonly string DDLookupServiceUrl = ConfigurationManager.AppSettings["DDLookupServiceUrl"];
+        protected static readonly string DDLookupServiceUrl = ConfigurationManager.AppSettings["DDLookupServiceUrl"];
         #endregion
+
+        public ICareMemberRepositoryFactory Factory { get; set; }
         
-        public static string InsertCareMember(PutCareMemberDataRequest request)
+        public string InsertCareMember(PutCareMemberDataRequest request)
         {
             string careMemberId = string.Empty;
             try
             {
-                ICareMemberRepository<PutCareMemberDataResponse> repo = CareMemberRepositoryFactory<PutCareMemberDataResponse>.GetCareMemberRepository(request.ContractNumber, request.Context, request.UserId);
-
+                ICareMemberRepository repo = Factory.GetRepository(request, RepositoryType.CareMember);
                 careMemberId = (string)repo.Insert(request);
             }
             catch (Exception ex)
@@ -35,13 +36,12 @@ namespace Phytel.API.DataDomain.CareMember
             return careMemberId;
         }
 
-        public static bool UpdateCareMember(PutUpdateCareMemberDataRequest request)
+        public bool UpdateCareMember(PutUpdateCareMemberDataRequest request)
         {
             bool updated = false;
             try
             {
-                ICareMemberRepository<PutUpdateCareMemberDataResponse> repo = CareMemberRepositoryFactory<PutUpdateCareMemberDataResponse>.GetCareMemberRepository(request.ContractNumber, request.Context, request.UserId);
-
+                ICareMemberRepository repo = Factory.GetRepository(request, RepositoryType.CareMember);
                 updated = (bool)repo.Update(request);
             }
             catch (Exception ex)
@@ -51,13 +51,12 @@ namespace Phytel.API.DataDomain.CareMember
             return updated;
         }
 
-        public static CareMemberData GetCareMember(GetCareMemberDataRequest request)
+        public CareMemberData GetCareMember(GetCareMemberDataRequest request)
         {
             try
             {
-                CareMemberData response = null;
-                ICareMemberRepository<CareMemberData> repo = CareMemberRepositoryFactory<CareMemberData>.GetCareMemberRepository(request.ContractNumber, request.Context, request.UserId);
-
+                CareMemberData response = null; 
+                ICareMemberRepository repo = Factory.GetRepository(request, RepositoryType.CareMember);
                 response = repo.FindByID(request.Id) as CareMemberData;
                 return response;
             }
@@ -67,13 +66,12 @@ namespace Phytel.API.DataDomain.CareMember
             }
         }
 
-        public static List<CareMemberData> GetAllCareMembers(GetAllCareMembersDataRequest request)
+        public List<CareMemberData> GetAllCareMembers(GetAllCareMembersDataRequest request)
         {
             try
             {
                 List<CareMemberData> response = null;
-                ICareMemberRepository<List<CareMemberData>> repo = CareMemberRepositoryFactory<List<CareMemberData>>.GetCareMemberRepository(request.ContractNumber, request.Context, request.UserId);
-
+                ICareMemberRepository repo = Factory.GetRepository(request, RepositoryType.CareMember);
                 response = repo.FindByPatientId(request.PatientId) as List<CareMemberData>;
                 return response;
             }
@@ -84,13 +82,12 @@ namespace Phytel.API.DataDomain.CareMember
         }
 
 
-        public static CareMemberData GetPrimaryCareManager(GetPrimaryCareManagerDataRequest request)
+        public CareMemberData GetPrimaryCareManager(GetPrimaryCareManagerDataRequest request)
         {
             try
             {
                 CareMemberData response = null;
-                ICareMemberRepository<List<CareMemberData>> repo = CareMemberRepositoryFactory<List<CareMemberData>>.GetCareMemberRepository(request.ContractNumber, request.Context, request.UserId);
-
+                ICareMemberRepository repo = Factory.GetRepository(request, RepositoryType.CareMember);
                 List<CareMemberData> careMembers = repo.FindByPatientId(request.PatientId) as List<CareMemberData>;
                 if(careMembers != null)
                 {
@@ -106,7 +103,7 @@ namespace Phytel.API.DataDomain.CareMember
             }
         }
 
-        private static string getCareManagerLookupId(GetLookUpsDataRequest request)
+        private string getCareManagerLookupId(GetLookUpsDataRequest request)
         {
             string lookupId = string.Empty;
             try

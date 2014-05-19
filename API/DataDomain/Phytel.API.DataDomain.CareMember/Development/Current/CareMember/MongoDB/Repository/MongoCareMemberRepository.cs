@@ -13,7 +13,7 @@ using MB = MongoDB.Driver.Builders;
 
 namespace Phytel.API.DataDomain.CareMember
 {
-    public class MongoCareMemberRepository<T> : ICareMemberRepository<T>
+    public class MongoCareMemberRepository : ICareMemberRepository
     {
         private string _dbName = string.Empty;
         private int _expireDays = Convert.ToInt32(ConfigurationManager.AppSettings["ExpireDays"]);

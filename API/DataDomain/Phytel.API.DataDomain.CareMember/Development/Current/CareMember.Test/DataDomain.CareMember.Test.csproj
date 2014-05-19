@@ -59,6 +59,8 @@
   <ItemGroup>
     <Compile Include="CareMemberTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Stub\StubCareMemberRepositoryFactory.cs" />
+    <Compile Include="Stub\StubMongoCareMemberRepository.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
