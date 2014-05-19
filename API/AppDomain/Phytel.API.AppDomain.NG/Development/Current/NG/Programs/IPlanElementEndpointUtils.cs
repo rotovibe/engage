@@ -1,19 +1,31 @@
-﻿using System;
+﻿using Phytel.API.AppDomain.NG.DTO;
+using Phytel.API.AppDomain.NG.DTO.Observation;
+using Phytel.API.AppDomain.NG.PlanCOR;
+using Phytel.API.DataDomain.Patient.DTO;
+using Phytel.API.DataDomain.PatientObservation.DTO;
+using Phytel.API.Interface;
+using System;
+using System.Collections.Generic;
+using AD = Phytel.API.AppDomain.NG.DTO;
+using DD = Phytel.API.DataDomain.Program.DTO;
+
 namespace Phytel.API.AppDomain.NG.Programs
 {
     public interface IEndpointUtils
     {
-        global::Phytel.API.AppDomain.NG.DTO.Observation.PatientObservation GetPatientProblem(string probId, global::Phytel.API.AppDomain.NG.PlanCOR.PlanElementEventArg e, string userId);
-        global::Phytel.API.DataDomain.Program.DTO.ProgramAttributeData GetProgramAttributes(string planElemId, global::Phytel.API.Interface.IAppDomainRequest request);
-        global::System.Collections.Generic.List<global::Phytel.API.DataDomain.Program.DTO.StepResponse> GetResponsesForStep(string stepId, global::Phytel.API.Interface.IAppDomainRequest request);
-        bool InsertNewProgramAttribute(global::Phytel.API.DataDomain.Program.DTO.ProgramAttributeData pa, global::Phytel.API.Interface.IAppDomainRequest request);
-        global::Phytel.API.DataDomain.PatientObservation.DTO.PutRegisterPatientObservationResponse PutNewPatientProblem(string patientId, string userId, string elementId, global::Phytel.API.Interface.IAppDomainRequest request);
-        global::Phytel.API.DataDomain.Patient.DTO.CohortPatientViewData RequestCohortPatientViewData(string patientId, global::Phytel.API.Interface.IAppDomainRequest request);
-        global::Phytel.API.AppDomain.NG.DTO.Program RequestPatientProgramDetail(global::Phytel.API.AppDomain.NG.DTO.IProcessActionRequest request);
-        global::Phytel.API.DataDomain.Program.DTO.GetProgramDetailsSummaryResponse RequestPatientProgramDetailsSummary(global::Phytel.API.AppDomain.NG.DTO.GetPatientProgramDetailsSummaryRequest request);
-        global::Phytel.API.DataDomain.Program.DTO.ProgramDetail SaveAction(global::Phytel.API.AppDomain.NG.DTO.IProcessActionRequest request, string actionId, global::Phytel.API.AppDomain.NG.DTO.Program p);
-        void UpdateCohortPatientViewProblem(global::Phytel.API.DataDomain.Patient.DTO.CohortPatientViewData cpvd, string patientId, global::Phytel.API.Interface.IAppDomainRequest request);
-        global::Phytel.API.DataDomain.PatientObservation.DTO.PutUpdateObservationDataResponse UpdatePatientProblem(string patientId, string userId, string elementId, global::Phytel.API.AppDomain.NG.DTO.Observation.PatientObservation pod, bool _active, global::Phytel.API.Interface.IAppDomainRequest request);
-        bool UpdateProgramAttributes(global::Phytel.API.DataDomain.Program.DTO.ProgramAttributeData pAtt, global::Phytel.API.Interface.IAppDomainRequest request);
+        PatientObservation GetPatientProblem(string probId, PlanElementEventArg e, string userId);
+        DD.ProgramAttributeData GetProgramAttributes(string planElemId, IAppDomainRequest request);
+        List<DD.StepResponse> GetResponsesForStep(string stepId, IAppDomainRequest request);
+        bool InsertNewProgramAttribute(DD.ProgramAttributeData pa, IAppDomainRequest request);
+        PutRegisterPatientObservationResponse PutNewPatientProblem(string patientId, string userId, string elementId, IAppDomainRequest request);
+        CohortPatientViewData RequestCohortPatientViewData(string patientId, IAppDomainRequest request);
+        AD.Program RequestPatientProgramDetail(IProcessActionRequest request);
+        DD.GetProgramDetailsSummaryResponse RequestPatientProgramDetailsSummary(AD.GetPatientProgramDetailsSummaryRequest request);
+        DD.ProgramDetail SaveAction(IProcessActionRequest request, string actionId, AD.Program p);
+        void UpdateCohortPatientViewProblem(CohortPatientViewData cpvd, string patientId, IAppDomainRequest request);
+        PutUpdateObservationDataResponse UpdatePatientProblem(string patientId, string userId, string elementId, PatientObservation pod, bool _active, IAppDomainRequest request);
+        bool UpdateProgramAttributes(DD.ProgramAttributeData pAtt, IAppDomainRequest request);
+        DD.PutProgramToPatientResponse AssignPatientToProgram(AD.PostPatientToProgramsRequest request, string careManagerId);
+        string GetPrimaryCareManagerForPatient(PostPatientToProgramsRequest request);
     }
 }

@@ -9,6 +9,9 @@ namespace Phytel.API.DataDomain.Program.DTO
         [ApiMember(Name = "UserId", Description = "UserId of the logged in user", ParameterType = "property", DataType = "string", IsRequired = false)]
         public string UserId { get; set; }
 
+        [ApiMember(Name = "CareManagerId", Description = "ContactId of primary care manager.", ParameterType = "property", DataType = "string", IsRequired = true)]
+        public string CareManagerId { get; set; }
+
         [ApiMember(Name = "PatientId", Description = "PatientId", ParameterType = "property", DataType = "string", IsRequired = false)]
         public string PatientId { get; set; }
 

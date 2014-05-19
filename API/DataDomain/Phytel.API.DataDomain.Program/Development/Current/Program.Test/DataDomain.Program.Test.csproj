@@ -99,6 +99,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\..\AppDomain\Phytel.API.AppDomain.NG\Development\Current\NG\AppDomain.NG.csproj">
+      <Project>{E368DA81-D304-4556-B1C4-D4774C0DEFD2}</Project>
+      <Name>AppDomain.NG</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\..\..\Common\Phytel.API.Common\Development\Current\Phytel.API.Common.csproj">
       <Project>{25cf3c3f-221f-4a49-b5ef-a8a5fcf9a5ba}</Project>
       <Name>Phytel.API.Common</Name>

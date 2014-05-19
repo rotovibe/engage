@@ -13,6 +13,9 @@ using Phytel.API.Interface;
 using Phytel.API.DataDomain.PatientObservation.DTO;
 using Phytel.API.AppDomain.NG.PlanCOR;
 using MongoDB.Bson;
+using ServiceStack.Service;
+using ServiceStack.ServiceClient.Web;
+using Phytel.API.DataDomain.CareMember.DTO;
 
 namespace Phytel.API.AppDomain.NG.Tests
 {
@@ -261,6 +264,39 @@ namespace Phytel.API.AppDomain.NG.Tests
 
                 PatientObservation po = PlanElementEndpointUtil.GetPatientProblem("533ed16dd4332307bc592baf", e, "000000000000000000000000");
                 Assert.IsNotNull(po);
+            }
+        }
+
+        [TestClass()]
+        public class GetPrimaryCareManagerForPatient_Test
+        {
+            [TestMethod()]
+            [TestCategory("NIGHT-833")]
+            [TestProperty("TFS", "11199")]
+            [TestProperty("Layer", "DD.DTOUtility")]
+            public void Get_PCM_Valid_For_Patient()
+            {
+                string control = "5325c81f072ef705080d347e";
+                string result = null;
+                //string url = "http://azurephyteldev.cloudapp.net:59901/CareMember";
+                string urls = "http://localhost:8888/CareMember";
+                IRestClient client = new JsonServiceClient();
+                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Patient/{4}/PrimaryCareManager/?UserId=nguser",
+                                                        urls,
+                                                        "NG",
+                                                        "1",
+                                                        "InHealth001",
+                                                        "5325db1ad6a4850adcbba83a"), "nguser");
+
+                GetPrimaryCareManagerDataResponse dataDomainResponse =
+                    client.Get<GetPrimaryCareManagerDataResponse>(url);
+
+                if (dataDomainResponse.CareMember != null)
+                {
+                    result = dataDomainResponse.CareMember.ContactId;
+                }
+
+                Assert.AreEqual(control, result);
             }
         }
     }

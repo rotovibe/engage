@@ -249,5 +249,11 @@ namespace Phytel.API.DataDomain.Program.Test.Stubs
         {
             throw new NotImplementedException();
         }
+
+
+        public string GetCareManagerValueByRule(DTO.PutProgramToPatientRequest request, MEProgram cp)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

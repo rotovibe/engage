@@ -8,7 +8,7 @@ using Phytel.API.AppDomain.NG.Test.Stubs;
 namespace Phytel.API.AppDomain.NG.Tests
 {
     [TestClass()]
-    public class NGManager_Tests
+    public class NGManager_Test
     {
         [TestClass()]
         public class GetPatientProgramDetailsSummary_Method
@@ -204,18 +204,11 @@ namespace Phytel.API.AppDomain.NG.Tests
                 Assert.AreEqual(desc, mDesc, true);
             }
         }
-    }
-}
 
-namespace Phytel.API.AppDomain.NG.Test
-{
-    [TestClass]
-    public class NGManager_Tests
-    {
         [TestMethod]
         public void GetPatientByID_Test()
         {
-            
+
             // Arrange
             double version = 1.0;
             string contractNumber = "InHealth001";
@@ -259,7 +252,7 @@ namespace Phytel.API.AppDomain.NG.Test
 
             //Assert
             Assert.IsTrue(response != null);
-        
+
         }
 
         #region PatientProblem
@@ -308,7 +301,7 @@ namespace Phytel.API.AppDomain.NG.Test
             Assert.IsTrue(response.Count > 0);
         }
 
-        
+
         [TestMethod]
         public void GetCohortPatients_Test()
         {
@@ -323,10 +316,10 @@ namespace Phytel.API.AppDomain.NG.Test
                 Token = token,
                 Version = version,
                 CohortID = "530f9cff072ef715f4b411cf",
-                SearchFilter = "", 
+                SearchFilter = "",
                 Skip = "0",
                 Take = "100",
-                UserId =  "EC0849A4-D0A1-44BF-A482-7A97103E96CD"
+                UserId = "EC0849A4-D0A1-44BF-A482-7A97103E96CD"
             };
             // Act
             GetCohortPatientsResponse response = ngManager.GetCohortPatients(request);
@@ -382,12 +375,12 @@ namespace Phytel.API.AppDomain.NG.Test
             Assert.IsTrue(response != null);
         }
 
-         [TestMethod]
+        [TestMethod]
         public void UpdatePatient_Test()
         {
             PutUpdateContactRequest request = new PutUpdateContactRequest();
             request.ContractNumber = "InHealth001";
-            request.UserId = "AD_TestHarness"; 
+            request.UserId = "AD_TestHarness";
             request.Version = 1;
             Contact contact = new Contact();
             contact.Modes = new List<CommMode>();
@@ -406,8 +399,8 @@ namespace Phytel.API.AppDomain.NG.Test
             List<Phone> phones = new List<Phone>();
             phones.Add(new Phone { Id = "52e7583dd43323149870c225", IsText = false, Number = 2142142147, OptOut = false, PhonePreferred = true, TextPreferred = false, TypeId = "52e18c2ed433232028e9e3a6" });
             phones.Add(new Phone { Id = "52e75847d43323149870c226", IsText = true, Number = 8179035768, OptOut = false, PhonePreferred = false, TextPreferred = true, TypeId = "52e18c38d433232028e9e3a8" });
-          //  phones.Add(new Phone { Id = "52e7584bd43323149870c227", IsText = false, Number = "9729729723", OptOut = false, PhonePreferred = false, TextPreferred = false, TypeId = "52e18c32d433232028e9e3a7" });
-           // phones.Add(new Phone { Id = "-1", IsText = false, Number = "0000000", OptOut = false, PhonePreferred = false, TextPreferred = false, TypeId = "52e18c32d433232028e9e3a7" });
+            //  phones.Add(new Phone { Id = "52e7584bd43323149870c227", IsText = false, Number = "9729729723", OptOut = false, PhonePreferred = false, TextPreferred = false, TypeId = "52e18c32d433232028e9e3a7" });
+            // phones.Add(new Phone { Id = "-1", IsText = false, Number = "0000000", OptOut = false, PhonePreferred = false, TextPreferred = false, TypeId = "52e18c32d433232028e9e3a7" });
             contact.Phones = phones;
 
             //List<Email> emails = new List<Email>();
@@ -442,35 +435,62 @@ namespace Phytel.API.AppDomain.NG.Test
 
             request.Contact = contact;
             NGManager ngManager = new NGManager();
-            PutUpdateContactResponse response =  ngManager.PutUpdateContact(request);
+            PutUpdateContactResponse response = ngManager.PutUpdateContact(request);
 
             Assert.IsNotNull(response);
         }
 
-         [TestMethod]
-         public void GetRecentPatients_Test()
-         {
+        [TestMethod]
+        public void GetRecentPatients_Test()
+        {
 
-             // Arrange
-             double version = 1.0;
-             string contractNumber = "InHealth001";
-             string token = "1234";
-             NGManager ngManager = new NGManager() { PlanElementUtils = new PlanElementUtils() };
-             GetRecentPatientsRequest request = new GetRecentPatientsRequest
-             {
-                 ContractNumber = contractNumber,
-                 Token = token,
-                 Version = version,
-                 ContactId = "5325c821072ef705080d3488",
-                 UserId = "5325c821072ef705080d3488"
-             };
-             // Act
-             GetRecentPatientsResponse response = ngManager.GetRecentPatients(request);
+            // Arrange
+            double version = 1.0;
+            string contractNumber = "InHealth001";
+            string token = "1234";
+            NGManager ngManager = new NGManager() { PlanElementUtils = new PlanElementUtils() };
+            GetRecentPatientsRequest request = new GetRecentPatientsRequest
+            {
+                ContractNumber = contractNumber,
+                Token = token,
+                Version = version,
+                ContactId = "5325c821072ef705080d3488",
+                UserId = "5325c821072ef705080d3488"
+            };
+            // Act
+            GetRecentPatientsResponse response = ngManager.GetRecentPatients(request);
 
-             //Assert
-             Assert.IsTrue(response != null);
-         }
+            //Assert
+            Assert.IsTrue(response != null);
+        }
 
         #endregion
+
+        [TestClass()]
+        public class PostPatientToProgram
+        {
+            [TestMethod()]
+            [TestCategory("NIGHT-833")]
+            [TestProperty("TFS", "11199")]
+            [TestProperty("Layer", "AD.NGManager")]
+            public void Assign_With_CarememberId()
+            {
+                string progId = "111111111111111111111111";
+                INGManager ngm = new NGManager { EndpointUtils = new StubPlanElementEndpointUtils(), PlanElementUtils = new StubPlanElementUtils() };
+                PostPatientToProgramsRequest request = new PostPatientToProgramsRequest
+                {
+                    PatientId = "123456789012345678901234",
+                    Context = "NG",
+                    ContractNumber = "InHealth001",
+                    ContractProgramId = "111111111111111111112222",
+                    Token = "123456789012345678909999",
+                    UserId = "123451234512345123455555",
+                    Version = 1.0
+                };
+                PostPatientToProgramsResponse response = ngm.PostPatientToProgram(request);
+
+                Assert.AreEqual(progId, response.Program.Id);
+            }
+        }
     }
 }

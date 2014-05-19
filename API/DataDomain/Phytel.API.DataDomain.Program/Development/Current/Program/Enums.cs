@@ -16,6 +16,12 @@ namespace Phytel.API.DataDomain.Program
         PatientProgramAttribute
     }
 
+    public enum AssignToType
+    {
+        Unassigned = 1,
+        PCM = 2
+    }
+
     public enum Status
     {
         Active = 1,

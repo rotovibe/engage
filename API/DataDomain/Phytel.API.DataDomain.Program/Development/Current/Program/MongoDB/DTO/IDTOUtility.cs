@@ -45,5 +45,6 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
         bool SavePatientProgramResponses(List<MEPatientProgramResponse> pprs, PutProgramToPatientRequest request);
         List<Module> GetTemplateModulesList(string contractProgramId, string contractNumber, string userId);
         List<Objective> GetTemplateObjectives(ObjectId sourceId, Module mod);
+        string GetCareManagerValueByRule(PutProgramToPatientRequest request, MEProgram cp);
     }
 }

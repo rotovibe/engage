@@ -1,6 +1,7 @@
 using Phytel.API.AppDomain.NG.DTO;
 using Phytel.API.AppDomain.NG.Programs;
 using Phytel.API.Common.CustomObject;
+using Phytel.API.DataDomain.CareMember.DTO;
 using Phytel.API.DataDomain.Cohort.DTO;
 using Phytel.API.DataDomain.Contact.DTO;
 using Phytel.API.DataDomain.LookUp.DTO;
@@ -453,17 +454,10 @@ namespace Phytel.API.AppDomain.NG
             {
                 PostPatientToProgramsResponse response = new PostPatientToProgramsResponse();
 
-                IRestClient client = new JsonServiceClient();
-                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Programs/?ContractProgramId={5}",
-                                                        DDProgramServiceUrl,
-                                                        "NG",
-                                                        request.Version,
-                                                        request.ContractNumber,
-                                                        request.PatientId,
-                                                        request.ContractProgramId), request.UserId);
+                // get PCMId from service call.
+                string primaryCM = EndpointUtils.GetPrimaryCareManagerForPatient(request);
 
-                DD.PutProgramToPatientResponse dataDomainResponse =
-                    client.Put<DD.PutProgramToPatientResponse>(url, new DD.PutProgramToPatientRequest { UserId = request.UserId } as object);
+                DD.PutProgramToPatientResponse dataDomainResponse = EndpointUtils.AssignPatientToProgram(request, primaryCM);
 
                 if (dataDomainResponse.program != null)
                 {
@@ -495,6 +489,8 @@ namespace Phytel.API.AppDomain.NG
                 throw new WebServiceException("AD:PostPatientToProgram()::" + wse.Message, wse.InnerException);
             }
         }
+
+
 
         public GetPatientProgramDetailsSummaryResponse GetPatientProgramDetailsSummary(GetPatientProgramDetailsSummaryRequest request)
         {

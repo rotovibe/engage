@@ -83,5 +83,10 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
         [BsonElement(ModulesProperty)]
         [BsonIgnoreIfNull(true)]
         public List<Module> Modules { get; set; }
+
+        public const string AssignToTypeProperty = "atotyp";
+        [BsonElement(AssignToTypeProperty)]
+        [BsonIgnoreIfNull(true)]
+        public AssignToType AssignToType { get; set; }
     }
 }

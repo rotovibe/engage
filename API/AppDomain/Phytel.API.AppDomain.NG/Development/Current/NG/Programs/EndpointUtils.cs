@@ -3,6 +3,7 @@ using Phytel.API.AppDomain.NG.DTO.Observation;
 using Phytel.API.AppDomain.NG.PlanCOR;
 //using Phytel.API.AppDomain.NG.Program;
 using Phytel.API.AppDomain.NG.Programs;
+using Phytel.API.DataDomain.CareMember.DTO;
 using Phytel.API.DataDomain.Patient.DTO;
 using Phytel.API.DataDomain.PatientObservation.DTO;
 using Phytel.API.DataDomain.PatientProblem.DTO;
@@ -26,6 +27,7 @@ namespace Phytel.API.AppDomain.NG
         static readonly string DDPatientObservationServiceUrl = ConfigurationManager.AppSettings["DDPatientObservationUrl"];
         static readonly string DDPatientServiceUrl = ConfigurationManager.AppSettings["DDPatientServiceUrl"];
         static readonly string DDProgramServiceUrl = ConfigurationManager.AppSettings["DDProgramServiceUrl"];
+        static readonly string DDCareMemberUrl = ConfigurationManager.AppSettings["DDCareMemberUrl"];
 
         public PatientObservation GetPatientProblem(string probId, PlanElementEventArg e, string userId)
         {
@@ -363,7 +365,7 @@ namespace Phytel.API.AppDomain.NG
                 double version = request.Version;
                 string contractNumber = request.ContractNumber;
                 string context = "NG";
-                
+
                 IRestClient client = new JsonServiceClient();
 
                 string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Program/Attributes/Insert/",
@@ -584,5 +586,63 @@ namespace Phytel.API.AppDomain.NG
             }
         }
         #endregion
+
+
+        public PutProgramToPatientResponse AssignPatientToProgram(PostPatientToProgramsRequest request, string primaryCM)
+        {
+            try
+            {
+                IRestClient client = new JsonServiceClient();
+                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Programs/?ContractProgramId={5}",
+                                                        DDProgramServiceUrl,
+                                                        "NG",
+                                                        request.Version,
+                                                        request.ContractNumber,
+                                                        request.PatientId,
+                                                        request.ContractProgramId), request.UserId);
+
+                DD.PutProgramToPatientResponse dataDomainResponse =
+                    client.Put<DD.PutProgramToPatientResponse>(url, new DD.PutProgramToPatientRequest
+                    {
+                        UserId = request.UserId,
+                        CareManagerId = !string.IsNullOrEmpty(primaryCM) ? primaryCM : null
+                    } as object);
+
+                return dataDomainResponse;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("AD:PlanElementEndpointUtil:RequestPatientProgramDetailsSummary()::" + ex.Message, ex.InnerException);
+            }
+        }
+
+        public string GetPrimaryCareManagerForPatient(PostPatientToProgramsRequest request)
+        {
+            try
+            {
+                string pcmId = null;
+                IRestClient client = new JsonServiceClient();
+                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Patient/{4}/PrimaryCareManager",
+                                                        DDCareMemberUrl,
+                                                        "NG",
+                                                        request.Version,
+                                                        request.ContractNumber,
+                                                        request.PatientId), request.UserId);
+
+                GetPrimaryCareManagerDataResponse dataDomainResponse =
+                    client.Get<GetPrimaryCareManagerDataResponse>(url);
+
+                if (dataDomainResponse.CareMember != null)
+                {
+                    pcmId = dataDomainResponse.CareMember.ContactId;
+                }
+
+                return pcmId;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("AD:PlanElementEndpointUtil:GetPrimaryCareManagerForPatient()::" + ex.Message, ex.InnerException);
+            }
+        }
     }
 }

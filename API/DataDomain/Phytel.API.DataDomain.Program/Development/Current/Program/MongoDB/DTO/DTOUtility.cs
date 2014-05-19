@@ -18,6 +18,11 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
         {
             try
             {
+                // logic to check for assignto params from program template
+                string res = GetCareManagerValueByRule(request, cp);
+                ObjectId? cmId = null;
+                if (res != null) cmId = ObjectId.Parse(res); 
+
                 MEPatientProgram patientProgDoc = new MEPatientProgram(request.UserId)
                 {
                     PatientId = ObjectId.Parse(request.PatientId),
@@ -29,6 +34,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
                     AttributeEndDate = null,
                     AssignedBy = request.UserId != null ? ObjectId.Parse(request.UserId): ObjectId.Empty,
                     AssignedOn = System.DateTime.UtcNow,
+                    AssignedTo = cmId,
                     StartDate = cp.StartDate,
                     EndDate = cp.EndDate,
                     DateCompleted = cp.DateCompleted,
@@ -64,6 +70,35 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             catch (Exception ex)
             {
                 throw new Exception("DD:DTOUtils:CreateInitialMEPatientProgram()::" + ex.Message, ex.InnerException);
+            }
+        }
+
+        public string GetCareManagerValueByRule(PutProgramToPatientRequest request, MEProgram cp)
+        {
+            string cmId = null;
+            try
+            {
+                if (cp.AssignToType == 0)
+                    return cmId;
+
+                switch (cp.AssignToType)
+                {
+                    case AssignToType.PCM:
+                        {
+                            cmId = request.CareManagerId != null ? request.CareManagerId : null;
+                            break;
+                        }
+                    default:
+                        {
+                            cmId = null;
+                            break;
+                        }
+                }
+                return cmId;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("DD:DTOUtils:GetCareManagerValueByRule()::" + ex.Message, ex.InnerException);
             }
         }
 

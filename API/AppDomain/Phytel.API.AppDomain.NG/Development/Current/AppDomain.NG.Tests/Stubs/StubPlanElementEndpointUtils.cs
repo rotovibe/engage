@@ -129,5 +129,36 @@ namespace Phytel.API.AppDomain.NG.Test.Stubs
         {
             throw new NotImplementedException();
         }
+
+
+        public PutProgramToPatientResponse AssignPatientToProgram(DTO.PostPatientToProgramsRequest request, string careManagerId)
+        {
+            PutProgramToPatientResponse response = new PutProgramToPatientResponse
+            {
+                program = new ProgramInfo
+                {
+                    Id = "111111111111111111111111",
+                    ShortName = "shortname",
+                    Status = 1,
+                    Name = "programname",
+                    PatientId = request.PatientId,
+                    ElementState = 1,
+                    ProgramState = 1
+                },
+                Outcome = new Outcome
+                {
+                    Result = 1,
+                    Reason = "Success"
+                },
+                Version = 1.0
+            };
+            return response;
+        }
+
+        public string GetPrimaryCareManagerForPatient(DTO.PostPatientToProgramsRequest request)
+        {
+            string pcmId = "123456789012345678901234";
+            return pcmId;
+        }
     }
 }

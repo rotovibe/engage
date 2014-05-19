@@ -594,6 +594,114 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO.Tests
 
                 Assert.AreEqual(now, ((DateTime)mepp.AssignedOn).Date);
             }
+
+            [TestMethod()]
+            [TestCategory("NIGHT-833")]
+            [TestProperty("TFS", "11222")]
+            [TestProperty("Layer", "DD.DTOUtility")]
+            public void With_CM_AssignToType_PCM()
+            {
+                IDTOUtility dtoUtil = new DTOUtility { Factory = new StubProgramRepositoryFactory() };
+                string userid = "123456789012345678901234";
+                string cmid = "123456789055554444441234";
+
+                PutProgramToPatientRequest request = new PutProgramToPatientRequest
+                {
+                    UserId = userid,
+                    Context = "NG",
+                    ContractNumber = "InHealth001",
+                    PatientId = "123456789012345678901111",
+                    CareManagerId = cmid
+                };
+
+                MEProgram program = new MEProgram(userid)
+                {
+                    Id = ObjectId.GenerateNewId(),
+                    AssignToType = AssignToType.PCM
+                };
+
+                List<ObjectId> sil = new List<ObjectId>() { ObjectId.GenerateNewId() };
+
+                MEPatientProgram mepp = dtoUtil.CreateInitialMEPatientProgram(request, program, sil);
+                string result = mepp.AssignedTo.ToString();
+
+                Assert.AreEqual(cmid, result);
+            }
+
+            [TestMethod()]
+            [TestCategory("NIGHT-833")]
+            [TestProperty("TFS", "11222")]
+            [TestProperty("Layer", "DD.DTOUtility")]
+            public void With_CM_AssignToType_Unassigned()
+            {
+                IDTOUtility dtoUtil = new DTOUtility { Factory = new StubProgramRepositoryFactory() };
+                string userid = "123456789012345678901234";
+                string cmid = "123456789055554444441234";
+
+                PutProgramToPatientRequest request = new PutProgramToPatientRequest
+                {
+                    UserId = userid,
+                    Context = "NG",
+                    ContractNumber = "InHealth001",
+                    PatientId = "123456789012345678901111",
+                    CareManagerId = cmid
+                };
+
+                MEProgram program = new MEProgram(userid)
+                {
+                    Id = ObjectId.GenerateNewId(),
+                    AssignToType = AssignToType.Unassigned
+                };
+
+                List<ObjectId> sil = new List<ObjectId>() { ObjectId.GenerateNewId() };
+
+                MEPatientProgram mepp = dtoUtil.CreateInitialMEPatientProgram(request, program, sil);
+                ObjectId? result = mepp.AssignedTo;
+
+                Assert.IsNull(result);
+            }
+        }
+
+        [TestClass()]
+        public class GetCareManagerValueByRule_Test
+        {
+            [TestMethod()]
+            [TestCategory("NIGHT-833")]
+            [TestProperty("TFS", "11222")]
+            [TestProperty("Layer", "DD.DTOUtility")]
+            public void With_CM_For_AssignToType()
+            {
+                string cmid = "999999999999999999999999";
+                IDTOUtility dtoUtil = new DTOUtility { Factory = new StubProgramRepositoryFactory() };
+                PutProgramToPatientRequest request = new PutProgramToPatientRequest
+                {
+                    CareManagerId = cmid
+                };
+
+                MEProgram mep = new MEProgram("111111111111111111111234") { AssignToType = AssignToType.PCM };
+                string result = dtoUtil.GetCareManagerValueByRule(request, mep);
+
+                Assert.AreEqual(cmid, result);
+            }
+
+            [TestMethod()]
+            [TestCategory("NIGHT-833")]
+            [TestProperty("TFS", "11222")]
+            [TestProperty("Layer", "DD.DTOUtility")]
+            public void With_Unassigned_For_AssignToType()
+            {
+                string cmid = null;
+                IDTOUtility dtoUtil = new DTOUtility { Factory = new StubProgramRepositoryFactory() };
+                PutProgramToPatientRequest request = new PutProgramToPatientRequest
+                {
+                    CareManagerId = cmid
+                };
+
+                MEProgram mep = new MEProgram("111111111111111111111234") { AssignToType = AssignToType.Unassigned };
+                string result = dtoUtil.GetCareManagerValueByRule(request, mep);
+
+                Assert.AreEqual(cmid, result);
+            }
         }
     }
 }
