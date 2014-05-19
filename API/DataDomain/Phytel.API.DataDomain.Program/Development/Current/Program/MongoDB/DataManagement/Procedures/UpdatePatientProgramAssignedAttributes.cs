@@ -3,6 +3,10 @@ using Phytel.API.DataDomain.Program.MongoDB.DTO;
 using System;
 using System.Collections.Generic;
 using MongoDB.Bson;
+using Phytel.API.DataDomain.CareMember.DTO;
+using ServiceStack.Service;
+using ServiceStack.ServiceClient.Web;
+using System.Configuration;
 
 namespace Phytel.API.DataDomain.Program.MongoDB.DataManagement.Procedures
 {
@@ -10,47 +14,78 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DataManagement.Procedures
     {
         public const string Name = "mp_UpdatePatientProgramAssignedAttributes";
         public const string Description = "Procedure to update the existing fields like AssignedBy(NIGHT-832), AssignedDate(NIGHT-831) and AssignedTo(NIGHT-833) in PatientProgram collection.";
+        public string DDCareMemberUrl = ConfigurationManager.AppSettings["DDCareMemberUrl"];
 
         public override void Implementation()
         {
             try
             {
                 Results = new List<Result>();
-                ObjectId systemObjectId = ObjectId.Parse(Constants.SystemContactId);
+                ObjectId systemObjectId = ObjectId.Parse(Phytel.API.DataDomain.Program.DTO.Constants.SystemContactId);
+                IRestClient client = new JsonServiceClient();
                 IProgramRepository repo = new ProgramRepositoryFactory().GetRepository(Request, RepositoryType.PatientProgram);
 
                 List<MEPatientProgram> programs = (List<MEPatientProgram>)repo.SelectAll();
 
                 foreach (MEPatientProgram mePP in programs)
                 {
-                    bool update = false;
 
                     #region NIGHT-832, NIGHT831
-                    if (mePP.AssignedBy != systemObjectId)
+                    mePP.AssignedBy = systemObjectId;
+                    mePP.AssignedOn = mePP.RecordCreatedOn;
+                    #endregion
+                     
+                    #region NIGHT-833
+                    GetPrimaryCareManagerDataRequest careMemberDataRequest = new GetPrimaryCareManagerDataRequest { Context = "NG", ContractNumber = "InHealth001", PatientId = mePP.PatientId.ToString(), UserId = Phytel.API.DataDomain.Program.DTO.Constants.SystemContactId, Version = 1 };
+                    ObjectId primaryCareManagerId = getPatientsPrimaryCareManager(careMemberDataRequest, client);
+                    if (primaryCareManagerId == ObjectId.Empty)
                     {
-                        mePP.AssignedBy = systemObjectId;
-                        update = true;
+                        mePP.AssignedTo = null;
                     }
-                    if (mePP.AssignedOn != mePP.RecordCreatedOn)
+                    else
                     {
-                        mePP.AssignedOn = mePP.RecordCreatedOn;
-                        update = true;
-                    } 
+                        mePP.AssignedTo = primaryCareManagerId;
+                    }
                     #endregion
 
-                    if (update)
+                    mePP.LastUpdatedOn = DateTime.UtcNow;
+                    mePP.UpdatedBy = systemObjectId;
+                    MEPatientProgram updatedProgram = mePP;
+                    bool success = repo.Save(updatedProgram);
+                    if (success)
                     {
-                        mePP.LastUpdatedOn = DateTime.UtcNow;
-                        mePP.UpdatedBy = systemObjectId;
-                        MEPatientProgram updatedProgram = mePP;
-                        bool success = repo.Save(updatedProgram);
-                        if (success)
-                        {
-                            Results.Add(new Result { Message = "AssignedBy(aby), AssignedDate(aon) for Program Id [" + updatedProgram.Id.ToString() + "] are updated in PatientProgram collection." });
-                        }
+                        Results.Add(new Result { Message = string.Format("Updated values are AssignedBy(aby) = '{0}', AssignedDate(aon) = '{1}', AssignedTo(ato) = '{2}' for Program Id = '{3}' in PatientProgram collection.", mePP.AssignedBy, mePP.AssignedOn, mePP.AssignedTo, updatedProgram.Id)});
                     }
                 }
                 Results.Add(new Result { Message = "Total records updated: " + Results.Count });
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        private ObjectId getPatientsPrimaryCareManager(GetPrimaryCareManagerDataRequest request, IRestClient client)
+        {
+            try
+            {
+
+                ObjectId pcmObjectId = ObjectId.Empty;
+                // [Route("/{Context}/{Version}/{ContractNumber}/Patient/{PatientId}/PrimaryCareManager", "GET")]
+                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Patient/{4}/PrimaryCareManager",
+                    DDCareMemberUrl,
+                    "NG",
+                    request.Version,
+                    request.ContractNumber,
+                    request.PatientId), request.UserId);
+
+                GetCareMemberDataResponse ddResponse = client.Get<GetCareMemberDataResponse>(url);
+
+                if (ddResponse != null && ddResponse.CareMember != null)
+                {
+                    pcmObjectId = ObjectId.Parse(ddResponse.CareMember.ContactId);
+                }
+                return pcmObjectId;
             }
             catch (Exception ex)
             {
