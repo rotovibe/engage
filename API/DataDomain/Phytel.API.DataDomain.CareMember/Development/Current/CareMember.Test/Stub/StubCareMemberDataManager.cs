@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Phytel.API.DataDomain.CareMember.DTO;
 
 namespace Phytel.API.DataDomain.CareMember.Test
 {
@@ -22,19 +23,28 @@ namespace Phytel.API.DataDomain.CareMember.Test
 
         public DTO.CareMemberData GetCareMember(DTO.GetCareMemberDataRequest request)
         {
-            throw new NotImplementedException();
+            ICareMemberRepository repo = Factory.GetRepository(request, RepositoryType.CareMember);
+            CareMemberData careMember = repo.FindByID(request.Id) as CareMemberData;
+            return careMember;
         }
 
         public List<DTO.CareMemberData> GetAllCareMembers(DTO.GetAllCareMembersDataRequest request)
         {
-            throw new NotImplementedException();
+            ICareMemberRepository repo = Factory.GetRepository(request, RepositoryType.CareMember);
+            List<CareMemberData> careMembers = repo.FindByPatientId(request.PatientId) as List<CareMemberData>;
+            return careMembers;
         }
 
         public DTO.CareMemberData GetPrimaryCareManager(DTO.GetPrimaryCareManagerDataRequest request)
         {
-            DTO.CareMemberData pcm = new DTO.CareMemberData();
-
-            return pcm;
+            CareMemberData response = null;
+            ICareMemberRepository repo = Factory.GetRepository(request, RepositoryType.CareMember);
+            List<CareMemberData> careMembers = repo.FindByPatientId(request.PatientId) as List<CareMemberData>;
+            if (careMembers != null)
+            {
+                response = careMembers.Find(c => c.Primary == true && c.TypeId == "530cd571d433231ed4ba969b");
+            }
+            return response;
         }
     }
 }

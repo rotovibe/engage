@@ -10,21 +10,21 @@ namespace Phytel.API.DataDomain.CareMember.Test
         [TestMethod]
         public void GetCareMember_Test_Passes()
         {
-            GetCareMemberDataRequest request = new GetCareMemberDataRequest { Id = "531dedbbd6a485039854650b" };
+            GetCareMemberDataRequest request = new GetCareMemberDataRequest { Id = "53271896d6a4850adc518b1f" };
             StubCareMemberDataManager cm = new StubCareMemberDataManager { Factory = new StubCareMemberRepositoryFactory() };
             CareMemberData response = cm.GetCareMember(request);
 
-            Assert.IsNotNull(response);
+            Assert.IsTrue(response.ContactId == "5325c81f072ef705080d347e");
         }
 
         [TestMethod]
-        public void GetAllCareMembers_Test_Passes()
+        public void GetAllCareMembers_Test()
         {
-            GetAllCareMembersDataRequest request = new GetAllCareMembersDataRequest { PatientId = "52f55899072ef709f84e7637" };
-            StubCareMemberDataManager cm = new StubCareMemberDataManager { Factory = new StubCareMemberRepositoryFactory() };
+            GetAllCareMembersDataRequest request = new GetAllCareMembersDataRequest { PatientId = "5325db1ad6a4850adcbba83a" };
+            ICareMemberDataManager cm = new StubCareMemberDataManager { Factory = new StubCareMemberRepositoryFactory() };
             List<CareMemberData> response = cm.GetAllCareMembers(request);
 
-            Assert.IsTrue(response.Count > 0);
+            Assert.IsTrue(response.Count == 3);
         }
 
         [TestMethod]
@@ -63,11 +63,11 @@ namespace Phytel.API.DataDomain.CareMember.Test
         [TestCategory("NIGHT_833")]
         public void GetPrimaryCareManager_Test()
         {
-            GetPrimaryCareManagerDataRequest request = new GetPrimaryCareManagerDataRequest { PatientId = "5325dafed6a4850adcbba7fa", Context = "NG", ContractNumber = "InHealth001", UserId = "000000000000000000000000", Version = 1.0 };
-            StubCareMemberDataManager cm = new StubCareMemberDataManager { Factory = new StubCareMemberRepositoryFactory() };
+            GetPrimaryCareManagerDataRequest request = new GetPrimaryCareManagerDataRequest { PatientId = "5325db1ad6a4850adcbba83a", Context = "NG", ContractNumber = "InHealth001", UserId = "000000000000000000000000", Version = 1.0 };
+            ICareMemberDataManager cm = new StubCareMemberDataManager { Factory = new StubCareMemberRepositoryFactory() };
             CareMemberData response = cm.GetPrimaryCareManager(request);
 
-            Assert.IsNotNull(response);
+            Assert.IsTrue(response.Id == "53271896d6a4850adc518b1f");
         }
     }
 }
