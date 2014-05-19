@@ -824,7 +824,7 @@ namespace Phytel.API.AppDomain.NG
                 {
                     AssignById = pr.AssignById,
                     AssignDate = pr.AssignDate,
-                    AssignTo = pr.AssignTo,
+                    AssignToId = pr.AssignToId,
                     Client = pr.Client,
                     Completed = pr.Completed,
                     CompletedBy = pr.CompletedBy,

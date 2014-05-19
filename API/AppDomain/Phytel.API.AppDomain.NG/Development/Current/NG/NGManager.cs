@@ -542,7 +542,7 @@ namespace Phytel.API.AppDomain.NG
                             Objectives = GetObjectivesInfo(resp.Program.ObjectivesData),
                             AssignById = resp.Program.AssignBy,
                             AssignDate = resp.Program.AssignDate,
-                            AssignTo = resp.Program.AssignTo,
+                            AssignToId = resp.Program.AssignTo,
                             Attributes = getAttributes(resp.Program.Attributes)
                         };
 
@@ -1370,7 +1370,7 @@ namespace Phytel.API.AppDomain.NG
                             SourceId = r.SourceId,
                             AssignById = r.AssignBy,
                             AssignDate = r.AssignDate,
-                            AssignTo = r.AssignTo,
+                            AssignToId = r.AssignTo,
                             AttrStartDate = r.AttrStartDate,
                             AttrEndDate = r.AttrEndDate,
                             ElementState = r.ElementState,
@@ -1429,7 +1429,7 @@ namespace Phytel.API.AppDomain.NG
                     SourceId = a.SourceId,
                     AssignById = a.AssignBy,
                     AssignDate = a.AssignDate,
-                    AssignTo = a.AssignTo,
+                    AssignToId = a.AssignTo,
                     AttrStartDate = a.AttrStartDate,
                     AttrEndDate = a.AttrEndDate,
                     ElementState = a.ElementState,
