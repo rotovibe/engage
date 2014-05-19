@@ -83,5 +83,10 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
         [BsonElement(RecordCreatedOnProperty)]
         [BsonDateTimeOptions(Kind = System.DateTimeKind.Utc)]
         public System.DateTime RecordCreatedOn { get; private set; }
+
+        public const string AssignToTypeProperty = "atotyp";
+        [BsonElement(AssignToTypeProperty)]
+        [BsonIgnoreIfNull(true)]
+        public AssignToType AssignToType { get; set; }
     }
 }
