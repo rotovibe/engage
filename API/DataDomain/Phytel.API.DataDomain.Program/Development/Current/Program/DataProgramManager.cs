@@ -292,6 +292,7 @@ namespace Phytel.API.DataDomain.Program
                     AssignDate = mepp.AssignedOn,
                     AssignTo = mepp.AssignedTo.ToString(),
                     ElementState = (int)mepp.State,
+                    StateUpdatedOn = mepp.StateUpdatedOn,
                     CompletedBy = mepp.CompletedBy,
                     DateCompleted = mepp.DateCompleted,
                     EligibilityEndDate = mepp.EligibilityEndDate,

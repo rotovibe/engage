@@ -15,6 +15,7 @@ namespace Phytel.API.DataDomain.Program.DTO
         public string Next { get; set; }
         public string Previous { get; set; }
         public int ElementState { get; set; }
+        public DateTime? StateUpdatedOn { get; set; }
         public DateTime? AssignDate { get; set; }
         public string AssignBy { get; set; }
         public string AssignTo { get; set; }

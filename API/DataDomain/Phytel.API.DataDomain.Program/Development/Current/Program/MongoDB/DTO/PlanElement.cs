@@ -45,6 +45,11 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
         [BsonIgnoreIfNull(true)]
         public ElementState State { get; set; }
 
+        public const string StateUpdatedOnProperty = "stuon";
+        [BsonElement(StateUpdatedOnProperty)]
+        [BsonIgnoreIfNull(true)]
+        public DateTime? StateUpdatedOn { get; set; }
+
         public const string AssignDateProperty = "aon";
         [BsonElement(AssignDateProperty)]
         [BsonIgnoreIfNull(true)]

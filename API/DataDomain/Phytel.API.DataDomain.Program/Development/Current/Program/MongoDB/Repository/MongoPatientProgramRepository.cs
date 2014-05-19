@@ -209,6 +209,7 @@ namespace Phytel.API.DataDomain.Program
                             CompletedBy = cp.CompletedBy,
                             DateCompleted = cp.DateCompleted,
                             ElementState = (int)cp.State,
+                            StateUpdatedOn = cp.StateUpdatedOn,
                             Enabled = cp.Enabled,
                             Next = cp.Next != null ? cp.Next.ToString() : string.Empty,
                             Order = cp.Order,
@@ -299,6 +300,7 @@ namespace Phytel.API.DataDomain.Program
                     uv.Add(MB.Update.Set(MEPatientProgram.VersionProperty, pg.Version)); 
 
                     if (pg.ElementState != 0) uv.Add(MB.Update.Set(MEPatientProgram.StateProperty, (ElementState)pg.ElementState));
+                    if (pg.StateUpdatedOn != null) { uv.Add(MB.Update.Set(MEPatientProgram.StateUpdatedOnProperty, pg.StateUpdatedOn)); }
                     if (pg.Status != 0) uv.Add(MB.Update.Set(MEPatientProgram.StatusProperty, (Status)pg.Status));
                     if (pg.AssignBy != null && !string.IsNullOrEmpty(pg.AssignBy)) { uv.Add(MB.Update.Set(MEPatientProgram.AssignByProperty, pg.AssignBy)); }
                     if (pg.AssignTo != null && !string.IsNullOrEmpty(pg.AssignTo)) { uv.Add(MB.Update.Set(MEPatientProgram.AssignToProperty, pg.AssignTo)); }
