@@ -60,6 +60,7 @@ namespace Phytel.API.DataDomain.CareMember.Test
         }
 
         [TestMethod]
+        [TestCategory("NIGHT_833")]
         public void GetPrimaryCareManager_Test()
         {
             GetPrimaryCareManagerDataRequest request = new GetPrimaryCareManagerDataRequest { PatientId = "5325dafed6a4850adcbba7fa", Context = "NG", ContractNumber = "InHealth001", UserId = "000000000000000000000000", Version = 1.0 };
