@@ -70,9 +70,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CareMemberData.cs" />
+    <Compile Include="Constants.cs" />
     <Compile Include="GetAllCareMembersDataRequest.cs" />
     <Compile Include="GetAllCareMembersDataResponse.cs" />
+    <Compile Include="GetPrimaryCareManagerDataRequest.cs" />
     <Compile Include="GetCareMemberDataRequest.cs" />
+    <Compile Include="GetPrimaryCareManagerDataResponse.cs" />
     <Compile Include="GetCareMemberDataResponse.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PutUpdateCareMemberDataRequest.cs" />

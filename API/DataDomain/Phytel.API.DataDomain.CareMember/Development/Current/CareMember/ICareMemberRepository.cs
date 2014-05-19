@@ -10,6 +10,6 @@ namespace Phytel.API.DataDomain.CareMember
 {
     public interface ICareMemberRepository<T> : IRepository<T>
     {
-        IEnumerable<object> FindByPatientId(object request);
+        IEnumerable<object> FindByPatientId(string entityId);
     }
 }

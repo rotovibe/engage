@@ -203,16 +203,15 @@ namespace Phytel.API.DataDomain.CareMember
             catch (Exception) { throw; }
         }
 
-        public IEnumerable<object> FindByPatientId(object request)
+        public IEnumerable<object> FindByPatientId(string patientId)
         {
             List<CareMemberData> careMembersDataList = null;
-            GetAllCareMembersDataRequest dataRequest = (GetAllCareMembersDataRequest)request;
             try
             {
                 using (CareMemberMongoContext ctx = new CareMemberMongoContext(_dbName))
                 {
                     List<IMongoQuery> queries = new List<IMongoQuery>();
-                    queries.Add(Query.EQ(MECareMember.PatientIdProperty, ObjectId.Parse(dataRequest.PatientId)));
+                    queries.Add(Query.EQ(MECareMember.PatientIdProperty, ObjectId.Parse(patientId)));
                     queries.Add(Query.EQ(MECareMember.DeleteFlagProperty, false));
                     IMongoQuery mQuery = Query.And(queries);
                     List<MECareMember> meCareMembers = ctx.CareMembers.Collection.Find(mQuery).ToList();

@@ -78,6 +78,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Enums.cs" />
     <Compile Include="Goal\GetLookUpsDataRequest.cs" />
     <Compile Include="Goal\GetLookUpsDataResponse.cs" />
     <Compile Include="Contact\GetAllLanguageDataRequest.cs" />
