@@ -75,7 +75,7 @@ namespace Phytel.API.DataDomain.Program
                         ShortName = nmePP.ShortName,
                         Status = (int)nmePP.Status,
                         PatientId = nmePP.PatientId.ToString(),
-                        ProgramState = (int)nmePP.ProgramState,
+                        //ProgramState = (int)nmePP.ProgramState, // depricated - Use Element state instead.
                         ElementState = (int)nmePP.State
                     };
 
@@ -119,7 +119,7 @@ namespace Phytel.API.DataDomain.Program
                     var findQ = MB.Query.And(
                         MB.Query<MEPatientProgram>.EQ(b => b.PatientId, ObjectId.Parse(patientID)),
                         MB.Query<MEPatientProgram>.EQ(b => b.ContractProgramId, ObjectId.Parse(progId)),
-                        MB.Query.In(MEPatientProgram.ProgramStateProperty, new List<BsonValue> { BsonValue.Create(0), BsonValue.Create(1) }));
+                        MB.Query.In(MEPatientProgram.StateProperty, new List<BsonValue> { BsonValue.Create(ElementState.NotStarted), BsonValue.Create(ElementState.Started) }));
 
                     pp = ctx.PatientPrograms.Collection.Find(findQ).ToList();
                 }
@@ -219,7 +219,7 @@ namespace Phytel.API.DataDomain.Program
                             Modules = DTOUtils.GetModules(cp.Modules, _dbName, this.UserId),
                             Name = cp.Name,
                             PatientId = cp.PatientId.ToString(),
-                            ProgramState = (int)cp.ProgramState,
+                            // ProgramState = (int)cp.ProgramState, depricated - Use Element state instead.
                             ShortName = cp.ShortName,
                             StartDate = cp.StartDate,
                             Status = (int)cp.Status,
@@ -294,7 +294,7 @@ namespace Phytel.API.DataDomain.Program
                     uv.Add(MB.Update.Set(MEPatientProgram.CompletedProperty, pg.Completed));
                     uv.Add(MB.Update.Set(MEPatientProgram.EnabledProperty, pg.Enabled));
                     uv.Add(MB.Update.Set(MEPatientProgram.OrderProperty, pg.Order));
-                    uv.Add(MB.Update.Set(MEPatientProgram.ProgramStateProperty, (ProgramState)pg.ProgramState));
+                    //uv.Add(MB.Update.Set(MEPatientProgram.ProgramStateProperty, (ProgramState)pg.ProgramState)); // depricated - Use Element state instead.
                     uv.Add(MB.Update.Set(MEPatientProgram.LastUpdatedOnProperty, System.DateTime.UtcNow));
                     uv.Add(MB.Update.Set(MEPatientProgram.UpdatedByProperty, ObjectId.Parse(this.UserId)));
                     uv.Add(MB.Update.Set(MEPatientProgram.VersionProperty, pg.Version)); 

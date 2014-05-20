@@ -68,14 +68,14 @@ public enum SpawnElementTypeCode
     /// <summary>
     /// depricated. see ElementState
     /// </summary>
-    public enum ProgramState
-    {
-        Removed = -1,
-        NotStarted = 0,
-        Started = 1,
-        Completed = 2,
-        Closed = 3
-    }
+    //public enum ProgramState
+    //{
+    //    Removed = -1,
+    //    NotStarted = 0,
+    //    Started = 1,
+    //    Completed = 2,
+    //    Closed = 3
+    //}
 
     public enum ElementState
     {
@@ -83,7 +83,8 @@ public enum SpawnElementTypeCode
         NotStarted = 2,
         Started = 3,
         InProgress = 4,
-        Completed = 5
+        Completed = 5,
+        Closed = 6
     }
 
     public enum EnrollmentStatus

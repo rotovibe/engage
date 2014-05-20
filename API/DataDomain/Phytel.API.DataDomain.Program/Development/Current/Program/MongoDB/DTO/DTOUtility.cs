@@ -28,7 +28,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
                     PatientId = ObjectId.Parse(request.PatientId),
                     //AuthoredBy = cp.AuthoredBy,
                     Client = cp.Client,
-                    ProgramState = ProgramState.NotStarted,
+                    //ProgramState = ProgramState.NotStarted  depricated - Use Element state instead.
                     State = ElementState.NotStarted,
                     AttributeStartDate = null,
                     AttributeEndDate = null,

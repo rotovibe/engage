@@ -1,5 +1,6 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Phytel.API.DataDomain.Program.DTO;
+using Phytel.API.DataDomain.Program.MongoDB.DTO;
 using Phytel.API.DataDomain.Program.Test.Stubs;
 
 namespace Phytel.API.DataDomain.Program.Test
@@ -43,6 +44,20 @@ namespace Phytel.API.DataDomain.Program.Test
             ProgramDataManager pm = new ProgramDataManager();
             
             GetPatientActionDetailsDataResponse response = pm.GetActionDetails(request);
+
+            Assert.IsNotNull(response);
+        }
+
+        
+        [TestMethod]
+        public void PutProgramToPatientTest()
+        {
+            string userId = "000000000000000000000000";
+            PutProgramToPatientRequest request = new PutProgramToPatientRequest { PatientId = "5325db77d6a4850adcbba95a", CareManagerId = "5325c81f072ef705080d347e", ContractProgramId = "5330920da38116ac180009d2", UserId = userId };
+
+            ProgramDataManager pm = new ProgramDataManager { Factory = new ProgramRepositoryFactory(), DTOUtility = new DTOUtility { Factory = new ProgramRepositoryFactory() } };
+            
+            PutProgramToPatientResponse response = pm.PutPatientToProgram(request);
 
             Assert.IsNotNull(response);
         }

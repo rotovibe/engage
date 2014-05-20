@@ -11,7 +11,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
 {
     [BsonIgnoreExtraElements(false)]
     [MongoIndex(Keys = new string[] { TTLDateProperty }, TimeToLive = 0)]
-    [MongoIndex(Keys = new string[] { PatientIdProperty, ContractProgramIdProperty, ProgramStateProperty }, Unique = false)]
+    [MongoIndex(Keys = new string[] { PatientIdProperty, ContractProgramIdProperty, StateProperty }, Unique = false)]
     public class MEPatientProgram : ProgramBase, IMEEntity, IMongoEntity<ObjectId>
     {
         public MEPatientProgram(string userId)
@@ -39,9 +39,10 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
         [BsonIgnoreIfNull(true)]
         public ObjectId ContractProgramId { get; set; }
 
-        public const string ProgramStateProperty = "progstate";
-        [BsonElement(ProgramStateProperty)]
-        public ProgramState ProgramState { get; set; }
+        // depricated - Use Element state instead.
+        //public const string ProgramStateProperty = "progstate";
+        //[BsonElement(ProgramStateProperty)]
+        //public ProgramState ProgramState { get; set; }
 
         [BsonExtraElements]
         public BsonDocument ExtraElements { get; set; }

@@ -274,7 +274,7 @@ namespace Phytel.API.DataDomain.Program
                     Description = mepp.Description,
                     Name = mepp.Name,
                     PatientId = mepp.PatientId.ToString(),
-                    ProgramState = (int)mepp.ProgramState,
+                    //ProgramState = (int)mepp.ProgramState, depricated - Use Element state instead.
                     ShortName = mepp.ShortName,
                     StartDate = mepp.StartDate,
                     EndDate = mepp.EndDate,
