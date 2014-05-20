@@ -49,19 +49,16 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DataManagement.Procedures
                     #endregion
 
                     #region NIGHT-868
-                    DateTime? stateUpdatedOn = null;
-		            switch(mePP.State)
+                    switch(mePP.State)
                     {
                         case ElementState.NotStarted :
                             mePP.StateUpdatedOn = mePP.AssignedOn;
                             break;
                         case ElementState.InProgress :
-                            stateUpdatedOn = getActionsEarliestCompletedDate(mePP);
-                            mePP.StateUpdatedOn = stateUpdatedOn;
+                            mePP.StateUpdatedOn = getActionsEarliestCompletedDate(mePP);
                             break;
                         case ElementState.Closed :
-                            stateUpdatedOn = getDisenrollmentActionsCompletedDate(mePP);
-                            mePP.StateUpdatedOn = stateUpdatedOn;
+                            mePP.StateUpdatedOn = getDisenrollmentActionsCompletedDate(mePP);
                             break;
                     }
 	                #endregion
