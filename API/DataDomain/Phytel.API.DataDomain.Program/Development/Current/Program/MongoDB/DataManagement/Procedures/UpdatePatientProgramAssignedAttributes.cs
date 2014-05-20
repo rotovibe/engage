@@ -13,7 +13,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DataManagement.Procedures
     public class UpdatePatientProgramAssignedAttributes : MongoProcedure, IMongoProcedure
     {
         public const string Name = "mp_UpdatePatientProgramAssignedAttributes";
-        public const string Description = "Procedure to update the existing fields like AssignedBy(NIGHT-832), AssignedDate(NIGHT-831), AssignedTo(NIGHT-833) and State Update date (NIGHT-868) in PatientProgram collection.";
+        public const string Description = "Procedure to update Program's existing fields like AssignedBy(NIGHT-832), AssignedDate(NIGHT-831), AssignedTo(NIGHT-833) and State Update date (NIGHT-868) in PatientProgram collection.";
         public string DDCareMemberUrl = ConfigurationManager.AppSettings["DDCareMemberUrl"];
 
         public override void Implementation()
@@ -69,7 +69,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DataManagement.Procedures
                     bool success = repo.Save(updatedProgram);
                     if (success)
                     {
-                        Results.Add(new Result { Message = string.Format("Updated values are AssignedBy(aby) = '{0}', AssignedDate(aon) = '{1}', AssignedTo(ato) = '{2}', StateUpdatedOn(stuon) = '{3}' for Program Id = '{4}' in PatientProgram collection.", mePP.AssignedBy, mePP.AssignedOn, mePP.AssignedTo, mePP.StateUpdatedOn, updatedProgram.Id) });
+                        Results.Add(new Result { Message = string.Format("Updated values for a Program are AssignedBy(aby) = '{0}', AssignedDate(aon) = '{1}', AssignedTo(ato) = '{2}', StateUpdatedOn(stuon) = '{3}' for Program Id = '{4}' in PatientProgram collection.", mePP.AssignedBy, mePP.AssignedOn, mePP.AssignedTo, mePP.StateUpdatedOn, updatedProgram.Id) });
                     }
                 }
                 Results.Add(new Result { Message = "Total records updated: " + Results.Count });
