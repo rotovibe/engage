@@ -49,13 +49,19 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DataManagement.Procedures
                     #endregion
 
                     #region NIGHT-868
+                    DateTime? stateUpdatedOn = null;
 		            switch(mePP.State)
                     {
                         case ElementState.NotStarted :
+                            mePP.StateUpdatedOn = mePP.AssignedOn;
                             break;
-                        case ElementState.InProgress:
+                        case ElementState.InProgress :
+                            stateUpdatedOn = getActionsEarliestCompletedDate(mePP);
+                            mePP.StateUpdatedOn = stateUpdatedOn;
                             break;
-                        case ElementState.Closed:
+                        case ElementState.Closed :
+                            stateUpdatedOn = getDisenrollmentActionsCompletedDate(mePP);
+                            mePP.StateUpdatedOn = stateUpdatedOn;
                             break;
                     }
 	                #endregion
@@ -63,17 +69,71 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DataManagement.Procedures
                     mePP.LastUpdatedOn = DateTime.UtcNow;
                     mePP.UpdatedBy = systemObjectId;
                     MEPatientProgram updatedProgram = mePP;
-                    bool success = repo.Save(updatedProgram);
-                    if (success)
-                    {
-                        Results.Add(new Result { Message = string.Format("Updated values are AssignedBy(aby) = '{0}', AssignedDate(aon) = '{1}', AssignedTo(ato) = '{2}', StateUpdatedOn(stuon) = '{3}' for Program Id = '{4}' in PatientProgram collection.", mePP.AssignedBy, mePP.AssignedOn, mePP.AssignedTo, mePP.StateUpdatedOn, updatedProgram.Id)});
-                    }
+                    //bool success = repo.Save(updatedProgram);
+                    //if (success)
+                    //{
+                    //    Results.Add(new Result { Message = string.Format("Updated values are AssignedBy(aby) = '{0}', AssignedDate(aon) = '{1}', AssignedTo(ato) = '{2}', StateUpdatedOn(stuon) = '{3}' for Program Id = '{4}' in PatientProgram collection.", mePP.AssignedBy, mePP.AssignedOn, mePP.AssignedTo, mePP.StateUpdatedOn, updatedProgram.Id)});
+                    //}
                 }
                 Results.Add(new Result { Message = "Total records updated: " + Results.Count });
             }
             catch (Exception ex)
             {
                 throw ex;
+            }
+        }
+
+        private DateTime? getDisenrollmentActionsCompletedDate(MEPatientProgram mePP)
+        {
+            List<Module> modules = mePP.Modules;
+            if (modules != null & modules.Count > 0)
+            {
+                foreach (Module meM in modules)
+                {
+                    List<Phytel.API.DataDomain.Program.MongoDB.DTO.Action> actions = meM.Actions;
+                    if (actions != null && actions.Count > 0)
+                    {
+                        foreach (Phytel.API.DataDomain.Program.MongoDB.DTO.Action meA in actions)
+                        {
+                            if (string.Compare(meA.Name, "Disenrollment", true) == 0)
+                            {
+                                if (meA.DateCompleted != null)
+                                    return meA.DateCompleted;
+                            }
+                        }
+                    }
+                }
+           }
+           return null;
+        }
+
+        private DateTime? getActionsEarliestCompletedDate(MEPatientProgram mePP)
+        {
+            List<DateTime> completedDates = new List<DateTime>();       
+            List<Module> modules = mePP.Modules;
+            if (modules != null & modules.Count > 0)
+            {
+                foreach (Module meM in modules)
+                {
+                    List<Phytel.API.DataDomain.Program.MongoDB.DTO.Action> actions = meM.Actions;
+                    if (actions != null && actions.Count > 0)
+                    {
+                        foreach (Phytel.API.DataDomain.Program.MongoDB.DTO.Action meA in actions)
+                        {
+                            if (meA.DateCompleted != null)
+                                completedDates.Add((DateTime)meA.DateCompleted);
+                        }
+                    }
+                }
+            }
+            completedDates.Sort();
+            if (completedDates.Count > 0)
+            {
+                return completedDates[0];
+            }
+            else
+            {
+                return null;
             }
         }
 

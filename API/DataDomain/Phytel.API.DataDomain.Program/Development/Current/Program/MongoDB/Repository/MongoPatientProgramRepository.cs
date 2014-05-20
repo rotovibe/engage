@@ -118,8 +118,9 @@ namespace Phytel.API.DataDomain.Program
                 {
                     var findQ = MB.Query.And(
                         MB.Query<MEPatientProgram>.EQ(b => b.PatientId, ObjectId.Parse(patientID)),
+                        MB.Query<MEPatientProgram>.EQ(b => b.DeleteFlag, false),
                         MB.Query<MEPatientProgram>.EQ(b => b.ContractProgramId, ObjectId.Parse(progId)),
-                        MB.Query.In(MEPatientProgram.StateProperty, new List<BsonValue> { BsonValue.Create(ElementState.NotStarted), BsonValue.Create(ElementState.Started) }));
+                        MB.Query.In(MEPatientProgram.StateProperty, new List<BsonValue> { BsonValue.Create(ElementState.NotStarted), BsonValue.Create(ElementState.Started), BsonValue.Create(ElementState.InProgress), BsonValue.Create(ElementState.Closed) }));
 
                     pp = ctx.PatientPrograms.Collection.Find(findQ).ToList();
                 }
