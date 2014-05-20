@@ -100,8 +100,9 @@ namespace Phytel.API.AppDomain.NG.Test.Stubs
                 {
                     Name = "Test Program",
                     Description = "test description",
-                     AssignById = request.UserId,
-                     AssignDate = System.DateTime.UtcNow,
+                    AssignById = request.UserId,
+                    AssignDate = System.DateTime.UtcNow,
+                    StateUpdatedOn = System.DateTime.UtcNow,
                     Attributes = new DTO.ProgramAttribute
                     {
                         //AssignedBy = "me",

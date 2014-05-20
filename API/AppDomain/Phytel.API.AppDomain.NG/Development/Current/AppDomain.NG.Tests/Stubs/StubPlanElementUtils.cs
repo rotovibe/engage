@@ -27,7 +27,7 @@ namespace Phytel.API.AppDomain.NG.Test.Stubs
 
         public T FindElementById<T>(List<T> list, string id)
         {
-            throw new NotImplementedException();
+            return list[0];
         }
 
         public void FindIdInActions(string p, DTO.Module m)
@@ -62,7 +62,7 @@ namespace Phytel.API.AppDomain.NG.Test.Stubs
 
         public bool IsActionInitial(DTO.Program p)
         {
-            throw new NotImplementedException();
+            return true;
         }
 
         public bool IsProgramCompleted(DTO.Program p, string userId)
@@ -136,6 +136,12 @@ namespace Phytel.API.AppDomain.NG.Test.Stubs
         }
 
         public void SpawnElementsInList(List<DTO.SpawnElement> list, DTO.Program program, string userId, Phytel.API.DataDomain.Program.DTO.ProgramAttributeData progAttr)
+        {
+            throw new NotImplementedException();
+        }
+
+
+        public DTO.ProgramAttribute GetAttributes(DataDomain.Program.DTO.ProgramAttributeData programAttributeData)
         {
             throw new NotImplementedException();
         }

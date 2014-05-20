@@ -30,10 +30,11 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
                     Client = cp.Client,
                     //ProgramState = ProgramState.NotStarted  depricated - Use Element state instead.
                     State = ElementState.NotStarted,
+                    StateUpdatedOn = DateTime.UtcNow,
                     AttributeStartDate = null,
                     AttributeEndDate = null,
                     AssignedBy = request.UserId != null ? ObjectId.Parse(request.UserId): ObjectId.Empty,
-                    AssignedOn = System.DateTime.UtcNow,
+                    AssignedOn = DateTime.UtcNow,
                     AssignedTo = cmId,
                     StartDate = cp.StartDate,
                     EndDate = cp.EndDate,
@@ -41,7 +42,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
                     ContractProgramId = cp.Id,
                     DeleteFlag = cp.DeleteFlag,
                     Description = cp.Description,
-                    LastUpdatedOn = System.DateTime.UtcNow, // utc time
+                    LastUpdatedOn = DateTime.UtcNow, // utc time
                     Name = cp.Name,
                     CompletedBy = cp.CompletedBy,
                     SourceId = cp.Id,

@@ -5,6 +5,7 @@ using Phytel.API.DataDomain.PatientProblem.DTO;
 using Phytel.API.DataDomain.Program.DTO;
 using ServiceStack.Service;
 using ServiceStack.ServiceClient.Web;
+using ServiceStack.WebHost.Endpoints;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -19,12 +20,15 @@ namespace Phytel.API.AppDomain.NG.PlanCOR
     public class StepPlanProcessor : PlanProcessor
     {
         public event SpawnEventHandler _spawnEvent;
+        public IPlanElementUtils PEUtils { get; set; }
         public static SpawnElementStrategy SpawnStrategy { get; set; }
         private ProgramAttributeData _programAttributes;
 
         public StepPlanProcessor()
         {
             _programAttributes = new ProgramAttributeData();
+            if (AppHostBase.Instance != null)
+                AppHostBase.Instance.Container.AutoWire(this);
         }
 
         protected void OnSpawnElementEvent(string type)
@@ -55,7 +59,7 @@ namespace Phytel.API.AppDomain.NG.PlanCOR
                                 SetCompletedStepResponses(e, s);
 
                             if (s.SpawnElement != null)
-                                PlanElementUtil.SpawnElementsInList(s.SpawnElement, e.Program, e.UserId, _programAttributes);
+                                PEUtils.SpawnElementsInList(s.SpawnElement, e.Program, e.UserId, _programAttributes);
                         }
                         else
                         {
@@ -63,7 +67,7 @@ namespace Phytel.API.AppDomain.NG.PlanCOR
                                 s.Responses.ForEach(r => { r.Delete = true; });
                         }
                         // save program properties
-                        PlanElementUtil.SaveReportingAttributes(_programAttributes, e.DomainRequest);
+                        PEUtils.SaveReportingAttributes(_programAttributes, e.DomainRequest);
                         // raise process event to register the id
                         OnProcessIdEvent(e.Program);
                     }
@@ -114,7 +118,7 @@ namespace Phytel.API.AppDomain.NG.PlanCOR
             {
                 if (r.SpawnElement != null)
                 {
-                    if (PlanElementUtil.ResponseSpawnAllowed(s, r))
+                    if (PEUtils.ResponseSpawnAllowed(s, r))
                     {
                         r.SpawnElement.ForEach(rse =>
                         {
@@ -130,7 +134,7 @@ namespace Phytel.API.AppDomain.NG.PlanCOR
                             }
                             else
                             {
-                                PlanElementUtil.SetProgramAttributes(rse, e.Program, e.UserId, _programAttributes);
+                                PEUtils.SetProgramAttributes(rse, e.Program, e.UserId, _programAttributes);
                             }
                         });
                     }
@@ -146,7 +150,7 @@ namespace Phytel.API.AppDomain.NG.PlanCOR
         {
             try
             {
-                PlanElement pe = PlanElementUtil.ActivatePlanElement(rse.ElementId, e.Program);
+                PlanElement pe = PEUtils.ActivatePlanElement(rse.ElementId, e.Program);
                 if (pe != null)
                     OnProcessIdEvent(pe);
             }
@@ -156,7 +160,7 @@ namespace Phytel.API.AppDomain.NG.PlanCOR
             }
         }
 
-        public static void HandlePatientProblemRegistration(PlanElementEventArg e, string userId, SpawnElement rse)
+        public void HandlePatientProblemRegistration(PlanElementEventArg e, string userId, SpawnElement rse)
         {
             try
             {
@@ -175,7 +179,7 @@ namespace Phytel.API.AppDomain.NG.PlanCOR
                 }
 
                 // register new problem code with cohortpatientview
-                PlanElementUtil.RegisterCohortPatientViewProblemToPatient(rse.ElementId, e.PatientId, e.DomainRequest);
+                PEUtils.RegisterCohortPatientViewProblemToPatient(rse.ElementId, e.PatientId, e.DomainRequest);
             }
             catch (Exception ex)
             {

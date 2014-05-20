@@ -138,6 +138,21 @@ namespace Phytel.API.AppDomain.NG.Tests
             }
 
             [TestMethod()]
+            [TestCategory("NIGHT-868")]
+            [TestProperty("TFS", "11270")]
+            public void Get_Program_StateChangeDate_Test()
+            {
+                StubPlanElementEndpointUtils peu = new StubPlanElementEndpointUtils { Client = new StubJsonRestClient() };
+                GetPatientProgramDetailsSummaryRequest request = new GetPatientProgramDetailsSummaryRequest();
+                GetProgramDetailsSummaryResponse response = peu.RequestPatientProgramDetailsSummary(request);
+
+                DateTime expected = System.DateTime.UtcNow.Date;
+                DateTime? value = response.Program.StateUpdatedOn;
+
+                Assert.AreEqual(expected, ((DateTime)value).Date);
+            }
+
+            [TestMethod()]
             [TestCategory("NIGHT-920")]
             [TestProperty("TFS", "6099")]
             public void GetActionIndividualAttributes_AssignedTo_Test()

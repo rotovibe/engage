@@ -534,6 +534,7 @@ namespace Phytel.API.AppDomain.NG
                             Order = resp.Program.Order,
                             Previous = resp.Program.Previous,
                             ElementState = resp.Program.ElementState,
+                            StateUpdatedOn =resp.Program.StateUpdatedOn,
                             SpawnElement = getSpawnElement(resp.Program),
                             SourceId = resp.Program.SourceId,
                             CompletedBy = resp.Program.CompletedBy,

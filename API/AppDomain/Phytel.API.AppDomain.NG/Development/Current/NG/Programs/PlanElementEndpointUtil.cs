@@ -62,36 +62,36 @@ namespace Phytel.API.AppDomain.NG
             }
         }
 
-        public static DD.ProgramDetail SaveAction(IProcessActionRequest request, string actionId, AD.Program p)
-        {
-            try
-            {
-                // save responses from action steps
-                SaveResponsesFromProgram(p, actionId, request);
+        //public static DD.ProgramDetail SaveAction(IProcessActionRequest request, string actionId, AD.Program p)
+        //{
+        //    try
+        //    {
+        //        // save responses from action steps
+        //        SaveResponsesFromProgram(p, actionId, request);
 
-                DD.ProgramDetail pD = NGUtils.FormatProgramDetail(p);
+        //        DD.ProgramDetail pD = NGUtils.FormatProgramDetail(p);
 
-                IRestClient client = new JsonServiceClient();
+        //        IRestClient client = new JsonServiceClient();
 
-                string url = Common.Helper.BuildURL(string.Format(@"{0}/{1}/{2}/{3}/Patient/{4}/Programs/{5}/Update",
-                                    DDProgramServiceUrl,
-                                    "NG",
-                                    request.Version,
-                                    request.ContractNumber,
-                                    request.PatientId,
-                                    request.ProgramId,
-                                    request.Token), request.UserId);
+        //        string url = Common.Helper.BuildURL(string.Format(@"{0}/{1}/{2}/{3}/Patient/{4}/Programs/{5}/Update",
+        //                            DDProgramServiceUrl,
+        //                            "NG",
+        //                            request.Version,
+        //                            request.ContractNumber,
+        //                            request.PatientId,
+        //                            request.ProgramId,
+        //                            request.Token), request.UserId);
 
-                DD.PutProgramActionProcessingResponse response = client.Put<DD.PutProgramActionProcessingResponse>(
-                    url, new DD.PutProgramActionProcessingRequest { Program = pD, UserId = request.UserId });
+        //        DD.PutProgramActionProcessingResponse response = client.Put<DD.PutProgramActionProcessingResponse>(
+        //            url, new DD.PutProgramActionProcessingRequest { Program = pD, UserId = request.UserId });
 
-                return response.program; 
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("AD:PlanElementEndpointUtil:SaveAction()::" + ex.Message, ex.InnerException);
-            }
-        }
+        //        return response.program; 
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw new Exception("AD:PlanElementEndpointUtil:SaveAction()::" + ex.Message, ex.InnerException);
+        //    }
+        //}
 
         private static void SaveResponsesFromProgram(AD.Program p, string actionId, IProcessActionRequest request)
         {
@@ -293,35 +293,35 @@ namespace Phytel.API.AppDomain.NG
             }
         }
 
-        public static AD.Program RequestPatientProgramDetail(IProcessActionRequest request)
-        {
-            try
-            {
-                AD.Program pd = null;
-                IRestClient client = new JsonServiceClient();
+        //public static AD.Program RequestPatientProgramDetail(IProcessActionRequest request)
+        //{
+        //    try
+        //    {
+        //        AD.Program pd = null;
+        //        IRestClient client = new JsonServiceClient();
 
-                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Program/{5}/Details/?Token={6}",
-                                    DDProgramServiceUrl,
-                                    "NG",
-                                    request.Version,
-                                    request.ContractNumber,
-                                    request.PatientId,
-                                    request.ProgramId,
-                                    request.Token), request.UserId);
+        //        string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Program/{5}/Details/?Token={6}",
+        //                            DDProgramServiceUrl,
+        //                            "NG",
+        //                            request.Version,
+        //                            request.ContractNumber,
+        //                            request.PatientId,
+        //                            request.ProgramId,
+        //                            request.Token), request.UserId);
 
-                DD.GetProgramDetailsSummaryResponse resp =
-                    client.Get<DD.GetProgramDetailsSummaryResponse>(
-                    url);
+        //        DD.GetProgramDetailsSummaryResponse resp =
+        //            client.Get<DD.GetProgramDetailsSummaryResponse>(
+        //            url);
 
-                pd = NGUtils.FormatProgramDetail(resp.Program);
+        //        pd = NGUtils.FormatProgramDetail(resp.Program);
 
-                return pd;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("AD:PlanElementEndpointUtil:RequestPatientProgramDetail()::" + ex.Message, ex.InnerException);
-            }
-        }
+        //        return pd;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw new Exception("AD:PlanElementEndpointUtil:RequestPatientProgramDetail()::" + ex.Message, ex.InnerException);
+        //    }
+        //}
 
         internal static CohortPatientViewData RequestCohortPatientViewData(string patientId, IAppDomainRequest request)
         {

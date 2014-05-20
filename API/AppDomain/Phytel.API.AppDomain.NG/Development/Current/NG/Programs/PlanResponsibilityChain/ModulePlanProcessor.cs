@@ -1,5 +1,6 @@
 ﻿using Phytel.API.AppDomain.NG.DTO;
 using Phytel.API.DataDomain.Program.DTO;
+using ServiceStack.WebHost.Endpoints;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,10 +12,13 @@ namespace Phytel.API.AppDomain.NG.PlanCOR
     public class ModulePlanProcessor : PlanProcessor
     {
         private ProgramAttributeData _programAttributes;
+        public IPlanElementUtils PEUtils { get; set; }
 
         public ModulePlanProcessor()
         {
             _programAttributes = new ProgramAttributeData();
+            if (AppHostBase.Instance != null)
+                AppHostBase.Instance.Container.AutoWire(this);
         }
 
         public override void PlanElementHandler(object sender, PlanElementEventArg e)
@@ -38,10 +42,10 @@ namespace Phytel.API.AppDomain.NG.PlanCOR
                             // look at spawnelement and trigger enabled state.
                             if (module.SpawnElement != null)
                             {
-                                PlanElementUtil.SpawnElementsInList(module.SpawnElement, e.Program, e.UserId, _programAttributes);
+                                PEUtils.SpawnElementsInList(module.SpawnElement, e.Program, e.UserId, _programAttributes);
                             }
                             // save any program attribute changes
-                            PlanElementUtil.SaveReportingAttributes(_programAttributes, e.DomainRequest);
+                            PEUtils.SaveReportingAttributes(_programAttributes, e.DomainRequest);
                             OnProcessIdEvent(module);
                         }
                     }

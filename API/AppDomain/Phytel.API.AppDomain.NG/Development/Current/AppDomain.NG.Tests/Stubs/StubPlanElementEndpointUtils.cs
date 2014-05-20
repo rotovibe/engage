@@ -46,7 +46,49 @@ namespace Phytel.API.AppDomain.NG.Test.Stubs
 
         public DTO.Program RequestPatientProgramDetail(DTO.IProcessActionRequest request)
         {
-            throw new NotImplementedException();
+            DTO.Program prg = new DTO.Program
+            {
+                Id = "000000000000000000000000",
+                Description = "this is a test program from the stub.",
+                AssignDate = System.DateTime.UtcNow,
+                Client = "NG",
+                Completed = false,
+                ContractProgramId = "123456789098765432167846",
+                ElementState = 4,
+                Enabled = true,
+                Name = "test stub program",
+                ShortName = "t s p",
+                EligibilityRequirements = "Individual must be a part of the health plan and have completed HRA and other requirements.",
+                EligibilityStartDate = DateTime.UtcNow.AddDays(1),
+                EligibilityEndDate = DateTime.UtcNow.AddDays(20),
+                Modules = new List<DTO.Module>() { 
+                    new DTO.Module { Id = "000000000000000000000000", 
+                        Name = "Test stub module 1",
+                         Description = "BSHSI - Outreach & Enrollment",
+                          SourceId ="532b5585a381168abe00042c",
+                        Actions = new List<DTO.Actions>(){ 
+                            new DTO.Actions{  Id = "000000000000000000000000", 
+                                                ElementState = 4, 
+                                                Name ="test action from stub",
+                                                Description = "action Description",
+                                                Text = "test action 1",
+                                                AttrEndDate =  DateTime.UtcNow.AddDays(10),
+                                                AttrStartDate =  DateTime.UtcNow,
+                                                AssignDate = System.DateTime.UtcNow
+                            } }
+                    }
+                },
+                Text = "This is a sample patient program for the request patient details summary test stub",
+                Attributes = new DTO.ProgramAttribute
+                {
+                    //AssignedBy = "me",
+                    //AssignedOn = System.DateTime.UtcNow,
+                    Id = "000000000000000000000000",
+                    PlanElementId = "000000000000000000000000"
+                }
+            };
+
+            return prg;
         }
 
         public GetProgramDetailsSummaryResponse RequestPatientProgramDetailsSummary(DTO.GetPatientProgramDetailsSummaryRequest request)
@@ -62,6 +104,7 @@ namespace Phytel.API.AppDomain.NG.Test.Stubs
                 Client = "NG",
                 Completed = false,
                 ContractProgramId = "123456789098765432167846",
+                StateUpdatedOn = DateTime.UtcNow,
                 ElementState = 4,
                 Enabled = true,
                 Name = "test stub program",

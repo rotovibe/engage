@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Phytel.API.AppDomain.NG.DTO;
+using System;
 namespace Phytel.API.AppDomain.NG
 {
     public interface IPlanElementUtils
@@ -30,5 +31,6 @@ namespace Phytel.API.AppDomain.NG
         void SetProgramInformation(Phytel.API.DataDomain.Program.DTO.ProgramAttributeData _programAttributes, Phytel.API.AppDomain.NG.DTO.Program p);
         void SetStartDateForProgramAttributes(string programId, Phytel.API.Interface.IAppDomainRequest request);
         void SpawnElementsInList(System.Collections.Generic.List<Phytel.API.AppDomain.NG.DTO.SpawnElement> list, Phytel.API.AppDomain.NG.DTO.Program program, string userId, Phytel.API.DataDomain.Program.DTO.ProgramAttributeData progAttr);
+        ProgramAttribute GetAttributes(Phytel.API.DataDomain.Program.DTO.ProgramAttributeData programAttributeData);
     }
 }

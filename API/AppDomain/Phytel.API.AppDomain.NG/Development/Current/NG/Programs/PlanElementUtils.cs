@@ -149,7 +149,7 @@ namespace Phytel.API.AppDomain.NG
                     }
                     else
                     {
-                        SetProgramAttributes(r, program, userId, progAttr );
+                        SetProgramAttributes(r, program, userId, progAttr);
                     }
                 });
             }
@@ -186,6 +186,7 @@ namespace Phytel.API.AppDomain.NG
                         if (state.Equals(1)) // not eligible
                         {
                             program.ElementState = 5;
+                            program.StateUpdatedOn = System.DateTime.UtcNow;
                             progAttr.Eligibility = 1;
                             //progAttr.AttrEndDate = System.DateTime.UtcNow;
                             program.AttrEndDate = System.DateTime.UtcNow;
@@ -193,6 +194,7 @@ namespace Phytel.API.AppDomain.NG
                         else if (state.Equals(2)) // eligible
                         {
                             program.ElementState = 4;
+                            program.StateUpdatedOn = System.DateTime.UtcNow;
                             progAttr.Eligibility = 2;
                         }
                     }
@@ -220,6 +222,7 @@ namespace Phytel.API.AppDomain.NG
                             throw new ArgumentException("Cannot set attribute of type " + r.ElementType + ". Tag value is null.");
 
                         program.ElementState = (!string.IsNullOrEmpty(r.Tag)) ? Convert.ToInt32(r.Tag) : 0;
+                        program.StateUpdatedOn = System.DateTime.UtcNow;
                     }
                     catch (Exception ex)
                     {
@@ -268,7 +271,7 @@ namespace Phytel.API.AppDomain.NG
 
                         progAttr.Enrollment = (!string.IsNullOrEmpty(r.Tag)) ? Convert.ToInt32(r.Tag) : 0;
                     }
-                    catch(Exception ex)
+                    catch (Exception ex)
                     {
                         throw new Exception("AD:SetProgramAttributes()::Enrollment" + ex.Message, ex.InnerException);
                     }
@@ -433,7 +436,7 @@ namespace Phytel.API.AppDomain.NG
             try
             {
                 m.Enabled = true;
-                
+                m.StateUpdatedOn = System.DateTime.UtcNow;
                 m.AssignDate = System.DateTime.UtcNow;
                 m.ElementState = 2;
                 m.AssignById = "5368ff2ad4332316288f3e3e";
@@ -835,6 +838,7 @@ namespace Phytel.API.AppDomain.NG
                     //DidNotEnrollReason = pr.DidNotEnrollReason,
                     //DisEnrollReason = pr.DisEnrollReason,
                     ElementState = pr.ElementState,
+                    StateUpdatedOn = pr.StateUpdatedOn,
                     Eligibility = pr.Eligibility,
                     EligibilityEndDate = pr.EligibilityEndDate,
                     //EligibilityOverride = pr.EligibilityOverride,
@@ -995,37 +999,45 @@ namespace Phytel.API.AppDomain.NG
             }
         }
 
-        public ProgramAttribute getAttributes(DD.ProgramAttributeData programAttributeData)
+        public ProgramAttribute GetAttributes(DD.ProgramAttributeData programAttributeData)
         {
             ProgramAttribute programAttribute = null;
-            if (programAttributeData != null)
+            
+            try
             {
-                programAttribute = new ProgramAttribute
+                if (programAttributeData != null)
                 {
-                    // AssignedBy = programAttributeData.AssignedBy,
-                    // AssignedOn = programAttributeData.AssignedOn, Sprint 12
-                    AuthoredBy = programAttributeData.AuthoredBy,
-                    Completed = (int)programAttributeData.Completed,
-                    CompletedBy = programAttributeData.CompletedBy,
-                    DateCompleted = programAttributeData.DateCompleted,
-                    DidNotEnrollReason = programAttributeData.DidNotEnrollReason,
-                    Eligibility = (int)programAttributeData.Eligibility,
-                    //AttrEndDate = programAttributeData.AttrEndDate,Sprint 12
-                    Enrollment = (int)programAttributeData.Enrollment,
-                    GraduatedFlag = (int)programAttributeData.GraduatedFlag,
-                    Id = programAttributeData.Id.ToString(),
-                    IneligibleReason = programAttributeData.IneligibleReason,
-                    Locked = (int)programAttributeData.Locked,
-                    OptOut = programAttributeData.OptOut,
-                    OverrideReason = programAttributeData.OverrideReason,
-                    PlanElementId = programAttributeData.PlanElementId.ToString(),
-                    Population = programAttributeData.Population,
-                    RemovedReason = programAttributeData.RemovedReason,
-                    //AttrStartDate = programAttributeData.AttrStartDate,Sprint 12
-                    Status = (int)programAttributeData.Status
-                };
+                    programAttribute = new ProgramAttribute
+                    {
+                        // AssignedBy = programAttributeData.AssignedBy,
+                        //AssignedOn = programAttributeData.AssignedOn, Sprint 12
+                        AuthoredBy = programAttributeData.AuthoredBy,
+                        Completed = (int)programAttributeData.Completed,
+                        CompletedBy = programAttributeData.CompletedBy,
+                        DateCompleted = programAttributeData.DateCompleted,
+                        DidNotEnrollReason = programAttributeData.DidNotEnrollReason,
+                        Eligibility = (int)programAttributeData.Eligibility,
+                        //AttrEndDate = programAttributeData.AttrEndDate, Sprint 12
+                        Enrollment = (int)programAttributeData.Enrollment,
+                        GraduatedFlag = (int)programAttributeData.GraduatedFlag,
+                        Id = programAttributeData.Id.ToString(),
+                        IneligibleReason = programAttributeData.IneligibleReason,
+                        Locked = (int)programAttributeData.Locked,
+                        OptOut = programAttributeData.OptOut,
+                        OverrideReason = programAttributeData.OverrideReason,
+                        PlanElementId = programAttributeData.PlanElementId.ToString(),
+                        Population = programAttributeData.Population,
+                        RemovedReason = programAttributeData.RemovedReason,
+                        //AttrStartDate = programAttributeData.AttrStartDate, Sprint 12
+                        Status = (int)programAttributeData.Status
+                    };
+                }
+                return programAttribute;
             }
-            return programAttribute;
+            catch (Exception ex)
+            {
+                throw new Exception("AD:PlanElementUtil:getAttributes()::" + ex.Message, ex.InnerException);
+            }
         }
     }
 }

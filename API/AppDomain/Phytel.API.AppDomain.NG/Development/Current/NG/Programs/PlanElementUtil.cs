@@ -51,36 +51,36 @@ namespace Phytel.API.AppDomain.NG
             }
         }
 
-        public static T FindElementById<T>(List<T> list, string id)
-        {
-            try
-            {
-                var mod = list.Where(r => ((IPlanElement)Convert.ChangeType(r, typeof(T))).Id == id).FirstOrDefault();
-                return mod;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("AD:PlanElementUtil:FindElementById()::" + ex.Message, ex.InnerException);
-            }
-        }
+        //public static T FindElementById<T>(List<T> list, string id)
+        //{
+        //    try
+        //    {
+        //        var mod = list.Where(r => ((IPlanElement)Convert.ChangeType(r, typeof(T))).Id == id).FirstOrDefault();
+        //        return mod;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw new Exception("AD:PlanElementUtil:FindElementById()::" + ex.Message, ex.InnerException);
+        //    }
+        //}
 
-        public static void SetEnabledStatusByPrevious<T>(List<T> actions)
-        {
-            try
-            {
-                if (actions != null)
-                {
-                    actions.ForEach(x =>
-                    {
-                        SetEnabledState(actions, x);
-                    });
-                }
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("AD:PlanElementUtil:SetEnabledStatusByPrevious()::" + ex.Message, ex.InnerException);
-            }
-        }
+        //public static void SetEnabledStatusByPrevious<T>(List<T> actions)
+        //{
+        //    try
+        //    {
+        //        if (actions != null)
+        //        {
+        //            actions.ForEach(x =>
+        //            {
+        //                SetEnabledState(actions, x);
+        //            });
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw new Exception("AD:PlanElementUtil:SetEnabledStatusByPrevious()::" + ex.Message, ex.InnerException);
+        //    }
+        //}
 
         public static void SetEnabledState<T>(List<T> list, T x)
         {
@@ -137,225 +137,228 @@ namespace Phytel.API.AppDomain.NG
             }
         }
 
-        internal static void SpawnElementsInList(List<SpawnElement> list, Program program, string userId, DD.ProgramAttributeData progAttr)
-        {
-            try
-            {
-                list.ForEach(r =>
-                {
-                    if (r.ElementType < 10)
-                    {
-                        SetElementEnabledState(r.ElementId, program);
-                    }
-                    else
-                    {
-                        SetProgramAttributes(r, program, userId, progAttr );
-                    }
-                });
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("AD:PlanElementUtil:SpawnElementsInList()::" + ex.Message, ex.InnerException);
-            }
-        }
+        //internal static void SpawnElementsInList(List<SpawnElement> list, Program program, string userId, DD.ProgramAttributeData progAttr)
+        //{
+        //    try
+        //    {
+        //        list.ForEach(r =>
+        //        {
+        //            if (r.ElementType < 10)
+        //            {
+        //                SetElementEnabledState(r.ElementId, program);
+        //            }
+        //            else
+        //            {
+        //                SetProgramAttributes(r, program, userId, progAttr );
+        //            }
+        //        });
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw new Exception("AD:PlanElementUtil:SpawnElementsInList()::" + ex.Message, ex.InnerException);
+        //    }
+        //}
 
-        public static void SetProgramAttributes(SpawnElement r, Program program, string userId, DD.ProgramAttributeData progAttr)
-        {
-            try
-            {
-                if (r.ElementType.Equals(10))
-                {
-                    // eligibility series
-                    try
-                    {
-                        if (r.Tag == null)
-                            throw new ArgumentException("Cannot set attribute of type " + r.ElementType + ". Tag value is null.");
+        //public static void SetProgramAttributes(SpawnElement r, Program program, string userId, DD.ProgramAttributeData progAttr)
+        //{
+        //    try
+        //    {
+        //        if (r.ElementType.Equals(10))
+        //        {
+        //            // eligibility series
+        //            try
+        //            {
+        //                if (r.Tag == null)
+        //                    throw new ArgumentException("Cannot set attribute of type " + r.ElementType + ". Tag value is null.");
 
-                        progAttr.Eligibility = (!string.IsNullOrEmpty(r.Tag)) ? Convert.ToInt32(r.Tag) : 0;
-                    }
-                    catch (Exception ex)
-                    {
-                        throw new Exception("AD:SetProgramAttributes()::Eligibility" + ex.Message, ex.InnerException);
-                    }
+        //                progAttr.Eligibility = (!string.IsNullOrEmpty(r.Tag)) ? Convert.ToInt32(r.Tag) : 0;
+        //            }
+        //            catch (Exception ex)
+        //            {
+        //                throw new Exception("AD:SetProgramAttributes()::Eligibility" + ex.Message, ex.InnerException);
+        //            }
 
-                    int state; // no = 1, yes = 2
-                    bool isNum = int.TryParse(r.Tag, out state);
-                    if (isNum)
-                    {
-                        // program is closed due to ineligibility
-                        if (state.Equals(1)) // not eligible
-                        {
-                            program.ElementState = 5;
-                            progAttr.Eligibility = 1;
-                            //progAttr.AttrEndDate = System.DateTime.UtcNow;
-                            program.AttrEndDate = System.DateTime.UtcNow;
-                        }
-                        else if (state.Equals(2)) // eligible
-                        {
-                            program.ElementState = 4;
-                            progAttr.Eligibility = 2;
-                        }
-                    }
-                }
-                else if (r.ElementType.Equals(11))
-                {
-                    // eligibility reason
-                    try
-                    {
-                        if (r.Tag == null)
-                            throw new ArgumentException("Cannot set attribute of type " + r.ElementType + ". Tag value is null.");
+        //            int state; // no = 1, yes = 2
+        //            bool isNum = int.TryParse(r.Tag, out state);
+        //            if (isNum)
+        //            {
+        //                // program is closed due to ineligibility
+        //                if (state.Equals(1)) // not eligible
+        //                {
+        //                    program.ElementState = 5;
+        //                    program.StateUpdatedOn = System.DateTime.UtcNow;
+        //                    progAttr.Eligibility = 1;
+        //                    //progAttr.AttrEndDate = System.DateTime.UtcNow;
+        //                    program.AttrEndDate = System.DateTime.UtcNow;
+        //                }
+        //                else if (state.Equals(2)) // eligible
+        //                {
+        //                    program.ElementState = 4;
+        //                    program.StateUpdatedOn = System.DateTime.UtcNow;
+        //                    progAttr.Eligibility = 2;
+        //                }
+        //            }
+        //        }
+        //        else if (r.ElementType.Equals(11))
+        //        {
+        //            // eligibility reason
+        //            try
+        //            {
+        //                if (r.Tag == null)
+        //                    throw new ArgumentException("Cannot set attribute of type " + r.ElementType + ". Tag value is null.");
 
-                        progAttr.IneligibleReason = (!string.IsNullOrEmpty(r.Tag)) ? r.Tag : null;
-                    }
-                    catch (Exception ex)
-                    {
-                        throw new Exception("AD:SetProgramAttributes()::IneligibleReason" + ex.Message, ex.InnerException);
-                    }
-                }
-                else if (r.ElementType.Equals(12))
-                {
-                    try
-                    {
-                        if (r.Tag == null)
-                            throw new ArgumentException("Cannot set attribute of type " + r.ElementType + ". Tag value is null.");
+        //                progAttr.IneligibleReason = (!string.IsNullOrEmpty(r.Tag)) ? r.Tag : null;
+        //            }
+        //            catch (Exception ex)
+        //            {
+        //                throw new Exception("AD:SetProgramAttributes()::IneligibleReason" + ex.Message, ex.InnerException);
+        //            }
+        //        }
+        //        else if (r.ElementType.Equals(12))
+        //        {
+        //            try
+        //            {
+        //                if (r.Tag == null)
+        //                    throw new ArgumentException("Cannot set attribute of type " + r.ElementType + ". Tag value is null.");
 
-                        program.ElementState = (!string.IsNullOrEmpty(r.Tag)) ? Convert.ToInt32(r.Tag) : 0;
-                    }
-                    catch (Exception ex)
-                    {
-                        throw new Exception("AD:SetProgramAttributes()::ElementState" + ex.Message, ex.InnerException);
-                    }
-                }
-                else if (r.ElementType.Equals(13))
-                {
-                    try
-                    {
-                        // need to revisit in the future.
-                        //if (r.Tag == null)
-                        //    throw new ArgumentException("Cannot set attribute of type " + r.ElementType + ". Tag value is null.");
+        //                program.ElementState = (!string.IsNullOrEmpty(r.Tag)) ? Convert.ToInt32(r.Tag) : 0;
+        //                program.StateUpdatedOn = System.DateTime.UtcNow;
+        //            }
+        //            catch (Exception ex)
+        //            {
+        //                throw new Exception("AD:SetProgramAttributes()::ElementState" + ex.Message, ex.InnerException);
+        //            }
+        //        }
+        //        else if (r.ElementType.Equals(13))
+        //        {
+        //            try
+        //            {
+        //                // need to revisit in the future.
+        //                //if (r.Tag == null)
+        //                //    throw new ArgumentException("Cannot set attribute of type " + r.ElementType + ". Tag value is null.");
 
-                        if (string.IsNullOrEmpty(r.Tag))
-                        {
-                            //progAttr.AttrStartDate = System.DateTime.UtcNow;
-                            program.AttrStartDate = System.DateTime.UtcNow;
-                        }
-                        else
-                        {
-                            DateTime date;
-                            if (DateTime.TryParse(r.Tag.ToString(), out date))
-                            {
-                                //progAttr.AttrStartDate = date;
-                                program.AttrStartDate = date;
-                            }
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        throw new Exception("AD:SetProgramAttributes()::StartDate" + ex.Message, ex.InnerException);
-                    }
-                }
-                else if (r.ElementType.Equals(14))
-                {
-                    //progAttr.AttrEndDate = System.DateTime.UtcNow;
-                    program.AttrEndDate = System.DateTime.UtcNow;
-                }
-                else if (r.ElementType.Equals(15))
-                {
-                    try
-                    {
-                        if (r.Tag == null)
-                            throw new ArgumentException("Cannot set attribute of type " + r.ElementType + ". Tag value is null.");
+        //                if (string.IsNullOrEmpty(r.Tag))
+        //                {
+        //                    //progAttr.AttrStartDate = System.DateTime.UtcNow;
+        //                    program.AttrStartDate = System.DateTime.UtcNow;
+        //                }
+        //                else
+        //                {
+        //                    DateTime date;
+        //                    if (DateTime.TryParse(r.Tag.ToString(), out date))
+        //                    {
+        //                        //progAttr.AttrStartDate = date;
+        //                        program.AttrStartDate = date;
+        //                    }
+        //                }
+        //            }
+        //            catch (Exception ex)
+        //            {
+        //                throw new Exception("AD:SetProgramAttributes()::StartDate" + ex.Message, ex.InnerException);
+        //            }
+        //        }
+        //        else if (r.ElementType.Equals(14))
+        //        {
+        //            //progAttr.AttrEndDate = System.DateTime.UtcNow;
+        //            program.AttrEndDate = System.DateTime.UtcNow;
+        //        }
+        //        else if (r.ElementType.Equals(15))
+        //        {
+        //            try
+        //            {
+        //                if (r.Tag == null)
+        //                    throw new ArgumentException("Cannot set attribute of type " + r.ElementType + ". Tag value is null.");
 
-                        progAttr.Enrollment = (!string.IsNullOrEmpty(r.Tag)) ? Convert.ToInt32(r.Tag) : 0;
-                    }
-                    catch(Exception ex)
-                    {
-                        throw new Exception("AD:SetProgramAttributes()::Enrollment" + ex.Message, ex.InnerException);
-                    }
-                }
-                else if (r.ElementType.Equals(16))
-                {
+        //                progAttr.Enrollment = (!string.IsNullOrEmpty(r.Tag)) ? Convert.ToInt32(r.Tag) : 0;
+        //            }
+        //            catch(Exception ex)
+        //            {
+        //                throw new Exception("AD:SetProgramAttributes()::Enrollment" + ex.Message, ex.InnerException);
+        //            }
+        //        }
+        //        else if (r.ElementType.Equals(16))
+        //        {
 
-                    try
-                    {
-                        if (r.Tag == null)
-                            throw new ArgumentException("Cannot set attribute of type " + r.ElementType + ". Tag value is null.");
+        //            try
+        //            {
+        //                if (r.Tag == null)
+        //                    throw new ArgumentException("Cannot set attribute of type " + r.ElementType + ". Tag value is null.");
 
-                        progAttr.OptOut = (!string.IsNullOrEmpty(r.Tag)) ? Convert.ToBoolean(r.Tag) : false;
-                    }
-                    catch (Exception ex)
-                    {
-                        throw new Exception("AD:SetProgramAttributes()::OptOut" + ex.Message, ex.InnerException);
-                    }
-                }
-                //else if (r.ElementType.Equals(17))
-                //{
-                //    // do something with opt out
-                //    try
-                //    {
-                //        if (r.Tag == null)
-                //            throw new ArgumentException("Cannot set attribute of type " + r.ElementType + ". Tag value is null.");
+        //                progAttr.OptOut = (!string.IsNullOrEmpty(r.Tag)) ? Convert.ToBoolean(r.Tag) : false;
+        //            }
+        //            catch (Exception ex)
+        //            {
+        //                throw new Exception("AD:SetProgramAttributes()::OptOut" + ex.Message, ex.InnerException);
+        //            }
+        //        }
+        //        //else if (r.ElementType.Equals(17))
+        //        //{
+        //        //    // do something with opt out
+        //        //    try
+        //        //    {
+        //        //        if (r.Tag == null)
+        //        //            throw new ArgumentException("Cannot set attribute of type " + r.ElementType + ". Tag value is null.");
 
-                //        progAttr.OptOutReason = (!string.IsNullOrEmpty(r.Tag)) ? r.Tag : null;
-                //    }
-                //    catch (Exception ex)
-                //    {
-                //        throw new Exception("AD:SetProgramAttributes()::OptOutReason" + ex.Message, ex.InnerException);
-                //    }
-                //}
-                //else if (r.ElementType.Equals(18))
-                //{
-                //    // do something with opt out 
-                //    progAttr.OptOutDate = System.DateTime.UtcNow;
-                //}
-                else if (r.ElementType.Equals(19))
-                {
-                    try
-                    {
-                        if (r.Tag == null)
-                            throw new ArgumentException("Cannot set attribute of type " + r.ElementType + ". Tag value is null.");
+        //        //        progAttr.OptOutReason = (!string.IsNullOrEmpty(r.Tag)) ? r.Tag : null;
+        //        //    }
+        //        //    catch (Exception ex)
+        //        //    {
+        //        //        throw new Exception("AD:SetProgramAttributes()::OptOutReason" + ex.Message, ex.InnerException);
+        //        //    }
+        //        //}
+        //        //else if (r.ElementType.Equals(18))
+        //        //{
+        //        //    // do something with opt out 
+        //        //    progAttr.OptOutDate = System.DateTime.UtcNow;
+        //        //}
+        //        else if (r.ElementType.Equals(19))
+        //        {
+        //            try
+        //            {
+        //                if (r.Tag == null)
+        //                    throw new ArgumentException("Cannot set attribute of type " + r.ElementType + ". Tag value is null.");
 
-                        progAttr.GraduatedFlag = (!string.IsNullOrEmpty(r.Tag)) ? Convert.ToInt32(r.Tag) : 0;
-                    }
-                    catch (Exception ex)
-                    {
-                        throw new Exception("AD:SetProgramAttributes()::GraduatedFlag" + ex.Message, ex.InnerException);
-                    }
-                }
-                else if (r.ElementType.Equals(20))
-                {
-                    try
-                    {
-                        if (r.Tag == null)
-                            throw new ArgumentException("Cannot set attribute of type " + r.ElementType + ". Tag value is null.");
+        //                progAttr.GraduatedFlag = (!string.IsNullOrEmpty(r.Tag)) ? Convert.ToInt32(r.Tag) : 0;
+        //            }
+        //            catch (Exception ex)
+        //            {
+        //                throw new Exception("AD:SetProgramAttributes()::GraduatedFlag" + ex.Message, ex.InnerException);
+        //            }
+        //        }
+        //        else if (r.ElementType.Equals(20))
+        //        {
+        //            try
+        //            {
+        //                if (r.Tag == null)
+        //                    throw new ArgumentException("Cannot set attribute of type " + r.ElementType + ". Tag value is null.");
 
-                        progAttr.Locked = (!string.IsNullOrEmpty(r.Tag)) ? Convert.ToInt32(r.Tag) : 0;
-                    }
-                    catch (Exception ex)
-                    {
-                        throw new Exception("AD:SetProgramAttributes()::Locked" + ex.Message, ex.InnerException);
-                    }
-                }
-                //else if (r.ElementType.Equals(21))
-                //{
-                //    try
-                //    {
-                //        if (r.Tag == null)
-                //            throw new ArgumentException("Cannot set attribute of type " + r.ElementType + ". Tag value is null.");
+        //                progAttr.Locked = (!string.IsNullOrEmpty(r.Tag)) ? Convert.ToInt32(r.Tag) : 0;
+        //            }
+        //            catch (Exception ex)
+        //            {
+        //                throw new Exception("AD:SetProgramAttributes()::Locked" + ex.Message, ex.InnerException);
+        //            }
+        //        }
+        //        //else if (r.ElementType.Equals(21))
+        //        //{
+        //        //    try
+        //        //    {
+        //        //        if (r.Tag == null)
+        //        //            throw new ArgumentException("Cannot set attribute of type " + r.ElementType + ". Tag value is null.");
 
-                //        progAttr.EligibilityOverride = (!string.IsNullOrEmpty(r.Tag)) ? Convert.ToInt32(r.Tag) : 0;
-                //    }
-                //    catch (Exception ex)
-                //    {
-                //        throw new Exception("AD:SetProgramAttributes()::EligibilityOverride" + ex.Message, ex.InnerException);
-                //    }
-                //}
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("AD:PlanElementUtil:SetProgramAttributes()::" + ex.Message, ex.InnerException);
-            }
-        }
+        //        //        progAttr.EligibilityOverride = (!string.IsNullOrEmpty(r.Tag)) ? Convert.ToInt32(r.Tag) : 0;
+        //        //    }
+        //        //    catch (Exception ex)
+        //        //    {
+        //        //        throw new Exception("AD:SetProgramAttributes()::EligibilityOverride" + ex.Message, ex.InnerException);
+        //        //    }
+        //        //}
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw new Exception("AD:PlanElementUtil:SetProgramAttributes()::" + ex.Message, ex.InnerException);
+        //    }
+        //}
 
         private static void SetElementEnabledState(string p, Program program)
         {
@@ -433,7 +436,7 @@ namespace Phytel.API.AppDomain.NG
             try
             {
                 m.Enabled = true;
-                
+                m.StateUpdatedOn = System.DateTime.UtcNow;
                 m.AssignDate = System.DateTime.UtcNow;
                 m.ElementState = 2;
                 m.AssignById = "5368ff2ad4332316288f3e3e";
@@ -458,40 +461,40 @@ namespace Phytel.API.AppDomain.NG
         }
 
         #region cohort patient
-        internal static void RegisterCohortPatientViewProblemToPatient(string problemId, string patientId, IAppDomainRequest request)
-        {
-            try
-            {
-                CohortPatientViewData cpvd = GetCohortPatientViewRecord(patientId, request);
-                // check to see if problem exists in the searchfield
-                if (!cpvd.SearchFields.Exists(sf => sf.Value == problemId))
-                {
-                    cpvd.SearchFields.Add(new SearchFieldData
-                    {
-                        Value = problemId,
-                        Active = true,
-                        FieldName = Constants.Problem
-                    });
-                }
-                else
-                {
-                    cpvd.SearchFields.ForEach(sf =>
-                    {
-                        if (sf.Value == problemId)
-                        {
-                            if (sf.Active == false)
-                                sf.Active = true;
-                        }
-                    });
-                }
+        //internal static void RegisterCohortPatientViewProblemToPatient(string problemId, string patientId, IAppDomainRequest request)
+        //{
+        //    try
+        //    {
+        //        CohortPatientViewData cpvd = GetCohortPatientViewRecord(patientId, request);
+        //        // check to see if problem exists in the searchfield
+        //        if (!cpvd.SearchFields.Exists(sf => sf.Value == problemId))
+        //        {
+        //            cpvd.SearchFields.Add(new SearchFieldData
+        //            {
+        //                Value = problemId,
+        //                Active = true,
+        //                FieldName = Constants.Problem
+        //            });
+        //        }
+        //        else
+        //        {
+        //            cpvd.SearchFields.ForEach(sf =>
+        //            {
+        //                if (sf.Value == problemId)
+        //                {
+        //                    if (sf.Active == false)
+        //                        sf.Active = true;
+        //                }
+        //            });
+        //        }
 
-                PlanElementEndpointUtil.UpdateCohortPatientViewProblem(cpvd, patientId, request);
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("AD:PlanElementUtil:RegisterCohortPatientViewProblemToPatient()::" + ex.Message, ex.InnerException);
-            }
-        }
+        //        PlanElementEndpointUtil.UpdateCohortPatientViewProblem(cpvd, patientId, request);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw new Exception("AD:PlanElementUtil:RegisterCohortPatientViewProblemToPatient()::" + ex.Message, ex.InnerException);
+        //    }
+        //}
 
         private static CohortPatientViewData GetCohortPatientViewRecord(string patientId, IAppDomainRequest request)
         {
@@ -508,58 +511,58 @@ namespace Phytel.API.AppDomain.NG
         #endregion
 
         #region program related tasks
-        internal static bool IsProgramCompleted(Program p, string userId)
-        {
-            try
-            {
-                bool result = false;
-                int modulesCompleted = 0;
-                p.Modules.ForEach(m =>
-                {
-                    if (m.Completed)
-                    {
-                        modulesCompleted++;
-                    }
-                });
+        //internal static bool IsProgramCompleted(Program p, string userId)
+        //{
+        //    try
+        //    {
+        //        bool result = false;
+        //        int modulesCompleted = 0;
+        //        p.Modules.ForEach(m =>
+        //        {
+        //            if (m.Completed)
+        //            {
+        //                modulesCompleted++;
+        //            }
+        //        });
 
-                if (modulesCompleted.Equals(p.Modules.Count))
-                {
-                    result = true;
-                }
+        //        if (modulesCompleted.Equals(p.Modules.Count))
+        //        {
+        //            result = true;
+        //        }
 
-                return result;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("AD:PlanElementUtil:IsProgramCompleted()::" + ex.Message, ex.InnerException);
-            }
-        }
+        //        return result;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw new Exception("AD:PlanElementUtil:IsProgramCompleted()::" + ex.Message, ex.InnerException);
+        //    }
+        //}
 
-        internal static void SaveReportingAttributes(DD.ProgramAttributeData _programAttributes, IAppDomainRequest request)
-        {
-            try
-            {
-                // 1) get program attribute
-                DD.ProgramAttributeData pAtt = PlanElementEndpointUtil.GetProgramAttributes(_programAttributes.PlanElementId, request);
-                // 2) update existing attributes
-                if (pAtt != null)
-                {
-                    bool dirty = ModifyProgramAttributePropertiesForUpdate(pAtt, _programAttributes);
-                    if (dirty)
-                    {
-                        PlanElementEndpointUtil.UpdateProgramAttributes(pAtt, request);
-                    }
-                }
-                else
-                {
-                    PlanElementEndpointUtil.InsertNewProgramAttribute(_programAttributes, request);
-                }
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("AD:PlanElementUtil:SaveReportingAttributes()::" + ex.Message, ex.InnerException);
-            }
-        }
+        //internal static void SaveReportingAttributes(DD.ProgramAttributeData _programAttributes, IAppDomainRequest request)
+        //{
+        //    try
+        //    {
+        //        // 1) get program attribute
+        //        DD.ProgramAttributeData pAtt = PlanElementEndpointUtil.GetProgramAttributes(_programAttributes.PlanElementId, request);
+        //        // 2) update existing attributes
+        //        if (pAtt != null)
+        //        {
+        //            bool dirty = ModifyProgramAttributePropertiesForUpdate(pAtt, _programAttributes);
+        //            if (dirty)
+        //            {
+        //                PlanElementEndpointUtil.UpdateProgramAttributes(pAtt, request);
+        //            }
+        //        }
+        //        else
+        //        {
+        //            PlanElementEndpointUtil.InsertNewProgramAttribute(_programAttributes, request);
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw new Exception("AD:PlanElementUtil:SaveReportingAttributes()::" + ex.Message, ex.InnerException);
+        //    }
+        //}
 
         private static bool ModifyProgramAttributePropertiesForUpdate(DD.ProgramAttributeData pAtt, DD.ProgramAttributeData _pAtt)
         {
@@ -837,6 +840,7 @@ namespace Phytel.API.AppDomain.NG
                     //DidNotEnrollReason = pr.DidNotEnrollReason,
                     //DisEnrollReason = pr.DisEnrollReason,
                     ElementState = pr.ElementState,
+                    StateUpdatedOn = pr.StateUpdatedOn,
                     Eligibility = pr.Eligibility,
                     EligibilityEndDate = pr.EligibilityEndDate,
                     //EligibilityOverride = pr.EligibilityOverride,
@@ -884,128 +888,128 @@ namespace Phytel.API.AppDomain.NG
             }
         }
 
-        public static bool ResponseSpawnAllowed(Step s, Response r)
-        {
-            try
-            {
-                bool pass = true;
-                if (new ResponseSpawnAllowed<Step>().IsSatisfiedBy(s))
-                {
-                    if (string.IsNullOrEmpty(r.Value) || r.Value.ToLower().Equals("false"))
-                    {
-                        pass = false;
-                    }
-                }
-                return pass;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("AD:PlanElementUtil:ResponseSpawnAllowed()::" + ex.Message, ex.InnerException);
-            }
-        }
+        //public static bool ResponseSpawnAllowed(Step s, Response r)
+        //{
+        //    try
+        //    {
+        //        bool pass = true;
+        //        if (new ResponseSpawnAllowed<Step>().IsSatisfiedBy(s))
+        //        {
+        //            if (string.IsNullOrEmpty(r.Value) || r.Value.ToLower().Equals("false"))
+        //            {
+        //                pass = false;
+        //            }
+        //        }
+        //        return pass;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw new Exception("AD:PlanElementUtil:ResponseSpawnAllowed()::" + ex.Message, ex.InnerException);
+        //    }
+        //}
 
-        public static void HydratePlanElementLists(List<object> ProcessedElements, PostProcessActionResponse response)
-        {
-            try
-            {
-                if (ProcessedElements != null && ProcessedElements.Count > 0)
-                {
-                    response.PlanElems = new PlanElements();
+        //public static void HydratePlanElementLists(List<object> ProcessedElements, PostProcessActionResponse response)
+        //{
+        //    try
+        //    {
+        //        if (ProcessedElements != null && ProcessedElements.Count > 0)
+        //        {
+        //            response.PlanElems = new PlanElements();
 
-                    foreach (Object obj in ProcessedElements)
-                    {
-                        if (obj.GetType().Equals(typeof(Program)))
-                        {
-                            if (!response.PlanElems.Programs.Contains(obj))
-                            {
-                                Program p = CloneProgram((Program)obj);
-                                response.PlanElems.Programs.Add(p);
-                            }
-                        }
-                        else if (obj.GetType().Equals(typeof(Module)))
-                        {
-                            if (!response.PlanElems.Modules.Contains(obj))
-                            {
-                                Module m = CloneModule((Module)obj);
-                                response.PlanElems.Modules.Add(m);
-                            }
-                        }
-                        else if (obj.GetType().Equals(typeof(Actions)))
-                        {
-                            if (!response.PlanElems.Actions.Contains(obj))
-                            {
-                                Actions a = CloneAction((Actions)obj);
-                                response.PlanElems.Actions.Add(a);
-                            }
-                        }
-                        else if (obj.GetType().Equals(typeof(Step)))
-                        {
-                            if (!response.PlanElems.Steps.Contains(obj))
-                            {
-                                Step s = CloneStep((Step)obj);
-                                response.PlanElems.Steps.Add(s);
-                            }
-                        }
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("AD:PlanElementUtil:HydratePlanElementLists()::" + ex.Message, ex.InnerException);
-            }
-        }
+        //            foreach (Object obj in ProcessedElements)
+        //            {
+        //                if (obj.GetType().Equals(typeof(Program)))
+        //                {
+        //                    if (!response.PlanElems.Programs.Contains(obj))
+        //                    {
+        //                        Program p = CloneProgram((Program)obj);
+        //                        response.PlanElems.Programs.Add(p);
+        //                    }
+        //                }
+        //                else if (obj.GetType().Equals(typeof(Module)))
+        //                {
+        //                    if (!response.PlanElems.Modules.Contains(obj))
+        //                    {
+        //                        Module m = CloneModule((Module)obj);
+        //                        response.PlanElems.Modules.Add(m);
+        //                    }
+        //                }
+        //                else if (obj.GetType().Equals(typeof(Actions)))
+        //                {
+        //                    if (!response.PlanElems.Actions.Contains(obj))
+        //                    {
+        //                        Actions a = CloneAction((Actions)obj);
+        //                        response.PlanElems.Actions.Add(a);
+        //                    }
+        //                }
+        //                else if (obj.GetType().Equals(typeof(Step)))
+        //                {
+        //                    if (!response.PlanElems.Steps.Contains(obj))
+        //                    {
+        //                        Step s = CloneStep((Step)obj);
+        //                        response.PlanElems.Steps.Add(s);
+        //                    }
+        //                }
+        //            }
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw new Exception("AD:PlanElementUtil:HydratePlanElementLists()::" + ex.Message, ex.InnerException);
+        //    }
+        //}
 
-        public static PlanElement ActivatePlanElement(string p, Program program)
-        {
-            try
-            {
-                PlanElement pe = null;
-                if (program.Modules != null)
-                {
-                    foreach (Module m in program.Modules)
-                    {
-                        if (m.Id.Equals(p))
-                        {
-                            pe = InitializePlanElementSettings(pe, m);
-                            break;
-                        }
-                        else
-                        {
-                            if (m.Actions != null)
-                            {
-                                foreach (Actions a in m.Actions)
-                                {
-                                    if (a.Id.Equals(p))
-                                    {
-                                        pe = InitializePlanElementSettings(pe, a);
-                                        break;
-                                    }
-                                    else
-                                    {
-                                        if (a.Steps != null)
-                                        {
-                                            foreach (Step s in a.Steps)
-                                            {
-                                                if (s.Id.Equals(p))
-                                                {
-                                                    pe = InitializePlanElementSettings(pe, s);
-                                                    break;
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-                return pe;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("AD:PlanElementUtil:ActivatePlanElement()::" + ex.Message, ex.InnerException);
-            }
-        }
+        //public static PlanElement ActivatePlanElement(string p, Program program)
+        //{
+        //    try
+        //    {
+        //        PlanElement pe = null;
+        //        if (program.Modules != null)
+        //        {
+        //            foreach (Module m in program.Modules)
+        //            {
+        //                if (m.Id.Equals(p))
+        //                {
+        //                    pe = InitializePlanElementSettings(pe, m);
+        //                    break;
+        //                }
+        //                else
+        //                {
+        //                    if (m.Actions != null)
+        //                    {
+        //                        foreach (Actions a in m.Actions)
+        //                        {
+        //                            if (a.Id.Equals(p))
+        //                            {
+        //                                pe = InitializePlanElementSettings(pe, a);
+        //                                break;
+        //                            }
+        //                            else
+        //                            {
+        //                                if (a.Steps != null)
+        //                                {
+        //                                    foreach (Step s in a.Steps)
+        //                                    {
+        //                                        if (s.Id.Equals(p))
+        //                                        {
+        //                                            pe = InitializePlanElementSettings(pe, s);
+        //                                            break;
+        //                                        }
+        //                                    }
+        //                                }
+        //                            }
+        //                        }
+        //                    }
+        //                }
+        //            }
+        //        }
+        //        return pe;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw new Exception("AD:PlanElementUtil:ActivatePlanElement()::" + ex.Message, ex.InnerException);
+        //    }
+        //}
 
         private static PlanElement InitializePlanElementSettings(PlanElement pe, PlanElement p)
         {
@@ -1023,63 +1027,63 @@ namespace Phytel.API.AppDomain.NG
             }
         }
 
-        internal static bool IsActionInitial(Program p)
-        {
-            try
-            {
-                bool result = true;
-                if (p.Modules != null)
-                {
-                    foreach (Module m in p.Modules)
-                    {
-                        foreach (Actions a in m.Actions)
-                        {
-                            if (a.ElementState == 4 || a.ElementState == 5)
-                            {
-                                result = false;
-                            }
-                        }
-                    }
-                }
-                return result;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("AD:PlanElementUtil:IsActionInitial()::" + ex.Message, ex.InnerException);
-            }
-        }
+        //internal static bool IsActionInitial(Program p)
+        //{
+        //    try
+        //    {
+        //        bool result = true;
+        //        if (p.Modules != null)
+        //        {
+        //            foreach (Module m in p.Modules)
+        //            {
+        //                foreach (Actions a in m.Actions)
+        //                {
+        //                    if (a.ElementState == 4 || a.ElementState == 5)
+        //                    {
+        //                        result = false;
+        //                    }
+        //                }
+        //            }
+        //        }
+        //        return result;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw new Exception("AD:PlanElementUtil:IsActionInitial()::" + ex.Message, ex.InnerException);
+        //    }
+        //}
 
-        public static ProgramAttribute GetAttributes(DD.ProgramAttributeData programAttributeData)
-        {
-            ProgramAttribute programAttribute = null;
-            if (programAttributeData != null)
-            {
-                programAttribute = new ProgramAttribute
-                {
-                    // AssignedBy = programAttributeData.AssignedBy,
-                    //AssignedOn = programAttributeData.AssignedOn, Sprint 12
-                    AuthoredBy = programAttributeData.AuthoredBy,
-                    Completed = (int)programAttributeData.Completed,
-                    CompletedBy = programAttributeData.CompletedBy,
-                    DateCompleted = programAttributeData.DateCompleted,
-                    DidNotEnrollReason = programAttributeData.DidNotEnrollReason,
-                    Eligibility = (int)programAttributeData.Eligibility,
-                    //AttrEndDate = programAttributeData.AttrEndDate, Sprint 12
-                    Enrollment = (int)programAttributeData.Enrollment,
-                    GraduatedFlag = (int)programAttributeData.GraduatedFlag,
-                    Id = programAttributeData.Id.ToString(),
-                    IneligibleReason = programAttributeData.IneligibleReason,
-                    Locked = (int)programAttributeData.Locked,
-                    OptOut = programAttributeData.OptOut,
-                    OverrideReason = programAttributeData.OverrideReason,
-                    PlanElementId = programAttributeData.PlanElementId.ToString(),
-                    Population = programAttributeData.Population,
-                    RemovedReason = programAttributeData.RemovedReason,
-                    //AttrStartDate = programAttributeData.AttrStartDate, Sprint 12
-                    Status = (int)programAttributeData.Status
-                };
-            }
-            return programAttribute;
-        }
+        //public static ProgramAttribute GetAttributes(DD.ProgramAttributeData programAttributeData)
+        //{
+        //    ProgramAttribute programAttribute = null;
+        //    if (programAttributeData != null)
+        //    {
+        //        programAttribute = new ProgramAttribute
+        //        {
+        //            // AssignedBy = programAttributeData.AssignedBy,
+        //            //AssignedOn = programAttributeData.AssignedOn, Sprint 12
+        //            AuthoredBy = programAttributeData.AuthoredBy,
+        //            Completed = (int)programAttributeData.Completed,
+        //            CompletedBy = programAttributeData.CompletedBy,
+        //            DateCompleted = programAttributeData.DateCompleted,
+        //            DidNotEnrollReason = programAttributeData.DidNotEnrollReason,
+        //            Eligibility = (int)programAttributeData.Eligibility,
+        //            //AttrEndDate = programAttributeData.AttrEndDate, Sprint 12
+        //            Enrollment = (int)programAttributeData.Enrollment,
+        //            GraduatedFlag = (int)programAttributeData.GraduatedFlag,
+        //            Id = programAttributeData.Id.ToString(),
+        //            IneligibleReason = programAttributeData.IneligibleReason,
+        //            Locked = (int)programAttributeData.Locked,
+        //            OptOut = programAttributeData.OptOut,
+        //            OverrideReason = programAttributeData.OverrideReason,
+        //            PlanElementId = programAttributeData.PlanElementId.ToString(),
+        //            Population = programAttributeData.Population,
+        //            RemovedReason = programAttributeData.RemovedReason,
+        //            //AttrStartDate = programAttributeData.AttrStartDate, Sprint 12
+        //            Status = (int)programAttributeData.Status
+        //        };
+        //    }
+        //    return programAttribute;
+        //}
     }
 }

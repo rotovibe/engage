@@ -119,6 +119,7 @@
     <Compile Include="PlanElementUtil_Tests.cs" />
     <Compile Include="PlanManager_Tests.cs" />
     <Compile Include="Programs\EndpointUtils_Tests.cs" />
+    <Compile Include="Programs\PlanManager_Test.cs" />
     <Compile Include="Programs\ProgramTest.cs" />
     <Compile Include="Programs\Specifications\IsInitialActionSpecificationTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

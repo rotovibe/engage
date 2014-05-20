@@ -67,6 +67,32 @@ namespace Phytel.API.AppDomain.NG.Tests
             }
 
             [TestMethod()]
+            [TestCategory("NIGHT-868")]
+            [TestProperty("TFS", "11270")]
+            [TestProperty("Layer", "NGManager")]
+            public void Get_Response_StateChange_Test()
+            {
+                string patientId = "5325dad4d6a4850adcbba776";
+                string programId = "534d9bffd6a48504b058a2cf";
+                string userId = "0000000000000000000000000";
+
+                INGManager ngm = new NGManager { PlanElementUtils = new StubPlanElementUtils(), EndpointUtils = new StubPlanElementEndpointUtils() };
+
+                GetPatientProgramDetailsSummaryRequest request = new GetPatientProgramDetailsSummaryRequest
+                {
+                    Version = 1.0,
+                    ContractNumber = "InHealth001",
+                    PatientId = patientId,
+                    PatientProgramId = programId,
+                    UserId = userId
+                };
+
+                GetPatientProgramDetailsSummaryResponse response = ngm.GetPatientProgramDetailsSummary(request);
+                DateTime statechangeDate = ((DateTime)response.Program.StateUpdatedOn).Date;
+                Assert.AreEqual(DateTime.UtcNow.Date, statechangeDate);
+            }
+
+            [TestMethod()]
             public void Get_Response_Not_Null_Test()
             {
                 string patientId = "5325dad4d6a4850adcbba776";

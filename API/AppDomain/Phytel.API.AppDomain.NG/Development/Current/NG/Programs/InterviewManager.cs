@@ -12,12 +12,14 @@ using System.Configuration;
 using Phytel.API.AppDomain.NG.Programs;
 using ServiceStack.ServiceInterface.ServiceModel;
 using Phytel.API.AppDomain.NG.Specifications;
+using ServiceStack.WebHost.Endpoints;
 
 namespace Phytel.API.AppDomain.NG
 {
     public class PlanManager : ManagerBase, IPlanManager
     {
         public IPlanElementUtils PEUtils { get; set; }
+        public IEndpointUtils EndPointUtils { get; set; }
         public List<string> RelatedChanges { get; set; }
         public List<object> ProcessedElements { get; set; }
         public IsInitialActionSpecification<Program> IsInitialAction { get; set; }
@@ -27,6 +29,9 @@ namespace Phytel.API.AppDomain.NG
             RelatedChanges = new List<string>();
             ProcessedElements = new List<object>();
             IsInitialAction = new IsInitialActionSpecification<Program>();
+
+            if (AppHostBase.Instance != null)
+                AppHostBase.Instance.Container.AutoWire(this);
         }
 
         public PostProcessActionResponse ProcessActionResults(PostProcessActionRequest request)
@@ -38,7 +43,7 @@ namespace Phytel.API.AppDomain.NG
                 ProcessedElements.Clear();
                 PostProcessActionResponse response = new PostProcessActionResponse();
 
-                Program p = PlanElementEndpointUtil.RequestPatientProgramDetail(request);
+                Program p = EndPointUtils.RequestPatientProgramDetail(request);
                 
                 Actions action = request.Action;
 
@@ -53,17 +58,18 @@ namespace Phytel.API.AppDomain.NG
                     }
 
                     // get module reference
-                    Module mod = PlanElementUtil.FindElementById(p.Modules, action.ModuleId);
+                    Module mod = PEUtils.FindElementById(p.Modules, action.ModuleId);
                     // set to in progress
                     mod.ElementState = 4;
                     
                     // set in progress state
                     //new ResponseSpawnAllowed<Step>().IsSatisfiedBy(s)
-                    if (PlanElementUtil.IsActionInitial(p))
+                    if (PEUtils.IsActionInitial(p))
                     //if (new IsActionInitialSpecification<Program>().IsSatisfiedBy(p))
                     {
                         // set program to in progress
                         p.ElementState = 4;
+                        p.StateUpdatedOn = System.DateTime.UtcNow;
                     }
 
                     // insert action update
@@ -81,17 +87,17 @@ namespace Phytel.API.AppDomain.NG
                     if (mod != null)
                     {
                         // set enabled status for action dependencies
-                        PlanElementUtil.SetEnabledStatusByPrevious(mod.Actions);
+                        PEUtils.SetEnabledStatusByPrevious(mod.Actions);
                         // set enable/visibility of actions after action processing.
                         pChain.ProcessWorkflow((IPlanElement)mod, p, request.UserId, request.PatientId, action, request);
                         AddUniquePlanElementToProcessedList(mod);
                     }
 
                     // set module visibility for modules
-                    PlanElementUtil.SetEnabledStatusByPrevious(p.Modules);
+                    PEUtils.SetEnabledStatusByPrevious(p.Modules);
 
                     // evaluate program status
-                    if (PlanElementUtil.IsProgramCompleted(p, request.UserId))
+                    if (PEUtils.IsProgramCompleted(p, request.UserId))
                     {
                         p.Completed = true;
                         pChain.ProcessWorkflow((IPlanElement)p, p, request.UserId, request.PatientId, action, request);
@@ -107,12 +113,12 @@ namespace Phytel.API.AppDomain.NG
                 AddUniquePlanElementToProcessedList(p);
 
                 // save
-                DD.ProgramDetail pdetail = PlanElementEndpointUtil.SaveAction(request, action.Id, p);
+                DD.ProgramDetail pdetail = EndPointUtils.SaveAction(request, action.Id, p);
 
                 // create element changed lists 
-                PlanElementUtil.HydratePlanElementLists(ProcessedElements, response);
+                PEUtils.HydratePlanElementLists(ProcessedElements, response);
 
-                response.PlanElems.Attributes = PlanElementUtil.GetAttributes(pdetail.Attributes);
+                response.PlanElems.Attributes = PEUtils.GetAttributes(pdetail.Attributes);
                 response.RelatedChanges = RelatedChanges;
                 response.PatientId = request.PatientId;
                 response.Version = request.Version;
@@ -133,19 +139,20 @@ namespace Phytel.API.AppDomain.NG
                 RelatedChanges.Clear();
                 PostSaveActionResponse response = new PostSaveActionResponse();
 
-                Program p = PlanElementEndpointUtil.RequestPatientProgramDetail(request);
+                Program p = EndPointUtils.RequestPatientProgramDetail(request);
                 Actions action = request.Action;
 
                 // set elementstates to in progress
-                Module mod = PlanElementUtil.FindElementById(p.Modules, action.ModuleId);
+                Module mod = PEUtils.FindElementById(p.Modules, action.ModuleId);
                 // set to in progress
                 mod.ElementState = 4;
                 
-                if (PlanElementUtil.IsActionInitial(p))
+                if (PEUtils.IsActionInitial(p))
                 //if (new IsActionInitialSpecification<Program>().IsSatisfiedBy(p))
                 {
                     // set program to in progress
                     p.ElementState = 4;
+                    p.StateUpdatedOn = System.DateTime.UtcNow;
                 }
                 
                 NGUtils.UpdateProgramAction(action, p);
@@ -153,7 +160,7 @@ namespace Phytel.API.AppDomain.NG
                 AddUniquePlanElementToProcessedList(mod);
 
                 // save
-                PlanElementEndpointUtil.SaveAction(request, action.Id, p);
+                EndPointUtils.SaveAction(request, action.Id, p);
 
                 //response.Program = p;
                 response.Saved = true;
@@ -177,7 +184,8 @@ namespace Phytel.API.AppDomain.NG
             StepPlanProcessor stepProc = new StepPlanProcessor();
             stepProc._spawnEvent += stepProc__spawnEvent;
             stepProc._processedElementEvent += Proc__processedIdEvent;
-            PlanElementUtil._processedElementEvent += PlanElementUtil__processedElementEvent;
+            //PlanElementUtil._processedElementEvent += PlanElementUtil__processedElementEvent;
+            PEUtils._processedElementEvent += PlanElementUtil__processedElementEvent;
             progProc.Successor = modProc;
             modProc.Successor = actProc;
             actProc.Successor = stepProc;
