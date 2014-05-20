@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System;
 using Phytel.API.Common;
 using Phytel.API.DataDomain.Program;
+using Phytel.API.DataDomain.Program.DTO;
 
 namespace Phytel.API.DataDomain.Program.MongoDB.DTO
 {

@@ -13,7 +13,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DataManagement.Procedures
     public class UpdatePatientProgramAssignedAttributes : MongoProcedure, IMongoProcedure
     {
         public const string Name = "mp_UpdatePatientProgramAssignedAttributes";
-        public const string Description = "Procedure to update the existing fields like AssignedBy(NIGHT-832), AssignedDate(NIGHT-831) and AssignedTo(NIGHT-833) in PatientProgram collection.";
+        public const string Description = "Procedure to update the existing fields like AssignedBy(NIGHT-832), AssignedDate(NIGHT-831), AssignedTo(NIGHT-833) and State Update date (NIGHT-868) in PatientProgram collection.";
         public string DDCareMemberUrl = ConfigurationManager.AppSettings["DDCareMemberUrl"];
 
         public override void Implementation()
@@ -23,7 +23,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DataManagement.Procedures
                 Results = new List<Result>();
                 ObjectId systemObjectId = ObjectId.Parse(Phytel.API.DataDomain.Program.DTO.Constants.SystemContactId);
                 IRestClient client = new JsonServiceClient();
-                IProgramRepository repo = new ProgramRepositoryFactory().GetRepository(Request, RepositoryType.PatientProgram);
+                IProgramRepository repo = new ProgramRepositoryFactory().GetRepository(Request, Phytel.API.DataDomain.Program.DTO.RepositoryType.PatientProgram);
 
                 List<MEPatientProgram> programs = (List<MEPatientProgram>)repo.SelectAll();
 
@@ -48,13 +48,25 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DataManagement.Procedures
                     }
                     #endregion
 
+                    #region NIGHT-868
+		            switch(mePP.State)
+                    {
+                        case ElementState.NotStarted :
+                            break;
+                        case ElementState.InProgress:
+                            break;
+                        case ElementState.Closed:
+                            break;
+                    }
+	                #endregion
+
                     mePP.LastUpdatedOn = DateTime.UtcNow;
                     mePP.UpdatedBy = systemObjectId;
                     MEPatientProgram updatedProgram = mePP;
                     bool success = repo.Save(updatedProgram);
                     if (success)
                     {
-                        Results.Add(new Result { Message = string.Format("Updated values are AssignedBy(aby) = '{0}', AssignedDate(aon) = '{1}', AssignedTo(ato) = '{2}' for Program Id = '{3}' in PatientProgram collection.", mePP.AssignedBy, mePP.AssignedOn, mePP.AssignedTo, updatedProgram.Id)});
+                        Results.Add(new Result { Message = string.Format("Updated values are AssignedBy(aby) = '{0}', AssignedDate(aon) = '{1}', AssignedTo(ato) = '{2}', StateUpdatedOn(stuon) = '{3}' for Program Id = '{4}' in PatientProgram collection.", mePP.AssignedBy, mePP.AssignedOn, mePP.AssignedTo, mePP.StateUpdatedOn, updatedProgram.Id)});
                     }
                 }
                 Results.Add(new Result { Message = "Total records updated: " + Results.Count });

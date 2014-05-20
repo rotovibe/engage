@@ -1,5 +1,6 @@
 ﻿using Phytel.API.Interface;
 using System;
+using Phytel.API.DataDomain.Program.DTO;
 namespace Phytel.API.DataDomain.Program
 {
     public interface IProgramRepositoryFactory

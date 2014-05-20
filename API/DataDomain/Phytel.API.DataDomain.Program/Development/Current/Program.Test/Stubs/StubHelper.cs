@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using MongoDB.Bson;
+using Phytel.API.DataDomain.Program.DTO;
 
 namespace Phytel.API.DataDomain.Program.Test.Stubs
 {

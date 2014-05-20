@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Phytel.API.DataDomain.Program
+namespace Phytel.API.DataDomain.Program.DTO
 {
     public enum RepositoryType
     {
