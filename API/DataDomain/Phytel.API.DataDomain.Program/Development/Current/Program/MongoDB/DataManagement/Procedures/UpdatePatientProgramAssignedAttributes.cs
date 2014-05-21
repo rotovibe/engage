@@ -14,8 +14,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DataManagement.Procedures
     {
         public const string Name = "mp_UpdatePatientProgramAssignedAttributes";
         public const string Description = "Procedure to update Program's existing fields like AssignedBy(NIGHT-832), AssignedDate(NIGHT-831), AssignedTo(NIGHT-833) and State Update date (NIGHT-868) in PatientProgram collection.";
-        public string DDCareMemberUrl = ConfigurationManager.AppSettings["DDCareMemberUrl"];
-
+        
         public override void Implementation()
         {
             try
@@ -37,7 +36,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DataManagement.Procedures
                      
                     #region NIGHT-833
                     GetPrimaryCareManagerDataRequest careMemberDataRequest = new GetPrimaryCareManagerDataRequest { Context = "NG", ContractNumber = "InHealth001", PatientId = mePP.PatientId.ToString(), UserId = Phytel.API.DataDomain.Program.DTO.Constants.SystemContactId, Version = 1 };
-                    ObjectId primaryCareManagerId = getPatientsPrimaryCareManager(careMemberDataRequest, client);
+                    ObjectId primaryCareManagerId = Helper.GetPatientsPrimaryCareManager(careMemberDataRequest, client);
                     if (primaryCareManagerId == ObjectId.Empty)
                     {
                         mePP.AssignedTo = null;
@@ -134,32 +133,5 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DataManagement.Procedures
             }
         }
 
-        private ObjectId getPatientsPrimaryCareManager(GetPrimaryCareManagerDataRequest request, IRestClient client)
-        {
-            try
-            {
-
-                ObjectId pcmObjectId = ObjectId.Empty;
-                // [Route("/{Context}/{Version}/{ContractNumber}/Patient/{PatientId}/PrimaryCareManager", "GET")]
-                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Patient/{4}/PrimaryCareManager",
-                    DDCareMemberUrl,
-                    "NG",
-                    request.Version,
-                    request.ContractNumber,
-                    request.PatientId), request.UserId);
-
-                GetCareMemberDataResponse ddResponse = client.Get<GetCareMemberDataResponse>(url);
-
-                if (ddResponse != null && ddResponse.CareMember != null)
-                {
-                    pcmObjectId = ObjectId.Parse(ddResponse.CareMember.ContactId);
-                }
-                return pcmObjectId;
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
     }
 }
