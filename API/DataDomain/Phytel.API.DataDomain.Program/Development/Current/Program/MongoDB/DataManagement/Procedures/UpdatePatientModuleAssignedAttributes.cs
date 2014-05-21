@@ -7,6 +7,7 @@ using Phytel.API.DataDomain.CareMember.DTO;
 using ServiceStack.Service;
 using ServiceStack.ServiceClient.Web;
 using System.Configuration;
+using System.Text;
 
 namespace Phytel.API.DataDomain.Program.MongoDB.DataManagement.Procedures
 {
@@ -29,14 +30,19 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DataManagement.Procedures
 
                 foreach (MEPatientProgram mePP in programs)
                 {
+                    List<Result> moduleMessages = new List<Result>();
                     List<Module> modules = mePP.Modules;
                     if (modules != null & modules.Count > 0)
                     {
                         foreach (Module meM in modules)
                         {
                             #region NIGHT-948, NIGHT-949
-                            meM.AssignedBy = systemObjectId;
-                            meM.AssignedOn = mePP.RecordCreatedOn;
+                            if (meM.Enabled)
+                            {
+                                meM.AssignedBy = systemObjectId;
+                                meM.AssignedOn = mePP.RecordCreatedOn;
+                            }
+                            
                             #endregion
 
                             #region NIGHT-950
@@ -67,14 +73,16 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DataManagement.Procedures
                             }
                             #endregion
 
-                            mePP.LastUpdatedOn = DateTime.UtcNow;
-                            mePP.UpdatedBy = systemObjectId;
-                            MEPatientProgram updatedProgram = mePP;
-                            bool success = repo.Save(updatedProgram);
-                            if (success)
-                            {
-                                Results.Add(new Result { Message = string.Format("Updated values for a Module are AssignedBy(aby) = '{0}', AssignedDate(aon) = '{1}', AssignedTo(ato) = '{2}', StateUpdatedOn(stuon) = '{3}' for Module Id = '{4}' in Program Id = '{5}' in PatientProgram collection.", meM.AssignedBy, meM.AssignedOn, meM.AssignedTo, meM.StateUpdatedOn, meM.Id, updatedProgram.Id) });
-                            }
+                            moduleMessages.Add(new Result { Message = string.Format("Updated values for a Module are AssignedBy(aby) = '{0}', AssignedDate(aon) = '{1}', AssignedTo(ato) = '{2}', StateUpdatedOn(stuon) = '{3}' for Module Id = '{4}' in Program Id = '{5}' in PatientProgram collection.", meM.AssignedBy, meM.AssignedOn, meM.AssignedTo, meM.StateUpdatedOn, meM.Id, mePP.Id)});
+
+                        }
+                        mePP.LastUpdatedOn = DateTime.UtcNow;
+                        mePP.UpdatedBy = systemObjectId;
+                        MEPatientProgram updatedProgram = mePP;
+                        bool success = repo.Save(updatedProgram);
+                        if (success)
+                        {
+                            Results.AddRange(moduleMessages);
                         }
                     }
                 }
