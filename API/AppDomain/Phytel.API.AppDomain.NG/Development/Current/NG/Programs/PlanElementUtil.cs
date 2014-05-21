@@ -31,25 +31,25 @@ namespace Phytel.API.AppDomain.NG
         /// <typeparam name="T">T</typeparam>
         /// <param name="list">PlanElement list</param>
         /// <returns></returns>
-        public static bool SetCompletionStatus<T>(List<T> list)
-        {
-            try
-            {
-                bool result = false;
-                int completed = list.FindAll(new Completed<T>().IsSatisfiedBy).Count();
-                int count = list.Count;
+        //public static bool SetCompletionStatus<T>(List<T> list)
+        //{
+        //    try
+        //    {
+        //        bool result = false;
+        //        int completed = list.FindAll(new Completed<T>().IsSatisfiedBy).Count();
+        //        int count = list.Count;
 
-                if (completed.Equals(count))
-                {
-                    result = true;
-                }
-                return result;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("AD:PlanElementUtil:SetCompletionStatus()::" + ex.Message, ex.InnerException);
-            }
-        }
+        //        if (completed.Equals(count))
+        //        {
+        //            result = true;
+        //        }
+        //        return result;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw new Exception("AD:PlanElementUtil:SetCompletionStatus()::" + ex.Message, ex.InnerException);
+        //    }
+        //}
 
         //public static T FindElementById<T>(List<T> list, string id)
         //{
@@ -82,60 +82,60 @@ namespace Phytel.API.AppDomain.NG
         //    }
         //}
 
-        public static void SetEnabledState<T>(List<T> list, T x)
-        {
-            try
-            {
-                if (list != null && x != null)
-                {
-                    IPlanElement pe = ((IPlanElement)Convert.ChangeType(x, typeof(T)));
+        //public static void SetEnabledState<T>(List<T> list, T x)
+        //{
+        //    try
+        //    {
+        //        if (list != null && x != null)
+        //        {
+        //            IPlanElement pe = ((IPlanElement)Convert.ChangeType(x, typeof(T)));
 
-                    if (!string.IsNullOrEmpty(pe.Previous))
-                    {
-                        var prevElem = list.Find(r => ((IPlanElement)r).Id == pe.Previous);
-                        if (prevElem != null)
-                        {
-                            if (((IPlanElement)prevElem).Completed != true)
-                            {
-                                ((IPlanElement)x).Enabled = false;
-                            }
-                            else
-                            {
-                                ((IPlanElement)x).Enabled = true;
-                                // only track elements who are enabled for now.
-                                OnProcessIdEvent(Convert.ChangeType(x, typeof(T)));
-                            }
-                        }
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("AD:PlanElementUtil:SetEnabledState()::" + ex.Message, ex.InnerException);
-            }
-        }
+        //            if (!string.IsNullOrEmpty(pe.Previous))
+        //            {
+        //                var prevElem = list.Find(r => ((IPlanElement)r).Id == pe.Previous);
+        //                if (prevElem != null)
+        //                {
+        //                    if (((IPlanElement)prevElem).Completed != true)
+        //                    {
+        //                        ((IPlanElement)x).Enabled = false;
+        //                    }
+        //                    else
+        //                    {
+        //                        ((IPlanElement)x).Enabled = true;
+        //                        // only track elements who are enabled for now.
+        //                        OnProcessIdEvent(Convert.ChangeType(x, typeof(T)));
+        //                    }
+        //                }
+        //            }
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw new Exception("AD:PlanElementUtil:SetEnabledState()::" + ex.Message, ex.InnerException);
+        //    }
+        //}
 
-        internal static void DisableCompleteButtonForAction(List<Step> list)
-        {
-            try
-            {
-                if (list != null)
-                {
-                    list.ForEach(s =>
-                    {
-                        if (s.StepTypeId.Equals(7))
-                        {
-                            s.Enabled = false;
-                            OnProcessIdEvent(s);
-                        }
-                    });
-                }
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("AD:PlanElementUtil:DisableCompleteButtonForAction()::" + ex.Message, ex.InnerException);
-            }
-        }
+        //internal static void DisableCompleteButtonForAction(List<Step> list)
+        //{
+        //    try
+        //    {
+        //        if (list != null)
+        //        {
+        //            list.ForEach(s =>
+        //            {
+        //                if (s.StepTypeId.Equals(7))
+        //                {
+        //                    s.Enabled = false;
+        //                    OnProcessIdEvent(s);
+        //                }
+        //            });
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw new Exception("AD:PlanElementUtil:DisableCompleteButtonForAction()::" + ex.Message, ex.InnerException);
+        //    }
+        //}
 
         //internal static void SpawnElementsInList(List<SpawnElement> list, Program program, string userId, DD.ProgramAttributeData progAttr)
         //{
@@ -360,92 +360,92 @@ namespace Phytel.API.AppDomain.NG
         //    }
         //}
 
-        private static void SetElementEnabledState(string p, Program program)
-        {
-            try
-            {
-                foreach (Module m in program.Modules)
-                {
-                    if (m.Id.ToString().Equals(p))
-                    {
-                        SetInitialProperties(m);
-                        OnProcessIdEvent(m);
-                    }
-                    else
-                    {
-                        FindIdInActions(p, m);
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("AD:PlanElementUtil:SetElementEnabledState()::" + ex.Message, ex.InnerException);
-            }
-        }
+        //private static void SetElementEnabledState(string p, Program program)
+        //{
+        //    try
+        //    {
+        //        foreach (Module m in program.Modules)
+        //        {
+        //            if (m.Id.ToString().Equals(p))
+        //            {
+        //                SetInitialProperties(m);
+        //                OnProcessIdEvent(m);
+        //            }
+        //            else
+        //            {
+        //                FindIdInActions(p, m);
+        //            }
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw new Exception("AD:PlanElementUtil:SetElementEnabledState()::" + ex.Message, ex.InnerException);
+        //    }
+        //}
 
-        private static void FindIdInActions(string p, Module m)
-        {
-            try
-            {
-                if (m.Actions != null)
-                {
-                    foreach (Actions a in m.Actions)
-                    {
-                        if (a.Id.ToString().Equals(p))
-                        {
-                            SetInitialProperties(a);
-                            OnProcessIdEvent(a);
-                        }
-                        else
-                        {
-                            FindIdInSteps(p, a);
-                        }
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("AD:PlanElementUtil:FindIdInActions()::" + ex.Message, ex.InnerException);
-            }
-        }
+        //private static void FindIdInActions(string p, Module m)
+        //{
+        //    try
+        //    {
+        //        if (m.Actions != null)
+        //        {
+        //            foreach (Actions a in m.Actions)
+        //            {
+        //                if (a.Id.ToString().Equals(p))
+        //                {
+        //                    SetInitialProperties(a);
+        //                    OnProcessIdEvent(a);
+        //                }
+        //                else
+        //                {
+        //                    FindIdInSteps(p, a);
+        //                }
+        //            }
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw new Exception("AD:PlanElementUtil:FindIdInActions()::" + ex.Message, ex.InnerException);
+        //    }
+        //}
 
-        private static void FindIdInSteps(string p, Actions a)
-        {
-            try
-            {
-                if (a.Steps != null)
-                {
-                    foreach (Step s in a.Steps)
-                    {
-                        if (s.Id.ToString().Equals(p))
-                        {
-                            SetInitialProperties(s);
-                            OnProcessIdEvent(s);
-                        }
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("AD:PlanElementUtil:FindIdInSteps()::" + ex.Message, ex.InnerException);
-            }
-        }
+        //private static void FindIdInSteps(string p, Actions a)
+        //{
+        //    try
+        //    {
+        //        if (a.Steps != null)
+        //        {
+        //            foreach (Step s in a.Steps)
+        //            {
+        //                if (s.Id.ToString().Equals(p))
+        //                {
+        //                    SetInitialProperties(s);
+        //                    OnProcessIdEvent(s);
+        //                }
+        //            }
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw new Exception("AD:PlanElementUtil:FindIdInSteps()::" + ex.Message, ex.InnerException);
+        //    }
+        //}
 
-        private static void SetInitialProperties(IPlanElement m)
-        {
-            try
-            {
-                m.Enabled = true;
-                m.StateUpdatedOn = System.DateTime.UtcNow;
-                m.AssignDate = System.DateTime.UtcNow;
-                m.ElementState = 2;
-                m.AssignById = "5368ff2ad4332316288f3e3e";
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("AD:PlanElementUtil:SetInitialProperties()::" + ex.Message, ex.InnerException);
-            }
-        }
+        //private static void SetInitialProperties(IPlanElement m)
+        //{
+        //    try
+        //    {
+        //        m.Enabled = true;
+        //        m.StateUpdatedOn = System.DateTime.UtcNow;
+        //        m.AssignDate = System.DateTime.UtcNow;
+        //        m.ElementState = 2;
+        //        m.AssignById = "5368ff2ad4332316288f3e3e";
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw new Exception("AD:PlanElementUtil:SetInitialProperties()::" + ex.Message, ex.InnerException);
+        //    }
+        //}
 
         public static Actions GetProcessingAction(List<Module> list, string actionId)
         {

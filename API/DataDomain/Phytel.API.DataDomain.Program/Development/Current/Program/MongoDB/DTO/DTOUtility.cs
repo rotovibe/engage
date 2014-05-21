@@ -112,7 +112,6 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
 
                 if (list != null && list.Count > 0)
                 {
-                    //Parallel.ForEach(list, m =>
                     foreach (Module m in list)
                     {
                         if (m.Status == Status.Active)
@@ -132,25 +131,21 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
                                 Previous = m.Previous,
                                 Spawn = m.Spawn,
                                 SourceId = m.SourceId,
-                                AssignedBy = m.AssignedBy,
                                 AssignedOn = m.AssignedOn,
                                 State = ElementState.NotStarted,
                                 CompletedBy = m.CompletedBy,
                                 DateCompleted = m.DateCompleted,
-                                //Objectives = m.Objectives.Where(a => a.Status == Common.Status.Active).Select(z => new ObjectivesInfo()
-                                //{
-                                //    Id = z.Id,
-                                //    Status = z.Status,
-                                //    Unit = z.Unit,
-                                //    Value = z.Value
-                                //}).ToList(),
                                 Actions = GetClonedActions(m.Actions, contractNumber, userId, sil)
                             };
+
                             mod.Objectives = null;
+                            if (mod.Enabled)
+                            {
+                                mod.AssignedBy = ObjectId.Parse(Constants.SystemContactId);
+                            }
                             mods.Add(mod);
                         }
                     }
-                    //);
                 }
                 return mods;
             }
@@ -165,6 +160,8 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             try
             {
                 List<Action> actions = new List<Action>();
+                if (list == null || list.Count <= 0) return actions;
+
                 foreach (Action ai in list)
                 {
                     if (ai.Status == Status.Active)

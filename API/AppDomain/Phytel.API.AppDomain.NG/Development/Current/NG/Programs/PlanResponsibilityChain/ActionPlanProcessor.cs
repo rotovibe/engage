@@ -11,8 +11,8 @@ namespace Phytel.API.AppDomain.NG.PlanCOR
 {
     public class ActionPlanProcessor : PlanProcessor
     {
-        private ProgramAttributeData _programAttributes;
-        public IPlanElementUtils PEUtils { get; set; }
+        private readonly ProgramAttributeData _programAttributes;
+        public IPlanElementUtils PeUtils { get; set; }
 
         public ActionPlanProcessor()
         {
@@ -25,27 +25,27 @@ namespace Phytel.API.AppDomain.NG.PlanCOR
         {
             try
             {
-                if (e.PlanElement.GetType().Equals(typeof(Actions)))
+                if (e.PlanElement.GetType() == typeof(Actions))
                 {
                     Actions action = e.PlanElement as Actions;
                     //PlanElementUtil.SetProgramInformation(_programAttributes, e.Program);
                     _programAttributes.PlanElementId = e.Program.Id;
 
-                    if (action.Completed)
+                    if (action != null && action.Completed)
                     {
                         action.CompletedBy = e.UserId;
                         action.ElementState = 5;
                         action.DateCompleted = System.DateTime.UtcNow;
-                        PlanElementUtil.DisableCompleteButtonForAction(action.Steps);
+                        PeUtils.DisableCompleteButtonForAction(action.Steps);
 
                         //2) look at spawnelement and trigger enabled state.
                         if (action.SpawnElement != null)
                         {
-                            PEUtils.SpawnElementsInList(action.SpawnElement, e.Program, e.UserId, _programAttributes);
+                            PeUtils.SpawnElementsInList(action.SpawnElement, e.Program, e.UserId, _programAttributes);
                         }
 
                         // save any program attribute changes
-                        PEUtils.SaveReportingAttributes(_programAttributes, e.DomainRequest);
+                        PeUtils.SaveReportingAttributes(_programAttributes, e.DomainRequest);
                         OnProcessIdEvent(action);
                     }
                 }

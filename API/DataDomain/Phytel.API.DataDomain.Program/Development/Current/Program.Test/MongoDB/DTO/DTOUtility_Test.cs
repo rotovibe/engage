@@ -13,6 +13,8 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO.Tests
     [TestClass()]
     public class DTOUtility_Test
     {
+        const string control = "5368ff2ad4332316288f3e3e";
+
         [TestClass()]
         public class GetModules
         {
@@ -770,6 +772,51 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO.Tests
                 string result = dtoUtil.GetCareManagerValueByRule(request, mep);
 
                 Assert.AreEqual(cmid, result);
+            }
+        }
+
+        [TestClass()]
+        public class GetClonedModules_Test
+        {
+            [TestMethod()]
+            [TestCategory("NIGHT-948")]
+            [TestProperty("TFS", "11495")]
+            [TestProperty("Layer", "DD.DTOUtility")]
+            public void Get_With_Assignby_Set_To_System()
+            {
+                DTOUtility util = new DTOUtility() {Factory = new StubProgramRepositoryFactory()};
+                var mods = new List<Module>
+                {
+                    new Module
+                    {
+                        Id = ObjectId.GenerateNewId(),
+                        SourceId = ObjectId.Parse("532b5585a381168abe00042c"),
+                        Name = "testmodule",
+                        Status = Status.Active,
+                        Enabled = true,
+                        Objectives = new List<Objective>
+                        {
+                            new Objective
+                            {
+                                Id = ObjectId.GenerateNewId(),
+                                Status = Status.Active,
+                                Value = "90",
+                                Units = "lbs"
+                            },
+                            new Objective
+                            {
+                                Id = ObjectId.GenerateNewId(),
+                                Status = Status.Inactive,
+                                Value = "99",
+                                Units = "hdl"
+                            }
+                        }
+                    }
+                };
+
+                var md = util.GetClonedModules(mods, "InHealth001", "123456789012345678901234", new List<ObjectId>());
+                var result = md[0].AssignedBy.ToString();
+                Assert.AreEqual(control, result);
             }
         }
     }

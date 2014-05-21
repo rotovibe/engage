@@ -325,9 +325,9 @@ namespace Phytel.API.AppDomain.NG
             bool result = false;
             try
             {
-                double version = request.Version;
+                double version        = request.Version;
                 string contractNumber = request.ContractNumber;
-                string context = "NG";
+                string context        = "NG";
 
 
                 IRestClient client = new JsonServiceClient();
@@ -362,9 +362,9 @@ namespace Phytel.API.AppDomain.NG
             bool result = false;
             try
             {
-                double version = request.Version;
+                double version        = request.Version;
                 string contractNumber = request.ContractNumber;
-                string context = "NG";
+                string context        = "NG";
 
                 IRestClient client = new JsonServiceClient();
 

@@ -1,16 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Phytel.API.AppDomain.NG.DTO;
-using ServiceStack.ServiceClient.Web;
 using Phytel.API.AppDomain.NG.PlanCOR;
-using ServiceStack.Service;
-using DD = Phytel.API.DataDomain.Program.DTO;
-using System.Configuration;
 using Phytel.API.AppDomain.NG.Programs;
-using ServiceStack.ServiceInterface.ServiceModel;
 using Phytel.API.AppDomain.NG.Specifications;
 using ServiceStack.WebHost.Endpoints;
 
@@ -46,14 +38,14 @@ namespace Phytel.API.AppDomain.NG
                 Program p = EndPointUtils.RequestPatientProgramDetail(request);
                 
                 Actions action = request.Action;
-
+                
                 if (action.Completed)
                 {
                     // pre-process
                     // set program starting date
                     if (IsInitialAction.IsSatisfiedBy(p))
                     {
-                        p.AttrStartDate = System.DateTime.UtcNow;
+                        p.AttrStartDate = DateTime.UtcNow;
                         //PlanElementUtil.SetStartDateForProgramAttributes(request.ProgramId, request);
                     }
 
@@ -69,7 +61,7 @@ namespace Phytel.API.AppDomain.NG
                     {
                         // set program to in progress
                         p.ElementState = 4;
-                        p.StateUpdatedOn = System.DateTime.UtcNow;
+                        p.StateUpdatedOn = DateTime.UtcNow;
                     }
 
                     // insert action update
@@ -79,7 +71,7 @@ namespace Phytel.API.AppDomain.NG
                     ProgramPlanProcessor pChain = InitializeProgramChain();
 
                     //// process steps in action
-                    action.Steps.ForEach(s => { pChain.ProcessWorkflow((IPlanElement)s, p, request.UserId, request.PatientId, action, request); });
+                    action.Steps.ForEach(s => pChain.ProcessWorkflow((IPlanElement)s, p, request.UserId, request.PatientId, action, request));
 
                     //// process action
                     pChain.ProcessWorkflow((IPlanElement)action, p, request.UserId, request.PatientId, action, request);
@@ -113,7 +105,7 @@ namespace Phytel.API.AppDomain.NG
                 AddUniquePlanElementToProcessedList(p);
 
                 // save
-                DD.ProgramDetail pdetail = EndPointUtils.SaveAction(request, action.Id, p);
+                var pdetail = EndPointUtils.SaveAction(request, action.Id, p);
 
                 // create element changed lists 
                 PEUtils.HydratePlanElementLists(ProcessedElements, response);

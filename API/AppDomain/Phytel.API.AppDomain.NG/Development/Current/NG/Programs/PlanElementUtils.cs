@@ -16,6 +16,7 @@ namespace Phytel.API.AppDomain.NG
     public class PlanElementUtils : IPlanElementUtils
     {
         public event ProcessedElementInUtilEventHandlers _processedElementEvent;
+        private const string SystemId = "5368ff2ad4332316288f3e3e";
 
         public void OnProcessIdEvent(object pe)
         {
@@ -102,6 +103,7 @@ namespace Phytel.API.AppDomain.NG
                             else
                             {
                                 ((IPlanElement)x).Enabled = true;
+                                ((IPlanElement) x).AssignById = SystemId;
                                 // only track elements who are enabled for now.
                                 OnProcessIdEvent(Convert.ChangeType(x, typeof(T)));
                             }
@@ -179,24 +181,22 @@ namespace Phytel.API.AppDomain.NG
                     }
 
                     int state; // no = 1, yes = 2
-                    bool isNum = int.TryParse(r.Tag, out state);
-                    if (isNum)
+                    var isNum = int.TryParse(r.Tag, out state);
+                    if (!isNum) return;
+                    // program is closed due to ineligibility
+                    if (state.Equals(1)) // not eligible
                     {
-                        // program is closed due to ineligibility
-                        if (state.Equals(1)) // not eligible
-                        {
-                            program.ElementState = 5;
-                            program.StateUpdatedOn = System.DateTime.UtcNow;
-                            progAttr.Eligibility = 1;
-                            //progAttr.AttrEndDate = System.DateTime.UtcNow;
-                            program.AttrEndDate = System.DateTime.UtcNow;
-                        }
-                        else if (state.Equals(2)) // eligible
-                        {
-                            program.ElementState = 4;
-                            program.StateUpdatedOn = System.DateTime.UtcNow;
-                            progAttr.Eligibility = 2;
-                        }
+                        program.ElementState = 5;
+                        program.StateUpdatedOn = System.DateTime.UtcNow;
+                        progAttr.Eligibility = 1;
+                        //progAttr.AttrEndDate = System.DateTime.UtcNow;
+                        program.AttrEndDate = System.DateTime.UtcNow;
+                    }
+                    else if (state.Equals(2)) // eligible
+                    {
+                        program.ElementState = 4;
+                        program.StateUpdatedOn = System.DateTime.UtcNow;
+                        progAttr.Eligibility = 2;
                     }
                 }
                 else if (r.ElementType.Equals(11))
@@ -439,7 +439,7 @@ namespace Phytel.API.AppDomain.NG
                 m.StateUpdatedOn = System.DateTime.UtcNow;
                 m.AssignDate = System.DateTime.UtcNow;
                 m.ElementState = 2;
-                m.AssignById = "5368ff2ad4332316288f3e3e";
+                m.AssignById = SystemId;
             }
             catch (Exception ex)
             {
@@ -962,7 +962,7 @@ namespace Phytel.API.AppDomain.NG
             try
             {
                 p.Enabled = true;
-                p.AssignById = "5368ff2ad4332316288f3e3e";
+                p.AssignById = SystemId;
                 p.AssignDate = System.DateTime.UtcNow;
                 pe = p;
                 return pe;
