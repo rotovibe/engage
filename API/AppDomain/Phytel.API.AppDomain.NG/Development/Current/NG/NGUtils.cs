@@ -303,6 +303,7 @@ namespace Phytel.API.AppDomain.NG
                         {
                             Actions = GetADActions(m.Actions),
                             AssignBy = m.AssignById,
+                            AssignTo = m.AssignToId,
                             AssignDate = m.AssignDate,
                             AttrEndDate = m.AttrEndDate, // night 919
                             AttrStartDate = m.AttrStartDate, // night 919

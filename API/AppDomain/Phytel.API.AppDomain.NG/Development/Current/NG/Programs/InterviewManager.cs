@@ -53,6 +53,7 @@ namespace Phytel.API.AppDomain.NG
                     Module mod = PEUtils.FindElementById(p.Modules, action.ModuleId);
                     // set to in progress
                     mod.ElementState = 4;
+                    mod.StateUpdatedOn = DateTime.UtcNow;
                     
                     // set in progress state
                     //new ResponseSpawnAllowed<Step>().IsSatisfiedBy(s)

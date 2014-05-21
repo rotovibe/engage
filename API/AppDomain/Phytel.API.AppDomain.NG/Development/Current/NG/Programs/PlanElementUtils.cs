@@ -104,6 +104,7 @@ namespace Phytel.API.AppDomain.NG
                             {
                                 ((IPlanElement)x).Enabled = true;
                                 ((IPlanElement) x).AssignById = SystemId;
+                                ((IPlanElement)x).AssignDate = DateTime.UtcNow;
                                 // only track elements who are enabled for now.
                                 OnProcessIdEvent(Convert.ChangeType(x, typeof(T)));
                             }

@@ -131,5 +131,35 @@ namespace Phytel.API.AppDomain.NG.Tests
                 Assert.AreEqual(assignedTO, mod.AssignToId);
             }
         }
+
+        [TestClass()]
+        public class SetEnabledState_Test
+        {
+            [TestMethod()]
+            [TestCategory("NIGHT-949")]
+            [TestProperty("TFS", "11449")]
+            [TestProperty("Layer", "AD.PlanElementUtils")]
+            public void Set_Assigned_On_With_Previous_Complete()
+            {
+                IPlanElementUtils peUtil = new PlanElementUtils {};
+                var mods = new List<AD.Module> {new AD.Module {Id = "123456789012345678901234", Completed = true}};
+                AD.Module mod = new DTO.Module {Previous = "123456789012345678901234"};
+                peUtil.SetEnabledState(mods, mod);
+                Assert.AreEqual(DateTime.UtcNow.Date, ((DateTime) mod.AssignDate).Date);
+            }
+
+            [TestMethod()]
+            [TestCategory("NIGHT-949")]
+            [TestProperty("TFS", "11449")]
+            [TestProperty("Layer", "AD.PlanElementUtils")]
+            public void Set_Assigned_On_With_Previous_Not_Complete()
+            {
+                IPlanElementUtils peUtil = new PlanElementUtils {};
+                var mods = new List<AD.Module> {new AD.Module {Id = "123456789012345678901234", Completed = false}};
+                AD.Module mod = new DTO.Module {Previous = "123456789012345678901234"};
+                peUtil.SetEnabledState(mods, mod);
+                Assert.IsNull(mod.AssignDate);
+            }
+        }
     }
 }

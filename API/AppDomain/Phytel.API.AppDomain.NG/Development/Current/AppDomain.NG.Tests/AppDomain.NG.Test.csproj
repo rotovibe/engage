@@ -104,6 +104,7 @@
     <Compile Include="Factories\NGManagerFactory.cs" />
     <Compile Include="Factories\SecurityManagerFactory.cs" />
     <Compile Include="NGService_Tests.cs" />
+    <Compile Include="NGUtils_Test.cs" />
     <Compile Include="Note_Tests.cs" />
     <Compile Include="Goal_Tests.cs" />
     <Compile Include="LookUps_Test.cs" />
