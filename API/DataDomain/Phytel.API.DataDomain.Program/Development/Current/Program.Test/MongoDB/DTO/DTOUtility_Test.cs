@@ -818,6 +818,47 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO.Tests
                 var result = md[0].AssignedBy.ToString();
                 Assert.AreEqual(control, result);
             }
+
+            [TestMethod()]
+            [TestCategory("NIGHT-949")]
+            [TestProperty("TFS", "11444")]
+            [TestProperty("Layer", "DD.DTOUtility")]
+            public void Get_With_AssignOn_Set_To_Now()
+            {
+                DTOUtility util = new DTOUtility() { Factory = new StubProgramRepositoryFactory() };
+                var mods = new List<Module>
+                {
+                    new Module
+                    {
+                        Id = ObjectId.GenerateNewId(),
+                        SourceId = ObjectId.Parse("532b5585a381168abe00042c"),
+                        Name = "testmodule",
+                        Status = Status.Active,
+                        Enabled = true,
+                        Objectives = new List<Objective>
+                        {
+                            new Objective
+                            {
+                                Id = ObjectId.GenerateNewId(),
+                                Status = Status.Active,
+                                Value = "90",
+                                Units = "lbs"
+                            },
+                            new Objective
+                            {
+                                Id = ObjectId.GenerateNewId(),
+                                Status = Status.Inactive,
+                                Value = "99",
+                                Units = "hdl"
+                            }
+                        }
+                    }
+                };
+
+                var md = util.GetClonedModules(mods, "InHealth001", "123456789012345678901234", new List<ObjectId>());
+                var result = ((DateTime)md[0].AssignedOn).Date;
+                Assert.AreEqual(DateTime.UtcNow.Date, result);
+            }
         }
     }
 }

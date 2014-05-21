@@ -131,7 +131,6 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
                                 Previous = m.Previous,
                                 Spawn = m.Spawn,
                                 SourceId = m.SourceId,
-                                AssignedOn = m.AssignedOn,
                                 State = ElementState.NotStarted,
                                 CompletedBy = m.CompletedBy,
                                 DateCompleted = m.DateCompleted,
@@ -142,6 +141,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
                             if (mod.Enabled)
                             {
                                 mod.AssignedBy = ObjectId.Parse(Constants.SystemContactId);
+                                mod.AssignedOn = System.DateTime.UtcNow;
                             }
                             mods.Add(mod);
                         }

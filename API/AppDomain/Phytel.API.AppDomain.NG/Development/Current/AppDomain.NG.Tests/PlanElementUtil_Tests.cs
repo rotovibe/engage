@@ -12,6 +12,8 @@ namespace Phytel.API.AppDomain.NG.Tests
     [TestClass()]
     public class PlanElementUtil_Tests
     {
+        public const string SystemId = "5368ff2ad4332316288f3e3e";
+
         [TestMethod()]
         public void ResponseSpawnAllowed_Test()
         {
@@ -58,6 +60,40 @@ namespace Phytel.API.AppDomain.NG.Tests
 
                 DateTime sample = ((DateTime)program.StateUpdatedOn).Date;
                 Assert.AreEqual(control, sample);
+            }
+        }
+
+        [TestClass()]
+        public class SetInitialProperties_Test
+        {
+            [TestMethod()]
+            [TestCategory("NIGHT-948")]
+            [TestProperty("TFS", "11495")]
+            [TestProperty("Layer", "AD.PlanElementUtils")]
+            public void Get_Assigned_By()
+            {
+                DateTime control = DateTime.UtcNow.Date;
+                IPlanElementUtils peUtil = new PlanElementUtils { };
+                AD.Module mod = new AD.Module();
+
+                peUtil.SetInitialProperties(mod);
+
+                Assert.AreEqual(SystemId, mod.AssignById);
+            }
+
+            [TestMethod()]
+            [TestCategory("NIGHT-949")]
+            [TestProperty("TFS", "11444")]
+            [TestProperty("Layer", "AD.PlanElementUtils")]
+            public void Get_Assigned_Date()
+            {
+                DateTime control = DateTime.UtcNow.Date;
+                IPlanElementUtils peUtil = new PlanElementUtils {};
+                AD.Module mod = new AD.Module();
+
+                peUtil.SetInitialProperties(mod);
+
+                Assert.AreEqual(DateTime.UtcNow.Date, ((DateTime)mod.AssignDate).Date);
             }
         }
     }
