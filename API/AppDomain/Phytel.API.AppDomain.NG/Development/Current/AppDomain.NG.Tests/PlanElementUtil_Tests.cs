@@ -7,6 +7,7 @@ using Phytel.API.AppDomain.NG;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using AD = Phytel.API.AppDomain.NG.DTO;
 using Phytel.API.DataDomain.Program.DTO;
+using MongoDB.Bson;
 namespace Phytel.API.AppDomain.NG.Tests
 {
     [TestClass()]
@@ -75,8 +76,9 @@ namespace Phytel.API.AppDomain.NG.Tests
                 DateTime control = DateTime.UtcNow.Date;
                 IPlanElementUtils peUtil = new PlanElementUtils { };
                 AD.Module mod = new AD.Module();
+                AD.Program prog = new AD.Program();
 
-                peUtil.SetInitialProperties(mod);
+                peUtil.SetInitialProperties(prog, mod);
 
                 Assert.AreEqual(SystemId, mod.AssignById);
             }
@@ -90,10 +92,43 @@ namespace Phytel.API.AppDomain.NG.Tests
                 DateTime control = DateTime.UtcNow.Date;
                 IPlanElementUtils peUtil = new PlanElementUtils {};
                 AD.Module mod = new AD.Module();
+                AD.Program prog = new AD.Program();
 
-                peUtil.SetInitialProperties(mod);
+                peUtil.SetInitialProperties(prog, mod);
 
                 Assert.AreEqual(DateTime.UtcNow.Date, ((DateTime)mod.AssignDate).Date);
+            }
+
+            [TestMethod()]
+            [TestCategory("NIGHT-950")]
+            [TestProperty("TFS", "11456")]
+            [TestProperty("Layer", "AD.PlanElementUtils")]
+            public void Get_Assigned_To()
+            {
+                ObjectId? assignedTO = new ObjectId();
+                IPlanElementUtils peUtil = new PlanElementUtils { };
+                AD.Module mod = new AD.Module();
+                AD.Program prog = new AD.Program{ AssignToId = assignedTO.ToString()};
+
+                peUtil.SetInitialProperties(prog, mod);
+
+                Assert.AreEqual(assignedTO.ToString(), mod.AssignToId);
+            }
+
+            [TestMethod()]
+            [TestCategory("NIGHT-950")]
+            [TestProperty("TFS", "11456")]
+            [TestProperty("Layer", "AD.PlanElementUtils")]
+            public void Get_Assigned_To_Null()
+            {
+                string assignedTO = null;
+                IPlanElementUtils peUtil = new PlanElementUtils { };
+                AD.Module mod = new AD.Module();
+                AD.Program prog = new AD.Program { AssignToId = assignedTO };
+
+                peUtil.SetInitialProperties(prog, mod);
+
+                Assert.AreEqual(assignedTO, mod.AssignToId);
             }
         }
     }

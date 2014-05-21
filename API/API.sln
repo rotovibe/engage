@@ -240,6 +240,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "PlayLists", "PlayLists", "{
 		Playlists\NIGHT_941.playlist = Playlists\NIGHT_941.playlist
 		Playlists\NIGHT_948.playlist = Playlists\NIGHT_948.playlist
 		Playlists\NIGHT_949.playlist = Playlists\NIGHT_949.playlist
+		Playlists\NIGHT_950.playlist = Playlists\NIGHT_950.playlist
 	EndProjectSection
 EndProject
 Global

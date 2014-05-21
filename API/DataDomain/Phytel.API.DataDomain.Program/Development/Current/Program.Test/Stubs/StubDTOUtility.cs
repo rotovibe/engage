@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Phytel.API.DataDomain.Program.DTO;
+using Phytel.API.Interface;
 
 namespace Phytel.API.DataDomain.Program.Test.Stubs
 {
@@ -48,7 +49,7 @@ namespace Phytel.API.DataDomain.Program.Test.Stubs
             throw new NotImplementedException();
         }
 
-        public List<Module> GetClonedModules(List<Module> list, string contractNumber, string userId, List<global::MongoDB.Bson.ObjectId> sil)
+        public List<Module> GetClonedModules(ObjectId? abyId, List<Module> list, IDataDomainRequest request, List<ObjectId> sil)
         {
             throw new NotImplementedException();
         }

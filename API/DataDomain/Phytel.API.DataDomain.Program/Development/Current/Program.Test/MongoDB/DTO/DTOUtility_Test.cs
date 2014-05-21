@@ -814,7 +814,10 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO.Tests
                     }
                 };
 
-                var md = util.GetClonedModules(mods, "InHealth001", "123456789012345678901234", new List<ObjectId>());
+                DataDomainRequest request = new DataDomainRequest { ContractNumber = "InHealth001", UserId = "123456789012345678901234" };
+                
+                ObjectId? cmId = new ObjectId();
+                var md = util.GetClonedModules(cmId,mods, request, new List<ObjectId>());
                 var result = md[0].AssignedBy.ToString();
                 Assert.AreEqual(control, result);
             }
@@ -855,9 +858,103 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO.Tests
                     }
                 };
 
-                var md = util.GetClonedModules(mods, "InHealth001", "123456789012345678901234", new List<ObjectId>());
+                DataDomainRequest request = new DataDomainRequest { ContractNumber = "InHealth001", UserId = "123456789012345678901234" };
+
+                ObjectId? cmId = new ObjectId();
+                var md = util.GetClonedModules(cmId, mods, request, new List<ObjectId>());
+
                 var result = ((DateTime)md[0].AssignedOn).Date;
                 Assert.AreEqual(DateTime.UtcNow.Date, result);
+            }
+
+            [TestMethod()]
+            [TestCategory("NIGHT-950")]
+            [TestProperty("TFS", "11456")]
+            [TestProperty("Layer", "DD.DTOUtility")]
+            public void Get_With_AssignTo_Set()
+            {
+                DTOUtility util = new DTOUtility() { Factory = new StubProgramRepositoryFactory() };
+                var mods = new List<Module>
+                {
+                    new Module
+                    {
+                        Id = ObjectId.GenerateNewId(),
+                        SourceId = ObjectId.Parse("532b5585a381168abe00042c"),
+                        Name = "testmodule",
+                        Status = Status.Active,
+                        Enabled = true,
+                        Objectives = new List<Objective>
+                        {
+                            new Objective
+                            {
+                                Id = ObjectId.GenerateNewId(),
+                                Status = Status.Active,
+                                Value = "90",
+                                Units = "lbs"
+                            },
+                            new Objective
+                            {
+                                Id = ObjectId.GenerateNewId(),
+                                Status = Status.Inactive,
+                                Value = "99",
+                                Units = "hdl"
+                            }
+                        }
+                    }
+                };
+
+                DataDomainRequest request = new DataDomainRequest { ContractNumber = "InHealth001", UserId = "123456789012345678901234" };
+
+                ObjectId? cmId = new ObjectId();
+                var md = util.GetClonedModules(cmId, mods, request, new List<ObjectId>());
+
+                var result = md[0].AssignedTo;
+                Assert.AreEqual(cmId, result);
+            }
+
+            [TestMethod()]
+            [TestCategory("NIGHT-950")]
+            [TestProperty("TFS", "11456")]
+            [TestProperty("Layer", "DD.DTOUtility")]
+            public void Get_With_AssignTo_Set_Null()
+            {
+                DTOUtility util = new DTOUtility() { Factory = new StubProgramRepositoryFactory() };
+                var mods = new List<Module>
+                {
+                    new Module
+                    {
+                        Id = ObjectId.GenerateNewId(),
+                        SourceId = ObjectId.Parse("532b5585a381168abe00042c"),
+                        Name = "testmodule",
+                        Status = Status.Active,
+                        Enabled = true,
+                        Objectives = new List<Objective>
+                        {
+                            new Objective
+                            {
+                                Id = ObjectId.GenerateNewId(),
+                                Status = Status.Active,
+                                Value = "90",
+                                Units = "lbs"
+                            },
+                            new Objective
+                            {
+                                Id = ObjectId.GenerateNewId(),
+                                Status = Status.Inactive,
+                                Value = "99",
+                                Units = "hdl"
+                            }
+                        }
+                    }
+                };
+
+                DataDomainRequest request = new DataDomainRequest { ContractNumber = "InHealth001", UserId = "123456789012345678901234" };
+
+                ObjectId? cmId = null;
+                var md = util.GetClonedModules(cmId, mods, request, new List<ObjectId>());
+
+                var result = md[0].AssignedTo;
+                Assert.AreEqual(cmId, result);
             }
         }
     }

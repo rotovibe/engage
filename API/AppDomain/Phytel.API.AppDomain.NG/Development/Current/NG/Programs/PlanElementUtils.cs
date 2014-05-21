@@ -368,12 +368,12 @@ namespace Phytel.API.AppDomain.NG
                 {
                     if (m.Id.ToString().Equals(p))
                     {
-                        SetInitialProperties(m);
+                        SetInitialProperties(program, m);
                         OnProcessIdEvent(m);
                     }
                     else
                     {
-                        FindIdInActions(p, m);
+                        FindIdInActions(program, p, m);
                     }
                 }
             }
@@ -383,7 +383,7 @@ namespace Phytel.API.AppDomain.NG
             }
         }
 
-        public void FindIdInActions(string p, Module m)
+        public void FindIdInActions(Program program, string p, Module m)
         {
             try
             {
@@ -393,12 +393,12 @@ namespace Phytel.API.AppDomain.NG
                     {
                         if (a.Id.ToString().Equals(p))
                         {
-                            SetInitialProperties(a);
+                            SetInitialProperties(program, a);
                             OnProcessIdEvent(a);
                         }
                         else
                         {
-                            FindIdInSteps(p, a);
+                            FindIdInSteps(program, p, a);
                         }
                     }
                 }
@@ -409,7 +409,7 @@ namespace Phytel.API.AppDomain.NG
             }
         }
 
-        public void FindIdInSteps(string p, Actions a)
+        public void FindIdInSteps(Program program, string p, Actions a)
         {
             try
             {
@@ -419,7 +419,7 @@ namespace Phytel.API.AppDomain.NG
                     {
                         if (s.Id.ToString().Equals(p))
                         {
-                            SetInitialProperties(s);
+                            SetInitialProperties(program, s);
                             OnProcessIdEvent(s);
                         }
                     }
@@ -431,13 +431,14 @@ namespace Phytel.API.AppDomain.NG
             }
         }
 
-        public void SetInitialProperties(IPlanElement m)
+        public void SetInitialProperties(Program program, IPlanElement m)
         {
             try
             {
                 m.Enabled = true;
                 m.StateUpdatedOn = System.DateTime.UtcNow;
                 m.AssignDate = System.DateTime.UtcNow;
+                m.AssignToId = program.AssignToId;
                 m.ElementState = 2;
                 m.AssignById = SystemId;
             }

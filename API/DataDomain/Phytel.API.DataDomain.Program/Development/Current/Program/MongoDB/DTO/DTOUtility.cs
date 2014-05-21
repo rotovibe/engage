@@ -19,7 +19,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             try
             {
                 // logic to check for assignto params from program template
-                string res = GetCareManagerValueByRule(request, cp);
+                var res = GetCareManagerValueByRule(request, cp);
                 ObjectId? cmId = null;
                 if (res != null) cmId = ObjectId.Parse(res); 
 
@@ -55,7 +55,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
                     Next = cp.Next,
                     Order = cp.Order,
                     Previous = cp.Previous,
-                    Modules = GetClonedModules(cp.Modules, request.ContractNumber, request.UserId, sil),
+                    Modules = GetClonedModules(cmId, cp.Modules, request, sil),
                     EligibilityEndDate = cp.EligibilityEndDate,
                     EligibilityStartDate = cp.EligibilityStartDate,
                     EligibilityRequirements = cp.EligibilityRequirements,
@@ -83,7 +83,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
                 {
                     case AssignToType.PCM:
                         {
-                            cmId = request.CareManagerId != null ? request.CareManagerId : null;
+                            cmId = request.CareManagerId ?? null;
                             break;
                         }
                     case AssignToType.Unassigned:
@@ -92,7 +92,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
                         }
                     default:
                         {
-                            cmId = request.CareManagerId != null ? request.CareManagerId : null;
+                            cmId = request.CareManagerId ?? null;
                             break;
                         }
                 }
@@ -104,7 +104,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             }
         }
 
-        public  List<Module> GetClonedModules(List<Module> list, string contractNumber, string userId, List<ObjectId> sil)
+        public  List<Module> GetClonedModules(ObjectId? cmid, List<Module> list, IDataDomainRequest request, List<ObjectId> sil)
         {
             try
             {
@@ -134,7 +134,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
                                 State = ElementState.NotStarted,
                                 CompletedBy = m.CompletedBy,
                                 DateCompleted = m.DateCompleted,
-                                Actions = GetClonedActions(m.Actions, contractNumber, userId, sil)
+                                Actions = GetClonedActions(m.Actions, request.ContractNumber, request.UserId, sil)
                             };
 
                             mod.Objectives = null;
@@ -142,6 +142,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
                             {
                                 mod.AssignedBy = ObjectId.Parse(Constants.SystemContactId);
                                 mod.AssignedOn = System.DateTime.UtcNow;
+                                mod.AssignedTo = cmid;
                             }
                             mods.Add(mod);
                         }

@@ -16,7 +16,9 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
         ActionsDetail GetAction(string contract, string userId, Action a);
         List<Action> GetActionElements(List<ActionsDetail> list, string userId);
         List<ActionsDetail> GetActions(List<Action> list, string contract, string userId, Module mod);
-        List<Module> GetClonedModules(List<Module> list, string contractNumber, string userId, List<ObjectId> sil);
+
+        List<Module> GetClonedModules(ObjectId? abyId, List<Module> list, IDataDomainRequest request,
+            List<ObjectId> sil);
         List<ModuleDetail> GetModules(List<Module> list, string contractProgramId, string contractNumber, string userId);
         MEProgram GetLimitedProgramDetails(string objectId, IDataDomainRequest request);
         List<ObjectiveInfoData> GetObjectivesData(List<Objective> sobjs);

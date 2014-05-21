@@ -9,8 +9,8 @@ namespace Phytel.API.AppDomain.NG
         Phytel.API.AppDomain.NG.DTO.Program CloneProgram(Phytel.API.AppDomain.NG.DTO.Program pr);
         void DisableCompleteButtonForAction(System.Collections.Generic.List<Phytel.API.AppDomain.NG.DTO.Step> list);
         T FindElementById<T>(System.Collections.Generic.List<T> list, string id);
-        void FindIdInActions(string p, Phytel.API.AppDomain.NG.DTO.Module m);
-        void FindIdInSteps(string p, Phytel.API.AppDomain.NG.DTO.Actions a);
+        void FindIdInActions(Phytel.API.AppDomain.NG.DTO.Program program, string p, Phytel.API.AppDomain.NG.DTO.Module m);
+        void FindIdInSteps(Phytel.API.AppDomain.NG.DTO.Program program, string p, Phytel.API.AppDomain.NG.DTO.Actions a);
         Phytel.API.DataDomain.Patient.DTO.CohortPatientViewData GetCohortPatientViewRecord(string patientId, Phytel.API.Interface.IAppDomainRequest request);
         Phytel.API.AppDomain.NG.DTO.Actions GetProcessingAction(System.Collections.Generic.List<Phytel.API.AppDomain.NG.DTO.Module> list, string actionId);
         void HydratePlanElementLists(System.Collections.Generic.List<object> ProcessedElements, Phytel.API.AppDomain.NG.DTO.PostProcessActionResponse response);
@@ -26,7 +26,7 @@ namespace Phytel.API.AppDomain.NG
         void SetElementEnabledState(string p, Phytel.API.AppDomain.NG.DTO.Program program);
         void SetEnabledState<T>(System.Collections.Generic.List<T> list, T x);
         void SetEnabledStatusByPrevious<T>(System.Collections.Generic.List<T> actions);
-        void SetInitialProperties(Phytel.API.AppDomain.NG.DTO.IPlanElement m);
+        void SetInitialProperties(Phytel.API.AppDomain.NG.DTO.Program program, Phytel.API.AppDomain.NG.DTO.IPlanElement m);
         void SetProgramAttributes(Phytel.API.AppDomain.NG.DTO.SpawnElement r, Phytel.API.AppDomain.NG.DTO.Program program, string userId, Phytel.API.DataDomain.Program.DTO.ProgramAttributeData progAttr);
         void SetProgramInformation(Phytel.API.DataDomain.Program.DTO.ProgramAttributeData _programAttributes, Phytel.API.AppDomain.NG.DTO.Program p);
         void SetStartDateForProgramAttributes(string programId, Phytel.API.Interface.IAppDomainRequest request);

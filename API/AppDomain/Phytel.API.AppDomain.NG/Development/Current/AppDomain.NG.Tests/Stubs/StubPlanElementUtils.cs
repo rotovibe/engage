@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Phytel.API.AppDomain.NG.DTO;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -30,12 +31,12 @@ namespace Phytel.API.AppDomain.NG.Test.Stubs
             return list[0];
         }
 
-        public void FindIdInActions(string p, DTO.Module m)
+        public void FindIdInActions(Program program, string p, DTO.Module m)
         {
             throw new NotImplementedException();
         }
 
-        public void FindIdInSteps(string p, DTO.Actions a)
+        public void FindIdInSteps(Program program, string p, DTO.Actions a)
         {
             throw new NotImplementedException();
         }
@@ -115,7 +116,7 @@ namespace Phytel.API.AppDomain.NG.Test.Stubs
             throw new NotImplementedException();
         }
 
-        public void SetInitialProperties(DTO.IPlanElement m)
+        public void SetInitialProperties(Program program, DTO.IPlanElement m)
         {
             throw new NotImplementedException();
         }
@@ -145,5 +146,6 @@ namespace Phytel.API.AppDomain.NG.Test.Stubs
         {
             throw new NotImplementedException();
         }
+
     }
 }
