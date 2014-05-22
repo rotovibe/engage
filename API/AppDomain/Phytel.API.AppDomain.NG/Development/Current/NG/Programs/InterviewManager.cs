@@ -4,7 +4,9 @@ using Phytel.API.AppDomain.NG.DTO;
 using Phytel.API.AppDomain.NG.PlanCOR;
 using Phytel.API.AppDomain.NG.Programs;
 using Phytel.API.AppDomain.NG.Specifications;
+using Phytel.API.DataDomain.Program.DTO;
 using ServiceStack.WebHost.Endpoints;
+using Program = Phytel.API.AppDomain.NG.DTO.Program;
 
 namespace Phytel.API.AppDomain.NG
 {
@@ -53,9 +55,9 @@ namespace Phytel.API.AppDomain.NG
                     Module mod = PEUtils.FindElementById(p.Modules, action.ModuleId);
 
                     // set module to in progress
-                    if (mod.ElementState != 4)
+                    if (mod.ElementState != (int)ElementState.InProgress) //!= 4
                     {
-                        mod.ElementState = 4;
+                        mod.ElementState = (int) ElementState.InProgress; //4;
                         mod.StateUpdatedOn = DateTime.UtcNow;
                     }
 
@@ -65,7 +67,7 @@ namespace Phytel.API.AppDomain.NG
                     //if (new IsActionInitialSpecification<Program>().IsSatisfiedBy(p))
                     {
                         // set program to in progress
-                        p.ElementState = 4;
+                        p.ElementState = (int)ElementState.InProgress; //4
                         p.StateUpdatedOn = DateTime.UtcNow;
                     }
 
@@ -104,7 +106,7 @@ namespace Phytel.API.AppDomain.NG
                 else
                 {
                     // need to update this on the p level.
-                    action.ElementState = 4; // in progress
+                    action.ElementState = (int) ElementState.InProgress;  //4; // in progress
                 }
 
                 AddUniquePlanElementToProcessedList(p);
@@ -141,15 +143,19 @@ namespace Phytel.API.AppDomain.NG
 
                 // set elementstates to in progress
                 Module mod = PEUtils.FindElementById(p.Modules, action.ModuleId);
+                
                 // set to in progress
-                mod.ElementState = 4;
-                mod.StateUpdatedOn = DateTime.UtcNow;
+                if (mod.ElementState == (int)ElementState.NotStarted) //!= 4
+                {
+                    mod.ElementState = (int)ElementState.InProgress; //4;
+                    mod.StateUpdatedOn = DateTime.UtcNow;
+                }
                 
                 if (PEUtils.IsActionInitial(p))
                 //if (new IsActionInitialSpecification<Program>().IsSatisfiedBy(p))
                 {
                     // set program to in progress
-                    p.ElementState = 4;
+                    p.ElementState = (int) ElementState.InProgress; //4;
                     p.StateUpdatedOn = System.DateTime.UtcNow;
                 }
                 

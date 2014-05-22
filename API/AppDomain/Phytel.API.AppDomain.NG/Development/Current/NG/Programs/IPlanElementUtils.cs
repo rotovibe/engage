@@ -19,7 +19,7 @@ namespace Phytel.API.AppDomain.NG
         void FindIdInSteps(Program program, string p, Actions a);
         CohortPatientViewData GetCohortPatientViewRecord(string patientId, IAppDomainRequest request);
         Actions GetProcessingAction(List<Module> list, string actionId);
-        void HydratePlanElementLists(List<object> ProcessedElements, PostProcessActionResponse response);
+        void HydratePlanElementLists(List<object> processedElements, PostProcessActionResponse response);
         PlanElement InitializePlanElementSettings(PlanElement pe, PlanElement p, Program program);
         bool IsActionInitial(Program p);
         bool IsProgramCompleted(Program p, string userId);

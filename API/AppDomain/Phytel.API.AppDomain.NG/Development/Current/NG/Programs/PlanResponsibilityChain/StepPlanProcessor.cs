@@ -43,7 +43,7 @@ namespace Phytel.API.AppDomain.NG.PlanCOR
         {
             try
             {
-                if (e.PlanElement.GetType().Equals(typeof(Step)))
+                if (e.PlanElement.GetType() == typeof(Step))
                 {
                     // set program information
                     //PlanElementUtil.SetProgramInformation(_programAttributes, e.Program);

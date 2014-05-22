@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Phytel.API.DataDomain.Program.DTO;
+using Program = Phytel.API.AppDomain.NG.DTO.Program;
 
 namespace Phytel.API.AppDomain.NG.Specifications
 {
@@ -21,7 +23,7 @@ namespace Phytel.API.AppDomain.NG.Specifications
                     {
                         foreach (Actions a in m.Actions)
                         {
-                            if (a.ElementState == 4)
+                            if (a.ElementState == (int)ElementState.InProgress) // == 4
                             {
                                 result = false;
                             }

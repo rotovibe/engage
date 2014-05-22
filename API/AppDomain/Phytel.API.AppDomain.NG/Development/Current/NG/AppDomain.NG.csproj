@@ -135,7 +135,6 @@
     <Compile Include="Programs\PlanElemStrategy\ISpawn.cs" />
     <Compile Include="Programs\PlanElemStrategy\UpdateSpawnProblemCode.cs" />
     <Compile Include="Programs\PlanElemStrategy\RegisterSpawnProblemCode.cs" />
-    <Compile Include="Programs\PlanElementUtil.cs" />
     <Compile Include="Programs\Specifications\ResponseSpawnAllowedSpecification.cs" />
     <Compile Include="Programs\Specifications\CompletedSpecification.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

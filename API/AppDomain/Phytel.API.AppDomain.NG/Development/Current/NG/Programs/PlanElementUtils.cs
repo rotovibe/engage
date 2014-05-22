@@ -16,7 +16,6 @@ namespace Phytel.API.AppDomain.NG
     public class PlanElementUtils : IPlanElementUtils
     {
         public event ProcessedElementInUtilEventHandlers _processedElementEvent;
-        private const string SystemId = "5368ff2ad4332316288f3e3e";
 
         public void OnProcessIdEvent(object pe)
         {
@@ -91,19 +90,26 @@ namespace Phytel.API.AppDomain.NG
                         var prevElem = list.Find(r => ((IPlanElement)r).Id == pe.Previous);
                         if (prevElem != null)
                         {
-                            if (((IPlanElement)prevElem).Completed != true)
+                            if (((IPlanElement) prevElem).Completed != true)
                             {
-                                ((IPlanElement)x).Enabled = false;
+                                ((IPlanElement) x).Enabled = false;
                             }
                             else
                             {
-                                ((IPlanElement)x).Enabled = true;
-                                ((IPlanElement) x).AssignById = SystemId;
-                                ((IPlanElement)x).AssignDate = DateTime.UtcNow;
-                                ((IPlanElement) x).StateUpdatedOn = DateTime.UtcNow;
-                                ((IPlanElement) x).AssignToId = assignToId; 
+                                if (!((IPlanElement) x).Enabled)
+                                {
+                                    ((IPlanElement) x).StateUpdatedOn = DateTime.UtcNow;
+                                    ((IPlanElement) x).Enabled = true;
+                                }
+
+                                if (((IPlanElement)x).AssignDate == null)
+                                    ((IPlanElement)x).AssignDate = DateTime.UtcNow;
+
+                                ((IPlanElement) x).AssignById = DD.Constants.SystemContactId;
+                                ((IPlanElement) x).AssignToId = assignToId;
+
                                 // only track elements who are enabled for now.
-                                OnProcessIdEvent(Convert.ChangeType(x, typeof(T)));
+                                OnProcessIdEvent(Convert.ChangeType(x, typeof (T)));
                             }
                         }
                     }
@@ -184,7 +190,7 @@ namespace Phytel.API.AppDomain.NG
                     // program is closed due to ineligibility
                     if (state.Equals(1)) // not eligible
                     {
-                        program.ElementState = 5;
+                        program.ElementState = (int)DataDomain.Program.DTO.ElementState.Completed; //5;
                         program.StateUpdatedOn = System.DateTime.UtcNow;
                         progAttr.Eligibility = 1;
                         //progAttr.AttrEndDate = System.DateTime.UtcNow;
@@ -192,7 +198,7 @@ namespace Phytel.API.AppDomain.NG
                     }
                     else if (state.Equals(2)) // eligible
                     {
-                        program.ElementState = 4;
+                        program.ElementState = (int) DataDomain.Program.DTO.ElementState.InProgress; //4;
                         program.StateUpdatedOn = System.DateTime.UtcNow;
                         progAttr.Eligibility = 2;
                     }
@@ -437,8 +443,8 @@ namespace Phytel.API.AppDomain.NG
                 m.StateUpdatedOn = System.DateTime.UtcNow;
                 m.AssignDate = System.DateTime.UtcNow;
                 m.AssignToId = program.AssignToId;
-                m.ElementState = 2;
-                m.AssignById = SystemId;
+                m.ElementState = (int)DD.ElementState.NotStarted; // 2;
+                m.AssignById = DD.Constants.SystemContactId;
             }
             catch (Exception ex)
             {
@@ -654,17 +660,17 @@ namespace Phytel.API.AppDomain.NG
         #endregion
 
 
-        public void HydratePlanElementLists(List<object> ProcessedElements, PostProcessActionResponse response)
+        public void HydratePlanElementLists(List<object> processedElements, PostProcessActionResponse response)
         {
             try
             {
-                if (ProcessedElements != null && ProcessedElements.Count > 0)
+                if (processedElements != null && processedElements.Count > 0)
                 {
                     response.PlanElems = new PlanElements();
 
-                    foreach (Object obj in ProcessedElements)
+                    foreach (Object obj in processedElements)
                     {
-                        if (obj.GetType().Equals(typeof(Program)))
+                        if (obj.GetType() == typeof(Program))
                         {
                             if (!response.PlanElems.Programs.Contains(obj))
                             {
@@ -672,7 +678,7 @@ namespace Phytel.API.AppDomain.NG
                                 response.PlanElems.Programs.Add(p);
                             }
                         }
-                        else if (obj.GetType().Equals(typeof(Module)))
+                        else if (obj.GetType() == typeof(Module))
                         {
                             if (!response.PlanElems.Modules.Contains(obj))
                             {
@@ -680,7 +686,7 @@ namespace Phytel.API.AppDomain.NG
                                 response.PlanElems.Modules.Add(m);
                             }
                         }
-                        else if (obj.GetType().Equals(typeof(Actions)))
+                        else if (obj.GetType() == typeof(Actions))
                         {
                             if (!response.PlanElems.Actions.Contains(obj))
                             {
@@ -688,7 +694,7 @@ namespace Phytel.API.AppDomain.NG
                                 response.PlanElems.Actions.Add(a);
                             }
                         }
-                        else if (obj.GetType().Equals(typeof(Step)))
+                        else if (obj.GetType() == typeof(Step))
                         {
                             if (!response.PlanElems.Steps.Contains(obj))
                             {
@@ -966,7 +972,7 @@ namespace Phytel.API.AppDomain.NG
             try
             {
                 p.Enabled = true;
-                p.AssignById = SystemId;
+                p.AssignById = DD.Constants.SystemContactId;
                 p.AssignDate = System.DateTime.UtcNow;
                 p.StateUpdatedOn = DateTime.UtcNow;
                 p.AssignToId = program.AssignToId;
@@ -990,7 +996,7 @@ namespace Phytel.API.AppDomain.NG
                     {
                         foreach (Actions a in m.Actions)
                         {
-                            if (a.ElementState == 4 || a.ElementState == 5)
+                            if (a.ElementState == (int)DD.ElementState.InProgress || a.ElementState == (int)DD.ElementState.Completed)
                             {
                                 result = false;
                             }
