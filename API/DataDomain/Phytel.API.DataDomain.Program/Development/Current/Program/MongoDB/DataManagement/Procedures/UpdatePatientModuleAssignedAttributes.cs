@@ -30,7 +30,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DataManagement.Procedures
 
                 foreach (MEPatientProgram mePP in programs)
                 {
-                    List<Result> moduleMessages = new List<Result>();
+                   // List<Result> moduleMessages = new List<Result>();
                     List<Module> modules = mePP.Modules;
                     if (modules != null & modules.Count > 0)
                     {
@@ -59,7 +59,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DataManagement.Procedures
                             #endregion
 
                             #region NIGHT-951
-                            switch (mePP.State)
+                            switch (meM.State)
                             {
                                 case ElementState.NotStarted:
                                     meM.StateUpdatedOn = mePP.RecordCreatedOn;
@@ -73,7 +73,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DataManagement.Procedures
                             }
                             #endregion
 
-                            moduleMessages.Add(new Result { Message = string.Format("Updated values for a Module are AssignedBy(aby) = '{0}', AssignedDate(aon) = '{1}', AssignedTo(ato) = '{2}', StateUpdatedOn(stuon) = '{3}' for Module Id = '{4}' in Program Id = '{5}' in PatientProgram collection.", meM.AssignedBy, meM.AssignedOn, meM.AssignedTo, meM.StateUpdatedOn, meM.Id, mePP.Id)});
+                        //    moduleMessages.Add(new Result { Message = string.Format("Updated values for a Module are AssignedBy(aby) = '{0}', AssignedDate(aon) = '{1}', AssignedTo(ato) = '{2}', StateUpdatedOn(stuon) = '{3}' for Module Id = '{4}' in Program Id = '{5}' in PatientProgram collection.", meM.AssignedBy, meM.AssignedOn, meM.AssignedTo, meM.StateUpdatedOn, meM.Id, mePP.Id)});
 
                         }
                         mePP.LastUpdatedOn = DateTime.UtcNow;
@@ -82,7 +82,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DataManagement.Procedures
                         bool success = repo.Save(updatedProgram);
                         if (success)
                         {
-                            Results.AddRange(moduleMessages);
+                            Results.Add(new Result { Message = string.Format("Updated Program Id : '{0}' in PatientProgram collection.", updatedProgram.Id) });
                         }
                     }
                 }
