@@ -147,5 +147,28 @@ namespace Phytel.API.AppDomain.NG.Test.Stubs
             throw new NotImplementedException();
         }
 
+
+
+        public Module CloneModule(Module md)
+        {
+            throw new NotImplementedException();
+        }
+
+
+        public void SetEnabledState<T>(List<T> list, T x, string assignToId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void SetEnabledStatusByPrevious<T>(List<T> actions, string assignToId)
+        {
+            throw new NotImplementedException();
+        }
+
+
+        public PlanElement InitializePlanElementSettings(PlanElement pe, PlanElement p, Program program)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

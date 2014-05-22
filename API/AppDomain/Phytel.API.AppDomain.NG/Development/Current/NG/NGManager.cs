@@ -1353,34 +1353,32 @@ namespace Phytel.API.AppDomain.NG
                 if (resp.Program.Modules != null)
                 {
                     modules = new List<Module>();
-                    resp.Program.Modules.ForEach(r =>
+                    resp.Program.Modules.ForEach(r => modules.Add(new Module
                     {
-                        modules.Add(new Module
-                        {
-                            Id = r.Id,
-                            ProgramId = r.ProgramId,
-                            Description = r.Description,
-                            Name = r.Name,
-                            Status = (int)r.Status,
-                            Completed = r.Completed,
-                            Enabled = r.Enabled,
-                            Next = r.Next,
-                            Order = r.Order,
-                            Previous = r.Previous,
-                            SpawnElement = getSpawnElement(r),
-                            SourceId = r.SourceId,
-                            AssignById = r.AssignBy,
-                            AssignDate = r.AssignDate,
-                            AssignToId = r.AssignTo,
-                            AttrStartDate = r.AttrStartDate,
-                            AttrEndDate = r.AttrEndDate,
-                            ElementState = r.ElementState,
-                            CompletedBy = r.CompletedBy,
-                            DateCompleted = r.DateCompleted,
-                            Objectives = GetObjectivesInfo(r.Objectives),
-                            Actions = getActionsInfo(r, request, false)
-                        });
-                    });
+                        Id = r.Id,
+                        ProgramId = r.ProgramId,
+                        Description = r.Description,
+                        Name = r.Name,
+                        Status = (int)r.Status,
+                        Completed = r.Completed,
+                        Enabled = r.Enabled,
+                        Next = r.Next,
+                        Order = r.Order,
+                        Previous = r.Previous,
+                        SpawnElement = getSpawnElement(r),
+                        SourceId = r.SourceId,
+                        AssignById = r.AssignBy,
+                        AssignDate = r.AssignDate,
+                        AssignToId = r.AssignTo,
+                        AttrStartDate = r.AttrStartDate,
+                        AttrEndDate = r.AttrEndDate,
+                        ElementState = r.ElementState,
+                        StateUpdatedOn = r.StateUpdatedOn,
+                        CompletedBy = r.CompletedBy,
+                        DateCompleted = r.DateCompleted,
+                        Objectives = GetObjectivesInfo(r.Objectives),
+                        Actions = getActionsInfo(r, request, false)
+                    }));
                 }
                 return modules;
             }
@@ -1434,6 +1432,7 @@ namespace Phytel.API.AppDomain.NG
                     AttrStartDate = a.AttrStartDate,
                     AttrEndDate = a.AttrEndDate,
                     ElementState = a.ElementState,
+                    StateUpdatedOn = a.StateUpdatedOn,
                     DateCompleted = a.DateCompleted,
                     Objectives = GetObjectivesInfo(a.Objectives)
                 };
@@ -1475,6 +1474,7 @@ namespace Phytel.API.AppDomain.NG
                 AssignById = s.AssignBy,
                 AssignDate = s.AssignDate,
                 ElementState = s.ElementState,
+                StateUpdatedOn = s.StateUpdatedOn,
                 Responses = getResponses(s, request),
                 SelectedResponseId = s.SelectedResponseId,
                 CompletedBy = s.CompletedBy,

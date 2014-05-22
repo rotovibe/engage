@@ -37,6 +37,7 @@ namespace Phytel.API.AppDomain.NG.PlanCOR
                         if (module.Completed)
                         {
                             module.CompletedBy = e.UserId;
+                            module.StateUpdatedOn = DateTime.UtcNow;
                             module.ElementState = 5;
                             module.DateCompleted = System.DateTime.UtcNow;
                             // look at spawnelement and trigger enabled state.

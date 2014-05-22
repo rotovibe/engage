@@ -51,10 +51,14 @@ namespace Phytel.API.AppDomain.NG
 
                     // get module reference
                     Module mod = PEUtils.FindElementById(p.Modules, action.ModuleId);
-                    // set to in progress
-                    mod.ElementState = 4;
-                    mod.StateUpdatedOn = DateTime.UtcNow;
-                    
+
+                    // set module to in progress
+                    if (mod.ElementState != 4)
+                    {
+                        mod.ElementState = 4;
+                        mod.StateUpdatedOn = DateTime.UtcNow;
+                    }
+
                     // set in progress state
                     //new ResponseSpawnAllowed<Step>().IsSatisfiedBy(s)
                     if (PEUtils.IsActionInitial(p))
@@ -80,14 +84,14 @@ namespace Phytel.API.AppDomain.NG
                     if (mod != null)
                     {
                         // set enabled status for action dependencies
-                        PEUtils.SetEnabledStatusByPrevious(mod.Actions);
+                        PEUtils.SetEnabledStatusByPrevious(mod.Actions, p.AssignToId);
                         // set enable/visibility of actions after action processing.
                         pChain.ProcessWorkflow((IPlanElement)mod, p, request.UserId, request.PatientId, action, request);
                         AddUniquePlanElementToProcessedList(mod);
                     }
 
                     // set module visibility for modules
-                    PEUtils.SetEnabledStatusByPrevious(p.Modules);
+                    PEUtils.SetEnabledStatusByPrevious(p.Modules, p.AssignToId);
 
                     // evaluate program status
                     if (PEUtils.IsProgramCompleted(p, request.UserId))
@@ -139,6 +143,7 @@ namespace Phytel.API.AppDomain.NG
                 Module mod = PEUtils.FindElementById(p.Modules, action.ModuleId);
                 // set to in progress
                 mod.ElementState = 4;
+                mod.StateUpdatedOn = DateTime.UtcNow;
                 
                 if (PEUtils.IsActionInitial(p))
                 //if (new IsActionInitialSpecification<Program>().IsSatisfiedBy(p))

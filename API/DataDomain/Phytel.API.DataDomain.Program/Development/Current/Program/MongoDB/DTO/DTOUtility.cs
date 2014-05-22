@@ -143,6 +143,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
                                 mod.AssignedBy = ObjectId.Parse(Constants.SystemContactId);
                                 mod.AssignedOn = System.DateTime.UtcNow;
                                 mod.AssignedTo = cmid;
+                                mod.StateUpdatedOn = DateTime.UtcNow;
                             }
                             mods.Add(mod);
                         }
@@ -966,6 +967,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
                     AttrEndDate = m.AttributeEndDate,
                     AttrStartDate = m.AttributeStartDate,
                     ElementState = (int)m.State,
+                    StateUpdatedOn =  m.StateUpdatedOn,
                     CompletedBy = m.CompletedBy,
                     DateCompleted = m.DateCompleted,
                     Objectives = GetObjectivesForModule(pMods, m.SourceId),

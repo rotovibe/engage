@@ -716,10 +716,12 @@ namespace Phytel.API.AppDomain.NG
                 {
                     AssignById = md.AssignById,
                     AssignDate = md.AssignDate,
+                    AssignToId = md.AssignToId,
                     Completed = md.Completed,
                     CompletedBy = md.CompletedBy,
                     DateCompleted = md.DateCompleted,
                     Description = md.Description,
+                    StateUpdatedOn = md.StateUpdatedOn,
                     ElementState = md.ElementState,
                     Enabled = md.Enabled,
                     Id = md.Id,

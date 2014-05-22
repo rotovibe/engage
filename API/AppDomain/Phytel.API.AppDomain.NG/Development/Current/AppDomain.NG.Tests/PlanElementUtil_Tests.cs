@@ -144,7 +144,7 @@ namespace Phytel.API.AppDomain.NG.Tests
                 IPlanElementUtils peUtil = new PlanElementUtils {};
                 var mods = new List<AD.Module> {new AD.Module {Id = "123456789012345678901234", Completed = true}};
                 AD.Module mod = new DTO.Module {Previous = "123456789012345678901234"};
-                peUtil.SetEnabledState(mods, mod);
+                peUtil.SetEnabledState(mods, mod, "123456789012345612341234");
                 Assert.AreEqual(DateTime.UtcNow.Date, ((DateTime) mod.AssignDate).Date);
             }
 
@@ -157,9 +157,28 @@ namespace Phytel.API.AppDomain.NG.Tests
                 IPlanElementUtils peUtil = new PlanElementUtils {};
                 var mods = new List<AD.Module> {new AD.Module {Id = "123456789012345678901234", Completed = false}};
                 AD.Module mod = new DTO.Module {Previous = "123456789012345678901234"};
-                peUtil.SetEnabledState(mods, mod);
+                peUtil.SetEnabledState(mods, mod, "123456789012345612341234");
                 Assert.IsNull(mod.AssignDate);
             }
+        }
+
+        [TestClass()]
+        public class CloneModule_Test
+        {
+            [TestMethod()]
+            public void Clone_Module_With_StateUpdateOn()
+            {
+                IPlanElementUtils peUtil = new PlanElementUtils();
+                peUtil.CloneModule(new AD.Module());
+
+            }
+        }
+
+        [TestClass()]
+        public class InitializePlanElementSettings_Test
+        {
+            //[TestMethod()]
+            //public void 
         }
     }
 }

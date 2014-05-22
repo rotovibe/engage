@@ -863,9 +863,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
                 if (prg != null)
                 {
                     mods = new List<Module>();
-                    prg.ForEach(m =>
-                    {
-                        mods.Add(
+                    prg.ForEach(m => mods.Add(
                         new Module
                         {
                             Id = ObjectId.Parse(m.Id),
@@ -875,6 +873,8 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
                             Spawn = DTOUtils.GetSpawnElements(m.SpawnElement),
                             Actions = DTOUtils.GetActionElements(m.Actions, userId),
                             AssignedBy = ParseObjectId(m.AssignBy),
+                            AssignedTo = ParseObjectId(m.AssignTo),
+                            StateUpdatedOn = m.StateUpdatedOn,
                             AssignedOn = m.AssignDate,
                             Completed = m.Completed,
                             CompletedBy = m.CompletedBy,
@@ -887,8 +887,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
                             ProgramId = ObjectId.Parse(m.ProgramId),
                             SourceId = ObjectId.Parse(m.SourceId),
                             Status = (Status)m.Status
-                        });
-                    });
+                        }));
                 }
                 return mods;
             }

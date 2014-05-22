@@ -115,8 +115,6 @@
     <Compile Include="PlanCOR\ActionPlanProcessorTests.cs" />
     <Compile Include="PlanCOR\ModulePlanProcessor_Tests.cs" />
     <Compile Include="PlanCOR\StepPlanProcessor_Tests.cs" />
-    <Compile Include="PlanElementEndpointUtilTests.cs" />
-    <Compile Include="PlanElementEndpointUtil_Tests.cs" />
     <Compile Include="PlanElementUtil_Tests.cs" />
     <Compile Include="PlanManager_Tests.cs" />
     <Compile Include="Programs\EndpointUtils_Tests.cs" />

@@ -65,17 +65,12 @@ namespace Phytel.API.AppDomain.NG
             }
         }
 
-        public void SetEnabledStatusByPrevious<T>(List<T> actions)
+        public void SetEnabledStatusByPrevious<T>(List<T> actions, string assignToId)
         {
             try
             {
                 if (actions != null)
-                {
-                    actions.ForEach(x =>
-                    {
-                        SetEnabledState(actions, x);
-                    });
-                }
+                    actions.ForEach(x => SetEnabledState(actions, x, assignToId));
             }
             catch (Exception ex)
             {
@@ -83,7 +78,7 @@ namespace Phytel.API.AppDomain.NG
             }
         }
 
-        public void SetEnabledState<T>(List<T> list, T x)
+        public void SetEnabledState<T>(List<T> list, T x, string assignToId)
         {
             try
             {
@@ -105,6 +100,8 @@ namespace Phytel.API.AppDomain.NG
                                 ((IPlanElement)x).Enabled = true;
                                 ((IPlanElement) x).AssignById = SystemId;
                                 ((IPlanElement)x).AssignDate = DateTime.UtcNow;
+                                ((IPlanElement) x).StateUpdatedOn = DateTime.UtcNow;
+                                ((IPlanElement) x).AssignToId = assignToId; 
                                 // only track elements who are enabled for now.
                                 OnProcessIdEvent(Convert.ChangeType(x, typeof(T)));
                             }
@@ -708,19 +705,21 @@ namespace Phytel.API.AppDomain.NG
             }
         }
 
-        private Module CloneModule(Module md)
+        public Module CloneModule(Module md)
         {
             try
             {
                 Module m = new Module
                 {
-                    AssignById = md.AssignById,
+                    AssignById = md.AssignById, 
+                    AssignToId = md.AssignToId, // 950
                     AssignDate = md.AssignDate,
                     Completed = md.Completed,
                     CompletedBy = md.CompletedBy,
                     DateCompleted = md.DateCompleted,
                     Description = md.Description,
                     ElementState = md.ElementState,
+                    StateUpdatedOn = md.StateUpdatedOn,
                     Enabled = md.Enabled,
                     Id = md.Id,
                     Name = md.Name,
@@ -756,6 +755,7 @@ namespace Phytel.API.AppDomain.NG
                     DateCompleted = ac.DateCompleted,
                     Description = ac.Description,
                     ElementState = ac.ElementState,
+                    StateUpdatedOn = ac.StateUpdatedOn,
                     Enabled = ac.Enabled,
                     Id = ac.Id,
                     ModuleId = ac.ModuleId,
@@ -793,6 +793,7 @@ namespace Phytel.API.AppDomain.NG
                     DateCompleted = st.DateCompleted,
                     Description = st.Description,
                     ElementState = st.ElementState,
+                    StateUpdatedOn = st.StateUpdatedOn,
                     Enabled = st.Enabled,
                     Ex = st.Ex,
                     Header = st.Header,
@@ -918,7 +919,7 @@ namespace Phytel.API.AppDomain.NG
                     {
                         if (m.Id.Equals(p))
                         {
-                            pe = InitializePlanElementSettings(pe, m);
+                            pe = InitializePlanElementSettings(pe, m, program);
                             break;
                         }
                         else
@@ -929,7 +930,7 @@ namespace Phytel.API.AppDomain.NG
                                 {
                                     if (a.Id.Equals(p))
                                     {
-                                        pe = InitializePlanElementSettings(pe, a);
+                                        pe = InitializePlanElementSettings(pe, a,program);
                                         break;
                                     }
                                     else
@@ -940,7 +941,7 @@ namespace Phytel.API.AppDomain.NG
                                             {
                                                 if (s.Id.Equals(p))
                                                 {
-                                                    pe = InitializePlanElementSettings(pe, s);
+                                                    pe = InitializePlanElementSettings(pe, s, program);
                                                     break;
                                                 }
                                             }
@@ -959,13 +960,16 @@ namespace Phytel.API.AppDomain.NG
             }
         }
 
-        public PlanElement InitializePlanElementSettings(PlanElement pe, PlanElement p)
+        // NIGHT-950,951
+        public PlanElement InitializePlanElementSettings(PlanElement pe, PlanElement p, Program program)
         {
             try
             {
                 p.Enabled = true;
                 p.AssignById = SystemId;
                 p.AssignDate = System.DateTime.UtcNow;
+                p.StateUpdatedOn = DateTime.UtcNow;
+                p.AssignToId = program.AssignToId;
                 pe = p;
                 return pe;
             }
