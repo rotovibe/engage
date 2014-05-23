@@ -30,6 +30,9 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DataManagement.Procedures
 
                 foreach (MEPatientProgram mePP in programs)
                 {
+                    GetPrimaryCareManagerDataRequest careMemberDataRequest = new GetPrimaryCareManagerDataRequest { Context = "NG", ContractNumber = "InHealth001", PatientId = mePP.PatientId.ToString(), UserId = Phytel.API.DataDomain.Program.DTO.Constants.SystemContactId, Version = 1 };
+                    ObjectId primaryCareManagerId = Helper.GetPatientsPrimaryCareManager(careMemberDataRequest, client);
+
                     List<Module> modules = mePP.Modules;
                     if (modules != null & modules.Count > 0)
                     {
@@ -45,8 +48,6 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DataManagement.Procedures
                             #endregion
 
                             #region NIGHT-950
-                            GetPrimaryCareManagerDataRequest careMemberDataRequest = new GetPrimaryCareManagerDataRequest { Context = "NG", ContractNumber = "InHealth001", PatientId = mePP.PatientId.ToString(), UserId = Phytel.API.DataDomain.Program.DTO.Constants.SystemContactId, Version = 1 };
-                            ObjectId primaryCareManagerId = Helper.GetPatientsPrimaryCareManager(careMemberDataRequest, client);
                             if (primaryCareManagerId == ObjectId.Empty)
                             {
                                 meM.AssignedTo = null;

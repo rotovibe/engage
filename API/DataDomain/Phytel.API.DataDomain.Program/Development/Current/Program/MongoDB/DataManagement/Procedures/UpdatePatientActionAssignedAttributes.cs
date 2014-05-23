@@ -23,11 +23,15 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DataManagement.Procedures
                 ObjectId systemObjectId = ObjectId.Parse(Phytel.API.DataDomain.Program.DTO.Constants.SystemContactId);
                 IRestClient client = new JsonServiceClient();
                 IProgramRepository repo = new ProgramRepositoryFactory().GetRepository(Request, Phytel.API.DataDomain.Program.DTO.RepositoryType.PatientProgram);
+                IProgramRepository ppResponserepo = new ProgramRepositoryFactory().GetRepository(Request, Phytel.API.DataDomain.Program.DTO.RepositoryType.PatientProgramResponse);
 
                 List<MEPatientProgram> programs = (List<MEPatientProgram>)repo.SelectAll();
-
+                
                 foreach (MEPatientProgram mePP in programs)
                 {
+                    GetPrimaryCareManagerDataRequest careMemberDataRequest = new GetPrimaryCareManagerDataRequest { Context = "NG", ContractNumber = "InHealth001", PatientId = mePP.PatientId.ToString(), UserId = Phytel.API.DataDomain.Program.DTO.Constants.SystemContactId, Version = 1 };
+                    ObjectId primaryCareManagerId = Helper.GetPatientsPrimaryCareManager(careMemberDataRequest, client);
+                    
                     List<Module> modules = mePP.Modules;
                     if (modules != null & modules.Count > 0)
                     {
@@ -49,8 +53,6 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DataManagement.Procedures
                                     #endregion
 
                                     #region NIGHT-877
-                                    GetPrimaryCareManagerDataRequest careMemberDataRequest = new GetPrimaryCareManagerDataRequest { Context = "NG", ContractNumber = "InHealth001", PatientId = mePP.PatientId.ToString(), UserId = Phytel.API.DataDomain.Program.DTO.Constants.SystemContactId, Version = 1 };
-                                    ObjectId primaryCareManagerId = Helper.GetPatientsPrimaryCareManager(careMemberDataRequest, client);
                                     if (primaryCareManagerId == ObjectId.Empty)
                                     {
                                         meA.AssignedTo = null;
@@ -68,7 +70,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DataManagement.Procedures
                                             meA.StateUpdatedOn = mePP.RecordCreatedOn;
                                             break;
                                         case ElementState.InProgress:
-                                            meA.StateUpdatedOn = getStepResponsesEarliestCompletedDate(meA);
+                                            meA.StateUpdatedOn = getStepResponsesEarliestUpdatedDate(meA, ppResponserepo);
                                             break;
                                         case ElementState.Completed:
                                             meA.StateUpdatedOn = meA.DateCompleted;
@@ -96,23 +98,26 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DataManagement.Procedures
             }
         }
 
-        private DateTime? getStepResponsesEarliestCompletedDate(Phytel.API.DataDomain.Program.MongoDB.DTO.Action meA)
+        private DateTime? getStepResponsesEarliestUpdatedDate(Phytel.API.DataDomain.Program.MongoDB.DTO.Action meA, IProgramRepository ppRrepo)
         {
-            List<DateTime> completedDates = new List<DateTime>();
+            List<DateTime> updatedDates = new List<DateTime>();
             List<Step> steps = meA.Steps;
             if (steps != null && steps.Count > 0)
             {
                 foreach (Step meS in steps)
                 {
-                   // meS.Responses 
-                    //if (meA.DateCompleted != null)
-                      //  completedDates.Add((DateTime)meA.DateCompleted);
+
+                    List<MEPatientProgramResponse> meResponses = ppRrepo.FindByStepId(meS.Id.ToString()) as List<MEPatientProgramResponse>;
+                    meResponses.ForEach(c => 
+                        {
+                            updatedDates.Add((DateTime)c.LastUpdatedOn);
+                        });
                 }
             }
-            completedDates.Sort();
-            if (completedDates.Count > 0)
+            updatedDates.Sort();
+            if (updatedDates.Count > 0)
             {
-                return completedDates[0];
+                return updatedDates[0];
             }
             else
             {

@@ -123,5 +123,10 @@ namespace Phytel.API.DataDomain.Program.Test.Stubs
         {
             throw new NotImplementedException();
         }
+
+        public IEnumerable<object> FindByStepId(string entityID)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

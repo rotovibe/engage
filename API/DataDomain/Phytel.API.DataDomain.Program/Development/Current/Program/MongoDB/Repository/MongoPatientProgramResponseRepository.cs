@@ -14,6 +14,7 @@ using Phytel.API.Common;
 using Phytel.API.Common.Data;
 using Phytel.API.DataAudit;
 using MongoDB.Bson.Serialization;
+using MongoDB.Driver.Builders;
 
 namespace Phytel.API.DataDomain.Program
 {
@@ -235,6 +236,24 @@ namespace Phytel.API.DataDomain.Program
         public IEnumerable<object> Find(string Id)
         {
             throw new NotImplementedException();
+        }
+
+        public IEnumerable<object> FindByStepId(string entityID)
+        {
+            List<MEPatientProgramResponse> response = null;
+            try
+            {
+                using (ProgramMongoContext ctx = new ProgramMongoContext(_dbName))
+                {
+                    List<IMongoQuery> queries = new List<IMongoQuery>();
+                    queries.Add(Query.EQ(MEPatientProgramResponse.StepIdProperty, ObjectId.Parse(entityID)));
+                    queries.Add(Query.EQ(MEPatientProgramResponse.DeleteFlagProperty, false));
+                    IMongoQuery mQuery = Query.And(queries);
+                    response = ctx.PatientProgramResponses.Collection.Find(mQuery).ToList();
+                }
+                return response;
+            }
+            catch (Exception ex) { throw ex; }
         }
 
 
