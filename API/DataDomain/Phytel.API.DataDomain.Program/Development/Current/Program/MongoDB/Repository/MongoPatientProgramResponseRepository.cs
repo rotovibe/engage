@@ -247,7 +247,8 @@ namespace Phytel.API.DataDomain.Program
                 {
                     List<IMongoQuery> queries = new List<IMongoQuery>();
                     queries.Add(Query.EQ(MEPatientProgramResponse.StepIdProperty, ObjectId.Parse(entityID)));
-                    queries.Add(Query.EQ(MEPatientProgramResponse.DeleteFlagProperty, false));
+                    // Excluding deleteflag query. Night-952
+                    //queries.Add(Query.EQ(MEPatientProgramResponse.DeleteFlagProperty, false));
                     IMongoQuery mQuery = Query.And(queries);
                     response = ctx.PatientProgramResponses.Collection.Find(mQuery).ToList();
                 }
