@@ -68,7 +68,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DataManagement.Procedures
                     bool success = repo.Save(updatedProgram);
                     if (success)
                     {
-                        Results.Add(new Result { Message = string.Format("Updated values for a Program are AssignedBy(aby) = '{0}', AssignedDate(aon) = '{1}', AssignedTo(ato) = '{2}', StateUpdatedOn(stuon) = '{3}' for Program Id = '{4}' in PatientProgram collection.", mePP.AssignedBy, mePP.AssignedOn, mePP.AssignedTo, mePP.StateUpdatedOn, updatedProgram.Id) });
+                        Results.Add(new Result { Message = string.Format("Updated Program Id : '{0}' in PatientProgram collection.", updatedProgram.Id) });
                     }
                 }
                 Results.Add(new Result { Message = "Total records updated: " + Results.Count });
