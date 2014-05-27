@@ -44,7 +44,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DataManagement.Procedures
                                 {
 
                                     #region NIGHT-876, NIGHT-835
-                                    if (meA.Enabled)
+                                    if (meM.Enabled && meA.Enabled)
                                     {
                                         meA.AssignedBy = systemObjectId;
                                         meA.AssignedOn = mePP.RecordCreatedOn;
