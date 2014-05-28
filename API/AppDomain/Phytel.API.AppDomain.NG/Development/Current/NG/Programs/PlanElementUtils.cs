@@ -93,10 +93,14 @@ namespace Phytel.API.AppDomain.NG
 
         public void SetInitialActions(object x, string assignToId)
         {
-            // foreach action
-            if (((Module)x).Enabled == false ) return;
+            if (((Module) x).Enabled == false) return;
             if (((Module) x).Actions == null) return;
-            var list = ((Module) x).Actions.Where(a => a.Enabled == true);
+            List<Actions> list =
+                ((Module) x).Actions.Where(
+                    a =>
+                        a.Enabled == true && a.ElementState != (int) DD.ElementState.Completed
+                        && a.ElementState != (int) DD.ElementState.InProgress).ToList(); // create a specification for this to isolate the business logic.
+
             list.ForEach(z => SetInitialProperties(null, (PlanElement) z));
         }
 
@@ -658,7 +662,6 @@ namespace Phytel.API.AppDomain.NG
                 {
                     PlanElementEndpointUtil.InsertNewProgramAttribute(pa, request);
                 }
-
             }
             catch (Exception ex)
             {

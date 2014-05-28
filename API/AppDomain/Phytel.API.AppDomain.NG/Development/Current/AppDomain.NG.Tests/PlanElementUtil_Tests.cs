@@ -359,6 +359,48 @@ namespace Phytel.API.AppDomain.NG.Tests
             [TestMethod()]
             [TestCategory("NIGHT-876")]
             [TestProperty("TFS", "11633")]
+            public void Set_One_Action_With_State_Complete()
+            {
+                IPlanElementUtils pUtils = new PlanElementUtils();
+                AD.Module mod = new AD.Module
+                {
+                    Enabled = true,
+                    Actions = new List<AD.Actions>
+                    {
+                        new AD.Actions {Enabled = true, ElementState = 5}, //complete
+                        new AD.Actions {Enabled = true, ElementState = 2} // not started
+                    }
+                };
+
+                pUtils.SetInitialActions(mod, "123456789012345678901234");
+
+                Assert.IsNotNull(mod.Actions[1].AssignById);
+            }
+
+            [TestMethod()]
+            [TestCategory("NIGHT-876")]
+            [TestProperty("TFS", "11633")]
+            public void Set_One_Action_With_State_InProgress()
+            {
+                IPlanElementUtils pUtils = new PlanElementUtils();
+                AD.Module mod = new AD.Module
+                {
+                    Enabled = true,
+                    Actions = new List<AD.Actions>
+                    {
+                        new AD.Actions {Enabled = true, ElementState = 4}, // inprogress
+                        new AD.Actions {Enabled = true, ElementState = 2} // not started
+                    }
+                };
+
+                pUtils.SetInitialActions(mod, "123456789012345678901234");
+
+                Assert.IsNotNull(mod.Actions[1].AssignById);
+            }
+
+            [TestMethod()]
+            [TestCategory("NIGHT-876")]
+            [TestProperty("TFS", "11633")]
             public void Set_One_Action()
             {
                 IPlanElementUtils pUtils = new PlanElementUtils();
