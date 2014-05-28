@@ -13,7 +13,7 @@ namespace Phytel.API.AppDomain.NG.PlanCOR
         {
             try
             {
-                if (e.PlanElement.GetType().Equals(typeof(Program)))
+                if (e.PlanElement.GetType() == typeof(Program))
                 {
                     if (e.Program.Completed)
                     {

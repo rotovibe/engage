@@ -45,8 +45,6 @@ namespace Phytel.API.AppDomain.NG.PlanCOR
             {
                 if (e.PlanElement.GetType() == typeof(Step))
                 {
-                    // set program information
-                    //PlanElementUtil.SetProgramInformation(_programAttributes, e.Program);
                     _programAttributes.PlanElementId = e.Program.Id;
                     Step s = (Step)e.PlanElement;
 
@@ -127,7 +125,7 @@ namespace Phytel.API.AppDomain.NG.PlanCOR
                             {
                                 HandlePlanElementActivation(e, rse);
                             }
-                            else if (rse.ElementType.Equals(101))
+                            else if (rse.ElementType == 101)
                             {
                                 HandlePatientProblemRegistration(e, userId, rse);
                                 OnSpawnElementEvent("Problems");
@@ -168,7 +166,7 @@ namespace Phytel.API.AppDomain.NG.PlanCOR
                 PatientObservation ppd = PlanElementEndpointUtil.GetPatientProblem(rse.ElementId, e, userId);
                 if (ppd != null)
                 {
-                    if (!ppd.StateId.Equals(2))
+                    if (ppd.StateId != 2)
                     {
                         new SpawnElementStrategy(new UpdateSpawnProblemCode(e, rse, ppd, true)).Evoke();
                     }

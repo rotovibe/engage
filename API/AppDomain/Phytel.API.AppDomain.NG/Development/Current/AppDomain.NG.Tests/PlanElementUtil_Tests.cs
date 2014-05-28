@@ -18,8 +18,8 @@ namespace Phytel.API.AppDomain.NG.Tests
         [TestMethod()]
         public void ResponseSpawnAllowed_Test()
         {
-            DTO.Step s = new DTO.Step { StepTypeId = 15 };
-            DTO.Response r = new DTO.Response {  Id = "000000000000000000000000", Value=""};
+            DTO.Step s = new DTO.Step {StepTypeId = 15};
+            DTO.Response r = new DTO.Response {Id = "000000000000000000000000", Value = ""};
             new PlanElementUtils().ResponseSpawnAllowed(s, r);
             Assert.Fail();
         }
@@ -33,14 +33,19 @@ namespace Phytel.API.AppDomain.NG.Tests
             [TestProperty("Layer", "AD.PlanElementUtils")]
             public void Set_Element_State_Change_Date()
             {
-                IPlanElementUtils peUtil = new PlanElementUtils { };
-                AD.SpawnElement spwn = new AD.SpawnElement { ElementId = "123456789012345678901234", ElementType =  12, Tag = "3"};
-                AD.Program program = new AD.Program { ElementState = 1 };
+                IPlanElementUtils peUtil = new PlanElementUtils {};
+                AD.SpawnElement spwn = new AD.SpawnElement
+                {
+                    ElementId = "123456789012345678901234",
+                    ElementType = 12,
+                    Tag = "3"
+                };
+                AD.Program program = new AD.Program {ElementState = 1};
                 ProgramAttributeData progAttr = new ProgramAttributeData();
                 peUtil.SetProgramAttributes(spwn, program, "UserId", progAttr);
 
                 DateTime control = DateTime.UtcNow.Date;
-                DateTime sample = ((DateTime)program.StateUpdatedOn).Date;
+                DateTime sample = ((DateTime) program.StateUpdatedOn).Date;
                 Assert.AreEqual(control, sample);
             }
         }
@@ -55,11 +60,11 @@ namespace Phytel.API.AppDomain.NG.Tests
             public void Clone_With_StateChangeDate()
             {
                 DateTime control = DateTime.UtcNow.Date;
-                IPlanElementUtils peUtil = new PlanElementUtils { };
-                AD.Program program = new AD.Program { ElementState = 1, StateUpdatedOn = control };
+                IPlanElementUtils peUtil = new PlanElementUtils {};
+                AD.Program program = new AD.Program {ElementState = 1, StateUpdatedOn = control};
                 peUtil.CloneProgram(program);
 
-                DateTime sample = ((DateTime)program.StateUpdatedOn).Date;
+                DateTime sample = ((DateTime) program.StateUpdatedOn).Date;
                 Assert.AreEqual(control, sample);
             }
         }
@@ -74,11 +79,11 @@ namespace Phytel.API.AppDomain.NG.Tests
             public void Get_Assigned_By()
             {
                 DateTime control = DateTime.UtcNow.Date;
-                IPlanElementUtils peUtil = new PlanElementUtils { };
+                IPlanElementUtils peUtil = new PlanElementUtils {};
                 AD.Module mod = new AD.Module();
                 AD.Program prog = new AD.Program();
 
-                peUtil.SetInitialProperties(prog, mod);
+                peUtil.SetInitialProperties("123456789012345678901234", mod);
 
                 Assert.AreEqual(SystemId, mod.AssignById);
             }
@@ -94,9 +99,9 @@ namespace Phytel.API.AppDomain.NG.Tests
                 AD.Module mod = new AD.Module();
                 AD.Program prog = new AD.Program();
 
-                peUtil.SetInitialProperties(prog, mod);
+                peUtil.SetInitialProperties("123456789012345678901234", mod);
 
-                Assert.AreEqual(DateTime.UtcNow.Date, ((DateTime)mod.AssignDate).Date);
+                Assert.AreEqual(DateTime.UtcNow.Date, ((DateTime) mod.AssignDate).Date);
             }
 
             [TestMethod()]
@@ -106,11 +111,11 @@ namespace Phytel.API.AppDomain.NG.Tests
             public void Get_Assigned_To()
             {
                 ObjectId? assignedTO = new ObjectId();
-                IPlanElementUtils peUtil = new PlanElementUtils { };
+                IPlanElementUtils peUtil = new PlanElementUtils {};
                 AD.Module mod = new AD.Module();
-                AD.Program prog = new AD.Program{ AssignToId = assignedTO.ToString()};
+                AD.Program prog = new AD.Program {AssignToId = assignedTO.ToString()};
 
-                peUtil.SetInitialProperties(prog, mod);
+                peUtil.SetInitialProperties(assignedTO.ToString(), mod);
 
                 Assert.AreEqual(assignedTO.ToString(), mod.AssignToId);
             }
@@ -122,11 +127,11 @@ namespace Phytel.API.AppDomain.NG.Tests
             public void Get_Assigned_To_Null()
             {
                 string assignedTO = null;
-                IPlanElementUtils peUtil = new PlanElementUtils { };
+                IPlanElementUtils peUtil = new PlanElementUtils {};
                 AD.Module mod = new AD.Module();
-                AD.Program prog = new AD.Program { AssignToId = assignedTO };
+                AD.Program prog = new AD.Program {AssignToId = assignedTO};
 
-                peUtil.SetInitialProperties(prog, mod);
+                peUtil.SetInitialProperties(assignedTO, mod);
 
                 Assert.AreEqual(assignedTO, mod.AssignToId);
             }
@@ -144,7 +149,7 @@ namespace Phytel.API.AppDomain.NG.Tests
                 IPlanElementUtils peUtil = new PlanElementUtils {};
                 var mods = new List<AD.Module> {new AD.Module {Id = "123456789012345678901234", Completed = true}};
                 AD.Module mod = new DTO.Module {Previous = "123456789012345678901234"};
-                peUtil.SetEnabledState(mods, mod, "123456789012345612341234");
+                peUtil.SetEnabledState(mods, mod, "123456789012345612341234", true);
                 Assert.AreEqual(DateTime.UtcNow.Date, ((DateTime) mod.AssignDate).Date);
             }
 
@@ -157,8 +162,22 @@ namespace Phytel.API.AppDomain.NG.Tests
                 IPlanElementUtils peUtil = new PlanElementUtils {};
                 var mods = new List<AD.Module> {new AD.Module {Id = "123456789012345678901234", Completed = false}};
                 AD.Module mod = new DTO.Module {Previous = "123456789012345678901234"};
-                peUtil.SetEnabledState(mods, mod, "123456789012345612341234");
+                peUtil.SetEnabledState(mods, mod, "123456789012345612341234", true);
                 Assert.IsNull(mod.AssignDate);
+            }
+
+            [TestMethod()]
+            [TestCategory("NIGHT-876")]
+            [TestProperty("TFS", "11633")]
+            [TestProperty("Layer", "AD.PlanElementUtils")]
+            public void Set_Assigned_On_With_Previous_Complete_Current()
+            {
+                IPlanElementUtils peUtil = new PlanElementUtils {};
+                var mods = new List<AD.Module> {new AD.Module {Id = "000006789012345678901234", Completed = true}};
+                AD.Module mod = new DTO.Module {Previous = "000006789012345678901234"};
+                peUtil.SetEnabledState(mods, mod, "123456789012345612341234", true);
+                Assert.AreEqual(DateTime.UtcNow.Date, ((DateTime) mod.AssignDate).Date);
+                Assert.AreEqual(mods[0].Id, mod.Previous);
             }
         }
 
@@ -179,6 +198,184 @@ namespace Phytel.API.AppDomain.NG.Tests
         {
             //[TestMethod()]
             //public void 
+        }
+
+        [TestClass()]
+        public class SetEnabledStatusByPrevious_Test
+        {
+            [TestMethod()]
+            [TestCategory("NIGHT-876")]
+            [TestProperty("TFS", "11633")]
+            public void Set_Status_As_Enabled()
+            {
+                IPlanElementUtils pUtils = new PlanElementUtils();
+
+                var mods = new List<AD.PlanElement>
+                {
+                    new AD.PlanElement {Id = "000006789012345678901234", Completed = true},
+                    new AD.PlanElement {Previous = "000006789012345678901234"}
+                };
+
+                pUtils.SetEnabledStatusByPrevious(mods, "123456789012345678901234", true);
+                Assert.IsTrue(mods[1].Enabled);
+            }
+
+            [TestMethod()]
+            [TestCategory("NIGHT-876")]
+            [TestProperty("TFS", "11633")]
+            public void Set_As_Enabled_Module()
+            {
+                IPlanElementUtils pUtils = new PlanElementUtils();
+
+                var mods = new List<AD.Module>
+                {
+                    new AD.Module {Id = "000006789012345678901234", Completed = true},
+                    new AD.Module {Previous = "000006789012345678901234"}
+                };
+
+                pUtils.SetEnabledStatusByPrevious(mods, "123456789012345678901234", true);
+                Assert.IsTrue(mods[1].Enabled);
+            }
+        }
+
+        [TestClass()]
+        public class SetElementEnabledState_Test
+        {
+            [TestMethod()]
+            [TestCategory("NIGHT-876")]
+            [TestProperty("TFS", "11633")]
+            public void Set_No_Action_Enabled()
+            {
+                IPlanElementUtils pUtils = new PlanElementUtils();
+                string modId = ObjectId.GenerateNewId().ToString();
+                AD.Program prog = new AD.Program
+                {
+                    Modules = new List<AD.Module>
+                    {
+                        new AD.Module
+                        {
+                            Id = modId,
+                            Actions = new List<AD.Actions>
+                            {
+                                new AD.Actions
+                                {
+                                    Enabled = false
+                                },
+                                new AD.Actions
+                                {
+                                    Enabled = false
+                                }
+                            }
+                        }
+                    }
+                };
+
+                pUtils.SetElementEnabledState(modId, prog);
+                Assert.IsNull(prog.Modules[0].Actions[0].AssignById);
+            }
+
+            [TestMethod()]
+            [TestCategory("NIGHT-876")]
+            [TestProperty("TFS", "11633")]
+            public void Set_One_Action_Enabled()
+            {
+                IPlanElementUtils pUtils = new PlanElementUtils();
+                string modId = ObjectId.GenerateNewId().ToString();
+                AD.Program prog = new AD.Program
+                {
+                    Modules = new List<AD.Module>
+                    {
+                        new AD.Module
+                        {
+                            Id = modId,
+                            Actions = new List<AD.Actions>
+                            {
+                                new AD.Actions
+                                {
+                                    Enabled = true
+                                },
+                                new AD.Actions
+                                {
+                                    Enabled = false
+                                }
+                            }
+                        }
+                    }
+                };
+
+                pUtils.SetElementEnabledState(modId, prog);
+                Assert.IsNotNull(prog.Modules[0].Actions[0].AssignById);
+            }
+
+        }
+
+        [TestClass()]
+        public class SetInitialActions_Test
+        {
+            [TestMethod()]
+            [TestCategory("NIGHT-876")]
+            [TestProperty("TFS", "11633")]
+            public void Set_No_Action_Module_Not_Enabled()
+            {
+                IPlanElementUtils pUtils = new PlanElementUtils();
+                AD.Module mod = new AD.Module
+                {
+                    Enabled = false,
+                    Actions = new List<AD.Actions>
+                    {
+                        new AD.Actions {Enabled = true},
+                        new AD.Actions {Enabled = true}
+                    }
+                };
+
+                pUtils.SetInitialActions(mod, "123456789012345678901234");
+
+                Assert.IsNull(mod.Actions[0].AssignById);
+                Assert.IsNull(mod.Actions[1].AssignById);
+            }
+
+            [TestMethod()]
+            [TestCategory("NIGHT-876")]
+            [TestProperty("TFS", "11633")]
+            public void Set_Two_Action()
+            {
+                IPlanElementUtils pUtils = new PlanElementUtils();
+                AD.Module mod = new AD.Module
+                {
+                    Enabled = true,
+                    Actions = new List<AD.Actions>
+                    {
+                        new AD.Actions {Enabled = true},
+                        new AD.Actions {Enabled = true}
+                    }
+                };
+
+                pUtils.SetInitialActions(mod, "123456789012345678901234");
+
+                Assert.IsNotNull(mod.Actions[0].AssignById);
+                Assert.IsNotNull(mod.Actions[1].AssignById);
+            }
+
+            [TestMethod()]
+            [TestCategory("NIGHT-876")]
+            [TestProperty("TFS", "11633")]
+            public void Set_One_Action()
+            {
+                IPlanElementUtils pUtils = new PlanElementUtils();
+                AD.Module mod = new AD.Module
+                {
+                    Enabled = true,
+                    Actions = new List<AD.Actions>
+                    {
+                        new AD.Actions {Enabled = true},
+                        new AD.Actions {Enabled = false}
+                    }
+                };
+
+                pUtils.SetInitialActions(mod, "123456789012345678901234");
+
+                Assert.IsNotNull(mod.Actions[0].AssignById);
+            }
         }
     }
 }

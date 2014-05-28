@@ -23,7 +23,6 @@ namespace Phytel.API.AppDomain.NG.Test.Stubs
 
         public void DisableCompleteButtonForAction(List<DTO.Step> list)
         {
-            throw new NotImplementedException();
         }
 
         public T FindElementById<T>(List<T> list, string id)
@@ -53,7 +52,7 @@ namespace Phytel.API.AppDomain.NG.Test.Stubs
 
         public void HydratePlanElementLists(List<object> processedElements, DTO.PostProcessActionResponse response)
         {
-            throw new NotImplementedException();
+            response.PlanElems = new PlanElements();
         }
 
         public DTO.PlanElement InitializePlanElementSettings(DTO.PlanElement pe, DTO.PlanElement p)
@@ -68,7 +67,7 @@ namespace Phytel.API.AppDomain.NG.Test.Stubs
 
         public bool IsProgramCompleted(DTO.Program p, string userId)
         {
-            throw new NotImplementedException();
+            return true;
         }
 
         public bool ModifyProgramAttributePropertiesForUpdate(Phytel.API.DataDomain.Program.DTO.ProgramAttributeData pAtt, Phytel.API.DataDomain.Program.DTO.ProgramAttributeData _pAtt)
@@ -93,12 +92,11 @@ namespace Phytel.API.AppDomain.NG.Test.Stubs
 
         public void SaveReportingAttributes(Phytel.API.DataDomain.Program.DTO.ProgramAttributeData _programAttributes, Interface.IAppDomainRequest request)
         {
-            throw new NotImplementedException();
         }
 
         public bool SetCompletionStatus<T>(List<T> list)
         {
-            throw new NotImplementedException();
+            return true;
         }
 
         public void SetElementEnabledState(string p, DTO.Program program)
@@ -116,7 +114,7 @@ namespace Phytel.API.AppDomain.NG.Test.Stubs
             throw new NotImplementedException();
         }
 
-        public void SetInitialProperties(Program program, DTO.IPlanElement m)
+        public void SetInitialProperties(string assignToId, DTO.IPlanElement m)
         {
             throw new NotImplementedException();
         }
@@ -138,35 +136,36 @@ namespace Phytel.API.AppDomain.NG.Test.Stubs
 
         public void SpawnElementsInList(List<DTO.SpawnElement> list, DTO.Program program, string userId, Phytel.API.DataDomain.Program.DTO.ProgramAttributeData progAttr)
         {
-            throw new NotImplementedException();
         }
 
 
         public DTO.ProgramAttribute GetAttributes(DataDomain.Program.DTO.ProgramAttributeData programAttributeData)
         {
-            throw new NotImplementedException();
+            return new DTO.ProgramAttribute();
         }
-
-
 
         public Module CloneModule(Module md)
         {
             throw new NotImplementedException();
         }
 
-
-        public void SetEnabledState<T>(List<T> list, T x, string assignToId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void SetEnabledStatusByPrevious<T>(List<T> actions, string assignToId)
-        {
-            throw new NotImplementedException();
-        }
-
-
         public PlanElement InitializePlanElementSettings(PlanElement pe, PlanElement p, Program program)
+        {
+            throw new NotImplementedException();
+        }
+
+
+        public void SetEnabledState<T>(List<T> list, T x, string assignToId, bool pEnabled)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void SetEnabledStatusByPrevious<T>(List<T> planElements, string assignToId, bool pEnabled)
+        {
+        }
+
+
+        public void SetInitialActions(object x, string assignToId)
         {
             throw new NotImplementedException();
         }

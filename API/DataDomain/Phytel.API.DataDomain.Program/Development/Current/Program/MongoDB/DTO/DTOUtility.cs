@@ -134,7 +134,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
                                 State = ElementState.NotStarted,
                                 CompletedBy = m.CompletedBy,
                                 DateCompleted = m.DateCompleted,
-                                Actions = GetClonedActions(m.Actions, request.ContractNumber, request.UserId, sil)
+                                Actions = GetClonedActions(m.Actions, request.ContractNumber, request.UserId, sil, m.Enabled)
                             };
 
                             mod.Objectives = null;
@@ -157,7 +157,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             }
         }
 
-        private  List<Action> GetClonedActions(List<Action> list, string contractNumber, string userId, List<ObjectId> sil)
+        private  List<Action> GetClonedActions(List<Action> list, string contractNumber, string userId, List<ObjectId> sil, bool pEnabled)
         {
             try
             {
@@ -184,7 +184,6 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
                             Previous = ai.Previous,
                             Spawn = ai.Spawn,
                             SourceId = ai.SourceId,
-                            AssignedBy = ai.AssignedBy,
                             AssignedOn = ai.AssignedOn,
                             State = ElementState.NotStarted,
                             //Objectives = ai.Objectives.Where(r => r.Status == Common.Status.Active).Select(x => new ObjectivesInfo()
@@ -197,6 +196,15 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
                             Steps = GetClonedSteps(contractNumber, userId, ai, sil)
                         };
                         ac.Objectives = null;
+
+                        if (ac.Enabled && pEnabled)
+                        {
+                            ac.AssignedBy = ObjectId.Parse(Constants.SystemContactId); // NIGHT-876
+                            //ac.AssignedOn = System.DateTime.UtcNow;
+                            //ac.AssignedTo = cmid;
+                            //ac.StateUpdatedOn = DateTime.UtcNow;
+                        }
+
                         actions.Add(ac);
                     }
                 }
@@ -213,40 +221,39 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             try
             {
                 List<Step> steps = new List<Step>();
+                if (ai.Steps == null) return steps;
+
                 //Parallel.ForEach(ai.Steps, b =>
-                foreach (Step b in ai.Steps)
+                foreach (Step b in ai.Steps.Where(b => b.Status == Status.Active))
                 {
-                    if (b.Status == Status.Active)
+                    sil.Add(b.Id);
+                    steps.Add(new Step()
                     {
-                        sil.Add(b.Id);
-                        steps.Add(new Step()
-                        {
-                            Status = b.Status,
-                            Description = b.Description,
-                            Id = b.Id,
-                            ActionId = b.ActionId,
-                            Notes = b.Notes,
-                            Question = b.Question,
-                            Title = b.Title,
-                            Text = b.Text,
-                            StepTypeId = b.StepTypeId,
-                            Responses = b.Responses,
-                            //Responses = GetContractStepResponses(b.Id, contractNumber, userId),
-                            Completed = b.Completed,
-                            ControlType = b.ControlType,
-                            Enabled = b.Enabled,
-                            Header = b.Header,
-                            Next = b.Next,
-                            Order = b.Order,
-                            Previous = b.Previous,
-                            SelectedResponseId = b.SelectedResponseId,
-                            Spawn = b.Spawn,
-                            SourceId = b.SourceId,
-                            AssignedBy = b.AssignedBy,
-                            AssignedOn = b.AssignedOn,
-                            State = b.State
-                        });
-                    }
+                        Status = b.Status,
+                        Description = b.Description,
+                        Id = b.Id,
+                        ActionId = b.ActionId,
+                        Notes = b.Notes,
+                        Question = b.Question,
+                        Title = b.Title,
+                        Text = b.Text,
+                        StepTypeId = b.StepTypeId,
+                        Responses = b.Responses,
+                        //Responses = GetContractStepResponses(b.Id, contractNumber, userId),
+                        Completed = b.Completed,
+                        ControlType = b.ControlType,
+                        Enabled = b.Enabled,
+                        Header = b.Header,
+                        Next = b.Next,
+                        Order = b.Order,
+                        Previous = b.Previous,
+                        SelectedResponseId = b.SelectedResponseId,
+                        Spawn = b.Spawn,
+                        SourceId = b.SourceId,
+                        AssignedBy = b.AssignedBy,
+                        AssignedOn = b.AssignedOn,
+                        State = b.State
+                    });
                 }
                 //);
 
@@ -581,7 +588,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
                 {
                     if (s.SelectedResponseId.ToString().Equals("52d241a31e601521285e97e8") && kv.Key.ToString().Equals("52d241a31e601521285e97e8"))
                     {
-                        string test = "test";
+                        var test = "test";
                     }
 
                     // need to cast to non nullable type to compare

@@ -30,10 +30,11 @@ namespace Phytel.API.AppDomain.NG
         void SaveReportingAttributes(ProgramAttributeData _programAttributes, IAppDomainRequest request);
         bool SetCompletionStatus<T>(List<T> list);
         void SetElementEnabledState(string p, Program program);
-        void SetEnabledState<T>(List<T> list, T x, string assignToId);
-        void SetEnabledStatusByPrevious<T>(List<T> actions, string assignToId);
-        void SetInitialProperties(Program program, IPlanElement m);
+        void SetEnabledState<T>(List<T> list, T x, string assignToId, bool pEnabled);
+        void SetEnabledStatusByPrevious<T>(List<T> planElements, string assignToId, bool pEnabled);
+        void SetInitialProperties(string assignToId, IPlanElement m);
         void SetProgramAttributes(SpawnElement r, Program program, string userId, ProgramAttributeData progAttr);
+        void SetInitialActions(object x, string assignToId);
         void SetProgramInformation(ProgramAttributeData _programAttributes, Program p);
         void SetStartDateForProgramAttributes(string programId, IAppDomainRequest request);
         void SpawnElementsInList(List<SpawnElement> list, Program program, string userId, ProgramAttributeData progAttr);

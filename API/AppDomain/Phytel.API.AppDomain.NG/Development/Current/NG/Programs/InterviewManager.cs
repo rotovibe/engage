@@ -40,7 +40,7 @@ namespace Phytel.API.AppDomain.NG
                 Program p = EndPointUtils.RequestPatientProgramDetail(request);
                 
                 Actions action = request.Action;
-                
+
                 if (action.Completed)
                 {
                     // pre-process
@@ -55,7 +55,7 @@ namespace Phytel.API.AppDomain.NG
                     Module mod = PEUtils.FindElementById(p.Modules, action.ModuleId);
 
                     // set module to in progress
-                    if (mod.ElementState != (int)ElementState.InProgress) //!= 4
+                    if (mod.ElementState != (int) ElementState.InProgress) //!= 4
                     {
                         mod.ElementState = (int) ElementState.InProgress; //4;
                         mod.StateUpdatedOn = DateTime.UtcNow;
@@ -64,10 +64,10 @@ namespace Phytel.API.AppDomain.NG
                     // set in progress state
                     //new ResponseSpawnAllowed<Step>().IsSatisfiedBy(s)
                     if (PEUtils.IsActionInitial(p))
-                    //if (new IsActionInitialSpecification<Program>().IsSatisfiedBy(p))
+                        //if (new IsActionInitialSpecification<Program>().IsSatisfiedBy(p))
                     {
                         // set program to in progress
-                        p.ElementState = (int)ElementState.InProgress; //4
+                        p.ElementState = (int) ElementState.InProgress; //4
                         p.StateUpdatedOn = DateTime.UtcNow;
                     }
 
@@ -78,35 +78,42 @@ namespace Phytel.API.AppDomain.NG
                     ProgramPlanProcessor pChain = InitializeProgramChain();
 
                     //// process steps in action
-                    action.Steps.ForEach(s => pChain.ProcessWorkflow((IPlanElement)s, p, request.UserId, request.PatientId, action, request));
+                    action.Steps.ForEach(
+                        s =>
+                            pChain.ProcessWorkflow((IPlanElement) s, p, request.UserId, request.PatientId, action,
+                                request));
 
                     //// process action
-                    pChain.ProcessWorkflow((IPlanElement)action, p, request.UserId, request.PatientId, action, request);
-                    
+                    pChain.ProcessWorkflow((IPlanElement) action, p, request.UserId, request.PatientId, action, request);
+
                     if (mod != null)
                     {
                         // set enabled status for action dependencies
-                        PEUtils.SetEnabledStatusByPrevious(mod.Actions, p.AssignToId);
+                        PEUtils.SetEnabledStatusByPrevious(mod.Actions, p.AssignToId, mod.Enabled);
                         // set enable/visibility of actions after action processing.
-                        pChain.ProcessWorkflow((IPlanElement)mod, p, request.UserId, request.PatientId, action, request);
+                        pChain.ProcessWorkflow((IPlanElement) mod, p, request.UserId, request.PatientId, action, request);
                         AddUniquePlanElementToProcessedList(mod);
                     }
 
                     // set module visibility for modules
-                    PEUtils.SetEnabledStatusByPrevious(p.Modules, p.AssignToId);
+                    PEUtils.SetEnabledStatusByPrevious(p.Modules, p.AssignToId, p.Enabled);
 
                     // evaluate program status
                     if (PEUtils.IsProgramCompleted(p, request.UserId))
                     {
                         p.Completed = true;
-                        pChain.ProcessWorkflow((IPlanElement)p, p, request.UserId, request.PatientId, action, request);
+                        pChain.ProcessWorkflow((IPlanElement) p, p, request.UserId, request.PatientId, action, request);
                     }
+
+                    // set action state to completed
+                    action.ElementState = (int) ElementState.Completed;
+
                     AddUniquePlanElementToProcessedList(action);
                 }
                 else
                 {
                     // need to update this on the p level.
-                    action.ElementState = (int) ElementState.InProgress;  //4; // in progress
+                    action.ElementState = (int) ElementState.InProgress; //4; // in progress
                 }
 
                 AddUniquePlanElementToProcessedList(p);

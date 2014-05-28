@@ -17,12 +17,12 @@ namespace Phytel.API.AppDomain.NG.Tests
     public class PlanManager_Test
     {
         [TestClass()]
-        public class ProcessActionResults_Test
+        public class ProcessActionResults_Test : StubAppHostBase
         {
-            private Container container;
-
             [TestMethod()]
-            public void Set_Program_State_Date_Changed()
+            [TestCategory("NIGHT-876")]
+            [TestProperty("TFS", "11633")]
+            public void Set_Action_State_Changed_To_Complete()
             {
                 IPlanManager pm = new PlanManager
                 {
@@ -48,13 +48,19 @@ namespace Phytel.API.AppDomain.NG.Tests
                         AttrEndDate = DateTime.UtcNow.AddDays(10),
                         AttrStartDate = DateTime.UtcNow,
                         AssignDate = System.DateTime.UtcNow,
-                        Steps = new List<Step> {new Step{ Id = "000000000011111111111234",
-                         ElementState = 1
-                        }}
+                        Steps = new List<Step>
+                        {
+                            new Step
+                            {
+                                Id = "000000000011111111111234",
+                                ElementState = 1
+                            }
+                        }
                     }
                 };
 
-                pm.ProcessActionResults(request);
+                PostProcessActionResponse response = pm.ProcessActionResults(request);
+                Assert.IsNotNull(response);
             }
         }
     }

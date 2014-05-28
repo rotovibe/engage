@@ -155,7 +155,7 @@ namespace Phytel.API.AppDomain.NG.Test.Stubs
 
         public DataDomain.Program.DTO.ProgramDetail SaveAction(DTO.IProcessActionRequest request, string actionId, DTO.Program p)
         {
-            throw new NotImplementedException();
+            return new ProgramDetail();
         }
 
         public void UpdateCohortPatientViewProblem(DataDomain.Patient.DTO.CohortPatientViewData cpvd, string patientId, Interface.IAppDomainRequest request)

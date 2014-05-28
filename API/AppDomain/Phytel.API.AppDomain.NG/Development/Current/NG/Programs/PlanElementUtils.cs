@@ -5,8 +5,8 @@ using Phytel.API.Interface;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using ServiceStack.Common.Extensions;
 using DD = Phytel.API.DataDomain.Program.DTO;
-using Phytel.API.Common;
 using Phytel.API.AppDomain.NG.Specifications;
 
 namespace Phytel.API.AppDomain.NG
@@ -39,7 +39,7 @@ namespace Phytel.API.AppDomain.NG
                 int completed = list.FindAll(new Completed<T>().IsSatisfiedBy).Count();
                 int count = list.Count;
 
-                if (completed.Equals(count))
+                if (completed == count)
                 {
                     result = true;
                 }
@@ -64,12 +64,26 @@ namespace Phytel.API.AppDomain.NG
             }
         }
 
-        public void SetEnabledStatusByPrevious<T>(List<T> actions, string assignToId)
+        /// <summary>
+        /// Sets the initial values for plan elements that get enabled by dependencies in the workflow
+        /// NIGHT-876
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="planElements">list</param>
+        /// <param name="assignToId">string</param>
+        public void SetEnabledStatusByPrevious<T>(List<T> planElements, string assignToId, bool pEnabled)
         {
             try
             {
-                if (actions != null)
-                    actions.ForEach(x => SetEnabledState(actions, x, assignToId));
+                if (planElements != null)
+                    planElements.ForEach(x =>
+                    {
+                        SetEnabledState(planElements, x, assignToId, pEnabled);
+                        if (x.GetType() == typeof (Module))
+                        {
+                            SetInitialActions(x, assignToId);
+                        }
+                    });
             }
             catch (Exception ex)
             {
@@ -77,17 +91,28 @@ namespace Phytel.API.AppDomain.NG
             }
         }
 
-        public void SetEnabledState<T>(List<T> list, T x, string assignToId)
+        public void SetInitialActions(object x, string assignToId)
+        {
+            // foreach action
+            if (((Module)x).Enabled == false ) return;
+            if (((Module) x).Actions == null) return;
+            var list = ((Module) x).Actions.Where(a => a.Enabled == true);
+            list.ForEach(z => SetInitialProperties(null, (PlanElement) z));
+        }
+
+        // NIGHT-876
+        public void SetEnabledState<T>(List<T> list, T x, string assignToId, bool pEnabled)
         {
             try
             {
                 if (list != null && x != null)
                 {
-                    IPlanElement pe = ((IPlanElement)Convert.ChangeType(x, typeof(T)));
+                    var pe = ((IPlanElement)Convert.ChangeType(x, typeof(T)));
 
                     if (!string.IsNullOrEmpty(pe.Previous))
                     {
                         var prevElem = list.Find(r => ((IPlanElement)r).Id == pe.Previous);
+                        
                         if (prevElem != null)
                         {
                             if (((IPlanElement) prevElem).Completed != true)
@@ -102,8 +127,9 @@ namespace Phytel.API.AppDomain.NG
                                     ((IPlanElement) x).Enabled = true;
                                 }
 
-                                if (((IPlanElement)x).AssignDate == null)
-                                    ((IPlanElement)x).AssignDate = DateTime.UtcNow;
+                                // add this to a parent enabled specification
+                                if (((IPlanElement) x).AssignDate == null)
+                                    ((IPlanElement) x).AssignDate = DateTime.UtcNow;
 
                                 ((IPlanElement) x).AssignById = DD.Constants.SystemContactId;
                                 ((IPlanElement) x).AssignToId = assignToId;
@@ -129,7 +155,7 @@ namespace Phytel.API.AppDomain.NG
                 {
                     list.ForEach(s =>
                     {
-                        if (s.StepTypeId.Equals(7))
+                        if (s.StepTypeId == 7)
                         {
                             s.Enabled = false;
                             OnProcessIdEvent(s);
@@ -169,9 +195,8 @@ namespace Phytel.API.AppDomain.NG
         {
             try
             {
-                if (r.ElementType.Equals(10))
+                if (r.ElementType == 10)
                 {
-                    // eligibility series
                     try
                     {
                         if (r.Tag == null)
@@ -187,23 +212,24 @@ namespace Phytel.API.AppDomain.NG
                     int state; // no = 1, yes = 2
                     var isNum = int.TryParse(r.Tag, out state);
                     if (!isNum) return;
+
                     // program is closed due to ineligibility
-                    if (state.Equals(1)) // not eligible
+                    switch (state)
                     {
-                        program.ElementState = (int)DataDomain.Program.DTO.ElementState.Completed; //5;
-                        program.StateUpdatedOn = System.DateTime.UtcNow;
-                        progAttr.Eligibility = 1;
-                        //progAttr.AttrEndDate = System.DateTime.UtcNow;
-                        program.AttrEndDate = System.DateTime.UtcNow;
-                    }
-                    else if (state.Equals(2)) // eligible
-                    {
-                        program.ElementState = (int) DataDomain.Program.DTO.ElementState.InProgress; //4;
-                        program.StateUpdatedOn = System.DateTime.UtcNow;
-                        progAttr.Eligibility = 2;
+                        case 1:
+                            program.ElementState = (int)DataDomain.Program.DTO.ElementState.Completed; //5;
+                            program.StateUpdatedOn = System.DateTime.UtcNow;
+                            progAttr.Eligibility = 1;
+                            program.AttrEndDate = System.DateTime.UtcNow;
+                            break;
+                        case 2:
+                            program.ElementState = (int) DataDomain.Program.DTO.ElementState.InProgress; //4;
+                            program.StateUpdatedOn = System.DateTime.UtcNow;
+                            progAttr.Eligibility = 2;
+                            break;
                     }
                 }
-                else if (r.ElementType.Equals(11))
+                else if (r.ElementType == 11 )
                 {
                     // eligibility reason
                     try
@@ -218,7 +244,7 @@ namespace Phytel.API.AppDomain.NG
                         throw new Exception("AD:SetProgramAttributes()::IneligibleReason" + ex.Message, ex.InnerException);
                     }
                 }
-                else if (r.ElementType.Equals(12))
+                else if (r.ElementType == 12)
                 {
                     try
                     {
@@ -233,7 +259,7 @@ namespace Phytel.API.AppDomain.NG
                         throw new Exception("AD:SetProgramAttributes()::ElementState" + ex.Message, ex.InnerException);
                     }
                 }
-                else if (r.ElementType.Equals(13))
+                else if (r.ElementType == 13)
                 {
                     try
                     {
@@ -261,12 +287,12 @@ namespace Phytel.API.AppDomain.NG
                         throw new Exception("AD:SetProgramAttributes()::StartDate" + ex.Message, ex.InnerException);
                     }
                 }
-                else if (r.ElementType.Equals(14))
+                else if (r.ElementType == 14)
                 {
                     //progAttr.AttrEndDate = System.DateTime.UtcNow;
                     program.AttrEndDate = System.DateTime.UtcNow;
                 }
-                else if (r.ElementType.Equals(15))
+                else if (r.ElementType == 15)
                 {
                     try
                     {
@@ -280,7 +306,7 @@ namespace Phytel.API.AppDomain.NG
                         throw new Exception("AD:SetProgramAttributes()::Enrollment" + ex.Message, ex.InnerException);
                     }
                 }
-                else if (r.ElementType.Equals(16))
+                else if (r.ElementType == 16)
                 {
 
                     try
@@ -295,7 +321,7 @@ namespace Phytel.API.AppDomain.NG
                         throw new Exception("AD:SetProgramAttributes()::OptOut" + ex.Message, ex.InnerException);
                     }
                 }
-                //else if (r.ElementType.Equals(17))
+                //else if (r.ElementType == 17)
                 //{
                 //    // do something with opt out
                 //    try
@@ -310,12 +336,12 @@ namespace Phytel.API.AppDomain.NG
                 //        throw new Exception("AD:SetProgramAttributes()::OptOutReason" + ex.Message, ex.InnerException);
                 //    }
                 //}
-                //else if (r.ElementType.Equals(18))
+                //else if (r.ElementType == 18)
                 //{
                 //    // do something with opt out 
                 //    progAttr.OptOutDate = System.DateTime.UtcNow;
                 //}
-                else if (r.ElementType.Equals(19))
+                else if (r.ElementType == 19)
                 {
                     try
                     {
@@ -329,7 +355,7 @@ namespace Phytel.API.AppDomain.NG
                         throw new Exception("AD:SetProgramAttributes()::GraduatedFlag" + ex.Message, ex.InnerException);
                     }
                 }
-                else if (r.ElementType.Equals(20))
+                else if (r.ElementType == 20)
                 {
                     try
                     {
@@ -343,7 +369,7 @@ namespace Phytel.API.AppDomain.NG
                         throw new Exception("AD:SetProgramAttributes()::Locked" + ex.Message, ex.InnerException);
                     }
                 }
-                //else if (r.ElementType.Equals(21))
+                //else if (r.ElementType == 21)
                 //{
                 //    try
                 //    {
@@ -370,9 +396,11 @@ namespace Phytel.API.AppDomain.NG
             {
                 foreach (Module m in program.Modules)
                 {
-                    if (m.Id.ToString().Equals(p))
+                    if (m.Id.Equals(p))
                     {
-                        SetInitialProperties(program, m);
+                        SetInitialProperties(program.AssignToId, m);
+                        var list = m.Actions.Where(a => a.Enabled == true);
+                        list.ForEach(a => { if (a.Enabled) SetInitialProperties(program.AssignToId, a); });
                         OnProcessIdEvent(m);
                     }
                     else
@@ -395,9 +423,9 @@ namespace Phytel.API.AppDomain.NG
                 {
                     foreach (Actions a in m.Actions)
                     {
-                        if (a.Id.ToString().Equals(p))
+                        if (a.Id.Equals(p))
                         {
-                            SetInitialProperties(program, a);
+                            SetInitialProperties(program.AssignToId, a);
                             OnProcessIdEvent(a);
                         }
                         else
@@ -421,9 +449,9 @@ namespace Phytel.API.AppDomain.NG
                 {
                     foreach (Step s in a.Steps)
                     {
-                        if (s.Id.ToString().Equals(p))
+                        if (s.Id.Equals(p))
                         {
-                            SetInitialProperties(program, s);
+                            SetInitialProperties(program.AssignToId, s);
                             OnProcessIdEvent(s);
                         }
                     }
@@ -435,14 +463,14 @@ namespace Phytel.API.AppDomain.NG
             }
         }
 
-        public void SetInitialProperties(Program program, IPlanElement m)
+        public void SetInitialProperties(string assignToId, IPlanElement m)
         {
             try
             {
                 m.Enabled = true;
                 m.StateUpdatedOn = System.DateTime.UtcNow;
                 m.AssignDate = System.DateTime.UtcNow;
-                m.AssignToId = program.AssignToId;
+                m.AssignToId = assignToId;
                 m.ElementState = (int)DD.ElementState.NotStarted; // 2;
                 m.AssignById = DD.Constants.SystemContactId;
             }
@@ -530,7 +558,7 @@ namespace Phytel.API.AppDomain.NG
                     }
                 });
 
-                if (modulesCompleted.Equals(p.Modules.Count))
+                if (modulesCompleted == p.Modules.Count )
                 {
                     result = true;
                 }
