@@ -586,11 +586,6 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             {
                 if (s.SelectedResponseId != null)
                 {
-                    if (s.SelectedResponseId.ToString().Equals("52d241a31e601521285e97e8") && kv.Key.ToString().Equals("52d241a31e601521285e97e8"))
-                    {
-                        var test = "test";
-                    }
-
                     // need to cast to non nullable type to compare
                     ObjectId sObjId = (ObjectId)s.SelectedResponseId;
 
