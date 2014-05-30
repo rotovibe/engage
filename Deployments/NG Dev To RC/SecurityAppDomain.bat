@@ -6,7 +6,7 @@ set hr=%TIME: =0%
 set hr=%hr:~0,2%
 
 set hrMin=%TIME: =0%
-set hrMin=%hrMin:~0,2%
+set hrMin=%hrMin:~3,2%
 
 set branchDate=%mydate%_%hr%-%hrMin%
 
