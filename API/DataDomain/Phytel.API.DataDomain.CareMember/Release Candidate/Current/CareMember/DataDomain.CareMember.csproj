@@ -64,7 +64,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ICareMemberDataManager.cs" />
     <Compile Include="ICareMemberRepository.cs" />
+    <Compile Include="ICareMemberRepositoryFactory.cs" />
     <Compile Include="MongoDB\DTO\MECareMember.cs" />
     <Compile Include="MongoDB\Repository\MongoCareMemberRepository.cs" />
     <Compile Include="MongoDB\CareMemberMongoContext.cs" />
@@ -80,6 +82,10 @@
     <ProjectReference Include="..\..\..\..\..\Interfaces\Release Candidate\Current\Phytel.API.Interface\Phytel.API.Interface.csproj">
       <Project>{abe948fb-247e-4955-b3ab-b7c93e10a542}</Project>
       <Name>Phytel.API.Interface</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\Phytel.API.DataDomain.LookUp\Development\Current\LookUp.DTO\DataDomain.LookUp.DTO.csproj">
+      <Project>{4885fe36-03db-47b7-be7e-33260943a9dc}</Project>
+      <Name>DataDomain.LookUp.DTO</Name>
     </ProjectReference>
     <ProjectReference Include="..\CareMember.DTO\DataDomain.CareMember.DTO.csproj">
       <Project>{b65577e7-60a6-4553-b1b9-38d6074ac560}</Project>
