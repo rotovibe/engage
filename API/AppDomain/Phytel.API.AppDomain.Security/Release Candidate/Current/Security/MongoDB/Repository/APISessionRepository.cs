@@ -169,18 +169,18 @@ namespace Phytel.API.AppDomain.Security
                                 _objectContext.APISessions.Collection.Save(session);
                             }
                             else
-                                throw new UnauthorizedAccessException("Invalid Security Authorization Request");
+                                throw new UnauthorizedAccessException("SD:APISessionRepository:Validate():Invalid Security Authorization Request");
 
                             return response;
                         }
                         else
-                            throw new UnauthorizedAccessException("Security Token does not exist");
+                            throw new UnauthorizedAccessException("SD:APISessionRepository:Validate():Security Token does not exist");
                     }
                     else
-                        throw new UnauthorizedAccessException("Security Token is not in correct format.");
+                        throw new UnauthorizedAccessException("SD:APISessionRepository:Validate():Security Token is not in correct format.");
                 }
                 else
-                    throw new UnauthorizedAccessException("Request is invalid");
+                    throw new UnauthorizedAccessException("SD:APISessionRepository:Validate():Request is invalid");
             }
             catch (Exception)
             {
