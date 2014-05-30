@@ -9,7 +9,6 @@ using MongoDB.Driver;
 using MongoDB.Driver.Builders;
 using MongoDB.Bson;
 using Phytel.API.DataDomain.Action;
-using Phytel.API.Common;
 
 namespace Phytel.API.DataDomain.Action
 {
@@ -86,12 +85,35 @@ namespace Phytel.API.DataDomain.Action
                         Description = meAction.Description,
                         CompletedBy = meAction.CompletedBy.ToString(),
                         Objectives = objectiveIDs,
-                        Status = Helper.ToFriendlyString(meAction.Status)
+                        Status = toFriendlyString(meAction.Status)
                     };
                     actionResponse.Action = action;
                 }
             }
             return actionResponse;
+        }
+
+        /// <summary>
+        /// Converts the name of the Enum to a friendly name that can be shown on the UI
+        /// </summary>
+        /// <param name="s">Status enum object</param>
+        /// <returns>friendly string</returns>
+        private string toFriendlyString(Status s)
+        {
+            switch (s)
+            {
+                case Status.Active:
+                    return "Active";
+                case Status.Inactive:
+                    return "Inactive";
+                case Status.InReview:
+                    return "In Review";
+                case Status.Met:
+                    return "Met";
+                case Status.NotMet:
+                    return "Not Met";
+            }
+            return null;
         }
 
         public Tuple<string, IEnumerable<object>> Select(Interface.APIExpression expression)
@@ -104,7 +126,7 @@ namespace Phytel.API.DataDomain.Action
             throw new NotImplementedException();
         }
 
-        public GetAllActionsDataResponse SelectAll(double versionNumber, Common.Status status)
+        public GetAllActionsDataResponse SelectAll(double versionNumber, Status status)
         {
             GetAllActionsDataResponse response = new GetAllActionsDataResponse()
             {
