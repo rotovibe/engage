@@ -1185,25 +1185,36 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
         //    }
         //}
 
-        public static List<MEPatientProgramResponse> RecurseAndStoreResponseObjects(MEPatientProgram prog, string contractNumber, string userId)
+        public static List<MEPatientProgramResponse> ExtractMEPatientProgramResponses(MEPatientProgram prog, string contractNumber, string userId)
         {
             try
             {
                 List<MEPatientProgramResponse> ppr = new List<MEPatientProgramResponse>();
                 foreach (Module m in prog.Modules)
                 {
-                    foreach (Action a in m.Actions)
+                    if(m.Actions != null)
                     {
-                        foreach (Step s in a.Steps)
+                        foreach (Action a in m.Actions)
                         {
-                            foreach (MEPatientProgramResponse r in s.Responses)
+                            if(a.Steps != null)
                             {
-                                r.DeleteFlag = false;
-                                r.RecordCreatedBy = ObjectId.Parse(userId);
-                                r.RecordCreatedOn = DateTime.UtcNow;
+                                foreach (Step s in a.Steps)
+                                {
+                                    if(s.Responses != null)
+                                    {
+                                        foreach (MEPatientProgramResponse r in s.Responses)
+                                        {
+                                            r.DeleteFlag = false;
+                                            r.RecordCreatedBy = ObjectId.Parse(userId);
+                                            r.RecordCreatedOn = DateTime.UtcNow;
 
-                                if (!ppr.Contains(r))
-                                    ppr.Add(r);
+                                            if (!ppr.Contains(r))
+                                                ppr.Add(r);
+                                        }
+                                        // Remove responses from PatientProgram collection.
+                                        s.Responses = null;
+                                    }
+                                }
                             }
                         }
                     }

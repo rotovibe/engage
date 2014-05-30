@@ -403,7 +403,10 @@ namespace Phytel.API.AppDomain.NG
                     if (m.Id.Equals(p))
                     {
                         SetInitialProperties(program.AssignToId, m);
-                        var list = m.Actions.Where(a => a.Enabled == true);
+                        var list = m.Actions.Where(a => a.Enabled == true
+                                                        && a.ElementState != (int) DD.ElementState.Completed
+                                                        && a.ElementState != (int) DD.ElementState.InProgress); // create rule specification
+
                         list.ForEach(a => { if (a.Enabled) SetInitialProperties(program.AssignToId, a); });
                         OnProcessIdEvent(m);
                     }
@@ -471,11 +474,14 @@ namespace Phytel.API.AppDomain.NG
         {
             try
             {
+                // NIGHT-835
+                if (m.AssignDate == null)
+                    m.AssignDate = System.DateTime.UtcNow;
+
                 m.Enabled = true;
                 m.StateUpdatedOn = System.DateTime.UtcNow;
-                m.AssignDate = System.DateTime.UtcNow;
                 m.AssignToId = assignToId;
-                m.ElementState = (int)DD.ElementState.NotStarted; // 2;
+                m.ElementState = (int) DD.ElementState.NotStarted; // 2;
                 m.AssignById = DD.Constants.SystemContactId;
             }
             catch (Exception ex)

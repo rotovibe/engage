@@ -174,7 +174,7 @@ namespace Phytel.API.DataDomain.Program.Test.Stubs
             throw new NotImplementedException();
         }
 
-        public List<MEPatientProgramResponse> InitializePatientProgramAssignment(DTO.PutProgramToPatientRequest request, MEPatientProgram nmePP)
+        public void InitializePatientProgramAssignment(DTO.PutProgramToPatientRequest request, MEPatientProgram nmePP)
         {
             throw new NotImplementedException();
         }

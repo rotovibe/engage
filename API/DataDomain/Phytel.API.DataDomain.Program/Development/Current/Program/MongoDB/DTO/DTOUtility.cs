@@ -157,7 +157,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             }
         }
 
-        private  List<Action> GetClonedActions(List<Action> list, string contractNumber, string userId, List<ObjectId> sil, bool pEnabled)
+        public  List<Action> GetClonedActions(List<Action> list, string contractNumber, string userId, List<ObjectId> sil, bool pEnabled)
         {
             try
             {
@@ -200,7 +200,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
                         if (ac.Enabled && pEnabled)
                         {
                             ac.AssignedBy = ObjectId.Parse(Constants.SystemContactId); // NIGHT-876
-                            //ac.AssignedOn = System.DateTime.UtcNow;
+                            ac.AssignedOn = System.DateTime.UtcNow; // NIGHT-835
                             //ac.AssignedTo = cmid;
                             //ac.StateUpdatedOn = DateTime.UtcNow;
                         }
@@ -1528,17 +1528,13 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             }
         }
 
-        public  List<MEPatientProgramResponse> InitializePatientProgramAssignment(PutProgramToPatientRequest request, MEPatientProgram nmePP)
+        public  void InitializePatientProgramAssignment(PutProgramToPatientRequest request, MEPatientProgram nmePP)
         {
             try
             {
-                List<MEPatientProgramResponse> pprs = new List<MEPatientProgramResponse>();
                 // update to new ids and their references
                 Dictionary<ObjectId, ObjectId> IdsList = new Dictionary<ObjectId, ObjectId>();
                 DTOUtils.RecurseAndReplaceIds(nmePP.Modules, IdsList);
-                pprs = DTOUtils.RecurseAndStoreResponseObjects(nmePP, request.ContractNumber, request.UserId);
-                //DTOUtils.RecurseAndSaveResponseObjects(nmePP, request.ContractNumber, request.UserId);
-                return pprs;
             }
             catch (Exception ex)
             {

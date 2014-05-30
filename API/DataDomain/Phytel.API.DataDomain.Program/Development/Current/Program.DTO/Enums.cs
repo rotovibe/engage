@@ -49,7 +49,7 @@ public enum SpawnElementTypeCode
         Graduated = 19,
         Locked = 20,
         //EligibilityOverride = 21,
-        Diabetes = 101
+        Problem = 101
     }
 
     public enum SelectType

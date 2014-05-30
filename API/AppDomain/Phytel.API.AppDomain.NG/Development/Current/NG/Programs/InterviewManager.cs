@@ -43,7 +43,7 @@ namespace Phytel.API.AppDomain.NG
 
                 if (action.Completed)
                 {
-                    // pre-process
+                    // 1) pre-process
                     // set program starting date
                     if (IsInitialAction.IsSatisfiedBy(p))
                     {
@@ -61,7 +61,7 @@ namespace Phytel.API.AppDomain.NG
                         mod.StateUpdatedOn = DateTime.UtcNow;
                     }
 
-                    // set in progress state
+                    // 2) set in progress state
                     //new ResponseSpawnAllowed<Step>().IsSatisfiedBy(s)
                     if (PEUtils.IsActionInitial(p))
                         //if (new IsActionInitialSpecification<Program>().IsSatisfiedBy(p))
@@ -71,21 +71,22 @@ namespace Phytel.API.AppDomain.NG
                         p.StateUpdatedOn = DateTime.UtcNow;
                     }
 
-                    // insert action update
+                    // 3) insert action update
                     NGUtils.UpdateProgramAction(action, p);
 
                     //// create a responsibility chain to process each elemnt in the hierachy
                     ProgramPlanProcessor pChain = InitializeProgramChain();
 
-                    //// process steps in action
+                    // 4)  process steps
                     action.Steps.ForEach(
                         s =>
                             pChain.ProcessWorkflow((IPlanElement) s, p, request.UserId, request.PatientId, action,
                                 request));
 
-                    //// process action
+                    // 5) process action
                     pChain.ProcessWorkflow((IPlanElement) action, p, request.UserId, request.PatientId, action, request);
 
+                    // 6) process module
                     if (mod != null)
                     {
                         // set enabled status for action dependencies
@@ -95,19 +96,21 @@ namespace Phytel.API.AppDomain.NG
                         AddUniquePlanElementToProcessedList(mod);
                     }
 
-                    // set module visibility for modules
+                    // post processing //
+                    // 7) set module visibility for modules
                     PEUtils.SetEnabledStatusByPrevious(p.Modules, p.AssignToId, p.Enabled);
 
-                    // evaluate program status
+                    // 8) evaluate program status
                     if (PEUtils.IsProgramCompleted(p, request.UserId))
                     {
                         p.Completed = true;
                         pChain.ProcessWorkflow((IPlanElement) p, p, request.UserId, request.PatientId, action, request);
                     }
 
-                    // set action state to completed
+                    // 9) set action state to completed
                     action.ElementState = (int) ElementState.Completed;
 
+                    // 10) set action state
                     AddUniquePlanElementToProcessedList(action);
                 }
                 else

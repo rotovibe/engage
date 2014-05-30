@@ -122,7 +122,7 @@ namespace Phytel.API.AppDomain.NG.Tests
 
             [TestMethod()]
             [TestCategory("NIGHT-950")]
-            [TestProperty("TFS", "11456")]
+            [TestProperty("TFS", "11746")]
             [TestProperty("Layer", "AD.PlanElementUtils")]
             public void Get_Assigned_To_Null()
             {
@@ -134,6 +134,40 @@ namespace Phytel.API.AppDomain.NG.Tests
                 peUtil.SetInitialProperties(assignedTO, mod);
 
                 Assert.AreEqual(assignedTO, mod.AssignToId);
+            }
+
+
+            [TestMethod()]
+            [TestCategory("NIGHT-835")]
+            [TestProperty("TFS", "11456")]
+            [TestProperty("Layer", "AD.PlanElementUtils")]
+            public void Set_Assigned_Date_Null()
+            {
+                string assignedTO = null;
+                IPlanElementUtils peUtil = new PlanElementUtils { };
+                AD.Module mod = new AD.Module();
+                AD.Program prog = new AD.Program { AssignToId = assignedTO };
+
+                peUtil.SetInitialProperties(assignedTO, mod);
+
+                Assert.AreEqual(DateTime.UtcNow.Date, ((DateTime)mod.AssignDate).Date);
+            }
+
+            [TestMethod()]
+            [TestCategory("NIGHT-835")]
+            [TestProperty("TFS", "11456")]
+            [TestProperty("Layer", "AD.PlanElementUtils")]
+            public void Set_Assigned_Date_Already_Assigned()
+            {
+                string assignedTO = null;
+                IPlanElementUtils peUtil = new PlanElementUtils { };
+                DateTime assigned = DateTime.UtcNow;
+                AD.Actions act = new AD.Actions{ AssignDate = assigned };
+                AD.Program prog = new AD.Program { AssignToId = assignedTO };
+
+                peUtil.SetInitialProperties(assignedTO, act);
+
+                Assert.AreEqual(assigned.Date, ((DateTime)act.AssignDate).Date);
             }
         }
 
@@ -236,6 +270,45 @@ namespace Phytel.API.AppDomain.NG.Tests
                 pUtils.SetEnabledStatusByPrevious(mods, "123456789012345678901234", true);
                 Assert.IsTrue(mods[1].Enabled);
             }
+
+            [TestMethod()]
+            [TestCategory("NIGHT-835")]
+            [TestProperty("TFS", "11759")]
+            public void Set_Status_As_Enabled_AssignDate()
+            {
+                IPlanElementUtils pUtils = new PlanElementUtils();
+
+                var mods = new List<AD.PlanElement>
+                {
+                    new AD.PlanElement {Id = "000006789012345678901234", Completed = true},
+                    new AD.PlanElement {Previous = "000006789012345678901234"}
+                };
+
+                pUtils.SetEnabledStatusByPrevious(mods, "123456789012345678901234", true);
+                Assert.IsTrue(mods[1].Enabled);
+            }
+
+            [TestMethod()]
+            [TestCategory("NIGHT-835")]
+            [TestProperty("TFS", "11759")]
+            public void Set_As_Enabled_Module_AssignDate()
+            {
+                IPlanElementUtils pUtils = new PlanElementUtils();
+
+                var mods = new List<AD.Module>
+                {
+                    new AD.Module {Id = "000006789012345678901234", Completed = true},
+                    new AD.Module
+                    {
+                        Enabled = true,
+                        Previous = "000006789012345678901234",
+                        Actions = new List<AD.Actions> {new AD.Actions { Enabled = true}}
+                    }
+                };
+
+                pUtils.SetEnabledStatusByPrevious(mods, "123456789012345678901234", true);
+                Assert.AreEqual(DateTime.UtcNow.Date, ((DateTime)mods[1].Actions[0].AssignDate).Date);
+            }
         }
 
         [TestClass()]
@@ -307,6 +380,38 @@ namespace Phytel.API.AppDomain.NG.Tests
                 Assert.IsNotNull(prog.Modules[0].Actions[0].AssignById);
             }
 
+            [TestMethod()]
+            [TestCategory("NIGHT-835")]
+            [TestProperty("TFS", "11759")]
+            public void Set_One_Action_Enabled_AssignDate()
+            {
+                IPlanElementUtils pUtils = new PlanElementUtils();
+                string modId = ObjectId.GenerateNewId().ToString();
+                AD.Program prog = new AD.Program
+                {
+                    Modules = new List<AD.Module>
+                    {
+                        new AD.Module
+                        {
+                            Id = modId,
+                            Actions = new List<AD.Actions>
+                            {
+                                new AD.Actions
+                                {
+                                    Enabled = true
+                                },
+                                new AD.Actions
+                                {
+                                    Enabled = false
+                                }
+                            }
+                        }
+                    }
+                };
+
+                pUtils.SetElementEnabledState(modId, prog);
+                Assert.AreEqual(DateTime.UtcNow.Date, ((DateTime)prog.Modules[0].Actions[0].AssignDate).Date);
+            }
         }
 
         [TestClass()]
@@ -417,6 +522,28 @@ namespace Phytel.API.AppDomain.NG.Tests
                 pUtils.SetInitialActions(mod, "123456789012345678901234");
 
                 Assert.IsNotNull(mod.Actions[0].AssignById);
+            }
+
+
+            [TestMethod()]
+            [TestCategory("NIGHT-835")]
+            [TestProperty("TFS", "11759")]
+            public void Set_One_Action_Assign_Date()
+            {
+                IPlanElementUtils pUtils = new PlanElementUtils();
+                AD.Module mod = new AD.Module
+                {
+                    Enabled = true,
+                    Actions = new List<AD.Actions>
+                    {
+                        new AD.Actions {Enabled = true},
+                        new AD.Actions {Enabled = false}
+                    }
+                };
+
+                pUtils.SetInitialActions(mod, "123456789012345678901234");
+
+                Assert.AreEqual(DateTime.UtcNow.Date, ((DateTime) mod.Actions[0].AssignDate).Date);
             }
         }
     }
