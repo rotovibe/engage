@@ -1,13 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Phytel.API.Common.Audit;
 using Phytel.API.DataAudit;
-using Phytel.Framework.ASE.Process;
-//using Phytel.API.Audit.DataAudit;
-//using Audit.DataAudit.Service;
+using Phytel.API.DataDomain.ASE.Common.Enums;
+using Phytel.API.DataDomain.ASE.DTO.Message;
+using Phytel.ASE.Core;
 
 namespace Audit.Tasks
 {
@@ -53,7 +49,7 @@ namespace Audit.Tasks
                 string messageQueue = @".\private$\failure";
 
 
-                QueueMessage newMessage = new QueueMessage(Phytel.Framework.ASE.Data.Common.ASEMessageType.Process, messageQueue);
+                QueueMessage newMessage = new QueueMessage(ASEMessageType.Process, messageQueue);
                 newMessage.Body = xmlBody;
 
                 MessageQueueHelper.SendMessage(@messageQueue, newMessage, "TestFailureType");
