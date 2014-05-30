@@ -109,7 +109,6 @@
     <Compile Include="PutProgramAttributesRequest.cs" />
     <Compile Include="PutUpdateProgramAttributesRequest.cs" />
     <Compile Include="PutProgramAttributesResponse.cs" />
-    <Compile Include="PostMongoProceduresRequest.cs" />
     <Compile Include="PutUpdateResponseRequest.cs" />
     <Compile Include="PutUpdateProgramAttributesResponse.cs" />
     <Compile Include="PostMongoProceduresResponse.cs" />
