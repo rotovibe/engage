@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 using System.Threading;
-using System.Web;
 using MongoDB.Bson;
 using MongoDB.Driver;
 using MongoDB.Driver.Builders;
@@ -16,13 +15,13 @@ using Phytel.Services;
 
 namespace Phytel.API.DataAudit
 {
-    public class AuditHelper
+    public class AuditUtil : IAuditUtil
     {
         /// <summary>
         /// Gets an auditdata record for the current context
         /// </summary>
         /// <returns></returns>
-        public static AuditData GetAuditLog(int auditTypeId, IAppDomainRequest request, string sqlUserID, List<string> patientids, string browser, string userIPAddress, string methodCalledFrom, bool isError = false)
+        public AuditData GetAuditLog(int auditTypeId, IAppDomainRequest request, string sqlUserID, List<string> patientids, string browser, string userIPAddress, string methodCalledFrom, bool isError = false)
         {
             ///{Version}/{ContractNumber}/patient/{PatientID}
             AuditData auditLog = new AuditData()
@@ -50,7 +49,7 @@ namespace Phytel.API.DataAudit
             return auditLog;
         }
 
-        private static DataAudit GetDataAuditLog(string userId, string collectionName, string entityId, string entityKeyField, DataAuditType auditType, string contractNumber)
+        public DataAudit GetDataAuditLog(string userId, string collectionName, string entityId, string entityKeyField, DataAuditType auditType, string contractNumber)
         {
             DataAudit auditLog = new DataAudit()
             {
@@ -65,7 +64,7 @@ namespace Phytel.API.DataAudit
             return auditLog;
         }
 
-        private static string GetMongoEntity(string contract, string collectionName, string entityId, string entityKeyField)
+        public string GetMongoEntity(string contract, string collectionName, string entityId, string entityKeyField)
         {
             try
             {
@@ -81,7 +80,7 @@ namespace Phytel.API.DataAudit
             }
         }
 
-        private static int GetContractID(string contractNumber)
+        public int GetContractID(string contractNumber)
         {
             int id = 0;
 
@@ -99,7 +98,7 @@ namespace Phytel.API.DataAudit
             return id;
         }
 
-        public static int GetAuditTypeID(string callingMethod)
+        public int GetAuditTypeID(string callingMethod)
         {
             int audittypeid = 0;
 
@@ -202,17 +201,17 @@ namespace Phytel.API.DataAudit
             return audittypeid;
         }
 
-        public static string FindMethodType(string returnTypeName)
+        public string FindMethodType(string returnTypeName)
         {
             return returnTypeName.ToString().Replace("Request", "").Replace("Response", "");
         }
 
-        public static void LogDataAudit(string userId, string collectionName, string entityId, DataAuditType auditType, string contractNumber)
+        public void LogDataAudit(string userId, string collectionName, string entityId, DataAuditType auditType, string contractNumber)
         {
             AuditHelper.LogDataAudit(userId, collectionName, entityId, "_id", auditType, contractNumber);
         }
 
-        public static void LogDataAudit(string userId, string collectionName, List<string> entityIds, DataAuditType auditType, string contractNumber)
+        public void LogDataAudit(string userId, string collectionName, List<string> entityIds, DataAuditType auditType, string contractNumber)
         {
             new Thread(() =>
             {
@@ -223,7 +222,7 @@ namespace Phytel.API.DataAudit
             }).Start();
         }
 
-        public static void LogDataAuditNoThread(string userId, string collectionName, string entityId, string entityKeyField, DataAuditType auditType, string contractNumber)
+        public void LogDataAuditNoThread(string userId, string collectionName, string entityId, string entityKeyField, DataAuditType auditType, string contractNumber)
         {
             //hand to a new thread here, and immediately return this thread to caller
             try
@@ -250,7 +249,7 @@ namespace Phytel.API.DataAudit
             return;
         }
 
-        public static void LogDataAudit(string userId, string collectionName, string entityId, string entityKeyField, DataAuditType auditType, string contractNumber)
+        public void LogDataAudit(string userId, string collectionName, string entityId, string entityKeyField, DataAuditType auditType, string contractNumber)
         {
             //hand to a new thread here, and immediately return this thread to caller
             try
@@ -284,7 +283,7 @@ namespace Phytel.API.DataAudit
 
         }
 
-        public static void LogAuditData(IAppDomainRequest request, string sqlUserID, List<string> patientids, HttpRequest webreq, string returnTypeName)
+        public void LogAuditData(IAppDomainRequest request, string sqlUserID, List<string> patientids, string browser, string hostAddress, string returnTypeName)
         {
             //hand to a new thread here, and immediately return this thread to caller
             try
@@ -294,27 +293,16 @@ namespace Phytel.API.DataAudit
                 {
                     try
                     {
-                        string browserType = "Unknown browser";
-                        string userHostAddress = "Unknown IP";
-                        if (webreq != null)
-                        {
-                            try
-                            {
-                                browserType = webreq.Browser.Type;
-                                userHostAddress = webreq.UserHostAddress;
-                            }
-                            catch (Exception)
-                            {
-                            }
-                        }
-                        AuditAsynch(request, sqlUserID, patientids, browserType, userHostAddress, returnTypeName);
+                         AuditAsynch(request, sqlUserID, patientids, browser, hostAddress, returnTypeName);
                     }
                     catch (Exception newthreadex)
                     {
                         //if there's an error from the new thread, handle it here, so we don't black the main thread
+
                         string aseAPIURL = ConfigurationManager.AppSettings.Get("ASEAPI");
                         int procID = int.Parse(ConfigurationManager.AppSettings.Get("ASEProcessID"));
                         Log.LogError(aseAPIURL, procID, newthreadex, LogErrorCode.Error, LogErrorSeverity.Medium);
+
                     }
 
                 }).Start();
@@ -331,7 +319,7 @@ namespace Phytel.API.DataAudit
 
         }
 
-        private static void AuditAsynch(IAppDomainRequest request, string sqlUserID, List<string> patientids, string browser, string userIPAddress, string returnTypeName)
+        public void AuditAsynch(IAppDomainRequest request, string sqlUserID, List<string> patientids, string browser, string userIPAddress, string returnTypeName)
         {
             //throw new SystemException("test error in new thread starts");
 
@@ -341,14 +329,12 @@ namespace Phytel.API.DataAudit
             AuditDispatcher.WriteAudit(data);
         }
 
-        private static void DataAuditAsynch(string userId, string collectionName, string entityId, string entityKeyField, DataAuditType auditType, string contractNumber)
+        public void DataAuditAsynch(string userId, string collectionName, string entityId, string entityKeyField, DataAuditType auditType, string contractNumber)
         {
             //throw new SystemException("test error in new thread starts");
 
             DataAudit data = GetDataAuditLog(userId, collectionName, entityId, entityKeyField, auditType, contractNumber);
             AuditDispatcher.WriteAudit(data, string.Format("{0}_{1}", data.Type, data.EntityType));
         }
-
-
     }
 }

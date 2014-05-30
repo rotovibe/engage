@@ -8,9 +8,9 @@ using Phytel.ASE.Core;
 
 namespace Phytel.API.Common
 {
-    public static class Helper
+    public class Helpers : IHelpers
     {
-        public static string BuildURL(string baseURL, string userId)
+        public string BuildURL(string baseURL, string userId)
         {
             string returnURL = baseURL;
             if (returnURL.Contains("?"))
@@ -24,7 +24,7 @@ namespace Phytel.API.Common
         /// </summary>
         /// <param name="objectIds">list of objectIds</param>
         /// <returns>list of strings</returns>
-        public static List<string> ConvertToStringList(List<ObjectId> objectIds)
+        public List<string> ConvertToStringList(List<ObjectId> objectIds)
         {
             List<string> stringList = null;
             if (objectIds != null && objectIds.Count != 0)
@@ -43,7 +43,7 @@ namespace Phytel.API.Common
         /// </summary>
         /// <param name="objectIds">list of strings</param>
         /// <returns>list of ObjectIds</returns>
-        public static List<ObjectId> ConvertToObjectIdList(List<string> stringList)
+        public List<ObjectId> ConvertToObjectIdList(List<string> stringList)
         {
             List<ObjectId> objectIdList = null;
             if (stringList != null && stringList.Count > 0)
@@ -66,7 +66,7 @@ namespace Phytel.API.Common
         /// </summary>
         /// <param name="p">object to be converted</param>
         /// <returns>converted object.</returns>
-        public static object ConvertToAppropriateType(object p)
+        public object ConvertToAppropriateType(object p)
         {
             string type = p.GetType().ToString();
             switch (type)
@@ -99,7 +99,7 @@ namespace Phytel.API.Common
         /// </summary>
         /// <param name="p">object to be converted.</param>
         /// <returns>List of BsonValue</returns>
-        public static List<BsonValue> ConvertToBsonValueList(object p)
+        public List<BsonValue> ConvertToBsonValueList(object p)
         {
             List<BsonValue> bsonValues = null;
             if(p != null)
@@ -136,7 +136,7 @@ namespace Phytel.API.Common
             return bsonValues;
         }
 
-        public static void LogException(int processId, Exception ex)
+        public void LogException(int processId, Exception ex)
         {
             string aseAPIURL = ConfigurationManager.AppSettings.Get("ASEAPI");
             Log.LogError(aseAPIURL, processId, ex, LogErrorCode.Error, LogErrorSeverity.High);
