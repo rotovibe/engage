@@ -96,4 +96,13 @@ namespace Phytel.API.DataDomain.Module.MongoDB.DTO
         [BsonElement(IDProperty)]
         public string ID { get; set; }
     }
+
+    public enum Status
+    {
+        Active = 1,
+        Inactive = 2,
+        InReview = 3,
+        Met = 4,
+        NotMet = 5
+    } 
 }
