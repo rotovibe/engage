@@ -5,28 +5,54 @@ using Phytel.API.DataDomain.Contact.DTO;
 using Phytel.API.Common.Format;
 using System.Configuration;
 using System.Web;
+using Phytel.API.Common;
 
 namespace Phytel.API.DataDomain.Contact.Service
 {
     public class ContactService : ServiceStack.ServiceInterface.Service
     {
-        public GetContactDataResponse Get(GetContactDataRequest request)
+        public IContactDataManager Manager { get; set; }
+        public IHelpers Helpers { get; set; }
+        public ICommonFormatterUtil CommonFormat { get; set; }
+
+        public GetContactByPatientIdDataResponse Get(GetContactByPatientIdDataRequest request)
         {
-            GetContactDataResponse response = new GetContactDataResponse();
+            GetContactByPatientIdDataResponse response = new GetContactByPatientIdDataResponse();
             response.Version = request.Version;
             try
             {
                 if (string.IsNullOrEmpty(request.UserId))
                     throw new UnauthorizedAccessException("ContactDD:Get()::Unauthorized Access");
 
-                response.Contact = ContactDataManager.GetContactByPatientId(request);
+                response.Contact = Manager.GetContactByPatientId(request);
             }
             catch (Exception ex)
             {
-                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+                CommonFormat.FormatExceptionResponse(response, base.Response, ex);
 
                 string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
-                Common.Helper.LogException(int.Parse(aseProcessID), ex);
+                Helpers.LogException(int.Parse(aseProcessID), ex);
+            }
+            return response;
+        }
+
+        public GetContactByContactIdDataResponse Get(GetContactByContactIdDataRequest request)
+        {
+            GetContactByContactIdDataResponse response = new GetContactByContactIdDataResponse();
+            response.Version = request.Version;
+            try
+            {
+                if (string.IsNullOrEmpty(request.UserId))
+                    throw new UnauthorizedAccessException("ContactDD:Get()::Unauthorized Access");
+
+                response = Manager.GetContactByContactId(request);
+            }
+            catch (Exception ex)
+            {
+                CommonFormat.FormatExceptionResponse(response, base.Response, ex);
+
+                string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
+                Helpers.LogException(int.Parse(aseProcessID), ex);
             }
             return response;
         }
@@ -40,14 +66,14 @@ namespace Phytel.API.DataDomain.Contact.Service
                 if (string.IsNullOrEmpty(request.UserId))
                     throw new UnauthorizedAccessException("ContactDD:Get()::Unauthorized Access");
 
-                response.Contact = ContactDataManager.GetContactByUserId(request);
+                response.Contact = Manager.GetContactByUserId(request);
             }
             catch (Exception ex)
             {
-                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+                CommonFormat.FormatExceptionResponse(response, base.Response, ex);
 
                 string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
-                Common.Helper.LogException(int.Parse(aseProcessID), ex);
+                Helpers.LogException(int.Parse(aseProcessID), ex);
             }
             return response;
         }
@@ -61,14 +87,14 @@ namespace Phytel.API.DataDomain.Contact.Service
                 if (string.IsNullOrEmpty(request.UserId))
                     throw new UnauthorizedAccessException("ContactDD:Post()::Unauthorized Access");
 
-                response = ContactDataManager.SearchContacts(request);
+                response = Manager.SearchContacts(request);
             }
             catch (Exception ex)
             {
-                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+                CommonFormat.FormatExceptionResponse(response, base.Response, ex);
 
                 string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
-                Common.Helper.LogException(int.Parse(aseProcessID), ex);
+                Helpers.LogException(int.Parse(aseProcessID), ex);
             }
             return response;
         }
@@ -82,14 +108,14 @@ namespace Phytel.API.DataDomain.Contact.Service
                 if (string.IsNullOrEmpty(request.UserId))
                     throw new UnauthorizedAccessException("ContactDD:Put()::Unauthorized Access");
 
-                response = ContactDataManager.InsertContact(request);
+                response = Manager.InsertContact(request);
             }
             catch (Exception ex)
             {
-                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+                CommonFormat.FormatExceptionResponse(response, base.Response, ex);
 
                 string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
-                Common.Helper.LogException(int.Parse(aseProcessID), ex);
+                Helpers.LogException(int.Parse(aseProcessID), ex);
             }
             return response;
         }
@@ -103,14 +129,35 @@ namespace Phytel.API.DataDomain.Contact.Service
                 if (string.IsNullOrEmpty(request.UserId))
                     throw new UnauthorizedAccessException("ContactDD:Put()::Unauthorized Access");
 
-                response = ContactDataManager.UpdateContact(request);
+                response = Manager.UpdateContact(request);
             }
             catch (Exception ex)
             {
-                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+                CommonFormat.FormatExceptionResponse(response, base.Response, ex);
 
                 string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
-                Common.Helper.LogException(int.Parse(aseProcessID), ex);
+                Helpers.LogException(int.Parse(aseProcessID), ex);
+            }
+            return response;
+        }
+
+        public PutRecentPatientResponse Put(PutRecentPatientRequest request)
+        {
+            PutRecentPatientResponse response = new PutRecentPatientResponse();
+            response.Version = request.Version;
+            try
+            {
+                if (string.IsNullOrEmpty(request.UserId))
+                    throw new UnauthorizedAccessException("ContactDD:Put()::Unauthorized Access");
+
+                response = Manager.AddRecentPatient(request);
+            }
+            catch (Exception ex)
+            {
+                CommonFormat.FormatExceptionResponse(response, base.Response, ex);
+
+                string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
+                Helpers.LogException(int.Parse(aseProcessID), ex);
             }
             return response;
         }
@@ -124,14 +171,14 @@ namespace Phytel.API.DataDomain.Contact.Service
                 if (string.IsNullOrEmpty(request.UserId))
                     throw new UnauthorizedAccessException("ContactDD:Get()::Unauthorized Access");
 
-                response = ContactDataManager.GetCareManagers(request);
+                response = Manager.GetCareManagers(request);
             }
             catch (Exception ex)
             {
-                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+                CommonFormat.FormatExceptionResponse(response, base.Response, ex);
 
                 string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
-                Common.Helper.LogException(int.Parse(aseProcessID), ex);
+                Helpers.LogException(int.Parse(aseProcessID), ex);
             }
             return response;
         }

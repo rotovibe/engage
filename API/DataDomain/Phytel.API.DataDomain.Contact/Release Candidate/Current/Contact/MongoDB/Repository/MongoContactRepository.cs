@@ -12,12 +12,16 @@ using Phytel.API.DataDomain.Contact;
 using MongoDB.Driver.Builders;
 using Phytel.API.Common;
 using Phytel.API.DataAudit;
+using Phytel.API.Common.Audit;
+using ServiceStack.Common;
+using ServiceStack.WebHost.Endpoints;
 
 namespace Phytel.API.DataDomain.Contact
 {
-    public class MongoContactRepository<T> : IContactRepository<T>
+    public class MongoContactRepository : IContactRepository
     {
         private string _dbName = string.Empty;
+        public IAuditHelpers AuditHelpers { get; set; }
 
         static MongoContactRepository() 
         {
@@ -68,9 +72,10 @@ namespace Phytel.API.DataDomain.Contact
                 #endregion
         }
 
-        public MongoContactRepository(string contractDBName)
+        public MongoContactRepository(string dbname)
         {
-            _dbName = contractDBName;
+            _dbName = dbname;
+            AppHostBase.Instance.Container.AutoWire(this);
         }
 
         /// <summary>
@@ -295,14 +300,16 @@ namespace Phytel.API.DataDomain.Contact
                 MEContact mc = ctx.Contacts.Collection.Find(mQuery).FirstOrDefault();
                 if (mc != null)
                 {
-                    contactData = new ContactData { 
+                    contactData = new ContactData
+                    {
                         ContactId = mc.Id.ToString(),
                         UserId = (string.IsNullOrEmpty(mc.ResourceId)) ? string.Empty : mc.ResourceId.ToString().Replace("-", string.Empty).ToLower(),
                         FirstName = mc.FirstName,
                         MiddleName = mc.MiddleName,
                         LastName = mc.LastName,
                         PreferredName = mc.PreferredName,
-                        Gender = mc.Gender
+                        Gender = mc.Gender,
+                        RecentsList = mc.RecentList != null ? mc.RecentList.ConvertAll(r => r.ToString()) : null
                     };
                 }
             }
@@ -763,6 +770,50 @@ namespace Phytel.API.DataDomain.Contact
             return response;
         }
 
+        public bool UpdateRecentList(PutRecentPatientRequest request, List<string> recents)
+        {
+            try
+            {
+                bool result = false;
+                List<ObjectId> lsO = recents.ConvertAll(r => ObjectId.Parse(r));
+
+                using (ContactMongoContext ctx = new ContactMongoContext(_dbName))
+                {
+                    List<IMongoQuery> queries = new List<IMongoQuery>();
+                    queries.Add(Query.EQ(MEContact.IdProperty, ObjectId.Parse(request.ContactId)));
+                    queries.Add(Query.EQ(MEContact.DeleteFlagProperty, false));
+                    IMongoQuery query = Query.And(queries);
+                    MEContact mc = ctx.Contacts.Collection.Find(query).FirstOrDefault();
+
+                    if (mc != null)
+                    {
+                        var uv = new List<UpdateBuilder>();
+                        uv.Add(MB.Update.SetWrapped<List<ObjectId>>(MEContact.RecentListProperty, lsO));
+
+                        // LastUpdatedOn
+                        uv.Add(MB.Update.Set(MEContact.LastUpdatedOnProperty, DateTime.UtcNow));
+                        //UpdatedBy
+                        uv.Add(MB.Update.Set(MEContact.UpdatedByProperty, ObjectId.Parse(this.UserId)));
+
+                        IMongoUpdate update = MB.Update.Combine(uv);
+                        ctx.Contacts.Collection.Update(query, update);
+
+                        AuditHelpers.LogDataAudit(this.UserId,
+                                                MongoCollectionName.Contact.ToString(),
+                                                request.ContactId,
+                                                Common.DataAuditType.Update,
+                                                request.ContractNumber);
+                        result = true;
+                    }
+                }
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
         public void CacheByID(List<string> entityIDs)
         {
             try
@@ -778,7 +829,7 @@ namespace Phytel.API.DataDomain.Contact
         /// </summary>
         /// <param name="request">GetContactDataRequest object</param>
         /// <returns>ContactData object</returns>
-        public object FindContactByPatientId(GetContactDataRequest request)
+        public object FindContactByPatientId(GetContactByPatientIdDataRequest request)
         {
             ContactData contactData = null;
             using (ContactMongoContext ctx = new ContactMongoContext(_dbName))
@@ -922,7 +973,7 @@ namespace Phytel.API.DataDomain.Contact
                 using (ContactMongoContext ctx = new ContactMongoContext(_dbName))
                 {
                     List<IMongoQuery> queries = new List<IMongoQuery>();
-                    queries.Add(Query.NE(MEContact.ResourceIdProperty, BsonNull.Value));
+                    //queries.Add(Query.NE(MEContact.ResourceIdProperty, BsonNull.Value)); commenting this out, so that System is returned.
                     queries.Add(Query.EQ(MEContact.PatientIdProperty, BsonNull.Value));
                     queries.Add(Query.EQ(MEContact.DeleteFlagProperty, false));
                     IMongoQuery mQuery = Query.And(queries);
@@ -936,7 +987,9 @@ namespace Phytel.API.DataDomain.Contact
                             {
                                ContactId = c.Id.ToString(),
                                UserId = (string.IsNullOrEmpty(c.ResourceId)) ? string.Empty : c.ResourceId.ToString().Replace("-", string.Empty).ToLower(),
-                               PreferredName = c.PreferredName
+                               PreferredName = c.PreferredName,
+                               FirstName = c.FirstName,
+                               LastName = c.LastName
                             };
                             contactDataList.Add(contactData);
                         }
