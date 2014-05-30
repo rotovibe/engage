@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -78,6 +78,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Constants.cs" />
+    <Compile Include="GetPatientActionDetailsDataRequest.cs" />
+    <Compile Include="DataDomainRequest.cs" />
     <Compile Include="GetProgramDetailsSummaryRequest.cs" />
     <Compile Include="ActionDetail.cs" />
     <Compile Include="GetProgramAttributeRequest.cs" />
@@ -85,13 +88,19 @@
     <Compile Include="GetContractProgramResponse.cs" />
     <Compile Include="GetProgramByNameRequest.cs" />
     <Compile Include="GetProgramByNameResponse.cs" />
+    <Compile Include="GetPatientActionDetailsDataResponse.cs" />
     <Compile Include="GetStepResponseRequest.cs" />
     <Compile Include="GetStepResponseListRequest.cs" />
     <Compile Include="GetProgramAttributeResponse.cs" />
     <Compile Include="GetStepResponseResponse.cs" />
     <Compile Include="GetStepResponseListResponse.cs" />
+    <Compile Include="Enums.cs" />
     <Compile Include="PlanElementDetail.cs" />
-    <Compile Include="ObjectivesDetail.cs" />
+    <Compile Include="ObjectiveInfoData.cs" />
+    <Compile Include="MongoProcedures\GetMongoProceduresListRequest.cs" />
+    <Compile Include="MongoProcedures\GetMongoProceduresRequest.cs" />
+    <Compile Include="MongoProcedures\GetMongoProceduresListResponse.cs" />
+    <Compile Include="MongoProcedures\GetMongoProceduresResponse.cs" />
     <Compile Include="ProgramAttribute.cs" />
     <Compile Include="PutProgramActionProcessingRequest.cs" />
     <Compile Include="PutProgramActionProcessingResponse.cs" />

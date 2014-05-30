@@ -4,6 +4,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DataManagement
 {
     public interface IProceduresManager
     {
-        PostMongoProceduresResponse ExecuteProcedure(PostMongoProceduresRequest request);
+        GetMongoProceduresResponse ExecuteProcedure(GetMongoProceduresRequest request);
+        GetMongoProceduresListResponse GetProceduresList(GetMongoProceduresListRequest request);
     }
 }

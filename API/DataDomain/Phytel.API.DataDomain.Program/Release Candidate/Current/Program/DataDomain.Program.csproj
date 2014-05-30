@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -66,14 +66,24 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IProgramDataManager.cs" />
+    <Compile Include="IProgramRepository.cs" />
+    <Compile Include="IProgramRepositoryFactory.cs" />
     <Compile Include="MongoDB\DataManagement\IMongoProcedure.cs" />
     <Compile Include="MongoDB\DataManagement\IProceduresManager.cs" />
     <Compile Include="MongoDB\DataManagement\MongoProcedure.cs" />
     <Compile Include="MongoDB\DataManagement\MongoProcedureFactory.cs" />
-    <Compile Include="MongoDB\DataManagement\Procedures\UpdateProgramStartDateToFirstActionStartDate.cs" />
     <Compile Include="MongoDB\DataManagement\ProceduresManager.cs" />
-    <Compile Include="IProgramRepository.cs" />
+    <Compile Include="MongoDB\DataManagement\Procedures\Helper.cs" />
+    <Compile Include="MongoDB\DataManagement\Procedures\UpdatePatientActionAssignedAttributes.cs" />
+    <Compile Include="MongoDB\DataManagement\Procedures\UpdatePatientModuleAssignedAttributes.cs" />
+    <Compile Include="MongoDB\DataManagement\Procedures\UpdatePatientProgramAssignedAttributes.cs" />
+    <Compile Include="MongoDB\DataManagement\Procedures\UpdatePatientProgram_HTNAndDiabetesText.cs" />
+    <Compile Include="MongoDB\DataManagement\Procedures\MoveProgramAttributeStartDateValue.cs" />
+    <Compile Include="MongoDB\DataManagement\Procedures\UpdateProgramStartDateToFirstActionStartDate.cs" />
+    <Compile Include="MongoDB\DTO\DTOUtility.cs" />
     <Compile Include="MongoDB\DTO\DTOUtils.cs" />
+    <Compile Include="MongoDB\DTO\IDTOUtility.cs" />
     <Compile Include="MongoDB\DTO\MEPatientProgram.cs" />
     <Compile Include="MongoDB\DTO\MEProgram.cs" />
     <Compile Include="MongoDB\DTO\MEPatientProgramResponse.cs" />
@@ -106,6 +116,10 @@
     <ProjectReference Include="..\..\..\..\..\Interfaces\Release Candidate\Current\Phytel.API.Interface\Phytel.API.Interface.csproj">
       <Project>{abe948fb-247e-4955-b3ab-b7c93e10a542}</Project>
       <Name>Phytel.API.Interface</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\Phytel.API.DataDomain.CareMember\Release Candidate\Current\CareMember.DTO\DataDomain.CareMember.DTO.csproj">
+      <Project>{b65577e7-60a6-4553-b1b9-38d6074ac560}</Project>
+      <Name>DataDomain.CareMember.DTO</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\..\Phytel.API.DataDomain.Patient\Release Candidate\Current\Patient.DTOs\DataDomain.Patient.DTO.csproj">
       <Project>{1b3148a8-fb57-4461-91bc-f1cd38a013b6}</Project>

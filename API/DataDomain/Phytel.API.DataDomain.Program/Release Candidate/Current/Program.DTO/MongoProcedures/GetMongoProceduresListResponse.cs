@@ -4,16 +4,15 @@ using Phytel.API.Interface;
 
 namespace Phytel.API.DataDomain.Program.DTO
 {
-    public class PostMongoProceduresResponse : IDomainResponse
+    public class GetMongoProceduresListResponse : IDomainResponse
     {
-        public bool Success { get; set; }
         public double Version { get; set; }
-        public List<Result> Results { get; set; }
+        public List<MongoProcedure> Procedures { get; set; }
         public ResponseStatus Status { get; set; }
     }
 
-    public class Result
+    public class MongoProcedure
     {
-        public string Message { get; set; }
+        public string Name { get; set; }
     }
 }

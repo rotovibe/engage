@@ -19,17 +19,41 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DataManagement
 {
     public class ProceduresManager : IProceduresManager
     {
-        public PostMongoProceduresResponse ExecuteProcedure(PostMongoProceduresRequest request)
+        public GetMongoProceduresResponse ExecuteProcedure(GetMongoProceduresRequest request)
         {
             try
             {
-                PostMongoProceduresResponse response = new PostMongoProceduresResponse();
-
+                GetMongoProceduresResponse response = new GetMongoProceduresResponse();
+                response.Success = false;
                 IMongoProcedure proc = new MongoProcedureFactory().GetProcedure(request);
-                proc.Execute();
-                response.Results = proc.Results;
-                response.Success = true;
+                if (proc != null)
+                {
+                    proc.Execute();
+                    response.Results = proc.Results;
+                    response.Success = true;            
+                }
+                return response;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("DD:DataProgramManager:ExecuteProcedure()::" + ex.Message, ex.InnerException);
+            }
+        }
 
+
+        public GetMongoProceduresListResponse GetProceduresList(GetMongoProceduresListRequest request)
+        {
+            try
+            {
+                GetMongoProceduresListResponse response = new GetMongoProceduresListResponse();
+                //response.Success = false;
+                //IMongoProcedure proc = new MongoProcedureFactory().GetProcedure(request);
+                //if (proc != null)
+                //{
+                //    proc.Execute();
+                //    response.Results = proc.Results;
+                //    response.Success = true;
+                //}
                 return response;
             }
             catch (Exception ex)

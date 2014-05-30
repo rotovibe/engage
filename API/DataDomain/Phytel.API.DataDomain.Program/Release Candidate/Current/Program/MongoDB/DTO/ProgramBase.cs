@@ -6,6 +6,7 @@ using System.ComponentModel;
 using System.Collections.Generic;
 using System;
 using Phytel.API.Common;
+using Phytel.API.DataDomain.Program.DTO;
 
 namespace Phytel.API.DataDomain.Program.MongoDB.DTO
 {
@@ -17,6 +18,11 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
         [BsonElement(EndDateProperty)]
         [BsonIgnoreIfNull(false)]
         public DateTime? EndDate { get; set; }
+
+        public const string StartDateProperty = "sd";
+        [BsonElement(StartDateProperty)]
+        [BsonIgnoreIfNull(true)]
+        public DateTime? StartDate { get; set; }
 
         public const string NameProperty = "nm";
         [BsonElement(NameProperty)]
@@ -42,6 +48,32 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
         [BsonElement(StatusProperty)]
         [BsonIgnoreIfNull(true)]
         public Status Status { get; set; }
+
+        public const string AuthoredByProperty = "athby";
+        [BsonElement(AuthoredByProperty)]
+        [BsonIgnoreIfNull(true)]
+        public string AuthoredBy { get; set; }
+
+        public const string TemplateNameProperty = "tn";
+        [BsonElement(TemplateNameProperty)]
+        [BsonIgnoreIfNull(true)]
+        public string TemplateName { get; set; }
+
+        public const string TemplateVersionProperty = "tv";
+        [BsonElement(TemplateVersionProperty)]
+        [BsonIgnoreIfNull(true)]
+        public string TemplateVersion { get; set; }
+
+        public const string ProgramVersionProperty = "pv";
+        [BsonElement(ProgramVersionProperty)]
+        [BsonIgnoreIfNull(true)]
+        public string ProgramVersion { get; set; }
+
+        public const string ProgramVersionUpdatedOnProperty = "pvuon";
+        [BsonElement(ProgramVersionUpdatedOnProperty)]
+        [BsonIgnoreIfNull(true)]
+        [BsonDateTimeOptions(Kind = System.DateTimeKind.Utc)]
+        public DateTime? ProgramVersionUpdatedOn { get; set; }
 
         public const string ObjectivesInfoProperty = "obj";
         [BsonElement(ObjectivesInfoProperty)]

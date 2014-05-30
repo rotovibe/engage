@@ -26,9 +26,9 @@ namespace Phytel.API.DataDomain.Program.DTO
         public string EligibilityRequirements { get; set; }
         public string EligibilityStartDate { get; set; }
         public string EligibilityEndDate { get; set; }
-        public Status Status { get; set; }
+        public int Status { get; set; }
         public string ProgramStatus { get; set; }
-        public List<ObjectivesDetail> ObjectivesInfo { get; set; }
+        public List<ObjectiveInfoData> ObjectivesInfo { get; set; }
         //public List<string> Attributes { get; set; }
         public string AuthoredBy { get; set; }
         public bool Locked { get; set; }

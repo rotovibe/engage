@@ -18,15 +18,48 @@ namespace Phytel.API.DataDomain.Program.Procs.Tests
             [TestMethod()]
             public void Get_UpdateProgramStartDate_Proc()
             {
-                string procName = "mp_UpdateProgramStartDateToFirstActionStartDate";
-                double version =1.0 ;
+                executeMongoProcedure("mp_UpdateProgramStartDateToFirstActionStartDate");
+            }
+
+            [TestMethod()]
+            public void Get_UpdatePatientProgram_HTNAndDiabetesText_Proc_Test()
+            {
+                executeMongoProcedure("mp_UpdatePatientProgram_HTNAndDiabetesText");
+            }
+
+            [TestMethod()]
+            public void Get_MoveProgramAttributeStartDateValue_Test()
+            {
+                executeMongoProcedure("mp_MoveProgramAttributeStartDateValue");
+            }
+
+            [TestMethod()]
+            public void UpdatePatientProgramAssignedAttributes_Test()
+            {
+                executeMongoProcedure("mp_UpdatePatientProgramAssignedAttributes");
+            }
+
+            [TestMethod()]
+            public void UpdatePatientModuleAssignedAttributes_Test()
+            {
+                executeMongoProcedure("mp_UpdatePatientModuleAssignedAttributes");
+            }
+
+            [TestMethod()]
+            public void UpdatePatientActionAssignedAttributes_Test()
+            {
+                executeMongoProcedure("mp_UpdatePatientActionAssignedAttributes");
+            }
+
+            private void executeMongoProcedure(string procName)
+            {
+                double version = 1.0;
                 double docVersion = 1.0;
                 string contract = "InHealth001";
                 string context = "NG";
                 string userId = "user";
 
-                PostMongoProceduresRequest request = new PostMongoProceduresRequest { Version = version, Name = procName, DocumentVersion = docVersion, ContractNumber = contract, Context = context, UserId = userId };
-
+                GetMongoProceduresRequest request = new GetMongoProceduresRequest { Version = version, Name = procName, DocumentVersion = docVersion, ContractNumber = contract, Context = context, UserId = userId };
                 MongoProcedureFactory factory = new MongoProcedureFactory();
                 IMongoProcedure proc = factory.GetProcedure(request);
                 proc.Execute();

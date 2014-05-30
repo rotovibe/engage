@@ -5,12 +5,17 @@ using Phytel.API.DataDomain.Program.DTO;
 using Phytel.API.Common.Format;
 using System.Configuration;
 using System.Web;
+using Phytel.API.Common;
 using Phytel.API.DataDomain.Program.MongoDB.DataManagement;
 
 namespace Phytel.API.DataDomain.Program.Service
 {
     public class ProgramService : ServiceStack.ServiceInterface.Service
     {
+        public ICommonFormatterUtil CommonFormatterUtil { get; set; }
+        public IHelpers Helpers { get; set; }
+        public IProgramDataManager ProgramDataManager { get; set; }
+
         public GetProgramResponse Post(GetProgramRequest request)
         {
             GetProgramResponse response = new GetProgramResponse();
@@ -24,10 +29,10 @@ namespace Phytel.API.DataDomain.Program.Service
             }
             catch (Exception ex)
             {
-                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+                CommonFormatterUtil.FormatExceptionResponse(response, base.Response, ex);
 
                 string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
-                Common.Helper.LogException(int.Parse(aseProcessID), ex);
+                Helpers.LogException(int.Parse(aseProcessID), ex);
             }
             return response;
         }
@@ -45,10 +50,10 @@ namespace Phytel.API.DataDomain.Program.Service
             }
             catch (Exception ex)
             {
-                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+                CommonFormatterUtil.FormatExceptionResponse(response, base.Response, ex);
 
                 string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
-                Common.Helper.LogException(int.Parse(aseProcessID), ex);
+                Helpers.LogException(int.Parse(aseProcessID), ex);
             }
             return response;
         }
@@ -66,10 +71,10 @@ namespace Phytel.API.DataDomain.Program.Service
             }
             catch (Exception ex)
             {
-                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+                CommonFormatterUtil.FormatExceptionResponse(response, base.Response, ex);
 
                 string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
-                Common.Helper.LogException(int.Parse(aseProcessID), ex);
+                Helpers.LogException(int.Parse(aseProcessID), ex);
             }
             return response;
         }
@@ -87,10 +92,10 @@ namespace Phytel.API.DataDomain.Program.Service
             }
             catch (Exception ex)
             {
-                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+                CommonFormatterUtil.FormatExceptionResponse(response, base.Response, ex);
 
                 string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
-                Common.Helper.LogException(int.Parse(aseProcessID), ex);
+                Helpers.LogException(int.Parse(aseProcessID), ex);
             }
             return response;
         }
@@ -108,10 +113,10 @@ namespace Phytel.API.DataDomain.Program.Service
             }
             catch (Exception ex)
             {
-                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+                CommonFormatterUtil.FormatExceptionResponse(response, base.Response, ex);
 
                 string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
-                Common.Helper.LogException(int.Parse(aseProcessID), ex);
+                Helpers.LogException(int.Parse(aseProcessID), ex);
             }
             return response;
         }
@@ -129,10 +134,10 @@ namespace Phytel.API.DataDomain.Program.Service
             }
             catch (Exception ex)
             {
-                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+                CommonFormatterUtil.FormatExceptionResponse(response, base.Response, ex);
 
                 string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
-                Common.Helper.LogException(int.Parse(aseProcessID), ex);
+                Helpers.LogException(int.Parse(aseProcessID), ex);
             }
             return response;
         }
@@ -150,10 +155,10 @@ namespace Phytel.API.DataDomain.Program.Service
             }
             catch (Exception ex)
             {
-                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+                CommonFormatterUtil.FormatExceptionResponse(response, base.Response, ex);
 
                 string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
-                Common.Helper.LogException(int.Parse(aseProcessID), ex);
+                Helpers.LogException(int.Parse(aseProcessID), ex);
             }
             return response;
         }
@@ -171,10 +176,10 @@ namespace Phytel.API.DataDomain.Program.Service
             }
             catch (Exception ex)
             {
-                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+                CommonFormatterUtil.FormatExceptionResponse(response, base.Response, ex);
 
                 string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
-                Common.Helper.LogException(int.Parse(aseProcessID), ex);
+                Helpers.LogException(int.Parse(aseProcessID), ex);
             }
             return response;
         }
@@ -192,10 +197,10 @@ namespace Phytel.API.DataDomain.Program.Service
             }
             catch (Exception ex)
             {
-                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+                CommonFormatterUtil.FormatExceptionResponse(response, base.Response, ex);
 
                 string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
-                Common.Helper.LogException(int.Parse(aseProcessID), ex);
+                Helpers.LogException(int.Parse(aseProcessID), ex);
             }
             return response;
         }
@@ -213,10 +218,10 @@ namespace Phytel.API.DataDomain.Program.Service
             }
             catch (Exception ex)
             {
-                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+                CommonFormatterUtil.FormatExceptionResponse(response, base.Response, ex);
 
                 string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
-                Common.Helper.LogException(int.Parse(aseProcessID), ex);
+                Helpers.LogException(int.Parse(aseProcessID), ex);
             }
             return response;
         }
@@ -234,10 +239,10 @@ namespace Phytel.API.DataDomain.Program.Service
             }
             catch (Exception ex)
             {
-                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+                CommonFormatterUtil.FormatExceptionResponse(response, base.Response, ex);
 
                 string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
-                Common.Helper.LogException(int.Parse(aseProcessID), ex);
+                Helpers.LogException(int.Parse(aseProcessID), ex);
             }
             return response;
         }
@@ -255,10 +260,10 @@ namespace Phytel.API.DataDomain.Program.Service
             }
             catch (Exception ex)
             {
-                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+                CommonFormatterUtil.FormatExceptionResponse(response, base.Response, ex);
 
                 string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
-                Common.Helper.LogException(int.Parse(aseProcessID), ex);
+                Helpers.LogException(int.Parse(aseProcessID), ex);
             }
             return response;
         }
@@ -276,6 +281,49 @@ namespace Phytel.API.DataDomain.Program.Service
             }
             catch (Exception ex)
             {
+                CommonFormatterUtil.FormatExceptionResponse(response, base.Response, ex);
+
+                string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
+                Helpers.LogException(int.Parse(aseProcessID), ex);
+            }
+            return response;
+        }
+
+        public GetPatientActionDetailsDataResponse Get(GetPatientActionDetailsDataRequest request)
+        {
+            GetPatientActionDetailsDataResponse response = new GetPatientActionDetailsDataResponse();
+            try
+            {
+                if (string.IsNullOrEmpty(request.UserId))
+                    throw new UnauthorizedAccessException("ProgramDD:Get()::Unauthorized Access");
+
+                response = ProgramDataManager.GetActionDetails(request);
+                response.Version = request.Version;
+            }
+            catch (Exception ex)
+            {
+                CommonFormatterUtil.FormatExceptionResponse(response, base.Response, ex);
+
+                string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
+                Helpers.LogException(int.Parse(aseProcessID), ex);
+            }
+            return response;
+        }
+
+        public GetMongoProceduresResponse Get(GetMongoProceduresRequest request)
+        {
+            GetMongoProceduresResponse response = new GetMongoProceduresResponse();
+            try
+            {
+                if (string.IsNullOrEmpty(request.UserId))
+                    throw new UnauthorizedAccessException("ProgramDD:Post()::Unauthorized Access");
+
+                IProceduresManager pm = new ProceduresManager();
+                response = pm.ExecuteProcedure(request);
+                response.Version = request.Version;
+            }
+            catch (Exception ex)
+            {
                 CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
 
                 string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
@@ -284,16 +332,16 @@ namespace Phytel.API.DataDomain.Program.Service
             return response;
         }
 
-        public PostMongoProceduresResponse Get(PostMongoProceduresRequest request)
+        public GetMongoProceduresListResponse Get(GetMongoProceduresListRequest request)
         {
-            PostMongoProceduresResponse response = new PostMongoProceduresResponse();
+            GetMongoProceduresListResponse response = new GetMongoProceduresListResponse();
             try
             {
                 if (string.IsNullOrEmpty(request.UserId))
                     throw new UnauthorizedAccessException("ProgramDD:Post()::Unauthorized Access");
 
                 IProceduresManager pm = new ProceduresManager();
-                response = pm.ExecuteProcedure(request);
+                response = pm.GetProceduresList(request);
                 response.Version = request.Version;
             }
             catch (Exception ex)

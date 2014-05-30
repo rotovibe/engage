@@ -15,10 +15,14 @@ namespace Phytel.API.DataDomain.Program.DTO
         public string Next { get; set; }
         public string Previous { get; set; }
         public int ElementState { get; set; }
+        public DateTime? StateUpdatedOn { get; set; }
         public DateTime? AssignDate { get; set; }
         public string AssignBy { get; set; }
+        public string AssignTo { get; set; }
         public string CompletedBy { get; set; }
         public DateTime? DateCompleted { get; set; }
+        public DateTime? AttrStartDate { get; set; }
+        public DateTime? AttrEndDate { get; set; }
         public List<SpawnElementDetail> SpawnElement { get; set; }
     }
 

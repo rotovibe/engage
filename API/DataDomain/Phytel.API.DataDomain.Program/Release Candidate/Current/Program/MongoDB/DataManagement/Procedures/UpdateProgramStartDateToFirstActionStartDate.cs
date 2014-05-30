@@ -18,8 +18,8 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DataManagement.Procedures
             try
             {
                 Results = new List<Result>();
-                IProgramRepository<PostMongoProceduresResponse> repo = ProgramRepositoryFactory<PostMongoProceduresResponse>
-                    .GetPatientProgramRepository(Request.ContractNumber, Request.Context, Request.UserId);
+
+                IProgramRepository repo = new ProgramRepositoryFactory().GetRepository(Request, RepositoryType.PatientProgram);
 
                 List<MEPatientProgram> programs = (List<MEPatientProgram>)repo.SelectAll();
 
@@ -36,20 +36,23 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DataManagement.Procedures
                     if (date != null)
                     {
                         rco = (DateTime)date;
+                        Request.UserId = p.UpdatedBy.ToString();
 
-                        IProgramRepository<PostMongoProceduresResponse> arp = ProgramRepositoryFactory<PostMongoProceduresResponse>
-                            .GetProgramAttributesRepository(Request.ContractNumber, Request.Context, p.UpdatedBy.ToString());
-                        ProgramAttribute pa = new ProgramAttribute
+                        p.AttributeStartDate = rco;
+
+                        IProgramRepository arp = new ProgramRepositoryFactory().GetRepository(Request, RepositoryType.PatientProgramAttribute);
+                        ProgramAttributeData pa = new ProgramAttributeData
                         {
                             PlanElementId = p.Id.ToString(),
-                            StartDate = rco,
-                             OptOut = false
+                            //AttrStartDate = rco,
+                            OptOut = false
                         };
 
                         arp.Update(pa);
                         Results.Add(new Result { Message = "PlanElement [" + p.Id.ToString() + "] in PatientProgramAttributes collection startdate modified to " + date });
                     }
                 });
+                Results.Add(new Result { Message = "Total records updated: " + Results.Count });
             }
             catch (Exception ex)
             {

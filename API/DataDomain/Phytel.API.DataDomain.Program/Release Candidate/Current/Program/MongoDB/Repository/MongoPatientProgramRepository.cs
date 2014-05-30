@@ -16,7 +16,7 @@ using MongoDB.Bson.Serialization;
 
 namespace Phytel.API.DataDomain.Program
 {
-    public class MongoPatientProgramRepository<T> : IProgramRepository<T>
+    public class MongoPatientProgramRepository : IProgramRepository
     {
         private string _dbName = string.Empty;
 
@@ -64,6 +64,7 @@ namespace Phytel.API.DataDomain.Program
                     // update programid in modules
                     var q = MB.Query<MEPatientProgram>.EQ(b => b.Id, nmePP.Id);
                     nmePP.Modules.ForEach(s => s.ProgramId = nmePP.Id);
+                    nmePP.Modules.ForEach(s => s.Objectives = null);
                     ctx.PatientPrograms.Collection.Update(q, MB.Update.SetWrapped<List<Module>>(MEPatientProgram.ModulesProperty, nmePP.Modules));
 
                     // hydrate response object
@@ -74,7 +75,7 @@ namespace Phytel.API.DataDomain.Program
                         ShortName = nmePP.ShortName,
                         Status = (int)nmePP.Status,
                         PatientId = nmePP.PatientId.ToString(),
-                        ProgramState = (int)nmePP.ProgramState,
+                        //ProgramState = (int)nmePP.ProgramState, // depricated - Use Element state instead.
                         ElementState = (int)nmePP.State
                     };
 
@@ -117,8 +118,9 @@ namespace Phytel.API.DataDomain.Program
                 {
                     var findQ = MB.Query.And(
                         MB.Query<MEPatientProgram>.EQ(b => b.PatientId, ObjectId.Parse(patientID)),
+                        MB.Query<MEPatientProgram>.EQ(b => b.DeleteFlag, false),
                         MB.Query<MEPatientProgram>.EQ(b => b.ContractProgramId, ObjectId.Parse(progId)),
-                        MB.Query.In(MEPatientProgram.ProgramStateProperty, new List<BsonValue> { BsonValue.Create(0), BsonValue.Create(1) }));
+                        MB.Query.In(MEPatientProgram.StateProperty, new List<BsonValue> { BsonValue.Create(ElementState.NotStarted), BsonValue.Create(ElementState.Started), BsonValue.Create(ElementState.InProgress), BsonValue.Create(ElementState.Closed) }));
 
                     pp = ctx.PatientPrograms.Collection.Find(findQ).ToList();
                 }
@@ -202,12 +204,13 @@ namespace Phytel.API.DataDomain.Program
                             ContractProgramId = cp.ContractProgramId.ToString(),
                             Description = cp.Description,
                             EndDate = cp.EndDate,
-                            AssignBy = cp.AssignedBy,
+                            AssignBy = cp.AssignedBy.ToString(),
                             AssignDate = cp.AssignedOn,
                             Completed = cp.Completed,
                             CompletedBy = cp.CompletedBy,
                             DateCompleted = cp.DateCompleted,
                             ElementState = (int)cp.State,
+                            StateUpdatedOn = cp.StateUpdatedOn,
                             Enabled = cp.Enabled,
                             Next = cp.Next != null ? cp.Next.ToString() : string.Empty,
                             Order = cp.Order,
@@ -216,9 +219,8 @@ namespace Phytel.API.DataDomain.Program
                             SpawnElement = DTOUtils.GetResponseSpawnElement(cp.Spawn),
                             Modules = DTOUtils.GetModules(cp.Modules, _dbName, this.UserId),
                             Name = cp.Name,
-                            ObjectivesInfo = DTOUtils.GetObjectives(cp.Objectives),
                             PatientId = cp.PatientId.ToString(),
-                            ProgramState = (int)cp.ProgramState,
+                            // ProgramState = (int)cp.ProgramState, depricated - Use Element state instead.
                             ShortName = cp.ShortName,
                             StartDate = cp.StartDate,
                             Status = (int)cp.Status,
@@ -252,6 +254,31 @@ namespace Phytel.API.DataDomain.Program
             }
         }
 
+        public bool Save(object entity)
+        {
+            bool success = false;
+            MEPatientProgram p = (MEPatientProgram)entity;
+            try
+            {
+                using (ProgramMongoContext ctx = new ProgramMongoContext(_dbName))
+                {
+                    ctx.PatientPrograms.Collection.Save(p);
+                    success = true;
+
+                    AuditHelper.LogDataAudit(this.UserId,
+                        MongoCollectionName.PatientProgram.ToString(),
+                        p.Id.ToString(),
+                        Common.DataAuditType.Update,
+                        _dbName);
+                }
+                return success;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("DD:PatientProgramRepository:Save()::" + ex.Message, ex.InnerException);
+            }
+        }
+
         public object Update(object entity)
         {
             PutProgramActionProcessingRequest p = (PutProgramActionProcessingRequest)entity;
@@ -268,15 +295,19 @@ namespace Phytel.API.DataDomain.Program
                     uv.Add(MB.Update.Set(MEPatientProgram.CompletedProperty, pg.Completed));
                     uv.Add(MB.Update.Set(MEPatientProgram.EnabledProperty, pg.Enabled));
                     uv.Add(MB.Update.Set(MEPatientProgram.OrderProperty, pg.Order));
-                    uv.Add(MB.Update.Set(MEPatientProgram.ProgramStateProperty, (ProgramState)pg.ProgramState));
+                    //uv.Add(MB.Update.Set(MEPatientProgram.ProgramStateProperty, (ProgramState)pg.ProgramState)); // depricated - Use Element state instead.
                     uv.Add(MB.Update.Set(MEPatientProgram.LastUpdatedOnProperty, System.DateTime.UtcNow));
                     uv.Add(MB.Update.Set(MEPatientProgram.UpdatedByProperty, ObjectId.Parse(this.UserId)));
                     uv.Add(MB.Update.Set(MEPatientProgram.VersionProperty, pg.Version)); 
 
                     if (pg.ElementState != 0) uv.Add(MB.Update.Set(MEPatientProgram.StateProperty, (ElementState)pg.ElementState));
+                    if (pg.StateUpdatedOn != null) { uv.Add(MB.Update.Set(MEPatientProgram.StateUpdatedOnProperty, pg.StateUpdatedOn)); }
                     if (pg.Status != 0) uv.Add(MB.Update.Set(MEPatientProgram.StatusProperty, (Status)pg.Status));
-                    if (pg.AssignBy != null) { uv.Add(MB.Update.Set(MEPatientProgram.AssignByProperty, pg.AssignBy)); }
+                    if (pg.AssignBy != null && !string.IsNullOrEmpty(pg.AssignBy)) { uv.Add(MB.Update.Set(MEPatientProgram.AssignByProperty, pg.AssignBy)); }
+                    if (pg.AssignTo != null && !string.IsNullOrEmpty(pg.AssignTo)) { uv.Add(MB.Update.Set(MEPatientProgram.AssignToProperty, pg.AssignTo)); }
                     if (pg.AssignDate != null) { uv.Add(MB.Update.Set(MEPatientProgram.AssignDateProperty, pg.AssignDate)); }
+                    if (pg.AttrEndDate != null) { uv.Add(MB.Update.Set(MEPatientProgram.AttributeEndDateProperty, pg.AttrEndDate)); }
+                    if (pg.AttrStartDate != null) { uv.Add(MB.Update.Set(MEPatientProgram.AttributeStartDateProperty, pg.AttrStartDate)); }
                     if (pg.Client != null) { uv.Add(MB.Update.Set(MEPatientProgram.ClientProperty, pg.Client)); }
                     if (pg.CompletedBy != null) { uv.Add(MB.Update.Set(MEPatientProgram.CompletedByProperty, pg.CompletedBy)); }
                     if (pg.ContractProgramId != null) { uv.Add(MB.Update.Set(MEPatientProgram.ContractProgramIdProperty, ObjectId.Parse(pg.ContractProgramId))); }
@@ -291,7 +322,7 @@ namespace Phytel.API.DataDomain.Program
                     if (pg.StartDate != null) { uv.Add(MB.Update.Set(MEPatientProgram.StartDateProperty, pg.StartDate)); }
                     if (mods != null) { uv.Add(MB.Update.SetWrapped<List<Module>>(MEPatientProgram.ModulesProperty, mods)); }
                     if (pg.SpawnElement != null) { uv.Add(MB.Update.SetWrapped<List<SpawnElement>>(MEPatientProgram.SpawnProperty, DTOUtils.GetSpawnElements(pg.SpawnElement))); }
-                    if (pg.ObjectivesInfo != null) { uv.Add(MB.Update.SetWrapped<List<Objective>>(MEPatientProgram.ObjectivesInfoProperty, DTOUtils.GetObjectives(pg.ObjectivesInfo))); }
+                    if (pg.ObjectivesData != null) { uv.Add(MB.Update.SetWrapped<List<Objective>>(MEPatientProgram.ObjectivesInfoProperty, DTOUtils.GetObjectives(pg.ObjectivesData))); }
 
                     IMongoUpdate update = MB.Update.Combine(uv);
                     ctx.PatientPrograms.Collection.Update(q, update);
@@ -330,6 +361,39 @@ namespace Phytel.API.DataDomain.Program
         public string ContractNumber { get; set; }
 
         public IEnumerable<object> Find(string Id)
+        {
+            throw new NotImplementedException();
+        }
+
+
+        public object FindByPlanElementID(string entityID)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<object> FindByStepId(string entityID)
+        {
+            throw new NotImplementedException();
+        }
+
+        public object GetLimitedProgramFields(string objectId)
+        {
+            throw new NotImplementedException();
+        }
+
+
+        public object InsertAsBatch(object newEntity)
+        {
+            throw new NotImplementedException();
+        }
+
+
+        public IEnumerable<object> Find(List<ObjectId> Ids)
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<Module> GetProgramModules(ObjectId progId)
         {
             throw new NotImplementedException();
         }
