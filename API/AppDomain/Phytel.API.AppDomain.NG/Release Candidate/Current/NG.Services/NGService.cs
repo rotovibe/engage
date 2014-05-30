@@ -1,5 +1,6 @@
 using Phytel.API.AppDomain.NG.DTO;
 using Phytel.API.AppDomain.Security.DTO;
+using Phytel.API.Common.Audit;
 using Phytel.API.Common.Format;
 using Phytel.API.DataAudit;
 using ServiceStack.ServiceClient.Web;
@@ -7,6 +8,7 @@ using ServiceStack.ServiceHost;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Web;
 
 namespace Phytel.API.AppDomain.NG.Service
 {
@@ -14,6 +16,11 @@ namespace Phytel.API.AppDomain.NG.Service
     {
         public ISecurityManager Security {get; set;}
         public INGManager NGManager {get; set;}
+        public IAuditUtil AuditUtil { get; set; }
+        public ICommonFormatterUtil CommonFormatterUtil { get; set; }
+
+        private const string unknownBrowserType = "Unknown browser";
+        private const string unknownUserHostAddress = "Unknown IP";
 
         public GetPatientResponse Post(GetPatientRequest request)
         {
@@ -482,7 +489,10 @@ namespace Phytel.API.AppDomain.NG.Service
 
             try
             {
-                request.Token = base.Request.Headers["Token"] as string;
+                if (base.Request != null)
+                {
+                    request.Token = base.Request.Headers["Token"] as string;
+                }
                 result = Security.IsUserValidated(request.Version, request.Token, request.ContractNumber);
                 if (result.UserId.Trim() != string.Empty)
                 {
@@ -495,14 +505,18 @@ namespace Phytel.API.AppDomain.NG.Service
             }
             catch (Exception ex)
             {
-                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+                CommonFormatterUtil.FormatExceptionResponse(response, base.Response, ex);
                 if ((ex is WebServiceException) == false)
                     NGManager.LogException(ex);
             }
             finally
             {
                 if (result != null)
-                    AuditHelper.LogAuditData(request, result.SQLUserId, null, System.Web.HttpContext.Current.Request, request.GetType().Name);               
+                {
+                    string browser = (base.Request != null) ? base.Request.UserAgent : unknownBrowserType;
+                    string hostAddress = (base.Request != null)? base.Request.UserHostAddress : unknownUserHostAddress;
+                    AuditUtil.LogAuditData(request, result.SQLUserId, null, browser, hostAddress, request.GetType().Name);
+                }
             }
             
             return response; 
@@ -546,6 +560,43 @@ namespace Phytel.API.AppDomain.NG.Service
             }
             
             return response; 
+        }
+
+        public GetPatientActionDetailsResponse Get(GetPatientActionDetailsRequest request)
+        {
+            GetPatientActionDetailsResponse response = new GetPatientActionDetailsResponse();
+            ValidateTokenResponse result = null;
+
+            try
+            {
+                request.Token = base.Request.Headers["Token"] as string;
+                result = Security.IsUserValidated(request.Version, request.Token, request.ContractNumber);
+                if (result.UserId.Trim() != string.Empty)
+                {
+                    request.UserId = result.UserId;
+                    response = NGManager.GetPatientActionDetails(request);
+                }
+                else
+                    throw new UnauthorizedAccessException();
+
+            }
+            catch (Exception ex)
+            {
+                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+                if ((ex is WebServiceException) == false)
+                    NGManager.LogException(ex);
+            }
+            finally
+            {
+                if (result != null)
+                {
+                    string browser = (base.Request != null) ? base.Request.UserAgent : unknownBrowserType;
+                    string hostAddress = (base.Request != null) ? base.Request.UserHostAddress : unknownUserHostAddress;
+                    AuditUtil.LogAuditData(request, result.SQLUserId, null, browser, hostAddress, request.GetType().Name);
+                }
+            }
+
+            return response;
         }
 
         #region Contact
@@ -644,6 +695,46 @@ namespace Phytel.API.AppDomain.NG.Service
             }
             
             return response; 
+        }
+
+        public GetRecentPatientsResponse Get(GetRecentPatientsRequest request)
+        {
+            GetRecentPatientsResponse response = new GetRecentPatientsResponse();
+            ValidateTokenResponse result = null;
+
+            try
+            {
+                request.Token = base.Request.Headers["Token"] as string;
+                result = Security.IsUserValidated(request.Version, request.Token, request.ContractNumber);
+                if (result.UserId.Trim() != string.Empty)
+                {
+                    request.UserId = result.UserId;
+                    response = NGManager.GetRecentPatients(request);
+                }
+                else
+                    throw new UnauthorizedAccessException();
+            }
+            catch (Exception ex)
+            {
+                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+                if ((ex is WebServiceException) == false)
+                    NGManager.LogException(ex);
+            }
+            finally
+            {
+                List<string> patientIds = null;
+                if (response.Patients != null && response.Patients.Count >  0)
+                {
+                    patientIds = new List<string>();
+                    foreach (CohortPatient cp in response.Patients)
+                    {
+                        patientIds.Add(cp.Id);
+                    }
+                }
+                if (result != null)
+                    AuditHelper.LogAuditData(request, result.SQLUserId, patientIds, System.Web.HttpContext.Current.Request, request.GetType().Name);
+            }
+            return response;
         }
         #endregion
 
@@ -876,6 +967,41 @@ namespace Phytel.API.AppDomain.NG.Service
         }
         #endregion
 
+        #region LookUps Program
+        public GetAllObjectivesResponse Get(GetAllObjectivesRequest request)
+        {
+            GetAllObjectivesResponse response = new GetAllObjectivesResponse();
+            ValidateTokenResponse result = null;
+
+            try
+            {
+                request.Token = base.Request.Headers["Token"] as string;
+                result = Security.IsUserValidated(request.Version, request.Token, request.ContractNumber);
+                if (result.UserId.Trim() != string.Empty)
+                {
+                    request.UserId = result.UserId;
+                    response.Objectives = NGManager.GetAllObjectives(request);
+                }
+                else
+                    throw new UnauthorizedAccessException();
+            }
+            catch (Exception ex)
+            {
+                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+                if ((ex is WebServiceException) == false)
+                    NGManager.LogException(ex);
+            }
+            finally
+            {
+                if (result != null)
+                    AuditHelper.LogAuditData(request, result.SQLUserId, null, System.Web.HttpContext.Current.Request, request.GetType().Name);
+            }
+
+            return response;
+        }
+        #endregion
+
+
         #region PatientNote
         public PostPatientNoteResponse Post(PostPatientNoteRequest request)
         {
@@ -1018,5 +1144,6 @@ namespace Phytel.API.AppDomain.NG.Service
             return response;
         }
         #endregion
+
     }
 }

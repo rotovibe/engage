@@ -67,8 +67,10 @@ namespace Phytel.API.AppDomain.NG
 
                 pD = new ProgramDetail
                 {
-                    AssignBy = p.AssignBy,
+                    AssignBy = p.AssignById,
                     AssignDate = p.AssignDate,
+                    AttrStartDate = p.AttrStartDate,
+                    AttrEndDate = p.AttrEndDate,
                     Client = p.Client,
                     Completed = p.Completed,
                     CompletedBy = p.CompletedBy,
@@ -76,16 +78,23 @@ namespace Phytel.API.AppDomain.NG
                     DateCompleted = p.DateCompleted,
                     Description = p.Description,
                     ElementState = p.ElementState,
+                    StateUpdatedOn = p.StateUpdatedOn,
                     EligibilityEndDate = p.EligibilityEndDate,
                     EligibilityRequirements = p.EligibilityRequirements,
                     EligibilityStartDate = p.EligibilityStartDate,
                     Enabled = p.Enabled,
+                    StartDate = p.StartDate,
                     EndDate = p.EndDate,
+                    AuthoredBy = p.AuthoredBy,
+                    TemplateName = p.TemplateName,
+                    TemplateVersion = p.TemplateVersion,
+                    ProgramVersion = p.ProgramVersion,
+                    ProgramVersionUpdatedOn = p.ProgramVersionUpdatedOn,
                     Id = p.Id,
                     Modules = GetADModules(p.Modules),
                     Name = p.Name,
                     Next = p.Next,
-                    ObjectivesInfo = GetADObjectives(p.ObjectivesInfo),
+                    ObjectivesData = GetADObjectives(p.Objectives),
                     Order = p.Order,
                     PatientId = p.PatientId,
                     Previous = p.Previous,
@@ -93,7 +102,6 @@ namespace Phytel.API.AppDomain.NG
                     ShortName = p.ShortName,
                     SourceId = p.SourceId,
                     SpawnElement = GetADSpawnElements(p.SpawnElement),
-                    StartDate = p.StartDate,
                     Status = p.Status,
                     Text = p.Text,
                     Version = p.Version
@@ -116,8 +124,9 @@ namespace Phytel.API.AppDomain.NG
 
                 pD = new DTO.Program
                 {
-                    AssignBy = p.AssignBy,
+                    AssignById = p.AssignBy,
                     AssignDate = p.AssignDate,
+                    AssignToId = p.AssignTo,
                     Client = p.Client,
                     Completed = p.Completed,
                     CompletedBy = p.CompletedBy,
@@ -125,16 +134,25 @@ namespace Phytel.API.AppDomain.NG
                     DateCompleted = p.DateCompleted,
                     Description = p.Description,
                     ElementState = p.ElementState,
+                    StateUpdatedOn = p.StateUpdatedOn,
                     EligibilityEndDate = p.EligibilityEndDate,
                     EligibilityRequirements = p.EligibilityRequirements,
                     EligibilityStartDate = p.EligibilityStartDate,
                     Enabled = p.Enabled,
+                    StartDate = p.StartDate,
                     EndDate = p.EndDate,
+                    AttrEndDate = p.AttrEndDate,
+                    AttrStartDate = p.AttrStartDate,
+                    AuthoredBy = p.AuthoredBy,
+                    TemplateName = p.TemplateName,
+                    TemplateVersion = p.TemplateVersion,
+                    ProgramVersion = p.ProgramVersion,
+                    ProgramVersionUpdatedOn = p.ProgramVersionUpdatedOn,
                     Id = p.Id,
                     Modules = GetADModules(p.Modules),
                     Name = p.Name,
                     Next = p.Next,
-                    ObjectivesInfo = GetADObjectives(p.ObjectivesInfo),
+                    Objectives = GetADObjectives(p.ObjectivesData),
                     Order = p.Order,
                     PatientId = p.PatientId,
                     Previous = p.Previous,
@@ -142,21 +160,20 @@ namespace Phytel.API.AppDomain.NG
                     ShortName = p.ShortName,
                     SourceId = p.SourceId,
                     SpawnElement = GetADSpawnElements(p.SpawnElement),
-                    StartDate = p.StartDate,
                     Status = p.Status,
                     Text = p.Text,
                     Version = p.Version,
-                    DisEnrollReason = p.DisEnrollReason,
-                    DidNotEnrollReason = p.DidNotEnrollReason,
-                    EligibilityOverride = p.EligibilityOverride,
-                    Enrollment = p.Enrollment,
-                    GraduatedFlag = p.GraduatedFlag,
-                    IneligibleReason = p.IneligibleReason,
-                    OptOut = p.OptOut,
-                    OptOutDate = p.OptOutDate,
-                    OptOutReason = p.OptOutReason,
-                    OverrideReason = p.OverrideReason,
-                    RemovedReason = p.RemovedReason
+                    //DisEnrollReason = p.DisEnrollReason,
+                    //DidNotEnrollReason = p.DidNotEnrollReason,
+                    //EligibilityOverride = p.EligibilityOverride,
+                    //Enrollment = p.Enrollment,
+                    //GraduatedFlag = p.GraduatedFlag,
+                    //IneligibleReason = p.IneligibleReason,
+                    //OptOut = p.OptOut,
+                    //OptOutDate = p.OptOutDate,
+                    //OptOutReason = p.OptOutReason,
+                    //OverrideReason = p.OverrideReason,
+                    //RemovedReason = p.RemovedReason
                 };
 
                 return pD;
@@ -219,16 +236,16 @@ namespace Phytel.API.AppDomain.NG
             }
         }
 
-        public static List<ObjectivesDetail> GetADObjectives(List<Objective> list)
+        public static List<ObjectiveInfoData> GetADObjectives(List<ObjectiveInfo> list)
         {
             try
             {
-                List<ObjectivesDetail> od = new List<ObjectivesDetail>();
+                List<ObjectiveInfoData> od = new List<ObjectiveInfoData>();
                 if (list != null)
                 {
                     list.ForEach(o =>
                     {
-                        ObjectivesDetail odi = new ObjectivesDetail
+                        ObjectiveInfoData odi = new ObjectiveInfoData
                         {
                             Id = o.Id,
                             Status = o.Status,
@@ -246,16 +263,16 @@ namespace Phytel.API.AppDomain.NG
             }
         }
 
-        public static List<Objective> GetADObjectives(List<ObjectivesDetail> list)
+        public static List<ObjectiveInfo> GetADObjectives(List<ObjectiveInfoData> list)
         {
             try
             {
-                List<Objective> od = new List<Objective>();
+                List<ObjectiveInfo> od = new List<ObjectiveInfo>();
                 if (list != null)
                 {
                     list.ForEach(o =>
                     {
-                        Objective odi = new Objective
+                        ObjectiveInfo odi = new ObjectiveInfo
                         {
                             Id = o.Id,
                             Status = o.Status,
@@ -285,13 +302,17 @@ namespace Phytel.API.AppDomain.NG
                         ModuleDetail mdi = new ModuleDetail
                         {
                             Actions = GetADActions(m.Actions),
-                            AssignBy = m.AssignBy,
+                            AssignBy = m.AssignById,
+                            AssignTo = m.AssignToId,
                             AssignDate = m.AssignDate,
+                            AttrEndDate = m.AttrEndDate, // night 919
+                            AttrStartDate = m.AttrStartDate, // night 919
                             Completed = m.Completed,
                             CompletedBy = m.CompletedBy,
                             DateCompleted = m.DateCompleted,
                             Description = m.Description,
                             ElementState = m.ElementState,
+                            StateUpdatedOn = m.StateUpdatedOn,
                             Enabled = m.Enabled,
                             Id = m.Id,
                             Name = m.Name,
@@ -328,13 +349,17 @@ namespace Phytel.API.AppDomain.NG
                         Module mdi = new Module
                         {
                             Actions = GetADActions(m.Actions),
-                            AssignBy = m.AssignBy,
+                            AssignById = m.AssignBy,
                             AssignDate = m.AssignDate,
+                            AssignToId = m.AssignTo,
+                            AttrStartDate = m.AttrEndDate,
+                            AttrEndDate = m.AttrEndDate,
                             Completed = m.Completed,
                             CompletedBy = m.CompletedBy,
                             DateCompleted = m.DateCompleted,
                             Description = m.Description,
                             ElementState = m.ElementState,
+                            StateUpdatedOn = m.StateUpdatedOn,
                             Enabled = m.Enabled,
                             Id = m.Id,
                             Name = m.Name,
@@ -370,13 +395,14 @@ namespace Phytel.API.AppDomain.NG
                     {
                         ActionsDetail adi = new ActionsDetail
                         {
-                            AssignBy = a.AssignBy,
+                            AssignBy = a.AssignById,
                             AssignDate = a.AssignDate,
                             Completed = a.Completed,
                             CompletedBy = a.CompletedBy,
                             DateCompleted = a.DateCompleted,
                             Description = a.Description,
                             ElementState = a.ElementState,
+                            StateUpdatedOn = a.StateUpdatedOn,
                             Enabled = a.Enabled,
                             Id = a.Id,
                             ModuleId = a.ModuleId,
@@ -413,13 +439,14 @@ namespace Phytel.API.AppDomain.NG
                     {
                         Actions adi = new Actions
                         {
-                            AssignBy = a.AssignBy,
+                            AssignById = a.AssignBy,
                             AssignDate = a.AssignDate,
                             Completed = a.Completed,
                             CompletedBy = a.CompletedBy,
                             DateCompleted = a.DateCompleted,
                             Description = a.Description,
                             ElementState = a.ElementState,
+                            StateUpdatedOn = a.StateUpdatedOn,
                             Enabled = a.Enabled,
                             Id = a.Id,
                             ModuleId = a.ModuleId,
@@ -463,7 +490,7 @@ namespace Phytel.API.AppDomain.NG
                         StepsDetail sdi = new StepsDetail
                         {
                             ActionId = s.ActionId,
-                            AssignBy = s.AssignBy,
+                            AssignBy = s.AssignById,
                             AssignDate = s.AssignDate,
                             Completed = s.Completed,
                             CompletedBy = s.CompletedBy,
@@ -471,6 +498,7 @@ namespace Phytel.API.AppDomain.NG
                             DateCompleted = s.DateCompleted,
                             Description = s.Description,
                             ElementState = s.ElementState,
+                            StateUpdatedOn = s.StateUpdatedOn,
                             Enabled = s.Enabled,
                             Header = s.Header,
                             Id = s.Id,
@@ -513,7 +541,7 @@ namespace Phytel.API.AppDomain.NG
                         Step sdi = new Step
                         {
                             ActionId = s.ActionId,
-                            AssignBy = s.AssignBy,
+                            AssignById = s.AssignBy,
                             AssignDate = s.AssignDate,
                             Completed = s.Completed,
                             CompletedBy = s.CompletedBy,
@@ -521,6 +549,7 @@ namespace Phytel.API.AppDomain.NG
                             DateCompleted = s.DateCompleted,
                             Description = s.Description,
                             ElementState = s.ElementState,
+                            StateUpdatedOn = s.StateUpdatedOn,
                             Enabled = s.Enabled,
                             Header = s.Header,
                             Id = s.Id,

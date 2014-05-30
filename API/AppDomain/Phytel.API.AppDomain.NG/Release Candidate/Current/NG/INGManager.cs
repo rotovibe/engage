@@ -1,4 +1,5 @@
 ﻿using Phytel.API.AppDomain.NG.DTO;
+using Phytel.API.AppDomain.NG.Programs;
 using Phytel.API.Common.CustomObject;
 using System;
 using System.Collections.Generic;
@@ -6,6 +7,8 @@ namespace Phytel.API.AppDomain.NG
 {
     public interface INGManager
     {
+        IPlanElementUtils PlanElementUtils { get; set; }
+        IEndpointUtils EndpointUtils { get; set; }
         GetActiveProgramsResponse GetActivePrograms(GetActiveProgramsRequest request);
         List<IdNamePair> GetAllCommModes(GetAllCommModesRequest request);
         List<CommTypeLookUp> GetAllCommTypes(GetAllCommTypesRequest request);
@@ -14,7 +17,9 @@ namespace Phytel.API.AppDomain.NG
         List<StatesLookUp> GetAllStates(GetAllStatesRequest request);
         List<IdNamePair> GetAllTimesOfDays(GetAllTimesOfDaysRequest request);
         List<TimeZonesLookUp> GetAllTimeZones(GetAllTimeZonesRequest request);
+        List<ObjectivesLookUp> GetAllObjectives(GetAllObjectivesRequest request);
         List<Contact> GetCareManagers(GetAllCareManagersRequest request);
+        GetRecentPatientsResponse GetRecentPatients(GetRecentPatientsRequest request);
         GetCohortPatientsResponse GetCohortPatients(GetCohortPatientsRequest request);
         List<Cohort> GetCohorts(GetAllCohortsRequest request);
         Contact GetContactByPatientId(GetContactRequest request);
@@ -22,6 +27,7 @@ namespace Phytel.API.AppDomain.NG
         GetPatientResponse GetPatient(GetPatientRequest request);
         List<PatientProblem> GetPatientProblems(GetAllPatientProblemsRequest request);
         GetPatientProgramDetailsSummaryResponse GetPatientProgramDetailsSummary(GetPatientProgramDetailsSummaryRequest request);
+        GetPatientActionDetailsResponse GetPatientActionDetails(GetPatientActionDetailsRequest request);
         GetPatientProgramsResponse GetPatientPrograms(GetPatientProgramsRequest request);
         GetPatientSSNResponse GetPatientSSN(GetPatientSSNRequest request);
         List<IdNamePair> GetProblems(GetAllProblemsRequest request);

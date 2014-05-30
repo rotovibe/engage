@@ -7,6 +7,7 @@ using MongoDB.Driver.Builders;
 using MongoDB.Bson;
 using System;
 using Phytel.API.Common.CustomObject;
+using Phytel.API.AppDomain.NG.Test.Stubs;
 
 namespace Phytel.API.AppDomain.NG.Test
 {
@@ -97,6 +98,25 @@ namespace Phytel.API.AppDomain.NG.Test
             };
             // Act
             List<Contact> response = ngManager.GetCareManagers(request);
+
+            //Assert
+            Assert.IsTrue(response.Count > 0);
+        }
+
+
+        [TestMethod]
+        public void GetObjectives()
+        {
+            // Arrange
+            StubNGManager ngManager  = new StubNGManager();
+            GetAllObjectivesRequest request = new GetAllObjectivesRequest
+            {
+                ContractNumber = _contractNumber,
+                Token = _token,
+                Version = _version,
+            };
+            // Act
+            List<ObjectivesLookUp> response = ngManager.GetAllObjectives(request);
 
             //Assert
             Assert.IsTrue(response.Count > 0);
