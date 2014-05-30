@@ -78,6 +78,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Enums.cs" />
     <Compile Include="Goal\GetLookUpsDataRequest.cs" />
     <Compile Include="Goal\GetLookUpsDataResponse.cs" />
     <Compile Include="Contact\GetAllLanguageDataRequest.cs" />
@@ -90,8 +91,6 @@
     <Compile Include="Contact\GetAllTimesOfDaysDataResponse.cs" />
     <Compile Include="Contact\GetAllStatesDataRequest.cs" />
     <Compile Include="Contact\GetAllStatesDataResponse.cs" />
-    <Compile Include="GetAllObjectivesDataRequest.cs" />
-    <Compile Include="GetAllObjectivesDataResponse.cs" />
     <Compile Include="Contact\GetAllCommModesDataRequest.cs" />
     <Compile Include="Contact\GetAllCommModesDataResponse.cs" />
     <Compile Include="GetCategoryDataRequest.cs" />
@@ -101,6 +100,8 @@
     <Compile Include="Contact\GetTimeZoneDataRequest.cs" />
     <Compile Include="Contact\GetTimeZoneDataResponse.cs" />
     <Compile Include="ProblemData.cs" />
+    <Compile Include="Program\GetAllObjectivesDataRequest.cs" />
+    <Compile Include="Program\GetAllObjectivesDataResponse.cs" />
     <Compile Include="SearchProblemsDataResponse .cs" />
     <Compile Include="GetAllProblemsDataResponse.cs" />
     <Compile Include="GetAllProblemsDataRequest.cs" />

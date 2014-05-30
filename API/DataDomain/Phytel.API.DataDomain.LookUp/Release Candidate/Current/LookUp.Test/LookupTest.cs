@@ -238,5 +238,22 @@ namespace Phytel.API.DataDomain.LookUp.Test
             Assert.IsTrue(true);
         }
 
+
+        [TestMethod]
+        public void GetAllObjectives_Test()
+        {
+            // Arrange
+            double version = 1.0;
+            string contractNumber = "InHealth001";
+            string context = "NG";
+            GetAllObjectivesDataRequest request = new GetAllObjectivesDataRequest { Context = context, ContractNumber = contractNumber, Version = version };
+
+            // Act
+            GetAllObjectivesDataResponse response = LookUpDataManager.GetAllObjectives(request);
+
+            // Assert
+            Assert.AreNotEqual(0, response.ObjectivesData.Count);
+        }
+
     }
 }

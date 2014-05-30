@@ -200,5 +200,22 @@ namespace Phytel.API.DataDomain.LookUp
             return response;
         }
         #endregion  
+
+        #region Program
+        public static GetAllObjectivesDataResponse GetAllObjectives(GetAllObjectivesDataRequest request)
+        {
+            GetAllObjectivesDataResponse response = new GetAllObjectivesDataResponse();
+
+            ILookUpRepository<ObjectiveData> repo = LookUpRepositoryFactory<ObjectiveData>.GetLookUpRepository(request.ContractNumber, request.Context, request.UserId);
+
+            List<ObjectiveData> data = repo.GetAllObjectives();
+
+            if (data != null)
+            {
+                response.ObjectivesData = data;
+            }
+            return response;
+        } 
+        #endregion
     }
 }   
