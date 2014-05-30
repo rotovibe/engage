@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DomainProjectGenerator.Controls;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -17,9 +18,16 @@ namespace DomainProjectGenerator
         {
             InitializeComponent();
             DirectoryService.RaiseMessageEvent += DirectoryService_RaiseMessageEvent;
+            
+            // add log viewer control
             IISLogViewUserControl iislvc = new IISLogViewUserControl();
             iislvc.Dock = DockStyle.Fill;
             IISLogViewerTabPage.Controls.Add(iislvc);
+
+            // add versioner
+            VersionerUserControl vuc = new VersionerUserControl();
+            vuc.Dock = DockStyle.Fill;
+            VersionerTabPage.Controls.Add(vuc);
         }
 
         void DirectoryService_RaiseMessageEvent(TextMessageEventArg e)
