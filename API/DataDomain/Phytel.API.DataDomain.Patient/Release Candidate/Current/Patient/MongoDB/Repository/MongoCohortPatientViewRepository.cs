@@ -15,8 +15,10 @@ using MB = MongoDB.Driver.Builders;
 
 namespace Phytel.API.DataDomain.Patient
 {
-    public class MongoCohortPatientViewRepository<T> : IPatientRepository<T>
+    public class MongoCohortPatientViewRepository : IPatientRepository
     {
+        public IDTOUtils Utils { get; set; }
+
         private string _dbName = string.Empty;
 
         static MongoCohortPatientViewRepository()
@@ -130,7 +132,7 @@ namespace Phytel.API.DataDomain.Patient
                 using (PatientMongoContext ctx = new PatientMongoContext(_dbName))
                 {
                     var q = MB.Query<MECohortPatientView>.EQ(b => b.Id, ObjectId.Parse(p.CohortPatientView.Id));
-                    List<SearchField> sfds = DTOUtils.CloneAppDomainCohortPatientViews(p.CohortPatientView.SearchFields);
+                    List<SearchField> sfds = Utils.CloneAppDomainCohortPatientViews(p.CohortPatientView.SearchFields);
 
                     var uv = new List<MB.UpdateBuilder>();
                     if (!String.IsNullOrEmpty(cpvd.LastName)) uv.Add(MB.Update.Set(MECohortPatientView.LastNameProperty, cpvd.LastName));

@@ -94,8 +94,13 @@
   </Choose>
   <ItemGroup>
     <Compile Include="CohortPatientsTest.cs" />
+    <Compile Include="PatientDataManager_Test.cs" />
     <Compile Include="PatientTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Stub\StubCohortPatientViewRepository.cs" />
+    <Compile Include="Stub\StubDataPatientManager.cs" />
+    <Compile Include="Stub\StubPatientRespository.cs" />
+    <Compile Include="Stub\StubPatientRepositoryFactory.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

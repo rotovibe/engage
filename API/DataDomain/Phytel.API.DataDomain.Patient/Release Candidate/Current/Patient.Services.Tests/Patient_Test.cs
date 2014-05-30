@@ -74,15 +74,16 @@ namespace Phytel.API.DataDomain.Patient.Service.Test
         [TestMethod]
         public void GetPatientDetailsListByID()
         {
-            string patientID = "528b972f072ef70eec772872";
             string contractNumber = "InHealth001";
             string context = "NG";
             double version = 1.0;
-
+            string userId = "5325c821072ef705080d3488";
             JsonServiceClient client = new JsonServiceClient();
             GetPatientsDataResponse response = client.Post<GetPatientsDataResponse>
-                (string.Format("{0}/{1}/{2}/{3}/patientdetails", "http://localhost:8888/Patient", context, version, contractNumber),
-                new GetPatientsDataRequest { PatientIDs = new string[]{patientID} } as object);
+                (string.Format("{0}/{1}/{2}/{3}/Patients", "http://localhost:8888/Patient", context, version, contractNumber),
+                new GetPatientsDataRequest { PatientIds = new string[]{
+                    "5325d9f2d6a4850adcbba4ca", "5325db50d6a4850adcbba8e6"}, UserId = userId
+                } as object);
         }
     }
 }

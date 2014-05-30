@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace Phytel.API.DataDomain.Patient.MongoDB.DTO
 {
-    public static class DTOUtils
+    public class DTOUtils : IDTOUtils
     {
-        internal static List<SearchField> CloneAppDomainCohortPatientViews(List<Patient.DTO.SearchFieldData> list)
+        public List<SearchField> CloneAppDomainCohortPatientViews(List<Patient.DTO.SearchFieldData> list)
         {
             List<SearchField> melist = new List<SearchField>();
 
