@@ -64,6 +64,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Enums.cs" />
     <Compile Include="IPatientObservationRepository.cs" />
     <Compile Include="MongoDB\DTO\MEObservation.cs" />
     <Compile Include="MongoDB\DTO\MEPatientObservation.cs" />

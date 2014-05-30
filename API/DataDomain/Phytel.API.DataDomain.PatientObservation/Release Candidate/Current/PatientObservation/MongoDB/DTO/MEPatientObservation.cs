@@ -130,4 +130,5 @@ namespace Phytel.API.DataDomain.PatientObservation.DTO
         public System.DateTime RecordCreatedOn { get; private set; }
         #endregion
     }
+
 }

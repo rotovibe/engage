@@ -135,16 +135,8 @@ namespace Phytel.API.DataDomain.PatientObservation
         {
             try
             {
-                IMongoQuery mQuery = null;
-                List<object> PatientObservationItems = new List<object>();
-
-                mQuery = MongoDataUtil.ExpressionQueryBuilder(expression);
-
-                //using (PatientObservationMongoContext ctx = new PatientObservationMongoContext(_dbName))
-                //{
-                //}
-
-                return new Tuple<string, IEnumerable<object>>(expression.ExpressionID, PatientObservationItems);
+                throw new NotImplementedException();
+                // code here //
             }
             catch (Exception) { throw; }
         }

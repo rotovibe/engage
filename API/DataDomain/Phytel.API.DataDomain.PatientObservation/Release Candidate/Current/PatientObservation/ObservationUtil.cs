@@ -41,7 +41,7 @@ namespace Phytel.API.DataDomain.PatientObservation
             {
                 Id = ObjectId.GenerateNewId().ToString(),
                 ObservationId = od.Id,
-                Name = od.CommonName != null ? od.CommonName : od.Description,
+                Name = od.CommonName ?? od.Description,
                 Order = od.Order,
                 Standard = od.Standard,
                 GroupId = od.GroupId,
