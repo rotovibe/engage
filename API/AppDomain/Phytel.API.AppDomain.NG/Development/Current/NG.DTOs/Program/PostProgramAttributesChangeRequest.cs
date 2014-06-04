@@ -12,7 +12,7 @@ namespace Phytel.API.AppDomain.NG.DTO
         [ApiMember(Name = "ProgramId", Description = "ProgramId", ParameterType = "path", DataType = "String", IsRequired = true)]
         public string ProgramId { get; set; }
 
-        [ApiMember(Name = "Properties", Description = "Plan Element graph with properties to change", ParameterType = "body", DataType = "string", IsRequired = true)]
+        [ApiMember(Name = "Properties", Description = "Plan Element graph with properties to change", ParameterType = "body", DataType = "PlanElementProperties", IsRequired = true)]
         public PlanElementProperties Properties { get; set; }
 
         [ApiMember(Name = "PatientId", Description = "PatientId", ParameterType = "path", DataType = "string", IsRequired = true)]
