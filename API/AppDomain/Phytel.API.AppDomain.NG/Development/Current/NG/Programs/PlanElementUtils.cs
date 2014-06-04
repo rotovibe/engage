@@ -101,7 +101,7 @@ namespace Phytel.API.AppDomain.NG
                         a.Enabled == true && a.ElementState != (int) DD.ElementState.Completed
                         && a.ElementState != (int) DD.ElementState.InProgress).ToList(); // create a specification for this to isolate the business logic.
 
-            list.ForEach(z => SetInitialProperties(null, (PlanElement) z));
+            list.ForEach(z => SetInitialProperties(assignToId, (PlanElement) z));
         }
 
         // NIGHT-876
@@ -477,10 +477,11 @@ namespace Phytel.API.AppDomain.NG
                 // NIGHT-835
                 if (m.AssignDate == null)
                     m.AssignDate = System.DateTime.UtcNow;
+                //if (m.AssignToId == null)
+                    m.AssignToId = assignToId; // NIGHT-877
 
                 m.Enabled = true;
                 m.StateUpdatedOn = System.DateTime.UtcNow;
-                m.AssignToId = assignToId;
                 m.ElementState = (int) DD.ElementState.NotStarted; // 2;
                 m.AssignById = DD.Constants.SystemContactId;
             }
@@ -785,13 +786,14 @@ namespace Phytel.API.AppDomain.NG
             }
         }
 
-        private Actions CloneAction(Actions ac)
+        public Actions CloneAction(Actions ac)
         {
             try
             {
                 Actions a = new Actions
                 {
                     AssignById = ac.AssignById,
+                    AssignToId = ac.AssignToId, // NIGHT-877
                     AssignDate = ac.AssignDate,
                     Completed = ac.Completed,
                     CompletedBy = ac.CompletedBy,

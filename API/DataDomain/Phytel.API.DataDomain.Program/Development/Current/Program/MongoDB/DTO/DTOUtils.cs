@@ -641,9 +641,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
                 {
                     acts = new List<Action>();
 
-                    list.ForEach(a =>
-                    {
-                        acts.Add(
+                    list.ForEach(a => acts.Add(
                         new Action
                         {
                             Id = ObjectId.Parse(a.Id),
@@ -651,11 +649,12 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
                             Steps = GetStepsInfo(a.Steps, userId),
                             AssignedBy = ParseObjectId(a.AssignBy),
                             AssignedOn = a.AssignDate,
+                            AssignedTo = ParseObjectId(a.AssignTo),
                             Completed = a.Completed,
                             CompletedBy = a.CompletedBy,
                             DateCompleted = a.DateCompleted,
                             Description = a.Description,
-                            State = (ElementState)a.ElementState,
+                            State = (ElementState) a.ElementState,
                             Enabled = a.Enabled,
                             Name = a.Name,
                             Next = ParseObjectId(a.Next),
@@ -664,9 +663,8 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
                             Previous = ParseObjectId(a.Previous),
                             SourceId = ObjectId.Parse(a.SourceId),
                             Spawn = GetSpawnElements(a.SpawnElement),
-                            Status = (Status)a.Status
-                        });
-                    });
+                            Status = (Status) a.Status
+                        }));
                 }
                 return acts;
             }

@@ -29,5 +29,22 @@ namespace Phytel.API.AppDomain.NG.Tests
                 Assert.AreEqual(guid.ToString(), ((ModuleDetail)nList[0]).AssignTo);
             }
         }
+
+        [TestClass()]
+        public class GetADActions_Test
+        {
+            [TestMethod()]
+            [TestCategory("NIGHT-877")]
+            [TestProperty("TFS", "11456")]
+            [TestProperty("Layer", "NGUtils")]
+            public void Get_Action_With_AssignTo_Id()
+            {
+                ObjectId guid = ObjectId.GenerateNewId();
+                List<Actions> list = new List<Actions> {new Actions {AssignToId = guid.ToString()}};
+                var nList = NGUtils.GetADActions(list);
+
+                Assert.AreEqual(guid.ToString(), ((ActionsDetail) nList[0]).AssignTo);
+            }
+        }
     }
 }

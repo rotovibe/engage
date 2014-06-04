@@ -693,6 +693,60 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO.Tests
 
                 Assert.IsNull(result);
             }
+
+            [TestMethod()]
+            [TestCategory("NIGHT-877")]
+            [TestProperty("TFS", "11222")]
+            [TestProperty("Layer", "DD.DTOUtility")]
+            public void With_Action_CM_AssignTo_Assigned_From_Program()
+            {
+                IDTOUtility dtoUtil = new DTOUtility { Factory = new StubProgramRepositoryFactory() };
+                string userid = "123456789012345678901234";
+                string cmid = "123456789055554444441234";
+
+                PutProgramToPatientRequest request = new PutProgramToPatientRequest
+                {
+                    UserId = userid,
+                    Context = "NG",
+                    ContractNumber = "InHealth001",
+                    PatientId = "123456789012345678901111",
+                    CareManagerId = cmid
+                };
+
+                ObjectId assignedTo = ObjectId.GenerateNewId();
+
+                MEProgram program = new MEProgram(userid)
+                {
+                    Id = ObjectId.GenerateNewId(),
+                    AssignedTo = assignedTo,
+                    Modules =
+                        new List<Module>
+                        {
+                            new Module
+                            {
+                                Id = ObjectId.GenerateNewId(),
+                                Enabled = true,
+                                Status = Program.DTO.Status.Active,
+                                Actions = new List<Action>
+                                {
+                                    new Action
+                                    {
+                                        Status = Program.DTO.Status.Active,
+                                        Enabled = true,
+                                        Id = ObjectId.GenerateNewId()
+                                    }
+                                }
+                            }
+                        }
+                };
+
+                List<ObjectId> sil = new List<ObjectId>() { ObjectId.GenerateNewId() };
+
+                MEPatientProgram mepp = dtoUtil.CreateInitialMEPatientProgram(request, program, sil);
+                ObjectId? result = mepp.AssignedTo;
+
+                Assert.AreEqual("123456789055554444441234", result.ToString());
+            }
         }
 
         [TestClass()]
@@ -1001,10 +1055,60 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO.Tests
 
                 ObjectId? cmId = null;
                 //public  List<Action> GetClonedActions(List<Action> list, string contractNumber, string userId, List<ObjectId> sil, bool pEnabled)
-                var md = util.GetClonedActions(acts, "InHealth001", "123456789012345678901234", new List<ObjectId>(), true);
+                var md = util.GetClonedActions(null, acts, "InHealth001", "123456789012345678901234", new List<ObjectId>(), true);
 
                 var result = md[0].AssignedOn;
                 Assert.AreEqual(DateTime.UtcNow.Date, ((DateTime)result).Date);
+            }
+
+            [TestMethod()]
+            [TestCategory("NIGHT-877")]
+            [TestProperty("TFS", "11759")]
+            [TestProperty("Layer", "DD.DTOUtility")]
+            public void Get_With_AssignTo_Set()
+            {
+                DTOUtility util = new DTOUtility() {Factory = new StubProgramRepositoryFactory()};
+                var acts = new List<Action>
+                {
+                    new Action
+                    {
+                        Id = ObjectId.GenerateNewId(),
+                        SourceId = ObjectId.Parse("532b5585a381168abe00042c"),
+                        Name = "testmodule",
+                        Status = Status.Active,
+                        Enabled = true,
+                        Objectives = new List<Objective>
+                        {
+                            new Objective
+                            {
+                                Id = ObjectId.GenerateNewId(),
+                                Status = Status.Active,
+                                Value = "90",
+                                Units = "lbs"
+                            },
+                            new Objective
+                            {
+                                Id = ObjectId.GenerateNewId(),
+                                Status = Status.Inactive,
+                                Value = "99",
+                                Units = "hdl"
+                            }
+                        }
+                    }
+                };
+
+                DataDomainRequest request = new DataDomainRequest
+                {
+                    ContractNumber = "InHealth001",
+                    UserId = "123456789012345678901234"
+                };
+
+                ObjectId? cmId = ObjectId.GenerateNewId();
+                var md = util.GetClonedActions(cmId, acts, "InHealth001", "123456789012345678901234",
+                    new List<ObjectId>(), true);
+
+                var result = md[0].AssignedTo;
+                Assert.AreEqual(cmId, result);
             }
         }
     }

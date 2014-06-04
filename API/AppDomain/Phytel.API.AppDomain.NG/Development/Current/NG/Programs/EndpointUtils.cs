@@ -137,7 +137,8 @@ namespace Phytel.API.AppDomain.NG
                 IRestClient client = new JsonServiceClient();
 
                 string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Program/{5}/Details/?Token={6}",
-                                    DDProgramServiceUrl,
+                    //"http://azurephyteldev.cloudapp.net:59901/Program",                
+                    DDProgramServiceUrl,
                                     "NG",
                                     request.Version,
                                     request.ContractNumber,

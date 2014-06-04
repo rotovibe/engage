@@ -40,5 +40,6 @@ namespace Phytel.API.AppDomain.NG
         void SpawnElementsInList(List<SpawnElement> list, Program program, string userId, ProgramAttributeData progAttr);
         ProgramAttribute GetAttributes(ProgramAttributeData programAttributeData);
         Module CloneModule(Module md);
+        Actions CloneAction(Actions act);
     }
 }
