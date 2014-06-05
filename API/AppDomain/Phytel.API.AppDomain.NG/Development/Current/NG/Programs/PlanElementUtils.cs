@@ -1097,7 +1097,7 @@ namespace Phytel.API.AppDomain.NG
             }
         }
 
-        public bool UpdatePlanElementAttributes(Program pg, PlanElement planElement)
+        public bool UpdatePlanElementAttributes(Program pg, PlanElement planElement, string userId)
         {
             try
             {
@@ -1109,11 +1109,13 @@ namespace Phytel.API.AppDomain.NG
                         .ToList();
 
                 var fPe = pes.First(pe => pe.Id == planElement.Id);
-
                 if (fPe == null) return false;
+
                 if (_isModifyAllowed.IsSatisfiedBy(fPe))
                 {
                     fPe.AssignToId = planElement.AssignToId;
+                    fPe.AssignById = userId;
+                    fPe.AssignDate = DateTime.UtcNow;
                     result = true;
                 }
                 return result;
