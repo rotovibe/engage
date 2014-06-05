@@ -1,8 +1,10 @@
-﻿using Phytel.Framework.ASE.Process;
-using System;
+﻿using System;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Xml;
+using Phytel.API.DataDomain.ASE.Common.Enums;
+using Phytel.API.DataDomain.ASE.DTO.Message;
+using Phytel.ASE.Core;
 
 namespace KeepAlive
 {
@@ -23,13 +25,13 @@ namespace KeepAlive
                     }
                     catch (Exception ex)
                     {
-                        LogError(ex.Message, Phytel.Framework.ASE.Data.Common.LogErrorCode.Error, Phytel.Framework.ASE.Data.Common.LogErrorSeverity.Low, currentSite);
+                        LogError(ex.Message, LogErrorCode.Error, LogErrorSeverity.Low, currentSite);
                     }
                 }
             }
             catch (Exception ex)
             {
-                LogError(ex, Phytel.Framework.ASE.Data.Common.LogErrorCode.Error, Phytel.Framework.ASE.Data.Common.LogErrorSeverity.Low);
+                LogError(ex, LogErrorCode.Error, LogErrorSeverity.Low);
             }
         }
 
