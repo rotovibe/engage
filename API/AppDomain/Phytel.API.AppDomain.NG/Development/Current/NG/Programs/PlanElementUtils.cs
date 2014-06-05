@@ -1090,5 +1090,17 @@ namespace Phytel.API.AppDomain.NG
                 throw new Exception("AD:PlanElementUtil:getAttributes()::" + ex.Message, ex.InnerException);
             }
         }
+
+        public void UpdatePlanElementAttributes(Program pg, PlanElement planElement)
+        {
+            var pes =
+                Enumerable.Repeat<PlanElement>(pg, 1)
+                    .Concat(pg.Modules)
+                    .Concat(pg.Modules.SelectMany(m => m.Actions))
+                    .ToList();
+
+            var fPe = pes.First(pe => pe.Id == planElement.Id);
+            if (fPe != null) fPe.AssignToId = planElement.AssignToId;
+        }
     }
 }

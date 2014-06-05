@@ -414,6 +414,38 @@ namespace Phytel.API.AppDomain.NG
         #endregion
 
         #region Programs
+
+        public PostProgramAttributesChangeResponse PostProgramAttributeChanges(
+            PostProgramAttributesChangeRequest request)
+        {
+            try
+            {
+                var aReq = new PostProcessActionRequest
+                {
+                    PatientId = request.PatientId,
+                    ProgramId = request.ProgramId,
+                    ContractNumber = request.ContractNumber,
+                    Token = request.Token,
+                    UserId = request.UserId,
+                    Version = request.Version
+                };
+
+                Program pg = EndpointUtils.RequestPatientProgramDetail(aReq);
+                if (pg == null) throw new Exception("Program is null.");
+
+                PlanElementUtils.UpdatePlanElementAttributes(pg, request.PlanElement);
+
+                var pD = NGUtils.FormatProgramDetail(pg);
+                PostProgramAttributesChangeResponse response = EndpointUtils.SaveProgramAttributeChanges(request, pD);
+
+                return response;
+            }
+            catch (WebServiceException wse)
+            {
+                throw new WebServiceException("AD:PostPatientToProgram()::" + wse.Message, wse.InnerException);
+            }
+        }
+
         public GetActiveProgramsResponse GetActivePrograms(GetActiveProgramsRequest request)
         {
             GetActiveProgramsResponse pResponse = new GetActiveProgramsResponse();

@@ -183,7 +183,6 @@
     <Compile Include="Observation\ObservationValue.cs" />
     <Compile Include="Observation\PatientObservation.cs" />
     <Compile Include="Observation\PreviousValue.cs" />
-    <Compile Include="Program\PlanElementProperties.cs" />
     <Compile Include="Program\PostProgramAttributesChangeRequest.cs" />
     <Compile Include="Program\PostProgramAttributesChangeResponse.cs" />
     <Compile Include="Program\ProgramAttribute.cs" />

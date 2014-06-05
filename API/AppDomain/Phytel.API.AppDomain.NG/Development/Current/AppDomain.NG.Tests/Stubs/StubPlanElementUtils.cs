@@ -490,5 +490,11 @@ namespace Phytel.API.AppDomain.NG.Test.Stubs
         {
             throw new NotImplementedException();
         }
+
+
+        public void UpdatePlanElementAttributes(DTO.Program pg, PlanElement planElement)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

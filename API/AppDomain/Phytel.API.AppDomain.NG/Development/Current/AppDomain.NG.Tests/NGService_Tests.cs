@@ -264,15 +264,35 @@ namespace Phytel.API.AppDomain.NG.Service.Tests
         public class PostProgramAttributesChange_Method
         {
             [TestMethod()]
+            [TestCategory("NIGHT-937")]
+            [TestProperty("TFS", "12107")]
+            [TestProperty("Layer", "AD.NGService")]
             public void Post()
             {
-                ISecurityManager ism = SecurityManagerFactory.Get();
-                INGManager ingm = NGManagerFactory.Get();
+                IAuditUtil audit = new StubAuditUtil();
+                INGManager ngm = new StubNGManager();
+                ISecurityManager sm = new StubSecurityManager();
+                ICommonFormatterUtil cf = new StubCommonFormatterUtil();
 
-                NGService ngs = new NGService {Security = ism, NGManager = ingm};
+                NGService ngs = new NGService
+                {
+                    AuditUtil = audit,
+                    NGManager = ngm,
+                    Security = sm,
+                    CommonFormatterUtil = cf
+                };
 
-                PostProgramAttributesChangeRequest request = new PostProgramAttributesChangeRequest();
-                ngs.Post(request);
+                PostProgramAttributesChangeRequest request = new PostProgramAttributesChangeRequest
+                {
+                    ContractNumber = "NG",
+                    PatientId = "",
+                    Token = "dsafgsdfgdafg",
+                    UserId = "",
+                    Version = 1.0
+                };
+
+                PostProgramAttributesChangeResponse response =  ngs.Post(request);
+                Assert.IsNotNull(response);
             }
         }
     }

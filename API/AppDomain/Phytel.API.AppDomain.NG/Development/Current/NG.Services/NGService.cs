@@ -489,12 +489,16 @@ namespace Phytel.API.AppDomain.NG.Service
 
             try
             {
-                request.Token = base.Request.Headers["Token"] as string;
+                if (base.Request != null)
+                {
+                    request.Token = base.Request.Headers["Token"] as string;
+                }
+
                 result = Security.IsUserValidated(request.Version, request.Token, request.ContractNumber);
                 if (result.UserId.Trim() != string.Empty)
                 {
                     request.UserId = result.UserId;
-                    //response = NGManager.PostPatientToProgram(request);
+                    response = NGManager.PostProgramAttributeChanges(request);
                 }
                 else
                     throw new UnauthorizedAccessException();
@@ -508,7 +512,11 @@ namespace Phytel.API.AppDomain.NG.Service
             finally
             {
                 if (result != null)
-                    AuditHelper.LogAuditData(request, result.SQLUserId, null, System.Web.HttpContext.Current.Request, request.GetType().Name);
+                {
+                    string browser = (base.Request != null) ? base.Request.UserAgent : unknownBrowserType;
+                    string hostAddress = (base.Request != null) ? base.Request.UserHostAddress : unknownUserHostAddress;
+                    AuditUtil.LogAuditData(request, result.SQLUserId, null, browser, hostAddress, request.GetType().Name);
+                }
             }
 
             return response;

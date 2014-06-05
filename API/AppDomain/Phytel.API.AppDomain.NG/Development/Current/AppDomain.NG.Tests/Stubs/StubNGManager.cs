@@ -1,4 +1,5 @@
 ﻿using Phytel.API.AppDomain.NG.DTO;
+using Phytel.API.AppDomain.NG.Programs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -217,7 +218,19 @@ namespace Phytel.API.AppDomain.NG.Test.Stubs
             }
         }
 
-        public NG.Programs.IEndpointUtils EndpointUtils
+
+        public PostProgramAttributesChangeResponse PostProgramAttributeChanges(PostProgramAttributesChangeRequest request)
+        {
+            PostProgramAttributesChangeResponse response = new PostProgramAttributesChangeResponse
+            {
+                Version = 1.0
+            };
+
+            return response;
+        }
+
+
+        public IEndpointUtils EndpointUtils
         {
             get
             {

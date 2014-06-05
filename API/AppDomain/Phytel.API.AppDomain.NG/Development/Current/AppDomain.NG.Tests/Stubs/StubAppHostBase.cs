@@ -26,7 +26,7 @@ namespace Phytel.API.AppDomain.NG.Test.Stubs
             //register any dependencies your services use, e.g:
             container.RegisterAutoWiredAs<StubSecurityManager, ISecurityManager>();
             container.RegisterAutoWiredAs<StubCommonFormatterUtil, ICommonFormatterUtil>();
-            //container.RegisterAutoWiredAs<EndpointUtils, IEndpointUtils>();
+            //container.RegisterAutoWiredAs<EndPointUtils, IEndpointUtils>();
             container.RegisterAutoWiredAs<StubPlanElementUtils, IPlanElementUtils>();
             container.RegisterAutoWiredAs<StubNGManager, INGManager>();
             container.RegisterAutoWiredAs<StubAuditUtil, IAuditUtil>();

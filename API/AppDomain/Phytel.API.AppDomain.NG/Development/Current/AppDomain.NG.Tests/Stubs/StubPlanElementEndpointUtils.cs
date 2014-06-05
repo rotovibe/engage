@@ -230,5 +230,13 @@ namespace Phytel.API.AppDomain.NG.Test.Stubs
             string pcmId = "123456789012345678901234";
             return pcmId;
         }
+
+
+        public DTO.PostProgramAttributesChangeResponse SaveProgramAttributeChanges(DTO.PostProgramAttributesChangeRequest request, ProgramDetail pg)
+        {
+            DTO.PostProgramAttributesChangeResponse response = new DTO.PostProgramAttributesChangeResponse();
+            response.Outcome = new DTO.Outcome {Result = 1, Reason = "Success!"};
+            return response;
+        }
     }
 }

@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using Phytel.API.AppDomain.NG;
 using Phytel.API.AppDomain.NG.Test.Stubs;
+using MongoDB.Bson;
 
 namespace Phytel.API.AppDomain.NG.Tests
 {
@@ -516,6 +517,44 @@ namespace Phytel.API.AppDomain.NG.Tests
                 PostPatientToProgramsResponse response = ngm.PostPatientToProgram(request);
 
                 Assert.AreEqual(progId, response.Program.Id);
+            }
+        }
+
+        [TestClass()]
+        public class PostProgramAttributeChanges_Test
+        {
+            [TestMethod()]
+            [TestCategory("NIGHT-937")]
+            [TestProperty("TFS", "12107")]
+            [TestProperty("Layer", "AD.NGManager")]
+            public void Post_Program_Change_AssignTo_Action()
+            {
+                INGManager ngm = new NGManager
+                {
+                    EndpointUtils = new StubPlanElementEndpointUtils(),
+                    PlanElementUtils = new PlanElementUtils()
+                };
+
+                string assignTo = ObjectId.GenerateNewId().ToString();
+                string patientId = ObjectId.GenerateNewId().ToString();
+
+                PostProgramAttributesChangeRequest request = new PostProgramAttributesChangeRequest
+                {
+                    ContractNumber = "InHealth001",
+                    PatientId = patientId,
+                    PlanElement = new PlanElement
+                    {
+                        Id = "538ca77dfe7a59112c3649e4",
+                        AssignToId = assignTo
+                    },
+                    ProgramId = "000000000000000000000000",
+                    UserId = "userId",
+                    Token = ObjectId.GenerateNewId().ToString(),
+                    Version = 1.0
+                };
+
+                PostProgramAttributesChangeResponse response = ngm.PostProgramAttributeChanges(request);
+                Assert.IsNotNull(response);
             }
         }
     }

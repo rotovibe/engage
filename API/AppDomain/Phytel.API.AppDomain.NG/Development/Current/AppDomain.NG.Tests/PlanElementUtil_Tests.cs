@@ -672,5 +672,69 @@ namespace Phytel.API.AppDomain.NG.Tests
                 Assert.AreEqual(DateTime.UtcNow.Date, ((DateTime) mod.Actions[0].AssignDate).Date);
             }
         }
+
+        [TestClass()]
+        public class UpdatePlanElementAttributes_Test
+        {
+            [TestMethod()]
+            [TestProperty("TFS", "12107")]
+            [TestProperty("Layer", "AD.PlanElementUtil")]
+            public void Update_Action_Assign_To()
+            {
+                IPlanElementUtils pUtils = new PlanElementUtils();
+
+                var targetAction = ObjectId.GenerateNewId().ToString();
+
+                AD.Program prog = new AD.Program
+                {
+                    Id = ObjectId.GenerateNewId().ToString(),
+                    Modules = new List<AD.Module>
+                    {
+                        new AD.Module
+                        {
+                            Id = ObjectId.GenerateNewId().ToString(),
+                            Actions = new List<AD.Actions>
+                            {
+                                new AD.Actions
+                                {
+                                    Id = targetAction
+                                },
+                                new AD.Actions
+                                {
+                                    Id = ObjectId.GenerateNewId().ToString()
+                                }
+                            }
+                        },
+                        new AD.Module
+                        {
+                            Id = ObjectId.GenerateNewId().ToString(),
+                            Actions = new List<AD.Actions>
+                            {
+                                new AD.Actions
+                                {
+                                    Id = ObjectId.GenerateNewId().ToString()
+                                },
+                                new AD.Actions
+                                {
+                                    Id = ObjectId.GenerateNewId().ToString()
+                                }
+                            }
+                        },
+                    }
+                };
+
+                var assignToId = ObjectId.GenerateNewId().ToString();
+
+                AD.PlanElement pe = new AD.PlanElement
+                {
+                    Id = targetAction,
+                    AssignToId = assignToId
+                };
+
+                pUtils.UpdatePlanElementAttributes(prog, pe);
+
+                Assert.AreEqual(assignToId, prog.Modules[0].Actions[0].AssignToId);
+            }
+        }
     }
 }
