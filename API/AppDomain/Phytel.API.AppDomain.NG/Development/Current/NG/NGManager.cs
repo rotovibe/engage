@@ -420,6 +420,7 @@ namespace Phytel.API.AppDomain.NG
         {
             try
             {
+                PostProgramAttributesChangeResponse response = new PostProgramAttributesChangeResponse();
                 var aReq = new PostProcessActionRequest
                 {
                     PatientId = request.PatientId,
@@ -433,10 +434,19 @@ namespace Phytel.API.AppDomain.NG
                 Program pg = EndpointUtils.RequestPatientProgramDetail(aReq);
                 if (pg == null) throw new Exception("Program is null.");
 
-                PlanElementUtils.UpdatePlanElementAttributes(pg, request.PlanElement);
-
-                var pD = NGUtils.FormatProgramDetail(pg);
-                PostProgramAttributesChangeResponse response = EndpointUtils.SaveProgramAttributeChanges(request, pD);
+                if (PlanElementUtils.UpdatePlanElementAttributes(pg, request.PlanElement))
+                {
+                    var pD = NGUtils.FormatProgramDetail(pg);
+                    response.Outcome = EndpointUtils.SaveProgramAttributeChanges(request, pD);
+                }
+                else
+                {
+                    response.Outcome = new Outcome
+                    {
+                        Reason = "PlanElement is not in the correct state to allow change.",
+                        Result = 2
+                    };
+                }
 
                 return response;
             }

@@ -29,6 +29,6 @@ namespace Phytel.API.AppDomain.NG.Programs
         DD.PutProgramToPatientResponse AssignPatientToProgram(AD.PostPatientToProgramsRequest request, string careManagerId);
         string GetPrimaryCareManagerForPatient(PostPatientToProgramsRequest request);
 
-        PostProgramAttributesChangeResponse SaveProgramAttributeChanges(PostProgramAttributesChangeRequest request, ProgramDetail pg);
+        AD.Outcome SaveProgramAttributeChanges(PostProgramAttributesChangeRequest request, ProgramDetail pg);
     }
 }

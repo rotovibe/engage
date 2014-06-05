@@ -15,6 +15,12 @@ namespace Phytel.API.AppDomain.NG
 
     public class PlanElementUtils : IPlanElementUtils
     {
+        private readonly Specification<PlanElement> _isModifyAllowed;
+        public PlanElementUtils()
+        {
+            _isModifyAllowed = new IsModifyAllowedSpecification<PlanElement>();
+        }
+
         public event ProcessedElementInUtilEventHandlers _processedElementEvent;
 
         public void OnProcessIdEvent(object pe)
@@ -1091,16 +1097,31 @@ namespace Phytel.API.AppDomain.NG
             }
         }
 
-        public void UpdatePlanElementAttributes(Program pg, PlanElement planElement)
+        public bool UpdatePlanElementAttributes(Program pg, PlanElement planElement)
         {
-            var pes =
-                Enumerable.Repeat<PlanElement>(pg, 1)
-                    .Concat(pg.Modules)
-                    .Concat(pg.Modules.SelectMany(m => m.Actions))
-                    .ToList();
+            try
+            {
+                var result = false;
+                var pes =
+                    Enumerable.Repeat<PlanElement>(pg, 1)
+                        .Concat(pg.Modules)
+                        .Concat(pg.Modules.SelectMany(m => m.Actions))
+                        .ToList();
 
-            var fPe = pes.First(pe => pe.Id == planElement.Id);
-            if (fPe != null) fPe.AssignToId = planElement.AssignToId;
+                var fPe = pes.First(pe => pe.Id == planElement.Id);
+
+                if (fPe == null) return false;
+                if (_isModifyAllowed.IsSatisfiedBy(fPe))
+                {
+                    fPe.AssignToId = planElement.AssignToId;
+                    result = true;
+                }
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("AD:PlanElementUtil:IsActionInitial()::" + ex.Message, ex.InnerException);
+            }
         }
     }
 }

@@ -697,7 +697,8 @@ namespace Phytel.API.AppDomain.NG.Tests
                             {
                                 new AD.Actions
                                 {
-                                    Id = targetAction
+                                    Id = targetAction,
+                                    ElementState = 2
                                 },
                                 new AD.Actions
                                 {

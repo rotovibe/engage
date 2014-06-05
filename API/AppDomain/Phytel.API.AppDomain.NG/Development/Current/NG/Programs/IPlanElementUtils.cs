@@ -42,6 +42,6 @@ namespace Phytel.API.AppDomain.NG
         Module CloneModule(Module md);
         Actions CloneAction(Actions act);
 
-        void UpdatePlanElementAttributes(Program pg, PlanElement planElement);
+        bool UpdatePlanElementAttributes(Program pg, PlanElement planElement);
     }
 }

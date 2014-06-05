@@ -492,7 +492,7 @@ namespace Phytel.API.AppDomain.NG.Test.Stubs
         }
 
 
-        public void UpdatePlanElementAttributes(DTO.Program pg, PlanElement planElement)
+        public bool UpdatePlanElementAttributes(DTO.Program pg, PlanElement planElement)
         {
             throw new NotImplementedException();
         }

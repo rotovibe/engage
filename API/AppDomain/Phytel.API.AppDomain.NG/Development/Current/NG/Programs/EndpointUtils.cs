@@ -650,7 +650,7 @@ namespace Phytel.API.AppDomain.NG
         }
 
 
-        public PostProgramAttributesChangeResponse SaveProgramAttributeChanges(
+        public AD.Outcome SaveProgramAttributeChanges(
             PostProgramAttributesChangeRequest request, ProgramDetail pD)
         {
             try
@@ -680,7 +680,7 @@ namespace Phytel.API.AppDomain.NG
                     };
                 }
 
-                return sResponse;
+                return sResponse.Outcome;
             }
             catch (Exception ex)
             {

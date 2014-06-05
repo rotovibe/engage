@@ -232,11 +232,11 @@ namespace Phytel.API.AppDomain.NG.Test.Stubs
         }
 
 
-        public DTO.PostProgramAttributesChangeResponse SaveProgramAttributeChanges(DTO.PostProgramAttributesChangeRequest request, ProgramDetail pg)
+        public AppDomain.NG.DTO.Outcome SaveProgramAttributeChanges(DTO.PostProgramAttributesChangeRequest request,
+            ProgramDetail pg)
         {
-            DTO.PostProgramAttributesChangeResponse response = new DTO.PostProgramAttributesChangeResponse();
-            response.Outcome = new DTO.Outcome {Result = 1, Reason = "Success!"};
-            return response;
+            DTO.Outcome outCome = new DTO.Outcome {Result = 1, Reason = "Success!"};
+            return outCome;
         }
     }
 }
