@@ -27,7 +27,7 @@ namespace Phytel.API.AppDomain.NG.Test.Stubs
             return list[0];
         }
 
-        public void FindIdInActions(DTO.Program program, string p, DTO.Module m)
+        public void FindSpawnIdInActions(DTO.Program program, string p, DTO.Module m)
         {
             try
             {
@@ -42,7 +42,7 @@ namespace Phytel.API.AppDomain.NG.Test.Stubs
                         }
                         else
                         {
-                            FindIdInSteps(program, p, a);
+                            FindSpawnIdInSteps(program, p, a);
                         }
                     }
                 }
@@ -53,7 +53,7 @@ namespace Phytel.API.AppDomain.NG.Test.Stubs
             }
         }
 
-        public void FindIdInSteps(DTO.Program program, string p, DTO.Actions a)
+        public void FindSpawnIdInSteps(DTO.Program program, string p, DTO.Actions a)
         {
             try
             {
@@ -381,7 +381,7 @@ namespace Phytel.API.AppDomain.NG.Test.Stubs
                     }
                     else
                     {
-                        FindIdInActions(program, p, m);
+                        FindSpawnIdInActions(program, p, m);
                     }
                 }
             }
@@ -492,7 +492,15 @@ namespace Phytel.API.AppDomain.NG.Test.Stubs
         }
 
 
-        public bool UpdatePlanElementAttributes(DTO.Program pg, PlanElement planElement, string userId)
+
+
+
+        public bool UpdatePlanElementAttributes(DTO.Program pg, PlanElement planElement, string userId, PlanElements planElems)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void ProcessPlanElementChanges(PlanElements planElems, PlanElement samplePe, PlanElement fPe, string userId)
         {
             throw new NotImplementedException();
         }

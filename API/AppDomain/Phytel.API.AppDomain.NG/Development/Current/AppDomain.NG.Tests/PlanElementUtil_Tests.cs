@@ -732,7 +732,15 @@ namespace Phytel.API.AppDomain.NG.Tests
                     AssignToId = assignToId
                 };
 
-                pUtils.UpdatePlanElementAttributes(prog, pe, "111111111111111111111111");
+                var planElems = new DTO.PlanElements
+                {
+                    Actions = new List<DTO.Actions>(),
+                    Modules = new List<DTO.Module>(),
+                    Programs = new List<DTO.Program>(),
+                    Steps = new List<DTO.Step>()
+                };
+
+                pUtils.UpdatePlanElementAttributes(prog, pe, "111111111111111111111111", planElems);
 
                 Assert.AreEqual(assignToId, prog.Modules[0].Actions[0].AssignToId);
             }

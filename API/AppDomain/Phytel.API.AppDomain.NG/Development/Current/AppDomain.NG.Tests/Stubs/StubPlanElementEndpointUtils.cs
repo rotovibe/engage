@@ -49,7 +49,7 @@ namespace Phytel.API.AppDomain.NG.Test.Stubs
         {
             DTO.Program prg = new DTO.Program
             {
-                Id = "000000000000000000000000",
+                Id = "111100000000000000000000",
                 Description = "this is a test program from the stub.",
                 AssignDate = System.DateTime.UtcNow,
                 AssignToId = ObjectId.GenerateNewId().ToString(),
@@ -68,10 +68,12 @@ namespace Phytel.API.AppDomain.NG.Test.Stubs
                 {
                     new DTO.Module
                     {
-                        Id = "000000000000000000000000",
+                        Id = "123450000000000000000000",
                         Name = "Test stub module 1",
                         Description = "BSHSI - Outreach & Enrollment",
                         SourceId = "532b5585a381168abe00042c",
+                        ElementState = 4,
+                        Enabled = true,
                         Actions = new List<DTO.Actions>()
                         {
                             new DTO.Actions
@@ -84,6 +86,7 @@ namespace Phytel.API.AppDomain.NG.Test.Stubs
                                 AttrEndDate = DateTime.UtcNow.AddDays(10),
                                 AttrStartDate = DateTime.UtcNow,
                                 AssignDate = System.DateTime.UtcNow,
+                                Enabled = true,
                                 SpawnElement =
                                     new List<DTO.SpawnElement>
                                     {
@@ -100,7 +103,7 @@ namespace Phytel.API.AppDomain.NG.Test.Stubs
                                 AttrEndDate = DateTime.UtcNow.AddDays(10),
                                 AttrStartDate = DateTime.UtcNow,
                                 AssignDate = System.DateTime.UtcNow,
-                                Enabled = false
+                                Enabled = true
                             }
                         }
                     }

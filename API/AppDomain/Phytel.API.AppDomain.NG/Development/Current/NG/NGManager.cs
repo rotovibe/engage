@@ -420,7 +420,17 @@ namespace Phytel.API.AppDomain.NG
         {
             try
             {
-                PostProgramAttributesChangeResponse response = new PostProgramAttributesChangeResponse();
+                PostProgramAttributesChangeResponse response = new PostProgramAttributesChangeResponse
+                {
+                    PlanElems = new PlanElements
+                    {
+                        Actions = new List<Actions>(),
+                        Modules = new List<Module>(),
+                        Programs = new List<Program>(),
+                        Steps = new List<Step>()
+                    }
+                };
+
                 var aReq = new PostProcessActionRequest
                 {
                     PatientId = request.PatientId,
@@ -434,7 +444,7 @@ namespace Phytel.API.AppDomain.NG
                 Program pg = EndpointUtils.RequestPatientProgramDetail(aReq);
                 if (pg == null) throw new Exception("Program is null.");
 
-                if (PlanElementUtils.UpdatePlanElementAttributes(pg, request.PlanElement, request.UserId))
+                if (PlanElementUtils.UpdatePlanElementAttributes(pg, request.PlanElement, request.UserId, response.PlanElems))
                 {
                     var pD = NGUtils.FormatProgramDetail(pg);
                     response.Outcome = EndpointUtils.SaveProgramAttributeChanges(request, pD);

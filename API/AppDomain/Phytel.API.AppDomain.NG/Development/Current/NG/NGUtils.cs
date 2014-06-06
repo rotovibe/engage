@@ -69,6 +69,7 @@ namespace Phytel.API.AppDomain.NG
                 {
                     AssignBy = p.AssignById,
                     AssignDate = p.AssignDate,
+                    AssignTo = p.AssignToId,
                     AttrStartDate = p.AttrStartDate,
                     AttrEndDate = p.AttrEndDate,
                     Client = p.Client,
