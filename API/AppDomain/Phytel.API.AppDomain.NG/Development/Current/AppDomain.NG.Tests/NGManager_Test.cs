@@ -555,6 +555,7 @@ namespace Phytel.API.AppDomain.NG.Tests
 
                 PostProgramAttributesChangeResponse response = ngm.PostProgramAttributeChanges(request);
                 Assert.IsNotNull(response);
+                Assert.IsNotNull(response.PlanElems.Actions[0]);
             }
 
             [TestMethod()]
@@ -578,7 +579,7 @@ namespace Phytel.API.AppDomain.NG.Tests
                     PatientId = patientId,
                     PlanElement = new PlanElement
                     {
-                        Id = "111100000000000000000000",
+                        Id = "123450000000000000000000",
                         AssignToId = assignTo
                     },
                     ProgramId = "111100000000000000000000",
@@ -589,6 +590,7 @@ namespace Phytel.API.AppDomain.NG.Tests
 
                 PostProgramAttributesChangeResponse response = ngm.PostProgramAttributeChanges(request);
                 Assert.IsNotNull(response);
+                Assert.IsNotNull(response.PlanElems.Modules[0]);
             }
 
             [TestMethod()]
@@ -623,6 +625,7 @@ namespace Phytel.API.AppDomain.NG.Tests
 
                 PostProgramAttributesChangeResponse response = ngm.PostProgramAttributeChanges(request);
                 Assert.IsNotNull(response);
+                Assert.IsNotNull(response.PlanElems.Programs[0]);
             }
         }
     }
