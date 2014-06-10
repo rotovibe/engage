@@ -90,7 +90,7 @@ namespace Phytel.API.AppDomain.NG
                     if (mod != null)
                     {
                         // set enabled status for action dependencies
-                        PEUtils.SetEnabledStatusByPrevious(mod.Actions, p.AssignToId, mod.Enabled);
+                        PEUtils.SetEnabledStatusByPrevious(mod.Actions, mod.AssignToId, mod.Enabled);
                         // set enable/visibility of actions after action processing.
                         pChain.ProcessWorkflow((IPlanElement) mod, p, request.UserId, request.PatientId, action, request);
                         AddUniquePlanElementToProcessedList(mod);

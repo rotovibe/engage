@@ -341,7 +341,6 @@ namespace Phytel.API.AppDomain.NG.Test.Stubs
 
         public void OnProcessIdEvent(object pe)
         {
-            throw new NotImplementedException();
         }
 
         public void RegisterCohortPatientViewProblemToPatient(string problemId, string patientId, Interface.IAppDomainRequest request)

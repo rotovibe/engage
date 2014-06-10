@@ -627,6 +627,41 @@ namespace Phytel.API.AppDomain.NG.Tests
                 Assert.IsNotNull(response);
                 Assert.IsNotNull(response.PlanElems.Programs[0]);
             }
+
+            [TestMethod()]
+            [TestCategory("NIGHT-968")]
+            [TestProperty("TFS", "12107")]
+            [TestProperty("Layer", "AD.NGManager")]
+            public void Post_Program_Change_AssignTo_Null_Program()
+            {
+                INGManager ngm = new NGManager
+                {
+                    EndpointUtils = new StubPlanElementEndpointUtils(),
+                    PlanElementUtils = new PlanElementUtils()
+                };
+
+                string assignTo = null;
+                string patientId = ObjectId.GenerateNewId().ToString();
+
+                PostProgramAttributesChangeRequest request = new PostProgramAttributesChangeRequest
+                {
+                    ContractNumber = "InHealth001",
+                    PatientId = patientId,
+                    PlanElement = new PlanElement
+                    {
+                        Id = "111100000000000000000000",
+                        AssignToId = assignTo
+                    },
+                    ProgramId = "111100000000000000000000",
+                    UserId = "userId",
+                    Token = ObjectId.GenerateNewId().ToString(),
+                    Version = 1.0
+                };
+
+                PostProgramAttributesChangeResponse response = ngm.PostProgramAttributeChanges(request);
+                Assert.IsNotNull(response);
+                Assert.IsNotNull(response.PlanElems.Programs[0]);
+            }
         }
     }
 }

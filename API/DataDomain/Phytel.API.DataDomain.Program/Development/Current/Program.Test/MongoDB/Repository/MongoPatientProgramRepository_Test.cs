@@ -234,5 +234,21 @@ namespace Phytel.API.DataDomain.Program.Tests
         {
             Assert.Fail();
         }
+
+        [TestMethod()]
+        public void Update_Test()
+        {
+            PutProgramActionProcessingRequest request = new PutProgramActionProcessingRequest
+            {
+                ProgramId = "5330920da38116ac180009d2",
+                Program = new ProgramDetail {Id = "5330920da38116ac180009d2", AssignTo = null}
+            };
+
+            MongoPatientProgramRepository repo = new MongoPatientProgramRepository("InHealth001")
+            {
+                UserId = "123456789012345678901234"
+            };
+            repo.Update(request);
+        }
     }
 }

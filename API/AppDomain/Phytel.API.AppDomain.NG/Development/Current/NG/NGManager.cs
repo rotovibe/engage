@@ -444,7 +444,8 @@ namespace Phytel.API.AppDomain.NG
                 Program pg = EndpointUtils.RequestPatientProgramDetail(aReq);
                 if (pg == null) throw new Exception("Program is null.");
 
-                if (PlanElementUtils.UpdatePlanElementAttributes(pg, request.PlanElement, request.UserId, response.PlanElems))
+                if (PlanElementUtils.UpdatePlanElementAttributes(pg, request.PlanElement, request.UserId,
+                    response.PlanElems))
                 {
                     var pD = NGUtils.FormatProgramDetail(pg);
                     response.Outcome = EndpointUtils.SaveProgramAttributeChanges(request, pD);

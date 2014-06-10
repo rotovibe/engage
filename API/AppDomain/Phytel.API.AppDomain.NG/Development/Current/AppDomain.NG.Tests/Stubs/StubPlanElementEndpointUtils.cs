@@ -68,6 +68,47 @@ namespace Phytel.API.AppDomain.NG.Test.Stubs
                 {
                     new DTO.Module
                     {
+                        Id = "999990000000000000000000",
+                        Name = "Test stub module 1",
+                        Description = "BSHSI - Outreach & Enrollment",
+                        SourceId = "532b5585a381168abe00042c",
+                        ElementState = 4,
+                        Enabled = false,
+                        Actions = new List<DTO.Actions>()
+                        {
+                            new DTO.Actions
+                            {
+                                Id = "9999977dfe7a59112c364123",
+                                ElementState = 4,
+                                Name = "test action from stub",
+                                Description = "action Description",
+                                Text = "test action 1",
+                                AttrEndDate = DateTime.UtcNow.AddDays(10),
+                                AttrStartDate = DateTime.UtcNow,
+                                AssignDate = System.DateTime.UtcNow,
+                                Enabled = true,
+                                SpawnElement =
+                                    new List<DTO.SpawnElement>
+                                    {
+                                        new DTO.SpawnElement {ElementId = "111116789012345678901234", ElementType = 3}
+                                    }
+                            },
+                            new DTO.Actions
+                            {
+                                Id = "999996789012345678904567",
+                                ElementState = 4,
+                                Name = "test action from stub",
+                                Description = "action Description",
+                                Text = "test action 1",
+                                AttrEndDate = DateTime.UtcNow.AddDays(10),
+                                AttrStartDate = DateTime.UtcNow,
+                                AssignDate = System.DateTime.UtcNow,
+                                Enabled = true
+                            }
+                        }
+                    },
+                    new DTO.Module
+                    {
                         Id = "123450000000000000000000",
                         Name = "Test stub module 1",
                         Description = "BSHSI - Outreach & Enrollment",
@@ -117,7 +158,6 @@ namespace Phytel.API.AppDomain.NG.Test.Stubs
                     PlanElementId = "000000000000000000000000"
                 }
             };
-
             return prg;
         }
 

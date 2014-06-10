@@ -71,13 +71,6 @@ namespace Phytel.API.AppDomain.NG
             }
         }
 
-        /// <summary>
-        /// Sets the initial values for plan elements that get enabled by dependencies in the workflow
-        /// NIGHT-876
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="planElements">list</param>
-        /// <param name="assignToId">string</param>
         public void SetEnabledStatusByPrevious<T>(List<T> planElements, string assignToId, bool pEnabled)
         {
             try
@@ -85,10 +78,14 @@ namespace Phytel.API.AppDomain.NG
                 if (planElements != null)
                     planElements.ForEach(x =>
                     {
+                        //var pe = ((IPlanElement) Convert.ChangeType(x, typeof (T)));
+                        //var atVal = !string.IsNullOrEmpty(pe.AssignToId) ? pe.AssignToId : assignToId;
+
                         SetEnabledState(planElements, x, assignToId, pEnabled);
+
                         if (x.GetType() == typeof (Module))
                         {
-                            SetInitialActions(x, assignToId);
+                            SetInitialActions(x, null);
                         }
                     });
             }
@@ -109,7 +106,11 @@ namespace Phytel.API.AppDomain.NG
                         && a.ElementState != (int)DD.ElementState.InProgress).ToList();
             // create a specification for this to isolate the business logic.
 
-            actionList.ForEach(z => SetInitialProperties(((Module)x).AssignToId, (PlanElement)z));
+            actionList.ForEach(z =>
+            {
+                SetInitialProperties(((Module) x).AssignToId, (PlanElement) z);
+                OnProcessIdEvent(z);
+            });
         }
 
         // NIGHT-876
@@ -117,40 +118,37 @@ namespace Phytel.API.AppDomain.NG
         {
             try
             {
-                if (list != null && x != null)
+                if (list == null || x == null) return;
+
+                var pe = ((IPlanElement) Convert.ChangeType(x, typeof (T)));
+                if (string.IsNullOrEmpty(pe.Previous)) return;
+
+                var prevElem = list.Find(r => ((IPlanElement) r).Id == pe.Previous);
+                if (prevElem == null) return;
+
+                if (((IPlanElement) prevElem).Completed != true)
                 {
-                    var pe = ((IPlanElement) Convert.ChangeType(x, typeof (T)));
-
-                    if (!string.IsNullOrEmpty(pe.Previous))
+                    ((IPlanElement) x).Enabled = false;
+                }
+                else
+                {
+                    if (!((IPlanElement) x).Enabled)
                     {
-                        var prevElem = list.Find(r => ((IPlanElement) r).Id == pe.Previous);
-
-                        if (prevElem != null)
-                        {
-                            if (((IPlanElement) prevElem).Completed != true)
-                            {
-                                ((IPlanElement) x).Enabled = false;
-                            }
-                            else
-                            {
-                                if (!((IPlanElement) x).Enabled)
-                                {
-                                    ((IPlanElement) x).StateUpdatedOn = DateTime.UtcNow;
-                                    ((IPlanElement) x).Enabled = true;
-                                }
-
-                                // add this to a parent enabled specification
-                                if (((IPlanElement) x).AssignDate == null)
-                                    ((IPlanElement) x).AssignDate = DateTime.UtcNow;
-
-                                ((IPlanElement) x).AssignById = DD.Constants.SystemContactId;
-                                ((IPlanElement) x).AssignToId = assignToId;
-
-                                // only track elements who are enabled for now.
-                                OnProcessIdEvent(Convert.ChangeType(x, typeof (T)));
-                            }
-                        }
+                        ((IPlanElement) x).StateUpdatedOn = DateTime.UtcNow;
+                        ((IPlanElement) x).Enabled = true;
+                        if (((IPlanElement) x).AssignToId == null)
+                            ((IPlanElement) x).AssignToId = assignToId;
                     }
+
+                    // add this to a parent enabled specification
+                    if (((IPlanElement) x).AssignDate == null)
+                        ((IPlanElement) x).AssignDate = DateTime.UtcNow;
+
+                    if (string.IsNullOrEmpty(((IPlanElement) x).AssignById))
+                        ((IPlanElement) x).AssignById = DD.Constants.SystemContactId;
+
+                    // only track elements who are enabled for now.
+                    OnProcessIdEvent(Convert.ChangeType(x, typeof (T)));
                 }
             }
             catch (Exception ex)
@@ -167,11 +165,9 @@ namespace Phytel.API.AppDomain.NG
                 {
                     list.ForEach(s =>
                     {
-                        if (s.StepTypeId == 7)
-                        {
-                            s.Enabled = false;
-                            OnProcessIdEvent(s);
-                        }
+                        if (s.StepTypeId != 7) return;
+                        s.Enabled = false;
+                        OnProcessIdEvent(s);
                     });
                 }
             }
@@ -426,8 +422,11 @@ namespace Phytel.API.AppDomain.NG
                                                         && a.ElementState != (int) DD.ElementState.Completed
                                                         && a.ElementState != (int) DD.ElementState.InProgress);
                         // create rule specification
-
-                        list.ForEach(a => { if (a.Enabled) SetInitialProperties(program.AssignToId, a); });
+                        list.ForEach(a =>
+                        {
+                            if (a.Enabled) SetInitialProperties(program.AssignToId, a);
+                            OnProcessIdEvent(a);
+                        });
                         OnProcessIdEvent(m);
                     }
                     else
@@ -454,6 +453,7 @@ namespace Phytel.API.AppDomain.NG
                         {
                             SetInitialProperties(m.AssignToId, a);
                             OnProcessIdEvent(a);
+                            return;
                         }
                         else
                         {
@@ -472,16 +472,11 @@ namespace Phytel.API.AppDomain.NG
         {
             try
             {
-                if (a.Steps != null)
+                if (a.Steps == null) return;
+                foreach (Step s in a.Steps.Where(s => s.Id.Equals(p)))
                 {
-                    foreach (Step s in a.Steps)
-                    {
-                        if (s.Id.Equals(p))
-                        {
-                            SetInitialProperties(program.AssignToId, s);
-                            OnProcessIdEvent(s);
-                        }
-                    }
+                    SetInitialProperties(program.AssignToId, s);
+                    OnProcessIdEvent(s);
                 }
             }
             catch (Exception ex)
@@ -503,7 +498,9 @@ namespace Phytel.API.AppDomain.NG
                 m.Enabled = true;
                 m.StateUpdatedOn = System.DateTime.UtcNow;
                 m.ElementState = (int) DD.ElementState.NotStarted; // 2;
-                m.AssignById = DD.Constants.SystemContactId;
+
+                if (string.IsNullOrEmpty(m.AssignById))
+                    m.AssignById = DD.Constants.SystemContactId;
             }
             catch (Exception ex)
             {
@@ -1239,7 +1236,7 @@ namespace Phytel.API.AppDomain.NG
                                     prog.Modules.Where(
                                         a => (a.ElementState == 2 || a.ElementState == 4) && a.Enabled == true))
                                 .Concat(
-                                    prog.Modules.SelectMany(m => m.Actions)
+                                    prog.Modules.Where(m => m.Enabled == true).SelectMany(m => m.Actions)
                                         .Where(a => (a.ElementState == 2 || a.ElementState == 4) && a.Enabled == true))
                                 .ToList();
 
