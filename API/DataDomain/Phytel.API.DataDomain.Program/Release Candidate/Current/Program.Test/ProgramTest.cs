@@ -39,7 +39,7 @@ namespace Phytel.API.DataDomain.Program.Test
         public void GetPatientActionDetailsTest()
         {
             string userId = "000000000000000000000000";
-            GetPatientActionDetailsDataRequest request = new GetPatientActionDetailsDataRequest { PatientId = "5325db0fd6a4850adcbba822", PatientProgramId = "535a90dbd6a485044cb7d90e", PatientModuleId = "535a90dbd6a485044cb7dac7", PatientActionId = "535a90dbd6a485044cb7dc24", UserId = userId };
+            GetPatientActionDetailsDataRequest request = new GetPatientActionDetailsDataRequest { PatientId = "5325da17d6a4850adcbba532", PatientProgramId = "535a90dbd6a485044cb7d90e", PatientModuleId = "535a90dbd6a485044cb7dac7", PatientActionId = "535a90dbd6a485044cb7dc24", UserId = userId };
 
             ProgramDataManager pm = new ProgramDataManager();
             
@@ -53,7 +53,7 @@ namespace Phytel.API.DataDomain.Program.Test
         public void PutProgramToPatientTest()
         {
             string userId = "000000000000000000000000";
-            PutProgramToPatientRequest request = new PutProgramToPatientRequest { PatientId = "5325db77d6a4850adcbba95a", CareManagerId = "5325c81f072ef705080d347e", ContractProgramId = "5330920da38116ac180009d2", UserId = userId };
+            PutProgramToPatientRequest request = new PutProgramToPatientRequest { PatientId = "5325da17d6a4850adcbba532", CareManagerId = "5325c81f072ef705080d347e", ContractProgramId = "5330920da38116ac180009d2", UserId = userId };
 
             ProgramDataManager pm = new ProgramDataManager { Factory = new ProgramRepositoryFactory(), DTOUtility = new DTOUtility { Factory = new ProgramRepositoryFactory() } };
             

@@ -37,7 +37,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
         List<StepsDetail> GetSteps(List<Step> list, string contract, string userId);
         void HydrateResponsesInProgram(MEProgram prog, List<MEResponse> responseList, string usrId);
         ProgramAttributeData InitializeElementAttributes(ProgramInfo p);
-        List<MEPatientProgramResponse> InitializePatientProgramAssignment(PutProgramToPatientRequest request, MEPatientProgram nmePP);
+        void InitializePatientProgramAssignment(PutProgramToPatientRequest request, MEPatientProgram nmePP);
         void InitializeProgramAttributes(PutProgramToPatientRequest request, PutProgramToPatientResponse response);
         ObjectId? ParseObjectId(string p);
         void RecurseAndReplaceIds(List<Module> mods, Dictionary<ObjectId, ObjectId> IdsList);

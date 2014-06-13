@@ -14,5 +14,6 @@ namespace Phytel.API.DataDomain.Program.DTO
     public class MongoProcedure
     {
         public string Name { get; set; }
+        public string Description { get; set; }
     }
 }

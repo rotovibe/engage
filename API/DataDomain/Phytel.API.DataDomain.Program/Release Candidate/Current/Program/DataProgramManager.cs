@@ -62,8 +62,8 @@ namespace Phytel.API.DataDomain.Program
                     List<MEResponse> responseList = DTOUtility.GetProgramResponseslist(stepIdList, cp, request);
                     DTOUtils.HydrateResponsesInProgram(cp, responseList, request.UserId);
                     MEPatientProgram nmePp = DTOUtility.CreateInitialMEPatientProgram(request, cp, stepIdList);
-                    List<MEPatientProgramResponse> pprs = DTOUtility.InitializePatientProgramAssignment(request, nmePp);
-
+                    DTOUtility.InitializePatientProgramAssignment(request, nmePp);
+                    List<MEPatientProgramResponse> pprs = DTOUtils.ExtractMEPatientProgramResponses(nmePp, request.ContractNumber, request.UserId);
                     ProgramInfo pi = DTOUtility.SaveNewPatientProgram(request, nmePp);
 
                     if (pi != null)
@@ -149,7 +149,7 @@ namespace Phytel.API.DataDomain.Program
                 ProgramAttributeData pa = request.ProgramAttributes;
                 result.Result = (bool)responseRepo.Update(pa);
 
-                return result;
+                return result; 
             }
             catch (Exception ex)
             {
