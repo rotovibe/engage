@@ -15,8 +15,8 @@ namespace Phytel.API.AppDomain.NG
         Program CloneProgram(Program pr);
         void DisableCompleteButtonForAction(List<Step> list);
         T FindElementById<T>(List<T> list, string id);
-        void FindIdInActions(Program program, string p, Module m);
-        void FindIdInSteps(Program program, string p, Actions a);
+        void FindSpawnIdInActions(Program program, string p, Module m);
+        void FindSpawnIdInSteps(Program program, string p, Actions a);
         CohortPatientViewData GetCohortPatientViewRecord(string patientId, IAppDomainRequest request);
         Actions GetProcessingAction(List<Module> list, string actionId);
         void HydratePlanElementLists(List<object> processedElements, PostProcessActionResponse response);
@@ -40,5 +40,9 @@ namespace Phytel.API.AppDomain.NG
         void SpawnElementsInList(List<SpawnElement> list, Program program, string userId, ProgramAttributeData progAttr);
         ProgramAttribute GetAttributes(ProgramAttributeData programAttributeData);
         Module CloneModule(Module md);
+        Actions CloneAction(Actions act);
+
+        bool UpdatePlanElementAttributes(Program pg, PlanElement planElement, string userId, PlanElements planElems);
+        void ProcessPlanElementChanges(PlanElements planElems, PlanElement samplePe, PlanElement fPe, string userId);
     }
 }

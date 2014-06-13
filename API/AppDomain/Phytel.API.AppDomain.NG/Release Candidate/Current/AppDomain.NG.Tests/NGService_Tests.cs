@@ -22,9 +22,16 @@ namespace Phytel.API.AppDomain.NG.Service.Tests
             ISecurityManager ism = SecurityManagerFactory.Get();
             INGManager ingm = NGManagerFactory.Get();
 
-            NGService ngs = new NGService{ Security = ism, NGManager = ingm };
+            NGService ngs = new NGService {Security = ism, NGManager = ingm};
 
-            GetPatientRequest request = new GetPatientRequest { ContractNumber="NG", PatientID="", Token="dsafgsdfgdafg", UserId="", Version= 1.0 };
+            GetPatientRequest request = new GetPatientRequest
+            {
+                ContractNumber = "NG",
+                PatientID = "",
+                Token = "dsafgsdfgdafg",
+                UserId = "",
+                Version = 1.0
+            };
             //((ServiceStack.ServiceInterface.Service)ngs).
             GetPatientResponse response = ngs.Get(request);
 
@@ -42,8 +49,21 @@ namespace Phytel.API.AppDomain.NG.Service.Tests
                 ISecurityManager sm = new StubSecurityManager();
                 ICommonFormatterUtil cf = new StubCommonFormatterUtil();
 
-                NGService ngs = new NGService { AuditUtil = audit, NGManager = ngm, Security = sm, CommonFormatterUtil = cf };
-                GetPatientProgramDetailsSummaryRequest request = new GetPatientProgramDetailsSummaryRequest { ContractNumber = "NG", PatientId = "", Token = "dsafgsdfgdafg", UserId = "", Version = 1.0 };
+                NGService ngs = new NGService
+                {
+                    AuditUtil = audit,
+                    NGManager = ngm,
+                    Security = sm,
+                    CommonFormatterUtil = cf
+                };
+                GetPatientProgramDetailsSummaryRequest request = new GetPatientProgramDetailsSummaryRequest
+                {
+                    ContractNumber = "NG",
+                    PatientId = "",
+                    Token = "dsafgsdfgdafg",
+                    UserId = "",
+                    Version = 1.0
+                };
                 GetPatientProgramDetailsSummaryResponse response = ngs.Get(request);
 
                 Assert.IsNotNull(response);
@@ -61,7 +81,13 @@ namespace Phytel.API.AppDomain.NG.Service.Tests
                 ICommonFormatterUtil cf = new StubCommonFormatterUtil();
                 string userid = "000000000000000000000000";
 
-                NGService ngs = new NGService { AuditUtil = audit, NGManager = ngm, Security = sm, CommonFormatterUtil = cf };
+                NGService ngs = new NGService
+                {
+                    AuditUtil = audit,
+                    NGManager = ngm,
+                    Security = sm,
+                    CommonFormatterUtil = cf
+                };
                 GetPatientProgramDetailsSummaryRequest request = new GetPatientProgramDetailsSummaryRequest
                 {
                     ContractNumber = "NG",
@@ -89,7 +115,13 @@ namespace Phytel.API.AppDomain.NG.Service.Tests
                 string userid = "000000000000000000000000";
                 DateTime now = System.DateTime.UtcNow.Date;
 
-                NGService ngs = new NGService { AuditUtil = audit, NGManager = ngm, Security = sm, CommonFormatterUtil = cf };
+                NGService ngs = new NGService
+                {
+                    AuditUtil = audit,
+                    NGManager = ngm,
+                    Security = sm,
+                    CommonFormatterUtil = cf
+                };
                 GetPatientProgramDetailsSummaryRequest request = new GetPatientProgramDetailsSummaryRequest
                 {
                     ContractNumber = "NG",
@@ -100,7 +132,7 @@ namespace Phytel.API.AppDomain.NG.Service.Tests
                 };
 
                 GetPatientProgramDetailsSummaryResponse response = ngs.Get(request);
-                DateTime assignbyDate = ((DateTime)response.Program.AssignDate).Date;
+                DateTime assignbyDate = ((DateTime) response.Program.AssignDate).Date;
                 Assert.AreEqual(now, assignbyDate);
             }
 
@@ -117,7 +149,13 @@ namespace Phytel.API.AppDomain.NG.Service.Tests
                 string userid = "000000000000000000000000";
                 DateTime now = System.DateTime.UtcNow.Date;
 
-                NGService ngs = new NGService { AuditUtil = audit, NGManager = ngm, Security = sm, CommonFormatterUtil = cf };
+                NGService ngs = new NGService
+                {
+                    AuditUtil = audit,
+                    NGManager = ngm,
+                    Security = sm,
+                    CommonFormatterUtil = cf
+                };
                 GetPatientProgramDetailsSummaryRequest request = new GetPatientProgramDetailsSummaryRequest
                 {
                     ContractNumber = "NG",
@@ -128,7 +166,7 @@ namespace Phytel.API.AppDomain.NG.Service.Tests
                 };
 
                 GetPatientProgramDetailsSummaryResponse response = ngs.Get(request);
-                DateTime statechangedate = ((DateTime)response.Program.StateUpdatedOn).Date;
+                DateTime statechangedate = ((DateTime) response.Program.StateUpdatedOn).Date;
                 Assert.AreEqual(now, statechangedate);
             }
 
@@ -140,8 +178,21 @@ namespace Phytel.API.AppDomain.NG.Service.Tests
                 ISecurityManager sm = new StubSecurityManager();
                 ICommonFormatterUtil cf = new StubCommonFormatterUtil();
 
-                NGService ngs = new NGService { AuditUtil = audit, NGManager = ngm, Security = sm, CommonFormatterUtil = cf };
-                GetPatientProgramDetailsSummaryRequest request = new GetPatientProgramDetailsSummaryRequest { ContractNumber = "NG", PatientId = "", Token = "dsafgsdfgdafg", UserId = "", Version = 1.0 };
+                NGService ngs = new NGService
+                {
+                    AuditUtil = audit,
+                    NGManager = ngm,
+                    Security = sm,
+                    CommonFormatterUtil = cf
+                };
+                GetPatientProgramDetailsSummaryRequest request = new GetPatientProgramDetailsSummaryRequest
+                {
+                    ContractNumber = "NG",
+                    PatientId = "",
+                    Token = "dsafgsdfgdafg",
+                    UserId = "",
+                    Version = 1.0
+                };
                 GetPatientProgramDetailsSummaryResponse response = ngs.Get(request);
 
                 Assert.IsNotNull(response.Program.Attributes);
@@ -155,8 +206,21 @@ namespace Phytel.API.AppDomain.NG.Service.Tests
                 ISecurityManager sm = new StubSecurityManager();
                 ICommonFormatterUtil cf = new StubCommonFormatterUtil();
 
-                NGService ngs = new NGService { AuditUtil = audit, NGManager = ngm, Security = sm, CommonFormatterUtil = cf };
-                GetPatientProgramDetailsSummaryRequest request = new GetPatientProgramDetailsSummaryRequest { ContractNumber = "NG", PatientId = "", Token = "dsafgsdfgdafg", UserId = "", Version = 1.0 };
+                NGService ngs = new NGService
+                {
+                    AuditUtil = audit,
+                    NGManager = ngm,
+                    Security = sm,
+                    CommonFormatterUtil = cf
+                };
+                GetPatientProgramDetailsSummaryRequest request = new GetPatientProgramDetailsSummaryRequest
+                {
+                    ContractNumber = "NG",
+                    PatientId = "",
+                    Token = "dsafgsdfgdafg",
+                    UserId = "",
+                    Version = 1.0
+                };
                 GetPatientProgramDetailsSummaryResponse response = ngs.Get(request);
 
                 Assert.IsNotNull(response.Program.Objectives);
@@ -173,13 +237,62 @@ namespace Phytel.API.AppDomain.NG.Service.Tests
                 ISecurityManager sm = new StubSecurityManager();
                 ICommonFormatterUtil cf = new StubCommonFormatterUtil();
 
-                NGService ngs = new NGService { AuditUtil = audit, NGManager = ngm, Security = sm, CommonFormatterUtil = cf };
-                GetPatientProgramDetailsSummaryRequest request = new GetPatientProgramDetailsSummaryRequest { ContractNumber = "NG", PatientId = "", Token = "dsafgsdfgdafg", UserId = "", Version = 1.0 };
+                NGService ngs = new NGService
+                {
+                    AuditUtil = audit,
+                    NGManager = ngm,
+                    Security = sm,
+                    CommonFormatterUtil = cf
+                };
+                GetPatientProgramDetailsSummaryRequest request = new GetPatientProgramDetailsSummaryRequest
+                {
+                    ContractNumber = "NG",
+                    PatientId = "",
+                    Token = "dsafgsdfgdafg",
+                    UserId = "",
+                    Version = 1.0
+                };
                 GetPatientProgramDetailsSummaryResponse response = ngs.Get(request);
 
                 Module module = response.Program.Modules.Find(m => m.SourceId == "532b5585a381168abe00042c");
                 string mDesc = module.Description.Trim();
                 Assert.AreEqual(desc, mDesc, true);
+            }
+        }
+
+        [TestClass()]
+        public class PostProgramAttributesChange_Method
+        {
+            [TestMethod()]
+            [TestCategory("NIGHT-937")]
+            [TestProperty("TFS", "12107")]
+            [TestProperty("Layer", "AD.NGService")]
+            public void Post()
+            {
+                IAuditUtil audit = new StubAuditUtil();
+                INGManager ngm = new StubNGManager();
+                ISecurityManager sm = new StubSecurityManager();
+                ICommonFormatterUtil cf = new StubCommonFormatterUtil();
+
+                NGService ngs = new NGService
+                {
+                    AuditUtil = audit,
+                    NGManager = ngm,
+                    Security = sm,
+                    CommonFormatterUtil = cf
+                };
+
+                PostProgramAttributesChangeRequest request = new PostProgramAttributesChangeRequest
+                {
+                    ContractNumber = "NG",
+                    PatientId = "",
+                    Token = "dsafgsdfgdafg",
+                    UserId = "",
+                    Version = 1.0
+                };
+
+                PostProgramAttributesChangeResponse response =  ngs.Post(request);
+                Assert.IsNotNull(response);
             }
         }
     }

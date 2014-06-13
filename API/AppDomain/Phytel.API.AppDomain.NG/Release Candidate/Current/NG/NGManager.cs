@@ -414,6 +414,59 @@ namespace Phytel.API.AppDomain.NG
         #endregion
 
         #region Programs
+
+        public PostProgramAttributesChangeResponse PostProgramAttributeChanges(
+            PostProgramAttributesChangeRequest request)
+        {
+            try
+            {
+                PostProgramAttributesChangeResponse response = new PostProgramAttributesChangeResponse
+                {
+                    PlanElems = new PlanElements
+                    {
+                        Actions = new List<Actions>(),
+                        Modules = new List<Module>(),
+                        Programs = new List<Program>(),
+                        Steps = new List<Step>()
+                    }
+                };
+
+                var aReq = new PostProcessActionRequest
+                {
+                    PatientId = request.PatientId,
+                    ProgramId = request.ProgramId,
+                    ContractNumber = request.ContractNumber,
+                    Token = request.Token,
+                    UserId = request.UserId,
+                    Version = request.Version
+                };
+
+                Program pg = EndpointUtils.RequestPatientProgramDetail(aReq);
+                if (pg == null) throw new Exception("Program is null.");
+
+                if (PlanElementUtils.UpdatePlanElementAttributes(pg, request.PlanElement, request.UserId,
+                    response.PlanElems))
+                {
+                    var pD = NGUtils.FormatProgramDetail(pg);
+                    response.Outcome = EndpointUtils.SaveProgramAttributeChanges(request, pD);
+                }
+                else
+                {
+                    response.Outcome = new Outcome
+                    {
+                        Reason = "PlanElement is not in the correct state to allow change.",
+                        Result = 2
+                    };
+                }
+
+                return response;
+            }
+            catch (WebServiceException wse)
+            {
+                throw new WebServiceException("AD:PostPatientToProgram()::" + wse.Message, wse.InnerException);
+            }
+        }
+
         public GetActiveProgramsResponse GetActivePrograms(GetActiveProgramsRequest request)
         {
             GetActiveProgramsResponse pResponse = new GetActiveProgramsResponse();

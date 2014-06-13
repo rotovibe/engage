@@ -137,7 +137,8 @@ namespace Phytel.API.AppDomain.NG
                 IRestClient client = new JsonServiceClient();
 
                 string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Program/{5}/Details/?Token={6}",
-                                    DDProgramServiceUrl,
+                    //"http://azurephyteldev.cloudapp.net:59901/Program",                
+                    DDProgramServiceUrl,
                                     "NG",
                                     request.Version,
                                     request.ContractNumber,
@@ -645,6 +646,46 @@ namespace Phytel.API.AppDomain.NG
             catch (Exception ex)
             {
                 throw new Exception("AD:PlanElementEndpointUtil:GetPrimaryCareManagerForPatient()::" + ex.Message, ex.InnerException);
+            }
+        }
+
+
+        public AD.Outcome SaveProgramAttributeChanges(
+            PostProgramAttributesChangeRequest request, ProgramDetail pD)
+        {
+            try
+            {
+                PostProgramAttributesChangeResponse sResponse = new PostProgramAttributesChangeResponse();
+
+                IRestClient client = new JsonServiceClient();
+
+                var url = Common.Helper.BuildURL(string.Format(@"{0}/{1}/{2}/{3}/Patient/{4}/Programs/{5}/Update",
+                    DDProgramServiceUrl,
+                    "NG",
+                    request.Version,
+                    request.ContractNumber,
+                    request.PatientId,
+                    request.ProgramId,
+                    request.Token), request.UserId);
+
+                PutProgramActionProcessingResponse response = client.Put<PutProgramActionProcessingResponse>(
+                    url, new PutProgramActionProcessingRequest {Program = pD, UserId = request.UserId});
+
+                if (response != null)
+                {
+                    sResponse.Outcome = new AD.Outcome
+                    {
+                        Reason = "Success",
+                        Result = 1
+                    };
+                }
+
+                return sResponse.Outcome;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("AD:PlanElementEndpointUtil:SaveProgramAttributeChanges()::" + ex.Message,
+                    ex.InnerException);
             }
         }
     }

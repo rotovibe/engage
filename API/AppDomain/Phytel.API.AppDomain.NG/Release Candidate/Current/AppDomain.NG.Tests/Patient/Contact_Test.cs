@@ -24,7 +24,7 @@ namespace Phytel.API.AppDomain.NG.Test.Patient
         [TestProperty("TFS", "10417")]
         public void GetRecentPatientsForAContact_Test()
         {
-            INGManager ngm = new StubNGManager(); // { PlanElementUtils = new StubPlanElementUtils(), EndpointUtils = new StubPlanElementEndpointUtils() };
+            INGManager ngm = new StubNGManager(); // { PlanElementUtils = new StubPlanElementUtils(), EndPointUtils = new StubPlanElementEndpointUtils() };
 
             GetRecentPatientsRequest request = new GetRecentPatientsRequest
             {
@@ -44,7 +44,7 @@ namespace Phytel.API.AppDomain.NG.Test.Patient
         [TestProperty("TFS", "10417")]
         public void GetRecentPatients_Limit_Test()
         {
-            INGManager ngm = new StubNGManager(); // { PlanElementUtils = new StubPlanElementUtils(), EndpointUtils = new StubPlanElementEndpointUtils() };
+            INGManager ngm = new StubNGManager(); // { PlanElementUtils = new StubPlanElementUtils(), EndPointUtils = new StubPlanElementEndpointUtils() };
 
             GetRecentPatientsRequest request = new GetRecentPatientsRequest
             {

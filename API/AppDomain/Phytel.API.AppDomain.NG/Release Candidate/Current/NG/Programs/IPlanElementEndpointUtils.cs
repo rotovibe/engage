@@ -3,6 +3,7 @@ using Phytel.API.AppDomain.NG.DTO.Observation;
 using Phytel.API.AppDomain.NG.PlanCOR;
 using Phytel.API.DataDomain.Patient.DTO;
 using Phytel.API.DataDomain.PatientObservation.DTO;
+using Phytel.API.DataDomain.Program.DTO;
 using Phytel.API.Interface;
 using System;
 using System.Collections.Generic;
@@ -27,5 +28,7 @@ namespace Phytel.API.AppDomain.NG.Programs
         bool UpdateProgramAttributes(DD.ProgramAttributeData pAtt, IAppDomainRequest request);
         DD.PutProgramToPatientResponse AssignPatientToProgram(AD.PostPatientToProgramsRequest request, string careManagerId);
         string GetPrimaryCareManagerForPatient(PostPatientToProgramsRequest request);
+
+        AD.Outcome SaveProgramAttributeChanges(PostProgramAttributesChangeRequest request, ProgramDetail pg);
     }
 }

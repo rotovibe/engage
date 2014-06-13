@@ -1,4 +1,5 @@
-﻿using Phytel.API.AppDomain.NG.Programs;
+﻿using MongoDB.Bson;
+using Phytel.API.AppDomain.NG.Programs;
 using Phytel.API.DataDomain.Program.DTO;
 using ServiceStack.Service;
 using ServiceStack.ServiceHost;
@@ -48,9 +49,10 @@ namespace Phytel.API.AppDomain.NG.Test.Stubs
         {
             DTO.Program prg = new DTO.Program
             {
-                Id = "000000000000000000000000",
+                Id = "111100000000000000000000",
                 Description = "this is a test program from the stub.",
                 AssignDate = System.DateTime.UtcNow,
+                AssignToId = ObjectId.GenerateNewId().ToString(),
                 Client = "NG",
                 Completed = false,
                 ContractProgramId = "123456789098765432167846",
@@ -58,24 +60,93 @@ namespace Phytel.API.AppDomain.NG.Test.Stubs
                 Enabled = true,
                 Name = "test stub program",
                 ShortName = "t s p",
-                EligibilityRequirements = "Individual must be a part of the health plan and have completed HRA and other requirements.",
+                EligibilityRequirements =
+                    "Individual must be a part of the health plan and have completed HRA and other requirements.",
                 EligibilityStartDate = DateTime.UtcNow.AddDays(1),
                 EligibilityEndDate = DateTime.UtcNow.AddDays(20),
-                Modules = new List<DTO.Module>() { 
-                    new DTO.Module { Id = "000000000000000000000000", 
+                Modules = new List<DTO.Module>()
+                {
+                    new DTO.Module
+                    {
+                        Id = "999990000000000000000000",
                         Name = "Test stub module 1",
-                         Description = "BSHSI - Outreach & Enrollment",
-                          SourceId ="532b5585a381168abe00042c",
-                        Actions = new List<DTO.Actions>(){ 
-                            new DTO.Actions{  Id = "000000000000000000000000", 
-                                                ElementState = 4, 
-                                                Name ="test action from stub",
-                                                Description = "action Description",
-                                                Text = "test action 1",
-                                                AttrEndDate =  DateTime.UtcNow.AddDays(10),
-                                                AttrStartDate =  DateTime.UtcNow,
-                                                AssignDate = System.DateTime.UtcNow
-                            } }
+                        Description = "BSHSI - Outreach & Enrollment",
+                        SourceId = "532b5585a381168abe00042c",
+                        ElementState = 4,
+                        Enabled = false,
+                        Actions = new List<DTO.Actions>()
+                        {
+                            new DTO.Actions
+                            {
+                                Id = "9999977dfe7a59112c364123",
+                                ElementState = 4,
+                                Name = "test action from stub",
+                                Description = "action Description",
+                                Text = "test action 1",
+                                AttrEndDate = DateTime.UtcNow.AddDays(10),
+                                AttrStartDate = DateTime.UtcNow,
+                                AssignDate = System.DateTime.UtcNow,
+                                Enabled = true,
+                                SpawnElement =
+                                    new List<DTO.SpawnElement>
+                                    {
+                                        new DTO.SpawnElement {ElementId = "111116789012345678901234", ElementType = 3}
+                                    }
+                            },
+                            new DTO.Actions
+                            {
+                                Id = "999996789012345678904567",
+                                ElementState = 4,
+                                Name = "test action from stub",
+                                Description = "action Description",
+                                Text = "test action 1",
+                                AttrEndDate = DateTime.UtcNow.AddDays(10),
+                                AttrStartDate = DateTime.UtcNow,
+                                AssignDate = System.DateTime.UtcNow,
+                                Enabled = true
+                            }
+                        }
+                    },
+                    new DTO.Module
+                    {
+                        Id = "123450000000000000000000",
+                        Name = "Test stub module 1",
+                        Description = "BSHSI - Outreach & Enrollment",
+                        SourceId = "532b5585a381168abe00042c",
+                        ElementState = 4,
+                        Enabled = true,
+                        Actions = new List<DTO.Actions>()
+                        {
+                            new DTO.Actions
+                            {
+                                Id = "538ca77dfe7a59112c3649e4",
+                                ElementState = 4,
+                                Name = "test action from stub",
+                                Description = "action Description",
+                                Text = "test action 1",
+                                AttrEndDate = DateTime.UtcNow.AddDays(10),
+                                AttrStartDate = DateTime.UtcNow,
+                                AssignDate = System.DateTime.UtcNow,
+                                Enabled = true,
+                                SpawnElement =
+                                    new List<DTO.SpawnElement>
+                                    {
+                                        new DTO.SpawnElement {ElementId = "111116789012345678901234", ElementType = 3}
+                                    }
+                            },
+                            new DTO.Actions
+                            {
+                                Id = "111116789012345678901234",
+                                ElementState = 4,
+                                Name = "test action from stub",
+                                Description = "action Description",
+                                Text = "test action 1",
+                                AttrEndDate = DateTime.UtcNow.AddDays(10),
+                                AttrStartDate = DateTime.UtcNow,
+                                AssignDate = System.DateTime.UtcNow,
+                                Enabled = true
+                            }
+                        }
                     }
                 },
                 Text = "This is a sample patient program for the request patient details summary test stub",
@@ -87,7 +158,6 @@ namespace Phytel.API.AppDomain.NG.Test.Stubs
                     PlanElementId = "000000000000000000000000"
                 }
             };
-
             return prg;
         }
 
@@ -202,6 +272,14 @@ namespace Phytel.API.AppDomain.NG.Test.Stubs
         {
             string pcmId = "123456789012345678901234";
             return pcmId;
+        }
+
+
+        public AppDomain.NG.DTO.Outcome SaveProgramAttributeChanges(DTO.PostProgramAttributesChangeRequest request,
+            ProgramDetail pg)
+        {
+            DTO.Outcome outCome = new DTO.Outcome {Result = 1, Reason = "Success!"};
+            return outCome;
         }
     }
 }

@@ -69,6 +69,7 @@ namespace Phytel.API.AppDomain.NG
                 {
                     AssignBy = p.AssignById,
                     AssignDate = p.AssignDate,
+                    AssignTo = p.AssignToId,
                     AttrStartDate = p.AttrStartDate,
                     AttrEndDate = p.AttrEndDate,
                     Client = p.Client,
@@ -397,6 +398,7 @@ namespace Phytel.API.AppDomain.NG
                         {
                             AssignBy = a.AssignById,
                             AssignDate = a.AssignDate,
+                            AssignTo = a.AssignToId,
                             Completed = a.Completed,
                             CompletedBy = a.CompletedBy,
                             DateCompleted = a.DateCompleted,
@@ -440,6 +442,7 @@ namespace Phytel.API.AppDomain.NG
                         Actions adi = new Actions
                         {
                             AssignById = a.AssignBy,
+                            AssignToId = a.AssignTo,
                             AssignDate = a.AssignDate,
                             Completed = a.Completed,
                             CompletedBy = a.CompletedBy,
