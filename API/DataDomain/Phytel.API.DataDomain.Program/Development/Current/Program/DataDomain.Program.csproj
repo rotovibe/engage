@@ -81,6 +81,7 @@
     <Compile Include="MongoDB\DataManagement\Procedures\UpdatePatientProgram_HTNAndDiabetesText.cs" />
     <Compile Include="MongoDB\DataManagement\Procedures\MoveProgramAttributeStartDateValue.cs" />
     <Compile Include="MongoDB\DataManagement\Procedures\UpdateProgramStartDateToFirstActionStartDate.cs" />
+    <Compile Include="MongoDB\DataManagement\Procedures\UpdateStateForProgramsAndModules.cs" />
     <Compile Include="MongoDB\DTO\DTOUtility.cs" />
     <Compile Include="MongoDB\DTO\DTOUtils.cs" />
     <Compile Include="MongoDB\DTO\IDTOUtility.cs" />
