@@ -30,12 +30,14 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DataManagement.Procedures
 
                 foreach (MEPatientProgram mePP in programs)
                 {
+                    bool update = false;
                     List<Module> modules = mePP.Modules;
                     if (mePP.State == ElementState.NotStarted)
                     {
                         if (isAnyActionInProgressOrCompletedForAProgram(modules))
                         {
                             mePP.State = ElementState.InProgress;
+                            update = true;
                         }
                     }
                     if (modules != null & modules.Count > 0)
@@ -48,20 +50,24 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DataManagement.Procedures
                                 if (isAnyActionInProgressOrCompletedForAModule(actions))
                                 {
                                     meM.State = ElementState.InProgress;
+                                    update = true;
                                 }
                             }
                         }
                     }
-                    mePP.LastUpdatedOn = DateTime.UtcNow;
-                    mePP.UpdatedBy = systemObjectId;
-                    MEPatientProgram updatedProgram = mePP;
-                    bool success = repo.Save(updatedProgram);
-                    if (success)
+                    if (update)
                     {
-                        Results.Add(new Result { Message = string.Format("Updated Program Id : '{0}' in PatientProgram collection.", updatedProgram.Id) });
+                        mePP.LastUpdatedOn = DateTime.UtcNow;
+                        mePP.UpdatedBy = systemObjectId;
+                        MEPatientProgram updatedProgram = mePP;
+                        bool success = repo.Save(updatedProgram);
+                        if (success)
+                        {
+                            Results.Add(new Result { Message = string.Format("Updated Program Id : '{0}' in PatientProgram collection.", updatedProgram.Id) });
+                        }
                     }
                 }
-                    Results.Add(new Result { Message = "Total records updated: " + Results.Count });
+                Results.Add(new Result { Message = "Total records updated: " + Results.Count });
             }
             catch (Exception ex)
             {
