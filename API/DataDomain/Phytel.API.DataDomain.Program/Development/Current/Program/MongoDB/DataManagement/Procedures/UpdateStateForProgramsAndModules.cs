@@ -44,13 +44,16 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DataManagement.Procedures
                     {
                         foreach (Module meM in modules)
                         {
-                            List<Phytel.API.DataDomain.Program.MongoDB.DTO.Action> actions = meM.Actions;
-                            if (mePP.State == ElementState.NotStarted || mePP.State == ElementState.InProgress)
+                            if (meM.State == ElementState.NotStarted)
                             {
-                                if (isAnyActionInProgressOrCompletedForAModule(actions))
+                                List<Phytel.API.DataDomain.Program.MongoDB.DTO.Action> actions = meM.Actions;
+                                if (mePP.State == ElementState.NotStarted || mePP.State == ElementState.InProgress)
                                 {
-                                    meM.State = ElementState.InProgress;
-                                    update = true;
+                                    if (isAnyActionInProgressOrCompletedForAModule(actions))
+                                    {
+                                        meM.State = ElementState.InProgress;
+                                        update = true;
+                                    }
                                 }
                             }
                         }
