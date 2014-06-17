@@ -47,13 +47,10 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DataManagement.Procedures
                             if (meM.State == ElementState.NotStarted)
                             {
                                 List<Phytel.API.DataDomain.Program.MongoDB.DTO.Action> actions = meM.Actions;
-                                if (mePP.State == ElementState.NotStarted || mePP.State == ElementState.InProgress)
+                                if (isAnyActionInProgressOrCompletedForAModule(actions))
                                 {
-                                    if (isAnyActionInProgressOrCompletedForAModule(actions))
-                                    {
-                                        meM.State = ElementState.InProgress;
-                                        update = true;
-                                    }
+                                    meM.State = ElementState.InProgress;
+                                    update = true;
                                 }
                             }
                         }
