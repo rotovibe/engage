@@ -51,6 +51,12 @@ namespace Phytel.API.DataDomain.Program.Procs.Tests
                 executeMongoProcedure("mp_UpdatePatientActionAssignedAttributes");
             }
 
+            [TestMethod()]
+            public void UpdateStateForProgramsAndModules_Test()
+            {
+                executeMongoProcedure("mp_UpdateStateForProgramsAndModules");
+            }
+
             private void executeMongoProcedure(string procName)
             {
                 double version = 1.0;
