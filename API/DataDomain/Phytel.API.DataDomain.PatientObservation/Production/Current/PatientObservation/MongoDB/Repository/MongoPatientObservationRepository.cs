@@ -25,6 +25,7 @@ namespace Phytel.API.DataDomain.PatientObservation
         private string _dbName = string.Empty;
         private int _expireDays = Convert.ToInt32(ConfigurationManager.AppSettings["ExpireDays"]);
         private int _initializeDays = Convert.ToInt32(ConfigurationManager.AppSettings["InitializeDays"]);
+        private const string CareManager = "CM";
 
         static MongoPatientObservationRepository()
         {
@@ -273,7 +274,7 @@ namespace Phytel.API.DataDomain.PatientObservation
                     ObservationId = ObjectId.Parse(request.ObservationId),
                     TTLDate = System.DateTime.UtcNow.AddDays(_initializeDays),
                     DeleteFlag = false,
-                    Source = Constants.CareManager,
+                    Source = CareManager,
                     StartDate = DateTime.UtcNow,
                     EndDate = DateTime.UtcNow,
                     State = ObservationState.Complete,
@@ -320,7 +321,7 @@ namespace Phytel.API.DataDomain.PatientObservation
                     EndDate = null,
                     Display = ObservationDisplay.Primary,
                     State = ObservationState.Active,
-                    Source = Constants.CareManager,
+                    Source = CareManager,
                     Version = request.Version
                 };
 
