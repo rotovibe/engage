@@ -5,7 +5,6 @@ using System.Text;
 using System.Threading.Tasks;
 using Phytel.API.AppDomain.NG.DTO;
 using ServiceStack.ServiceClient.Web;
-using Phytel.API.AppDomain.NG.PlanSpecification;
 using Phytel.API.AppDomain.NG.PlanCOR;
 using ServiceStack.Service;
 using DD = Phytel.API.DataDomain.Program.DTO;

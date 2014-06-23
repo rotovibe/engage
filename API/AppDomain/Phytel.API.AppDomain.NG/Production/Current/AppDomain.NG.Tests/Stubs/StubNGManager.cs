@@ -1,10 +1,12 @@
-﻿using System;
+﻿using Phytel.API.AppDomain.NG.DTO;
+using Phytel.API.AppDomain.NG.Programs;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Phytel.API.AppDomain.NG.Service.Tests.Stubs
+namespace Phytel.API.AppDomain.NG.Test.Stubs
 {
     public class StubNGManager: INGManager
     {
@@ -26,6 +28,14 @@ namespace Phytel.API.AppDomain.NG.Service.Tests.Stubs
         public List<DTO.LanguagesLookUp> GetAllLanguages(DTO.GetAllLanguagesRequest request)
         {
             throw new NotImplementedException();
+        }
+
+        public List<DTO.ObjectivesLookUp> GetAllObjectives(DTO.GetAllObjectivesRequest request)
+        {
+            List<DTO.ObjectivesLookUp> list = new List<DTO.ObjectivesLookUp>();
+            list.Add(new DTO.ObjectivesLookUp { Id = "123", Name = "test", Categories = null });
+            return list;
+
         }
 
         public DTO.GetAllSettingsResponse GetAllSettings(DTO.GetAllSettingsRequest request)
@@ -85,12 +95,58 @@ namespace Phytel.API.AppDomain.NG.Service.Tests.Stubs
 
         public DTO.GetPatientProgramDetailsSummaryResponse GetPatientProgramDetailsSummary(DTO.GetPatientProgramDetailsSummaryRequest request)
         {
-            throw new NotImplementedException();
+            DTO.GetPatientProgramDetailsSummaryResponse response = new DTO.GetPatientProgramDetailsSummaryResponse
+            {
+                Program = new DTO.Program
+                {
+                    Name = "Test Program",
+                    Description = "test description",
+                    AssignById = request.UserId,
+                    AssignDate = System.DateTime.UtcNow,
+                    StateUpdatedOn = System.DateTime.UtcNow,
+                    Attributes = new DTO.ProgramAttribute
+                    {
+                        //AssignedBy = "me",
+                        //AssignedOn = System.DateTime.UtcNow,
+                        Id = "0000000000000000000000000"
+                    },
+                    Modules = new List<Module>() { 
+                    new Module { Id = "000000000000000000000000", 
+                        Name = "Test stub module 1",
+                         Description = "BSHSI - Outreach & Enrollment",
+                          SourceId ="532b5585a381168abe00042c",
+                        Actions = new List<Actions>(){ 
+                            new Actions{ Id = "000000000000000000000000", ElementState = 4, Name ="test action from stub", Text = "test action 1"} } 
+                    }
+                },
+                    Objectives = new List<DTO.ObjectiveInfo> { new DTO.ObjectiveInfo{ Id="123456789012345678901234",
+                     Status = 1,
+                      Unit = "lbs",
+                       Value = "12"
+                    } }
+                },
+                Version = 1.0
+            };
+            return response;
         }
 
         public DTO.GetPatientProgramsResponse GetPatientPrograms(DTO.GetPatientProgramsRequest request)
         {
             throw new NotImplementedException();
+        }
+
+        public DTO.GetPatientActionDetailsResponse GetPatientActionDetails(DTO.GetPatientActionDetailsRequest request)
+        {
+            DTO.GetPatientActionDetailsResponse response = new DTO.GetPatientActionDetailsResponse
+            {
+                Action = new DTO.Actions
+                {
+                    Name = "Program Completion",
+                    Description = "Program Completion test description"
+                },
+                Version = 1.0
+            };
+            return response;
         }
 
         public DTO.GetPatientSSNResponse GetPatientSSN(DTO.GetPatientSSNRequest request)
@@ -128,10 +184,62 @@ namespace Phytel.API.AppDomain.NG.Service.Tests.Stubs
             throw new NotImplementedException();
         }
 
+        public GetRecentPatientsResponse GetRecentPatients(GetRecentPatientsRequest request)
+        {
+            GetRecentPatientsResponse response = new GetRecentPatientsResponse();
+            List<CohortPatient> cohortpatients = new List<CohortPatient>();
+            cohortpatients.Add(new CohortPatient { Id = "abc", MiddleName = "e",  LastName = "lopez", FirstName = "eric", Gender = "M", DOB = "01/02/1978", PreferredName ="", Suffix ="Jr" });
+            cohortpatients.Add(new CohortPatient { Id = "efg", MiddleName = "e", LastName = "johnson", FirstName = "miles", Gender = "M", DOB = "01/02/1978", PreferredName = "", Suffix = "II" });
+            cohortpatients.Add(new CohortPatient { Id = "hij", MiddleName = "r", LastName = "miles", FirstName = "raul", Gender = "M", DOB = "01/02/1978", PreferredName = "", Suffix = "Sr" });
+            cohortpatients.Add(new CohortPatient { Id = "lmn", MiddleName = "t", LastName = "hopkins", FirstName = "john", Gender = "M", DOB = "01/02/1978", PreferredName = "", Suffix = "IV" });
+            cohortpatients.Add(new CohortPatient { Id = "opq", MiddleName = "w", LastName = "kennedy", FirstName = "peter", Gender = "M", DOB = "01/02/1943", PreferredName = "", Suffix = "X" });
+            response.Patients = new List<CohortPatient>();
+            response.ContactId = request.ContactId;
+            response.Limit = 5;
+            response.Patients = cohortpatients;
+            return response;
+        }
+
 
         public void LogException(Exception ex)
         {
             throw new NotImplementedException();
+        }
+
+        public IPlanElementUtils PlanElementUtils
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+            set
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+
+        public PostProgramAttributesChangeResponse PostProgramAttributeChanges(PostProgramAttributesChangeRequest request)
+        {
+            PostProgramAttributesChangeResponse response = new PostProgramAttributesChangeResponse
+            {
+                Version = 1.0
+            };
+
+            return response;
+        }
+
+
+        public IEndpointUtils EndpointUtils
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+            set
+            {
+                throw new NotImplementedException();
+            }
         }
     }
 }

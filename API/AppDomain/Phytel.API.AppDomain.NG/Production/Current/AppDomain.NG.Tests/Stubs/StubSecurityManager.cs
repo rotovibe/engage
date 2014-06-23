@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Phytel.API.AppDomain.NG.Service.Tests.Stubs
+namespace Phytel.API.AppDomain.NG.Test.Stubs
 {
     public class StubSecurityManager : ISecurityManager
     {
