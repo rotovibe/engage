@@ -1,14 +1,14 @@
-﻿using Phytel.Framework.ASE.Process;
-//using Phytel.API.AppDomain.Audit.DTO;
+﻿//using Phytel.API.AppDomain.Audit.DTO;
 using System;
 using System.Configuration;
 using System.Data;
+using System.Diagnostics;
 using System.IO;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Serialization;
-using System.Diagnostics;
+using Phytel.API.DataDomain.ASE.Common.Enums;
+using Phytel.API.DataDomain.ASE.DTO.Message;
+using Phytel.ASE.Core;
 
 namespace Phytel.API.Common.Audit
 {
@@ -36,7 +36,7 @@ namespace Phytel.API.Common.Audit
 
                 string xmlBody = ToXML(auditLog);
 
-                newMessage = new QueueMessage(Phytel.Framework.ASE.Data.Common.ASEMessageType.Process, messageQueue);
+                newMessage = new QueueMessage(ASEMessageType.Process, messageQueue);
                 newMessage.Body = xmlBody;
 
 #if DEBUG
@@ -73,9 +73,9 @@ namespace Phytel.API.Common.Audit
                 //string messageQueue = "fake";
 
                 //string xmlBody = ToXML(auditLog);
-                string xmlBody = MessageQueueHelper.SerializeObject(auditLog);
+                string xmlBody = MessageQueueHelper.SerializeXmlObject(auditLog);
 
-                newMessage = new QueueMessage(Phytel.Framework.ASE.Data.Common.ASEMessageType.Process, messageQueue);
+                newMessage = new QueueMessage(ASEMessageType.Process, messageQueue);
                 newMessage.Body = xmlBody;
 
                 string title = string.Empty;
@@ -109,7 +109,7 @@ namespace Phytel.API.Common.Audit
 
                 string xmlBody = ToXML(auditLog);
 
-                newMessage = new QueueMessage(Phytel.Framework.ASE.Data.Common.ASEMessageType.Process, messageQueue);
+                newMessage = new QueueMessage(ASEMessageType.Process, messageQueue);
                 newMessage.Body = xmlBody;
 
                 MessageQueueHelper.SendMessage(@messageQueue, newMessage, title);

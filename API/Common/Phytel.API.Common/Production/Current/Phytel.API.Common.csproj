@@ -43,20 +43,12 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="ASEBus">
-      <HintPath>References\ASEBus.dll</HintPath>
-    </Reference>
-    <Reference Include="ASEContext, Version=2.2.3.0, Culture=neutral, PublicKeyToken=2125ac4128f3087b, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>References\ASEContext.dll</HintPath>
+    <Reference Include="ASEAPI.Common">
+      <HintPath>References\ASEAPI.Common.dll</HintPath>
     </Reference>
     <Reference Include="ASECore, Version=2.2.3.0, Culture=neutral, PublicKeyToken=2125ac4128f3087b, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>References\ASECore.dll</HintPath>
-    </Reference>
-    <Reference Include="ASEData, Version=2.2.3.0, Culture=neutral, PublicKeyToken=2125ac4128f3087b, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>References\ASEData.dll</HintPath>
     </Reference>
     <Reference Include="MongoDB.Bson, Version=1.8.1.20, Culture=neutral, PublicKeyToken=f686731cfb9cc103, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -66,9 +58,15 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>References\MongoDB.Driver.dll</HintPath>
     </Reference>
+    <Reference Include="Phytel.API.DataDomain.ASE.DTO">
+      <HintPath>References\Phytel.API.DataDomain.ASE.DTO.dll</HintPath>
+    </Reference>
     <Reference Include="Phytel.Mongo, Version=1.1.3.0, Culture=neutral, PublicKeyToken=2125ac4128f3087b, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>References\Phytel.Mongo.dll</HintPath>
+    </Reference>
+    <Reference Include="Phytel.Web">
+      <HintPath>References\Phytel.Web.dll</HintPath>
     </Reference>
     <Reference Include="PhytelServices, Version=1.1.3.0, Culture=neutral, PublicKeyToken=2125ac4128f3087b, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -108,29 +106,29 @@
   <ItemGroup>
     <Compile Include="Audit\AuditData.cs" />
     <Compile Include="Audit\AuditDispatcher.cs" />
+    <Compile Include="Audit\AuditHelpers.cs" />
+    <Compile Include="Audit\AuditUtil.cs" />
     <Compile Include="Audit\AuditHelper.cs" />
     <Compile Include="Audit\DispatchEventArgs.cs" />
     <Compile Include="Audit\DispatchRequest.cs" />
-    <Compile Include="Constants.cs" />
+    <Compile Include="Audit\IAuditHelpers.cs" />
+    <Compile Include="Audit\IAuditUtil.cs" />
     <Compile Include="CustomObject\IdNamePair.cs" />
     <Compile Include="Data\MongoDataUtil.cs" />
     <Compile Include="Enums.cs" />
     <Compile Include="Extensions\LinqExtensions.cs" />
+    <Compile Include="Format\CommonFormatterUtil.cs" />
     <Compile Include="Format\CommonFormatter.cs" />
+    <Compile Include="Format\ICommonFormatterUtil.cs" />
+    <Compile Include="Helpers.cs" />
     <Compile Include="Helper.cs" />
+    <Compile Include="IHelpers.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Specification\AndSpecification.cs" />
-    <Compile Include="Specification\CompositeSpecification.cs" />
-    <Compile Include="Specification\NotSpecification.cs" />
-    <Compile Include="Specification\OrSpecification.cs" />
-    <Compile Include="Specification\Specification.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="DataEndpoints\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\Interfaces\Production\Current\Phytel.API.Interface\Phytel.API.Interface.csproj">
       <Project>{abe948fb-247e-4955-b3ab-b7c93e10a542}</Project>
