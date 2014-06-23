@@ -110,5 +110,14 @@ namespace Phytel.API.DataDomain.PatientGoal.DTO
         Goal = 1,
         Task = 2,
     }
+
+    public enum AttributeControlType
+    {
+        Single = 1,
+        Multi = 2,
+        Date = 3,
+        DateTime = 4,
+        Text = 5
+    }
 }
 
