@@ -111,4 +111,13 @@ namespace Phytel.API.DataDomain.Action.DTO
         [BsonElement(StatusProperty)]
         public Status Status { get; set; }
     }
+
+    public enum Status
+    {
+        Active = 1,
+        Inactive = 2,
+        InReview = 3,
+        Met = 4,
+        NotMet = 5
+    } 
 }
