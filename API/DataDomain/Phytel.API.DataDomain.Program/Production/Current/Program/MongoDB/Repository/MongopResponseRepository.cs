@@ -18,7 +18,7 @@ using MongoDB.Driver.Builders;
 
 namespace Phytel.API.DataDomain.Program
 {
-    public class MongoResponseRepository<T> : IProgramRepository<T>
+    public class MongoResponseRepository : IProgramRepository
     {
         private string _dbName = string.Empty;
 
@@ -272,6 +272,44 @@ namespace Phytel.API.DataDomain.Program
                 return responses;
             }
             catch (Exception) { throw; }
+        }
+
+
+        public object FindByPlanElementID(string entityID)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<object> FindByStepId(string entityID)
+        {
+            throw new NotImplementedException();
+        }
+
+        public object GetLimitedProgramFields(string objectId)
+        {
+            throw new NotImplementedException();
+        }
+
+
+        public object InsertAsBatch(object newEntity)
+        {
+            throw new NotImplementedException();
+        }
+
+
+        public object FindByEntityExistsID(string patientID, string progId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool Save(object entity)
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<Module> GetProgramModules(ObjectId progId)
+        {
+            throw new NotImplementedException();
         }
     }
 }

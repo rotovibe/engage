@@ -10,7 +10,7 @@ namespace Phytel.API.DataDomain.Program.DTO
         public string ModuleId { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
-        public List<ObjectivesDetail> Objectives { get; set; }
+        public List<ObjectiveInfoData> Objectives { get; set; }
         public List<StepsDetail> Steps { get; set; }
         public int Status { get; set; }
         public string Text { get; set; }

@@ -11,19 +11,22 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DataManagement
 {
     public class MongoProcedureFactory
     {
-        public IMongoProcedure GetProcedure(PostMongoProceduresRequest request)
+        public IMongoProcedure GetProcedure(GetMongoProceduresRequest request)
         {
             IMongoProcedure proc = GetInstanceFromExecutingAssembly(request);
-            proc.Request = request;
+            if(proc != null)
+            {
+                proc.Request = request;
+            }
             return proc;
         }
 
-        private IMongoProcedure GetInstanceFromExecutingAssembly(PostMongoProceduresRequest request)
+        private IMongoProcedure GetInstanceFromExecutingAssembly(GetMongoProceduresRequest request)
         {
             IMongoProcedure pr = null;
 
             string nm = string.Empty;
-            foreach (Type mytype in System.Reflection.Assembly.GetExecutingAssembly().GetTypes()
+            foreach (Type mytype in Assembly.GetExecutingAssembly().GetTypes()
                 .Where(mytype => mytype.GetInterfaces().Contains(typeof(IMongoProcedure)) && !mytype.IsAbstract))
             {
                 if (GetStaticPropertyName(request.Name, mytype))

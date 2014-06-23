@@ -14,7 +14,7 @@ using MongoDB.Bson.Serialization;
 
 namespace Phytel.API.DataDomain.Program
 {
-    public class MongoProgramRepository<T> : IProgramRepository<T>
+    public class MongoProgramRepository : IProgramRepository
     {
         private string _dbName = string.Empty;
 
@@ -76,6 +76,34 @@ namespace Phytel.API.DataDomain.Program
             catch (Exception ex)
             {
                 throw new Exception("DD:Program:FindByID()::" + ex.Message, ex.InnerException);
+            }
+        }
+
+        public object GetLimitedProgramFields(string objectId)
+        {
+            try
+            {
+                MEProgram cp = null;
+                using (ProgramMongoContext ctx = new ProgramMongoContext(_dbName))
+                {
+                     var query = MB.Query.And(
+                        MB.Query<MEProgram>.EQ(b => b.Id, ObjectId.Parse(objectId)),
+                        MB.Query<MEProgram>.EQ(b => b.DeleteFlag, false)
+                    );
+                    cp = ctx.Programs.Collection.Find(query).SetFields(
+                        MEProgram.AuthoredByProperty,
+                        MEProgram.TemplateNameProperty,
+                        MEProgram.TemplateVersionProperty,
+                        MEProgram.ProgramVersionProperty,
+                        MEProgram.ProgramVersionUpdatedOnProperty,
+                        MEProgram.ObjectivesInfoProperty
+                    ).FirstOrDefault();
+                }
+                return cp;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("DD:Program:GetLimitedProgramFields()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -146,6 +174,67 @@ namespace Phytel.API.DataDomain.Program
         public IEnumerable<object> Find(string Id)
         {
             throw new NotImplementedException();
+        }
+
+
+        public object FindByPlanElementID(string entityID)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<object> FindByStepId(string entityID)
+        {
+            throw new NotImplementedException();
+        }
+
+        public object InsertAsBatch(object newEntity)
+        {
+            throw new NotImplementedException();
+        }
+
+
+        public object FindByEntityExistsID(string patientID, string progId)
+        {
+            throw new NotImplementedException();
+        }
+
+
+        public IEnumerable<object> Find(List<ObjectId> Ids)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool Save(object entity)
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<Module> GetProgramModules(ObjectId progId)
+        {
+            try
+            {
+                List<Module> mods = null;
+
+                using (ProgramMongoContext ctx = new ProgramMongoContext(_dbName))
+                {
+                    var findcp = MB.Query<MEProgram>.EQ(b => b.Id, progId);
+                    MEProgram cp = ctx.Programs.Collection.Find(findcp).FirstOrDefault();
+
+                    if (cp != null)
+                    {
+                        mods = cp.Modules;
+                    }
+                    else
+                    {
+                        throw new ArgumentException("ProgramId is not valid or is missing from the records.");
+                    }
+                }
+                return mods;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("DD:PatientProgramRepository:GetProgramModules()::" + ex.Message, ex.InnerException);
+            }
         }
     }
 }

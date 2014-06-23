@@ -6,6 +6,7 @@ using System.ComponentModel;
 using System.Collections.Generic;
 using System;
 using Phytel.API.Common;
+using Phytel.API.DataDomain.Program.DTO;
 
 namespace Phytel.API.DataDomain.Program.MongoDB.DTO
 {
@@ -13,10 +14,17 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
     {
         public PlanElement() { }
 
-        public const string StartDateProperty = "sd";
-        [BsonElement(StartDateProperty)]
+        // This is an individual attribute
+        public const string AttributeEndDateProperty = "attred";
+        [BsonElement(AttributeEndDateProperty)]
+        [BsonIgnoreIfNull(false)]
+        public DateTime? AttributeEndDate { get; set; }
+
+        // This is an individual attribute
+        public const string AttributeStartDateProperty = "attrsd";
+        [BsonElement(AttributeStartDateProperty)]
         [BsonIgnoreIfNull(true)]
-        public DateTime? StartDate { get; set; }
+        public DateTime? AttributeStartDate { get; set; }
 
         public const string SourceIdProperty = "srcid";
         [BsonElement(SourceIdProperty)]
@@ -38,6 +46,11 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
         [BsonIgnoreIfNull(true)]
         public ElementState State { get; set; }
 
+        public const string StateUpdatedOnProperty = "stuon";
+        [BsonElement(StateUpdatedOnProperty)]
+        [BsonIgnoreIfNull(true)]
+        public DateTime? StateUpdatedOn { get; set; }
+
         public const string AssignDateProperty = "aon";
         [BsonElement(AssignDateProperty)]
         [BsonIgnoreIfNull(true)]
@@ -46,7 +59,12 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
         public const string AssignByProperty = "aby";
         [BsonElement(AssignByProperty)]
         [BsonIgnoreIfNull(true)]
-        public string AssignedBy { get; set; }
+        public ObjectId? AssignedBy { get; set; }
+
+        public const string AssignToProperty = "ato";
+        [BsonElement(AssignToProperty)]
+        [BsonIgnoreIfNull(true)]
+        public ObjectId? AssignedTo { get; set; }
 
         public const string CompletedByProperty = "cby";
         [BsonElement(CompletedByProperty)]
@@ -78,7 +96,6 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
         [BsonIgnoreIfNull(true)]
         public List<SpawnElement> Spawn { get; set; }
 
-        // remove when done testing !!!
         public const string EligibilityRequirementsProperty = "er";
         [BsonElement(EligibilityRequirementsProperty)]
         [BsonIgnoreIfNull(true)]
@@ -93,6 +110,5 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
         [BsonElement(EligibilityEndDateProperty)]
         [BsonIgnoreIfNull(false)]
         public DateTime? EligibilityEndDate { get; set; }
-        // remove !!!
     }
 }

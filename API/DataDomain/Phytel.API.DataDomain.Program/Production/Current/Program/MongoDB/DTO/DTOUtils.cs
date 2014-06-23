@@ -12,106 +12,111 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
 {
     public static class DTOUtils
     {
-        public static MEPatientProgram CreateInitialMEPatientProgram(PutProgramToPatientRequest request, MEProgram cp, List<ObjectId> sil)
-        {
-            try
-            {
-                MEPatientProgram patientProgDoc = new MEPatientProgram(request.UserId)
-                {
-                    PatientId = ObjectId.Parse(request.PatientId),
-                    //AuthoredBy = cp.AuthoredBy,
-                    Client = cp.Client,
-                    ProgramState = Common.ProgramState.NotStarted,
-                    State = Common.ElementState.NotStarted,
-                    AssignedBy = cp.AssignedBy,
-                    AssignedOn = cp.AssignedOn,
-                    StartDate = System.DateTime.UtcNow, // utc time
-                    EndDate = null,
-                    DateCompleted = cp.DateCompleted,
-                    ContractProgramId = cp.Id,
-                    DeleteFlag = cp.DeleteFlag,
-                    Description = cp.Description,
-                    LastUpdatedOn = System.DateTime.UtcNow, // utc time
-                    Name = cp.Name,
-                    Objectives = cp.Objectives,
-                    CompletedBy = cp.CompletedBy,
-                    SourceId = cp.Id,
-                    ShortName = cp.ShortName,
-                    Status = cp.Status,
-                    Version = cp.Version,
-                    Spawn = cp.Spawn,
-                    Completed = cp.Completed,
-                    Enabled = cp.Enabled,
-                    Next = cp.Next,
-                    Order = cp.Order,
-                    Previous = cp.Previous,
-                    Modules = DTOUtils.GetClonedModules(cp.Modules, request.ContractNumber, request.UserId, sil)
-                    //,UpdatedBy = ObjectId.Parse(request.UserId)
-                };
-                if (!string.IsNullOrEmpty(request.UserId))
-                {
-                    patientProgDoc.UpdatedBy = ObjectId.Parse(request.UserId);
-                }
-                return patientProgDoc;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("DD:DTOUtils:CreateInitialMEPatientProgram()::" + ex.Message, ex.InnerException);
-            }
-        }
+        //public static MEPatientProgram CreateInitialMEPatientProgram(PutProgramToPatientRequest request, MEProgram cp, List<ObjectId> sil)
+        //{
+        //    try
+        //    {
+        //        MEPatientProgram patientProgDoc = new MEPatientProgram(request.UserId)
+        //        {
+        //            PatientId = ObjectId.Parse(request.PatientId),
+        //            //AuthoredBy = cp.AuthoredBy,
+        //            Client = cp.Client,
+        //            ProgramState = ProgramState.NotStarted,
+        //            State = ElementState.NotStarted,
+        //            AttributeStartDate = null,
+        //            AttributeEndDate = null,
+        //            AssignedBy = null,
+        //            AssignedOn = null,
+        //            StartDate = cp.StartDate, 
+        //            EndDate = cp.EndDate,
+        //            DateCompleted = cp.DateCompleted,
+        //            ContractProgramId = cp.Id,
+        //            DeleteFlag = cp.DeleteFlag,
+        //            Description = cp.Description,
+        //            LastUpdatedOn = System.DateTime.UtcNow, // utc time
+        //            Name = cp.Name,
+        //            CompletedBy = cp.CompletedBy,
+        //            SourceId = cp.Id,
+        //            ShortName = cp.ShortName,
+        //            Status = cp.Status,
+        //            Version = cp.Version,
+        //            Spawn = cp.Spawn,
+        //            Completed = cp.Completed,
+        //            Enabled = cp.Enabled,
+        //            Next = cp.Next,
+        //            Order = cp.Order,
+        //            Previous = cp.Previous,
+        //            Modules = DTOUtils.GetClonedModules(cp.Modules, request.ContractNumber, request.UserId, sil),
+        //            EligibilityEndDate = cp.EligibilityEndDate,
+        //            EligibilityStartDate = cp.EligibilityStartDate,
+        //            EligibilityRequirements = cp.EligibilityRequirements,
+        //            //Objectives = cp.Objectives
+        //            //,UpdatedBy = ObjectId.Parse(request.UserId)
+        //        };
+        //        if (!string.IsNullOrEmpty(request.UserId))
+        //        {
+        //            patientProgDoc.UpdatedBy = ObjectId.Parse(request.UserId);
+        //        }
+        //        return patientProgDoc;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw new Exception("DD:DTOUtils:CreateInitialMEPatientProgram()::" + ex.Message, ex.InnerException);
+        //    }
+        //}
 
-        public static List<Module> GetClonedModules(List<Module> list, string contractNumber, string userId, List<ObjectId> sil)
-        {
-            try
-            {
-                List<Module> mods = new List<Module>();
+        //public static List<Module> GetClonedModules(List<Module> list, string contractNumber, string userId, List<ObjectId> sil)
+        //{
+        //    try
+        //    {
+        //        List<Module> mods = new List<Module>();
 
-                //Parallel.ForEach(list, m =>
-                foreach (Module m in list)
-                {
-                    if (m.Status == Common.Status.Active)
-                    {
-                        Module mod = new Module()
-                        {
-                            Id = m.Id,
-                            ProgramId = m.ProgramId,
-                            Description = m.Description,
-                            Name = m.Name,
-                            Status = m.Status,
-                            Objectives = m.Objectives,
-                            Completed = m.Completed,
-                            Enabled = m.Enabled,
-                            Next = m.Next,
-                            Order = m.Order,
-                            Previous = m.Previous,
-                            Spawn = m.Spawn,
-                            SourceId = m.SourceId,
-                            AssignedBy = m.AssignedBy,
-                            AssignedOn = m.AssignedOn,
-                            State = Common.ElementState.NotStarted,
-                            CompletedBy = m.CompletedBy,
-                            DateCompleted = m.DateCompleted,
-                            //Objectives = m.Objectives.Where(a => a.Status == Common.Status.Active).Select(z => new ObjectivesInfo()
-                            //{
-                            //    Id = z.Id,
-                            //    Status = z.Status,
-                            //    Unit = z.Unit,
-                            //    Value = z.Value
-                            //}).ToList(),
-                            Actions = GetClonedActions(m.Actions, contractNumber, userId, sil)
-                        };
-                            mods.Add(mod);
-                    }
-                }
-                //);
+        //        //Parallel.ForEach(list, m =>
+        //        foreach (Module m in list)
+        //        {
+        //            if (m.Status == Status.Active)
+        //            {
+        //                Module mod = new Module()
+        //                {
+        //                    Id = m.Id,
+        //                    ProgramId = m.ProgramId,
+        //                    Description = m.Description,
+        //                    Name = m.Name,
+        //                    Status = m.Status,
+        //                    Objectives = m.Objectives,
+        //                    Completed = m.Completed,
+        //                    Enabled = m.Enabled,
+        //                    Next = m.Next,
+        //                    Order = m.Order,
+        //                    Previous = m.Previous,
+        //                    Spawn = m.Spawn,
+        //                    SourceId = m.SourceId,
+        //                    AssignedBy = m.AssignedBy,
+        //                    AssignedOn = m.AssignedOn,
+        //                    State = ElementState.NotStarted,
+        //                    CompletedBy = m.CompletedBy,
+        //                    DateCompleted = m.DateCompleted,
+        //                    //Objectives = m.Objectives.Where(a => a.Status == Common.Status.Active).Select(z => new ObjectivesInfo()
+        //                    //{
+        //                    //    Id = z.Id,
+        //                    //    Status = z.Status,
+        //                    //    Unit = z.Unit,
+        //                    //    Value = z.Value
+        //                    //}).ToList(),
+        //                    Actions = GetClonedActions(m.Actions, contractNumber, userId, sil)
+        //                };
+        //                    mods.Add(mod);
+        //            }
+        //        }
+        //        //);
 
-                return mods;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("DD:DTOUtils:SetValidModules()::" + ex.Message, ex.InnerException);
-            }
-        }
+        //        return mods;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw new Exception("DD:DTOUtils:GetClonedModules()::" + ex.Message, ex.InnerException);
+        //    }
+        //}
 
         private static List<Action> GetClonedActions(List<Action> list, string contractNumber, string userId, List<ObjectId> sil)
         {
@@ -120,7 +125,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
                 List<Action> actions = new List<Action>();
                 foreach (Action ai in list)
                 {
-                    if (ai.Status == Common.Status.Active)
+                    if (ai.Status == Status.Active)
                     {
                         Action ac = new Action()
                         {
@@ -140,7 +145,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
                             SourceId = ai.SourceId,
                             AssignedBy = ai.AssignedBy,
                             AssignedOn = ai.AssignedOn,
-                            State = Common.ElementState.NotStarted,
+                            State = ElementState.NotStarted,
                             //Objectives = ai.Objectives.Where(r => r.Status == Common.Status.Active).Select(x => new ObjectivesInfo()
                             //{
                             //    Id = x.Id,
@@ -169,7 +174,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
                 //Parallel.ForEach(ai.Steps, b =>
                 foreach (Step b in ai.Steps)
                 {
-                    if (b.Status == Common.Status.Active)
+                    if (b.Status == Status.Active)
                     {
                         sil.Add(b.Id);
                         steps.Add(new Step()
@@ -238,66 +243,53 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             //}).ToList();
         }
 
-        private static List<MEPatientProgramResponse> GetContractStepResponses(ObjectId stepId, string contractNumber, string userId)
-        {
-            List<MEResponse> responseList = null;
-            List<MEPatientProgramResponse> ppresponseList = new List<MEPatientProgramResponse>();
-            try
-            {
-                IProgramRepository<GetStepResponseListResponse> repo =
-                    ProgramRepositoryFactory<GetStepResponseListResponse>.GetStepResponseRepository(contractNumber, "NG", userId);
+        //private static List<MEPatientProgramResponse> GetContractStepResponses(ObjectId stepId, string contractNumber, string userId)
+        //{
+        //    List<MEResponse> responseList = null;
+        //    List<MEPatientProgramResponse> ppresponseList = new List<MEPatientProgramResponse>();
+        //    try
+        //    {
+        //        IProgramRepository repo =
+        //            Factory.GetStepResponseRepository(contractNumber, "NG", userId);
 
-                //ICollection<SelectExpression> selectExpressions = new List<SelectExpression>();
+        //        List<MEResponse> stepResponses = (List<MEResponse>)repo.Find(stepId.ToString());
 
-                //SelectExpression stepResponseExpression = new SelectExpression();
-                //stepResponseExpression.FieldName = MEResponse.StepIdProperty;
-                //stepResponseExpression.Type = SelectExpressionType.EQ;
-                //stepResponseExpression.Value = stepId.ToString();
-                //stepResponseExpression.ExpressionOrder = 1;
-                //stepResponseExpression.GroupID = 1;
-                //selectExpressions.Add(stepResponseExpression);
+        //        if (stepResponses != null)
+        //        {
+        //            responseList = stepResponses;
+        //            responseList.ForEach(rs =>
+        //            {
+        //                ppresponseList.Add(new MEPatientProgramResponse(userId)
+        //                {
+        //                    Id = rs.Id,
+        //                    Value = rs.Value,
+        //                    Text = rs.Text,
+        //                    StepId = rs.StepId,
+        //                    Spawn = rs.Spawn,
+        //                    Required = rs.Required,
+        //                    Order = rs.Order,
+        //                    Nominal = rs.Nominal,
+        //                    NextStepId = rs.NextStepId
+        //                });
+        //            });
+        //        }
 
-                //APIExpression apiExpression = new APIExpression();
-                //apiExpression.Expressions = selectExpressions;
-
-                //Tuple<string, IEnumerable<object>> stepResponses = repo.Select(apiExpression);
-                List<MEResponse> stepResponses = (List<MEResponse>)repo.Find(stepId.ToString());
-
-                if (stepResponses != null)
-                {
-                    responseList = stepResponses;
-                    responseList.ForEach(rs =>
-                    {
-                        ppresponseList.Add(new MEPatientProgramResponse(userId)
-                        {
-                            Id = rs.Id,
-                            Value = rs.Value,
-                            Text = rs.Text,
-                            StepId = rs.StepId,
-                            Spawn = rs.Spawn,
-                            Required = rs.Required,
-                            Order = rs.Order,
-                            Nominal = rs.Nominal,
-                            NextStepId = rs.NextStepId
-                        });
-                    });
-                }
-
-                return ppresponseList;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("DD:DTOUtils:GetContractStepResponses()::" + ex.Message, ex.InnerException);
-            }
-        }
+        //        return ppresponseList;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw new Exception("DD:DTOUtils:GetContractStepResponses()::" + ex.Message, ex.InnerException);
+        //    }
+        //}
 
         private static List<MEPatientProgramResponse> GetStepResponses(ObjectId stepId, string contractNumber, string userId)
         {
             List<MEPatientProgramResponse> responseList = null;
             try
             {
-                IProgramRepository<GetStepResponseListResponse> repo =
-                    ProgramRepositoryFactory<GetStepResponseListResponse>.GetPatientProgramStepResponseRepository(contractNumber, "NG", userId);
+                GetPatientProgramsRequest request = new GetPatientProgramsRequest { ContractNumber = contractNumber, Context = "NG", UserId = userId };
+                IProgramRepository repo =
+                    new ProgramRepositoryFactory().GetRepository(request, RepositoryType.PatientProgramResponse);
 
                 ICollection<SelectExpression> selectExpressions = new List<SelectExpression>();
 
@@ -334,8 +326,8 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             List<StepResponse> returnResponseList = new List<StepResponse>();
             try
             {
-                IProgramRepository<GetStepResponseListResponse> repo =
-                    ProgramRepositoryFactory<GetStepResponseListResponse>.GetStepResponseRepository(contractNumber, "NG", userId);
+                GetPatientProgramsRequest request = new GetPatientProgramsRequest { ContractNumber = contractNumber, Context = "NG", UserId = userId };
+                IProgramRepository repo = new ProgramRepositoryFactory().GetRepository(request, RepositoryType.Response);
 
                 ICollection<SelectExpression> selectExpressions = new List<SelectExpression>();
 
@@ -649,21 +641,20 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
                 {
                     acts = new List<Action>();
 
-                    list.ForEach(a =>
-                    {
-                        acts.Add(
+                    list.ForEach(a => acts.Add(
                         new Action
                         {
                             Id = ObjectId.Parse(a.Id),
                             ModuleId = ObjectId.Parse(a.ModuleId),
                             Steps = GetStepsInfo(a.Steps, userId),
-                            AssignedBy = a.AssignBy,
+                            AssignedBy = ParseObjectId(a.AssignBy),
                             AssignedOn = a.AssignDate,
+                            AssignedTo = ParseObjectId(a.AssignTo),
                             Completed = a.Completed,
                             CompletedBy = a.CompletedBy,
                             DateCompleted = a.DateCompleted,
                             Description = a.Description,
-                            State = (ElementState)a.ElementState,
+                            State = (ElementState) a.ElementState,
                             Enabled = a.Enabled,
                             Name = a.Name,
                             Next = ParseObjectId(a.Next),
@@ -672,9 +663,8 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
                             Previous = ParseObjectId(a.Previous),
                             SourceId = ObjectId.Parse(a.SourceId),
                             Spawn = GetSpawnElements(a.SpawnElement),
-                            Status = (Status)a.Status
-                        });
-                    });
+                            Status = (Status) a.Status
+                        }));
                 }
                 return acts;
             }
@@ -700,7 +690,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
                         {
                             Id = ObjectId.Parse(st.Id),
                             ActionId = ObjectId.Parse(st.ActionId),
-                            AssignedBy = st.AssignBy,
+                            AssignedBy = ParseObjectId(st.AssignBy),
                             AssignedOn = st.AssignDate,
                             Completed = st.Completed,
                             CompletedBy = st.CompletedBy,
@@ -835,7 +825,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             }
         }
 
-        public static List<Objective> GetObjectives(List<Program.DTO.ObjectivesDetail> list)
+        public static List<Objective> GetObjectives(List<Program.DTO.ObjectiveInfoData> list)
         {
             try
             {
@@ -871,9 +861,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
                 if (prg != null)
                 {
                     mods = new List<Module>();
-                    prg.ForEach(m =>
-                    {
-                        mods.Add(
+                    prg.ForEach(m => mods.Add(
                         new Module
                         {
                             Id = ObjectId.Parse(m.Id),
@@ -882,7 +870,9 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
                             Previous = ParseObjectId(m.Previous),
                             Spawn = DTOUtils.GetSpawnElements(m.SpawnElement),
                             Actions = DTOUtils.GetActionElements(m.Actions, userId),
-                            AssignedBy = m.AssignBy,
+                            AssignedBy = ParseObjectId(m.AssignBy),
+                            AssignedTo = ParseObjectId(m.AssignTo),
+                            StateUpdatedOn = m.StateUpdatedOn,
                             AssignedOn = m.AssignDate,
                             Completed = m.Completed,
                             CompletedBy = m.CompletedBy,
@@ -895,8 +885,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
                             ProgramId = ObjectId.Parse(m.ProgramId),
                             SourceId = ObjectId.Parse(m.SourceId),
                             Status = (Status)m.Status
-                        });
-                    });
+                        }));
                 }
                 return mods;
             }
@@ -926,7 +915,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
                     Order = r.Order,
                     SpawnElement = GetSpawnElement(r),
                     SourceId = r.SourceId.ToString(),
-                    AssignBy = r.AssignedBy,
+                    AssignBy = r.AssignedBy.ToString(),
                     AssignDate = r.AssignedOn,
                     ElementState = (int)r.State,
                     CompletedBy = r.CompletedBy,
@@ -942,14 +931,14 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             }
         }
 
-        public static List<ObjectivesDetail> GetObjectives(List<Objective> list)
+        public static List<ObjectiveInfoData> GetObjectives(List<Objective> list)
         {
             try
             {
-                List<ObjectivesDetail> objs = new List<ObjectivesDetail>();
+                List<ObjectiveInfoData> objs = new List<ObjectiveInfoData>();
                 if (list != null)
                 {
-                    list.ForEach(o => objs.Add(new ObjectivesDetail
+                    list.ForEach(o => objs.Add(new ObjectiveInfoData
                     {
                         Id = o.Id.ToString(),
                         Value = o.Value,
@@ -970,34 +959,51 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             try
             {
                 List<ActionsDetail> acts = new List<ActionsDetail>();
-                list.ForEach(a => acts.Add(new ActionsDetail
-                {
-                    CompletedBy = a.CompletedBy,
-                    Description = a.Description,
-                    Id = a.Id.ToString(),
-                    ModuleId = a.ModuleId.ToString(),
-                    Name = a.Name,
-                    Status = (int)a.Status,
-                    Completed = a.Completed,
-                    Enabled = a.Enabled,
-                    Next = a.Next != null ? a.Next.ToString() : string.Empty,
-                    Previous = a.Previous != null ? a.Previous.ToString() : string.Empty,
-                    Order = a.Order,
-                    SpawnElement = GetSpawnElement(a),
-                    SourceId = a.SourceId.ToString(),
-                    AssignBy = a.AssignedBy,
-                    AssignDate = a.AssignedOn,
-                    ElementState = (int)a.State,
-                    DateCompleted = a.DateCompleted,
-                    Objectives = GetObjectives(a.Objectives),
-                    Steps = GetSteps(a.Steps, contract, userId)
-                }));
+                list.ForEach(a => acts.Add(GetAction(contract, userId, a)));
                 return acts;
             }
             catch (Exception ex)
             {
                 throw new Exception("DD:DTOUtils:GetActions()::" + ex.Message, ex.InnerException);
             }
+        }
+
+        public static ActionsDetail GetAction(string contract, string userId, Action a)
+        {
+            ActionsDetail actionDetail = null;
+            try
+            {
+                if (a != null)
+                {
+                    actionDetail =  new ActionsDetail
+                    {
+                        CompletedBy = a.CompletedBy,
+                        Description = a.Description,
+                        Id = a.Id.ToString(),
+                        ModuleId = a.ModuleId.ToString(),
+                        Name = a.Name,
+                        Status = (int)a.Status,
+                        Completed = a.Completed,
+                        Enabled = a.Enabled,
+                        Next = a.Next != null ? a.Next.ToString() : string.Empty,
+                        Previous = a.Previous != null ? a.Previous.ToString() : string.Empty,
+                        Order = a.Order,
+                        SpawnElement = GetSpawnElement(a),
+                        SourceId = a.SourceId.ToString(),
+                        AssignBy = a.AssignedBy.ToString(),
+                        AssignDate = a.AssignedOn,
+                        ElementState = (int)a.State,
+                        DateCompleted = a.DateCompleted,
+                        Objectives = GetObjectives(a.Objectives),
+                        Steps = GetSteps(a.Steps, contract, userId)
+                    };
+                }
+            }
+            catch 
+            {
+                throw;
+            }
+            return actionDetail;
         }
 
         public static List<StepsDetail> GetSteps(List<Step> list, string contract, string userId)
@@ -1030,7 +1036,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
                             SelectedResponseId = s.SelectedResponseId.ToString(),
                             IncludeTime = s.IncludeTime,
                             SelectType = (int)s.SelectType,
-                            AssignBy = s.AssignedBy,
+                            AssignBy = s.AssignedBy.ToString(),
                             AssignDate = s.AssignedOn,
                             ElementState = (int)s.State,
                             CompletedBy = s.CompletedBy,
@@ -1161,41 +1167,52 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             }
         }
 
-        public static bool SavePatientProgramResponses(List<MEPatientProgramResponse> pprs, PutProgramToPatientRequest request)
-        {
-            try
-            {
-                IProgramRepository<MEPatientProgramResponse> repo =
-                    ProgramRepositoryFactory<MEPatientProgramResponse>.GetPatientProgramStepResponseRepository(request.ContractNumber, "NG", request.UserId);
+        //public static bool SavePatientProgramResponses(List<MEPatientProgramResponse> pprs, PutProgramToPatientRequest request)
+        //{
+        //    try
+        //    {
+        //        IProgramRepository repo =
+        //            new ProgramRepositoryFactory().GetRepository(request, RepositoryType.PatientProgramResponse);//.GetPatientProgramStepResponseRepository(request);
 
-                bool result = (bool)((MongoPatientProgramResponseRepository<MEPatientProgramResponse>)repo).InsertAsBatch(pprs);
-                return result;
-            }
-            catch (Exception ex)
-            {
-                throw new ArgumentException("DD:DTOUtils:SavePatientProgramResponses()::" + ex.Message, ex.InnerException);
-            }
-        }
+        //        bool result = (bool)repo.InsertAsBatch(pprs);
+        //        return result;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw new ArgumentException("DD:DTOUtils:SavePatientProgramResponses()::" + ex.Message, ex.InnerException);
+        //    }
+        //}
 
-        public static List<MEPatientProgramResponse> RecurseAndStoreResponseObjects(MEPatientProgram prog, string contractNumber, string userId)
+        public static List<MEPatientProgramResponse> ExtractMEPatientProgramResponses(MEPatientProgram prog, string contractNumber, string userId)
         {
             try
             {
                 List<MEPatientProgramResponse> ppr = new List<MEPatientProgramResponse>();
                 foreach (Module m in prog.Modules)
                 {
-                    foreach (Action a in m.Actions)
+                    if(m.Actions != null)
                     {
-                        foreach (Step s in a.Steps)
+                        foreach (Action a in m.Actions)
                         {
-                            foreach (MEPatientProgramResponse r in s.Responses)
+                            if(a.Steps != null)
                             {
-                                r.DeleteFlag = false;
-                                r.RecordCreatedBy = ObjectId.Parse(userId);
-                                r.RecordCreatedOn = DateTime.UtcNow;
+                                foreach (Step s in a.Steps)
+                                {
+                                    if(s.Responses != null)
+                                    {
+                                        foreach (MEPatientProgramResponse r in s.Responses)
+                                        {
+                                            r.DeleteFlag = false;
+                                            r.RecordCreatedBy = ObjectId.Parse(userId);
+                                            r.RecordCreatedOn = DateTime.UtcNow;
 
-                                if (!ppr.Contains(r))
-                                    ppr.Add(r);
+                                            if (!ppr.Contains(r))
+                                                ppr.Add(r);
+                                        }
+                                        // Remove responses from PatientProgram collection.
+                                        s.Responses = null;
+                                    }
+                                }
                             }
                         }
                     }
@@ -1213,8 +1230,8 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             bool result = false;
             try
             {
-                IProgramRepository<MEPatientProgramResponse> repo =
-                    ProgramRepositoryFactory<MEPatientProgramResponse>.GetPatientProgramStepResponseRepository(contractNumber, "NG", userId);
+                GetPatientProgramsRequest request = new GetPatientProgramsRequest { ContractNumber = contractNumber, Context = "NG", UserId = userId };
+                IProgramRepository repo = new ProgramRepositoryFactory().GetRepository(request, RepositoryType.PatientProgramResponse);//.GetPatientProgramStepResponseRepository(new GetPatientProgramsRequest { ContractNumber = contractNumber, Context = "NG", UserId = userId });
 
                 result = (Boolean)repo.Insert(r);
                 return result;
@@ -1225,161 +1242,151 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             }
         }
 
-        internal static ProgramAttribute InitializeElementAttributes(ProgramInfo p)
-        {
-            try
-            {
-                ProgramAttribute pa = new ProgramAttribute();
-                pa.PlanElementId = p.Id;
-                pa.Status = p.Status;
-                pa.StartDate = System.DateTime.UtcNow;
-                pa.EndDate = null;
-                pa.Eligibility = 3;
-                pa.Enrollment = 2;
-                pa.GraduatedFlag = 1;
-                pa.OptOut = false;
-                //pa.EligibilityOverride = 1;
-                return pa;
-            }
-            catch (Exception ex)
-            {
-                throw new ArgumentException("DD:DTOUtils:InitializeElementAttributes()::" + ex.Message, ex.InnerException);
-            }
-        }
+        //internal static ProgramAttributeData InitializeElementAttributes(ProgramInfo p)
+        //{
+        //    try
+        //    {
+        //        ProgramAttributeData pa = new ProgramAttributeData();
+        //        pa.PlanElementId = p.Id;
+        //        pa.Status = p.Status;
+        //        //pa.AttrStartDate = System.DateTime.UtcNow;
+        //        //pa.AttrEndDate = null;
+        //        pa.Eligibility = 3;
+        //        pa.Enrollment = 2;
+        //        pa.GraduatedFlag = 1;
+        //        pa.OptOut = false;
+        //        //pa.EligibilityOverride = 1;
+        //        return pa;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw new ArgumentException("DD:DTOUtils:InitializeElementAttributes()::" + ex.Message, ex.InnerException);
+        //    }
+        //}
 
-        internal static void InitializeProgramAttributes(PutProgramToPatientRequest request, PutProgramToPatientResponse response)
-        {
-            try
-            {
-                // create program attribute insertion
-                ProgramAttribute attr = DTOUtils.InitializeElementAttributes(response.program);
+        //internal static void InitializeProgramAttributes(PutProgramToPatientRequest request, PutProgramToPatientResponse response)
+        //{
+        //    try
+        //    {
+        //        // create program attribute insertion
+        //        ProgramAttributeData attr = DTOUtils.InitializeElementAttributes(response.program);
 
-                IProgramRepository<PutProgramAttributesResponse> attrRepo =
-                    Phytel.API.DataDomain.Program.ProgramRepositoryFactory<PutProgramAttributesResponse>
-                    .GetProgramAttributesRepository(request.ContractNumber, request.Context, request.UserId);
+        //        IProgramRepository attrRepo = new ProgramRepositoryFactory().GetRepository(request  , RepositoryType.PatientProgramAttribute);//.GetProgramAttributesRepository(request);
 
-                attrRepo.Insert(attr);
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("DD:DTOUtils:InitializeProgramAttributes()::" + ex.Message, ex.InnerException);
-            }
-        }
+        //        attrRepo.Insert(attr);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw new Exception("DD:DTOUtils:InitializeProgramAttributes()::" + ex.Message, ex.InnerException);
+        //    }
+        //}
 
-        internal static bool CanInsertPatientProgram(List<MEPatientProgram> pp)
-        {
-            try
-            {
-                bool result = true;
-                if (pp == null)
-                {
-                    result = true;
-                }
-                else if (pp.Count >= 1)
-                {
-                    foreach (MEPatientProgram p in pp)
-                    {
-                        if (!p.State.Equals(ElementState.Removed) && !p.State.Equals(ElementState.Completed))
-                        {
-                            result = false;
-                            break;
-                        }
-                    }
-                }
-                return result;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("DD:PatientProgramRepository:CanInsertPatientProgram()::" + ex.Message, ex.InnerException);
-            }
-        }
+        //internal static bool CanInsertPatientProgram(List<MEPatientProgram> pp)
+        //{
+        //    try
+        //    {
+        //        bool result = true;
+        //        if (pp == null)
+        //        {
+        //            result = true;
+        //        }
+        //        else if (pp.Count >= 1)
+        //        {
+        //            foreach (MEPatientProgram p in pp)
+        //            {
+        //                if (!p.State.Equals(ElementState.Removed) && !p.State.Equals(ElementState.Completed))
+        //                {
+        //                    result = false;
+        //                    break;
+        //                }
+        //            }
+        //        }
+        //        return result;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw new Exception("DD:PatientProgramRepository:CanInsertPatientProgram()::" + ex.Message, ex.InnerException);
+        //    }
+        //}
 
-        internal static List<MEPatientProgram> FindExistingpatientProgram(PutProgramToPatientRequest request)
-        {
-            try
-            {
-                IProgramRepository<PutProgramToPatientResponse> pRepo = ProgramRepositoryFactory<PutProgramToPatientResponse>
-                    .GetPatientProgramRepository(request.ContractNumber, request.Context, request.UserId);
+        //internal static List<MEPatientProgram> FindExistingpatientProgram(PutProgramToPatientRequest request)
+        //{
+        //    try
+        //    {
+        //        IProgramRepository pRepo = new ProgramRepositoryFactory().GetRepository(request, RepositoryType.PatientProgram);//.GetPatientProgramRepository(request);
 
-                List<MEPatientProgram> pp =
-                    ((MongoPatientProgramRepository<PutProgramToPatientResponse>)pRepo)
-                    .FindByEntityExistsID(request.PatientId, request.ContractProgramId) as List<MEPatientProgram>;
-                return pp;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("DD:DataProgramManager:FindExistingpatientProgram()::" + ex.Message, ex.InnerException);
-            }
-        }
+        //        List<MEPatientProgram> pp = pRepo.FindByEntityExistsID(request.PatientId, request.ContractProgramId) as List<MEPatientProgram>;
+        //        return pp;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw new Exception("DD:DataProgramManager:FindExistingpatientProgram()::" + ex.Message, ex.InnerException);
+        //    }
+        //}
 
-        internal static MEProgram GetProgramForDeepCopy(PutProgramToPatientRequest request)
-        {
-            try
-            {
-                IProgramRepository<PutProgramToPatientResponse> pgRepo = ProgramRepositoryFactory<PutProgramToPatientResponse>
-                    .GetProgramRepository(request.ContractNumber, request.Context, request.UserId);
-                MEProgram cp = (MEProgram)pgRepo.FindByID(request.ContractProgramId.ToString());
-                return cp;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("DD:DataProgramManager:GetProgram()::" + ex.Message, ex.InnerException);
-            }
-        }
+        //internal static MEProgram GetProgramForDeepCopy(PutProgramToPatientRequest request)
+        //{
+        //    try
+        //    {
+        //        IProgramRepository pgRepo = new ProgramRepositoryFactory().GetRepository(request, RepositoryType.Program);//.GetProgramRepository(request);
+        //        MEProgram cp = (MEProgram)pgRepo.FindByID(request.ContractProgramId.ToString());
+        //        return cp;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw new Exception("DD:DataProgramManager:GetProgram()::" + ex.Message, ex.InnerException);
+        //    }
+        //}
 
-        internal static ProgramInfo SaveNewPatientProgram(PutProgramToPatientRequest request, MEPatientProgram nmePP)
-        {
-            try
-            {
-                // give this the formatted patient program ready for saving
-                IProgramRepository<PutProgramToPatientResponse> patProgRepo =
-                    Phytel.API.DataDomain.Program.ProgramRepositoryFactory<PutProgramToPatientResponse>
-                    .GetPatientProgramRepository(request.ContractNumber, request.Context, request.UserId);
+        //internal static ProgramInfo SaveNewPatientProgram(PutProgramToPatientRequest request, MEPatientProgram nmePP)
+        //{
+        //    try
+        //    {
+        //        // give this the formatted patient program ready for saving
+        //        IProgramRepository patProgRepo = new ProgramRepositoryFactory().GetRepository(request, RepositoryType.PatientProgram);//.GetPatientProgramRepository(request);
 
-                ProgramInfo pi = (ProgramInfo)patProgRepo.Insert((object)nmePP);
-                return pi;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("DD:DataProgramManager:SaveNewPatientProgram()::" + ex.Message, ex.InnerException);
-            }
-        }
+        //        ProgramInfo pi = (ProgramInfo)patProgRepo.Insert((object)nmePP);
+        //        return pi;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw new Exception("DD:DataProgramManager:SaveNewPatientProgram()::" + ex.Message, ex.InnerException);
+        //    }
+        //}
 
-        internal static List<MEPatientProgramResponse> InitializePatientProgramAssignment(PutProgramToPatientRequest request, MEPatientProgram nmePP)
-        {
-            try
-            {
-                List<MEPatientProgramResponse> pprs = new List<MEPatientProgramResponse>();
-                // update to new ids and their references
-                Dictionary<ObjectId, ObjectId> IdsList = new Dictionary<ObjectId, ObjectId>();
-                DTOUtils.RecurseAndReplaceIds(nmePP.Modules, IdsList);
-                pprs = DTOUtils.RecurseAndStoreResponseObjects(nmePP, request.ContractNumber, request.UserId);
-                //DTOUtils.RecurseAndSaveResponseObjects(nmePP, request.ContractNumber, request.UserId);
-                return pprs;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("DD:DataProgramManager:InitializePatientProgramAssignment()::" + ex.Message, ex.InnerException);
-            }
-        }
+        //internal static List<MEPatientProgramResponse> InitializePatientProgramAssignment(PutProgramToPatientRequest request, MEPatientProgram nmePP)
+        //{
+        //    try
+        //    {
+        //        List<MEPatientProgramResponse> pprs = new List<MEPatientProgramResponse>();
+        //        // update to new ids and their references
+        //        Dictionary<ObjectId, ObjectId> IdsList = new Dictionary<ObjectId, ObjectId>();
+        //        DTOUtils.RecurseAndReplaceIds(nmePP.Modules, IdsList);
+        //        pprs = DTOUtils.RecurseAndStoreResponseObjects(nmePP, request.ContractNumber, request.UserId);
+        //        //DTOUtils.RecurseAndSaveResponseObjects(nmePP, request.ContractNumber, request.UserId);
+        //        return pprs;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw new Exception("DD:DataProgramManager:InitializePatientProgramAssignment()::" + ex.Message, ex.InnerException);
+        //    }
+        //}
 
-        internal static List<MEResponse> GetProgramResponseslist(List<ObjectId> idl, MEProgram cp, PutProgramToPatientRequest request)
-        {
-            try
-            {
-                List<MEResponse> list = null;
-                IProgramRepository<PutProgramToPatientResponse> respRepo =
-                    Phytel.API.DataDomain.Program.ProgramRepositoryFactory<PutProgramToPatientResponse>
-                    .GetStepResponseRepository(request.ContractNumber, request.Context, request.UserId);
+        //internal static List<MEResponse> GetProgramResponseslist(List<ObjectId> idl, MEProgram cp, PutProgramToPatientRequest request)
+        //{
+        //    try
+        //    {
+        //        List<MEResponse> list = null;
+        //        IProgramRepository respRepo = new ProgramRepositoryFactory().GetRepository(request, RepositoryType.Response);//.GetStepResponseRepository(request);
 
-                list = ((MongoResponseRepository<PutProgramToPatientResponse>)respRepo).Find(idl) as List<MEResponse>;
-                return list;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("DD:DataProgramManager:GetProgramResponseslist()::" + ex.Message, ex.InnerException);
-            }
-        }
+        //        list = respRepo.Find(idl) as List<MEResponse>;
+        //        return list;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw new Exception("DD:DataProgramManager:GetProgramResponseslist()::" + ex.Message, ex.InnerException);
+        //    }
+        //}
 
         internal static void HydrateResponsesInProgram(MEProgram prog, List<MEResponse> responseList, string usrId)
         {

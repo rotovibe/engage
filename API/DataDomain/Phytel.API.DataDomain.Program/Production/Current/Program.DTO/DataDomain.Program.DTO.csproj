@@ -78,6 +78,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Constants.cs" />
+    <Compile Include="GetPatientActionDetailsDataRequest.cs" />
+    <Compile Include="DataDomainRequest.cs" />
     <Compile Include="GetProgramDetailsSummaryRequest.cs" />
     <Compile Include="ActionDetail.cs" />
     <Compile Include="GetProgramAttributeRequest.cs" />
@@ -85,13 +88,19 @@
     <Compile Include="GetContractProgramResponse.cs" />
     <Compile Include="GetProgramByNameRequest.cs" />
     <Compile Include="GetProgramByNameResponse.cs" />
+    <Compile Include="GetPatientActionDetailsDataResponse.cs" />
     <Compile Include="GetStepResponseRequest.cs" />
     <Compile Include="GetStepResponseListRequest.cs" />
     <Compile Include="GetProgramAttributeResponse.cs" />
     <Compile Include="GetStepResponseResponse.cs" />
     <Compile Include="GetStepResponseListResponse.cs" />
+    <Compile Include="Enums.cs" />
     <Compile Include="PlanElementDetail.cs" />
-    <Compile Include="ObjectivesDetail.cs" />
+    <Compile Include="ObjectiveInfoData.cs" />
+    <Compile Include="MongoProcedures\GetMongoProceduresListRequest.cs" />
+    <Compile Include="MongoProcedures\GetMongoProceduresRequest.cs" />
+    <Compile Include="MongoProcedures\GetMongoProceduresListResponse.cs" />
+    <Compile Include="MongoProcedures\GetMongoProceduresResponse.cs" />
     <Compile Include="ProgramAttribute.cs" />
     <Compile Include="PutProgramActionProcessingRequest.cs" />
     <Compile Include="PutProgramActionProcessingResponse.cs" />
@@ -100,10 +109,8 @@
     <Compile Include="PutProgramAttributesRequest.cs" />
     <Compile Include="PutUpdateProgramAttributesRequest.cs" />
     <Compile Include="PutProgramAttributesResponse.cs" />
-    <Compile Include="PostMongoProceduresRequest.cs" />
     <Compile Include="PutUpdateResponseRequest.cs" />
     <Compile Include="PutUpdateProgramAttributesResponse.cs" />
-    <Compile Include="PostMongoProceduresResponse.cs" />
     <Compile Include="PutUpdateResponseResponse.cs" />
     <Compile Include="ResponseDetail.cs" />
     <Compile Include="StepDetail.cs" />

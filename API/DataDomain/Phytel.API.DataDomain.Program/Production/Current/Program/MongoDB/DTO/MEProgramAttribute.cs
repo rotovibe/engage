@@ -6,6 +6,8 @@ using System.ComponentModel;
 using System.Collections.Generic;
 using System;
 using Phytel.API.Common;
+using Phytel.API.DataDomain.Program;
+using Phytel.API.DataDomain.Program.DTO;
 
 namespace Phytel.API.DataDomain.Program.MongoDB.DTO
 {
@@ -34,35 +36,15 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
         [BsonIgnoreIfNull(true)]
         public ObjectId PlanElementId { get; set; }
 
-        public const string EndDateProperty = "ed";
-        [BsonElement(EndDateProperty)]
-        [BsonIgnoreIfNull(false)]
-        public DateTime? EndDate { get; set; }
+        //public const string EndDateProperty = "ed"; , Sprint 12
+        //[BsonElement(EndDateProperty)]
+        //[BsonIgnoreIfNull(false)]
+        //public DateTime? EndDate { get; set; }
 
         public const string StatusProperty = "sts";
         [BsonElement(StatusProperty)]
         [BsonIgnoreIfNull(true)]
         public Status Status { get; set; }
-
-        public const string EligibilityRequirementsProperty = "er";
-        [BsonElement(EligibilityRequirementsProperty)]
-        [BsonIgnoreIfNull(true)]
-        public string EligibilityRequirements { get; set; }
-
-        public const string EligibilityStartDateProperty = "esd";
-        [BsonElement(EligibilityStartDateProperty)]
-        [BsonIgnoreIfNull(true)]
-        public DateTime? EligibilityStartDate { get; set; }
-
-        public const string EligibilityEndDateProperty = "eedt";
-        [BsonElement(EligibilityEndDateProperty)]
-        [BsonIgnoreIfNull(false)]
-        public DateTime? EligibilityEndDate { get; set; }
-
-        public const string AuthoredByProperty = "athby";
-        [BsonElement(AuthoredByProperty)]
-        [BsonIgnoreIfNull(true)]
-        public string AuthoredBy { get; set; }
 
         public const string LockedProperty = "lck";
         [BsonElement(LockedProperty)]
@@ -122,7 +104,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
         [BsonElement(OverrideReasonProperty)]
         public string OverrideReason { get; set; }
 
-        public const string StartDateProperty = "sd";
+        public const string StartDateProperty = "sd"; //, Sprint 12
         [BsonElement(StartDateProperty)]
         [BsonIgnoreIfNull(true)]
         public DateTime? StartDate { get; set; }
@@ -135,7 +117,12 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
         public const string AssignByProperty = "aby";
         [BsonElement(AssignByProperty)]
         [BsonIgnoreIfNull(true)]
-        public string AssignedBy { get; set; }
+        public ObjectId? AssignedBy { get; set; }
+
+        public const string AssignToProperty = "ato";
+        [BsonElement(AssignToProperty)]
+        [BsonIgnoreIfNull(true)]
+        public ObjectId? AssignedTo { get; set; }
 
         public const string CompletedByProperty = "cby";
         [BsonElement(CompletedByProperty)]

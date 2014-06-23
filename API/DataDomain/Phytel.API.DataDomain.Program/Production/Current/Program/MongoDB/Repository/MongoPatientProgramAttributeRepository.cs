@@ -17,7 +17,7 @@ using MongoDB.Bson.Serialization;
 
 namespace Phytel.API.DataDomain.Program
 {
-    public class MongoPatientProgramAttributeRepository<T> : IProgramRepository<T>
+    public class MongoPatientProgramAttributeRepository : IProgramRepository
     {
         private string _dbName = string.Empty;
 
@@ -53,7 +53,7 @@ namespace Phytel.API.DataDomain.Program
         public object Insert(object newEntity)
         {
             bool result = false;
-            ProgramAttribute pa = (ProgramAttribute)newEntity;
+            ProgramAttributeData pa = (ProgramAttributeData)newEntity;
             MEProgramAttribute mepa = null;
             try
             {
@@ -72,26 +72,34 @@ namespace Phytel.API.DataDomain.Program
                         Locked = (Locked)pa.Locked,
                         IneligibleReason = pa.IneligibleReason,
                         Completed = (Completed)pa.Completed,
-                        AssignedBy = pa.AssignedBy,
-                        AssignedOn = pa.AssignedOn,
-                        AuthoredBy = pa.AuthoredBy,
+                        //AssignedOn = pa.AssignedOn, Sprint 12
                         CompletedBy = pa.CompletedBy,
                         DateCompleted = pa.DateCompleted,
                         DidNotEnrollReason = pa.DidNotEnrollReason,
                         //DisEnrollReason = pa.DisEnrollReason,
                         Eligibility = (EligibilityStatus)pa.Eligibility,
-                        EligibilityEndDate = pa.EligibilityEndDate,
+                        //EligibilityEndDate = pa.EligibilityEndDate,
                         //EligibilityOverride = (EligibilityOverride)pa.EligibilityOverride,
-                        EligibilityRequirements = pa.EligibilityRequirements,
-                        EligibilityStartDate = pa.EligibilityStartDate,
-                        EndDate = pa.EndDate,
+                        //EligibilityRequirements = pa.EligibilityRequirements,
+                        //EligibilityStartDate = pa.EligibilityStartDate,
+                        // EndDate = pa.AttrEndDate, , Sprint 12
                         Enrollment = (EnrollmentStatus)pa.Enrollment,
                         GraduatedFlag = (Graduated)pa.GraduatedFlag,
-                        StartDate = pa.StartDate,
+                        //  StartDate = pa.AttrStartDate, Sprint 12
                         DeleteFlag = false
                         //,LastUpdatedOn = DateTime.UtcNow,
                         //UpdatedBy = ObjectId.Parse(this.UserId)
                     };
+
+                    //if(pa.AssignedBy != null) Sprint 12
+                    //{
+                    //    mepa.AssignedBy = ObjectId.Parse(pa.AssignedBy);
+                    //}
+
+                    //if (pa.AssignedTo != null) Sprint 12
+                    //{
+                    //    mepa.AssignedTo = ObjectId.Parse(pa.AssignedTo);
+                    //}
 
                     ctx.ProgramAttributes.Collection.Insert(mepa);
                     
@@ -132,53 +140,35 @@ namespace Phytel.API.DataDomain.Program
             {
                 GetProgramDetailsSummaryResponse result = new GetProgramDetailsSummaryResponse();
 
-                using (ProgramMongoContext ctx = new ProgramMongoContext(_dbName))
-                {
-                    var findcp = MB.Query<MEPatientProgram>.EQ(b => b.Id, ObjectId.Parse(entityID));
-                    MEPatientProgram cp = ctx.PatientPrograms.Collection.Find(findcp).FirstOrDefault();
-
-                    if (cp != null)
-                    {
-                        result.Program = new ProgramDetail
-                        {
-                            Id = cp.Id.ToString(),
-                            Client = cp.Client != null ? cp.Client.ToString(): null,
-                            ContractProgramId = cp.ContractProgramId.ToString(),
-                            Description = cp.Description,
-                            Name = cp.Name,
-                            PatientId = cp.PatientId.ToString(),
-                            ProgramState = (int)cp.ProgramState,
-                            ShortName = cp.ShortName,
-                            StartDate = cp.StartDate,
-                            Status = (int)cp.Status,
-                            Version = cp.Version,
-                            EndDate = cp.EndDate,
-                            Completed = cp.Completed,
-                            Enabled = cp.Enabled,
-                            Next = cp.Next != null ? cp.Next.ToString() : string.Empty,
-                            Order = cp.Order,
-                            Previous = cp.Previous != null ? cp.Previous.ToString() : string.Empty,
-                            SourceId = cp.SourceId.ToString(),
-                            AssignBy = cp.AssignedBy,
-                            AssignDate = cp.AssignedOn,
-                            ElementState = (int)cp.State,
-                            CompletedBy = cp.CompletedBy,
-                            DateCompleted = cp.DateCompleted,
-                            ObjectivesInfo = DTOUtils.GetObjectives(cp.Objectives),
-                            SpawnElement = DTOUtils.GetSpawnElement(cp),
-                            Modules = DTOUtils.GetModules(cp.Modules, _dbName, this.UserId)
-                        };
-                    }
-                    else
-                    {
-                        throw new ArgumentException("ProgramID is not valid or is missing from the records.");
-                    }
-                }
+                //using (ProgramMongoContext ctx = new ProgramMongoContext(_dbName))
+                //{
+                //    var findcp = MB.Query<MEPatientProgram>.EQ(b => b.Id, ObjectId.Parse(entityID));
+                //    MEPatientProgram cp = ctx.PatientPrograms.Collection.Find(findcp).FirstOrDefault();
+                //}
                 return result;
             }
             catch (Exception ex)
             {
                 throw new Exception("DD:PatientProgramAttributeRepository:FindById()::" + ex.Message, ex.InnerException);
+            }
+        }
+
+        public object FindByPlanElementID(string entityID)
+        {
+            try
+            {
+                MEProgramAttribute cp = null;
+
+                using (ProgramMongoContext ctx = new ProgramMongoContext(_dbName))
+                {
+                    var findcp = MB.Query<MEProgramAttribute>.EQ(b => b.PlanElementId, ObjectId.Parse(entityID));
+                    cp = ctx.ProgramAttributes.Collection.Find(findcp).FirstOrDefault();
+                }
+                return cp;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("DD:PatientProgramAttributeRepository:FindByPlanElementID()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -198,18 +188,17 @@ namespace Phytel.API.DataDomain.Program
 
                     if (pa != null)
                     {
-                        pa.ForEach(cp => pAtts.Add(new ProgramAttribute
+                        pa.ForEach(cp => pAtts.Add(new ProgramAttributeData
                         {
                             Id = cp.Id.ToString(),
-                            AuthoredBy = cp.AuthoredBy,
                             DidNotEnrollReason = cp.DidNotEnrollReason,
                             //DisEnrollReason = cp.DisEnrollReason,
                             Eligibility = (int)cp.Eligibility,
-                            EligibilityEndDate = cp.EligibilityEndDate,
+                            //EligibilityEndDate = cp.EligibilityEndDate,
                             //EligibilityOverride = (int)cp.EligibilityOverride,
-                            EligibilityRequirements = cp.EligibilityRequirements,
-                            EligibilityStartDate = cp.EligibilityStartDate,
-                            EndDate = cp.EndDate,
+                            //EligibilityRequirements = cp.EligibilityRequirements,
+                            //EligibilityStartDate = cp.EligibilityStartDate,
+                            //  AttrEndDate = cp.EndDate, , Sprint 12
                             Enrollment = (int)cp.Enrollment,
                             GraduatedFlag = (int)cp.GraduatedFlag,
                             IneligibleReason = cp.IneligibleReason,
@@ -241,7 +230,7 @@ namespace Phytel.API.DataDomain.Program
 
         public object Update(object entity)
         {
-            ProgramAttribute mepa = (ProgramAttribute)entity;
+            ProgramAttributeData mepa = (ProgramAttributeData)entity;
             bool result = false;
             try
             {
@@ -250,10 +239,10 @@ namespace Phytel.API.DataDomain.Program
                     var q = MB.Query<MEProgramAttribute>.EQ(b => b.PlanElementId, ObjectId.Parse(mepa.PlanElementId));
                     var uv = new List<MB.UpdateBuilder>();
                     // state
-                    if (mepa.AssignedBy != null) uv.Add(MB.Update.Set(MEProgramAttribute.AssignByProperty, mepa.AssignedBy));
-                    if (mepa.AssignedOn != null) uv.Add(MB.Update.Set(MEProgramAttribute.AssignDateProperty, mepa.AssignedOn));
+                    //if (mepa.AssignedBy != null) uv.Add(MB.Update.Set(MEProgramAttribute.AssignByProperty, mepa.AssignedBy));
+                    //if (mepa.AssignedTo != null) uv.Add(MB.Update.Set(MEProgramAttribute.AssignToProperty, mepa.AssignedTo));
+                    //if (mepa.AssignedOn != null) uv.Add(MB.Update.Set(MEProgramAttribute.AssignDateProperty, mepa.AssignedOn));
                     if (mepa.Population != null) uv.Add(MB.Update.Set(MEProgramAttribute.PopulationProperty, mepa.Population));
-                    if (mepa.AuthoredBy != null) uv.Add(MB.Update.Set(MEProgramAttribute.AuthoredByProperty, mepa.AuthoredBy));
                     if (mepa.Completed != 0) uv.Add(MB.Update.Set(MEProgramAttribute.CompletedProperty, mepa.Completed));
                     if (mepa.CompletedBy != null) uv.Add(MB.Update.Set(MEProgramAttribute.CompletedByProperty, mepa.CompletedBy));
                     if (mepa.DateCompleted != null) uv.Add(MB.Update.Set(MEProgramAttribute.CompletedOnProperty, mepa.DateCompleted));
@@ -263,9 +252,9 @@ namespace Phytel.API.DataDomain.Program
                     if (mepa.OverrideReason != null) uv.Add(MB.Update.Set(MEProgramAttribute.OverrideReasonProperty, mepa.OverrideReason));
                     if (mepa.Status != 0) uv.Add(MB.Update.Set(MEProgramAttribute.StatusProperty, (Status)mepa.Status));
                     // eligibility
-                    if (mepa.EligibilityEndDate != null) uv.Add(MB.Update.Set(MEProgramAttribute.EligibilityEndDateProperty, mepa.EligibilityEndDate));
-                    if (mepa.EligibilityRequirements != null) uv.Add(MB.Update.Set(MEProgramAttribute.EligibilityRequirementsProperty, mepa.EligibilityRequirements));
-                    if (mepa.EligibilityStartDate != null) uv.Add(MB.Update.Set(MEProgramAttribute.EligibilityStartDateProperty, mepa.EligibilityStartDate));
+                    //if (mepa.EligibilityEndDate != null) uv.Add(MB.Update.Set(MEProgramAttribute.EligibilityEndDateProperty, mepa.EligibilityEndDate));
+                    //if (mepa.EligibilityRequirements != null) uv.Add(MB.Update.Set(MEProgramAttribute.EligibilityRequirementsProperty, mepa.EligibilityRequirements));
+                    //if (mepa.EligibilityStartDate != null) uv.Add(MB.Update.Set(MEProgramAttribute.EligibilityStartDateProperty, mepa.EligibilityStartDate));
                     if (mepa.IneligibleReason != null) uv.Add(MB.Update.Set(MEProgramAttribute.IneligibleReasonProperty, mepa.IneligibleReason));
                     //if (mepa.EligibilityOverride != 0) uv.Add(MB.Update.Set(MEProgramAttribute.EligibilityOverrideProperty, (EligibilityOverride)mepa.EligibilityOverride));
                     if (mepa.Eligibility != 0) uv.Add(MB.Update.Set(MEProgramAttribute.EligibilityProperty, (EligibilityStatus)mepa.Eligibility));
@@ -274,8 +263,8 @@ namespace Phytel.API.DataDomain.Program
                     if (mepa.OptOut != null) uv.Add(MB.Update.Set(MEProgramAttribute.OptOutProperty, mepa.OptOut));
                     //if (mepa.OptOutReason != null) uv.Add(MB.Update.Set(MEProgramAttribute.OptOutReasonProperty, mepa.OptOutReason));
                     // dates
-                    if (mepa.StartDate != null) uv.Add(MB.Update.Set(MEProgramAttribute.StartDateProperty, mepa.StartDate));
-                    if (mepa.EndDate != null) uv.Add(MB.Update.Set(MEProgramAttribute.EndDateProperty, mepa.EndDate));
+                    //if (mepa.AttrStartDate != null) uv.Add(MB.Update.Set(MEProgramAttribute.StartDateProperty, mepa.AttrStartDate)); Sprint 12
+                    //if (mepa.AttrEndDate != null) uv.Add(MB.Update.Set(MEProgramAttribute.EndDateProperty, mepa.AttrEndDate)); Sprint 12
                     // enrollment
                     if (mepa.Enrollment != 0) uv.Add(MB.Update.Set(MEProgramAttribute.EnrollmentProperty, (EnrollmentStatus)mepa.Enrollment));
                     if (mepa.DidNotEnrollReason != null) uv.Add(MB.Update.Set(MEProgramAttribute.DidNotEnrollReasonProperty, mepa.DidNotEnrollReason));
@@ -326,6 +315,44 @@ namespace Phytel.API.DataDomain.Program
         public string ContractNumber { get; set; }
 
         public IEnumerable<object> Find(string Id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public object GetLimitedProgramFields(string objectId)
+        {
+            throw new NotImplementedException();
+        }
+
+
+        public object InsertAsBatch(object newEntity)
+        {
+            throw new NotImplementedException();
+        }
+
+
+        public object FindByEntityExistsID(string patientID, string progId)
+        {
+            throw new NotImplementedException();
+        }
+
+
+        public IEnumerable<object> Find(List<ObjectId> Ids)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool Save(object entity)
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<Module> GetProgramModules(ObjectId progId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<object> FindByStepId(string entityID)
         {
             throw new NotImplementedException();
         }

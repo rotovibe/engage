@@ -5,7 +5,7 @@ using System;
 
 namespace Phytel.API.DataDomain.Program.DTO
 {
-    public class ObjectivesDetail
+    public class ObjectiveInfoData
     {
         public string Id { get; set; }
         public string Value { get; set; }

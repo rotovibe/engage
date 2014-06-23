@@ -8,7 +8,7 @@ namespace Phytel.API.DataDomain.Program.DTO
 {
     public class GetProgramAttributeResponse : IDomainResponse
     {
-        public ProgramAttribute ProgramAttribute { get; set; }
+        public ProgramAttributeData ProgramAttribute { get; set; }
         public double Version { get; set; }
         public ResponseStatus Status { get; set; }
     }
