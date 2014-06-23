@@ -70,6 +70,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Helper.cs" />
     <Compile Include="IStepRepository.cs" />
     <Compile Include="MongoDB\DTO\MEModal.cs" />
     <Compile Include="MongoDB\DTO\MEDateTime.cs" />
