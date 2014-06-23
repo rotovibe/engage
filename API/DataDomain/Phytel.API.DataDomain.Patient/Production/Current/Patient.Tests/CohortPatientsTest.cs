@@ -23,7 +23,8 @@ namespace Phytel.API.DataDomain.Patient.Test
                 Take = 100
             };
 
-            GetCohortPatientsDataResponse response = PatientDataManager.GetCohortPatients(request);
+            IPatientDataManager pm = new PatientDataManager();
+            GetCohortPatientsDataResponse response = pm.GetCohortPatients(request);
 
             Assert.IsTrue(response.CohortPatients.Count > 0);
         }
@@ -42,7 +43,8 @@ namespace Phytel.API.DataDomain.Patient.Test
                 Take = 100
             };
 
-            GetCohortPatientsDataResponse response = PatientDataManager.GetCohortPatients(request);
+            IPatientDataManager pm = new PatientDataManager();
+            GetCohortPatientsDataResponse response = pm.GetCohortPatients(request);
 
             Assert.IsTrue(response.CohortPatients.Count > 0);
         }
@@ -61,7 +63,8 @@ namespace Phytel.API.DataDomain.Patient.Test
                 Take = 100
             };
 
-            GetCohortPatientsDataResponse response = PatientDataManager.GetCohortPatients(request);
+            IPatientDataManager pm = new PatientDataManager();
+            GetCohortPatientsDataResponse response = pm.GetCohortPatients(request);
 
             Assert.IsTrue(response.CohortPatients.Count > 0);
         }
@@ -80,7 +83,8 @@ namespace Phytel.API.DataDomain.Patient.Test
                 Take = 100
             };
 
-            GetCohortPatientsDataResponse response = PatientDataManager.GetCohortPatients(request);
+            IPatientDataManager pm = new PatientDataManager();
+            GetCohortPatientsDataResponse response = pm.GetCohortPatients(request);
 
             Assert.IsTrue(response.CohortPatients.Count > 0);
         }
@@ -99,7 +103,8 @@ namespace Phytel.API.DataDomain.Patient.Test
                 Take = 100
             };
 
-            GetCohortPatientsDataResponse response = PatientDataManager.GetCohortPatients(request);
+            IPatientDataManager pm = new PatientDataManager();
+            GetCohortPatientsDataResponse response = pm.GetCohortPatients(request);
 
             Assert.IsTrue(response.CohortPatients.Count > 0);
         }
@@ -122,7 +127,8 @@ namespace Phytel.API.DataDomain.Patient.Test
                 Version = version
             };
 
-            PutUpdateCohortPatientViewResponse response = PatientDataManager.UpdateCohortPatientViewProblem(request);
+            IPatientDataManager pm = new PatientDataManager();
+            PutUpdateCohortPatientViewResponse response = pm.UpdateCohortPatientViewProblem(request);
         }
 
         private CohortPatientViewData GetCohortPatientView()

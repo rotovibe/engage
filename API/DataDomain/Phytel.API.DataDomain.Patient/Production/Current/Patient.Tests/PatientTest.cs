@@ -11,7 +11,8 @@ namespace Phytel.API.DataDomain.Patient.Test
         {
             GetPatientDataRequest request = new GetPatientDataRequest { PatientID = "531f2dcc072ef727c4d29e1a" };
 
-            GetPatientDataResponse response = PatientDataManager.GetPatientByID(request);
+            IPatientDataManager pm = new PatientDataManager();
+            GetPatientDataResponse response = pm.GetPatientByID(request);
 
             Assert.IsTrue(response.Patient.FirstName == "Phyliss");
         }
@@ -21,7 +22,8 @@ namespace Phytel.API.DataDomain.Patient.Test
         {
             GetPatientSSNDataRequest request = new GetPatientSSNDataRequest { PatientId = "531f2dce072ef727c4d2a065", UserId = "531f2df6072ef727c4d2a3c0" };
 
-            GetPatientSSNDataResponse response = PatientDataManager.GetPatientSSN(request);
+            IPatientDataManager pm = new PatientDataManager();
+            GetPatientSSNDataResponse response = pm.GetPatientSSN(request);
 
             Assert.IsNotNull(response.SSN);
         }
@@ -31,7 +33,8 @@ namespace Phytel.API.DataDomain.Patient.Test
         {
             PutPatientBackgroundDataRequest request = new PutPatientBackgroundDataRequest {  PatientId = "52f55899072ef709f84e7637", UserId = "bb241c64-a0ff-4e01-ba5f-4246ef50780e" };
 
-            PutPatientBackgroundDataResponse response = PatientDataManager.UpdatePatientBackground(request);
+            IPatientDataManager pm = new PatientDataManager();
+            PutPatientBackgroundDataResponse response = pm.UpdatePatientBackground(request);
 
             Assert.IsTrue(response.Success);
         }
@@ -49,9 +52,23 @@ namespace Phytel.API.DataDomain.Patient.Test
                 LastName = "Aarsvold"
             };
 
-            PutUpdatePatientDataResponse response = PatientDataManager.UpdatePatient(request);
+            IPatientDataManager pm = new PatientDataManager();
+            PutUpdatePatientDataResponse response = pm.UpdatePatient(request);
 
             Assert.IsNotNull(response);
+        }
+
+
+        [TestMethod]
+        public void GetPatients()
+        {
+            string[] patientIds = new string[] { "5325da2dd6a4850adcbba576", "5325da31d6a4850adcbba582", "5325da3ad6a4850adcbba59a" };
+            GetPatientsDataRequest request = new GetPatientsDataRequest { PatientIds = patientIds };
+
+            IPatientDataManager pm = new PatientDataManager { Factory = new PatientRepositoryFactory() };
+            GetPatientsDataResponse response = pm.GetPatients(request);
+
+            Assert.IsNotNull(response.Patients);
         }
     }
 }

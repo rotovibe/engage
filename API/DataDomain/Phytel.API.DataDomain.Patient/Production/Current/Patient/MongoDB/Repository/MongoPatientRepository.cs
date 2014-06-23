@@ -15,7 +15,7 @@ using MongoDB.Bson.Serialization;
 
 namespace Phytel.API.DataDomain.Patient
 {
-    public class MongoPatientRepository<T> : IPatientRepository<T>
+    public class MongoPatientRepository : IPatientRepository
     {
         private string _dbName = string.Empty;
 
@@ -67,7 +67,7 @@ namespace Phytel.API.DataDomain.Patient
                                     Query.EQ(MEPatient.DOBProperty, request.DOB));
 
                     patient = ctx.Patients.Collection.FindOneAs<MEPatient>(query);
-                    MongoCohortPatientViewRepository<T> repo = new MongoCohortPatientViewRepository<T>(_dbName);
+                    MongoCohortPatientViewRepository repo = new MongoCohortPatientViewRepository(_dbName);
                     repo.UserId = this.UserId;
 
                     if (patient == null)
@@ -403,44 +403,56 @@ namespace Phytel.API.DataDomain.Patient
 
         public GetPatientsDataResponse Select(string[] patientIds)
         {
-            BsonValue[] bsv = new BsonValue[patientIds.Length];
-            for (int i = 0; i < patientIds.Length; i++)
-            {
-                bsv[i] = ObjectId.Parse(patientIds[i]);
-            }
-
-            IMongoQuery query = MB.Query.In(MEPatient.IdProperty, bsv);
-            List<MEPatient> pr = null;
-            List<DTO.PatientData> pResp = new List<DTO.PatientData>();
-            using (PatientMongoContext ctx = new PatientMongoContext(_dbName))
-            {
-                pr = ctx.Patients.Collection.Find(query).ToList();
-                // convert to a PatientDetailsResponse
-                foreach (MEPatient mp in pr)
-                {
-                    pResp.Add(new DTO.PatientData
-                    {
-                        ID = mp.Id.ToString(),
-                        PreferredName = mp.PreferredName,
-                        DOB = mp.DOB,
-                        FirstName = mp.FirstName,
-                        Gender = mp.Gender,
-                        LastName = mp.LastName,
-                        MiddleName = mp.MiddleName,
-                        Suffix = mp.Suffix,
-                        Version = mp.Version,
-                        PriorityData = (PriorityData)((int)mp.Priority),
-                        DisplayPatientSystemId = mp.DisplayPatientSystemId.ToString(),
-                        Background = mp.Background,
-                        LastFourSSN = mp.LastFourSSN
-                    });
-                }
-            }
-
             GetPatientsDataResponse pdResponse = new GetPatientsDataResponse();
-            pdResponse.Patients = pResp;
+            try
+            {
+                BsonValue[] bsv = new BsonValue[patientIds.Length];
+                if(patientIds != null && patientIds.Length > 0)
+                {
+                    for (int i = 0; i < patientIds.Length; i++)
+                    {
+                        bsv[i] = ObjectId.Parse(patientIds[i]);
+                    }
 
-            return pdResponse;
+                    IMongoQuery query = MB.Query.In(MEPatient.IdProperty, bsv);
+                    List<PatientData> pResp = null;
+                    using (PatientMongoContext ctx = new PatientMongoContext(_dbName))
+                    {
+                        List<MEPatient> pr = ctx.Patients.Collection.Find(query).ToList();
+                        if(pr != null && pr.Count > 0)
+                        {
+                            pResp = new List<PatientData>();
+                            foreach (MEPatient mp in pr)
+                            {
+                                pResp.Add(new DTO.PatientData
+                                {
+                                    ID = mp.Id.ToString(),
+                                    PreferredName = mp.PreferredName,
+                                    DOB = mp.DOB,
+                                    FirstName = mp.FirstName,
+                                    Gender = mp.Gender,
+                                    LastName = mp.LastName,
+                                    MiddleName = mp.MiddleName,
+                                    Suffix = mp.Suffix,
+                                    Version = mp.Version,
+                                    PriorityData = (PriorityData)((int)mp.Priority),
+                                    DisplayPatientSystemId = mp.DisplayPatientSystemId.ToString(),
+                                    Background = mp.Background,
+                                    LastFourSSN = mp.LastFourSSN
+                                });
+                            }
+                        }
+                        
+                    }
+                    pdResponse.Patients = pResp;      
+                }
+
+                return pdResponse;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
 
         public IEnumerable<object> SelectAll()

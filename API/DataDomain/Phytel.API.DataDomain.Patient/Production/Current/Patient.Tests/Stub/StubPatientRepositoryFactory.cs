@@ -1,14 +1,13 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Phytel.API.Interface;
-using Phytel.API.DataDomain.Patient.MongoDB.DTO;
 
-namespace Phytel.API.DataDomain.Patient
+namespace Phytel.API.DataDomain.Patient.Test.Stub
 {
-    public class PatientRepositoryFactory : IPatientRepositoryFactory
+    public class StubPatientRepositoryFactory : IPatientRepositoryFactory
     {
         public IPatientRepository GetRepository(IDataDomainRequest request, RepositoryType type)
         {
@@ -18,12 +17,12 @@ namespace Phytel.API.DataDomain.Patient
             {
                 case RepositoryType.Patient:
                     {
-                        repo = new MongoPatientRepository(request.ContractNumber) as IPatientRepository;
+                        repo = new StubPatientRespository(request.ContractNumber) as IPatientRepository;
                         break;
                     }
                 case RepositoryType.CohortPatientView:
                     {
-                        repo = new MongoCohortPatientViewRepository(request.ContractNumber) { Utils = new DTOUtils() } as IPatientRepository;
+                        repo = new StubCohortPatientViewRepository(request.ContractNumber) as IPatientRepository;
                         break;
                     }
             }
