@@ -8,8 +8,8 @@ using Phytel.API.Interface;
 
 namespace Phytel.API.DataDomain.CareMember
 {
-    public interface ICareMemberRepository<T> : IRepository<T>
+    public interface ICareMemberRepository : IRepository
     {
-        IEnumerable<object> FindByPatientId(object request);
+        IEnumerable<object> FindByPatientId(string entityId);
     }
 }

@@ -13,7 +13,7 @@ using MB = MongoDB.Driver.Builders;
 
 namespace Phytel.API.DataDomain.CareMember
 {
-    public class MongoCareMemberRepository<T> : ICareMemberRepository<T>
+    public class MongoCareMemberRepository : ICareMemberRepository
     {
         private string _dbName = string.Empty;
         private int _expireDays = Convert.ToInt32(ConfigurationManager.AppSettings["ExpireDays"]);
@@ -135,12 +135,8 @@ namespace Phytel.API.DataDomain.CareMember
         {
             try
             {
-                IMongoQuery mQuery = null;
-                List<object> CareMemberItems = new List<object>();
-
-                mQuery = MongoDataUtil.ExpressionQueryBuilder(expression);
-
-                return new Tuple<string, IEnumerable<object>>(expression.ExpressionID, CareMemberItems);
+                throw new NotImplementedException();
+                // code here //
             }
             catch (Exception) { throw; }
         }
@@ -207,16 +203,15 @@ namespace Phytel.API.DataDomain.CareMember
             catch (Exception) { throw; }
         }
 
-        public IEnumerable<object> FindByPatientId(object request)
+        public IEnumerable<object> FindByPatientId(string patientId)
         {
             List<CareMemberData> careMembersDataList = null;
-            GetAllCareMembersDataRequest dataRequest = (GetAllCareMembersDataRequest)request;
             try
             {
                 using (CareMemberMongoContext ctx = new CareMemberMongoContext(_dbName))
                 {
                     List<IMongoQuery> queries = new List<IMongoQuery>();
-                    queries.Add(Query.EQ(MECareMember.PatientIdProperty, ObjectId.Parse(dataRequest.PatientId)));
+                    queries.Add(Query.EQ(MECareMember.PatientIdProperty, ObjectId.Parse(patientId)));
                     queries.Add(Query.EQ(MECareMember.DeleteFlagProperty, false));
                     IMongoQuery mQuery = Query.And(queries);
                     List<MECareMember> meCareMembers = ctx.CareMembers.Collection.Find(mQuery).ToList();
