@@ -7,12 +7,25 @@ namespace Phytel.API.DataDomain.Contact.Test
     [TestClass]
     public class ContactTest
     {
+        /// <summary>
+        /// Major update for NIGHT-911
+        /// Need to refactory these test to account for any stubs needed.
+        /// </summary>
+        
+        IContactDataManager manager;
+
+        [TestInitialize()]
+        public void Initialize()
+        {
+            manager = new ContactDataManager { Factory = new ContactRepositoryFactory() };
+        }
+
         [TestMethod]
         public void GetContactByPatientId_Test()
         {
-            GetContactDataRequest request = new GetContactDataRequest { PatientId = "52e26f53072ef7191c11d5e2" };
+            GetContactByPatientIdDataRequest request = new GetContactByPatientIdDataRequest { PatientId = "52e26f53072ef7191c11d5e2" };
 
-            ContactData response = ContactDataManager.GetContactByPatientId(request);
+            ContactData response = manager.GetContactByPatientId(request);
 
             Assert.IsTrue(response.ContactId == "52ebc816d433232150813e49");
         }
@@ -22,7 +35,7 @@ namespace Phytel.API.DataDomain.Contact.Test
         {
             GetContactByUserIdDataRequest request = new GetContactByUserIdDataRequest { UserId = "abe05e86-a890-4d61-8c78-b04923cbb3d6" };
 
-            ContactData response = ContactDataManager.GetContactByUserId(request);
+            ContactData response = manager.GetContactByUserId(request);
 
             Assert.IsTrue(response.ContactId == "530fcad1d4332320e0336a6a");
         }
@@ -30,9 +43,9 @@ namespace Phytel.API.DataDomain.Contact.Test
         [TestMethod]
         public void GetContactByPatientId_Minimal_Test()
         {
-            GetContactDataRequest request = new GetContactDataRequest { PatientId = "52e26f53072ef7191c11d5e2" };
+            GetContactByPatientIdDataRequest request = new GetContactByPatientIdDataRequest { PatientId = "52e26f53072ef7191c11d5e2" };
 
-            ContactData response = ContactDataManager.GetContactByPatientId(request);
+            ContactData response = manager.GetContactByPatientId(request);
 
             Assert.IsTrue(response.ContactId == "52e749e3d43323149870c214");
         }
@@ -40,9 +53,9 @@ namespace Phytel.API.DataDomain.Contact.Test
         [TestMethod]
         public void GetContactByPatientId_Empty_Test()
         {
-            GetContactDataRequest request = new GetContactDataRequest { PatientId = "52e26f4b072ef7191c11b026" };
+            GetContactByPatientIdDataRequest request = new GetContactByPatientIdDataRequest { PatientId = "52e26f4b072ef7191c11b026" };
 
-            ContactData response = ContactDataManager.GetContactByPatientId(request);
+            ContactData response = manager.GetContactByPatientId(request);
 
             Assert.IsNotNull(response.ContactId);
         }
@@ -61,7 +74,7 @@ namespace Phytel.API.DataDomain.Contact.Test
             ids.Add("52f57462d6a4850fd02cc1b4");
             //request.ContactIds = ids;
 
-            SearchContactsDataResponse response = ContactDataManager.SearchContacts(request);
+            SearchContactsDataResponse response = manager.SearchContacts(request);
 
             Assert.IsNotNull(response);
         }
@@ -75,7 +88,7 @@ namespace Phytel.API.DataDomain.Contact.Test
             request.UserId = "DD_TestHarness";
             request.Version = 1;
 
-            GetAllCareManagersDataResponse response = ContactDataManager.GetCareManagers(request);
+            GetAllCareManagersDataResponse response = manager.GetCareManagers(request);
 
             Assert.IsNotNull(response);
         }
@@ -95,7 +108,7 @@ namespace Phytel.API.DataDomain.Contact.Test
             request.Version = 1;
             request.UserId = "DataDomain_TestHarness";
             
-            PutContactDataResponse response = ContactDataManager.InsertContact(request);
+            PutContactDataResponse response = manager.InsertContact(request);
             Assert.IsNotNull(response);
         }
 
@@ -152,7 +165,7 @@ namespace Phytel.API.DataDomain.Contact.Test
             request.PatientId = "52f55859072ef709f84e5e20";
             request.TimeZoneId = "52e1817dd433232028e9e39e";
 
-            PutContactDataResponse response = ContactDataManager.InsertContact(request);
+            PutContactDataResponse response = manager.InsertContact(request);
 
             Assert.IsNotNull(response);
         }
@@ -241,7 +254,7 @@ namespace Phytel.API.DataDomain.Contact.Test
             request.ContactId = "52f6d709d6a4850aa439fa82";
             request.TimeZoneId = "52e1817ad433232028e9e39d";
 
-            PutUpdateContactDataResponse response = ContactDataManager.UpdateContact(request);
+            PutUpdateContactDataResponse response = manager.UpdateContact(request);
 
             Assert.IsNotNull(response);
         }

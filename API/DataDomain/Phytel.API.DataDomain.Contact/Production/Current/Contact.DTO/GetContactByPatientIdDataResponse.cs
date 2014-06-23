@@ -4,7 +4,7 @@ using Phytel.API.Interface;
 
 namespace Phytel.API.DataDomain.Contact.DTO
 {
-    public class GetContactDataResponse : IDomainResponse
+    public class GetContactByPatientIdDataResponse : IDomainResponse
     {
         public ContactData Contact { get; set; }
         public double Version { get; set; }
@@ -29,5 +29,6 @@ namespace Phytel.API.DataDomain.Contact.DTO
         public List<string> TimesOfDaysId { get; set; }
         public string TimeZoneId { get; set; }
         public List<LanguageData> Languages { get; set; }
+        public List<string> RecentsList { get; set; }
     }
 }

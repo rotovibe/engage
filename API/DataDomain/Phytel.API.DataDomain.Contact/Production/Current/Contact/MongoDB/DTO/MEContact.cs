@@ -110,6 +110,11 @@ namespace Phytel.API.DataDomain.Contact.DTO
         [BsonIgnoreIfNull(true)]
         public List<Language> Languages { get; set; }
 
+        public const string RecentListProperty = "rctlst";
+        [BsonElement(RecentListProperty)]
+        [BsonIgnoreIfNull(true)]
+        public List<ObjectId> RecentList { get; set; }
+
         [BsonExtraElements]
         public BsonDocument ExtraElements { get; set; }
 
