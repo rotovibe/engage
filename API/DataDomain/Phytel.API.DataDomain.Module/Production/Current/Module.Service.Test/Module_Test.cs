@@ -24,7 +24,7 @@ namespace Phytel.API.DataDomain.Module.Services.Test
                 string.Format("{0}/{1}/{2}/{3}/Module/{4}", url, context, version, contractNumber, moduleID));
 
             Assert.AreEqual(moduleID, response.Module.Id);
-            Assert.IsTrue(response.Module.Objectives.Count.Equals(3));
+            Assert.IsTrue(response.Module.Objectives.Count == 3);
         }
 
         [TestMethod]
@@ -43,7 +43,7 @@ namespace Phytel.API.DataDomain.Module.Services.Test
                 string.Format("{0}/{1}/{2}/{3}/Module/{4}", url, context, version, contractNumber, moduleID));
 
             Assert.AreEqual(moduleID, response.Module.Id);
-            Assert.IsTrue(response.Module.Objectives.Count.Equals(2));
+            Assert.IsTrue(response.Module.Objectives.Count == 2);
         }
 
         [TestMethod]
@@ -62,7 +62,7 @@ namespace Phytel.API.DataDomain.Module.Services.Test
                 string.Format("{0}/{1}/{2}/{3}/Module/{4}", url, context, version, contractNumber, moduleID));
 
             Assert.AreEqual(moduleID, response.Module.Id);
-            Assert.IsTrue(response.Module.Objectives.Count.Equals(1));
+            Assert.IsTrue(response.Module.Objectives.Count == 1);
         }
 
         //[TestMethod]

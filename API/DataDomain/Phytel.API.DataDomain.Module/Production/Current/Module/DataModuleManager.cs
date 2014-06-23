@@ -1,6 +1,7 @@
 using Phytel.API.DataDomain.Module.DTO;
 using System.Data.SqlClient;
 using Phytel.API.DataDomain.Module;
+using Phytel.API.DataDomain.Module.MongoDB.DTO;
 
 namespace Phytel.API.DataDomain.Module
 {
@@ -25,7 +26,7 @@ namespace Phytel.API.DataDomain.Module
             MongoModuleRepository<GetAllModulesResponse> repo = new MongoModuleRepository<GetAllModulesResponse>(request.ContractNumber);
             repo.UserId = request.UserId;
 
-            result = repo.SelectAll(request.Version, Common.Status.Active);
+            result = repo.SelectAll(request.Version, Status.Active);
 
             return result;
         }
