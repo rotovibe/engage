@@ -89,6 +89,8 @@
     <Compile Include="LookUp\Program\GetAllObjectivesResponse.cs" />
     <Compile Include="Contact\GetRecentPatientsRequest.cs" />
     <Compile Include="Contact\GetRecentPatientsResponse .cs" />
+    <Compile Include="Patient\PostDeletePatientRequest.cs" />
+    <Compile Include="Patient\PostDeletePatientResponse.cs" />
     <Compile Include="Program\Action.cs" />
     <Compile Include="CareMember\GetAllCareMembersRequest.cs" />
     <Compile Include="CareMember\GetAllCareMembersResponse.cs" />

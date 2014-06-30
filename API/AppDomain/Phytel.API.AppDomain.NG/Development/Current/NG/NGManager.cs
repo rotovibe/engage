@@ -305,6 +305,34 @@ namespace Phytel.API.AppDomain.NG
                 throw new WebServiceException("AD:UpdateBackground()::" + wse.Message, wse.InnerException);
             }
         }
+
+        public PostDeletePatientResponse DeletePatient(PostDeletePatientRequest request)
+        {
+            PostDeletePatientResponse response = new PostDeletePatientResponse();
+            try
+            {
+                IRestClient client = new JsonServiceClient();
+                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Delete",
+                                                        DDPatientServiceURL,
+                                                        "NG",
+                                                        request.Version,
+                                                        request.ContractNumber,
+                                                        request.Id), request.UserId);
+
+                //[Route("/{Context}/{Version}/{ContractNumber}/Patient/{Id}/Delete", "DELETE")]
+                DeletePatientDataResponse ddResponse = client.Delete<DeletePatientDataResponse>(url);
+
+                if (ddResponse != null && ddResponse.Deleted)
+                {
+                    response.Version = ddResponse.Version;
+                }
+                return response;
+            }
+            catch (WebServiceException ex)
+            {
+                throw new WebServiceException("AD:DeletePatient()::" + ex.Message, ex.InnerException);
+            }
+        }
         #endregion
 
         #region Cohort 

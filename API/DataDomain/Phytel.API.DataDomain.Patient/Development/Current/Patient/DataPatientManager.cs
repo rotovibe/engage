@@ -224,5 +224,26 @@ namespace Phytel.API.DataDomain.Patient
 
             return result;
         }
+
+        public DeletePatientDataResponse DeletePatient(DeletePatientDataRequest request)
+        {
+            DeletePatientDataResponse response = null;
+            try
+            {
+                response = new DeletePatientDataResponse();
+                
+                // Delete Patient and PatientUser
+                IPatientRepository patientRepo = Factory.GetRepository(request, RepositoryType.Patient);
+                patientRepo.Delete(request);
+
+                // Delete CohortPatientView.
+                IPatientRepository cohortPatientViewRepo = Factory.GetRepository(request, RepositoryType.CohortPatientView);
+                cohortPatientViewRepo.Delete(request);
+
+                response.Deleted = true;
+                return response;
+            }
+            catch (Exception ex) { throw ex; }
+        }
     }
 }   

@@ -29,5 +29,34 @@ namespace Phytel.API.DataDomain.Patient.Test
             GetPatientsDataResponse response = pm.GetPatients(request);
             Assert.IsTrue(response.Patients.Count > 0);
         }
+
+        [TestMethod()]
+        [TestCategory("NIGHT-1035")]
+        [TestProperty("Layer", "DD.DataManager")]
+        public void DeletePatient()
+        {
+            //StubDataPatientManager pm = new StubDataPatientManager { Factory = new StubPatientRepositoryFactory() };
+            //GetPatientsDataRequest request = new GetPatientsDataRequest
+            //{
+            //    Version = 1.0,
+            //    UserId = "000000000000000000000000",
+            //    ContractNumber = "InHealth001",
+            //    Context = "NG"
+            //};
+            //GetPatientsDataResponse response = pm.GetPatients(request);
+            //Assert.IsTrue(response.Patients.Count > 0);
+
+            PatientDataManager pm = new PatientDataManager { Factory = new PatientRepositoryFactory() };
+            DeletePatientDataRequest request = new DeletePatientDataRequest
+            {
+                Version = 1.0,
+                UserId = "000000000000000000000000",
+                ContractNumber = "InHealth001",
+                Context = "NG",
+                Id = "5325da69d6a4850adcbba62a"
+            };
+            DeletePatientDataResponse response = pm.DeletePatient(request);
+            Assert.IsTrue(response.Deleted);
+        }
     }
 }

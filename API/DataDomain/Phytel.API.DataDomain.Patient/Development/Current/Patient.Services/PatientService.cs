@@ -273,5 +273,26 @@ namespace Phytel.API.DataDomain.Patient.Service
             }
             return response;
         }
+
+        public DeletePatientDataResponse Put(DeletePatientDataRequest request)
+        {
+            DeletePatientDataResponse response = new DeletePatientDataResponse();
+            try
+            {
+                if (string.IsNullOrEmpty(request.UserId))
+                    throw new UnauthorizedAccessException("PatientDD:Delete()::Unauthorized Access");
+
+                response = PatientManager.DeletePatient(request);
+                response.Version = request.Version;
+            }
+            catch (Exception ex)
+            {
+                CommonFormatterUtil.FormatExceptionResponse(response, base.Response, ex);
+
+                string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
+                Helpers.LogException(int.Parse(aseProcessID), ex);
+            }
+            return response;
+        }
     }
 }

@@ -16,5 +16,6 @@ namespace Phytel.API.DataDomain.Patient
         PutPatientBackgroundDataResponse UpdatePatientBackground(PutPatientBackgroundDataRequest request);
         PutPatientFlaggedResponse UpdatePatientFlagged(PutPatientFlaggedRequest request);
         PutPatientPriorityResponse UpdatePatientPriority(PutPatientPriorityRequest request);
+        DeletePatientDataResponse DeletePatient(DeletePatientDataRequest request);
     }
 }

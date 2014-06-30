@@ -80,6 +80,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DataDomainRequest.cs" />
+    <Compile Include="DeletePatientDataRequest.cs" />
+    <Compile Include="DeletePatientDataResponse.cs" />
     <Compile Include="GetCohortPatientsDataRequest.cs" />
     <Compile Include="GetCohortPatientsDataResponse.cs" />
     <Compile Include="GetCohortPatientViewRequest.cs" />

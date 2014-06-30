@@ -73,5 +73,13 @@ namespace Phytel.API.DataDomain.Patient.Test.Stub
         {
             throw new NotImplementedException();
         }
+
+        public DTO.DeletePatientDataResponse DeletePatient(DTO.DeletePatientDataRequest request)
+        {
+            DeletePatientDataResponse response = new DeletePatientDataResponse();
+            IPatientRepository repo = Factory.GetRepository(request, RepositoryType.Patient);
+            repo.Delete(request.Id);
+            return response;
+        }
     }
 }

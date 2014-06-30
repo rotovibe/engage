@@ -12,11 +12,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using MB = MongoDB.Driver.Builders;
+using System.Configuration;
 
 namespace Phytel.API.DataDomain.Patient
 {
     public class MongoCohortPatientViewRepository : IPatientRepository
     {
+        private int _expireDays = Convert.ToInt32(ConfigurationManager.AppSettings["ExpireDays"]);
         public IDTOUtils Utils { get; set; }
 
         private string _dbName = string.Empty;
@@ -99,7 +101,29 @@ namespace Phytel.API.DataDomain.Patient
 
         public void Delete(object entity)
         {
-            throw new NotImplementedException();
+            DeletePatientDataRequest request = (DeletePatientDataRequest)entity;
+            try
+            {
+                using (PatientMongoContext ctx = new PatientMongoContext(_dbName))
+                {
+                    var q = MB.Query<MECohortPatientView>.EQ(b => b.PatientID, ObjectId.Parse(request.Id));
+                    var ub = new List<MB.UpdateBuilder>();
+                    ub.Add(MB.Update.Set(MECohortPatientView.TTLDateProperty, DateTime.UtcNow.AddDays(_expireDays)));
+                    ub.Add(MB.Update.Set(MECohortPatientView.DeleteFlagProperty, true));
+                    ub.Add(MB.Update.Set(MECohortPatientView.LastUpdatedOnProperty, DateTime.UtcNow));
+                    ub.Add(MB.Update.Set(MECohortPatientView.UpdatedByProperty, ObjectId.Parse(this.UserId)));
+
+                    IMongoUpdate update = MB.Update.Combine(ub);
+                    ctx.CohortPatientViews.Collection.Update(q, update);
+
+                    AuditHelper.LogDataAudit(this.UserId,
+                                            MongoCollectionName.CohortPatientView.ToString(),
+                                            request.Id.ToString(),
+                                            Common.DataAuditType.Delete,
+                                            request.ContractNumber);
+                }
+            }
+            catch (Exception) { throw; }
         }
 
         public void DeleteAll(List<object> entities)
@@ -113,7 +137,7 @@ namespace Phytel.API.DataDomain.Patient
             using (PatientMongoContext ctx = new PatientMongoContext(_dbName))
             {
                 patient = (from p in ctx.CohortPatientViews
-                           where p.Id == ObjectId.Parse(entityID)
+                           where p.Id == ObjectId.Parse(entityID) && p.DeleteFlag == false
                            select new DTO.PatientData
                             {
                             }).FirstOrDefault();
