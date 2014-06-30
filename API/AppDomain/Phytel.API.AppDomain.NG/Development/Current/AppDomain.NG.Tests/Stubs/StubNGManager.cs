@@ -154,6 +154,11 @@ namespace Phytel.API.AppDomain.NG.Test.Stubs
             throw new NotImplementedException();
         }
 
+        public PostDeletePatientResponse DeletePatient(PostDeletePatientRequest request)
+        {
+            throw new NotImplementedException();
+        }
+
         public List<Common.CustomObject.IdNamePair> GetProblems(DTO.GetAllProblemsRequest request)
         {
             throw new NotImplementedException();

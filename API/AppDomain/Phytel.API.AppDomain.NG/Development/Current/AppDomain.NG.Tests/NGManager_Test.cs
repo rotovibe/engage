@@ -282,30 +282,32 @@ namespace Phytel.API.AppDomain.NG.Tests
 
         }
 
-        #region PatientProblem
         [TestMethod]
-        public void GetAllPatientProblems_Test()
+        public void DeletePatient_Tests()
         {
             // Arrange
             double version = 1.0;
             string contractNumber = "InHealth001";
             string token = "1234";
-            NGManager ngManager = new NGManager();
-            GetAllPatientProblemsRequest request = new GetAllPatientProblemsRequest
+            INGManager ngm = new NGManager
+            {
+                EndpointUtils = new StubPlanElementEndpointUtils(),
+                PlanElementUtils = new PlanElementUtils()
+            };
+            PostDeletePatientRequest request = new PostDeletePatientRequest
             {
                 ContractNumber = contractNumber,
                 Token = token,
                 Version = version,
-                PatientID = "528bdccc072ef7071c2e22ae"
+                Id = "5325da69d6a4850adcbba62a",
+                UserId = "5325c821072ef705080d3488"
             };
             // Act
-            List<PatientProblem> response = ngManager.GetPatientProblems(request);
+            PostDeletePatientResponse response = ngm.DeletePatient(request);
 
             //Assert
-            Assert.IsTrue(response.Count > 0);
+            Assert.IsNotNull(response);
         }
-
-        #endregion
 
         [TestMethod]
         public void GetAllCohorts_Test()
