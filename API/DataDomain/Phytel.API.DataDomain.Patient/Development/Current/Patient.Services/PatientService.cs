@@ -274,7 +274,7 @@ namespace Phytel.API.DataDomain.Patient.Service
             return response;
         }
 
-        public DeletePatientDataResponse Put(DeletePatientDataRequest request)
+        public DeletePatientDataResponse Delete(DeletePatientDataRequest request)
         {
             DeletePatientDataResponse response = new DeletePatientDataResponse();
             try
