@@ -39,6 +39,7 @@ namespace Phytel.API.AppDomain.NG
         protected static readonly string DDContactServiceUrl = ConfigurationManager.AppSettings["DDContactServiceUrl"];
         protected static readonly string DDCareMemberUrl = ConfigurationManager.AppSettings["DDCareMemberUrl"];
         protected static readonly string DDPatientNoteUrl = ConfigurationManager.AppSettings["DDPatientNoteUrl"];
+        protected static readonly string DDPatientObservationsServiceUrl = ConfigurationManager.AppSettings["DDPatientObservationUrl"];
         #endregion
 
         public void LogException(Exception ex)
@@ -391,6 +392,17 @@ namespace Phytel.API.AppDomain.NG
                                                         request.ContractNumber,
                                                         request.Id), request.UserId);
                 DeletePatientDataResponse psDDResponse = client.Delete<DeletePatientDataResponse>(psUrl);
+                #endregion
+
+                #region DeletePatientObservation
+                //[Route("/{Context}/{Version}/{ContractNumber}/PatientObservation/Patient/{PatientId}/Delete", "DELETE")]
+                string poUrl = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/PatientObservation/Patient/{4}/Delete",
+                                                        DDPatientObservationsServiceUrl,
+                                                        "NG",
+                                                        request.Version,
+                                                        request.ContractNumber,
+                                                        request.Id), request.UserId);
+                DeletePatientDataResponse poDDResponse = client.Delete<DeletePatientDataResponse>(poUrl);
                 #endregion
 
                 if (patientDDResponse != null)
