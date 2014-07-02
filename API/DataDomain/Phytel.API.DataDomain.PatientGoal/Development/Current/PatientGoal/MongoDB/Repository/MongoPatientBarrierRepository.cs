@@ -70,7 +70,7 @@ namespace Phytel.API.DataDomain.PatientGoal
 
         public void Delete(object entity)
         {
-            DeleteBarrierRequest request = (DeleteBarrierRequest)entity;
+            DeleteBarrierDataRequest request = (DeleteBarrierDataRequest)entity;
             try
             {
                 using (PatientGoalMongoContext ctx = new PatientGoalMongoContext(_dbName))
