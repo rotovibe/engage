@@ -241,12 +241,12 @@ namespace Phytel.API.DataDomain.Patient
             catch (Exception ex) { throw ex; }
         }
 
-        public DeletePatientUserDataResponse DeletePatientUser(DeletePatientUserDataRequest request)
+        public DeletePatientUserByPatientIdDataResponse DeletePatientUserByPatientId(DeletePatientUserByPatientIdDataRequest request)
         {
-            DeletePatientUserDataResponse response = null;
+            DeletePatientUserByPatientIdDataResponse response = null;
             try
             {
-                response = new DeletePatientUserDataResponse();
+                response = new DeletePatientUserByPatientIdDataResponse();
 
                 IPatientRepository patientUserRepo = Factory.GetRepository(request, RepositoryType.PatientUser);
 
@@ -269,7 +269,7 @@ namespace Phytel.API.DataDomain.Patient
             catch (Exception ex) { throw ex; }
         }
 
-        public DeleteCohortPatientViewDataResponse DeleteCohortPatientView(DeleteCohortPatientViewDataRequest request)
+        public DeleteCohortPatientViewDataResponse DeleteCohortPatientViewByPatientId(DeleteCohortPatientViewDataRequest request)
         {
             DeleteCohortPatientViewDataResponse response = null;
             try

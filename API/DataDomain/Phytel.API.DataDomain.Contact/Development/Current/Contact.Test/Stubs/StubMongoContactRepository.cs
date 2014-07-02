@@ -108,5 +108,11 @@ namespace Phytel.API.DataDomain.Contact.Test.Stubs
                 throw new NotImplementedException();
             }
         }
+
+        public object GetContactByPatientId(string patientId)
+        {
+            throw new NotImplementedException();
+        }
+
     }
 }

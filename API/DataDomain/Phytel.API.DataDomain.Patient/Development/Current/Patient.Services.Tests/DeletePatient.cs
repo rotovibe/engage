@@ -42,7 +42,7 @@ namespace Phytel.API.DataDomain.Patient.Service.Test
                                         version,
                                         contractNumber,
                                         patientId), userId);
-            DeletePatientUserDataResponse response = client.Delete<DeletePatientUserDataResponse>(url);
+            DeletePatientUserByPatientIdDataResponse response = client.Delete<DeletePatientUserByPatientIdDataResponse>(url);
             Assert.IsNotNull(response);
         }
 

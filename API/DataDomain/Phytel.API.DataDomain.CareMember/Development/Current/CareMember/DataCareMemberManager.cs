@@ -133,5 +133,32 @@ namespace Phytel.API.DataDomain.CareMember
                 throw ex;
             }
         }
+
+        public DeleteCareMemberByPatientIdDataResponse DeleteCareMemberByPatientId(DeleteCareMemberByPatientIdDataRequest request)
+        {
+            DeleteCareMemberByPatientIdDataResponse response = null;
+            try
+            {
+                response = new DeleteCareMemberByPatientIdDataResponse();
+
+                ICareMemberRepository repo = Factory.GetRepository(request, RepositoryType.CareMember);
+                List<CareMemberData> careMembers = repo.FindByPatientId(request.PatientId) as List<CareMemberData>;
+                List<string> deletedIds = null;
+                if (careMembers != null)
+                {
+                    deletedIds = new List<string>();
+                    careMembers.ForEach(u =>
+                    {
+                        request.Id = u.Id;
+                        repo.Delete(request);
+                        deletedIds.Add(request.Id);
+                    });
+                    response.DeletedIds = deletedIds;
+                }
+                response.Success = true;
+                return response;
+            }
+            catch (Exception ex) { throw ex; }
+        }
     }
 }   

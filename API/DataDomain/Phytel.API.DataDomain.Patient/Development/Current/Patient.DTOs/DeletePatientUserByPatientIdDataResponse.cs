@@ -2,9 +2,9 @@ using ServiceStack.ServiceInterface.ServiceModel;
 using System.Collections.Generic;
 using Phytel.API.Interface;
 
-namespace Phytel.API.DataDomain.CareMember.DTO
+namespace Phytel.API.DataDomain.Patient.DTO
 {
-    public class DeleteCareMemberByPatientIdDataResponse : IDomainResponse
+    public class DeletePatientUserByPatientIdDataResponse : IDomainResponse
     {
         public bool Success { get; set; }
         public List<string> DeletedIds { get; set; }

@@ -21,6 +21,11 @@ namespace Phytel.API.DataDomain.CareMember.Test
             throw new NotImplementedException();
         }
 
+        public DeleteCareMemberByPatientIdDataResponse DeleteCareMemberByPatientId(DeleteCareMemberByPatientIdDataRequest request)
+        {
+            throw new NotImplementedException();
+        }
+
         public DTO.CareMemberData GetCareMember(DTO.GetCareMemberDataRequest request)
         {
             ICareMemberRepository repo = Factory.GetRepository(request, RepositoryType.CareMember);

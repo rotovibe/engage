@@ -295,15 +295,15 @@ namespace Phytel.API.DataDomain.Patient.Service
             return response;
         }
 
-        public DeletePatientUserDataResponse Delete(DeletePatientUserDataRequest request)
+        public DeletePatientUserByPatientIdDataResponse Delete(DeletePatientUserByPatientIdDataRequest request)
         {
-            DeletePatientUserDataResponse response = new DeletePatientUserDataResponse();
+            DeletePatientUserByPatientIdDataResponse response = new DeletePatientUserByPatientIdDataResponse();
             try
             {
                 if (string.IsNullOrEmpty(request.UserId))
                     throw new UnauthorizedAccessException("PatientDD:PatientUserDelete()::Unauthorized Access");
 
-                response = PatientManager.DeletePatientUser(request);
+                response = PatientManager.DeletePatientUserByPatientId(request);
                 response.Version = request.Version;
             }
             catch (Exception ex)
@@ -324,7 +324,7 @@ namespace Phytel.API.DataDomain.Patient.Service
                 if (string.IsNullOrEmpty(request.UserId))
                     throw new UnauthorizedAccessException("PatientDD:DeleteCohortPatientView()::Unauthorized Access");
 
-                response = PatientManager.DeleteCohortPatientView(request);
+                response = PatientManager.DeleteCohortPatientViewByPatientId(request);
                 response.Version = request.Version;
             }
             catch (Exception ex)

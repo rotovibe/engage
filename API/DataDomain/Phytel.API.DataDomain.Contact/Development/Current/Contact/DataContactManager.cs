@@ -166,5 +166,26 @@ namespace Phytel.API.DataDomain.Contact
             }
             return result;
         }
+
+        public DeleteContactByPatientIdDataResponse DeleteContactByPatientId(DeleteContactByPatientIdDataRequest request)
+        {
+            DeleteContactByPatientIdDataResponse response = null;
+            try
+            {
+                response = new DeleteContactByPatientIdDataResponse();
+
+                IContactRepository repo = Factory.GetRepository(request, RepositoryType.Contact);
+                ContactData contact = repo.GetContactByPatientId(request.PatientId) as ContactData;
+                if (contact != null)
+                {
+                    request.Id = contact.ContactId;
+                    repo.Delete(request);
+                    response.DeletedId = request.Id;
+                }
+                response.Success = true;
+                return response;
+            }
+            catch (Exception ex) { throw ex; }
+        }
     }
 }   

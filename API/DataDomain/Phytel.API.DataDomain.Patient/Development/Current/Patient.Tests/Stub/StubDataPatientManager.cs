@@ -82,12 +82,12 @@ namespace Phytel.API.DataDomain.Patient.Test.Stub
             return response;
         }
 
-        public DTO.DeletePatientUserDataResponse DeletePatientUser(DTO.DeletePatientUserDataRequest request)
+        public DTO.DeletePatientUserByPatientIdDataResponse DeletePatientUserByPatientId(DTO.DeletePatientUserByPatientIdDataRequest request)
         {
             throw new NotImplementedException();
         }
 
-        public DTO.DeleteCohortPatientViewDataResponse DeleteCohortPatientView(DTO.DeleteCohortPatientViewDataRequest request)
+        public DTO.DeleteCohortPatientViewDataResponse DeleteCohortPatientViewByPatientId(DTO.DeleteCohortPatientViewDataRequest request)
         {
             throw new NotImplementedException();
         }

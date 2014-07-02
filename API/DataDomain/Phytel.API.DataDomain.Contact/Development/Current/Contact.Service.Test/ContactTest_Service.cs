@@ -29,5 +29,27 @@ namespace Phytel.API.DataDomain.Contact.Services.Test
                 ContactId,
                 ContactId));
         }
+
+        [TestMethod]
+        public void DeleteCareMemberByPatientId_Test()
+        {
+            double version = 1.0;
+            string contractNumber = "InHealth001";
+            string context = "NG";
+            string patientId = "5325db70d6a4850adcbba948";
+            string userId = "000000000000000000000000";
+            string ddUrl = "http://localhost:8888/Contact";
+            IRestClient client = new JsonServiceClient();
+
+            // [Route("/{Context}/{Version}/{ContractNumber}/Contact/Patient/{PatientId}/Delete", "DELETE")]
+            string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Contact/Patient/{4}/Delete",
+                                        ddUrl,
+                                        context,
+                                        version,
+                                        contractNumber,
+                                        patientId), userId);
+            DeleteContactByPatientIdDataResponse response = client.Delete<DeleteContactByPatientIdDataResponse>(url);
+            Assert.IsNotNull(response);
+        }
     }
 }

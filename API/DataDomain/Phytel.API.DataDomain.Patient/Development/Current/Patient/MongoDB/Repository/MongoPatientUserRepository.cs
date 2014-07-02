@@ -94,7 +94,7 @@ namespace Phytel.API.DataDomain.Patient
 
         public void Delete(object entity)
         {
-            DeletePatientUserDataRequest request = (DeletePatientUserDataRequest)entity;
+            DeletePatientUserByPatientIdDataRequest request = (DeletePatientUserByPatientIdDataRequest)entity;
             try
             {
                 using (PatientMongoContext ctx = new PatientMongoContext(_dbName))

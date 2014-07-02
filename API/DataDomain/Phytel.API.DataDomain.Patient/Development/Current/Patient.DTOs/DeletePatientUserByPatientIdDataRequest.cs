@@ -1,15 +1,15 @@
 using Phytel.API.Interface;
 using ServiceStack.ServiceHost;
 
-namespace Phytel.API.DataDomain.CareMember.DTO
+namespace Phytel.API.DataDomain.Patient.DTO
 {
-    [Route("/{Context}/{Version}/{ContractNumber}/CareMember/Patient/{PatientId}/Delete", "DELETE")]
-    public class DeleteCareMemberByPatientIdDataRequest : IDataDomainRequest
+    [Route("/{Context}/{Version}/{ContractNumber}/PatientUser/Patient/{PatientId}/Delete", "DELETE")]
+    public class DeletePatientUserByPatientIdDataRequest : IDataDomainRequest
     {
-        [ApiMember(Name = "Id", Description = "Care Member Id", ParameterType = "property", DataType = "string", IsRequired = true)]
+        [ApiMember(Name = "Id", Description = "PatientUser Id", ParameterType = "property", DataType = "string", IsRequired = true)]
         public string Id { get; set; }
-
-        [ApiMember(Name = "PatientId", Description = "Id of the patient whose CareMember record needs to be deleted", ParameterType = "property", DataType = "string", IsRequired = true)]
+        
+        [ApiMember(Name = "PatientId", Description = "Id of the patient whose PatientUser record needs to be deleted", ParameterType = "property", DataType = "string", IsRequired = true)]
         public string PatientId { get; set; }
 
         [ApiMember(Name = "UserId", Description = "UserId of the logged in user", ParameterType = "property", DataType = "string", IsRequired = true)]
