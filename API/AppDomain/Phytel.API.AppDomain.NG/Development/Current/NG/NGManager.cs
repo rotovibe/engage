@@ -6,6 +6,7 @@ using Phytel.API.DataDomain.Cohort.DTO;
 using Phytel.API.DataDomain.Contact.DTO;
 using Phytel.API.DataDomain.LookUp.DTO;
 using Phytel.API.DataDomain.Patient.DTO;
+using Phytel.API.DataDomain.PatientNote.DTO;
 using Phytel.API.Interface;
 using ServiceStack.Service;
 using ServiceStack.ServiceClient.Web;
@@ -37,6 +38,7 @@ namespace Phytel.API.AppDomain.NG
         protected static readonly string DDPatientSystemUrl = ConfigurationManager.AppSettings["DDPatientSystemUrl"];
         protected static readonly string DDContactServiceUrl = ConfigurationManager.AppSettings["DDContactServiceUrl"];
         protected static readonly string DDCareMemberUrl = ConfigurationManager.AppSettings["DDCareMemberUrl"];
+        protected static readonly string DDPatientNoteUrl = ConfigurationManager.AppSettings["DDPatientNoteUrl"];
         #endregion
 
         public void LogException(Exception ex)
@@ -313,6 +315,7 @@ namespace Phytel.API.AppDomain.NG
             try
             {
                 IRestClient client = new JsonServiceClient();
+
                 #region DeletePatient
                 //[Route("/{Context}/{Version}/{ContractNumber}/Patient/{Id}/Delete", "DELETE")]
                 string patientUrl = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Delete",
@@ -349,7 +352,7 @@ namespace Phytel.API.AppDomain.NG
                 #region DeleteContact
                 //[Route("/{Context}/{Version}/{ContractNumber}/Contact/Patient/{PatientId}/Delete", "DELETE")]
                 string cUrl = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Contact/Patient/{4}/Delete",
-                                                        DDCareMemberUrl,
+                                                        DDContactServiceUrl,
                                                         "NG",
                                                         request.Version,
                                                         request.ContractNumber,
@@ -366,6 +369,28 @@ namespace Phytel.API.AppDomain.NG
                                                         request.ContractNumber,
                                                         request.Id), request.UserId);
                 DeletePatientDataResponse cmDDResponse = client.Delete<DeletePatientDataResponse>(cmUrl);
+                #endregion
+
+                #region DeletePatientNotes
+                //[Route("/{Context}/{Version}/{ContractNumber}/PatientNote/Patient/{PatientId}/Delete", "DELETE")]
+                string pnUrl = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/PatientNote/Patient/{4}/Delete",
+                                                        DDPatientNoteUrl,
+                                                        "NG",
+                                                        request.Version,
+                                                        request.ContractNumber,
+                                                        request.Id), request.UserId);
+                DeleteNoteByPatientIdDataResponse pnDDResponse = client.Delete<DeleteNoteByPatientIdDataResponse>(pnUrl);
+                #endregion
+
+                #region DeletePatientSystem
+                //[Route("/{Context}/{Version}/{ContractNumber}/PatientSystem/Patient/{PatientId}/Delete", "DELETE")]
+                string psUrl = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/PatientSystem/Patient/{4}/Delete",
+                                                        DDPatientSystemUrl,
+                                                        "NG",
+                                                        request.Version,
+                                                        request.ContractNumber,
+                                                        request.Id), request.UserId);
+                DeletePatientDataResponse psDDResponse = client.Delete<DeletePatientDataResponse>(psUrl);
                 #endregion
 
                 if (patientDDResponse != null)

@@ -70,6 +70,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DeletePatientSystemByPatientIdDataRequest.cs" />
+    <Compile Include="DeletePatientSystemByPatientIdDataResponse.cs" />
     <Compile Include="GetAllPatientSystemsDataRequest.cs" />
     <Compile Include="PutPatientSystemDataResponse.cs" />
     <Compile Include="PutPatientSystemDataRequest.cs" />

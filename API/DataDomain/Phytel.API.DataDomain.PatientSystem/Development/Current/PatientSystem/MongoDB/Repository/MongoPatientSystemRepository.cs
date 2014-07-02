@@ -12,12 +12,15 @@ using Phytel.API.DataDomain.PatientSystem;
 using Phytel.API.DataAudit;
 using Phytel.API.Common;
 using MongoDB.Bson.Serialization;
+using MB = MongoDB.Driver.Builders;
+using System.Configuration;
 
 namespace Phytel.API.DataDomain.PatientSystem
 {
     public class MongoPatientSystemRepository<T> : IPatientSystemRepository<T>
     {
         private string _dbName = string.Empty;
+        private int _expireDays = Convert.ToInt32(ConfigurationManager.AppSettings["ExpireDays"]);
 
         static MongoPatientSystemRepository()
         {
@@ -92,7 +95,29 @@ namespace Phytel.API.DataDomain.PatientSystem
 
         public void Delete(object entity)
         {
-            throw new NotImplementedException();
+            DeletePatientSystemByPatientIdDataRequest request = (DeletePatientSystemByPatientIdDataRequest)entity;
+            try
+            {
+                using (PatientSystemMongoContext ctx = new PatientSystemMongoContext(_dbName))
+                {
+                    var query = MB.Query<MEPatientSystem>.EQ(b => b.Id, ObjectId.Parse(request.Id));
+                    var builder = new List<MB.UpdateBuilder>();
+                    builder.Add(MB.Update.Set(MEPatientSystem.TTLDateProperty, DateTime.UtcNow.AddDays(_expireDays)));
+                    builder.Add(MB.Update.Set(MEPatientSystem.DeleteFlagProperty, true));
+                    builder.Add(MB.Update.Set(MEPatientSystem.LastUpdatedOnProperty, DateTime.UtcNow));
+                    builder.Add(MB.Update.Set(MEPatientSystem.UpdatedByProperty, ObjectId.Parse(this.UserId)));
+
+                    IMongoUpdate patientUserUpdate = MB.Update.Combine(builder);
+                    ctx.PatientSystems.Collection.Update(query, patientUserUpdate);
+
+                    AuditHelper.LogDataAudit(this.UserId,
+                                            MongoCollectionName.PatientSystem.ToString(),
+                                            request.Id.ToString(),
+                                            Common.DataAuditType.Delete,
+                                            request.ContractNumber);
+                }
+            }
+            catch (Exception) { throw; }
         }
 
         public void DeleteAll(List<object> entities)
@@ -136,6 +161,39 @@ namespace Phytel.API.DataDomain.PatientSystem
         public void CacheByID(List<string> entityIDs)
         {
             throw new NotImplementedException();
+        }
+
+        public IEnumerable<object> FindByPatientId(string patientId)
+        {
+            List<PatientSystemData> dataList = null;
+            try
+            {
+                using (PatientSystemMongoContext ctx = new PatientSystemMongoContext(_dbName))
+                {
+                    List<IMongoQuery> queries = new List<IMongoQuery>();
+                    queries.Add(Query.EQ(MEPatientSystem.PatientIDProperty, ObjectId.Parse(patientId)));
+                    queries.Add(Query.EQ(MEPatientSystem.DeleteFlagProperty, false));
+                    IMongoQuery mQuery = Query.And(queries);
+                    List<MEPatientSystem> mePatientSystems = ctx.PatientSystems.Collection.Find(mQuery).ToList();
+                    if (mePatientSystems != null && mePatientSystems.Count > 0)
+                    {
+                        dataList = new List<PatientSystemData>();
+                        foreach (MEPatientSystem mePS in mePatientSystems)
+                        {
+                            dataList.Add(new PatientSystemData
+                            {
+                                Id = mePS.Id.ToString(),
+                                PatientID = mePS.PatientID.ToString(),
+                                SystemID = mePS.SystemID,
+                                DisplayLabel = mePS.DisplayLabel,
+                                SystemName =  mePS.SystemName
+                            });
+                        }
+                    }
+                }
+                return dataList;
+            }
+            catch (Exception) { throw; }
         }
 
         public string UserId { get; set; }
