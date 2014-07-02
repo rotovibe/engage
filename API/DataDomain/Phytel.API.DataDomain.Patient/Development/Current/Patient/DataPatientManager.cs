@@ -232,15 +232,59 @@ namespace Phytel.API.DataDomain.Patient
             {
                 response = new DeletePatientDataResponse();
                 
-                // Delete Patient and PatientUser
                 IPatientRepository patientRepo = Factory.GetRepository(request, RepositoryType.Patient);
                 patientRepo.Delete(request);
+                response.DeletedId = request.Id;
+                response.Success = true;
+                return response;
+            }
+            catch (Exception ex) { throw ex; }
+        }
 
-                // Delete CohortPatientView.
-                IPatientRepository cohortPatientViewRepo = Factory.GetRepository(request, RepositoryType.CohortPatientView);
-                cohortPatientViewRepo.Delete(request);
+        public DeletePatientUserDataResponse DeletePatientUser(DeletePatientUserDataRequest request)
+        {
+            DeletePatientUserDataResponse response = null;
+            try
+            {
+                response = new DeletePatientUserDataResponse();
 
-                response.Deleted = true;
+                IPatientRepository patientUserRepo = Factory.GetRepository(request, RepositoryType.PatientUser);
+
+                List<PatientUserData> puData = patientUserRepo.FindPatientUsersByPatientId(request.PatientId);
+                List<string> deletedIds = null;
+                if(puData != null)
+                {
+                    deletedIds = new List<string>();
+                    puData.ForEach(u => 
+                    {
+                        request.Id = u.Id;
+                        patientUserRepo.Delete(request);
+                        deletedIds.Add(request.Id);
+                    });
+                    response.DeletedIds = deletedIds;
+                }
+                response.Success = true;
+                return response;
+            }
+            catch (Exception ex) { throw ex; }
+        }
+
+        public DeleteCohortPatientViewDataResponse DeleteCohortPatientView(DeleteCohortPatientViewDataRequest request)
+        {
+            DeleteCohortPatientViewDataResponse response = null;
+            try
+            {
+                response = new DeleteCohortPatientViewDataResponse();
+                
+                IPatientRepository cpvRepo = Factory.GetRepository(request, RepositoryType.CohortPatientView);
+                CohortPatientViewData cpvData = cpvRepo.FindCohortPatientViewByPatientId(request.PatientId);
+                if (cpvData != null)
+                {
+                    request.Id = cpvData.Id;
+                    cpvRepo.Delete(request);
+                    response.DeletedId = request.Id;
+                }
+                response.Success = true;
                 return response;
             }
             catch (Exception ex) { throw ex; }

@@ -145,7 +145,6 @@ namespace Phytel.API.DataDomain.Patient
             {
                 using (PatientMongoContext ctx = new PatientMongoContext(_dbName))
                 {
-                    #region Patient
                     var patientQuery = MB.Query<MEPatient>.EQ(b => b.Id, ObjectId.Parse(request.Id));
                     var patientBuilder = new List<MB.UpdateBuilder>();
                     patientBuilder.Add(MB.Update.Set(MEPatient.TTLDateProperty, DateTime.UtcNow.AddDays(_expireDays)));
@@ -160,26 +159,7 @@ namespace Phytel.API.DataDomain.Patient
                                             MongoCollectionName.Patient.ToString(),
                                             request.Id.ToString(),
                                             Common.DataAuditType.Delete,
-                                            request.ContractNumber); 
-                    #endregion
-
-                    #region PatientUser
-                    var patientUserQuery = MB.Query<MEPatientUser>.EQ(b => b.PatientId, ObjectId.Parse(request.Id));
-                    var patientUserBuilder = new List<MB.UpdateBuilder>();
-                    patientUserBuilder.Add(MB.Update.Set(MEPatientUser.TTLDateProperty, DateTime.UtcNow.AddDays(_expireDays)));
-                    patientUserBuilder.Add(MB.Update.Set(MEPatientUser.DeleteFlagProperty, true));
-                    patientUserBuilder.Add(MB.Update.Set(MEPatientUser.LastUpdatedOnProperty, DateTime.UtcNow));
-                    patientUserBuilder.Add(MB.Update.Set(MEPatientUser.UpdatedByProperty, ObjectId.Parse(this.UserId)));
-
-                    IMongoUpdate patientUserUpdate = MB.Update.Combine(patientUserBuilder);
-                    ctx.PatientUsers.Collection.Update(patientUserQuery, patientUserUpdate);
-
-                    AuditHelper.LogDataAudit(this.UserId,
-                                            MongoCollectionName.PatientUser.ToString(),
-                                            request.Id.ToString(),
-                                            Common.DataAuditType.Delete,
                                             request.ContractNumber);
-                    #endregion
                 }
             }
             catch (Exception) { throw; }
@@ -710,5 +690,16 @@ namespace Phytel.API.DataDomain.Patient
         }
 
         public string UserId { get; set; }
+
+
+        public List<PatientUserData> FindPatientUsersByPatientId(string patientId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public CohortPatientViewData FindCohortPatientViewByPatientId(string patientId)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -81,5 +81,15 @@ namespace Phytel.API.DataDomain.Patient.Test.Stub
             repo.Delete(request.Id);
             return response;
         }
+
+        public DTO.DeletePatientUserDataResponse DeletePatientUser(DTO.DeletePatientUserDataRequest request)
+        {
+            throw new NotImplementedException();
+        }
+
+        public DTO.DeleteCohortPatientViewDataResponse DeleteCohortPatientView(DTO.DeleteCohortPatientViewDataRequest request)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

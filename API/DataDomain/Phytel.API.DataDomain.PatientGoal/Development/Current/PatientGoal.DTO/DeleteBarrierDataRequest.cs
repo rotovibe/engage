@@ -4,7 +4,7 @@ using ServiceStack.ServiceHost;
 namespace Phytel.API.DataDomain.PatientGoal.DTO
 {
     [Route("/{Context}/{Version}/{ContractNumber}/Patient/{PatientId}/Goal/{PatientGoalId}/Barrier/{BarrierId}/Delete", "DELETE")]
-    public class DeleteBarrierRequest : IDataDomainRequest
+    public class DeleteBarrierDataRequest : IDataDomainRequest
     {
         [ApiMember(Name = "TaskId", Description = "TaskId of the task to update", ParameterType = "property", DataType = "string", IsRequired = false)]
         public string InterventionId { get; set; }

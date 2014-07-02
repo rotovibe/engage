@@ -101,12 +101,12 @@ namespace Phytel.API.DataDomain.Patient
 
         public void Delete(object entity)
         {
-            DeletePatientDataRequest request = (DeletePatientDataRequest)entity;
+            DeleteCohortPatientViewDataRequest request = (DeleteCohortPatientViewDataRequest)entity;
             try
             {
                 using (PatientMongoContext ctx = new PatientMongoContext(_dbName))
                 {
-                    var q = MB.Query<MECohortPatientView>.EQ(b => b.PatientID, ObjectId.Parse(request.Id));
+                    var q = MB.Query<MECohortPatientView>.EQ(b => b.Id, ObjectId.Parse(request.Id));
                     var ub = new List<MB.UpdateBuilder>();
                     ub.Add(MB.Update.Set(MECohortPatientView.TTLDateProperty, DateTime.UtcNow.AddDays(_expireDays)));
                     ub.Add(MB.Update.Set(MECohortPatientView.DeleteFlagProperty, true));
@@ -386,6 +386,33 @@ namespace Phytel.API.DataDomain.Patient
 
         public string UserId { get; set; }
 
+        public CohortPatientViewData FindCohortPatientViewByPatientId(string patientId)
+        {
+            CohortPatientViewData data = null;
+            try
+            {
+                using (PatientMongoContext ctx = new PatientMongoContext(_dbName))
+                {
+                    List<IMongoQuery> queries = new List<IMongoQuery>();
+                    queries.Add(Query.EQ(MECohortPatientView.PatientIDProperty, ObjectId.Parse(patientId)));
+                    //queries.Add(Query.EQ(MECohortPatientView.DeleteFlagProperty, false)); Commented out this line as there are few records in Prod that do not contain basic fields like del, ttl, uon, etc.
+                    IMongoQuery mQuery = Query.And(queries);
+                    MECohortPatientView meCPV = ctx.CohortPatientViews.Collection.Find(mQuery).FirstOrDefault();
+                    if (meCPV != null)
+                    {
+                        data = new CohortPatientViewData
+                        {
+                            Id = meCPV.Id.ToString(),
+                            LastName = meCPV.LastName,
+                            PatientID = meCPV.PatientID.ToString()
+                        };
+                    }
+                }
+                return data;
+            }
+            catch (Exception) { throw; }
+        }
+
         #region needs to be taken out of IPatientRepository . In place right now to accomidate the interface
         public void CacheByID(List<string> entityIDs)
         {
@@ -426,5 +453,11 @@ namespace Phytel.API.DataDomain.Patient
             throw new NotImplementedException();
         }
         #endregion
+
+
+        public List<PatientUserData> FindPatientUsersByPatientId(string patientId)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

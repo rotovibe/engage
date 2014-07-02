@@ -232,7 +232,7 @@ namespace Phytel.API.DataDomain.PatientGoal
                 excludes.ForEach(ex =>
                 {
                     // create delete task request to insert
-                    DeleteTaskRequest dtr = new DeleteTaskRequest { TaskId = ex, UserId = request.UserId };
+                    DeleteTaskDataRequest dtr = new DeleteTaskDataRequest { TaskId = ex, UserId = request.UserId };
                     repo.Delete(dtr);
                 });
 
@@ -265,7 +265,7 @@ namespace Phytel.API.DataDomain.PatientGoal
                 excludes.ForEach(ex =>
                 {
                     // create delete intervention request to insert
-                    DeleteInterventionRequest dtr = new DeleteInterventionRequest { InterventionId = ex, UserId = request.UserId };
+                    DeleteInterventionDataRequest dtr = new DeleteInterventionDataRequest { InterventionId = ex, UserId = request.UserId };
                     repo.Delete(dtr);
                 });
 
@@ -298,7 +298,7 @@ namespace Phytel.API.DataDomain.PatientGoal
                 excludes.ForEach(ex =>
                 {
                     // create delete barrier request to insert
-                    DeleteBarrierRequest dbr = new DeleteBarrierRequest { BarrierId = ex, UserId = request.UserId };
+                    DeleteBarrierDataRequest dbr = new DeleteBarrierDataRequest { BarrierId = ex, UserId = request.UserId };
                     repo.Delete(dbr);
                 });
 
@@ -413,13 +413,13 @@ namespace Phytel.API.DataDomain.PatientGoal
             }
         }
 
-        public static DeleteTaskResponse DeleteTask(DeleteTaskRequest request)
+        public static DeleteTaskDataResponse DeleteTask(DeleteTaskDataRequest request)
         {
             try
             {
-                DeleteTaskResponse result = new DeleteTaskResponse();
+                DeleteTaskDataResponse result = new DeleteTaskDataResponse();
 
-                IPatientGoalRepository<DeleteTaskResponse> repo = PatientGoalRepositoryFactory<DeleteTaskResponse>.GetPatientTaskRepository(request.ContractNumber, request.Context, request.UserId);
+                IPatientGoalRepository<DeleteTaskDataResponse> repo = PatientGoalRepositoryFactory<DeleteTaskDataResponse>.GetPatientTaskRepository(request.ContractNumber, request.Context, request.UserId);
                 
                 List<PatientTaskData> ptd = (List<PatientTaskData>)repo.FindByGoalId(request.PatientGoalId);
                 ptd.ForEach(t =>
@@ -437,13 +437,13 @@ namespace Phytel.API.DataDomain.PatientGoal
             }
         }
 
-        public static DeleteInterventionResponse DeleteIntervention(DeleteInterventionRequest request)
+        public static DeleteInterventionDataResponse DeleteIntervention(DeleteInterventionDataRequest request)
         {
             try
             {
-                DeleteInterventionResponse result = new DeleteInterventionResponse();
+                DeleteInterventionDataResponse result = new DeleteInterventionDataResponse();
 
-                IPatientGoalRepository<DeleteInterventionResponse> repo = PatientGoalRepositoryFactory<DeleteInterventionResponse>.GetPatientInterventionRepository(request.ContractNumber, request.Context, request.UserId);
+                IPatientGoalRepository<DeleteInterventionDataResponse> repo = PatientGoalRepositoryFactory<DeleteInterventionDataResponse>.GetPatientInterventionRepository(request.ContractNumber, request.Context, request.UserId);
                 
                 List<PatientInterventionData> pid = (List<PatientInterventionData>)repo.FindByGoalId(request.PatientGoalId);
                 pid.ForEach(i =>
@@ -463,13 +463,13 @@ namespace Phytel.API.DataDomain.PatientGoal
             }
         }
 
-        public static DeleteBarrierResponse DeleteBarrier(DeleteBarrierRequest request)
+        public static DeleteBarrierDataResponse DeleteBarrier(DeleteBarrierDataRequest request)
         {
             try
             {
-                DeleteBarrierResponse result = new DeleteBarrierResponse();
+                DeleteBarrierDataResponse result = new DeleteBarrierDataResponse();
 
-                IPatientGoalRepository<DeleteBarrierResponse> repo = PatientGoalRepositoryFactory<DeleteBarrierResponse>.GetPatientBarrierRepository(request.ContractNumber, request.Context, request.UserId);
+                IPatientGoalRepository<DeleteBarrierDataResponse> repo = PatientGoalRepositoryFactory<DeleteBarrierDataResponse>.GetPatientBarrierRepository(request.ContractNumber, request.Context, request.UserId);
                 
                 List<PatientBarrierData> pbd = (List<PatientBarrierData>)repo.FindByGoalId(request.PatientGoalId);
                 pbd.ForEach(b =>

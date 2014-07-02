@@ -96,6 +96,7 @@
   <ItemGroup>
     <Compile Include="CohortPatientView_Tests.cs" />
     <Compile Include="CohortPatients_Test.cs" />
+    <Compile Include="DeletePatient.cs" />
     <Compile Include="Patient_Flagged_Tests.cs" />
     <Compile Include="Patient_Priority_Tests.cs" />
     <Compile Include="Patient_Test.cs" />

@@ -79,8 +79,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="PatientUserData.cs" />
     <Compile Include="DataDomainRequest.cs" />
+    <Compile Include="DeleteCohortPatientViewDataRequest.cs" />
+    <Compile Include="DeletePatientUserDataRequest.cs" />
     <Compile Include="DeletePatientDataRequest.cs" />
+    <Compile Include="DeleteCohortPatientViewDataResponse.cs" />
+    <Compile Include="DeletePatientUserDataResponse.cs" />
     <Compile Include="DeletePatientDataResponse.cs" />
     <Compile Include="GetCohortPatientsDataRequest.cs" />
     <Compile Include="GetCohortPatientsDataResponse.cs" />

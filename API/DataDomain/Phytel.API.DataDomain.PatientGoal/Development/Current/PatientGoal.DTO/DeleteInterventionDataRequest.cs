@@ -4,7 +4,7 @@ using ServiceStack.ServiceHost;
 namespace Phytel.API.DataDomain.PatientGoal.DTO
 {
     [Route("/{Context}/{Version}/{ContractNumber}/Patient/{PatientId}/Goal/{PatientGoalId}/Intervention/{InterventionId}/Delete", "DELETE")]
-    public class DeleteInterventionRequest : IDataDomainRequest
+    public class DeleteInterventionDataRequest : IDataDomainRequest
     {
         [ApiMember(Name = "InterventionId", Description = "InterventionId of the intervention to update", ParameterType = "property", DataType = "string", IsRequired = false)]
         public string InterventionId { get; set; }

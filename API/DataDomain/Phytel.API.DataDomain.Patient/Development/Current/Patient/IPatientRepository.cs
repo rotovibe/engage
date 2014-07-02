@@ -19,5 +19,7 @@ namespace Phytel.API.DataDomain.Patient
         object FindByID(string patientId, string userId);
         object Update(PutUpdatePatientDataRequest request);
         object GetSSN(string patientId);
+        List<PatientUserData> FindPatientUsersByPatientId(string patientId);
+        CohortPatientViewData FindCohortPatientViewByPatientId(string patientId);
     }
 }

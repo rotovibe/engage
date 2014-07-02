@@ -157,7 +157,7 @@
         <WebProjectProperties>
           <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>53167</DevelopmentServerPort>
+          <DevelopmentServerPort>56176</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
           <IISUrl>http://localhost:888/Nightingale/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>

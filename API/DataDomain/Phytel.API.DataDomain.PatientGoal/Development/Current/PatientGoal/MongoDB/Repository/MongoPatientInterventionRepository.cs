@@ -72,7 +72,7 @@ namespace Phytel.API.DataDomain.PatientGoal
 
         public void Delete(object entity)
         {
-            DeleteInterventionRequest request = (DeleteInterventionRequest)entity;
+            DeleteInterventionDataRequest request = (DeleteInterventionDataRequest)entity;
             try
             {
                 using (PatientGoalMongoContext ctx = new PatientGoalMongoContext(_dbName))

@@ -120,5 +120,16 @@ namespace Phytel.API.DataDomain.Patient.Test.Stub
                 this.userId = value;
             }
         }
+
+
+        public List<PatientUserData> FindPatientUsersByPatientId(string patientId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public CohortPatientViewData FindCohortPatientViewByPatientId(string patientId)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

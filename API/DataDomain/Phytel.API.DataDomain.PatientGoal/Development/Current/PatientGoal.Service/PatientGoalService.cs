@@ -241,9 +241,9 @@ namespace Phytel.API.DataDomain.PatientGoal.Service
             return response;
         }
 
-        public DeleteTaskResponse Delete(DeleteTaskRequest request)
+        public DeleteTaskDataResponse Delete(DeleteTaskDataRequest request)
         {
-            DeleteTaskResponse response = new DeleteTaskResponse();
+            DeleteTaskDataResponse response = new DeleteTaskDataResponse();
             try
             {
                 if (string.IsNullOrEmpty(request.UserId))
@@ -262,9 +262,9 @@ namespace Phytel.API.DataDomain.PatientGoal.Service
             return response;
         }
 
-        public DeleteInterventionResponse Delete(DeleteInterventionRequest request)
+        public DeleteInterventionDataResponse Delete(DeleteInterventionDataRequest request)
         {
-            DeleteInterventionResponse response = new DeleteInterventionResponse();
+            DeleteInterventionDataResponse response = new DeleteInterventionDataResponse();
             try
             {
                 if (string.IsNullOrEmpty(request.UserId))
@@ -283,9 +283,9 @@ namespace Phytel.API.DataDomain.PatientGoal.Service
             return response;
         }
 
-        public DeleteBarrierResponse Delete(DeleteBarrierRequest request)
+        public DeleteBarrierDataResponse Delete(DeleteBarrierDataRequest request)
         {
-            DeleteBarrierResponse response = new DeleteBarrierResponse();
+            DeleteBarrierDataResponse response = new DeleteBarrierDataResponse();
             try
             {
                 if (string.IsNullOrEmpty(request.UserId))

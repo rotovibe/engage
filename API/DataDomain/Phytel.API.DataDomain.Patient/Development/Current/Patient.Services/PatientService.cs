@@ -280,9 +280,51 @@ namespace Phytel.API.DataDomain.Patient.Service
             try
             {
                 if (string.IsNullOrEmpty(request.UserId))
-                    throw new UnauthorizedAccessException("PatientDD:Delete()::Unauthorized Access");
+                    throw new UnauthorizedAccessException("PatientDD:PatientDelete()::Unauthorized Access");
 
                 response = PatientManager.DeletePatient(request);
+                response.Version = request.Version;
+            }
+            catch (Exception ex)
+            {
+                CommonFormatterUtil.FormatExceptionResponse(response, base.Response, ex);
+
+                string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
+                Helpers.LogException(int.Parse(aseProcessID), ex);
+            }
+            return response;
+        }
+
+        public DeletePatientUserDataResponse Delete(DeletePatientUserDataRequest request)
+        {
+            DeletePatientUserDataResponse response = new DeletePatientUserDataResponse();
+            try
+            {
+                if (string.IsNullOrEmpty(request.UserId))
+                    throw new UnauthorizedAccessException("PatientDD:PatientUserDelete()::Unauthorized Access");
+
+                response = PatientManager.DeletePatientUser(request);
+                response.Version = request.Version;
+            }
+            catch (Exception ex)
+            {
+                CommonFormatterUtil.FormatExceptionResponse(response, base.Response, ex);
+
+                string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
+                Helpers.LogException(int.Parse(aseProcessID), ex);
+            }
+            return response;
+        }
+
+        public DeleteCohortPatientViewDataResponse Delete(DeleteCohortPatientViewDataRequest request)
+        {
+            DeleteCohortPatientViewDataResponse response = new DeleteCohortPatientViewDataResponse();
+            try
+            {
+                if (string.IsNullOrEmpty(request.UserId))
+                    throw new UnauthorizedAccessException("PatientDD:DeleteCohortPatientView()::Unauthorized Access");
+
+                response = PatientManager.DeleteCohortPatientView(request);
                 response.Version = request.Version;
             }
             catch (Exception ex)
