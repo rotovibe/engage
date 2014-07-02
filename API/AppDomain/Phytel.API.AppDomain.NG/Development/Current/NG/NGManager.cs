@@ -36,6 +36,7 @@ namespace Phytel.API.AppDomain.NG
         protected static readonly string DDCohortServiceUrl = ConfigurationManager.AppSettings["DDCohortServiceUrl"];
         protected static readonly string DDPatientSystemUrl = ConfigurationManager.AppSettings["DDPatientSystemUrl"];
         protected static readonly string DDContactServiceUrl = ConfigurationManager.AppSettings["DDContactServiceUrl"];
+        protected static readonly string DDCareMemberUrl = ConfigurationManager.AppSettings["DDCareMemberUrl"];
         #endregion
 
         public void LogException(Exception ex)
@@ -343,6 +344,28 @@ namespace Phytel.API.AppDomain.NG
                                                         request.ContractNumber,
                                                         request.Id), request.UserId);
                 DeletePatientDataResponse cpvDDResponse = client.Delete<DeletePatientDataResponse>(cpvUrl);
+                #endregion
+
+                #region DeleteContact
+                //[Route("/{Context}/{Version}/{ContractNumber}/Contact/Patient/{PatientId}/Delete", "DELETE")]
+                string cUrl = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Contact/Patient/{4}/Delete",
+                                                        DDCareMemberUrl,
+                                                        "NG",
+                                                        request.Version,
+                                                        request.ContractNumber,
+                                                        request.Id), request.UserId);
+                DeleteContactByPatientIdDataResponse cDDResponse = client.Delete<DeleteContactByPatientIdDataResponse>(cUrl);
+                #endregion
+
+                #region DeleteCareMember
+                //[Route("/{Context}/{Version}/{ContractNumber}/CareMember/Patient/{PatientId}/Delete", "DELETE")]
+                string cmUrl = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/CareMember/Patient/{4}/Delete",
+                                                        DDCareMemberUrl,
+                                                        "NG",
+                                                        request.Version,
+                                                        request.ContractNumber,
+                                                        request.Id), request.UserId);
+                DeletePatientDataResponse cmDDResponse = client.Delete<DeletePatientDataResponse>(cmUrl);
                 #endregion
 
                 if (patientDDResponse != null)

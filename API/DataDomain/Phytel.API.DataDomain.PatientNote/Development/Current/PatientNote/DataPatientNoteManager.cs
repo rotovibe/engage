@@ -67,6 +67,49 @@ namespace Phytel.API.DataDomain.PatientNote
             {
                 throw ex;
             }
-        } 
+        }
+
+        public static DeleteNoteByPatientIdDataResponse DeleteNoteByPatientId(DeleteNoteByPatientIdDataRequest request)
+        {
+            DeleteNoteByPatientIdDataResponse response = null;
+            try
+            {
+                response = new DeleteNoteByPatientIdDataResponse();
+
+                IPatientNoteRepository<DeleteNoteByPatientIdDataResponse> repo = PatientNoteRepositoryFactory<DeleteNoteByPatientIdDataResponse>.GetPatientNoteRepository(request.ContractNumber, request.Context, request.UserId);
+                GetAllPatientNotesDataRequest getAllPatientNotesDataRequest = new GetAllPatientNotesDataRequest 
+                {
+                     Context = request.Context,
+                      ContractNumber = request.ContractNumber, 
+                      PatientId = request.PatientId,
+                      UserId = request.UserId,
+                      Version = request.Version
+                };
+                List<PatientNoteData> patientNotes = repo.FindByPatientId(getAllPatientNotesDataRequest) as List<PatientNoteData>;
+                List<string> deletedIds = null;
+                if (patientNotes != null)
+                {
+                    deletedIds = new List<string>();
+                    patientNotes.ForEach(u =>
+                    {
+                        DeletePatientNoteDataRequest deletePatientNoteDataRequest = new DeletePatientNoteDataRequest
+                        { 
+                            Context = request.Context, 
+                            ContractNumber = request.ContractNumber,
+                            Id = u.Id,
+                            PatientId = request.PatientId,
+                            UserId = request.UserId, 
+                            Version =  request.Version
+                        };
+                        repo.Delete(deletePatientNoteDataRequest);
+                        deletedIds.Add(deletePatientNoteDataRequest.Id);
+                    });
+                    response.DeletedIds = deletedIds;
+                }
+                response.Success = true;
+                return response;
+            }
+            catch (Exception ex) { throw ex; }
+        }
     }
 }   

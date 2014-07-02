@@ -31,7 +31,7 @@ namespace Phytel.API.DataDomain.Contact.Services.Test
         }
 
         [TestMethod]
-        public void DeleteCareMemberByPatientId_Test()
+        public void DeleteContactByPatientId_Test()
         {
             double version = 1.0;
             string contractNumber = "InHealth001";

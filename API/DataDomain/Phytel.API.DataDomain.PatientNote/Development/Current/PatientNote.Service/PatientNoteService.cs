@@ -93,5 +93,27 @@ namespace Phytel.API.DataDomain.PatientNote.Service
             }
             return response;
         }
+
+
+        public DeleteNoteByPatientIdDataResponse Delete(DeleteNoteByPatientIdDataRequest request)
+        {
+            DeleteNoteByPatientIdDataResponse response = new DeleteNoteByPatientIdDataResponse();
+            try
+            {
+                if (string.IsNullOrEmpty(request.UserId))
+                    throw new UnauthorizedAccessException("PatientNoteDD:PatientNoteDelete()::Unauthorized Access");
+
+                response = PatientNoteDataManager.DeleteNoteByPatientId(request);
+                response.Version = request.Version;
+            }
+            catch (Exception ex)
+            {
+                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+
+                string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
+                Common.Helper.LogException(int.Parse(aseProcessID), ex);
+            }
+            return response;
+        }
     }
 }
