@@ -330,5 +330,38 @@ namespace Phytel.API.DataDomain.PatientObservation
                 throw new Exception("DD.DataPatientObservationManager:InitializePatientObservation()::" + ex.Message, ex.InnerException);
             }
         }
+
+        public static DeletePatientObservationByPatientIdDataResponse DeletePatientObservationByPatientId(DeletePatientObservationByPatientIdDataRequest request)
+        {
+            DeletePatientObservationByPatientIdDataResponse response = null;
+            try
+            {
+                response = new DeletePatientObservationByPatientIdDataResponse();
+                IPatientObservationRepository<List<PatientObservationData>> repo = PatientObservationRepositoryFactory<List<PatientObservationData>>.GetPatientObservationRepository(request.ContractNumber, request.Context, request.UserId);
+                List<PatientObservationData> patientObservations = repo.FindObservationIdByPatientId(request.PatientId) as List<PatientObservationData>;
+                List<string> deletedIds = null;
+                if (patientObservations != null)
+                {
+                    deletedIds = new List<string>();
+                    patientObservations.ForEach(u =>
+                    {
+                        //request.Id = u.Id;
+                        DeletePatientObservationRequest deletePatientObservationRequest = new DeletePatientObservationRequest { 
+                            Context = request.Context,
+                            ContractNumber = request.ContractNumber,
+                            UserId = request.UserId,
+                            Version = request.Version,
+                            PatientObservationId = u.Id,
+                        };
+                        repo.Delete(deletePatientObservationRequest);
+                        deletedIds.Add(deletePatientObservationRequest.PatientObservationId);
+                    });
+                    response.DeletedIds = deletedIds;
+                }
+                response.Success = true;
+                return response;
+            }
+            catch (Exception ex) { throw ex; }
+        }
     }
 }   

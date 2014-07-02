@@ -47,5 +47,27 @@ namespace Phytel.API.DataDomain.PatientObservation.Services.Test
 
             Assert.AreEqual(string.Empty, string.Empty);
         }
+
+        [TestMethod]
+        public void DeletePatientObservationByPatientId_Test()
+        {
+            double version = 1.0;
+            string contractNumber = "InHealth001";
+            string context = "NG";
+            string patientId = "5325db70d6a4850adcbba946";
+            string userId = "000000000000000000000000";
+            string ddUrl = "http://localhost:8888/PatientObservation";
+            IRestClient client = new JsonServiceClient();
+
+            // [Route("/{Context}/{Version}/{ContractNumber}/PatientObservation/Patient/{PatientId}/Delete", "DELETE")]
+            string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/PatientObservation/Patient/{4}/Delete",
+                                        ddUrl,
+                                        context,
+                                        version,
+                                        contractNumber,
+                                        patientId), userId);
+            DeletePatientObservationByPatientIdDataResponse response = client.Delete<DeletePatientObservationByPatientIdDataResponse>(url);
+            Assert.IsNotNull(response);
+        }
     }
 }
