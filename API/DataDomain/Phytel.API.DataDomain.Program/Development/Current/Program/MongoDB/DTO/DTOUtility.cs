@@ -195,7 +195,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
                             ac.AssignedBy = ObjectId.Parse(Constants.SystemContactId); // NIGHT-876
                             ac.AssignedOn = System.DateTime.UtcNow; // NIGHT-835
                             ac.AssignedTo = cmid; // NIGHT-877
-                            //ac.StateUpdatedOn = DateTime.UtcNow;
+                            ac.StateUpdatedOn = DateTime.UtcNow; //NIGHT-952
                         }
 
                         actions.Add(ac);
