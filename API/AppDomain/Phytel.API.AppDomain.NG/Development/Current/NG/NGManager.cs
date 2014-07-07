@@ -19,6 +19,9 @@ using System.Runtime.Serialization.Json;
 using System.Text;
 using System.Web.Hosting;
 using DD = Phytel.API.DataDomain.Program.DTO;
+using Phytel.API.DataDomain.PatientGoal.DTO;
+using Phytel.API.DataDomain.PatientSystem.DTO;
+using Phytel.API.DataDomain.PatientObservation.DTO;
 
 namespace Phytel.API.AppDomain.NG
 {
@@ -40,6 +43,7 @@ namespace Phytel.API.AppDomain.NG
         protected static readonly string DDCareMemberUrl = ConfigurationManager.AppSettings["DDCareMemberUrl"];
         protected static readonly string DDPatientNoteUrl = ConfigurationManager.AppSettings["DDPatientNoteUrl"];
         protected static readonly string DDPatientObservationsServiceUrl = ConfigurationManager.AppSettings["DDPatientObservationUrl"];
+        protected static readonly string DDPatientGoalsServiceUrl = ConfigurationManager.AppSettings["DDPatientGoalUrl"];
         #endregion
 
         public void LogException(Exception ex)
@@ -336,7 +340,7 @@ namespace Phytel.API.AppDomain.NG
                                                         request.Version,
                                                         request.ContractNumber,
                                                         request.Id), request.UserId);
-                DeletePatientDataResponse patientUserDDResponse = client.Delete<DeletePatientDataResponse>(patientUserUrl);
+                DeletePatientUserByPatientIdDataResponse patientUserDDResponse = client.Delete<DeletePatientUserByPatientIdDataResponse>(patientUserUrl);
                 #endregion
 
                 #region DeleteCohortPatientView
@@ -347,7 +351,7 @@ namespace Phytel.API.AppDomain.NG
                                                         request.Version,
                                                         request.ContractNumber,
                                                         request.Id), request.UserId);
-                DeletePatientDataResponse cpvDDResponse = client.Delete<DeletePatientDataResponse>(cpvUrl);
+                DeleteCohortPatientViewDataResponse cpvDDResponse = client.Delete<DeleteCohortPatientViewDataResponse>(cpvUrl);
                 #endregion
 
                 #region DeleteContact
@@ -369,7 +373,7 @@ namespace Phytel.API.AppDomain.NG
                                                         request.Version,
                                                         request.ContractNumber,
                                                         request.Id), request.UserId);
-                DeletePatientDataResponse cmDDResponse = client.Delete<DeletePatientDataResponse>(cmUrl);
+                DeleteCareMemberByPatientIdDataResponse cmDDResponse = client.Delete<DeleteCareMemberByPatientIdDataResponse>(cmUrl);
                 #endregion
 
                 #region DeletePatientNotes
@@ -391,7 +395,7 @@ namespace Phytel.API.AppDomain.NG
                                                         request.Version,
                                                         request.ContractNumber,
                                                         request.Id), request.UserId);
-                DeletePatientDataResponse psDDResponse = client.Delete<DeletePatientDataResponse>(psUrl);
+                DeletePatientSystemByPatientIdDataResponse psDDResponse = client.Delete<DeletePatientSystemByPatientIdDataResponse>(psUrl);
                 #endregion
 
                 #region DeletePatientObservation
@@ -402,7 +406,18 @@ namespace Phytel.API.AppDomain.NG
                                                         request.Version,
                                                         request.ContractNumber,
                                                         request.Id), request.UserId);
-                DeletePatientDataResponse poDDResponse = client.Delete<DeletePatientDataResponse>(poUrl);
+                DeletePatientObservationByPatientIdDataResponse poDDResponse = client.Delete<DeletePatientObservationByPatientIdDataResponse>(poUrl);
+                #endregion
+
+                #region DeletePatientGoal
+                //[Route("/{Context}/{Version}/{ContractNumber}/PatientGoal/Patient/{PatientId}/Delete", "DELETE")]
+                string pgUrl = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/PatientGoal/Patient/{4}/Delete",
+                                                        DDPatientGoalsServiceUrl,
+                                                        "NG",
+                                                        request.Version,
+                                                        request.ContractNumber,
+                                                        request.Id), request.UserId);
+                DeletePatientGoalByPatientIdDataResponse pgDDResponse = client.Delete<DeletePatientGoalByPatientIdDataResponse>(pgUrl);
                 #endregion
 
                 if (patientDDResponse != null)
@@ -563,7 +578,7 @@ namespace Phytel.API.AppDomain.NG
                 }
                 else
                 {
-                    response.Outcome = new Outcome
+                    response.Outcome = new Phytel.API.AppDomain.NG.DTO.Outcome
                     {
                         Reason = "PlanElement is not in the correct state to allow change.",
                         Result = 2

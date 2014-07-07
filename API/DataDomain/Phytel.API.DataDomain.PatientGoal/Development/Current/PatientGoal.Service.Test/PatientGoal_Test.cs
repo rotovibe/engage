@@ -47,5 +47,28 @@ namespace Phytel.API.DataDomain.PatientGoal.Services.Test
                 patientGoaldId,
                 patientId));
         }
+
+
+        [TestMethod]
+        public void DeletePatientGoalByPatientId_Test()
+        {
+            double version = 1.0;
+            string contractNumber = "InHealth001";
+            string context = "NG";
+            string patientId = "5325db70d6a4850adcbba946";
+            string userId = "000000000000000000000000";
+            string ddUrl = "http://localhost:8888/PatientGoal";
+            IRestClient client = new JsonServiceClient();
+
+            // [Route("/{Context}/{Version}/{ContractNumber}/PatientGoal/Patient/{PatientId}/Delete", "DELETE")]
+            string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/PatientGoal/Patient/{4}/Delete",
+                                        ddUrl,
+                                        context,
+                                        version,
+                                        contractNumber,
+                                        patientId), userId);
+            DeletePatientGoalByPatientIdDataResponse response = client.Delete<DeletePatientGoalByPatientIdDataResponse>(url);
+            Assert.IsNotNull(response);
+        }
     }
 }

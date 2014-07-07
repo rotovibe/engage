@@ -422,13 +422,19 @@ namespace Phytel.API.DataDomain.PatientGoal
                 IPatientGoalRepository<DeleteTaskDataResponse> repo = PatientGoalRepositoryFactory<DeleteTaskDataResponse>.GetPatientTaskRepository(request.ContractNumber, request.Context, request.UserId);
                 
                 List<PatientTaskData> ptd = (List<PatientTaskData>)repo.FindByGoalId(request.PatientGoalId);
-                ptd.ForEach(t =>
+                List<string> deletedIds = null;
+                if (ptd != null && ptd.Count > 0)
                 {
-                    request.TaskId = t.Id;
-                    repo.Delete(request);
-                });
-
-                result.Deleted = true;
+                    deletedIds = new List<string>();
+                    ptd.ForEach(t =>
+                    {
+                        request.TaskId = t.Id;
+                        repo.Delete(request);
+                        deletedIds.Add(request.TaskId);
+                    });
+                }
+                result.DeletedIds = deletedIds;
+                result.Success = true;
                 return result;
             }
             catch (Exception ex)
@@ -446,15 +452,21 @@ namespace Phytel.API.DataDomain.PatientGoal
                 IPatientGoalRepository<DeleteInterventionDataResponse> repo = PatientGoalRepositoryFactory<DeleteInterventionDataResponse>.GetPatientInterventionRepository(request.ContractNumber, request.Context, request.UserId);
                 
                 List<PatientInterventionData> pid = (List<PatientInterventionData>)repo.FindByGoalId(request.PatientGoalId);
-                pid.ForEach(i =>
+                List<string> deletedIds = null;
+                if (pid != null && pid.Count > 0)
                 {
-                    request.InterventionId = i.Id;
+                    deletedIds = new List<string>();
+                    pid.ForEach(i =>
+                    {
+                        request.InterventionId = i.Id;
+                        repo.Delete(request);
+                        deletedIds.Add(request.InterventionId);
+                    }); 
+                }
+                if(request.InterventionId != null)
                     repo.Delete(request);
-                });
-                
-                repo.Delete(request);
-
-                result.Deleted = true;
+                result.DeletedIds = deletedIds;
+                result.Success = true;
                 return result;
             }
             catch (Exception ex)
@@ -472,15 +484,21 @@ namespace Phytel.API.DataDomain.PatientGoal
                 IPatientGoalRepository<DeleteBarrierDataResponse> repo = PatientGoalRepositoryFactory<DeleteBarrierDataResponse>.GetPatientBarrierRepository(request.ContractNumber, request.Context, request.UserId);
                 
                 List<PatientBarrierData> pbd = (List<PatientBarrierData>)repo.FindByGoalId(request.PatientGoalId);
-                pbd.ForEach(b =>
+                List<string> deletedIds = null;
+                if (pbd != null && pbd.Count > 0)
                 {
-                    request.BarrierId = b.Id;
+                    deletedIds = new List<string>();
+                    pbd.ForEach(b =>
+                    {
+                        request.BarrierId = b.Id;
+                        repo.Delete(request);
+                        deletedIds.Add(request.BarrierId);
+                    });
+                }
+                if(request.BarrierId != null)
                     repo.Delete(request);
-                });
-                
-                repo.Delete(request);
-
-                result.Deleted = true;
+                result.DeletedIds = deletedIds;
+                result.Success = true;
                 return result;
             }
             catch (Exception ex)
@@ -507,6 +525,96 @@ namespace Phytel.API.DataDomain.PatientGoal
                 throw ex;
             }
         
+        }
+
+        public static DeletePatientGoalByPatientIdDataResponse DeletePatientGoalByPatientId(DeletePatientGoalByPatientIdDataRequest request)
+        {
+            DeletePatientGoalByPatientIdDataResponse response = null;
+            bool success = false;
+            try
+            {
+                response = new DeletePatientGoalByPatientIdDataResponse();
+                IPatientGoalRepository<PatientGoalViewData> goalRepo = PatientGoalRepositoryFactory<PatientGoalViewData>.GetPatientGoalRepository(request.ContractNumber, request.Context, request.UserId);
+
+                List<PatientGoalViewData> goalViewDataList = goalRepo.Find(request.PatientId) as List<PatientGoalViewData>;
+                List<DeletedPatientGoal> deletedPatientGoals = null;
+                if (goalViewDataList != null && goalViewDataList.Count > 0)
+                {
+                    deletedPatientGoals = new List<DeletedPatientGoal>();
+                    goalViewDataList.ForEach(u =>
+                    {
+                        DeletePatientGoalDataRequest deletePatientGoalDataRequest = new DeletePatientGoalDataRequest { 
+                            Context = request.Context,
+                            ContractNumber = request.ContractNumber,
+                            PatientGoalId = u.Id,
+                            PatientId = request.PatientId,
+                            UserId = request.UserId,
+                            Version = request.Version
+                        };
+                        goalRepo.Delete(deletePatientGoalDataRequest);
+                        success = true;
+                        DeletedPatientGoal deletedPatientGoal = new DeletedPatientGoal { PatientGoalId = deletePatientGoalDataRequest.PatientGoalId}; 
+
+                        #region Delete Barriers
+                        DeleteBarrierDataResponse deleteBarrierDataResponse = DeleteBarrier(new DeleteBarrierDataRequest
+                        {
+                            Context = request.Context,
+                            ContractNumber = request.ContractNumber,
+                            PatientGoalId = deletePatientGoalDataRequest.PatientGoalId,
+                            PatientId = request.PatientId,
+                            UserId = request.UserId,
+                            Version = request.Version
+                        });
+                        if (deleteBarrierDataResponse.Success)
+                        {
+                            deletedPatientGoal.PatientBarrierIds = deleteBarrierDataResponse.DeletedIds;
+                            success = true;
+                        }
+                        
+                        #endregion
+
+                        #region Delete Tasks
+                        DeleteTaskDataResponse deleteTaskDataResponse = DeleteTask(new DeleteTaskDataRequest
+                        {
+                            Context = request.Context,
+                            ContractNumber = request.ContractNumber,
+                            PatientGoalId = deletePatientGoalDataRequest.PatientGoalId,
+                            PatientId = request.PatientId,
+                            UserId = request.UserId,
+                            Version = request.Version
+                        });
+                        if (deleteTaskDataResponse.Success)
+                        {
+                            deletedPatientGoal.PatientTaskIds = deleteTaskDataResponse.DeletedIds;
+                            success = true;
+                        }
+                        #endregion
+
+                        #region Delete Interventions
+                        DeleteInterventionDataResponse deleteInterventionDataResponse = DeleteIntervention(new DeleteInterventionDataRequest
+                        {
+                            Context = request.Context,
+                            ContractNumber = request.ContractNumber,
+                            PatientGoalId = deletePatientGoalDataRequest.PatientGoalId,
+                            PatientId = request.PatientId,
+                            UserId = request.UserId,
+                            Version = request.Version
+                        });
+                        if (deleteInterventionDataResponse.Success)
+                        {
+                            deletedPatientGoal.PatientInterventionIds = deleteInterventionDataResponse.DeletedIds;
+                            success = true;
+                        }
+                        #endregion
+
+                        deletedPatientGoals.Add(deletedPatientGoal);
+                    });
+                    response.DeletedPatientGoals = deletedPatientGoals;
+                }
+                response.Success = success;
+                return response;
+            }
+            catch (Exception ex) { throw ex; }
         }
     }
 }   

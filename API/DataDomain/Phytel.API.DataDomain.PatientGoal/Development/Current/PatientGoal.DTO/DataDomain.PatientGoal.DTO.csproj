@@ -70,6 +70,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CustomAttributeData.cs" />
+    <Compile Include="DeletePatientGoalByPatientIdDataRequest.cs" />
+    <Compile Include="DeletePatientGoalByPatientIdDataResponse.cs" />
     <Compile Include="GetCustomAttributesDataRequest.cs" />
     <Compile Include="GetAllPatientGoalsDataRequest.cs" />
     <Compile Include="GetCustomAttributesDataResponse.cs" />
