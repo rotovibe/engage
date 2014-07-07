@@ -1088,6 +1088,41 @@ namespace Phytel.API.DataDomain.Contact
             catch (Exception ex) { throw ex; }
         }
 
+        public IEnumerable<object> FindContactsWithAPatientInRecentList(string entityId)
+        {
+            List<ContactData> contactDataList = null;
+            try
+            {
+                using (ContactMongoContext ctx = new ContactMongoContext(_dbName))
+                {
+                    List<IMongoQuery> queries = new List<IMongoQuery>();
+                    queries.Add(Query.In(MEContact.RecentListProperty, new List<BsonValue> { BsonValue.Create(ObjectId.Parse(entityId))}));
+                    queries.Add(Query.EQ(MEContact.DeleteFlagProperty, false));
+                    IMongoQuery mQuery = Query.And(queries);
+                    List<MEContact> meContacts = ctx.Contacts.Collection.Find(mQuery).ToList();
+                    if (meContacts != null)
+                    {
+                        contactDataList = new List<ContactData>();
+                        foreach (MEContact c in meContacts)
+                        {
+                            ContactData contactData = new ContactData
+                            {
+                                ContactId = c.Id.ToString(),
+                                PatientId = c.PatientId.ToString(),
+                                RecentsList = c.RecentList != null ? c.RecentList.ConvertAll(r => r.ToString()) : null,
+                                FirstName = c.FirstName,
+                                LastName = c.LastName
+                            };
+                            contactDataList.Add(contactData);
+                        }
+
+                    }
+                }
+                return contactDataList;
+            }
+            catch (Exception ex) { throw ex; }
+        }
+
         public string UserId { get; set; }
     }
 }

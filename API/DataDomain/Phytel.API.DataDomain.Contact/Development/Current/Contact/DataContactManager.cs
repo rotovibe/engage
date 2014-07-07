@@ -170,6 +170,7 @@ namespace Phytel.API.DataDomain.Contact
         public DeleteContactByPatientIdDataResponse DeleteContactByPatientId(DeleteContactByPatientIdDataRequest request)
         {
             DeleteContactByPatientIdDataResponse response = null;
+            bool success = false;
             try
             {
                 response = new DeleteContactByPatientIdDataResponse();
@@ -181,8 +182,32 @@ namespace Phytel.API.DataDomain.Contact
                     request.Id = contact.ContactId;
                     repo.Delete(request);
                     response.DeletedId = request.Id;
+                    success = true;
+
+                    // Remove this deleted contact(PatientId) from RecentList of  other contacts(users logged in).
+                    List<ContactData> contactsWithAPatientInRecentList = repo.FindContactsWithAPatientInRecentList(request.PatientId) as List<ContactData>;
+                    if (contactsWithAPatientInRecentList != null && contactsWithAPatientInRecentList.Count > 0)
+                    {
+                        contactsWithAPatientInRecentList.ForEach(c =>
+                        {
+                            PutRecentPatientRequest recentPatientRequest = new PutRecentPatientRequest { 
+                                ContactId = c.ContactId,
+                                Context = request.Context,
+                                ContractNumber = request.ContractNumber,
+                                UserId = request.UserId,
+                                Version = request.Version
+                            };
+                            if (c.RecentsList.Remove(request.PatientId))
+                            {
+                                if (repo.UpdateRecentList(recentPatientRequest, c.RecentsList))
+                                {
+                                    success = true;
+                                }
+                            }
+                        });
+                    }
                 }
-                response.Success = true;
+                response.Success = success;
                 return response;
             }
             catch (Exception ex) { throw ex; }

@@ -114,5 +114,9 @@ namespace Phytel.API.DataDomain.Contact.Test.Stubs
             throw new NotImplementedException();
         }
 
+        public IEnumerable<object> FindContactsWithAPatientInRecentList(string entityId)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

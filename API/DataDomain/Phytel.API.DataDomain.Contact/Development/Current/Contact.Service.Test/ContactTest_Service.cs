@@ -36,7 +36,7 @@ namespace Phytel.API.DataDomain.Contact.Services.Test
             double version = 1.0;
             string contractNumber = "InHealth001";
             string context = "NG";
-            string patientId = "5325db70d6a4850adcbba948";
+            string patientId = "5325db70d6a4850adcbba946";
             string userId = "000000000000000000000000";
             string ddUrl = "http://localhost:8888/Contact";
             IRestClient client = new JsonServiceClient();
