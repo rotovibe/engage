@@ -36,6 +36,7 @@ namespace Phytel.API.AppDomain.NG.PlanCOR
                         action.CompletedBy = e.UserId;
                         action.ElementState = (int)ElementState.Completed;
                         action.DateCompleted = DateTime.UtcNow;
+                        action.StateUpdatedOn = DateTime.UtcNow;
                         PeUtils.DisableCompleteButtonForAction(action.Steps);
 
                         //2) look at spawnelement and trigger enabled state.

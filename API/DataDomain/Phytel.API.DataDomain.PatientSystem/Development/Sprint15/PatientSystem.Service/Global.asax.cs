@@ -1,3 +1,6 @@
+using Phytel.API.Common;
+using Phytel.API.Common.Format;
+using Phytel.API.DataDomain.PatientSystem.MongoDB.DataManagement;
 using ServiceStack.WebHost.Endpoints;
 using System;
 
@@ -14,7 +17,10 @@ namespace Phytel.API.DataDomain.PatientSystem.Service
             {
                 //register any dependencies your services use, e.g:
                 //container.Register<ICacheClient>(new MemoryCacheClient());
-
+                container.RegisterAutoWiredAs<PatientSystemDataManager, IPatientSystemDataManager>();
+                container.RegisterAutoWiredAs<CommonFormatterUtil, ICommonFormatterUtil>();
+                container.RegisterAutoWiredAs<Helpers, IHelpers>();
+                container.RegisterAutoWiredAs<ProceduresManager, IProceduresManager>();
             }
         }
 

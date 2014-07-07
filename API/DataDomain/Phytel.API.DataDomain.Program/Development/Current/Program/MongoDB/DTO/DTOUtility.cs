@@ -1165,6 +1165,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
                         AttrEndDate = a.AttributeEndDate,
                         AttrStartDate = a.AttributeStartDate,
                         ElementState = (int)a.State,
+                        StateUpdatedOn = a.StateUpdatedOn,
                         DateCompleted = a.DateCompleted,
                         Objectives = GetObjectives(a.Objectives),
                         Steps = GetSteps(a.Steps, contract, userId)

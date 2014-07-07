@@ -70,7 +70,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Enums.cs" />
     <Compile Include="GetAllPatientSystemsDataRequest.cs" />
+    <Compile Include="MongoProcedures\GetMongoProceduresListRequest.cs" />
+    <Compile Include="MongoProcedures\GetMongoProceduresListResponse.cs" />
+    <Compile Include="MongoProcedures\GetMongoProceduresRequest.cs" />
+    <Compile Include="MongoProcedures\GetMongoProceduresResponse.cs" />
     <Compile Include="PutPatientSystemDataResponse.cs" />
     <Compile Include="PutPatientSystemDataRequest.cs" />
     <Compile Include="GetPatientSystemDataRequest.cs" />

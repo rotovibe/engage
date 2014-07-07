@@ -91,7 +91,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IPatientSystemDataManager.cs" />
     <Compile Include="IPatientSystemRepository.cs" />
+    <Compile Include="IPatientSystemRepositoryFactory.cs" />
+    <Compile Include="MongoDB\DataManagement\IMongoProcedure.cs" />
+    <Compile Include="MongoDB\DataManagement\IProceduresManager.cs" />
+    <Compile Include="MongoDB\DataManagement\MongoProcedure.cs" />
+    <Compile Include="MongoDB\DataManagement\MongoProcedureFactory.cs" />
+    <Compile Include="MongoDB\DataManagement\ProceduresManager.cs" />
+    <Compile Include="MongoDB\DataManagement\Procedures\UpdatePatientProgram_HTNAndDiabetesText.cs" />
     <Compile Include="MongoDB\DTO\MEPatientSystem.cs" />
     <Compile Include="MongoDB\Repository\MongoPatientSystemRepository.cs" />
     <Compile Include="MongoDB\PatientSystemMongoContext.cs" />

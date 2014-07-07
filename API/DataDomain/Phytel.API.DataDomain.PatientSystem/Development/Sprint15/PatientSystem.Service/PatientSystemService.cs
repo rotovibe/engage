@@ -6,11 +6,16 @@ using ServiceStack.ServiceInterface.ServiceModel;
 using Phytel.API.Common.Format;
 using System.Configuration;
 using System.Web;
+using Phytel.API.Common;
 
 namespace Phytel.API.DataDomain.PatientSystem.Service
 {
-    public class PatientSystemService : ServiceStack.ServiceInterface.Service
+    public partial class PatientSystemService : ServiceStack.ServiceInterface.Service
     {
+        public ICommonFormatterUtil CommonFormatterUtil { get; set; }
+        public IPatientSystemDataManager PatientSystemDataManager { get; set; }
+        public IHelpers Helpers { get; set; }
+
         public GetPatientSystemDataResponse Get(GetPatientSystemDataRequest request)
         {
             GetPatientSystemDataResponse response = new GetPatientSystemDataResponse();
@@ -24,10 +29,10 @@ namespace Phytel.API.DataDomain.PatientSystem.Service
             }
             catch (Exception ex)
             {
-                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+                CommonFormatterUtil.FormatExceptionResponse(response, base.Response, ex);
 
                 string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
-                Common.Helper.LogException(int.Parse(aseProcessID), ex);
+                Helpers.LogException(int.Parse(aseProcessID), ex);
             }
             return response;
         }
@@ -45,10 +50,10 @@ namespace Phytel.API.DataDomain.PatientSystem.Service
             }
             catch (Exception ex)
             {
-                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+                CommonFormatterUtil.FormatExceptionResponse(response, base.Response, ex);
 
                 string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
-                Common.Helper.LogException(int.Parse(aseProcessID), ex);
+                Helpers.LogException(int.Parse(aseProcessID), ex);
             }
             return response;
         }
@@ -66,10 +71,10 @@ namespace Phytel.API.DataDomain.PatientSystem.Service
             }
             catch (Exception ex)
             {
-                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+                CommonFormatterUtil.FormatExceptionResponse(response, base.Response, ex);
 
                 string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
-                Common.Helper.LogException(int.Parse(aseProcessID), ex);
+                Helpers.LogException(int.Parse(aseProcessID), ex);
             }
             return response;
         }

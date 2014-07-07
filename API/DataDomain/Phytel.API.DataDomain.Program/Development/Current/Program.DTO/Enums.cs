@@ -116,6 +116,7 @@ public enum SpawnElementTypeCode
 
     public enum Completed
     {
+        None = 0,
         No = 1,
         Yes = 2
     }

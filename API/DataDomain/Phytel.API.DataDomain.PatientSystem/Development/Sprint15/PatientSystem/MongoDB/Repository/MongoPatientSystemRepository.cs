@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Phytel.API.DataDomain.PatientSystem.DTO;
 using Phytel.API.Interface;
 using MongoDB.Driver;
-using MongoDB.Driver.Builders;
+using MB = MongoDB.Driver.Builders;
 using MongoDB.Bson;
 using Phytel.API.DataDomain.PatientSystem;
 using Phytel.API.DataAudit;
@@ -15,7 +15,7 @@ using MongoDB.Bson.Serialization;
 
 namespace Phytel.API.DataDomain.PatientSystem
 {
-    public class MongoPatientSystemRepository<T> : IPatientSystemRepository<T>
+    public class MongoPatientSystemRepository : IPatientSystemRepository
     {
         private string _dbName = string.Empty;
 
@@ -44,8 +44,8 @@ namespace Phytel.API.DataDomain.PatientSystem
             {
                 using (PatientSystemMongoContext ctx = new PatientSystemMongoContext(_dbName))
                 {
-                    IMongoQuery query = Query.And(
-                                    Query.EQ(MEPatientSystem.PatientIDProperty, ObjectId.Parse(systemRequest.PatientID)));
+                    IMongoQuery query = MB.Query.And(
+                                    MB.Query.EQ(MEPatientSystem.PatientIDProperty, ObjectId.Parse(systemRequest.PatientID)));
 
                     patientSystem = ctx.PatientSystems.Collection.FindOneAs<MEPatientSystem>(query);
                     if (patientSystem == null)
@@ -128,9 +128,57 @@ namespace Phytel.API.DataDomain.PatientSystem
             throw new NotImplementedException();
         }
 
-        public object Update(object entity)
+        public object FindBySystemId(object entity)
         {
             throw new NotImplementedException();
+        }
+
+        public object Update(object entity)
+        {
+            MEPatientSystem meps = null;
+            var psd = entity as PatientSystemData;
+
+            try
+            {
+                using (PatientSystemMongoContext ctx = new PatientSystemMongoContext(_dbName))
+                {
+                    var q = MB.Query<MEPatientSystem>.EQ(b => b.Id, ObjectId.Parse(psd.Id));
+                    var uv = new List<MB.UpdateBuilder>();
+                    if (psd.DisplayLabel != null)
+                    {
+                        uv.Add(MB.Update.Set(MEPatientSystem.DisplayLabelProperty, psd.DisplayLabel));
+                    }
+                    if (psd.PatientID != null)
+                    {
+                        uv.Add(MB.Update.Set(MEPatientSystem.PatientIDProperty, ObjectId.Parse(psd.PatientID)));
+                    }
+                    if (psd.SystemID != null)
+                    {
+                        uv.Add(MB.Update.Set(MEPatientSystem.SystemIDProperty, psd.SystemID));
+                    }
+                    if (psd.SystemName != null)
+                    {
+                        uv.Add(MB.Update.Set(MEPatientSystem.SystemNameProperty, psd.SystemName));
+                    }
+
+                    uv.Add(MB.Update.Set(MEPatientSystem.UpdatedByProperty, ObjectId.Parse(this.UserId)));
+                    uv.Add(MB.Update.Set(MEPatientSystem.LastUpdatedOnProperty, DateTime.UtcNow));
+
+                    IMongoUpdate update = MB.Update.Combine(uv);
+                    ctx.PatientSystems.Collection.Update(q, update);
+
+                    AuditHelper.LogDataAudit(this.UserId,
+                        MongoCollectionName.PatientSystem.ToString(),
+                        psd.Id,
+                        Common.DataAuditType.Update,
+                        _dbName);
+                }
+                return meps;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("DD:PatientProgramRepository:Update()::" + ex.Message, ex.InnerException);
+            }
         }
 
         public void CacheByID(List<string> entityIDs)

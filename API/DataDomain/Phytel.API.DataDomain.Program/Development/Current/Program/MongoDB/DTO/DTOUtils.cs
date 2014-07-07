@@ -632,7 +632,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             }
         }
 
-        internal static List<Action> GetActionElements(List<Program.DTO.ActionsDetail> list, string userId)
+        public static List<Action> GetActionElements(List<Program.DTO.ActionsDetail> list, string userId)
         {
             try
             {
@@ -655,6 +655,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
                             DateCompleted = a.DateCompleted,
                             Description = a.Description,
                             State = (ElementState) a.ElementState,
+                            StateUpdatedOn = a.StateUpdatedOn, // NIGHT-952
                             Enabled = a.Enabled,
                             Name = a.Name,
                             Next = ParseObjectId(a.Next),

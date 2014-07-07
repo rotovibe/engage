@@ -4,31 +4,36 @@ using Phytel.API.DataDomain.PatientSystem;
 
 namespace Phytel.API.DataDomain.PatientSystem
 {
-    public static class PatientSystemDataManager
+    public class PatientSystemDataManager : IPatientSystemDataManager
     {
-        public static GetPatientSystemDataResponse GetPatientSystem(GetPatientSystemDataRequest request)
+        public IPatientSystemRepositoryFactory Factory { get; set; }
+
+        public GetPatientSystemDataResponse GetPatientSystem(GetPatientSystemDataRequest request)
         {
             GetPatientSystemDataResponse result = new GetPatientSystemDataResponse();
 
-            IPatientSystemRepository<GetPatientSystemDataResponse> repo = PatientSystemRepositoryFactory<GetPatientSystemDataResponse>.GetPatientSystemRepository(request.ContractNumber, request.Context, request.UserId);
+            IPatientSystemRepository repo = Factory.GetRepository(request, RepositoryType.PatientSystem);
+                //PatientSystemRepositoryFactory<GetPatientSystemDataResponse>.GetPatientSystemRepository(request.ContractNumber, request.Context, request.UserId);
             
             result.PatientSystem = repo.FindByID(request.PatientSystemID) as PatientSystemData;
 
             return result;
         }
 
-        public static GetAllPatientSystemsDataResponse GetAllPatientSystems(GetAllPatientSystemsDataRequest request)
+        public GetAllPatientSystemsDataResponse GetAllPatientSystems(GetAllPatientSystemsDataRequest request)
         {
             GetAllPatientSystemsDataResponse result = new GetAllPatientSystemsDataResponse();
 
-            IPatientSystemRepository<GetAllPatientSystemsDataResponse> repo = PatientSystemRepositoryFactory<GetAllPatientSystemsDataResponse>.GetPatientSystemRepository(request.ContractNumber, request.Context, request.UserId);
+            IPatientSystemRepository repo = Factory.GetRepository(request, RepositoryType.PatientSystem);
+            //IPatientSystemRepository<GetAllPatientSystemsDataResponse> repo = PatientSystemRepositoryFactory<GetAllPatientSystemsDataResponse>.GetPatientSystemRepository(request.ContractNumber, request.Context, request.UserId);
             
             return result;
         }
 
-        public static PutPatientSystemDataResponse PutPatientSystem(PutPatientSystemDataRequest request)
+        public PutPatientSystemDataResponse PutPatientSystem(PutPatientSystemDataRequest request)
         {
-            IPatientSystemRepository<PutPatientSystemDataResponse> repo = PatientSystemRepositoryFactory<PutPatientSystemDataResponse>.GetPatientSystemRepository(request.ContractNumber, request.Context, request.UserId);
+            //IPatientSystemRepository<PutPatientSystemDataResponse> repo = PatientSystemRepositoryFactory<PutPatientSystemDataResponse>.GetPatientSystemRepository(request.ContractNumber, request.Context, request.UserId);
+            IPatientSystemRepository repo = Factory.GetRepository(request, RepositoryType.PatientSystem);
 
             PutPatientSystemDataResponse result = repo.Insert(request) as PutPatientSystemDataResponse;
             return result;
