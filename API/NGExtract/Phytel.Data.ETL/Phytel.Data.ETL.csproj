@@ -38,13 +38,13 @@
       <HintPath>..\..\DataDomain\Phytel.API.DataDomain.PatientObservation\Development\Current\References\MongoDB.Bson.dll</HintPath>
     </Reference>
     <Reference Include="MongoDB.Driver">
-      <HintPath>..\NGETL\bin\Debug\MongoDB.Driver.dll</HintPath>
+      <HintPath>..\..\Interfaces\Development\Current\References\MongoDB.Driver.dll</HintPath>
     </Reference>
     <Reference Include="Phytel.Mongo">
-      <HintPath>..\NGETL\bin\Debug\Phytel.Mongo.dll</HintPath>
+      <HintPath>..\..\Interfaces\Development\Current\References\Phytel.Mongo.dll</HintPath>
     </Reference>
     <Reference Include="PhytelServices">
-      <HintPath>..\NGETL\bin\Debug\PhytelServices.dll</HintPath>
+      <HintPath>..\..\Common\Phytel.API.Common\Development\Current\References\PhytelServices.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.configuration" />

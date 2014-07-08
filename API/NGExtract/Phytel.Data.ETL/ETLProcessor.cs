@@ -62,16 +62,15 @@ namespace Phytel.Data.ETL
             LoadPatientSystems(contract);
             LoadPatientNotes(contract);
             LoadPatientProblems(contract);
-                //Has not been tested (PatientObservations to PatientTasks)
-               //LoadPatientObservations(contract);
+            LoadPatientObservations(contract);
 
             LoadContacts(contract);
 
-                //LoadCareMembers(contract);
-                //LoadPatientUsers(contract);
+            LoadCareMembers(contract);
+            LoadPatientUsers(contract);
 
             LoadPatientGoals(contract);
-                //LoadPatientInterventions(contract);
+            LoadPatientInterventions(contract);
                 //Method not complete
                 //LoadPatientBarriers(contract);
             LoadPatientTasks(contract);
@@ -165,10 +164,10 @@ namespace Phytel.Data.ETL
                     parms.Add(new Parameter("@Delete", (string.IsNullOrEmpty(obs.DeleteFlag.ToString()) ? string.Empty : obs.DeleteFlag.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
                     parms.Add(new Parameter("@NumericValue", (string.IsNullOrEmpty(obs.NumericValue.ToString()) ? string.Empty : obs.NumericValue.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
                     parms.Add(new Parameter("@ObservationMongoId", (string.IsNullOrEmpty(obs.ObservationId.ToString()) ? string.Empty : obs.ObservationId.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
-                    parms.Add(new Parameter("@Source", (string.IsNullOrEmpty(obs.Source.ToString()) ? string.Empty : obs.Source.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                    parms.Add(new Parameter("@Source", (string.IsNullOrEmpty(obs.Source) ? string.Empty : obs.Source), SqlDbType.VarChar, ParameterDirection.Input, 50));
                     parms.Add(new Parameter("@State", (string.IsNullOrEmpty(obs.State.ToString()) ? string.Empty : obs.State.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
                     parms.Add(new Parameter("@TimeToLive", (string.IsNullOrEmpty(obs.TTLDate.ToString()) ? string.Empty : obs.TTLDate.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
-                    parms.Add(new Parameter("@Units", (string.IsNullOrEmpty(obs.Units.ToString()) ? string.Empty : obs.Units.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                    parms.Add(new Parameter("@Units", (string.IsNullOrEmpty(obs.Units) ? string.Empty : obs.Units), SqlDbType.VarChar, ParameterDirection.Input, 50));
 
                     SQLDataService.Instance.ExecuteScalar("InHealth001", true, "REPORT", "spPhy_SavePatientObservation", parms);
                 }
@@ -264,8 +263,8 @@ namespace Phytel.Data.ETL
             {
                 List<MEPatientTask> tasks = pgctx.PatientTasks.Collection.FindAllAs<MEPatientTask>().ToList();
 
-                Parallel.ForEach(tasks, new ParallelOptions{MaxDegreeOfParallelism= Environment.ProcessorCount * _exponent}, task =>
-                //foreach (MEPatientTask task in tasks)
+                //Parallel.ForEach(tasks, new ParallelOptions{MaxDegreeOfParallelism= Environment.ProcessorCount * _exponent}, task =>
+                foreach (MEPatientTask task in tasks)
                 {
                     ParameterCollection parms = new ParameterCollection();
 
@@ -286,7 +285,31 @@ namespace Phytel.Data.ETL
                     parms.Add(new Parameter("@TimeToLive", (string.IsNullOrEmpty(task.TTLDate.ToString()) ? string.Empty : task.TTLDate.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
 
                     SQLDataService.Instance.ExecuteScalar("InHealth001", true, "REPORT", "spPhy_SavePatientTask", parms);
-                });
+
+                    if (task.Attributes != null)
+                    {
+                        foreach (MAttribute att in task.Attributes)
+                        {
+                            parms.Clear();
+                            parms.Add(new Parameter("@GoalAttributeMongoID", (string.IsNullOrEmpty(att.AttributeId.ToString()) ? string.Empty : att.AttributeId.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                            parms.Add(new Parameter("@PatientTaskMongoID", (string.IsNullOrEmpty(task.Id.ToString()) ? string.Empty : task.Id.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
+
+                            SQLDataService.Instance.ExecuteScalar("InHealth001", true, "REPORT", "spPhy_SavePatientTaskAttribute", parms);
+                        }
+                    }
+
+                    if (task.BarrierIds != null)
+                    {
+                        foreach (ObjectId bar in task.BarrierIds)
+                        {
+                            parms.Clear();
+                            parms.Add(new Parameter("@MongoID", (string.IsNullOrEmpty(bar.ToString()) ? string.Empty : bar.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                            parms.Add(new Parameter("@PatientTaskMongoID", (string.IsNullOrEmpty(task.Id.ToString()) ? string.Empty : task.Id.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
+
+                            SQLDataService.Instance.ExecuteScalar("InHealth001", true, "REPORT", "spPhy_SavePatientTaskBarrier", parms);
+                        }
+                    }
+                }//);
             }
         }
 
@@ -455,7 +478,7 @@ namespace Phytel.Data.ETL
                 foreach (MEObservation obs in observations)
                 {
                     ParameterCollection parms = new ParameterCollection();
-
+                    
                     parms.Add(new Parameter("@MongoID", obs.Id.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
                     parms.Add(new Parameter("@Code", (string.IsNullOrEmpty(obs.Code) ? string.Empty : obs.Code), SqlDbType.VarChar, ParameterDirection.Input, 50));
                     parms.Add(new Parameter("@CodingSystemId", (string.IsNullOrEmpty(obs.CodingSystemId.ToString()) ? string.Empty : obs.CodingSystemId.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
@@ -472,6 +495,8 @@ namespace Phytel.Data.ETL
                     parms.Add(new Parameter("@TimeToLive", (string.IsNullOrEmpty(obs.TTLDate.ToString()) ? string.Empty : obs.TTLDate.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
                     parms.Add(new Parameter("@Units", (string.IsNullOrEmpty(obs.Units) ? string.Empty : obs.Units.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
                     parms.Add(new Parameter("@UpdatedBy", obs.UpdatedBy == null ? string.Empty : obs.UpdatedBy.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                    parms.Add(new Parameter("@RecordCreatedBy", obs.RecordCreatedBy == null ? string.Empty : obs.RecordCreatedBy.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                    parms.Add(new Parameter("@RecordCreatedOn", obs.RecordCreatedOn == null ? string.Empty : obs.RecordCreatedOn.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
                     parms.Add(new Parameter("@Version", (string.IsNullOrEmpty(obs.Version.ToString()) ? string.Empty : obs.Version.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
                     if (obs.ExtraElements != null)
                         parms.Add(new Parameter("@ExtraElements", obs.ExtraElements.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
@@ -490,8 +515,8 @@ namespace Phytel.Data.ETL
             {
                 List<MEPatient> patients = pmctx.Patients.Collection.FindAllAs<MEPatient>().ToList();
 
-                Parallel.ForEach(patients, new ParallelOptions{MaxDegreeOfParallelism= Environment.ProcessorCount * _exponent}, patient =>
-                //foreach (MEPatient patient in patients)
+                //Parallel.ForEach(patients, new ParallelOptions{MaxDegreeOfParallelism= Environment.ProcessorCount * _exponent}, patient =>
+                foreach (MEPatient patient in patients)
                 {
                     ParameterCollection parms = new ParameterCollection();
 
@@ -510,11 +535,11 @@ namespace Phytel.Data.ETL
                     parms.Add(new Parameter("@RecordCreatedBy", patient.RecordCreatedBy, SqlDbType.VarChar, ParameterDirection.Input, 50));
                     parms.Add(new Parameter("@RecordCreatedOn", patient.RecordCreatedOn, SqlDbType.VarChar, ParameterDirection.Input, 50));
                     parms.Add(new Parameter("@Delete", patient.DeleteFlag, SqlDbType.VarChar, ParameterDirection.Input, 50));
-                    parms.Add(new Parameter("@BackGround", (string.IsNullOrEmpty(patient.Background) ? string.Empty : patient.Background), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                    parms.Add(new Parameter("@BackGround", (string.IsNullOrEmpty(patient.Background) ? string.Empty : patient.Background), SqlDbType.VarChar, ParameterDirection.Input, int.MaxValue));
                     parms.Add(new Parameter("@DisplayPatientSystemMongoId", string.Empty, SqlDbType.VarChar, ParameterDirection.Input, 50));
 
                     SQLDataService.Instance.ExecuteProcedure("InHealth001", true, "REPORT", "spPhy_SavePatient", parms);
-                });
+                }//);
             }
         }
 
@@ -734,15 +759,15 @@ namespace Phytel.Data.ETL
             {
                 List<MEPatientGoal> goals = pgctx.PatientGoals.Collection.FindAllAs<MEPatientGoal>().ToList();
 
-                Parallel.ForEach(goals, new ParallelOptions{MaxDegreeOfParallelism= Environment.ProcessorCount * _exponent}, goal =>
-                //foreach (MEPatientGoal goal in goals)
+                //Parallel.ForEach(goals, new ParallelOptions{MaxDegreeOfParallelism= Environment.ProcessorCount * _exponent}, goal =>
+                foreach (MEPatientGoal goal in goals)
                 {
                     ParameterCollection parms = new ParameterCollection();
 
                     parms.Add(new Parameter("@_id", (string.IsNullOrEmpty(goal.Id.ToString()) ? string.Empty : goal.Id.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
                     parms.Add(new Parameter("@_patientId", (string.IsNullOrEmpty(goal.PatientId.ToString()) ? string.Empty : goal.PatientId.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
-                    parms.Add(new Parameter("@Name", (string.IsNullOrEmpty(goal.Name.ToString()) ? string.Empty : goal.Name.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
-                    parms.Add(new Parameter("@Description", goal.Description == null ? string.Empty : goal.Description.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                    parms.Add(new Parameter("@Name", (string.IsNullOrEmpty(goal.Name) ? string.Empty : goal.Name), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                    parms.Add(new Parameter("@Description", goal.Description == null ? string.Empty : goal.Description, SqlDbType.VarChar, ParameterDirection.Input, 50));
                     parms.Add(new Parameter("@StartDate", (string.IsNullOrEmpty(goal.StartDate.ToString()) ? string.Empty : goal.StartDate.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
                     parms.Add(new Parameter("@EndDate", (string.IsNullOrEmpty(goal.EndDate.ToString()) ? string.Empty : goal.EndDate.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
                     parms.Add(new Parameter("@Status", (string.IsNullOrEmpty(goal.Status.ToString()) ? string.Empty : goal.Status.ToString()), SqlDbType.VarChar, ParameterDirection.Input, int.MaxValue));
@@ -809,7 +834,7 @@ namespace Phytel.Data.ETL
                             SQLDataService.Instance.ExecuteScalar("InHealth001", true, "REPORT", "spPhy_SavePatientGoalProgram", parms);
                         }
                     }
-                });
+                }//);
             }
         }
 
@@ -822,20 +847,22 @@ namespace Phytel.Data.ETL
                 foreach (MEPatientIntervention intervention in interventions)
                 {
                     ParameterCollection parms = new ParameterCollection();
-
+                    
                     parms.Add(new Parameter("@MongoID", (string.IsNullOrEmpty(intervention.Id.ToString()) ? string.Empty : intervention.Id.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
                     parms.Add(new Parameter("@PatientGoalMongoId", (string.IsNullOrEmpty(intervention.PatientGoalId.ToString()) ? string.Empty : intervention.PatientGoalId.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
                     parms.Add(new Parameter("@CategoryMongoId", (string.IsNullOrEmpty(intervention.CategoryId.ToString()) ? string.Empty : intervention.CategoryId.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                    parms.Add(new Parameter("@AssignedTo", (string.IsNullOrEmpty(intervention.AssignedToId.ToString()) ? string.Empty : intervention.AssignedToId.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
                     parms.Add(new Parameter("@UpdatedBy", (string.IsNullOrEmpty(intervention.UpdatedBy.ToString()) ? string.Empty : intervention.UpdatedBy.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
                     parms.Add(new Parameter("@LastUpdatedOn", (string.IsNullOrEmpty(intervention.LastUpdatedOn.ToString()) ? string.Empty : intervention.LastUpdatedOn.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
                     parms.Add(new Parameter("@RecordCreatedBy", (string.IsNullOrEmpty(intervention.RecordCreatedBy.ToString()) ? string.Empty : intervention.RecordCreatedBy.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
                     parms.Add(new Parameter("@RecordCreatedOn", (string.IsNullOrEmpty(intervention.RecordCreatedOn.ToString()) ? string.Empty : intervention.RecordCreatedOn.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
                     parms.Add(new Parameter("@Version", (string.IsNullOrEmpty(intervention.Version.ToString()) ? string.Empty : intervention.Version.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                    parms.Add(new Parameter("@TimeToLive", (string.IsNullOrEmpty(intervention.TTLDate.ToString()) ? string.Empty : intervention.TTLDate.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
                     parms.Add(new Parameter("@Delete", (string.IsNullOrEmpty(intervention.DeleteFlag.ToString()) ? string.Empty : intervention.DeleteFlag.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
-                    parms.Add(new Parameter("@Status", (string.IsNullOrEmpty(intervention.Status.ToString()) ? string.Empty : intervention.Status.ToString()), SqlDbType.VarChar, ParameterDirection.Input, int.MaxValue));
+                    parms.Add(new Parameter("@Status", (string.IsNullOrEmpty(intervention.Status.ToString()) ? string.Empty : intervention.Status.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
                     parms.Add(new Parameter("@StatusDate", (string.IsNullOrEmpty(intervention.StatusDate.ToString()) ? string.Empty : intervention.StatusDate.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
                     parms.Add(new Parameter("@StartDate", (string.IsNullOrEmpty(intervention.StartDate.ToString()) ? string.Empty : intervention.StartDate.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
-                    parms.Add(new Parameter("@Description", (string.IsNullOrEmpty(intervention.Description.ToString()) ? string.Empty : intervention.Description.ToString()), SqlDbType.VarChar, ParameterDirection.Input, int.MaxValue));
+                    parms.Add(new Parameter("@Description", (string.IsNullOrEmpty(intervention.Description) ? string.Empty : intervention.Description), SqlDbType.VarChar, ParameterDirection.Input, int.MaxValue));
 
                     SQLDataService.Instance.ExecuteScalar("InHealth001", true, "REPORT", "spPhy_SavePatientIntervention", parms);
                 }
