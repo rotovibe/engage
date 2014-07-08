@@ -107,8 +107,8 @@ namespace Phytel.API.DataDomain.PatientSystem
                     builder.Add(MB.Update.Set(MEPatientSystem.LastUpdatedOnProperty, DateTime.UtcNow));
                     builder.Add(MB.Update.Set(MEPatientSystem.UpdatedByProperty, ObjectId.Parse(this.UserId)));
 
-                    IMongoUpdate patientUserUpdate = MB.Update.Combine(builder);
-                    ctx.PatientSystems.Collection.Update(query, patientUserUpdate);
+                    IMongoUpdate update = MB.Update.Combine(builder);
+                    ctx.PatientSystems.Collection.Update(query, update);
 
                     AuditHelper.LogDataAudit(this.UserId,
                                             MongoCollectionName.PatientSystem.ToString(),

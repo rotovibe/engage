@@ -543,7 +543,8 @@ namespace Phytel.API.DataDomain.PatientGoal
                     deletedPatientGoals = new List<DeletedPatientGoal>();
                     goalViewDataList.ForEach(u =>
                     {
-                        DeletePatientGoalDataRequest deletePatientGoalDataRequest = new DeletePatientGoalDataRequest { 
+                        DeletePatientGoalDataRequest deletePatientGoalDataRequest = new DeletePatientGoalDataRequest
+                        {
                             Context = request.Context,
                             ContractNumber = request.ContractNumber,
                             PatientGoalId = u.Id,
@@ -553,7 +554,7 @@ namespace Phytel.API.DataDomain.PatientGoal
                         };
                         goalRepo.Delete(deletePatientGoalDataRequest);
                         success = true;
-                        DeletedPatientGoal deletedPatientGoal = new DeletedPatientGoal { PatientGoalId = deletePatientGoalDataRequest.PatientGoalId}; 
+                        DeletedPatientGoal deletedPatientGoal = new DeletedPatientGoal { PatientGoalId = deletePatientGoalDataRequest.PatientGoalId };
 
                         #region Delete Barriers
                         DeleteBarrierDataResponse deleteBarrierDataResponse = DeleteBarrier(new DeleteBarrierDataRequest
@@ -570,7 +571,7 @@ namespace Phytel.API.DataDomain.PatientGoal
                             deletedPatientGoal.PatientBarrierIds = deleteBarrierDataResponse.DeletedIds;
                             success = true;
                         }
-                        
+
                         #endregion
 
                         #region Delete Tasks
@@ -610,6 +611,10 @@ namespace Phytel.API.DataDomain.PatientGoal
                         deletedPatientGoals.Add(deletedPatientGoal);
                     });
                     response.DeletedPatientGoals = deletedPatientGoals;
+                }
+                else 
+                {
+                    success = true;
                 }
                 response.Success = success;
                 return response;

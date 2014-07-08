@@ -311,5 +311,10 @@ namespace Phytel.API.DataDomain.Program
         {
             throw new NotImplementedException();
         }
+
+        public IEnumerable<object> FindByPatientId(string patientId)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

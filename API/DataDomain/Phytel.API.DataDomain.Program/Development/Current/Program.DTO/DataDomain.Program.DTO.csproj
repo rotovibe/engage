@@ -79,6 +79,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
+    <Compile Include="DeletePatientProgramResponsesDataRequest.cs" />
+    <Compile Include="DeletePatientProgramAttributesDataRequest.cs" />
+    <Compile Include="DeletePatientProgramResponsesDataResponse.cs" />
+    <Compile Include="DeletePatientProgramByPatientIdDataRequest.cs" />
+    <Compile Include="DeletePatientProgramAttributesDataResponse.cs" />
+    <Compile Include="DeletePatientProgramByPatientIdDataResponse.cs" />
     <Compile Include="GetPatientActionDetailsDataRequest.cs" />
     <Compile Include="DataDomainRequest.cs" />
     <Compile Include="GetProgramDetailsSummaryRequest.cs" />

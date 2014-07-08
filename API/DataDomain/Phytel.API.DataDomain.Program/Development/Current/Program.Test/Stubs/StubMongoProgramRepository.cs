@@ -146,5 +146,10 @@ namespace Phytel.API.DataDomain.Program.Test.Stubs
 
             return mods;
         }
+
+        public IEnumerable<object> FindByPatientId(string patientId)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
