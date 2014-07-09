@@ -58,6 +58,26 @@ namespace Phytel.API.DataDomain.Contact.Tests
                 
                 Assert.IsNotNull(response);
             }
+
+
+            [TestMethod()]
+            [TestProperty("Layer", "DD.ContactDataManager")]
+            public void DeletePatient()
+            {
+                ContactDataManager cm = new ContactDataManager { Factory = new ContactRepositoryFactory() };
+                DeleteContactByPatientIdDataRequest request = new DeleteContactByPatientIdDataRequest
+                {
+                    PatientId = "5325db70d6a4850adcbba946",
+                    UserId = "5325c81f072ef705080d347e",
+                    Context = "NG",
+                    ContractNumber = "InHealth001",
+                    Version = 1.0
+                };
+
+                DeleteContactByPatientIdDataResponse response = cm.DeleteContactByPatientId(request);
+
+                Assert.IsNotNull(response);
+            }
         }
     }
 }

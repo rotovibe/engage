@@ -664,6 +664,29 @@ namespace Phytel.API.AppDomain.NG.Tests
                 Assert.IsNotNull(response);
                 Assert.IsNotNull(response.PlanElems.Programs[0]);
             }
+
+            [TestMethod()]
+            [TestProperty("Layer", "AD.NGManager")]
+            public void DeletePatient_Test()
+            {
+                INGManager ngm = new NGManager
+                {
+                    EndpointUtils = new StubPlanElementEndpointUtils(),
+                    PlanElementUtils = new PlanElementUtils()
+                };
+
+                PostDeletePatientRequest request = new PostDeletePatientRequest
+                {
+                    ContractNumber = "InHealth001",
+                    Id = "5325db70d6a4850adcbba946",
+                    UserId = "5325c821072ef705080d3488",
+                    Token = ObjectId.GenerateNewId().ToString(),
+                    Version = 1.0
+                };
+
+                PostDeletePatientResponse response = ngm.DeletePatient(request);
+                Assert.IsNotNull(response);
+            }
         }
     }
 }
