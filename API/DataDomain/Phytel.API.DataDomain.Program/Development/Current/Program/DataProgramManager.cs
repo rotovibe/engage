@@ -555,6 +555,7 @@ namespace Phytel.API.DataDomain.Program
                 List<string> deletedResponsesIds = null;
                 if (meppList != null && meppList.Count > 0)
                 {
+                    deletedPatientPrograms = new List<DeletedPatientProgram>();
                     meppList.ForEach(u =>
                     {
                         #region PatientProgram
