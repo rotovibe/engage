@@ -70,9 +70,8 @@ namespace Phytel.Data.ETL
             LoadPatientUsers(contract);
 
             LoadPatientGoals(contract);
-            LoadPatientInterventions(contract);
-
             LoadPatientBarriers(contract);
+            LoadPatientInterventions(contract);
             LoadPatientTasks(contract);
 
             LoadPatientPrograms(contract);
