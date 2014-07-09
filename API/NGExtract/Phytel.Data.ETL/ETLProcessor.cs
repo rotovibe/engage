@@ -1499,6 +1499,8 @@ namespace Phytel.Data.ETL
                             parms.Add(new Parameter("@Notes", step.Notes ?? string.Empty, SqlDbType.VarChar, ParameterDirection.Input, -1));
                             parms.Add(new Parameter("@Text", step.Text ?? string.Empty, SqlDbType.VarChar, ParameterDirection.Input, -1));
                             parms.Add(new Parameter("@Status", step.Status.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                            parms.Add(new Parameter("@_previous", step.Previous == null ? string.Empty : step.Previous.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                            parms.Add(new Parameter("@_next", step.Next == null ? string.Empty : step.Next.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
                             // inherited fields
                             parms.Add(new Parameter("@AttributeEndDate", step.AttributeEndDate == null ? string.Empty : step.AttributeEndDate.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
                             parms.Add(new Parameter("@AttributeStartDate", step.AttributeStartDate == null ? string.Empty : step.AttributeStartDate.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
