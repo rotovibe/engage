@@ -444,6 +444,7 @@ namespace Phytel.API.AppDomain.NG
                                                     if (ppDDResponse != null && ppDDResponse.Success)
                                                     {
                                                         response.Version = patientDDResponse.Version;
+                                                        response.DeletedId = patientDDResponse.DeletedId;
                                                     }
                                                 }
                                                 #endregion

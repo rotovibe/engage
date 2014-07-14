@@ -463,8 +463,6 @@ namespace Phytel.API.DataDomain.PatientGoal
                         deletedIds.Add(request.InterventionId);
                     }); 
                 }
-                if(request.InterventionId != null)
-                    repo.Delete(request);
                 result.DeletedIds = deletedIds;
                 result.Success = true;
                 return result;
@@ -495,8 +493,6 @@ namespace Phytel.API.DataDomain.PatientGoal
                         deletedIds.Add(request.BarrierId);
                     });
                 }
-                if(request.BarrierId != null)
-                    repo.Delete(request);
                 result.DeletedIds = deletedIds;
                 result.Success = true;
                 return result;
