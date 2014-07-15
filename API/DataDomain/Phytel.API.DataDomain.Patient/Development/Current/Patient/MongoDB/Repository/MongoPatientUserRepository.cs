@@ -190,7 +190,7 @@ namespace Phytel.API.DataDomain.Patient
 
         public void UndoDelete(object entity)
         {
-            UndoDeletePatientUserByPatientIdDataRequest request = (UndoDeletePatientUserByPatientIdDataRequest)entity;
+            UndoDeletePatientUsersDataRequest request = (UndoDeletePatientUsersDataRequest)entity;
             try
             {
                 using (PatientMongoContext ctx = new PatientMongoContext(_dbName))

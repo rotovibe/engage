@@ -81,8 +81,8 @@
   <ItemGroup>
     <Compile Include="UndoDeleteCohortPatientViewDataRequest.cs" />
     <Compile Include="UndoDeleteCohortPatientViewDataResponse.cs" />
-    <Compile Include="UndoDeletePatientUserByPatientIdDataRequest.cs" />
-    <Compile Include="UndoDeletePatientUserByPatientIdDataResponse.cs" />
+    <Compile Include="UndoDeletePatientUsersDataRequest.cs" />
+    <Compile Include="UndoDeletePatientUsersDataResponse.cs" />
     <Compile Include="UndoDeletePatientDataRequest.cs" />
     <Compile Include="UndoDeletePatientDataResponse.cs" />
     <Compile Include="PatientUserData.cs" />

@@ -98,7 +98,7 @@ namespace Phytel.API.DataDomain.Patient.Test.Stub
             throw new NotImplementedException();
         }
 
-        public UndoDeletePatientUserByPatientIdDataResponse UndoDeletePatientUserByPatientId(UndoDeletePatientUserByPatientIdDataRequest request)
+        public UndoDeletePatientUsersDataResponse UndoDeletePatientUserByPatientId(UndoDeletePatientUsersDataRequest request)
         {
             throw new NotImplementedException();
         }
@@ -188,7 +188,7 @@ namespace Phytel.API.DataDomain.Patient.Test.Stub
             throw new NotImplementedException();
         }
 
-        UndoDeletePatientUserByPatientIdDataResponse IPatientDataManager.UndoDeletePatientUserByPatientId(UndoDeletePatientUserByPatientIdDataRequest request)
+        UndoDeletePatientUsersDataResponse IPatientDataManager.UndoDeletePatientUserByPatientId(UndoDeletePatientUsersDataRequest request)
         {
             throw new NotImplementedException();
         }

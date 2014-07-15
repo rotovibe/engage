@@ -310,12 +310,12 @@ namespace Phytel.API.DataDomain.Patient
             catch (Exception ex) { throw ex; }
         }
 
-        public UndoDeletePatientUserByPatientIdDataResponse UndoDeletePatientUserByPatientId(UndoDeletePatientUserByPatientIdDataRequest request)
+        public UndoDeletePatientUsersDataResponse UndoDeletePatientUserByPatientId(UndoDeletePatientUsersDataRequest request)
         {
-            UndoDeletePatientUserByPatientIdDataResponse response = null;
+            UndoDeletePatientUsersDataResponse response = null;
             try
             {
-                response = new UndoDeletePatientUserByPatientIdDataResponse();
+                response = new UndoDeletePatientUsersDataResponse();
                 IPatientRepository patientUserRepo = Factory.GetRepository(request, RepositoryType.PatientUser);
                 if (request.Ids != null)
                 {

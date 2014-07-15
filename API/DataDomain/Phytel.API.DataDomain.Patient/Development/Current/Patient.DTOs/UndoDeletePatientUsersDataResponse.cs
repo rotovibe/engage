@@ -4,7 +4,7 @@ using Phytel.API.Interface;
 
 namespace Phytel.API.DataDomain.Patient.DTO
 {
-    public class UndoDeletePatientUserByPatientIdDataResponse : IDomainResponse
+    public class UndoDeletePatientUsersDataResponse : IDomainResponse
     {
         public bool Success { get; set; }
         public double Version { get; set; }

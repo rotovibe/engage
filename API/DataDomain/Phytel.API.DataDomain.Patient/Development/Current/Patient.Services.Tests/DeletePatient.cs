@@ -93,7 +93,7 @@ namespace Phytel.API.DataDomain.Patient.Service.Test
             List<String> ids = new List<string>();
             ids.Add("53c453bdd6a48506ec180428");
             ids.Add("53c450bdd6a48506ec18039b");
-            UndoDeletePatientUserByPatientIdDataResponse response = client.Put<UndoDeletePatientUserByPatientIdDataResponse>(url, new UndoDeletePatientUserByPatientIdDataRequest
+            UndoDeletePatientUsersDataResponse response = client.Put<UndoDeletePatientUsersDataResponse>(url, new UndoDeletePatientUsersDataRequest
             {
               //  Ids = ids,
                 PatientUserId = null,

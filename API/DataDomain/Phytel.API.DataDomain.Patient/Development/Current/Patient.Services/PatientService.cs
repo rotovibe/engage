@@ -361,9 +361,9 @@ namespace Phytel.API.DataDomain.Patient.Service
             return response;
         }
 
-        public UndoDeletePatientUserByPatientIdDataResponse Put(UndoDeletePatientUserByPatientIdDataRequest request)
+        public UndoDeletePatientUsersDataResponse Put(UndoDeletePatientUsersDataRequest request)
         {
-            UndoDeletePatientUserByPatientIdDataResponse response = new UndoDeletePatientUserByPatientIdDataResponse();
+            UndoDeletePatientUsersDataResponse response = new UndoDeletePatientUsersDataResponse();
             try
             {
                 if (string.IsNullOrEmpty(request.UserId))
