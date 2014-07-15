@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Phytel.API.DataDomain.CareMember.DTO;
 using ServiceStack.Service;
@@ -48,6 +49,37 @@ namespace Phytel.API.DataDomain.CareMember.Services.Test
                                         contractNumber,
                                         patientId), userId);
             DeleteCareMemberByPatientIdDataResponse response = client.Delete<DeleteCareMemberByPatientIdDataResponse>(url);
+            Assert.IsNotNull(response);
+        }
+
+        [TestMethod]
+        public void UndoDeleteCareMembers_Test()
+        {
+            double version = 1.0;
+            string contractNumber = "InHealth001";
+            string context = "NG";
+            string userId = "000000000000000000000000";
+            string ddUrl = "http://localhost:8888/CareMember";
+            IRestClient client = new JsonServiceClient();
+
+            //[Route("/{Context}/{Version}/{ContractNumber}/CareMember/UndoDelete", "PUT")]
+            string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/CareMember/UndoDelete",
+                                        ddUrl,
+                                        context,
+                                        version,
+                                        contractNumber), userId);
+            List<string> ids = new List<string>();
+            ids.Add("53c5a74dd433231880d25ae0");
+            ids.Add("53c5a714d6a48506ecd6c13b");
+            UndoDeleteCareMembersDataResponse response = client.Put<UndoDeleteCareMembersDataResponse>(url, new UndoDeleteCareMembersDataRequest
+            {   
+                Ids  = ids,
+                Context = context, 
+                ContractNumber = contractNumber, 
+                UserId = userId,
+                Version = version
+            }
+            );
             Assert.IsNotNull(response);
         }
     }

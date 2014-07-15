@@ -258,7 +258,29 @@ namespace Phytel.API.DataDomain.CareMember
 
         public void UndoDelete(object entity)
         {
-            throw new NotImplementedException();
+            UndoDeleteCareMembersDataRequest request = (UndoDeleteCareMembersDataRequest)entity;
+            try
+            {
+                using (CareMemberMongoContext ctx = new CareMemberMongoContext(_dbName))
+                {
+                    var query = MB.Query<MECareMember>.EQ(b => b.Id, ObjectId.Parse(request.CareMemberId));
+                    var builder = new List<MB.UpdateBuilder>();
+                    builder.Add(MB.Update.Set(MECareMember.TTLDateProperty, BsonNull.Value));
+                    builder.Add(MB.Update.Set(MECareMember.DeleteFlagProperty, false));
+                    builder.Add(MB.Update.Set(MECareMember.LastUpdatedOnProperty, DateTime.UtcNow));
+                    builder.Add(MB.Update.Set(MECareMember.UpdatedByProperty, ObjectId.Parse(this.UserId)));
+
+                    IMongoUpdate update = MB.Update.Combine(builder);
+                    ctx.CareMembers.Collection.Update(query, update);
+
+                    AuditHelper.LogDataAudit(this.UserId,
+                                            MongoCollectionName.CareMember.ToString(),
+                                            request.CareMemberId.ToString(),
+                                            Common.DataAuditType.UndoDelete,
+                                            request.ContractNumber);
+                }
+            }
+            catch (Exception) { throw; }
         }
     }
 }

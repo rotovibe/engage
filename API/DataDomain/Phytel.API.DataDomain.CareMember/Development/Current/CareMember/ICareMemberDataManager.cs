@@ -11,5 +11,6 @@ namespace Phytel.API.DataDomain.CareMember
         List<CareMemberData> GetAllCareMembers(GetAllCareMembersDataRequest request);
         CareMemberData GetPrimaryCareManager(GetPrimaryCareManagerDataRequest request);
         DeleteCareMemberByPatientIdDataResponse DeleteCareMemberByPatientId(DeleteCareMemberByPatientIdDataRequest request);
+        UndoDeleteCareMembersDataResponse UndoDeleteCareMembers(UndoDeleteCareMembersDataRequest request);
     }
 }

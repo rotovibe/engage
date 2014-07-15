@@ -137,5 +137,26 @@ namespace Phytel.API.DataDomain.CareMember.Service
             }
             return response;
         }
+
+        public UndoDeleteCareMembersDataResponse Put(UndoDeleteCareMembersDataRequest request)
+        {
+            UndoDeleteCareMembersDataResponse response = new UndoDeleteCareMembersDataResponse();
+            try
+            {
+                if (string.IsNullOrEmpty(request.UserId))
+                    throw new UnauthorizedAccessException("CareMemberDD:CareMemberUndoDelete()::Unauthorized Access");
+
+                response = Manager.UndoDeleteCareMembers(request);
+                response.Version = request.Version;
+            }
+            catch (Exception ex)
+            {
+                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+
+                string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
+                Common.Helper.LogException(int.Parse(aseProcessID), ex);
+            }
+            return response;
+        }
     }
 }

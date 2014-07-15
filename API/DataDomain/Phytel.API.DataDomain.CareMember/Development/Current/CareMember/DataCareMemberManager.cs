@@ -160,5 +160,27 @@ namespace Phytel.API.DataDomain.CareMember
             }
             catch (Exception ex) { throw ex; }
         }
+
+        public UndoDeleteCareMembersDataResponse UndoDeleteCareMembers(UndoDeleteCareMembersDataRequest request)
+        {
+            UndoDeleteCareMembersDataResponse response = null;
+            try
+            {
+                response = new UndoDeleteCareMembersDataResponse();
+
+                ICareMemberRepository repo = Factory.GetRepository(request, RepositoryType.CareMember);
+                if (request.Ids != null)
+                {
+                    request.Ids.ForEach(u =>
+                    {
+                        request.CareMemberId = u;
+                        repo.UndoDelete(request);
+                    });
+                }
+                response.Success = true;
+                return response;
+            }
+            catch (Exception ex) { throw ex; }
+        }
     }
 }   
