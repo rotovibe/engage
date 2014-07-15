@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Phytel.API.DataDomain.Contact.DTO;
 using ServiceStack.Service;
@@ -36,7 +37,7 @@ namespace Phytel.API.DataDomain.Contact.Services.Test
             double version = 1.0;
             string contractNumber = "InHealth001";
             string context = "NG";
-            string patientId = "5325db70d6a4850adcbba946";
+            string patientId = "5325da9ed6a4850adcbba6ce";
             string userId = "000000000000000000000000";
             string ddUrl = "http://localhost:8888/Contact";
             IRestClient client = new JsonServiceClient();
@@ -49,6 +50,36 @@ namespace Phytel.API.DataDomain.Contact.Services.Test
                                         contractNumber,
                                         patientId), userId);
             DeleteContactByPatientIdDataResponse response = client.Delete<DeleteContactByPatientIdDataResponse>(url);
+            Assert.IsNotNull(response);
+        }
+
+        [TestMethod]
+        public void UndoDeleteContactByPatientId_Test()
+        {
+            double version = 1.0;
+            string contractNumber = "InHealth001";
+            string context = "NG";
+            string userId = "000000000000000000000000";
+            string ddUrl = "http://localhost:8888/Contact";
+            IRestClient client = new JsonServiceClient();
+
+            //[Route("/{Context}/{Version}/{ContractNumber}/Contact/UndoDelete", "PUT")]
+            string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Contact/UndoDelete",
+                                        ddUrl,
+                                        context,
+                                        version,
+                                        contractNumber), userId);
+            List<ContactWithUpdatedRecentList> list = new List<ContactWithUpdatedRecentList>();
+            list.Add(new ContactWithUpdatedRecentList { ContactId  = "5325c81f072ef705080d347e", PatientIndex = 1 } );
+            list.Add(new ContactWithUpdatedRecentList { ContactId  = "5325c821072ef705080d3488", PatientIndex = 3 } );
+            UndoDeleteContactDataResponse response = client.Put<UndoDeleteContactDataResponse>(url, new UndoDeleteContactDataRequest { 
+                Id = "5325da9fd6a4850adc046d1a",
+                ContactWithUpdatedRecentLists = null, 
+                Context = context,
+                ContractNumber = contractNumber,
+                Version  = version,
+                UserId = userId
+            });
             Assert.IsNotNull(response);
         }
     }

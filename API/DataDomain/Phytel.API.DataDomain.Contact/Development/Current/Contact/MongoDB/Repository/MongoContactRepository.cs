@@ -322,6 +322,7 @@ namespace Phytel.API.DataDomain.Contact
                     contactData = new ContactData
                     {
                         ContactId = mc.Id.ToString(),
+                        PatientId = mc.PatientId.ToString(),
                         UserId = (string.IsNullOrEmpty(mc.ResourceId)) ? string.Empty : mc.ResourceId.ToString().Replace("-", string.Empty).ToLower(),
                         FirstName = mc.FirstName,
                         MiddleName = mc.MiddleName,
@@ -1128,7 +1129,29 @@ namespace Phytel.API.DataDomain.Contact
 
         public void UndoDelete(object entity)
         {
-            throw new NotImplementedException();
+            UndoDeleteContactDataRequest request = (UndoDeleteContactDataRequest)entity;
+            try
+            {
+                using (ContactMongoContext ctx = new ContactMongoContext(_dbName))
+                {
+                    var query = MB.Query<MEContact>.EQ(b => b.Id, ObjectId.Parse(request.Id));
+                    var builder = new List<MB.UpdateBuilder>();
+                    builder.Add(MB.Update.Set(MEContact.TTLDateProperty, BsonNull.Value));
+                    builder.Add(MB.Update.Set(MEContact.DeleteFlagProperty, false));
+                    builder.Add(MB.Update.Set(MEContact.LastUpdatedOnProperty, DateTime.UtcNow));
+                    builder.Add(MB.Update.Set(MEContact.UpdatedByProperty, ObjectId.Parse(this.UserId)));
+
+                    IMongoUpdate update = MB.Update.Combine(builder);
+                    ctx.Contacts.Collection.Update(query, update);
+
+                    AuditHelper.LogDataAudit(this.UserId,
+                                            MongoCollectionName.Contact.ToString(),
+                                            request.Id.ToString(),
+                                            Common.DataAuditType.UndoDelete,
+                                            request.ContractNumber);
+                }
+            }
+            catch (Exception) { throw; }
         }
     }
 }

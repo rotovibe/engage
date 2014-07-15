@@ -369,7 +369,7 @@ namespace Phytel.API.DataDomain.Patient.Service
                 if (string.IsNullOrEmpty(request.UserId))
                     throw new UnauthorizedAccessException("PatientDD:UndoPatientUserDelete()::Unauthorized Access");
 
-                response = PatientManager.UndoDeletePatientUserByPatientId(request);
+                response = PatientManager.UndoDeletePatientUser(request);
                 response.Version = request.Version;
             }
             catch (Exception ex)
@@ -390,7 +390,7 @@ namespace Phytel.API.DataDomain.Patient.Service
                 if (string.IsNullOrEmpty(request.UserId))
                     throw new UnauthorizedAccessException("PatientDD:UndoDeleteCohortPatientView()::Unauthorized Access");
 
-                response = PatientManager.UndoDeleteCohortPatientViewByPatientId(request);
+                response = PatientManager.UndoDeleteCohortPatientView(request);
                 response.Version = request.Version;
             }
             catch (Exception ex)

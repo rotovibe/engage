@@ -310,7 +310,7 @@ namespace Phytel.API.DataDomain.Patient
             catch (Exception ex) { throw ex; }
         }
 
-        public UndoDeletePatientUsersDataResponse UndoDeletePatientUserByPatientId(UndoDeletePatientUsersDataRequest request)
+        public UndoDeletePatientUsersDataResponse UndoDeletePatientUser(UndoDeletePatientUsersDataRequest request)
         {
             UndoDeletePatientUsersDataResponse response = null;
             try
@@ -331,7 +331,7 @@ namespace Phytel.API.DataDomain.Patient
             catch (Exception ex) { throw ex; }
         }
 
-        public UndoDeleteCohortPatientViewDataResponse UndoDeleteCohortPatientViewByPatientId(UndoDeleteCohortPatientViewDataRequest request)
+        public UndoDeleteCohortPatientViewDataResponse UndoDeleteCohortPatientView(UndoDeleteCohortPatientViewDataRequest request)
         {
             UndoDeleteCohortPatientViewDataResponse response = null;
             try

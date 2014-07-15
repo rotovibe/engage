@@ -204,5 +204,26 @@ namespace Phytel.API.DataDomain.Contact.Service
             return response;
         }
 
+        public UndoDeleteContactDataResponse Put(UndoDeleteContactDataRequest request)
+        {
+            UndoDeleteContactDataResponse response = new UndoDeleteContactDataResponse();
+            try
+            {
+                if (string.IsNullOrEmpty(request.UserId))
+                    throw new UnauthorizedAccessException("ContactDD:ContactUndoDelete()::Unauthorized Access");
+
+                response = Manager.UndoDeleteContact(request);
+                response.Version = request.Version;
+            }
+            catch (Exception ex)
+            {
+                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+
+                string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
+                Common.Helper.LogException(int.Parse(aseProcessID), ex);
+            }
+            return response;
+        }
+
     }
 }
