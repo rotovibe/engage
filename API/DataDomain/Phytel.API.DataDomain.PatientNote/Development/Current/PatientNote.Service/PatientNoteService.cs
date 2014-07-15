@@ -115,5 +115,26 @@ namespace Phytel.API.DataDomain.PatientNote.Service
             }
             return response;
         }
+
+        public UndoDeletePatientNotesDataResponse Put(UndoDeletePatientNotesDataRequest request)
+        {
+            UndoDeletePatientNotesDataResponse response = new UndoDeletePatientNotesDataResponse();
+            try
+            {
+                if (string.IsNullOrEmpty(request.UserId))
+                    throw new UnauthorizedAccessException("PatientNoteDD:PatientNoteUndoDelete()::Unauthorized Access");
+
+                response = PatientNoteDataManager.UndoDeletePatientNotes(request);
+                response.Version = request.Version;
+            }
+            catch (Exception ex)
+            {
+                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+
+                string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
+                Common.Helper.LogException(int.Parse(aseProcessID), ex);
+            }
+            return response;
+        }
     }
 }

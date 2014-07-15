@@ -111,5 +111,27 @@ namespace Phytel.API.DataDomain.PatientNote
             }
             catch (Exception ex) { throw ex; }
         }
+
+        public static UndoDeletePatientNotesDataResponse UndoDeletePatientNotes(UndoDeletePatientNotesDataRequest request)
+        {
+            UndoDeletePatientNotesDataResponse response = null;
+            try
+            {
+                response = new UndoDeletePatientNotesDataResponse();
+
+                IPatientNoteRepository<DeleteNoteByPatientIdDataResponse> repo = PatientNoteRepositoryFactory<DeleteNoteByPatientIdDataResponse>.GetPatientNoteRepository(request.ContractNumber, request.Context, request.UserId);
+                if (request.Ids != null)
+                {
+                    request.Ids.ForEach(u =>
+                    {
+                        request.PatientNoteId = u;
+                        repo.UndoDelete(request);
+                    });
+                }
+                response.Success = true;
+                return response;
+            }
+            catch (Exception ex) { throw ex; }
+        }
     }
 }   

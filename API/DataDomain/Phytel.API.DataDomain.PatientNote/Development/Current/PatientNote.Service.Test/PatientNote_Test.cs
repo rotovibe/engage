@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Phytel.API.DataDomain.PatientNote;
 using Phytel.API.DataDomain.PatientNote.DTO;
@@ -49,6 +50,37 @@ namespace Phytel.API.DataDomain.PatientNote.Services.Test
                                         contractNumber,
                                         patientId), userId);
             DeleteNoteByPatientIdDataResponse response = client.Delete<DeleteNoteByPatientIdDataResponse>(url);
+            Assert.IsNotNull(response);
+        }
+
+
+        [TestMethod]
+        public void UndoDeletePatientNotes_Test()
+        {
+            double version = 1.0;
+            string contractNumber = "InHealth001";
+            string context = "NG";
+            string userId = "000000000000000000000000";
+            string ddUrl = "http://localhost:8888/PatientNote";
+            IRestClient client = new JsonServiceClient();
+
+            //[Route("/{Context}/{Version}/{ContractNumber}/PatientNote/UndoDelete", "PUT")]
+            string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/PatientNote/UndoDelete",
+                                        ddUrl,
+                                        context,
+                                        version,
+                                        contractNumber), userId);
+            List<string> ids = new List<string>();
+            ids.Add("53c5ab5cd6a48506ec660ad4");
+            ids.Add("53c5ab59d6a48506ec660ad0");
+            UndoDeletePatientNotesDataResponse response = client.Put<UndoDeletePatientNotesDataResponse>(url, new UndoDeletePatientNotesDataRequest 
+            { 
+                Ids = ids,
+                Context = context,
+                ContractNumber = contractNumber,
+                UserId = userId,
+                Version = version
+            });
             Assert.IsNotNull(response);
         }
     }
