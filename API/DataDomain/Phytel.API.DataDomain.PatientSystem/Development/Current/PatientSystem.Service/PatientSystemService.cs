@@ -94,5 +94,26 @@ namespace Phytel.API.DataDomain.PatientSystem.Service
             }
             return response;
         }
+
+        public UndoDeletePatientSystemsDataResponse Put(UndoDeletePatientSystemsDataRequest request)
+        {
+            UndoDeletePatientSystemsDataResponse response = new UndoDeletePatientSystemsDataResponse();
+            try
+            {
+                if (string.IsNullOrEmpty(request.UserId))
+                    throw new UnauthorizedAccessException("PatientSystemDD:PatientSystemUndoDelete()::Unauthorized Access");
+
+                response = PatientSystemDataManager.UndoDeletePatientSystems(request);
+                response.Version = request.Version;
+            }
+            catch (Exception ex)
+            {
+                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+
+                string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
+                Common.Helper.LogException(int.Parse(aseProcessID), ex);
+            }
+            return response;
+        }
     }
 }

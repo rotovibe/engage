@@ -62,5 +62,27 @@ namespace Phytel.API.DataDomain.PatientSystem
             }
             catch (Exception ex) { throw ex; }
         }
+
+        public static UndoDeletePatientSystemsDataResponse UndoDeletePatientSystems(UndoDeletePatientSystemsDataRequest request)
+        {
+            UndoDeletePatientSystemsDataResponse response = null;
+            try
+            {
+                response = new UndoDeletePatientSystemsDataResponse();
+
+                IPatientSystemRepository<PutPatientSystemDataResponse> repo = PatientSystemRepositoryFactory<PutPatientSystemDataResponse>.GetPatientSystemRepository(request.ContractNumber, request.Context, request.UserId);
+                if (request.Ids != null)
+                {
+                    request.Ids.ForEach(u =>
+                    {
+                        request.PatientSystemId = u;
+                        repo.UndoDelete(request);
+                    });
+                }
+                response.Success = true;
+                return response;
+            }
+            catch (Exception ex) { throw ex; }
+        }
     }
 }   
