@@ -225,13 +225,14 @@ namespace Phytel.API.DataDomain.Patient
             return result;
         }
 
+        #region Delete
         public DeletePatientDataResponse DeletePatient(DeletePatientDataRequest request)
         {
             DeletePatientDataResponse response = null;
             try
             {
                 response = new DeletePatientDataResponse();
-                
+
                 IPatientRepository patientRepo = Factory.GetRepository(request, RepositoryType.Patient);
                 patientRepo.Delete(request);
                 response.DeletedId = request.Id;
@@ -252,10 +253,10 @@ namespace Phytel.API.DataDomain.Patient
 
                 List<PatientUserData> puData = patientUserRepo.FindPatientUsersByPatientId(request.PatientId);
                 List<string> deletedIds = null;
-                if(puData != null)
+                if (puData != null)
                 {
                     deletedIds = new List<string>();
-                    puData.ForEach(u => 
+                    puData.ForEach(u =>
                     {
                         request.Id = u.Id;
                         patientUserRepo.Delete(request);
@@ -275,7 +276,7 @@ namespace Phytel.API.DataDomain.Patient
             try
             {
                 response = new DeleteCohortPatientViewDataResponse();
-                
+
                 IPatientRepository cpvRepo = Factory.GetRepository(request, RepositoryType.CohortPatientView);
                 CohortPatientViewData cpvData = cpvRepo.FindCohortPatientViewByPatientId(request.PatientId);
                 if (cpvData != null)
@@ -288,6 +289,64 @@ namespace Phytel.API.DataDomain.Patient
                 return response;
             }
             catch (Exception ex) { throw ex; }
+        } 
+        #endregion
+
+        #region UndoDelete
+        public UndoDeletePatientDataResponse UndoDeletePatient(UndoDeletePatientDataRequest request)
+        {
+            UndoDeletePatientDataResponse response = null;
+            try
+            {
+                response = new UndoDeletePatientDataResponse();
+                IPatientRepository patientRepo = Factory.GetRepository(request, RepositoryType.Patient);
+                if(request.Id != null)
+                {
+                    patientRepo.UndoDelete(request);
+                }
+                response.Success = true;
+                return response;
+            }
+            catch (Exception ex) { throw ex; }
         }
+
+        public UndoDeletePatientUserByPatientIdDataResponse UndoDeletePatientUserByPatientId(UndoDeletePatientUserByPatientIdDataRequest request)
+        {
+            UndoDeletePatientUserByPatientIdDataResponse response = null;
+            try
+            {
+                response = new UndoDeletePatientUserByPatientIdDataResponse();
+                IPatientRepository patientUserRepo = Factory.GetRepository(request, RepositoryType.PatientUser);
+                if (request.Ids != null)
+                {
+                    request.Ids.ForEach(u =>
+                    {
+                        request.PatientUserId = u;
+                        patientUserRepo.UndoDelete(request);
+                    });
+                }
+                response.Success = true;
+                return response;
+            }
+            catch (Exception ex) { throw ex; }
+        }
+
+        public UndoDeleteCohortPatientViewDataResponse UndoDeleteCohortPatientViewByPatientId(UndoDeleteCohortPatientViewDataRequest request)
+        {
+            UndoDeleteCohortPatientViewDataResponse response = null;
+            try
+            {
+                response = new UndoDeleteCohortPatientViewDataResponse();
+                IPatientRepository cpvRepo = Factory.GetRepository(request, RepositoryType.CohortPatientView);
+                if (request.Id != null)
+                {
+                    cpvRepo.UndoDelete(request);
+                }
+                response.Success = true;
+                return response;
+            }
+            catch (Exception ex) { throw ex; }
+        }
+        #endregion
     }
 }   

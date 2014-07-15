@@ -541,5 +541,11 @@ namespace Phytel.API.DataDomain.PatientObservation
         }
 
         public string UserId { get; set; }
+
+
+        public void UndoDelete(object entity)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

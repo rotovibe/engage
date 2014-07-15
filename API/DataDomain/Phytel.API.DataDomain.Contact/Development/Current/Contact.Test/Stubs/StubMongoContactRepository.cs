@@ -118,5 +118,11 @@ namespace Phytel.API.DataDomain.Contact.Test.Stubs
         {
             throw new NotImplementedException();
         }
+
+
+        public void UndoDelete(object entity)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -91,5 +91,111 @@ namespace Phytel.API.DataDomain.Patient.Test.Stub
         {
             throw new NotImplementedException();
         }
+
+
+        public UndoDeletePatientDataResponse UndoDeletePatient(UndoDeletePatientDataRequest request)
+        {
+            throw new NotImplementedException();
+        }
+
+        public UndoDeletePatientUserByPatientIdDataResponse UndoDeletePatientUserByPatientId(UndoDeletePatientUserByPatientIdDataRequest request)
+        {
+            throw new NotImplementedException();
+        }
+
+        public UndoDeleteCohortPatientViewDataResponse UndoDeleteCohortPatientViewByPatientId(UndoDeleteCohortPatientViewDataRequest request)
+        {
+            throw new NotImplementedException();
+        }
+
+        GetCohortPatientsDataResponse IPatientDataManager.GetCohortPatients(GetCohortPatientsDataRequest request)
+        {
+            throw new NotImplementedException();
+        }
+
+        GetCohortPatientViewResponse IPatientDataManager.GetCohortPatientView(GetCohortPatientViewRequest request)
+        {
+            throw new NotImplementedException();
+        }
+
+        GetPatientDataResponse IPatientDataManager.GetPatientByID(GetPatientDataRequest request)
+        {
+            throw new NotImplementedException();
+        }
+
+        GetPatientsDataResponse IPatientDataManager.GetPatients(GetPatientsDataRequest request)
+        {
+            throw new NotImplementedException();
+        }
+
+        GetPatientSSNDataResponse IPatientDataManager.GetPatientSSN(GetPatientSSNDataRequest request)
+        {
+            throw new NotImplementedException();
+        }
+
+        PutCohortPatientViewDataResponse IPatientDataManager.InsertCohortPatientView(PutCohortPatientViewDataRequest request)
+        {
+            throw new NotImplementedException();
+        }
+
+        PutPatientDataResponse IPatientDataManager.InsertPatient(PutPatientDataRequest request)
+        {
+            throw new NotImplementedException();
+        }
+
+        PutUpdateCohortPatientViewResponse IPatientDataManager.UpdateCohortPatientViewProblem(PutUpdateCohortPatientViewRequest request)
+        {
+            throw new NotImplementedException();
+        }
+
+        PutUpdatePatientDataResponse IPatientDataManager.UpdatePatient(PutUpdatePatientDataRequest request)
+        {
+            throw new NotImplementedException();
+        }
+
+        PutPatientBackgroundDataResponse IPatientDataManager.UpdatePatientBackground(PutPatientBackgroundDataRequest request)
+        {
+            throw new NotImplementedException();
+        }
+
+        PutPatientFlaggedResponse IPatientDataManager.UpdatePatientFlagged(PutPatientFlaggedRequest request)
+        {
+            throw new NotImplementedException();
+        }
+
+        PutPatientPriorityResponse IPatientDataManager.UpdatePatientPriority(PutPatientPriorityRequest request)
+        {
+            throw new NotImplementedException();
+        }
+
+        DeletePatientDataResponse IPatientDataManager.DeletePatient(DeletePatientDataRequest request)
+        {
+            throw new NotImplementedException();
+        }
+
+        DeletePatientUserByPatientIdDataResponse IPatientDataManager.DeletePatientUserByPatientId(DeletePatientUserByPatientIdDataRequest request)
+        {
+            throw new NotImplementedException();
+        }
+
+        DeleteCohortPatientViewDataResponse IPatientDataManager.DeleteCohortPatientViewByPatientId(DeleteCohortPatientViewDataRequest request)
+        {
+            throw new NotImplementedException();
+        }
+
+        UndoDeletePatientDataResponse IPatientDataManager.UndoDeletePatient(UndoDeletePatientDataRequest request)
+        {
+            throw new NotImplementedException();
+        }
+
+        UndoDeletePatientUserByPatientIdDataResponse IPatientDataManager.UndoDeletePatientUserByPatientId(UndoDeletePatientUserByPatientIdDataRequest request)
+        {
+            throw new NotImplementedException();
+        }
+
+        UndoDeleteCohortPatientViewDataResponse IPatientDataManager.UndoDeleteCohortPatientViewByPatientId(UndoDeleteCohortPatientViewDataRequest request)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -131,5 +131,11 @@ namespace Phytel.API.DataDomain.Patient.Test.Stub
         {
             throw new NotImplementedException();
         }
+
+
+        public void UndoDelete(object entity)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

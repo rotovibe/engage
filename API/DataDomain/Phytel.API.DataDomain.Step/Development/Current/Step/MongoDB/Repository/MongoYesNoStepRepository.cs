@@ -135,5 +135,11 @@ namespace Phytel.API.DataDomain.Step
         }
 
         public string UserId { get; set; }
+
+
+        public void UndoDelete(object entity)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

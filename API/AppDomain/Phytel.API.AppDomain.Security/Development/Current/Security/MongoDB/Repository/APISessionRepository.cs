@@ -277,5 +277,11 @@ namespace Phytel.API.AppDomain.Security
         }
 
         #endregion
+
+
+        public void UndoDelete(object entity)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

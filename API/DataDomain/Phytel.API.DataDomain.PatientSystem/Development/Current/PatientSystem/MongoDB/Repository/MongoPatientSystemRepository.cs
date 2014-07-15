@@ -197,5 +197,11 @@ namespace Phytel.API.DataDomain.PatientSystem
         }
 
         public string UserId { get; set; }
+
+
+        public void UndoDelete(object entity)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

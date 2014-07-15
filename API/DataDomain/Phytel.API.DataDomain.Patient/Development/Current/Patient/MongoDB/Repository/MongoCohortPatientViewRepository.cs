@@ -459,5 +459,34 @@ namespace Phytel.API.DataDomain.Patient
         {
             throw new NotImplementedException();
         }
+
+
+        public void UndoDelete(object entity)
+        {
+            UndoDeleteCohortPatientViewDataRequest request = (UndoDeleteCohortPatientViewDataRequest)entity;
+            try
+            {
+                using (PatientMongoContext ctx = new PatientMongoContext(_dbName))
+                {
+                    var q = MB.Query<MECohortPatientView>.EQ(b => b.Id, ObjectId.Parse(request.Id));
+                    var ub = new List<MB.UpdateBuilder>();
+                    ub.Add(MB.Update.Set(MECohortPatientView.TTLDateProperty, BsonNull.Value));
+                    ub.Add(MB.Update.Set(MECohortPatientView.DeleteFlagProperty, false));
+                    ub.Add(MB.Update.Set(MECohortPatientView.LastUpdatedOnProperty, DateTime.UtcNow));
+                    ub.Add(MB.Update.Set(MECohortPatientView.UpdatedByProperty, ObjectId.Parse(this.UserId)));
+
+                    IMongoUpdate update = MB.Update.Combine(ub);
+                    ctx.CohortPatientViews.Collection.Update(q, update);
+
+                    AuditHelper.LogDataAudit(this.UserId,
+                                            MongoCollectionName.CohortPatientView.ToString(),
+                                            request.Id.ToString(),
+                                            Common.DataAuditType.UndoDelete,
+                                            request.ContractNumber);
+                }
+            }
+            catch (Exception) { throw; }
+        }
+
     }
 }

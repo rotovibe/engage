@@ -19,5 +19,8 @@ namespace Phytel.API.DataDomain.Patient
         DeletePatientDataResponse DeletePatient(DeletePatientDataRequest request);
         DeletePatientUserByPatientIdDataResponse DeletePatientUserByPatientId(DeletePatientUserByPatientIdDataRequest request);
         DeleteCohortPatientViewDataResponse DeleteCohortPatientViewByPatientId(DeleteCohortPatientViewDataRequest request);
+        UndoDeletePatientDataResponse UndoDeletePatient(UndoDeletePatientDataRequest request);
+        UndoDeletePatientUserByPatientIdDataResponse UndoDeletePatientUserByPatientId(UndoDeletePatientUserByPatientIdDataRequest request);
+        UndoDeleteCohortPatientViewDataResponse UndoDeleteCohortPatientViewByPatientId(UndoDeleteCohortPatientViewDataRequest request);
     }
 }
