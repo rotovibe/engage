@@ -14,7 +14,7 @@ namespace Phytel.API.DataDomain.PatientGoal.DTO
 
     public class DeletedPatientGoal
     {
-        public string PatientGoalId { get; set; }
+        public string Id { get; set; }
         public List<string> PatientBarrierIds { get; set; }
         public List<string> PatientTaskIds { get; set; }
         public List<string> PatientInterventionIds { get; set; }

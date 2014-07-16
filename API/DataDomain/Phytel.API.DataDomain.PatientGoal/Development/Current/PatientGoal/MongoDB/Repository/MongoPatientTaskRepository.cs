@@ -77,8 +77,6 @@ namespace Phytel.API.DataDomain.PatientGoal
                 using (PatientGoalMongoContext ctx = new PatientGoalMongoContext(_dbName))
                 {
                     var q = MB.Query<MEPatientTask>.EQ(b => b.Id, ObjectId.Parse(request.TaskId));
-
-                    var f = ctx.PatientTasks.Collection.FindAll();
                     var uv = new List<MB.UpdateBuilder>();
                     uv.Add(MB.Update.Set(MEPatientTask.TTLDateProperty, System.DateTime.UtcNow.AddDays(_expireDays)));
                     uv.Add(MB.Update.Set(MEPatientTask.DeleteFlagProperty, true));
@@ -322,7 +320,29 @@ namespace Phytel.API.DataDomain.PatientGoal
 
         public void UndoDelete(object entity)
         {
-            throw new NotImplementedException();
+            UndoDeleteTaskDataRequest request = (UndoDeleteTaskDataRequest)entity;
+            try
+            {
+                using (PatientGoalMongoContext ctx = new PatientGoalMongoContext(_dbName))
+                {
+                    var q = MB.Query<MEPatientTask>.EQ(b => b.Id, ObjectId.Parse(request.TaskId));
+                    var uv = new List<MB.UpdateBuilder>();
+                    uv.Add(MB.Update.Set(MEPatientTask.TTLDateProperty, BsonNull.Value));
+                    uv.Add(MB.Update.Set(MEPatientTask.DeleteFlagProperty, false));
+                    uv.Add(MB.Update.Set(MEPatientTask.UpdatedByProperty, ObjectId.Parse(this.UserId)));
+                    uv.Add(MB.Update.Set(MEPatientTask.LastUpdatedOnProperty, DateTime.UtcNow));
+
+                    IMongoUpdate update = MB.Update.Combine(uv);
+                    ctx.PatientTasks.Collection.Update(q, update);
+
+                    AuditHelper.LogDataAudit(this.UserId,
+                                            MongoCollectionName.PatientTask.ToString(),
+                                            request.TaskId.ToString(),
+                                            Common.DataAuditType.UndoDelete,
+                                            request.ContractNumber);
+                }
+            }
+            catch (Exception) { throw; }
         }
     }
 }

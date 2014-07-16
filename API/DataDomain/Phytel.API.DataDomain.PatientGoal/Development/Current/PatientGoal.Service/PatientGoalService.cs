@@ -345,5 +345,28 @@ namespace Phytel.API.DataDomain.PatientGoal.Service
             }
             return response;
         }
+
+        public UndoDeletePatientGoalDataResponse Put(UndoDeletePatientGoalDataRequest request)
+        {
+            UndoDeletePatientGoalDataResponse response = new UndoDeletePatientGoalDataResponse();
+            try
+            {
+                if (string.IsNullOrEmpty(request.UserId))
+                    throw new UnauthorizedAccessException("PatientGoalDD:PatientGoalUndoDelete()::Unauthorized Access");
+
+                response = PatientGoalDataManager.UndoDeletePatientGoals(request);
+                response.Version = request.Version;
+            }
+            catch (Exception ex)
+            {
+                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+
+                string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
+                Common.Helper.LogException(int.Parse(aseProcessID), ex);
+            }
+            return response;
+        }
+
+
     }
 }

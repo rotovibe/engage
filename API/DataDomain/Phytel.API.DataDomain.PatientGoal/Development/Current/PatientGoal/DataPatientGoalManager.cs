@@ -550,7 +550,7 @@ namespace Phytel.API.DataDomain.PatientGoal
                         };
                         goalRepo.Delete(deletePatientGoalDataRequest);
                         success = true;
-                        DeletedPatientGoal deletedPatientGoal = new DeletedPatientGoal { PatientGoalId = deletePatientGoalDataRequest.PatientGoalId };
+                        DeletedPatientGoal deletedPatientGoal = new DeletedPatientGoal { Id = deletePatientGoalDataRequest.PatientGoalId };
 
                         #region Delete Barriers
                         DeleteBarrierDataResponse deleteBarrierDataResponse = DeleteBarrier(new DeleteBarrierDataRequest
@@ -613,6 +613,86 @@ namespace Phytel.API.DataDomain.PatientGoal
                     success = true;
                 }
                 response.Success = success;
+                return response;
+            }
+            catch (Exception ex) { throw ex; }
+        }
+
+        public static UndoDeletePatientGoalDataResponse UndoDeletePatientGoals(UndoDeletePatientGoalDataRequest request)
+        {
+            UndoDeletePatientGoalDataResponse response = null;
+            try
+            {
+                response = new UndoDeletePatientGoalDataResponse();
+                IPatientGoalRepository<PatientGoalViewData> goalRepo = PatientGoalRepositoryFactory<PatientGoalViewData>.GetPatientGoalRepository(request.ContractNumber, request.Context, request.UserId);
+                if (request.Ids != null && request.Ids.Count > 0)
+                {
+                    request.Ids.ForEach(u =>
+                    {
+                        request.PatientGoalId = u.Id;
+                        goalRepo.UndoDelete(request);
+
+                        #region Delete Barriers
+                        if (u.PatientBarrierIds != null)
+                        {
+                            IPatientGoalRepository<UndoDeleteBarrierDataRequest> barrierRepo = PatientGoalRepositoryFactory<UndoDeleteBarrierDataRequest>.GetPatientBarrierRepository(request.ContractNumber, request.Context, request.UserId);
+                            u.PatientBarrierIds.ForEach(b =>
+                            {
+                                UndoDeleteBarrierDataRequest barrierRequest = new UndoDeleteBarrierDataRequest
+                                {
+                                    BarrierId = b,
+                                    Context = request.Context,
+                                    ContractNumber = request.ContractNumber,
+                                    UserId = request.UserId,
+                                    Version = request.Version
+                                };
+                                barrierRepo.UndoDelete(barrierRequest);
+                            });
+                        }
+
+                        #endregion
+
+                        #region Delete Tasks
+                        if (u.PatientTaskIds != null)
+                        {
+                            IPatientGoalRepository<UndoDeleteTaskDataRequest> taskRepo = PatientGoalRepositoryFactory<UndoDeleteTaskDataRequest>.GetPatientTaskRepository(request.ContractNumber, request.Context, request.UserId);
+                            u.PatientTaskIds.ForEach(t =>
+                            {
+                                UndoDeleteTaskDataRequest taskRequest = new UndoDeleteTaskDataRequest
+                                {
+                                    TaskId = t,
+                                    Context = request.Context,
+                                    ContractNumber = request.ContractNumber,
+                                    UserId = request.UserId,
+                                    Version = request.Version
+                                };
+                                taskRepo.UndoDelete(taskRequest);
+                            });
+                        }
+                        #endregion
+
+                        #region Delete Interventions
+                        if (u.PatientInterventionIds != null)
+                        {
+                            IPatientGoalRepository<UndoDeleteInterventionDataRequest> interventionRepo = PatientGoalRepositoryFactory<UndoDeleteInterventionDataRequest>.GetPatientInterventionRepository(request.ContractNumber, request.Context, request.UserId);
+                            u.PatientInterventionIds.ForEach(i =>
+                            {
+                                UndoDeleteInterventionDataRequest interventionRequest = new UndoDeleteInterventionDataRequest
+                                {
+                                    InterventionId = i,
+                                    Context = request.Context,
+                                    ContractNumber = request.ContractNumber,
+                                    UserId = request.UserId,
+                                    Version = request.Version
+                                };
+                                interventionRepo.UndoDelete(interventionRequest);
+                            });
+                        }
+                        #endregion
+                    });
+
+                }
+                response.Success = true;
                 return response;
             }
             catch (Exception ex) { throw ex; }

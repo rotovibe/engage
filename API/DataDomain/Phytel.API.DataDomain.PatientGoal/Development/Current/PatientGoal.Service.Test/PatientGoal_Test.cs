@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Phytel.API.DataDomain.PatientGoal.DTO;
 using ServiceStack.Service;
@@ -68,6 +69,46 @@ namespace Phytel.API.DataDomain.PatientGoal.Services.Test
                                         contractNumber,
                                         patientId), userId);
             DeletePatientGoalByPatientIdDataResponse response = client.Delete<DeletePatientGoalByPatientIdDataResponse>(url);
+            Assert.IsNotNull(response);
+        }
+
+        [TestMethod]
+        public void UndoDeletePatientGoal_Test()
+        {
+            double version = 1.0;
+            string contractNumber = "InHealth001";
+            string context = "NG";
+            string userId = "000000000000000000000000";
+            string ddUrl = "http://localhost:8888/PatientGoal";
+            IRestClient client = new JsonServiceClient();
+
+            //[Route("/{Context}/{Version}/{ContractNumber}/PatientGoal/UndoDelete", "PUT")]
+            string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/PatientGoal/UndoDelete",
+                                        ddUrl,
+                                        context,
+                                        version,
+                                        contractNumber), userId);
+            List<DeletedPatientGoal> ids = new List<DeletedPatientGoal>();
+            DeletedPatientGoal item1 = new DeletedPatientGoal();
+            item1.Id = "53c6f7ddd6a48506ecc5b7c1";
+            item1.PatientBarrierIds = new List<string> { "53c6f810d6a48506ecc5b8ff", "53c6f805d6a48506ecc5b8a3" };
+            item1.PatientTaskIds = new List<string> { "53c6f7edd6a48506ecc5b7ff", "53c6f7f7d6a48506ecc5b847" };
+            ids.Add(item1);
+
+            DeletedPatientGoal item2 = new DeletedPatientGoal();
+            item2.Id = "53c45133d6a48506ecc4d856";
+            item2.PatientBarrierIds = new List<string> { "53c4517dd6a48506ecc4da86", "53c45183d6a48506ecc4dae2" };
+            item2.PatientInterventionIds = new List<string> { "53c4518ad6a48506ecc4db52", "53c4518fd6a48506ecc4dbcc" };
+            item2.PatientTaskIds = new List<string> { "53c45162d6a48506ecc4d922", "53c45174d6a48506ecc4da2a" };
+            ids.Add(item2);
+            UndoDeletePatientGoalDataResponse response = client.Put<UndoDeletePatientGoalDataResponse>(url, new UndoDeletePatientGoalDataRequest 
+            { 
+                Ids = ids,
+                Context = context,
+                ContractNumber = contractNumber,
+                UserId = userId,
+                Version = version
+            });
             Assert.IsNotNull(response);
         }
     }

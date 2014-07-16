@@ -300,7 +300,30 @@ namespace Phytel.API.DataDomain.PatientGoal
 
         public void UndoDelete(object entity)
         {
-            throw new NotImplementedException();
+            UndoDeleteBarrierDataRequest request = (UndoDeleteBarrierDataRequest)entity;
+            try
+            {
+                using (PatientGoalMongoContext ctx = new PatientGoalMongoContext(_dbName))
+                {
+                    var q = MB.Query<MEPatientBarrier>.EQ(b => b.Id, ObjectId.Parse(request.BarrierId));
+
+                    var uv = new List<MB.UpdateBuilder>();
+                    uv.Add(MB.Update.Set(MEPatientBarrier.TTLDateProperty, BsonNull.Value));
+                    uv.Add(MB.Update.Set(MEPatientBarrier.DeleteFlagProperty, false));
+                    uv.Add(MB.Update.Set(MEPatientBarrier.UpdatedByProperty, ObjectId.Parse(this.UserId)));
+                    uv.Add(MB.Update.Set(MEPatientBarrier.LastUpdatedOnProperty, DateTime.UtcNow));
+
+                    IMongoUpdate update = MB.Update.Combine(uv);
+                    WriteConcernResult res = ctx.PatientBarriers.Collection.Update(q, update);
+
+                    AuditHelper.LogDataAudit(this.UserId,
+                                            MongoCollectionName.PatientBarrier.ToString(),
+                                            request.BarrierId.ToString(),
+                                            Common.DataAuditType.UndoDelete,
+                                            request.ContractNumber);
+                }
+            }
+            catch (Exception) { throw; }
         }
     }
 }

@@ -70,8 +70,16 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CustomAttributeData.cs" />
+    <Compile Include="UndoDeleteBarrierDataRequest.cs" />
+    <Compile Include="UndoDeleteBarrierDataResponse.cs" />
+    <Compile Include="UndoDeleteInterventionDataRequest.cs" />
+    <Compile Include="UndoDeleteInterventionDataResponse.cs" />
+    <Compile Include="UndoDeletePatientGoalDataRequest.cs" />
     <Compile Include="DeletePatientGoalByPatientIdDataRequest.cs" />
+    <Compile Include="UndoDeletePatientGoalDataResponse.cs" />
     <Compile Include="DeletePatientGoalByPatientIdDataResponse.cs" />
+    <Compile Include="UndoDeleteTaskDataRequest.cs" />
+    <Compile Include="UndoDeleteTaskDataResponse.cs" />
     <Compile Include="GetCustomAttributesDataRequest.cs" />
     <Compile Include="GetAllPatientGoalsDataRequest.cs" />
     <Compile Include="GetCustomAttributesDataResponse.cs" />
