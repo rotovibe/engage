@@ -363,5 +363,26 @@ namespace Phytel.API.DataDomain.PatientObservation
             }
             catch (Exception ex) { throw ex; }
         }
+
+        public static UndoDeletePatientObservationsDataResponse UndoDeletePatientObservations(UndoDeletePatientObservationsDataRequest request)
+        {
+            UndoDeletePatientObservationsDataResponse response = null;
+            try
+            {
+                response = new UndoDeletePatientObservationsDataResponse();
+                IPatientObservationRepository<List<PatientObservationData>> repo = PatientObservationRepositoryFactory<List<PatientObservationData>>.GetPatientObservationRepository(request.ContractNumber, request.Context, request.UserId);
+                if (request.Ids != null)
+                {
+                    request.Ids.ForEach(u =>
+                    {
+                        request.PatientObservationId = u;
+                        repo.UndoDelete(request);
+                    });
+                }
+                response.Success = true;
+                return response;
+            }
+            catch (Exception ex) { throw ex; }
+        }
     }
 }   

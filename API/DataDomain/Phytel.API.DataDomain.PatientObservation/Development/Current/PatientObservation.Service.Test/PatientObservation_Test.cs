@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Phytel.API.DataDomain.PatientObservation.DTO;
 using ServiceStack.Service;
@@ -67,6 +68,39 @@ namespace Phytel.API.DataDomain.PatientObservation.Services.Test
                                         contractNumber,
                                         patientId), userId);
             DeletePatientObservationByPatientIdDataResponse response = client.Delete<DeletePatientObservationByPatientIdDataResponse>(url);
+            Assert.IsNotNull(response);
+        }
+
+        [TestMethod]
+        public void UndoDeletePatientObservations_Test()
+        {
+            double version = 1.0;
+            string contractNumber = "InHealth001";
+            string context = "NG";
+            string userId = "000000000000000000000000";
+            string ddUrl = "http://localhost:8888/PatientObservation";
+            IRestClient client = new JsonServiceClient();
+
+            //[Route("/{Context}/{Version}/{ContractNumber}/PatientObservation/UndoDelete", "PUT")]
+            string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/PatientObservation/UndoDelete",
+                                        ddUrl,
+                                        context,
+                                        version,
+                                        contractNumber), userId);
+            List<string> ids = new List<string>();
+            ids.Add("53c6a795d6a48506ec49f9a6");
+            ids.Add("53c6a7a1d6a48506ec49fa59");
+            ids.Add("53c6a7a1d6a48506ec49fa64");
+            ids.Add("53c6a7add6a48506ec49fa97");
+            ids.Add("53c6a7bad6a48506ec49fb11");
+            UndoDeletePatientObservationsDataResponse response = client.Put<UndoDeletePatientObservationsDataResponse>(url, new UndoDeletePatientObservationsDataRequest 
+            { 
+                Ids = ids,
+                Context = context, 
+                ContractNumber = contractNumber,
+                UserId = userId,
+                Version = version
+            });
             Assert.IsNotNull(response);
         }
     }
