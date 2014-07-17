@@ -283,6 +283,8 @@ namespace Phytel.API.DataDomain.PatientGoal
                 List<PatientTaskData> tasksDataList = null;
                 List<IMongoQuery> queries = new List<IMongoQuery>();
                 queries.Add(Query.EQ(MEPatientTask.PatientGoalIdProperty, ObjectId.Parse(Id)));
+                queries.Add(Query.EQ(MEPatientTask.DeleteFlagProperty, false));
+                queries.Add(Query.EQ(MEPatientTask.TTLDateProperty, BsonNull.Value));
                 IMongoQuery mQuery = Query.And(queries);
 
                 using (PatientGoalMongoContext ctx = new PatientGoalMongoContext(_dbName))
