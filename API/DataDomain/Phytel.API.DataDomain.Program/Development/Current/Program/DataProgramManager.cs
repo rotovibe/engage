@@ -561,7 +561,7 @@ namespace Phytel.API.DataDomain.Program
                         #region PatientProgram
                         request.Id = u.Id.ToString();
                         ppRepo.Delete(request);
-                        DeletedPatientProgram deletedPatientProgram = new DeletedPatientProgram { PatientProgramId = request.Id };
+                        DeletedPatientProgram deletedPatientProgram = new DeletedPatientProgram { Id = request.Id };
                         deletedResponsesIds = new List<string>();
                         success = true;
                         #endregion
@@ -641,6 +641,71 @@ namespace Phytel.API.DataDomain.Program
             }
             catch (Exception ex) { throw ex; }
         } 
+        #endregion
+
+        #region UNDODELETE
+        public UndoDeletePatientProgramDataResponse UndoDeletePatientPrograms(UndoDeletePatientProgramDataRequest request)
+        {
+            UndoDeletePatientProgramDataResponse response = null;
+            try
+            {
+                response = new UndoDeletePatientProgramDataResponse();
+                IProgramRepository ppRepo = Factory.GetRepository(request, RepositoryType.PatientProgram);
+                IProgramRepository ppAttributesRepo = Factory.GetRepository(request, RepositoryType.PatientProgramAttribute);
+                IProgramRepository ppResponsesRepo = Factory.GetRepository(request, RepositoryType.PatientProgramResponse);
+                if (request.Ids != null && request.Ids.Count > 0)
+                {
+                    List<DeletedPatientProgram> PatientProgramIds = request.Ids;
+                    PatientProgramIds.ForEach(u =>
+                    {
+                        #region PatientProgram
+                        if(u.Id != null)
+                        {
+                            request.PatientProgramId = u.Id;
+                            ppRepo.UndoDelete(request);
+                        }
+                        #endregion
+
+                        #region PPAttributes
+                        if (u.PatientProgramAttributeId != null)
+                        {
+                            UndoDeletePatientProgramAttributesDataRequest attrRequest = new UndoDeletePatientProgramAttributesDataRequest
+                            {
+                                Context = request.Context,
+                                ContractNumber = request.ContractNumber,
+                                PatientProgramAttributeId = u.PatientProgramAttributeId,
+                                UserId = request.UserId,
+                                Version = request.Version
+                            };
+                            ppAttributesRepo.UndoDelete(attrRequest);
+                        }
+                        #endregion
+
+                        #region PPResponses
+                        List<string> responseIds = u.PatientProgramResponsesIds;
+                        if (responseIds != null && responseIds.Count > 0)
+                        {
+                            responseIds.ForEach(r =>
+                            {
+                                UndoDeletePatientProgramResponsesDataRequest respRequest = new UndoDeletePatientProgramResponsesDataRequest 
+                                { 
+                                    Context = request.Context,
+                                    ContractNumber = request.ContractNumber,
+                                    PatientProgramResponseId = r,
+                                    UserId = request.UserId,
+                                    Version = request.Version
+                                };
+                                ppResponsesRepo.UndoDelete(respRequest);
+                            });
+                        }
+                        #endregion
+                    });
+                }
+                response.Success = true;
+                return response;
+            }
+            catch (Exception ex) { throw ex; }
+        }
         #endregion
 
         #region private methods

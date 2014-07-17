@@ -390,7 +390,29 @@ namespace Phytel.API.DataDomain.Program
 
         public void UndoDelete(object entity)
         {
-            throw new NotImplementedException();
+            UndoDeletePatientProgramAttributesDataRequest request = (UndoDeletePatientProgramAttributesDataRequest)entity;
+            try
+            {
+                using (ProgramMongoContext ctx = new ProgramMongoContext(_dbName))
+                {
+                    var query = MB.Query<MEProgramAttribute>.EQ(b => b.Id, ObjectId.Parse(request.PatientProgramAttributeId));
+                    var builder = new List<MB.UpdateBuilder>();
+                    builder.Add(MB.Update.Set(MEProgramAttribute.TTLDateProperty, BsonNull.Value));
+                    builder.Add(MB.Update.Set(MEProgramAttribute.DeleteFlagProperty, false));
+                    builder.Add(MB.Update.Set(MEProgramAttribute.LastUpdatedOnProperty, DateTime.UtcNow));
+                    builder.Add(MB.Update.Set(MEProgramAttribute.UpdatedByProperty, ObjectId.Parse(this.UserId)));
+
+                    IMongoUpdate update = MB.Update.Combine(builder);
+                    ctx.ProgramAttributes.Collection.Update(query, update);
+
+                    AuditHelper.LogDataAudit(this.UserId,
+                                            MongoCollectionName.PatientProgramAttribute.ToString(),
+                                            request.PatientProgramAttributeId.ToString(),
+                                            Common.DataAuditType.UndoDelete,
+                                            request.ContractNumber);
+                }
+            }
+            catch (Exception) { throw; }
         }
     }
 }
