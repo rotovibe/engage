@@ -14,7 +14,7 @@ namespace Phytel.API.DataDomain.Program.DTO
 
     public class DeletedPatientProgram
     {
-        public string PatientProgramId { get; set; }
+        public string Id { get; set; }
         public string PatientProgramAttributeId { get; set; }
         public List<string> PatientProgramResponsesIds { get; set; }
     }

@@ -170,5 +170,11 @@ namespace Phytel.API.DataDomain.Program.Test.Stubs
         {
             throw new NotImplementedException();
         }
+
+
+        public UndoDeletePatientProgramDataResponse UndoDeletePatientPrograms(UndoDeletePatientProgramDataRequest request)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

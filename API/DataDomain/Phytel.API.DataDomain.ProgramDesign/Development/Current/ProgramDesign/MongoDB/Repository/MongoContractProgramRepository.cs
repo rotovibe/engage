@@ -154,5 +154,11 @@ namespace Phytel.API.DataDomain.ProgramDesign
         {
             throw new NotImplementedException();
         }
+
+
+        public void UndoDelete(object entity)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

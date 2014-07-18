@@ -71,7 +71,7 @@ namespace Phytel.API.DataDomain.PatientSystem
                 response = new UndoDeletePatientSystemsDataResponse();
 
                 IPatientSystemRepository<PutPatientSystemDataResponse> repo = PatientSystemRepositoryFactory<PutPatientSystemDataResponse>.GetPatientSystemRepository(request.ContractNumber, request.Context, request.UserId);
-                if (request.Ids != null)
+                if (request.Ids != null && request.Ids.Count > 0)
                 {
                     request.Ids.ForEach(u =>
                     {

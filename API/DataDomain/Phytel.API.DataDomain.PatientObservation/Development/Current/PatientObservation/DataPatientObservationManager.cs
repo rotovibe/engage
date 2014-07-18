@@ -371,7 +371,7 @@ namespace Phytel.API.DataDomain.PatientObservation
             {
                 response = new UndoDeletePatientObservationsDataResponse();
                 IPatientObservationRepository<List<PatientObservationData>> repo = PatientObservationRepositoryFactory<List<PatientObservationData>>.GetPatientObservationRepository(request.ContractNumber, request.Context, request.UserId);
-                if (request.Ids != null)
+                if (request.Ids != null && request.Ids.Count > 0)
                 {
                     request.Ids.ForEach(u =>
                     {

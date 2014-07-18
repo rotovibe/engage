@@ -95,9 +95,22 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CareMembersManager.cs" />
+    <Compile Include="Command\CareMemberCommand.cs" />
+    <Compile Include="Command\CohortPatientViewCommand.cs" />
+    <Compile Include="Command\ContactCommand.cs" />
+    <Compile Include="Command\PatientGoalCommand.cs" />
+    <Compile Include="Command\PatientNoteCommand.cs" />
+    <Compile Include="Command\PatientObservationCommand.cs" />
+    <Compile Include="Command\PatientProgramCommand.cs" />
+    <Compile Include="Command\PatientSystemCommand.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="Enums.cs" />
+    <Compile Include="Command\INGCommand.cs" />
     <Compile Include="INGManager.cs" />
+    <Compile Include="UnitOfWork\INGUnitOfWork.cs" />
+    <Compile Include="UnitOfWork\NGUnitOfWork.cs" />
+    <Compile Include="Command\PatientCommand.cs" />
+    <Compile Include="Command\PatientUserCommand.cs" />
     <Compile Include="Programs\IPlanElementEndpointUtils.cs" />
     <Compile Include="Programs\IPlanElementUtils.cs" />
     <Compile Include="ISecurityManager.cs" />

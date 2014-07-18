@@ -120,7 +120,7 @@ namespace Phytel.API.DataDomain.PatientNote
                 response = new UndoDeletePatientNotesDataResponse();
 
                 IPatientNoteRepository<DeleteNoteByPatientIdDataResponse> repo = PatientNoteRepositoryFactory<DeleteNoteByPatientIdDataResponse>.GetPatientNoteRepository(request.ContractNumber, request.Context, request.UserId);
-                if (request.Ids != null)
+                if (request.Ids != null && request.Ids.Count > 0)
                 {
                     request.Ids.ForEach(u =>
                     {

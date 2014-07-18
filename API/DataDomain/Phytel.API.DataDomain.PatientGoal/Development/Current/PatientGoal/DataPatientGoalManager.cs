@@ -633,7 +633,7 @@ namespace Phytel.API.DataDomain.PatientGoal
                         goalRepo.UndoDelete(request);
 
                         #region Delete Barriers
-                        if (u.PatientBarrierIds != null)
+                        if (u.PatientBarrierIds != null && u.PatientBarrierIds.Count > 0)
                         {
                             IPatientGoalRepository<UndoDeleteBarrierDataRequest> barrierRepo = PatientGoalRepositoryFactory<UndoDeleteBarrierDataRequest>.GetPatientBarrierRepository(request.ContractNumber, request.Context, request.UserId);
                             u.PatientBarrierIds.ForEach(b =>
@@ -653,7 +653,7 @@ namespace Phytel.API.DataDomain.PatientGoal
                         #endregion
 
                         #region Delete Tasks
-                        if (u.PatientTaskIds != null)
+                        if (u.PatientTaskIds != null && u.PatientTaskIds.Count > 0)
                         {
                             IPatientGoalRepository<UndoDeleteTaskDataRequest> taskRepo = PatientGoalRepositoryFactory<UndoDeleteTaskDataRequest>.GetPatientTaskRepository(request.ContractNumber, request.Context, request.UserId);
                             u.PatientTaskIds.ForEach(t =>
@@ -672,7 +672,7 @@ namespace Phytel.API.DataDomain.PatientGoal
                         #endregion
 
                         #region Delete Interventions
-                        if (u.PatientInterventionIds != null)
+                        if (u.PatientInterventionIds != null && u.PatientInterventionIds.Count > 0)
                         {
                             IPatientGoalRepository<UndoDeleteInterventionDataRequest> interventionRepo = PatientGoalRepositoryFactory<UndoDeleteInterventionDataRequest>.GetPatientInterventionRepository(request.ContractNumber, request.Context, request.UserId);
                             u.PatientInterventionIds.ForEach(i =>

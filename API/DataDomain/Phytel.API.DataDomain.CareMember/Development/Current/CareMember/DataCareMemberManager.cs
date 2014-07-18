@@ -169,7 +169,7 @@ namespace Phytel.API.DataDomain.CareMember
                 response = new UndoDeleteCareMembersDataResponse();
 
                 ICareMemberRepository repo = Factory.GetRepository(request, RepositoryType.CareMember);
-                if (request.Ids != null)
+                if (request.Ids != null && request.Ids.Count > 0)
                 {
                     request.Ids.ForEach(u =>
                     {
