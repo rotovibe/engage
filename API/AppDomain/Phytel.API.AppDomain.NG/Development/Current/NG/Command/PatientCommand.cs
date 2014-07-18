@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Configuration;
 using Phytel.API.AppDomain.NG.DTO;
 using Phytel.API.DataDomain.Patient.DTO;
@@ -23,36 +24,50 @@ namespace Phytel.API.AppDomain.NG
 
         public void Execute()
         {
-            //[Route("/{Context}/{Version}/{ContractNumber}/Patient/{Id}/Delete", "DELETE")]
-            string patientUrl = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Delete",
-                                                    DDPatientServiceURL,
-                                                    "NG",
-                                                    request.Version,
-                                                    request.ContractNumber,
-                                                    request.Id), request.UserId);
-            DeletePatientDataResponse patientDDResponse = client.Delete<DeletePatientDataResponse>(patientUrl);
-            if (patientDDResponse != null && patientDDResponse.Success)
+            try
+            { 
+                //[Route("/{Context}/{Version}/{ContractNumber}/Patient/{Id}/Delete", "DELETE")]
+                string patientUrl = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Delete",
+                                                        DDPatientServiceURL,
+                                                        "NG",
+                                                        request.Version,
+                                                        request.ContractNumber,
+                                                        request.Id), request.UserId);
+                DeletePatientDataResponse patientDDResponse = client.Delete<DeletePatientDataResponse>(patientUrl);
+                if (patientDDResponse != null && patientDDResponse.Success)
+                {
+                    deletedId = patientDDResponse.DeletedId;
+                }
+            }
+            catch (Exception ex)
             {
-                deletedId = patientDDResponse.DeletedId;
+                throw new Exception("AD: PatientCommand Execute::" + ex.Message, ex.InnerException);
             }
         }
 
         public void Undo()
         {
-            // [Route("/{Context}/{Version}/{ContractNumber}/Patient/UndoDelete", "PUT")]
-            string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Patient/UndoDelete",
-                                     DDPatientServiceURL,
-                                     "NG",
-                                     request.Version,
-                                     request.ContractNumber), request.UserId);
-            UndoDeletePatientDataResponse response = client.Put<UndoDeletePatientDataResponse>(url, new UndoDeletePatientDataRequest
+            try
+            { 
+                // [Route("/{Context}/{Version}/{ContractNumber}/Patient/UndoDelete", "PUT")]
+                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Patient/UndoDelete",
+                                         DDPatientServiceURL,
+                                         "NG",
+                                         request.Version,
+                                         request.ContractNumber), request.UserId);
+                UndoDeletePatientDataResponse response = client.Put<UndoDeletePatientDataResponse>(url, new UndoDeletePatientDataRequest
+                {
+                    Id = deletedId,
+                    Context = "NG",
+                    ContractNumber = request.ContractNumber,
+                    UserId = request.UserId,
+                    Version = request.Version
+                }as object);
+            }
+            catch (Exception ex)
             {
-                Id = deletedId,
-                Context = "NG",
-                ContractNumber = request.ContractNumber,
-                UserId = request.UserId,
-                Version = request.Version
-            }as object);
+                throw new Exception("AD: PatientCommand Undo::" + ex.Message, ex.InnerException);
+            }
         }
     }
 

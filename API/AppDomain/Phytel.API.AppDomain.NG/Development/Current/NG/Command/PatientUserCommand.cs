@@ -27,37 +27,51 @@ namespace Phytel.API.AppDomain.NG
 
         public void Execute()
         {
-            //[Route("/{Context}/{Version}/{ContractNumber}/PatientUser/Patient/{PatientId}/Delete", "DELETE")]
-            string patientUserUrl = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/PatientUser/Patient/{4}/Delete",
-                                                    DDPatientServiceURL,
-                                                    "NG",
-                                                    request.Version,
-                                                    request.ContractNumber,
-                                                    request.Id), request.UserId);
-            DeletePatientUserByPatientIdDataResponse patientUserDDResponse = client.Delete<DeletePatientUserByPatientIdDataResponse>(patientUserUrl);
-            if (patientUserDDResponse != null && patientUserDDResponse.Success)
+            try
             {
-                deletedIds = patientUserDDResponse.DeletedIds;
+                //[Route("/{Context}/{Version}/{ContractNumber}/PatientUser/Patient/{PatientId}/Delete", "DELETE")]
+                string patientUserUrl = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/PatientUser/Patient/{4}/Delete",
+                                                        DDPatientServiceURL,
+                                                        "NG",
+                                                        request.Version,
+                                                        request.ContractNumber,
+                                                        request.Id), request.UserId);
+                DeletePatientUserByPatientIdDataResponse patientUserDDResponse = client.Delete<DeletePatientUserByPatientIdDataResponse>(patientUserUrl);
+                if (patientUserDDResponse != null && patientUserDDResponse.Success)
+                {
+                    deletedIds = patientUserDDResponse.DeletedIds;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("AD: PatientUserCommand Execute::" + ex.Message, ex.InnerException);
             }
         }
 
         public void Undo()
         {
-            //[Route("/{Context}/{Version}/{ContractNumber}/PatientUser/UndoDelete", "PUT")]
-            string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/PatientUser/UndoDelete",
-                            DDPatientServiceURL,
-                            "NG",
-                            request.Version,
-                            request.ContractNumber), request.UserId);
-
-            UndoDeletePatientUsersDataResponse response = client.Put<UndoDeletePatientUsersDataResponse>(url, new UndoDeletePatientUsersDataRequest
+            try
             {
-                Ids = deletedIds,
-                Context = "NG",
-                ContractNumber = request.ContractNumber,
-                UserId = request.UserId,
-                Version = request.Version
-            } as object);
+                //[Route("/{Context}/{Version}/{ContractNumber}/PatientUser/UndoDelete", "PUT")]
+                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/PatientUser/UndoDelete",
+                                DDPatientServiceURL,
+                                "NG",
+                                request.Version,
+                                request.ContractNumber), request.UserId);
+
+                UndoDeletePatientUsersDataResponse response = client.Put<UndoDeletePatientUsersDataResponse>(url, new UndoDeletePatientUsersDataRequest
+                {
+                    Ids = deletedIds,
+                    Context = "NG",
+                    ContractNumber = request.ContractNumber,
+                    UserId = request.UserId,
+                    Version = request.Version
+                } as object);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("AD: PatientUserCommand Undo::" + ex.Message, ex.InnerException);
+            }
         }
     }
 }

@@ -31,9 +31,10 @@ namespace Phytel.API.AppDomain.NG
                 _commands.Add(command);
                 _current++;
             }
-            catch
+            catch (Exception ex)
             {
                 Undo();
+                throw ex;
             }
         }
     }

@@ -25,36 +25,50 @@ namespace Phytel.API.AppDomain.NG
 
         public void Execute()
         {
-            //[Route("/{Context}/{Version}/{ContractNumber}/PatientObservation/Patient/{PatientId}/Delete", "DELETE")]
-            string poUrl = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/PatientObservation/Patient/{4}/Delete",
-                                                    DDPatientObservationsServiceUrl,
-                                                    "NG",
-                                                    request.Version,
-                                                    request.ContractNumber,
-                                                    request.Id), request.UserId);
-            DeletePatientObservationByPatientIdDataResponse poDDResponse = client.Delete<DeletePatientObservationByPatientIdDataResponse>(poUrl);
-            if (poDDResponse != null && poDDResponse.Success)
+            try
             {
-                deletedIds = poDDResponse.DeletedIds;
+                //[Route("/{Context}/{Version}/{ContractNumber}/PatientObservation/Patient/{PatientId}/Delete", "DELETE")]
+                string poUrl = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/PatientObservation/Patient/{4}/Delete",
+                                                        DDPatientObservationsServiceUrl,
+                                                        "NG",
+                                                        request.Version,
+                                                        request.ContractNumber,
+                                                        request.Id), request.UserId);
+                DeletePatientObservationByPatientIdDataResponse poDDResponse = client.Delete<DeletePatientObservationByPatientIdDataResponse>(poUrl);
+                if (poDDResponse != null && poDDResponse.Success)
+                {
+                    deletedIds = poDDResponse.DeletedIds;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("AD: PatientObservationCommand Execute::" + ex.Message, ex.InnerException);
             }
         }
 
         public void Undo()
         {
-            //[Route("/{Context}/{Version}/{ContractNumber}/PatientObservation/UndoDelete", "PUT")]
-            string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/PatientObservation/UndoDelete",
-                                        DDPatientObservationsServiceUrl,
-                                        "NG",
-                                        request.Version,
-                                        request.ContractNumber), request.UserId);
-            UndoDeletePatientObservationsDataResponse response = client.Put<UndoDeletePatientObservationsDataResponse>(url, new UndoDeletePatientObservationsDataRequest
+            try
             {
-                Ids = deletedIds,
-                Context = "NG",
-                ContractNumber = request.ContractNumber,
-                UserId = request.UserId,
-                Version = request.Version
-            } as object);
+                //[Route("/{Context}/{Version}/{ContractNumber}/PatientObservation/UndoDelete", "PUT")]
+                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/PatientObservation/UndoDelete",
+                                            DDPatientObservationsServiceUrl,
+                                            "NG",
+                                            request.Version,
+                                            request.ContractNumber), request.UserId);
+                UndoDeletePatientObservationsDataResponse response = client.Put<UndoDeletePatientObservationsDataResponse>(url, new UndoDeletePatientObservationsDataRequest
+                {
+                    Ids = deletedIds,
+                    Context = "NG",
+                    ContractNumber = request.ContractNumber,
+                    UserId = request.UserId,
+                    Version = request.Version
+                } as object);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("AD: PatientObservationCommand Undo::" + ex.Message, ex.InnerException);
+            }
         }
     }
 }

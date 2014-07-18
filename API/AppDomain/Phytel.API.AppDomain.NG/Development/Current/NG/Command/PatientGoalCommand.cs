@@ -25,36 +25,50 @@ namespace Phytel.API.AppDomain.NG
 
         public void Execute()
         {
-            //[Route("/{Context}/{Version}/{ContractNumber}/PatientGoal/Patient/{PatientId}/Delete", "DELETE")]
-            string pgUrl = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/PatientGoal/Patient/{4}/Delete",
-                                                    DDPatientGoalsServiceUrl,
-                                                    "NG",
-                                                    request.Version,
-                                                    request.ContractNumber,
-                                                    request.Id), request.UserId);
-            DeletePatientGoalByPatientIdDataResponse pgDDResponse = client.Delete<DeletePatientGoalByPatientIdDataResponse>(pgUrl);
-            if (pgDDResponse != null && pgDDResponse.Success)
+            try
             {
-                deletedPatientGoals = pgDDResponse.DeletedPatientGoals;
+                //[Route("/{Context}/{Version}/{ContractNumber}/PatientGoal/Patient/{PatientId}/Delete", "DELETE")]
+                string pgUrl = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/PatientGoal/Patient/{4}/Delete",
+                                                        DDPatientGoalsServiceUrl,
+                                                        "NG",
+                                                        request.Version,
+                                                        request.ContractNumber,
+                                                        request.Id), request.UserId);
+                DeletePatientGoalByPatientIdDataResponse pgDDResponse = client.Delete<DeletePatientGoalByPatientIdDataResponse>(pgUrl);
+                if (pgDDResponse != null && pgDDResponse.Success)
+                {
+                    deletedPatientGoals = pgDDResponse.DeletedPatientGoals;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("AD: PatientGoalCommand Execute::" + ex.Message, ex.InnerException);
             }
         }
 
         public void Undo()
         {
-            //[Route("/{Context}/{Version}/{ContractNumber}/PatientGoal/UndoDelete", "PUT")]
-            string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/PatientGoal/UndoDelete",
-                                        DDPatientGoalsServiceUrl,
-                                        "NG",
-                                        request.Version,
-                                        request.ContractNumber), request.UserId);
-            UndoDeletePatientGoalDataResponse response = client.Put<UndoDeletePatientGoalDataResponse>(url, new UndoDeletePatientGoalDataRequest
+            try
             {
-                Ids = deletedPatientGoals,
-                Context = "NG",
-                ContractNumber = request.ContractNumber,
-                UserId = request.UserId,
-                Version = request.Version
-            }as object);
+                //[Route("/{Context}/{Version}/{ContractNumber}/PatientGoal/UndoDelete", "PUT")]
+                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/PatientGoal/UndoDelete",
+                                            DDPatientGoalsServiceUrl,
+                                            "NG",
+                                            request.Version,
+                                            request.ContractNumber), request.UserId);
+                UndoDeletePatientGoalDataResponse response = client.Put<UndoDeletePatientGoalDataResponse>(url, new UndoDeletePatientGoalDataRequest
+                {
+                    Ids = deletedPatientGoals,
+                    Context = "NG",
+                    ContractNumber = request.ContractNumber,
+                    UserId = request.UserId,
+                    Version = request.Version
+                } as object);
+            }     
+            catch (Exception ex)
+            {
+                throw new Exception("AD: PatientGoalCommand Undo::" + ex.Message, ex.InnerException);
+            }
         }
     }
 }

@@ -26,36 +26,50 @@ namespace Phytel.API.AppDomain.NG
 
         public void Execute()
         {
-            //[Route("/{Context}/{Version}/{ContractNumber}/CareMember/Patient/{PatientId}/Delete", "DELETE")]
-            string cmUrl = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/CareMember/Patient/{4}/Delete",
-                                                    DDCareMemberUrl,
-                                                    "NG",
-                                                    request.Version,
-                                                    request.ContractNumber,
-                                                    request.Id), request.UserId);
-            DeleteCareMemberByPatientIdDataResponse cmDDResponse = client.Delete<DeleteCareMemberByPatientIdDataResponse>(cmUrl);
-            if (cmDDResponse != null && cmDDResponse.Success)
+            try
             {
-                deletedIds = cmDDResponse.DeletedIds;
+                //[Route("/{Context}/{Version}/{ContractNumber}/CareMember/Patient/{PatientId}/Delete", "DELETE")]
+                string cmUrl = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/CareMember/Patient/{4}/Delete",
+                                                        DDCareMemberUrl,
+                                                        "NG",
+                                                        request.Version,
+                                                        request.ContractNumber,
+                                                        request.Id), request.UserId);
+                DeleteCareMemberByPatientIdDataResponse cmDDResponse = client.Delete<DeleteCareMemberByPatientIdDataResponse>(cmUrl);
+                if (cmDDResponse != null && cmDDResponse.Success)
+                {
+                    deletedIds = cmDDResponse.DeletedIds;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("AD: CareMemberCommand Execute::" + ex.Message, ex.InnerException);
             }
         }
 
         public void Undo()
         {
-            //[Route("/{Context}/{Version}/{ContractNumber}/CareMember/UndoDelete", "PUT")]
-            string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/CareMember/UndoDelete",
-                                        DDCareMemberUrl,
-                                        "NG",
-                                        request.Version,
-                                        request.ContractNumber), request.UserId);
-             UndoDeleteCareMembersDataResponse response = client.Put<UndoDeleteCareMembersDataResponse>(url, new UndoDeleteCareMembersDataRequest
+            try
             {
-                Ids = deletedIds,
-                Context = "NG",
-                ContractNumber = request.ContractNumber,
-                UserId = request.UserId,
-                Version = request.Version
-            }as object);
+                //[Route("/{Context}/{Version}/{ContractNumber}/CareMember/UndoDelete", "PUT")]
+                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/CareMember/UndoDelete",
+                                            DDCareMemberUrl,
+                                            "NG",
+                                            request.Version,
+                                            request.ContractNumber), request.UserId);
+                UndoDeleteCareMembersDataResponse response = client.Put<UndoDeleteCareMembersDataResponse>(url, new UndoDeleteCareMembersDataRequest
+               {
+                   Ids = deletedIds,
+                   Context = "NG",
+                   ContractNumber = request.ContractNumber,
+                   UserId = request.UserId,
+                   Version = request.Version
+              } as object);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("AD: CareMemberCommand Undo::" + ex.Message, ex.InnerException);
+            }
         }
     }
 }
