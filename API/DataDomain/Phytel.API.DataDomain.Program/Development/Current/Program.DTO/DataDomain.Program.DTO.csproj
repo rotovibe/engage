@@ -79,7 +79,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
-    <Compile Include="List.cs" />
     <Compile Include="UndoDeletePatientProgramAttributesDataRequest.cs" />
     <Compile Include="UndoDeletePatientProgramAttributesDataResponse.cs" />
     <Compile Include="UndoDeletePatientProgramDataRequest.cs" />
