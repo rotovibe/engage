@@ -317,7 +317,7 @@ namespace Phytel.API.DataDomain.Patient
             {
                 response = new UndoDeletePatientUsersDataResponse();
                 IPatientRepository patientUserRepo = Factory.GetRepository(request, RepositoryType.PatientUser);
-                if (request.Ids != null)
+                if (request.Ids != null && request.Ids.Count > 0)
                 {
                     request.Ids.ForEach(u =>
                     {
