@@ -1459,7 +1459,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
                 {
                     foreach (MEPatientProgram p in pp)
                     {
-                        if (!p.State.Equals(ElementState.Removed) && !p.State.Equals(ElementState.Completed))
+                        if (!p.State.Equals(ElementState.Completed))
                         {
                             result = false;
                             break;

@@ -79,7 +79,6 @@ public enum SpawnElementTypeCode
 
     public enum ElementState
     {
-        Removed = 1,
         NotStarted = 2,
         Started = 3,
         InProgress = 4,

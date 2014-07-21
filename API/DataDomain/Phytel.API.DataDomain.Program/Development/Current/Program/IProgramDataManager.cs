@@ -23,5 +23,6 @@ namespace Phytel.API.DataDomain.Program
         PutUpdateResponseResponse PutUpdateResponse(Phytel.API.DataDomain.Program.DTO.PutUpdateResponseRequest r);
         DeletePatientProgramByPatientIdDataResponse DeletePatientProgramByPatientId(DeletePatientProgramByPatientIdDataRequest request);
         UndoDeletePatientProgramDataResponse UndoDeletePatientPrograms(UndoDeletePatientProgramDataRequest request);
+        DeletePatientProgramDataResponse DeletePatientProgram(DeletePatientProgramDataRequest request);
     }
 }

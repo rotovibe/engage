@@ -52,7 +52,7 @@ namespace Phytel.API.DataDomain.Program.Services.Test
             double version = 1.0;
             string contractNumber = "InHealth001";
             string context = "NG";
-            string patientId = "5325da9ed6a4850adcbba6ce";
+            string patientId = "5325da59d6a4850adcbba5fa";
             string userId = "000000000000000000000000";
             string ddUrl = "http://localhost:8888/Program";
             IRestClient client = new JsonServiceClient();
@@ -98,6 +98,28 @@ namespace Phytel.API.DataDomain.Program.Services.Test
                 UserId = userId,
                 Version = version
             });
+            Assert.IsNotNull(response);
+        }
+
+        [TestMethod]
+        public void DeletePatientProgram_Test()
+        {
+            double version = 1.0;
+            string contractNumber = "InHealth001";
+            string context = "NG";
+            string patientId = "53cd427ad6a4850d5812d65d";
+            string userId = "000000000000000000000000";
+            string ddUrl = "http://localhost:8888/Program";
+            IRestClient client = new JsonServiceClient();
+
+            //[Route("/{Context}/{Version}/{ContractNumber}/Program/{Id}/Delete", "DELETE")]
+            string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Program/{4}/Delete",
+                                        ddUrl,
+                                        context,
+                                        version,
+                                        contractNumber,
+                                        patientId), userId);
+            DeletePatientProgramDataResponse response = client.Delete<DeletePatientProgramDataResponse>(url);
             Assert.IsNotNull(response);
         }
     }
