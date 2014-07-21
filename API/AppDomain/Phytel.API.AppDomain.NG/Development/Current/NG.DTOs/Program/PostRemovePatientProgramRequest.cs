@@ -14,6 +14,9 @@ namespace Phytel.API.AppDomain.NG.DTO
         [ApiMember(Name = "PatientId", Description = "Id of the patient whose program needs to be removed.", ParameterType = "property", DataType = "string", IsRequired = true)]
         public string PatientId { get; set; }
 
+        [ApiMember(Name = "ProgramName", Description = "Name of the program to be removed.", ParameterType = "property", DataType = "string", IsRequired = true)]
+        public string ProgramName { get; set; }
+
         [ApiMember(Name = "Reason", Description = "Reason for removing the program.", ParameterType = "property", DataType = "string", IsRequired = false)]
         public string Reason { get; set; }
 
