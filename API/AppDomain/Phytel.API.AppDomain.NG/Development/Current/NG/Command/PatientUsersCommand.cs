@@ -11,7 +11,7 @@ using ServiceStack.ServiceClient.Web;
 
 namespace Phytel.API.AppDomain.NG
 {
-    public class PatientUserCommand : INGCommand
+    public class PatientUsersCommand : INGCommand
     {
         private PostDeletePatientRequest request;
         private IRestClient client;
@@ -19,7 +19,7 @@ namespace Phytel.API.AppDomain.NG
 
         protected static readonly string DDPatientServiceURL = ConfigurationManager.AppSettings["DDPatientServiceUrl"];
 
-        public PatientUserCommand(PostDeletePatientRequest req, IRestClient restClient)
+        public PatientUsersCommand(PostDeletePatientRequest req, IRestClient restClient)
         {
             request = req;
             client = restClient;

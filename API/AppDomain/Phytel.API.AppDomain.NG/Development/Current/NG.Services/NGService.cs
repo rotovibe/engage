@@ -687,7 +687,7 @@ namespace Phytel.API.AppDomain.NG.Service
                 if (result.UserId.Trim() != string.Empty)
                 {
                     request.UserId = result.UserId;
-                    //response = ngm.DeletePatient(request);
+                    response = ngm.RemovePatientProgram(request);
                 }
                 else
                     throw new UnauthorizedAccessException();

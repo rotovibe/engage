@@ -5,20 +5,19 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Phytel.API.AppDomain.NG.DTO;
-using Phytel.API.DataDomain.PatientSystem.DTO;
+using Phytel.API.DataDomain.PatientObservation.DTO;
 using ServiceStack.Service;
 
 namespace Phytel.API.AppDomain.NG
 {
-    public class PatientSystemCommand : INGCommand
+    public class PatientObservationsCommand : INGCommand
     {
         private PostDeletePatientRequest request;
         private List<string> deletedIds;  
         private IRestClient client;
+        private static readonly string DDPatientObservationsServiceUrl = ConfigurationManager.AppSettings["DDPatientObservationUrl"];
 
-        private static readonly string DDPatientSystemUrl = ConfigurationManager.AppSettings["DDPatientSystemUrl"];
-
-        public PatientSystemCommand(PostDeletePatientRequest req, IRestClient restClient)
+        public PatientObservationsCommand(PostDeletePatientRequest req, IRestClient restClient)
         {
             request = req as PostDeletePatientRequest;
             client = restClient;
@@ -28,22 +27,22 @@ namespace Phytel.API.AppDomain.NG
         {
             try
             {
-                //[Route("/{Context}/{Version}/{ContractNumber}/PatientSystem/Patient/{PatientId}/Delete", "DELETE")]
-                string psUrl = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/PatientSystem/Patient/{4}/Delete",
-                                                        DDPatientSystemUrl,
+                //[Route("/{Context}/{Version}/{ContractNumber}/PatientObservation/Patient/{PatientId}/Delete", "DELETE")]
+                string poUrl = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/PatientObservation/Patient/{4}/Delete",
+                                                        DDPatientObservationsServiceUrl,
                                                         "NG",
                                                         request.Version,
                                                         request.ContractNumber,
                                                         request.Id), request.UserId);
-                DeletePatientSystemByPatientIdDataResponse psDDResponse = client.Delete<DeletePatientSystemByPatientIdDataResponse>(psUrl);
-                if (psDDResponse != null && psDDResponse.Success)
+                DeletePatientObservationByPatientIdDataResponse poDDResponse = client.Delete<DeletePatientObservationByPatientIdDataResponse>(poUrl);
+                if (poDDResponse != null && poDDResponse.Success)
                 {
-                    deletedIds = psDDResponse.DeletedIds;
+                    deletedIds = poDDResponse.DeletedIds;
                 }
             }
             catch (Exception ex)
             {
-                throw new Exception("AD: PatientSystemCommand Execute::" + ex.Message, ex.InnerException);
+                throw new Exception("AD: PatientObservationCommand Execute::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -51,13 +50,13 @@ namespace Phytel.API.AppDomain.NG
         {
             try
             {
-                //[Route("/{Context}/{Version}/{ContractNumber}/PatientSystem/UndoDelete", "Put")]
-                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/PatientSystem/UndoDelete",
-                                            DDPatientSystemUrl,
+                //[Route("/{Context}/{Version}/{ContractNumber}/PatientObservation/UndoDelete", "PUT")]
+                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/PatientObservation/UndoDelete",
+                                            DDPatientObservationsServiceUrl,
                                             "NG",
                                             request.Version,
                                             request.ContractNumber), request.UserId);
-                UndoDeletePatientSystemsDataResponse response = client.Put<UndoDeletePatientSystemsDataResponse>(url, new UndoDeletePatientSystemsDataRequest
+                UndoDeletePatientObservationsDataResponse response = client.Put<UndoDeletePatientObservationsDataResponse>(url, new UndoDeletePatientObservationsDataRequest
                 {
                     Ids = deletedIds,
                     Context = "NG",
@@ -68,7 +67,7 @@ namespace Phytel.API.AppDomain.NG
             }
             catch (Exception ex)
             {
-                throw new Exception("AD: PatientSystemCommand Undo::" + ex.Message, ex.InnerException);
+                throw new Exception("AD: PatientObservationCommand Undo::" + ex.Message, ex.InnerException);
             }
         }
     }

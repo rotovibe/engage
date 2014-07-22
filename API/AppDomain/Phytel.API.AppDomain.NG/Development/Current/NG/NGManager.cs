@@ -484,7 +484,7 @@ namespace Phytel.API.AppDomain.NG
                 INGCommand deletePatientCommand = new PatientCommand(request, client);
                 uow.Execute(deletePatientCommand);
 
-                INGCommand deletePatientUserCommand = new PatientUserCommand(request, client);
+                INGCommand deletePatientUserCommand = new PatientUsersCommand(request, client);
                 uow.Execute(deletePatientUserCommand);
 
                 INGCommand deleteCPVCommand = new CohortPatientViewCommand(request, client);
@@ -493,22 +493,22 @@ namespace Phytel.API.AppDomain.NG
                 INGCommand deleteContactCommand = new ContactCommand(request, client);
                 uow.Execute(deleteContactCommand);
 
-                INGCommand deleteCareMemberCommand = new CareMemberCommand(request, client);
+                INGCommand deleteCareMemberCommand = new CareMembersCommand(request, client);
                 uow.Execute(deleteCareMemberCommand);
 
-                INGCommand deletePatientNoteCommand = new PatientNoteCommand(request, client);
+                INGCommand deletePatientNoteCommand = new PatientNotesCommand(request, client);
                 uow.Execute(deletePatientNoteCommand);
 
-                INGCommand deletePatientSystemCommand = new PatientSystemCommand(request, client);
+                INGCommand deletePatientSystemCommand = new PatientSystemsCommand(request, client);
                 uow.Execute(deletePatientSystemCommand);
 
-                INGCommand deletePatientObservationCommand = new PatientObservationCommand(request, client);
+                INGCommand deletePatientObservationCommand = new PatientObservationsCommand(request, client);
                 uow.Execute(deletePatientObservationCommand);
 
-                INGCommand deletePatientGoalCommand = new PatientGoalCommand(request, client);
+                INGCommand deletePatientGoalCommand = new PatientGoalsCommand(request, client);
                 uow.Execute(deletePatientGoalCommand);
 
-                INGCommand deletePatientProgramCommand = new PatientProgramCommand(request, client);
+                INGCommand deletePatientProgramCommand = new PatientProgramsCommand(request, client);
                 uow.Execute(deletePatientProgramCommand);
 
                 return response;
@@ -936,6 +936,64 @@ namespace Phytel.API.AppDomain.NG
                 throw new WebServiceException("AD:GetPatientActionDetails()::" + wse.Message, wse.InnerException);
             }
         }
+
+
+        public PostRemovePatientProgramResponse RemovePatientProgram(PostRemovePatientProgramRequest request)
+        {
+            try
+            {
+                PostRemovePatientProgramResponse response = new PostRemovePatientProgramResponse();
+                IRestClient client = new JsonServiceClient();
+                INGUnitOfWork uow = new NGUnitOfWork();
+
+                INGCommand deletePatientProgramCommand = new PatientProgramCommand(request, client);
+                uow.Execute(deletePatientProgramCommand);
+
+                #region InsertANote
+                //[Route("/{Context}/{Version}/{ContractNumber}/Patient/{PatientId}/Note/Insert", "PUT")]
+                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/patient/{4}/note/insert",
+                                                                        DDPatientNoteUrl,
+                                                                        "NG",
+                                                                        request.Version,
+                                                                        request.ContractNumber,
+                                                                        request.PatientId), request.UserId);
+
+                string noteText = string.Format("Program titled {0} was removed for the following reason: {1}", request.ProgramName, string.IsNullOrEmpty(request.Reason) ? "unknown" : request.Reason);
+                PatientNoteData noteData = new PatientNoteData
+                {
+                    Text = noteText,
+                    CreatedById = request.UserId,
+                    CreatedOn = DateTime.UtcNow,
+                    PatientId = request.PatientId
+                };
+                PutPatientNoteDataResponse dataDomainResponse =
+                    client.Put<PutPatientNoteDataResponse>(url, new PutPatientNoteDataRequest
+                    {
+                        PatientNote = noteData,
+                        Context = "NG",
+                        ContractNumber = request.ContractNumber,
+                        Version = request.Version,
+                        UserId = request.UserId,
+                        PatientId = request.PatientId
+                    } as object); 
+                #endregion
+
+                #region RemoveProgramReferenceInGoals
+                #endregion  
+
+                #region RemoveProgramReferenceInNotes
+                #endregion
+
+                return response;
+            }
+            catch (WebServiceException wse)
+            {
+                throw new WebServiceException("AD:RemovePatientProgram()::" + wse.Message, wse.InnerException);
+            }
+        }
+
+
+
 
         #endregion
 

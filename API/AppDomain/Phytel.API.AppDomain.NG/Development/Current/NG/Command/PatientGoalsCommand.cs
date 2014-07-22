@@ -10,14 +10,14 @@ using ServiceStack.Service;
 
 namespace Phytel.API.AppDomain.NG
 {
-    public class PatientGoalCommand : INGCommand
+    public class PatientGoalsCommand : INGCommand
     {
         private PostDeletePatientRequest request;
         private List<DeletedPatientGoal> deletedPatientGoals;  
         private IRestClient client;
         private static readonly string DDPatientGoalsServiceUrl = ConfigurationManager.AppSettings["DDPatientGoalUrl"];
 
-        public PatientGoalCommand(PostDeletePatientRequest req, IRestClient restClient)
+        public PatientGoalsCommand(PostDeletePatientRequest req, IRestClient restClient)
         {
             request = req as PostDeletePatientRequest;
             client = restClient;

@@ -10,7 +10,7 @@ using ServiceStack.Service;
 
 namespace Phytel.API.AppDomain.NG
 {
-    public class PatientNoteCommand : INGCommand
+    public class PatientNotesCommand : INGCommand
     {
         private PostDeletePatientRequest request;
         private List<string> deletedIds;  
@@ -18,7 +18,7 @@ namespace Phytel.API.AppDomain.NG
 
         private static readonly string DDPatientNoteUrl = ConfigurationManager.AppSettings["DDPatientNoteUrl"];
 
-        public PatientNoteCommand(PostDeletePatientRequest req, IRestClient restClient)
+        public PatientNotesCommand(PostDeletePatientRequest req, IRestClient restClient)
         {
             request = req as PostDeletePatientRequest;
             client = restClient;

@@ -133,5 +133,33 @@ namespace Phytel.API.DataDomain.PatientNote
             }
             catch (Exception ex) { throw ex; }
         }
+
+        public static RemoveProgramInPatientNotesDataResponse RemoveProgramInPatientNotes(RemoveProgramInPatientNotesDataRequest request)
+        {
+            RemoveProgramInPatientNotesDataResponse response = null;
+            try
+            {
+                response = new RemoveProgramInPatientNotesDataResponse();
+
+                IPatientNoteRepository<DeleteNoteByPatientIdDataResponse> repo = PatientNoteRepositoryFactory<DeleteNoteByPatientIdDataResponse>.GetPatientNoteRepository(request.ContractNumber, request.Context, request.UserId);
+                if (request.ProgramId != null)
+                {
+                    List<PatientNoteData> notes = repo.FindNotesWithAProgramId(request.ProgramId) as List<PatientNoteData>;
+                    if (notes != null && notes.Count > 0)
+                    {
+                        notes.ForEach(u =>
+                        {
+                            request.NoteId = u.Id;
+                            if (u.ProgramIds != null && u.ProgramIds.Remove(request.ProgramId))
+                            {
+                                repo.RemoveProgram(request, u.ProgramIds);
+                            }
+                        });
+                    }
+                }
+                return response;
+            }
+            catch (Exception ex) { throw ex; }
+        }
     }
 }   

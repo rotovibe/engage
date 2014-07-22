@@ -10,16 +10,16 @@ using ServiceStack.Service;
 
 namespace Phytel.API.AppDomain.NG
 {
-    public class PatientProgramCommand : INGCommand
+    public class PatientProgramsCommand : INGCommand
     {
-        private PostRemovePatientProgramRequest request;
+        private PostDeletePatientRequest request;
         private List<DeletedPatientProgram> deletedPatientPrograms; 
         private IRestClient client;
         private static readonly string DDProgramServiceUrl = ConfigurationManager.AppSettings["DDProgramServiceUrl"];
 
-        public PatientProgramCommand(PostRemovePatientProgramRequest req, IRestClient restClient)
+        public PatientProgramsCommand(PostDeletePatientRequest req, IRestClient restClient)
         {
-            request = req as PostRemovePatientProgramRequest;
+            request = req as PostDeletePatientRequest;
             client = restClient;
         }
 
@@ -27,18 +27,17 @@ namespace Phytel.API.AppDomain.NG
         {
             try
             {
-                // [Route("/{Context}/{Version}/{ContractNumber}/Program/{Id}/Delete", "DELETE")]
-                string ppUrl = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Program/{4}/Delete",
+                //  [Route("/{Context}/{Version}/{ContractNumber}/Program/Patient/{PatientId}/Delete", "DELETE")]
+                string ppUrl = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Program/Patient/{4}/Delete",
                                                         DDProgramServiceUrl,
                                                         "NG",
                                                         request.Version,
                                                         request.ContractNumber,
                                                         request.Id), request.UserId);
-                DeletePatientProgramDataResponse ppDDResponse = client.Delete<DeletePatientProgramDataResponse>(ppUrl);
+                DeletePatientProgramByPatientIdDataResponse ppDDResponse = client.Delete<DeletePatientProgramByPatientIdDataResponse>(ppUrl);
                 if (ppDDResponse != null && ppDDResponse.Success)
                 {
-                    DeletedPatientProgram pp = ppDDResponse.DeletedPatientProgram;
-                    List<DeletedPatientProgram> deletedPatientPrograms = new List<DeletedPatientProgram>() { pp };
+                    deletedPatientPrograms = ppDDResponse.DeletedPatientPrograms;
                 }
             }
             catch (Exception ex)
@@ -51,7 +50,7 @@ namespace Phytel.API.AppDomain.NG
         {
             try 
             { 
-                //[Route("/{Context}/{Version}/{ContractNumber}/Program/UndoDelete", "PUT")]
+                //    [Route("/{Context}/{Version}/{ContractNumber}/Program/UndoDelete", "PUT")]
                 string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Program/UndoDelete",
                                             DDProgramServiceUrl,
                                             "NG",

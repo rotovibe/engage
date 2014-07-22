@@ -592,18 +592,18 @@ namespace Phytel.API.DataDomain.Program
                 IProgramRepository ppRepo = Factory.GetRepository(request, RepositoryType.PatientProgram);
 
                 MEPatientProgram mePP = ppRepo.FindByID(request.Id) as MEPatientProgram;
-                List<DeletedPatientProgram> deletedPatientPrograms = null;
+                DeletedPatientProgram deletedPatientProgram = null;
 
                 if (mePP != null)
                 {
-                    DeletedPatientProgram deletedPatientProgram = delete(mePP, request, ppRepo);
-                    deletedPatientPrograms.Add(deletedPatientProgram);
+                    deletedPatientProgram = delete(mePP, request, ppRepo);
                     success = true;
                 }
                 else
                 {
                     success = true;
                 }
+                response.DeletedPatientProgram = deletedPatientProgram;
                 response.Success = success;
                 return response;
             }
@@ -618,8 +618,7 @@ namespace Phytel.API.DataDomain.Program
             {
                 IProgramRepository ppAttributesRepo = Factory.GetRepository(request, RepositoryType.PatientProgramAttribute);
                 IProgramRepository ppResponsesRepo = Factory.GetRepository(request, RepositoryType.PatientProgramResponse);
-                
-                deletedPatientProgram = new DeletedPatientProgram();
+
                 #region PatientProgram
                 request.Id = mePP.Id.ToString();
                 ppRepo.Delete(request);

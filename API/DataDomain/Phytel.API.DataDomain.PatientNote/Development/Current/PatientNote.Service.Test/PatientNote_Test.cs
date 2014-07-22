@@ -83,5 +83,33 @@ namespace Phytel.API.DataDomain.PatientNote.Services.Test
             });
             Assert.IsNotNull(response);
         }
+
+        [TestMethod]
+        public void RemoveProgramInPatientNotes_Test()
+        {
+            double version = 1.0;
+            string contractNumber = "InHealth001";
+            string context = "NG";
+            string userId = "000000000000000000000000";
+            string ddUrl = "http://localhost:8888/PatientNote";
+            string programId = "53cedd21d6a4850d58889ee7";
+            IRestClient client = new JsonServiceClient();
+
+            //[Route("/{Context}/{Version}/{ContractNumber}/Note/RemoveProgram/{ProgramId}/Update", "PUT")]
+            string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Note/RemoveProgram/{4}/Update",
+                                        ddUrl,
+                                        context,
+                                        version,
+                                        contractNumber, programId), userId);
+            RemoveProgramInPatientNotesDataResponse response = client.Put<RemoveProgramInPatientNotesDataResponse>(url, new RemoveProgramInPatientNotesDataRequest
+            {
+                ProgramId = programId,
+                Context = context,
+                ContractNumber = contractNumber,
+                UserId = userId,
+                Version = version
+            });
+            Assert.IsNotNull(response);
+        }
     }
 }
