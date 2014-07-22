@@ -315,164 +315,6 @@ namespace Phytel.API.AppDomain.NG
             }
         }
 
-        //public PostDeletePatientResponse DeletePatient(PostDeletePatientRequest request)
-        //{
-        //    PostDeletePatientResponse response = new PostDeletePatientResponse();
-        //    try
-        //    {
-        //        IRestClient client = new JsonServiceClient();
-
-        //        #region DeletePatient
-        //        //[Route("/{Context}/{Version}/{ContractNumber}/Patient/{Id}/Delete", "DELETE")]
-        //        string patientUrl = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Delete",
-        //                                                DDPatientServiceURL,
-        //                                                "NG",
-        //                                                request.Version,
-        //                                                request.ContractNumber,
-        //                                                request.Id), request.UserId);
-        //        DeletePatientDataResponse patientDDResponse = client.Delete<DeletePatientDataResponse>(patientUrl);
-
-        //        #region DeletePatientUser
-        //        if (patientDDResponse != null && patientDDResponse.Success)
-        //        {
-        //            //[Route("/{Context}/{Version}/{ContractNumber}/PatientUser/Patient/{PatientId}/Delete", "DELETE")]
-        //            string patientUserUrl = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/PatientUser/Patient/{4}/Delete",
-        //                                                    DDPatientServiceURL,
-        //                                                    "NG",
-        //                                                    request.Version,
-        //                                                    request.ContractNumber,
-        //                                                    request.Id), request.UserId);
-        //            DeletePatientUserByPatientIdDataResponse patientUserDDResponse = client.Delete<DeletePatientUserByPatientIdDataResponse>(patientUserUrl);
-
-        //            #region DeleteCohortPatientView
-        //            if (patientUserDDResponse != null && patientUserDDResponse.Success)
-        //            {
-        //                //[Route("/{Context}/{Version}/{ContractNumber}/CohortPatientView/Patient/{PatientId}/Delete", "DELETE")]
-        //                string cpvUrl = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/CohortPatientView/Patient/{4}/Delete",
-        //                                                        DDPatientServiceURL,
-        //                                                        "NG",
-        //                                                        request.Version,
-        //                                                        request.ContractNumber,
-        //                                                        request.Id), request.UserId);
-        //                DeleteCohortPatientViewDataResponse cpvDDResponse = client.Delete<DeleteCohortPatientViewDataResponse>(cpvUrl);
-
-        //                #region DeleteContact
-        //                if (cpvDDResponse != null && cpvDDResponse.Success)
-        //                {
-        //                    //[Route("/{Context}/{Version}/{ContractNumber}/Contact/Patient/{PatientId}/Delete", "DELETE")]
-        //                    string cUrl = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Contact/Patient/{4}/Delete",
-        //                                                            DDContactServiceUrl,
-        //                                                            "NG",
-        //                                                            request.Version,
-        //                                                            request.ContractNumber,
-        //                                                            request.Id), request.UserId);
-        //                    DeleteContactByPatientIdDataResponse cDDResponse = client.Delete<DeleteContactByPatientIdDataResponse>(cUrl);
-
-
-        //                    #region DeleteCareMember
-        //                    if (cDDResponse != null && cDDResponse.Success)
-        //                    {
-        //                        //[Route("/{Context}/{Version}/{ContractNumber}/CareMember/Patient/{PatientId}/Delete", "DELETE")]
-        //                        string cmUrl = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/CareMember/Patient/{4}/Delete",
-        //                                                                DDCareMemberUrl,
-        //                                                                "NG",
-        //                                                                request.Version,
-        //                                                                request.ContractNumber,
-        //                                                                request.Id), request.UserId);
-        //                        DeleteCareMemberByPatientIdDataResponse cmDDResponse = client.Delete<DeleteCareMemberByPatientIdDataResponse>(cmUrl);
-
-        //                        #region DeletePatientNotes
-        //                        if (cmDDResponse != null && cmDDResponse.Success)
-        //                        {
-        //                            //[Route("/{Context}/{Version}/{ContractNumber}/PatientNote/Patient/{PatientId}/Delete", "DELETE")]
-        //                            string pnUrl = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/PatientNote/Patient/{4}/Delete",
-        //                                                                    DDPatientNoteUrl,
-        //                                                                    "NG",
-        //                                                                    request.Version,
-        //                                                                    request.ContractNumber,
-        //                                                                    request.Id), request.UserId);
-        //                            DeleteNoteByPatientIdDataResponse pnDDResponse = client.Delete<DeleteNoteByPatientIdDataResponse>(pnUrl);
-
-
-        //                            #region DeletePatientSystem
-        //                            if (pnDDResponse != null && pnDDResponse.Success)
-        //                            {
-        //                                //[Route("/{Context}/{Version}/{ContractNumber}/PatientSystem/Patient/{PatientId}/Delete", "DELETE")]
-        //                                string psUrl = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/PatientSystem/Patient/{4}/Delete",
-        //                                                                        DDPatientSystemUrl,
-        //                                                                        "NG",
-        //                                                                        request.Version,
-        //                                                                        request.ContractNumber,
-        //                                                                        request.Id), request.UserId);
-        //                                DeletePatientSystemByPatientIdDataResponse psDDResponse = client.Delete<DeletePatientSystemByPatientIdDataResponse>(psUrl);
-
-        //                                #region DeletePatientObservation
-        //                                if (psDDResponse != null && psDDResponse.Success)
-        //                                {
-        //                                    //[Route("/{Context}/{Version}/{ContractNumber}/PatientObservation/Patient/{PatientId}/Delete", "DELETE")]
-        //                                    string poUrl = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/PatientObservation/Patient/{4}/Delete",
-        //                                                                            DDPatientObservationsServiceUrl,
-        //                                                                            "NG",
-        //                                                                            request.Version,
-        //                                                                            request.ContractNumber,
-        //                                                                            request.Id), request.UserId);
-        //                                    DeletePatientObservationByPatientIdDataResponse poDDResponse = client.Delete<DeletePatientObservationByPatientIdDataResponse>(poUrl);
-
-        //                                    #region DeletePatientGoal
-        //                                    if (poDDResponse != null && poDDResponse.Success)
-        //                                    {
-        //                                        //[Route("/{Context}/{Version}/{ContractNumber}/PatientGoal/Patient/{PatientId}/Delete", "DELETE")]
-        //                                        string pgUrl = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/PatientGoal/Patient/{4}/Delete",
-        //                                                                                DDPatientGoalsServiceUrl,
-        //                                                                                "NG",
-        //                                                                                request.Version,
-        //                                                                                request.ContractNumber,
-        //                                                                                request.Id), request.UserId);
-        //                                        DeletePatientGoalByPatientIdDataResponse pgDDResponse = client.Delete<DeletePatientGoalByPatientIdDataResponse>(pgUrl);
-
-        //                                        #region DeletePatientProgram
-        //                                        if (pgDDResponse != null && pgDDResponse.Success)
-        //                                        {
-        //                                            //  [Route("/{Context}/{Version}/{ContractNumber}/Program/Patient/{PatientId}/Delete", "DELETE")]
-        //                                            string ppUrl = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Program/Patient/{4}/Delete",
-        //                                                                                    DDProgramServiceUrl,
-        //                                                                                    "NG",
-        //                                                                                    request.Version,
-        //                                                                                    request.ContractNumber,
-        //                                                                                    request.Id), request.UserId);
-        //                                            DeletePatientProgramByPatientIdDataResponse ppDDResponse = client.Delete<DeletePatientProgramByPatientIdDataResponse>(ppUrl);
-        //                                            if (ppDDResponse != null && ppDDResponse.Success)
-        //                                            {
-        //                                                response.Version = patientDDResponse.Version;
-        //                                                response.DeletedId = patientDDResponse.DeletedId;
-        //                                            }
-        //                                        }
-        //                                        #endregion
-        //                                    }
-        //                                    #endregion
-        //                                }
-        //                                #endregion
-        //                            }
-        //                            #endregion
-        //                        }
-        //                        #endregion
-        //                    }
-        //                    #endregion
-        //                }
-        //                #endregion
-        //            }
-        //            #endregion
-        //        }
-        //        #endregion
-        //        #endregion
-        //        return response;
-        //    }
-        //    catch (WebServiceException ex)
-        //    {
-        //        throw new WebServiceException("AD:DeletePatient()::" + ex.Message, ex.InnerException);
-        //    }
-        //}
-
         public PostDeletePatientResponse DeletePatient(PostDeletePatientRequest request)
         {
             PostDeletePatientResponse response = new PostDeletePatientResponse();
@@ -966,22 +808,52 @@ namespace Phytel.API.AppDomain.NG
                     CreatedOn = DateTime.UtcNow,
                     PatientId = request.PatientId
                 };
-                PutPatientNoteDataResponse dataDomainResponse =
-                    client.Put<PutPatientNoteDataResponse>(url, new PutPatientNoteDataRequest
-                    {
-                        PatientNote = noteData,
-                        Context = "NG",
-                        ContractNumber = request.ContractNumber,
-                        Version = request.Version,
-                        UserId = request.UserId,
-                        PatientId = request.PatientId
-                    } as object); 
+                PutPatientNoteDataResponse noteDDResponse = client.Put<PutPatientNoteDataResponse>(url, new PutPatientNoteDataRequest
+                {
+                    PatientNote = noteData,
+                    Context = "NG",
+                    ContractNumber = request.ContractNumber,
+                    Version = request.Version,
+                    UserId = request.UserId,
+                    PatientId = request.PatientId
+                } as object); 
                 #endregion
 
                 #region RemoveProgramReferenceInGoals
+                // [Route("/{Context}/{Version}/{ContractNumber}/Goal/RemoveProgram/{ProgramId}/Update", "PUT")]
+                string goalUrl = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Goal/RemoveProgram/{4}/Update",
+                                            DDPatientGoalsServiceUrl,
+                                            "NG",
+                                            request.Version,
+                                            request.ContractNumber,
+                                            request.Id), request.UserId);
+
+                RemoveProgramInPatientGoalsDataResponse goalDDResponse = client.Put<RemoveProgramInPatientGoalsDataResponse>(goalUrl, new RemoveProgramInPatientGoalsDataRequest
+                {
+                    ProgramId = request.Id,
+                    Context = "NG",
+                    ContractNumber = request.ContractNumber,
+                    Version = request.Version,
+                    UserId = request.UserId
+                });
                 #endregion  
 
                 #region RemoveProgramReferenceInNotes
+                //[Route("/{Context}/{Version}/{ContractNumber}/Note/RemoveProgram/{ProgramId}/Update", "PUT")]
+                string notesURL = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Note/RemoveProgram/{4}/Update",
+                                            DDPatientNoteUrl,
+                                            "NG",
+                                            request.Version,
+                                            request.ContractNumber,
+                                            request.Id), request.UserId);
+                RemoveProgramInPatientNotesDataResponse notesDDResponse = client.Put<RemoveProgramInPatientNotesDataResponse>(notesURL, new RemoveProgramInPatientNotesDataRequest
+                {
+                    ProgramId = request.Id,
+                    Context = "NG",
+                    ContractNumber = request.ContractNumber,
+                    Version = request.Version,
+                    UserId = request.UserId
+                });
                 #endregion
 
                 return response;
