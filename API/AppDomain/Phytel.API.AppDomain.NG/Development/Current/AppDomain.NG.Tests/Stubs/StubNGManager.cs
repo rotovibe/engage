@@ -246,5 +246,11 @@ namespace Phytel.API.AppDomain.NG.Test.Stubs
                 throw new NotImplementedException();
             }
         }
+
+
+        public PostRemovePatientProgramResponse RemovePatientProgram(PostRemovePatientProgramRequest request)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

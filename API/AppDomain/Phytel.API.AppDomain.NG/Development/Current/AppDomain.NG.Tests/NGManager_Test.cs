@@ -687,6 +687,32 @@ namespace Phytel.API.AppDomain.NG.Tests
                 PostDeletePatientResponse response = ngm.DeletePatient(request);
                 Assert.IsNotNull(response);
             }
+
+            [TestMethod()]
+            [TestProperty("Layer", "AD.NGManager")]
+            public void RemoveProgram_Test()
+            {
+                INGManager ngm = new NGManager
+                {
+                    EndpointUtils = new StubPlanElementEndpointUtils(),
+                    PlanElementUtils = new PlanElementUtils()
+                };
+
+                PostRemovePatientProgramRequest request = new PostRemovePatientProgramRequest
+                {
+                    ContractNumber = "InHealth001",
+                    Id = "53ceea79d6a4850d58649a40",
+                    PatientId = "5325da10d6a4850adcbba51e",
+                    Reason = "Just liked that.",
+                    ProgramName = "BSHSI - Healthy Weight",
+                    UserId = "5325c821072ef705080d3488",
+                    Token = ObjectId.GenerateNewId().ToString(),
+                    Version = 1.0
+                };
+
+                PostRemovePatientProgramResponse response = ngm.RemovePatientProgram(request);
+                Assert.IsNotNull(response);
+            }
         }
     }
 }
