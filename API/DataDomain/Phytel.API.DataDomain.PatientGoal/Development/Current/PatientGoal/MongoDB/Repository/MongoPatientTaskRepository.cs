@@ -346,5 +346,16 @@ namespace Phytel.API.DataDomain.PatientGoal
             }
             catch (Exception) { throw; }
         }
+
+
+        public IEnumerable<object> FindGoalsWithAProgramId(string entityId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void RemoveProgram(object entity, List<string> updatedProgramIds)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

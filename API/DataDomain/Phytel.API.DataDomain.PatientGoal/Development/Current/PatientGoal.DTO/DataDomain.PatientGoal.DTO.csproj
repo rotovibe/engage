@@ -70,6 +70,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CustomAttributeData.cs" />
+    <Compile Include="RemoveProgramInPatientGoalsDataRequest.cs" />
+    <Compile Include="RemoveProgramInPatientGoalsDataResponse.cs" />
     <Compile Include="UndoDeleteBarrierDataRequest.cs" />
     <Compile Include="UndoDeleteBarrierDataResponse.cs" />
     <Compile Include="UndoDeleteInterventionDataRequest.cs" />

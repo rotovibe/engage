@@ -111,5 +111,34 @@ namespace Phytel.API.DataDomain.PatientGoal.Services.Test
             });
             Assert.IsNotNull(response);
         }
+
+        [TestMethod]
+        public void RemoveProgramInPatientGoals_Test()
+        {
+            double version = 1.0;
+            string contractNumber = "InHealth001";
+            string context = "NG";
+            string userId = "000000000000000000000000";
+            string programId = "53cedd21d6a4850d58889ee7";
+            string ddUrl = "http://localhost:8888/PatientGoal";
+            IRestClient client = new JsonServiceClient();
+
+            // [Route("/{Context}/{Version}/{ContractNumber}/Goal/RemoveProgram/{ProgramId}/Update", "PUT")]
+            string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Goal/RemoveProgram/{4}/Update",
+                                        ddUrl,
+                                        context,
+                                        version,
+                                        contractNumber,programId), userId);
+
+            RemoveProgramInPatientGoalsDataResponse response = client.Put<RemoveProgramInPatientGoalsDataResponse>(url, new RemoveProgramInPatientGoalsDataRequest
+            {
+                ProgramId = programId,
+                Context = context,
+                ContractNumber = contractNumber,
+                UserId = userId,
+                Version = version
+            });
+            Assert.IsNotNull(response);
+        }
     }
 }

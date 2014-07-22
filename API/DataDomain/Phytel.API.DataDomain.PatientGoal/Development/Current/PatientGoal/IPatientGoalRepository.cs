@@ -13,5 +13,7 @@ namespace Phytel.API.DataDomain.PatientGoal
         object Initialize(object newEntity);
         IEnumerable<object> Find(string Id);
         IEnumerable<object> FindByGoalId(string Id);
+        IEnumerable<object> FindGoalsWithAProgramId(string entityId);
+        void RemoveProgram(object entity, List<string> updatedProgramIds);
     }
 }

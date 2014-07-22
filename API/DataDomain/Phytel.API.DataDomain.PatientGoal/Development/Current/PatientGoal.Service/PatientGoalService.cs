@@ -367,6 +367,27 @@ namespace Phytel.API.DataDomain.PatientGoal.Service
             return response;
         }
 
+        public RemoveProgramInPatientGoalsDataResponse Put(RemoveProgramInPatientGoalsDataRequest request)
+        {
+            RemoveProgramInPatientGoalsDataResponse response = new RemoveProgramInPatientGoalsDataResponse();
+            try
+            {
+                if (string.IsNullOrEmpty(request.UserId))
+                    throw new UnauthorizedAccessException("PatientNoteDD:RemoveProgramInPatientGoals()::Unauthorized Access");
+
+                response = PatientGoalDataManager.RemoveProgramInPatientGoals(request);
+                response.Version = request.Version;
+            }
+            catch (Exception ex)
+            {
+                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+
+                string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
+                Common.Helper.LogException(int.Parse(aseProcessID), ex);
+            }
+            return response;
+        }
+
 
     }
 }

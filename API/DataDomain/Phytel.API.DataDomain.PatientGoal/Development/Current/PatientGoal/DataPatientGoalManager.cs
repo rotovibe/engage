@@ -697,5 +697,33 @@ namespace Phytel.API.DataDomain.PatientGoal
             }
             catch (Exception ex) { throw ex; }
         }
+
+        public static RemoveProgramInPatientGoalsDataResponse RemoveProgramInPatientGoals(RemoveProgramInPatientGoalsDataRequest request)
+        {
+            RemoveProgramInPatientGoalsDataResponse response = null;
+            try
+            {
+                response = new RemoveProgramInPatientGoalsDataResponse();
+
+                IPatientGoalRepository<PatientGoalViewData> repo = PatientGoalRepositoryFactory<PatientGoalViewData>.GetPatientGoalRepository(request.ContractNumber, request.Context, request.UserId);
+                if (request.ProgramId != null)
+                {
+                    List<PatientGoalData> goals = repo.FindGoalsWithAProgramId(request.ProgramId) as List<PatientGoalData>;
+                    if (goals != null && goals.Count > 0)
+                    {
+                        goals.ForEach(u =>
+                        {
+                            request.PatientGoalId = u.Id;
+                            if (u.ProgramIds != null && u.ProgramIds.Remove(request.ProgramId))
+                            {
+                                repo.RemoveProgram(request, u.ProgramIds);
+                            }
+                        });
+                    }
+                }
+                return response;
+            }
+            catch (Exception ex) { throw ex; }
+        }
     }
 }   
