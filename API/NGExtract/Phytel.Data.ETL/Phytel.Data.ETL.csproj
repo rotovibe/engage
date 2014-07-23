@@ -60,6 +60,7 @@
     <Compile Include="ETLProcessor.cs" />
     <Compile Include="ETLUtil.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SimpleLog.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\DataDomain\Phytel.API.DataDomain.Action\Development\Current\Action.DTO\DataDomain.Action.DTO.csproj">
