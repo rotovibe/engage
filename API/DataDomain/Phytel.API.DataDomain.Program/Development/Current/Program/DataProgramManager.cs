@@ -565,9 +565,12 @@ namespace Phytel.API.DataDomain.Program
                             UserId = request.UserId,
                             Version = request.Version
                         };
-                        DeletedPatientProgram deletedPatientProgram = delete(mePP, req, ppRepo);
-                        deletedPatientPrograms.Add(deletedPatientProgram);
-                        success = true;
+                        DeletedPatientProgram deletedPatientProgram = null;
+                        if(delete(mePP, req, ppRepo, out deletedPatientProgram))
+                        {
+                            deletedPatientPrograms.Add(deletedPatientProgram);
+                            success = true;
+                        }
                     });
                     response.DeletedPatientPrograms = deletedPatientPrograms;
                 }
@@ -596,8 +599,8 @@ namespace Phytel.API.DataDomain.Program
 
                 if (mePP != null)
                 {
-                    deletedPatientProgram = delete(mePP, request, ppRepo);
-                    success = true;
+                    if (delete(mePP, request, ppRepo, out deletedPatientProgram))
+                        success = true;
                 }
                 else
                 {
@@ -607,86 +610,101 @@ namespace Phytel.API.DataDomain.Program
                 response.Success = success;
                 return response;
             }
-            catch (Exception ex) { throw ex; }
+            catch (Exception ex) 
+            { 
+                throw ex; 
+            }
         }
 
-        private DeletedPatientProgram delete(MEPatientProgram mePP, DeletePatientProgramDataRequest request, IProgramRepository ppRepo)
+        private bool delete(MEPatientProgram mePP, DeletePatientProgramDataRequest request, IProgramRepository ppRepo, out DeletedPatientProgram deletedProgram)
         {
             DeletedPatientProgram deletedPatientProgram = null;
             List<string> deletedResponsesIds = null;
-            if (mePP != null)
+            bool success = false;
+            try
             {
-                IProgramRepository ppAttributesRepo = Factory.GetRepository(request, RepositoryType.PatientProgramAttribute);
-                IProgramRepository ppResponsesRepo = Factory.GetRepository(request, RepositoryType.PatientProgramResponse);
-
-                #region PatientProgram
-                request.Id = mePP.Id.ToString();
-                ppRepo.Delete(request);
-                deletedPatientProgram = new DeletedPatientProgram { Id = request.Id };
-                deletedResponsesIds = new List<string>();
-                #endregion
-
-                #region PPAttributes
-                MEProgramAttribute pa = ppAttributesRepo.FindByPlanElementID(request.Id) as MEProgramAttribute;
-                if (pa != null)
+                if (mePP != null)
                 {
-                    DeletePatientProgramAttributesDataRequest deletePPAttrDataRequest = new DeletePatientProgramAttributesDataRequest
-                    {
-                        Context = request.Context,
-                        ContractNumber = request.ContractNumber,
-                        Id = pa.Id.ToString(),
-                        UserId = request.UserId,
-                        Version = request.Version
-                    };
-                    ppAttributesRepo.Delete(deletePPAttrDataRequest);
-                    deletedPatientProgram.PatientProgramAttributeId = deletePPAttrDataRequest.Id;
-                }
-                #endregion
+                    IProgramRepository ppAttributesRepo = Factory.GetRepository(request, RepositoryType.PatientProgramAttribute);
+                    IProgramRepository ppResponsesRepo = Factory.GetRepository(request, RepositoryType.PatientProgramResponse);
 
-                #region PPResponses
-                List<Module> modules = mePP.Modules;
-                if (modules != null && modules.Count > 0)
-                {
-                    modules.ForEach(m =>
+                    #region PatientProgram
+                    request.Id = mePP.Id.ToString();
+                    ppRepo.Delete(request);
+                    deletedPatientProgram = new DeletedPatientProgram { Id = request.Id };
+                    success = true;
+                    deletedResponsesIds = new List<string>();
+                    #endregion
+
+                    #region PPAttributes
+                    MEProgramAttribute pa = ppAttributesRepo.FindByPlanElementID(request.Id) as MEProgramAttribute;
+                    if (pa != null)
                     {
-                        List<MongoDB.DTO.Action> actions = m.Actions;
-                        if (actions != null && actions.Count > 0)
+                        DeletePatientProgramAttributesDataRequest deletePPAttrDataRequest = new DeletePatientProgramAttributesDataRequest
                         {
-                            actions.ForEach(a =>
-                            {
-                                List<Step> steps = a.Steps;
-                                if (steps != null && steps.Count > 0)
-                                {
-                                    steps.ForEach(s =>
-                                    {
-                                        List<MEPatientProgramResponse> meResponses = ppResponsesRepo.FindByStepId(s.Id.ToString()) as List<MEPatientProgramResponse>;
-                                        if (meResponses != null && meResponses.Count > 0)
-                                        {
-                                            meResponses.ForEach(r =>
-                                            {
-                                                DeletePatientProgramResponsesDataRequest deletePPResponsesRequest = new DeletePatientProgramResponsesDataRequest
-                                                {
-                                                    Context = request.Context,
-                                                    ContractNumber = request.ContractNumber,
-                                                    Id = r.Id.ToString(),
-                                                    UserId = request.UserId,
-                                                    Version = request.Version
-                                                };
-                                                ppResponsesRepo.Delete(deletePPResponsesRequest);
-                                                deletedResponsesIds.Add(deletePPResponsesRequest.Id);
-                                            });
-                                        }
-                                    });
+                            Context = request.Context,
+                            ContractNumber = request.ContractNumber,
+                            Id = pa.Id.ToString(),
+                            UserId = request.UserId,
+                            Version = request.Version
+                        };
+                        ppAttributesRepo.Delete(deletePPAttrDataRequest);
+                        deletedPatientProgram.PatientProgramAttributeId = deletePPAttrDataRequest.Id;
+                        success = true;
+                    }
+                    #endregion
 
-                                }
-                            });
-                        }
-                    });
+                    #region PPResponses
+                    List<Module> modules = mePP.Modules;
+                    if (modules != null && modules.Count > 0)
+                    {
+                        modules.ForEach(m =>
+                        {
+                            List<MongoDB.DTO.Action> actions = m.Actions;
+                            if (actions != null && actions.Count > 0)
+                            {
+                                actions.ForEach(a =>
+                                {
+                                    List<Step> steps = a.Steps;
+                                    if (steps != null && steps.Count > 0)
+                                    {
+                                        steps.ForEach(s =>
+                                        {
+                                            List<MEPatientProgramResponse> meResponses = ppResponsesRepo.FindByStepId(s.Id.ToString()) as List<MEPatientProgramResponse>;
+                                            if (meResponses != null && meResponses.Count > 0)
+                                            {
+                                                meResponses.ForEach(r =>
+                                                {
+                                                    DeletePatientProgramResponsesDataRequest deletePPResponsesRequest = new DeletePatientProgramResponsesDataRequest
+                                                    {
+                                                        Context = request.Context,
+                                                        ContractNumber = request.ContractNumber,
+                                                        Id = r.Id.ToString(),
+                                                        UserId = request.UserId,
+                                                        Version = request.Version
+                                                    };
+                                                    ppResponsesRepo.Delete(deletePPResponsesRequest);
+                                                    deletedResponsesIds.Add(deletePPResponsesRequest.Id);
+                                                    success = true;
+                                                    deletedPatientProgram.PatientProgramResponsesIds = deletedResponsesIds;
+                                                });
+                                            }
+                                        });
+
+                                    }
+                                });
+                            }
+                        });
+                    }
+                    #endregion
                 }
-                #endregion
-                deletedPatientProgram.PatientProgramResponsesIds = deletedResponsesIds;
             }
-            return deletedPatientProgram;
+            catch (Exception ex)
+            {
+                success = false;
+            }
+            deletedProgram = deletedPatientProgram;
+            return success;
         }
         #endregion
 

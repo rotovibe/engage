@@ -701,8 +701,8 @@ namespace Phytel.API.AppDomain.NG.Tests
                 PostRemovePatientProgramRequest request = new PostRemovePatientProgramRequest
                 {
                     ContractNumber = "InHealth001",
-                    Id = "53ceea79d6a4850d58649a40",
-                    PatientId = "5325da10d6a4850adcbba51e",
+                    Id = "53d02c4bd6a4850d589cb465",
+                    PatientId = "5325dae6d6a4850adcbba7ae",
                     Reason = "Just liked that.",
                     ProgramName = "BSHSI - Healthy Weight",
                     UserId = "5325c821072ef705080d3488",

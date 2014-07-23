@@ -35,10 +35,17 @@ namespace Phytel.API.AppDomain.NG
                                                         request.ContractNumber,
                                                         request.Id), request.UserId);
                 DeletePatientProgramDataResponse ppDDResponse = client.Delete<DeletePatientProgramDataResponse>(ppUrl);
-                if (ppDDResponse != null && ppDDResponse.Success)
+                if (ppDDResponse != null)
                 {
-                    DeletedPatientProgram pp = ppDDResponse.DeletedPatientProgram;
-                    List<DeletedPatientProgram> deletedPatientPrograms = new List<DeletedPatientProgram>() { pp };
+                    if (ppDDResponse.Success)
+                    {
+                        DeletedPatientProgram pp = ppDDResponse.DeletedPatientProgram;
+                        List<DeletedPatientProgram> deletedPatientPrograms = new List<DeletedPatientProgram>() { pp };
+                    }
+                    else 
+                    {
+                        Undo();  
+                    }
                 }
             }
             catch (Exception ex)

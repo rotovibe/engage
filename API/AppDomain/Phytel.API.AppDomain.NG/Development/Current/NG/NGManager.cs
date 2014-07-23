@@ -786,10 +786,9 @@ namespace Phytel.API.AppDomain.NG
             {
                 PostRemovePatientProgramResponse response = new PostRemovePatientProgramResponse();
                 IRestClient client = new JsonServiceClient();
-                INGUnitOfWork uow = new NGUnitOfWork();
 
                 INGCommand deletePatientProgramCommand = new PatientProgramCommand(request, client);
-                uow.Execute(deletePatientProgramCommand);
+                deletePatientProgramCommand.Execute();
 
                 #region InsertANote
                 //[Route("/{Context}/{Version}/{ContractNumber}/Patient/{PatientId}/Note/Insert", "PUT")]

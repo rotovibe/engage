@@ -139,7 +139,7 @@ namespace Phytel.API.Common
         public static void LogException(int processId, Exception ex)
         {
             string aseAPIURL = ConfigurationManager.AppSettings.Get("ASEAPI");
-            Log.LogError(aseAPIURL, processId, ex, LogErrorCode.Error, LogErrorSeverity.High);
+            //Log.LogError(aseAPIURL, processId, ex, LogErrorCode.Error, LogErrorSeverity.High);
         }
 
     }
