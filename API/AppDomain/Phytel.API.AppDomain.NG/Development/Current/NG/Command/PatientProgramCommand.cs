@@ -37,14 +37,12 @@ namespace Phytel.API.AppDomain.NG
                 DeletePatientProgramDataResponse ppDDResponse = client.Delete<DeletePatientProgramDataResponse>(ppUrl);
                 if (ppDDResponse != null)
                 {
-                    if (ppDDResponse.Success)
+                    DeletedPatientProgram pp = ppDDResponse.DeletedPatientProgram;
+                    deletedPatientPrograms = new List<DeletedPatientProgram>() { pp };
+                    if (!ppDDResponse.Success)
                     {
-                        DeletedPatientProgram pp = ppDDResponse.DeletedPatientProgram;
-                        List<DeletedPatientProgram> deletedPatientPrograms = new List<DeletedPatientProgram>() { pp };
-                    }
-                    else 
-                    {
-                        Undo();  
+                        Undo();
+                        throw new Exception("Error occurred during AppDomain: PatientProgramCommand Execute method");
                     }
                 }
             }
