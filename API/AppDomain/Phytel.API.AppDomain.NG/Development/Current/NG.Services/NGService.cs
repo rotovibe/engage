@@ -172,10 +172,10 @@ namespace Phytel.API.AppDomain.NG.Service
             finally
             {
                 List<string> patientIds = null;
-                if (response.DeletedId != null)
+                if (request.Id != null)
                 {
                     patientIds = new List<string>();
-                    patientIds.Add(response.DeletedId);
+                    patientIds.Add(request.Id);
                 }
                 
                 if (result != null)
