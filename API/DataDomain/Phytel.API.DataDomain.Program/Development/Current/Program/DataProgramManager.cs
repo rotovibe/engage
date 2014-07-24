@@ -702,6 +702,8 @@ namespace Phytel.API.DataDomain.Program
             catch (Exception ex)
             {
                 success = false;
+                string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
+                Common.Helper.LogException(int.Parse(aseProcessID), ex);
             }
             deletedProgram = deletedPatientProgram;
             return success;

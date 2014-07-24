@@ -147,7 +147,7 @@ namespace Phytel.API.AppDomain.NG.Service
 
         public PostDeletePatientResponse Post(PostDeletePatientRequest request)
         {
-            PostDeletePatientResponse response = null;
+            PostDeletePatientResponse response = new PostDeletePatientResponse();
             NGManager ngm = new NGManager();
             ValidateTokenResponse result = null;
 
@@ -676,7 +676,7 @@ namespace Phytel.API.AppDomain.NG.Service
 
         public PostRemovePatientProgramResponse Post(PostRemovePatientProgramRequest request)
         {
-            PostRemovePatientProgramResponse response = null;
+            PostRemovePatientProgramResponse response = new PostRemovePatientProgramResponse();
             NGManager ngm = new NGManager();
             ValidateTokenResponse result = null;
 
@@ -690,7 +690,7 @@ namespace Phytel.API.AppDomain.NG.Service
                     response = ngm.RemovePatientProgram(request);
                 }
                 else
-                    throw new UnauthorizedAccessException();
+                   throw new UnauthorizedAccessException();
             }
             catch (Exception ex)
             {
