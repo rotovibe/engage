@@ -37,7 +37,7 @@ namespace Phytel.API.AppDomain.NG.Test.Stubs
                     {
                         if (a.Id.Equals(p))
                         {
-                            SetInitialProperties(program.AssignToId, a);
+                            SetInitialProperties(program.AssignToId, a, false);
                             OnProcessIdEvent(a);
                         }
                         else
@@ -63,7 +63,7 @@ namespace Phytel.API.AppDomain.NG.Test.Stubs
                     {
                         if (s.Id.Equals(p))
                         {
-                            SetInitialProperties(program.AssignToId, s);
+                            SetInitialProperties(program.AssignToId, s, false);
                             OnProcessIdEvent(s);
                         }
                     }
@@ -326,7 +326,29 @@ namespace Phytel.API.AppDomain.NG.Test.Stubs
 
         public bool IsActionInitial(DTO.Program p)
         {
-            return true;
+            try
+            {
+                bool result = true;
+                if (p.Modules != null)
+                {
+                    foreach (Module m in p.Modules)
+                    {
+                        foreach (Actions a in m.Actions)
+                        {
+                            if (a.ElementState == (int)ElementState.InProgress ||
+                                a.ElementState == (int)ElementState.Completed)
+                            {
+                                result = false;
+                            }
+                        }
+                    }
+                }
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("AD:PlanElementUtil:IsActionInitial()::" + ex.Message, ex.InnerException);
+            }
         }
 
         public bool IsProgramCompleted(DTO.Program p, string userId)
@@ -370,12 +392,12 @@ namespace Phytel.API.AppDomain.NG.Test.Stubs
                 {
                     if (m.Id.Equals(p))
                     {
-                        SetInitialProperties(program.AssignToId, m);
+                        SetInitialProperties(program.AssignToId, m, false);
                         var list = m.Actions.Where(a => a.Enabled == true
                                                         && a.ElementState != (int)ElementState.Completed
                                                         && a.ElementState != (int)ElementState.InProgress); // create rule specification
 
-                        list.ForEach(a => { if (a.Enabled) SetInitialProperties(program.AssignToId, a); });
+                        list.ForEach(a => { if (a.Enabled) SetInitialProperties(program.AssignToId, a, false); });
                         OnProcessIdEvent(m);
                     }
                     else
@@ -400,7 +422,7 @@ namespace Phytel.API.AppDomain.NG.Test.Stubs
             throw new NotImplementedException();
         }
 
-        public void SetInitialProperties(string assignToId, DTO.IPlanElement m)
+        public void SetInitialProperties(string assignToId, IPlanElement m, bool dependent)
         {
             try
             {
@@ -471,11 +493,69 @@ namespace Phytel.API.AppDomain.NG.Test.Stubs
 
         public void SetEnabledState<T>(List<T> list, T x, string assignToId, bool pEnabled)
         {
-            throw new NotImplementedException();
+            try
+            {
+                if (list == null || x == null) return;
+
+                var pe = ((IPlanElement)Convert.ChangeType(x, typeof(T)));
+                if (string.IsNullOrEmpty(pe.Previous)) return;
+
+                var prevElem = list.Find(r => ((IPlanElement)r).Id == pe.Previous);
+                if (prevElem == null) return;
+
+                if (((IPlanElement)prevElem).Completed != true)
+                {
+                    ((IPlanElement)x).Enabled = false;
+                }
+                else
+                {
+                    if (!((IPlanElement)x).Enabled)
+                    {
+                        ((IPlanElement)x).StateUpdatedOn = DateTime.UtcNow;
+                        ((IPlanElement)x).Enabled = true;
+                        if (((IPlanElement)x).AssignToId == null)
+                            ((IPlanElement)x).AssignToId = assignToId;
+                    }
+
+                    // add this to a parent enabled specification
+                    if (((IPlanElement)x).AssignDate == null)
+                        ((IPlanElement)x).AssignDate = DateTime.UtcNow;
+
+                    if (string.IsNullOrEmpty(((IPlanElement)x).AssignById))
+                        ((IPlanElement)x).AssignById = DataDomain.Program.DTO.Constants.SystemContactId;
+
+                    // only track elements who are enabled for now.
+                    OnProcessIdEvent(Convert.ChangeType(x, typeof(T)));
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("AD:PlanElementUtil:SetEnabledState()::" + ex.Message, ex.InnerException);
+            }
         }
 
         public void SetEnabledStatusByPrevious<T>(List<T> planElements, string assignToId, bool pEnabled)
         {
+            try
+            {
+                if (planElements != null)
+                    planElements.ForEach(x =>
+                    {
+                        //var pe = ((IPlanElement) Convert.ChangeType(x, typeof (T)));
+                        //var atVal = !string.IsNullOrEmpty(pe.AssignToId) ? pe.AssignToId : assignToId;
+
+                        SetEnabledState(planElements, x, assignToId, pEnabled);
+
+                        if (x.GetType() == typeof(Module))
+                        {
+                            SetInitialActions(x, null);
+                        }
+                    });
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("AD:PlanElementUtil:SetEnabledStatusByPrevious()::" + ex.Message, ex.InnerException);
+            }
         }
 
 

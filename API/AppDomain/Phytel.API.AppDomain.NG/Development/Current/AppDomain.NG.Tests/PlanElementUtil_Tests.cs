@@ -102,7 +102,7 @@ namespace Phytel.API.AppDomain.NG.Tests
                 AD.Module mod = new AD.Module();
                 AD.Program prog = new AD.Program();
 
-                peUtil.SetInitialProperties("123456789012345678901234", mod);
+                peUtil.SetInitialProperties("123456789012345678901234", mod, false);
 
                 Assert.AreEqual(SystemId, mod.AssignById);
             }
@@ -118,7 +118,7 @@ namespace Phytel.API.AppDomain.NG.Tests
                 AD.Module mod = new AD.Module();
                 AD.Program prog = new AD.Program();
 
-                peUtil.SetInitialProperties("123456789012345678901234", mod);
+                peUtil.SetInitialProperties("123456789012345678901234", mod, false);
 
                 Assert.AreEqual(DateTime.UtcNow.Date, ((DateTime) mod.AssignDate).Date);
             }
@@ -134,7 +134,7 @@ namespace Phytel.API.AppDomain.NG.Tests
                 AD.Module mod = new AD.Module();
                 AD.Program prog = new AD.Program {AssignToId = assignedTO.ToString()};
 
-                peUtil.SetInitialProperties(assignedTO.ToString(), mod);
+                peUtil.SetInitialProperties(assignedTO.ToString(), mod, false);
 
                 Assert.AreEqual(assignedTO.ToString(), mod.AssignToId);
             }
@@ -150,7 +150,7 @@ namespace Phytel.API.AppDomain.NG.Tests
                 AD.Module mod = new AD.Module();
                 AD.Program prog = new AD.Program {AssignToId = assignedTO};
 
-                peUtil.SetInitialProperties(assignedTO, mod);
+                peUtil.SetInitialProperties(assignedTO, mod, false);
 
                 Assert.AreEqual(assignedTO, mod.AssignToId);
             }
@@ -167,7 +167,7 @@ namespace Phytel.API.AppDomain.NG.Tests
                 AD.Module mod = new AD.Module();
                 AD.Program prog = new AD.Program { AssignToId = assignedTO };
 
-                peUtil.SetInitialProperties(assignedTO, mod);
+                peUtil.SetInitialProperties(assignedTO, mod, false);
 
                 Assert.AreEqual(DateTime.UtcNow.Date, ((DateTime)mod.AssignDate).Date);
             }
@@ -184,7 +184,7 @@ namespace Phytel.API.AppDomain.NG.Tests
                 AD.Actions act = new AD.Actions{ AssignDate = assigned };
                 AD.Program prog = new AD.Program { AssignToId = assignedDate };
 
-                peUtil.SetInitialProperties(assignedDate, act);
+                peUtil.SetInitialProperties(assignedDate, act, false);
 
                 Assert.AreEqual(assigned.Date, ((DateTime)act.AssignDate).Date);
             }
@@ -201,7 +201,7 @@ namespace Phytel.API.AppDomain.NG.Tests
                 AD.Actions act = new AD.Actions { AssignDate = assigned };
                 AD.Program prog = new AD.Program { AssignToId = assignedTO };
 
-                peUtil.SetInitialProperties(assignedTO, act);
+                peUtil.SetInitialProperties(assignedTO, act, false);
 
                 Assert.AreEqual(assignedTO, act.AssignToId);
             }
@@ -218,7 +218,7 @@ namespace Phytel.API.AppDomain.NG.Tests
                 AD.Actions act = new AD.Actions { AssignDate = assigned };
                 AD.Program prog = new AD.Program { AssignToId = assignedTO };
 
-                peUtil.SetInitialProperties(assignedTO, act);
+                peUtil.SetInitialProperties(assignedTO, act, false);
 
                 Assert.IsNull(act.AssignToId);
             }

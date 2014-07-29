@@ -257,9 +257,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Phytel.Data.ETL", "NGExtrac
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.PatientGoal.Service.Test", "DataDomain\Phytel.API.DataDomain.PatientGoal\Development\Current\PatientGoal.Service.Test\DataDomain.PatientGoal.Service.Test.csproj", "{C6B46E4D-93A9-4D31-85D0-CE7080919734}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExtractConsole", "NGExtract\ExtractConsole\ExtractConsole.csproj", "{C5604B8A-86D4-4CF9-90E0-48C2E12CB327}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 92
+		SccNumberOfProjects = 93
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = http://hillstfs2013:8080/tfs/phytel
 		SccLocalPath0 = .
@@ -627,6 +629,10 @@ Global
 		SccProjectTopLevelParentUniqueName91 = API.sln
 		SccProjectName91 = DataDomain/Phytel.API.DataDomain.PatientGoal/Development/Current/PatientGoal.Service.Test
 		SccLocalPath91 = DataDomain\\Phytel.API.DataDomain.PatientGoal\\Development\\Current\\PatientGoal.Service.Test
+		SccProjectUniqueName92 = NGExtract\\ExtractConsole\\ExtractConsole.csproj
+		SccProjectTopLevelParentUniqueName92 = API.sln
+		SccProjectName92 = NGExtract/ExtractConsole
+		SccLocalPath92 = NGExtract\\ExtractConsole
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -995,6 +1001,10 @@ Global
 		{C6B46E4D-93A9-4D31-85D0-CE7080919734}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C6B46E4D-93A9-4D31-85D0-CE7080919734}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C6B46E4D-93A9-4D31-85D0-CE7080919734}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C5604B8A-86D4-4CF9-90E0-48C2E12CB327}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C5604B8A-86D4-4CF9-90E0-48C2E12CB327}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C5604B8A-86D4-4CF9-90E0-48C2E12CB327}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C5604B8A-86D4-4CF9-90E0-48C2E12CB327}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -1109,5 +1119,6 @@ Global
 		{F27D6936-A185-42CF-9488-7036883AD029} = {566B7B11-C45E-4017-9D10-04A68A683B5C}
 		{40510778-2F44-4C71-8D04-8C3BC06C4032} = {F59D966C-C273-4097-8F91-066E284C39EB}
 		{6F7E797F-C4C5-4F6E-A7CE-230E05D375F8} = {F59D966C-C273-4097-8F91-066E284C39EB}
+		{C5604B8A-86D4-4CF9-90E0-48C2E12CB327} = {F59D966C-C273-4097-8F91-066E284C39EB}
 	EndGlobalSection
 EndGlobal

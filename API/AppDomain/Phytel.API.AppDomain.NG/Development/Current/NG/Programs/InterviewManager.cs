@@ -55,9 +55,9 @@ namespace Phytel.API.AppDomain.NG
                     Module mod = PEUtils.FindElementById(p.Modules, action.ModuleId);
 
                     // set module to in progress
-                    if (mod.ElementState != (int) ElementState.InProgress) //!= 4
+                    if (mod.ElementState == (int)ElementState.NotStarted) //!= 4
                     {
-                        mod.ElementState = (int) ElementState.InProgress; //4;
+                        mod.ElementState = (int)ElementState.InProgress; //4;
                         mod.StateUpdatedOn = DateTime.UtcNow;
                     }
 
@@ -67,8 +67,11 @@ namespace Phytel.API.AppDomain.NG
                         //if (new IsActionInitialSpecification<Program>().IsSatisfiedBy(p))
                     {
                         // set program to in progress
-                        p.ElementState = (int) ElementState.InProgress; //4
-                        p.StateUpdatedOn = DateTime.UtcNow;
+                        if (p.ElementState == (int)ElementState.NotStarted)
+                        {
+                            p.ElementState = (int)ElementState.InProgress; //4;
+                            p.StateUpdatedOn = DateTime.UtcNow;
+                        }
                     }
 
                         // 3) set action state to completed
@@ -166,10 +169,21 @@ namespace Phytel.API.AppDomain.NG
                 //if (new IsActionInitialSpecification<Program>().IsSatisfiedBy(p))
                 {
                     // set program to in progress
-                    p.ElementState = (int) ElementState.InProgress; //4;
-                    p.StateUpdatedOn = System.DateTime.UtcNow;
+                    if (p.ElementState == (int)ElementState.NotStarted)
+                    {
+                        p.ElementState = (int)ElementState.InProgress; //4;
+                        p.StateUpdatedOn = System.DateTime.UtcNow;
+                    }
                 }
-                
+
+                // presenter is sending a save request with an action element state of 4 already. 
+                // presenter will also set the stateupdatedon property.
+                //if (action.ElementState == (int)ElementState.NotStarted)
+                //{
+                //    action.ElementState = (int) ElementState.InProgress;
+                //    action.StateUpdatedOn = DateTime.UtcNow;
+                //}
+
                 NGUtils.UpdateProgramAction(action, p);
 
                 AddUniquePlanElementToProcessedList(mod);
