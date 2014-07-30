@@ -1111,5 +1111,30 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO.Tests
                 Assert.AreEqual(cmId, result);
             }
         }
+
+        
+        [TestClass()]
+        public class GetActionElements
+        {
+            [TestMethod()]
+            [TestCategory("NIGHT-952")]
+            [TestProperty("TFS", "15646")]
+            [TestProperty("Layer", "DD.DTOUtility")]
+            public void Get_Action_With_StateUpdateDate()
+            {
+                DateTime date = System.DateTime.Now;
+
+                List<ActionsDetail> actDetails = new List<ActionsDetail>{ new ActionsDetail{ 
+                     Id = ObjectId.GenerateNewId().ToString(),
+                     ModuleId = ObjectId.GenerateNewId().ToString(),
+                     SourceId = ObjectId.GenerateNewId().ToString(),
+                      ElementState = (int)ElementState.Completed,
+                    StateUpdatedOn = date
+                }};
+
+                List<Action> actions = DTOUtils.GetActionElements(actDetails, "nguser");
+                Assert.AreEqual(date, actions[0].StateUpdatedOn);
+            }
+        }
     }
 }

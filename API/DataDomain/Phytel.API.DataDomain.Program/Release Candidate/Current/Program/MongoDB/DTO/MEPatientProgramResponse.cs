@@ -7,6 +7,7 @@ using System.Collections.Generic;
 namespace Phytel.API.DataDomain.Program.MongoDB.DTO
 {
     [MongoIndex(Keys = new string[] { ResponseBase.StepIdProperty }, Unique = false)]
+    [MongoIndex(Keys = new string[] { TTLDateProperty }, TimeToLive = 0)]
     public class MEPatientProgramResponse : ResponseBase, IMongoEntity<ObjectId>
     {
         public MEPatientProgramResponse(string userId)

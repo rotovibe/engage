@@ -14,12 +14,15 @@ using Phytel.API.Common;
 using Phytel.API.Common.Data;
 using Phytel.API.DataAudit;
 using MongoDB.Bson.Serialization;
+using System.Configuration;
+using MongoDB.Driver.Builders;
 
 namespace Phytel.API.DataDomain.Program
 {
     public class MongoPatientProgramAttributeRepository : IProgramRepository
     {
         private string _dbName = string.Empty;
+        private int _expireDays = Convert.ToInt32(ConfigurationManager.AppSettings["ExpireDays"]);
 
         static MongoPatientProgramAttributeRepository()
         {
@@ -126,7 +129,48 @@ namespace Phytel.API.DataDomain.Program
 
         public void Delete(object entity)
         {
-            throw new NotImplementedException();
+            DeletePatientProgramAttributesDataRequest request = (DeletePatientProgramAttributesDataRequest)entity;
+            try
+            {
+                using (ProgramMongoContext ctx = new ProgramMongoContext(_dbName))
+                {
+                    var query = MB.Query<MEProgramAttribute>.EQ(b => b.Id, ObjectId.Parse(request.Id));
+                    var builder = new List<MB.UpdateBuilder>();
+                    builder.Add(MB.Update.Set(MEProgramAttribute.TTLDateProperty, DateTime.UtcNow.AddDays(_expireDays)));
+                    builder.Add(MB.Update.Set(MEProgramAttribute.DeleteFlagProperty, true));
+                    builder.Add(MB.Update.Set(MEProgramAttribute.LastUpdatedOnProperty, DateTime.UtcNow));
+                    builder.Add(MB.Update.Set(MEProgramAttribute.UpdatedByProperty, ObjectId.Parse(this.UserId)));
+
+                    IMongoUpdate update = MB.Update.Combine(builder);
+                    ctx.ProgramAttributes.Collection.Update(query, update);
+
+                    AuditHelper.LogDataAudit(this.UserId,
+                                            MongoCollectionName.PatientProgramAttribute.ToString(),
+                                            request.Id.ToString(),
+                                            Common.DataAuditType.Delete,
+                                            request.ContractNumber);
+                }
+            }
+            catch (Exception) { throw; }
+        }
+
+        public object FindByPlanElementID(string entityID)
+        {
+            try
+            {
+                MEProgramAttribute cp = null;
+                using (ProgramMongoContext ctx = new ProgramMongoContext(_dbName))
+                {
+
+                    List<IMongoQuery> queries = new List<IMongoQuery>();
+                    queries.Add(Query.EQ(MEProgramAttribute.PlanElementIdProperty, ObjectId.Parse(entityID)));
+                    queries.Add(Query.EQ(MEProgramAttribute.DeleteFlagProperty, false));
+                    IMongoQuery mQuery = Query.And(queries);
+                    cp = ctx.ProgramAttributes.Collection.Find(mQuery).FirstOrDefault();
+                }
+                return cp;
+            }
+            catch (Exception) { throw; }
         }
 
         public void DeleteAll(List<object> entities)
@@ -150,25 +194,6 @@ namespace Phytel.API.DataDomain.Program
             catch (Exception ex)
             {
                 throw new Exception("DD:PatientProgramAttributeRepository:FindById()::" + ex.Message, ex.InnerException);
-            }
-        }
-
-        public object FindByPlanElementID(string entityID)
-        {
-            try
-            {
-                MEProgramAttribute cp = null;
-
-                using (ProgramMongoContext ctx = new ProgramMongoContext(_dbName))
-                {
-                    var findcp = MB.Query<MEProgramAttribute>.EQ(b => b.PlanElementId, ObjectId.Parse(entityID));
-                    cp = ctx.ProgramAttributes.Collection.Find(findcp).FirstOrDefault();
-                }
-                return cp;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("DD:PatientProgramAttributeRepository:FindByPlanElementID()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -355,6 +380,39 @@ namespace Phytel.API.DataDomain.Program
         public IEnumerable<object> FindByStepId(string entityID)
         {
             throw new NotImplementedException();
+        }
+
+        public IEnumerable<object> FindByPatientId(string patientId)
+        {
+            throw new NotImplementedException();
+        }
+
+
+        public void UndoDelete(object entity)
+        {
+            UndoDeletePatientProgramAttributesDataRequest request = (UndoDeletePatientProgramAttributesDataRequest)entity;
+            try
+            {
+                using (ProgramMongoContext ctx = new ProgramMongoContext(_dbName))
+                {
+                    var query = MB.Query<MEProgramAttribute>.EQ(b => b.Id, ObjectId.Parse(request.PatientProgramAttributeId));
+                    var builder = new List<MB.UpdateBuilder>();
+                    builder.Add(MB.Update.Set(MEProgramAttribute.TTLDateProperty, BsonNull.Value));
+                    builder.Add(MB.Update.Set(MEProgramAttribute.DeleteFlagProperty, false));
+                    builder.Add(MB.Update.Set(MEProgramAttribute.LastUpdatedOnProperty, DateTime.UtcNow));
+                    builder.Add(MB.Update.Set(MEProgramAttribute.UpdatedByProperty, ObjectId.Parse(this.UserId)));
+
+                    IMongoUpdate update = MB.Update.Combine(builder);
+                    ctx.ProgramAttributes.Collection.Update(query, update);
+
+                    AuditHelper.LogDataAudit(this.UserId,
+                                            MongoCollectionName.PatientProgramAttribute.ToString(),
+                                            request.PatientProgramAttributeId.ToString(),
+                                            Common.DataAuditType.UndoDelete,
+                                            request.ContractNumber);
+                }
+            }
+            catch (Exception) { throw; }
         }
     }
 }

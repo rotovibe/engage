@@ -1,6 +1,7 @@
 using Phytel.API.Common;
 using Phytel.API.Common.Format;
 using Phytel.API.DataDomain.Program.MongoDB.DTO;
+using ServiceStack.MiniProfiler;
 using ServiceStack.Text;
 using ServiceStack.WebHost.Endpoints;
 using System;
@@ -42,7 +43,12 @@ namespace Phytel.API.DataDomain.Program.Service
 
         protected void Application_BeginRequest(object sender, EventArgs e)
         {
+            Profiler.Start();
+        }
 
+        protected void Application_EndRequest(object src, EventArgs e)
+        {
+            Profiler.Stop();
         }
 
         protected void Application_AuthenticateRequest(object sender, EventArgs e)

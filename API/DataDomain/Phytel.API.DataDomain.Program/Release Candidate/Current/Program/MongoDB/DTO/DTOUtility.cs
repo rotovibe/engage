@@ -195,7 +195,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
                             ac.AssignedBy = ObjectId.Parse(Constants.SystemContactId); // NIGHT-876
                             ac.AssignedOn = System.DateTime.UtcNow; // NIGHT-835
                             ac.AssignedTo = cmid; // NIGHT-877
-                            //ac.StateUpdatedOn = DateTime.UtcNow;
+                            ac.StateUpdatedOn = DateTime.UtcNow; //NIGHT-952
                         }
 
                         actions.Add(ac);
@@ -1165,6 +1165,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
                         AttrEndDate = a.AttributeEndDate,
                         AttrStartDate = a.AttributeStartDate,
                         ElementState = (int)a.State,
+                        StateUpdatedOn = a.StateUpdatedOn,
                         DateCompleted = a.DateCompleted,
                         Objectives = GetObjectives(a.Objectives),
                         Steps = GetSteps(a.Steps, contract, userId)
@@ -1458,7 +1459,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
                 {
                     foreach (MEPatientProgram p in pp)
                     {
-                        if (!p.State.Equals(ElementState.Removed) && !p.State.Equals(ElementState.Completed))
+                        if (!p.State.Equals(ElementState.Completed))
                         {
                             result = false;
                             break;

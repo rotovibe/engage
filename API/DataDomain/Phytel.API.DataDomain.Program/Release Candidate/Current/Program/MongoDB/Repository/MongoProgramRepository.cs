@@ -236,5 +236,16 @@ namespace Phytel.API.DataDomain.Program
                 throw new Exception("DD:PatientProgramRepository:GetProgramModules()::" + ex.Message, ex.InnerException);
             }
         }
+
+        public IEnumerable<object> FindByPatientId(string patientId)
+        {
+            throw new NotImplementedException();
+        }
+
+
+        public void UndoDelete(object entity)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

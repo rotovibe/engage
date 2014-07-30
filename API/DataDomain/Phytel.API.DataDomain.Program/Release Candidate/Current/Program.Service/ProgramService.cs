@@ -353,5 +353,68 @@ namespace Phytel.API.DataDomain.Program.Service
             }
             return response;
         }
+
+        public DeletePatientProgramByPatientIdDataResponse Delete(DeletePatientProgramByPatientIdDataRequest request)
+        {
+            DeletePatientProgramByPatientIdDataResponse response = new DeletePatientProgramByPatientIdDataResponse();
+            try
+            {
+                if (string.IsNullOrEmpty(request.UserId))
+                    throw new UnauthorizedAccessException("ProgramDD:PatientProgramDelete()::Unauthorized Access");
+
+                response = ProgramDataManager.DeletePatientProgramByPatientId(request);
+                response.Version = request.Version;
+            }
+            catch (Exception ex)
+            {
+                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+
+                string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
+                Common.Helper.LogException(int.Parse(aseProcessID), ex);
+            }
+            return response;
+        }
+
+        public UndoDeletePatientProgramDataResponse Put(UndoDeletePatientProgramDataRequest request)
+        {
+            UndoDeletePatientProgramDataResponse response = new UndoDeletePatientProgramDataResponse();
+            try
+            {
+                if (string.IsNullOrEmpty(request.UserId))
+                    throw new UnauthorizedAccessException("ProgramDD:PatientProgramUndoDelete()::Unauthorized Access");
+
+                response = ProgramDataManager.UndoDeletePatientPrograms(request);
+                response.Version = request.Version;
+            }
+            catch (Exception ex)
+            {
+                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+
+                string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
+                Common.Helper.LogException(int.Parse(aseProcessID), ex);
+            }
+            return response;
+        }
+
+        public DeletePatientProgramDataResponse Delete(DeletePatientProgramDataRequest request)
+        {
+            DeletePatientProgramDataResponse response = new DeletePatientProgramDataResponse();
+            try
+            {
+                if (string.IsNullOrEmpty(request.UserId))
+                    throw new UnauthorizedAccessException("ProgramDD:PatientProgramDelete()::Unauthorized Access");
+
+                response = ProgramDataManager.DeletePatientProgram(request);
+                response.Version = request.Version;
+            }
+            catch (Exception ex)
+            {
+                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+
+                string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
+                Common.Helper.LogException(int.Parse(aseProcessID), ex);
+            }
+            return response;
+        }
     }
 }
