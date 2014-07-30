@@ -18,6 +18,7 @@ namespace Phytel.API.Interface
         IEnumerable<object> SelectAll();
         object Update(object entity);
         void CacheByID(List<string> entityIDs);
+        void UndoDelete(object entity);
     }
 
     public interface IRepository
@@ -33,6 +34,7 @@ namespace Phytel.API.Interface
         IEnumerable<object> SelectAll();
         object Update(object entity);
         void CacheByID(List<string> entityIDs);
+        void UndoDelete(object entity);
     }
 
     public class APIExpression
