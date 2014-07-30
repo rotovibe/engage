@@ -8,7 +8,6 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Phytel.API.AppDomain.NG.Test.Stubs;
 using Phytel.API.DataDomain.Program.DTO;
 using Phytel.API.AppDomain.NG.DTO;
-using Phytel.API.AppDomain.NG.DTO.Observation;
 using Phytel.API.Interface;
 using Phytel.API.DataDomain.PatientObservation.DTO;
 using Phytel.API.AppDomain.NG.PlanCOR;

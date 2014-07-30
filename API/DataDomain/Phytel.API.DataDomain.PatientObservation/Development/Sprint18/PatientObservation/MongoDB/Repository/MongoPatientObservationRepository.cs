@@ -369,7 +369,7 @@ namespace Phytel.API.DataDomain.PatientObservation
         {
             try
             {
-                List<PatientObservationData> observationsDataList = null;
+                List<PatientObservationData> poDataList = null;
                 List<IMongoQuery> queries = new List<IMongoQuery>();
                 queries.Add(Query.EQ(MEPatientObservation.PatientIdProperty, ObjectId.Parse(Id)));
                 queries.Add(Query.EQ(MEPatientObservation.TTLDateProperty, BsonNull.Value));
@@ -378,22 +378,30 @@ namespace Phytel.API.DataDomain.PatientObservation
 
                 using (PatientObservationMongoContext ctx = new PatientObservationMongoContext(_dbName))
                 {
-                    List<MEPatientObservation> meObservations = ctx.PatientObservations.Collection.Find(mQuery).ToList();
-                    if (meObservations != null)
+                    List<MEPatientObservation> mePO = ctx.PatientObservations.Collection.Find(mQuery).ToList();
+                    if (mePO != null && mePO.Count > 0)
                     {
-                        observationsDataList = new List<PatientObservationData>();
-                        foreach (MEPatientObservation b in meObservations)
+                        poDataList = new List<PatientObservationData>();
+                        foreach (MEPatientObservation b in mePO)
                         {
-                            PatientObservationData observationData = new PatientObservationData
+                            PatientObservationData poData = new PatientObservationData
                             {
                                 Id = b.Id.ToString(),
-                                PatientId = b.PatientId.ToString()
+                                PatientId = b.PatientId.ToString(),
+                                EndDate = b.EndDate,
+                                ObservationId = b.ObservationId.ToString(),
+                                Source = b.Source,
+                                StartDate = b.StartDate,
+                                StateId = (int)b.State,
+                                Units = b.Units,
+                                Values = GetValueList(b.NumericValue, b.NonNumericValue),
+                                LastUpdatedOn = b.LastUpdatedOn
                             };
-                            observationsDataList.Add(observationData);
+                            poDataList.Add(poData);
                         }
                     }
                 }
-                return observationsDataList;
+                return poDataList;
             }
             catch (Exception) { throw; }
         }
@@ -536,6 +544,11 @@ namespace Phytel.API.DataDomain.PatientObservation
         }
 
         public object GetObservationsByType(object newEntity, bool? standard, bool? status)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<object> GetActiveObservations()
         {
             throw new NotImplementedException();
         }

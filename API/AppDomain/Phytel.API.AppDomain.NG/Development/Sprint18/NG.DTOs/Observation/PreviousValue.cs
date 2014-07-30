@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Phytel.API.AppDomain.NG.DTO.Observation
+namespace Phytel.API.AppDomain.NG.DTO
 {
     public class PreviousValue
     {

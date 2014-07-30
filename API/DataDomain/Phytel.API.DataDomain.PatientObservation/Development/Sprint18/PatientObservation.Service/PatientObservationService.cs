@@ -136,15 +136,15 @@ namespace Phytel.API.DataDomain.PatientObservation.Service
             return response;
         }
 
-        public GetAdditionalLibraryObservationsResponse Get(GetAdditionalLibraryObservationsRequest request)
+        public GetObservationsDataResponse Get(GetObservationsDataRequest request)
         {
-            GetAdditionalLibraryObservationsResponse response = new GetAdditionalLibraryObservationsResponse();
+            GetObservationsDataResponse response = new GetObservationsDataResponse();
             try
             {
                 if (string.IsNullOrEmpty(request.UserId))
                     throw new UnauthorizedAccessException("PatientObservationDD:Get()::Unauthorized Access");
 
-                response = PatientObservationDataManager.GetAdditionalObservationsLibraryByType(request);
+                response = PatientObservationDataManager.GetObservationsData(request);
                 response.Version = request.Version;
             }
             catch (Exception ex)
@@ -292,6 +292,27 @@ namespace Phytel.API.DataDomain.PatientObservation.Service
                     throw new UnauthorizedAccessException("PatientObservationDD:PatientObservatioUndoDelete()::Unauthorized Access");
 
                 response = PatientObservationDataManager.UndoDeletePatientObservations(request);
+                response.Version = request.Version;
+            }
+            catch (Exception ex)
+            {
+                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+
+                string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
+                Common.Helper.LogException(int.Parse(aseProcessID), ex);
+            }
+            return response;
+        }
+
+        public GetCurrentPatientObservationsDataResponse Get(GetCurrentPatientObservationsDataRequest request)
+        {
+            GetCurrentPatientObservationsDataResponse response = new GetCurrentPatientObservationsDataResponse();
+            try
+            {
+                if (string.IsNullOrEmpty(request.UserId))
+                    throw new UnauthorizedAccessException("PatientObservationDD:Get()::Unauthorized Access");
+
+                response = PatientObservationDataManager.GetCurrentPatientObservations(request);
                 response.Version = request.Version;
             }
             catch (Exception ex)

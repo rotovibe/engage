@@ -107,7 +107,6 @@ namespace Phytel.API.DataDomain.PatientObservation
                             CodingSystemCode = o.Code,
                             DeleteFlag = o.DeleteFlag,
                             Description = o.Description,
-                            //ExtraElements = o.ExtraElements,
                             GroupId = o.GroupId != null ? o.GroupId.ToString() : null,
                             LowValue = o.LowValue,
                             HighValue = o.HighValue,
@@ -330,6 +329,58 @@ namespace Phytel.API.DataDomain.PatientObservation
                     }
                 }
                 return allowedStates;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public IEnumerable<object> GetActiveObservations()
+        {
+            List<ObservationData> odL = null;
+            try
+            {
+                using (PatientObservationMongoContext ctx = new PatientObservationMongoContext(_dbName))
+                {
+                    List<IMongoQuery> queries = new List<IMongoQuery>();
+                    queries.Add(Query.EQ(MEObservation.StatusProperty, Status.Active));
+                    queries.Add(Query.EQ(MEObservation.DeleteFlagProperty, false));
+                    IMongoQuery mQuery = Query.And(queries);
+
+                    List<MEObservation> meObs = ctx.Observations.Collection.Find(mQuery).ToList();
+
+                    if (meObs != null && meObs.Count > 0)
+                    {
+                        odL = new List<ObservationData>();
+                        meObs.ForEach(o =>
+                        {
+                            odL.Add(new ObservationData
+                            {
+                                CodingSystem = o.CodingSystemId.ToString(),
+                                CodingSystemCode = o.Code,
+                                DeleteFlag = o.DeleteFlag,
+                                Description = o.Description,
+                                GroupId = o.GroupId != null ? o.GroupId.ToString() : null,
+                                LowValue = o.LowValue,
+                                HighValue = o.HighValue,
+                                Id = o.Id.ToString(),
+                                LastUpdatedOn = o.LastUpdatedOn,
+                                ObservationTypeId = o.ObservationTypeId.ToString(),
+                                Order = o.Order,
+                                Source = o.Source,
+                                Standard = o.Standard,
+                                Status = (int)o.Status,
+                                TTLDate = o.TTLDate,
+                                Units = o.Units,
+                                UpdatedBy = o.UpdatedBy.ToString(),
+                                Version = o.Version,
+                                CommonName = o.CommonName
+                            });
+                        });
+                    }
+                }
+                return odL;
             }
             catch (Exception ex)
             {

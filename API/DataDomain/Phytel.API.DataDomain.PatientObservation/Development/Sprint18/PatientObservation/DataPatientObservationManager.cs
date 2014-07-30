@@ -190,33 +190,22 @@ namespace Phytel.API.DataDomain.PatientObservation
             }
         }
 
-        public static GetAdditionalLibraryObservationsResponse GetAdditionalObservationsLibraryByType(GetAdditionalLibraryObservationsRequest request)
+        public static GetObservationsDataResponse GetObservationsData(GetObservationsDataRequest request)
         {
             try
             {
-                GetAdditionalLibraryObservationsResponse response = new GetAdditionalLibraryObservationsResponse();
-                List<ObservationLibraryItemData> oli = new List<ObservationLibraryItemData>();
-                IPatientObservationRepository<GetAdditionalLibraryObservationsResponse> repo =
-                    PatientObservationRepositoryFactory<GetAdditionalLibraryObservationsResponse>.GetObservationRepository(request.ContractNumber, request.Context, request.UserId);
+                GetObservationsDataResponse response = new GetObservationsDataResponse();
+                IPatientObservationRepository<GetObservationsDataResponse> repo =
+                    PatientObservationRepositoryFactory<GetObservationsDataResponse>.GetObservationRepository(request.ContractNumber, request.Context, request.UserId);
 
-                List<ObservationData> odl = (List<ObservationData>)repo.GetObservationsByType(request.TypeId, request.Standard, true);
-
-                odl.ForEach(o =>
-                {
-                    oli.Add(new ObservationLibraryItemData
-                    {
-                        Id = o.Id,
-                        Name = o.CommonName != null ? o.CommonName : o.Description
-                    });
-                });
-
-                response.Library = oli;
+                List<ObservationData> odl = (List<ObservationData>)repo.GetActiveObservations();
+                response.ObservationsData = odl;
 
                 return response;
             }
             catch (Exception ex)
             {
-                throw new Exception("DD.DataPatientObservationManager:GetAdditionalObservationsLibraryByType()::" + ex.Message, ex.InnerException);
+                throw new Exception("DD.DataPatientObservationManager:GetObservationsData()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -329,6 +318,48 @@ namespace Phytel.API.DataDomain.PatientObservation
             {
                 throw new Exception("DD.DataPatientObservationManager:InitializePatientObservation()::" + ex.Message, ex.InnerException);
             }
+        }
+
+        public static GetCurrentPatientObservationsDataResponse GetCurrentPatientObservations(GetCurrentPatientObservationsDataRequest request)
+        {
+            try
+            {
+                GetCurrentPatientObservationsDataResponse result = new GetCurrentPatientObservationsDataResponse();
+
+                IPatientObservationRepository<List<PatientObservationData>> poRepo = PatientObservationRepositoryFactory<List<PatientObservationData>>.GetPatientObservationRepository(request.ContractNumber, request.Context, request.UserId);
+                List<PatientObservationData> patientObservations = poRepo.FindObservationIdByPatientId(request.PatientId) as List<PatientObservationData>;
+
+                IPatientObservationRepository<GetObservationsDataResponse> observationRepo = PatientObservationRepositoryFactory<GetObservationsDataResponse>.GetObservationRepository(request.ContractNumber, request.Context, request.UserId);
+                List<ObservationData> observations = (List<ObservationData>)observationRepo.GetActiveObservations();
+
+                List<PatientObservationData> currentPOs = null;
+                if (patientObservations != null && patientObservations.Count > 0)
+                {
+                    currentPOs = new List<PatientObservationData>();
+                    if (observations != null && observations.Count > 0)
+                    {
+                        List<string> distinctObservations = patientObservations.Select(a => a.ObservationId).Distinct().ToList();
+                        distinctObservations.ForEach(a =>
+                        {
+                            List<PatientObservationData> po = patientObservations.Where(s => s.ObservationId == a).OrderByDescending(o => o.LastUpdatedOn).ToList();
+                            PatientObservationData current = po.FirstOrDefault();
+                            if(current != null)
+                            {
+                                ObservationData odata = observations.Where(x => x.Id == a).FirstOrDefault();
+                                if(odata != null)
+                                {
+                                    current.TypeId = odata.ObservationTypeId;
+                                    current.Name = odata.CommonName == null ? odata.Description : odata.CommonName;
+                                }
+                                currentPOs.Add(current);
+                            }
+                        });
+                    }
+                }
+                result.PatientObservationsData = currentPOs;
+                return result;
+            }
+            catch (Exception ex) { throw ex; }
         }
 
         public static DeletePatientObservationByPatientIdDataResponse DeletePatientObservationByPatientId(DeletePatientObservationByPatientIdDataRequest request)

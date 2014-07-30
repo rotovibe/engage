@@ -50,21 +50,36 @@ namespace Phytel.API.DataDomain.PatientObservation.Test
         }
 
         [TestMethod]
-        public void GetObservationsByType_StandardIsFalse_Test()
+        public void GetObservations_Test()
         {
             // Arrange
             string userId = string.Empty;
             string contractNumber = "InHealth001";
             string context = "NG";
-            string typeId = "53067408fe7a591a348e1b65";
-            bool? standard = false;
 
             IPatientObservationRepository<object> repo =
                 PatientObservationRepositoryFactory<object>.GetPatientObservationRepository(contractNumber, context, userId);
-            GetAdditionalLibraryObservationsRequest request = new GetAdditionalLibraryObservationsRequest { Standard = standard, TypeId = typeId, Context = context, ContractNumber = contractNumber, UserId = userId, Version = 1 };
-            GetAdditionalLibraryObservationsResponse response = PatientObservationDataManager.GetAdditionalObservationsLibraryByType(request);
+            GetObservationsDataRequest request = new GetObservationsDataRequest { Context = context, ContractNumber = contractNumber, UserId = userId, Version = 1 };
+            GetObservationsDataResponse response = PatientObservationDataManager.GetObservationsData(request);
 
-            Assert.IsNotNull(response.Library);
+            Assert.IsNotNull(response.ObservationsData);
+        }
+
+        [TestMethod]
+        public void GetCurrentPatientObservations_Test()
+        {
+            // Arrange
+            string userId = string.Empty;
+            string contractNumber = "InHealth001";
+            string context = "NG";
+            string patientId = "5323762f231e250d5c0c62a7";
+
+            IPatientObservationRepository<object> repo =
+                PatientObservationRepositoryFactory<object>.GetPatientObservationRepository(contractNumber, context, userId);
+            GetCurrentPatientObservationsDataRequest request = new GetCurrentPatientObservationsDataRequest { PatientId = patientId, Context = context, ContractNumber = contractNumber, UserId = userId, Version = 1 };
+            GetCurrentPatientObservationsDataResponse response = PatientObservationDataManager.GetCurrentPatientObservations(request);
+
+            Assert.IsNotNull(response);
         }
     }
 }

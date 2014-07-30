@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Phytel.API.AppDomain.NG.DTO.Observation;
 using Phytel.API.AppDomain.NG.DTO;
 using Phytel.API.AppDomain.NG.Observation;
 using Phytel.API.DataDomain.PatientObservation.DTO;
@@ -17,7 +16,7 @@ namespace Phytel.API.AppDomain.NG.Observation
             {
                 GetStandardObservationItemsResponse response = new GetStandardObservationItemsResponse();
                 List<PatientObservationData> po = (List<PatientObservationData>)ObservationEndpointUtil.GetStandardObservationsRequest(request);
-                response.Observations = ObservationsUtil.GetStandardObservationsForPatient(request, po);
+                response.PatientObservations = ObservationsUtil.GetStandardObservationsForPatient(request, po);
                 response.Version = request.Version;
                 return response;
             }
@@ -27,13 +26,13 @@ namespace Phytel.API.AppDomain.NG.Observation
             }
         }
 
-        public GetAdditionalObservationLibraryResponse GetAdditionalObservationsLibraryRequest(GetAdditionalObservationLibraryRequest request)
+        public GetObservationsResponse GetObservations(GetObservationsRequest request)
         {
             try
             {
-                GetAdditionalObservationLibraryResponse response = new GetAdditionalObservationLibraryResponse();
-                List<ObservationLibraryItemData> po = (List<ObservationLibraryItemData>)ObservationEndpointUtil.GetAdditionalObservationsLibraryRequest(request);
-                response.Library = ObservationsUtil.GetAdditionalLibraryObservations(request, po);
+                GetObservationsResponse response = new GetObservationsResponse();
+                List<ObservationData> po = (List<ObservationData>)ObservationEndpointUtil.GetObservations(request);
+                response.Observations = ObservationsUtil.GetObservations(request, po);
                 response.Version = request.Version;
                 return response;
             }
@@ -49,13 +48,13 @@ namespace Phytel.API.AppDomain.NG.Observation
             {
                 PostUpdateObservationItemsResponse response = new PostUpdateObservationItemsResponse();
 
-                List<Phytel.API.AppDomain.NG.DTO.Observation.PatientObservation> obsl = request.Observations;
+                List<PatientObservation> obsl = request.PatientObservations;
 
                 //List<string> patientObservationIds = ObservationsUtil.GetPatientObservationIds(obsl);
 
-                if (request.Observations != null && request.Observations.Count > 0)
+                if (request.PatientObservations != null && request.PatientObservations.Count > 0)
                 {
-                    foreach (Phytel.API.AppDomain.NG.DTO.Observation.PatientObservation po in obsl)
+                    foreach (PatientObservation po in obsl)
                     {
                         PatientObservationRecordData pord = null;
                         if (po.Values != null && po.Values.Count > 0) // Labs and Vitals have values
@@ -96,7 +95,7 @@ namespace Phytel.API.AppDomain.NG.Observation
             {
                 GetAdditionalObservationItemResponse response = new GetAdditionalObservationItemResponse();
                 PatientObservationData po = (PatientObservationData)ObservationEndpointUtil.GetAdditionalObservationItemRequest(request);
-                response.Observation = ObservationsUtil.GetAdditionalObservationItemForPatient(request, po);
+                response.PatientObservation = ObservationsUtil.GetAdditionalObservationItemForPatient(request, po);
                 response.Version = request.Version;
                 return response;
             }
@@ -128,7 +127,7 @@ namespace Phytel.API.AppDomain.NG.Observation
             try
             {
                 GetPatientProblemsResponse response = new GetPatientProblemsResponse();
-                List<Phytel.API.AppDomain.NG.DTO.Observation.PatientObservation> problems = ObservationEndpointUtil.GetPatientProblemSummary(request);
+                List<PatientObservation> problems = ObservationEndpointUtil.GetPatientProblemSummary(request);
                 response.Problems = problems;
                 response.Version = request.Version;
                 return response;
@@ -145,13 +144,29 @@ namespace Phytel.API.AppDomain.NG.Observation
             {
                 GetInitializeProblemResponse response = new GetInitializeProblemResponse();
                 PatientObservationData po = ObservationEndpointUtil.GetInitializeProblem(request);
-                response.Observation = ObservationsUtil.GetInitializeProblem(request, po);
+                response.PatientObservation = ObservationsUtil.GetInitializeProblem(request, po);
                 response.Version = request.Version;
                 return response;
             }
             catch (Exception ex)
             {
                 throw new Exception("AD:GetAllowedObservationStates()::" + ex.Message, ex.InnerException);
+            }
+        }
+
+        public GetCurrentPatientObservationsResponse GetCurrentPatientObservations(GetCurrentPatientObservationsRequest request)
+        {
+            try
+            {
+                GetCurrentPatientObservationsResponse response = new GetCurrentPatientObservationsResponse();
+                List<PatientObservationData> po = (List<PatientObservationData>)ObservationEndpointUtil.GetCurrentPatientObservations(request);
+                response.PatientObservations = ObservationsUtil.GetCurrentPatientObservations(request, po);
+                response.Version = request.Version;
+                return response;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("AD:GetStandardObservationsRequest()::" + ex.Message, ex.InnerException);
             }
         }
     }

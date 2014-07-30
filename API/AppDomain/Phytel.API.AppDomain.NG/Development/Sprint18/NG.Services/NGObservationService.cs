@@ -82,9 +82,9 @@ namespace Phytel.API.AppDomain.NG.Service
             return response;
         }
 
-        public GetAdditionalObservationLibraryResponse Get(GetAdditionalObservationLibraryRequest request)
+        public GetObservationsResponse Get(GetObservationsRequest request)
         {
-            GetAdditionalObservationLibraryResponse response = new GetAdditionalObservationLibraryResponse();
+            GetObservationsResponse response = new GetObservationsResponse();
             ObservationsManager om = new ObservationsManager();
             ValidateTokenResponse result = null;
 
@@ -95,7 +95,7 @@ namespace Phytel.API.AppDomain.NG.Service
                 if (result.UserId.Trim() != string.Empty)
                 {
                     request.UserId = result.UserId;
-                    response = om.GetAdditionalObservationsLibraryRequest(request);
+                    response = om.GetObservations(request);
                 }
                 else
                     throw new UnauthorizedAccessException();
@@ -229,6 +229,41 @@ namespace Phytel.API.AppDomain.NG.Service
                 {
                     request.UserId = result.UserId;
                     response = om.GetInitializeProblem(request);
+                }
+                else
+                    throw new UnauthorizedAccessException();
+            }
+            catch (Exception ex)
+            {
+                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+                if ((ex is WebServiceException) == false)
+                    om.LogException(ex);
+            }
+            finally
+            {
+                List<string> patientIds = new List<string>();
+                patientIds.Add(request.PatientId);
+
+                if (result != null)
+                    AuditHelper.LogAuditData(request, result.SQLUserId, patientIds, System.Web.HttpContext.Current.Request, request.GetType().Name);
+            }
+            return response;
+        }
+
+        public GetCurrentPatientObservationsResponse Get(GetCurrentPatientObservationsRequest request)
+        {
+            GetCurrentPatientObservationsResponse response = new GetCurrentPatientObservationsResponse();
+            ObservationsManager om = new ObservationsManager();
+            ValidateTokenResponse result = null;
+
+            try
+            {
+                request.Token = base.Request.Headers["Token"] as string;
+                result = Security.IsUserValidated(request.Version, request.Token, request.ContractNumber);
+                if (result.UserId.Trim() != string.Empty)
+                {
+                    request.UserId = result.UserId;
+                    response = om.GetCurrentPatientObservations(request);
                 }
                 else
                     throw new UnauthorizedAccessException();

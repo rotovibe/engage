@@ -1,5 +1,4 @@
 ﻿using Phytel.API.AppDomain.NG.DTO;
-using Phytel.API.AppDomain.NG.DTO.Observation;
 using Phytel.API.DataDomain.PatientObservation.DTO;
 using Phytel.API.Interface;
 using ServiceStack.Service;
@@ -49,27 +48,55 @@ namespace Phytel.API.AppDomain.NG.Observation
             }
         }
 
-        internal static List<ObservationLibraryItemData> GetAdditionalObservationsLibraryRequest(GetAdditionalObservationLibraryRequest request)
+        internal static List<PatientObservationData> GetCurrentPatientObservations(GetCurrentPatientObservationsRequest request)
         {
             try
             {
-                List<ObservationLibraryItemData> result = null;
+                List<PatientObservationData> result = null;
                 IRestClient client = new JsonServiceClient();
-                // [Route("/{Version}/{ContractNumber}/Observation/Type/{TypeId}/MatchLibrary/{Standard}"
-                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Observation/Type/{4}/MatchLibrary/{5}",
+                //[Route("/{Context}/{Version}/{ContractNumber}/Patient/{PatientId}/Observations/Current", "GET")]
+                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Observations/Current",
                                     DDPatientObservationsServiceUrl,
                                     "NG",
                                     request.Version,
                                     request.ContractNumber,
-                                    request.TypeId,
-                                    request.Standard), request.UserId);
+                                    request.PatientId), request.UserId);
 
-                GetAdditionalLibraryObservationsResponse dataDomainResponse = client.Get<GetAdditionalLibraryObservationsResponse>(
+                GetCurrentPatientObservationsDataResponse dataDomainResponse = client.Get<GetCurrentPatientObservationsDataResponse>(
                     url);
 
                 if (dataDomainResponse != null)
                 {
-                    result = dataDomainResponse.Library;
+                    result = dataDomainResponse.PatientObservationsData;
+                }
+
+                return result;
+            }
+            catch (WebServiceException ex)
+            {
+                throw new WebServiceException("AD:GetStandardObservationsRequest()::" + ex.Message, ex.InnerException);
+            }
+        }
+
+        internal static List<ObservationData> GetObservations(GetObservationsRequest request)
+        {
+            try
+            {
+                List<ObservationData> result = null;
+                IRestClient client = new JsonServiceClient();
+                //[Route("/{Context}/{Version}/{ContractNumber}/Observations", "GET")]
+                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Observations",
+                                    DDPatientObservationsServiceUrl,
+                                    "NG",
+                                    request.Version,
+                                    request.ContractNumber), request.UserId);
+
+                GetObservationsDataResponse dataDomainResponse = client.Get<GetObservationsDataResponse>(
+                    url);
+
+                if (dataDomainResponse != null)
+                {
+                    result = dataDomainResponse.ObservationsData;
                 }
 
                 return result;
@@ -177,11 +204,11 @@ namespace Phytel.API.AppDomain.NG.Observation
             }
         }
 
-        internal static List<Phytel.API.AppDomain.NG.DTO.Observation.PatientObservation> GetPatientProblemSummary(GetPatientProblemsRequest request)
+        internal static List<PatientObservation> GetPatientProblemSummary(GetPatientProblemsRequest request)
         {
             try
             {
-                List<Phytel.API.AppDomain.NG.DTO.Observation.PatientObservation> result = new List<Phytel.API.AppDomain.NG.DTO.Observation.PatientObservation>();
+                List<PatientObservation> result = new List<PatientObservation>();
                 IRestClient client = new JsonServiceClient();
                 string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Observation/Problems",
                                     DDPatientObservationsServiceUrl,
@@ -197,7 +224,7 @@ namespace Phytel.API.AppDomain.NG.Observation
                     dataDomainResponse.PatientObservations.ForEach(r =>
                     {
                         result.Add(
-                            new Phytel.API.AppDomain.NG.DTO.Observation.PatientObservation
+                            new PatientObservation
                             {
                                 Id = r.Id,
                                 ObservationId = r.ObservationId,
