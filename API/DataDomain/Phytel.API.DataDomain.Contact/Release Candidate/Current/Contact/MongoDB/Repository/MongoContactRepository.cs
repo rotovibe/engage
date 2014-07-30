@@ -15,12 +15,14 @@ using Phytel.API.DataAudit;
 using Phytel.API.Common.Audit;
 using ServiceStack.Common;
 using ServiceStack.WebHost.Endpoints;
+using System.Configuration;
 
 namespace Phytel.API.DataDomain.Contact
 {
     public class MongoContactRepository : IContactRepository
     {
         private string _dbName = string.Empty;
+        private int _expireDays = Convert.ToInt32(ConfigurationManager.AppSettings["ExpireDays"]);
         public IAuditHelpers AuditHelpers { get; set; }
 
         static MongoContactRepository() 
@@ -270,12 +272,29 @@ namespace Phytel.API.DataDomain.Contact
 
         public void Delete(object entity)
         {
+            DeleteContactByPatientIdDataRequest request = (DeleteContactByPatientIdDataRequest)entity;
             try
             {
-                throw new NotImplementedException();
-                // code here //
+                using (ContactMongoContext ctx = new ContactMongoContext(_dbName))
+                {
+                    var query = MB.Query<MEContact>.EQ(b => b.Id, ObjectId.Parse(request.Id));
+                    var builder = new List<MB.UpdateBuilder>();
+                    builder.Add(MB.Update.Set(MEContact.TTLDateProperty, DateTime.UtcNow.AddDays(_expireDays)));
+                    builder.Add(MB.Update.Set(MEContact.DeleteFlagProperty, true));
+                    builder.Add(MB.Update.Set(MEContact.LastUpdatedOnProperty, DateTime.UtcNow));
+                    builder.Add(MB.Update.Set(MEContact.UpdatedByProperty, ObjectId.Parse(this.UserId)));
+
+                    IMongoUpdate update = MB.Update.Combine(builder);
+                    ctx.Contacts.Collection.Update(query, update);
+
+                    AuditHelper.LogDataAudit(this.UserId,
+                                            MongoCollectionName.Contact.ToString(),
+                                            request.Id.ToString(),
+                                            Common.DataAuditType.Delete,
+                                            request.ContractNumber);
+                }
             }
-            catch (Exception ex) { throw ex; }
+            catch (Exception) { throw; }
         }
 
         public void DeleteAll(List<object> entities)
@@ -303,6 +322,7 @@ namespace Phytel.API.DataDomain.Contact
                     contactData = new ContactData
                     {
                         ContactId = mc.Id.ToString(),
+                        PatientId = mc.PatientId.ToString(),
                         UserId = (string.IsNullOrEmpty(mc.ResourceId)) ? string.Empty : mc.ResourceId.ToString().Replace("-", string.Empty).ToLower(),
                         FirstName = mc.FirstName,
                         MiddleName = mc.MiddleName,
@@ -965,6 +985,37 @@ namespace Phytel.API.DataDomain.Contact
             return contactData;
         }
 
+        /// <summary>
+        /// This method get minimal information of contact. For full information use FindContactByPatientId method.
+        /// </summary>
+        /// <param name="patientId">Patient Id</param>
+        /// <returns>ContactData</returns>
+        public object GetContactByPatientId(string patientId)
+        {
+            ContactData contactData = null;
+            using (ContactMongoContext ctx = new ContactMongoContext(_dbName))
+            {
+                List<IMongoQuery> queries = new List<IMongoQuery>();
+                queries.Add(Query.EQ(MEContact.PatientIdProperty, ObjectId.Parse(patientId)));
+                queries.Add(Query.EQ(MEContact.DeleteFlagProperty, false));
+                IMongoQuery mQuery = Query.And(queries);
+                MEContact mc = ctx.Contacts.Collection.Find(mQuery).FirstOrDefault();
+                if (mc != null)
+                {
+                    contactData = new ContactData
+                    {
+                        ContactId = mc.Id.ToString(),
+                        PatientId = mc.PatientId.ToString(),
+                        FirstName = mc.FirstName,
+                        LastName = mc.LastName
+                    };
+                }
+
+            }
+            return contactData;
+        }
+
+
         public IEnumerable<object> FindCareManagers()
         { 
             List<ContactData> contactDataList = null;
@@ -1038,6 +1089,69 @@ namespace Phytel.API.DataDomain.Contact
             catch (Exception ex) { throw ex; }
         }
 
+        public IEnumerable<object> FindContactsWithAPatientInRecentList(string entityId)
+        {
+            List<ContactData> contactDataList = null;
+            try
+            {
+                using (ContactMongoContext ctx = new ContactMongoContext(_dbName))
+                {
+                    List<IMongoQuery> queries = new List<IMongoQuery>();
+                    queries.Add(Query.In(MEContact.RecentListProperty, new List<BsonValue> { BsonValue.Create(ObjectId.Parse(entityId))}));
+                    queries.Add(Query.EQ(MEContact.DeleteFlagProperty, false));
+                    IMongoQuery mQuery = Query.And(queries);
+                    List<MEContact> meContacts = ctx.Contacts.Collection.Find(mQuery).ToList();
+                    if (meContacts != null)
+                    {
+                        contactDataList = new List<ContactData>();
+                        foreach (MEContact c in meContacts)
+                        {
+                            ContactData contactData = new ContactData
+                            {
+                                ContactId = c.Id.ToString(),
+                                PatientId = c.PatientId.ToString(),
+                                RecentsList = c.RecentList != null ? c.RecentList.ConvertAll(r => r.ToString()) : null,
+                                FirstName = c.FirstName,
+                                LastName = c.LastName
+                            };
+                            contactDataList.Add(contactData);
+                        }
+
+                    }
+                }
+                return contactDataList;
+            }
+            catch (Exception ex) { throw ex; }
+        }
+
         public string UserId { get; set; }
+
+
+        public void UndoDelete(object entity)
+        {
+            UndoDeleteContactDataRequest request = (UndoDeleteContactDataRequest)entity;
+            try
+            {
+                using (ContactMongoContext ctx = new ContactMongoContext(_dbName))
+                {
+                    var query = MB.Query<MEContact>.EQ(b => b.Id, ObjectId.Parse(request.Id));
+                    var builder = new List<MB.UpdateBuilder>();
+                    builder.Add(MB.Update.Set(MEContact.TTLDateProperty, BsonNull.Value));
+                    builder.Add(MB.Update.Set(MEContact.DeleteFlagProperty, false));
+                    builder.Add(MB.Update.Set(MEContact.LastUpdatedOnProperty, DateTime.UtcNow));
+                    builder.Add(MB.Update.Set(MEContact.UpdatedByProperty, ObjectId.Parse(this.UserId)));
+
+                    IMongoUpdate update = MB.Update.Combine(builder);
+                    ctx.Contacts.Collection.Update(query, update);
+
+                    AuditHelper.LogDataAudit(this.UserId,
+                                            MongoCollectionName.Contact.ToString(),
+                                            request.Id.ToString(),
+                                            Common.DataAuditType.UndoDelete,
+                                            request.ContractNumber);
+                }
+            }
+            catch (Exception) { throw; }
+        }
     }
 }

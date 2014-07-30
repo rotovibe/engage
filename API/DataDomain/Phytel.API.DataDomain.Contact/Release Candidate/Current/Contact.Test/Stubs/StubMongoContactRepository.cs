@@ -108,5 +108,21 @@ namespace Phytel.API.DataDomain.Contact.Test.Stubs
                 throw new NotImplementedException();
             }
         }
+
+        public object GetContactByPatientId(string patientId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<object> FindContactsWithAPatientInRecentList(string entityId)
+        {
+            throw new NotImplementedException();
+        }
+
+
+        public void UndoDelete(object entity)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

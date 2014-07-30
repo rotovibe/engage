@@ -166,5 +166,99 @@ namespace Phytel.API.DataDomain.Contact
             }
             return result;
         }
+
+        public DeleteContactByPatientIdDataResponse DeleteContactByPatientId(DeleteContactByPatientIdDataRequest request)
+        {
+            DeleteContactByPatientIdDataResponse response = null;
+            bool success = false;
+            try
+            {
+                response = new DeleteContactByPatientIdDataResponse();
+
+                IContactRepository repo = Factory.GetRepository(request, RepositoryType.Contact);
+                ContactData contact = repo.GetContactByPatientId(request.PatientId) as ContactData;
+                List<ContactWithUpdatedRecentList> contactsWithUpdatedRecentList = null;
+                if (contact != null)
+                {
+                    request.Id = contact.ContactId;
+                    repo.Delete(request);
+                    response.DeletedId = request.Id;
+                    success = true;
+
+                    // Remove this deleted contact(PatientId) from RecentList of  other contacts(users logged in).
+
+                    List<ContactData> contactsWithAPatientInRecentList = repo.FindContactsWithAPatientInRecentList(request.PatientId) as List<ContactData>;
+                    if (contactsWithAPatientInRecentList != null && contactsWithAPatientInRecentList.Count > 0)
+                    {
+                        contactsWithUpdatedRecentList = new List<ContactWithUpdatedRecentList>();
+                        contactsWithAPatientInRecentList.ForEach(c =>
+                        {
+                            PutRecentPatientRequest recentPatientRequest = new PutRecentPatientRequest { 
+                                ContactId = c.ContactId,
+                                Context = request.Context,
+                                ContractNumber = request.ContractNumber,
+                                UserId = request.UserId,
+                                Version = request.Version
+                            };
+                            int index = c.RecentsList.IndexOf(request.PatientId);
+                            if (c.RecentsList.Remove(request.PatientId))
+                            {
+                                if (repo.UpdateRecentList(recentPatientRequest, c.RecentsList))
+                                {
+                                    contactsWithUpdatedRecentList.Add(new ContactWithUpdatedRecentList { ContactId = recentPatientRequest.ContactId, PatientIndex = index });
+                                    success = true;
+                                }
+                            }
+                        });
+                    }
+                }
+                response.ContactWithUpdatedRecentLists = contactsWithUpdatedRecentList;
+                response.Success = success;
+                return response;
+            }
+            catch (Exception ex) { throw ex; }
+        }
+
+        public UndoDeleteContactDataResponse UndoDeleteContact(UndoDeleteContactDataRequest request)
+        {
+            UndoDeleteContactDataResponse response = null;
+            try
+            {
+                response = new UndoDeleteContactDataResponse();
+                IContactRepository repo = Factory.GetRepository(request, RepositoryType.Contact);
+                if (request.Id != null)
+                {
+                    repo.UndoDelete(request);
+                    // Add the deleted contact back into the RecentList of  other contacts(users logged in) who had him/her before the delete action.
+                    var undeletedContact = repo.FindByID(request.Id) as ContactData;
+                    if(undeletedContact != null)
+                    {
+                        if(request.ContactWithUpdatedRecentLists != null && request.ContactWithUpdatedRecentLists.Count > 0)
+                        {
+                            request.ContactWithUpdatedRecentLists.ForEach(c =>
+                            {
+                               var contactData = repo.FindByID(c.ContactId) as ContactData;
+                                if(contactData != null)
+                                {
+                                    contactData.RecentsList.Insert(c.PatientIndex, undeletedContact.PatientId);
+                                    PutRecentPatientRequest recentPatientRequest = new PutRecentPatientRequest
+                                    {
+                                        ContactId = c.ContactId,
+                                        Context = request.Context,
+                                        ContractNumber = request.ContractNumber,
+                                        UserId = request.UserId,
+                                        Version = request.Version
+                                    };
+                                    repo.UpdateRecentList(recentPatientRequest, contactData.RecentsList);
+                                }
+                            });
+                        }
+                    }
+                }
+                response.Success = true;
+                return response;
+            }
+            catch (Exception ex) { throw ex; }
+        }
     }
 }   
