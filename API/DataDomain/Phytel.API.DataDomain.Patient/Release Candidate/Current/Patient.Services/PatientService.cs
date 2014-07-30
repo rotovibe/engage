@@ -273,5 +273,135 @@ namespace Phytel.API.DataDomain.Patient.Service
             }
             return response;
         }
+
+        #region Delete
+        public DeletePatientDataResponse Delete(DeletePatientDataRequest request)
+        {
+            DeletePatientDataResponse response = new DeletePatientDataResponse();
+            try
+            {
+                if (string.IsNullOrEmpty(request.UserId))
+                    throw new UnauthorizedAccessException("PatientDD:PatientDelete()::Unauthorized Access");
+
+                response = PatientManager.DeletePatient(request);
+                response.Version = request.Version;
+            }
+            catch (Exception ex)
+            {
+                CommonFormatterUtil.FormatExceptionResponse(response, base.Response, ex);
+
+                string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
+                Helpers.LogException(int.Parse(aseProcessID), ex);
+            }
+            return response;
+        }
+
+        public DeletePatientUserByPatientIdDataResponse Delete(DeletePatientUserByPatientIdDataRequest request)
+        {
+            DeletePatientUserByPatientIdDataResponse response = new DeletePatientUserByPatientIdDataResponse();
+            try
+            {
+                if (string.IsNullOrEmpty(request.UserId))
+                    throw new UnauthorizedAccessException("PatientDD:PatientUserDelete()::Unauthorized Access");
+
+                response = PatientManager.DeletePatientUserByPatientId(request);
+                response.Version = request.Version;
+            }
+            catch (Exception ex)
+            {
+                CommonFormatterUtil.FormatExceptionResponse(response, base.Response, ex);
+
+                string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
+                Helpers.LogException(int.Parse(aseProcessID), ex);
+            }
+            return response;
+        }
+
+        public DeleteCohortPatientViewDataResponse Delete(DeleteCohortPatientViewDataRequest request)
+        {
+            DeleteCohortPatientViewDataResponse response = new DeleteCohortPatientViewDataResponse();
+            try
+            {
+                if (string.IsNullOrEmpty(request.UserId))
+                    throw new UnauthorizedAccessException("PatientDD:DeleteCohortPatientView()::Unauthorized Access");
+
+                response = PatientManager.DeleteCohortPatientViewByPatientId(request);
+                response.Version = request.Version;
+            }
+            catch (Exception ex)
+            {
+                CommonFormatterUtil.FormatExceptionResponse(response, base.Response, ex);
+
+                string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
+                Helpers.LogException(int.Parse(aseProcessID), ex);
+            }
+            return response;
+        } 
+        #endregion
+
+        #region UndoDelete
+        public UndoDeletePatientDataResponse Put(UndoDeletePatientDataRequest request)
+        {
+            UndoDeletePatientDataResponse response = new UndoDeletePatientDataResponse();
+            try
+            {
+                if (string.IsNullOrEmpty(request.UserId))
+                    throw new UnauthorizedAccessException("PatientDD:UndoPatientDelete()::Unauthorized Access");
+
+                response = PatientManager.UndoDeletePatient(request);
+                response.Version = request.Version;
+            }
+            catch (Exception ex)
+            {
+                CommonFormatterUtil.FormatExceptionResponse(response, base.Response, ex);
+
+                string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
+                Helpers.LogException(int.Parse(aseProcessID), ex);
+            }
+            return response;
+        }
+
+        public UndoDeletePatientUsersDataResponse Put(UndoDeletePatientUsersDataRequest request)
+        {
+            UndoDeletePatientUsersDataResponse response = new UndoDeletePatientUsersDataResponse();
+            try
+            {
+                if (string.IsNullOrEmpty(request.UserId))
+                    throw new UnauthorizedAccessException("PatientDD:UndoPatientUserDelete()::Unauthorized Access");
+
+                response = PatientManager.UndoDeletePatientUser(request);
+                response.Version = request.Version;
+            }
+            catch (Exception ex)
+            {
+                CommonFormatterUtil.FormatExceptionResponse(response, base.Response, ex);
+
+                string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
+                Helpers.LogException(int.Parse(aseProcessID), ex);
+            }
+            return response;
+        }
+
+        public UndoDeleteCohortPatientViewDataResponse Put(UndoDeleteCohortPatientViewDataRequest request)
+        {
+            UndoDeleteCohortPatientViewDataResponse response = new UndoDeleteCohortPatientViewDataResponse();
+            try
+            {
+                if (string.IsNullOrEmpty(request.UserId))
+                    throw new UnauthorizedAccessException("PatientDD:UndoDeleteCohortPatientView()::Unauthorized Access");
+
+                response = PatientManager.UndoDeleteCohortPatientView(request);
+                response.Version = request.Version;
+            }
+            catch (Exception ex)
+            {
+                CommonFormatterUtil.FormatExceptionResponse(response, base.Response, ex);
+
+                string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
+                Helpers.LogException(int.Parse(aseProcessID), ex);
+            }
+            return response;
+        }
+        #endregion
     }
 }

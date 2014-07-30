@@ -103,6 +103,7 @@
     <Compile Include="MongoDB\DTO\IDTOUtils.cs" />
     <Compile Include="MongoDB\DTO\SearchField.cs" />
     <Compile Include="MongoDB\Repository\MongoCohortPatientViewRepository.cs" />
+    <Compile Include="MongoDB\Repository\MongoPatientUserRepository.cs" />
     <Compile Include="PatientsUtils.cs" />
     <Compile Include="IPatientRepository.cs" />
     <Compile Include="MongoDB\DTO\MECohortPatientView.cs" />

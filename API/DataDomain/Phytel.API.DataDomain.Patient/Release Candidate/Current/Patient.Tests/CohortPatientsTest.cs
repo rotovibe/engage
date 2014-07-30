@@ -92,18 +92,24 @@ namespace Phytel.API.DataDomain.Patient.Test
         [TestMethod]
         public void GetCohortPatientsByID_WithStartingComma()
         {
+            IPatientDataManager pm = new PatientDataManager
+            {
+                Factory = new PatientRepositoryFactory(),
+                Helpers = new Helpers()
+            };
+            
             GetCohortPatientsDataRequest request = new GetCohortPatientsDataRequest
             {
-                CohortID = "528ed9b3072ef70e10099687",
+                CohortID = "53237514072ef709d84efe9d",
                 Version = 1,
                 Context = "NG",
-                SearchFilter = ", Jonell",
+                SearchFilter = "barr",
                 ContractNumber = "InHealth001",
                 Skip = 0,
-                Take = 100
+                Take = 100,
+                UserId = "0000000000000000000000000"
             };
 
-            IPatientDataManager pm = new PatientDataManager();
             GetCohortPatientsDataResponse response = pm.GetCohortPatients(request);
 
             Assert.IsTrue(response.CohortPatients.Count > 0);

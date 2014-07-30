@@ -18,6 +18,7 @@ namespace Phytel.API.DataDomain.Patient
     public class MongoPatientRepository : IPatientRepository
     {
         private string _dbName = string.Empty;
+        private int _expireDays = Convert.ToInt32(ConfigurationManager.AppSettings["ExpireDays"]);
 
         #region endpoint addresses
         protected static readonly string DDPatientSystemUrl = ConfigurationManager.AppSettings["DDPatientSystemServiceUrl"];
@@ -139,7 +140,29 @@ namespace Phytel.API.DataDomain.Patient
 
         public void Delete(object entity)
         {
-            throw new NotImplementedException();
+            DeletePatientDataRequest request = (DeletePatientDataRequest)entity;
+            try
+            {
+                using (PatientMongoContext ctx = new PatientMongoContext(_dbName))
+                {
+                    var patientQuery = MB.Query<MEPatient>.EQ(b => b.Id, ObjectId.Parse(request.Id));
+                    var patientBuilder = new List<MB.UpdateBuilder>();
+                    patientBuilder.Add(MB.Update.Set(MEPatient.TTLDateProperty, DateTime.UtcNow.AddDays(_expireDays)));
+                    patientBuilder.Add(MB.Update.Set(MEPatient.DeleteFlagProperty, true));
+                    patientBuilder.Add(MB.Update.Set(MEPatient.LastUpdatedOnProperty, DateTime.UtcNow));
+                    patientBuilder.Add(MB.Update.Set(MEPatient.UpdatedByProperty, ObjectId.Parse(this.UserId)));
+
+                    IMongoUpdate patientUpdate = MB.Update.Combine(patientBuilder);
+                    ctx.Patients.Collection.Update(patientQuery, patientUpdate);
+
+                    AuditHelper.LogDataAudit(this.UserId,
+                                            MongoCollectionName.Patient.ToString(),
+                                            request.Id.ToString(),
+                                            Common.DataAuditType.Delete,
+                                            request.ContractNumber);
+                }
+            }
+            catch (Exception) { throw; }
         }
 
         public void DeleteAll(List<object> entities)
@@ -234,7 +257,8 @@ namespace Phytel.API.DataDomain.Patient
         {
             var findQ = MB.Query.And(
                 MB.Query<MEPatientUser>.EQ(b => b.PatientId, ObjectId.Parse(patientId)),
-                MB.Query<MEPatientUser>.EQ(b => b.ContactId, ObjectId.Parse(userId))
+                MB.Query<MEPatientUser>.EQ(b => b.ContactId, ObjectId.Parse(userId)),
+                MB.Query<MEPatientUser>.EQ(b => b.DeleteFlag, false)
             );
 
             var patientUsr = ctx.PatientUsers.Collection.Find(findQ).FirstOrDefault();
@@ -244,161 +268,11 @@ namespace Phytel.API.DataDomain.Patient
         public List<PatientData> Select(string query, string[] filterData, string querySort, int skip, int take)
         {
             throw new NotImplementedException();
-            ///* Query without filter:
-            // *  { sf: { $elemMatch : {'val':'528a66f4d4332317acc5095f', 'fldn':'Problem', 'act':true}}}
-            // * 
-            // * Query with single field filter:
-            // *  { $and : [ 
-            // *      { sf: { $elemMatch : {'val':'528a66f4d4332317acc5095f', 'fldn':'Problem', 'act':true}}}, 
-            // *      { $or : [ 
-            // *          { sf: { $elemMatch : {'val':/^<Single Field Text Here>/i, 'fldn':'FN'}}}, 
-            // *          { sf: { $elemMatch : {'val':/^<Single Field Text Here>/i, 'fldn':'LN'}}}, 
-            // *          { sf: { $elemMatch : {'val':/^<Single Field Text Here>/i, 'fldn':'PN'}}} 
-            // *          ] 
-            // *      } 
-            // *   ] 
-            // * }
-            // * 
-            // * Query with double field filter:
-            // *  { $and : [ 
-            // *      { sf: { $elemMatch : {'val':'528a66f4d4332317acc5095f', 'fldn':'Problem', 'act':true}}}, 
-            // *      { $and : [ 
-            // *          { $or : [ 
-            // *              { sf : { $elemMatch: {'val':/^<First Field Text Here>/i, 'fldn':'FN'}}}, 
-            // *              { sf : { $elemMatch: {'val':/^<First Field Text Here>/i, 'fldn':'PN'}}}
-            // *            ]
-            // *          },	
-            // *          { sf: { $elemMatch : {'val':/^<Second Field Text Here>/i, 'fldn':'LN'}}}
-            // *        ] 
-            // *      } 
-            // *    ] 
-            // *  }
-            // * 
-            //*/
-
-            //try
-            //{
-            //    string jsonQuery = string.Empty;
-            //    string queryName = "TBD"; //Pass this into the method call
-            //    string redisKey = string.Empty;
-
-            //    if (filterData[0].Trim() == string.Empty)
-            //    {
-            //        jsonQuery = query;
-            //        redisKey = string.Format("{0}{1}{2}", queryName, skip, take);
-            //    }
-            //    else
-            //    {
-            //        if (filterData[1].Trim() == string.Empty)
-            //        {
-            //            redisKey = string.Format("{0}{1}{2}{3}", queryName, filterData[0].Trim(), skip, take);
-
-            //            jsonQuery = "{ $and : [ ";
-            //            jsonQuery += string.Format("{0},  ", query);
-            //            jsonQuery += "{ $or : [  ";
-            //            jsonQuery += "{ sf: { $elemMatch : {'val':/^";
-            //            jsonQuery += string.Format("{0}/i, ", filterData[0].Trim());
-            //            jsonQuery += "'" + SearchField.FieldNameProperty + "':'FN'}}},  ";
-            //            jsonQuery += "{ sf: { $elemMatch : {'" + SearchField.ValueProperty + "':/^";
-            //            jsonQuery += string.Format("{0}/i, ", filterData[0].Trim());
-            //            jsonQuery += "'" + SearchField.FieldNameProperty + "':'LN'}}},  ";
-            //            jsonQuery += "{ sf: { $elemMatch : {'" + SearchField.ValueProperty + "':/^";
-            //            jsonQuery += string.Format("{0}/i, ", filterData[0].Trim());
-            //            jsonQuery += "'" + SearchField.FieldNameProperty + "':'PN'}}}]}]}";
-            //        }
-            //        else
-            //        {
-            //            redisKey = string.Format("{0}{1}{2}{3}{4}", queryName, filterData[0].Trim(), filterData[1].Trim(), skip, take);
-
-            //            jsonQuery = "{ $and : [ ";
-            //            jsonQuery += string.Format("{0},  ", query);
-            //            jsonQuery += "{ $and : [  ";
-            //            jsonQuery += "{ $or : [  ";
-            //            jsonQuery += "{ sf : { $elemMatch: {'" + SearchField.ValueProperty + "':/^";
-            //            jsonQuery += string.Format("{0}/i, ", filterData[0].Trim());
-            //            jsonQuery += "'" + SearchField.FieldNameProperty + "':'FN'}}},  ";
-            //            jsonQuery += "{ sf : { $elemMatch: {'" + SearchField.ValueProperty + "':/^";
-            //            jsonQuery += string.Format("{0}/i, ", filterData[0].Trim());
-            //            jsonQuery += "'" + SearchField.FieldNameProperty + "':'PN'}}} ";
-            //            jsonQuery += "]}, ";
-            //            jsonQuery += "{ sf: { $elemMatch : {'" + SearchField.ValueProperty + "':/^";
-            //            jsonQuery += string.Format("{0}/i, ", filterData[1].Trim());
-            //            jsonQuery += "'" + SearchField.FieldNameProperty + "':'LN'}}}]}]}}";
-            //        }
-            //    }
-
-            //    string redisClientIPAddress = System.Configuration.ConfigurationManager.AppSettings.Get("RedisClientIPAddress");
-
-            //    List<PatientData> cohortPatientList = new List<PatientData>();
-            //    ServiceStack.Redis.RedisClient client = null;
-
-            //    //TODO: Uncomment the following 2 lines to turn Redis cache on
-            //    //if(string.IsNullOrEmpty(redisClientIPAddress) == false)
-            //    //    client = new ServiceStack.Redis.RedisClient(redisClientIPAddress);
-
-            //    //If the redisKey is already in Cache (REDIS) get it from there, else re-query
-            //    if (client != null && client.ContainsKey(redisKey))
-            //    {
-            //        //go get cohortPatientList from Redis using the redisKey now
-            //        cohortPatientList = client.Get<List<PatientData>>(redisKey);
-            //    }
-            //    else
-            //    {
-            //        using (PatientMongoContext ctx = new PatientMongoContext(_dbName))
-            //        {
-            //            BsonDocument searchQuery = MongoDB.Bson.Serialization.BsonSerializer.Deserialize<BsonDocument>(jsonQuery);
-            //            QueryDocument queryDoc = new QueryDocument(searchQuery);
-            //            SortByBuilder builder = PatientsUtils.BuildSortByBuilder(querySort);
-
-            //            List<MECohortPatientView> meCohortPatients = ctx.CohortPatientViews.Collection.Find(queryDoc)
-            //                .SetSortOrder(builder).SetSkip(skip).SetLimit(take).Distinct().ToList();
-
-            //            if (meCohortPatients != null && meCohortPatients.Count > 0)
-            //            {
-            //                meCohortPatients.ForEach(delegate(MECohortPatientView pat)
-            //                {
-            //                    PatientData cohortPatient = new PatientData();
-            //                    cohortPatient.ID = pat.PatientID.ToString();
-
-            //                    foreach (SearchField sf in pat.SearchFields)
-            //                    {
-            //                        cohortPatient.FirstName = ((SearchField)pat.SearchFields.Where(x => x.FieldName == "FN").FirstOrDefault()).Value;
-            //                        cohortPatient.LastName = ((SearchField)pat.SearchFields.Where(x => x.FieldName == "LN").FirstOrDefault()).Value;
-            //                        cohortPatient.Gender = ((SearchField)pat.SearchFields.Where(x => x.FieldName == "G").FirstOrDefault()).Value;
-            //                        cohortPatient.DOB = CommonFormatter.FormatDateOfBirth(((SearchField)pat.SearchFields.Where(x => x.FieldName == "DOB").FirstOrDefault()).Value);
-            //                        cohortPatient.MiddleName = ((SearchField)pat.SearchFields.Where(x => x.FieldName == "MN").FirstOrDefault()).Value;
-            //                        cohortPatient.Suffix = ((SearchField)pat.SearchFields.Where(x => x.FieldName == "SFX").FirstOrDefault()).Value;
-            //                        cohortPatient.PreferredName = ((SearchField)pat.SearchFields.Where(x => x.FieldName == "PN").FirstOrDefault()).Value;
-            //                    }
-            //                    cohortPatientList.Add(cohortPatient);
-            //                });
-            //            }
-            //        }
-            //        //put cohortPatientList into cache using redisKey now
-            //        if (client != null)
-            //            client.Set<List<PatientData>>(redisKey, cohortPatientList);
-            //    }
-            //    return cohortPatientList;
-            //}
-            //catch (Exception)
-            //{
-            //    throw;
-            //}
         }
 
         public Tuple<string, IEnumerable<object>> Select(Interface.APIExpression expression)
         {
             throw new NotImplementedException();
-            //List<IMongoQuery> queries = new List<IMongoQuery>();
-
-            //queries.Add(Query.EQ(MEPatient.FirstNameProperty, "Greg"));
-            //queries.Add(Query.EQ(MEPatient.LastNameProperty, "Tony"));
-
-            //IMongoQuery query2 = Query.And(queries);
-
-            //IMongoQuery query = Query.Or(
-            //    Query.EQ(MEPatient.FirstNameProperty, "Greg"),
-            //    Query.EQ(MEPatient.LastNameProperty, "Tony"));
         }
 
         public GetPatientsDataResponse Select(string[] patientIds)
@@ -414,7 +288,10 @@ namespace Phytel.API.DataDomain.Patient
                         bsv[i] = ObjectId.Parse(patientIds[i]);
                     }
 
-                    IMongoQuery query = MB.Query.In(MEPatient.IdProperty, bsv);
+                    var query = MB.Query.And(
+                        MB.Query<MEPatientUser>.In(b => b.Id, bsv),
+                        MB.Query<MEPatientUser>.EQ(b => b.DeleteFlag, false));
+
                     List<PatientData> pResp = null;
                     using (PatientMongoContext ctx = new PatientMongoContext(_dbName))
                     {
@@ -813,5 +690,44 @@ namespace Phytel.API.DataDomain.Patient
         }
 
         public string UserId { get; set; }
+
+
+        public List<PatientUserData> FindPatientUsersByPatientId(string patientId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public CohortPatientViewData FindCohortPatientViewByPatientId(string patientId)
+        {
+            throw new NotImplementedException();
+        }
+
+
+        public void UndoDelete(object entity)
+        {
+            UndoDeletePatientDataRequest request = (UndoDeletePatientDataRequest)entity;
+            try
+            {
+                using (PatientMongoContext ctx = new PatientMongoContext(_dbName))
+                {
+                    var query = MB.Query<MEPatient>.EQ(b => b.Id, ObjectId.Parse(request.Id));
+                    var builder = new List<MB.UpdateBuilder>();
+                    builder.Add(MB.Update.Set(MEPatient.TTLDateProperty, BsonNull.Value));
+                    builder.Add(MB.Update.Set(MEPatient.DeleteFlagProperty, false));
+                    builder.Add(MB.Update.Set(MEPatient.LastUpdatedOnProperty, DateTime.UtcNow));
+                    builder.Add(MB.Update.Set(MEPatient.UpdatedByProperty, ObjectId.Parse(this.UserId)));
+
+                    IMongoUpdate update = MB.Update.Combine(builder);
+                    ctx.Patients.Collection.Update(query, update);
+
+                    AuditHelper.LogDataAudit(this.UserId,
+                                            MongoCollectionName.Patient.ToString(),
+                                            request.Id.ToString(),
+                                            Common.DataAuditType.UndoDelete,
+                                            request.ContractNumber);
+                }
+            }
+            catch (Exception) { throw; }
+        }
     }
 }

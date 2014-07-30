@@ -12,11 +12,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using MB = MongoDB.Driver.Builders;
+using System.Configuration;
 
 namespace Phytel.API.DataDomain.Patient
 {
     public class MongoCohortPatientViewRepository : IPatientRepository
     {
+        private int _expireDays = Convert.ToInt32(ConfigurationManager.AppSettings["ExpireDays"]);
         public IDTOUtils Utils { get; set; }
 
         private string _dbName = string.Empty;
@@ -99,7 +101,29 @@ namespace Phytel.API.DataDomain.Patient
 
         public void Delete(object entity)
         {
-            throw new NotImplementedException();
+            DeleteCohortPatientViewDataRequest request = (DeleteCohortPatientViewDataRequest)entity;
+            try
+            {
+                using (PatientMongoContext ctx = new PatientMongoContext(_dbName))
+                {
+                    var q = MB.Query<MECohortPatientView>.EQ(b => b.Id, ObjectId.Parse(request.Id));
+                    var ub = new List<MB.UpdateBuilder>();
+                    ub.Add(MB.Update.Set(MECohortPatientView.TTLDateProperty, DateTime.UtcNow.AddDays(_expireDays)));
+                    ub.Add(MB.Update.Set(MECohortPatientView.DeleteFlagProperty, true));
+                    ub.Add(MB.Update.Set(MECohortPatientView.LastUpdatedOnProperty, DateTime.UtcNow));
+                    ub.Add(MB.Update.Set(MECohortPatientView.UpdatedByProperty, ObjectId.Parse(this.UserId)));
+
+                    IMongoUpdate update = MB.Update.Combine(ub);
+                    ctx.CohortPatientViews.Collection.Update(q, update);
+
+                    AuditHelper.LogDataAudit(this.UserId,
+                                            MongoCollectionName.CohortPatientView.ToString(),
+                                            request.Id.ToString(),
+                                            Common.DataAuditType.Delete,
+                                            request.ContractNumber);
+                }
+            }
+            catch (Exception) { throw; }
         }
 
         public void DeleteAll(List<object> entities)
@@ -113,7 +137,7 @@ namespace Phytel.API.DataDomain.Patient
             using (PatientMongoContext ctx = new PatientMongoContext(_dbName))
             {
                 patient = (from p in ctx.CohortPatientViews
-                           where p.Id == ObjectId.Parse(entityID)
+                           where p.Id == ObjectId.Parse(entityID) && p.DeleteFlag == false
                            select new DTO.PatientData
                             {
                             }).FirstOrDefault();
@@ -156,6 +180,7 @@ namespace Phytel.API.DataDomain.Patient
 
         public List<PatientData> Select(string query, string[] filterData, string querySort, int skip, int take)
         {
+            #region commented code
             /* Query without filter:
              *  { sf: { $elemMatch : {'val':'528a66f4d4332317acc5095f', 'fldn':'Problem', 'act':true}}}
              * 
@@ -187,6 +212,8 @@ namespace Phytel.API.DataDomain.Patient
              *  }
              * 
             */
+            
+            #endregion
 
             try
             {
@@ -269,20 +296,24 @@ namespace Phytel.API.DataDomain.Patient
                         {
                             meCohortPatients.ForEach(delegate(MECohortPatientView pat)
                             {
-                                PatientData cohortPatient = new PatientData();
-                                cohortPatient.ID = pat.PatientID.ToString();
+                                if(!pat.DeleteFlag)
+                                {   
+                                    PatientData cohortPatient = new PatientData();
+                                    cohortPatient.ID = pat.PatientID.ToString();
 
-                                foreach (SearchField sf in pat.SearchFields)
-                                {
-                                    cohortPatient.FirstName = ((SearchField)pat.SearchFields.Where(x => x.FieldName == Constants.FN).FirstOrDefault()).Value;
-                                    cohortPatient.LastName = ((SearchField)pat.SearchFields.Where(x => x.FieldName == Constants.LN).FirstOrDefault()).Value;
-                                    cohortPatient.Gender = ((SearchField)pat.SearchFields.Where(x => x.FieldName == Constants.G).FirstOrDefault()).Value;
-                                    cohortPatient.DOB = CommonFormatter.FormatDateOfBirth(((SearchField)pat.SearchFields.Where(x => x.FieldName == Constants.DOB).FirstOrDefault()).Value);
-                                    cohortPatient.MiddleName = ((SearchField)pat.SearchFields.Where(x => x.FieldName == Constants.MN).FirstOrDefault()).Value;
-                                    cohortPatient.Suffix = ((SearchField)pat.SearchFields.Where(x => x.FieldName == Constants.SFX).FirstOrDefault()).Value;
-                                    cohortPatient.PreferredName = ((SearchField)pat.SearchFields.Where(x => x.FieldName == Constants.PN).FirstOrDefault()).Value;
+                                    foreach (SearchField sf in pat.SearchFields)
+                                    {
+                                        cohortPatient.FirstName = ((SearchField)pat.SearchFields.Where(x => x.FieldName == Constants.FN).FirstOrDefault()).Value;
+                                        cohortPatient.LastName = ((SearchField)pat.SearchFields.Where(x => x.FieldName == Constants.LN).FirstOrDefault()).Value;
+                                        cohortPatient.Gender = ((SearchField)pat.SearchFields.Where(x => x.FieldName == Constants.G).FirstOrDefault()).Value;
+                                        cohortPatient.DOB = CommonFormatter.FormatDateOfBirth(((SearchField)pat.SearchFields.Where(x => x.FieldName == Constants.DOB).FirstOrDefault()).Value);
+                                        cohortPatient.MiddleName = ((SearchField)pat.SearchFields.Where(x => x.FieldName == Constants.MN).FirstOrDefault()).Value;
+                                        cohortPatient.Suffix = ((SearchField)pat.SearchFields.Where(x => x.FieldName == Constants.SFX).FirstOrDefault()).Value;
+                                        cohortPatient.PreferredName = ((SearchField)pat.SearchFields.Where(x => x.FieldName == Constants.PN).FirstOrDefault()).Value;
+                                    }
+                                    cohortPatientList.Add(cohortPatient);
                                 }
-                                cohortPatientList.Add(cohortPatient);
+
                             });
                         }
                     }
@@ -355,6 +386,33 @@ namespace Phytel.API.DataDomain.Patient
 
         public string UserId { get; set; }
 
+        public CohortPatientViewData FindCohortPatientViewByPatientId(string patientId)
+        {
+            CohortPatientViewData data = null;
+            try
+            {
+                using (PatientMongoContext ctx = new PatientMongoContext(_dbName))
+                {
+                    List<IMongoQuery> queries = new List<IMongoQuery>();
+                    queries.Add(Query.EQ(MECohortPatientView.PatientIDProperty, ObjectId.Parse(patientId)));
+                    //queries.Add(Query.EQ(MECohortPatientView.DeleteFlagProperty, false)); Commented out this line as there are few records in Prod that do not contain basic fields like del, ttl, uon, etc.
+                    IMongoQuery mQuery = Query.And(queries);
+                    MECohortPatientView meCPV = ctx.CohortPatientViews.Collection.Find(mQuery).FirstOrDefault();
+                    if (meCPV != null)
+                    {
+                        data = new CohortPatientViewData
+                        {
+                            Id = meCPV.Id.ToString(),
+                            LastName = meCPV.LastName,
+                            PatientID = meCPV.PatientID.ToString()
+                        };
+                    }
+                }
+                return data;
+            }
+            catch (Exception) { throw; }
+        }
+
         #region needs to be taken out of IPatientRepository . In place right now to accomidate the interface
         public void CacheByID(List<string> entityIDs)
         {
@@ -395,5 +453,40 @@ namespace Phytel.API.DataDomain.Patient
             throw new NotImplementedException();
         }
         #endregion
+
+
+        public List<PatientUserData> FindPatientUsersByPatientId(string patientId)
+        {
+            throw new NotImplementedException();
+        }
+
+
+        public void UndoDelete(object entity)
+        {
+            UndoDeleteCohortPatientViewDataRequest request = (UndoDeleteCohortPatientViewDataRequest)entity;
+            try
+            {
+                using (PatientMongoContext ctx = new PatientMongoContext(_dbName))
+                {
+                    var q = MB.Query<MECohortPatientView>.EQ(b => b.Id, ObjectId.Parse(request.Id));
+                    var ub = new List<MB.UpdateBuilder>();
+                    ub.Add(MB.Update.Set(MECohortPatientView.TTLDateProperty, BsonNull.Value));
+                    ub.Add(MB.Update.Set(MECohortPatientView.DeleteFlagProperty, false));
+                    ub.Add(MB.Update.Set(MECohortPatientView.LastUpdatedOnProperty, DateTime.UtcNow));
+                    ub.Add(MB.Update.Set(MECohortPatientView.UpdatedByProperty, ObjectId.Parse(this.UserId)));
+
+                    IMongoUpdate update = MB.Update.Combine(ub);
+                    ctx.CohortPatientViews.Collection.Update(q, update);
+
+                    AuditHelper.LogDataAudit(this.UserId,
+                                            MongoCollectionName.CohortPatientView.ToString(),
+                                            request.Id.ToString(),
+                                            Common.DataAuditType.UndoDelete,
+                                            request.ContractNumber);
+                }
+            }
+            catch (Exception) { throw; }
+        }
+
     }
 }

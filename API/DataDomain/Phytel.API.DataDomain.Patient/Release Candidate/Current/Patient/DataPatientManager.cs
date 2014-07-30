@@ -224,5 +224,129 @@ namespace Phytel.API.DataDomain.Patient
 
             return result;
         }
+
+        #region Delete
+        public DeletePatientDataResponse DeletePatient(DeletePatientDataRequest request)
+        {
+            DeletePatientDataResponse response = null;
+            try
+            {
+                response = new DeletePatientDataResponse();
+
+                IPatientRepository patientRepo = Factory.GetRepository(request, RepositoryType.Patient);
+                patientRepo.Delete(request);
+                response.DeletedId = request.Id;
+                response.Success = true;
+                return response;
+            }
+            catch (Exception ex) { throw ex; }
+        }
+
+        public DeletePatientUserByPatientIdDataResponse DeletePatientUserByPatientId(DeletePatientUserByPatientIdDataRequest request)
+        {
+            DeletePatientUserByPatientIdDataResponse response = null;
+            try
+            {
+                response = new DeletePatientUserByPatientIdDataResponse();
+
+                IPatientRepository patientUserRepo = Factory.GetRepository(request, RepositoryType.PatientUser);
+
+                List<PatientUserData> puData = patientUserRepo.FindPatientUsersByPatientId(request.PatientId);
+                List<string> deletedIds = null;
+                if (puData != null)
+                {
+                    deletedIds = new List<string>();
+                    puData.ForEach(u =>
+                    {
+                        request.Id = u.Id;
+                        patientUserRepo.Delete(request);
+                        deletedIds.Add(request.Id);
+                    });
+                    response.DeletedIds = deletedIds;
+                }
+                response.Success = true;
+                return response;
+            }
+            catch (Exception ex) { throw ex; }
+        }
+
+        public DeleteCohortPatientViewDataResponse DeleteCohortPatientViewByPatientId(DeleteCohortPatientViewDataRequest request)
+        {
+            DeleteCohortPatientViewDataResponse response = null;
+            try
+            {
+                response = new DeleteCohortPatientViewDataResponse();
+
+                IPatientRepository cpvRepo = Factory.GetRepository(request, RepositoryType.CohortPatientView);
+                CohortPatientViewData cpvData = cpvRepo.FindCohortPatientViewByPatientId(request.PatientId);
+                if (cpvData != null)
+                {
+                    request.Id = cpvData.Id;
+                    cpvRepo.Delete(request);
+                    response.DeletedId = request.Id;
+                }
+                response.Success = true;
+                return response;
+            }
+            catch (Exception ex) { throw ex; }
+        } 
+        #endregion
+
+        #region UndoDelete
+        public UndoDeletePatientDataResponse UndoDeletePatient(UndoDeletePatientDataRequest request)
+        {
+            UndoDeletePatientDataResponse response = null;
+            try
+            {
+                response = new UndoDeletePatientDataResponse();
+                IPatientRepository patientRepo = Factory.GetRepository(request, RepositoryType.Patient);
+                if(request.Id != null)
+                {
+                    patientRepo.UndoDelete(request);
+                }
+                response.Success = true;
+                return response;
+            }
+            catch (Exception ex) { throw ex; }
+        }
+
+        public UndoDeletePatientUsersDataResponse UndoDeletePatientUser(UndoDeletePatientUsersDataRequest request)
+        {
+            UndoDeletePatientUsersDataResponse response = null;
+            try
+            {
+                response = new UndoDeletePatientUsersDataResponse();
+                IPatientRepository patientUserRepo = Factory.GetRepository(request, RepositoryType.PatientUser);
+                if (request.Ids != null && request.Ids.Count > 0)
+                {
+                    request.Ids.ForEach(u =>
+                    {
+                        request.PatientUserId = u;
+                        patientUserRepo.UndoDelete(request);
+                    });
+                }
+                response.Success = true;
+                return response;
+            }
+            catch (Exception ex) { throw ex; }
+        }
+
+        public UndoDeleteCohortPatientViewDataResponse UndoDeleteCohortPatientView(UndoDeleteCohortPatientViewDataRequest request)
+        {
+            UndoDeleteCohortPatientViewDataResponse response = null;
+            try
+            {
+                response = new UndoDeleteCohortPatientViewDataResponse();
+                IPatientRepository cpvRepo = Factory.GetRepository(request, RepositoryType.CohortPatientView);
+                if (request.Id != null)
+                {
+                    cpvRepo.UndoDelete(request);
+                }
+                response.Success = true;
+                return response;
+            }
+            catch (Exception ex) { throw ex; }
+        }
+        #endregion
     }
 }   

@@ -11,6 +11,7 @@ namespace Phytel.API.DataDomain.Patient.DTO
     [BsonIgnoreExtraElements(false)]
     [MongoIndex(Keys = new string[] { SearchFieldsProperty + "." + SearchField.FieldNameProperty, SearchFieldsProperty + "." + SearchField.ValueProperty, SearchFieldsProperty + "." + SearchField.ActiveProperty })]
     [MongoIndex(Keys = new string[] { PatientIDProperty }, Unique = true)]
+    [MongoIndex(Keys = new string[] { TTLDateProperty }, TimeToLive = 0)]
     public class MECohortPatientView : IMongoEntity<ObjectId>
     {
         public MECohortPatientView(string userId)
