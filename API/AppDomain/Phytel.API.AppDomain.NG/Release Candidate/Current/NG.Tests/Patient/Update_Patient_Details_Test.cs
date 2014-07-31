@@ -32,18 +32,56 @@ namespace Phytel.API.DataDomain.Patient.Service.Test
                     Token = token
                 } as object);
 
-            //PutPatientDetailsUpdateResponse response = client.Post<PutPatientDetailsUpdateResponse>(
-            //    string.Format(@"http://azurephyteldev.cloudapp.net:59900/Nightingale/{0}/{1}/patient/Update/?Id={2}",
-            //    version,
-            //    contractNumber,
-            //    patientID),
-            //    new PutPatientDetailsUpdateRequest
-            //    {
-            //        DOB = "12-12-2013",
-            //        Priority = 1,
-            //        PreferredName = "Sammy",
-            //        Token = token
-            //    } as object);
+        }
+
+        [TestMethod]
+        public void DeletePatient_Test()
+        {
+            string contractNumber = "InHealth001";
+            double version = 1.0;
+            string token = "53b2b4d6d6a4850facf303d1";
+            string id = "5325d9fad6a4850adcbba4e2";
+            string userId = "53b2b4d6d6a4850facf303d1";
+            IRestClient client = new JsonServiceClient();
+
+            JsonServiceClient.HttpWebRequestFilter = x => x.Headers.Add(string.Format("Token: {0}", token));
+
+            PostDeletePatientResponse response = client.Post<PostDeletePatientResponse>(
+                string.Format(@"http://localhost:56176/{0}/{1}/Patient/{2}/Delete",
+                version,
+                contractNumber,
+                id), new PostDeletePatientRequest
+                {
+                    ContractNumber = contractNumber, 
+                    Id = id, 
+                    Token = token,
+                    UserId = userId,
+                    Version = version
+                } as object);
+
+            Assert.IsNotNull(response);
+        }
+
+
+        [TestMethod]
+        public void GetRecentPatientsForAContact_Test()
+        {
+            string contractNumber = "InHealth001";
+            double version = 1.0;
+            string token = "53750ca2d6a4850854d33c42";
+            string contactId = "5325c821072ef705080d3488";
+
+            JsonServiceClient.HttpWebRequestFilter = x => x.Headers.Add(string.Format("Token: {0}", token));
+
+            IRestClient client = new JsonServiceClient();
+            //[Route("/{Version}/{ContractNumber}/Patient/{Id}/Delete", "POST")]
+            GetRecentPatientsResponse response = client.Get<GetRecentPatientsResponse>(
+                string.Format(@"http://localhost:888/Nightingale/{0}/{1}/Contact/{2}/RecentPatients",
+                version,
+                contractNumber,
+                contactId));
+
+            Assert.IsNotNull(response.Limit);
         }
     }
 }

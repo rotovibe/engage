@@ -55,9 +55,9 @@ namespace Phytel.API.AppDomain.NG
                     Module mod = PEUtils.FindElementById(p.Modules, action.ModuleId);
 
                     // set module to in progress
-                    if (mod.ElementState != (int) ElementState.InProgress) //!= 4
+                    if (mod.ElementState == (int)ElementState.NotStarted) //!= 4
                     {
-                        mod.ElementState = (int) ElementState.InProgress; //4;
+                        mod.ElementState = (int)ElementState.InProgress; //4;
                         mod.StateUpdatedOn = DateTime.UtcNow;
                     }
 
@@ -67,26 +67,33 @@ namespace Phytel.API.AppDomain.NG
                         //if (new IsActionInitialSpecification<Program>().IsSatisfiedBy(p))
                     {
                         // set program to in progress
-                        p.ElementState = (int) ElementState.InProgress; //4
-                        p.StateUpdatedOn = DateTime.UtcNow;
+                        if (p.ElementState == (int)ElementState.NotStarted)
+                        {
+                            p.ElementState = (int)ElementState.InProgress; //4;
+                            p.StateUpdatedOn = DateTime.UtcNow;
+                        }
                     }
 
-                    // 3) insert action update
-                    NGUtils.UpdateProgramAction(action, p);
+                        // 3) set action state to completed
+                        action.ElementState = (int) ElementState.Completed;
+                        action.StateUpdatedOn = DateTime.UtcNow;
+
+                    // 4) insert action update
+                    var act = NGUtils.UpdateProgramAction(action, p);
 
                     //// create a responsibility chain to process each elemnt in the hierachy
                     ProgramPlanProcessor pChain = InitializeProgramChain();
 
-                    // 4)  process steps
+                    // 5)  process steps
                     action.Steps.ForEach(
                         s =>
                             pChain.ProcessWorkflow((IPlanElement) s, p, request.UserId, request.PatientId, action,
                                 request));
 
-                    // 5) process action
+                    // 6) process action
                     pChain.ProcessWorkflow((IPlanElement) action, p, request.UserId, request.PatientId, action, request);
 
-                    // 6) process module
+                    // 7) process module
                     if (mod != null)
                     {
                         // set enabled status for action dependencies
@@ -97,20 +104,17 @@ namespace Phytel.API.AppDomain.NG
                     }
 
                     // post processing //
-                    // 7) set module visibility for modules
+                    // 8) set module visibility for modules
                     PEUtils.SetEnabledStatusByPrevious(p.Modules, p.AssignToId, p.Enabled);
 
-                    // 8) evaluate program status
+                    // 9) evaluate program status
                     if (PEUtils.IsProgramCompleted(p, request.UserId))
                     {
                         p.Completed = true;
                         pChain.ProcessWorkflow((IPlanElement) p, p, request.UserId, request.PatientId, action, request);
                     }
 
-                    // 9) set action state to completed
-                    action.ElementState = (int) ElementState.Completed;
-
-                    // 10) set action state
+                    // 10) register changed action 
                     AddUniquePlanElementToProcessedList(action);
                 }
                 else
@@ -165,10 +169,21 @@ namespace Phytel.API.AppDomain.NG
                 //if (new IsActionInitialSpecification<Program>().IsSatisfiedBy(p))
                 {
                     // set program to in progress
-                    p.ElementState = (int) ElementState.InProgress; //4;
-                    p.StateUpdatedOn = System.DateTime.UtcNow;
+                    if (p.ElementState == (int)ElementState.NotStarted)
+                    {
+                        p.ElementState = (int)ElementState.InProgress; //4;
+                        p.StateUpdatedOn = System.DateTime.UtcNow;
+                    }
                 }
-                
+
+                // presenter is sending a save request with an action element state of 4 already. 
+                // presenter will also set the stateupdatedon property.
+                //if (action.ElementState == (int)ElementState.NotStarted)
+                //{
+                //    action.ElementState = (int) ElementState.InProgress;
+                //    action.StateUpdatedOn = DateTime.UtcNow;
+                //}
+
                 NGUtils.UpdateProgramAction(action, p);
 
                 AddUniquePlanElementToProcessedList(mod);

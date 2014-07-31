@@ -85,7 +85,7 @@ namespace Phytel.API.AppDomain.NG
 
                         if (x.GetType() == typeof (Module))
                         {
-                            SetInitialActions(x, null);
+                            SetInitialActions(x, assignToId);
                         }
                     });
             }
@@ -97,18 +97,32 @@ namespace Phytel.API.AppDomain.NG
 
         public void SetInitialActions(object x, string assignToId)
         {
-            if (((Module)x).Enabled == false) return;
-            if (((Module)x).Actions == null) return;
+            if (((Module) x).Enabled == false) return;
+            if (((Module) x).Actions == null) return;
+
             List<Actions> actionList =
-                ((Module)x).Actions.Where(
+                ((Module) x).Actions.Where(
                     a =>
-                        a.Enabled == true && a.ElementState != (int)DD.ElementState.Completed
-                        && a.ElementState != (int)DD.ElementState.InProgress).ToList();
+                        a.Enabled == true && a.ElementState != (int) DD.ElementState.Completed
+                        && a.ElementState != (int) DD.ElementState.InProgress).ToList();
             // create a specification for this to isolate the business logic.
 
             actionList.ForEach(z =>
             {
-                SetInitialProperties(((Module) x).AssignToId, (PlanElement) z);
+                //SetInitialProperties(((Module) x).AssignToId, (PlanElement) z, true);
+
+                if (z.StateUpdatedOn == null)
+                    z.StateUpdatedOn = DateTime.UtcNow;
+
+                if (z.AssignDate == null)
+                    z.AssignDate = DateTime.UtcNow;
+
+                if (string.IsNullOrEmpty(z.AssignToId))
+                    z.AssignToId = assignToId;
+
+                if (string.IsNullOrEmpty(z.AssignById))
+                    z.AssignById = DD.Constants.SystemContactId;
+
                 OnProcessIdEvent(z);
             });
         }
@@ -417,14 +431,14 @@ namespace Phytel.API.AppDomain.NG
                 {
                     if (m.Id.Equals(p))
                     {
-                        SetInitialProperties(program.AssignToId, m);
+                        SetInitialProperties(program.AssignToId, m, false);
                         var list = m.Actions.Where(a => a.Enabled == true
                                                         && a.ElementState != (int) DD.ElementState.Completed
                                                         && a.ElementState != (int) DD.ElementState.InProgress);
                         // create rule specification
                         list.ForEach(a =>
                         {
-                            if (a.Enabled) SetInitialProperties(program.AssignToId, a);
+                            if (a.Enabled) SetInitialProperties(program.AssignToId, a, false);
                             OnProcessIdEvent(a);
                         });
                         OnProcessIdEvent(m);
@@ -451,7 +465,7 @@ namespace Phytel.API.AppDomain.NG
                     {
                         if (a.Id.Equals(p))
                         {
-                            SetInitialProperties(m.AssignToId, a);
+                            SetInitialProperties(m.AssignToId, a, false);
                             OnProcessIdEvent(a);
                             return;
                         }
@@ -475,7 +489,7 @@ namespace Phytel.API.AppDomain.NG
                 if (a.Steps == null) return;
                 foreach (Step s in a.Steps.Where(s => s.Id.Equals(p)))
                 {
-                    SetInitialProperties(program.AssignToId, s);
+                    SetInitialProperties(program.AssignToId, s, false);
                     OnProcessIdEvent(s);
                 }
             }
@@ -485,13 +499,39 @@ namespace Phytel.API.AppDomain.NG
             }
         }
 
-        public void SetInitialProperties(string assignToId, IPlanElement m)
+        public void SetInitialProperties(string assignToId, IPlanElement m, bool dependent)
         {
             try
             {
+                switch (dependent)
+                {
+                    case false:
+                        {
+                            SetInitialValues(assignToId, m);
+                            break;
+                        }
+                    case true:
+                        {
+                            if (!m.Enabled)
+                            {
+                                SetInitialValues(assignToId, m);
+                            }
+                            break;
+                        }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("AD:PlanElementUtil:SetInitialProperties()::" + ex.Message, ex.InnerException);
+            }
+        }
+
+        public void SetInitialValues(string assignToId, IPlanElement m)
+        {
                 // NIGHT-835
                 if (m.AssignDate == null)
                     m.AssignDate = System.DateTime.UtcNow;
+
                 //if (m.AssignToId == null)
                 m.AssignToId = assignToId; // NIGHT-877
 
@@ -501,11 +541,6 @@ namespace Phytel.API.AppDomain.NG
 
                 if (string.IsNullOrEmpty(m.AssignById))
                     m.AssignById = DD.Constants.SystemContactId;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("AD:PlanElementUtil:SetInitialProperties()::" + ex.Message, ex.InnerException);
-            }
         }
 
         public Actions GetProcessingAction(List<Module> list, string actionId)

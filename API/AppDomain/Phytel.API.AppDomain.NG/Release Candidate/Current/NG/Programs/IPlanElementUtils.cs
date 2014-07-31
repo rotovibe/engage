@@ -32,7 +32,7 @@ namespace Phytel.API.AppDomain.NG
         void SetElementEnabledState(string p, Program program);
         void SetEnabledState<T>(List<T> list, T x, string assignToId, bool pEnabled);
         void SetEnabledStatusByPrevious<T>(List<T> planElements, string assignToId, bool pEnabled);
-        void SetInitialProperties(string assignToId, IPlanElement m);
+        void SetInitialProperties(string assignToId, IPlanElement m, bool dependent);
         void SetProgramAttributes(SpawnElement r, Program program, string userId, ProgramAttributeData progAttr);
         void SetInitialActions(object x, string assignToId);
         void SetProgramInformation(ProgramAttributeData _programAttributes, Program p);
