@@ -69,6 +69,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="RemoveProgramInPatientNotesDataRequest.cs" />
+    <Compile Include="RemoveProgramInPatientNotesDataResponse.cs" />
+    <Compile Include="UndoDeletePatientNotesDataRequest.cs" />
+    <Compile Include="DeleteNoteByPatientIdDataRequest.cs" />
+    <Compile Include="UndoDeletePatientNotesDataResponse.cs" />
+    <Compile Include="DeleteNoteByPatientIdDataResponse.cs" />
     <Compile Include="DeletePatientNoteDataRequest.cs" />
     <Compile Include="DeletePatientNoteDataResponse.cs" />
     <Compile Include="GetAllPatientNotesDataRequest.cs" />

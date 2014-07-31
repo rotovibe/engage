@@ -213,7 +213,15 @@ namespace Phytel.API.DataDomain.PatientNote
                     queries.Add(Query.EQ(MEPatientNote.PatientIdProperty, ObjectId.Parse(dataRequest.PatientId)));
                     queries.Add(Query.EQ(MEPatientNote.DeleteFlagProperty, false));
                     IMongoQuery mQuery = Query.And(queries);
-                    List<MEPatientNote> meNotes = ctx.PatientNotes.Collection.Find(mQuery).OrderByDescending(o => o.RecordCreatedOn).Take(dataRequest.Count).ToList();
+                    List<MEPatientNote> meNotes = null;
+                    if (dataRequest.Count > 0)
+                    {
+                        meNotes = ctx.PatientNotes.Collection.Find(mQuery).OrderByDescending(o => o.RecordCreatedOn).Take(dataRequest.Count).ToList();
+                    }
+                    else
+                    {
+                        meNotes = ctx.PatientNotes.Collection.Find(mQuery).ToList();
+                    }
                     if (meNotes != null && meNotes.Count > 0)
                     {
                         noteDataList = new List<PatientNoteData>();
@@ -236,5 +244,100 @@ namespace Phytel.API.DataDomain.PatientNote
         }
 
         public string UserId { get; set; }
+
+
+        public void UndoDelete(object entity)
+        {
+            UndoDeletePatientNotesDataRequest request = (UndoDeletePatientNotesDataRequest)entity;
+            try
+            {
+                using (PatientNoteMongoContext ctx = new PatientNoteMongoContext(_dbName))
+                {
+                    var q = MB.Query<MEPatientNote>.EQ(b => b.Id, ObjectId.Parse(request.PatientNoteId));
+
+                    var uv = new List<MB.UpdateBuilder>();
+                    uv.Add(MB.Update.Set(MEPatientNote.TTLDateProperty, BsonNull.Value));
+                    uv.Add(MB.Update.Set(MEPatientNote.DeleteFlagProperty, false));
+                    uv.Add(MB.Update.Set(MEPatientNote.LastUpdatedOnProperty, DateTime.UtcNow));
+                    uv.Add(MB.Update.Set(MEPatientNote.UpdatedByProperty, ObjectId.Parse(this.UserId)));
+
+                    IMongoUpdate update = MB.Update.Combine(uv);
+                    ctx.PatientNotes.Collection.Update(q, update);
+
+                    AuditHelper.LogDataAudit(this.UserId,
+                                            MongoCollectionName.PatientNote.ToString(),
+                                            request.PatientNoteId.ToString(),
+                                            Common.DataAuditType.UndoDelete,
+                                            request.ContractNumber);
+
+                }
+            }
+            catch (Exception) { throw; }
+        }
+
+        public void RemoveProgram(object entity, List<string> updatedProgramIds)
+        {
+            RemoveProgramInPatientNotesDataRequest request = (RemoveProgramInPatientNotesDataRequest)entity;
+            try
+            {
+                List<ObjectId> ids = updatedProgramIds.ConvertAll(r => ObjectId.Parse(r));
+                using (PatientNoteMongoContext ctx = new PatientNoteMongoContext(_dbName))
+                {
+                    var q = MB.Query<MEPatientNote>.EQ(b => b.Id, ObjectId.Parse(request.NoteId));
+
+                    var uv = new List<MB.UpdateBuilder>();
+                    uv.Add(MB.Update.SetWrapped<List<ObjectId>>(MEPatientNote.ProgramProperty, ids));
+                    uv.Add(MB.Update.Set(MEPatientNote.LastUpdatedOnProperty, DateTime.UtcNow));
+                    uv.Add(MB.Update.Set(MEPatientNote.UpdatedByProperty, ObjectId.Parse(this.UserId)));
+
+                    IMongoUpdate update = MB.Update.Combine(uv);
+                    ctx.PatientNotes.Collection.Update(q, update);
+
+                    AuditHelper.LogDataAudit(this.UserId,
+                                            MongoCollectionName.PatientNote.ToString(),
+                                            request.NoteId.ToString(),
+                                            Common.DataAuditType.Update,
+                                            request.ContractNumber);
+
+                }
+            }
+            catch (Exception) { throw; }
+        }
+
+        public IEnumerable<object> FindNotesWithAProgramId(string entityId)
+        {
+            List<PatientNoteData> noteDataList = null;
+            try
+            {
+                using (PatientNoteMongoContext ctx = new PatientNoteMongoContext(_dbName))
+                {
+                    List<IMongoQuery> queries = new List<IMongoQuery>();
+                    queries.Add(Query.In(MEPatientNote.ProgramProperty, new List<BsonValue> { BsonValue.Create(ObjectId.Parse(entityId)) }));
+                    queries.Add(Query.EQ(MEPatientNote.DeleteFlagProperty, false));
+                    IMongoQuery mQuery = Query.And(queries);
+                    List<MEPatientNote> meNotes = ctx.PatientNotes.Collection.Find(mQuery).ToList();
+                    if (meNotes != null && meNotes.Count > 0)
+                    {
+                        noteDataList = new List<PatientNoteData>();
+                        foreach (MEPatientNote meN in meNotes)
+                        {
+                            PatientNoteData data = new PatientNoteData
+                            {
+                                Id = meN.Id.ToString(),
+                                PatientId = meN.PatientId.ToString(),
+                                Text = meN.Text,
+                                ProgramIds = Helper.ConvertToStringList(meN.ProgramIds),
+                                CreatedOn = meN.RecordCreatedOn,
+                                CreatedById = meN.RecordCreatedBy.ToString()
+                            };
+                            noteDataList.Add(data);
+                        }
+
+                    }
+                }
+                return noteDataList;
+            }
+            catch (Exception ex) { throw ex; }
+        }
     }
 }
