@@ -301,5 +301,97 @@ namespace Phytel.API.DataDomain.PatientGoal
         }
 
         public string UserId { get; set; }
+
+
+        public void UndoDelete(object entity)
+        {
+            UndoDeletePatientGoalDataRequest request = (UndoDeletePatientGoalDataRequest)entity;
+            try
+            {
+                using (PatientGoalMongoContext ctx = new PatientGoalMongoContext(_dbName))
+                {
+                    var q = MB.Query<MEPatientGoal>.EQ(b => b.Id, ObjectId.Parse(request.PatientGoalId));
+
+                    var uv = new List<MB.UpdateBuilder>();
+                    uv.Add(MB.Update.Set(MEPatientGoal.TTLDateProperty, BsonNull.Value));
+                    uv.Add(MB.Update.Set(MEPatientGoal.DeleteFlagProperty, false));
+                    uv.Add(MB.Update.Set(MEPatientGoal.UpdatedByProperty, ObjectId.Parse(this.UserId)));
+                    uv.Add(MB.Update.Set(MEPatientGoal.LastUpdatedOnProperty, DateTime.UtcNow));
+
+                    IMongoUpdate update = MB.Update.Combine(uv);
+                    ctx.PatientGoals.Collection.Update(q, update);
+
+                    AuditHelper.LogDataAudit(this.UserId,
+                                            MongoCollectionName.PatientGoal.ToString(),
+                                            request.PatientGoalId.ToString(),
+                                            Common.DataAuditType.UndoDelete,
+                                            request.ContractNumber);
+                }
+            }
+            catch (Exception) { throw; }
+        }
+
+        public void RemoveProgram(object entity, List<string> updatedProgramIds)
+        {
+            RemoveProgramInPatientGoalsDataRequest request = (RemoveProgramInPatientGoalsDataRequest)entity;
+            try
+            {
+                List<ObjectId> ids = updatedProgramIds.ConvertAll(r => ObjectId.Parse(r));
+                using (PatientGoalMongoContext ctx = new PatientGoalMongoContext(_dbName))
+                {
+                    var q = MB.Query<MEPatientGoal>.EQ(b => b.Id, ObjectId.Parse(request.PatientGoalId));
+
+                    var uv = new List<MB.UpdateBuilder>();
+                    uv.Add(MB.Update.SetWrapped<List<ObjectId>>(MEPatientGoal.ProgramProperty, ids));
+                    uv.Add(MB.Update.Set(MEPatientGoal.LastUpdatedOnProperty, DateTime.UtcNow));
+                    uv.Add(MB.Update.Set(MEPatientGoal.UpdatedByProperty, ObjectId.Parse(this.UserId)));
+
+                    IMongoUpdate update = MB.Update.Combine(uv);
+                    ctx.PatientGoals.Collection.Update(q, update);
+
+                    AuditHelper.LogDataAudit(this.UserId,
+                                            MongoCollectionName.PatientGoal.ToString(),
+                                            request.PatientGoalId.ToString(),
+                                            Common.DataAuditType.Update,
+                                            request.ContractNumber);
+
+                }
+            }
+            catch (Exception) { throw; }
+        }
+
+        public IEnumerable<object> FindGoalsWithAProgramId(string entityId)
+        {
+            List<PatientGoalData> goals = null;
+            try
+            {
+                using (PatientGoalMongoContext ctx = new PatientGoalMongoContext(_dbName))
+                {
+                    List<IMongoQuery> queries = new List<IMongoQuery>();
+                    queries.Add(Query.In(MEPatientGoal.ProgramProperty, new List<BsonValue> { BsonValue.Create(ObjectId.Parse(entityId)) }));
+                    queries.Add(Query.EQ(MEPatientGoal.DeleteFlagProperty, false));
+                    queries.Add(Query.EQ(MEPatientGoal.TTLDateProperty, BsonNull.Value));
+                    IMongoQuery mQuery = Query.And(queries);
+                    List<MEPatientGoal> meGoals = ctx.PatientGoals.Collection.Find(mQuery).ToList();
+                    if (meGoals != null && meGoals.Count > 0)
+                    {
+                        goals = new List<PatientGoalData>();
+                        foreach (MEPatientGoal mePG in meGoals)
+                        {
+                            PatientGoalData data = new PatientGoalData
+                            {
+                                Id = mePG.Id.ToString(),
+                                PatientId = mePG.PatientId.ToString(),
+                                Name = mePG.Name,
+                                ProgramIds = Helper.ConvertToStringList(mePG.ProgramIds)
+                            };
+                            goals.Add(data);
+                        }
+                    }
+                }
+                return goals;
+            }
+            catch (Exception ex) { throw ex; }
+        }
     }
 }

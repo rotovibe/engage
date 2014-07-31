@@ -4,9 +4,10 @@ using Phytel.API.Interface;
 
 namespace Phytel.API.DataDomain.PatientGoal.DTO
 {
-    public class DeleteInterventionResponse : IDomainResponse
+    public class DeleteInterventionDataResponse : IDomainResponse
     {
-        public bool Deleted { get; set; }
+        public bool Success { get; set; }
+        public List<string> DeletedIds { get; set; }
         public double Version { get; set; }
         public ResponseStatus Status { get; set; }
     }

@@ -71,14 +71,12 @@ namespace Phytel.API.DataDomain.PatientGoal
 
         public void Delete(object entity)
         {
-            DeleteTaskRequest request = (DeleteTaskRequest)entity;
+            DeleteTaskDataRequest request = (DeleteTaskDataRequest)entity;
             try
             {
                 using (PatientGoalMongoContext ctx = new PatientGoalMongoContext(_dbName))
                 {
                     var q = MB.Query<MEPatientTask>.EQ(b => b.Id, ObjectId.Parse(request.TaskId));
-
-                    var f = ctx.PatientTasks.Collection.FindAll();
                     var uv = new List<MB.UpdateBuilder>();
                     uv.Add(MB.Update.Set(MEPatientTask.TTLDateProperty, System.DateTime.UtcNow.AddDays(_expireDays)));
                     uv.Add(MB.Update.Set(MEPatientTask.DeleteFlagProperty, true));
@@ -285,6 +283,8 @@ namespace Phytel.API.DataDomain.PatientGoal
                 List<PatientTaskData> tasksDataList = null;
                 List<IMongoQuery> queries = new List<IMongoQuery>();
                 queries.Add(Query.EQ(MEPatientTask.PatientGoalIdProperty, ObjectId.Parse(Id)));
+                queries.Add(Query.EQ(MEPatientTask.DeleteFlagProperty, false));
+                queries.Add(Query.EQ(MEPatientTask.TTLDateProperty, BsonNull.Value));
                 IMongoQuery mQuery = Query.And(queries);
 
                 using (PatientGoalMongoContext ctx = new PatientGoalMongoContext(_dbName))
@@ -318,5 +318,44 @@ namespace Phytel.API.DataDomain.PatientGoal
         }
 
         public string UserId { get; set; }
+
+
+        public void UndoDelete(object entity)
+        {
+            UndoDeleteTaskDataRequest request = (UndoDeleteTaskDataRequest)entity;
+            try
+            {
+                using (PatientGoalMongoContext ctx = new PatientGoalMongoContext(_dbName))
+                {
+                    var q = MB.Query<MEPatientTask>.EQ(b => b.Id, ObjectId.Parse(request.TaskId));
+                    var uv = new List<MB.UpdateBuilder>();
+                    uv.Add(MB.Update.Set(MEPatientTask.TTLDateProperty, BsonNull.Value));
+                    uv.Add(MB.Update.Set(MEPatientTask.DeleteFlagProperty, false));
+                    uv.Add(MB.Update.Set(MEPatientTask.UpdatedByProperty, ObjectId.Parse(this.UserId)));
+                    uv.Add(MB.Update.Set(MEPatientTask.LastUpdatedOnProperty, DateTime.UtcNow));
+
+                    IMongoUpdate update = MB.Update.Combine(uv);
+                    ctx.PatientTasks.Collection.Update(q, update);
+
+                    AuditHelper.LogDataAudit(this.UserId,
+                                            MongoCollectionName.PatientTask.ToString(),
+                                            request.TaskId.ToString(),
+                                            Common.DataAuditType.UndoDelete,
+                                            request.ContractNumber);
+                }
+            }
+            catch (Exception) { throw; }
+        }
+
+
+        public IEnumerable<object> FindGoalsWithAProgramId(string entityId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void RemoveProgram(object entity, List<string> updatedProgramIds)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

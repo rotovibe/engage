@@ -21,7 +21,7 @@ namespace Phytel.API.DataDomain.PatientGoal.Services.Test
             string patientGoaldId = "52fd2d6cd433231c845e7d25";
             IRestClient client = new JsonServiceClient();
 
-            DeleteTaskResponse response = client.Delete<DeleteTaskResponse>(
+            DeleteTaskDataResponse response = client.Delete<DeleteTaskDataResponse>(
                 string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Goal/{5}/Task/{6}/Delete/?UserId={7}",
                 url,
                 context,

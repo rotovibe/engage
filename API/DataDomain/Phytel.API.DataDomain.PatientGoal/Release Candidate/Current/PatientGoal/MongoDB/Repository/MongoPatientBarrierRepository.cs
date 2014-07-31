@@ -70,7 +70,7 @@ namespace Phytel.API.DataDomain.PatientGoal
 
         public void Delete(object entity)
         {
-            DeleteBarrierRequest request = (DeleteBarrierRequest)entity;
+            DeleteBarrierDataRequest request = (DeleteBarrierDataRequest)entity;
             try
             {
                 using (PatientGoalMongoContext ctx = new PatientGoalMongoContext(_dbName))
@@ -272,6 +272,8 @@ namespace Phytel.API.DataDomain.PatientGoal
                 List<PatientBarrierData> barriersDataList = null;
                 List<IMongoQuery> queries = new List<IMongoQuery>();
                 queries.Add(Query.EQ(MEPatientBarrier.PatientGoalIdProperty, ObjectId.Parse(Id)));
+                queries.Add(Query.EQ(MEPatientBarrier.DeleteFlagProperty, false));
+                queries.Add(Query.EQ(MEPatientBarrier.TTLDateProperty, BsonNull.Value));
                 IMongoQuery mQuery = Query.And(queries);
 
                 using (PatientGoalMongoContext ctx = new PatientGoalMongoContext(_dbName))
@@ -296,5 +298,45 @@ namespace Phytel.API.DataDomain.PatientGoal
         }
 
         public string UserId { get; set; }
+
+
+        public void UndoDelete(object entity)
+        {
+            UndoDeleteBarrierDataRequest request = (UndoDeleteBarrierDataRequest)entity;
+            try
+            {
+                using (PatientGoalMongoContext ctx = new PatientGoalMongoContext(_dbName))
+                {
+                    var q = MB.Query<MEPatientBarrier>.EQ(b => b.Id, ObjectId.Parse(request.BarrierId));
+
+                    var uv = new List<MB.UpdateBuilder>();
+                    uv.Add(MB.Update.Set(MEPatientBarrier.TTLDateProperty, BsonNull.Value));
+                    uv.Add(MB.Update.Set(MEPatientBarrier.DeleteFlagProperty, false));
+                    uv.Add(MB.Update.Set(MEPatientBarrier.UpdatedByProperty, ObjectId.Parse(this.UserId)));
+                    uv.Add(MB.Update.Set(MEPatientBarrier.LastUpdatedOnProperty, DateTime.UtcNow));
+
+                    IMongoUpdate update = MB.Update.Combine(uv);
+                    WriteConcernResult res = ctx.PatientBarriers.Collection.Update(q, update);
+
+                    AuditHelper.LogDataAudit(this.UserId,
+                                            MongoCollectionName.PatientBarrier.ToString(),
+                                            request.BarrierId.ToString(),
+                                            Common.DataAuditType.UndoDelete,
+                                            request.ContractNumber);
+                }
+            }
+            catch (Exception) { throw; }
+        }
+
+
+        public IEnumerable<object> FindGoalsWithAProgramId(string entityId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void RemoveProgram(object entity, List<string> updatedProgramIds)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -22,7 +22,7 @@ namespace Phytel.API.DataDomain.PatientGoal.Services.Test
             string patientGoaldId = "52fd2d6cd433231c845e7d25";
             IRestClient client = new JsonServiceClient();
 
-            DeleteBarrierResponse response = client.Delete<DeleteBarrierResponse>(
+            DeleteBarrierDataResponse response = client.Delete<DeleteBarrierDataResponse>(
                 string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Goal/{5}/Barrier/{6}/Delete/?UserId={7}",
                 url,
                 context,

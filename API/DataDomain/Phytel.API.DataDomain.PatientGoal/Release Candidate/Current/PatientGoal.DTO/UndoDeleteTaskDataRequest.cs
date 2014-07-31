@@ -1,19 +1,14 @@
+using System.Collections.Generic;
 using Phytel.API.Interface;
 using ServiceStack.ServiceHost;
 
 namespace Phytel.API.DataDomain.PatientGoal.DTO
 {
-    [Route("/{Context}/{Version}/{ContractNumber}/Patient/{PatientId}/Goal/{PatientGoalId}/Intervention/{InterventionId}/Delete", "DELETE")]
-    public class DeleteInterventionRequest : IDataDomainRequest
+    [Route("/{Context}/{Version}/{ContractNumber}/PatientGoal/Task/UndoDelete", "PUT")]
+    public class UndoDeleteTaskDataRequest : IDataDomainRequest
     {
-        [ApiMember(Name = "InterventionId", Description = "InterventionId of the intervention to update", ParameterType = "property", DataType = "string", IsRequired = false)]
-        public string InterventionId { get; set; }
-
-        [ApiMember(Name = "PatientGoalId", Description = "Id of the PatientGoal.", ParameterType = "property", DataType = "string", IsRequired = true)]
-        public string PatientGoalId { get; set; }
-
-        [ApiMember(Name = "PatientId", Description = "UserId of the logged in user", ParameterType = "property", DataType = "string", IsRequired = false)]
-        public string PatientId { get; set; }
+        [ApiMember(Name = "TaskId", Description = "TaskId", ParameterType = "property", DataType = "string", IsRequired = false)]
+        public string TaskId { get; set; }
 
         [ApiMember(Name = "UserId", Description = "UserId of the logged in user", ParameterType = "property", DataType = "string", IsRequired = false)]
         public string UserId { get; set; }
