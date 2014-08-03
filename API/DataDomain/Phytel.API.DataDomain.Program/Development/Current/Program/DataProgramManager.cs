@@ -112,25 +112,29 @@ namespace Phytel.API.DataDomain.Program
                 PutUpdateResponseResponse result = new PutUpdateResponseResponse();
                 IProgramRepository responseRepo = Factory.GetRepository(request, RepositoryType.PatientProgramResponse);
 
-                MEPatientProgramResponse meres = new MEPatientProgramResponse(request.UserId)
+                foreach (ResponseDetail rd in request.ResponseDetails)
                 {
-                    Id = ObjectId.Parse(request.ResponseDetail.Id),
-                    NextStepId = ObjectId.Parse(request.ResponseDetail.NextStepId),
-                    Nominal = request.ResponseDetail.Nominal,
-                    Spawn = ParseSpawnElements(request.ResponseDetail.SpawnElement),
-                    Required = request.ResponseDetail.Required,
-                    Order = request.ResponseDetail.Order,
-                    StepId = ObjectId.Parse(request.ResponseDetail.StepId),
-                    Text = request.ResponseDetail.Text,
-                    Value = request.ResponseDetail.Value,
-                    Selected = request.ResponseDetail.Selected,
-                    DeleteFlag = request.ResponseDetail.Delete,
-                    LastUpdatedOn = System.DateTime.UtcNow,
-                    UpdatedBy = ObjectId.Parse(request.UserId)
-                };
+                    MEPatientProgramResponse meres = new MEPatientProgramResponse(request.UserId)
+                    {
+                        Id = ObjectId.Parse(rd.Id),
+                        NextStepId = ObjectId.Parse(rd.NextStepId),
+                        Nominal = rd.Nominal,
+                        Spawn = ParseSpawnElements(rd.SpawnElement),
+                        Required = rd.Required,
+                        Order = rd.Order,
+                        StepId = ObjectId.Parse(rd.StepId),
+                        Text = rd.Text,
+                        Value = rd.Value,
+                        Selected = rd.Selected,
+                        DeleteFlag = rd.Delete,
+                        LastUpdatedOn = System.DateTime.UtcNow,
+                        UpdatedBy = ObjectId.Parse(request.UserId)
+                    };
 
-                result.Result = (bool)responseRepo.Update(meres);
-
+                    //result.Result = (bool) 
+                    responseRepo.Update(meres);
+                    result.Result = true;
+                }
                 return result;
             }
             catch (Exception ex)
