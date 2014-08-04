@@ -2,6 +2,7 @@ using Phytel.API.Common;
 using Phytel.API.Common.Format;
 using Phytel.API.DataDomain.Program.MongoDB.DTO;
 using ServiceStack.MiniProfiler;
+using ServiceStack.ServiceInterface.Admin;
 using ServiceStack.Text;
 using ServiceStack.WebHost.Endpoints;
 using System;
@@ -24,6 +25,8 @@ namespace Phytel.API.DataDomain.Program.Service
                 container.RegisterAutoWiredAs<ProgramDataManager, IProgramDataManager>();
                 container.RegisterAutoWiredAs<ProgramRepositoryFactory, IProgramRepositoryFactory>();
                 container.RegisterAutoWiredAs<DTOUtility, IDTOUtility>();
+
+                Plugins.Add(new RequestLogsFeature() { RequiredRoles = new string[] { } });
 
                 // initialize datetime format
                 JsConfig.DateHandler = JsonDateHandler.ISO8601;

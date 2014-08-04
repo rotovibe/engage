@@ -440,10 +440,45 @@ namespace Phytel.API.DataDomain.Program
             throw new NotImplementedException();
         }
 
+        public static List<BsonValue> ConvertToBsonValueList(List<ObjectId> p)
+        {
+            List<BsonValue> bsonValues = null;
+
+            if (p.Count() > 0)
+            {
+                bsonValues = new List<BsonValue>();
+                foreach (ObjectId s in p)
+                {
+                    bsonValues.Add(BsonValue.Create(s));
+                }
+            }
+            return bsonValues;
+        }
 
         public IEnumerable<object> Find(List<ObjectId> Ids)
         {
-            throw new NotImplementedException();
+            try
+            {
+                List<MEPatientProgramResponse> responses = null;
+
+                IList<IMongoQuery> queries = new List<IMongoQuery>();
+
+                IMongoQuery mQuery = null;
+                List<BsonValue> bsonList = ConvertToBsonValueList(Ids);
+                if (bsonList != null)
+                {
+                    mQuery = Query.In(MEPatientProgramResponse.StepIdProperty, bsonList);
+                }
+
+                using (ProgramMongoContext ctx = new ProgramMongoContext(_dbName))
+                {
+
+                    responses = ctx.PatientProgramResponses.Collection.Find(mQuery).ToList();
+
+                }
+                return responses;
+            }
+            catch (Exception) { throw; }
         }
 
         public List<Module> GetProgramModules(ObjectId progId)

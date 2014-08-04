@@ -180,7 +180,6 @@ namespace Phytel.API.DataDomain.Program
             }
         }
 
-
         #endregion
 
         #region GETS
@@ -191,8 +190,11 @@ namespace Phytel.API.DataDomain.Program
                 GetProgramDetailsSummaryResponse response = new GetProgramDetailsSummaryResponse();
 
                 IProgramRepository repo = Factory.GetRepository(request, RepositoryType.PatientProgram);
-
                 MEPatientProgram mepp = repo.FindByID(request.ProgramId) as MEPatientProgram;
+                
+                IProgramRepository respRepo = Factory.GetRepository(request, RepositoryType.PatientProgramResponse);
+                var stepIds = mepp.Modules.SelectMany(m => m.Actions.SelectMany(a => a.Steps.Select(s => s.Id))).ToList();
+                DTOUtility.ResponsesBag = respRepo.Find(stepIds).Cast<MEPatientProgramResponse>().ToList();
 
                 response.Program = new ProgramDetail
                 {
@@ -229,7 +231,7 @@ namespace Phytel.API.DataDomain.Program
                     AuthoredBy = mepp.AuthoredBy,
                     //ObjectivesData = DTOUtils.GetObjectives(mepp.Objectives),
                     SpawnElement = DTOUtility.GetSpawnElement(mepp),
-                    Modules = DTOUtility.GetModules(mepp.Modules, mepp.ContractProgramId.ToString(), request.ContractNumber, request.UserId)
+                    Modules = DTOUtility.GetModules(mepp.Modules, mepp.ContractProgramId.ToString(), request)
                 };
 
                 // load program attributes
@@ -248,6 +250,8 @@ namespace Phytel.API.DataDomain.Program
                     response.Program.ProgramVersionUpdatedOn = meProgram.ProgramVersionUpdatedOn;
                     response.Program.ObjectivesData = DTOUtility.GetObjectivesData(meProgram.Objectives);
                 }
+
+                DTOUtility.ResponsesBag = null;
                 return response;
             }
             catch (Exception ex)
