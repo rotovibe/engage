@@ -13,6 +13,7 @@ namespace Phytel.API.DataDomain.Program.Test.Stubs
     public class StubDTOUtility : IDTOUtility
     {
         public IProgramRepositoryFactory Factory { get; set; }
+        public List<MEPatientProgramResponse> ResponsesBag { get; set; }
 
         public bool CanInsertPatientProgram(List<MEPatientProgram> pp)
         {
@@ -44,7 +45,7 @@ namespace Phytel.API.DataDomain.Program.Test.Stubs
             throw new NotImplementedException();
         }
 
-        public List<DTO.ActionsDetail> GetActions(List<MongoDB.DTO.Action> list, string contract, string userId, Module mod)
+        public List<DTO.ActionsDetail> GetActions(List<MongoDB.DTO.Action> list, IDataDomainRequest request, Module mod)
         {
             throw new NotImplementedException();
         }
@@ -54,7 +55,7 @@ namespace Phytel.API.DataDomain.Program.Test.Stubs
             throw new NotImplementedException();
         }
 
-        public List<DTO.ModuleDetail> GetModules(List<Module> list, string contractProgId,  string contractNumber, string userId)
+        public List<DTO.ModuleDetail> GetModules(List<Module> list, string contractProgId,  IDataDomainRequest request)
         {
             List<DTO.ModuleDetail> modules = new List<DTO.ModuleDetail>();
 
@@ -257,5 +258,6 @@ namespace Phytel.API.DataDomain.Program.Test.Stubs
         {
             throw new NotImplementedException();
         }
+
     }
 }

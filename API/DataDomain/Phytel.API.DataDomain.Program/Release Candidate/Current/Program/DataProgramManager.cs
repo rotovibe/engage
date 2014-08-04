@@ -112,25 +112,29 @@ namespace Phytel.API.DataDomain.Program
                 PutUpdateResponseResponse result = new PutUpdateResponseResponse();
                 IProgramRepository responseRepo = Factory.GetRepository(request, RepositoryType.PatientProgramResponse);
 
-                MEPatientProgramResponse meres = new MEPatientProgramResponse(request.UserId)
+                foreach (ResponseDetail rd in request.ResponseDetails)
                 {
-                    Id = ObjectId.Parse(request.ResponseDetail.Id),
-                    NextStepId = ObjectId.Parse(request.ResponseDetail.NextStepId),
-                    Nominal = request.ResponseDetail.Nominal,
-                    Spawn = ParseSpawnElements(request.ResponseDetail.SpawnElement),
-                    Required = request.ResponseDetail.Required,
-                    Order = request.ResponseDetail.Order,
-                    StepId = ObjectId.Parse(request.ResponseDetail.StepId),
-                    Text = request.ResponseDetail.Text,
-                    Value = request.ResponseDetail.Value,
-                    Selected = request.ResponseDetail.Selected,
-                    DeleteFlag = request.ResponseDetail.Delete,
-                    LastUpdatedOn = System.DateTime.UtcNow,
-                    UpdatedBy = ObjectId.Parse(request.UserId)
-                };
+                    MEPatientProgramResponse meres = new MEPatientProgramResponse(request.UserId)
+                    {
+                        Id = ObjectId.Parse(rd.Id),
+                        NextStepId = ObjectId.Parse(rd.NextStepId),
+                        Nominal = rd.Nominal,
+                        Spawn = ParseSpawnElements(rd.SpawnElement),
+                        Required = rd.Required,
+                        Order = rd.Order,
+                        StepId = ObjectId.Parse(rd.StepId),
+                        Text = rd.Text,
+                        Value = rd.Value,
+                        Selected = rd.Selected,
+                        DeleteFlag = rd.Delete,
+                        LastUpdatedOn = System.DateTime.UtcNow,
+                        UpdatedBy = ObjectId.Parse(request.UserId)
+                    };
 
-                result.Result = (bool)responseRepo.Update(meres);
-
+                    //result.Result = (bool) 
+                    responseRepo.Update(meres);
+                    result.Result = true;
+                }
                 return result;
             }
             catch (Exception ex)
@@ -176,7 +180,6 @@ namespace Phytel.API.DataDomain.Program
             }
         }
 
-
         #endregion
 
         #region GETS
@@ -187,8 +190,11 @@ namespace Phytel.API.DataDomain.Program
                 GetProgramDetailsSummaryResponse response = new GetProgramDetailsSummaryResponse();
 
                 IProgramRepository repo = Factory.GetRepository(request, RepositoryType.PatientProgram);
-
                 MEPatientProgram mepp = repo.FindByID(request.ProgramId) as MEPatientProgram;
+                
+                IProgramRepository respRepo = Factory.GetRepository(request, RepositoryType.PatientProgramResponse);
+                var stepIds = mepp.Modules.SelectMany(m => m.Actions.SelectMany(a => a.Steps.Select(s => s.Id))).ToList();
+                DTOUtility.ResponsesBag = respRepo.Find(stepIds).Cast<MEPatientProgramResponse>().ToList();
 
                 response.Program = new ProgramDetail
                 {
@@ -225,7 +231,7 @@ namespace Phytel.API.DataDomain.Program
                     AuthoredBy = mepp.AuthoredBy,
                     //ObjectivesData = DTOUtils.GetObjectives(mepp.Objectives),
                     SpawnElement = DTOUtility.GetSpawnElement(mepp),
-                    Modules = DTOUtility.GetModules(mepp.Modules, mepp.ContractProgramId.ToString(), request.ContractNumber, request.UserId)
+                    Modules = DTOUtility.GetModules(mepp.Modules, mepp.ContractProgramId.ToString(), request)
                 };
 
                 // load program attributes
@@ -249,6 +255,10 @@ namespace Phytel.API.DataDomain.Program
             catch (Exception ex)
             {
                 throw new Exception("DD:DataProgramManager:GetPatientProgramDetailsById()::" + ex.Message, ex.InnerException);
+            }
+            finally
+            {
+                DTOUtility.ResponsesBag = null;
             }
         }
 
@@ -513,8 +523,11 @@ namespace Phytel.API.DataDomain.Program
                 GetPatientActionDetailsDataResponse response = new GetPatientActionDetailsDataResponse();
 
                 IProgramRepository repo = Factory.GetRepository(request, RepositoryType.PatientProgram);//.GetPatientProgramRepository(request);
-
                 MEPatientProgram mepp = repo.FindByID(request.PatientProgramId) as MEPatientProgram;
+
+                IProgramRepository respRepo = Factory.GetRepository(request, RepositoryType.PatientProgramResponse);
+                var stepIds = mepp.Modules.SelectMany(m => m.Actions.SelectMany(a => a.Steps.Select(s => s.Id))).ToList();
+                DTOUtility.ResponsesBag = respRepo.Find(stepIds).Cast<MEPatientProgramResponse>().ToList();
 
                 Module meModule = mepp.Modules.Where(m => m.Id == ObjectId.Parse(request.PatientModuleId)).FirstOrDefault();
                 if (meModule != null)
@@ -531,12 +544,16 @@ namespace Phytel.API.DataDomain.Program
                         response.ActionData = DTOUtility.GetAction(request.ContractNumber, request.UserId, meAction);
                     }
                 }
-
                 return response;
             }
             catch (Exception ex)
             {
+                DTOUtility.ResponsesBag = null;
                 throw new Exception("DD:DataProgramManager:GetActionDetails()::" + ex.Message, ex.InnerException);
+            }
+            finally
+            {
+                DTOUtility.ResponsesBag = null;
             }
         } 
         #endregion
