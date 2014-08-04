@@ -9,17 +9,17 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
     public interface IDTOUtility
     {
         IProgramRepositoryFactory Factory { get; set; }
+        List<MEPatientProgramResponse> ResponsesBag { get; set; }
+
         bool CanInsertPatientProgram(List<MEPatientProgram> pp);
         List<Module> CloneAppDomainModules(List<ModuleDetail> prg, string userId);
         MEPatientProgram CreateInitialMEPatientProgram(PutProgramToPatientRequest request, MEProgram cp, List<ObjectId> sil);
         List<MEPatientProgram> FindExistingpatientProgram(PutProgramToPatientRequest request);
         ActionsDetail GetAction(string contract, string userId, Action a);
         List<Action> GetActionElements(List<ActionsDetail> list, string userId);
-        List<ActionsDetail> GetActions(List<Action> list, string contract, string userId, Module mod);
-
-        List<Module> GetClonedModules(ObjectId? abyId, List<Module> list, IDataDomainRequest request,
-            List<ObjectId> sil);
-        List<ModuleDetail> GetModules(List<Module> list, string contractProgramId, string contractNumber, string userId);
+        List<ActionsDetail> GetActions(List<Action> list, IDataDomainRequest request, Module mod);
+        List<Module> GetClonedModules(ObjectId? abyId, List<Module> list, IDataDomainRequest request, List<ObjectId> sil);
+        List<ModuleDetail> GetModules(List<Module> list, string contractProgramId,IDataDomainRequest request);
         MEProgram GetLimitedProgramDetails(string objectId, IDataDomainRequest request);
         List<ObjectiveInfoData> GetObjectivesData(List<Objective> sobjs);
         List<Objective> GetObjectives(System.Collections.Generic.List<ObjectiveInfoData> list);
@@ -33,7 +33,6 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
         List<SpawnElementDetail> GetSpawnElements(List<SpawnElement> list);
         List<ObjectId> GetStepIds(MEPatientProgram mepp);
         GetStepResponseListResponse GetStepResponses(string stepId, string contractNumber, bool? service, string userId);
-        List<MEPatientProgramResponse> GetStepResponses(ObjectId stepId, string contractNumber, string userId);
         List<StepsDetail> GetSteps(List<Step> list, string contract, string userId);
         void HydrateResponsesInProgram(MEProgram prog, List<MEResponse> responseList, string usrId);
         ProgramAttributeData InitializeElementAttributes(ProgramInfo p);
