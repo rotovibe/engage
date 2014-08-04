@@ -250,13 +250,15 @@ namespace Phytel.API.DataDomain.Program
                     response.Program.ProgramVersionUpdatedOn = meProgram.ProgramVersionUpdatedOn;
                     response.Program.ObjectivesData = DTOUtility.GetObjectivesData(meProgram.Objectives);
                 }
-
-                DTOUtility.ResponsesBag = null;
                 return response;
             }
             catch (Exception ex)
             {
                 throw new Exception("DD:DataProgramManager:GetPatientProgramDetailsById()::" + ex.Message, ex.InnerException);
+            }
+            finally
+            {
+                DTOUtility.ResponsesBag = null;
             }
         }
 
@@ -521,8 +523,11 @@ namespace Phytel.API.DataDomain.Program
                 GetPatientActionDetailsDataResponse response = new GetPatientActionDetailsDataResponse();
 
                 IProgramRepository repo = Factory.GetRepository(request, RepositoryType.PatientProgram);//.GetPatientProgramRepository(request);
-
                 MEPatientProgram mepp = repo.FindByID(request.PatientProgramId) as MEPatientProgram;
+
+                IProgramRepository respRepo = Factory.GetRepository(request, RepositoryType.PatientProgramResponse);
+                var stepIds = mepp.Modules.SelectMany(m => m.Actions.SelectMany(a => a.Steps.Select(s => s.Id))).ToList();
+                DTOUtility.ResponsesBag = respRepo.Find(stepIds).Cast<MEPatientProgramResponse>().ToList();
 
                 Module meModule = mepp.Modules.Where(m => m.Id == ObjectId.Parse(request.PatientModuleId)).FirstOrDefault();
                 if (meModule != null)
@@ -539,12 +544,16 @@ namespace Phytel.API.DataDomain.Program
                         response.ActionData = DTOUtility.GetAction(request.ContractNumber, request.UserId, meAction);
                     }
                 }
-
                 return response;
             }
             catch (Exception ex)
             {
+                DTOUtility.ResponsesBag = null;
                 throw new Exception("DD:DataProgramManager:GetActionDetails()::" + ex.Message, ex.InnerException);
+            }
+            finally
+            {
+                DTOUtility.ResponsesBag = null;
             }
         } 
         #endregion
