@@ -16,6 +16,7 @@ using Phytel.API.Common.Format;
 using Phytel.API.AppDomain.NG.Programs;
 using ServiceStack.Service;
 using ServiceStack.ServiceClient.Web;
+using Phytel.API.AppDomain.NG.Observation;
 
 namespace Phytel.API.AppDomain.NG.Service
 {
@@ -39,6 +40,8 @@ namespace Phytel.API.AppDomain.NG.Service
                 container.RegisterAutoWiredAs<PlanElementUtils, IPlanElementUtils>();
                 container.RegisterAutoWiredAs<NGManager, INGManager>();
                 container.RegisterAutoWiredAs<AuditUtil, IAuditUtil>();
+                container.RegisterAutoWiredAs<ObservationEndpointUtil, IObservationEndpointUtil>();
+                container.RegisterAutoWiredAs<ObservationsManager, IObservationsManager>();
 
 
                 Plugins.Add(new RequestLogsFeature() { RequiredRoles = new string[] { } });

@@ -89,8 +89,11 @@
     <Compile Include="LookUp\Program\GetAllObjectivesResponse.cs" />
     <Compile Include="Contact\GetRecentPatientsRequest.cs" />
     <Compile Include="Contact\GetRecentPatientsResponse .cs" />
+    <Compile Include="Observation\GetHistoricalPatientObservationsRequest.cs" />
     <Compile Include="Observation\GetCurrenPatientObservationsRequest.cs" />
+    <Compile Include="Observation\GetHistoricalPatientObservationsResponse.cs" />
     <Compile Include="Observation\GetCurrentPatientObservationsResponse.cs" />
+    <Compile Include="Observation\IPatientObservationRequest.cs" />
     <Compile Include="Patient\PostDeletePatientRequest.cs" />
     <Compile Include="Patient\PostDeletePatientResponse.cs" />
     <Compile Include="Program\Action.cs" />

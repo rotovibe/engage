@@ -11,6 +11,8 @@ namespace Phytel.API.AppDomain.NG.Service
 {
     public partial class NGService : ServiceStack.ServiceInterface.Service
     {
+        public IObservationsManager Omgr { get; set; }
+
         public GetStandardObservationItemsResponse Get(GetStandardObservationItemsRequest request)
         {
             GetStandardObservationItemsResponse response = new GetStandardObservationItemsResponse();
@@ -273,6 +275,41 @@ namespace Phytel.API.AppDomain.NG.Service
                 CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
                 if ((ex is WebServiceException) == false)
                     om.LogException(ex);
+            }
+            finally
+            {
+                List<string> patientIds = new List<string>();
+                patientIds.Add(request.PatientId);
+
+                if (result != null)
+                    AuditHelper.LogAuditData(request, result.SQLUserId, patientIds, System.Web.HttpContext.Current.Request, request.GetType().Name);
+            }
+            return response;
+        }
+
+        public GetHistoricalPatientObservationsResponse Get(GetHistoricalPatientObservationsRequest request)
+        {
+            GetHistoricalPatientObservationsResponse response = new GetHistoricalPatientObservationsResponse();
+            ValidateTokenResponse result = null;
+
+            try
+            {
+                request.Token = base.Request.Headers["Token"] as string;
+                result = Security.IsUserValidated(request.Version, request.Token, request.ContractNumber);
+                if (result.UserId.Trim() != string.Empty)
+                {
+                    request.UserId = result.UserId;
+                    var resultSet = Omgr.GetHistoricalPatientObservations(request);
+                    response.PatientObservations = resultSet;
+                }
+                else
+                    throw new UnauthorizedAccessException();
+            }
+            catch (Exception ex)
+            {
+                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+                if ((ex is WebServiceException) == false)
+                    Omgr.LogException(ex);
             }
             finally
             {

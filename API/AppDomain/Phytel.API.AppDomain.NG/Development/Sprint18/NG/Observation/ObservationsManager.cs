@@ -5,11 +5,14 @@ using Phytel.API.AppDomain.NG.Observation;
 using Phytel.API.DataDomain.PatientObservation.DTO;
 using System.Globalization;
 using Phytel.API.Common.CustomObject;
+using Phytel.API.Interface;
 
 namespace Phytel.API.AppDomain.NG.Observation
 {
-    public class ObservationsManager : ManagerBase
+    public class ObservationsManager : ManagerBase, IObservationsManager
     {
+        public IObservationEndpointUtil EndpointUtil { get; set; }
+
         public GetStandardObservationItemsResponse GetStandardObservationsRequest(GetStandardObservationItemsRequest request)
         {
             try
@@ -167,6 +170,20 @@ namespace Phytel.API.AppDomain.NG.Observation
             catch (Exception ex)
             {
                 throw new Exception("AD:GetStandardObservationsRequest()::" + ex.Message, ex.InnerException);
+            }
+        }
+
+        public List<PatientObservation> GetHistoricalPatientObservations(IPatientObservationsRequest request)
+        {
+            try
+            {
+                var po = EndpointUtil.GetHistoricalPatientObservations(request);
+                var historyData = ObservationsUtil.GetCurrentPatientObservations(request, po);
+                return historyData;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("AD:GetHistoricalPatientObservations()::" + ex.Message, ex.InnerException);
             }
         }
     }

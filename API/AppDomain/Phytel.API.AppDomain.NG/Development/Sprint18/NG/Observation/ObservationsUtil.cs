@@ -265,34 +265,31 @@ namespace Phytel.API.AppDomain.NG
             }
         }
 
-        internal static List<PatientObservation> GetCurrentPatientObservations(GetCurrentPatientObservationsRequest request, List<PatientObservationData> po)
+        internal static List<PatientObservation> GetCurrentPatientObservations(IPatientObservationsRequest request, List<PatientObservationData> po)
         {
-            List<PatientObservation> result = new List<PatientObservation>();
+            var result = new List<PatientObservation>();
             try
             {
-                if (po != null && po.Count > 0)
+                if (po == null || po.Count <= 0) return result;
+
+                po.ForEach(o => result.Add(new PatientObservation
                 {
-                    po.ForEach(o =>
-                    {
-                        result.Add(new PatientObservation
-                        {
-                            ObservationId = o.ObservationId,
-                            EndDate = o.EndDate,
-                            GroupId = o.GroupId,
-                            Id = o.Id,
-                            PatientId = o.PatientId,
-                            Name = o.Name,
-                            Standard = o.Standard,
-                            StartDate = o.StartDate,
-                            TypeId = o.TypeId,
-                            Units = o.Units,
-                            Values = GetValues(o.Values),
-                            StateId = o.StateId,
-                            DisplayId = o.DisplayId,
-                            Source = o.Source
-                        });
-                    });
-                }
+                    ObservationId = o.ObservationId,
+                    EndDate = o.EndDate,
+                    GroupId = o.GroupId,
+                    Id = o.Id,
+                    PatientId = o.PatientId,
+                    Name = o.Name,
+                    Standard = o.Standard,
+                    StartDate = o.StartDate,
+                    TypeId = o.TypeId,
+                    Units = o.Units,
+                    Values = GetValues(o.Values),
+                    StateId = o.StateId,
+                    DisplayId = o.DisplayId,
+                    Source = o.Source
+                }));
+
                 return result;
             }
             catch (Exception ex)

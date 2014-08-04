@@ -108,6 +108,8 @@
     <Compile Include="Enums.cs" />
     <Compile Include="Command\INGCommand.cs" />
     <Compile Include="INGManager.cs" />
+    <Compile Include="Observation\IObservationEndpointUtil.cs" />
+    <Compile Include="Observation\IObservationsManager.cs" />
     <Compile Include="UnitOfWork\INGUnitOfWork.cs" />
     <Compile Include="UnitOfWork\NGUnitOfWork.cs" />
     <Compile Include="Command\PatientCommand.cs" />
@@ -185,7 +187,7 @@
       <Project>{99f4ec29-b099-424e-9757-223e67029001}</Project>
       <Name>DataDomain.PatientNote.DTO</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\..\..\DataDomain\Phytel.API.DataDomain.PatientObservation\Development\Current\PatientObservation.DTO\DataDomain.PatientObservation.DTO.csproj">
+    <ProjectReference Include="..\..\..\..\..\DataDomain\Phytel.API.DataDomain.PatientObservation\Development\Sprint18\PatientObservation.DTO\DataDomain.PatientObservation.DTO.csproj">
       <Project>{06d69e2b-a395-459c-b4d0-fc750018bdd8}</Project>
       <Name>DataDomain.PatientObservation.DTO</Name>
     </ProjectReference>
@@ -201,7 +203,7 @@
       <Project>{1b3148a8-fb57-4461-91bc-f1cd38a013b6}</Project>
       <Name>DataDomain.Patient.DTO</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\..\..\DataDomain\Phytel.API.DataDomain.Program\Development\Current\Program.DTO\DataDomain.Program.DTO.csproj">
+    <ProjectReference Include="..\..\..\..\..\DataDomain\Phytel.API.DataDomain.Program\Development\Sprint18\Program.DTO\DataDomain.Program.DTO.csproj">
       <Project>{4e9f9dbf-e01b-4226-9e4f-246149ebbb3f}</Project>
       <Name>DataDomain.Program.DTO</Name>
     </ProjectReference>

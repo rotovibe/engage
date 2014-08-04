@@ -13,7 +13,7 @@ using Phytel.API.Common.CustomObject;
 
 namespace Phytel.API.AppDomain.NG.Observation
 {
-    public class ObservationEndpointUtil
+    public class ObservationEndpointUtil : IObservationEndpointUtil
     {
         static readonly string DDPatientObservationsServiceUrl = ConfigurationManager.AppSettings["DDPatientObservationUrl"];
 
@@ -64,6 +64,37 @@ namespace Phytel.API.AppDomain.NG.Observation
 
                 GetCurrentPatientObservationsDataResponse dataDomainResponse = client.Get<GetCurrentPatientObservationsDataResponse>(
                     url);
+
+                if (dataDomainResponse != null)
+                {
+                    result = dataDomainResponse.PatientObservationsData;
+                }
+
+                return result;
+            }
+            catch (WebServiceException ex)
+            {
+                throw new WebServiceException("AD:GetStandardObservationsRequest()::" + ex.Message, ex.InnerException);
+            }
+        }
+
+        public List<PatientObservationData> GetHistoricalPatientObservations(IPatientObservationsRequest request)
+        {
+            try
+            {
+                List<PatientObservationData> result = null;
+                IRestClient client = new JsonServiceClient();
+
+                var url =
+                    Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Observations/{5}/Historical",
+                        DDPatientObservationsServiceUrl,
+                        "NG",
+                        request.Version,
+                        request.ContractNumber,
+                        request.PatientId,
+                        request.ObservationId), request.UserId);
+
+                var dataDomainResponse = client.Get<GetHistoricalPatientObservationsDataResponse>(url);
 
                 if (dataDomainResponse != null)
                 {
