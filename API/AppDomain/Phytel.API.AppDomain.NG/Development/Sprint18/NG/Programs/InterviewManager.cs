@@ -38,7 +38,7 @@ namespace Phytel.API.AppDomain.NG
                 PostProcessActionResponse response = new PostProcessActionResponse();
 
                 Program p = EndPointUtils.RequestPatientProgramDetail(request);
-                
+
                 Actions action = request.Action;
 
                 if (action.Completed)
@@ -64,7 +64,7 @@ namespace Phytel.API.AppDomain.NG
                     // 2) set in progress state
                     //new ResponseSpawnAllowed<Step>().IsSatisfiedBy(s)
                     if (PEUtils.IsActionInitial(p))
-                        //if (new IsActionInitialSpecification<Program>().IsSatisfiedBy(p))
+                    //if (new IsActionInitialSpecification<Program>().IsSatisfiedBy(p))
                     {
                         // set program to in progress
                         if (p.ElementState == (int)ElementState.NotStarted)
@@ -74,9 +74,9 @@ namespace Phytel.API.AppDomain.NG
                         }
                     }
 
-                        // 3) set action state to completed
-                        action.ElementState = (int) ElementState.Completed;
-                        action.StateUpdatedOn = DateTime.UtcNow;
+                    // 3) set action state to completed
+                    action.ElementState = (int)ElementState.Completed;
+                    action.StateUpdatedOn = DateTime.UtcNow;
 
                     // 4) insert action update
                     var act = NGUtils.UpdateProgramAction(action, p);
@@ -87,11 +87,11 @@ namespace Phytel.API.AppDomain.NG
                     // 5)  process steps
                     action.Steps.ForEach(
                         s =>
-                            pChain.ProcessWorkflow((IPlanElement) s, p, request.UserId, request.PatientId, action,
+                            pChain.ProcessWorkflow((IPlanElement)s, p, request.UserId, request.PatientId, action,
                                 request));
 
                     // 6) process action
-                    pChain.ProcessWorkflow((IPlanElement) action, p, request.UserId, request.PatientId, action, request);
+                    pChain.ProcessWorkflow((IPlanElement)action, p, request.UserId, request.PatientId, action, request);
 
                     // 7) process module
                     if (mod != null)
@@ -99,7 +99,7 @@ namespace Phytel.API.AppDomain.NG
                         // set enabled status for action dependencies
                         PEUtils.SetEnabledStatusByPrevious(mod.Actions, mod.AssignToId, mod.Enabled);
                         // set enable/visibility of actions after action processing.
-                        pChain.ProcessWorkflow((IPlanElement) mod, p, request.UserId, request.PatientId, action, request);
+                        pChain.ProcessWorkflow((IPlanElement)mod, p, request.UserId, request.PatientId, action, request);
                         AddUniquePlanElementToProcessedList(mod);
                     }
 
@@ -111,7 +111,7 @@ namespace Phytel.API.AppDomain.NG
                     if (PEUtils.IsProgramCompleted(p, request.UserId))
                     {
                         p.Completed = true;
-                        pChain.ProcessWorkflow((IPlanElement) p, p, request.UserId, request.PatientId, action, request);
+                        pChain.ProcessWorkflow((IPlanElement)p, p, request.UserId, request.PatientId, action, request);
                     }
 
                     // 10) register changed action 
@@ -120,7 +120,7 @@ namespace Phytel.API.AppDomain.NG
                 else
                 {
                     // need to update this on the p level.
-                    action.ElementState = (int) ElementState.InProgress; //4; // in progress
+                    action.ElementState = (int)ElementState.InProgress; //4; // in progress
                 }
 
                 AddUniquePlanElementToProcessedList(p);
