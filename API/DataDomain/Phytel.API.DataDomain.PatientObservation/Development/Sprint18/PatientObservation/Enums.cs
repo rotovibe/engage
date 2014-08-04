@@ -6,6 +6,11 @@ using System.Threading.Tasks;
 
 namespace Phytel.API.DataDomain.PatientObservation
 {
+    public enum RepositoryType
+    {
+        Observation,
+        PatientObservation
+    }
 
     public enum ObservationDisplay
     {

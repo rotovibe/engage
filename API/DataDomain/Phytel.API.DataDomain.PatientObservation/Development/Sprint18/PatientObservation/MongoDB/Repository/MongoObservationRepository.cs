@@ -18,7 +18,7 @@ using Phytel.API.Common.CustomObject;
 
 namespace Phytel.API.DataDomain.PatientObservation
 {
-    public class MongoObservationRepository<T> : IPatientObservationRepository<T>
+    public class MongoObservationRepository : IPatientObservationRepository
     {
         private string _dbName = string.Empty;
 
@@ -170,42 +170,42 @@ namespace Phytel.API.DataDomain.PatientObservation
             catch (Exception) { throw; }
         }
 
-        object IRepository<T>.Insert(object newEntity)
+        object IRepository.Insert(object newEntity)
         {
             throw new NotImplementedException();
         }
 
-        object IRepository<T>.InsertAll(List<object> entities)
+        object IRepository.InsertAll(List<object> entities)
         {
             throw new NotImplementedException();
         }
 
-        void IRepository<T>.Delete(object entity)
+        void IRepository.Delete(object entity)
         {
             throw new NotImplementedException();
         }
 
-        void IRepository<T>.DeleteAll(List<object> entities)
+        void IRepository.DeleteAll(List<object> entities)
         {
             throw new NotImplementedException();
         }
 
-        Tuple<string, IEnumerable<object>> IRepository<T>.Select(APIExpression expression)
+        Tuple<string, IEnumerable<object>> IRepository.Select(APIExpression expression)
         {
             throw new NotImplementedException();
         }
 
-        IEnumerable<object> IRepository<T>.SelectAll()
+        IEnumerable<object> IRepository.SelectAll()
         {
             throw new NotImplementedException();
         }
 
-        object IRepository<T>.Update(object entity)
+        object IRepository.Update(object entity)
         {
             throw new NotImplementedException();
         }
 
-        void IRepository<T>.CacheByID(List<string> entityIDs)
+        void IRepository.CacheByID(List<string> entityIDs)
         {
             throw new NotImplementedException();
         }

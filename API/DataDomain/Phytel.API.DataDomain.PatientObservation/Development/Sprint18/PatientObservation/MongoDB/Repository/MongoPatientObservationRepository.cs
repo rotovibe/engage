@@ -20,7 +20,7 @@ using Phytel.API.Common.CustomObject;
 
 namespace Phytel.API.DataDomain.PatientObservation
 {
-    public class MongoPatientObservationRepository<T> : IPatientObservationRepository<T>
+    public class MongoPatientObservationRepository : IPatientObservationRepository
     {
         private string _dbName = string.Empty;
         private int _expireDays = Convert.ToInt32(ConfigurationManager.AppSettings["ExpireDays"]);
@@ -121,17 +121,17 @@ namespace Phytel.API.DataDomain.PatientObservation
             catch (Exception) { throw; }
         }
 
-        object IRepository<T>.Insert(object newEntity)
+        object IRepository.Insert(object newEntity)
         {
             throw new NotImplementedException();
         }
 
-        object IRepository<T>.InsertAll(List<object> entities)
+        object IRepository.InsertAll(List<object> entities)
         {
             throw new NotImplementedException();
         }
 
-        void IRepository<T>.Delete(object entity)
+        void IRepository.Delete(object entity)
         {
             DeletePatientObservationRequest request = (DeletePatientObservationRequest)entity;
             try
@@ -159,7 +159,7 @@ namespace Phytel.API.DataDomain.PatientObservation
             catch (Exception) { throw; }
         }
 
-        void IRepository<T>.DeleteAll(List<object> entities)
+        void IRepository.DeleteAll(List<object> entities)
         {
             throw new NotImplementedException();
         }
@@ -194,17 +194,17 @@ namespace Phytel.API.DataDomain.PatientObservation
             catch (Exception) { throw; }
         }
 
-        Tuple<string, IEnumerable<object>> IRepository<T>.Select(APIExpression expression)
+        Tuple<string, IEnumerable<object>> IRepository.Select(APIExpression expression)
         {
             throw new NotImplementedException();
         }
 
-        IEnumerable<object> IRepository<T>.SelectAll()
+        IEnumerable<object> IRepository.SelectAll()
         {
             throw new NotImplementedException();
         }
 
-        object IRepository<T>.Update(object entity)
+        object IRepository.Update(object entity)
         {
             bool result = false;
             PutUpdateObservationDataRequest odr = (PutUpdateObservationDataRequest)entity;
@@ -254,7 +254,7 @@ namespace Phytel.API.DataDomain.PatientObservation
             catch (Exception ex) { throw new Exception("PatientObservationDD:MongoPatientBarrierRepository:Update()::" + ex.Message, ex.InnerException); }
         }
 
-        void IRepository<T>.CacheByID(List<string> entityIDs)
+        void IRepository.CacheByID(List<string> entityIDs)
         {
             throw new NotImplementedException();
         }

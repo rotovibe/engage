@@ -1,5 +1,6 @@
 using Phytel.API.Common.Format;
 using Phytel.API.DataDomain.PatientObservation.DTO;
+using Phytel.API.DataDomain.PatientObservation.MongoDB.DTO;
 using System;
 using System.Configuration;
 using System.Web;
@@ -8,6 +9,8 @@ namespace Phytel.API.DataDomain.PatientObservation.Service
 {
     public class PatientObservationService : ServiceStack.ServiceInterface.Service
     {
+        public IPatientObservationDataManager Omgr { get; set; }
+
         public GetPatientObservationResponse Post(GetPatientObservationRequest request)
         {
             GetPatientObservationResponse response = new GetPatientObservationResponse();
@@ -16,7 +19,7 @@ namespace Phytel.API.DataDomain.PatientObservation.Service
                 if (string.IsNullOrEmpty(request.UserId))
                     throw new UnauthorizedAccessException("PatientObservationDD:Post()::Unauthorized Access");
 
-                response = PatientObservationDataManager.GetPatientObservationByID(request);
+                response = Omgr.GetPatientObservationByID(request);
                 response.Version = request.Version;
             }
             catch (Exception ex)
@@ -37,7 +40,7 @@ namespace Phytel.API.DataDomain.PatientObservation.Service
                 if (string.IsNullOrEmpty(request.UserId))
                     throw new UnauthorizedAccessException("PatientObservationDD:Get()::Unauthorized Access");
 
-                response = PatientObservationDataManager.GetPatientObservationByID(request);
+                response = Omgr.GetPatientObservationByID(request);
                 response.Version = request.Version;
             }
             catch (Exception ex)
@@ -58,7 +61,7 @@ namespace Phytel.API.DataDomain.PatientObservation.Service
                 if (string.IsNullOrEmpty(request.UserId))
                     throw new UnauthorizedAccessException("PatientObservationDD:Post()::Unauthorized Access");
 
-                response = PatientObservationDataManager.GetPatientProblemList(request);
+                response = Omgr.GetPatientProblemList(request);
                 response.Version = request.Version;
             }
             catch (Exception ex)
@@ -80,7 +83,7 @@ namespace Phytel.API.DataDomain.PatientObservation.Service
                 if (string.IsNullOrEmpty(request.UserId))
                     throw new UnauthorizedAccessException("PatientObservationDD:Insert()");
 
-                IPatientObservationRepository<PutInitializeObservationDataResponse> repo = PatientObservationRepositoryFactory<PutInitializeObservationDataResponse>.GetPatientObservationRepository(request.ContractNumber, request.Context, request.UserId);
+                IPatientObservationRepository repo = new PatientObservationRepositoryFactory().GetRepository(request, RepositoryType.PatientObservation);
 
                 response.ObservationData = (PatientObservationData)repo.Initialize(request);
             }
@@ -102,7 +105,7 @@ namespace Phytel.API.DataDomain.PatientObservation.Service
                 if (string.IsNullOrEmpty(request.UserId))
                     throw new UnauthorizedAccessException("PatientObservationDD:Get()::Unauthorized Access");
 
-                response = PatientObservationDataManager.GetStandardObservationsByType(request);
+                response = Omgr.GetStandardObservationsByType(request);
                 response.Version = request.Version;
             }
             catch (Exception ex)
@@ -123,7 +126,7 @@ namespace Phytel.API.DataDomain.PatientObservation.Service
                 if (string.IsNullOrEmpty(request.UserId))
                     throw new UnauthorizedAccessException("PatientObservationDD:Post()::Unauthorized Access");
 
-                response = PatientObservationDataManager.GetAdditionalObservationItemById(request);
+                response = Omgr.GetAdditionalObservationItemById(request);
                 response.Version = request.Version;
             }
             catch (Exception ex)
@@ -144,7 +147,7 @@ namespace Phytel.API.DataDomain.PatientObservation.Service
                 if (string.IsNullOrEmpty(request.UserId))
                     throw new UnauthorizedAccessException("PatientObservationDD:Get()::Unauthorized Access");
 
-                response = PatientObservationDataManager.GetObservationsData(request);
+                response = Omgr.GetObservationsData(request);
                 response.Version = request.Version;
             }
             catch (Exception ex)
@@ -165,7 +168,7 @@ namespace Phytel.API.DataDomain.PatientObservation.Service
                 if (string.IsNullOrEmpty(request.UserId))
                     throw new UnauthorizedAccessException("PatientObservationDD:Put()::Unauthorized Access");
 
-                response.Result = PatientObservationDataManager.PutUpdateOfPatientObservationRecord(request);
+                response.Result = Omgr.PutUpdateOfPatientObservationRecord(request);
                 response.Version = request.Version;
             }
             catch (Exception ex)
@@ -186,7 +189,7 @@ namespace Phytel.API.DataDomain.PatientObservation.Service
                 if (string.IsNullOrEmpty(request.UserId))
                     throw new UnauthorizedAccessException("PatientObservationDD:Post()::Unauthorized Access");
 
-                response.Result = PatientObservationDataManager.PutUpdateOfPatientObservationRecord(request);
+                response.Result = Omgr.PutUpdateOfPatientObservationRecord(request);
                 response.Version = request.Version;
             }
             catch (Exception ex)
@@ -207,7 +210,7 @@ namespace Phytel.API.DataDomain.PatientObservation.Service
                 if (string.IsNullOrEmpty(request.UserId))
                     throw new UnauthorizedAccessException("PatientObservationDD:Put()::Unauthorized Access");
 
-                PatientObservationDataManager.PutRegisteredObservation(request);
+                Omgr.PutRegisteredObservation(request);
                 response.Version = request.Version;
             }
             catch (Exception ex)
@@ -228,7 +231,7 @@ namespace Phytel.API.DataDomain.PatientObservation.Service
                 if (string.IsNullOrEmpty(request.UserId))
                     throw new UnauthorizedAccessException("PatientObservationDD:Get()::Unauthorized Access");
 
-                response = PatientObservationDataManager.GetAllowedStates(request);
+                response = Omgr.GetAllowedStates(request);
                 response.Version = request.Version;
             }
             catch (Exception ex)
@@ -249,7 +252,7 @@ namespace Phytel.API.DataDomain.PatientObservation.Service
                 if (string.IsNullOrEmpty(request.UserId))
                     throw new UnauthorizedAccessException("PatientObservationDD:Get()::Unauthorized Access");
 
-                response = PatientObservationDataManager.GetInitializeProblem(request);
+                response = Omgr.GetInitializeProblem(request);
                 response.Version = request.Version;
             }
             catch (Exception ex)
@@ -270,7 +273,7 @@ namespace Phytel.API.DataDomain.PatientObservation.Service
                 if (string.IsNullOrEmpty(request.UserId))
                     throw new UnauthorizedAccessException("PatientObservationDD:PatientObservatioDelete()::Unauthorized Access");
 
-                response = PatientObservationDataManager.DeletePatientObservationByPatientId(request);
+                response = Omgr.DeletePatientObservationByPatientId(request);
                 response.Version = request.Version;
             }
             catch (Exception ex)
@@ -291,7 +294,7 @@ namespace Phytel.API.DataDomain.PatientObservation.Service
                 if (string.IsNullOrEmpty(request.UserId))
                     throw new UnauthorizedAccessException("PatientObservationDD:PatientObservatioUndoDelete()::Unauthorized Access");
 
-                response = PatientObservationDataManager.UndoDeletePatientObservations(request);
+                response = Omgr.UndoDeletePatientObservations(request);
                 response.Version = request.Version;
             }
             catch (Exception ex)
@@ -312,7 +315,7 @@ namespace Phytel.API.DataDomain.PatientObservation.Service
                 if (string.IsNullOrEmpty(request.UserId))
                     throw new UnauthorizedAccessException("PatientObservationDD:Get()::Unauthorized Access");
 
-                response = PatientObservationDataManager.GetCurrentPatientObservations(request);
+                response = Omgr.GetCurrentPatientObservations(request);
                 response.Version = request.Version;
             }
             catch (Exception ex)
@@ -320,6 +323,28 @@ namespace Phytel.API.DataDomain.PatientObservation.Service
                 CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
 
                 string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
+                Common.Helper.LogException(int.Parse(aseProcessID), ex);
+            }
+            return response;
+        }
+
+        public GetHistoricalPatientObservationsDataResponse Get(GetHistoricalPatientObservationsDataRequest request)
+        {
+            GetHistoricalPatientObservationsDataResponse response = new GetHistoricalPatientObservationsDataResponse();
+            try
+            {
+                if (string.IsNullOrEmpty(request.UserId))
+                    throw new UnauthorizedAccessException("PatientObservationDD:Get()::Unauthorized Access");
+
+                var data = Omgr.GetHistoricalPatientObservations(request);
+                response.PatientObservationsData = data;
+                response.Version = request.Version;
+            }
+            catch (Exception ex)
+            {
+                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+
+                var aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
                 Common.Helper.LogException(int.Parse(aseProcessID), ex);
             }
             return response;

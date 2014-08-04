@@ -3,6 +3,7 @@ using System.Text;
 using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Phytel.API.DataDomain.PatientObservation.DTO;
+using Phytel.API.DataDomain.PatientObservation.MongoDB.DTO;
 
 namespace Phytel.API.DataDomain.PatientObservation.Test
 {
@@ -24,10 +25,9 @@ namespace Phytel.API.DataDomain.PatientObservation.Test
 
             string type = "Lab";
 
-            IPatientObservationRepository<object> repo =
-                PatientObservationRepositoryFactory<object>.GetPatientObservationRepository(contractNumber, context, userId);
             GetAllowedStatesDataRequest request = new GetAllowedStatesDataRequest { TypeName = type, Context = context, ContractNumber = contractNumber, UserId = userId, Version = 1 };
-            GetAllowedStatesDataResponse response = PatientObservationDataManager.GetAllowedStates(request);
+            IPatientObservationRepository repo = new PatientObservationRepositoryFactory().GetRepository(request, RepositoryType.PatientObservation);
+            GetAllowedStatesDataResponse response = new PatientObservationDataManager().GetAllowedStates(request);
 
             Assert.IsTrue(response.StatesData.Count > 0);
         }
@@ -41,10 +41,9 @@ namespace Phytel.API.DataDomain.PatientObservation.Test
             string context = "NG";
             string type = "Labs";
 
-            IPatientObservationRepository<object> repo =
-                PatientObservationRepositoryFactory<object>.GetPatientObservationRepository(contractNumber, context, userId);
             GetAllowedStatesDataRequest request = new GetAllowedStatesDataRequest { TypeName = type, Context = context, ContractNumber = contractNumber, UserId = userId, Version = 1 };
-            GetAllowedStatesDataResponse response = PatientObservationDataManager.GetAllowedStates(request);
+            IPatientObservationRepository repo = new PatientObservationRepositoryFactory().GetRepository(request, RepositoryType.PatientObservation);
+            GetAllowedStatesDataResponse response = new PatientObservationDataManager().GetAllowedStates(request);
 
             Assert.IsNull(response.StatesData);
         }
@@ -57,10 +56,10 @@ namespace Phytel.API.DataDomain.PatientObservation.Test
             string contractNumber = "InHealth001";
             string context = "NG";
 
-            IPatientObservationRepository<object> repo =
-                PatientObservationRepositoryFactory<object>.GetPatientObservationRepository(contractNumber, context, userId);
+
             GetObservationsDataRequest request = new GetObservationsDataRequest { Context = context, ContractNumber = contractNumber, UserId = userId, Version = 1 };
-            GetObservationsDataResponse response = PatientObservationDataManager.GetObservationsData(request);
+            IPatientObservationRepository repo = new PatientObservationRepositoryFactory().GetRepository(request, RepositoryType.PatientObservation);            
+            GetObservationsDataResponse response = new PatientObservationDataManager().GetObservationsData(request);
 
             Assert.IsNotNull(response.ObservationsData);
         }
@@ -74,10 +73,9 @@ namespace Phytel.API.DataDomain.PatientObservation.Test
             string context = "NG";
             string patientId = "5323762f231e250d5c0c62a7";
 
-            IPatientObservationRepository<object> repo =
-                PatientObservationRepositoryFactory<object>.GetPatientObservationRepository(contractNumber, context, userId);
             GetCurrentPatientObservationsDataRequest request = new GetCurrentPatientObservationsDataRequest { PatientId = patientId, Context = context, ContractNumber = contractNumber, UserId = userId, Version = 1 };
-            GetCurrentPatientObservationsDataResponse response = PatientObservationDataManager.GetCurrentPatientObservations(request);
+            IPatientObservationRepository repo = new PatientObservationRepositoryFactory().GetRepository(request, RepositoryType.PatientObservation);
+            GetCurrentPatientObservationsDataResponse response = new PatientObservationDataManager().GetCurrentPatientObservations(request);
 
             Assert.IsNotNull(response);
         }

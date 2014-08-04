@@ -63,6 +63,7 @@
     <Compile Include="MongoDB\Repository\MongoPatientObservationRepository_Tests.cs" />
     <Compile Include="ObservationTest.cs" />
     <Compile Include="PatientObservationDataManager_Tests.cs" />
+    <Compile Include="PatientObservationService_Test.cs" />
     <Compile Include="PatientObservationTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
