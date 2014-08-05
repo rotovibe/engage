@@ -20,11 +20,11 @@ namespace Phytel.API.DataDomain.Program.Service
             {
                 //register any dependencies your services use, e.g:
                 //container.Register<ICacheClient>(new MemoryCacheClient());
-                container.RegisterAutoWiredAs<CommonFormatterUtil, ICommonFormatterUtil>();
-                container.RegisterAutoWiredAs<Helpers, IHelpers>();
-                container.RegisterAutoWiredAs<ProgramDataManager, IProgramDataManager>();
-                container.RegisterAutoWiredAs<ProgramRepositoryFactory, IProgramRepositoryFactory>();
-                container.RegisterAutoWiredAs<DTOUtility, IDTOUtility>();
+                container.RegisterAutoWiredAs<CommonFormatterUtil, ICommonFormatterUtil>().ReusedWithin(Funq.ReuseScope.Request);
+                container.RegisterAutoWiredAs<Helpers, IHelpers>().ReusedWithin(Funq.ReuseScope.Request);
+                container.RegisterAutoWiredAs<ProgramDataManager, IProgramDataManager>().ReusedWithin(Funq.ReuseScope.Request);
+                container.RegisterAutoWiredAs<ProgramRepositoryFactory, IProgramRepositoryFactory>().ReusedWithin(Funq.ReuseScope.Request);
+                container.RegisterAutoWiredAs<DTOUtility, IDTOUtility>().ReusedWithin(Funq.ReuseScope.Request);
 
                 Plugins.Add(new RequestLogsFeature() { RequiredRoles = new string[] { } });
 
