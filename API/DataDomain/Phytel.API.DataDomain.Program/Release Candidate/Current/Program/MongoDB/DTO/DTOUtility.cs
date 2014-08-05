@@ -1218,7 +1218,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             }
         }
 
-        public  List<ResponseDetail> GetResponses(Step step, string contract, string userId)
+        public List<ResponseDetail> GetResponses(Step step, string contract, string userId)
         {
             try
             {
@@ -1227,22 +1227,38 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
 
                 if (meresp == null || meresp.Count == 0)
                 {
-                    //meresp = GetStepResponses(step.Id, contract, userId);
-                    meresp = ResponsesBag.Where(r => r.StepId == step.Id).ToList();
+                    try
+                    {
+                        //meresp = GetStepResponses(step.Id, contract, userId);
+                        if (ResponsesBag == null) throw new ArgumentException("ResponseBag is null");
+                        meresp = ResponsesBag.Where(r => r.StepId == step.Id).ToList();
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new Exception("DD:DTOUtils:GetResponses()::meresp where clause error" + ex.Message,
+                            ex.InnerException);
+                    }
                 }
 
-                resp = meresp.Select(x => new ResponseDetail
+                try
                 {
-                    Id = x.Id.ToString(),
-                    NextStepId = x.NextStepId.ToString(),
-                    Nominal = x.Nominal,
-                    Order = x.Order,
-                    Required = x.Required,
-                    StepId = x.StepId.ToString(),
-                    Text = x.Text,
-                    Value = x.Value,
-                    SpawnElement = GetResponseSpawnElement(x.Spawn)
-                }).ToList();
+                    resp = meresp.Select(x => new ResponseDetail
+                    {
+                        Id = Convert.ToString(x.Id),
+                        NextStepId = Convert.ToString(x.NextStepId),
+                        Nominal = x.Nominal,
+                        Order = x.Order,
+                        Required = x.Required,
+                        StepId = Convert.ToString(x.StepId),
+                        Text = x.Text,
+                        Value = x.Value,
+                        SpawnElement = GetResponseSpawnElement(x.Spawn)
+                    }).ToList();
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception("DD:DTOUtils:GetResponses()::Linq Expression error" + ex.Message, ex.InnerException);
+                }
 
                 return resp;
             }
