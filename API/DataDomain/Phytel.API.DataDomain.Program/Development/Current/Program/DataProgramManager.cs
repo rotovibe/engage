@@ -369,55 +369,24 @@ namespace Phytel.API.DataDomain.Program
         {
             try
             {
-                GetPatientProgramsResponse response = new GetPatientProgramsResponse(); ;
-
-                IProgramRepository repo = Factory.GetRepository(request, RepositoryType.PatientProgram);
-
-                ICollection<SelectExpression> selectExpressions = new List<SelectExpression>();
-
-                // PatientID
-                SelectExpression patientSelectExpression = new SelectExpression();
-                patientSelectExpression.FieldName = MEPatientProgram.PatientIdProperty;
-                patientSelectExpression.Type = SelectExpressionType.EQ;
-                patientSelectExpression.Value = request.PatientId;
-                patientSelectExpression.ExpressionOrder = 1;
-                patientSelectExpression.GroupID = 1;
-                selectExpressions.Add(patientSelectExpression);
-
-                //DeleteFlag
-                SelectExpression deleteFlagSelectExpression = new SelectExpression();
-                deleteFlagSelectExpression.FieldName = MEPatientProgram.DeleteFlagProperty;
-                deleteFlagSelectExpression.Type = SelectExpressionType.EQ;
-                deleteFlagSelectExpression.Value = false;
-                deleteFlagSelectExpression.ExpressionOrder = 2;
-                deleteFlagSelectExpression.GroupID = 1;
-                selectExpressions.Add(deleteFlagSelectExpression);
-
-                APIExpression apiExpression = new APIExpression();
-                apiExpression.Expressions = selectExpressions;
-
-                Tuple<string, IEnumerable<object>> patientPrograms = repo.Select(apiExpression);
+                var response = new GetPatientProgramsResponse();
+                var repo = Factory.GetRepository(request, RepositoryType.PatientProgram);
+                var patientPrograms = repo.FindByPatientId(request.PatientId).Cast<MEPatientProgram>().ToList();
 
                 if (patientPrograms != null)
                 {
-                    List<ProgramDetail> pds = patientPrograms.Item2.Cast<ProgramDetail>().ToList();
-                    if (pds.Count > 0)
+                    var lpi = new List<ProgramInfo>();
+                    patientPrograms.ForEach(pd => lpi.Add(new ProgramInfo
                     {
-
-                        List<ProgramInfo> lpi = new List<ProgramInfo>();
-                        pds.ForEach(pd => lpi.Add(new ProgramInfo
-                            {
-                                Id = pd.Id,
-                                Name = pd.Name,
-                                PatientId = pd.PatientId,
-                                ProgramState = pd.ProgramState,
-                                ShortName = pd.ShortName,
-                                Status = pd.Status,
-                                ElementState = pd.ElementState
-                            })
+                        Id = Convert.ToString(pd.Id),
+                        Name = pd.Name,
+                        PatientId = Convert.ToString(pd.PatientId),
+                        ShortName = pd.ShortName,
+                        Status = (int)pd.Status,
+                        ElementState = (int)pd.State
+                    })
                         );
-                        response.programs = lpi;
-                    }
+                    response.programs = lpi;
                 }
 
                 return response;
