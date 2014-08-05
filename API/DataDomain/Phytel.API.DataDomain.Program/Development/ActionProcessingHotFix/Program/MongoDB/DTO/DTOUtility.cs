@@ -1233,12 +1233,12 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
 
                 resp = meresp.Select(x => new ResponseDetail
                 {
-                    Id = x.Id.ToString(),
-                    NextStepId = x.NextStepId.ToString(),
+                    Id = Convert.ToString(x.Id),
+                    NextStepId = Convert.ToString(x.NextStepId),
                     Nominal = x.Nominal,
                     Order = x.Order,
                     Required = x.Required,
-                    StepId = x.StepId.ToString(),
+                    StepId = Convert.ToString(x.StepId),
                     Text = x.Text,
                     Value = x.Value,
                     SpawnElement = GetResponseSpawnElement(x.Spawn)
