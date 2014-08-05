@@ -325,13 +325,12 @@ namespace Phytel.API.DataDomain.PatientObservation
                 IPatientObservationRepository poRepo = Factory.GetRepository(request, RepositoryType.PatientObservation);
                 List<PatientObservationData> patientObservations = poRepo.FindObservationIdByPatientId(request.PatientId) as List<PatientObservationData>;
 
-                IPatientObservationRepository observationRepo = Factory.GetRepository(request, RepositoryType.Observation);
-                List<ObservationData> observations = (List<ObservationData>)observationRepo.GetActiveObservations();
-
                 List<PatientObservationData> currentPOs = null;
                 if (patientObservations != null && patientObservations.Count > 0)
                 {
                     currentPOs = new List<PatientObservationData>();
+                    IPatientObservationRepository observationRepo = Factory.GetRepository(request, RepositoryType.Observation);
+                    List<ObservationData> observations = (List<ObservationData>)observationRepo.GetActiveObservations();
                     if (observations != null && observations.Count > 0)
                     {
                         List<string> distinctObservations = patientObservations.Select(a => a.ObservationId).Distinct().ToList();
@@ -349,6 +348,7 @@ namespace Phytel.API.DataDomain.PatientObservation
                                 {
                                     current.TypeId = odata.ObservationTypeId;
                                     current.Name = odata.CommonName == null ? odata.Description : odata.CommonName;
+                                    current.Standard = odata.Standard;
                                 }
                                 currentPOs.Add(current);
                             }
@@ -408,20 +408,24 @@ namespace Phytel.API.DataDomain.PatientObservation
                 {
                     var systol = patientObservations.Where(o => o.ObservationId == "530c270afe7a592f64473e38").ToList();
                     var diastol = patientObservations.Where(o => o.ObservationId == "530c26fcfe7a592f64473e37").ToList();
+                    diastol.ForEach(d => 
+                    {
+                        if (d.LastUpdatedOn != null)
+                        {
+                            d.LastUpdatedOn = TrimMilliseconds((DateTime)d.LastUpdatedOn);
+                        }
+                    });
 
                     systol.ForEach(dt =>
                     {
                         dt.Values.First().Text = "Systolic blood pressure";
 
-                        var val2 =
-                            diastol.First(
-                                o =>
-                                    o.StartDate == dt.StartDate &&
-                                    o.ObservationId != dt.ObservationId);
-
-                        val2.Values.First().Text = "Diastolic blood pressure";
-
-                        dt.Values.Add(val2.Values.First());
+                        var val2 = diastol.Where(o => o.LastUpdatedOn == TrimMilliseconds((DateTime)dt.LastUpdatedOn)).FirstOrDefault();
+                        if (val2 != null)
+                        {
+                            val2.Values.First().Text = "Diastolic blood pressure";
+                            dt.Values.Add(val2.Values.First());
+                        }
                     });
 
                     //once parsed, remove diastol from patientobservations list.
@@ -527,6 +531,11 @@ namespace Phytel.API.DataDomain.PatientObservation
                 Source = od.Source
             };
             return pod;
+        }
+
+        private DateTime TrimMilliseconds(DateTime dt)
+        {
+            return new DateTime(dt.Year, dt.Month, dt.Day, dt.Hour, dt.Minute, dt.Second, 0);
         }
     }
 }   

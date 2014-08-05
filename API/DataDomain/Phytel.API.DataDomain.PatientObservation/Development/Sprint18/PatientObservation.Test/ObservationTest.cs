@@ -71,11 +71,12 @@ namespace Phytel.API.DataDomain.PatientObservation.Test
             string userId = string.Empty;
             string contractNumber = "InHealth001";
             string context = "NG";
-            string patientId = "5323762f231e250d5c0c62a7";
+            string patientId = "5325db20d6a4850adcbba84e";
 
             GetCurrentPatientObservationsDataRequest request = new GetCurrentPatientObservationsDataRequest { PatientId = patientId, Context = context, ContractNumber = contractNumber, UserId = userId, Version = 1 };
-            IPatientObservationRepository repo = new PatientObservationRepositoryFactory().GetRepository(request, RepositoryType.PatientObservation);
-            GetCurrentPatientObservationsDataResponse response = new PatientObservationDataManager().GetCurrentPatientObservations(request);
+
+            PatientObservationDataManager cm = new PatientObservationDataManager { Factory = new PatientObservationRepositoryFactory() };
+            GetCurrentPatientObservationsDataResponse response = cm.GetCurrentPatientObservations(request);
 
             Assert.IsNotNull(response);
         }

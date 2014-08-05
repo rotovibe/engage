@@ -395,7 +395,8 @@ namespace Phytel.API.DataDomain.PatientObservation
                                 StateId = (int)b.State,
                                 Units = b.Units,
                                 Values = GetValueList(b.NumericValue, b.NonNumericValue),
-                                LastUpdatedOn = b.LastUpdatedOn
+                                LastUpdatedOn = b.LastUpdatedOn,
+                                DisplayId = (int)b.Display
                             };
                             poDataList.Add(poData);
                         }
