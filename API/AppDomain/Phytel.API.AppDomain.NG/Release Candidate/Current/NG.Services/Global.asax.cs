@@ -33,12 +33,12 @@ namespace Phytel.API.AppDomain.NG.Service
             public override void Configure(Funq.Container container)
             {
                 //register any dependencies your services use, e.g:
-                container.RegisterAutoWiredAs<SecurityManager, ISecurityManager>();
-                container.RegisterAutoWiredAs<CommonFormatterUtil, ICommonFormatterUtil>();
-                container.RegisterAutoWiredAs<EndpointUtils, IEndpointUtils>();
-                container.RegisterAutoWiredAs<PlanElementUtils, IPlanElementUtils>();
-                container.RegisterAutoWiredAs<NGManager, INGManager>();
-                container.RegisterAutoWiredAs<AuditUtil, IAuditUtil>();
+                container.RegisterAutoWiredAs<SecurityManager, ISecurityManager>().ReusedWithin(Funq.ReuseScope.Request);
+                container.RegisterAutoWiredAs<CommonFormatterUtil, ICommonFormatterUtil>().ReusedWithin(Funq.ReuseScope.Request);
+                container.RegisterAutoWiredAs<EndpointUtils, IEndpointUtils>().ReusedWithin(Funq.ReuseScope.Request);
+                container.RegisterAutoWiredAs<PlanElementUtils, IPlanElementUtils>().ReusedWithin(Funq.ReuseScope.Request);
+                container.RegisterAutoWiredAs<NGManager, INGManager>().ReusedWithin(Funq.ReuseScope.Request);
+                container.RegisterAutoWiredAs<AuditUtil, IAuditUtil>().ReusedWithin(Funq.ReuseScope.Request);
 
 
                 Plugins.Add(new RequestLogsFeature() { RequiredRoles = new string[] { } });
