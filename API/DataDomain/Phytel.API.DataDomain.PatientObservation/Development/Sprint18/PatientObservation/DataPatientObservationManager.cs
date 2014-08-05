@@ -339,8 +339,8 @@ namespace Phytel.API.DataDomain.PatientObservation
 
                         distinctObservations.ForEach(a =>
                         {
-                            List<PatientObservationData> po = patientObservations.Where(s => s.ObservationId == a).OrderByDescending(o => o.LastUpdatedOn).ToList();
-                            PatientObservationData current = po.FirstOrDefault();
+                            PatientObservationData current = getCurrentPO(patientObservations.Where(s => s.ObservationId == a).ToList());
+                            
                             if(current != null)
                             {
                                 ObservationData odata = observations.Where(x => x.Id == a).FirstOrDefault();
@@ -359,6 +359,19 @@ namespace Phytel.API.DataDomain.PatientObservation
                 return result;
             }
             catch (Exception ex) { throw ex; }
+        }
+
+        private PatientObservationData getCurrentPO(List<PatientObservationData> patientObservations)
+        {
+            List<PatientObservationData> withNullEndDates = patientObservations.Where(s => s.EndDate == null).ToList();
+            if (withNullEndDates != null && withNullEndDates.Count > 0)
+            {
+                return withNullEndDates.OrderByDescending(o => o.LastUpdatedOn).FirstOrDefault();
+            }
+            else 
+            {
+                return patientObservations.OrderByDescending(o => o.EndDate).ThenByDescending(o => o.LastUpdatedOn).FirstOrDefault();
+            }
         }
 
         public List<PatientObservationData> GetHistoricalPatientObservations(GetHistoricalPatientObservationsDataRequest request)
@@ -412,7 +425,7 @@ namespace Phytel.API.DataDomain.PatientObservation
                     {
                         if (d.LastUpdatedOn != null)
                         {
-                            d.LastUpdatedOn = TrimMilliseconds((DateTime)d.LastUpdatedOn);
+                            d.LastUpdatedOn = trimMilliseconds((DateTime)d.LastUpdatedOn);
                         }
                     });
 
@@ -420,7 +433,7 @@ namespace Phytel.API.DataDomain.PatientObservation
                     {
                         dt.Values.First().Text = "Systolic blood pressure";
 
-                        var val2 = diastol.Where(o => o.LastUpdatedOn == TrimMilliseconds((DateTime)dt.LastUpdatedOn)).FirstOrDefault();
+                        var val2 = diastol.Where(o => o.LastUpdatedOn == trimMilliseconds((DateTime)dt.LastUpdatedOn)).FirstOrDefault();
                         if (val2 != null)
                         {
                             val2.Values.First().Text = "Diastolic blood pressure";
@@ -533,7 +546,7 @@ namespace Phytel.API.DataDomain.PatientObservation
             return pod;
         }
 
-        private DateTime TrimMilliseconds(DateTime dt)
+        private DateTime trimMilliseconds(DateTime dt)
         {
             return new DateTime(dt.Year, dt.Month, dt.Day, dt.Hour, dt.Minute, dt.Second, 0);
         }

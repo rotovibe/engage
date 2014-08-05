@@ -71,7 +71,7 @@ namespace Phytel.API.DataDomain.PatientObservation.Test
             string userId = string.Empty;
             string contractNumber = "InHealth001";
             string context = "NG";
-            string patientId = "5325db20d6a4850adcbba84e";
+            string patientId = "5325d9f3d6a4850adcbba4ce";
 
             GetCurrentPatientObservationsDataRequest request = new GetCurrentPatientObservationsDataRequest { PatientId = patientId, Context = context, ContractNumber = contractNumber, UserId = userId, Version = 1 };
 
