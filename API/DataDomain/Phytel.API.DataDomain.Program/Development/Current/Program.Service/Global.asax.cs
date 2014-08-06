@@ -11,6 +11,8 @@ namespace Phytel.API.DataDomain.Program.Service
 {
     public class Global : System.Web.HttpApplication
     {
+        private static readonly bool Profile = Convert.ToBoolean(System.Web.Configuration.WebConfigurationManager.AppSettings.Get("Profiler"));
+
         public class ProgramAppHost : AppHostBase
         {
             //Tell Service Stack the name of your application and where to find your web services
@@ -46,12 +48,14 @@ namespace Phytel.API.DataDomain.Program.Service
 
         protected void Application_BeginRequest(object sender, EventArgs e)
         {
-            Profiler.Start();
+            if (Profile)
+                Profiler.Start();
         }
 
         protected void Application_EndRequest(object src, EventArgs e)
         {
-            Profiler.Stop();
+            if (Profile)
+                Profiler.Stop();
         }
 
         protected void Application_AuthenticateRequest(object sender, EventArgs e)
