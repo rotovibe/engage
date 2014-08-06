@@ -21,6 +21,8 @@ namespace Phytel.API.AppDomain.NG.Service
 {
     public class Global : System.Web.HttpApplication
     {
+        private static readonly bool Profile = Convert.ToBoolean(System.Web.Configuration.WebConfigurationManager.AppSettings.Get("Profiler"));
+
         public class NGAppHost : AppHostBase
         {
 
@@ -101,13 +103,14 @@ namespace Phytel.API.AppDomain.NG.Service
 
         protected void Application_BeginRequest(object sender, EventArgs e)
         {
-            //if (Request.IsLocal)
+            if (Profile)
                 Profiler.Start();
         }
 
         protected void Application_EndRequest(object src, EventArgs e)
         {
-            Profiler.Stop();
+            if (Profile)
+                Profiler.Stop();
         }
 
         protected void Application_AuthenticateRequest(object sender, EventArgs e)
