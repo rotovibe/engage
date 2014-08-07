@@ -1229,10 +1229,10 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
                 {
                     try
                     {
-                        //meresp = GetStepResponses(step.Id, contract, userId);
+                    //meresp = GetStepResponses(step.Id, contract, userId);
                         if (ResponsesBag == null) throw new ArgumentException("ResponseBag is null");
-                        meresp = ResponsesBag.Where(r => r.StepId == step.Id).ToList();
-                    }
+                    meresp = ResponsesBag.Where(r => r.StepId == step.Id).ToList();
+                }
                     catch (Exception ex)
                     {
                         throw new Exception("DD:DTOUtils:GetResponses()::meresp where clause error" + ex.Message,
@@ -1242,20 +1242,20 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
 
                 try
                 {
-                    resp = meresp.Select(x => new ResponseDetail
-                    {
+                resp = meresp.Select(x => new ResponseDetail
+                {
                         Id = Convert.ToString(x.Id),
                         NextStepId = Convert.ToString(x.NextStepId),
-                        Nominal = x.Nominal,
-                        Order = x.Order,
-                        Required = x.Required,
+                    Nominal = x.Nominal,
+                    Order = x.Order,
+                    Required = x.Required,
                         StepId = Convert.ToString(x.StepId),
-                        Text = x.Text,
-                        Value = x.Value,
-                        SpawnElement = GetResponseSpawnElement(x.Spawn)
-                    }).ToList();
+                    Text = x.Text,
+                    Value = x.Value,
+                    SpawnElement = GetResponseSpawnElement(x.Spawn)
+                }).ToList();
                 }
-                catch (Exception ex)
+                catch(Exception ex)
                 {
                     throw new Exception("DD:DTOUtils:GetResponses()::Linq Expression error" + ex.Message, ex.InnerException);
                 }

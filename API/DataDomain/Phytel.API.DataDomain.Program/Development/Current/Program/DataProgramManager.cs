@@ -379,15 +379,15 @@ namespace Phytel.API.DataDomain.Program
                     patientPrograms.ForEach(pd => lpi.Add(new ProgramInfo
                     {
                         Id = Convert.ToString(pd.Id),
-                        Name = pd.Name,
+                                Name = pd.Name,
                         PatientId = Convert.ToString(pd.PatientId),
-                        ShortName = pd.ShortName,
+                                ShortName = pd.ShortName,
                         Status = (int)pd.Status,
                         ElementState = (int)pd.State
-                    })
+                            })
                         );
-                    response.programs = lpi;
-                }
+                        response.programs = lpi;
+                    }
 
                 return response;
             }
