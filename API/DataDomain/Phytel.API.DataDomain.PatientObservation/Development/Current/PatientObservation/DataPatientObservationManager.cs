@@ -479,8 +479,8 @@ namespace Phytel.API.DataDomain.PatientObservation
                 // handle BP readings if they exist - check request.observationid
                 if (observationId.Equals("530c270afe7a592f64473e38"))
                 {
-                    var systol = patientObservations.Where(o => o.ObservationId == "530c270afe7a592f64473e38").ToList();
-                    var diastol = patientObservations.Where(o => o.ObservationId == "530c26fcfe7a592f64473e37").ToList();
+                    var systol = patientObservations.Where(o => o.ObservationId == "530c270afe7a592f64473e38").OrderBy(o => o.LastUpdatedOn).ToList();
+                    var diastol = patientObservations.Where(o => o.ObservationId == "530c26fcfe7a592f64473e37").OrderBy(o => o.LastUpdatedOn).ToList();
                     diastol.ForEach(d => 
                     {
                         if (d.LastUpdatedOn != null)
@@ -498,6 +498,7 @@ namespace Phytel.API.DataDomain.PatientObservation
                         {
                             val2.Values.First().Text = "Diastolic blood pressure";
                             dt.Values.Add(val2.Values.First());
+                            diastol.Remove(val2);
                         }
                     });
 
