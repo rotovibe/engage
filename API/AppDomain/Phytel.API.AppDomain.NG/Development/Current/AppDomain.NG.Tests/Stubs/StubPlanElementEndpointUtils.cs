@@ -282,12 +282,12 @@ namespace Phytel.API.AppDomain.NG.Test.Stubs
             return outCome;
         }
 
-        DTO.PatientObservation IEndpointUtils.GetPatientProblem(string probId, PlanCOR.PlanElementEventArg e, string userId)
+        public DataDomain.PatientObservation.DTO.PutUpdateObservationDataResponse UpdatePatientProblem(string patientId, string userId, string elementId, DTO.PatientObservation pod, bool _active, Interface.IAppDomainRequest request)
         {
             throw new NotImplementedException();
         }
 
-        public DataDomain.PatientObservation.DTO.PutUpdateObservationDataResponse UpdatePatientProblem(string patientId, string userId, string elementId, DTO.PatientObservation pod, bool _active, Interface.IAppDomainRequest request)
+        DTO.PatientObservation IEndpointUtils.GetPatientProblem(string probId, PlanCOR.PlanElementEventArg e, string userId)
         {
             throw new NotImplementedException();
         }
