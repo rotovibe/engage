@@ -470,7 +470,8 @@ namespace Phytel.API.DataDomain.PatientObservation
                                 StateId = (int)mePO.State,
                                 PatientId = request.PatientId,
                                 StartDate = mePO.StartDate,
-                                EndDate = mePO.EndDate
+                                EndDate = mePO.EndDate,
+                                Source = mePO.Source
                             };
                             observationDataL.Add(data);
                         }
