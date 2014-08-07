@@ -1,20 +1,19 @@
 using Phytel.API.Interface;
 using ServiceStack.ServiceHost;
-using System.Collections.Generic;
 
 namespace Phytel.API.DataDomain.PatientObservation.DTO
 {
-    [Route("/{Context}/{Version}/{ContractNumber}/Patient/{PatientId}/Observation/Update", "PUT")]
-    public class PutUpdateObservationDataRequest : IDataDomainRequest
+    [Route("/{Context}/{Version}/{ContractNumber}/Patient/{PatientId}/Observations/{ObservationId}/Historical", "GET")]
+    public class GetHistoricalPatientObservationsDataRequest : IDataDomainRequest, IPatientObservationsDataRequest
     {
-        [ApiMember(Name = "PatientId", Description = "Id of the Patient for whom a goal is being created.", ParameterType = "property", DataType = "string", IsRequired = true)]
+        [ApiMember(Name = "PatientId", Description = "Id of the Patient for whom current observations are requested.", ParameterType = "property", DataType = "string", IsRequired = true)]
         public string PatientId { get; set; }
-
-        [ApiMember(Name = "PatientObservationData", Description = "PatientObservation to update.", ParameterType = "property", DataType = "PatientObservationRecordData", IsRequired = true)]
-        public PatientObservationRecordData PatientObservationData { get; set; }
 
         [ApiMember(Name = "UserId", Description = "UserId of the logged in user", ParameterType = "property", DataType = "string", IsRequired = true)]
         public string UserId { get; set; }
+
+        [ApiMember(Name = "ObservationId", Description = "ObservationId of the logged in user", ParameterType = "property", DataType = "string", IsRequired = true)]
+        public string ObservationId { get; set; }
 
         [ApiMember(Name = "Context", Description = "Product Context requesting the PatientGoal", ParameterType = "property", DataType = "string", IsRequired = true)]
         public string Context { get; set; }

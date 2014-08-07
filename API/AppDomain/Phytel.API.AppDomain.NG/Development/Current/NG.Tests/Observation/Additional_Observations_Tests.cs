@@ -1,6 +1,5 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Phytel.API.AppDomain.NG.DTO;
-using Phytel.API.AppDomain.NG.DTO.Observation;
 using ServiceStack.Service;
 using ServiceStack.ServiceClient.Web;
 using System.Collections.Generic;

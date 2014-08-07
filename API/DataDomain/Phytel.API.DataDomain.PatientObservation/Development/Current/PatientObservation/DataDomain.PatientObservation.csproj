@@ -65,7 +65,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Enums.cs" />
+    <Compile Include="IObservationUtil.cs" />
+    <Compile Include="IPatientObservationDataManager.cs" />
     <Compile Include="IPatientObservationRepository.cs" />
+    <Compile Include="IPatientObservationRepositoryFactory.cs" />
     <Compile Include="MongoDB\DTO\MEObservation.cs" />
     <Compile Include="MongoDB\DTO\MEPatientObservation.cs" />
     <Compile Include="MongoDB\DTO\ObservationValue.cs" />

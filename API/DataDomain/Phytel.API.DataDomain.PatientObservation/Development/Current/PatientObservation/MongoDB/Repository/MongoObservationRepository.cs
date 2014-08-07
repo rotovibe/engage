@@ -18,7 +18,7 @@ using Phytel.API.Common.CustomObject;
 
 namespace Phytel.API.DataDomain.PatientObservation
 {
-    public class MongoObservationRepository<T> : IPatientObservationRepository<T>
+    public class MongoObservationRepository : IPatientObservationRepository
     {
         private string _dbName = string.Empty;
 
@@ -107,7 +107,6 @@ namespace Phytel.API.DataDomain.PatientObservation
                             CodingSystemCode = o.Code,
                             DeleteFlag = o.DeleteFlag,
                             Description = o.Description,
-                            //ExtraElements = o.ExtraElements,
                             GroupId = o.GroupId != null ? o.GroupId.ToString() : null,
                             LowValue = o.LowValue,
                             HighValue = o.HighValue,
@@ -171,42 +170,42 @@ namespace Phytel.API.DataDomain.PatientObservation
             catch (Exception) { throw; }
         }
 
-        object IRepository<T>.Insert(object newEntity)
+        object IRepository.Insert(object newEntity)
         {
             throw new NotImplementedException();
         }
 
-        object IRepository<T>.InsertAll(List<object> entities)
+        object IRepository.InsertAll(List<object> entities)
         {
             throw new NotImplementedException();
         }
 
-        void IRepository<T>.Delete(object entity)
+        void IRepository.Delete(object entity)
         {
             throw new NotImplementedException();
         }
 
-        void IRepository<T>.DeleteAll(List<object> entities)
+        void IRepository.DeleteAll(List<object> entities)
         {
             throw new NotImplementedException();
         }
 
-        Tuple<string, IEnumerable<object>> IRepository<T>.Select(APIExpression expression)
+        Tuple<string, IEnumerable<object>> IRepository.Select(APIExpression expression)
         {
             throw new NotImplementedException();
         }
 
-        IEnumerable<object> IRepository<T>.SelectAll()
+        IEnumerable<object> IRepository.SelectAll()
         {
             throw new NotImplementedException();
         }
 
-        object IRepository<T>.Update(object entity)
+        object IRepository.Update(object entity)
         {
             throw new NotImplementedException();
         }
 
-        void IRepository<T>.CacheByID(List<string> entityIDs)
+        void IRepository.CacheByID(List<string> entityIDs)
         {
             throw new NotImplementedException();
         }
@@ -330,6 +329,58 @@ namespace Phytel.API.DataDomain.PatientObservation
                     }
                 }
                 return allowedStates;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public IEnumerable<object> GetActiveObservations()
+        {
+            List<ObservationData> odL = null;
+            try
+            {
+                using (PatientObservationMongoContext ctx = new PatientObservationMongoContext(_dbName))
+                {
+                    List<IMongoQuery> queries = new List<IMongoQuery>();
+                    queries.Add(Query.EQ(MEObservation.StatusProperty, Status.Active));
+                    queries.Add(Query.EQ(MEObservation.DeleteFlagProperty, false));
+                    IMongoQuery mQuery = Query.And(queries);
+
+                    List<MEObservation> meObs = ctx.Observations.Collection.Find(mQuery).ToList();
+
+                    if (meObs != null && meObs.Count > 0)
+                    {
+                        odL = new List<ObservationData>();
+                        meObs.ForEach(o =>
+                        {
+                            odL.Add(new ObservationData
+                            {
+                                CodingSystem = o.CodingSystemId.ToString(),
+                                CodingSystemCode = o.Code,
+                                DeleteFlag = o.DeleteFlag,
+                                Description = o.Description,
+                                GroupId = o.GroupId != null ? o.GroupId.ToString() : null,
+                                LowValue = o.LowValue,
+                                HighValue = o.HighValue,
+                                Id = o.Id.ToString(),
+                                LastUpdatedOn = o.LastUpdatedOn,
+                                ObservationTypeId = o.ObservationTypeId.ToString(),
+                                Order = o.Order,
+                                Source = o.Source,
+                                Standard = o.Standard,
+                                Status = (int)o.Status,
+                                TTLDate = o.TTLDate,
+                                Units = o.Units,
+                                UpdatedBy = o.UpdatedBy.ToString(),
+                                Version = o.Version,
+                                CommonName = o.CommonName
+                            });
+                        });
+                    }
+                }
+                return odL;
             }
             catch (Exception ex)
             {

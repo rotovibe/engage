@@ -1,5 +1,4 @@
 ﻿using Phytel.API.AppDomain.NG.DTO;
-using Phytel.API.AppDomain.NG.DTO.Observation;
 using Phytel.API.AppDomain.NG.PlanCOR;
 using Phytel.API.DataDomain.Patient.DTO;
 using Phytel.API.DataDomain.PatientObservation.DTO;
@@ -140,42 +139,42 @@ namespace Phytel.API.AppDomain.NG
         //    }
         //}
 
-        private static void SetSelectedResponseProperty(Step step, Response r)
-        {
-            try
-            {
-                r.Selected = false;
-                if (step.SelectedResponseId.Equals(r.Id))
-                {
-                    if ((step.StepTypeId == 1) || (step.StepTypeId == 4))
-                    {
-                        r.Selected = true;
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("AD:PlanElementEndpointUtil:SetSelectedResponseProperty()::" + ex.Message, ex.InnerException);
-            }
-        }
+        //private static void SetSelectedResponseProperty(Step step, Response r)
+        //{
+        //    try
+        //    {
+        //        r.Selected = false;
+        //        if (step.SelectedResponseId.Equals(r.Id))
+        //        {
+        //            if ((step.StepTypeId == 1) || (step.StepTypeId == 4))
+        //            {
+        //                r.Selected = true;
+        //            }
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw new Exception("AD:PlanElementEndpointUtil:SetSelectedResponseProperty()::" + ex.Message, ex.InnerException);
+        //    }
+        //}
 
-        private static void SetDeleteFlagByStepCompletion(Step step, Response r)
-        {
-            try
-            {
-                if (step != null && r != null)
-                {
-                    if (step.Completed)
-                        r.Delete = false;
-                    else
-                        r.Delete = true;
-                }
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("AD:PlanElementEndpointUtil:SetDeleteFlagByStepCompletion()::" + ex.Message, ex.InnerException);
-            }
-        }
+        //private static void SetDeleteFlagByStepCompletion(Step step, Response r)
+        //{
+        //    try
+        //    {
+        //        if (step != null && r != null)
+        //        {
+        //            if (step.Completed)
+        //                r.Delete = false;
+        //            else
+        //                r.Delete = true;
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw new Exception("AD:PlanElementEndpointUtil:SetDeleteFlagByStepCompletion()::" + ex.Message, ex.InnerException);
+        //    }
+        //}
 
         public static List<StepResponse> GetResponsesForStep(string stepId, IAppDomainRequest request)
         {
@@ -208,35 +207,35 @@ namespace Phytel.API.AppDomain.NG
             }
         }
 
-        private static bool ResponseExistsRequest(string stepId, string responseId, IProcessActionRequest request)
-        {
-            bool result = false;
-            try
-            {
-                IRestClient client = new JsonServiceClient();
+        //private static bool ResponseExistsRequest(string stepId, string responseId, IProcessActionRequest request)
+        //{
+        //    bool result = false;
+        //    try
+        //    {
+        //        IRestClient client = new JsonServiceClient();
 
-                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Program/Module/Action/Step/{4}/Response/?ResponseId={5}",
-                                                    DDProgramServiceUrl,
-                                                    "NG",
-                                                    request.Version,
-                                                    request.ContractNumber,
-                                                    stepId,
-                                                    responseId), request.UserId);
+        //        string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Program/Module/Action/Step/{4}/Response/?ResponseId={5}",
+        //                                            DDProgramServiceUrl,
+        //                                            "NG",
+        //                                            request.Version,
+        //                                            request.ContractNumber,
+        //                                            stepId,
+        //                                            responseId), request.UserId);
 
-                GetStepResponseResponse resp =
-                                    client.Get<GetStepResponseResponse>(
-                                    url);
+        //        GetStepResponseResponse resp =
+        //                            client.Get<GetStepResponseResponse>(
+        //                            url);
 
-                if (resp.StepResponse != null)
-                    result = true;
+        //        if (resp.StepResponse != null)
+        //            result = true;
 
-                return result;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("AD:PlanElementEndpointUtil:ResponseExistsRequest()::" + ex.Message, ex.InnerException);
-            }
-        }
+        //        return result;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw new Exception("AD:PlanElementEndpointUtil:ResponseExistsRequest()::" + ex.Message, ex.InnerException);
+        //    }
+        //}
 
         //private static void UpdateResponseRequest(IProcessActionRequest request, Response r)
         //{

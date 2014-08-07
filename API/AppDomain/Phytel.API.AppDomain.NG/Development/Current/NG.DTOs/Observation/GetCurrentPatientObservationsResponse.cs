@@ -5,9 +5,9 @@ using System.Collections.Generic;
 
 namespace Phytel.API.AppDomain.NG.DTO
 {
-    public class GetInitializeProblemResponse : IDomainResponse
+    public class GetCurrentPatientObservationsResponse : IDomainResponse
     {
-        public PatientObservation PatientObservation { get; set; }
+        public List<PatientObservation> PatientObservations { get; set; }
         public ResponseStatus Status { get; set; }
         public double Version { get; set; }
     }

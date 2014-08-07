@@ -17,7 +17,7 @@ namespace Phytel.API.DataDomain.PatientObservation.Test
         {
             GetInitializeProblemDataRequest request = new GetInitializeProblemDataRequest { Context = context, ContractNumber = contractNumber, ObservationId = "533ed16ed4332307bc592bb9", PatientId = "5325db00d6a4850adcbba802", UserId = userId, Version = version };
 
-            GetInitializeProblemDataResponse response = PatientObservationDataManager.GetInitializeProblem(request);
+            GetInitializeProblemDataResponse response = new PatientObservationDataManager().GetInitializeProblem(request);
 
             Assert.IsNotNull(response.PatientObservation);
         }
@@ -27,7 +27,7 @@ namespace Phytel.API.DataDomain.PatientObservation.Test
         {
             PutUpdateObservationDataRequest request = new PutUpdateObservationDataRequest { Context = context, ContractNumber = contractNumber, PatientId = "5325da48d6a4850adcbba5c2", PatientObservationData = GetProblem(), UserId = userId, Version = version };
 
-            bool response = (bool)PatientObservationDataManager.PutUpdateOfPatientObservationRecord(request);
+            bool response = (bool) new PatientObservationDataManager().PutUpdateOfPatientObservationRecord(request);
 
             Assert.IsTrue(response);
         }

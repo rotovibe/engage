@@ -15,7 +15,7 @@ namespace Phytel.API.AppDomain.NG.Test.Stubs
     {
         public IRestClient Client { get; set; }
 
-        public DTO.Observation.PatientObservation GetPatientProblem(string probId, PlanCOR.PlanElementEventArg e, string userId)
+        public Phytel.API.AppDomain.NG.DTO.Observation GetPatientProblem(string probId, PlanCOR.PlanElementEventArg e, string userId)
         {
             throw new NotImplementedException();
         }
@@ -233,7 +233,7 @@ namespace Phytel.API.AppDomain.NG.Test.Stubs
             throw new NotImplementedException();
         }
 
-        public DataDomain.PatientObservation.DTO.PutUpdateObservationDataResponse UpdatePatientProblem(string patientId, string userId, string elementId, DTO.Observation.PatientObservation pod, bool _active, Interface.IAppDomainRequest request)
+        public DataDomain.PatientObservation.DTO.PutUpdateObservationDataResponse UpdatePatientProblem(string patientId, string userId, string elementId, Phytel.API.AppDomain.NG.DTO.Observation pod, bool _active, Interface.IAppDomainRequest request)
         {
             throw new NotImplementedException();
         }
@@ -280,6 +280,16 @@ namespace Phytel.API.AppDomain.NG.Test.Stubs
         {
             DTO.Outcome outCome = new DTO.Outcome {Result = 1, Reason = "Success!"};
             return outCome;
+        }
+
+        DTO.PatientObservation IEndpointUtils.GetPatientProblem(string probId, PlanCOR.PlanElementEventArg e, string userId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public DataDomain.PatientObservation.DTO.PutUpdateObservationDataResponse UpdatePatientProblem(string patientId, string userId, string elementId, DTO.PatientObservation pod, bool _active, Interface.IAppDomainRequest request)
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -20,7 +20,19 @@ namespace Phytel.API.AppDomain.NG.Test
             ObservationsManager oManager = new ObservationsManager();
             GetInitializeProblemResponse response = oManager.GetInitializeProblem(request);
 
-            Assert.IsNotNull(response.Observation);
+            Assert.IsNotNull(response.PatientObservation);
+        }
+
+
+        [TestMethod]
+        public void GetCurrentPatientObservation_Test()
+        {
+            GetCurrentPatientObservationsRequest request = new GetCurrentPatientObservationsRequest { ContractNumber = contract, PatientId = "5323762f231e250d5c0c62a7", UserId = userId, Version = version };
+
+            ObservationsManager oManager = new ObservationsManager();
+            GetCurrentPatientObservationsResponse response = oManager.GetCurrentPatientObservations(request);
+
+            Assert.IsNotNull(response);
         }
     }
 }

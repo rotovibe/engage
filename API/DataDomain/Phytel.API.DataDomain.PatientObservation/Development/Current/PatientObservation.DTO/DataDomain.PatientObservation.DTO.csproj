@@ -69,6 +69,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="GetHistoricalPatientObservationsDataRequest.cs" />
+    <Compile Include="GetCurrentPatientObservationsDataRequest.cs" />
+    <Compile Include="GetHistoricalPatientObservationsDataResponse.cs" />
+    <Compile Include="GetCurrentPatientObservationsDataResponse.cs" />
+    <Compile Include="IPatientObservationsDataRequest.cs" />
+    <Compile Include="PutUpdatePatientObservationsDataRequest.cs" />
+    <Compile Include="PutUpdatePatientObservationsDataResponse.cs" />
     <Compile Include="UndoDeletePatientObservationsDataRequest.cs" />
     <Compile Include="DeletePatientObservationByPatientIdDataRequest.cs" />
     <Compile Include="UndoDeletePatientObservationsDataResponse.cs" />
@@ -76,9 +83,9 @@
     <Compile Include="DeletePatientObservationRequest.cs" />
     <Compile Include="DeletePatientObservationResponse.cs" />
     <Compile Include="GetAllowedStatesDataRequest.cs" />
-    <Compile Include="GetAdditionalLibraryObservationsRequest.cs" />
+    <Compile Include="GetObservationsDataRequest.cs" />
     <Compile Include="GetAllowedStatesDataResponse.cs" />
-    <Compile Include="GetAdditionalLibraryObservationsResponse.cs" />
+    <Compile Include="GetObservationsDataResponse.cs" />
     <Compile Include="GetPatientProblemsSummaryRequest.cs" />
     <Compile Include="GetPatientObservationRequest.cs" />
     <Compile Include="GetPatientProblemsSummaryResponse.cs" />

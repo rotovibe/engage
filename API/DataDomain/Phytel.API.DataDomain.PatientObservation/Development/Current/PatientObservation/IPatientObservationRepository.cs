@@ -14,6 +14,19 @@ namespace Phytel.API.DataDomain.PatientObservation
         object Initialize(object newEntity);
         object InitializeProblem(object newEntity);
         object GetObservationsByType(object newEntity, bool? standard, bool? status);
+        IEnumerable<object> GetActiveObservations();
+        IEnumerable<object> FindObservationIdByPatientId(string Id);
+        object FindRecentObservationValue(string observationTypeId, string patientId);
+        List<IdNamePair> GetAllowedObservationStates(object entity);
+        object FindByObservationID(string entityId, string patientId);
+    }
+
+    public interface IPatientObservationRepository : IRepository
+    {
+        object Initialize(object newEntity);
+        object InitializeProblem(object newEntity);
+        object GetObservationsByType(object newEntity, bool? standard, bool? status);
+        IEnumerable<object> GetActiveObservations();
         IEnumerable<object> FindObservationIdByPatientId(string Id);
         object FindRecentObservationValue(string observationTypeId, string patientId);
         List<IdNamePair> GetAllowedObservationStates(object entity);
