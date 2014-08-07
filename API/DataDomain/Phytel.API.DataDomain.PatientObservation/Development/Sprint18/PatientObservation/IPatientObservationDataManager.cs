@@ -21,5 +21,6 @@ namespace Phytel.API.DataDomain.PatientObservation
         List<PatientObservationData> GetHistoricalPatientObservations(GetHistoricalPatientObservationsDataRequest request);
         DeletePatientObservationByPatientIdDataResponse DeletePatientObservationByPatientId(DeletePatientObservationByPatientIdDataRequest request);
         UndoDeletePatientObservationsDataResponse UndoDeletePatientObservations(UndoDeletePatientObservationsDataRequest request);
+        PutUpdatePatientObservationsDataResponse UpdatePatientObservations(PutUpdatePatientObservationsDataRequest request);
     }
 }

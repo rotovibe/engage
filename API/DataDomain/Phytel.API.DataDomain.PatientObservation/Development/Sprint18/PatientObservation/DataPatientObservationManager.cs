@@ -209,7 +209,7 @@ namespace Phytel.API.DataDomain.PatientObservation
             }
         }
 
-        public  bool PutUpdateOfPatientObservationRecord(PutUpdateObservationDataRequest request)
+        public bool PutUpdateOfPatientObservationRecord(PutUpdateObservationDataRequest request)
         {
             try
             {
@@ -221,6 +221,66 @@ namespace Phytel.API.DataDomain.PatientObservation
                     result = (bool)repo.Update(request);
 
                 return result;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("DD.DataPatientObservationManager:PutUpdateOfPatientObservationRecord()::" + ex.Message, ex.InnerException);
+            }
+        }
+
+        public PutUpdatePatientObservationsDataResponse UpdatePatientObservations(PutUpdatePatientObservationsDataRequest request)
+        {
+            try
+            {
+                PutUpdatePatientObservationsDataResponse response = new PutUpdatePatientObservationsDataResponse();
+                List<PatientObservationData> returnDataList = null;
+                bool result = false;
+                IPatientObservationRepository repo = Factory.GetRepository(request, RepositoryType.PatientObservation);
+
+                // update
+                if (request.PatientObservationsRecordData != null && request.PatientObservationsRecordData.Count != 0)
+                {
+                    returnDataList = new List<PatientObservationData>();
+                    foreach(PatientObservationRecordData poData in request.PatientObservationsRecordData)
+                    {
+                        if (!string.IsNullOrEmpty(poData.Id))
+                        {
+                            PutUpdateObservationDataRequest putUpdateObservationDataRequest = new PutUpdateObservationDataRequest { 
+                                 Context  = request.Context,
+                                 ContractNumber = request.ContractNumber,
+                                 PatientId = request.PatientId,
+                                 PatientObservationData = poData,
+                                 UserId = request.UserId,
+                                 Version = request.Version
+                            };
+                            result = (bool)repo.Update(putUpdateObservationDataRequest);
+                            //fetch & return the update object.
+                            PatientObservationData pod = (PatientObservationData)repo.FindByID(poData.Id);
+                            returnDataList.Add(pod);
+                        }
+                    }
+                    IPatientObservationRepository observationRepo = Factory.GetRepository(request, RepositoryType.Observation);
+                    List<ObservationData> observations = (List<ObservationData>)observationRepo.GetActiveObservations();
+                    if (observations != null && observations.Count > 0)
+                    {
+                        List<string> distinctObservations = returnDataList.Select(a => a.ObservationId).Distinct().ToList();
+                        // added this to take care of composite observations like BP
+                        distinctObservations.ForEach(o => CombineCompositeObservations(o, returnDataList));
+                        returnDataList.ForEach(r => 
+                        {
+                            ObservationData odata = observations.Where(x => x.Id == r.ObservationId).FirstOrDefault();
+                            if (odata != null)
+                            {
+                                r.TypeId = odata.ObservationTypeId;
+                                r.Name = odata.CommonName == null ? odata.Description : odata.CommonName;
+                                r.Standard = odata.Standard;
+                            }
+                        });
+                    }
+                }
+                response.PatientObservationsData = returnDataList;
+                response.Result = result;
+                return response;
             }
             catch (Exception ex)
             {

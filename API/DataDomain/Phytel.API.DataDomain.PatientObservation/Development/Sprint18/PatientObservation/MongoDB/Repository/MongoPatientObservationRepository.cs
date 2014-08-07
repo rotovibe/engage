@@ -85,8 +85,36 @@ namespace Phytel.API.DataDomain.PatientObservation
         {
             try
             {
-                throw new NotImplementedException();
-                // code here //
+                PatientObservationData poData = null;
+                List<IMongoQuery> queries = new List<IMongoQuery>();
+                queries.Add(Query.EQ(MEPatientObservation.IdProperty, ObjectId.Parse(entityID)));
+                queries.Add(Query.EQ(MEPatientObservation.TTLDateProperty, BsonNull.Value));
+                queries.Add(Query.EQ(MEPatientObservation.DeleteFlagProperty, false));
+                IMongoQuery mQuery = Query.And(queries);
+
+                using (PatientObservationMongoContext ctx = new PatientObservationMongoContext(_dbName))
+                {
+                    MEPatientObservation mePO = ctx.PatientObservations.Collection.Find(mQuery).FirstOrDefault();
+                    if (mePO != null)
+                    {
+                        poData = new PatientObservationData
+                        {
+                            Id = mePO.Id.ToString(),
+                            PatientId = mePO.PatientId.ToString(),
+                            EndDate = mePO.EndDate,
+                            ObservationId = mePO.ObservationId.ToString(),
+                            Source = mePO.Source,
+                            StartDate = mePO.StartDate,
+                            StateId = (int)mePO.State,
+                            Units = mePO.Units,
+                            Values = GetValueList(mePO.NumericValue, mePO.NonNumericValue),
+                            LastUpdatedOn = mePO.LastUpdatedOn,
+                            DisplayId = (int)mePO.Display,
+                            DeleteFlag = mePO.DeleteFlag
+                        };
+                    }
+                }
+                return poData;
             }
             catch (Exception) { throw; }
         }

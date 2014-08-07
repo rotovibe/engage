@@ -54,7 +54,7 @@ namespace Phytel.API.AppDomain.NG.Observation
                 List<PatientObservation> obsl = request.PatientObservations;
 
                 //List<string> patientObservationIds = ObservationsUtil.GetPatientObservationIds(obsl);
-
+                List<PatientObservationRecordData> poRecordDataList = new List<PatientObservationRecordData>();
                 if (request.PatientObservations != null && request.PatientObservations.Count > 0)
                 {
                     foreach (PatientObservation po in obsl)
@@ -65,24 +65,25 @@ namespace Phytel.API.AppDomain.NG.Observation
                             foreach (ObservationValue ov in po.Values)
                             {
                                 pord = ObservationsUtil.CreatePatientObservationRecord(po, ov);
-                                ObservationEndpointUtil.UpdatePatientObservation(request, pord);
+                                //ObservationEndpointUtil.UpdatePatientObservation(request, pord);
+                                poRecordDataList.Add(pord);
                             }
                         }
                         else // Problem does not have values
                         {
                             pord = ObservationsUtil.CreatePatientObservationRecord(po, null);
-                            ObservationEndpointUtil.UpdatePatientObservation(request, pord);
+                            //ObservationEndpointUtil.UpdatePatientObservation(request, pord);
+                            poRecordDataList.Add(pord);
                         }
-                        
                     }
+                    response = ObservationEndpointUtil.UpdatePatientObservation(request, poRecordDataList);
                 }
                 else
                 {
                     PatientObservationRecordData epord = new PatientObservationRecordData();
-                    ObservationEndpointUtil.UpdatePatientObservation(request, epord);
+                    poRecordDataList.Add(epord);
+                    response = ObservationEndpointUtil.UpdatePatientObservation(request, poRecordDataList);
                 }
-
-                response.Result = true;
                 response.Version = request.Version;
                 return response;
             }
@@ -163,7 +164,7 @@ namespace Phytel.API.AppDomain.NG.Observation
             {
                 GetCurrentPatientObservationsResponse response = new GetCurrentPatientObservationsResponse();
                 List<PatientObservationData> po = (List<PatientObservationData>)ObservationEndpointUtil.GetCurrentPatientObservations(request);
-                response.PatientObservations = ObservationsUtil.GetCurrentPatientObservations(request, po);
+                response.PatientObservations = ObservationsUtil.GetPatientObservations(po);
                 response.Version = request.Version;
                 return response;
             }
@@ -178,7 +179,7 @@ namespace Phytel.API.AppDomain.NG.Observation
             try
             {
                 var po = EndpointUtil.GetHistoricalPatientObservations(request);
-                var historyData = ObservationsUtil.GetCurrentPatientObservations(request, po);
+                var historyData = ObservationsUtil.GetPatientObservations(po);
                 return historyData;
             }
             catch (Exception ex)

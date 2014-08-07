@@ -74,6 +74,8 @@
     <Compile Include="GetHistoricalPatientObservationsDataResponse.cs" />
     <Compile Include="GetCurrentPatientObservationsDataResponse.cs" />
     <Compile Include="IPatientObservationsDataRequest.cs" />
+    <Compile Include="PutUpdatePatientObservationsDataRequest.cs" />
+    <Compile Include="PutUpdatePatientObservationsDataResponse.cs" />
     <Compile Include="UndoDeletePatientObservationsDataRequest.cs" />
     <Compile Include="DeletePatientObservationByPatientIdDataRequest.cs" />
     <Compile Include="UndoDeletePatientObservationsDataResponse.cs" />

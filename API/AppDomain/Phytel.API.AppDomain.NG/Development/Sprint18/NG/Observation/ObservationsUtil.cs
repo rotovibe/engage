@@ -59,7 +59,7 @@ namespace Phytel.API.AppDomain.NG
                             Id = v.Id,
                             Text = v.Text,
                             Value = v.Value,
-                             PreviousValue = ConvertPreviousValue(v.PreviousValue)
+                            PreviousValue = ConvertPreviousValue(v.PreviousValue)
                         });
                     });
                 }
@@ -265,37 +265,55 @@ namespace Phytel.API.AppDomain.NG
             }
         }
 
-        internal static List<PatientObservation> GetCurrentPatientObservations(IPatientObservationsRequest request, List<PatientObservationData> po)
+        internal static List<PatientObservation> GetPatientObservations(List<PatientObservationData> po)
         {
-            var result = new List<PatientObservation>();
+            List<PatientObservation> result = null;
             try
             {
-                if (po == null || po.Count <= 0) return result;
-
-                po.ForEach(o => result.Add(new PatientObservation
+                if (po != null && po.Count > 0)
                 {
-                    ObservationId = o.ObservationId,
-                    EndDate = o.EndDate,
-                    GroupId = o.GroupId,
-                    Id = o.Id,
-                    PatientId = o.PatientId,
-                    Name = o.Name,
-                    Standard = o.Standard,
-                    StartDate = o.StartDate,
-                    TypeId = o.TypeId,
-                    Units = o.Units,
-                    Values = GetValues(o.Values),
-                    StateId = o.StateId,
-                    DisplayId = o.DisplayId,
-                    Source = o.Source
-                }));
-
+                    result = new List<PatientObservation>();
+                    po.ForEach(o => result.Add(GetPatientObservation(o)));
+                }
                 return result;
             }
             catch (Exception ex)
             {
-                throw new Exception("AD:GetCurrentPatientObservations()::" + ex.Message, ex.InnerException);
+                throw new Exception("AD:GetPatientObservations()::" + ex.Message, ex.InnerException);
             }
+        }
+
+        internal static PatientObservation GetPatientObservation(PatientObservationData po)
+        {
+            PatientObservation result = null;
+            try
+            {
+                if (po != null)
+                {
+                    result = new PatientObservation
+                    {
+                        ObservationId = po.ObservationId,
+                        Id = po.Id,
+                        PatientId = po.PatientId,
+                        StartDate = po.StartDate,
+                        EndDate = po.EndDate,
+                        Units = po.Units,
+                        Values = GetValues(po.Values),
+                        StateId = po.StateId,
+                        DisplayId = po.DisplayId,
+                        Source = po.Source,
+                        GroupId = po.GroupId,
+                        Name = po.Name,
+                        Standard = po.Standard,
+                        TypeId = po.TypeId
+                    };
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("AD:GetPatientObservation()::" + ex.Message, ex.InnerException);
+            } 
+            return result;
         }
     }
 }

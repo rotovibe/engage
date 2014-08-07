@@ -138,33 +138,35 @@ namespace Phytel.API.AppDomain.NG.Observation
             }
         }
 
-        internal static bool UpdatePatientObservation(PostUpdateObservationItemsRequest request, PatientObservationRecordData pord)
+        internal static PostUpdateObservationItemsResponse UpdatePatientObservation(PostUpdateObservationItemsRequest request, List<PatientObservationRecordData> pord)
         {
-            bool result = false;
+            PostUpdateObservationItemsResponse response = null;
             try
             {
                 IRestClient client = new JsonServiceClient();
-
-                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Observation/Update/",
+                //[Route("/{Context}/{Version}/{ContractNumber}/Patient/{PatientId}/Observations/Update", "PUT")]
+                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Observations/Update/",
                                     DDPatientObservationsServiceUrl,
                                     "NG",
                                     request.Version,
                                     request.ContractNumber,
                                     request.PatientId), request.UserId);
 
-                PutUpdateObservationDataResponse dataDomainResponse = client.Put<PutUpdateObservationDataResponse>(
-                    url, new PutUpdateObservationDataRequest
+                PutUpdatePatientObservationsDataResponse dataDomainResponse = client.Put<PutUpdatePatientObservationsDataResponse>(
+                    url, new PutUpdatePatientObservationsDataRequest
                     {
-                        PatientObservationData = pord,
+                        PatientObservationsRecordData = pord,
                         UserId = request.UserId
                     } as object);
 
                 if (dataDomainResponse.Result)
                 {
-                    result = dataDomainResponse.Result;
+                    response = new PostUpdateObservationItemsResponse();
+                    response.PatientObservations = ObservationsUtil.GetPatientObservations(dataDomainResponse.PatientObservationsData);
+                    response.Result = dataDomainResponse.Result;
                 }
 
-                return result;
+                return response;
             }
             catch (WebServiceException ex)
             {

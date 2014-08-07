@@ -181,6 +181,27 @@ namespace Phytel.API.DataDomain.PatientObservation.Service
             return response;
         }
 
+        public PutUpdatePatientObservationsDataResponse Put(PutUpdatePatientObservationsDataRequest request)
+        {
+            PutUpdatePatientObservationsDataResponse response = new PutUpdatePatientObservationsDataResponse();
+            try
+            {
+                if (string.IsNullOrEmpty(request.UserId))
+                    throw new UnauthorizedAccessException("PatientObservationDD:Put()::Unauthorized Access");
+
+                response = Omgr.UpdatePatientObservations(request);
+                response.Version = request.Version;
+            }
+            catch (Exception ex)
+            {
+                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+
+                string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
+                Common.Helper.LogException(int.Parse(aseProcessID), ex);
+            }
+            return response;
+        }
+
         public PutUpdateObservationDataResponse Post(PutUpdateObservationDataRequest request)
         {
             PutUpdateObservationDataResponse response = new PutUpdateObservationDataResponse();
