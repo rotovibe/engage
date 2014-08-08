@@ -11,5 +11,7 @@ namespace Phytel.API.DataDomain.PatientNote
     public interface IPatientNoteRepository<T> : IRepository<T>
     {
         IEnumerable<object> FindByPatientId(object request);
+        void RemoveProgram(object entity, List<string> updatedProgramIds);
+        IEnumerable<object> FindNotesWithAProgramId(string entityId);
     }
 }

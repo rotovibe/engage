@@ -67,6 +67,99 @@ namespace Phytel.API.DataDomain.PatientNote
             {
                 throw ex;
             }
-        } 
+        }
+
+        public static DeleteNoteByPatientIdDataResponse DeleteNoteByPatientId(DeleteNoteByPatientIdDataRequest request)
+        {
+            DeleteNoteByPatientIdDataResponse response = null;
+            try
+            {
+                response = new DeleteNoteByPatientIdDataResponse();
+
+                IPatientNoteRepository<DeleteNoteByPatientIdDataResponse> repo = PatientNoteRepositoryFactory<DeleteNoteByPatientIdDataResponse>.GetPatientNoteRepository(request.ContractNumber, request.Context, request.UserId);
+                GetAllPatientNotesDataRequest getAllPatientNotesDataRequest = new GetAllPatientNotesDataRequest 
+                {
+                     Context = request.Context,
+                      ContractNumber = request.ContractNumber, 
+                      PatientId = request.PatientId,
+                      UserId = request.UserId,
+                      Version = request.Version
+                };
+                List<PatientNoteData> patientNotes = repo.FindByPatientId(getAllPatientNotesDataRequest) as List<PatientNoteData>;
+                List<string> deletedIds = null;
+                if (patientNotes != null)
+                {
+                    deletedIds = new List<string>();
+                    patientNotes.ForEach(u =>
+                    {
+                        DeletePatientNoteDataRequest deletePatientNoteDataRequest = new DeletePatientNoteDataRequest
+                        { 
+                            Context = request.Context, 
+                            ContractNumber = request.ContractNumber,
+                            Id = u.Id,
+                            PatientId = request.PatientId,
+                            UserId = request.UserId, 
+                            Version =  request.Version
+                        };
+                        repo.Delete(deletePatientNoteDataRequest);
+                        deletedIds.Add(deletePatientNoteDataRequest.Id);
+                    });
+                    response.DeletedIds = deletedIds;
+                }
+                response.Success = true;
+                return response;
+            }
+            catch (Exception ex) { throw ex; }
+        }
+
+        public static UndoDeletePatientNotesDataResponse UndoDeletePatientNotes(UndoDeletePatientNotesDataRequest request)
+        {
+            UndoDeletePatientNotesDataResponse response = null;
+            try
+            {
+                response = new UndoDeletePatientNotesDataResponse();
+
+                IPatientNoteRepository<DeleteNoteByPatientIdDataResponse> repo = PatientNoteRepositoryFactory<DeleteNoteByPatientIdDataResponse>.GetPatientNoteRepository(request.ContractNumber, request.Context, request.UserId);
+                if (request.Ids != null && request.Ids.Count > 0)
+                {
+                    request.Ids.ForEach(u =>
+                    {
+                        request.PatientNoteId = u;
+                        repo.UndoDelete(request);
+                    });
+                }
+                response.Success = true;
+                return response;
+            }
+            catch (Exception ex) { throw ex; }
+        }
+
+        public static RemoveProgramInPatientNotesDataResponse RemoveProgramInPatientNotes(RemoveProgramInPatientNotesDataRequest request)
+        {
+            RemoveProgramInPatientNotesDataResponse response = null;
+            try
+            {
+                response = new RemoveProgramInPatientNotesDataResponse();
+
+                IPatientNoteRepository<DeleteNoteByPatientIdDataResponse> repo = PatientNoteRepositoryFactory<DeleteNoteByPatientIdDataResponse>.GetPatientNoteRepository(request.ContractNumber, request.Context, request.UserId);
+                if (request.ProgramId != null)
+                {
+                    List<PatientNoteData> notes = repo.FindNotesWithAProgramId(request.ProgramId) as List<PatientNoteData>;
+                    if (notes != null && notes.Count > 0)
+                    {
+                        notes.ForEach(u =>
+                        {
+                            request.NoteId = u.Id;
+                            if (u.ProgramIds != null && u.ProgramIds.Remove(request.ProgramId))
+                            {
+                                repo.RemoveProgram(request, u.ProgramIds);
+                            }
+                        });
+                    }
+                }
+                return response;
+            }
+            catch (Exception ex) { throw ex; }
+        }
     }
 }   
