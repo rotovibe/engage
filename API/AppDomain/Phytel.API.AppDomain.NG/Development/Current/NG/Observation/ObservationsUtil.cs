@@ -305,8 +305,7 @@ namespace Phytel.API.AppDomain.NG
                         GroupId = po.GroupId,
                         Name = po.Name,
                         Standard = po.Standard,
-                        TypeId = po.TypeId,
-                        DeleteFlag = po.DeleteFlag
+                        TypeId = po.TypeId
                     };
                 }
             }
