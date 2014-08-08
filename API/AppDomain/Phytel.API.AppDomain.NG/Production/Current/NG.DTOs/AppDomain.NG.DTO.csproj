@@ -89,6 +89,8 @@
     <Compile Include="LookUp\Program\GetAllObjectivesResponse.cs" />
     <Compile Include="Contact\GetRecentPatientsRequest.cs" />
     <Compile Include="Contact\GetRecentPatientsResponse .cs" />
+    <Compile Include="Patient\PostDeletePatientRequest.cs" />
+    <Compile Include="Patient\PostDeletePatientResponse.cs" />
     <Compile Include="Program\Action.cs" />
     <Compile Include="CareMember\GetAllCareMembersRequest.cs" />
     <Compile Include="CareMember\GetAllCareMembersResponse.cs" />
@@ -183,6 +185,8 @@
     <Compile Include="Observation\ObservationValue.cs" />
     <Compile Include="Observation\PatientObservation.cs" />
     <Compile Include="Observation\PreviousValue.cs" />
+    <Compile Include="Program\PostRemovePatientProgramRequest.cs" />
+    <Compile Include="Program\PostRemovePatientProgramResponse.cs" />
     <Compile Include="Program\PostProgramAttributesChangeRequest.cs" />
     <Compile Include="Program\PostProgramAttributesChangeResponse.cs" />
     <Compile Include="Program\ProgramAttribute.cs" />

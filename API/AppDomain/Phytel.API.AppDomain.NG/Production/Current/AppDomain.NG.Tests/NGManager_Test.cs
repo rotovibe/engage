@@ -282,30 +282,32 @@ namespace Phytel.API.AppDomain.NG.Tests
 
         }
 
-        #region PatientProblem
         [TestMethod]
-        public void GetAllPatientProblems_Test()
+        public void DeletePatient_Tests()
         {
             // Arrange
             double version = 1.0;
             string contractNumber = "InHealth001";
             string token = "1234";
-            NGManager ngManager = new NGManager();
-            GetAllPatientProblemsRequest request = new GetAllPatientProblemsRequest
+            INGManager ngm = new NGManager
+            {
+                EndpointUtils = new StubPlanElementEndpointUtils(),
+                PlanElementUtils = new PlanElementUtils()
+            };
+            PostDeletePatientRequest request = new PostDeletePatientRequest
             {
                 ContractNumber = contractNumber,
                 Token = token,
                 Version = version,
-                PatientID = "528bdccc072ef7071c2e22ae"
+                Id = "5325db68d6a4850adcbba92e",
+                UserId = "5325c821072ef705080d3488"
             };
             // Act
-            List<PatientProblem> response = ngManager.GetPatientProblems(request);
+            PostDeletePatientResponse response = ngm.DeletePatient(request);
 
             //Assert
-            Assert.IsTrue(response.Count > 0);
+            Assert.IsNotNull(response);
         }
-
-        #endregion
 
         [TestMethod]
         public void GetAllCohorts_Test()
@@ -661,6 +663,55 @@ namespace Phytel.API.AppDomain.NG.Tests
                 PostProgramAttributesChangeResponse response = ngm.PostProgramAttributeChanges(request);
                 Assert.IsNotNull(response);
                 Assert.IsNotNull(response.PlanElems.Programs[0]);
+            }
+
+            [TestMethod()]
+            [TestProperty("Layer", "AD.NGManager")]
+            public void DeletePatient_Test()
+            {
+                INGManager ngm = new NGManager
+                {
+                    EndpointUtils = new StubPlanElementEndpointUtils(),
+                    PlanElementUtils = new PlanElementUtils()
+                };
+
+                PostDeletePatientRequest request = new PostDeletePatientRequest
+                {
+                    ContractNumber = "InHealth001",
+                    Id = "5325db70d6a4850adcbba946",
+                    UserId = "5325c821072ef705080d3488",
+                    Token = ObjectId.GenerateNewId().ToString(),
+                    Version = 1.0
+                };
+
+                PostDeletePatientResponse response = ngm.DeletePatient(request);
+                Assert.IsNotNull(response);
+            }
+
+            [TestMethod()]
+            [TestProperty("Layer", "AD.NGManager")]
+            public void RemoveProgram_Test()
+            {
+                INGManager ngm = new NGManager
+                {
+                    EndpointUtils = new StubPlanElementEndpointUtils(),
+                    PlanElementUtils = new PlanElementUtils()
+                };
+
+                PostRemovePatientProgramRequest request = new PostRemovePatientProgramRequest
+                {
+                    ContractNumber = "InHealth001",
+                    Id = "53d138d7d6a4850d58008e85",
+                    PatientId = "5325dae5d6a4850adcbba7aa",
+                    Reason = "Just liked that.",
+                    ProgramName = "BSHSI - Healthy Weight",
+                    UserId = "5325c821072ef705080d3488",
+                    Token = ObjectId.GenerateNewId().ToString(),
+                    Version = 1.0
+                };
+
+                PostRemovePatientProgramResponse response = ngm.RemovePatientProgram(request);
+                Assert.IsNotNull(response);
             }
         }
     }

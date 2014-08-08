@@ -696,18 +696,24 @@ namespace Phytel.API.AppDomain.NG
             }
         }
 
-        public static void UpdateProgramAction(Actions ac, DTO.Program p)
+        public static Actions UpdateProgramAction(Actions ac, DTO.Program p)
         {
             DTO.Program pr = p;
+            DTO.Actions act = null;
             pr.Modules.ForEach(m =>
             {
                 foreach (Actions a in m.Actions)
                 {
                     bool replaced = ReplaceAction(ac, m, a);
                     if (replaced)
+                    {
+                        act = a;
                         break;
+                    }
                 }
             });
+
+            return act;
         }
 
         public static bool ReplaceAction(Actions ac, Module m, Actions a)

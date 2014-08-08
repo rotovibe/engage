@@ -61,5 +61,32 @@ namespace Phytel.API.DataDomain.Patient.Service.Test
 
             Assert.IsNotNull(response.Program.Modules[0].Objectives);
         }
+
+        [TestMethod]
+        public void RemoveProgram_Test()
+        {
+            PostRemovePatientProgramRequest request = new PostRemovePatientProgramRequest
+            {
+                ContractNumber = "InHealth001",
+                Id = "53d1442fd6a4850d589a2d5a",
+                PatientId = "5325db0cd6a4850adcbba81a",
+                Reason = "Just liked that.",
+                ProgramName = "BSHSI - Healthy Weight",
+                UserId = "5325c821072ef705080d3488",
+                Token = "53d13d16d6a4850d5889f443",
+                Version = 1.0
+            };
+            IRestClient client = new JsonServiceClient();
+            JsonServiceClient.HttpWebRequestFilter = x => x.Headers.Add(string.Format("Token: {0}", request.Token));
+            //[Route("/{Version}/{ContractNumber}/Patient/{PatientId}/Program/{Id}/Remove", "POST")]
+            PostRemovePatientProgramResponse response = client.Post<PostRemovePatientProgramResponse>(
+                string.Format(@"http://localhost:56187/{0}/{1}/Patient/{2}/Program/{3}/Remove",
+                request.Version,
+                request.ContractNumber,
+                request.PatientId,
+                request.Id), request);
+
+            Assert.IsNotNull(response);
+        }
     }
 }

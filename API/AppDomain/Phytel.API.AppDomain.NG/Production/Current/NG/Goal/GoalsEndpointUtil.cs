@@ -265,7 +265,7 @@ namespace Phytel.API.AppDomain.NG
                     request.PatientGoalId,
                    id), request.UserId);
 
-                DeleteBarrierResponse response = client.Delete<DeleteBarrierResponse>(
+                DeleteBarrierDataResponse response = client.Delete<DeleteBarrierDataResponse>(
                     url);
 
                 if (response != null)
@@ -298,7 +298,7 @@ namespace Phytel.API.AppDomain.NG
                     request.PatientGoalId,
                     id), request.UserId);
 
-                DeleteTaskResponse response = client.Delete<DeleteTaskResponse>(
+                DeleteTaskDataResponse response = client.Delete<DeleteTaskDataResponse>(
                     url);
 
                 if (response != null)
@@ -331,7 +331,7 @@ namespace Phytel.API.AppDomain.NG
                     request.PatientGoalId,
                     id), request.UserId);
 
-                DeleteInterventionResponse response = client.Delete<DeleteInterventionResponse>(
+                DeleteInterventionDataResponse response = client.Delete<DeleteInterventionDataResponse>(
                     url);
 
                 if (response != null)

@@ -6,6 +6,7 @@ using Phytel.API.DataDomain.Cohort.DTO;
 using Phytel.API.DataDomain.Contact.DTO;
 using Phytel.API.DataDomain.LookUp.DTO;
 using Phytel.API.DataDomain.Patient.DTO;
+using Phytel.API.DataDomain.PatientNote.DTO;
 using Phytel.API.Interface;
 using ServiceStack.Service;
 using ServiceStack.ServiceClient.Web;
@@ -18,6 +19,10 @@ using System.Runtime.Serialization.Json;
 using System.Text;
 using System.Web.Hosting;
 using DD = Phytel.API.DataDomain.Program.DTO;
+using Phytel.API.DataDomain.PatientGoal.DTO;
+using Phytel.API.DataDomain.PatientSystem.DTO;
+using Phytel.API.DataDomain.PatientObservation.DTO;
+using Phytel.API.DataDomain.Program.DTO;
 
 namespace Phytel.API.AppDomain.NG
 {
@@ -36,6 +41,10 @@ namespace Phytel.API.AppDomain.NG
         protected static readonly string DDCohortServiceUrl = ConfigurationManager.AppSettings["DDCohortServiceUrl"];
         protected static readonly string DDPatientSystemUrl = ConfigurationManager.AppSettings["DDPatientSystemUrl"];
         protected static readonly string DDContactServiceUrl = ConfigurationManager.AppSettings["DDContactServiceUrl"];
+        protected static readonly string DDCareMemberUrl = ConfigurationManager.AppSettings["DDCareMemberUrl"];
+        protected static readonly string DDPatientNoteUrl = ConfigurationManager.AppSettings["DDPatientNoteUrl"];
+        protected static readonly string DDPatientObservationsServiceUrl = ConfigurationManager.AppSettings["DDPatientObservationUrl"];
+        protected static readonly string DDPatientGoalsServiceUrl = ConfigurationManager.AppSettings["DDPatientGoalUrl"];
         #endregion
 
         public void LogException(Exception ex)
@@ -305,6 +314,52 @@ namespace Phytel.API.AppDomain.NG
                 throw new WebServiceException("AD:UpdateBackground()::" + wse.Message, wse.InnerException);
             }
         }
+
+        public PostDeletePatientResponse DeletePatient(PostDeletePatientRequest request)
+        {
+            PostDeletePatientResponse response = new PostDeletePatientResponse();
+            try
+            {
+                IRestClient client = new JsonServiceClient();
+                INGUnitOfWork uow = new NGUnitOfWork();
+
+                INGCommand deletePatientCommand = new PatientCommand(request, client);
+                uow.Execute(deletePatientCommand);
+
+                INGCommand deletePatientUserCommand = new PatientUsersCommand(request, client);
+                uow.Execute(deletePatientUserCommand);
+
+                INGCommand deleteCPVCommand = new CohortPatientViewCommand(request, client);
+                uow.Execute(deleteCPVCommand);
+
+                INGCommand deleteContactCommand = new ContactCommand(request, client);
+                uow.Execute(deleteContactCommand);
+
+                INGCommand deleteCareMemberCommand = new CareMembersCommand(request, client);
+                uow.Execute(deleteCareMemberCommand);
+
+                INGCommand deletePatientNoteCommand = new PatientNotesCommand(request, client);
+                uow.Execute(deletePatientNoteCommand);
+
+                INGCommand deletePatientSystemCommand = new PatientSystemsCommand(request, client);
+                uow.Execute(deletePatientSystemCommand);
+
+                INGCommand deletePatientObservationCommand = new PatientObservationsCommand(request, client);
+                uow.Execute(deletePatientObservationCommand);
+
+                INGCommand deletePatientGoalCommand = new PatientGoalsCommand(request, client);
+                uow.Execute(deletePatientGoalCommand);
+
+                INGCommand deletePatientProgramCommand = new PatientProgramsCommand(request, client);
+                uow.Execute(deletePatientProgramCommand);
+
+                return response;
+            }
+            catch (WebServiceException ex)
+            {
+                throw new WebServiceException("AD:DeletePatient()::" + ex.Message, ex.InnerException);
+            }
+        }
         #endregion
 
         #region Cohort 
@@ -426,7 +481,7 @@ namespace Phytel.API.AppDomain.NG
                     {
                         Actions = new List<Actions>(),
                         Modules = new List<Module>(),
-                        Programs = new List<Program>(),
+                        Programs = new List<Phytel.API.AppDomain.NG.DTO.Program>(),
                         Steps = new List<Step>()
                     }
                 };
@@ -441,7 +496,7 @@ namespace Phytel.API.AppDomain.NG
                     Version = request.Version
                 };
 
-                Program pg = EndpointUtils.RequestPatientProgramDetail(aReq);
+                Phytel.API.AppDomain.NG.DTO.Program pg = EndpointUtils.RequestPatientProgramDetail(aReq);
                 if (pg == null) throw new Exception("Program is null.");
 
                 if (PlanElementUtils.UpdatePlanElementAttributes(pg, request.PlanElement, request.UserId,
@@ -452,7 +507,7 @@ namespace Phytel.API.AppDomain.NG
                 }
                 else
                 {
-                    response.Outcome = new Outcome
+                    response.Outcome = new Phytel.API.AppDomain.NG.DTO.Outcome
                     {
                         Reason = "PlanElement is not in the correct state to allow change.",
                         Result = 2
@@ -557,7 +612,7 @@ namespace Phytel.API.AppDomain.NG
                 {
                     if (resp.Program != null)
                     {
-                        result.Program = new Program
+                        result.Program = new Phytel.API.AppDomain.NG.DTO.Program
                         {
                             Id = resp.Program.Id,
                             Client = resp.Program.Client,
@@ -640,11 +695,11 @@ namespace Phytel.API.AppDomain.NG
             }
         }
 
-        public GetPatientProgramsResponse GetPatientPrograms(GetPatientProgramsRequest request)
+        public Phytel.API.AppDomain.NG.DTO.GetPatientProgramsResponse GetPatientPrograms(Phytel.API.AppDomain.NG.DTO.GetPatientProgramsRequest request)
         {
             try
             {
-                GetPatientProgramsResponse result = new GetPatientProgramsResponse();
+                Phytel.API.AppDomain.NG.DTO.GetPatientProgramsResponse result = new Phytel.API.AppDomain.NG.DTO.GetPatientProgramsResponse();
 
                 IRestClient client = new JsonServiceClient();
                 string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Programs/",
@@ -662,8 +717,8 @@ namespace Phytel.API.AppDomain.NG
                 {
                     if (resp.programs != null)
                     {
-                        List<ProgramInfo> adPs = new List<ProgramInfo>();
-                        resp.programs.ForEach(p => adPs.Add(new ProgramInfo
+                        List<Phytel.API.AppDomain.NG.DTO.ProgramInfo> adPs = new List<Phytel.API.AppDomain.NG.DTO.ProgramInfo>();
+                        resp.programs.ForEach(p => adPs.Add(new Phytel.API.AppDomain.NG.DTO.ProgramInfo
                         {
                             Id = p.Id,
                             Name = p.Name,
@@ -723,6 +778,93 @@ namespace Phytel.API.AppDomain.NG
                 throw new WebServiceException("AD:GetPatientActionDetails()::" + wse.Message, wse.InnerException);
             }
         }
+
+
+        public PostRemovePatientProgramResponse RemovePatientProgram(PostRemovePatientProgramRequest request)
+        {
+            try
+            {
+                PostRemovePatientProgramResponse response = new PostRemovePatientProgramResponse();
+                IRestClient client = new JsonServiceClient();
+
+                INGCommand deletePatientProgramCommand = new PatientProgramCommand(request, client);
+                deletePatientProgramCommand.Execute();
+
+                #region InsertANote
+                //[Route("/{Context}/{Version}/{ContractNumber}/Patient/{PatientId}/Note/Insert", "PUT")]
+                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/patient/{4}/note/insert",
+                                                                        DDPatientNoteUrl,
+                                                                        "NG",
+                                                                        request.Version,
+                                                                        request.ContractNumber,
+                                                                        request.PatientId), request.UserId);
+
+                string noteText = string.Format("Program titled {0} was removed for the following reason: {1}", request.ProgramName, string.IsNullOrEmpty(request.Reason) ? "unknown" : request.Reason);
+                PatientNoteData noteData = new PatientNoteData
+                {
+                    Text = noteText,
+                    CreatedById = request.UserId,
+                    CreatedOn = DateTime.UtcNow,
+                    PatientId = request.PatientId
+                };
+                PutPatientNoteDataResponse noteDDResponse = client.Put<PutPatientNoteDataResponse>(url, new PutPatientNoteDataRequest
+                {
+                    PatientNote = noteData,
+                    Context = "NG",
+                    ContractNumber = request.ContractNumber,
+                    Version = request.Version,
+                    UserId = request.UserId,
+                    PatientId = request.PatientId
+                } as object); 
+                #endregion
+
+                #region RemoveProgramReferenceInGoals
+                // [Route("/{Context}/{Version}/{ContractNumber}/Goal/RemoveProgram/{ProgramId}/Update", "PUT")]
+                string goalUrl = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Goal/RemoveProgram/{4}/Update",
+                                            DDPatientGoalsServiceUrl,
+                                            "NG",
+                                            request.Version,
+                                            request.ContractNumber,
+                                            request.Id), request.UserId);
+
+                RemoveProgramInPatientGoalsDataResponse goalDDResponse = client.Put<RemoveProgramInPatientGoalsDataResponse>(goalUrl, new RemoveProgramInPatientGoalsDataRequest
+                {
+                    ProgramId = request.Id,
+                    Context = "NG",
+                    ContractNumber = request.ContractNumber,
+                    Version = request.Version,
+                    UserId = request.UserId
+                });
+                #endregion  
+
+                #region RemoveProgramReferenceInNotes
+                //[Route("/{Context}/{Version}/{ContractNumber}/Note/RemoveProgram/{ProgramId}/Update", "PUT")]
+                string notesURL = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Note/RemoveProgram/{4}/Update",
+                                            DDPatientNoteUrl,
+                                            "NG",
+                                            request.Version,
+                                            request.ContractNumber,
+                                            request.Id), request.UserId);
+                RemoveProgramInPatientNotesDataResponse notesDDResponse = client.Put<RemoveProgramInPatientNotesDataResponse>(notesURL, new RemoveProgramInPatientNotesDataRequest
+                {
+                    ProgramId = request.Id,
+                    Context = "NG",
+                    ContractNumber = request.ContractNumber,
+                    Version = request.Version,
+                    UserId = request.UserId
+                });
+                #endregion
+
+                return response;
+            }
+            catch (WebServiceException wse)
+            {
+                throw new WebServiceException("AD:RemovePatientProgram()::" + wse.Message, wse.InnerException);
+            }
+        }
+
+
+
 
         #endregion
 
