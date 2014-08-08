@@ -261,5 +261,47 @@ namespace Phytel.API.DataDomain.PatientObservation.Service
             }
             return response;
         }
+
+        public DeletePatientObservationByPatientIdDataResponse Delete(DeletePatientObservationByPatientIdDataRequest request)
+        {
+            DeletePatientObservationByPatientIdDataResponse response = new DeletePatientObservationByPatientIdDataResponse();
+            try
+            {
+                if (string.IsNullOrEmpty(request.UserId))
+                    throw new UnauthorizedAccessException("PatientObservationDD:PatientObservatioDelete()::Unauthorized Access");
+
+                response = PatientObservationDataManager.DeletePatientObservationByPatientId(request);
+                response.Version = request.Version;
+            }
+            catch (Exception ex)
+            {
+                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+
+                string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
+                Common.Helper.LogException(int.Parse(aseProcessID), ex);
+            }
+            return response;
+        }
+
+        public UndoDeletePatientObservationsDataResponse Put(UndoDeletePatientObservationsDataRequest request)
+        {
+            UndoDeletePatientObservationsDataResponse response = new UndoDeletePatientObservationsDataResponse();
+            try
+            {
+                if (string.IsNullOrEmpty(request.UserId))
+                    throw new UnauthorizedAccessException("PatientObservationDD:PatientObservatioUndoDelete()::Unauthorized Access");
+
+                response = PatientObservationDataManager.UndoDeletePatientObservations(request);
+                response.Version = request.Version;
+            }
+            catch (Exception ex)
+            {
+                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+
+                string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
+                Common.Helper.LogException(int.Parse(aseProcessID), ex);
+            }
+            return response;
+        }
     }
 }
