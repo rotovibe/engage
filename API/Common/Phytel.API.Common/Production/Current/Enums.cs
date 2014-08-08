@@ -41,7 +41,8 @@ namespace Phytel.API.Common
     { 
         Insert,
         Update,
-        Delete
+        Delete,
+        UndoDelete
     }
 
     public enum MongoCollectionName
