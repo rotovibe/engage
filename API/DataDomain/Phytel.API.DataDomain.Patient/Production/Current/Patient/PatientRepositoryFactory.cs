@@ -26,6 +26,11 @@ namespace Phytel.API.DataDomain.Patient
                         repo = new MongoCohortPatientViewRepository(request.ContractNumber) { Utils = new DTOUtils() } as IPatientRepository;
                         break;
                     }
+                case RepositoryType.PatientUser:
+                    {
+                        repo = new MongoPatientUserRepository(request.ContractNumber) as IPatientRepository;
+                        break;
+                    }
             }
 
             repo.UserId = request.UserId;

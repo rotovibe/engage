@@ -9,6 +9,7 @@ namespace Phytel.API.DataDomain.Patient
     public enum RepositoryType
     {
         Patient,
-        CohortPatientView
+        CohortPatientView,
+        PatientUser
     }
 }

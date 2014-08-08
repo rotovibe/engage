@@ -9,7 +9,7 @@ namespace Phytel.API.DataDomain.Patient.Test.Stub
     class StubCohortPatientViewRepository : IPatientRepository
     {
         string userId = "testuser";
-        
+
         public StubCohortPatientViewRepository(string contract)
         {
         }
@@ -109,6 +109,73 @@ namespace Phytel.API.DataDomain.Patient.Test.Stub
             {
                 this.userId = value;
             }
+        }
+
+
+        public List<DTO.PatientUserData> FindPatientUsersByPatientId(string patientId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public DTO.CohortPatientViewData FindCohortPatientViewByPatientId(string patientId)
+        {
+            throw new NotImplementedException();
+        }
+
+        DTO.GetPatientsDataResponse IPatientRepository.Select(string[] patientIds)
+        {
+            throw new NotImplementedException();
+        }
+
+        List<DTO.PatientData> IPatientRepository.Select(string query, string[] filterData, string querySort, int skip, int take)
+        {
+            throw new NotImplementedException();
+        }
+
+        DTO.PutPatientPriorityResponse IPatientRepository.UpdatePriority(DTO.PutPatientPriorityRequest request)
+        {
+            throw new NotImplementedException();
+        }
+
+        DTO.PutPatientFlaggedResponse IPatientRepository.UpdateFlagged(DTO.PutPatientFlaggedRequest request)
+        {
+            throw new NotImplementedException();
+        }
+
+        DTO.PutPatientBackgroundDataResponse IPatientRepository.UpdateBackground(DTO.PutPatientBackgroundDataRequest request)
+        {
+            throw new NotImplementedException();
+        }
+
+        object IPatientRepository.FindByID(string patientId, string userId)
+        {
+            throw new NotImplementedException();
+        }
+
+        object IPatientRepository.Update(DTO.PutUpdatePatientDataRequest request)
+        {
+            throw new NotImplementedException();
+        }
+
+        object IPatientRepository.GetSSN(string patientId)
+        {
+            throw new NotImplementedException();
+        }
+
+        List<DTO.PatientUserData> IPatientRepository.FindPatientUsersByPatientId(string patientId)
+        {
+            throw new NotImplementedException();
+        }
+
+        DTO.CohortPatientViewData IPatientRepository.FindCohortPatientViewByPatientId(string patientId)
+        {
+            throw new NotImplementedException();
+        }
+
+
+        public void UndoDelete(object entity)
+        {
+            throw new NotImplementedException();
         }
     }
 }
