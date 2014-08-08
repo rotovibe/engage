@@ -183,5 +183,47 @@ namespace Phytel.API.DataDomain.Contact.Service
             return response;
         }
 
+        public DeleteContactByPatientIdDataResponse Delete(DeleteContactByPatientIdDataRequest request)
+        {
+            DeleteContactByPatientIdDataResponse response = new DeleteContactByPatientIdDataResponse();
+            try
+            {
+                if (string.IsNullOrEmpty(request.UserId))
+                    throw new UnauthorizedAccessException("ContactDD:ContactDelete()::Unauthorized Access");
+
+                response = Manager.DeleteContactByPatientId(request);
+                response.Version = request.Version;
+            }
+            catch (Exception ex)
+            {
+                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+
+                string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
+                Common.Helper.LogException(int.Parse(aseProcessID), ex);
+            }
+            return response;
+        }
+
+        public UndoDeleteContactDataResponse Put(UndoDeleteContactDataRequest request)
+        {
+            UndoDeleteContactDataResponse response = new UndoDeleteContactDataResponse();
+            try
+            {
+                if (string.IsNullOrEmpty(request.UserId))
+                    throw new UnauthorizedAccessException("ContactDD:ContactUndoDelete()::Unauthorized Access");
+
+                response = Manager.UndoDeleteContact(request);
+                response.Version = request.Version;
+            }
+            catch (Exception ex)
+            {
+                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+
+                string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
+                Common.Helper.LogException(int.Parse(aseProcessID), ex);
+            }
+            return response;
+        }
+
     }
 }
