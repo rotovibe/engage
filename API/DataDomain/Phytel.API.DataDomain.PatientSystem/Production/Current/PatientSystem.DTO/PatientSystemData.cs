@@ -8,6 +8,7 @@ namespace Phytel.API.DataDomain.PatientSystem.DTO
 {
     public class PatientSystemData
     {
+        public string Id { get; set; }
         public string PatientID { get; set; }
         public string SystemID { get; set; }
         public string SystemName { get; set; }
