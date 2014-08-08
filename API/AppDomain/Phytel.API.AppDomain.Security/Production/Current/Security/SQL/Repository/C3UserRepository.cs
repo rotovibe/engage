@@ -132,5 +132,11 @@ namespace Phytel.API.AppDomain.Security
         {
             throw new NotImplementedException();
         }
+
+
+        public void UndoDelete(object entity)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
