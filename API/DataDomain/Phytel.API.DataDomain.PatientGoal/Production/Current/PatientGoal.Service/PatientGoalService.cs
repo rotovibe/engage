@@ -241,9 +241,9 @@ namespace Phytel.API.DataDomain.PatientGoal.Service
             return response;
         }
 
-        public DeleteTaskResponse Delete(DeleteTaskRequest request)
+        public DeleteTaskDataResponse Delete(DeleteTaskDataRequest request)
         {
-            DeleteTaskResponse response = new DeleteTaskResponse();
+            DeleteTaskDataResponse response = new DeleteTaskDataResponse();
             try
             {
                 if (string.IsNullOrEmpty(request.UserId))
@@ -262,9 +262,9 @@ namespace Phytel.API.DataDomain.PatientGoal.Service
             return response;
         }
 
-        public DeleteInterventionResponse Delete(DeleteInterventionRequest request)
+        public DeleteInterventionDataResponse Delete(DeleteInterventionDataRequest request)
         {
-            DeleteInterventionResponse response = new DeleteInterventionResponse();
+            DeleteInterventionDataResponse response = new DeleteInterventionDataResponse();
             try
             {
                 if (string.IsNullOrEmpty(request.UserId))
@@ -283,9 +283,9 @@ namespace Phytel.API.DataDomain.PatientGoal.Service
             return response;
         }
 
-        public DeleteBarrierResponse Delete(DeleteBarrierRequest request)
+        public DeleteBarrierDataResponse Delete(DeleteBarrierDataRequest request)
         {
-            DeleteBarrierResponse response = new DeleteBarrierResponse();
+            DeleteBarrierDataResponse response = new DeleteBarrierDataResponse();
             try
             {
                 if (string.IsNullOrEmpty(request.UserId))
@@ -324,5 +324,70 @@ namespace Phytel.API.DataDomain.PatientGoal.Service
             }
             return response;
         }
+
+        public DeletePatientGoalByPatientIdDataResponse Delete(DeletePatientGoalByPatientIdDataRequest request)
+        {
+            DeletePatientGoalByPatientIdDataResponse response = new DeletePatientGoalByPatientIdDataResponse();
+            try
+            {
+                if (string.IsNullOrEmpty(request.UserId))
+                    throw new UnauthorizedAccessException("PatientGoalDD:PatientGoalDelete()::Unauthorized Access");
+
+                response = PatientGoalDataManager.DeletePatientGoalByPatientId(request);
+                response.Version = request.Version;
+            }
+            catch (Exception ex)
+            {
+                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+
+                string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
+                Common.Helper.LogException(int.Parse(aseProcessID), ex);
+            }
+            return response;
+        }
+
+        public UndoDeletePatientGoalDataResponse Put(UndoDeletePatientGoalDataRequest request)
+        {
+            UndoDeletePatientGoalDataResponse response = new UndoDeletePatientGoalDataResponse();
+            try
+            {
+                if (string.IsNullOrEmpty(request.UserId))
+                    throw new UnauthorizedAccessException("PatientGoalDD:PatientGoalUndoDelete()::Unauthorized Access");
+
+                response = PatientGoalDataManager.UndoDeletePatientGoals(request);
+                response.Version = request.Version;
+            }
+            catch (Exception ex)
+            {
+                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+
+                string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
+                Common.Helper.LogException(int.Parse(aseProcessID), ex);
+            }
+            return response;
+        }
+
+        public RemoveProgramInPatientGoalsDataResponse Put(RemoveProgramInPatientGoalsDataRequest request)
+        {
+            RemoveProgramInPatientGoalsDataResponse response = new RemoveProgramInPatientGoalsDataResponse();
+            try
+            {
+                if (string.IsNullOrEmpty(request.UserId))
+                    throw new UnauthorizedAccessException("PatientNoteDD:RemoveProgramInPatientGoals()::Unauthorized Access");
+
+                response = PatientGoalDataManager.RemoveProgramInPatientGoals(request);
+                response.Version = request.Version;
+            }
+            catch (Exception ex)
+            {
+                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+
+                string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
+                Common.Helper.LogException(int.Parse(aseProcessID), ex);
+            }
+            return response;
+        }
+
+
     }
 }

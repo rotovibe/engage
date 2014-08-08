@@ -74,15 +74,20 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\..\Common\Phytel.API.Common\Production\Current\Phytel.API.Common.csproj">
+      <Project>{25cf3c3f-221f-4a49-b5ef-a8a5fcf9a5ba}</Project>
+      <Name>Phytel.API.Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\..\..\Interfaces\Production\Current\Phytel.API.Interface\Phytel.API.Interface.csproj">
       <Project>{abe948fb-247e-4955-b3ab-b7c93e10a542}</Project>
       <Name>Phytel.API.Interface</Name>
     </ProjectReference>
     <ProjectReference Include="..\PatientGoal.DTO\DataDomain.PatientGoal.DTO.csproj">
-      <Project>{1c2c63a1-4246-4ec9-bad1-c00e9ecd85f6}</Project>
+      <Project>{92488af4-963e-4098-8ba8-23d6952bd952}</Project>
       <Name>DataDomain.PatientGoal.DTO</Name>
     </ProjectReference>
   </ItemGroup>

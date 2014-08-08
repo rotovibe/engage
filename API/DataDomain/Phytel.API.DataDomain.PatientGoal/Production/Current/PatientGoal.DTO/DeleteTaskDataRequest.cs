@@ -4,7 +4,7 @@ using ServiceStack.ServiceHost;
 namespace Phytel.API.DataDomain.PatientGoal.DTO
 {
     [Route("/{Context}/{Version}/{ContractNumber}/Patient/{PatientId}/Goal/{PatientGoalId}/Task/{TaskId}/Delete", "DELETE")]
-    public class DeleteTaskRequest : IDataDomainRequest
+    public class DeleteTaskDataRequest : IDataDomainRequest
     {
         [ApiMember(Name = "TaskId", Description = "TaskId of the task to update", ParameterType = "property", DataType = "string", IsRequired = false)]
         public string TaskId { get; set; }
