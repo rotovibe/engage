@@ -284,7 +284,7 @@ namespace Phytel.API.DataDomain.PatientObservation
             }
             catch (Exception ex)
             {
-                throw new Exception("DD.DataPatientObservationManager:PutUpdateOfPatientObservationRecord()::" + ex.Message, ex.InnerException);
+                throw new Exception("DD.DataPatientObservationManager:UpdatePatientObservations()::" + ex.Message, ex.InnerException);
             }
         }
 
