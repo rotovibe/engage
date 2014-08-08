@@ -71,6 +71,10 @@
   <ItemGroup>
     <Compile Include="CareMemberData.cs" />
     <Compile Include="Constants.cs" />
+    <Compile Include="UndoDeleteCareMembersDataRequest.cs" />
+    <Compile Include="DeleteCareMemberByPatientIdDataRequest.cs" />
+    <Compile Include="UndoDeleteCareMembersDataResponse.cs" />
+    <Compile Include="DeleteCareMemberByPatientIdDataResponse.cs" />
     <Compile Include="Enums.cs" />
     <Compile Include="GetAllCareMembersDataRequest.cs" />
     <Compile Include="GetAllCareMembersDataResponse.cs" />

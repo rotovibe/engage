@@ -21,6 +21,11 @@ namespace Phytel.API.DataDomain.CareMember.Test
             throw new NotImplementedException();
         }
 
+        public DeleteCareMemberByPatientIdDataResponse DeleteCareMemberByPatientId(DeleteCareMemberByPatientIdDataRequest request)
+        {
+            throw new NotImplementedException();
+        }
+
         public DTO.CareMemberData GetCareMember(DTO.GetCareMemberDataRequest request)
         {
             ICareMemberRepository repo = Factory.GetRepository(request, RepositoryType.CareMember);
@@ -45,6 +50,12 @@ namespace Phytel.API.DataDomain.CareMember.Test
                 response = careMembers.Find(c => c.Primary == true && c.TypeId == "530cd571d433231ed4ba969b");
             }
             return response;
+        }
+
+
+        public UndoDeleteCareMembersDataResponse UndoDeleteCareMembers(UndoDeleteCareMembersDataRequest request)
+        {
+            throw new NotImplementedException();
         }
     }
 }
