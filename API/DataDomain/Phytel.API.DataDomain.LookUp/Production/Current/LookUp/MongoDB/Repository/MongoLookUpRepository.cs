@@ -1044,5 +1044,11 @@ namespace Phytel.API.DataDomain.LookUp
             return objectiveList;
         } 
         #endregion
+
+
+        public void UndoDelete(object entity)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
