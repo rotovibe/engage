@@ -112,25 +112,29 @@ namespace Phytel.API.DataDomain.Program
                 PutUpdateResponseResponse result = new PutUpdateResponseResponse();
                 IProgramRepository responseRepo = Factory.GetRepository(request, RepositoryType.PatientProgramResponse);
 
-                MEPatientProgramResponse meres = new MEPatientProgramResponse(request.UserId)
+                foreach (ResponseDetail rd in request.ResponseDetails)
                 {
-                    Id = ObjectId.Parse(request.ResponseDetail.Id),
-                    NextStepId = ObjectId.Parse(request.ResponseDetail.NextStepId),
-                    Nominal = request.ResponseDetail.Nominal,
-                    Spawn = ParseSpawnElements(request.ResponseDetail.SpawnElement),
-                    Required = request.ResponseDetail.Required,
-                    Order = request.ResponseDetail.Order,
-                    StepId = ObjectId.Parse(request.ResponseDetail.StepId),
-                    Text = request.ResponseDetail.Text,
-                    Value = request.ResponseDetail.Value,
-                    Selected = request.ResponseDetail.Selected,
-                    DeleteFlag = request.ResponseDetail.Delete,
-                    LastUpdatedOn = System.DateTime.UtcNow,
-                    UpdatedBy = ObjectId.Parse(request.UserId)
-                };
+                    MEPatientProgramResponse meres = new MEPatientProgramResponse(request.UserId)
+                    {
+                        Id = ObjectId.Parse(rd.Id),
+                        NextStepId = ObjectId.Parse(rd.NextStepId),
+                        Nominal = rd.Nominal,
+                        Spawn = ParseSpawnElements(rd.SpawnElement),
+                        Required = rd.Required,
+                        Order = rd.Order,
+                        StepId = ObjectId.Parse(rd.StepId),
+                        Text = rd.Text,
+                        Value = rd.Value,
+                        Selected = rd.Selected,
+                        DeleteFlag = rd.Delete,
+                        LastUpdatedOn = System.DateTime.UtcNow,
+                        UpdatedBy = ObjectId.Parse(request.UserId)
+                    };
 
-                result.Result = (bool)responseRepo.Update(meres);
-
+                    //result.Result = (bool) 
+                    responseRepo.Update(meres);
+                    result.Result = true;
+                }
                 return result;
             }
             catch (Exception ex)
@@ -175,6 +179,7 @@ namespace Phytel.API.DataDomain.Program
                 throw new Exception("DD:DataProgramManager:InsertProgramAttributes()::" + ex.Message, ex.InnerException);
             }
         }
+
         #endregion
 
         #region GETS
@@ -185,8 +190,11 @@ namespace Phytel.API.DataDomain.Program
                 GetProgramDetailsSummaryResponse response = new GetProgramDetailsSummaryResponse();
 
                 IProgramRepository repo = Factory.GetRepository(request, RepositoryType.PatientProgram);
-
                 MEPatientProgram mepp = repo.FindByID(request.ProgramId) as MEPatientProgram;
+                
+                IProgramRepository respRepo = Factory.GetRepository(request, RepositoryType.PatientProgramResponse);
+                var stepIds = mepp.Modules.SelectMany(m => m.Actions.SelectMany(a => a.Steps.Select(s => s.Id))).ToList();
+                DTOUtility.ResponsesBag = respRepo.Find(stepIds).Cast<MEPatientProgramResponse>().ToList();
 
                 response.Program = new ProgramDetail
                 {
@@ -223,7 +231,7 @@ namespace Phytel.API.DataDomain.Program
                     AuthoredBy = mepp.AuthoredBy,
                     //ObjectivesData = DTOUtils.GetObjectives(mepp.Objectives),
                     SpawnElement = DTOUtility.GetSpawnElement(mepp),
-                    Modules = DTOUtility.GetModules(mepp.Modules, mepp.ContractProgramId.ToString(), request.ContractNumber, request.UserId)
+                    Modules = DTOUtility.GetModules(mepp.Modules, mepp.ContractProgramId.ToString(), request)
                 };
 
                 // load program attributes
@@ -247,6 +255,10 @@ namespace Phytel.API.DataDomain.Program
             catch (Exception ex)
             {
                 throw new Exception("DD:DataProgramManager:GetPatientProgramDetailsById()::" + ex.Message, ex.InnerException);
+            }
+            finally
+            {
+                DTOUtility.ResponsesBag = null;
             }
         }
 
@@ -357,46 +369,24 @@ namespace Phytel.API.DataDomain.Program
         {
             try
             {
-                GetPatientProgramsResponse response = new GetPatientProgramsResponse(); ;
-
-                IProgramRepository repo = Factory.GetRepository(request, RepositoryType.PatientProgram);
-
-                ICollection<SelectExpression> selectExpressions = new List<SelectExpression>();
-
-                // PatientID
-                SelectExpression patientSelectExpression = new SelectExpression();
-                patientSelectExpression.FieldName = MEPatientProgram.PatientIdProperty;
-                patientSelectExpression.Type = SelectExpressionType.EQ;
-                patientSelectExpression.Value = request.PatientId;
-                patientSelectExpression.ExpressionOrder = 1;
-                patientSelectExpression.GroupID = 1;
-                selectExpressions.Add(patientSelectExpression);
-
-                APIExpression apiExpression = new APIExpression();
-                apiExpression.Expressions = selectExpressions;
-
-                Tuple<string, IEnumerable<object>> patientPrograms = repo.Select(apiExpression);
+                var response = new GetPatientProgramsResponse();
+                var repo = Factory.GetRepository(request, RepositoryType.PatientProgram);
+                var patientPrograms = repo.FindByPatientId(request.PatientId).Cast<MEPatientProgram>().ToList();
 
                 if (patientPrograms != null)
                 {
-                    List<ProgramDetail> pds = patientPrograms.Item2.Cast<ProgramDetail>().ToList();
-                    if (pds.Count > 0)
+                    var lpi = new List<ProgramInfo>();
+                    patientPrograms.ForEach(pd => lpi.Add(new ProgramInfo
                     {
-
-                        List<ProgramInfo> lpi = new List<ProgramInfo>();
-                        pds.ForEach(pd => lpi.Add(new ProgramInfo
-                            {
-                                Id = pd.Id,
-                                Name = pd.Name,
-                                PatientId = pd.PatientId,
-                                ProgramState = pd.ProgramState,
-                                ShortName = pd.ShortName,
-                                Status = pd.Status,
-                                ElementState = pd.ElementState
-                            })
+                        Id = Convert.ToString(pd.Id),
+                        Name = pd.Name,
+                        PatientId = Convert.ToString(pd.PatientId),
+                        ShortName = pd.ShortName,
+                        Status = (int)pd.Status,
+                        ElementState = (int)pd.State
+                    })
                         );
-                        response.programs = lpi;
-                    }
+                    response.programs = lpi;
                 }
 
                 return response;
@@ -502,8 +492,11 @@ namespace Phytel.API.DataDomain.Program
                 GetPatientActionDetailsDataResponse response = new GetPatientActionDetailsDataResponse();
 
                 IProgramRepository repo = Factory.GetRepository(request, RepositoryType.PatientProgram);//.GetPatientProgramRepository(request);
-
                 MEPatientProgram mepp = repo.FindByID(request.PatientProgramId) as MEPatientProgram;
+
+                IProgramRepository respRepo = Factory.GetRepository(request, RepositoryType.PatientProgramResponse);
+                var stepIds = mepp.Modules.SelectMany(m => m.Actions.SelectMany(a => a.Steps.Select(s => s.Id))).ToList();
+                DTOUtility.ResponsesBag = respRepo.Find(stepIds).Cast<MEPatientProgramResponse>().ToList();
 
                 Module meModule = mepp.Modules.Where(m => m.Id == ObjectId.Parse(request.PatientModuleId)).FirstOrDefault();
                 if (meModule != null)
@@ -520,14 +513,252 @@ namespace Phytel.API.DataDomain.Program
                         response.ActionData = DTOUtility.GetAction(request.ContractNumber, request.UserId, meAction);
                     }
                 }
-
                 return response;
             }
             catch (Exception ex)
             {
+                DTOUtility.ResponsesBag = null;
                 throw new Exception("DD:DataProgramManager:GetActionDetails()::" + ex.Message, ex.InnerException);
             }
+            finally
+            {
+                DTOUtility.ResponsesBag = null;
+            }
         } 
+        #endregion
+
+        #region DELETES
+        public DeletePatientProgramByPatientIdDataResponse DeletePatientProgramByPatientId(DeletePatientProgramByPatientIdDataRequest request)
+        {
+            DeletePatientProgramByPatientIdDataResponse response = null;
+            bool success = false;
+            try
+            {
+                response = new DeletePatientProgramByPatientIdDataResponse();
+                IProgramRepository ppRepo = Factory.GetRepository(request, RepositoryType.PatientProgram);
+
+                List<MEPatientProgram> meppList = ppRepo.FindByPatientId(request.PatientId) as List<MEPatientProgram>;
+                List<DeletedPatientProgram> deletedPatientPrograms = null;
+                
+                if (meppList != null && meppList.Count > 0)
+                {
+                    deletedPatientPrograms = new List<DeletedPatientProgram>();
+                    meppList.ForEach(mePP =>
+                    {
+                        DeletePatientProgramDataRequest req = new DeletePatientProgramDataRequest { 
+                            Context = request.Context,
+                            ContractNumber = request.ContractNumber,
+                            UserId = request.UserId,
+                            Version = request.Version
+                        };
+                        DeletedPatientProgram deletedPatientProgram = null;
+                        if(delete(mePP, req, ppRepo, out deletedPatientProgram))
+                        {
+                            deletedPatientPrograms.Add(deletedPatientProgram);
+                            success = true;
+                        }
+                    });
+                    response.DeletedPatientPrograms = deletedPatientPrograms;
+                }
+                else
+                {
+                    success = true;
+                }
+                response.Success = success;
+                return response;
+            }
+            catch (Exception ex) { throw ex; }
+        }
+
+
+        public DeletePatientProgramDataResponse DeletePatientProgram(DeletePatientProgramDataRequest request)
+        {
+            DeletePatientProgramDataResponse response = null;
+            bool success = false;
+            try
+            {
+                response = new DeletePatientProgramDataResponse();
+                IProgramRepository ppRepo = Factory.GetRepository(request, RepositoryType.PatientProgram);
+
+                MEPatientProgram mePP = ppRepo.FindByID(request.Id) as MEPatientProgram;
+                DeletedPatientProgram deletedPatientProgram = null;
+
+                if (mePP != null)
+                {
+                    if (delete(mePP, request, ppRepo, out deletedPatientProgram))
+                        success = true;
+                }
+                else
+                {
+                    success = true;
+                }
+                response.DeletedPatientProgram = deletedPatientProgram;
+                response.Success = success;
+                return response;
+            }
+            catch (Exception ex) 
+            { 
+                throw ex; 
+            }
+        }
+
+        private bool delete(MEPatientProgram mePP, DeletePatientProgramDataRequest request, IProgramRepository ppRepo, out DeletedPatientProgram deletedProgram)
+        {
+            DeletedPatientProgram deletedPatientProgram = null;
+            List<string> deletedResponsesIds = null;
+            bool success = false;
+            try
+            {
+                if (mePP != null)
+                {
+                    IProgramRepository ppAttributesRepo = Factory.GetRepository(request, RepositoryType.PatientProgramAttribute);
+                    IProgramRepository ppResponsesRepo = Factory.GetRepository(request, RepositoryType.PatientProgramResponse);
+
+                    #region PatientProgram
+                    request.Id = mePP.Id.ToString();
+                    ppRepo.Delete(request);
+                    deletedPatientProgram = new DeletedPatientProgram { Id = request.Id };
+                    success = true;
+                    deletedResponsesIds = new List<string>();
+                    #endregion
+
+                    #region PPAttributes
+                    MEProgramAttribute pa = ppAttributesRepo.FindByPlanElementID(request.Id) as MEProgramAttribute;
+                    if (pa != null)
+                    {
+                        DeletePatientProgramAttributesDataRequest deletePPAttrDataRequest = new DeletePatientProgramAttributesDataRequest
+                        {
+                            Context = request.Context,
+                            ContractNumber = request.ContractNumber,
+                            Id = pa.Id.ToString(),
+                            UserId = request.UserId,
+                            Version = request.Version
+                        };
+                        ppAttributesRepo.Delete(deletePPAttrDataRequest);
+                        deletedPatientProgram.PatientProgramAttributeId = deletePPAttrDataRequest.Id;
+                        success = true;
+                    }
+                    #endregion
+
+                    #region PPResponses
+                    List<Module> modules = mePP.Modules;
+                    if (modules != null && modules.Count > 0)
+                    {
+                        modules.ForEach(m =>
+                        {
+                            List<MongoDB.DTO.Action> actions = m.Actions;
+                            if (actions != null && actions.Count > 0)
+                            {
+                                actions.ForEach(a =>
+                                {
+                                    List<Step> steps = a.Steps;
+                                    if (steps != null && steps.Count > 0)
+                                    {
+                                        steps.ForEach(s =>
+                                        {
+                                            List<MEPatientProgramResponse> meResponses = ppResponsesRepo.FindByStepId(s.Id.ToString()) as List<MEPatientProgramResponse>;
+                                            if (meResponses != null && meResponses.Count > 0)
+                                            {
+                                                meResponses.ForEach(r =>
+                                                {
+                                                    DeletePatientProgramResponsesDataRequest deletePPResponsesRequest = new DeletePatientProgramResponsesDataRequest
+                                                    {
+                                                        Context = request.Context,
+                                                        ContractNumber = request.ContractNumber,
+                                                        Id = r.Id.ToString(),
+                                                        UserId = request.UserId,
+                                                        Version = request.Version
+                                                    };
+                                                    ppResponsesRepo.Delete(deletePPResponsesRequest);
+                                                    deletedResponsesIds.Add(deletePPResponsesRequest.Id);
+                                                    success = true;
+                                                    deletedPatientProgram.PatientProgramResponsesIds = deletedResponsesIds;
+                                                });
+                                            }
+                                        });
+
+                                    }
+                                });
+                            }
+                        });
+                    }
+                    #endregion
+                }
+            }
+            catch (Exception ex)
+            {
+                success = false;
+                string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
+                Common.Helper.LogException(int.Parse(aseProcessID), ex);
+            }
+            deletedProgram = deletedPatientProgram;
+            return success;
+        }
+        #endregion
+
+        #region UNDODELETE
+        public UndoDeletePatientProgramDataResponse UndoDeletePatientPrograms(UndoDeletePatientProgramDataRequest request)
+        {
+            UndoDeletePatientProgramDataResponse response = null;
+            try
+            {
+                response = new UndoDeletePatientProgramDataResponse();
+                IProgramRepository ppRepo = Factory.GetRepository(request, RepositoryType.PatientProgram);
+                IProgramRepository ppAttributesRepo = Factory.GetRepository(request, RepositoryType.PatientProgramAttribute);
+                IProgramRepository ppResponsesRepo = Factory.GetRepository(request, RepositoryType.PatientProgramResponse);
+                if (request.Ids != null && request.Ids.Count > 0)
+                {
+                    List<DeletedPatientProgram> PatientProgramIds = request.Ids;
+                    PatientProgramIds.ForEach(u =>
+                    {
+                        #region PatientProgram
+                        if(u.Id != null)
+                        {
+                            request.PatientProgramId = u.Id;
+                            ppRepo.UndoDelete(request);
+                        }
+                        #endregion
+
+                        #region PPAttributes
+                        if (u.PatientProgramAttributeId != null)
+                        {
+                            UndoDeletePatientProgramAttributesDataRequest attrRequest = new UndoDeletePatientProgramAttributesDataRequest
+                            {
+                                Context = request.Context,
+                                ContractNumber = request.ContractNumber,
+                                PatientProgramAttributeId = u.PatientProgramAttributeId,
+                                UserId = request.UserId,
+                                Version = request.Version
+                            };
+                            ppAttributesRepo.UndoDelete(attrRequest);
+                        }
+                        #endregion
+
+                        #region PPResponses
+                        List<string> responseIds = u.PatientProgramResponsesIds;
+                        if (responseIds != null && responseIds.Count > 0)
+                        {
+                            responseIds.ForEach(r =>
+                            {
+                                UndoDeletePatientProgramResponsesDataRequest respRequest = new UndoDeletePatientProgramResponsesDataRequest 
+                                { 
+                                    Context = request.Context,
+                                    ContractNumber = request.ContractNumber,
+                                    PatientProgramResponseId = r,
+                                    UserId = request.UserId,
+                                    Version = request.Version
+                                };
+                                ppResponsesRepo.UndoDelete(respRequest);
+                            });
+                        }
+                        #endregion
+                    });
+                }
+                response.Success = true;
+                return response;
+            }
+            catch (Exception ex) { throw ex; }
+        }
         #endregion
 
         #region private methods

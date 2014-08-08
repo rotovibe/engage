@@ -1,19 +1,17 @@
 using Phytel.API.Interface;
 using ServiceStack.ServiceHost;
+using System.Collections.Generic;
 
 namespace Phytel.API.DataDomain.Program.DTO
 {
-    [Route("/{Context}/{Version}/{ContractNumber}/Program/Module/Action/Step/{StepId}/Responses/Update", "PUT")]
+    [Route("/{Context}/{Version}/{ContractNumber}/Program/Module/Action/Step/Responses/Update", "PUT")]
     public class PutUpdateResponseRequest : IDataDomainRequest
     {
         [ApiMember(Name = "UserId", Description = "UserId of the logged in user", ParameterType = "property", DataType = "string", IsRequired = false)]
         public string UserId { get; set; }
 
-        [ApiMember(Name = "StepId", Description = "StepId of the response object", ParameterType = "path", DataType = "string", IsRequired = true)]
-        public string StepId { get; set; }
-
         [ApiMember(Name = "ResponseDetail", Description = "Response to save in the response document", ParameterType = "property", DataType = "string", IsRequired = false)]
-        public ResponseDetail ResponseDetail { get; set; }
+        public List<ResponseDetail> ResponseDetails { get; set; }
 
         [ApiMember(Name = "Context", Description = "Product Context requesting the Program", ParameterType = "property", DataType = "string", IsRequired = false)]
         public string Context { get; set; }

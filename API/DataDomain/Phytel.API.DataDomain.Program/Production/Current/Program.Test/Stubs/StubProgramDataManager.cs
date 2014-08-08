@@ -165,5 +165,22 @@ namespace Phytel.API.DataDomain.Program.Test.Stubs
         {
             throw new NotImplementedException();
         }
+
+        public DeletePatientProgramByPatientIdDataResponse DeletePatientProgramByPatientId(DeletePatientProgramByPatientIdDataRequest request)
+        {
+            throw new NotImplementedException();
+        }
+
+
+        public UndoDeletePatientProgramDataResponse UndoDeletePatientPrograms(UndoDeletePatientProgramDataRequest request)
+        {
+            throw new NotImplementedException();
+        }
+
+
+        public DeletePatientProgramDataResponse DeletePatientProgram(DeletePatientProgramDataRequest request)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

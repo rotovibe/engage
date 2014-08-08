@@ -13,6 +13,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
     public class DTOUtility : IDTOUtility
     {
         public IProgramRepositoryFactory Factory { get; set; }
+        public List<MEPatientProgramResponse> ResponsesBag { get; set; }
 
         public MEPatientProgram CreateInitialMEPatientProgram(PutProgramToPatientRequest request, MEProgram cp, List<ObjectId> sil)
         {
@@ -195,7 +196,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
                             ac.AssignedBy = ObjectId.Parse(Constants.SystemContactId); // NIGHT-876
                             ac.AssignedOn = System.DateTime.UtcNow; // NIGHT-835
                             ac.AssignedTo = cmid; // NIGHT-877
-                            //ac.StateUpdatedOn = DateTime.UtcNow;
+                            ac.StateUpdatedOn = DateTime.UtcNow; //NIGHT-952
                         }
 
                         actions.Add(ac);
@@ -323,42 +324,6 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
         //        throw new Exception("DD:DTOUtils:GetContractStepResponses()::" + ex.Message, ex.InnerException);
         //    }
         //}
-
-        public  List<MEPatientProgramResponse> GetStepResponses(ObjectId stepId, string contractNumber, string userId)
-        {
-            List<MEPatientProgramResponse> responseList = null;
-            try
-            {
-                GetPatientProgramsRequest request = new GetPatientProgramsRequest { ContractNumber = contractNumber, Context = "NG", UserId = userId };
-                IProgramRepository repo = Factory.GetRepository(request, RepositoryType.PatientProgramResponse);
-
-                ICollection<SelectExpression> selectExpressions = new List<SelectExpression>();
-
-                SelectExpression stepResponseExpression = new SelectExpression();
-                stepResponseExpression.FieldName = MEPatientProgramResponse.StepIdProperty;
-                stepResponseExpression.Type = SelectExpressionType.EQ;
-                stepResponseExpression.Value = stepId.ToString();
-                stepResponseExpression.ExpressionOrder = 1;
-                stepResponseExpression.GroupID = 1;
-                selectExpressions.Add(stepResponseExpression);
-
-                APIExpression apiExpression = new APIExpression();
-                apiExpression.Expressions = selectExpressions;
-
-                Tuple<string, IEnumerable<object>> stepResponses = repo.Select(apiExpression);
-
-                if (stepResponses != null)
-                {
-                responseList = stepResponses.Item2.Cast<MEPatientProgramResponse>().ToList();
-                }
-
-                return responseList;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("DD:DTOUtils:GetStepResponses()::" + ex.Message, ex.InnerException);
-            }
-        }
 
         public  GetStepResponseListResponse GetStepResponses(string stepId, string contractNumber, bool? service, string userId)
         {
@@ -932,11 +897,11 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
         }
 
 
-        public  List<ModuleDetail> GetModules(List<Module> list, string contractProgramId, string contractNumber, string userId)
+        public  List<ModuleDetail> GetModules(List<Module> list, string contractProgramId, IDataDomainRequest request)
         {
             try
             {
-                List<Module> pMods = GetTemplateModulesList(contractProgramId, contractNumber, userId);
+                List<Module> pMods = GetTemplateModulesList(contractProgramId, request.ContractNumber, request.UserId);
 
                 List<ModuleDetail> mods = new List<ModuleDetail>();
                 list.ForEach(m => mods.Add(new ModuleDetail
@@ -963,7 +928,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
                     CompletedBy = m.CompletedBy,
                     DateCompleted = m.DateCompleted,
                     Objectives = GetObjectivesForModule(pMods, m.SourceId),
-                    Actions = GetActions(m.Actions, contractNumber, userId, pMods.Find(pm => pm.SourceId == m.SourceId))
+                    Actions = GetActions(m.Actions, request, pMods.Find(pm => pm.SourceId == m.SourceId))
                 }));
                 return mods;
             }
@@ -1091,7 +1056,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             }
         }
 
-        public List<ActionsDetail> GetActions(List<Action> list, string contract, string userId, Module mod)
+        public List<ActionsDetail> GetActions(List<Action> list, IDataDomainRequest request, Module mod)
         {
             try
             {
@@ -1099,7 +1064,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
                 list.ForEach(a =>
                 {
                     a.Objectives = GetTemplateObjectives(a.SourceId, mod);
-                    acts.Add(GetAction(contract, userId, a));
+                    acts.Add(GetAction(request.Context, request.UserId, a));
                 });
                 return acts;
             }
@@ -1165,6 +1130,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
                         AttrEndDate = a.AttributeEndDate,
                         AttrStartDate = a.AttributeStartDate,
                         ElementState = (int)a.State,
+                        StateUpdatedOn = a.StateUpdatedOn,
                         DateCompleted = a.DateCompleted,
                         Objectives = GetObjectives(a.Objectives),
                         Steps = GetSteps(a.Steps, contract, userId)
@@ -1252,7 +1218,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             }
         }
 
-        public  List<ResponseDetail> GetResponses(Step step, string contract, string userId)
+        public List<ResponseDetail> GetResponses(Step step, string contract, string userId)
         {
             try
             {
@@ -1261,21 +1227,38 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
 
                 if (meresp == null || meresp.Count == 0)
                 {
-                    meresp = GetStepResponses(step.Id, contract, userId);
+                    try
+                    {
+                        //meresp = GetStepResponses(step.Id, contract, userId);
+                        if (ResponsesBag == null) throw new ArgumentException("ResponseBag is null");
+                        meresp = ResponsesBag.Where(r => r.StepId == step.Id).ToList();
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new Exception("DD:DTOUtils:GetResponses()::meresp where clause error" + ex.Message,
+                            ex.InnerException);
+                    }
                 }
 
-                resp = meresp.Select(x => new ResponseDetail
+                try
                 {
-                    Id = x.Id.ToString(),
-                    NextStepId = x.NextStepId.ToString(),
-                    Nominal = x.Nominal,
-                    Order = x.Order,
-                    Required = x.Required,
-                    StepId = x.StepId.ToString(),
-                    Text = x.Text,
-                    Value = x.Value,
-                    SpawnElement = GetResponseSpawnElement(x.Spawn)
-                }).ToList<ResponseDetail>();
+                    resp = meresp.Select(x => new ResponseDetail
+                    {
+                        Id = Convert.ToString(x.Id),
+                        NextStepId = Convert.ToString(x.NextStepId),
+                        Nominal = x.Nominal,
+                        Order = x.Order,
+                        Required = x.Required,
+                        StepId = Convert.ToString(x.StepId),
+                        Text = x.Text,
+                        Value = x.Value,
+                        SpawnElement = GetResponseSpawnElement(x.Spawn)
+                    }).ToList();
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception("DD:DTOUtils:GetResponses()::Linq Expression error" + ex.Message, ex.InnerException);
+                }
 
                 return resp;
             }
@@ -1458,7 +1441,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
                 {
                     foreach (MEPatientProgram p in pp)
                     {
-                        if (!p.State.Equals(ElementState.Removed) && !p.State.Equals(ElementState.Completed))
+                        if (!p.State.Equals(ElementState.Completed))
                         {
                             result = false;
                             break;
