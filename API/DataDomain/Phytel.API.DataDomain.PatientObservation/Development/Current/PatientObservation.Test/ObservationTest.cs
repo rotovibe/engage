@@ -21,31 +21,11 @@ namespace Phytel.API.DataDomain.PatientObservation.Test
         [TestMethod]
         public void GetAllowedObservationStates_CorrectType_Test()
         {
-            // Arrange
-
-            string type = "Lab";
-
-            GetAllowedStatesDataRequest request = new GetAllowedStatesDataRequest { TypeName = type, Context = context, ContractNumber = contractNumber, UserId = userId, Version = 1 };
-            IPatientObservationRepository repo = new PatientObservationRepositoryFactory().GetRepository(request, RepositoryType.PatientObservation);
-            GetAllowedStatesDataResponse response = new PatientObservationDataManager().GetAllowedStates(request);
+            GetAllowedStatesDataRequest request = new GetAllowedStatesDataRequest { Context = context, ContractNumber = contractNumber, UserId = userId, Version = 1 };
+            PatientObservationDataManager cm = new PatientObservationDataManager { Factory = new PatientObservationRepositoryFactory() };
+            GetAllowedStatesDataResponse response = cm.GetAllowedStates(request);
 
             Assert.IsTrue(response.StatesData.Count > 0);
-        }
-
-        [TestMethod]
-        public void GetAllowedObservationStates_IncorrectType_NullResult_Test()
-        {
-            // Arrange
-            string userId = string.Empty;
-            string contractNumber = "InHealth001";
-            string context = "NG";
-            string type = "Labs";
-
-            GetAllowedStatesDataRequest request = new GetAllowedStatesDataRequest { TypeName = type, Context = context, ContractNumber = contractNumber, UserId = userId, Version = 1 };
-            IPatientObservationRepository repo = new PatientObservationRepositoryFactory().GetRepository(request, RepositoryType.PatientObservation);
-            GetAllowedStatesDataResponse response = new PatientObservationDataManager().GetAllowedStates(request);
-
-            Assert.IsNull(response.StatesData);
         }
 
         [TestMethod]

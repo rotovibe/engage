@@ -105,7 +105,6 @@
     <Compile Include="Command\PatientProgramsCommand.cs" />
     <Compile Include="Command\PatientSystemsCommand.cs" />
     <Compile Include="Constants.cs" />
-    <Compile Include="Enums.cs" />
     <Compile Include="Command\INGCommand.cs" />
     <Compile Include="INGManager.cs" />
     <Compile Include="Observation\IObservationEndpointUtil.cs" />

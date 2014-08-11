@@ -64,7 +64,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Enums.cs" />
     <Compile Include="IObservationUtil.cs" />
     <Compile Include="IPatientObservationDataManager.cs" />
     <Compile Include="IPatientObservationRepository.cs" />

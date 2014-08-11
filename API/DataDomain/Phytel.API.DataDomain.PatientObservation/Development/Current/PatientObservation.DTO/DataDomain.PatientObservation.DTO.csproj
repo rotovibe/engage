@@ -69,6 +69,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Constants.cs" />
+    <Compile Include="Enums.cs" />
     <Compile Include="GetHistoricalPatientObservationsDataRequest.cs" />
     <Compile Include="GetCurrentPatientObservationsDataRequest.cs" />
     <Compile Include="GetHistoricalPatientObservationsDataResponse.cs" />

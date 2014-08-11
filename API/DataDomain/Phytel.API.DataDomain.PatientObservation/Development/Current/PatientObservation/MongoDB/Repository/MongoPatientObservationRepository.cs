@@ -576,7 +576,7 @@ namespace Phytel.API.DataDomain.PatientObservation
             }
         }
 
-        public List<IdNamePair> GetAllowedObservationStates(object entity)
+        public List<ObservationStateData> GetAllowedObservationStates()
         {
             throw new NotImplementedException();
         }

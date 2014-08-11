@@ -299,41 +299,35 @@ namespace Phytel.API.DataDomain.PatientObservation
             throw new NotImplementedException();
         }
 
-        public List<IdNamePair> GetAllowedObservationStates(object entity)
+        public List<ObservationStateData> GetAllowedObservationStates()
         {
-            GetAllowedStatesDataRequest request = (GetAllowedStatesDataRequest)entity;
-            string observationType = request.TypeName.ToLower();
-            List<IdNamePair> allowedStates = null;
-            try
+            List<ObservationStateData> states = new List<ObservationStateData>();
+            ObservationState[] values = (ObservationState[])Enum.GetValues(typeof(ObservationState));
+            foreach (var item in values)
             {
-                if (!string.IsNullOrEmpty(observationType))
+                ObservationStateData state = null;
+                switch (item)
                 {
-                    switch (observationType)
-                    {
-                        case "lab":
-                            allowedStates = new List<IdNamePair>();
-                            allowedStates.Add(new IdNamePair { Id = ((int)ObservationState.Complete).ToString(), Name = Enum.GetName(typeof(ObservationState), ObservationState.Complete) });
-                            allowedStates.Add(new IdNamePair { Id = ((int)ObservationState.Decline).ToString(), Name = Enum.GetName(typeof(ObservationState), ObservationState.Decline) });
-                            break;
-                        case "vitals":
-                            allowedStates = new List<IdNamePair>();
-                            allowedStates.Add(new IdNamePair { Id = ((int)ObservationState.Complete).ToString(), Name = Enum.GetName(typeof(ObservationState), ObservationState.Complete) });
-                            allowedStates.Add(new IdNamePair { Id = ((int)ObservationState.Decline).ToString(), Name = Enum.GetName(typeof(ObservationState), ObservationState.Decline) });
-                            break;
-                        case "problem":
-                            allowedStates = new List<IdNamePair>();
-                            allowedStates.Add(new IdNamePair { Id = ((int)ObservationState.Active).ToString(), Name = Enum.GetName(typeof(ObservationState), ObservationState.Active) });
-                            allowedStates.Add(new IdNamePair { Id = ((int)ObservationState.Inactive).ToString(), Name = Enum.GetName(typeof(ObservationState), ObservationState.Inactive) });
-                            allowedStates.Add(new IdNamePair { Id = ((int)ObservationState.Resolved).ToString(), Name = Enum.GetName(typeof(ObservationState), ObservationState.Resolved) });
-                            break;
-                    }
+                    
+                    case ObservationState.Complete:
+                        state = new ObservationStateData { Id = (int)ObservationState.Complete, Name = ObservationState.Complete.ToString(), TypeIds = new List<string> { Constants.LabLookUpId, Constants.VitalsLookUpId } };
+                        break;
+                    case ObservationState.Active:
+                        state = new ObservationStateData { Id = (int)ObservationState.Active, Name = ObservationState.Active.ToString(), TypeIds = new List<string> { Constants.ProblemLookUpId } };
+                        break;
+                    case ObservationState.Inactive:
+                        state = new ObservationStateData { Id = (int)ObservationState.Inactive, Name = ObservationState.Inactive.ToString(), TypeIds = new List<string> { Constants.ProblemLookUpId } };
+                        break;
+                    case ObservationState.Resolved:
+                        state = new ObservationStateData { Id = (int)ObservationState.Resolved, Name = ObservationState.Resolved.ToString(), TypeIds = new List<string> { Constants.ProblemLookUpId } };
+                        break;
+                    case ObservationState.Decline:
+                        state = new ObservationStateData { Id = (int)ObservationState.Decline, Name = ObservationState.Decline.ToString(), TypeIds = new List<string> { Constants.LabLookUpId, Constants.VitalsLookUpId } };
+                        break;  
                 }
-                return allowedStates;
+                states.Add(state);
             }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
+            return states;
         }
 
         public IEnumerable<object> GetActiveObservations()

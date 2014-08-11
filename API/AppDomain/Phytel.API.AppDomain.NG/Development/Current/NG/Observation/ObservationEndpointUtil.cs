@@ -208,27 +208,34 @@ namespace Phytel.API.AppDomain.NG.Observation
             }
         }
 
-        internal static List<IdNamePair> GetAllowedObservationStates(GetAllowedStatesRequest request)
+        internal static List<State> GetAllowedObservationStates(GetAllowedStatesRequest request)
         {
             try
             {
-                List<IdNamePair> result = null;
+                List<State> result = null;
                 IRestClient client = new JsonServiceClient();
-                // [Route("/{Context}/{Version}/{ContractNumber}/Observation/States/{TypeName}", "GET")]
-                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Observation/States/{4}",
+                // [Route("/{Context}/{Version}/{ContractNumber}/Observation/States", "GET")]
+                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Observation/States",
                                     DDPatientObservationsServiceUrl,
                                     "NG",
                                     request.Version,
-                                    request.ContractNumber,
-                                    request.TypeName), request.UserId);
+                                    request.ContractNumber), request.UserId);
 
                 GetAllowedStatesDataResponse dataDomainResponse = client.Get<GetAllowedStatesDataResponse>(url);
 
-                if (dataDomainResponse != null)
+                if (dataDomainResponse != null && dataDomainResponse.StatesData.Count > 0)
                 {
-                    result = dataDomainResponse.StatesData;
+                    result = new List<State>();
+                    dataDomainResponse.StatesData.ForEach(a =>
+                        {
+                            result.Add(new State 
+                            { 
+                                Id = a.Id,
+                                Name = a.Name,
+                                TypeIds = a.TypeIds
+                            });
+                        });
                 }
-
                 return result;
             }
             catch (WebServiceException ex)

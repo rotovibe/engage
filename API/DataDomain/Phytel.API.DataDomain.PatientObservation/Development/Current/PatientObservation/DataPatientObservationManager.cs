@@ -314,9 +314,7 @@ namespace Phytel.API.DataDomain.PatientObservation
             {
                 GetAllowedStatesDataResponse response = new GetAllowedStatesDataResponse();
                 IPatientObservationRepository repo = Factory.GetRepository(request, RepositoryType.Observation);
-
-                List<IdNamePair> allowedStates = repo.GetAllowedObservationStates(request);
-                response.StatesData = allowedStates;
+                response.StatesData = repo.GetAllowedObservationStates();
                 return response;
             }
             catch (Exception ex)

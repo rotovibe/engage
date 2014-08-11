@@ -1,3 +1,4 @@
+using Phytel.API.DataDomain.PatientObservation.DTO;
 using Phytel.API.DataDomain.PatientObservation.MongoDB.DTO;
 using Phytel.API.Interface;
 

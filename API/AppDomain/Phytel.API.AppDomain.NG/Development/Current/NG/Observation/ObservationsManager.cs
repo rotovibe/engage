@@ -115,8 +115,7 @@ namespace Phytel.API.AppDomain.NG.Observation
             try
             {
                 GetAllowedStatesResponse response = new GetAllowedStatesResponse();
-                List<IdNamePair> states = ObservationEndpointUtil.GetAllowedObservationStates(request);
-                response.States = states;
+                response.States = ObservationEndpointUtil.GetAllowedObservationStates(request);
                 response.Version = request.Version;
                 return response;
             }

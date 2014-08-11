@@ -4,13 +4,10 @@ using System.Runtime.Serialization;
 
 namespace Phytel.API.AppDomain.NG.DTO
 {
-    [Api(Description = "A Request object to get allowed observation states by type name.")]
-    [Route("/{Version}/{ContractNumber}/Observation/States/{TypeName}", "GET")]
+    [Api(Description = "A Request object to get allowed observation states.")]
+    [Route("/{Version}/{ContractNumber}/Observation/States", "GET")]
     public class GetAllowedStatesRequest : IAppDomainRequest
     {
-        [ApiMember(Name = "TypeName", Description = "Name of the observation type.", ParameterType = "path", DataType = "string", IsRequired = true)]
-        public string TypeName { get; set; }
-
         [ApiMember(Name = "UserID", Description = "ID of the user making the request (Internally used ONLY)", ParameterType = "property", DataType = "string", IsRequired = true)]
         public string UserId { get; set; }
 

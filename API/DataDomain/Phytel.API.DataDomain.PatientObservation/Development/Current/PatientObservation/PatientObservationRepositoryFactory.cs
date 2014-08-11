@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Phytel.API.Interface;
 using Phytel.API.DataDomain.PatientObservation.MongoDB.DTO;
+using Phytel.API.DataDomain.PatientObservation.DTO;
 
 namespace Phytel.API.DataDomain.PatientObservation
 {

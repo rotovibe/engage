@@ -8,8 +8,15 @@ namespace Phytel.API.AppDomain.NG.DTO
 {
     public class GetAllowedStatesResponse : IDomainResponse
     {
-        public List<IdNamePair> States { get; set; }
+        public List<State> States { get; set; }
         public ResponseStatus Status { get; set; }
         public double Version { get; set; }
+    }
+
+    public class State
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public List<string> TypeIds { get; set; }
     }
 }

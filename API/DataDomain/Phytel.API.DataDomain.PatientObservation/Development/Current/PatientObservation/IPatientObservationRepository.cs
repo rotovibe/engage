@@ -17,7 +17,7 @@ namespace Phytel.API.DataDomain.PatientObservation
         IEnumerable<object> GetActiveObservations();
         IEnumerable<object> FindObservationIdByPatientId(string Id);
         object FindRecentObservationValue(string observationTypeId, string patientId);
-        List<IdNamePair> GetAllowedObservationStates(object entity);
+        List<ObservationStateData> GetAllowedObservationStates();
         object FindByObservationID(string entityId, string patientId);
     }
 
@@ -29,7 +29,7 @@ namespace Phytel.API.DataDomain.PatientObservation
         IEnumerable<object> GetActiveObservations();
         IEnumerable<object> FindObservationIdByPatientId(string Id);
         object FindRecentObservationValue(string observationTypeId, string patientId);
-        List<IdNamePair> GetAllowedObservationStates(object entity);
+        List<ObservationStateData> GetAllowedObservationStates();
         object FindByObservationID(string entityId, string patientId);
         object FindByID(string entityID, bool includeDeletedObservations);
     }
