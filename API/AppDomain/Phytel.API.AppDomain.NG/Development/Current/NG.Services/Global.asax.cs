@@ -16,6 +16,7 @@ using Phytel.API.Common.Format;
 using Phytel.API.AppDomain.NG.Programs;
 using ServiceStack.Service;
 using ServiceStack.ServiceClient.Web;
+using Phytel.API.AppDomain.NG.Observation;
 
 namespace Phytel.API.AppDomain.NG.Service
 {
