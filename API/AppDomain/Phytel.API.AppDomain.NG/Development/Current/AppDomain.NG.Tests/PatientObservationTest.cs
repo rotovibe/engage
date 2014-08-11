@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Phytel.API.AppDomain.NG.DTO;
 using Phytel.API.AppDomain.NG.Observation;
@@ -31,6 +32,36 @@ namespace Phytel.API.AppDomain.NG.Test
 
             ObservationsManager oManager = new ObservationsManager();
             GetCurrentPatientObservationsResponse response = oManager.GetCurrentPatientObservations(request);
+
+            Assert.IsNotNull(response);
+        }
+
+        [TestMethod]
+        public void UpdatePatientObservation_Test()
+        {
+            List<PatientObservation> po = new List<PatientObservation>();
+            po.Add(new PatientObservation {
+                DeleteFlag = true,
+                DisplayId = 1,
+                EndDate = null,
+                GroupId = null,
+                Id = "53e907dcd6a4850bc4f863ba",
+                Name = "GERD",
+                ObservationId = "533ed16ed4332307bc592bb8",
+                PatientId = "5325db15d6a4850adcbba82a",
+                Source = "CM",
+                Standard = false, 
+                StartDate = DateTime.Now,
+                StateId = 2,
+                TypeId = "533d8278d433231deccaa62d",
+                Units = null,
+                Values = null
+            });
+
+            PostUpdateObservationItemsRequest request = new PostUpdateObservationItemsRequest { ContractNumber = contract, PatientId = "5325db15d6a4850adcbba82a", UserId = userId, Version = version, Context = "NG", PatientObservations = po };
+
+            ObservationsManager oManager = new ObservationsManager();
+            PostUpdateObservationItemsResponse response = oManager.SavePatientObservations(request);
 
             Assert.IsNotNull(response);
         }

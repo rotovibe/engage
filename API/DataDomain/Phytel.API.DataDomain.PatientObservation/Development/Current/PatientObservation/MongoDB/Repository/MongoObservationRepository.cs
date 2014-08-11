@@ -401,5 +401,11 @@ namespace Phytel.API.DataDomain.PatientObservation
         {
             throw new NotImplementedException();
         }
+
+
+        public object FindByID(string entityID, bool includeDeletedObservations)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

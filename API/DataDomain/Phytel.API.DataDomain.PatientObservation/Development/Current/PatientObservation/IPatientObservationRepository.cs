@@ -31,5 +31,6 @@ namespace Phytel.API.DataDomain.PatientObservation
         object FindRecentObservationValue(string observationTypeId, string patientId);
         List<IdNamePair> GetAllowedObservationStates(object entity);
         object FindByObservationID(string entityId, string patientId);
+        object FindByID(string entityID, bool includeDeletedObservations);
     }
 }

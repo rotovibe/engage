@@ -255,7 +255,7 @@ namespace Phytel.API.DataDomain.PatientObservation
                             };
                             result = (bool)repo.Update(putUpdateObservationDataRequest);
                             //fetch & return the update object.
-                            PatientObservationData pod = (PatientObservationData)repo.FindByID(poData.Id);
+                            PatientObservationData pod = (PatientObservationData)repo.FindByID(poData.Id, true);
                             returnDataList.Add(pod);
                         }
                     }

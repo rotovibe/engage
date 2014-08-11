@@ -83,13 +83,21 @@ namespace Phytel.API.DataDomain.PatientObservation
 
         public object FindByID(string entityID)
         {
+            return FindByID(entityID, false);
+        }
+
+        public object FindByID(string entityID, bool includeDeletedObservations)
+        {
             try
             {
                 PatientObservationData poData = null;
                 List<IMongoQuery> queries = new List<IMongoQuery>();
                 queries.Add(Query.EQ(MEPatientObservation.IdProperty, ObjectId.Parse(entityID)));
-                queries.Add(Query.EQ(MEPatientObservation.TTLDateProperty, BsonNull.Value));
-                queries.Add(Query.EQ(MEPatientObservation.DeleteFlagProperty, false));
+                if (!includeDeletedObservations)
+                {
+                    queries.Add(Query.EQ(MEPatientObservation.DeleteFlagProperty, false));
+                    queries.Add(Query.EQ(MEPatientObservation.TTLDateProperty, BsonNull.Value));
+                }
                 IMongoQuery mQuery = Query.And(queries);
 
                 using (PatientObservationMongoContext ctx = new PatientObservationMongoContext(_dbName))
