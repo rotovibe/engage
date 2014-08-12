@@ -78,12 +78,6 @@ namespace Phytel.API.AppDomain.NG.Observation
                     }
                     response = ObservationEndpointUtil.UpdatePatientObservation(request, poRecordDataList);
                 }
-                else
-                {
-                    PatientObservationRecordData epord = new PatientObservationRecordData();
-                    poRecordDataList.Add(epord);
-                    response = ObservationEndpointUtil.UpdatePatientObservation(request, poRecordDataList);
-                }
                 response.Version = request.Version;
                 return response;
             }
