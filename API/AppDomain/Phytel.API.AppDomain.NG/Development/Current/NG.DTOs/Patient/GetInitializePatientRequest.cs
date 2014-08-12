@@ -7,7 +7,7 @@ namespace Phytel.API.AppDomain.NG.DTO
     [Route("/{Version}/{ContractNumber}/Patient/Initialize", "GET")]
     public class GetInitializePatientRequest : IAppDomainRequest
     {
-        [ApiMember(Name = "UserID", Description = "ID of the user making the request (Internally used ONLY)", ParameterType = "property", DataType = "string", IsRequired = true)]
+        [ApiMember(Name = "UserId", Description = "ID of the user making the request (Internally used ONLY)", ParameterType = "property", DataType = "string", IsRequired = true)]
         public string UserId { get; set; }
 
         [ApiMember(Name = "ContractNumber", Description = "Contract Number to retrieve data from", ParameterType = "path", DataType = "string", IsRequired = true)]
