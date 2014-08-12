@@ -58,5 +58,22 @@ namespace Phytel.API.AppDomain.NG.Test.Patient
             GetRecentPatientsResponse response = ngm.GetRecentPatients(request);
             Assert.IsTrue(response.Limit >= response.Patients.Count);
         }
+
+        [TestMethod()]
+        public void InitializePatient_Test()
+        {
+            INGManager ngm = new NGManager();
+
+            GetInitializePatientRequest request = new GetInitializePatientRequest
+            {
+                Version = version,
+                ContractNumber = contractNumber,
+                UserId = userId,
+                Context = context
+            };
+
+            GetInitializePatientResponse response = ngm.GetInitializePatient(request);
+            Assert.IsNotNull(response);
+        }
     }
 }

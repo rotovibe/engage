@@ -6,6 +6,11 @@ namespace Phytel.API.DataDomain.Patient.Test
     [TestClass]
     public class PatientTest
     {
+        static string userId = "000000000000000000000000";
+        static string contractNumber = "InHealth001";
+        static string context = "NG";
+        static int version = 1;
+        
         [TestMethod]
         public void GetPatientByID()
         {
@@ -69,6 +74,16 @@ namespace Phytel.API.DataDomain.Patient.Test
             GetPatientsDataResponse response = pm.GetPatients(request);
 
             Assert.IsNotNull(response.Patients);
+        }
+
+        [TestMethod]
+        public void InitializePatient_Test()
+        {
+            PutInitializePatientDataRequest request = new PutInitializePatientDataRequest {  Context = context, ContractNumber = contractNumber, UserId = userId, Version = version};
+            IPatientDataManager pm = new PatientDataManager { Factory = new PatientRepositoryFactory() };
+            PutInitializePatientDataResponse response = pm.InitializePatient(request);
+
+            Assert.IsNotNull(response);
         }
     }
 }

@@ -89,7 +89,7 @@ namespace Phytel.API.AppDomain.NG
                     
                     pResponse.Patient = new NG.DTO.Patient
                     {
-                        Id = response.Patient.ID,
+                        Id = response.Patient.Id,
                         FirstName = response.Patient.FirstName,
                         LastName = response.Patient.LastName,
                         DOB = NGUtils.IsDateValid(response.Patient.DOB) ? response.Patient.DOB : string.Empty,
@@ -315,6 +315,44 @@ namespace Phytel.API.AppDomain.NG
             }
         }
 
+        public GetInitializePatientResponse GetInitializePatient(GetInitializePatientRequest request)
+        {
+            try
+            {
+                GetInitializePatientResponse response = new GetInitializePatientResponse();
+
+                IRestClient client = new JsonServiceClient();
+                //[Route("/{Context}/{Version}/{ContractNumber}/Patient/Initialize", "PUT")]
+                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/patient/Initialize",
+                                                                                DDPatientServiceURL,
+                                                                                "NG",
+                                                                                request.Version,
+                                                                                request.ContractNumber), request.UserId);
+
+                PutInitializePatientDataResponse dataDomainResponse =
+                    client.Put<PutInitializePatientDataResponse>(url, new PutInitializePatientDataRequest
+                    {
+                        Context = "NG",
+                        ContractNumber = request.ContractNumber,
+                        UserId = request.UserId,
+                        Version = request.Version
+                    } as object);
+
+                if (dataDomainResponse != null && dataDomainResponse.PatientData != null)
+                {
+                    response = new GetInitializePatientResponse { 
+                        Patient = new Patient { Id = dataDomainResponse.PatientData.Id },
+                        Version = dataDomainResponse.Version
+                    };
+                }
+                return response;
+            }
+            catch (WebServiceException wse)
+            {
+                throw new WebServiceException("AD:GetInitializePatient()::" + wse.Message, wse.InnerException);
+            }
+        }
+
         public PostDeletePatientResponse DeletePatient(PostDeletePatientRequest request)
         {
             PostDeletePatientResponse response = new PostDeletePatientResponse();
@@ -419,7 +457,7 @@ namespace Phytel.API.AppDomain.NG
                 //take qResponse Patient details and map them to "Patient" in the GetCohortPatientsResponse
                 qResponse.CohortPatients.ForEach(x => pResponse.Patients.Add(new CohortPatient
                 {
-                    Id = x.ID,
+                    Id = x.Id,
                     DOB = x.DOB,
                     FirstName = x.FirstName,
                     Gender = x.Gender,
@@ -1506,12 +1544,12 @@ namespace Phytel.API.AppDomain.NG
                             patients = new List<CohortPatient>();
                             foreach (string id in recentPatientIds)
                             {
-                                PatientData pd = patientDDResponse.Patients.Where(p => p.ID == id).FirstOrDefault();
+                                PatientData pd = patientDDResponse.Patients.Where(p => p.Id == id).FirstOrDefault();
                                 if(pd != null)
                                 {
                                     patients.Add(new CohortPatient
                                     {
-                                        Id = pd.ID,
+                                        Id = pd.Id,
                                         FirstName = pd.FirstName,
                                         LastName = pd.LastName,
                                         MiddleName = pd.MiddleName,

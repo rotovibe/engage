@@ -299,7 +299,7 @@ namespace Phytel.API.DataDomain.Patient
                                 if(!pat.DeleteFlag)
                                 {   
                                     PatientData cohortPatient = new PatientData();
-                                    cohortPatient.ID = pat.PatientID.ToString();
+                                    cohortPatient.Id = pat.PatientID.ToString();
 
                                     foreach (SearchField sf in pat.SearchFields)
                                     {
@@ -488,5 +488,11 @@ namespace Phytel.API.DataDomain.Patient
             catch (Exception) { throw; }
         }
 
+
+
+        public object Initialize(object newEntity)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

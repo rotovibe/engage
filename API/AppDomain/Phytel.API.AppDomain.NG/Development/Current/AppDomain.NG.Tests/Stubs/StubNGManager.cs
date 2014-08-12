@@ -252,5 +252,11 @@ namespace Phytel.API.AppDomain.NG.Test.Stubs
         {
             throw new NotImplementedException();
         }
+
+
+        public GetInitializePatientResponse GetInitializePatient(GetInitializePatientRequest request)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

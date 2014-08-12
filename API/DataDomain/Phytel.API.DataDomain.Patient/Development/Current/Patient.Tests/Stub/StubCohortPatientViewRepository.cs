@@ -177,5 +177,11 @@ namespace Phytel.API.DataDomain.Patient.Test.Stub
         {
             throw new NotImplementedException();
         }
+
+
+        public object Initialize(object newEntity)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

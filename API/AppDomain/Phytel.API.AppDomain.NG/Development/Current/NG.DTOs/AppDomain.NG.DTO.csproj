@@ -94,6 +94,8 @@
     <Compile Include="Observation\GetHistoricalPatientObservationsResponse.cs" />
     <Compile Include="Observation\GetCurrentPatientObservationsResponse.cs" />
     <Compile Include="Observation\IPatientObservationRequest.cs" />
+    <Compile Include="Patient\GetInitializePatientRequest.cs" />
+    <Compile Include="Patient\GetInitializePatientResponse.cs" />
     <Compile Include="Patient\PostDeletePatientRequest.cs" />
     <Compile Include="Patient\PostDeletePatientResponse.cs" />
     <Compile Include="Program\Action.cs" />

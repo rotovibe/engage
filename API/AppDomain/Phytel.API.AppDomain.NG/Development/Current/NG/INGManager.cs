@@ -39,7 +39,7 @@ namespace Phytel.API.AppDomain.NG
         PostDeletePatientResponse DeletePatient(PostDeletePatientRequest request);
         PostRemovePatientProgramResponse RemovePatientProgram(PostRemovePatientProgramRequest request);
         void LogException(Exception ex);
-
+        GetInitializePatientResponse GetInitializePatient(GetInitializePatientRequest request);
         PostProgramAttributesChangeResponse PostProgramAttributeChanges(PostProgramAttributesChangeRequest request);
     }
 }

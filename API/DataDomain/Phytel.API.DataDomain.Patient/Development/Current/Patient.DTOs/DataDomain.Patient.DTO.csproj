@@ -79,6 +79,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="PutInitializePatientDataRequest.cs" />
+    <Compile Include="PutInitializePatientDataResponse.cs" />
     <Compile Include="UndoDeleteCohortPatientViewDataRequest.cs" />
     <Compile Include="UndoDeleteCohortPatientViewDataResponse.cs" />
     <Compile Include="UndoDeletePatientUsersDataRequest.cs" />

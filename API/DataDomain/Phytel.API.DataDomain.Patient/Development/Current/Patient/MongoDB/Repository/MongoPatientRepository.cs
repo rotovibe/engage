@@ -19,6 +19,7 @@ namespace Phytel.API.DataDomain.Patient
     {
         private string _dbName = string.Empty;
         private int _expireDays = Convert.ToInt32(ConfigurationManager.AppSettings["ExpireDays"]);
+        private int _initializeDays = Convert.ToInt32(ConfigurationManager.AppSettings["InitializeDays"]);
 
         #region endpoint addresses
         protected static readonly string DDPatientSystemUrl = ConfigurationManager.AppSettings["DDPatientSystemServiceUrl"];
@@ -196,7 +197,7 @@ namespace Phytel.API.DataDomain.Patient
                 {
                     patientData = new PatientData
                     {
-                        ID = mePatient.Id.ToString(),
+                        Id = mePatient.Id.ToString(),
                         DOB = CommonFormatter.FormatDateOfBirth(mePatient.DOB),
                         FirstName = mePatient.FirstName,
                         Gender = mePatient.Gender,
@@ -303,7 +304,7 @@ namespace Phytel.API.DataDomain.Patient
                             {
                                 pResp.Add(new DTO.PatientData
                                 {
-                                    ID = mp.Id.ToString(),
+                                    Id = mp.Id.ToString(),
                                     PreferredName = mp.PreferredName,
                                     DOB = mp.DOB,
                                     FirstName = mp.FirstName,
@@ -726,6 +727,39 @@ namespace Phytel.API.DataDomain.Patient
                                             Common.DataAuditType.UndoDelete,
                                             request.ContractNumber);
                 }
+            }
+            catch (Exception) { throw; }
+        }
+
+        public object Initialize(object newEntity)
+        {
+            PutInitializePatientDataRequest request = (PutInitializePatientDataRequest)newEntity;
+            PatientData patientData = null;
+            MEPatient meP = null;
+            try
+            {
+                meP = new MEPatient(this.UserId)
+                {
+                    Id = ObjectId.GenerateNewId(),
+                    TTLDate = System.DateTime.UtcNow.AddDays(_initializeDays)
+                };
+
+                using (PatientMongoContext ctx = new PatientMongoContext(_dbName))
+                {
+                    ctx.Patients.Collection.Insert(meP);
+
+                    AuditHelper.LogDataAudit(this.UserId,
+                                            MongoCollectionName.PatientGoal.ToString(),
+                                            meP.Id.ToString(),
+                                            Common.DataAuditType.Insert,
+                                            request.ContractNumber);
+
+                    patientData = new PatientData
+                    {
+                        Id = meP.Id.ToString()
+                    };
+                }
+                return patientData;
             }
             catch (Exception) { throw; }
         }
