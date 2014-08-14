@@ -477,8 +477,8 @@ namespace Phytel.API.DataDomain.PatientObservation
                 // handle BP readings if they exist - check request.observationid
                 if (observationId.Equals("530c270afe7a592f64473e38"))
                 {
-                    var systol = patientObservations.Where(o => o.ObservationId == "530c270afe7a592f64473e38").OrderBy(o => o.LastUpdatedOn).ToList();
-                    var diastol = patientObservations.Where(o => o.ObservationId == "530c26fcfe7a592f64473e37").OrderBy(o => o.LastUpdatedOn).ToList();
+                    var systol = patientObservations.Where(o => o.ObservationId == "530c270afe7a592f64473e38").OrderBy(p => p.StartDate).ThenBy(o => o.LastUpdatedOn).ToList();
+                    var diastol = patientObservations.Where(o => o.ObservationId == "530c26fcfe7a592f64473e37").OrderBy(p => p.StartDate).ThenBy(o => o.LastUpdatedOn).ToList();
                     diastol.ForEach(d => 
                     {
                         if (d.LastUpdatedOn != null)
@@ -490,13 +490,23 @@ namespace Phytel.API.DataDomain.PatientObservation
                     systol.ForEach(dt =>
                     {
                         dt.Values.First().Text = "Systolic blood pressure";
-
-                        var val2 = diastol.Where(o => o.LastUpdatedOn == trimMilliseconds((DateTime)dt.LastUpdatedOn)).FirstOrDefault();
-                        if (val2 != null)
+                        PatientObservationData selectedDistol = null;
+                        List<PatientObservationData> matchingDiastols = diastol.Where(o => o.StartDate == dt.StartDate).ToList();
+                        // A systolic value will have atleast one matching distolic value with same start date. If there are more then one, then find a distolic value that has a matching LastUpdatedDateTime. 
+                        if (matchingDiastols.Count == 1)
                         {
-                            val2.Values.First().Text = "Diastolic blood pressure";
-                            dt.Values.Add(val2.Values.First());
-                            diastol.Remove(val2);
+                            selectedDistol = matchingDiastols[0];
+                        }
+                        else
+                        {
+                            selectedDistol = matchingDiastols.Where(o => o.LastUpdatedOn == trimMilliseconds((DateTime)dt.LastUpdatedOn)).FirstOrDefault();
+                        }
+                        if (selectedDistol != null)
+                        {
+                            selectedDistol.Values.First().Text = "Diastolic blood pressure";
+                            dt.Values.Add(selectedDistol.Values.First());
+                            //Once we have found a systolic-distolic pair, remove the selected dystolic from the list.
+                            diastol.Remove(selectedDistol);
                         }
                     });
 
