@@ -272,7 +272,7 @@ namespace Phytel.API.DataDomain.PatientObservation
             }
         }
 
-        private static List<IMongoQuery> BuildQuery(object type, bool? standard, bool? status)
+        private static List<IMongoQuery> BuildQuery(object type, bool? standard, bool? activeStatus)
         {
             List<IMongoQuery> queries = new List<IMongoQuery>();
             queries.Add(Query.EQ(MEObservation.ObservationTypeProperty, ObjectId.Parse(type as string)));
@@ -280,9 +280,9 @@ namespace Phytel.API.DataDomain.PatientObservation
             {
                     queries.Add(Query.EQ(MEObservation.StandardProperty, standard));
             }
-            if (status != null)
+            if (activeStatus != null)
             {
-                if ((bool)status)
+                if ((bool)activeStatus)
                     queries.Add(Query.EQ(MEObservation.StatusProperty, 1)); // active
             }
             queries.Add(Query.EQ(MEObservation.DeleteFlagProperty, false));

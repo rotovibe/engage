@@ -75,7 +75,7 @@ namespace Phytel.API.DataDomain.PatientObservation
                 // get list of observations
                 IPatientObservationRepository repo = Factory.GetRepository(request, RepositoryType.Observation);
 
-                List<ObservationData> odl = (List<ObservationData>)repo.GetObservationsByType(request.TypeId, true, null);
+                List<ObservationData> odl = (List<ObservationData>)repo.GetObservationsByType(request.TypeId, true, true);
                 List<PatientObservationData> podl = new List<PatientObservationData>();
 
                 // load and initialize each observation
