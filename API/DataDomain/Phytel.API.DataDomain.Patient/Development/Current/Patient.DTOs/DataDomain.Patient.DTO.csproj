@@ -79,6 +79,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Enums.cs" />
     <Compile Include="PutInitializePatientDataRequest.cs" />
     <Compile Include="PutInitializePatientDataResponse.cs" />
     <Compile Include="UndoDeleteCohortPatientViewDataRequest.cs" />

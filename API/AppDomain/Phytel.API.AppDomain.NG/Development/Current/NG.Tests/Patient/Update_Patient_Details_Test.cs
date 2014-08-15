@@ -18,7 +18,7 @@ namespace Phytel.API.DataDomain.Patient.Service.Test
             double version = 1.0;
             string token = "52cc3dcbd6a4850cf4c0ce58";
             IRestClient client = new JsonServiceClient();
-
+            
             PutPatientDetailsUpdateResponse response = client.Post<PutPatientDetailsUpdateResponse>(
                 string.Format(@"http://localhost:888/Nightingale/{0}/{1}/patient/Update/?Id={2}",
                 version,
@@ -26,10 +26,7 @@ namespace Phytel.API.DataDomain.Patient.Service.Test
                 patientID),
                 new PutPatientDetailsUpdateRequest
                 {
-                    DOB = "12-12-2013",
-                    Priority = 3,
-                    PreferredName = "Samuel",
-                    Token = token
+                   Token = token
                 } as object);
 
         }

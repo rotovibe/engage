@@ -53,7 +53,7 @@ namespace Phytel.API.DataDomain.Patient
             MECohortPatientView patientView = null;
             using (PatientMongoContext ctx = new PatientMongoContext(_dbName))
             {
-                //Does the patient exist?
+                //Does the patient exist in cohortpatientview?
                 IMongoQuery query = Query.And(
                                 Query.EQ(MECohortPatientView.PatientIDProperty, ObjectId.Parse(cohortRequest.PatientID)),
                                 Query.EQ(MECohortPatientView.LastNameProperty, cohortRequest.LastName));
@@ -491,6 +491,12 @@ namespace Phytel.API.DataDomain.Patient
 
 
         public object Initialize(object newEntity)
+        {
+            throw new NotImplementedException();
+        }
+
+
+        public object FindDuplicatePatient(PutUpdatePatientDataRequest request)
         {
             throw new NotImplementedException();
         }

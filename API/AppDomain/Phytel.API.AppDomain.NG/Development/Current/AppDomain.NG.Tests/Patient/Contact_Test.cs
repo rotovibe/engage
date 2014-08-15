@@ -75,5 +75,37 @@ namespace Phytel.API.AppDomain.NG.Test.Patient
             GetInitializePatientResponse response = ngm.GetInitializePatient(request);
             Assert.IsNotNull(response);
         }
+
+        [TestMethod()]
+        public void SavePatient_Test()
+        {
+            INGManager ngm = new NGManager();
+
+            Phytel.API.AppDomain.NG.DTO.Patient p = new DTO.Patient {
+                Id = "53ee51f8d433230bb8a9172d",
+                FirstName = "farah",
+                MiddleName = "f",
+                LastName = "kahn",
+                PreferredName = "farah kahn",
+                Suffix = "IV",
+                DOB = "02/07/1950",
+                FullSSN = "333333333",
+                Gender = "F",
+                Priority = 3
+            };
+
+            PutPatientDetailsUpdateRequest request = new PutPatientDetailsUpdateRequest
+            {
+                Version = version,
+                ContractNumber = contractNumber,
+                UserId = userId,
+                Token = string.Empty,
+                Patient = p,
+                Insert = true
+            };
+
+            PutPatientDetailsUpdateResponse response = ngm.PutPatientDetailsUpdate(request);
+            Assert.IsNotNull(response);
+        }
     }
 }

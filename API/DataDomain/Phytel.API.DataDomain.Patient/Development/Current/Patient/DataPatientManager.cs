@@ -199,10 +199,27 @@ namespace Phytel.API.DataDomain.Patient
 
         public PutUpdatePatientDataResponse UpdatePatient(PutUpdatePatientDataRequest request)
         {
+            PutUpdatePatientDataResponse response = null;
             IPatientRepository repo = Factory.GetRepository(request, RepositoryType.Patient);
-
-            PutUpdatePatientDataResponse result = repo.Update(request) as PutUpdatePatientDataResponse;
-            return result;
+            if (request.Insert)
+            {
+                if (repo.FindDuplicatePatient(request) == null)
+                {
+                    if (request.PatientData != null)
+                    {
+                        response = repo.Update(request) as PutUpdatePatientDataResponse;
+                    }
+                }
+                else 
+                {
+                    throw new Exception("An individual by the same first name, last name and date of birth already exists.");
+                }
+            }
+            else
+            {
+                response = repo.Update(request) as PutUpdatePatientDataResponse;
+            }
+            return response;
         }
 
         public PutUpdateCohortPatientViewResponse UpdateCohortPatientViewProblem(PutUpdateCohortPatientViewRequest request)

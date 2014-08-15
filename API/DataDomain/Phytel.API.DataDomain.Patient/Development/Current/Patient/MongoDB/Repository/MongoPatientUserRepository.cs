@@ -220,5 +220,11 @@ namespace Phytel.API.DataDomain.Patient
         {
             throw new NotImplementedException();
         }
+
+
+        public object FindDuplicatePatient(PutUpdatePatientDataRequest request)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -6,35 +6,11 @@ namespace Phytel.API.AppDomain.NG.DTO
     [Route("/{Version}/{ContractNumber}/patient/Update/", "POST")]
     public class PutPatientDetailsUpdateRequest : IAppDomainRequest
     {
-        [ApiMember(Name = "Id", Description = "Id of the patient being updated", ParameterType = "property", DataType = "string", IsRequired = true)]
-        public string Id { get; set; }
+        [ApiMember(Name = "Patient", Description = "Patient details that need to be upserted.", ParameterType = "property", DataType = "Patient", IsRequired = true)]
+        public Patient Patient { get; set; }
 
-        [ApiMember(Name = "FirstName", Description = "First Name of the patient being created", ParameterType = "property", DataType = "string", IsRequired = true)]
-        public string FirstName { get; set; }
-
-        [ApiMember(Name = "LastName", Description = "Last name of the patient being created", ParameterType = "property", DataType = "string", IsRequired = true)]
-        public string LastName { get; set; }
-
-        [ApiMember(Name = "MiddleName", Description = "Middle name of the patient being created", ParameterType = "property", DataType = "string", IsRequired = false)]
-        public string MiddleName { get; set; }
-
-        [ApiMember(Name = "Suffix", Description = "Suffix of the patient being created", ParameterType = "property", DataType = "string", IsRequired = false)]
-        public string Suffix { get; set; }
-
-        [ApiMember(Name = "PreferredName", Description = "Preferred name of the patient being created", ParameterType = "property", DataType = "string", IsRequired = false)]
-        public string PreferredName { get; set; }
-
-        [ApiMember(Name = "Gender", Description = "Gender of the patient being created", ParameterType = "property", DataType = "string", IsRequired = false)]
-        public string Gender { get; set; }
-
-        [ApiMember(Name = "DOB", Description = "Date of birth of the patient being created", ParameterType = "property", DataType = "string", IsRequired = false)]
-        public string DOB { get; set; }
-
-        [ApiMember(Name = "Priority", Description = "Priority value of the patient being updated", ParameterType = "property", DataType = "string", IsRequired = true)]
-        public int Priority { get; set; }
-
-        [ApiMember(Name = "FullSSN", Description = "SSN value of the patient being updated", ParameterType = "property", DataType = "string", IsRequired = true)]
-        public string FullSSN { get; set; }
+        [ApiMember(Name = "Insert", Description = "Indicates if the action is to create or update a patient", ParameterType = "path", DataType = "boolean", IsRequired = true)]
+        public bool Insert { get; set; }
 
         [ApiMember(Name = "Token", Description = "Token parameter", ParameterType = "path", DataType = "string", IsRequired = true)]
         public string Token { get; set; }

@@ -97,7 +97,7 @@ namespace Phytel.API.AppDomain.NG
                         MiddleName = response.Patient.MiddleName,
                         Suffix = response.Patient.Suffix,
                         PreferredName = response.Patient.PreferredName,
-                        Priority = (int)response.Patient.PriorityData,
+                        Priority = response.Patient.PriorityData,
                         Flagged = Convert.ToInt32(response.Patient.Flagged),
                         Background = response.Patient.Background,
                         LastFourSSN = response.Patient.LastFourSSN
@@ -214,35 +214,45 @@ namespace Phytel.API.AppDomain.NG
             try
             {
                 PutPatientDetailsUpdateResponse response = new PutPatientDetailsUpdateResponse();
+                if (request.Patient != null)
+                {
+                    IRestClient client = new JsonServiceClient();
+                    //[Route("/{Context}/{Version}/{ContractNumber}/Patient", "PUT")]
+                    string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Patient",
+                                                                                    DDPatientServiceURL,
+                                                                                    "NG",
+                                                                                    request.Version,
+                                                                                    request.ContractNumber), request.UserId);
 
-                IRestClient client = new JsonServiceClient();
-                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/patient/{4}",
-                                                                                DDPatientServiceURL,
-                                                                                "NG",
-                                                                                request.Version,
-                                                                                request.ContractNumber,
-                                                                                request.Id,
-                                                                                request.Priority), request.UserId);
-
-                PutPatientDetailsUpdateResponse dataDomainResponse =
-                    client.Put<PutPatientDetailsUpdateResponse>(url, new PutPatientDetailsUpdateRequest
-                                                                                {
-                                                                                    ContractNumber = request.ContractNumber,
-                                                                                    DOB = request.DOB,
-                                                                                    FirstName = request.FirstName,
-                                                                                    LastName = request.LastName,
-                                                                                    Gender = request.Gender,
-                                                                                    MiddleName = request.MiddleName,
-                                                                                    PreferredName = request.PreferredName,
-                                                                                    Priority = request.Priority,
-                                                                                    FullSSN = request.FullSSN,
-                                                                                    Suffix = request.Suffix,
-                                                                                    Token = request.Token,
-                                                                                    UserId = request.UserId,
-                                                                                    Version = request.Version,
-                                                                                    Id = request.Id
-                                                                                } as object);
-                return dataDomainResponse;
+                    PatientData data = new PatientData
+                    {
+                        Id = request.Patient.Id,
+                        FirstName = request.Patient.FirstName,
+                        LastName = request.Patient.LastName,
+                        MiddleName = request.Patient.MiddleName,
+                        PreferredName = request.Patient.PreferredName,
+                        Suffix = request.Patient.Suffix,
+                        DOB = request.Patient.DOB,
+                        PriorityData = request.Patient.Priority,
+                        Gender = request.Patient.Gender,
+                        FullSSN = request.Patient.FullSSN
+                    };
+                    PutUpdatePatientDataResponse dataDomainResponse =
+                        client.Put<PutUpdatePatientDataResponse>(url, new PutUpdatePatientDataRequest
+                        {
+                            Context = "NG",
+                            ContractNumber = request.ContractNumber,
+                            PatientData = data,
+                            Insert = request.Insert,
+                            UserId = request.UserId,
+                            Version = request.Version
+                        } as object);
+                    if (dataDomainResponse != null)
+                    {
+                        response.Id = dataDomainResponse.Id;
+                    }
+                }
+                return response;
             }
             catch (WebServiceException wse)
             {
