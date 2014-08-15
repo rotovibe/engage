@@ -407,8 +407,8 @@ namespace Phytel.API.DataDomain.PatientObservation
                                     current.TypeId = odata.ObservationTypeId;
                                     current.Name = odata.CommonName == null ? odata.Description : odata.CommonName;
                                     current.Standard = odata.Standard;
+                                    currentPOs.Add(current);
                                 }
-                                currentPOs.Add(current);
                             }
                         });
                     }
