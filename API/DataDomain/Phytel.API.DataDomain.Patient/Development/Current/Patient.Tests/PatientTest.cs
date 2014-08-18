@@ -73,12 +73,12 @@ namespace Phytel.API.DataDomain.Patient.Test
         {
             PatientData data = new PatientData 
             {
-                Id = "",
-                FirstName = "aaron",
-                LastName = "meis",
-                DOB = "01/05/1992"
+                Id = "53f274e8d6a4851444cf7a9e",
+                FirstName = "eric",
+                LastName = "miles",
+                DOB = "01/01/1942"
             };
-            PutUpdatePatientDataRequest request = new PutUpdatePatientDataRequest {Insert = true,  Context = context, ContractNumber = contractNumber, UserId = userId, Version = version, PatientData = data };
+            PutUpdatePatientDataRequest request = new PutUpdatePatientDataRequest {Insert = true, InsertDuplicate = true,  Context = context, ContractNumber = contractNumber, UserId = userId, Version = version, PatientData = data };
             IPatientDataManager pm = new PatientDataManager { Factory = new PatientRepositoryFactory() };
             PutUpdatePatientDataResponse response = pm.UpdatePatient(request);
 

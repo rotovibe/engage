@@ -629,7 +629,7 @@ namespace Phytel.API.DataDomain.Patient
             List<SearchFieldData> data = new List<SearchFieldData>();
             data.Add(new SearchFieldData { Active = true, FieldName = Constants.FN, Value = request.PatientData.FirstName });
             data.Add(new SearchFieldData { Active = true, FieldName = Constants.LN, Value = request.PatientData.LastName });
-            data.Add(new SearchFieldData { Active = true, FieldName = Constants.G, Value = request.PatientData.Gender.ToUpper() });
+            data.Add(new SearchFieldData { Active = true, FieldName = Constants.G, Value = request.PatientData.Gender == null ? null : request.PatientData.Gender.ToUpper()});
             data.Add(new SearchFieldData { Active = true, FieldName = Constants.DOB, Value = request.PatientData.DOB });
             data.Add(new SearchFieldData { Active = true, FieldName = Constants.MN, Value = request.PatientData.MiddleName });
             data.Add(new SearchFieldData { Active = true, FieldName = Constants.SFX, Value = request.PatientData.Suffix });
