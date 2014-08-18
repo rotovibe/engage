@@ -220,13 +220,12 @@ namespace Phytel.API.DataDomain.Patient
             {
                 using (PatientMongoContext ctx = new PatientMongoContext(_dbName))
                 {
-                    IMongoQuery query = Query.And(
-                                    Query.EQ(MEPatient.FirstNameProperty, request.PatientData.FirstName),
-                                    Query.EQ(MEPatient.LastNameProperty, request.PatientData.LastName),
-                                    Query.EQ(MEPatient.DOBProperty, request.PatientData.DOB),
-                                    Query.EQ(MEPatient.DeleteFlagProperty, false),
-                                    Query.EQ(MEPatient.TTLDateProperty, BsonNull.Value));
+                    string searchQuery = string.Format("{0} : /^{1}$/i, {2} : /^{3}$/i, {4} : false, {5} : null", MEPatient.FirstNameProperty, request.PatientData.FirstName, MEPatient.LastNameProperty, request.PatientData.LastName, MEPatient.DeleteFlagProperty, MEPatient.TTLDateProperty);
 
+                    string jsonQuery = "{ ";
+                    jsonQuery += searchQuery;
+                    jsonQuery += " }";
+                    QueryDocument query = new QueryDocument(BsonSerializer.Deserialize<BsonDocument>(jsonQuery));
                     mePatient = ctx.Patients.Collection.FindOneAs<MEPatient>(query);
                 }
             }
