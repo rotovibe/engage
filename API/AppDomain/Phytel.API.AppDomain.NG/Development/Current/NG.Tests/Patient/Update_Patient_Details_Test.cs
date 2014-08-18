@@ -80,5 +80,46 @@ namespace Phytel.API.DataDomain.Patient.Service.Test
 
             Assert.IsNotNull(response.Limit);
         }
+
+        [TestMethod]
+        public void SavePatient_Test()
+        {
+            string contractNumber = "InHealth001";
+            double version = 1.0;
+            string token = "53f23c70d6a4850d189307d9";
+            string userId = "53b2b4d6d6a4850facf303d1";
+            IRestClient client = new JsonServiceClient();
+
+            JsonServiceClient.HttpWebRequestFilter = x => x.Headers.Add(string.Format("Token: {0}", token));
+
+            Phytel.API.AppDomain.NG.DTO.Patient p = new AppDomain.NG.DTO.Patient {
+                Id = "5325d9fcd6a4850adcbba4ea",
+               //FirstName = "Alex", 
+               //MiddleName = "M",
+                LastName = "Wilcox",
+               //Suffix = "Jr.",
+               //PreferredName = "Alex Rowland",
+               //DOB = "01/01/2008",
+               //FullSSN = "123456789",
+               Gender = "F",
+               Priority = 3
+            };
+
+            //[Route("/{Version}/{ContractNumber}/patient/Update/", "POST")]
+            PutPatientDetailsUpdateResponse response = client.Post<PutPatientDetailsUpdateResponse>(
+                string.Format(@"http://localhost:888/Nightingale/{0}/{1}/Patient/Update",
+                version,
+                contractNumber), new PutPatientDetailsUpdateRequest
+                {
+                    ContractNumber = contractNumber,
+                    //Insert = true,
+                    Patient = p,
+                    Token = token,
+                    UserId = userId,
+                    Version = version
+                } as object);
+
+            Assert.IsNotNull(response);
+        }
     }
 }

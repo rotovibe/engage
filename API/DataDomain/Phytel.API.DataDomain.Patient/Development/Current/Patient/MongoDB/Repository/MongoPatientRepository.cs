@@ -181,10 +181,10 @@ namespace Phytel.API.DataDomain.Patient
             PatientData patientData = null;
             using (PatientMongoContext ctx = new PatientMongoContext(_dbName))
             {
-                var query = MB.Query.And(
-                                MB.Query<MEPatient>.EQ(b => b.Id, ObjectId.Parse(entityId)),
-                                MB.Query<MEPatient>.EQ(b => b.DeleteFlag, false)
-                            );
+                IMongoQuery query = Query.And(
+                                Query.EQ(MEPatient.IdProperty, ObjectId.Parse(entityId)),
+                                Query.EQ(MEPatient.DeleteFlagProperty, false),
+                                Query.EQ(MEPatient.TTLDateProperty, BsonNull.Value));
 
                 var mePatient = ctx.Patients.Collection.Find(query).FirstOrDefault();
                 if (mePatient != null)
@@ -238,10 +238,10 @@ namespace Phytel.API.DataDomain.Patient
             string ssn = string.Empty;
             using (PatientMongoContext ctx = new PatientMongoContext(_dbName))
             {
-                var query = MB.Query.And(
-                                MB.Query<MEPatient>.EQ(b => b.Id, ObjectId.Parse(patientId)),
-                                MB.Query<MEPatient>.EQ(b => b.DeleteFlag, false)
-                            );
+                IMongoQuery query = Query.And(
+                                Query.EQ(MEPatient.IdProperty, ObjectId.Parse(patientId)),
+                                Query.EQ(MEPatient.DeleteFlagProperty, false),
+                                Query.EQ(MEPatient.TTLDateProperty, BsonNull.Value));
 
                 var mePatient = ctx.Patients.Collection.Find(query).SetFields(MEPatient.FullSSNProperty).FirstOrDefault();
                 if (mePatient != null)
@@ -601,7 +601,7 @@ namespace Phytel.API.DataDomain.Patient
                     MECohortPatientView cPV = ctx.CohortPatientViews.Collection.Find(findQ).FirstOrDefault();
                     if (cPV == null)
                     {
-                        //This Update call is for Initialized Patient and hence insert a new record for that patient into CohortPatientView.
+                        //If the Update call is for an Initialized Patient, CohortPatientView doesnot have a record for this patient, hence insert one.
                         insertCohortPatientView(request);
                     }
                     else 
