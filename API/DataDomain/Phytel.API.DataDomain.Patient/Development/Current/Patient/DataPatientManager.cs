@@ -212,7 +212,12 @@ namespace Phytel.API.DataDomain.Patient
                 }
                 else 
                 {
-                    throw new Exception("An individual by the same first name, last name and date of birth already exists.");
+                    Outcome outcome = new Outcome 
+                    { 
+                        Result = 0,
+                        Reason = "An individual by the same first name, last name and date of birth already exists." 
+                    };
+                    response.Outcome = outcome;
                 }
             }
             else

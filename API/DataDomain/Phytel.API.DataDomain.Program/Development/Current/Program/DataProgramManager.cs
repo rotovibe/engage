@@ -27,7 +27,7 @@ namespace Phytel.API.DataDomain.Program
             try
             {
                 PutProgramToPatientResponse response = new PutProgramToPatientResponse();
-                response.Outcome = new Outcome();
+                response.Outcome = new Phytel.API.DataDomain.Program.DTO.Outcome();
 
                 #region validation calls
                 if (!IsValidPatientId(request))
@@ -792,7 +792,7 @@ namespace Phytel.API.DataDomain.Program
             try
             {
                 response.Status = new ResponseStatus(errorcode, reason);
-                response.Outcome = new Outcome() { Reason = reason, Result = 0 };
+                response.Outcome = new Phytel.API.DataDomain.Program.DTO.Outcome() { Reason = reason, Result = 0 };
                 return response;
             }
             catch (Exception ex)

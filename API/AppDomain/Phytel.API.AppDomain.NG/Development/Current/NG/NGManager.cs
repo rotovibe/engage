@@ -250,6 +250,10 @@ namespace Phytel.API.AppDomain.NG
                     if (dataDomainResponse != null)
                     {
                         response.Id = dataDomainResponse.Id;
+                        if (dataDomainResponse.Outcome != null)
+                        {
+                            response.Outcome = new DTO.Outcome { Result = dataDomainResponse.Outcome.Result, Reason = dataDomainResponse.Outcome.Reason};
+                        }
                     }
                 }
                 return response;
