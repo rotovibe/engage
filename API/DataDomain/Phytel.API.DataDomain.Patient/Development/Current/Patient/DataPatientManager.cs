@@ -217,6 +217,7 @@ namespace Phytel.API.DataDomain.Patient
                         Result = 0,
                         Reason = "An individual by the same first name, last name and date of birth already exists." 
                     };
+                    response = new PutUpdatePatientDataResponse();
                     response.Outcome = outcome;
                 }
             }
