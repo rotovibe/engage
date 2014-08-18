@@ -244,6 +244,7 @@ namespace Phytel.API.AppDomain.NG
                             ContractNumber = request.ContractNumber,
                             PatientData = data,
                             Insert = request.Insert,
+                            InsertDuplicate = request.InsertDuplicate,
                             UserId = request.UserId,
                             Version = request.Version
                         } as object);

@@ -9,8 +9,11 @@ namespace Phytel.API.AppDomain.NG.DTO
         [ApiMember(Name = "Patient", Description = "Patient details that need to be upserted.", ParameterType = "property", DataType = "Patient", IsRequired = true)]
         public Patient Patient { get; set; }
 
-        [ApiMember(Name = "Insert", Description = "Indicates if the action is to create or update a patient", ParameterType = "path", DataType = "boolean", IsRequired = true)]
+        [ApiMember(Name = "Insert", Description = "Indicates if the action is to create or update a patient", ParameterType = "path", DataType = "boolean", IsRequired = false)]
         public bool Insert { get; set; }
+
+        [ApiMember(Name = "InsertDuplicate", Description = "Indicates if a duplicate record of the patient should be inserted.", ParameterType = "path", DataType = "boolean", IsRequired = false)]
+        public bool InsertDuplicate { get; set; }
 
         [ApiMember(Name = "Token", Description = "Token parameter", ParameterType = "path", DataType = "string", IsRequired = true)]
         public string Token { get; set; }

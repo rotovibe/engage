@@ -199,31 +199,37 @@ namespace Phytel.API.DataDomain.Patient
 
         public PutUpdatePatientDataResponse UpdatePatient(PutUpdatePatientDataRequest request)
         {
-            PutUpdatePatientDataResponse response = null;
+            PutUpdatePatientDataResponse response = new PutUpdatePatientDataResponse();
             IPatientRepository repo = Factory.GetRepository(request, RepositoryType.Patient);
-            if (request.Insert)
+            if (request.PatientData != null)
             {
-                if (repo.FindDuplicatePatient(request) == null)
+                if (request.Insert)
                 {
-                    if (request.PatientData != null)
+                    if (request.InsertDuplicate) // the user has ignored the warning message about a duplicate patient entry.
                     {
                         response = repo.Update(request) as PutUpdatePatientDataResponse;
                     }
+                    else
+                    {
+                        if (repo.FindDuplicatePatient(request) == null)
+                        {
+                            response = repo.Update(request) as PutUpdatePatientDataResponse;
+                        }
+                        else
+                        {
+                            Outcome outcome = new Outcome
+                            {
+                                Result = 0,
+                                Reason = "An individual by the same first name, last name and date of birth already exists."
+                            };
+                            response.Outcome = outcome;
+                        }
+                    }
                 }
-                else 
+                else
                 {
-                    Outcome outcome = new Outcome 
-                    { 
-                        Result = 0,
-                        Reason = "An individual by the same first name, last name and date of birth already exists." 
-                    };
-                    response = new PutUpdatePatientDataResponse();
-                    response.Outcome = outcome;
+                    response = repo.Update(request) as PutUpdatePatientDataResponse;
                 }
-            }
-            else
-            {
-                response = repo.Update(request) as PutUpdatePatientDataResponse;
             }
             return response;
         }

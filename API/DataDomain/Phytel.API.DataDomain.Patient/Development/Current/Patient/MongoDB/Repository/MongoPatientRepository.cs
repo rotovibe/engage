@@ -220,7 +220,10 @@ namespace Phytel.API.DataDomain.Patient
             {
                 using (PatientMongoContext ctx = new PatientMongoContext(_dbName))
                 {
-                    string searchQuery = string.Format("{0} : /^{1}$/i, {2} : /^{3}$/i, {4} : false, {5} : null", MEPatient.FirstNameProperty, request.PatientData.FirstName, MEPatient.LastNameProperty, request.PatientData.LastName, MEPatient.DeleteFlagProperty, MEPatient.TTLDateProperty);
+                    string searchQuery = string.Format("{0} : /^{1}$/i, {2} : /^{3}$/i, {4} : '{5}', {6} : false, {7} : null",                MEPatient.FirstNameProperty, request.PatientData.FirstName, 
+                      MEPatient.LastNameProperty, request.PatientData.LastName,
+                      MEPatient.DOBProperty, request.PatientData.DOB,
+                      MEPatient.DeleteFlagProperty, MEPatient.TTLDateProperty);
 
                     string jsonQuery = "{ ";
                     jsonQuery += searchQuery;
