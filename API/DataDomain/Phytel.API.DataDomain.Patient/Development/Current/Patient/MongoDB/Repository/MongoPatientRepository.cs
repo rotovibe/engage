@@ -216,34 +216,41 @@ namespace Phytel.API.DataDomain.Patient
         public object FindDuplicatePatient(PutUpdatePatientDataRequest request)
         {
             MEPatient mePatient = null;
-            if(request.PatientData != null)
+            try
             {
-                using (PatientMongoContext ctx = new PatientMongoContext(_dbName))
+                if (request.PatientData != null)
                 {
-                    string searchQuery = string.Empty;
-                    if (request.PatientData.DOB == null)
+                    using (PatientMongoContext ctx = new PatientMongoContext(_dbName))
                     {
-                        searchQuery = string.Format("{0} : /^{1}$/i, {2} : /^{3}$/i, {4} : null, {5} : false, {6} : null", MEPatient.FirstNameProperty, request.PatientData.FirstName,
-                          MEPatient.LastNameProperty, request.PatientData.LastName,
-                          MEPatient.DOBProperty,
-                          MEPatient.DeleteFlagProperty, 
-                          MEPatient.TTLDateProperty);
-                    }
-                    else
-                    {
-                        searchQuery = string.Format("{0} : /^{1}$/i, {2} : /^{3}$/i, {4} : '{5}', {6} : false, {7} : null", MEPatient.FirstNameProperty, request.PatientData.FirstName,
-                          MEPatient.LastNameProperty, request.PatientData.LastName,
-                          MEPatient.DOBProperty, request.PatientData.DOB,
-                          MEPatient.DeleteFlagProperty, 
-                          MEPatient.TTLDateProperty);
-                    }
+                        string searchQuery = string.Empty;
+                        if (request.PatientData.DOB == null)
+                        {
+                            searchQuery = string.Format("{0} : /^{1}$/i, {2} : /^{3}$/i, {4} : null, {5} : false, {6} : null", MEPatient.FirstNameProperty, request.PatientData.FirstName,
+                              MEPatient.LastNameProperty, request.PatientData.LastName,
+                              MEPatient.DOBProperty,
+                              MEPatient.DeleteFlagProperty,
+                              MEPatient.TTLDateProperty);
+                        }
+                        else
+                        {
+                            searchQuery = string.Format("{0} : /^{1}$/i, {2} : /^{3}$/i, {4} : '{5}', {6} : false, {7} : null", MEPatient.FirstNameProperty, request.PatientData.FirstName,
+                              MEPatient.LastNameProperty, request.PatientData.LastName,
+                              MEPatient.DOBProperty, request.PatientData.DOB,
+                              MEPatient.DeleteFlagProperty,
+                              MEPatient.TTLDateProperty);
+                        }
 
-                    string jsonQuery = "{ ";
-                    jsonQuery += searchQuery;
-                    jsonQuery += " }";
-                    QueryDocument query = new QueryDocument(BsonSerializer.Deserialize<BsonDocument>(jsonQuery));
-                    mePatient = ctx.Patients.Collection.FindOneAs<MEPatient>(query);
+                        string jsonQuery = "{ ";
+                        jsonQuery += searchQuery;
+                        jsonQuery += " }";
+                        QueryDocument query = new QueryDocument(BsonSerializer.Deserialize<BsonDocument>(jsonQuery));
+                        mePatient = ctx.Patients.Collection.FindOneAs<MEPatient>(query);
+                    }
                 }
+            }
+            catch (Exception)
+            {
+                throw;
             }
             return mePatient;
         }
