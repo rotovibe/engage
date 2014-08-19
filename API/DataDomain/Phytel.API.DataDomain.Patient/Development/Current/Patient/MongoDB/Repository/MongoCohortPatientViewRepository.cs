@@ -62,6 +62,7 @@ namespace Phytel.API.DataDomain.Patient
                 {
                     patientView = new MECohortPatientView(this.UserId)
                     {
+                        Id = ObjectId.GenerateNewId(),
                         PatientID = ObjectId.Parse(cohortRequest.PatientID),
                         LastName = cohortRequest.LastName,
                         Version = cohortRequest.Version,
@@ -82,7 +83,7 @@ namespace Phytel.API.DataDomain.Patient
 
                     AuditHelper.LogDataAudit(this.UserId,
                                             MongoCollectionName.CohortPatientView.ToString(),
-                                            cohortRequest.PatientID.ToString(),
+                                            patientView.Id.ToString(),
                                             Common.DataAuditType.Insert,
                                             cohortRequest.ContractNumber);
                 }
@@ -90,7 +91,7 @@ namespace Phytel.API.DataDomain.Patient
 
             return new PutCohortPatientViewDataResponse
             {
-                PatientID = patientView.Id.ToString()
+                Id = patientView.Id.ToString()
             };
         }
 

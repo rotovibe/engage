@@ -6,7 +6,7 @@ namespace Phytel.API.DataDomain.Patient.DTO
 {
     public class PutCohortPatientViewDataResponse : IDomainResponse
     {
-        public string PatientID { get; set; }
+        public string Id { get; set; }
         public double Version { get; set; }
         public ResponseStatus Status { get; set; }
     }
