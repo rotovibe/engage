@@ -6,19 +6,19 @@ using Phytel.API.Common.Format;
 
 namespace Phytel.API.DataDomain.Template
 {
-    public static class TemplateDataManager
+    public class TemplateDataManager : ITemplateDataManager
     {
-        public static GetTemplateResponse GetTemplateByID(GetTemplateRequest request)
+        public GetTemplateResponse GetTemplateByID(GetTemplateRequest request)
         {
             try
             {
-                GetTemplateResponse result = new GetTemplateResponse();
+                var result = new GetTemplateResponse();
 
-                ITemplateRepository<GetTemplateResponse> repo = TemplateRepositoryFactory<GetTemplateResponse>.GetTemplateRepository(request.ContractNumber, request.Context, request.UserId);
+                ITemplateRepository repo = TemplateRepositoryFactory.GetTemplateRepository(request, RepositoryType.Template);
                 repo.UserId = request.UserId;
                 result = repo.FindByID(request.TemplateID) as GetTemplateResponse;
 
-                return (result != null ? result : new GetTemplateResponse());
+                return (result ?? new GetTemplateResponse());
             }
             catch (Exception ex)
             { 
@@ -26,17 +26,17 @@ namespace Phytel.API.DataDomain.Template
             }
         }
 
-        public static GetAllTemplatesResponse GetTemplateList(GetAllTemplatesRequest request)
+        public GetAllTemplatesResponse GetTemplateList(GetAllTemplatesRequest request)
         {
             try
             {
-                GetAllTemplatesResponse result = new GetAllTemplatesResponse();
+                var result = new GetAllTemplatesResponse();
 
-                ITemplateRepository<GetAllTemplatesResponse> repo = TemplateRepositoryFactory<GetAllTemplatesResponse>.GetTemplateRepository(request.ContractNumber, request.Context, request.UserId);
+                ITemplateRepository repo = TemplateRepositoryFactory.GetTemplateRepository(request, RepositoryType.Template);
                 repo.UserId = request.UserId;
                 result = repo.SelectAll() as GetAllTemplatesResponse;
 
-                return (result != null ? result : new GetAllTemplatesResponse());
+                return (result ?? new GetAllTemplatesResponse());
             }
             catch (Exception ex)
             {

@@ -1,6 +1,6 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.30110.0
+VisualStudioVersion = 12.0.21005.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.Template.Service", "Template.Service\DataDomain.Template.Service.csproj", "{29DFC6F8-F09F-4881-8A94-43C4229A5583}"
 EndProject
@@ -9,8 +9,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.Template", "Template\DataDomain.Template.csproj", "{F1A478D1-DCA1-4BE6-AE83-E0ACDD4FDFFD}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.Template.DTO", "Template.DTO\DataDomain.Template.DTO.csproj", "{1C2C63A1-4246-4EC9-BAD1-C00E9ECD85F6}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.Template.Service.Test", "Template.Service.Test\DataDomain.Template.Service.Test.csproj", "{9F763B50-9E2B-426F-ACFB-27F3D3F255D5}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Phytel.API.Interface", "..\..\..\..\Interfaces\Development\Current\Phytel.API.Interface\Phytel.API.Interface.csproj", "{ABE948FB-247E-4955-B3AB-B7C93E10A542}"
 EndProject
@@ -22,24 +20,22 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Phytel.API.DataAudit", "..\
 EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 9
+		SccNumberOfProjects = 8
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = http://hillstfs2013:8080/tfs/phytel
-		SccProjectUniqueName0 = Template.Service\\DataDomain.Template.Service.csproj
-		SccProjectName0 = Template.Service
-		SccLocalPath0 = Template.Service
-		SccProjectUniqueName1 = Template.Test\\DataDomain.Template.Test.csproj
-		SccProjectName1 = Template.Test
-		SccLocalPath1 = Template.Test
-		SccProjectUniqueName2 = Template\\DataDomain.Template.csproj
-		SccProjectName2 = Template
-		SccLocalPath2 = Template
-		SccProjectUniqueName3 = Template.DTO\\DataDomain.Template.DTO.csproj
-		SccProjectName3 = Template.DTO
-		SccLocalPath3 = Template.DTO
-		SccProjectUniqueName4 = Template.Service.Test\\DataDomain.Template.Service.Test.csproj
-		SccProjectName4 = Template.Service.Test
-		SccLocalPath4 = Template.Service.Test
+		SccLocalPath0 = .
+		SccProjectUniqueName1 = Template.Service\\DataDomain.Template.Service.csproj
+		SccProjectName1 = Template.Service
+		SccLocalPath1 = Template.Service
+		SccProjectUniqueName2 = Template.Test\\DataDomain.Template.Test.csproj
+		SccProjectName2 = Template.Test
+		SccLocalPath2 = Template.Test
+		SccProjectUniqueName3 = Template\\DataDomain.Template.csproj
+		SccProjectName3 = Template
+		SccLocalPath3 = Template
+		SccProjectUniqueName4 = Template.DTO\\DataDomain.Template.DTO.csproj
+		SccProjectName4 = Template.DTO
+		SccLocalPath4 = Template.DTO
 		SccProjectUniqueName5 = ..\\..\\..\\..\\Interfaces\\Development\\Current\\Phytel.API.Interface\\Phytel.API.Interface.csproj
 		SccProjectTopLevelParentUniqueName5 = DataDomain.Template.sln
 		SccProjectName5 = ../../../../Interfaces/Development/Current/Phytel.API.Interface
@@ -52,7 +48,6 @@ Global
 		SccProjectTopLevelParentUniqueName7 = DataDomain.Template.sln
 		SccProjectName7 = ../../../../Common/Phytel.API.DataAudit/Development/Current
 		SccLocalPath7 = ..\\..\\..\\..\\Common\\Phytel.API.DataAudit\\Development\\Current
-		SccLocalPath8 = .
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -75,10 +70,6 @@ Global
 		{1C2C63A1-4246-4EC9-BAD1-C00E9ECD85F6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1C2C63A1-4246-4EC9-BAD1-C00E9ECD85F6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1C2C63A1-4246-4EC9-BAD1-C00E9ECD85F6}.Release|Any CPU.Build.0 = Release|Any CPU
-		{9F763B50-9E2B-426F-ACFB-27F3D3F255D5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{9F763B50-9E2B-426F-ACFB-27F3D3F255D5}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{9F763B50-9E2B-426F-ACFB-27F3D3F255D5}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{9F763B50-9E2B-426F-ACFB-27F3D3F255D5}.Release|Any CPU.Build.0 = Release|Any CPU
 		{ABE948FB-247E-4955-B3AB-B7C93E10A542}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{ABE948FB-247E-4955-B3AB-B7C93E10A542}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{ABE948FB-247E-4955-B3AB-B7C93E10A542}.Release|Any CPU.ActiveCfg = Release|Any CPU

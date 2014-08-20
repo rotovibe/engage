@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace Phytel.API.DataDomain.Template
 {
-    public class MongoTemplateRepository<T> : ITemplateRepository<T>
+    public class MongoTemplateRepository : ITemplateRepository
     {
         private string _dbName = string.Empty;
 
@@ -57,6 +57,12 @@ namespace Phytel.API.DataDomain.Template
         }
 
         public void CacheByID(List<string> entityIDs)
+        {
+            throw new NotImplementedException();
+        }
+
+
+        public void UndoDelete(object entity)
         {
             throw new NotImplementedException();
         }

@@ -1,3 +1,5 @@
+using Phytel.API.Common;
+using Phytel.API.Common.Format;
 using ServiceStack.MiniProfiler;
 using ServiceStack.ServiceInterface.Admin;
 using ServiceStack.WebHost.Endpoints;
@@ -17,6 +19,9 @@ namespace Phytel.API.DataDomain.Template.Service
                 //register any dependencies your services use, e.g:
                 //container.Register<ICacheClient>(new MemoryCacheClient());
                 Plugins.Add(new RequestLogsFeature() { RequiredRoles = new string[] { } });
+                container.RegisterAutoWiredAs<TemplateDataManager, ITemplateDataManager>().ReusedWithin(Funq.ReuseScope.Request);
+                container.RegisterAutoWiredAs<CommonFormatterUtil, ICommonFormatterUtil>().ReusedWithin(Funq.ReuseScope.Request);
+                container.RegisterAutoWiredAs<Helpers, IHelpers>().ReusedWithin(Funq.ReuseScope.Request); 
             }
         }
 

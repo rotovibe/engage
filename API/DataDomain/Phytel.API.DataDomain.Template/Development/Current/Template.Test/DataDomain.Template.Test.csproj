@@ -57,6 +57,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="Stubs\StubTemplateDataManager.cs" />
     <Compile Include="TemplateTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

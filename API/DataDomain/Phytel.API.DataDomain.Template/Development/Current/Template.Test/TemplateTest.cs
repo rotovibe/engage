@@ -1,5 +1,6 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Phytel.API.DataDomain.Template.DTO;
+using Phytel.API.DataDomain.Template.Test.Stubs;
 
 namespace Phytel.API.DataDomain.Template.Test
 {
@@ -11,7 +12,7 @@ namespace Phytel.API.DataDomain.Template.Test
         {
             GetTemplateRequest request = new GetTemplateRequest{ TemplateID = "5"};
 
-            GetTemplateResponse response = TemplateDataManager.GetTemplateByID(request);
+            GetTemplateResponse response = new StubTemplateDataManager().GetTemplateByID(request);
 
             Assert.IsTrue(response.Template.TemplateID == "??");
         }

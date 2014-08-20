@@ -7,17 +7,30 @@ using Phytel.API.Interface;
 
 namespace Phytel.API.DataDomain.Template
 {
-    public abstract class TemplateRepositoryFactory<T>
+        public enum RepositoryType
+        {
+            Template
+        }
+
+    public abstract class TemplateRepositoryFactory
     {
-        public static ITemplateRepository<T> GetTemplateRepository(string dbName, string productName, string userId)
+
+        public static ITemplateRepository GetTemplateRepository(IDataDomainRequest request, RepositoryType type)
         {
             try
             {
-                ITemplateRepository<T> repo = null;
+                ITemplateRepository repo = null;
 
-                //We only have 1 repository at this time, just return it
-                repo = new MongoTemplateRepository<T>(dbName) as ITemplateRepository<T>;
-                repo.UserId = userId;
+                switch (type)
+                {
+                    case RepositoryType.Template:
+                        {
+                            repo = new MongoTemplateRepository(request.ContractNumber);
+                            break;
+                        }
+                }
+
+                repo.UserId = request.UserId;
                 return repo;
             }
             catch (Exception ex)

@@ -62,6 +62,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ITemplateDataManager.cs" />
     <Compile Include="ITemplateRepository.cs" />
     <Compile Include="MongoDB\DTO\METemplate.cs" />
     <Compile Include="MongoDB\Repository\MongoTemplateRepository.cs" />

@@ -1,5 +1,6 @@
 using System;
 using System.Net;
+using Phytel.API.Common;
 using Phytel.API.DataDomain.Template;
 using Phytel.API.DataDomain.Template.DTO;
 using Phytel.API.Common.Format;
@@ -9,20 +10,27 @@ namespace Phytel.API.DataDomain.Template.Service
 {
     public class TemplateService : ServiceStack.ServiceInterface.Service
     {
+        public ITemplateDataManager Manager { get; set; }
+        public ICommonFormatterUtil FormatUtil { get; set; }
+        public IHelpers Helpers { get; set; }
+
         public GetTemplateResponse Post(GetTemplateRequest request)
         {
             GetTemplateResponse response = new GetTemplateResponse();
             try
             {
-                response = TemplateDataManager.GetTemplateByID(request);
+                if (string.IsNullOrEmpty(request.UserId))
+                    throw new UnauthorizedAccessException("ProgramDD:Put()::Unauthorized Access");
+
+                response = Manager.GetTemplateByID(request);
                 response.Version = request.Version;
             }
             catch (Exception ex)
             {
-                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+                FormatUtil.FormatExceptionResponse(response, base.Response, ex);
 
                 string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
-                Common.Helper.LogException(int.Parse(aseProcessID), ex);
+                Helpers.LogException(int.Parse(aseProcessID), ex);
             }
             return response;
         }
@@ -32,15 +40,18 @@ namespace Phytel.API.DataDomain.Template.Service
             GetTemplateResponse response = new GetTemplateResponse();
             try
             {
-                response = TemplateDataManager.GetTemplateByID(request);
+                if (string.IsNullOrEmpty(request.UserId))
+                    throw new UnauthorizedAccessException("ProgramDD:Put()::Unauthorized Access");
+
+                response = Manager.GetTemplateByID(request);
                 response.Version = request.Version;
             }
             catch (Exception ex)
             {
-                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+                FormatUtil.FormatExceptionResponse(response, base.Response, ex);
 
                 string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
-                Common.Helper.LogException(int.Parse(aseProcessID), ex);
+                Helpers.LogException(int.Parse(aseProcessID), ex);
             }
             return response;
         }
@@ -50,15 +61,18 @@ namespace Phytel.API.DataDomain.Template.Service
             GetAllTemplatesResponse response = new GetAllTemplatesResponse();
             try
             {
-                response = TemplateDataManager.GetTemplateList(request);
+                if (string.IsNullOrEmpty(request.UserId))
+                    throw new UnauthorizedAccessException("ProgramDD:Put()::Unauthorized Access");
+
+                response = Manager.GetTemplateList(request);
                 response.Version = request.Version;
             }
             catch (Exception ex)
             {
-                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+                FormatUtil.FormatExceptionResponse(response, base.Response, ex);
 
                 string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
-                Common.Helper.LogException(int.Parse(aseProcessID), ex);
+                Helpers.LogException(int.Parse(aseProcessID), ex);
             }
             return response;
         }

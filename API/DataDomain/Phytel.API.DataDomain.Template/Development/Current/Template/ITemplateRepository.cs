@@ -8,8 +8,8 @@ using Phytel.API.Interface;
 
 namespace Phytel.API.DataDomain.Template
 {
-    public interface ITemplateRepository<T> : IRepository<T>
+    public interface ITemplateRepository : IRepository
     {
-        
+
     }
 }
