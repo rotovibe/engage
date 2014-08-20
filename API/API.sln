@@ -269,9 +269,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.ToDo.DTO", "Data
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.ToDo.Test", "DataDomain\Phytel.API.DataDomain.ToDo\Development\Current\ToDo.Test\DataDomain.ToDo.Test.csproj", "{4D28361E-951C-4552-9A5C-D756CFB80F5A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.ToDo.Service.Test", "DataDomain\Phytel.API.DataDomain.ToDo\Development\Current\ToDo.Service.Test\DataDomain.ToDo.Service.Test.csproj", "{8A2CE0FF-1A38-44AE-BCA7-0D55D53EC504}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 97
+		SccNumberOfProjects = 98
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = http://hillstfs2013:8080/tfs/phytel
 		SccLocalPath0 = .
@@ -659,6 +661,10 @@ Global
 		SccProjectTopLevelParentUniqueName96 = API.sln
 		SccProjectName96 = DataDomain/Phytel.API.DataDomain.ToDo/Development/Current/ToDo.Test
 		SccLocalPath96 = DataDomain\\Phytel.API.DataDomain.ToDo\\Development\\Current\\ToDo.Test
+		SccProjectUniqueName97 = DataDomain\\Phytel.API.DataDomain.ToDo\\Development\\Current\\ToDo.Service.Test\\DataDomain.ToDo.Service.Test.csproj
+		SccProjectTopLevelParentUniqueName97 = API.sln
+		SccProjectName97 = DataDomain/Phytel.API.DataDomain.ToDo/Development/Current/ToDo.Service.Test
+		SccLocalPath97 = DataDomain\\Phytel.API.DataDomain.ToDo\\Development\\Current\\ToDo.Service.Test
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -1047,6 +1053,10 @@ Global
 		{4D28361E-951C-4552-9A5C-D756CFB80F5A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4D28361E-951C-4552-9A5C-D756CFB80F5A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4D28361E-951C-4552-9A5C-D756CFB80F5A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8A2CE0FF-1A38-44AE-BCA7-0D55D53EC504}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8A2CE0FF-1A38-44AE-BCA7-0D55D53EC504}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8A2CE0FF-1A38-44AE-BCA7-0D55D53EC504}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8A2CE0FF-1A38-44AE-BCA7-0D55D53EC504}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -1167,5 +1177,6 @@ Global
 		{4FD3A994-DB24-41D6-BD34-4EA5AAD8D62B} = {59733DFF-0B10-4ED0-8587-B1CB4F52F758}
 		{1E303326-EEC9-42A8-BA50-880AB7AD99B2} = {59733DFF-0B10-4ED0-8587-B1CB4F52F758}
 		{4D28361E-951C-4552-9A5C-D756CFB80F5A} = {59733DFF-0B10-4ED0-8587-B1CB4F52F758}
+		{8A2CE0FF-1A38-44AE-BCA7-0D55D53EC504} = {59733DFF-0B10-4ED0-8587-B1CB4F52F758}
 	EndGlobalSection
 EndGlobal
