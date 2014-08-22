@@ -130,6 +130,7 @@
     <Compile Include="Stubs\StubPlanElementEndpointUtils.cs" />
     <Compile Include="Stubs\StubPlanElementUtils.cs" />
     <Compile Include="Stubs\StubSecurityManager.cs" />
+    <Compile Include="ToDo\ToDoTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\..\Common\Phytel.API.Common\Development\Current\Phytel.API.Common.csproj">
