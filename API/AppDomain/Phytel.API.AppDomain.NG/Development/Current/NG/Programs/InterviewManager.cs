@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Phytel.API.AppDomain.NG.DTO;
 using Phytel.API.AppDomain.NG.PlanCOR;
+using Phytel.API.AppDomain.NG.PlanElementStrategy;
 using Phytel.API.AppDomain.NG.Programs;
 using Phytel.API.AppDomain.NG.Specifications;
 using Phytel.API.DataDomain.Program.DTO;
@@ -36,6 +37,7 @@ namespace Phytel.API.AppDomain.NG
                 RelatedChanges.Clear();
                 ProcessedElements.Clear();
                 PostProcessActionResponse response = new PostProcessActionResponse();
+                response.PlanElems = new PlanElements();
 
                 Program p = EndPointUtils.RequestPatientProgramDetail(request);
 
@@ -129,7 +131,7 @@ namespace Phytel.API.AppDomain.NG
                 var pdetail = EndPointUtils.SaveAction(request, action.Id, p);
 
                 // create element changed lists 
-                PEUtils.HydratePlanElementLists(ProcessedElements, response);
+                PEUtils.HydratePlanElementLists(ProcessedElements, response.PlanElems);
 
                 response.PlanElems.Attributes = PEUtils.GetAttributes(pdetail.Attributes);
                 response.RelatedChanges = RelatedChanges;
@@ -166,7 +168,6 @@ namespace Phytel.API.AppDomain.NG
                 }
                 
                 if (PEUtils.IsActionInitial(p))
-                //if (new IsActionInitialSpecification<Program>().IsSatisfiedBy(p))
                 {
                     // set program to in progress
                     if (p.ElementState == (int)ElementState.NotStarted)
@@ -175,14 +176,6 @@ namespace Phytel.API.AppDomain.NG
                         p.StateUpdatedOn = System.DateTime.UtcNow;
                     }
                 }
-
-                // presenter is sending a save request with an action element state of 4 already. 
-                // presenter will also set the stateupdatedon property.
-                //if (action.ElementState == (int)ElementState.NotStarted)
-                //{
-                //    action.ElementState = (int) ElementState.InProgress;
-                //    action.StateUpdatedOn = DateTime.UtcNow;
-                //}
 
                 NGUtils.UpdateProgramAction(action, p);
 
@@ -205,6 +198,119 @@ namespace Phytel.API.AppDomain.NG
             }
         }
 
+        public PostRepeatActionResponse RepeatAction(PostRepeatActionRequest request)
+        {
+            try
+            {
+                RelatedChanges.Clear();
+                ProcessedElements.Clear();
+                var response = new PostRepeatActionResponse();
+                response.PlanElems = new PlanElements();
+
+                var p = EndPointUtils.RequestPatientProgramDetail(request);             
+
+                // get module reference
+                Module mod = PEUtils.FindElementById(p.Modules, request.Action.ModuleId);
+                IPlanElementStrategy strategy = new StatePlanElementStrategy(new SetModulePropertiesForRepeat(mod));                
+
+                // clone and insert new action
+                var cAction = PEUtils.CloneRepeatAction(request.Action, mod.AssignToId);
+                AddUniquePlanElementToProcessedList(cAction);
+
+                // insert action update
+                var action = NGUtils.UpdateProgramAction(request.Action, p);   
+
+                // register changed action
+                AddUniquePlanElementToProcessedList(request.Action);
+
+                // insert action into module and update references
+                ReplaceActionReferenceInModule(request.Action.Id, cAction, mod);
+                strategy.Evoke();
+
+                // modify module properties
+                AddUniquePlanElementToProcessedList(mod);
+
+                // save
+                var pdetail = EndPointUtils.SaveAction(request, cAction.Id, p);
+
+                // create element changed lists 
+                PEUtils.HydratePlanElementLists(ProcessedElements, response.PlanElems);
+
+                response.PlanElems.Attributes = PEUtils.GetAttributes(pdetail.Attributes);
+                response.RelatedChanges = RelatedChanges;
+                response.PatientId = request.PatientId;
+                response.Version = request.Version;
+
+                return response;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("AD:InterviewManager:ProcessActionResults()::" + ex.Message, ex.InnerException);
+            }
+        }
+
+        public void ReplaceActionReferenceInModule(string oActionId, Actions newAction, Module mod)
+        {
+            try
+            {
+                var cActionId = newAction.Id;
+                // replace all references to old action
+                mod.Actions.ForEach(a =>
+                {
+                    //previous
+                    if (!string.IsNullOrEmpty(a.Previous))
+                        if (a.Previous.Equals(oActionId)) a.Previous = cActionId;
+
+                    //next
+                    if (!string.IsNullOrEmpty(a.Next))
+                        if (a.Next.Equals(oActionId)) a.Next = cActionId;
+
+                    // spawnelements
+                    ReplaceSpawnElementReferences(a.SpawnElement, oActionId, cActionId);
+
+                    // steps
+                    a.Steps.ForEach(stp =>
+                    {
+                        // step spawnelements
+                        ReplaceSpawnElementReferences(stp.SpawnElement, oActionId, cActionId);
+
+                        // responses
+                        if (stp.Responses != null)
+                            stp.Responses.ForEach(
+                                rsp => ReplaceSpawnElementReferences(rsp.SpawnElement, oActionId, cActionId));
+                    });
+                });
+
+                // add new action
+                if (!mod.Actions.Contains(newAction))
+                    mod.Actions.Add(newAction);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("AD:InterviewManager:ReplaceActionReferenceInModule()::" + ex.Message,
+                    ex.InnerException);
+            }
+        }
+
+        public void ReplaceSpawnElementReferences(List<SpawnElement> list, string oActionId, string cActionId)
+        {
+            try
+            {
+                if (list == null || list.Count == 0) return;
+
+                list.ForEach(se =>
+                {
+                    if (se.ElementId.Equals(oActionId))
+                        se.ElementId = cActionId;
+                });
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("AD:InterviewManager:ReplaceSpawnElementReferences()::" + ex.Message,
+                    ex.InnerException);
+            }
+        }
+
         private ProgramPlanProcessor InitializeProgramChain()
         {
             ProgramPlanProcessor progProc = new ProgramPlanProcessor();
@@ -213,7 +319,6 @@ namespace Phytel.API.AppDomain.NG
             StepPlanProcessor stepProc = new StepPlanProcessor();
             stepProc._spawnEvent += stepProc__spawnEvent;
             stepProc._processedElementEvent += Proc__processedIdEvent;
-            //PlanElementUtil._processedElementEvent += PlanElementUtil__processedElementEvent;
             PEUtils._processedElementEvent += PlanElementUtil__processedElementEvent;
             progProc.Successor = modProc;
             modProc.Successor = actProc;

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Phytel.API.AppDomain.NG.Specifications
 {
-    public abstract class Specification<T>
+    public abstract class Specification<T> : ISpecification<T>
     {
         public abstract bool IsSatisfiedBy(T obj);
 

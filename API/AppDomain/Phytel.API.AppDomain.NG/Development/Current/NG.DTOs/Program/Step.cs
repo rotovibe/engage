@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace Phytel.API.AppDomain.NG.DTO
 {
+    [Serializable]
     public class Step : PlanElement
     {
         public int StepTypeId { get; set; }

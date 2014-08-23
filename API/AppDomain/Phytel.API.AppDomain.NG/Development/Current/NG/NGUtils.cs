@@ -164,17 +164,9 @@ namespace Phytel.API.AppDomain.NG
                     Status = p.Status,
                     Text = p.Text,
                     Version = p.Version,
-                    //DisEnrollReason = p.DisEnrollReason,
-                    //DidNotEnrollReason = p.DidNotEnrollReason,
-                    //EligibilityOverride = p.EligibilityOverride,
-                    //Enrollment = p.Enrollment,
-                    //GraduatedFlag = p.GraduatedFlag,
-                    //IneligibleReason = p.IneligibleReason,
-                    //OptOut = p.OptOut,
-                    //OptOutDate = p.OptOutDate,
-                    //OptOutReason = p.OptOutReason,
-                    //OverrideReason = p.OverrideReason,
-                    //RemovedReason = p.RemovedReason
+                    Archived = p.Archived,
+                    ArchivedDate = p.ArchivedDate,
+                    ArchiveOriginId = p.ArchiveOriginId
                 };
 
                 return pD;
@@ -372,7 +364,10 @@ namespace Phytel.API.AppDomain.NG
                             SourceId = m.SourceId,
                             SpawnElement = GetADSpawnElements(m.SpawnElement),
                             Status = m.Status,
-                            Text = m.Text
+                            Text = m.Text,
+                            Archived = m.Archived,
+                            ArchivedDate = m.ArchivedDate,
+                            ArchiveOriginId = m.ArchiveOriginId
                         };
                         md.Add(mdi);
                     });
@@ -417,7 +412,10 @@ namespace Phytel.API.AppDomain.NG
                             SpawnElement = GetADSpawnElements(a.SpawnElement),
                             Status = a.Status,
                             Steps = GetADSteps(a.Steps),
-                            Text = a.Text
+                            Text = a.Text,
+                            Archived = a.Archived,
+                            ArchivedDate = a.ArchivedDate,
+                            ArchiveOriginId = a.ArchiveOriginId
                         };
                         ad.Add(adi);
                     });
@@ -462,7 +460,10 @@ namespace Phytel.API.AppDomain.NG
                             SpawnElement = GetADSpawnElements(a.SpawnElement),
                             Status = a.Status,
                             Steps = GetADSteps(a.Steps),
-                            Text = a.Text
+                            Text = a.Text,
+                            Archived = a.Archived,
+                            ArchivedDate = a.ArchivedDate,
+                            ArchiveOriginId = a.ArchiveOriginId
                         };
                         ad.Add(adi);
                     });
@@ -570,7 +571,10 @@ namespace Phytel.API.AppDomain.NG
                             Status = s.Status,
                             StepTypeId = s.StepTypeId,
                             Text = s.Text,
-                            Title = s.Title
+                            Title = s.Title,
+                            Archived = s.Archived,
+                            ArchivedDate = s.ArchivedDate,
+                            ArchiveOriginId = s.ArchiveOriginId
                         };
                         sd.Add(sdi);
                     });

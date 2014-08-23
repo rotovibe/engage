@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Phytel.API.AppDomain.NG;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Phytel.API.AppDomain.NG.Test.Factories;
 using AD = Phytel.API.AppDomain.NG.DTO;
 using Phytel.API.DataDomain.Program.DTO;
 using MongoDB.Bson;
@@ -744,6 +745,23 @@ namespace Phytel.API.AppDomain.NG.Tests
 
                 Assert.AreEqual(assignToId, prog.Modules[0].Actions[0].AssignToId);
             }
+        }
+
+        [TestMethod()]
+        public void CloneRepeatActionTest()
+        {
+            IPlanElementUtils pUtils = new PlanElementUtils();
+
+            var actionId = ObjectId.GenerateNewId().ToString();
+            var step1Id = ObjectId.GenerateNewId().ToString();
+            var step2Id = ObjectId.GenerateNewId().ToString();
+            var selectedRespId = ObjectId.GenerateNewId().ToString();
+
+            var action = SampleFactory.CreateCloneAction(actionId, step1Id, step2Id, selectedRespId );
+
+            var newAction = pUtils.CloneRepeatAction(action, ObjectId.GenerateNewId().ToString());
+            Assert.AreNotEqual(action.Id, newAction.Id);
+            Assert.AreEqual(action.ElementState, newAction.ElementState);
         }
     }
 }

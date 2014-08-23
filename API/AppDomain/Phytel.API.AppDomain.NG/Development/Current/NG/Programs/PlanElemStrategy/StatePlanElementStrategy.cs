@@ -6,18 +6,18 @@ using System.Threading.Tasks;
 
 namespace Phytel.API.AppDomain.NG.PlanElementStrategy
 {
-    public class SpawnElementStrategy : IPlanElementStrategy
+    public class StatePlanElementStrategy : IPlanElementStrategy
     {
-        private readonly ISpawn _spawn;
+        private readonly IPlanElementAction _action;
 
-        public SpawnElementStrategy(ISpawn spawn)
+        public StatePlanElementStrategy(IPlanElementAction action)
         {
-            _spawn = spawn;
+            _action = action;
         }
 
         public void Evoke()
         {
-            _spawn.Execute();
+            _action.Execute();
         }
     }
 }

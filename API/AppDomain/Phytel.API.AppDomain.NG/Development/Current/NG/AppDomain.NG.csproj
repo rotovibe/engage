@@ -108,8 +108,16 @@
     <Compile Include="Constants.cs" />
     <Compile Include="Command\INGCommand.cs" />
     <Compile Include="INGManager.cs" />
+    <Compile Include="ObjectCopy.cs" />
     <Compile Include="Observation\IObservationEndpointUtil.cs" />
     <Compile Include="Observation\IObservationsManager.cs" />
+    <Compile Include="Programs\PlanElemStrategy\IPlanElementStrategy.cs" />
+    <Compile Include="Programs\PlanElemStrategy\IPlanElementAction.cs" />
+    <Compile Include="Programs\PlanElemStrategy\StatePlanElementStrategy.cs" />
+    <Compile Include="Programs\PlanElemStrategy\SetModulePropertiesForRepeat.cs" />
+    <Compile Include="Programs\Specifications\ISpecification.cs" />
+    <Compile Include="Programs\Specifications\IsModuleCompletedSpecification.cs" />
+    <Compile Include="Programs\Specifications\RemoveSelectedResponseSpecification.cs" />
     <Compile Include="UnitOfWork\INGUnitOfWork.cs" />
     <Compile Include="UnitOfWork\NGUnitOfWork.cs" />
     <Compile Include="Command\PatientCommand.cs" />

@@ -28,7 +28,8 @@ namespace Phytel.API.AppDomain.NG.PlanElementStrategy
         public void Execute()
         {
             // if patient problem registration is new
-            PutRegisterPatientObservationResponse response = PlanElementEndpointUtil.PutNewPatientProblem(_e.PatientId, _e.UserId, _se.ElementId, _e.DomainRequest);
+            PutRegisterPatientObservationResponse response = PlanElementEndpointUtil.PutNewPatientProblem(_e.PatientId,
+                _e.UserId, _se.ElementId, _e.DomainRequest);
         }
     }
 }

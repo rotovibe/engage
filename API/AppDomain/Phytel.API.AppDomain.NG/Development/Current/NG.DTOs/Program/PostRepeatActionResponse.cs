@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace Phytel.API.AppDomain.NG.DTO
 {
-    public class PostProcessActionResponse : IDomainResponse
+    public class PostRepeatActionResponse : IDomainResponse
     {
         public PlanElements PlanElems { get; set; }
         public Program Program { get; set; }

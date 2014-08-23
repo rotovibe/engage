@@ -105,6 +105,45 @@ namespace Phytel.API.DataDomain.Program
             }
         }
 
+        public PutInsertResponseResponse PutInsertResponse(PutInsertResponseRequest request)
+        {
+            try
+            {
+                PutInsertResponseResponse result = new PutInsertResponseResponse();
+                IProgramRepository responseRepo = Factory.GetRepository(request, RepositoryType.PatientProgramResponse);
+
+                foreach (ResponseDetail rd in request.ResponseDetails)
+                {
+                    MEPatientProgramResponse meres = new MEPatientProgramResponse(request.UserId)
+                    {
+                        Id = ObjectId.Parse(rd.Id),
+                        NextStepId = ObjectId.Parse(rd.NextStepId),
+                        Nominal = rd.Nominal,
+                        Spawn = ParseSpawnElements(rd.SpawnElement),
+                        Required = rd.Required,
+                        Order = rd.Order,
+                        StepId = ObjectId.Parse(rd.StepId),
+                        Text = rd.Text,
+                        Value = rd.Value,
+                        Selected = rd.Selected,
+                        DeleteFlag = rd.Delete,
+                        UpdatedBy = ObjectId.Parse(request.UserId),
+                        RecordCreatedBy = ObjectId.Parse(request.UserId),
+                        RecordCreatedOn = DateTime.UtcNow
+                    };
+
+                    //result.Result = (bool) 
+                    responseRepo.Insert(meres);
+                    result.Result = true;
+                }
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("DD:DataProgramManager:PutInsertResponse()::" + ex.Message, ex.InnerException);
+            }
+        }
+
         public PutUpdateResponseResponse PutUpdateResponse(PutUpdateResponseRequest request)
         {
             try

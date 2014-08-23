@@ -87,7 +87,7 @@ namespace Phytel.Data.ETL
         }
             catch (Exception ex)
             {
-                SimpleLog.Log(new ArgumentException("Rebuild()", ex));
+                throw ex; //SimpleLog.Log(new ArgumentException("Rebuild()", ex));
             }
         }
 
@@ -317,7 +317,7 @@ namespace Phytel.Data.ETL
         }
             catch (Exception ex)
             {
-                SimpleLog.Log(new ArgumentException("RegisterClasses()", ex));
+                throw ex; //SimpleLog.Log(new ArgumentException("RegisterClasses()", ex));
             }
         }
 
@@ -396,7 +396,7 @@ namespace Phytel.Data.ETL
             }
             catch (Exception ex)
             {
-                SimpleLog.Log(new ArgumentException("LoadCareMembers()", ex));
+                throw ex; //SimpleLog.Log(new ArgumentException("LoadCareMembers()", ex));
             }
         }
 
@@ -610,7 +610,7 @@ namespace Phytel.Data.ETL
             }
             catch (Exception ex)
             {
-                SimpleLog.Log(new ArgumentException("LoadContacts()", ex));
+                throw ex; //SimpleLog.Log(new ArgumentException("LoadContacts()", ex));
             }
         }
 
@@ -667,7 +667,7 @@ namespace Phytel.Data.ETL
             }
             catch (Exception ex)
             {
-                SimpleLog.Log(new ArgumentException("LoadGoalAttributes()", ex));
+                throw ex; //SimpleLog.Log(new ArgumentException("LoadGoalAttributes()", ex));
             }
         }
 
@@ -752,7 +752,7 @@ namespace Phytel.Data.ETL
             }
             catch (Exception ex)
             {
-                SimpleLog.Log(new ArgumentException("LoadLookups()", ex));
+                throw ex; //SimpleLog.Log(new ArgumentException("LoadLookups()", ex));
             }
         }
 
@@ -1113,7 +1113,7 @@ namespace Phytel.Data.ETL
             }
             catch (Exception ex)
             {
-                SimpleLog.Log(new ArgumentException("LoadObservations()", ex));
+                throw ex; //SimpleLog.Log(new ArgumentException("LoadObservations()", ex));
             }
         }
 
@@ -1165,7 +1165,7 @@ namespace Phytel.Data.ETL
             }
             catch (Exception ex)
             {
-                SimpleLog.Log(new ArgumentException("LoadPatients()", ex));
+                throw ex; //SimpleLog.Log(new ArgumentException("LoadPatients()", ex));
             }
         }
 
@@ -1212,7 +1212,7 @@ namespace Phytel.Data.ETL
             }
             catch (Exception ex)
             {
-                SimpleLog.Log(new ArgumentException("LoadPatientBarriers()", ex));
+                throw ex; //SimpleLog.Log(new ArgumentException("LoadPatientBarriers()", ex));
             }
         }
 
@@ -1334,7 +1334,7 @@ namespace Phytel.Data.ETL
             }
             catch (Exception ex)
             {
-                SimpleLog.Log(new ArgumentException("LoadPatientGoals()", ex));
+                throw ex; //SimpleLog.Log(new ArgumentException("LoadPatientGoals()", ex));
             }
         }
 
@@ -1350,64 +1350,68 @@ namespace Phytel.Data.ETL
                     {
                         try
                         {
-                            ParameterCollection parms = new ParameterCollection();
-                            parms.Add(new Parameter("@MongoID", (string.IsNullOrEmpty(intervention.Id.ToString()) ? string.Empty : intervention.Id.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
-                            parms.Add(new Parameter("@PatientGoalMongoId", (string.IsNullOrEmpty(intervention.PatientGoalId.ToString()) ? string.Empty : intervention.PatientGoalId.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
-                            parms.Add(new Parameter("@CategoryMongoId", (string.IsNullOrEmpty(intervention.CategoryId.ToString()) ? string.Empty : intervention.CategoryId.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
-                            parms.Add(new Parameter("@AssignedTo", (string.IsNullOrEmpty(intervention.AssignedToId.ToString()) ? string.Empty : intervention.AssignedToId.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
-                            parms.Add(new Parameter("@UpdatedBy", (string.IsNullOrEmpty(intervention.UpdatedBy.ToString()) ? string.Empty : intervention.UpdatedBy.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
-                            parms.Add(new Parameter("@LastUpdatedOn", intervention.LastUpdatedOn ?? (object)DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
-                            parms.Add(new Parameter("@RecordCreatedBy", (string.IsNullOrEmpty(intervention.RecordCreatedBy.ToString()) ? string.Empty : intervention.RecordCreatedBy.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
-                            if (intervention.RecordCreatedOn.Year == 1)
-                                parms.Add(new Parameter("@RecordCreatedOn", (object)DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
-                            else
-                                parms.Add(new Parameter("@RecordCreatedOn", intervention.RecordCreatedOn, SqlDbType.DateTime, ParameterDirection.Input, 50));
-                            parms.Add(new Parameter("@Version", (string.IsNullOrEmpty(intervention.Version.ToString()) ? string.Empty : intervention.Version.ToString()), SqlDbType.Float, ParameterDirection.Input, 32));
-                            parms.Add(new Parameter("@TimeToLive", intervention.TTLDate ?? (object)DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
-                            parms.Add(new Parameter("@Delete", (string.IsNullOrEmpty(intervention.DeleteFlag.ToString()) ? string.Empty : intervention.DeleteFlag.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
-                            parms.Add(new Parameter("@Status", (string.IsNullOrEmpty(intervention.Status.ToString()) ? string.Empty : intervention.Status.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
-                            parms.Add(new Parameter("@StatusDate", intervention.StatusDate ?? (object)DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
-                            parms.Add(new Parameter("@StartDate", intervention.StartDate ?? (object)DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
-                            parms.Add(new Parameter("@Description", (string.IsNullOrEmpty(intervention.Description) ? string.Empty : intervention.Description), SqlDbType.VarChar, ParameterDirection.Input, int.MaxValue));
-                            parms.Add(new Parameter("@Name", (string.IsNullOrEmpty(intervention.Name) ? string.Empty : intervention.Name), SqlDbType.VarChar, ParameterDirection.Input, 100));
-                            if (intervention.ExtraElements != null)
-                                parms.Add(new Parameter("@ExtraElements", intervention.ExtraElements.ToString(), SqlDbType.VarChar, ParameterDirection.Input, int.MaxValue));
-                            else
-                                parms.Add(new Parameter("@ExtraElements", string.Empty, SqlDbType.VarChar, ParameterDirection.Input, int.MaxValue));
+                            if (!string.IsNullOrEmpty(intervention.PatientGoalId.ToString())) 
+                            { 
+                                ParameterCollection parms = new ParameterCollection();
+                                parms.Add(new Parameter("@MongoID", (string.IsNullOrEmpty(intervention.Id.ToString()) ? string.Empty : intervention.Id.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                                parms.Add(new Parameter("@PatientGoalMongoId", (string.IsNullOrEmpty(intervention.PatientGoalId.ToString()) ? string.Empty : intervention.PatientGoalId.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                                parms.Add(new Parameter("@CategoryMongoId", (string.IsNullOrEmpty(intervention.CategoryId.ToString()) ? string.Empty : intervention.CategoryId.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                                parms.Add(new Parameter("@AssignedTo", (string.IsNullOrEmpty(intervention.AssignedToId.ToString()) ? string.Empty : intervention.AssignedToId.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                                parms.Add(new Parameter("@UpdatedBy", (string.IsNullOrEmpty(intervention.UpdatedBy.ToString()) ? string.Empty : intervention.UpdatedBy.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                                parms.Add(new Parameter("@LastUpdatedOn", intervention.LastUpdatedOn ?? (object)DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
+                                parms.Add(new Parameter("@RecordCreatedBy", (string.IsNullOrEmpty(intervention.RecordCreatedBy.ToString()) ? string.Empty : intervention.RecordCreatedBy.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                                if (intervention.RecordCreatedOn.Year == 1)
+                                    parms.Add(new Parameter("@RecordCreatedOn", (object)DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
+                                else
+                                    parms.Add(new Parameter("@RecordCreatedOn", intervention.RecordCreatedOn, SqlDbType.DateTime, ParameterDirection.Input, 50));
+                                parms.Add(new Parameter("@Version", (string.IsNullOrEmpty(intervention.Version.ToString()) ? string.Empty : intervention.Version.ToString()), SqlDbType.Float, ParameterDirection.Input, 32));
+                                parms.Add(new Parameter("@TimeToLive", intervention.TTLDate ?? (object)DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
+                                parms.Add(new Parameter("@Delete", (string.IsNullOrEmpty(intervention.DeleteFlag.ToString()) ? string.Empty : intervention.DeleteFlag.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                                parms.Add(new Parameter("@Status", (string.IsNullOrEmpty(intervention.Status.ToString()) ? string.Empty : intervention.Status.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                                parms.Add(new Parameter("@StatusDate", intervention.StatusDate ?? (object)DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
+                                parms.Add(new Parameter("@StartDate", intervention.StartDate ?? (object)DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
+                                parms.Add(new Parameter("@Description", (string.IsNullOrEmpty(intervention.Description) ? string.Empty : intervention.Description), SqlDbType.VarChar, ParameterDirection.Input, int.MaxValue));
+                                parms.Add(new Parameter("@Name", (string.IsNullOrEmpty(intervention.Name) ? string.Empty : intervention.Name), SqlDbType.VarChar, ParameterDirection.Input, 100));
+                                if (intervention.ExtraElements != null)
+                                    parms.Add(new Parameter("@ExtraElements", intervention.ExtraElements.ToString(), SqlDbType.VarChar, ParameterDirection.Input, int.MaxValue));
+                                else
+                                    parms.Add(new Parameter("@ExtraElements", string.Empty, SqlDbType.VarChar, ParameterDirection.Input, int.MaxValue));
 
-                            SQLDataService.Instance.ExecuteScalar("InHealth001", true, "REPORT", "spPhy_SavePatientIntervention", parms);
+                                SQLDataService.Instance.ExecuteScalar("InHealth001", true, "REPORT", "spPhy_SavePatientIntervention", parms);
+                            
 
-                            if (intervention.BarrierIds != null)
-                            {
-                                foreach (ObjectId bar in intervention.BarrierIds)
+                                if (intervention.BarrierIds != null)
                                 {
-                                    parms.Clear();
-                                    parms.Add(new Parameter("@PatientBarrierMongoId", (string.IsNullOrEmpty(bar.ToString()) ? string.Empty : bar.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
-                                    parms.Add(new Parameter("@PatientInterventionMongoID", (string.IsNullOrEmpty(intervention.Id.ToString()) ? string.Empty : intervention.Id.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
-                                    parms.Add(new Parameter("@UpdatedBy", (string.IsNullOrEmpty(intervention.UpdatedBy.ToString()) ? string.Empty : intervention.UpdatedBy.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
-                                    parms.Add(new Parameter("@LastUpdatedOn", intervention.LastUpdatedOn ?? (object)DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
-                                    parms.Add(new Parameter("@RecordCreatedBy", (string.IsNullOrEmpty(intervention.RecordCreatedBy.ToString()) ? string.Empty : intervention.RecordCreatedBy.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
-                                    if (intervention.RecordCreatedOn.Year == 1)
-                                        parms.Add(new Parameter("@RecordCreatedOn", (object)DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
-                                    else
-                                        parms.Add(new Parameter("@RecordCreatedOn", intervention.RecordCreatedOn, SqlDbType.DateTime, ParameterDirection.Input, 50));
-                                    parms.Add(new Parameter("@Version", (string.IsNullOrEmpty(intervention.Version.ToString()) ? string.Empty : intervention.Version.ToString()), SqlDbType.Float, ParameterDirection.Input, 32));
+                                    foreach (ObjectId bar in intervention.BarrierIds)
+                                    {
+                                        parms.Clear();
+                                        parms.Add(new Parameter("@PatientBarrierMongoId", (string.IsNullOrEmpty(bar.ToString()) ? string.Empty : bar.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                                        parms.Add(new Parameter("@PatientInterventionMongoID", (string.IsNullOrEmpty(intervention.Id.ToString()) ? string.Empty : intervention.Id.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                                        parms.Add(new Parameter("@UpdatedBy", (string.IsNullOrEmpty(intervention.UpdatedBy.ToString()) ? string.Empty : intervention.UpdatedBy.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                                        parms.Add(new Parameter("@LastUpdatedOn", intervention.LastUpdatedOn ?? (object)DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
+                                        parms.Add(new Parameter("@RecordCreatedBy", (string.IsNullOrEmpty(intervention.RecordCreatedBy.ToString()) ? string.Empty : intervention.RecordCreatedBy.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                                        if (intervention.RecordCreatedOn.Year == 1)
+                                            parms.Add(new Parameter("@RecordCreatedOn", (object)DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
+                                        else
+                                            parms.Add(new Parameter("@RecordCreatedOn", intervention.RecordCreatedOn, SqlDbType.DateTime, ParameterDirection.Input, 50));
+                                        parms.Add(new Parameter("@Version", (string.IsNullOrEmpty(intervention.Version.ToString()) ? string.Empty : intervention.Version.ToString()), SqlDbType.Float, ParameterDirection.Input, 32));
 
-                                    SQLDataService.Instance.ExecuteScalar("InHealth001", true, "REPORT", "spPhy_SavePatientInterventionBarrier", parms);
+                                        SQLDataService.Instance.ExecuteScalar("InHealth001", true, "REPORT", "spPhy_SavePatientInterventionBarrier", parms);
 
+                                    }
                                 }
                             }
                         }
                         catch (Exception ex)
                         {
-                            throw new ArgumentException("InterventionId: " + intervention.Id.ToString());
+                            throw new ArgumentException("InterventionId: " + intervention.Id.ToString(), ex);
                         }
                     }
                 }
             }
             catch (Exception ex)
             {
-                SimpleLog.Log(new ArgumentException("LoadPatientInterventions()", ex));
+                throw ex; //SimpleLog.Log(new ArgumentException("LoadPatientInterventions()", ex));
             }
         }
 
@@ -1468,7 +1472,7 @@ namespace Phytel.Data.ETL
             }
             catch (Exception ex)
             {
-                SimpleLog.Log(new ArgumentException("LoadPatientNotes()", ex));
+                throw ex; //SimpleLog.Log(new ArgumentException("LoadPatientNotes()", ex));
             }
         }
 
@@ -1521,7 +1525,7 @@ namespace Phytel.Data.ETL
             }
             catch (Exception ex)
             {
-                SimpleLog.Log(new ArgumentException("LoadPatientObservations()", ex));
+                throw ex; //SimpleLog.Log(new ArgumentException("LoadPatientObservations()", ex));
             }
         }
 
@@ -1570,7 +1574,7 @@ namespace Phytel.Data.ETL
             }
             catch (Exception ex)
             {
-                SimpleLog.Log(new ArgumentException("LoadPatientProblems()", ex));
+                throw ex; //SimpleLog.Log(new ArgumentException("LoadPatientProblems()", ex));
             }
         }
 
@@ -1582,8 +1586,8 @@ namespace Phytel.Data.ETL
                 {
                     var programs = pmctx.PatientPrograms.Collection.FindAllAs<MEPatientProgram>().ToList();
 
-                    //foreach (MEPatientProgram prog in programs)
-                    Parallel.ForEach(programs, new ParallelOptions{MaxDegreeOfParallelism= Environment.ProcessorCount * _exponent}, prog =>
+                    foreach (MEPatientProgram prog in programs)
+                    //Parallel.ForEach(programs, new ParallelOptions{MaxDegreeOfParallelism= Environment.ProcessorCount * _exponent}, prog =>
                     {
                         try
                         {
@@ -1641,12 +1645,12 @@ namespace Phytel.Data.ETL
                         {
                             throw new ArgumentException("ProgramId : " + prog.Id.ToString());
                         }
-                    });
+                    }//);
                 }
             }
             catch (Exception ex)
             {
-                SimpleLog.Log(new ArgumentException("LoadPatientPrograms()", ex));
+                throw ex; //SimpleLog.Log(new ArgumentException("LoadPatientPrograms()", ex));
             }
         }
 
@@ -1704,7 +1708,7 @@ namespace Phytel.Data.ETL
             }
             catch (Exception ex)
             {
-                SimpleLog.Log(new ArgumentException("LoadPatientProgramAttributes()", ex));
+                throw ex; //SimpleLog.Log(new ArgumentException("LoadPatientProgramAttributes()", ex));
             }
         }
 
@@ -1764,7 +1768,7 @@ namespace Phytel.Data.ETL
             }
             catch (Exception ex)
             {
-                SimpleLog.Log(new ArgumentException("LoadPatientProgramModules()", ex));
+                throw ex; //SimpleLog.Log(new ArgumentException("LoadPatientProgramModules()", ex));
             }
         }
 
@@ -1821,7 +1825,7 @@ namespace Phytel.Data.ETL
             }
             catch (Exception ex)
             {
-                SimpleLog.Log(new ArgumentException("LoadPatientProgramActions()", ex));
+                throw ex; //SimpleLog.Log(new ArgumentException("LoadPatientProgramActions()", ex));
             }
         }
 
@@ -1883,7 +1887,7 @@ namespace Phytel.Data.ETL
             }
             catch (Exception ex)
             {
-                SimpleLog.Log(new ArgumentException("LoadPatientProgramSteps()", ex));
+                throw ex; //SimpleLog.Log(new ArgumentException("LoadPatientProgramSteps()", ex));
             }
         }
 
@@ -1938,7 +1942,7 @@ namespace Phytel.Data.ETL
             }
             catch (Exception ex)
             {
-                SimpleLog.Log(new ArgumentException("LoadPatientProgramResponse()", ex));
+                throw ex; //SimpleLog.Log(new ArgumentException("LoadPatientProgramResponse()", ex));
             }
         }
 
@@ -1962,7 +1966,7 @@ namespace Phytel.Data.ETL
         }
             catch (Exception ex)
             {
-                SimpleLog.Log(new ArgumentException("RegisterSpawnElement()", ex));
+                throw ex; //SimpleLog.Log(new ArgumentException("RegisterSpawnElement()", ex));
             }
         }
 
@@ -1986,7 +1990,7 @@ namespace Phytel.Data.ETL
                 }
                 catch (Exception ex)
                 {
-                    SimpleLog.Log(new ArgumentException("ProcessSpawnElements()", ex));
+                    throw ex; //SimpleLog.Log(new ArgumentException("ProcessSpawnElements()", ex));
                 }
             });
         }
@@ -2051,7 +2055,7 @@ namespace Phytel.Data.ETL
             }
             catch (Exception ex)
             {
-                SimpleLog.Log(new ArgumentException("LoadPatientSystems()", ex));
+                throw ex; //SimpleLog.Log(new ArgumentException("LoadPatientSystems()", ex));
             }
         }
 
@@ -2153,7 +2157,7 @@ namespace Phytel.Data.ETL
             }
             catch (Exception ex)
             {
-                SimpleLog.Log(new ArgumentException("LoadPatientTasks()", ex));
+                throw ex; //SimpleLog.Log(new ArgumentException("LoadPatientTasks()", ex));
             }
         }
 
@@ -2198,7 +2202,7 @@ namespace Phytel.Data.ETL
             }
             catch (Exception ex)
             {
-                SimpleLog.Log(new ArgumentException("LoadPatientUsers()", ex));
+                throw ex; //SimpleLog.Log(new ArgumentException("LoadPatientUsers()", ex));
             }
         }
 
@@ -2259,7 +2263,7 @@ namespace Phytel.Data.ETL
             }
             catch (Exception ex)
             {
-                SimpleLog.Log(new ArgumentException("LoadUsers()", ex));
+                throw ex; //SimpleLog.Log(new ArgumentException("LoadUsers()", ex));
             }
         }
     }

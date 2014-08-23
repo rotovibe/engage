@@ -21,8 +21,6 @@ namespace Phytel.API.AppDomain.NG
 {
     public class EndpointUtils : IEndpointUtils
     {
-        //public IRestClient Client { get; set; }
-        static readonly string DDPatientProblemServiceUrl = ConfigurationManager.AppSettings["DDPatientProblemServiceUrl"];
         static readonly string DDPatientObservationServiceUrl = ConfigurationManager.AppSettings["DDPatientObservationUrl"];
         static readonly string DDPatientServiceUrl = ConfigurationManager.AppSettings["DDPatientServiceUrl"];
         static readonly string DDProgramServiceUrl = ConfigurationManager.AppSettings["DDProgramServiceUrl"];
@@ -71,13 +69,13 @@ namespace Phytel.API.AppDomain.NG
             try
             {
                 // save responses from action steps
-                SaveResponsesFromProgram(p, actionId, request);
+                SaveResponsesFromProgramAction(p, actionId, request);
 
-                DD.ProgramDetail pD = NGUtils.FormatProgramDetail(p);
+                var pD = NGUtils.FormatProgramDetail(p);
 
-                IRestClient client = new JsonServiceClient();
+                var client = new JsonServiceClient();
 
-                string url = Common.Helper.BuildURL(string.Format(@"{0}/{1}/{2}/{3}/Patient/{4}/Programs/{5}/Update",
+                var url = Common.Helper.BuildURL(string.Format(@"{0}/{1}/{2}/{3}/Patient/{4}/Programs/{5}/Update",
                                     DDProgramServiceUrl,
                                     "NG",
                                     request.Version,
@@ -86,8 +84,8 @@ namespace Phytel.API.AppDomain.NG
                                     request.ProgramId,
                                     request.Token), request.UserId);
 
-                DD.PutProgramActionProcessingResponse response = client.Put<DD.PutProgramActionProcessingResponse>(
-                    url, new DD.PutProgramActionProcessingRequest { Program = pD, UserId = request.UserId });
+                var response = client.Put<DD.PutProgramActionProcessingResponse>(
+                    url, new PutProgramActionProcessingRequest { Program = pD, UserId = request.UserId });
 
                 return response.program;
             }
@@ -135,8 +133,7 @@ namespace Phytel.API.AppDomain.NG
                 AD.Program pd = null;
                 IRestClient client = new JsonServiceClient();
 
-                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Program/{5}/Details/?Token={6}",
-                    //"http://azurephyteldev.cloudapp.net:59901/Program",                
+                var url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Program/{5}/Details/?Token={6}",              
                     DDProgramServiceUrl,
                                     "NG",
                                     request.Version,
@@ -145,10 +142,7 @@ namespace Phytel.API.AppDomain.NG
                                     request.ProgramId,
                                     request.Token), request.UserId);
 
-                DD.GetProgramDetailsSummaryResponse resp =
-                    client.Get<DD.GetProgramDetailsSummaryResponse>(
-                    url);
-
+                GetProgramDetailsSummaryResponse resp = client.Get<GetProgramDetailsSummaryResponse>(url);
                 pd = NGUtils.FormatProgramDetail(resp.Program);
 
                 return pd;
@@ -417,7 +411,7 @@ namespace Phytel.API.AppDomain.NG
         }
 
         #region private methods
-        private void SaveResponsesFromProgram(AD.Program p, string actionId, IProcessActionRequest request)
+        private void SaveResponsesFromProgramAction(AD.Program p, string actionId, IProcessActionRequest request)
         {
             try
             {
@@ -428,37 +422,36 @@ namespace Phytel.API.AppDomain.NG
             }
             catch (Exception ex)
             {
-                throw new Exception("AD:PlanElementEndpointUtil:SaveResponsesFromProgram()::" + ex.Message, ex.InnerException);
+                throw new Exception("AD:PlanElementEndpointUtil:SaveResponsesFromProgramAction()::" + ex.Message, ex.InnerException);
             }
         }
 
-        private bool ResponseExistsRequest(string stepId, string responseId, IProcessActionRequest request)
+        private void InsertResponseRequest(IProcessActionRequest request, List<Response> r)
         {
-            bool result = false;
             try
             {
                 IRestClient client = new JsonServiceClient();
 
-                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Program/Module/Action/Step/{4}/Response/?ResponseId={5}",
-                                                    DDProgramServiceUrl,
-                                                    "NG",
-                                                    request.Version,
-                                                    request.ContractNumber,
-                                                    stepId,
-                                                    responseId), request.UserId);
+                string url =
+                    Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Program/Module/Action/Step/Responses/Insert",
+                        DDProgramServiceUrl,
+                        "NG",
+                        request.Version,
+                        request.ContractNumber), request.UserId);
 
-                GetStepResponseResponse resp =
-                                    client.Get<GetStepResponseResponse>(
-                                    url);
-
-                if (resp.StepResponse != null)
-                    result = true;
-
-                return result;
+                DD.PutInsertResponseResponse resp =
+                    client.Put<DD.PutInsertResponseResponse>(
+                        url, new DD.PutInsertResponseRequest
+                        {
+                            ResponseDetails = FormatResponseDetails(r),
+                            UserId = request.UserId,
+                            Version = request.Version
+                        } as object);
             }
             catch (Exception ex)
             {
-                throw new Exception("AD:PlanElementEndpointUtil:ResponseExistsRequest()::" + ex.Message, ex.InnerException);
+                throw new Exception("AD:PlanElementEndpointUtil:InsertResponseRequest()::" + ex.Message,
+                    ex.InnerException);
             }
         }
 
@@ -555,7 +548,10 @@ namespace Phytel.API.AppDomain.NG
                     }
                 });
 
-                UpdateResponseRequest(request, rlist);
+                if (!string.IsNullOrEmpty(action.ArchiveOriginId))
+                    InsertResponseRequest(request, rlist);
+                else
+                    UpdateResponseRequest(request, rlist);
             }
             catch (Exception ex)
             {

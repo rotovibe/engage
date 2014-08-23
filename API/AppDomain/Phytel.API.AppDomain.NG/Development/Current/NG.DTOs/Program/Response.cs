@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace Phytel.API.AppDomain.NG.DTO
 {
+    [Serializable]
     public class Response
     {
         public string Id { get; set; }

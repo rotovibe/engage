@@ -163,16 +163,23 @@ namespace Phytel.API.AppDomain.NG.PlanCOR
             {
                 // check if problem code is already registered for patient
                 PatientObservation ppd = PlanElementEndpointUtil.GetPatientProblem(rse.ElementId, e, userId);
+
+                IPlanElementStrategy updateSpawnProblemCode =
+                    new SpawnElementStrategy(new UpdateSpawnProblemCode(e, rse, ppd, true));
+
+                IPlanElementStrategy registerSpawnProblemCode =
+                    new SpawnElementStrategy(new RegisterSpawnProblemCode(e, rse, ppd));
+
                 if (ppd != null)
                 {
                     if (ppd.StateId != 2)
                     {
-                        new SpawnElementStrategy(new UpdateSpawnProblemCode(e, rse, ppd, true)).Evoke();
+                        updateSpawnProblemCode.Evoke();
                     }
                 }
                 else
                 {
-                    new SpawnElementStrategy(new RegisterSpawnProblemCode(e, rse, ppd)).Evoke();
+                    registerSpawnProblemCode.Evoke();
                 }
 
                 // register new problem code with cohortpatientview

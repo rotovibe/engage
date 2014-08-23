@@ -102,6 +102,7 @@
   <ItemGroup>
     <Compile Include="CareMember_Tests.cs" />
     <Compile Include="Factories\NGManagerFactory.cs" />
+    <Compile Include="Factories\SampleFactory.cs" />
     <Compile Include="Factories\SecurityManagerFactory.cs" />
     <Compile Include="NGService_Tests.cs" />
     <Compile Include="NGUtils_Test.cs" />
@@ -118,9 +119,13 @@
     <Compile Include="PlanElementUtil_Tests.cs" />
     <Compile Include="PlanManager_Tests.cs" />
     <Compile Include="Programs\EndpointUtils_Tests.cs" />
+    <Compile Include="Programs\PlanElemStrategy\SetModulePropertiesForRepeat_Test.cs" />
+    <Compile Include="Programs\PlanManagerTests.cs" />
     <Compile Include="Programs\PlanManager_Test.cs" />
     <Compile Include="Programs\ProgramTest.cs" />
     <Compile Include="Programs\Specifications\IsInitialActionSpecificationTests.cs" />
+    <Compile Include="Programs\Specifications\IsModuleCompletedSpecification_Test.cs" />
+    <Compile Include="Programs\Specifications\RemoveSelectedResponseSpecification_Test.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Stubs\StubAppHostBase.cs" />
     <Compile Include="Stubs\StubAuditUtil.cs" />

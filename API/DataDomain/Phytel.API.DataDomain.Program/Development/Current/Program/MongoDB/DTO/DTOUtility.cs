@@ -1133,7 +1133,10 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
                         StateUpdatedOn = a.StateUpdatedOn,
                         DateCompleted = a.DateCompleted,
                         Objectives = GetObjectives(a.Objectives),
-                        Steps = GetSteps(a.Steps, contract, userId)
+                        Steps = GetSteps(a.Steps, contract, userId),
+                        Archived = a.Archived,
+                        ArchivedDate = a.ArchivedDate,
+                        ArchiveOriginId = a.ArchiveOriginId
                     };
                 }
             }

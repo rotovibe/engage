@@ -6,10 +6,14 @@ using System.Threading.Tasks;
 
 namespace Phytel.API.AppDomain.NG.DTO
 {
+    [Serializable]
     public class PlanElement : IPlanElement
     {
         public string Id { get; set; }
         public string SourceId { get; set; }
+        public string ArchiveOriginId { get; set; }
+        public bool Archived { get; set; }
+        public DateTime? ArchivedDate { get; set; }
         public int Order { get; set; }
         public bool Enabled { get; set; }
         public bool Completed { get; set; }

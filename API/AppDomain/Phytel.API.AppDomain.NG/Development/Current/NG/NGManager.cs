@@ -1682,6 +1682,9 @@ namespace Phytel.API.AppDomain.NG
                     ElementState = a.ElementState,
                     StateUpdatedOn = a.StateUpdatedOn,
                     DateCompleted = a.DateCompleted,
+                    Archived = a.Archived,
+                    ArchivedDate = a.ArchivedDate,
+                    ArchiveOriginId = a.ArchiveOriginId,
                     Objectives = GetObjectivesInfo(a.Objectives)
                 };
                 if (includeSteps)

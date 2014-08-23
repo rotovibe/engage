@@ -191,6 +191,9 @@
     <Compile Include="Observation\ObservationValue.cs" />
     <Compile Include="Observation\PatientObservation.cs" />
     <Compile Include="Observation\PreviousValue.cs" />
+    <Compile Include="Program\PlanElements.cs" />
+    <Compile Include="Program\PostRepeatActionRequest.cs" />
+    <Compile Include="Program\PostRepeatActionResponse.cs" />
     <Compile Include="Program\PostRemovePatientProgramRequest.cs" />
     <Compile Include="Program\PostRemovePatientProgramResponse.cs" />
     <Compile Include="Program\PostProgramAttributesChangeRequest.cs" />
