@@ -74,7 +74,7 @@ namespace Phytel.API.AppDomain.NG.Service
             return response;
         }
 
-        public GetToDosResponse Get(GetToDosRequest request)
+        public GetToDosResponse Post(GetToDosRequest request)
         {
             GetToDosResponse response = new GetToDosResponse();
             ToDoManager toDoMgr = new ToDoManager();

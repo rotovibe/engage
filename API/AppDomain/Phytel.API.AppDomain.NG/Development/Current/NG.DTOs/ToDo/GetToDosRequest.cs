@@ -1,9 +1,10 @@
+using System.Collections.Generic;
 using Phytel.API.Interface;
 using ServiceStack.ServiceHost;
 
 namespace Phytel.API.AppDomain.NG.DTO
 {
-    [Route("/{Version}/{ContractNumber}/ToDo/AssignedTo/{AssignedToId}/Patient/{PatientId}/Status/{StatusIds}", "GET")]
+    [Route("/{Version}/{ContractNumber}/ToDos", "POST")]
     public class GetToDosRequest : IAppDomainRequest
     {
         [ApiMember(Name = "AssignedToId", Description = "AssignedToId is the Id to which ToDo is assigned to.", ParameterType = "property", DataType = "string", IsRequired = false)]
@@ -12,8 +13,8 @@ namespace Phytel.API.AppDomain.NG.DTO
         [ApiMember(Name = "PatientId", Description = "PatientId is the Id of the patient for whom a todo is associated.", ParameterType = "property", DataType = "string", IsRequired = false)]
         public string PatientId { get; set; }
 
-        [ApiMember(Name = "StatusIds", Description = "Comma separated Status ids of the ToDos", ParameterType = "property", DataType = "string", IsRequired = false)]
-        public string StatusIds { get; set; }
+        [ApiMember(Name = "StatusIds", Description = "List of ToDo Status ids.", ParameterType = "property", DataType = "List<int>", IsRequired = false)]
+        public List<int> StatusIds { get; set; }
 
         [ApiMember(Name = "ContractNumber", Description = "Contract Number to retrieve data from", ParameterType = "property", DataType = "string", IsRequired = true)]
         public string ContractNumber { get; set; }

@@ -24,18 +24,26 @@ namespace Phytel.API.AppDomain.NG
             try
             {
                 List<ToDo> result = null;
-                //[Route("/{Context}/{Version}/{ContractNumber}/ToDo/AssignedTo/{AssignedToId}/Patient/{PatientId}/Status/{StatusIds}", "GET")]
+                //[Route("/{Context}/{Version}/{ContractNumber}/ToDos", "POST")]
                 IRestClient client = new JsonServiceClient();
-                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/ToDo/AssignedTo/{4}/Patient/{5}/Status/{6}",
+                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/ToDos",
                     DDToDoUrl,
                     "NG",
                     request.Version,
-                    request.ContractNumber,
-                    request.AssignedToId,
-                    request.PatientId,
-                    request.StatusIds), request.UserId);
+                    request.ContractNumber), request.UserId);
 
-                GetToDosDataResponse ddResponse = client.Get<GetToDosDataResponse>(url);
+                GetToDosDataResponse ddResponse =
+                    client.Post<GetToDosDataResponse>(url, new GetToDosDataRequest
+                    {
+                        Context = "NG",
+                        ContractNumber = request.ContractNumber,
+                        Version = request.Version,
+                        UserId = request.UserId,
+                        AssignedToId = request.AssignedToId,
+                        PatientId = request.PatientId,
+                        StatusIds = request.StatusIds
+                        
+                    } as object);
 
                 if (ddResponse != null && ddResponse.ToDos != null)
                 {

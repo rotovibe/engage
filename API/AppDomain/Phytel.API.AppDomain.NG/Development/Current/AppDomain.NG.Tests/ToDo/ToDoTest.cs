@@ -30,7 +30,7 @@ namespace Phytel.API.AppDomain.NG.Test.ToDo
                 UserId = userId,
                 AssignedToId = "5325c826072ef705080d34a8",
                 PatientId = "5325db20d6a4850adcbba84e",
-                StatusIds = "2, 1"
+                StatusIds = new List<int> { 1, 2}
             };
 
             List<AppDomain.NG.DTO.ToDo> list = ngm.GetToDos(request);
