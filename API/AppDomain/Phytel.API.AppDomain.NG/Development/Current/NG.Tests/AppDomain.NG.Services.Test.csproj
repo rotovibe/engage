@@ -113,7 +113,7 @@
     <Compile Include="Request_NG_Cohort_Test.cs" />
     <Compile Include="Request_NG_Token_Test.cs" />
     <Compile Include="SettingService_Tests.cs" />
-    <Compile Include="ToDo\ToDoService_Test.cs" />
+    <Compile Include="Scheduling\SchedulingService_Test.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

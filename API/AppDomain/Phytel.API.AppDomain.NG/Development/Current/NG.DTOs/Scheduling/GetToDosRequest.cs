@@ -4,7 +4,7 @@ using ServiceStack.ServiceHost;
 
 namespace Phytel.API.AppDomain.NG.DTO
 {
-    [Route("/{Version}/{ContractNumber}/ToDos", "POST")]
+    [Route("/{Version}/{ContractNumber}/Scheduling/ToDos", "POST")]
     public class GetToDosRequest : IAppDomainRequest
     {
         [ApiMember(Name = "AssignedToId", Description = "AssignedToId is the Id to which ToDo is assigned to.", ParameterType = "property", DataType = "string", IsRequired = false)]

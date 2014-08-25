@@ -5,13 +5,13 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Phytel.API.AppDomain.NG.Test.Stubs;
 using Phytel.API.AppDomain.NG.DTO;
 
-namespace Phytel.API.AppDomain.NG.Test.ToDo
+namespace Phytel.API.AppDomain.NG.Test.Scheduling
 {
     /// <summary>
     /// This class tests all the methods that are related to ToDo domain in INGManager class.
     /// </summary>
     [TestClass]
-    public class ToDoTest
+    public class SchedulingTest
     {
         string userId = "000000000000000000000000";
         string contractNumber = "InHealth001";
@@ -21,7 +21,7 @@ namespace Phytel.API.AppDomain.NG.Test.ToDo
         [TestMethod()]
         public void GetToDosTest()
         {
-            ToDoManager ngm = new ToDoManager();
+            SchedulingManager ngm = new SchedulingManager();
 
             GetToDosRequest request = new GetToDosRequest
             {
@@ -40,7 +40,7 @@ namespace Phytel.API.AppDomain.NG.Test.ToDo
         [TestMethod()]
         public void InsertToDoTest()
         {
-            ToDoManager ngm = new ToDoManager();
+            SchedulingManager ngm = new SchedulingManager();
 
            PostInsertToDoRequest request = new PostInsertToDoRequest
             {

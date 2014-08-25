@@ -13,7 +13,7 @@ namespace Phytel.API.AppDomain.NG.Service
         public PostInsertToDoResponse Post(PostInsertToDoRequest request)
         {
             PostInsertToDoResponse response = new PostInsertToDoResponse();
-            ToDoManager toDoMgr = new ToDoManager();
+            SchedulingManager toDoMgr = new SchedulingManager();
             ValidateTokenResponse result = null;
 
             try
@@ -45,7 +45,7 @@ namespace Phytel.API.AppDomain.NG.Service
         public PostUpdateToDoResponse Post(PostUpdateToDoRequest request)
         {
             PostUpdateToDoResponse response = new PostUpdateToDoResponse();
-            ToDoManager toDoMgr = new ToDoManager();
+            SchedulingManager toDoMgr = new SchedulingManager();
             ValidateTokenResponse result = null;
 
             try
@@ -77,7 +77,7 @@ namespace Phytel.API.AppDomain.NG.Service
         public GetToDosResponse Post(GetToDosRequest request)
         {
             GetToDosResponse response = new GetToDosResponse();
-            ToDoManager toDoMgr = new ToDoManager();
+            SchedulingManager toDoMgr = new SchedulingManager();
             ValidateTokenResponse result = null;
 
             try

@@ -5,7 +5,7 @@ using ServiceStack.ServiceHost;
 namespace Phytel.API.AppDomain.NG.DTO
 {
     [Api(Description = "A Request object to insert a ToDo.")]
-    [Route("/{Version}/{ContractNumber}/ToDo/Insert", "POST")]
+    [Route("/{Version}/{ContractNumber}/Scheduling/ToDo/Insert", "POST")]
     public class PostInsertToDoRequest : IAppDomainRequest
     {
         [ApiMember(Name = "ToDo", Description = "ToDo object to be inserted", ParameterType = "property", DataType = "ToDo", IsRequired = true)]

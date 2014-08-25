@@ -236,13 +236,13 @@
     <Compile Include="Program\Response.cs" />
     <Compile Include="Program\SpawnElement.cs" />
     <Compile Include="Program\Step.cs" />
-    <Compile Include="ToDo\GetToDosRequest.cs" />
-    <Compile Include="ToDo\GetToDosResponse.cs" />
-    <Compile Include="ToDo\PostUpdateToDoRequest.cs" />
-    <Compile Include="ToDo\PostInsertToDoRequest.cs" />
-    <Compile Include="ToDo\PostUpdateToDoResponse.cs" />
-    <Compile Include="ToDo\PostInsertToDoResponse.cs" />
-    <Compile Include="ToDo\ToDo.cs" />
+    <Compile Include="Scheduling\GetToDosRequest.cs" />
+    <Compile Include="Scheduling\GetToDosResponse.cs" />
+    <Compile Include="Scheduling\PostUpdateToDoRequest.cs" />
+    <Compile Include="Scheduling\PostInsertToDoRequest.cs" />
+    <Compile Include="Scheduling\PostUpdateToDoResponse.cs" />
+    <Compile Include="Scheduling\PostInsertToDoResponse.cs" />
+    <Compile Include="Scheduling\ToDo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

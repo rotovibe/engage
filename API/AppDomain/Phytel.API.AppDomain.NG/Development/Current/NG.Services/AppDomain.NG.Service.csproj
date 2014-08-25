@@ -102,7 +102,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="NGToDoService.cs" />
+    <Compile Include="NGSchedulingService.cs" />
     <Compile Include="NGObservationService.cs" />
     <Compile Include="NGCareMembersService.cs" />
     <Compile Include="NGGoalsService.cs" />

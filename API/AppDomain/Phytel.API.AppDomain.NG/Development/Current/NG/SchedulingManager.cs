@@ -8,15 +8,15 @@ using System;
 using System.Collections.Generic;
 using System.Configuration;
 using Phytel.API.Common;
-using Phytel.API.DataDomain.ToDo.DTO;
+using Phytel.API.DataDomain.Scheduling.DTO;
 
 namespace Phytel.API.AppDomain.NG
 {
-    public class ToDoManager : ManagerBase
+    public class SchedulingManager : ManagerBase
     {
         #region endpoint addresses
         protected static readonly string DDPatientServiceURL = ConfigurationManager.AppSettings["DDPatientServiceUrl"];
-        protected static readonly string DDToDoUrl = ConfigurationManager.AppSettings["DDToDoUrl"];
+        protected static readonly string DDSchedulingUrl = ConfigurationManager.AppSettings["DDSchedulingUrl"];
         #endregion
 
         public List<ToDo> GetToDos(GetToDosRequest request)
@@ -24,10 +24,10 @@ namespace Phytel.API.AppDomain.NG
             try
             {
                 List<ToDo> result = null;
-                //[Route("/{Context}/{Version}/{ContractNumber}/ToDos", "POST")]
+                //[Route("/{Context}/{Version}/{ContractNumber}/Scheduling/ToDos", "POST")]
                 IRestClient client = new JsonServiceClient();
-                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/ToDos",
-                    DDToDoUrl,
+                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Scheduling/ToDos",
+                    DDSchedulingUrl,
                     "NG",
                     request.Version,
                     request.ContractNumber), request.UserId);
@@ -112,10 +112,10 @@ namespace Phytel.API.AppDomain.NG
                     throw new Exception("The ToDo property cannot be null in the request.");
 
                 PostInsertToDoResponse response = new PostInsertToDoResponse();
-                //[Route("/{Context}/{Version}/{ContractNumber}/ToDo/Insert", "PUT")]
+                //[Route("/{Context}/{Version}/{ContractNumber}/Scheduling/ToDo/Insert", "PUT")]
                 IRestClient client = new JsonServiceClient();
-                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/ToDo/Insert",
-                                                                                DDToDoUrl,
+                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Scheduling/ToDo/Insert",
+                                                                                DDSchedulingUrl,
                                                                                 "NG",
                                                                                 request.Version,
                                                                                 request.ContractNumber), request.UserId);
@@ -163,10 +163,10 @@ namespace Phytel.API.AppDomain.NG
                     throw new Exception("The ToDo property cannot be null in the request.");
 
                 PostUpdateToDoResponse response = new PostUpdateToDoResponse();
-                // [Route("/{Context}/{Version}/{ContractNumber}/ToDo/Update", "PUT")]
+                // [Route("/{Context}/{Version}/{ContractNumber}/Scheduling/ToDo/Update", "PUT")]
                 IRestClient client = new JsonServiceClient();
-                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/ToDo/Update",
-                                                                                DDToDoUrl,
+                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Scheduling/ToDo/Update",
+                                                                                DDSchedulingUrl,
                                                                                 "NG",
                                                                                 request.Version,
                                                                                 request.ContractNumber), request.UserId);
@@ -210,39 +210,6 @@ namespace Phytel.API.AppDomain.NG
                 throw new WebServiceException("AD:UpdateToDo()::" + ex.Message, ex.InnerException);
             }
         }
-
-        //private List<ContactData> getContactDetails(List<string> contactIds, double version, string contractNumber, string userId)
-        //{
-
-        //    List<ContactData> contactsData = new List<ContactData>();
-        //    if(contactIds.Count > 0)
-        //    {
-        //        SearchContactsDataResponse contactDataResponse = null;
-        //        IRestClient client = new JsonServiceClient();
-        //        string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Contact",
-        //                                                DDContactServiceUrl,
-        //                                                "NG",
-        //                                                version,
-        //                                                contractNumber), userId);
-
-        //        //[Route("/{Context}/{Version}/{ContractNumber}/Contact", "POST")]
-        //        contactDataResponse = client.Post<SearchContactsDataResponse>(url, new SearchContactsDataRequest
-        //                                                {
-        //                                                    ContactIds = contactIds,
-        //                                                    Context = "NG",
-        //                                                    ContractNumber = contractNumber,
-        //                                                    UserId = userId,
-        //                                                    Version = version
-        //                                                } as object
-        //                                                );
-
-        //        if (contactDataResponse != null && contactDataResponse.Contacts != null)
-        //        {
-        //            contactsData = contactDataResponse.Contacts;
-        //        }
-        //    }
-        //    return contactsData;
-        //}
 
     }
 
