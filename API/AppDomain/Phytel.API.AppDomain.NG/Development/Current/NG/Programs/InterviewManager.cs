@@ -128,7 +128,7 @@ namespace Phytel.API.AppDomain.NG
                 AddUniquePlanElementToProcessedList(p);
 
                 // save
-                var pdetail = EndPointUtils.SaveAction(request, action.Id, p);
+                var pdetail = EndPointUtils.SaveAction(request, action.Id, p, false);
 
                 // create element changed lists 
                 PEUtils.HydratePlanElementLists(ProcessedElements, response.PlanElems);
@@ -182,7 +182,7 @@ namespace Phytel.API.AppDomain.NG
                 AddUniquePlanElementToProcessedList(mod);
 
                 // save
-                EndPointUtils.SaveAction(request, action.Id, p);
+                EndPointUtils.SaveAction(request, action.Id, p, false);
 
                 //response.Program = p;
                 response.Saved = true;
@@ -219,19 +219,15 @@ namespace Phytel.API.AppDomain.NG
 
                 // insert action update
                 var action = NGUtils.UpdateProgramAction(request.Action, p);   
-
-                // register changed action
                 AddUniquePlanElementToProcessedList(request.Action);
 
                 // insert action into module and update references
                 ReplaceActionReferenceInModule(request.Action.Id, cAction, mod);
                 strategy.Evoke();
-
-                // modify module properties
                 AddUniquePlanElementToProcessedList(mod);
 
                 // save
-                var pdetail = EndPointUtils.SaveAction(request, cAction.Id, p);
+                var pdetail = EndPointUtils.SaveAction(request, cAction.Id, p, true);
 
                 // create element changed lists 
                 PEUtils.HydratePlanElementLists(ProcessedElements, response.PlanElems);

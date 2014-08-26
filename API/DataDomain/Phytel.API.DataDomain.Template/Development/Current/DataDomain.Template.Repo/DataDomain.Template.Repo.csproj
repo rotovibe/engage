@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{F1A478D1-DCA1-4BE6-AE83-E0ACDD4FDFFD}</ProjectGuid>
+    <ProjectGuid>{3102572C-54BF-4004-8453-077790779157}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Phytel.API.DataDomain.Template</RootNamespace>
-    <AssemblyName>Phytel.API.DataDomain.Template</AssemblyName>
+    <RootNamespace>DataDomain.Template.Repo</RootNamespace>
+    <AssemblyName>DataDomain.Template.Repo</AssemblyName>
     <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SccProjectName>SAK</SccProjectName>
@@ -41,20 +41,22 @@
       <HintPath>..\References\MongoDB.Driver.dll</HintPath>
     </Reference>
     <Reference Include="Phytel.Mongo">
-      <HintPath>..\References\Phytel.Mongo.dll</HintPath>
+      <HintPath>..\..\..\..\Phytel.API.DataDomain.PatientObservation\Development\Current\References\Phytel.Mongo.dll</HintPath>
     </Reference>
     <Reference Include="Phytel.Repository">
       <HintPath>..\..\..\..\..\packages\Phytel.Repository\Phytel.Repository.dll</HintPath>
     </Reference>
+    <Reference Include="ServiceStack">
+      <HintPath>..\..\..\..\..\packages\ServiceStack.3.9.70\lib\net35\ServiceStack.dll</HintPath>
+    </Reference>
     <Reference Include="ServiceStack.Common">
       <HintPath>..\..\..\..\..\packages\ServiceStack.Common.3.9.70\lib\net35\ServiceStack.Common.dll</HintPath>
     </Reference>
-    <Reference Include="ServiceStack.Interfaces, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="ServiceStack.Interfaces">
       <HintPath>..\..\..\..\..\packages\ServiceStack.Common.3.9.70\lib\net35\ServiceStack.Interfaces.dll</HintPath>
     </Reference>
-    <Reference Include="ServiceStack.Text">
-      <HintPath>..\..\..\..\..\packages\ServiceStack.Text.3.9.70\lib\net35\ServiceStack.Text.dll</HintPath>
+    <Reference Include="ServiceStack.ServiceInterface">
+      <HintPath>..\..\..\..\..\packages\ServiceStack.3.9.70\lib\net35\ServiceStack.ServiceInterface.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -65,19 +67,22 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ITemplateDataManager.cs" />
-    <Compile Include="ITemplateRepository.cs" />
-    <Compile Include="MongoDB\DTO\METemplate.cs" />
-    <Compile Include="DataTemplateManager.cs" />
+    <Compile Include="Containers\TemplateRepositoryContainer.cs" />
+    <Compile Include="IUOWMongo.cs" />
+    <Compile Include="MongoTemplateRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
+    <Compile Include="TemplateMongoContext.cs" />
+    <Compile Include="TemplateRepositoryFactory.cs" />
+    <Compile Include="UOWMongo.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\..\Common\Phytel.API.Common\Development\Current\Phytel.API.Common.csproj">
       <Project>{25cf3c3f-221f-4a49-b5ef-a8a5fcf9a5ba}</Project>
       <Name>Phytel.API.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\Common\Phytel.API.DataAudit\Development\Current\Phytel.API.DataAudit.csproj">
+      <Project>{ae842695-4dd4-4403-9be4-8473bca09580}</Project>
+      <Name>Phytel.API.DataAudit</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\..\..\Interfaces\Development\Current\Phytel.API.Interface\Phytel.API.Interface.csproj">
       <Project>{abe948fb-247e-4955-b3ab-b7c93e10a542}</Project>
@@ -86,6 +91,10 @@
     <ProjectReference Include="..\Template.DTO\DataDomain.Template.DTO.csproj">
       <Project>{1c2c63a1-4246-4ec9-bad1-c00e9ecd85f6}</Project>
       <Name>DataDomain.Template.DTO</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Template\DataDomain.Template.csproj">
+      <Project>{f1a478d1-dca1-4be6-ae83-e0acdd4fdffd}</Project>
+      <Name>DataDomain.Template</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

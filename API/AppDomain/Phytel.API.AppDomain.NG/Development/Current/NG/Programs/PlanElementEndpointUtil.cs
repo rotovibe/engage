@@ -18,48 +18,10 @@ namespace Phytel.API.AppDomain.NG
 {
     public static class PlanElementEndpointUtil
     {
-        static readonly string DDPatientProblemServiceUrl = ConfigurationManager.AppSettings["DDPatientProblemServiceUrl"];
         static readonly string DDPatientObservationServiceUrl = ConfigurationManager.AppSettings["DDPatientObservationUrl"];
         static readonly string DDPatientServiceUrl = ConfigurationManager.AppSettings["DDPatientServiceUrl"];
         static readonly string DDProgramServiceUrl = ConfigurationManager.AppSettings["DDProgramServiceUrl"];
 
-        public static PatientObservation GetPatientProblem(string probId, PlanElementEventArg e, string userId)
-        {
-            try
-            {
-                PatientObservation result = null;
-
-                IRestClient client = new JsonServiceClient();
-
-                //Patient/{PatientId}/Observation/{ObservationID}
-                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Observation/{5}",
-                                   DDPatientObservationServiceUrl,
-                                   "NG",
-                                   e.DomainRequest.Version,
-                                   e.DomainRequest.ContractNumber,
-                                   e.PatientId,
-                                   probId), userId);
-
-                GetPatientObservationResponse dataDomainResponse =
-                   client.Get<GetPatientObservationResponse>(
-                   url);
-
-                if (dataDomainResponse.PatientObservation != null)
-                {
-                    result = new PatientObservation
-                    {
-                        Id = dataDomainResponse.PatientObservation.Id,
-                        StateId = dataDomainResponse.PatientObservation.StateId
-                    };
-                }
-
-                return result;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("AD:PlanElementEndpointUtil:GetPatientProblem()::" + ex.Message, ex.InnerException);
-            }
-        }
 
         public static List<StepResponse> GetResponsesForStep(string stepId, IAppDomainRequest request)
         {
@@ -165,77 +127,77 @@ namespace Phytel.API.AppDomain.NG
             }
         }
 
-        public static PutRegisterPatientObservationResponse PutNewPatientProblem(string patientId, string userId, string elementId, IAppDomainRequest request)
-        {
-            try
-            {
-                //register call to remote serivce.
-                IRestClient client = new JsonServiceClient();
+        //public static PutRegisterPatientObservationResponse PutNewPatientProblem(string patientId, string userId, string elementId, IAppDomainRequest request)
+        //{
+        //    try
+        //    {
+        //        //register call to remote serivce.
+        //        IRestClient client = new JsonServiceClient();
 
-                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Observation/Insert",
-                                   DDPatientObservationServiceUrl,
-                                   "NG",
-                                   request.Version,
-                                   request.ContractNumber,
-                                   patientId), request.UserId);
+        //        string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Observation/Insert",
+        //                           DDPatientObservationServiceUrl,
+        //                           "NG",
+        //                           request.Version,
+        //                           request.ContractNumber,
+        //                           patientId), request.UserId);
 
-                PutRegisterPatientObservationResponse dataDomainResponse =
-                   client.Put<PutRegisterPatientObservationResponse>(
-                   url, new PutRegisterPatientObservationRequest
-                   {
-                       Id = elementId,
-                       StateId = 2,
-                       DisplayId = 1,
-                       UserId = userId
-                   } as object);
-                return dataDomainResponse;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("AD:PlanElementEndpointUtil:PutNewPatientProblem()::" + ex.Message, ex.InnerException);
-            }
-        }
+        //        PutRegisterPatientObservationResponse dataDomainResponse =
+        //           client.Put<PutRegisterPatientObservationResponse>(
+        //           url, new PutRegisterPatientObservationRequest
+        //           {
+        //               Id = elementId,
+        //               StateId = 2,
+        //               DisplayId = 1,
+        //               UserId = userId
+        //           } as object);
+        //        return dataDomainResponse;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw new Exception("AD:PlanElementEndpointUtil:PutNewPatientProblem()::" + ex.Message, ex.InnerException);
+        //    }
+        //}
 
-        public static PutUpdateObservationDataResponse UpdatePatientProblem(string patientId, string userId, string elementId, PatientObservation pod, bool _active, IAppDomainRequest request)
-        {
-            try
-            {
-                //register call to remote serivce.
-                IRestClient client = new JsonServiceClient();
+        //public static PutUpdateObservationDataResponse UpdatePatientProblem(string patientId, string userId, string elementId, PatientObservation pod, bool _active, IAppDomainRequest request)
+        //{
+        //    try
+        //    {
+        //        //register call to remote serivce.
+        //        IRestClient client = new JsonServiceClient();
 
-                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Observation/Update",
-                                   DDPatientObservationServiceUrl,
-                                   "NG",
-                                   request.Version,
-                                   request.ContractNumber,
-                                   patientId), request.UserId);
+        //        string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Observation/Update",
+        //                           DDPatientObservationServiceUrl,
+        //                           "NG",
+        //                           request.Version,
+        //                           request.ContractNumber,
+        //                           patientId), request.UserId);
 
-                PatientObservationRecordData pdata = new PatientObservationRecordData
-                {
-                    Id = pod.Id,
-                    StateId = pod.StateId,
-                    DeleteFlag = false
-                };
+        //        PatientObservationRecordData pdata = new PatientObservationRecordData
+        //        {
+        //            Id = pod.Id,
+        //            StateId = pod.StateId,
+        //            DeleteFlag = false
+        //        };
 
-                PutUpdateObservationDataRequest purequest = new PutUpdateObservationDataRequest
-                {
-                    PatientObservationData = pdata,
-                    Context = "NG",
-                    ContractNumber = request.ContractNumber,
-                    UserId = request.UserId,
-                };
+        //        PutUpdateObservationDataRequest purequest = new PutUpdateObservationDataRequest
+        //        {
+        //            PatientObservationData = pdata,
+        //            Context = "NG",
+        //            ContractNumber = request.ContractNumber,
+        //            UserId = request.UserId,
+        //        };
 
-                PutUpdateObservationDataResponse dataDomainResponse =
-                   client.Put<PutUpdateObservationDataResponse>(
-                   url, purequest as object);
+        //        PutUpdateObservationDataResponse dataDomainResponse =
+        //           client.Put<PutUpdateObservationDataResponse>(
+        //           url, purequest as object);
 
-                return dataDomainResponse;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("AD:PlanElementEndpointUtil:UpdatePatientProblem()::" + ex.Message, ex.InnerException);
-            }
-        }
+        //        return dataDomainResponse;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw new Exception("AD:PlanElementEndpointUtil:UpdatePatientProblem()::" + ex.Message, ex.InnerException);
+        //    }
+        //}
 
         internal static ProgramAttributeData GetProgramAttributes(string planElemId, IAppDomainRequest request)
         {

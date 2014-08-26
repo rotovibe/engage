@@ -527,21 +527,22 @@ namespace Phytel.API.AppDomain.NG
             }
         }
 
-        public void SetInitialValues(string assignToId, IPlanElement m)
+        public void SetInitialValues(string assignToId, IPlanElement pe)
         {
-                // NIGHT-835
-                if (m.AssignDate == null)
-                    m.AssignDate = System.DateTime.UtcNow;
+            if (pe.Enabled) return;
+            // NIGHT-835
+            if (pe.AssignDate == null)
+                pe.AssignDate = System.DateTime.UtcNow;
 
-                //if (m.AssignToId == null)
-                m.AssignToId = assignToId; // NIGHT-877
+            //if (pe.AssignToId == null)
+            pe.AssignToId = assignToId; // NIGHT-877
 
-                m.Enabled = true;
-                m.StateUpdatedOn = System.DateTime.UtcNow;
-                m.ElementState = (int) DD.ElementState.NotStarted; // 2;
+            pe.Enabled = true;
+            pe.StateUpdatedOn = System.DateTime.UtcNow;
+            pe.ElementState = (int) DD.ElementState.NotStarted; // 2;
 
-                if (string.IsNullOrEmpty(m.AssignById))
-                    m.AssignById = DD.Constants.SystemContactId;
+            if (string.IsNullOrEmpty(pe.AssignById))
+                pe.AssignById = DD.Constants.SystemContactId;
         }
 
         public Actions GetProcessingAction(List<Module> list, string actionId)
@@ -1140,6 +1141,7 @@ namespace Phytel.API.AppDomain.NG
         {
             try
             {
+                if (p.Enabled == true) return p;
                 p.Enabled = true;
                 p.AssignById = DD.Constants.SystemContactId;
                 p.AssignDate = System.DateTime.UtcNow;

@@ -94,6 +94,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Programs\PlanElemStrategy\IPlanElementActivationRule.cs" />
+    <Compile Include="Programs\PlanElemStrategy\IPlanElementActivationStrategy.cs" />
+    <Compile Include="Programs\PlanElemStrategy\ProblemActivationRule.cs" />
+    <Compile Include="Programs\PlanElemStrategy\ToDoActivationRule.cs" />
+    <Compile Include="Programs\PlanElemStrategy\PlanElementActivationRule.cs" />
+    <Compile Include="Programs\PlanElemStrategy\PlanElementActivationStrategy.cs" />
     <Compile Include="SchedulingManager.cs" />
     <Compile Include="CareMembersManager.cs" />
     <Compile Include="Command\CareMembersCommand.cs" />

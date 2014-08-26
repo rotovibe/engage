@@ -1,5 +1,6 @@
 ﻿using Phytel.API.AppDomain.NG.DTO;
 using Phytel.API.AppDomain.NG.PlanCOR;
+using Phytel.API.AppDomain.NG.Programs;
 using Phytel.API.DataDomain.PatientObservation.DTO;
 using Phytel.API.DataDomain.PatientProblem.DTO;
 using ServiceStack.Service;
@@ -10,25 +11,30 @@ using System.Configuration;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ServiceStack.WebHost.Endpoints;
 
 namespace Phytel.API.AppDomain.NG.PlanElementStrategy
 {
     public class RegisterSpawnProblemCode : ISpawn
     {
+        public IEndpointUtils EndPointUtil { get; set; }
         private PlanElementEventArg _e;
         private SpawnElement _se;
-        protected static readonly string DDPatientProblemServiceUrl = ConfigurationManager.AppSettings["DDPatientProblemServiceUrl"];
+        //protected static readonly string DDPatientProblemServiceUrl = ConfigurationManager.AppSettings["DDPatientProblemServiceUrl"];
 
         public RegisterSpawnProblemCode(PlanElementEventArg e, SpawnElement rse, PatientObservation ppd)
         {
             _e = e;
             _se = rse;
+
+            if (AppHostBase.Instance != null)
+                AppHostBase.Instance.Container.AutoWire(this);
         }
 
         public void Execute()
         {
             // if patient problem registration is new
-            PutRegisterPatientObservationResponse response = PlanElementEndpointUtil.PutNewPatientProblem(_e.PatientId,
+            PutRegisterPatientObservationResponse response = EndPointUtil.PutNewPatientProblem(_e.PatientId,
                 _e.UserId, _se.ElementId, _e.DomainRequest);
         }
     }

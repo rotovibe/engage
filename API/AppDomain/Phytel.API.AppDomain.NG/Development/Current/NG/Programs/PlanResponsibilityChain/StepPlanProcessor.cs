@@ -1,5 +1,6 @@
 ﻿using Phytel.API.AppDomain.NG.DTO;
 using Phytel.API.AppDomain.NG.PlanElementStrategy;
+using Phytel.API.AppDomain.NG.Programs.PlanElemStrategy;
 using Phytel.API.DataDomain.PatientProblem.DTO;
 using Phytel.API.DataDomain.Program.DTO;
 using ServiceStack.Service;
@@ -124,10 +125,11 @@ namespace Phytel.API.AppDomain.NG.PlanCOR
                             {
                                 HandlePlanElementActivation(e, rse);
                             }
-                            else if (rse.ElementType == 101)
+                            else if (rse.ElementType > 100)
                             {
-                                HandlePatientProblemRegistration(e, userId, rse);
-                                OnSpawnElementEvent("Problems");
+                                //HandlePatientProblemRegistration(e, userId, rse);
+                                var type = new PlanElementActivationStrategy().Run(e, rse, userId);
+                                if (!string.IsNullOrEmpty(type)) OnSpawnElementEvent(type);
                             }
                             else
                             {
@@ -154,40 +156,6 @@ namespace Phytel.API.AppDomain.NG.PlanCOR
             catch (Exception ex)
             {
                 throw new Exception("AD:StepPlanProcessor:HandlePlanElementActivation()::" + ex.Message, ex.InnerException);
-            }
-        }
-
-        public void HandlePatientProblemRegistration(PlanElementEventArg e, string userId, SpawnElement rse)
-        {
-            try
-            {
-                // check if problem code is already registered for patient
-                PatientObservation ppd = PlanElementEndpointUtil.GetPatientProblem(rse.ElementId, e, userId);
-
-                IPlanElementStrategy updateSpawnProblemCode =
-                    new SpawnElementStrategy(new UpdateSpawnProblemCode(e, rse, ppd, true));
-
-                IPlanElementStrategy registerSpawnProblemCode =
-                    new SpawnElementStrategy(new RegisterSpawnProblemCode(e, rse, ppd));
-
-                if (ppd != null)
-                {
-                    if (ppd.StateId != 2)
-                    {
-                        updateSpawnProblemCode.Evoke();
-                    }
-                }
-                else
-                {
-                    registerSpawnProblemCode.Evoke();
-                }
-
-                // register new problem code with cohortpatientview
-                PEUtils.RegisterCohortPatientViewProblemToPatient(rse.ElementId, e.PatientId, e.DomainRequest);
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("AD:StepPlanProcessor:HandlePatientProblemRegistration()::" + ex.Message, ex.InnerException);
             }
         }
     }

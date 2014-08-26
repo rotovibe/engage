@@ -35,7 +35,7 @@ namespace Phytel.API.AppDomain.NG
                 IRestClient client = new JsonServiceClient();
 
                 //Patient/{PatientId}/Observation/{ObservationID}
-                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Observation/{5}",
+                var url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Observation/{5}",
                                    DDPatientObservationServiceUrl,
                                    "NG",
                                    e.DomainRequest.Version,
@@ -64,12 +64,12 @@ namespace Phytel.API.AppDomain.NG
             }
         }
 
-        public DD.ProgramDetail SaveAction(IProcessActionRequest request, string actionId, AD.Program p)
+        public DD.ProgramDetail SaveAction(IProcessActionRequest request, string actionId, AD.Program p, bool repeat)
         {
             try
             {
                 // save responses from action steps
-                SaveResponsesFromProgramAction(p, actionId, request);
+                SaveResponsesFromProgramAction(p, actionId, request, repeat);
 
                 var pD = NGUtils.FormatProgramDetail(p);
 
@@ -411,12 +411,12 @@ namespace Phytel.API.AppDomain.NG
         }
 
         #region private methods
-        private void SaveResponsesFromProgramAction(AD.Program p, string actionId, IProcessActionRequest request)
+        private void SaveResponsesFromProgramAction(AD.Program p, string actionId, IProcessActionRequest request, bool repeat)
         {
             try
             {
                 Actions act = GetActionById(p, actionId);
-                SaveResponses(act, request);
+                SaveResponses(act, request, repeat);
                 // clear response collections
                 foreach (Step stp in act.Steps) { stp.Responses = null; }
             }
@@ -529,7 +529,7 @@ namespace Phytel.API.AppDomain.NG
             }
         }
 
-        public void SaveResponses(Actions action, IProcessActionRequest request)
+        public void SaveResponses(Actions action, IProcessActionRequest request, bool repeat)
         {
             try
             {
@@ -548,7 +548,7 @@ namespace Phytel.API.AppDomain.NG
                     }
                 });
 
-                if (!string.IsNullOrEmpty(action.ArchiveOriginId))
+                if (repeat)
                     InsertResponseRequest(request, rlist);
                 else
                     UpdateResponseRequest(request, rlist);

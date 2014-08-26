@@ -367,7 +367,6 @@ namespace Phytel.API.AppDomain.NG.Test.Stubs
 
         public void RegisterCohortPatientViewProblemToPatient(string problemId, string patientId, Interface.IAppDomainRequest request)
         {
-            throw new NotImplementedException();
         }
 
         public bool ResponseSpawnAllowed(DTO.Step s, DTO.Response r)
@@ -578,6 +577,12 @@ namespace Phytel.API.AppDomain.NG.Test.Stubs
 
 
         public Actions CloneRepeatAction(Actions action, string assignedById)
+        {
+            throw new NotImplementedException();
+        }
+
+
+        public void SetInitialValues(string assignToId, IPlanElement pe)
         {
             throw new NotImplementedException();
         }

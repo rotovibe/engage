@@ -26,19 +26,13 @@ namespace Phytel.API.AppDomain.NG.PlanElementStrategy
 
         public void Execute()
         {
-            // modify module if it is completed
             if (isModuleAlreadyCompleted.IsSatisfiedBy(_module))
             {
-                // change state to 4 from 5
                 _module.ElementState = 4;
-                // stateupdated date to current date
                 _module.StateUpdatedOn = DateTime.UtcNow;
-                // completed flag should be set to false
                 _module.Completed = false;
-                // datecomplated blanked
                 _module.DateCompleted = null;
-                // completedby to null
-                _module.CompletedBy = string.Empty;
+                _module.CompletedBy = null;
             }
         }
     }

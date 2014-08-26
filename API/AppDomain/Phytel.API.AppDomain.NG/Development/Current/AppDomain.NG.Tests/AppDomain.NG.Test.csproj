@@ -48,6 +48,7 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.QualityTools.Testing.Fakes, Version=11.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
     <Reference Include="MongoDB.Bson, Version=1.8.1.20, Culture=neutral, PublicKeyToken=f686731cfb9cc103, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\References\MongoDB.Bson.dll</HintPath>
@@ -55,6 +56,12 @@
     <Reference Include="MongoDB.Driver, Version=1.8.1.20, Culture=neutral, PublicKeyToken=f686731cfb9cc103, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\References\MongoDB.Driver.dll</HintPath>
+    </Reference>
+    <Reference Include="Phytel.API.AppDomain.NG.DTO.Fakes">
+      <HintPath>FakesAssemblies\Phytel.API.AppDomain.NG.DTO.Fakes.dll</HintPath>
+    </Reference>
+    <Reference Include="Phytel.API.AppDomain.NG.Fakes">
+      <HintPath>FakesAssemblies\Phytel.API.AppDomain.NG.Fakes.dll</HintPath>
     </Reference>
     <Reference Include="Phytel.Mongo">
       <HintPath>..\References\Phytel.Mongo.dll</HintPath>
@@ -119,6 +126,8 @@
     <Compile Include="PlanElementUtil_Tests.cs" />
     <Compile Include="PlanManager_Tests.cs" />
     <Compile Include="Programs\EndpointUtils_Tests.cs" />
+    <Compile Include="Programs\PlanElemStrategy\PlanElementActivationStrategyTests.cs" />
+    <Compile Include="Programs\PlanElemStrategy\ProblemActivationRuleTests.cs" />
     <Compile Include="Programs\PlanElemStrategy\SetModulePropertiesForRepeat_Test.cs" />
     <Compile Include="Programs\PlanManagerTests.cs" />
     <Compile Include="Programs\PlanManager_Test.cs" />
@@ -130,12 +139,16 @@
     <Compile Include="Stubs\StubAppHostBase.cs" />
     <Compile Include="Stubs\StubAuditUtil.cs" />
     <Compile Include="Stubs\StubCommonFormatterUtil.cs" />
+    <Compile Include="Stubs\StubEndpointUtils.cs" />
     <Compile Include="Stubs\StubJsonRestClient.cs" />
     <Compile Include="Stubs\StubNGManager.cs" />
+    <Compile Include="Stubs\StubPlanElementActivationStrategy.cs" />
     <Compile Include="Stubs\StubPlanElementEndpointUtils.cs" />
     <Compile Include="Stubs\StubPlanElementUtils.cs" />
     <Compile Include="Stubs\StubSecurityManager.cs" />
     <Compile Include="Scheduling\SchedulingTest.cs" />
+    <Compile Include="Stubs\StubProblemActivationRule.cs" />
+    <Compile Include="Stubs\StubToDoActivationRule.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\..\Common\Phytel.API.Common\Development\Current\Phytel.API.Common.csproj">
@@ -185,6 +198,8 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <Fakes Include="Fakes\Phytel.API.AppDomain.NG.fakes" />
+    <Fakes Include="Fakes\Phytel.API.AppDomain.NG.DTO.fakes" />
     <None Include="packages.config" />
   </ItemGroup>
   <Choose>

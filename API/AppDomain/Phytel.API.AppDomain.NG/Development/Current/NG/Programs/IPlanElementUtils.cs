@@ -35,6 +35,7 @@ namespace Phytel.API.AppDomain.NG
         void SetInitialProperties(string assignToId, IPlanElement m, bool dependent);
         void SetProgramAttributes(SpawnElement r, Program program, string userId, ProgramAttributeData progAttr);
         void SetInitialActions(object x, string assignToId);
+        void SetInitialValues(string assignToId, IPlanElement pe);
         void SetProgramInformation(ProgramAttributeData _programAttributes, Program p);
         void SetStartDateForProgramAttributes(string programId, IAppDomainRequest request);
         void SpawnElementsInList(List<SpawnElement> list, Program program, string userId, ProgramAttributeData progAttr);

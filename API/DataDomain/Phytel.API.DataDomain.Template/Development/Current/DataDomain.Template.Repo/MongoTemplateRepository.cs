@@ -1,9 +1,11 @@
-using MongoDB.Driver;
+
 using Phytel.API.Common.Data;
 using System;
 using System.Collections.Generic;
+using Phytel.API.DataDomain.Template;
+using Phytel.Repository;
 
-namespace Phytel.API.DataDomain.Template
+namespace DataDomain.Template.Repo
 {
     public class MongoTemplateRepository : ITemplateRepository
     {
@@ -41,7 +43,7 @@ namespace Phytel.API.DataDomain.Template
             throw new NotImplementedException();
         }
 
-        public Tuple<string, IEnumerable<object>> Select(Interface.APIExpression expression)
+        public Tuple<string, IEnumerable<object>> Select(Phytel.API.Interface.APIExpression expression)
         {
             throw new NotImplementedException();
         }

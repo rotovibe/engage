@@ -14,9 +14,9 @@ namespace Phytel.API.DataDomain.Template
             {
                 var result = new GetTemplateResponse();
 
-                ITemplateRepository repo = TemplateRepositoryFactory.GetTemplateRepository(request, RepositoryType.Template);
-                repo.UserId = request.UserId;
-                result = repo.FindByID(request.TemplateID) as GetTemplateResponse;
+                //ITemplateRepository repo = TemplateRepositoryFactory.GetTemplateRepository(request, RepositoryType.Template);
+                //repo.UserId = request.UserId;
+                //result = repo.FindByID(request.TemplateID) as GetTemplateResponse;
 
                 return (result ?? new GetTemplateResponse());
             }
@@ -32,9 +32,9 @@ namespace Phytel.API.DataDomain.Template
             {
                 var result = new GetAllTemplatesResponse();
 
-                ITemplateRepository repo = TemplateRepositoryFactory.GetTemplateRepository(request, RepositoryType.Template);
-                repo.UserId = request.UserId;
-                result = repo.SelectAll() as GetAllTemplatesResponse;
+                //ITemplateRepository repo = TemplateRepositoryFactory.GetTemplateRepository(request, RepositoryType.Template);
+                //repo.UserId = request.UserId;
+                //result = repo.SelectAll() as GetAllTemplatesResponse;
 
                 return (result ?? new GetAllTemplatesResponse());
             }

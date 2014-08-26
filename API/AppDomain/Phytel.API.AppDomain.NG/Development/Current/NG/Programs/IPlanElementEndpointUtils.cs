@@ -21,13 +21,13 @@ namespace Phytel.API.AppDomain.NG.Programs
         CohortPatientViewData RequestCohortPatientViewData(string patientId, IAppDomainRequest request);
         AD.Program RequestPatientProgramDetail(IProcessActionRequest request);
         DD.GetProgramDetailsSummaryResponse RequestPatientProgramDetailsSummary(AD.GetPatientProgramDetailsSummaryRequest request);
-        DD.ProgramDetail SaveAction(IProcessActionRequest request, string actionId, AD.Program p);
+        DD.ProgramDetail SaveAction(IProcessActionRequest request, string actionId, AD.Program p, bool repeat);
         void UpdateCohortPatientViewProblem(CohortPatientViewData cpvd, string patientId, IAppDomainRequest request);
         PutUpdateObservationDataResponse UpdatePatientProblem(string patientId, string userId, string elementId, PatientObservation pod, bool _active, IAppDomainRequest request);
         bool UpdateProgramAttributes(DD.ProgramAttributeData pAtt, IAppDomainRequest request);
         DD.PutProgramToPatientResponse AssignPatientToProgram(AD.PostPatientToProgramsRequest request, string careManagerId);
         string GetPrimaryCareManagerForPatient(PostPatientToProgramsRequest request);
-
+        void SaveResponses(Actions action, IProcessActionRequest request, bool repeat);
         AD.Outcome SaveProgramAttributeChanges(PostProgramAttributesChangeRequest request, ProgramDetail pg);
     }
 }

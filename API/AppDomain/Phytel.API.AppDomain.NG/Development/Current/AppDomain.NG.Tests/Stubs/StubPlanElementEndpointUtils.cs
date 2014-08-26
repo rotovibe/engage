@@ -223,7 +223,7 @@ namespace Phytel.API.AppDomain.NG.Test.Stubs
             return list;
         }
 
-        public DataDomain.Program.DTO.ProgramDetail SaveAction(DTO.IProcessActionRequest request, string actionId, DTO.Program p)
+        public DataDomain.Program.DTO.ProgramDetail SaveAction(DTO.IProcessActionRequest request, string actionId, DTO.Program p, bool repeat)
         {
             return new ProgramDetail();
         }
@@ -288,6 +288,12 @@ namespace Phytel.API.AppDomain.NG.Test.Stubs
         }
 
         DTO.PatientObservation IEndpointUtils.GetPatientProblem(string probId, PlanCOR.PlanElementEventArg e, string userId)
+        {
+            throw new NotImplementedException();
+        }
+
+
+        public void SaveResponses(DTO.Actions action, DTO.IProcessActionRequest request, bool repeat)
         {
             throw new NotImplementedException();
         }
