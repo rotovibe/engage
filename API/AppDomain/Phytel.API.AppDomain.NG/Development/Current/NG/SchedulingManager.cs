@@ -40,6 +40,7 @@ namespace Phytel.API.AppDomain.NG
                         Version = request.Version,
                         UserId = request.UserId,
                         AssignedToId = request.AssignedToId,
+                        CreatedById = request.CreatedById,
                         PatientId = request.PatientId,
                         StatusIds = request.StatusIds
                         

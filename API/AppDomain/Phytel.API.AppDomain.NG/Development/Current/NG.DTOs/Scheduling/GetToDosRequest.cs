@@ -10,6 +10,9 @@ namespace Phytel.API.AppDomain.NG.DTO
         [ApiMember(Name = "AssignedToId", Description = "AssignedToId is the Id to which ToDo is assigned to.", ParameterType = "property", DataType = "string", IsRequired = false)]
         public string AssignedToId { get; set; }
 
+        [ApiMember(Name = "CreatedById", Description = "CreatedById is the Id of the user who created the ToDo.", ParameterType = "property", DataType = "string", IsRequired = false)]
+        public string CreatedById { get; set; }
+
         [ApiMember(Name = "PatientId", Description = "PatientId is the Id of the patient for whom a todo is associated.", ParameterType = "property", DataType = "string", IsRequired = false)]
         public string PatientId { get; set; }
 
