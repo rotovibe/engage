@@ -71,29 +71,7 @@ namespace Phytel.API.AppDomain.NG
                         };
 
                         // Call Patient DD to get patient details.
-                        if(!string.IsNullOrEmpty(toDo.PatientId))
-                        {
-                            string patientUrl = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/patient/{4}",
-                                                                                                DDPatientServiceURL,
-                                                                                                "NG",
-                                                                                                request.Version,
-                                                                                                request.ContractNumber,
-                                                                                                toDo.PatientId), request.UserId);
-
-                            GetPatientDataResponse response = client.Get<GetPatientDataResponse>(patientUrl);
-
-                            if (response != null && response.Patient != null)
-                            {
-                                toDo.PatientDetails = new PatientDetails 
-                                {
-                                    FirstName = response.Patient.FirstName,
-                                    LastName = response.Patient.LastName,
-                                    MiddleName = response.Patient.MiddleName,
-                                    PreferredName = response.Patient.PreferredName,
-                                    Suffix = response.Patient.Suffix 
-                                };
-                            }
-                        }
+                        getPatientDetails(request, client, toDo);
                         result.Add(toDo);
                     }
                 }
@@ -102,6 +80,33 @@ namespace Phytel.API.AppDomain.NG
             catch (WebServiceException ex)
             {
                 throw new WebServiceException("AD:GetToDos()::" + ex.Message, ex.InnerException);
+            }
+        }
+
+        private static void getPatientDetails(GetToDosRequest request, IRestClient client, ToDo toDo)
+        {
+            if (!string.IsNullOrEmpty(toDo.PatientId))
+            {
+                string patientUrl = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/patient/{4}",
+                                                                                    DDPatientServiceURL,
+                                                                                    "NG",
+                                                                                    request.Version,
+                                                                                    request.ContractNumber,
+                                                                                    toDo.PatientId), request.UserId);
+
+                GetPatientDataResponse response = client.Get<GetPatientDataResponse>(patientUrl);
+
+                if (response != null && response.Patient != null)
+                {
+                    toDo.PatientDetails = new PatientDetails
+                    {
+                        FirstName = response.Patient.FirstName,
+                        LastName = response.Patient.LastName,
+                        MiddleName = response.Patient.MiddleName,
+                        PreferredName = response.Patient.PreferredName,
+                        Suffix = response.Patient.Suffix
+                    };
+                }
             }
         }
 
