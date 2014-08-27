@@ -52,24 +52,7 @@ namespace Phytel.API.AppDomain.NG
                     List<ToDoData> dataList = ddResponse.ToDos;
                     foreach (ToDoData n in dataList)
                     {
-                        ToDo toDo = new ToDo
-                        {
-                            AssignedToId = n.AssignedToId,
-                            CategoryId = n.CategoryId,
-                            ClosedDate = n.ClosedDate,
-                            CreatedById = n.CreatedById,
-                            CreatedOn = n.CreatedOn,
-                            Description = n.Description,
-                            DueDate = n.DueDate,
-                            Id = n.Id,
-                            PatientId = n.PatientId,
-                            PriorityId = n.PriorityId,
-                            ProgramIds = n.ProgramIds,
-                            StatusId = n.StatusId,
-                            Title = n.Title,
-                            UpdatedOn = n.UpdatedOn
-                        };
-
+                        ToDo toDo = convertToToDo(n);
                         // Call Patient DD to get patient details.
                         getPatientDetails(request, client, toDo);
                         result.Add(toDo);
@@ -136,7 +119,7 @@ namespace Phytel.API.AppDomain.NG
                     PriorityId = request.ToDo.PriorityId,
                     ProgramIds = request.ToDo.ProgramIds,
                     Title = request.ToDo.Title,
-                    StatusId = (int)Status.Open
+                    StatusId = request.ToDo.StatusId
                 };
                 PutInsertToDoDataResponse dataDomainResponse =
                     client.Put<PutInsertToDoDataResponse>(url, new PutInsertToDoDataRequest
@@ -147,9 +130,9 @@ namespace Phytel.API.AppDomain.NG
                                                                                     UserId = request.UserId,
                                                                                     ToDoData = data
                                                                                 } as object);
-                if (dataDomainResponse != null && !(string.IsNullOrEmpty(dataDomainResponse.Id)))
+                if (dataDomainResponse != null && dataDomainResponse.ToDoData != null)
                 {
-                    response.Id = dataDomainResponse.Id;
+                    response.ToDo = convertToToDo(dataDomainResponse.ToDoData);
                     response.Version = dataDomainResponse.Version;
                 }
 
@@ -205,8 +188,9 @@ namespace Phytel.API.AppDomain.NG
                                                                                     UserId = request.UserId,
                                                                                     
                                                                                 } as object);
-                if (dataDomainResponse != null && dataDomainResponse.Success)
+                if (dataDomainResponse != null && dataDomainResponse.ToDoData != null)
                 {
+                    response.ToDo = convertToToDo(dataDomainResponse.ToDoData);
                     response.Version = dataDomainResponse.Version;
                 }
                 return response;
@@ -215,6 +199,32 @@ namespace Phytel.API.AppDomain.NG
             {
                 throw new WebServiceException("AD:UpdateToDo()::" + ex.Message, ex.InnerException);
             }
+        }
+
+        private ToDo convertToToDo(ToDoData toDoData)
+        {
+            ToDo data = null;
+            if (toDoData != null)
+            {
+                data = new ToDo
+                {
+                    AssignedToId = toDoData.AssignedToId,
+                    CategoryId = toDoData.CategoryId,
+                    ClosedDate = toDoData.ClosedDate,
+                    CreatedById = toDoData.CreatedById,
+                    CreatedOn = toDoData.CreatedOn,
+                    Description = toDoData.Description,
+                    DueDate = toDoData.DueDate,
+                    Id = toDoData.Id,
+                    PatientId = toDoData.PatientId,
+                    PriorityId = toDoData.PriorityId,
+                    ProgramIds = toDoData.ProgramIds,
+                    StatusId = toDoData.StatusId,
+                    Title = toDoData.Title,
+                    UpdatedOn = toDoData.UpdatedOn
+                };
+            }
+            return data;
         }
 
     }

@@ -6,7 +6,7 @@ namespace Phytel.API.AppDomain.NG.DTO
 {
     public class PostInsertToDoResponse : IDomainResponse
     {
-        public string Id { get; set; }
+        public ToDo ToDo { get; set; }
         public double Version { get; set; }
         public ResponseStatus Status { get; set; }
     }
