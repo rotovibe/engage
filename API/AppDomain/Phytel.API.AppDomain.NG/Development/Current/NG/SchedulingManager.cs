@@ -42,7 +42,8 @@ namespace Phytel.API.AppDomain.NG
                         AssignedToId = request.AssignedToId,
                         CreatedById = request.CreatedById,
                         PatientId = request.PatientId,
-                        StatusIds = request.StatusIds
+                        StatusIds = request.StatusIds,
+                        FromDate = request.FromDate
                         
                     } as object);
 
