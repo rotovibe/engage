@@ -18,7 +18,7 @@ namespace Phytel.API.AppDomain.NG.DTO
         public string PatientId { get; set; }
 
         [ApiMember(Name = "FromDate", Description = "Get the Todos having ClosedDate greater than or equal to FromDate.", ParameterType = "property", DataType = "DateTime", IsRequired = false)]
-        public DateTime FromDate { get; set; }
+        public DateTime? FromDate { get; set; }
 
         [ApiMember(Name = "StatusIds", Description = "List of ToDo Status ids.", ParameterType = "property", DataType = "List<int>", IsRequired = false)]
         public List<int> StatusIds { get; set; }
