@@ -5,20 +5,19 @@ using System.Text;
 using System.Threading.Tasks;
 using Phytel.API.AppDomain.NG.DTO;
 using Phytel.API.AppDomain.NG.PlanCOR;
-using Phytel.API.AppDomain.NG.Programs.PlanElemStrategy;
 
-namespace Phytel.API.AppDomain.NG.Test.Stubs
+namespace Phytel.API.AppDomain.NG.Programs.ElementActivation
 {
-    public class StubPlanElementActivationStrategy : IPlanElementActivationStrategy
+    public class ElementActivationStrategy : IElementActivationStrategy
     {
-        private readonly List<IPlanElementActivationRule> _rules;
+        private readonly List<IElementActivationRule> _rules;
 
-        public StubPlanElementActivationStrategy()
+        public ElementActivationStrategy()
         {
-            _rules = new List<IPlanElementActivationRule>
+            _rules = new List<IElementActivationRule>
             {
-                new StubToDoActivationRule(),
-                new StubProblemActivationRule()
+                new ToDoActivationRule(),
+                new ProblemActivationRule()
             };
         }
 

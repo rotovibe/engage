@@ -142,7 +142,7 @@
     <Compile Include="Stubs\StubEndpointUtils.cs" />
     <Compile Include="Stubs\StubJsonRestClient.cs" />
     <Compile Include="Stubs\StubNGManager.cs" />
-    <Compile Include="Stubs\StubPlanElementActivationStrategy.cs" />
+    <Compile Include="Stubs\StubElementActivationStrategy.cs" />
     <Compile Include="Stubs\StubPlanElementEndpointUtils.cs" />
     <Compile Include="Stubs\StubPlanElementUtils.cs" />
     <Compile Include="Stubs\StubSecurityManager.cs" />

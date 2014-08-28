@@ -1,17 +1,9 @@
 ﻿using Phytel.API.AppDomain.NG.DTO;
 using Phytel.API.AppDomain.NG.PlanElementStrategy;
-using Phytel.API.AppDomain.NG.Programs.PlanElemStrategy;
-using Phytel.API.DataDomain.PatientProblem.DTO;
+using Phytel.API.AppDomain.NG.Programs.ElementActivation;
 using Phytel.API.DataDomain.Program.DTO;
-using ServiceStack.Service;
-using ServiceStack.ServiceClient.Web;
 using ServiceStack.WebHost.Endpoints;
 using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Phytel.API.AppDomain.NG.PlanCOR
 {
@@ -128,7 +120,7 @@ namespace Phytel.API.AppDomain.NG.PlanCOR
                             else if (rse.ElementType > 100)
                             {
                                 //HandlePatientProblemRegistration(e, userId, rse);
-                                var type = new PlanElementActivationStrategy().Run(e, rse, userId);
+                                var type = new ElementActivationStrategy().Run(e, rse, userId);
                                 if (!string.IsNullOrEmpty(type)) OnSpawnElementEvent(type);
                             }
                             else

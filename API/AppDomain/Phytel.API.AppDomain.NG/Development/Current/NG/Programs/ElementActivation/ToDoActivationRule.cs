@@ -2,9 +2,9 @@
 using Phytel.API.AppDomain.NG.PlanCOR;
 using ServiceStack.WebHost.Endpoints;
 
-namespace Phytel.API.AppDomain.NG.Programs.PlanElemStrategy
+namespace Phytel.API.AppDomain.NG.Programs.ElementActivation
 {
-    public class ToDoActivationRule : PlanElementActivationRule, IPlanElementActivationRule
+    public class ToDoActivationRule : ElementActivationRule, IElementActivationRule
     {
         private const int _elementType = 111;
         private const string AlertType = "ToDo";

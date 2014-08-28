@@ -94,12 +94,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Programs\PlanElemStrategy\IPlanElementActivationRule.cs" />
-    <Compile Include="Programs\PlanElemStrategy\IPlanElementActivationStrategy.cs" />
-    <Compile Include="Programs\PlanElemStrategy\ProblemActivationRule.cs" />
-    <Compile Include="Programs\PlanElemStrategy\ToDoActivationRule.cs" />
-    <Compile Include="Programs\PlanElemStrategy\PlanElementActivationRule.cs" />
-    <Compile Include="Programs\PlanElemStrategy\PlanElementActivationStrategy.cs" />
+    <Compile Include="Programs\ElementActivation\IElementActivationRule.cs" />
+    <Compile Include="Programs\ElementActivation\IElementActivationStrategy.cs" />
+    <Compile Include="Programs\ElementActivation\ProblemActivationRule.cs" />
+    <Compile Include="Programs\ElementActivation\ToDoActivationRule.cs" />
+    <Compile Include="Programs\ElementActivation\ElementActivationRule.cs" />
+    <Compile Include="Programs\ElementActivation\ElementActivationStrategy.cs" />
     <Compile Include="SchedulingManager.cs" />
     <Compile Include="CareMembersManager.cs" />
     <Compile Include="Command\CareMembersCommand.cs" />
@@ -118,7 +118,7 @@
     <Compile Include="Observation\IObservationEndpointUtil.cs" />
     <Compile Include="Observation\IObservationsManager.cs" />
     <Compile Include="Programs\PlanElemStrategy\IPlanElementStrategy.cs" />
-    <Compile Include="Programs\PlanElemStrategy\IPlanElementAction.cs" />
+    <Compile Include="Programs\PlanElemStrategy\IElementAction.cs" />
     <Compile Include="Programs\PlanElemStrategy\StatePlanElementStrategy.cs" />
     <Compile Include="Programs\PlanElemStrategy\SetModulePropertiesForRepeat.cs" />
     <Compile Include="Programs\Specifications\ISpecification.cs" />
@@ -163,9 +163,9 @@
     <Compile Include="Programs\PlanResponsibilityChain\ModulePlanProcessor.cs" />
     <Compile Include="Programs\PlanResponsibilityChain\ProgramPlanProcessor.cs" />
     <Compile Include="Programs\PlanElementEndpointUtil.cs" />
-    <Compile Include="Programs\PlanElemStrategy\ISpawn.cs" />
-    <Compile Include="Programs\PlanElemStrategy\UpdateSpawnProblemCode.cs" />
-    <Compile Include="Programs\PlanElemStrategy\RegisterSpawnProblemCode.cs" />
+    <Compile Include="Programs\ElementActivation\ISpawn.cs" />
+    <Compile Include="Programs\ElementActivation\UpdateSpawnProblemCode.cs" />
+    <Compile Include="Programs\ElementActivation\RegisterSpawnProblemCode.cs" />
     <Compile Include="Programs\Specifications\ResponseSpawnAllowedSpecification.cs" />
     <Compile Include="Programs\Specifications\CompletedSpecification.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

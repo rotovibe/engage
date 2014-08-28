@@ -1140,6 +1140,8 @@ namespace Phytel.Data.ETL
                             parms.Add(new Parameter("@DateOfBirth", patient.DOB, SqlDbType.VarChar, ParameterDirection.Input, 50));
                             parms.Add(new Parameter("@Gender", patient.Gender, SqlDbType.VarChar, ParameterDirection.Input, 50));
                             parms.Add(new Parameter("@Priority", patient.Priority, SqlDbType.VarChar, ParameterDirection.Input, 50));
+                            parms.Add(new Parameter("@LSSN", patient.LastFourSSN != null ?  patient.LastFourSSN.ToString() : (object)DBNull.Value, SqlDbType.VarChar, ParameterDirection.Input, 50));
+                            parms.Add(new Parameter("@FSSN", patient.FullSSN != null ? patient.FullSSN.ToString() : (object)DBNull.Value, SqlDbType.VarChar, ParameterDirection.Input, 100));                            
                             parms.Add(new Parameter("@Version", patient.Version, SqlDbType.Float, ParameterDirection.Input, 50));
                             parms.Add(new Parameter("@UpdatedBy", patient.UpdatedBy, SqlDbType.VarChar, ParameterDirection.Input, 50));
                             parms.Add(new Parameter("@LastUpdatedOn", patient.LastUpdatedOn ?? (object)DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
@@ -1149,6 +1151,7 @@ namespace Phytel.Data.ETL
                             parms.Add(new Parameter("@BackGround", (string.IsNullOrEmpty(patient.Background) ? string.Empty : patient.Background), SqlDbType.VarChar, ParameterDirection.Input, int.MaxValue));
                             parms.Add(new Parameter("@DisplayPatientSystemMongoId", string.Empty, SqlDbType.VarChar, ParameterDirection.Input, 50));
                             parms.Add(new Parameter("@TTLDate", patient.TTLDate ?? (object)DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
+
                             if (patient.ExtraElements != null)
                                 parms.Add(new Parameter("@ExtraElements", patient.ExtraElements.ToString(), SqlDbType.VarChar, ParameterDirection.Input, int.MaxValue));
                             else
@@ -1620,6 +1623,8 @@ namespace Phytel.Data.ETL
                             parms.Add(new Parameter("@EligibilityRequirements", prog.EligibilityRequirements ?? string.Empty, SqlDbType.VarChar, ParameterDirection.Input, -1));
                             parms.Add(new Parameter("@EligibilityEndDate", prog.EligibilityEndDate ?? (object)DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
                             parms.Add(new Parameter("@MongoID", prog.Id.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
+
+                            parms.Add(new Parameter("@Version", prog.Version.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
                             parms.Add(new Parameter("@_updatedBy", prog.UpdatedBy == null ? string.Empty : prog.UpdatedBy.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
                             parms.Add(new Parameter("@LastUpdatedOn", prog.LastUpdatedOn ?? (object)DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));                            
                             parms.Add(new Parameter("@_recordCreatedBy", prog.RecordCreatedBy.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
@@ -1639,7 +1644,7 @@ namespace Phytel.Data.ETL
                                 RegisterSpawnElement(prog.Spawn, prog.Id.ToString(), (int)patientProgramId);
                             }
 
-                            LoadPatientProgramModules(ctr, patientProgramId, prog.Modules);
+                            LoadPatientProgramModules(ctr, patientProgramId, prog.Modules, prog);
                         }
                         catch (Exception ex)
                         {
@@ -1712,7 +1717,7 @@ namespace Phytel.Data.ETL
             }
         }
 
-        private void LoadPatientProgramModules(string ctr, object patientProgramId, List<Module> list)
+        private void LoadPatientProgramModules(string ctr, object patientProgramId, List<Module> list, MEPatientProgram prog )
         {
             try
             {
@@ -1758,7 +1763,7 @@ namespace Phytel.Data.ETL
                                 RegisterSpawnElement(mod.Spawn, mod.Id.ToString(), (int)patientProgramModuleId);
                             }
 
-                            LoadPatientProgramActions(ctr, patientProgramModuleId, mod.Actions);
+                            LoadPatientProgramActions(ctr, patientProgramModuleId, mod.Actions, prog);
                         }
                         catch (Exception ex)
                         {
@@ -1772,7 +1777,7 @@ namespace Phytel.Data.ETL
             }
         }
 
-        private void LoadPatientProgramActions(string ctr, object patientProgramModuleId, List<Action> list)
+        private void LoadPatientProgramActions(string ctr, object patientProgramModuleId, List<Action> list, MEPatientProgram prog)
         {
             try
             {
@@ -1807,6 +1812,14 @@ namespace Phytel.Data.ETL
                             parms.Add(new Parameter("@_previous", act.Previous == null ? string.Empty : act.Previous.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
                             parms.Add(new Parameter("@_next", act.Next == null ? string.Empty : act.Next.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
 
+                            parms.Add(new Parameter("@Version", prog.Version.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                            parms.Add(new Parameter("@_updatedBy", prog.UpdatedBy == null ? string.Empty : prog.UpdatedBy.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                            parms.Add(new Parameter("@LastUpdatedOn", prog.LastUpdatedOn ?? (object)DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
+                            parms.Add(new Parameter("@_recordCreatedBy", prog.RecordCreatedBy.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                            parms.Add(new Parameter("@RecordCreatedOn", prog.RecordCreatedOn, SqlDbType.DateTime, ParameterDirection.Input, 50));
+                            parms.Add(new Parameter("@TTLDate", prog.TTLDate ?? (object)DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
+                            parms.Add(new Parameter("@Delete", prog.DeleteFlag.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
+
                             var patientProgramActionId = SQLDataService.Instance.ExecuteScalar("InHealth001", true, "REPORT", "spPhy_SavePatientProgramModuleAction", parms);
 
                             if (patientProgramActionId != null && act.Spawn != null && act.Spawn.Count > 0)
@@ -1815,7 +1828,7 @@ namespace Phytel.Data.ETL
                                 RegisterSpawnElement(act.Spawn, act.Id.ToString(), (int)patientProgramActionId);
                             }
 
-                            LoadPatientProgramSteps(ctr, patientProgramActionId, act.Steps);
+                            LoadPatientProgramSteps(ctr, patientProgramActionId, act.Steps, prog);
                         }
                         catch (Exception ex)
                         {
@@ -1829,7 +1842,7 @@ namespace Phytel.Data.ETL
             }
         }
 
-        private void LoadPatientProgramSteps(string ctr, object patientProgramActionId, List<Step> list)
+        private void LoadPatientProgramSteps(string ctr, object patientProgramActionId, List<Step> list, MEPatientProgram prog)
         {
             try
             {
@@ -1870,6 +1883,14 @@ namespace Phytel.Data.ETL
                             parms.Add(new Parameter("@DateCompleted", step.DateCompleted ?? (object)DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
                             parms.Add(new Parameter("@EligibilityRequirements", step.EligibilityRequirements ?? string.Empty, SqlDbType.VarChar, ParameterDirection.Input, -1));
                             parms.Add(new Parameter("@EligibilityEndDate", step.EligibilityEndDate ?? (object)DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
+
+                            parms.Add(new Parameter("@Version", prog.Version.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                            parms.Add(new Parameter("@_updatedBy", prog.UpdatedBy == null ? string.Empty : prog.UpdatedBy.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                            parms.Add(new Parameter("@LastUpdatedOn", prog.LastUpdatedOn ?? (object)DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
+                            parms.Add(new Parameter("@_recordCreatedBy", prog.RecordCreatedBy.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                            parms.Add(new Parameter("@RecordCreatedOn", prog.RecordCreatedOn, SqlDbType.DateTime, ParameterDirection.Input, 50));
+                            parms.Add(new Parameter("@TTLDate", prog.TTLDate ?? (object)DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
+                            parms.Add(new Parameter("@Delete", prog.DeleteFlag.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
 
                             var StepId = SQLDataService.Instance.ExecuteScalar("InHealth001", true, "REPORT", "spPhy_SavePatientProgramModuleActionStep", parms);
 
@@ -1916,7 +1937,7 @@ namespace Phytel.Data.ETL
                             parms.Add(new Parameter("@_nextStepId", resp.NextStepId == null ? string.Empty : resp.NextStepId.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
                             parms.Add(new Parameter("@Selected", resp.Selected.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
                             parms.Add(new Parameter("@_stepSourceId", resp.StepSourceId.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
-
+                            parms.Add(new Parameter("@Version", resp.Version, SqlDbType.Float, ParameterDirection.Input, 50));
                             parms.Add(new Parameter("@_updatedBy", resp.UpdatedBy == null ? string.Empty : resp.UpdatedBy.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
                             parms.Add(new Parameter("@_recordCreatedBy", resp.RecordCreatedBy.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
                             parms.Add(new Parameter("@RecordCreatedOn", resp.RecordCreatedOn , SqlDbType.DateTime, ParameterDirection.Input, 50));

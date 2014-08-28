@@ -1,9 +1,9 @@
 using Phytel.API.AppDomain.NG.DTO;
 using Phytel.API.AppDomain.NG.PlanCOR;
 
-namespace Phytel.API.AppDomain.NG.Programs.PlanElemStrategy
+namespace Phytel.API.AppDomain.NG.Programs.ElementActivation
 {
-    public interface IPlanElementActivationStrategy
+    public interface IElementActivationStrategy
     {
         string Run(PlanElementEventArg e, SpawnElement rse, string userId);
     }

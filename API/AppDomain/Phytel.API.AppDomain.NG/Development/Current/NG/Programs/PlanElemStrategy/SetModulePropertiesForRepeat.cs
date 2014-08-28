@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace Phytel.API.AppDomain.NG.PlanElementStrategy
 {
-    public class SetModulePropertiesForRepeat : IPlanElementAction
+    public class SetModulePropertiesForRepeat : IElementAction
     {
         private Module _module;
         ISpecification<Module> isModuleAlreadyCompleted = new IsModuleCompletedSpecification<Module>();

@@ -8,9 +8,9 @@ namespace Phytel.API.AppDomain.NG.PlanElementStrategy
 {
     public class StatePlanElementStrategy : IPlanElementStrategy
     {
-        private readonly IPlanElementAction _action;
+        private readonly IElementAction _action;
 
-        public StatePlanElementStrategy(IPlanElementAction action)
+        public StatePlanElementStrategy(IElementAction action)
         {
             _action = action;
         }

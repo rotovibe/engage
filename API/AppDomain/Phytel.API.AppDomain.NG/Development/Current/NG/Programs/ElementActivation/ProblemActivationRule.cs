@@ -1,12 +1,13 @@
 ﻿using System;
 using Phytel.API.AppDomain.NG.DTO;
+using Phytel.API.AppDomain.NG.ElementActivation;
 using Phytel.API.AppDomain.NG.PlanCOR;
 using Phytel.API.AppDomain.NG.PlanElementStrategy;
 using ServiceStack.WebHost.Endpoints;
 
-namespace Phytel.API.AppDomain.NG.Programs.PlanElemStrategy
+namespace Phytel.API.AppDomain.NG.Programs.ElementActivation
 {
-    public class ProblemActivationRule : PlanElementActivationRule, IPlanElementActivationRule
+    public class ProblemActivationRule : ElementActivationRule, IElementActivationRule
     {
         private const int _elementType = 101;
         private const string AlertType = "Problems";

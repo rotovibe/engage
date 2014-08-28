@@ -3,7 +3,7 @@ using Phytel.API.AppDomain.NG.PlanCOR;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Phytel.API.AppDomain.NG.Test.Stubs;
 
-namespace Phytel.API.AppDomain.NG.Programs.PlanElemStrategy.Tests
+namespace Phytel.API.AppDomain.NG.Programs.ElementActivation.Tests
 {
     [TestClass()]
     public class ProblemActivationRuleTests
@@ -14,7 +14,7 @@ namespace Phytel.API.AppDomain.NG.Programs.PlanElemStrategy.Tests
             [TestMethod()]
             public void Execute_Problem()
             {
-                IPlanElementActivationRule rule = new ProblemActivationRule
+                IElementActivationRule rule = new ProblemActivationRule
                 {
                     EndpointUtil = new StubEndpointUtils(),
                     PlanUtils = new NG.Fakes.StubIPlanElementUtils()
@@ -29,7 +29,7 @@ namespace Phytel.API.AppDomain.NG.Programs.PlanElemStrategy.Tests
             [TestMethod()]
             public void Execute_ToDo()
             {
-                IPlanElementActivationRule rule = new ToDoActivationRule
+                IElementActivationRule rule = new ToDoActivationRule
                 {
                     EndpointUtil = new StubEndpointUtils(),
                     PlanUtils = new NG.Fakes.StubIPlanElementUtils()

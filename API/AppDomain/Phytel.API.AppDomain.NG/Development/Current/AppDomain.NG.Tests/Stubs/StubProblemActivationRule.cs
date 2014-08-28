@@ -1,10 +1,10 @@
 ﻿using Phytel.API.AppDomain.NG.DTO;
 using Phytel.API.AppDomain.NG.PlanCOR;
-using Phytel.API.AppDomain.NG.Programs.PlanElemStrategy;
+using Phytel.API.AppDomain.NG.Programs.ElementActivation;
 
 namespace Phytel.API.AppDomain.NG.Test.Stubs
 {
-    public class StubProblemActivationRule : PlanElementActivationRule, IPlanElementActivationRule
+    public class StubProblemActivationRule : ElementActivationRule, IElementActivationRule
     {
         private const int _elementType = 101;
         private const string AlertType = "Problems";

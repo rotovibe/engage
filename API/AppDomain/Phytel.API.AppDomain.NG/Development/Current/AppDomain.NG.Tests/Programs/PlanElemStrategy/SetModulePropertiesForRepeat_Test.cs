@@ -23,7 +23,7 @@ namespace Phytel.API.AppDomain.NG.PlanElementStrategy.Tests
                 CompletedBy = "Testing"
             };
 
-            IPlanElementAction action = new SetModulePropertiesForRepeat(mod);
+            IElementAction action = new SetModulePropertiesForRepeat(mod);
             action.Execute();
 
             Assert.AreEqual(mod.ElementState, 4);
