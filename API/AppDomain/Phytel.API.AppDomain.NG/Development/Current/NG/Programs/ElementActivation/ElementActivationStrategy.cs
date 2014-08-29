@@ -16,12 +16,12 @@ namespace Phytel.API.AppDomain.NG.Programs.ElementActivation
             _rules = new List<IElementActivationRule>
             {
                 new ToDoActivationRule(),
-                new ProblemActivationRule(),
-                new ProgramActivationRule(),
-                new ModuleActivationRule(),
-                new ActionActivationRule(),
-                new StepActivationRule(),
-                new ProgramAttributeActivationRule()
+                new ProblemActivationRule()
+                //new ProgramActivationRule(),
+                //new ModuleActivationRule(),
+                //new ActionActivationRule(),
+                //new StepActivationRule(),
+                //new ProgramAttributeActivationRule()
             };
         }
 

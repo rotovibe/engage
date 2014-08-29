@@ -23,35 +23,55 @@ namespace Phytel.API.AppDomain.NG.Programs.ElementActivation
 
         public override object Execute(string userId, PlanElementEventArg arg, SpawnElement pe, ProgramAttributeData pad)
         {
-            HandleToDoTemplateRegistration(arg, pe);
-            return _alertType;
-        }
-
-        private void HandleToDoTemplateRegistration(PlanElementEventArg e, SpawnElement rse)
-        {
             try
             {
                 // get template todo from schedule endpoint
-                var todoTemp = EndpointUtil.GetScheduleToDoById(rse.ElementId, e.UserId);
+                var todoTemp = EndpointUtil.GetScheduleToDoById(pe.ElementId, arg.UserId);
 
                 var todo = new ToDoData
                 {
-                    AssignedToId = e.UserId,
-                    CreatedById = e.UserId,
+                    AssignedToId = arg.UserId,
+                    CreatedById = arg.UserId,
+                    SourceId = todoTemp.Id,
                     Title = todoTemp.Title,
                     CategoryId = todoTemp.CategoryId,
                     StatusId = todoTemp.StatusId,
                     Description = todoTemp.Description,
-                    PriorityId = todoTemp.PriorityId
+                    PriorityId = todoTemp.PriorityId,
+                    DueDate = HandleDueDate(todoTemp.DueDateRange),
+                    PatientId = arg.Program.PatientId,
+                    ProgramIds = new System.Collections.Generic.List<string> { arg.Program.Id },
+                    CreatedOn = DateTime.UtcNow
                 };
 
                 // register new todo
-                var result = EndpointUtil.PutInsertToDo(todo, e.UserId);
+                var result = EndpointUtil.PutInsertToDo(todo, arg.UserId);
+
+                return _alertType;
             }
             catch (Exception ex)
             {
-                throw new Exception("AD:StepPlanProcessor:HandlePatientProblemRegistration()::" + ex.Message,
-                    ex.InnerException);
+                throw new Exception("AD:ToDoActivationRule:Execute()::" + ex.Message, ex.InnerException);
+            }
+        }
+
+        public DateTime? HandleDueDate(int? days)
+        {
+            try
+            {
+                DateTime? dueDate = null;
+                if (days == null) return dueDate;
+
+                if (days > 0)
+                {
+                    dueDate = DateTime.UtcNow.AddDays(days.Value);
+                }
+
+                return dueDate;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("AD:ToDoActivationRule:HandleDueDate()::" + ex.Message, ex.InnerException);
             }
         }
     }

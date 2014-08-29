@@ -49,6 +49,11 @@ namespace Phytel.API.DataDomain.Scheduling
         [BsonId]
         public ObjectId Id { get; set; }
 
+        public const string SourceIdProperty = "srcid";
+        [BsonElement(SourceIdProperty)]
+        [BsonIgnoreIfNull(false)]
+        public ObjectId SourceId { get; set; }
+
         [BsonElement(PatientIdProperty)]
         [BsonIgnoreIfNull(true)]
         public ObjectId? PatientId { get; set; }

@@ -59,6 +59,11 @@ namespace Phytel.API.DataDomain.Scheduling
                         meToDo.PatientId = ObjectId.Parse(todoData.PatientId);
                     }
 
+                    if (!string.IsNullOrEmpty(todoData.SourceId))
+                    {
+                        meToDo.SourceId = ObjectId.Parse(todoData.SourceId);
+                    }
+
                     using (SchedulingMongoContext ctx = new SchedulingMongoContext(_dbName))
                     {
                         ctx.ToDos.Collection.Insert(meToDo);

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using MongoDB.Bson;
 using Phytel.API.AppDomain.NG.Programs;
 using Phytel.API.DataDomain.Patient.DTO;
 using Phytel.API.DataDomain.PatientObservation.DTO;
@@ -96,13 +97,29 @@ namespace Phytel.API.AppDomain.NG.Test.Stubs
 
         public DTO.Scheduling.Schedule GetScheduleToDoById(string p, string userId)
         {
-            throw new NotImplementedException();
+            return new DTO.Scheduling.Schedule
+            {
+                Id = "888888888888888888888888",
+                DueDateRange = 5,
+                AssignedToId = ObjectId.GenerateNewId().ToString(),
+                CategoryId = ObjectId.GenerateNewId().ToString(),
+                CreatedById = ObjectId.GenerateNewId().ToString(),
+                Description = "test description",
+                ProgramIds = new List<string> {ObjectId.GenerateNewId().ToString()},
+                Title = "Test Title for sample",
+                PriorityId = 3,
+                StatusId = 1,
+                PatientId = ObjectId.GenerateNewId().ToString(),
+                CreatedOn = DateTime.UtcNow,
+                TypeId = 2
+            };
         }
 
 
         public object PutInsertToDo(ToDoData todo, string p)
         {
-            throw new NotImplementedException();
+            // insert implementation here
+            return new object();
         }
     }
 }

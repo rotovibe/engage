@@ -22,5 +22,6 @@ namespace Phytel.API.DataDomain.Scheduling.DTO
         public string Title { get; set; }
         public DateTime CreatedOn { get; set; }
         public DateTime? UpdatedOn { get; set; }
+        public string SourceId { get; set; }
     }
 }
