@@ -1,6 +1,7 @@
 ﻿using MongoDB.Bson;
 using Phytel.API.AppDomain.NG.Programs;
 using Phytel.API.DataDomain.Program.DTO;
+using Phytel.API.DataDomain.Scheduling.DTO;
 using ServiceStack.Service;
 using ServiceStack.ServiceHost;
 using System;
@@ -294,6 +295,18 @@ namespace Phytel.API.AppDomain.NG.Test.Stubs
 
 
         public void SaveResponses(DTO.Actions action, DTO.IProcessActionRequest request, bool repeat)
+        {
+            throw new NotImplementedException();
+        }
+
+
+        public DTO.Scheduling.Schedule GetScheduleToDoById(string p, string userId)
+        {
+            throw new NotImplementedException();
+        }
+
+
+        public object PutInsertToDo(ToDoData todo, string p)
         {
             throw new NotImplementedException();
         }

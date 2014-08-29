@@ -17,7 +17,7 @@ namespace Phytel.API.AppDomain.NG.Programs.PlanElemStrategy.Tests
             {
                 var se = new SpawnElement {ElementType = 101};
                 var arg = new PlanElementEventArg {UserId = ObjectId.GenerateNewId().ToString()};
-                var strat = new StubElementActivationStrategy().Run(arg, se, ObjectId.GenerateNewId().ToString());
+                var strat = new StubElementActivationStrategy().Run(arg, se, ObjectId.GenerateNewId().ToString(), new DataDomain.Program.DTO.ProgramAttributeData());
                 Assert.AreEqual(strat, "Problems");
             }
 
@@ -26,7 +26,7 @@ namespace Phytel.API.AppDomain.NG.Programs.PlanElemStrategy.Tests
             {
                 var se = new SpawnElement { ElementType = 111 };
                 var arg = new PlanElementEventArg { UserId = ObjectId.GenerateNewId().ToString() };
-                var strat = new StubElementActivationStrategy().Run(arg, se, ObjectId.GenerateNewId().ToString());
+                var strat = new StubElementActivationStrategy().Run(arg, se, ObjectId.GenerateNewId().ToString(), new DataDomain.Program.DTO.ProgramAttributeData());
                 Assert.AreEqual(strat, "ToDo");
             }
         }

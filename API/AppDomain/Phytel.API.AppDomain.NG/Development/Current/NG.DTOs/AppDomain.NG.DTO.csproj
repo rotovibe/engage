@@ -242,6 +242,7 @@
     <Compile Include="Scheduling\PostInsertToDoRequest.cs" />
     <Compile Include="Scheduling\PostUpdateToDoResponse.cs" />
     <Compile Include="Scheduling\PostInsertToDoResponse.cs" />
+    <Compile Include="Scheduling\Schedule.cs" />
     <Compile Include="Scheduling\ToDo.cs" />
   </ItemGroup>
   <ItemGroup>

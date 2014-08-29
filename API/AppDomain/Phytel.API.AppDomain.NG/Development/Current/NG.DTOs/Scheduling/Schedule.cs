@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Phytel.API.DataDomain.Scheduling.DTO
+namespace Phytel.API.AppDomain.NG.DTO.Scheduling
 {
-    public class ScheduleData
+    public class Schedule
     {
         public string Id { get; set; }
         public string CreatedById { get; set; }

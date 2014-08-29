@@ -2,6 +2,7 @@
 using Phytel.API.AppDomain.NG.PlanCOR;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Phytel.API.AppDomain.NG.Test.Stubs;
+using Phytel.API.DataDomain.Program.DTO;
 
 namespace Phytel.API.AppDomain.NG.Programs.ElementActivation.Tests
 {
@@ -22,7 +23,7 @@ namespace Phytel.API.AppDomain.NG.Programs.ElementActivation.Tests
                 SpawnElement se = new NG.DTO.Fakes.StubSpawnElement {ElementType = 101};
                 PlanElementEventArg arg = new NG.PlanCOR.Fakes.StubPlanElementEventArg {};
                 var userid = "999999999999999999999999";
-                var result = rule.Execute(userid, arg, se);
+                var result = rule.Execute(userid, arg, se, new ProgramAttributeData());
                 Assert.AreEqual(result, "Problems");
             }
 
@@ -37,7 +38,7 @@ namespace Phytel.API.AppDomain.NG.Programs.ElementActivation.Tests
                 SpawnElement se = new NG.DTO.Fakes.StubSpawnElement { ElementType = 111 };
                 PlanElementEventArg arg = new NG.PlanCOR.Fakes.StubPlanElementEventArg { };
                 var userid = "999999999999999999999999";
-                var result = rule.Execute(userid, arg, se);
+                var result = rule.Execute(userid, arg, se, new ProgramAttributeData());
                 Assert.AreEqual(result, "ToDo");
             }
         }

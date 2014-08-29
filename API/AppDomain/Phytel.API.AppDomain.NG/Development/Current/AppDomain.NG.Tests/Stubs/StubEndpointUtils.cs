@@ -7,6 +7,7 @@ using Phytel.API.AppDomain.NG.Programs;
 using Phytel.API.DataDomain.Patient.DTO;
 using Phytel.API.DataDomain.PatientObservation.DTO;
 using Phytel.API.DataDomain.Program.DTO;
+using Phytel.API.DataDomain.Scheduling.DTO;
 
 namespace Phytel.API.AppDomain.NG.Test.Stubs
 {
@@ -88,6 +89,18 @@ namespace Phytel.API.AppDomain.NG.Test.Stubs
         }
 
         public DTO.Outcome SaveProgramAttributeChanges(DTO.PostProgramAttributesChangeRequest request, DataDomain.Program.DTO.ProgramDetail pg)
+        {
+            throw new NotImplementedException();
+        }
+
+
+        public DTO.Scheduling.Schedule GetScheduleToDoById(string p, string userId)
+        {
+            throw new NotImplementedException();
+        }
+
+
+        public object PutInsertToDo(ToDoData todo, string p)
         {
             throw new NotImplementedException();
         }

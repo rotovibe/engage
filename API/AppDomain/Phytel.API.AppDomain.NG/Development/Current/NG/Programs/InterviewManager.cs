@@ -215,6 +215,7 @@ namespace Phytel.API.AppDomain.NG
 
                 // clone and insert new action
                 var cAction = PEUtils.CloneRepeatAction(request.Action, mod.AssignToId);
+                cAction.CompletedBy = "CM";
                 AddUniquePlanElementToProcessedList(cAction);
 
                 // insert action update

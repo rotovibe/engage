@@ -66,6 +66,7 @@ namespace Phytel.API.DataDomain.Scheduling
                             CreatedOn = meSch.RecordCreatedOn,
                             Description = meSch.Description,
                             DueDate = meSch.DueDate,
+                            DueDateRange = meSch.DueDateRange,
                             Id = meSch.Id.ToString(),
                             PatientId = meSch.PatientId.ToString(),
                             PriorityId = (int)meSch.Priority,

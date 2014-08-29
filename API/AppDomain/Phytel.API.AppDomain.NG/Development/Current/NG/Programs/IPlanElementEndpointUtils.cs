@@ -1,8 +1,10 @@
 ﻿using Phytel.API.AppDomain.NG.DTO;
+using Phytel.API.AppDomain.NG.DTO.Scheduling;
 using Phytel.API.AppDomain.NG.PlanCOR;
 using Phytel.API.DataDomain.Patient.DTO;
 using Phytel.API.DataDomain.PatientObservation.DTO;
 using Phytel.API.DataDomain.Program.DTO;
+using Phytel.API.DataDomain.Scheduling.DTO;
 using Phytel.API.Interface;
 using System;
 using System.Collections.Generic;
@@ -29,5 +31,9 @@ namespace Phytel.API.AppDomain.NG.Programs
         string GetPrimaryCareManagerForPatient(PostPatientToProgramsRequest request);
         void SaveResponses(Actions action, IProcessActionRequest request, bool repeat);
         AD.Outcome SaveProgramAttributeChanges(PostProgramAttributesChangeRequest request, ProgramDetail pg);
+
+        Schedule GetScheduleToDoById(string p, string userId);
+
+        object PutInsertToDo(ToDoData todo, string p);
     }
 }

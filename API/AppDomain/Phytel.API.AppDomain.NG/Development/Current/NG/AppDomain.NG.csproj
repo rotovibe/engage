@@ -94,8 +94,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Programs\ElementActivation\ProgramAttributeActivationRule.cs" />
+    <Compile Include="Programs\ElementActivation\StepActivationRule.cs" />
+    <Compile Include="Programs\ElementActivation\ModuleActivationRule.cs" />
+    <Compile Include="Programs\ElementActivation\ProgramActivationRule.cs" />
     <Compile Include="Programs\ElementActivation\IElementActivationRule.cs" />
     <Compile Include="Programs\ElementActivation\IElementActivationStrategy.cs" />
+    <Compile Include="Programs\ElementActivation\ActionActivationRule.cs" />
     <Compile Include="Programs\ElementActivation\ProblemActivationRule.cs" />
     <Compile Include="Programs\ElementActivation\ToDoActivationRule.cs" />
     <Compile Include="Programs\ElementActivation\ElementActivationRule.cs" />

@@ -1341,6 +1341,7 @@ namespace Phytel.API.AppDomain.NG
                 cAct.AssignById = DD.Constants.SystemContactId;
                 cAct.AssignToId = assignedTo;
                 cAct.Completed = false;
+                cAct.CompletedBy = "CM";
                 cAct.DateCompleted = null;
 
                 // update spawnelements

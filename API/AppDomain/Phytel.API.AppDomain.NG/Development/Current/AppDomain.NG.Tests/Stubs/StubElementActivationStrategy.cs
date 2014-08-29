@@ -3,6 +3,7 @@ using System.Linq;
 using Phytel.API.AppDomain.NG.DTO;
 using Phytel.API.AppDomain.NG.PlanCOR;
 using Phytel.API.AppDomain.NG.Programs.ElementActivation;
+using Phytel.API.DataDomain.Program.DTO;
 
 namespace Phytel.API.AppDomain.NG.Test.Stubs
 {
@@ -19,9 +20,9 @@ namespace Phytel.API.AppDomain.NG.Test.Stubs
             };
         }
 
-        public string Run(PlanElementEventArg e, SpawnElement rse, string userId)
+        public object Run(PlanElementEventArg e, SpawnElement rse, string userId, ProgramAttributeData pad)
         {
-            var alert = _rules.First(r => r.ElementType == rse.ElementType).Execute(userId, e, rse);
+            var alert = _rules.First(r => r.ElementType == rse.ElementType).Execute(userId, e, rse, pad);
             return alert;
         }
     }

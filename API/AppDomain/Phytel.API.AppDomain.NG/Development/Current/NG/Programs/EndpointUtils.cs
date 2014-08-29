@@ -1,4 +1,5 @@
 ﻿using Phytel.API.AppDomain.NG.DTO;
+using Phytel.API.AppDomain.NG.DTO.Scheduling;
 using Phytel.API.AppDomain.NG.PlanCOR;
 //using Phytel.API.AppDomain.NG.Program;
 using Phytel.API.AppDomain.NG.Programs;
@@ -7,6 +8,7 @@ using Phytel.API.DataDomain.Patient.DTO;
 using Phytel.API.DataDomain.PatientObservation.DTO;
 using Phytel.API.DataDomain.PatientProblem.DTO;
 using Phytel.API.DataDomain.Program.DTO;
+using Phytel.API.DataDomain.Scheduling.DTO;
 using Phytel.API.Interface;
 using ServiceStack.Service;
 using ServiceStack.ServiceClient.Web;
@@ -25,6 +27,7 @@ namespace Phytel.API.AppDomain.NG
         static readonly string DDPatientServiceUrl = ConfigurationManager.AppSettings["DDPatientServiceUrl"];
         static readonly string DDProgramServiceUrl = ConfigurationManager.AppSettings["DDProgramServiceUrl"];
         static readonly string DDCareMemberUrl = ConfigurationManager.AppSettings["DDCareMemberUrl"];
+        static readonly string DDSchedulingUrl = ConfigurationManager.AppSettings["DDSchedulingUrl"];
 
         public PatientObservation GetPatientProblem(string probId, PlanElementEventArg e, string userId)
         {
@@ -695,6 +698,68 @@ namespace Phytel.API.AppDomain.NG
             {
                 throw new Exception("AD:PlanElementEndpointUtil:SaveProgramAttributeChanges()::" + ex.Message,
                     ex.InnerException);
+            }
+        }
+
+
+        public Schedule GetScheduleToDoById(string sid, string userId)
+        {
+            var request = new GetScheduleDataRequest();
+
+            IRestClient client = new JsonServiceClient();
+
+            var url = Common.Helper.BuildURL(string.Format(@"{0}/{1}/{2}/{3}/Scheduling/Schedule/{4}",
+                DDSchedulingUrl,
+                "NG",
+                request.Version,
+                request.ContractNumber,
+                sid), request.UserId);
+
+            var response = client.Get<GetScheduleDataResponse>(url);
+            var schedule = new Schedule
+            {
+                AssignedToId = response.Schedule.AssignedToId,
+                CategoryId = response.Schedule.CategoryId,
+                ClosedDate = response.Schedule.ClosedDate,
+                CreatedById = response.Schedule.CreatedById,
+                CreatedOn = response.Schedule.CreatedOn,
+                Description = response.Schedule.Description,
+                DueDate = response.Schedule.DueDate,
+                DueDateRange = response.Schedule.DueDateRange,
+                Id = response.Schedule.Id,
+                PatientId = response.Schedule.PatientId,
+                PriorityId = response.Schedule.PriorityId,
+                ProgramIds = response.Schedule.ProgramIds,
+                StatusId = response.Schedule.StatusId,
+                Title = response.Schedule.Title,
+                TypeId = response.Schedule.TypeId,
+                UpdatedOn = response.Schedule.UpdatedOn
+            };
+
+            return schedule;
+        }
+
+
+        public object PutInsertToDo(ToDoData todo, string p)
+        {
+            try
+            {
+                var request = new PutInsertToDoDataRequest();
+                request.ToDoData = todo;
+                IRestClient client = new JsonServiceClient();
+
+                var url = Common.Helper.BuildURL(string.Format(@"{0}/{1}/{2}/{3}/Scheduling/ToDo/Insert",
+                    DDSchedulingUrl,
+                    "NG",
+                    1.0,
+                    "InHealth001"), request.UserId);
+
+                var response = client.Put<PutInsertToDoDataResponse>(url, request);
+                return response;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("AD:PlanElementEndpointUtil:SaveProgramAttributeChanges()::" + ex.Message, ex.InnerException);
             }
         }
     }

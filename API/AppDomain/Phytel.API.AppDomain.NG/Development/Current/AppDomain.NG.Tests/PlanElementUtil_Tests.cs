@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Phytel.API.AppDomain.NG;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Phytel.API.AppDomain.NG.Programs.ElementActivation;
 using Phytel.API.AppDomain.NG.Test.Factories;
 using AD = Phytel.API.AppDomain.NG.DTO;
 using Phytel.API.DataDomain.Program.DTO;
