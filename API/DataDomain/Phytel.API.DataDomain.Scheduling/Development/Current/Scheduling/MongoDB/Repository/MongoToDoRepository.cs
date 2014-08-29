@@ -9,12 +9,14 @@ using Phytel.API.DataAudit;
 using MB = MongoDB.Driver.Builders;
 using MongoDB.Driver.Builders;
 using System.Linq;
+using System.Configuration;
 
 namespace Phytel.API.DataDomain.Scheduling
 {
     public class MongoToDoRepository : ISchedulingRepository
     {
         private string _dbName = string.Empty;
+        private int _expireDays = Convert.ToInt32(ConfigurationManager.AppSettings["ExpireDays"]);
 
         public MongoToDoRepository(string contractDBName)
         {
@@ -82,7 +84,31 @@ namespace Phytel.API.DataDomain.Scheduling
 
         public void Delete(object entity)
         {
-            throw new NotImplementedException();
+            DeleteToDoByPatientIdDataRequest request = (DeleteToDoByPatientIdDataRequest)entity;
+            try
+            {
+                using (SchedulingMongoContext ctx = new SchedulingMongoContext(_dbName))
+                {
+                    var q = MB.Query<METoDo>.EQ(b => b.Id, ObjectId.Parse(request.Id));
+
+                    var uv = new List<MB.UpdateBuilder>();
+                    uv.Add(MB.Update.Set(METoDo.TTLDateProperty, DateTime.UtcNow.AddDays(_expireDays)));
+                    uv.Add(MB.Update.Set(METoDo.LastUpdatedOnProperty, DateTime.UtcNow));
+                    uv.Add(MB.Update.Set(METoDo.DeleteFlagProperty, true));
+                    uv.Add(MB.Update.Set(METoDo.UpdatedByProperty, ObjectId.Parse(this.UserId)));
+
+                    IMongoUpdate update = MB.Update.Combine(uv);
+                    ctx.ToDos.Collection.Update(q, update);
+
+                    AuditHelper.LogDataAudit(this.UserId,
+                                            MongoCollectionName.ToDo.ToString(),
+                                            request.Id.ToString(),
+                                            Common.DataAuditType.Delete,
+                                            request.ContractNumber);
+
+                }
+            }
+            catch (Exception) { throw; }
         }
 
         public void DeleteAll(List<object> entities)
@@ -241,7 +267,31 @@ namespace Phytel.API.DataDomain.Scheduling
 
         public void UndoDelete(object entity)
         {
-            throw new NotImplementedException();
+            UndoDeletePatientToDosDataRequest request = (UndoDeletePatientToDosDataRequest)entity;
+            try
+            {
+                using (SchedulingMongoContext ctx = new SchedulingMongoContext(_dbName))
+                {
+                    var q = MB.Query<METoDo>.EQ(b => b.Id, ObjectId.Parse(request.ToDoId));
+
+                    var uv = new List<MB.UpdateBuilder>();
+                    uv.Add(MB.Update.Set(METoDo.TTLDateProperty, BsonNull.Value));
+                    uv.Add(MB.Update.Set(METoDo.DeleteFlagProperty, false));
+                    uv.Add(MB.Update.Set(METoDo.LastUpdatedOnProperty, DateTime.UtcNow));
+                    uv.Add(MB.Update.Set(METoDo.UpdatedByProperty, ObjectId.Parse(this.UserId)));
+
+                    IMongoUpdate update = MB.Update.Combine(uv);
+                    ctx.ToDos.Collection.Update(q, update);
+
+                    AuditHelper.LogDataAudit(this.UserId,
+                                            MongoCollectionName.ToDo.ToString(),
+                                            request.ToDoId.ToString(),
+                                            Common.DataAuditType.UndoDelete,
+                                            request.ContractNumber);
+
+                }
+            }
+            catch (Exception) { throw; }
         }
 
         public IEnumerable<object> FindToDos(object request)

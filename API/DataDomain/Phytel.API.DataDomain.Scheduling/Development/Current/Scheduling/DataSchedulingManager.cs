@@ -75,7 +75,6 @@ namespace Phytel.API.DataDomain.Scheduling
             RemoveProgramInToDosDataResponse response = new RemoveProgramInToDosDataResponse();
             try
             {
-
                 ISchedulingRepository repo = Factory.GetRepository(request, RepositoryType.ToDo);
                 if (request.ProgramId != null)
                 {
@@ -92,6 +91,59 @@ namespace Phytel.API.DataDomain.Scheduling
                         });
                     }
                 }
+                return response;
+            }
+            catch (Exception ex) { throw ex; }
+        }
+
+        public DeleteToDoByPatientIdDataResponse DeleteToDoByPatientId(DeleteToDoByPatientIdDataRequest request)
+        {
+            DeleteToDoByPatientIdDataResponse response = new DeleteToDoByPatientIdDataResponse();
+            try
+            {
+                ISchedulingRepository repo = Factory.GetRepository(request, RepositoryType.ToDo);
+                GetToDosDataRequest getToDosDataRequest = new GetToDosDataRequest
+                {
+                    PatientId = request.PatientId,
+                    Context = request.Context,
+                    ContractNumber = request.ContractNumber,
+                    UserId = request.UserId,
+                    Version = request.Version
+                };
+                List<ToDoData> patientToDos = (List<ToDoData>)repo.FindToDos(getToDosDataRequest); ;
+                List<string> deletedIds = null;
+                if (patientToDos != null)
+                {
+                    deletedIds = new List<string>();
+                    patientToDos.ForEach(u =>
+                    {
+                        request.Id = u.Id;
+                        repo.Delete(request);
+                        deletedIds.Add(request.Id);
+                    });
+                    response.DeletedIds = deletedIds;
+                }
+                response.Success = true;
+                return response;
+            }
+            catch (Exception ex) { throw ex; }
+        }
+
+        public UndoDeletePatientToDosDataResponse UndoDeleteToDos(UndoDeletePatientToDosDataRequest request)
+        {
+            UndoDeletePatientToDosDataResponse response = new UndoDeletePatientToDosDataResponse();
+            try
+            {
+                ISchedulingRepository repo = Factory.GetRepository(request, RepositoryType.ToDo);
+                if (request.Ids != null && request.Ids.Count > 0)
+                {
+                    request.Ids.ForEach(u =>
+                    {
+                        request.ToDoId = u;
+                        repo.UndoDelete(request);
+                    });
+                }
+                response.Success = true;
                 return response;
             }
             catch (Exception ex) { throw ex; }

@@ -94,6 +94,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Command\PatientToDosCommand.cs" />
     <Compile Include="Programs\ElementActivation\ProgramAttributeActivationRule.cs" />
     <Compile Include="Programs\ElementActivation\StepActivationRule.cs" />
     <Compile Include="Programs\ElementActivation\ModuleActivationRule.cs" />

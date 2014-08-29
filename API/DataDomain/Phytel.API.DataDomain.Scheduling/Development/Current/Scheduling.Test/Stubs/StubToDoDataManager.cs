@@ -39,5 +39,16 @@ namespace Phytel.API.DataDomain.Scheduling.Test.Stubs
         {
             throw new NotImplementedException();
         }
+
+
+        public DTO.DeleteToDoByPatientIdDataResponse DeleteToDoByPatientId(DTO.DeleteToDoByPatientIdDataRequest request)
+        {
+            throw new NotImplementedException();
+        }
+
+        public DTO.UndoDeletePatientToDosDataResponse UndoDeleteToDos(DTO.UndoDeletePatientToDosDataRequest request)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

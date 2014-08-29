@@ -71,6 +71,8 @@
   <ItemGroup>
     <Compile Include="Enums.cs" />
     <Compile Include="Schedule\GetScheduleDataRequest.cs" />
+    <Compile Include="ToDo\DeleteToDoByPatientIdDataRequest.cs" />
+    <Compile Include="ToDo\DeleteToDoByPatientIdDataResponse.cs" />
     <Compile Include="ToDo\GetToDosDataRequest.cs" />
     <Compile Include="Schedule\GetScheduleDataResponse.cs" />
     <Compile Include="ToDo\GetToDosDataResponse.cs" />
@@ -83,6 +85,8 @@
     <Compile Include="ToDo\RemoveProgramInToDosDataResponse.cs" />
     <Compile Include="Schedule\ScheduleData.cs" />
     <Compile Include="ToDo\ToDoData.cs" />
+    <Compile Include="ToDo\UndoDeletePatientToDosDataRequest.cs" />
+    <Compile Include="ToDo\UndoDeletePatientToDosDataResponse.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

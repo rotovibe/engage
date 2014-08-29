@@ -9,5 +9,7 @@ namespace Phytel.API.DataDomain.Scheduling
         PutUpdateToDoDataResponse UpdateToDo(PutUpdateToDoDataRequest request);
         GetScheduleDataResponse GetSchedule(GetScheduleDataRequest request);
         RemoveProgramInToDosDataResponse RemoveProgramInToDos(RemoveProgramInToDosDataRequest request);
+        DeleteToDoByPatientIdDataResponse DeleteToDoByPatientId(DeleteToDoByPatientIdDataRequest request);
+        UndoDeletePatientToDosDataResponse UndoDeleteToDos(UndoDeletePatientToDosDataRequest request);
     }
 }

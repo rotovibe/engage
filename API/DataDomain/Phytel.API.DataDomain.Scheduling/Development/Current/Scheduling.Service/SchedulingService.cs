@@ -98,6 +98,48 @@ namespace Phytel.API.DataDomain.Scheduling.Service
             }
             return response;
         }
+
+        public DeleteToDoByPatientIdDataResponse Delete(DeleteToDoByPatientIdDataRequest request)
+        {
+            DeleteToDoByPatientIdDataResponse response = new DeleteToDoByPatientIdDataResponse();
+            try
+            {
+                if (string.IsNullOrEmpty(request.UserId))
+                    throw new UnauthorizedAccessException("SchedulingDD:Delete()::Unauthorized Access");
+
+                response = Manager.DeleteToDoByPatientId(request);
+                response.Version = request.Version;
+            }
+            catch (Exception ex)
+            {
+                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+
+                string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
+                Common.Helper.LogException(int.Parse(aseProcessID), ex);
+            }
+            return response;
+        }
+
+        public UndoDeletePatientToDosDataResponse Put(UndoDeletePatientToDosDataRequest request)
+        {
+            UndoDeletePatientToDosDataResponse response = new UndoDeletePatientToDosDataResponse();
+            try
+            {
+                if (string.IsNullOrEmpty(request.UserId))
+                    throw new UnauthorizedAccessException("SchedulingDD:UndoDelete()::Unauthorized Access");
+
+                response = Manager.UndoDeleteToDos(request);
+                response.Version = request.Version;
+            }
+            catch (Exception ex)
+            {
+                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+
+                string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
+                Common.Helper.LogException(int.Parse(aseProcessID), ex);
+            }
+            return response;
+        }
         #endregion
 
         #region Schedule
