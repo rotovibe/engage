@@ -98,6 +98,25 @@ namespace Phytel.API.DataDomain.Scheduling.Test
 
             Assert.IsNotNull(response);
         }
+
+        [TestMethod]
+        public void RemoveProgramInToDos_Test()
+        {
+
+            RemoveProgramInToDosDataRequest request = new RemoveProgramInToDosDataRequest
+            {
+                Context = context,
+                ContractNumber = contractNumber,
+                ProgramId = "5400b12bd6a4850940b9f245",
+                UserId = userId,
+                Version = version
+            };
+
+            ISchedulingDataManager cm = new SchedulingDataManager { Factory = new SchedulingRepositoryFactory() };
+            RemoveProgramInToDosDataResponse response = cm.RemoveProgramInToDos(request);
+
+            Assert.IsNotNull(response);
+        }
         
     }
 }
