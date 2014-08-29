@@ -1,0 +1,13 @@
+using Phytel.API.DataDomain.Scheduling.DTO;
+
+namespace Phytel.API.DataDomain.Scheduling
+{
+    public interface ISchedulingDataManager
+    {
+        GetToDosDataResponse GetToDos(GetToDosDataRequest request);
+        PutInsertToDoDataResponse InsertToDo(PutInsertToDoDataRequest request);
+        PutUpdateToDoDataResponse UpdateToDo(PutUpdateToDoDataRequest request);
+        GetScheduleDataResponse GetSchedule(GetScheduleDataRequest request);
+        RemoveProgramInToDosDataResponse RemoveProgramInToDos(RemoveProgramInToDosDataRequest request);
+    }
+}

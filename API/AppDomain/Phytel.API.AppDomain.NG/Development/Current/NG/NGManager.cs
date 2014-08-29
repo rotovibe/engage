@@ -7,6 +7,7 @@ using Phytel.API.DataDomain.Contact.DTO;
 using Phytel.API.DataDomain.LookUp.DTO;
 using Phytel.API.DataDomain.Patient.DTO;
 using Phytel.API.DataDomain.PatientNote.DTO;
+using Phytel.API.DataDomain.Scheduling.DTO;
 using Phytel.API.Interface;
 using ServiceStack.Service;
 using ServiceStack.ServiceClient.Web;
@@ -45,6 +46,7 @@ namespace Phytel.API.AppDomain.NG
         protected static readonly string DDPatientNoteUrl = ConfigurationManager.AppSettings["DDPatientNoteUrl"];
         protected static readonly string DDPatientObservationsServiceUrl = ConfigurationManager.AppSettings["DDPatientObservationUrl"];
         protected static readonly string DDPatientGoalsServiceUrl = ConfigurationManager.AppSettings["DDPatientGoalUrl"];
+        protected static readonly string DDSchedulingUrl = ConfigurationManager.AppSettings["DDSchedulingUrl"];
         #endregion
 
         public void LogException(Exception ex)
@@ -908,6 +910,24 @@ namespace Phytel.API.AppDomain.NG
                 });
                 #endregion
 
+                #region RemoveProgramReferenceInToDos
+                //[Route("/{Context}/{Version}/{ContractNumber}/Scheduling/ToDo/RemoveProgram/{ProgramId}/Update", "PUT")]
+                string schUrl = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Scheduling/ToDo/RemoveProgram/{4}/Update",
+                                            DDSchedulingUrl,
+                                            "NG",
+                                            request.Version,
+                                            request.ContractNumber,
+                                            request.Id), request.UserId);
+                RemoveProgramInToDosDataResponse todoDDResponse = client.Put<RemoveProgramInToDosDataResponse>(schUrl, new RemoveProgramInToDosDataRequest
+                {
+                    ProgramId = request.Id,
+                    Context = "NG",
+                    ContractNumber = request.ContractNumber,
+                    Version = request.Version,
+                    UserId = request.UserId
+                });
+                #endregion
+
                 return response;
             }
             catch (WebServiceException wse)
@@ -915,9 +935,6 @@ namespace Phytel.API.AppDomain.NG
                 throw new WebServiceException("AD:RemovePatientProgram()::" + wse.Message, wse.InnerException);
             }
         }
-
-
-
 
         #endregion
 

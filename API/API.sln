@@ -261,17 +261,19 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExtractConsole", "NGExtract
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Scheduling", "Scheduling", "{633190DF-40AB-4F81-800E-BE17965DD269}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.Scheduling.Service", "DataDomain\Phytel.API.DataDomain.ToDo\Development\Current\ToDo.Service\DataDomain.Scheduling.Service.csproj", "{8918774E-3A00-4A19-AB58-0CCCF73E72AD}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.Scheduling", "DataDomain\Phytel.API.DataDomain.Scheduling\Development\Current\Scheduling\DataDomain.Scheduling.csproj", "{4FD3A994-DB24-41D6-BD34-4EA5AAD8D62B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.Scheduling", "DataDomain\Phytel.API.DataDomain.ToDo\Development\Current\ToDo\DataDomain.Scheduling.csproj", "{4FD3A994-DB24-41D6-BD34-4EA5AAD8D62B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.Scheduling.DTO", "DataDomain\Phytel.API.DataDomain.Scheduling\Development\Current\Scheduling.DTO\DataDomain.Scheduling.DTO.csproj", "{1E303326-EEC9-42A8-BA50-880AB7AD99B2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.Scheduling.DTO", "DataDomain\Phytel.API.DataDomain.ToDo\Development\Current\ToDo.DTO\DataDomain.Scheduling.DTO.csproj", "{1E303326-EEC9-42A8-BA50-880AB7AD99B2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.Scheduling.Service", "DataDomain\Phytel.API.DataDomain.Scheduling\Development\Current\Scheduling.Service\DataDomain.Scheduling.Service.csproj", "{8918774E-3A00-4A19-AB58-0CCCF73E72AD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.Scheduling.Test", "DataDomain\Phytel.API.DataDomain.ToDo\Development\Current\ToDo.Test\DataDomain.Scheduling.Test.csproj", "{4D28361E-951C-4552-9A5C-D756CFB80F5A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.Scheduling.Service.Test", "DataDomain\Phytel.API.DataDomain.Scheduling\Development\Current\Scheduling.Service.Test\DataDomain.Scheduling.Service.Test.csproj", "{8A2CE0FF-1A38-44AE-BCA7-0D55D53EC504}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.Scheduling.Test", "DataDomain\Phytel.API.DataDomain.Scheduling\Development\Current\Scheduling.Test\DataDomain.Scheduling.Test.csproj", "{4D28361E-951C-4552-9A5C-D756CFB80F5A}"
 EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 97
+		SccNumberOfProjects = 98
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = http://hillstfs2013:8080/tfs/phytel
 		SccLocalPath0 = .
@@ -643,22 +645,26 @@ Global
 		SccProjectTopLevelParentUniqueName92 = API.sln
 		SccProjectName92 = NGExtract/ExtractConsole
 		SccLocalPath92 = NGExtract\\ExtractConsole
-		SccProjectUniqueName93 = DataDomain\\Phytel.API.DataDomain.ToDo\\Development\\Current\\ToDo.Service\\DataDomain.Scheduling.Service.csproj
+		SccProjectUniqueName93 = DataDomain\\Phytel.API.DataDomain.Scheduling\\Development\\Current\\Scheduling\\DataDomain.Scheduling.csproj
 		SccProjectTopLevelParentUniqueName93 = API.sln
-		SccProjectName93 = DataDomain/Phytel.API.DataDomain.ToDo/Development/Current/ToDo.Service
-		SccLocalPath93 = DataDomain\\Phytel.API.DataDomain.ToDo\\Development\\Current\\ToDo.Service
-		SccProjectUniqueName94 = DataDomain\\Phytel.API.DataDomain.ToDo\\Development\\Current\\ToDo\\DataDomain.Scheduling.csproj
+		SccProjectName93 = DataDomain/Phytel.API.DataDomain.Scheduling/Development/Current/Scheduling
+		SccLocalPath93 = DataDomain\\Phytel.API.DataDomain.Scheduling\\Development\\Current\\Scheduling
+		SccProjectUniqueName94 = DataDomain\\Phytel.API.DataDomain.Scheduling\\Development\\Current\\Scheduling.DTO\\DataDomain.Scheduling.DTO.csproj
 		SccProjectTopLevelParentUniqueName94 = API.sln
-		SccProjectName94 = DataDomain/Phytel.API.DataDomain.ToDo/Development/Current/ToDo
-		SccLocalPath94 = DataDomain\\Phytel.API.DataDomain.ToDo\\Development\\Current\\ToDo
-		SccProjectUniqueName95 = DataDomain\\Phytel.API.DataDomain.ToDo\\Development\\Current\\ToDo.DTO\\DataDomain.Scheduling.DTO.csproj
+		SccProjectName94 = DataDomain/Phytel.API.DataDomain.Scheduling/Development/Current/Scheduling.DTO
+		SccLocalPath94 = DataDomain\\Phytel.API.DataDomain.Scheduling\\Development\\Current\\Scheduling.DTO
+		SccProjectUniqueName95 = DataDomain\\Phytel.API.DataDomain.Scheduling\\Development\\Current\\Scheduling.Service\\DataDomain.Scheduling.Service.csproj
 		SccProjectTopLevelParentUniqueName95 = API.sln
-		SccProjectName95 = DataDomain/Phytel.API.DataDomain.ToDo/Development/Current/ToDo.DTO
-		SccLocalPath95 = DataDomain\\Phytel.API.DataDomain.ToDo\\Development\\Current\\ToDo.DTO
-		SccProjectUniqueName96 = DataDomain\\Phytel.API.DataDomain.ToDo\\Development\\Current\\ToDo.Test\\DataDomain.Scheduling.Test.csproj
+		SccProjectName95 = DataDomain/Phytel.API.DataDomain.Scheduling/Development/Current/Scheduling.Service
+		SccLocalPath95 = DataDomain\\Phytel.API.DataDomain.Scheduling\\Development\\Current\\Scheduling.Service
+		SccProjectUniqueName96 = DataDomain\\Phytel.API.DataDomain.Scheduling\\Development\\Current\\Scheduling.Service.Test\\DataDomain.Scheduling.Service.Test.csproj
 		SccProjectTopLevelParentUniqueName96 = API.sln
-		SccProjectName96 = DataDomain/Phytel.API.DataDomain.ToDo/Development/Current/ToDo.Test
-		SccLocalPath96 = DataDomain\\Phytel.API.DataDomain.ToDo\\Development\\Current\\ToDo.Test
+		SccProjectName96 = DataDomain/Phytel.API.DataDomain.Scheduling/Development/Current/Scheduling.Service.Test
+		SccLocalPath96 = DataDomain\\Phytel.API.DataDomain.Scheduling\\Development\\Current\\Scheduling.Service.Test
+		SccProjectUniqueName97 = DataDomain\\Phytel.API.DataDomain.Scheduling\\Development\\Current\\Scheduling.Test\\DataDomain.Scheduling.Test.csproj
+		SccProjectTopLevelParentUniqueName97 = API.sln
+		SccProjectName97 = DataDomain/Phytel.API.DataDomain.Scheduling/Development/Current/Scheduling.Test
+		SccLocalPath97 = DataDomain\\Phytel.API.DataDomain.Scheduling\\Development\\Current\\Scheduling.Test
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -1031,10 +1037,6 @@ Global
 		{C5604B8A-86D4-4CF9-90E0-48C2E12CB327}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C5604B8A-86D4-4CF9-90E0-48C2E12CB327}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C5604B8A-86D4-4CF9-90E0-48C2E12CB327}.Release|Any CPU.Build.0 = Release|Any CPU
-		{8918774E-3A00-4A19-AB58-0CCCF73E72AD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{8918774E-3A00-4A19-AB58-0CCCF73E72AD}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{8918774E-3A00-4A19-AB58-0CCCF73E72AD}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{8918774E-3A00-4A19-AB58-0CCCF73E72AD}.Release|Any CPU.Build.0 = Release|Any CPU
 		{4FD3A994-DB24-41D6-BD34-4EA5AAD8D62B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{4FD3A994-DB24-41D6-BD34-4EA5AAD8D62B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4FD3A994-DB24-41D6-BD34-4EA5AAD8D62B}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -1043,6 +1045,14 @@ Global
 		{1E303326-EEC9-42A8-BA50-880AB7AD99B2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1E303326-EEC9-42A8-BA50-880AB7AD99B2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1E303326-EEC9-42A8-BA50-880AB7AD99B2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8918774E-3A00-4A19-AB58-0CCCF73E72AD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8918774E-3A00-4A19-AB58-0CCCF73E72AD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8918774E-3A00-4A19-AB58-0CCCF73E72AD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8918774E-3A00-4A19-AB58-0CCCF73E72AD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8A2CE0FF-1A38-44AE-BCA7-0D55D53EC504}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8A2CE0FF-1A38-44AE-BCA7-0D55D53EC504}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8A2CE0FF-1A38-44AE-BCA7-0D55D53EC504}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8A2CE0FF-1A38-44AE-BCA7-0D55D53EC504}.Release|Any CPU.Build.0 = Release|Any CPU
 		{4D28361E-951C-4552-9A5C-D756CFB80F5A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{4D28361E-951C-4552-9A5C-D756CFB80F5A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4D28361E-951C-4552-9A5C-D756CFB80F5A}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -1163,9 +1173,10 @@ Global
 		{40510778-2F44-4C71-8D04-8C3BC06C4032} = {F59D966C-C273-4097-8F91-066E284C39EB}
 		{6F7E797F-C4C5-4F6E-A7CE-230E05D375F8} = {F59D966C-C273-4097-8F91-066E284C39EB}
 		{C5604B8A-86D4-4CF9-90E0-48C2E12CB327} = {F59D966C-C273-4097-8F91-066E284C39EB}
-		{8918774E-3A00-4A19-AB58-0CCCF73E72AD} = {633190DF-40AB-4F81-800E-BE17965DD269}
 		{4FD3A994-DB24-41D6-BD34-4EA5AAD8D62B} = {633190DF-40AB-4F81-800E-BE17965DD269}
 		{1E303326-EEC9-42A8-BA50-880AB7AD99B2} = {633190DF-40AB-4F81-800E-BE17965DD269}
+		{8918774E-3A00-4A19-AB58-0CCCF73E72AD} = {633190DF-40AB-4F81-800E-BE17965DD269}
+		{8A2CE0FF-1A38-44AE-BCA7-0D55D53EC504} = {633190DF-40AB-4F81-800E-BE17965DD269}
 		{4D28361E-951C-4552-9A5C-D756CFB80F5A} = {633190DF-40AB-4F81-800E-BE17965DD269}
 	EndGlobalSection
 EndGlobal
