@@ -711,9 +711,9 @@ namespace Phytel.API.AppDomain.NG
             var url = Common.Helper.BuildURL(string.Format(@"{0}/{1}/{2}/{3}/Scheduling/Schedule/{4}",
                 DDSchedulingUrl,
                 "NG",
-                request.Version,
-                request.ContractNumber,
-                sid), request.UserId);
+                "1.0",
+                "InHealth001",
+                sid), userId);
 
             var response = client.Get<GetScheduleDataResponse>(url);
             var schedule = new Schedule
@@ -740,7 +740,7 @@ namespace Phytel.API.AppDomain.NG
         }
 
 
-        public object PutInsertToDo(ToDoData todo, string p)
+        public object PutInsertToDo(ToDoData todo, string userId)
         {
             try
             {
@@ -752,7 +752,7 @@ namespace Phytel.API.AppDomain.NG
                     DDSchedulingUrl,
                     "NG",
                     1.0,
-                    "InHealth001"), request.UserId);
+                    "InHealth001"), userId);
 
                 var response = client.Put<PutInsertToDoDataResponse>(url, request);
                 return response;

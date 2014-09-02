@@ -121,6 +121,10 @@
       <Project>{abe948fb-247e-4955-b3ab-b7c93e10a542}</Project>
       <Name>Phytel.API.Interface</Name>
     </ProjectReference>
+    <ProjectReference Include="..\DataDomain.Template.Repo\DataDomain.Template.Repo.csproj">
+      <Project>{3102572c-54bf-4004-8453-077790779157}</Project>
+      <Name>DataDomain.Template.Repo</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Template.DTO\DataDomain.Template.DTO.csproj">
       <Project>{1c2c63a1-4246-4ec9-bad1-c00e9ecd85f6}</Project>
       <Name>DataDomain.Template.DTO</Name>

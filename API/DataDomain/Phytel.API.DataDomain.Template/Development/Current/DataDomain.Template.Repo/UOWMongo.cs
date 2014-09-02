@@ -3,7 +3,7 @@ using Phytel.Mongo.Linq;
 
 namespace DataDomain.Template.Repo
 {
-    public class UOWMongo<TContext> : IUOWMongo<TContext>, IDisposable where TContext : MongoContext
+    public class UOWMongo<TContext> : IUOWMongo<TContext>, IDisposable where TContext : TemplateMongoContext
     {
         protected readonly TContext _context;
 

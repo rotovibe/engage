@@ -68,7 +68,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Containers\TemplateRepositoryContainer.cs" />
+    <Compile Include="IMongoTemplateRepository.cs" />
+    <Compile Include="ITemplateRepository.cs" />
     <Compile Include="IUOWMongo.cs" />
+    <Compile Include="MongoDB\DTO\METemplate.cs" />
     <Compile Include="MongoTemplateRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TemplateMongoContext.cs" />
@@ -91,10 +94,6 @@
     <ProjectReference Include="..\Template.DTO\DataDomain.Template.DTO.csproj">
       <Project>{1c2c63a1-4246-4ec9-bad1-c00e9ecd85f6}</Project>
       <Name>DataDomain.Template.DTO</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Template\DataDomain.Template.csproj">
-      <Project>{f1a478d1-dca1-4be6-ae83-e0acdd4fdffd}</Project>
-      <Name>DataDomain.Template</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

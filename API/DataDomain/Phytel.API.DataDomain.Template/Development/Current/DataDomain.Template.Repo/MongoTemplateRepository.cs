@@ -7,16 +7,15 @@ using Phytel.Repository;
 
 namespace DataDomain.Template.Repo
 {
-    public class MongoTemplateRepository : ITemplateRepository
+    public class MongoTemplateRepository<TContext> : ITemplateRepository, IMongoTemplateRepository where TContext : TemplateMongoContext
     {
-        private string _dbName = string.Empty;
-
-        public MongoTemplateRepository(string contractDBName)
-        {
-            _dbName = contractDBName;
-        }
-
+        protected readonly TContext Context;
         public string UserId { get; set; }
+
+        public MongoTemplateRepository(IUOWMongo<TContext> uow)
+        {
+            Context = uow.MongoContext;
+        }
 
         public object Insert(object newEntity)
         {

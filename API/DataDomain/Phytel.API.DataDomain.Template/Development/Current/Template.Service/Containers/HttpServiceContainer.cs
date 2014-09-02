@@ -1,5 +1,4 @@
-﻿using Phytel.API.Common;
-using Phytel.API.Common.Format;
+﻿using DataDomain.Template.Repo.Containers;
 using Phytel.API.DataDomain.Template.DTO;
 using Phytel.Service.Proxy;
 
@@ -12,14 +11,11 @@ namespace Phytel.API.DataDomain.Template.Service.Containers
             container.Register<IHostContextProxy>(new HostContextProxy());
             container.Register<string>(Constants.NamedString, c =>
             {
-                IHostContextProxy hostContextProxy = c.Resolve<IHostContextProxy>();
+                var hostContextProxy = c.Resolve<IHostContextProxy>();
                 return hostContextProxy.ContractNumber;
             }).ReusedWithin(Funq.ReuseScope.Request);
 
-            container.RegisterAutoWiredAs<TemplateDataManager, ITemplateDataManager>().ReusedWithin(Funq.ReuseScope.Request);
-            container.RegisterAutoWiredAs<CommonFormatterUtil, ICommonFormatterUtil>().ReusedWithin(Funq.ReuseScope.Request);
-            container.RegisterAutoWiredAs<Helpers, IHelpers>().ReusedWithin(Funq.ReuseScope.Request);
-            
+            container = TemplateContainer.Configure(container);
             return container;
         }
     }

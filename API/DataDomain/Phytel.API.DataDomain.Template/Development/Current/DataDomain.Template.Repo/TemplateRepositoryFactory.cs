@@ -16,28 +16,28 @@ namespace Phytel.API.DataDomain.Template
     public abstract class TemplateRepositoryFactory
     {
 
-        public static ITemplateRepository GetTemplateRepository(IDataDomainRequest request, RepositoryType type)
-        {
-            try
-            {
-                ITemplateRepository repo = null;
+        //public static ITemplateRepository GetTemplateRepository(IDataDomainRequest request, RepositoryType type)
+        //{
+        //    try
+        //    {
+        //        ITemplateRepository repo = null;
 
-                switch (type)
-                {
-                    case RepositoryType.Template:
-                        {
-                            repo = new MongoTemplateRepository(request.ContractNumber);
-                            break;
-                        }
-                }
+        //        switch (type)
+        //        {
+        //            case RepositoryType.Template:
+        //                {
+        //                    repo = new MongoTemplateRepository(request.ContractNumber);
+        //                    break;
+        //                }
+        //        }
 
-                repo.UserId = request.UserId;
-                return repo;
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
+        //        repo.UserId = request.UserId;
+        //        return repo;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw ex;
+        //    }
+        //}
     }
 }

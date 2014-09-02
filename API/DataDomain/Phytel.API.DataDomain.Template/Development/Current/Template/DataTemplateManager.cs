@@ -1,13 +1,24 @@
+using DataDomain.Template.Repo;
 using Phytel.API.DataDomain.Template.DTO;
 using System.Data.SqlClient;
 using Phytel.API.DataDomain.Template;
 using System;
 using Phytel.API.Common.Format;
+using ServiceStack.WebHost.Endpoints;
 
 namespace Phytel.API.DataDomain.Template
 {
     public class TemplateDataManager : ITemplateDataManager
     {
+        public IMongoTemplateRepository TemplateRepository { get; set; }
+        //protected readonly IMongoTemplateRepository TemplateRepository;
+
+        public TemplateDataManager()
+        {
+            if (AppHostBase.Instance != null)
+                AppHostBase.Instance.Container.AutoWire(this);
+        }
+
         public GetTemplateResponse GetTemplateByID(GetTemplateRequest request)
         {
             try
@@ -15,8 +26,8 @@ namespace Phytel.API.DataDomain.Template
                 var result = new GetTemplateResponse();
 
                 //ITemplateRepository repo = TemplateRepositoryFactory.GetTemplateRepository(request, RepositoryType.Template);
-                //repo.UserId = request.UserId;
-                //result = repo.FindByID(request.TemplateID) as GetTemplateResponse;
+                TemplateRepository.UserId = request.UserId;
+                result = TemplateRepository.FindByID(request.TemplateID) as GetTemplateResponse;
 
                 return (result ?? new GetTemplateResponse());
             }
@@ -33,8 +44,8 @@ namespace Phytel.API.DataDomain.Template
                 var result = new GetAllTemplatesResponse();
 
                 //ITemplateRepository repo = TemplateRepositoryFactory.GetTemplateRepository(request, RepositoryType.Template);
-                //repo.UserId = request.UserId;
-                //result = repo.SelectAll() as GetAllTemplatesResponse;
+                TemplateRepository.UserId = request.UserId;
+                //result = TemplateRepository.SelectAll() as GetAllTemplatesResponse;
 
                 return (result ?? new GetAllTemplatesResponse());
             }

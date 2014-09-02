@@ -22,8 +22,8 @@ namespace Phytel.API.AppDomain.NG.Programs.ElementActivation.Tests
         {
             ToDoActivationRule rule = new ToDoActivationRule
             {
-                EndpointUtil = new StubEndpointUtils(),
-                PlanUtils = new StubPlanElementUtils()
+                EndpointUtil = new EndpointUtils(),
+                PlanUtils = new PlanElementUtils()
             };
 
             var patientId = ObjectId.GenerateNewId().ToString();
@@ -35,19 +35,19 @@ namespace Phytel.API.AppDomain.NG.Programs.ElementActivation.Tests
                     Id = ObjectId.GenerateNewId().ToString(),
                     PatientId = patientId
                 },
-                UserId = ObjectId.GenerateNewId().ToString(),
+                UserId = "5325c821072ef705080d3488",
                 Action = new Actions {Id = ObjectId.GenerateNewId().ToString()},
                 PatientId = patientId,
                 PlanElement = new Step()
             };
- 
-            var se = new SpawnElement{
-             ElementType = 201,
-              ElementId = "888888888888888888888888"
+
+            var se = new SpawnElement
+            {
+                ElementType = 201,
+                ElementId = "53ff6b92d4332314bcab46e0"
             };
 
             var type = rule.Execute(arg.UserId, arg, se, new ProgramAttributeData());
-
             Assert.AreEqual(type, "ToDo");
         }
 

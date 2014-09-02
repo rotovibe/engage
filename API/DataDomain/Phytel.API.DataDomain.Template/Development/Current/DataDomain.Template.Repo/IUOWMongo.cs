@@ -2,7 +2,7 @@
 
 namespace DataDomain.Template.Repo
 {
-    public interface IUOWMongo<TContext> where TContext : MongoContext
+    public interface IUOWMongo<TContext> where TContext : TemplateMongoContext
     {
         TContext MongoContext { get; }
     }
