@@ -59,7 +59,7 @@ namespace Phytel.API.DataDomain.Scheduling
                 bool success = (bool)repo.Update(request);
                 if (success)
                 {
-                    ToDoData data = (ToDoData)repo.FindByID(request.ToDoData.Id);
+                    ToDoData data = (ToDoData)repo.FindByID(request.ToDoData.Id, true);
                     response.ToDoData = data;
                 }
             }

@@ -123,5 +123,11 @@ namespace Phytel.API.DataDomain.Scheduling
         {
             throw new NotImplementedException();
         }
+
+
+        public object FindByID(string entityID, bool includeDeletedToDo)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

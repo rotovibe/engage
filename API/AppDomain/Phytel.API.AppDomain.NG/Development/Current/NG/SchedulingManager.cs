@@ -172,7 +172,8 @@ namespace Phytel.API.AppDomain.NG
                     PriorityId = request.ToDo.PriorityId,
                     ProgramIds = request.ToDo.ProgramIds,
                     Title = request.ToDo.Title,
-                    StatusId = request.ToDo.StatusId
+                    StatusId = request.ToDo.StatusId,
+                    DeleteFlag = request.ToDo.DeleteFlag
                 };
                 if (request.ToDo.StatusId == (int)Status.Met || request.ToDo.StatusId == (int)Status.Abandoned)
                 {
@@ -222,7 +223,8 @@ namespace Phytel.API.AppDomain.NG
                     ProgramIds = toDoData.ProgramIds,
                     StatusId = toDoData.StatusId,
                     Title = toDoData.Title,
-                    UpdatedOn = toDoData.UpdatedOn
+                    UpdatedOn = toDoData.UpdatedOn,
+                    DeleteFlag = toDoData.DeleteFlag
                 };
             }
             return data;

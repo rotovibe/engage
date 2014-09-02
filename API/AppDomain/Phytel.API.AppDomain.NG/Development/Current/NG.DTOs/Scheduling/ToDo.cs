@@ -23,6 +23,7 @@ namespace Phytel.API.AppDomain.NG.DTO
         public string Title { get; set; }
         public DateTime CreatedOn { get; set; }
         public DateTime? UpdatedOn { get; set; }
+        public bool DeleteFlag { get; set; }
     }
 
     public class PatientDetails

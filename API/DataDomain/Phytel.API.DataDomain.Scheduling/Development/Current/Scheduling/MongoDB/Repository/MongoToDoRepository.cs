@@ -123,13 +123,21 @@ namespace Phytel.API.DataDomain.Scheduling
 
         public object FindByID(string entityID)
         {
+            return FindByID(entityID, false);
+        }
+
+        public object FindByID(string entityID, bool includeDeletedToDo)
+        {
             ToDoData todoData = null;
             try
             {
                 using (SchedulingMongoContext ctx = new SchedulingMongoContext(_dbName))
                 {
                     List<IMongoQuery> queries = new List<IMongoQuery>();
-                    queries.Add(Query.EQ(METoDo.DeleteFlagProperty, false));
+                    if (!includeDeletedToDo)
+                    {
+                        queries.Add(Query.EQ(METoDo.DeleteFlagProperty, false));
+                    }
                     queries.Add(Query.EQ(METoDo.IdProperty, ObjectId.Parse(entityID)));
                     IMongoQuery mQuery = Query.And(queries);
                     METoDo meToDo = ctx.ToDos.Collection.Find(mQuery).FirstOrDefault();
@@ -150,7 +158,8 @@ namespace Phytel.API.DataDomain.Scheduling
                             ProgramIds = Helper.ConvertToStringList(meToDo.ProgramIds),
                             StatusId = (int)meToDo.Status,
                             Title = meToDo.Title,
-                            UpdatedOn = meToDo.LastUpdatedOn
+                            UpdatedOn = meToDo.LastUpdatedOn,
+                            DeleteFlag = meToDo.DeleteFlag
                         };
                     }
                 }
@@ -246,6 +255,18 @@ namespace Phytel.API.DataDomain.Scheduling
                         {
                             uv.Add(MB.Update.Set(METoDo.AssignedToProperty, BsonNull.Value));
                         }
+                        uv.Add(MB.Update.Set(METoDo.DeleteFlagProperty, todoData.DeleteFlag));
+                        DataAuditType type;
+                        if (todoData.DeleteFlag)
+                        {
+                            uv.Add(MB.Update.Set(METoDo.TTLDateProperty, System.DateTime.UtcNow.AddDays(_expireDays)));
+                            type = Common.DataAuditType.Delete;
+                        }
+                        else
+                        {
+                            uv.Add(MB.Update.Set(METoDo.TTLDateProperty, BsonNull.Value));
+                            type = Common.DataAuditType.Update;
+                        }
                         IMongoUpdate update = MB.Update.Combine(uv);
                         WriteConcernResult res = ctx.ToDos.Collection.Update(q, update);
                         if (res.Ok == false)
@@ -254,7 +275,7 @@ namespace Phytel.API.DataDomain.Scheduling
                             AuditHelper.LogDataAudit(this.UserId,
                                                     MongoCollectionName.ToDo.ToString(),
                                                     todoData.Id,
-                                                    Common.DataAuditType.Update,
+                                                    type,
                                                     request.ContractNumber);
 
                         result = true;
@@ -353,7 +374,8 @@ namespace Phytel.API.DataDomain.Scheduling
                                 ProgramIds = Helper.ConvertToStringList(t.ProgramIds),
                                 StatusId = (int)t.Status,
                                 Title = t.Title,
-                                UpdatedOn = t.LastUpdatedOn
+                                UpdatedOn = t.LastUpdatedOn, 
+                                DeleteFlag = t.DeleteFlag
                             });
                         }
                     }

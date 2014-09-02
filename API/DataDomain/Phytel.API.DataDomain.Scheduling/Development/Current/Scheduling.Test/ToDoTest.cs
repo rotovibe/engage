@@ -26,8 +26,8 @@ namespace Phytel.API.DataDomain.Scheduling.Test
                 Version = version,
                 AssignedToId = "5325c821072ef705080d3488",
                 //PatientId  = "",
-                //StatusIds = new List<int> { 1, 2}
-                FromDate = DateTime.Parse("8/25/2014 8:02:26 PM")
+                StatusIds = new List<int> { 1, 2}
+               // FromDate = DateTime.Parse("8/25/2014 8:02:26 PM")
 
             };
 
@@ -73,16 +73,17 @@ namespace Phytel.API.DataDomain.Scheduling.Test
 
             ToDoData data = new ToDoData
             {
-                Id = "53f794c1d43323141817bf0d",
-                //AssignedToId = "5325c826072ef705080d34a8",
+                Id = "5400b215d433231f60c94119",
+                AssignedToId = "5325c821072ef705080d3488",
                 //CategoryId = "53f51b0ed4332316fcdbeba4",
                 //Description = "updated desc",
                 //DueDate = System.DateTime.UtcNow,
-                Title = "this is my new title",
+                Title = "this is my updated title",
                // PatientId = "5325d9efd6a4850adcbba4c2",
-                PriorityId = 3,
-                StatusId = 0,
+               // PriorityId = 3,
+                StatusId = 1,
                 //ProgramIds = new System.Collections.Generic.List<string> { "532caae9a38116ac18000846" },
+                DeleteFlag = true
             };
             PutUpdateToDoDataRequest request = new PutUpdateToDoDataRequest
             {
