@@ -1,5 +1,6 @@
 ﻿using System;
 using Phytel.API.AppDomain.NG.DTO;
+using Phytel.API.AppDomain.NG.DTO.Scheduling;
 using Phytel.API.AppDomain.NG.PlanCOR;
 using Phytel.API.DataDomain.Program.DTO;
 using Phytel.API.DataDomain.Scheduling.DTO;
@@ -25,27 +26,59 @@ namespace Phytel.API.AppDomain.NG.Programs.ElementActivation
         {
             try
             {
-                // get template todo from schedule endpoint
-                var todoTemp = EndpointUtil.GetScheduleToDoById(pe.ElementId, arg.UserId);
+                Schedule todoTemp = null;
+                ToDoData todo = null;
 
-                var todo = new ToDoData
+                try
                 {
-                    AssignedToId = arg.UserId,
-                    CreatedById = arg.UserId,
-                    SourceId = todoTemp.Id,
-                    Title = todoTemp.Title,
-                    CategoryId = todoTemp.CategoryId,
-                    StatusId = todoTemp.StatusId,
-                    Description = todoTemp.Description,
-                    PriorityId = todoTemp.PriorityId,
-                    DueDate = HandleDueDate(todoTemp.DueDateRange),
-                    PatientId = arg.Program.PatientId,
-                    ProgramIds = new System.Collections.Generic.List<string> { arg.Program.Id },
-                    CreatedOn = DateTime.UtcNow
-                };
+                    // get template todo from schedule endpoint
+                    todoTemp = EndpointUtil.GetScheduleToDoById(pe.ElementId, userId);
+                }
+                catch(Exception ex)
+                {
+                    throw new ArgumentException("GetScheduleToDoById():Error" + ex.Message);
+                }
 
-                // register new todo
-                var result = EndpointUtil.PutInsertToDo(todo, arg.UserId);
+                var prog = new System.Collections.Generic.List<string>();
+                if (arg.Program != null)
+                    prog.Add(arg.Program.Id);
+
+                string patientId = null;
+                if (arg.Program != null)
+                    patientId = arg.Program.PatientId;
+
+                try
+                {
+                    todo = new ToDoData
+                    {
+                        AssignedToId = userId,
+                        CreatedById = userId,
+                        SourceId = todoTemp.Id,
+                        Title = todoTemp.Title,
+                        CategoryId = todoTemp.CategoryId,
+                        StatusId = todoTemp.StatusId,
+                        Description = todoTemp.Description,
+                        PriorityId = todoTemp.PriorityId,
+                        DueDate = HandleDueDate(todoTemp.DueDateRange),
+                        PatientId = patientId,
+                        ProgramIds = prog,
+                        CreatedOn = DateTime.UtcNow
+                    };
+                }
+                catch (Exception ex)
+                {
+                    throw new ArgumentException("ToDoData Hydration Error." + ex.Message);
+                }
+
+                try
+                {
+                    // register new todo
+                    var result = EndpointUtil.PutInsertToDo(todo, arg.UserId);
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception("AD:ToDoActivationRule:PutInsertToDo()::" + ex.Message, ex.InnerException);
+                }
 
                 return _alertType;
             }

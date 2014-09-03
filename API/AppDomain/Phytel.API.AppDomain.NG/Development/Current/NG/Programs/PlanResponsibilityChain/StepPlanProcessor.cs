@@ -1,6 +1,4 @@
 ﻿using Phytel.API.AppDomain.NG.DTO;
-using Phytel.API.AppDomain.NG.PlanElementStrategy;
-using Phytel.API.AppDomain.NG.Programs.ElementActivation;
 using Phytel.API.DataDomain.Program.DTO;
 using ServiceStack.WebHost.Endpoints;
 using System;
@@ -11,24 +9,11 @@ namespace Phytel.API.AppDomain.NG.PlanCOR
 
     public class StepPlanProcessor : PlanProcessor
     {
-        public event SpawnEventHandler _spawnEvent;
-        public IPlanElementUtils PEUtils { get; set; }
-        public static SpawnElementStrategy SpawnStrategy { get; set; }
-        private ProgramAttributeData _programAttributes;
-
         public StepPlanProcessor()
         {
-            _programAttributes = new ProgramAttributeData();
+            ProgramAttributes = new ProgramAttributeData();
             if (AppHostBase.Instance != null)
                 AppHostBase.Instance.Container.AutoWire(this);
-        }
-
-        protected void OnSpawnElementEvent(string type)
-        {
-            if (_spawnEvent != null)
-            {
-                _spawnEvent(this, new SpawnEventArgs() { Name = type });
-            }
         }
 
         public override void PlanElementHandler(object sender, PlanElementEventArg e)
@@ -37,8 +22,8 @@ namespace Phytel.API.AppDomain.NG.PlanCOR
             {
                 if (e.PlanElement.GetType() == typeof(Step))
                 {
-                    _programAttributes.PlanElementId = e.Program.Id;
-                    Step s = (Step)e.PlanElement;
+                    ProgramAttributes.PlanElementId = e.Program.Id;
+                    var s = (Step)e.PlanElement;
 
                     if (e.Action.Completed)
                     {
@@ -49,15 +34,20 @@ namespace Phytel.API.AppDomain.NG.PlanCOR
                                 SetCompletedStepResponses(e, s);
 
                             if (s.SpawnElement != null)
-                                PEUtils.SpawnElementsInList(s.SpawnElement, e.Program, e.UserId, _programAttributes);
+                            {
+                                PEUtils.SpawnElementsInList(s.SpawnElement, e.Program, e.UserId, ProgramAttributes);
+                                s.SpawnElement.ForEach(
+                                    rse => { if (rse.ElementType > 100) HandlePlanElementActions(e, e.UserId, rse); });
+                            }
                         }
                         else
                         {
                             if (s.Responses != null)
                                 s.Responses.ForEach(r => { r.Delete = true; });
                         }
+
                         // save program properties
-                        PEUtils.SaveReportingAttributes(_programAttributes, e.DomainRequest);
+                        PEUtils.SaveReportingAttributes(ProgramAttributes, e.DomainRequest);
                         // raise process event to register the id
                         OnProcessIdEvent(e.Program);
                     }
@@ -110,76 +100,13 @@ namespace Phytel.API.AppDomain.NG.PlanCOR
                 {
                     if (PEUtils.ResponseSpawnAllowed(s, r))
                     {
-                        r.SpawnElement.ForEach(rse =>
-                        {
-                            // handles the response spawnelements
-                            if (rse.ElementType < 10)
-                            {
-                                HandlePlanElementActivation(e, rse);
-                            }
-                            else if (rse.ElementType > 100)
-                            {
-                                //HandlePatientProblemRegistration(e, userId, rse);
-                                var type = new ElementActivationStrategy().Run(e, rse, userId, _programAttributes);
-                                if (!string.IsNullOrEmpty(type.ToString())) OnSpawnElementEvent(type.ToString());
-                            }
-                            else
-                            {
-                                PEUtils.SetProgramAttributes(rse, e.Program, e.UserId, _programAttributes);
-                            }
-                        });
+                        r.SpawnElement.ForEach(rse => HandlePlanElementActions(e, userId, rse));
                     }
                 }
             }
             catch (Exception ex)
             {
                 throw new Exception("AD:StepPlanProcessor:HandleResponseSpawnElements()::" + ex.Message, ex.InnerException);
-            }
-        }
-
-        //public void HandleResponseSpawnElements(Step s, Response r, PlanElementEventArg e, string userId)
-        //{
-        //    try
-        //    {
-        //        if (r.SpawnElement != null)
-        //        {
-        //            if (PEUtils.ResponseSpawnAllowed(s, r))
-        //            {
-        //                r.SpawnElement.ForEach(rse =>
-        //                {
-        //                    var type = new ElementActivationStrategy().Run(e, rse, userId, _programAttributes);
-
-        //                    // account for plan element registration
-        //                    if (type == null) throw new ArgumentException("Type returned null from strategy.");
-
-        //                    if (type.GetType() == typeof (PlanElement))
-        //                        OnProcessIdEvent(type as PlanElement);
-        //                    else
-        //                    {
-        //                        if (!string.IsNullOrEmpty(type.ToString()))
-        //                            OnSpawnElementEvent(type.ToString());
-        //                    }
-        //                });
-        //            }
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        throw new Exception("AD:StepPlanProcessor:HandleResponseSpawnElements()::" + ex.Message, ex.InnerException);
-        //    }
-        //}
-
-        public void HandlePlanElementActivation(PlanElementEventArg e, SpawnElement rse)
-        {
-            try
-            {
-                PlanElement pe = PEUtils.ActivatePlanElement(rse.ElementId, e.Program);
-                if (pe != null)
-                    OnProcessIdEvent(pe);
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("AD:StepPlanProcessor:HandlePlanElementActivation()::" + ex.Message, ex.InnerException);
             }
         }
     }

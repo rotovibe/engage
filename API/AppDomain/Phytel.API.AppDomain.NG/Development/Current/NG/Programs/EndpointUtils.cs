@@ -704,39 +704,47 @@ namespace Phytel.API.AppDomain.NG
 
         public Schedule GetScheduleToDoById(string sid, string userId)
         {
-            var request = new GetScheduleDataRequest();
-
-            IRestClient client = new JsonServiceClient();
-
-            var url = Common.Helper.BuildURL(string.Format(@"{0}/{1}/{2}/{3}/Scheduling/Schedule/{4}",
-                DDSchedulingUrl,
-                "NG",
-                "1.0",
-                "InHealth001",
-                sid), userId);
-
-            var response = client.Get<GetScheduleDataResponse>(url);
-            var schedule = new Schedule
+            try
             {
-                AssignedToId = response.Schedule.AssignedToId,
-                CategoryId = response.Schedule.CategoryId,
-                ClosedDate = response.Schedule.ClosedDate,
-                CreatedById = response.Schedule.CreatedById,
-                CreatedOn = response.Schedule.CreatedOn,
-                Description = response.Schedule.Description,
-                DueDate = response.Schedule.DueDate,
-                DueDateRange = response.Schedule.DueDateRange,
-                Id = response.Schedule.Id,
-                PatientId = response.Schedule.PatientId,
-                PriorityId = response.Schedule.PriorityId,
-                ProgramIds = response.Schedule.ProgramIds,
-                StatusId = response.Schedule.StatusId,
-                Title = response.Schedule.Title,
-                TypeId = response.Schedule.TypeId,
-                UpdatedOn = response.Schedule.UpdatedOn
-            };
+                var request = new GetScheduleDataRequest();
 
-            return schedule;
+                IRestClient client = new JsonServiceClient();
+
+                var url = Common.Helper.BuildURL(string.Format(@"{0}/{1}/{2}/{3}/Scheduling/Schedule/{4}",
+                    DDSchedulingUrl,
+                    "NG",
+                    "1.0",
+                    "InHealth001",
+                    sid), userId);
+
+                var response = client.Get<GetScheduleDataResponse>(url);
+                var schedule = new Schedule
+                {
+                    AssignedToId = response.Schedule.AssignedToId,
+                    CategoryId = response.Schedule.CategoryId,
+                    ClosedDate = response.Schedule.ClosedDate,
+                    CreatedById = response.Schedule.CreatedById,
+                    CreatedOn = response.Schedule.CreatedOn,
+                    Description = response.Schedule.Description,
+                    DueDate = response.Schedule.DueDate,
+                    DueDateRange = response.Schedule.DueDateRange,
+                    Id = response.Schedule.Id,
+                    PatientId = response.Schedule.PatientId,
+                    PriorityId = response.Schedule.PriorityId,
+                    ProgramIds = response.Schedule.ProgramIds,
+                    StatusId = response.Schedule.StatusId,
+                    Title = response.Schedule.Title,
+                    TypeId = response.Schedule.TypeId,
+                    UpdatedOn = response.Schedule.UpdatedOn
+                };
+
+                return schedule;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("AD:PlanElementEndpointUtil:GetScheduleToDoById()::" + ex.Message,
+                    ex.InnerException);
+            }
         }
 
 

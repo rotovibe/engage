@@ -313,5 +313,12 @@ namespace Phytel.API.AppDomain.NG.Tests
                 Assert.AreEqual(control, result);
             }
         }
+
+        [TestMethod()]
+        public void GetScheduleToDoByIdTest()
+        {
+            EndpointUtils utils = new EndpointUtils();
+            utils.GetScheduleToDoById("53ff6b92d4332314bcab46e0", "5325c821072ef705080d3488");
+        }
     }
 }

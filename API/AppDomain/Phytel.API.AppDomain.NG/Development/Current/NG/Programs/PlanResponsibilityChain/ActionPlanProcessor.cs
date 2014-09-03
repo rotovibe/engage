@@ -2,10 +2,6 @@
 using Phytel.API.DataDomain.Program.DTO;
 using ServiceStack.WebHost.Endpoints;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Phytel.API.AppDomain.NG.PlanCOR
 {
@@ -42,7 +38,9 @@ namespace Phytel.API.AppDomain.NG.PlanCOR
                         //2) look at spawnelement and trigger enabled state.
                         if (action.SpawnElement != null)
                         {
-                            PeUtils.SpawnElementsInList(action.SpawnElement, e.Program, e.UserId, _programAttributes);
+                            PEUtils.SpawnElementsInList(action.SpawnElement, e.Program, e.UserId, ProgramAttributes);
+                            action.SpawnElement.ForEach(
+                                rse => { if (rse.ElementType > 100) HandlePlanElementActions(e, e.UserId, rse); });
                         }
 
                         // save any program attribute changes

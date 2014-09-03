@@ -314,8 +314,8 @@ namespace Phytel.API.AppDomain.NG
             ModulePlanProcessor modProc = new ModulePlanProcessor();
             ActionPlanProcessor actProc = new ActionPlanProcessor();
             StepPlanProcessor stepProc = new StepPlanProcessor();
-            stepProc._spawnEvent += stepProc__spawnEvent;
-            stepProc._processedElementEvent += Proc__processedIdEvent;
+            stepProc.SpawnEvent += stepProc__spawnEvent;
+            stepProc.ProcessedElementEvent += Proc__processedIdEvent;
             PEUtils._processedElementEvent += PlanElementUtil__processedElementEvent;
             progProc.Successor = modProc;
             modProc.Successor = actProc;

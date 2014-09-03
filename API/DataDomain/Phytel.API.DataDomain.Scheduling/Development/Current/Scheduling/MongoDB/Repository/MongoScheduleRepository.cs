@@ -59,16 +59,16 @@ namespace Phytel.API.DataDomain.Scheduling
                     {
                         scheduleData = new ScheduleData
                         {
-                            AssignedToId = meSch.AssignedToId.ToString(),
-                            CategoryId = meSch.Category.ToString(),
+                            AssignedToId = meSch.AssignedToId.ToString() ?? null,
+                            CategoryId = meSch.Category.ToString() ?? null,
                             ClosedDate = meSch.ClosedDate,
-                            CreatedById = meSch.RecordCreatedBy.ToString(),
+                            CreatedById = meSch.RecordCreatedBy.ToString() ?? null,
                             CreatedOn = meSch.RecordCreatedOn,
                             Description = meSch.Description,
                             DueDate = meSch.DueDate,
                             DueDateRange = meSch.DueDateRange,
                             Id = meSch.Id.ToString(),
-                            PatientId = meSch.PatientId.ToString(),
+                            PatientId = meSch.PatientId.ToString() ?? null,
                             PriorityId = (int)meSch.Priority,
                             ProgramIds = Helper.ConvertToStringList(meSch.ProgramIds),
                             StatusId = (int)meSch.Status,

@@ -56,7 +56,7 @@ namespace Phytel.API.DataDomain.Scheduling
 
         [BsonElement(AssignedToProperty)]
         [BsonIgnoreIfNull(false)]
-        public ObjectId AssignedToId { get; set; }
+        public ObjectId? AssignedToId { get; set; }
 
         [BsonElement(DescriptionProperty)]
         [BsonIgnoreIfNull(true)]
