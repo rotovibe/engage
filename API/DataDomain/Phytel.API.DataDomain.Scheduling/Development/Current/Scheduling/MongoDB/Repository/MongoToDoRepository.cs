@@ -58,10 +58,13 @@ namespace Phytel.API.DataDomain.Scheduling
                     {
                         meToDo.PatientId = ObjectId.Parse(todoData.PatientId);
                     }
-
                     if (!string.IsNullOrEmpty(todoData.SourceId))
                     {
                         meToDo.SourceId = ObjectId.Parse(todoData.SourceId);
+                    }
+                    if (todoData.ClosedDate != null)
+                    {
+                        meToDo.ClosedDate = todoData.ClosedDate;
                     }
 
                     using (SchedulingMongoContext ctx = new SchedulingMongoContext(_dbName))
