@@ -43,6 +43,7 @@ namespace Phytel.API.AppDomain.NG
                         CreatedById = request.CreatedById,
                         PatientId = request.PatientId,
                         StatusIds = request.StatusIds,
+                        //FromDate = (request.FromDate != null) ? TimeZoneInfo.ConvertTimeFromUtc((DateTime)request.FromDate, ): request.FromDate
                         FromDate = request.FromDate
                         
                     } as object);
@@ -122,6 +123,10 @@ namespace Phytel.API.AppDomain.NG
                     Title = request.ToDo.Title,
                     StatusId = request.ToDo.StatusId
                 };
+                if (request.ToDo.StatusId == (int)Status.Met || request.ToDo.StatusId == (int)Status.Abandoned)
+                {
+                    data.ClosedDate = DateTime.UtcNow;
+                }
                 PutInsertToDoDataResponse dataDomainResponse =
                     client.Put<PutInsertToDoDataResponse>(url, new PutInsertToDoDataRequest
                                                                                 {

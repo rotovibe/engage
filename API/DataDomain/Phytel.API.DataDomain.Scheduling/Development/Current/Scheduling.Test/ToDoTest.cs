@@ -24,10 +24,10 @@ namespace Phytel.API.DataDomain.Scheduling.Test
                 ContractNumber = contractNumber,
                 UserId = userId,
                 Version = version,
-                AssignedToId = "5325c821072ef705080d3488",
+                AssignedToId = "5325c821072ef705080d348c",
                 //PatientId  = "",
-                StatusIds = new List<int> { 1, 2}
-               // FromDate = DateTime.Parse("8/25/2014 8:02:26 PM")
+                StatusIds = new List<int> { 2, 4},
+                FromDate = DateTime.Parse("9/1/2014 5:36:54 PM")
 
             };
 
