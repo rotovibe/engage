@@ -62,7 +62,6 @@ namespace Phytel.API.DataDomain.Patient
                 {
                     patientView = new MECohortPatientView(this.UserId)
                     {
-                        Id = ObjectId.GenerateNewId(),
                         PatientID = ObjectId.Parse(cohortRequest.PatientID),
                         LastName = cohortRequest.LastName,
                         Version = cohortRequest.Version,
