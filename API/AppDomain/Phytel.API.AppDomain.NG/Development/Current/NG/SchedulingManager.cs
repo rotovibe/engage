@@ -43,7 +43,6 @@ namespace Phytel.API.AppDomain.NG
                         CreatedById = request.CreatedById,
                         PatientId = request.PatientId,
                         StatusIds = request.StatusIds,
-                        //FromDate = (request.FromDate != null) ? TimeZoneInfo.ConvertTimeFromUtc((DateTime)request.FromDate, ): request.FromDate
                         FromDate = request.FromDate
                         
                     } as object);

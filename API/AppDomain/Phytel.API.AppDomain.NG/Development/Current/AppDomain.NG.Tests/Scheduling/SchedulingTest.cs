@@ -29,7 +29,7 @@ namespace Phytel.API.AppDomain.NG.Test.Scheduling
                 ContractNumber = contractNumber,
                 UserId = userId,
                 AssignedToId = "5325c821072ef705080d348c",
-                FromDate = DateTime.Parse("9/1/2014 6:36:50 PM"),
+                FromDate = DateTime.Parse("9/1/2014 3:47:01 PM"),
                 StatusIds = new List<int> { 2, 4}
             };
 
