@@ -44,7 +44,7 @@ namespace Phytel.API.DataDomain.Patient.Service.Test
             JsonServiceClient.HttpWebRequestFilter = x => x.Headers.Add(string.Format("Token: {0}", token));
 
             PostDeletePatientResponse response = client.Post<PostDeletePatientResponse>(
-                string.Format(@"http://localhost:56176/{0}/{1}/Patient/{2}/Delete",
+                string.Format(@"http://localhost:888/Nightingale/{0}/{1}/Patient/{2}/Delete",
                 version,
                 contractNumber,
                 id), new PostDeletePatientRequest

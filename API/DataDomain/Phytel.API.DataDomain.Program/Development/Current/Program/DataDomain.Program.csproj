@@ -77,6 +77,7 @@
     <Compile Include="MongoDB\DataManagement\MongoProcedureFactory.cs" />
     <Compile Include="MongoDB\DataManagement\ProceduresManager.cs" />
     <Compile Include="MongoDB\DataManagement\Procedures\Helper.cs" />
+    <Compile Include="MongoDB\DataManagement\Procedures\UpdatePatientActionStateUpdateDate.cs" />
     <Compile Include="MongoDB\DataManagement\Procedures\UpdatePatientActionAssignedAttributes.cs" />
     <Compile Include="MongoDB\DataManagement\Procedures\UpdatePatientModuleAssignedAttributes.cs" />
     <Compile Include="MongoDB\DataManagement\Procedures\UpdatePatientProgramAssignedAttributes.cs" />
