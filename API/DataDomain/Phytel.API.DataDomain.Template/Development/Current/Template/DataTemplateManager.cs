@@ -10,13 +10,12 @@ namespace Phytel.API.DataDomain.Template
 {
     public class TemplateDataManager : ITemplateDataManager
     {
-        public IMongoTemplateRepository TemplateRepository { get; set; }
-        //protected readonly IMongoTemplateRepository TemplateRepository;
+        //public IMongoTemplateRepository<TemplateMongoContext> TemplateRepository { get; set; }
+        protected readonly IMongoTemplateRepository TemplateRepository;
 
-        public TemplateDataManager()
+        public TemplateDataManager(IMongoTemplateRepository repository)
         {
-            if (AppHostBase.Instance != null)
-                AppHostBase.Instance.Container.AutoWire(this);
+            TemplateRepository = repository;
         }
 
         public GetTemplateResponse GetTemplateByID(GetTemplateRequest request)

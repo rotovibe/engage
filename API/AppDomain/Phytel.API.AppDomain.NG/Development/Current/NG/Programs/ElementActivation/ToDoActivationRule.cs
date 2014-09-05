@@ -11,7 +11,7 @@ namespace Phytel.API.AppDomain.NG.Programs.ElementActivation
     public class ToDoActivationRule : ElementActivationRule, IElementActivationRule
     {
         private const int _elementType = 201;
-        private const string _alertType = "ToDo";
+        private const int _alertType = 200;
         public int ElementType{ get { return _elementType; } }
         public IEndpointUtils EndpointUtil { get; set; }
         public IPlanElementUtils PlanUtils { get; set; }

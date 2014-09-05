@@ -6,6 +6,8 @@ using Phytel.API.DataDomain.Template;
 using Phytel.API.DataDomain.Template.DTO;
 using Phytel.API.Common.Format;
 using System.Configuration;
+using Phytel.Service.Proxy;
+using ServiceStack.WebHost.Endpoints;
 
 namespace Phytel.API.DataDomain.Template.Service
 {
@@ -14,6 +16,7 @@ namespace Phytel.API.DataDomain.Template.Service
         public ITemplateDataManager Manager { get; set; }
         public ICommonFormatterUtil FormatUtil { get; set; }
         public IHelpers Helpers { get; set; }
+
 
         public GetTemplateResponse Post(GetTemplateRequest request)
         {
@@ -39,6 +42,12 @@ namespace Phytel.API.DataDomain.Template.Service
         public GetTemplateResponse Get(GetTemplateRequest request)
         {
             GetTemplateResponse response = new GetTemplateResponse();
+
+            if (AppHostBase.Instance != null)
+            {
+                Manager = AppHostBase.Instance.Container.ResolveNamed<ITemplateDataManager>("Template");
+            }
+
             try
             {
                 if (string.IsNullOrEmpty(request.UserId))

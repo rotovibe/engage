@@ -167,6 +167,14 @@
       <Project>{34271552-e2e1-428f-b612-7186e01b6c54}</Project>
       <Name>DataDomain.Program</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\DataDomain\Phytel.API.DataDomain.Scheduling\Development\Current\Scheduling.DTO\DataDomain.Scheduling.DTO.csproj">
+      <Project>{1e303326-eec9-42a8-ba50-880ab7ad99b2}</Project>
+      <Name>DataDomain.Scheduling.DTO</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\DataDomain\Phytel.API.DataDomain.Scheduling\Development\Current\Scheduling\DataDomain.Scheduling.csproj">
+      <Project>{4fd3a994-db24-41d6-bd34-4ea5aad8d62b}</Project>
+      <Name>DataDomain.Scheduling</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\DataDomain\Phytel.API.DataDomain.Step\Development\Current\Step.DTO\DataDomain.Step.DTO.csproj">
       <Project>{71e4bd1e-0fdf-4b80-8322-4c38b8bb671c}</Project>
       <Name>DataDomain.Step.DTO</Name>

@@ -1,10 +1,13 @@
 using Phytel.API.Interface;
+using Phytel.Service.DTO;
+using Phytel.Service.Filters;
 using ServiceStack.ServiceHost;
 
 namespace Phytel.API.DataDomain.Template.DTO
 {
     [Route("/{Context}/{Version}/{ContractNumber}/Template/{TemplateID}", "GET")]
-    public class GetTemplateRequest : IDataDomainRequest
+    [ContractRequestFilter]
+    public class GetTemplateRequest : IContractRequest, IDataDomainRequest
     {
         [ApiMember(Name = "UserId", Description = "UserId of the logged in user", ParameterType = "property", DataType = "string", IsRequired = false)]
         public string UserId { get; set; }

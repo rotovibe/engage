@@ -11,7 +11,7 @@ namespace Phytel.API.AppDomain.NG.Programs.ElementActivation
     public class ProblemActivationRule : ElementActivationRule, IElementActivationRule
     {
         private const int _elementType = 101;
-        private const string _alertType = "Problems";
+        private const int _alertType = 100;
         public int ElementType{ get { return _elementType; } }
         public IEndpointUtils EndpointUtil { get; set; }
         public IPlanElementUtils PlanUtils { get; set; }

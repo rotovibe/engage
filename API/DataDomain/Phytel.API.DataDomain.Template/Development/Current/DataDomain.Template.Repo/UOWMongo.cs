@@ -21,6 +21,14 @@ namespace DataDomain.Template.Repo
             }) as TContext);
         }
 
+        public UOWMongo(string database)
+        {
+            _context = (Activator.CreateInstance(typeof (TContext), new object[]
+            {
+                database
+            }) as TContext);
+        }
+
         public void Dispose()
         {
             TContext context = _context;

@@ -24,6 +24,7 @@ using Phytel.API.DataDomain.PatientProblem;
 using Phytel.API.DataDomain.PatientProblem.DTO;
 using Phytel.API.DataDomain.PatientSystem;
 using Phytel.API.DataDomain.PatientSystem.DTO;
+using Phytel.API.DataDomain.Scheduling;
 using Phytel.Services;
 using Phytel.API.DataDomain.Program;
 using Phytel.API.DataDomain.Program.MongoDB.DTO;
@@ -54,37 +55,38 @@ namespace Phytel.Data.ETL
         {
             try
             {
-            //Truncate/Delete SQL databases
+                //Truncate/Delete SQL databases
                 SQLDataService.Instance.ExecuteProcedure("InHealth001", true, "REPORT", "spPhy_TruncateTables",
                     new ParameterCollection());
 
-            RegisterClasses();
-            LoadUsers(contract);
-            LoadLookUps(contract);
-            LoadGoalAttributes(contract);
-            LoadObservations(contract);
+                RegisterClasses();
+                LoadUsers(contract);
+                LoadLookUps(contract);
+                LoadGoalAttributes(contract);
+                LoadObservations(contract);
 
-            LoadPatients(contract);
-            LoadPatientSystems(contract);
-            LoadPatientNotes(contract);
-            LoadPatientProblems(contract);
-            LoadPatientObservations(contract);
+                LoadPatients(contract);
+                LoadPatientSystems(contract);
+                LoadPatientNotes(contract);
+                LoadPatientProblems(contract);
+                LoadPatientObservations(contract);
 
-            LoadContacts(contract);
+                LoadContacts(contract);
 
-            LoadCareMembers(contract);
-            LoadPatientUsers(contract);
+                LoadCareMembers(contract);
+                LoadPatientUsers(contract);
 
-            LoadPatientGoals(contract);
-            LoadPatientBarriers(contract);
-            LoadPatientInterventions(contract);
-            LoadPatientTasks(contract);
+                LoadPatientGoals(contract);
+                LoadPatientBarriers(contract);
+                LoadPatientInterventions(contract);
+                LoadPatientTasks(contract);
 
-            LoadPatientPrograms(contract);
-            LoadPatientProgramResponses(contract);
-            LoadPatientProgramAttributes(contract);
-            ProcessSpawnElements();
-        }
+                LoadPatientPrograms(contract);
+                LoadPatientProgramResponses(contract);
+                LoadPatientProgramAttributes(contract);
+                ProcessSpawnElements();
+                LoadToDos(contract);
+            }
             catch (Exception ex)
             {
                 throw ex; //SimpleLog.Log(new ArgumentException("Rebuild()", ex));
@@ -331,6 +333,7 @@ namespace Phytel.Data.ETL
 
                     foreach (MECareMember mem in members)
                     {
+                        if (mem.DeleteFlag) return;
                         try
                         {
                             ParameterCollection parms = new ParameterCollection();
@@ -411,6 +414,7 @@ namespace Phytel.Data.ETL
                     Parallel.ForEach(contacts, new ParallelOptions { MaxDegreeOfParallelism = Environment.ProcessorCount * _exponent }, contact =>
                     //foreach (MEContact contact in contacts)
                     {
+                        if (contact.DeleteFlag) return;
                         if (contact.PatientId != null)
                         {
                             try
@@ -623,6 +627,7 @@ namespace Phytel.Data.ETL
                     List<MEAttributeLibrary> attributes = pgctx.AttributesLibrary.Collection.FindAllAs<MEAttributeLibrary>().ToList();
                     foreach (MEAttributeLibrary att in attributes)
                     {
+                        if (att.DeleteFlag) return;
                         try
                         {
                             ParameterCollection parms = new ParameterCollection();
@@ -734,6 +739,9 @@ namespace Phytel.Data.ETL
                                         break;
                                     case LookUpType.TimeZone:
                                         LoadTimeZones(lookup);
+                                        break;
+                                    case LookUpType.ToDoCategory:
+                                        LoadToDoCategory(lookup);
                                         break;
                                     default:
                                         break;
@@ -1024,6 +1032,22 @@ namespace Phytel.Data.ETL
                 SQLDataService.Instance.ExecuteProcedure("InHealth001", true, "REPORT", "spPhy_SaveTimeZoneLookUp", parms);
             }
         }
+        
+        private void LoadToDoCategory(MELookup lookup)
+        {
+            foreach (LookUpBase lbase in lookup.Data)
+            {
+                ToDoCategory tz = (ToDoCategory)lbase;
+
+                ParameterCollection parms = new ParameterCollection();
+
+                parms.Add(new Parameter("@LookUpType", lookup.Type.ToString(), SqlDbType.VarChar, ParameterDirection.Input, int.MaxValue));
+                parms.Add(new Parameter("@MongoID", tz.DataId, SqlDbType.VarChar, ParameterDirection.Input, 50));
+                parms.Add(new Parameter("@Name", tz.Name, SqlDbType.VarChar, ParameterDirection.Input, int.MaxValue));
+
+                SQLDataService.Instance.ExecuteProcedure("InHealth001", true, "REPORT", "spPhy_SaveToDoCategoryLookUp", parms);
+            }
+        }
 
         private void LinkCommTypeCommModes(MELookup lookup)
         {
@@ -1069,6 +1093,7 @@ namespace Phytel.Data.ETL
 
                     foreach (MEObservation obs in observations)
                     {
+                        if (obs.DeleteFlag) return;
                         try
                         {
                             ParameterCollection parms = new ParameterCollection();
@@ -1128,6 +1153,7 @@ namespace Phytel.Data.ETL
                     //Parallel.ForEach(patients, new ParallelOptions{MaxDegreeOfParallelism= Environment.ProcessorCount * _exponent}, patient =>
                     foreach (MEPatient patient in patients)
                     {
+                        if (patient.DeleteFlag) return;
                         try
                         {
                             ParameterCollection parms = new ParameterCollection();
@@ -1182,6 +1208,7 @@ namespace Phytel.Data.ETL
 
                     Parallel.ForEach(barriers, new ParallelOptions { MaxDegreeOfParallelism = Environment.ProcessorCount * _exponent }, bar =>
                     {
+                        if (bar.DeleteFlag) return;
                         try
                         {
                             ParameterCollection parms = new ParameterCollection();
@@ -1230,6 +1257,7 @@ namespace Phytel.Data.ETL
                     Parallel.ForEach(goals, new ParallelOptions { MaxDegreeOfParallelism = Environment.ProcessorCount * _exponent }, goal =>
                     //foreach (MEPatientGoal goal in goals)
                     {
+                        if (goal.DeleteFlag) return;
                         try
                         {
                             ParameterCollection parms = new ParameterCollection();
@@ -1351,6 +1379,7 @@ namespace Phytel.Data.ETL
 
                     foreach (MEPatientIntervention intervention in interventions)
                     {
+                        if (intervention.DeleteFlag) return;
                         try
                         {
                             if (!string.IsNullOrEmpty(intervention.PatientGoalId.ToString())) 
@@ -1429,6 +1458,7 @@ namespace Phytel.Data.ETL
                     Parallel.ForEach(notes, new ParallelOptions { MaxDegreeOfParallelism = Environment.ProcessorCount * _exponent }, note =>
                     //foreach (MEPatientNote note in notes)
                     {
+                        if (note.DeleteFlag) return;
                         try
                         {
                             ParameterCollection parms = new ParameterCollection();
@@ -1489,6 +1519,7 @@ namespace Phytel.Data.ETL
 
                     foreach (MEPatientObservation obs in observations)
                     {
+                        if (obs.DeleteFlag) return;
                         try
                         {
                             ParameterCollection parms = new ParameterCollection();
@@ -1543,6 +1574,7 @@ namespace Phytel.Data.ETL
                     Parallel.ForEach(problems, new ParallelOptions { MaxDegreeOfParallelism = Environment.ProcessorCount * _exponent }, problem =>
                     //foreach (MEPatientProblem problem in problems)
                     {
+                        if (problem.DeleteFlag) return;
                         try
                         {
                             ParameterCollection parms = new ParameterCollection();
@@ -1581,6 +1613,85 @@ namespace Phytel.Data.ETL
             }
         }
 
+        private void LoadToDos(string ctr)
+        {
+            try
+            {
+                using (SchedulingMongoContext smct = new SchedulingMongoContext(ctr))
+                {
+                    var todo = smct.ToDos.Collection.FindAllAs<METoDo>().ToList();
+
+                    todo.ForEach(td =>
+                    {
+                        if (td.DeleteFlag) return;
+
+                        try
+                        {
+                            ParameterCollection parms = new ParameterCollection
+                            {
+                                new Parameter("@_id", td.Id.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50),
+                                new Parameter("@_sourceId", td.SourceId == null ? string.Empty : td.SourceId.ToString(),SqlDbType.VarChar, ParameterDirection.Input, 50),
+                                new Parameter("@_patientId",td.PatientId == null ? string.Empty : td.PatientId.ToString(), SqlDbType.VarChar,ParameterDirection.Input, 50),
+                                new Parameter("@_assignedToId",td.AssignedToId == null ? string.Empty : td.AssignedToId.ToString(),SqlDbType.VarChar, ParameterDirection.Input, 50),
+                                new Parameter("@ClosedDate", td.ClosedDate ?? (object) DBNull.Value, SqlDbType.DateTime,ParameterDirection.Input, 50),
+                                new Parameter("@Title", td.Title ?? string.Empty, SqlDbType.VarChar,ParameterDirection.Input, 500),
+                                new Parameter("@Description", td.Description ?? string.Empty, SqlDbType.VarChar,ParameterDirection.Input, 500),
+                                new Parameter("@DueDate", td.DueDate ?? (object) DBNull.Value, SqlDbType.DateTime,ParameterDirection.Input, 50),
+                                new Parameter("@Status", td.Status.ToString() ?? (object) DBNull.Value,SqlDbType.VarChar, ParameterDirection.Input, 50),
+                                new Parameter("@_category", td.Category.ToString(), SqlDbType.VarChar,ParameterDirection.Input, 50),
+                                new Parameter("@Priority", td.Priority.ToString() ?? (object) DBNull.Value,SqlDbType.VarChar, ParameterDirection.Input, 50),
+                                new Parameter("@Version", td.Version.ToString(), SqlDbType.VarChar,ParameterDirection.Input, 50),
+                                new Parameter("@_updatedBy",td.UpdatedBy == null ? string.Empty : td.UpdatedBy.ToString(), SqlDbType.VarChar,ParameterDirection.Input, 50),
+                                new Parameter("@LastUpdatedOn", td.LastUpdatedOn ?? (object) DBNull.Value,SqlDbType.DateTime, ParameterDirection.Input, 50),
+                                new Parameter("@_recordCreatedBy", td.RecordCreatedBy.ToString(), SqlDbType.VarChar,ParameterDirection.Input, 50),
+                                new Parameter("@RecordCreatedOn", td.RecordCreatedOn, SqlDbType.DateTime,ParameterDirection.Input, 50),
+                                new Parameter("@TTLDate", td.TTLDate ?? (object) DBNull.Value, SqlDbType.DateTime,ParameterDirection.Input, 50),
+                                new Parameter("@DeleteFlag", td.DeleteFlag.ToString(), SqlDbType.VarChar,ParameterDirection.Input, 50),
+                                new Parameter("@ExtraElements",td.ExtraElements != null ? td.ExtraElements.ToString() : (object) DBNull.Value, SqlDbType.VarChar, ParameterDirection.Input, int.MaxValue)
+                            };
+
+                            SQLDataService.Instance.ExecuteScalar("InHealth001", true, "REPORT", "spPhy_SaveToDo", parms);
+
+
+                            if (td.ProgramIds != null && td.ProgramIds.Count > 0)
+                            {
+                                LoadProgramIdReferences(td.Id.ToString(), td.ProgramIds);
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            throw new ArgumentException("LoadToDos():ToDoId : " + td.Id.ToString());
+                        }
+                    });
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex; //SimpleLog.Log(new ArgumentException("LoadPatientPrograms()", ex));
+            }
+        }
+
+        private void LoadProgramIdReferences(string todoId, List<ObjectId> list)
+        {
+            try
+            {
+                list.ForEach(pid => 
+                {
+                    ParameterCollection parms = new ParameterCollection
+                    {
+                        new Parameter("@_toDoId", todoId, SqlDbType.VarChar, ParameterDirection.Input, 50),
+                        new Parameter("@_programId", pid.ToString() ,SqlDbType.VarChar, ParameterDirection.Input, 50)
+                    };
+
+                    SQLDataService.Instance.ExecuteScalar("InHealth001", true, "REPORT", "spPhy_SaveToDoProgram", parms);
+                });
+            }
+            catch (Exception ex)
+            {
+                throw new ArgumentException("LoadProgramIdReferences():ToDoId : " + todoId);
+            }
+        }
+
         private void LoadPatientPrograms(string ctr)
         {
             try
@@ -1592,6 +1703,7 @@ namespace Phytel.Data.ETL
                     foreach (MEPatientProgram prog in programs)
                     //Parallel.ForEach(programs, new ParallelOptions{MaxDegreeOfParallelism= Environment.ProcessorCount * _exponent}, prog =>
                     {
+                        if (prog.DeleteFlag) return;
                         try
                         {
                             ParameterCollection parms = new ParameterCollection();
@@ -1670,6 +1782,7 @@ namespace Phytel.Data.ETL
                     //foreach (MEProgramAttribute prog in programAttributes)
                     Parallel.ForEach(programAttributes, new ParallelOptions { MaxDegreeOfParallelism = Environment.ProcessorCount * _exponent }, prog =>
                     {
+                        if (prog.DeleteFlag) return;
                         try
                         {
                             ParameterCollection parms = new ParameterCollection();
@@ -2045,6 +2158,7 @@ namespace Phytel.Data.ETL
 
                     foreach (MEPatientSystem system in systems)
                     {
+                        if (system.DeleteFlag) return;
                         try
                         {
                             ParameterCollection parms = new ParameterCollection();
@@ -2091,6 +2205,7 @@ namespace Phytel.Data.ETL
                     //Parallel.ForEach(tasks, new ParallelOptions{MaxDegreeOfParallelism= Environment.ProcessorCount * _exponent}, task =>
                     foreach (MEPatientTask task in tasks)
                     {
+                        if (task.DeleteFlag) return;
                         try
                         {
                             ParameterCollection parms = new ParameterCollection();
@@ -2193,6 +2308,7 @@ namespace Phytel.Data.ETL
                     Parallel.ForEach(users, new ParallelOptions { MaxDegreeOfParallelism = Environment.ProcessorCount * _exponent }, user =>
                     //foreach (MEPatientUser user in users)
                     {
+                        if (user.DeleteFlag) return;
                         try
                         {
                             ParameterCollection parms = new ParameterCollection();
@@ -2237,6 +2353,7 @@ namespace Phytel.Data.ETL
 
                     foreach (MEContact contact in contacts)
                     {
+                        if (contact.DeleteFlag) return;
                         if (contact.PatientId == null)
                         {
                             try

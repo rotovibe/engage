@@ -7,7 +7,7 @@ using Phytel.Repository;
 
 namespace DataDomain.Template.Repo
 {
-    public class MongoTemplateRepository<TContext> : ITemplateRepository, IMongoTemplateRepository where TContext : TemplateMongoContext
+    public class MongoTemplateRepository<TContext> : IMongoTemplateRepository where TContext : TemplateMongoContext
     {
         protected readonly TContext Context;
         public string UserId { get; set; }
