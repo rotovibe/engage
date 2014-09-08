@@ -40,25 +40,23 @@ namespace Phytel.API.AppDomain.Security.Service
 
         public UserAuthenticateResponse Post(UserAuthenticateRequest request)
         {
-            throw new NotImplementedException();
+            UserAuthenticateResponse response = new UserAuthenticateResponse();
+            try
+            {
+                //build the token from the user authentication request remote machine for additional security
+                //this will then be passed in from calling domains via the header for validation
+                string securityToken = BuildSecurityToken();
 
-            //UserAuthenticateResponse response = new UserAuthenticateResponse();
-            //try
-            //{
-            //    //build the token from the user authentication request remote machine for additional security
-            //    //this will then be passed in from calling domains via the header for validation
-            //    string securityToken = BuildSecurityToken();
-
-            //    // validate user against apiuser datastore
-            //    response = SecurityManager.ValidateCredentials(request.UserName, request.Password, securityToken, request.APIKey, request.Context);
-            //    return response;
-            //}
-            //catch (Exception ex)
-            //{
-            //    //TODO: Log this to the SQL database via ASE
-            //    CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
-            //    return response;
-            //}
+                // validate user against apiuser datastore
+                response = SecurityManager.ValidateCredentials(request.UserName, request.Password, securityToken, request.APIKey, request.Context);
+                return response;
+            }
+            catch (Exception ex)
+            {
+                //TODO: Log this to the SQL database via ASE
+                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+                return response;
+            }
         }
 
         public ValidateTokenResponse Post(ValidateTokenRequest request)

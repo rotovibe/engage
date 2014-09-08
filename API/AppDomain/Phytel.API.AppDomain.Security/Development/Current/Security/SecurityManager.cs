@@ -38,13 +38,11 @@ namespace Phytel.API.AppDomain.Security
         {
             try
             {
-                throw new NotImplementedException();
+                ISecurityRepository<UserAuthenticateResponse> securityRepo = SecurityRepositoryFactory<UserAuthenticateResponse>.GetSecurityRepository(productName);
 
-                //ISecurityRepository<UserAuthenticateResponse> securityRepo = SecurityRepositoryFactory<UserAuthenticateResponse>.GetSecurityRepository(productName);
+                UserAuthenticateResponse response = securityRepo.LoginUser(userName, password, securityToken, apiKey, productName);
 
-                //UserAuthenticateResponse response = securityRepo.LoginUser(userName, password, securityToken, apiKey, productName);
-
-                //return response;
+                return response;
             }
             catch (Exception)
             {
