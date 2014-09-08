@@ -36,7 +36,7 @@ namespace Phytel.API.AppDomain.NG.Programs.ElementActivation
                 }
                 catch(Exception ex)
                 {
-                    throw new ArgumentException("GetScheduleToDoById():Error" + ex.Message);
+                    throw new ArgumentException(ex.Message);
                 }
 
                 var prog = new System.Collections.Generic.List<string>();
@@ -77,7 +77,7 @@ namespace Phytel.API.AppDomain.NG.Programs.ElementActivation
                 }
                 catch (Exception ex)
                 {
-                    throw new Exception("AD:ToDoActivationRule:PutInsertToDo()::" + ex.Message, ex.InnerException);
+                    throw new Exception(ex.Message, ex.InnerException);
                 }
 
                 return _alertType;

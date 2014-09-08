@@ -20,6 +20,7 @@ namespace Phytel.API.DataDomain.Template.Service.Containers
             }).ReusedWithin(Funq.ReuseScope.Request);
 
             container = TemplateContainer.Configure(container);
+
             return container;
         }
     }

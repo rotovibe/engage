@@ -1,4 +1,5 @@
 ﻿using System.Reflection;
+using DataDomain.Template.Repo;
 using Phytel.API.Common;
 using Phytel.API.Common.Format;
 using Phytel.API.DataDomain.Template.Service.Containers;
@@ -9,11 +10,13 @@ namespace Phytel.API.DataDomain.Template.Service
 {
     public class TemplateAppHost : AppHostBase
     {
-        public TemplateAppHost() : base("Phytel Template Data Domain Services", Assembly.GetExecutingAssembly()) { }
+        public TemplateAppHost() : base("Phytel Template Data Domain Services", Assembly.GetExecutingAssembly())
+        {
+        }
 
         public override void Configure(Funq.Container container)
         {
-            Plugins.Add(new RequestLogsFeature() { RequiredRoles = new string[] { } });
+            Plugins.Add(new RequestLogsFeature() {RequiredRoles = new string[] {}});
             HttpServiceContainer.Build(container);
         }
     }

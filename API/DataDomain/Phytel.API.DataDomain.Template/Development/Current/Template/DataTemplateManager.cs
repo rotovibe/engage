@@ -1,16 +1,14 @@
+using System.Collections.Generic;
+using System.Linq;
 using DataDomain.Template.Repo;
 using Phytel.API.DataDomain.Template.DTO;
-using System.Data.SqlClient;
-using Phytel.API.DataDomain.Template;
+using DTO = Phytel.API.DataDomain.Template.DTO;
 using System;
-using Phytel.API.Common.Format;
-using ServiceStack.WebHost.Endpoints;
 
 namespace Phytel.API.DataDomain.Template
 {
     public class TemplateDataManager : ITemplateDataManager
     {
-        //public IMongoTemplateRepository<TemplateMongoContext> TemplateRepository { get; set; }
         protected readonly IMongoTemplateRepository TemplateRepository;
 
         public TemplateDataManager(IMongoTemplateRepository repository)
@@ -18,17 +16,15 @@ namespace Phytel.API.DataDomain.Template
             TemplateRepository = repository;
         }
 
-        public GetTemplateResponse GetTemplateByID(GetTemplateRequest request)
+        public DTO.Template GetTemplateByID(GetTemplateRequest request)
         {
             try
             {
-                var result = new GetTemplateResponse();
-
-                //ITemplateRepository repo = TemplateRepositoryFactory.GetTemplateRepository(request, RepositoryType.Template);
+                DTO.Template result = null;
                 TemplateRepository.UserId = request.UserId;
-                result = TemplateRepository.FindByID(request.TemplateID) as GetTemplateResponse;
+                result = TemplateRepository.FindByID(request.TemplateID) as DTO.Template;
 
-                return (result ?? new GetTemplateResponse());
+                return result;
             }
             catch (Exception ex)
             { 
@@ -36,17 +32,15 @@ namespace Phytel.API.DataDomain.Template
             }
         }
 
-        public GetAllTemplatesResponse GetTemplateList(GetAllTemplatesRequest request)
+        public List<DTO.Template> GetTemplateList(GetAllTemplatesRequest request)
         {
             try
             {
-                var result = new GetAllTemplatesResponse();
-
-                //ITemplateRepository repo = TemplateRepositoryFactory.GetTemplateRepository(request, RepositoryType.Template);
+                List<DTO.Template> result = null;
                 TemplateRepository.UserId = request.UserId;
-                //result = TemplateRepository.SelectAll() as GetAllTemplatesResponse;
+                result = TemplateRepository.SelectAll().Cast<DTO.Template>().ToList<DTO.Template>();
 
-                return (result ?? new GetAllTemplatesResponse());
+                return result;
             }
             catch (Exception ex)
             {

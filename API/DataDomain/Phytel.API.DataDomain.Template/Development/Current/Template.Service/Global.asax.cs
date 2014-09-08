@@ -1,5 +1,6 @@
 using Phytel.API.Common;
 using Phytel.API.Common.Format;
+using Phytel.API.DataDomain.Template.DTO;
 using ServiceStack.MiniProfiler;
 using ServiceStack.ServiceInterface.Admin;
 using ServiceStack.WebHost.Endpoints;

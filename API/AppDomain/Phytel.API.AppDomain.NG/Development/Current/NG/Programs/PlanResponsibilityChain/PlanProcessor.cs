@@ -113,37 +113,5 @@ namespace Phytel.API.AppDomain.NG.PlanCOR
                 PEUtils.SetProgramAttributes(rse, e.Program, e.UserId, ProgramAttributes);
             }
         }
-
-        //public void HandleResponseSpawnElements(Step s, Response r, PlanElementEventArg e, string userId)
-        //{
-        //    try
-        //    {
-        //        if (r.SpawnElement != null)
-        //        {
-        //            if (PEUtils.ResponseSpawnAllowed(s, r))
-        //            {
-        //                r.SpawnElement.ForEach(rse =>
-        //                {
-        //                    var type = new ElementActivationStrategy().Run(e, rse, userId, _programAttributes);
-
-        //                    // account for plan element registration
-        //                    if (type == null) throw new ArgumentException("Type returned null from strategy.");
-
-        //                    if (type.GetType() == typeof (PlanElement))
-        //                        OnProcessIdEvent(type as PlanElement);
-        //                    else
-        //                    {
-        //                        if (!string.IsNullOrEmpty(type.ToString()))
-        //                            OnSpawnElementEvent(type.ToString());
-        //                    }
-        //                });
-        //            }
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        throw new Exception("AD:StepPlanProcessor:HandleResponseSpawnElements()::" + ex.Message, ex.InnerException);
-        //    }
-        //}
     }
 }

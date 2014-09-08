@@ -1,0 +1,29 @@
+﻿using System;
+using System.Configuration;
+using Phytel.API.Common;
+using Phytel.API.Common.Format;
+using Phytel.API.DataDomain.Template.DTO;
+using Phytel.API.Interface;
+using ServiceStack.WebHost.Endpoints;
+
+namespace Phytel.API.DataDomain.Template.Service
+{
+    public class ServiceBase : ServiceStack.ServiceInterface.Service
+    {
+        public ICommonFormatterUtil FormatUtil { get; set; }
+        public IHelpers Helpers { get; set; }
+        protected readonly string _aseProcessId = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
+
+        protected static void RequireUserId(IDataDomainRequest request)
+        {
+            if (string.IsNullOrEmpty(request.UserId))
+                throw new UnauthorizedAccessException("ProgramDD:Put()::Unauthorized Access");
+        }
+
+        protected void RaiseException(IDomainResponse response, Exception ex)
+        {
+            FormatUtil.FormatExceptionResponse(response, base.Response, ex);
+            Helpers.LogException(int.Parse(_aseProcessId), ex);
+        }
+    }
+}

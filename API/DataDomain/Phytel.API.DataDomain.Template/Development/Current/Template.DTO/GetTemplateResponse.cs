@@ -1,19 +1,8 @@
-using ServiceStack.ServiceInterface.ServiceModel;
-using System.Collections.Generic;
-using Phytel.API.Interface;
 
 namespace Phytel.API.DataDomain.Template.DTO
 {
-    public class GetTemplateResponse : IDomainResponse
+    public class GetTemplateResponse : DomainResponse
     {
         public Template Template { get; set; }
-        public double Version { get; set; }
-        public ResponseStatus Status { get; set; }
-    }
-
-    public class Template
-    {
-        public string TemplateID { get; set; }
-        public double Version { get; set; }
     }
 }

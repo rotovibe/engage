@@ -718,6 +718,9 @@ namespace Phytel.API.AppDomain.NG
                     sid), userId);
 
                 var response = client.Get<GetScheduleDataResponse>(url);
+
+                if (response == null) throw new Exception("Schedule template was not found or initialized.");
+
                 var schedule = new Schedule
                 {
                     AssignedToId = response.Schedule.AssignedToId,

@@ -1,8 +1,13 @@
 
+using System.Linq;
+using MongoDB.Bson;
+using MongoDB.Driver.Builders;
 using Phytel.API.Common.Data;
 using System;
 using System.Collections.Generic;
 using Phytel.API.DataDomain.Template;
+using DTO = Phytel.API.DataDomain.Template.DTO;
+using Phytel.API.DataDomain.Template.DTO;
 using Phytel.Repository;
 
 namespace DataDomain.Template.Repo
@@ -39,7 +44,36 @@ namespace DataDomain.Template.Repo
 
         public object FindByID(string entityID)
         {
-            throw new NotImplementedException();
+            try
+            {
+                object result = null;
+
+                var findcp = Query.And(
+                    Query<METemplate>.EQ(b => b.Id, ObjectId.Parse(entityID)),
+                    Query<METemplate>.EQ(b => b.DeleteFlag, false));
+
+                var cp = Context.Templates.Collection.Find(findcp).FirstOrDefault();
+
+                if (cp == null) return result;
+
+                result = new DTO.Template
+                {
+                    Id = cp.Id.ToString(),
+                    DeleteFlag = cp.DeleteFlag,
+                    LastUpdatedOn = cp.LastUpdatedOn,
+                    RecordCreatedBy = cp.RecordCreatedBy.ToString(),
+                    RecordCreatedOn = cp.RecordCreatedOn,
+                    TtlDate = cp.TTLDate,
+                    UpdatedBy = cp.UpdatedBy.ToString(),
+                    Version = cp.Version
+                };
+                
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("DD:PatientProgramRepository:FindByID()::" + ex.Message, ex.InnerException);
+            }
         }
 
         public Tuple<string, IEnumerable<object>> Select(Phytel.API.Interface.APIExpression expression)

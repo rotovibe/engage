@@ -1,88 +1,59 @@
 using System;
-using System.Net;
-using DataDomain.Template.Repo;
-using Phytel.API.Common;
-using Phytel.API.DataDomain.Template;
 using Phytel.API.DataDomain.Template.DTO;
-using Phytel.API.Common.Format;
-using System.Configuration;
-using Phytel.Service.Proxy;
-using ServiceStack.WebHost.Endpoints;
 
 namespace Phytel.API.DataDomain.Template.Service
 {
-    public class TemplateService : ServiceStack.ServiceInterface.Service
+    public class TemplateService : ServiceBase
     {
-        public ITemplateDataManager Manager { get; set; }
-        public ICommonFormatterUtil FormatUtil { get; set; }
-        public IHelpers Helpers { get; set; }
+        protected readonly ITemplateDataManager Manager;
 
+        public TemplateService(ITemplateDataManager mgr)
+        {
+            Manager = mgr;
+        }
 
         public GetTemplateResponse Post(GetTemplateRequest request)
         {
-            GetTemplateResponse response = new GetTemplateResponse();
+            var response = new GetTemplateResponse{ Version = request.Version};
             try
             {
-                if (string.IsNullOrEmpty(request.UserId))
-                    throw new UnauthorizedAccessException("ProgramDD:Put()::Unauthorized Access");
-
-                response = Manager.GetTemplateByID(request);
-                response.Version = request.Version;
+                RequireUserId(request);
+                response.Template = Manager.GetTemplateByID(request);
             }
             catch (Exception ex)
             {
-                FormatUtil.FormatExceptionResponse(response, base.Response, ex);
-
-                string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
-                Helpers.LogException(int.Parse(aseProcessID), ex);
+                RaiseException(response, ex);
             }
             return response;
         }
 
         public GetTemplateResponse Get(GetTemplateRequest request)
         {
-            GetTemplateResponse response = new GetTemplateResponse();
-
-            if (AppHostBase.Instance != null)
-            {
-                Manager = AppHostBase.Instance.Container.ResolveNamed<ITemplateDataManager>("Template");
-            }
+            var response = new GetTemplateResponse { Version = request.Version };
 
             try
             {
-                if (string.IsNullOrEmpty(request.UserId))
-                    throw new UnauthorizedAccessException("ProgramDD:Put()::Unauthorized Access");
-
-                response = Manager.GetTemplateByID(request);
-                response.Version = request.Version;
+                RequireUserId(request);
+                response.Template = Manager.GetTemplateByID(request);
             }
             catch (Exception ex)
             {
-                FormatUtil.FormatExceptionResponse(response, base.Response, ex);
-
-                string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
-                Helpers.LogException(int.Parse(aseProcessID), ex);
+                RaiseException(response, ex);
             }
             return response;
         }
 
         public GetAllTemplatesResponse Post(GetAllTemplatesRequest request)
         {
-            GetAllTemplatesResponse response = new GetAllTemplatesResponse();
+            var response = new GetAllTemplatesResponse { Version = request.Version };
             try
             {
-                if (string.IsNullOrEmpty(request.UserId))
-                    throw new UnauthorizedAccessException("ProgramDD:Put()::Unauthorized Access");
-
-                response = Manager.GetTemplateList(request);
-                response.Version = request.Version;
+                RequireUserId(request);
+                response.Templates = Manager.GetTemplateList(request);
             }
             catch (Exception ex)
             {
-                FormatUtil.FormatExceptionResponse(response, base.Response, ex);
-
-                string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
-                Helpers.LogException(int.Parse(aseProcessID), ex);
+                RaiseException(response, ex);
             }
             return response;
         }

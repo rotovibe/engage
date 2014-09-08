@@ -6,8 +6,7 @@ using ServiceStack.ServiceHost;
 namespace Phytel.API.DataDomain.Template.DTO
 {
     [Route("/{Context}/{Version}/{ContractNumber}/Template/{TemplateID}", "GET")]
-    [ContractRequestFilter]
-    public class GetTemplateRequest : IContractRequest, IDataDomainRequest
+    public class GetTemplateRequest : IDataDomainRequest
     {
         [ApiMember(Name = "UserId", Description = "UserId of the logged in user", ParameterType = "property", DataType = "string", IsRequired = false)]
         public string UserId { get; set; }
