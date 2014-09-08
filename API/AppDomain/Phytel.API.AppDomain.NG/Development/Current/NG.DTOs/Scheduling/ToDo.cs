@@ -28,6 +28,7 @@ namespace Phytel.API.AppDomain.NG.DTO
 
     public class PatientDetails
     {
+        public string Id { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string MiddleName { get; set; }

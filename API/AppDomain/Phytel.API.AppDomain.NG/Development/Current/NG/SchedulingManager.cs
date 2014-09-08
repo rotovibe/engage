@@ -84,6 +84,7 @@ namespace Phytel.API.AppDomain.NG
                 {
                     toDo.PatientDetails = new PatientDetails
                     {
+                        Id = response.Patient.Id,
                         FirstName = response.Patient.FirstName,
                         LastName = response.Patient.LastName,
                         MiddleName = response.Patient.MiddleName,
