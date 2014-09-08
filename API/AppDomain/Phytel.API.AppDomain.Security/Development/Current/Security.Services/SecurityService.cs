@@ -47,6 +47,11 @@ namespace Phytel.API.AppDomain.Security.Service
                 //this will then be passed in from calling domains via the header for validation
                 string securityToken = BuildSecurityToken();
 
+                request.UserName = Request.Headers["UserName"];
+                request.Password = Request.Headers["Password"];
+                request.APIKey = Request.Headers["APIKey"];
+                request.Context = Request.Headers["Context"];
+
                 // validate user against apiuser datastore
                 response = SecurityManager.ValidateCredentials(request.UserName, request.Password, securityToken, request.APIKey, request.Context);
                 return response;

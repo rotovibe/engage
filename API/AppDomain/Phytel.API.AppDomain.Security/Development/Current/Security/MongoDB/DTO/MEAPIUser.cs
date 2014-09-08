@@ -15,7 +15,7 @@ namespace Phytel.API.AppDomain.Security
 
         public const string UserNameProperty = "un";
         public const string PasswordProperty = "pwd";
-
+        public const string SaltProperty = "salt";
         public const string ApiKeyProperty = "apikey";
         public const string ProductProperty = "product";
         public const string IsActiveProperty = "isactive";
@@ -32,6 +32,10 @@ namespace Phytel.API.AppDomain.Security
         [BsonElement(PasswordProperty)]
         [BsonIgnoreIfNull(true)]
         public string Password { get; set; }
+
+        [BsonElement(SaltProperty)]
+        [BsonIgnoreIfNull(true)]
+        public string Salt { get; set; }
 
         [BsonElement(ApiKeyProperty)]
         [BsonIgnoreIfNull(true)]

@@ -12,6 +12,8 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
 using Phytel.Services;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace Phytel.API.AppDomain.Security
 {
@@ -47,9 +49,8 @@ namespace Phytel.API.AppDomain.Security
                 if (user != null)
                 {
                     //validate password
-                    Phytel.Services.DataProtector protector = new Services.DataProtector(Services.DataProtector.Store.USE_SIMPLE_STORE);
-                    string dbPwd = protector.Decrypt(user.Password);
-                    if (dbPwd.Equals(password))
+                    string dbPwd = HashText(password, user.Salt, new SHA1CryptoServiceProvider());
+                    if (dbPwd.Equals(user.Password))
                     {
                         session = new MEAPISession
                         {
@@ -59,7 +60,8 @@ namespace Phytel.API.AppDomain.Security
                             SessionLengthInMinutes = user.SessionLengthInMinutes,
                             SessionTimeOut = DateTime.UtcNow.AddMinutes(user.SessionLengthInMinutes),
                             UserName = user.UserName,
-                            SQLUserId = user.Id.ToString()
+                            Version = 1.0,
+                            UserId = user.Id
                         };
 
                         _objectContext.APISessions.Collection.Insert(session);
@@ -274,8 +276,14 @@ namespace Phytel.API.AppDomain.Security
             return returnId;
         }
 
+        private string HashText(string text, string salt, System.Security.Cryptography.HashAlgorithm hash)
+        {
+            byte[] textWithSaltBytes = Encoding.UTF8.GetBytes(string.Concat(text, salt));
+            byte[] hashedBytes = hash.ComputeHash(textWithSaltBytes);
+            hash.Clear();
+            return Convert.ToBase64String(hashedBytes);
+        }
         #endregion
-
 
         public void UndoDelete(object entity)
         {

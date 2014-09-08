@@ -2,7 +2,7 @@
 
 namespace Phytel.API.AppDomain.Security.DTO
 {
-    [Route("/{Version}/login", "GET")]
+    [Route("/{Version}/user/login", "POST")]
     public class UserAuthenticateRequest //we don't inherit from IAppDomainRequest in the Security as that interface does not apply
     {
         [ApiMember(Name = "UserName", Description = "API Username requesting access", ParameterType = "header", DataType = "string", IsRequired = true)]
