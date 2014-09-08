@@ -3,21 +3,29 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Phytel.API.DataDomain.PatientNote.DTO;
 using Phytel.API.Interface;
 
 namespace Phytel.API.DataDomain.PatientNote
 {
-    public abstract class PatientNoteRepositoryFactory<T>
+    public class PatientNoteRepositoryFactory : IPatientNoteRepositoryFactory
     {
-        public static IPatientNoteRepository<T> GetPatientNoteRepository(string dbName, string productName, string userId)
+        public IPatientNoteRepository GetRepository(IDataDomainRequest request, RepositoryType type)
         {
             try
             {
-                IPatientNoteRepository<T> repo = null;
+                IPatientNoteRepository repo = null;
 
-                //We only have 1 repository at this time, just return it
-                repo = new MongoPatientNoteRepository<T>(dbName) as IPatientNoteRepository<T>;
-                repo.UserId = userId;
+                switch (type)
+                {
+                    case RepositoryType.PatientNote:
+                        {
+                            repo = new MongoPatientNoteRepository(request.ContractNumber);
+                            break;
+                        }
+                }
+
+                repo.UserId = request.UserId;
                 return repo;
             }
             catch (Exception ex)

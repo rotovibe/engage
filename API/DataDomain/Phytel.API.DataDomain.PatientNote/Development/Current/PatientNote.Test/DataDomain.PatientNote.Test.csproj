@@ -61,6 +61,7 @@
   <ItemGroup>
     <Compile Include="PatientNoteTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Stub\StubPatientNoteDataManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

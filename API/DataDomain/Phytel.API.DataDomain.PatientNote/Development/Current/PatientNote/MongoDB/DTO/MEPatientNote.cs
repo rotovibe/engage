@@ -25,6 +25,7 @@ namespace Phytel.API.DataDomain.PatientNote.DTO
         public const string PatientIdProperty = "pid";
         public const string TextProperty = "txt";
         public const string ProgramProperty = "prog";
+        public const string NoteTypeProperty = "type";
 
         #region Standard IMongoEntity Constants
         public const string VersionProperty = "v";
@@ -50,6 +51,10 @@ namespace Phytel.API.DataDomain.PatientNote.DTO
         [BsonElement(ProgramProperty)]
         [BsonIgnoreIfNull(true)]
         public List<ObjectId> ProgramIds { get; set; }
+
+        [BsonElement(NoteTypeProperty)]
+        [BsonIgnoreIfNull(true)]
+        public NoteType Type { get; set; }
 
         #region Standard IMongoEntity Implementation
         [BsonExtraElements]

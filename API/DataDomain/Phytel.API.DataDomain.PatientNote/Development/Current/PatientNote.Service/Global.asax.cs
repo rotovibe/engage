@@ -1,8 +1,11 @@
+using Phytel.API.Common;
+using Phytel.API.Common.Format;
 using ServiceStack.MiniProfiler;
 using ServiceStack.ServiceInterface.Admin;
 using ServiceStack.WebHost.Endpoints;
 using System;
-
+using Phytel.API.Common.Audit;
+using Phytel.API.DataAudit;
 namespace Phytel.API.DataDomain.PatientNote.Service
 {
     public class Global : System.Web.HttpApplication
@@ -17,6 +20,11 @@ namespace Phytel.API.DataDomain.PatientNote.Service
                 //register any dependencies your services use, e.g:
                 //container.Register<ICacheClient>(new MemoryCacheClient());
                 Plugins.Add(new RequestLogsFeature() { RequiredRoles = new string[] { } });
+                container.RegisterAutoWiredAs<CommonFormatterUtil, ICommonFormatterUtil>();
+                container.RegisterAutoWiredAs<PatientNoteRepositoryFactory, IPatientNoteRepositoryFactory>();
+                container.RegisterAutoWiredAs<Helpers, IHelpers>();
+                container.RegisterAutoWiredAs<PatientNoteDataManager, IPatientNoteDataManager>();
+                container.RegisterAutoWiredAs<AuditHelpers, IAuditHelpers>();
             }
         }
 
