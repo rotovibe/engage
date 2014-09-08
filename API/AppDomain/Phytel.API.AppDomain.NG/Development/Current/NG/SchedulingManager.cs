@@ -55,7 +55,7 @@ namespace Phytel.API.AppDomain.NG
                     {
                         ToDo toDo = convertToToDo(n);
                         // Call Patient DD to get patient details.
-                        getPatientDetails(request, client, toDo);
+                        getPatientDetails(request.Version, request.ContractNumber, request.UserId, client, toDo);
                         result.Add(toDo);
                     }
                 }
@@ -67,16 +67,16 @@ namespace Phytel.API.AppDomain.NG
             }
         }
 
-        private static void getPatientDetails(GetToDosRequest request, IRestClient client, ToDo toDo)
+        private static void getPatientDetails(double version, string contractNumber, string userId, IRestClient client, ToDo toDo)
         {
             if (!string.IsNullOrEmpty(toDo.PatientId))
             {
                 string patientUrl = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/patient/{4}",
                                                                                     DDPatientServiceURL,
                                                                                     "NG",
-                                                                                    request.Version,
-                                                                                    request.ContractNumber,
-                                                                                    toDo.PatientId), request.UserId);
+                                                                                    version,
+                                                                                    contractNumber,
+                                                                                    toDo.PatientId), userId);
 
                 GetPatientDataResponse response = client.Get<GetPatientDataResponse>(patientUrl);
 
@@ -137,7 +137,10 @@ namespace Phytel.API.AppDomain.NG
                                                                                 } as object);
                 if (dataDomainResponse != null && dataDomainResponse.ToDoData != null)
                 {
-                    response.ToDo = convertToToDo(dataDomainResponse.ToDoData);
+                    ToDo toDo = convertToToDo(dataDomainResponse.ToDoData);
+                    // Call Patient DD to get patient details.
+                    getPatientDetails(request.Version, request.ContractNumber, request.UserId, client, toDo);
+                    response.ToDo = toDo;
                     response.Version = dataDomainResponse.Version;
                 }
 
@@ -196,7 +199,10 @@ namespace Phytel.API.AppDomain.NG
                                                                                 } as object);
                 if (dataDomainResponse != null && dataDomainResponse.ToDoData != null)
                 {
-                    response.ToDo = convertToToDo(dataDomainResponse.ToDoData);
+                    ToDo toDo = convertToToDo(dataDomainResponse.ToDoData);
+                    // Call Patient DD to get patient details.
+                    getPatientDetails(request.Version, request.ContractNumber, request.UserId, client, toDo);
+                    response.ToDo = toDo;
                     response.Version = dataDomainResponse.Version;
                 }
                 return response;
