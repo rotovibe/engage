@@ -1086,7 +1086,7 @@ namespace Phytel.API.AppDomain.NG.Service
 
         #endregion
 
-        #region LookUps GoalRelated
+        #region LookUps refactored
         public GetLookUpsResponse Get(GetLookUpsRequest request)
         {
             GetLookUpsResponse response = new GetLookUpsResponse();
@@ -1117,6 +1117,38 @@ namespace Phytel.API.AppDomain.NG.Service
             }
             
             return response; 
+        }
+
+        public GetLookUpDetailsResponse Get(GetLookUpDetailsRequest request)
+        {
+            GetLookUpDetailsResponse response = new GetLookUpDetailsResponse();
+            ValidateTokenResponse result = null;
+
+            try
+            {
+                request.Token = base.Request.Headers["Token"] as string;
+                result = Security.IsUserValidated(request.Version, request.Token, request.ContractNumber);
+                if (result.UserId.Trim() != string.Empty)
+                {
+                    request.UserId = result.UserId;
+                    response.LookUpDetails = NGManager.GetLookUpDetails(request);
+                }
+                else
+                    throw new UnauthorizedAccessException();
+            }
+            catch (Exception ex)
+            {
+                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+                if ((ex is WebServiceException) == false)
+                    NGManager.LogException(ex);
+            }
+            finally
+            {
+                if (result != null)
+                    AuditHelper.LogAuditData(request, result.SQLUserId, null, System.Web.HttpContext.Current.Request, request.GetType().Name);
+            }
+
+            return response;
         }
         #endregion
 

@@ -1199,6 +1199,45 @@ namespace Phytel.API.AppDomain.NG
             }
         }
 
+        public List<LookUpDetails> GetLookUpDetails(GetLookUpDetailsRequest request)
+        {
+            try
+            {
+                List<LookUpDetails> response = new List<LookUpDetails>();
+                IRestClient client = new JsonServiceClient();
+                //[Route("/{Context}/{Version}/{ContractNumber}/LookUp/Details/Type/{Name}", "GET")]
+                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/LookUp/Details/Type/{4}",
+                                                                        DDLookupServiceUrl,
+                                                                        "NG",
+                                                                        request.Version,
+                                                                        request.ContractNumber,
+                                                                        request.TypeName), request.UserId);
+
+                Phytel.API.DataDomain.LookUp.DTO.GetLookUpDetailsDataResponse dataDomainResponse = client.Get<Phytel.API.DataDomain.LookUp.DTO.GetLookUpDetailsDataResponse>(url);
+
+                List<LookUpDetailsData> dataList = dataDomainResponse.LookUpDetailsData;
+                if (dataList != null && dataList.Count > 0)
+                {
+                    List<LookUpDetails> list = new List<LookUpDetails>();
+                    dataList.ForEach(m => 
+                    {
+                        LookUpDetails details  = new LookUpDetails {
+                            Id = m.Id,
+                            Name = m.Name,
+                            Default = m.Default
+                        };
+                        list.Add(details);
+                    });
+                    response = list;
+                }
+                return response;
+            }
+            catch (WebServiceException wse)
+            {
+                throw new WebServiceException("AD:GetLookUpDetails()::" + wse.Message, wse.InnerException);
+            }
+        }
+
         public List<ObjectivesLookUp> GetAllObjectives(GetAllObjectivesRequest request)
         {
             try

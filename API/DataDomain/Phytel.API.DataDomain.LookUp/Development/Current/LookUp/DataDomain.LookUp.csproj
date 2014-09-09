@@ -115,6 +115,7 @@
     <Compile Include="MongoDB\DTO\Note\NoteMethod.cs" />
     <Compile Include="MongoDB\DTO\Problem.cs" />
     <Compile Include="MongoDB\DTO\ToDo\ToDoCategory.cs" />
+    <Compile Include="MongoDB\LookUpDetailsBase.cs" />
     <Compile Include="MongoDB\LookUpMongoContext.cs" />
     <Compile Include="MongoDB\Repository\MongoLookUpRepository.cs" />
     <Compile Include="LookUpRepositoryFactory.cs" />

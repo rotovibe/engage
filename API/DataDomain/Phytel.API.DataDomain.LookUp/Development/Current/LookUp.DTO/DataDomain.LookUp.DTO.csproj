@@ -81,10 +81,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Enums.cs" />
-    <Compile Include="Note\GetLookUpDetailsDataRequest.cs" />
-    <Compile Include="Note\GetLookUpDetailsDataResponse.cs" />
-    <Compile Include="Goal\GetLookUpsDataRequest.cs" />
-    <Compile Include="Goal\GetLookUpsDataResponse.cs" />
+    <Compile Include="Common\GetLookUpDetailsDataRequest.cs" />
+    <Compile Include="Common\GetLookUpDetailsDataResponse.cs" />
+    <Compile Include="Common\GetLookUpsDataRequest.cs" />
+    <Compile Include="Common\GetLookUpsDataResponse.cs" />
     <Compile Include="Contact\GetAllLanguageDataRequest.cs" />
     <Compile Include="Contact\GetAllLanguagesDataResponse.cs" />
     <Compile Include="Contact\GetAllCommTypesDataRequest.cs" />
@@ -126,6 +126,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Note\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />

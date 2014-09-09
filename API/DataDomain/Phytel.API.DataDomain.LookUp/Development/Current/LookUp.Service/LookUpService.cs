@@ -273,7 +273,7 @@ namespace Phytel.API.DataDomain.Patient.Service
 
         #endregion
 
-        #region Goal Related LookUps
+        #region Refactored LookUps
         public GetLookUpsDataResponse Get(GetLookUpsDataRequest request)
         {
             GetLookUpsDataResponse response = new GetLookUpsDataResponse();
@@ -283,6 +283,27 @@ namespace Phytel.API.DataDomain.Patient.Service
                     throw new UnauthorizedAccessException("LookUpDD:Get()::Unauthorized Access");
 
                 response = LookUpDataManager.GetLookUpsByType(request);
+                response.Version = request.Version;
+            }
+            catch (Exception ex)
+            {
+                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+
+                string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
+                Common.Helper.LogException(int.Parse(aseProcessID), ex);
+            }
+            return response;
+        }
+
+        public GetLookUpDetailsDataResponse Get(GetLookUpDetailsDataRequest request)
+        {
+            GetLookUpDetailsDataResponse response = new GetLookUpDetailsDataResponse();
+            try
+            {
+                if (string.IsNullOrEmpty(request.UserId))
+                    throw new UnauthorizedAccessException("LookUpDD:Get()::Unauthorized Access");
+
+                response = LookUpDataManager.GetLookUpDetails(request);
                 response.Version = request.Version;
             }
             catch (Exception ex)

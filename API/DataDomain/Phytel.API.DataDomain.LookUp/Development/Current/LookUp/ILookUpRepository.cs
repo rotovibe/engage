@@ -25,5 +25,6 @@ namespace Phytel.API.DataDomain.LookUp
         TimeZoneData GetDefaultTimeZone();
         List<IdNamePair> GetLookps(string type);
         List<ObjectiveData> GetAllObjectives();
+        List<LookUpDetailsData> GetLookUpDetails(string type);
     }
 }

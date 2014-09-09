@@ -258,5 +258,11 @@ namespace Phytel.API.AppDomain.NG.Test.Stubs
         {
             throw new NotImplementedException();
         }
+
+
+        public List<LookUpDetails> GetLookUpDetails(GetLookUpDetailsRequest request)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
