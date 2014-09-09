@@ -72,6 +72,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Enums.cs" />
+    <Compile Include="PatientNoteData.cs" />
     <Compile Include="RemoveProgramInPatientNotesDataRequest.cs" />
     <Compile Include="RemoveProgramInPatientNotesDataResponse.cs" />
     <Compile Include="UndoDeletePatientNotesDataRequest.cs" />
