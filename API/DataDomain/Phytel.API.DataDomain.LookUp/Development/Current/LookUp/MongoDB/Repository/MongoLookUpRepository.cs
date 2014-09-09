@@ -185,6 +185,51 @@ namespace Phytel.API.DataDomain.LookUp
                 }
             }
             catch { }
+
+            try
+            {
+                if (MongoDB.Bson.Serialization.BsonClassMap.IsClassMapRegistered(typeof(NoteMethod)) == false)
+                {
+                    MongoDB.Bson.Serialization.BsonClassMap.RegisterClassMap<NoteMethod>();
+                }
+            }
+            catch { }
+
+            try
+            {
+                if (MongoDB.Bson.Serialization.BsonClassMap.IsClassMapRegistered(typeof(NoteOutcome)) == false)
+                {
+                    MongoDB.Bson.Serialization.BsonClassMap.RegisterClassMap<NoteOutcome>();
+                }
+            }
+            catch { }
+
+            try
+            {
+                if (MongoDB.Bson.Serialization.BsonClassMap.IsClassMapRegistered(typeof(NoteWho)) == false)
+                {
+                    MongoDB.Bson.Serialization.BsonClassMap.RegisterClassMap<NoteWho>();
+                }
+            }
+            catch { }
+
+            try
+            {
+                if (MongoDB.Bson.Serialization.BsonClassMap.IsClassMapRegistered(typeof(NoteSource)) == false)
+                {
+                    MongoDB.Bson.Serialization.BsonClassMap.RegisterClassMap<NoteSource>();
+                }
+            }
+            catch { }
+
+            try
+            {
+                if (MongoDB.Bson.Serialization.BsonClassMap.IsClassMapRegistered(typeof(NoteDuration)) == false)
+                {
+                    MongoDB.Bson.Serialization.BsonClassMap.RegisterClassMap<NoteDuration>();
+                }
+            }
+            catch { }
             #endregion
 
             // Get the redis IP address from config file.
@@ -979,6 +1024,68 @@ namespace Phytel.API.DataDomain.LookUp
             }
             catch (Exception ex)
             { 
+                throw ex;
+            }
+            return lookupList;
+        }
+
+        public List<LookUpDetailsData> GetLookUpDetails(string type)
+        {
+            List<LookUpDetailsData> lookupList = null;
+            try
+            {
+                LookUpType lookUpValue;
+                if (Enum.TryParse(type, true, out lookUpValue))
+                {
+                    lookupList = new List<LookUpDetailsData>();
+                    string redisKey = string.Format("{0}{1}", "Lookup", type);
+                    ServiceStack.Redis.RedisClient client = null;
+
+                    //TODO: Uncomment the following 2 lines to turn Redis cache on
+                    //if(!string.IsNullOrEmpty(redisClientIPAddress))
+                    //    client = new ServiceStack.Redis.RedisClient(redisClientIPAddress);
+
+                    //If the redisKey is already in Cache (REDIS) get it from there, else re-query
+                    if (client != null && client.ContainsKey(redisKey))
+                    {
+                        //go get lookupList from Redis using the redisKey now
+                        lookupList = client.Get<List<LookUpDetailsData>>(redisKey);
+                    }
+                    else
+                    {
+                        using (LookUpMongoContext ctx = new LookUpMongoContext(_dbName))
+                        {
+                            List<IMongoQuery> queries = new List<IMongoQuery>();
+                            queries.Add(Query.EQ(MELookup.TypeProperty, lookUpValue));
+                            queries.Add(Query.EQ(MELookup.DeleteFlagProperty, false));
+                            IMongoQuery mQuery = Query.And(queries);
+                            MELookup meLookup = ctx.LookUps.Collection.Find(mQuery).FirstOrDefault();
+                            if (meLookup != null)
+                            {
+                                if (meLookup.Data != null)
+                                {
+
+                                    foreach (LookUpBase m in meLookup.Data)
+                                    {
+                                        LookUpDetailsData data = new LookUpDetailsData { Id = m.DataId.ToString(), Name = m.Name };
+                                        lookupList.Add(data);
+                                    }
+                                    lookupList = lookupList.OrderBy(s => s.Name).ToList();
+                                }
+                            }
+                        }
+                        //put lookupList into cache using redisKey now
+                        if (client != null)
+                            client.Set<List<LookUpDetailsData>>(redisKey, lookupList, TimeSpan.FromMinutes(redisCacheExpiry));
+                    }
+                }
+                else
+                {
+                    throw new ApplicationException("Type requested does not exists.");
+                }
+            }
+            catch (Exception ex)
+            {
                 throw ex;
             }
             return lookupList;

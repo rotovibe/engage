@@ -81,6 +81,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Enums.cs" />
+    <Compile Include="Note\GetLookUpDetailsDataRequest.cs" />
+    <Compile Include="Note\GetLookUpDetailsDataResponse.cs" />
     <Compile Include="Goal\GetLookUpsDataRequest.cs" />
     <Compile Include="Goal\GetLookUpsDataResponse.cs" />
     <Compile Include="Contact\GetAllLanguageDataRequest.cs" />

@@ -108,6 +108,11 @@
     <Compile Include="MongoDB\DTO\Category.cs" />
     <Compile Include="MongoDB\DTO\MELookup.cs" />
     <Compile Include="MongoDB\DTO\Objective.cs" />
+    <Compile Include="MongoDB\DTO\PatientNote\NoteDuration.cs" />
+    <Compile Include="MongoDB\DTO\PatientNote\NoteSource.cs" />
+    <Compile Include="MongoDB\DTO\PatientNote\NoteWho.cs" />
+    <Compile Include="MongoDB\DTO\PatientNote\NoteOutcome.cs" />
+    <Compile Include="MongoDB\DTO\PatientNote\NoteMethod.cs" />
     <Compile Include="MongoDB\DTO\Problem.cs" />
     <Compile Include="MongoDB\DTO\ToDo\ToDoCategory.cs" />
     <Compile Include="MongoDB\LookUpMongoContext.cs" />
