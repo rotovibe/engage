@@ -1042,7 +1042,6 @@ namespace Phytel.API.DataDomain.LookUp
                         List<IMongoQuery> queries = new List<IMongoQuery>();
                         queries.Add(Query.EQ(MELookup.TypeProperty, lookUpValue));
                         queries.Add(Query.EQ(MELookup.DeleteFlagProperty, false));
-                        queries.Add(Query.EQ(LookUpDetailsBase.ActiveProperty, true));
                         IMongoQuery mQuery = Query.And(queries);
                         MELookup meLookup = ctx.LookUps.Collection.Find(mQuery).FirstOrDefault();
                         if (meLookup != null)
@@ -1052,8 +1051,11 @@ namespace Phytel.API.DataDomain.LookUp
                                 lookupList = new List<LookUpDetailsData>();
                                 foreach (LookUpDetailsBase m in meLookup.Data)
                                 {
-                                    LookUpDetailsData data = new LookUpDetailsData { Id = m.DataId.ToString(), Name = m.Name, Default = m.Default };
-                                    lookupList.Add(data);
+                                    if(m.Active)
+                                    {
+                                        LookUpDetailsData data = new LookUpDetailsData { Id = m.DataId.ToString(), Name = m.Name, Default = m.Default };
+                                        lookupList.Add(data);
+                                    }       
                                 }
                                 lookupList = lookupList.OrderBy(s => s.Name).ToList();
                             }

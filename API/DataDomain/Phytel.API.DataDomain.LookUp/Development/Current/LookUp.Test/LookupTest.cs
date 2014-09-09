@@ -217,13 +217,29 @@ namespace Phytel.API.DataDomain.LookUp.Test
             double version = 1.0;
             string contractNumber = "InHealth001";
             string context = "NG";
-            GetLookUpsDataRequest request = new GetLookUpsDataRequest { Context = context, ContractNumber = contractNumber, Version = version, Name = "NoteWho" };
+            GetLookUpsDataRequest request = new GetLookUpsDataRequest { Context = context, ContractNumber = contractNumber, Version = version, Name = "FocusArea" };
 
             // Act
             GetLookUpsDataResponse response = LookUpDataManager.GetLookUpsByType(request);
 
             // Assert
             Assert.IsTrue(response.LookUpsData.Count > 0);
+        }
+
+        [TestMethod]
+        public void GetLookUpDetails_Test()
+        {
+            // Arrange
+            double version = 1.0;
+            string contractNumber = "InHealth001";
+            string context = "NG";
+            GetLookUpDetailsDataRequest request = new GetLookUpDetailsDataRequest { Context = context, ContractNumber = contractNumber, Version = version, Name = "NoteWho" };
+
+            // Act
+            GetLookUpDetailsDataResponse response = LookUpDataManager.GetLookUpDetails(request);
+
+            // Assert
+            Assert.IsTrue(response.LookUpDetailsData.Count > 0);
         }
 
         [TestMethod]
