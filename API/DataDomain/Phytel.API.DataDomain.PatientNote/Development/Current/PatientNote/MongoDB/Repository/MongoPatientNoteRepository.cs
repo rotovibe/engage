@@ -53,15 +53,18 @@ namespace Phytel.API.DataDomain.PatientNote
                 {
                     meN = new MEPatientNote(this.UserId)
                     {
-                        Id = ObjectId.GenerateNewId(),
                         PatientId = ObjectId.Parse(noteData.PatientId),
                         Text = noteData.Text,
                         ProgramIds = Helper.ConvertToObjectIdList(noteData.ProgramIds),
-                        Version = request.Version,
+                        Type = (NoteType)noteData.TypeId,
+                        MethodId = ObjectId.Parse(noteData.MethodId),
+                        OutcomeId = ObjectId.Parse(noteData.OutcomeId),
+                        WhoId = ObjectId.Parse(noteData.WhoId),
+                        SourceId = ObjectId.Parse(noteData.SourceId),
+                        DurationId = ObjectId.Parse(noteData.DurationId),
+                        ValidatedIndentity = noteData.ValidatedIndentity,
+                        ContactedOn = noteData.ContactedOn,
                         DeleteFlag = false
-                        //,
-                        //UpdatedBy = ObjectId.Parse(this.UserId),
-                        //LastUpdatedOn = DateTime.UtcNow
                     };
 
                     using (PatientNoteMongoContext ctx = new PatientNoteMongoContext(_dbName))
@@ -152,7 +155,15 @@ namespace Phytel.API.DataDomain.PatientNote
                             Text = meN.Text,
                             ProgramIds = Helper.ConvertToStringList(meN.ProgramIds),
                             CreatedOn = meN.RecordCreatedOn,
-                            CreatedById = meN.RecordCreatedBy.ToString()
+                            CreatedById = meN.RecordCreatedBy.ToString(),
+                            TypeId = (int)meN.Type,
+                            MethodId = meN.MethodId.ToString(),
+                            OutcomeId = meN.OutcomeId.ToString(),
+                            WhoId = meN.WhoId.ToString(),
+                            SourceId = meN.SourceId.ToString(),
+                            DurationId = meN.DurationId.ToString(),
+                            ValidatedIndentity = meN.ValidatedIndentity,
+                            ContactedOn = meN.ContactedOn
                         };
                     }
                 }
@@ -233,7 +244,15 @@ namespace Phytel.API.DataDomain.PatientNote
                                 Text = meN.Text,
                                 ProgramIds = Helper.ConvertToStringList(meN.ProgramIds),
                                 CreatedOn = meN.RecordCreatedOn,
-                                CreatedById = meN.RecordCreatedBy.ToString()
+                                CreatedById = meN.RecordCreatedBy.ToString(),
+                                TypeId = (int)meN.Type,
+                                MethodId = meN.MethodId.ToString(),
+                                OutcomeId = meN.OutcomeId.ToString(),
+                                WhoId = meN.WhoId.ToString(),
+                                SourceId = meN.SourceId.ToString(),
+                                DurationId = meN.DurationId.ToString(),
+                                ValidatedIndentity = meN.ValidatedIndentity,
+                                ContactedOn = meN.ContactedOn
                             });
                         }
                     }

@@ -20,7 +20,7 @@ namespace Phytel.API.DataDomain.PatientNote.DTO
         public string WhoId { get; set; }
         public string SourceId { get; set; }
         public string DurationId { get; set; }
-        public string ContactedOn { get; set; }
-        public string ValidatedIndentity { get; set; }
+        public DateTime ContactedOn { get; set; }
+        public bool ValidatedIndentity { get; set; }
     }
 }
