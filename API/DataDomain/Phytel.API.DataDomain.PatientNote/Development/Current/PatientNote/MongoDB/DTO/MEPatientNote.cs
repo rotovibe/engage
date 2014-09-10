@@ -65,27 +65,27 @@ namespace Phytel.API.DataDomain.PatientNote.DTO
 
         [BsonElement(MethodIdProperty)]
         [BsonIgnoreIfNull(true)]
-        public ObjectId MethodId { get; set; }
+        public ObjectId? MethodId { get; set; }
 
         [BsonElement(WhoIdProperty)]
         [BsonIgnoreIfNull(true)]
-        public ObjectId WhoId { get; set; }
+        public ObjectId? WhoId { get; set; }
 
         [BsonElement(SourceIdProperty)]
         [BsonIgnoreIfNull(true)]
-        public ObjectId SourceId { get; set; }
+        public ObjectId? SourceId { get; set; }
 
         [BsonElement(OutcomeIdProperty)]
         [BsonIgnoreIfNull(true)]
-        public ObjectId OutcomeId { get; set; }
+        public ObjectId? OutcomeId { get; set; }
 
         [BsonElement(DurationIdProperty)]
         [BsonIgnoreIfNull(true)]
-        public ObjectId DurationId { get; set; }
+        public ObjectId? DurationId { get; set; }
 
         [BsonElement(ContactedOnProperty)]
         [BsonIgnoreIfNull(true)]
-        public DateTime ContactedOn { get; set; }
+        public DateTime? ContactedOn { get; set; }
 
         [BsonElement(ValidatedIndentityProperty)]
         [BsonIgnoreIfNull(true)]

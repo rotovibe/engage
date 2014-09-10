@@ -56,17 +56,35 @@ namespace Phytel.API.DataDomain.PatientNote
                         PatientId = ObjectId.Parse(noteData.PatientId),
                         Text = noteData.Text,
                         ProgramIds = Helper.ConvertToObjectIdList(noteData.ProgramIds),
-                        Type = (NoteType)noteData.TypeId,
-                        MethodId = ObjectId.Parse(noteData.MethodId),
-                        OutcomeId = ObjectId.Parse(noteData.OutcomeId),
-                        WhoId = ObjectId.Parse(noteData.WhoId),
-                        SourceId = ObjectId.Parse(noteData.SourceId),
-                        DurationId = ObjectId.Parse(noteData.DurationId),
                         ValidatedIndentity = noteData.ValidatedIndentity,
                         ContactedOn = noteData.ContactedOn,
                         DeleteFlag = false
                     };
 
+                    if(noteData.TypeId != null && noteData.TypeId != 0)
+                    {
+                        meN.Type = (NoteType)noteData.TypeId;
+                    }
+                    if(!string.IsNullOrEmpty(noteData.MethodId))
+                    {
+                        meN.MethodId = ObjectId.Parse(noteData.MethodId);
+                    }
+                    if(!string.IsNullOrEmpty(noteData.OutcomeId))
+                    {
+                        meN.OutcomeId = ObjectId.Parse(noteData.OutcomeId);
+                    }
+                    if(!string.IsNullOrEmpty(noteData.WhoId))
+                    {
+                        meN.WhoId = ObjectId.Parse(noteData.WhoId);
+                    }
+                    if(!string.IsNullOrEmpty(noteData.SourceId))
+                    {
+                        meN.SourceId = ObjectId.Parse(noteData.SourceId);
+                    }
+                    if(!string.IsNullOrEmpty(noteData.DurationId))
+                    {
+                        meN.DurationId = ObjectId.Parse(noteData.DurationId);
+                    }
                     using (PatientNoteMongoContext ctx = new PatientNoteMongoContext(_dbName))
                     {
                         ctx.PatientNotes.Collection.Insert(meN);
@@ -157,11 +175,11 @@ namespace Phytel.API.DataDomain.PatientNote
                             CreatedOn = meN.RecordCreatedOn,
                             CreatedById = meN.RecordCreatedBy.ToString(),
                             TypeId = (int)meN.Type,
-                            MethodId = meN.MethodId.ToString(),
-                            OutcomeId = meN.OutcomeId.ToString(),
-                            WhoId = meN.WhoId.ToString(),
-                            SourceId = meN.SourceId.ToString(),
-                            DurationId = meN.DurationId.ToString(),
+                            MethodId = (meN.MethodId == null) ? null :  meN.MethodId.ToString(),
+                            OutcomeId = (meN.OutcomeId == null) ? null : meN.OutcomeId.ToString(),
+                            WhoId = (meN.WhoId == null) ? null : meN.WhoId.ToString(),
+                            SourceId = (meN.SourceId == null) ? null : meN.SourceId.ToString(),
+                            DurationId = (meN.DurationId == null) ? null : meN.DurationId.ToString(),
                             ValidatedIndentity = meN.ValidatedIndentity,
                             ContactedOn = meN.ContactedOn
                         };
@@ -246,11 +264,11 @@ namespace Phytel.API.DataDomain.PatientNote
                                 CreatedOn = meN.RecordCreatedOn,
                                 CreatedById = meN.RecordCreatedBy.ToString(),
                                 TypeId = (int)meN.Type,
-                                MethodId = meN.MethodId.ToString(),
-                                OutcomeId = meN.OutcomeId.ToString(),
-                                WhoId = meN.WhoId.ToString(),
-                                SourceId = meN.SourceId.ToString(),
-                                DurationId = meN.DurationId.ToString(),
+                                MethodId = (meN.MethodId == null) ? null : meN.MethodId.ToString(),
+                                OutcomeId = (meN.OutcomeId == null) ? null : meN.OutcomeId.ToString(),
+                                WhoId = (meN.WhoId == null) ? null : meN.WhoId.ToString(),
+                                SourceId = (meN.SourceId == null) ? null : meN.SourceId.ToString(),
+                                DurationId = (meN.DurationId == null) ? null : meN.DurationId.ToString(),
                                 ValidatedIndentity = meN.ValidatedIndentity,
                                 ContactedOn = meN.ContactedOn
                             });
