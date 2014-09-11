@@ -67,6 +67,8 @@ namespace Phytel.API.Common
         Program,
         Module,
         Action,
-        Step
+        Step,
+        ToDo,
+        Schedule
     }
 }
