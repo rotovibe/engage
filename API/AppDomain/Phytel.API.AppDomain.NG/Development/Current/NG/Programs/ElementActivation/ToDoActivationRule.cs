@@ -97,7 +97,10 @@ namespace Phytel.API.AppDomain.NG.Programs.ElementActivation
 
                 if (days > 0)
                 {
-                    dueDate = DateTime.UtcNow.AddDays(days.Value);
+                    //var calcDate 
+                    dueDate = new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.Month,
+                        DateTime.UtcNow.AddDays(days.Value).Day, 12, 0, 0);
+                    //dueDate = TimeZoneInfo.ConvertTimeToUtc(calcDate);
                 }
 
                 return dueDate;

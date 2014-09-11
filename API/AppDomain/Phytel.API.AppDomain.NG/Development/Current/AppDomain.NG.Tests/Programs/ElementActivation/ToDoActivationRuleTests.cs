@@ -48,7 +48,7 @@ namespace Phytel.API.AppDomain.NG.Programs.ElementActivation.Tests
             };
 
             var type = rule.Execute(arg.UserId, arg, se, new ProgramAttributeData());
-            Assert.AreEqual(type, "ToDo");
+            Assert.AreEqual(type, 200);
         }
 
         [TestClass()]
@@ -60,7 +60,11 @@ namespace Phytel.API.AppDomain.NG.Programs.ElementActivation.Tests
                 var days = 5;
                 ToDoActivationRule rule = new ToDoActivationRule();
                 var duedate = rule.HandleDueDate(days);
-                Assert.AreEqual(duedate, DateTime.UtcNow.AddDays(days));
+                var date = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.AddDays(days).Day,
+                    0, 0, 0);
+                var utcDate = TimeZoneInfo.ConvertTimeToUtc(date);
+
+                Assert.AreEqual(duedate, utcDate);
             }
 
             [TestMethod()]

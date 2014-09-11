@@ -770,7 +770,7 @@ namespace Phytel.API.AppDomain.NG
             }
             catch (Exception ex)
             {
-                throw new Exception("AD:PlanElementEndpointUtil:SaveProgramAttributeChanges()::" + ex.Message, ex.InnerException);
+                throw new Exception("AD:PlanElementEndpointUtil:PutInsertToDo()::" + ex.Message, ex.InnerException);
             }
         }
     }
