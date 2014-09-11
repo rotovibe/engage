@@ -1224,7 +1224,7 @@ namespace Phytel.API.AppDomain.NG
                         LookUpDetails details  = new LookUpDetails {
                             Id = m.Id,
                             Name = m.Name,
-                            Default = m.Default
+                            IsDefault = m.IsDefault
                         };
                         list.Add(details);
                     });

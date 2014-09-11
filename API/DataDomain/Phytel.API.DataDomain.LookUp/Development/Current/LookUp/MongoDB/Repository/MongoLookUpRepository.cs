@@ -1053,7 +1053,7 @@ namespace Phytel.API.DataDomain.LookUp
                                 {
                                     if(m.Active)
                                     {
-                                        LookUpDetailsData data = new LookUpDetailsData { Id = m.DataId.ToString(), Name = m.Name, Default = m.Default };
+                                        LookUpDetailsData data = new LookUpDetailsData { Id = m.DataId.ToString(), Name = m.Name, IsDefault = m.Default };
                                         lookupList.Add(data);
                                     }       
                                 }
