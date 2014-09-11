@@ -184,7 +184,7 @@ namespace Phytel.API.DataDomain.LookUp
         }
         #endregion
 
-        #region Goal Related LookUps
+        #region Refatored LookUps
         public static GetLookUpsDataResponse GetLookUpsByType(GetLookUpsDataRequest request)
         {
             GetLookUpsDataResponse response = new GetLookUpsDataResponse();
@@ -196,6 +196,21 @@ namespace Phytel.API.DataDomain.LookUp
             if (data != null)
             {
                 response.LookUpsData = data;
+            }
+            return response;
+        }
+
+        public static GetLookUpDetailsDataResponse GetLookUpDetails(GetLookUpDetailsDataRequest request)
+        {
+            GetLookUpDetailsDataResponse response = new GetLookUpDetailsDataResponse();
+
+            ILookUpRepository<IdNamePair> repo = LookUpRepositoryFactory<IdNamePair>.GetLookUpRepository(request.ContractNumber, request.Context, request.UserId);
+
+            List<LookUpDetailsData> data = repo.GetLookUpDetails(request.Name);
+
+            if (data != null)
+            {
+                response.LookUpDetailsData = data;
             }
             return response;
         }

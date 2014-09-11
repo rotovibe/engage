@@ -176,6 +176,60 @@ namespace Phytel.API.DataDomain.LookUp
                 }
             }
             catch { }
+
+            try
+            {
+                if (MongoDB.Bson.Serialization.BsonClassMap.IsClassMapRegistered(typeof(ToDoCategory)) == false)
+                {
+                    MongoDB.Bson.Serialization.BsonClassMap.RegisterClassMap<ToDoCategory>();
+                }
+            }
+            catch { }
+
+            try
+            {
+                if (MongoDB.Bson.Serialization.BsonClassMap.IsClassMapRegistered(typeof(NoteMethod)) == false)
+                {
+                    MongoDB.Bson.Serialization.BsonClassMap.RegisterClassMap<NoteMethod>();
+                }
+            }
+            catch { }
+
+            try
+            {
+                if (MongoDB.Bson.Serialization.BsonClassMap.IsClassMapRegistered(typeof(NoteOutcome)) == false)
+                {
+                    MongoDB.Bson.Serialization.BsonClassMap.RegisterClassMap<NoteOutcome>();
+                }
+            }
+            catch { }
+
+            try
+            {
+                if (MongoDB.Bson.Serialization.BsonClassMap.IsClassMapRegistered(typeof(NoteWho)) == false)
+                {
+                    MongoDB.Bson.Serialization.BsonClassMap.RegisterClassMap<NoteWho>();
+                }
+            }
+            catch { }
+
+            try
+            {
+                if (MongoDB.Bson.Serialization.BsonClassMap.IsClassMapRegistered(typeof(NoteSource)) == false)
+                {
+                    MongoDB.Bson.Serialization.BsonClassMap.RegisterClassMap<NoteSource>();
+                }
+            }
+            catch { }
+
+            try
+            {
+                if (MongoDB.Bson.Serialization.BsonClassMap.IsClassMapRegistered(typeof(NoteDuration)) == false)
+                {
+                    MongoDB.Bson.Serialization.BsonClassMap.RegisterClassMap<NoteDuration>();
+                }
+            }
+            catch { }
             #endregion
 
             // Get the redis IP address from config file.
@@ -970,6 +1024,50 @@ namespace Phytel.API.DataDomain.LookUp
             }
             catch (Exception ex)
             { 
+                throw ex;
+            }
+            return lookupList;
+        }
+
+        public List<LookUpDetailsData> GetLookUpDetails(string type)
+        {
+            List<LookUpDetailsData> lookupList = null;
+            try
+            {
+                LookUpType lookUpValue;
+                if (Enum.TryParse(type, true, out lookUpValue))
+                {
+                    using (LookUpMongoContext ctx = new LookUpMongoContext(_dbName))
+                    {
+                        List<IMongoQuery> queries = new List<IMongoQuery>();
+                        queries.Add(Query.EQ(MELookup.TypeProperty, lookUpValue));
+                        queries.Add(Query.EQ(MELookup.DeleteFlagProperty, false));
+                        IMongoQuery mQuery = Query.And(queries);
+                        MELookup meLookup = ctx.LookUps.Collection.Find(mQuery).FirstOrDefault();
+                        if (meLookup != null)
+                        {
+                            if (meLookup.Data != null && meLookup.Data.Count > 0)
+                            {
+                                lookupList = new List<LookUpDetailsData>();
+                                foreach (LookUpDetailsBase m in meLookup.Data)
+                                {
+                                    if(m.Active)
+                                    {
+                                        LookUpDetailsData data = new LookUpDetailsData { Id = m.DataId.ToString(), Name = m.Name, IsDefault = m.Default };
+                                        lookupList.Add(data);
+                                    }       
+                                }
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    throw new ApplicationException("Type requested does not exists.");
+                }
+            }
+            catch (Exception ex)
+            {
                 throw ex;
             }
             return lookupList;

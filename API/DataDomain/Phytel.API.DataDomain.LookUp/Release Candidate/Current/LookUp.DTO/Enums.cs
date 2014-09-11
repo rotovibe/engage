@@ -23,6 +23,12 @@ namespace Phytel.API.DataDomain.LookUp.DTO
         InterventionCategory = 13,
         ObservationType = 14,
         CareMemberType = 15,
-        CodingSystem = 16
+        CodingSystem = 16,
+        ToDoCategory = 17,
+        NoteMethod = 18,
+        NoteOutcome = 19,
+        NoteWho = 20,
+        NoteSource = 21,
+        NoteDuration = 22
     }
 }
