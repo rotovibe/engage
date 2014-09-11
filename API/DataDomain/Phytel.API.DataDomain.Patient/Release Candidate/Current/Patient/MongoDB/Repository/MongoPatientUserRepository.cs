@@ -214,5 +214,17 @@ namespace Phytel.API.DataDomain.Patient
             }
             catch (Exception) { throw; }
         }
+
+
+        public object Initialize(object newEntity)
+        {
+            throw new NotImplementedException();
+        }
+
+
+        public object FindDuplicatePatient(PutUpdatePatientDataRequest request)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -21,5 +21,7 @@ namespace Phytel.API.DataDomain.Patient
         object GetSSN(string patientId);
         List<PatientUserData> FindPatientUsersByPatientId(string patientId);
         CohortPatientViewData FindCohortPatientViewByPatientId(string patientId);
+        object Initialize(object newEntity);
+        object FindDuplicatePatient(PutUpdatePatientDataRequest request);
     }
 }

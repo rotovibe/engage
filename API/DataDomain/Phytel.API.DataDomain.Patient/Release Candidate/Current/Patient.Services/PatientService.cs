@@ -230,6 +230,27 @@ namespace Phytel.API.DataDomain.Patient.Service
             return response;
         }
 
+        public PutInitializePatientDataResponse Put(PutInitializePatientDataRequest request)
+        {
+            PutInitializePatientDataResponse response = new PutInitializePatientDataResponse();
+            try
+            {
+                if (string.IsNullOrEmpty(request.UserId))
+                    throw new UnauthorizedAccessException("PatientDD:Put()::Unauthorized Access");
+
+                response = PatientManager.InitializePatient(request);
+                response.Version = request.Version;
+            }
+            catch (Exception ex)
+            {
+                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+
+                string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
+                Common.Helper.LogException(int.Parse(aseProcessID), ex);
+            }
+            return response;
+        }
+
         public GetCohortPatientsDataResponse Get(GetCohortPatientsDataRequest request)
         {
             GetCohortPatientsDataResponse response = new GetCohortPatientsDataResponse();

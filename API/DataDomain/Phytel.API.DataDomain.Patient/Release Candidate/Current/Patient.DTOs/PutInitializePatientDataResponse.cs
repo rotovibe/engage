@@ -1,12 +1,12 @@
-﻿using Phytel.API.Interface;
 using ServiceStack.ServiceInterface.ServiceModel;
 using System.Collections.Generic;
+using Phytel.API.Interface;
 
 namespace Phytel.API.DataDomain.Patient.DTO
 {
-    public class PutCohortPatientViewDataResponse : IDomainResponse
+    public class PutInitializePatientDataResponse : IDomainResponse
     {
-        public string Id { get; set; }
+        public PatientData PatientData { get; set; }
         public double Version { get; set; }
         public ResponseStatus Status { get; set; }
     }
