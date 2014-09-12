@@ -16,10 +16,13 @@ tf branch "$/PhytelCode/Phytel.Net/Client Apps/NG/Atmosphere.Site/Release Candid
 tf merge "$/PhytelCode/Phytel.Net/Client Apps/NG/Atmosphere.Core/Development/Current" "$/PhytelCode/Phytel.Net/Client Apps/NG/Atmosphere.Core/Release Candidate/Current" /recursive /nosummary /lock:checkout
 tf merge "$/PhytelCode/Phytel.Net/Client Apps/NG/Atmosphere.Site/Development/Current" "$/PhytelCode/Phytel.Net/Client Apps/NG/Atmosphere.Site/Release Candidate/Current" /recursive /nosummary /lock:checkout
 
-tf checkout "$/PhytelCode/Phytel.Net/Client Apps/NG/Atmosphere.Core/Release Candidate/Current/*.sln" /lock:checkout /recursive
-tf checkout "$/PhytelCode/Phytel.Net/Client Apps/NG/Atmosphere.Site/Release Candidate/Current/*.sln" /lock:checkout /recursive
 tf checkout "$/PhytelCode/Phytel.Net/Client Apps/NG/Atmosphere.Core/Release Candidate/Current/*.csproj" /lock:checkout /recursive
+tf checkout "$/PhytelCode/Phytel.Net/Client Apps/NG/Atmosphere.Core/Release Candidate/Current/*.sln" /lock:checkout /recursive
+tf checkout "$/PhytelCode/Phytel.Net/Client Apps/NG/Atmosphere.Core/Release Candidate/Current/*.config" /lock:checkout /recursive
+
+tf checkout "$/PhytelCode/Phytel.Net/Client Apps/NG/Atmosphere.Site/Release Candidate/Current/*.sln" /lock:checkout /recursive
 tf checkout "$/PhytelCode/Phytel.Net/Client Apps/NG/Atmosphere.Site/Release Candidate/Current/*.csproj" /lock:checkout /recursive
+tf checkout "$/PhytelCode/Phytel.Net/Client Apps/NG/Atmosphere.Site/Release Candidate/Current/*.config" /lock:checkout /recursive
 
 "UpdateRCProjectInfo.exe" /RF:"C:\Projects\TFS2013\PhytelCode\Phytel.Net\Client Apps\NG\Atmosphere.Core\Release Candidate\Current" /RW:"Development" /WW:"Release Candidate"
 "UpdateRCProjectInfo.exe" /RF:"C:\Projects\TFS2013\PhytelCode\Phytel.Net\Client Apps\NG\Atmosphere.Site\Release Candidate\Current" /RW:"Development" /WW:"Release Candidate"

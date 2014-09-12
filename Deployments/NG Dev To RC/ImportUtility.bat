@@ -16,6 +16,7 @@ tf merge "$/PhytelCode/Phytel.Net/Services/API/Import/Development/Current" "$/Ph
 
 tf checkout "$/PhytelCode/Phytel.Net/Services/API/Import/Release Candidate/Current/*.sln" /lock:checkout /recursive
 tf checkout "$/PhytelCode/Phytel.Net/Services/API/Import/Release Candidate/Current/*.csproj" /lock:checkout /recursive
+tf checkout "$/PhytelCode/Phytel.Net/Services/API/Import/Release Candidate/Current/*.config" /lock:checkout /recursive
 
 "UpdateRCProjectInfo.exe" /RF:"C:\Projects\TFS2013\PhytelCode\Phytel.Net\Services\API\Import\Release Candidate\Current" /RW:"Development" /WW:"Release Candidate"
 

@@ -16,6 +16,7 @@ tf merge "$/PhytelCode/Phytel.Net/Internal Tools/MongoDBMaintenance/Development/
 
 tf checkout "$/PhytelCode/Phytel.Net/Internal Tools/MongoDBMaintenance/Release Candidate/Current/*.sln" /lock:checkout /recursive
 tf checkout "$/PhytelCode/Phytel.Net/Internal Tools/MongoDBMaintenance/Release Candidate/Current/*.csproj" /lock:checkout /recursive
+tf checkout "$/PhytelCode/Phytel.Net/Internal Tools/MongoDBMaintenance/Release Candidate/Current/*.config" /lock:checkout /recursive
 
 "UpdateRCProjectInfo.exe" /RF:"C:\Projects\TFS2013\PhytelCode\Phytel.Net\Internal Tools\MongoDBMaintenance\Release Candidate\Current" /RW:"Development" /WW:"Release Candidate"
 

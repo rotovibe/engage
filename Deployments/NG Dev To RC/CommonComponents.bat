@@ -26,6 +26,10 @@ tf checkout "$/PhytelCode/Phytel.Net/Services/API/Common/Phytel.API.Common/Relea
 tf checkout "$/PhytelCode/Phytel.Net/Services/API/Common/Phytel.API.DataAudit/Release Candidate/Current/*.csproj" /lock:checkout /recursive
 tf checkout "$/PhytelCode/Phytel.Net/Services/API/Interfaces/Release Candidate/Current/*.csproj" /lock:checkout /recursive
 
+tf checkout "$/PhytelCode/Phytel.Net/Services/API/Common/Phytel.API.Common/Release Candidate/Current/*.config" /lock:checkout /recursive
+tf checkout "$/PhytelCode/Phytel.Net/Services/API/Common/Phytel.API.DataAudit/Release Candidate/Current/*.config" /lock:checkout /recursive
+tf checkout "$/PhytelCode/Phytel.Net/Services/API/Interfaces/Release Candidate/Current/*.config" /lock:checkout /recursive
+
 "UpdateRCProjectInfo.exe" /RF:"C:\Projects\TFS2013\PhytelCode\Phytel.Net\Services\API\Common\Phytel.API.Common\Release Candidate\Current" /RW:"Development" /WW:"Release Candidate"
 "UpdateRCProjectInfo.exe" /RF:"C:\Projects\TFS2013\PhytelCode\Phytel.Net\Services\API\Common\Phytel.API.DataAudit\Release Candidate\Current" /RW:"Development" /WW:"Release Candidate"
 "UpdateRCProjectInfo.exe" /RF:"C:\Projects\TFS2013\PhytelCode\Phytel.Net\Services\API\Interfaces\Release Candidate\Current" /RW:"Development" /WW:"Release Candidate"
