@@ -12,7 +12,15 @@ namespace ExtractConsole
         static void Main(string[] args)
         {
             ETLProcessor pro = new ETLProcessor();
+            pro.EtlEvent += pro_EtlEvent;
             pro.Rebuild();
+            Console.WriteLine("Process Finished");
+            Console.ReadLine();
+        }
+
+        static void pro_EtlEvent(object sender, ETLEventArgs e)
+        {
+            Console.WriteLine(e.Message);
         }
     }
 }

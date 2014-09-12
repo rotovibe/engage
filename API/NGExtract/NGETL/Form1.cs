@@ -22,6 +22,7 @@ namespace NGETL
         {
             ETLProcessor pro = new ETLProcessor();
             pro.Rebuild();
+            MessageBox.Show("ETL process complete!!!");
         }
     }
 }

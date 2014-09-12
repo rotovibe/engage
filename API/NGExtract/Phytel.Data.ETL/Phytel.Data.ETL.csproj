@@ -57,6 +57,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ETLEventArgs.cs" />
     <Compile Include="ETLProcessor.cs" />
     <Compile Include="ETLUtil.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
