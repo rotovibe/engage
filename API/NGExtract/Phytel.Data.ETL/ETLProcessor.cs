@@ -59,71 +59,71 @@ namespace Phytel.Data.ETL
 
         public ETLProcessor()
         {
-            OnEtlEvent(new ETLEventArgs {Message = "ETLProcessor start initialized."});
+            OnEtlEvent(new ETLEventArgs {Message = "ETLProcessor start initialized.", IsError = false});
         }
 
         public void Rebuild()
         {
             try
             {
-                OnEtlEvent(new ETLEventArgs { Message = "Truncate Tables." });
+                OnEtlEvent(new ETLEventArgs { Message = "Truncate Tables.", IsError = false });
                 //Truncate/Delete SQL databases
                 SQLDataService.Instance.ExecuteProcedure("InHealth001", true, "REPORT", "spPhy_TruncateTables",
                     new ParameterCollection());
 
-                OnEtlEvent(new ETLEventArgs { Message = "registering classes." });
+                OnEtlEvent(new ETLEventArgs { Message = "registering classes.", IsError = false });
                 RegisterClasses();
-                OnEtlEvent(new ETLEventArgs { Message = "Loading users." });
+                OnEtlEvent(new ETLEventArgs { Message = "Loading users.", IsError = false });
                 LoadUsers(contract);
-                OnEtlEvent(new ETLEventArgs { Message = "Loading lookups." });
+                OnEtlEvent(new ETLEventArgs { Message = "Loading lookups.", IsError = false });
                 LoadLookUps(contract);
 
-                OnEtlEvent(new ETLEventArgs { Message = "Loading goal attributes." });
+                OnEtlEvent(new ETLEventArgs { Message = "Loading goal attributes.", IsError = false });
                 LoadGoalAttributes(contract);
 
-                OnEtlEvent(new ETLEventArgs { Message = "Loading observations." });
+                OnEtlEvent(new ETLEventArgs { Message = "Loading observations.", IsError = false });
                 LoadObservations(contract);
 
-                OnEtlEvent(new ETLEventArgs { Message = "Loading patients." });
+                OnEtlEvent(new ETLEventArgs { Message = "Loading patients.", IsError = false });
                 LoadPatients(contract);
 
-                OnEtlEvent(new ETLEventArgs { Message = "Loading patient system." });
+                OnEtlEvent(new ETLEventArgs { Message = "Loading patient system.", IsError = false });
                 LoadPatientSystems(contract);
 
-                OnEtlEvent(new ETLEventArgs { Message = "Loading Patient Notes." });
+                OnEtlEvent(new ETLEventArgs { Message = "Loading Patient Notes.", IsError = false });
                 LoadPatientNotes(contract);
 
-                OnEtlEvent(new ETLEventArgs { Message = "Loading patient problems." });
+                OnEtlEvent(new ETLEventArgs { Message = "Loading patient problems.", IsError = false });
                 LoadPatientProblems(contract);
-                OnEtlEvent(new ETLEventArgs { Message = "Loading patient observations." });
+                OnEtlEvent(new ETLEventArgs { Message = "Loading patient observations.", IsError = false });
                 LoadPatientObservations(contract);
 
-                OnEtlEvent(new ETLEventArgs { Message = "Loading contacts." });
+                OnEtlEvent(new ETLEventArgs { Message = "Loading contacts.", IsError = false });
                 LoadContacts(contract);
 
-                OnEtlEvent(new ETLEventArgs { Message = "Loading care members." });
+                OnEtlEvent(new ETLEventArgs { Message = "Loading care members.", IsError = false });
                 LoadCareMembers(contract);
-                OnEtlEvent(new ETLEventArgs { Message = "Loading patient users." });
+                OnEtlEvent(new ETLEventArgs { Message = "Loading patient users.", IsError = false });
                 LoadPatientUsers(contract);
 
-                OnEtlEvent(new ETLEventArgs { Message = "Loading patient goals." });
+                OnEtlEvent(new ETLEventArgs { Message = "Loading patient goals.", IsError = false });
                 LoadPatientGoals(contract);
-                OnEtlEvent(new ETLEventArgs { Message = "Loading patient barriers." });
+                OnEtlEvent(new ETLEventArgs { Message = "Loading patient barriers.", IsError = false });
                 LoadPatientBarriers(contract);
-                OnEtlEvent(new ETLEventArgs { Message = "Loading patient interventions." });
+                OnEtlEvent(new ETLEventArgs { Message = "Loading patient interventions.", IsError = false });
                 LoadPatientInterventions(contract);
-                OnEtlEvent(new ETLEventArgs { Message = "Loading patient tasks." });
+                OnEtlEvent(new ETLEventArgs { Message = "Loading patient tasks.", IsError = false });
                 LoadPatientTasks(contract);
 
-                OnEtlEvent(new ETLEventArgs { Message = "Loading patient programs." });
+                OnEtlEvent(new ETLEventArgs { Message = "Loading patient programs.", IsError = false });
                 LoadPatientPrograms(contract);
-                OnEtlEvent(new ETLEventArgs { Message = "Loading program responses." });
+                OnEtlEvent(new ETLEventArgs { Message = "Loading program responses.", IsError = false });
                 LoadPatientProgramResponses(contract);
-                OnEtlEvent(new ETLEventArgs { Message = "Loading program attributes." });
+                OnEtlEvent(new ETLEventArgs { Message = "Loading program attributes.", IsError = false });
                 LoadPatientProgramAttributes(contract);
-                OnEtlEvent(new ETLEventArgs { Message = "Loading spawn elements." });
+                OnEtlEvent(new ETLEventArgs { Message = "Loading spawn elements.", IsError = false });
                 ProcessSpawnElements();
-                OnEtlEvent(new ETLEventArgs { Message = "Loading todos." });
+                OnEtlEvent(new ETLEventArgs { Message = "Loading todos.", IsError = false });
                 LoadToDos(contract);
             }
             catch (Exception ex)
@@ -430,7 +430,7 @@ namespace Phytel.Data.ETL
         }
             catch (Exception ex)
             {
-                OnEtlEvent(new ETLEventArgs { Message = ex.Message + ": " + ex.StackTrace });
+                OnEtlEvent(new ETLEventArgs { Message = ex.Message + ": " + ex.StackTrace, IsError = true });
             }
         }
 
@@ -502,7 +502,7 @@ namespace Phytel.Data.ETL
                         }
                         catch (Exception ex)
                         {
-                            OnEtlEvent(new ETLEventArgs { Message = ex.Message + ": " + ex.StackTrace });
+                            OnEtlEvent(new ETLEventArgs { Message = ex.Message + ": " + ex.StackTrace, IsError = true });
                         }
                     }
                 }
@@ -722,7 +722,7 @@ namespace Phytel.Data.ETL
                             }
                             catch (Exception ex)
                             {
-                                OnEtlEvent(new ETLEventArgs { Message = ex.Message + ": " + ex.StackTrace });
+                                OnEtlEvent(new ETLEventArgs { Message = ex.Message + ": " + ex.StackTrace, IsError = true });
                             }
                         }
                     });
@@ -780,7 +780,7 @@ namespace Phytel.Data.ETL
                         }
                         catch (Exception ex)
                         {
-                            OnEtlEvent(new ETLEventArgs { Message = ex.Message + ": " + ex.StackTrace });
+                            OnEtlEvent(new ETLEventArgs { Message = ex.Message + ": " + ex.StackTrace, IsError = true });
                         }
                     }
                 }
@@ -864,7 +864,7 @@ namespace Phytel.Data.ETL
                             }
                             catch (Exception ex)
                             {
-                                OnEtlEvent(new ETLEventArgs { Message = ex.Message + ": " + ex.StackTrace });
+                                OnEtlEvent(new ETLEventArgs { Message = ex.Message + ": " + ex.StackTrace, IsError = true });
                             }
                         });
 
@@ -875,7 +875,7 @@ namespace Phytel.Data.ETL
             }
             catch (Exception ex)
             {
-                OnEtlEvent(new ETLEventArgs { Message = ex.Message + ": " + ex.StackTrace });
+                OnEtlEvent(new ETLEventArgs { Message = ex.Message + ": " + ex.StackTrace, IsError = true });
             }
         }
 
@@ -1245,7 +1245,7 @@ namespace Phytel.Data.ETL
                         }
                         catch (Exception ex)
                         {
-                            OnEtlEvent(new ETLEventArgs { Message = ex.Message + ": " + ex.StackTrace });
+                            OnEtlEvent(new ETLEventArgs { Message = ex.Message + ": " + ex.StackTrace, IsError = true });
                         }
                     }
                 }
@@ -1303,7 +1303,7 @@ namespace Phytel.Data.ETL
                         }
                         catch (Exception ex)
                         {
-                            OnEtlEvent(new ETLEventArgs { Message = ex.Message + ": " + ex.StackTrace });
+                            OnEtlEvent(new ETLEventArgs { Message = ex.Message + ": " + ex.StackTrace, IsError = true });
                         }
                     });
                 }
@@ -1351,7 +1351,7 @@ namespace Phytel.Data.ETL
                         }
                         catch (Exception ex)
                         {
-                            OnEtlEvent(new ETLEventArgs { Message = ex.Message + ": " + ex.StackTrace });
+                            OnEtlEvent(new ETLEventArgs { Message = ex.Message + ": " + ex.StackTrace, IsError = true });
                         }
                     }//);
                 }
@@ -1473,7 +1473,7 @@ namespace Phytel.Data.ETL
                         }
                         catch (Exception ex)
                         {
-                            OnEtlEvent(new ETLEventArgs { Message = ex.Message + ": " + ex.StackTrace });
+                            OnEtlEvent(new ETLEventArgs { Message = ex.Message + ": " + ex.StackTrace, IsError = true });
                         }
                     }//);
                 }
@@ -1549,7 +1549,7 @@ namespace Phytel.Data.ETL
                         }
                         catch (Exception ex)
                         {
-                            OnEtlEvent(new ETLEventArgs { Message = ex.Message + ": " + ex.StackTrace });
+                            OnEtlEvent(new ETLEventArgs { Message = ex.Message + ": " + ex.StackTrace, IsError = true });
                         }
                     }
                 }
@@ -1610,7 +1610,7 @@ namespace Phytel.Data.ETL
                         }
                         catch (Exception ex)
                         {
-                            OnEtlEvent(new ETLEventArgs { Message = ex.Message + ": " + ex.StackTrace });
+                            OnEtlEvent(new ETLEventArgs { Message = ex.Message + ": " + ex.StackTrace, IsError = true });
                         }
                     }//);
                 }
@@ -1667,7 +1667,7 @@ namespace Phytel.Data.ETL
                         }
                         catch (Exception ex)
                         {
-                            OnEtlEvent(new ETLEventArgs { Message = ex.Message + ": " + ex.StackTrace });
+                            OnEtlEvent(new ETLEventArgs { Message = ex.Message + ": " + ex.StackTrace, IsError = true });
                         }
                     });
                 }
@@ -1716,7 +1716,7 @@ namespace Phytel.Data.ETL
                         }
                         catch (Exception ex)
                         {
-                            OnEtlEvent(new ETLEventArgs { Message = ex.Message + ": " + ex.StackTrace });
+                            OnEtlEvent(new ETLEventArgs { Message = ex.Message + ": " + ex.StackTrace, IsError = true });
                         }
                     }//);
                 }
@@ -1771,7 +1771,7 @@ namespace Phytel.Data.ETL
                         }
                         catch (Exception ex)
                         {
-                            OnEtlEvent(new ETLEventArgs { Message = ex.Message + ": " + ex.StackTrace });
+                            OnEtlEvent(new ETLEventArgs { Message = ex.Message + ": " + ex.StackTrace, IsError = true });
                         }
                     }
                 }
@@ -1799,7 +1799,7 @@ namespace Phytel.Data.ETL
             }
             catch (Exception ex)
             {
-                OnEtlEvent(new ETLEventArgs { Message = ex.Message + ": " + ex.StackTrace });
+                OnEtlEvent(new ETLEventArgs { Message = ex.Message + ": " + ex.StackTrace, IsError = true });
             }
         }
 
@@ -1872,7 +1872,7 @@ namespace Phytel.Data.ETL
                         }
                         catch (Exception ex)
                         {
-                            OnEtlEvent(new ETLEventArgs { Message = ex.Message + ": " + ex.StackTrace });
+                            OnEtlEvent(new ETLEventArgs { Message = ex.Message + ": " + ex.StackTrace, IsError = true });
                         }
                     });
                 }
@@ -1936,7 +1936,7 @@ namespace Phytel.Data.ETL
                         }
                         catch (Exception ex)
                         {
-                            OnEtlEvent(new ETLEventArgs { Message = ex.Message + ": " + ex.StackTrace });
+                            OnEtlEvent(new ETLEventArgs { Message = ex.Message + ": " + ex.StackTrace, IsError = true });
                         }
                     });
                 }
@@ -1998,7 +1998,7 @@ namespace Phytel.Data.ETL
                         }
                         catch (Exception ex)
                         {
-                            OnEtlEvent(new ETLEventArgs { Message = ex.Message + ": " + ex.StackTrace });
+                            OnEtlEvent(new ETLEventArgs { Message = ex.Message + ": " + ex.StackTrace, IsError = true });
                         }
                     });
             }
@@ -2064,7 +2064,7 @@ namespace Phytel.Data.ETL
                         }
                         catch (Exception ex)
                         {
-                            OnEtlEvent(new ETLEventArgs { Message = ex.Message + ": " + ex.StackTrace });
+                            OnEtlEvent(new ETLEventArgs { Message = ex.Message + ": " + ex.StackTrace, IsError = true });
                         }
                     });
             }
@@ -2135,7 +2135,7 @@ namespace Phytel.Data.ETL
                         }
                         catch (Exception ex)
                         {
-                            OnEtlEvent(new ETLEventArgs { Message = ex.Message + ": " + ex.StackTrace });
+                            OnEtlEvent(new ETLEventArgs { Message = ex.Message + ": " + ex.StackTrace, IsError = true });
                         }
                     });
             }
@@ -2193,7 +2193,7 @@ namespace Phytel.Data.ETL
                         }
                         catch (Exception ex)
                         {
-                            OnEtlEvent(new ETLEventArgs { Message = ex.Message + ": " + ex.StackTrace });
+                            OnEtlEvent(new ETLEventArgs { Message = ex.Message + ": " + ex.StackTrace, IsError = true });
                         }
                     });
 
@@ -2225,7 +2225,7 @@ namespace Phytel.Data.ETL
         }
             catch (Exception ex)
             {
-                OnEtlEvent(new ETLEventArgs { Message = ex.Message + ": " + ex.StackTrace });
+                OnEtlEvent(new ETLEventArgs { Message = ex.Message + ": " + ex.StackTrace, IsError = true });
                 //throw ex; //SimpleLog.Log(new ArgumentException("RegisterSpawnElement()", ex));
             }
         }
@@ -2250,7 +2250,7 @@ namespace Phytel.Data.ETL
                 }
                 catch (Exception ex)
                 {
-                    OnEtlEvent(new ETLEventArgs { Message = ex.Message + ": " + ex.StackTrace });
+                    OnEtlEvent(new ETLEventArgs { Message = ex.Message + ": " + ex.StackTrace, IsError = true });
                 }
             });
         }
@@ -2309,7 +2309,7 @@ namespace Phytel.Data.ETL
                         }
                         catch (Exception ex)
                         {
-                            OnEtlEvent(new ETLEventArgs { Message = ex.Message + ": " + ex.StackTrace });
+                            OnEtlEvent(new ETLEventArgs { Message = ex.Message + ": " + ex.StackTrace, IsError = true });
                         }
                     });
                 }
@@ -2411,7 +2411,7 @@ namespace Phytel.Data.ETL
                         }
                         catch (Exception ex)
                         {
-                            OnEtlEvent(new ETLEventArgs { Message = ex.Message + ": " + ex.StackTrace });
+                            OnEtlEvent(new ETLEventArgs { Message = ex.Message + ": " + ex.StackTrace, IsError = true });
                         }
                     });
                 }
@@ -2456,7 +2456,7 @@ namespace Phytel.Data.ETL
                         }
                         catch (Exception ex)
                         {
-                            OnEtlEvent(new ETLEventArgs { Message = ex.Message + ": " + ex.StackTrace });
+                            OnEtlEvent(new ETLEventArgs { Message = ex.Message + ": " + ex.StackTrace, IsError = true });
                         }
                     });
                 }
@@ -2519,7 +2519,7 @@ namespace Phytel.Data.ETL
                             }
                             catch (Exception ex)
                             {
-                                OnEtlEvent(new ETLEventArgs { Message = ex.Message + ": " + ex.StackTrace });
+                                OnEtlEvent(new ETLEventArgs { Message = ex.Message + ": " + ex.StackTrace, IsError = true });
                             }
                         }
                     }
