@@ -166,7 +166,7 @@
       <Project>{b65577e7-60a6-4553-b1b9-38d6074ac560}</Project>
       <Name>DataDomain.CareMember.DTO</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\..\..\DataDomain\Phytel.API.DataDomain.PatientObservation\Development\Sprint18\PatientObservation.DTO\DataDomain.PatientObservation.DTO.csproj">
+    <ProjectReference Include="..\..\..\..\..\DataDomain\Phytel.API.DataDomain.PatientObservation\Development\Current\PatientObservation.DTO\DataDomain.PatientObservation.DTO.csproj">
       <Project>{06d69e2b-a395-459c-b4d0-fc750018bdd8}</Project>
       <Name>DataDomain.PatientObservation.DTO</Name>
     </ProjectReference>
