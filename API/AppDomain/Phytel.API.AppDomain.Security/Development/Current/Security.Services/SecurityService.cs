@@ -38,7 +38,7 @@ namespace Phytel.API.AppDomain.Security.Service
             }
         }
 
-        public UserAuthenticateResponse Post(UserAuthenticateRequest request)
+        public UserAuthenticateResponse Get(UserAuthenticateRequest request)
         {
             UserAuthenticateResponse response = new UserAuthenticateResponse();
             try
@@ -53,7 +53,7 @@ namespace Phytel.API.AppDomain.Security.Service
                 request.Context = Request.Headers["Context"];
 
                 // validate user against apiuser datastore
-                response = SecurityManager.ValidateCredentials(request.UserName, request.Password, securityToken, request.APIKey, request.Context);
+                response = SecurityManager.ValidateCredentials(request.UserName, request.Password, securityToken, request.APIKey, request.Context, request.ContractNumber);
                 return response;
             }
             catch (Exception ex)

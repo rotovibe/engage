@@ -37,7 +37,7 @@ namespace Phytel.API.AppDomain.Security
             throw new NotImplementedException();
         }
 
-        public UserAuthenticateResponse LoginUser(string userName, string password, string securityToken, string apiKey, string productName)
+        public UserAuthenticateResponse LoginUser(string userName, string password, string securityToken, string apiKey, string productName, string contractNumber)
         {
             try
             {
@@ -61,7 +61,8 @@ namespace Phytel.API.AppDomain.Security
                             SessionTimeOut = DateTime.UtcNow.AddMinutes(user.SessionLengthInMinutes),
                             UserName = user.UserName,
                             Version = 1.0,
-                            UserId = user.Id
+                            UserId = user.Id,
+                            ContractNumber = (string.IsNullOrEmpty(contractNumber) ? user.DefaultContract : contractNumber)
                         };
 
                         _objectContext.APISessions.Collection.Insert(session);
@@ -69,10 +70,13 @@ namespace Phytel.API.AppDomain.Security
                     else
                         throw new UnauthorizedAccessException("Login Failed!  Username and/or Password is incorrect");
 
+                    List<ContractInfo> cts = new List<ContractInfo>();
+                    cts.Add(new ContractInfo { Number = session.ContractNumber });
+
                     response = new UserAuthenticateResponse
                                     {
                                         APIToken = session.Id.ToString(),
-                                        Contracts = new List<ContractInfo>(),
+                                        Contracts = cts,
                                         Name = user.UserName,
                                         SessionTimeout = user.SessionLengthInMinutes,
                                         UserName = user.UserName
