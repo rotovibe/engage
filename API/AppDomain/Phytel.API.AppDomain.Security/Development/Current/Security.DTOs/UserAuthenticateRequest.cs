@@ -2,7 +2,8 @@
 
 namespace Phytel.API.AppDomain.Security.DTO
 {
-    [Route("/{Version}/user/login", "POST")]
+    [Route("/{Version}/user/login", "GET")]
+    [Route("/{Version}/{ContractNumber}/user/login", "GET")]
     public class UserAuthenticateRequest //we don't inherit from IAppDomainRequest in the Security as that interface does not apply
     {
         [ApiMember(Name = "UserName", Description = "API Username requesting access", ParameterType = "header", DataType = "string", IsRequired = true)]
@@ -16,6 +17,9 @@ namespace Phytel.API.AppDomain.Security.DTO
 
         [ApiMember(Name = "Context", Description = "Context Requesting Access", ParameterType = "header", DataType = "string", IsRequired = true)]
         public string Context { get; set; }
+
+        [ApiMember(Name = "ContractNumber", Description = "Contract Number to access", ParameterType = "property", DataType = "string", IsRequired = true)]
+        public string ContractNumber { get; set; }
 
         [ApiMember(Name = "Version", Description = "Version of the API being called", ParameterType = "property", DataType = "double", IsRequired = false)]
         public double Version { get; set; }
