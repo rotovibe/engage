@@ -7,10 +7,12 @@ namespace DataDomain.Template.Repo
 	public class TemplateMongoContext : MongoContext
 	{
 		private static string COLL_TemplateS = "Template";
+		public string ContractName { get; set; }
 
 		public TemplateMongoContext(string contractDBName)
 			: base(contractDBName, true)
 		{
+			ContractName = contractDBName;
 			Templates = new MongoSet<METemplate, ObjectId>(this, COLL_TemplateS);
 		}
 

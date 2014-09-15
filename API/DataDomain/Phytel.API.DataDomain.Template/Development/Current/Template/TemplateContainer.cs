@@ -2,7 +2,6 @@
 using Phytel.API.Common.Format;
 using Phytel.API.DataDomain.Template;
 using Phytel.API.DataDomain.Template.DTO;
-using Phytel.Repository;
 
 namespace DataDomain.Template.Repo.Containers
 {

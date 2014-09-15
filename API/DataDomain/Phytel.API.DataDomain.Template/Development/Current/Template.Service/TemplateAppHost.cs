@@ -1,7 +1,4 @@
 ﻿using System.Reflection;
-using DataDomain.Template.Repo;
-using Phytel.API.Common;
-using Phytel.API.Common.Format;
 using Phytel.API.DataDomain.Template.Service.Containers;
 using ServiceStack.ServiceInterface.Admin;
 using ServiceStack.WebHost.Endpoints;
@@ -10,7 +7,9 @@ namespace Phytel.API.DataDomain.Template.Service
 {
     public class TemplateAppHost : AppHostBase
     {
-        public TemplateAppHost() : base("Phytel Template Data Domain Services", Assembly.GetExecutingAssembly())
+        public TemplateAppHost() : base("Phytel Template Data Domain Services",
+            Assembly.GetExecutingAssembly() 
+            )
         {
         }
 

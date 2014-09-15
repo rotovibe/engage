@@ -1,7 +1,5 @@
-﻿using DataDomain.Template.Repo;
-using DataDomain.Template.Repo.Containers;
+﻿using DataDomain.Template.Repo.Containers;
 using Phytel.API.DataDomain.Template.DTO;
-using Phytel.Service.Proxy;
 
 namespace Phytel.API.DataDomain.Template.Service.Containers
 {
@@ -11,12 +9,12 @@ namespace Phytel.API.DataDomain.Template.Service.Containers
 
         public static Funq.Container Build(Funq.Container container)
         {
-            container.Register<IHostContextProxy>(Proxy, new HostContextProxy());
+            container.Register<IServiceProxy>(Proxy, new ServiceProxy());
 
             container.Register<string>(Constants.NamedString, c =>
             {
-                IHostContextProxy hostContextProxy = c.ResolveNamed<IHostContextProxy>(Proxy);
-                return hostContextProxy.ContractNumber;
+                var serviceProxy = c.ResolveNamed<IServiceProxy>(Proxy);
+                return serviceProxy.ContractNumber;
             }).ReusedWithin(Funq.ReuseScope.Request);
 
             container = TemplateContainer.Configure(container);

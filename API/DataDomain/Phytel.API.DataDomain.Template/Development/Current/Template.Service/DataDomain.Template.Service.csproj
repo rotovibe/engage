@@ -49,10 +49,8 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\Phytel.API.DataDomain.Program\Development\Current\Program\bin\Debug\Phytel.Mongo.dll</HintPath>
     </Reference>
-    <Reference Include="Phytel.Service">
-      <HintPath>..\..\..\..\..\packages\Phytel.Service\Phytel.Service.dll</HintPath>
-    </Reference>
-    <Reference Include="ServiceStack">
+    <Reference Include="ServiceStack, Version=3.9.70.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\..\packages\ServiceStack.3.9.70\lib\net35\ServiceStack.dll</HintPath>
     </Reference>
     <Reference Include="ServiceStack.Common">
@@ -61,12 +59,6 @@
     <Reference Include="ServiceStack.Interfaces, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\..\packages\ServiceStack.Common.3.9.70\lib\net35\ServiceStack.Interfaces.dll</HintPath>
-    </Reference>
-    <Reference Include="ServiceStack.OrmLite">
-      <HintPath>..\..\..\..\..\packages\ServiceStack.OrmLite.SqlServer.3.9.70\lib\net35\ServiceStack.OrmLite.dll</HintPath>
-    </Reference>
-    <Reference Include="ServiceStack.OrmLite.SqlServer">
-      <HintPath>..\..\..\..\..\packages\ServiceStack.OrmLite.SqlServer.3.9.70\lib\net35\ServiceStack.OrmLite.SqlServer.dll</HintPath>
     </Reference>
     <Reference Include="ServiceStack.Redis">
       <HintPath>..\..\..\..\..\packages\ServiceStack.Redis.3.9.70\lib\net35\ServiceStack.Redis.dll</HintPath>
@@ -100,7 +92,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Containers\HttpServiceContainer.cs" />
+    <Compile Include="IServiceProxy.cs" />
     <Compile Include="ServiceBase.cs" />
+    <Compile Include="ServiceProxy.cs" />
     <Compile Include="TemplateAppHost.cs" />
     <Compile Include="TemplateService.cs" />
     <Compile Include="Global.asax.cs">

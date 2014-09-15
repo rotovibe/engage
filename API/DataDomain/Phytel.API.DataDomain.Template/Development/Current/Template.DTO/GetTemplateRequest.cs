@@ -1,6 +1,4 @@
 using Phytel.API.Interface;
-using Phytel.Service.DTO;
-using Phytel.Service.Filters;
 using ServiceStack.ServiceHost;
 
 namespace Phytel.API.DataDomain.Template.DTO

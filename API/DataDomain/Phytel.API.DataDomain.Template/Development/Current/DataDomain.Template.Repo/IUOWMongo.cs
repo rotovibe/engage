@@ -1,5 +1,4 @@
 ﻿using System;
-using Phytel.Mongo.Linq;
 
 namespace DataDomain.Template.Repo
 {

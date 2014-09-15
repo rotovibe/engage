@@ -2,13 +2,10 @@
 using System.Linq;
 using MongoDB.Bson;
 using MongoDB.Driver.Builders;
-using Phytel.API.Common.Data;
 using System;
 using System.Collections.Generic;
-using Phytel.API.DataDomain.Template;
 using DTO = Phytel.API.DataDomain.Template.DTO;
 using Phytel.API.DataDomain.Template.DTO;
-using Phytel.Repository;
 
 namespace DataDomain.Template.Repo
 {
@@ -20,6 +17,11 @@ namespace DataDomain.Template.Repo
         public MongoTemplateRepository(IUOWMongo<TContext> uow)
         {
             Context = uow.MongoContext;
+        }
+
+        public MongoTemplateRepository(TContext context)
+        {
+            Context = context;
         }
 
         public object Insert(object newEntity)

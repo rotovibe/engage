@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using System.Linq;
 using DataDomain.Template.Repo;
 using Phytel.API.DataDomain.Template.DTO;
-using DTO = Phytel.API.DataDomain.Template.DTO;
 using System;
 
 namespace Phytel.API.DataDomain.Template

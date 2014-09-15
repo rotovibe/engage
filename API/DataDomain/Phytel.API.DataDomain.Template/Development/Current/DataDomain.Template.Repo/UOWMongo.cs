@@ -1,5 +1,4 @@
 ﻿using System;
-using Phytel.Mongo.Linq;
 
 namespace DataDomain.Template.Repo
 {
@@ -14,24 +13,17 @@ namespace DataDomain.Template.Repo
 
         public UOWMongo(string database, bool isContract)
         {
-            _context = (Activator.CreateInstance(typeof (TContext), new object[]
-            {
-                database,
-                isContract
-            }) as TContext);
+            _context = (Activator.CreateInstance(typeof (TContext), new object[]{ database, isContract }) as TContext);
         }
 
         public UOWMongo(string database)
         {
-            _context = (Activator.CreateInstance(typeof (TContext), new object[]
-            {
-                database
-            }) as TContext);
+            _context = (Activator.CreateInstance(typeof (TContext), new object[]{ database}) as TContext);
         }
 
         public void Dispose()
         {
-            TContext context = _context;
+            var context = _context;
             context.Dispose();
         }
     }

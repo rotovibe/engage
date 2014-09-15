@@ -2,9 +2,7 @@
 using System.Configuration;
 using Phytel.API.Common;
 using Phytel.API.Common.Format;
-using Phytel.API.DataDomain.Template.DTO;
 using Phytel.API.Interface;
-using ServiceStack.WebHost.Endpoints;
 
 namespace Phytel.API.DataDomain.Template.Service
 {
