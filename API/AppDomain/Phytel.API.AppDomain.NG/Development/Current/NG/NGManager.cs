@@ -861,6 +861,7 @@ namespace Phytel.API.AppDomain.NG
                 PatientNoteData noteData = new PatientNoteData
                 {
                     Text = noteText,
+                    TypeId = (int)NoteType.General,
                     CreatedById = request.UserId,
                     CreatedOn = DateTime.UtcNow,
                     PatientId = request.PatientId
