@@ -48,6 +48,8 @@
             this.newToolStripButton = new System.Windows.Forms.ToolStripButton();
             this.openToolStripButton = new System.Windows.Forms.ToolStripButton();
             this.saveToolStripButton = new System.Windows.Forms.ToolStripButton();
+            this.label4 = new System.Windows.Forms.Label();
+            this.label5 = new System.Windows.Forms.Label();
             this.VersionerTabControl.SuspendLayout();
             this.DDGeneratorTabPage.SuspendLayout();
             this.toolStrip1.SuspendLayout();
@@ -78,9 +80,9 @@
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(19, 12);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(139, 13);
+            this.label1.Size = new System.Drawing.Size(133, 13);
             this.label1.TabIndex = 2;
-            this.label1.Text = "Working Directory (required)";
+            this.label1.Text = "Source Directory (required)";
             // 
             // label2
             // 
@@ -168,6 +170,8 @@
             // 
             // DDGeneratorTabPage
             // 
+            this.DDGeneratorTabPage.Controls.Add(this.label5);
+            this.DDGeneratorTabPage.Controls.Add(this.label4);
             this.DDGeneratorTabPage.Controls.Add(this.WorkingDirectoryTextBox);
             this.DDGeneratorTabPage.Controls.Add(this.ResultsTextBox);
             this.DDGeneratorTabPage.Controls.Add(this.OpenDirectoryBrowserBtn);
@@ -246,6 +250,26 @@
             this.saveToolStripButton.Size = new System.Drawing.Size(23, 22);
             this.saveToolStripButton.Text = "&Save";
             // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.ForeColor = System.Drawing.SystemColors.ControlDark;
+            this.label4.Location = new System.Drawing.Point(164, 12);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(362, 13);
+            this.label4.TabIndex = 10;
+            this.label4.Text = "ex) C:\\Projects\\tfs2013\\PhytelCode\\Phytel.Net\\Services\\API\\DataDomain";
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.ForeColor = System.Drawing.SystemColors.ControlDark;
+            this.label5.Location = new System.Drawing.Point(164, 59);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(362, 13);
+            this.label5.TabIndex = 11;
+            this.label5.Text = "ex) C:\\Projects\\tfs2013\\PhytelCode\\Phytel.Net\\Services\\API\\DataDomain";
+            // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -286,6 +310,8 @@
         private System.Windows.Forms.ToolStripButton openToolStripButton;
         private System.Windows.Forms.ToolStripButton saveToolStripButton;
         private System.Windows.Forms.TabPage VersionerTabPage;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.Label label4;
     }
 }
 
