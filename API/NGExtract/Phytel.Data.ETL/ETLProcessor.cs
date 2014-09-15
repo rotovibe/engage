@@ -71,11 +71,9 @@ namespace Phytel.Data.ETL
                 SQLDataService.Instance.ExecuteProcedure("InHealth001", true, "REPORT", "spPhy_TruncateTables",
                     new ParameterCollection());
 
-                OnEtlEvent(new ETLEventArgs { Message = "registering classes.", IsError = false });
                 RegisterClasses();
                 OnEtlEvent(new ETLEventArgs { Message = "Loading users.", IsError = false });
                 LoadUsers(contract);
-                OnEtlEvent(new ETLEventArgs { Message = "Loading lookups.", IsError = false });
                 LoadLookUps(contract);
 
                 OnEtlEvent(new ETLEventArgs { Message = "Loading goal attributes.", IsError = false });
@@ -90,7 +88,6 @@ namespace Phytel.Data.ETL
                 OnEtlEvent(new ETLEventArgs { Message = "Loading patient system.", IsError = false });
                 LoadPatientSystems(contract);
 
-                OnEtlEvent(new ETLEventArgs { Message = "Loading Patient Notes.", IsError = false });
                 LoadPatientNotes(contract);
 
                 OnEtlEvent(new ETLEventArgs { Message = "Loading patient problems.", IsError = false });
@@ -136,301 +133,303 @@ namespace Phytel.Data.ETL
         {
             try
             {
-            #region Register ClassMap
+                OnEtlEvent(new ETLEventArgs {Message = "registering classes.", IsError = false});
 
-            try
-            {
+                #region Register ClassMap
+
+                try
+                {
                     if (BsonClassMap.IsClassMapRegistered(typeof (MELookup)) == false)
-                {
-                    BsonClassMap.RegisterClassMap<MELookup>();
+                    {
+                        BsonClassMap.RegisterClassMap<MELookup>();
+                    }
                 }
-            }
                 catch
                 {
                     throw;
                 }
 
-            try
-            {
+                try
+                {
                     if (BsonClassMap.IsClassMapRegistered(typeof (MEProgramAttribute)) == false)
-                {
-                    BsonClassMap.RegisterClassMap<MEProgramAttribute>();
+                    {
+                        BsonClassMap.RegisterClassMap<MEProgramAttribute>();
+                    }
                 }
-            }
                 catch
                 {
                     throw;
                 }
 
-            try
-            {
+                try
+                {
                     if (BsonClassMap.IsClassMapRegistered(typeof (Problem)) == false)
-                {
-                    BsonClassMap.RegisterClassMap<Problem>();
+                    {
+                        BsonClassMap.RegisterClassMap<Problem>();
+                    }
                 }
-            }
                 catch
                 {
                     throw;
                 }
 
-            try
-            {
+                try
+                {
                     if (BsonClassMap.IsClassMapRegistered(typeof (Objective)) == false)
-                {
-                    BsonClassMap.RegisterClassMap<Objective>();
+                    {
+                        BsonClassMap.RegisterClassMap<Objective>();
+                    }
                 }
-            }
                 catch
                 {
                     throw;
                 }
 
-            try
-            {
+                try
+                {
                     if (BsonClassMap.IsClassMapRegistered(typeof (Category)) == false)
-                {
-                    BsonClassMap.RegisterClassMap<Category>();
+                    {
+                        BsonClassMap.RegisterClassMap<Category>();
+                    }
                 }
-            }
                 catch
                 {
                     throw;
                 }
 
-            try
-            {
+                try
+                {
                     if (BsonClassMap.IsClassMapRegistered(typeof (Phytel.API.DataDomain.LookUp.DTO.CommMode)) == false)
-                {
-                    BsonClassMap.RegisterClassMap<Phytel.API.DataDomain.LookUp.DTO.CommMode>();
+                    {
+                        BsonClassMap.RegisterClassMap<Phytel.API.DataDomain.LookUp.DTO.CommMode>();
+                    }
                 }
-            }
                 catch
                 {
                     throw;
                 }
 
-            try
-            {
+                try
+                {
                     if (BsonClassMap.IsClassMapRegistered(typeof (State)) == false)
-                {
-                    BsonClassMap.RegisterClassMap<State>();
+                    {
+                        BsonClassMap.RegisterClassMap<State>();
+                    }
                 }
-            }
                 catch
                 {
                     throw;
                 }
 
-            try
-            {
+                try
+                {
                     if (BsonClassMap.IsClassMapRegistered(typeof (TimesOfDay)) == false)
-                {
-                    BsonClassMap.RegisterClassMap<TimesOfDay>();
+                    {
+                        BsonClassMap.RegisterClassMap<TimesOfDay>();
+                    }
                 }
-            }
                 catch
                 {
                     throw;
                 }
 
-            try
-            {
+                try
+                {
                     if (BsonClassMap.IsClassMapRegistered(typeof (TimeZone)) == false)
-                {
-                    BsonClassMap.RegisterClassMap<TimeZone>();
+                    {
+                        BsonClassMap.RegisterClassMap<TimeZone>();
+                    }
                 }
-            }
                 catch
                 {
                     throw;
                 }
 
-            try
-            {
+                try
+                {
                     if (BsonClassMap.IsClassMapRegistered(typeof (CommType)) == false)
-                {
-                    BsonClassMap.RegisterClassMap<CommType>();
+                    {
+                        BsonClassMap.RegisterClassMap<CommType>();
+                    }
                 }
-            }
                 catch
                 {
                     throw;
                 }
 
-            try
-            {
+                try
+                {
                     if (BsonClassMap.IsClassMapRegistered(typeof (Phytel.API.DataDomain.LookUp.DTO.Language)) == false)
-                {
-                    BsonClassMap.RegisterClassMap<Phytel.API.DataDomain.LookUp.DTO.Language>();
+                    {
+                        BsonClassMap.RegisterClassMap<Phytel.API.DataDomain.LookUp.DTO.Language>();
+                    }
                 }
-            }
                 catch
                 {
                     throw;
                 }
 
-            try
-            {
+                try
+                {
                     if (BsonClassMap.IsClassMapRegistered(typeof (FocusArea)) == false)
-                {
-                    BsonClassMap.RegisterClassMap<FocusArea>();
+                    {
+                        BsonClassMap.RegisterClassMap<FocusArea>();
+                    }
                 }
-            }
                 catch
                 {
                     throw;
                 }
 
-            try
-            {
+                try
+                {
                     if (BsonClassMap.IsClassMapRegistered(typeof (Source)) == false)
-                {
-                    BsonClassMap.RegisterClassMap<Source>();
+                    {
+                        BsonClassMap.RegisterClassMap<Source>();
+                    }
                 }
-            }
                 catch
                 {
                     throw;
                 }
 
-            try
-            {
+                try
+                {
                     if (BsonClassMap.IsClassMapRegistered(typeof (BarrierCategory)) == false)
-                {
-                    BsonClassMap.RegisterClassMap<BarrierCategory>();
+                    {
+                        BsonClassMap.RegisterClassMap<BarrierCategory>();
+                    }
                 }
-            }
                 catch
                 {
                     throw;
                 }
 
-            try
-            {
+                try
+                {
                     if (BsonClassMap.IsClassMapRegistered(typeof (InterventionCategory)) == false)
-                {
-                    BsonClassMap.RegisterClassMap<InterventionCategory>();
+                    {
+                        BsonClassMap.RegisterClassMap<InterventionCategory>();
+                    }
                 }
-            }
                 catch
                 {
                     throw;
                 }
 
-            try
-            {
+                try
+                {
                     if (BsonClassMap.IsClassMapRegistered(typeof (ObservationType)) == false)
-                {
-                    BsonClassMap.RegisterClassMap<ObservationType>();
+                    {
+                        BsonClassMap.RegisterClassMap<ObservationType>();
+                    }
                 }
-            }
                 catch
                 {
                     throw;
                 }
 
-            try
-            {
+                try
+                {
                     if (BsonClassMap.IsClassMapRegistered(typeof (CareMemberType)) == false)
-                {
-                    BsonClassMap.RegisterClassMap<CareMemberType>();
+                    {
+                        BsonClassMap.RegisterClassMap<CareMemberType>();
+                    }
                 }
-            }
                 catch
                 {
                     throw;
                 }
 
-            try
-            {
+                try
+                {
                     if (BsonClassMap.IsClassMapRegistered(typeof (CodingSystem)) == false)
-                {
-                    BsonClassMap.RegisterClassMap<CodingSystem>();
+                    {
+                        BsonClassMap.RegisterClassMap<CodingSystem>();
+                    }
                 }
-            }
                 catch
                 {
                     throw;
                 }
 
-            try
-            {
-                if (BsonClassMap.IsClassMapRegistered(typeof(ToDoCategory)) == false)
+                try
                 {
-                    BsonClassMap.RegisterClassMap<ToDoCategory>();
+                    if (BsonClassMap.IsClassMapRegistered(typeof (ToDoCategory)) == false)
+                    {
+                        BsonClassMap.RegisterClassMap<ToDoCategory>();
+                    }
                 }
-            }
-            catch
-            {
-                throw;
-            }
+                catch
+                {
+                    throw;
+                }
 
-            try
-            {
-                if (BsonClassMap.IsClassMapRegistered(typeof(NoteMethod)) == false)
+                try
                 {
-                    BsonClassMap.RegisterClassMap<NoteMethod>();
+                    if (BsonClassMap.IsClassMapRegistered(typeof (NoteMethod)) == false)
+                    {
+                        BsonClassMap.RegisterClassMap<NoteMethod>();
+                    }
                 }
-            }
-            catch
-            {
-                throw;
-            }
+                catch
+                {
+                    throw;
+                }
 
-            try
-            {
-                if (BsonClassMap.IsClassMapRegistered(typeof(NoteOutcome)) == false)
+                try
                 {
-                    BsonClassMap.RegisterClassMap<NoteOutcome>();
+                    if (BsonClassMap.IsClassMapRegistered(typeof (NoteOutcome)) == false)
+                    {
+                        BsonClassMap.RegisterClassMap<NoteOutcome>();
+                    }
                 }
-            }
-            catch
-            {
-                throw;
-            }
+                catch
+                {
+                    throw;
+                }
 
-            try
-            {
-                if (BsonClassMap.IsClassMapRegistered(typeof(NoteWho)) == false)
+                try
                 {
-                    BsonClassMap.RegisterClassMap<NoteWho>();
+                    if (BsonClassMap.IsClassMapRegistered(typeof (NoteWho)) == false)
+                    {
+                        BsonClassMap.RegisterClassMap<NoteWho>();
+                    }
                 }
-            }
-            catch
-            {
-                throw;
-            }
+                catch
+                {
+                    throw;
+                }
 
-            try
-            {
-                if (BsonClassMap.IsClassMapRegistered(typeof(NoteSource)) == false)
+                try
                 {
-                    BsonClassMap.RegisterClassMap<NoteSource>();
+                    if (BsonClassMap.IsClassMapRegistered(typeof (NoteSource)) == false)
+                    {
+                        BsonClassMap.RegisterClassMap<NoteSource>();
+                    }
                 }
-            }
-            catch
-            {
-                throw;
-            }
+                catch
+                {
+                    throw;
+                }
 
-            try
-            {
-                if (BsonClassMap.IsClassMapRegistered(typeof(NoteDuration)) == false)
+                try
                 {
-                    BsonClassMap.RegisterClassMap<NoteDuration>();
+                    if (BsonClassMap.IsClassMapRegistered(typeof (NoteDuration)) == false)
+                    {
+                        BsonClassMap.RegisterClassMap<NoteDuration>();
+                    }
                 }
-            }
-            catch
-            {
-                throw;
-            }
+                catch
+                {
+                    throw;
+                }
 
                 #endregion
-        }
+            }
             catch (Exception ex)
             {
-                OnEtlEvent(new ETLEventArgs { Message = ex.Message + ": " + ex.StackTrace, IsError = true });
+                OnEtlEvent(new ETLEventArgs {Message = ex.Message + ": " + ex.StackTrace, IsError = true});
             }
         }
 
@@ -795,6 +794,8 @@ namespace Phytel.Data.ETL
         {
             try
             {
+                OnEtlEvent(new ETLEventArgs { Message = "Loading lookups.", IsError = false });
+
                 using (LookUpMongoContext lmctx = new LookUpMongoContext(ctr))
                 {
                     List<MELookup> lookups = lmctx.LookUps.Collection.FindAll().ToList();
@@ -857,6 +858,21 @@ namespace Phytel.Data.ETL
                                         break;
                                     case LookUpType.ToDoCategory:
                                         LoadToDoCategory(lookup);
+                                        break;
+                                    case LookUpType.NoteMethod:
+                                        LoadLookUp(lookup, "spPhy_SaveNoteMethodLookUp");
+                                        break;
+                                    case LookUpType.NoteOutcome:
+                                        LoadLookUp(lookup, "spPhy_SaveNoteOutcomeLookUp");
+                                        break;
+                                    case LookUpType.NoteWho:
+                                        LoadLookUp(lookup, "spPhy_SaveNoteWhoLookUp");
+                                        break;
+                                    case LookUpType.NoteSource:
+                                        LoadLookUp(lookup, "spPhy_SaveNoteSourceLookUp");
+                                        break;
+                                    case LookUpType.NoteDuration:
+                                        LoadLookUp(lookup, "spPhy_SaveNoteDurationLookUp");
                                         break;
                                     default:
                                         break;
@@ -1147,7 +1163,26 @@ namespace Phytel.Data.ETL
                 SQLDataService.Instance.ExecuteProcedure("InHealth001", true, "REPORT", "spPhy_SaveTimeZoneLookUp", parms);
             }
         }
-        
+
+        private void LoadLookUp(MELookup lookup, string sp)
+        {
+            foreach (LookUpBase lbase in lookup.Data)
+            {
+                var lu = (LookUpDetailsBase)lbase;
+
+                var parms = new ParameterCollection
+                {
+                    new Parameter("@LookUpType", lookup.Type.ToString(), SqlDbType.VarChar, ParameterDirection.Input,int.MaxValue),
+                    new Parameter("@_id", lu.DataId, SqlDbType.VarChar, ParameterDirection.Input, 50),
+                    new Parameter("@Name", lu.Name, SqlDbType.VarChar, ParameterDirection.Input, int.MaxValue),
+                    new Parameter("@Active", lu.Active, SqlDbType.VarChar, ParameterDirection.Input, 50),
+                    new Parameter("@Default", lu.Default, SqlDbType.VarChar, ParameterDirection.Input, 50)
+                };
+
+                SQLDataService.Instance.ExecuteProcedure("InHealth001", true, "REPORT", sp, parms);
+            }
+        }
+
         private void LoadToDoCategory(MELookup lookup)
         {
             foreach (LookUpBase lbase in lookup.Data)
@@ -1564,6 +1599,7 @@ namespace Phytel.Data.ETL
         {
             try
             {
+                OnEtlEvent(new ETLEventArgs { Message = "Loading Patient Notes.", IsError = false });
                 using (PatientNoteMongoContext pnctx = new PatientNoteMongoContext(ctr))
                 {
                     List<MEPatientNote> notes = pnctx.PatientNotes.Collection.FindAllAs<MEPatientNote>().ToList();
@@ -1577,6 +1613,15 @@ namespace Phytel.Data.ETL
                             parms.Add(new Parameter("@MongoID", (string.IsNullOrEmpty(note.Id.ToString()) ? string.Empty : note.Id.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
                             parms.Add(new Parameter("@PatientMongoId", (string.IsNullOrEmpty(note.PatientId.ToString()) ? string.Empty : note.PatientId.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
                             parms.Add(new Parameter("@Text", (string.IsNullOrEmpty(note.Text) ? string.Empty : note.Text), SqlDbType.VarChar, ParameterDirection.Input, int.MaxValue));
+                            parms.Add(new Parameter("@Type", note.Type.ToString() ?? (object) DBNull.Value, SqlDbType.VarChar, ParameterDirection.Input, 50));
+                            parms.Add(new Parameter("@_methodId", (string.IsNullOrEmpty(note.MethodId.ToString()) ? string.Empty : note.MethodId.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                            parms.Add(new Parameter("@_outcomeId", (string.IsNullOrEmpty(note.OutcomeId.ToString()) ? string.Empty : note.OutcomeId.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                            parms.Add(new Parameter("@_whoId", (string.IsNullOrEmpty(note.WhoId.ToString()) ? string.Empty : note.WhoId.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                            parms.Add(new Parameter("@_sourceId", (string.IsNullOrEmpty(note.SourceId.ToString()) ? string.Empty : note.SourceId.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                            parms.Add(new Parameter("@_durationId", (string.IsNullOrEmpty(note.DurationId.ToString()) ? string.Empty : note.DurationId.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                            parms.Add(new Parameter("@ContactedOn", note.ContactedOn ?? (object)DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
+                            parms.Add(new Parameter("@ValidatedIntentity", note.ValidatedIndentity.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                            // standard fields
                             parms.Add(new Parameter("@UpdatedBy", (string.IsNullOrEmpty(note.UpdatedBy.ToString()) ? string.Empty : note.UpdatedBy.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
                             parms.Add(new Parameter("@LastUpdatedOn", note.LastUpdatedOn ?? (object)DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
                             parms.Add(new Parameter("@RecordCreatedBy", (string.IsNullOrEmpty(note.RecordCreatedBy.ToString()) ? string.Empty : note.RecordCreatedBy.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
