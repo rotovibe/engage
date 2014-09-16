@@ -48,7 +48,7 @@ namespace Phytel.API.AppDomain.NG
                         WhoId = n.WhoId,
                         SourceId = n.SourceId,
                         DurationId = n.DurationId,
-                        ValidatedIndentity = n.ValidatedIndentity,
+                        ValidatedIdentity = n.ValidatedIdentity,
                         ContactedOn = n.ContactedOn
                     };
                 }
@@ -97,7 +97,7 @@ namespace Phytel.API.AppDomain.NG
                             WhoId = n.WhoId,
                             SourceId = n.SourceId,
                             DurationId = n.DurationId,
-                            ValidatedIndentity = n.ValidatedIndentity,
+                            ValidatedIdentity = n.ValidatedIdentity,
                             ContactedOn = n.ContactedOn
                         }
                         );
@@ -143,7 +143,7 @@ namespace Phytel.API.AppDomain.NG
                     SourceId = request.Note.SourceId,
                     DurationId = request.Note.DurationId,
                     ContactedOn = request.Note.ContactedOn,
-                    ValidatedIndentity = request.Note.ValidatedIndentity
+                    ValidatedIdentity = request.Note.ValidatedIdentity
                 };
                 PutPatientNoteDataResponse dataDomainResponse =
                     client.Put<PutPatientNoteDataResponse>(url, new PutPatientNoteDataRequest

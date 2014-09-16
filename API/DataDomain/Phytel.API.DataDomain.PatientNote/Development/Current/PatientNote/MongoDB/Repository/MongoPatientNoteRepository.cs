@@ -56,7 +56,7 @@ namespace Phytel.API.DataDomain.PatientNote
                         PatientId = ObjectId.Parse(noteData.PatientId),
                         Text = noteData.Text,
                         ProgramIds = Helper.ConvertToObjectIdList(noteData.ProgramIds),
-                        ValidatedIndentity = noteData.ValidatedIndentity,
+                        ValidatedIdentity = noteData.ValidatedIdentity,
                         ContactedOn = noteData.ContactedOn,
                         DeleteFlag = false
                     };
@@ -180,7 +180,7 @@ namespace Phytel.API.DataDomain.PatientNote
                             WhoId = (meN.WhoId == null) ? null : meN.WhoId.ToString(),
                             SourceId = (meN.SourceId == null) ? null : meN.SourceId.ToString(),
                             DurationId = (meN.DurationId == null) ? null : meN.DurationId.ToString(),
-                            ValidatedIndentity = meN.ValidatedIndentity,
+                            ValidatedIdentity = meN.ValidatedIdentity,
                             ContactedOn = meN.ContactedOn
                         };
                     }
@@ -269,7 +269,7 @@ namespace Phytel.API.DataDomain.PatientNote
                                 WhoId = (meN.WhoId == null) ? null : meN.WhoId.ToString(),
                                 SourceId = (meN.SourceId == null) ? null : meN.SourceId.ToString(),
                                 DurationId = (meN.DurationId == null) ? null : meN.DurationId.ToString(),
-                                ValidatedIndentity = meN.ValidatedIndentity,
+                                ValidatedIdentity = meN.ValidatedIdentity,
                                 ContactedOn = meN.ContactedOn
                             });
                         }
