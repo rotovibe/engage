@@ -16,6 +16,7 @@ tf merge "$/PhytelCode/Phytel.Net/Services/API/AppDomain/Phytel.API.AppDomain.NG
 
 tf checkout "$/PhytelCode/Phytel.Net/Services/API/AppDomain/Phytel.API.AppDomain.NG/Production/Current/*.sln" /lock:checkout /recursive
 tf checkout "$/PhytelCode/Phytel.Net/Services/API/AppDomain/Phytel.API.AppDomain.NG/Production/Current/*.csproj" /lock:checkout /recursive
+tf checkout "$/PhytelCode/Phytel.Net/Services/API/AppDomain/Phytel.API.AppDomain.NG/Production/Current/*.config" /lock:checkout /recursive
 
 "UpdateRCProjectInfo.exe" /RF:"C:\Projects\TFS2013\PhytelCode\Phytel.Net\Services\API\AppDomain\Phytel.API.AppDomain.NG\Production\Current" /RW:"Release Candidate" /WW:"Production"
 

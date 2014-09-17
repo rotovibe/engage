@@ -16,6 +16,7 @@ tf merge "$/PhytelCode/Phytel.Net/Services/API/KeepAliveProcessor/Release Candid
 
 tf checkout "$/PhytelCode/Phytel.Net/Services/API/KeepAliveProcessor/Production/Current/*.sln" /lock:checkout /recursive
 tf checkout "$/PhytelCode/Phytel.Net/Services/API/KeepAliveProcessor/Production/Current/*.csproj" /lock:checkout /recursive
+tf checkout "$/PhytelCode/Phytel.Net/Services/API/KeepAliveProcessor/Production/Current/*.config" /lock:checkout /recursive
 
 "UpdateRCProjectInfo.exe" /RF:"C:\Projects\TFS2013\PhytelCode\Phytel.Net\Services\API\KeepAliveProcessor\Production\Current" /RW:"Release Candidate" /WW:"Production"
 

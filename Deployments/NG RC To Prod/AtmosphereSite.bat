@@ -17,9 +17,12 @@ tf merge "$/PhytelCode/Phytel.Net/Client Apps/NG/Atmosphere.Core/Release Candida
 tf merge "$/PhytelCode/Phytel.Net/Client Apps/NG/Atmosphere.Site/Release Candidate/Current" "$/PhytelCode/Phytel.Net/Client Apps/NG/Atmosphere.Site/Production/Current" /recursive /nosummary /lock:checkout
 
 tf checkout "$/PhytelCode/Phytel.Net/Client Apps/NG/Atmosphere.Core/Production/Current/*.sln" /lock:checkout /recursive
-tf checkout "$/PhytelCode/Phytel.Net/Client Apps/NG/Atmosphere.Site/Production/Current/*.sln" /lock:checkout /recursive
 tf checkout "$/PhytelCode/Phytel.Net/Client Apps/NG/Atmosphere.Core/Production/Current/*.csproj" /lock:checkout /recursive
+tf checkout "$/PhytelCode/Phytel.Net/Client Apps/NG/Atmosphere.Core/Production/Current/*.config" /lock:checkout /recursive
+
+tf checkout "$/PhytelCode/Phytel.Net/Client Apps/NG/Atmosphere.Site/Production/Current/*.sln" /lock:checkout /recursive
 tf checkout "$/PhytelCode/Phytel.Net/Client Apps/NG/Atmosphere.Site/Production/Current/*.csproj" /lock:checkout /recursive
+tf checkout "$/PhytelCode/Phytel.Net/Client Apps/NG/Atmosphere.Site/Production/Current/*.config" /lock:checkout /recursive
 
 "UpdateRCProjectInfo.exe" /RF:"C:\Projects\TFS2013\PhytelCode\Phytel.Net\Client Apps\NG\Atmosphere.Core\Production\Current" /RW:"Release Candidate" /WW:"Production"
 "UpdateRCProjectInfo.exe" /RF:"C:\Projects\TFS2013\PhytelCode\Phytel.Net\Client Apps\NG\Atmosphere.Site\Production\Current" /RW:"Release Candidate" /WW:"Production"

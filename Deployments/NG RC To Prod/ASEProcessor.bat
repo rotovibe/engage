@@ -16,6 +16,7 @@ tf merge "$/PhytelCode/Phytel.Net/Client Apps/NG/ASEProcessor/Release Candidate/
 
 tf checkout "$/PhytelCode/Phytel.Net/Client Apps/NG/ASEProcessor/Production/Current/*.sln" /lock:checkout /recursive
 tf checkout "$/PhytelCode/Phytel.Net/Client Apps/NG/ASEProcessor/Production/Current/*.csproj" /lock:checkout /recursive
+tf checkout "$/PhytelCode/Phytel.Net/Client Apps/NG/ASEProcessor/Production/Current/*.config" /lock:checkout /recursive
 
 "UpdateRCProjectInfo.exe" /RF:"C:\Projects\TFS2013\PhytelCode\Phytel.Net\Client Apps\NG\ASEProcessor\Production\Current" /RW:"Release Candidate" /WW:"Production"
 

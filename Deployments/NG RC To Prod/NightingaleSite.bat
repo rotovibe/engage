@@ -16,6 +16,7 @@ tf merge "$/PhytelCode/Phytel.Net/Client Apps/NG/Nightingale/Release Candidate/C
 
 tf checkout "$/PhytelCode/Phytel.Net/Client Apps/NG/Nightingale/Production/Current/*.sln" /lock:checkout /recursive
 tf checkout "$/PhytelCode/Phytel.Net/Client Apps/NG/Nightingale/Production/Current/*.csproj" /lock:checkout /recursive
+tf checkout "$/PhytelCode/Phytel.Net/Client Apps/NG/Nightingale/Production/Current/*.config" /lock:checkout /recursive
 
 "UpdateRCProjectInfo.exe" /RF:"C:\Projects\TFS2013\PhytelCode\Phytel.Net\Client Apps\NG\Nightingale\Production\Current" /RW:"Release Candidate" /WW:"Production"
 

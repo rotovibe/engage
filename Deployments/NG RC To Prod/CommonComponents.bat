@@ -19,12 +19,16 @@ tf merge "$/PhytelCode/Phytel.Net/Services/API/Common/Phytel.API.DataAudit/Relea
 tf merge "$/PhytelCode/Phytel.Net/Services/API/Interfaces/Release Candidate/Current" "$/PhytelCode/Phytel.Net/Services/API/Interfaces/Production/Current" /recursive /nosummary /lock:checkout
 
 tf checkout "$/PhytelCode/Phytel.Net/Services/API/Common/Phytel.API.Common/Production/Current/*.sln" /lock:checkout /recursive
-tf checkout "$/PhytelCode/Phytel.Net/Services/API/Common/Phytel.API.DataAudit/Production/Current/*.sln" /lock:checkout /recursive
-tf checkout "$/PhytelCode/Phytel.Net/Services/API/Interfaces/Production/Current/*.sln" /lock:checkout /recursive
-
 tf checkout "$/PhytelCode/Phytel.Net/Services/API/Common/Phytel.API.Common/Production/Current/*.csproj" /lock:checkout /recursive
+tf checkout "$/PhytelCode/Phytel.Net/Services/API/Common/Phytel.API.Common/Production/Current/*.config" /lock:checkout /recursive
+
+tf checkout "$/PhytelCode/Phytel.Net/Services/API/Common/Phytel.API.DataAudit/Production/Current/*.sln" /lock:checkout /recursive
 tf checkout "$/PhytelCode/Phytel.Net/Services/API/Common/Phytel.API.DataAudit/Production/Current/*.csproj" /lock:checkout /recursive
+tf checkout "$/PhytelCode/Phytel.Net/Services/API/Common/Phytel.API.DataAudit/Production/Current/*.config" /lock:checkout /recursive
+
+tf checkout "$/PhytelCode/Phytel.Net/Services/API/Interfaces/Production/Current/*.sln" /lock:checkout /recursive
 tf checkout "$/PhytelCode/Phytel.Net/Services/API/Interfaces/Production/Current/*.csproj" /lock:checkout /recursive
+tf checkout "$/PhytelCode/Phytel.Net/Services/API/Interfaces/Production/Current/*.config" /lock:checkout /recursive
 
 "UpdateRCProjectInfo.exe" /RF:"C:\Projects\TFS2013\PhytelCode\Phytel.Net\Services\API\Common\Phytel.API.Common\Production\Current" /RW:"Release Candidate" /WW:"Production"
 "UpdateRCProjectInfo.exe" /RF:"C:\Projects\TFS2013\PhytelCode\Phytel.Net\Services\API\Common\Phytel.API.DataAudit\Production\Current" /RW:"Release Candidate" /WW:"Production"
