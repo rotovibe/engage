@@ -22,4 +22,4 @@ tf checkout "$/PhytelCode/Phytel.Net/Services/API/AppDomain/Phytel.API.AppDomain
 
 tf checkin "$/PhytelCode/Phytel.Net/Services/API/AppDomain/Phytel.API.AppDomain.NG/Release Candidate/Current" /comment:"Merge Changes for RC Release" /recursive /force /noprompt
 
-TFSBuild start http://hillstfs2013:8080/tfs PhytelCode "API NG App Domain (RC)" /silent
+REM TFSBuild start http://hillstfs2013:8080/tfs PhytelCode "API NG App Domain (RC)" /silent
