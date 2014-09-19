@@ -6,7 +6,6 @@ using Phytel.API.AppDomain.NG.Programs;
 using Phytel.API.DataDomain.CareMember.DTO;
 using Phytel.API.DataDomain.Patient.DTO;
 using Phytel.API.DataDomain.PatientObservation.DTO;
-using Phytel.API.DataDomain.PatientProblem.DTO;
 using Phytel.API.DataDomain.Program.DTO;
 using Phytel.API.DataDomain.Scheduling.DTO;
 using Phytel.API.Interface;

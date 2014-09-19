@@ -26,7 +26,6 @@ namespace Phytel.API.AppDomain.NG
         List<IdNamePair> GetLookUps(GetLookUpsRequest request);
         List<LookUpDetails> GetLookUpDetails(GetLookUpDetailsRequest request);
         GetPatientResponse GetPatient(GetPatientRequest request);
-        List<PatientProblem> GetPatientProblems(GetAllPatientProblemsRequest request);
         GetPatientProgramDetailsSummaryResponse GetPatientProgramDetailsSummary(GetPatientProgramDetailsSummaryRequest request);
         GetPatientActionDetailsResponse GetPatientActionDetails(GetPatientActionDetailsRequest request);
         GetPatientProgramsResponse GetPatientPrograms(GetPatientProgramsRequest request);

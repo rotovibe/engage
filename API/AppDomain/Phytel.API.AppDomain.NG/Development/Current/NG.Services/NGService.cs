@@ -184,37 +184,38 @@ namespace Phytel.API.AppDomain.NG.Service
             return response;
         }
        
-        public GetAllPatientProblemsResponse Get(GetAllPatientProblemsRequest request)
-        {
-            GetAllPatientProblemsResponse response = new GetAllPatientProblemsResponse();
-            ValidateTokenResponse result = null;
+        // Deprecated - Problems is now in PatientObservations.
+        //public GetAllPatientProblemsResponse Get(GetAllPatientProblemsRequest request)
+        //{
+        //    GetAllPatientProblemsResponse response = new GetAllPatientProblemsResponse();
+        //    ValidateTokenResponse result = null;
 
-            try
-            {
-                request.Token = base.Request.Headers["Token"] as string;
-                result = Security.IsUserValidated(request.Version, request.Token, request.ContractNumber);
-                if (result.UserId.Trim() != string.Empty)
-                {
-                    request.UserId = result.UserId;
-                    response.PatientProblems = NGManager.GetPatientProblems(request);
-                }
-                else
-                    throw new UnauthorizedAccessException();
-            }
-            catch (Exception ex)
-            {
-                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
-                if ((ex is WebServiceException) == false)
-                    NGManager.LogException(ex);
-            }
-            finally
-            {
-                if(result != null)
-                    AuditHelper.LogAuditData(request, result.SQLUserId, null, System.Web.HttpContext.Current.Request, request.GetType().Name);               
-            }
+        //    try
+        //    {
+        //        request.Token = base.Request.Headers["Token"] as string;
+        //        result = Security.IsUserValidated(request.Version, request.Token, request.ContractNumber);
+        //        if (result.UserId.Trim() != string.Empty)
+        //        {
+        //            request.UserId = result.UserId;
+        //            response.PatientProblems = NGManager.GetPatientProblems(request);
+        //        }
+        //        else
+        //            throw new UnauthorizedAccessException();
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+        //        if ((ex is WebServiceException) == false)
+        //            NGManager.LogException(ex);
+        //    }
+        //    finally
+        //    {
+        //        if(result != null)
+        //            AuditHelper.LogAuditData(request, result.SQLUserId, null, System.Web.HttpContext.Current.Request, request.GetType().Name);               
+        //    }
             
-            return response; 
-        }
+        //    return response; 
+        //}
 
         public GetAllProblemsResponse Get(GetAllProblemsRequest request)
         {

@@ -1,8 +1,5 @@
 ﻿using Phytel.API.AppDomain.NG.DTO;
-using Phytel.API.AppDomain.NG.PlanCOR;
 using Phytel.API.DataDomain.Patient.DTO;
-using Phytel.API.DataDomain.PatientObservation.DTO;
-using Phytel.API.DataDomain.PatientProblem.DTO;
 using Phytel.API.DataDomain.Program.DTO;
 using Phytel.API.Interface;
 using ServiceStack.Service;
@@ -12,7 +9,6 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
 using AD = Phytel.API.AppDomain.NG.DTO;
-using DD = Phytel.API.DataDomain.Program.DTO;
 
 namespace Phytel.API.AppDomain.NG
 {

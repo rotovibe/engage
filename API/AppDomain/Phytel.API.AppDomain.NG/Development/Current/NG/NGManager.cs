@@ -171,45 +171,46 @@ namespace Phytel.API.AppDomain.NG
             }
         }
 
-        public List<NG.DTO.PatientProblem> GetPatientProblems(NG.DTO.GetAllPatientProblemsRequest request)
-        {
-            try
-            {
-                if (string.IsNullOrEmpty(request.PatientID))
-                    throw new ArgumentException("PatientID is null or empty.");
+        // Deprecated - Problems is not in PatientObservations.
+        //public List<NG.DTO.PatientProblem> GetPatientProblems(NG.DTO.GetAllPatientProblemsRequest request)
+        //{
+        //    try
+        //    {
+        //        if (string.IsNullOrEmpty(request.PatientID))
+        //            throw new ArgumentException("PatientID is null or empty.");
 
-                List<Phytel.API.AppDomain.NG.DTO.PatientProblem> response = new List<Phytel.API.AppDomain.NG.DTO.PatientProblem>();
+        //        List<Phytel.API.AppDomain.NG.DTO.PatientProblem> response = new List<Phytel.API.AppDomain.NG.DTO.PatientProblem>();
 
-                IRestClient client = new JsonServiceClient();
-                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Problems",
-                        DDPatientProblemServiceUrl,
-                        "NG",
-                        request.Version,
-                        request.ContractNumber,
-                        request.PatientID), request.UserId);
+        //        IRestClient client = new JsonServiceClient();
+        //        string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Problems",
+        //                DDPatientProblemServiceUrl,
+        //                "NG",
+        //                request.Version,
+        //                request.ContractNumber,
+        //                request.PatientID), request.UserId);
 
-                //[Route("/{Context}/{Version}/{ContractNumber}/Patient/{PatientID}/Problems", "GET")]
-                Phytel.API.DataDomain.PatientProblem.DTO.GetAllPatientProblemsDataResponse dataDomainResponse = client.Get<Phytel.API.DataDomain.PatientProblem.DTO.GetAllPatientProblemsDataResponse>(url);
+        //        //[Route("/{Context}/{Version}/{ContractNumber}/Patient/{PatientID}/Problems", "GET")]
+        //        Phytel.API.DataDomain.PatientProblem.DTO.GetAllPatientProblemsDataResponse dataDomainResponse = client.Get<Phytel.API.DataDomain.PatientProblem.DTO.GetAllPatientProblemsDataResponse>(url);
 
-                List<Phytel.API.DataDomain.PatientProblem.DTO.PatientProblemData> problems = dataDomainResponse.PatientProblems;
+        //        List<Phytel.API.DataDomain.PatientProblem.DTO.PatientProblemData> problems = dataDomainResponse.PatientProblems;
 
-                foreach (Phytel.API.DataDomain.PatientProblem.DTO.PatientProblemData p in problems)
-                {
-                    Phytel.API.AppDomain.NG.DTO.PatientProblem pp = new Phytel.API.AppDomain.NG.DTO.PatientProblem();
-                    pp.ID = p.ID;
-                    pp.PatientID = p.PatientID;
-                    pp.ProblemID = p.ProblemID;
-                    pp.Level = p.Level;
-                    response.Add(pp);
-                }
+        //        foreach (Phytel.API.DataDomain.PatientProblem.DTO.PatientProblemData p in problems)
+        //        {
+        //            Phytel.API.AppDomain.NG.DTO.PatientProblem pp = new Phytel.API.AppDomain.NG.DTO.PatientProblem();
+        //            pp.ID = p.ID;
+        //            pp.PatientID = p.PatientID;
+        //            pp.ProblemID = p.ProblemID;
+        //            pp.Level = p.Level;
+        //            response.Add(pp);
+        //        }
 
-                return response;
-            }
-            catch (WebServiceException wse)
-            {
-                throw new WebServiceException("AD:GetPatientProblem()::" + wse.Message, wse.InnerException);
-            }
-        }
+        //        return response;
+        //    }
+        //    catch (WebServiceException wse)
+        //    {
+        //        throw new WebServiceException("AD:GetPatientProblem()::" + wse.Message, wse.InnerException);
+        //    }
+        //}
 
         public PutPatientDetailsUpdateResponse PutPatientDetailsUpdate(PutPatientDetailsUpdateRequest request)
         {
