@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization;
+using MongoDB.Driver;
 using Phytel.API.DataDomain.Contact;
 using Phytel.API.DataDomain.Contact.DTO;
 using Phytel.API.DataDomain.LookUp;
@@ -68,59 +69,34 @@ namespace Phytel.Data.ETL
             {
                 OnEtlEvent(new ETLEventArgs { Message = "Truncate Tables.", IsError = false });
                 //Truncate/Delete SQL databases
-                SQLDataService.Instance.ExecuteProcedure("InHealth001", true, "REPORT", "spPhy_TruncateTables",
+                SQLDataService.Instance.ExecuteProcedure("InHealth001", true, "REPORT", "spPhy_RPT_TruncateTables",
                     new ParameterCollection());
 
                 RegisterClasses();
-                OnEtlEvent(new ETLEventArgs { Message = "Loading users.", IsError = false });
                 LoadUsers(contract);
                 LoadLookUps(contract);
-
-                OnEtlEvent(new ETLEventArgs { Message = "Loading goal attributes.", IsError = false });
                 LoadGoalAttributes(contract);
-
-                OnEtlEvent(new ETLEventArgs { Message = "Loading observations.", IsError = false });
                 LoadObservations(contract);
-
-                OnEtlEvent(new ETLEventArgs { Message = "Loading patients.", IsError = false });
                 LoadPatients(contract);
-
-                OnEtlEvent(new ETLEventArgs { Message = "Loading patient system.", IsError = false });
                 LoadPatientSystems(contract);
 
                 LoadPatientNotes(contract);
-
-                OnEtlEvent(new ETLEventArgs { Message = "Loading patient problems.", IsError = false });
                 LoadPatientProblems(contract);
-                OnEtlEvent(new ETLEventArgs { Message = "Loading patient observations.", IsError = false });
                 LoadPatientObservations(contract);
-
-                OnEtlEvent(new ETLEventArgs { Message = "Loading contacts.", IsError = false });
                 LoadContacts(contract);
 
-                OnEtlEvent(new ETLEventArgs { Message = "Loading care members.", IsError = false });
                 LoadCareMembers(contract);
-                OnEtlEvent(new ETLEventArgs { Message = "Loading patient users.", IsError = false });
                 LoadPatientUsers(contract);
 
-                OnEtlEvent(new ETLEventArgs { Message = "Loading patient goals.", IsError = false });
                 LoadPatientGoals(contract);
-                OnEtlEvent(new ETLEventArgs { Message = "Loading patient barriers.", IsError = false });
                 LoadPatientBarriers(contract);
-                OnEtlEvent(new ETLEventArgs { Message = "Loading patient interventions.", IsError = false });
                 LoadPatientInterventions(contract);
-                OnEtlEvent(new ETLEventArgs { Message = "Loading patient tasks.", IsError = false });
                 LoadPatientTasks(contract);
 
-                OnEtlEvent(new ETLEventArgs { Message = "Loading patient programs.", IsError = false });
                 LoadPatientPrograms(contract);
-                OnEtlEvent(new ETLEventArgs { Message = "Loading program responses.", IsError = false });
                 LoadPatientProgramResponses(contract);
-                OnEtlEvent(new ETLEventArgs { Message = "Loading program attributes.", IsError = false });
                 LoadPatientProgramAttributes(contract);
-                OnEtlEvent(new ETLEventArgs { Message = "Loading spawn elements.", IsError = false });
                 ProcessSpawnElements();
-                OnEtlEvent(new ETLEventArgs { Message = "Loading todos.", IsError = false });
                 LoadToDos(contract);
             }
             catch (Exception ex)
@@ -437,11 +413,15 @@ namespace Phytel.Data.ETL
         {
             try
             {
+                OnEtlEvent(new ETLEventArgs { Message = "Loading care members.", IsError = false });
+
+                List<MECareMember> members;
                 using (CareMemberMongoContext cmctx = new CareMemberMongoContext(ctr))
                 {
-                    List<MECareMember> members = cmctx.CareMembers.Collection.FindAllAs<MECareMember>().ToList();
+                    members = cmctx.CareMembers.Collection.FindAllAs<MECareMember>().ToList();
+                }
 
-                    foreach (MECareMember mem in members.Where(t => !t.DeleteFlag))
+                foreach (MECareMember mem in members)//.Where(t => !t.DeleteFlag))
                     {
                         try
                         {
@@ -496,7 +476,7 @@ namespace Phytel.Data.ETL
                                 parms.Add(new Parameter("@ExtraElements", string.Empty, SqlDbType.VarChar,
                                     ParameterDirection.Input, int.MaxValue));
 
-                            SQLDataService.Instance.ExecuteScalar("InHealth001", true, "REPORT", "spPhy_SaveCareMember",
+                            SQLDataService.Instance.ExecuteScalar("InHealth001", true, "REPORT", "spPhy_RPT_SaveCareMember",
                                 parms);
                         }
                         catch (Exception ex)
@@ -504,7 +484,6 @@ namespace Phytel.Data.ETL
                             OnEtlEvent(new ETLEventArgs { Message = ex.Message + ": " + ex.StackTrace, IsError = true });
                         }
                     }
-                }
             }
             catch (Exception ex)
             {
@@ -516,14 +495,18 @@ namespace Phytel.Data.ETL
         {
             try
             {
+                OnEtlEvent(new ETLEventArgs { Message = "Loading contacts.", IsError = false });
+
+                List<MEContact> contacts;
                 using (ContactMongoContext cmctx = new ContactMongoContext(ctr))
                 {
-                    List<MEContact> contacts = cmctx.Contacts.Collection.FindAllAs<MEContact>().ToList();
+                    contacts = cmctx.Contacts.Collection.FindAllAs<MEContact>().ToList();
+                }
 
                     Parallel.ForEach(contacts, new ParallelOptions { MaxDegreeOfParallelism = Environment.ProcessorCount * _exponent }, contact =>
                     //foreach (MEContact contact in contacts.Where(t => !t.DeleteFlag))
                     {
-                        if (contact.PatientId != null && !contact.DeleteFlag)
+                        if (contact.PatientId != null)// && !contact.DeleteFlag)
                         {
                             try
                             {
@@ -549,7 +532,7 @@ namespace Phytel.Data.ETL
                                 else
                                     parms.Add(new Parameter("@ExtraElements", string.Empty, SqlDbType.VarChar, ParameterDirection.Input, int.MaxValue));
 
-                                SQLDataService.Instance.ExecuteProcedure("InHealth001", true, "REPORT", "spPhy_SaveContact", parms);
+                                SQLDataService.Instance.ExecuteProcedure("InHealth001", true, "REPORT", "spPhy_RPT_SaveContact", parms);
 
                                 if (contact.Addresses != null)
                                 {
@@ -575,7 +558,7 @@ namespace Phytel.Data.ETL
                                         parms.Add(new Parameter("@RecordCreatedOn", contact.RecordCreatedOn, SqlDbType.DateTime, ParameterDirection.Input, 50));
                                         parms.Add(new Parameter("@TTLDate", contact.TTLDate ?? (object)DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
 
-                                        SQLDataService.Instance.ExecuteProcedure("InHealth001", true, "REPORT", "spPhy_SaveContactAddress", parms);
+                                        SQLDataService.Instance.ExecuteProcedure("InHealth001", true, "REPORT", "spPhy_RPT_SaveContactAddress", parms);
                                     }
                                 }
 
@@ -598,7 +581,7 @@ namespace Phytel.Data.ETL
                                         parms.Add(new Parameter("@RecordCreatedOn", contact.RecordCreatedOn, SqlDbType.DateTime, ParameterDirection.Input, 50));
                                         parms.Add(new Parameter("@TTLDate", contact.TTLDate ?? (object)DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
 
-                                        SQLDataService.Instance.ExecuteProcedure("InHealth001", true, "REPORT", "spPhy_SaveContactEmail", parms);
+                                        SQLDataService.Instance.ExecuteProcedure("InHealth001", true, "REPORT", "spPhy_RPT_SaveContactEmail", parms);
                                     }
                                 }
 
@@ -617,7 +600,7 @@ namespace Phytel.Data.ETL
                                         parms.Add(new Parameter("@RecordCreatedOn", contact.RecordCreatedOn, SqlDbType.DateTime, ParameterDirection.Input, 50));
                                         parms.Add(new Parameter("@TTLDate", contact.TTLDate ?? (object)DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
 
-                                        SQLDataService.Instance.ExecuteProcedure("InHealth001", true, "REPORT", "spPhy_SaveContactLanguage", parms);
+                                        SQLDataService.Instance.ExecuteProcedure("InHealth001", true, "REPORT", "spPhy_RPT_SaveContactLanguage", parms);
                                     }
                                 }
 
@@ -637,7 +620,7 @@ namespace Phytel.Data.ETL
                                         parms.Add(new Parameter("@RecordCreatedOn", contact.RecordCreatedOn, SqlDbType.DateTime, ParameterDirection.Input, 50));
                                         parms.Add(new Parameter("@TTLDate", contact.TTLDate ?? (object)DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
 
-                                        SQLDataService.Instance.ExecuteProcedure("InHealth001", true, "REPORT", "spPhy_SaveContactMode", parms);
+                                        SQLDataService.Instance.ExecuteProcedure("InHealth001", true, "REPORT", "spPhy_RPT_SaveContactMode", parms);
                                     }
                                 }
 
@@ -662,7 +645,7 @@ namespace Phytel.Data.ETL
                                         parms.Add(new Parameter("@RecordCreatedOn", contact.RecordCreatedOn, SqlDbType.DateTime, ParameterDirection.Input, 50));
                                         parms.Add(new Parameter("@TTLDate", contact.TTLDate ?? (object)DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
 
-                                        SQLDataService.Instance.ExecuteProcedure("InHealth001", true, "REPORT", "spPhy_SaveContactPhone", parms);
+                                        SQLDataService.Instance.ExecuteProcedure("InHealth001", true, "REPORT", "spPhy_RPT_SaveContactPhone", parms);
                                     }
                                 }
 
@@ -680,7 +663,7 @@ namespace Phytel.Data.ETL
                                         parms.Add(new Parameter("@RecordCreatedOn", contact.RecordCreatedOn, SqlDbType.DateTime, ParameterDirection.Input, 50));
                                         parms.Add(new Parameter("@TTLDate", contact.TTLDate ?? (object)DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
 
-                                        SQLDataService.Instance.ExecuteProcedure("InHealth001", true, "REPORT", "spPhy_SaveContactTimeOfDay", parms);
+                                        SQLDataService.Instance.ExecuteProcedure("InHealth001", true, "REPORT", "spPhy_RPT_SaveContactTimeOfDay", parms);
                                     }
                                 }
 
@@ -698,7 +681,7 @@ namespace Phytel.Data.ETL
                                         parms.Add(new Parameter("@RecordCreatedOn", contact.RecordCreatedOn, SqlDbType.DateTime, ParameterDirection.Input, 50));
                                         parms.Add(new Parameter("@TTLDate", contact.TTLDate ?? (object)DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
 
-                                        SQLDataService.Instance.ExecuteProcedure("InHealth001", true, "REPORT", "spPhy_SaveContactWeekDay", parms);
+                                        SQLDataService.Instance.ExecuteProcedure("InHealth001", true, "REPORT", "spPhy_RPT_SaveContactWeekDay", parms);
                                     }
                                 }
 
@@ -715,7 +698,7 @@ namespace Phytel.Data.ETL
                                         parms.Add(new Parameter("@RecordCreatedBy", (string.IsNullOrEmpty(contact.RecordCreatedBy.ToString()) ? string.Empty : contact.RecordCreatedBy.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
                                         parms.Add(new Parameter("@RecordCreatedOn", contact.RecordCreatedOn, SqlDbType.DateTime, ParameterDirection.Input, 50));
 
-                                        SQLDataService.Instance.ExecuteProcedure("InHealth001", true, "REPORT", "spPhy_SaveContactRecentList", parms);
+                                        SQLDataService.Instance.ExecuteProcedure("InHealth001", true, "REPORT", "spPhy_RPT_SaveContactRecentList", parms);
                                     }
                                 }
                             }
@@ -725,7 +708,6 @@ namespace Phytel.Data.ETL
                             }
                         }
                     });
-                }
             }
             catch (Exception ex)
             {
@@ -737,10 +719,15 @@ namespace Phytel.Data.ETL
         {
             try
             {
+                OnEtlEvent(new ETLEventArgs { Message = "Loading goal attributes.", IsError = false });
+
+                List<MEAttributeLibrary> attributes;
                 using (PatientGoalMongoContext pgctx = new PatientGoalMongoContext(ctr))
                 {
-                    List<MEAttributeLibrary> attributes = pgctx.AttributesLibrary.Collection.FindAllAs<MEAttributeLibrary>().ToList();
-                    foreach (MEAttributeLibrary att in attributes.Where(t => !t.DeleteFlag))
+                    attributes =
+                        pgctx.AttributesLibrary.Collection.FindAllAs<MEAttributeLibrary>().ToList();
+                }
+                foreach (MEAttributeLibrary att in attributes)//.Where(t => !t.DeleteFlag))
                     {
                         try
                         {
@@ -761,7 +748,7 @@ namespace Phytel.Data.ETL
                             else
                                 parms.Add(new Parameter("@ExtraElements", string.Empty, SqlDbType.VarChar, ParameterDirection.Input, 50));
 
-                            SQLDataService.Instance.ExecuteProcedure("InHealth001", true, "REPORT", "spPhy_SaveGoalAttribute", parms);
+                            SQLDataService.Instance.ExecuteProcedure("InHealth001", true, "REPORT", "spPhy_RPT_SaveGoalAttribute", parms);
 
                             foreach (KeyValuePair<int, string> option in att.Options)
                             {
@@ -774,7 +761,7 @@ namespace Phytel.Data.ETL
                                 parms.Add(new Parameter("@UpdatedBy", (string.IsNullOrEmpty(att.UpdatedBy.ToString()) ? string.Empty : att.UpdatedBy.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
                                 parms.Add(new Parameter("@LastUpdatedOn", att.LastUpdatedOn ?? (object)DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
 
-                                SQLDataService.Instance.ExecuteProcedure("InHealth001", true, "REPORT", "spPhy_SaveGoalAttributeOption", parms);
+                                SQLDataService.Instance.ExecuteProcedure("InHealth001", true, "REPORT", "spPhy_RPT_SaveGoalAttributeOption", parms);
                             }
                         }
                         catch (Exception ex)
@@ -782,7 +769,6 @@ namespace Phytel.Data.ETL
                             OnEtlEvent(new ETLEventArgs { Message = ex.Message + ": " + ex.StackTrace, IsError = true });
                         }
                     }
-                }
             }
             catch (Exception ex)
             {
@@ -796,11 +782,13 @@ namespace Phytel.Data.ETL
             {
                 OnEtlEvent(new ETLEventArgs { Message = "Loading lookups.", IsError = false });
 
+                List<MELookup> lookups;
                 using (LookUpMongoContext lmctx = new LookUpMongoContext(ctr))
                 {
-                    List<MELookup> lookups = lmctx.LookUps.Collection.FindAll().ToList();
+                    lookups = lmctx.LookUps.Collection.FindAll().ToList();
+                }
 
-                    Parallel.ForEach(lookups, new ParallelOptions { MaxDegreeOfParallelism = Environment.ProcessorCount * 3 },
+                Parallel.ForEach(lookups, new ParallelOptions { MaxDegreeOfParallelism = Environment.ProcessorCount * 3 },
                         lookup =>
                         //foreach (MELookup lookup in lookups)
                         {
@@ -860,19 +848,19 @@ namespace Phytel.Data.ETL
                                         LoadToDoCategory(lookup);
                                         break;
                                     case LookUpType.NoteMethod:
-                                        LoadLookUp(lookup, "spPhy_SaveNoteMethodLookUp");
+                                        LoadLookUp(lookup, "spPhy_RPT_SaveNoteMethodLookUp");
                                         break;
                                     case LookUpType.NoteOutcome:
-                                        LoadLookUp(lookup, "spPhy_SaveNoteOutcomeLookUp");
+                                        LoadLookUp(lookup, "spPhy_RPT_SaveNoteOutcomeLookUp");
                                         break;
                                     case LookUpType.NoteWho:
-                                        LoadLookUp(lookup, "spPhy_SaveNoteWhoLookUp");
+                                        LoadLookUp(lookup, "spPhy_RPT_SaveNoteWhoLookUp");
                                         break;
                                     case LookUpType.NoteSource:
-                                        LoadLookUp(lookup, "spPhy_SaveNoteSourceLookUp");
+                                        LoadLookUp(lookup, "spPhy_RPT_SaveNoteSourceLookUp");
                                         break;
                                     case LookUpType.NoteDuration:
-                                        LoadLookUp(lookup, "spPhy_SaveNoteDurationLookUp");
+                                        LoadLookUp(lookup, "spPhy_RPT_SaveNoteDurationLookUp");
                                         break;
                                     default:
                                         break;
@@ -886,8 +874,6 @@ namespace Phytel.Data.ETL
 
                     LinkObjectiveCategories(lookups[0]);
                     LinkCommTypeCommModes(lookups[10]);
-
-                }
             }
             catch (Exception ex)
             {
@@ -908,7 +894,7 @@ namespace Phytel.Data.ETL
                 parms.Add(new Parameter("@MongoID", bc.DataId, SqlDbType.VarChar, ParameterDirection.Input, 50));
                 parms.Add(new Parameter("@Name", bc.Name, SqlDbType.VarChar, ParameterDirection.Input, int.MaxValue));
 
-                SQLDataService.Instance.ExecuteProcedure("InHealth001", true, "REPORT", "spPhy_SaveBarrierCategoryLookUp", parms);
+                SQLDataService.Instance.ExecuteProcedure("InHealth001", true, "REPORT", "spPhy_RPT_SaveBarrierCategoryLookUp", parms);
             }
  
         }
@@ -925,7 +911,7 @@ namespace Phytel.Data.ETL
                 parms.Add(new Parameter("@MongoID", cmt.DataId, SqlDbType.VarChar, ParameterDirection.Input, 50));
                 parms.Add(new Parameter("@Name", cmt.Name, SqlDbType.VarChar, ParameterDirection.Input, int.MaxValue));
 
-                SQLDataService.Instance.ExecuteProcedure("InHealth001", true, "REPORT", "spPhy_SaveCareMemberTypeLookUp", parms);
+                SQLDataService.Instance.ExecuteProcedure("InHealth001", true, "REPORT", "spPhy_RPT_SaveCareMemberTypeLookUp", parms);
             }
         }
 
@@ -941,7 +927,7 @@ namespace Phytel.Data.ETL
                 parms.Add(new Parameter("@MongoID", cat.DataId, SqlDbType.VarChar, ParameterDirection.Input, 50));
                 parms.Add(new Parameter("@Name", cat.Name, SqlDbType.VarChar, ParameterDirection.Input, int.MaxValue));
 
-                SQLDataService.Instance.ExecuteProcedure("InHealth001", true, "REPORT", "spPhy_SaveCategoryLookUp", parms);
+                SQLDataService.Instance.ExecuteProcedure("InHealth001", true, "REPORT", "spPhy_RPT_SaveCategoryLookUp", parms);
             }
         }
 
@@ -957,7 +943,7 @@ namespace Phytel.Data.ETL
                 parms.Add(new Parameter("@MongoID", cs.DataId, SqlDbType.VarChar, ParameterDirection.Input, 50));
                 parms.Add(new Parameter("@Name", cs.Name, SqlDbType.VarChar, ParameterDirection.Input, int.MaxValue));
 
-                SQLDataService.Instance.ExecuteProcedure("InHealth001", true, "REPORT", "spPhy_SaveCodingSystemLookUp", parms);
+                SQLDataService.Instance.ExecuteProcedure("InHealth001", true, "REPORT", "spPhy_RPT_SaveCodingSystemLookUp", parms);
             }
         }
 
@@ -973,7 +959,7 @@ namespace Phytel.Data.ETL
                 parms.Add(new Parameter("@MongoID", cmm.DataId, SqlDbType.VarChar, ParameterDirection.Input, 50));
                 parms.Add(new Parameter("@Name", cmm.Name, SqlDbType.VarChar, ParameterDirection.Input, int.MaxValue));
 
-                SQLDataService.Instance.ExecuteProcedure("InHealth001", true, "REPORT", "spPhy_SaveCommModeLookUp", parms);
+                SQLDataService.Instance.ExecuteProcedure("InHealth001", true, "REPORT", "spPhy_RPT_SaveCommModeLookUp", parms);
             }
         }
 
@@ -989,7 +975,7 @@ namespace Phytel.Data.ETL
                 parms.Add(new Parameter("@MongoID", cmt.DataId, SqlDbType.VarChar, ParameterDirection.Input, 50));
                 parms.Add(new Parameter("@Name", cmt.Name, SqlDbType.VarChar, ParameterDirection.Input, int.MaxValue));
 
-                SQLDataService.Instance.ExecuteProcedure("InHealth001", true, "REPORT", "spPhy_SaveCommTypeLookUp", parms);
+                SQLDataService.Instance.ExecuteProcedure("InHealth001", true, "REPORT", "spPhy_RPT_SaveCommTypeLookUp", parms);
              }
         }
 
@@ -1005,7 +991,7 @@ namespace Phytel.Data.ETL
                 parms.Add(new Parameter("@MongoID", fa.DataId, SqlDbType.VarChar, ParameterDirection.Input, 50));
                 parms.Add(new Parameter("@Name", fa.Name, SqlDbType.VarChar, ParameterDirection.Input, int.MaxValue));
 
-                SQLDataService.Instance.ExecuteProcedure("InHealth001", true, "REPORT", "spPhy_SaveFocusAreaLookUp", parms);
+                SQLDataService.Instance.ExecuteProcedure("InHealth001", true, "REPORT", "spPhy_RPT_SaveFocusAreaLookUp", parms);
             }
         }
 
@@ -1021,7 +1007,7 @@ namespace Phytel.Data.ETL
                 parms.Add(new Parameter("@MongoID", ic.DataId, SqlDbType.VarChar, ParameterDirection.Input, 50));
                 parms.Add(new Parameter("@Name", ic.Name, SqlDbType.VarChar, ParameterDirection.Input, int.MaxValue));
 
-                SQLDataService.Instance.ExecuteProcedure("InHealth001", true, "REPORT", "spPhy_SaveInterventionCategoryLookUp", parms);
+                SQLDataService.Instance.ExecuteProcedure("InHealth001", true, "REPORT", "spPhy_RPT_SaveInterventionCategoryLookUp", parms);
             }
         }
 
@@ -1039,7 +1025,7 @@ namespace Phytel.Data.ETL
                 parms.Add(new Parameter("@Code", la.Code, SqlDbType.VarChar, ParameterDirection.Input, 50));
                 parms.Add(new Parameter("@Active", la.Active, SqlDbType.VarChar, ParameterDirection.Input, 50));
 
-                SQLDataService.Instance.ExecuteProcedure("InHealth001", true, "REPORT", "spPhy_SaveLanguageLookUp", parms);
+                SQLDataService.Instance.ExecuteProcedure("InHealth001", true, "REPORT", "spPhy_RPT_SaveLanguageLookUp", parms);
             }
         }
 
@@ -1056,7 +1042,7 @@ namespace Phytel.Data.ETL
                 parms.Add(new Parameter("@Name", o.Name, SqlDbType.VarChar, ParameterDirection.Input, int.MaxValue));
                 parms.Add(new Parameter("@Description", o.Description, SqlDbType.VarChar, ParameterDirection.Input, int.MaxValue));
 
-                SQLDataService.Instance.ExecuteProcedure("InHealth001", true, "REPORT", "spPhy_SaveObjectiveLookUp", parms);
+                SQLDataService.Instance.ExecuteProcedure("InHealth001", true, "REPORT", "spPhy_RPT_SaveObjectiveLookUp", parms);
             }
         }
 
@@ -1072,7 +1058,7 @@ namespace Phytel.Data.ETL
                 parms.Add(new Parameter("@MongoID", ot.DataId, SqlDbType.VarChar, ParameterDirection.Input, 50));
                 parms.Add(new Parameter("@Name", ot.Name, SqlDbType.VarChar, ParameterDirection.Input, int.MaxValue));
 
-                SQLDataService.Instance.ExecuteProcedure("InHealth001", true, "REPORT", "spPhy_SaveObservationTypeLookUp", parms);
+                SQLDataService.Instance.ExecuteProcedure("InHealth001", true, "REPORT", "spPhy_RPT_SaveObservationTypeLookUp", parms);
             }
         }
 
@@ -1094,7 +1080,7 @@ namespace Phytel.Data.ETL
                 parms.Add(new Parameter("@Default", prb.DefaultFeatured, SqlDbType.VarChar, ParameterDirection.Input, int.MaxValue));
                 parms.Add(new Parameter("@DefaultLevel", (string.IsNullOrEmpty(prb.DefaultLevel.ToString()) ? string.Empty : prb.DefaultLevel.ToString()), SqlDbType.VarChar, ParameterDirection.Input, int.MaxValue));
 
-                SQLDataService.Instance.ExecuteProcedure("InHealth001", true, "REPORT", "spPhy_SaveProblemLookUp", parms);
+                SQLDataService.Instance.ExecuteProcedure("InHealth001", true, "REPORT", "spPhy_RPT_SaveProblemLookUp", parms);
             }
         }
 
@@ -1110,7 +1096,7 @@ namespace Phytel.Data.ETL
                 parms.Add(new Parameter("@MongoID", src.DataId, SqlDbType.VarChar, ParameterDirection.Input, 50));
                 parms.Add(new Parameter("@Name", src.Name, SqlDbType.VarChar, ParameterDirection.Input, int.MaxValue));
 
-                SQLDataService.Instance.ExecuteProcedure("InHealth001", true, "REPORT", "spPhy_SaveSourceLookUp", parms);
+                SQLDataService.Instance.ExecuteProcedure("InHealth001", true, "REPORT", "spPhy_RPT_SaveSourceLookUp", parms);
             }
         }
 
@@ -1127,7 +1113,7 @@ namespace Phytel.Data.ETL
                 parms.Add(new Parameter("@Name", st.Name, SqlDbType.VarChar, ParameterDirection.Input, int.MaxValue));
                 parms.Add(new Parameter("@Code", st.Code, SqlDbType.VarChar, ParameterDirection.Input, 50));
 
-                SQLDataService.Instance.ExecuteProcedure("InHealth001", true, "REPORT", "spPhy_SaveStateLookUp", parms);
+                SQLDataService.Instance.ExecuteProcedure("InHealth001", true, "REPORT", "spPhy_RPT_SaveStateLookUp", parms);
             }
         }
 
@@ -1143,7 +1129,7 @@ namespace Phytel.Data.ETL
                 parms.Add(new Parameter("@MongoID", tod.DataId, SqlDbType.VarChar, ParameterDirection.Input, 50));
                 parms.Add(new Parameter("@Name", tod.Name, SqlDbType.VarChar, ParameterDirection.Input, int.MaxValue));
 
-                SQLDataService.Instance.ExecuteProcedure("InHealth001", true, "REPORT", "spPhy_SaveTimesOfDayLookUp", parms);
+                SQLDataService.Instance.ExecuteProcedure("InHealth001", true, "REPORT", "spPhy_RPT_SaveTimesOfDayLookUp", parms);
             }
         }
 
@@ -1160,7 +1146,7 @@ namespace Phytel.Data.ETL
                 parms.Add(new Parameter("@Name", tz.Name, SqlDbType.VarChar, ParameterDirection.Input, int.MaxValue));
                 parms.Add(new Parameter("@Default", tz.Default, SqlDbType.VarChar, ParameterDirection.Input, 50));
 
-                SQLDataService.Instance.ExecuteProcedure("InHealth001", true, "REPORT", "spPhy_SaveTimeZoneLookUp", parms);
+                SQLDataService.Instance.ExecuteProcedure("InHealth001", true, "REPORT", "spPhy_RPT_SaveTimeZoneLookUp", parms);
             }
         }
 
@@ -1195,7 +1181,7 @@ namespace Phytel.Data.ETL
                 parms.Add(new Parameter("@MongoID", tz.DataId, SqlDbType.VarChar, ParameterDirection.Input, 50));
                 parms.Add(new Parameter("@Name", tz.Name, SqlDbType.VarChar, ParameterDirection.Input, int.MaxValue));
 
-                SQLDataService.Instance.ExecuteProcedure("InHealth001", true, "REPORT", "spPhy_SaveToDoCategoryLookUp", parms);
+                SQLDataService.Instance.ExecuteProcedure("InHealth001", true, "REPORT", "spPhy_RPT_SaveToDoCategoryLookUp", parms);
             }
         }
 
@@ -1211,7 +1197,7 @@ namespace Phytel.Data.ETL
                     parms.Add(new Parameter("@CommTypeMongoId", cmt.DataId.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
                     parms.Add(new Parameter("@CommModeMongoId", mode.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
 
-                    SQLDataService.Instance.ExecuteProcedure("InHealth001", true, "REPORT", "spPhy_SaveCommTypeCommMode", parms);
+                    SQLDataService.Instance.ExecuteProcedure("InHealth001", true, "REPORT", "spPhy_RPT_SaveCommTypeCommMode", parms);
                 }
             }
         }
@@ -1227,7 +1213,7 @@ namespace Phytel.Data.ETL
                     parms.Add(new Parameter("@ObjectiveMongoId", o.DataId, SqlDbType.VarChar, ParameterDirection.Input, 50));
                     parms.Add(new Parameter("@CategoryMongoId", cat.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
 
-                    SQLDataService.Instance.ExecuteProcedure("InHealth001", true, "REPORT", "spPhy_SaveObjectiveCategory", parms);
+                    SQLDataService.Instance.ExecuteProcedure("InHealth001", true, "REPORT", "spPhy_RPT_SaveObjectiveCategory", parms);
                 }
             }
         }
@@ -1237,11 +1223,15 @@ namespace Phytel.Data.ETL
         {
             try
             {
+                OnEtlEvent(new ETLEventArgs { Message = "Loading observations.", IsError = false });
+
+                List<MEObservation> observations;
                 using (PatientObservationMongoContext poctx = new PatientObservationMongoContext(ctr))
                 {
-                    List<MEObservation> observations = poctx.Observations.Collection.FindAllAs<MEObservation>().ToList();
+                    observations = poctx.Observations.Collection.FindAllAs<MEObservation>().ToList();
+                }
 
-                    foreach (MEObservation obs in observations.Where(t => !t.DeleteFlag))
+                foreach (MEObservation obs in observations)//.Where(t => !t.DeleteFlag))
                     {
                         try
                         {
@@ -1276,14 +1266,13 @@ namespace Phytel.Data.ETL
                                 parms.Add(new Parameter("@ExtraElements", string.Empty, SqlDbType.VarChar, ParameterDirection.Input, int.MaxValue));
 
 
-                            SQLDataService.Instance.ExecuteProcedure("InHealth001", true, "REPORT", "spPhy_SaveObservation", parms);
+                            SQLDataService.Instance.ExecuteProcedure("InHealth001", true, "REPORT", "spPhy_RPT_SaveObservation", parms);
                         }
                         catch (Exception ex)
                         {
                             OnEtlEvent(new ETLEventArgs { Message = ex.Message + ": " + ex.StackTrace, IsError = true });
                         }
                     }
-                }
             }
             catch (Exception ex)
             {
@@ -1295,11 +1284,15 @@ namespace Phytel.Data.ETL
         {
             try
             {
+                OnEtlEvent(new ETLEventArgs { Message = "Loading patients.", IsError = false });
+
+                List<MEPatient> patients;
                 using (PatientMongoContext pmctx = new PatientMongoContext(ctr))
                 {
-                    List<MEPatient> patients = pmctx.Patients.Collection.FindAllAs<MEPatient>().ToList();
+                    patients = Utils.GetMongoCollectionList(pmctx.Patients.Collection, 1000);
+                }
 
-                    Parallel.ForEach(patients, new ParallelOptions{MaxDegreeOfParallelism= Environment.ProcessorCount * _exponent}, patient =>
+                Parallel.ForEach(patients, new ParallelOptions{MaxDegreeOfParallelism= Environment.ProcessorCount * _exponent}, patient =>
                     //foreach (MEPatient patient in patients.Where(t => !t.DeleteFlag))
                     {
                         try
@@ -1316,7 +1309,7 @@ namespace Phytel.Data.ETL
                                 parms.Add(new Parameter("@DateOfBirth", patient.DOB ?? (object)DBNull.Value, SqlDbType.VarChar, ParameterDirection.Input, 50));
                                 parms.Add(new Parameter("@Gender", patient.Gender ?? (object)DBNull.Value, SqlDbType.VarChar, ParameterDirection.Input, 50));
                                 parms.Add(new Parameter("@Priority", patient.Priority, SqlDbType.VarChar, ParameterDirection.Input, 50));
-                                parms.Add(new Parameter("@LSSN", patient.LastFourSSN != null ?  patient.LastFourSSN.ToString() : (object)DBNull.Value, SqlDbType.VarChar, ParameterDirection.Input, 50));
+                                parms.Add(new Parameter("@LSSN", patient.LastFourSSN ?? (object)DBNull.Value, SqlDbType.Int, ParameterDirection.Input, 50));
                                 parms.Add(new Parameter("@FSSN", patient.FullSSN != null ? patient.FullSSN.ToString() : (object)DBNull.Value, SqlDbType.VarChar, ParameterDirection.Input, 100));                            
                                 parms.Add(new Parameter("@Version", patient.Version, SqlDbType.Float, ParameterDirection.Input, 50));
                                 parms.Add(new Parameter("@UpdatedBy", patient.UpdatedBy ?? (object)DBNull.Value, SqlDbType.VarChar, ParameterDirection.Input, 50));
@@ -1333,7 +1326,7 @@ namespace Phytel.Data.ETL
                                 else
                                     parms.Add(new Parameter("@ExtraElements", string.Empty, SqlDbType.VarChar, ParameterDirection.Input, int.MaxValue));
 
-                                SQLDataService.Instance.ExecuteProcedure("InHealth001", true, "REPORT", "spPhy_SavePatient", parms);
+                                SQLDataService.Instance.ExecuteProcedure("InHealth001", true, "REPORT", "spPhy_RPT_SavePatient", parms);
                             }
                         }
                         catch (Exception ex)
@@ -1341,7 +1334,6 @@ namespace Phytel.Data.ETL
                             OnEtlEvent(new ETLEventArgs { Message = ex.Message + ": " + ex.StackTrace, IsError = true });
                         }
                     });
-                }
             }
             catch (Exception ex)
             {
@@ -1353,12 +1345,17 @@ namespace Phytel.Data.ETL
         {
             try
             {
+                OnEtlEvent(new ETLEventArgs { Message = "Loading patient barriers.", IsError = false });
+
+                List<MEPatientBarrier> barriers;
                 using (PatientGoalMongoContext pgctx = new PatientGoalMongoContext(ctr))
                 {
-                    List<MEPatientBarrier> barriers = pgctx.PatientBarriers.Collection.FindAllAs<MEPatientBarrier>().ToList();
+                    barriers =
+                        pgctx.PatientBarriers.Collection.FindAllAs<MEPatientBarrier>().ToList();
+                }
 
-                    //Parallel.ForEach(barriers, new ParallelOptions { MaxDegreeOfParallelism = Environment.ProcessorCount * _exponent }, bar =>
-                    foreach (MEPatientBarrier bar in barriers.Where(t => !t.DeleteFlag))
+                //Parallel.ForEach(barriers, new ParallelOptions { MaxDegreeOfParallelism = Environment.ProcessorCount * _exponent }, bar =>
+                    foreach (MEPatientBarrier bar in barriers)//.Where(t => !t.DeleteFlag))
                     {
                         try
                         {
@@ -1382,14 +1379,13 @@ namespace Phytel.Data.ETL
                             else
                                 parms.Add(new Parameter("@ExtraElements", string.Empty, SqlDbType.VarChar, ParameterDirection.Input, int.MaxValue));
 
-                            SQLDataService.Instance.ExecuteScalar("InHealth001", true, "REPORT", "spPhy_SavePatientBarrier", parms);
+                            SQLDataService.Instance.ExecuteScalar("InHealth001", true, "REPORT", "spPhy_RPT_SavePatientBarrier", parms);
                         }
                         catch (Exception ex)
                         {
                             OnEtlEvent(new ETLEventArgs { Message = ex.Message + ": " + ex.StackTrace, IsError = true });
                         }
                     }//);
-                }
             }
             catch (Exception ex)
             {
@@ -1401,12 +1397,16 @@ namespace Phytel.Data.ETL
         {
             try
             {
+                OnEtlEvent(new ETLEventArgs { Message = "Loading patient goals.", IsError = false });
+
+                List<MEPatientGoal> goals;
                 using (PatientGoalMongoContext pgctx = new PatientGoalMongoContext(ctr))
                 {
-                    List<MEPatientGoal> goals = pgctx.PatientGoals.Collection.FindAllAs<MEPatientGoal>().ToList();
+                    goals = pgctx.PatientGoals.Collection.FindAllAs<MEPatientGoal>().ToList();
+                }
 
-                    //Parallel.ForEach(goals, new ParallelOptions { MaxDegreeOfParallelism = Environment.ProcessorCount * _exponent }, goal =>
-                    foreach (MEPatientGoal goal in goals.Where(t => !t.DeleteFlag))
+                //Parallel.ForEach(goals, new ParallelOptions { MaxDegreeOfParallelism = Environment.ProcessorCount * _exponent }, goal =>
+                    foreach (MEPatientGoal goal in goals)//.Where(t => !t.DeleteFlag))
                     {
                         try
                         {
@@ -1435,7 +1435,7 @@ namespace Phytel.Data.ETL
                             else
                                 parms.Add(new Parameter("@ExtraElements", string.Empty, SqlDbType.VarChar, ParameterDirection.Input, int.MaxValue));
 
-                            SQLDataService.Instance.ExecuteScalar("InHealth001", true, "REPORT", "spPhy_SavePatientGoal", parms);
+                            SQLDataService.Instance.ExecuteScalar("InHealth001", true, "REPORT", "spPhy_RPT_SavePatientGoal", parms);
 
                             if (goal.Attributes != null)
                             {
@@ -1450,7 +1450,7 @@ namespace Phytel.Data.ETL
                                     parms.Add(new Parameter("@RecordCreatedOn", goal.RecordCreatedOn == null ? string.Empty : goal.RecordCreatedOn.ToString(), SqlDbType.DateTime, ParameterDirection.Input, 50));
                                     parms.Add(new Parameter("@Version", goal.Version.ToString(), SqlDbType.Float, ParameterDirection.Input, 32));
 
-                                    SQLDataService.Instance.ExecuteScalar("InHealth001", true, "REPORT", "spPhy_SavePatientGoalAttribute", parms);
+                                    SQLDataService.Instance.ExecuteScalar("InHealth001", true, "REPORT", "spPhy_RPT_SavePatientGoalAttribute", parms);
 
                                     if (att.Values != null)
                                     {
@@ -1466,7 +1466,7 @@ namespace Phytel.Data.ETL
                                             parms.Add(new Parameter("@RecordCreatedOn", goal.RecordCreatedOn == null ? string.Empty : goal.RecordCreatedOn.ToString(), SqlDbType.DateTime, ParameterDirection.Input, 50));
                                             parms.Add(new Parameter("@Version", goal.Version.ToString(), SqlDbType.Float, ParameterDirection.Input, 32));
 
-                                            SQLDataService.Instance.ExecuteScalar("InHealth001", true, "REPORT", "spPhy_SavePatientGoalAttributeValue", parms);
+                                            SQLDataService.Instance.ExecuteScalar("InHealth001", true, "REPORT", "spPhy_RPT_SavePatientGoalAttributeValue", parms);
                                         }
                                     }
                                 }
@@ -1485,7 +1485,7 @@ namespace Phytel.Data.ETL
                                     parms.Add(new Parameter("@RecordCreatedOn", goal.RecordCreatedOn == null ? string.Empty : goal.RecordCreatedOn.ToString(), SqlDbType.DateTime, ParameterDirection.Input, 50));
                                     parms.Add(new Parameter("@Version", goal.Version.ToString(), SqlDbType.Float, ParameterDirection.Input, 32));
 
-                                    SQLDataService.Instance.ExecuteScalar("InHealth001", true, "REPORT", "spPhy_SavePatientGoalFocusArea", parms);
+                                    SQLDataService.Instance.ExecuteScalar("InHealth001", true, "REPORT", "spPhy_RPT_SavePatientGoalFocusArea", parms);
                                 }
                             }
 
@@ -1502,7 +1502,7 @@ namespace Phytel.Data.ETL
                                     parms.Add(new Parameter("@RecordCreatedOn", goal.RecordCreatedOn == null ? string.Empty : goal.RecordCreatedOn.ToString(), SqlDbType.DateTime, ParameterDirection.Input, 50));
                                     parms.Add(new Parameter("@Version", goal.Version.ToString(), SqlDbType.Float, ParameterDirection.Input, 32));
 
-                                    SQLDataService.Instance.ExecuteScalar("InHealth001", true, "REPORT", "spPhy_SavePatientGoalProgram", parms);
+                                    SQLDataService.Instance.ExecuteScalar("InHealth001", true, "REPORT", "spPhy_RPT_SavePatientGoalProgram", parms);
                                 }
                             }
                         }
@@ -1511,7 +1511,6 @@ namespace Phytel.Data.ETL
                             OnEtlEvent(new ETLEventArgs { Message = ex.Message + ": " + ex.StackTrace, IsError = true });
                         }
                     }//);
-                }
             }
             catch (Exception ex)
             {
@@ -1523,11 +1522,16 @@ namespace Phytel.Data.ETL
         {
             try
             {
+                OnEtlEvent(new ETLEventArgs { Message = "Loading patient interventions.", IsError = false });
+
+                List<MEPatientIntervention> interventions;                
                 using (PatientGoalMongoContext pgctx = new PatientGoalMongoContext(ctr))
                 {
-                    List<MEPatientIntervention> interventions = pgctx.PatientInterventions.Collection.FindAllAs<MEPatientIntervention>().ToList();
+                    interventions =
+                        pgctx.PatientInterventions.Collection.FindAllAs<MEPatientIntervention>().ToList();
+                }
 
-                    foreach (MEPatientIntervention intervention in interventions.Where(t => !t.DeleteFlag))
+                foreach (MEPatientIntervention intervention in interventions)//.Where(t => !t.DeleteFlag))
                     {
                         try
                         {
@@ -1558,7 +1562,7 @@ namespace Phytel.Data.ETL
                                 else
                                     parms.Add(new Parameter("@ExtraElements", string.Empty, SqlDbType.VarChar, ParameterDirection.Input, int.MaxValue));
 
-                                SQLDataService.Instance.ExecuteScalar("InHealth001", true, "REPORT", "spPhy_SavePatientIntervention", parms);
+                                SQLDataService.Instance.ExecuteScalar("InHealth001", true, "REPORT", "spPhy_RPT_SavePatientIntervention", parms);
                             
                                 if (intervention.BarrierIds != null)
                                 {
@@ -1576,7 +1580,7 @@ namespace Phytel.Data.ETL
                                             parms.Add(new Parameter("@RecordCreatedOn", intervention.RecordCreatedOn, SqlDbType.DateTime, ParameterDirection.Input, 50));
                                         parms.Add(new Parameter("@Version", (string.IsNullOrEmpty(intervention.Version.ToString()) ? string.Empty : intervention.Version.ToString()), SqlDbType.Float, ParameterDirection.Input, 32));
 
-                                        SQLDataService.Instance.ExecuteScalar("InHealth001", true, "REPORT", "spPhy_SavePatientInterventionBarrier", parms);
+                                        SQLDataService.Instance.ExecuteScalar("InHealth001", true, "REPORT", "spPhy_RPT_SavePatientInterventionBarrier", parms);
 
                                     }
                                 }
@@ -1587,7 +1591,6 @@ namespace Phytel.Data.ETL
                             OnEtlEvent(new ETLEventArgs { Message = ex.Message + ": " + ex.StackTrace, IsError = true });
                         }
                     }
-                }
             }
             catch (Exception ex)
             {
@@ -1600,12 +1603,15 @@ namespace Phytel.Data.ETL
             try
             {
                 OnEtlEvent(new ETLEventArgs { Message = "Loading Patient Notes.", IsError = false });
+
+                List<MEPatientNote> notes;
                 using (PatientNoteMongoContext pnctx = new PatientNoteMongoContext(ctr))
                 {
-                    List<MEPatientNote> notes = pnctx.PatientNotes.Collection.FindAllAs<MEPatientNote>().ToList();
+                    notes = pnctx.PatientNotes.Collection.FindAllAs<MEPatientNote>().ToList();
+                }
 
-                    //Parallel.ForEach(notes, new ParallelOptions { MaxDegreeOfParallelism = Environment.ProcessorCount * _exponent }, note =>
-                    foreach (MEPatientNote note in notes.Where(t => !t.DeleteFlag))
+                //Parallel.ForEach(notes, new ParallelOptions { MaxDegreeOfParallelism = Environment.ProcessorCount * _exponent }, note =>
+                    foreach (MEPatientNote note in notes)//.Where(t => !t.DeleteFlag))
                     {
                         try
                         {
@@ -1620,7 +1626,7 @@ namespace Phytel.Data.ETL
                             parms.Add(new Parameter("@_sourceId", (string.IsNullOrEmpty(note.SourceId.ToString()) ? string.Empty : note.SourceId.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
                             parms.Add(new Parameter("@_durationId", (string.IsNullOrEmpty(note.DurationId.ToString()) ? string.Empty : note.DurationId.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
                             parms.Add(new Parameter("@ContactedOn", note.ContactedOn ?? (object)DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
-                            parms.Add(new Parameter("@ValidatedIntentity", note.ValidatedIndentity.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                            parms.Add(new Parameter("@ValidatedIntentity", note.ValidatedIdentity.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
                             // standard fields
                             parms.Add(new Parameter("@UpdatedBy", (string.IsNullOrEmpty(note.UpdatedBy.ToString()) ? string.Empty : note.UpdatedBy.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
                             parms.Add(new Parameter("@LastUpdatedOn", note.LastUpdatedOn ?? (object)DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
@@ -1634,7 +1640,7 @@ namespace Phytel.Data.ETL
                             else
                                 parms.Add(new Parameter("@ExtraElements", string.Empty, SqlDbType.VarChar, ParameterDirection.Input, int.MaxValue));
 
-                            SQLDataService.Instance.ExecuteScalar("InHealth001", true, "REPORT", "spPhy_SavePatientNote", parms);
+                            SQLDataService.Instance.ExecuteScalar("InHealth001", true, "REPORT", "spPhy_RPT_SavePatientNote", parms);
 
                             if (note.ProgramIds != null)
                             {
@@ -1649,7 +1655,7 @@ namespace Phytel.Data.ETL
                                     parms.Add(new Parameter("@RecordCreatedOn", note.RecordCreatedOn, SqlDbType.DateTime, ParameterDirection.Input, 50));
                                     parms.Add(new Parameter("@Version", (string.IsNullOrEmpty(note.Version.ToString()) ? string.Empty : note.Version.ToString()), SqlDbType.Float, ParameterDirection.Input, 32));
 
-                                    SQLDataService.Instance.ExecuteScalar("InHealth001", true, "REPORT", "spPhy_SavePatientNoteProgram", parms);
+                                    SQLDataService.Instance.ExecuteScalar("InHealth001", true, "REPORT", "spPhy_RPT_SavePatientNoteProgram", parms);
                                 }
                             }
                         }
@@ -1658,7 +1664,6 @@ namespace Phytel.Data.ETL
                             OnEtlEvent(new ETLEventArgs { Message = ex.Message + ": " + ex.StackTrace, IsError = true });
                         }
                     }//);
-                }
             }
             catch (Exception ex)
             {
@@ -1670,11 +1675,16 @@ namespace Phytel.Data.ETL
         {
             try
             {
+                OnEtlEvent(new ETLEventArgs { Message = "Loading patient observations.", IsError = false });
+
+                List<MEPatientObservation> observations;                
                 using (PatientObservationMongoContext poctx = new PatientObservationMongoContext(ctr))
                 {
-                    List<MEPatientObservation> observations = poctx.PatientObservations.Collection.FindAllAs<MEPatientObservation>().ToList();
+                    observations =
+                        poctx.PatientObservations.Collection.FindAllAs<MEPatientObservation>().ToList();
+                }
 
-                    Parallel.ForEach(observations, new ParallelOptions { MaxDegreeOfParallelism = Environment.ProcessorCount * _exponent }, obs =>
+                Parallel.ForEach(observations, new ParallelOptions { MaxDegreeOfParallelism = Environment.ProcessorCount * _exponent }, obs =>
                     //foreach (MEPatientObservation obs in observations.Where(t => !t.DeleteFlag))
                     {
                         try
@@ -1707,7 +1717,7 @@ namespace Phytel.Data.ETL
                                 else
                                     parms.Add(new Parameter("@ExtraElements", string.Empty, SqlDbType.VarChar, ParameterDirection.Input, int.MaxValue));
 
-                                SQLDataService.Instance.ExecuteScalar("InHealth001", true, "REPORT", "spPhy_SavePatientObservation", parms);
+                                SQLDataService.Instance.ExecuteScalar("InHealth001", true, "REPORT", "spPhy_RPT_SavePatientObservation", parms);
                             }
                         }
                         catch (Exception ex)
@@ -1715,7 +1725,6 @@ namespace Phytel.Data.ETL
                             OnEtlEvent(new ETLEventArgs { Message = ex.Message + ": " + ex.StackTrace, IsError = true });
                         }
                     });
-                }
             }
             catch (Exception ex)
             {
@@ -1727,12 +1736,17 @@ namespace Phytel.Data.ETL
         {
             try
             {
+                OnEtlEvent(new ETLEventArgs { Message = "Loading patient problems.", IsError = false });
+
+                List<MEPatientProblem> problems;                
                 using (PatientProblemMongoContext ppctx = new PatientProblemMongoContext(ctr))
                 {
-                    List<MEPatientProblem> problems = ppctx.PatientProblems.Collection.FindAllAs<MEPatientProblem>().ToList();
+                    problems =
+                        ppctx.PatientProblems.Collection.FindAllAs<MEPatientProblem>().ToList();
+                }
 
-                    //Parallel.ForEach(problems, new ParallelOptions { MaxDegreeOfParallelism = Environment.ProcessorCount * _exponent }, problem =>
-                    foreach (MEPatientProblem problem in problems.Where(t => !t.DeleteFlag))
+                //Parallel.ForEach(problems, new ParallelOptions { MaxDegreeOfParallelism = Environment.ProcessorCount * _exponent }, problem =>
+                    foreach (MEPatientProblem problem in problems)//.Where(t => !t.DeleteFlag))
                     {
                         try
                         {
@@ -1757,14 +1771,13 @@ namespace Phytel.Data.ETL
                             else
                                 parms.Add(new Parameter("@ExtraElements", string.Empty, SqlDbType.VarChar, ParameterDirection.Input, int.MaxValue));
 
-                            SQLDataService.Instance.ExecuteScalar("InHealth001", true, "REPORT", "spPhy_SavePatientProblem", parms);
+                            SQLDataService.Instance.ExecuteScalar("InHealth001", true, "REPORT", "spPhy_RPT_SavePatientProblem", parms);
                         }
                         catch (Exception ex)
                         {
                             OnEtlEvent(new ETLEventArgs { Message = ex.Message + ": " + ex.StackTrace, IsError = true });
                         }
                     }//);
-                }
             }
             catch (Exception ex)
             {
@@ -1776,11 +1789,16 @@ namespace Phytel.Data.ETL
         {
             try
             {
+                OnEtlEvent(new ETLEventArgs { Message = "Loading todos.", IsError = false });
+
+                List<METoDo> todo;
                 using (SchedulingMongoContext smct = new SchedulingMongoContext(ctr))
                 {
-                    var todo = smct.ToDos.Collection.FindAllAs<METoDo>().ToList();
+                    todo = smct.ToDos.Collection.FindAllAs<METoDo>().ToList();
+                }
 
-                    foreach(METoDo td in todo.Where(t => !t.DeleteFlag )){
+                foreach(METoDo td in todo)//.Where(t => !t.DeleteFlag ))
+                    {
                         try
                         {
                             ParameterCollection parms = new ParameterCollection
@@ -1806,7 +1824,7 @@ namespace Phytel.Data.ETL
                                 new Parameter("@ExtraElements",td.ExtraElements != null ? td.ExtraElements.ToString() : (object) DBNull.Value, SqlDbType.VarChar, ParameterDirection.Input, int.MaxValue)
                             };
 
-                            SQLDataService.Instance.ExecuteScalar("InHealth001", true, "REPORT", "spPhy_SaveToDo", parms);
+                            SQLDataService.Instance.ExecuteScalar("InHealth001", true, "REPORT", "spPhy_RPT_SaveToDo", parms);
 
 
                             if (td.ProgramIds != null && td.ProgramIds.Count > 0)
@@ -1819,7 +1837,6 @@ namespace Phytel.Data.ETL
                             OnEtlEvent(new ETLEventArgs { Message = ex.Message + ": " + ex.StackTrace, IsError = true });
                         }
                     }
-                }
             }
             catch (Exception ex)
             {
@@ -1839,7 +1856,7 @@ namespace Phytel.Data.ETL
                         new Parameter("@_programId", pid.ToString() ,SqlDbType.VarChar, ParameterDirection.Input, 50)
                     };
 
-                    SQLDataService.Instance.ExecuteScalar("InHealth001", true, "REPORT", "spPhy_SaveToDoProgram", parms);
+                    SQLDataService.Instance.ExecuteScalar("InHealth001", true, "REPORT", "spPhy_RPT_SaveToDoProgram", parms);
                 });
             }
             catch (Exception ex)
@@ -1852,17 +1869,21 @@ namespace Phytel.Data.ETL
         {
             try
             {
-                using (ProgramMongoContext pmctx = new ProgramMongoContext(ctr))
-                {
-                    var programs = pmctx.PatientPrograms.Collection.FindAllAs<MEPatientProgram>().ToList();
+                OnEtlEvent(new ETLEventArgs { Message = "Loading patient programs.", IsError = false });
 
-                    Parallel.ForEach(programs, new ParallelOptions { MaxDegreeOfParallelism = 4 }, prog =>
+                List<MEPatientProgram> programs;
+                using (ProgramMongoContext pctx = new ProgramMongoContext(ctr))
+                {
+                    programs = Utils.GetMongoCollectionList(pctx.PatientPrograms.Collection, 50);
+                }
+
+                Parallel.ForEach(programs, new ParallelOptions { MaxDegreeOfParallelism = 4 }, prog =>
                     //foreach (MEPatientProgram prog in programs.Where(prog => !prog.DeleteFlag))
                     {
                         try
                         {
-                            if(!prog.DeleteFlag)
-                            {
+                            //if(!prog.DeleteFlag)
+                            //{
                                 ParameterCollection parms = new ParameterCollection();
                                 parms.Add(new Parameter("@MongoID", prog.Id.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
                                 parms.Add(new Parameter("@MongoPatientId", prog.PatientId.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
@@ -1902,7 +1923,7 @@ namespace Phytel.Data.ETL
                                 //parms.Add(new Parameter("@BackGround", (string.IsNullOrEmpty(prog.Background) ? string.Empty : prog.Background), SqlDbType.VarChar, ParameterDirection.Input, 50));
 
                                 var patientProgramId = SQLDataService.Instance.ExecuteScalar("InHealth001", true, "REPORT",
-                                    "spPhy_SavePatientProgram", parms);
+                                    "spPhy_RPT_SavePatientProgram", parms);
 
 
                                 if (patientProgramId != null && prog.Spawn != null && prog.Spawn.Count > 0)
@@ -1913,14 +1934,13 @@ namespace Phytel.Data.ETL
 
                                 LoadPatientProgramModules(ctr, patientProgramId, prog.Modules, prog);
                                 OnEtlEvent(new ETLEventArgs { Message = "Program:" + prog.Id.ToString() + "Loaded." });
-                            }
+                            //}
                         }
                         catch (Exception ex)
                         {
                             OnEtlEvent(new ETLEventArgs { Message = ex.Message + ": " + ex.StackTrace, IsError = true });
                         }
                     });
-                }
             }
             catch (Exception ex)
             {
@@ -1933,17 +1953,20 @@ namespace Phytel.Data.ETL
         {
             try
             {
+                OnEtlEvent(new ETLEventArgs { Message = "Loading program attributes.", IsError = false });
+                List<MEProgramAttribute> programAttributes;
                 using (ProgramMongoContext pmctx = new ProgramMongoContext(ctr))
                 {
-                    var programAttributes = pmctx.ProgramAttributes.Collection.FindAllAs<MEProgramAttribute>().ToList();
+                    programAttributes = pmctx.ProgramAttributes.Collection.FindAllAs<MEProgramAttribute>().ToList();
+                }
 
-                    //foreach (MEProgramAttribute prog in programAttributes.Where(t => !t.DeleteFlag))
+                //foreach (MEProgramAttribute prog in programAttributes.Where(t => !t.DeleteFlag))
                     Parallel.ForEach(programAttributes, new ParallelOptions { MaxDegreeOfParallelism = Environment.ProcessorCount * _exponent }, prog =>
                     {
                         try
                         {
-                            if(!prog.DeleteFlag)
-                            {
+                            //if(!prog.DeleteFlag)
+                            //{
                                 ParameterCollection parms = new ParameterCollection();
                                 parms.Add(new Parameter("@_id", prog.Id.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
                                 parms.Add(new Parameter("@_planElementId", prog.PlanElementId == null ? string.Empty : prog.PlanElementId.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
@@ -1974,17 +1997,17 @@ namespace Phytel.Data.ETL
 
 
                                 var patientProgramId = SQLDataService.Instance.ExecuteScalar("InHealth001", true, "REPORT",
-                                    "spPhy_SavePatientProgramAttribute", parms);
+                                    "spPhy_RPT_SavePatientProgramAttribute", parms);
 
                                 OnEtlEvent(new ETLEventArgs { Message = "Program attribute:" + prog.PlanElementId.ToString() + "Loaded." });
-                            }
+                            //}
                         }
                         catch (Exception ex)
                         {
                             OnEtlEvent(new ETLEventArgs { Message = ex.Message + ": " + ex.StackTrace, IsError = true });
                         }
                     });
-                }
+                
             }
             catch (Exception ex)
             {
@@ -2031,7 +2054,7 @@ namespace Phytel.Data.ETL
                             //
                             //parms.Add(new Parameter("@BackGround", (string.IsNullOrEmpty(prog.Background) ? string.Empty : prog.Background), SqlDbType.VarChar, ParameterDirection.Input, 50));
 
-                            var patientProgramModuleId = SQLDataService.Instance.ExecuteScalar("InHealth001", true, "REPORT", "spPhy_SavePatientProgramModule", parms);
+                            var patientProgramModuleId = SQLDataService.Instance.ExecuteScalar("InHealth001", true, "REPORT", "spPhy_RPT_SavePatientProgramModule", parms);
 
                             if (patientProgramModuleId != null && mod.Spawn != null && mod.Spawn.Count > 0)
                             {
@@ -2088,6 +2111,9 @@ namespace Phytel.Data.ETL
                             parms.Add(new Parameter("@EligibilityEndDate", act.EligibilityEndDate ?? (object)DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
                             parms.Add(new Parameter("@_previous", act.Previous == null ? string.Empty : act.Previous.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
                             parms.Add(new Parameter("@_next", act.Next == null ? string.Empty : act.Next.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                            parms.Add(new Parameter("@Archived", prog.Archived.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                            parms.Add(new Parameter("@ArchivedDate", act.ArchivedDate ?? (object)DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
+                            parms.Add(new Parameter("@_archiveOriginId", act.ArchiveOriginId == null ? string.Empty : act.AssignedTo.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
 
                             parms.Add(new Parameter("@Version", prog.Version.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
                             parms.Add(new Parameter("@_updatedBy", prog.UpdatedBy == null ? string.Empty : prog.UpdatedBy.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
@@ -2097,7 +2123,7 @@ namespace Phytel.Data.ETL
                             parms.Add(new Parameter("@TTLDate", prog.TTLDate ?? (object)DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
                             parms.Add(new Parameter("@Delete", prog.DeleteFlag.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
 
-                            var patientProgramActionId = SQLDataService.Instance.ExecuteScalar("InHealth001", true, "REPORT", "spPhy_SavePatientProgramModuleAction", parms);
+                            var patientProgramActionId = SQLDataService.Instance.ExecuteScalar("InHealth001", true, "REPORT", "spPhy_RPT_SavePatientProgramModuleAction", parms);
 
                             if (patientProgramActionId != null && act.Spawn != null && act.Spawn.Count > 0)
                             {
@@ -2170,7 +2196,7 @@ namespace Phytel.Data.ETL
                             parms.Add(new Parameter("@TTLDate", prog.TTLDate ?? (object)DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
                             parms.Add(new Parameter("@Delete", prog.DeleteFlag.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
 
-                            var StepId = SQLDataService.Instance.ExecuteScalar("InHealth001", true, "REPORT", "spPhy_SavePatientProgramModuleActionStep", parms);
+                            var StepId = SQLDataService.Instance.ExecuteScalar("InHealth001", true, "REPORT", "spPhy_RPT_SavePatientProgramModuleActionStep", parms);
 
                             if (StepId != null && step.Spawn != null && step.Spawn.Count > 0)
                             {
@@ -2194,17 +2220,21 @@ namespace Phytel.Data.ETL
         {
             try
             {
+                OnEtlEvent(new ETLEventArgs { Message = "Loading program responses.", IsError = false });
+                List<MEPatientProgramResponse> responses = new List<MEPatientProgramResponse>();
+
                 using (ProgramMongoContext pmctx = new ProgramMongoContext(ctr))
                 {
-                    var responses = pmctx.PatientProgramResponses.Collection.FindAllAs<MEPatientProgramResponse>().ToList();
-                    
-                    Parallel.ForEach(responses, new ParallelOptions{ MaxDegreeOfParallelism = Environment.ProcessorCount * _exponent }, resp =>
+                    responses = Utils.GetMongoCollectionList(pmctx.PatientProgramResponses.Collection, 50000);
+                }
+
+                Parallel.ForEach(responses, new ParallelOptions{ MaxDegreeOfParallelism = Environment.ProcessorCount * _exponent }, resp =>
                     //foreach (MEPatientProgramResponse resp in responses.Where(t => !t.DeleteFlag ))
                     {
                         try
                         {
-                            if(!resp.DeleteFlag)
-                            {
+                            //if(!resp.DeleteFlag)
+                            //{
                                 ParameterCollection parms = new ParameterCollection();
                                 parms.Add(new Parameter("@_id", resp.Id.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
                                 parms.Add(new Parameter("@_actionId", resp.ActionId.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
@@ -2225,7 +2255,7 @@ namespace Phytel.Data.ETL
                                 parms.Add(new Parameter("@Delete", resp.DeleteFlag.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
                                 parms.Add(new Parameter("@LastUpdatedOn", resp.LastUpdatedOn ?? (object)DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
 
-                                var responseId = SQLDataService.Instance.ExecuteScalar("InHealth001", true, "REPORT", "spPhy_SavePatientProgramResponse", parms);
+                                var responseId = SQLDataService.Instance.ExecuteScalar("InHealth001", true, "REPORT", "spPhy_RPT_SavePatientProgramResponse", parms);
 
                                 if (responseId != null && resp.Spawn != null && resp.Spawn.Count > 0)
                                 {
@@ -2233,16 +2263,14 @@ namespace Phytel.Data.ETL
                                     RegisterSpawnElement(resp.Spawn, resp.Id.ToString(), (int)responseId);
                                 }
 
-                                OnEtlEvent(new ETLEventArgs { Message = "Program response:" + resp.Id.ToString() + "Loaded." });
-                            }
+                                OnEtlEvent(new ETLEventArgs { Message = "Program response: " + resp.Id.ToString() + " Loaded." });
+                            //}
                         }
                         catch (Exception ex)
                         {
                             OnEtlEvent(new ETLEventArgs { Message = ex.Message + ": " + ex.StackTrace, IsError = true });
                         }
                     });
-
-                }
             }
             catch (Exception ex)
             {
@@ -2277,6 +2305,7 @@ namespace Phytel.Data.ETL
 
         public void ProcessSpawnElements()
         {
+            OnEtlEvent(new ETLEventArgs { Message = "Loading SpawnElements.", IsError = false });
             Parallel.ForEach(_spawnElementDict, new ParallelOptions{ MaxDegreeOfParallelism = Environment.ProcessorCount * _exponent }, entry =>
             //foreach (var entry in _spawnElementDict)
             {
@@ -2284,6 +2313,7 @@ namespace Phytel.Data.ETL
 
                 try
                 {
+                    OnEtlEvent(new ETLEventArgs { Message = "Loading spawn elements.", IsError = false });
                     ParameterCollection parms = new ParameterCollection();
                     parms.Add(new Parameter("@_planElementId", entry.PlanElementId, SqlDbType.VarChar, ParameterDirection.Input, 50));
                     parms.Add(new Parameter("@PlanElementId", entry.SqlId, SqlDbType.Int, ParameterDirection.Input, 50));
@@ -2291,7 +2321,8 @@ namespace Phytel.Data.ETL
                     parms.Add(new Parameter("@Tag", entry.SpawnElem.Tag ?? string.Empty, SqlDbType.VarChar, ParameterDirection.Input, 50));
                     parms.Add(new Parameter("@Type", (int)entry.SpawnElem.Type, SqlDbType.Int, ParameterDirection.Input, 50));
 
-                    SQLDataService.Instance.ExecuteProcedure("InHealth001", true, "REPORT", "spPhy_SaveSpawnElement", parms);
+                    SQLDataService.Instance.ExecuteProcedure("InHealth001", true, "REPORT", "spPhy_RPT_SaveSpawnElement", parms);
+                    OnEtlEvent(new ETLEventArgs { Message = "Spawn Element : "+ entry.SqlId + " saved.", IsError = false });
                 }
                 catch (Exception ex)
                 {
@@ -2311,7 +2342,7 @@ namespace Phytel.Data.ETL
         //            parms.Add(new Parameter("@Tag", spawn.Tag == null ? string.Empty : spawn.Tag.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
         //            parms.Add(new Parameter("@Type", (int)spawn.Type, SqlDbType.Int, ParameterDirection.Input, 50));
 
-        //            SQLDataService.Instance.ExecuteProcedure("InHealth001", true, "REPORT", "spPhy_SaveSpawnElement", parms);
+        //            SQLDataService.Instance.ExecuteProcedure("InHealth001", true, "REPORT", "spPhy_RPT_SaveSpawnElement", parms);
         //        }
         //        catch (Exception ex)
         //        {
@@ -2323,11 +2354,16 @@ namespace Phytel.Data.ETL
         {
             try
             {
+                OnEtlEvent(new ETLEventArgs { Message = "Loading patient system.", IsError = false });
+
+                List<MEPatientSystem> systems;                
                 using (PatientSystemMongoContext psctx = new PatientSystemMongoContext(ctr))
                 {
-                    List<MEPatientSystem> systems = psctx.PatientSystems.Collection.FindAllAs<MEPatientSystem>().ToList();
+                    systems =
+                        psctx.PatientSystems.Collection.FindAllAs<MEPatientSystem>().ToList();
+                }
 
-                    Parallel.ForEach(systems, new ParallelOptions { MaxDegreeOfParallelism = 4 }, system =>
+                Parallel.ForEach(systems, new ParallelOptions { MaxDegreeOfParallelism = 4 }, system =>
                     //foreach (MEPatientSystem system in systems.Where(t => !t.DeleteFlag))
                     {
                         try
@@ -2350,14 +2386,13 @@ namespace Phytel.Data.ETL
                             else
                                 parms.Add(new Parameter("@ExtraElements", string.Empty, SqlDbType.VarChar, ParameterDirection.Input, int.MaxValue));
 
-                            SQLDataService.Instance.ExecuteScalar("InHealth001", true, "REPORT", "spPhy_SavePatientSystem", parms);
+                            SQLDataService.Instance.ExecuteScalar("InHealth001", true, "REPORT", "spPhy_RPT_SavePatientSystem", parms);
                         }
                         catch (Exception ex)
                         {
                             OnEtlEvent(new ETLEventArgs { Message = ex.Message + ": " + ex.StackTrace, IsError = true });
                         }
                     });
-                }
             }
             catch (Exception ex)
             {
@@ -2369,11 +2404,15 @@ namespace Phytel.Data.ETL
         {
             try
             {
+                OnEtlEvent(new ETLEventArgs { Message = "Loading patient tasks.", IsError = false });
+
+                List<MEPatientTask> tasks;                
                 using (PatientGoalMongoContext pgctx = new PatientGoalMongoContext(ctr))
                 {
-                    List<MEPatientTask> tasks = pgctx.PatientTasks.Collection.FindAllAs<MEPatientTask>().ToList();
+                    tasks = pgctx.PatientTasks.Collection.FindAllAs<MEPatientTask>().ToList();
+                }
 
-                    Parallel.ForEach(tasks, new ParallelOptions{MaxDegreeOfParallelism= Environment.ProcessorCount * _exponent}, task =>
+                Parallel.ForEach(tasks, new ParallelOptions{MaxDegreeOfParallelism= Environment.ProcessorCount * _exponent}, task =>
                     //foreach (MEPatientTask task in tasks.Where(t => !t.DeleteFlag))
                     {
                         try
@@ -2400,7 +2439,7 @@ namespace Phytel.Data.ETL
                             else
                                 parms.Add(new Parameter("@ExtraElements", string.Empty, SqlDbType.VarChar, ParameterDirection.Input, int.MaxValue));
 
-                            SQLDataService.Instance.ExecuteScalar("InHealth001", true, "REPORT", "spPhy_SavePatientTask", parms);
+                            SQLDataService.Instance.ExecuteScalar("InHealth001", true, "REPORT", "spPhy_RPT_SavePatientTask", parms);
 
                             if (task.Attributes != null)
                             {
@@ -2415,7 +2454,7 @@ namespace Phytel.Data.ETL
                                     parms.Add(new Parameter("@RecordCreatedOn", task.RecordCreatedOn, SqlDbType.DateTime, ParameterDirection.Input, 50));
                                     parms.Add(new Parameter("@Version", task.Version, SqlDbType.Float, ParameterDirection.Input, 50));
 
-                                    SQLDataService.Instance.ExecuteScalar("InHealth001", true, "REPORT", "spPhy_SavePatientTaskAttribute", parms);
+                                    SQLDataService.Instance.ExecuteScalar("InHealth001", true, "REPORT", "spPhy_RPT_SavePatientTaskAttribute", parms);
 
                                     if (att.Values != null)
                                     {
@@ -2431,7 +2470,7 @@ namespace Phytel.Data.ETL
                                             parms.Add(new Parameter("@RecordCreatedOn", task.RecordCreatedOn, SqlDbType.DateTime, ParameterDirection.Input, 50));
                                             parms.Add(new Parameter("@Version", task.Version, SqlDbType.Float, ParameterDirection.Input, 50));
 
-                                            SQLDataService.Instance.ExecuteScalar("InHealth001", true, "REPORT", "spPhy_SavePatientTaskAttributeValue", parms);
+                                            SQLDataService.Instance.ExecuteScalar("InHealth001", true, "REPORT", "spPhy_RPT_SavePatientTaskAttributeValue", parms);
                                         }
                                     }
                                 }
@@ -2450,7 +2489,7 @@ namespace Phytel.Data.ETL
                             parms.Add(new Parameter("@RecordCreatedOn", task.RecordCreatedOn, SqlDbType.DateTime, ParameterDirection.Input, 50));
                             parms.Add(new Parameter("@Version", task.Version, SqlDbType.Float, ParameterDirection.Input, 50));                            
 
-                                    SQLDataService.Instance.ExecuteScalar("InHealth001", true, "REPORT", "spPhy_SavePatientTaskBarrier", parms);
+                                    SQLDataService.Instance.ExecuteScalar("InHealth001", true, "REPORT", "spPhy_RPT_SavePatientTaskBarrier", parms);
                                 }
                             }
                         }
@@ -2459,7 +2498,6 @@ namespace Phytel.Data.ETL
                             OnEtlEvent(new ETLEventArgs { Message = ex.Message + ": " + ex.StackTrace, IsError = true });
                         }
                     });
-                }
             }
             catch (Exception ex)
             {
@@ -2471,11 +2509,15 @@ namespace Phytel.Data.ETL
         {
             try
             {
+                OnEtlEvent(new ETLEventArgs { Message = "Loading patient users.", IsError = false });
+
+                List<MEPatientUser> users;
                 using (PatientMongoContext pctx = new PatientMongoContext(ctr))
                 {
-                    List<MEPatientUser> users = pctx.PatientUsers.Collection.FindAllAs<MEPatientUser>().ToList();
+                    users = pctx.PatientUsers.Collection.FindAllAs<MEPatientUser>().ToList();
+                }
 
-                    Parallel.ForEach(users, new ParallelOptions { MaxDegreeOfParallelism = Environment.ProcessorCount * _exponent }, user =>
+                Parallel.ForEach(users, new ParallelOptions { MaxDegreeOfParallelism = Environment.ProcessorCount * _exponent }, user =>
                     //foreach (MEPatientUser user in users.Where(t => !t.DeleteFlag))
                     {
                         try
@@ -2497,14 +2539,13 @@ namespace Phytel.Data.ETL
                             else
                                 parms.Add(new Parameter("@ExtraElements", string.Empty, SqlDbType.VarChar, ParameterDirection.Input, int.MaxValue));
 
-                            SQLDataService.Instance.ExecuteScalar("InHealth001", true, "REPORT", "spPhy_SavePatientUser", parms);
+                            SQLDataService.Instance.ExecuteScalar("InHealth001", true, "REPORT", "spPhy_RPT_SavePatientUser", parms);
                         }
                         catch (Exception ex)
                         {
                             OnEtlEvent(new ETLEventArgs { Message = ex.Message + ": " + ex.StackTrace, IsError = true });
                         }
                     });
-                }
             }
             catch (Exception ex)
             {
@@ -2516,12 +2557,15 @@ namespace Phytel.Data.ETL
         {
             try
             {
-                OnEtlEvent(new ETLEventArgs { Message = "Loading Users." });
+                OnEtlEvent(new ETLEventArgs { Message = "Loading users.", IsError = false });
+
+                List<MEContact> contacts;
                 using (ContactMongoContext cctx = new ContactMongoContext(ctr))
                 {
-                    List<MEContact> contacts = cctx.Contacts.Collection.FindAllAs<MEContact>().ToList();
+                    contacts = cctx.Contacts.Collection.FindAllAs<MEContact>().ToList();
+                }
 
-                    foreach (MEContact contact in contacts.Where(t => !t.DeleteFlag))
+                foreach (MEContact contact in contacts)//.Where(t => !t.DeleteFlag))
                     {
                         if (contact.PatientId == null)
                         {
@@ -2541,7 +2585,7 @@ namespace Phytel.Data.ETL
                                 parms.Add(new Parameter("@Delete", (string.IsNullOrEmpty(contact.DeleteFlag.ToString()) ? string.Empty : contact.DeleteFlag.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
                                 parms.Add(new Parameter("@TTLDate", contact.TTLDate ?? (object)DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
 
-                                SQLDataService.Instance.ExecuteProcedure("InHealth001", true, "REPORT", "spPhy_SaveUser", parms);
+                                SQLDataService.Instance.ExecuteProcedure("InHealth001", true, "REPORT", "spPhy_RPT_SaveUser", parms);
 
                                 if (contact.RecentList != null)
                                 {
@@ -2556,7 +2600,7 @@ namespace Phytel.Data.ETL
                                         parms.Add(new Parameter("@RecordCreatedBy", (string.IsNullOrEmpty(contact.RecordCreatedBy.ToString()) ? string.Empty : contact.RecordCreatedBy.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
                                         parms.Add(new Parameter("@RecordCreatedOn", contact.RecordCreatedOn, SqlDbType.DateTime, ParameterDirection.Input, 50));
 
-                                        SQLDataService.Instance.ExecuteProcedure("InHealth001", true, "REPORT", "spPhy_SaveUserRecentList", parms);
+                                        SQLDataService.Instance.ExecuteProcedure("InHealth001", true, "REPORT", "spPhy_RPT_SaveUserRecentList", parms);
                                     }
                                 }
 
@@ -2568,7 +2612,6 @@ namespace Phytel.Data.ETL
                             }
                         }
                     }
-                }
             }
             catch (Exception ex)
             {
