@@ -183,9 +183,16 @@ namespace Phytel.API.AppDomain.NG
                     StatusId = request.ToDo.StatusId,
                     DeleteFlag = request.ToDo.DeleteFlag
                 };
-                if ((request.ToDo.StatusId == (int)Status.Met || request.ToDo.StatusId == (int)Status.Abandoned) && request.ToDo.ClosedDate == null)
+                if ((request.ToDo.StatusId == (int)Status.Met || request.ToDo.StatusId == (int)Status.Abandoned))
                 {
-                    data.ClosedDate = DateTime.UtcNow;
+                    if (request.ToDo.ClosedDate == null)
+                    {
+                        data.ClosedDate = DateTime.UtcNow;
+                    }
+                    else
+                    {
+                        data.ClosedDate = request.ToDo.ClosedDate; 
+                    }
                 }
 
                 PutUpdateToDoDataResponse dataDomainResponse =
