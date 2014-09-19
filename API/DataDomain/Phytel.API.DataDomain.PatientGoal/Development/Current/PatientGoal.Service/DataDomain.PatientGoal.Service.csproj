@@ -103,6 +103,7 @@
     <Content Include="App.config" />
     <None Include="Properties\PublishProfiles\Azure Dev Publish.pubxml" />
     <None Include="Properties\PublishProfiles\Azure Model Publish.pubxml" />
+    <None Include="Properties\PublishProfiles\Phytel Model Publish.pubxml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
