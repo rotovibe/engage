@@ -32,7 +32,7 @@ namespace Phytel.API.DataDomain.PatientNote.DTO
         public const string OutcomeIdProperty = "oid";
         public const string DurationIdProperty = "did";
         public const string ContactedOnProperty = "con";
-        public const string ValidatedIndentityProperty = "vi";
+        public const string ValidatedIdentityProperty = "vi";
 
         #region Standard IMongoEntity Constants
         public const string VersionProperty = "v";
@@ -87,9 +87,9 @@ namespace Phytel.API.DataDomain.PatientNote.DTO
         [BsonIgnoreIfNull(true)]
         public DateTime? ContactedOn { get; set; }
 
-        [BsonElement(ValidatedIndentityProperty)]
+        [BsonElement(ValidatedIdentityProperty)]
         [BsonIgnoreIfNull(true)]
-        public bool ValidatedIndentity { get; set; }
+        public bool ValidatedIdentity { get; set; }
 
         #region Standard IMongoEntity Implementation
         [BsonExtraElements]
