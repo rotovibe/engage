@@ -1,4 +1,5 @@
-﻿using Phytel.API.AppDomain.NG.DTO;
+﻿using MongoDB.Bson;
+using Phytel.API.AppDomain.NG.DTO;
 using Phytel.API.AppDomain.NG.PlanCOR;
 using Phytel.API.DataDomain.Patient.DTO;
 using Phytel.API.Interface;
@@ -526,21 +527,22 @@ namespace Phytel.API.AppDomain.NG
             }
         }
 
-        public void SetInitialValues(string assignToId, IPlanElement m)
+        public void SetInitialValues(string assignToId, IPlanElement pe)
         {
-                // NIGHT-835
-                if (m.AssignDate == null)
-                    m.AssignDate = System.DateTime.UtcNow;
+            if (pe.Enabled) return;
+            // NIGHT-835
+            if (pe.AssignDate == null)
+                pe.AssignDate = System.DateTime.UtcNow;
 
-                //if (m.AssignToId == null)
-                m.AssignToId = assignToId; // NIGHT-877
+            //if (pe.AssignToId == null)
+            pe.AssignToId = assignToId; // NIGHT-877
 
-                m.Enabled = true;
-                m.StateUpdatedOn = System.DateTime.UtcNow;
-                m.ElementState = (int) DD.ElementState.NotStarted; // 2;
+            pe.Enabled = true;
+            pe.StateUpdatedOn = System.DateTime.UtcNow;
+            pe.ElementState = (int) DD.ElementState.NotStarted; // 2;
 
-                if (string.IsNullOrEmpty(m.AssignById))
-                    m.AssignById = DD.Constants.SystemContactId;
+            if (string.IsNullOrEmpty(pe.AssignById))
+                pe.AssignById = DD.Constants.SystemContactId;
         }
 
         public Actions GetProcessingAction(List<Module> list, string actionId)
@@ -817,46 +819,44 @@ namespace Phytel.API.AppDomain.NG
         #endregion
 
 
-        public void HydratePlanElementLists(List<object> processedElements, PostProcessActionResponse response)
+        public void HydratePlanElementLists(List<object> processedElements, PlanElements planElems)
         {
             try
             {
                 if (processedElements != null && processedElements.Count > 0)
                 {
-                    response.PlanElems = new PlanElements();
-
                     foreach (Object obj in processedElements)
                     {
                         if (obj.GetType() == typeof (Program))
                         {
-                            if (!response.PlanElems.Programs.Contains(obj))
+                            if (!planElems.Programs.Contains(obj))
                             {
                                 Program p = CloneProgram((Program) obj);
-                                response.PlanElems.Programs.Add(p);
+                                planElems.Programs.Add(p);
                             }
                         }
                         else if (obj.GetType() == typeof (Module))
                         {
-                            if (!response.PlanElems.Modules.Contains(obj))
+                            if (!planElems.Modules.Contains(obj))
                             {
                                 Module m = CloneModule((Module) obj);
-                                response.PlanElems.Modules.Add(m);
+                                planElems.Modules.Add(m);
                             }
                         }
                         else if (obj.GetType() == typeof (Actions))
                         {
-                            if (!response.PlanElems.Actions.Contains(obj))
+                            if (!planElems.Actions.Contains(obj))
                             {
                                 Actions a = CloneAction((Actions) obj);
-                                response.PlanElems.Actions.Add(a);
+                                planElems.Actions.Add(a);
                             }
                         }
                         else if (obj.GetType() == typeof (Step))
                         {
-                            if (!response.PlanElems.Steps.Contains(obj))
+                            if (!planElems.Steps.Contains(obj))
                             {
                                 Step s = CloneStep((Step) obj);
-                                response.PlanElems.Steps.Add(s);
+                                planElems.Steps.Add(s);
                             }
                         }
                     }
@@ -874,6 +874,9 @@ namespace Phytel.API.AppDomain.NG
             {
                 Module m = new Module
                 {
+                    Archived = md.Archived,
+                    ArchivedDate = md.ArchivedDate,
+                    ArchiveOriginId = md.ArchiveOriginId,
                     AssignById = md.AssignById,
                     AssignToId = md.AssignToId, // 950
                     AssignDate = md.AssignDate,
@@ -911,6 +914,9 @@ namespace Phytel.API.AppDomain.NG
             {
                 Actions a = new Actions
                 {
+                    Archived = ac.Archived,
+                    ArchivedDate = ac.ArchivedDate,
+                    ArchiveOriginId = ac.ArchiveOriginId,
                     AssignById = ac.AssignById,
                     AssignToId = ac.AssignToId, // NIGHT-877
                     AssignDate = ac.AssignDate,
@@ -948,6 +954,9 @@ namespace Phytel.API.AppDomain.NG
             {
                 Step s = new Step
                 {
+                    Archived = st.Archived,
+                    ArchivedDate = st.ArchivedDate,
+                    ArchiveOriginId = st.ArchiveOriginId,
                     ActionId = st.ActionId,
                     AssignById = st.AssignById,
                     AssignDate = st.AssignDate,
@@ -992,6 +1001,9 @@ namespace Phytel.API.AppDomain.NG
             {
                 Program p = new Program
                 {
+                    Archived = pr.Archived,
+                    ArchivedDate = pr.ArchivedDate,
+                    ArchiveOriginId = pr.ArchiveOriginId,
                     AssignById = pr.AssignById,
                     AssignDate = pr.AssignDate,
                     AssignToId = pr.AssignToId,
@@ -1129,6 +1141,7 @@ namespace Phytel.API.AppDomain.NG
         {
             try
             {
+                if (p.Enabled == true) return p;
                 p.Enabled = true;
                 p.AssignById = DD.Constants.SystemContactId;
                 p.AssignDate = System.DateTime.UtcNow;
@@ -1299,6 +1312,153 @@ namespace Phytel.API.AppDomain.NG
                 planElems.Modules.Add(pe as Module);
             else if (pe.GetType() == typeof (Actions))
                 planElems.Actions.Add(pe as Actions);
+        }
+
+
+        public Actions CloneRepeatAction(Actions action, string assignedTo)
+        {
+            try
+            {
+                ISpecification<Step> removeSelectedResponse = new RemoveSelectedResponseSpecification<Step>();
+                var idBag = new Dictionary<string, string>();
+                var cAct = action.Clone<Actions>();
+                
+                cAct.ArchiveOriginId = action.Id;
+                cAct.Id = ObjectId.GenerateNewId().ToString();
+
+                // set archived action properties
+                // archive parent action
+                action.Order = 999;
+                action.Archived = true;
+                action.ArchivedDate = System.DateTime.UtcNow;
+
+                // reinitialize properties
+                cAct.ElementState = 4;
+                cAct.AssignDate = System.DateTime.UtcNow;
+                cAct.Enabled = true;
+                cAct.StateUpdatedOn = System.DateTime.UtcNow;
+                cAct.ElementState = (int) DD.ElementState.NotStarted;
+                cAct.AssignById = DD.Constants.SystemContactId;
+                cAct.AssignToId = assignedTo;
+                cAct.Completed = false;
+                cAct.CompletedBy = "CM";
+                cAct.DateCompleted = null;
+
+                // update spawnelements
+                if (cAct.SpawnElement != null)
+                    cAct.SpawnElement.ForEach(sp =>
+                    {
+                        if (!string.IsNullOrEmpty(sp.ElementId))
+                            sp.ElementId = GetUpdatedId(idBag, sp.ElementId);
+                    });
+
+                cAct.Steps.ForEach(s =>
+                {
+                    s.ActionId = cAct.Id;
+                    var newId = ObjectId.GenerateNewId().ToString();
+                    if (!idBag.ContainsKey(s.Id))
+                        idBag.Add(s.Id, newId);
+
+                    s.Id = newId;
+
+                    // set updated date
+                    s.Completed = false;
+                    s.DateCompleted = null;
+                    s.ElementState = 4;
+                    s.AssignDate = System.DateTime.UtcNow;
+                    s.Enabled = true;
+                    s.StateUpdatedOn = System.DateTime.UtcNow;
+                    s.ElementState = (int) DD.ElementState.NotStarted;
+                    s.AssignToId = assignedTo;
+
+                    if (!string.IsNullOrEmpty(s.Next))
+                        if (!idBag.ContainsKey(s.Next)) 
+                            idBag.Add(s.Next, ObjectId.GenerateNewId().ToString());
+
+                    if (!string.IsNullOrEmpty(s.Previous))
+                        if (!idBag.ContainsKey(s.Previous))
+                            idBag.Add(s.Previous, ObjectId.GenerateNewId().ToString());
+
+                    // update stepids
+                    s.Responses.ForEach(r =>
+                    {
+                        r.StepId = newId;
+                        var rid = ObjectId.GenerateNewId().ToString();
+
+                        if (!idBag.ContainsKey(r.Id))
+                            idBag.Add(r.Id, rid);
+
+                        r.Id = rid;
+
+                        // reset the selectedresponseid by step type
+                        s.SelectedResponseId = string.Empty;
+                        if (removeSelectedResponse.IsSatisfiedBy(s))
+                            s.SelectedResponseId = r.Id;
+
+                        r.Selected = false;
+                        r.Value = string.Empty;
+                    });
+                });
+
+                try
+                {
+                    // go through and update references
+                    cAct.Steps.ForEach(s =>
+                    {
+                        if (!string.IsNullOrEmpty(s.Next))
+                            s.Next = GetUpdatedId(idBag, s.Next);
+
+                        if (!string.IsNullOrEmpty(s.Previous))
+                            s.Previous = GetUpdatedId(idBag, s.Previous);
+
+                        if (s.SpawnElement != null)
+                            s.SpawnElement.ForEach(sp =>
+                            {
+                                if (!string.IsNullOrEmpty(sp.ElementId))
+                                    sp.ElementId = GetUpdatedId(idBag, sp.ElementId);
+                            });
+
+                        s.Responses.ForEach(rp =>
+                        {
+                            if (!string.IsNullOrEmpty(rp.NextStepId))
+                                rp.NextStepId = GetUpdatedId(idBag, rp.NextStepId);
+
+                            if (rp.SpawnElement != null)
+                                rp.SpawnElement.ForEach(sp =>
+                                {
+                                    if (!string.IsNullOrEmpty(sp.ElementId))
+                                        sp.ElementId = GetUpdatedId(idBag, sp.ElementId);
+                                });
+                        });
+                    });
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception("Update References Failed." + ex.Message, ex.InnerException);    
+                }
+
+                return cAct;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("AD:PlanElementUtil:CloneRepeatAction()::" + ex.Message, ex.InnerException);
+            }
+        }
+
+        private string GetUpdatedId(Dictionary<string, string> bag, string id) {
+            try
+            {
+                var rId = id;
+                if (bag.ContainsKey(id))
+                {
+                    rId = bag[id];
+                }
+                return rId;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("AD:PlanElementUtil:GetUpdatedId()::" + ex.Message, ex.InnerException);
+            }
         }
     }
 }

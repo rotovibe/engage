@@ -1,6 +1,7 @@
 ﻿using MongoDB.Bson;
 using Phytel.API.AppDomain.NG.Programs;
 using Phytel.API.DataDomain.Program.DTO;
+using Phytel.API.DataDomain.Scheduling.DTO;
 using ServiceStack.Service;
 using ServiceStack.ServiceHost;
 using System;
@@ -15,7 +16,7 @@ namespace Phytel.API.AppDomain.NG.Test.Stubs
     {
         public IRestClient Client { get; set; }
 
-        public DTO.Observation.PatientObservation GetPatientProblem(string probId, PlanCOR.PlanElementEventArg e, string userId)
+        public Phytel.API.AppDomain.NG.DTO.Observation GetPatientProblem(string probId, PlanCOR.PlanElementEventArg e, string userId)
         {
             throw new NotImplementedException();
         }
@@ -223,7 +224,7 @@ namespace Phytel.API.AppDomain.NG.Test.Stubs
             return list;
         }
 
-        public DataDomain.Program.DTO.ProgramDetail SaveAction(DTO.IProcessActionRequest request, string actionId, DTO.Program p)
+        public DataDomain.Program.DTO.ProgramDetail SaveAction(DTO.IProcessActionRequest request, string actionId, DTO.Program p, bool repeat)
         {
             return new ProgramDetail();
         }
@@ -233,7 +234,7 @@ namespace Phytel.API.AppDomain.NG.Test.Stubs
             throw new NotImplementedException();
         }
 
-        public DataDomain.PatientObservation.DTO.PutUpdateObservationDataResponse UpdatePatientProblem(string patientId, string userId, string elementId, DTO.Observation.PatientObservation pod, bool _active, Interface.IAppDomainRequest request)
+        public DataDomain.PatientObservation.DTO.PutUpdateObservationDataResponse UpdatePatientProblem(string patientId, string userId, string elementId, Phytel.API.AppDomain.NG.DTO.Observation pod, bool _active, Interface.IAppDomainRequest request)
         {
             throw new NotImplementedException();
         }
@@ -280,6 +281,34 @@ namespace Phytel.API.AppDomain.NG.Test.Stubs
         {
             DTO.Outcome outCome = new DTO.Outcome {Result = 1, Reason = "Success!"};
             return outCome;
+        }
+
+        public DataDomain.PatientObservation.DTO.PutUpdateObservationDataResponse UpdatePatientProblem(string patientId, string userId, string elementId, DTO.PatientObservation pod, bool _active, Interface.IAppDomainRequest request)
+        {
+            throw new NotImplementedException();
+        }
+
+        DTO.PatientObservation IEndpointUtils.GetPatientProblem(string probId, PlanCOR.PlanElementEventArg e, string userId)
+        {
+            throw new NotImplementedException();
+        }
+
+
+        public void SaveResponses(DTO.Actions action, DTO.IProcessActionRequest request, bool repeat)
+        {
+            throw new NotImplementedException();
+        }
+
+
+        public DTO.Scheduling.Schedule GetScheduleToDoById(string p, string userId)
+        {
+            throw new NotImplementedException();
+        }
+
+
+        public object PutInsertToDo(ToDoData todo, string p)
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -1,7 +1,6 @@
 using ServiceStack.ServiceInterface.ServiceModel;
 using System.Collections.Generic;
 using Phytel.API.Interface;
-using Phytel.API.AppDomain.NG.DTO.Observation;
 
 namespace Phytel.API.AppDomain.NG.DTO
 {

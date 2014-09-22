@@ -7,6 +7,7 @@ using Phytel.API.DataDomain.Contact.DTO;
 using Phytel.API.DataDomain.LookUp.DTO;
 using Phytel.API.DataDomain.Patient.DTO;
 using Phytel.API.DataDomain.PatientNote.DTO;
+using Phytel.API.DataDomain.Scheduling.DTO;
 using Phytel.API.Interface;
 using ServiceStack.Service;
 using ServiceStack.ServiceClient.Web;
@@ -45,6 +46,7 @@ namespace Phytel.API.AppDomain.NG
         protected static readonly string DDPatientNoteUrl = ConfigurationManager.AppSettings["DDPatientNoteUrl"];
         protected static readonly string DDPatientObservationsServiceUrl = ConfigurationManager.AppSettings["DDPatientObservationUrl"];
         protected static readonly string DDPatientGoalsServiceUrl = ConfigurationManager.AppSettings["DDPatientGoalUrl"];
+        protected static readonly string DDSchedulingUrl = ConfigurationManager.AppSettings["DDSchedulingUrl"];
         #endregion
 
         public void LogException(Exception ex)
@@ -89,7 +91,7 @@ namespace Phytel.API.AppDomain.NG
                     
                     pResponse.Patient = new NG.DTO.Patient
                     {
-                        Id = response.Patient.ID,
+                        Id = response.Patient.Id,
                         FirstName = response.Patient.FirstName,
                         LastName = response.Patient.LastName,
                         DOB = NGUtils.IsDateValid(response.Patient.DOB) ? response.Patient.DOB : string.Empty,
@@ -97,7 +99,7 @@ namespace Phytel.API.AppDomain.NG
                         MiddleName = response.Patient.MiddleName,
                         Suffix = response.Patient.Suffix,
                         PreferredName = response.Patient.PreferredName,
-                        Priority = (int)response.Patient.PriorityData,
+                        Priority = response.Patient.PriorityData,
                         Flagged = Convert.ToInt32(response.Patient.Flagged),
                         Background = response.Patient.Background,
                         LastFourSSN = response.Patient.LastFourSSN
@@ -169,80 +171,96 @@ namespace Phytel.API.AppDomain.NG
             }
         }
 
-        public List<NG.DTO.PatientProblem> GetPatientProblems(NG.DTO.GetAllPatientProblemsRequest request)
-        {
-            try
-            {
-                if (string.IsNullOrEmpty(request.PatientID))
-                    throw new ArgumentException("PatientID is null or empty.");
+        // Deprecated - Problems is not in PatientObservations.
+        //public List<NG.DTO.PatientProblem> GetPatientProblems(NG.DTO.GetAllPatientProblemsRequest request)
+        //{
+        //    try
+        //    {
+        //        if (string.IsNullOrEmpty(request.PatientID))
+        //            throw new ArgumentException("PatientID is null or empty.");
 
-                List<Phytel.API.AppDomain.NG.DTO.PatientProblem> response = new List<Phytel.API.AppDomain.NG.DTO.PatientProblem>();
+        //        List<Phytel.API.AppDomain.NG.DTO.PatientProblem> response = new List<Phytel.API.AppDomain.NG.DTO.PatientProblem>();
 
-                IRestClient client = new JsonServiceClient();
-                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Problems",
-                        DDPatientProblemServiceUrl,
-                        "NG",
-                        request.Version,
-                        request.ContractNumber,
-                        request.PatientID), request.UserId);
+        //        IRestClient client = new JsonServiceClient();
+        //        string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Problems",
+        //                DDPatientProblemServiceUrl,
+        //                "NG",
+        //                request.Version,
+        //                request.ContractNumber,
+        //                request.PatientID), request.UserId);
 
-                //[Route("/{Context}/{Version}/{ContractNumber}/Patient/{PatientID}/Problems", "GET")]
-                Phytel.API.DataDomain.PatientProblem.DTO.GetAllPatientProblemsDataResponse dataDomainResponse = client.Get<Phytel.API.DataDomain.PatientProblem.DTO.GetAllPatientProblemsDataResponse>(url);
+        //        //[Route("/{Context}/{Version}/{ContractNumber}/Patient/{PatientID}/Problems", "GET")]
+        //        Phytel.API.DataDomain.PatientProblem.DTO.GetAllPatientProblemsDataResponse dataDomainResponse = client.Get<Phytel.API.DataDomain.PatientProblem.DTO.GetAllPatientProblemsDataResponse>(url);
 
-                List<Phytel.API.DataDomain.PatientProblem.DTO.PatientProblemData> problems = dataDomainResponse.PatientProblems;
+        //        List<Phytel.API.DataDomain.PatientProblem.DTO.PatientProblemData> problems = dataDomainResponse.PatientProblems;
 
-                foreach (Phytel.API.DataDomain.PatientProblem.DTO.PatientProblemData p in problems)
-                {
-                    Phytel.API.AppDomain.NG.DTO.PatientProblem pp = new Phytel.API.AppDomain.NG.DTO.PatientProblem();
-                    pp.ID = p.ID;
-                    pp.PatientID = p.PatientID;
-                    pp.ProblemID = p.ProblemID;
-                    pp.Level = p.Level;
-                    response.Add(pp);
-                }
+        //        foreach (Phytel.API.DataDomain.PatientProblem.DTO.PatientProblemData p in problems)
+        //        {
+        //            Phytel.API.AppDomain.NG.DTO.PatientProblem pp = new Phytel.API.AppDomain.NG.DTO.PatientProblem();
+        //            pp.ID = p.ID;
+        //            pp.PatientID = p.PatientID;
+        //            pp.ProblemID = p.ProblemID;
+        //            pp.Level = p.Level;
+        //            response.Add(pp);
+        //        }
 
-                return response;
-            }
-            catch (WebServiceException wse)
-            {
-                throw new WebServiceException("AD:GetPatientProblem()::" + wse.Message, wse.InnerException);
-            }
-        }
+        //        return response;
+        //    }
+        //    catch (WebServiceException wse)
+        //    {
+        //        throw new WebServiceException("AD:GetPatientProblem()::" + wse.Message, wse.InnerException);
+        //    }
+        //}
 
         public PutPatientDetailsUpdateResponse PutPatientDetailsUpdate(PutPatientDetailsUpdateRequest request)
         {
             try
             {
                 PutPatientDetailsUpdateResponse response = new PutPatientDetailsUpdateResponse();
+                if (request.Patient != null)
+                {
+                    IRestClient client = new JsonServiceClient();
+                    //[Route("/{Context}/{Version}/{ContractNumber}/Patient", "PUT")]
+                    string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Patient",
+                                                                                    DDPatientServiceURL,
+                                                                                    "NG",
+                                                                                    request.Version,
+                                                                                    request.ContractNumber), request.UserId);
 
-                IRestClient client = new JsonServiceClient();
-                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/patient/{4}",
-                                                                                DDPatientServiceURL,
-                                                                                "NG",
-                                                                                request.Version,
-                                                                                request.ContractNumber,
-                                                                                request.Id,
-                                                                                request.Priority), request.UserId);
-
-                PutPatientDetailsUpdateResponse dataDomainResponse =
-                    client.Put<PutPatientDetailsUpdateResponse>(url, new PutPatientDetailsUpdateRequest
-                                                                                {
-                                                                                    ContractNumber = request.ContractNumber,
-                                                                                    DOB = request.DOB,
-                                                                                    FirstName = request.FirstName,
-                                                                                    LastName = request.LastName,
-                                                                                    Gender = request.Gender,
-                                                                                    MiddleName = request.MiddleName,
-                                                                                    PreferredName = request.PreferredName,
-                                                                                    Priority = request.Priority,
-                                                                                    FullSSN = request.FullSSN,
-                                                                                    Suffix = request.Suffix,
-                                                                                    Token = request.Token,
-                                                                                    UserId = request.UserId,
-                                                                                    Version = request.Version,
-                                                                                    Id = request.Id
-                                                                                } as object);
-                return dataDomainResponse;
+                    PatientData data = new PatientData
+                    {
+                        Id = request.Patient.Id,
+                        FirstName = request.Patient.FirstName,
+                        LastName = request.Patient.LastName,
+                        MiddleName = request.Patient.MiddleName,
+                        PreferredName = request.Patient.PreferredName,
+                        Suffix = request.Patient.Suffix,
+                        DOB = request.Patient.DOB,
+                        PriorityData = request.Patient.Priority,
+                        Gender = request.Patient.Gender,
+                        FullSSN = request.Patient.FullSSN
+                    };
+                    PutUpdatePatientDataResponse dataDomainResponse =
+                        client.Put<PutUpdatePatientDataResponse>(url, new PutUpdatePatientDataRequest
+                        {
+                            Context = "NG",
+                            ContractNumber = request.ContractNumber,
+                            PatientData = data,
+                            Insert = request.Insert,
+                            InsertDuplicate = request.InsertDuplicate,
+                            UserId = request.UserId,
+                            Version = request.Version
+                        } as object);
+                    if (dataDomainResponse != null)
+                    {
+                        response.Id = dataDomainResponse.Id;
+                        if (dataDomainResponse.Outcome != null)
+                        {
+                            response.Outcome = new DTO.Outcome { Result = dataDomainResponse.Outcome.Result, Reason = dataDomainResponse.Outcome.Reason};
+                        }
+                    }
+                }
+                return response;
             }
             catch (WebServiceException wse)
             {
@@ -315,6 +333,44 @@ namespace Phytel.API.AppDomain.NG
             }
         }
 
+        public GetInitializePatientResponse GetInitializePatient(GetInitializePatientRequest request)
+        {
+            try
+            {
+                GetInitializePatientResponse response = new GetInitializePatientResponse();
+
+                IRestClient client = new JsonServiceClient();
+                //[Route("/{Context}/{Version}/{ContractNumber}/Patient/Initialize", "PUT")]
+                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/patient/Initialize",
+                                                                                DDPatientServiceURL,
+                                                                                "NG",
+                                                                                request.Version,
+                                                                                request.ContractNumber), request.UserId);
+
+                PutInitializePatientDataResponse dataDomainResponse =
+                    client.Put<PutInitializePatientDataResponse>(url, new PutInitializePatientDataRequest
+                    {
+                        Context = "NG",
+                        ContractNumber = request.ContractNumber,
+                        UserId = request.UserId,
+                        Version = request.Version
+                    } as object);
+
+                if (dataDomainResponse != null && dataDomainResponse.PatientData != null)
+                {
+                    response = new GetInitializePatientResponse { 
+                        Patient = new Patient { Id = dataDomainResponse.PatientData.Id },
+                        Version = dataDomainResponse.Version
+                    };
+                }
+                return response;
+            }
+            catch (WebServiceException wse)
+            {
+                throw new WebServiceException("AD:GetInitializePatient()::" + wse.Message, wse.InnerException);
+            }
+        }
+
         public PostDeletePatientResponse DeletePatient(PostDeletePatientRequest request)
         {
             PostDeletePatientResponse response = new PostDeletePatientResponse();
@@ -349,6 +405,9 @@ namespace Phytel.API.AppDomain.NG
 
                 INGCommand deletePatientGoalCommand = new PatientGoalsCommand(request, client);
                 uow.Execute(deletePatientGoalCommand);
+
+                INGCommand deletePatientToDosCommand = new PatientToDosCommand(request, client);
+                uow.Execute(deletePatientToDosCommand);
 
                 INGCommand deletePatientProgramCommand = new PatientProgramsCommand(request, client);
                 uow.Execute(deletePatientProgramCommand);
@@ -419,7 +478,7 @@ namespace Phytel.API.AppDomain.NG
                 //take qResponse Patient details and map them to "Patient" in the GetCohortPatientsResponse
                 qResponse.CohortPatients.ForEach(x => pResponse.Patients.Add(new CohortPatient
                 {
-                    Id = x.ID,
+                    Id = x.Id,
                     DOB = x.DOB,
                     FirstName = x.FirstName,
                     Gender = x.Gender,
@@ -803,6 +862,7 @@ namespace Phytel.API.AppDomain.NG
                 PatientNoteData noteData = new PatientNoteData
                 {
                     Text = noteText,
+                    TypeId = (int)NoteType.General,
                     CreatedById = request.UserId,
                     CreatedOn = DateTime.UtcNow,
                     PatientId = request.PatientId
@@ -855,6 +915,24 @@ namespace Phytel.API.AppDomain.NG
                 });
                 #endregion
 
+                #region RemoveProgramReferenceInToDos
+                //[Route("/{Context}/{Version}/{ContractNumber}/Scheduling/ToDo/RemoveProgram/{ProgramId}/Update", "PUT")]
+                string schUrl = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Scheduling/ToDo/RemoveProgram/{4}/Update",
+                                            DDSchedulingUrl,
+                                            "NG",
+                                            request.Version,
+                                            request.ContractNumber,
+                                            request.Id), request.UserId);
+                RemoveProgramInToDosDataResponse todoDDResponse = client.Put<RemoveProgramInToDosDataResponse>(schUrl, new RemoveProgramInToDosDataRequest
+                {
+                    ProgramId = request.Id,
+                    Context = "NG",
+                    ContractNumber = request.ContractNumber,
+                    Version = request.Version,
+                    UserId = request.UserId
+                });
+                #endregion
+
                 return response;
             }
             catch (WebServiceException wse)
@@ -862,9 +940,6 @@ namespace Phytel.API.AppDomain.NG
                 throw new WebServiceException("AD:RemovePatientProgram()::" + wse.Message, wse.InnerException);
             }
         }
-
-
-
 
         #endregion
 
@@ -1123,6 +1198,45 @@ namespace Phytel.API.AppDomain.NG
             catch (WebServiceException wse)
             {
                 throw new WebServiceException("AD:GetLookUps()::" + wse.Message, wse.InnerException);
+            }
+        }
+
+        public List<LookUpDetails> GetLookUpDetails(GetLookUpDetailsRequest request)
+        {
+            try
+            {
+                List<LookUpDetails> response = new List<LookUpDetails>();
+                IRestClient client = new JsonServiceClient();
+                //[Route("/{Context}/{Version}/{ContractNumber}/LookUp/Details/Type/{Name}", "GET")]
+                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/LookUp/Details/Type/{4}",
+                                                                        DDLookupServiceUrl,
+                                                                        "NG",
+                                                                        request.Version,
+                                                                        request.ContractNumber,
+                                                                        request.TypeName), request.UserId);
+
+                Phytel.API.DataDomain.LookUp.DTO.GetLookUpDetailsDataResponse dataDomainResponse = client.Get<Phytel.API.DataDomain.LookUp.DTO.GetLookUpDetailsDataResponse>(url);
+
+                List<LookUpDetailsData> dataList = dataDomainResponse.LookUpDetailsData;
+                if (dataList != null && dataList.Count > 0)
+                {
+                    List<LookUpDetails> list = new List<LookUpDetails>();
+                    dataList.ForEach(m => 
+                    {
+                        LookUpDetails details  = new LookUpDetails {
+                            Id = m.Id,
+                            Name = m.Name,
+                            IsDefault = m.IsDefault
+                        };
+                        list.Add(details);
+                    });
+                    response = list;
+                }
+                return response;
+            }
+            catch (WebServiceException wse)
+            {
+                throw new WebServiceException("AD:GetLookUpDetails()::" + wse.Message, wse.InnerException);
             }
         }
 
@@ -1506,12 +1620,12 @@ namespace Phytel.API.AppDomain.NG
                             patients = new List<CohortPatient>();
                             foreach (string id in recentPatientIds)
                             {
-                                PatientData pd = patientDDResponse.Patients.Where(p => p.ID == id).FirstOrDefault();
+                                PatientData pd = patientDDResponse.Patients.Where(p => p.Id == id).FirstOrDefault();
                                 if(pd != null)
                                 {
                                     patients.Add(new CohortPatient
                                     {
-                                        Id = pd.ID,
+                                        Id = pd.Id,
                                         FirstName = pd.FirstName,
                                         LastName = pd.LastName,
                                         MiddleName = pd.MiddleName,
@@ -1629,6 +1743,9 @@ namespace Phytel.API.AppDomain.NG
                     ElementState = a.ElementState,
                     StateUpdatedOn = a.StateUpdatedOn,
                     DateCompleted = a.DateCompleted,
+                    Archived = a.Archived,
+                    ArchivedDate = a.ArchivedDate,
+                    ArchiveOriginId = a.ArchiveOriginId,
                     Objectives = GetObjectivesInfo(a.Objectives)
                 };
                 if (includeSteps)

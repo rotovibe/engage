@@ -5,6 +5,7 @@ using System.Text;
 
 namespace Phytel.API.AppDomain.NG.DTO
 {
+    [Serializable]
     public class SpawnElement
     {
         public int ElementType { get; set; }

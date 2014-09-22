@@ -11,5 +11,13 @@ namespace Phytel.API.AppDomain.NG.DTO
         public List<string> ProgramIds { get; set; }
         public DateTime CreatedOn { get; set; }
         public string CreatedById { get; set; }
+        public int TypeId { get; set; }
+        public string MethodId { get; set; }
+        public string OutcomeId { get; set; }
+        public string WhoId { get; set; }
+        public string SourceId { get; set; }
+        public string DurationId { get; set; }
+        public DateTime? ContactedOn { get; set; }
+        public bool ValidatedIdentity { get; set; }
     }
 }

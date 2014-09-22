@@ -22,7 +22,7 @@ namespace Phytel.API.DataDomain.Patient.Service.Test
 
             IRestClient client = new JsonServiceClient();
             //[Route("/{Version}/{ContractNumber}/Observation/Type/{TypeId}/MatchLibrary/{Standard}", "GET")]
-            GetAdditionalObservationLibraryResponse response = client.Get<GetAdditionalObservationLibraryResponse>(
+            GetObservationsResponse response = client.Get<GetObservationsResponse>(
                 string.Format(@"http://localhost:888/Nightingale/{0}/{1}/Observation/Type/{2}/MatchLibrary/{3}",
                 version,
                 contractNumber,

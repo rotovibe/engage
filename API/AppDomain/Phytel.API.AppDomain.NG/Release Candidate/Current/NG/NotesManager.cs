@@ -41,7 +41,15 @@ namespace Phytel.API.AppDomain.NG
                         Text = n.Text,
                         ProgramIds = n.ProgramIds,
                         CreatedOn = n.CreatedOn,
-                        CreatedById = n.CreatedById
+                        CreatedById = n.CreatedById,
+                        TypeId = n.TypeId,
+                        MethodId = n.MethodId,
+                        OutcomeId = n.OutcomeId,
+                        WhoId = n.WhoId,
+                        SourceId = n.SourceId,
+                        DurationId = n.DurationId,
+                        ValidatedIdentity = n.ValidatedIdentity,
+                        ContactedOn = n.ContactedOn
                     };
                 }
                 return result;
@@ -82,7 +90,15 @@ namespace Phytel.API.AppDomain.NG
                             Text = n.Text,
                             ProgramIds = n.ProgramIds,
                             CreatedOn = n.CreatedOn,
-                            CreatedById = n.CreatedById
+                            CreatedById = n.CreatedById,
+                            TypeId = n.TypeId,
+                            MethodId = n.MethodId,
+                            OutcomeId = n.OutcomeId,
+                            WhoId = n.WhoId,
+                            SourceId = n.SourceId,
+                            DurationId = n.DurationId,
+                            ValidatedIdentity = n.ValidatedIdentity,
+                            ContactedOn = n.ContactedOn
                         }
                         );
                     }
@@ -119,7 +135,15 @@ namespace Phytel.API.AppDomain.NG
                     ProgramIds  = request.Note.ProgramIds,
                     CreatedById = request.UserId,
                     CreatedOn = request.Note.CreatedOn,
-                    PatientId = request.Note.PatientId
+                    PatientId = request.Note.PatientId,
+                    TypeId = request.Note.TypeId,
+                    MethodId = request.Note.MethodId,
+                    OutcomeId = request.Note.OutcomeId,
+                    WhoId = request.Note.WhoId,
+                    SourceId = request.Note.SourceId,
+                    DurationId = request.Note.DurationId,
+                    ContactedOn = request.Note.ContactedOn,
+                    ValidatedIdentity = request.Note.ValidatedIdentity
                 };
                 PutPatientNoteDataResponse dataDomainResponse =
                     client.Put<PutPatientNoteDataResponse>(url, new PutPatientNoteDataRequest

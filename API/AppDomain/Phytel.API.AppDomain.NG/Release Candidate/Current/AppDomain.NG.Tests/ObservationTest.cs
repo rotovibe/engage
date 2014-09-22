@@ -15,7 +15,7 @@ namespace Phytel.API.AppDomain.NG.Test
         [TestMethod]
         public void GetAllowedStates_CorrectType_Test()
         {
-            GetAllowedStatesRequest request = new GetAllowedStatesRequest { ContractNumber = contract, Token = "", TypeName = "Lab", UserId = userId, Version = version };
+            GetAllowedStatesRequest request = new GetAllowedStatesRequest { ContractNumber = contract, Token = "", UserId = userId, Version = version };
 
             ObservationsManager oManager = new ObservationsManager();
             GetAllowedStatesResponse response = oManager.GetAllowedObservationStates(request);
@@ -26,7 +26,7 @@ namespace Phytel.API.AppDomain.NG.Test
         [TestMethod]
         public void GetAllowedStates_InCorrectType_Test()
         {
-            GetAllowedStatesRequest request = new GetAllowedStatesRequest { ContractNumber = contract, Token = "", TypeName = "Labs", UserId = userId, Version = version };
+            GetAllowedStatesRequest request = new GetAllowedStatesRequest { ContractNumber = contract, Token = "",  UserId = userId, Version = version };
 
             ObservationsManager oManager = new ObservationsManager();
             GetAllowedStatesResponse response = oManager.GetAllowedObservationStates(request);

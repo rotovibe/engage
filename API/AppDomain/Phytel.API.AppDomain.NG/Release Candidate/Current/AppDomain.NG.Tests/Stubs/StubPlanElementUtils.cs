@@ -85,46 +85,46 @@ namespace Phytel.API.AppDomain.NG.Test.Stubs
             throw new NotImplementedException();
         }
 
-        public void HydratePlanElementLists(List<object> processedElements, DTO.PostProcessActionResponse response)
+        public void HydratePlanElementLists(List<object> processedElements, DTO.PlanElements planElems)
         {
             try
             {
                 if (processedElements != null && processedElements.Count > 0)
                 {
-                    response.PlanElems = new PlanElements();
+                    planElems = new PlanElements();
 
                     foreach (Object obj in processedElements)
                     {
                         if (obj.GetType() == typeof(DTO.Program))
                         {
-                            if (!response.PlanElems.Programs.Contains(obj))
+                            if (!planElems.Programs.Contains(obj))
                             {
                                 DTO.Program p = CloneProgram((DTO.Program)obj);
-                                response.PlanElems.Programs.Add(p);
+                                planElems.Programs.Add(p);
                             }
                         }
                         else if (obj.GetType() == typeof(Module))
                         {
-                            if (!response.PlanElems.Modules.Contains(obj))
+                            if (!planElems.Modules.Contains(obj))
                             {
                                 Module m = CloneModule((Module)obj);
-                                response.PlanElems.Modules.Add(m);
+                                planElems.Modules.Add(m);
                             }
                         }
                         else if (obj.GetType() == typeof(Actions))
                         {
-                            if (!response.PlanElems.Actions.Contains(obj))
+                            if (!planElems.Actions.Contains(obj))
                             {
                                 Actions a = CloneAction((Actions)obj);
-                                response.PlanElems.Actions.Add(a);
+                                planElems.Actions.Add(a);
                             }
                         }
                         else if (obj.GetType() == typeof(Step))
                         {
-                            if (!response.PlanElems.Steps.Contains(obj))
+                            if (!planElems.Steps.Contains(obj))
                             {
                                 Step s = CloneStep((Step)obj);
-                                response.PlanElems.Steps.Add(s);
+                                planElems.Steps.Add(s);
                             }
                         }
                     }
@@ -367,7 +367,6 @@ namespace Phytel.API.AppDomain.NG.Test.Stubs
 
         public void RegisterCohortPatientViewProblemToPatient(string problemId, string patientId, Interface.IAppDomainRequest request)
         {
-            throw new NotImplementedException();
         }
 
         public bool ResponseSpawnAllowed(DTO.Step s, DTO.Response r)
@@ -479,7 +478,6 @@ namespace Phytel.API.AppDomain.NG.Test.Stubs
             }
         }
 
-
         public DTO.ProgramAttribute GetAttributes(DataDomain.Program.DTO.ProgramAttributeData programAttributeData)
         {
             return new DTO.ProgramAttribute();
@@ -489,7 +487,6 @@ namespace Phytel.API.AppDomain.NG.Test.Stubs
         {
             throw new NotImplementedException();
         }
-
 
         public void SetEnabledState<T>(List<T> list, T x, string assignToId, bool pEnabled)
         {
@@ -558,21 +555,15 @@ namespace Phytel.API.AppDomain.NG.Test.Stubs
             }
         }
 
-
         public void SetInitialActions(object x, string assignToId)
         {
             throw new NotImplementedException();
         }
 
-
         Actions IPlanElementUtils.CloneAction(Actions md)
         {
             throw new NotImplementedException();
         }
-
-
-
-
 
         public bool UpdatePlanElementAttributes(DTO.Program pg, PlanElement planElement, string userId, PlanElements planElems)
         {
@@ -580,6 +571,18 @@ namespace Phytel.API.AppDomain.NG.Test.Stubs
         }
 
         public void ProcessPlanElementChanges(PlanElements planElems, PlanElement samplePe, PlanElement fPe, string userId)
+        {
+            throw new NotImplementedException();
+        }
+
+
+        public Actions CloneRepeatAction(Actions action, string assignedById)
+        {
+            throw new NotImplementedException();
+        }
+
+
+        public void SetInitialValues(string assignToId, IPlanElement pe)
         {
             throw new NotImplementedException();
         }

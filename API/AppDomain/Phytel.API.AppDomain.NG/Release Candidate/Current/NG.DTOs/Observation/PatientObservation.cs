@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Phytel.API.AppDomain.NG.DTO.Observation
+namespace Phytel.API.AppDomain.NG.DTO
 {
     public class PatientObservation
     {

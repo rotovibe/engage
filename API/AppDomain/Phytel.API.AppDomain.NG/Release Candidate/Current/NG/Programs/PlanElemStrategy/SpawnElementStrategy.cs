@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Phytel.API.AppDomain.NG.ElementActivation;
 
 namespace Phytel.API.AppDomain.NG.PlanElementStrategy
 {
-    public class SpawnElementStrategy
+    public class SpawnElementStrategy : IPlanElementStrategy
     {
         private readonly ISpawn _spawn;
 

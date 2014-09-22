@@ -20,6 +20,8 @@
     <SccLocalPath>SAK</SccLocalPath>
     <SccAuxPath>SAK</SccAuxPath>
     <SccProvider>SAK</SccProvider>
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\..\..\..\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -48,6 +50,7 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.QualityTools.Testing.Fakes, Version=11.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
     <Reference Include="MongoDB.Bson, Version=1.8.1.20, Culture=neutral, PublicKeyToken=f686731cfb9cc103, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\References\MongoDB.Bson.dll</HintPath>
@@ -55,6 +58,12 @@
     <Reference Include="MongoDB.Driver, Version=1.8.1.20, Culture=neutral, PublicKeyToken=f686731cfb9cc103, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\References\MongoDB.Driver.dll</HintPath>
+    </Reference>
+    <Reference Include="Phytel.API.AppDomain.NG.DTO.Fakes">
+      <HintPath>FakesAssemblies\Phytel.API.AppDomain.NG.DTO.Fakes.dll</HintPath>
+    </Reference>
+    <Reference Include="Phytel.API.AppDomain.NG.Fakes">
+      <HintPath>FakesAssemblies\Phytel.API.AppDomain.NG.Fakes.dll</HintPath>
     </Reference>
     <Reference Include="Phytel.Mongo">
       <HintPath>..\References\Phytel.Mongo.dll</HintPath>
@@ -102,6 +111,7 @@
   <ItemGroup>
     <Compile Include="CareMember_Tests.cs" />
     <Compile Include="Factories\NGManagerFactory.cs" />
+    <Compile Include="Factories\SampleFactory.cs" />
     <Compile Include="Factories\SecurityManagerFactory.cs" />
     <Compile Include="NGService_Tests.cs" />
     <Compile Include="NGUtils_Test.cs" />
@@ -117,19 +127,31 @@
     <Compile Include="PlanCOR\StepPlanProcessor_Tests.cs" />
     <Compile Include="PlanElementUtil_Tests.cs" />
     <Compile Include="PlanManager_Tests.cs" />
+    <Compile Include="Programs\ElementActivation\ToDoActivationRuleTests.cs" />
     <Compile Include="Programs\EndpointUtils_Tests.cs" />
+    <Compile Include="Programs\PlanElemStrategy\PlanElementActivationStrategyTests.cs" />
+    <Compile Include="Programs\PlanElemStrategy\ProblemActivationRuleTests.cs" />
+    <Compile Include="Programs\PlanElemStrategy\SetModulePropertiesForRepeat_Test.cs" />
+    <Compile Include="Programs\PlanManagerTests.cs" />
     <Compile Include="Programs\PlanManager_Test.cs" />
     <Compile Include="Programs\ProgramTest.cs" />
     <Compile Include="Programs\Specifications\IsInitialActionSpecificationTests.cs" />
+    <Compile Include="Programs\Specifications\IsModuleCompletedSpecification_Test.cs" />
+    <Compile Include="Programs\Specifications\RemoveSelectedResponseSpecification_Test.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Stubs\StubAppHostBase.cs" />
     <Compile Include="Stubs\StubAuditUtil.cs" />
     <Compile Include="Stubs\StubCommonFormatterUtil.cs" />
+    <Compile Include="Stubs\StubEndpointUtils.cs" />
     <Compile Include="Stubs\StubJsonRestClient.cs" />
     <Compile Include="Stubs\StubNGManager.cs" />
+    <Compile Include="Stubs\StubElementActivationStrategy.cs" />
     <Compile Include="Stubs\StubPlanElementEndpointUtils.cs" />
     <Compile Include="Stubs\StubPlanElementUtils.cs" />
     <Compile Include="Stubs\StubSecurityManager.cs" />
+    <Compile Include="Scheduling\SchedulingTest.cs" />
+    <Compile Include="Stubs\StubProblemActivationRule.cs" />
+    <Compile Include="Stubs\StubToDoActivationRule.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\..\Common\Phytel.API.Common\Release Candidate\Current\Phytel.API.Common.csproj">
@@ -156,6 +178,10 @@
       <Project>{4e9f9dbf-e01b-4226-9e4f-246149ebbb3f}</Project>
       <Name>DataDomain.Program.DTO</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\DataDomain\Phytel.API.DataDomain.Scheduling\Release Candidate\Current\Scheduling.DTO\DataDomain.Scheduling.DTO.csproj">
+      <Project>{1e303326-eec9-42a8-ba50-880ab7ad99b2}</Project>
+      <Name>DataDomain.Scheduling.DTO</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\..\..\Interfaces\Release Candidate\Current\Phytel.API.Interface\Phytel.API.Interface.csproj">
       <Project>{abe948fb-247e-4955-b3ab-b7c93e10a542}</Project>
       <Name>Phytel.API.Interface</Name>
@@ -179,6 +205,8 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <Fakes Include="Fakes\Phytel.API.AppDomain.NG.fakes" />
+    <Fakes Include="Fakes\Phytel.API.AppDomain.NG.DTO.fakes" />
     <None Include="packages.config" />
   </ItemGroup>
   <Choose>
@@ -201,6 +229,7 @@
   </Choose>
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

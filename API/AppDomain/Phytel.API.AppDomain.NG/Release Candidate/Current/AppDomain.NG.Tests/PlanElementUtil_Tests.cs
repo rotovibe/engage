@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using Phytel.API.AppDomain.NG;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Phytel.API.AppDomain.NG.Programs.ElementActivation;
+using Phytel.API.AppDomain.NG.Test.Factories;
 using AD = Phytel.API.AppDomain.NG.DTO;
 using Phytel.API.DataDomain.Program.DTO;
 using MongoDB.Bson;
@@ -79,8 +81,8 @@ namespace Phytel.API.AppDomain.NG.Tests
             public void Clone_Action_With_AssignTo()
             {
                 ObjectId control = ObjectId.GenerateNewId();
-                IPlanElementUtils peUtil = new PlanElementUtils { };
-                AD.Actions action = new AD.Actions { ElementState = 1, AssignToId = control.ToString() };
+                IPlanElementUtils peUtil = new PlanElementUtils {};
+                AD.Actions action = new AD.Actions {ElementState = 1, AssignToId = control.ToString()};
                 peUtil.CloneAction(action);
 
                 string sample = action.AssignToId;
@@ -163,13 +165,13 @@ namespace Phytel.API.AppDomain.NG.Tests
             public void Set_Assigned_Date_Null()
             {
                 string assignedTO = null;
-                IPlanElementUtils peUtil = new PlanElementUtils { };
+                IPlanElementUtils peUtil = new PlanElementUtils {};
                 AD.Module mod = new AD.Module();
-                AD.Program prog = new AD.Program { AssignToId = assignedTO };
+                AD.Program prog = new AD.Program {AssignToId = assignedTO};
 
                 peUtil.SetInitialProperties(assignedTO, mod, false);
 
-                Assert.AreEqual(DateTime.UtcNow.Date, ((DateTime)mod.AssignDate).Date);
+                Assert.AreEqual(DateTime.UtcNow.Date, ((DateTime) mod.AssignDate).Date);
             }
 
             [TestMethod()]
@@ -179,14 +181,14 @@ namespace Phytel.API.AppDomain.NG.Tests
             public void Set_Assigned_Date_Already_Assigned()
             {
                 string assignedDate = null;
-                IPlanElementUtils peUtil = new PlanElementUtils { };
+                IPlanElementUtils peUtil = new PlanElementUtils {};
                 DateTime assigned = DateTime.UtcNow;
-                AD.Actions act = new AD.Actions{ AssignDate = assigned };
-                AD.Program prog = new AD.Program { AssignToId = assignedDate };
+                AD.Actions act = new AD.Actions {AssignDate = assigned};
+                AD.Program prog = new AD.Program {AssignToId = assignedDate};
 
                 peUtil.SetInitialProperties(assignedDate, act, false);
 
-                Assert.AreEqual(assigned.Date, ((DateTime)act.AssignDate).Date);
+                Assert.AreEqual(assigned.Date, ((DateTime) act.AssignDate).Date);
             }
 
             [TestMethod()]
@@ -196,10 +198,10 @@ namespace Phytel.API.AppDomain.NG.Tests
             public void Set_AssignedTo_CM_Already_Assigned_In_Program()
             {
                 string assignedTO = ObjectId.GenerateNewId().ToString();
-                IPlanElementUtils peUtil = new PlanElementUtils { };
+                IPlanElementUtils peUtil = new PlanElementUtils {};
                 DateTime assigned = DateTime.UtcNow;
-                AD.Actions act = new AD.Actions { AssignDate = assigned };
-                AD.Program prog = new AD.Program { AssignToId = assignedTO };
+                AD.Actions act = new AD.Actions {AssignDate = assigned};
+                AD.Program prog = new AD.Program {AssignToId = assignedTO};
 
                 peUtil.SetInitialProperties(assignedTO, act, false);
 
@@ -213,10 +215,10 @@ namespace Phytel.API.AppDomain.NG.Tests
             public void Set_Assigned_To_No_CM_Assigned_In_Program()
             {
                 string assignedTO = null;
-                IPlanElementUtils peUtil = new PlanElementUtils { };
+                IPlanElementUtils peUtil = new PlanElementUtils {};
                 DateTime assigned = DateTime.UtcNow;
-                AD.Actions act = new AD.Actions { AssignDate = assigned };
-                AD.Program prog = new AD.Program { AssignToId = assignedTO };
+                AD.Actions act = new AD.Actions {AssignDate = assigned};
+                AD.Program prog = new AD.Program {AssignToId = assignedTO};
 
                 peUtil.SetInitialProperties(assignedTO, act, false);
 
@@ -355,12 +357,12 @@ namespace Phytel.API.AppDomain.NG.Tests
                     {
                         Enabled = true,
                         Previous = "000006789012345678901234",
-                        Actions = new List<AD.Actions> {new AD.Actions { Enabled = true}}
+                        Actions = new List<AD.Actions> {new AD.Actions {Enabled = true}}
                     }
                 };
 
                 pUtils.SetEnabledStatusByPrevious(mods, "123456789012345678901234", true);
-                Assert.AreEqual(DateTime.UtcNow.Date, ((DateTime)mods[1].Actions[0].AssignDate).Date);
+                Assert.AreEqual(DateTime.UtcNow.Date, ((DateTime) mods[1].Actions[0].AssignDate).Date);
             }
         }
 
@@ -463,7 +465,7 @@ namespace Phytel.API.AppDomain.NG.Tests
                 };
 
                 pUtils.SetElementEnabledState(modId, prog);
-                Assert.AreEqual(DateTime.UtcNow.Date, ((DateTime)prog.Modules[0].Actions[0].AssignDate).Date);
+                Assert.AreEqual(DateTime.UtcNow.Date, ((DateTime) prog.Modules[0].Actions[0].AssignDate).Date);
             }
 
             [TestMethod()]
@@ -743,6 +745,71 @@ namespace Phytel.API.AppDomain.NG.Tests
                 pUtils.UpdatePlanElementAttributes(prog, pe, "111111111111111111111111", planElems);
 
                 Assert.AreEqual(assignToId, prog.Modules[0].Actions[0].AssignToId);
+            }
+        }
+
+        [TestMethod()]
+        public void CloneRepeatActionTest()
+        {
+            IPlanElementUtils pUtils = new PlanElementUtils();
+
+            var actionId = ObjectId.GenerateNewId().ToString();
+            var step1Id = ObjectId.GenerateNewId().ToString();
+            var step2Id = ObjectId.GenerateNewId().ToString();
+            var selectedRespId = ObjectId.GenerateNewId().ToString();
+
+            var action = SampleFactory.CreateCloneAction(actionId, step1Id, step2Id, selectedRespId);
+
+            var newAction = pUtils.CloneRepeatAction(action, ObjectId.GenerateNewId().ToString());
+            Assert.AreNotEqual(action.Id, newAction.Id);
+            Assert.AreEqual(action.ElementState, newAction.ElementState);
+        }
+
+        [TestClass()]
+        public class SetInitialValuesTest
+        {
+            [TestMethod()]
+            public void SetInitialValuesTest_enabled()
+            {
+                IPlanElementUtils pUtils = new PlanElementUtils();
+                var pe = new AD.PlanElement {Enabled = true};
+                var id = "999999999999999999999999";
+                pUtils.SetInitialValues(id, pe);
+
+                Assert.AreEqual(pe.AssignDate, null);
+            }
+
+            [TestMethod()]
+            public void SetInitialValuesTest_disabled()
+            {
+                IPlanElementUtils pUtils = new PlanElementUtils();
+                var pe = new AD.PlanElement {Enabled = false};
+                var id = "999999999999999999999999";
+                pUtils.SetInitialValues(id, pe);
+
+                Assert.AreNotEqual(pe.AssignDate, null);
+            }
+        }
+
+        [TestClass()]
+        public class InitializePlanElementSettingsTest
+        {
+            [TestMethod()]
+            public void InitializePlanElementSettings_true()
+            {
+                IPlanElementUtils pUtils = new PlanElementUtils();
+                AD.PlanElement pe = new AD.PlanElement {Enabled = true};
+                pUtils.InitializePlanElementSettings(pe, pe, new AD.Program {AssignToId = "999999999999999999999999"});
+                Assert.AreEqual(pe.AssignDate, null);
+            }
+
+            [TestMethod()]
+            public void InitializePlanElementSettings_false()
+            {
+                IPlanElementUtils pUtils = new PlanElementUtils();
+                AD.PlanElement pe = new AD.PlanElement {Enabled = false};
+                pUtils.InitializePlanElementSettings(pe, pe, new AD.Program {AssignToId = "999999999999999999999999"});
+                Assert.AreNotEqual(pe.AssignDate, null);
             }
         }
     }

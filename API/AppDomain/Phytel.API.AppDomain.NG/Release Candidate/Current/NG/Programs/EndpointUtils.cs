@@ -1,13 +1,13 @@
 ﻿using Phytel.API.AppDomain.NG.DTO;
-using Phytel.API.AppDomain.NG.DTO.Observation;
+using Phytel.API.AppDomain.NG.DTO.Scheduling;
 using Phytel.API.AppDomain.NG.PlanCOR;
 //using Phytel.API.AppDomain.NG.Program;
 using Phytel.API.AppDomain.NG.Programs;
 using Phytel.API.DataDomain.CareMember.DTO;
 using Phytel.API.DataDomain.Patient.DTO;
 using Phytel.API.DataDomain.PatientObservation.DTO;
-using Phytel.API.DataDomain.PatientProblem.DTO;
 using Phytel.API.DataDomain.Program.DTO;
+using Phytel.API.DataDomain.Scheduling.DTO;
 using Phytel.API.Interface;
 using ServiceStack.Service;
 using ServiceStack.ServiceClient.Web;
@@ -22,12 +22,11 @@ namespace Phytel.API.AppDomain.NG
 {
     public class EndpointUtils : IEndpointUtils
     {
-        //public IRestClient Client { get; set; }
-        static readonly string DDPatientProblemServiceUrl = ConfigurationManager.AppSettings["DDPatientProblemServiceUrl"];
         static readonly string DDPatientObservationServiceUrl = ConfigurationManager.AppSettings["DDPatientObservationUrl"];
         static readonly string DDPatientServiceUrl = ConfigurationManager.AppSettings["DDPatientServiceUrl"];
         static readonly string DDProgramServiceUrl = ConfigurationManager.AppSettings["DDProgramServiceUrl"];
         static readonly string DDCareMemberUrl = ConfigurationManager.AppSettings["DDCareMemberUrl"];
+        static readonly string DDSchedulingUrl = ConfigurationManager.AppSettings["DDSchedulingUrl"];
 
         public PatientObservation GetPatientProblem(string probId, PlanElementEventArg e, string userId)
         {
@@ -38,7 +37,7 @@ namespace Phytel.API.AppDomain.NG
                 IRestClient client = new JsonServiceClient();
 
                 //Patient/{PatientId}/Observation/{ObservationID}
-                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Observation/{5}",
+                var url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Observation/{5}",
                                    DDPatientObservationServiceUrl,
                                    "NG",
                                    e.DomainRequest.Version,
@@ -67,18 +66,18 @@ namespace Phytel.API.AppDomain.NG
             }
         }
 
-        public DD.ProgramDetail SaveAction(IProcessActionRequest request, string actionId, AD.Program p)
+        public DD.ProgramDetail SaveAction(IProcessActionRequest request, string actionId, AD.Program p, bool repeat)
         {
             try
             {
                 // save responses from action steps
-                SaveResponsesFromProgram(p, actionId, request);
+                SaveResponsesFromProgramAction(p, actionId, request, repeat);
 
-                DD.ProgramDetail pD = NGUtils.FormatProgramDetail(p);
+                var pD = NGUtils.FormatProgramDetail(p);
 
-                IRestClient client = new JsonServiceClient();
+                var client = new JsonServiceClient();
 
-                string url = Common.Helper.BuildURL(string.Format(@"{0}/{1}/{2}/{3}/Patient/{4}/Programs/{5}/Update",
+                var url = Common.Helper.BuildURL(string.Format(@"{0}/{1}/{2}/{3}/Patient/{4}/Programs/{5}/Update",
                                     DDProgramServiceUrl,
                                     "NG",
                                     request.Version,
@@ -87,8 +86,8 @@ namespace Phytel.API.AppDomain.NG
                                     request.ProgramId,
                                     request.Token), request.UserId);
 
-                DD.PutProgramActionProcessingResponse response = client.Put<DD.PutProgramActionProcessingResponse>(
-                    url, new DD.PutProgramActionProcessingRequest { Program = pD, UserId = request.UserId });
+                var response = client.Put<DD.PutProgramActionProcessingResponse>(
+                    url, new PutProgramActionProcessingRequest { Program = pD, UserId = request.UserId });
 
                 return response.program;
             }
@@ -136,8 +135,7 @@ namespace Phytel.API.AppDomain.NG
                 AD.Program pd = null;
                 IRestClient client = new JsonServiceClient();
 
-                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Program/{5}/Details/?Token={6}",
-                    //"http://azurephyteldev.cloudapp.net:59901/Program",                
+                var url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Program/{5}/Details/?Token={6}",              
                     DDProgramServiceUrl,
                                     "NG",
                                     request.Version,
@@ -146,10 +144,7 @@ namespace Phytel.API.AppDomain.NG
                                     request.ProgramId,
                                     request.Token), request.UserId);
 
-                DD.GetProgramDetailsSummaryResponse resp =
-                    client.Get<DD.GetProgramDetailsSummaryResponse>(
-                    url);
-
+                GetProgramDetailsSummaryResponse resp = client.Get<GetProgramDetailsSummaryResponse>(url);
                 pd = NGUtils.FormatProgramDetail(resp.Program);
 
                 return pd;
@@ -418,48 +413,47 @@ namespace Phytel.API.AppDomain.NG
         }
 
         #region private methods
-        private void SaveResponsesFromProgram(AD.Program p, string actionId, IProcessActionRequest request)
+        private void SaveResponsesFromProgramAction(AD.Program p, string actionId, IProcessActionRequest request, bool repeat)
         {
             try
             {
                 Actions act = GetActionById(p, actionId);
-                SaveResponses(act, request);
+                SaveResponses(act, request, repeat);
                 // clear response collections
                 foreach (Step stp in act.Steps) { stp.Responses = null; }
             }
             catch (Exception ex)
             {
-                throw new Exception("AD:PlanElementEndpointUtil:SaveResponsesFromProgram()::" + ex.Message, ex.InnerException);
+                throw new Exception("AD:PlanElementEndpointUtil:SaveResponsesFromProgramAction()::" + ex.Message, ex.InnerException);
             }
         }
 
-        private bool ResponseExistsRequest(string stepId, string responseId, IProcessActionRequest request)
+        private void InsertResponseRequest(IProcessActionRequest request, List<Response> r)
         {
-            bool result = false;
             try
             {
                 IRestClient client = new JsonServiceClient();
 
-                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Program/Module/Action/Step/{4}/Response/?ResponseId={5}",
-                                                    DDProgramServiceUrl,
-                                                    "NG",
-                                                    request.Version,
-                                                    request.ContractNumber,
-                                                    stepId,
-                                                    responseId), request.UserId);
+                string url =
+                    Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Program/Module/Action/Step/Responses/Insert",
+                        DDProgramServiceUrl,
+                        "NG",
+                        request.Version,
+                        request.ContractNumber), request.UserId);
 
-                GetStepResponseResponse resp =
-                                    client.Get<GetStepResponseResponse>(
-                                    url);
-
-                if (resp.StepResponse != null)
-                    result = true;
-
-                return result;
+                DD.PutInsertResponseResponse resp =
+                    client.Put<DD.PutInsertResponseResponse>(
+                        url, new DD.PutInsertResponseRequest
+                        {
+                            ResponseDetails = FormatResponseDetails(r),
+                            UserId = request.UserId,
+                            Version = request.Version
+                        } as object);
             }
             catch (Exception ex)
             {
-                throw new Exception("AD:PlanElementEndpointUtil:ResponseExistsRequest()::" + ex.Message, ex.InnerException);
+                throw new Exception("AD:PlanElementEndpointUtil:InsertResponseRequest()::" + ex.Message,
+                    ex.InnerException);
             }
         }
 
@@ -537,7 +531,7 @@ namespace Phytel.API.AppDomain.NG
             }
         }
 
-        public void SaveResponses(Actions action, IProcessActionRequest request)
+        public void SaveResponses(Actions action, IProcessActionRequest request, bool repeat)
         {
             try
             {
@@ -556,7 +550,10 @@ namespace Phytel.API.AppDomain.NG
                     }
                 });
 
-                UpdateResponseRequest(request, rlist);
+                if (repeat)
+                    InsertResponseRequest(request, rlist);
+                else
+                    UpdateResponseRequest(request, rlist);
             }
             catch (Exception ex)
             {
@@ -700,6 +697,79 @@ namespace Phytel.API.AppDomain.NG
             {
                 throw new Exception("AD:PlanElementEndpointUtil:SaveProgramAttributeChanges()::" + ex.Message,
                     ex.InnerException);
+            }
+        }
+
+
+        public Schedule GetScheduleToDoById(string sid, string userId)
+        {
+            try
+            {
+                var request = new GetScheduleDataRequest();
+
+                IRestClient client = new JsonServiceClient();
+
+                var url = Common.Helper.BuildURL(string.Format(@"{0}/{1}/{2}/{3}/Scheduling/Schedule/{4}",
+                    DDSchedulingUrl,
+                    "NG",
+                    "1.0",
+                    "InHealth001",
+                    sid), userId);
+
+                var response = client.Get<GetScheduleDataResponse>(url);
+
+                if (response == null) throw new Exception("Schedule template was not found or initialized.");
+
+                var schedule = new Schedule
+                {
+                    AssignedToId = response.Schedule.AssignedToId,
+                    CategoryId = response.Schedule.CategoryId,
+                    ClosedDate = response.Schedule.ClosedDate,
+                    CreatedById = response.Schedule.CreatedById,
+                    CreatedOn = response.Schedule.CreatedOn,
+                    Description = response.Schedule.Description,
+                    DueDate = response.Schedule.DueDate,
+                    DueDateRange = response.Schedule.DueDateRange,
+                    Id = response.Schedule.Id,
+                    PatientId = response.Schedule.PatientId,
+                    PriorityId = response.Schedule.PriorityId,
+                    ProgramIds = response.Schedule.ProgramIds,
+                    StatusId = response.Schedule.StatusId,
+                    Title = response.Schedule.Title,
+                    TypeId = response.Schedule.TypeId,
+                    UpdatedOn = response.Schedule.UpdatedOn
+                };
+
+                return schedule;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("AD:PlanElementEndpointUtil:GetScheduleToDoById()::" + ex.Message,
+                    ex.InnerException);
+            }
+        }
+
+
+        public object PutInsertToDo(ToDoData todo, string userId)
+        {
+            try
+            {
+                var request = new PutInsertToDoDataRequest();
+                request.ToDoData = todo;
+                IRestClient client = new JsonServiceClient();
+
+                var url = Common.Helper.BuildURL(string.Format(@"{0}/{1}/{2}/{3}/Scheduling/ToDo/Insert",
+                    DDSchedulingUrl,
+                    "NG",
+                    1.0,
+                    "InHealth001"), userId);
+
+                var response = client.Put<PutInsertToDoDataResponse>(url, request);
+                return response;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("AD:PlanElementEndpointUtil:PutInsertToDo()::" + ex.Message, ex.InnerException);
             }
         }
     }

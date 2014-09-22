@@ -7,12 +7,9 @@ namespace Phytel.API.AppDomain.NG.PlanCOR
 {
     public class ModulePlanProcessor : PlanProcessor
     {
-        private ProgramAttributeData _programAttributes;
-        public IPlanElementUtils PeUtils { get; set; }
-
         public ModulePlanProcessor()
         {
-            _programAttributes = new ProgramAttributeData();
+            ProgramAttributes = new ProgramAttributeData();
             if (AppHostBase.Instance != null)
                 AppHostBase.Instance.Container.AutoWire(this);
         }
@@ -25,24 +22,28 @@ namespace Phytel.API.AppDomain.NG.PlanCOR
                 {
                     Module module = e.PlanElement as Module;
                     //PlanElementUtil.SetProgramInformation(_programAttributes, e.Program);
-                    _programAttributes.PlanElementId = e.Program.Id;
+                    ProgramAttributes.PlanElementId = e.Program.Id;
 
                     if (module.Actions != null)
                     {
-                        module.Completed = PeUtils.SetCompletionStatus(module.Actions);
+                        module.Completed = PEUtils.SetCompletionStatus(module.Actions);
                         if (module.Completed)
                         {
                             module.CompletedBy = e.UserId;
                             module.StateUpdatedOn = DateTime.UtcNow;
                             module.ElementState = (int)ElementState.Completed;
                             module.DateCompleted = System.DateTime.UtcNow;
+
                             // look at spawnelement and trigger enabled state.
                             if (module.SpawnElement != null)
                             {
-                                PeUtils.SpawnElementsInList(module.SpawnElement, e.Program, e.UserId, _programAttributes);
+                                PEUtils.SpawnElementsInList(module.SpawnElement, e.Program, e.UserId, ProgramAttributes);
+                                module.SpawnElement.ForEach(
+                                    rse => { if (rse.ElementType > 100) HandlePlanElementActions(e, e.UserId, rse); });
                             }
+
                             // save any program attribute changes
-                            PeUtils.SaveReportingAttributes(_programAttributes, e.DomainRequest);
+                            PEUtils.SaveReportingAttributes(ProgramAttributes, e.DomainRequest);
                             OnProcessIdEvent(module);
                         }
                     }
