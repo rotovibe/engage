@@ -1,4 +1,5 @@
 ﻿using System.Configuration;
+using System.Data.SqlClient;
 using System.Threading.Tasks;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization;
@@ -21,8 +22,8 @@ using Phytel.API.DataDomain.PatientNote;
 using Phytel.API.DataDomain.PatientNote.DTO;
 using Phytel.API.DataDomain.PatientObservation;
 using Phytel.API.DataDomain.PatientObservation.DTO;
-using Phytel.API.DataDomain.PatientProblem;
-using Phytel.API.DataDomain.PatientProblem.DTO;
+//using Phytel.API.DataDomain.PatientProblem;
+//using Phytel.API.DataDomain.PatientProblem.DTO;
 using Phytel.API.DataDomain.PatientSystem;
 using Phytel.API.DataDomain.PatientSystem.DTO;
 using Phytel.API.DataDomain.Scheduling;
@@ -37,6 +38,7 @@ using Objective = Phytel.API.DataDomain.LookUp.DTO.Objective;
 using TimeZone = Phytel.API.DataDomain.LookUp.DTO.TimeZone;
 using System.Windows.Forms;
 using Logging;
+using Phytel.Data.ETL.BulkCopy;
 
 
 namespace Phytel.Data.ETL
@@ -49,6 +51,7 @@ namespace Phytel.Data.ETL
         private int _exponent = Convert.ToInt32(ConfigurationManager.AppSettings["ParallelProcess"]);
         string contract = "InHealth001";
         private List<SpawnElementHash> _spawnElementDict = new List<SpawnElementHash>();
+        private SqlConnection _sqlConnection;
 
         protected virtual void OnEtlEvent(ETLEventArgs e)
         {
@@ -61,6 +64,12 @@ namespace Phytel.Data.ETL
         public ETLProcessor()
         {
             OnEtlEvent(new ETLEventArgs {Message = "ETLProcessor start initialized.", IsError = false});
+
+            var connString =
+                SQLDataService.Instance.GetConnectionString(
+                    ConfigurationManager.AppSettings["PhytelServicesConnName"], contract, true, "REPORT");
+
+            _sqlConnection = new SqlConnection(connString);
         }
 
         public void Rebuild()
@@ -69,35 +78,35 @@ namespace Phytel.Data.ETL
             {
                 OnEtlEvent(new ETLEventArgs { Message = "Truncate Tables.", IsError = false });
                 //Truncate/Delete SQL databases
-                SQLDataService.Instance.ExecuteProcedure("InHealth001", true, "REPORT", "spPhy_RPT_TruncateTables",
-                    new ParameterCollection());
+                //SQLDataService.Instance.ExecuteProcedure("InHealth001", true, "REPORT", "spPhy_RPT_TruncateTables",
+                //    new ParameterCollection());
 
-                RegisterClasses();
-                LoadUsers(contract);
-                LoadLookUps(contract);
-                LoadGoalAttributes(contract);
-                LoadObservations(contract);
-                LoadPatients(contract);
-                LoadPatientSystems(contract);
+                //RegisterClasses();
+                //LoadUsers(contract);
+                //LoadLookUps(contract);
+                //LoadGoalAttributes(contract);
+                //LoadObservations(contract);
+                //LoadPatients(contract);
+                //LoadPatientSystems(contract);
 
-                LoadPatientNotes(contract);
-                LoadPatientProblems(contract);
-                LoadPatientObservations(contract);
-                LoadContacts(contract);
+                //LoadPatientNotes(contract);
+                ////LoadPatientProblems(contract);
+                //LoadPatientObservations(contract);
+                //LoadContacts(contract);
 
-                LoadCareMembers(contract);
-                LoadPatientUsers(contract);
+                //LoadCareMembers(contract);
+                //LoadPatientUsers(contract);
 
-                LoadPatientGoals(contract);
-                LoadPatientBarriers(contract);
-                LoadPatientInterventions(contract);
-                LoadPatientTasks(contract);
+                //LoadPatientGoals(contract);
+                //LoadPatientBarriers(contract);
+                //LoadPatientInterventions(contract);
+                //LoadPatientTasks(contract);
 
-                LoadPatientPrograms(contract);
+                //LoadPatientPrograms(contract);
                 LoadPatientProgramResponses(contract);
-                LoadPatientProgramAttributes(contract);
-                ProcessSpawnElements();
-                LoadToDos(contract);
+                //LoadPatientProgramAttributes(contract);
+                //ProcessSpawnElements();
+                //LoadToDos(contract);
             }
             catch (Exception ex)
             {
@@ -1732,58 +1741,58 @@ namespace Phytel.Data.ETL
             }
         }
 
-        private void LoadPatientProblems(string ctr)
-        {
-            try
-            {
-                OnEtlEvent(new ETLEventArgs { Message = "Loading patient problems.", IsError = false });
+        //private void LoadPatientProblems(string ctr)
+        //{
+        //    try
+        //    {
+        //        OnEtlEvent(new ETLEventArgs { Message = "Loading patient problems.", IsError = false });
 
-                List<MEPatientProblem> problems;                
-                using (PatientProblemMongoContext ppctx = new PatientProblemMongoContext(ctr))
-                {
-                    problems =
-                        ppctx.PatientProblems.Collection.FindAllAs<MEPatientProblem>().ToList();
-                }
+        //        List<MEPatientProblem> problems;                
+        //        using (PatientProblemMongoContext ppctx = new PatientProblemMongoContext(ctr))
+        //        {
+        //            problems =
+        //                ppctx.PatientProblems.Collection.FindAllAs<MEPatientProblem>().ToList();
+        //        }
 
-                //Parallel.ForEach(problems, new ParallelOptions { MaxDegreeOfParallelism = Environment.ProcessorCount * _exponent }, problem =>
-                    foreach (MEPatientProblem problem in problems)//.Where(t => !t.DeleteFlag))
-                    {
-                        try
-                        {
-                            ParameterCollection parms = new ParameterCollection();
-                            parms.Add(new Parameter("@MongoID", (string.IsNullOrEmpty(problem.Id.ToString()) ? string.Empty : problem.Id.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
-                            parms.Add(new Parameter("@PatientMongoId", (string.IsNullOrEmpty(problem.PatientID.ToString()) ? string.Empty : problem.PatientID.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
-                            parms.Add(new Parameter("@ProblemMongoId", (string.IsNullOrEmpty(problem.ProblemID.ToString()) ? string.Empty : problem.ProblemID.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
-                            parms.Add(new Parameter("@Active", (string.IsNullOrEmpty(problem.Active.ToString()) ? string.Empty : problem.Active.ToString()), SqlDbType.VarChar, ParameterDirection.Input, int.MaxValue));
-                            parms.Add(new Parameter("@Featured", (string.IsNullOrEmpty(problem.Featured.ToString()) ? string.Empty : problem.Featured.ToString()), SqlDbType.VarChar, ParameterDirection.Input, int.MaxValue));
-                            parms.Add(new Parameter("@Level", problem.Level, SqlDbType.Int, ParameterDirection.Input, 32));
-                            parms.Add(new Parameter("@UpdatedBy", (string.IsNullOrEmpty(problem.UpdatedBy.ToString()) ? string.Empty : problem.UpdatedBy.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
-                            parms.Add(new Parameter("@LastUpdatedOn", problem.LastUpdatedOn ?? (object)DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
-                            parms.Add(new Parameter("@RecordCreatedBy", (string.IsNullOrEmpty(problem.RecordCreatedBy.ToString()) ? string.Empty : problem.RecordCreatedBy.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
-                            parms.Add(new Parameter("@RecordCreatedOn", problem.RecordCreatedOn, SqlDbType.DateTime, ParameterDirection.Input, 50));
-                            parms.Add(new Parameter("@Version", problem.Version, SqlDbType.Float, ParameterDirection.Input, 32));
-                            parms.Add(new Parameter("@Delete", (string.IsNullOrEmpty(problem.DeleteFlag.ToString()) ? string.Empty : problem.DeleteFlag.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
-                            parms.Add(new Parameter("@StartDate", problem.StartDate ?? (object)DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
-                            parms.Add(new Parameter("@EndDate", problem.EndDate ?? (object)DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
-                            parms.Add(new Parameter("@TTLDate", problem.TTLDate ?? (object)DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
-                            if (problem.ExtraElements != null)
-                                parms.Add(new Parameter("@ExtraElements", problem.ExtraElements.ToString(), SqlDbType.VarChar, ParameterDirection.Input, int.MaxValue));
-                            else
-                                parms.Add(new Parameter("@ExtraElements", string.Empty, SqlDbType.VarChar, ParameterDirection.Input, int.MaxValue));
+        //        //Parallel.ForEach(problems, new ParallelOptions { MaxDegreeOfParallelism = Environment.ProcessorCount * _exponent }, problem =>
+        //            foreach (MEPatientProblem problem in problems)//.Where(t => !t.DeleteFlag))
+        //            {
+        //                try
+        //                {
+        //                    ParameterCollection parms = new ParameterCollection();
+        //                    parms.Add(new Parameter("@MongoID", (string.IsNullOrEmpty(problem.Id.ToString()) ? string.Empty : problem.Id.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
+        //                    parms.Add(new Parameter("@PatientMongoId", (string.IsNullOrEmpty(problem.PatientID.ToString()) ? string.Empty : problem.PatientID.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
+        //                    parms.Add(new Parameter("@ProblemMongoId", (string.IsNullOrEmpty(problem.ProblemID.ToString()) ? string.Empty : problem.ProblemID.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
+        //                    parms.Add(new Parameter("@Active", (string.IsNullOrEmpty(problem.Active.ToString()) ? string.Empty : problem.Active.ToString()), SqlDbType.VarChar, ParameterDirection.Input, int.MaxValue));
+        //                    parms.Add(new Parameter("@Featured", (string.IsNullOrEmpty(problem.Featured.ToString()) ? string.Empty : problem.Featured.ToString()), SqlDbType.VarChar, ParameterDirection.Input, int.MaxValue));
+        //                    parms.Add(new Parameter("@Level", problem.Level, SqlDbType.Int, ParameterDirection.Input, 32));
+        //                    parms.Add(new Parameter("@UpdatedBy", (string.IsNullOrEmpty(problem.UpdatedBy.ToString()) ? string.Empty : problem.UpdatedBy.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
+        //                    parms.Add(new Parameter("@LastUpdatedOn", problem.LastUpdatedOn ?? (object)DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
+        //                    parms.Add(new Parameter("@RecordCreatedBy", (string.IsNullOrEmpty(problem.RecordCreatedBy.ToString()) ? string.Empty : problem.RecordCreatedBy.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
+        //                    parms.Add(new Parameter("@RecordCreatedOn", problem.RecordCreatedOn, SqlDbType.DateTime, ParameterDirection.Input, 50));
+        //                    parms.Add(new Parameter("@Version", problem.Version, SqlDbType.Float, ParameterDirection.Input, 32));
+        //                    parms.Add(new Parameter("@Delete", (string.IsNullOrEmpty(problem.DeleteFlag.ToString()) ? string.Empty : problem.DeleteFlag.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
+        //                    parms.Add(new Parameter("@StartDate", problem.StartDate ?? (object)DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
+        //                    parms.Add(new Parameter("@EndDate", problem.EndDate ?? (object)DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
+        //                    parms.Add(new Parameter("@TTLDate", problem.TTLDate ?? (object)DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
+        //                    if (problem.ExtraElements != null)
+        //                        parms.Add(new Parameter("@ExtraElements", problem.ExtraElements.ToString(), SqlDbType.VarChar, ParameterDirection.Input, int.MaxValue));
+        //                    else
+        //                        parms.Add(new Parameter("@ExtraElements", string.Empty, SqlDbType.VarChar, ParameterDirection.Input, int.MaxValue));
 
-                            SQLDataService.Instance.ExecuteScalar("InHealth001", true, "REPORT", "spPhy_RPT_SavePatientProblem", parms);
-                        }
-                        catch (Exception ex)
-                        {
-                            OnEtlEvent(new ETLEventArgs { Message = ex.Message + ": " + ex.StackTrace, IsError = true });
-                        }
-                    }//);
-            }
-            catch (Exception ex)
-            {
-                throw ex; //SimpleLog.Log(new ArgumentException("LoadPatientProblems()", ex));
-            }
-        }
+        //                    SQLDataService.Instance.ExecuteScalar("InHealth001", true, "REPORT", "spPhy_RPT_SavePatientProblem", parms);
+        //                }
+        //                catch (Exception ex)
+        //                {
+        //                    OnEtlEvent(new ETLEventArgs { Message = ex.Message + ": " + ex.StackTrace, IsError = true });
+        //                }
+        //            }//);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw ex; //SimpleLog.Log(new ArgumentException("LoadPatientProblems()", ex));
+        //    }
+        //}
 
         private void LoadToDos(string ctr)
         {
@@ -1869,7 +1878,7 @@ namespace Phytel.Data.ETL
         {
             try
             {
-                OnEtlEvent(new ETLEventArgs { Message = "Loading patient programs.", IsError = false });
+                OnEtlEvent(new ETLEventArgs {Message = "Loading patient programs.", IsError = false});
 
                 List<MEPatientProgram> programs;
                 using (ProgramMongoContext pctx = new ProgramMongoContext(ctr))
@@ -1877,76 +1886,154 @@ namespace Phytel.Data.ETL
                     programs = Utils.GetMongoCollectionList(pctx.PatientPrograms.Collection, 50);
                 }
 
-                Parallel.ForEach(programs, new ParallelOptions { MaxDegreeOfParallelism = 4 }, prog =>
-                    //foreach (MEPatientProgram prog in programs.Where(prog => !prog.DeleteFlag))
+                            _sqlConnection.Open();
+
+                    Parallel.ForEach(programs, new ParallelOptions {MaxDegreeOfParallelism = 4}, prog =>
+                        //foreach (MEPatientProgram prog in programs.Where(prog => !prog.DeleteFlag))
                     {
                         try
                         {
                             //if(!prog.DeleteFlag)
                             //{
-                                ParameterCollection parms = new ParameterCollection();
-                                parms.Add(new Parameter("@MongoID", prog.Id.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
-                                parms.Add(new Parameter("@MongoPatientId", prog.PatientId.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
-                                parms.Add(new Parameter("@_assignedBy", prog.AssignedBy == null ? string.Empty : prog.AssignedBy.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
-                                parms.Add(new Parameter("@AssignedOn", prog.AssignedOn ?? (object)DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
-                                parms.Add(new Parameter("@_assignedToId", prog.AssignedTo == null ? string.Empty : prog.AssignedTo.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
-                                parms.Add(new Parameter("@AttributeEndDate", prog.AttributeEndDate ?? (object)DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
-                                parms.Add(new Parameter("@AttributeStartDate", prog.AttributeStartDate ?? (object)DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
-                                parms.Add(new Parameter("@Completed", prog.Completed.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
-                                parms.Add(new Parameter("@ContractProgramId", prog.ContractProgramId.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
-                                parms.Add(new Parameter("@Description", prog.Description ?? string.Empty, SqlDbType.VarChar, ParameterDirection.Input, -1));
-                                parms.Add(new Parameter("@EligibilityReason", "", SqlDbType.VarChar, ParameterDirection.Input, 50));
-                                parms.Add(new Parameter("@EligibilityStartDate", prog.EligibilityStartDate ?? (object)DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
-                                parms.Add(new Parameter("@Eligible", "", SqlDbType.VarChar, ParameterDirection.Input, 50));
-                                parms.Add(new Parameter("@EndDate", prog.EndDate ?? (object)DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
-                                parms.Add(new Parameter("@Name", prog.Name ?? null, SqlDbType.VarChar, ParameterDirection.Input, 50));
-                                parms.Add(new Parameter("@Order", prog.Order.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
-                                parms.Add(new Parameter("@ShortName", prog.ShortName ?? string.Empty, SqlDbType.VarChar, ParameterDirection.Input, 50));
-                                parms.Add(new Parameter("@SourceId", prog.SourceId.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
-                                parms.Add(new Parameter("@StartDate", prog.StartDate ?? (object)DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
-                                parms.Add(new Parameter("@State", prog.State.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
-                                parms.Add(new Parameter("@Status", prog.Status.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
-                                parms.Add(new Parameter("@Enabled", prog.Enabled.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
-                                parms.Add(new Parameter("@StateUpdatedOn", prog.StateUpdatedOn ?? (object)DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
-                                parms.Add(new Parameter("@_completedBy", prog.CompletedBy == null ? string.Empty: prog.CompletedBy, SqlDbType.VarChar, ParameterDirection.Input, 50));
-                                parms.Add(new Parameter("@DateCompleted", prog.DateCompleted ?? (object)DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
-                                parms.Add(new Parameter("@EligibilityRequirements", prog.EligibilityRequirements ?? string.Empty, SqlDbType.VarChar, ParameterDirection.Input, -1));
-                                parms.Add(new Parameter("@EligibilityEndDate", prog.EligibilityEndDate ?? (object)DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
-                                parms.Add(new Parameter("@Version", prog.Version.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
-                                parms.Add(new Parameter("@_updatedBy", prog.UpdatedBy == null ? string.Empty : prog.UpdatedBy.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
-                                parms.Add(new Parameter("@LastUpdatedOn", prog.LastUpdatedOn ?? (object)DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));                            
-                                parms.Add(new Parameter("@_recordCreatedBy", prog.RecordCreatedBy.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
-                                parms.Add(new Parameter("@RecordCreatedOn", prog.RecordCreatedOn , SqlDbType.DateTime, ParameterDirection.Input, 50));
-                                parms.Add(new Parameter("@TTLDate", prog.TTLDate ?? (object)DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
-                                parms.Add(new Parameter("@Delete", prog.DeleteFlag.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
-                                //
-                                //parms.Add(new Parameter("@BackGround", (string.IsNullOrEmpty(prog.Background) ? string.Empty : prog.Background), SqlDbType.VarChar, ParameterDirection.Input, 50));
-
-                                var patientProgramId = SQLDataService.Instance.ExecuteScalar("InHealth001", true, "REPORT",
-                                    "spPhy_RPT_SavePatientProgram", parms);
+                            ParameterCollection parms = new ParameterCollection();
+                            parms.Add(new Parameter("@MongoID", prog.Id.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                            parms.Add(new Parameter("@MongoPatientId", prog.PatientId.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                            parms.Add(new Parameter("@_assignedBy", prog.AssignedBy == null ? string.Empty : prog.AssignedBy.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                            parms.Add(new Parameter("@AssignedOn", prog.AssignedOn ?? (object) DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
+                            parms.Add(new Parameter("@_assignedToId", prog.AssignedTo == null ? string.Empty : prog.AssignedTo.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                            parms.Add(new Parameter("@AttributeEndDate", prog.AttributeEndDate ?? (object) DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
+                            parms.Add(new Parameter("@AttributeStartDate", prog.AttributeStartDate ?? (object) DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
+                            parms.Add(new Parameter("@Completed", prog.Completed.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                            parms.Add(new Parameter("@ContractProgramId", prog.ContractProgramId.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                            parms.Add(new Parameter("@Description", prog.Description ?? string.Empty, SqlDbType.VarChar, ParameterDirection.Input, -1));
+                            parms.Add(new Parameter("@EligibilityReason", "", SqlDbType.VarChar, ParameterDirection.Input, 50));
+                            parms.Add(new Parameter("@EligibilityStartDate", prog.EligibilityStartDate ?? (object) DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
+                            parms.Add(new Parameter("@Eligible", "", SqlDbType.VarChar, ParameterDirection.Input, 50));
+                            parms.Add(new Parameter("@EndDate", prog.EndDate ?? (object) DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
+                            parms.Add(new Parameter("@Name", prog.Name ?? null, SqlDbType.VarChar, ParameterDirection.Input, 50));
+                            parms.Add(new Parameter("@Order", prog.Order.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                            parms.Add(new Parameter("@ShortName", prog.ShortName ?? string.Empty, SqlDbType.VarChar, ParameterDirection.Input, 50));
+                            parms.Add(new Parameter("@SourceId", prog.SourceId.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                            parms.Add(new Parameter("@StartDate", prog.StartDate ?? (object) DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
+                            parms.Add(new Parameter("@State", prog.State.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                            parms.Add(new Parameter("@Status", prog.Status.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                            parms.Add(new Parameter("@Enabled", prog.Enabled.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                            parms.Add(new Parameter("@StateUpdatedOn", prog.StateUpdatedOn ?? (object) DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
+                            parms.Add(new Parameter("@_completedBy", prog.CompletedBy == null ? string.Empty : prog.CompletedBy, SqlDbType.VarChar, ParameterDirection.Input, 50));
+                            parms.Add(new Parameter("@DateCompleted", prog.DateCompleted ?? (object) DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
+                            parms.Add(new Parameter("@EligibilityRequirements", prog.EligibilityRequirements ?? string.Empty, SqlDbType.VarChar, ParameterDirection.Input, -1));
+                            parms.Add(new Parameter("@EligibilityEndDate", prog.EligibilityEndDate ?? (object) DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
+                            parms.Add(new Parameter("@Version", prog.Version.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                            parms.Add(new Parameter("@_updatedBy", prog.UpdatedBy == null ? string.Empty : prog.UpdatedBy.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                            parms.Add(new Parameter("@LastUpdatedOn", prog.LastUpdatedOn ?? (object) DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
+                            parms.Add(new Parameter("@_recordCreatedBy", prog.RecordCreatedBy.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                            parms.Add(new Parameter("@RecordCreatedOn", prog.RecordCreatedOn, SqlDbType.DateTime, ParameterDirection.Input, 50));
+                            parms.Add(new Parameter("@TTLDate", prog.TTLDate ?? (object) DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
+                            parms.Add(new Parameter("@Delete", prog.DeleteFlag.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                            //
+                            //parms.Add(new Parameter("@BackGround", (string.IsNullOrEmpty(prog.Background) ? string.Empty : prog.Background), SqlDbType.VarChar, ParameterDirection.Input, 50));
 
 
-                                if (patientProgramId != null && prog.Spawn != null && prog.Spawn.Count > 0)
-                                {
-                                    //LoadSpawnElement(ctr, planElementId, prog.Id.ToString(), prog.Spawn);
-                                    RegisterSpawnElement(prog.Spawn, prog.Id.ToString(), (int)patientProgramId);
-                                }
+                            var patientProgramId = ExecuteScalarSproc(parms, _sqlConnection, "spPhy_RPT_SavePatientProgram");
 
-                                LoadPatientProgramModules(ctr, patientProgramId, prog.Modules, prog);
-                                OnEtlEvent(new ETLEventArgs { Message = "Program:" + prog.Id.ToString() + "Loaded." });
+                            #region -- archived 
+                            // original call
+                            //patientProgramId = SQLDataService.Instance.ExecuteScalar("InHealth001", true,
+                            //    "REPORT",
+                            //    "spPhy_RPT_SavePatientProgram", parms);
+
+                            //var times = 0;
+                            //try
+                            //{
+                            //    ExecuteScalarSproc(parms, out patientProgramId);
+                            //}
+                            //catch (Exception ex)
+                            //{
+                            //    if (ex != null && ex is SqlException)
+                            //    {
+                            //        foreach (SqlError error in (ex as SqlException).Errors)
+                            //        {
+                            //            switch (error.Number)
+                            //            {
+                            //                case 1205:
+                            //                {
+                            //                    System.Diagnostics.Debug.WriteLine(
+                            //                        "SQL Error: Deadlock condition. Retrying...");
+                            //                    //return true;
+                            //                    if (times <= 5)
+                            //                    {
+                            //                        ExecuteScalarSproc(parms, out patientProgramId);
+                            //                        times = times++;
+                            //                    }
+                            //                    break;
+                            //                }
+                            //                case -2:
+                            //                    System.Diagnostics.Debug.WriteLine(
+                            //                        "SQL Error: Timeout expired. Retrying...");
+                            //                    //return true;
+                            //                    if (times <= 5)
+                            //                    {
+                            //                        ExecuteScalarSproc(parms, out patientProgramId);
+                            //                        times = times++;
+                            //                    }
+                            //                    break;
+                            //            }
+                            //        }
+                            //    }
+                            //}
+                            #endregion
+
+                            if (patientProgramId != null && prog.Spawn != null && prog.Spawn.Count > 0)
+                            {
+                                //LoadSpawnElement(ctr, planElementId, prog.Id.ToString(), prog.Spawn);
+                                RegisterSpawnElement(prog.Spawn, prog.Id.ToString(), (int) patientProgramId);
+                            }
+
+                            LoadPatientProgramModules(ctr, patientProgramId, prog.Modules, prog);
+                            OnEtlEvent(new ETLEventArgs {Message = "Program:" + prog.Id.ToString() + "Loaded."});
                             //}
                         }
                         catch (Exception ex)
                         {
-                            OnEtlEvent(new ETLEventArgs { Message = ex.Message + ": " + ex.StackTrace, IsError = true });
+                            OnEtlEvent(new ETLEventArgs {Message = ex.Message + ": " + ex.StackTrace, IsError = true});
                         }
                     });
+                    _sqlConnection.Close();
+
             }
             catch (Exception ex)
             {
                 throw new ArgumentException("LoadPatientPrograms() : ", ex.InnerException);
                 //throw ex; //SimpleLog.Log(new ArgumentException("LoadPatientPrograms()", ex));
             }
+        }
+
+        private object ExecuteScalarSproc(ParameterCollection parms, SqlConnection conn, string sproc)
+        {
+            object result = null;
+            lock (conn)
+            {
+                SqlCommand sqlCommand = new SqlCommand(sproc, conn, null)
+                {
+                    CommandType = CommandType.StoredProcedure,
+                    CommandTimeout = 3600
+                };
+
+                foreach (Parameter parameter in parms)
+                {
+                    SqlParameter sqlParameter = new SqlParameter(parameter.Name, parameter.Value)
+                    {
+                        SqlDbType = parameter.Type,
+                        Direction = parameter.Direction,
+                        Size = parameter.Size
+                    };
+
+                    sqlCommand.Parameters.Add(sqlParameter);
+                }
+
+                result = sqlCommand.ExecuteScalar();
+            }
+            return result;
         }
 
         private void LoadPatientProgramAttributes(string ctr)
@@ -2228,49 +2315,63 @@ namespace Phytel.Data.ETL
                     responses = Utils.GetMongoCollectionList(pmctx.PatientProgramResponses.Collection, 50000);
                 }
 
-                Parallel.ForEach(responses, new ParallelOptions{ MaxDegreeOfParallelism = Environment.ProcessorCount * _exponent }, resp =>
-                    //foreach (MEPatientProgramResponse resp in responses.Where(t => !t.DeleteFlag ))
-                    {
-                        try
+                // get stepidlist
+                var stepIdList = Utils.GetStepIdList();
+                var rSeries = ReadSeries.ReadEStepResponseSeries(responses);
+
+                _sqlConnection.Open();
+                    Parallel.ForEach(responses,  resp =>
+                        //foreach (MEPatientProgramResponse resp in responses)//.Where(t => !t.DeleteFlag ))
                         {
-                            //if(!resp.DeleteFlag)
-                            //{
-                                ParameterCollection parms = new ParameterCollection();
-                                parms.Add(new Parameter("@_id", resp.Id.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
-                                parms.Add(new Parameter("@_actionId", resp.ActionId.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
-                                parms.Add(new Parameter("@Order", resp.Order.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
-                                parms.Add(new Parameter("@Text", resp.Text == null ? string.Empty : resp.Text, SqlDbType.VarChar, ParameterDirection.Input, 50));
-                                parms.Add(new Parameter("@_stepId", resp.StepId == null ? string.Empty : resp.StepId.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
-                                parms.Add(new Parameter("@Value", resp.Value == null ? string.Empty : resp.Value, SqlDbType.VarChar, ParameterDirection.Input, 50));
-                                parms.Add(new Parameter("@Nominal", resp.Nominal.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
-                                parms.Add(new Parameter("@Required", resp.Required.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
-                                parms.Add(new Parameter("@_nextStepId", resp.NextStepId == null ? string.Empty : resp.NextStepId.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
-                                parms.Add(new Parameter("@Selected", resp.Selected.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
-                                parms.Add(new Parameter("@_stepSourceId", resp.StepSourceId.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
-                                parms.Add(new Parameter("@Version", resp.Version, SqlDbType.Float, ParameterDirection.Input, 50));
-                                parms.Add(new Parameter("@_updatedBy", resp.UpdatedBy == null ? string.Empty : resp.UpdatedBy.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
-                                parms.Add(new Parameter("@_recordCreatedBy", resp.RecordCreatedBy.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
-                                parms.Add(new Parameter("@RecordCreatedOn", resp.RecordCreatedOn , SqlDbType.DateTime, ParameterDirection.Input, 50));
-                                parms.Add(new Parameter("@TTLDate", resp.TTLDate ?? (object)DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
-                                parms.Add(new Parameter("@Delete", resp.DeleteFlag.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
-                                parms.Add(new Parameter("@LastUpdatedOn", resp.LastUpdatedOn ?? (object)DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
+                            try
+                            {
+                                //if(!resp.DeleteFlag)
+                                //{
+                                    ParameterCollection parms = new ParameterCollection();
+                                    parms.Add(new Parameter("@_id", resp.Id.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                                    parms.Add(new Parameter("@_actionId", resp.ActionId.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                                    parms.Add(new Parameter("@Order", resp.Order.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                                    parms.Add(new Parameter("@Text", resp.Text == null ? string.Empty : resp.Text, SqlDbType.VarChar, ParameterDirection.Input, 50));
+                                    parms.Add(new Parameter("@_stepId", resp.StepId == null ? string.Empty : resp.StepId.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                                    parms.Add(new Parameter("@Value", resp.Value == null ? string.Empty : resp.Value, SqlDbType.VarChar, ParameterDirection.Input, 50));
+                                    parms.Add(new Parameter("@Nominal", resp.Nominal.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                                    parms.Add(new Parameter("@Required", resp.Required.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                                    parms.Add(new Parameter("@_nextStepId", resp.NextStepId == null ? string.Empty : resp.NextStepId.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                                    parms.Add(new Parameter("@Selected", resp.Selected.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                                    parms.Add(new Parameter("@_stepSourceId", resp.StepSourceId.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                                    parms.Add(new Parameter("@Version", resp.Version, SqlDbType.Float, ParameterDirection.Input, 50));
+                                    parms.Add(new Parameter("@_updatedBy", resp.UpdatedBy == null ? string.Empty : resp.UpdatedBy.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                                    parms.Add(new Parameter("@_recordCreatedBy", resp.RecordCreatedBy.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                                    parms.Add(new Parameter("@RecordCreatedOn", resp.RecordCreatedOn , SqlDbType.DateTime, ParameterDirection.Input, 50));
+                                    parms.Add(new Parameter("@TTLDate", resp.TTLDate ?? (object)DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
+                                    parms.Add(new Parameter("@Delete", resp.DeleteFlag.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                                    parms.Add(new Parameter("@LastUpdatedOn", resp.LastUpdatedOn ?? (object)DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
 
-                                var responseId = SQLDataService.Instance.ExecuteScalar("InHealth001", true, "REPORT", "spPhy_RPT_SavePatientProgramResponse", parms);
+                                    //var responseId = SQLDataService.Instance.ExecuteScalar("InHealth001", true, "REPORT", "spPhy_RPT_SavePatientProgramResponse", parms);
 
-                                if (responseId != null && resp.Spawn != null && resp.Spawn.Count > 0)
-                                {
-                                    //LoadSpawnElement(ctr, responseId, resp.Id.ToString(), resp.Spawn);
-                                    RegisterSpawnElement(resp.Spawn, resp.Id.ToString(), (int)responseId);
-                                }
+                                    var responseId = ExecuteScalarSproc(parms, _sqlConnection, "spPhy_RPT_SavePatientProgramResponse");
 
-                                OnEtlEvent(new ETLEventArgs { Message = "Program response: " + resp.Id.ToString() + " Loaded." });
-                            //}
-                        }
-                        catch (Exception ex)
-                        {
-                            OnEtlEvent(new ETLEventArgs { Message = ex.Message + ": " + ex.StackTrace, IsError = true });
-                        }
-                    });
+                                    ///
+                                    var bulkCopy = new SqlBulkCopy(_sqlConnection);
+
+                                    ///
+
+
+                                    if (responseId != null && resp.Spawn != null && resp.Spawn.Count > 0)
+                                    {
+                                        //LoadSpawnElement(ctr, responseId, resp.Id.ToString(), resp.Spawn);
+                                        RegisterSpawnElement(resp.Spawn, resp.Id.ToString(), (int)responseId);
+                                    }
+
+                                    OnEtlEvent(new ETLEventArgs { Message = "Program response: " + resp.Id.ToString() + " Loaded." });
+                                //}
+                            }
+                            catch (Exception ex)
+                            {
+                                OnEtlEvent(new ETLEventArgs { Message = ex.Message + ": " + ex.StackTrace, IsError = true });
+                            }
+                        });
+                _sqlConnection.Close();
             }
             catch (Exception ex)
             {
