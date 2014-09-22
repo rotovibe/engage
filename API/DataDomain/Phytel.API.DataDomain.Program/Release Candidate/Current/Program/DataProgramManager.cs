@@ -27,7 +27,7 @@ namespace Phytel.API.DataDomain.Program
             try
             {
                 PutProgramToPatientResponse response = new PutProgramToPatientResponse();
-                response.Outcome = new Outcome();
+                response.Outcome = new Phytel.API.DataDomain.Program.DTO.Outcome();
 
                 #region validation calls
                 if (!IsValidPatientId(request))
@@ -102,6 +102,45 @@ namespace Phytel.API.DataDomain.Program
             catch (Exception ex)
             {
                 throw new Exception("DD:DataProgramManager:PutProgramActionUpdate()::" + ex.Message, ex.InnerException);
+            }
+        }
+
+        public PutInsertResponseResponse PutInsertResponse(PutInsertResponseRequest request)
+        {
+            try
+            {
+                PutInsertResponseResponse result = new PutInsertResponseResponse();
+                IProgramRepository responseRepo = Factory.GetRepository(request, RepositoryType.PatientProgramResponse);
+
+                foreach (ResponseDetail rd in request.ResponseDetails)
+                {
+                    MEPatientProgramResponse meres = new MEPatientProgramResponse(request.UserId)
+                    {
+                        Id = ObjectId.Parse(rd.Id),
+                        NextStepId = ObjectId.Parse(rd.NextStepId),
+                        Nominal = rd.Nominal,
+                        Spawn = ParseSpawnElements(rd.SpawnElement),
+                        Required = rd.Required,
+                        Order = rd.Order,
+                        StepId = ObjectId.Parse(rd.StepId),
+                        Text = rd.Text,
+                        Value = rd.Value,
+                        Selected = rd.Selected,
+                        DeleteFlag = rd.Delete,
+                        UpdatedBy = ObjectId.Parse(request.UserId),
+                        RecordCreatedBy = ObjectId.Parse(request.UserId),
+                        RecordCreatedOn = DateTime.UtcNow
+                    };
+
+                    //result.Result = (bool) 
+                    responseRepo.Insert(meres);
+                    result.Result = true;
+                }
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("DD:DataProgramManager:PutInsertResponse()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -379,15 +418,15 @@ namespace Phytel.API.DataDomain.Program
                     patientPrograms.ForEach(pd => lpi.Add(new ProgramInfo
                     {
                         Id = Convert.ToString(pd.Id),
-                        Name = pd.Name,
+                                Name = pd.Name,
                         PatientId = Convert.ToString(pd.PatientId),
-                        ShortName = pd.ShortName,
+                                ShortName = pd.ShortName,
                         Status = (int)pd.Status,
                         ElementState = (int)pd.State
-                    })
+                            })
                         );
-                    response.programs = lpi;
-                }
+                        response.programs = lpi;
+                    }
 
                 return response;
             }
@@ -792,7 +831,7 @@ namespace Phytel.API.DataDomain.Program
             try
             {
                 response.Status = new ResponseStatus(errorcode, reason);
-                response.Outcome = new Outcome() { Reason = reason, Result = 0 };
+                response.Outcome = new Phytel.API.DataDomain.Program.DTO.Outcome() { Reason = reason, Result = 0 };
                 return response;
             }
             catch (Exception ex)

@@ -52,6 +52,12 @@ namespace Phytel.API.DataDomain.Program.Procs.Tests
             }
 
             [TestMethod()]
+            public void UpdatePatientActionStateUpdateDate_Test()
+            {
+                executeMongoProcedure("mp_UpdatePatientActionStateUpdateDate");
+            }
+
+            [TestMethod()]
             public void UpdateStateForProgramsAndModules_Test()
             {
                 executeMongoProcedure("mp_UpdateStateForProgramsAndModules");
