@@ -16,6 +16,10 @@ namespace Phytel.API.DataDomain.PatientObservation.Service
             {
                 //register any dependencies your services use, e.g:
                 //container.Register<ICacheClient>(new MemoryCacheClient());
+                container.RegisterAutoWiredAs<PatientObservationDataManager, IPatientObservationDataManager>();
+                container.RegisterAutoWiredAs<PatientObservationRepositoryFactory, IPatientObservationRepositoryFactory>();
+                container.RegisterAutoWiredAs<ObservationUtil, IObservationUtil>();
+
                 Plugins.Add(new RequestLogsFeature() { RequiredRoles = new string[] { } });
             }
         }

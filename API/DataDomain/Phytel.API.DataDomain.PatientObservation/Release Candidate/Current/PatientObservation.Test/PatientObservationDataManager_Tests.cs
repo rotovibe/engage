@@ -19,7 +19,7 @@ namespace Phytel.API.DataDomain.PatientObservation.Tests
             request.Context = "NG";
             request.PatientId = "5325db4cd6a4850adcbba8da";
             request.Version = 1.0;
-            PatientObservationDataManager.GetPatientProblemList(request);
+            new PatientObservationDataManager().GetPatientProblemList(request);
         }
 
         [TestMethod()]
@@ -34,7 +34,7 @@ namespace Phytel.API.DataDomain.PatientObservation.Tests
                 UserId = "000000000000000000000000",
                 Version = 1.0
             };
-            GetPatientObservationResponse response = PatientObservationDataManager.GetPatientObservationByID(request);
+            GetPatientObservationResponse response = new PatientObservationDataManager().GetPatientObservationByID(request);
             Assert.IsNotNull(response);
         }
     }

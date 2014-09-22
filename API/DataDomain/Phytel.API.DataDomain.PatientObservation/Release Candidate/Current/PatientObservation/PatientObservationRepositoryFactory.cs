@@ -4,44 +4,37 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Phytel.API.Interface;
+using Phytel.API.DataDomain.PatientObservation.MongoDB.DTO;
+using Phytel.API.DataDomain.PatientObservation.DTO;
 
 namespace Phytel.API.DataDomain.PatientObservation
 {
-    public abstract class PatientObservationRepositoryFactory<T>
+    public class PatientObservationRepositoryFactory : IPatientObservationRepositoryFactory
     {
-        public static IPatientObservationRepository<T> GetPatientObservationRepository(string dbName, string productName, string userId)
+        public IPatientObservationRepository GetRepository(IDataDomainRequest request, RepositoryType type)
         {
-            try
-            {
-                IPatientObservationRepository<T> repo = null;
+            IPatientObservationRepository repo = null;
 
-                //We only have 1 repository at this time, just return it
-                repo = new MongoPatientObservationRepository<T>(dbName) as IPatientObservationRepository<T>;
-                repo.UserId = userId;
-                return repo;
-            }
-            catch (Exception ex)
+            switch (type)
             {
-                throw ex;
+                case RepositoryType.PatientObservation:
+                {
+                    repo =
+                        new MongoPatientObservationRepository(request.ContractNumber);
+                    break;
+                }
+                case RepositoryType.Observation:
+                {
+                    repo =
+                        new MongoObservationRepository(request.ContractNumber);
+                    break;
+                }
             }
-        }
 
-        internal static IPatientObservationRepository<T> GetObservationRepository(string dbName, string productName, string userId)
-        {
-            try
-            {
-                IPatientObservationRepository<T> repo = null;
+            if (repo != null)
+                repo.UserId = request.UserId;
 
-                //We only have 1 repository at this time, just return it
-                repo = new MongoObservationRepository<T>(dbName) as IPatientObservationRepository<T>;
-                repo.UserId = userId;
-
-                return repo;
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
+            return repo;
         }
     }
 }

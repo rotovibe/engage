@@ -3,6 +3,7 @@ using System.Text;
 using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Phytel.API.DataDomain.PatientObservation.DTO;
+using Phytel.API.DataDomain.PatientObservation.MongoDB.DTO;
 
 namespace Phytel.API.DataDomain.PatientObservation.Test
 {
@@ -20,51 +21,29 @@ namespace Phytel.API.DataDomain.PatientObservation.Test
         [TestMethod]
         public void GetAllowedObservationStates_CorrectType_Test()
         {
-            // Arrange
-
-            string type = "Lab";
-
-            IPatientObservationRepository<object> repo =
-                PatientObservationRepositoryFactory<object>.GetPatientObservationRepository(contractNumber, context, userId);
-            GetAllowedStatesDataRequest request = new GetAllowedStatesDataRequest { TypeName = type, Context = context, ContractNumber = contractNumber, UserId = userId, Version = 1 };
-            GetAllowedStatesDataResponse response = PatientObservationDataManager.GetAllowedStates(request);
+            GetAllowedStatesDataRequest request = new GetAllowedStatesDataRequest { Context = context, ContractNumber = contractNumber, UserId = userId, Version = 1 };
+            PatientObservationDataManager cm = new PatientObservationDataManager { Factory = new PatientObservationRepositoryFactory() };
+            GetAllowedStatesDataResponse response = cm.GetAllowedStates(request);
 
             Assert.IsTrue(response.StatesData.Count > 0);
         }
 
         [TestMethod]
-        public void GetAllowedObservationStates_IncorrectType_NullResult_Test()
+        public void GetObservations_Test()
         {
             // Arrange
             string userId = string.Empty;
             string contractNumber = "InHealth001";
             string context = "NG";
-            string type = "Labs";
 
-            IPatientObservationRepository<object> repo =
-                PatientObservationRepositoryFactory<object>.GetPatientObservationRepository(contractNumber, context, userId);
-            GetAllowedStatesDataRequest request = new GetAllowedStatesDataRequest { TypeName = type, Context = context, ContractNumber = contractNumber, UserId = userId, Version = 1 };
-            GetAllowedStatesDataResponse response = PatientObservationDataManager.GetAllowedStates(request);
 
-            Assert.IsNull(response.StatesData);
+            GetObservationsDataRequest request = new GetObservationsDataRequest { Context = context, ContractNumber = contractNumber, UserId = userId, Version = 1 };
+            IPatientObservationRepository repo = new PatientObservationRepositoryFactory().GetRepository(request, RepositoryType.PatientObservation);            
+            GetObservationsDataResponse response = new PatientObservationDataManager().GetObservationsData(request);
+
+            Assert.IsNotNull(response.ObservationsData);
         }
 
-        [TestMethod]
-        public void GetObservationsByType_StandardIsFalse_Test()
-        {
-            // Arrange
-            string userId = string.Empty;
-            string contractNumber = "InHealth001";
-            string context = "NG";
-            string typeId = "53067408fe7a591a348e1b65";
-            bool? standard = false;
-
-            IPatientObservationRepository<object> repo =
-                PatientObservationRepositoryFactory<object>.GetPatientObservationRepository(contractNumber, context, userId);
-            GetAdditionalLibraryObservationsRequest request = new GetAdditionalLibraryObservationsRequest { Standard = standard, TypeId = typeId, Context = context, ContractNumber = contractNumber, UserId = userId, Version = 1 };
-            GetAdditionalLibraryObservationsResponse response = PatientObservationDataManager.GetAdditionalObservationsLibraryByType(request);
-
-            Assert.IsNotNull(response.Library);
-        }
+        
     }
 }
