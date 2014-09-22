@@ -34,17 +34,15 @@ namespace Phytel.API.AppDomain.Security
             }
         }
 
-        public static UserAuthenticateResponse ValidateCredentials(string userName, string password, string securityToken, string apiKey, string productName)
+        public static UserAuthenticateResponse ValidateCredentials(string userName, string password, string securityToken, string apiKey, string productName, string contractNumber)
         {
             try
             {
-                throw new NotImplementedException();
+                ISecurityRepository<UserAuthenticateResponse> securityRepo = SecurityRepositoryFactory<UserAuthenticateResponse>.GetSecurityRepository(productName);
 
-                //ISecurityRepository<UserAuthenticateResponse> securityRepo = SecurityRepositoryFactory<UserAuthenticateResponse>.GetSecurityRepository(productName);
+                UserAuthenticateResponse response = securityRepo.LoginUser(userName, password, securityToken, apiKey, productName, contractNumber);
 
-                //UserAuthenticateResponse response = securityRepo.LoginUser(userName, password, securityToken, apiKey, productName);
-
-                //return response;
+                return response;
             }
             catch (Exception)
             {

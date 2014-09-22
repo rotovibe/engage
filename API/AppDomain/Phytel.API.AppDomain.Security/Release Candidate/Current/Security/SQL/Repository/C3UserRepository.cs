@@ -118,7 +118,7 @@ namespace Phytel.API.AppDomain.Security
             throw new NotImplementedException();
         }
 
-        public DTO.UserAuthenticateResponse LoginUser(string userName, string password, string securityToken, string apiKey, string productName)
+        public DTO.UserAuthenticateResponse LoginUser(string userName, string password, string securityToken, string apiKey, string productName, string contractNumber)
         {
             throw new NotImplementedException();
         }
