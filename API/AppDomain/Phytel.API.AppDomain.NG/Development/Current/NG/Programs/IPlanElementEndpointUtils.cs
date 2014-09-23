@@ -32,7 +32,7 @@ namespace Phytel.API.AppDomain.NG.Programs
         void SaveResponses(Actions action, IProcessActionRequest request, bool repeat);
         AD.Outcome SaveProgramAttributeChanges(PostProgramAttributesChangeRequest request, ProgramDetail pg);
 
-        Schedule GetScheduleToDoById(string p, string userId);
+        Schedule GetScheduleToDoById(string p, string userId, IAppDomainRequest request);
 
         object PutInsertToDo(ToDoData todo, string p);
     }

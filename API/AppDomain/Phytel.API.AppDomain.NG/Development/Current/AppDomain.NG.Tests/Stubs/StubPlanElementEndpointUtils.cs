@@ -2,6 +2,7 @@
 using Phytel.API.AppDomain.NG.Programs;
 using Phytel.API.DataDomain.Program.DTO;
 using Phytel.API.DataDomain.Scheduling.DTO;
+using Phytel.API.Interface;
 using ServiceStack.Service;
 using ServiceStack.ServiceHost;
 using System;
@@ -300,7 +301,7 @@ namespace Phytel.API.AppDomain.NG.Test.Stubs
         }
 
 
-        public DTO.Scheduling.Schedule GetScheduleToDoById(string p, string userId)
+        public DTO.Scheduling.Schedule GetScheduleToDoById(string p, string userId, IAppDomainRequest request)
         {
             throw new NotImplementedException();
         }
