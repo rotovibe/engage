@@ -73,7 +73,7 @@ namespace Phytel.API.AppDomain.NG.Programs.ElementActivation
                 try
                 {
                     // register new todo
-                    var result = EndpointUtil.PutInsertToDo(todo, arg.UserId);
+                    var result = EndpointUtil.PutInsertToDo(todo, arg.UserId, arg.DomainRequest);
                 }
                 catch (Exception ex)
                 {
