@@ -32,7 +32,7 @@ namespace Phytel.API.AppDomain.NG.Programs.ElementActivation
                 try
                 {
                     // get template todo from schedule endpoint
-                    todoTemp = EndpointUtil.GetScheduleToDoById(pe.ElementId, userId);
+                    todoTemp = EndpointUtil.GetScheduleToDoById(pe.ElementId, userId, arg.DomainRequest);
                 }
                 catch(Exception ex)
                 {
@@ -73,7 +73,7 @@ namespace Phytel.API.AppDomain.NG.Programs.ElementActivation
                 try
                 {
                     // register new todo
-                    var result = EndpointUtil.PutInsertToDo(todo, arg.UserId);
+                    var result = EndpointUtil.PutInsertToDo(todo, arg.UserId, arg.DomainRequest);
                 }
                 catch (Exception ex)
                 {

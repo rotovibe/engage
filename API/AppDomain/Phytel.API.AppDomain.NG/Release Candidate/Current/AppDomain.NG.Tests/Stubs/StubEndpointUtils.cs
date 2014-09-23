@@ -9,6 +9,7 @@ using Phytel.API.DataDomain.Patient.DTO;
 using Phytel.API.DataDomain.PatientObservation.DTO;
 using Phytel.API.DataDomain.Program.DTO;
 using Phytel.API.DataDomain.Scheduling.DTO;
+using Phytel.API.Interface;
 
 namespace Phytel.API.AppDomain.NG.Test.Stubs
 {
@@ -95,7 +96,7 @@ namespace Phytel.API.AppDomain.NG.Test.Stubs
         }
 
 
-        public DTO.Scheduling.Schedule GetScheduleToDoById(string p, string userId)
+        public DTO.Scheduling.Schedule GetScheduleToDoById(string p, string userId, IAppDomainRequest request)
         {
             return new DTO.Scheduling.Schedule
             {
@@ -116,7 +117,7 @@ namespace Phytel.API.AppDomain.NG.Test.Stubs
         }
 
 
-        public object PutInsertToDo(ToDoData todo, string p)
+        public object PutInsertToDo(ToDoData todo, string p, IAppDomainRequest req)
         {
             // insert implementation here
             return new object();

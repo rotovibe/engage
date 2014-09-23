@@ -318,7 +318,7 @@ namespace Phytel.API.AppDomain.NG.Tests
         public void GetScheduleToDoByIdTest()
         {
             EndpointUtils utils = new EndpointUtils();
-            utils.GetScheduleToDoById("53ff6b92d4332314bcab46e0", "5325c821072ef705080d3488");
+            utils.GetScheduleToDoById("53ff6b92d4332314bcab46e0", "5325c821072ef705080d3488", new GetToDosRequest{ Version=1.0, ContractNumber="InHealth001", UserId="1234"});
         }
     }
 }
