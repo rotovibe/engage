@@ -812,5 +812,26 @@ namespace Phytel.API.AppDomain.NG.Tests
                 Assert.AreNotEqual(pe.AssignDate, null);
             }
         }
+
+
+        [TestClass()]
+        public class SetProgramAttributesTest
+        {
+            [TestMethod()]
+            public void SetProgramAttributes_Null_attributes()
+            {
+                try
+                {
+                    IPlanElementUtils pUtils = new PlanElementUtils();
+                    AD.PlanElement pe = new AD.PlanElement {Enabled = false};
+                    pUtils.SetProgramAttributes(new AD.SpawnElement {Tag = "0", ElementType = 19, ElementId = "1234"},
+                        new AD.Program {Name = "test"}, "user", null);
+                }
+                catch (Exception ex)
+                {
+                    Assert.IsTrue(ex != null);
+                }
+            }
+        }
     }
 }

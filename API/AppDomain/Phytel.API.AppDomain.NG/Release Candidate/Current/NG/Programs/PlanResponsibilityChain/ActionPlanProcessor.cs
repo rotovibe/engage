@@ -38,7 +38,7 @@ namespace Phytel.API.AppDomain.NG.PlanCOR
                         //2) look at spawnelement and trigger enabled state.
                         if (action.SpawnElement != null)
                         {
-                            PEUtils.SpawnElementsInList(action.SpawnElement, e.Program, e.UserId, ProgramAttributes);
+                            PEUtils.SpawnElementsInList(action.SpawnElement, e.Program, e.UserId, _programAttributes);
                             action.SpawnElement.ForEach(
                                 rse => { if (rse.ElementType > 100) HandlePlanElementActions(e, e.UserId, rse); });
                         }
