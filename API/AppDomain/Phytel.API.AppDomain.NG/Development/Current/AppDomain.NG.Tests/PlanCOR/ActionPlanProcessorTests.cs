@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using Phytel.API.AppDomain.NG.PlanCOR;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Phytel.API.AppDomain.NG.Test.Stubs;
+
 namespace Phytel.API.AppDomain.NG.PlanCOR.Tests
 {
     [TestClass()]
@@ -13,7 +15,12 @@ namespace Phytel.API.AppDomain.NG.PlanCOR.Tests
         [TestMethod()]
         public void PlanElementHandler_Test()
         {
-            Assert.Fail();
+            var actionPlan = new ActionPlanProcessor
+            {
+                PeUtils = new StubPlanElementUtils(),
+                PEUtils = new StubPlanElementUtils()
+            };
+            Assert.IsNotNull(actionPlan);
         }
     }
 }

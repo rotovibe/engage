@@ -381,11 +381,14 @@ namespace Phytel.API.AppDomain.NG
                             throw new ArgumentException("Cannot set attribute of type " + r.ElementType +
                                                         ". Tag value is null.");
 
+                        if (progAttr == null)
+                            throw new ArgumentException(" ProgramAttributes is null.");
+
                         progAttr.GraduatedFlag = (!string.IsNullOrEmpty(r.Tag)) ? Convert.ToInt32(r.Tag) : 0;
                     }
                     catch (Exception ex)
                     {
-                        throw new Exception("AD:SetProgramAttributes()::GraduatedFlag" + ex.Message, ex.InnerException);
+                        throw new Exception("AD:SetProgramAttributes()::GraduatedFlag:" + ex.Message, ex.InnerException);
                     }
                 }
                 else if (r.ElementType == 20)
