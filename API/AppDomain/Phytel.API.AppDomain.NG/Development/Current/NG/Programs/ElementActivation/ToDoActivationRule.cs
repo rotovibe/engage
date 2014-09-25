@@ -64,6 +64,12 @@ namespace Phytel.API.AppDomain.NG.Programs.ElementActivation
                         ProgramIds = prog,
                         CreatedOn = DateTime.UtcNow
                     };
+
+                    // modified for ENG-709
+                    if (todo.StatusId == 2 || todo.StatusId == 4)
+                    {
+                        todo.ClosedDate = DateTime.UtcNow;
+                    }
                 }
                 catch (Exception ex)
                 {

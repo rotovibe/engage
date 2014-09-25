@@ -109,7 +109,7 @@ namespace Phytel.API.AppDomain.NG.Test.Stubs
                 ProgramIds = new List<string> {ObjectId.GenerateNewId().ToString()},
                 Title = "Test Title for sample",
                 PriorityId = 3,
-                StatusId = 1,
+                StatusId = 2,
                 PatientId = ObjectId.GenerateNewId().ToString(),
                 CreatedOn = DateTime.UtcNow,
                 TypeId = 2
