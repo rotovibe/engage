@@ -51,20 +51,88 @@ namespace Phytel.API.AppDomain.NG.Programs.ElementActivation.Tests
             Assert.AreEqual(type, 200);
         }
 
+        [TestMethod()]
+        public void HandleToDoTemplateRegistration_Status_Met()
+        {
+            ToDoActivationRule rule = new ToDoActivationRule
+            {
+                EndpointUtil = new StubEndpointUtils(),
+                PlanUtils = new PlanElementUtils()
+            };
+
+            var patientId = ObjectId.GenerateNewId().ToString();
+
+            PlanElementEventArg arg = new PlanElementEventArg
+            {
+                Program = new Program
+                {
+                    Id = ObjectId.GenerateNewId().ToString(),
+                    PatientId = patientId
+                },
+                UserId = "5325c821072ef705080d3488",
+                Action = new Actions { Id = ObjectId.GenerateNewId().ToString() },
+                PatientId = patientId,
+                PlanElement = new Step()
+            };
+
+            var se = new SpawnElement
+            {
+                ElementType = 201,
+                ElementId = "53ff6b92d4332314bcab46e0"
+            };
+
+            var type = rule.Execute(arg.UserId, arg, se, new ProgramAttributeData());
+            Assert.AreEqual(type, 200);
+        }
+
+        [TestMethod()]
+        public void HandleToDoTemplateRegistration_Status_Abandoned()
+        {
+            ToDoActivationRule rule = new ToDoActivationRule
+            {
+                EndpointUtil = new StubEndpointUtils(),
+                PlanUtils = new PlanElementUtils()
+            };
+
+            var patientId = ObjectId.GenerateNewId().ToString();
+
+            PlanElementEventArg arg = new PlanElementEventArg
+            {
+                Program = new Program
+                {
+                    Id = ObjectId.GenerateNewId().ToString(),
+                    PatientId = patientId
+                },
+                UserId = "5325c821072ef705080d3488",
+                Action = new Actions { Id = ObjectId.GenerateNewId().ToString() },
+                PatientId = patientId,
+                PlanElement = new Step()
+            };
+
+            var se = new SpawnElement
+            {
+                ElementType = 201,
+                ElementId = "53ff6b92d4332314bcab46e0"
+            };
+
+            var type = rule.Execute(arg.UserId, arg, se, new ProgramAttributeData());
+            Assert.AreEqual(type, 200);
+        }
+
         [TestClass()]
         public class HandleDueDateTest
         {
             [TestMethod()]
             public void HandleDueDate_HasRange()
             {
-                var days = 5;
+                var days = 10;
                 ToDoActivationRule rule = new ToDoActivationRule();
                 var duedate = rule.HandleDueDate(days);
-                var date = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.AddDays(days).Day,
-                    0, 0, 0);
-                var utcDate = TimeZoneInfo.ConvertTimeToUtc(date);
 
-                Assert.AreEqual(duedate, utcDate);
+                var nDt = DateTime.UtcNow.AddDays(days);
+                var dDate = new DateTime(nDt.Year, nDt.Month, nDt.Day, 12, 0, 0);
+
+                Assert.AreEqual(duedate, dDate);
             }
 
             [TestMethod()]

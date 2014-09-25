@@ -64,6 +64,12 @@ namespace Phytel.API.AppDomain.NG.Programs.ElementActivation
                         ProgramIds = prog,
                         CreatedOn = DateTime.UtcNow
                     };
+
+                    // modified for ENG-709
+                    if (todo.StatusId == 2 || todo.StatusId == 4)
+                    {
+                        todo.ClosedDate = DateTime.UtcNow;
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -95,11 +101,12 @@ namespace Phytel.API.AppDomain.NG.Programs.ElementActivation
                 DateTime? dueDate = null;
                 if (days == null) return dueDate;
 
-                if (days > 0)
+                if (days > -1)
                 {
                     //var calcDate 
-                    dueDate = new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.Month,
-                        DateTime.UtcNow.AddDays(days.Value).Day, 12, 0, 0);
+                    var nDt = DateTime.UtcNow.AddDays(days.Value);
+                    dueDate = new DateTime(nDt.Year, nDt.Month,
+                        nDt.Day, 12, 0, 0);
                     //dueDate = TimeZoneInfo.ConvertTimeToUtc(calcDate);
                 }
 
