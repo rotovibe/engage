@@ -101,7 +101,7 @@ namespace Phytel.API.AppDomain.NG.Programs.ElementActivation
                 DateTime? dueDate = null;
                 if (days == null) return dueDate;
 
-                if (days > 0)
+                if (days > -1)
                 {
                     //var calcDate 
                     var nDt = DateTime.UtcNow.AddDays(days.Value);
