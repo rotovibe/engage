@@ -125,14 +125,14 @@ namespace Phytel.API.AppDomain.NG.Programs.ElementActivation.Tests
             [TestMethod()]
             public void HandleDueDate_HasRange()
             {
-                var days = 5;
+                var days = 10;
                 ToDoActivationRule rule = new ToDoActivationRule();
                 var duedate = rule.HandleDueDate(days);
-                var date = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.AddDays(days).Day,
-                    0, 0, 0);
-                var utcDate = TimeZoneInfo.ConvertTimeToUtc(date);
 
-                Assert.AreEqual(duedate, utcDate);
+                var nDt = DateTime.UtcNow.AddDays(days);
+                var dDate = new DateTime(nDt.Year, nDt.Month, nDt.Day, 12, 0, 0);
+
+                Assert.AreEqual(duedate, dDate);
             }
 
             [TestMethod()]
