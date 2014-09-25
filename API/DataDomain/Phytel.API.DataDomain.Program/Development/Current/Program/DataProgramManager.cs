@@ -74,7 +74,7 @@ namespace Phytel.API.DataDomain.Program
                     }
 
                     response.Outcome.Result = 1;
-                    response.Outcome.Reason = "Successfully assigned this program for the patient";
+                    response.Outcome.Reason = "Successfully assigned this program for the individual";
                 }
 
                 return response;
