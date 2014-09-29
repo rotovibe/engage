@@ -166,20 +166,31 @@ namespace NightingaleImport
                                 throw new Exception("Patient System import request failed.");
                             }
                             //Update Patient with DisplayPatientSystemId
-                            PutUpdatePatientDataRequest updatePatientRequest = new PutUpdatePatientDataRequest
+                            PatientData data = new PatientData
                             {
                                 Id = responsePatient.Id.ToString(),
                                 FirstName = patientRequest.FirstName,
                                 LastName = patientRequest.LastName,
                                 DisplayPatientSystemId = responsePatientPS.PatientSystemId.ToString(),
-                                Priority = 0,
+                                PriorityData = 0
+                            };
+                            PutUpdatePatientDataRequest updatePatientRequest = new PutUpdatePatientDataRequest
+                            {
+                                //Id = responsePatient.Id.ToString(),
+                                //FirstName = patientRequest.FirstName,
+                                //LastName = patientRequest.LastName,
+                                //DisplayPatientSystemId = responsePatientPS.PatientSystemId.ToString(),
+                                //Priority = 0,
+                                PatientData = data,
+                                Insert = true,
+                                InsertDuplicate = false,
                                 Context = patientRequest.Context,
                                 ContractNumber = patientRequest.ContractNumber,
                                 Version = patientRequest.Version
                             };
 
                             PutUpdatePatientDataResponse updateResponsePatient = putUpdatePatientServiceCall(updatePatientRequest, responsePatient.Id.ToString());
-                            if (updatePatientRequest.Id == null)
+                            if (updatePatientRequest.PatientData.Id == null)
                             {
                                 throw new Exception("Patient was not successfully updated with Patient System ID");
                             }
@@ -494,24 +505,24 @@ namespace NightingaleImport
                             }
                         }
 
-                        //Program
-                        string patientId = responsePatient.Id.ToString();
-                        if (string.IsNullOrEmpty(lvi.SubItems[colPrNm].Text) == false)
-                        {
-                            GetProgramByNameResponse programResponse = getProgramServiceCall(sqlUserId.ToString(), lvi.SubItems[colPrNm].Text);
+                        ////Program
+                        //string patientId = responsePatient.Id.ToString();
+                        //if (string.IsNullOrEmpty(lvi.SubItems[colPrNm].Text) == false)
+                        //{
+                        //    GetProgramByNameResponse programResponse = getProgramServiceCall(sqlUserId.ToString(), lvi.SubItems[colPrNm].Text);
                             
 
-                            if (string.IsNullOrEmpty(programResponse.Program.ProgramID) == false)
-                            {
-                                PutProgramToPatientRequest programRequest = new PutProgramToPatientRequest
-                                {
-                                    UserId = sqlUserId.ToString(),
-                                    ContractProgramId = programResponse.Program.ProgramID,
-                                    PatientId = patientId
-                                };
-                                PutProgramToPatientResponse responseProgram = putProgramToPatientServiceCall(programRequest, patientId);
-                            }
-                        }
+                        //    if (string.IsNullOrEmpty(programResponse.Program.ProgramID) == false)
+                        //    {
+                        //        PutProgramToPatientRequest programRequest = new PutProgramToPatientRequest
+                        //        {
+                        //            UserId = sqlUserId.ToString(),
+                        //            ContractProgramId = programResponse.Program.ProgramID,
+                        //            PatientId = patientId
+                        //        };
+                        //        PutProgramToPatientResponse responseProgram = putProgramToPatientServiceCall(programRequest, patientId);
+                        //    }
+                        //}
 
                         if (responsePatient.Id != null && responsePatient.Status == null)
                         {
@@ -1165,20 +1176,20 @@ namespace NightingaleImport
             {
                 CohortPatientViewData cpvd = getResponse.CohortPatientView;
                 // check to see if primary care manager's contactId exists in the searchfield
-                if (!cpvd.SearchFields.Exists(sf => sf.FieldName == Constants.PCM))
+                if (!cpvd.SearchFields.Exists(sf => sf.FieldName == "PCM"))
                 {
                     cpvd.SearchFields.Add(new SearchFieldData
                     {
                         Value = careMemberContactId,
                         Active = true,
-                        FieldName = Constants.PCM
+                        FieldName = "PCM"
                     });
                 }
                 else
                 {
                     cpvd.SearchFields.ForEach(sf =>
                     {
-                        if (sf.FieldName == Constants.PCM)
+                        if (sf.FieldName == "PCM")
                         {
                             sf.Value = careMemberContactId;
                             sf.Active = true;
