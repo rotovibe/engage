@@ -176,13 +176,8 @@ namespace NightingaleImport
                             };
                             PutUpdatePatientDataRequest updatePatientRequest = new PutUpdatePatientDataRequest
                             {
-                                //Id = responsePatient.Id.ToString(),
-                                //FirstName = patientRequest.FirstName,
-                                //LastName = patientRequest.LastName,
-                                //DisplayPatientSystemId = responsePatientPS.PatientSystemId.ToString(),
-                                //Priority = 0,
                                 PatientData = data,
-                                Insert = true,
+                                Insert = false,
                                 InsertDuplicate = false,
                                 Context = patientRequest.Context,
                                 ContractNumber = patientRequest.ContractNumber,
@@ -928,7 +923,7 @@ namespace NightingaleImport
         private PutPatientDataResponse putPatientServiceCall(PutPatientDataRequest putPatientRequest)
         {
             //Patient
-            Uri theUri = new Uri(string.Format("{0}/Patient/{1}/{2}/{3}/patient?UserId={4}",
+            Uri theUri = new Uri(string.Format("{0}/Patient/{1}/{2}/{3}/Patient/Insert?UserId={4}",
                                                  txtURL.Text,
                                                  context,
                                                  version,
@@ -1008,12 +1003,11 @@ namespace NightingaleImport
 
         private PutUpdatePatientDataResponse putUpdatePatientServiceCall(PutUpdatePatientDataRequest putUpdatePatient, string patientId)
         {
-            Uri updateUri = new Uri(string.Format("{0}/Patient/{1}/{2}/{3}/patient/{4}?UserId={5}",
+            Uri updateUri = new Uri(string.Format("{0}/Patient/{1}/{2}/{3}/patient?UserId={4}",
                                                         txtURL.Text,
                                                         context,
                                                         version,
                                                         txtContract.Text,
-                                                        patientId,
                                                         _headerUserId));
             HttpClient updateClient = GetHttpClient(updateUri);
 
