@@ -240,7 +240,7 @@ namespace NightingaleImport
                                 OptOut = false
                             };
 
-                            if (lvi.SubItems[colPh1Pref].Text == "True")
+                            if (String.Compare(lvi.SubItems[colPh1Pref].Text, "true", true) == 0)
                             {
                                 phone1.PhonePreferred = true;
                             }
@@ -251,7 +251,7 @@ namespace NightingaleImport
                             {
                                 foreach (CommTypeData c in typesLookUp)
                                 {
-                                    if (lvi.SubItems[colPh1Type].Text == c.Name)
+                                    if (String.Compare(lvi.SubItems[colPh1Type].Text, c.Name, true) == 0)
                                     {
                                         phone1.TypeId = c.Id;
                                     }
@@ -271,7 +271,7 @@ namespace NightingaleImport
                                 OptOut = false
                             };
 
-                            if (lvi.SubItems[colPh2Pref].Text == "True")
+                            if (String.Compare(lvi.SubItems[colPh2Pref].Text, "true", true) == 0)
                             {
                                 phone2.PhonePreferred = true;
                             }
@@ -282,7 +282,7 @@ namespace NightingaleImport
                             {
                                 foreach (CommTypeData c in typesLookUp)
                                 {
-                                    if (lvi.SubItems[colPh2Type].Text == c.Name)
+                                    if (String.Compare(lvi.SubItems[colPh2Type].Text, c.Name, true) == 0)
                                     {
                                         phone2.TypeId = c.Id;
                                     }
@@ -303,7 +303,7 @@ namespace NightingaleImport
                                 OptOut = false,
                             };
 
-                            if (lvi.SubItems[colEm1Pref].Text == "True")
+                            if (String.Compare(lvi.SubItems[colEm1Pref].Text, "true", true) == 0)
                             {
                                 email1.Preferred = true;
                             }
@@ -314,7 +314,7 @@ namespace NightingaleImport
                             {
                                 foreach (CommTypeData c in typesLookUp)
                                 {
-                                    if (lvi.SubItems[colEm1Type].Text == c.Name)
+                                    if (String.Compare(lvi.SubItems[colEm1Type].Text, c.Name, true) == 0)
                                     {
                                         email1.TypeId = c.Id;
                                     }
@@ -334,7 +334,7 @@ namespace NightingaleImport
                                 OptOut = false,
                             };
 
-                            if (lvi.SubItems[colEm2Pref].Text == "True")
+                            if (String.Compare(lvi.SubItems[colEm2Pref].Text, "true", true) == 0)
                             {
                                 email2.Preferred = true;
                             }
@@ -345,7 +345,7 @@ namespace NightingaleImport
                             {
                                 foreach (CommTypeData c in typesLookUp)
                                 {
-                                    if (lvi.SubItems[colEm2Type].Text == c.Name)
+                                    if (String.Compare(lvi.SubItems[colEm2Type].Text, c.Name, true) == 0)
                                     {
                                         email2.TypeId = c.Id;
                                     }
@@ -375,7 +375,7 @@ namespace NightingaleImport
                                 OptOut = false
                             };
 
-                            if (lvi.SubItems[colAdd1Pref].Text == "True")
+                            if (String.Compare(lvi.SubItems[colAdd1Pref].Text, "true", true) == 0)
                             {
                                 add1.Preferred = true;
                             }
@@ -395,7 +395,7 @@ namespace NightingaleImport
                             {
                                 foreach (CommTypeData c in typesLookUp)
                                 {
-                                    if (lvi.SubItems[colAdd1Type].Text == c.Name)
+                                    if (String.Compare(lvi.SubItems[colAdd1Type].Text, c.Name, true) == 0)
                                     {
                                         add1.TypeId = c.Id;
                                     }
@@ -424,7 +424,7 @@ namespace NightingaleImport
                                 OptOut = false
                             };
 
-                            if (lvi.SubItems[colAdd2Pref].Text == "True")
+                            if (String.Compare(lvi.SubItems[colAdd2Pref].Text, "true", true) == 0)
                             {
                                 add2.Preferred = true;
                             }
@@ -444,7 +444,7 @@ namespace NightingaleImport
                             {
                                 foreach (CommTypeData c in typesLookUp)
                                 {
-                                    if (lvi.SubItems[colAdd2Type].Text == c.Name)
+                                    if (String.Compare(lvi.SubItems[colAdd2Type].Text, c.Name, true) == 0)
                                     {
                                         add2.TypeId = c.Id;
                                     }
