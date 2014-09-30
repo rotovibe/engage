@@ -79,6 +79,7 @@ namespace Phytel.Data.ETL
         {
             try
             {
+                OnEtlEvent(new ETLEventArgs { Message = "*** ETL PROCESS START ***", IsError = false });
                 OnEtlEvent(new ETLEventArgs { Message = "Truncate Tables.", IsError = false });
                 //Truncate/Delete SQL databases
                 SQLDataService.Instance.ExecuteProcedure("InHealth001", true, "REPORT", "spPhy_RPT_TruncateTables", new ParameterCollection());
@@ -109,7 +110,7 @@ namespace Phytel.Data.ETL
                 LoadPatientProgramAttributes(contract);
                 ProcessSpawnElements();
                 LoadToDos(contract);
-                OnEtlEvent(new ETLEventArgs { Message = "Export Process Completed!", IsError = false });
+                OnEtlEvent(new ETLEventArgs { Message = "*** ETL PROCESS COMPLETED ***", IsError = false });
             }
             catch (Exception ex)
             {
