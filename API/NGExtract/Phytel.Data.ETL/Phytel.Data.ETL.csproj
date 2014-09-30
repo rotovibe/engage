@@ -62,7 +62,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BulkCopy\EObservationResponse.cs" />
     <Compile Include="BulkCopy\EStepResponse.cs" />
+    <Compile Include="BulkCopy\ReadObservationsSeries.cs" />
+    <Compile Include="BulkCopy\ReadResponsesSeries.cs" />
     <Compile Include="BulkCopy\ReadSeries.cs" />
     <Compile Include="ETLEventArgs.cs" />
     <Compile Include="ETLProcessor.cs" />
