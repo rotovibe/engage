@@ -3,41 +3,17 @@ using ServiceStack.ServiceHost;
 
 namespace Phytel.API.DataDomain.Patient.DTO
 {
-    [Route("/{Context}/{Version}/{ContractNumber}/patient/{Id}", "PUT")]
+    [Route("/{Context}/{Version}/{ContractNumber}/Patient", "PUT")]
     public class PutUpdatePatientDataRequest : IDataDomainRequest
     {
-        [ApiMember(Name = "Id", Description = "Id of the patient being updated", ParameterType = "property", DataType = "string", IsRequired = true)]
-        public string Id { get; set; }
+        [ApiMember(Name = "PatientData", Description = "Patient details who is being inserted or updated.", ParameterType = "property", DataType = "PatientData", IsRequired = true)]
+        public PatientData PatientData { get; set; }
 
-        [ApiMember(Name = "FirstName", Description = "First Name of the patient being created", ParameterType = "property", DataType = "string", IsRequired = true)]
-        public string FirstName { get; set; }
+        [ApiMember(Name = "Insert", Description = "Indicates if the action is to create or update a patient", ParameterType = "path", DataType = "boolean", IsRequired = false)]
+        public bool Insert { get; set; }
 
-        [ApiMember(Name = "LastName", Description = "Last name of the patient being created", ParameterType = "property", DataType = "string", IsRequired = true)]
-        public string LastName { get; set; }
-
-        [ApiMember(Name = "MiddleName", Description = "Middle name of the patient being created", ParameterType = "property", DataType = "string", IsRequired = false)]
-        public string MiddleName { get; set; }
-
-        [ApiMember(Name = "Suffix", Description = "Suffix of the patient being created", ParameterType = "property", DataType = "string", IsRequired = false)]
-        public string Suffix { get; set; }
-
-        [ApiMember(Name = "PreferredName", Description = "Preferred name of the patient being created", ParameterType = "property", DataType = "string", IsRequired = false)]
-        public string PreferredName { get; set; }
-
-        [ApiMember(Name = "Gender", Description = "Gender of the patient being created", ParameterType = "property", DataType = "string", IsRequired = false)]
-        public string Gender { get; set; }
-
-        [ApiMember(Name = "DOB", Description = "Date of birth of the patient being created", ParameterType = "property", DataType = "string", IsRequired = false)]
-        public string DOB { get; set; }
-
-        [ApiMember(Name = "DisplayPatientSystemId", Description = "Patient System ID of the patient being created", ParameterType = "property", DataType = "string", IsRequired = false)]
-        public string DisplayPatientSystemId { get; set; }
-
-        [ApiMember(Name = "Priority", Description = "Priority value for the patient", ParameterType = "property", DataType = "string", IsRequired = false)]
-        public int Priority { get; set; }
-
-        [ApiMember(Name = "FullSSN", Description = "SSN value of the patient being updated", ParameterType = "property", DataType = "string", IsRequired = true)]
-        public string FullSSN { get; set; }
+        [ApiMember(Name = "InsertDuplicate", Description = "Indicates if a duplicate record of the patient should be inserted.", ParameterType = "path", DataType = "boolean", IsRequired = false)]
+        public bool InsertDuplicate { get; set; }
 
         [ApiMember(Name = "Context", Description = "Product Context creating the patient", ParameterType = "property", DataType = "string", IsRequired = true)]
         public string Context { get; set; }

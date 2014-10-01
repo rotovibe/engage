@@ -19,10 +19,10 @@ namespace Phytel.API.DataDomain.Patient.Test.Stub
         {
             GetPatientsDataResponse response = new GetPatientsDataResponse();
             List<PatientData> patientData = new List<PatientData>();
-            patientData.Add( new PatientData { ID = "abc", FirstName = "mark", LastName = "anderson", PreferredName = "MA", MiddleName = "jay", Gender = "M", DOB = "01/01/1945"});
-            patientData.Add( new PatientData { ID = "efg", FirstName = "lisa", LastName = "anderson", PreferredName = "LA", MiddleName = "olivia", Gender = "F", DOB = "02/02/1932"});
-            patientData.Add( new PatientData { ID = "hij", FirstName = "mark1", LastName = "anderson2", PreferredName = "MA", MiddleName = "jay", Gender = "M", DOB = "01/01/1945"});
-            patientData.Add( new PatientData { ID = "xyz", FirstName = "mark2", LastName = "anderson3", PreferredName = "MA", MiddleName = "jay", Gender = "M", DOB = "01/01/1945"});
+            patientData.Add( new PatientData { Id = "abc", FirstName = "mark", LastName = "anderson", PreferredName = "MA", MiddleName = "jay", Gender = "M", DOB = "01/01/1945"});
+            patientData.Add( new PatientData { Id = "efg", FirstName = "lisa", LastName = "anderson", PreferredName = "LA", MiddleName = "olivia", Gender = "F", DOB = "02/02/1932"});
+            patientData.Add( new PatientData { Id = "hij", FirstName = "mark1", LastName = "anderson2", PreferredName = "MA", MiddleName = "jay", Gender = "M", DOB = "01/01/1945"});
+            patientData.Add( new PatientData { Id = "xyz", FirstName = "mark2", LastName = "anderson3", PreferredName = "MA", MiddleName = "jay", Gender = "M", DOB = "01/01/1945"});
             response.Version = 1;
             response.Patients = patientData;
 
@@ -134,6 +134,18 @@ namespace Phytel.API.DataDomain.Patient.Test.Stub
 
 
         public void UndoDelete(object entity)
+        {
+            throw new NotImplementedException();
+        }
+
+
+        public object Initialize(object newEntity)
+        {
+            throw new NotImplementedException();
+        }
+
+
+        public object FindDuplicatePatient(PutUpdatePatientDataRequest request)
         {
             throw new NotImplementedException();
         }

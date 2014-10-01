@@ -53,7 +53,7 @@ namespace Phytel.API.DataDomain.Patient
             MECohortPatientView patientView = null;
             using (PatientMongoContext ctx = new PatientMongoContext(_dbName))
             {
-                //Does the patient exist?
+                //Does the patient exist in cohortpatientview?
                 IMongoQuery query = Query.And(
                                 Query.EQ(MECohortPatientView.PatientIDProperty, ObjectId.Parse(cohortRequest.PatientID)),
                                 Query.EQ(MECohortPatientView.LastNameProperty, cohortRequest.LastName));
@@ -82,7 +82,7 @@ namespace Phytel.API.DataDomain.Patient
 
                     AuditHelper.LogDataAudit(this.UserId,
                                             MongoCollectionName.CohortPatientView.ToString(),
-                                            cohortRequest.PatientID.ToString(),
+                                            patientView.Id.ToString(),
                                             Common.DataAuditType.Insert,
                                             cohortRequest.ContractNumber);
                 }
@@ -90,7 +90,7 @@ namespace Phytel.API.DataDomain.Patient
 
             return new PutCohortPatientViewDataResponse
             {
-                PatientID = patientView.Id.ToString()
+                Id = patientView.Id.ToString()
             };
         }
 
@@ -299,7 +299,7 @@ namespace Phytel.API.DataDomain.Patient
                                 if(!pat.DeleteFlag)
                                 {   
                                     PatientData cohortPatient = new PatientData();
-                                    cohortPatient.ID = pat.PatientID.ToString();
+                                    cohortPatient.Id = pat.PatientID.ToString();
 
                                     foreach (SearchField sf in pat.SearchFields)
                                     {
@@ -488,5 +488,17 @@ namespace Phytel.API.DataDomain.Patient
             catch (Exception) { throw; }
         }
 
+
+
+        public object Initialize(object newEntity)
+        {
+            throw new NotImplementedException();
+        }
+
+
+        public object FindDuplicatePatient(PutUpdatePatientDataRequest request)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -179,12 +179,59 @@ namespace Phytel.API.DataDomain.Patient
             return response;
         }
 
+        public PutInitializePatientDataResponse InitializePatient(PutInitializePatientDataRequest request)
+        {
+            PutInitializePatientDataResponse response = null;
+            try
+            {
+                response = new PutInitializePatientDataResponse();
+                IPatientRepository repo = Factory.GetRepository(request, RepositoryType.Patient);
+
+                response.PatientData = (PatientData)repo.Initialize(request);
+                response.Version = request.Version;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return response;
+        }
+
         public PutUpdatePatientDataResponse UpdatePatient(PutUpdatePatientDataRequest request)
         {
+            PutUpdatePatientDataResponse response = new PutUpdatePatientDataResponse();
             IPatientRepository repo = Factory.GetRepository(request, RepositoryType.Patient);
-
-            PutUpdatePatientDataResponse result = repo.Update(request) as PutUpdatePatientDataResponse;
-            return result;
+            if (request.PatientData != null)
+            {
+                if (request.Insert)
+                {
+                    if (request.InsertDuplicate) // the user has ignored the warning message about a duplicate patient entry.
+                    {
+                        response = repo.Update(request) as PutUpdatePatientDataResponse;
+                    }
+                    else
+                    {
+                        if (repo.FindDuplicatePatient(request) == null)
+                        {
+                            response = repo.Update(request) as PutUpdatePatientDataResponse;
+                        }
+                        else
+                        {
+                            Outcome outcome = new Outcome
+                            {
+                                Result = 0,
+                                Reason = "An individual by the same first name, last name and date of birth already exists."
+                            };
+                            response.Outcome = outcome;
+                        }
+                    }
+                }
+                else
+                {
+                    response = repo.Update(request) as PutUpdatePatientDataResponse;
+                }
+            }
+            return response;
         }
 
         public PutUpdateCohortPatientViewResponse UpdateCohortPatientViewProblem(PutUpdateCohortPatientViewRequest request)
