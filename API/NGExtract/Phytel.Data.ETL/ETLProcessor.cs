@@ -762,7 +762,7 @@ namespace Phytel.Data.ETL
         {
             try
             {
-                OnEtlEvent(new ETLEventArgs { Message = "Loading lookups.", IsError = false });
+                OnEtlEvent(new ETLEventArgs {Message = "Loading lookups.", IsError = false});
 
                 List<MELookup> lookups;
                 using (LookUpMongoContext lmctx = new LookUpMongoContext(ctr))
@@ -770,95 +770,95 @@ namespace Phytel.Data.ETL
                     lookups = lmctx.LookUps.Collection.FindAll().ToList();
                 }
 
-                        
-                        foreach (MELookup lookup in lookups)
-                        {
-                            try
-                            {
-                                switch (lookup.Type)
-                                {
-                                    case LookUpType.BarrierCategory:
-                                        LoadBarrierCategories(lookup);
-                                        break;
-                                    case LookUpType.CareMemberType:
-                                        LoadCareMemberTypes(lookup);
-                                        break;
-                                    case LookUpType.Category:
-                                        LoadCategories(lookup);
-                                        break;
-                                    case LookUpType.CodingSystem:
-                                        LoadCodingSystems(lookup);
-                                        break;
-                                    case LookUpType.CommMode:
-                                        LoadCommModes(lookup);
-                                        break;
-                                    case LookUpType.CommType:
-                                        LoadCommTypes(lookup);
-                                        break;
-                                    case LookUpType.FocusArea:
-                                        LoadFocusAreas(lookup);
-                                        break;
-                                    case LookUpType.InterventionCategory:
-                                        LoadInterventionCategories(lookup);
-                                        break;
-                                    case LookUpType.Language:
-                                        LoadLanguages(lookup);
-                                        break;
-                                    case LookUpType.Objective:
-                                        LoadObjectives(lookup);
-                                        break;
-                                    case LookUpType.ObservationType:
-                                        LoadObservationTypes(lookup);
-                                        break;
-                                    case LookUpType.Problem:
-                                        LoadProblems(lookup);
-                                        break;
-                                    case LookUpType.Source:
-                                        LoadSources(lookup);
-                                        break;
-                                    case LookUpType.State:
-                                        LoadStates(lookup);
-                                        break;
-                                    case LookUpType.TimesOfDay:
-                                        LoadTimesOfDays(lookup);
-                                        break;
-                                    case LookUpType.TimeZone:
-                                        LoadTimeZones(lookup);
-                                        break;
-                                    case LookUpType.ToDoCategory:
-                                        LoadToDoCategory(lookup);
-                                        break;
-                                    case LookUpType.NoteMethod:
-                                        LoadLookUp(lookup, "spPhy_RPT_SaveNoteMethodLookUp");
-                                        break;
-                                    case LookUpType.NoteOutcome:
-                                        LoadLookUp(lookup, "spPhy_RPT_SaveNoteOutcomeLookUp");
-                                        break;
-                                    case LookUpType.NoteWho:
-                                        LoadLookUp(lookup, "spPhy_RPT_SaveNoteWhoLookUp");
-                                        break;
-                                    case LookUpType.NoteSource:
-                                        LoadLookUp(lookup, "spPhy_RPT_SaveNoteSourceLookUp");
-                                        break;
-                                    case LookUpType.NoteDuration:
-                                        LoadLookUp(lookup, "spPhy_RPT_SaveNoteDurationLookUp");
-                                        break;
-                                    default:
-                                        break;
-                                }
-                            }
-                            catch (Exception ex)
-                            {
-                                OnEtlEvent(new ETLEventArgs { Message = ex.Message + ": " + ex.StackTrace, IsError = true });
-                            }
-                        }
 
-                    LinkObjectiveCategories(lookups[0]);
-                    LinkCommTypeCommModes(lookups[10]);
+                foreach (MELookup lookup in lookups)
+                {
+                    try
+                    {
+                        switch (lookup.Type)
+                        {
+                            case LookUpType.BarrierCategory:
+                                LoadBarrierCategories(lookup);
+                                break;
+                            case LookUpType.CareMemberType:
+                                LoadCareMemberTypes(lookup);
+                                break;
+                            case LookUpType.Category:
+                                LoadCategories(lookup);
+                                break;
+                            case LookUpType.CodingSystem:
+                                LoadCodingSystems(lookup);
+                                break;
+                            case LookUpType.CommMode:
+                                LoadCommModes(lookup);
+                                break;
+                            case LookUpType.CommType:
+                                LoadCommTypes(lookup);
+                                break;
+                            case LookUpType.FocusArea:
+                                LoadFocusAreas(lookup);
+                                break;
+                            case LookUpType.InterventionCategory:
+                                LoadInterventionCategories(lookup);
+                                break;
+                            case LookUpType.Language:
+                                LoadLanguages(lookup);
+                                break;
+                            case LookUpType.Objective:
+                                LoadObjectives(lookup);
+                                break;
+                            case LookUpType.ObservationType:
+                                LoadObservationTypes(lookup);
+                                break;
+                            case LookUpType.Problem:
+                                LoadProblems(lookup);
+                                break;
+                            case LookUpType.Source:
+                                LoadSources(lookup);
+                                break;
+                            case LookUpType.State:
+                                LoadStates(lookup);
+                                break;
+                            case LookUpType.TimesOfDay:
+                                LoadTimesOfDays(lookup);
+                                break;
+                            case LookUpType.TimeZone:
+                                LoadTimeZones(lookup);
+                                break;
+                            case LookUpType.ToDoCategory:
+                                LoadToDoCategory(lookup);
+                                break;
+                            case LookUpType.NoteMethod:
+                                LoadLookUp(lookup, "spPhy_RPT_SaveNoteMethodLookUp");
+                                break;
+                            case LookUpType.NoteOutcome:
+                                LoadLookUp(lookup, "spPhy_RPT_SaveNoteOutcomeLookUp");
+                                break;
+                            case LookUpType.NoteWho:
+                                LoadLookUp(lookup, "spPhy_RPT_SaveNoteWhoLookUp");
+                                break;
+                            case LookUpType.NoteSource:
+                                LoadLookUp(lookup, "spPhy_RPT_SaveNoteSourceLookUp");
+                                break;
+                            case LookUpType.NoteDuration:
+                                LoadLookUp(lookup, "spPhy_RPT_SaveNoteDurationLookUp");
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        OnEtlEvent(new ETLEventArgs {Message = ex.Message + ": " + ex.StackTrace, IsError = true});
+                    }
+                }
+
+                LinkObjectiveCategories(lookups.Find(l => l.Data[0].GetType() == typeof (Objective)));
+                LinkCommTypeCommModes(lookups.Find(l => l.Data[0].GetType() == typeof (CommType)));
             }
             catch (Exception ex)
             {
-                OnEtlEvent(new ETLEventArgs { Message = ex.Message + ": " + ex.StackTrace, IsError = true });
+                OnEtlEvent(new ETLEventArgs {Message = ex.Message + ": " + ex.StackTrace, IsError = true});
             }
         }
 
@@ -1278,8 +1278,6 @@ namespace Phytel.Data.ETL
                     {
                         try
                         {
-                            if(!patient.DeleteFlag)
-                            {
                                 ParameterCollection parms = new ParameterCollection();
                                 parms.Add(new Parameter("@MongoID", patient.Id.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
                                 parms.Add(new Parameter("@FirstName", patient.FirstName ?? (object)DBNull.Value, SqlDbType.VarChar, ParameterDirection.Input, 100));
@@ -1308,7 +1306,6 @@ namespace Phytel.Data.ETL
                                     parms.Add(new Parameter("@ExtraElements", string.Empty, SqlDbType.VarChar, ParameterDirection.Input, int.MaxValue));
 
                                 SQLDataService.Instance.ExecuteProcedure("InHealth001", true, "REPORT", "spPhy_RPT_SavePatient", parms);
-                            }
                         }
                         catch (Exception ex)
                         {
@@ -1706,7 +1703,7 @@ namespace Phytel.Data.ETL
                     {
                         OnEtlEvent(new ETLEventArgs
                         {
-                            Message = "SqlBulkCopy process failure: " + ex.Message + " : " + ex.InnerException,
+                            Message = "LoadPatientObservations(): SqlBulkCopy process failure: " + ex.Message + " : " + ex.InnerException,
                             IsError = true
                         });
                     }
@@ -2377,7 +2374,7 @@ namespace Phytel.Data.ETL
                     {
                         OnEtlEvent(new ETLEventArgs
                         {
-                            Message = "SqlBulkCopy process failure: " + ex.Message + " : " + ex.InnerException,
+                            Message = "LoadPatientProgramResponses():SqlBulkCopy process failure: " + ex.Message + " : " + ex.InnerException,
                             IsError = true
                         });
                     }
