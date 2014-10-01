@@ -18,7 +18,7 @@ using Phytel.API.Common.CustomObject;
 
 namespace Phytel.API.DataDomain.PatientObservation
 {
-    public class MongoObservationRepository<T> : IPatientObservationRepository<T>
+    public class MongoObservationRepository : IPatientObservationRepository
     {
         private string _dbName = string.Empty;
 
@@ -107,7 +107,6 @@ namespace Phytel.API.DataDomain.PatientObservation
                             CodingSystemCode = o.Code,
                             DeleteFlag = o.DeleteFlag,
                             Description = o.Description,
-                            //ExtraElements = o.ExtraElements,
                             GroupId = o.GroupId != null ? o.GroupId.ToString() : null,
                             LowValue = o.LowValue,
                             HighValue = o.HighValue,
@@ -171,42 +170,42 @@ namespace Phytel.API.DataDomain.PatientObservation
             catch (Exception) { throw; }
         }
 
-        object IRepository<T>.Insert(object newEntity)
+        object IRepository.Insert(object newEntity)
         {
             throw new NotImplementedException();
         }
 
-        object IRepository<T>.InsertAll(List<object> entities)
+        object IRepository.InsertAll(List<object> entities)
         {
             throw new NotImplementedException();
         }
 
-        void IRepository<T>.Delete(object entity)
+        void IRepository.Delete(object entity)
         {
             throw new NotImplementedException();
         }
 
-        void IRepository<T>.DeleteAll(List<object> entities)
+        void IRepository.DeleteAll(List<object> entities)
         {
             throw new NotImplementedException();
         }
 
-        Tuple<string, IEnumerable<object>> IRepository<T>.Select(APIExpression expression)
+        Tuple<string, IEnumerable<object>> IRepository.Select(APIExpression expression)
         {
             throw new NotImplementedException();
         }
 
-        IEnumerable<object> IRepository<T>.SelectAll()
+        IEnumerable<object> IRepository.SelectAll()
         {
             throw new NotImplementedException();
         }
 
-        object IRepository<T>.Update(object entity)
+        object IRepository.Update(object entity)
         {
             throw new NotImplementedException();
         }
 
-        void IRepository<T>.CacheByID(List<string> entityIDs)
+        void IRepository.CacheByID(List<string> entityIDs)
         {
             throw new NotImplementedException();
         }
@@ -273,7 +272,7 @@ namespace Phytel.API.DataDomain.PatientObservation
             }
         }
 
-        private static List<IMongoQuery> BuildQuery(object type, bool? standard, bool? status)
+        private static List<IMongoQuery> BuildQuery(object type, bool? standard, bool? activeStatus)
         {
             List<IMongoQuery> queries = new List<IMongoQuery>();
             queries.Add(Query.EQ(MEObservation.ObservationTypeProperty, ObjectId.Parse(type as string)));
@@ -281,9 +280,9 @@ namespace Phytel.API.DataDomain.PatientObservation
             {
                     queries.Add(Query.EQ(MEObservation.StandardProperty, standard));
             }
-            if (status != null)
+            if (activeStatus != null)
             {
-                if ((bool)status)
+                if ((bool)activeStatus)
                     queries.Add(Query.EQ(MEObservation.StatusProperty, 1)); // active
             }
             queries.Add(Query.EQ(MEObservation.DeleteFlagProperty, false));
@@ -300,36 +299,82 @@ namespace Phytel.API.DataDomain.PatientObservation
             throw new NotImplementedException();
         }
 
-        public List<IdNamePair> GetAllowedObservationStates(object entity)
+        public List<ObservationStateData> GetAllowedObservationStates()
         {
-            GetAllowedStatesDataRequest request = (GetAllowedStatesDataRequest)entity;
-            string observationType = request.TypeName.ToLower();
-            List<IdNamePair> allowedStates = null;
+            List<ObservationStateData> states = new List<ObservationStateData>();
+            ObservationState[] values = (ObservationState[])Enum.GetValues(typeof(ObservationState));
+            foreach (var item in values)
+            {
+                ObservationStateData state = null;
+                switch (item)
+                {
+                    
+                    case ObservationState.Complete:
+                        state = new ObservationStateData { Id = (int)ObservationState.Complete, Name = ObservationState.Complete.ToString(), TypeIds = new List<string> { Constants.LabLookUpId, Constants.VitalsLookUpId } };
+                        break;
+                    case ObservationState.Active:
+                        state = new ObservationStateData { Id = (int)ObservationState.Active, Name = ObservationState.Active.ToString(), TypeIds = new List<string> { Constants.ProblemLookUpId } };
+                        break;
+                    case ObservationState.Inactive:
+                        state = new ObservationStateData { Id = (int)ObservationState.Inactive, Name = ObservationState.Inactive.ToString(), TypeIds = new List<string> { Constants.ProblemLookUpId } };
+                        break;
+                    case ObservationState.Resolved:
+                        state = new ObservationStateData { Id = (int)ObservationState.Resolved, Name = ObservationState.Resolved.ToString(), TypeIds = new List<string> { Constants.ProblemLookUpId } };
+                        break;
+                    case ObservationState.Decline:
+                        state = new ObservationStateData { Id = (int)ObservationState.Decline, Name = ObservationState.Decline.ToString(), TypeIds = new List<string> { Constants.LabLookUpId, Constants.VitalsLookUpId } };
+                        break;  
+                }
+                states.Add(state);
+            }
+            return states;
+        }
+
+        public IEnumerable<object> GetActiveObservations()
+        {
+            List<ObservationData> odL = null;
             try
             {
-                if (!string.IsNullOrEmpty(observationType))
+                using (PatientObservationMongoContext ctx = new PatientObservationMongoContext(_dbName))
                 {
-                    switch (observationType)
+                    List<IMongoQuery> queries = new List<IMongoQuery>();
+                    queries.Add(Query.EQ(MEObservation.StatusProperty, Status.Active));
+                    queries.Add(Query.EQ(MEObservation.DeleteFlagProperty, false));
+                    IMongoQuery mQuery = Query.And(queries);
+
+                    List<MEObservation> meObs = ctx.Observations.Collection.Find(mQuery).ToList();
+
+                    if (meObs != null && meObs.Count > 0)
                     {
-                        case "lab":
-                            allowedStates = new List<IdNamePair>();
-                            allowedStates.Add(new IdNamePair { Id = ((int)ObservationState.Complete).ToString(), Name = Enum.GetName(typeof(ObservationState), ObservationState.Complete) });
-                            allowedStates.Add(new IdNamePair { Id = ((int)ObservationState.Decline).ToString(), Name = Enum.GetName(typeof(ObservationState), ObservationState.Decline) });
-                            break;
-                        case "vitals":
-                            allowedStates = new List<IdNamePair>();
-                            allowedStates.Add(new IdNamePair { Id = ((int)ObservationState.Complete).ToString(), Name = Enum.GetName(typeof(ObservationState), ObservationState.Complete) });
-                            allowedStates.Add(new IdNamePair { Id = ((int)ObservationState.Decline).ToString(), Name = Enum.GetName(typeof(ObservationState), ObservationState.Decline) });
-                            break;
-                        case "problem":
-                            allowedStates = new List<IdNamePair>();
-                            allowedStates.Add(new IdNamePair { Id = ((int)ObservationState.Active).ToString(), Name = Enum.GetName(typeof(ObservationState), ObservationState.Active) });
-                            allowedStates.Add(new IdNamePair { Id = ((int)ObservationState.Inactive).ToString(), Name = Enum.GetName(typeof(ObservationState), ObservationState.Inactive) });
-                            allowedStates.Add(new IdNamePair { Id = ((int)ObservationState.Resolved).ToString(), Name = Enum.GetName(typeof(ObservationState), ObservationState.Resolved) });
-                            break;
+                        odL = new List<ObservationData>();
+                        meObs.ForEach(o =>
+                        {
+                            odL.Add(new ObservationData
+                            {
+                                CodingSystem = o.CodingSystemId.ToString(),
+                                CodingSystemCode = o.Code,
+                                DeleteFlag = o.DeleteFlag,
+                                Description = o.Description,
+                                GroupId = o.GroupId != null ? o.GroupId.ToString() : null,
+                                LowValue = o.LowValue,
+                                HighValue = o.HighValue,
+                                Id = o.Id.ToString(),
+                                LastUpdatedOn = o.LastUpdatedOn,
+                                ObservationTypeId = o.ObservationTypeId.ToString(),
+                                Order = o.Order,
+                                Source = o.Source,
+                                Standard = o.Standard,
+                                Status = (int)o.Status,
+                                TTLDate = o.TTLDate,
+                                Units = o.Units,
+                                UpdatedBy = o.UpdatedBy.ToString(),
+                                Version = o.Version,
+                                CommonName = o.CommonName
+                            });
+                        });
                     }
                 }
-                return allowedStates;
+                return odL;
             }
             catch (Exception ex)
             {
@@ -347,6 +392,12 @@ namespace Phytel.API.DataDomain.PatientObservation
 
 
         public void UndoDelete(object entity)
+        {
+            throw new NotImplementedException();
+        }
+
+
+        public object FindByID(string entityID, bool includeDeletedObservations)
         {
             throw new NotImplementedException();
         }

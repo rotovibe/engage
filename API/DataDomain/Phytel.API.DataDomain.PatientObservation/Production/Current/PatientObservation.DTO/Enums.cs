@@ -4,8 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Phytel.API.DataDomain.PatientObservation
+namespace Phytel.API.DataDomain.PatientObservation.DTO
 {
+    public enum RepositoryType
+    {
+        Observation,
+        PatientObservation
+    }
 
     public enum ObservationDisplay
     {

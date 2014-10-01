@@ -15,7 +15,7 @@ namespace Phytel.API.DataDomain.PatientObservation.Tests
         public void FindByObservationID_Test()
         {
 
-            MongoPatientObservationRepository<GetPatientObservationResponse> repo = new MongoPatientObservationRepository<GetPatientObservationResponse>("InHealth001");
+            MongoPatientObservationRepository repo = new MongoPatientObservationRepository("InHealth001");
 
             object obj = repo.FindByObservationID("533ed16dd4332307bc592baf", "5325db5ed6a4850adcbba912");
         }

@@ -81,12 +81,10 @@ namespace Phytel.API.DataDomain.PatientObservation.Services.Test
         }
 
         [TestMethod]
-        public void GetObservationsByType_StandardIsNull_Test()
+        public void GetObservations_Test()
         {
             string url = "http://localhost:8888/PatientObservation";
             //string url = "http://azurePhytel.cloudapp.net:59901/PatientObservation";
-            string typeId = "533d8278d433231deccaa62d";
-            bool? standard = true;
             string contractNumber = "InHealth001";
             string context = "NG";
             double version = 1.0;
@@ -95,17 +93,15 @@ namespace Phytel.API.DataDomain.PatientObservation.Services.Test
 
             //[Route("/{Context}/{Version}/{ContractNumber}/Observation/Type/{TypeId}/MatchLibrary/{Standard}", "GET")]
 
-            GetAdditionalLibraryObservationsResponse response = client.Get<GetAdditionalLibraryObservationsResponse>(
-                string.Format("{0}/{1}/{2}/{3}/Observation/Type/{4}/MatchLibrary/{5}?UserId={6}",
+            GetObservationsDataResponse response = client.Get<GetObservationsDataResponse>(
+                string.Format("{0}/{1}/{2}/{3}/Observations?UserId={4}",
                 url,
                 context,
                 version,
                 contractNumber,
-                typeId,
-                standard,
                 userId));
 
-            Assert.IsNotNull(response.Library);
+            Assert.IsNotNull(response.ObservationsData);
         }
     }
 }

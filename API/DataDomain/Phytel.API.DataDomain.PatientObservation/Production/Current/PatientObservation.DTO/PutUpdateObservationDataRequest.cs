@@ -13,9 +13,6 @@ namespace Phytel.API.DataDomain.PatientObservation.DTO
         [ApiMember(Name = "PatientObservationData", Description = "PatientObservation to update.", ParameterType = "property", DataType = "PatientObservationRecordData", IsRequired = true)]
         public PatientObservationRecordData PatientObservationData { get; set; }
 
-        [ApiMember(Name = "PatientObservationIdsList", Description = "PatientObservation Ids list to reference", ParameterType = "body", DataType = "string", IsRequired = false)]
-        public List<string> PatientObservationIdsList { get; set; }
-
         [ApiMember(Name = "UserId", Description = "UserId of the logged in user", ParameterType = "property", DataType = "string", IsRequired = true)]
         public string UserId { get; set; }
 

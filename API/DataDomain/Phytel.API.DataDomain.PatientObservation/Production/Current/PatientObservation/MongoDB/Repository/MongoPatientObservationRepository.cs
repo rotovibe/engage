@@ -20,7 +20,7 @@ using Phytel.API.Common.CustomObject;
 
 namespace Phytel.API.DataDomain.PatientObservation
 {
-    public class MongoPatientObservationRepository<T> : IPatientObservationRepository<T>
+    public class MongoPatientObservationRepository : IPatientObservationRepository
     {
         private string _dbName = string.Empty;
         private int _expireDays = Convert.ToInt32(ConfigurationManager.AppSettings["ExpireDays"]);
@@ -83,10 +83,46 @@ namespace Phytel.API.DataDomain.PatientObservation
 
         public object FindByID(string entityID)
         {
+            return FindByID(entityID, false);
+        }
+
+        public object FindByID(string entityID, bool includeDeletedObservations)
+        {
             try
             {
-                throw new NotImplementedException();
-                // code here //
+                PatientObservationData poData = null;
+                List<IMongoQuery> queries = new List<IMongoQuery>();
+                queries.Add(Query.EQ(MEPatientObservation.IdProperty, ObjectId.Parse(entityID)));
+                if (!includeDeletedObservations)
+                {
+                    queries.Add(Query.EQ(MEPatientObservation.DeleteFlagProperty, false));
+                    queries.Add(Query.EQ(MEPatientObservation.TTLDateProperty, BsonNull.Value));
+                }
+                IMongoQuery mQuery = Query.And(queries);
+
+                using (PatientObservationMongoContext ctx = new PatientObservationMongoContext(_dbName))
+                {
+                    MEPatientObservation mePO = ctx.PatientObservations.Collection.Find(mQuery).FirstOrDefault();
+                    if (mePO != null)
+                    {
+                        poData = new PatientObservationData
+                        {
+                            Id = mePO.Id.ToString(),
+                            PatientId = mePO.PatientId.ToString(),
+                            EndDate = mePO.EndDate,
+                            ObservationId = mePO.ObservationId.ToString(),
+                            Source = mePO.Source,
+                            StartDate = mePO.StartDate,
+                            StateId = (int)mePO.State,
+                            Units = mePO.Units,
+                            Values = GetValueList(mePO.NumericValue, mePO.NonNumericValue),
+                            LastUpdatedOn = mePO.LastUpdatedOn,
+                            DisplayId = (int)mePO.Display,
+                            DeleteFlag = mePO.DeleteFlag
+                        };
+                    }
+                }
+                return poData;
             }
             catch (Exception) { throw; }
         }
@@ -121,17 +157,17 @@ namespace Phytel.API.DataDomain.PatientObservation
             catch (Exception) { throw; }
         }
 
-        object IRepository<T>.Insert(object newEntity)
+        object IRepository.Insert(object newEntity)
         {
             throw new NotImplementedException();
         }
 
-        object IRepository<T>.InsertAll(List<object> entities)
+        object IRepository.InsertAll(List<object> entities)
         {
             throw new NotImplementedException();
         }
 
-        void IRepository<T>.Delete(object entity)
+        void IRepository.Delete(object entity)
         {
             DeletePatientObservationRequest request = (DeletePatientObservationRequest)entity;
             try
@@ -159,7 +195,7 @@ namespace Phytel.API.DataDomain.PatientObservation
             catch (Exception) { throw; }
         }
 
-        void IRepository<T>.DeleteAll(List<object> entities)
+        void IRepository.DeleteAll(List<object> entities)
         {
             throw new NotImplementedException();
         }
@@ -194,17 +230,17 @@ namespace Phytel.API.DataDomain.PatientObservation
             catch (Exception) { throw; }
         }
 
-        Tuple<string, IEnumerable<object>> IRepository<T>.Select(APIExpression expression)
+        Tuple<string, IEnumerable<object>> IRepository.Select(APIExpression expression)
         {
             throw new NotImplementedException();
         }
 
-        IEnumerable<object> IRepository<T>.SelectAll()
+        IEnumerable<object> IRepository.SelectAll()
         {
             throw new NotImplementedException();
         }
 
-        object IRepository<T>.Update(object entity)
+        object IRepository.Update(object entity)
         {
             bool result = false;
             PutUpdateObservationDataRequest odr = (PutUpdateObservationDataRequest)entity;
@@ -254,7 +290,7 @@ namespace Phytel.API.DataDomain.PatientObservation
             catch (Exception ex) { throw new Exception("PatientObservationDD:MongoPatientBarrierRepository:Update()::" + ex.Message, ex.InnerException); }
         }
 
-        void IRepository<T>.CacheByID(List<string> entityIDs)
+        void IRepository.CacheByID(List<string> entityIDs)
         {
             throw new NotImplementedException();
         }
@@ -369,7 +405,7 @@ namespace Phytel.API.DataDomain.PatientObservation
         {
             try
             {
-                List<PatientObservationData> observationsDataList = null;
+                List<PatientObservationData> poDataList = null;
                 List<IMongoQuery> queries = new List<IMongoQuery>();
                 queries.Add(Query.EQ(MEPatientObservation.PatientIdProperty, ObjectId.Parse(Id)));
                 queries.Add(Query.EQ(MEPatientObservation.TTLDateProperty, BsonNull.Value));
@@ -378,22 +414,31 @@ namespace Phytel.API.DataDomain.PatientObservation
 
                 using (PatientObservationMongoContext ctx = new PatientObservationMongoContext(_dbName))
                 {
-                    List<MEPatientObservation> meObservations = ctx.PatientObservations.Collection.Find(mQuery).ToList();
-                    if (meObservations != null)
+                    List<MEPatientObservation> mePO = ctx.PatientObservations.Collection.Find(mQuery).ToList();
+                    if (mePO != null && mePO.Count > 0)
                     {
-                        observationsDataList = new List<PatientObservationData>();
-                        foreach (MEPatientObservation b in meObservations)
+                        poDataList = new List<PatientObservationData>();
+                        foreach (MEPatientObservation b in mePO)
                         {
-                            PatientObservationData observationData = new PatientObservationData
+                            PatientObservationData poData = new PatientObservationData
                             {
                                 Id = b.Id.ToString(),
-                                PatientId = b.PatientId.ToString()
+                                PatientId = b.PatientId.ToString(),
+                                EndDate = b.EndDate,
+                                ObservationId = b.ObservationId.ToString(),
+                                Source = b.Source,
+                                StartDate = b.StartDate,
+                                StateId = (int)b.State,
+                                Units = b.Units,
+                                Values = GetValueList(b.NumericValue, b.NonNumericValue),
+                                LastUpdatedOn = b.LastUpdatedOn,
+                                DisplayId = (int)b.Display
                             };
-                            observationsDataList.Add(observationData);
+                            poDataList.Add(poData);
                         }
                     }
                 }
-                return observationsDataList;
+                return poDataList;
             }
             catch (Exception) { throw; }
         }
@@ -433,7 +478,8 @@ namespace Phytel.API.DataDomain.PatientObservation
                                 StateId = (int)mePO.State,
                                 PatientId = request.PatientId,
                                 StartDate = mePO.StartDate,
-                                EndDate = mePO.EndDate
+                                EndDate = mePO.EndDate,
+                                Source = mePO.Source
                             };
                             observationDataL.Add(data);
                         }
@@ -530,12 +576,17 @@ namespace Phytel.API.DataDomain.PatientObservation
             }
         }
 
-        public List<IdNamePair> GetAllowedObservationStates(object entity)
+        public List<ObservationStateData> GetAllowedObservationStates()
         {
             throw new NotImplementedException();
         }
 
         public object GetObservationsByType(object newEntity, bool? standard, bool? status)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<object> GetActiveObservations()
         {
             throw new NotImplementedException();
         }
