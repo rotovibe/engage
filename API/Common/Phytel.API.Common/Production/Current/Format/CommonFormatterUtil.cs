@@ -10,24 +10,22 @@ namespace Phytel.API.Common.Format
     {
         public void FormatExceptionResponse<T>(T response, IHttpResponse httpResponse, Exception ex) where T : IDomainResponse
         {
-            if (ex is UnauthorizedAccessException || ex.Message == "UnauthorizedAccessException" || ex.Message == "Unauthorized")
-            {
-                httpResponse.StatusCode = (int)HttpStatusCode.Unauthorized;
-            }
+            if (ex != null && (ex is UnauthorizedAccessException || ex.Message == "UnauthorizedAccessException" || ex.Message == "Unauthorized"))
+                httpResponse.StatusCode = (int) HttpStatusCode.Unauthorized;
             else
+                httpResponse.StatusCode = (int) HttpStatusCode.InternalServerError;
+
+            response.Status = new ResponseStatus(ex.ToErrorCode(), ex.Message)
             {
-                httpResponse.StatusCode = (int)HttpStatusCode.InternalServerError;
-            }
-            
-            response.Status = new ResponseStatus(ex.ToErrorCode(), ex.Message);
-            response.Status.ErrorCode = ex.ToErrorCode();
-            response.Status.Message = ex.Message;
-            response.Status.StackTrace = ex.StackTrace;
+                ErrorCode = ex.ToErrorCode(),
+                Message = ex.Message,
+                StackTrace = ex.StackTrace
+            };
         }
 
         public string FormatDateOfBirth(string val)
         {
-            string result = string.Empty;
+            var result = string.Empty;
             DateTime parsed;
             if (DateTime.TryParse(val, out parsed))
                 result = val;

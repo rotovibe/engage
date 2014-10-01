@@ -280,8 +280,6 @@ namespace Phytel.API.DataAudit
             }
 
             return;
-
-
         }
 
         public static void LogAuditData(IAppDomainRequest request, string sqlUserID, List<string> patientids, HttpRequest webreq, string returnTypeName)
