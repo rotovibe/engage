@@ -14,21 +14,26 @@ namespace Phytel.API.AppDomain.NG.Test
         [TestMethod]
         public void InsertPatientNote_Test()
         {
-            List<string> pgIds = new List<string>();
-            pgIds.Add("52f927abd6a4850e5c0f038b");
-            PatientNote note = new PatientNote { 
-                Id = "-2",
-                Text = "AD Patrick test",
-                CreatedById = "bb241c64a0ff4e01ba5f4246ef50780e",
-                PatientId = "52f5589b072ef709f84e7706",
-                ProgramIds = pgIds
+            PatientNote note = new PatientNote {
+                ContactedOn = DateTime.UtcNow,
+                CreatedById = "5325c821072ef705080d3488",
+                CreatedOn = DateTime.UtcNow,
+                DurationId = "540f2181d4332319883f3ea5",
+                MethodId = "540f1da7d4332319883f3e8c",
+                OutcomeId = "540f1f10d4332319883f3e92",
+                PatientId = "5325db71d6a4850adcbba94a",
+                SourceId = "540f208ed4332319883f3e9b",
+                 Text = "HEllo Hello",
+                 TypeId = 2,
+                 ValidatedIdentity  = true,
+                WhoId = "540f1fc7d4332319883f3e99"
             };
             
             PostPatientNoteRequest request = new PostPatientNoteRequest();
             request.ContractNumber = "InHealth001";
-            request.UserId = "AD_TestHarness"; 
+            request.UserId = "5325c821072ef705080d3488"; 
             request.Version = 1;
-            request.PatientId = "52f5589b072ef709f84e7706";
+            request.PatientId = "5325db71d6a4850adcbba94a";
             request.Token = "5307bcf5d6a4850cd4abe0dd";
             request.Note = note;
 

@@ -19,7 +19,7 @@ namespace Phytel.API.AppDomain.NG
         void FindSpawnIdInSteps(Program program, string p, Actions a);
         CohortPatientViewData GetCohortPatientViewRecord(string patientId, IAppDomainRequest request);
         Actions GetProcessingAction(List<Module> list, string actionId);
-        void HydratePlanElementLists(List<object> processedElements, PostProcessActionResponse response);
+        void HydratePlanElementLists(List<object> processedElements, PlanElements planElems);
         PlanElement InitializePlanElementSettings(PlanElement pe, PlanElement p, Program program);
         bool IsActionInitial(Program p);
         bool IsProgramCompleted(Program p, string userId);
@@ -35,6 +35,7 @@ namespace Phytel.API.AppDomain.NG
         void SetInitialProperties(string assignToId, IPlanElement m, bool dependent);
         void SetProgramAttributes(SpawnElement r, Program program, string userId, ProgramAttributeData progAttr);
         void SetInitialActions(object x, string assignToId);
+        void SetInitialValues(string assignToId, IPlanElement pe);
         void SetProgramInformation(ProgramAttributeData _programAttributes, Program p);
         void SetStartDateForProgramAttributes(string programId, IAppDomainRequest request);
         void SpawnElementsInList(List<SpawnElement> list, Program program, string userId, ProgramAttributeData progAttr);
@@ -44,5 +45,7 @@ namespace Phytel.API.AppDomain.NG
 
         bool UpdatePlanElementAttributes(Program pg, PlanElement planElement, string userId, PlanElements planElems);
         void ProcessPlanElementChanges(PlanElements planElems, PlanElement samplePe, PlanElement fPe, string userId);
+
+        Actions CloneRepeatAction(Actions action, string assignedById);
     }
 }

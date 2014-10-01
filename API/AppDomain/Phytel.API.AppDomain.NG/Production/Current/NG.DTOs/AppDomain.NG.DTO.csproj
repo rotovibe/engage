@@ -15,6 +15,8 @@
     <SccLocalPath>SAK</SccLocalPath>
     <SccAuxPath>SAK</SccAuxPath>
     <SccProvider>SAK</SccProvider>
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\..\..\..\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -85,10 +87,20 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="LookUp\GetLookUpDetailsRequest.cs" />
+    <Compile Include="LookUp\GetLookUpDetailsResponse.cs" />
+    <Compile Include="LookUp\LookUpDetails.cs" />
     <Compile Include="LookUp\Program\GetAllObjectivesRequest.cs" />
     <Compile Include="LookUp\Program\GetAllObjectivesResponse.cs" />
     <Compile Include="Contact\GetRecentPatientsRequest.cs" />
     <Compile Include="Contact\GetRecentPatientsResponse .cs" />
+    <Compile Include="Observation\GetHistoricalPatientObservationsRequest.cs" />
+    <Compile Include="Observation\GetCurrenPatientObservationsRequest.cs" />
+    <Compile Include="Observation\GetHistoricalPatientObservationsResponse.cs" />
+    <Compile Include="Observation\GetCurrentPatientObservationsResponse.cs" />
+    <Compile Include="Observation\IPatientObservationRequest.cs" />
+    <Compile Include="Patient\GetInitializePatientRequest.cs" />
+    <Compile Include="Patient\GetInitializePatientResponse.cs" />
     <Compile Include="Patient\PostDeletePatientRequest.cs" />
     <Compile Include="Patient\PostDeletePatientResponse.cs" />
     <Compile Include="Program\Action.cs" />
@@ -170,21 +182,23 @@
     <Compile Include="Note\PostPatientNoteResponse.cs" />
     <Compile Include="Observation\GetAllowedStatesRequest.cs" />
     <Compile Include="Observation\GetAllowedStatesResponse.cs" />
-    <Compile Include="Observation\GetAdditionalObservationLibraryRequest.cs" />
+    <Compile Include="Observation\GetObservationsRequest.cs" />
     <Compile Include="Observation\GetAdditionalObservationItemRequest.cs" />
     <Compile Include="Observation\GetAdditionalObservationItemResponse.cs" />
     <Compile Include="Observation\PatientProblems.cs" />
     <Compile Include="Observation\PostUpdateObservationItemsRequest.cs" />
     <Compile Include="Observation\GetStandardObservationItemsRequest.cs" />
     <Compile Include="Observation\GetInitializeProblemRequest.cs" />
-    <Compile Include="Observation\GetAdditionalObservationLibraryResponse.cs" />
+    <Compile Include="Observation\GetObservationsResponse.cs" />
     <Compile Include="Observation\PostUpdateObservationItemsResponse.cs" />
     <Compile Include="Observation\GetStandardObservationItemsResponse.cs" />
     <Compile Include="Observation\GetInitializeProblemResponse.cs" />
-    <Compile Include="Observation\ObservationLibraryItem.cs" />
     <Compile Include="Observation\ObservationValue.cs" />
     <Compile Include="Observation\PatientObservation.cs" />
     <Compile Include="Observation\PreviousValue.cs" />
+    <Compile Include="Program\PlanElements.cs" />
+    <Compile Include="Program\PostRepeatActionRequest.cs" />
+    <Compile Include="Program\PostRepeatActionResponse.cs" />
     <Compile Include="Program\PostRemovePatientProgramRequest.cs" />
     <Compile Include="Program\PostRemovePatientProgramResponse.cs" />
     <Compile Include="Program\PostProgramAttributesChangeRequest.cs" />
@@ -227,6 +241,14 @@
     <Compile Include="Program\Response.cs" />
     <Compile Include="Program\SpawnElement.cs" />
     <Compile Include="Program\Step.cs" />
+    <Compile Include="Scheduling\GetToDosRequest.cs" />
+    <Compile Include="Scheduling\GetToDosResponse.cs" />
+    <Compile Include="Scheduling\PostUpdateToDoRequest.cs" />
+    <Compile Include="Scheduling\PostInsertToDoRequest.cs" />
+    <Compile Include="Scheduling\PostUpdateToDoResponse.cs" />
+    <Compile Include="Scheduling\PostInsertToDoResponse.cs" />
+    <Compile Include="Scheduling\Schedule.cs" />
+    <Compile Include="Scheduling\ToDo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -245,6 +267,7 @@
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

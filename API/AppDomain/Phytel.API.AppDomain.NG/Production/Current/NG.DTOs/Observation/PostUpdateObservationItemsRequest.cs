@@ -1,4 +1,3 @@
-using Phytel.API.AppDomain.NG.DTO.Observation;
 using Phytel.API.Interface;
 using ServiceStack.ServiceHost;
 using System.Collections.Generic;
@@ -13,8 +12,8 @@ namespace Phytel.API.AppDomain.NG.DTO
         [ApiMember(Name = "PatientId", Description = "Id of the patient.", ParameterType = "path", DataType = "string", IsRequired = true)]
         public string PatientId { get; set; }
 
-        [ApiMember(Name = "Observations", Description = "Observations to be updated/saved.", ParameterType = "path", DataType = "string", IsRequired = true)]
-        public List<PatientObservation> Observations { get; set; }
+        [ApiMember(Name = "PatientObservations", Description = "Observations to be updated/saved.", ParameterType = "path", DataType = "string", IsRequired = true)]
+        public List<PatientObservation> PatientObservations { get; set; }
 
         [ApiMember(Name = "UserID", Description = "ID of the user making the request (Internally used ONLY)", ParameterType = "property", DataType = "string", IsRequired = true)]
         public string UserId { get; set; }

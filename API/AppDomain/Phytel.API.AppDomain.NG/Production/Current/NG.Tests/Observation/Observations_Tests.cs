@@ -1,6 +1,5 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Phytel.API.AppDomain.NG.DTO;
-using Phytel.API.AppDomain.NG.DTO.Observation;
 using ServiceStack.Service;
 using ServiceStack.ServiceClient.Web;
 using System.Collections.Generic;
@@ -57,7 +56,7 @@ namespace Phytel.API.DataDomain.Patient.Service.Test
                 version,
                 contractNumber,
                 patientId,
-                token), new PostUpdateObservationItemsRequest { Observations = GetObservations() } as object);
+                token), new PostUpdateObservationItemsRequest { PatientObservations = GetObservations() } as object);
         }
 
         private List<PatientObservation> GetObservations()
@@ -206,7 +205,7 @@ namespace Phytel.API.DataDomain.Patient.Service.Test
                 string.Format(@"http://localhost:888/Nightingale/{0}/{1}/Patient/{2}/Observation/Update",
                 version,
                 contractNumber,
-                patientId), new PostUpdateObservationItemsRequest { Observations = GetProblems() } as object);
+                patientId), new PostUpdateObservationItemsRequest { PatientObservations = GetProblems() } as object);
         }
 
         private List<PatientObservation> GetProblems()

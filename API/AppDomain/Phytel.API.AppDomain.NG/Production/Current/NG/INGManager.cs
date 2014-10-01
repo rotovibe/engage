@@ -24,8 +24,8 @@ namespace Phytel.API.AppDomain.NG
         List<Cohort> GetCohorts(GetAllCohortsRequest request);
         Contact GetContactByPatientId(GetContactRequest request);
         List<IdNamePair> GetLookUps(GetLookUpsRequest request);
+        List<LookUpDetails> GetLookUpDetails(GetLookUpDetailsRequest request);
         GetPatientResponse GetPatient(GetPatientRequest request);
-        List<PatientProblem> GetPatientProblems(GetAllPatientProblemsRequest request);
         GetPatientProgramDetailsSummaryResponse GetPatientProgramDetailsSummary(GetPatientProgramDetailsSummaryRequest request);
         GetPatientActionDetailsResponse GetPatientActionDetails(GetPatientActionDetailsRequest request);
         GetPatientProgramsResponse GetPatientPrograms(GetPatientProgramsRequest request);
@@ -39,7 +39,7 @@ namespace Phytel.API.AppDomain.NG
         PostDeletePatientResponse DeletePatient(PostDeletePatientRequest request);
         PostRemovePatientProgramResponse RemovePatientProgram(PostRemovePatientProgramRequest request);
         void LogException(Exception ex);
-
+        GetInitializePatientResponse GetInitializePatient(GetInitializePatientRequest request);
         PostProgramAttributesChangeResponse PostProgramAttributeChanges(PostProgramAttributesChangeRequest request);
     }
 }
