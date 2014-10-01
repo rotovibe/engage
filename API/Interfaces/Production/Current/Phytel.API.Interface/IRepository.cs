@@ -24,7 +24,6 @@ namespace Phytel.API.Interface
     public interface IRepository
     {
         string UserId { get; set; }
-
         object Insert(object newEntity);
         object InsertAll(List<object> entities);
         void Delete(object entity);
