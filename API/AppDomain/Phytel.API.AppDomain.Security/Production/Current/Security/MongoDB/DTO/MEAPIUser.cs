@@ -15,12 +15,13 @@ namespace Phytel.API.AppDomain.Security
 
         public const string UserNameProperty = "un";
         public const string PasswordProperty = "pwd";
-
+        public const string SaltProperty = "salt";
         public const string ApiKeyProperty = "apikey";
         public const string ProductProperty = "product";
         public const string IsActiveProperty = "isactive";
         public const string SessionLengthInMinutesProperty = "slim";
         public const string VersionProperty = "v";
+        public const string DefaultContractProperty = "dc";
 
         [BsonId]
         public ObjectId Id { get; set; }
@@ -33,10 +34,18 @@ namespace Phytel.API.AppDomain.Security
         [BsonIgnoreIfNull(true)]
         public string Password { get; set; }
 
+        [BsonElement(SaltProperty)]
+        [BsonIgnoreIfNull(true)]
+        public string Salt { get; set; }
+
         [BsonElement(ApiKeyProperty)]
         [BsonIgnoreIfNull(true)]
         public string ApiKey { get; set; }
 
+        [BsonElement(DefaultContractProperty)]
+        [BsonIgnoreIfNull(true)]
+        public string DefaultContract { get; set; }
+        
         [BsonElement(ProductProperty)]
         [BsonIgnoreIfNull(true)]
         public string Product { get; set; }

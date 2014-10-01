@@ -12,6 +12,8 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
 using Phytel.Services;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace Phytel.API.AppDomain.Security
 {
@@ -35,58 +37,60 @@ namespace Phytel.API.AppDomain.Security
             throw new NotImplementedException();
         }
 
-        public UserAuthenticateResponse LoginUser(string userName, string password, string securityToken, string apiKey, string productName)
+        public UserAuthenticateResponse LoginUser(string userName, string password, string securityToken, string apiKey, string productName, string contractNumber)
         {
-            throw new NotImplementedException();
+            try
+            {
+                UserAuthenticateResponse response = new UserAuthenticateResponse();
+                MEAPISession session = null;
 
-            //try
-            //{
-            //    UserAuthenticateResponse response = new UserAuthenticateResponse();
-            //    MEAPISession session = null;
+                //need to do a lookup against the APIKey collection to see if apiKey/Product combination exists
+                MEAPIUser user = (from k in _objectContext.APIUsers where k.UserName == userName && k.ApiKey == apiKey && k.Product == productName.ToUpper() && k.IsActive == true select k).FirstOrDefault();
+                if (user != null)
+                {
+                    //validate password
+                    string dbPwd = HashText(password, user.Salt, new SHA1CryptoServiceProvider());
+                    if (dbPwd.Equals(user.Password))
+                    {
+                        session = new MEAPISession
+                        {
+                            SecurityToken = securityToken,
+                            APIKey = apiKey,
+                            Product = productName,
+                            SessionLengthInMinutes = user.SessionLengthInMinutes,
+                            SessionTimeOut = DateTime.UtcNow.AddMinutes(user.SessionLengthInMinutes),
+                            UserName = user.UserName,
+                            Version = 1.0,
+                            UserId = user.Id,
+                            ContractNumber = (string.IsNullOrEmpty(contractNumber) ? user.DefaultContract : contractNumber)
+                        };
 
-            //    //need to do a lookup against the APIKey collection to see if apiKey/Product combination exists
-            //    MEAPIUser user = (from k in _objectContext.APIUsers where k.UserName == userName && k.ApiKey == apiKey && k.Product == productName && k.IsActive == true select k).FirstOrDefault();
-            //    if (user != null)
-            //    {
-            //        //validate password
-            //        Phytel.Services.DataProtector protector = new Services.DataProtector(Services.DataProtector.Store.USE_SIMPLE_STORE);
-            //        string dbPwd = protector.Decrypt(user.Password);
-            //        if (dbPwd.Equals(password))
-            //        {
-            //            session = new MEAPISession
-            //            {
-            //                SecurityToken = securityToken,
-            //                APIKey = apiKey,
-            //                Product = productName,
-            //                SessionLengthInMinutes = user.SessionLengthInMinutes,
-            //                SessionTimeOut = DateTime.UtcNow.AddMinutes(user.SessionLengthInMinutes),
-            //                UserName = user.UserName,
-            //                SQLUserId = user.Id.ToString()
-            //            };
+                        _objectContext.APISessions.Collection.Insert(session);
+                    }
+                    else
+                        throw new UnauthorizedAccessException("Login Failed!  Username and/or Password is incorrect");
 
-            //            _objectContext.APISessions.Collection.Insert(session);
-            //        }
-            //        else
-            //            throw new UnauthorizedAccessException("Login Failed!  Username and/or Password is incorrect");
+                    List<ContractInfo> cts = new List<ContractInfo>();
+                    cts.Add(new ContractInfo { Number = session.ContractNumber });
 
-            //        response = new UserAuthenticateResponse 
-            //                        {
-            //                            APIToken = session.Id.ToString(), 
-            //                            Contracts = new List<ContractInfo>(), 
-            //                            Name = user.UserName, 
-            //                            SessionTimeout = user.SessionLengthInMinutes, 
-            //                            UserName = user.UserName 
-            //                        };
-            //    }
-            //    else
-            //        throw new UnauthorizedAccessException("Login Failed! Unknown Username/Password");
+                    response = new UserAuthenticateResponse
+                                    {
+                                        APIToken = session.Id.ToString(),
+                                        Contracts = cts,
+                                        Name = user.UserName,
+                                        SessionTimeout = user.SessionLengthInMinutes,
+                                        UserName = user.UserName
+                                    };
+                }
+                else
+                    throw new UnauthorizedAccessException("Login Failed! Unknown Username/Password");
 
-            //    return response;
-            //}
-            //catch (Exception)
-            //{
-            //    throw;
-            //}
+                return response;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
 
         public AuthenticateResponse LoginUser(AuthenticateResponse existingReponse, string securityToken, string apiKey, string productName)
@@ -276,8 +280,14 @@ namespace Phytel.API.AppDomain.Security
             return returnId;
         }
 
+        private string HashText(string text, string salt, System.Security.Cryptography.HashAlgorithm hash)
+        {
+            byte[] textWithSaltBytes = Encoding.UTF8.GetBytes(string.Concat(text, salt));
+            byte[] hashedBytes = hash.ComputeHash(textWithSaltBytes);
+            hash.Clear();
+            return Convert.ToBase64String(hashedBytes);
+        }
         #endregion
-
 
         public void UndoDelete(object entity)
         {
