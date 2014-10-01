@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Security.Cryptography;
 using System.Text;
 using System.Windows.Forms;
 using System.Xml;
@@ -77,6 +78,39 @@ namespace DataProtectorWinApp
                     break;
             }
             this.txtEncrypt.Text = protector.Decrypt(txtDecrypt.Text, txtConfig.Text, Phytel.Framework.Data.DataProtector.EntropyType.CONFIGPATH);
-        } 
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            string randomSaltKey = new Random().Next(100, 999999999).ToString();
+            Phytel.Framework.Data.DataProtector protector = new Phytel.Framework.Data.DataProtector(Phytel.Framework.Data.DataProtector.Store.USE_SIMPLE_STORE);
+            string salt = protector.Encrypt(randomSaltKey, txtConfig.Text, Phytel.Framework.Data.DataProtector.EntropyType.CONFIGPATH);
+            string pwd = HashText(txtEncrypt.Text, salt, new SHA1CryptoServiceProvider());
+
+            StringBuilder sb = new StringBuilder();
+            sb.AppendLine("{");
+            sb.AppendLine("\"un\" : \"" + txtUserName.Text + "\",");
+            sb.AppendLine("\"pwd\" : \"" + pwd + "\",");
+            sb.AppendLine("\"dc\" : \"PHYTEL\",");
+            sb.AppendLine("\"salt\" : \"" + salt + "\",");
+            sb.AppendLine("\"apikey\" : \"" + txtAPIKey.Text + "\",");
+            sb.AppendLine("\"product\" : \"" + txtProduct.Text + "\",");
+            sb.AppendLine("\"isactive\" : true,");
+            sb.AppendLine("\"slim\" : " + txtTimeout.Text + ",");
+            sb.AppendLine("\"v\" : 1");
+            sb.AppendLine("}");
+
+            txtAPIUser.Text = sb.ToString();
+
+            txtDecrypt.Text = protector.Encrypt(txtEncrypt.Text, txtConfig.Text, Phytel.Framework.Data.DataProtector.EntropyType.CONFIGPATH);
+        }
+
+        private string HashText(string text, string salt, System.Security.Cryptography.HashAlgorithm hash)
+        {
+            byte[] textWithSaltBytes = Encoding.UTF8.GetBytes(string.Concat(text, salt));
+            byte[] hashedBytes = hash.ComputeHash(textWithSaltBytes);
+            hash.Clear();
+            return Convert.ToBase64String(hashedBytes);
+        }
     }
 }
