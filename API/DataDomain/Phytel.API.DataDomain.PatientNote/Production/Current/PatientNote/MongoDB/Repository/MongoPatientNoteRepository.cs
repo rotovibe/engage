@@ -19,7 +19,7 @@ using MongoDB.Bson.Serialization;
 
 namespace Phytel.API.DataDomain.PatientNote
 {
-    public class MongoPatientNoteRepository<T> : IPatientNoteRepository<T>
+    public class MongoPatientNoteRepository : IPatientNoteRepository
     {
         private string _dbName = string.Empty;
         private int _expireDays = Convert.ToInt32(ConfigurationManager.AppSettings["ExpireDays"]);
@@ -53,17 +53,38 @@ namespace Phytel.API.DataDomain.PatientNote
                 {
                     meN = new MEPatientNote(this.UserId)
                     {
-                        Id = ObjectId.GenerateNewId(),
                         PatientId = ObjectId.Parse(noteData.PatientId),
                         Text = noteData.Text,
                         ProgramIds = Helper.ConvertToObjectIdList(noteData.ProgramIds),
-                        Version = request.Version,
+                        ValidatedIdentity = noteData.ValidatedIdentity,
+                        ContactedOn = noteData.ContactedOn,
                         DeleteFlag = false
-                        //,
-                        //UpdatedBy = ObjectId.Parse(this.UserId),
-                        //LastUpdatedOn = DateTime.UtcNow
                     };
 
+                    if(noteData.TypeId != null && noteData.TypeId != 0)
+                    {
+                        meN.Type = (NoteType)noteData.TypeId;
+                    }
+                    if(!string.IsNullOrEmpty(noteData.MethodId))
+                    {
+                        meN.MethodId = ObjectId.Parse(noteData.MethodId);
+                    }
+                    if(!string.IsNullOrEmpty(noteData.OutcomeId))
+                    {
+                        meN.OutcomeId = ObjectId.Parse(noteData.OutcomeId);
+                    }
+                    if(!string.IsNullOrEmpty(noteData.WhoId))
+                    {
+                        meN.WhoId = ObjectId.Parse(noteData.WhoId);
+                    }
+                    if(!string.IsNullOrEmpty(noteData.SourceId))
+                    {
+                        meN.SourceId = ObjectId.Parse(noteData.SourceId);
+                    }
+                    if(!string.IsNullOrEmpty(noteData.DurationId))
+                    {
+                        meN.DurationId = ObjectId.Parse(noteData.DurationId);
+                    }
                     using (PatientNoteMongoContext ctx = new PatientNoteMongoContext(_dbName))
                     {
                         ctx.PatientNotes.Collection.Insert(meN);
@@ -152,7 +173,15 @@ namespace Phytel.API.DataDomain.PatientNote
                             Text = meN.Text,
                             ProgramIds = Helper.ConvertToStringList(meN.ProgramIds),
                             CreatedOn = meN.RecordCreatedOn,
-                            CreatedById = meN.RecordCreatedBy.ToString()
+                            CreatedById = meN.RecordCreatedBy.ToString(),
+                            TypeId = (meN.Type == 0) ? 0 : (int)meN.Type,
+                            MethodId = (meN.MethodId == null) ? null :  meN.MethodId.ToString(),
+                            OutcomeId = (meN.OutcomeId == null) ? null : meN.OutcomeId.ToString(),
+                            WhoId = (meN.WhoId == null) ? null : meN.WhoId.ToString(),
+                            SourceId = (meN.SourceId == null) ? null : meN.SourceId.ToString(),
+                            DurationId = (meN.DurationId == null) ? null : meN.DurationId.ToString(),
+                            ValidatedIdentity = meN.ValidatedIdentity,
+                            ContactedOn = meN.ContactedOn
                         };
                     }
                 }
@@ -233,7 +262,15 @@ namespace Phytel.API.DataDomain.PatientNote
                                 Text = meN.Text,
                                 ProgramIds = Helper.ConvertToStringList(meN.ProgramIds),
                                 CreatedOn = meN.RecordCreatedOn,
-                                CreatedById = meN.RecordCreatedBy.ToString()
+                                CreatedById = meN.RecordCreatedBy.ToString(),
+                                TypeId = (meN.Type == 0) ? 0 : (int)meN.Type,
+                                MethodId = (meN.MethodId == null) ? null : meN.MethodId.ToString(),
+                                OutcomeId = (meN.OutcomeId == null) ? null : meN.OutcomeId.ToString(),
+                                WhoId = (meN.WhoId == null) ? null : meN.WhoId.ToString(),
+                                SourceId = (meN.SourceId == null) ? null : meN.SourceId.ToString(),
+                                DurationId = (meN.DurationId == null) ? null : meN.DurationId.ToString(),
+                                ValidatedIdentity = meN.ValidatedIdentity,
+                                ContactedOn = meN.ContactedOn
                             });
                         }
                     }

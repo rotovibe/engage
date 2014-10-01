@@ -7,12 +7,14 @@ namespace Phytel.API.DataDomain.PatientNote.Test
     [TestClass]
     public class PatientNoteTest
     {
+        IPatientNoteDataManager m = new PatientNoteDataManager { Factory = new PatientNoteRepositoryFactory() };
+        
         [TestMethod]
         public void GetPatientNote_Test_Passes()
         {
             GetPatientNoteDataRequest request = new GetPatientNoteDataRequest { Id = "530fb4d9d433230ea4e8bdfa" };
 
-            PatientNoteData response = PatientNoteDataManager.GetPatientNote(request);
+            PatientNoteData response = m.GetPatientNote(request);
 
             Assert.IsNotNull(response);
         }
@@ -22,7 +24,7 @@ namespace Phytel.API.DataDomain.PatientNote.Test
         {
             GetPatientNoteDataRequest request = new GetPatientNoteDataRequest { Id = "52f5589c072ef709f84e7798" };
 
-            PatientNoteData response = PatientNoteDataManager.GetPatientNote(request);
+            PatientNoteData response = m.GetPatientNote(request);
 
             Assert.IsNull(response);
         }
@@ -32,7 +34,7 @@ namespace Phytel.API.DataDomain.PatientNote.Test
         {
             GetAllPatientNotesDataRequest request = new GetAllPatientNotesDataRequest { PatientId = "52f5589c072ef709f84e7798", Count = 3 };
 
-            List<PatientNoteData> response = PatientNoteDataManager.GetAllPatientNotes(request);
+            List<PatientNoteData> response = m.GetAllPatientNotes(request);
 
             Assert.IsTrue(response.Count > 0);
         }
@@ -42,7 +44,7 @@ namespace Phytel.API.DataDomain.PatientNote.Test
         {
             GetAllPatientNotesDataRequest request = new GetAllPatientNotesDataRequest { PatientId = "5307b343d433232dd4e94743", Count = 3 };
 
-            List<PatientNoteData> response = PatientNoteDataManager.GetAllPatientNotes(request);
+            List<PatientNoteData> response = m.GetAllPatientNotes(request);
 
             Assert.IsTrue(response.Count == 0);
         }
@@ -55,7 +57,7 @@ namespace Phytel.API.DataDomain.PatientNote.Test
                 Version = 1,
                 PatientNote = n
             };
-            string id = PatientNoteDataManager.InsertPatientNote(request);
+            string id = m.InsertPatientNote(request);
 
             Assert.IsNotNull(id);
         }
@@ -69,7 +71,7 @@ namespace Phytel.API.DataDomain.PatientNote.Test
                 Version = 1,
                 Id = "5307c1f2d433232860709fef",
             };
-            bool isDeleted = PatientNoteDataManager.DeletePatientNote(request);
+            bool isDeleted = m.DeletePatientNote(request);
 
             Assert.IsTrue(isDeleted);
         }

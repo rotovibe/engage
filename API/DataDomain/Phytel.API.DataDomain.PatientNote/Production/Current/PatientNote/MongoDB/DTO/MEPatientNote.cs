@@ -25,6 +25,14 @@ namespace Phytel.API.DataDomain.PatientNote.DTO
         public const string PatientIdProperty = "pid";
         public const string TextProperty = "txt";
         public const string ProgramProperty = "prog";
+        public const string NoteTypeProperty = "type";
+        public const string MethodIdProperty = "mid";
+        public const string WhoIdProperty = "wid";
+        public const string SourceIdProperty = "srcid";
+        public const string OutcomeIdProperty = "oid";
+        public const string DurationIdProperty = "did";
+        public const string ContactedOnProperty = "con";
+        public const string ValidatedIdentityProperty = "vi";
 
         #region Standard IMongoEntity Constants
         public const string VersionProperty = "v";
@@ -50,6 +58,38 @@ namespace Phytel.API.DataDomain.PatientNote.DTO
         [BsonElement(ProgramProperty)]
         [BsonIgnoreIfNull(true)]
         public List<ObjectId> ProgramIds { get; set; }
+
+        [BsonElement(NoteTypeProperty)]
+        [BsonIgnoreIfNull(true)]
+        public NoteType Type { get; set; }
+
+        [BsonElement(MethodIdProperty)]
+        [BsonIgnoreIfNull(true)]
+        public ObjectId? MethodId { get; set; }
+
+        [BsonElement(WhoIdProperty)]
+        [BsonIgnoreIfNull(true)]
+        public ObjectId? WhoId { get; set; }
+
+        [BsonElement(SourceIdProperty)]
+        [BsonIgnoreIfNull(true)]
+        public ObjectId? SourceId { get; set; }
+
+        [BsonElement(OutcomeIdProperty)]
+        [BsonIgnoreIfNull(true)]
+        public ObjectId? OutcomeId { get; set; }
+
+        [BsonElement(DurationIdProperty)]
+        [BsonIgnoreIfNull(true)]
+        public ObjectId? DurationId { get; set; }
+
+        [BsonElement(ContactedOnProperty)]
+        [BsonIgnoreIfNull(true)]
+        public DateTime? ContactedOn { get; set; }
+
+        [BsonElement(ValidatedIdentityProperty)]
+        [BsonIgnoreIfNull(true)]
+        public bool ValidatedIdentity { get; set; }
 
         #region Standard IMongoEntity Implementation
         [BsonExtraElements]

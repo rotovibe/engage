@@ -8,7 +8,7 @@ using Phytel.API.Interface;
 
 namespace Phytel.API.DataDomain.PatientNote
 {
-    public interface IPatientNoteRepository<T> : IRepository<T>
+    public interface IPatientNoteRepository : IRepository
     {
         IEnumerable<object> FindByPatientId(object request);
         void RemoveProgram(object entity, List<string> updatedProgramIds);
