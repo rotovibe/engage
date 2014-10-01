@@ -664,7 +664,10 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
                             Previous = ParseObjectId(a.Previous),
                             SourceId = ObjectId.Parse(a.SourceId),
                             Spawn = GetSpawnElements(a.SpawnElement),
-                            Status = (Status) a.Status
+                            Status = (Status) a.Status,
+                            Archived = a.Archived,
+                            ArchivedDate = a.ArchivedDate,
+                            ArchiveOriginId = a.ArchiveOriginId
                         }));
                 }
                 return acts;

@@ -26,6 +26,21 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
         [BsonIgnoreIfNull(true)]
         public DateTime? AttributeStartDate { get; set; }
 
+        public const string ArchiveOriginIdProperty = "archoid";
+        [BsonElement(ArchiveOriginIdProperty)]
+        [BsonIgnoreIfNull(true)]
+        public string ArchiveOriginId { get; set; }
+
+        public const string ArchiveIdProperty = "archid";
+        [BsonElement(ArchiveIdProperty)]
+        [BsonIgnoreIfNull(true)]
+        public bool Archived { get; set; }
+
+        public const string ArchiveDateProperty = "archdate";
+        [BsonElement(ArchiveDateProperty)]
+        [BsonIgnoreIfNull(true)]
+        public DateTime? ArchivedDate { get; set; }
+
         public const string SourceIdProperty = "srcid";
         [BsonElement(SourceIdProperty)]
         [BsonIgnoreIfNull(false)]

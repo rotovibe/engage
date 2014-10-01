@@ -182,5 +182,11 @@ namespace Phytel.API.DataDomain.Program.Test.Stubs
         {
             throw new NotImplementedException();
         }
+
+
+        public PutInsertResponseResponse PutInsertResponse(PutInsertResponseRequest r)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -29,9 +29,9 @@ namespace Phytel.API.DataDomain.Program.DTO
         InReview = 3,
         Met = 4,
         NotMet = 5
-    }    
-    
-public enum SpawnElementTypeCode
+    }
+
+    public enum SpawnElementTypeCode
     {
         Program = 1,
         Module = 2,
@@ -44,12 +44,10 @@ public enum SpawnElementTypeCode
         ProgramEnddate = 14,
         EnrollmentStatus = 15,
         OptOut = 16,
-        //OptOutReason = 17,
-        //OptOutDate = 18,
         Graduated = 19,
         Locked = 20,
-        //EligibilityOverride = 21,
-        Problem = 101
+        Problem = 101,
+        ToDo = 111
     }
 
     public enum SelectType
