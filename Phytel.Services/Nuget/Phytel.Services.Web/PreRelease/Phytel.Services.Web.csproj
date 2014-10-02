@@ -52,6 +52,18 @@
     <Reference Include="MongoDB.Driver">
       <HintPath>packages\mongocsharpdriver.1.9.2\lib\net35\MongoDB.Driver.dll</HintPath>
     </Reference>
+    <Reference Include="Phytel.Services.Mongo">
+      <HintPath>packages\Phytel.Services.Mongo.1.3.0.01\lib\net451\Phytel.Services.Mongo.dll</HintPath>
+    </Reference>
+    <Reference Include="Phytel.Services.Security">
+      <HintPath>packages\Phytel.Services.Security.1.3.0.02\lib\net451\Phytel.Services.Security.dll</HintPath>
+    </Reference>
+    <Reference Include="Phytel.Services.SQLServer">
+      <HintPath>packages\Phytel.Services.SQLServer.1.3.0.03\lib\net451\Phytel.Services.SQLServer.dll</HintPath>
+    </Reference>
+    <Reference Include="Phytel.Services.Utility">
+      <HintPath>packages\Phytel.Services.Utility.1.3.0.02\lib\net451\Phytel.Services.Utility.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
@@ -77,25 +89,8 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+    <None Include="Phytel.Services.Web.nuspec" />
     <None Include="phytel.snk" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Phytel.Services.Mongo\Phytel.Services.Mongo.csproj">
-      <Project>{381f3161-50b0-4531-ab10-d7b6baefa377}</Project>
-      <Name>Phytel.Services.Mongo</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Phytel.Services.Security\Phytel.Services.Security.csproj">
-      <Project>{fc475bd5-1be6-40c9-ba40-8f38c13b47f5}</Project>
-      <Name>Phytel.Services.Security</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Phytel.Services.SQLServer\Phytel.Services.SQLServer.csproj">
-      <Project>{11ed9376-bac8-4322-b63b-f6a244dc8a0e}</Project>
-      <Name>Phytel.Services.SQLServer</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Phytel.Services.Utility\Phytel.Services.Utility.csproj">
-      <Project>{8b6ba61b-f5b8-4361-bbab-8e8f9f6189b2}</Project>
-      <Name>Phytel.Services.Utility</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
