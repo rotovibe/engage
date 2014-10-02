@@ -2216,7 +2216,7 @@ namespace Phytel.Data.ETL
                             parms.Add(new Parameter("@EligibilityEndDate", act.EligibilityEndDate ?? (object)DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
                             parms.Add(new Parameter("@MongoPrevious", act.Previous == null ? string.Empty : act.Previous.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
                             parms.Add(new Parameter("@MongoNext", act.Next == null ? string.Empty : act.Next.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
-                            parms.Add(new Parameter("@Archived", prog.Archived.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                            parms.Add(new Parameter("@Archived", act.Archived.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
                             parms.Add(new Parameter("@ArchivedDate", act.ArchivedDate ?? (object)DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
                             parms.Add(new Parameter("@MongoArchiveOriginId", act.ArchiveOriginId == null ? string.Empty : act.AssignedTo.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
 
