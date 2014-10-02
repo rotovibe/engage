@@ -14,6 +14,6 @@
     </dependencies>
   </metadata>
   <files>
-    <file src="..\..\bin\Phytel.Services.Utility.dll" target="lib\net451\Phytel.Services.Utility.dll" />
+    <file src="..\bin\Phytel.Services.Utility.dll" target="lib\net451\Phytel.Services.Utility.dll" />
   </files>
 </package>
