@@ -19,6 +19,6 @@
     </dependencies>
   </metadata>
   <files>
-    <file src="..\bin\Phytel.Services.IOC" target="lib\net451\Phytel.Services.IOC" />
+    <file src="..\bin\Phytel.Services.IOC.dll" target="lib\net451\Phytel.Services.IOC.dll" />
   </files>
 </package>
