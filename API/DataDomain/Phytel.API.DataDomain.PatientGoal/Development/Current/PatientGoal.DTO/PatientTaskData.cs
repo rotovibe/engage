@@ -18,5 +18,6 @@ namespace Phytel.API.DataDomain.PatientGoal.DTO
         public DateTime? StatusDate { get; set; }
         public DateTime? StartDate { get; set; }
         public List<CustomAttributeData> CustomAttributes { get; set; }
+        public DateTime? ClosedDate { get; set; }
     }
 }

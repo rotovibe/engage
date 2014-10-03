@@ -18,5 +18,6 @@ namespace Phytel.API.AppDomain.NG.DTO
         public string Description { get; set; }
         public DateTime? StatusDate { get; set; }
         public DateTime? StartDate { get; set; }
+        public DateTime? ClosedDate { get; set; }
     }
 }

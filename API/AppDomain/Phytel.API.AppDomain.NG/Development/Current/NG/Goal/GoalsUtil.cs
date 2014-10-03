@@ -20,7 +20,7 @@ namespace Phytel.API.AppDomain.NG
                     List<PatientTaskData> ptd = new List<PatientTaskData>();
                     request.Goal.Tasks.ForEach(t =>
                     {
-                        ptd.Add(new PatientTaskData
+                        PatientTaskData data = new PatientTaskData
                         {
                             Id = t.Id,
                             CustomAttributes = GetAttributeData(t.CustomAttributes),
@@ -32,7 +32,19 @@ namespace Phytel.API.AppDomain.NG
                             StatusDate = t.StatusDate,
                             TargetDate = t.TargetDate,
                             TargetValue = t.TargetValue
-                        });
+                        };
+                        if ((t.StatusId == (int)GoalTaskStatus.Met || t.StatusId == (int)GoalTaskStatus.Abandoned))
+                        {
+                            if (t.ClosedDate == null)
+                            {
+                                data.ClosedDate = DateTime.UtcNow;
+                            }
+                            else
+                            {
+                                data.ClosedDate = t.ClosedDate;
+                            }
+                        }
+                        ptd.Add(data);
                     });
 
                     ptd.ForEach(td =>
@@ -88,7 +100,7 @@ namespace Phytel.API.AppDomain.NG
                     List<PatientInterventionData> pid = new List<PatientInterventionData>();
                     request.Goal.Interventions.ForEach(i =>
                     {
-                        pid.Add(new PatientInterventionData
+                        PatientInterventionData data = new PatientInterventionData
                         {
                             AssignedToId = i.AssignedToId,
                             BarrierIds = i.BarrierIds,
@@ -99,7 +111,19 @@ namespace Phytel.API.AppDomain.NG
                             StartDate = i.StartDate,
                             StatusId = i.StatusId,
                             StatusDate = i.StatusDate
-                        });
+                        };
+                        if ((i.StatusId == (int)InterventionStatus.Removed || i.StatusId == (int)InterventionStatus.Completed))
+                        {
+                            if (i.ClosedDate == null)
+                            {
+                                data.ClosedDate = DateTime.UtcNow;
+                            }
+                            else
+                            {
+                                data.ClosedDate = i.ClosedDate;
+                            }
+                        }
+                        pid.Add(data);
                     });
 
                     pid.ForEach(pi =>

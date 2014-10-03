@@ -81,6 +81,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CustomAttributeData.cs" />
+    <Compile Include="Enums.cs" />
     <Compile Include="RemoveProgramInPatientGoalsDataRequest.cs" />
     <Compile Include="RemoveProgramInPatientGoalsDataResponse.cs" />
     <Compile Include="UndoDeleteBarrierDataRequest.cs" />

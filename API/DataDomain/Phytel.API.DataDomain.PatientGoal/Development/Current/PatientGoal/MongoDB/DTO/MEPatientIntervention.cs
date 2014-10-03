@@ -51,6 +51,11 @@ namespace Phytel.API.DataDomain.PatientGoal.DTO
         [BsonIgnoreIfNull(true)]
         public InterventionStatus Status { get; set; }
 
+        public const string ClosedDateProperty = "cd";
+        [BsonElement(ClosedDateProperty)]
+        [BsonIgnoreIfNull(true)]
+        public DateTime? ClosedDate { get; set; }
+
         #region Standard IMongoEntity Implementation
         [BsonExtraElements]
         public BsonDocument ExtraElements { get; set; }
