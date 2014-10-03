@@ -1,16 +1,22 @@
 ﻿using ServiceStack.ServiceClient.Web;
 
-namespace Phytel.Services.ServiceStack
+namespace Phytel.Services.ServiceStack.Client
 {
     public class RepositoryHttp : IRepositoryHttp
     {
-        protected readonly JsonServiceClient _client;
         public const int DefaultTimeoutInSeconds = 60;
+        protected readonly JsonServiceClient _client;
 
         public RepositoryHttp(string baseUri, int timeoutInSeconds = DefaultTimeoutInSeconds)
         {
             _client = new JsonServiceClient(baseUri);
             _client.Timeout = new System.TimeSpan(0, 0, timeoutInSeconds);
+        }
+
+        public TResponse Delete<TResponse>(string relativeUrlFormat, params object[] relativeUrlParams)
+        {
+            string relativeOrAbsoluteUrl = string.Format(relativeUrlFormat, relativeUrlParams);
+            return _client.Delete<TResponse>(relativeOrAbsoluteUrl);
         }
 
         public TResponse Get<TResponse>(string relativeUrlFormat, params string[] relativeUrlParams)
@@ -33,12 +39,6 @@ namespace Phytel.Services.ServiceStack
         {
             string relativeOrAbsoluteUrl = string.Format(relativeUrlFormat, relativeUrlParams);
             return _client.Post<TResponse>(relativeOrAbsoluteUrl, request);
-        }
-
-        public TResponse Delete<TResponse>(string relativeUrlFormat, params object[] relativeUrlParams)
-        {
-            string relativeOrAbsoluteUrl = string.Format(relativeUrlFormat, relativeUrlParams);
-            return _client.Delete<TResponse>(relativeOrAbsoluteUrl);
         }
     }
 }
