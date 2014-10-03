@@ -65,7 +65,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="DBChanges.sql" />
-    <Content Include="spPhy_GetContractDBConnection.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
