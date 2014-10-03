@@ -57,12 +57,18 @@ namespace Phytel.API.DataDomain.Patient
                 using (PatientMongoContext ctx = new PatientMongoContext(_dbName))
                 {
                     //Does the patient exist?
-                    IMongoQuery query = Query.And(
-                                    Query.EQ(MEPatient.FirstNameProperty, request.FirstName),
-                                    Query.EQ(MEPatient.LastNameProperty, request.LastName),
-                                    Query.EQ(MEPatient.DOBProperty, request.DOB));
-
+                    string searchQuery = string.Empty;
+                    searchQuery = string.Format("{0} : /^{1}$/i, {2} : /^{3}$/i, {4} : '{5}', {6} : false, {7} : null", MEPatient.FirstNameProperty, request.FirstName,
+                              MEPatient.LastNameProperty, request.LastName,
+                              MEPatient.DOBProperty, request.DOB,
+                              MEPatient.DeleteFlagProperty,
+                              MEPatient.TTLDateProperty);
+                    string jsonQuery = "{ ";
+                    jsonQuery += searchQuery;
+                    jsonQuery += " }";
+                    QueryDocument query = new QueryDocument(BsonSerializer.Deserialize<BsonDocument>(jsonQuery));
                     patient = ctx.Patients.Collection.FindOneAs<MEPatient>(query);
+
                     MongoCohortPatientViewRepository repo = new MongoCohortPatientViewRepository(_dbName);
                     repo.UserId = this.UserId;
 
