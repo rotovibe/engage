@@ -558,7 +558,7 @@ namespace NightingaleImport
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                MessageBox.Show(string.Format("Message: {0}, InnerException: {1}, StackTrace: {2} ", ex.Message, ex.InnerException, ex.StackTrace));
             }
         }
 
