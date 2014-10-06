@@ -116,7 +116,7 @@ namespace Phytel.API.DataDomain.Patient
                     }
                     else
                     {
-                        throw new ApplicationException(string.Format("A patient by firstname: {0}, lastname {1} and DOB: {2} already exists.", patient.FirstName, patient.LastName, patient.DOB ));
+                        throw new ApplicationException(string.Format("A patient by firstname: {0}, lastname: {1} and DOB: {2} already exists.", patient.FirstName, patient.LastName, patient.DOB ));
                     }
 
                     AuditHelper.LogDataAudit(this.UserId, 
@@ -131,9 +131,9 @@ namespace Phytel.API.DataDomain.Patient
                     };
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw;
+                throw ex;
             }
         }
 

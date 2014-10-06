@@ -128,7 +128,7 @@ namespace NightingaleImport
                         {
                             FirstName = lvi.SubItems[colFirstN].Text,
                             LastName = lvi.SubItems[colLastN].Text,
-                            MiddleName = lvi.SubItems[colMiddleN].Text,
+                            MiddleName = (String.IsNullOrEmpty(lvi.SubItems[colMiddleN].Text)) ? null : lvi.SubItems[colMiddleN].Text.Trim(),
                             Suffix = lvi.SubItems[colSuff].Text,
                             PreferredName = lvi.SubItems[colPrefN].Text,
                             Gender = lvi.SubItems[colGen].Text,
@@ -144,7 +144,8 @@ namespace NightingaleImport
                         PutPatientDataResponse responsePatient = putPatientServiceCall(patientRequest);
                         if (responsePatient.Id == null)
                         {
-                            throw new Exception("Patient import request failed.");
+
+                            throw new Exception(string.Format("Message: {0} StackTrace: {1}", responsePatient.Status.Message, responsePatient.Status.StackTrace));
                         }
 
                         //PatientSystem
@@ -558,7 +559,7 @@ namespace NightingaleImport
             }
             catch (Exception ex)
             {
-                MessageBox.Show(string.Format("Message: {0}, InnerException: {1}, StackTrace: {2} ", ex.Message, ex.InnerException, ex.StackTrace));
+                MessageBox.Show(ex.Message);
             }
         }
 
@@ -922,43 +923,50 @@ namespace NightingaleImport
 
         private PutPatientDataResponse putPatientServiceCall(PutPatientDataRequest putPatientRequest)
         {
-            //Patient
-            Uri theUri = new Uri(string.Format("{0}/Patient/{1}/{2}/{3}/Patient/Insert?UserId={4}",
-                                                 txtURL.Text,
-                                                 context,
-                                                 version,
-                                                 txtContract.Text,
-                                                 _headerUserId));
-
-            HttpClient client = GetHttpClient(theUri);
-
-            DataContractJsonSerializer jsonSer = new DataContractJsonSerializer(typeof(PutPatientDataRequest));
-
-            // use the serializer to write the object to a MemoryStream 
-            MemoryStream ms = new MemoryStream();
-            jsonSer.WriteObject(ms, putPatientRequest);
-            ms.Position = 0;
-
-
-            //use a Stream reader to construct the StringContent (Json) 
-            StreamReader sr = new StreamReader(ms);
-
-            StringContent theContent = new StringContent(sr.ReadToEnd(), System.Text.Encoding.UTF8, "application/json");
-
-            //Post the data 
-            var response = client.PutAsync(theUri, theContent);
-            var responseContent = response.Result.Content;
-
-            string responseString = responseContent.ReadAsStringAsync().Result;
-            PutPatientDataResponse responsePatient = null;
-
-            using (var msResponse = new MemoryStream(Encoding.Unicode.GetBytes(responseString)))
+            try
             {
-                var serializer = new DataContractJsonSerializer(typeof(PutPatientDataResponse));
-                responsePatient = (PutPatientDataResponse)serializer.ReadObject(msResponse);
-            }
+                //Patient
+                Uri theUri = new Uri(string.Format("{0}/Patient/{1}/{2}/{3}/Patient/Insert?UserId={4}",
+                                                     txtURL.Text,
+                                                     context,
+                                                     version,
+                                                     txtContract.Text,
+                                                     _headerUserId));
 
-            return responsePatient;
+                HttpClient client = GetHttpClient(theUri);
+
+                DataContractJsonSerializer jsonSer = new DataContractJsonSerializer(typeof(PutPatientDataRequest));
+
+                // use the serializer to write the object to a MemoryStream 
+                MemoryStream ms = new MemoryStream();
+                jsonSer.WriteObject(ms, putPatientRequest);
+                ms.Position = 0;
+
+
+                //use a Stream reader to construct the StringContent (Json) 
+                StreamReader sr = new StreamReader(ms);
+
+                StringContent theContent = new StringContent(sr.ReadToEnd(), System.Text.Encoding.UTF8, "application/json");
+
+                //Post the data 
+                var response = client.PutAsync(theUri, theContent);
+                var responseContent = response.Result.Content;
+
+                string responseString = responseContent.ReadAsStringAsync().Result;
+                PutPatientDataResponse responsePatient = null;
+
+                using (var msResponse = new MemoryStream(Encoding.Unicode.GetBytes(responseString)))
+                {
+                    var serializer = new DataContractJsonSerializer(typeof(PutPatientDataResponse));
+                    responsePatient = (PutPatientDataResponse)serializer.ReadObject(msResponse);
+                }
+
+                return responsePatient;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
 
         private PutPatientSystemDataResponse putPatientSystemServiceCall(PutPatientSystemDataRequest putPatSysRequest)
