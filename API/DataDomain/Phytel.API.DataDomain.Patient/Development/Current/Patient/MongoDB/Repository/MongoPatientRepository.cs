@@ -93,7 +93,7 @@ namespace Phytel.API.DataDomain.Patient
                         };
                         ctx.Patients.Collection.Insert(patient);
 
-                       List<SearchFieldData> data = new List<SearchFieldData>();
+                        List<SearchFieldData> data = new List<SearchFieldData>();
                         data.Add(new SearchFieldData { Active = true, FieldName = Constants.FN, Value = patient.FirstName });
                         data.Add(new SearchFieldData { Active = true, FieldName = Constants.LN, Value = patient.LastName });
                         data.Add(new SearchFieldData { Active = true, FieldName = Constants.G, Value = patient.Gender.ToUpper() });
@@ -114,6 +114,10 @@ namespace Phytel.API.DataDomain.Patient
                         };
                         repo.Insert(cohortPatientRequest);
                     }
+                    else
+                    {
+                        throw new ApplicationException(string.Format("A patient by firstname: {0}, lastname {1} and DOB: {2} already exists.", patient.FirstName, patient.LastName, patient.DOB ));
+                    }
 
                     AuditHelper.LogDataAudit(this.UserId, 
                                             MongoCollectionName.Patient.ToString(), 
@@ -127,11 +131,10 @@ namespace Phytel.API.DataDomain.Patient
                     };
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                throw ex;
+                throw;
             }
-        
         }
 
         public object InsertAll(List<object> entities)
