@@ -64,7 +64,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="DBChanges.sql" />
+    <Content Include="Database\C3\Procedures\spPhy_GetContractDBConnection.sql" />
+    <Content Include="Database\C3\Scripts\01_SchemaChanges.sql" />
+    <Content Include="Database\C3\Scripts\Rollback\99_SchemaChanges.Rollback.sql" />
+    <Content Include="DBChanges_Future.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
