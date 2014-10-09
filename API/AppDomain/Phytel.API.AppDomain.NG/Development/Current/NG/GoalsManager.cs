@@ -206,7 +206,7 @@ namespace Phytel.API.AppDomain.NG
             try
             {
                 GetInterventionsResponse response = new GetInterventionsResponse();
-                response.PatientInterventions = GoalsEndpointUtil.GetInterventions(request);
+                response.Interventions = GoalsEndpointUtil.GetInterventions(request);
                 response.Version = request.Version;
                 return response;
             }
@@ -221,7 +221,7 @@ namespace Phytel.API.AppDomain.NG
             try
             {
                 GetTasksResponse response = new GetTasksResponse();
-                response.PatientTasks = GoalsEndpointUtil.GetTasks(request);
+                response.Tasks = GoalsEndpointUtil.GetTasks(request);
                 response.Version = request.Version;
                 return response;
             }
