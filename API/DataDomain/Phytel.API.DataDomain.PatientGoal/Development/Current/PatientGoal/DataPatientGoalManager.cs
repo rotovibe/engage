@@ -238,7 +238,7 @@ namespace Phytel.API.DataDomain.PatientGoal
                         repo.Delete(dtr);
                     });
                 }
-                if (request.Task != null)
+                if (request.Task != null && request.Task.Id != "0")
                 {
                   bool status = (bool)repo.Update(request);
                   if (status)
@@ -277,7 +277,7 @@ namespace Phytel.API.DataDomain.PatientGoal
                         repo.Delete(dtr);
                     });
                 }
-                if (request.Intervention != null)
+                if (request.Intervention != null && request.Intervention.Id != "0")
                 {
                     bool status = (bool)repo.Update(request);
                     if (status)
