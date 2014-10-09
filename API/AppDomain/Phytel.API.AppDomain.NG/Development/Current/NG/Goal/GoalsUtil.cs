@@ -20,30 +20,7 @@ namespace Phytel.API.AppDomain.NG
                     List<PatientTaskData> ptd = new List<PatientTaskData>();
                     request.Goal.Tasks.ForEach(t =>
                     {
-                        PatientTaskData data = new PatientTaskData
-                        {
-                            Id = t.Id,
-                            CustomAttributes = GetAttributeData(t.CustomAttributes),
-                            BarrierIds = t.BarrierIds,
-                            Description = t.Description,
-                            PatientGoalId = request.Goal.Id,
-                            StartDate = t.StartDate,
-                            StatusId = t.StatusId,
-                            StatusDate = t.StatusDate,
-                            TargetDate = t.TargetDate,
-                            TargetValue = t.TargetValue
-                        };
-                        if ((t.StatusId == (int)GoalTaskStatus.Met || t.StatusId == (int)GoalTaskStatus.Abandoned))
-                        {
-                            if (t.ClosedDate == null)
-                            {
-                                data.ClosedDate = DateTime.UtcNow;
-                            }
-                            else
-                            {
-                                data.ClosedDate = t.ClosedDate;
-                            }
-                        }
+                        PatientTaskData data = ConvertToPatientTaskData(t);
                         ptd.Add(data);
                     });
 
@@ -63,6 +40,39 @@ namespace Phytel.API.AppDomain.NG
             {
                 throw new Exception("AD:SavePatientGoalTasks()::" + ex.Message, ex.InnerException);
             }
+        }
+
+        public static PatientTaskData ConvertToPatientTaskData(PatientTask t)
+        {
+            PatientTaskData data = null;
+            if (t != null)
+            {
+                data = new PatientTaskData
+                {
+                    Id = t.Id,
+                    CustomAttributes = GetAttributeData(t.CustomAttributes),
+                    BarrierIds = t.BarrierIds,
+                    Description = t.Description,
+                    PatientGoalId = t.PatientGoalId,
+                    StartDate = t.StartDate,
+                    StatusId = t.StatusId,
+                    StatusDate = t.StatusDate,
+                    TargetDate = t.TargetDate,
+                    TargetValue = t.TargetValue
+                };
+                if ((t.StatusId == (int)GoalTaskStatus.Met || t.StatusId == (int)GoalTaskStatus.Abandoned))
+                {
+                    if (t.ClosedDate == null)
+                    {
+                        data.ClosedDate = DateTime.UtcNow;
+                    }
+                    else
+                    {
+                        data.ClosedDate = t.ClosedDate;
+                    }
+                }
+            }
+            return data;
         }
 
         public static List<CustomAttributeData> GetAttributeData(List<DTO.CustomAttribute> list)
@@ -100,29 +110,7 @@ namespace Phytel.API.AppDomain.NG
                     List<PatientInterventionData> pid = new List<PatientInterventionData>();
                     request.Goal.Interventions.ForEach(i =>
                     {
-                        PatientInterventionData data = new PatientInterventionData
-                        {
-                            AssignedToId = i.AssignedToId,
-                            BarrierIds = i.BarrierIds,
-                            CategoryId = i.CategoryId,
-                            Description = i.Description,
-                            Id = i.Id,
-                            PatientGoalId = i.PatientGoalId,
-                            StartDate = i.StartDate,
-                            StatusId = i.StatusId,
-                            StatusDate = i.StatusDate
-                        };
-                        if ((i.StatusId == (int)InterventionStatus.Removed || i.StatusId == (int)InterventionStatus.Completed))
-                        {
-                            if (i.ClosedDate == null)
-                            {
-                                data.ClosedDate = DateTime.UtcNow;
-                            }
-                            else
-                            {
-                                data.ClosedDate = i.ClosedDate;
-                            }
-                        }
+                        PatientInterventionData data = ConvertToInterventionData(i);
                         pid.Add(data);
                     });
 
@@ -143,6 +131,39 @@ namespace Phytel.API.AppDomain.NG
             {
                 throw new Exception("AD:SavePatientGoalInterventions()::" + ex.Message, ex.InnerException);
             }
+        }
+
+        public static PatientInterventionData ConvertToInterventionData(PatientIntervention i)
+        {
+            PatientInterventionData data = null;
+            if (i != null)
+            {
+                data = new PatientInterventionData
+                {
+                    AssignedToId = i.AssignedToId,
+                    BarrierIds = i.BarrierIds,
+                    CategoryId = i.CategoryId,
+                    Description = i.Description,
+                    Id = i.Id,
+                    PatientGoalId = i.PatientGoalId,
+                    StartDate = i.StartDate,
+                    StatusId = i.StatusId,
+                    StatusDate = i.StatusDate
+                };
+                if ((i.StatusId == (int)InterventionStatus.Removed || i.StatusId == (int)InterventionStatus.Completed))
+                {
+                    if (i.ClosedDate == null)
+                    {
+                        data.ClosedDate = DateTime.UtcNow;
+                    }
+                    else
+                    {
+                        data.ClosedDate = i.ClosedDate;
+                    }
+                }
+            }
+            return data;
+
         }
 
         public static bool SavePatientGoalBarriers(PostPatientGoalRequest request)
@@ -218,7 +239,7 @@ namespace Phytel.API.AppDomain.NG
             return attrList;
         }
 
-        public static List<PatientBarrier> GetBarriers(List<PatientBarrierData> list)
+        public static List<PatientBarrier> ConvertToBarriers(List<PatientBarrierData> list)
         {
             List<PatientBarrier> barrierList = null;
             try
@@ -247,7 +268,7 @@ namespace Phytel.API.AppDomain.NG
             return barrierList;
         }
 
-        public static List<PatientTask> GetTasks(List<PatientTaskData> list, List<CustomAttribute> taskAttributesLibrary)
+        public static List<PatientTask> ConvertToTasks(List<PatientTaskData> list, List<CustomAttribute> taskAttributesLibrary)
         {
             List<PatientTask> taskList = null;
 
@@ -258,19 +279,9 @@ namespace Phytel.API.AppDomain.NG
                     taskList = new List<PatientTask>();
                     foreach (PatientTaskData t in list)
                     {
-                        taskList.Add(new PatientTask
-                        {
-                            Id = t.Id,
-                            PatientGoalId = t.PatientGoalId,
-                            TargetValue = t.TargetValue,
-                            StatusId = t.StatusId,
-                            TargetDate = t.TargetDate,
-                            CustomAttributes = GetCustomAttributeDetails(t.CustomAttributes, taskAttributesLibrary),
-                            BarrierIds = t.BarrierIds,
-                            Description = t.Description,
-                            StatusDate = t.StatusDate,
-                            StartDate = t.StartDate
-                        });
+                        PatientTask task = ConvertToTask(t, taskAttributesLibrary);
+                        if (task != null)
+                            taskList.Add(task);
                     }
                 }
             }
@@ -281,7 +292,34 @@ namespace Phytel.API.AppDomain.NG
             return taskList;
         }
 
-        public static List<PatientIntervention> GetInterventions(List<PatientInterventionData> list)
+
+
+        public static PatientTask ConvertToTask(PatientTaskData t, List<CustomAttribute> taskAttributesLibrary)
+        {
+            PatientTask task = null;
+            if (t != null)
+            { 
+                task = new PatientTask
+                {
+                    Id = t.Id,
+                    PatientGoalId = t.PatientGoalId,
+                    TargetValue = t.TargetValue,
+                    StatusId = t.StatusId,
+                    TargetDate = t.TargetDate,
+                    CustomAttributes = GetCustomAttributeDetails(t.CustomAttributes, taskAttributesLibrary),
+                    BarrierIds = t.BarrierIds,
+                    Description = t.Description,
+                    StatusDate = t.StatusDate,
+                    StartDate = t.StartDate,
+                    ClosedDate = t.ClosedDate,
+                    CreatedById = t.CreatedById,
+                    GoalName = t.GoalName
+                }; 
+            }   
+            return task;
+        }
+
+        public static List<PatientIntervention> ConvertToInterventions(List<PatientInterventionData> list)
         {
             List<PatientIntervention> interventionList = null;
             try
@@ -291,18 +329,9 @@ namespace Phytel.API.AppDomain.NG
                     interventionList = new List<PatientIntervention>();
                     foreach (PatientInterventionData i in list)
                     {
-                        interventionList.Add(new PatientIntervention
-                        {
-                            Id = i.Id,
-                            PatientGoalId = i.PatientGoalId,
-                            CategoryId = i.CategoryId,
-                            StatusId = i.StatusId,
-                            AssignedToId = i.AssignedToId,
-                            BarrierIds = i.BarrierIds,
-                            Description = i.Description,
-                            StatusDate = i.StatusDate,
-                            StartDate = i.StartDate
-                        });
+                        PatientIntervention pi = ConvertToIntervention(i);
+                        if (pi != null)
+                            interventionList.Add(pi);
                     }
                 }
             }
@@ -311,6 +340,30 @@ namespace Phytel.API.AppDomain.NG
                 throw new Exception("AD:GetInterventions()::" + ex.Message, ex.InnerException);
             } 
             return interventionList;
+        }
+
+        public static PatientIntervention ConvertToIntervention(PatientInterventionData i)
+        {
+            PatientIntervention pi = null;
+            if (i != null)
+            {
+                pi = new PatientIntervention
+                {
+                    Id = i.Id,
+                    PatientGoalId = i.PatientGoalId,
+                    CategoryId = i.CategoryId,
+                    StatusId = i.StatusId,
+                    AssignedToId = i.AssignedToId,
+                    BarrierIds = i.BarrierIds,
+                    Description = i.Description,
+                    StatusDate = i.StatusDate,
+                    StartDate = i.StartDate,
+                    ClosedDate = i.ClosedDate,
+                    CreatedById = i.CreatedById,
+                    GoalName = i.GoalName
+                };
+            }
+            return pi;
         }
 
         public static List<ChildView> GetChildView(List<ChildViewData> list)

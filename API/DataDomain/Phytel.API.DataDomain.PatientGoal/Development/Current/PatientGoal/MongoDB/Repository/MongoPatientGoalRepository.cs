@@ -294,11 +294,6 @@ namespace Phytel.API.DataDomain.PatientGoal
             }
             catch (Exception) { throw; }
         }
-        
-        public IEnumerable<object> FindByGoalId(string Id)
-        {
-            throw new NotImplementedException();
-        }
 
         public string UserId { get; set; }
 
@@ -392,6 +387,12 @@ namespace Phytel.API.DataDomain.PatientGoal
                 return goals;
             }
             catch (Exception ex) { throw ex; }
+        }
+
+
+        public IEnumerable<object> Search(object request, List<string> patientGoalIds)
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -1,9 +1,4 @@
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Phytel.API.DataDomain.PatientGoal.DTO;
 using Phytel.API.Interface;
 
 namespace Phytel.API.DataDomain.PatientGoal
@@ -12,8 +7,8 @@ namespace Phytel.API.DataDomain.PatientGoal
     {
         object Initialize(object newEntity);
         IEnumerable<object> Find(string Id);
-        IEnumerable<object> FindByGoalId(string Id);
         IEnumerable<object> FindGoalsWithAProgramId(string entityId);
         void RemoveProgram(object entity, List<string> updatedProgramIds);
+        IEnumerable<object> Search(object request, List<string> patientGoalIds);
     }
 }

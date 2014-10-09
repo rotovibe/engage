@@ -10,6 +10,8 @@ namespace Phytel.API.AppDomain.NG.DTO
     {
         public string Id { get; set; }
         public string PatientGoalId { get; set; }
+        public string GoalName { get; set; }
+        public string CreatedById { get; set; }
         public string CategoryId { get; set; }
         public string AssignedToId { get; set; }
         public List<string> BarrierIds { get; set; }
@@ -18,5 +20,6 @@ namespace Phytel.API.AppDomain.NG.DTO
         public DateTime? StatusDate { get; set; }
         public DateTime? StartDate { get; set; }
         public DateTime? ClosedDate { get; set; }
+        public PatientDetails PatientDetails { get; set; }
     }
 }

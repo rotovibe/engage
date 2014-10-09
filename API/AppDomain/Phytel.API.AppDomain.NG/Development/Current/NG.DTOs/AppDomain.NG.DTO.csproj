@@ -96,6 +96,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Goal\GetTasksRequest.cs" />
+    <Compile Include="Goal\GetInterventionsRequest.cs" />
+    <Compile Include="Goal\GetTasksResponse.cs" />
+    <Compile Include="Goal\GetInterventionsResponse.cs" />
+    <Compile Include="Goal\PostPatientTaskRequest.cs" />
+    <Compile Include="Goal\PostPatientInterventionRequest.cs" />
+    <Compile Include="Goal\PostPatientTaskResponse.cs" />
+    <Compile Include="Goal\PostPatientInterventionResponse.cs" />
     <Compile Include="LookUp\GetLookUpDetailsRequest.cs" />
     <Compile Include="LookUp\GetLookUpDetailsResponse.cs" />
     <Compile Include="LookUp\LookUpDetails.cs" />

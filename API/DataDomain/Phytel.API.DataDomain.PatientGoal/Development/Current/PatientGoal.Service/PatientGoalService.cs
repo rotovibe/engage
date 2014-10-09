@@ -373,7 +373,7 @@ namespace Phytel.API.DataDomain.PatientGoal.Service
             try
             {
                 if (string.IsNullOrEmpty(request.UserId))
-                    throw new UnauthorizedAccessException("PatientNoteDD:RemoveProgramInPatientGoals()::Unauthorized Access");
+                    throw new UnauthorizedAccessException("PatientGoalDD:RemoveProgramInPatientGoals()::Unauthorized Access");
 
                 response = PatientGoalDataManager.RemoveProgramInPatientGoals(request);
                 response.Version = request.Version;
@@ -388,6 +388,46 @@ namespace Phytel.API.DataDomain.PatientGoal.Service
             return response;
         }
 
+        public GetInterventionsDataResponse Post(GetInterventionsDataRequest request)
+        {
+            GetInterventionsDataResponse response = new GetInterventionsDataResponse();
+            try
+            {
+                if (string.IsNullOrEmpty(request.UserId))
+                    throw new UnauthorizedAccessException("PatientGoalDD:Post()::Unauthorized Access");
 
+                response = PatientGoalDataManager.GetInterventions(request);
+                response.Version = request.Version;
+            }
+            catch (Exception ex)
+            {
+                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+
+                string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
+                Common.Helper.LogException(int.Parse(aseProcessID), ex);
+            }
+            return response;
+        }
+
+        public GetTasksDataResponse Post(GetTasksDataRequest request)
+        {
+            GetTasksDataResponse response = new GetTasksDataResponse();
+            try
+            {
+                if (string.IsNullOrEmpty(request.UserId))
+                    throw new UnauthorizedAccessException("PatientGoalDD:Post()::Unauthorized Access");
+
+                response = PatientGoalDataManager.GetTasks(request);
+                response.Version = request.Version;
+            }
+            catch (Exception ex)
+            {
+                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+
+                string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
+                Common.Helper.LogException(int.Parse(aseProcessID), ex);
+            }
+            return response;
+        }
     }
 }

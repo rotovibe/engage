@@ -264,39 +264,7 @@ namespace Phytel.API.DataDomain.PatientGoal
             }
             catch (Exception) { throw; }
         }
-        
-        public IEnumerable<object> FindByGoalId(string Id)
-        {
-            try
-            {
-                List<PatientBarrierData> barriersDataList = null;
-                List<IMongoQuery> queries = new List<IMongoQuery>();
-                queries.Add(Query.EQ(MEPatientBarrier.PatientGoalIdProperty, ObjectId.Parse(Id)));
-                queries.Add(Query.EQ(MEPatientBarrier.DeleteFlagProperty, false));
-                queries.Add(Query.EQ(MEPatientBarrier.TTLDateProperty, BsonNull.Value));
-                IMongoQuery mQuery = Query.And(queries);
-
-                using (PatientGoalMongoContext ctx = new PatientGoalMongoContext(_dbName))
-                {
-                    List<MEPatientBarrier> meBarriers = ctx.PatientBarriers.Collection.Find(mQuery).ToList();
-                    if (meBarriers != null)
-                    {
-                        barriersDataList = new List<PatientBarrierData>();
-                        foreach (MEPatientBarrier b in meBarriers)
-                        {
-                            PatientBarrierData barrierData = new PatientBarrierData
-                            {
-                                Id = b.Id.ToString(),
-                            };
-                            barriersDataList.Add(barrierData);
-                        }
-                    }
-                }
-                return barriersDataList;
-            }
-            catch (Exception) { throw; }
-        }
-
+      
         public string UserId { get; set; }
 
 
@@ -335,6 +303,12 @@ namespace Phytel.API.DataDomain.PatientGoal
         }
 
         public void RemoveProgram(object entity, List<string> updatedProgramIds)
+        {
+            throw new NotImplementedException();
+        }
+
+
+        public IEnumerable<object> Search(object request, List<string> patientGoalIds)
         {
             throw new NotImplementedException();
         }

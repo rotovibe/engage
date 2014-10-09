@@ -112,8 +112,40 @@ namespace Phytel.API.DataDomain.PatientGoal
         {
             try
             {
-                throw new NotImplementedException();
-                // code here //
+                PatientInterventionData interventionData = null;
+                List<IMongoQuery> queries = new List<IMongoQuery>();
+                queries.Add(Query.EQ(MEPatientIntervention.IdProperty, ObjectId.Parse(entityID)));
+                queries.Add(Query.EQ(MEPatientIntervention.DeleteFlagProperty, false));
+                queries.Add(Query.EQ(MEPatientIntervention.TTLDateProperty, BsonNull.Value));
+                IMongoQuery mQuery = Query.And(queries);
+                using (PatientGoalMongoContext ctx = new PatientGoalMongoContext(_dbName))
+                {
+                    MEPatientIntervention b = ctx.PatientInterventions.Collection.Find(mQuery).FirstOrDefault();
+                    if (b != null)
+                    {
+                        interventionData = new PatientInterventionData
+                        {
+                            Id = b.Id.ToString(),
+                            Description = b.Description,
+                            PatientGoalId = b.PatientGoalId.ToString(),
+                            CategoryId = b.CategoryId == null ? null : b.CategoryId.ToString(),
+                            AssignedToId = b.AssignedToId == null ? null : b.AssignedToId.ToString(),
+                            BarrierIds = Helper.ConvertToStringList(b.BarrierIds),
+                            StatusId = ((int)b.Status),
+                            StatusDate = b.StatusDate,
+                            StartDate = b.StartDate,
+                            ClosedDate = b.ClosedDate,
+                            CreatedById = b.RecordCreatedBy.ToString()
+                        };
+                        var mePG = ctx.PatientGoals.Collection.Find(Query.EQ(MEPatientGoal.IdProperty, ObjectId.Parse(interventionData.PatientGoalId))).SetFields(MEPatientGoal.PatientIdProperty, MEPatientGoal.NameProperty).FirstOrDefault();
+                        if (mePG != null)
+                        {
+                            interventionData.PatientId = mePG.PatientId.ToString();
+                            interventionData.GoalName = mePG.Name;
+                        }
+                    }
+                }
+                return interventionData;
             }
             catch (Exception) { throw; }
         }
@@ -142,20 +174,20 @@ namespace Phytel.API.DataDomain.PatientGoal
         {
             bool result = false;
             PutUpdateInterventionRequest ir = (PutUpdateInterventionRequest)entity;
-            PatientInterventionData pt = ir.Intervention;
+            PatientInterventionData pi = ir.Intervention;
             try
             {
                 using (PatientGoalMongoContext ctx = new PatientGoalMongoContext(_dbName))
                 {
-                    var q = MB.Query<MEPatientIntervention>.EQ(b => b.Id, ObjectId.Parse(pt.Id));
+                    var q = MB.Query<MEPatientIntervention>.EQ(b => b.Id, ObjectId.Parse(pi.Id));
 
                     // Set the StatusDate to Now if the status is changed.
                     MEPatientIntervention existingPI = ctx.PatientInterventions.Collection.Find(q).SetFields(MEPatientIntervention.StatusProperty).FirstOrDefault();
                     if (existingPI != null)
                     {
-                        if ((int)existingPI.Status != pt.StatusId)
+                        if ((int)existingPI.Status != pi.StatusId)
                         {
-                            pt.StatusDate = DateTime.UtcNow;
+                            pi.StatusDate = DateTime.UtcNow;
                         }
                     }
 
@@ -165,20 +197,20 @@ namespace Phytel.API.DataDomain.PatientGoal
                     uv.Add(MB.Update.Set(MEPatientIntervention.VersionProperty, ir.Version));
                     uv.Add(MB.Update.Set(MEPatientIntervention.LastUpdatedOnProperty, System.DateTime.UtcNow));
                     uv.Add(MB.Update.Set(MEPatientIntervention.UpdatedByProperty, ObjectId.Parse(this.UserId)));
-                    if (pt.Description != null) uv.Add(MB.Update.Set(MEPatientIntervention.DescriptionProperty, pt.Description));
-                    if (pt.StartDate != null) uv.Add(MB.Update.Set(MEPatientIntervention.StartDateProperty, pt.StartDate));
-                    if (pt.StatusDate != null) uv.Add(MB.Update.Set(MEPatientIntervention.StatusDateProperty, pt.StatusDate));
-                    if (pt.StatusId != 0) uv.Add(MB.Update.Set(MEPatientIntervention.StatusProperty, pt.StatusId));
-                    if (pt.CategoryId != null) uv.Add(MB.Update.Set(MEPatientIntervention.CategoryProperty, ObjectId.Parse(pt.CategoryId)));
-                    if (pt.AssignedToId != null) uv.Add(MB.Update.Set(MEPatientIntervention.AssignedToProperty, ObjectId.Parse(pt.AssignedToId)));
-                    if (pt.BarrierIds != null) { uv.Add(MB.Update.SetWrapped<List<ObjectId>>(MEPatientIntervention.BarriersProperty, DTOUtil.ConvertObjectId(pt.BarrierIds))); }
-
+                    if (pi.Description != null) uv.Add(MB.Update.Set(MEPatientIntervention.DescriptionProperty, pi.Description));
+                    if (pi.StartDate != null) uv.Add(MB.Update.Set(MEPatientIntervention.StartDateProperty, pi.StartDate));
+                    if (pi.StatusDate != null) uv.Add(MB.Update.Set(MEPatientIntervention.StatusDateProperty, pi.StatusDate));
+                    if (pi.StatusId != 0) uv.Add(MB.Update.Set(MEPatientIntervention.StatusProperty, pi.StatusId));
+                    if (pi.CategoryId != null) uv.Add(MB.Update.Set(MEPatientIntervention.CategoryProperty, ObjectId.Parse(pi.CategoryId)));
+                    if (pi.AssignedToId != null) uv.Add(MB.Update.Set(MEPatientIntervention.AssignedToProperty, ObjectId.Parse(pi.AssignedToId)));
+                    if (pi.BarrierIds != null) { uv.Add(MB.Update.SetWrapped<List<ObjectId>>(MEPatientIntervention.BarriersProperty, DTOUtil.ConvertObjectId(pi.BarrierIds))); }
+                    if (pi.ClosedDate != null) { uv.Add(MB.Update.Set(MEPatientIntervention.ClosedDateProperty, pi.ClosedDate)); }
                     IMongoUpdate update = MB.Update.Combine(uv);
                     ctx.PatientInterventions.Collection.Update(q, update);
 
                     AuditHelper.LogDataAudit(this.UserId, 
                                             MongoCollectionName.PatientIntervention.ToString(), 
-                                            pt.Id.ToString(), 
+                                            pi.Id.ToString(), 
                                             Common.DataAuditType.Update, 
                                             ir.ContractNumber);
 
@@ -261,6 +293,8 @@ namespace Phytel.API.DataDomain.PatientGoal
                                 StatusId = ((int)b.Status),
                                 StatusDate = b.StatusDate,
                                 StartDate = b.StartDate,
+                                ClosedDate = b.ClosedDate,
+                                CreatedById = b.RecordCreatedBy.ToString()
                             };
                             interventionsDataList.Add(interventionData);
                         }
@@ -271,41 +305,7 @@ namespace Phytel.API.DataDomain.PatientGoal
             catch (Exception) { throw; }
 
         }
-        
-        public IEnumerable<object> FindByGoalId(string Id)
-        {
-            try
-            {
-                List<PatientInterventionData> interventionsDataList = null;
-                List<IMongoQuery> queries = new List<IMongoQuery>();
-                queries.Add(Query.EQ(MEPatientIntervention.PatientGoalIdProperty, ObjectId.Parse(Id)));
-                queries.Add(Query.EQ(MEPatientIntervention.DeleteFlagProperty, false));
-                queries.Add(Query.EQ(MEPatientIntervention.TTLDateProperty, BsonNull.Value));
-                IMongoQuery mQuery = Query.And(queries);
-
-                using (PatientGoalMongoContext ctx = new PatientGoalMongoContext(_dbName))
-                {
-                    List<MEPatientIntervention> meInterventions = ctx.PatientInterventions.Collection.Find(mQuery).ToList();
-                    if (meInterventions != null)
-                    {
-                        interventionsDataList = new List<PatientInterventionData>();
-                        foreach (MEPatientIntervention b in meInterventions)
-                        {
-                            PatientInterventionData interventionData = new PatientInterventionData
-                            {
-                                Id = b.Id.ToString(),
-                                 AssignedToId = b.AssignedToId != null ? b.AssignedToId.ToString(): null
-                                 // need to implement all the values needed!
-                            };
-                            interventionsDataList.Add(interventionData);
-                        }
-                    }
-                }
-                return interventionsDataList;
-            }
-            catch (Exception) { throw; }
-        }
-
+       
         public string UserId { get; set; }
 
 
@@ -346,6 +346,70 @@ namespace Phytel.API.DataDomain.PatientGoal
         public void RemoveProgram(object entity, List<string> updatedProgramIds)
         {
             throw new NotImplementedException();
+        }
+
+        public IEnumerable<object> Search(object request, List<string> patientGoalIds)
+        {
+            List<PatientInterventionData> list = null;
+            GetInterventionsDataRequest dataRequest = (GetInterventionsDataRequest)request;
+            try
+            {
+                using (PatientGoalMongoContext ctx = new PatientGoalMongoContext(_dbName))
+                {
+                    List<IMongoQuery> queries = new List<IMongoQuery>();
+                    queries.Add(Query.EQ(MEPatientIntervention.DeleteFlagProperty, false));
+                    if (!string.IsNullOrEmpty(dataRequest.AssignedToId))
+                    {
+                        queries.Add(Query.EQ(MEPatientIntervention.AssignedToProperty, ObjectId.Parse(dataRequest.AssignedToId)));
+                    }
+                    if (!string.IsNullOrEmpty(dataRequest.CreatedById))
+                    {
+                        queries.Add(Query.EQ(MEPatientIntervention.RecordCreatedByProperty, ObjectId.Parse(dataRequest.CreatedById)));
+                    }
+                    if (dataRequest.StatusIds != null && dataRequest.StatusIds.Count > 0)
+                    {
+                        queries.Add(Query.In(MEPatientIntervention.StatusProperty, new BsonArray(dataRequest.StatusIds)));
+                    }
+                    if (patientGoalIds != null && patientGoalIds.Count > 0)
+                    {
+                        List<BsonValue> bsonList = Helper.ConvertToBsonValueList(patientGoalIds);
+                        queries.Add(Query.In(MEPatientIntervention.PatientGoalIdProperty, bsonList));
+                    }
+                    IMongoQuery mQuery = Query.And(queries);
+                    List<MEPatientIntervention> meInterventions = null;
+                    meInterventions = ctx.PatientInterventions.Collection.Find(mQuery).ToList();
+                    if (meInterventions != null && meInterventions.Count > 0)
+                    {
+                        list = new List<PatientInterventionData>();
+                        foreach (MEPatientIntervention b in meInterventions)
+                        {
+                            PatientInterventionData interventionData = new PatientInterventionData
+                            {
+                                Id = b.Id.ToString(),
+                                Description = b.Description,
+                                PatientGoalId = b.PatientGoalId.ToString(),
+                                CategoryId = b.CategoryId == null ? null : b.CategoryId.ToString(),
+                                AssignedToId = b.AssignedToId == null ? null : b.AssignedToId.ToString(),
+                                BarrierIds = Helper.ConvertToStringList(b.BarrierIds),
+                                StatusId = ((int)b.Status),
+                                StatusDate = b.StatusDate,
+                                StartDate = b.StartDate,
+                                ClosedDate = b.ClosedDate,
+                                CreatedById = b.RecordCreatedBy.ToString()
+                            };
+                            var mePG = ctx.PatientGoals.Collection.Find(Query.EQ(MEPatientGoal.IdProperty, ObjectId.Parse(interventionData.PatientGoalId))).SetFields(MEPatientGoal.PatientIdProperty, MEPatientGoal.NameProperty).FirstOrDefault();
+                            if (mePG != null)
+                            {
+                                interventionData.PatientId = mePG.PatientId.ToString();
+                                interventionData.GoalName = mePG.Name;
+                            }
+                            list.Add(interventionData);
+                        }
+                    }
+                }
+                return list;
+            }
+            catch (Exception) { throw; }
         }
     }
 }

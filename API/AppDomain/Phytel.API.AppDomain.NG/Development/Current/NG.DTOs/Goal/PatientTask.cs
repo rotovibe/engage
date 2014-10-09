@@ -10,6 +10,8 @@ namespace Phytel.API.AppDomain.NG.DTO
     {
         public string Id { get; set; }
         public string PatientGoalId { get; set; }
+        public string GoalName { get; set; }
+        public string CreatedById { get; set; }
         public string TargetValue { get; set; }
         public int StatusId { get; set; }
         public DateTime? TargetDate { get; set; }

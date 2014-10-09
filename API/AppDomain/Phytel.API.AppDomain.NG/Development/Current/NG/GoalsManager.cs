@@ -141,6 +141,36 @@ namespace Phytel.API.AppDomain.NG
             }
         }
 
+        public PostPatientInterventionResponse SavePatientIntervention(PostPatientInterventionRequest request)
+        {
+            try
+            {
+                PostPatientInterventionResponse response = new PostPatientInterventionResponse();
+                response.Intervention = GoalsEndpointUtil.PostUpdateInterventionRequest(request);
+                response.Version = request.Version;
+                return response;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("AD:SavePatientIntervention()::" + ex.Message, ex.InnerException);
+            }
+        }
+
+        public PostPatientTaskResponse SavePatientTask(PostPatientTaskRequest request)
+        {
+            try
+            {
+                PostPatientTaskResponse response = new PostPatientTaskResponse();
+                response.Task = GoalsEndpointUtil.PostUpdateTaskRequest(request);
+                response.Version = request.Version;
+                return response;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("AD:SavePatientTask()::" + ex.Message, ex.InnerException);
+            }
+        }
+
         public PostDeletePatientGoalResponse DeletePatientGoal(PostDeletePatientGoalRequest request)
         {
             try
@@ -168,6 +198,36 @@ namespace Phytel.API.AppDomain.NG
             catch (Exception ex)
             {
                 throw new Exception("AD:DeletePatientGoal()::" + ex.Message, ex.InnerException);
+            }
+        }
+
+        public GetInterventionsResponse GetInterventions(GetInterventionsRequest request)
+        {
+            try
+            {
+                GetInterventionsResponse response = new GetInterventionsResponse();
+                response.PatientInterventions = GoalsEndpointUtil.GetInterventions(request);
+                response.Version = request.Version;
+                return response;
+            }
+            catch (WebServiceException ex)
+            {
+                throw new WebServiceException("AD:GetInterventions()::" + ex.Message, ex.InnerException);
+            }
+        }
+
+        public GetTasksResponse GetTasks(GetTasksRequest request)
+        {
+            try
+            {
+                GetTasksResponse response = new GetTasksResponse();
+                response.PatientTasks = GoalsEndpointUtil.GetTasks(request);
+                response.Version = request.Version;
+                return response;
+            }
+            catch (WebServiceException ex)
+            {
+                throw new WebServiceException("AD:GetTasks()::" + ex.Message, ex.InnerException);
             }
         }
     }

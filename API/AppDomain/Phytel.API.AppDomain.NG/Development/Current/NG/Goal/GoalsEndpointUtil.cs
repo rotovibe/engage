@@ -1,5 +1,6 @@
 ﻿using Phytel.API.AppDomain.NG.DTO;
 using Phytel.API.DataDomain.PatientGoal.DTO;
+using Phytel.API.DataDomain.Patient.DTO;
 using Phytel.API.Interface;
 using ServiceStack.Service;
 using ServiceStack.ServiceClient.Web;
@@ -14,7 +15,7 @@ namespace Phytel.API.AppDomain.NG
     {
         #region Static Fields
         static readonly string DDPatientGoalsServiceUrl = ConfigurationManager.AppSettings["DDPatientGoalUrl"];
-        static readonly string PhytelUserIDHeaderKey = "x-Phytel-UserID";
+        static readonly string DDPatientServiceURL = ConfigurationManager.AppSettings["DDPatientServiceUrl"];
         #endregion
 
         #region Public Methods
@@ -155,9 +156,9 @@ namespace Phytel.API.AppDomain.NG
                         TargetDate = g.TargetDate,
                         TargetValue = g.TargetValue,
                         CustomAttributes = GoalsUtil.GetCustomAttributeDetails(g.CustomAttributes, goalAttributesLibrary),
-                        Barriers = GoalsUtil.GetBarriers(g.BarriersData),
-                        Tasks = GoalsUtil.GetTasks(g.TasksData, taskAttributesLibrary),
-                        Interventions = GoalsUtil.GetInterventions(g.InterventionsData)
+                        Barriers = GoalsUtil.ConvertToBarriers(g.BarriersData),
+                        Tasks = GoalsUtil.ConvertToTasks(g.TasksData, taskAttributesLibrary),
+                        Interventions = GoalsUtil.ConvertToInterventions(g.InterventionsData)
                     };
                 }
                 return result;
@@ -211,6 +212,97 @@ namespace Phytel.API.AppDomain.NG
             {
                 throw new WebServiceException("AD:GetAllPatientGoals()::" + ex.Message, ex.InnerException);
             }
+        }
+
+        public static List<PatientIntervention> GetInterventions(GetInterventionsRequest request)
+        {
+            List<PatientIntervention> interventions = null;
+            try
+            {
+                //[Route("/{Context}/{Version}/{ContractNumber}/Goal/Interventions", "POST")]
+                IRestClient client = new JsonServiceClient();
+                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Goal/Interventions",
+                    DDPatientGoalsServiceUrl,
+                    "NG",
+                    request.Version,
+                    request.ContractNumber), request.UserId);
+
+                GetInterventionsDataResponse ddResponse =
+                    client.Post<GetInterventionsDataResponse>(url, new GetInterventionsDataRequest
+                    {
+                        Context = "NG",
+                        ContractNumber = request.ContractNumber,
+                        Version = request.Version,
+                        UserId = request.UserId,
+                        AssignedToId = request.AssignedToId,
+                        CreatedById = request.CreatedById,
+                        PatientId = request.PatientId,
+                        StatusIds = request.StatusIds
+
+                    } as object);
+
+                if (ddResponse != null && ddResponse.InterventionsData != null)
+                {
+                    interventions = new List<PatientIntervention>();
+                    List<PatientInterventionData> dataList = ddResponse.InterventionsData;
+                    foreach (PatientInterventionData n in dataList)
+                    {
+                        PatientIntervention i = GoalsUtil.ConvertToIntervention(n);
+                        // Call Patient DD to get patient details. 
+                        i.PatientDetails = getPatientDetails(request.Version, request.ContractNumber, request.UserId, client, n.PatientId);
+                        interventions.Add(i);
+                    }
+                }
+            }
+            catch
+            {
+                throw;
+            }
+            return interventions;
+        }
+
+        public static List<PatientTask> GetTasks(GetTasksRequest request)
+        {
+            List<PatientTask> tasks = null;
+            try
+            {
+                //[Route("/{Context}/{Version}/{ContractNumber}/Goal/Tasks", "POST")]
+                IRestClient client = new JsonServiceClient();
+                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Goal/Tasks",
+                    DDPatientGoalsServiceUrl,
+                    "NG",
+                    request.Version,
+                    request.ContractNumber), request.UserId);
+
+                GetTasksDataResponse ddResponse =
+                    client.Post<GetTasksDataResponse>(url, new GetTasksDataRequest
+                    {
+                        Context = "NG",
+                        ContractNumber = request.ContractNumber,
+                        Version = request.Version,
+                        UserId = request.UserId,
+                        StatusIds = request.StatusIds,
+                        PatientId = request.PatientId
+                    } as object);
+
+                if (ddResponse != null && ddResponse.TasksData != null)
+                {
+                    tasks = new List<PatientTask>();
+                    List<PatientTaskData> dataList = ddResponse.TasksData;
+                    foreach (PatientTaskData n in dataList)
+                    {
+                        //Make a call to AttributeLibrary to get attributes details for Goal and Task.
+                        List<CustomAttribute> taskAttributesLibrary = GoalsEndpointUtil.GetAttributesLibraryByType(request, 2);
+                        PatientTask i = GoalsUtil.ConvertToTask(n, taskAttributesLibrary);
+                        tasks.Add(i);
+                    }
+                }
+            }
+            catch
+            {
+                throw;
+            }
+            return tasks;
         }
         #endregion
 
@@ -547,7 +639,7 @@ namespace Phytel.API.AppDomain.NG
                     request.Goal.Id), request.UserId);
 
                 PutPatientGoalDataResponse response = client.Put<PutPatientGoalDataResponse>(
-                    url, new PutPatientGoalDataRequest { GoalData = GetGoalData(request.Goal), UserId = request.UserId } as object);
+                    url, new PutPatientGoalDataRequest { GoalData = convertToPatientGoalData(request.Goal), UserId = request.UserId } as object);
 
                 if (response != null)
                 {
@@ -561,10 +653,85 @@ namespace Phytel.API.AppDomain.NG
                 throw new WebServiceException("AD:PostUpdateGoalRequest()::" + ex.Message, ex.InnerException);
             }
         }
+
+        internal static PatientIntervention PostUpdateInterventionRequest(PostPatientInterventionRequest request)
+        {
+            try
+            {
+                PatientIntervention intervention = null;
+
+                if (request.Intervention == null)
+                    throw new Exception("The Intervention property is null in the request.");
+
+                IRestClient client = new JsonServiceClient();
+
+                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Goal/{5}/Intervention/{6}/Update",
+                    DDPatientGoalsServiceUrl,
+                    "NG",
+                    request.Version,
+                    request.ContractNumber,
+                    request.PatientId,
+                    request.PatientGoalId,
+                    request.Id), request.UserId);
+
+                PutUpdateInterventionResponse response = client.Put<PutUpdateInterventionResponse>(
+                    url, new PutUpdateInterventionRequest { Intervention = GoalsUtil.ConvertToInterventionData(request.Intervention) , UserId = request.UserId} as object);
+
+                if (response != null && response.InterventionData != null)
+                {
+                    intervention = GoalsUtil.ConvertToIntervention(response.InterventionData);
+                    // Call Patient DD to get patient details. 
+                    intervention.PatientDetails = getPatientDetails(request.Version, request.ContractNumber, request.UserId, client, response.InterventionData.PatientId);
+                }
+                return intervention;
+            }
+            catch (WebServiceException ex)
+            {
+                throw new WebServiceException("AD:PostUpdateInterventionRequest()::" + ex.Message, ex.InnerException);
+            }
+        }
+
+        internal static PatientTask PostUpdateTaskRequest(PostPatientTaskRequest request)
+        {
+            try
+            {
+                PatientTask task = null;
+
+                if (request.Task == null)
+                    throw new Exception("The Task property is null in the request.");
+
+                IRestClient client = new JsonServiceClient();
+
+                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Goal/{5}/Task/{6}/Update",
+                    DDPatientGoalsServiceUrl,
+                    "NG",
+                    request.Version,
+                    request.ContractNumber,
+                    request.PatientId,
+                    request.PatientGoalId,
+                    request.Id), request.UserId);
+
+                PutUpdateTaskResponse response = client.Put<PutUpdateTaskResponse>(
+                    url, new PutUpdateTaskRequest { Task = GoalsUtil.ConvertToPatientTaskData(request.Task), UserId = request.UserId } as object);
+
+                if (response != null && response.TaskData != null)
+                {
+                    //Make a call to AttributeLibrary to get attributes details for Goal and Task.
+                    List<CustomAttribute> taskAttributesLibrary = GoalsEndpointUtil.GetAttributesLibraryByType(request, 2);
+                    task = GoalsUtil.ConvertToTask(response.TaskData, taskAttributesLibrary);
+                }
+                return task;
+            }
+            catch (WebServiceException ex)
+            {
+                throw new WebServiceException("AD:PostUpdateTaskRequest()::" + ex.Message, ex.InnerException);
+            }
+        }
+
         #endregion
 
         #region Private Methods
-        private static PatientGoalData GetGoalData(PatientGoal pg)
+        private static PatientGoalData convertToPatientGoalData(PatientGoal pg)
         {
             PatientGoalData pgd = new PatientGoalData
             {
@@ -645,6 +812,36 @@ namespace Phytel.API.AppDomain.NG
                 }
 
                 return barrierIds;
+        }
+
+        private static PatientDetails getPatientDetails(double version, string contractNumber, string userId, IRestClient client, string patientId)
+        {
+            PatientDetails patient = null;
+            if (!string.IsNullOrEmpty(patientId))
+            {
+                string patientUrl = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/patient/{4}",
+                                                                                    DDPatientServiceURL,
+                                                                                    "NG",
+                                                                                    version,
+                                                                                    contractNumber,
+                                                                                    patientId), userId);
+
+                GetPatientDataResponse response = client.Get<GetPatientDataResponse>(patientUrl);
+
+                if (response != null && response.Patient != null)
+                {
+                    patient = new PatientDetails
+                    {
+                        Id = response.Patient.Id,
+                        FirstName = response.Patient.FirstName,
+                        LastName = response.Patient.LastName,
+                        MiddleName = response.Patient.MiddleName,
+                        PreferredName = response.Patient.PreferredName,
+                        Suffix = response.Patient.Suffix
+                    };
+                }
+            }
+            return patient;
         }
         #endregion
     }
