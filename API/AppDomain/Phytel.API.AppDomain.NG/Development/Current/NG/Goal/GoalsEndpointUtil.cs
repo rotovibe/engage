@@ -250,6 +250,7 @@ namespace Phytel.API.AppDomain.NG
                         PatientIntervention i = GoalsUtil.ConvertToIntervention(n);
                         // Call Patient DD to get patient details. 
                         i.PatientDetails = getPatientDetails(request.Version, request.ContractNumber, request.UserId, client, n.PatientId);
+                        i.PatientId = n.PatientId;
                         interventions.Add(i);
                     }
                 }
@@ -682,6 +683,7 @@ namespace Phytel.API.AppDomain.NG
                     intervention = GoalsUtil.ConvertToIntervention(response.InterventionData);
                     // Call Patient DD to get patient details. 
                     intervention.PatientDetails = getPatientDetails(request.Version, request.ContractNumber, request.UserId, client, response.InterventionData.PatientId);
+                    intervention.PatientId = response.InterventionData.PatientId;
                 }
                 return intervention;
             }
