@@ -76,7 +76,7 @@ namespace Phytel.API.DataDomain.PatientGoal.Test
             };
 
             PutUpdateBarrierResponse response = m.UpdatePatientBarrier(req);
-            Assert.IsTrue(response.Updated);
+            Assert.IsNotNull(response.BarrierData);
         }
     }
 }

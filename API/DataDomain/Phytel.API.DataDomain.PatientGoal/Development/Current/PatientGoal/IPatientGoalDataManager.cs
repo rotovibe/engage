@@ -13,7 +13,7 @@ namespace Phytel.API.DataDomain.PatientGoal
         PutInitializeBarrierDataResponse InitializeBarrier(PutInitializeBarrierDataRequest request);
         GetPatientGoalDataResponse GetPatientGoal(GetPatientGoalDataRequest request);
         GetAllPatientGoalsDataResponse GetPatientGoalList(GetAllPatientGoalsDataRequest request);
-        PutPatientGoalDataResponse PutPatientGoal(PutPatientGoalDataRequest request);
+        PutUpdateGoalDataResponse PutPatientGoal(PutUpdateGoalDataRequest request);
         PutInitializeTaskResponse InsertNewPatientTask(PutInitializeTaskRequest request);
         PutUpdateTaskResponse UpdatePatientTask(PutUpdateTaskRequest request);
         PutUpdateInterventionResponse UpdatePatientIntervention(PutUpdateInterventionRequest request);

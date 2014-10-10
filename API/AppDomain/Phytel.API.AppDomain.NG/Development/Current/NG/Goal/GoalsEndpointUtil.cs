@@ -139,27 +139,11 @@ namespace Phytel.API.AppDomain.NG
                     //Make a call to AttributeLibrary to get attributes details for Goal and Task.
                     List<CustomAttribute> goalAttributesLibrary = GoalsEndpointUtil.GetAttributesLibraryByType(request, 1);
                     List<CustomAttribute> taskAttributesLibrary = GoalsEndpointUtil.GetAttributesLibraryByType(request, 2);
-                    
-                    PatientGoalData g = ddResponse.GoalData;
-                    result = new PatientGoal
-                    {
-                        Id  = g.Id,
-                        PatientId = g.PatientId, 
-                        Name = g.Name, 
-                        FocusAreaIds = g.FocusAreaIds,
-                        SourceId = g.SourceId,
-                        ProgramIds = g.ProgramIds,
-                        TypeId = g.TypeId,
-                        StatusId = g.StatusId, 
-                        StartDate = g.StartDate, 
-                        EndDate = g.EndDate,
-                        TargetDate = g.TargetDate,
-                        TargetValue = g.TargetValue,
-                        CustomAttributes = GoalsUtil.GetCustomAttributeDetails(g.CustomAttributes, goalAttributesLibrary),
-                        Barriers = GoalsUtil.ConvertToBarriers(g.BarriersData),
-                        Tasks = GoalsUtil.ConvertToTasks(g.TasksData, taskAttributesLibrary),
-                        Interventions = GoalsUtil.ConvertToInterventions(g.InterventionsData)
-                    };
+
+                    result = GoalsUtil.ConvertToGoal(ddResponse.GoalData, goalAttributesLibrary);
+                    result.Barriers = GoalsUtil.ConvertToBarriers(ddResponse.GoalData.BarriersData);
+                    result.Tasks = GoalsUtil.ConvertToTasks(ddResponse.GoalData.TasksData, taskAttributesLibrary);
+                    result.Interventions = GoalsUtil.ConvertToInterventions(ddResponse.GoalData.InterventionsData);
                 }
                 return result;
             }
@@ -618,11 +602,11 @@ namespace Phytel.API.AppDomain.NG
             }
         }
 
-        internal static bool PostUpdateGoalRequest(PostPatientGoalRequest request)
+        internal static PatientGoal PostUpdateGoalRequest(PostPatientGoalRequest request)
         {
             try
             {
-                bool result = false;
+                PatientGoal goal = null;
 
                 if (request.Goal == null)
                     throw new Exception("The Goal property is null in the request.");
@@ -639,15 +623,17 @@ namespace Phytel.API.AppDomain.NG
                     request.PatientId,
                     request.Goal.Id), request.UserId);
 
-                PutPatientGoalDataResponse response = client.Put<PutPatientGoalDataResponse>(
-                    url, new PutPatientGoalDataRequest { GoalData = convertToPatientGoalData(request.Goal), UserId = request.UserId } as object);
+                PutUpdateGoalDataResponse response = client.Put<PutUpdateGoalDataResponse>(
+                    url, new PutUpdateGoalDataRequest { Goal = convertToPatientGoalData(request.Goal), UserId = request.UserId } as object);
 
-                if (response != null)
+                if (response != null && response.GoalData != null)
                 {
-                    result = true;
+                    //Make a call to AttributeLibrary to get attributes details for Goal.
+                    List<CustomAttribute> goalAttributesLibrary = GoalsEndpointUtil.GetAttributesLibraryByType(request, 1);
+                    goal = GoalsUtil.ConvertToGoal(response.GoalData, goalAttributesLibrary);
                 }
 
-                return result;
+                return goal;
             }
             catch (WebServiceException ex)
             {
@@ -727,6 +713,41 @@ namespace Phytel.API.AppDomain.NG
             catch (WebServiceException ex)
             {
                 throw new WebServiceException("AD:PostUpdateTaskRequest()::" + ex.Message, ex.InnerException);
+            }
+        }
+
+        internal static PatientBarrier PostUpdateBarrierRequest(PostPatientBarrierRequest request)
+        {
+            try
+            {
+                PatientBarrier task = null;
+
+                if (request.Barrier == null)
+                    throw new Exception("The Barrier property is null in the request.");
+
+                IRestClient client = new JsonServiceClient();
+
+                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Goal/{5}/Barrier/{6}/Update",
+                    DDPatientGoalsServiceUrl,
+                    "NG",
+                    request.Version,
+                    request.ContractNumber,
+                    request.PatientId,
+                    request.PatientGoalId,
+                    request.Id), request.UserId);
+
+                PutUpdateBarrierResponse response = client.Put<PutUpdateBarrierResponse>(
+                    url, new PutUpdateBarrierRequest { Barrier = GoalsUtil.ConvertToPatientBarrierData(request.Barrier), UserId = request.UserId } as object);
+
+                if (response != null && response.BarrierData != null)
+                {
+                    task = GoalsUtil.ConvertToBarrier(response.BarrierData);
+                }
+                return task;
+            }
+            catch (WebServiceException ex)
+            {
+                throw new WebServiceException("AD:PostUpdateBarrierRequest()::" + ex.Message, ex.InnerException);
             }
         }
 

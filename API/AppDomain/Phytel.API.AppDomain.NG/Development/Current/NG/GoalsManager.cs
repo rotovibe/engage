@@ -116,23 +116,8 @@ namespace Phytel.API.AppDomain.NG
             try
             {
                 PostPatientGoalResponse pgr = new PostPatientGoalResponse();
-                bool result = false;
-
-                // we can thread here if we want!
-                // save goals
-                result = GoalsEndpointUtil.PostUpdateGoalRequest(request);
-
-                // save barriers
-                GoalsUtil.SavePatientGoalBarriers(request);
-
-                // save tasks
-                GoalsUtil.SavePatientGoalTasks(request);
-
-                // save interventions
-                GoalsUtil.SavePatientGoalInterventions(request);
-
-                pgr.Result = result;
-
+                pgr.Goal = GoalsEndpointUtil.PostUpdateGoalRequest(request);
+                pgr.Version = request.Version;
                 return pgr;
             }
             catch (Exception ex)
@@ -168,6 +153,21 @@ namespace Phytel.API.AppDomain.NG
             catch (Exception ex)
             {
                 throw new Exception("AD:SavePatientTask()::" + ex.Message, ex.InnerException);
+            }
+        }
+
+        public PostPatientBarrierResponse SavePatientBarrier(PostPatientBarrierRequest request)
+        {
+            try
+            {
+                PostPatientBarrierResponse response = new PostPatientBarrierResponse();
+                response.Barrier = GoalsEndpointUtil.PostUpdateBarrierRequest(request);
+                response.Version = request.Version;
+                return response;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("AD:SavePatientBarrier()::" + ex.Message, ex.InnerException);
             }
         }
 

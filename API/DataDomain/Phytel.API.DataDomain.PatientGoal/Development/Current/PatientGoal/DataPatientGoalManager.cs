@@ -183,17 +183,22 @@ namespace Phytel.API.DataDomain.PatientGoal
         #endregion
 
         #region // TASKS
-        public  PutPatientGoalDataResponse PutPatientGoal(PutPatientGoalDataRequest request)
+        public  PutUpdateGoalDataResponse PutPatientGoal(PutUpdateGoalDataRequest request)
         {
             try
             {
-                PutPatientGoalDataResponse result = new PutPatientGoalDataResponse();
+                PutUpdateGoalDataResponse result = new PutUpdateGoalDataResponse();
 
                 IPatientGoalRepository repo = Factory.GetRepository(request, RepositoryType.PatientGoal);
-
-                bool status = (bool)repo.Update(request);
-
-                result.Updated = status;
+                if(request.Goal != null)
+                {
+                  bool status = (bool)repo.Update(request);
+                  if (status)
+                  {
+                      PatientGoalData data = repo.FindByID(request.Goal.Id) as PatientGoalData;
+                      result.GoalData = data;
+                  }
+                }
                 return result;
             }
             catch (Exception ex)
@@ -304,24 +309,30 @@ namespace Phytel.API.DataDomain.PatientGoal
                 PutUpdateBarrierResponse result = new PutUpdateBarrierResponse();
 
                 IPatientGoalRepository repo = Factory.GetRepository(request, RepositoryType.PatientBarrier);
-                
-                List<PatientBarrierData> pid = (List<PatientBarrierData>)repo.Find(request.PatientGoalId);
-                List<string> dbBarrierIdList = GetBarrierIds(pid);
 
-                // update existing barrier entries with a delete
-                List<string> excludes = dbBarrierIdList.Except(request.BarrierIdsList).ToList<string>();
-                excludes.ForEach(ex =>
+                if (request.BarrierIdsList != null && request.BarrierIdsList.Count > 0)
                 {
-                    // create delete barrier request to insert
-                    DeleteBarrierDataRequest dbr = new DeleteBarrierDataRequest { BarrierId = ex, UserId = request.UserId };
-                    repo.Delete(dbr);
-                });
+                    List<PatientBarrierData> pid = (List<PatientBarrierData>)repo.Find(request.PatientGoalId);
+                    List<string> dbBarrierIdList = GetBarrierIds(pid);
 
-                bool status = false;
-                if (request.BarrierIdsList.Count > 0)
-                    status = (bool)repo.Update(request);
-
-                result.Updated = status;
+                    // update existing barrier entries with a delete
+                    List<string> excludes = dbBarrierIdList.Except(request.BarrierIdsList).ToList<string>();
+                    excludes.ForEach(ex =>
+                    {
+                        // create delete barrier request to insert
+                        DeleteBarrierDataRequest dbr = new DeleteBarrierDataRequest { BarrierId = ex, UserId = request.UserId };
+                        repo.Delete(dbr);
+                    });
+                }
+                if (request.Barrier != null && request.Barrier.Id != "0")
+                {
+                    bool status = (bool)repo.Update(request);
+                    if (status)
+                    {
+                        PatientBarrierData data = repo.FindByID(request.Barrier.Id) as PatientBarrierData;
+                        result.BarrierData = data;
+                    }
+                }
                 return result;
             }
             catch (Exception ex)

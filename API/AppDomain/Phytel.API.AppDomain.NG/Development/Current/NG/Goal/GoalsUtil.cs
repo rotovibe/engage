@@ -176,15 +176,8 @@ namespace Phytel.API.AppDomain.NG
                     List<PatientBarrierData> pbd = new List<PatientBarrierData>();
                     request.Goal.Barriers.ForEach(b =>
                     {
-                        pbd.Add(new PatientBarrierData
-                        {
-                            CategoryId = b.CategoryId,
-                            Id = b.Id,
-                            Name = b.Name,
-                            PatientGoalId = b.PatientGoalId,
-                            StatusId = b.StatusId,
-                            StatusDate = b.StatusDate
-                        });
+                        PatientBarrierData data = ConvertToPatientBarrierData(b);
+                        pbd.Add(ConvertToPatientBarrierData(b));
                     });
 
                     pbd.ForEach(bd =>
@@ -203,6 +196,24 @@ namespace Phytel.API.AppDomain.NG
             {
                 throw new Exception("AD:SavePatientGoalBarriers()::" + ex.Message, ex.InnerException);
             }
+        }
+
+        public static PatientBarrierData ConvertToPatientBarrierData(PatientBarrier b)
+        {
+            PatientBarrierData data = null;
+            if(b != null)
+            { 
+                data = new PatientBarrierData
+                {
+                    CategoryId = b.CategoryId,
+                    Id = b.Id,
+                    Name = b.Name,
+                    PatientGoalId = b.PatientGoalId,
+                    StatusId = b.StatusId,
+                    StatusDate = b.StatusDate
+                };
+            }
+            return data;
         }
 
         public static List<CustomAttribute> GetCustomAttributeDetails(List<CustomAttributeData> list, List<CustomAttribute> attributesLibrary)
@@ -249,15 +260,9 @@ namespace Phytel.API.AppDomain.NG
                     barrierList = new List<PatientBarrier>();
                     foreach (PatientBarrierData b in list)
                     {
-                        barrierList.Add(new PatientBarrier
-                            {
-                                Id = b.Id,
-                                StatusId = b.StatusId,
-                                CategoryId = b.CategoryId,
-                                Name = b.Name,
-                                PatientGoalId = b.PatientGoalId,
-                                StatusDate = b.StatusDate
-                            });
+                        PatientBarrier pb = ConvertToBarrier(b);
+                        if(pb != null)
+                            barrierList.Add(pb);
                     }
                 }
             }
@@ -266,6 +271,24 @@ namespace Phytel.API.AppDomain.NG
                 throw new Exception("AD:GetBarriers()::" + ex.Message, ex.InnerException);
             } 
             return barrierList;
+        }
+
+        public static PatientBarrier ConvertToBarrier(PatientBarrierData b)
+        {
+            PatientBarrier data = null;
+            if (b != null)
+            {
+                data = new PatientBarrier
+                {
+                    Id = b.Id,
+                    StatusId = b.StatusId,
+                    CategoryId = b.CategoryId,
+                    Name = b.Name,
+                    PatientGoalId = b.PatientGoalId,
+                    StatusDate = b.StatusDate
+                };
+            }
+            return data;
         }
 
         public static List<PatientTask> ConvertToTasks(List<PatientTaskData> list, List<CustomAttribute> taskAttributesLibrary)
@@ -292,6 +315,30 @@ namespace Phytel.API.AppDomain.NG
             return taskList;
         }
 
+        public static PatientGoal ConvertToGoal(PatientGoalData g, List<CustomAttribute> goalAttributesLibrary)
+        {
+            PatientGoal goal = null;
+            if (g != null)
+            {
+                goal = new PatientGoal
+                {
+                    Id = g.Id,
+                    PatientId = g.PatientId,
+                    Name = g.Name,
+                    FocusAreaIds = g.FocusAreaIds,
+                    SourceId = g.SourceId,
+                    ProgramIds = g.ProgramIds,
+                    TypeId = g.TypeId,
+                    StatusId = g.StatusId,
+                    StartDate = g.StartDate,
+                    EndDate = g.EndDate,
+                    TargetDate = g.TargetDate,
+                    TargetValue = g.TargetValue,
+                    CustomAttributes = GoalsUtil.GetCustomAttributeDetails(g.CustomAttributes, goalAttributesLibrary)
+                };
+            }
+            return goal;
+        }
 
 
         public static PatientTask ConvertToTask(PatientTaskData t, List<CustomAttribute> taskAttributesLibrary)

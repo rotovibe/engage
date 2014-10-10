@@ -48,10 +48,9 @@ namespace Phytel.API.AppDomain.NG.Test
         {
             GetAllPatientGoalsRequest request = new GetAllPatientGoalsRequest();
             request.ContractNumber = "InHealth001";
-            request.UserId = "AD_TestHarness";
+            request.UserId = "531f2df5072ef727c4d2a3bc";
             request.Version = 1;
-            request.PatientId = "52f55877072ef709f84e69b0";
-            request.UserId = "Snehal";
+            request.PatientId = "5325da76d6a4850adcbba656";
 
             GoalsManager gManager = new GoalsManager();
             GetAllPatientGoalsResponse response = gManager.GetAllPatientGoals(request);
@@ -59,23 +58,7 @@ namespace Phytel.API.AppDomain.NG.Test
             Assert.IsNotNull(response);
         }
 
-        [TestMethod]
-        public void SavePatientGoal_Test()
-        {
-            PostPatientGoalRequest request = new PostPatientGoalRequest();
-            request.ContractNumber = "InHealth001";
-            request.UserId = "AD_TestHarness";
-            request.Version = 1;
-            request.PatientId = "52f55874072ef709f84e68c5";
-            request.UserId = "Snehal";
-            request.Goal = new PatientGoal { Name =  "my name", SourceId = "my source"};
-
-            GoalsManager gManager = new GoalsManager();
-            PostPatientGoalResponse response = gManager.SavePatientGoal(request);
-
-            Assert.IsNotNull(response);
-        }
-        
+       
         [TestMethod]
         public void InitializePatientGoal_Test()
         {
@@ -123,6 +106,32 @@ namespace Phytel.API.AppDomain.NG.Test
 
             GoalsManager gManager = new GoalsManager();
             GetTasksResponse response = gManager.GetTasks(request);
+
+            Assert.IsNotNull(response);
+        }
+
+        [TestMethod]
+        public void SavePatientGoal_Test()
+        {
+            PostPatientGoalRequest request = new PostPatientGoalRequest();
+            request.ContractNumber = "InHealth001";
+            request.Version = 1;
+            request.UserId = "531f2df5072ef727c4d2a3bc";
+            request.PatientId = "5325db62d6a4850adcbba91e";
+            request.PatientGoalId = "5438563484ac050d1cb15617";
+            request.Goal = new PatientGoal
+            {
+                Id = "5438563484ac050d1cb15617",
+                //FocusAreaIds = new List<string> { "532be4771e60150ce42f8a30" },
+                Name = "Snehal 3",
+                PatientId = "5325db62d6a4850adcbba91e",
+                SourceId = "52fa57c9d433231dd0775011",
+                StatusId = 2,
+                StartDate = DateTime.UtcNow,
+            };
+
+            GoalsManager gManager = new GoalsManager();
+            PostPatientGoalResponse response = gManager.SavePatientGoal(request);
 
             Assert.IsNotNull(response);
         }
@@ -185,6 +194,33 @@ namespace Phytel.API.AppDomain.NG.Test
 
             GoalsManager gManager = new GoalsManager();
             PostPatientTaskResponse response = gManager.SavePatientTask(request);
+
+            Assert.IsNotNull(response);
+        }
+
+        [TestMethod]
+        public void SavePatientbarrier_Test()
+        {
+            PostPatientBarrierRequest request = new PostPatientBarrierRequest();
+            request.ContractNumber = "InHealth001";
+            request.Version = 1;
+            request.UserId = "531f2df5072ef727c4d2a3bc";
+            request.Id = "543853ba84ac050d1cb13261";
+            request.Barrier = new PatientBarrier
+            {
+                Id = "543853ba84ac050d1cb13261",
+                CategoryId = "52fa61bed433231dd077501c",
+                Name = "barr 4",
+                PatientGoalId = "543853b184ac050d1cb13183",
+                StatusDate = DateTime.UtcNow,
+                StatusId =  2
+
+            };
+            request.PatientGoalId = "543853b184ac050d1cb13183";
+            request.PatientId = "5325db62d6a4850adcbba91e";
+
+            GoalsManager gManager = new GoalsManager();
+            PostPatientBarrierResponse response = gManager.SavePatientBarrier(request);
 
             Assert.IsNotNull(response);
         }

@@ -106,11 +106,11 @@
     <Compile Include="PatientInterventionData.cs" />
     <Compile Include="PatientTaskData.cs" />
     <Compile Include="DeletePatientGoalDataRequest.cs" />
-    <Compile Include="PutPatientGoalDataRequest.cs" />
+    <Compile Include="PutUpdateGoalDataRequest.cs" />
     <Compile Include="PutInitializeBarrierDataRequest.cs" />
     <Compile Include="PutInitializeGoalDataRequest.cs" />
     <Compile Include="DeletePatientGoalDataResponse.cs" />
-    <Compile Include="PutPatientGoalDataResponse.cs" />
+    <Compile Include="PutUpdateGoalDataResponse.cs" />
     <Compile Include="PutInitializeBarrierDataResponse.cs" />
     <Compile Include="PutInitializeInterventionRequest.cs" />
     <Compile Include="PutInitializeInterventionResponse.cs" />

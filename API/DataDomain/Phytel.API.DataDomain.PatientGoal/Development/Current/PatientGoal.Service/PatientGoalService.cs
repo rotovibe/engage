@@ -96,9 +96,9 @@ namespace Phytel.API.DataDomain.PatientGoal.Service
             return response;
         }
 
-        public PutPatientGoalDataResponse Put(PutPatientGoalDataRequest request)
+        public PutUpdateGoalDataResponse Put(PutUpdateGoalDataRequest request)
         {
-            PutPatientGoalDataResponse response = new PutPatientGoalDataResponse();
+            PutUpdateGoalDataResponse response = new PutUpdateGoalDataResponse();
             try
             {
                 if (string.IsNullOrEmpty(request.UserId))

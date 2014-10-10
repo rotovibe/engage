@@ -1,22 +1,15 @@
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Phytel.API.DataDomain.PatientGoal.DTO;
-using Phytel.API.Interface;
+using MongoDB.Bson;
+using MongoDB.Bson.Serialization;
 using MongoDB.Driver;
 using MongoDB.Driver.Builders;
-using MongoDB.Bson;
-using Phytel.API.DataDomain.PatientGoal;
-using MB = MongoDB.Driver.Builders;
-using MongoDB.Bson;
 using Phytel.API.Common;
-using Phytel.API.Common.Data;
-using Phytel.API.DataDomain.PatientGoal;
-using System.Configuration;
 using Phytel.API.DataAudit;
-using MongoDB.Bson.Serialization;
+using Phytel.API.DataDomain.PatientGoal.DTO;
+using MB = MongoDB.Driver.Builders;
 
 namespace Phytel.API.DataDomain.PatientGoal
 {
@@ -169,8 +162,8 @@ namespace Phytel.API.DataDomain.PatientGoal
         public object Update(object entity)
         {
             bool result = false;
-            PutPatientGoalDataRequest pgr = (PutPatientGoalDataRequest)entity;
-            PatientGoalData pt = pgr.GoalData;
+            PutUpdateGoalDataRequest pgr = (PutUpdateGoalDataRequest)entity;
+            PatientGoalData pt = pgr.Goal;
             try
             {
                 using (PatientGoalMongoContext ctx = new PatientGoalMongoContext(_dbName))
@@ -204,6 +197,7 @@ namespace Phytel.API.DataDomain.PatientGoal
                                             pt.Id.ToString(), 
                                             Common.DataAuditType.Update, 
                                             pgr.ContractNumber);
+                    result = true;
                 }
                 return result as object;
             }

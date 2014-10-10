@@ -1,21 +1,15 @@
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Phytel.API.DataDomain.PatientGoal.DTO;
-using Phytel.API.Interface;
+using MongoDB.Bson;
+using MongoDB.Bson.Serialization;
 using MongoDB.Driver;
 using MongoDB.Driver.Builders;
-using MongoDB.Bson;
-using Phytel.API.DataDomain.PatientGoal;
-using MB = MongoDB.Driver.Builders;
-using MongoDB.Bson;
 using Phytel.API.Common;
-using Phytel.API.Common.Data;
-using System.Configuration;
 using Phytel.API.DataAudit;
-using MongoDB.Bson.Serialization;
+using Phytel.API.DataDomain.PatientGoal.DTO;
+using MB = MongoDB.Driver.Builders;
 
 namespace Phytel.API.DataDomain.PatientGoal
 {
@@ -110,8 +104,28 @@ namespace Phytel.API.DataDomain.PatientGoal
         {
             try
             {
-                throw new NotImplementedException();
-                // code here //
+                PatientBarrierData barrierData = null;
+                List<IMongoQuery> queries = new List<IMongoQuery>();
+                queries.Add(Query.EQ(MEPatientBarrier.IdProperty, ObjectId.Parse(entityID)));
+                queries.Add(Query.EQ(MEPatientBarrier.DeleteFlagProperty, false));
+                queries.Add(Query.EQ(MEPatientBarrier.TTLDateProperty, BsonNull.Value));
+                IMongoQuery mQuery = Query.And(queries);
+                using (PatientGoalMongoContext ctx = new PatientGoalMongoContext(_dbName))
+                {
+                    MEPatientBarrier b = ctx.PatientBarriers.Collection.Find(mQuery).FirstOrDefault();
+                    if (b != null)
+                    {
+                        barrierData = new PatientBarrierData { 
+                            Id = b.Id.ToString(),
+                            Name = b.Name,
+                            PatientGoalId = b.PatientGoalId.ToString(),
+                            CategoryId = b.CategoryId == null ? null : b.CategoryId.ToString(),
+                            StatusId = ((int)b.Status),
+                            StatusDate = b.StatusDate
+                        };
+                    }
+                }
+                return barrierData;
             }
             catch (Exception) { throw; }
         }
@@ -178,7 +192,7 @@ namespace Phytel.API.DataDomain.PatientGoal
                                             pb.Id.ToString(), 
                                             Common.DataAuditType.Update, 
                                             pbr.ContractNumber);
-
+                    result = true;
                 }
                 return result as object;
             }
