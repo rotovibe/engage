@@ -75,7 +75,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="IAttributeRepository.cs" />
+    <Compile Include="IPatientGoalDataManager.cs" />
     <Compile Include="IPatientGoalRepository.cs" />
+    <Compile Include="IAttributeRepositoryFactory.cs" />
+    <Compile Include="IPatientGoalRepositoryFactory.cs" />
     <Compile Include="MongoDB\DTOUtil.cs" />
     <Compile Include="MongoDB\DTO\Enums.cs" />
     <Compile Include="MongoDB\DTO\MEAttributeLibrary.cs" />
@@ -92,6 +95,7 @@
     <Compile Include="MongoDB\PatientGoalMongoContext.cs" />
     <Compile Include="DataPatientGoalManager.cs" />
     <Compile Include="MongoDB\Repository\MongoPatientTaskRepository.cs" />
+    <Compile Include="AttributeRepositoryFactory.cs" />
     <Compile Include="PatientGoalRepositoryFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

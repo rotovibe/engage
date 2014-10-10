@@ -17,6 +17,9 @@ namespace Phytel.API.DataDomain.PatientGoal.Service
                 //register any dependencies your services use, e.g:
                 //container.Register<ICacheClient>(new MemoryCacheClient());
                 Plugins.Add(new RequestLogsFeature() { RequiredRoles = new string[] { } });
+                container.RegisterAutoWiredAs<AttributeRepositoryFactory, IAttributeRepositoryFactory>();
+                container.RegisterAutoWiredAs<PatientGoalRepositoryFactory, IPatientGoalRepositoryFactory>();
+                container.RegisterAutoWiredAs<PatientGoalDataManager, IPatientGoalDataManager>();
             }
         }
 

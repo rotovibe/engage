@@ -20,7 +20,7 @@ using MongoDB.Bson.Serialization;
 
 namespace Phytel.API.DataDomain.PatientGoal
 {
-    public class MongoPatientInterventionRepository<T> : IPatientGoalRepository<T>
+    public class MongoPatientInterventionRepository : IPatientGoalRepository
     {
         private string _dbName = string.Empty;
         private int _expireDays = Convert.ToInt32(ConfigurationManager.AppSettings["ExpireDays"]);

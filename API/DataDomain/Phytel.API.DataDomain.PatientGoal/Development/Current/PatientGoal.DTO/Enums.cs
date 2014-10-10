@@ -6,6 +6,15 @@ using System.Threading.Tasks;
 
 namespace Phytel.API.DataDomain.PatientGoal.DTO
 {
+    public enum RepositoryType
+    {
+        PatientGoal =1,
+        PatientBarrier = 2,
+        PatientTask = 3,
+        PatientIntervention = 4,
+        AttributeLibrary = 5
+    }
+    
     public enum GoalTaskStatus
     {
         Open = 1,

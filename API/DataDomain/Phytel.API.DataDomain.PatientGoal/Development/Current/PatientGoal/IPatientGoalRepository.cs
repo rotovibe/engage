@@ -3,7 +3,7 @@ using Phytel.API.Interface;
 
 namespace Phytel.API.DataDomain.PatientGoal
 {
-    public interface IPatientGoalRepository<T> : IRepository<T>
+    public interface IPatientGoalRepository : IRepository
     {
         object Initialize(object newEntity);
         IEnumerable<object> Find(string Id);

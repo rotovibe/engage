@@ -11,8 +11,6 @@ namespace Phytel.API.DataDomain.PatientNote.Service
     public class PatientNoteService : ServiceStack.ServiceInterface.Service
     {
         public IPatientNoteDataManager Manager { get; set; }
-        public ICommonFormatterUtil FormatUtil { get; set; }
-        public IHelpers Helpers { get; set; }
         
         public PutPatientNoteDataResponse Put(PutPatientNoteDataRequest request)
         {

@@ -10,6 +10,8 @@ namespace Phytel.API.DataDomain.PatientGoal.Service
 {
     public class PatientGoalService : ServiceStack.ServiceInterface.Service
     {
+        public IPatientGoalDataManager Manager { get; set; }
+        
         public PutInitializeGoalDataResponse Put(PutInitializeGoalDataRequest request)
         {
             PutInitializeGoalDataResponse response = new PutInitializeGoalDataResponse();
@@ -18,7 +20,7 @@ namespace Phytel.API.DataDomain.PatientGoal.Service
                 if (string.IsNullOrEmpty(request.UserId))
                     throw new UnauthorizedAccessException("PatientGoalDD:Put()::Unauthorized Access");
 
-                response = PatientGoalDataManager.InitializeGoal(request);
+                response = Manager.InitializeGoal(request);
                 response.Version = request.Version;
             }
             catch (Exception ex)
@@ -39,7 +41,7 @@ namespace Phytel.API.DataDomain.PatientGoal.Service
                 if (string.IsNullOrEmpty(request.UserId))
                     throw new UnauthorizedAccessException("PatientGoalDD:Put()::Unauthorized Access");
 
-                response = PatientGoalDataManager.InitializeBarrier(request);
+                response = Manager.InitializeBarrier(request);
                 response.Version = request.Version;
             }
             catch (Exception ex)
@@ -60,7 +62,7 @@ namespace Phytel.API.DataDomain.PatientGoal.Service
                 if (string.IsNullOrEmpty(request.UserId))
                     throw new UnauthorizedAccessException("PatientGoalDD:Get()::Unauthorized Access");
 
-                response = PatientGoalDataManager.GetPatientGoal(request);
+                response = Manager.GetPatientGoal(request);
                 response.Version = request.Version;
             }
             catch (Exception ex)
@@ -81,7 +83,7 @@ namespace Phytel.API.DataDomain.PatientGoal.Service
                 if (string.IsNullOrEmpty(request.UserId))
                     throw new UnauthorizedAccessException("PatientGoalDD:Get()::Unauthorized Access");
 
-                response = PatientGoalDataManager.GetPatientGoalList(request);
+                response = Manager.GetPatientGoalList(request);
                 response.Version = request.Version;
             }
             catch (Exception ex)
@@ -102,7 +104,7 @@ namespace Phytel.API.DataDomain.PatientGoal.Service
                 if (string.IsNullOrEmpty(request.UserId))
                     throw new UnauthorizedAccessException("PatientGoalDD:Put()::Unauthorized Access");
 
-                response = PatientGoalDataManager.PutPatientGoal(request);
+                response = Manager.PutPatientGoal(request);
                 response.Version = request.Version;
             }
             catch (Exception ex)
@@ -123,7 +125,7 @@ namespace Phytel.API.DataDomain.PatientGoal.Service
                 if (string.IsNullOrEmpty(request.UserId))
                     throw new UnauthorizedAccessException("PatientGoalDD:Put()::Unauthorized Access");
 
-                response = PatientGoalDataManager.InsertNewPatientTask(request);
+                response = Manager.InsertNewPatientTask(request);
                 response.Version = request.Version;
             }
             catch (Exception ex)
@@ -144,7 +146,7 @@ namespace Phytel.API.DataDomain.PatientGoal.Service
                 if (string.IsNullOrEmpty(request.UserId))
                     throw new UnauthorizedAccessException("PatientGoalDD:Put()::Unauthorized Access");
 
-                response = PatientGoalDataManager.UpdatePatientTask(request);
+                response = Manager.UpdatePatientTask(request);
                 response.Version = request.Version;
             }
             catch (Exception ex)
@@ -165,7 +167,7 @@ namespace Phytel.API.DataDomain.PatientGoal.Service
                 if (string.IsNullOrEmpty(request.UserId))
                     throw new UnauthorizedAccessException("PatientGoalDD:Put()::Unauthorized Access");
 
-                response = PatientGoalDataManager.InsertNewPatientIntervention(request);
+                response = Manager.InsertNewPatientIntervention(request);
                 response.Version = request.Version;
             }
             catch (Exception ex)
@@ -186,7 +188,7 @@ namespace Phytel.API.DataDomain.PatientGoal.Service
                 if (string.IsNullOrEmpty(request.UserId))
                     throw new UnauthorizedAccessException("PatientGoalDD:Put()::Unauthorized Access");
 
-                response = PatientGoalDataManager.UpdatePatientIntervention(request);
+                response = Manager.UpdatePatientIntervention(request);
                 response.Version = request.Version;
             }
             catch (Exception ex)
@@ -207,7 +209,7 @@ namespace Phytel.API.DataDomain.PatientGoal.Service
                 if (string.IsNullOrEmpty(request.UserId))
                     throw new UnauthorizedAccessException("PatientGoalDD:Put()::Unauthorized Access");
 
-                response = PatientGoalDataManager.UpdatePatientBarrier(request);
+                response = Manager.UpdatePatientBarrier(request);
                 response.Version = request.Version;
             }
             catch (Exception ex)
@@ -228,7 +230,7 @@ namespace Phytel.API.DataDomain.PatientGoal.Service
                 if (string.IsNullOrEmpty(request.UserId))
                     throw new UnauthorizedAccessException("PatientGoalDD:Get()::Unauthorized Access");
 
-                response = PatientGoalDataManager.DeletePatientGoal(request);
+                response = Manager.DeletePatientGoal(request);
                 response.Version = request.Version;
             }
             catch (Exception ex)
@@ -249,7 +251,7 @@ namespace Phytel.API.DataDomain.PatientGoal.Service
                 if (string.IsNullOrEmpty(request.UserId))
                     throw new UnauthorizedAccessException("PatientGoalDD:Get()::Unauthorized Access");
 
-                response = PatientGoalDataManager.DeleteTask(request);
+                response = Manager.DeleteTask(request);
                 response.Version = request.Version;
             }
             catch (Exception ex)
@@ -270,7 +272,7 @@ namespace Phytel.API.DataDomain.PatientGoal.Service
                 if (string.IsNullOrEmpty(request.UserId))
                     throw new UnauthorizedAccessException("PatientGoalDD:Get()::Unauthorized Access");
 
-                response = PatientGoalDataManager.DeleteIntervention(request);
+                response = Manager.DeleteIntervention(request);
                 response.Version = request.Version;
             }
             catch (Exception ex)
@@ -291,7 +293,7 @@ namespace Phytel.API.DataDomain.PatientGoal.Service
                 if (string.IsNullOrEmpty(request.UserId))
                     throw new UnauthorizedAccessException("PatientGoalDD:Get()::Unauthorized Access");
 
-                response = PatientGoalDataManager.DeleteBarrier(request);
+                response = Manager.DeleteBarrier(request);
                 response.Version = request.Version;
             }
             catch (Exception ex)
@@ -312,7 +314,7 @@ namespace Phytel.API.DataDomain.PatientGoal.Service
                 if (string.IsNullOrEmpty(request.UserId))
                     throw new UnauthorizedAccessException("PatientGoalDD:Get()::Unauthorized Access");
 
-                response = PatientGoalDataManager.GetCustomAttributesByType(request);
+                response = Manager.GetCustomAttributesByType(request);
                 response.Version = request.Version;
             }
             catch (Exception ex)
@@ -333,7 +335,7 @@ namespace Phytel.API.DataDomain.PatientGoal.Service
                 if (string.IsNullOrEmpty(request.UserId))
                     throw new UnauthorizedAccessException("PatientGoalDD:PatientGoalDelete()::Unauthorized Access");
 
-                response = PatientGoalDataManager.DeletePatientGoalByPatientId(request);
+                response = Manager.DeletePatientGoalByPatientId(request);
                 response.Version = request.Version;
             }
             catch (Exception ex)
@@ -354,7 +356,7 @@ namespace Phytel.API.DataDomain.PatientGoal.Service
                 if (string.IsNullOrEmpty(request.UserId))
                     throw new UnauthorizedAccessException("PatientGoalDD:PatientGoalUndoDelete()::Unauthorized Access");
 
-                response = PatientGoalDataManager.UndoDeletePatientGoals(request);
+                response = Manager.UndoDeletePatientGoals(request);
                 response.Version = request.Version;
             }
             catch (Exception ex)
@@ -375,7 +377,7 @@ namespace Phytel.API.DataDomain.PatientGoal.Service
                 if (string.IsNullOrEmpty(request.UserId))
                     throw new UnauthorizedAccessException("PatientGoalDD:RemoveProgramInPatientGoals()::Unauthorized Access");
 
-                response = PatientGoalDataManager.RemoveProgramInPatientGoals(request);
+                response = Manager.RemoveProgramInPatientGoals(request);
                 response.Version = request.Version;
             }
             catch (Exception ex)
@@ -396,7 +398,7 @@ namespace Phytel.API.DataDomain.PatientGoal.Service
                 if (string.IsNullOrEmpty(request.UserId))
                     throw new UnauthorizedAccessException("PatientGoalDD:Post()::Unauthorized Access");
 
-                response = PatientGoalDataManager.GetInterventions(request);
+                response = Manager.GetInterventions(request);
                 response.Version = request.Version;
             }
             catch (Exception ex)
@@ -417,7 +419,7 @@ namespace Phytel.API.DataDomain.PatientGoal.Service
                 if (string.IsNullOrEmpty(request.UserId))
                     throw new UnauthorizedAccessException("PatientGoalDD:Post()::Unauthorized Access");
 
-                response = PatientGoalDataManager.GetTasks(request);
+                response = Manager.GetTasks(request);
                 response.Version = request.Version;
             }
             catch (Exception ex)

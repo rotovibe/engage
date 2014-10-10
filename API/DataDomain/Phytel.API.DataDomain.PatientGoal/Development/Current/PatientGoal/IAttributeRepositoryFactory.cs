@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,8 +8,8 @@ using Phytel.API.Interface;
 
 namespace Phytel.API.DataDomain.PatientGoal
 {
-    public interface IAttributeRepository : IRepository
+    public interface IAttributeRepositoryFactory
     {
-        IEnumerable<object> FindByType(int typeId);
+        IAttributeRepository GetRepository(IDataDomainRequest request, RepositoryType type);
     }
 }
