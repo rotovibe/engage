@@ -102,7 +102,7 @@ namespace Phytel.API.DataDomain.PatientGoal
 
                         //Barriers
                         List<ChildViewData> barrierChildView = null;
-                        List<PatientBarrierData> barrierData = getBarriersByPatientGoalId(request, context);
+                        List<PatientBarrierData> barrierData = getBarriersByPatientGoalId(request, p.Id);
                         if(barrierData != null && barrierData.Count > 0)
                         {   
                             barrierChildView = new List<ChildViewData>();
