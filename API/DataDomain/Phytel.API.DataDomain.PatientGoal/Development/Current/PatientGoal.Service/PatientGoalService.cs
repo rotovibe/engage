@@ -11,7 +11,8 @@ namespace Phytel.API.DataDomain.PatientGoal.Service
     public class PatientGoalService : ServiceStack.ServiceInterface.Service
     {
         public IPatientGoalDataManager Manager { get; set; }
-        
+
+        #region Initialize
         public PutInitializeGoalDataResponse Put(PutInitializeGoalDataRequest request)
         {
             PutInitializeGoalDataResponse response = new PutInitializeGoalDataResponse();
@@ -54,6 +55,50 @@ namespace Phytel.API.DataDomain.PatientGoal.Service
             return response;
         }
 
+        public PutInitializeTaskResponse Put(PutInitializeTaskRequest request)
+        {
+            PutInitializeTaskResponse response = new PutInitializeTaskResponse();
+            try
+            {
+                if (string.IsNullOrEmpty(request.UserId))
+                    throw new UnauthorizedAccessException("PatientGoalDD:Put()::Unauthorized Access");
+
+                response = Manager.InsertNewPatientTask(request);
+                response.Version = request.Version;
+            }
+            catch (Exception ex)
+            {
+                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+
+                string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
+                Common.Helper.LogException(int.Parse(aseProcessID), ex);
+            }
+            return response;
+        }
+
+        public PutInitializeInterventionResponse Put(PutInitializeInterventionRequest request)
+        {
+            PutInitializeInterventionResponse response = new PutInitializeInterventionResponse();
+            try
+            {
+                if (string.IsNullOrEmpty(request.UserId))
+                    throw new UnauthorizedAccessException("PatientGoalDD:Put()::Unauthorized Access");
+
+                response = Manager.InsertNewPatientIntervention(request);
+                response.Version = request.Version;
+            }
+            catch (Exception ex)
+            {
+                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+
+                string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
+                Common.Helper.LogException(int.Parse(aseProcessID), ex);
+            }
+            return response;
+        }
+        #endregion
+
+        #region Gets
         public GetPatientGoalDataResponse Get(GetPatientGoalDataRequest request)
         {
             GetPatientGoalDataResponse response = new GetPatientGoalDataResponse();
@@ -96,6 +141,50 @@ namespace Phytel.API.DataDomain.PatientGoal.Service
             return response;
         }
 
+        public GetInterventionsDataResponse Post(GetInterventionsDataRequest request)
+        {
+            GetInterventionsDataResponse response = new GetInterventionsDataResponse();
+            try
+            {
+                if (string.IsNullOrEmpty(request.UserId))
+                    throw new UnauthorizedAccessException("PatientGoalDD:Post()::Unauthorized Access");
+
+                response = Manager.GetInterventions(request);
+                response.Version = request.Version;
+            }
+            catch (Exception ex)
+            {
+                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+
+                string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
+                Common.Helper.LogException(int.Parse(aseProcessID), ex);
+            }
+            return response;
+        }
+
+        public GetTasksDataResponse Post(GetTasksDataRequest request)
+        {
+            GetTasksDataResponse response = new GetTasksDataResponse();
+            try
+            {
+                if (string.IsNullOrEmpty(request.UserId))
+                    throw new UnauthorizedAccessException("PatientGoalDD:Post()::Unauthorized Access");
+
+                response = Manager.GetTasks(request);
+                response.Version = request.Version;
+            }
+            catch (Exception ex)
+            {
+                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+
+                string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
+                Common.Helper.LogException(int.Parse(aseProcessID), ex);
+            }
+            return response;
+        }
+        #endregion
+
+        #region Update
         public PutUpdateGoalDataResponse Put(PutUpdateGoalDataRequest request)
         {
             PutUpdateGoalDataResponse response = new PutUpdateGoalDataResponse();
@@ -117,27 +206,6 @@ namespace Phytel.API.DataDomain.PatientGoal.Service
             return response;
         }
 
-        public PutInitializeTaskResponse Put(PutInitializeTaskRequest request)
-        {
-            PutInitializeTaskResponse response = new PutInitializeTaskResponse();
-            try
-            {
-                if (string.IsNullOrEmpty(request.UserId))
-                    throw new UnauthorizedAccessException("PatientGoalDD:Put()::Unauthorized Access");
-
-                response = Manager.InsertNewPatientTask(request);
-                response.Version = request.Version;
-            }
-            catch (Exception ex)
-            {
-                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
-
-                string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
-                Common.Helper.LogException(int.Parse(aseProcessID), ex);
-            }
-            return response;
-        }
-
         public PutUpdateTaskResponse Put(PutUpdateTaskRequest request)
         {
             PutUpdateTaskResponse response = new PutUpdateTaskResponse();
@@ -147,27 +215,6 @@ namespace Phytel.API.DataDomain.PatientGoal.Service
                     throw new UnauthorizedAccessException("PatientGoalDD:Put()::Unauthorized Access");
 
                 response = Manager.UpdatePatientTask(request);
-                response.Version = request.Version;
-            }
-            catch (Exception ex)
-            {
-                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
-
-                string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
-                Common.Helper.LogException(int.Parse(aseProcessID), ex);
-            }
-            return response;
-        }
-
-        public PutInitializeInterventionResponse Put(PutInitializeInterventionRequest request)
-        {
-            PutInitializeInterventionResponse response = new PutInitializeInterventionResponse();
-            try
-            {
-                if (string.IsNullOrEmpty(request.UserId))
-                    throw new UnauthorizedAccessException("PatientGoalDD:Put()::Unauthorized Access");
-
-                response = Manager.InsertNewPatientIntervention(request);
                 response.Version = request.Version;
             }
             catch (Exception ex)
@@ -220,8 +267,10 @@ namespace Phytel.API.DataDomain.PatientGoal.Service
                 Common.Helper.LogException(int.Parse(aseProcessID), ex);
             }
             return response;
-        }
+        } 
+        #endregion
 
+        #region Delete & UndoDelete
         public DeletePatientGoalDataResponse Delete(DeletePatientGoalDataRequest request)
         {
             DeletePatientGoalDataResponse response = new DeletePatientGoalDataResponse();
@@ -306,27 +355,6 @@ namespace Phytel.API.DataDomain.PatientGoal.Service
             return response;
         }
 
-        public GetCustomAttributesDataResponse Get(GetCustomAttributesDataRequest request)
-        {
-            GetCustomAttributesDataResponse response = new GetCustomAttributesDataResponse();
-            try
-            {
-                if (string.IsNullOrEmpty(request.UserId))
-                    throw new UnauthorizedAccessException("PatientGoalDD:Get()::Unauthorized Access");
-
-                response = Manager.GetCustomAttributesByType(request);
-                response.Version = request.Version;
-            }
-            catch (Exception ex)
-            {
-                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
-
-                string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
-                Common.Helper.LogException(int.Parse(aseProcessID), ex);
-            }
-            return response;
-        }
-
         public DeletePatientGoalByPatientIdDataResponse Delete(DeletePatientGoalByPatientIdDataRequest request)
         {
             DeletePatientGoalByPatientIdDataResponse response = new DeletePatientGoalByPatientIdDataResponse();
@@ -368,7 +396,32 @@ namespace Phytel.API.DataDomain.PatientGoal.Service
             }
             return response;
         }
+        #endregion
 
+        #region CustomAttribute
+        public GetCustomAttributesDataResponse Get(GetCustomAttributesDataRequest request)
+        {
+            GetCustomAttributesDataResponse response = new GetCustomAttributesDataResponse();
+            try
+            {
+                if (string.IsNullOrEmpty(request.UserId))
+                    throw new UnauthorizedAccessException("PatientGoalDD:Get()::Unauthorized Access");
+
+                response = Manager.GetCustomAttributesByType(request);
+                response.Version = request.Version;
+            }
+            catch (Exception ex)
+            {
+                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+
+                string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
+                Common.Helper.LogException(int.Parse(aseProcessID), ex);
+            }
+            return response;
+        } 
+        #endregion
+
+        #region RemoveProgram
         public RemoveProgramInPatientGoalsDataResponse Put(RemoveProgramInPatientGoalsDataRequest request)
         {
             RemoveProgramInPatientGoalsDataResponse response = new RemoveProgramInPatientGoalsDataResponse();
@@ -388,48 +441,7 @@ namespace Phytel.API.DataDomain.PatientGoal.Service
                 Common.Helper.LogException(int.Parse(aseProcessID), ex);
             }
             return response;
-        }
-
-        public GetInterventionsDataResponse Post(GetInterventionsDataRequest request)
-        {
-            GetInterventionsDataResponse response = new GetInterventionsDataResponse();
-            try
-            {
-                if (string.IsNullOrEmpty(request.UserId))
-                    throw new UnauthorizedAccessException("PatientGoalDD:Post()::Unauthorized Access");
-
-                response = Manager.GetInterventions(request);
-                response.Version = request.Version;
-            }
-            catch (Exception ex)
-            {
-                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
-
-                string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
-                Common.Helper.LogException(int.Parse(aseProcessID), ex);
-            }
-            return response;
-        }
-
-        public GetTasksDataResponse Post(GetTasksDataRequest request)
-        {
-            GetTasksDataResponse response = new GetTasksDataResponse();
-            try
-            {
-                if (string.IsNullOrEmpty(request.UserId))
-                    throw new UnauthorizedAccessException("PatientGoalDD:Post()::Unauthorized Access");
-
-                response = Manager.GetTasks(request);
-                response.Version = request.Version;
-            }
-            catch (Exception ex)
-            {
-                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
-
-                string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
-                Common.Helper.LogException(int.Parse(aseProcessID), ex);
-            }
-            return response;
-        }
+        } 
+        #endregion
     }
 }
