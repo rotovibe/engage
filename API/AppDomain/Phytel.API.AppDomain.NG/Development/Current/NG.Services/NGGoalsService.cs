@@ -11,6 +11,7 @@ namespace Phytel.API.AppDomain.NG.Service
 {
     public partial class NGService : ServiceStack.ServiceInterface.Service
     {
+        #region Initialize
         public GetInitializeGoalResponse Get(GetInitializeGoalRequest request)
         {
             GetInitializeGoalResponse response = new GetInitializeGoalResponse();
@@ -37,7 +38,7 @@ namespace Phytel.API.AppDomain.NG.Service
             }
             finally
             {
-               List<string> patientIds = null;
+                List<string> patientIds = null;
 
                 if (response.Goal != null)
                 {
@@ -45,11 +46,11 @@ namespace Phytel.API.AppDomain.NG.Service
                     patientIds.Add(response.Goal.PatientId);
                 }
 
-                if(result != null)
+                if (result != null)
                     AuditHelper.LogAuditData(request, result.SQLUserId, patientIds, System.Web.HttpContext.Current.Request, request.GetType().Name);
             }
-            
-            return response; 
+
+            return response;
         }
 
         public GetInitializeBarrierResponse Get(GetInitializeBarrierRequest request)
@@ -78,12 +79,12 @@ namespace Phytel.API.AppDomain.NG.Service
             }
             finally
             {
-                if(result != null)
+                if (result != null)
                     AuditHelper.LogAuditData(request, result.SQLUserId, null, System.Web.HttpContext.Current.Request, request.GetType().Name);
             }
-            return response; 
+            return response;
         }
-        
+
         public GetInitializeTaskResponse Get(GetInitializeTaskRequest request)
         {
             GetInitializeTaskResponse response = null;
@@ -110,11 +111,11 @@ namespace Phytel.API.AppDomain.NG.Service
             }
             finally
             {
-                if(result != null)
+                if (result != null)
                     AuditHelper.LogAuditData(request, result.SQLUserId, null, System.Web.HttpContext.Current.Request, request.GetType().Name);
             }
-            
-            return response; 
+
+            return response;
         }
 
         public GetInitializeInterventionResponse Get(GetInitializeInterventionRequest request)
@@ -143,12 +144,14 @@ namespace Phytel.API.AppDomain.NG.Service
             }
             finally
             {
-                if(result != null)
+                if (result != null)
                     AuditHelper.LogAuditData(request, result.SQLUserId, null, System.Web.HttpContext.Current.Request, request.GetType().Name);
             }
-            return response; 
-        }
+            return response;
+        } 
+        #endregion
 
+        #region Gets
         public GetPatientGoalResponse Get(GetPatientGoalRequest request)
         {
             GetPatientGoalResponse response = new GetPatientGoalResponse();
@@ -175,7 +178,7 @@ namespace Phytel.API.AppDomain.NG.Service
             }
             finally
             {
-                 List<string> patientIds = null;
+                List<string> patientIds = null;
 
                 if (response.Goal != null)
                 {
@@ -183,10 +186,10 @@ namespace Phytel.API.AppDomain.NG.Service
                     patientIds.Add(response.Goal.PatientId);
                 }
 
-                if(result != null)
+                if (result != null)
                     AuditHelper.LogAuditData(request, result.SQLUserId, patientIds, System.Web.HttpContext.Current.Request, request.GetType().Name);
             }
-            return response; 
+            return response;
         }
 
         public GetAllPatientGoalsResponse Get(GetAllPatientGoalsRequest request)
@@ -215,143 +218,17 @@ namespace Phytel.API.AppDomain.NG.Service
             }
             finally
             {
-                 List<string> patientIds = null;
+                List<string> patientIds = null;
 
                 if (response.Goals != null)
                 {
-                    patientIds = response.Goals.Select(x => x.PatientId).ToList();                   
+                    patientIds = response.Goals.Select(x => x.PatientId).ToList();
                 }
 
-                if(result != null)
+                if (result != null)
                     AuditHelper.LogAuditData(request, result.SQLUserId, patientIds, System.Web.HttpContext.Current.Request, request.GetType().Name);
             }
-            return response; 
-        }
-
-        public PostPatientGoalResponse Post(PostPatientGoalRequest request)
-        {
-            PostPatientGoalResponse response = new PostPatientGoalResponse();
-            GoalsManager gm = new GoalsManager();
-            ValidateTokenResponse result = null;
-
-            try
-            {
-                request.Token = base.Request.Headers["Token"] as string;
-                result = Security.IsUserValidated(request.Version, request.Token, request.ContractNumber);
-                if (result.UserId.Trim() != string.Empty)
-                {
-                    request.UserId = result.UserId;
-                    response = gm.SavePatientGoal(request);
-                }
-                else
-                    throw new UnauthorizedAccessException();
-            }
-            catch (Exception ex)
-            {
-                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
-                if ((ex is WebServiceException) == false)
-                    gm.LogException(ex);
-            }
-            finally
-            {
-                if(result != null)
-                    AuditHelper.LogAuditData(request, result.SQLUserId, null, System.Web.HttpContext.Current.Request, request.GetType().Name);
-            }
-            return response; 
-        }
-
-        public PostPatientInterventionResponse Post(PostPatientInterventionRequest request)
-        {
-            PostPatientInterventionResponse response = new PostPatientInterventionResponse();
-            GoalsManager gm = new GoalsManager();
-            ValidateTokenResponse result = null;
-            try
-            {
-                request.Token = base.Request.Headers["Token"] as string;
-                result = Security.IsUserValidated(request.Version, request.Token, request.ContractNumber);
-                if (result.UserId.Trim() != string.Empty)
-                {
-                    request.UserId = result.UserId;
-                    response = gm.SavePatientIntervention(request);
-                }
-                else
-                    throw new UnauthorizedAccessException();
-            }
-            catch (Exception ex)
-            {
-                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
-                if ((ex is WebServiceException) == false)
-                    gm.LogException(ex);
-            }
-            finally
-            {
-                if (result != null)
-                    AuditHelper.LogAuditData(request, result.SQLUserId, null, System.Web.HttpContext.Current.Request, request.GetType().Name);
-            }
             return response;
-        }
-
-        public PostPatientTaskResponse Post(PostPatientTaskRequest request)
-        {
-            PostPatientTaskResponse response = new PostPatientTaskResponse();
-            GoalsManager gm = new GoalsManager();
-            ValidateTokenResponse result = null;
-            try
-            {
-                request.Token = base.Request.Headers["Token"] as string;
-                result = Security.IsUserValidated(request.Version, request.Token, request.ContractNumber);
-                if (result.UserId.Trim() != string.Empty)
-                {
-                    request.UserId = result.UserId;
-                    response = gm.SavePatientTask(request);
-                }
-                else
-                    throw new UnauthorizedAccessException();
-            }
-            catch (Exception ex)
-            {
-                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
-                if ((ex is WebServiceException) == false)
-                    gm.LogException(ex);
-            }
-            finally
-            {
-                if (result != null)
-                    AuditHelper.LogAuditData(request, result.SQLUserId, null, System.Web.HttpContext.Current.Request, request.GetType().Name);
-            }
-            return response;
-        }
-
-        public PostDeletePatientGoalResponse Post(PostDeletePatientGoalRequest request)
-        {
-            PostDeletePatientGoalResponse response = null;
-            GoalsManager gm = new GoalsManager();
-            ValidateTokenResponse result = null;
-
-            try
-            {
-                request.Token = base.Request.Headers["Token"] as string;
-                result = Security.IsUserValidated(request.Version, request.Token, request.ContractNumber);
-                if (result.UserId.Trim() != string.Empty)
-                {
-                    request.UserId = result.UserId;
-                    response = gm.DeletePatientGoal(request);
-                }
-                else
-                    throw new UnauthorizedAccessException();
-            }
-            catch (Exception ex)
-            {
-                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
-                if ((ex is WebServiceException) == false)
-                    gm.LogException(ex);
-            }
-            finally
-            {
-                if(result != null)
-                    AuditHelper.LogAuditData(request, result.SQLUserId, null, System.Web.HttpContext.Current.Request, request.GetType().Name);
-            }
-            return response; 
         }
 
         public GetInterventionsResponse Post(GetInterventionsRequest request)
@@ -416,6 +293,102 @@ namespace Phytel.API.AppDomain.NG.Service
                     AuditHelper.LogAuditData(request, result.SQLUserId, null, System.Web.HttpContext.Current.Request, request.GetType().Name);
             }
             return response;
+        } 
+        #endregion
+
+        #region Update
+        public PostPatientGoalResponse Post(PostPatientGoalRequest request)
+        {
+            PostPatientGoalResponse response = new PostPatientGoalResponse();
+            GoalsManager gm = new GoalsManager();
+            ValidateTokenResponse result = null;
+
+            try
+            {
+                request.Token = base.Request.Headers["Token"] as string;
+                result = Security.IsUserValidated(request.Version, request.Token, request.ContractNumber);
+                if (result.UserId.Trim() != string.Empty)
+                {
+                    request.UserId = result.UserId;
+                    response = gm.SavePatientGoal(request);
+                }
+                else
+                    throw new UnauthorizedAccessException();
+            }
+            catch (Exception ex)
+            {
+                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+                if ((ex is WebServiceException) == false)
+                    gm.LogException(ex);
+            }
+            finally
+            {
+                if (result != null)
+                    AuditHelper.LogAuditData(request, result.SQLUserId, null, System.Web.HttpContext.Current.Request, request.GetType().Name);
+            }
+            return response;
+        }
+
+        public PostPatientInterventionResponse Post(PostPatientInterventionRequest request)
+        {
+            PostPatientInterventionResponse response = new PostPatientInterventionResponse();
+            GoalsManager gm = new GoalsManager();
+            ValidateTokenResponse result = null;
+            try
+            {
+                request.Token = base.Request.Headers["Token"] as string;
+                result = Security.IsUserValidated(request.Version, request.Token, request.ContractNumber);
+                if (result.UserId.Trim() != string.Empty)
+                {
+                    request.UserId = result.UserId;
+                    response = gm.SavePatientIntervention(request);
+                }
+                else
+                    throw new UnauthorizedAccessException();
+            }
+            catch (Exception ex)
+            {
+                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+                if ((ex is WebServiceException) == false)
+                    gm.LogException(ex);
+            }
+            finally
+            {
+                if (result != null)
+                    AuditHelper.LogAuditData(request, result.SQLUserId, null, System.Web.HttpContext.Current.Request, request.GetType().Name);
+            }
+            return response;
+        }
+
+        public PostPatientTaskResponse Post(PostPatientTaskRequest request)
+        {
+            PostPatientTaskResponse response = new PostPatientTaskResponse();
+            GoalsManager gm = new GoalsManager();
+            ValidateTokenResponse result = null;
+            try
+            {
+                request.Token = base.Request.Headers["Token"] as string;
+                result = Security.IsUserValidated(request.Version, request.Token, request.ContractNumber);
+                if (result.UserId.Trim() != string.Empty)
+                {
+                    request.UserId = result.UserId;
+                    response = gm.SavePatientTask(request);
+                }
+                else
+                    throw new UnauthorizedAccessException();
+            }
+            catch (Exception ex)
+            {
+                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+                if ((ex is WebServiceException) == false)
+                    gm.LogException(ex);
+            }
+            finally
+            {
+                if (result != null)
+                    AuditHelper.LogAuditData(request, result.SQLUserId, null, System.Web.HttpContext.Current.Request, request.GetType().Name);
+            }
+            return response;
         }
 
         public PostPatientBarrierResponse Post(PostPatientBarrierRequest request)
@@ -447,6 +420,41 @@ namespace Phytel.API.AppDomain.NG.Service
                     AuditHelper.LogAuditData(request, result.SQLUserId, null, System.Web.HttpContext.Current.Request, request.GetType().Name);
             }
             return response;
-        }
+        } 
+        #endregion
+
+        #region Delete
+        public PostDeletePatientGoalResponse Post(PostDeletePatientGoalRequest request)
+        {
+            PostDeletePatientGoalResponse response = null;
+            GoalsManager gm = new GoalsManager();
+            ValidateTokenResponse result = null;
+
+            try
+            {
+                request.Token = base.Request.Headers["Token"] as string;
+                result = Security.IsUserValidated(request.Version, request.Token, request.ContractNumber);
+                if (result.UserId.Trim() != string.Empty)
+                {
+                    request.UserId = result.UserId;
+                    response = gm.DeletePatientGoal(request);
+                }
+                else
+                    throw new UnauthorizedAccessException();
+            }
+            catch (Exception ex)
+            {
+                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+                if ((ex is WebServiceException) == false)
+                    gm.LogException(ex);
+            }
+            finally
+            {
+                if (result != null)
+                    AuditHelper.LogAuditData(request, result.SQLUserId, null, System.Web.HttpContext.Current.Request, request.GetType().Name);
+            }
+            return response;
+        } 
+        #endregion
     }
 }
