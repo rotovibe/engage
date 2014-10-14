@@ -121,7 +121,8 @@ namespace Phytel.API.DataDomain.PatientGoal
                             PatientGoalId = b.PatientGoalId.ToString(),
                             CategoryId = b.CategoryId == null ? null : b.CategoryId.ToString(),
                             StatusId = ((int)b.Status),
-                            StatusDate = b.StatusDate
+                            StatusDate = b.StatusDate,
+                            DeleteFlag = b.DeleteFlag
                         };
                     }
                 }
@@ -173,7 +174,6 @@ namespace Phytel.API.DataDomain.PatientGoal
 
                     var uv = new List<MB.UpdateBuilder>();
                     uv.Add(MB.Update.Set(MEPatientBarrier.TTLDateProperty, BsonNull.Value));
-                    uv.Add(MB.Update.Set(MEPatientBarrier.DeleteFlagProperty, false));
                     uv.Add(MB.Update.Set(MEPatientBarrier.UpdatedByProperty, ObjectId.Parse(this.UserId)));
                     uv.Add(MB.Update.Set(MEPatientBarrier.VersionProperty, pbr.Version));
                     uv.Add(MB.Update.Set(MEPatientBarrier.LastUpdatedOnProperty, System.DateTime.UtcNow));
@@ -182,15 +182,26 @@ namespace Phytel.API.DataDomain.PatientGoal
                     if (pb.StatusId != 0) uv.Add(MB.Update.Set(MEPatientBarrier.StatusProperty, pb.StatusId));
                     if (pb.StatusDate != null) uv.Add(MB.Update.Set(MEPatientBarrier.StatusDateProperty, pb.StatusDate));
                     if (pb.CategoryId != null) uv.Add(MB.Update.Set(MEPatientBarrier.CategoryProperty, ObjectId.Parse(pb.CategoryId)));
-
+                    uv.Add(MB.Update.Set(MEPatientBarrier.DeleteFlagProperty, pb.DeleteFlag));
+                    DataAuditType type;
+                    if (pb.DeleteFlag)
+                    {
+                        uv.Add(MB.Update.Set(MEPatientBarrier.TTLDateProperty, System.DateTime.UtcNow.AddDays(_expireDays)));
+                        type = Common.DataAuditType.Delete;
+                    }
+                    else
+                    {
+                        uv.Add(MB.Update.Set(MEPatientBarrier.TTLDateProperty, BsonNull.Value));
+                        type = Common.DataAuditType.Update;
+                    }
                     IMongoUpdate update = MB.Update.Combine(uv);
                     
                     ctx.PatientBarriers.Collection.Update(q, update);
 
                     AuditHelper.LogDataAudit(pbr.UserId, 
                                             MongoCollectionName.PatientBarrier.ToString(), 
-                                            pb.Id.ToString(), 
-                                            Common.DataAuditType.Update, 
+                                            pb.Id.ToString(),
+                                            type, 
                                             pbr.ContractNumber);
                     result = true;
                 }
@@ -268,7 +279,8 @@ namespace Phytel.API.DataDomain.PatientGoal
                                 PatientGoalId = b.PatientGoalId.ToString(),
                                 CategoryId = b.CategoryId == null ? null : b.CategoryId.ToString(),
                                 StatusId = ((int)b.Status),
-                                StatusDate = b.StatusDate
+                                StatusDate = b.StatusDate,
+                                DeleteFlag = b.DeleteFlag
                             };
                             barriersDataList.Add(barrierData);
                         }

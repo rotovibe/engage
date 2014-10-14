@@ -58,7 +58,8 @@ namespace Phytel.API.AppDomain.NG
                     StatusId = t.StatusId,
                     StatusDate = t.StatusDate,
                     TargetDate = t.TargetDate,
-                    TargetValue = t.TargetValue
+                    TargetValue = t.TargetValue,
+                    DeleteFlag = t.DeleteFlag
                 };
                 if ((t.StatusId == (int)GoalTaskStatus.Met || t.StatusId == (int)GoalTaskStatus.Abandoned))
                 {
@@ -148,7 +149,8 @@ namespace Phytel.API.AppDomain.NG
                     PatientGoalId = i.PatientGoalId,
                     StartDate = i.StartDate,
                     StatusId = i.StatusId,
-                    StatusDate = i.StatusDate
+                    StatusDate = i.StatusDate,
+                    DeleteFlag = i.DeleteFlag
                 };
                 if ((i.StatusId == (int)InterventionStatus.Removed || i.StatusId == (int)InterventionStatus.Completed))
                 {
@@ -210,7 +212,8 @@ namespace Phytel.API.AppDomain.NG
                     Name = b.Name,
                     PatientGoalId = b.PatientGoalId,
                     StatusId = b.StatusId,
-                    StatusDate = b.StatusDate
+                    StatusDate = b.StatusDate,
+                    DeleteFlag = b.DeleteFlag
                 };
             }
             return data;
@@ -285,7 +288,8 @@ namespace Phytel.API.AppDomain.NG
                     CategoryId = b.CategoryId,
                     Name = b.Name,
                     PatientGoalId = b.PatientGoalId,
-                    StatusDate = b.StatusDate
+                    StatusDate = b.StatusDate,
+                    DeleteFlag = b.DeleteFlag
                 };
             }
             return data;
@@ -360,7 +364,8 @@ namespace Phytel.API.AppDomain.NG
                     StartDate = t.StartDate,
                     ClosedDate = t.ClosedDate,
                     CreatedById = t.CreatedById,
-                    GoalName = t.GoalName
+                    GoalName = t.GoalName,
+                    DeleteFlag = t.DeleteFlag
                 }; 
             }   
             return task;
@@ -407,7 +412,8 @@ namespace Phytel.API.AppDomain.NG
                     StartDate = i.StartDate,
                     ClosedDate = i.ClosedDate,
                     CreatedById = i.CreatedById,
-                    GoalName = i.GoalName
+                    GoalName = i.GoalName,
+                    DeleteFlag = i.DeleteFlag
                 };
             }
             return pi;
@@ -523,6 +529,7 @@ namespace Phytel.API.AppDomain.NG
                         StatusId = ptd.StatusId,
                         TargetDate = ptd.TargetDate,
                         TargetValue = ptd.TargetValue,
+                        DeleteFlag = ptd.DeleteFlag
                     };
                 }
             }

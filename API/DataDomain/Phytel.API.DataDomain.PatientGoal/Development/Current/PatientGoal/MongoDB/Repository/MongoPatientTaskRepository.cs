@@ -134,7 +134,8 @@ namespace Phytel.API.DataDomain.PatientGoal
                             StartDate = t.StartDate,
                             CustomAttributes = DTOUtil.GetCustomAttributeIdAndValues(t.Attributes),
                             ClosedDate = t.ClosedDate,
-                            CreatedById = t.RecordCreatedBy.ToString()
+                            CreatedById = t.RecordCreatedBy.ToString(),
+                            DeleteFlag = t.DeleteFlag
                         };
                         var mePG = ctx.PatientGoals.Collection.Find(Query.EQ(MEPatientGoal.IdProperty, ObjectId.Parse(taskData.PatientGoalId))).SetFields(MEPatientGoal.NameProperty).FirstOrDefault();
                         if (mePG != null)
@@ -190,7 +191,6 @@ namespace Phytel.API.DataDomain.PatientGoal
                     }
                     var uv = new List<MB.UpdateBuilder>();
                     uv.Add(MB.Update.Set(MEPatientTask.TTLDateProperty, BsonNull.Value));
-                    uv.Add(MB.Update.Set(MEPatientTask.DeleteFlagProperty, false));
                     uv.Add(MB.Update.Set(MEPatientTask.UpdatedByProperty, ObjectId.Parse(this.UserId)));
                     uv.Add(MB.Update.Set(MEPatientTask.VersionProperty, ptr.Version));
                     uv.Add(MB.Update.Set(MEPatientTask.LastUpdatedOnProperty, System.DateTime.UtcNow));
@@ -203,13 +203,25 @@ namespace Phytel.API.DataDomain.PatientGoal
                     if (pt.CustomAttributes != null) { uv.Add(MB.Update.SetWrapped<List<MAttribute>>(MEPatientTask.AttributesProperty, DTOUtil.GetAttributes(pt.CustomAttributes))); }
                     if (pt.BarrierIds != null) { uv.Add(MB.Update.SetWrapped<List<ObjectId>>(MEPatientTask.BarriersProperty, DTOUtil.ConvertObjectId(pt.BarrierIds))); }
                     if (pt.ClosedDate != null) { uv.Add(MB.Update.Set(MEPatientTask.ClosedDateProperty, pt.ClosedDate)); }
+                    uv.Add(MB.Update.Set(MEPatientTask.DeleteFlagProperty, pt.DeleteFlag));
+                    DataAuditType type;
+                    if (pt.DeleteFlag)
+                    {
+                        uv.Add(MB.Update.Set(MEPatientTask.TTLDateProperty, System.DateTime.UtcNow.AddDays(_expireDays)));
+                        type = Common.DataAuditType.Delete;
+                    }
+                    else
+                    {
+                        uv.Add(MB.Update.Set(MEPatientTask.TTLDateProperty, BsonNull.Value));
+                        type = Common.DataAuditType.Update;
+                    }
                     IMongoUpdate update = MB.Update.Combine(uv);
                     ctx.PatientTasks.Collection.Update(q, update);
 
                     AuditHelper.LogDataAudit(this.UserId, 
                                             MongoCollectionName.PatientTask.ToString(), 
                                             pt.Id, 
-                                            Common.DataAuditType.Update, 
+                                            type, 
                                             ptr.ContractNumber);
 
                     result = true;
@@ -299,7 +311,8 @@ namespace Phytel.API.DataDomain.PatientGoal
                                 StartDate = t.StartDate,
                                 CustomAttributes = DTOUtil.GetCustomAttributeIdAndValues(t.Attributes),
                                 ClosedDate = t.ClosedDate,
-                                CreatedById = t.RecordCreatedBy.ToString()
+                                CreatedById = t.RecordCreatedBy.ToString(),
+                                DeleteFlag = t.DeleteFlag
                             };
                             tasksDataList.Add(taskData);
                         }
@@ -391,7 +404,8 @@ namespace Phytel.API.DataDomain.PatientGoal
                                 StartDate = t.StartDate,
                                 CustomAttributes = DTOUtil.GetCustomAttributeIdAndValues(t.Attributes),
                                 ClosedDate = t.ClosedDate,
-                                CreatedById = t.RecordCreatedBy.ToString()
+                                CreatedById = t.RecordCreatedBy.ToString(),
+                                DeleteFlag = t.DeleteFlag
                             };
                             var mePG = ctx.PatientGoals.Collection.Find(Query.EQ(MEPatientGoal.IdProperty, ObjectId.Parse(taskData.PatientGoalId))).SetFields(MEPatientGoal.NameProperty).FirstOrDefault();
                             if (mePG != null)

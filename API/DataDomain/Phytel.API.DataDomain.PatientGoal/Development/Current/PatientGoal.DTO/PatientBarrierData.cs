@@ -14,5 +14,6 @@ namespace Phytel.API.DataDomain.PatientGoal.DTO
         public string Name { get; set; }
         public int StatusId { get; set; }
         public DateTime? StatusDate { get; set; }
+        public bool DeleteFlag { get; set; }
     }
 }

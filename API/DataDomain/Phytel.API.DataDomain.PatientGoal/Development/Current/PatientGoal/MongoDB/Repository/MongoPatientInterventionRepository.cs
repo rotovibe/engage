@@ -135,7 +135,8 @@ namespace Phytel.API.DataDomain.PatientGoal
                             StatusDate = b.StatusDate,
                             StartDate = b.StartDate,
                             ClosedDate = b.ClosedDate,
-                            CreatedById = b.RecordCreatedBy.ToString()
+                            CreatedById = b.RecordCreatedBy.ToString(),
+                            DeleteFlag = b.DeleteFlag
                         };
                         var mePG = ctx.PatientGoals.Collection.Find(Query.EQ(MEPatientGoal.IdProperty, ObjectId.Parse(interventionData.PatientGoalId))).SetFields(MEPatientGoal.PatientIdProperty, MEPatientGoal.NameProperty).FirstOrDefault();
                         if (mePG != null)
@@ -193,7 +194,6 @@ namespace Phytel.API.DataDomain.PatientGoal
 
                     var uv = new List<MB.UpdateBuilder>();
                     uv.Add(MB.Update.Set(MEPatientIntervention.TTLDateProperty, BsonNull.Value));
-                    uv.Add(MB.Update.Set(MEPatientIntervention.DeleteFlagProperty, false));
                     uv.Add(MB.Update.Set(MEPatientIntervention.VersionProperty, ir.Version));
                     uv.Add(MB.Update.Set(MEPatientIntervention.LastUpdatedOnProperty, System.DateTime.UtcNow));
                     uv.Add(MB.Update.Set(MEPatientIntervention.UpdatedByProperty, ObjectId.Parse(this.UserId)));
@@ -205,13 +205,25 @@ namespace Phytel.API.DataDomain.PatientGoal
                     if (pi.AssignedToId != null) uv.Add(MB.Update.Set(MEPatientIntervention.AssignedToProperty, ObjectId.Parse(pi.AssignedToId)));
                     if (pi.BarrierIds != null) { uv.Add(MB.Update.SetWrapped<List<ObjectId>>(MEPatientIntervention.BarriersProperty, DTOUtil.ConvertObjectId(pi.BarrierIds))); }
                     if (pi.ClosedDate != null) { uv.Add(MB.Update.Set(MEPatientIntervention.ClosedDateProperty, pi.ClosedDate)); }
+                    uv.Add(MB.Update.Set(MEPatientIntervention.DeleteFlagProperty, pi.DeleteFlag));
+                    DataAuditType type;
+                    if (pi.DeleteFlag)
+                    {
+                        uv.Add(MB.Update.Set(MEPatientIntervention.TTLDateProperty, System.DateTime.UtcNow.AddDays(_expireDays)));
+                        type = Common.DataAuditType.Delete;
+                    }
+                    else
+                    {
+                        uv.Add(MB.Update.Set(MEPatientIntervention.TTLDateProperty, BsonNull.Value));
+                        type = Common.DataAuditType.Update;
+                    }
                     IMongoUpdate update = MB.Update.Combine(uv);
                     ctx.PatientInterventions.Collection.Update(q, update);
 
                     AuditHelper.LogDataAudit(this.UserId, 
                                             MongoCollectionName.PatientIntervention.ToString(), 
                                             pi.Id.ToString(), 
-                                            Common.DataAuditType.Update, 
+                                            type, 
                                             ir.ContractNumber);
 
                     result = true;
@@ -294,7 +306,8 @@ namespace Phytel.API.DataDomain.PatientGoal
                                 StatusDate = b.StatusDate,
                                 StartDate = b.StartDate,
                                 ClosedDate = b.ClosedDate,
-                                CreatedById = b.RecordCreatedBy.ToString()
+                                CreatedById = b.RecordCreatedBy.ToString(),
+                                DeleteFlag = b.DeleteFlag
                             };
                             interventionsDataList.Add(interventionData);
                         }
@@ -395,7 +408,8 @@ namespace Phytel.API.DataDomain.PatientGoal
                                 StatusDate = b.StatusDate,
                                 StartDate = b.StartDate,
                                 ClosedDate = b.ClosedDate,
-                                CreatedById = b.RecordCreatedBy.ToString()
+                                CreatedById = b.RecordCreatedBy.ToString(),
+                                DeleteFlag = b.DeleteFlag
                             };
                             var mePG = ctx.PatientGoals.Collection.Find(Query.EQ(MEPatientGoal.IdProperty, ObjectId.Parse(interventionData.PatientGoalId))).SetFields(MEPatientGoal.PatientIdProperty, MEPatientGoal.NameProperty).FirstOrDefault();
                             if (mePG != null)
