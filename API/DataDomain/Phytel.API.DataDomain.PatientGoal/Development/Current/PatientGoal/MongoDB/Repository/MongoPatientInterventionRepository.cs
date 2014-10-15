@@ -193,7 +193,6 @@ namespace Phytel.API.DataDomain.PatientGoal
                     }
 
                     var uv = new List<MB.UpdateBuilder>();
-                    uv.Add(MB.Update.Set(MEPatientIntervention.TTLDateProperty, BsonNull.Value));
                     uv.Add(MB.Update.Set(MEPatientIntervention.VersionProperty, ir.Version));
                     uv.Add(MB.Update.Set(MEPatientIntervention.LastUpdatedOnProperty, System.DateTime.UtcNow));
                     uv.Add(MB.Update.Set(MEPatientIntervention.UpdatedByProperty, ObjectId.Parse(this.UserId)));
