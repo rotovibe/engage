@@ -294,6 +294,12 @@ namespace Phytel.API.DataDomain.PatientGoal
                     List<MEPatientTask> meTasks = ctx.PatientTasks.Collection.Find(mQuery).ToList();
                     if (meTasks != null)
                     {
+                        string goalName = string.Empty;
+                        var mePG = ctx.PatientGoals.Collection.Find(Query.EQ(MEPatientGoal.IdProperty, ObjectId.Parse(Id))).SetFields(MEPatientGoal.NameProperty).FirstOrDefault();
+                        if (mePG != null)
+                        {
+                            goalName = mePG.Name;
+                        }
                         tasksDataList = new List<PatientTaskData>();
                         foreach (MEPatientTask t in meTasks)
                         {
@@ -311,7 +317,8 @@ namespace Phytel.API.DataDomain.PatientGoal
                                 CustomAttributes = DTOUtil.GetCustomAttributeIdAndValues(t.Attributes),
                                 ClosedDate = t.ClosedDate,
                                 CreatedById = t.RecordCreatedBy.ToString(),
-                                DeleteFlag = t.DeleteFlag
+                                DeleteFlag = t.DeleteFlag,
+                                GoalName = goalName
                             };
                             tasksDataList.Add(taskData);
                         }

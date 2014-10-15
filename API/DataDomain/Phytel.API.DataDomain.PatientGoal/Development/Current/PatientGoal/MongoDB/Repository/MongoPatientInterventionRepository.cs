@@ -290,6 +290,14 @@ namespace Phytel.API.DataDomain.PatientGoal
                     List<MEPatientIntervention> meInterventions = ctx.PatientInterventions.Collection.Find(mQuery).ToList();
                     if (meInterventions != null)
                     {
+                        string goalName = string.Empty;
+                        string patientId = string.Empty;
+                        var mePG = ctx.PatientGoals.Collection.Find(Query.EQ(MEPatientGoal.IdProperty, ObjectId.Parse(Id))).SetFields(MEPatientGoal.NameProperty).FirstOrDefault();
+                        if (mePG != null)
+                        {
+                            goalName = mePG.Name;
+                            patientId = mePG.PatientId.ToString();
+                        }
                         interventionsDataList = new List<PatientInterventionData>();
                         foreach (MEPatientIntervention b in meInterventions)
                         {
@@ -306,7 +314,9 @@ namespace Phytel.API.DataDomain.PatientGoal
                                 StartDate = b.StartDate,
                                 ClosedDate = b.ClosedDate,
                                 CreatedById = b.RecordCreatedBy.ToString(),
-                                DeleteFlag = b.DeleteFlag
+                                DeleteFlag = b.DeleteFlag,
+                                GoalName = goalName,
+                                PatientId = patientId
                             };
                             interventionsDataList.Add(interventionData);
                         }

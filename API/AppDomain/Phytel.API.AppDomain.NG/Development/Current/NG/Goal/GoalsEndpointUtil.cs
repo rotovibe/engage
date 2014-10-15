@@ -143,7 +143,7 @@ namespace Phytel.API.AppDomain.NG
                     result = GoalsUtil.ConvertToGoal(ddResponse.GoalData, goalAttributesLibrary);
                     result.Barriers = GoalsUtil.ConvertToBarriers(ddResponse.GoalData.BarriersData);
                     result.Tasks = GoalsUtil.ConvertToTasks(ddResponse.GoalData.TasksData, taskAttributesLibrary);
-                    result.Interventions = GoalsUtil.ConvertToInterventions(ddResponse.GoalData.InterventionsData);
+                    result.Interventions = GoalsUtil.ConvertToInterventions(request, client, ddResponse.GoalData.InterventionsData);
                 }
                 return result;
             }
@@ -233,7 +233,7 @@ namespace Phytel.API.AppDomain.NG
                     {
                         PatientIntervention i = GoalsUtil.ConvertToIntervention(n);
                         // Call Patient DD to get patient details. 
-                        i.PatientDetails = getPatientDetails(request.Version, request.ContractNumber, request.UserId, client, n.PatientId);
+                        i.PatientDetails = GetPatientDetails(request.Version, request.ContractNumber, request.UserId, client, n.PatientId);
                         i.PatientId = n.PatientId;
                         interventions.Add(i);
                     }
@@ -668,7 +668,7 @@ namespace Phytel.API.AppDomain.NG
                 {
                     intervention = GoalsUtil.ConvertToIntervention(response.InterventionData);
                     // Call Patient DD to get patient details. 
-                    intervention.PatientDetails = getPatientDetails(request.Version, request.ContractNumber, request.UserId, client, response.InterventionData.PatientId);
+                    intervention.PatientDetails = GetPatientDetails(request.Version, request.ContractNumber, request.UserId, client, response.InterventionData.PatientId);
                     intervention.PatientId = response.InterventionData.PatientId;
                 }
                 return intervention;
@@ -837,7 +837,7 @@ namespace Phytel.API.AppDomain.NG
                 return barrierIds;
         }
 
-        private static PatientDetails getPatientDetails(double version, string contractNumber, string userId, IRestClient client, string patientId)
+        public static PatientDetails GetPatientDetails(double version, string contractNumber, string userId, IRestClient client, string patientId)
         {
             PatientDetails patient = null;
             if (!string.IsNullOrEmpty(patientId))

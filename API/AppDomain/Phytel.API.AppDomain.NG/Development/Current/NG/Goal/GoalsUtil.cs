@@ -5,6 +5,8 @@ using AD = Phytel.API.AppDomain.NG.DTO;
 using Phytel.API.DataDomain.PatientGoal.DTO;
 using Phytel.API.AppDomain.NG.DTO.Goal;
 using System.Linq;
+using Phytel.API.Interface;
+using ServiceStack.Service;
 
 namespace Phytel.API.AppDomain.NG
 {
@@ -371,7 +373,7 @@ namespace Phytel.API.AppDomain.NG
             return task;
         }
 
-        public static List<PatientIntervention> ConvertToInterventions(List<PatientInterventionData> list)
+        public static List<PatientIntervention> ConvertToInterventions(IAppDomainRequest request, IRestClient client, List<PatientInterventionData> list)
         {
             List<PatientIntervention> interventionList = null;
             try
@@ -383,7 +385,12 @@ namespace Phytel.API.AppDomain.NG
                     {
                         PatientIntervention pi = ConvertToIntervention(i);
                         if (pi != null)
+                        {
+                            // Call Patient DD to get patient details. 
+                            pi.PatientDetails = GoalsEndpointUtil.GetPatientDetails(request.Version, request.ContractNumber, request.UserId, client, i.PatientId);
+                            pi.PatientId = i.PatientId;
                             interventionList.Add(pi);
+                        }
                     }
                 }
             }
