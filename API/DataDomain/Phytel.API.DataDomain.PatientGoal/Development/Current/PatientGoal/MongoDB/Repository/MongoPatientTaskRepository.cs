@@ -201,7 +201,7 @@ namespace Phytel.API.DataDomain.PatientGoal
                     if (pt.TargetValue != null) uv.Add(MB.Update.Set(MEPatientTask.TargetValueProperty, pt.TargetValue));
                     if (pt.CustomAttributes != null) { uv.Add(MB.Update.SetWrapped<List<MAttribute>>(MEPatientTask.AttributesProperty, DTOUtil.GetAttributes(pt.CustomAttributes))); }
                     if (pt.BarrierIds != null) { uv.Add(MB.Update.SetWrapped<List<ObjectId>>(MEPatientTask.BarriersProperty, DTOUtil.ConvertObjectId(pt.BarrierIds))); }
-                    if (pt.ClosedDate != null) { uv.Add(MB.Update.Set(MEPatientTask.ClosedDateProperty, pt.ClosedDate)); }
+                    uv.Add(MB.Update.Set(MEPatientTask.ClosedDateProperty, pt.ClosedDate)); 
                     uv.Add(MB.Update.Set(MEPatientTask.DeleteFlagProperty, pt.DeleteFlag));
                     DataAuditType type;
                     if (pt.DeleteFlag)

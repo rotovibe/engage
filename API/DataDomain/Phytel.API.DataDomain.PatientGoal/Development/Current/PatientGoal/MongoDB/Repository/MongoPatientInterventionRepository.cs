@@ -203,7 +203,7 @@ namespace Phytel.API.DataDomain.PatientGoal
                     if (pi.CategoryId != null) uv.Add(MB.Update.Set(MEPatientIntervention.CategoryProperty, ObjectId.Parse(pi.CategoryId)));
                     if (pi.AssignedToId != null) uv.Add(MB.Update.Set(MEPatientIntervention.AssignedToProperty, ObjectId.Parse(pi.AssignedToId)));
                     if (pi.BarrierIds != null) { uv.Add(MB.Update.SetWrapped<List<ObjectId>>(MEPatientIntervention.BarriersProperty, DTOUtil.ConvertObjectId(pi.BarrierIds))); }
-                    if (pi.ClosedDate != null) { uv.Add(MB.Update.Set(MEPatientIntervention.ClosedDateProperty, pi.ClosedDate)); }
+                    uv.Add(MB.Update.Set(MEPatientIntervention.ClosedDateProperty, pi.ClosedDate)); 
                     uv.Add(MB.Update.Set(MEPatientIntervention.DeleteFlagProperty, pi.DeleteFlag));
                     DataAuditType type;
                     if (pi.DeleteFlag)
