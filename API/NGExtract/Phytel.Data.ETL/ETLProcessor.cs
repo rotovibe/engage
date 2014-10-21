@@ -51,6 +51,7 @@ namespace Phytel.Data.ETL
     {
         public event ETLEventHandler EtlEvent;
         private int _exponent = Convert.ToInt32(ConfigurationManager.AppSettings["ParallelProcess"]);
+        private bool truncate = Convert.ToBoolean(ConfigurationManager.AppSettings["Truncate"]);
         string contract = "InHealth001";
         private List<SpawnElementHash> _spawnElementDict = new List<SpawnElementHash>();
         private SqlConnection _sqlConnection;
@@ -79,10 +80,11 @@ namespace Phytel.Data.ETL
         {
             try
             {
-                OnEtlEvent(new ETLEventArgs { Message = "*** ETL PROCESS START ***", IsError = false });
-                OnEtlEvent(new ETLEventArgs { Message = "Truncate Tables.", IsError = false });
+                OnEtlEvent(new ETLEventArgs {Message = "*** ETL PROCESS START ***", IsError = false});
+                OnEtlEvent(new ETLEventArgs {Message = "Truncate Tables.", IsError = false});
                 //Truncate/Delete SQL databases
-                SQLDataService.Instance.ExecuteProcedure("InHealth001", true, "REPORT", "spPhy_RPT_TruncateTables", new ParameterCollection());
+                SQLDataService.Instance.ExecuteProcedure("InHealth001", true, "REPORT", "spPhy_RPT_TruncateTables",
+                    new ParameterCollection());
 
                 RegisterClasses();
                 LoadUsers(contract);
@@ -110,7 +112,7 @@ namespace Phytel.Data.ETL
                 LoadPatientProgramAttributes(contract);
                 ProcessSpawnElements();
                 LoadToDos(contract);
-                OnEtlEvent(new ETLEventArgs { Message = "*** ETL PROCESS COMPLETED ***", IsError = false });
+                OnEtlEvent(new ETLEventArgs {Message = "*** ETL PROCESS COMPLETED ***", IsError = false});
             }
             catch (Exception ex)
             {
