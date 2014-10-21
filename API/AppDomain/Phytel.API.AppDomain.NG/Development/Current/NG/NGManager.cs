@@ -107,7 +107,7 @@ namespace Phytel.API.AppDomain.NG
 
                     if (sysResponse != null && sysResponse.PatientSystem != null)
                     {
-                        pResponse.Patient.DisplaySystemId = sysResponse.PatientSystem.SystemID;
+                        pResponse.Patient.DisplaySystemId = sysResponse.PatientSystem.SystemId;
                         pResponse.Patient.DisplaySystemName = sysResponse.PatientSystem.SystemName;
                         pResponse.Patient.DisplayLabel = sysResponse.PatientSystem.DisplayLabel;
                     }

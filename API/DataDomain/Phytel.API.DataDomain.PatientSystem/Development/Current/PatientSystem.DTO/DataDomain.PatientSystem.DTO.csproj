@@ -81,15 +81,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Enums.cs" />
+    <Compile Include="PutUpdatePatientSystemDataRequest.cs" />
+    <Compile Include="PutUpdatePatientSystemDataResponse.cs" />
     <Compile Include="UndoDeletePatientSystemsDataRequest.cs" />
     <Compile Include="DeletePatientSystemByPatientIdDataRequest.cs" />
     <Compile Include="UndoDeletePatientSystemsDataResponse.cs" />
     <Compile Include="DeletePatientSystemByPatientIdDataResponse.cs" />
-    <Compile Include="GetAllPatientSystemsDataRequest.cs" />
+    <Compile Include="GetPatientSystemsDataRequest.cs" />
     <Compile Include="PutPatientSystemDataResponse.cs" />
     <Compile Include="PutPatientSystemDataRequest.cs" />
     <Compile Include="GetPatientSystemDataRequest.cs" />
-    <Compile Include="GetAllPatientSystemsDataResponse.cs" />
+    <Compile Include="GetPatientSystemsDataResponse.cs" />
     <Compile Include="GetPatientSystemDataResponse.cs" />
     <Compile Include="PatientSystemData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

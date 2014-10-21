@@ -14,7 +14,9 @@ namespace Phytel.API.DataDomain.PatientSystem.Service
             {
                 //register any dependencies your services use, e.g:
                 //container.Register<ICacheClient>(new MemoryCacheClient());
-
+                container.RegisterAutoWiredAs<PatientSystemRepositoryFactory, IPatientSystemRepositoryFactory>();
+                container.RegisterAutoWiredAs<PatientSystemDataManager, IPatientSystemDataManager>();
+                
             }
         }
 

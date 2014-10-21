@@ -102,13 +102,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IPatientSystemDataManager.cs" />
     <Compile Include="IPatientSystemRepository.cs" />
     <Compile Include="MongoDB\DTO\MEPatientSystem.cs" />
     <Compile Include="MongoDB\Repository\MongoPatientSystemRepository.cs" />
     <Compile Include="MongoDB\PatientSystemMongoContext.cs" />
-    <Compile Include="DataPatientSystemManager.cs" />
+    <Compile Include="PatientSystemDataManager.cs" />
     <Compile Include="PatientSystemRepositoryFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="IPatientSystemRepositoryFactory.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\..\Common\Phytel.API.Common\Development\Current\Phytel.API.Common.csproj">
