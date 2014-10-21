@@ -228,9 +228,21 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DataAudit", "DataAudit", "{
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Phytel.API.DataAuditProcessor", "Audit\DataAudit\Development\Current\DataAuditProcessor\Phytel.API.DataAuditProcessor.csproj", "{8437F30E-2F49-433D-BD34-8E47DBC8C404}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Allergy", "Allergy", "{16ED6D96-F453-41D4-930B-A734BF7028BA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.Allergy.DTO", "DataDomain\Phytel.API.DataDomain.Allergy\Development\Current\Allergy.DTO\DataDomain.Allergy.DTO.csproj", "{404FF84F-C52A-45B1-9966-2F79B52EE03D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.Allergy", "DataDomain\Phytel.API.DataDomain.Allergy\Development\Current\Allergy\DataDomain.Allergy.csproj", "{0D61DD4A-D0B0-4DBD-A1E8-2BA6AB90CBD0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.Allergy.Service", "DataDomain\Phytel.API.DataDomain.Allergy\Development\Current\Allergy.Service\DataDomain.Allergy.Service.csproj", "{7067F85F-E22A-46D7-BD60-F904A04395EB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.Allergy.Test", "DataDomain\Phytel.API.DataDomain.Allergy\Development\Current\Allergy.Test\DataDomain.Allergy.Test.csproj", "{C4855FAF-1957-4612-A10F-C5E0E51A1742}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.Allergy.Repo", "DataDomain\Phytel.API.DataDomain.Allergy\Development\Current\DataDomain.Allergy.Repo\DataDomain.Allergy.Repo.csproj", "{3102572C-54BF-4004-8453-077790779157}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 74
+		SccNumberOfProjects = 79
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = http://hillstfs2013:8080/tfs/phytel
 		SccLocalPath0 = .
@@ -526,6 +538,26 @@ Global
 		SccProjectTopLevelParentUniqueName73 = API.sln
 		SccProjectName73 = Audit/DataAudit/Development/Current/DataAuditProcessor
 		SccLocalPath73 = Audit\\DataAudit\\Development\\Current\\DataAuditProcessor
+		SccProjectUniqueName74 = DataDomain\\Phytel.API.DataDomain.Allergy\\Development\\Current\\Allergy.DTO\\DataDomain.Allergy.DTO.csproj
+		SccProjectTopLevelParentUniqueName74 = API.sln
+		SccProjectName74 = DataDomain/Phytel.API.DataDomain.Allergy/Development/Current/Allergy.DTO
+		SccLocalPath74 = DataDomain\\Phytel.API.DataDomain.Allergy\\Development\\Current\\Allergy.DTO
+		SccProjectUniqueName75 = DataDomain\\Phytel.API.DataDomain.Allergy\\Development\\Current\\Allergy\\DataDomain.Allergy.csproj
+		SccProjectTopLevelParentUniqueName75 = API.sln
+		SccProjectName75 = DataDomain/Phytel.API.DataDomain.Allergy/Development/Current/Allergy
+		SccLocalPath75 = DataDomain\\Phytel.API.DataDomain.Allergy\\Development\\Current\\Allergy
+		SccProjectUniqueName76 = DataDomain\\Phytel.API.DataDomain.Allergy\\Development\\Current\\Allergy.Service\\DataDomain.Allergy.Service.csproj
+		SccProjectTopLevelParentUniqueName76 = API.sln
+		SccProjectName76 = DataDomain/Phytel.API.DataDomain.Allergy/Development/Current/Allergy.Service
+		SccLocalPath76 = DataDomain\\Phytel.API.DataDomain.Allergy\\Development\\Current\\Allergy.Service
+		SccProjectUniqueName77 = DataDomain\\Phytel.API.DataDomain.Allergy\\Development\\Current\\Allergy.Test\\DataDomain.Allergy.Test.csproj
+		SccProjectTopLevelParentUniqueName77 = API.sln
+		SccProjectName77 = DataDomain/Phytel.API.DataDomain.Allergy/Development/Current/Allergy.Test
+		SccLocalPath77 = DataDomain\\Phytel.API.DataDomain.Allergy\\Development\\Current\\Allergy.Test
+		SccProjectUniqueName78 = DataDomain\\Phytel.API.DataDomain.Allergy\\Development\\Current\\DataDomain.Allergy.Repo\\DataDomain.Allergy.Repo.csproj
+		SccProjectTopLevelParentUniqueName78 = API.sln
+		SccProjectName78 = DataDomain/Phytel.API.DataDomain.Allergy/Development/Current/DataDomain.Allergy.Repo
+		SccLocalPath78 = DataDomain\\Phytel.API.DataDomain.Allergy\\Development\\Current\\DataDomain.Allergy.Repo
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -969,6 +1001,36 @@ Global
 		{8437F30E-2F49-433D-BD34-8E47DBC8C404}.Model|Any CPU.Build.0 = Model|Any CPU
 		{8437F30E-2F49-433D-BD34-8E47DBC8C404}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8437F30E-2F49-433D-BD34-8E47DBC8C404}.Release|Any CPU.Build.0 = Release|Any CPU
+		{404FF84F-C52A-45B1-9966-2F79B52EE03D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{404FF84F-C52A-45B1-9966-2F79B52EE03D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{404FF84F-C52A-45B1-9966-2F79B52EE03D}.Model|Any CPU.ActiveCfg = Release|Any CPU
+		{404FF84F-C52A-45B1-9966-2F79B52EE03D}.Model|Any CPU.Build.0 = Release|Any CPU
+		{404FF84F-C52A-45B1-9966-2F79B52EE03D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{404FF84F-C52A-45B1-9966-2F79B52EE03D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0D61DD4A-D0B0-4DBD-A1E8-2BA6AB90CBD0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0D61DD4A-D0B0-4DBD-A1E8-2BA6AB90CBD0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0D61DD4A-D0B0-4DBD-A1E8-2BA6AB90CBD0}.Model|Any CPU.ActiveCfg = Release|Any CPU
+		{0D61DD4A-D0B0-4DBD-A1E8-2BA6AB90CBD0}.Model|Any CPU.Build.0 = Release|Any CPU
+		{0D61DD4A-D0B0-4DBD-A1E8-2BA6AB90CBD0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0D61DD4A-D0B0-4DBD-A1E8-2BA6AB90CBD0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7067F85F-E22A-46D7-BD60-F904A04395EB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7067F85F-E22A-46D7-BD60-F904A04395EB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7067F85F-E22A-46D7-BD60-F904A04395EB}.Model|Any CPU.ActiveCfg = Release|Any CPU
+		{7067F85F-E22A-46D7-BD60-F904A04395EB}.Model|Any CPU.Build.0 = Release|Any CPU
+		{7067F85F-E22A-46D7-BD60-F904A04395EB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7067F85F-E22A-46D7-BD60-F904A04395EB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C4855FAF-1957-4612-A10F-C5E0E51A1742}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C4855FAF-1957-4612-A10F-C5E0E51A1742}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C4855FAF-1957-4612-A10F-C5E0E51A1742}.Model|Any CPU.ActiveCfg = Release|Any CPU
+		{C4855FAF-1957-4612-A10F-C5E0E51A1742}.Model|Any CPU.Build.0 = Release|Any CPU
+		{C4855FAF-1957-4612-A10F-C5E0E51A1742}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C4855FAF-1957-4612-A10F-C5E0E51A1742}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3102572C-54BF-4004-8453-077790779157}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3102572C-54BF-4004-8453-077790779157}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3102572C-54BF-4004-8453-077790779157}.Model|Any CPU.ActiveCfg = Release|Any CPU
+		{3102572C-54BF-4004-8453-077790779157}.Model|Any CPU.Build.0 = Release|Any CPU
+		{3102572C-54BF-4004-8453-077790779157}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3102572C-54BF-4004-8453-077790779157}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -990,6 +1052,7 @@ Global
 		{20A81ED1-98B7-45E5-BC46-C5FD31BBED5D} = {81F6F5D5-AADE-4C4A-ACAE-EB1B3651E150}
 		{56E9EF60-63EB-4CED-A8C5-451A2AE238D1} = {81F6F5D5-AADE-4C4A-ACAE-EB1B3651E150}
 		{633190DF-40AB-4F81-800E-BE17965DD269} = {81F6F5D5-AADE-4C4A-ACAE-EB1B3651E150}
+		{16ED6D96-F453-41D4-930B-A734BF7028BA} = {81F6F5D5-AADE-4C4A-ACAE-EB1B3651E150}
 		{B84263C2-54D7-4254-B159-DDB1F39D0783} = {8E28768D-9A7C-4CA0-A4D0-761C06DA259C}
 		{8F254AC6-F99C-4BEC-9088-EBBA9C696CAF} = {8E28768D-9A7C-4CA0-A4D0-761C06DA259C}
 		{5D9C233B-E53D-4BE1-B578-1AA9722DE1CF} = {8E28768D-9A7C-4CA0-A4D0-761C06DA259C}
@@ -1064,5 +1127,10 @@ Global
 		{8918774E-3A00-4A19-AB58-0CCCF73E72AD} = {633190DF-40AB-4F81-800E-BE17965DD269}
 		{4D28361E-951C-4552-9A5C-D756CFB80F5A} = {633190DF-40AB-4F81-800E-BE17965DD269}
 		{8437F30E-2F49-433D-BD34-8E47DBC8C404} = {13643B19-820C-4FC1-885D-F3BB9B561E84}
+		{404FF84F-C52A-45B1-9966-2F79B52EE03D} = {16ED6D96-F453-41D4-930B-A734BF7028BA}
+		{0D61DD4A-D0B0-4DBD-A1E8-2BA6AB90CBD0} = {16ED6D96-F453-41D4-930B-A734BF7028BA}
+		{7067F85F-E22A-46D7-BD60-F904A04395EB} = {16ED6D96-F453-41D4-930B-A734BF7028BA}
+		{C4855FAF-1957-4612-A10F-C5E0E51A1742} = {16ED6D96-F453-41D4-930B-A734BF7028BA}
+		{3102572C-54BF-4004-8453-077790779157} = {16ED6D96-F453-41D4-930B-A734BF7028BA}
 	EndGlobalSection
 EndGlobal

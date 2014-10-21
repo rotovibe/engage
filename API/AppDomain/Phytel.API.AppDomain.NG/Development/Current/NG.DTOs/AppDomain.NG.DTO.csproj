@@ -96,6 +96,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Allergy\Allergy.cs" />
+    <Compile Include="Allergy\GetAllergiesRequest.cs" />
+    <Compile Include="Allergy\GetAllergiesResponse.cs" />
+    <Compile Include="Allergy\PatientAllergy.cs" />
+    <Compile Include="Allergy\PostInsertPatientAllergyRequest.cs" />
+    <Compile Include="Allergy\PostInsertPatientAllergyResponse.cs" />
     <Compile Include="Goal\GetTasksRequest.cs" />
     <Compile Include="Goal\GetInterventionsRequest.cs" />
     <Compile Include="Goal\GetTasksResponse.cs" />

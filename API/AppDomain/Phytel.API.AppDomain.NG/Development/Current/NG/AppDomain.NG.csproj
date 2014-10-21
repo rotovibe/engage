@@ -105,6 +105,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Allergy\AllergyManager.cs" />
+    <Compile Include="Allergy\AllergyEndpointUtil.cs" />
+    <Compile Include="Allergy\IAllergyEndpointUtil.cs" />
+    <Compile Include="Allergy\IAllergyManager.cs" />
     <Compile Include="Command\PatientToDosCommand.cs" />
     <Compile Include="Programs\ElementActivation\ProgramAttributeActivationRule.cs" />
     <Compile Include="Programs\ElementActivation\StepActivationRule.cs" />
@@ -193,6 +197,10 @@
     <ProjectReference Include="..\..\..\..\..\Common\Phytel.API.Common\Development\Current\Phytel.API.Common.csproj">
       <Project>{25cf3c3f-221f-4a49-b5ef-a8a5fcf9a5ba}</Project>
       <Name>Phytel.API.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\DataDomain\Phytel.API.DataDomain.Allergy\Development\Current\Allergy.DTO\DataDomain.Allergy.DTO.csproj">
+      <Project>{404ff84f-c52a-45b1-9966-2f79b52ee03d}</Project>
+      <Name>DataDomain.Allergy.DTO</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\..\..\DataDomain\Phytel.API.DataDomain.CareMember\Development\Current\CareMember.DTO\DataDomain.CareMember.DTO.csproj">
       <Project>{b65577e7-60a6-4553-b1b9-38d6074ac560}</Project>
