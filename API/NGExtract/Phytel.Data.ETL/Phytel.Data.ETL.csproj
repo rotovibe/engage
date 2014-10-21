@@ -136,10 +136,6 @@
       <Project>{92488af4-963e-4098-8ba8-23d6952bd952}</Project>
       <Name>DataDomain.PatientGoal.DTO</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\DataDomain\Phytel.API.DataDomain.PatientGoal\Development\Current\PatientGoal\DataDomain.PatientGoal.csproj">
-      <Project>{73fa0644-f0b9-45ad-a52a-0930b66c6c10}</Project>
-      <Name>DataDomain.PatientGoal</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\DataDomain\Phytel.API.DataDomain.PatientNote\Development\Current\PatientNote.DTO\DataDomain.PatientNote.DTO.csproj">
       <Project>{99f4ec29-b099-424e-9757-223e67029001}</Project>
       <Name>DataDomain.PatientNote.DTO</Name>
