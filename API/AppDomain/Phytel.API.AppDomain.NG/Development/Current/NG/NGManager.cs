@@ -605,7 +605,7 @@ namespace Phytel.API.AppDomain.NG
 
                     dataDomainResponse.Programs.ForEach(p => adProgs.Add(new DTO.ProgramInfo
                     {
-                        AttributeEndDate = p.AttributeEndDate,
+                        AttrEndDate = p.AttrEndDate,
                         ElementState = p.ElementState,
                         Id = p.Id,
                         Name = p.Name,
@@ -801,7 +801,7 @@ namespace Phytel.API.AppDomain.NG
                             ShortName = p.ShortName,
                             Status = p.Status,
                             ElementState = p.ElementState,
-                             AttributeEndDate = p.AttributeEndDate
+                             AttrEndDate = p.AttrEndDate
                         }));
 
                         result.Programs = adPs;
