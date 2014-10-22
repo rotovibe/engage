@@ -93,6 +93,8 @@
     <Compile Include="Enums.cs" />
     <Compile Include="PutInitializePatientDataRequest.cs" />
     <Compile Include="PutInitializePatientDataResponse.cs" />
+    <Compile Include="PutPatientSystemIdDataRequest.cs" />
+    <Compile Include="PutPatientSystemIdDataResponse.cs" />
     <Compile Include="UndoDeleteCohortPatientViewDataRequest.cs" />
     <Compile Include="UndoDeleteCohortPatientViewDataResponse.cs" />
     <Compile Include="UndoDeletePatientUsersDataRequest.cs" />

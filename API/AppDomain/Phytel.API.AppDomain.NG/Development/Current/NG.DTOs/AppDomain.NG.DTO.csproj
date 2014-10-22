@@ -124,6 +124,11 @@
     <Compile Include="Observation\GetHistoricalPatientObservationsResponse.cs" />
     <Compile Include="Observation\GetCurrentPatientObservationsResponse.cs" />
     <Compile Include="Observation\IPatientObservationRequest.cs" />
+    <Compile Include="PatientSystem\GetPatientSystemsRequest.cs" />
+    <Compile Include="PatientSystem\GetPatientSystemsResponse.cs" />
+    <Compile Include="PatientSystem\PatientSystem.cs" />
+    <Compile Include="PatientSystem\PostPatientSystemRequest.cs" />
+    <Compile Include="PatientSystem\PostPatientSystemResponse.cs" />
     <Compile Include="Patient\GetInitializePatientRequest.cs" />
     <Compile Include="Patient\GetInitializePatientResponse.cs" />
     <Compile Include="Patient\PostDeletePatientRequest.cs" />

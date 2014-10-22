@@ -838,5 +838,39 @@ namespace Phytel.API.DataDomain.Patient
             }
             catch (Exception) { throw; }
         }
+
+
+        public PutPatientSystemIdDataResponse UpdatePatientSystem(PutPatientSystemIdDataRequest request)
+        {
+            PutPatientSystemIdDataResponse response = new PutPatientSystemIdDataResponse();
+            response.Success = false;
+            try
+            {
+                using (PatientMongoContext ctx = new PatientMongoContext(_dbName))
+                {
+                    if (!string.IsNullOrEmpty(request.PatientSystemId))
+                    {
+                        FindAndModifyResult result = ctx.Patients.Collection.FindAndModify(MB.Query.EQ(MEPatient.IdProperty, ObjectId.Parse(request.PatientId)), MB.SortBy.Null,
+                            new MB.UpdateBuilder()
+                            .Set(MEPatient.DisplayPatientSystemIdProperty, ObjectId.Parse(request.PatientSystemId))
+                            .Set(MEPatient.UpdatedByProperty, ObjectId.Parse(this.UserId))
+                            .Set(MEPatient.LastUpdatedOnProperty, DateTime.UtcNow));
+
+                        AuditHelper.LogDataAudit(this.UserId,
+                                                MongoCollectionName.Patient.ToString(),
+                                                request.PatientId,
+                                                Common.DataAuditType.Update,
+                                                request.ContractNumber);
+
+                        response.Success = true;
+                    }
+                }
+                return response;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
     }
 }

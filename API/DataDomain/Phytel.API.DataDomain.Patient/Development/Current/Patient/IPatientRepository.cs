@@ -16,6 +16,7 @@ namespace Phytel.API.DataDomain.Patient
         PutPatientPriorityResponse UpdatePriority(PutPatientPriorityRequest request);
         PutPatientFlaggedResponse UpdateFlagged(PutPatientFlaggedRequest request);
         PutPatientBackgroundDataResponse UpdateBackground(PutPatientBackgroundDataRequest request);
+        PutPatientSystemIdDataResponse UpdatePatientSystem(PutPatientSystemIdDataRequest request);
         object FindByID(string patientId, string userId);
         object Update(PutUpdatePatientDataRequest request);
         object GetSSN(string patientId);
