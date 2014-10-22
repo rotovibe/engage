@@ -99,7 +99,7 @@
       <Name>Phytel.API.Interface</Name>
     </ProjectReference>
     <ProjectReference Include="..\Allergy.DTO\DataDomain.Allergy.DTO.csproj">
-      <Project>{1c2c63a1-4246-4ec9-bad1-c00e9ecd85f6}</Project>
+      <Project>{404ff84f-c52a-45b1-9966-2f79b52ee03d}</Project>
       <Name>DataDomain.Allergy.DTO</Name>
     </ProjectReference>
   </ItemGroup>

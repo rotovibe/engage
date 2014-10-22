@@ -129,17 +129,17 @@
       <Project>{abe948fb-247e-4955-b3ab-b7c93e10a542}</Project>
       <Name>Phytel.API.Interface</Name>
     </ProjectReference>
-    <ProjectReference Include="..\DataDomain.Allergy.Repo\DataDomain.Allergy.Repo.csproj">
-      <Project>{3102572c-54bf-4004-8453-077790779157}</Project>
-      <Name>DataDomain.Allergy.Repo</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Allergy.DTO\DataDomain.Allergy.DTO.csproj">
-      <Project>{1c2c63a1-4246-4ec9-bad1-c00e9ecd85f6}</Project>
+      <Project>{404ff84f-c52a-45b1-9966-2f79b52ee03d}</Project>
       <Name>DataDomain.Allergy.DTO</Name>
     </ProjectReference>
     <ProjectReference Include="..\Allergy\DataDomain.Allergy.csproj">
-      <Project>{f1a478d1-dca1-4be6-ae83-e0acdd4fdffd}</Project>
+      <Project>{0d61dd4a-d0b0-4dbd-a1e8-2ba6ab90cbd0}</Project>
       <Name>DataDomain.Allergy</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DataDomain.Allergy.Repo\DataDomain.Allergy.Repo.csproj">
+      <Project>{3102572c-54bf-4004-8453-077790779157}</Project>
+      <Name>DataDomain.Allergy.Repo</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />
