@@ -44,6 +44,24 @@ namespace Phytel.Services.Security.Text
         }
 
         [TestCase]
+        public void PassphraseIsValid_AttemptValidationChangePassphraseLength_Success()
+        {
+            string passphrase = "Test Passphrase for joe";
+            AuthenticationData data = _authenticationManager.GenerateAuthenticationDataFromPassphrase(passphrase);
+
+            Assert.IsTrue(_authenticationManager.PassphraseIsValid(data.EncodedKey, data.EncodedSalt, passphrase));
+        }
+
+        [TestCase]
+        public void PassphraseIsValid_AttemptValidationNonAlphaNumeric_Success()
+        {
+            string passphrase = "Test Passphrase !@#$%^&*()_+1234567890";
+            AuthenticationData data = _authenticationManager.GenerateAuthenticationDataFromPassphrase(passphrase);
+
+            Assert.IsTrue(_authenticationManager.PassphraseIsValid(data.EncodedKey, data.EncodedSalt, passphrase));
+        }
+
+        [TestCase]
         public void PassphraseIsValid_AttemptValidation_Failure()
         {
             string passphrase = "TestPassphrase";
