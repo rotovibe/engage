@@ -183,10 +183,31 @@ namespace Phytel.API.DataDomain.PatientGoal
                     if (pt.ProgramIds != null) { uv.Add(MB.Update.SetWrapped<List<ObjectId>>(MEPatientGoal.ProgramProperty, DTOUtil.ConvertObjectId(pt.ProgramIds))); }
                     if (pt.TypeId != null) uv.Add(MB.Update.Set(MEPatientGoal.TypeProperty, pt.TypeId)); 
                     if (pt.StatusId != 0) uv.Add(MB.Update.Set(MEPatientGoal.StatusProperty, pt.StatusId ));
-                    if (pt.StartDate != null) uv.Add(MB.Update.Set(MEPatientGoal.StartDateProperty, pt.StartDate));
-                    if (pt.EndDate != null) uv.Add(MB.Update.Set(MEPatientGoal.EndDateProperty, pt.EndDate));
                     if (pt.TargetValue != null) uv.Add(MB.Update.Set(MEPatientGoal.TargetValueProperty, pt.TargetValue));
-                    if (pt.TargetDate != null) uv.Add(MB.Update.Set(MEPatientGoal.TargetDateProperty, pt.TargetDate));
+                    if (pt.StartDate != null)
+                    {
+                        uv.Add(MB.Update.Set(MEPatientGoal.StartDateProperty, pt.StartDate));
+                    }
+                    else
+                    {
+                        uv.Add(MB.Update.Set(MEPatientGoal.StartDateProperty, BsonNull.Value));
+                    }
+                    if (pt.EndDate != null)
+                    {
+                        uv.Add(MB.Update.Set(MEPatientGoal.EndDateProperty, pt.EndDate));
+                    }
+                    else 
+                    {
+                        uv.Add(MB.Update.Set(MEPatientGoal.EndDateProperty, BsonNull.Value));
+                    }
+                    if (pt.TargetDate != null)
+                    {
+                        uv.Add(MB.Update.Set(MEPatientGoal.TargetDateProperty, pt.TargetDate));
+                    }
+                    else
+                    {
+                        uv.Add(MB.Update.Set(MEPatientGoal.TargetDateProperty, BsonNull.Value));
+                    }
                     if (pt.CustomAttributes != null) { uv.Add(MB.Update.SetWrapped<List<MAttribute>>(MEPatientGoal.AttributesProperty, DTOUtil.GetAttributes(pt.CustomAttributes))); }
                     
                     IMongoUpdate update = MB.Update.Combine(uv);

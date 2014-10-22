@@ -194,10 +194,24 @@ namespace Phytel.API.DataDomain.PatientGoal
                     uv.Add(MB.Update.Set(MEPatientTask.VersionProperty, ptr.Version));
                     uv.Add(MB.Update.Set(MEPatientTask.LastUpdatedOnProperty, System.DateTime.UtcNow));
                     if (pt.Description != null) uv.Add(MB.Update.Set(MEPatientTask.DescriptionProperty, pt.Description));
-                    if (pt.StartDate != null) uv.Add(MB.Update.Set(MEPatientTask.StartDateProperty, pt.StartDate));
+                    if (pt.StartDate != null)
+                    {
+                        uv.Add(MB.Update.Set(MEPatientTask.StartDateProperty, pt.StartDate));
+                    }
+                    else
+                    {
+                        uv.Add(MB.Update.Set(MEPatientTask.StartDateProperty, BsonNull.Value));
+                    }
                     if (pt.StatusDate != null) uv.Add(MB.Update.Set(MEPatientTask.StatusDateProperty, pt.StatusDate));
                     if (pt.StatusId != 0) uv.Add(MB.Update.Set(MEPatientTask.StatusProperty, pt.StatusId));
-                    if (pt.TargetDate != null) uv.Add(MB.Update.Set(MEPatientTask.TargetDateProperty, pt.TargetDate));
+                    if (pt.TargetDate != null)
+                    {
+                        uv.Add(MB.Update.Set(MEPatientTask.TargetDateProperty, pt.TargetDate));
+                    }
+                    else
+                    {
+                        uv.Add(MB.Update.Set(MEPatientTask.TargetDateProperty, BsonNull.Value));
+                    }
                     if (pt.TargetValue != null) uv.Add(MB.Update.Set(MEPatientTask.TargetValueProperty, pt.TargetValue));
                     if (pt.CustomAttributes != null) { uv.Add(MB.Update.SetWrapped<List<MAttribute>>(MEPatientTask.AttributesProperty, DTOUtil.GetAttributes(pt.CustomAttributes))); }
                     if (pt.BarrierIds != null) { uv.Add(MB.Update.SetWrapped<List<ObjectId>>(MEPatientTask.BarriersProperty, DTOUtil.ConvertObjectId(pt.BarrierIds))); }

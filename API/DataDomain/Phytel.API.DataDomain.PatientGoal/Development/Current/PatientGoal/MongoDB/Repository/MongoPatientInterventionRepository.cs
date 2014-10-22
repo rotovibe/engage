@@ -197,7 +197,14 @@ namespace Phytel.API.DataDomain.PatientGoal
                     uv.Add(MB.Update.Set(MEPatientIntervention.LastUpdatedOnProperty, System.DateTime.UtcNow));
                     uv.Add(MB.Update.Set(MEPatientIntervention.UpdatedByProperty, ObjectId.Parse(this.UserId)));
                     if (pi.Description != null) uv.Add(MB.Update.Set(MEPatientIntervention.DescriptionProperty, pi.Description));
-                    if (pi.StartDate != null) uv.Add(MB.Update.Set(MEPatientIntervention.StartDateProperty, pi.StartDate));
+                    if (pi.StartDate != null)
+                    {
+                        uv.Add(MB.Update.Set(MEPatientIntervention.StartDateProperty, pi.StartDate));
+                    }
+                    else 
+                    {
+                        uv.Add(MB.Update.Set(MEPatientIntervention.StartDateProperty, BsonNull.Value));
+                    }
                     if (pi.StatusDate != null) uv.Add(MB.Update.Set(MEPatientIntervention.StatusDateProperty, pi.StatusDate));
                     if (pi.StatusId != 0) uv.Add(MB.Update.Set(MEPatientIntervention.StatusProperty, pi.StatusId));
                     if (pi.CategoryId != null) uv.Add(MB.Update.Set(MEPatientIntervention.CategoryProperty, ObjectId.Parse(pi.CategoryId)));
