@@ -594,18 +594,33 @@ namespace Phytel.API.AppDomain.NG
                         request.Version,
                         request.ContractNumber), request.UserId);
 
-                GetActiveProgramsResponse dataDomainResponse;
+                GetAllActiveProgramsResponse dataDomainResponse;
+
+                var adProgs = new List<DTO.ProgramInfo>();
+
                 try
                 {
                     dataDomainResponse =
-                        client.Get<GetActiveProgramsResponse>(url);
+                        client.Get<GetAllActiveProgramsResponse>(url);   
+
+                    dataDomainResponse.Programs.ForEach(p => adProgs.Add(new DTO.ProgramInfo
+                    {
+                        AttributeEndDate = p.AttributeEndDate,
+                        ElementState = p.ElementState,
+                        Id = p.Id,
+                        Name = p.Name,
+                        PatientId = p.PatientId,
+                        ProgramState = p.ProgramState,
+                        ShortName = p.ShortName,
+                        Status = p.Status
+                    }));
                 }
                 catch (Exception ex)
                 {
                     throw new WebServiceException(ex.Message, ex.InnerException);
                 }
 
-                pResponse.Programs = dataDomainResponse.Programs;
+                pResponse.Programs = adProgs;
                 pResponse.Version = 1;
                 return pResponse;
             }
@@ -785,7 +800,8 @@ namespace Phytel.API.AppDomain.NG
                             ProgramState = p.ProgramState,
                             ShortName = p.ShortName,
                             Status = p.Status,
-                            ElementState = p.ElementState
+                            ElementState = p.ElementState,
+                             AttributeEndDate = p.AttributeEndDate
                         }));
 
                         result.Programs = adPs;

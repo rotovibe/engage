@@ -422,7 +422,8 @@ namespace Phytel.API.DataDomain.Program
                         PatientId = Convert.ToString(pd.PatientId),
                                 ShortName = pd.ShortName,
                         Status = (int)pd.Status,
-                        ElementState = (int)pd.State
+                        ElementState = (int)pd.State,
+                         AttributeEndDate = pd.AttributeEndDate
                             })
                         );
                         response.programs = lpi;

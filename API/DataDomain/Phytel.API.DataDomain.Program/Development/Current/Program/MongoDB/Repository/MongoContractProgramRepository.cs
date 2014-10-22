@@ -110,7 +110,8 @@ namespace Phytel.API.DataDomain.Program
                         Id = r.Id.ToString(),
                         ShortName = r.ShortName,
                         Status = (int)r.Status,
-                        ElementState = (int)r.State
+                        ElementState = (int)r.State,
+                         AttributeEndDate = r.AttributeEndDate
                     }).ToList();
                 }
                 return result;
