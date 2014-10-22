@@ -84,13 +84,13 @@
       <Project>{abe948fb-247e-4955-b3ab-b7c93e10a542}</Project>
       <Name>Phytel.API.Interface</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Allergy.DTO\DataDomain.Allergy.DTO.csproj">
+      <Project>{404ff84f-c52a-45b1-9966-2f79b52ee03d}</Project>
+      <Name>DataDomain.Allergy.DTO</Name>
+    </ProjectReference>
     <ProjectReference Include="..\DataDomain.Allergy.Repo\DataDomain.Allergy.Repo.csproj">
       <Project>{3102572c-54bf-4004-8453-077790779157}</Project>
       <Name>DataDomain.Allergy.Repo</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Allergy.DTO\DataDomain.Allergy.DTO.csproj">
-      <Project>{1c2c63a1-4246-4ec9-bad1-c00e9ecd85f6}</Project>
-      <Name>DataDomain.Allergy.DTO</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
