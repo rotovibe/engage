@@ -19,7 +19,7 @@ namespace Phytel.Services.Security
             return (passphraseAttemptKey.SequenceEqual(key));
         }
 
-        public AuthenticationData GenerateAuthenticationDataFromPassphrase(string plainTextPassphrase)
+        public AuthenticationData GenerateAuthenticationDataForPassphrase(string plainTextPassphrase)
         {
             string randomSaltKey = new Random().Next(100, 999999999).ToString();
             DataProtector protector = new DataProtector(DataProtector.Store.USE_SIMPLE_STORE);

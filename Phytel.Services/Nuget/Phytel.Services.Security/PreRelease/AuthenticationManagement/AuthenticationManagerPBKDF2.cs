@@ -21,7 +21,7 @@ namespace Phytel.Services.Security
             }
         }
 
-        public AuthenticationData GenerateAuthenticationDataFromPassphrase(string plainTextPassphrase)
+        public AuthenticationData GenerateAuthenticationDataForPassphrase(string plainTextPassphrase)
         {
             // specify that we want to randomly generate a 20-byte salt
             using (var deriveBytes = new Rfc2898DeriveBytes(plainTextPassphrase, 20))

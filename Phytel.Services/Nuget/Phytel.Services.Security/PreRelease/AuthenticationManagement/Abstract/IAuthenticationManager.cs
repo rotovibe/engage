@@ -5,6 +5,6 @@ namespace Phytel.Services.Security
     {
         bool PassphraseIsValid(string key, string salt, string plainTextPassphraseAttempt);
         bool PassphraseIsValid(byte[] key, byte[] salt, string plainTextPassphraseAttempt);
-        AuthenticationData GenerateAuthenticationDataFromPassphrase(string plainTextPassphrase);
+        AuthenticationData GenerateAuthenticationDataForPassphrase(string plainTextPassphrase);
     }
 }
