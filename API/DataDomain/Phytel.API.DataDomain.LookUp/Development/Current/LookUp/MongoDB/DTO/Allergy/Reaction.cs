@@ -1,12 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
 
 namespace Phytel.API.DataDomain.LookUp.DTO
 {
     class Reaction : LookUpBase
     {
+        public const string CodingSystemIdProperty = "csid";
+        public const string CodingSystemCodeProperty = "csc";
+
+        [BsonElement(CodingSystemIdProperty)]
+        [BsonIgnoreIfNull(true)]
+        public ObjectId? CodingSystemId { get; set; }
+
+        [BsonElement(CodingSystemCodeProperty)]
+        [BsonIgnoreIfNull(true)]
+        public string CodingSystemCode { get; set; }
     }
 }
