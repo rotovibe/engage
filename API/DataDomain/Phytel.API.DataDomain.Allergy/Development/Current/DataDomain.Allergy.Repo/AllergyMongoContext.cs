@@ -6,7 +6,7 @@ namespace DataDomain.Allergy.Repo
 {
 	public class AllergyMongoContext : MongoContext
 	{
-		private static string COLL_Allergy = "DdAllergy";
+		private static string COLL_Allergy = "Allergy";
 		private static string COLL_PatientAllergy = "PatientAllergy";
 		public string ContractName { get; set; }
 

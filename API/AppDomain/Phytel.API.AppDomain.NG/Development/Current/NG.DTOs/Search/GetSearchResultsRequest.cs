@@ -2,11 +2,17 @@ using Phytel.API.Interface;
 using ServiceStack.ServiceHost;
 using System.Runtime.Serialization;
 
-namespace Phytel.API.AppDomain.NG.DTO
+namespace Phytel.API.AppDomain.NG.DTO.Search
 {
-    [Route("/{Version}/{ContractNumber}/Allergy", "GET")]
-    public class GetAllergiesRequest : IAppDomainRequest
+    [Route("/{Version}/{ContractNumber}/Search/{SearchDomain}", "GET")]
+    public class GetSearchResultsRequest : IAppDomainRequest
     {
+        [ApiMember(Name = "SearchTerm", Description = "Term to search for.", ParameterType = "QueryString", DataType = "string", IsRequired = true)]
+        public string SearchTerm { get; set; }
+
+        [ApiMember(Name = "SearchDomain", Description = "Domain to search data from.", ParameterType = "path", DataType = "string", IsRequired = true)]
+        public string SearchDomain { get; set; }
+
         [ApiMember(Name = "UserID", Description = "ID of the user making the request (Internally used ONLY)", ParameterType = "property", DataType = "string", IsRequired = true)]
         public string UserId { get; set; }
 

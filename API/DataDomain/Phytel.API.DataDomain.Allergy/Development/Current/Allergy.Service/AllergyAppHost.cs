@@ -7,7 +7,7 @@ namespace Phytel.API.DataDomain.Allergy.Service
 {
     public class AllergyAppHost : AppHostBase
     {
-        public AllergyAppHost() : base("Phytel DdAllergy Data Domain Services",
+        public AllergyAppHost() : base("Phytel Allergy Data Domain Services",
             Assembly.GetExecutingAssembly() 
             )
         {

@@ -65,7 +65,7 @@ namespace DataDomain.Allergy.Repo
                     LastUpdatedOn = cp.LastUpdatedOn,
                     RecordCreatedBy = cp.RecordCreatedBy.ToString(),
                     RecordCreatedOn = cp.RecordCreatedOn,
-                    TtlDate = cp.TTLDate,
+                    TTLDate = cp.TTLDate,
                     UpdatedBy = cp.UpdatedBy.ToString(),
                     Version = cp.Version
                 };

@@ -1,6 +1,8 @@
 
 using System.Linq;
+using AutoMapper;
 using MongoDB.Bson;
+using MongoDB.Driver;
 using MongoDB.Driver.Builders;
 using System;
 using System.Collections.Generic;
@@ -89,7 +91,20 @@ namespace DataDomain.Allergy.Repo
 
         public IEnumerable<object> SelectAll()
         {
-            throw new NotImplementedException();
+            List<IMongoQuery> queries = new List<IMongoQuery>();
+            queries.Add(Query.EQ(MEAllergy.StatusProperty, Status.Active));
+            queries.Add(Query.EQ(MEAllergy.DeleteFlagProperty, false));
+            IMongoQuery mQuery = Query.And(queries);
+
+            List<MEAllergy> meAllgy = Context.Allergy.Collection.Find(mQuery).ToList();
+
+            List<DdAllergy> allgs = null;
+            if (meAllgy != null && meAllgy.Count > 0)
+            {
+                allgs = meAllgy.Select(a => Mapper.Map<DdAllergy>(a)).ToList();
+            }
+
+            return allgs;
         }
 
         public object Update(object entity)

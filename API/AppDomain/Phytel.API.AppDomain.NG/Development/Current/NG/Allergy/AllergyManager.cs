@@ -1,5 +1,12 @@
-﻿using Phytel.API.AppDomain.NG.DTO;
-using Phytel.API.AppDomain.NG.DTO.Allergy;
+﻿using AutoMapper;
+using Lucene.Net.Analysis;
+using Lucene.Net.Analysis.Standard;
+using Lucene.Net.Index;
+using Lucene.Net.Store;
+using Phytel.API.AppDomain.NG.DTO;
+using Phytel.API.AppDomain.NG.DTO;
+using Phytel.API.AppDomain.NG.DTO.Search;
+using Phytel.API.AppDomain.NG.Search;
 using Phytel.API.DataDomain.Allergy.DTO;
 using ServiceStack.Service;
 using ServiceStack.ServiceClient.Web;
@@ -14,18 +21,33 @@ namespace Phytel.API.AppDomain.NG.Allergy
     {
         public IAllergyEndpointUtil EndpointUtil { get; set; }
 
-        public List<DTO.Allergy.Allergy> GetAllergies(GetAllergiesRequest request)
+        public List<DTO.Allergy> GetAllergies(GetAllergiesRequest request)
         {
             try
             {
-                List<DTO.Allergy.Allergy> result = new List<DTO.Allergy.Allergy>();
+                List<DTO.Allergy> result = new List<DTO.Allergy>();
                 var algy = EndpointUtil.GetAllergies(request);
-                algy.ForEach(a => result.Add(new DTO.Allergy.Allergy {Id = a.Id}));
+                algy.ForEach(a => result.Add(Mapper.Map<DTO.Allergy>(a)));
+                IndexResultSet(result);
                 return result;
             }
             catch (WebServiceException ex)
             {
                 throw new WebServiceException("AD:GetAllergies()::" + ex.Message, ex.InnerException);
+            }
+        }
+
+        public void IndexResultSet(List<DTO.Allergy> result)
+        {
+            try
+            {
+                var searchDocs = new List<SearchedItem>();
+                result.ForEach(a => searchDocs.Add(Mapper.Map<SearchedItem>(a)));
+                LuceneManager.AddUpdateLuceneIndex(searchDocs);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("AD:IndexResultSet()::" + ex.Message, ex.InnerException);
             }
         }
     }

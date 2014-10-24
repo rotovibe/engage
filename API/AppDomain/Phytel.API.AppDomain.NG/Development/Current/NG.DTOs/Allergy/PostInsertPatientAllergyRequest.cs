@@ -1,7 +1,7 @@
 using Phytel.API.Interface;
 using ServiceStack.ServiceHost;
 
-namespace Phytel.API.AppDomain.NG.DTO.Allergy
+namespace Phytel.API.AppDomain.NG.DTO
 {
     [Api(Description = "A Request object to insert an allergy record for the patient.")]
     [Route("/{Version}/{ContractNumber}/Patient/{PatientId}/Allergy/Insert", "POST")]

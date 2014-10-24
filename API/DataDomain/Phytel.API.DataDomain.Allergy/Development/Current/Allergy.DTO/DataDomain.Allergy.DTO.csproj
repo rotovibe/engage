@@ -73,6 +73,7 @@
   <ItemGroup>
     <Compile Include="Constants.cs" />
     <Compile Include="DomainResponse.cs" />
+    <Compile Include="Enums.cs" />
     <Compile Include="GetAllAllergysRequest.cs" />
     <Compile Include="GetPatientAllergyRequest.cs" />
     <Compile Include="GetAllAllergysResponse.cs" />

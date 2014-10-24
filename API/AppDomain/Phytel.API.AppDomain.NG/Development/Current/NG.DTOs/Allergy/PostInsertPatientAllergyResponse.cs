@@ -3,7 +3,7 @@ using ServiceStack.ServiceInterface.ServiceModel;
 using System;
 using System.Collections.Generic;
 
-namespace Phytel.API.AppDomain.NG.DTO.Allergy
+namespace Phytel.API.AppDomain.NG.DTO
 {
     public class PostInsertPatientAllergyResponse : IDomainResponse
     {

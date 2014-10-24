@@ -279,6 +279,10 @@
     <Compile Include="Scheduling\PostInsertToDoResponse.cs" />
     <Compile Include="Scheduling\Schedule.cs" />
     <Compile Include="Scheduling\ToDo.cs" />
+    <Compile Include="Search\AllergySearchDoc.cs" />
+    <Compile Include="Search\GetSearchResultsRequest.cs" />
+    <Compile Include="Search\GetSearchResultsResponse.cs" />
+    <Compile Include="Search\SearchedItem.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

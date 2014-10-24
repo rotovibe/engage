@@ -1,5 +1,6 @@
 using Phytel.API.AppDomain.NG.Allergy;
 using Phytel.API.AppDomain.NG.DTO;
+using Phytel.API.AppDomain.NG.DTO.Search;
 using Phytel.API.AppDomain.Security.DTO;
 using Phytel.API.Common.Audit;
 using Phytel.API.Common.Format;
@@ -13,19 +14,19 @@ using System.Web;
 
 namespace Phytel.API.AppDomain.NG.Service
 {
-    public partial class AllergyService : ServiceStack.ServiceInterface.Service
+    public partial class SearchService : ServiceStack.ServiceInterface.Service
     {
+        public ISearchManager SearchManager { get; set; }
         public ISecurityManager Security {get; set;}
-        public IAllergyManager AllergyManager {get; set;}
         public IAuditUtil AuditUtil { get; set; }
         public ICommonFormatterUtil CommonFormatterUtil { get; set; }
 
         private const string unknownBrowserType = "Unknown browser";
         private const string unknownUserHostAddress = "Unknown IP";
 
-        public GetAllergiesResponse Get(GetAllergiesRequest request)
+        public GetSearchResultsResponse Get(GetSearchResultsRequest request)
         {
-            GetAllergiesResponse response = new GetAllergiesResponse();
+            GetSearchResultsResponse response = new GetSearchResultsResponse();
             ValidateTokenResponse result = null;
 
             try
@@ -38,7 +39,7 @@ namespace Phytel.API.AppDomain.NG.Service
                 if (result.UserId.Trim() != string.Empty)
                 {
                     request.UserId = result.UserId;
-                    response.Allergies = AllergyManager.GetAllergies(request);
+                    response.Allergies = SearchManager.GetSearchDomainResults(request);
                 }
                 else
                     throw new UnauthorizedAccessException();
@@ -47,19 +48,19 @@ namespace Phytel.API.AppDomain.NG.Service
             {
                 CommonFormatterUtil.FormatExceptionResponse(response, base.Response, ex);
                 if ((ex is WebServiceException) == false)
-                    AllergyManager.LogException(ex);
+                    SearchManager.LogException(ex);
             }
             finally
             {
                 if (result != null)
                 {
                     string browser = (base.Request != null) ? base.Request.UserAgent : unknownBrowserType;
-                    string hostAddress = (base.Request != null)? base.Request.UserHostAddress : unknownUserHostAddress;
+                    string hostAddress = (base.Request != null) ? base.Request.UserHostAddress : unknownUserHostAddress;
                     AuditUtil.LogAuditData(request, result.SQLUserId, null, browser, hostAddress, request.GetType().Name);
                 }
             }
-            
-            return response; 
+
+            return response;
         }
     }
 }

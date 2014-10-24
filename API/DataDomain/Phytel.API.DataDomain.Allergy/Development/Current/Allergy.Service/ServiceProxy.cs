@@ -1,4 +1,5 @@
 
+using System.Web;
 using ServiceStack.Common;
 
 namespace Phytel.API.DataDomain.Allergy.Service
@@ -41,9 +42,10 @@ namespace Phytel.API.DataDomain.Allergy.Service
 		protected virtual string GetContractNumber()
 		{
 			string result = null;
-			var obj = this._hostContext.Items["ContractNumber"];
-			if (obj != null)
-				result = obj.ToString();
+            //var obj = _hostContext.Items["ContractNumber"];
+            //if (obj != null)
+            //    result = obj.ToString();
+		    result = "InHealth001";
 			return result;
 		}
 	}

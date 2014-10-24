@@ -1,4 +1,7 @@
+using AutoMapper;
 using Phytel.API.AppDomain.NG.Allergy;
+using Phytel.API.AppDomain.NG.DTO.Search;
+using Phytel.API.DataDomain.Allergy.DTO;
 using ServiceStack.MiniProfiler;
 using ServiceStack.ServiceInterface.Admin;
 using ServiceStack.ServiceInterface.Cors;
@@ -47,7 +50,11 @@ namespace Phytel.API.AppDomain.NG.Service
                 container.RegisterAutoWiredAs<ObservationEndpointUtil, IObservationEndpointUtil>().ReusedWithin(Funq.ReuseScope.Request);
                 container.RegisterAutoWiredAs<ObservationsManager, IObservationsManager>().ReusedWithin(Funq.ReuseScope.Request);
                 container.RegisterAutoWiredAs<AllergyManager, IAllergyManager>().ReusedWithin(Funq.ReuseScope.Request);
+                container.RegisterAutoWiredAs<SearchManager, ISearchManager>().ReusedWithin(Funq.ReuseScope.Request);
 
+                // automapper configuration
+                Mapper.CreateMap<DdAllergy, DTO.Allergy>();
+                Mapper.CreateMap<DTO.Allergy, SearchedItem>().ForMember(d => d.Name, opt => opt.MapFrom(src => src.Description));
 
                 Plugins.Add(new RequestLogsFeature() { RequiredRoles = new string[] { } });
 

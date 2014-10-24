@@ -1,5 +1,6 @@
 using DataDomain.Allergy.Repo.Containers;
 using Phytel.API.DataDomain.Allergy.DTO;
+using ServiceStack.Common;
 
 namespace Phytel.API.DataDomain.Allergy.Service.Containers
 {
@@ -9,6 +10,7 @@ namespace Phytel.API.DataDomain.Allergy.Service.Containers
 
         public static Funq.Container Build(Funq.Container container)
         {
+            container.Register<HostContext>(c => HostContext.Instance).ReusedWithin(Funq.ReuseScope.Request);
             container.Register<IServiceProxy>(Proxy, new ServiceProxy());
 
             container.Register<string>(Constants.NamedString, c =>
