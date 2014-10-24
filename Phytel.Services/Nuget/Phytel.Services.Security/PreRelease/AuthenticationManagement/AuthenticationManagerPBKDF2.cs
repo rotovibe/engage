@@ -6,35 +6,48 @@ namespace Phytel.Services.Security
 {
     public class AuthenticationManagerPBKDF2 : IAuthenticationManager
     {
-        public const int PBKDF2_ITERATIONS = 1000;
-        public const int PBKDF2_SALT_SIZE = 20;
+        private const int PBKDF2_ITERATIONS = 1000;
+        private const int PBKDF2_SALT_SIZE = 24;
+        private const int PBKDF2_KEY_SIZE = 24;
+        private const int ITERATION_INDEX = 0;
+        private const int KEY_INDEX = 1;
 
         /// <summary>
         /// Validates a passphrase given a hash and salt of the correct one.
         /// </summary>
-        /// <param name="key">The correct passphrase hash.</param>
+        /// <param name="key">The correct passphrase hash coupled with key stretching iterations.</param>
         /// <param name="salt">The correct salt for the passphrase.</param>
         /// <param name="plainTextPassphraseAttempt">The passphrase to validate.</param>
         /// <returns>True if the password is correct. False otherwise.</returns>
         public bool PassphraseIsValid(string key, string salt, string plainTextPassphraseAttempt)
         {
-            return PassphraseIsValid(Convert.FromBase64String(key), Convert.FromBase64String(salt), plainTextPassphraseAttempt);
+            char[] delimiter = { ':' };
+            string[] iterationKey = key.Split(delimiter);
+            int iterations = Int32.Parse(iterationKey[ITERATION_INDEX]);
+            byte[] hash = Convert.FromBase64String(iterationKey[KEY_INDEX]);
+
+            using (var deriveBytes = new Rfc2898DeriveBytes(plainTextPassphraseAttempt, Convert.FromBase64String(salt), iterations))
+            {
+                byte[] newKey = deriveBytes.GetBytes(PBKDF2_KEY_SIZE);
+
+                return SlowEquals(newKey, hash);
+            } 
         }
 
         /// <summary>
-        /// Validates a passphrase given a hash and salt (in bytes) of the correct one.
+        /// Creates an AuthenticationData object with the salted PBKDF2 hash of the password.
         /// </summary>
-        /// <param name="key">The correct passphrase hash (in bytes).</param>
-        /// <param name="salt">The correct salt for the passphrase (in bytes).</param>
-        /// <param name="plainTextPassphraseAttempt">The passphrase to validate.</param>
-        /// <returns>True if the password is correct. False otherwise.</returns>
-        public bool PassphraseIsValid(byte[] key, byte[] salt, string plainTextPassphraseAttempt)
+        /// <param name="plainTextPassphrase">The password to hash.</param>
+        /// <returns>An AuthenticationData object with the Base64 Encoded Key (prefixed with key stretching iterations) and Salt</returns>
+        public AuthenticationData GenerateAuthenticationDataForPassphrase(string plainTextPassphrase)
         {
-            using (var deriveBytes = new Rfc2898DeriveBytes(plainTextPassphraseAttempt, salt, PBKDF2_ITERATIONS))
+            // specify that we want to randomly generate a 20-byte salt
+            using (var deriveBytes = new Rfc2898DeriveBytes(plainTextPassphrase, PBKDF2_SALT_SIZE, PBKDF2_ITERATIONS))
             {
-                byte[] newKey = deriveBytes.GetBytes(20);  // derive a 20-byte key
+                byte[] salt = deriveBytes.Salt;
+                byte[] key = deriveBytes.GetBytes(PBKDF2_KEY_SIZE);
 
-                return SlowEquals(newKey, key);
+                return new AuthenticationData(PBKDF2_ITERATIONS + ":" + Convert.ToBase64String(key), Convert.ToBase64String(salt), plainTextPassphrase);
             }
         }
 
@@ -52,27 +65,10 @@ namespace Phytel.Services.Security
             for (int i = 0; i < a.Length && i < b.Length; i++)
             {
                 // The result of XORing two integers will be zero if and only if they are exactly the same
-                difference |= (uint)(a[i] ^ b[i]); 
+                difference |= (uint)(a[i] ^ b[i]);
             }
 
             return difference == 0;
-        }
-
-        /// <summary>
-        /// Creates an AuthenticationData object with the salted PBKDF2 hash of the password.
-        /// </summary>
-        /// <param name="plainTextPassphrase">The password to hash.</param>
-        /// <returns>An AuthenticationData object with the Base64 Encoded Key and Salt</returns>
-        public AuthenticationData GenerateAuthenticationDataForPassphrase(string plainTextPassphrase)
-        {
-            // specify that we want to randomly generate a 20-byte salt
-            using (var deriveBytes = new Rfc2898DeriveBytes(plainTextPassphrase, PBKDF2_SALT_SIZE))
-            {
-                byte[] salt = deriveBytes.Salt;
-                byte[] key = deriveBytes.GetBytes(20);  // derive a 20-byte key
-
-                return new AuthenticationData(key, salt, plainTextPassphrase);
-            }
         }
     }
 }

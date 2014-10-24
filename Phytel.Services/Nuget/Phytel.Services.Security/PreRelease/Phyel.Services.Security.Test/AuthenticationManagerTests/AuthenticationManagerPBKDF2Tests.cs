@@ -90,24 +90,5 @@ namespace Phytel.Services.Security.Text
 
             Assert.IsFalse(_authenticationManager.PassphraseIsValid(data.EncodedKey, data.EncodedSalt, incorrectPassphrase));
         }
-
-        [TestCase]
-        public void PassphraseIsValid_AttemptValidationOverload_Success()
-        {
-            string passphrase = "TestPassphrase";
-            AuthenticationData data = _authenticationManager.GenerateAuthenticationDataForPassphrase(passphrase);
-
-            Assert.IsTrue(_authenticationManager.PassphraseIsValid(Convert.FromBase64String(data.EncodedKey), Convert.FromBase64String(data.EncodedSalt), passphrase));
-        }
-
-        [TestCase]
-        public void PassphraseIsValid_AttemptValidationOverload_Failure()
-        {
-            string passphrase = "TestPassphrase";
-            string incorrectPassphrase = "FAIL";
-            AuthenticationData data = _authenticationManager.GenerateAuthenticationDataForPassphrase(passphrase);
-
-            Assert.IsFalse(_authenticationManager.PassphraseIsValid(Convert.FromBase64String(data.EncodedKey), Convert.FromBase64String(data.EncodedSalt), incorrectPassphrase));
-        }
     }
 }

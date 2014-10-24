@@ -4,18 +4,6 @@ namespace Phytel.Services.Security
 {
     public class AuthenticationData
     {
-        //public AuthenticationData(byte[] key, byte[] salt)
-        //    : this(key, salt, string.Empty)
-        //{ }
-
-        //public AuthenticationData(string key, string salt)
-        //    : this(key, salt, string.Empty)
-        //{ }
-
-        public AuthenticationData(byte[] key, byte[] salt, string passphrase)
-            : this(Convert.ToBase64String(key), Convert.ToBase64String(salt), passphrase)
-        { }
-
         public AuthenticationData(string key, string salt, string passphrase)
         {
             EncodedKey = key;
