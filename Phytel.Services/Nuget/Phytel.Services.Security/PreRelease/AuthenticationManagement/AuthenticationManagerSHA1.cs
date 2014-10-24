@@ -8,7 +8,7 @@ namespace Phytel.Services.Security
     public class AuthenticationManagerSHA1 : IAuthenticationManager
     {
         /// <summary>
-        /// Validates a passphrase given a hash and salt of the correct one.
+        /// Validates a passphrase given a key (hash) and salt of the correct one.
         /// </summary>
         /// <param name="key">The correct passphrase hash.</param>
         /// <param name="salt">The correct salt for the passphrase.</param>

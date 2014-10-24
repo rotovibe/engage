@@ -13,7 +13,7 @@ namespace Phytel.Services.Security
         private const int KEY_INDEX = 1;
 
         /// <summary>
-        /// Validates a passphrase given a hash and salt of the correct one.
+        /// Validates a passphrase given a key (hash)  and salt of the correct one.
         /// </summary>
         /// <param name="key">The correct passphrase hash coupled with key stretching iterations.</param>
         /// <param name="salt">The correct salt for the passphrase.</param>
