@@ -15,7 +15,7 @@ namespace Phytel.API.DataDomain.Allergy
             AllergyRepository = repository;
         }
 
-        public List<PatientAllergyData> GetPatientAllergyList(GetPatientAllergiesRequest request)
+        public List<PatientAllergyData> GetPatientAllergyList(GetPatientAllergiesDataRequest request)
         {
             try
             {

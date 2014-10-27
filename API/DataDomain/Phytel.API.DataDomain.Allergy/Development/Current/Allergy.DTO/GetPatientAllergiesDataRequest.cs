@@ -4,7 +4,7 @@ using ServiceStack.ServiceHost;
 namespace Phytel.API.DataDomain.Allergy.DTO
 {
     [Route("/{Context}/{Version}/{ContractNumber}/PatientAllergy/{PatientId}", "GET")]
-    public class GetPatientAllergiesRequest : IDataDomainRequest
+    public class GetPatientAllergiesDataRequest : IDataDomainRequest
     {
         [ApiMember(Name = "PatientId", Description = "ID of the patient who's Allergies are being requested", ParameterType = "property", DataType = "string", IsRequired = false)]
         public string PatientId { get; set; }

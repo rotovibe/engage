@@ -12,9 +12,9 @@ namespace Phytel.API.DataDomain.Allergy.Service
             Manager = mgr;
         }
 
-        public GetPatientAllergiesResponse Get(GetPatientAllergiesRequest request)
+        public GetPatientAllergiesDataResponse Get(GetPatientAllergiesDataRequest request)
         {
-            var response = new GetPatientAllergiesResponse { Version = request.Version };
+            var response = new GetPatientAllergiesDataResponse { Version = request.Version };
 
             try
             {
