@@ -1,18 +1,19 @@
 using Phytel.API.Interface;
 using ServiceStack.ServiceHost;
+using System.Runtime.Serialization;
+using System.Collections.Generic;
 
 namespace Phytel.API.AppDomain.NG.DTO
 {
-    [Api(Description = "A Request object to insert an allergy record for the patient.")]
-    [Route("/{Version}/{ContractNumber}/Patient/{PatientId}/Allergy/Insert", "POST")]
-    public class PostInsertPatientAllergyRequest : IAppDomainRequest
+    [Route("/{Version}/{ContractNumber}/PatientAllergy/{PatientId}", "GET")]
+    public class GetPatientAllergiesRequest : IAppDomainRequest
     {
-        [ApiMember(Name = "PatientId", Description = "Id of the patient.", ParameterType = "path", DataType = "string", IsRequired = true)]
+        [ApiMember(Name = "PatientId", Description = "Id of the patient for whom the allergies need to be retrieved.", ParameterType = "property", DataType = "string", IsRequired = true)]
         public string PatientId { get; set; }
 
-        [ApiMember(Name = "PatientAllergy", Description = "Allergy to be saved.", ParameterType = "path", DataType = "string", IsRequired = true)]
-        public PatientAllergy PatientAllergy { get; set; }
-
+        [ApiMember(Name = "StatusIds", Description = "List of patient allergy Status ids.", ParameterType = "property", DataType = "List<int>", IsRequired = false)]
+        public List<int> StatusIds { get; set; }
+        
         [ApiMember(Name = "UserID", Description = "ID of the user making the request (Internally used ONLY)", ParameterType = "property", DataType = "string", IsRequired = true)]
         public string UserId { get; set; }
 
