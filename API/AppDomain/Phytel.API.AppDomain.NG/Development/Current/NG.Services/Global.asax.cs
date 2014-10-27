@@ -1,28 +1,25 @@
+using System;
+using System.Web;
 using AutoMapper;
 using Lucene.Net.Documents;
 using Phytel.API.AppDomain.NG.Allergy;
-using Phytel.API.AppDomain.NG.DTO.Search;
-using Phytel.API.Common.CustomObject;
-using Phytel.API.DataDomain.Allergy.DTO;
-using ServiceStack.MiniProfiler;
-using ServiceStack.ServiceInterface.Admin;
-using ServiceStack.ServiceInterface.Cors;
-using ServiceStack.WebHost.Endpoints;
-using System;
-using ServiceStack;
-using ServiceStack.WebHost.Endpoints.Support;
-using ServiceStack.ServiceHost;
-using System.Web;
-using ServiceStack.WebHost.Endpoints.Extensions;
-using ServiceStack.Common.Web;
-using ServiceStack.Text;
-using Phytel.API.DataAudit;
-using Phytel.API.Common.Audit;
-using Phytel.API.Common.Format;
-using Phytel.API.AppDomain.NG.Programs;
-using ServiceStack.Service;
-using ServiceStack.ServiceClient.Web;
+using Phytel.API.AppDomain.NG.DTO;
 using Phytel.API.AppDomain.NG.Observation;
+using Phytel.API.AppDomain.NG.Programs;
+using Phytel.API.Common.Audit;
+using Phytel.API.Common.CustomObject;
+using Phytel.API.Common.Format;
+using Phytel.API.DataAudit;
+using Phytel.API.DataDomain.Allergy.DTO;
+using ServiceStack;
+using ServiceStack.Common.Web;
+using ServiceStack.MiniProfiler;
+using ServiceStack.ServiceHost;
+using ServiceStack.ServiceInterface.Admin;
+using ServiceStack.Text;
+using ServiceStack.WebHost.Endpoints;
+using ServiceStack.WebHost.Endpoints.Extensions;
+using ServiceStack.WebHost.Endpoints.Support;
 
 namespace Phytel.API.AppDomain.NG.Service
 {
@@ -56,6 +53,8 @@ namespace Phytel.API.AppDomain.NG.Service
 
                 // automapper configuration
                 Mapper.CreateMap<DdAllergy, DTO.Allergy>();
+                Mapper.CreateMap<PatientAllergyData, PatientAllergy>();
+                Mapper.CreateMap<PatientAllergy, PatientAllergyData>();
                 
                 Mapper.CreateMap<Document, IdNamePair>()
                     .ForMember(d => d.Id, opt => opt.MapFrom(src => src.Get("Id")))

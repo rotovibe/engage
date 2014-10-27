@@ -23,6 +23,7 @@ namespace Phytel.API.AppDomain.NG.Allergy
     {
         public IAllergyEndpointUtil EndpointUtil { get; set; }
 
+        #region Allergy - Gets
         public List<DTO.Allergy> GetAllergies(GetAllergiesRequest request)
         {
             try
@@ -51,6 +52,69 @@ namespace Phytel.API.AppDomain.NG.Allergy
             {
                 throw new Exception("AD:IndexResultSet()::" + ex.Message, ex.InnerException);
             }
+        } 
+        #endregion
+
+        #region PatientAllergy - Gets
+        public List<PatientAllergy> GetPatientAllergies(GetPatientAllergiesRequest request)
+        {
+            List<PatientAllergy> patientAllergies = null;
+            try
+            {
+                List<PatientAllergyData> data = EndpointUtil.GetPatientAllergies(request);
+                if (data != null && data.Count > 0)
+                {
+                    patientAllergies = new List<PatientAllergy>();
+                    data.ForEach(a => patientAllergies.Add(Mapper.Map<PatientAllergy>(a)));
+                }
+                return patientAllergies;
+            }
+            catch (WebServiceException ex)
+            {
+                throw new WebServiceException("AD:GetPatientAllergies()::" + ex.Message, ex.InnerException);
+            }
         }
+
+        public PatientAllergy InitializePatientAllergy(GetInitializePatientAllergyRequest request)
+        {
+            PatientAllergy patientAllergy = null;
+            try
+            {
+
+                PatientAllergyData data = EndpointUtil.InitializePatientAllergy(request);
+                if(data != null)
+                {
+                    patientAllergy = Mapper.Map<PatientAllergy>(data);
+                }
+                return patientAllergy;
+            }
+            catch (WebServiceException ex)
+            {
+                throw new WebServiceException("AD:InitializePatientAllergy()::" + ex.Message, ex.InnerException);
+            }
+        } 
+
+        #endregion
+
+        #region PatientAllergy - Posts
+        public List<PatientAllergy> UpdatePatientAllergies(PostPatientAllergiesRequest request)
+        {
+            List<PatientAllergy> patientAllergies = null;
+            try
+            {
+                List<PatientAllergyData> data = EndpointUtil.UpdatePatientAllergies(request);
+                if (data != null && data.Count > 0)
+                {
+                    patientAllergies = new List<PatientAllergy>();
+                    data.ForEach(a => patientAllergies.Add(Mapper.Map<PatientAllergy>(a)));
+                }
+                return patientAllergies;
+            }
+            catch (WebServiceException ex)
+            {
+                throw new WebServiceException("AD:UpdatePatientAllergies()::" + ex.Message, ex.InnerException);
+            }
+        }
+        #endregion
     }
 }

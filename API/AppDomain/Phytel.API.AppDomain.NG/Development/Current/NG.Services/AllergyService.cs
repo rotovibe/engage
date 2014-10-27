@@ -23,6 +23,7 @@ namespace Phytel.API.AppDomain.NG.Service
         private const string unknownBrowserType = "Unknown browser";
         private const string unknownUserHostAddress = "Unknown IP";
 
+        #region Allergy - Gets
         public GetAllergiesResponse Get(GetAllergiesRequest request)
         {
             GetAllergiesResponse response = new GetAllergiesResponse();
@@ -54,12 +55,144 @@ namespace Phytel.API.AppDomain.NG.Service
                 if (result != null)
                 {
                     string browser = (base.Request != null) ? base.Request.UserAgent : unknownBrowserType;
-                    string hostAddress = (base.Request != null)? base.Request.UserHostAddress : unknownUserHostAddress;
+                    string hostAddress = (base.Request != null) ? base.Request.UserHostAddress : unknownUserHostAddress;
                     AuditUtil.LogAuditData(request, result.SQLUserId, null, browser, hostAddress, request.GetType().Name);
                 }
             }
-            
-            return response; 
+
+            return response;
+        } 
+        #endregion
+
+        #region PatientAllergy - Gets
+        public GetPatientAllergiesResponse Get(GetPatientAllergiesRequest request)
+        {
+            GetPatientAllergiesResponse response = new GetPatientAllergiesResponse();
+            ValidateTokenResponse result = null;
+
+            try
+            {
+                if (base.Request != null)
+                {
+                    request.Token = base.Request.Headers["Token"] as string;
+                }
+                result = Security.IsUserValidated(request.Version, request.Token, request.ContractNumber);
+                if (result.UserId.Trim() != string.Empty)
+                {
+                    request.UserId = result.UserId;
+                    response.PatientAllergies = AllergyManager.GetPatientAllergies(request);
+                }
+                else
+                    throw new UnauthorizedAccessException();
+            }
+            catch (Exception ex)
+            {
+                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+                if ((ex is WebServiceException) == false)
+                    AllergyManager.LogException(ex);
+            }
+            finally
+            {
+                List<string> patientIds = new List<string>();
+                patientIds.Add(request.PatientId);
+                if (result != null)
+                {
+                    string browser = (base.Request != null) ? base.Request.UserAgent : unknownBrowserType;
+                    string hostAddress = (base.Request != null) ? base.Request.UserHostAddress : unknownUserHostAddress;
+                    AuditUtil.LogAuditData(request, result.SQLUserId, patientIds, browser, hostAddress, request.GetType().Name);
+                }
+            }
+            return response;
         }
+
+        public GetInitializePatientAllergyResponse Get(GetInitializePatientAllergyRequest request)
+        {
+            GetInitializePatientAllergyResponse response = new GetInitializePatientAllergyResponse();
+            ValidateTokenResponse result = null;
+
+            try
+            {
+                if (base.Request != null)
+                {
+                    request.Token = base.Request.Headers["Token"] as string;
+                }
+                result = Security.IsUserValidated(request.Version, request.Token, request.ContractNumber);
+                if (result.UserId.Trim() != string.Empty)
+                {
+                    request.UserId = result.UserId;
+                    response.PatientAllergy = AllergyManager.InitializePatientAllergy(request);
+                }
+                else
+                    throw new UnauthorizedAccessException();
+            }
+            catch (Exception ex)
+            {
+                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+                if ((ex is WebServiceException) == false)
+                    AllergyManager.LogException(ex);
+            }
+            finally
+            {
+                List<string> patientIds = new List<string>();
+                patientIds.Add(request.PatientId);
+                if (result != null)
+                {
+                    string browser = (base.Request != null) ? base.Request.UserAgent : unknownBrowserType;
+                    string hostAddress = (base.Request != null) ? base.Request.UserHostAddress : unknownUserHostAddress;
+                    AuditUtil.LogAuditData(request, result.SQLUserId, patientIds, browser, hostAddress, request.GetType().Name);
+                }
+            }
+            return response;
+        }
+        #endregion
+
+        #region PatientAllergy - Posts
+        public PostPatientAllergiesResponse Post(PostPatientAllergiesRequest request)
+        {
+            PostPatientAllergiesResponse response = new PostPatientAllergiesResponse();
+            ValidateTokenResponse result = null;
+
+            try
+            {
+                if (base.Request != null)
+                {
+                    request.Token = base.Request.Headers["Token"] as string;
+                }
+                result = Security.IsUserValidated(request.Version, request.Token, request.ContractNumber);
+                if (result.UserId.Trim() != string.Empty)
+                {
+                    request.UserId = result.UserId;
+                    response.PatientAllergies = AllergyManager.UpdatePatientAllergies(request);
+                }
+                else
+                    throw new UnauthorizedAccessException();
+            }
+            catch (Exception ex)
+            {
+                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+                if ((ex is WebServiceException) == false)
+                    AllergyManager.LogException(ex);
+            }
+            finally
+            {
+                List<string> patientIds = null;
+                if (request.PatientAllergies != null && request.PatientAllergies.Count > 0)
+                {
+                    patientIds = new List<string>();
+                    request.PatientAllergies.ForEach(p =>
+                    {
+                        patientIds.Add(p.PatientId);
+                    });
+                }
+                if (result != null)
+                {
+                    string browser = (base.Request != null) ? base.Request.UserAgent : unknownBrowserType;
+                    string hostAddress = (base.Request != null) ? base.Request.UserHostAddress : unknownUserHostAddress;
+                    AuditUtil.LogAuditData(request, result.SQLUserId, patientIds, browser, hostAddress, request.GetType().Name);
+                }
+            }
+            return response;
+        } 
+        #endregion
     }
 }
