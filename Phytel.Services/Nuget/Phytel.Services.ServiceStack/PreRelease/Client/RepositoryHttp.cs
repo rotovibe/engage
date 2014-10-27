@@ -1,4 +1,5 @@
 ﻿using ServiceStack.ServiceClient.Web;
+using System.Collections.Specialized;
 
 namespace Phytel.Services.ServiceStack.Client
 {
@@ -37,6 +38,14 @@ namespace Phytel.Services.ServiceStack.Client
 
         public TResponse Post<TResponse>(object request, string relativeUrlFormat, params string[] relativeUrlParams)
         {
+            string relativeOrAbsoluteUrl = string.Format(relativeUrlFormat, relativeUrlParams);
+            return _client.Post<TResponse>(relativeOrAbsoluteUrl, request);
+        }
+
+        public TResponse Post<TResponse>(object request, NameValueCollection headers, string relativeUrlFormat, params string[] relativeUrlParams)
+        {
+            _client.LocalHttpWebRequestFilter = x => x.Headers.Add(headers);
+
             string relativeOrAbsoluteUrl = string.Format(relativeUrlFormat, relativeUrlParams);
             return _client.Post<TResponse>(relativeOrAbsoluteUrl, request);
         }
