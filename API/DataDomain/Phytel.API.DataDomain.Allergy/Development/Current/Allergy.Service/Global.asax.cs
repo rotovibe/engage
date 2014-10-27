@@ -15,6 +15,8 @@ namespace Phytel.API.DataDomain.Allergy.Service
                 .ForMember(d => d.SubType, opt => opt.MapFrom(src => src.SubType.ConvertAll<string>(c => c.ToString()) ))
                 .ForMember(d => d.UpdatedBy, opt => opt.MapFrom(src => src.UpdatedBy.ToString()))
                 .ForMember(d => d.RecordCreatedBy, opt => opt.MapFrom(src => src.RecordCreatedBy.ToString()));
+
+            Mapper.CreateMap<MEPatientAllergy, PatientAllergyData>();
         }
 
         protected void Session_Start(object sender, EventArgs e)

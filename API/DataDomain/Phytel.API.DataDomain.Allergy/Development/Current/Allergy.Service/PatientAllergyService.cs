@@ -12,14 +12,14 @@ namespace Phytel.API.DataDomain.Allergy.Service
             Manager = mgr;
         }
 
-        public GetPatientAllergyResponse Get(GetPatientAllergyRequest request)
+        public GetPatientAllergiesResponse Get(GetPatientAllergiesRequest request)
         {
-            var response = new GetPatientAllergyResponse { Version = request.Version };
+            var response = new GetPatientAllergiesResponse { Version = request.Version };
 
             try
             {
                 RequireUserId(request);
-                response.Allergies = Manager.GetPatientAllergyList(request);
+                response.PatientAllergiesData = Manager.GetPatientAllergyList(request);
             }
             catch (Exception ex)
             {

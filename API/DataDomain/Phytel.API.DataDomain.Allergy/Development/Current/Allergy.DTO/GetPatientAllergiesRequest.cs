@@ -3,14 +3,14 @@ using ServiceStack.ServiceHost;
 
 namespace Phytel.API.DataDomain.Allergy.DTO
 {
-    [Route("/{Context}/{Version}/{ContractNumber}/patient/{PatientId}/DdAllergy/", "GET")]
-    public class GetPatientAllergyRequest : IDataDomainRequest
+    [Route("/{Context}/{Version}/{ContractNumber}/PatientAllergy/{PatientId}", "GET")]
+    public class GetPatientAllergiesRequest : IDataDomainRequest
     {
-        [ApiMember(Name = "UserId", Description = "UserId of the logged in user", ParameterType = "property", DataType = "string", IsRequired = false)]
-        public string UserId { get; set; }
-
         [ApiMember(Name = "PatientId", Description = "ID of the patient who's Allergies are being requested", ParameterType = "property", DataType = "string", IsRequired = false)]
         public string PatientId { get; set; }
+
+        [ApiMember(Name = "UserId", Description = "UserId of the logged in user", ParameterType = "property", DataType = "string", IsRequired = false)]
+        public string UserId { get; set; }
 
         [ApiMember(Name = "Context", Description = "Product Context", ParameterType = "property", DataType = "string", IsRequired = false)]
         public string Context { get; set; }

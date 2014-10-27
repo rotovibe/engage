@@ -15,13 +15,13 @@ namespace Phytel.API.DataDomain.Allergy
             AllergyRepository = repository;
         }
 
-        public List<DTO.DdAllergy> GetPatientAllergyList(GetPatientAllergyRequest request)
+        public List<PatientAllergyData> GetPatientAllergyList(GetPatientAllergiesRequest request)
         {
             try
             {
-                List<DTO.DdAllergy> result = null;
+                List<PatientAllergyData> result = null;
                 AllergyRepository.UserId = request.UserId;
-                result = AllergyRepository.SelectAll().Cast<DTO.DdAllergy>().ToList<DTO.DdAllergy>();
+               // result = AllergyRepository.SelectAll().Cast<PatientAllergyData>().ToList<PatientAllergyData>();
 
                 return result;
             }

@@ -75,11 +75,18 @@
     <Compile Include="DomainResponse.cs" />
     <Compile Include="Enums.cs" />
     <Compile Include="GetAllAllergysRequest.cs" />
-    <Compile Include="GetPatientAllergyRequest.cs" />
+    <Compile Include="GetPatientAllergiesRequest.cs" />
     <Compile Include="GetAllAllergysResponse.cs" />
-    <Compile Include="GetPatientAllergyResponse.cs" />
+    <Compile Include="GetPatientAllergiesResponse.cs" />
+    <Compile Include="PatientAllergyData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="DdAllergy.cs" />
+    <Compile Include="PutPatientAllergyDataRequest.cs" />
+    <Compile Include="PutPatientAllergiesDataRequest.cs" />
+    <Compile Include="PutPatientAllergyDataResponse.cs" />
+    <Compile Include="PutPatientAllergiesDataResponse.cs" />
+    <Compile Include="PutInitializePatientAllergyDataRequest.cs" />
+    <Compile Include="PutInitializePatientAllergyDataResponse.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
