@@ -1,33 +1,20 @@
-﻿using System.IO;
-using System.Linq;
-using AutoMapper;
-using Lucene.Net.Analysis.Standard;
-using Lucene.Net.Documents;
-using Lucene.Net.Index;
-using Lucene.Net.QueryParsers;
-using Lucene.Net.Search;
-using Lucene.Net.Store;
-using Phytel.API.AppDomain.NG.DTO;
-using Phytel.API.AppDomain.NG.DTO;
-using Phytel.API.AppDomain.NG.DTO.Search;
-using Phytel.API.AppDomain.NG.Search;
-using Phytel.API.DataDomain.Allergy.DTO;
-using ServiceStack.Service;
+﻿using Phytel.API.AppDomain.NG.DTO.Search;
+using Phytel.API.AppDomain.NG.Search.LuceneStrategy;
+using Phytel.API.Common.CustomObject;
 using ServiceStack.ServiceClient.Web;
-using System;
 using System.Collections.Generic;
-using System.Configuration;
-using Phytel.API.Common;
 
 namespace Phytel.API.AppDomain.NG.Allergy
 {
     public class SearchManager : ManagerBase, ISearchManager
     {
-        public List<DTO.Search.SearchedItem> GetSearchDomainResults(GetSearchResultsRequest request)
+
+        public List<IdNamePair> GetSearchDomainResults(GetSearchResultsRequest request)
         {
             try
             {
-                var result = LuceneManager.SearchComplex(request.SearchTerm);
+                // create a switch to determine which lucene strat to use
+                var result = new AllergyLuceneStrategy<IdNamePair>().SearchComplex(request.SearchTerm);
                 return result;
             }
             catch (WebServiceException ex)

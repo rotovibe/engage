@@ -15,8 +15,9 @@ namespace Phytel.API.DataDomain.Allergy.Service.Containers
 
             container.Register<string>(Constants.NamedString, c =>
             {
-                var serviceProxy = c.ResolveNamed<IServiceProxy>(Proxy);
-                return serviceProxy.ContractNumber;
+                //var serviceProxy = c.ResolveNamed<IServiceProxy>(Proxy);
+                //return serviceProxy.ContractNumber;
+                return "InHealth001";
             }).ReusedWithin(Funq.ReuseScope.Request);
 
             container = AllergyContainer.Configure(container);

@@ -7,6 +7,8 @@ using Phytel.API.AppDomain.NG.DTO;
 using Phytel.API.AppDomain.NG.DTO;
 using Phytel.API.AppDomain.NG.DTO.Search;
 using Phytel.API.AppDomain.NG.Search;
+using Phytel.API.AppDomain.NG.Search.LuceneStrategy;
+using Phytel.API.Common.CustomObject;
 using Phytel.API.DataDomain.Allergy.DTO;
 using ServiceStack.Service;
 using ServiceStack.ServiceClient.Web;
@@ -41,9 +43,9 @@ namespace Phytel.API.AppDomain.NG.Allergy
         {
             try
             {
-                var searchDocs = new List<SearchedItem>();
-                result.ForEach(a => searchDocs.Add(Mapper.Map<SearchedItem>(a)));
-                LuceneManager.AddUpdateLuceneIndex(searchDocs);
+                var searchDocs = new List<IdNamePair>();
+                result.ForEach(a => searchDocs.Add(Mapper.Map<IdNamePair>(a)));
+                new AllergyLuceneStrategy<IdNamePair>().AddUpdateLuceneIndex(searchDocs);
             }
             catch (Exception ex)
             {

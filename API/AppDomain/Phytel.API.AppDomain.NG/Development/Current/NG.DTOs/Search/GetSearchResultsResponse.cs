@@ -1,3 +1,4 @@
+using Phytel.API.Common.CustomObject;
 using Phytel.API.Interface;
 using ServiceStack.ServiceInterface.ServiceModel;
 using System;
@@ -7,7 +8,7 @@ namespace Phytel.API.AppDomain.NG.DTO.Search
 {
     public class GetSearchResultsResponse : IDomainResponse
     {
-        public List<SearchedItem> Allergies { get; set; }
+        public List<IdNamePair> Allergies { get; set; }
         public ResponseStatus Status { get; set; }
         public double Version { get; set; }
     }

@@ -1,4 +1,5 @@
 
+using System.Collections;
 using System.Web;
 using ServiceStack.Common;
 
@@ -31,6 +32,7 @@ namespace Phytel.API.DataDomain.Allergy.Service
 
 		protected virtual void SetContractNumber(string contractNumber)
 		{
+
 			if ( _hostContext.Items["ContractNumber"] == null)
 			{
 				_hostContext.Items.Add("ContractNumber", contractNumber);
@@ -42,10 +44,22 @@ namespace Phytel.API.DataDomain.Allergy.Service
 		protected virtual string GetContractNumber()
 		{
 			string result = null;
+
+            //string val = null;
+            //    foreach(DictionaryEntry de in _hostContext.Items){
+            //        if(de.Key == "ContractNumber")
+            //        {
+            //            val = de.Value.ToString();
+            //        }
+            //    }
+            //result = val;
+
             //var obj = _hostContext.Items["ContractNumber"];
             //if (obj != null)
             //    result = obj.ToString();
-		    result = "InHealth001";
+		    
+            // need to fix this!
+            result = "InHealth001";
 			return result;
 		}
 	}

@@ -12,6 +12,7 @@ namespace DataDomain.Allergy.Repo
     public class MongoPatientAllergyRepository<TContext> : IMongoPatientAllergyRepository where TContext : AllergyMongoContext
     {
         protected readonly TContext Context;
+        public string ContractDBName { get; set; }
         public string UserId { get; set; }
 
         public MongoPatientAllergyRepository(IUOWMongo<TContext> uow)
@@ -48,29 +49,32 @@ namespace DataDomain.Allergy.Repo
         {
             try
             {
-                object result = null;
-
-                var findcp = Query.And(
-                    Query<MEAllergy>.EQ(b => b.Id, ObjectId.Parse(entityID)),
-                    Query<MEAllergy>.EQ(b => b.DeleteFlag, false));
-
-                var cp = Context.Allergy.Collection.Find(findcp).FirstOrDefault();
-
-                if (cp == null) return result;
-
-                result = new DTO.DdAllergy
+                using (AllergyMongoContext ctx = new AllergyMongoContext(ContractDBName))
                 {
-                    Id = cp.Id.ToString(),
-                    DeleteFlag = cp.DeleteFlag,
-                    LastUpdatedOn = cp.LastUpdatedOn,
-                    RecordCreatedBy = cp.RecordCreatedBy.ToString(),
-                    RecordCreatedOn = cp.RecordCreatedOn,
-                    TTLDate = cp.TTLDate,
-                    UpdatedBy = cp.UpdatedBy.ToString(),
-                    Version = cp.Version
-                };
-                
-                return result;
+                    object result = null;
+
+                    var findcp = Query.And(
+                        Query<MEAllergy>.EQ(b => b.Id, ObjectId.Parse(entityID)),
+                        Query<MEAllergy>.EQ(b => b.DeleteFlag, false));
+
+                    var cp = Context.Allergy.Collection.Find(findcp).FirstOrDefault();
+
+                    if (cp == null) return result;
+
+                    result = new DTO.DdAllergy
+                    {
+                        Id = cp.Id.ToString(),
+                        DeleteFlag = cp.DeleteFlag,
+                        LastUpdatedOn = cp.LastUpdatedOn,
+                        RecordCreatedBy = cp.RecordCreatedBy.ToString(),
+                        RecordCreatedOn = cp.RecordCreatedOn,
+                        TTLDate = cp.TTLDate,
+                        UpdatedBy = cp.UpdatedBy.ToString(),
+                        Version = cp.Version
+                    };
+
+                    return result;
+                }
             }
             catch (Exception ex)
             {

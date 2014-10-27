@@ -14,6 +14,7 @@ namespace DataDomain.Allergy.Repo
     public class MongoAllergyRepository<TContext> : IMongoAllergyRepository where TContext : AllergyMongoContext
     {
         protected readonly TContext Context;
+        public string ContractDBName { get; set; }
         public string UserId { get; set; }
 
         public MongoAllergyRepository(IUOWMongo<TContext> uow)
@@ -24,6 +25,11 @@ namespace DataDomain.Allergy.Repo
         public MongoAllergyRepository(TContext context)
         {
             Context = context;
+        }
+
+        public MongoAllergyRepository(string dbName)
+        {
+            ContractDBName = dbName;
         }
 
         public object Insert(object newEntity)
@@ -91,20 +97,23 @@ namespace DataDomain.Allergy.Repo
 
         public IEnumerable<object> SelectAll()
         {
-            List<IMongoQuery> queries = new List<IMongoQuery>();
-            queries.Add(Query.EQ(MEAllergy.StatusProperty, Status.Active));
-            queries.Add(Query.EQ(MEAllergy.DeleteFlagProperty, false));
-            IMongoQuery mQuery = Query.And(queries);
-
-            List<MEAllergy> meAllgy = Context.Allergy.Collection.Find(mQuery).ToList();
-
-            List<DdAllergy> allgs = null;
-            if (meAllgy != null && meAllgy.Count > 0)
+            using (AllergyMongoContext ctx = new AllergyMongoContext(ContractDBName))
             {
-                allgs = meAllgy.Select(a => Mapper.Map<DdAllergy>(a)).ToList();
-            }
+                List<IMongoQuery> queries = new List<IMongoQuery>();
+                queries.Add(Query.EQ(MEAllergy.StatusProperty, Status.Active));
+                queries.Add(Query.EQ(MEAllergy.DeleteFlagProperty, false));
+                IMongoQuery mQuery = Query.And(queries);
 
-            return allgs;
+                List<MEAllergy> meAllgy = ctx.Allergy.Collection.Find(mQuery).ToList();
+
+                List<DdAllergy> allgs = null;
+                if (meAllgy != null && meAllgy.Count > 0)
+                {
+                    allgs = meAllgy.Select(a => Mapper.Map<DdAllergy>(a)).ToList();
+                }
+
+                return allgs;
+            }
         }
 
         public object Update(object entity)

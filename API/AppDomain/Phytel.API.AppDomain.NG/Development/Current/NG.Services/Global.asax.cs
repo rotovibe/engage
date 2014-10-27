@@ -1,6 +1,8 @@
 using AutoMapper;
+using Lucene.Net.Documents;
 using Phytel.API.AppDomain.NG.Allergy;
 using Phytel.API.AppDomain.NG.DTO.Search;
+using Phytel.API.Common.CustomObject;
 using Phytel.API.DataDomain.Allergy.DTO;
 using ServiceStack.MiniProfiler;
 using ServiceStack.ServiceInterface.Admin;
@@ -54,7 +56,12 @@ namespace Phytel.API.AppDomain.NG.Service
 
                 // automapper configuration
                 Mapper.CreateMap<DdAllergy, DTO.Allergy>();
-                Mapper.CreateMap<DTO.Allergy, SearchedItem>().ForMember(d => d.Name, opt => opt.MapFrom(src => src.Description));
+                
+                Mapper.CreateMap<Document, IdNamePair>()
+                    .ForMember(d => d.Id, opt => opt.MapFrom(src => src.Get("Id")))
+                    .ForMember(d => d.Name, opt => opt.MapFrom(src => src.Get("Name")));
+
+                Mapper.CreateMap<DTO.Allergy, IdNamePair>().ForMember(d => d.Name, opt => opt.MapFrom(src => src.Description));
 
                 Plugins.Add(new RequestLogsFeature() { RequiredRoles = new string[] { } });
 
