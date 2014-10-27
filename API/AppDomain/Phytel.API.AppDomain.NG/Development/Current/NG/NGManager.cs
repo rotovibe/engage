@@ -494,7 +494,7 @@ namespace Phytel.API.AppDomain.NG
                                 DisplayLabel = request.PatientSystem.DisplayLabel,
                                 PatientID = request.PatientSystem.PatientId,
                                 SystemID = request.PatientSystem.SystemId,
-                                SystemName = request.PatientSystem.SystemName
+                                SystemName = "Lawson"//request.PatientSystem.SystemName
                             } as object);
                         if (ddInsertResponse != null && !string.IsNullOrEmpty(ddInsertResponse.PatientSystemId))
                         {
