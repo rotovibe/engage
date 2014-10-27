@@ -32,6 +32,7 @@ namespace Phytel.API.DataDomain.LookUp.DTO
         NoteDuration = 22,
         AllergyType = 23,
         Severity = 24,
-        Reaction = 25
+        Reaction = 25,
+        AllergySource = 26
     }
 }

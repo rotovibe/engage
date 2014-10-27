@@ -99,6 +99,7 @@
   <ItemGroup>
     <Compile Include="DataLookUpManager.cs" />
     <Compile Include="ILookUpRepository.cs" />
+    <Compile Include="MongoDB\DTO\Allergy\AllergySource.cs" />
     <Compile Include="MongoDB\DTO\Allergy\AllergyType.cs" />
     <Compile Include="MongoDB\DTO\Allergy\Reaction.cs" />
     <Compile Include="MongoDB\DTO\Allergy\Severity.cs" />
