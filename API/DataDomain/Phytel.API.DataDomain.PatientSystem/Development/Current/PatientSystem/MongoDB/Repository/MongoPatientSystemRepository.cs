@@ -202,7 +202,7 @@ namespace Phytel.API.DataDomain.PatientSystem
                             throw new Exception("Failed to update a patient system: " + res.ErrorMessage);
                         else
                             AuditHelper.LogDataAudit(this.UserId,
-                                                    MongoCollectionName.ToDo.ToString(),
+                                                    MongoCollectionName.PatientSystem.ToString(),
                                                     request.Id,
                                                     type,
                                                     request.ContractNumber);
