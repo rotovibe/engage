@@ -6,7 +6,7 @@ namespace Phytel.API.AppDomain.NG.DTO
 {
     public class PostPatientAllergiesResponse : IDomainResponse
     {
-        public PatientAllergy PatientAllergy { get; set; }
+        public List<PatientAllergy> PatientAllergies { get; set; }
         public double Version { get; set; }
         public ResponseStatus Status { get; set; }
     }
