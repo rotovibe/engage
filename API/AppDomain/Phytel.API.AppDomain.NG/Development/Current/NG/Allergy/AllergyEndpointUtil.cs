@@ -110,7 +110,7 @@ namespace Phytel.API.AppDomain.NG.Allergy
         #endregion
 
         #region PatientAllergy - Post
-        public List<PatientAllergyData> UpdatePatientAllergies(PostPatientAllergiesRequest request)
+        public List<PatientAllergyData> BulkUpdatePatientAllergies(PostPatientAllergiesRequest request)
         {
             try
             {
@@ -145,7 +145,47 @@ namespace Phytel.API.AppDomain.NG.Allergy
             }
             catch (WebServiceException ex)
             {
-                throw new WebServiceException("AD:UpdatePatientAllergies()::" + ex.Message, ex.InnerException);
+                throw new WebServiceException("AD:BulkUpdatePatientAllergies()::" + ex.Message, ex.InnerException);
+            }
+        }
+
+
+        public PatientAllergyData SingleUpdatePatientAllergy(PostPatientAllergyRequest request)
+        {
+            try
+            {
+                PatientAllergyData result = null;
+                IRestClient client = new JsonServiceClient();
+                //[Route("/{Context}/{Version}/{ContractNumber}/PatientAllergy/Update/Single", "PUT")]
+                var url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/PatientAllergy/Update/Single",
+                                    DDAllergyUrl,
+                                    "NG",
+                                    request.Version,
+                                    request.ContractNumber), request.UserId);
+
+                if (request.PatientAllergy != null)
+                {
+                    PatientAllergyData data = new PatientAllergyData();
+                    data = Mapper.Map<PatientAllergyData>(request.PatientAllergy);
+                    PutPatientAllergyDataResponse dataDomainResponse = client.Put<PutPatientAllergyDataResponse>(url, new PutPatientAllergyDataRequest
+                    {
+                        Context = "NG",
+                        ContractNumber = request.ContractNumber,
+                        UserId = request.UserId,
+                        Version = request.Version,
+                        PatientAllergyData  = data
+                    } as object);
+
+                    if (dataDomainResponse != null)
+                    {
+                        result = dataDomainResponse.PatientAllergyData;
+                    }
+                }
+                return result;
+            }
+            catch (WebServiceException ex)
+            {
+                throw new WebServiceException("AD:SingleUpdatePatientAllergy()::" + ex.Message, ex.InnerException);
             }
         } 
         #endregion

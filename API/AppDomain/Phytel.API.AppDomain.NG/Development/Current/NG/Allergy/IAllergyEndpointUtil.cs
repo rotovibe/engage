@@ -10,6 +10,7 @@ namespace Phytel.API.AppDomain.NG.Allergy
         List<DdAllergy> GetAllergies(GetAllergiesRequest request);
         List<PatientAllergyData> GetPatientAllergies(GetPatientAllergiesRequest request);
         PatientAllergyData InitializePatientAllergy(GetInitializePatientAllergyRequest request);
-        List<PatientAllergyData> UpdatePatientAllergies(PostPatientAllergiesRequest request);
+        List<PatientAllergyData> BulkUpdatePatientAllergies(PostPatientAllergiesRequest request);
+        PatientAllergyData SingleUpdatePatientAllergy(PostPatientAllergyRequest request);
     }
 }

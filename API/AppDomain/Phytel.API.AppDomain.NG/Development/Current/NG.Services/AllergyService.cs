@@ -162,7 +162,7 @@ namespace Phytel.API.AppDomain.NG.Service
                 if (result.UserId.Trim() != string.Empty)
                 {
                     request.UserId = result.UserId;
-                    response.PatientAllergies = AllergyManager.UpdatePatientAllergies(request);
+                    response.PatientAllergies = AllergyManager.BulkUpdatePatientAllergies(request);
                 }
                 else
                     throw new UnauthorizedAccessException();
@@ -183,6 +183,50 @@ namespace Phytel.API.AppDomain.NG.Service
                     {
                         patientIds.Add(p.PatientId);
                     });
+                }
+                if (result != null)
+                {
+                    string browser = (base.Request != null) ? base.Request.UserAgent : unknownBrowserType;
+                    string hostAddress = (base.Request != null) ? base.Request.UserHostAddress : unknownUserHostAddress;
+                    AuditUtil.LogAuditData(request, result.SQLUserId, patientIds, browser, hostAddress, request.GetType().Name);
+                }
+            }
+            return response;
+        }
+
+        public PostPatientAllergyResponse Post(PostPatientAllergyRequest request)
+        {
+            PostPatientAllergyResponse response = new PostPatientAllergyResponse();
+            ValidateTokenResponse result = null;
+
+            try
+            {
+                if (base.Request != null)
+                {
+                    request.Token = base.Request.Headers["Token"] as string;
+                }
+                result = Security.IsUserValidated(request.Version, request.Token, request.ContractNumber);
+                if (result.UserId.Trim() != string.Empty)
+                {
+                    request.UserId = result.UserId;
+                    response.PatientAllergy = AllergyManager.SingleUpdatePatientAllergy(request);
+                }
+                else
+                    throw new UnauthorizedAccessException();
+            }
+            catch (Exception ex)
+            {
+                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+                if ((ex is WebServiceException) == false)
+                    AllergyManager.LogException(ex);
+            }
+            finally
+            {
+                List<string> patientIds = null;
+                if (request.PatientAllergy != null)
+                {
+                    patientIds = new List<string>();
+                    patientIds.Add(request.PatientAllergy.PatientId);
                 }
                 if (result != null)
                 {

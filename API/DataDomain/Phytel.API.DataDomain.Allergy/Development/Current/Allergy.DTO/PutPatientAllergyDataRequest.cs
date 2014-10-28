@@ -7,8 +7,8 @@ namespace Phytel.API.DataDomain.Allergy.DTO
     [Route("/{Context}/{Version}/{ContractNumber}/PatientAllergy/Update/Single", "PUT")]
     public class PutPatientAllergyDataRequest : IDataDomainRequest
     {
-        [ApiMember(Name = "PatientAllergiesData", Description = "List of PatientAllergies that need to be updated", ParameterType = "property", DataType = "List<PatientAllergyData>", IsRequired = true)]
-        public List<PatientAllergyData> PatientAllergiesData { get; set; }
+        [ApiMember(Name = "PatientAllergyData", Description = "PatientAllergy that need to be updated", ParameterType = "property", DataType = "PatientAllergyData", IsRequired = true)]
+        public PatientAllergyData PatientAllergyData { get; set; }
 
         [ApiMember(Name = "Context", Description = "Product Context requesting the PatientSystem", ParameterType = "property", DataType = "string", IsRequired = false)]
         public string Context { get; set; }
