@@ -14,7 +14,42 @@ namespace Phytel.API.AppDomain.NG.Allergy
         protected readonly string DDAllergyUrl = ConfigurationManager.AppSettings["DDAllergyUrl"];
         #endregion
 
-        #region Allergy - Gets
+        public DdAllergy PutNewAllergy(PostInsertNewAllergyRequest request)
+        {
+            try
+            {
+                DdAllergy result = null;
+                IRestClient client = new JsonServiceClient();
+                //[Route("/{Context}/{Version}/{ContractNumber}/Allergy", "PUT")]
+                var url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Allergy",
+                                    DDAllergyUrl,
+                                    "NG",
+                                    request.Version,
+                                    request.ContractNumber), request.UserId);
+
+                PostNewAllergyResponse dataDomainResponse = client.Put<PostNewAllergyResponse>(url,
+                    new PostNewAllergyRequest
+                    {
+                        Context = request.Context,
+                        Description = request.Name,
+                        ContractNumber = request.ContractNumber,
+                        UserId = request.UserId,
+                        Version = request.Version
+                    });
+
+                if (dataDomainResponse != null)
+                {
+                    result = dataDomainResponse.Allergy;
+                }
+
+                return result;
+            }
+            catch (WebServiceException ex)
+            {
+                throw new WebServiceException("AD:GetAllergies()::" + ex.Message, ex.InnerException);
+            }
+        }
+
         public List<DdAllergy> GetAllergies(GetAllergiesRequest request)
         {
             try
@@ -42,7 +77,6 @@ namespace Phytel.API.AppDomain.NG.Allergy
                 throw new WebServiceException("AD:GetAllergies()::" + ex.Message, ex.InnerException);
             }
         } 
-        #endregion
 
         #region PatientAllergy - Gets
         public List<PatientAllergyData> GetPatientAllergies(GetPatientAllergiesRequest request)
@@ -101,7 +135,7 @@ namespace Phytel.API.AppDomain.NG.Allergy
                     result = dataDomainResponse.PatientAllergyData;
                 }
                 return result;
-            }
+        }
             catch (WebServiceException ex)
             {
                 throw new WebServiceException("AD:InitializePatientAllergy()::" + ex.Message, ex.InnerException);

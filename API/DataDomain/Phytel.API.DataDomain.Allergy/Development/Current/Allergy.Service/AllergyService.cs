@@ -12,6 +12,21 @@ namespace Phytel.API.DataDomain.Allergy.Service
             Manager = mgr;
         }
 
+        public PostNewAllergyResponse Put(PostNewAllergyRequest request)
+        {
+            var response = new PostNewAllergyResponse { Version = request.Version };
+            try
+            {
+                RequireUserId(request);
+                response.Allergy = Manager.PutNewAllergy(request);
+            }
+            catch (Exception ex)
+            {
+                RaiseException(response, ex);
+            }
+            return response;
+        }
+
         public GetAllAllergysResponse Get(GetAllAllergysRequest request)
         {
             var response = new GetAllAllergysResponse { Version = request.Version };

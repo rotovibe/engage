@@ -10,5 +10,6 @@ namespace Phytel.API.AppDomain.NG.Allergy
     {
         List<IdNamePair> GetSearchDomainResults(GetSearchResultsRequest request);
         void LogException(Exception ex);
+        void RegisterDocumentInSearchIndex(DTO.Allergy allergy);
     }
 }

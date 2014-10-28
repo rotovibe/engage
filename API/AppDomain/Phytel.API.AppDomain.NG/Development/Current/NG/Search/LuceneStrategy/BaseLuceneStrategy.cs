@@ -116,6 +116,9 @@ namespace Phytel.API.AppDomain.NG.Search.LuceneStrategy
         {
             if (string.IsNullOrEmpty(input)) return new List<IdNamePair>();
 
+            // added to remove symbol
+            input = input.Replace("^", " ");
+
             var terms = input.Trim().Replace("-", " ").Split(' ')
                 .Where(x => !string.IsNullOrEmpty(x)).Select(x => x.Trim() + "*");
             input = string.Join(" ", terms);

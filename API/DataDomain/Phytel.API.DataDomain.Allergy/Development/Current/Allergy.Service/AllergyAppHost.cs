@@ -16,6 +16,7 @@ namespace Phytel.API.DataDomain.Allergy.Service
         public override void Configure(Funq.Container container)
         {
             Plugins.Add(new RequestLogsFeature() {RequiredRoles = new string[] {}});
+
             HttpServiceContainer.Build(container);
         }
     }

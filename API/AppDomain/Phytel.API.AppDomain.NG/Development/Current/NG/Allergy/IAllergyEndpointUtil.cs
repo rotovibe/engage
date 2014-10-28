@@ -8,6 +8,7 @@ namespace Phytel.API.AppDomain.NG.Allergy
     public interface IAllergyEndpointUtil
     {
         List<DdAllergy> GetAllergies(GetAllergiesRequest request);
+        DdAllergy PutNewAllergy(PostInsertNewAllergyRequest request);
         List<PatientAllergyData> GetPatientAllergies(GetPatientAllergiesRequest request);
         PatientAllergyData InitializePatientAllergy(GetInitializePatientAllergyRequest request);
         List<PatientAllergyData> BulkUpdatePatientAllergies(PostPatientAllergiesRequest request);

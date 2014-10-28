@@ -104,8 +104,10 @@
     <Compile Include="Allergy\GetPatientAllergiesResponse.cs" />
     <Compile Include="Allergy\GetAllergiesResponse.cs" />
     <Compile Include="Allergy\PatientAllergy.cs" />
-    <Compile Include="Allergy\PostPatientAllergyRequest.cs" />
+    <Compile Include="Allergy\PostInsertNewAllergyRequest.cs" />
+    <Compile Include="Allergy\PostInsertNewAllergyResponse.cs" />
     <Compile Include="Allergy\PostPatientAllergiesRequest.cs" />
+    <Compile Include="Allergy\PostPatientAllergyRequest.cs" />
     <Compile Include="Allergy\PostPatientAllergyResponse.cs" />
     <Compile Include="Allergy\PostPatientAllergiesResponse.cs" />
     <Compile Include="Goal\GetTasksRequest.cs" />

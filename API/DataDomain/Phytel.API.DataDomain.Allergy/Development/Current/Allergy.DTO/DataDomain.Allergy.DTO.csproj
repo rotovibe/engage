@@ -74,7 +74,9 @@
     <Compile Include="Constants.cs" />
     <Compile Include="DomainResponse.cs" />
     <Compile Include="Enums.cs" />
+    <Compile Include="PostNewAllergyRequest.cs" />
     <Compile Include="GetAllAllergysRequest.cs" />
+    <Compile Include="PostNewAllergyResponse.cs" />
     <Compile Include="GetPatientAllergiesDataRequest.cs" />
     <Compile Include="GetAllAllergysResponse.cs" />
     <Compile Include="GetPatientAllergiesDataResponse.cs" />

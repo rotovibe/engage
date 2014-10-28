@@ -34,7 +34,21 @@ namespace DataDomain.Allergy.Repo
 
         public object Insert(object newEntity)
         {
-            throw new NotImplementedException();
+            try
+            {
+                object result = null;
+                using (AllergyMongoContext ctx = new AllergyMongoContext(ContractDBName))
+                {
+                    var allgr = new MEAllergy(UserId){ Description = ((DdAllergy)newEntity).Description };
+                    ctx.Allergy.Insert(allgr);
+                    result = Mapper.Map<DdAllergy>(allgr);
+                }
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("AllergyDD:MongoAllergyRepository:Insert()::" + ex.Message, ex.InnerException); 
+            }
         }
 
         public object InsertAll(List<object> entities)

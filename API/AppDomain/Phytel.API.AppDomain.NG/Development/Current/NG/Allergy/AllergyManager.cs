@@ -22,8 +22,24 @@ namespace Phytel.API.AppDomain.NG.Allergy
     public class AllergyManager : ManagerBase, IAllergyManager
     {
         public IAllergyEndpointUtil EndpointUtil { get; set; }
+        public ISearchManager SearchManager { get; set; }
 
-        #region Allergy - Gets
+        public DTO.Allergy PutNewAllergy(PostInsertNewAllergyRequest request)
+        {
+            try
+            {
+                DTO.Allergy result = null;
+                var algy = EndpointUtil.PutNewAllergy(request);
+                result = Mapper.Map<DTO.Allergy>(algy);
+                SearchManager.RegisterDocumentInSearchIndex(result);
+                return result;
+            }
+            catch (WebServiceException ex)
+            {
+                throw new WebServiceException("AD:GetAllergies()::" + ex.Message, ex.InnerException);
+            }
+        }
+
         public List<DTO.Allergy> GetAllergies(GetAllergiesRequest request)
         {
             try
@@ -31,7 +47,7 @@ namespace Phytel.API.AppDomain.NG.Allergy
                 List<DTO.Allergy> result = new List<DTO.Allergy>();
                 var algy = EndpointUtil.GetAllergies(request);
                 algy.ForEach(a => result.Add(Mapper.Map<DTO.Allergy>(a)));
-                IndexResultSet(result);
+                //IndexResultSet(result);
                 return result;
             }
             catch (WebServiceException ex)
@@ -52,8 +68,7 @@ namespace Phytel.API.AppDomain.NG.Allergy
             {
                 throw new Exception("AD:IndexResultSet()::" + ex.Message, ex.InnerException);
             }
-        } 
-        #endregion
+        }
 
         #region PatientAllergy - Gets
         public List<PatientAllergy> GetPatientAllergies(GetPatientAllergiesRequest request)

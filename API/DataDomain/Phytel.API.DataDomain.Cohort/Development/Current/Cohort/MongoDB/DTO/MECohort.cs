@@ -21,7 +21,6 @@ namespace Phytel.API.DataDomain.Cohort.DTO
         }
 
         public const string IdProperty = "_id";
-        public const string NameProperty = "nm";
         public const string ShortNameProperty = "sn";
         public const string DescriptionProperty = "desc";
         public const string QueryProperty = "query";
@@ -40,6 +39,7 @@ namespace Phytel.API.DataDomain.Cohort.DTO
         [BsonElement(IdProperty)]
         public ObjectId Id { get; set; }
 
+        public const string NameProperty = "nm";
         [BsonElement(NameProperty)]
         [BsonIgnoreIfNull(true)]
         public string Name { get; set; }

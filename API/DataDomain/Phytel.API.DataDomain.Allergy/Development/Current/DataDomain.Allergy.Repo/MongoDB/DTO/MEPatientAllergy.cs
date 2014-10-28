@@ -1,3 +1,4 @@
+using System;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 using Phytel.API.Interface;
@@ -20,6 +21,46 @@ namespace Phytel.API.DataDomain.Allergy.DTO
         public const string IdProperty = "_id";
         [BsonId]
         public ObjectId Id { get; private set; }
+
+        public const string NameProperty = "aid";
+        [BsonElement(NameProperty)]
+        [BsonIgnoreIfNull(true)]
+        public ObjectId? AllergyId { get; set; }
+
+        public const string SeverityProperty = "sev";
+        [BsonElement(SeverityProperty)]
+        [BsonIgnoreIfNull(true)]
+        public ObjectId? Severity { get; set; }
+
+        public const string ReactionProperty = "rct";
+        [BsonElement(ReactionProperty)]
+        [BsonIgnoreIfNull(true)]        
+        public ObjectId? Reaction { get; set; }
+        
+        public const string StatusProperty = "sts";
+        [BsonElement(StatusProperty)]
+        [BsonIgnoreIfNull(true)]
+        public Status Status { get; set; }
+
+        public const string SourceProperty = "src";
+        [BsonElement(SourceProperty)]
+        [BsonIgnoreIfNull(true)]
+        public ObjectId? Source { get; set; }
+
+        public const string StartDateProperty = "sd";
+        [BsonElement(StartDateProperty)]
+        [BsonIgnoreIfNull(true)]
+        public DateTime? StartDate { get; set; }
+
+        public const string EndDateProperty = "ed";
+        [BsonElement(EndDateProperty)]
+        [BsonIgnoreIfNull(true)]
+        public DateTime? EndDate { get; set; }
+
+        public const string NotesProperty = "nts";
+        [BsonElement(NotesProperty)]
+        [BsonIgnoreIfNull(true)]
+        public string Notes { get; set; }
 
         public const string VersionProperty = "v";
         [BsonElement(VersionProperty)]

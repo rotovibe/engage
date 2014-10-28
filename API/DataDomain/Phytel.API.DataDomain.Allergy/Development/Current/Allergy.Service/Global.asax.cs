@@ -1,4 +1,5 @@
 using AutoMapper;
+using MongoDB.Bson;
 using Phytel.API.DataDomain.Allergy.DTO;
 using ServiceStack.MiniProfiler;
 using System;

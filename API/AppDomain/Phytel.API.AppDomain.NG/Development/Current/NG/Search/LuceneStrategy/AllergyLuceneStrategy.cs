@@ -58,7 +58,7 @@ namespace Phytel.API.AppDomain.NG.Search.LuceneStrategy
 
             using (var searcher = new IndexSearcher(Directory, false))
             {
-                var hits_limit = 1000;
+                var hits_limit = 10;
                 var analyzer = new StandardAnalyzer(Lucene.Net.Util.Version.LUCENE_30);
 
                 if (!string.IsNullOrEmpty(searchField))
@@ -75,8 +75,7 @@ namespace Phytel.API.AppDomain.NG.Search.LuceneStrategy
                 {
                     var parser = new MultiFieldQueryParser(Lucene.Net.Util.Version.LUCENE_30, new[] { "Id", "Name" }, analyzer);
                     var query = ParseQuery(searchQuery, parser);
-                    var hits = searcher.Search
-                    (query, null, hits_limit, Sort.RELEVANCE).ScoreDocs;
+                    var hits = searcher.Search(query, null, hits_limit, Sort.RELEVANCE).ScoreDocs;
                     var results = MapLuceneToDataList(hits, searcher);
                     analyzer.Close();
                     searcher.Dispose();
