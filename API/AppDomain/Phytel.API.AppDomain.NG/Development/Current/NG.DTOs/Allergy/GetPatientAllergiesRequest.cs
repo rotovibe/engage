@@ -13,6 +13,9 @@ namespace Phytel.API.AppDomain.NG.DTO
 
         [ApiMember(Name = "StatusIds", Description = "List of patient allergy Status ids.", ParameterType = "property", DataType = "List<int>", IsRequired = false)]
         public List<int> StatusIds { get; set; }
+
+        [ApiMember(Name = "TypeIds", Description = "List of allergy Type ids.", ParameterType = "property", DataType = "List<string>", IsRequired = false)]
+        public List<string> TypeIds { get; set; }
         
         [ApiMember(Name = "UserID", Description = "ID of the user making the request (Internally used ONLY)", ParameterType = "property", DataType = "string", IsRequired = true)]
         public string UserId { get; set; }

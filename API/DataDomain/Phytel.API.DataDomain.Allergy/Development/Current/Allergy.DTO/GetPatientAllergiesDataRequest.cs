@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Phytel.API.Interface;
 using ServiceStack.ServiceHost;
 
@@ -8,6 +9,12 @@ namespace Phytel.API.DataDomain.Allergy.DTO
     {
         [ApiMember(Name = "PatientId", Description = "ID of the patient who's Allergies are being requested", ParameterType = "property", DataType = "string", IsRequired = false)]
         public string PatientId { get; set; }
+
+        [ApiMember(Name = "StatusIds", Description = "List of patient allergy Status ids.", ParameterType = "property", DataType = "List<int>", IsRequired = false)]
+        public List<int> StatusIds { get; set; }
+
+        [ApiMember(Name = "TypeIds", Description = "List of allergy Type ids.", ParameterType = "property", DataType = "List<string>", IsRequired = false)]
+        public List<string> TypeIds { get; set; }
 
         [ApiMember(Name = "UserId", Description = "UserId of the logged in user", ParameterType = "property", DataType = "string", IsRequired = false)]
         public string UserId { get; set; }
