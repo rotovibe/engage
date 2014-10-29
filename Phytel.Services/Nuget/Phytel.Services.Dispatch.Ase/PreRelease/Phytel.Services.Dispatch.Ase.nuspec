@@ -13,12 +13,12 @@
       <dependency id="Phytel.Services.Serializer" version="1.3.0.04" />
     </dependencies>
     <references>
-      <reference file="ASEBus.dll" />
-      <reference file="ASEContext.dll" />
-      <reference file="ASECore.dll" />
-      <reference file="ASEData.dll" />
-      <reference file="PhytelServices.dll" />
-      <reference file="Phytel.Mongo.dll" />
+      <reference file="CoreReferences\ASEBus.dll" />
+      <reference file="CoreReferences\ASEContext.dll" />
+      <reference file="CoreReferences\ASECore.dll" />
+      <reference file="CoreReferences\ASEData.dll" />
+      <reference file="CoreReferences\PhytelServices.dll" />
+      <reference file="CoreReferences\Phytel.Mongo.dll" />
     </references>
   </metadata>
   <files>
