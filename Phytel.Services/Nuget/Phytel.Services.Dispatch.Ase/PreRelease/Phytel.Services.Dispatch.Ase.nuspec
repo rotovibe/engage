@@ -12,16 +12,14 @@
       <dependency id="Phytel.Services.Dispatch" version="1.0.0.01" />
       <dependency id="Phytel.Services.Serializer" version="1.3.0.04" />
     </dependencies>
-    <references>
-      <reference file="CoreReferences\ASEBus.dll" />
-      <reference file="CoreReferences\ASEContext.dll" />
-      <reference file="CoreReferences\ASECore.dll" />
-      <reference file="CoreReferences\ASEData.dll" />
-      <reference file="CoreReferences\PhytelServices.dll" />
-      <reference file="CoreReferences\Phytel.Mongo.dll" />
-    </references>
   </metadata>
   <files>
+    <file src="..\bin\ASEBus.dll" target="lib\net451\ASEBus.dll" />
+    <file src="..\bin\ASEContext.dll" target="lib\net451\ASEContext.dll" />
+    <file src="..\bin\ASECore.dll" target="lib\net451\ASECore.dll" />
+    <file src="..\bin\ASEData.dll" target="lib\net451\ASEData.dll" />
+    <file src="..\bin\PhytelServices.dll" target="lib\net451\PhytelServices.dll" />
+    <file src="..\bin\Phytel.Mongo.dll" target="lib\net451\Phytel.Mongo.dll" />
     <file src="..\bin\Phytel.Services.Dispatch.Ase.dll" target="lib\net451\Phytel.Services.Dispatch.Ase.dll" />
   </files>
 </package>
