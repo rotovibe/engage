@@ -48,6 +48,12 @@
     <Reference Include="ASEData">
       <HintPath>CoreReferences\ASEData.dll</HintPath>
     </Reference>
+    <Reference Include="MongoDB.Bson">
+      <HintPath>packages\mongocsharpdriver.1.8.1\lib\net35\MongoDB.Bson.dll</HintPath>
+    </Reference>
+    <Reference Include="MongoDB.Driver">
+      <HintPath>packages\mongocsharpdriver.1.8.1\lib\net35\MongoDB.Driver.dll</HintPath>
+    </Reference>
     <Reference Include="Phytel.Mongo">
       <HintPath>CoreReferences\Phytel.Mongo.dll</HintPath>
     </Reference>
