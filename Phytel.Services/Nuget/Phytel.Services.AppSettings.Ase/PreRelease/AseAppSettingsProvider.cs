@@ -32,9 +32,9 @@ namespace Phytel.Services.AppSettings
         {
             string rvalue = string.Empty;
 
-            if (_appSettings.ContainsKey(key))
+            if (AppSettings.ContainsKey(key))
             {
-                rvalue = _appSettings[key];
+                rvalue = AppSettings[key];
             }
 
             return rvalue;
