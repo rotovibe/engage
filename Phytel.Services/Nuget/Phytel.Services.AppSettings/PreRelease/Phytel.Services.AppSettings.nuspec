@@ -13,6 +13,6 @@
     </frameworkAssemblies>
   </metadata>
   <files>
-    <file src="..\..\bin\Phytel.Services.AppSettings.dll" target="lib\net451\Phytel.Services.AppSettings.dll" />
+    <file src="..\bin\Phytel.Services.AppSettings.dll" target="lib\net451\Phytel.Services.AppSettings.dll" />
   </files>
 </package>
