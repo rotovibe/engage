@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace Phytel.API.AppDomain.NG.DTO
 {
-    public class GetInitializePatientAllergyResponse : IDomainResponse
+    public class PostInitializePatientAllergyResponse : IDomainResponse
     {
         public PatientAllergy PatientAllergy { get; set; }
         public ResponseStatus Status { get; set; }

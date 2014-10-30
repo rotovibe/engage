@@ -70,8 +70,8 @@ namespace Phytel.API.DataDomain.Allergy.Test
                Version = version
            };
            //[Route("/{Context}/{Version}/{ContractNumber}/PatientAllergy/{PatientId}", "GET")]
-           GetPatientAllergiesDataResponse response = client.Get<GetPatientAllergiesDataResponse>(
-   string.Format("{0}/{1}/{2}/{3}/PatientAllergy/{4}?UserId={5}", url, context, version, contractNumber, request.PatientId, request.UserId));
+           GetPatientAllergiesDataResponse response = client.Post<GetPatientAllergiesDataResponse>(
+   string.Format("{0}/{1}/{2}/{3}/PatientAllergy/{4}", url, context, version, contractNumber, request.PatientId), request);
 
            Assert.IsNotNull(response);
        }
@@ -89,7 +89,7 @@ namespace Phytel.API.DataDomain.Allergy.Test
             };
             // [Route("/{Context}/{Version}/{ContractNumber}/PatientAllergy/{PatientId}/Initialize", "PUT")]
             PutInitializePatientAllergyDataResponse response = client.Put<PutInitializePatientAllergyDataResponse>(
-    string.Format("{0}/{1}/{2}/{3}/PatientAllergy/{4}/Initialize", url, context, version, contractNumber, request.PatientId), request);
+    string.Format("{0}/{1}/{2}/{3}/PatientAllergy/Initialize", url, context, version, contractNumber), request);
 
             Assert.IsNotNull(response);
         }
@@ -99,17 +99,17 @@ namespace Phytel.API.DataDomain.Allergy.Test
         {
 
             PatientAllergyData data = new PatientAllergyData {
-                AllergyId = "54489a72fe7a59146485bce5",
+                AllergyId = "54489a3dfe7a59146485bafe",
                 EndDate = DateTime.UtcNow,
-                Id = "5452567ed433231b9c516d8e",
-                Notes = "first note for patient allergy",
+                Id = "5452b3f1d4332303e459f08a",
+                Notes = "AAAAAAAAAAAAAAA",
                 PatientId = "54087f43d6a48509407d69cb",
-                ReactionIds = new List<string>{"54494b5ad433232a446f7323", "54494b5dd433232a446f7324", "54494b60d433232a446f7325"},
-                SeverityId = "54494a96d433232a446f7313",
+                ReactionIds = new List<string>{"54494b5ad433232a446f7323"},
+               // SeverityId = "54494a96d433232a446f7313",
                 SourceId = "544e9976d433231d9c0330ae",
                 StartDate = DateTime.UtcNow,
-                StatusId = 2,
-                SystemName = "Engage",
+                StatusId = 1,
+                SystemName = "Integration",
                 UpdatedOn  = DateTime.UtcNow 
             };
             

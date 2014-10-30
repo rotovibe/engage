@@ -234,31 +234,58 @@ namespace DataDomain.Allergy.Repo
             catch (Exception) { throw; }
         }
 
-        public object FindByPatientId(string entityID)
+        public object FindByPatientId(object request)
         {
             List<PatientAllergyData> list = null;
+            GetPatientAllergiesDataRequest dataRequest = (GetPatientAllergiesDataRequest)request;
             try
             {
                 using (AllergyMongoContext ctx = new AllergyMongoContext(ContractDBName))
                 {
                     List<IMongoQuery> queries = new List<IMongoQuery>();
+                    queries.Add(Query.EQ(MEPatientAllergy.PatientIdProperty, ObjectId.Parse(dataRequest.PatientId)));
                     queries.Add(Query.EQ(MEPatientAllergy.DeleteFlagProperty, false));
                     queries.Add(Query.EQ(MEPatientAllergy.TTLDateProperty, BsonNull.Value));
-                    queries.Add(Query.EQ(MEPatientAllergy.PatientIdProperty, ObjectId.Parse(entityID)));
+                    if (dataRequest.StatusIds != null && dataRequest.StatusIds.Count > 0)
+                    {
+                        queries.Add(Query.In(MEPatientAllergy.StatusProperty, new BsonArray(dataRequest.StatusIds)));
+                    }
                     IMongoQuery mQuery = Query.And(queries);
                     List<MEPatientAllergy> mePAs = ctx.PatientAllergies.Collection.Find(mQuery).ToList();
                     if (mePAs != null && mePAs.Count > 0)
                     {
                         list = new List<PatientAllergyData>();
+                        List<ObjectId> aids = new List<ObjectId>();
+                        if (dataRequest.TypeIds != null && dataRequest.TypeIds.Count > 0)
+                        {
+                            // get allergy details by typeId.
+                            List<MEAllergy> allergiesByType = ctx.Allergies.Collection.Find(Query.EQ(MEAllergy.SubTypeProperty, new BsonArray(dataRequest.TypeIds))).ToList();
+                            aids = allergiesByType.Select(i => i.Id).ToList();
+                        }
                         mePAs.ForEach(p =>
-                            { 
-                                PatientAllergyData data = AutoMapper.Mapper.Map<PatientAllergyData>(p);
-                                // get corresponding allergy name and type.
-                                if (data != null)
+                            {
+                                MEPatientAllergy meData = null;
+                                if (dataRequest.TypeIds != null && dataRequest.TypeIds.Count > 0)
                                 {
-                                    getAllergyDetails(data, ctx, p.AllergyId);
+                                    if(aids.Contains(p.AllergyId))
+                                    {
+                                        meData = p;
+                                    }
                                 }
-                                list.Add(data);
+                                else
+                                {
+                                    meData = p;
+                                }
+                                if (meData != null)
+                                {
+                                    PatientAllergyData data = AutoMapper.Mapper.Map<PatientAllergyData>(meData);
+                                    // get corresponding allergy name and type.
+                                    if (data != null)
+                                    {
+                                        getAllergyDetails(data, ctx, p.AllergyId);
+                                    }
+                                    list.Add(data);
+                                }
                             });
                     }
                 }

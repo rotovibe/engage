@@ -90,7 +90,7 @@ namespace Phytel.API.AppDomain.NG.Allergy
             }
         }
 
-        public PatientAllergy InitializePatientAllergy(GetInitializePatientAllergyRequest request)
+        public PatientAllergy InitializePatientAllergy(PostInitializePatientAllergyRequest request)
         {
             PatientAllergy patientAllergy = null;
             try

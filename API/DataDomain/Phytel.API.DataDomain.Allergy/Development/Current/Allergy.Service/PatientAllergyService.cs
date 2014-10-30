@@ -12,8 +12,8 @@ namespace Phytel.API.DataDomain.Allergy.Service
             Manager = mgr;
         }
 
-        #region Gets
-        public GetPatientAllergiesDataResponse Get(GetPatientAllergiesDataRequest request)
+        #region Posts
+        public GetPatientAllergiesDataResponse Post(GetPatientAllergiesDataRequest request)
         {
             var response = new GetPatientAllergiesDataResponse { Version = request.Version };
 

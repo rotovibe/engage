@@ -14,6 +14,7 @@ namespace Phytel.API.AppDomain.NG.Allergy
         protected readonly string DDAllergyUrl = ConfigurationManager.AppSettings["DDAllergyUrl"];
         #endregion
 
+        #region Allergy
         public DdAllergy PutNewAllergy(PostInsertNewAllergyRequest request)
         {
             try
@@ -76,7 +77,8 @@ namespace Phytel.API.AppDomain.NG.Allergy
             {
                 throw new WebServiceException("AD:GetAllergies()::" + ex.Message, ex.InnerException);
             }
-        } 
+        }  
+        #endregion
 
         #region PatientAllergy - Gets
         public List<PatientAllergyData> GetPatientAllergies(GetPatientAllergiesRequest request)
@@ -93,7 +95,16 @@ namespace Phytel.API.AppDomain.NG.Allergy
                                     request.ContractNumber,
                                     request.PatientId), request.UserId);
 
-                GetPatientAllergiesDataResponse dataDomainResponse = client.Get<GetPatientAllergiesDataResponse>(url);
+                GetPatientAllergiesDataResponse dataDomainResponse = client.Post<GetPatientAllergiesDataResponse>(url, new GetPatientAllergiesDataRequest
+                {
+                    Context = "NG",
+                    ContractNumber = request.ContractNumber,
+                    StatusIds = request.StatusIds,
+                    TypeIds = request.TypeIds,
+                    PatientId = request.PatientId,
+                    UserId = request.UserId,
+                    Version = request.Version
+                } as object);
 
                 if (dataDomainResponse != null)
                 {
@@ -107,25 +118,25 @@ namespace Phytel.API.AppDomain.NG.Allergy
             }
         }
 
-        public PatientAllergyData InitializePatientAllergy(GetInitializePatientAllergyRequest request)
+        public PatientAllergyData InitializePatientAllergy(PostInitializePatientAllergyRequest request)
         {
             try
             {
                 PatientAllergyData result = null;
                 IRestClient client = new JsonServiceClient();
-                //[Route("/{Context}/{Version}/{ContractNumber}/PatientAllergy/{PatientId}/Initialize", "PUT")]
-                var url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/PatientAllergy/{4}/Initialize",
+                //[Route("/{Version}/{ContractNumber}/PatientAllergy/Initialize", "POST")]
+                var url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/PatientAllergy/Initialize",
                                     DDAllergyUrl,
                                     "NG",
                                     request.Version,
-                                    request.ContractNumber,
-                                    request.PatientId), request.UserId);
+                                    request.ContractNumber), request.UserId);
 
                 PutInitializePatientAllergyDataResponse dataDomainResponse = client.Put<PutInitializePatientAllergyDataResponse>(url, new PutInitializePatientAllergyDataRequest 
                 { 
                     Context  = "NG",
                     ContractNumber = request.ContractNumber,
                     PatientId = request.PatientId,
+                    AllergyId = request.AllergyId,
                     UserId = request.UserId,
                     Version = request.Version
                 } as object);

@@ -103,8 +103,8 @@ namespace Phytel.API.AppDomain.NG.Service
             return response; 
         } 
 
-        #region PatientAllergy - Gets
-        public GetPatientAllergiesResponse Get(GetPatientAllergiesRequest request)
+        #region PatientAllergy - Posts
+        public GetPatientAllergiesResponse Post(GetPatientAllergiesRequest request)
         {
             GetPatientAllergiesResponse response = new GetPatientAllergiesResponse();
             ValidateTokenResponse result = null;
@@ -144,9 +144,9 @@ namespace Phytel.API.AppDomain.NG.Service
             return response;
         }
 
-        public GetInitializePatientAllergyResponse Get(GetInitializePatientAllergyRequest request)
+        public PostInitializePatientAllergyResponse Post(PostInitializePatientAllergyRequest request)
         {
-            GetInitializePatientAllergyResponse response = new GetInitializePatientAllergyResponse();
+            PostInitializePatientAllergyResponse response = new PostInitializePatientAllergyResponse();
             ValidateTokenResponse result = null;
 
             try
@@ -183,9 +183,7 @@ namespace Phytel.API.AppDomain.NG.Service
             }
             return response;
         }
-        #endregion
 
-        #region PatientAllergy - Posts
         public PostPatientAllergiesResponse Post(PostPatientAllergiesRequest request)
         {
             PostPatientAllergiesResponse response = new PostPatientAllergiesResponse();

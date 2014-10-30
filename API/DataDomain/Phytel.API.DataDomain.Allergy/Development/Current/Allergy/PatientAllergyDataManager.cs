@@ -23,7 +23,7 @@ namespace Phytel.API.DataDomain.Allergy
                 PatientAllergyRepository.UserId = request.UserId;
                 if (request.PatientId != null)
                 {
-                    result = PatientAllergyRepository.FindByPatientId(request.PatientId) as List<PatientAllergyData>;
+                    result = PatientAllergyRepository.FindByPatientId(request) as List<PatientAllergyData>;
                 }
                 return result;
             }

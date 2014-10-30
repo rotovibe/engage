@@ -3,7 +3,7 @@ using ServiceStack.ServiceHost;
 
 namespace Phytel.API.DataDomain.Allergy.DTO
 {
-    [Route("/{Context}/{Version}/{ContractNumber}/PatientAllergy/{PatientId}/Initialize", "PUT")]
+    [Route("/{Context}/{Version}/{ContractNumber}/PatientAllergy/Initialize", "PUT")]
     public class PutInitializePatientAllergyDataRequest : IDataDomainRequest
     {
         [ApiMember(Name = "PatientId", Description = "Id of the Patient for whom an allergy is being initialized.", ParameterType = "property", DataType = "string", IsRequired = true)]

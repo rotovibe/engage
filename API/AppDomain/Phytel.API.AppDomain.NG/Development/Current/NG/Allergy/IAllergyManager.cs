@@ -12,7 +12,7 @@ namespace Phytel.API.AppDomain.NG.Allergy
         void LogException(Exception ex);
         DTO.Allergy PutNewAllergy(PostInsertNewAllergyRequest request);
         List<PatientAllergy> GetPatientAllergies(GetPatientAllergiesRequest request);
-        PatientAllergy InitializePatientAllergy(GetInitializePatientAllergyRequest request);
+        PatientAllergy InitializePatientAllergy(PostInitializePatientAllergyRequest request);
         List<PatientAllergy> BulkUpdatePatientAllergies(PostPatientAllergiesRequest request);
         PatientAllergy SingleUpdatePatientAllergy(PostPatientAllergyRequest request);
     }
