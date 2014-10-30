@@ -46,7 +46,7 @@ namespace Phytel.API.DataDomain.Allergy.DTO
         public const string StatusProperty = "sts";
         [BsonElement(StatusProperty)]
         [BsonIgnoreIfNull(true)]
-        public Status Status { get; set; }
+        public Status StatusId { get; set; }
 
         public const string SourceIdProperty = "srcid";
         [BsonElement(SourceIdProperty)]

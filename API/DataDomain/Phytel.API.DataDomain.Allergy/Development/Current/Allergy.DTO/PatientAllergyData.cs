@@ -20,7 +20,7 @@ namespace Phytel.API.DataDomain.Allergy.DTO
         public DateTime? StartDate { get; set; }
         public DateTime? EndDate { get; set; }
         public int StatusId { get; set; }
-        public string System { get; set; }
+        public string SystemName { get; set; }
         public bool DeleteFlag { get; set; }
         public DateTime CreatedOn { get; set; }
         public DateTime? UpdatedOn { get; set; }

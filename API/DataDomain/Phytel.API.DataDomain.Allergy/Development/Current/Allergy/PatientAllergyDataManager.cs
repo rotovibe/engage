@@ -21,14 +21,15 @@ namespace Phytel.API.DataDomain.Allergy
             {
                 List<PatientAllergyData> result = null;
                 PatientAllergyRepository.UserId = request.UserId;
-                // Mel, I commented out line below, since it was failing. Fix this when you reach here.
-               // result = AllergyRepository.SelectAll().Cast<PatientAllergyData>().ToList<PatientAllergyData>();
-
+                if (request.PatientId != null)
+                {
+                    result = PatientAllergyRepository.FindByPatientId(request.PatientId) as List<PatientAllergyData>;
+                }
                 return result;
             }
             catch (Exception ex)
             {
-                throw new Exception("AllergyDD:GetAllergyList()::" + ex.Message, ex.InnerException);
+                throw new Exception("AllergyDD:GetPatientAllergies()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -56,7 +57,7 @@ namespace Phytel.API.DataDomain.Allergy
                     bool status = (bool)PatientAllergyRepository.Update(request);
                     if (status)
                     {
-                        result = (PatientAllergyData)PatientAllergyRepository.FindByID(request.PatientAllergyData.Id, true);
+                        result = (PatientAllergyData)PatientAllergyRepository.FindByID(request.PatientAllergyData.Id);
                     }
                 }
 
@@ -90,7 +91,7 @@ namespace Phytel.API.DataDomain.Allergy
                         bool status = (bool)PatientAllergyRepository.Update(req);
                         if (status)
                         {
-                            PatientAllergyData data = (PatientAllergyData)PatientAllergyRepository.FindByID(req.PatientAllergyData.Id, true);
+                            PatientAllergyData data = (PatientAllergyData)PatientAllergyRepository.FindByID(req.PatientAllergyData.Id);
                             result.Add(data);
                         }
                     });
