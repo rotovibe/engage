@@ -82,6 +82,8 @@
     <Compile Include="Client\Interface\IRepositoryHttp.cs" />
     <Compile Include="Provider\ContractNumberProvider.cs" />
     <Compile Include="Provider\Interface\IContractNumberProvider.cs" />
+    <Compile Include="Provider\Interface\IServiceConfigProxy.cs" />
+    <Compile Include="Provider\ServiceStackServiceConfigProxy.cs" />
     <Compile Include="Proxy\HostContextProxy.cs" />
     <Compile Include="Proxy\Interface\IHostContextProxy.cs" />
     <Compile Include="Client\RepositoryHttp.cs" />
