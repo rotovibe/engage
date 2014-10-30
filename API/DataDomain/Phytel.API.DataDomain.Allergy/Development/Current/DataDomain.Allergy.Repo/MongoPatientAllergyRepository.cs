@@ -68,11 +68,26 @@ namespace DataDomain.Allergy.Repo
                     if (mePA != null)
                     {
                         data = AutoMapper.Mapper.Map<PatientAllergyData>(mePA);
+                        // get corresponding allergy name and type.
+                        if(data != null)
+                        {
+                            getAllergyDetails(data, ctx, mePA.AllergyId);
+                        }
                     }
                 }
                 return data;
             }
             catch (Exception) { throw; }
+        }
+
+        private static void getAllergyDetails(PatientAllergyData data, AllergyMongoContext ctx, ObjectId aid)
+        {
+            MEAllergy meA = ctx.Allergies.Collection.Find(Query.EQ(MEAllergy.IdProperty, aid)).FirstOrDefault();
+            if (meA != null)
+            {
+                data.AllergyName = meA.Description;
+                data.AllergyTypeId = Helper.ConvertToStringList(meA.SubType);
+            }
         }
 
         public Tuple<string, IEnumerable<object>> Select(Phytel.API.Interface.APIExpression expression)
@@ -238,6 +253,11 @@ namespace DataDomain.Allergy.Repo
                         mePAs.ForEach(p =>
                             { 
                                 PatientAllergyData data = AutoMapper.Mapper.Map<PatientAllergyData>(p);
+                                // get corresponding allergy name and type.
+                                if (data != null)
+                                {
+                                    getAllergyDetails(data, ctx, p.AllergyId);
+                                }
                                 list.Add(data);
                             });
                     }
