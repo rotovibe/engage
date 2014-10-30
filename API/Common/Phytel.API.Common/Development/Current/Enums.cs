@@ -69,6 +69,8 @@ namespace Phytel.API.Common
         Action,
         Step,
         ToDo,
-        Schedule
+        Schedule,
+        Allergy,
+        PatientAllergy
     }
 }

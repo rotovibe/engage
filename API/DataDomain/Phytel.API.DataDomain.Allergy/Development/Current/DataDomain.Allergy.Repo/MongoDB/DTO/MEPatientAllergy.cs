@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 using Phytel.API.Interface;
@@ -22,30 +23,35 @@ namespace Phytel.API.DataDomain.Allergy.DTO
         [BsonId]
         public ObjectId Id { get; private set; }
 
-        public const string NameProperty = "aid";
-        [BsonElement(NameProperty)]
+        public const string AllergyIdProperty = "aid";
+        [BsonElement(AllergyIdProperty)]
         [BsonIgnoreIfNull(true)]
-        public ObjectId? AllergyId { get; set; }
+        public ObjectId AllergyId { get; set; }
 
-        public const string SeverityProperty = "sev";
-        [BsonElement(SeverityProperty)]
+        public const string PatientIdProperty = "pid";
+        [BsonElement(PatientIdProperty)]
         [BsonIgnoreIfNull(true)]
-        public ObjectId? Severity { get; set; }
+        public ObjectId PatientId { get; set; }
 
-        public const string ReactionProperty = "rct";
-        [BsonElement(ReactionProperty)]
+        public const string SeverityIdProperty = "sevid";
+        [BsonElement(SeverityIdProperty)]
+        [BsonIgnoreIfNull(true)]
+        public ObjectId? SeverityId { get; set; }
+
+        public const string ReactionIdsProperty = "rctid";
+        [BsonElement(ReactionIdsProperty)]
         [BsonIgnoreIfNull(true)]        
-        public ObjectId? Reaction { get; set; }
-        
+        public List<ObjectId> ReactionIds { get; set; }
+       
         public const string StatusProperty = "sts";
         [BsonElement(StatusProperty)]
         [BsonIgnoreIfNull(true)]
         public Status Status { get; set; }
 
-        public const string SourceProperty = "src";
-        [BsonElement(SourceProperty)]
+        public const string SourceIdProperty = "srcid";
+        [BsonElement(SourceIdProperty)]
         [BsonIgnoreIfNull(true)]
-        public ObjectId? Source { get; set; }
+        public ObjectId SourceId { get; set; }
 
         public const string StartDateProperty = "sd";
         [BsonElement(StartDateProperty)]
@@ -62,6 +68,12 @@ namespace Phytel.API.DataDomain.Allergy.DTO
         [BsonIgnoreIfNull(true)]
         public string Notes { get; set; }
 
+        public const string SystemProperty = "sys";
+        [BsonElement(SystemProperty)]
+        [BsonIgnoreIfNull(true)]
+        public string SystemName { get; set; }
+
+        #region Base elements
         public const string VersionProperty = "v";
         [BsonElement(VersionProperty)]
         [BsonDefaultValue(1.0)]
@@ -102,6 +114,7 @@ namespace Phytel.API.DataDomain.Allergy.DTO
         public const string ExtraElementsProperty = "ex";
         [BsonElement(ExtraElementsProperty)]
         [BsonExtraElements]
-        public BsonDocument ExtraElements { get; set; }
+        public BsonDocument ExtraElements { get; set; } 
+        #endregion
     }
 }

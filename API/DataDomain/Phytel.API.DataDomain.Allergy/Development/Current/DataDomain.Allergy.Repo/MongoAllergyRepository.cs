@@ -8,11 +8,15 @@ using System;
 using System.Collections.Generic;
 using DTO = Phytel.API.DataDomain.Allergy.DTO;
 using Phytel.API.DataDomain.Allergy.DTO;
+using System.Configuration;
 
 namespace DataDomain.Allergy.Repo
 {
     public class MongoAllergyRepository<TContext> : IMongoAllergyRepository where TContext : AllergyMongoContext
     {
+        private int _expireDays = Convert.ToInt32(ConfigurationManager.AppSettings["ExpireDays"]);
+        private int _initializeDays = Convert.ToInt32(ConfigurationManager.AppSettings["InitializeDays"]);
+
         protected readonly TContext Context;
         public string ContractDBName { get; set; }
         public string UserId { get; set; }
@@ -40,7 +44,7 @@ namespace DataDomain.Allergy.Repo
                 using (AllergyMongoContext ctx = new AllergyMongoContext(ContractDBName))
                 {
                     var allgr = new MEAllergy(UserId){ Description = ((DdAllergy)newEntity).Description };
-                    ctx.Allergy.Insert(allgr);
+                    ctx.Allergies.Insert(allgr);
                     result = Mapper.Map<DdAllergy>(allgr);
                 }
                 return result;
@@ -76,7 +80,7 @@ namespace DataDomain.Allergy.Repo
                     Query<MEAllergy>.EQ(b => b.Id, ObjectId.Parse(entityID)),
                     Query<MEAllergy>.EQ(b => b.DeleteFlag, false));
 
-                var cp = Context.Allergy.Collection.Find(findcp).FirstOrDefault();
+                var cp = Context.Allergies.Collection.Find(findcp).FirstOrDefault();
 
                 if (cp == null) return result;
 
@@ -118,7 +122,7 @@ namespace DataDomain.Allergy.Repo
                 queries.Add(Query.EQ(MEAllergy.DeleteFlagProperty, false));
                 IMongoQuery mQuery = Query.And(queries);
 
-                List<MEAllergy> meAllgy = ctx.Allergy.Collection.Find(mQuery).ToList();
+                List<MEAllergy> meAllgy = ctx.Allergies.Collection.Find(mQuery).ToList();
 
                 List<DdAllergy> allgs = null;
                 if (meAllgy != null && meAllgy.Count > 0)
@@ -142,6 +146,11 @@ namespace DataDomain.Allergy.Repo
 
 
         public void UndoDelete(object entity)
+        {
+            throw new NotImplementedException();
+        }
+
+        public object Initialize(object newEntity)
         {
             throw new NotImplementedException();
         }

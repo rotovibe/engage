@@ -12,6 +12,7 @@ namespace Phytel.API.DataDomain.Allergy.Service
             Manager = mgr;
         }
 
+        #region Gets
         public GetPatientAllergiesDataResponse Get(GetPatientAllergiesDataRequest request)
         {
             var response = new GetPatientAllergiesDataResponse { Version = request.Version };
@@ -19,7 +20,25 @@ namespace Phytel.API.DataDomain.Allergy.Service
             try
             {
                 RequireUserId(request);
-                response.PatientAllergiesData = Manager.GetPatientAllergyList(request);
+                response.PatientAllergiesData = Manager.GetPatientAllergies(request);
+            }
+            catch (Exception ex)
+            {
+                RaiseException(response, ex);
+            }
+            return response;
+        } 
+        #endregion
+
+        #region Initialize
+        public PutInitializePatientAllergyDataResponse Put(PutInitializePatientAllergyDataRequest request)
+        {
+            PutInitializePatientAllergyDataResponse response = new PutInitializePatientAllergyDataResponse { Version = request.Version };
+
+            try
+            {
+                RequireUserId(request);
+                response.PatientAllergyData = Manager.InitializePatientAllergy(request);
             }
             catch (Exception ex)
             {
@@ -27,5 +46,41 @@ namespace Phytel.API.DataDomain.Allergy.Service
             }
             return response;
         }
+        #endregion
+
+        #region Puts
+        public PutPatientAllergyDataResponse Put(PutPatientAllergyDataRequest request)
+        {
+            PutPatientAllergyDataResponse response = new PutPatientAllergyDataResponse { Version = request.Version };
+
+            try
+            {
+                RequireUserId(request);
+                response.PatientAllergyData = Manager.UpdateSinglePatientAllergy(request);
+            }
+            catch (Exception ex)
+            {
+                RaiseException(response, ex);
+            }
+            return response;
+        }
+
+
+        public PutPatientAllergiesDataResponse Put(PutPatientAllergiesDataRequest request)
+        {
+            PutPatientAllergiesDataResponse response = new PutPatientAllergiesDataResponse { Version = request.Version };
+
+            try
+            {
+                RequireUserId(request);
+                response.PatientAllergiesData = Manager.UpdateBulkPatientAllergies(request);
+            }
+            catch (Exception ex)
+            {
+                RaiseException(response, ex);
+            }
+            return response;
+        }
+        #endregion
     }
 }

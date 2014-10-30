@@ -14,11 +14,11 @@ namespace DataDomain.Allergy.Repo
 			: base(contractDBName, true)
 		{
 			ContractName = contractDBName;
-			Allergy = new MongoSet<MEAllergy, ObjectId>(this, COLL_Allergy);
-			PatientAllergy = new MongoSet<MEPatientAllergy, ObjectId>(this, COLL_PatientAllergy);
+			Allergies = new MongoSet<MEAllergy, ObjectId>(this, COLL_Allergy);
+			PatientAllergies = new MongoSet<MEPatientAllergy, ObjectId>(this, COLL_PatientAllergy);
 		}
 
-		public MongoSet<MEAllergy, ObjectId> Allergy { get; private set; }
-		public MongoSet<MEPatientAllergy, ObjectId> PatientAllergy { get; private set; }
+		public MongoSet<MEAllergy, ObjectId> Allergies { get; private set; }
+		public MongoSet<MEPatientAllergy, ObjectId> PatientAllergies { get; private set; }
 	}
 }

@@ -37,7 +37,7 @@ namespace Phytel.API.DataDomain.Allergy.DTO
 
         public const string CodingSystemProperty = "csid";
         [BsonElement(CodingSystemProperty)]        
-        public string CodingSystem { get; set; }
+        public ObjectId CodingSystem { get; set; }
 
         public const string CodingSystemCodeProperty = "csc";
         [BsonElement(CodingSystemCodeProperty)]        

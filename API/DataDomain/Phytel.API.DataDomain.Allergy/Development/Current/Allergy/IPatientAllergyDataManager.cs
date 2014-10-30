@@ -5,6 +5,9 @@ namespace Phytel.API.DataDomain.Allergy
 {
     public interface IPatientAllergyDataManager
     {
-        List<PatientAllergyData> GetPatientAllergyList(GetPatientAllergiesDataRequest request);
+        List<PatientAllergyData> GetPatientAllergies(GetPatientAllergiesDataRequest request);
+        PatientAllergyData InitializePatientAllergy(PutInitializePatientAllergyDataRequest request);
+        List<PatientAllergyData> UpdateBulkPatientAllergies(PutPatientAllergiesDataRequest request);
+        PatientAllergyData UpdateSinglePatientAllergy(PutPatientAllergyDataRequest request);
     }
 }

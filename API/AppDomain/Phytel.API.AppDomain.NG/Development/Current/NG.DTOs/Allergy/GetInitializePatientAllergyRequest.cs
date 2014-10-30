@@ -10,6 +10,9 @@ namespace Phytel.API.AppDomain.NG.DTO
         [ApiMember(Name = "PatientId", Description = "Id of the patient for whom an allergy is being initialized.", ParameterType = "path", DataType = "string", IsRequired = true)]
         public string PatientId { get; set; }
 
+        [ApiMember(Name = "AllergyId", Description = "Id of the allergy which is getting associted to a patient.", ParameterType = "property", DataType = "string", IsRequired = true)]
+        public string AllergyId { get; set; }
+
         [ApiMember(Name = "UserID", Description = "ID of the user making the request (Internally used ONLY)", ParameterType = "property", DataType = "string", IsRequired = true)]
         public string UserId { get; set; }
 

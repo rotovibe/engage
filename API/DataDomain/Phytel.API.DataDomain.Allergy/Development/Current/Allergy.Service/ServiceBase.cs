@@ -15,7 +15,7 @@ namespace Phytel.API.DataDomain.Allergy.Service
         protected static void RequireUserId(IDataDomainRequest request)
         {
             if (string.IsNullOrEmpty(request.UserId))
-                throw new UnauthorizedAccessException("ProgramDD:Put()::Unauthorized Access");
+                throw new UnauthorizedAccessException("AllergyDD:Put()::Unauthorized Access");
         }
 
         protected void RaiseException(IDomainResponse response, Exception ex)
