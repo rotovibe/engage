@@ -86,7 +86,7 @@ namespace DataDomain.Allergy.Repo
             if (meA != null)
             {
                 data.AllergyName = meA.Description;
-                data.AllergyTypeId = Helper.ConvertToStringList(meA.SubType);
+                data.AllergyTypeIds = Helper.ConvertToStringList(meA.SubType);
             }
         }
 
@@ -228,6 +228,8 @@ namespace DataDomain.Allergy.Repo
                         PatientId = mePA.PatientId.ToString(),
                         AllergyId = mePA.AllergyId.ToString()
                     };
+                    // get corresponding allergy name and type.
+                    getAllergyDetails(data, ctx, mePA.AllergyId);
                 }
                 return data;
             }
