@@ -56,6 +56,27 @@ namespace Phytel.API.AppDomain.NG.Allergy
             }
         }
 
+        #region Allergy - Posts
+        public DTO.Allergy InitializeAllergy(PostInitializeAllergyRequest request)
+        {
+            DTO.Allergy allergy = null;
+            try
+            {
+
+                AllergyData data = EndpointUtil.InitializeAllergy(request);
+                if (data != null)
+                {
+                    allergy = Mapper.Map<DTO.Allergy>(data);
+                }
+                return allergy;
+            }
+            catch (WebServiceException ex)
+            {
+                throw new WebServiceException("AD:InitializeAllergy()::" + ex.Message, ex.InnerException);
+            }
+        }
+        #endregion
+
         public void IndexResultSet(List<DTO.Allergy> result)
         {
             try
@@ -89,7 +110,9 @@ namespace Phytel.API.AppDomain.NG.Allergy
                 throw new WebServiceException("AD:GetPatientAllergies()::" + ex.Message, ex.InnerException);
             }
         }
+        #endregion
 
+        #region PatientAllergy - Posts
         public PatientAllergy InitializePatientAllergy(PostInitializePatientAllergyRequest request)
         {
             PatientAllergy patientAllergy = null;
@@ -97,7 +120,7 @@ namespace Phytel.API.AppDomain.NG.Allergy
             {
 
                 PatientAllergyData data = EndpointUtil.InitializePatientAllergy(request);
-                if(data != null)
+                if (data != null)
                 {
                     patientAllergy = Mapper.Map<PatientAllergy>(data);
                 }
@@ -109,9 +132,6 @@ namespace Phytel.API.AppDomain.NG.Allergy
             }
         } 
 
-        #endregion
-
-        #region PatientAllergy - Posts
         public List<PatientAllergy> BulkUpdatePatientAllergies(PostPatientAllergiesRequest request)
         {
             List<PatientAllergy> patientAllergies = null;

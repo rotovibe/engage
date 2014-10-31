@@ -119,6 +119,7 @@
   </Choose>
   <ItemGroup>
     <Compile Include="Allergy\Data_Allergy_Test.cs" />
+    <Compile Include="Allergy\Data_PatientAllergy_Test.cs" />
     <Compile Include="CareMember_Tests.cs" />
     <Compile Include="Factories\NGManagerFactory.cs" />
     <Compile Include="Factories\SampleFactory.cs" />

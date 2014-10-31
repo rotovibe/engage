@@ -15,5 +15,6 @@ namespace Phytel.API.AppDomain.NG.Allergy
         PatientAllergy InitializePatientAllergy(PostInitializePatientAllergyRequest request);
         List<PatientAllergy> BulkUpdatePatientAllergies(PostPatientAllergiesRequest request);
         PatientAllergy SingleUpdatePatientAllergy(PostPatientAllergyRequest request);
+        DTO.Allergy InitializeAllergy(PostInitializeAllergyRequest request);
     }
 }

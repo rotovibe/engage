@@ -25,6 +25,48 @@ namespace Phytel.API.AppDomain.NG.Service
         private const string unknownBrowserType = "Unknown browser";
         private const string unknownUserHostAddress = "Unknown IP";
 
+        #region Allergy - Gets
+        public GetAllergiesResponse Get(GetAllergiesRequest request)
+        {
+            GetAllergiesResponse response = new GetAllergiesResponse();
+            ValidateTokenResponse result = null;
+
+            try
+            {
+                if (base.Request != null)
+                {
+                    request.Token = base.Request.Headers["Token"] as string;
+                }
+                result = Security.IsUserValidated(request.Version, request.Token, request.ContractNumber);
+                if (result.UserId.Trim() != string.Empty)
+                {
+                    request.UserId = result.UserId;
+                    response.Allergies = AllergyManager.GetAllergies(request);
+                }
+                else
+                    throw new UnauthorizedAccessException();
+            }
+            catch (Exception ex)
+            {
+                CommonFormatterUtil.FormatExceptionResponse(response, base.Response, ex);
+                if ((ex is WebServiceException) == false)
+                    AllergyManager.LogException(ex);
+            }
+            finally
+            {
+                if (result != null)
+                {
+                    string browser = (base.Request != null) ? base.Request.UserAgent : unknownBrowserType;
+                    string hostAddress = (base.Request != null) ? base.Request.UserHostAddress : unknownUserHostAddress;
+                    AuditUtil.LogAuditData(request, result.SQLUserId, null, browser, hostAddress, request.GetType().Name);
+                }
+            }
+
+            return response;
+        } 
+        #endregion
+
+        #region Allergy - Posts
         public PostInsertNewAllergyResponse Post(PostInsertNewAllergyRequest request)
         {
             PostInsertNewAllergyResponse response = new PostInsertNewAllergyResponse();
@@ -64,9 +106,9 @@ namespace Phytel.API.AppDomain.NG.Service
             return response;
         }
 
-        public GetAllergiesResponse Get(GetAllergiesRequest request)
+        public PostInitializeAllergyResponse Post(PostInitializeAllergyRequest request)
         {
-            GetAllergiesResponse response = new GetAllergiesResponse();
+            PostInitializeAllergyResponse response = new PostInitializeAllergyResponse();
             ValidateTokenResponse result = null;
 
             try
@@ -79,14 +121,14 @@ namespace Phytel.API.AppDomain.NG.Service
                 if (result.UserId.Trim() != string.Empty)
                 {
                     request.UserId = result.UserId;
-                    response.Allergies = AllergyManager.GetAllergies(request);
+                    response.Allergy = AllergyManager.InitializeAllergy(request);
                 }
                 else
                     throw new UnauthorizedAccessException();
             }
             catch (Exception ex)
             {
-                CommonFormatterUtil.FormatExceptionResponse(response, base.Response, ex);
+                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
                 if ((ex is WebServiceException) == false)
                     AllergyManager.LogException(ex);
             }
@@ -99,9 +141,9 @@ namespace Phytel.API.AppDomain.NG.Service
                     AuditUtil.LogAuditData(request, result.SQLUserId, null, browser, hostAddress, request.GetType().Name);
                 }
             }
-            
-            return response; 
+            return response;
         } 
+        #endregion
 
         #region PatientAllergy - Posts
         public GetPatientAllergiesResponse Post(GetPatientAllergiesRequest request)

@@ -166,7 +166,7 @@ namespace DataDomain.Allergy.Repo
 
                 using (AllergyMongoContext ctx = new AllergyMongoContext(ContractDBName))
                 {
-                    ctx.PatientAllergies.Collection.Insert(meA);
+                    ctx.Allergies.Collection.Insert(meA);
 
                     AuditHelper.LogDataAudit(this.UserId,
                                             MongoCollectionName.Allergy.ToString(),

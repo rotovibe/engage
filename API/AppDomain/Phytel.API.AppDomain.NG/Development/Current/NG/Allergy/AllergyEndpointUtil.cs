@@ -77,7 +77,41 @@ namespace Phytel.API.AppDomain.NG.Allergy
             {
                 throw new WebServiceException("AD:GetAllergies()::" + ex.Message, ex.InnerException);
             }
-        }  
+        }
+
+        public AllergyData InitializeAllergy(PostInitializeAllergyRequest request)
+        {
+            try
+            {
+                AllergyData result = null;
+                IRestClient client = new JsonServiceClient();
+                //[Route("/{Version}/{ContractNumber}/Allergy/Initialize", "POST")]
+                var url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Allergy/Initialize",
+                                    DDAllergyUrl,
+                                    "NG",
+                                    request.Version,
+                                    request.ContractNumber), request.UserId);
+
+                PutInitializeAllergyDataResponse dataDomainResponse = client.Put<PutInitializeAllergyDataResponse>(url, new PutInitializeAllergyDataRequest
+                {
+                    Context = "NG",
+                    ContractNumber = request.ContractNumber,
+                    AllergyName = request.AllergyName,
+                    UserId = request.UserId,
+                    Version = request.Version
+                } as object);
+
+                if (dataDomainResponse != null)
+                {
+                    result = dataDomainResponse.AllergyData;
+                }
+                return result;
+            }
+            catch (WebServiceException ex)
+            {
+                throw new WebServiceException("AD:InitializeAllergy()::" + ex.Message, ex.InnerException);
+            }
+        }
         #endregion
 
         #region PatientAllergy - Gets
@@ -117,7 +151,9 @@ namespace Phytel.API.AppDomain.NG.Allergy
                 throw new WebServiceException("AD:GetPatientAllergies()::" + ex.Message, ex.InnerException);
             }
         }
+        #endregion
 
+        #region PatientAllergy - Post
         public PatientAllergyData InitializePatientAllergy(PostInitializePatientAllergyRequest request)
         {
             try
@@ -131,9 +167,9 @@ namespace Phytel.API.AppDomain.NG.Allergy
                                     request.Version,
                                     request.ContractNumber), request.UserId);
 
-                PutInitializePatientAllergyDataResponse dataDomainResponse = client.Put<PutInitializePatientAllergyDataResponse>(url, new PutInitializePatientAllergyDataRequest 
-                { 
-                    Context  = "NG",
+                PutInitializePatientAllergyDataResponse dataDomainResponse = client.Put<PutInitializePatientAllergyDataResponse>(url, new PutInitializePatientAllergyDataRequest
+                {
+                    Context = "NG",
                     ContractNumber = request.ContractNumber,
                     PatientId = request.PatientId,
                     AllergyId = request.AllergyId,
@@ -146,15 +182,13 @@ namespace Phytel.API.AppDomain.NG.Allergy
                     result = dataDomainResponse.PatientAllergyData;
                 }
                 return result;
-        }
+            }
             catch (WebServiceException ex)
             {
                 throw new WebServiceException("AD:InitializePatientAllergy()::" + ex.Message, ex.InnerException);
             }
         }
-        #endregion
 
-        #region PatientAllergy - Post
         public List<PatientAllergyData> BulkUpdatePatientAllergies(PostPatientAllergiesRequest request)
         {
             try
@@ -193,7 +227,6 @@ namespace Phytel.API.AppDomain.NG.Allergy
                 throw new WebServiceException("AD:BulkUpdatePatientAllergies()::" + ex.Message, ex.InnerException);
             }
         }
-
 
         public PatientAllergyData SingleUpdatePatientAllergy(PostPatientAllergyRequest request)
         {
