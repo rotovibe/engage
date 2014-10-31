@@ -11,7 +11,7 @@ namespace Phytel.API.AppDomain.NG.DTO
         public string PatientId { get; set; }
         public string AllergyId { get; set; }
         public string AllergyName { get; set; }
-        public List<string> AllergyTypeId { get; set; }
+        public List<string> AllergyTypeIds { get; set; }
         public string SeverityId { get; set; }
         public List<string> ReactionIds { get; set; }
         public string SourceId { get; set; }
