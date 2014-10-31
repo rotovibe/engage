@@ -52,7 +52,7 @@ namespace Phytel.API.AppDomain.NG.Test
            PostInitializeAllergyRequest request = new PostInitializeAllergyRequest {
                 Context = context,
                 ContractNumber = contractNumber,
-                AllergyName = "testing",
+                AllergyName = "New Allergy 1",
                 UserId = userId,
                 Version = version
             };

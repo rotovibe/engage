@@ -22,9 +22,9 @@ namespace Phytel.API.DataDomain.Allergy.DTO
         [BsonId]
         public ObjectId Id { get; private set; }
 
-        public const string TypeProperty = "type";
-        [BsonElement(TypeProperty)]
-        public List<ObjectId> Type { get; set; }
+        public const string TypeIdsProperty = "type";
+        [BsonElement(TypeIdsProperty)]
+        public List<ObjectId> TypeIds { get; set; }
 
         public const string NameProperty = "nm";
         [BsonElement(NameProperty)]

@@ -9,7 +9,7 @@ namespace Phytel.API.AppDomain.NG.DTO
     public class Allergy
     {
         public string Id { get; set; }
-        public List<string> Type { get; set; }
+        public List<string> TypeIds { get; set; }
         public string Name { get; set; }
         public string CodingSystemId { get; set; }
         public string CodingSystemCode { get; set; }

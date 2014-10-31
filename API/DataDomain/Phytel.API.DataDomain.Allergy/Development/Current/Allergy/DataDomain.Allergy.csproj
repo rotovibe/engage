@@ -68,7 +68,7 @@
     <Compile Include="IPatientAllergyDataManager.cs" />
     <Compile Include="PatientAllergyDataManager.cs" />
     <Compile Include="IAllergyDataManager.cs" />
-    <Compile Include="DataAllergyManager.cs" />
+    <Compile Include="AllergyDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="AllergyContainer.cs" />
   </ItemGroup>

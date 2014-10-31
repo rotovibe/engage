@@ -13,7 +13,7 @@ namespace Phytel.API.DataDomain.Allergy.Service
             new AllergyAppHost().Init();
 
             Mapper.CreateMap<MEAllergy, AllergyData>().ForMember(d => d.Id, opt => opt.MapFrom(src => src.Id.ToString()))
-                .ForMember(d => d.Type, opt => opt.MapFrom(src => src.Type.ConvertAll<string>(c => c.ToString()) ))
+                .ForMember(d => d.TypeIds, opt => opt.MapFrom(src => src.TypeIds.ConvertAll<string>(c => c.ToString()) ))
                 .ForMember(dest => dest.CreatedOn, opt => opt.MapFrom(src => src.RecordCreatedOn))
                 .ForMember(dest => dest.UpdatedOn, opt => opt.MapFrom(src => src.LastUpdatedOn));
 

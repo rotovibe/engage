@@ -55,5 +55,34 @@ namespace Phytel.API.DataDomain.Allergy.Test
 
             Assert.IsNotNull(response);
         }
+
+
+        [TestMethod]
+        public void UpdateAllergy_Test()
+        {
+
+            AllergyData data = new AllergyData
+            {
+                DeleteFlag = false,
+                Id = "5453cea0d433232a387d51b9",
+                Name = "testing",
+                TypeIds = new List<string> { "5447d6ddfe7a59146485b512", "5446db5efe7a591e74013b6b", "5446db5efe7a591e74013b6c" },
+                Version = 1.0
+            };
+
+            PutAllergyDataRequest request = new PutAllergyDataRequest
+            {
+                Context = context,
+                ContractNumber = contractNumber,
+                AllergyData = data,
+                UserId = userId,
+                Version = version
+            };
+
+            //[Route("/{Context}/{Version}/{ContractNumber}/Allergy/Update", "PUT")]
+            PutPatientAllergyDataResponse response = client.Put<PutPatientAllergyDataResponse>(
+                string.Format("{0}/{1}/{2}/{3}/Allergy/Update", url, context, version, contractNumber), request);
+            Assert.IsNotNull(response);
+        }
     }
 }

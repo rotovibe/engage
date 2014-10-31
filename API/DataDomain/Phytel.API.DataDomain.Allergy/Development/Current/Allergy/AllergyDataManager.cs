@@ -57,5 +57,29 @@ namespace Phytel.API.DataDomain.Allergy
                 throw new Exception("AllergyDD:InitializeAllergy()::" + ex.Message, ex.InnerException);
             }
         }
+
+
+        public AllergyData UpdateAllergy(PutAllergyDataRequest request)
+        {
+            try
+            {
+                AllergyData result = null;
+                AllergyRepository.UserId = request.UserId;
+                if (request.AllergyData != null)
+                {
+                    bool status = (bool)AllergyRepository.Update(request);
+                    if (status)
+                    {
+                        result = (AllergyData)AllergyRepository.FindByID(request.AllergyData.Id);
+                    }
+                }
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("AllergyDD:UpdateAllergy()::" + ex.Message, ex.InnerException);
+            }
+        }
+
     }
 }   

@@ -85,8 +85,10 @@
     <Compile Include="AllergyData.cs" />
     <Compile Include="PutInitializeAllergyDataRequest.cs" />
     <Compile Include="PutInitializeAllergyDataResponse.cs" />
+    <Compile Include="PutAllergyDataRequest.cs" />
     <Compile Include="PutPatientAllergyDataRequest.cs" />
     <Compile Include="PutPatientAllergiesDataRequest.cs" />
+    <Compile Include="PutAllergyDataResponse.cs" />
     <Compile Include="PutPatientAllergyDataResponse.cs" />
     <Compile Include="PutPatientAllergiesDataResponse.cs" />
     <Compile Include="PutInitializePatientAllergyDataRequest.cs" />

@@ -137,6 +137,27 @@ namespace Phytel.API.AppDomain.NG.Allergy
             List<PatientAllergy> patientAllergies = null;
             try
             {
+                // Update Allergy collection for any newly initialized allergies & then register in search index.
+                if(request.PatientAllergies != null && request.PatientAllergies.Count > 0)
+                {
+                    request.PatientAllergies.ForEach(p =>
+                    { 
+                        if(p.IsNewAllergy)
+                        {
+                            PostAllergyRequest req = new DTO.PostAllergyRequest
+                            {
+                                Allergy = new DTO.Allergy { Id = p.AllergyId, TypeIds = p.AllergyTypeIds },
+                                ContractNumber = request.ContractNumber,
+                                UserId = request.UserId,
+                                Version = request.Version
+                            };
+                            AllergyData allergyData = EndpointUtil.UpdateAllergy(req);
+                            DTO.Allergy newAllergy = Mapper.Map<DTO.Allergy>(allergyData);
+                            // Register newly initialized allergies in search index.
+                            SearchManager.RegisterDocumentInSearchIndex(newAllergy);
+                        }
+                    });
+                }
                 List<PatientAllergyData> data = EndpointUtil.BulkUpdatePatientAllergies(request);
                 if (data != null && data.Count > 0)
                 {

@@ -24,5 +24,11 @@ namespace Phytel.API.DataDomain.Allergy.Test.Stubs
         {
             throw new NotImplementedException();
         }
+
+
+        public DTO.AllergyData UpdateAllergy(DTO.PutAllergyDataRequest request)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

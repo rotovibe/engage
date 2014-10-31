@@ -11,6 +11,7 @@ using Phytel.API.DataDomain.Allergy.DTO;
 using System.Configuration;
 using Phytel.API.DataAudit;
 using Phytel.API.Common;
+using MB = MongoDB.Driver.Builders;
 
 namespace DataDomain.Allergy.Repo
 {
@@ -74,40 +75,23 @@ namespace DataDomain.Allergy.Repo
 
         public object FindByID(string entityID)
         {
+            AllergyData data = null;
             try
             {
-                object result = null;
-
-                var findcp = Query.And(
-                    Query<MEAllergy>.EQ(b => b.Id, ObjectId.Parse(entityID)),
-                    Query<MEAllergy>.EQ(b => b.DeleteFlag, false));
-
-                var cp = Context.Allergies.Collection.Find(findcp).FirstOrDefault();
-
-                if (cp == null) return result;
-
-                AutoMapper.Mapper.CreateMap<MEAllergy, DTO.AllergyData>();
-
-                result = AutoMapper.Mapper.Map<DTO.AllergyData>(cp);
-
-                //result = new DTO.DdAllergy
-                //{
-                //    Id = cp.Id.ToString(),
-                //    DeleteFlag = cp.DeleteFlag,
-                //    LastUpdatedOn = cp.LastUpdatedOn,
-                //    RecordCreatedBy = cp.RecordCreatedBy.ToString(),
-                //    RecordCreatedOn = cp.RecordCreatedOn,
-                //    TtlDate = cp.TTLDate,
-                //    UpdatedBy = cp.UpdatedBy.ToString(),
-                //    Version = cp.Version
-                //};
-
-                return result;
+                using (AllergyMongoContext ctx = new AllergyMongoContext(ContractDBName))
+                {
+                    List<IMongoQuery> queries = new List<IMongoQuery>();
+                    queries.Add(Query.EQ(MEAllergy.IdProperty, ObjectId.Parse(entityID)));
+                    IMongoQuery mQuery = Query.And(queries);
+                    MEAllergy meA = ctx.Allergies.Collection.Find(mQuery).FirstOrDefault();
+                    if (meA != null)
+                    {
+                        data = AutoMapper.Mapper.Map<AllergyData>(meA);
+                    }
+                }
+                return data;
             }
-            catch (Exception ex)
-            {
-                throw new Exception("DD:PatientProgramRepository:FindByID()::" + ex.Message, ex.InnerException);
-            }
+            catch (Exception) { throw; }
         }
 
         public Tuple<string, IEnumerable<object>> Select(Phytel.API.Interface.APIExpression expression)
@@ -121,6 +105,7 @@ namespace DataDomain.Allergy.Repo
             {
                 List<IMongoQuery> queries = new List<IMongoQuery>();
                 queries.Add(Query.EQ(MEAllergy.DeleteFlagProperty, false));
+                queries.Add(Query.EQ(MEAllergy.TTLDateProperty, BsonNull.Value));
                 IMongoQuery mQuery = Query.And(queries);
 
                 List<MEAllergy> meAllgy = ctx.Allergies.Collection.Find(mQuery).ToList();
@@ -137,7 +122,52 @@ namespace DataDomain.Allergy.Repo
 
         public object Update(object entity)
         {
-            throw new NotImplementedException();
+            bool result = false;
+            PutAllergyDataRequest pa = (PutAllergyDataRequest)entity;
+            AllergyData pt = pa.AllergyData;
+            try
+            {
+                using (AllergyMongoContext ctx = new AllergyMongoContext(ContractDBName))
+                {
+                    var q = MB.Query<MEAllergy>.EQ(b => b.Id, ObjectId.Parse(pt.Id));
+                    var uv = new List<MB.UpdateBuilder>();
+                    uv.Add(MB.Update.Set(MEAllergy.UpdatedByProperty, ObjectId.Parse(this.UserId)));
+                    uv.Add(MB.Update.Set(MEAllergy.VersionProperty, pa.Version));
+                    uv.Add(MB.Update.Set(MEAllergy.LastUpdatedOnProperty, System.DateTime.UtcNow));
+                    if (pt.TypeIds != null && pt.TypeIds.Count > 0)
+                    {
+                        uv.Add(MB.Update.SetWrapped<List<ObjectId>>(MEAllergy.TypeIdsProperty, Helper.ConvertToObjectIdList(pt.TypeIds)));
+                    }
+                    else
+                    {
+                        uv.Add(MB.Update.Set(MEAllergy.TypeIdsProperty, BsonNull.Value));
+                    }
+                    uv.Add(MB.Update.Set(MEAllergy.DeleteFlagProperty, pt.DeleteFlag));
+                    DataAuditType type;
+                    if (pt.DeleteFlag)
+                    {
+                        uv.Add(MB.Update.Set(MEAllergy.TTLDateProperty, System.DateTime.UtcNow.AddDays(_expireDays)));
+                        type = DataAuditType.Delete;
+                    }
+                    else
+                    {
+                        uv.Add(MB.Update.Set(MEAllergy.TTLDateProperty, BsonNull.Value));
+                        type = DataAuditType.Update;
+                    }
+                    IMongoUpdate update = MB.Update.Combine(uv);
+                    ctx.Allergies.Collection.Update(q, update);
+
+                    AuditHelper.LogDataAudit(this.UserId,
+                                            MongoCollectionName.Allergy.ToString(),
+                                            pt.Id,
+                                            type,
+                                            pa.ContractNumber);
+
+                    result = true;
+                }
+                return result as object;
+            }
+            catch (Exception) { throw; }
         }
 
         public void CacheByID(List<string> entityIDs)
