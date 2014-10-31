@@ -82,7 +82,9 @@
     <Compile Include="GetPatientAllergiesDataResponse.cs" />
     <Compile Include="PatientAllergyData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="DdAllergy.cs" />
+    <Compile Include="AllergyData.cs" />
+    <Compile Include="PutInitializeAllergyDataRequest.cs" />
+    <Compile Include="PutInitializeAllergyDataResponse.cs" />
     <Compile Include="PutPatientAllergyDataRequest.cs" />
     <Compile Include="PutPatientAllergiesDataRequest.cs" />
     <Compile Include="PutPatientAllergyDataResponse.cs" />

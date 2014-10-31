@@ -15,11 +15,11 @@ namespace Phytel.API.AppDomain.NG.Allergy
         #endregion
 
         #region Allergy
-        public DdAllergy PutNewAllergy(PostInsertNewAllergyRequest request)
+        public AllergyData PutNewAllergy(PostInsertNewAllergyRequest request)
         {
             try
             {
-                DdAllergy result = null;
+                AllergyData result = null;
                 IRestClient client = new JsonServiceClient();
                 //[Route("/{Context}/{Version}/{ContractNumber}/Allergy", "PUT")]
                 var url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Allergy",
@@ -51,11 +51,11 @@ namespace Phytel.API.AppDomain.NG.Allergy
             }
         }
 
-        public List<DdAllergy> GetAllergies(GetAllergiesRequest request)
+        public List<AllergyData> GetAllergies(GetAllergiesRequest request)
         {
             try
             {
-                List<DdAllergy> result = null;
+                List<AllergyData> result = null;
                 IRestClient client = new JsonServiceClient();
                 //[Route("/{Context}/{Version}/{ContractNumber}/Allergy", "GET")]
                 var url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Allergy",

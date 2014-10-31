@@ -6,6 +6,6 @@ namespace Phytel.API.DataDomain.Allergy.DTO
 {
     public class PostNewAllergyResponse : DomainResponse
     {
-        public DdAllergy Allergy { get; set; }
+        public AllergyData Allergy { get; set; }
     }
 }

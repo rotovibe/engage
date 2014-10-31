@@ -12,10 +12,10 @@ namespace Phytel.API.DataDomain.Allergy.Service
         {
             new AllergyAppHost().Init();
 
-            Mapper.CreateMap<MEAllergy, DdAllergy>().ForMember(d => d.Id, opt => opt.MapFrom(src => src.Id.ToString()))
-                .ForMember(d => d.SubType, opt => opt.MapFrom(src => src.SubType.ConvertAll<string>(c => c.ToString()) ))
-                .ForMember(d => d.UpdatedBy, opt => opt.MapFrom(src => src.UpdatedBy.ToString()))
-                .ForMember(d => d.RecordCreatedBy, opt => opt.MapFrom(src => src.RecordCreatedBy.ToString()));
+            Mapper.CreateMap<MEAllergy, AllergyData>().ForMember(d => d.Id, opt => opt.MapFrom(src => src.Id.ToString()))
+                .ForMember(d => d.Type, opt => opt.MapFrom(src => src.Type.ConvertAll<string>(c => c.ToString()) ))
+                .ForMember(dest => dest.CreatedOn, opt => opt.MapFrom(src => src.RecordCreatedOn))
+                .ForMember(dest => dest.UpdatedOn, opt => opt.MapFrom(src => src.LastUpdatedOn));
 
             Mapper.CreateMap<MEPatientAllergy, PatientAllergyData>()
                 .ForMember(dest => dest.CreatedOn, opt => opt.MapFrom(src => src.RecordCreatedOn))

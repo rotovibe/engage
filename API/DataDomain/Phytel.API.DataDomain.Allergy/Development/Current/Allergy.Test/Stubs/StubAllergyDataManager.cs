@@ -9,12 +9,18 @@ namespace Phytel.API.DataDomain.Allergy.Test.Stubs
     public class StubAllergyDataManager : IAllergyDataManager
     {
 
-        public List<DTO.DdAllergy> GetAllergyList(DTO.GetAllAllergysRequest request)
+        public List<DTO.AllergyData> GetAllergyList(DTO.GetAllAllergysRequest request)
         {
-            return new List<DTO.DdAllergy>();
+            return new List<DTO.AllergyData>();
         }
 
-        public DTO.DdAllergy PutNewAllergy(DTO.PostNewAllergyRequest request)
+        public DTO.AllergyData PutNewAllergy(DTO.PostNewAllergyRequest request)
+        {
+            throw new NotImplementedException();
+        }
+
+
+        public DTO.AllergyData InitializeAllergy(DTO.PutInitializeAllergyDataRequest request)
         {
             throw new NotImplementedException();
         }

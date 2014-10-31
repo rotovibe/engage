@@ -85,8 +85,8 @@ namespace DataDomain.Allergy.Repo
             MEAllergy meA = ctx.Allergies.Collection.Find(Query.EQ(MEAllergy.IdProperty, aid)).FirstOrDefault();
             if (meA != null)
             {
-                data.AllergyName = meA.Description;
-                data.AllergyTypeIds = Helper.ConvertToStringList(meA.SubType);
+                data.AllergyName = meA.Name;
+                data.AllergyTypeIds = Helper.ConvertToStringList(meA.Type);
             }
         }
 
@@ -261,7 +261,7 @@ namespace DataDomain.Allergy.Repo
                         if (dataRequest.TypeIds != null && dataRequest.TypeIds.Count > 0)
                         {
                             // get allergy details by typeId.
-                            List<MEAllergy> allergiesByType = ctx.Allergies.Collection.Find(Query.EQ(MEAllergy.SubTypeProperty, new BsonArray(dataRequest.TypeIds))).ToList();
+                            List<MEAllergy> allergiesByType = ctx.Allergies.Collection.Find(Query.EQ(MEAllergy.TypeProperty, new BsonArray(dataRequest.TypeIds))).ToList();
                             aids = allergiesByType.Select(i => i.Id).ToList();
                         }
                         mePAs.ForEach(p =>

@@ -41,5 +41,23 @@ namespace Phytel.API.DataDomain.Allergy.Service
             }
             return response;
         }
+
+        #region Initialize
+        public PutInitializeAllergyDataResponse Put(PutInitializeAllergyDataRequest request)
+        {
+            PutInitializeAllergyDataResponse response = new PutInitializeAllergyDataResponse { Version = request.Version };
+
+            try
+            {
+                RequireUserId(request);
+                response.AllergyData = Manager.InitializeAllergy(request);
+            }
+            catch (Exception ex)
+            {
+                RaiseException(response, ex);
+            }
+            return response;
+        }
+        #endregion
     }
 }

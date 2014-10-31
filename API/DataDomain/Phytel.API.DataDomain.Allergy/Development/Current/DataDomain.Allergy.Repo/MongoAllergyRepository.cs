@@ -9,6 +9,8 @@ using System.Collections.Generic;
 using DTO = Phytel.API.DataDomain.Allergy.DTO;
 using Phytel.API.DataDomain.Allergy.DTO;
 using System.Configuration;
+using Phytel.API.DataAudit;
+using Phytel.API.Common;
 
 namespace DataDomain.Allergy.Repo
 {
@@ -43,9 +45,9 @@ namespace DataDomain.Allergy.Repo
                 object result = null;
                 using (AllergyMongoContext ctx = new AllergyMongoContext(ContractDBName))
                 {
-                    var allgr = new MEAllergy(UserId){ Description = ((DdAllergy)newEntity).Description };
+                    var allgr = new MEAllergy(UserId){ Name = ((AllergyData)newEntity).Name };
                     ctx.Allergies.Insert(allgr);
-                    result = Mapper.Map<DdAllergy>(allgr);
+                    result = Mapper.Map<AllergyData>(allgr);
                 }
                 return result;
             }
@@ -84,9 +86,9 @@ namespace DataDomain.Allergy.Repo
 
                 if (cp == null) return result;
 
-                AutoMapper.Mapper.CreateMap<MEAllergy, DTO.DdAllergy>();
+                AutoMapper.Mapper.CreateMap<MEAllergy, DTO.AllergyData>();
 
-                result = AutoMapper.Mapper.Map<DTO.DdAllergy>(cp);
+                result = AutoMapper.Mapper.Map<DTO.AllergyData>(cp);
 
                 //result = new DTO.DdAllergy
                 //{
@@ -118,16 +120,15 @@ namespace DataDomain.Allergy.Repo
             using (AllergyMongoContext ctx = new AllergyMongoContext(ContractDBName))
             {
                 List<IMongoQuery> queries = new List<IMongoQuery>();
-                queries.Add(Query.EQ(MEAllergy.StatusProperty, Status.Active));
                 queries.Add(Query.EQ(MEAllergy.DeleteFlagProperty, false));
                 IMongoQuery mQuery = Query.And(queries);
 
                 List<MEAllergy> meAllgy = ctx.Allergies.Collection.Find(mQuery).ToList();
 
-                List<DdAllergy> allgs = null;
+                List<AllergyData> allgs = null;
                 if (meAllgy != null && meAllgy.Count > 0)
                 {
-                    allgs = meAllgy.Select(a => Mapper.Map<DdAllergy>(a)).ToList();
+                    allgs = meAllgy.Select(a => Mapper.Map<AllergyData>(a)).ToList();
                 }
 
                 return allgs;
@@ -152,7 +153,36 @@ namespace DataDomain.Allergy.Repo
 
         public object Initialize(object newEntity)
         {
-            throw new NotImplementedException();
+            PutInitializeAllergyDataRequest request = (PutInitializeAllergyDataRequest)newEntity;
+            AllergyData data = null;
+            try
+            {
+                MEAllergy meA = new MEAllergy(this.UserId)
+                {
+                    Name = request.AllergyName,
+                    TTLDate = System.DateTime.UtcNow.AddDays(_initializeDays),
+                    DeleteFlag = false
+                };
+
+                using (AllergyMongoContext ctx = new AllergyMongoContext(ContractDBName))
+                {
+                    ctx.PatientAllergies.Collection.Insert(meA);
+
+                    AuditHelper.LogDataAudit(this.UserId,
+                                            MongoCollectionName.Allergy.ToString(),
+                                            meA.Id.ToString(),
+                                            DataAuditType.Insert,
+                                            request.ContractNumber);
+
+                    data = new AllergyData
+                    {
+                        Id = meA.Id.ToString(),
+                        Name = meA.Name
+                    };
+                }
+                return data;
+            }
+            catch (Exception) { throw; }
         }
     }
 }

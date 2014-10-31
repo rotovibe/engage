@@ -6,7 +6,7 @@ namespace Phytel.API.DataDomain.Allergy.DTO
 {
     public class GetAllAllergysResponse : DomainResponse
    {
-        public List<DdAllergy> Allergys { get; set; }
+        public List<AllergyData> Allergys { get; set; }
    }
 
 }

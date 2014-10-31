@@ -52,7 +52,7 @@ namespace Phytel.API.AppDomain.NG.Service
                 container.RegisterAutoWiredAs<SearchManager, ISearchManager>().ReusedWithin(Funq.ReuseScope.Request);
 
                 // automapper configuration
-                Mapper.CreateMap<DdAllergy, DTO.Allergy>();
+                Mapper.CreateMap<AllergyData, DTO.Allergy>();
                 Mapper.CreateMap<PatientAllergyData, PatientAllergy>();
                 Mapper.CreateMap<PatientAllergy, PatientAllergyData>();
                 
@@ -60,7 +60,7 @@ namespace Phytel.API.AppDomain.NG.Service
                     .ForMember(d => d.Id, opt => opt.MapFrom(src => src.Get("Id")))
                     .ForMember(d => d.Name, opt => opt.MapFrom(src => src.Get("Name")));
 
-                Mapper.CreateMap<DTO.Allergy, IdNamePair>().ForMember(d => d.Name, opt => opt.MapFrom(src => src.Description));
+                Mapper.CreateMap<DTO.Allergy, IdNamePair>().ForMember(d => d.Name, opt => opt.MapFrom(src => src.Name));
 
                 Plugins.Add(new RequestLogsFeature() { RequiredRoles = new string[] { } });
 

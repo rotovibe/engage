@@ -80,6 +80,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="Data\MongoData_Allergy_Test.cs" />
     <Compile Include="Data\MongoData_PatientAllergy_Test.cs" />
     <Compile Include="Stubs\StubAllergyDataManager.cs" />
     <Compile Include="AllergyTest.cs" />

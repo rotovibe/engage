@@ -1,12 +1,9 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Phytel.API.AppDomain.NG.DTO
+namespace Phytel.API.DataDomain.Allergy.DTO
 {
-    public class Allergy
+    public class AllergyData
     {
         public string Id { get; set; }
         public List<string> Type { get; set; }

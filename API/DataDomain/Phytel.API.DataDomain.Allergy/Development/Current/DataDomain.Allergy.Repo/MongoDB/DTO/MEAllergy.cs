@@ -7,7 +7,7 @@ using Phytel.Mongo.Linq;
 namespace Phytel.API.DataDomain.Allergy.DTO
 {
     [BsonIgnoreExtraElements(false)]
-    [MongoIndex(Keys = new string[] { IdProperty, DescriptionProperty, TTLDateProperty }, TimeToLive = 0)]
+    [MongoIndex(Keys = new string[] { IdProperty, NameProperty, TTLDateProperty }, TimeToLive = 0)]
     public class MEAllergy : IMongoEntity<ObjectId>, IMEEntity
     {
         public MEAllergy(string userId)
@@ -22,18 +22,13 @@ namespace Phytel.API.DataDomain.Allergy.DTO
         [BsonId]
         public ObjectId Id { get; private set; }
 
-        public const string VersionProperty = "v";
-        [BsonElement(VersionProperty)]
-        [BsonDefaultValue(1.0)]
-        public double Version { get; set; }
+        public const string TypeProperty = "type";
+        [BsonElement(TypeProperty)]
+        public List<ObjectId> Type { get; set; }
 
-        public const string SubTypeProperty = "subtype";
-        [BsonElement(SubTypeProperty)]
-        public List<ObjectId> SubType { get; set; }
-
-        public const string DescriptionProperty = "desc";
-        [BsonElement(DescriptionProperty)]
-        public string Description { get; set; }
+        public const string NameProperty = "nm";
+        [BsonElement(NameProperty)]
+        public string Name { get; set; }
 
         public const string CodingSystemProperty = "csid";
         [BsonElement(CodingSystemProperty)]        
@@ -43,9 +38,11 @@ namespace Phytel.API.DataDomain.Allergy.DTO
         [BsonElement(CodingSystemCodeProperty)]        
         public string CodingSystemCode { get; set; }
 
-        public const string StatusProperty = "sts";
-        [BsonElement(StatusProperty)]
-        public int Status { get; set; }
+        #region BaseElements
+        public const string VersionProperty = "v";
+        [BsonElement(VersionProperty)]
+        [BsonDefaultValue(1.0)]
+        public double Version { get; set; }
 
         public const string UpdatedByProperty = "uby";
         [BsonElement(UpdatedByProperty)]
@@ -82,6 +79,7 @@ namespace Phytel.API.DataDomain.Allergy.DTO
         public const string ExtraElementsProperty = "ex";
         [BsonElement(ExtraElementsProperty)]
         [BsonExtraElements]
-        public BsonDocument ExtraElements { get; set; }
+        public BsonDocument ExtraElements { get; set; } 
+        #endregion
     }
 }
