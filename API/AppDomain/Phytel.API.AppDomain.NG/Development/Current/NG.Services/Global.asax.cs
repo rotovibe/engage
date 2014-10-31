@@ -53,6 +53,7 @@ namespace Phytel.API.AppDomain.NG.Service
 
                 // automapper configuration
                 Mapper.CreateMap<AllergyData, DTO.Allergy>();
+                Mapper.CreateMap<DTO.Allergy, AllergyData>();
                 Mapper.CreateMap<PatientAllergyData, PatientAllergy>();
                 Mapper.CreateMap<PatientAllergy, PatientAllergyData>();
                 
