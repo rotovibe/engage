@@ -24,15 +24,15 @@ namespace DataDomain.Allergy.Repo
                 {
                     case RepositoryType.Allergy:
                     {
-                        var db = AppHostBase.Instance.Container.ResolveNamed<string>(Constants.Domain);
-                        var context = new AllergyMongoContext(db);
+                        //var db = AppHostBase.Instance.Container.ResolveNamed<string>(Constants.Domain);
+                        var context = new AllergyMongoContext(request.ContractNumber);
                         repo = new MongoAllergyRepository<AllergyMongoContext>(context) {UserId = request.UserId, ContractDBName = request.ContractNumber};
                         break;
                     }
                     case RepositoryType.PatientAllergy:
                     {
-                        var db = AppHostBase.Instance.Container.ResolveNamed<string>(Constants.Domain);
-                        var context = new AllergyMongoContext(db);
+                        //var db = AppHostBase.Instance.Container.ResolveNamed<string>(Constants.Domain);
+                        var context = new AllergyMongoContext(request.ContractNumber);
                         repo = new MongoPatientAllergyRepository<AllergyMongoContext>(context) { UserId = request.UserId, ContractDBName = request.ContractNumber };
                         break;
                     }
