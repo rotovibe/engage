@@ -161,7 +161,8 @@
     <Compile Include="Programs\Specifications\IsModuleCompletedSpecification.cs" />
     <Compile Include="Programs\Specifications\RemoveSelectedResponseSpecification.cs" />
     <Compile Include="Search\ISearchManager.cs" />
-    <Compile Include="Search\LuceneStrategy\MedsLuceneStrategy.cs" />
+    <Compile Include="Search\LuceneStrategy\MedFieldsLuceneStrategy.cs" />
+    <Compile Include="Search\LuceneStrategy\MedNameLuceneStrategy.cs" />
     <Compile Include="Search\LuceneStrategy\AllergyLuceneStrategy.cs" />
     <Compile Include="Search\LuceneStrategy\BaseLuceneStrategy.cs" />
     <Compile Include="Search\SearchManager.cs" />

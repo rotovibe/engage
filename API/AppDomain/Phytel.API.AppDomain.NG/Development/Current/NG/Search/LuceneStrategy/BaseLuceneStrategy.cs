@@ -12,11 +12,11 @@ using Phytel.API.Common.CustomObject;
 
 namespace Phytel.API.AppDomain.NG.Search.LuceneStrategy
 {
-    public abstract class BaseLuceneStrategy<T>
+    public abstract class BaseLuceneStrategy<T, TT>
     {
         public abstract string LuceneDir { get; }
         public abstract void AddToLuceneIndex(T sampleData, IndexWriter writer);
-        public abstract List<IdNamePair> ExecuteSearch(string searchQuery, string searchField = "");
+        public abstract List<TT> ExecuteSearch(string searchQuery, string searchField = "");
         public abstract void AddUpdateLuceneIndex(IEnumerable<T> sampleDatas);
         public abstract void AddUpdateLuceneIndex(T sampleData);
         public FSDirectory DirectoryTemp;
@@ -83,24 +83,24 @@ namespace Phytel.API.AppDomain.NG.Search.LuceneStrategy
             }
         }
 
-        public List<IdNamePair> MapLuceneToDataList(IEnumerable<Document> hits)
+        public List<TT> MapLuceneToDataList(IEnumerable<Document> hits)
         {
             return hits.Select(MapLuceneDocumentToData).ToList();
         }
 
-        public List<IdNamePair> MapLuceneToDataList(IEnumerable<ScoreDoc> hits, IndexSearcher searcher)
+        public List<TT> MapLuceneToDataList(IEnumerable<ScoreDoc> hits, IndexSearcher searcher)
         {
             return hits.Select(hit => MapLuceneDocumentToData(searcher.Doc(hit.Doc))).ToList();
         }
 
-        public IdNamePair MapLuceneDocumentToData(Document doc)
+        public TT MapLuceneDocumentToData(Document doc)
         {
-            return AutoMapper.Mapper.Map<IdNamePair>(doc);
+            return AutoMapper.Mapper.Map<TT>(doc);
         }
 
         public Query ParseQuery(string searchQuery, QueryParser parser)
         {
-            Query query;
+            Query query = new PhraseQuery();
             try
             {
                 query = parser.Parse(searchQuery.Trim());
@@ -112,23 +112,38 @@ namespace Phytel.API.AppDomain.NG.Search.LuceneStrategy
             return query;
         }
 
-        public List<IdNamePair> SearchComplex(string input, string fieldName = "")
+        public Query ParseWholeQuery(string searchQuery, QueryParser parser)
         {
-            if (string.IsNullOrEmpty(input)) return new List<IdNamePair>();
+            Query query = new PhraseQuery();
+            try
+            {
+                query = parser.Parse(searchQuery.Trim());
+            }
+            catch (ParseException)
+            {
+                //query = parser.Parse(QueryParser.Escape(searchQuery.Trim()));
+            }
+            return query;
+        }
+
+        public List<TT> SearchComplex(string input, string fieldName = "")
+        {
+            if (string.IsNullOrEmpty(input)) return new List<TT>();
 
             // added to remove symbol
             input = input.Replace("^", " ");
 
             var terms = input.Trim().Replace("-", " ").Split(' ')
-                .Where(x => !string.IsNullOrEmpty(x)).Select(x => x.Trim() + "*");
+                .Where(x => !string.IsNullOrEmpty(x)).Select(x =>  "*" + x.Trim() + "*");
+
             input = string.Join(" ", terms);
 
             return ExecuteSearch(input, fieldName);
         }
 
-        public List<IdNamePair> Search(string input, string fieldName = "")
+        public List<TT> Search(string input, string fieldName = "")
         {
-            return string.IsNullOrEmpty(input) ? new List<IdNamePair>() : ExecuteSearch(input, fieldName);
+            return string.IsNullOrEmpty(input) ? new List<TT>() : ExecuteSearch(input, fieldName);
         }
     }
 }

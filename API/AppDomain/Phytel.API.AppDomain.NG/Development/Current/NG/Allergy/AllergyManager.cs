@@ -47,7 +47,7 @@ namespace Phytel.API.AppDomain.NG.Allergy
                 List<DTO.Allergy> result = new List<DTO.Allergy>();
                 var algy = EndpointUtil.GetAllergies(request);
                 algy.ForEach(a => result.Add(Mapper.Map<DTO.Allergy>(a)));
-                //IndexResultSet(result);
+                IndexResultSet(result);
                 return result;
             }
             catch (WebServiceException ex)
@@ -83,7 +83,7 @@ namespace Phytel.API.AppDomain.NG.Allergy
             {
                 var searchDocs = new List<IdNamePair>();
                 result.ForEach(a => searchDocs.Add(Mapper.Map<IdNamePair>(a)));
-                new AllergyLuceneStrategy<IdNamePair>().AddUpdateLuceneIndex(searchDocs);
+                new AllergyLuceneStrategy<IdNamePair,IdNamePair>().AddUpdateLuceneIndex(searchDocs);
             }
             catch (Exception ex)
             {

@@ -131,6 +131,7 @@
     <Compile Include="LookUp\Program\GetAllObjectivesResponse.cs" />
     <Compile Include="Contact\GetRecentPatientsRequest.cs" />
     <Compile Include="Contact\GetRecentPatientsResponse .cs" />
+    <Compile Include="Meds\Medication.cs" />
     <Compile Include="Observation\GetHistoricalPatientObservationsRequest.cs" />
     <Compile Include="Observation\GetCurrenPatientObservationsRequest.cs" />
     <Compile Include="Observation\GetHistoricalPatientObservationsResponse.cs" />
@@ -292,9 +293,17 @@
     <Compile Include="Scheduling\Schedule.cs" />
     <Compile Include="Scheduling\ToDo.cs" />
     <Compile Include="Search\AllergySearchDoc.cs" />
+    <Compile Include="Search\GetMedNamesRequest.cs" />
+    <Compile Include="Search\GetMedFieldsRequest.cs" />
+    <Compile Include="Search\GetMedNamesResponse.cs" />
     <Compile Include="Search\GetSearchResultsRequest.cs" />
+    <Compile Include="Search\GetMedFieldsResponse.cs" />
     <Compile Include="Search\GetSearchResultsResponse.cs" />
+    <Compile Include="Search\MedFieldsLists.cs" />
+    <Compile Include="Search\MedFieldsSearchDoc.cs" />
+    <Compile Include="Search\MedNameSearchDoc.cs" />
     <Compile Include="Search\SearchedItem.cs" />
+    <Compile Include="Search\TextValuePair.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

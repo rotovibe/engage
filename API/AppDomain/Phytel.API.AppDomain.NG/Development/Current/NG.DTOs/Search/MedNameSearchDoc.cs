@@ -1,0 +1,17 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Phytel.API.AppDomain.NG.DTO.Search
+{
+    public class MedNameSearchDoc
+    {
+        public string ProductId { get; set; }
+        public string ProductNDC { get; set; }
+        public string ProprietaryName { get; set; }
+        public string ProprietaryNameSuffix { get; set; }
+        public string SubstanceName { get; set; }
+    }
+}

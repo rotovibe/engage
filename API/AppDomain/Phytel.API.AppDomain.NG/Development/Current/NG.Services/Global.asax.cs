@@ -4,6 +4,7 @@ using AutoMapper;
 using Lucene.Net.Documents;
 using Phytel.API.AppDomain.NG.Allergy;
 using Phytel.API.AppDomain.NG.DTO;
+using Phytel.API.AppDomain.NG.DTO.Search;
 using Phytel.API.AppDomain.NG.Observation;
 using Phytel.API.AppDomain.NG.Programs;
 using Phytel.API.Common.Audit;
@@ -61,7 +62,21 @@ namespace Phytel.API.AppDomain.NG.Service
                     .ForMember(d => d.Id, opt => opt.MapFrom(src => src.Get("Id")))
                     .ForMember(d => d.Name, opt => opt.MapFrom(src => src.Get("Name")));
 
-                Mapper.CreateMap<DTO.Allergy, IdNamePair>().ForMember(d => d.Name, opt => opt.MapFrom(src => src.Name));
+                Mapper.CreateMap<Document, TextValuePair>()
+                                    .ForMember(d => d.Value, opt => opt.MapFrom(src => src.Get("ProprietaryName")))
+                                    .ForMember(d => d.Text, opt => opt.MapFrom(
+                                        src => src.Get("ProprietaryName") + " " + src.Get("ProprietaryNameSuffix") ));
+
+                Mapper.CreateMap<Document, MedFieldsSearchDoc>()
+                    .ForMember(d => d.ProductId, opt => opt.MapFrom(src => src.Get("Id")))
+                    .ForMember(d => d.DosageFormname, opt => opt.MapFrom(src => src.Get("DosageFormname")))
+                    .ForMember(d => d.ProprietaryName, opt => opt.MapFrom(src => src.Get("ProprietaryName")))
+                    .ForMember(d => d.RouteName, opt => opt.MapFrom(src => src.Get("RouteName")))
+                    .ForMember(d => d.SubstanceName, opt => opt.MapFrom(src => src.Get("SubstanceName")))
+                    .ForMember(d => d.Strength, opt => opt.MapFrom(src => src.Get("Strength")))
+                    .ForMember(d => d.Unit, opt => opt.MapFrom(src => src.Get("Unit")));
+
+                Mapper.CreateMap<DTO.Allergy, IdNamePair>().ForMember(d => d.Name, opt => opt.MapFrom(src => src.Name.Trim().ToUpper().Replace("\"", "").Replace(",", "")));
 
                 Plugins.Add(new RequestLogsFeature() { RequiredRoles = new string[] { } });
 

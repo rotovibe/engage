@@ -10,26 +10,31 @@ using Lucene.Net.Documents;
 using Lucene.Net.Index;
 using Lucene.Net.QueryParsers;
 using Lucene.Net.Search;
+using Phytel.API.AppDomain.NG.DTO.Meds;
+using Phytel.API.AppDomain.NG.DTO.Search;
 using Phytel.API.Common.CustomObject;
 
 namespace Phytel.API.AppDomain.NG.Search.LuceneStrategy
 {
-    public class MedsLuceneStrategy<T> : BaseLuceneStrategy<T> where T : IdNamePair
+    public class MedNameLuceneStrategy<T, TT> : BaseLuceneStrategy<T, TT> where T : MedNameSearchDoc where TT : TextValuePair
     {
         protected static readonly string SearchIndexPath = ConfigurationManager.AppSettings["SearchIndexPath"];
 
         public override string LuceneDir
         {
-            get { return SearchIndexPath + @"\Meds_Index"; }
+            get { return SearchIndexPath + @"\MedNames_Index"; }
         }
 
         public override void AddToLuceneIndex(T sampleData, IndexWriter writer)
         {
-            var searchQuery = new TermQuery(new Term("Id", sampleData.Id));
+            var searchQuery = new TermQuery(new Term("Id", sampleData.ProductId));
             writer.DeleteDocuments(searchQuery);
             var doc = new Document();
-            doc.Add(new Field("Id", sampleData.Id, Field.Store.YES, Field.Index.NOT_ANALYZED));
-            doc.Add(new Field("Name", sampleData.Name, Field.Store.YES, Field.Index.ANALYZED));
+            doc.Add(new Field("Id", sampleData.ProductId, Field.Store.YES, Field.Index.NOT_ANALYZED));
+            doc.Add(new Field("ProductNDC", sampleData.ProductNDC, Field.Store.YES, Field.Index.NOT_ANALYZED));
+            doc.Add(new Field("ProprietaryName", sampleData.ProprietaryName, Field.Store.YES, Field.Index.ANALYZED));
+            doc.Add(new Field("ProprietaryNameSuffix", sampleData.ProprietaryNameSuffix, Field.Store.YES, Field.Index.ANALYZED));
+            doc.Add(new Field("SubstanceName", sampleData.SubstanceName, Field.Store.YES, Field.Index.ANALYZED));
 
             writer.AddDocument(doc);
         }
@@ -52,9 +57,9 @@ namespace Phytel.API.AppDomain.NG.Search.LuceneStrategy
         }
 
 
-        public override List<IdNamePair> ExecuteSearch(string searchQuery, string searchField = "")
+        public override List<TT> ExecuteSearch(string searchQuery, string searchField = "")
         {
-            if (string.IsNullOrEmpty(searchQuery.Replace("*", "").Replace("?", ""))) return new List<IdNamePair>();
+            if (string.IsNullOrEmpty(searchQuery.Replace("*", "").Replace("?", ""))) return new List<TT>();
 
             using (var searcher = new IndexSearcher(Directory, false))
             {
@@ -64,7 +69,9 @@ namespace Phytel.API.AppDomain.NG.Search.LuceneStrategy
                 if (!string.IsNullOrEmpty(searchField))
                 {
                     var parser = new QueryParser(Lucene.Net.Util.Version.LUCENE_30, searchField, analyzer);
-                    var query = ParseQuery(searchQuery, parser);
+                    parser.AllowLeadingWildcard = true;
+                    parser.PhraseSlop = 0;
+                    var query = ParseWholeQuery(searchQuery, parser);
                     var hits = searcher.Search(query, hits_limit).ScoreDocs;
                     var results = MapLuceneToDataList(hits, searcher);
                     analyzer.Close();
@@ -73,8 +80,10 @@ namespace Phytel.API.AppDomain.NG.Search.LuceneStrategy
                 }
                 else
                 {
-                    var parser = new MultiFieldQueryParser(Lucene.Net.Util.Version.LUCENE_30, new[] { "Id", "Name" }, analyzer);
-                    var query = ParseQuery(searchQuery, parser);
+                    var parser = new MultiFieldQueryParser(Lucene.Net.Util.Version.LUCENE_30, new[] { "ProprietaryName", "SubstanceName" }, analyzer);
+                    parser.AllowLeadingWildcard = true;
+                    parser.PhraseSlop = 0;
+                    var query = ParseWholeQuery(searchQuery, parser);
                     var hits = searcher.Search
                     (query, null, hits_limit, Sort.RELEVANCE).ScoreDocs;
                     var results = MapLuceneToDataList(hits, searcher);
