@@ -10,8 +10,8 @@
     <description>Components to support the repository pattern for classes implementing the MongoDB system</description>
     <dependencies>
       <group targetFramework=".NETFramework4.5.1">
-        <dependency id="mongocsharpdriver" version="1.9.2" />
-        <dependency id="Phytel.Services.Mongo" version="1.3.0" />
+        <dependency id="mongocsharpdriver" version="1.8.1" />
+        <dependency id="Phytel.Services.Mongo" version="1.3.1" />
         <dependency id="Phytel.Services.Utility" version="1.3.0" />
         <dependency id="Phytel.Services.Security" version="1.3.0" />
         <dependency id="Phytel.Services.SQLServer" version="1.3.0" />
