@@ -14,8 +14,7 @@ namespace DataDomain.Allergy.Repo.Containers
 
             container.Register<IMongoAllergyRepository>(Constants.Domain, c =>
                 new MongoAllergyRepository<AllergyMongoContext>(
-                    //c.ResolveNamed<IUOWMongo<AllergyMongoContext>>(Constants.Domain)
-                    "InHealth001"
+                    c.ResolveNamed<IUOWMongo<AllergyMongoContext>>(Constants.Domain)
                     )
                 ).ReusedWithin(Funq.ReuseScope.Request);
 

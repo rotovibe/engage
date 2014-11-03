@@ -19,10 +19,11 @@ namespace Phytel.API.AppDomain.NG.Search.LuceneStrategy
     public class MedNameLuceneStrategy<T, TT> : BaseLuceneStrategy<T, TT> where T : MedNameSearchDoc where TT : TextValuePair
     {
         protected static readonly string SearchIndexPath = ConfigurationManager.AppSettings["SearchIndexPath"];
+        public string Contract { get; set; }
 
         public override string LuceneDir
         {
-            get { return SearchIndexPath + @"\MedNames_Index"; }
+            get { return SearchIndexPath + "\\" + Contract + "\\" + @"\MedNames_Index"; }
         }
 
         public override void AddToLuceneIndex(T sampleData, IndexWriter writer)

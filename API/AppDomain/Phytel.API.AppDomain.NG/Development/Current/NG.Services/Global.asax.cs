@@ -7,6 +7,7 @@ using Phytel.API.AppDomain.NG.DTO;
 using Phytel.API.AppDomain.NG.DTO.Search;
 using Phytel.API.AppDomain.NG.Observation;
 using Phytel.API.AppDomain.NG.Programs;
+using Phytel.API.AppDomain.NG.Search;
 using Phytel.API.Common.Audit;
 using Phytel.API.Common.CustomObject;
 using Phytel.API.Common.Format;
@@ -50,7 +51,10 @@ namespace Phytel.API.AppDomain.NG.Service
                 container.RegisterAutoWiredAs<ObservationEndpointUtil, IObservationEndpointUtil>().ReusedWithin(Funq.ReuseScope.Request);
                 container.RegisterAutoWiredAs<ObservationsManager, IObservationsManager>().ReusedWithin(Funq.ReuseScope.Request);
                 container.RegisterAutoWiredAs<AllergyManager, IAllergyManager>().ReusedWithin(Funq.ReuseScope.Request);
+                
+                // search
                 container.RegisterAutoWiredAs<SearchManager, ISearchManager>().ReusedWithin(Funq.ReuseScope.Request);
+                container.RegisterAutoWiredAs<SearchUtil, ISearchUtil>().ReusedWithin(Funq.ReuseScope.Request);
 
                 // automapper configuration
                 Mapper.CreateMap<AllergyData, DTO.Allergy>();

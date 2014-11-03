@@ -8,19 +8,19 @@ namespace Phytel.API.AppDomain.NG.DTO.Search
     public class GetMedFieldsRequest : IAppDomainRequest
     {
         [ApiMember(Name = "ProprietaryName", Description = "proprietary Name to search data for.", ParameterType = "property", DataType = "string", IsRequired = true)]
-        public string NameParam { get; set; }
+        public string Name { get; set; }
 
         [ApiMember(Name = "Type", Description = "Type of type if applicable.", ParameterType = "property", DataType = "string", IsRequired = true)]
-        public string TypeParam { get; set; }
+        public string Type { get; set; }
 
         [ApiMember(Name = "Route", Description = "Route if applicable.", ParameterType = "property", DataType = "string", IsRequired = false)]
-        public string RouteParam { get; set; }
+        public string Route { get; set; }
 
-        [ApiMember(Name = "Dosage", Description = "Dose if applicable.", ParameterType = "property", DataType = "string", IsRequired = false)]
-        public string DoseParam { get; set; }
+        [ApiMember(Name = "Form", Description = "Form if applicable.", ParameterType = "property", DataType = "string", IsRequired = false)]
+        public string Form { get; set; }
 
         [ApiMember(Name = "Strength", Description = "Strength of dose if applicable.", ParameterType = "property", DataType = "string", IsRequired = false)]
-        public string StrengthParam { get; set; }
+        public string Strength { get; set; }
 
         [ApiMember(Name = "UserID", Description = "ID of the user making the request (Internally used ONLY)", ParameterType = "property", DataType = "string", IsRequired = true)]
         public string UserId { get; set; }

@@ -1,6 +1,7 @@
 ﻿using System;
 using Phytel.API.AppDomain.NG.DTO.Meds;
 using Phytel.API.AppDomain.NG.DTO.Search;
+using Phytel.API.AppDomain.NG.Search;
 using Phytel.API.AppDomain.NG.Search.LuceneStrategy;
 using Phytel.API.Common.CustomObject;
 using ServiceStack.ServiceClient.Web;
@@ -11,6 +12,8 @@ namespace Phytel.API.AppDomain.NG.Allergy
 {
     public class SearchManager : ManagerBase, ISearchManager
     {
+        public ISearchUtil SearchUtil { get; set; }
+
         public void RegisterDocumentInSearchIndex(DTO.Allergy allergy)
         {
             try
@@ -42,7 +45,7 @@ namespace Phytel.API.AppDomain.NG.Allergy
         {
             try
             {
-                var matches = new MedNameLuceneStrategy<MedNameSearchDoc, TextValuePair>().Search(request.Term);
+                var matches = new MedNameLuceneStrategy<MedNameSearchDoc, TextValuePair> { Contract = request.ContractNumber }.Search(request.Term);
                 matches.All(x => { x.Text = x.Text.Trim(); return true; });
                 var groupby = matches.GroupBy(a => a.Text).Select(s => s.First()).ToList();
                 //var result = groupby.OrderBy(g => g.Text.Length).ToList();
@@ -60,22 +63,9 @@ namespace Phytel.API.AppDomain.NG.Allergy
             try
             {
                 var lists = new MedFieldsLists();
-                var matches = new MedFieldsLuceneStrategy<MedFieldsSearchDoc, MedFieldsSearchDoc>().Search(request.NameParam, "ProprietaryName");
+                var matches = new MedFieldsLuceneStrategy<MedFieldsSearchDoc, MedFieldsSearchDoc>{ Contract = request.ContractNumber}.Search(request.Name, "ProprietaryName");
 
-                if (request.RouteParam != null)
-                {
-                    matches = matches.Where(l => l.RouteName == request.RouteParam).ToList();
-                }
-
-                if (request.DoseParam != null)
-                {
-                    matches = matches.Where(l => l.DosageFormname == request.DoseParam).ToList();
-                }
-
-                if (request.StrengthParam != null)
-                {
-                    matches = matches.Where(l => l.Strength == request.StrengthParam).ToList();
-                }
+                matches = SearchUtil.FilterFieldResultsByParams(request, matches);
 
                 // break out into seperate lists here.
                 lists.RouteList = GetRouteSelections(matches);
@@ -202,7 +192,7 @@ namespace Phytel.API.AppDomain.NG.Allergy
             try
             {
                 // create a switch to determine which lucene strat to use
-                var result = new AllergyLuceneStrategy<IdNamePair, IdNamePair>().SearchComplex(request.SearchTerm, "Name");
+                var result = new AllergyLuceneStrategy<IdNamePair, IdNamePair> { Contract = request.ContractNumber }.SearchComplex(request.SearchTerm, "Name");
                 //var result = new AllergyLuceneStrategy<IdNamePair>().Search(request.SearchTerm);
                 return result;
             }

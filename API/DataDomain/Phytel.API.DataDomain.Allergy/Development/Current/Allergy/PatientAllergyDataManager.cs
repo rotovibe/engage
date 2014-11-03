@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
 using DataDomain.Allergy.Repo;
 using Phytel.API.DataDomain.Allergy.DTO;
 using System;
@@ -23,7 +22,9 @@ namespace Phytel.API.DataDomain.Allergy
                 PatientAllergyRepository.UserId = request.UserId;
                 if (request.PatientId != null)
                 {
-                    result = PatientAllergyRepository.FindByPatientId(request) as List<PatientAllergyData>;
+                    var repo = AllergyRepositoryFactory.GetAllergyRepository(request, RepositoryType.PatientAllergy);
+                    result = repo.FindByPatientId(request) as List<PatientAllergyData>;
+                    //result = PatientAllergyRepository.FindByPatientId(request) as List<PatientAllergyData>;
                 }
                 return result;
             }
@@ -38,7 +39,9 @@ namespace Phytel.API.DataDomain.Allergy
             try
             {
                 PatientAllergyRepository.UserId = request.UserId;
-                return (PatientAllergyData)PatientAllergyRepository.Initialize(request);
+                var repo = AllergyRepositoryFactory.GetAllergyRepository(request, RepositoryType.PatientAllergy);
+                return (PatientAllergyData)repo.Initialize(request);
+                //return (PatientAllergyData)PatientAllergyRepository.Initialize(request);
             }
             catch (Exception ex)
             {
@@ -51,13 +54,15 @@ namespace Phytel.API.DataDomain.Allergy
             try
             {
                 PatientAllergyData result = null;
-                PatientAllergyRepository.UserId = request.UserId;
+                //PatientAllergyRepository.UserId = request.UserId;
+                var repo = AllergyRepositoryFactory.GetAllergyRepository(request, RepositoryType.PatientAllergy);
+
                 if (request.PatientAllergyData != null)
                 {
-                    bool status = (bool)PatientAllergyRepository.Update(request);
+                    bool status = (bool)repo.Update(request);
                     if (status)
                     {
-                        result = (PatientAllergyData)PatientAllergyRepository.FindByID(request.PatientAllergyData.Id);
+                        result = (PatientAllergyData)repo.FindByID(request.PatientAllergyData.Id);
                     }
                 }
 
@@ -74,7 +79,9 @@ namespace Phytel.API.DataDomain.Allergy
             try
             {
                 List<PatientAllergyData> result = null;
-                PatientAllergyRepository.UserId = request.UserId;
+                //PatientAllergyRepository.UserId = request.UserId;
+                var repo = AllergyRepositoryFactory.GetAllergyRepository(request, RepositoryType.PatientAllergy);
+
                 if (request.PatientAllergiesData != null && request.PatientAllergiesData.Count > 0)
                 {
                     result = new List<PatientAllergyData>();
@@ -88,10 +95,10 @@ namespace Phytel.API.DataDomain.Allergy
                             UserId = request.UserId,
                             Version = request.Version
                         };
-                        bool status = (bool)PatientAllergyRepository.Update(req);
+                        bool status = (bool)repo.Update(req);
                         if (status)
                         {
-                            PatientAllergyData data = (PatientAllergyData)PatientAllergyRepository.FindByID(req.PatientAllergyData.Id);
+                            PatientAllergyData data = (PatientAllergyData)repo.FindByID(req.PatientAllergyData.Id);
                             result.Add(data);
                         }
                     });

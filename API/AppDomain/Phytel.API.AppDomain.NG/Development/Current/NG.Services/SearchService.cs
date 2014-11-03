@@ -127,7 +127,6 @@ namespace Phytel.API.AppDomain.NG.Service
                     request.UserId = result.UserId;
                     var results = SearchManager.GetSearchMedFieldsResults(request);
 
-                    // test data
                     response.DosageForms = results.FormList;
                     response.Routes = results.RouteList;
                     response.Strengths = results.StrengthList;

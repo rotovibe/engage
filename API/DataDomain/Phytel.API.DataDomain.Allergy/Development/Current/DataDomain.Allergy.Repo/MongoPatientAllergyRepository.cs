@@ -15,7 +15,7 @@ using MB = MongoDB.Driver.Builders;
 
 namespace DataDomain.Allergy.Repo
 {
-    public class MongoPatientAllergyRepository<TContext> : IMongoPatientAllergyRepository where TContext : AllergyMongoContext
+    public class MongoPatientAllergyRepository<TContext> : IMongoPatientAllergyRepository, IMongoAllergyRepository where TContext : AllergyMongoContext
     {
         private int _expireDays = Convert.ToInt32(ConfigurationManager.AppSettings["ExpireDays"]);
         private int _initializeDays = Convert.ToInt32(ConfigurationManager.AppSettings["InitializeDays"]);

@@ -17,10 +17,11 @@ namespace Phytel.API.AppDomain.NG.Search.LuceneStrategy
     public class AllergyLuceneStrategy<T, TT> : BaseLuceneStrategy<T, TT> where T : IdNamePair where TT : IdNamePair
     {
         protected static readonly string SearchIndexPath = ConfigurationManager.AppSettings["SearchIndexPath"];
+        public string Contract { get; set; }
 
         public override string LuceneDir
         {
-            get { return SearchIndexPath + @"\Allergy_Index"; }
+            get { return SearchIndexPath + "\\" + Contract + "\\" + @"\Allergy_Index"; }
         }
 
         public override void AddToLuceneIndex(T sampleData, IndexWriter writer)

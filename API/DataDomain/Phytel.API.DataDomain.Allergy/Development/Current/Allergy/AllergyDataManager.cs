@@ -19,8 +19,9 @@ namespace Phytel.API.DataDomain.Allergy
         {
             try
             {
-                AllergyRepository.UserId = request.UserId;
-                var result =  AllergyRepository.Insert( new AllergyData{ Name = request.Description }) as AllergyData;
+                //AllergyRepository.UserId = request.UserId;
+                var repo = AllergyRepositoryFactory.GetAllergyRepository(request, RepositoryType.Allergy);
+                var result = repo.Insert(new AllergyData { Name = request.Description }) as AllergyData;
                 return result;
             }
             catch (Exception ex)
@@ -34,8 +35,10 @@ namespace Phytel.API.DataDomain.Allergy
             try
             {
                 List<AllergyData> result = null;
-                AllergyRepository.UserId = request.UserId;
-                result = AllergyRepository.SelectAll().Cast<AllergyData>().ToList<AllergyData>();
+                //AllergyRepository.UserId = request.UserId;
+                //result = AllergyRepository.SelectAll().Cast<AllergyData>().ToList<AllergyData>();
+                var repo = AllergyRepositoryFactory.GetAllergyRepository(request, RepositoryType.Allergy);
+                result = repo.SelectAll().Cast<AllergyData>().ToList<AllergyData>();
 
                 return result;
             }
@@ -49,8 +52,10 @@ namespace Phytel.API.DataDomain.Allergy
         {
             try
             {
-                AllergyRepository.UserId = request.UserId;
-                return (AllergyData)AllergyRepository.Initialize(request);
+                //AllergyRepository.UserId = request.UserId;
+                //return (AllergyData)AllergyRepository.Initialize(request);
+                var repo = AllergyRepositoryFactory.GetAllergyRepository(request, RepositoryType.Allergy);
+                return (AllergyData)repo.Initialize(request);
             }
             catch (Exception ex)
             {
@@ -64,13 +69,15 @@ namespace Phytel.API.DataDomain.Allergy
             try
             {
                 AllergyData result = null;
-                AllergyRepository.UserId = request.UserId;
+                //AllergyRepository.UserId = request.UserId;
+                var repo = AllergyRepositoryFactory.GetAllergyRepository(request, RepositoryType.Allergy);
+
                 if (request.AllergyData != null)
                 {
-                    bool status = (bool)AllergyRepository.Update(request);
+                    bool status = (bool)repo.Update(request);
                     if (status)
                     {
-                        result = (AllergyData)AllergyRepository.FindByID(request.AllergyData.Id);
+                        result = (AllergyData)repo.FindByID(request.AllergyData.Id);
                     }
                 }
                 return result;

@@ -7,7 +7,8 @@ namespace DataDomain.Allergy.Repo
 {
     public enum RepositoryType
     {
-        Allergy
+        Allergy,
+        PatientAllergy
     }
 
     public abstract class AllergyRepositoryFactory
@@ -25,7 +26,14 @@ namespace DataDomain.Allergy.Repo
                     {
                         var db = AppHostBase.Instance.Container.ResolveNamed<string>(Constants.Domain);
                         var context = new AllergyMongoContext(db);
-                        repo = new MongoAllergyRepository<AllergyMongoContext>(context) {UserId = request.UserId};
+                        repo = new MongoAllergyRepository<AllergyMongoContext>(context) {UserId = request.UserId, ContractDBName = request.ContractNumber};
+                        break;
+                    }
+                    case RepositoryType.PatientAllergy:
+                    {
+                        var db = AppHostBase.Instance.Container.ResolveNamed<string>(Constants.Domain);
+                        var context = new AllergyMongoContext(db);
+                        repo = new MongoPatientAllergyRepository<AllergyMongoContext>(context) { UserId = request.UserId, ContractDBName = request.ContractNumber };
                         break;
                     }
                 }

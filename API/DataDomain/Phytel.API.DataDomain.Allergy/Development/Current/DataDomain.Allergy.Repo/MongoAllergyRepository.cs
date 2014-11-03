@@ -214,5 +214,11 @@ namespace DataDomain.Allergy.Repo
             }
             catch (Exception) { throw; }
         }
+
+
+        public object FindByPatientId(object request)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
