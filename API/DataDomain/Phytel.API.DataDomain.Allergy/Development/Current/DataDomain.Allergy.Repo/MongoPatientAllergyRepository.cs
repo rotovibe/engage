@@ -46,7 +46,31 @@ namespace DataDomain.Allergy.Repo
 
         public void Delete(object entity)
         {
-            throw new NotImplementedException();
+            DeleteAllergiesByPatientIdDataRequest request = (DeleteAllergiesByPatientIdDataRequest)entity;
+            try
+            {
+                using (AllergyMongoContext ctx = new AllergyMongoContext(ContractDBName))
+                {
+                    var q = MB.Query<MEPatientAllergy>.EQ(b => b.Id, ObjectId.Parse(request.Id));
+
+                    var uv = new List<MB.UpdateBuilder>();
+                    uv.Add(MB.Update.Set(MEPatientAllergy.TTLDateProperty, DateTime.UtcNow.AddDays(_expireDays)));
+                    uv.Add(MB.Update.Set(MEPatientAllergy.LastUpdatedOnProperty, DateTime.UtcNow));
+                    uv.Add(MB.Update.Set(MEPatientAllergy.DeleteFlagProperty, true));
+                    uv.Add(MB.Update.Set(MEPatientAllergy.UpdatedByProperty, ObjectId.Parse(this.UserId)));
+
+                    IMongoUpdate update = MB.Update.Combine(uv);
+                    ctx.PatientAllergies.Collection.Update(q, update);
+
+                    AuditHelper.LogDataAudit(this.UserId,
+                                            MongoCollectionName.PatientAllergy.ToString(),
+                                            request.Id.ToString(),
+                                            DataAuditType.Delete,
+                                            request.ContractNumber);
+
+                }
+            }
+            catch (Exception) { throw; }
         }
 
         public void DeleteAll(List<object> entities)
@@ -192,10 +216,33 @@ namespace DataDomain.Allergy.Repo
             throw new NotImplementedException();
         }
 
-
         public void UndoDelete(object entity)
         {
-            throw new NotImplementedException();
+            UndoDeletePatientAllergiesDataRequest request = (UndoDeletePatientAllergiesDataRequest)entity;
+            try
+            {
+                using (AllergyMongoContext ctx = new AllergyMongoContext(ContractDBName))
+                {
+                    var q = MB.Query<MEPatientAllergy>.EQ(b => b.Id, ObjectId.Parse(request.PatientAllergyId));
+
+                    var uv = new List<MB.UpdateBuilder>();
+                    uv.Add(MB.Update.Set(MEPatientAllergy.TTLDateProperty, BsonNull.Value));
+                    uv.Add(MB.Update.Set(MEPatientAllergy.DeleteFlagProperty, false));
+                    uv.Add(MB.Update.Set(MEPatientAllergy.LastUpdatedOnProperty, DateTime.UtcNow));
+                    uv.Add(MB.Update.Set(MEPatientAllergy.UpdatedByProperty, ObjectId.Parse(this.UserId)));
+
+                    IMongoUpdate update = MB.Update.Combine(uv);
+                    ctx.PatientAllergies.Collection.Update(q, update);
+
+                    AuditHelper.LogDataAudit(this.UserId,
+                                            MongoCollectionName.PatientAllergy.ToString(),
+                                            request.PatientAllergyId.ToString(),
+                                            DataAuditType.UndoDelete,
+                                            request.ContractNumber);
+
+                }
+            }
+            catch (Exception) { throw; }
         }
 
         public object Initialize(object newEntity)

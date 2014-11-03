@@ -20,7 +20,7 @@ namespace Phytel.API.AppDomain.NG.Test
         double version = 1.0;
         string url = "http://localhost:888/Nightingale";
         IRestClient client = new JsonServiceClient();
-        string token = "5453c51984ac0510a8437c85";
+        string token = "5457977d84ac051b78c3c4f1";
 
         [TestMethod]
         public void GetPatientAllergies_Test()
@@ -108,13 +108,13 @@ namespace Phytel.API.AppDomain.NG.Test
 
             PatientAllergy p1 = new PatientAllergy
             {
-                AllergyId = "5453cea0d433232a387d51b9",
+                AllergyId = "54580a9b84ac05021485f632",
                 IsNewAllergy = true,
                 //AllergyName = "Cat dander",
                 EndDate = DateTime.UtcNow,
-                Id = "5453e7e484ac0510a8f3ba85",
+                Id = "54580a9d84ac05021485f637",
                 Notes = "AAAAAAAAA",
-                PatientId = "5325da1fd6a4850adcbba54a",
+                PatientId = "5325daebd6a4850adcbba7be",
                 ReactionIds = new List<string> { "54494b5ad433232a446f7323" },
                 SeverityId = "54494a8fd433232a446f7311",
                 SourceId = "544e9976d433231d9c0330ae",
@@ -127,27 +127,27 @@ namespace Phytel.API.AppDomain.NG.Test
               
             };
 
-            PatientAllergy p2 = new PatientAllergy
-            {
-                AllergyId = "5453e6bfd433230468567d33",
-                IsNewAllergy = true,
-                //AllergyName = "Cat dander",
-                EndDate = DateTime.UtcNow,
-                Id = "5453e7eb84ac0510a8f3ba88",
-                Notes = "BBBBBBB",
-                PatientId = "5325da1fd6a4850adcbba54a",
-                //ReactionIds = new List<string> { "54494b5ad433232a446f7323" },
-                //SeverityId = "54494a8fd433232a446f7311",
-                SourceId = "544e9976d433231d9c0330ae",
-                StartDate = DateTime.UtcNow,
-                StatusId = 2,
-                SystemName = "Integration",
-                UpdatedOn = DateTime.UtcNow,
-                DeleteFlag = false,
-                AllergyTypeIds = new List<string> { "5446db5efe7a591e74013b6d" },
-            };
+            //PatientAllergy p2 = new PatientAllergy
+            //{
+            //    AllergyId = "5453e6bfd433230468567d33",
+            //    IsNewAllergy = true,
+            //    //AllergyName = "Cat dander",
+            //    EndDate = DateTime.UtcNow,
+            //    Id = "5453e7eb84ac0510a8f3ba88",
+            //    Notes = "BBBBBBB",
+            //    PatientId = "5325da1fd6a4850adcbba54a",
+            //    //ReactionIds = new List<string> { "54494b5ad433232a446f7323" },
+            //    //SeverityId = "54494a8fd433232a446f7311",
+            //    SourceId = "544e9976d433231d9c0330ae",
+            //    StartDate = DateTime.UtcNow,
+            //    StatusId = 2,
+            //    SystemName = "Integration",
+            //    UpdatedOn = DateTime.UtcNow,
+            //    DeleteFlag = false,
+            //    AllergyTypeIds = new List<string> { "5446db5efe7a591e74013b6d" },
+            //};
             data.Add(p1);
-            data.Add(p2);
+            //data.Add(p2);
             PostPatientAllergiesRequest request = new PostPatientAllergiesRequest
             {
                 ContractNumber = contractNumber,

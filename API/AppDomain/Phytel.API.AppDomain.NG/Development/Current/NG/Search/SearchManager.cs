@@ -14,12 +14,12 @@ namespace Phytel.API.AppDomain.NG.Allergy
     {
         public ISearchUtil SearchUtil { get; set; }
 
-        public void RegisterDocumentInSearchIndex(DTO.Allergy allergy)
+        public void RegisterDocumentInSearchIndex(DTO.Allergy allergy,string contractNumber)
         {
             try
             {
                 var np =  AutoMapper.Mapper.Map<IdNamePair>(allergy);
-                new AllergyLuceneStrategy<IdNamePair, IdNamePair>().AddUpdateLuceneIndex(np);
+                new AllergyLuceneStrategy<IdNamePair, IdNamePair> { Contract = contractNumber }.AddUpdateLuceneIndex(np);
             }
             catch (Exception ex)
             {

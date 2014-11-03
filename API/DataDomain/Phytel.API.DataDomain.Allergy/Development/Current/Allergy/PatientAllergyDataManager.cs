@@ -28,10 +28,7 @@ namespace Phytel.API.DataDomain.Allergy
                 }
                 return result;
             }
-            catch (Exception ex)
-            {
-                throw new Exception("AllergyDD:GetPatientAllergies()::" + ex.Message, ex.InnerException);
-            }
+            catch (Exception ex) { throw ex; }
         }
 
         public PatientAllergyData InitializePatientAllergy(PutInitializePatientAllergyDataRequest request)
@@ -43,10 +40,7 @@ namespace Phytel.API.DataDomain.Allergy
                 return (PatientAllergyData)repo.Initialize(request);
                 //return (PatientAllergyData)PatientAllergyRepository.Initialize(request);
             }
-            catch (Exception ex)
-            {
-                throw new Exception("AllergyDD:InitializePatientAllergy()::" + ex.Message, ex.InnerException);
-            }
+            catch (Exception ex) { throw ex; }
         }
 
         public PatientAllergyData UpdateSinglePatientAllergy(PutPatientAllergyDataRequest request)
@@ -68,10 +62,7 @@ namespace Phytel.API.DataDomain.Allergy
 
                 return result;
             }
-            catch (Exception ex)
-            {
-                throw new Exception("AllergyDD:UpdateSinglePatientAllergy()::" + ex.Message, ex.InnerException);
-            }
+            catch (Exception ex) { throw ex; }
         }
 
         public List<PatientAllergyData> UpdateBulkPatientAllergies(PutPatientAllergiesDataRequest request)
@@ -105,11 +96,75 @@ namespace Phytel.API.DataDomain.Allergy
                 }
                 return result;
             }
-            catch (Exception ex)
+            catch (Exception ex) { throw ex; }
+        }
+
+        #region Delete & UndoDelete
+        public DeleteAllergiesByPatientIdDataResponse DeletePatientAllergies(DeleteAllergiesByPatientIdDataRequest request)
+        {
+            DeleteAllergiesByPatientIdDataResponse response = null;
+            try
             {
-                throw new Exception("AllergyDD:UpdateBulkPatientAllergy()::" + ex.Message, ex.InnerException);
+                response = new DeleteAllergiesByPatientIdDataResponse();
+
+                var repo = AllergyRepositoryFactory.GetAllergyRepository(request, RepositoryType.PatientAllergy);
+                GetPatientAllergiesDataRequest getAllPatientNotesDataRequest = new GetPatientAllergiesDataRequest
+                {
+                    Context = request.Context,
+                    ContractNumber = request.ContractNumber,
+                    PatientId = request.PatientId,
+                    UserId = request.UserId,
+                    Version = request.Version
+                };
+                List<PatientAllergyData> patientAllergies = repo.FindByPatientId(getAllPatientNotesDataRequest) as List<PatientAllergyData>;
+                List<string> deletedIds = null;
+                if (patientAllergies != null)
+                {
+                    deletedIds = new List<string>();
+                    patientAllergies.ForEach(u =>
+                    {
+                        DeleteAllergiesByPatientIdDataRequest deletePADataRequest = new DeleteAllergiesByPatientIdDataRequest
+                        {
+                            Context = request.Context,
+                            ContractNumber = request.ContractNumber,
+                            Id = u.Id,
+                            PatientId = request.PatientId,
+                            UserId = request.UserId,
+                            Version = request.Version
+                        };
+                        repo.Delete(deletePADataRequest);
+                        deletedIds.Add(deletePADataRequest.Id);
+                    });
+                    response.DeletedIds = deletedIds;
+                }
+                response.Success = true;
+                return response;
             }
+            catch (Exception ex) { throw ex; }
+        }
+
+        public UndoDeletePatientAllergiesDataResponse UndoDeletePatientAllergies(UndoDeletePatientAllergiesDataRequest request)
+        {
+            UndoDeletePatientAllergiesDataResponse response = null;
+            try
+            {
+                response = new UndoDeletePatientAllergiesDataResponse();
+
+                var repo = AllergyRepositoryFactory.GetAllergyRepository(request, RepositoryType.PatientAllergy);
+                if (request.Ids != null && request.Ids.Count > 0)
+                {
+                    request.Ids.ForEach(u =>
+                    {
+                        request.PatientAllergyId = u;
+                        repo.UndoDelete(request);
+                    });
+                }
+                response.Success = true;
+                return response;
+            }
+            catch (Exception ex) { throw ex; }
         } 
+        #endregion
 
     }
 }   

@@ -124,6 +124,7 @@
     <Compile Include="Allergy\AllergyEndpointUtil.cs" />
     <Compile Include="Allergy\IAllergyEndpointUtil.cs" />
     <Compile Include="Allergy\IAllergyManager.cs" />
+    <Compile Include="Command\PatientAllergiesCommand.cs" />
     <Compile Include="Command\PatientToDosCommand.cs" />
     <Compile Include="Programs\ElementActivation\ProgramAttributeActivationRule.cs" />
     <Compile Include="Programs\ElementActivation\StepActivationRule.cs" />

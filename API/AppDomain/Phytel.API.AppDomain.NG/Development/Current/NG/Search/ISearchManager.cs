@@ -12,6 +12,6 @@ namespace Phytel.API.AppDomain.NG.Allergy
         List<TextValuePair> GetSearchMedNameResults(GetMedNamesRequest request);
         MedFieldsLists GetSearchMedFieldsResults(GetMedFieldsRequest request);
         void LogException(Exception ex);
-        void RegisterDocumentInSearchIndex(DTO.Allergy allergy);
+        void RegisterDocumentInSearchIndex(DTO.Allergy allergy, string contractNumber);
     }
 }

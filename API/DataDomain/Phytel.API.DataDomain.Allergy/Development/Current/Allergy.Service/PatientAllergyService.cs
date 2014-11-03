@@ -82,5 +82,37 @@ namespace Phytel.API.DataDomain.Allergy.Service
             return response;
         }
         #endregion
-    }
+
+        #region Delete & UndoDelete
+        public DeleteAllergiesByPatientIdDataResponse Delete(DeleteAllergiesByPatientIdDataRequest request)
+        {
+            DeleteAllergiesByPatientIdDataResponse response = new DeleteAllergiesByPatientIdDataResponse { Version = request.Version };
+            try
+            {
+                RequireUserId(request);
+                response = Manager.DeletePatientAllergies(request);
+            }
+            catch (Exception ex)
+            {
+                RaiseException(response, ex);
+            }
+            return response;
+        }
+
+        public UndoDeletePatientAllergiesDataResponse Put(UndoDeletePatientAllergiesDataRequest request)
+        {
+            UndoDeletePatientAllergiesDataResponse response = new UndoDeletePatientAllergiesDataResponse();
+            try
+            {
+                RequireUserId(request);
+                response = Manager.UndoDeletePatientAllergies(request);
+            }
+            catch (Exception ex)
+            {
+                RaiseException(response, ex);
+            }
+            return response;
+        }
+        #endregion
+    }   
 }

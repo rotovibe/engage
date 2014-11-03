@@ -72,6 +72,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
+    <Compile Include="DeleteAllergiesByPatientIdDataRequest.cs" />
+    <Compile Include="DeleteAllergiesByPatientIdDataResponse.cs" />
     <Compile Include="DomainResponse.cs" />
     <Compile Include="Enums.cs" />
     <Compile Include="PostNewAllergyRequest.cs" />
@@ -93,6 +95,8 @@
     <Compile Include="PutPatientAllergiesDataResponse.cs" />
     <Compile Include="PutInitializePatientAllergyDataRequest.cs" />
     <Compile Include="PutInitializePatientAllergyDataResponse.cs" />
+    <Compile Include="UndoDeletePatientAllergiesDataRequest.cs" />
+    <Compile Include="UndoDeletePatientAllergiesDataResponse.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

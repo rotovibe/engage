@@ -31,7 +31,7 @@ namespace Phytel.API.AppDomain.NG.Allergy
                 DTO.Allergy result = null;
                 var algy = EndpointUtil.PutNewAllergy(request);
                 result = Mapper.Map<DTO.Allergy>(algy);
-                SearchManager.RegisterDocumentInSearchIndex(result);
+                SearchManager.RegisterDocumentInSearchIndex(result, request.ContractNumber);
                 return result;
             }
             catch (WebServiceException ex)
@@ -146,7 +146,7 @@ namespace Phytel.API.AppDomain.NG.Allergy
                         {
                             PostAllergyRequest req = new DTO.PostAllergyRequest
                             {
-                                Allergy = new DTO.Allergy { Id = p.AllergyId, TypeIds = p.AllergyTypeIds },
+                                Allergy = new DTO.Allergy { Id = p.AllergyId, TypeIds = p.AllergyTypeIds, Name = p.AllergyName },
                                 ContractNumber = request.ContractNumber,
                                 UserId = request.UserId,
                                 Version = request.Version
@@ -154,7 +154,7 @@ namespace Phytel.API.AppDomain.NG.Allergy
                             AllergyData allergyData = EndpointUtil.UpdateAllergy(req);
                             DTO.Allergy newAllergy = Mapper.Map<DTO.Allergy>(allergyData);
                             // Register newly initialized allergies in search index.
-                            SearchManager.RegisterDocumentInSearchIndex(newAllergy);
+                            SearchManager.RegisterDocumentInSearchIndex(newAllergy, req.ContractNumber);
                         }
                     });
                 }
