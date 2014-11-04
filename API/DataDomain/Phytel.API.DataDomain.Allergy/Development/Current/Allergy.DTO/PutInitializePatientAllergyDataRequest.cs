@@ -12,6 +12,9 @@ namespace Phytel.API.DataDomain.Allergy.DTO
         [ApiMember(Name = "AllergyId", Description = "Id of the allergy which is getting associted to a patient.", ParameterType = "property", DataType = "string", IsRequired = true)]
         public string AllergyId { get; set; }
 
+        [ApiMember(Name = "SystemName", Description = "SystemName", ParameterType = "property", DataType = "string", IsRequired = true)]
+        public string SystemName { get; set; }
+
         [ApiMember(Name = "UserId", Description = "UserId of the logged in user", ParameterType = "property", DataType = "string", IsRequired = true)]
         public string UserId { get; set; }
 

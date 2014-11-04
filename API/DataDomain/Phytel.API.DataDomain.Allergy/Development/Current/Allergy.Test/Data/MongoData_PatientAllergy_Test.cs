@@ -65,7 +65,7 @@ namespace Phytel.API.DataDomain.Allergy.Test
            {
                Context = context,
                ContractNumber = contractNumber,
-               PatientId = "54087f43d6a48509407d69cb",
+               PatientId = "5458fdef84ac050ea472df8e",
                UserId = userId,
                Version = version
            };

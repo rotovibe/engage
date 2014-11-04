@@ -273,7 +273,8 @@ namespace DataDomain.Allergy.Repo
                     {
                         Id = mePA.Id.ToString(),
                         PatientId = mePA.PatientId.ToString(),
-                        AllergyId = mePA.AllergyId.ToString()
+                        AllergyId = mePA.AllergyId.ToString(),
+                        SystemName = mePA.SystemName
                     };
                     // get corresponding allergy name and type.
                     getAllergyDetails(data, ctx, mePA.AllergyId);
