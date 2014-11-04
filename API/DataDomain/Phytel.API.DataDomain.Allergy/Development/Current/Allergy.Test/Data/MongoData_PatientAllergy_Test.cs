@@ -20,43 +20,6 @@ namespace Phytel.API.DataDomain.Allergy.Test
         double version = 1.0;
         string url = "http://localhost:8888/Allergy";
         IRestClient client = new JsonServiceClient();
-            
-       [TestMethod]
-        public void GetAllergyByID()
-        {
-            //GetAllergyRequest request = new GetAllergyRequest{ AllergyID = "5"};
-
-            //GetAllergyResponse response = new StubAllergyDataManager().GetAllergyByID(request);
-
-            //Assert.IsTrue(response.DdAllergy.AllergyID == "??");
-        }
-
-
-
-       //[TestClass]
-       //public class PatientNote_Test
-       //{
-       //    [TestMethod]
-       //    public void InsertPatientNote_Test()
-       //    {
-       //        string url = "http://localhost:8888/PatientNote";
-       //        PatientNoteData note = new PatientNoteData { Text = "DD_Service test note 2", CreatedById = "53043e53d433231f48de8a7a", PatientId = "52f55877072ef709f84e69b0" };
-       //        string contractNumber = "InHealth001";
-       //        string context = "NG";
-       //        double version = 1.0;
-       //        IRestClient client = new JsonServiceClient();
-       //        JsonServiceClient.HttpWebRequestFilter = x =>
-       //                        x.Headers.Add(string.Format("{0}: {1}", "x-Phytel-UserID", "531f2df9072ef727c4d2a3df"));
-
-       //        //[Route("/{Context}/{Version}/{ContractNumber}/Patient/{PatientId}/Note/Insert", "PUT")]
-       //        PutPatientNoteDataResponse response = client.Put<PutPatientNoteDataResponse>(
-       //            string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Note/Insert", url, context, version, contractNumber, note.PatientId),
-       //            new PutPatientNoteDataRequest { Context = context, ContractNumber = contractNumber, PatientId = "52f55877072ef709f84e69b0", PatientNote = note, UserId = "53043e53d433231f48de8a7a", Version = version } as object);
-
-       //        Assert.IsNotNull(response.Id);
-       //    }
-       //}
-
 
        [TestMethod]
        public void GetPatientAllergies_Test()
@@ -179,6 +142,42 @@ namespace Phytel.API.DataDomain.Allergy.Test
             //[Route("/{Context}/{Version}/{ContractNumber}/PatientAllergy/Update/Bulk", "PUT")]
             PutPatientAllergiesDataResponse response = client.Put<PutPatientAllergiesDataResponse>(
                 string.Format("{0}/{1}/{2}/{3}/PatientAllergy/Update/Bulk", url, context, version, contractNumber), request);
+            Assert.IsNotNull(response);
+        }
+
+        [TestMethod]
+        public void DeletePatientAllergies_Test()
+        {
+            DeleteAllergiesByPatientIdDataRequest request = new DeleteAllergiesByPatientIdDataRequest
+            {
+                Context = context,
+                ContractNumber = contractNumber,
+                PatientId = "5458fdef84ac050ea472df8e",
+                UserId = userId,
+                Version = version
+            };
+
+            //[Route("/{Context}/{Version}/{ContractNumber}/PatientAllergy/Patient/{PatientId}/Delete", "DELETE")]
+            DeleteAllergiesByPatientIdDataResponse response = client.Delete<DeleteAllergiesByPatientIdDataResponse>(
+                string.Format("{0}/{1}/{2}/{3}/PatientAllergy/Patient/{4}/Delete?UserId={5}", url, context, version, contractNumber, request.PatientId, request.UserId));
+            Assert.IsNotNull(response);
+        }
+
+        [TestMethod]
+        public void UndoDeletePatientAllergies_Test()
+        {
+            UndoDeletePatientAllergiesDataRequest request = new UndoDeletePatientAllergiesDataRequest
+            {
+                Context = context,
+                ContractNumber = contractNumber,
+                Ids = new List<string> { "545920a184ac05124c984711", "5459271684ac05124ce6862a", "5459281584ac05124c362845", "54593ce684ac05124c3628cf" },
+                UserId = userId,
+                Version = version
+            };
+
+            //[Route("/{Context}/{Version}/{ContractNumber}/PatientAllergy/UndoDelete", "PUT")]
+            UndoDeletePatientAllergiesDataResponse response = client.Put<UndoDeletePatientAllergiesDataResponse>(
+                string.Format("{0}/{1}/{2}/{3}/PatientAllergy/UndoDelete", url, context, version, contractNumber), request);
             Assert.IsNotNull(response);
         }
     }
