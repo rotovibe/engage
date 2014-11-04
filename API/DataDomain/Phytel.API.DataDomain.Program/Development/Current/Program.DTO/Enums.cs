@@ -89,7 +89,8 @@ namespace Phytel.API.DataDomain.Program.DTO
         Enrolled = 1,
         Pending = 2,
         DidNotEnroll = 3,
-        Disenrolled = 4
+        Disenrolled = 4,
+        Completed = 5
     }
 
     public enum EligibilityStatus
