@@ -256,6 +256,7 @@ namespace DataDomain.Allergy.Repo
                     PatientId = ObjectId.Parse(request.PatientId),
                     AllergyId = ObjectId.Parse(request.AllergyId),
                     TTLDate = System.DateTime.UtcNow.AddDays(_initializeDays),
+                    SystemName = request.SystemName,
                     DeleteFlag = false
                 };
 
