@@ -212,7 +212,7 @@ namespace Phytel.API.AppDomain.NG.Allergy
                     ContractNumber = request.ContractNumber,
                     PatientId = request.PatientId,
                     AllergyId = request.AllergyId,
-                    SystemName = "Engage",
+                    SystemName = Constants.SystemName,
                     UserId = request.UserId,
                     Version = request.Version
                 } as object);

@@ -11,5 +11,7 @@ namespace Phytel.API.AppDomain.NG
         // Cohort Patient View
         public const string Problem = "Problem";
         public const string PCM = "PCM";
+        // Allergy
+        public const string SystemName = "Engage";
     }
 }
