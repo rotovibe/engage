@@ -58,40 +58,6 @@ namespace Phytel.API.DataDomain.Allergy.Test
         }
 
         [TestMethod]
-        public void UpdatePatientAllergy_Test()
-        {
-
-            PatientAllergyData data = new PatientAllergyData {
-                AllergyId = "54489a3dfe7a59146485bafe",
-                EndDate = DateTime.UtcNow,
-                Id = "5452b3f1d4332303e459f08a",
-                Notes = "AAAAAAAAAAAAAAA",
-                PatientId = "54087f43d6a48509407d69cb",
-                ReactionIds = new List<string>{"54494b5ad433232a446f7323"},
-               // SeverityId = "54494a96d433232a446f7313",
-                SourceId = "544e9976d433231d9c0330ae",
-                StartDate = DateTime.UtcNow,
-                StatusId = 1,
-                SystemName = "Integration",
-                UpdatedOn  = DateTime.UtcNow 
-            };
-            
-            PutPatientAllergyDataRequest request = new PutPatientAllergyDataRequest
-            {
-                Context = context,
-                ContractNumber = contractNumber,
-                PatientAllergyData = data,
-                UserId = userId,
-                Version = version
-            };
-
-            // [Route("/{Context}/{Version}/{ContractNumber}/PatientAllergy/Update/Single", "PUT")]
-            PutPatientAllergyDataResponse response = client.Put<PutPatientAllergyDataResponse>(
-                string.Format("{0}/{1}/{2}/{3}/PatientAllergy/Update/Single", url, context, version, contractNumber), request);
-            Assert.IsNotNull(response);
-        }
-
-        [TestMethod]
         public void UpdatePatientAllergies_Test()
         {
 

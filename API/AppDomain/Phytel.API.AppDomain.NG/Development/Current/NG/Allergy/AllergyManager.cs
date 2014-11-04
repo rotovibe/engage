@@ -132,7 +132,7 @@ namespace Phytel.API.AppDomain.NG.Allergy
             }
         } 
 
-        public List<PatientAllergy> BulkUpdatePatientAllergies(PostPatientAllergiesRequest request)
+        public List<PatientAllergy> UpdatePatientAllergies(PostPatientAllergiesRequest request)
         {
             List<PatientAllergy> patientAllergies = null;
             try
@@ -158,7 +158,7 @@ namespace Phytel.API.AppDomain.NG.Allergy
                         }
                     });
                 }
-                List<PatientAllergyData> data = EndpointUtil.BulkUpdatePatientAllergies(request);
+                List<PatientAllergyData> data = EndpointUtil.UpdatePatientAllergies(request);
                 if (data != null && data.Count > 0)
                 {
                     patientAllergies = new List<PatientAllergy>();
@@ -168,25 +168,7 @@ namespace Phytel.API.AppDomain.NG.Allergy
             }
             catch (WebServiceException ex)
             {
-                throw new WebServiceException("AD:BulkUpdatePatientAllergies()::" + ex.Message, ex.InnerException);
-            }
-        }
-
-        public PatientAllergy SingleUpdatePatientAllergy(PostPatientAllergyRequest request)
-        {
-            PatientAllergy patientAllergy = null;
-            try
-            {
-                PatientAllergyData data = EndpointUtil.SingleUpdatePatientAllergy(request);
-                if (data != null)
-                {
-                    patientAllergy = Mapper.Map<PatientAllergy>(data);
-                }
-                return patientAllergy;
-            }
-            catch (WebServiceException ex)
-            {
-                throw new WebServiceException("AD:SingleUpdatePatientAllergy()::" + ex.Message, ex.InnerException);
+                throw new WebServiceException("AD:UpdatePatientAllergies()::" + ex.Message, ex.InnerException);
             }
         }
         #endregion

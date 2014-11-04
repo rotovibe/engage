@@ -13,8 +13,7 @@ namespace Phytel.API.AppDomain.NG.Allergy
         DTO.Allergy PutNewAllergy(PostInsertNewAllergyRequest request);
         List<PatientAllergy> GetPatientAllergies(GetPatientAllergiesRequest request);
         PatientAllergy InitializePatientAllergy(PostInitializePatientAllergyRequest request);
-        List<PatientAllergy> BulkUpdatePatientAllergies(PostPatientAllergiesRequest request);
-        PatientAllergy SingleUpdatePatientAllergy(PostPatientAllergyRequest request);
+        List<PatientAllergy> UpdatePatientAllergies(PostPatientAllergiesRequest request);
         DTO.Allergy InitializeAllergy(PostInitializeAllergyRequest request);
     }
 }

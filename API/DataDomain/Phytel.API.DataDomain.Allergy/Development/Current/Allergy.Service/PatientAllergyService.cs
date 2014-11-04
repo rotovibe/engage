@@ -49,23 +49,6 @@ namespace Phytel.API.DataDomain.Allergy.Service
         #endregion
 
         #region Puts
-        public PutPatientAllergyDataResponse Put(PutPatientAllergyDataRequest request)
-        {
-            PutPatientAllergyDataResponse response = new PutPatientAllergyDataResponse { Version = request.Version };
-
-            try
-            {
-                RequireUserId(request);
-                response.PatientAllergyData = Manager.UpdateSinglePatientAllergy(request);
-            }
-            catch (Exception ex)
-            {
-                RaiseException(response, ex);
-            }
-            return response;
-        }
-
-
         public PutPatientAllergiesDataResponse Put(PutPatientAllergiesDataRequest request)
         {
             PutPatientAllergiesDataResponse response = new PutPatientAllergiesDataResponse { Version = request.Version };
@@ -73,7 +56,7 @@ namespace Phytel.API.DataDomain.Allergy.Service
             try
             {
                 RequireUserId(request);
-                response.PatientAllergiesData = Manager.UpdateBulkPatientAllergies(request);
+                response.PatientAllergiesData = Manager.UpdatePatientAllergies(request);
             }
             catch (Exception ex)
             {

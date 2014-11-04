@@ -80,7 +80,7 @@ namespace Phytel.API.DataDomain.Allergy.Test
             };
 
             //[Route("/{Context}/{Version}/{ContractNumber}/Allergy/Update", "PUT")]
-            PutPatientAllergyDataResponse response = client.Put<PutPatientAllergyDataResponse>(
+            PutAllergyDataResponse response = client.Put<PutAllergyDataResponse>(
                 string.Format("{0}/{1}/{2}/{3}/Allergy/Update", url, context, version, contractNumber), request);
             Assert.IsNotNull(response);
         }

@@ -43,29 +43,7 @@ namespace Phytel.API.DataDomain.Allergy
             catch (Exception ex) { throw ex; }
         }
 
-        public PatientAllergyData UpdateSinglePatientAllergy(PutPatientAllergyDataRequest request)
-        {
-            try
-            {
-                PatientAllergyData result = null;
-                //PatientAllergyRepository.UserId = request.UserId;
-                var repo = AllergyRepositoryFactory.GetAllergyRepository(request, RepositoryType.PatientAllergy);
-
-                if (request.PatientAllergyData != null)
-                {
-                    bool status = (bool)repo.Update(request);
-                    if (status)
-                    {
-                        result = (PatientAllergyData)repo.FindByID(request.PatientAllergyData.Id);
-                    }
-                }
-
-                return result;
-            }
-            catch (Exception ex) { throw ex; }
-        }
-
-        public List<PatientAllergyData> UpdateBulkPatientAllergies(PutPatientAllergiesDataRequest request)
+        public List<PatientAllergyData> UpdatePatientAllergies(PutPatientAllergiesDataRequest request)
         {
             try
             {

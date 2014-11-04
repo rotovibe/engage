@@ -67,40 +67,6 @@ namespace Phytel.API.AppDomain.NG.Test
         }
 
         [TestMethod]
-        public void UpdatePatientAllergy_Test()
-        {
-
-            PatientAllergy data = new PatientAllergy
-            {
-                AllergyId = "54489a3efe7a59146485bb05",
-                EndDate = DateTime.UtcNow,
-                Id = "5452b4b7d4332303e459f08d",
-                Notes = "AAAAAAAAA",
-                PatientId = "54087f43d6a48509407d69cb",
-                ReactionIds = new List<string> { "54494b5ad433232a446f7323" },
-               // SeverityId = "54494a96d433232a446f7313",
-                SourceId = "544e9976d433231d9c0330ae",
-                StartDate = DateTime.UtcNow,
-                StatusId = 2,
-                SystemName = "Integration",
-                UpdatedOn = DateTime.UtcNow
-            };
-
-            PostPatientAllergyRequest request = new PostPatientAllergyRequest
-            {
-                ContractNumber = contractNumber,
-                PatientAllergy = data,
-                UserId = userId,
-                Version = version
-            };
-            JsonServiceClient.HttpWebRequestFilter = x => x.Headers.Add(string.Format("{0}: {1}", "Token", token));
-            // [Route("/{Version}/{ContractNumber}/PatientAllergy/Update/Single", "POST")]
-            PostPatientAllergyResponse response = client.Post<PostPatientAllergyResponse>(
-                string.Format("{0}/{1}/{2}/PatientAllergy/Update/Single", url, version, contractNumber), request);
-            Assert.IsNotNull(response);
-        }
-
-        [TestMethod]
         public void UpdatePatientAllergies_Test()
         {
 
@@ -157,9 +123,9 @@ namespace Phytel.API.AppDomain.NG.Test
             };
 
             JsonServiceClient.HttpWebRequestFilter = x => x.Headers.Add(string.Format("{0}: {1}", "Token", token));
-            //[Route("/{Version}/{ContractNumber}/PatientAllergy/Update/Bulk", "POST")]
+            //[Route("/{Version}/{ContractNumber}/PatientAllergy/Update", "POST")]
             PostPatientAllergiesResponse response = client.Post<PostPatientAllergiesResponse>(
-                string.Format("{0}/{1}/{2}/PatientAllergy/Update/Bulk", url, version, contractNumber), request);
+                string.Format("{0}/{1}/{2}/PatientAllergy/Update", url, version, contractNumber), request);
             Assert.IsNotNull(response);
         }
     }
