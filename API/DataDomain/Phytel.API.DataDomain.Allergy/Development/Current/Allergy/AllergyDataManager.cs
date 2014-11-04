@@ -15,28 +15,11 @@ namespace Phytel.API.DataDomain.Allergy
             AllergyRepository = repository;
         }
 
-        public AllergyData PutNewAllergy(PostNewAllergyRequest request)
-        {
-            try
-            {
-                //AllergyRepository.UserId = request.UserId;
-                var repo = AllergyRepositoryFactory.GetAllergyRepository(request, RepositoryType.Allergy);
-                var result = repo.Insert(new AllergyData { Name = request.Description }) as AllergyData;
-                return result;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("AllergyDD:PutNewAllergy()::" + ex.Message, ex.InnerException);
-            }
-        }
-
         public List<AllergyData> GetAllergyList(GetAllAllergysRequest request)
         {
             try
             {
                 List<AllergyData> result = null;
-                //AllergyRepository.UserId = request.UserId;
-                //result = AllergyRepository.SelectAll().Cast<AllergyData>().ToList<AllergyData>();
                 var repo = AllergyRepositoryFactory.GetAllergyRepository(request, RepositoryType.Allergy);
                 result = repo.SelectAll().Cast<AllergyData>().ToList<AllergyData>();
 
@@ -52,8 +35,6 @@ namespace Phytel.API.DataDomain.Allergy
         {
             try
             {
-                //AllergyRepository.UserId = request.UserId;
-                //return (AllergyData)AllergyRepository.Initialize(request);
                 var repo = AllergyRepositoryFactory.GetAllergyRepository(request, RepositoryType.Allergy);
                 return (AllergyData)repo.Initialize(request);
             }
@@ -69,7 +50,6 @@ namespace Phytel.API.DataDomain.Allergy
             try
             {
                 AllergyData result = null;
-                //AllergyRepository.UserId = request.UserId;
                 var repo = AllergyRepositoryFactory.GetAllergyRepository(request, RepositoryType.Allergy);
 
                 if (request.AllergyData != null)

@@ -1,25 +1,18 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Phytel.API.DataDomain.Allergy.DTO;
-using Phytel.API.DataDomain.Allergy.Test;
-using DataDomain.Allergy.Repo;
 using System;
 using System.Collections.Generic;
-using System.Collections.Generic;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using ServiceStack.Service;
-using ServiceStack.ServiceClient.Web;
 
 namespace Phytel.API.DataDomain.Allergy.Test
 {
     [TestClass]
-    public class MongoData_PatientAllergy_Test
+    public class StubPatientAllergy_Test
     {
         string context = "NG";
         string contractNumber = "InHealth001";
         string userId = "000000000000000000000000";
         double version = 1.0;
-        string url = "http://localhost:8888/Allergy";
-        IRestClient client = new JsonServiceClient();
+        IPatientAllergyDataManager cm = new StubPatientAllergyDataManager();
 
        [TestMethod]
        public void GetPatientAllergies_Test()
@@ -32,11 +25,9 @@ namespace Phytel.API.DataDomain.Allergy.Test
                UserId = userId,
                Version = version
            };
-           //[Route("/{Context}/{Version}/{ContractNumber}/PatientAllergy/{PatientId}", "GET")]
-           GetPatientAllergiesDataResponse response = client.Post<GetPatientAllergiesDataResponse>(
-   string.Format("{0}/{1}/{2}/{3}/PatientAllergy/{4}", url, context, version, contractNumber, request.PatientId), request);
+           List<PatientAllergyData> data = cm.GetPatientAllergies(request);
 
-           Assert.IsNotNull(response);
+           Assert.IsNotNull(data.Count ==  2);
        }
 
         [TestMethod]
@@ -47,14 +38,13 @@ namespace Phytel.API.DataDomain.Allergy.Test
                 Context = context,
                 ContractNumber = contractNumber,
                 PatientId = "54087f43d6a48509407d69cb",
+                SystemName = "Engage",
                 UserId = userId,
                 Version = version
             };
-            // [Route("/{Context}/{Version}/{ContractNumber}/PatientAllergy/{PatientId}/Initialize", "PUT")]
-            PutInitializePatientAllergyDataResponse response = client.Put<PutInitializePatientAllergyDataResponse>(
-    string.Format("{0}/{1}/{2}/{3}/PatientAllergy/Initialize", url, context, version, contractNumber), request);
 
-            Assert.IsNotNull(response);
+            PatientAllergyData data = cm.InitializePatientAllergy(request);
+            Assert.IsTrue(data.AllergyId == request.AllergyId);
         }
 
         [TestMethod]
@@ -78,24 +68,7 @@ namespace Phytel.API.DataDomain.Allergy.Test
                 SystemName = "Engage1",
                 UpdatedOn = DateTime.UtcNow
             };
-
-            PatientAllergyData p2 = new PatientAllergyData
-            {
-                AllergyId = "54489a79fe7a59146485bd1e",
-                EndDate = DateTime.UtcNow,
-                Id = "5452584ed4332305d8fa10b5",
-                Notes = "asdasfddfjskdfjsldfugiosdgjksgj",
-                PatientId = "54087f43d6a48509407d69cb",
-                ReactionIds = new List<string> { "54494b5ad433232a446f7323" },
-                SeverityId = "54494a96d433232a446f7313",
-                SourceId = "544e9976d433231d9c0330ae",
-                StartDate = DateTime.UtcNow,
-                StatusId = 1,
-                SystemName = "Engage2",
-                UpdatedOn = DateTime.UtcNow
-            };
             data.Add(p1);
-            data.Add(p2);
             PutPatientAllergiesDataRequest request = new PutPatientAllergiesDataRequest
             {
                 Context = context,
@@ -104,11 +77,8 @@ namespace Phytel.API.DataDomain.Allergy.Test
                 UserId = userId,
                 Version = version
             };
-
-            //[Route("/{Context}/{Version}/{ContractNumber}/PatientAllergy/Update/Bulk", "PUT")]
-            PutPatientAllergiesDataResponse response = client.Put<PutPatientAllergiesDataResponse>(
-                string.Format("{0}/{1}/{2}/{3}/PatientAllergy/Update/Bulk", url, context, version, contractNumber), request);
-            Assert.IsNotNull(response);
+            List<PatientAllergyData> response = cm.UpdatePatientAllergies(request);
+            Assert.IsTrue(request.PatientAllergiesData.Count == response.Count);
         }
 
         [TestMethod]
@@ -123,10 +93,8 @@ namespace Phytel.API.DataDomain.Allergy.Test
                 Version = version
             };
 
-            //[Route("/{Context}/{Version}/{ContractNumber}/PatientAllergy/Patient/{PatientId}/Delete", "DELETE")]
-            DeleteAllergiesByPatientIdDataResponse response = client.Delete<DeleteAllergiesByPatientIdDataResponse>(
-                string.Format("{0}/{1}/{2}/{3}/PatientAllergy/Patient/{4}/Delete?UserId={5}", url, context, version, contractNumber, request.PatientId, request.UserId));
-            Assert.IsNotNull(response);
+            DeleteAllergiesByPatientIdDataResponse response = cm.DeletePatientAllergies(request);
+            Assert.IsTrue(response.Success);
         }
 
         [TestMethod]
@@ -141,10 +109,8 @@ namespace Phytel.API.DataDomain.Allergy.Test
                 Version = version
             };
 
-            //[Route("/{Context}/{Version}/{ContractNumber}/PatientAllergy/UndoDelete", "PUT")]
-            UndoDeletePatientAllergiesDataResponse response = client.Put<UndoDeletePatientAllergiesDataResponse>(
-                string.Format("{0}/{1}/{2}/{3}/PatientAllergy/UndoDelete", url, context, version, contractNumber), request);
-            Assert.IsNotNull(response);
+             UndoDeletePatientAllergiesDataResponse response = cm.UndoDeletePatientAllergies(request);
+             Assert.IsTrue(response.Success);
         }
     }
 }

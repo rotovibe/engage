@@ -12,30 +12,43 @@ using ServiceStack.ServiceClient.Web;
 namespace Phytel.API.DataDomain.Allergy.Test
 {
     [TestClass]
-    public class MongoData_Allergy_Test
+    public class StubAllergy_Test
     {
         string context = "NG";
         string contractNumber = "InHealth001";
         string userId = "000000000000000000000000";
         double version = 1.0;
-        string url = "http://localhost:8888/Allergy";
-        IRestClient client = new JsonServiceClient();
+        IAllergyDataManager cm = new StubAllergyDataManager();
 
         [TestMethod]
-        public void InitializeAllergy_Test()
+        public void GetAllergies_Test()
         {
-            PutInitializeAllergyDataRequest request = new PutInitializeAllergyDataRequest {
-                AllergyName = "testing name",
+            GetAllAllergysRequest request = new GetAllAllergysRequest
+            {
                 Context = context,
                 ContractNumber = contractNumber,
                 UserId = userId,
-                Version = version
+                Version = version,
             };
-            //[Route("/{Context}/{Version}/{ContractNumber}/Allergy/Initialize", "PUT")]
-            PutInitializeAllergyDataResponse response = client.Put<PutInitializeAllergyDataResponse>(
-    string.Format("{0}/{1}/{2}/{3}/Allergy/Initialize", url, context, version, contractNumber), request);
-
-            Assert.IsNotNull(response);
+            List<AllergyData> response = cm.GetAllergyList(request);
+            Assert.IsTrue(response.Count == 2);
+        } 
+        
+        
+        [TestMethod]
+        public void InitializeAllergy_Test()
+        {
+            PutInitializeAllergyDataRequest request = new PutInitializeAllergyDataRequest
+            {
+                Context = context,
+                ContractNumber = contractNumber,
+                UserId = userId,
+                Version = version,
+                AllergyName = "allergyName"
+            };
+            
+            AllergyData response = cm.InitializeAllergy(request);
+            Assert.IsTrue(request.AllergyName == response.Name);
         }
 
 
@@ -47,7 +60,7 @@ namespace Phytel.API.DataDomain.Allergy.Test
             {
                 DeleteFlag = false,
                 Id = "5453cea0d433232a387d51b9",
-                Name = "testing",
+                Name = "allergyName",
                 TypeIds = new List<string> { "5447d6ddfe7a59146485b512", "5446db5efe7a591e74013b6b", "5446db5efe7a591e74013b6c" },
                 Version = 1.0
             };
@@ -61,10 +74,8 @@ namespace Phytel.API.DataDomain.Allergy.Test
                 Version = version
             };
 
-            //[Route("/{Context}/{Version}/{ContractNumber}/Allergy/Update", "PUT")]
-            PutAllergyDataResponse response = client.Put<PutAllergyDataResponse>(
-                string.Format("{0}/{1}/{2}/{3}/Allergy/Update", url, context, version, contractNumber), request);
-            Assert.IsNotNull(response);
+            AllergyData aData = cm.UpdateAllergy(request);
+            Assert.IsTrue(aData.Name == data.Name);
         }
     }
 }

@@ -24,22 +24,6 @@ namespace Phytel.API.AppDomain.NG.Allergy
         public IAllergyEndpointUtil EndpointUtil { get; set; }
         public ISearchManager SearchManager { get; set; }
 
-        public DTO.Allergy PutNewAllergy(PostInsertNewAllergyRequest request)
-        {
-            try
-            {
-                DTO.Allergy result = null;
-                var algy = EndpointUtil.PutNewAllergy(request);
-                result = Mapper.Map<DTO.Allergy>(algy);
-                SearchManager.RegisterDocumentInSearchIndex(result, request.ContractNumber);
-                return result;
-            }
-            catch (WebServiceException ex)
-            {
-                throw new WebServiceException("AD:GetAllergies()::" + ex.Message, ex.InnerException);
-            }
-        }
-
         public List<DTO.Allergy> GetAllergies(GetAllergiesRequest request)
         {
             try

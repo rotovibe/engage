@@ -15,42 +15,6 @@ namespace Phytel.API.AppDomain.NG.Allergy
         #endregion
 
         #region Allergy
-        public AllergyData PutNewAllergy(PostInsertNewAllergyRequest request)
-        {
-            try
-            {
-                AllergyData result = null;
-                IRestClient client = new JsonServiceClient();
-                //[Route("/{Context}/{Version}/{ContractNumber}/Allergy", "PUT")]
-                var url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Allergy",
-                                    DDAllergyUrl,
-                                    "NG",
-                                    request.Version,
-                                    request.ContractNumber), request.UserId);
-
-                PostNewAllergyResponse dataDomainResponse = client.Put<PostNewAllergyResponse>(url,
-                    new PostNewAllergyRequest
-                    {
-                        Context = request.Context,
-                        Description = request.Name,
-                        ContractNumber = request.ContractNumber,
-                        UserId = request.UserId,
-                        Version = request.Version
-                    });
-
-                if (dataDomainResponse != null)
-                {
-                    result = dataDomainResponse.Allergy;
-                }
-
-                return result;
-            }
-            catch (WebServiceException ex)
-            {
-                throw new WebServiceException("AD:GetAllergies()::" + ex.Message, ex.InnerException);
-            }
-        }
-
         public List<AllergyData> GetAllergies(GetAllergiesRequest request)
         {
             try

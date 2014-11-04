@@ -3,32 +3,42 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using DataDomain.Allergy.Repo;
+using Phytel.API.DataDomain.Allergy.DTO;
 
-namespace Phytel.API.DataDomain.Allergy.Test.Stubs
+namespace Phytel.API.DataDomain.Allergy.Test
 {
     public class StubAllergyDataManager : IAllergyDataManager
     {
 
         public List<DTO.AllergyData> GetAllergyList(DTO.GetAllAllergysRequest request)
         {
-            return new List<DTO.AllergyData>();
+            List<AllergyData> result = null;
+            var repo = StubRepositoryFactory.GetAllergyRepository(request, RepositoryType.Allergy);
+            result = repo.SelectAll().Cast<AllergyData>().ToList<AllergyData>();
+            return result;
         }
-
-        public DTO.AllergyData PutNewAllergy(DTO.PostNewAllergyRequest request)
-        {
-            throw new NotImplementedException();
-        }
-
 
         public DTO.AllergyData InitializeAllergy(DTO.PutInitializeAllergyDataRequest request)
         {
-            throw new NotImplementedException();
+            var repo = StubRepositoryFactory.GetAllergyRepository(request, RepositoryType.Allergy);
+            return (AllergyData)repo.Initialize(request);
         }
-
 
         public DTO.AllergyData UpdateAllergy(DTO.PutAllergyDataRequest request)
         {
-            throw new NotImplementedException();
+            AllergyData result = null;
+            var repo = StubRepositoryFactory.GetAllergyRepository(request, RepositoryType.Allergy);
+
+            if (request.AllergyData != null)
+            {
+                bool status = (bool)repo.Update(request);
+                if (status)
+                {
+                    result = (AllergyData)repo.FindByID(request.AllergyData.Id);
+                }
+            }
+            return result;
         }
     }
 }

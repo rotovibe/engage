@@ -67,45 +67,6 @@ namespace Phytel.API.AppDomain.NG.Service
         #endregion
 
         #region Allergy - Posts
-        public PostInsertNewAllergyResponse Post(PostInsertNewAllergyRequest request)
-        {
-            PostInsertNewAllergyResponse response = new PostInsertNewAllergyResponse();
-            ValidateTokenResponse result = null;
-
-            try
-            {
-                if (base.Request != null)
-                {
-                    request.Token = base.Request.Headers["Token"] as string;
-                }
-                result = Security.IsUserValidated(request.Version, request.Token, request.ContractNumber);
-                if (result.UserId.Trim() != string.Empty)
-                {
-                    request.UserId = result.UserId;
-                    response.Allergy = Mapper.Map<IdNamePair>(AllergyManager.PutNewAllergy(request));
-                }
-                else
-                    throw new UnauthorizedAccessException();
-            }
-            catch (Exception ex)
-            {
-                CommonFormatterUtil.FormatExceptionResponse(response, base.Response, ex);
-                if ((ex is WebServiceException) == false)
-                    AllergyManager.LogException(ex);
-            }
-            finally
-            {
-                if (result != null)
-                {
-                    string browser = (base.Request != null) ? base.Request.UserAgent : unknownBrowserType;
-                    string hostAddress = (base.Request != null) ? base.Request.UserHostAddress : unknownUserHostAddress;
-                    AuditUtil.LogAuditData(request, result.SQLUserId, null, browser, hostAddress, request.GetType().Name);
-                }
-            }
-
-            return response;
-        }
-
         public PostInitializeAllergyResponse Post(PostInitializeAllergyRequest request)
         {
             PostInitializeAllergyResponse response = new PostInitializeAllergyResponse();
