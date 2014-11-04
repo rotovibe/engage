@@ -39,7 +39,14 @@ namespace Phytel.API.AppDomain.NG.Service
                 if (result.UserId.Trim() != string.Empty)
                 {
                     request.UserId = result.UserId;
-                    response.Allergies = SearchManager.GetSearchDomainResults(request);
+                     var res = SearchManager.GetSearchDomainResults(request);
+                     var count = res.Count;
+                     if (request.Take > 0 && res.Count > request.Take)
+                     {
+                         res = res.Take(request.Take).ToList();
+                         response.Message = request.Take + " out of " + count + ". Please refine your search.";
+                     }
+                    response.Allergies = res;
                 }
                 else
                     throw new UnauthorizedAccessException();
@@ -80,7 +87,7 @@ namespace Phytel.API.AppDomain.NG.Service
                     request.UserId = result.UserId;
                     var res = SearchManager.GetSearchMedNameResults(request);
                     var count = res.Count;
-                    if (request.Take > 0)
+                    if (request.Take > 0 && res.Count > request.Take)
                     {
                         res = res.Take(request.Take).ToList();
                         response.Message = request.Take + " out of " + count + ". Please refine your search.";

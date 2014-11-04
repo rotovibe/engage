@@ -59,7 +59,7 @@ namespace Phytel.API.AppDomain.NG.Search.LuceneStrategy
 
             using (var searcher = new IndexSearcher(Directory, false))
             {
-                var hits_limit = 10;
+                var hits_limit = 1000;
                 var analyzer = new StandardAnalyzer(Lucene.Net.Util.Version.LUCENE_30);
 
                 if (!string.IsNullOrEmpty(searchField))

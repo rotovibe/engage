@@ -10,6 +10,9 @@ namespace Phytel.API.AppDomain.NG.DTO.Search
         [ApiMember(Name = "SearchTerm", Description = "Term to search for.", ParameterType = "QueryString", DataType = "string", IsRequired = true)]
         public string SearchTerm { get; set; }
 
+        [ApiMember(Name = "Take", Description = "Number of results to return.", ParameterType = "property", DataType = "int", IsRequired = true)]
+        public int Take { get; set; }
+
         [ApiMember(Name = "SearchDomain", Description = "Domain to search data from.", ParameterType = "path", DataType = "string", IsRequired = true)]
         public string SearchDomain { get; set; }
 
