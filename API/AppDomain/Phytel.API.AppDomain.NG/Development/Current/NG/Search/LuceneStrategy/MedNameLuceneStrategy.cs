@@ -31,11 +31,12 @@ namespace Phytel.API.AppDomain.NG.Search.LuceneStrategy
             var searchQuery = new TermQuery(new Term("Id", sampleData.ProductId));
             writer.DeleteDocuments(searchQuery);
             var doc = new Document();
-            doc.Add(new Field("Id", sampleData.ProductId, Field.Store.YES, Field.Index.NOT_ANALYZED));
-            doc.Add(new Field("ProductNDC", sampleData.ProductNDC, Field.Store.YES, Field.Index.NOT_ANALYZED));
-            doc.Add(new Field("ProprietaryName", sampleData.ProprietaryName, Field.Store.YES, Field.Index.ANALYZED));
-            doc.Add(new Field("ProprietaryNameSuffix", sampleData.ProprietaryNameSuffix, Field.Store.YES, Field.Index.ANALYZED));
-            doc.Add(new Field("SubstanceName", sampleData.SubstanceName, Field.Store.YES, Field.Index.ANALYZED));
+            doc.Add(new Field("Id", sampleData.ProductId.Trim(), Field.Store.YES, Field.Index.NOT_ANALYZED));
+            doc.Add(new Field("ProductNDC", sampleData.ProductNDC.Trim(), Field.Store.YES, Field.Index.NOT_ANALYZED));
+            doc.Add(new Field("CompositeName", sampleData.CompositeName.Trim(), Field.Store.YES, Field.Index.ANALYZED));
+            doc.Add(new Field("ProprietaryName", sampleData.ProprietaryName.Trim(), Field.Store.YES, Field.Index.ANALYZED));
+            doc.Add(new Field("ProprietaryNameSuffix", sampleData.ProprietaryNameSuffix.Trim(), Field.Store.YES, Field.Index.ANALYZED));
+            doc.Add(new Field("SubstanceName", sampleData.SubstanceName.Trim(), Field.Store.YES, Field.Index.ANALYZED));
 
             writer.AddDocument(doc);
         }
@@ -81,7 +82,7 @@ namespace Phytel.API.AppDomain.NG.Search.LuceneStrategy
                 }
                 else
                 {
-                    var parser = new MultiFieldQueryParser(Lucene.Net.Util.Version.LUCENE_30, new[] { "ProprietaryName", "SubstanceName" }, analyzer);
+                    var parser = new MultiFieldQueryParser(Lucene.Net.Util.Version.LUCENE_30, new[] { "CompositeName", "SubstanceName" }, analyzer);
                     parser.AllowLeadingWildcard = true;
                     parser.PhraseSlop = 0;
                     var query = ParseWholeQuery(searchQuery, parser);

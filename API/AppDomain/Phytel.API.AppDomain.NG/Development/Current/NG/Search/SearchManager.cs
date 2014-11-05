@@ -63,7 +63,7 @@ namespace Phytel.API.AppDomain.NG.Allergy
             try
             {
                 var lists = new MedFieldsLists();
-                var matches = new MedFieldsLuceneStrategy<MedFieldsSearchDoc, MedFieldsSearchDoc>{ Contract = request.ContractNumber}.Search(request.Name, "ProprietaryName");
+                var matches = new MedFieldsLuceneStrategy<MedFieldsSearchDoc, MedFieldsSearchDoc>{ Contract = request.ContractNumber}.Search(request.Name, "CompositeName");
 
                 matches = SearchUtil.FilterFieldResultsByParams(request, matches);
 

@@ -10,6 +10,7 @@ namespace Phytel.API.AppDomain.NG.DTO.Search
     {
         public string ProductId { get; set; }
         public string ProductNDC { get; set; }
+        public string CompositeName { get; set; }
         public string ProprietaryName { get; set; }
         public string ProprietaryNameSuffix { get; set; }
         public string SubstanceName { get; set; }

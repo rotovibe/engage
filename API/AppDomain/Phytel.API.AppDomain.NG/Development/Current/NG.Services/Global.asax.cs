@@ -67,13 +67,14 @@ namespace Phytel.API.AppDomain.NG.Service
                     .ForMember(d => d.Name, opt => opt.MapFrom(src => src.Get("Name")));
 
                 Mapper.CreateMap<Document, TextValuePair>()
-                                    .ForMember(d => d.Value, opt => opt.MapFrom(src => src.Get("ProprietaryName")))
+                                    .ForMember(d => d.Value, opt => opt.MapFrom(src => src.Get("CompositeName").Trim()))
                                     .ForMember(d => d.Text, opt => opt.MapFrom(
-                                        src => src.Get("ProprietaryName") + " " + src.Get("ProprietaryNameSuffix") ));
+                                        src => src.Get("CompositeName").Trim()));
 
                 Mapper.CreateMap<Document, MedFieldsSearchDoc>()
                     .ForMember(d => d.ProductId, opt => opt.MapFrom(src => src.Get("Id")))
                     .ForMember(d => d.DosageFormname, opt => opt.MapFrom(src => src.Get("DosageFormname")))
+                    .ForMember(d => d.CompositeName, opt => opt.MapFrom(src => src.Get("CompositeName")))
                     .ForMember(d => d.ProprietaryName, opt => opt.MapFrom(src => src.Get("ProprietaryName")))
                     .ForMember(d => d.RouteName, opt => opt.MapFrom(src => src.Get("RouteName")))
                     .ForMember(d => d.SubstanceName, opt => opt.MapFrom(src => src.Get("SubstanceName")))

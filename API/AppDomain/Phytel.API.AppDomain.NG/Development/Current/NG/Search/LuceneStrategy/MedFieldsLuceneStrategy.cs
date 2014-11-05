@@ -40,6 +40,7 @@ namespace Phytel.API.AppDomain.NG.Search.LuceneStrategy
             var sq5 = new TermQuery(new Term("SubstanceName", sampleData.SubstanceName));
             var sq6 = new TermQuery(new Term("Strength", sampleData.Strength));
             var sq7 = new TermQuery(new Term("Unit", sampleData.Unit));
+            var sq8 = new TermQuery(new Term("CompositeName", sampleData.CompositeName));
             boolQuery.Add(sq1, Occur.MUST);
             boolQuery.Add(sq2, Occur.MUST);
             boolQuery.Add(sq3, Occur.MUST);
@@ -47,16 +48,18 @@ namespace Phytel.API.AppDomain.NG.Search.LuceneStrategy
             boolQuery.Add(sq5, Occur.MUST);
             boolQuery.Add(sq6, Occur.MUST);
             boolQuery.Add(sq7, Occur.MUST);
+            boolQuery.Add(sq8, Occur.MUST);
             writer.DeleteDocuments(boolQuery);
 
             var doc = new Document();
             doc.Add(new Field("Id", sampleData.ProductId, Field.Store.YES, Field.Index.NOT_ANALYZED));
-            doc.Add(new Field("DosageFormname", sampleData.DosageFormname, Field.Store.YES, Field.Index.NOT_ANALYZED));
-            doc.Add(new Field("ProprietaryName", sampleData.ProprietaryName, Field.Store.YES, Field.Index.ANALYZED));
-            doc.Add(new Field("RouteName", sampleData.RouteName, Field.Store.YES, Field.Index.ANALYZED));
-            doc.Add(new Field("SubstanceName", sampleData.SubstanceName, Field.Store.YES, Field.Index.ANALYZED));
-            doc.Add(new Field("Strength", sampleData.Strength, Field.Store.YES, Field.Index.ANALYZED));
-            doc.Add(new Field("Unit", sampleData.Unit, Field.Store.YES, Field.Index.ANALYZED));
+            doc.Add(new Field("DosageFormname", sampleData.DosageFormname.Trim(), Field.Store.YES, Field.Index.NOT_ANALYZED));
+            doc.Add(new Field("CompositeName", sampleData.CompositeName.Trim(), Field.Store.YES, Field.Index.ANALYZED));
+            doc.Add(new Field("ProprietaryName", sampleData.ProprietaryName.Trim(), Field.Store.YES, Field.Index.ANALYZED));
+            doc.Add(new Field("RouteName", sampleData.RouteName.Trim(), Field.Store.YES, Field.Index.ANALYZED));
+            doc.Add(new Field("SubstanceName", sampleData.SubstanceName.Trim(), Field.Store.YES, Field.Index.ANALYZED));
+            doc.Add(new Field("Strength", sampleData.Strength.Trim(), Field.Store.YES, Field.Index.ANALYZED));
+            doc.Add(new Field("Unit", sampleData.Unit.Trim(), Field.Store.YES, Field.Index.ANALYZED));
 
             writer.AddDocument(doc);
         }
