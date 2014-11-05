@@ -5,7 +5,7 @@ namespace Phytel.API.DataDomain.Medication
 {
     public interface IMedicationDataManager
     {
-        DTO.Medication GetMedicationByID(GetMedicationRequest request);
-        List<DTO.Medication> GetMedicationList(GetAllMedicationsRequest request);
+        List<DTO.MedicationData> GetMedicationList(string userid, string contract);
+        bool BulkInsertMedications(List<DTO.MedicationData> meds, string userId, string contract);
     }
 }
