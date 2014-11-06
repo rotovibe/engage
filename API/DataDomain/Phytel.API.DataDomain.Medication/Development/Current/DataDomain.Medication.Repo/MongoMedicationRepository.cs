@@ -155,5 +155,10 @@ namespace DataDomain.Medication.Repo
         {
             throw new NotImplementedException();
         }
+
+        public object FindByPatientId(object request)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

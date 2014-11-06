@@ -19,7 +19,7 @@ namespace Phytel.API.DataDomain.Medication.Service
             try
             {
                 RequireUserId(request);
-                response.Medications = Manager.GetMedicationList(request.UserId, request.ContractNumber);
+                response.Medications = Manager.GetMedicationList(request);
             }
             catch (Exception ex)
             {
@@ -35,7 +35,7 @@ namespace Phytel.API.DataDomain.Medication.Service
             {
                 RequireUserId(request);
                 //response.Medications = 
-                    var result = Manager.BulkInsertMedications(new List<DTO.MedicationData>(), request.UserId, request.ContractNumber);
+                    var result = Manager.BulkInsertMedications(new List<DTO.MedicationData>(), request);
                 response.Status = result;
             }
             catch (Exception ex)

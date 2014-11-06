@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using DataDomain.Medication.Repo;
 using Phytel.API.DataDomain.Medication;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Phytel.API.DataDomain.Medication.DTO;
 namespace Phytel.API.DataDomain.Medication.Tests
 {
     [TestClass()]
@@ -16,13 +17,18 @@ namespace Phytel.API.DataDomain.Medication.Tests
         [TestMethod()]
         public void BulkInsertMedicationsTest()
         {
-            var userid = "1234";
-            var contract = "InHealth001";
-            var repo = MedicationRepositoryFactory.GetMedicationRepository(userid, contract, RepositoryType.Medication);
+            PutBulkInsertMedicationsRequest request = new PutBulkInsertMedicationsRequest
+            { 
+                Context = "NG",
+                ContractNumber = "InHealth001",
+                UserId = "1234",
+                Version = 1.0,
+                Medications  = GetMedDtoList()
+            };
+            var repo = MedicationRepositoryFactory.GetMedicationRepository(request, RepositoryType.Medication);
             var dm = new MedicationDataManager(repo);
 
-            var meds = GetMedDtoList();
-            dm.BulkInsertMedications(meds, userid, contract);
+            dm.BulkInsertMedications(request.Medications, request);
         }
 
         private List<DTO.MedicationData> GetMedDtoList()

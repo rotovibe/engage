@@ -15,14 +15,14 @@ namespace Phytel.API.DataDomain.Medication
             MedicationRepository = repository;
         }
 
-        public List<DTO.MedicationData> GetMedicationList(string userid, string contract)
+        public List<DTO.MedicationData> GetMedicationList(GetAllMedicationsRequest request)
         {
             try
             {
                 List<DTO.MedicationData> result = null;
                 //MedicationRepository.UserId = request.UserId;
                 //result = MedicationRepository.SelectAll().Cast<DTO.Medication>().ToList<DTO.Medication>();
-                var repo = MedicationRepositoryFactory.GetMedicationRepository(userid, contract, RepositoryType.Medication);
+                var repo = MedicationRepositoryFactory.GetMedicationRepository(request, RepositoryType.Medication);
                 result = repo.SelectAll().Cast<DTO.MedicationData>().ToList<DTO.MedicationData>();
                 return result;
             }
@@ -32,13 +32,13 @@ namespace Phytel.API.DataDomain.Medication
             }
         }
 
-        public bool BulkInsertMedications(List<DTO.MedicationData> meds, string userId, string contract)
+        public bool BulkInsertMedications(List<DTO.MedicationData> meds, PutBulkInsertMedicationsRequest request)
         {
             try
             {
                 //MedicationRepository.UserId = request.UserId;
                 //result = MedicationRepository.SelectAll().Cast<DTO.Medication>().ToList<DTO.Medication>();
-                var repo = MedicationRepositoryFactory.GetMedicationRepository(userId, contract, RepositoryType.Medication);
+                var repo = MedicationRepositoryFactory.GetMedicationRepository(request, RepositoryType.Medication);
 
                 var result = (Boolean)repo.InsertAll(meds.ToList<object>());
                 return result;

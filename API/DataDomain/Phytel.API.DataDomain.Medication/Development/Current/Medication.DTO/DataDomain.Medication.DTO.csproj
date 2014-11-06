@@ -72,8 +72,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
+    <Compile Include="DeleteMedSuppsByPatientIdDataRequest.cs" />
+    <Compile Include="DeleteMedSuppsByPatientIdDataResponse.cs" />
     <Compile Include="DomainResponse.cs" />
     <Compile Include="Enums.cs" />
+    <Compile Include="GetPatientMedSuppsDataRequest.cs" />
+    <Compile Include="GetPatientMedSuppsDataResponse.cs" />
     <Compile Include="PatientMedSuppData.cs" />
     <Compile Include="PutBulkInsertMedicationsRequest.cs" />
     <Compile Include="GetAllMedicationsRequest.cs" />
@@ -83,6 +87,10 @@
     <Compile Include="GetMedicationResponse.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Medication.cs" />
+    <Compile Include="PutPatientMedSuppDataRequest.cs" />
+    <Compile Include="PutPatientMedSuppDataResponse.cs" />
+    <Compile Include="UndoDeletePatientMedSuppsDataRequest.cs" />
+    <Compile Include="UndoDeletePatientMedSuppsDataResponse.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

@@ -4,7 +4,7 @@ using Phytel.API.Interface;
 
 namespace DataDomain.Medication.Repo
 {
-    public interface IMongoMedicationRepository : IRepository
+    public interface IMongoPatientMedSuppRepository : IRepository
     {
         object FindByPatientId(object request);
     }

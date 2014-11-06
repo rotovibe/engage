@@ -7,13 +7,14 @@ namespace DataDomain.Medication.Repo
 {
     public enum RepositoryType
     {
-        Medication
+        Medication,
+        PatientMedSupp
     }
 
     public abstract class MedicationRepositoryFactory
     {
 
-        public static IMongoMedicationRepository GetMedicationRepository(string userId, string contract, RepositoryType type)
+        public static IMongoMedicationRepository GetMedicationRepository(IDataDomainRequest request, RepositoryType type)
         {
             try
             {
@@ -23,8 +24,14 @@ namespace DataDomain.Medication.Repo
                 {
                     case RepositoryType.Medication:
                     {
-                        var context = new MedicationMongoContext(contract);
-                        repo = new MongoMedicationRepository<MedicationMongoContext>(context) {UserId = userId};
+                        var context = new MedicationMongoContext(request.ContractNumber);
+                        repo = new MongoMedicationRepository<MedicationMongoContext>(context) {UserId = request.UserId, ContractDBName = request.ContractNumber};
+                        break;
+                    }
+                    case RepositoryType.PatientMedSupp:
+                    {
+                        var context = new MedicationMongoContext(request.ContractNumber);
+                        repo = new MongoPatientMedSuppRepository<MedicationMongoContext>(context) { UserId = request.UserId, ContractDBName = request.ContractNumber };
                         break;
                     }
                 }

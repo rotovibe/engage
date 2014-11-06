@@ -12,22 +12,18 @@ namespace DataDomain.Medication.Repo.Containers
                     )
                 ).ReusedWithin(Funq.ReuseScope.Request);
 
+
             container.Register<IMongoMedicationRepository>(Constants.Domain, c =>
                 new MongoMedicationRepository<MedicationMongoContext>(
-                    //c.ResolveNamed<IUOWMongo<MedicationMongoContext>>(Constants.Domain)
-                    "InHealth001"
+                    c.ResolveNamed<IUOWMongo<MedicationMongoContext>>(Constants.Domain)
                     )
                 ).ReusedWithin(Funq.ReuseScope.Request);
 
-            /*
-             * Uncomment this and register MongoMedicationRepository without a UOW wrapper.
-             * Delete the one above.
-             * 
-            container.Register<IMongoMedicationRepository>(Constants.Domain, c =>
-                new MongoMedicationRepository<MedicationMongoContext>(
-                    new MedicationMongoContext(c.ResolveNamed<string>(Constants.NamedString)))
+            container.Register<IMongoPatientMedSuppRepository>(Constants.Domain, c =>
+                new MongoPatientMedSuppRepository<MedicationMongoContext>(
+                    c.ResolveNamed<IUOWMongo<MedicationMongoContext>>(Constants.Domain)
+                    )
                 ).ReusedWithin(Funq.ReuseScope.Request);
-            */
 
             return container;
         }

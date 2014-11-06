@@ -38,13 +38,26 @@ namespace Phytel.API.DataDomain.Medication.Service
 			_hostContext.Items["ContractNumber"] = contractNumber;
 		}
 
-		protected virtual string GetContractNumber()
-		{
-			string result = null;
-			var obj = this._hostContext.Items["ContractNumber"];
-			if (obj != null)
-				result = obj.ToString();
-			return result;
-		}
+        protected virtual string GetContractNumber()
+        {
+            string result = null;
+
+            //string val = null;
+            //    foreach(DictionaryEntry de in _hostContext.Items){
+            //        if(de.Key == "ContractNumber")
+            //        {
+            //            val = de.Value.ToString();
+            //        }
+            //    }
+            //result = val;
+
+            //var obj = _hostContext.Items["ContractNumber"];
+            //if (obj != null)
+            //    result = obj.ToString();
+
+            // need to fix this!
+            result = "InHealth001";
+            return result;
+        }
 	}
 }
