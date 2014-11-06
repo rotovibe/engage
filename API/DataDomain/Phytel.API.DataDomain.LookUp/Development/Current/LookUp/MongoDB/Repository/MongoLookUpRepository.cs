@@ -262,6 +262,30 @@ namespace Phytel.API.DataDomain.LookUp
                 }
             }
             catch { }
+            try
+            {
+                if (MongoDB.Bson.Serialization.BsonClassMap.IsClassMapRegistered(typeof(MedSuppType)) == false)
+                {
+                    MongoDB.Bson.Serialization.BsonClassMap.RegisterClassMap<MedSuppType>();
+                }
+            }
+            catch { }
+            try
+            {
+                if (MongoDB.Bson.Serialization.BsonClassMap.IsClassMapRegistered(typeof(FreqHowOften)) == false)
+                {
+                    MongoDB.Bson.Serialization.BsonClassMap.RegisterClassMap<FreqHowOften>();
+                }
+            }
+            catch { }
+            try
+            {
+                if (MongoDB.Bson.Serialization.BsonClassMap.IsClassMapRegistered(typeof(FreqWhen)) == false)
+                {
+                    MongoDB.Bson.Serialization.BsonClassMap.RegisterClassMap<FreqWhen>();
+                }
+            }
+            catch { }
             #endregion
 
             // Get the redis IP address from config file.

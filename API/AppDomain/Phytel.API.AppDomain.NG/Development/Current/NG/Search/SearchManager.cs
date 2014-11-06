@@ -1,5 +1,4 @@
 ﻿using System;
-using Phytel.API.AppDomain.NG.DTO.Meds;
 using Phytel.API.AppDomain.NG.DTO.Search;
 using Phytel.API.AppDomain.NG.Search;
 using Phytel.API.AppDomain.NG.Search.LuceneStrategy;

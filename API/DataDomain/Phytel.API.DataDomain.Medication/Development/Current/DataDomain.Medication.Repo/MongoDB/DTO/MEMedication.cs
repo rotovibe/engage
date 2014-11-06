@@ -76,6 +76,7 @@ namespace Phytel.API.DataDomain.Medication.DTO
         [BsonElement(StrengthProperty)]
         public List<string> Strength { get; set; }
 
+        #region Base elements
         public const string VersionProperty = "v";
         [BsonElement(VersionProperty)]
         [BsonDefaultValue(1.0)]
@@ -117,5 +118,6 @@ namespace Phytel.API.DataDomain.Medication.DTO
         [BsonElement(ExtraElementsProperty)]
         [BsonExtraElements]
         public BsonDocument ExtraElements { get; set; }
+        #endregion
     }
 }

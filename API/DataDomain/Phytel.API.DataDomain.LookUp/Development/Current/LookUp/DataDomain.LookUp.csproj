@@ -104,6 +104,9 @@
     <Compile Include="MongoDB\DTO\Allergy\Reaction.cs" />
     <Compile Include="MongoDB\DTO\Allergy\Severity.cs" />
     <Compile Include="MongoDB\DTO\CodingSystem.cs" />
+    <Compile Include="MongoDB\DTO\MedSupp\MedSuppType.cs" />
+    <Compile Include="MongoDB\DTO\MedSupp\FreqHowOften.cs" />
+    <Compile Include="MongoDB\DTO\MedSupp\FreqWhen.cs" />
     <Compile Include="MongoDB\DTO\ObservationType.cs" />
     <Compile Include="MongoDB\DTO\Goal\InterventionCategory.cs" />
     <Compile Include="MongoDB\DTO\Goal\BarrierCategory.cs" />

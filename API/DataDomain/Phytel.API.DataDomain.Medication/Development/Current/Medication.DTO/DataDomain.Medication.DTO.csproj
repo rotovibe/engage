@@ -73,6 +73,8 @@
   <ItemGroup>
     <Compile Include="Constants.cs" />
     <Compile Include="DomainResponse.cs" />
+    <Compile Include="Enums.cs" />
+    <Compile Include="PatientMedSuppData.cs" />
     <Compile Include="PutBulkInsertMedicationsRequest.cs" />
     <Compile Include="GetAllMedicationsRequest.cs" />
     <Compile Include="PutBulkInsertMedicationsResponse.cs" />

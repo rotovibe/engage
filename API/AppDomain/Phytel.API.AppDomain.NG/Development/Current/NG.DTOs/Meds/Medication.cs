@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Phytel.API.AppDomain.NG.DTO.Meds
+namespace Phytel.API.AppDomain.NG.DTO
 {
     public class Medication
     {

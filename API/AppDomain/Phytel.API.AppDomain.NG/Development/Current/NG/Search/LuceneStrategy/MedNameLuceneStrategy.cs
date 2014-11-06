@@ -10,7 +10,6 @@ using Lucene.Net.Documents;
 using Lucene.Net.Index;
 using Lucene.Net.QueryParsers;
 using Lucene.Net.Search;
-using Phytel.API.AppDomain.NG.DTO.Meds;
 using Phytel.API.AppDomain.NG.DTO.Search;
 using Phytel.API.Common.CustomObject;
 
