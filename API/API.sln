@@ -244,13 +244,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Medication", "Medication", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.Medication.Repo", "DataDomain\Phytel.API.DataDomain.Medication\Development\Current\DataDomain.Medication.Repo\DataDomain.Medication.Repo.csproj", "{60C6A9F6-D668-4053-8997-8CFE661628DD}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.Medication", "DataDomain\Phytel.API.DataDomain.Medication\Development\Current\Medication\DataDomain.Medication.csproj", "{1C19F07A-0F65-4A19-887F-A8DB148D4CA8}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.Medication.DTO", "DataDomain\Phytel.API.DataDomain.Medication\Development\Current\Medication.DTO\DataDomain.Medication.DTO.csproj", "{006555BA-C927-4CE0-BC5A-7A6A7053D0D5}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.Medication.Service", "DataDomain\Phytel.API.DataDomain.Medication\Development\Current\Medication.Service\DataDomain.Medication.Service.csproj", "{12D22E0C-BFFF-4F2E-AC47-6B8E50E69861}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.Medication.Test", "DataDomain\Phytel.API.DataDomain.Medication\Development\Current\Medication.Test\DataDomain.Medication.Test.csproj", "{B181877E-DD18-412A-B01A-A662764BE6B8}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.Medication", "DataDomain\Phytel.API.DataDomain.Medication\Development\Current\Medication\DataDomain.Medication.csproj", "{1C19F07A-0F65-4A19-887F-A8DB148D4CA8}"
 EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
@@ -574,22 +574,22 @@ Global
 		SccProjectTopLevelParentUniqueName79 = API.sln
 		SccProjectName79 = DataDomain/Phytel.API.DataDomain.Medication/Development/Current/DataDomain.Medication.Repo
 		SccLocalPath79 = DataDomain\\Phytel.API.DataDomain.Medication\\Development\\Current\\DataDomain.Medication.Repo
-		SccProjectUniqueName80 = DataDomain\\Phytel.API.DataDomain.Medication\\Development\\Current\\Medication.DTO\\DataDomain.Medication.DTO.csproj
+		SccProjectUniqueName80 = DataDomain\\Phytel.API.DataDomain.Medication\\Development\\Current\\Medication\\DataDomain.Medication.csproj
 		SccProjectTopLevelParentUniqueName80 = API.sln
-		SccProjectName80 = DataDomain/Phytel.API.DataDomain.Medication/Development/Current/Medication.DTO
-		SccLocalPath80 = DataDomain\\Phytel.API.DataDomain.Medication\\Development\\Current\\Medication.DTO
-		SccProjectUniqueName81 = DataDomain\\Phytel.API.DataDomain.Medication\\Development\\Current\\Medication.Service\\DataDomain.Medication.Service.csproj
+		SccProjectName80 = DataDomain/Phytel.API.DataDomain.Medication/Development/Current/Medication
+		SccLocalPath80 = DataDomain\\Phytel.API.DataDomain.Medication\\Development\\Current\\Medication
+		SccProjectUniqueName81 = DataDomain\\Phytel.API.DataDomain.Medication\\Development\\Current\\Medication.DTO\\DataDomain.Medication.DTO.csproj
 		SccProjectTopLevelParentUniqueName81 = API.sln
-		SccProjectName81 = DataDomain/Phytel.API.DataDomain.Medication/Development/Current/Medication.Service
-		SccLocalPath81 = DataDomain\\Phytel.API.DataDomain.Medication\\Development\\Current\\Medication.Service
-		SccProjectUniqueName82 = DataDomain\\Phytel.API.DataDomain.Medication\\Development\\Current\\Medication.Test\\DataDomain.Medication.Test.csproj
+		SccProjectName81 = DataDomain/Phytel.API.DataDomain.Medication/Development/Current/Medication.DTO
+		SccLocalPath81 = DataDomain\\Phytel.API.DataDomain.Medication\\Development\\Current\\Medication.DTO
+		SccProjectUniqueName82 = DataDomain\\Phytel.API.DataDomain.Medication\\Development\\Current\\Medication.Service\\DataDomain.Medication.Service.csproj
 		SccProjectTopLevelParentUniqueName82 = API.sln
-		SccProjectName82 = DataDomain/Phytel.API.DataDomain.Medication/Development/Current/Medication.Test
-		SccLocalPath82 = DataDomain\\Phytel.API.DataDomain.Medication\\Development\\Current\\Medication.Test
-		SccProjectUniqueName83 = DataDomain\\Phytel.API.DataDomain.Medication\\Development\\Current\\Medication\\DataDomain.Medication.csproj
+		SccProjectName82 = DataDomain/Phytel.API.DataDomain.Medication/Development/Current/Medication.Service
+		SccLocalPath82 = DataDomain\\Phytel.API.DataDomain.Medication\\Development\\Current\\Medication.Service
+		SccProjectUniqueName83 = DataDomain\\Phytel.API.DataDomain.Medication\\Development\\Current\\Medication.Test\\DataDomain.Medication.Test.csproj
 		SccProjectTopLevelParentUniqueName83 = API.sln
-		SccProjectName83 = DataDomain/Phytel.API.DataDomain.Medication/Development/Current/Medication
-		SccLocalPath83 = DataDomain\\Phytel.API.DataDomain.Medication\\Development\\Current\\Medication
+		SccProjectName83 = DataDomain/Phytel.API.DataDomain.Medication/Development/Current/Medication.Test
+		SccLocalPath83 = DataDomain\\Phytel.API.DataDomain.Medication\\Development\\Current\\Medication.Test
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -1069,6 +1069,12 @@ Global
 		{60C6A9F6-D668-4053-8997-8CFE661628DD}.Model|Any CPU.Build.0 = Release|Any CPU
 		{60C6A9F6-D668-4053-8997-8CFE661628DD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{60C6A9F6-D668-4053-8997-8CFE661628DD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1C19F07A-0F65-4A19-887F-A8DB148D4CA8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1C19F07A-0F65-4A19-887F-A8DB148D4CA8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1C19F07A-0F65-4A19-887F-A8DB148D4CA8}.Model|Any CPU.ActiveCfg = Release|Any CPU
+		{1C19F07A-0F65-4A19-887F-A8DB148D4CA8}.Model|Any CPU.Build.0 = Release|Any CPU
+		{1C19F07A-0F65-4A19-887F-A8DB148D4CA8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1C19F07A-0F65-4A19-887F-A8DB148D4CA8}.Release|Any CPU.Build.0 = Release|Any CPU
 		{006555BA-C927-4CE0-BC5A-7A6A7053D0D5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{006555BA-C927-4CE0-BC5A-7A6A7053D0D5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{006555BA-C927-4CE0-BC5A-7A6A7053D0D5}.Model|Any CPU.ActiveCfg = Release|Any CPU
@@ -1087,12 +1093,6 @@ Global
 		{B181877E-DD18-412A-B01A-A662764BE6B8}.Model|Any CPU.Build.0 = Release|Any CPU
 		{B181877E-DD18-412A-B01A-A662764BE6B8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B181877E-DD18-412A-B01A-A662764BE6B8}.Release|Any CPU.Build.0 = Release|Any CPU
-		{1C19F07A-0F65-4A19-887F-A8DB148D4CA8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{1C19F07A-0F65-4A19-887F-A8DB148D4CA8}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{1C19F07A-0F65-4A19-887F-A8DB148D4CA8}.Model|Any CPU.ActiveCfg = Release|Any CPU
-		{1C19F07A-0F65-4A19-887F-A8DB148D4CA8}.Model|Any CPU.Build.0 = Release|Any CPU
-		{1C19F07A-0F65-4A19-887F-A8DB148D4CA8}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{1C19F07A-0F65-4A19-887F-A8DB148D4CA8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -1196,9 +1196,9 @@ Global
 		{C4855FAF-1957-4612-A10F-C5E0E51A1742} = {16ED6D96-F453-41D4-930B-A734BF7028BA}
 		{3102572C-54BF-4004-8453-077790779157} = {16ED6D96-F453-41D4-930B-A734BF7028BA}
 		{60C6A9F6-D668-4053-8997-8CFE661628DD} = {E30294CC-3ED1-4520-9621-2BC65E467307}
+		{1C19F07A-0F65-4A19-887F-A8DB148D4CA8} = {E30294CC-3ED1-4520-9621-2BC65E467307}
 		{006555BA-C927-4CE0-BC5A-7A6A7053D0D5} = {E30294CC-3ED1-4520-9621-2BC65E467307}
 		{12D22E0C-BFFF-4F2E-AC47-6B8E50E69861} = {E30294CC-3ED1-4520-9621-2BC65E467307}
 		{B181877E-DD18-412A-B01A-A662764BE6B8} = {E30294CC-3ED1-4520-9621-2BC65E467307}
-		{1C19F07A-0F65-4A19-887F-A8DB148D4CA8} = {E30294CC-3ED1-4520-9621-2BC65E467307}
 	EndGlobalSection
 EndGlobal
