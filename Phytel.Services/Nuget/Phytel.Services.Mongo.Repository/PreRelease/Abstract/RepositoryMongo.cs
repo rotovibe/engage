@@ -33,7 +33,13 @@ namespace Phytel.Services.Mongo.Repository
 
         public void Insert<T, TKey>(T entity) where T : IMongoEntity<TKey>
         {
-            _context.Set<T, TKey>().Insert(entity);
+            RetryHelper.DoWithRetry(() =>
+            {
+                _context.Set<T, TKey>().Insert(entity);
+            },
+                RetryHelper.RETRIES,
+                RetryHelper.RETRYDELAY
+            );            
         }
 
         public void InsertBatch<T, TKey>(IEnumerable<T> entities) where T : IMongoEntity<TKey>
@@ -70,12 +76,32 @@ namespace Phytel.Services.Mongo.Repository
 
         public long Update<T, TKey>(UpdateBuilder<T> update, Expression<Func<T, bool>> criteria) where T : IMongoEntity<TKey>
         {
-            return _context.Set<T, TKey>().Update(update, criteria);
+            long rvalue = default(long);
+
+            RetryHelper.DoWithRetry(() =>
+            {
+                rvalue = _context.Set<T, TKey>().Update(update, criteria);
+            },
+                RetryHelper.RETRIES,
+                RetryHelper.RETRYDELAY
+            );
+
+            return rvalue;
         }
 
         public long Update<T, TKey, TMember>(Expression<Func<T, TMember>> propertySelector, TMember value, Expression<Func<T, bool>> criteria) where T : IMongoEntity<TKey>
         {
-            return _context.Set<T, TKey>().Update(propertySelector, value, criteria);
+            long rvalue = default(long);
+
+            RetryHelper.DoWithRetry(() =>
+            {
+                rvalue = _context.Set<T, TKey>().Update(propertySelector, value, criteria);
+            },
+                RetryHelper.RETRIES,
+                RetryHelper.RETRYDELAY
+            );
+
+            return rvalue;
         }
 
         public BsonValue Eval(string code, params object[] args)
@@ -85,7 +111,17 @@ namespace Phytel.Services.Mongo.Repository
 
         public long Remove<T, TKey>(Expression<Func<T, bool>> predicate) where T : IMongoEntity<TKey>
         {
-            return _context.Set<T, TKey>().Remove(predicate);
+            long rvalue = default(long);
+
+            RetryHelper.DoWithRetry(() =>
+            {
+                rvalue = _context.Set<T, TKey>().Remove(predicate);
+            },
+                RetryHelper.RETRIES,
+                RetryHelper.RETRYDELAY
+            );
+
+            return rvalue;
         }
 
         public AggregateResult Aggregate<T, TKey>(params BsonDocument[] pipeline) where T : IMongoEntity<TKey>
