@@ -11,7 +11,7 @@ namespace Phytel.Services.Journal
 {
     public class JournalDispatcherContainerDecorator : ContainerDecorator
     {
-        public const string AppSettingKeyPublishKey = "Ase.PublishKey.AuditActionFailed";
+        public const string AppSettingKeyPublishKey = "Ase.PublishKey.JournalEntryAdd";
         public const string PublishKey = "journalentryadd";
 
         protected readonly string _appSettingKeyPublishKey;
