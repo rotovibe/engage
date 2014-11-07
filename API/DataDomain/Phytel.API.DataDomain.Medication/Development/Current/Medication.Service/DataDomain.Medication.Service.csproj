@@ -103,6 +103,7 @@
   <ItemGroup>
     <Compile Include="Containers\HttpServiceContainer.cs" />
     <Compile Include="IServiceProxy.cs" />
+    <Compile Include="PatientMedSuppService.cs" />
     <Compile Include="ServiceBase.cs" />
     <Compile Include="ServiceProxy.cs" />
     <Compile Include="MedicationAppHost.cs" />
@@ -116,6 +117,7 @@
     <Content Include="packages.config" />
     <None Include="Properties\PublishProfiles\Azure Dev Publish.pubxml" />
     <None Include="Properties\PublishProfiles\Azure Model Publish.pubxml" />
+    <None Include="Properties\PublishProfiles\Phytel Model Publish.pubxml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
