@@ -172,17 +172,59 @@ namespace DataDomain.Medication.Repo
                     uv.Add(MB.Update.Set(MEPatientMedSupp.VersionProperty, request.Version));
                     uv.Add(MB.Update.Set(MEPatientMedSupp.LastUpdatedOnProperty, System.DateTime.UtcNow));
                     if (data.PatientId != null) uv.Add(MB.Update.Set(MEPatientMedSupp.PatientIdProperty, ObjectId.Parse(data.PatientId)));
-                    uv.Add(MB.Update.Set(MEPatientMedSupp.NameProperty, data.Name));
+                    if (!string.IsNullOrEmpty(data.Name))
+                    {
+                        uv.Add(MB.Update.Set(MEPatientMedSupp.NameProperty, data.Name));
+                    }
+                    else
+                    {
+                        uv.Add(MB.Update.Set(MEPatientMedSupp.NameProperty, BsonNull.Value));
+                    }
                     if (data.CategoryId != 0) uv.Add(MB.Update.Set(MEPatientMedSupp.CategoryProperty, data.CategoryId));
                     if (data.TypeId != null) uv.Add(MB.Update.Set(MEPatientMedSupp.TypeIdProperty, ObjectId.Parse(data.TypeId)));
                     if (data.StatusId != 0) uv.Add(MB.Update.Set(MEPatientMedSupp.StatusProperty, data.StatusId));
-                    uv.Add(MB.Update.Set(MEPatientMedSupp.DosageProperty, data.Dosage));
-                    uv.Add(MB.Update.Set(MEPatientMedSupp.StrengthProperty, data.Strength));
-                    uv.Add(MB.Update.Set(MEPatientMedSupp.FormProperty, data.Form));
-                    uv.Add(MB.Update.Set(MEPatientMedSupp.RouteProperty, data.Route));
+                    if (!string.IsNullOrEmpty(data.Dosage))
+                    {
+                        uv.Add(MB.Update.Set(MEPatientMedSupp.DosageProperty, data.Dosage));
+                    }
+                    else
+                    {
+                        uv.Add(MB.Update.Set(MEPatientMedSupp.DosageProperty, BsonNull.Value));
+                    }
+                    if (!string.IsNullOrEmpty(data.Strength))
+                    {
+                        uv.Add(MB.Update.Set(MEPatientMedSupp.StrengthProperty, data.Strength));
+                    }
+                    else
+                    {
+                        uv.Add(MB.Update.Set(MEPatientMedSupp.StrengthProperty, BsonNull.Value));
+                    }
+                    if (!string.IsNullOrEmpty(data.Form))
+                    {
+                        uv.Add(MB.Update.Set(MEPatientMedSupp.FormProperty, data.Form));
+                    }
+                    else
+                    {
+                        uv.Add(MB.Update.Set(MEPatientMedSupp.FormProperty, BsonNull.Value));
+                    }
+                    if (!string.IsNullOrEmpty(data.Route))
+                    {
+                        uv.Add(MB.Update.Set(MEPatientMedSupp.RouteProperty, data.Route));
+                    }
+                    else 
+                    {
+                        uv.Add(MB.Update.Set(MEPatientMedSupp.RouteProperty, BsonNull.Value));
+                    }
                     uv.Add(MB.Update.SetWrapped<List<string>>(MEPatientMedSupp.PharmClassProperty, data.PharmClasses));
                     uv.Add(MB.Update.SetWrapped<List<string>>(MEPatientMedSupp.NDCProperty, data.NDCs));
-                    uv.Add(MB.Update.Set(MEPatientMedSupp.FreqQuantityProperty, data.FreqQuantity));
+                    if (!string.IsNullOrEmpty(data.FreqQuantity))
+                    {
+                        uv.Add(MB.Update.Set(MEPatientMedSupp.FreqQuantityProperty, data.FreqQuantity));
+                    }
+                    else 
+                    {
+                        uv.Add(MB.Update.Set(MEPatientMedSupp.FreqQuantityProperty, BsonNull.Value));
+                    }
                     if (data.FreqHowOftenId != null)
                     {
                         uv.Add(MB.Update.Set(MEPatientMedSupp.FreqHowOftenIdProperty, ObjectId.Parse(data.FreqHowOftenId)));
@@ -216,9 +258,30 @@ namespace DataDomain.Medication.Repo
                     {
                         uv.Add(MB.Update.Set(MEPatientMedSupp.EndDateProperty, BsonNull.Value));
                     }
-                    uv.Add(MB.Update.Set(MEPatientMedSupp.ReasonProperty, data.Reason));
-                    uv.Add(MB.Update.Set(MEPatientMedSupp.NotesProperty, data.Notes));
-                    uv.Add(MB.Update.Set(MEPatientMedSupp.PrescribedByProperty, data.PrescribedBy));
+                    if (!string.IsNullOrEmpty(data.Reason))
+                    {
+                        uv.Add(MB.Update.Set(MEPatientMedSupp.ReasonProperty, data.Reason));
+                    }
+                    else 
+                    {
+                        uv.Add(MB.Update.Set(MEPatientMedSupp.ReasonProperty, BsonNull.Value));
+                    }
+                    if (!string.IsNullOrEmpty(data.Notes))
+                    {
+                        uv.Add(MB.Update.Set(MEPatientMedSupp.NotesProperty, data.Notes));
+                    }
+                    else
+                    {
+                        uv.Add(MB.Update.Set(MEPatientMedSupp.NotesProperty, BsonNull.Value));
+                    }
+                    if (!string.IsNullOrEmpty(data.PrescribedBy))
+                    {
+                        uv.Add(MB.Update.Set(MEPatientMedSupp.PrescribedByProperty, data.PrescribedBy));
+                    }
+                    else
+                    {
+                        uv.Add(MB.Update.Set(MEPatientMedSupp.PrescribedByProperty, BsonNull.Value));
+                    }
                     uv.Add(MB.Update.Set(MEPatientMedSupp.SystemProperty, data.SystemName));
                     uv.Add(MB.Update.Set(MEPatientMedSupp.DeleteFlagProperty, data.DeleteFlag));
                     DataAuditType type;

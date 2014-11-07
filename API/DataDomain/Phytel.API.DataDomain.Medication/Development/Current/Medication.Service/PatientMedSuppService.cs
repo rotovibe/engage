@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using Phytel.API.DataDomain.Medication.DTO;
 
 namespace Phytel.API.DataDomain.Medication.Service

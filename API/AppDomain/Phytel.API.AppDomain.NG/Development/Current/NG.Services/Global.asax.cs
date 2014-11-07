@@ -5,6 +5,7 @@ using Lucene.Net.Documents;
 using Phytel.API.AppDomain.NG.Allergy;
 using Phytel.API.AppDomain.NG.DTO;
 using Phytel.API.AppDomain.NG.DTO.Search;
+using Phytel.API.AppDomain.NG.Medication;
 using Phytel.API.AppDomain.NG.Observation;
 using Phytel.API.AppDomain.NG.Programs;
 using Phytel.API.AppDomain.NG.Search;
@@ -13,6 +14,7 @@ using Phytel.API.Common.CustomObject;
 using Phytel.API.Common.Format;
 using Phytel.API.DataAudit;
 using Phytel.API.DataDomain.Allergy.DTO;
+using Phytel.API.DataDomain.Medication.DTO;
 using ServiceStack;
 using ServiceStack.Common.Web;
 using ServiceStack.MiniProfiler;
@@ -51,7 +53,8 @@ namespace Phytel.API.AppDomain.NG.Service
                 container.RegisterAutoWiredAs<ObservationEndpointUtil, IObservationEndpointUtil>().ReusedWithin(Funq.ReuseScope.Request);
                 container.RegisterAutoWiredAs<ObservationsManager, IObservationsManager>().ReusedWithin(Funq.ReuseScope.Request);
                 container.RegisterAutoWiredAs<AllergyManager, IAllergyManager>().ReusedWithin(Funq.ReuseScope.Request);
-                
+                container.RegisterAutoWiredAs<MedicationManager, IMedicationManager>().ReusedWithin(Funq.ReuseScope.Request);
+                container.RegisterAutoWiredAs<MedicationEndpointUtil, IMedicationEndpointUtil>().ReusedWithin(Funq.ReuseScope.Request);  
                 // search
                 container.RegisterAutoWiredAs<SearchManager, ISearchManager>().ReusedWithin(Funq.ReuseScope.Request);
                 container.RegisterAutoWiredAs<SearchUtil, ISearchUtil>().ReusedWithin(Funq.ReuseScope.Request);
@@ -82,6 +85,9 @@ namespace Phytel.API.AppDomain.NG.Service
                     .ForMember(d => d.Unit, opt => opt.MapFrom(src => src.Get("Unit")));
 
                 Mapper.CreateMap<DTO.Allergy, IdNamePair>().ForMember(d => d.Name, opt => opt.MapFrom(src => src.Name.Trim().ToUpper().Replace("\"", "").Replace(",", "")));
+
+                Mapper.CreateMap<PatientMedSuppData, PatientMedSupp>();
+                Mapper.CreateMap<PatientMedSupp, PatientMedSuppData>();
 
                 Plugins.Add(new RequestLogsFeature() { RequiredRoles = new string[] { } });
 

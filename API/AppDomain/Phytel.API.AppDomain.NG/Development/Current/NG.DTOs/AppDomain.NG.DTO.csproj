@@ -129,8 +129,12 @@
     <Compile Include="LookUp\Program\GetAllObjectivesResponse.cs" />
     <Compile Include="Contact\GetRecentPatientsRequest.cs" />
     <Compile Include="Contact\GetRecentPatientsResponse .cs" />
+    <Compile Include="Meds\GetPatientMedSuppsRequest.cs" />
+    <Compile Include="Meds\GetPatientMedSuppsResponse.cs" />
     <Compile Include="Meds\Medication.cs" />
     <Compile Include="Meds\PatientMedSupp.cs" />
+    <Compile Include="Meds\PostPatientMedSuppRequest.cs" />
+    <Compile Include="Meds\PostPatientMedSuppResponse.cs" />
     <Compile Include="Observation\GetHistoricalPatientObservationsRequest.cs" />
     <Compile Include="Observation\GetCurrenPatientObservationsRequest.cs" />
     <Compile Include="Observation\GetHistoricalPatientObservationsResponse.cs" />

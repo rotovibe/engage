@@ -4,7 +4,7 @@ using Phytel.API.AppDomain.NG.DTO;
 using Phytel.API.AppDomain.NG.DTO.Search;
 using Phytel.API.Common.CustomObject;
 
-namespace Phytel.API.AppDomain.NG.Allergy
+namespace Phytel.API.AppDomain.NG
 {
     public interface ISearchManager
     {

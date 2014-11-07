@@ -27,7 +27,6 @@ namespace Phytel.API.AppDomain.NG.Test
         {
             GetPatientAllergiesRequest request = new GetPatientAllergiesRequest
             {
-                Context = context,
                 ContractNumber = contractNumber,
                 PatientId = "54087f43d6a48509407d69cb",
                 StatusIds = new List<int>{1},

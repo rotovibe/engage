@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Phytel.API.AppDomain.NG.DTO
 {
-    public class PatientMedSuppData
+    public class PatientMedSupp
     {
         public string Id { get; set; }
         public string PatientId { get; set; }
@@ -33,6 +33,6 @@ namespace Phytel.API.AppDomain.NG.DTO
         public string SigCode { get; set; }
         public bool DeleteFlag { get; set; }
         public DateTime CreatedOn { get; set; }
-        public DateTime? UpdatedOn { get; set; }
+        public DateTime? UpdatedOn { get; set; }   
     }
 }

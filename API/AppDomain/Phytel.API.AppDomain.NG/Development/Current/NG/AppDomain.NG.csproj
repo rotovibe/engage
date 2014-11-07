@@ -124,8 +124,13 @@
     <Compile Include="Allergy\AllergyEndpointUtil.cs" />
     <Compile Include="Allergy\IAllergyEndpointUtil.cs" />
     <Compile Include="Allergy\IAllergyManager.cs" />
+    <Compile Include="Command\PatientMedSuppsCommand.cs" />
     <Compile Include="Command\PatientAllergiesCommand.cs" />
     <Compile Include="Command\PatientToDosCommand.cs" />
+    <Compile Include="Medication\MedicationEndpointUtil.cs" />
+    <Compile Include="Medication\MedicationManager.cs" />
+    <Compile Include="Medication\IMedicationEndpointUtil.cs" />
+    <Compile Include="Medication\IMedicationManager.cs" />
     <Compile Include="Programs\ElementActivation\ProgramAttributeActivationRule.cs" />
     <Compile Include="Programs\ElementActivation\StepActivationRule.cs" />
     <Compile Include="Programs\ElementActivation\ModuleActivationRule.cs" />
@@ -241,6 +246,10 @@
     <ProjectReference Include="..\..\..\..\..\DataDomain\Phytel.API.DataDomain.LookUp\Development\Current\LookUp.DTO\DataDomain.LookUp.DTO.csproj">
       <Project>{4885fe36-03db-47b7-be7e-33260943a9dc}</Project>
       <Name>DataDomain.LookUp.DTO</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\DataDomain\Phytel.API.DataDomain.Medication\Development\Current\Medication.DTO\DataDomain.Medication.DTO.csproj">
+      <Project>{006555ba-c927-4ce0-bc5a-7a6a7053d0d5}</Project>
+      <Name>DataDomain.Medication.DTO</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\..\..\DataDomain\Phytel.API.DataDomain.PatientGoal\Development\Current\PatientGoal.DTO\DataDomain.PatientGoal.DTO.csproj">
       <Project>{92488af4-963e-4098-8ba8-23d6952bd952}</Project>

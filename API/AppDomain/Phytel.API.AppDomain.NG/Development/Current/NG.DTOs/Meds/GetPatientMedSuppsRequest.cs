@@ -5,17 +5,17 @@ using System.Collections.Generic;
 
 namespace Phytel.API.AppDomain.NG.DTO
 {
-    [Route("/{Version}/{ContractNumber}/PatientAllergy/{PatientId}", "POST")]
-    public class GetPatientAllergiesRequest : IAppDomainRequest
+    [Route("/{Version}/{ContractNumber}/PatientMedSupp/{PatientId}", "POST")]
+    public class GetPatientMedSuppsRequest : IAppDomainRequest
     {
-        [ApiMember(Name = "PatientId", Description = "Id of the patient for whom the allergies need to be retrieved.", ParameterType = "property", DataType = "string", IsRequired = true)]
+        [ApiMember(Name = "PatientId", Description = "ID of the patient who's MedSupps are being requested", ParameterType = "property", DataType = "string", IsRequired = false)]
         public string PatientId { get; set; }
 
-        [ApiMember(Name = "StatusIds", Description = "List of patient allergy Status ids.", ParameterType = "property", DataType = "List<int>", IsRequired = false)]
+        [ApiMember(Name = "StatusIds", Description = "List of Status ids.", ParameterType = "property", DataType = "List<int>", IsRequired = false)]
         public List<int> StatusIds { get; set; }
 
-        [ApiMember(Name = "TypeIds", Description = "List of allergy Type ids.", ParameterType = "property", DataType = "List<string>", IsRequired = false)]
-        public List<string> TypeIds { get; set; }
+        [ApiMember(Name = "CategoryIds", Description = "List of Category Ids.", ParameterType = "property", DataType = "List<int>", IsRequired = false)]
+        public List<int> CategoryIds { get; set; }
         
         [ApiMember(Name = "UserID", Description = "ID of the user making the request (Internally used ONLY)", ParameterType = "property", DataType = "string", IsRequired = true)]
         public string UserId { get; set; }
@@ -28,5 +28,7 @@ namespace Phytel.API.AppDomain.NG.DTO
 
         [ApiMember(Name = "Version", Description = "Version of the API being called", ParameterType = "property", DataType = "double", IsRequired = true)]
         public double Version { get; set; }
+
+        public GetPatientMedSuppsRequest() { }
     }
 }
