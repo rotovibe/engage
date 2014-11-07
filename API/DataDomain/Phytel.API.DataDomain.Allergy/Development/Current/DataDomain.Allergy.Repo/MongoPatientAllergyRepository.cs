@@ -109,7 +109,7 @@ namespace DataDomain.Allergy.Repo
             MEAllergy meA = ctx.Allergies.Collection.Find(Query.EQ(MEAllergy.IdProperty, aid)).FirstOrDefault();
             if (meA != null)
             {
-                data.AllergyName = meA.Name;
+                data.AllergyName = meA.Name.ToUpper();
                 data.AllergyTypeIds = Helper.ConvertToStringList(meA.TypeIds);
             }
         }

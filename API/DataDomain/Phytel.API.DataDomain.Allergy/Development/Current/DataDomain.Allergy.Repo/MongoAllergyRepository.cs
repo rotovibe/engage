@@ -207,7 +207,7 @@ namespace DataDomain.Allergy.Repo
                     data = new AllergyData
                     {
                         Id = meA.Id.ToString(),
-                        Name = meA.Name
+                        Name = meA.Name.ToUpper()
                     };
                 }
                 return data;
