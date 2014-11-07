@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Phytel.Services.IOC;
+using Phytel.Services.Journal.Dispatch;
 using Phytel.Services.Journal.Filters;
 using Phytel.Services.Journal.Map;
 using ServiceStack.WebHost.Endpoints;
@@ -53,22 +54,22 @@ namespace Phytel.Services.Journal
         {
             if (_globalJournalingEnabled)
             {
-                JournalRequestFilterAttribute journalRequest = TryResolve<JournalRequestFilterAttribute>();
+                JournalRequestFilterAttribute journalRequest = new JournalRequestFilterAttribute { JournalDispatcher = TryResolve<IJournalDispatcher>() };
                 RequestFilters.Add(journalRequest.RequestFilter);
-                JournalResponseFilterAttribute journalResponse = TryResolve<JournalResponseFilterAttribute>();
+                JournalResponseFilterAttribute journalResponse = new JournalResponseFilterAttribute { JournalDispatcher = TryResolve<IJournalDispatcher>() };
                 ResponseFilters.Add(journalResponse.ResponseFilter);
             }
 
             IJournalExceptionHandler exceptionHander = container.TryResolve<IJournalExceptionHandler>();
             if (exceptionHander != null)
             {
-                this.ExceptionHandler = exceptionHander.HandleException;
+                ExceptionHandler = exceptionHander.HandleException;
             }
 
             IJournalServiceExceptionHandler serviceExceptionHander = container.TryResolve<IJournalServiceExceptionHandler>();
             if (serviceExceptionHander != null)
             {
-                this.ServiceExceptionHandler = serviceExceptionHander.HandleServiceException;
+                ServiceExceptionHandler = serviceExceptionHander.HandleServiceException;
             }
         }
     }

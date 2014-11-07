@@ -27,6 +27,20 @@ namespace Phytel.Services.Journal
         protected override void OnBuild(Funq.Container container)
         {
             container.Register<IMappingEngine>(Mapper.Engine);
+            
+            if(container.TryResolve<IAppSettingsProvider>() == null)
+            {
+                container.Register<IAppSettingsProvider>(new AppSettingsProvider());
+            }
+            if (container.TryResolve<IActionIdProvider>() == null)
+            {
+                container.Register<IActionIdProvider>(new ActionIdAsMongoObjectIdProvider());
+            }
+            if (container.TryResolve<IServiceConfigProxy>() == null)
+            {
+                container.Register<IServiceConfigProxy>(new ServiceStackServiceConfigProxy());
+            }
+
             container.Register<IJournalDispatcher>(c =>
                 new JournalDispatcher(
                     new AseBusDispatcher(
@@ -34,7 +48,7 @@ namespace Phytel.Services.Journal
                         new SerializerJson()
                         ),
                         c.Resolve<IActionIdProvider>(),
-                        c.Resolve<IDateTimeProxy>(),
+                        new DateTimeUtcProxy(),
                         c.Resolve<IServiceConfigProxy>(),
                         c.Resolve<IMappingEngine>()
                     )
