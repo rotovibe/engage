@@ -49,6 +49,7 @@ namespace Phytel.API.DataDomain.Medication
                 {
                     List<string> ndcs = new List<string>();
                     List<string> pharmclasses = new List<string>();
+                    // Get list of unique ndc codes and pharmclasses.
                     meMeds.ForEach(m =>
                     {
                         if (!ndcs.Contains(m.NDC))
