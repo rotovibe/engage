@@ -2,13 +2,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
 VisualStudioVersion = 12.0.21005.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.Medication.Service", "Medication.Service\DataDomain.Medication.Service.csproj", "{29DFC6F8-F09F-4881-8A94-43C4229A5583}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.Medication.Service", "Medication.Service\DataDomain.Medication.Service.csproj", "{12D22E0C-BFFF-4F2E-AC47-6B8E50E69861}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.Medication.Test", "Medication.Test\DataDomain.Medication.Test.csproj", "{79CB7A3A-6D69-45F8-964F-D9609383B22A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.Medication.Test", "Medication.Test\DataDomain.Medication.Test.csproj", "{B181877E-DD18-412A-B01A-A662764BE6B8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.Medication", "Medication\DataDomain.Medication.csproj", "{F1A478D1-DCA1-4BE6-AE83-E0ACDD4FDFFD}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.Medication", "Medication\DataDomain.Medication.csproj", "{1C19F07A-0F65-4A19-887F-A8DB148D4CA8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.Medication.DTO", "Medication.DTO\DataDomain.Medication.DTO.csproj", "{1C2C63A1-4246-4EC9-BAD1-C00E9ECD85F6}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.Medication.DTO", "Medication.DTO\DataDomain.Medication.DTO.csproj", "{006555BA-C927-4CE0-BC5A-7A6A7053D0D5}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Phytel.API.Interface", "..\..\..\..\Interfaces\Development\Current\Phytel.API.Interface\Phytel.API.Interface.csproj", "{ABE948FB-247E-4955-B3AB-B7C93E10A542}"
 EndProject
@@ -18,7 +18,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Phytel.API.Common", "..\..\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Phytel.API.DataAudit", "..\..\..\..\Common\Phytel.API.DataAudit\Development\Current\Phytel.API.DataAudit.csproj", "{AE842695-4DD4-4403-9BE4-8473BCA09580}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.Medication.Repo", "DataDomain.Medication.Repo\DataDomain.Medication.Repo.csproj", "{3102572C-54BF-4004-8453-077790779157}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.Medication.Repo", "DataDomain.Medication.Repo\DataDomain.Medication.Repo.csproj", "{60C6A9F6-D668-4053-8997-8CFE661628DD}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{96185A28-CCA9-4EA7-AD62-038F35DE8FF7}"
 	ProjectSection(SolutionItems) = preProject
@@ -66,22 +66,22 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{29DFC6F8-F09F-4881-8A94-43C4229A5583}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{29DFC6F8-F09F-4881-8A94-43C4229A5583}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{29DFC6F8-F09F-4881-8A94-43C4229A5583}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{29DFC6F8-F09F-4881-8A94-43C4229A5583}.Release|Any CPU.Build.0 = Release|Any CPU
-		{79CB7A3A-6D69-45F8-964F-D9609383B22A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{79CB7A3A-6D69-45F8-964F-D9609383B22A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{79CB7A3A-6D69-45F8-964F-D9609383B22A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{79CB7A3A-6D69-45F8-964F-D9609383B22A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F1A478D1-DCA1-4BE6-AE83-E0ACDD4FDFFD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F1A478D1-DCA1-4BE6-AE83-E0ACDD4FDFFD}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F1A478D1-DCA1-4BE6-AE83-E0ACDD4FDFFD}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F1A478D1-DCA1-4BE6-AE83-E0ACDD4FDFFD}.Release|Any CPU.Build.0 = Release|Any CPU
-		{1C2C63A1-4246-4EC9-BAD1-C00E9ECD85F6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{1C2C63A1-4246-4EC9-BAD1-C00E9ECD85F6}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{1C2C63A1-4246-4EC9-BAD1-C00E9ECD85F6}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{1C2C63A1-4246-4EC9-BAD1-C00E9ECD85F6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{12D22E0C-BFFF-4F2E-AC47-6B8E50E69861}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{12D22E0C-BFFF-4F2E-AC47-6B8E50E69861}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{12D22E0C-BFFF-4F2E-AC47-6B8E50E69861}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{12D22E0C-BFFF-4F2E-AC47-6B8E50E69861}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B181877E-DD18-412A-B01A-A662764BE6B8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B181877E-DD18-412A-B01A-A662764BE6B8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B181877E-DD18-412A-B01A-A662764BE6B8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B181877E-DD18-412A-B01A-A662764BE6B8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1C19F07A-0F65-4A19-887F-A8DB148D4CA8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1C19F07A-0F65-4A19-887F-A8DB148D4CA8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1C19F07A-0F65-4A19-887F-A8DB148D4CA8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1C19F07A-0F65-4A19-887F-A8DB148D4CA8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{006555BA-C927-4CE0-BC5A-7A6A7053D0D5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{006555BA-C927-4CE0-BC5A-7A6A7053D0D5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{006555BA-C927-4CE0-BC5A-7A6A7053D0D5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{006555BA-C927-4CE0-BC5A-7A6A7053D0D5}.Release|Any CPU.Build.0 = Release|Any CPU
 		{ABE948FB-247E-4955-B3AB-B7C93E10A542}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{ABE948FB-247E-4955-B3AB-B7C93E10A542}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{ABE948FB-247E-4955-B3AB-B7C93E10A542}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -94,10 +94,10 @@ Global
 		{AE842695-4DD4-4403-9BE4-8473BCA09580}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AE842695-4DD4-4403-9BE4-8473BCA09580}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AE842695-4DD4-4403-9BE4-8473BCA09580}.Release|Any CPU.Build.0 = Release|Any CPU
-		{3102572C-54BF-4004-8453-077790779157}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{3102572C-54BF-4004-8453-077790779157}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{3102572C-54BF-4004-8453-077790779157}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{3102572C-54BF-4004-8453-077790779157}.Release|Any CPU.Build.0 = Release|Any CPU
+		{60C6A9F6-D668-4053-8997-8CFE661628DD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{60C6A9F6-D668-4053-8997-8CFE661628DD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{60C6A9F6-D668-4053-8997-8CFE661628DD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{60C6A9F6-D668-4053-8997-8CFE661628DD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
