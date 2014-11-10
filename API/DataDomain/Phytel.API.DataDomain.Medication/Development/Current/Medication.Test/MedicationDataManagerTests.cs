@@ -62,6 +62,7 @@ namespace Phytel.API.DataDomain.Medication.Tests
                         {
                             ProductId = reader["PRODUCTID"].ToString(),
                             NDC = reader["PRODUCTNDC"].ToString(),
+                            FullName = reader["PROPRIETARYNAME"].ToString() +" " + reader["PROPRIETARYNAMESUFFIX"].ToString(),
                             ProprietaryName = reader["PROPRIETARYNAME"].ToString(),
                             ProprietaryNameSuffix = reader["PROPRIETARYNAMESUFFIX"].ToString(),
                             StartDate = formatDate(reader["STARTMARKETINGDATE"].ToString()),
@@ -71,7 +72,7 @@ namespace Phytel.API.DataDomain.Medication.Tests
                             Form = reader["DOSAGEFORMNAME"].ToString(),
                             Unit = GetList(reader["ACTIVE_INGRED_UNIT"].ToString()),
                             Strength = GetList(reader["ACTIVE_NUMERATOR_STRENGTH"].ToString()),
-                            RecordCreatedBy = "000000000000000000000000",
+                            RecordCreatedBy = "5368ff2ad4332316288f3e3e",
                             RecordCreatedOn = System.DateTime.UtcNow,
                             DeleteFlag = false,
                             Version = 1

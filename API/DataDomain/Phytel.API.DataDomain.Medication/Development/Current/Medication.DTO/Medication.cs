@@ -8,6 +8,7 @@ namespace Phytel.API.DataDomain.Medication.DTO
         public string Id { get; set; }
         public string ProductId { get; set; }
         public string NDC { get; set; }
+        public string FullName { get; set; }
         public string ProprietaryName { get; set; }
         public string ProprietaryNameSuffix { get; set; }
         public DateTime? StartDate { get; set; }

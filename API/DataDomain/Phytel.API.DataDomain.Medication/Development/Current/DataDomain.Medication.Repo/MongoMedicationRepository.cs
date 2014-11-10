@@ -47,7 +47,7 @@ namespace DataDomain.Medication.Repo
 
                 list.ToList().ForEach(m =>
                 {
-                    var med = new MEMedication("000000000000000000000000")
+                    var med = new MEMedication("5368ff2ad4332316288f3e3e")
                     {
                         DeleteFlag = m.DeleteFlag,
                         EndDate = m.EndDate,
@@ -61,6 +61,7 @@ namespace DataDomain.Medication.Repo
                         NDC = m.NDC,
                         StartDate = m.StartDate,
                         ProductId = m.ProductId,
+                        FullName = m.FullName,
                         ProprietaryName = m.ProprietaryName,
                         ProprietaryNameSuffix = m.ProprietaryNameSuffix
                     };

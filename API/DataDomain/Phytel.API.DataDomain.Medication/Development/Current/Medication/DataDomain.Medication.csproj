@@ -65,8 +65,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IPatientMedSuppDataManager.cs" />
     <Compile Include="MedicationDataManager.cs" />
     <Compile Include="IMedicationDataManager.cs" />
+    <Compile Include="PatientMedSuppDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="MedicationContainer.cs" />
   </ItemGroup>

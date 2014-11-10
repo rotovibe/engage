@@ -36,6 +36,10 @@ namespace Phytel.API.DataDomain.Medication.DTO
         [BsonElement(NDCProperty)]
         public string NDC { get; set; }
 
+        public const string FullNameProperty = "flnm";
+        [BsonElement(FullNameProperty)]
+        public string FullName { get; set; }
+
         public const string ProprietaryNameProperty = "pnm";
         [BsonElement(ProprietaryNameProperty)]
         public string ProprietaryName { get; set; }
