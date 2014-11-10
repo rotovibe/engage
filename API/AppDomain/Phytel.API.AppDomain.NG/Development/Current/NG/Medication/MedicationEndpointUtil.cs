@@ -28,6 +28,7 @@ namespace Phytel.API.AppDomain.NG.Medication
                                     request.Version,
                                     request.ContractNumber), request.UserId);
 
+                string[] values = request.PatientMedSupp.Strength.Split(' ');
                 GetMedicationDetailsDataResponse dataDomainResponse = client.Post<GetMedicationDetailsDataResponse>(url, new GetMedicationDetailsDataRequest
                 {
                     Context = "NG",
@@ -35,9 +36,10 @@ namespace Phytel.API.AppDomain.NG.Medication
                     UserId = request.UserId,
                     Version = request.Version,
                     Name = request.PatientMedSupp.Name,
-                    Strength = request.PatientMedSupp.Strength,
+                    Strength = values[0],
                     Form = request.PatientMedSupp.Form,
-                    Route = request.PatientMedSupp.Route
+                    Route = request.PatientMedSupp.Route,
+                    Unit = values[1]
                 } as object);
 
                 if (dataDomainResponse != null)

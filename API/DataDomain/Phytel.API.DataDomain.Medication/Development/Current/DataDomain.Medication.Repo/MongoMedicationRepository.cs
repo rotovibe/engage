@@ -187,6 +187,10 @@ namespace DataDomain.Medication.Repo
                     if (!string.IsNullOrEmpty(dataRequest.Form))
                     {
                         queries.Add(Query.EQ(MEMedication.FormProperty, dataRequest.Form));
+                    } 
+                    if (!string.IsNullOrEmpty(dataRequest.Form))
+                    {
+                        queries.Add(Query.In(MEMedication.UnitProperty, new BsonArray(dataRequest.Unit)));
                     }
                     IMongoQuery mQuery = Query.And(queries);
                     list = ctx.Medications.Collection.Find(mQuery).ToList();
