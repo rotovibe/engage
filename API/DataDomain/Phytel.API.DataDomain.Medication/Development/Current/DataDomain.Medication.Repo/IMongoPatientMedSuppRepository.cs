@@ -7,5 +7,6 @@ namespace DataDomain.Medication.Repo
     public interface IMongoPatientMedSuppRepository : IRepository
     {
         object FindByPatientId(object request);
+        object SearchMedications(object request);
     }
 }

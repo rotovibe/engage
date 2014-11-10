@@ -7,5 +7,6 @@ namespace Phytel.API.DataDomain.Medication
     {
         List<DTO.MedicationData> GetMedicationList(GetAllMedicationsRequest request);
         bool BulkInsertMedications(List<DTO.MedicationData> meds, PutBulkInsertMedicationsRequest request);
+        GetMedicationDetailsDataResponse GetMedicationDetails(GetMedicationDetailsDataRequest request);
     }
 }

@@ -381,5 +381,11 @@ namespace DataDomain.Medication.Repo
             }
             catch (Exception) { throw; }
         }
+
+
+        public object SearchMedications(object request)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -42,6 +42,9 @@
     <Reference Include="MongoDB.Driver">
       <HintPath>..\References\MongoDB.Driver.dll</HintPath>
     </Reference>
+    <Reference Include="Phytel.Mongo">
+      <HintPath>..\References\Phytel.Mongo.dll</HintPath>
+    </Reference>
     <Reference Include="ServiceStack, Version=3.9.70.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\..\packages\ServiceStack.3.9.70\lib\net35\ServiceStack.dll</HintPath>

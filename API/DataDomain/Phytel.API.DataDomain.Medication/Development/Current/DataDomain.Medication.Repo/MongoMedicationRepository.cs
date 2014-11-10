@@ -161,5 +161,39 @@ namespace DataDomain.Medication.Repo
         {
             throw new NotImplementedException();
         }
+
+        public object SearchMedications(object request)
+        {
+            List<MEMedication> list = null;
+            GetMedicationDetailsDataRequest dataRequest = (GetMedicationDetailsDataRequest)request;
+            try
+            {
+                using (MedicationMongoContext ctx = new MedicationMongoContext(ContractDBName))
+                {
+                    List<IMongoQuery> queries = new List<IMongoQuery>();
+                    queries.Add(Query.EQ(MEMedication.DeleteFlagProperty, false));
+                    if (!string.IsNullOrEmpty(dataRequest.Name))
+                    {
+                        queries.Add(Query.EQ(MEMedication.FullNameProperty, dataRequest.Name));
+                    }
+                    if (!string.IsNullOrEmpty(dataRequest.Strength))
+                    {
+                        queries.Add(Query.In(MEMedication.StrengthProperty, new BsonArray(dataRequest.Strength)));
+                    }
+                    if (!string.IsNullOrEmpty(dataRequest.Route))
+                    {
+                        queries.Add(Query.In(MEMedication.RouteProperty, new BsonArray(dataRequest.Route)));
+                    }
+                    if (!string.IsNullOrEmpty(dataRequest.Form))
+                    {
+                        queries.Add(Query.EQ(MEMedication.FormProperty, dataRequest.Form));
+                    }
+                    IMongoQuery mQuery = Query.And(queries);
+                    list = ctx.Medications.Collection.Find(mQuery).ToList();
+                }
+                return list;
+            }
+            catch (Exception) { throw; }
+        }
     }
 }

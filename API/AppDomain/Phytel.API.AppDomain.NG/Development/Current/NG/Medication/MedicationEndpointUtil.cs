@@ -14,6 +14,49 @@ namespace Phytel.API.AppDomain.NG.Medication
         protected readonly string DDMedicationUrl = ConfigurationManager.AppSettings["DDMedicationUrl"];
         #endregion
 
+        #region Medication - Posts
+        public PatientMedSupp GetMedicationDetails(PostPatientMedSuppRequest request)
+        {
+            try
+            {
+                PatientMedSupp result = null;
+                IRestClient client = new JsonServiceClient();
+                //[Route("/{Context}/{Version}/{ContractNumber}/Medication/Search", "GET")]
+                var url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Medication/Search",
+                                    DDMedicationUrl,
+                                    "NG",
+                                    request.Version,
+                                    request.ContractNumber), request.UserId);
+
+                GetMedicationDetailsDataResponse dataDomainResponse = client.Post<GetMedicationDetailsDataResponse>(url, new GetMedicationDetailsDataRequest
+                {
+                    Context = "NG",
+                    ContractNumber = request.ContractNumber,
+                    UserId = request.UserId,
+                    Version = request.Version,
+                    Name = request.PatientMedSupp.Name,
+                    Strength = request.PatientMedSupp.Strength,
+                    Form = request.PatientMedSupp.Form,
+                    Route = request.PatientMedSupp.Route
+                } as object);
+
+                if (dataDomainResponse != null)
+                {
+                    result = new PatientMedSupp
+                    {
+                        NDCs = dataDomainResponse.NDCcodes,
+                        PharmClasses = dataDomainResponse.PharmClasses
+                    };
+                }
+                return result;
+            }
+            catch (WebServiceException ex)
+            {
+                throw new WebServiceException("AD:GetMedicationDetails()::" + ex.Message, ex.InnerException);
+            }
+        }
+        #endregion
+
         #region PatientMedSupps - Posts
         public List<PatientMedSuppData> GetPatientMedSupps(GetPatientMedSuppsRequest request)
         {
@@ -64,28 +107,24 @@ namespace Phytel.API.AppDomain.NG.Medication
                                     "NG",
                                     request.Version,
                                     request.ContractNumber), request.UserId);
-
-                if (request.PatientMedSupp != null)
+                PatientMedSuppData data = Mapper.Map<PatientMedSuppData>(request.PatientMedSupp);
+                if (request.Insert)
                 {
-                    PatientMedSuppData data = Mapper.Map<PatientMedSuppData>(request.PatientMedSupp);
-                    if (request.Insert)
-                    {
-                        data.SystemName = Constants.SystemName;
-                    }
-                    PutPatientMedSuppDataResponse dataDomainResponse = client.Put<PutPatientMedSuppDataResponse>(url, new PutPatientMedSuppDataRequest
-                    {
-                        Context = "NG",
-                        ContractNumber = request.ContractNumber,
-                        UserId = request.UserId,
-                        Version = request.Version,
-                        PatientMedSuppData = data,
-                        Insert = request.Insert
-                    } as object);
+                    data.SystemName = Constants.SystemName;
+                }
+                PutPatientMedSuppDataResponse dataDomainResponse = client.Put<PutPatientMedSuppDataResponse>(url, new PutPatientMedSuppDataRequest
+                {
+                    Context = "NG",
+                    ContractNumber = request.ContractNumber,
+                    UserId = request.UserId,
+                    Version = request.Version,
+                    PatientMedSuppData = data,
+                    Insert = request.Insert
+                } as object);
 
-                    if (dataDomainResponse != null)
-                    {
-                        result = dataDomainResponse.PatientMedSuppData;
-                    }
+                if (dataDomainResponse != null)
+                {
+                    result = dataDomainResponse.PatientMedSuppData;
                 }
                 return result;
             }

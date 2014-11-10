@@ -44,5 +44,20 @@ namespace Phytel.API.DataDomain.Medication.Service
             }
             return response;
         }
+
+        public GetMedicationDetailsDataResponse Post(GetMedicationDetailsDataRequest request)
+        {
+            var response = new GetMedicationDetailsDataResponse { Version = request.Version };
+            try
+            {
+                RequireUserId(request);
+                response = Manager.GetMedicationDetails(request);
+            }
+            catch (Exception ex)
+            {
+                RaiseException(response, ex);
+            }
+            return response;
+        }
     }
 }

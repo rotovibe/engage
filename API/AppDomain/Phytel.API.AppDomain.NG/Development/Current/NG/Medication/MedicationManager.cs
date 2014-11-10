@@ -50,10 +50,36 @@ namespace Phytel.API.AppDomain.NG.Medication
             PatientMedSupp patientMedSupp = null;
             try
             {
-                PatientMedSuppData data = EndpointUtil.SavePatientMedSupp(request);
-                if (data != null)
+                if (request.PatientMedSupp != null)
                 {
-                    patientMedSupp = Mapper.Map<PatientMedSupp>(data);
+                    // Populate calculated NDC codes and Pharm classes in the request object before save.
+                    bool calculateNDCAndPharm = false;
+                    if (request.Insert)
+                    {
+                        calculateNDCAndPharm = true;
+                    }
+                    else
+                    {
+                        // On update, check for ReCalculateNDC flag.
+                        if (request.RecalculateNDC)
+                        {
+                            calculateNDCAndPharm = true;
+                        }
+                    }
+                    if (calculateNDCAndPharm)
+                    {
+                        PatientMedSupp pms = EndpointUtil.GetMedicationDetails(request);
+                        if (pms != null)
+                        {
+                            request.PatientMedSupp.NDCs = pms.NDCs;
+                            request.PatientMedSupp.PharmClasses = pms.PharmClasses;
+                        }
+                    }
+                    PatientMedSuppData data = EndpointUtil.SavePatientMedSupp(request);
+                    if (data != null)
+                    {
+                        patientMedSupp = Mapper.Map<PatientMedSupp>(data);
+                    }
                 }
                 return patientMedSupp;
             }

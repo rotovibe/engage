@@ -76,6 +76,8 @@
     <Compile Include="DeleteMedSuppsByPatientIdDataResponse.cs" />
     <Compile Include="DomainResponse.cs" />
     <Compile Include="Enums.cs" />
+    <Compile Include="GetMedicationDetailsDataRequest.cs" />
+    <Compile Include="GetMedicationDetailsDataResponse.cs" />
     <Compile Include="GetPatientMedSuppsDataRequest.cs" />
     <Compile Include="GetPatientMedSuppsDataResponse.cs" />
     <Compile Include="PatientMedSuppData.cs" />
