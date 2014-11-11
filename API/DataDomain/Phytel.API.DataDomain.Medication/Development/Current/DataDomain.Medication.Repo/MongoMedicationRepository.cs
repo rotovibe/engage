@@ -173,26 +173,11 @@ namespace DataDomain.Medication.Repo
                 {
                     List<IMongoQuery> queries = new List<IMongoQuery>();
                     queries.Add(Query.EQ(MEMedication.DeleteFlagProperty, false));
-                    if (!string.IsNullOrEmpty(dataRequest.Name))
-                    {
-                        queries.Add(Query.EQ(MEMedication.FullNameProperty, dataRequest.Name));
-                    }
-                    if (!string.IsNullOrEmpty(dataRequest.Strength))
-                    {
-                        queries.Add(Query.In(MEMedication.StrengthProperty, new List<BsonValue> { BsonValue.Create(dataRequest.Strength) }));
-                    }
-                    if (!string.IsNullOrEmpty(dataRequest.Route))
-                    {
-                        queries.Add(Query.In(MEMedication.RouteProperty, new List<BsonValue> { BsonValue.Create(dataRequest.Route) }));
-                    }
-                    if (!string.IsNullOrEmpty(dataRequest.Form))
-                    {
-                        queries.Add(Query.EQ(MEMedication.FormProperty, dataRequest.Form));
-                    } 
-                    if (!string.IsNullOrEmpty(dataRequest.Unit))
-                    {
-                        queries.Add(Query.In(MEMedication.UnitProperty, new List<BsonValue> { BsonValue.Create(dataRequest.Unit) }));
-                    }
+                    queries.Add(Query.EQ(MEMedication.FullNameProperty, dataRequest.Name));
+                    queries.Add(Query.In(MEMedication.StrengthProperty, new List<BsonValue> { BsonValue.Create(dataRequest.Strength) }));
+                    queries.Add(Query.In(MEMedication.RouteProperty, new List<BsonValue> { BsonValue.Create(dataRequest.Route) }));
+                    queries.Add(Query.EQ(MEMedication.FormProperty, dataRequest.Form));
+                    queries.Add(Query.In(MEMedication.UnitProperty, new List<BsonValue> { BsonValue.Create(dataRequest.Unit) }));
                     IMongoQuery mQuery = Query.And(queries);
                     list = ctx.Medications.Collection.Find(mQuery).ToList();
                 }
