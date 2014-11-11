@@ -15,11 +15,11 @@ namespace Phytel.API.AppDomain.NG.Medication
         #endregion
 
         #region Medication - Posts
-        public PatientMedSupp GetMedicationDetails(PostPatientMedSuppRequest request)
+        public List<string> GetMedicationNDCs(PostPatientMedSuppRequest request)
         {
             try
             {
-                PatientMedSupp result = null;
+                List<string> result = null;
                 IRestClient client = new JsonServiceClient();
                 //[Route("/{Context}/{Version}/{ContractNumber}/Medication/Search", "GET")]
                 var url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Medication/Search",
@@ -28,27 +28,37 @@ namespace Phytel.API.AppDomain.NG.Medication
                                     request.Version,
                                     request.ContractNumber), request.UserId);
 
-                string[] values = request.PatientMedSupp.Strength.Split(' ');
-                GetMedicationDetailsDataResponse dataDomainResponse = client.Post<GetMedicationDetailsDataResponse>(url, new GetMedicationDetailsDataRequest
+                string strength = string.Empty;
+                string unit = string.Empty;
+                if (!string.IsNullOrEmpty(request.PatientMedSupp.Strength))
+                {
+                    string[] values = request.PatientMedSupp.Strength.Split(' ');
+                    if(values.Length > 0)
+                    { 
+                        strength = values[0];
+                        if (values.Length > 1)
+                        {
+                            unit = values[1].ToUpper();// Medication collection store all units in upper case.
+                        }
+                    }
+                }
+
+                GetMedicationNDCsDataResponse dataDomainResponse = client.Post<GetMedicationNDCsDataResponse>(url, new GetMedicationNDCsDataRequest
                 {
                     Context = "NG",
                     ContractNumber = request.ContractNumber,
                     UserId = request.UserId,
                     Version = request.Version,
                     Name = request.PatientMedSupp.Name,
-                    Strength = values[0],
+                    Strength = strength,
                     Form = request.PatientMedSupp.Form,
                     Route = request.PatientMedSupp.Route,
-                    Unit = values[1].ToUpper()// Medication collection store all units in upper case.
+                    Unit = unit
                 } as object);
 
                 if (dataDomainResponse != null)
                 {
-                    result = new PatientMedSupp
-                    {
-                        NDCs = dataDomainResponse.NDCcodes,
-                        PharmClasses = dataDomainResponse.PharmClasses
-                    };
+                    result = dataDomainResponse.NDCcodes;
                 }
                 return result;
             }

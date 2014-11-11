@@ -38,37 +38,25 @@ namespace Phytel.API.DataDomain.Medication
             catch (Exception ex) { throw ex; }
         }
 
-        public GetMedicationDetailsDataResponse GetMedicationDetails(GetMedicationDetailsDataRequest request)
+        public GetMedicationNDCsDataResponse GetMedicationNDCs(GetMedicationNDCsDataRequest request)
         {
             try
             {
-                GetMedicationDetailsDataResponse result = new GetMedicationDetailsDataResponse();
+                GetMedicationNDCsDataResponse result = new GetMedicationNDCsDataResponse();
                 var repo = MedicationRepositoryFactory.GetMedicationRepository(request, RepositoryType.Medication)    ;
-                List<MEMedication> meMeds = repo.SearchMedications(request) as List<MEMedication>;
+                List<MEMedication> meMeds = repo.FindNDCCodes(request) as List<MEMedication>;
                 if (meMeds != null && meMeds.Count > 0)
                 {
                     List<string> ndcs = new List<string>();
-                    List<string> pharmclasses = new List<string>();
-                    // Get list of unique ndc codes and pharmclasses.
+                    // Get list of unique NDC codes.
                     meMeds.ForEach(m =>
                     {
                         if (!ndcs.Contains(m.NDC))
                         {
                             ndcs.Add(m.NDC);
                         }
-                        if (m.PharmClass != null && m.PharmClass.Count > 0)
-                        {
-                            m.PharmClass.ForEach(p =>
-                                {
-                                    if (!pharmclasses.Contains(p))
-                                    {
-                                        pharmclasses.Add(p);
-                                    }
-                                });
-                        }
                     });
                     result.NDCcodes = ndcs;
-                    result.PharmClasses = pharmclasses;
                 }
                 return result;
             }

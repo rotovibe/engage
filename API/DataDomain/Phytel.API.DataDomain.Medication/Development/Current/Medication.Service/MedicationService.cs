@@ -45,13 +45,13 @@ namespace Phytel.API.DataDomain.Medication.Service
             return response;
         }
 
-        public GetMedicationDetailsDataResponse Post(GetMedicationDetailsDataRequest request)
+        public GetMedicationNDCsDataResponse Post(GetMedicationNDCsDataRequest request)
         {
-            var response = new GetMedicationDetailsDataResponse { Version = request.Version };
+            var response = new GetMedicationNDCsDataResponse { Version = request.Version };
             try
             {
                 RequireUserId(request);
-                response = Manager.GetMedicationDetails(request);
+                response = Manager.GetMedicationNDCs(request);
             }
             catch (Exception ex)
             {

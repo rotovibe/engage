@@ -8,6 +8,6 @@ namespace Phytel.API.AppDomain.NG.Medication
     {
         List<PatientMedSuppData> GetPatientMedSupps(GetPatientMedSuppsRequest request);
         PatientMedSuppData SavePatientMedSupp(PostPatientMedSuppRequest request);
-        PatientMedSupp GetMedicationDetails(PostPatientMedSuppRequest request);
+        List<string> GetMedicationNDCs(PostPatientMedSuppRequest request);
     }
 }

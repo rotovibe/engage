@@ -20,7 +20,7 @@ namespace Phytel.API.AppDomain.NG.Test
         double version = 1.0;
         string url = "http://localhost:888/Nightingale";
         IRestClient client = new JsonServiceClient();
-        string token = "54610ecd84ac05098c807bed";
+        string token = "5462909584ac0510085bf00b";
 
         [TestMethod]
         public void GetPatientMedSupps_Test()
@@ -53,24 +53,24 @@ namespace Phytel.API.AppDomain.NG.Test
                 DeleteFlag = false,
                // Dosage = "Two",
                 //EndDate = DateTime.UtcNow,
-                Form = "",
                 //FreqHowOftenId = "545be059d43323224896663a",
                 //FreqQuantity = "4",
              //   FreqWhenId = "545be126d433232248966643",
-              //  Id = "546198cad43323311cce53ff",
-                Name = "ACETAMINOPHEN",
+                 Id = "5462991ed4332323a01ce994",
+                Name = "TREE MIXTURE",
+                Form = "INJECTION, SOLUTION",
+                Route = "INTRADERMAL",
+                Strength = ".0021 g/mL",
                 //NDCs = ,
-                Notes = "note for Acetomophine 2",
-                PatientId = "5325db19d6a4850adcbba836",
+               // Notes = "note for Acetomophine 2",
+                PatientId = "5325db0cd6a4850adcbba81a",
                 //PharmClasses = ,
-                PrescribedBy = "Dr Basu",
-                Reason = "Reason for Acetomophine 2",
-                Route = "",
+               PrescribedBy = "Dr Basu",
+               // Reason = "Reason for Acetomophine 2",
                 //SigCode = ,
                 SourceId = "544e9976d433231d9c0330ae",
                 StartDate = DateTime.UtcNow,
                 StatusId = 2,
-                Strength = "",
                 SystemName = "Engage",
                 TypeId = "545bdfa1d433232248966638"
             };
@@ -79,7 +79,7 @@ namespace Phytel.API.AppDomain.NG.Test
             {
                 ContractNumber = contractNumber,
                 PatientMedSupp = pms,
-                Insert = true,
+                Insert = false,
                 RecalculateNDC = true,
                 UserId = userId,
                 Version = version

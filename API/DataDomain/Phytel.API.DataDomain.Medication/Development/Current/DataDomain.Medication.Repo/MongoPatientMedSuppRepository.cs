@@ -46,34 +46,34 @@ namespace DataDomain.Medication.Repo
             PatientMedSuppData data  = request.PatientMedSuppData;
             try
             {
-                MEPatientMedSupp mePMS = new MEPatientMedSupp(this.UserId)
-                {
-                    PatientId = ObjectId.Parse(data.PatientId),
-                    Name = data.Name,
-                    CategoryId = (Category)data.CategoryId,
-                    TypeId  = ObjectId.Parse(data.TypeId),
-                    StatusId = (Status)data.StatusId,
-                    Dosage = data.Dosage,
-                    Strength = data.Strength,
-                    Route = data.Route,
-                    Form = data.Form,
-                    PharmClasses = data.PharmClasses,
-                    NDCs = data.NDCs,
-                    FreqQuantity = data.FreqQuantity,
-                    FreqHowOftenId = string.IsNullOrEmpty(data.FreqHowOftenId) ? (ObjectId?)null : ObjectId.Parse(data.FreqHowOftenId),
-                    FreqWhenId = string.IsNullOrEmpty(data.FreqWhenId) ? (ObjectId?)null : ObjectId.Parse(data.FreqWhenId),
-                    SourceId = ObjectId.Parse(data.SourceId),
-                    StartDate = data.StartDate == null ? (DateTime?)null : data.StartDate,
-                    EndDate = data.EndDate == null ? (DateTime?)null : data.EndDate,
-                    Reason = data.Reason,
-                    Notes = data.Notes,
-                    PrescribedBy = data.PrescribedBy,
-                    SystemName = data.SystemName,
-                    DeleteFlag = false
-                };
-
                 using (MedicationMongoContext ctx = new MedicationMongoContext(ContractDBName))
                 {
+                    MEPatientMedSupp mePMS = new MEPatientMedSupp(this.UserId)
+                    {
+                        PatientId = ObjectId.Parse(data.PatientId),
+                        Name = data.Name,
+                        CategoryId = (Category)data.CategoryId,
+                        TypeId  = ObjectId.Parse(data.TypeId),
+                        StatusId = (Status)data.StatusId,
+                        Dosage = data.Dosage,
+                        Strength = data.Strength,
+                        Route = data.Route,
+                        Form = data.Form,
+                        PharmClasses = getPharmClassses(ctx, data.Name),
+                        NDCs = data.NDCs,
+                        FreqQuantity = data.FreqQuantity,
+                        FreqHowOftenId = string.IsNullOrEmpty(data.FreqHowOftenId) ? (ObjectId?)null : ObjectId.Parse(data.FreqHowOftenId),
+                        FreqWhenId = string.IsNullOrEmpty(data.FreqWhenId) ? (ObjectId?)null : ObjectId.Parse(data.FreqWhenId),
+                        SourceId = ObjectId.Parse(data.SourceId),
+                        StartDate = data.StartDate == null ? (DateTime?)null : data.StartDate,
+                        EndDate = data.EndDate == null ? (DateTime?)null : data.EndDate,
+                        Reason = data.Reason,
+                        Notes = data.Notes,
+                        PrescribedBy = data.PrescribedBy,
+                        SystemName = data.SystemName,
+                        DeleteFlag = false
+                    };
+
                     ctx.PatientMedSupps.Collection.Insert(mePMS);
 
                     AuditHelper.LogDataAudit(this.UserId,
@@ -81,8 +81,8 @@ namespace DataDomain.Medication.Repo
                                             mePMS.Id.ToString(),
                                             DataAuditType.Insert,
                                             request.ContractNumber);
+                    return AutoMapper.Mapper.Map<PatientMedSuppData>(mePMS);
                 }
-                return AutoMapper.Mapper.Map<PatientMedSuppData>(mePMS);
             }
             catch (Exception) { throw; }
         }
@@ -382,8 +382,29 @@ namespace DataDomain.Medication.Repo
             catch (Exception) { throw; }
         }
 
+        private List<string> getPharmClassses(MedicationMongoContext ctx, string name)
+        {
+            List<string> result = null;
+            List<MEMedication> meMs = ctx.Medications.Collection.Find(Query.EQ(MEMedication.FullNameProperty, name)).SetFields(MEMedication.PharmClassProperty).ToList();
+            if (meMs != null && meMs.Count > 0)
+            {
+                result = new List<string>();
+                meMs.ForEach(m =>
+                {
+                    m.PharmClass.ForEach(p => 
+                    {
+                        // get only unique pharm classes codes.
+                        if (!result.Contains(p))
+                        {
+                            result.Add(p);
+                        }
+                    });
+                });
+            }
+            return result;
+        }
 
-        public object SearchMedications(object request)
+        public object FindNDCCodes(object request)
         {
             throw new NotImplementedException();
         }
