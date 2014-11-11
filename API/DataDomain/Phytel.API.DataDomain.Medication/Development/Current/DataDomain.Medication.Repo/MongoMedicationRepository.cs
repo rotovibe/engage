@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using DTO = Phytel.API.DataDomain.Medication.DTO;
 using Phytel.API.DataDomain.Medication.DTO;
+using Phytel.API.Common;
 
 namespace DataDomain.Medication.Repo
 {
@@ -178,19 +179,19 @@ namespace DataDomain.Medication.Repo
                     }
                     if (!string.IsNullOrEmpty(dataRequest.Strength))
                     {
-                        queries.Add(Query.In(MEMedication.StrengthProperty, new BsonArray(dataRequest.Strength)));
+                        queries.Add(Query.In(MEMedication.StrengthProperty, new List<BsonValue> { BsonValue.Create(dataRequest.Strength) }));
                     }
                     if (!string.IsNullOrEmpty(dataRequest.Route))
                     {
-                        queries.Add(Query.In(MEMedication.RouteProperty, new BsonArray(dataRequest.Route)));
+                        queries.Add(Query.In(MEMedication.RouteProperty, new List<BsonValue> { BsonValue.Create(dataRequest.Route) }));
                     }
                     if (!string.IsNullOrEmpty(dataRequest.Form))
                     {
                         queries.Add(Query.EQ(MEMedication.FormProperty, dataRequest.Form));
                     } 
-                    if (!string.IsNullOrEmpty(dataRequest.Form))
+                    if (!string.IsNullOrEmpty(dataRequest.Unit))
                     {
-                        queries.Add(Query.In(MEMedication.UnitProperty, new BsonArray(dataRequest.Unit)));
+                        queries.Add(Query.In(MEMedication.UnitProperty, new List<BsonValue> { BsonValue.Create(dataRequest.Unit) }));
                     }
                     IMongoQuery mQuery = Query.And(queries);
                     list = ctx.Medications.Collection.Find(mQuery).ToList();

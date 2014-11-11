@@ -20,7 +20,7 @@ namespace Phytel.API.AppDomain.NG.Test
         double version = 1.0;
         string url = "http://localhost:888/Nightingale";
         IRestClient client = new JsonServiceClient();
-        string token = "545d28ee84ac0515d493b3c4";
+        string token = "54610ecd84ac05098c807bed";
 
         [TestMethod]
         public void GetPatientMedSupps_Test()
@@ -53,24 +53,24 @@ namespace Phytel.API.AppDomain.NG.Test
                 DeleteFlag = false,
                // Dosage = "Two",
                 //EndDate = DateTime.UtcNow,
-              //  Form = "Liquid",
+                Form = "LIQUID",
                 //FreqHowOftenId = "545be059d43323224896663a",
                 //FreqQuantity = "4",
              //   FreqWhenId = "545be126d433232248966643",
-                Id = "545d3b09d433230c244eafff",
-                Name = "Acetomophine",
+                Id = "546198cad43323311cce53ff",
+                Name = "ACETAMINOPHEN",
                 //NDCs = ,
-                //Notes = "note for Acetomophine 2",
-                PatientId = "5325d9e9d6a4850adcbba4b1",
+                Notes = "note for Acetomophine 2",
+                PatientId = "5325db19d6a4850adcbba836",
                 //PharmClasses = ,
-                //PrescribedBy = "Dr Basu",
-                //Reason = "Reason for Acetomophine 2",
-                //Route = "Oral",
+                PrescribedBy = "Dr Basu",
+                Reason = "Reason for Acetomophine 2",
+                Route = "ORAL",
                 //SigCode = ,
                 SourceId = "544e9976d433231d9c0330ae",
                 StartDate = DateTime.UtcNow,
                 StatusId = 2,
-               // Strength = "150 ml",
+                Strength = "160 mg/5mL",
                 SystemName = "Engage",
                 TypeId = "545bdfa1d433232248966638"
             };
@@ -80,6 +80,7 @@ namespace Phytel.API.AppDomain.NG.Test
                 ContractNumber = contractNumber,
                 PatientMedSupp = pms,
                 Insert = false,
+                RecalculateNDC = true,
                 UserId = userId,
                 Version = version
             };

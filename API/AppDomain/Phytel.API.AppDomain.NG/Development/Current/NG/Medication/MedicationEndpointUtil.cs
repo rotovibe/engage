@@ -28,7 +28,15 @@ namespace Phytel.API.AppDomain.NG.Medication
                                     request.Version,
                                     request.ContractNumber), request.UserId);
 
-                string[] values = request.PatientMedSupp.Strength.Split(' ');
+                string strength = string.Empty;
+                string unit = string.Empty;
+                if (!string.IsNullOrEmpty(request.PatientMedSupp.Strength))
+                {
+                    string[] values = request.PatientMedSupp.Strength.Split(' ');
+                    strength = values[0];
+                    unit = values[1].ToUpper();// Medication collection store all units in upper case.
+                }
+                
                 GetMedicationDetailsDataResponse dataDomainResponse = client.Post<GetMedicationDetailsDataResponse>(url, new GetMedicationDetailsDataRequest
                 {
                     Context = "NG",
@@ -36,10 +44,10 @@ namespace Phytel.API.AppDomain.NG.Medication
                     UserId = request.UserId,
                     Version = request.Version,
                     Name = request.PatientMedSupp.Name,
-                    Strength = values[0],
+                    Strength = strength,
                     Form = request.PatientMedSupp.Form,
                     Route = request.PatientMedSupp.Route,
-                    Unit = values[1]
+                    Unit = unit
                 } as object);
 
                 if (dataDomainResponse != null)

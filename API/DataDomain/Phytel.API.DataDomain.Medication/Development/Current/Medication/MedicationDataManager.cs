@@ -43,7 +43,7 @@ namespace Phytel.API.DataDomain.Medication
             try
             {
                 GetMedicationDetailsDataResponse result = new GetMedicationDetailsDataResponse();
-                var repo = MedicationRepositoryFactory.GetMedicationRepository(request, RepositoryType.PatientMedSupp);
+                var repo = MedicationRepositoryFactory.GetMedicationRepository(request, RepositoryType.Medication)    ;
                 List<MEMedication> meMeds = repo.SearchMedications(request) as List<MEMedication>;
                 if (meMeds != null && meMeds.Count > 0)
                 {
