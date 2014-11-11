@@ -68,11 +68,14 @@ namespace Phytel.API.AppDomain.NG.Medication
                     }
                     if (calculateNDCAndPharm)
                     {
-                        PatientMedSupp pms = EndpointUtil.GetMedicationDetails(request);
-                        if (pms != null)
+                        if(!string.IsNullOrEmpty(request.PatientMedSupp.Name) && !string.IsNullOrEmpty(request.PatientMedSupp.Form) && !string.IsNullOrEmpty(request.PatientMedSupp.Strength) && !string.IsNullOrEmpty(request.PatientMedSupp.Route))
                         {
-                            request.PatientMedSupp.NDCs = pms.NDCs;
-                            request.PatientMedSupp.PharmClasses = pms.PharmClasses;
+                            PatientMedSupp pms = EndpointUtil.GetMedicationDetails(request);
+                            if (pms != null)
+                            {
+                                request.PatientMedSupp.NDCs = pms.NDCs;
+                                request.PatientMedSupp.PharmClasses = pms.PharmClasses;
+                            }
                         }
                     }
                     PatientMedSuppData data = EndpointUtil.SavePatientMedSupp(request);

@@ -53,11 +53,11 @@ namespace Phytel.API.AppDomain.NG.Test
                 DeleteFlag = false,
                // Dosage = "Two",
                 //EndDate = DateTime.UtcNow,
-                Form = "LIQUID",
+                Form = "",
                 //FreqHowOftenId = "545be059d43323224896663a",
                 //FreqQuantity = "4",
              //   FreqWhenId = "545be126d433232248966643",
-                Id = "546198cad43323311cce53ff",
+              //  Id = "546198cad43323311cce53ff",
                 Name = "ACETAMINOPHEN",
                 //NDCs = ,
                 Notes = "note for Acetomophine 2",
@@ -65,12 +65,12 @@ namespace Phytel.API.AppDomain.NG.Test
                 //PharmClasses = ,
                 PrescribedBy = "Dr Basu",
                 Reason = "Reason for Acetomophine 2",
-                Route = "ORAL",
+                Route = "",
                 //SigCode = ,
                 SourceId = "544e9976d433231d9c0330ae",
                 StartDate = DateTime.UtcNow,
                 StatusId = 2,
-                Strength = "160 mg/5mL",
+                Strength = "",
                 SystemName = "Engage",
                 TypeId = "545bdfa1d433232248966638"
             };
@@ -79,7 +79,7 @@ namespace Phytel.API.AppDomain.NG.Test
             {
                 ContractNumber = contractNumber,
                 PatientMedSupp = pms,
-                Insert = false,
+                Insert = true,
                 RecalculateNDC = true,
                 UserId = userId,
                 Version = version
