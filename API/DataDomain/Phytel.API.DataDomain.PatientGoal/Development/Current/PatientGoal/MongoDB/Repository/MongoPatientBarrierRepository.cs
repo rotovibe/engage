@@ -13,7 +13,7 @@ using MB = MongoDB.Driver.Builders;
 
 namespace Phytel.API.DataDomain.PatientGoal
 {
-    public class MongoPatientBarrierRepository : IPatientGoalRepository
+    public class MongoPatientBarrierRepository : IGoalRepository
     {
         private string _dbName = string.Empty;
         private int _expireDays = Convert.ToInt32(ConfigurationManager.AppSettings["ExpireDays"]);
@@ -334,6 +334,12 @@ namespace Phytel.API.DataDomain.PatientGoal
 
 
         public IEnumerable<object> Search(object request, List<string> patientGoalIds)
+        {
+            throw new NotImplementedException();
+        }
+
+
+        public object FindByTemplateId(string patientId, string entityID)
         {
             throw new NotImplementedException();
         }

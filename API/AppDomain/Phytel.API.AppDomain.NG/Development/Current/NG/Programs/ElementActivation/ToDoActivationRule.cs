@@ -22,7 +22,7 @@ namespace Phytel.API.AppDomain.NG.Programs.ElementActivation
                 AppHostBase.Instance.Container.AutoWire(this);
         }
 
-        public override object Execute(string userId, PlanElementEventArg arg, SpawnElement pe, ProgramAttributeData pad)
+        public override SpawnType Execute(string userId, PlanElementEventArg arg, SpawnElement pe, ProgramAttributeData pad)
         {
             try
             {
@@ -86,7 +86,8 @@ namespace Phytel.API.AppDomain.NG.Programs.ElementActivation
                     throw new Exception(ex.Message, ex.InnerException);
                 }
 
-                return _alertType;
+                var spawnType = new SpawnType { Type = _alertType.ToString()};
+                return spawnType;
             }
             catch (Exception ex)
             {

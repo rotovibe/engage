@@ -18,6 +18,7 @@ namespace Phytel.API.AppDomain.NG
         public List<string> RelatedChanges { get; set; }
         public List<object> ProcessedElements { get; set; }
         public IsInitialActionSpecification<Program> IsInitialAction { get; set; }
+        public IStepPlanProcessor StepProcessor { get; set; }
 
         public PlanManager()
         {
@@ -313,7 +314,7 @@ namespace Phytel.API.AppDomain.NG
             ProgramPlanProcessor progProc = new ProgramPlanProcessor();
             ModulePlanProcessor modProc = new ModulePlanProcessor();
             ActionPlanProcessor actProc = new ActionPlanProcessor();
-            StepPlanProcessor stepProc = new StepPlanProcessor();
+            IStepPlanProcessor stepProc = StepProcessor;
             
             // initialize all spawn events.
             stepProc.SpawnEvent += stepProc__spawnEvent;
@@ -325,7 +326,7 @@ namespace Phytel.API.AppDomain.NG
             PEUtils._processedElementEvent += PlanElementUtil__processedElementEvent;
             progProc.Successor = modProc;
             modProc.Successor = actProc;
-            actProc.Successor = stepProc;
+            actProc.Successor = (PlanProcessor)stepProc;
 
             return progProc;
         }
@@ -353,9 +354,35 @@ namespace Phytel.API.AppDomain.NG
             }
         }
 
-        void stepProc__spawnEvent(object s, SpawnEventArgs e)
+        private void stepProc__spawnEvent(object s, SpawnEventArgs e)
         {
-            RelatedChanges.Add(e.Name);
+            try
+            {
+                // add goal/task/intervention payload to processlist
+                if (e.Tags != null)
+                {
+                    if (e.Tags.Count > 0)
+                    {
+                        e.Tags.ForEach(t =>
+                        {
+                            if (t != null)
+                            {
+                                if (t.GetType() == typeof (List<object>))
+                                    ((List<object>) t).ForEach(AddUniquePlanElementToProcessedList);
+                                else
+                                    AddUniquePlanElementToProcessedList(t);
+                            }
+                        });
+                    }
+                }
+                RelatedChanges.Add(e.Name);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(
+                    "AD:InterviewManager:stepProc__spawnEvent():: count: " + e.Tags.Count + " " + ex.Message,
+                    ex.InnerException);
+            }
         }
     }
 }

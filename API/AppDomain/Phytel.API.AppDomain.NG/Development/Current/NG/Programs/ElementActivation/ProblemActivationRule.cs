@@ -22,10 +22,11 @@ namespace Phytel.API.AppDomain.NG.Programs.ElementActivation
                 AppHostBase.Instance.Container.AutoWire(this);
         }
 
-        public override object Execute(string userId, PlanElementEventArg arg, SpawnElement pe, ProgramAttributeData pad)
+        public override SpawnType Execute(string userId, PlanElementEventArg arg, SpawnElement pe, ProgramAttributeData pad)
         {
             HandlePatientProblemRegistration(arg, userId, pe);
-            return _alertType;
+            var spawnType = new SpawnType {Type = _alertType.ToString()};
+            return spawnType;
         }
 
         private void HandlePatientProblemRegistration(PlanElementEventArg e, string userId, SpawnElement rse)

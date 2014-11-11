@@ -7,6 +7,6 @@ namespace Phytel.API.AppDomain.NG.Programs.ElementActivation
     public interface IElementActivationRule
     {
         int ElementType { get;}
-        object Execute(string userId, PlanElementEventArg arg, SpawnElement se, ProgramAttributeData pad);
+        SpawnType Execute(string userId, PlanElementEventArg arg, SpawnElement se, ProgramAttributeData pad);
     }
 }

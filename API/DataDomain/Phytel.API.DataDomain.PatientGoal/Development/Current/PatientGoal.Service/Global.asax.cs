@@ -1,3 +1,5 @@
+using AutoMapper;
+using Phytel.API.DataDomain.PatientGoal.DTO;
 using ServiceStack.MiniProfiler;
 using ServiceStack.ServiceInterface.Admin;
 using ServiceStack.WebHost.Endpoints;
@@ -27,6 +29,12 @@ namespace Phytel.API.DataDomain.PatientGoal.Service
         {
             new PatientGoalAppHost().Init();
 
+            Mapper.CreateMap<MEGoal, GoalData>()
+                .ForMember(d => d.Id, opt => opt.MapFrom(src => src.Id.ToString()))
+                .ForMember(d => d.SourceId, opt => opt.MapFrom(src => src.SourceId.ToString()))
+                .ForMember(d => d.CustomAttributes,
+                    opt => opt.MapFrom(src => src.Attributes.ConvertAll<CustomAttributeData>(
+                        c => new CustomAttributeData {Id = c.AttributeId.ToString(), Values = c.Values})));
         }
 
         protected void Session_Start(object sender, EventArgs e)

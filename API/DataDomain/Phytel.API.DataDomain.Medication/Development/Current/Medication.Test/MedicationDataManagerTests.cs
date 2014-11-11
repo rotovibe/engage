@@ -60,18 +60,18 @@ namespace Phytel.API.DataDomain.Medication.Tests
                     {
                         var rec = new DTO.MedicationData
                         {
-                            ProductId = reader["PRODUCTID"].ToString(),
-                            NDC = reader["PRODUCTNDC"].ToString(),
-                            FullName = reader["PROPRIETARYNAME"].ToString() +" " + reader["PROPRIETARYNAMESUFFIX"].ToString(),
-                            ProprietaryName = reader["PROPRIETARYNAME"].ToString(),
-                            ProprietaryNameSuffix = reader["PROPRIETARYNAMESUFFIX"].ToString(),
-                            StartDate = formatDate(reader["STARTMARKETINGDATE"].ToString()),
-                            SubstanceName = GetList(reader["SUBSTANCENAME"].ToString()),
-                            PharmClass = GetList(reader["PHARM_CLASSES"].ToString()),
-                            Route = GetList(reader["ROUTENAME"].ToString()),
-                            Form = reader["DOSAGEFORMNAME"].ToString(),
-                            Unit = GetList(reader["ACTIVE_INGRED_UNIT"].ToString()),
-                            Strength = GetList(reader["ACTIVE_NUMERATOR_STRENGTH"].ToString()),
+                            ProductId = reader["PRODUCTID"].ToString().Trim(),
+                            NDC = reader["PRODUCTNDC"].ToString().Trim(),
+                            FullName = GetFullName(reader["PROPRIETARYNAME"].ToString().Trim() , reader["PROPRIETARYNAMESUFFIX"].ToString().Trim()),
+                            ProprietaryName = reader["PROPRIETARYNAME"].ToString().Trim().Replace("\"", ""),
+                            ProprietaryNameSuffix = reader["PROPRIETARYNAMESUFFIX"].ToString().Trim().Replace("\"", ""),
+                            StartDate = formatDate(reader["STARTMARKETINGDATE"].ToString().Trim()),
+                            SubstanceName = GetList(reader["SUBSTANCENAME"].ToString().Trim()),
+                            PharmClass = GetList(reader["PHARM_CLASSES"].ToString().Trim()),
+                            Route = GetList(reader["ROUTENAME"].ToString().Trim()),
+                            Form = reader["DOSAGEFORMNAME"].ToString().Trim(),
+                            Unit = GetList(reader["ACTIVE_INGRED_UNIT"].ToString().Trim()),
+                            Strength = GetList(reader["ACTIVE_NUMERATOR_STRENGTH"].ToString().Trim()),
                             RecordCreatedBy = "5368ff2ad4332316288f3e3e",
                             RecordCreatedOn = System.DateTime.UtcNow,
                             DeleteFlag = false,
@@ -86,19 +86,29 @@ namespace Phytel.API.DataDomain.Medication.Tests
             return medList;
         }
 
+        private string GetFullName(string propName, string suffix)
+        {
+            var fpN = propName.Replace("\"", "");
+            var sfx = suffix.Replace("\"", "");
+            var name = fpN;
+            if (suffix.Length > 0)
+                name = fpN + " " + sfx;
+            return name;
+        }
+
         private List<string> GetList(string p)
         {
+            if (p.Equals("[\"\"]")) return null;
+
             p = p.Replace("[\"", "");
             p = p.Replace("\"]", "");
             p = p.Replace("\"", "");
             var split = p.Split(',');
+            split.Select(i => i.Trim());
 
             var list = new List<string>();
             split.ToList().ForEach(list.Add);
-            if (split.Length > 1)
-            {
-                var test = "";
-            }
+
             return list;
         }
 

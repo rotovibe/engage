@@ -73,7 +73,7 @@ namespace DataDomain.Medication.Repo
                     object result = null;
                     ctx.Medications.Collection.InsertBatch(mColl);
 
-                    return result;
+                    return result = true;
                 }
             }
             catch (Exception ex)

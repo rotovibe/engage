@@ -12,7 +12,10 @@ namespace Phytel.API.DataDomain.PatientGoal.DTO
         PatientBarrier = 2,
         PatientTask = 3,
         PatientIntervention = 4,
-        AttributeLibrary = 5
+        AttributeLibrary = 5,
+        Goal = 6,
+        Task = 7,
+        Intervention = 8
     }
     
     public enum GoalTaskStatus

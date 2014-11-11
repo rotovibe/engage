@@ -20,7 +20,7 @@ using MongoDB.Bson.Serialization;
 
 namespace Phytel.API.DataDomain.PatientGoal
 {
-    public class MongoPatientInterventionRepository : IPatientGoalRepository
+    public class MongoPatientInterventionRepository : IGoalRepository
     {
         private string _dbName = string.Empty;
         private int _expireDays = Convert.ToInt32(ConfigurationManager.AppSettings["ExpireDays"]);
@@ -440,6 +440,12 @@ namespace Phytel.API.DataDomain.PatientGoal
                 return list;
             }
             catch (Exception) { throw; }
+        }
+
+
+        public object FindByTemplateId(string patientId, string entityID)
+        {
+            throw new NotImplementedException();
         }
     }
 }

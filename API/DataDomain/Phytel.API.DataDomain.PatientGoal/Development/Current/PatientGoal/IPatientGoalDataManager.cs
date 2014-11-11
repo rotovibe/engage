@@ -29,5 +29,7 @@ namespace Phytel.API.DataDomain.PatientGoal
         RemoveProgramInPatientGoalsDataResponse RemoveProgramInPatientGoals(RemoveProgramInPatientGoalsDataRequest request);
         GetInterventionsDataResponse GetInterventions(GetInterventionsDataRequest request);
         GetTasksDataResponse GetTasks(GetTasksDataRequest request);
+        GetGoalDataResponse GetGoal(GetGoalDataRequest request);
+        GetPatientGoalByTemplateIdResponse GetPatientByTemplateIdGoal(GetPatientGoalByTemplateIdRequest request);
     }
 }

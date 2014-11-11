@@ -13,7 +13,7 @@ using MB = MongoDB.Driver.Builders;
 
 namespace Phytel.API.DataDomain.PatientGoal
 {
-    public class MongoPatientGoalRepository : IPatientGoalRepository
+    public class MongoPatientGoalRepository : IGoalRepository
     {
         private string _dbName = string.Empty;
         private int _expireDays = Convert.ToInt32(ConfigurationManager.AppSettings["ExpireDays"]);
@@ -97,6 +97,49 @@ namespace Phytel.API.DataDomain.PatientGoal
             {
                 throw new NotImplementedException();
                 // code here //
+            }
+            catch (Exception) { throw; }
+        }
+
+        public object FindByTemplateId(string patientId, string entityID)
+        {
+            PatientGoalData goalData = null;
+            try
+            {
+                using (PatientGoalMongoContext ctx = new PatientGoalMongoContext(_dbName))
+                {
+                    List<IMongoQuery> queries = new List<IMongoQuery>
+                    {
+                        Query.EQ(MEPatientGoal.PatientIdProperty, ObjectId.Parse(patientId)),
+                        Query.EQ(MEPatientGoal.TemplateIdProperty, ObjectId.Parse(entityID)),
+                        Query.EQ(MEPatientGoal.DeleteFlagProperty, false),
+                        Query.EQ(MEPatientGoal.TTLDateProperty, BsonNull.Value)
+                    };
+
+                    var mQuery = Query.And(queries);
+                    var mePG = ctx.PatientGoals.Collection.Find(mQuery).FirstOrDefault();
+
+                    if (mePG != null)
+                    {
+                        goalData = new PatientGoalData
+                        {
+                            Id = mePG.Id.ToString(),
+                            PatientId = mePG.PatientId.ToString(),
+                            FocusAreaIds = Helper.ConvertToStringList(mePG.FocusAreaIds),
+                            Name = mePG.Name,
+                            SourceId = (mePG.SourceId == null) ? null : mePG.SourceId.ToString(),
+                            ProgramIds = Helper.ConvertToStringList(mePG.ProgramIds),
+                            TypeId = ((int) mePG.Type),
+                            StatusId = ((int) mePG.Status),
+                            StartDate = mePG.StartDate,
+                            EndDate = mePG.EndDate,
+                            TargetDate = mePG.TargetDate,
+                            TargetValue = mePG.TargetValue,
+                            CustomAttributes = DTOUtil.GetCustomAttributeIdAndValues(mePG.Attributes)
+                        };
+                    }
+                }
+                return goalData;
             }
             catch (Exception) { throw; }
         }

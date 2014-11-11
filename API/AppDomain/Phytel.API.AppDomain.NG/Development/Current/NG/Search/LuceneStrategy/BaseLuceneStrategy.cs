@@ -112,6 +112,20 @@ namespace Phytel.API.AppDomain.NG.Search.LuceneStrategy
             return query;
         }
 
+        public Query ParseWholeQueryWc(string searchQuery, QueryParser parser)
+        {
+            Query query = new PhraseQuery();
+            try
+            {
+                query = parser.Parse(searchQuery.Trim() + "*");
+            }
+            catch (ParseException)
+            {
+                //query = parser.Parse(QueryParser.Escape(searchQuery.Trim()));
+            }
+            return query;
+        }
+
         public Query ParseWholeQuery(string searchQuery, QueryParser parser)
         {
             Query query = new PhraseQuery();

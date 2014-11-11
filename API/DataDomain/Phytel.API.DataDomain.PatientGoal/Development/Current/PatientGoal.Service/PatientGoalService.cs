@@ -120,6 +120,48 @@ namespace Phytel.API.DataDomain.PatientGoal.Service
             return response;
         }
 
+        public GetPatientGoalByTemplateIdResponse Get(GetPatientGoalByTemplateIdRequest request)
+        {
+            GetPatientGoalByTemplateIdResponse response = new GetPatientGoalByTemplateIdResponse();
+            try
+            {
+                if (string.IsNullOrEmpty(request.UserId))
+                    throw new UnauthorizedAccessException("PatientGoalDD:Get()::Unauthorized Access");
+
+                response = Manager.GetPatientByTemplateIdGoal(request);
+                response.Version = request.Version;
+            }
+            catch (Exception ex)
+            {
+                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+
+                string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
+                Common.Helper.LogException(int.Parse(aseProcessID), ex);
+            }
+            return response;
+        }
+
+        public GetGoalDataResponse Get(GetGoalDataRequest request)
+        {
+            GetGoalDataResponse response = new GetGoalDataResponse();
+            try
+            {
+                if (string.IsNullOrEmpty(request.UserId))
+                    throw new UnauthorizedAccessException("PatientGoalDD:Get()::Unauthorized Access");
+
+                response = Manager.GetGoal(request);
+                response.Version = request.Version;
+            }
+            catch (Exception ex)
+            {
+                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+
+                string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
+                Common.Helper.LogException(int.Parse(aseProcessID), ex);
+            }
+            return response;
+        }
+
         public GetAllPatientGoalsDataResponse Get(GetAllPatientGoalsDataRequest request)
         {
             GetAllPatientGoalsDataResponse response = new GetAllPatientGoalsDataResponse();

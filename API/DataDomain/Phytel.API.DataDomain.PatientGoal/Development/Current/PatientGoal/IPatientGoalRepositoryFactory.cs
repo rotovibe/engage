@@ -10,6 +10,6 @@ namespace Phytel.API.DataDomain.PatientGoal
 {
     public interface IPatientGoalRepositoryFactory
     {
-        IPatientGoalRepository GetRepository(IDataDomainRequest request, RepositoryType type);
+        IGoalRepository GetRepository(IDataDomainRequest request, RepositoryType type);
     }
 }

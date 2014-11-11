@@ -1,10 +1,13 @@
-﻿using Phytel.API.AppDomain.NG.DTO;
+﻿using AutoMapper;
+using Phytel.API.AppDomain.NG.DTO;
+using Phytel.API.AppDomain.NG.DTO.Goal;
 using Phytel.API.AppDomain.NG.DTO.Scheduling;
 using Phytel.API.AppDomain.NG.PlanCOR;
 //using Phytel.API.AppDomain.NG.Program;
 using Phytel.API.AppDomain.NG.Programs;
 using Phytel.API.DataDomain.CareMember.DTO;
 using Phytel.API.DataDomain.Patient.DTO;
+using Phytel.API.DataDomain.PatientGoal.DTO;
 using Phytel.API.DataDomain.PatientObservation.DTO;
 using Phytel.API.DataDomain.Program.DTO;
 using Phytel.API.DataDomain.Scheduling.DTO;
@@ -27,6 +30,7 @@ namespace Phytel.API.AppDomain.NG
         static readonly string DDProgramServiceUrl = ConfigurationManager.AppSettings["DDProgramServiceUrl"];
         static readonly string DDCareMemberUrl = ConfigurationManager.AppSettings["DDCareMemberUrl"];
         static readonly string DDSchedulingUrl = ConfigurationManager.AppSettings["DDSchedulingUrl"];
+        static readonly string DDPatientGoalsServiceUrl = ConfigurationManager.AppSettings["DDPatientGoalUrl"];
 
         public PatientObservation GetPatientProblem(string probId, PlanElementEventArg e, string userId)
         {
@@ -599,7 +603,6 @@ namespace Phytel.API.AppDomain.NG
         }
         #endregion
 
-
         public PutProgramToPatientResponse AssignPatientToProgram(PostPatientToProgramsRequest request, string primaryCM)
         {
             try
@@ -700,6 +703,65 @@ namespace Phytel.API.AppDomain.NG
             }
         }
 
+        public Goal GetGoalById(string sid, string userId, IAppDomainRequest req)
+        {
+            try
+            {
+                var request = new GetGoalDataRequest();
+
+                IRestClient client = new JsonServiceClient();
+
+                //"/{Context}/{Version}/{ContractNumber}/Goal/{Id}"
+                var url = Common.Helper.BuildURL(string.Format(@"{0}/{1}/{2}/{3}/Goal/{4}",
+                    DDPatientGoalsServiceUrl,
+                    "NG",
+                    req.Version,
+                    req.ContractNumber,
+                    sid), userId);
+
+                var response = client.Get<GetGoalDataResponse>(url);
+                if (response == null) throw new Exception("Schedule template was not found or initialized.");
+                var goal = Mapper.Map<Goal>(response.GoalData); //new Goal();
+
+                return goal;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("AD:PlanElementEndpointUtil:GetGoalById()::" + ex.Message,
+                    ex.InnerException);
+            }
+        }
+
+        public PatientGoal GetPatientGoalByTemplateId(string gid, string patientId, string userId, IAppDomainRequest req)
+        {
+            try
+            {
+                var request = new GetGoalDataRequest();
+
+                IRestClient client = new JsonServiceClient();
+
+                //"/{Context}/{Version}/{ContractNumber}/Patient/{PatientId}/Goal/"
+                var url = Common.Helper.BuildURL(string.Format(@"{0}/{1}/{2}/{3}/Patient/{4}/Goal/?TemplateId={5}",
+                    DDPatientGoalsServiceUrl,
+                    "NG",
+                    req.Version,
+                    req.ContractNumber,
+                     patientId,
+                    gid), userId);
+
+                var response = client.Get<GetPatientGoalByTemplateIdResponse>(url);
+                if (response == null) throw new Exception("Patient goal was not found.");
+                var goal = Mapper.Map<PatientGoal>(response.GoalData);
+                //var patientGoal = Mapper.Map<Goal>(response.GoalData); //new Goal();
+
+                return goal;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("AD:PlanElementEndpointUtil:GetGoalById()::" + ex.Message,
+                    ex.InnerException);
+            }
+        }
 
         public Schedule GetScheduleToDoById(string sid, string userId, IAppDomainRequest req)
         {
@@ -748,7 +810,6 @@ namespace Phytel.API.AppDomain.NG
                     ex.InnerException);
             }
         }
-
 
         public object PutInsertToDo(ToDoData todo, string userId, IAppDomainRequest req)
         {

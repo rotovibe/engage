@@ -824,42 +824,120 @@ namespace Phytel.API.AppDomain.NG
 
         public void HydratePlanElementLists(List<object> processedElements, PlanElements planElems)
         {
+            object _obj = null;
             try
             {
+                if (planElems == null) throw new ArgumentException("planElems is null.");
+                if (processedElements == null) throw new ArgumentException("processedElements is null.");
+
                 if (processedElements != null && processedElements.Count > 0)
                 {
                     foreach (Object obj in processedElements)
                     {
+                        _obj = obj;
                         if (obj.GetType() == typeof (Program))
                         {
-                            if (!planElems.Programs.Contains(obj))
+                            try
                             {
-                                Program p = CloneProgram((Program) obj);
-                                planElems.Programs.Add(p);
+                                if (!planElems.Programs.Contains(obj))
+                                {
+                                    Program p = CloneProgram((Program) obj);
+                                    planElems.Programs.Add(p);
+                                }
+                            }
+                            catch (Exception ex)
+                            {
+                                throw new ArgumentException("plan elems programs collection null" + ex.Message);
                             }
                         }
                         else if (obj.GetType() == typeof (Module))
                         {
-                            if (!planElems.Modules.Contains(obj))
+                            try
                             {
-                                Module m = CloneModule((Module) obj);
-                                planElems.Modules.Add(m);
+                                if (!planElems.Modules.Contains(obj))
+                                {
+                                    Module m = CloneModule((Module) obj);
+                                    planElems.Modules.Add(m);
+                                }
+                            }
+                            catch (Exception ex)
+                            {
+                                throw new ArgumentException("plan elems modules collection null" + ex.Message);
                             }
                         }
                         else if (obj.GetType() == typeof (Actions))
                         {
-                            if (!planElems.Actions.Contains(obj))
+                            try
                             {
-                                Actions a = CloneAction((Actions) obj);
-                                planElems.Actions.Add(a);
+                                if (!planElems.Actions.Contains(obj))
+                                {
+                                    Actions a = CloneAction((Actions) obj);
+                                    planElems.Actions.Add(a);
+                                }
+                            }
+                            catch (Exception ex)
+                            {
+                                throw new ArgumentException("plan elems actions collection null" + ex.Message);
                             }
                         }
                         else if (obj.GetType() == typeof (Step))
                         {
-                            if (!planElems.Steps.Contains(obj))
+                            try
                             {
-                                Step s = CloneStep((Step) obj);
-                                planElems.Steps.Add(s);
+                                if (!planElems.Steps.Contains(obj))
+                                {
+                                    Step s = CloneStep((Step) obj);
+                                    planElems.Steps.Add(s);
+                                }
+                            }
+                            catch (Exception ex)
+                            {
+                                throw new ArgumentException("plan elems step collection null" + ex.Message);
+                            }
+                        }
+                        else if (obj.GetType() == typeof (PatientGoal))
+                        {
+                            try
+                            {
+                                if (!planElems.Goals.Contains(obj))
+                                {
+                                    PatientGoal s = CloneGoal((PatientGoal) obj);
+                                    planElems.Goals.Add(s);
+                                }
+                            }
+                            catch (Exception ex)
+                            {
+                                throw new ArgumentException("plan elems patientgoal collection null" + ex.Message);
+                            }
+                        }
+                        else if (obj.GetType() == typeof (PatientIntervention))
+                        {
+                            try
+                            {
+                                if (!planElems.Interventions.Contains(obj))
+                                {
+                                    PatientIntervention s = CloneIntervention((PatientIntervention) obj);
+                                    planElems.Interventions.Add(s);
+                                }
+                            }
+                            catch (Exception ex)
+                            {
+                                throw new ArgumentException("plan elems PatientIntervention collection null" + ex.Message);
+                            }
+                        }
+                        else if (obj.GetType() == typeof (PatientTask))
+                        {
+                            try
+                            {
+                                if (!planElems.Tasks.Contains(obj))
+                                {
+                                    PatientTask s = CloneTask((PatientTask) obj);
+                                    planElems.Tasks.Add(s);
+                                }
+                            }
+                            catch (Exception ex)
+                            {
+                                throw new ArgumentException("plan elems patienttask collection null" + ex.Message);
                             }
                         }
                     }
@@ -867,7 +945,97 @@ namespace Phytel.API.AppDomain.NG
             }
             catch (Exception ex)
             {
-                throw new Exception("AD:PlanElementUtil:HydratePlanElementLists()::" + ex.Message, ex.InnerException);
+                throw new Exception("AD:PlanElementUtil:HydratePlanElementLists()::" + _obj.GetType().ToString() + ex.Message, ex.InnerException);
+            }
+        }
+
+        public PatientTask CloneTask(PatientTask t)
+        {
+            try
+            {
+                PatientTask pt = new PatientTask
+                {
+                    TargetValue = t.TargetValue,
+                    TargetDate = t.TargetDate,
+                    StatusId = t.StatusId,
+                    StatusDate = t.StatusDate,
+                    StartDate = t.StartDate,
+                    PatientGoalId = t.PatientGoalId,
+                    GoalName = t.GoalName,
+                    Description = t.Description,
+                    DeleteFlag = t.DeleteFlag,
+                    CustomAttributes = t.CustomAttributes,
+                    CreatedById = t.CreatedById,
+                    BarrierIds = t.BarrierIds,
+                    ClosedDate = t.ClosedDate,
+                    Id = t.Id
+                };
+                return pt;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("AD:PlanElementUtil:CloneTask()::" + ex.Message, ex.InnerException);
+            }
+        }
+
+        public PatientIntervention CloneIntervention(PatientIntervention i)
+        {
+            try
+            {
+                PatientIntervention pi = new PatientIntervention
+                {
+                    PatientDetails = i.PatientDetails,
+                    StatusId = i.StatusId,
+                    StatusDate = i.StatusDate,
+                    StartDate = i.StartDate,
+                    PatientId = i.PatientId,
+                    PatientGoalId = i.PatientGoalId,
+                    Id = i.Id,
+                    GoalName = i.GoalName,
+                    Description = i.Description,
+                    DeleteFlag = i.DeleteFlag,
+                    CreatedById = i.CreatedById,
+                    AssignedToId = i.AssignedToId,
+                    BarrierIds = i.BarrierIds,
+                    CategoryId = i.CategoryId,
+                    ClosedDate = i.ClosedDate
+                };
+                return pi;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("AD:PlanElementUtil:CloneIntervention()::" + ex.Message, ex.InnerException);
+            }
+        }
+
+        public PatientGoal CloneGoal(PatientGoal g)
+        {
+            try
+            {
+                PatientGoal pg = new PatientGoal
+                {
+                    Id = g.Id,
+                    StatusId = g.StatusId,
+                    PatientId = g.PatientId,
+                    ProgramIds = g.ProgramIds,
+                    Interventions = g.Interventions,
+                    Tasks = g.Tasks,
+                    Barriers = g.Barriers,
+                    CustomAttributes = g.CustomAttributes,
+                    EndDate = g.EndDate,
+                    FocusAreaIds = g.FocusAreaIds,
+                    Name = g.Name,
+                    SourceId = g.SourceId,
+                    StartDate = g.StartDate,
+                    TargetDate = g.TargetDate,
+                    TargetValue = g.TargetValue,
+                    TypeId = g.TypeId
+                };
+                return pg;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("AD:PlanElementUtil:CloneGoal()::" + ex.Message, ex.InnerException);
             }
         }
 

@@ -10,11 +10,11 @@ namespace Phytel.API.DataDomain.PatientGoal
 {
     public class PatientGoalRepositoryFactory : IPatientGoalRepositoryFactory
     {
-        public IPatientGoalRepository GetRepository(IDataDomainRequest request, RepositoryType type)
+        public IGoalRepository GetRepository(IDataDomainRequest request, RepositoryType type)
         {
             try
             {
-                IPatientGoalRepository repo = null;
+                IGoalRepository repo = null;
 
                 switch (type)
                 {
@@ -36,6 +36,21 @@ namespace Phytel.API.DataDomain.PatientGoal
                     case RepositoryType.PatientIntervention:
                     {
                         repo = new MongoPatientInterventionRepository(request.ContractNumber);
+                        break;
+                    }
+                    case RepositoryType.Goal:
+                    {
+                        repo = new MongoGoalRepository(request.ContractNumber);
+                        break;
+                    }
+                    case RepositoryType.Task:
+                    {
+                        repo = new MongoTaskRepository(request.ContractNumber);
+                        break;
+                    }
+                    case RepositoryType.Intervention:
+                    {
+                        repo = new MongoInterventionRepository(request.ContractNumber);
                         break;
                     }
                 }

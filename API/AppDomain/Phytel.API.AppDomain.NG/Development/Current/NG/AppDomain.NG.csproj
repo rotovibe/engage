@@ -127,11 +127,14 @@
     <Compile Include="Command\PatientMedSuppsCommand.cs" />
     <Compile Include="Command\PatientAllergiesCommand.cs" />
     <Compile Include="Command\PatientToDosCommand.cs" />
+    <Compile Include="Goal\GoalsEndpointUtils.cs" />
+    <Compile Include="Goal\IGoalsEndpointUtils.cs" />
     <Compile Include="Medication\MedicationEndpointUtil.cs" />
     <Compile Include="Medication\MedicationManager.cs" />
     <Compile Include="Medication\IMedicationEndpointUtil.cs" />
     <Compile Include="Medication\IMedicationManager.cs" />
     <Compile Include="Programs\ElementActivation\ProgramAttributeActivationRule.cs" />
+    <Compile Include="Programs\ElementActivation\SpawnType.cs" />
     <Compile Include="Programs\ElementActivation\StepActivationRule.cs" />
     <Compile Include="Programs\ElementActivation\ModuleActivationRule.cs" />
     <Compile Include="Programs\ElementActivation\ProgramActivationRule.cs" />
@@ -139,9 +142,11 @@
     <Compile Include="Programs\ElementActivation\IElementActivationStrategy.cs" />
     <Compile Include="Programs\ElementActivation\ActionActivationRule.cs" />
     <Compile Include="Programs\ElementActivation\ProblemActivationRule.cs" />
+    <Compile Include="Programs\ElementActivation\GoalActivationRule.cs" />
     <Compile Include="Programs\ElementActivation\ToDoActivationRule.cs" />
     <Compile Include="Programs\ElementActivation\ElementActivationRule.cs" />
     <Compile Include="Programs\ElementActivation\ElementActivationStrategy.cs" />
+    <Compile Include="Programs\PlanResponsibilityChain\IStepPlanProcessor.cs" />
     <Compile Include="SchedulingManager.cs" />
     <Compile Include="CareMembersManager.cs" />
     <Compile Include="Command\CareMembersCommand.cs" />

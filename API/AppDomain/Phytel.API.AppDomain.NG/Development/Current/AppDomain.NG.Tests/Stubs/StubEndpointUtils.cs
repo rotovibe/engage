@@ -4,6 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using MongoDB.Bson;
+using Moq;
+using Phytel.API.AppDomain.NG.DTO;
+using Phytel.API.AppDomain.NG.DTO.Goal;
 using Phytel.API.AppDomain.NG.Programs;
 using Phytel.API.DataDomain.Patient.DTO;
 using Phytel.API.DataDomain.PatientObservation.DTO;
@@ -121,6 +124,37 @@ namespace Phytel.API.AppDomain.NG.Test.Stubs
         {
             // insert implementation here
             return new object();
+        }
+
+
+        public Goal GetGoalById(string sid, string userId, IAppDomainRequest req)
+        {
+            var goal = new Goal
+            {
+                Id = "123456789012345678901234",
+                EndDate = DateTime.UtcNow,
+                Name = "sample goal name",
+                SourceId = "5325db9cd6a4850adcbba9ca",
+                StartDate = DateTime.UtcNow,
+                StatusId = 1,
+                TargetDate = DateTime.UtcNow,
+                TargetValue = "12",
+                TypeId = 2,
+                CustomAttributes = new List<CustomAttribute> {new CustomAttribute {Id = "1234", Name = "testing value"}},
+                FocusAreaIds = new List<string> {"123456789098676745763"}
+            };
+
+            return goal;
+        }
+
+        public PatientGoal GetPatientGoalByTemplateId(string sid, string patientId, string userId, IAppDomainRequest req)
+        {
+            PatientGoal pg = new PatientGoal {
+             StatusId = 2,
+             Name = "test patient goal",
+             Id = "123456789012345612345678",
+             PatientId = "999999999911111111111234"};
+            return pg;
         }
     }
 }
