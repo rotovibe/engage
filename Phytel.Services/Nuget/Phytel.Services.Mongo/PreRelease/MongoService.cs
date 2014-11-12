@@ -188,10 +188,15 @@ namespace Phytel.Services.Mongo
                         servers.Add("localhost");
                         connectString = GetContractDBString(servers, databaseName, string.Empty, userName, password);
                     }
+
+                    if(!dataReader.IsClosed)
+                    {
+                        dataReader.Close();
+                    }
                 }
                 else
                     connectString = GetDBString(databaseName, userName, password);
-
+                
                 return connectString;
             }
             catch (Exception ex)
