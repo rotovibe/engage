@@ -391,14 +391,17 @@ namespace DataDomain.Medication.Repo
                 result = new List<string>();
                 meMs.ForEach(m =>
                 {
-                    m.PharmClass.ForEach(p => 
+                    if (m.PharmClass != null && m.PharmClass.Count > 0)
                     {
-                        // get only unique pharm classes codes.
-                        if (!result.Contains(p))
+                        m.PharmClass.ForEach(p =>
                         {
-                            result.Add(p);
-                        }
-                    });
+                            // get only unique pharm classes codes.
+                            if (!result.Contains(p))
+                            {
+                                result.Add(p);
+                            }
+                        });
+                    }
                 });
             }
             return result;
