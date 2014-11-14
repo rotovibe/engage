@@ -145,7 +145,7 @@ namespace Phytel.API.AppDomain.NG.Allergy
                         var pair = new TextValuePair
                         {
                             Text = m.Strength + " " + m.Unit,
-                            Value = m.Strength + " " + m.Unit
+                            Value = m.Strength
                         };
 
                         var rec = vals.Find(f => f.Text == m.Strength + " " + m.Unit);
