@@ -229,6 +229,7 @@ namespace Phytel.API.DataDomain.PatientGoal
                     if (pt.StatusId != 0) uv.Add(MB.Update.Set(MEPatientGoal.StatusProperty, pt.StatusId ));
                     if (pt.TargetValue != null) uv.Add(MB.Update.Set(MEPatientGoal.TargetValueProperty, pt.TargetValue));
                     if (pt.TemplateId != null) uv.Add(MB.Update.Set(MEPatientGoal.TemplateIdProperty, ObjectId.Parse(pt.TemplateId)));
+
                     if (pt.StartDate != null)
                     {
                         uv.Add(MB.Update.Set(MEPatientGoal.StartDateProperty, pt.StartDate));
