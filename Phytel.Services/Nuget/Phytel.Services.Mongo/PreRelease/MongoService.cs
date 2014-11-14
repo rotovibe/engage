@@ -161,37 +161,57 @@ namespace Phytel.Services.Mongo
                     parms.Add(new Parameter("@DatabaseType", "MONGO", SqlDbType.VarChar, ParameterDirection.Input, 10));
                     parms.Add(new Parameter("@SystemType", systemType, SqlDbType.VarChar, ParameterDirection.Input, 10));
 
-                    SqlDataReader dataReader = SQLDataService.Instance.GetReader(dbConnName, false, "spPhy_GetContractDBConnection", parms, 30);
+                    string connString = SQLDataService.Instance.GetConnectionString(dbConnName, false);
 
-                    List<string> servers = new List<string>();
-
-                    if (dataReader.HasRows)
+                    using (SqlConnection sqlConnection = new SqlConnection(connString))
                     {
-                        DataProtector dp = new DataProtector(DataProtector.Store.USE_SIMPLE_STORE);
+                        sqlConnection.Open();
 
-                        dataReader.Read();
+                        using (SqlCommand sqlCommand = new SqlCommand("spPhy_GetContractDBConnection", sqlConnection))
+                        {
+                            sqlCommand.CommandType = CommandType.StoredProcedure;
+                            sqlCommand.CommandTimeout = 3600;
 
-                        replicationSetName = dataReader.SafeGetString("ReplicationSetName");
-                        userName = dataReader.SafeGetString("UserName");
-                        password = dp.Decrypt(dataReader.SafeGetString("Password")).Replace("@", "%40");
-                        dbName = dataReader.SafeGetString("Database");
+                            SqlParameter sqlParam = null;
+                            foreach (Parameter param in parms)
+                            {
+                                sqlParam = new SqlParameter(param.Name, param.Value);
+                                sqlParam.SqlDbType = param.Type;
+                                sqlParam.Direction = param.Direction;
+                                sqlParam.Size = param.Size;
 
-                        //Ok, we could get multiple records back, one for each potential server (Primary and Secondary)
-                        servers.Add(dataReader.SafeGetString("Server"));
-                        while(dataReader.Read())
-                            servers.Add(dataReader.SafeGetString("Server"));
+                                sqlCommand.Parameters.Add(sqlParam);
+                            }
 
-                        connectString = GetContractDBString(servers, dbName, replicationSetName, userName, password);
-                    }
-                    else
-                    {
-                        servers.Add("localhost");
-                        connectString = GetContractDBString(servers, databaseName, string.Empty, userName, password);
-                    }
+                            using (SqlDataReader dataReader = sqlCommand.ExecuteReader())
+                            {
+                                List<string> servers = new List<string>();
 
-                    if(!dataReader.IsClosed)
-                    {
-                        dataReader.Close();
+                                if (dataReader.HasRows)
+                                {
+                                    DataProtector dp = new DataProtector(DataProtector.Store.USE_SIMPLE_STORE);
+
+                                    dataReader.Read();
+
+                                    replicationSetName = dataReader.SafeGetString("ReplicationSetName");
+                                    userName = dataReader.SafeGetString("UserName");
+                                    password = dp.Decrypt(dataReader.SafeGetString("Password")).Replace("@", "%40");
+                                    dbName = dataReader.SafeGetString("Database");
+
+                                    //Ok, we could get multiple records back, one for each potential server (Primary and Secondary)
+                                    servers.Add(dataReader.SafeGetString("Server"));
+                                    while (dataReader.Read())
+                                        servers.Add(dataReader.SafeGetString("Server"));
+
+                                    connectString = GetContractDBString(servers, dbName, replicationSetName, userName, password);
+                                }
+                                else
+                                {
+                                    servers.Add("localhost");
+                                    connectString = GetContractDBString(servers, databaseName, string.Empty, userName, password);
+                                }
+                            }
+                        }
                     }
                 }
                 else
