@@ -65,30 +65,30 @@ namespace Phytel.API.DataDomain.PatientGoal
 
         public void Delete(object entity)
         {
-            DeletePatientGoalDataRequest request = (DeletePatientGoalDataRequest)entity;
-            try
-            {
-                using (PatientGoalMongoContext ctx = new PatientGoalMongoContext(_dbName))
-                {
-                    var q = MB.Query<MEPatientGoal>.EQ(b => b.Id, ObjectId.Parse(request.PatientGoalId));
+            //DeletePatientGoalDataRequest request = (DeletePatientGoalDataRequest)entity;
+            //try
+            //{
+            //    using (PatientGoalMongoContext ctx = new PatientGoalMongoContext(_dbName))
+            //    {
+            //        var q = MB.Query<MEPatientGoal>.EQ(b => b.Id, ObjectId.Parse(request.PatientGoalId));
 
-                    var uv = new List<MB.UpdateBuilder>();
-                    uv.Add(MB.Update.Set(MEPatientGoal.TTLDateProperty, System.DateTime.UtcNow.AddDays(_expireDays)));
-                    uv.Add(MB.Update.Set(MEPatientGoal.DeleteFlagProperty, true));
-                    uv.Add(MB.Update.Set(MEPatientGoal.UpdatedByProperty, ObjectId.Parse(this.UserId)));
-                    uv.Add(MB.Update.Set(MEPatientGoal.LastUpdatedOnProperty, DateTime.UtcNow));
+            //        var uv = new List<MB.UpdateBuilder>();
+            //        uv.Add(MB.Update.Set(MEPatientGoal.TTLDateProperty, System.DateTime.UtcNow.AddDays(_expireDays)));
+            //        uv.Add(MB.Update.Set(MEPatientGoal.DeleteFlagProperty, true));
+            //        uv.Add(MB.Update.Set(MEPatientGoal.UpdatedByProperty, ObjectId.Parse(this.UserId)));
+            //        uv.Add(MB.Update.Set(MEPatientGoal.LastUpdatedOnProperty, DateTime.UtcNow));
 
-                    IMongoUpdate update = MB.Update.Combine(uv);
-                    ctx.PatientGoals.Collection.Update(q, update);
+            //        IMongoUpdate update = MB.Update.Combine(uv);
+            //        ctx.PatientGoals.Collection.Update(q, update);
 
-                    AuditHelper.LogDataAudit(this.UserId, 
-                                            MongoCollectionName.PatientGoal.ToString(), 
-                                            request.PatientGoalId.ToString(), 
-                                            Common.DataAuditType.Delete, 
-                                            request.ContractNumber);
-                }
-            }
-            catch (Exception) { throw; }
+            //        AuditHelper.LogDataAudit(this.UserId, 
+            //                                MongoCollectionName.PatientGoal.ToString(), 
+            //                                request.PatientGoalId.ToString(), 
+            //                                Common.DataAuditType.Delete, 
+            //                                request.ContractNumber);
+            //    }
+            //}
+            //catch (Exception) { throw; }
         }
 
         public void DeleteAll(List<object> entities)
@@ -109,9 +109,9 @@ namespace Phytel.API.DataDomain.PatientGoal
                 using (PatientGoalMongoContext ctx = new PatientGoalMongoContext(_dbName))
                 {
                     List<IMongoQuery> queries = new List<IMongoQuery>();
-                    queries.Add(Query.EQ(MEPatientGoal.IdProperty, ObjectId.Parse(entityID)));
-                    queries.Add(Query.EQ(MEPatientGoal.DeleteFlagProperty, false));
-                    queries.Add(Query.EQ(MEPatientGoal.TTLDateProperty, BsonNull.Value));
+                    queries.Add(Query.EQ(MEGoal.IdProperty, ObjectId.Parse(entityID)));
+                    queries.Add(Query.EQ(MEGoal.DeleteFlagProperty, false));
+                    queries.Add(Query.EQ(MEGoal.TTLDateProperty, BsonNull.Value));
                     IMongoQuery mQuery = Query.And(queries);
                     MEGoal meG = ctx.Goals.Collection.Find(mQuery).FirstOrDefault();
 

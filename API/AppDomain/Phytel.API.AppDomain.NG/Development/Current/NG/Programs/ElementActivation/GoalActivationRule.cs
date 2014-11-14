@@ -48,8 +48,9 @@ namespace Phytel.API.AppDomain.NG.Programs.ElementActivation
 
                 try
                 {
-                    // get template Goal from Goal endpoint
-                    patientGoal = EndpointUtil.GetPatientGoalByTemplateId(pe.ElementId, arg.PatientId, userId, arg.DomainRequest);
+                    // get patient Goal from template id
+                    // this will only return patientgoals that are open or notmet state
+                    patientGoal = EndpointUtil.GetOpenNotMetPatientGoalByTemplateId(pe.ElementId, arg.PatientId, userId, arg.DomainRequest);
                 }
                 catch (Exception ex)
                 {
@@ -59,16 +60,18 @@ namespace Phytel.API.AppDomain.NG.Programs.ElementActivation
                 try
                 {
                     //Open = 1, Met = 2, NotMet =3, Abandoned =4
-                    if (patientGoal == null || (patientGoal.StatusId == 2 || patientGoal.StatusId == 4))
+                    if (patientGoal == null) // || (patientGoal.StatusId == 2 || patientGoal.StatusId == 4))
                     {
                         newPGoal = Mapper.Map<PatientGoal>(goalTemp);
                         newPGoal.ProgramIds = new List<string> {arg.Program.Id};
                         newPGoal.PatientId = arg.PatientId;
+                        newPGoal.TemplateId = goalTemp.Id;
+                        newPGoal.StartDate = PlanUtils.HandleDueDate(goalTemp.StartDateRange);
+                        newPGoal.TargetDate = PlanUtils.HandleDueDate(goalTemp.TargetDateRange);
                         newPGoal.StatusId = 1;
 
                         try
                         {
-                            // register new patientobservation
                             // initialize patientgoal and get id
                             var iPG = GoalsEndpointUtil.GetInitialGoalRequest(new GetInitializeGoalRequest
                             {

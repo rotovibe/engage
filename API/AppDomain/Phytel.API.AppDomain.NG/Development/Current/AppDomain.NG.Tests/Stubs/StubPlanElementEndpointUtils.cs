@@ -322,7 +322,30 @@ namespace Phytel.API.AppDomain.NG.Test.Stubs
             throw new NotImplementedException();
         }
 
-        public PatientGoal GetPatientGoalByTemplateId(string sid, string patientId, string userId, IAppDomainRequest req)
+        public PatientGoal GetOpenNotMetPatientGoalByTemplateId(string sid, string patientId, string userId, IAppDomainRequest req)
+        {
+            throw new NotImplementedException();
+        }
+
+
+        public Intervention GetInterventionById(string sid, string userId, IAppDomainRequest req)
+        {
+            throw new NotImplementedException();
+        }
+
+
+        public PatientIntervention GetOpenNotMetPatientInterventionByTemplateId(string gid, string templateId, string patientId, string userId, IAppDomainRequest req)
+        {
+            throw new NotImplementedException();
+        }
+
+
+        public DTO.Goal.Task GetTaskById(string sid, string userId, IAppDomainRequest req)
+        {
+            throw new NotImplementedException();
+        }
+
+        public PatientTask GetOpenNotMetPatientTaskByTemplateId(string taskid, string tempId, string patientId, string userId, IAppDomainRequest req)
         {
             throw new NotImplementedException();
         }

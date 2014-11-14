@@ -17,7 +17,9 @@ namespace Phytel.API.AppDomain.NG.Test.Stubs
             {
                 new StubToDoActivationRule(),
                 new StubProblemActivationRule(),
-                new GoalActivationRule(){ EndpointUtil = new StubEndpointUtils(), PlanUtils = new StubPlanElementUtils(), GoalsEndpointUtil = new StubGoalsEndpointUtils()}
+                new GoalActivationRule(){ EndpointUtil = new StubEndpointUtils(), PlanUtils = new StubPlanElementUtils(), GoalsEndpointUtil = new StubGoalsEndpointUtils()},
+                new InterventionActivationRule(){ EndpointUtil = new StubEndpointUtils(), PlanUtils = new StubPlanElementUtils(), GoalsEndpointUtil = new StubGoalsEndpointUtils()},
+                new TaskActivationRule(){ EndpointUtil = new StubEndpointUtils(), PlanUtils = new StubPlanElementUtils(), GoalsEndpointUtil = new StubGoalsEndpointUtils()}
             };
         }
 

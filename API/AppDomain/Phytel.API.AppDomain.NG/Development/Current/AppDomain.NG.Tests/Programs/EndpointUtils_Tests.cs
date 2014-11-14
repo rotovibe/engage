@@ -417,7 +417,7 @@ namespace Phytel.API.AppDomain.NG.Tests
             #endregion
 
             EndpointUtils utils = new EndpointUtils();
-            var patientGoal = utils.GetPatientGoalByTemplateId("545a91a1fe7a59218cef2d6d", "5325db9cd6a4850adcbba9ca", "1234",
+            var patientGoal = utils.GetOpenNotMetPatientGoalByTemplateId("545a91a1fe7a59218cef2d6d", "5325db9cd6a4850adcbba9ca", "1234",
                 new AppDomainRequest { Version = 1.0, ContractNumber = "InHealth001", UserId = "1234" });
 
             Assert.IsNotNull(patientGoal);
@@ -500,7 +500,7 @@ namespace Phytel.API.AppDomain.NG.Tests
             #endregion
 
             EndpointUtils utils = new EndpointUtils();
-            var patientGoal = utils.GetPatientGoalByTemplateId("123491a1fe7a59218cef2d6d", "5325db9cd6a4850adcbba9ca", "1234",
+            var patientGoal = utils.GetOpenNotMetPatientGoalByTemplateId("123491a1fe7a59218cef2d6d", "5325db9cd6a4850adcbba9ca", "1234",
                 new AppDomainRequest { Version = 1.0, ContractNumber = "InHealth001", UserId = "1234" });
 
             Assert.IsNull(patientGoal);

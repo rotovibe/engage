@@ -60,6 +60,11 @@ namespace Phytel.API.DataDomain.PatientGoal.DTO
         [BsonIgnoreIfNull(true)]
         public DateTime? TargetDate { get; set; }
 
+        public const string TargetDateRangeProperty = "tdr";
+        [BsonElement(TargetDateRangeProperty)]
+        [BsonIgnoreIfNull(true)]
+        public int TargetDateRange { get; set; }
+
         public const string AttributesProperty = "attr";        
         [BsonElement(AttributesProperty)]
         [BsonIgnoreIfNull(false)]

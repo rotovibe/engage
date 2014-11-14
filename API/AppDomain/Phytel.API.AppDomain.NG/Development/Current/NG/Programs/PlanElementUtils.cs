@@ -1,5 +1,7 @@
-﻿using MongoDB.Bson;
+﻿using AutoMapper;
+using MongoDB.Bson;
 using Phytel.API.AppDomain.NG.DTO;
+using Phytel.API.AppDomain.NG.DTO.Goal;
 using Phytel.API.AppDomain.NG.PlanCOR;
 using Phytel.API.DataDomain.Patient.DTO;
 using Phytel.API.Interface;
@@ -1629,6 +1631,206 @@ namespace Phytel.API.AppDomain.NG
             catch (Exception ex)
             {
                 throw new Exception("AD:PlanElementUtil:GetUpdatedId()::" + ex.Message, ex.InnerException);
+            }
+        }
+
+        public PatientIntervention InsertPatientIntervention(PlanElementEventArg arg, PatientGoal patientGoal, Intervention interventionTemplate)
+        {
+            try
+            {
+                var request = new GetInitializeInterventionRequest
+                {
+                    Context = "NG",
+                    ContractNumber = arg.DomainRequest.ContractNumber,
+                    PatientGoalId = patientGoal.Id,
+                    PatientId = arg.PatientId,
+                    UserId = arg.UserId,
+                    Version = arg.DomainRequest.Version
+                };
+
+                var id = new GoalsEndpointUtils().GetInitialInterventionRequest(request);
+
+                var patIntervention = new PatientIntervention
+                {
+                    Id = id,
+                    PatientId = arg.PatientId,
+                    BarrierIds = interventionTemplate.BarrierIds,
+                    ClosedDate = interventionTemplate.ClosedDate,
+                    GoalName = interventionTemplate.GoalName,
+                    StatusDate = interventionTemplate.StatusDate,
+                    AssignedToId = arg.UserId,
+                    PatientGoalId = patientGoal.Id,
+                    StatusId = interventionTemplate.StatusId,
+                    Description = interventionTemplate.Description,
+                    StartDate = HandleDueDate(interventionTemplate.StartDateRange),
+                    CategoryId = interventionTemplate.CategoryId,
+                    TemplateId = interventionTemplate.Id
+                };
+
+                PostPatientInterventionRequest uRequest = new PostPatientInterventionRequest
+                {
+                    ContractNumber = arg.DomainRequest.ContractNumber,
+                    PatientId = arg.PatientId,
+                    UserId = arg.UserId,
+                    Version = arg.DomainRequest.Version,
+                    Intervention = patIntervention,
+                    PatientGoalId = patientGoal.Id,
+                    Id = patIntervention.Id
+                };
+                new GoalsEndpointUtils().PostUpdateInterventionRequest(uRequest);
+
+                return patIntervention;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("PlanElementUtils()::InsertPatientIntervention()::" + ex.Message, ex.InnerException);
+            }
+        }
+
+        public PatientGoal InsertPatientGoal(PlanElementEventArg arg, Goal goalTemplate)
+        {
+            try
+            {
+                //Open = 1, Met = 2, NotMet =3, Abandoned =4
+                PatientGoal newPGoal = Mapper.Map<PatientGoal>(goalTemplate);
+                newPGoal.ProgramIds = new List<string> { arg.Program.Id };
+                newPGoal.PatientId = arg.PatientId;
+                newPGoal.StartDate = HandleDueDate(goalTemplate.StartDateRange);
+                newPGoal.TargetDate = HandleDueDate(goalTemplate.TargetDateRange);
+                newPGoal.TemplateId = goalTemplate.Id;
+                newPGoal.StatusId = 1;
+
+                // initialize patientgoal and get id
+                var iPG = GoalsEndpointUtil.GetInitialGoalRequest(new GetInitializeGoalRequest
+                {
+                    Context = "NG",
+                    ContractNumber = arg.DomainRequest.ContractNumber,
+                    PatientId = arg.PatientId,
+                    Token = arg.DomainRequest.Token,
+                    UserId = arg.DomainRequest.UserId,
+                    Version = arg.DomainRequest.Version
+                });
+
+                // update patientgoal
+                if (iPG == null)
+                    throw new ArgumentException("Failed to Initialize patient goal");
+
+                newPGoal.Id = iPG.Id;
+
+                GoalsEndpointUtil.PostUpdateGoalRequest(new PostPatientGoalRequest
+                {
+                    ContractNumber = arg.DomainRequest.ContractNumber,
+                    Goal = newPGoal,
+                    PatientGoalId = iPG.Id,
+                    PatientId = arg.PatientId,
+                    Token = arg.DomainRequest.Token,
+                    UserId = arg.DomainRequest.UserId,
+                    Version = arg.DomainRequest.Version
+                });
+
+                return newPGoal;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("InsertPatientGoal()::" + ex.Message, ex.InnerException);
+            }
+        }
+
+
+        public PatientTask InsertPatientTask(PlanElementEventArg arg, PatientGoal pGoal, Task taskTemplate)
+        {
+            try
+            {
+                PatientTask newPTask = Mapper.Map<PatientTask>(taskTemplate);
+                newPTask.StartDate = HandleDueDate(taskTemplate.StartDateRange);
+                newPTask.TargetDate = HandleDueDate(taskTemplate.TargetDateRange);
+                newPTask.TemplateId = taskTemplate.Id;
+                newPTask.PatientGoalId = pGoal.Id;
+
+                // initialize patientgoal and get id
+                var iPG = GoalsEndpointUtil.GetInitialTaskRequest(new GetInitializeTaskRequest
+                {
+                    Context = "NG",
+                    ContractNumber = arg.DomainRequest.ContractNumber,
+                    PatientId = arg.PatientId,
+                    Token = arg.DomainRequest.Token,
+                    UserId = arg.DomainRequest.UserId,
+                    Version = arg.DomainRequest.Version,
+                    PatientGoalId = pGoal.Id
+                });
+
+                // update patientgoal
+                if (iPG == null)
+                    throw new ArgumentException("Failed to Initialize patient Task");
+
+                newPTask.Id = iPG.Id;
+
+                GoalsEndpointUtil.PostUpdateTaskRequest(new PostPatientTaskRequest
+                {
+                    ContractNumber = arg.DomainRequest.ContractNumber,
+                    Task = newPTask,
+                    PatientGoalId = iPG.Id,
+                    PatientId = arg.PatientId,
+                    Token = arg.DomainRequest.Token,
+                    UserId = arg.DomainRequest.UserId,
+                    Version = arg.DomainRequest.Version,
+                    Id = newPTask.Id
+                });
+
+                return newPTask;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("InsertPatientTask()::" + ex.Message, ex.InnerException);
+            }
+        }
+
+        public DateTime? HandleDueDate(int? days)
+        {
+            try
+            {
+                DateTime? dueDate = null;
+                if (days == null) return dueDate;
+
+                if (days > -1)
+                {
+                    //var calcDate 
+                    var nDt = DateTime.UtcNow.AddDays(days.Value);
+                    dueDate = new DateTime(nDt.Year, nDt.Month,
+                        nDt.Day, 12, 0, 0);
+                    //dueDate = TimeZoneInfo.ConvertTimeToUtc(calcDate);
+                }
+
+                return dueDate;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("AD:PlanElementUtils():HandleDueDate()::" + ex.Message, ex.InnerException);
+            }
+        }
+
+
+        public DateTime? HandleDueDate(int days)
+        {
+            try
+            {
+                DateTime? dueDate = null;
+                if (days == null) return dueDate;
+
+                if (days > -1)
+                {
+                    //var calcDate 
+                    var nDt = DateTime.UtcNow.AddDays(days);
+                    dueDate = new DateTime(nDt.Year, nDt.Month,
+                        nDt.Day, 12, 0, 0);
+                    //dueDate = TimeZoneInfo.ConvertTimeToUtc(calcDate);
+                }
+
+                return dueDate;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("AD:PlanElementUtils():HandleDueDate()::" + ex.Message, ex.InnerException);
             }
         }
     }

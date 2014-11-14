@@ -61,7 +61,8 @@ namespace Phytel.API.AppDomain.NG
                     StatusDate = t.StatusDate,
                     TargetDate = t.TargetDate,
                     TargetValue = t.TargetValue,
-                    DeleteFlag = t.DeleteFlag
+                    DeleteFlag = t.DeleteFlag,
+                    TemplateId = t.TemplateId
                 };
                 if ((t.StatusId == (int)GoalTaskStatus.Met || t.StatusId == (int)GoalTaskStatus.Abandoned))
                 {
@@ -146,6 +147,7 @@ namespace Phytel.API.AppDomain.NG
                     Description = i.Description,
                     Id = i.Id,
                     PatientGoalId = i.PatientGoalId,
+                    TemplateId = i.TemplateId,
                     StartDate = i.StartDate,
                     StatusId = i.StatusId,
                     StatusDate = i.StatusDate,
@@ -326,6 +328,7 @@ namespace Phytel.API.AppDomain.NG
                     PatientId = g.PatientId,
                     Name = g.Name,
                     FocusAreaIds = g.FocusAreaIds,
+                    TemplateId = g.TemplateId,
                     SourceId = g.SourceId,
                     ProgramIds = g.ProgramIds,
                     TypeId = g.TypeId,
@@ -345,7 +348,7 @@ namespace Phytel.API.AppDomain.NG
         {
             PatientTask task = null;
             if (t != null)
-            { 
+            {
                 task = new PatientTask
                 {
                     Id = t.Id,
@@ -361,8 +364,9 @@ namespace Phytel.API.AppDomain.NG
                     ClosedDate = t.ClosedDate,
                     CreatedById = t.CreatedById,
                     GoalName = t.GoalName,
-                    DeleteFlag = t.DeleteFlag
-                }; 
+                    DeleteFlag = t.DeleteFlag,
+                    TemplateId = t.TemplateId
+                };
             }   
             return task;
         }
@@ -414,7 +418,8 @@ namespace Phytel.API.AppDomain.NG
                     ClosedDate = i.ClosedDate,
                     CreatedById = i.CreatedById,
                     GoalName = i.GoalName,
-                    DeleteFlag = i.DeleteFlag
+                    DeleteFlag = i.DeleteFlag,
+                    TemplateId = i.TemplateId
                 };
             }
             return pi;

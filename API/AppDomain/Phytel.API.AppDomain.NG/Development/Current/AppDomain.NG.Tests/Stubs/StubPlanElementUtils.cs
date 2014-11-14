@@ -1,4 +1,5 @@
-﻿using Phytel.API.AppDomain.NG.DTO;
+﻿using AutoMapper;
+using Phytel.API.AppDomain.NG.DTO;
 using Phytel.API.DataDomain.Program.DTO;
 using System;
 using System.Collections.Generic;
@@ -937,6 +938,109 @@ namespace Phytel.API.AppDomain.NG.Test.Stubs
         public void SetInitialValues(string assignToId, IPlanElement pe)
         {
             throw new NotImplementedException();
+        }
+
+
+        public PatientGoal InsertPatientGoal(PlanCOR.PlanElementEventArg arg, DTO.Goal.Goal goalTemplate)
+        {
+            return new PatientGoal
+            {
+                Id = "123456789012345678901234",
+                Name = "New test patient goal",
+                PatientId = arg.PatientId,
+                StatusId = goalTemplate.StatusId,
+                TypeId = goalTemplate.TypeId
+            };
+        }
+
+
+        public PatientIntervention InsertPatientIntervention(PlanCOR.PlanElementEventArg arg, PatientGoal patientGoal, Intervention interventionTemplate)
+        {
+            return new PatientIntervention
+            {
+                AssignedToId = arg.UserId,
+                GoalName = interventionTemplate.GoalName,
+                Id = interventionTemplate.Id,
+                Description = interventionTemplate.Description,
+                StartDate = interventionTemplate.StartDate,
+                PatientId = arg.PatientId,
+                StatusDate = interventionTemplate.StatusDate,
+                StatusId = interventionTemplate.StatusId
+            };
+        }
+
+
+        public PatientTask InsertPatientTask(PlanCOR.PlanElementEventArg arg, PatientGoal pGoal, DTO.Goal.Task taskTemplate)
+        {
+            try
+            {
+                PatientTask newPTask = Mapper.Map<PatientTask>(taskTemplate);
+                newPTask.StartDate = HandleDueDate(taskTemplate.StartDateRange);
+                newPTask.TargetDate = HandleDueDate(taskTemplate.TargetDateRange);
+                newPTask.TemplateId = taskTemplate.Id;
+                newPTask.PatientGoalId = pGoal.Id;
+
+                // initialize patientgoal and get id
+                var iPG = new GoalsEndpointUtils().GetInitialTaskRequest(new GetInitializeTaskRequest
+                {
+                    Context = "NG",
+                    ContractNumber = arg.DomainRequest.ContractNumber,
+                    PatientId = arg.PatientId,
+                    Token = arg.DomainRequest.Token,
+                    UserId = arg.DomainRequest.UserId,
+                    Version = arg.DomainRequest.Version,
+                    PatientGoalId = pGoal.Id
+                });
+
+                // update patientgoal
+                if (iPG == null)
+                    throw new ArgumentException("Failed to Initialize patient Task");
+
+                newPTask.Id = iPG.Id;
+
+                new GoalsEndpointUtils().PostUpdateTaskRequest(new PostPatientTaskRequest
+                {
+                    ContractNumber = arg.DomainRequest.ContractNumber,
+                    Task = newPTask,
+                    PatientGoalId = iPG.Id,
+                    PatientId = arg.PatientId,
+                    Token = arg.DomainRequest.Token,
+                    UserId = arg.DomainRequest.UserId,
+                    Version = arg.DomainRequest.Version,
+                    Id = newPTask.Id
+                });
+
+                return newPTask;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("InsertPatientTask()::" + ex.Message, ex.InnerException);
+            }
+        }
+
+
+        public DateTime? HandleDueDate(int days)
+        {
+            try
+            {
+                DateTime? dueDate = null;
+                if (days == null) return dueDate;
+
+                if (days > -1)
+                {
+                    //var calcDate 
+                    var nDt = DateTime.UtcNow.AddDays(days);
+                    dueDate = new DateTime(nDt.Year, nDt.Month,
+                        nDt.Day, 12, 0, 0);
+                    //dueDate = TimeZoneInfo.ConvertTimeToUtc(calcDate);
+                }
+
+                return dueDate;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("AD:PlanElementUtils():HandleDueDate()::" + ex.Message, ex.InnerException);
+            }
         }
     }
 }

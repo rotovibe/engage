@@ -110,34 +110,35 @@ namespace Phytel.API.DataDomain.PatientGoal
         {
             try
             {
-                PatientTaskData taskData = null;
+                TaskData taskData = null;
                 List<IMongoQuery> queries = new List<IMongoQuery>();
-                queries.Add(Query.EQ(MEPatientTask.IdProperty, ObjectId.Parse(entityID)));
-                queries.Add(Query.EQ(MEPatientTask.DeleteFlagProperty, false));
-                queries.Add(Query.EQ(MEPatientTask.TTLDateProperty, BsonNull.Value));
+                queries.Add(Query.EQ(METask.IdProperty, ObjectId.Parse(entityID)));
+                queries.Add(Query.EQ(METask.DeleteFlagProperty, false));
+                queries.Add(Query.EQ(METask.TTLDateProperty, BsonNull.Value));
                 IMongoQuery mQuery = Query.And(queries);
                 using (PatientGoalMongoContext ctx = new PatientGoalMongoContext(_dbName))
                 {
-                    MEPatientTask t = ctx.PatientTasks.Collection.Find(mQuery).FirstOrDefault();
+                    METask t = ctx.Tasks.Collection.Find(mQuery).FirstOrDefault();
                     if (t != null)
                     {
-                        taskData = new PatientTaskData
+                        taskData = new TaskData
                         {
                             Id = t.Id.ToString(),
                             TargetValue = t.TargetValue,
-                            PatientGoalId = t.PatientGoalId.ToString(),
-                            StatusId = ((int)t.Status),
+                            TemplateGoalId = t.TemplateGoalId.ToString(),
+                            StatusId = ((int) t.Status),
                             TargetDate = t.TargetDate,
                             BarrierIds = Helper.ConvertToStringList(t.BarrierIds),
                             Description = t.Description,
                             StatusDate = t.StatusDate,
+                            StartDateRange = t.StartDateRange,
+                            TargetDateRange = t.TargetDateRange,
                             StartDate = t.StartDate,
                             CustomAttributes = DTOUtil.GetCustomAttributeIdAndValues(t.Attributes),
-                            ClosedDate = t.ClosedDate,
                             CreatedById = t.RecordCreatedBy.ToString(),
                             DeleteFlag = t.DeleteFlag
                         };
-                        var mePG = ctx.PatientGoals.Collection.Find(Query.EQ(MEPatientGoal.IdProperty, ObjectId.Parse(taskData.PatientGoalId))).SetFields(MEPatientGoal.NameProperty).FirstOrDefault();
+                        var mePG = ctx.Goals.Collection.Find(Query.EQ(MEGoal.IdProperty, ObjectId.Parse(taskData.TemplateGoalId))).SetFields(MEGoal.NameProperty).FirstOrDefault();
                         if (mePG != null)
                         {
                             taskData.GoalName = mePG.Name;
@@ -215,6 +216,8 @@ namespace Phytel.API.DataDomain.PatientGoal
                     if (pt.TargetValue != null) uv.Add(MB.Update.Set(MEPatientTask.TargetValueProperty, pt.TargetValue));
                     if (pt.CustomAttributes != null) { uv.Add(MB.Update.SetWrapped<List<MAttribute>>(MEPatientTask.AttributesProperty, DTOUtil.GetAttributes(pt.CustomAttributes))); }
                     if (pt.BarrierIds != null) { uv.Add(MB.Update.SetWrapped<List<ObjectId>>(MEPatientTask.BarriersProperty, DTOUtil.ConvertObjectId(pt.BarrierIds))); }
+                    if (pt.PatientGoalId != null) uv.Add(MB.Update.Set(MEPatientTask.PatientGoalIdProperty, ObjectId.Parse(pt.PatientGoalId)));
+                    
                     uv.Add(MB.Update.Set(MEPatientTask.ClosedDateProperty, pt.ClosedDate)); 
                     uv.Add(MB.Update.Set(MEPatientTask.DeleteFlagProperty, pt.DeleteFlag));
                     DataAuditType type;
@@ -387,7 +390,7 @@ namespace Phytel.API.DataDomain.PatientGoal
         public IEnumerable<object> Search(object request, List<string> patientGoalIds)
         {
             List<PatientTaskData> list = null;
-            GetTasksDataRequest dataRequest = (GetTasksDataRequest)request;
+            GetPatientTasksDataRequest dataRequest = (GetPatientTasksDataRequest)request;
             try
             {
                 using (PatientGoalMongoContext ctx = new PatientGoalMongoContext(_dbName))

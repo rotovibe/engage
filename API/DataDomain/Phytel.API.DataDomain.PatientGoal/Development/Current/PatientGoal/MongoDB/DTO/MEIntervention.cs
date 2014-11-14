@@ -10,64 +10,51 @@ namespace Phytel.API.DataDomain.PatientGoal.DTO
 {
     [BsonIgnoreExtraElements(false)]
     [MongoIndex(Keys = new string[] { TTLDateProperty }, TimeToLive = 0)]
-    [MongoIndex(Keys = new string[] { PatientGoalIdProperty, DeleteFlagProperty }, Unique = false)]
-    public class MEPatientTask : GoalBase, IMongoEntity<ObjectId>, IMEEntity
+    [MongoIndex(Keys = new string[] { TemplateGoalIdProperty, DeleteFlagProperty }, Unique = false)]
+    public class MEIntervention : GoalBase, IMongoEntity<ObjectId>
     {
-        public MEPatientTask(string userId)
+        public MEIntervention(string userId)
         {
             Id = ObjectId.GenerateNewId();
-            Version = 1.0;
             RecordCreatedBy = ObjectId.Parse(userId);
             RecordCreatedOn = DateTime.UtcNow;
+            Version = 1.0;
         }
 
-        public const string RecordCreatedByProperty = "rcby";
-        public const string RecordCreatedOnProperty = "rcon";
-
         public const string IdProperty = "_id";
+
         [BsonId]
         public ObjectId Id { get; set; }
 
-        public const string PatientGoalIdProperty = "pgid";
-        [BsonElement(PatientGoalIdProperty)]
+        public const string TemplateGoalIdProperty = "tgid";
+        [BsonElement(TemplateGoalIdProperty)]
         [BsonIgnoreIfNull(false)]
-        public ObjectId PatientGoalId { get; set; }
+        public ObjectId? TemplateGoalId { get; set; }
 
-        public const string TemplateIdProperty = "tid";
-        [BsonElement(TemplateIdProperty)]
-        [BsonIgnoreIfNull(true)]
-        public ObjectId? TemplateId { get; set; } 
-
-        public const string TargetValueProperty = "tv";
-        [BsonElement(TargetValueProperty)]
+        public const string CategoryProperty = "cat";
+        [BsonElement(CategoryProperty)]
         [BsonIgnoreIfNull(false)]
-        public string TargetValue { get; set; }
+        public ObjectId? CategoryId { get; set; }
 
-        public const string StatusProperty = "sts";
-        [BsonElement(StatusProperty)]
-        [BsonIgnoreIfNull(true)]
-        public GoalTaskStatus Status { get; set; }
-
-        public const string TargetDateProperty = "td";
-        [BsonElement(TargetDateProperty)]
-        [BsonIgnoreIfNull(true)]
-        [BsonDateTimeOptions(Kind = System.DateTimeKind.Utc)]
-        public DateTime? TargetDate { get; set; }
-
-        public const string AttributesProperty = "attr";
-        [BsonElement(AttributesProperty)]
+        public const string AssignedToProperty = "ato";
+        [BsonElement(AssignedToProperty)]
         [BsonIgnoreIfNull(false)]
-        public List<MAttribute> Attributes { get; set; }
+        public ObjectId? AssignedToId { get; set; }
 
         public const string BarriersProperty = "bar";
         [BsonElement(BarriersProperty)]
         [BsonIgnoreIfNull(false)]
         public List<ObjectId> BarrierIds { get; set; }
 
-        public const string ClosedDateProperty = "cd";
-        [BsonElement(ClosedDateProperty)]
+        public const string StatusProperty = "sts";
+        [BsonElement(StatusProperty)]
         [BsonIgnoreIfNull(true)]
-        public DateTime? ClosedDate { get; set; }
+        public InterventionStatus Status { get; set; }
+
+        //public const string ClosedDateProperty = "cd";
+        //[BsonElement(ClosedDateProperty)]
+        //[BsonIgnoreIfNull(true)]
+        //public DateTime? ClosedDate { get; set; }
 
         #region Standard IMongoEntity Implementation
         [BsonExtraElements]
@@ -99,10 +86,12 @@ namespace Phytel.API.DataDomain.PatientGoal.DTO
         [BsonDateTimeOptions(Kind = System.DateTimeKind.Utc)]
         public System.DateTime? LastUpdatedOn { get; set; }
 
+        public const string RecordCreatedByProperty = "rcby";
         [BsonIgnoreIfNull(true)]
         [BsonElement(RecordCreatedByProperty)]
         public ObjectId RecordCreatedBy { get; private set; }
 
+        public const string RecordCreatedOnProperty = "rcon";
         [BsonIgnoreIfNull(true)]
         [BsonElement(RecordCreatedOnProperty)]
         [BsonDateTimeOptions(Kind = System.DateTimeKind.Utc)]

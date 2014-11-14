@@ -13,6 +13,8 @@ namespace Phytel.API.AppDomain.NG.DTO.Goal
         int StatusId { get; set; }
         DateTime? StartDate { get; set; }
         DateTime? EndDate { get; set; }
+        int StartDateRange { get; set; }
+        int TargetDateRange { get; set; }
         string TargetValue { get; set; }
         DateTime? TargetDate { get; set; }
         List<CustomAttribute> CustomAttributes { get; set; }

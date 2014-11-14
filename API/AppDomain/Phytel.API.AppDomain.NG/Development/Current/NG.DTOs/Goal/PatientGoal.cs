@@ -11,6 +11,7 @@ namespace Phytel.API.AppDomain.NG.DTO
         public List<string> FocusAreaIds { get; set; }
         public string Name { get; set; }
         public string SourceId { get; set; }
+        public string TemplateId { get; set; }
         public List<string> ProgramIds { get; set; }
         public int TypeId { get; set; }
         public int StatusId { get; set; }

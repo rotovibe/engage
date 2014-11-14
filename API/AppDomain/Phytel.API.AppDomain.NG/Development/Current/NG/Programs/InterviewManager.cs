@@ -368,7 +368,10 @@ namespace Phytel.API.AppDomain.NG
                             if (t != null)
                             {
                                 if (t.GetType() == typeof (List<object>))
-                                    ((List<object>) t).ForEach(AddUniquePlanElementToProcessedList);
+                                    ((List<object>) t).ForEach(r =>
+                                    {
+                                        if (r != null) AddUniquePlanElementToProcessedList(r);
+                                    });
                                 else
                                     AddUniquePlanElementToProcessedList(t);
                             }

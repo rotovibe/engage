@@ -92,6 +92,8 @@
     <Compile Include="MongoDB\DTO\GoalBase.cs" />
     <Compile Include="MongoDB\DTO\MEPatientBarrier.cs" />
     <Compile Include="MongoDB\DTO\MEGoal.cs" />
+    <Compile Include="MongoDB\DTO\MEIntervention.cs" />
+    <Compile Include="MongoDB\DTO\METask.cs" />
     <Compile Include="MongoDB\DTO\MEPatientTask.cs" />
     <Compile Include="MongoDB\DTO\MEPatientIntervention.cs" />
     <Compile Include="MongoDB\DTO\MEPatientGoal.cs" />

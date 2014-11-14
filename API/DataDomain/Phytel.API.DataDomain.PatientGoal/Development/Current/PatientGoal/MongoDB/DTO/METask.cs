@@ -10,10 +10,10 @@ namespace Phytel.API.DataDomain.PatientGoal.DTO
 {
     [BsonIgnoreExtraElements(false)]
     [MongoIndex(Keys = new string[] { TTLDateProperty }, TimeToLive = 0)]
-    [MongoIndex(Keys = new string[] { PatientGoalIdProperty, DeleteFlagProperty }, Unique = false)]
-    public class MEPatientTask : GoalBase, IMongoEntity<ObjectId>, IMEEntity
+    [MongoIndex(Keys = new string[] { TemplateGoalIdProperty, DeleteFlagProperty }, Unique = false)]
+    public class METask : GoalBase, IMongoEntity<ObjectId>, IMEEntity
     {
-        public MEPatientTask(string userId)
+        public METask(string userId)
         {
             Id = ObjectId.GenerateNewId();
             Version = 1.0;
@@ -28,15 +28,11 @@ namespace Phytel.API.DataDomain.PatientGoal.DTO
         [BsonId]
         public ObjectId Id { get; set; }
 
-        public const string PatientGoalIdProperty = "pgid";
-        [BsonElement(PatientGoalIdProperty)]
+        public const string TemplateGoalIdProperty = "tgid";
+        [BsonElement(TemplateGoalIdProperty)]
         [BsonIgnoreIfNull(false)]
-        public ObjectId PatientGoalId { get; set; }
+        public ObjectId TemplateGoalId { get; set; }
 
-        public const string TemplateIdProperty = "tid";
-        [BsonElement(TemplateIdProperty)]
-        [BsonIgnoreIfNull(true)]
-        public ObjectId? TemplateId { get; set; } 
 
         public const string TargetValueProperty = "tv";
         [BsonElement(TargetValueProperty)]
@@ -54,6 +50,11 @@ namespace Phytel.API.DataDomain.PatientGoal.DTO
         [BsonDateTimeOptions(Kind = System.DateTimeKind.Utc)]
         public DateTime? TargetDate { get; set; }
 
+        public const string TargetDateRangeProperty = "tdr";
+        [BsonElement(TargetDateRangeProperty)]
+        [BsonIgnoreIfNull(true)]
+        public int TargetDateRange { get; set; }
+
         public const string AttributesProperty = "attr";
         [BsonElement(AttributesProperty)]
         [BsonIgnoreIfNull(false)]
@@ -64,10 +65,10 @@ namespace Phytel.API.DataDomain.PatientGoal.DTO
         [BsonIgnoreIfNull(false)]
         public List<ObjectId> BarrierIds { get; set; }
 
-        public const string ClosedDateProperty = "cd";
-        [BsonElement(ClosedDateProperty)]
-        [BsonIgnoreIfNull(true)]
-        public DateTime? ClosedDate { get; set; }
+        //public const string ClosedDateProperty = "cd";
+        //[BsonElement(ClosedDateProperty)]
+        //[BsonIgnoreIfNull(true)]
+        //public DateTime? ClosedDate { get; set; }
 
         #region Standard IMongoEntity Implementation
         [BsonExtraElements]

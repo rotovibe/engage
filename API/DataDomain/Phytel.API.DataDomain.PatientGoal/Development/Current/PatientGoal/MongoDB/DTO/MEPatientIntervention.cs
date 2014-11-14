@@ -31,6 +31,11 @@ namespace Phytel.API.DataDomain.PatientGoal.DTO
         [BsonIgnoreIfNull(false)]
         public ObjectId PatientGoalId { get; set; }
 
+        public const string TemplateIdProperty = "tid";
+        [BsonElement(TemplateIdProperty)]
+        [BsonIgnoreIfNull(true)]
+        public ObjectId? TemplateId { get; set; }
+
         public const string CategoryProperty = "cat";
         [BsonElement(CategoryProperty)]
         [BsonIgnoreIfNull(false)]

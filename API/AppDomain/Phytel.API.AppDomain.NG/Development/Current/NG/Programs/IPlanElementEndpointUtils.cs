@@ -37,6 +37,11 @@ namespace Phytel.API.AppDomain.NG.Programs
 
         object PutInsertToDo(ToDoData todo, string p, IAppDomainRequest request);
         Goal GetGoalById(string sid, string userId, IAppDomainRequest req);
-        PatientGoal GetPatientGoalByTemplateId(string sid, string patientId, string userId, IAppDomainRequest req);
+        PatientGoal GetOpenNotMetPatientGoalByTemplateId(string sid, string patientId, string userId, IAppDomainRequest req);
+        Intervention GetInterventionById(string sid, string userId, IAppDomainRequest req);
+
+        PatientIntervention GetOpenNotMetPatientInterventionByTemplateId(string gid, string tempId, string patientId, string userId, IAppDomainRequest req);
+        Task GetTaskById(string sid, string userId, IAppDomainRequest req);
+        PatientTask GetOpenNotMetPatientTaskByTemplateId(string taskid, string tempId, string patientId, string userId, IAppDomainRequest req);
     }
 }

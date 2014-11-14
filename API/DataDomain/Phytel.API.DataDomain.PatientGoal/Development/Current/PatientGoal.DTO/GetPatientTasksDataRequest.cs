@@ -6,7 +6,7 @@ using ServiceStack.ServiceHost;
 namespace Phytel.API.DataDomain.PatientGoal.DTO
 {
     [Route("/{Context}/{Version}/{ContractNumber}/Goal/Tasks", "POST")]
-    public class GetTasksDataRequest : IDataDomainRequest
+    public class GetPatientTasksDataRequest : IDataDomainRequest
     {
         [ApiMember(Name = "StatusIds", Description = "List of Task Status ids.", ParameterType = "property", DataType = "List<int>", IsRequired = false)]
         public List<int> StatusIds { get; set; }

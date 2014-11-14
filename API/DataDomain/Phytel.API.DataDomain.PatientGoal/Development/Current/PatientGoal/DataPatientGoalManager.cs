@@ -125,6 +125,26 @@ namespace Phytel.API.DataDomain.PatientGoal
                 IGoalRepository repo = Factory.GetRepository(request, RepositoryType.PatientGoal);
 
                 PatientGoalData patientGoalData = repo.FindByTemplateId(request.PatientId, request.TemplateId) as PatientGoalData;
+
+                result.GoalData = patientGoalData;
+                result.Version = request.Version;
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public GetPatientTaskByTemplateIdResponse GetPatientTaskByTemplateId(GetPatientTaskByTemplateIdRequest request)
+        {
+            GetPatientTaskByTemplateIdResponse result = null;
+            try
+            {
+                result = new GetPatientTaskByTemplateIdResponse();
+                IGoalRepository repo = Factory.GetRepository(request, RepositoryType.PatientTask);
+
+                PatientTaskData patientTaskData = repo.FindByTemplateId(request.GoalId, request.TemplateId) as PatientTaskData;
                 //if (patientGoalData != null)
                 //{
                 //    //Get all barriers for a given goal
@@ -137,7 +157,78 @@ namespace Phytel.API.DataDomain.PatientGoal
                 //    patientGoalData.InterventionsData = getInterventionsByPatientGoalId(request, patientGoalData.Id);
                 //}
 
-                result.GoalData = patientGoalData;
+                result.TaskData = patientTaskData;
+                result.Version = request.Version;
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public GetPatientInterventionByTemplateIdResponse GetPatientInterventionByTemplateId(GetPatientInterventionByTemplateIdRequest request)
+        {
+            GetPatientInterventionByTemplateIdResponse result = null;
+            try
+            {
+                result = new GetPatientInterventionByTemplateIdResponse();
+                IGoalRepository repo = Factory.GetRepository(request, RepositoryType.PatientIntervention);
+
+                PatientInterventionData patientInterventionData = repo.FindByTemplateId(request.GoalId, request.TemplateId) as PatientInterventionData;
+                //if (patientGoalData != null)
+                //{
+                //    //Get all barriers for a given goal
+                //    patientGoalData.BarriersData = getBarriersByPatientGoalId(request, patientGoalData.Id);
+
+                //    //Get all tasks for a given goal
+                //    patientGoalData.TasksData = getTasksByPatientGoalId(request, patientGoalData.Id);
+
+                //    //Get all interventions for a given goal
+                //    patientGoalData.InterventionsData = getInterventionsByPatientGoalId(request, patientGoalData.Id);
+                //}
+
+                result.InterventionData = patientInterventionData;
+                result.Version = request.Version;
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public GetTaskDataResponse GetTask(GetTaskDataRequest request)
+        {
+            GetTaskDataResponse result = null;
+            try
+            {
+                result = new GetTaskDataResponse();
+                IGoalRepository repo = Factory.GetRepository(request, RepositoryType.Task);
+
+                var intData = repo.FindByID(request.Id) as TaskData;
+
+                result.TaskData = intData;
+                result.Version = request.Version;
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public GetInterventionDataResponse GetIntervention(GetInterventionDataRequest request)
+        {
+            GetInterventionDataResponse result = null;
+            try
+            {
+                result = new GetInterventionDataResponse();
+                IGoalRepository repo = Factory.GetRepository(request, RepositoryType.Intervention);
+
+                var intData = repo.FindByID(request.Id) as InterventionData;
+
+                result.InterventionsData = intData;
                 result.Version = request.Version;
                 return result;
             }
@@ -155,7 +246,7 @@ namespace Phytel.API.DataDomain.PatientGoal
                 result = new GetGoalDataResponse();
                 IGoalRepository repo = Factory.GetRepository(request, RepositoryType.Goal);
 
-                GoalData patientGoalData = repo.FindByID(request.Id) as GoalData;
+                GoalData goalData = repo.FindByID(request.Id) as GoalData;
 
                 //if (patientGoalData != null)
                 //{
@@ -169,7 +260,7 @@ namespace Phytel.API.DataDomain.PatientGoal
                 //    patientGoalData.InterventionsData = getInterventionsByPatientGoalId(request, patientGoalData.Id);
                 //}
 
-                result.GoalData = patientGoalData;
+                result.GoalData = goalData;
                 result.Version = request.Version;
                 return result;
             }
@@ -255,11 +346,11 @@ namespace Phytel.API.DataDomain.PatientGoal
             }
         }
 
-        public GetInterventionsDataResponse GetInterventions(GetInterventionsDataRequest request)
+        public GetPatientInterventionsDataResponse GetPatientInterventions(GetPatientInterventionsDataRequest request)
         {
             try
             {
-                var result = new GetInterventionsDataResponse();
+                var result = new GetPatientInterventionsDataResponse();
 
                 IGoalRepository intRepo = Factory.GetRepository(request, RepositoryType.PatientIntervention);
                 IGoalRepository goalRepo = Factory.GetRepository(request, RepositoryType.PatientGoal);
@@ -280,11 +371,11 @@ namespace Phytel.API.DataDomain.PatientGoal
             }
         }
 
-        public GetTasksDataResponse GetTasks(GetTasksDataRequest request)
+        public GetPatientTasksDataResponse GetTasks(GetPatientTasksDataRequest request)
         {
             try
             {
-                var result = new GetTasksDataResponse();
+                var result = new GetPatientTasksDataResponse();
 
                 IGoalRepository taskRepo = Factory.GetRepository(request, RepositoryType.PatientTask);
                 taskRepo.UserId = request.UserId;

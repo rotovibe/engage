@@ -18,7 +18,9 @@ namespace Phytel.API.AppDomain.NG.Programs.ElementActivation
                 // add other implementations here
                 new ToDoActivationRule(),
                 new ProblemActivationRule(),
-                new GoalActivationRule()
+                new GoalActivationRule(),
+                new InterventionActivationRule(),
+                new TaskActivationRule()
             };
         }
 

@@ -98,9 +98,7 @@ namespace Phytel.API.AppDomain.NG
                     request.PatientId,
                     request.PatientGoalId), request.UserId);
 
-                PutInitializeTaskResponse response = client.Put<PutInitializeTaskResponse>(
-                    url,
-                    new PutInitializeTaskRequest() as object);
+                PutInitializeTaskResponse response = client.Put<PutInitializeTaskResponse>(url, new PutInitializeTaskRequest() as object);
 
                 if (response != null)
                 {
@@ -211,8 +209,8 @@ namespace Phytel.API.AppDomain.NG
                     request.Version,
                     request.ContractNumber), request.UserId);
 
-                GetInterventionsDataResponse ddResponse =
-                    client.Post<GetInterventionsDataResponse>(url, new GetInterventionsDataRequest
+                GetPatientInterventionsDataResponse ddResponse =
+                    client.Post<GetPatientInterventionsDataResponse>(url, new GetPatientInterventionsDataRequest
                     {
                         Context = "NG",
                         ContractNumber = request.ContractNumber,
@@ -259,8 +257,8 @@ namespace Phytel.API.AppDomain.NG
                     request.Version,
                     request.ContractNumber), request.UserId);
 
-                GetTasksDataResponse ddResponse =
-                    client.Post<GetTasksDataResponse>(url, new GetTasksDataRequest
+                GetPatientTasksDataResponse ddResponse =
+                    client.Post<GetPatientTasksDataResponse>(url, new GetPatientTasksDataRequest
                     {
                         Context = "NG",
                         ContractNumber = request.ContractNumber,
@@ -598,7 +596,7 @@ namespace Phytel.API.AppDomain.NG
             }
             catch (WebServiceException ex)
             {
-                throw new WebServiceException("AD:GetInitialTaskRequest()::" + ex.Message, ex.InnerException);
+                throw new WebServiceException("AD:GetInitialInterventionRequest()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -652,6 +650,7 @@ namespace Phytel.API.AppDomain.NG
 
                 IRestClient client = new JsonServiceClient();
 
+                //"/{Context}/{Version}/{ContractNumber}/Patient/{PatientId}/Goal/{PatientGoalId}/Intervention/{InterventionId}/Update"
                 string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Goal/{5}/Intervention/{6}/Update",
                     DDPatientGoalsServiceUrl,
                     "NG",
@@ -763,6 +762,7 @@ namespace Phytel.API.AppDomain.NG
                 CustomAttributes = GetPatientGoalAttributes(pg.CustomAttributes),
                 EndDate = pg.EndDate,
                 FocusAreaIds = pg.FocusAreaIds,
+                TemplateId = pg.TemplateId,
                 Name = pg.Name,
                 PatientId = pg.PatientId,
                 ProgramIds = pg.ProgramIds,

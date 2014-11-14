@@ -7,7 +7,7 @@ namespace Phytel.API.AppDomain.NG.DTO.Search
     [Route("/{Version}/{ContractNumber}/Search/Meds/Fields", "GET")]
     public class GetMedFieldsRequest : IAppDomainRequest
     {
-        [ApiMember(Name = "ProprietaryName", Description = "proprietary Name to search data for.", ParameterType = "property", DataType = "string", IsRequired = true)]
+        [ApiMember(Name = "Name", Description = "proprietary Name to search data for.", ParameterType = "property", DataType = "string", IsRequired = true)]
         public string Name { get; set; }
 
         [ApiMember(Name = "Type", Description = "Type of type if applicable.", ParameterType = "property", DataType = "string", IsRequired = true)]

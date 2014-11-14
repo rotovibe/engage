@@ -112,38 +112,34 @@ namespace Phytel.API.DataDomain.PatientGoal
         {
             try
             {
-                PatientInterventionData interventionData = null;
+                InterventionData interventionData = null;
                 List<IMongoQuery> queries = new List<IMongoQuery>();
-                queries.Add(Query.EQ(MEPatientIntervention.IdProperty, ObjectId.Parse(entityID)));
-                queries.Add(Query.EQ(MEPatientIntervention.DeleteFlagProperty, false));
-                queries.Add(Query.EQ(MEPatientIntervention.TTLDateProperty, BsonNull.Value));
+                queries.Add(Query.EQ(MEIntervention.IdProperty, ObjectId.Parse(entityID)));
+                queries.Add(Query.EQ(MEIntervention.DeleteFlagProperty, false));
+                queries.Add(Query.EQ(MEIntervention.TTLDateProperty, BsonNull.Value));
                 IMongoQuery mQuery = Query.And(queries);
+
                 using (PatientGoalMongoContext ctx = new PatientGoalMongoContext(_dbName))
                 {
-                    MEPatientIntervention b = ctx.PatientInterventions.Collection.Find(mQuery).FirstOrDefault();
+                    MEIntervention b = ctx.Interventions.Collection.Find(mQuery).FirstOrDefault();
                     if (b != null)
                     {
-                        interventionData = new PatientInterventionData
+                        interventionData = new InterventionData
                         {
                             Id = b.Id.ToString(),
                             Description = b.Description,
-                            PatientGoalId = b.PatientGoalId.ToString(),
+                            TemplateGoalId = b.TemplateGoalId.ToString(),
+                            StartDateRange = b.StartDateRange,
                             CategoryId = b.CategoryId == null ? null : b.CategoryId.ToString(),
                             AssignedToId = b.AssignedToId == null ? null : b.AssignedToId.ToString(),
                             BarrierIds = Helper.ConvertToStringList(b.BarrierIds),
-                            StatusId = ((int)b.Status),
+                            StatusId = ((int) b.Status),
                             StatusDate = b.StatusDate,
                             StartDate = b.StartDate,
-                            ClosedDate = b.ClosedDate,
+                            //ClosedDate = b.ClosedDate,
                             CreatedById = b.RecordCreatedBy.ToString(),
                             DeleteFlag = b.DeleteFlag
                         };
-                        var mePG = ctx.PatientGoals.Collection.Find(Query.EQ(MEPatientGoal.IdProperty, ObjectId.Parse(interventionData.PatientGoalId))).SetFields(MEPatientGoal.PatientIdProperty, MEPatientGoal.NameProperty).FirstOrDefault();
-                        if (mePG != null)
-                        {
-                            interventionData.PatientId = mePG.PatientId.ToString();
-                            interventionData.GoalName = mePG.Name;
-                        }
                     }
                 }
                 return interventionData;
@@ -380,7 +376,7 @@ namespace Phytel.API.DataDomain.PatientGoal
         public IEnumerable<object> Search(object request, List<string> patientGoalIds)
         {
             List<PatientInterventionData> list = null;
-            GetInterventionsDataRequest dataRequest = (GetInterventionsDataRequest)request;
+            GetPatientInterventionsDataRequest dataRequest = (GetPatientInterventionsDataRequest)request;
             try
             {
                 using (PatientGoalMongoContext ctx = new PatientGoalMongoContext(_dbName))

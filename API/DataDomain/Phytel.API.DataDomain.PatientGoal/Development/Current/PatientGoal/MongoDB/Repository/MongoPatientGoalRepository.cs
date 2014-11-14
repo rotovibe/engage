@@ -112,6 +112,7 @@ namespace Phytel.API.DataDomain.PatientGoal
                     {
                         Query.EQ(MEPatientGoal.PatientIdProperty, ObjectId.Parse(patientId)),
                         Query.EQ(MEPatientGoal.TemplateIdProperty, ObjectId.Parse(entityID)),
+                        Query.In(MEPatientGoal.StatusProperty, new BsonArray{1, 3}),
                         Query.EQ(MEPatientGoal.DeleteFlagProperty, false),
                         Query.EQ(MEPatientGoal.TTLDateProperty, BsonNull.Value)
                     };
@@ -227,6 +228,7 @@ namespace Phytel.API.DataDomain.PatientGoal
                     if (pt.TypeId != null) uv.Add(MB.Update.Set(MEPatientGoal.TypeProperty, pt.TypeId)); 
                     if (pt.StatusId != 0) uv.Add(MB.Update.Set(MEPatientGoal.StatusProperty, pt.StatusId ));
                     if (pt.TargetValue != null) uv.Add(MB.Update.Set(MEPatientGoal.TargetValueProperty, pt.TargetValue));
+                    if (pt.TemplateId != null) uv.Add(MB.Update.Set(MEPatientGoal.TemplateIdProperty, ObjectId.Parse(pt.TemplateId)));
                     if (pt.StartDate != null)
                     {
                         uv.Add(MB.Update.Set(MEPatientGoal.StartDateProperty, pt.StartDate));

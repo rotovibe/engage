@@ -77,11 +77,30 @@ namespace Phytel.API.AppDomain.NG.Service
                         opt => opt.MapFrom(src => src.CustomAttributes.ConvertAll(
                             c => new CustomAttribute {Id = c.Id, Values = c.Values})));
 
+                Mapper.CreateMap<TaskData, Task>()
+                    .ForMember(d => d.CustomAttributes,
+                        opt => opt.MapFrom(src => src.CustomAttributes.ConvertAll(
+                            c => new CustomAttribute { Id = c.Id, Values = c.Values })));
+
+                Mapper.CreateMap<Task, PatientTask>()
+                    .ForMember(d => d.CustomAttributes,
+                        opt => opt.MapFrom(src => src.CustomAttributes.ConvertAll(
+                            c => new CustomAttribute { Id = c.Id, Values = c.Values })));
+
+                Mapper.CreateMap<PatientTaskData, PatientTask>()
+                    .ForMember(d => d.CustomAttributes,
+                        opt => opt.MapFrom(src => src.CustomAttributes.ConvertAll(
+                            c => new CustomAttribute { Id = c.Id, Values = c.Values })));
+
+                Mapper.CreateMap<InterventionData, Intervention>();
+
                 // goal to patientgoal
                 Mapper.CreateMap<Goal, PatientGoal>()
                     .ForMember(d => d.CustomAttributes,
                         opt => opt.MapFrom(src => src.CustomAttributes.ConvertAll(
                             c => new CustomAttribute { Id = c.Id, Values = c.Values })));
+
+                Mapper.CreateMap<PatientInterventionData, PatientIntervention>();
 
                 Mapper.CreateMap<PatientGoalData, PatientGoal>()
                     .ForMember(d => d.CustomAttributes,

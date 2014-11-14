@@ -27,9 +27,13 @@ namespace Phytel.API.DataDomain.PatientGoal
         UndoDeletePatientGoalDataResponse UndoDeletePatientGoals(UndoDeletePatientGoalDataRequest request);
         GetCustomAttributesDataResponse GetCustomAttributesByType(GetCustomAttributesDataRequest request);
         RemoveProgramInPatientGoalsDataResponse RemoveProgramInPatientGoals(RemoveProgramInPatientGoalsDataRequest request);
-        GetInterventionsDataResponse GetInterventions(GetInterventionsDataRequest request);
-        GetTasksDataResponse GetTasks(GetTasksDataRequest request);
+        GetPatientInterventionsDataResponse GetPatientInterventions(GetPatientInterventionsDataRequest request);
+        GetPatientTasksDataResponse GetTasks(GetPatientTasksDataRequest request);
         GetGoalDataResponse GetGoal(GetGoalDataRequest request);
         GetPatientGoalByTemplateIdResponse GetPatientByTemplateIdGoal(GetPatientGoalByTemplateIdRequest request);
+        GetInterventionDataResponse GetIntervention(GetInterventionDataRequest request);
+        GetPatientInterventionByTemplateIdResponse GetPatientInterventionByTemplateId(GetPatientInterventionByTemplateIdRequest request);
+        GetTaskDataResponse GetTask(GetTaskDataRequest request);
+        GetPatientTaskByTemplateIdResponse GetPatientTaskByTemplateId(GetPatientTaskByTemplateIdRequest request);
     }
 }
