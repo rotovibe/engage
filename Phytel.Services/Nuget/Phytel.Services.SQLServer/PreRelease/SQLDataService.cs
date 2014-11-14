@@ -40,17 +40,6 @@ namespace Phytel.Services.SQLServer
         }
         #endregion
 
-        public SqlTransaction GetTransaction(string connString)
-        {
-            SqlConnection sqlConnection = new SqlConnection(connString);
-
-            sqlConnection.Open();
-
-            SqlTransaction trans = sqlConnection.BeginTransaction();
-
-            return trans;
-        }
-
         #region Database Name Methods (using configuration file for phytel services conn name)
         
         public DataSet GetDataSet(string databaseName, bool isContract, string procedureName, ParameterCollection procedureParams)
@@ -73,16 +62,6 @@ namespace Phytel.Services.SQLServer
             ExecuteProcedureDirect(GetConnectionString(_dbConnName, databaseName, isContract, _defaultSystemType), procedureName, procedureParams, cmdTimeout);
         }
 
-        public void ExecuteProcedure(string databaseName, bool isContract, string procedureName, ParameterCollection procedureParams, SqlTransaction sqlTrans)
-        {
-            ExecuteProcedure(_dbConnName, databaseName, isContract, procedureName, procedureParams, sqlTrans, 3600);
-        }
-
-        public void ExecuteProcedure(string databaseName, bool isContract, string procedureName, ParameterCollection procedureParams, SqlTransaction sqlTrans, int cmdTimeout)
-        {
-            ExecuteProcedureDirect(GetConnectionString(_dbConnName, databaseName, isContract, _defaultSystemType), procedureName, procedureParams, sqlTrans, cmdTimeout);
-        }
-
         public object ExecuteScalar(string databaseName, bool isContract, string procedureName, ParameterCollection procedureParams)
         {
             return ExecuteScalar(_dbConnName, databaseName, isContract, procedureName, procedureParams, 3600);
@@ -90,37 +69,17 @@ namespace Phytel.Services.SQLServer
 
         public object ExecuteScalar(string databaseName, bool isContract, string procedureName, ParameterCollection procedureParams, int cmdTimeout)
         {
-            return ExecuteScalarDirect(GetConnectionString(_dbConnName, databaseName, isContract, _defaultSystemType), procedureName, procedureParams, null, cmdTimeout);
+            return ExecuteScalarDirect(GetConnectionString(_dbConnName, databaseName, isContract, _defaultSystemType), procedureName, procedureParams, cmdTimeout);
         }
 
         public DataSet ExecuteSQL(string databaseName, bool isContract, string queryText)
         {
-            return ExecuteSQL(_dbConnName, databaseName, isContract, _defaultSystemType, queryText, null, 3600);
+            return ExecuteSQL(_dbConnName, databaseName, isContract, _defaultSystemType, queryText, 3600);
         }
 
         public DataSet ExecuteSQL(string databaseName, bool isContract, string queryText, int cmdTimeout)
         {
-            return ExecuteSQL(_dbConnName, databaseName, isContract, _defaultSystemType, queryText, null, cmdTimeout);
-        }
-
-        public DataSet ExecuteSQL(string databaseName, bool isContract, string queryText, SqlTransaction sqlTrans)
-        {
-            return ExecuteSQL(_dbConnName, databaseName, isContract, _defaultSystemType, queryText, null, 3600);
-        }
-
-        public DataSet ExecuteSQL(string databaseName, bool isContract, string queryText, SqlTransaction sqlTrans, int cmdTimeout)
-        {
-            return ExecuteSQLDirect(GetConnectionString(_dbConnName, databaseName, isContract, _defaultSystemType), queryText, sqlTrans, cmdTimeout);
-        }
-
-        public SqlDataReader GetReader(string databaseName, bool isContract, string procedureName, ParameterCollection procedureParams)
-        {
-            return GetReader(_dbConnName, databaseName, isContract, procedureName, procedureParams, 3600);
-        }
-
-        public SqlDataReader GetReader(string databaseName, bool isContract, string procedureName, ParameterCollection procedureParams, int cmdTimeout)
-        {
-            return GetReaderDirect(GetConnectionString(_dbConnName, databaseName, isContract, _defaultSystemType), procedureName, procedureParams, cmdTimeout);
+            return ExecuteSQLDirect(GetConnectionString(_dbConnName, databaseName, isContract, _defaultSystemType), queryText, cmdTimeout);
         }
 
         public DataSet GetDataSet(string databaseName, bool isContract, string systemType, string procedureName, ParameterCollection procedureParams)
@@ -143,16 +102,6 @@ namespace Phytel.Services.SQLServer
             ExecuteProcedureDirect(GetConnectionString(_dbConnName, databaseName, isContract, systemType), procedureName, procedureParams, cmdTimeout);
         }
 
-        public void ExecuteProcedure(string databaseName, bool isContract, string systemType, string procedureName, ParameterCollection procedureParams, SqlTransaction sqlTrans)
-        {
-            ExecuteProcedure(_dbConnName, databaseName, isContract, systemType, procedureName, procedureParams, sqlTrans, 3600);
-        }
-
-        public void ExecuteProcedure(string databaseName, bool isContract, string systemType, string procedureName, ParameterCollection procedureParams, SqlTransaction sqlTrans, int cmdTimeout)
-        {
-            ExecuteProcedureDirect(GetConnectionString(_dbConnName, databaseName, isContract, systemType), procedureName, procedureParams, sqlTrans, cmdTimeout);
-        }
-
         public object ExecuteScalar(string databaseName, bool isContract, string systemType, string procedureName, ParameterCollection procedureParams)
         {
             return ExecuteScalar(_dbConnName, databaseName, isContract, systemType, procedureName, procedureParams, 3600);
@@ -160,37 +109,17 @@ namespace Phytel.Services.SQLServer
 
         public object ExecuteScalar(string databaseName, bool isContract, string systemType, string procedureName, ParameterCollection procedureParams, int cmdTimeout)
         {
-            return ExecuteScalarDirect(GetConnectionString(_dbConnName, databaseName, isContract, systemType), procedureName, procedureParams, null, cmdTimeout);
+            return ExecuteScalarDirect(GetConnectionString(_dbConnName, databaseName, isContract, systemType), procedureName, procedureParams, cmdTimeout);
         }
 
         public DataSet ExecuteSQL(string databaseName, bool isContract, string systemType, string queryText)
         {
-            return ExecuteSQL(_dbConnName, databaseName, isContract, systemType, queryText, null, 3600);
+            return ExecuteSQL(_dbConnName, databaseName, isContract, systemType, queryText, 3600);
         }
 
         public DataSet ExecuteSQL(string databaseName, bool isContract, string systemType, string queryText, int cmdTimeout)
         {
-            return ExecuteSQL(_dbConnName, databaseName, isContract, systemType, queryText, null, cmdTimeout);
-        }
-
-        public DataSet ExecuteSQL(string databaseName, bool isContract, string systemType, string queryText, SqlTransaction sqlTrans)
-        {
-            return ExecuteSQL(_dbConnName, databaseName, isContract, systemType, queryText, null, 3600);
-        }
-
-        public DataSet ExecuteSQL(string databaseName, bool isContract, string systemType, string queryText, SqlTransaction sqlTrans, int cmdTimeout)
-        {
-            return ExecuteSQLDirect(GetConnectionString(_dbConnName, databaseName, isContract, systemType), queryText, sqlTrans, cmdTimeout);
-        }
-
-        public SqlDataReader GetReader(string databaseName, bool isContract, string systemType, string procedureName, ParameterCollection procedureParams)
-        {
-            return GetReader(_dbConnName, databaseName, isContract, systemType, procedureName, procedureParams, 3600);
-        }
-
-        public SqlDataReader GetReader(string databaseName, bool isContract, string systemType, string procedureName, ParameterCollection procedureParams, int cmdTimeout)
-        {
-            return GetReaderDirect(GetConnectionString(_dbConnName, databaseName, isContract, systemType), procedureName, procedureParams, cmdTimeout);
+            return ExecuteSQLDirect(GetConnectionString(_dbConnName, databaseName, isContract, systemType), queryText, cmdTimeout);
         }
 
         #endregion
@@ -217,16 +146,6 @@ namespace Phytel.Services.SQLServer
             ExecuteProcedureDirect(GetConnectionString(dbConnName, databaseName, isContract, _defaultSystemType), procedureName, procedureParams, cmdTimeout);
         }
 
-        public void ExecuteProcedure(string dbConnName, string databaseName, bool isContract, string procedureName, ParameterCollection procedureParams, SqlTransaction sqlTrans)
-        {
-            ExecuteProcedure(dbConnName, databaseName, isContract, procedureName, procedureParams, sqlTrans, 3600);
-        }
-
-        public void ExecuteProcedure(string dbConnName, string databaseName, bool isContract, string procedureName, ParameterCollection procedureParams, SqlTransaction sqlTrans, int cmdTimeout)
-        {
-            ExecuteProcedureDirect(GetConnectionString(dbConnName, databaseName, isContract, _defaultSystemType), procedureName, procedureParams, sqlTrans, cmdTimeout);
-        }
-
         public object ExecuteScalar(string dbConnName, string databaseName, bool isContract, string procedureName, ParameterCollection procedureParams)
         {
             return ExecuteScalar(dbConnName, databaseName, isContract, procedureName, procedureParams, 3600);
@@ -234,37 +153,17 @@ namespace Phytel.Services.SQLServer
 
         public object ExecuteScalar(string dbConnName, string databaseName, bool isContract, string procedureName, ParameterCollection procedureParams, int cmdTimeout)
         {
-            return ExecuteScalarDirect(GetConnectionString(dbConnName, databaseName, isContract, _defaultSystemType), procedureName, procedureParams, null, cmdTimeout);
+            return ExecuteScalarDirect(GetConnectionString(dbConnName, databaseName, isContract, _defaultSystemType), procedureName, procedureParams, cmdTimeout);
         }
 
         public DataSet ExecuteSQL(string dbConnName, string databaseName, bool isContract, string queryText)
         {
-            return ExecuteSQL(dbConnName, databaseName, isContract, _defaultSystemType, queryText, null, 3600);
+            return ExecuteSQL(dbConnName, databaseName, isContract, _defaultSystemType, queryText, 3600);
         }
 
         public DataSet ExecuteSQL(string dbConnName, string databaseName, bool isContract, string queryText, int cmdTimeout)
         {
-            return ExecuteSQL(dbConnName, databaseName, isContract, _defaultSystemType, queryText, null, cmdTimeout);
-        }
-
-        public DataSet ExecuteSQL(string dbConnName, string databaseName, bool isContract, string queryText, SqlTransaction sqlTrans)
-        {
-            return ExecuteSQL(dbConnName, databaseName, isContract, _defaultSystemType, queryText, null, 3600);
-        }
-
-        public DataSet ExecuteSQL(string dbConnName, string databaseName, bool isContract, string queryText, SqlTransaction sqlTrans, int cmdTimeout)
-        {
-            return ExecuteSQLDirect(GetConnectionString(dbConnName, databaseName, isContract, _defaultSystemType), queryText, sqlTrans, cmdTimeout);
-        }
-
-        public SqlDataReader GetReader(string dbConnName, string databaseName, bool isContract, string procedureName, ParameterCollection procedureParams)
-        {
-            return GetReader(dbConnName, databaseName, isContract, procedureName, procedureParams, 3600);
-        }
-
-        public SqlDataReader GetReader(string dbConnName, string databaseName, bool isContract, string procedureName, ParameterCollection procedureParams, int cmdTimeout)
-        {
-            return GetReaderDirect(GetConnectionString(dbConnName, databaseName, isContract, _defaultSystemType), procedureName, procedureParams, cmdTimeout);
+            return ExecuteSQLDirect(GetConnectionString(dbConnName, databaseName, isContract, _defaultSystemType), queryText, cmdTimeout);
         }
 
         public DataSet GetDataSet(string dbConnName, string databaseName, bool isContract, string systemType, string procedureName, ParameterCollection procedureParams)
@@ -287,16 +186,6 @@ namespace Phytel.Services.SQLServer
             ExecuteProcedureDirect(GetConnectionString(dbConnName, databaseName, isContract, systemType), procedureName, procedureParams, cmdTimeout);
         }
 
-        public void ExecuteProcedure(string dbConnName, string databaseName, bool isContract, string systemType, string procedureName, ParameterCollection procedureParams, SqlTransaction sqlTrans)
-        {
-            ExecuteProcedure(dbConnName, databaseName, isContract, systemType, procedureName, procedureParams, sqlTrans, 3600);
-        }
-
-        public void ExecuteProcedure(string dbConnName, string databaseName, bool isContract, string systemType, string procedureName, ParameterCollection procedureParams, SqlTransaction sqlTrans, int cmdTimeout)
-        {
-            ExecuteProcedureDirect(GetConnectionString(dbConnName, databaseName, isContract, systemType), procedureName, procedureParams, sqlTrans, cmdTimeout);
-        }
-
         public object ExecuteScalar(string dbConnName, string databaseName, bool isContract, string systemType, string procedureName, ParameterCollection procedureParams)
         {
             return ExecuteScalar(dbConnName, databaseName, isContract, systemType, procedureName, procedureParams, 3600);
@@ -304,37 +193,17 @@ namespace Phytel.Services.SQLServer
 
         public object ExecuteScalar(string dbConnName, string databaseName, bool isContract, string systemType, string procedureName, ParameterCollection procedureParams, int cmdTimeout)
         {
-            return ExecuteScalarDirect(GetConnectionString(dbConnName, databaseName, isContract, systemType), procedureName, procedureParams, null, cmdTimeout);
+            return ExecuteScalarDirect(GetConnectionString(dbConnName, databaseName, isContract, systemType), procedureName, procedureParams, cmdTimeout);
         }
 
         public DataSet ExecuteSQL(string dbConnName, string databaseName, bool isContract, string systemType, string queryText)
         {
-            return ExecuteSQL(dbConnName, databaseName, isContract, systemType, queryText, null, 3600);
+            return ExecuteSQL(dbConnName, databaseName, isContract, systemType, queryText, 3600);
         }
 
         public DataSet ExecuteSQL(string dbConnName, string databaseName, bool isContract, string systemType, string queryText, int cmdTimeout)
         {
-            return ExecuteSQL(dbConnName, databaseName, isContract, systemType, queryText, null, cmdTimeout);
-        }
-
-        public DataSet ExecuteSQL(string dbConnName, string databaseName, bool isContract, string systemType, string queryText, SqlTransaction sqlTrans)
-        {
-            return ExecuteSQL(dbConnName, databaseName, isContract, systemType, queryText, null, 3600);
-        }
-
-        public DataSet ExecuteSQL(string dbConnName, string databaseName, bool isContract, string systemType, string queryText, SqlTransaction sqlTrans, int cmdTimeout)
-        {
-            return ExecuteSQLDirect(GetConnectionString(dbConnName, databaseName, isContract, systemType), queryText, sqlTrans, cmdTimeout);
-        }
-
-        public SqlDataReader GetReader(string dbConnName, string databaseName, bool isContract, string systemType, string procedureName, ParameterCollection procedureParams)
-        {
-            return GetReader(dbConnName, databaseName, isContract, systemType, procedureName, procedureParams, 3600);
-        }
-
-        public SqlDataReader GetReader(string dbConnName, string databaseName, bool isContract, string systemType, string procedureName, ParameterCollection procedureParams, int cmdTimeout)
-        {
-            return GetReaderDirect(GetConnectionString(dbConnName, databaseName, isContract, systemType), procedureName, procedureParams, cmdTimeout);
+            return ExecuteSQLDirect(GetConnectionString(dbConnName, databaseName, isContract, systemType), queryText, cmdTimeout);
         }
 
         #endregion
@@ -344,262 +213,213 @@ namespace Phytel.Services.SQLServer
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2100:Review SQL queries for security vulnerabilities")]
         public DataSet GetDataSetDirect(string connectionString, string procedureName, ParameterCollection procedureParams, int cmdTimeout)
         {
-            SqlConnection sqlConnection = null;
-            SqlCommand sqlCommand;
-            SqlParameter sqlParam;
-            SqlDataAdapter sqlAdapter;
-            DataSet returnDataSet;
+            SqlCommand sqlCommand = null;
+            SqlParameter sqlParam = null;
+            SqlDataAdapter sqlAdapter = null;
+            DataSet returnDataSet = null;
 
             try
             {
-                sqlConnection = new SqlConnection(connectionString);
-                sqlConnection.Open();
-
-                sqlCommand = new SqlCommand(procedureName, sqlConnection);
-                sqlCommand.CommandType = CommandType.StoredProcedure;
-                sqlCommand.CommandTimeout = cmdTimeout;
-
-                foreach (Parameter param in procedureParams)
+                using (SqlConnection sqlConnection = new SqlConnection(connectionString))
                 {
-                    sqlParam = new SqlParameter(param.Name, param.Value);
-                    sqlParam.SqlDbType = param.Type;
-                    sqlParam.Direction = param.Direction;
-                    sqlParam.Size = param.Size;
+                    sqlConnection.Open();
 
-                    sqlCommand.Parameters.Add(sqlParam);
+                    sqlCommand = new SqlCommand(procedureName, sqlConnection);
+                    sqlCommand.CommandType = CommandType.StoredProcedure;
+                    sqlCommand.CommandTimeout = cmdTimeout;
+
+                    foreach (Parameter param in procedureParams)
+                    {
+                        sqlParam = new SqlParameter(param.Name, param.Value);
+                        sqlParam.SqlDbType = param.Type;
+                        sqlParam.Direction = param.Direction;
+                        sqlParam.Size = param.Size;
+
+                        sqlCommand.Parameters.Add(sqlParam);
+                    }
+
+                    //Now execute and return the results
+                    sqlAdapter = new SqlDataAdapter(sqlCommand);
+                    returnDataSet = new DataSet();
+                    sqlAdapter.Fill(returnDataSet);
                 }
-
-                //Now execute and return the results
-                sqlAdapter = new SqlDataAdapter(sqlCommand);
-                returnDataSet = new DataSet();
-                sqlAdapter.Fill(returnDataSet);
             }
-
             finally
             {
+                try
+                {
+                    if (sqlCommand != null)
+                        sqlCommand.Dispose();
+
+                    if (sqlAdapter != null)
+                        sqlAdapter.Dispose();
+                }
+                catch { }
+
                 sqlCommand = null;
                 sqlParam = null;
                 sqlAdapter = null;
-
-                if (sqlConnection != null)
-                    sqlConnection.Close();
-                sqlConnection = null;
             }
 
             return returnDataSet;
         }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2100:Review SQL queries for security vulnerabilities")]
         public object ExecuteScalarDirect(string connectionString, string procedureName, ParameterCollection procedureParams, int cmdTimeout)
         {
-            return ExecuteScalarDirect(connectionString, procedureName, procedureParams, null, cmdTimeout);
-        }
-
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2100:Review SQL queries for security vulnerabilities")]
-        public object ExecuteScalarDirect(string connectionString, string procedureName, ParameterCollection procedureParams, SqlTransaction sqlTrans, int cmdTimeout)
-        {
-            SqlConnection sqlConnection = null;
-            SqlCommand sqlCommand;
-            SqlParameter sqlParam;
+            SqlCommand sqlCommand = null;
+            SqlParameter sqlParam = null;
 
             object retVal = null;
 
             try
             {
-                if (sqlTrans == null)
+                using (SqlConnection sqlConnection = new SqlConnection(connectionString))
                 {
-                    sqlConnection = new SqlConnection(connectionString);
                     sqlConnection.Open();
-                }
-                else
-                {
-                    sqlConnection = sqlTrans.Connection;
-                }
 
-                sqlCommand = new SqlCommand(procedureName, sqlConnection, sqlTrans);
-                sqlCommand.CommandType = CommandType.StoredProcedure;
-                sqlCommand.CommandTimeout = cmdTimeout;
+                    sqlCommand = new SqlCommand(procedureName, sqlConnection);
+                    sqlCommand.CommandType = CommandType.StoredProcedure;
+                    sqlCommand.CommandTimeout = cmdTimeout;
 
-                foreach (Parameter param in procedureParams)
-                {
-                    sqlParam = new SqlParameter(param.Name, param.Value);
-                    sqlParam.SqlDbType = param.Type;
-                    sqlParam.Direction = param.Direction;
-                    sqlParam.Size = param.Size;
+                    foreach (Parameter param in procedureParams)
+                    {
+                        sqlParam = new SqlParameter(param.Name, param.Value);
+                        sqlParam.SqlDbType = param.Type;
+                        sqlParam.Direction = param.Direction;
+                        sqlParam.Size = param.Size;
 
-                    sqlCommand.Parameters.Add(sqlParam);
+                        sqlCommand.Parameters.Add(sqlParam);
+                    }
+                    retVal = sqlCommand.ExecuteScalar();
                 }
-                retVal = sqlCommand.ExecuteScalar();
             }
-
             finally
             {
+                try
+                {
+                    if (sqlCommand != null)
+                        sqlCommand.Dispose();
+                }
+                catch { }
+
                 sqlCommand = null;
                 sqlParam = null;
-
-                if (sqlConnection != null && sqlTrans == null)
-                    sqlConnection.Close();
-                sqlConnection = null;
             }
-
             return retVal;
         }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2100:Review SQL queries for security vulnerabilities")]
         public void ExecuteProcedureDirect(string connectionString, string procedureName, ParameterCollection procedureParams, int cmdTimeout)
         {
-            ExecuteProcedureDirect(connectionString, procedureName, procedureParams, null, cmdTimeout);
-        }
-
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2100:Review SQL queries for security vulnerabilities")]
-        public void ExecuteProcedureDirect(string connectionString, string procedureName, ParameterCollection procedureParams, SqlTransaction sqlTrans, int cmdTimeout)
-        {
-            SqlConnection sqlConnection = null;
-            SqlCommand sqlCommand;
-            SqlParameter sqlParam;
+            SqlCommand sqlCommand = null;
+            SqlParameter sqlParam = null;
 
             try
             {
-                if (sqlTrans == null)
+                using (SqlConnection sqlConnection = new SqlConnection(connectionString))
                 {
-                    sqlConnection = new SqlConnection(connectionString);
                     sqlConnection.Open();
+
+                    sqlCommand = new SqlCommand(procedureName, sqlConnection);
+                    sqlCommand.CommandType = CommandType.StoredProcedure;
+                    sqlCommand.CommandTimeout = cmdTimeout;
+
+                    foreach (Parameter param in procedureParams)
+                    {
+                        sqlParam = new SqlParameter(param.Name, param.Value);
+                        sqlParam.SqlDbType = param.Type;
+                        sqlParam.Direction = param.Direction;
+                        sqlParam.Size = param.Size;
+
+                        sqlCommand.Parameters.Add(sqlParam);
+                    }
+
+                    sqlCommand.ExecuteNonQuery();
                 }
-                else
-                {
-                    sqlConnection = sqlTrans.Connection;
-                }
-
-                sqlCommand = new SqlCommand(procedureName, sqlConnection, sqlTrans);
-                sqlCommand.CommandType = CommandType.StoredProcedure;
-                sqlCommand.CommandTimeout = cmdTimeout;
-
-                foreach (Parameter param in procedureParams)
-                {
-                    sqlParam = new SqlParameter(param.Name, param.Value);
-                    sqlParam.SqlDbType = param.Type;
-                    sqlParam.Direction = param.Direction;
-                    sqlParam.Size = param.Size;
-
-                    sqlCommand.Parameters.Add(sqlParam);
-                }
-
-                sqlCommand.ExecuteNonQuery();
             }
-
             finally
             {
+                try
+                {
+                    if (sqlCommand != null)
+                        sqlCommand.Dispose();
+                }
+                catch { }
+
                 sqlCommand = null;
                 sqlParam = null;
-
-                if (sqlConnection != null && sqlTrans == null)
-                    sqlConnection.Close();
-                sqlConnection = null;
             }
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2100:Review SQL queries for security vulnerabilities")]
         public void ExecuteCommand(string connectionString, string commandSql, int cmdTimeout)
         {
-            SqlConnection sqlConnection = null;
-            SqlCommand sqlCommand;
+            SqlCommand sqlCommand = null;
 
             try
             {
-                sqlConnection = new SqlConnection(connectionString);
-                sqlConnection.Open();
-
-                sqlCommand = new SqlCommand(commandSql, sqlConnection);
-                sqlCommand.CommandType = CommandType.Text;
-                sqlCommand.CommandTimeout = cmdTimeout;
-                sqlCommand.ExecuteNonQuery();
+                using (SqlConnection sqlConnection = new SqlConnection(connectionString))
+                {
+                    sqlConnection.Open();
+                    sqlCommand = new SqlCommand(commandSql, sqlConnection);
+                    sqlCommand.CommandType = CommandType.Text;
+                    sqlCommand.CommandTimeout = cmdTimeout;
+                    sqlCommand.ExecuteNonQuery();
+                }
             }
-
             finally
             {
-                sqlCommand = null;
+                try
+                {
+                    if (sqlCommand != null)
+                        sqlCommand.Dispose();
+                }
+                catch { }
 
-                if (sqlConnection != null)
-                    sqlConnection.Close();
-                sqlConnection = null;
+                sqlCommand = null;
             }
         }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2100:Review SQL queries for security vulnerabilities")]
         public DataSet ExecuteSQLDirect(string connectionString, string queryText, int cmdTimeout)
         {
-            return ExecuteSQLDirect(connectionString, queryText, null, cmdTimeout);
-        }
-
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2100:Review SQL queries for security vulnerabilities")]
-        public DataSet ExecuteSQLDirect(string connectionString, string queryText, SqlTransaction sqlTrans, int cmdTimeout)
-        {
-            SqlConnection sqlConnection = null;
-            SqlCommand sqlCommand;
-            SqlDataAdapter sqlAdapter;
-            DataSet returnDataSet;
+            SqlCommand sqlCommand = null;
+            SqlDataAdapter sqlAdapter = null;
+            DataSet returnDataSet = null;
 
             try
             {
-                if (sqlTrans == null)
+                using (SqlConnection sqlConnection = new SqlConnection(connectionString))
                 {
-                    sqlConnection = new SqlConnection(connectionString);
                     sqlConnection.Open();
-                }
-                else
-                {
-                    sqlConnection = sqlTrans.Connection;
-                }
 
-                sqlCommand = new SqlCommand(queryText, sqlConnection, sqlTrans);
-                sqlCommand.CommandType = CommandType.Text;
-                sqlCommand.CommandTimeout = cmdTimeout;
+                    sqlCommand = new SqlCommand(queryText, sqlConnection);
+                    sqlCommand.CommandType = CommandType.Text;
+                    sqlCommand.CommandTimeout = cmdTimeout;
 
-                //Now execute and return the results
-                sqlAdapter = new SqlDataAdapter(sqlCommand);
-                returnDataSet = new DataSet();
-                sqlAdapter.Fill(returnDataSet);
+                    //Now execute and return the results
+                    sqlAdapter = new SqlDataAdapter(sqlCommand);
+                    returnDataSet = new DataSet();
+                    sqlAdapter.Fill(returnDataSet);
+                }
             }
-
             finally
             {
+                try
+                {
+                    if (sqlCommand != null)
+                        sqlCommand.Dispose();
+
+                    if (sqlAdapter != null)
+                        sqlAdapter.Dispose();
+                }
+                catch { }
+
                 sqlCommand = null;
                 sqlAdapter = null;
-
-                if (sqlConnection != null && sqlTrans == null)
-                    sqlConnection.Close();
-
-                sqlConnection = null;
             }
-
             return returnDataSet;
-        }
-
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2100:Review SQL queries for security vulnerabilities")]
-        public SqlDataReader GetReaderDirect(string connectionString, string procedureName, ParameterCollection procedureParams, int cmdTimeout)
-        {
-            SqlConnection sqlConnection = null;
-            SqlCommand sqlCommand;
-            SqlParameter sqlParam;
-            SqlDataReader sqlReader;
-
-            sqlConnection = new SqlConnection(connectionString);
-            sqlConnection.Open();
-
-            sqlCommand = new SqlCommand(procedureName, sqlConnection);
-            sqlCommand.CommandType = CommandType.StoredProcedure;
-            sqlCommand.CommandTimeout = cmdTimeout;
-
-            foreach (Parameter param in procedureParams)
-            {
-                sqlParam = new SqlParameter(param.Name, param.Value);
-                sqlParam.SqlDbType = param.Type;
-                sqlParam.Direction = param.Direction;
-                sqlParam.Size = param.Size;
-
-                sqlCommand.Parameters.Add(sqlParam);
-            }
-
-            sqlReader = sqlCommand.ExecuteReader();
-
-            return sqlReader;
         }
 
         #endregion
@@ -623,7 +443,6 @@ namespace Phytel.Services.SQLServer
         #endregion
 
         #region Using configuration file for phytel services conn name
-
         public string GetServer(string dbConnName, string ContractID, string systemType)
         {
             string retVal = string.Empty;
@@ -642,12 +461,10 @@ namespace Phytel.Services.SQLServer
                     }
                 }
             }
-
             catch
             {
                 retVal = string.Empty;
             }
-
             return retVal;
         }
 
@@ -655,7 +472,6 @@ namespace Phytel.Services.SQLServer
         {
             return GetConnectionString(_dbConnName, databaseName, isContract, _defaultSystemType);
         }
-        #endregion
 
         public string GetConnectionString(string dbConnName, string databaseName, bool isContract, string systemType)
         {
@@ -690,6 +506,11 @@ namespace Phytel.Services.SQLServer
                     else
                         connectString = connectString = string.Format("Server={0};Database={1};Trusted_Connection=True;{2}",
                                                   "localhost", databaseName, additionalParams);
+
+                    if (ds != null)
+                        ds.Dispose();
+
+                    ds = null;
                 }
                 else
                     connectString = GetDBString(databaseName);
@@ -705,13 +526,13 @@ namespace Phytel.Services.SQLServer
 
         private string GetDBString(string databaseName)
         {
+            string connectString = string.Empty;
+            XmlNode xmlNode = null;
+            XmlDocument doc = new XmlDocument();
+            DataProtector dp = new DataProtector(DataProtector.Store.USE_MACHINE_STORE);
+
             try
             {
-                string connectString = string.Empty;
-                XmlNode xmlNode = null;
-                XmlDocument doc = new XmlDocument();
-                DataProtector dp = new DataProtector(DataProtector.Store.USE_MACHINE_STORE);
-
                 // Load the Phytel Database Security File
                 doc.Load(DataProtector.GetConfigurationPathAndFile());
 
@@ -755,17 +576,23 @@ namespace Phytel.Services.SQLServer
             {
                 string msg = ex.Message + System.Environment.NewLine + System.Reflection.MethodBase.GetCurrentMethod().DeclaringType.Name + ":" + System.Reflection.MethodBase.GetCurrentMethod().Name + System.Environment.NewLine;
                 throw new Exception(msg + ex.Source);
-            }            
+            }
+            finally
+            {
+                xmlNode = null;
+                doc = null;
+                dp = null;
+            }
         }
 
         private string GetContractParams(string databaseName)
         {
+            string connectParams = string.Empty;
+            XmlNode xmlNode = null;
+            XmlDocument doc = new XmlDocument();
+
             try
             {
-                string connectParams = string.Empty;
-                XmlNode xmlNode = null;
-                XmlDocument doc = new XmlDocument();
-
                 // Load the Phytel Database Security File
                 doc.Load(DataProtector.GetConfigurationPathAndFile());
 
@@ -796,7 +623,13 @@ namespace Phytel.Services.SQLServer
                 string msg = ex.Message + System.Environment.NewLine + System.Reflection.MethodBase.GetCurrentMethod().DeclaringType.Name + ":" + System.Reflection.MethodBase.GetCurrentMethod().Name + System.Environment.NewLine;
                 throw new Exception(msg + ex.Source);
             }
+            finally
+            {
+                xmlNode = null;
+                doc = null;
+            }
         }
+        #endregion
         #endregion
     }
 }
