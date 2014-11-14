@@ -4,7 +4,7 @@ using Phytel.API.Interface;
 
 namespace Phytel.API.DataDomain.PatientGoal.DTO
 {
-    public class GetInterventionsDataResponse : IDomainResponse
+    public class GetPatientInterventionsDataResponse : IDomainResponse
    {
         public List<PatientInterventionData> InterventionsData { get; set; }
         public double Version { get; set; }
