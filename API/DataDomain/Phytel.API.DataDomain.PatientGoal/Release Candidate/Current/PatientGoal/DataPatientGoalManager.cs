@@ -7,15 +7,19 @@ using MongoDB.Bson;
 
 namespace Phytel.API.DataDomain.PatientGoal
 {
-    public static class PatientGoalDataManager
+    public  class PatientGoalDataManager : IPatientGoalDataManager
     {
-        public static PutInitializeGoalDataResponse InitializeGoal(PutInitializeGoalDataRequest request)
+        public IPatientGoalRepositoryFactory Factory { get; set; }
+        public IAttributeRepositoryFactory AttrFactory { get; set; }
+
+        #region Initialize
+        public PutInitializeGoalDataResponse InitializeGoal(PutInitializeGoalDataRequest request)
         {
             PutInitializeGoalDataResponse response = null;
             try
             {
                 response = new PutInitializeGoalDataResponse();
-                IPatientGoalRepository<PutInitializeGoalDataResponse> repo = PatientGoalRepositoryFactory<PutInitializeGoalDataResponse>.GetPatientGoalRepository(request.ContractNumber, request.Context, request.UserId);
+                IGoalRepository repo = Factory.GetRepository(request, RepositoryType.PatientGoal);
 
                 response.Goal = (PatientGoalData)repo.Initialize(request);
                 response.Version = request.Version;
@@ -27,13 +31,13 @@ namespace Phytel.API.DataDomain.PatientGoal
             return response;
         }
 
-        public static PutInitializeBarrierDataResponse InitializeBarrier(PutInitializeBarrierDataRequest request)
+        public PutInitializeBarrierDataResponse InitializeBarrier(PutInitializeBarrierDataRequest request)
         {
             PutInitializeBarrierDataResponse response = null;
             try
             {
                 response = new PutInitializeBarrierDataResponse();
-                IPatientGoalRepository<PutInitializeBarrierDataResponse> repo = PatientGoalRepositoryFactory<PutInitializeBarrierDataResponse>.GetPatientBarrierRepository(request.ContractNumber, request.Context, request.UserId);
+                IGoalRepository repo = Factory.GetRepository(request, RepositoryType.PatientBarrier);
 
                 response.Id = (string)repo.Initialize(request);
                 response.Version = request.Version;
@@ -45,25 +49,61 @@ namespace Phytel.API.DataDomain.PatientGoal
             return response;
         }
 
-        public static GetPatientGoalDataResponse GetPatientGoal(GetPatientGoalDataRequest request)
+        public PutInitializeInterventionResponse InsertNewPatientIntervention(PutInitializeInterventionRequest request)
+        {
+            try
+            {
+                PutInitializeInterventionResponse result = new PutInitializeInterventionResponse();
+
+                IGoalRepository repo = Factory.GetRepository(request, RepositoryType.PatientIntervention);
+
+                result.Id = (string)repo.Initialize(request);
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public PutInitializeTaskResponse InsertNewPatientTask(PutInitializeTaskRequest request)
+        {
+            try
+            {
+                PutInitializeTaskResponse result = new PutInitializeTaskResponse();
+
+                IGoalRepository repo = Factory.GetRepository(request, RepositoryType.PatientTask);
+
+                result.Task = (PatientTaskData)repo.Initialize(request);
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        #endregion
+
+        #region Get
+        public GetPatientGoalDataResponse GetPatientGoal(GetPatientGoalDataRequest request)
         {
             GetPatientGoalDataResponse result = null;
             try
             {
                 result = new GetPatientGoalDataResponse();
-                IPatientGoalRepository<PatientGoalData> goalRepo = PatientGoalRepositoryFactory<PatientGoalData>.GetPatientGoalRepository(request.ContractNumber, request.Context, request.UserId);
-                
-                PatientGoalData patientGoalData = goalRepo.FindByID(request.Id) as PatientGoalData;
+                IGoalRepository repo = Factory.GetRepository(request, RepositoryType.PatientGoal);
+
+                PatientGoalData patientGoalData = repo.FindByID(request.Id) as PatientGoalData;
                 if (patientGoalData != null)
                 {
                     //Get all barriers for a given goal
-                    patientGoalData.BarriersData = getBarriersByPatientGoalId(request.ContractNumber, request.Context, patientGoalData.Id, request.UserId);
+                    patientGoalData.BarriersData = getBarriersByPatientGoalId(request, patientGoalData.Id);
 
                     //Get all tasks for a given goal
-                    patientGoalData.TasksData = getTasksByPatientGoalId(request.ContractNumber, request.Context, patientGoalData.Id, request.UserId);
-                    
+                    patientGoalData.TasksData = getTasksByPatientGoalId(request, patientGoalData.Id);
+
                     //Get all interventions for a given goal
-                    patientGoalData.InterventionsData = getInterventionsByPatientGoalId(request.ContractNumber, request.Context, patientGoalData.Id, request.UserId);
+                    patientGoalData.InterventionsData = getInterventionsByPatientGoalId(request, patientGoalData.Id);
                 }
 
                 result.GoalData = patientGoalData;
@@ -76,48 +116,202 @@ namespace Phytel.API.DataDomain.PatientGoal
             }
         }
 
-        public static GetAllPatientGoalsDataResponse GetPatientGoalList(GetAllPatientGoalsDataRequest request)
+        public GetPatientGoalByTemplateIdResponse GetPatientByTemplateIdGoal(GetPatientGoalByTemplateIdRequest request)
+        {
+            GetPatientGoalByTemplateIdResponse result = null;
+            try
+            {
+                result = new GetPatientGoalByTemplateIdResponse();
+                IGoalRepository repo = Factory.GetRepository(request, RepositoryType.PatientGoal);
+
+                PatientGoalData patientGoalData = repo.FindByTemplateId(request.PatientId, request.TemplateId) as PatientGoalData;
+
+                result.GoalData = patientGoalData;
+                result.Version = request.Version;
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public GetPatientTaskByTemplateIdResponse GetPatientTaskByTemplateId(GetPatientTaskByTemplateIdRequest request)
+        {
+            GetPatientTaskByTemplateIdResponse result = null;
+            try
+            {
+                result = new GetPatientTaskByTemplateIdResponse();
+                IGoalRepository repo = Factory.GetRepository(request, RepositoryType.PatientTask);
+
+                PatientTaskData patientTaskData = repo.FindByTemplateId(request.GoalId, request.TemplateId) as PatientTaskData;
+                //if (patientGoalData != null)
+                //{
+                //    //Get all barriers for a given goal
+                //    patientGoalData.BarriersData = getBarriersByPatientGoalId(request, patientGoalData.Id);
+
+                //    //Get all tasks for a given goal
+                //    patientGoalData.TasksData = getTasksByPatientGoalId(request, patientGoalData.Id);
+
+                //    //Get all interventions for a given goal
+                //    patientGoalData.InterventionsData = getInterventionsByPatientGoalId(request, patientGoalData.Id);
+                //}
+
+                result.TaskData = patientTaskData;
+                result.Version = request.Version;
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public GetPatientInterventionByTemplateIdResponse GetPatientInterventionByTemplateId(GetPatientInterventionByTemplateIdRequest request)
+        {
+            GetPatientInterventionByTemplateIdResponse result = null;
+            try
+            {
+                result = new GetPatientInterventionByTemplateIdResponse();
+                IGoalRepository repo = Factory.GetRepository(request, RepositoryType.PatientIntervention);
+
+                PatientInterventionData patientInterventionData = repo.FindByTemplateId(request.GoalId, request.TemplateId) as PatientInterventionData;
+                //if (patientGoalData != null)
+                //{
+                //    //Get all barriers for a given goal
+                //    patientGoalData.BarriersData = getBarriersByPatientGoalId(request, patientGoalData.Id);
+
+                //    //Get all tasks for a given goal
+                //    patientGoalData.TasksData = getTasksByPatientGoalId(request, patientGoalData.Id);
+
+                //    //Get all interventions for a given goal
+                //    patientGoalData.InterventionsData = getInterventionsByPatientGoalId(request, patientGoalData.Id);
+                //}
+
+                result.InterventionData = patientInterventionData;
+                result.Version = request.Version;
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public GetTaskDataResponse GetTask(GetTaskDataRequest request)
+        {
+            GetTaskDataResponse result = null;
+            try
+            {
+                result = new GetTaskDataResponse();
+                IGoalRepository repo = Factory.GetRepository(request, RepositoryType.Task);
+
+                var intData = repo.FindByID(request.Id) as TaskData;
+
+                result.TaskData = intData;
+                result.Version = request.Version;
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public GetInterventionDataResponse GetIntervention(GetInterventionDataRequest request)
+        {
+            GetInterventionDataResponse result = null;
+            try
+            {
+                result = new GetInterventionDataResponse();
+                IGoalRepository repo = Factory.GetRepository(request, RepositoryType.Intervention);
+
+                var intData = repo.FindByID(request.Id) as InterventionData;
+
+                result.InterventionsData = intData;
+                result.Version = request.Version;
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public GetGoalDataResponse GetGoal(GetGoalDataRequest request)
+        {
+            GetGoalDataResponse result = null;
+            try
+            {
+                result = new GetGoalDataResponse();
+                IGoalRepository repo = Factory.GetRepository(request, RepositoryType.Goal);
+
+                GoalData goalData = repo.FindByID(request.Id) as GoalData;
+
+                //if (patientGoalData != null)
+                //{
+                //    //Get all barriers for a given goal
+                //    patientGoalData.BarriersData = getBarriersByPatientGoalId(request, patientGoalData.Id);
+
+                //    //Get all tasks for a given goal
+                //    patientGoalData.TasksData = getTasksByPatientGoalId(request, patientGoalData.Id);
+
+                //    //Get all interventions for a given goal
+                //    patientGoalData.InterventionsData = getInterventionsByPatientGoalId(request, patientGoalData.Id);
+                //}
+
+                result.GoalData = goalData;
+                result.Version = request.Version;
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public GetAllPatientGoalsDataResponse GetPatientGoalList(GetAllPatientGoalsDataRequest request)
         {
             GetAllPatientGoalsDataResponse result = null;
             try
             {
                 result = new GetAllPatientGoalsDataResponse();
-                IPatientGoalRepository<PatientGoalViewData> goalRepo = PatientGoalRepositoryFactory<PatientGoalViewData>.GetPatientGoalRepository(request.ContractNumber, request.Context, request.UserId);
+                IGoalRepository goalRepo = Factory.GetRepository(request, RepositoryType.PatientGoal);
 
                 List<PatientGoalViewData> goalViewDataList = goalRepo.Find(request.PatientId) as List<PatientGoalViewData>;
                 List<PatientGoalViewData> goalDataView = null;
                 if (goalViewDataList != null && goalViewDataList.Count > 0)
                 {
                     goalDataView = new List<PatientGoalViewData>();
-                    foreach(PatientGoalViewData p in goalViewDataList)
+                    foreach (PatientGoalViewData p in goalViewDataList)
                     {
                         string contractNumber = request.ContractNumber;
-                        string context  = request.Context;
-                        
+                        string context = request.Context;
+
                         PatientGoalViewData view = new PatientGoalViewData();
                         view = p;
 
                         //Barriers
                         List<ChildViewData> barrierChildView = null;
-                        List<PatientBarrierData> barrierData = getBarriersByPatientGoalId(contractNumber, context, p.Id, request.UserId);
-                        if(barrierData != null && barrierData.Count > 0)
-                        {   
+                        List<PatientBarrierData> barrierData = getBarriersByPatientGoalId(request, p.Id);
+                        if (barrierData != null && barrierData.Count > 0)
+                        {
                             barrierChildView = new List<ChildViewData>();
-                            foreach(PatientBarrierData b in barrierData)
+                            foreach (PatientBarrierData b in barrierData)
                             {
-                                barrierChildView.Add(new ChildViewData { Id = b.Id, PatientGoalId = b.PatientGoalId, Name = b.Name, StatusId = ((int)(b.StatusId))});
+                                barrierChildView.Add(new ChildViewData { Id = b.Id, PatientGoalId = b.PatientGoalId, Name = b.Name, StatusId = ((int)(b.StatusId)) });
                                 barrierChildView = barrierChildView.OrderBy(o => o.Name).ToList();
                             }
                         }
-                        view.BarriersData =  barrierChildView; 
+                        view.BarriersData = barrierChildView;
 
                         //Tasks
                         List<ChildViewData> taskChildView = null;
-                        List<PatientTaskData> taskData = getTasksByPatientGoalId(contractNumber, context, p.Id, request.UserId);
-                        if(taskData != null && taskData.Count > 0)
-                        {   
+                        List<PatientTaskData> taskData = getTasksByPatientGoalId(request, p.Id);
+                        if (taskData != null && taskData.Count > 0)
+                        {
                             taskChildView = new List<ChildViewData>();
-                            foreach(PatientTaskData b in taskData)
+                            foreach (PatientTaskData b in taskData)
                             {
                                 taskChildView.Add(new ChildViewData { Id = b.Id, PatientGoalId = b.PatientGoalId, Description = b.Description, StatusId = ((int)(b.StatusId)) });
                                 taskChildView = taskChildView.OrderBy(o => o.Description).ToList();
@@ -127,9 +321,9 @@ namespace Phytel.API.DataDomain.PatientGoal
 
                         //Interventions
                         List<ChildViewData> interChildView = null;
-                        List<PatientInterventionData> interData = getInterventionsByPatientGoalId(contractNumber, context, p.Id, request.UserId);
+                        List<PatientInterventionData> interData = getInterventionsByPatientGoalId(request, p.Id);
                         if (interData != null && interData.Count > 0)
-                        {   
+                        {
                             interChildView = new List<ChildViewData>();
                             foreach (PatientInterventionData b in interData)
                             {
@@ -150,47 +344,76 @@ namespace Phytel.API.DataDomain.PatientGoal
             {
                 throw ex;
             }
+        }
+
+        public GetPatientInterventionsDataResponse GetPatientInterventions(GetPatientInterventionsDataRequest request)
+        {
+            try
+            {
+                var result = new GetPatientInterventionsDataResponse();
+
+                IGoalRepository intRepo = Factory.GetRepository(request, RepositoryType.PatientIntervention);
+                IGoalRepository goalRepo = Factory.GetRepository(request, RepositoryType.PatientGoal);
+                intRepo.UserId = request.UserId;
+                // Get all the goals associated to the patient in the request object.
+                List<string> patientGoalIds = null;
+                if (!string.IsNullOrEmpty(request.PatientId))
+                {
+                    List<PatientGoalViewData> goalViewDataList = goalRepo.Find(request.PatientId) as List<PatientGoalViewData>;
+                    patientGoalIds = goalViewDataList.Select(a => a.Id).ToList();
+                }
+                result.InterventionsData = (List<PatientInterventionData>)intRepo.Search(request, patientGoalIds);
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public GetPatientTasksDataResponse GetTasks(GetPatientTasksDataRequest request)
+        {
+            try
+            {
+                var result = new GetPatientTasksDataResponse();
+
+                IGoalRepository taskRepo = Factory.GetRepository(request, RepositoryType.PatientTask);
+                taskRepo.UserId = request.UserId;
+                IGoalRepository goalRepo = Factory.GetRepository(request, RepositoryType.PatientGoal);
+                // Get all the goals associated to the patient in the request object.
+                List<string> patientGoalIds = null;
+                if (!string.IsNullOrEmpty(request.PatientId))
+                {
+                    List<PatientGoalViewData> goalViewDataList = goalRepo.Find(request.PatientId) as List<PatientGoalViewData>;
+                    patientGoalIds = goalViewDataList.Select(a => a.Id).ToList();
+                }
+                result.TasksData = (List<PatientTaskData>)taskRepo.Search(request, patientGoalIds);
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         } 
-
-        #region Private methods
-        private static List<PatientBarrierData> getBarriersByPatientGoalId(string contractNumber, string context, string patientGoalId, string userId)
-        {
-            IPatientGoalRepository<PatientBarrierData> barrierRepo = PatientGoalRepositoryFactory<PatientBarrierData>.GetPatientBarrierRepository(contractNumber, context, userId);
-            
-            List<PatientBarrierData> barrierDataList = barrierRepo.Find(patientGoalId) as List<PatientBarrierData>; 
-            return barrierDataList;
-        }
-
-        private static List<PatientTaskData> getTasksByPatientGoalId(string contractNumber, string context, string patientGoalId, string userId)
-        {
-            IPatientGoalRepository<PatientTaskData> taskRepo = PatientGoalRepositoryFactory<PatientTaskData>.GetPatientTaskRepository(contractNumber, context, userId);
-            
-            List<PatientTaskData> taskDataList = taskRepo.Find(patientGoalId) as List<PatientTaskData>;
-            return taskDataList;
-        }
-
-        private static List<PatientInterventionData> getInterventionsByPatientGoalId(string contractNumber, string context, string patientGoalId, string userId)
-        {
-            IPatientGoalRepository<PatientInterventionData> interventionRepo = PatientGoalRepositoryFactory<PatientInterventionData>.GetPatientInterventionRepository(contractNumber, context, userId);
-            
-            List<PatientInterventionData> interventionDataList = interventionRepo.Find(patientGoalId) as List<PatientInterventionData>;
-            return interventionDataList;
-        }
-
         #endregion
 
-        #region // TASKS
-        public static PutPatientGoalDataResponse PutPatientGoal(PutPatientGoalDataRequest request)
+        #region Update
+        public PutUpdateGoalDataResponse PutPatientGoal(PutUpdateGoalDataRequest request)
         {
             try
             {
-                PutPatientGoalDataResponse result = new PutPatientGoalDataResponse();
+                PutUpdateGoalDataResponse result = new PutUpdateGoalDataResponse();
 
-                IPatientGoalRepository<PutPatientGoalDataResponse> repo = PatientGoalRepositoryFactory<PutPatientGoalDataResponse>.GetPatientGoalRepository(request.ContractNumber, request.Context, request.UserId);
-
-                bool status = (bool)repo.Update(request);
-
-                result.Updated = status;
+                IGoalRepository repo = Factory.GetRepository(request, RepositoryType.PatientGoal);
+                if (request.Goal != null)
+                {
+                    bool status = (bool)repo.Update(request);
+                    if (status)
+                    {
+                        PatientGoalData data = repo.FindByID(request.Goal.Id) as PatientGoalData;
+                        result.GoalData = data;
+                    }
+                }
                 return result;
             }
             catch (Exception ex)
@@ -199,48 +422,37 @@ namespace Phytel.API.DataDomain.PatientGoal
             }
         }
 
-        public static PutInitializeTaskResponse InsertNewPatientTask(PutInitializeTaskRequest request)
-        {
-            try
-            {
-                PutInitializeTaskResponse result = new PutInitializeTaskResponse();
-
-                IPatientGoalRepository<PutInitializeTaskResponse> repo = PatientGoalRepositoryFactory<PutInitializeTaskResponse>.GetPatientTaskRepository(request.ContractNumber, request.Context, request.UserId);
-                
-                result.Task = (PatientTaskData)repo.Initialize(request);
-                return result;
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
-
-        public static PutUpdateTaskResponse UpdatePatientTask(PutUpdateTaskRequest request)
+        public PutUpdateTaskResponse UpdatePatientTask(PutUpdateTaskRequest request)
         {
             try
             {
                 PutUpdateTaskResponse result = new PutUpdateTaskResponse();
 
-                IPatientGoalRepository<PutUpdateTaskResponse> repo = PatientGoalRepositoryFactory<PutUpdateTaskResponse>.GetPatientTaskRepository(request.ContractNumber, request.Context, request.UserId);
-                
-                List<PatientTaskData> ptd = (List<PatientTaskData>)repo.FindByGoalId(request.PatientGoalId);
-                List<string> dbTaskIdList = GetTaskIds(ptd);
+                IGoalRepository repo = Factory.GetRepository(request, RepositoryType.PatientTask);
 
-                // update existing task entries with a delete
-                List<string> excludes = dbTaskIdList.Except(request.TaskIdsList).ToList<string>();
-                excludes.ForEach(ex =>
+                if (request.TaskIdsList != null && request.TaskIdsList.Count > 0)
                 {
-                    // create delete task request to insert
-                    DeleteTaskDataRequest dtr = new DeleteTaskDataRequest { TaskId = ex, UserId = request.UserId };
-                    repo.Delete(dtr);
-                });
+                    List<PatientTaskData> ptd = (List<PatientTaskData>)repo.Find(request.PatientGoalId);
+                    List<string> dbTaskIdList = GetTaskIds(ptd);
 
-                bool status = false;
-                if (request.TaskIdsList.Count > 0)
-                    status = (bool)repo.Update(request);
-
-                result.Updated = status;
+                    // update existing task entries with a delete
+                    List<string> excludes = dbTaskIdList.Except(request.TaskIdsList).ToList<string>();
+                    excludes.ForEach(ex =>
+                    {
+                        // create delete task request to insert
+                        DeleteTaskDataRequest dtr = new DeleteTaskDataRequest { TaskId = ex, UserId = request.UserId };
+                        repo.Delete(dtr);
+                    });
+                }
+                if (request.Task != null && request.Task.Id != "0")
+                {
+                    bool status = (bool)repo.Update(request);
+                    if (status)
+                    {
+                        PatientTaskData data = repo.FindByID(request.Task.Id) as PatientTaskData;
+                        result.TaskData = data;
+                    }
+                }
                 return result;
             }
             catch (Exception ex)
@@ -249,31 +461,37 @@ namespace Phytel.API.DataDomain.PatientGoal
             }
         }
 
-        public static PutUpdateInterventionResponse UpdatePatientIntervention(PutUpdateInterventionRequest request)
+        public PutUpdateInterventionResponse UpdatePatientIntervention(PutUpdateInterventionRequest request)
         {
             try
             {
                 PutUpdateInterventionResponse result = new PutUpdateInterventionResponse();
 
-                IPatientGoalRepository<PutUpdateInterventionResponse> repo = PatientGoalRepositoryFactory<PutUpdateInterventionResponse>.GetPatientInterventionRepository(request.ContractNumber, request.Context, request.UserId);
-                
-                List<PatientInterventionData> pid = (List<PatientInterventionData>)repo.FindByGoalId(request.PatientGoalId);
-                List<string> dbTaskIdList = GetInterventionIds(pid);
+                IGoalRepository repo = Factory.GetRepository(request, RepositoryType.PatientIntervention);
 
-                // update existing intervention entries with a delete
-                List<string> excludes = dbTaskIdList.Except(request.InterventionIdsList).ToList<string>();
-                excludes.ForEach(ex =>
+                if (request.InterventionIdsList != null && request.InterventionIdsList.Count > 0)
                 {
-                    // create delete intervention request to insert
-                    DeleteInterventionDataRequest dtr = new DeleteInterventionDataRequest { InterventionId = ex, UserId = request.UserId };
-                    repo.Delete(dtr);
-                });
+                    List<PatientInterventionData> pid = (List<PatientInterventionData>)repo.Find(request.PatientGoalId);
+                    List<string> dbTaskIdList = GetInterventionIds(pid);
 
-                bool status = false;
-                if (request.InterventionIdsList.Count > 0)
-                    status = (bool)repo.Update(request);
-
-                result.Updated = status;
+                    // update existing intervention entries with a delete
+                    List<string> excludes = dbTaskIdList.Except(request.InterventionIdsList).ToList<string>();
+                    excludes.ForEach(ex =>
+                    {
+                        // create delete intervention request to insert
+                        DeleteInterventionDataRequest dtr = new DeleteInterventionDataRequest { InterventionId = ex, UserId = request.UserId };
+                        repo.Delete(dtr);
+                    });
+                }
+                if (request.Intervention != null && request.Intervention.Id != "0")
+                {
+                    bool status = (bool)repo.Update(request);
+                    if (status)
+                    {
+                        PatientInterventionData data = repo.FindByID(request.Intervention.Id) as PatientInterventionData;
+                        result.InterventionData = data;
+                    }
+                }
                 return result;
             }
             catch (Exception ex)
@@ -282,125 +500,54 @@ namespace Phytel.API.DataDomain.PatientGoal
             }
         }
 
-        public static PutUpdateBarrierResponse UpdatePatientBarrier(PutUpdateBarrierRequest request)
+        public PutUpdateBarrierResponse UpdatePatientBarrier(PutUpdateBarrierRequest request)
         {
             try
             {
                 PutUpdateBarrierResponse result = new PutUpdateBarrierResponse();
 
-                IPatientGoalRepository<PutUpdateBarrierResponse> repo = PatientGoalRepositoryFactory<PutUpdateBarrierResponse>.GetPatientBarrierRepository(request.ContractNumber, request.Context, request.UserId);
-                
-                List<PatientBarrierData> pid = (List<PatientBarrierData>)repo.FindByGoalId(request.PatientGoalId);
-                List<string> dbBarrierIdList = GetBarrierIds(pid);
+                IGoalRepository repo = Factory.GetRepository(request, RepositoryType.PatientBarrier);
 
-                // update existing barrier entries with a delete
-                List<string> excludes = dbBarrierIdList.Except(request.BarrierIdsList).ToList<string>();
-                excludes.ForEach(ex =>
+                if (request.BarrierIdsList != null && request.BarrierIdsList.Count > 0)
                 {
-                    // create delete barrier request to insert
-                    DeleteBarrierDataRequest dbr = new DeleteBarrierDataRequest { BarrierId = ex, UserId = request.UserId };
-                    repo.Delete(dbr);
-                });
+                    List<PatientBarrierData> pid = (List<PatientBarrierData>)repo.Find(request.PatientGoalId);
+                    List<string> dbBarrierIdList = GetBarrierIds(pid);
 
-                bool status = false;
-                if (request.BarrierIdsList.Count > 0)
-                    status = (bool)repo.Update(request);
-
-                result.Updated = status;
+                    // update existing barrier entries with a delete
+                    List<string> excludes = dbBarrierIdList.Except(request.BarrierIdsList).ToList<string>();
+                    excludes.ForEach(ex =>
+                    {
+                        // create delete barrier request to insert
+                        DeleteBarrierDataRequest dbr = new DeleteBarrierDataRequest { BarrierId = ex, UserId = request.UserId };
+                        repo.Delete(dbr);
+                    });
+                }
+                if (request.Barrier != null && request.Barrier.Id != "0")
+                {
+                    bool status = (bool)repo.Update(request);
+                    if (status)
+                    {
+                        PatientBarrierData data = repo.FindByID(request.Barrier.Id) as PatientBarrierData;
+                        result.BarrierData = data;
+                    }
+                }
                 return result;
             }
             catch (Exception ex)
             {
                 throw ex;
             }
-        }
-
-        private static List<string> GetInterventionIds(List<PatientInterventionData> ptd)
-        {
-            List<string> list = new List<string>();
-            try
-            {
-                if (ptd != null && ptd.Count > 0)
-                {
-                    ptd.ForEach(t =>
-                    {
-                        list.Add(t.Id);
-                    });
-                }
-                return list;
-            }
-            catch (Exception ex)
-            {
-                throw;
-            }
-        }
-
-        private static List<string> GetBarrierIds(List<PatientBarrierData> ptd)
-        {
-            List<string> list = new List<string>();
-            try
-            {
-                if (ptd != null && ptd.Count > 0)
-                {
-                    ptd.ForEach(t =>
-                    {
-                        list.Add(t.Id);
-                    });
-                }
-                return list;
-            }
-            catch (Exception ex)
-            {
-                throw;
-            }
-        }
-
-        private static List<string> GetTaskIds(List<PatientTaskData> ptd)
-        {
-            List<string> list = new List<string>();
-            try
-            {
-                if (ptd != null && ptd.Count > 0)
-                {
-                    ptd.ForEach(t =>
-                    {
-                        list.Add(t.Id);
-                    });
-                }
-                return list;
-            }
-            catch (Exception ex)
-            {
-                throw;
-            }
-        }
+        } 
         #endregion
 
-        public static PutInitializeInterventionResponse InsertNewPatientIntervention(PutInitializeInterventionRequest request)
-        {
-            try
-            {
-                PutInitializeInterventionResponse result = new PutInitializeInterventionResponse();
-
-                IPatientGoalRepository<PutInitializeInterventionResponse> repo = PatientGoalRepositoryFactory<PutInitializeInterventionResponse>.GetPatientInterventionRepository(request.ContractNumber, request.Context, request.UserId);
-                
-                result.Id = (string)repo.Initialize(request);
-                return result;
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
-
-        #region Delete
-        public static DeletePatientGoalDataResponse DeletePatientGoal(DeletePatientGoalDataRequest request)
+        #region Delete & UndoDelete
+        public  DeletePatientGoalDataResponse DeletePatientGoal(DeletePatientGoalDataRequest request)
         {
             try
             {
                 DeletePatientGoalDataResponse result = new DeletePatientGoalDataResponse();
 
-                IPatientGoalRepository<DeletePatientGoalDataResponse> repo = PatientGoalRepositoryFactory<DeletePatientGoalDataResponse>.GetPatientGoalRepository(request.ContractNumber, request.Context, request.UserId);
+                IGoalRepository repo = Factory.GetRepository(request, RepositoryType.PatientGoal);
                 
                 repo.Delete(request);
 
@@ -413,15 +560,15 @@ namespace Phytel.API.DataDomain.PatientGoal
             }
         }
 
-        public static DeleteTaskDataResponse DeleteTask(DeleteTaskDataRequest request)
+        public  DeleteTaskDataResponse DeleteTask(DeleteTaskDataRequest request)
         {
             try
             {
                 DeleteTaskDataResponse result = new DeleteTaskDataResponse();
 
-                IPatientGoalRepository<DeleteTaskDataResponse> repo = PatientGoalRepositoryFactory<DeleteTaskDataResponse>.GetPatientTaskRepository(request.ContractNumber, request.Context, request.UserId);
+                IGoalRepository repo = Factory.GetRepository(request, RepositoryType.PatientTask);
                 
-                List<PatientTaskData> ptd = (List<PatientTaskData>)repo.FindByGoalId(request.PatientGoalId);
+                List<PatientTaskData> ptd = (List<PatientTaskData>)repo.Find(request.PatientGoalId);
                 List<string> deletedIds = null;
                 if (ptd != null && ptd.Count > 0)
                 {
@@ -443,15 +590,15 @@ namespace Phytel.API.DataDomain.PatientGoal
             }
         }
 
-        public static DeleteInterventionDataResponse DeleteIntervention(DeleteInterventionDataRequest request)
+        public  DeleteInterventionDataResponse DeleteIntervention(DeleteInterventionDataRequest request)
         {
             try
             {
                 DeleteInterventionDataResponse result = new DeleteInterventionDataResponse();
 
-                IPatientGoalRepository<DeleteInterventionDataResponse> repo = PatientGoalRepositoryFactory<DeleteInterventionDataResponse>.GetPatientInterventionRepository(request.ContractNumber, request.Context, request.UserId);
+                IGoalRepository repo = Factory.GetRepository(request, RepositoryType.PatientIntervention);
                 
-                List<PatientInterventionData> pid = (List<PatientInterventionData>)repo.FindByGoalId(request.PatientGoalId);
+                List<PatientInterventionData> pid = (List<PatientInterventionData>)repo.Find(request.PatientGoalId);
                 List<string> deletedIds = null;
                 if (pid != null && pid.Count > 0)
                 {
@@ -473,15 +620,15 @@ namespace Phytel.API.DataDomain.PatientGoal
             }
         }
 
-        public static DeleteBarrierDataResponse DeleteBarrier(DeleteBarrierDataRequest request)
+        public  DeleteBarrierDataResponse DeleteBarrier(DeleteBarrierDataRequest request)
         {
             try
             {
                 DeleteBarrierDataResponse result = new DeleteBarrierDataResponse();
 
-                IPatientGoalRepository<DeleteBarrierDataResponse> repo = PatientGoalRepositoryFactory<DeleteBarrierDataResponse>.GetPatientBarrierRepository(request.ContractNumber, request.Context, request.UserId);
+                IGoalRepository repo = Factory.GetRepository(request, RepositoryType.PatientBarrier);
                 
-                List<PatientBarrierData> pbd = (List<PatientBarrierData>)repo.FindByGoalId(request.PatientGoalId);
+                List<PatientBarrierData> pbd = (List<PatientBarrierData>)repo.Find(request.PatientGoalId);
                 List<string> deletedIds = null;
                 if (pbd != null && pbd.Count > 0)
                 {
@@ -501,36 +648,16 @@ namespace Phytel.API.DataDomain.PatientGoal
             {
                 throw ex;
             }
-        } 
-        #endregion
-
-        public static GetCustomAttributesDataResponse GetCustomAttributesByType(GetCustomAttributesDataRequest request)
-        {
-            GetCustomAttributesDataResponse result = null;
-            try
-            {
-                result = new GetCustomAttributesDataResponse();
-                IAttributeRepository<GetCustomAttributesDataResponse> repo = PatientGoalRepositoryFactory<GetCustomAttributesDataResponse>.GetAttributeLibraryRepository(request.ContractNumber, request.Context, request.UserId);
-                
-                result.CustomAttributes = repo.FindByType(request.TypeId) as List<CustomAttributeData>;
-                result.Version = request.Version;
-                return result;
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        
         }
 
-        public static DeletePatientGoalByPatientIdDataResponse DeletePatientGoalByPatientId(DeletePatientGoalByPatientIdDataRequest request)
+        public  DeletePatientGoalByPatientIdDataResponse DeletePatientGoalByPatientId(DeletePatientGoalByPatientIdDataRequest request)
         {
             DeletePatientGoalByPatientIdDataResponse response = null;
             bool success = false;
             try
             {
                 response = new DeletePatientGoalByPatientIdDataResponse();
-                IPatientGoalRepository<PatientGoalViewData> goalRepo = PatientGoalRepositoryFactory<PatientGoalViewData>.GetPatientGoalRepository(request.ContractNumber, request.Context, request.UserId);
+                IGoalRepository goalRepo = Factory.GetRepository(request, RepositoryType.PatientGoal);
 
                 List<PatientGoalViewData> goalViewDataList = goalRepo.Find(request.PatientId) as List<PatientGoalViewData>;
                 List<DeletedPatientGoal> deletedPatientGoals = null;
@@ -608,7 +735,7 @@ namespace Phytel.API.DataDomain.PatientGoal
                     });
                     response.DeletedPatientGoals = deletedPatientGoals;
                 }
-                else 
+                else
                 {
                     success = true;
                 }
@@ -618,24 +745,24 @@ namespace Phytel.API.DataDomain.PatientGoal
             catch (Exception ex) { throw ex; }
         }
 
-        public static UndoDeletePatientGoalDataResponse UndoDeletePatientGoals(UndoDeletePatientGoalDataRequest request)
+        public  UndoDeletePatientGoalDataResponse UndoDeletePatientGoals(UndoDeletePatientGoalDataRequest request)
         {
             UndoDeletePatientGoalDataResponse response = null;
             try
             {
                 response = new UndoDeletePatientGoalDataResponse();
-                IPatientGoalRepository<PatientGoalViewData> goalRepo = PatientGoalRepositoryFactory<PatientGoalViewData>.GetPatientGoalRepository(request.ContractNumber, request.Context, request.UserId);
+                IGoalRepository repo = Factory.GetRepository(request, RepositoryType.PatientGoal);
                 if (request.Ids != null && request.Ids.Count > 0)
                 {
                     request.Ids.ForEach(u =>
                     {
                         request.PatientGoalId = u.Id;
-                        goalRepo.UndoDelete(request);
+                        repo.UndoDelete(request);
 
                         #region Delete Barriers
                         if (u.PatientBarrierIds != null && u.PatientBarrierIds.Count > 0)
                         {
-                            IPatientGoalRepository<UndoDeleteBarrierDataRequest> barrierRepo = PatientGoalRepositoryFactory<UndoDeleteBarrierDataRequest>.GetPatientBarrierRepository(request.ContractNumber, request.Context, request.UserId);
+                            IGoalRepository barrierRepo = Factory.GetRepository(request, RepositoryType.PatientBarrier);
                             u.PatientBarrierIds.ForEach(b =>
                             {
                                 UndoDeleteBarrierDataRequest barrierRequest = new UndoDeleteBarrierDataRequest
@@ -655,7 +782,7 @@ namespace Phytel.API.DataDomain.PatientGoal
                         #region Delete Tasks
                         if (u.PatientTaskIds != null && u.PatientTaskIds.Count > 0)
                         {
-                            IPatientGoalRepository<UndoDeleteTaskDataRequest> taskRepo = PatientGoalRepositoryFactory<UndoDeleteTaskDataRequest>.GetPatientTaskRepository(request.ContractNumber, request.Context, request.UserId);
+                            IGoalRepository taskRepo = Factory.GetRepository(request, RepositoryType.PatientTask);
                             u.PatientTaskIds.ForEach(t =>
                             {
                                 UndoDeleteTaskDataRequest taskRequest = new UndoDeleteTaskDataRequest
@@ -674,7 +801,7 @@ namespace Phytel.API.DataDomain.PatientGoal
                         #region Delete Interventions
                         if (u.PatientInterventionIds != null && u.PatientInterventionIds.Count > 0)
                         {
-                            IPatientGoalRepository<UndoDeleteInterventionDataRequest> interventionRepo = PatientGoalRepositoryFactory<UndoDeleteInterventionDataRequest>.GetPatientInterventionRepository(request.ContractNumber, request.Context, request.UserId);
+                            IGoalRepository interventionRepo = Factory.GetRepository(request, RepositoryType.PatientIntervention);
                             u.PatientInterventionIds.ForEach(i =>
                             {
                                 UndoDeleteInterventionDataRequest interventionRequest = new UndoDeleteInterventionDataRequest
@@ -697,15 +824,38 @@ namespace Phytel.API.DataDomain.PatientGoal
             }
             catch (Exception ex) { throw ex; }
         }
+        #endregion
 
-        public static RemoveProgramInPatientGoalsDataResponse RemoveProgramInPatientGoals(RemoveProgramInPatientGoalsDataRequest request)
+        #region CustomAttribute
+        public GetCustomAttributesDataResponse GetCustomAttributesByType(GetCustomAttributesDataRequest request)
+        {
+            GetCustomAttributesDataResponse result = null;
+            try
+            {
+                result = new GetCustomAttributesDataResponse();
+                IAttributeRepository repo = AttrFactory.GetRepository(request, RepositoryType.AttributeLibrary);
+
+                result.CustomAttributes = repo.FindByType(request.TypeId) as List<CustomAttributeData>;
+                result.Version = request.Version;
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+        } 
+        #endregion
+
+        #region RemoveProgram
+        public RemoveProgramInPatientGoalsDataResponse RemoveProgramInPatientGoals(RemoveProgramInPatientGoalsDataRequest request)
         {
             RemoveProgramInPatientGoalsDataResponse response = null;
             try
             {
                 response = new RemoveProgramInPatientGoalsDataResponse();
 
-                IPatientGoalRepository<PatientGoalViewData> repo = PatientGoalRepositoryFactory<PatientGoalViewData>.GetPatientGoalRepository(request.ContractNumber, request.Context, request.UserId);
+                IGoalRepository repo = Factory.GetRepository(request, RepositoryType.PatientGoal);
                 if (request.ProgramId != null)
                 {
                     List<PatientGoalData> goals = repo.FindGoalsWithAProgramId(request.ProgramId) as List<PatientGoalData>;
@@ -724,6 +874,93 @@ namespace Phytel.API.DataDomain.PatientGoal
                 return response;
             }
             catch (Exception ex) { throw ex; }
+        } 
+        #endregion
+
+        #region Private methods
+        private List<PatientBarrierData> getBarriersByPatientGoalId(IDataDomainRequest request, string patientGoalId)
+        {
+            IGoalRepository repo = Factory.GetRepository(request, RepositoryType.PatientBarrier);
+
+            List<PatientBarrierData> barrierDataList = repo.Find(patientGoalId) as List<PatientBarrierData>;
+            return barrierDataList;
         }
+
+        private List<PatientTaskData> getTasksByPatientGoalId(IDataDomainRequest request, string patientGoalId)
+        {
+            IGoalRepository repo = Factory.GetRepository(request, RepositoryType.PatientTask);
+
+            List<PatientTaskData> taskDataList = repo.Find(patientGoalId) as List<PatientTaskData>;
+            return taskDataList;
+        }
+
+        private List<PatientInterventionData> getInterventionsByPatientGoalId(IDataDomainRequest request, string patientGoalId)
+        {
+            IGoalRepository repo = Factory.GetRepository(request, RepositoryType.PatientIntervention);
+
+            List<PatientInterventionData> interventionDataList = repo.Find(patientGoalId) as List<PatientInterventionData>;
+            return interventionDataList;
+        }
+
+        private List<string> GetInterventionIds(List<PatientInterventionData> ptd)
+        {
+            List<string> list = new List<string>();
+            try
+            {
+                if (ptd != null && ptd.Count > 0)
+                {
+                    ptd.ForEach(t =>
+                    {
+                        list.Add(t.Id);
+                    });
+                }
+                return list;
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+
+        private List<string> GetBarrierIds(List<PatientBarrierData> ptd)
+        {
+            List<string> list = new List<string>();
+            try
+            {
+                if (ptd != null && ptd.Count > 0)
+                {
+                    ptd.ForEach(t =>
+                    {
+                        list.Add(t.Id);
+                    });
+                }
+                return list;
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+
+        private List<string> GetTaskIds(List<PatientTaskData> ptd)
+        {
+            List<string> list = new List<string>();
+            try
+            {
+                if (ptd != null && ptd.Count > 0)
+                {
+                    ptd.ForEach(t =>
+                    {
+                        list.Add(t.Id);
+                    });
+                }
+                return list;
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+        #endregion
     }
 }   

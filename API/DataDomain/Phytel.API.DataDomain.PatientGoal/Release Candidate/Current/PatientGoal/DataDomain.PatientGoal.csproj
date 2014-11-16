@@ -35,7 +35,22 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Model|AnyCPU'">
+    <OutputPath>bin\Model\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AutoMapper">
+      <HintPath>..\..\..\..\..\packages\AutoMapper.3.2.1\lib\net40\AutoMapper.dll</HintPath>
+    </Reference>
+    <Reference Include="AutoMapper.Net4">
+      <HintPath>..\..\..\..\..\packages\AutoMapper.3.2.1\lib\net40\AutoMapper.Net4.dll</HintPath>
+    </Reference>
     <Reference Include="MongoDB.Bson">
       <HintPath>..\References\MongoDB.Bson.dll</HintPath>
     </Reference>
@@ -66,23 +81,33 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="IAttributeRepository.cs" />
-    <Compile Include="IPatientGoalRepository.cs" />
+    <Compile Include="IPatientGoalDataManager.cs" />
+    <Compile Include="IGoalRepository.cs" />
+    <Compile Include="IAttributeRepositoryFactory.cs" />
+    <Compile Include="IPatientGoalRepositoryFactory.cs" />
     <Compile Include="MongoDB\DTOUtil.cs" />
     <Compile Include="MongoDB\DTO\Enums.cs" />
     <Compile Include="MongoDB\DTO\MEAttributeLibrary.cs" />
     <Compile Include="MongoDB\DTO\MAttribute.cs" />
     <Compile Include="MongoDB\DTO\GoalBase.cs" />
     <Compile Include="MongoDB\DTO\MEPatientBarrier.cs" />
+    <Compile Include="MongoDB\DTO\MEGoal.cs" />
+    <Compile Include="MongoDB\DTO\MEIntervention.cs" />
+    <Compile Include="MongoDB\DTO\METask.cs" />
     <Compile Include="MongoDB\DTO\MEPatientTask.cs" />
     <Compile Include="MongoDB\DTO\MEPatientIntervention.cs" />
     <Compile Include="MongoDB\DTO\MEPatientGoal.cs" />
     <Compile Include="MongoDB\Repository\MongoPatientBarrierRepository.cs" />
     <Compile Include="MongoDB\Repository\MongoAttributeLibraryRepository.cs" />
+    <Compile Include="MongoDB\Repository\MongoGoalRepository.cs" />
+    <Compile Include="MongoDB\Repository\MongoInterventionRepository.cs" />
     <Compile Include="MongoDB\Repository\MongoPatientInterventionRepository.cs" />
     <Compile Include="MongoDB\Repository\MongoPatientGoalRepository.cs" />
     <Compile Include="MongoDB\PatientGoalMongoContext.cs" />
     <Compile Include="DataPatientGoalManager.cs" />
+    <Compile Include="MongoDB\Repository\MongoTaskRepository.cs" />
     <Compile Include="MongoDB\Repository\MongoPatientTaskRepository.cs" />
+    <Compile Include="AttributeRepositoryFactory.cs" />
     <Compile Include="PatientGoalRepositoryFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -105,6 +130,7 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
+  <Import Project="..\..\..\..\..\packages\AutoMapper.3.2.1\tools\AutoMapper.targets" Condition="Exists('..\..\..\..\..\packages\AutoMapper.3.2.1\tools\AutoMapper.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

@@ -18,7 +18,7 @@ using MongoDB.Bson.Serialization;
 
 namespace Phytel.API.DataDomain.PatientGoal
 {
-    public class MongoAttributeLibraryRepository<T> : IAttributeRepository<T>
+    public class MongoAttributeLibraryRepository : IAttributeRepository
     {
         private string _dbName = string.Empty;
 

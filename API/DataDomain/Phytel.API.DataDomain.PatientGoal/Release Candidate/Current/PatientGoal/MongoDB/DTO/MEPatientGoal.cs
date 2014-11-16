@@ -27,7 +27,6 @@ namespace Phytel.API.DataDomain.PatientGoal.DTO
         public const string SourceProperty = "src";
         public const string ProgramProperty = "prog";
         public const string TypeProperty = "type";
-        public const string StatusProperty = "sts";
         public const string EndDateProperty = "ed";
         public const string TargetValueProperty = "tv";
         public const string TargetDateProperty = "td";
@@ -49,7 +48,12 @@ namespace Phytel.API.DataDomain.PatientGoal.DTO
         [BsonElement(PatientIdProperty)]
         [BsonIgnoreIfNull(true)]
         public ObjectId PatientId { get; set; }
-        
+
+        public const string TemplateIdProperty = "tid";
+        [BsonElement(TemplateIdProperty)]
+        [BsonIgnoreIfNull(true)]
+        public ObjectId? TemplateId { get; set; }        
+
         [BsonElement(FocusAreaProperty)]
         [BsonIgnoreIfNull(true)]
         public List<ObjectId> FocusAreaIds { get; set; }
@@ -66,6 +70,7 @@ namespace Phytel.API.DataDomain.PatientGoal.DTO
         [BsonIgnoreIfNull(true)]
         public GoalType Type { get; set; }
 
+        public const string StatusProperty = "sts";
         [BsonElement(StatusProperty)]
         [BsonIgnoreIfNull(true)]
         public GoalTaskStatus Status { get; set; }

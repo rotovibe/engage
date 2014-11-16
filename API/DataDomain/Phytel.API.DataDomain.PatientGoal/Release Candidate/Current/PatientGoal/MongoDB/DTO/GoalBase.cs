@@ -33,5 +33,10 @@ namespace Phytel.API.DataDomain.PatientGoal.DTO
         [BsonIgnoreIfNull(true)]
         [BsonDateTimeOptions(Kind = System.DateTimeKind.Utc)]        
         public DateTime? StartDate { get; set; }
+
+        public const string StartDateRangeProperty = "sdr";
+        [BsonElement(StartDateRangeProperty)]
+        [BsonIgnoreIfNull(true)]
+        public int StartDateRange { get; set; }
     }
 }

@@ -6,7 +6,7 @@ namespace Phytel.API.DataDomain.PatientGoal.DTO
 {
     public class PutUpdateTaskResponse : IDomainResponse
     {
-        public bool Updated { get; set; }
+        public PatientTaskData TaskData { get; set; }
         public double Version { get; set; }
         public ResponseStatus Status { get; set; }
     }
