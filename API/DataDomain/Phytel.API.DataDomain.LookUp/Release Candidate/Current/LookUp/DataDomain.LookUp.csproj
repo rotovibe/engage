@@ -35,6 +35,15 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Model|AnyCPU'">
+    <OutputPath>bin\Model\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="MongoDB.Bson, Version=1.8.1.20, Culture=neutral, PublicKeyToken=f686731cfb9cc103, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -90,15 +99,22 @@
   <ItemGroup>
     <Compile Include="DataLookUpManager.cs" />
     <Compile Include="ILookUpRepository.cs" />
+    <Compile Include="MongoDB\DTO\Allergy\AllergySource.cs" />
+    <Compile Include="MongoDB\DTO\Allergy\AllergyType.cs" />
+    <Compile Include="MongoDB\DTO\Allergy\Reaction.cs" />
+    <Compile Include="MongoDB\DTO\Allergy\Severity.cs" />
     <Compile Include="MongoDB\DTO\CodingSystem.cs" />
+    <Compile Include="MongoDB\DTO\MedSupp\MedSuppType.cs" />
+    <Compile Include="MongoDB\DTO\MedSupp\FreqHowOften.cs" />
+    <Compile Include="MongoDB\DTO\MedSupp\FreqWhen.cs" />
     <Compile Include="MongoDB\DTO\ObservationType.cs" />
     <Compile Include="MongoDB\DTO\Goal\InterventionCategory.cs" />
     <Compile Include="MongoDB\DTO\Goal\BarrierCategory.cs" />
     <Compile Include="MongoDB\DTO\Goal\Source.cs" />
     <Compile Include="MongoDB\DTO\Goal\FocusArea.cs" />
-    <Compile Include="MongoDB\DTO\ILookUpData.cs" />
+    <Compile Include="MongoDB\BaseClasses\ILookUpData.cs" />
     <Compile Include="MongoDB\DTO\CareMemberType.cs" />
-    <Compile Include="MongoDB\DTO\LookUpBase.cs" />
+    <Compile Include="MongoDB\BaseClasses\LookUpBase.cs" />
     <Compile Include="MongoDB\DTO\Contact\Language.cs" />
     <Compile Include="MongoDB\DTO\Contact\CommType.cs" />
     <Compile Include="MongoDB\DTO\Contact\State.cs" />
@@ -115,7 +131,7 @@
     <Compile Include="MongoDB\DTO\Note\NoteMethod.cs" />
     <Compile Include="MongoDB\DTO\Problem.cs" />
     <Compile Include="MongoDB\DTO\ToDo\ToDoCategory.cs" />
-    <Compile Include="MongoDB\DTO\LookUpDetailsBase.cs" />
+    <Compile Include="MongoDB\BaseClasses\LookUpDetailsBase.cs" />
     <Compile Include="MongoDB\LookUpMongoContext.cs" />
     <Compile Include="MongoDB\Repository\MongoLookUpRepository.cs" />
     <Compile Include="LookUpRepositoryFactory.cs" />

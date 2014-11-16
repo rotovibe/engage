@@ -29,6 +29,13 @@ namespace Phytel.API.DataDomain.LookUp.DTO
         NoteOutcome = 19,
         NoteWho = 20,
         NoteSource = 21,
-        NoteDuration = 22
+        NoteDuration = 22,
+        AllergyType = 23,
+        Severity = 24,
+        Reaction = 25,
+        AllergySource = 26,
+        MedSuppType = 27,
+        FreqHowOften = 28,
+        FreqWhen = 29
     }
 }
