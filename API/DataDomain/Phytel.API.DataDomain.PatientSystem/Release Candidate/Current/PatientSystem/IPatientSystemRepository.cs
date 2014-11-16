@@ -8,7 +8,7 @@ using Phytel.API.Interface;
 
 namespace Phytel.API.DataDomain.PatientSystem
 {
-    public interface IPatientSystemRepository<T> : IRepository<T>
+    public interface IPatientSystemRepository : IRepository
     {
         IEnumerable<object> FindByPatientId(string patientId);
     }

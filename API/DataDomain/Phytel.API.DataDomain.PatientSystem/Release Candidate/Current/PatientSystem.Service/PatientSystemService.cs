@@ -11,6 +11,9 @@ namespace Phytel.API.DataDomain.PatientSystem.Service
 {
     public class PatientSystemService : ServiceStack.ServiceInterface.Service
     {
+        public IPatientSystemDataManager Manager { get; set; }
+
+        #region Gets
         public GetPatientSystemDataResponse Get(GetPatientSystemDataRequest request)
         {
             GetPatientSystemDataResponse response = new GetPatientSystemDataResponse();
@@ -19,7 +22,7 @@ namespace Phytel.API.DataDomain.PatientSystem.Service
                 if (string.IsNullOrEmpty(request.UserId))
                     throw new UnauthorizedAccessException("PatientSystemDD:Get()::Unauthorized Access");
 
-                response = PatientSystemDataManager.GetPatientSystem(request);
+                response = Manager.GetPatientSystem(request);
                 response.Version = request.Version;
             }
             catch (Exception ex)
@@ -32,15 +35,15 @@ namespace Phytel.API.DataDomain.PatientSystem.Service
             return response;
         }
 
-        public GetAllPatientSystemsDataResponse Post(GetAllPatientSystemsDataRequest request)
+        public GetPatientSystemsDataResponse Get(GetPatientSystemsDataRequest request)
         {
-            GetAllPatientSystemsDataResponse response = new GetAllPatientSystemsDataResponse();
+            GetPatientSystemsDataResponse response = new GetPatientSystemsDataResponse();
             try
             {
                 if (string.IsNullOrEmpty(request.UserId))
-                    throw new UnauthorizedAccessException("PatientSystemDD:Post()::Unauthorized Access");
+                    throw new UnauthorizedAccessException("PatientSystemDD:Get()::Unauthorized Access");
 
-                response = PatientSystemDataManager.GetAllPatientSystems(request);
+                response = Manager.GetPatientSystems(request);
                 response.Version = request.Version;
             }
             catch (Exception ex)
@@ -51,8 +54,10 @@ namespace Phytel.API.DataDomain.PatientSystem.Service
                 Common.Helper.LogException(int.Parse(aseProcessID), ex);
             }
             return response;
-        }
+        } 
+        #endregion
 
+        #region Insert & Update
         public PutPatientSystemDataResponse Put(PutPatientSystemDataRequest request)
         {
             PutPatientSystemDataResponse response = new PutPatientSystemDataResponse();
@@ -61,7 +66,7 @@ namespace Phytel.API.DataDomain.PatientSystem.Service
                 if (string.IsNullOrEmpty(request.UserId))
                     throw new UnauthorizedAccessException("PatientSystemDD:Put()::Unauthorized Access");
 
-                response = PatientSystemDataManager.PutPatientSystem(request);
+                response = Manager.InsertPatientSystem(request);
                 response.Version = request.Version;
             }
             catch (Exception ex)
@@ -74,6 +79,29 @@ namespace Phytel.API.DataDomain.PatientSystem.Service
             return response;
         }
 
+        public PutUpdatePatientSystemDataResponse Put(PutUpdatePatientSystemDataRequest request)
+        {
+            PutUpdatePatientSystemDataResponse response = new PutUpdatePatientSystemDataResponse();
+            try
+            {
+                if (string.IsNullOrEmpty(request.UserId))
+                    throw new UnauthorizedAccessException("PatientSystemDD:Put()::Unauthorized Access");
+
+                response = Manager.UpdatePatientSystem(request);
+                response.Version = request.Version;
+            }
+            catch (Exception ex)
+            {
+                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+
+                string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
+                Common.Helper.LogException(int.Parse(aseProcessID), ex);
+            }
+            return response;
+        } 
+        #endregion
+
+        #region Delete & UndoDelete
         public DeletePatientSystemByPatientIdDataResponse Delete(DeletePatientSystemByPatientIdDataRequest request)
         {
             DeletePatientSystemByPatientIdDataResponse response = new DeletePatientSystemByPatientIdDataResponse();
@@ -82,7 +110,7 @@ namespace Phytel.API.DataDomain.PatientSystem.Service
                 if (string.IsNullOrEmpty(request.UserId))
                     throw new UnauthorizedAccessException("PatientSystemDD:PatientSystemDelete()::Unauthorized Access");
 
-                response = PatientSystemDataManager.DeletePatientSystemByPatientId(request);
+                response = Manager.DeletePatientSystemByPatientId(request);
                 response.Version = request.Version;
             }
             catch (Exception ex)
@@ -103,7 +131,7 @@ namespace Phytel.API.DataDomain.PatientSystem.Service
                 if (string.IsNullOrEmpty(request.UserId))
                     throw new UnauthorizedAccessException("PatientSystemDD:PatientSystemUndoDelete()::Unauthorized Access");
 
-                response = PatientSystemDataManager.UndoDeletePatientSystems(request);
+                response = Manager.UndoDeletePatientSystems(request);
                 response.Version = request.Version;
             }
             catch (Exception ex)
@@ -114,6 +142,7 @@ namespace Phytel.API.DataDomain.PatientSystem.Service
                 Common.Helper.LogException(int.Parse(aseProcessID), ex);
             }
             return response;
-        }
+        } 
+        #endregion
     }
 }
