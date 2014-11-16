@@ -24,7 +24,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
         //            ProgramState = ProgramState.NotStarted,
         //            State = ElementState.NotStarted,
         //            AttributeStartDate = null,
-        //            AttributeEndDate = null,
+        //            AttrEndDate = null,
         //            AssignedBy = null,
         //            AssignedOn = null,
         //            StartDate = cp.StartDate, 

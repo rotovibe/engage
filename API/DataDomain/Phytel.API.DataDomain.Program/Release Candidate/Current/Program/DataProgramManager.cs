@@ -74,7 +74,7 @@ namespace Phytel.API.DataDomain.Program
                     }
 
                     response.Outcome.Result = 1;
-                    response.Outcome.Reason = "Successfully assigned this program for the patient";
+                    response.Outcome.Reason = "Successfully assigned this program for the individual";
                 }
 
                 return response;
@@ -422,7 +422,8 @@ namespace Phytel.API.DataDomain.Program
                         PatientId = Convert.ToString(pd.PatientId),
                                 ShortName = pd.ShortName,
                         Status = (int)pd.Status,
-                        ElementState = (int)pd.State
+                        ElementState = (int)pd.State,
+                         AttrEndDate = pd.AttributeEndDate
                             })
                         );
                         response.programs = lpi;
