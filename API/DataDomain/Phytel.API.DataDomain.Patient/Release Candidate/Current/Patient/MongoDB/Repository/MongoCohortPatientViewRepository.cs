@@ -500,5 +500,11 @@ namespace Phytel.API.DataDomain.Patient
         {
             throw new NotImplementedException();
         }
+
+
+        public PutPatientSystemIdDataResponse UpdatePatientSystem(PutPatientSystemIdDataRequest request)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

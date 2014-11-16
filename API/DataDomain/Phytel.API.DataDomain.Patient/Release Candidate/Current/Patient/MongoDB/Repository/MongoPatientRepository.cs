@@ -57,12 +57,18 @@ namespace Phytel.API.DataDomain.Patient
                 using (PatientMongoContext ctx = new PatientMongoContext(_dbName))
                 {
                     //Does the patient exist?
-                    IMongoQuery query = Query.And(
-                                    Query.EQ(MEPatient.FirstNameProperty, request.FirstName),
-                                    Query.EQ(MEPatient.LastNameProperty, request.LastName),
-                                    Query.EQ(MEPatient.DOBProperty, request.DOB));
-
+                    string searchQuery = string.Empty;
+                    searchQuery = string.Format("{0} : /^{1}$/i, {2} : /^{3}$/i, {4} : '{5}', {6} : false, {7} : null", MEPatient.FirstNameProperty, request.FirstName,
+                              MEPatient.LastNameProperty, request.LastName,
+                              MEPatient.DOBProperty, request.DOB,
+                              MEPatient.DeleteFlagProperty,
+                              MEPatient.TTLDateProperty);
+                    string jsonQuery = "{ ";
+                    jsonQuery += searchQuery;
+                    jsonQuery += " }";
+                    QueryDocument query = new QueryDocument(BsonSerializer.Deserialize<BsonDocument>(jsonQuery));
                     patient = ctx.Patients.Collection.FindOneAs<MEPatient>(query);
+
                     MongoCohortPatientViewRepository repo = new MongoCohortPatientViewRepository(_dbName);
                     repo.UserId = this.UserId;
 
@@ -87,7 +93,7 @@ namespace Phytel.API.DataDomain.Patient
                         };
                         ctx.Patients.Collection.Insert(patient);
 
-                       List<SearchFieldData> data = new List<SearchFieldData>();
+                        List<SearchFieldData> data = new List<SearchFieldData>();
                         data.Add(new SearchFieldData { Active = true, FieldName = Constants.FN, Value = patient.FirstName });
                         data.Add(new SearchFieldData { Active = true, FieldName = Constants.LN, Value = patient.LastName });
                         data.Add(new SearchFieldData { Active = true, FieldName = Constants.G, Value = patient.Gender.ToUpper() });
@@ -108,6 +114,10 @@ namespace Phytel.API.DataDomain.Patient
                         };
                         repo.Insert(cohortPatientRequest);
                     }
+                    else
+                    {
+                        throw new ApplicationException(string.Format("A patient by firstname: {0}, lastname: {1} and DOB: {2} already exists.", patient.FirstName, patient.LastName, patient.DOB ));
+                    }
 
                     AuditHelper.LogDataAudit(this.UserId, 
                                             MongoCollectionName.Patient.ToString(), 
@@ -125,7 +135,6 @@ namespace Phytel.API.DataDomain.Patient
             {
                 throw ex;
             }
-        
         }
 
         public object InsertAll(List<object> entities)
@@ -828,6 +837,40 @@ namespace Phytel.API.DataDomain.Patient
                 return patientData;
             }
             catch (Exception) { throw; }
+        }
+
+
+        public PutPatientSystemIdDataResponse UpdatePatientSystem(PutPatientSystemIdDataRequest request)
+        {
+            PutPatientSystemIdDataResponse response = new PutPatientSystemIdDataResponse();
+            response.Success = false;
+            try
+            {
+                using (PatientMongoContext ctx = new PatientMongoContext(_dbName))
+                {
+                    if (!string.IsNullOrEmpty(request.PatientSystemId))
+                    {
+                        FindAndModifyResult result = ctx.Patients.Collection.FindAndModify(MB.Query.EQ(MEPatient.IdProperty, ObjectId.Parse(request.PatientId)), MB.SortBy.Null,
+                            new MB.UpdateBuilder()
+                            .Set(MEPatient.DisplayPatientSystemIdProperty, ObjectId.Parse(request.PatientSystemId))
+                            .Set(MEPatient.UpdatedByProperty, ObjectId.Parse(this.UserId))
+                            .Set(MEPatient.LastUpdatedOnProperty, DateTime.UtcNow));
+
+                        AuditHelper.LogDataAudit(this.UserId,
+                                                MongoCollectionName.Patient.ToString(),
+                                                request.PatientId,
+                                                Common.DataAuditType.Update,
+                                                request.ContractNumber);
+
+                        response.Success = true;
+                    }
+                }
+                return response;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
     }
 }

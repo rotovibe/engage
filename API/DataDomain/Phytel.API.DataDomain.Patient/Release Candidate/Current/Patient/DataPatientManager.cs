@@ -179,6 +179,15 @@ namespace Phytel.API.DataDomain.Patient
             return response;
         }
 
+        public PutPatientSystemIdDataResponse UpdatePatientSystem(PutPatientSystemIdDataRequest request)
+        {
+            PutPatientSystemIdDataResponse response = new PutPatientSystemIdDataResponse();
+            IPatientRepository repo = Factory.GetRepository(request, RepositoryType.Patient);
+
+            response = repo.UpdatePatientSystem(request) as PutPatientSystemIdDataResponse;
+            return response;
+        }
+
         public PutInitializePatientDataResponse InitializePatient(PutInitializePatientDataRequest request)
         {
             PutInitializePatientDataResponse response = null;
