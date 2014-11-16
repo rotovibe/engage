@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using Phytel.API.AppDomain.NG.DTO;
 using System;
+using Phytel.API.AppDomain.NG.DTO.Goal;
+using Phytel.API.AppDomain.NG.PlanCOR;
 using Phytel.API.DataDomain.Patient.DTO;
 using Phytel.API.DataDomain.Program.DTO;
 using Phytel.API.Interface;
@@ -47,5 +49,12 @@ namespace Phytel.API.AppDomain.NG
         void ProcessPlanElementChanges(PlanElements planElems, PlanElement samplePe, PlanElement fPe, string userId);
 
         Actions CloneRepeatAction(Actions action, string assignedById);
+        PatientGoal InsertPatientGoal(PlanElementEventArg arg, Goal goalTemplate);
+
+        PatientIntervention InsertPatientIntervention(PlanElementEventArg arg, PatientGoal patientGoal, Intervention interventionTemplate);
+
+        PatientTask InsertPatientTask(PlanElementEventArg arg, PatientGoal pGoal, Task taskTemplate);
+
+        DateTime? HandleDueDate(int p);
     }
 }

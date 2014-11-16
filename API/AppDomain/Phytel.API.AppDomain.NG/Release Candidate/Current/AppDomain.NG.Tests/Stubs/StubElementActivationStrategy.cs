@@ -16,11 +16,14 @@ namespace Phytel.API.AppDomain.NG.Test.Stubs
             _rules = new List<IElementActivationRule>
             {
                 new StubToDoActivationRule(),
-                new StubProblemActivationRule()
+                new StubProblemActivationRule(),
+                new GoalActivationRule(){ EndpointUtil = new StubEndpointUtils(), PlanUtils = new StubPlanElementUtils(), GoalsEndpointUtil = new StubGoalsEndpointUtils()},
+                new InterventionActivationRule(){ EndpointUtil = new StubEndpointUtils(), PlanUtils = new StubPlanElementUtils(), GoalsEndpointUtil = new StubGoalsEndpointUtils()},
+                new TaskActivationRule(){ EndpointUtil = new StubEndpointUtils(), PlanUtils = new StubPlanElementUtils(), GoalsEndpointUtil = new StubGoalsEndpointUtils()}
             };
         }
 
-        public object Run(PlanElementEventArg e, SpawnElement rse, string userId, ProgramAttributeData pad)
+        public SpawnType Run(PlanElementEventArg e, SpawnElement rse, string userId, ProgramAttributeData pad)
         {
             var alert = _rules.First(r => r.ElementType == rse.ElementType).Execute(userId, e, rse, pad);
             return alert;

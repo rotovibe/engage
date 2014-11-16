@@ -1,4 +1,5 @@
-﻿using Phytel.API.AppDomain.NG.DTO;
+﻿using System.Collections.Generic;
+using Phytel.API.AppDomain.NG.DTO;
 using Phytel.API.AppDomain.NG.PlanElementStrategy;
 using Phytel.API.AppDomain.NG.Programs.ElementActivation;
 using Phytel.API.DataDomain.Program.DTO;
@@ -20,14 +21,15 @@ namespace Phytel.API.AppDomain.NG.PlanCOR
         public event ProcessedElementEventHandler ProcessedElementEvent;
         public EventHandler<PlanElementEventArg> PlanElement;
         public PlanProcessor Successor { get; set; }
+        public IElementActivationStrategy ElementActivationStrategy { get; set; }
 
         public abstract void PlanElementHandler(object sender, PlanElementEventArg e);
 
-        protected void OnSpawnElementEvent(string type)
+        protected void OnSpawnElementEvent(SpawnType type)
         {
             if (SpawnEvent != null)
             {
-                SpawnEvent(this, new SpawnEventArgs() { Name = type });
+                SpawnEvent(this, new SpawnEventArgs {Name = type.Type, Tags = new List<object>{type.Tag}});
             }
         }
 
@@ -35,7 +37,7 @@ namespace Phytel.API.AppDomain.NG.PlanCOR
         {
             if (ProcessedElementEvent != null)
             {
-                ProcessedElementEvent(this, new ProcessElementEventArgs { PlanElement = pe });
+                ProcessedElementEvent(this, new ProcessElementEventArgs {PlanElement = pe});
             }
         }
 
@@ -46,7 +48,8 @@ namespace Phytel.API.AppDomain.NG.PlanCOR
                 AppHostBase.Instance.Container.AutoWire(this);
         }
 
-        public void ProcessWorkflow(IPlanElement planElem, Program program, string userId, string patientId, Actions action, IAppDomainRequest request)
+        public void ProcessWorkflow(IPlanElement planElem, Program program, string userId, string patientId,
+            Actions action, IAppDomainRequest request)
         {
             try
             {
@@ -91,7 +94,8 @@ namespace Phytel.API.AppDomain.NG.PlanCOR
             }
             catch (Exception ex)
             {
-                throw new Exception("AD:StepPlanProcessor:HandlePlanElementActivation()::" + ex.Message, ex.InnerException);
+                throw new Exception("AD:StepPlanProcessor:HandlePlanElementActivation()::" + ex.Message,
+                    ex.InnerException);
             }
         }
 
@@ -105,8 +109,10 @@ namespace Phytel.API.AppDomain.NG.PlanCOR
             else if (rse.ElementType > 100)
             {
                 //HandlePatientProblemRegistration(e, userId, rse);
-                var type = new ElementActivationStrategy().Run(e, rse, userId, ProgramAttributes);
-                if (!string.IsNullOrEmpty(type.ToString())) OnSpawnElementEvent(type.ToString());
+                var type = ElementActivationStrategy.Run(e, rse, userId, ProgramAttributes);
+
+                if (!string.IsNullOrEmpty(type.ToString()))
+                    OnSpawnElementEvent(type);
             }
             else
             {

@@ -44,7 +44,31 @@
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Model|AnyCPU'">
+    <OutputPath>bin\Model\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AutoMapper">
+      <HintPath>..\..\..\..\..\packages\AutoMapper.3.2.1\lib\net40\AutoMapper.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="AutoMapper.Net4">
+      <HintPath>..\..\..\..\..\packages\AutoMapper.3.2.1\lib\net40\AutoMapper.Net4.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="ICSharpCode.SharpZipLib">
+      <HintPath>..\..\..\..\..\packages\SharpZipLib.0.86.0\lib\20\ICSharpCode.SharpZipLib.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Lucene.Net">
+      <HintPath>..\..\..\..\..\packages\Lucene.Net.3.0.3\lib\NET40\Lucene.Net.dll</HintPath>
+    </Reference>
     <Reference Include="MongoDB.Bson, Version=1.8.1.20, Culture=neutral, PublicKeyToken=f686731cfb9cc103, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\References\MongoDB.Bson.dll</HintPath>
@@ -96,8 +120,23 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Allergy\AllergyManager.cs" />
+    <Compile Include="Allergy\AllergyEndpointUtil.cs" />
+    <Compile Include="Allergy\IAllergyEndpointUtil.cs" />
+    <Compile Include="Allergy\IAllergyManager.cs" />
+    <Compile Include="Command\PatientMedSuppsCommand.cs" />
+    <Compile Include="Command\PatientAllergiesCommand.cs" />
     <Compile Include="Command\PatientToDosCommand.cs" />
+    <Compile Include="Goal\GoalsEndpointUtils.cs" />
+    <Compile Include="Goal\IGoalsEndpointUtils.cs" />
+    <Compile Include="Medication\MedicationEndpointUtil.cs" />
+    <Compile Include="Medication\MedicationManager.cs" />
+    <Compile Include="Medication\IMedicationEndpointUtil.cs" />
+    <Compile Include="Medication\IMedicationManager.cs" />
+    <Compile Include="Programs\ElementActivation\TaskActivationRule.cs" />
+    <Compile Include="Programs\ElementActivation\InterventionActivationRule.cs" />
     <Compile Include="Programs\ElementActivation\ProgramAttributeActivationRule.cs" />
+    <Compile Include="Programs\ElementActivation\SpawnType.cs" />
     <Compile Include="Programs\ElementActivation\StepActivationRule.cs" />
     <Compile Include="Programs\ElementActivation\ModuleActivationRule.cs" />
     <Compile Include="Programs\ElementActivation\ProgramActivationRule.cs" />
@@ -105,9 +144,11 @@
     <Compile Include="Programs\ElementActivation\IElementActivationStrategy.cs" />
     <Compile Include="Programs\ElementActivation\ActionActivationRule.cs" />
     <Compile Include="Programs\ElementActivation\ProblemActivationRule.cs" />
+    <Compile Include="Programs\ElementActivation\GoalActivationRule.cs" />
     <Compile Include="Programs\ElementActivation\ToDoActivationRule.cs" />
     <Compile Include="Programs\ElementActivation\ElementActivationRule.cs" />
     <Compile Include="Programs\ElementActivation\ElementActivationStrategy.cs" />
+    <Compile Include="Programs\PlanResponsibilityChain\IStepPlanProcessor.cs" />
     <Compile Include="SchedulingManager.cs" />
     <Compile Include="CareMembersManager.cs" />
     <Compile Include="Command\CareMembersCommand.cs" />
@@ -132,6 +173,14 @@
     <Compile Include="Programs\Specifications\ISpecification.cs" />
     <Compile Include="Programs\Specifications\IsModuleCompletedSpecification.cs" />
     <Compile Include="Programs\Specifications\RemoveSelectedResponseSpecification.cs" />
+    <Compile Include="Search\ISearchManager.cs" />
+    <Compile Include="Search\ISearchUtil.cs" />
+    <Compile Include="Search\LuceneStrategy\MedFieldsLuceneStrategy.cs" />
+    <Compile Include="Search\LuceneStrategy\MedNameLuceneStrategy.cs" />
+    <Compile Include="Search\LuceneStrategy\AllergyLuceneStrategy.cs" />
+    <Compile Include="Search\LuceneStrategy\BaseLuceneStrategy.cs" />
+    <Compile Include="Search\SearchManager.cs" />
+    <Compile Include="Search\SearchUtil.cs" />
     <Compile Include="UnitOfWork\INGUnitOfWork.cs" />
     <Compile Include="UnitOfWork\NGUnitOfWork.cs" />
     <Compile Include="Command\PatientCommand.cs" />
@@ -185,6 +234,10 @@
       <Project>{25cf3c3f-221f-4a49-b5ef-a8a5fcf9a5ba}</Project>
       <Name>Phytel.API.Common</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\DataDomain\Phytel.API.DataDomain.Allergy\Release Candidate\Current\Allergy.DTO\DataDomain.Allergy.DTO.csproj">
+      <Project>{404ff84f-c52a-45b1-9966-2f79b52ee03d}</Project>
+      <Name>DataDomain.Allergy.DTO</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\..\..\DataDomain\Phytel.API.DataDomain.CareMember\Release Candidate\Current\CareMember.DTO\DataDomain.CareMember.DTO.csproj">
       <Project>{b65577e7-60a6-4553-b1b9-38d6074ac560}</Project>
       <Name>DataDomain.CareMember.DTO</Name>
@@ -200,6 +253,10 @@
     <ProjectReference Include="..\..\..\..\..\DataDomain\Phytel.API.DataDomain.LookUp\Release Candidate\Current\LookUp.DTO\DataDomain.LookUp.DTO.csproj">
       <Project>{4885fe36-03db-47b7-be7e-33260943a9dc}</Project>
       <Name>DataDomain.LookUp.DTO</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\DataDomain\Phytel.API.DataDomain.Medication\Release Candidate\Current\Medication.DTO\DataDomain.Medication.DTO.csproj">
+      <Project>{006555ba-c927-4ce0-bc5a-7a6a7053d0d5}</Project>
+      <Name>DataDomain.Medication.DTO</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\..\..\DataDomain\Phytel.API.DataDomain.PatientGoal\Release Candidate\Current\PatientGoal.DTO\DataDomain.PatientGoal.DTO.csproj">
       <Project>{92488af4-963e-4098-8ba8-23d6952bd952}</Project>
@@ -252,6 +309,7 @@
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
+  <Import Project="..\..\..\..\..\packages\AutoMapper.3.2.1\tools\AutoMapper.targets" Condition="Exists('..\..\..\..\..\packages\AutoMapper.3.2.1\tools\AutoMapper.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

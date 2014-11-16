@@ -10,7 +10,7 @@ namespace Phytel.API.AppDomain.NG.Programs.ElementActivation
 {
     public abstract class ElementActivationRule
     {
-        public abstract object Execute(string userId, PlanElementEventArg arg, SpawnElement pe, ProgramAttributeData pad);
+        public abstract SpawnType Execute(string userId, PlanElementEventArg arg, SpawnElement pe, ProgramAttributeData pad);
 
         protected PlanElement HandlePlanElementActivation(IPlanElementUtils planUtils, PlanElementEventArg e, SpawnElement rse)
         {

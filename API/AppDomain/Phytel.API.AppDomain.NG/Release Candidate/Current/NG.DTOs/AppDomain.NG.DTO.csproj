@@ -44,6 +44,15 @@
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Model|AnyCPU'">
+    <OutputPath>bin\Model\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="ServiceStack, Version=3.9.70.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -87,6 +96,36 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Allergy\Allergy.cs" />
+    <Compile Include="Allergy\GetPatientAllergiesRequest.cs" />
+    <Compile Include="Allergy\GetAllergiesRequest.cs" />
+    <Compile Include="Allergy\GetPatientAllergiesResponse.cs" />
+    <Compile Include="Allergy\GetAllergiesResponse.cs" />
+    <Compile Include="Allergy\PatientAllergy.cs" />
+    <Compile Include="Allergy\PostInitializeAllergyRequest.cs" />
+    <Compile Include="Allergy\PostInitializePatientAllergyRequest.cs" />
+    <Compile Include="Allergy\PostInitializeAllergyResponse.cs" />
+    <Compile Include="Allergy\PostInitializePatientAllergyResponse.cs" />
+    <Compile Include="Allergy\PostInsertNewAllergyRequest.cs" />
+    <Compile Include="Allergy\PostInsertNewAllergyResponse.cs" />
+    <Compile Include="Allergy\PostPatientAllergiesRequest.cs" />
+    <Compile Include="Allergy\PostAllergyRequest.cs" />
+    <Compile Include="Allergy\PostAllergyResponse.cs" />
+    <Compile Include="Allergy\PostPatientAllergiesResponse.cs" />
+    <Compile Include="Goal\GetTasksRequest.cs" />
+    <Compile Include="Goal\GetInterventionsRequest.cs" />
+    <Compile Include="Goal\GetTasksResponse.cs" />
+    <Compile Include="Goal\GetInterventionsResponse.cs" />
+    <Compile Include="Goal\Goal.cs" />
+    <Compile Include="Goal\IGoal.cs" />
+    <Compile Include="Goal\Intervention.cs" />
+    <Compile Include="Goal\PostPatientBarrierRequest.cs" />
+    <Compile Include="Goal\PostPatientBarrierResponse.cs" />
+    <Compile Include="Goal\PostPatientTaskRequest.cs" />
+    <Compile Include="Goal\PostPatientInterventionRequest.cs" />
+    <Compile Include="Goal\PostPatientTaskResponse.cs" />
+    <Compile Include="Goal\PostPatientInterventionResponse.cs" />
+    <Compile Include="Goal\Task.cs" />
     <Compile Include="LookUp\GetLookUpDetailsRequest.cs" />
     <Compile Include="LookUp\GetLookUpDetailsResponse.cs" />
     <Compile Include="LookUp\LookUpDetails.cs" />
@@ -94,11 +133,22 @@
     <Compile Include="LookUp\Program\GetAllObjectivesResponse.cs" />
     <Compile Include="Contact\GetRecentPatientsRequest.cs" />
     <Compile Include="Contact\GetRecentPatientsResponse .cs" />
+    <Compile Include="Meds\GetPatientMedSuppsRequest.cs" />
+    <Compile Include="Meds\GetPatientMedSuppsResponse.cs" />
+    <Compile Include="Meds\Medication.cs" />
+    <Compile Include="Meds\PatientMedSupp.cs" />
+    <Compile Include="Meds\PostPatientMedSuppRequest.cs" />
+    <Compile Include="Meds\PostPatientMedSuppResponse.cs" />
     <Compile Include="Observation\GetHistoricalPatientObservationsRequest.cs" />
     <Compile Include="Observation\GetCurrenPatientObservationsRequest.cs" />
     <Compile Include="Observation\GetHistoricalPatientObservationsResponse.cs" />
     <Compile Include="Observation\GetCurrentPatientObservationsResponse.cs" />
     <Compile Include="Observation\IPatientObservationRequest.cs" />
+    <Compile Include="PatientSystem\GetPatientSystemsRequest.cs" />
+    <Compile Include="PatientSystem\GetPatientSystemsResponse.cs" />
+    <Compile Include="PatientSystem\PatientSystem.cs" />
+    <Compile Include="PatientSystem\PostPatientSystemRequest.cs" />
+    <Compile Include="PatientSystem\PostPatientSystemResponse.cs" />
     <Compile Include="Patient\GetInitializePatientRequest.cs" />
     <Compile Include="Patient\GetInitializePatientResponse.cs" />
     <Compile Include="Patient\PostDeletePatientRequest.cs" />
@@ -249,6 +299,18 @@
     <Compile Include="Scheduling\PostInsertToDoResponse.cs" />
     <Compile Include="Scheduling\Schedule.cs" />
     <Compile Include="Scheduling\ToDo.cs" />
+    <Compile Include="Search\AllergySearchDoc.cs" />
+    <Compile Include="Search\GetMedNamesRequest.cs" />
+    <Compile Include="Search\GetMedFieldsRequest.cs" />
+    <Compile Include="Search\GetMedNamesResponse.cs" />
+    <Compile Include="Search\GetSearchResultsRequest.cs" />
+    <Compile Include="Search\GetMedFieldsResponse.cs" />
+    <Compile Include="Search\GetSearchResultsResponse.cs" />
+    <Compile Include="Search\MedFieldsLists.cs" />
+    <Compile Include="Search\MedFieldsSearchDoc.cs" />
+    <Compile Include="Search\MedNameSearchDoc.cs" />
+    <Compile Include="Search\SearchedItem.cs" />
+    <Compile Include="Search\TextValuePair.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

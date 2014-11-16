@@ -16,6 +16,7 @@ namespace Phytel.API.AppDomain.NG
     public class GoalsManager : ManagerBase
     {
 
+        #region Initialize
         public GetInitializeGoalResponse GetInitialGoalRequest(GetInitializeGoalRequest request)
         {
             try
@@ -47,7 +48,7 @@ namespace Phytel.API.AppDomain.NG
                 throw new Exception("AD:GetInitialBarrierRequest()::" + ex.Message, ex.InnerException);
             }
         }
-        
+
         public GetInitializeTaskResponse GetInitialTask(GetInitializeTaskRequest request)
         {
             try
@@ -79,8 +80,10 @@ namespace Phytel.API.AppDomain.NG
             {
                 throw new Exception("AD:GetInitialIntervention()::" + ex.Message, ex.InnerException);
             }
-        }
+        } 
+        #endregion
 
+        #region Gets
         public GetPatientGoalResponse GetPatientGoal(GetPatientGoalRequest request)
         {
             try
@@ -111,28 +114,45 @@ namespace Phytel.API.AppDomain.NG
             }
         }
 
+        public GetInterventionsResponse GetInterventions(GetInterventionsRequest request)
+        {
+            try
+            {
+                GetInterventionsResponse response = new GetInterventionsResponse();
+                response.Interventions = GoalsEndpointUtil.GetInterventions(request);
+                response.Version = request.Version;
+                return response;
+            }
+            catch (WebServiceException ex)
+            {
+                throw new WebServiceException("AD:GetInterventions()::" + ex.Message, ex.InnerException);
+            }
+        }
+
+        public GetTasksResponse GetTasks(GetTasksRequest request)
+        {
+            try
+            {
+                GetTasksResponse response = new GetTasksResponse();
+                response.Tasks = GoalsEndpointUtil.GetTasks(request);
+                response.Version = request.Version;
+                return response;
+            }
+            catch (WebServiceException ex)
+            {
+                throw new WebServiceException("AD:GetTasks()::" + ex.Message, ex.InnerException);
+            }
+        } 
+        #endregion
+
+        #region Save
         public PostPatientGoalResponse SavePatientGoal(PostPatientGoalRequest request)
         {
             try
             {
                 PostPatientGoalResponse pgr = new PostPatientGoalResponse();
-                bool result = false;
-
-                // we can thread here if we want!
-                // save goals
-                result = GoalsEndpointUtil.PostUpdateGoalRequest(request);
-
-                // save barriers
-                GoalsUtil.SavePatientGoalBarriers(request);
-
-                // save tasks
-                GoalsUtil.SavePatientGoalTasks(request);
-
-                // save interventions
-                GoalsUtil.SavePatientGoalInterventions(request);
-
-                pgr.Result = result;
-
+                pgr.Goal = GoalsEndpointUtil.PostUpdateGoalRequest(request);
+                pgr.Version = request.Version;
                 return pgr;
             }
             catch (Exception ex)
@@ -141,6 +161,53 @@ namespace Phytel.API.AppDomain.NG
             }
         }
 
+        public PostPatientInterventionResponse SavePatientIntervention(PostPatientInterventionRequest request)
+        {
+            try
+            {
+                PostPatientInterventionResponse response = new PostPatientInterventionResponse();
+                response.Intervention = GoalsEndpointUtil.PostUpdateInterventionRequest(request);
+                response.Version = request.Version;
+                return response;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("AD:SavePatientIntervention()::" + ex.Message, ex.InnerException);
+            }
+        }
+
+        public PostPatientTaskResponse SavePatientTask(PostPatientTaskRequest request)
+        {
+            try
+            {
+                PostPatientTaskResponse response = new PostPatientTaskResponse();
+                response.Task = GoalsEndpointUtil.PostUpdateTaskRequest(request);
+                response.Version = request.Version;
+                return response;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("AD:SavePatientTask()::" + ex.Message, ex.InnerException);
+            }
+        }
+
+        public PostPatientBarrierResponse SavePatientBarrier(PostPatientBarrierRequest request)
+        {
+            try
+            {
+                PostPatientBarrierResponse response = new PostPatientBarrierResponse();
+                response.Barrier = GoalsEndpointUtil.PostUpdateBarrierRequest(request);
+                response.Version = request.Version;
+                return response;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("AD:SavePatientBarrier()::" + ex.Message, ex.InnerException);
+            }
+        } 
+        #endregion
+
+        #region Delete
         public PostDeletePatientGoalResponse DeletePatientGoal(PostDeletePatientGoalRequest request)
         {
             try
@@ -169,6 +236,7 @@ namespace Phytel.API.AppDomain.NG
             {
                 throw new Exception("AD:DeletePatientGoal()::" + ex.Message, ex.InnerException);
             }
-        }
+        } 
+        #endregion
     }
 }

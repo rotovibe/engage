@@ -41,5 +41,7 @@ namespace Phytel.API.AppDomain.NG
         void LogException(Exception ex);
         GetInitializePatientResponse GetInitializePatient(GetInitializePatientRequest request);
         PostProgramAttributesChangeResponse PostProgramAttributeChanges(PostProgramAttributesChangeRequest request);
+        GetPatientSystemsResponse GetPatientSystems(GetPatientSystemsRequest request);
+        PostPatientSystemResponse SavePatientSystem(PostPatientSystemRequest request);
     }
 }

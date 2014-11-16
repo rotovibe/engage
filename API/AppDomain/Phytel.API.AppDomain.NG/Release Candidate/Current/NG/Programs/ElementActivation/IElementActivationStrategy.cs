@@ -6,6 +6,6 @@ namespace Phytel.API.AppDomain.NG.Programs.ElementActivation
 {
     public interface IElementActivationStrategy
     {
-        object Run(PlanElementEventArg e, SpawnElement rse, string userId, ProgramAttributeData pad);
+        SpawnType Run(PlanElementEventArg e, SpawnElement rse, string userId, ProgramAttributeData pad);
     }
 }

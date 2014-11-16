@@ -3,9 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using AutoMapper;
 using Phytel.API.AppDomain.NG;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Phytel.API.AppDomain.NG.DTO.Goal;
+using Phytel.API.AppDomain.NG.Test;
 using Phytel.API.AppDomain.NG.Test.Stubs;
+using Phytel.API.DataDomain.PatientGoal.DTO;
 using Phytel.API.DataDomain.Program.DTO;
 using Phytel.API.AppDomain.NG.DTO;
 using Phytel.API.Interface;
@@ -320,5 +324,186 @@ namespace Phytel.API.AppDomain.NG.Tests
             EndpointUtils utils = new EndpointUtils();
             utils.GetScheduleToDoById("53ff6b92d4332314bcab46e0", "5325c821072ef705080d3488", new GetToDosRequest{ Version=1.0, ContractNumber="InHealth001", UserId="1234"});
         }
+
+        [TestMethod()]
+        public void GetGoalByIdTest()
+        {
+            Mapper.CreateMap<GoalData, Goal>()
+                .ForMember(d => d.CustomAttributes,
+                    opt => opt.MapFrom(src => src.CustomAttributes.ConvertAll(
+                        c => new CustomAttribute {Id = c.Id, Values = c.Values})));
+
+            EndpointUtils utils = new EndpointUtils();
+            var goal = utils.GetGoalById("545a91a1fe7a59218cef2d6d", "5325c821072ef705080d3488",
+                new GetToDosRequest {Version = 1.0, ContractNumber = "InHealth001", UserId = "1234"});
+
+            Assert.IsNotNull(goal);
+        }
+
+        [TestMethod()]
+        public void GetPatientGoalByTemplateId_Found()
+        {
+            #region 
+            Mapper.CreateMap<PatientGoalData, PatientGoal>()
+                            .ForMember(d => d.CustomAttributes,
+                                opt => opt.MapFrom(src => src.CustomAttributes.ConvertAll(
+                                    c => new CustomAttribute { Id = c.Id, Values = c.Values })))
+                            .ForMember(d => d.Barriers,
+                                opt => opt.MapFrom(src => src.BarriersData.ConvertAll(
+                                    c =>
+                                        new PatientBarrier
+                                        {
+                                            Id = c.Id,
+                                            CategoryId = c.CategoryId,
+                                            DeleteFlag = c.DeleteFlag,
+                                            Name = c.Name,
+                                            PatientGoalId = c.PatientGoalId,
+                                            StatusDate = c.StatusDate,
+                                            StatusId = c.StatusId
+                                        })))
+                            .ForMember(d => d.Tasks,
+                                opt => opt.MapFrom(src => src.TasksData.ConvertAll(
+                                    c =>
+                                        new PatientTask
+                                        {
+                                            Id = c.Id,
+                                            BarrierIds = c.BarrierIds,
+                                            ClosedDate = c.ClosedDate,
+                                            CreatedById = c.CreatedById,
+                                            CustomAttributes =
+                                                c.CustomAttributes.ConvertAll(
+                                                    ca =>
+                                                        new CustomAttribute
+                                                        {
+                                                            ControlType = ca.ControlType,
+                                                            Id = ca.Id,
+                                                            Name = ca.Name,
+                                                            Order = ca.Order,
+                                                            Required = ca.Required,
+                                                            Type = ca.Type,
+                                                            Values = ca.Values,
+                                                            Options = NGUtils.FormatOptions(ca.Options)
+                                                        }),
+                                            DeleteFlag = c.DeleteFlag,
+                                            Description = c.Description,
+                                            GoalName = c.GoalName,
+                                            PatientGoalId = c.PatientGoalId,
+                                            StartDate = c.StartDate,
+                                            StatusDate = c.StatusDate,
+                                            StatusId = c.StatusId,
+                                            TargetDate = c.TargetDate,
+                                            TargetValue = c.TargetValue,
+                                        })))
+                            .ForMember(d => d.Interventions,
+                                opt => opt.MapFrom(src => src.InterventionsData.ConvertAll(
+                                    c =>
+                                        new PatientIntervention
+                                        {
+                                            AssignedToId = c.AssignedToId,
+                                            BarrierIds = c.BarrierIds,
+                                            CategoryId = c.CategoryId,
+                                            ClosedDate = c.ClosedDate,
+                                            CreatedById = c.CreatedById,
+                                            DeleteFlag = c.DeleteFlag,
+                                            Description = c.Description,
+                                            GoalName = c.GoalName,
+                                            Id = c.Id,
+                                            PatientGoalId = c.PatientGoalId,
+                                            PatientId = c.PatientId,
+                                            StartDate = c.StartDate,
+                                            StatusDate = c.StatusDate,
+                                            StatusId = c.StatusId
+                                        })));
+            #endregion
+
+            EndpointUtils utils = new EndpointUtils();
+            var patientGoal = utils.GetOpenNotMetPatientGoalByTemplateId("545a91a1fe7a59218cef2d6d", "5325db9cd6a4850adcbba9ca", "1234",
+                new AppDomainRequest { Version = 1.0, ContractNumber = "InHealth001", UserId = "1234" });
+
+            Assert.IsNotNull(patientGoal);
+        }
+
+        [TestMethod()]
+        public void GetPatientGoalByTemplateId_Null()
+        {
+            #region
+            Mapper.CreateMap<PatientGoalData, PatientGoal>()
+                            .ForMember(d => d.CustomAttributes,
+                                opt => opt.MapFrom(src => src.CustomAttributes.ConvertAll(
+                                    c => new CustomAttribute { Id = c.Id, Values = c.Values })))
+                            .ForMember(d => d.Barriers,
+                                opt => opt.MapFrom(src => src.BarriersData.ConvertAll(
+                                    c =>
+                                        new PatientBarrier
+                                        {
+                                            Id = c.Id,
+                                            CategoryId = c.CategoryId,
+                                            DeleteFlag = c.DeleteFlag,
+                                            Name = c.Name,
+                                            PatientGoalId = c.PatientGoalId,
+                                            StatusDate = c.StatusDate,
+                                            StatusId = c.StatusId
+                                        })))
+                            .ForMember(d => d.Tasks,
+                                opt => opt.MapFrom(src => src.TasksData.ConvertAll(
+                                    c =>
+                                        new PatientTask
+                                        {
+                                            Id = c.Id,
+                                            BarrierIds = c.BarrierIds,
+                                            ClosedDate = c.ClosedDate,
+                                            CreatedById = c.CreatedById,
+                                            CustomAttributes =
+                                                c.CustomAttributes.ConvertAll(
+                                                    ca =>
+                                                        new CustomAttribute
+                                                        {
+                                                            ControlType = ca.ControlType,
+                                                            Id = ca.Id,
+                                                            Name = ca.Name,
+                                                            Order = ca.Order,
+                                                            Required = ca.Required,
+                                                            Type = ca.Type,
+                                                            Values = ca.Values,
+                                                            Options = NGUtils.FormatOptions(ca.Options)
+                                                        }),
+                                            DeleteFlag = c.DeleteFlag,
+                                            Description = c.Description,
+                                            GoalName = c.GoalName,
+                                            PatientGoalId = c.PatientGoalId,
+                                            StartDate = c.StartDate,
+                                            StatusDate = c.StatusDate,
+                                            StatusId = c.StatusId,
+                                            TargetDate = c.TargetDate,
+                                            TargetValue = c.TargetValue,
+                                        })))
+                            .ForMember(d => d.Interventions,
+                                opt => opt.MapFrom(src => src.InterventionsData.ConvertAll(
+                                    c =>
+                                        new PatientIntervention
+                                        {
+                                            AssignedToId = c.AssignedToId,
+                                            BarrierIds = c.BarrierIds,
+                                            CategoryId = c.CategoryId,
+                                            ClosedDate = c.ClosedDate,
+                                            CreatedById = c.CreatedById,
+                                            DeleteFlag = c.DeleteFlag,
+                                            Description = c.Description,
+                                            GoalName = c.GoalName,
+                                            Id = c.Id,
+                                            PatientGoalId = c.PatientGoalId,
+                                            PatientId = c.PatientId,
+                                            StartDate = c.StartDate,
+                                            StatusDate = c.StatusDate,
+                                            StatusId = c.StatusId
+                                        })));
+            #endregion
+
+            EndpointUtils utils = new EndpointUtils();
+            var patientGoal = utils.GetOpenNotMetPatientGoalByTemplateId("123491a1fe7a59218cef2d6d", "5325db9cd6a4850adcbba9ca", "1234",
+                new AppDomainRequest { Version = 1.0, ContractNumber = "InHealth001", UserId = "1234" });
+
+            Assert.IsNull(patientGoal);
+        }    
     }
 }

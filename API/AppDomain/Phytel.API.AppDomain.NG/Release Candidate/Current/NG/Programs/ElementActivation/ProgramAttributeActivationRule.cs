@@ -17,10 +17,11 @@ namespace Phytel.API.AppDomain.NG.Programs.ElementActivation
                 AppHostBase.Instance.Container.AutoWire(this);
         }
 
-        public override object Execute(string userId, PlanElementEventArg arg, SpawnElement se, ProgramAttributeData pad)
+        public override SpawnType Execute(string userId, PlanElementEventArg arg, SpawnElement se, ProgramAttributeData pad)
         {
             PlanUtils.SetProgramAttributes(se, arg.Program, arg.UserId, pad);
-            return "KickAss";
+            var spawnType = new SpawnType { Type = "KickAss" };
+            return spawnType;
         }
     }
 }

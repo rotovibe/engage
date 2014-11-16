@@ -7,7 +7,7 @@ namespace Phytel.API.AppDomain.NG.PlanCOR
 {
     public delegate void SpawnEventHandler(object s, SpawnEventArgs e);
 
-    public class StepPlanProcessor : PlanProcessor
+    public class StepPlanProcessor : PlanProcessor, IStepPlanProcessor
     {
         public StepPlanProcessor()
         {
