@@ -6,7 +6,8 @@ namespace Phytel.API.DataDomain.Allergy.Service
     public class PatientAllergyService : ServiceBase
     {
         //protected readonly IPatientAllergyDataManager Manager;
-        public IPatientAllergyDataManager Manager;
+        public IPatientAllergyDataManager Manager { get; set;}
+    }
 
         //public PatientAllergyService(IPatientAllergyDataManager mgr)
         //{
