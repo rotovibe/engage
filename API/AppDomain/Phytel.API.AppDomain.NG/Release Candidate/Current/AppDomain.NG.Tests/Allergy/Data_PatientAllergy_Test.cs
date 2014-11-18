@@ -15,12 +15,12 @@ namespace Phytel.API.AppDomain.NG.Test
     public class Data_PatientAllergy_Test
     {
         string context = "NG";
-        string contractNumber = "InHealth001";
+        string contractNumber = "Demo001";
         string userId = "000000000000000000000000";
         double version = 1.0;
         string url = "http://localhost:888/Nightingale";
         IRestClient client = new JsonServiceClient();
-        string token = "5457977d84ac051b78c3c4f1";
+        string token = "546bac6f60e4b90c7839b9eb";
 
         [TestMethod]
         public void GetPatientAllergies_Test()
@@ -28,7 +28,7 @@ namespace Phytel.API.AppDomain.NG.Test
             GetPatientAllergiesRequest request = new GetPatientAllergiesRequest
             {
                 ContractNumber = contractNumber,
-                PatientId = "54087f43d6a48509407d69cb",
+                PatientId = "534685c160e4b90f8c8966a8",
                 StatusIds = new List<int>{1},
                 TypeIds = new List<string> { "5447d6ddfe7a59146485b512", "5446db5efe7a591e74013b6b" },
                 UserId = userId,
