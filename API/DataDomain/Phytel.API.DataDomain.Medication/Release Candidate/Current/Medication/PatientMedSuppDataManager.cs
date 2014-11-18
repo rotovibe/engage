@@ -10,19 +10,20 @@ namespace Phytel.API.DataDomain.Medication
 {
     public class PatientMedSuppDataManager : IPatientMedSuppDataManager
     {
-        protected readonly IMongoPatientMedSuppRepository PatientMedSuppRepository;
+        //protected readonly IMongoPatientMedSuppRepository PatientMedSuppRepository;
+        public IMongoPatientMedSuppRepository PatientMedSuppRepository { get; set; }
 
-        public PatientMedSuppDataManager(IMongoPatientMedSuppRepository repository)
-        {
-            PatientMedSuppRepository = repository;
-        }
+        //public PatientMedSuppDataManager(IMongoPatientMedSuppRepository repository)
+        //{
+        //    PatientMedSuppRepository = repository;
+        //}
         
         public List<PatientMedSuppData> GetPatientMedSupps(GetPatientMedSuppsDataRequest request)
         {
             try
             {
                 List<PatientMedSuppData> result = null;
-                PatientMedSuppRepository.UserId = request.UserId;
+                //PatientMedSuppRepository.UserId = request.UserId;
                 if (request.PatientId != null)
                 {
                     var repo = MedicationRepositoryFactory.GetMedicationRepository(request, RepositoryType.PatientMedSupp);
