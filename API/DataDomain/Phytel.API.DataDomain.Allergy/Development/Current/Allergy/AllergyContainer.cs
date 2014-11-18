@@ -21,7 +21,6 @@ namespace DataDomain.Allergy.Repo.Containers
 
             container.RegisterAutoWiredAs<AllergyDataManager, IAllergyDataManager>().ReusedWithin(Funq.ReuseScope.Request);
             container.RegisterAutoWiredAs<PatientAllergyDataManager, IPatientAllergyDataManager>().ReusedWithin(Funq.ReuseScope.Request);
-            container.RegisterAutoWiredAs<PatientAllergyDataManager, IPatientAllergyDataManager>().ReusedWithin(Funq.ReuseScope.Request);
             container.RegisterAutoWiredAs<CommonFormatterUtil, ICommonFormatterUtil>().ReusedWithin(Funq.ReuseScope.Request);
             container.RegisterAutoWiredAs<Helpers, IHelpers>().ReusedWithin(Funq.ReuseScope.Request);
             return container;
