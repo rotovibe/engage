@@ -7,19 +7,19 @@ namespace Phytel.API.DataDomain.Allergy
 {
     public class PatientAllergyDataManager : IPatientAllergyDataManager
     {
-        protected readonly IMongoPatientAllergyRepository PatientAllergyRepository;
+        //protected readonly IMongoPatientAllergyRepository PatientAllergyRepository;
 
-        public PatientAllergyDataManager(IMongoPatientAllergyRepository repository)
-        {
-            PatientAllergyRepository = repository;
-        }
+        //public PatientAllergyDataManager(IMongoPatientAllergyRepository repository)
+        //{
+        //    PatientAllergyRepository = repository;
+        //}
 
         public List<PatientAllergyData> GetPatientAllergies(GetPatientAllergiesDataRequest request)
         {
             try
             {
                 List<PatientAllergyData> result = null;
-                PatientAllergyRepository.UserId = request.UserId;
+                //PatientAllergyRepository.UserId = request.UserId;
                 if (request.PatientId != null)
                 {
                     var repo = AllergyRepositoryFactory.GetAllergyRepository(request, RepositoryType.PatientAllergy);
@@ -34,7 +34,7 @@ namespace Phytel.API.DataDomain.Allergy
         {
             try
             {
-                PatientAllergyRepository.UserId = request.UserId;
+                //PatientAllergyRepository.UserId = request.UserId;
                 var repo = AllergyRepositoryFactory.GetAllergyRepository(request, RepositoryType.PatientAllergy);
                 return (PatientAllergyData)repo.Initialize(request);
             }
