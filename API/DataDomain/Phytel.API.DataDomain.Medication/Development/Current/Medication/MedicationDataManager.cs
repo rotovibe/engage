@@ -8,12 +8,13 @@ namespace Phytel.API.DataDomain.Medication
 {
     public class MedicationDataManager : IMedicationDataManager
     {
-        protected readonly IMongoMedicationRepository MedicationRepository;
+        //protected readonly IMongoMedicationRepository MedicationRepository;
+        public IMongoMedicationRepository MedicationRepository { get; set; }
 
-        public MedicationDataManager(IMongoMedicationRepository repository)
-        {
-            MedicationRepository = repository;
-        }
+        //public MedicationDataManager(IMongoMedicationRepository repository)
+        //{
+        //    MedicationRepository = repository;
+        //}
 
         public List<DTO.MedicationData> GetMedicationList(GetAllMedicationsRequest request)
         {
