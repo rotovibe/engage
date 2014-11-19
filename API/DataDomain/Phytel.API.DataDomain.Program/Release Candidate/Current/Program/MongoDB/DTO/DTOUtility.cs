@@ -1431,7 +1431,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             }
         }
 
-        public  bool CanInsertPatientProgram(List<MEPatientProgram> pp)
+        public bool CanInsertPatientProgram(List<MEPatientProgram> pp)
         {
             try
             {
@@ -1444,7 +1444,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
                 {
                     foreach (MEPatientProgram p in pp)
                     {
-                        if (!p.State.Equals(ElementState.Completed))
+                        if ((p.State != ElementState.Completed) && (p.State != ElementState.Closed))
                         {
                             result = false;
                             break;
