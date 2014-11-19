@@ -44,7 +44,7 @@
             this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(124, 17);
-            this.label1.TabIndex = 0;
+            this.label1.TabIndex = 1;
             this.label1.Text = "Connection Name:";
             // 
             // txtConnectionName
@@ -84,7 +84,7 @@
             this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(119, 17);
-            this.label2.TabIndex = 6;
+            this.label2.TabIndex = 2;
             this.label2.Text = "Connection Type:";
             // 
             // cboType
@@ -98,7 +98,7 @@
             this.cboType.Location = new System.Drawing.Point(151, 44);
             this.cboType.Name = "cboType";
             this.cboType.Size = new System.Drawing.Size(267, 24);
-            this.cboType.TabIndex = 7;
+            this.cboType.TabIndex = 3;
             // 
             // frmNew
             // 

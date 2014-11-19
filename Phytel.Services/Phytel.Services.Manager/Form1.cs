@@ -3,10 +3,11 @@ using Phytel.Services.Mongo;
 using Phytel.Services.Security;
 using Phytel.Services.SQLServer;
 using System;
+using System.Diagnostics;
 using System.IO;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Text;
+using System.Reflection;
 using System.Windows.Forms;
 using System.Xml;
 
@@ -39,13 +40,42 @@ namespace PhytelServicesManager
 
             InitializeConfiguration();
 
-            lblVersion.Text = "Version: " + Application.ProductVersion;
+            lblSQLVersion.Text = GetVersion("SQL");
+            lblMongoVersion.Text = GetVersion("Mongo");
+            lblAPIVersion.Text = GetVersion("API");
+
             _somethingChanged = false;
         }
 
         private void btnClose_Click(object sender, EventArgs e)
         {
             Application.Exit();
+        }
+
+        private string GetVersion(string type)
+        {
+            Assembly sqlAssembly = System.Reflection.Assembly.LoadFrom("Phytel.Services.SQLServer.dll");
+            Assembly mongoAssembly = System.Reflection.Assembly.LoadFrom("Phytel.Services.Mongo.dll");
+            Assembly apiAssembly = System.Reflection.Assembly.LoadFrom("Phytel.Services.API.dll");
+            FileVersionInfo fileVersionInfo = null;
+
+            switch(type.ToUpper())
+            {
+                case "SQL":
+                    fileVersionInfo = FileVersionInfo.GetVersionInfo(sqlAssembly.Location);
+                    break;
+                case "MONGO":
+                    fileVersionInfo = FileVersionInfo.GetVersionInfo(mongoAssembly.Location);
+                    break;
+                case "API":
+                    fileVersionInfo = FileVersionInfo.GetVersionInfo(apiAssembly.Location);
+                    break;
+            }
+
+            if (fileVersionInfo != null)
+                return fileVersionInfo.ProductVersion;
+            else
+                return "Unknown";
         }
 
         private void InitializeConfiguration()
@@ -131,14 +161,17 @@ namespace PhytelServicesManager
                         case "MONGO":
                             LoadMongoConnection();
                             gbMongo.Visible = true;
+                            gbMongo.BringToFront();
                             break;
                         case "SQL":
                             LoadSQLConnection();
                             gbSQL.Visible = true;
+                            gbSQL.BringToFront();
                             break;
                         case "URL":
                             LoadAPIConnection();
                             gbAPI.Visible = true;
+                            gbAPI.BringToFront();
                             break;
                         default:
                             MessageBox.Show("Invalid Connection Type");
