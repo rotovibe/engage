@@ -416,6 +416,90 @@ namespace Phytel.Data.ETL
                     throw;
                 }
 
+                try
+                {
+                    if (BsonClassMap.IsClassMapRegistered(typeof (AllergyType)) == false)
+                    {
+                        BsonClassMap.RegisterClassMap<AllergyType>();
+                    }
+                }
+                catch
+                {
+                    throw;
+                }
+
+                try
+                {
+                    if (BsonClassMap.IsClassMapRegistered(typeof(AllergySource)) == false)
+                    {
+                        BsonClassMap.RegisterClassMap<AllergySource>();
+                    }
+                }
+                catch
+                {
+                    throw;
+                }
+
+                try
+                {
+                    if (BsonClassMap.IsClassMapRegistered(typeof(Severity)) == false)
+                    {
+                        BsonClassMap.RegisterClassMap<Severity>();
+                    }
+                }
+                catch
+                {
+                    throw;
+                }
+
+                try
+                {
+                    if (BsonClassMap.IsClassMapRegistered(typeof(Reaction)) == false)
+                    {
+                        BsonClassMap.RegisterClassMap<Reaction>();
+                    }
+                }
+                catch
+                {
+                    throw;
+                }
+
+                try
+                {
+                    if (BsonClassMap.IsClassMapRegistered(typeof(MedSuppType)) == false)
+                    {
+                        BsonClassMap.RegisterClassMap<MedSuppType>();
+                    }
+                }
+                catch
+                {
+                    throw;
+                }
+
+                try
+                {
+                    if (BsonClassMap.IsClassMapRegistered(typeof(FreqHowOften)) == false)
+                    {
+                        BsonClassMap.RegisterClassMap<FreqHowOften>();
+                    }
+                }
+                catch
+                {
+                    throw;
+                }
+
+                try
+                {
+                    if (BsonClassMap.IsClassMapRegistered(typeof(FreqWhen)) == false)
+                    {
+                        BsonClassMap.RegisterClassMap<FreqWhen>();
+                    }
+                }
+                catch
+                {
+                    throw;
+                }
+
                 #endregion
             }
             catch (Exception ex)
