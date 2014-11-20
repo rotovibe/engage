@@ -66,7 +66,14 @@ namespace Phytel.API.AppDomain.NG
                 };
                 if ((t.StatusId == (int)GoalTaskStatus.Met || t.StatusId == (int)GoalTaskStatus.Abandoned))
                 {
-                    data.ClosedDate = DateTime.UtcNow;
+                    if (t.ClosedDate == null)
+                    {
+                        data.ClosedDate = DateTime.UtcNow;
+                    }
+                    else
+                    {
+                        data.ClosedDate = t.ClosedDate;
+                    }
                 }
                 else 
                 {
@@ -155,7 +162,14 @@ namespace Phytel.API.AppDomain.NG
                 };
                 if ((i.StatusId == (int)InterventionStatus.Removed || i.StatusId == (int)InterventionStatus.Completed))
                 {
-                    data.ClosedDate = DateTime.UtcNow;
+                    if (i.ClosedDate == null)
+                    {
+                        data.ClosedDate = DateTime.UtcNow;
+                    }
+                    else
+                    {
+                        data.ClosedDate = i.ClosedDate;
+                    }
                 }
                 else 
                 {
