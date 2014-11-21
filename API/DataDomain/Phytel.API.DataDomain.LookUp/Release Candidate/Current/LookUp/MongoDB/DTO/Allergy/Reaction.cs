@@ -3,7 +3,7 @@ using MongoDB.Bson.Serialization.Attributes;
 
 namespace Phytel.API.DataDomain.LookUp.DTO
 {
-    class Reaction : LookUpBase
+    public class Reaction : LookUpBase
     {
         public const string CodingSystemIdProperty = "csid";
         public const string CodingSystemCodeProperty = "csc";
