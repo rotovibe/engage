@@ -262,5 +262,11 @@ namespace Phytel.API.DataDomain.Patient.Test.Stub
                 throw new NotImplementedException();
             }
         }
+
+
+        public DTO.PutPatientSystemIdDataResponse UpdatePatientSystem(DTO.PutPatientSystemIdDataRequest request)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
