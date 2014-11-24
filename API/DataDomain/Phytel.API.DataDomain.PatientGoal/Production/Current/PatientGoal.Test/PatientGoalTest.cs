@@ -8,12 +8,14 @@ namespace Phytel.API.DataDomain.PatientGoal.Test
     [TestClass]
     public class PatientGoalTest
     {
+        IPatientGoalDataManager m = new PatientGoalDataManager { Factory = new PatientGoalRepositoryFactory() };
+        
         [TestMethod]
         public void GetPatientGoalByID()
         {
             GetPatientGoalDataRequest request = new GetPatientGoalDataRequest { Id = "5304d677d6a4850f14e4cc93" };
 
-            GetPatientGoalDataResponse response = PatientGoalDataManager.GetPatientGoal(request);
+            GetPatientGoalDataResponse response = m.GetPatientGoal(request);
 
             Assert.IsNotNull(response.GoalData);
         }
@@ -23,7 +25,7 @@ namespace Phytel.API.DataDomain.PatientGoal.Test
         {
             GetAllPatientGoalsDataRequest request = new GetAllPatientGoalsDataRequest { PatientId = "52f55860072ef709f84e60f7" };
 
-            GetAllPatientGoalsDataResponse response = PatientGoalDataManager.GetPatientGoalList(request);
+            GetAllPatientGoalsDataResponse response = m.GetPatientGoalList(request);
 
             Assert.IsNotNull(response.PatientGoalsData);
         }
@@ -33,7 +35,7 @@ namespace Phytel.API.DataDomain.PatientGoal.Test
         {
             PutInitializeGoalDataRequest request = new PutInitializeGoalDataRequest { PatientId = "531f2dcd072ef727c4d29fb0" };
 
-            PutInitializeGoalDataResponse response = PatientGoalDataManager.InitializeGoal(request);
+            PutInitializeGoalDataResponse response = m.InitializeGoal(request);
 
             Assert.IsNotNull(response.Goal);
         }
@@ -44,7 +46,7 @@ namespace Phytel.API.DataDomain.PatientGoal.Test
         {
             PutInitializeBarrierDataRequest request = new PutInitializeBarrierDataRequest { PatientGoalId = "52fc609fd43323258c5c8c71" };
 
-            PutInitializeBarrierDataResponse response = PatientGoalDataManager.InitializeBarrier(request);
+            PutInitializeBarrierDataResponse response = m.InitializeBarrier(request);
 
             Assert.IsNotNull(response.Id);
         }
@@ -54,7 +56,7 @@ namespace Phytel.API.DataDomain.PatientGoal.Test
         {
             GetCustomAttributesDataRequest request = new GetCustomAttributesDataRequest { TypeId = 2 };
 
-            GetCustomAttributesDataResponse response = PatientGoalDataManager.GetCustomAttributesByType(request);
+            GetCustomAttributesDataResponse response = m.GetCustomAttributesByType(request);
 
             Assert.IsNotNull(response.CustomAttributes);
         }
@@ -73,8 +75,8 @@ namespace Phytel.API.DataDomain.PatientGoal.Test
                 BarrierIdsList = barrierIds
             };
 
-            PutUpdateBarrierResponse response = PatientGoalDataManager.UpdatePatientBarrier(req);
-            Assert.IsTrue(response.Updated);
+            PutUpdateBarrierResponse response = m.UpdatePatientBarrier(req);
+            Assert.IsNotNull(response.BarrierData);
         }
     }
 }

@@ -33,6 +33,11 @@ namespace Phytel.API.DataDomain.PatientGoal.DTO
         [BsonIgnoreIfNull(false)]
         public ObjectId PatientGoalId { get; set; }
 
+        public const string TemplateIdProperty = "tid";
+        [BsonElement(TemplateIdProperty)]
+        [BsonIgnoreIfNull(true)]
+        public ObjectId? TemplateId { get; set; } 
+
         public const string TargetValueProperty = "tv";
         [BsonElement(TargetValueProperty)]
         [BsonIgnoreIfNull(false)]
@@ -58,6 +63,11 @@ namespace Phytel.API.DataDomain.PatientGoal.DTO
         [BsonElement(BarriersProperty)]
         [BsonIgnoreIfNull(false)]
         public List<ObjectId> BarrierIds { get; set; }
+
+        public const string ClosedDateProperty = "cd";
+        [BsonElement(ClosedDateProperty)]
+        [BsonIgnoreIfNull(true)]
+        public DateTime? ClosedDate { get; set; }
 
         #region Standard IMongoEntity Implementation
         [BsonExtraElements]

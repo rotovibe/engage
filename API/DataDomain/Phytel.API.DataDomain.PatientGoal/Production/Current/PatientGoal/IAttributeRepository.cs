@@ -8,7 +8,7 @@ using Phytel.API.Interface;
 
 namespace Phytel.API.DataDomain.PatientGoal
 {
-    public interface IAttributeRepository<T> : IRepository<T>
+    public interface IAttributeRepository : IRepository
     {
         IEnumerable<object> FindByType(int typeId);
     }

@@ -4,11 +4,11 @@ using Phytel.API.Interface;
 
 namespace Phytel.API.DataDomain.PatientGoal.DTO
 {
-    public class PutPatientGoalDataResponse : IDomainResponse
-    {
+    public class GetPatientTasksDataResponse : IDomainResponse
+   {
+        public List<PatientTaskData> TasksData { get; set; }
         public double Version { get; set; }
         public ResponseStatus Status { get; set; }
+   }
 
-        public bool Updated { get; set; }
-    }
 }

@@ -20,7 +20,7 @@ using MongoDB.Bson.Serialization;
 
 namespace Phytel.API.DataDomain.PatientGoal
 {
-    public class MongoPatientTaskRepository<T> : IPatientGoalRepository<T>
+    public class MongoPatientTaskRepository : IGoalRepository
     {
         private string _dbName = string.Empty;
         private int _expireDays = Convert.ToInt32(ConfigurationManager.AppSettings["ExpireDays"]);
@@ -110,8 +110,41 @@ namespace Phytel.API.DataDomain.PatientGoal
         {
             try
             {
-                throw new NotImplementedException();
-                // code here //
+                PatientTaskData taskData = null;
+                List<IMongoQuery> queries = new List<IMongoQuery>();
+                queries.Add(Query.EQ(MEPatientTask.IdProperty, ObjectId.Parse(entityID)));
+                queries.Add(Query.EQ(MEPatientTask.DeleteFlagProperty, false));
+                queries.Add(Query.EQ(MEPatientTask.TTLDateProperty, BsonNull.Value));
+                IMongoQuery mQuery = Query.And(queries);
+                using (PatientGoalMongoContext ctx = new PatientGoalMongoContext(_dbName))
+                {
+                    MEPatientTask t = ctx.PatientTasks.Collection.Find(mQuery).FirstOrDefault();
+                    if (t != null)
+                    {
+                        taskData = new PatientTaskData
+                        {
+                            Id = t.Id.ToString(),
+                            TargetValue = t.TargetValue,
+                            PatientGoalId = t.PatientGoalId.ToString(),
+                            StatusId = ((int)t.Status),
+                            TargetDate = t.TargetDate,
+                            BarrierIds = Helper.ConvertToStringList(t.BarrierIds),
+                            Description = t.Description,
+                            StatusDate = t.StatusDate,
+                            StartDate = t.StartDate,
+                            CustomAttributes = DTOUtil.GetCustomAttributeIdAndValues(t.Attributes),
+                            ClosedDate = t.ClosedDate,
+                            CreatedById = t.RecordCreatedBy.ToString(),
+                            DeleteFlag = t.DeleteFlag
+                        };
+                        var mePG = ctx.PatientGoals.Collection.Find(Query.EQ(MEPatientGoal.IdProperty, ObjectId.Parse(taskData.PatientGoalId))).SetFields(MEPatientGoal.NameProperty).FirstOrDefault();
+                        if (mePG != null)
+                        {
+                            taskData.GoalName = mePG.Name;
+                        }
+                    }
+                }
+                return taskData;
             }
             catch (Exception) { throw; }
         }
@@ -157,27 +190,53 @@ namespace Phytel.API.DataDomain.PatientGoal
                         }
                     }
                     var uv = new List<MB.UpdateBuilder>();
-                    uv.Add(MB.Update.Set(MEPatientTask.TTLDateProperty, BsonNull.Value));
-                    uv.Add(MB.Update.Set(MEPatientTask.DeleteFlagProperty, false));
                     uv.Add(MB.Update.Set(MEPatientTask.UpdatedByProperty, ObjectId.Parse(this.UserId)));
                     uv.Add(MB.Update.Set(MEPatientTask.VersionProperty, ptr.Version));
                     uv.Add(MB.Update.Set(MEPatientTask.LastUpdatedOnProperty, System.DateTime.UtcNow));
                     if (pt.Description != null) uv.Add(MB.Update.Set(MEPatientTask.DescriptionProperty, pt.Description));
-                    if (pt.StartDate != null) uv.Add(MB.Update.Set(MEPatientTask.StartDateProperty, pt.StartDate));
+                    if (pt.StartDate != null)
+                    {
+                        uv.Add(MB.Update.Set(MEPatientTask.StartDateProperty, pt.StartDate));
+                    }
+                    else
+                    {
+                        uv.Add(MB.Update.Set(MEPatientTask.StartDateProperty, BsonNull.Value));
+                    }
                     if (pt.StatusDate != null) uv.Add(MB.Update.Set(MEPatientTask.StatusDateProperty, pt.StatusDate));
                     if (pt.StatusId != 0) uv.Add(MB.Update.Set(MEPatientTask.StatusProperty, pt.StatusId));
-                    if (pt.TargetDate != null) uv.Add(MB.Update.Set(MEPatientTask.TargetDateProperty, pt.TargetDate));
+                    if (pt.TargetDate != null)
+                    {
+                        uv.Add(MB.Update.Set(MEPatientTask.TargetDateProperty, pt.TargetDate));
+                    }
+                    else
+                    {
+                        uv.Add(MB.Update.Set(MEPatientTask.TargetDateProperty, BsonNull.Value));
+                    }
                     if (pt.TargetValue != null) uv.Add(MB.Update.Set(MEPatientTask.TargetValueProperty, pt.TargetValue));
                     if (pt.CustomAttributes != null) { uv.Add(MB.Update.SetWrapped<List<MAttribute>>(MEPatientTask.AttributesProperty, DTOUtil.GetAttributes(pt.CustomAttributes))); }
                     if (pt.BarrierIds != null) { uv.Add(MB.Update.SetWrapped<List<ObjectId>>(MEPatientTask.BarriersProperty, DTOUtil.ConvertObjectId(pt.BarrierIds))); }
+                    uv.Add(MB.Update.Set(MEPatientTask.ClosedDateProperty, pt.ClosedDate)); 
+                    uv.Add(MB.Update.Set(MEPatientTask.DeleteFlagProperty, pt.DeleteFlag));
+                    if (pt.TemplateId != null) uv.Add(MB.Update.Set(MEPatientTask.TemplateIdProperty, ObjectId.Parse(pt.TemplateId)));
 
+                    DataAuditType type;
+                    if (pt.DeleteFlag)
+                    {
+                        uv.Add(MB.Update.Set(MEPatientTask.TTLDateProperty, System.DateTime.UtcNow.AddDays(_expireDays)));
+                        type = Common.DataAuditType.Delete;
+                    }
+                    else
+                    {
+                        uv.Add(MB.Update.Set(MEPatientTask.TTLDateProperty, BsonNull.Value));
+                        type = Common.DataAuditType.Update;
+                    }
                     IMongoUpdate update = MB.Update.Combine(uv);
                     ctx.PatientTasks.Collection.Update(q, update);
 
                     AuditHelper.LogDataAudit(this.UserId, 
                                             MongoCollectionName.PatientTask.ToString(), 
                                             pt.Id, 
-                                            Common.DataAuditType.Update, 
+                                            type, 
                                             ptr.ContractNumber);
 
                     result = true;
@@ -251,62 +310,31 @@ namespace Phytel.API.DataDomain.PatientGoal
                     List<MEPatientTask> meTasks = ctx.PatientTasks.Collection.Find(mQuery).ToList();
                     if (meTasks != null)
                     {
-                        tasksDataList = new List<PatientTaskData>();
-                        foreach (MEPatientTask b in meTasks)
+                        string goalName = string.Empty;
+                        var mePG = ctx.PatientGoals.Collection.Find(Query.EQ(MEPatientGoal.IdProperty, ObjectId.Parse(Id))).SetFields(MEPatientGoal.NameProperty).FirstOrDefault();
+                        if (mePG != null)
                         {
-                            PatientTaskData taskData = new PatientTaskData
-                            {
-                                Id = b.Id.ToString(),
-                                TargetValue = b.TargetValue,
-                                PatientGoalId = b.PatientGoalId.ToString(),
-                                StatusId = ((int)b.Status),
-                                TargetDate = b.TargetDate,
-                                BarrierIds = Helper.ConvertToStringList(b.BarrierIds),
-                                Description = b.Description,
-                                StatusDate = b.StatusDate,
-                                StartDate = b.StartDate,
-                                CustomAttributes = DTOUtil.GetCustomAttributeIdAndValues(b.Attributes)
-                            };
-                            tasksDataList.Add(taskData);
+                            goalName = mePG.Name;
                         }
-                    }
-                }
-                return tasksDataList;
-            }
-            catch (Exception) { throw; }
-        }
-
-        public IEnumerable<object> FindByGoalId(string Id)
-        {
-            try
-            {
-                List<PatientTaskData> tasksDataList = null;
-                List<IMongoQuery> queries = new List<IMongoQuery>();
-                queries.Add(Query.EQ(MEPatientTask.PatientGoalIdProperty, ObjectId.Parse(Id)));
-                queries.Add(Query.EQ(MEPatientTask.DeleteFlagProperty, false));
-                queries.Add(Query.EQ(MEPatientTask.TTLDateProperty, BsonNull.Value));
-                IMongoQuery mQuery = Query.And(queries);
-
-                using (PatientGoalMongoContext ctx = new PatientGoalMongoContext(_dbName))
-                {
-                    List<MEPatientTask> meTasks = ctx.PatientTasks.Collection.Find(mQuery).ToList();
-                    if (meTasks != null)
-                    {
                         tasksDataList = new List<PatientTaskData>();
-                        foreach (MEPatientTask b in meTasks)
+                        foreach (MEPatientTask t in meTasks)
                         {
                             PatientTaskData taskData = new PatientTaskData
                             {
-                                Id = b.Id.ToString(),
-                                TargetValue = b.TargetValue,
-                                PatientGoalId = b.PatientGoalId.ToString(),
-                                StatusId = ((int)b.Status),
-                                TargetDate = b.TargetDate,
-                                //Attributes = DTOUtil.ConvertToAttributeDataList(b.Attributes),
-                                BarrierIds = Helper.ConvertToStringList(b.BarrierIds),
-                                Description = b.Description,
-                                StatusDate = b.StatusDate,
-                                StartDate = b.StartDate
+                                Id = t.Id.ToString(),
+                                TargetValue = t.TargetValue,
+                                PatientGoalId = t.PatientGoalId.ToString(),
+                                StatusId = ((int)t.Status),
+                                TargetDate = t.TargetDate,
+                                BarrierIds = Helper.ConvertToStringList(t.BarrierIds),
+                                Description = t.Description,
+                                StatusDate = t.StatusDate,
+                                StartDate = t.StartDate,
+                                CustomAttributes = DTOUtil.GetCustomAttributeIdAndValues(t.Attributes),
+                                ClosedDate = t.ClosedDate,
+                                CreatedById = t.RecordCreatedBy.ToString(),
+                                DeleteFlag = t.DeleteFlag,
+                                GoalName = goalName
                             };
                             tasksDataList.Add(taskData);
                         }
@@ -356,6 +384,114 @@ namespace Phytel.API.DataDomain.PatientGoal
         public void RemoveProgram(object entity, List<string> updatedProgramIds)
         {
             throw new NotImplementedException();
+        }
+
+        public IEnumerable<object> Search(object request, List<string> patientGoalIds)
+        {
+            List<PatientTaskData> list = null;
+            GetPatientTasksDataRequest dataRequest = (GetPatientTasksDataRequest)request;
+            try
+            {
+                using (PatientGoalMongoContext ctx = new PatientGoalMongoContext(_dbName))
+                {
+                    List<IMongoQuery> queries = new List<IMongoQuery>();
+                    queries.Add(Query.EQ(MEPatientTask.DeleteFlagProperty, false));
+                    if (dataRequest.StatusIds != null && dataRequest.StatusIds.Count > 0)
+                    {
+                        queries.Add(Query.In(MEPatientTask.StatusProperty, new BsonArray(dataRequest.StatusIds)));
+                    }
+                    if (patientGoalIds != null && patientGoalIds.Count > 0)
+                    {
+                        List<BsonValue> bsonList = Helper.ConvertToBsonValueList(patientGoalIds);
+                        queries.Add(Query.In(MEPatientTask.PatientGoalIdProperty, bsonList));
+                    }
+                    IMongoQuery mQuery = Query.And(queries);
+                    List<MEPatientTask> meTasks = null;
+                    meTasks = ctx.PatientTasks.Collection.Find(mQuery).ToList();
+                    if (meTasks != null && meTasks.Count > 0)
+                    {
+                        list = new List<PatientTaskData>();
+                        foreach (MEPatientTask t in meTasks)
+                        {
+                            PatientTaskData taskData = new PatientTaskData
+                            {
+                                Id = t.Id.ToString(),
+                                TargetValue = t.TargetValue,
+                                PatientGoalId = t.PatientGoalId.ToString(),
+                                StatusId = ((int)t.Status),
+                                TargetDate = t.TargetDate,
+                                BarrierIds = Helper.ConvertToStringList(t.BarrierIds),
+                                Description = t.Description,
+                                StatusDate = t.StatusDate,
+                                StartDate = t.StartDate,
+                                CustomAttributes = DTOUtil.GetCustomAttributeIdAndValues(t.Attributes),
+                                ClosedDate = t.ClosedDate,
+                                CreatedById = t.RecordCreatedBy.ToString(),
+                                DeleteFlag = t.DeleteFlag
+                            };
+                            var mePG = ctx.PatientGoals.Collection.Find(Query.EQ(MEPatientGoal.IdProperty, ObjectId.Parse(taskData.PatientGoalId))).SetFields(MEPatientGoal.NameProperty).FirstOrDefault();
+                            if (mePG != null)
+                            {
+                                taskData.GoalName = mePG.Name;
+                            }
+                            list.Add(taskData);
+                        }
+                    }
+                }
+                return list;
+            }
+            catch (Exception) { throw; }
+        }
+
+
+        public object FindByTemplateId(string patientGoalId, string entityID)
+        {
+            PatientTaskData taskData = null;
+            try
+            {
+                using (PatientGoalMongoContext ctx = new PatientGoalMongoContext(_dbName))
+                {
+                    List<IMongoQuery> queries = new List<IMongoQuery>
+                    {
+                        Query.EQ(MEPatientTask.PatientGoalIdProperty, ObjectId.Parse(patientGoalId)),
+                        Query.EQ(MEPatientTask.TemplateIdProperty, ObjectId.Parse(entityID)),
+                        Query.In(MEPatientTask.StatusProperty, new BsonArray{1, 3}),
+                        Query.EQ(MEPatientTask.DeleteFlagProperty, false),
+                        Query.EQ(MEPatientTask.TTLDateProperty, BsonNull.Value)
+                    };
+
+                    var mQuery = Query.And(queries);
+                    var b = ctx.PatientTasks.Collection.Find(mQuery).FirstOrDefault();
+
+                    if (b != null)
+                    {
+                        taskData = new PatientTaskData
+                        {
+                            Id = b.Id.ToString(),
+                            Description = b.Description,
+                            PatientGoalId = b.PatientGoalId.ToString(),
+                            BarrierIds = Helper.ConvertToStringList(b.BarrierIds),
+                            StatusId = ((int) b.Status),
+                            StatusDate = b.StatusDate,
+                            StartDate = b.StartDate,
+                            TargetValue = b.TargetValue,
+                            CustomAttributes = DTOUtil.GetCustomAttributeIdAndValues(b.Attributes),
+                            TargetDate = b.TargetDate,
+                            ClosedDate = b.ClosedDate,
+                            CreatedById = b.RecordCreatedBy.ToString(),
+                            DeleteFlag = b.DeleteFlag
+                        };
+
+                        var mePG = ctx.PatientGoals.Collection.Find(Query.EQ(MEPatientGoal.IdProperty, ObjectId.Parse(taskData.PatientGoalId))).SetFields(MEPatientGoal.PatientIdProperty, MEPatientGoal.NameProperty).FirstOrDefault();
+                        if (mePG != null)
+                        {
+                            taskData.GoalName = mePG.Name;
+                        }
+                    }
+                }
+                return taskData;
+            }
+            catch (Exception) { throw; }
         }
     }
 }
