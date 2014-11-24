@@ -1,4 +1,5 @@
 ﻿using Phytel.API.AppDomain.NG.DTO;
+using Phytel.API.AppDomain.NG.DTO.Goal;
 using Phytel.API.AppDomain.NG.DTO.Scheduling;
 using Phytel.API.AppDomain.NG.PlanCOR;
 using Phytel.API.DataDomain.Patient.DTO;
@@ -35,5 +36,12 @@ namespace Phytel.API.AppDomain.NG.Programs
         Schedule GetScheduleToDoById(string p, string userId, IAppDomainRequest request);
 
         object PutInsertToDo(ToDoData todo, string p, IAppDomainRequest request);
+        Goal GetGoalById(string sid, string userId, IAppDomainRequest req);
+        PatientGoal GetOpenNotMetPatientGoalByTemplateId(string sid, string patientId, string userId, IAppDomainRequest req);
+        Intervention GetInterventionById(string sid, string userId, IAppDomainRequest req);
+
+        PatientIntervention GetOpenNotMetPatientInterventionByTemplateId(string gid, string tempId, string patientId, string userId, IAppDomainRequest req);
+        Task GetTaskById(string sid, string userId, IAppDomainRequest req);
+        PatientTask GetOpenNotMetPatientTaskByTemplateId(string taskid, string tempId, string patientId, string userId, IAppDomainRequest req);
     }
 }

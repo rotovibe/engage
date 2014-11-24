@@ -1,4 +1,5 @@
 ﻿using Phytel.API.AppDomain.NG.DTO;
+using Phytel.API.AppDomain.NG.DTO.Goal;
 using Phytel.API.DataDomain.Program.DTO;
 using ServiceStack.Service;
 using ServiceStack.ServiceClient.Web;
@@ -730,6 +731,14 @@ namespace Phytel.API.AppDomain.NG
                 replaced = true;
             }
             return replaced;
+        }
+
+        public static List<DTO.Goal.Option> FormatOptions(Dictionary<int, string> dictionary)
+        {
+            var list = dictionary.ToList();
+
+            var mlist = list.ConvertAll(c => new DTO.Goal.Option { Display = c.Value,  Value = c.Key}).ToList();
+            return mlist;
         }
     }
 }

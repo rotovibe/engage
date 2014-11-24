@@ -1,10 +1,13 @@
-﻿using Phytel.API.AppDomain.NG.DTO;
+﻿using AutoMapper;
+using Phytel.API.AppDomain.NG.DTO;
+using Phytel.API.AppDomain.NG.DTO.Goal;
 using Phytel.API.AppDomain.NG.DTO.Scheduling;
 using Phytel.API.AppDomain.NG.PlanCOR;
 //using Phytel.API.AppDomain.NG.Program;
 using Phytel.API.AppDomain.NG.Programs;
 using Phytel.API.DataDomain.CareMember.DTO;
 using Phytel.API.DataDomain.Patient.DTO;
+using Phytel.API.DataDomain.PatientGoal.DTO;
 using Phytel.API.DataDomain.PatientObservation.DTO;
 using Phytel.API.DataDomain.Program.DTO;
 using Phytel.API.DataDomain.Scheduling.DTO;
@@ -27,6 +30,7 @@ namespace Phytel.API.AppDomain.NG
         static readonly string DDProgramServiceUrl = ConfigurationManager.AppSettings["DDProgramServiceUrl"];
         static readonly string DDCareMemberUrl = ConfigurationManager.AppSettings["DDCareMemberUrl"];
         static readonly string DDSchedulingUrl = ConfigurationManager.AppSettings["DDSchedulingUrl"];
+        static readonly string DDPatientGoalsServiceUrl = ConfigurationManager.AppSettings["DDPatientGoalUrl"];
 
         public PatientObservation GetPatientProblem(string probId, PlanElementEventArg e, string userId)
         {
@@ -599,7 +603,6 @@ namespace Phytel.API.AppDomain.NG
         }
         #endregion
 
-
         public PutProgramToPatientResponse AssignPatientToProgram(PostPatientToProgramsRequest request, string primaryCM)
         {
             try
@@ -660,7 +663,6 @@ namespace Phytel.API.AppDomain.NG
             }
         }
 
-
         public AD.Outcome SaveProgramAttributeChanges(
             PostProgramAttributesChangeRequest request, ProgramDetail pD)
         {
@@ -700,6 +702,184 @@ namespace Phytel.API.AppDomain.NG
             }
         }
 
+        public Goal GetGoalById(string sid, string userId, IAppDomainRequest req)
+        {
+            try
+            {
+                var request = new GetGoalDataRequest();
+
+                IRestClient client = new JsonServiceClient();
+
+                //"/{Context}/{Version}/{ContractNumber}/Goal/{Id}"
+                var url = Common.Helper.BuildURL(string.Format(@"{0}/{1}/{2}/{3}/Goal/{4}",
+                    DDPatientGoalsServiceUrl,
+                    "NG",
+                    req.Version,
+                    req.ContractNumber,
+                    sid), userId);
+
+                var response = client.Get<GetGoalDataResponse>(url);
+                if (response == null) throw new Exception("Goal template was not found or initialized.");
+                var goal = Mapper.Map<Goal>(response.GoalData);
+                goal.StatusId = response.GoalData.StatusId;
+
+                return goal;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("AD:EndpointUtils:GetGoalById()::" + ex.Message,
+                    ex.InnerException);
+            }
+        }
+
+        public Task GetTaskById(string sid, string userId, IAppDomainRequest req)
+        {
+            try
+            {
+                IRestClient client = new JsonServiceClient();
+                var url = Common.Helper.BuildURL(string.Format(@"{0}/{1}/{2}/{3}/Goal/Tasks?Id={4}",
+                    DDPatientGoalsServiceUrl,
+                    "NG",
+                    req.Version,
+                    req.ContractNumber,
+                    sid), userId);
+
+                var response = client.Get<GetTaskDataResponse>(url);
+                if (response == null) throw new Exception("Task template was not found or initialized.");
+                var task = Mapper.Map<Task>(response.TaskData);
+
+                return task;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("AD:PlanElementEndpointUtil:GetTaskById()::" + ex.Message,
+                    ex.InnerException);
+            }
+        }
+
+        public Intervention GetInterventionById(string sid, string userId, IAppDomainRequest req)
+        {
+            try
+            {
+                IRestClient client = new JsonServiceClient();
+
+                //"/{Context}/{Version}/{ContractNumber}/Goal/Interventions?Id={Id}"
+                var url = Common.Helper.BuildURL(string.Format(@"{0}/{1}/{2}/{3}/Goal/Interventions?Id={4}",
+                    DDPatientGoalsServiceUrl,
+                    "NG",
+                    req.Version,
+                    req.ContractNumber,
+                    sid), userId);
+
+                var response = client.Get<GetInterventionDataResponse>(url);
+                if (response == null) throw new Exception("Intervention template was not found or initialized.");
+                var intervention = Mapper.Map<Intervention>(response.InterventionsData);
+
+                return intervention;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("AD:PlanElementEndpointUtil:GetInterventionById()::" + ex.Message,
+                    ex.InnerException);
+            }
+        }
+
+        public PatientGoal GetOpenNotMetPatientGoalByTemplateId(string gid, string patientId, string userId, IAppDomainRequest req)
+        {
+            try
+            {
+                PatientGoal goal = null;
+
+                IRestClient client = new JsonServiceClient();
+
+                //"/{Context}/{Version}/{ContractNumber}/Patient/{PatientId}/Goal/"
+                var url = Common.Helper.BuildURL(string.Format(@"{0}/{1}/{2}/{3}/Patient/{4}/Goal/?TemplateId={5}",
+                    DDPatientGoalsServiceUrl,
+                    "NG",
+                    req.Version,
+                    req.ContractNumber,
+                    patientId,
+                    gid), userId);
+
+                var response = client.Get<GetPatientGoalByTemplateIdResponse>(url);
+
+                if (response.GoalData != null)
+                    goal = Mapper.Map<PatientGoal>(response.GoalData);
+
+                return goal;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("AD:PlanElementEndpointUtil:GetOpenNotMetPatientGoalByTemplateId()::" + ex.Message,
+                    ex.InnerException);
+            }
+        }
+
+        public PatientTask GetOpenNotMetPatientTaskByTemplateId(string taskid, string tempId, string patientId, string userId, IAppDomainRequest req)
+        {
+            try
+            {
+                var request = new GetPatientTaskByTemplateIdRequest();
+                PatientTask task = null;
+
+                IRestClient client = new JsonServiceClient();
+
+                var url =
+                    Common.Helper.BuildURL(
+                        string.Format(@"{0}/{1}/{2}/{3}/Patient/{4}/Goal/Tasks?TemplateId={5}&GoalId={6}",
+                            DDPatientGoalsServiceUrl,
+                            "NG",
+                            req.Version,
+                            req.ContractNumber,
+                            patientId,
+                            tempId,
+                            taskid), userId);
+
+                var response = client.Get<GetPatientTaskByTemplateIdResponse>(url);
+                if (response.TaskData != null)
+                    task = Mapper.Map<PatientTask>(response.TaskData);
+
+                return task;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("AD:PlanElementEndpointUtil:GetGoalById()::" + ex.Message,
+                    ex.InnerException);
+            }
+        }
+
+        public PatientIntervention GetOpenNotMetPatientInterventionByTemplateId(string goalid, string tempId, string patientId, string userId, IAppDomainRequest req)
+        {
+            try
+            {
+                var request = new GetPatientInterventionByTemplateIdRequest();
+                PatientIntervention intervention = null;
+
+                IRestClient client = new JsonServiceClient();
+
+                var url =
+                    Common.Helper.BuildURL(
+                        string.Format(@"{0}/{1}/{2}/{3}/Patient/{4}/Goal/Interventions?TemplateId={5}&GoalId={6}",
+                            DDPatientGoalsServiceUrl,
+                            "NG",
+                            req.Version,
+                            req.ContractNumber,
+                            patientId,
+                            tempId,
+                            goalid), userId);
+
+                var response = client.Get<GetPatientInterventionByTemplateIdResponse>(url);
+                if (response.InterventionData != null)
+                    intervention = Mapper.Map<PatientIntervention>(response.InterventionData);
+
+                return intervention;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("AD:PlanElementEndpointUtil:GetOpenNotMetPatientInterventionByTemplateId()::" + ex.Message,
+                    ex.InnerException);
+            }
+        }
 
         public Schedule GetScheduleToDoById(string sid, string userId, IAppDomainRequest req)
         {
@@ -748,7 +928,6 @@ namespace Phytel.API.AppDomain.NG
                     ex.InnerException);
             }
         }
-
 
         public object PutInsertToDo(ToDoData todo, string userId, IAppDomainRequest req)
         {

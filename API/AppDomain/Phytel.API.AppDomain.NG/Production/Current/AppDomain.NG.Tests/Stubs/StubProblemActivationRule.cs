@@ -11,9 +11,10 @@ namespace Phytel.API.AppDomain.NG.Test.Stubs
         private const string _alertType = "Problems";
         public int ElementType { get { return _elementType; } }
 
-        public override object Execute(string userId, PlanElementEventArg arg, SpawnElement pe, ProgramAttributeData pad)
+        public override SpawnType Execute(string userId, PlanElementEventArg arg, SpawnElement pe, ProgramAttributeData pad)
         {
-            return _alertType;
+            var spawnType = new SpawnType { Type = _alertType.ToString()};
+            return spawnType;
         }
     }
 }

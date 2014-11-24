@@ -15,19 +15,18 @@ namespace Phytel.API.AppDomain.NG.Programs.ElementActivation
         {
             _rules = new List<IElementActivationRule>
             {
+                // add other implementations here
                 new ToDoActivationRule(),
-                new ProblemActivationRule()
-                //new ProgramActivationRule(),
-                //new ModuleActivationRule(),
-                //new ActionActivationRule(),
-                //new StepActivationRule(),
-                //new ProgramAttributeActivationRule()
+                new ProblemActivationRule(),
+                new GoalActivationRule(),
+                new InterventionActivationRule(),
+                new TaskActivationRule()
             };
         }
 
-        public object Run(PlanElementEventArg e, SpawnElement rse, string userId, ProgramAttributeData pad)
+        public SpawnType Run(PlanElementEventArg e, SpawnElement rse, string userId, ProgramAttributeData pad)
         {
-            object alert = null;
+            SpawnType alert = null;
 
             alert = _progAttributeTypes.Contains(rse.ElementType)
                 ? new ProgramAttributeActivationRule().Execute(userId, e, rse, pad)

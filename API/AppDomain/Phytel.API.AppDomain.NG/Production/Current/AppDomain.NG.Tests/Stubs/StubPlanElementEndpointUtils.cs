@@ -1,4 +1,6 @@
 ﻿using MongoDB.Bson;
+using Phytel.API.AppDomain.NG.DTO;
+using Phytel.API.AppDomain.NG.DTO.Goal;
 using Phytel.API.AppDomain.NG.Programs;
 using Phytel.API.DataDomain.Program.DTO;
 using Phytel.API.DataDomain.Scheduling.DTO;
@@ -10,6 +12,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Outcome = Phytel.API.DataDomain.Program.DTO.Outcome;
+using ProgramInfo = Phytel.API.DataDomain.Program.DTO.ProgramInfo;
 
 namespace Phytel.API.AppDomain.NG.Test.Stubs
 {
@@ -308,6 +312,40 @@ namespace Phytel.API.AppDomain.NG.Test.Stubs
 
 
         public object PutInsertToDo(ToDoData todo, string p, IAppDomainRequest req)
+        {
+            throw new NotImplementedException();
+        }
+
+
+        public Goal GetGoalById(string sid, string userId, IAppDomainRequest req)
+        {
+            throw new NotImplementedException();
+        }
+
+        public PatientGoal GetOpenNotMetPatientGoalByTemplateId(string sid, string patientId, string userId, IAppDomainRequest req)
+        {
+            throw new NotImplementedException();
+        }
+
+
+        public Intervention GetInterventionById(string sid, string userId, IAppDomainRequest req)
+        {
+            throw new NotImplementedException();
+        }
+
+
+        public PatientIntervention GetOpenNotMetPatientInterventionByTemplateId(string gid, string templateId, string patientId, string userId, IAppDomainRequest req)
+        {
+            throw new NotImplementedException();
+        }
+
+
+        public DTO.Goal.Task GetTaskById(string sid, string userId, IAppDomainRequest req)
+        {
+            throw new NotImplementedException();
+        }
+
+        public PatientTask GetOpenNotMetPatientTaskByTemplateId(string taskid, string tempId, string patientId, string userId, IAppDomainRequest req)
         {
             throw new NotImplementedException();
         }
