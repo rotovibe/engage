@@ -5,12 +5,13 @@ namespace Phytel.API.DataDomain.Allergy.Service
 {
     public class PatientAllergyService : ServiceBase
     {
-        protected readonly IPatientAllergyDataManager Manager;
+        //protected readonly IPatientAllergyDataManager Manager;
+        public IPatientAllergyDataManager Manager { get; set;}
 
-        public PatientAllergyService(IPatientAllergyDataManager mgr)
-        {
-            Manager = mgr;
-        }
+        //public PatientAllergyService(IPatientAllergyDataManager mgr)
+        //{
+        //    Manager = mgr;
+        //}
 
         #region Posts
         public GetPatientAllergiesDataResponse Post(GetPatientAllergiesDataRequest request)

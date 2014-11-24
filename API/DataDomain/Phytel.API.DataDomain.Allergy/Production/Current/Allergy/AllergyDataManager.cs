@@ -8,12 +8,12 @@ namespace Phytel.API.DataDomain.Allergy
 {
     public class AllergyDataManager : IAllergyDataManager
     {
-        protected readonly IMongoAllergyRepository AllergyRepository;
+        //protected readonly IMongoAllergyRepository AllergyRepository;
 
-        public AllergyDataManager(IMongoAllergyRepository repository)
-        {
-            AllergyRepository = repository;
-        }
+        //public AllergyDataManager(IMongoAllergyRepository repository)
+        //{
+        //    AllergyRepository = repository;
+        //}
 
         public List<AllergyData> GetAllergyList(GetAllAllergysRequest request)
         {
