@@ -26,7 +26,8 @@ namespace Phytel.API.DataDomain.Medication.Tests
                 Medications  = GetMedDtoList()
             };
             var repo = MedicationRepositoryFactory.GetMedicationRepository(request, RepositoryType.Medication);
-            var dm = new MedicationDataManager(repo);
+//            var dm = new MedicationDataManager(repo);
+            var dm = new MedicationDataManager();
 
             dm.BulkInsertMedications(request.Medications, request);
         }

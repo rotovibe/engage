@@ -388,17 +388,20 @@ namespace DataDomain.Medication.Repo
             List<MEMedication> meMs = ctx.Medications.Collection.Find(Query.EQ(MEMedication.FullNameProperty, name)).SetFields(MEMedication.PharmClassProperty).ToList();
             if (meMs != null && meMs.Count > 0)
             {
-                result = new List<string>();
                 meMs.ForEach(m =>
                 {
-                    m.PharmClass.ForEach(p => 
+                    if (m.PharmClass != null && m.PharmClass.Count > 0)
                     {
-                        // get only unique pharm classes codes.
-                        if (!result.Contains(p))
+                        result = new List<string>();
+                        m.PharmClass.ForEach(p =>
                         {
-                            result.Add(p);
-                        }
-                    });
+                            // get only unique pharm classes codes.
+                            if (!result.Contains(p))
+                            {
+                                result.Add(p);
+                            }
+                        });
+                    }
                 });
             }
             return result;
