@@ -36,6 +36,15 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Model|AnyCPU'">
+    <OutputPath>bin\Model\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="ServiceStack">
       <HintPath>..\..\..\..\..\packages\ServiceStack.3.9.70\lib\net35\ServiceStack.dll</HintPath>
@@ -72,15 +81,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Enums.cs" />
+    <Compile Include="PutUpdatePatientSystemDataRequest.cs" />
+    <Compile Include="PutUpdatePatientSystemDataResponse.cs" />
     <Compile Include="UndoDeletePatientSystemsDataRequest.cs" />
     <Compile Include="DeletePatientSystemByPatientIdDataRequest.cs" />
     <Compile Include="UndoDeletePatientSystemsDataResponse.cs" />
     <Compile Include="DeletePatientSystemByPatientIdDataResponse.cs" />
-    <Compile Include="GetAllPatientSystemsDataRequest.cs" />
+    <Compile Include="GetPatientSystemsDataRequest.cs" />
     <Compile Include="PutPatientSystemDataResponse.cs" />
     <Compile Include="PutPatientSystemDataRequest.cs" />
     <Compile Include="GetPatientSystemDataRequest.cs" />
-    <Compile Include="GetAllPatientSystemsDataResponse.cs" />
+    <Compile Include="GetPatientSystemsDataResponse.cs" />
     <Compile Include="GetPatientSystemDataResponse.cs" />
     <Compile Include="PatientSystemData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

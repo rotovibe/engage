@@ -4,10 +4,10 @@ using System.Collections.Generic;
 
 namespace Phytel.API.DataDomain.PatientSystem.DTO
 {
-    public class GetAllPatientSystemsDataResponse : IDomainResponse
-   {
-        public List<PatientSystemData> PatientSystems { get; set; }
+    public class PutUpdatePatientSystemDataResponse : IDomainResponse
+    {
+        public bool Success { get; set; }
         public double Version { get; set; }
         public ResponseStatus Status { get; set; }
-   }
+    }
 }
