@@ -1193,5 +1193,44 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO.Tests
                 Assert.AreEqual(date, actions[0].StateUpdatedOn);
             }
         }
+
+        [TestMethod()]
+        public void CanInsertPatientProgramTest_True_Closed_State()
+        {
+            DTOUtility util = new DTOUtility();
+            List<MEPatientProgram> pp = new List<MEPatientProgram>
+            {
+                new MEPatientProgram(ObjectId.GenerateNewId().ToString()){State = ElementState.Closed}
+            };
+            var result = util.CanInsertPatientProgram(pp);
+
+            Assert.IsTrue(result);
+        }
+
+        [TestMethod()]
+        public void CanInsertPatientProgramTest_True_Completed_State()
+        {
+            DTOUtility util = new DTOUtility();
+            List<MEPatientProgram> pp = new List<MEPatientProgram>
+            {
+                new MEPatientProgram(ObjectId.GenerateNewId().ToString()){State = ElementState.Completed}
+            };
+            var result = util.CanInsertPatientProgram(pp);
+
+            Assert.IsTrue(result);
+        }
+
+        [TestMethod()]
+        public void CanInsertPatientProgramTest_False_InProgress_State()
+        {
+            DTOUtility util = new DTOUtility();
+            List<MEPatientProgram> pp = new List<MEPatientProgram>
+            {
+                new MEPatientProgram(ObjectId.GenerateNewId().ToString()) {State = ElementState.InProgress}
+            };
+            var result = util.CanInsertPatientProgram(pp);
+
+            Assert.IsFalse(result);
+        }
     }
 }
