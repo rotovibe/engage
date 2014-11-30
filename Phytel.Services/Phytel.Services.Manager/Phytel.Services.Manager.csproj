@@ -57,22 +57,22 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="MongoDB.Bson">
-      <HintPath>packages\mongocsharpdriver.1.8.1\lib\net35\MongoDB.Bson.dll</HintPath>
+      <HintPath>..\..\..\Internal Tools\ASE\Development\Current\packages\mongocsharpdriver.1.8.1\lib\net35\MongoDB.Bson.dll</HintPath>
     </Reference>
     <Reference Include="MongoDB.Driver">
-      <HintPath>packages\mongocsharpdriver.1.8.1\lib\net35\MongoDB.Driver.dll</HintPath>
+      <HintPath>..\..\..\Internal Tools\ASE\Development\Current\packages\mongocsharpdriver.1.8.1\lib\net35\MongoDB.Driver.dll</HintPath>
     </Reference>
     <Reference Include="Phytel.Services.API">
-      <HintPath>packages\Phytel.Services.API.1.3.0.06\lib\net451\Phytel.Services.API.dll</HintPath>
+      <HintPath>..\..\..\Internal Tools\ASE\Development\Current\packages\Phytel.Services.API.1.3.0.06\lib\net451\Phytel.Services.API.dll</HintPath>
     </Reference>
     <Reference Include="Phytel.Services.Mongo">
-      <HintPath>packages\Phytel.Services.Mongo.1.3.2.03\lib\net451\Phytel.Services.Mongo.dll</HintPath>
+      <HintPath>..\..\..\Internal Tools\ASE\Development\Current\packages\Phytel.Services.Mongo.1.3.2.03\lib\net451\Phytel.Services.Mongo.dll</HintPath>
     </Reference>
     <Reference Include="Phytel.Services.Security">
-      <HintPath>packages\Phytel.Services.Security.1.3.0.05\lib\net451\Phytel.Services.Security.dll</HintPath>
+      <HintPath>..\..\..\Internal Tools\ASE\Development\Current\packages\Phytel.Services.Security.1.3.0.04\lib\net451\Phytel.Services.Security.dll</HintPath>
     </Reference>
     <Reference Include="Phytel.Services.SQLServer">
-      <HintPath>packages\Phytel.Services.SQLServer.1.3.0.08\lib\net451\Phytel.Services.SQLServer.dll</HintPath>
+      <HintPath>..\..\..\Internal Tools\ASE\Development\Current\packages\Phytel.Services.SQLServer.1.3.0.05\lib\net451\Phytel.Services.SQLServer.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
