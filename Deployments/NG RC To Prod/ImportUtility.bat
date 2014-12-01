@@ -10,7 +10,7 @@ set hrMin=%hrMin:~3,2%
 
 set branchDate=%mydate%_%hr%-%hrMin%
 
-tf branch "$/PhytelCode/Phytel.Net/Services/API/Import/Production/Current" "$/PhytelCode/Phytel.Net/Services/API/Import/Production/%branchDate%" /checkin /noprompt /silent
+REM tf branch "$/PhytelCode/Phytel.Net/Services/API/Import/Production/Current" "$/PhytelCode/Phytel.Net/Services/API/Import/Production/%branchDate%" /checkin /noprompt /silent
 
 tf merge "$/PhytelCode/Phytel.Net/Services/API/Import/Release Candidate/Current" "$/PhytelCode/Phytel.Net/Services/API/Import/Production/Current" /recursive /nosummary /lock:checkout
 

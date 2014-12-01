@@ -10,8 +10,8 @@ set hrMin=%hrMin:~3,2%
 
 set branchDate=%mydate%_%hr%-%hrMin%
 
-tf branch "$/PhytelCode/Phytel.Net/Client Apps/NG/Atmosphere.Core/Production/Current" "$/PhytelCode/Phytel.Net/Client Apps/NG/Atmosphere.Core/Production/%branchDate%" /checkin /noprompt /silent
-tf branch "$/PhytelCode/Phytel.Net/Client Apps/NG/Atmosphere.Site/Production/Current" "$/PhytelCode/Phytel.Net/Client Apps/NG/Atmosphere.Site/Production/%branchDate%" /checkin /noprompt /silent
+REM tf branch "$/PhytelCode/Phytel.Net/Client Apps/NG/Atmosphere.Core/Production/Current" "$/PhytelCode/Phytel.Net/Client Apps/NG/Atmosphere.Core/Production/%branchDate%" /checkin /noprompt /silent
+REM tf branch "$/PhytelCode/Phytel.Net/Client Apps/NG/Atmosphere.Site/Production/Current" "$/PhytelCode/Phytel.Net/Client Apps/NG/Atmosphere.Site/Production/%branchDate%" /checkin /noprompt /silent
 
 tf merge "$/PhytelCode/Phytel.Net/Client Apps/NG/Atmosphere.Core/Release Candidate/Current" "$/PhytelCode/Phytel.Net/Client Apps/NG/Atmosphere.Core/Production/Current" /recursive /nosummary /lock:checkout
 tf merge "$/PhytelCode/Phytel.Net/Client Apps/NG/Atmosphere.Site/Release Candidate/Current" "$/PhytelCode/Phytel.Net/Client Apps/NG/Atmosphere.Site/Production/Current" /recursive /nosummary /lock:checkout

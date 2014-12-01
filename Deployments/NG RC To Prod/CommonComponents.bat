@@ -10,9 +10,9 @@ set hrMin=%hrMin:~3,2%
 
 set branchDate=%mydate%_%hr%-%hrMin%
 
-tf branch "$/PhytelCode/Phytel.Net/Services/API/Common/Phytel.API.Common/Production/Current" "$/PhytelCode/Phytel.Net/Services/API/Common/Phytel.API.Common/Production/%branchDate%" /checkin /noprompt /silent
-tf branch "$/PhytelCode/Phytel.Net/Services/API/Common/Phytel.API.DataAudit/Production/Current" "$/PhytelCode/Phytel.Net/Services/API/Common/Phytel.API.DataAudit/Production/%branchDate%" /checkin /noprompt /silent
-tf branch "$/PhytelCode/Phytel.Net/Services/API/Interfaces/Production/Current" "$/PhytelCode/Phytel.Net/Services/API/Interfaces/Production/%branchDate%" /checkin /noprompt /silent
+REM tf branch "$/PhytelCode/Phytel.Net/Services/API/Common/Phytel.API.Common/Production/Current" "$/PhytelCode/Phytel.Net/Services/API/Common/Phytel.API.Common/Production/%branchDate%" /checkin /noprompt /silent
+REM tf branch "$/PhytelCode/Phytel.Net/Services/API/Common/Phytel.API.DataAudit/Production/Current" "$/PhytelCode/Phytel.Net/Services/API/Common/Phytel.API.DataAudit/Production/%branchDate%" /checkin /noprompt /silent
+REM tf branch "$/PhytelCode/Phytel.Net/Services/API/Interfaces/Production/Current" "$/PhytelCode/Phytel.Net/Services/API/Interfaces/Production/%branchDate%" /checkin /noprompt /silent
 
 tf merge "$/PhytelCode/Phytel.Net/Services/API/Common/Phytel.API.Common/Release Candidate/Current" "$/PhytelCode/Phytel.Net/Services/API/Common/Phytel.API.Common/Production/Current" /recursive /nosummary /lock:checkout
 tf merge "$/PhytelCode/Phytel.Net/Services/API/Common/Phytel.API.DataAudit/Release Candidate/Current" "$/PhytelCode/Phytel.Net/Services/API/Common/Phytel.API.DataAudit/Production/Current" /recursive /nosummary /lock:checkout
