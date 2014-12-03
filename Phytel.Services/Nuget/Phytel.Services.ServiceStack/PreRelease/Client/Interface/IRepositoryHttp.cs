@@ -10,6 +10,8 @@ namespace Phytel.Services.ServiceStack.Client
 
         TResponse Get<TResponse>(string relativeUrlFormat, params string[] relativeUrlParams) where TResponse : class, new();
 
+        TResponse Get<TResponse>(string relativeUrlFormat, NameValueCollection headers, params string[] relativeUrlParams) where TResponse : class, new();
+
         TResponse Get<TResponse>(object requestDto);
 
         TResponse Post<TResponse>(string relativeUrlFormat, params string[] relativeUrlParams);
@@ -25,6 +27,8 @@ namespace Phytel.Services.ServiceStack.Client
         TResponse Put<TResponse>(object requestDto);
 
         TResponse Put<TResponse>(object request, string relativeUrlFormat, params string[] relativeUrlParams);
+
+        TResponse Put<TResponse>(object request, NameValueCollection headers, string relativeUrlFormat, params string[] relativeUrlParams);
 
         TResponse Post<TResponse>(object request, NameValueCollection headers, string relativeUrlFormat, params string[] relativeUrlParams);
     }
