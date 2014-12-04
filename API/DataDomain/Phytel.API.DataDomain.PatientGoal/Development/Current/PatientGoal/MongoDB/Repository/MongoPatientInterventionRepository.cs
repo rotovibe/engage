@@ -1,22 +1,15 @@
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Phytel.API.DataDomain.PatientGoal.DTO;
-using Phytel.API.Interface;
+using MongoDB.Bson;
+using MongoDB.Bson.Serialization;
 using MongoDB.Driver;
 using MongoDB.Driver.Builders;
-using MongoDB.Bson;
-using Phytel.API.DataDomain.PatientGoal;
-using MB = MongoDB.Driver.Builders;
-using MongoDB.Bson;
 using Phytel.API.Common;
-using Phytel.API.Common.Data;
-using Phytel.API.DataDomain.PatientGoal;
-using System.Configuration;
 using Phytel.API.DataAudit;
-using MongoDB.Bson.Serialization;
+using Phytel.API.DataDomain.PatientGoal.DTO;
+using MB = MongoDB.Driver.Builders;
 
 namespace Phytel.API.DataDomain.PatientGoal
 {
@@ -190,6 +183,17 @@ namespace Phytel.API.DataDomain.PatientGoal
                         {
                             pi.StatusDate = DateTime.UtcNow;
                         }
+                        if ((pi.StatusId == (int)InterventionStatus.Removed || pi.StatusId == (int)InterventionStatus.Completed))
+                        {
+                            if (existingPI.Status != (InterventionStatus)pi.StatusId)
+                            {
+                                pi.ClosedDate = DateTime.UtcNow;
+                            }
+                        }
+                        else
+                        {
+                            pi.ClosedDate = null;
+                        }
                     }
 
                     var uv = new List<MB.UpdateBuilder>();
@@ -215,8 +219,14 @@ namespace Phytel.API.DataDomain.PatientGoal
                     if (pi.AssignedToId != null) uv.Add(MB.Update.Set(MEPatientIntervention.AssignedToProperty, ObjectId.Parse(pi.AssignedToId)));
                     if (pi.BarrierIds != null) { uv.Add(MB.Update.SetWrapped<List<ObjectId>>(MEPatientIntervention.BarriersProperty, DTOUtil.ConvertObjectId(pi.BarrierIds))); }
                     if (pi.PatientGoalId != null) uv.Add(MB.Update.Set(MEPatientIntervention.PatientGoalIdProperty, ObjectId.Parse(pi.PatientGoalId)));
-                    
-                    uv.Add(MB.Update.Set(MEPatientIntervention.ClosedDateProperty, pi.ClosedDate)); 
+                    if (pi.ClosedDate != null)
+                    {
+                        uv.Add(MB.Update.Set(MEPatientIntervention.ClosedDateProperty, pi.ClosedDate));
+                    }
+                    else
+                    {
+                        uv.Add(MB.Update.Set(MEPatientIntervention.ClosedDateProperty, BsonNull.Value));
+                    } 
                     uv.Add(MB.Update.Set(MEPatientIntervention.DeleteFlagProperty, pi.DeleteFlag));
                     DataAuditType type;
                     if (pi.DeleteFlag)
