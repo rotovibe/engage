@@ -36,8 +36,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Phytel.Services.AppSettings">
-      <HintPath>packages\Phytel.Services.AppSettings.1.0.0.01\lib\net451\Phytel.Services.AppSettings.dll</HintPath>
+    <Reference Include="Phytel.Services.AppSettings, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>packages\Phytel.Services.AppSettings.1.0.1.01\lib\net451\Phytel.Services.AppSettings.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
