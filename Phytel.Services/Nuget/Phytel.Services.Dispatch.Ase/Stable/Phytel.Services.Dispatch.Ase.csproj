@@ -37,25 +37,25 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="ASEBus">
-      <HintPath>packages\Phytel.ASE.2.1.3.2.1.3\lib\ASEBus.dll</HintPath>
+      <HintPath>packages\Phytel.ASE.2.1.3.01\lib\ASEBus.dll</HintPath>
     </Reference>
     <Reference Include="ASEContext">
-      <HintPath>packages\Phytel.ASE.2.1.3.2.1.3\lib\ASEContext.dll</HintPath>
+      <HintPath>packages\Phytel.ASE.2.1.3.01\lib\ASEContext.dll</HintPath>
     </Reference>
     <Reference Include="ASECore">
-      <HintPath>packages\Phytel.ASE.2.1.3.2.1.3\lib\ASECore.dll</HintPath>
+      <HintPath>packages\Phytel.ASE.2.1.3.01\lib\ASECore.dll</HintPath>
     </Reference>
     <Reference Include="ASEData">
-      <HintPath>packages\Phytel.ASE.2.1.3.2.1.3\lib\ASEData.dll</HintPath>
+      <HintPath>packages\Phytel.ASE.2.1.3.01\lib\ASEData.dll</HintPath>
     </Reference>
     <Reference Include="MongoDB.Bson">
-      <HintPath>packages\Phytel.ASE.2.1.3.2.1.3\lib\MongoDB.Bson.dll</HintPath>
+      <HintPath>packages\Phytel.ASE.2.1.3.01\lib\MongoDB.Bson.dll</HintPath>
     </Reference>
     <Reference Include="MongoDB.Driver">
-      <HintPath>packages\Phytel.ASE.2.1.3.2.1.3\lib\MongoDB.Driver.dll</HintPath>
+      <HintPath>packages\Phytel.ASE.2.1.3.01\lib\MongoDB.Driver.dll</HintPath>
     </Reference>
     <Reference Include="Phytel.Mongo">
-      <HintPath>packages\Phytel.ASE.2.1.3.2.1.3\lib\Phytel.Mongo.dll</HintPath>
+      <HintPath>packages\Phytel.ASE.2.1.3.01\lib\Phytel.Mongo.dll</HintPath>
     </Reference>
     <Reference Include="Phytel.Services.Dispatch">
       <HintPath>packages\Phytel.Services.Dispatch.1.3.1.01\lib\net451\Phytel.Services.Dispatch.dll</HintPath>
@@ -64,10 +64,10 @@
       <HintPath>packages\Phytel.Services.Serializer.1.3.0.06\lib\net451\Phytel.Services.Serializer.dll</HintPath>
     </Reference>
     <Reference Include="Phytel.Web">
-      <HintPath>packages\Phytel.ASE.2.1.3.2.1.3\lib\Phytel.Web.dll</HintPath>
+      <HintPath>packages\Phytel.ASE.2.1.3.01\lib\Phytel.Web.dll</HintPath>
     </Reference>
     <Reference Include="PhytelServices">
-      <HintPath>packages\Phytel.ASE.2.1.3.2.1.3\lib\PhytelServices.dll</HintPath>
+      <HintPath>packages\Phytel.ASE.2.1.3.01\lib\PhytelServices.dll</HintPath>
     </Reference>
     <Reference Include="ServiceStack.Text">
       <HintPath>packages\ServiceStack.Text.3.9.70\lib\net35\ServiceStack.Text.dll</HintPath>
