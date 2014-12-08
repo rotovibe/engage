@@ -40,6 +40,19 @@ namespace Phytel.Services.ServiceStack.Client
             return rvalue;
         }
 
+        public TResponse Get<TResponse>(string relativeUrlFormat, NameValueCollection headers, params string[] relativeUrlParams)
+            where TResponse : class, new()
+        {
+            _client.LocalHttpWebRequestFilter = x => x.Headers.Add(headers);
+
+            TResponse rvalue = new TResponse();
+
+            string relativeOrAbsoluteUrl = string.Format(relativeUrlFormat, relativeUrlParams);
+            rvalue = _client.Get<TResponse>(relativeOrAbsoluteUrl);
+
+            return rvalue;
+        }
+
         public TResponse Get<TResponse>(object requestDto)
         {
             IReturn<TResponse> request = OnExecuteConvertToIReturn<TResponse>(requestDto);
@@ -87,6 +100,14 @@ namespace Phytel.Services.ServiceStack.Client
 
         public TResponse Put<TResponse>(object request, string relativeUrlFormat, params string[] relativeUrlParams)
         {
+            string relativeOrAbsoluteUrl = string.Format(relativeUrlFormat, relativeUrlParams);
+            return _client.Put<TResponse>(relativeOrAbsoluteUrl, request);
+        }
+
+        public TResponse Put<TResponse>(object request, NameValueCollection headers, string relativeUrlFormat, params string[] relativeUrlParams)
+        {
+            _client.LocalHttpWebRequestFilter = x => x.Headers.Add(headers);
+
             string relativeOrAbsoluteUrl = string.Format(relativeUrlFormat, relativeUrlParams);
             return _client.Put<TResponse>(relativeOrAbsoluteUrl, request);
         }
