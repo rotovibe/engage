@@ -9,17 +9,11 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Components to support getting app settings from ase config</description>
     <dependencies>
-      <dependency id="Phytel.Services.AppSettings" version="1.0.0.01" />
+      <dependency id="Phytel.Services.AppSettings" version="1.0.0" />
       <dependency id="mongocsharpdriver" version="1.8.1" />
     </dependencies>
   </metadata>
   <files>
-    <file src="..\bin\ASEBus.dll" target="lib\net451\ASEBus.dll" />
-    <file src="..\bin\ASEContext.dll" target="lib\net451\ASEContext.dll" />
-    <file src="..\bin\ASECore.dll" target="lib\net451\ASECore.dll" />
-    <file src="..\bin\ASEData.dll" target="lib\net451\ASEData.dll" />
-    <file src="..\bin\PhytelServices.dll" target="lib\net451\PhytelServices.dll" />
-    <file src="..\bin\Phytel.Mongo.dll" target="lib\net451\Phytel.Mongo.dll" />
     <file src="..\bin\Phytel.Services.AppSettings.Ase.dll" target="lib\net451\Phytel.Services.AppSettings.Ase.dll" />
   </files>
 </package>
