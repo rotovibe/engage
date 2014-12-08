@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Phytel.API.DataDomain.Contact.Test.Stubs
+namespace Phytel.API.DataDomain.Contract.Test.Stubs
 {
     public class StubHelpers : IHelpers
     {

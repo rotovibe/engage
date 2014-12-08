@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Phytel.API.DataDomain.Contract.Services.Test")]
+[assembly: AssemblyTitle("Phytel.API.DataDomain.Contract.DTO")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Phytel Inc.")]
-[assembly: AssemblyProduct("Phytel.API.DataDomain.Contract.Services.Test")]
+[assembly: AssemblyProduct("Phytel.API.DataDomain.Contract.DTO")]
 [assembly: AssemblyCopyright("Copyright © Phytel Inc. 2013")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("75e72de2-0fe8-42b3-b40d-ebe99adfc763")]
+[assembly: Guid("63d676d8-f606-45f0-8976-215c94fb8de8")]
 
 // Version information for an assembly consists of the following four values:
 //
@@ -32,5 +32,5 @@ using System.Runtime.InteropServices;
 // You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("0.2.4.0")]
-[assembly: AssemblyFileVersion("0.2.4.0")]
+[assembly: AssemblyVersion("1.0.0.0")]
+[assembly: AssemblyFileVersion("1.0.0.0")]

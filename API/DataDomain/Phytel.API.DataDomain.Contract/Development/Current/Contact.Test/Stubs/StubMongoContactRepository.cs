@@ -1,30 +1,30 @@
 ﻿using MongoDB.Bson;
-using Phytel.API.DataDomain.Contact.DTO;
+using Phytel.API.DataDomain.Contract.DTO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Phytel.API.DataDomain.Contact.Test.Stubs
+namespace Phytel.API.DataDomain.Contract.Test.Stubs
 {
-    public class StubMongoContactRepository : IContactRepository
+    public class StubMongoContractRepository : IContractRepository
     {
         public IEnumerable<object> FindCareManagers()
         {
             throw new NotImplementedException();
         }
 
-        public object FindContactByPatientId(DTO.GetContactByPatientIdDataRequest request)
+        public object FindContractByPatientId(DTO.GetContractByPatientIdDataRequest request)
         {
             throw new NotImplementedException();
         }
 
-        public object FindContactByUserId(DTO.GetContactByUserIdDataRequest request)
+        public object FindContractByUserId(DTO.GetContractByUserIdDataRequest request)
         {
             throw new NotImplementedException();
         }
 
-        public IEnumerable<object> SearchContacts(DTO.SearchContactsDataRequest request)
+        public IEnumerable<object> SearchContracts(DTO.SearchContractsDataRequest request)
         {
             throw new NotImplementedException();
         }
@@ -52,7 +52,7 @@ namespace Phytel.API.DataDomain.Contact.Test.Stubs
 
         public object FindByID(string entityID)
         {
-            ContactData mC = new ContactData
+            ContractData mC = new ContractData
             {
                 UserId = "666656789012345678906666"
             };
@@ -109,12 +109,12 @@ namespace Phytel.API.DataDomain.Contact.Test.Stubs
             }
         }
 
-        public object GetContactByPatientId(string patientId)
+        public object GetContractByPatientId(string patientId)
         {
             throw new NotImplementedException();
         }
 
-        public IEnumerable<object> FindContactsWithAPatientInRecentList(string entityId)
+        public IEnumerable<object> FindContractsWithAPatientInRecentList(string entityId)
         {
             throw new NotImplementedException();
         }

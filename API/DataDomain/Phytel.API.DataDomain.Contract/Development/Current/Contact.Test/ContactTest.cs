@@ -1,69 +1,69 @@
 using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Phytel.API.DataDomain.Contact.DTO;
+using Phytel.API.DataDomain.Contract.DTO;
 
-namespace Phytel.API.DataDomain.Contact.Test
+namespace Phytel.API.DataDomain.Contract.Test
 {
     [TestClass]
-    public class ContactTest
+    public class ContractTest
     {
         /// <summary>
         /// Major update for NIGHT-911
         /// Need to refactory these test to account for any stubs needed.
         /// </summary>
         
-        IContactDataManager manager;
+        IContractDataManager manager;
 
         [TestInitialize()]
         public void Initialize()
         {
-            manager = new ContactDataManager { Factory = new ContactRepositoryFactory() };
+            manager = new ContractDataManager { Factory = new ContractRepositoryFactory() };
         }
 
         [TestMethod]
-        public void GetContactByPatientId_Test()
+        public void GetContractByPatientId_Test()
         {
-            GetContactByPatientIdDataRequest request = new GetContactByPatientIdDataRequest { PatientId = "52e26f53072ef7191c11d5e2" };
+            GetContractByPatientIdDataRequest request = new GetContractByPatientIdDataRequest { PatientId = "52e26f53072ef7191c11d5e2" };
 
-            ContactData response = manager.GetContactByPatientId(request);
+            ContractData response = manager.GetContractByPatientId(request);
 
-            Assert.IsTrue(response.ContactId == "52ebc816d433232150813e49");
+            Assert.IsTrue(response.ContractId == "52ebc816d433232150813e49");
         }
 
         [TestMethod]
-        public void GetContactByUserId_Test()
+        public void GetContractByUserId_Test()
         {
-            GetContactByUserIdDataRequest request = new GetContactByUserIdDataRequest { UserId = "abe05e86-a890-4d61-8c78-b04923cbb3d6" };
+            GetContractByUserIdDataRequest request = new GetContractByUserIdDataRequest { UserId = "abe05e86-a890-4d61-8c78-b04923cbb3d6" };
 
-            ContactData response = manager.GetContactByUserId(request);
+            ContractData response = manager.GetContractByUserId(request);
 
-            Assert.IsTrue(response.ContactId == "530fcad1d4332320e0336a6a");
+            Assert.IsTrue(response.ContractId == "530fcad1d4332320e0336a6a");
         }
 
         [TestMethod]
-        public void GetContactByPatientId_Minimal_Test()
+        public void GetContractByPatientId_Minimal_Test()
         {
-            GetContactByPatientIdDataRequest request = new GetContactByPatientIdDataRequest { PatientId = "52e26f53072ef7191c11d5e2" };
+            GetContractByPatientIdDataRequest request = new GetContractByPatientIdDataRequest { PatientId = "52e26f53072ef7191c11d5e2" };
 
-            ContactData response = manager.GetContactByPatientId(request);
+            ContractData response = manager.GetContractByPatientId(request);
 
-            Assert.IsTrue(response.ContactId == "52e749e3d43323149870c214");
+            Assert.IsTrue(response.ContractId == "52e749e3d43323149870c214");
         }
 
         [TestMethod]
-        public void GetContactByPatientId_Empty_Test()
+        public void GetContractByPatientId_Empty_Test()
         {
-            GetContactByPatientIdDataRequest request = new GetContactByPatientIdDataRequest { PatientId = "52e26f4b072ef7191c11b026" };
+            GetContractByPatientIdDataRequest request = new GetContractByPatientIdDataRequest { PatientId = "52e26f4b072ef7191c11b026" };
 
-            ContactData response = manager.GetContactByPatientId(request);
+            ContractData response = manager.GetContractByPatientId(request);
 
-            Assert.IsNotNull(response.ContactId);
+            Assert.IsNotNull(response.ContractId);
         }
 
         [TestMethod]
-        public void SearchContacts_Test()
+        public void SearchContracts_Test()
         {
-            SearchContactsDataRequest request = new SearchContactsDataRequest();
+            SearchContractsDataRequest request = new SearchContractsDataRequest();
 
             request.ContractNumber = "InHealth001";
             request.UserId = "DD_TestHarness";
@@ -72,9 +72,9 @@ namespace Phytel.API.DataDomain.Contact.Test
             ids.Add("53043e53d433231f48de8a7a");
             ids.Add("53043e5fd433231f48de8a7b");
             ids.Add("52f57462d6a4850fd02cc1b4");
-            //request.ContactIds = ids;
+            //request.ContractIds = ids;
 
-            SearchContactsDataResponse response = manager.SearchContacts(request);
+            SearchContractsDataResponse response = manager.SearchContracts(request);
 
             Assert.IsNotNull(response);
         }
@@ -95,9 +95,9 @@ namespace Phytel.API.DataDomain.Contact.Test
 
 
         [TestMethod]
-        public void InsertContactByUserId_Test()
+        public void InsertContractByUserId_Test()
         {
-            PutContactDataRequest request = new PutContactDataRequest();
+            PutContractDataRequest request = new PutContractDataRequest();
 
             request.ContractNumber = "InHealth001";
             request.ResourceId = "EC0849A4-D0A1-44BF-A482-7A97103E96CD";
@@ -108,15 +108,15 @@ namespace Phytel.API.DataDomain.Contact.Test
             request.Version = 1;
             request.UserId = "DataDomain_TestHarness";
             
-            PutContactDataResponse response = manager.InsertContact(request);
+            PutContractDataResponse response = manager.InsertContract(request);
             Assert.IsNotNull(response);
         }
 
         [TestMethod]
-        public void InsertContact_Test()
+        public void InsertContract_Test()
         {
 
-            PutContactDataRequest request = new PutContactDataRequest();
+            PutContractDataRequest request = new PutContractDataRequest();
 
             request.ContractNumber = "InHealth001";
             request.UserId = "DD_TestHarness";
@@ -165,13 +165,13 @@ namespace Phytel.API.DataDomain.Contact.Test
             request.PatientId = "52f55859072ef709f84e5e20";
             request.TimeZoneId = "52e1817dd433232028e9e39e";
 
-            PutContactDataResponse response = manager.InsertContact(request);
+            PutContractDataResponse response = manager.InsertContract(request);
 
             Assert.IsNotNull(response);
         }
 
         [TestMethod]
-        public void UpdateContact_Test()
+        public void UpdateContract_Test()
         {
             //List<int> weekDays = new List<int>();
             //List<string> timesOfday = new List<string>();
@@ -200,7 +200,7 @@ namespace Phytel.API.DataDomain.Contact.Test
             //timesOfday.Add("52e17de8d433232028e9e394");
             //timesOfday.Add("52e17dedd433232028e9e395");
 
-            PutUpdateContactDataRequest request = new PutUpdateContactDataRequest();
+            PutUpdateContractDataRequest request = new PutUpdateContractDataRequest();
 
             request.ContractNumber = "InHealth001";
             request.UserId = "DD_TestHarness";
@@ -251,10 +251,10 @@ namespace Phytel.API.DataDomain.Contact.Test
             //request.WeekDays = days;
 
             //request.pat = "52e26f5b072ef7191c11e0b6";
-            request.ContactId = "52f6d709d6a4850aa439fa82";
+            request.ContractId = "52f6d709d6a4850aa439fa82";
             request.TimeZoneId = "52e1817ad433232028e9e39d";
 
-            PutUpdateContactDataResponse response = manager.UpdateContact(request);
+            PutUpdateContractDataResponse response = manager.UpdateContract(request);
 
             Assert.IsNotNull(response);
         }

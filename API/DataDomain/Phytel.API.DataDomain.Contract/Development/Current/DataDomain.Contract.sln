@@ -1,0 +1,71 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.30110.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shared", "Shared", "{688504DA-15E9-46D5-B068-020B92F8836D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{CDA84214-7361-4881-840B-640C7FB9CA10}"
+	ProjectSection(SolutionItems) = preProject
+		.nuget\NuGet.Config = .nuget\NuGet.Config
+		.nuget\NuGet.exe = .nuget\NuGet.exe
+		.nuget\NuGet.targets = .nuget\NuGet.targets
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.Contract", "Contract\DataDomain.Contract.csproj", "{16143EA0-7971-4959-8B3B-EAC8584279C2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.Contract.DTO", "Contract.DTO\DataDomain.Contract.DTO.csproj", "{0B6E0ED8-ABE5-4A1D-8E10-0AC54F06D9C4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.Contract.Service", "Contract.Service\DataDomain.Contract.Service.csproj", "{B67F51E7-8ADD-43E5-9FFA-729D5AC59D97}"
+EndProject
+Global
+	GlobalSection(TeamFoundationVersionControl) = preSolution
+		SccNumberOfProjects = 4
+		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccTeamFoundationServer = http://hillstfs2013:8080/tfs/phytel
+		SccLocalPath0 = .
+		SccProjectUniqueName1 = Contract.Service\\DataDomain.Contract.Service.csproj
+		SccProjectName1 = Contract.Service
+		SccLocalPath1 = Contract.Service
+		SccProjectUniqueName2 = Contract.DTO\\DataDomain.Contract.DTO.csproj
+		SccProjectName2 = Contract.DTO
+		SccLocalPath2 = Contract.DTO
+		SccProjectUniqueName3 = Contract\\DataDomain.Contract.csproj
+		SccProjectName3 = Contract
+		SccLocalPath3 = Contract
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Model|Any CPU = Model|Any CPU
+		Release|Any CPU = Release|Any CPU
+		Test|Any CPU = Test|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{16143EA0-7971-4959-8B3B-EAC8584279C2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{16143EA0-7971-4959-8B3B-EAC8584279C2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{16143EA0-7971-4959-8B3B-EAC8584279C2}.Model|Any CPU.ActiveCfg = Model|Any CPU
+		{16143EA0-7971-4959-8B3B-EAC8584279C2}.Model|Any CPU.Build.0 = Model|Any CPU
+		{16143EA0-7971-4959-8B3B-EAC8584279C2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{16143EA0-7971-4959-8B3B-EAC8584279C2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{16143EA0-7971-4959-8B3B-EAC8584279C2}.Test|Any CPU.ActiveCfg = Model|Any CPU
+		{16143EA0-7971-4959-8B3B-EAC8584279C2}.Test|Any CPU.Build.0 = Model|Any CPU
+		{0B6E0ED8-ABE5-4A1D-8E10-0AC54F06D9C4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0B6E0ED8-ABE5-4A1D-8E10-0AC54F06D9C4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0B6E0ED8-ABE5-4A1D-8E10-0AC54F06D9C4}.Model|Any CPU.ActiveCfg = Model|Any CPU
+		{0B6E0ED8-ABE5-4A1D-8E10-0AC54F06D9C4}.Model|Any CPU.Build.0 = Model|Any CPU
+		{0B6E0ED8-ABE5-4A1D-8E10-0AC54F06D9C4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0B6E0ED8-ABE5-4A1D-8E10-0AC54F06D9C4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0B6E0ED8-ABE5-4A1D-8E10-0AC54F06D9C4}.Test|Any CPU.ActiveCfg = Test|Any CPU
+		{0B6E0ED8-ABE5-4A1D-8E10-0AC54F06D9C4}.Test|Any CPU.Build.0 = Test|Any CPU
+		{B67F51E7-8ADD-43E5-9FFA-729D5AC59D97}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B67F51E7-8ADD-43E5-9FFA-729D5AC59D97}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B67F51E7-8ADD-43E5-9FFA-729D5AC59D97}.Model|Any CPU.ActiveCfg = Model|Any CPU
+		{B67F51E7-8ADD-43E5-9FFA-729D5AC59D97}.Model|Any CPU.Build.0 = Model|Any CPU
+		{B67F51E7-8ADD-43E5-9FFA-729D5AC59D97}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B67F51E7-8ADD-43E5-9FFA-729D5AC59D97}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B67F51E7-8ADD-43E5-9FFA-729D5AC59D97}.Test|Any CPU.ActiveCfg = Model|Any CPU
+		{B67F51E7-8ADD-43E5-9FFA-729D5AC59D97}.Test|Any CPU.Build.0 = Model|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Phytel.API.DataDomain.Contact;
+using Phytel.API.DataDomain.Contract;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MongoDB.Bson;
-namespace Phytel.API.DataDomain.Contact.Tests
+namespace Phytel.API.DataDomain.Contract.Tests
 {
     [TestClass()]
     public class MruList_Test

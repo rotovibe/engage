@@ -4,13 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Phytel.API.DataDomain.Contact.Test.Stubs
+namespace Phytel.API.DataDomain.Contract.Test.Stubs
 {
-    public class StubContactRepositoryFactory : IContactRepositoryFactory
+    public class StubContractRepositoryFactory : IContractRepositoryFactory
     {
-        public IContactRepository GetRepository(Interface.IDataDomainRequest request, RepositoryType type)
+        public IContractRepository GetRepository(Interface.IDataDomainRequest request, RepositoryType type)
         {
-            IContactRepository cr = new StubMongoContactRepository() as IContactRepository;
+            IContractRepository cr = new StubMongoContractRepository() as IContractRepository;
             return cr;
         }
     }
