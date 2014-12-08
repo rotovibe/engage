@@ -12,6 +12,7 @@
       <dependency id="Phytel.Services.Dispatch" version="1.0.0.01" />
       <dependency id="Phytel.Services.Serializer" version="1.3.0.04" />
       <dependency id="ServiceStack.Text" version="3.9.70" />
+      <dependency id="Phytel.ASE.2.1.3" version="2.1.3" />
     </dependencies>
   </metadata>
   <files>
