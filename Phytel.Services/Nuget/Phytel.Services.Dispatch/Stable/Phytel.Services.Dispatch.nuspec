@@ -11,6 +11,12 @@
     <frameworkAssemblies>
       <frameworkAssembly assemblyName="System.Configuration" targetFramework="net451" />
     </frameworkAssemblies>
+    <dependencies>
+      <group targetFramework=".NETFramework4.5.1">
+        <dependency id="Phytel.Services.Serializer" version="1.3.0" />
+        <dependency id="ServiceStack.Text" version="3.9.70" />
+      </group>
+    </dependencies>
   </metadata>
   <files>
     <file src="..\bin\Phytel.Services.Dispatch.dll" target="lib\net451\Phytel.Services.Dispatch.dll" />
