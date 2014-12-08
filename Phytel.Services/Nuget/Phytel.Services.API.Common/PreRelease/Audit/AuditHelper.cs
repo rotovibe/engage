@@ -13,6 +13,8 @@ using Phytel.API.DataDomain.ASE.Common.Enums;
 using Phytel.API.Interface;
 using Phytel.ASE.Core;
 using Phytel.Services;
+using Phytel.Services.SQLServer;
+using Phytel.Services.Mongo;
 
 namespace Phytel.API.DataAudit
 {
@@ -69,7 +71,7 @@ namespace Phytel.API.DataAudit
         {
             try
             {
-                MongoDatabase db = Phytel.Services.MongoService.Instance.GetDatabase(contract, true);
+                MongoDatabase db = MongoService.Instance.GetDatabase(contract, true);
 
                 IMongoQuery query = Query.EQ(entityKeyField, ObjectId.Parse(entityId));
                 return db.GetCollection(collectionName).FindOne(query).ToJson();

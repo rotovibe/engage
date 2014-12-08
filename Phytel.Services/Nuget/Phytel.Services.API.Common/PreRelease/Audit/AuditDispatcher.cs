@@ -9,6 +9,7 @@ using System.Xml.Serialization;
 using Phytel.API.DataDomain.ASE.Common.Enums;
 using Phytel.API.DataDomain.ASE.DTO.Message;
 using Phytel.ASE.Core;
+using Phytel.Services.SQLServer;
 
 namespace Phytel.API.Common.Audit
 {
@@ -27,7 +28,7 @@ namespace Phytel.API.Common.Audit
             string dbName = ConfigurationManager.AppSettings.Get("PhytelServicesConnName");
             string configqueue =  "AUDIT_QUEUE";
 
-            DataSet ds = Phytel.Services.SQLDataService.Instance.ExecuteSQL(dbName, false, string.Format("Select [Value] From ApplicationSetting Where [Key] = '{0}'",configqueue));
+            DataSet ds = SQLDataService.Instance.ExecuteSQL(dbName, false, string.Format("Select [Value] From ApplicationSetting Where [Key] = '{0}'",configqueue));
 
             if (ds.Tables[0].Rows.Count > 0)
             {
@@ -65,7 +66,7 @@ namespace Phytel.API.Common.Audit
             string dbName = ConfigurationManager.AppSettings.Get("PhytelServicesConnName");
             string configqueue =  "DATA_AUDIT_QUEUE";
 
-            DataSet ds = Phytel.Services.SQLDataService.Instance.ExecuteSQL(dbName, false, string.Format("Select [Value] From ApplicationSetting Where [Key] = '{0}'", configqueue));
+            DataSet ds = SQLDataService.Instance.ExecuteSQL(dbName, false, string.Format("Select [Value] From ApplicationSetting Where [Key] = '{0}'", configqueue));
 
             if (ds.Tables[0].Rows.Count > 0)
             {
@@ -100,7 +101,7 @@ namespace Phytel.API.Common.Audit
             string dbName = ConfigurationManager.AppSettings.Get("PhytelServicesConnName");
             string configqueue = "DATA_AUDIT_QUEUE";
 
-            DataSet ds = Phytel.Services.SQLDataService.Instance.ExecuteSQL(dbName, false, string.Format("Select [Value] From ApplicationSetting Where [Key] = '{0}'", configqueue));
+            DataSet ds = SQLDataService.Instance.ExecuteSQL(dbName, false, string.Format("Select [Value] From ApplicationSetting Where [Key] = '{0}'", configqueue));
 
             if (ds.Tables[0].Rows.Count > 0)
             {
