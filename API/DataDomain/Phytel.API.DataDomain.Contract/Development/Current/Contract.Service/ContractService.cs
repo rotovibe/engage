@@ -24,7 +24,7 @@ namespace Phytel.API.DataDomain.Contract.Service
                 if (string.IsNullOrEmpty(request.UserId))
                     throw new UnauthorizedAccessException("ContractDD:Get()::Unauthorized Access");
 
-                response.Contracts = Manager.GetContracts(request);
+                response.Contract = Manager.GetContracts(request);
             }
             catch (Exception ex)
             {
