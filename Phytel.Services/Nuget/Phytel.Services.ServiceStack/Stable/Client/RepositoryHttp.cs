@@ -29,6 +29,13 @@ namespace Phytel.Services.ServiceStack.Client
             return _client.Delete<TResponse>(request);
         }
 
+        public void Delete(object requestDto)
+        {
+            IReturnVoid request = OnExecuteConvertToIReturnVoid(requestDto);
+
+            _client.Delete(request);
+        }
+
         public TResponse Get<TResponse>(string relativeUrlFormat, params string[] relativeUrlParams)
             where TResponse : class, new()
         {
@@ -67,6 +74,13 @@ namespace Phytel.Services.ServiceStack.Client
             return _client.Patch<TResponse>(request);
         }
 
+        public void Patch(object requestDto)
+        {
+            IReturnVoid request = OnExecuteConvertToIReturnVoid(requestDto);
+
+            _client.Patch(request);
+        }
+
         public TResponse Patch<TResponse>(object request, string relativeUrlFormat, params string[] relativeUrlParams)
         {
             string relativeOrAbsoluteUrl = string.Format(relativeUrlFormat, relativeUrlParams);
@@ -91,6 +105,30 @@ namespace Phytel.Services.ServiceStack.Client
             return _client.Post<TResponse>(request);
         }
 
+        public void Post(object requestDto)
+        {
+            IReturnVoid request = OnExecuteConvertToIReturnVoid(requestDto);
+
+            _client.Post(request);
+        }
+
+        protected virtual IReturnVoid OnExecuteConvertToIReturnVoid(object requestDto)
+        {
+            IReturnVoid rvalue = null;
+
+            if (requestDto is IReturnVoid)
+            {
+                rvalue = requestDto as IReturnVoid;
+            }
+
+            if (rvalue == null)
+            {
+                throw new ArgumentException("Provided request dto was not of type " + typeof(IReturnVoid).Name);
+            }
+
+            return rvalue;
+        }
+
         public TResponse Put<TResponse>(object requestDto)
         {
             IReturn<TResponse> request = OnExecuteConvertToIReturn<TResponse>(requestDto);
@@ -98,8 +136,23 @@ namespace Phytel.Services.ServiceStack.Client
             return _client.Put<TResponse>(request);
         }
 
+        public void Put(object requestDto)
+        {
+            IReturnVoid request = OnExecuteConvertToIReturnVoid(requestDto);
+
+            _client.Put(request);
+        }
+
         public TResponse Put<TResponse>(object request, string relativeUrlFormat, params string[] relativeUrlParams)
         {
+            string relativeOrAbsoluteUrl = string.Format(relativeUrlFormat, relativeUrlParams);
+            return _client.Put<TResponse>(relativeOrAbsoluteUrl, request);
+        }
+
+        public TResponse Put<TResponse>(object request, NameValueCollection headers, string relativeUrlFormat, params string[] relativeUrlParams)
+        {
+            _client.LocalHttpWebRequestFilter = x => x.Headers.Add(headers);
+
             string relativeOrAbsoluteUrl = string.Format(relativeUrlFormat, relativeUrlParams);
             return _client.Put<TResponse>(relativeOrAbsoluteUrl, request);
         }
