@@ -356,13 +356,19 @@ namespace Phytel.API.DataDomain.PatientGoal
                 IGoalRepository goalRepo = Factory.GetRepository(request, RepositoryType.PatientGoal);
                 intRepo.UserId = request.UserId;
                 // Get all the goals associated to the patient in the request object.
-                List<string> patientGoalIds = null;
                 if (!string.IsNullOrEmpty(request.PatientId))
                 {
                     List<PatientGoalViewData> goalViewDataList = goalRepo.Find(request.PatientId) as List<PatientGoalViewData>;
-                    patientGoalIds = goalViewDataList.Select(a => a.Id).ToList();
+                    List<string> patientGoalIds = goalViewDataList.Select(a => a.Id).ToList();
+                    if (patientGoalIds != null && patientGoalIds.Count > 0)
+                    {
+                        result.InterventionsData = (List<PatientInterventionData>)intRepo.Search(request, patientGoalIds);
+                    }
                 }
-                result.InterventionsData = (List<PatientInterventionData>)intRepo.Search(request, patientGoalIds);
+                else
+                {
+                    result.InterventionsData = (List<PatientInterventionData>)intRepo.Search(request, null);
+                }
                 return result;
             }
             catch (Exception ex)
@@ -381,13 +387,20 @@ namespace Phytel.API.DataDomain.PatientGoal
                 taskRepo.UserId = request.UserId;
                 IGoalRepository goalRepo = Factory.GetRepository(request, RepositoryType.PatientGoal);
                 // Get all the goals associated to the patient in the request object.
-                List<string> patientGoalIds = null;
                 if (!string.IsNullOrEmpty(request.PatientId))
                 {
                     List<PatientGoalViewData> goalViewDataList = goalRepo.Find(request.PatientId) as List<PatientGoalViewData>;
-                    patientGoalIds = goalViewDataList.Select(a => a.Id).ToList();
+                    List<string> patientGoalIds = goalViewDataList.Select(a => a.Id).ToList();
+                    if (patientGoalIds != null && patientGoalIds.Count > 0)
+                    {
+                        result.TasksData = (List<PatientTaskData>)taskRepo.Search(request, patientGoalIds);
+                    }
                 }
-                result.TasksData = (List<PatientTaskData>)taskRepo.Search(request, patientGoalIds);
+                else
+                {
+                    result.TasksData = (List<PatientTaskData>)taskRepo.Search(request, null);
+                }
+
                 return result;
             }
             catch (Exception ex)
