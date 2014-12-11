@@ -9,7 +9,7 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Components to support getting app settings from ase config</description>
     <dependencies>
-      <dependency id="Phytel.Services.AppSettings" version="1.0.0" />
+      <dependency id="Phytel.Services.AppSettings" version="1.1.0" />
       <dependency id="mongocsharpdriver" version="1.8.1" />
     </dependencies>
   </metadata>
