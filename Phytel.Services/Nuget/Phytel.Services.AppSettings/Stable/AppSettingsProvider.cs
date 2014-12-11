@@ -28,5 +28,21 @@ namespace Phytel.Services.AppSettings
 
             return rvalue;
         }
+
+        public string Get(string key, string value, string defaultValue)
+        {
+            string rvalue = defaultValue;
+
+            if(string.IsNullOrEmpty(value))
+            {
+                string valueFromAppSetting = Get(key);
+                if(!string.IsNullOrEmpty(valueFromAppSetting))
+                {
+                    rvalue = valueFromAppSetting;
+                }
+            }
+
+            return rvalue;
+        }
     }
 }
