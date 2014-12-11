@@ -82,10 +82,10 @@ namespace Phytel.API.AppDomain.NG.Test
             GetInterventionsRequest request = new GetInterventionsRequest();
             request.ContractNumber = "InHealth001";
             request.Version = 1;
-            request.AssignedToId = "5325c821072ef705080d3488";
+           // request.AssignedToId = "5325c821072ef705080d3488";
           // request.CreatedById = "5325c821072ef705080d3488";
-            request.StatusIds = new List<int>{1, 2};
-          //  request.PatientId = "5325db97d6a4850adcbba9ba";
+            request.StatusIds = new List<int>{1, 2, 3};
+            request.PatientId = "5481dbbd231e250160a0e9d1";
             request.UserId = "531f2df5072ef727c4d2a3bc";
 
             GoalsManager gManager = new GoalsManager();
