@@ -82,8 +82,9 @@
     <Reference Include="Phytel.Services.Security">
       <HintPath>..\packages\Phytel.Services.Security.1.3.0.05\lib\net451\Phytel.Services.Security.dll</HintPath>
     </Reference>
-    <Reference Include="Phytel.Services.ServiceStack">
-      <HintPath>..\packages\Phytel.Services.ServiceStack.1.3.1.02\lib\net451\Phytel.Services.ServiceStack.dll</HintPath>
+    <Reference Include="Phytel.Services.ServiceStack, Version=1.3.0.1, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Phytel.Services.ServiceStack.1.4.0.03\lib\net451\Phytel.Services.ServiceStack.dll</HintPath>
     </Reference>
     <Reference Include="Phytel.Services.SQLServer">
       <HintPath>..\packages\Phytel.Services.SQLServer.1.3.0.08\lib\net451\Phytel.Services.SQLServer.dll</HintPath>

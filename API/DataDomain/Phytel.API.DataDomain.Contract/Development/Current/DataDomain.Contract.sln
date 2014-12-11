@@ -17,9 +17,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.Contract.DTO", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.Contract.Service", "Contract.Service\DataDomain.Contract.Service.csproj", "{B67F51E7-8ADD-43E5-9FFA-729D5AC59D97}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.Contract.Test", "DataDomain.Contract.Test\DataDomain.Contract.Test.csproj", "{94B2DA9E-DE33-43C6-9587-C5CC217A0D23}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.Contract.Service.Test", "DataDomain.Contract.Service.Test\DataDomain.Contract.Service.Test.csproj", "{C187D467-A28E-4570-B970-EA28B837B737}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 4
+		SccNumberOfProjects = 6
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = http://hillstfs2013:8080/tfs/phytel
 		SccLocalPath0 = .
@@ -32,6 +36,12 @@ Global
 		SccProjectUniqueName3 = Contract\\DataDomain.Contract.csproj
 		SccProjectName3 = Contract
 		SccLocalPath3 = Contract
+		SccProjectUniqueName4 = DataDomain.Contract.Test\\DataDomain.Contract.Test.csproj
+		SccProjectName4 = DataDomain.Contract.Test
+		SccLocalPath4 = DataDomain.Contract.Test
+		SccProjectUniqueName5 = DataDomain.Contract.Service.Test\\DataDomain.Contract.Service.Test.csproj
+		SccProjectName5 = DataDomain.Contract.Service.Test
+		SccLocalPath5 = DataDomain.Contract.Service.Test
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -64,6 +74,22 @@ Global
 		{B67F51E7-8ADD-43E5-9FFA-729D5AC59D97}.Release|Any CPU.Build.0 = Release|Any CPU
 		{B67F51E7-8ADD-43E5-9FFA-729D5AC59D97}.Test|Any CPU.ActiveCfg = Model|Any CPU
 		{B67F51E7-8ADD-43E5-9FFA-729D5AC59D97}.Test|Any CPU.Build.0 = Model|Any CPU
+		{94B2DA9E-DE33-43C6-9587-C5CC217A0D23}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{94B2DA9E-DE33-43C6-9587-C5CC217A0D23}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{94B2DA9E-DE33-43C6-9587-C5CC217A0D23}.Model|Any CPU.ActiveCfg = Release|Any CPU
+		{94B2DA9E-DE33-43C6-9587-C5CC217A0D23}.Model|Any CPU.Build.0 = Release|Any CPU
+		{94B2DA9E-DE33-43C6-9587-C5CC217A0D23}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{94B2DA9E-DE33-43C6-9587-C5CC217A0D23}.Release|Any CPU.Build.0 = Release|Any CPU
+		{94B2DA9E-DE33-43C6-9587-C5CC217A0D23}.Test|Any CPU.ActiveCfg = Release|Any CPU
+		{94B2DA9E-DE33-43C6-9587-C5CC217A0D23}.Test|Any CPU.Build.0 = Release|Any CPU
+		{C187D467-A28E-4570-B970-EA28B837B737}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C187D467-A28E-4570-B970-EA28B837B737}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C187D467-A28E-4570-B970-EA28B837B737}.Model|Any CPU.ActiveCfg = Release|Any CPU
+		{C187D467-A28E-4570-B970-EA28B837B737}.Model|Any CPU.Build.0 = Release|Any CPU
+		{C187D467-A28E-4570-B970-EA28B837B737}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C187D467-A28E-4570-B970-EA28B837B737}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C187D467-A28E-4570-B970-EA28B837B737}.Test|Any CPU.ActiveCfg = Release|Any CPU
+		{C187D467-A28E-4570-B970-EA28B837B737}.Test|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
