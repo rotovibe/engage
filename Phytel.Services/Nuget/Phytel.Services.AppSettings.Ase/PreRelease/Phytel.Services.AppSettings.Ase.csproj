@@ -38,7 +38,7 @@
   <ItemGroup>
     <Reference Include="Phytel.Services.AppSettings, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>packages\Phytel.Services.AppSettings.1.0.1.01\lib\net451\Phytel.Services.AppSettings.dll</HintPath>
+      <HintPath>packages\Phytel.Services.AppSettings.1.1.0-beta4003\lib\net451\Phytel.Services.AppSettings.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
@@ -54,7 +54,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Phytel.Services.AppSettings.Ase.nuspec" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
