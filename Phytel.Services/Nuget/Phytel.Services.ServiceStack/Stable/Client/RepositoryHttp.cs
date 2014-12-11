@@ -157,14 +157,6 @@ namespace Phytel.Services.ServiceStack.Client
             return _client.Put<TResponse>(relativeOrAbsoluteUrl, request);
         }
 
-        public TResponse Put<TResponse>(object request, NameValueCollection headers, string relativeUrlFormat, params string[] relativeUrlParams)
-        {
-            _client.LocalHttpWebRequestFilter = x => x.Headers.Add(headers);
-
-            string relativeOrAbsoluteUrl = string.Format(relativeUrlFormat, relativeUrlParams);
-            return _client.Put<TResponse>(relativeOrAbsoluteUrl, request);
-        }
-
         protected virtual IReturn<TResponse> OnExecuteConvertToIReturn<TResponse>(object requestDto)
         {
             IReturn<TResponse> rvalue = null;
