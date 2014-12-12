@@ -62,23 +62,9 @@ namespace Phytel.API.AppDomain.NG
                     TargetDate = t.TargetDate,
                     TargetValue = t.TargetValue,
                     DeleteFlag = t.DeleteFlag,
-                    TemplateId = t.TemplateId
+                    TemplateId = t.TemplateId,
+                    ClosedDate = t.ClosedDate
                 };
-                if ((t.StatusId == (int)GoalTaskStatus.Met || t.StatusId == (int)GoalTaskStatus.Abandoned))
-                {
-                    if (t.ClosedDate == null)
-                    {
-                        data.ClosedDate = DateTime.UtcNow;
-                    }
-                    else
-                    {
-                        data.ClosedDate = t.ClosedDate;
-                    }
-                }
-                else 
-                {
-                    data.ClosedDate = null;
-                }
             }
             return data;
         }
@@ -158,23 +144,9 @@ namespace Phytel.API.AppDomain.NG
                     StartDate = i.StartDate,
                     StatusId = i.StatusId,
                     StatusDate = i.StatusDate,
-                    DeleteFlag = i.DeleteFlag
+                    DeleteFlag = i.DeleteFlag,
+                    ClosedDate = i.ClosedDate
                 };
-                if ((i.StatusId == (int)InterventionStatus.Removed || i.StatusId == (int)InterventionStatus.Completed))
-                {
-                    if (i.ClosedDate == null)
-                    {
-                        data.ClosedDate = DateTime.UtcNow;
-                    }
-                    else
-                    {
-                        data.ClosedDate = i.ClosedDate;
-                    }
-                }
-                else 
-                {
-                    data.ClosedDate = null;
-                }
             }
             return data;
 
