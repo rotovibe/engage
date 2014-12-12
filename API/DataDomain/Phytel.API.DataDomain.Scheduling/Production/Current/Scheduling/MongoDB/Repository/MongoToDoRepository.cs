@@ -193,6 +193,23 @@ namespace Phytel.API.DataDomain.Scheduling
                     using (SchedulingMongoContext ctx = new SchedulingMongoContext(_dbName))
                     {
                         var q = MB.Query<METoDo>.EQ(b => b.Id, ObjectId.Parse(todoData.Id));
+
+                        // Set the ClosedDate if the status is changed.
+                        METoDo existingToDo = ctx.ToDos.Collection.Find(q).SetFields(METoDo.StatusProperty).FirstOrDefault();
+                        if (existingToDo != null)
+                        {
+                            if ((todoData.StatusId == (int)Status.Met || todoData.StatusId == (int)Status.Abandoned))
+                            {
+                                if (existingToDo.Status != (Status)todoData.StatusId)
+                                {
+                                    todoData.ClosedDate = DateTime.UtcNow;
+                                }
+                            }
+                            else
+                            {
+                                todoData.ClosedDate = null;
+                            }
+                        }
                         var uv = new List<MB.UpdateBuilder>();
                         uv.Add(MB.Update.Set(METoDo.UpdatedByProperty, ObjectId.Parse(this.UserId)));
                         uv.Add(MB.Update.Set(METoDo.VersionProperty, request.Version));
