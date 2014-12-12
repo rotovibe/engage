@@ -1,22 +1,15 @@
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Phytel.API.DataDomain.PatientGoal.DTO;
-using Phytel.API.Interface;
+using MongoDB.Bson;
+using MongoDB.Bson.Serialization;
 using MongoDB.Driver;
 using MongoDB.Driver.Builders;
-using MongoDB.Bson;
-using Phytel.API.DataDomain.PatientGoal;
-using MB = MongoDB.Driver.Builders;
-using MongoDB.Bson;
 using Phytel.API.Common;
-using Phytel.API.Common.Data;
-using Phytel.API.DataDomain.PatientGoal;
-using System.Configuration;
 using Phytel.API.DataAudit;
-using MongoDB.Bson.Serialization;
+using Phytel.API.DataDomain.PatientGoal.DTO;
+using MB = MongoDB.Driver.Builders;
 
 namespace Phytel.API.DataDomain.PatientGoal
 {
@@ -180,13 +173,24 @@ namespace Phytel.API.DataDomain.PatientGoal
                 {
                     var q = MB.Query<MEPatientTask>.EQ(b => b.Id, ObjectId.Parse(pt.Id));
                     
-                    // Set the StatusDate to Now if the status is changed.
+                    // Set the StatusDate to Now if the status is changed. Set the ClosedDate depending on the Status.
                     MEPatientTask existingPB = ctx.PatientTasks.Collection.Find(q).SetFields(MEPatientTask.StatusProperty).FirstOrDefault();
                     if (existingPB != null)
                     {
                         if ((int)existingPB.Status != pt.StatusId)
                         {
                             pt.StatusDate = DateTime.UtcNow;
+                        }
+                        if ((pt.StatusId == (int)GoalTaskStatus.Met || pt.StatusId == (int)GoalTaskStatus.Abandoned))
+                        {
+                            if (existingPB.Status != (GoalTaskStatus)pt.StatusId)
+                            {
+                                pt.ClosedDate = DateTime.UtcNow;
+                            }
+                        }
+                        else
+                        {
+                            pt.ClosedDate = null;
                         }
                     }
                     var uv = new List<MB.UpdateBuilder>();
@@ -215,7 +219,14 @@ namespace Phytel.API.DataDomain.PatientGoal
                     if (pt.TargetValue != null) uv.Add(MB.Update.Set(MEPatientTask.TargetValueProperty, pt.TargetValue));
                     if (pt.CustomAttributes != null) { uv.Add(MB.Update.SetWrapped<List<MAttribute>>(MEPatientTask.AttributesProperty, DTOUtil.GetAttributes(pt.CustomAttributes))); }
                     if (pt.BarrierIds != null) { uv.Add(MB.Update.SetWrapped<List<ObjectId>>(MEPatientTask.BarriersProperty, DTOUtil.ConvertObjectId(pt.BarrierIds))); }
-                    uv.Add(MB.Update.Set(MEPatientTask.ClosedDateProperty, pt.ClosedDate)); 
+                    if (pt.ClosedDate != null)
+                    {
+                        uv.Add(MB.Update.Set(MEPatientTask.ClosedDateProperty, pt.ClosedDate));
+                    }
+                    else
+                    {
+                        uv.Add(MB.Update.Set(MEPatientTask.ClosedDateProperty, BsonNull.Value));
+                    }
                     uv.Add(MB.Update.Set(MEPatientTask.DeleteFlagProperty, pt.DeleteFlag));
                     if (pt.TemplateId != null) uv.Add(MB.Update.Set(MEPatientTask.TemplateIdProperty, ObjectId.Parse(pt.TemplateId)));
 
