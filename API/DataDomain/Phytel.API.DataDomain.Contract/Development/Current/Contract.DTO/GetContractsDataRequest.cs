@@ -4,7 +4,7 @@ using ServiceStack.ServiceHost;
 namespace Phytel.API.DataDomain.Contract.DTO
 {
     [Api(Description = "A Request object to get all contract details for an individual from the API.")]
-    [Route("/{Context}/{Version}/{ContractNumber}/Contract", "GET")]
+    [Route("/{Context}/{Version}/Contract/{ContractNumber}/GetContract", "GET")]
     public class GetContractsDataRequest : IDataDomainRequest
     {
 

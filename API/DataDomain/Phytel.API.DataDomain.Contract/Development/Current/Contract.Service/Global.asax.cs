@@ -16,10 +16,13 @@ namespace Phytel.API.DataDomain.Contract.Service
             //Tell Service Stack the name of your application and where to find your web services
             public ContractAppHost() : base("Phytel Contract Data Domain Services", typeof(ContractService).Assembly) { }
 
+            //public ContractAppHost() : base("Hello Web Services", typeof(HelloService).Assembly) { }
+
+
             public override void Configure(Funq.Container container)
             {
                 //register any dependencies your services use, e.g:
-                //container.Register<ICacheClient>(new MemoryCacheClient());
+
                 Plugins.Add(new RequestLogsFeature() { RequiredRoles = new string[] { } });
 
                 container.RegisterAutoWiredAs<CommonFormatterUtil, ICommonFormatterUtil>();

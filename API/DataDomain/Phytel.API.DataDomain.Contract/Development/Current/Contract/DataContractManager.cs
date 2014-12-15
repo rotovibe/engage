@@ -21,7 +21,13 @@ namespace Phytel.API.DataDomain.Contract
             {
                 IContractRepository repo = Factory.GetRepository(request, RepositoryType.Contract);
 
-                result = repo.FindContracts(request) as ContractData;
+                //result = repo.FindContracts(request) as ContractData;
+
+                //Hardcoding results
+                result = new ContractData();
+                result.ContractId = "452";
+                result.ContractNumber = "ATMOSPHEREDEMO001";
+
             }
             catch (Exception ex)
             {

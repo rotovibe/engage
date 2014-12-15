@@ -21,8 +21,8 @@ namespace Phytel.API.DataDomain.Contract.Service
             response.Version = request.Version;
             try
             {
-                if (string.IsNullOrEmpty(request.UserId))
-                    throw new UnauthorizedAccessException("ContractDD:Get()::Unauthorized Access");
+                //if (string.IsNullOrEmpty(request.UserId))
+                //    throw new UnauthorizedAccessException("ContractDD:Get()::Unauthorized Access");
 
                 response.Contract = Manager.GetContracts(request);
             }
